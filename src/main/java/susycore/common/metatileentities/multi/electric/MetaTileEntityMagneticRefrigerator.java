@@ -38,6 +38,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import susycore.api.capability.impl.CoolingCoilRecipeLogic;
+import susycore.api.metatileentity.multiblock.CoolingCoilBlock;
 import susycore.common.blocks.BlockCoolingCoil;
 
 import javax.annotation.Nonnull;
@@ -49,51 +50,6 @@ import static gregtech.GregTechMod.proxy;
 import static gregtech.api.GregTechAPI.HEATING_COILS;
 
 public class MetaTileEntityMagneticRefrigerator extends RecipeMapMultiblockController implements IHeatingCoil{
-
-    /* Init cooling coils exist */
-
-    public static final Object2ObjectOpenHashMap<IBlockState, IHeatingCoilBlockStats> COOLING_COILS = new Object2ObjectOpenHashMap<>();
-
-    BlockCoolingCoil.CoolingCoilType type : BlockCoolingCoil.CoolingCoilType.values()) {
-        COOLING_COILS.put(MetaBlocks.COOLING_COIL.getState(type), type);
-    }
-
-    @Mod.EventHandler
-    public void onPostInit(FMLPostInitializationEvent event) {
-        proxy.onPostLoad();
-        BedrockFluidVeinHandler.recalculateChances(true);
-        // registers coil types for the BlastTemperatureProperty used in Blast Furnace Recipes
-        // runs AFTER craftTweaker
-        for (Map.Entry<IBlockState, IHeatingCoilBlockStats> entry : GregTechAPI.COOLING_COILS.entrySet()) {
-            IHeatingCoilBlockStats value = entry.getValue();
-            if (value != null) {
-                String name = entry.getKey().getBlock().getTranslationKey();
-                if (!name.endsWith(".name")) name = String.format("%s.name", name);
-                TemperatureProperty.registerCoilType(value.getCoilTemperature(), value.getMaterial(), name);
-            }
-        }
-    }
-
-    public static Supplier<TraceabilityPredicate> COOLING_COILS = () -> new TraceabilityPredicate(blockWorldState -> {
-        IBlockState blockState = blockWorldState.getBlockState();
-        if (susycore.COOLING_COILS.containsKey(blockState)) {
-            IHeatingCoilBlockStats stats = GregTechAPI.COOLING_COILS.get(blockState);
-            Object currentCoil = blockWorldState.getMatchContext().getOrPut("CoolingCoilType", stats);
-            if (!currentCoil.equals(stats)) {
-                blockWorldState.setError(new PatternStringError("gregtech.multiblock.pattern.error.coils"));
-                return false;
-            }
-            blockWorldState.getMatchContext().getOrPut("VABlock", new LinkedList<>()).add(blockWorldState.getPos());
-            return true;
-        }
-        return false;
-    });
-
-    public static TraceabilityPredicate coolingCoils() {
-        return TraceabilityPredicate.COOLING_COILS.get();
-    }
-
-    /* Init cooling coils exist */
 
     private int magneticRefrigeratorTemperature;
 
