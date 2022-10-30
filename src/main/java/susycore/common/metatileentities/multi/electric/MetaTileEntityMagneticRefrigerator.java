@@ -50,6 +50,8 @@ import static gregtech.api.GregTechAPI.HEATING_COILS;
 
 public class MetaTileEntityMagneticRefrigerator extends RecipeMapMultiblockController implements IHeatingCoil{
 
+    /* Init cooling coils exist */
+
     public static final Object2ObjectOpenHashMap<IBlockState, IHeatingCoilBlockStats> COOLING_COILS = new Object2ObjectOpenHashMap<>();
 
     BlockCoolingCoil.CoolingCoilType type : BlockCoolingCoil.CoolingCoilType.values()) {
@@ -90,6 +92,8 @@ public class MetaTileEntityMagneticRefrigerator extends RecipeMapMultiblockContr
     public static TraceabilityPredicate coolingCoils() {
         return TraceabilityPredicate.COOLING_COILS.get();
     }
+
+    /* Init cooling coils exist */
 
     private int magneticRefrigeratorTemperature;
 
@@ -151,20 +155,17 @@ public class MetaTileEntityMagneticRefrigerator extends RecipeMapMultiblockContr
     }
 
     protected IBlockState getCasingState() {
-        return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.INVAR_HEATPROOF);
+        return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.ALUMINIUM_FROSTPROOF);
     }
 
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
-        return Textures.HEAT_PROOF_CASING;
+        return Textures.FROST_PROOF_CASING;
     }
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
-        tooltip.add(I18n.format("gregtech.machine.electric_blast_furnace.tooltip.1"));
-        tooltip.add(I18n.format("gregtech.machine.electric_blast_furnace.tooltip.2"));
-        tooltip.add(I18n.format("gregtech.machine.electric_blast_furnace.tooltip.3"));
     }
 
     @Override
@@ -193,9 +194,9 @@ public class MetaTileEntityMagneticRefrigerator extends RecipeMapMultiblockContr
         ArrayList<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
         MultiblockShapeInfo.Builder builder = MultiblockShapeInfo.builder()
                 .aisle("XEM", "CCC", "CCC", "XXX")
-                .aisle("FXD", "C#C", "C#C", "XHX")
+                .aisle("FXD", "C#C", "C#C", "XXX")
                 .aisle("ISO", "CCC", "CCC", "XXX")
-                .where('X', MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.INVAR_HEATPROOF))
+                .where('X', MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.ALUMINIUM_FROSTPROOF))
                 .where('S', MetaTileEntities.ELECTRIC_BLAST_FURNACE, EnumFacing.SOUTH)
                 .where('#', Blocks.AIR.getDefaultState())
                 .where('E', MetaTileEntities.ENERGY_INPUT_HATCH[GTValues.MV], EnumFacing.NORTH)
@@ -204,10 +205,10 @@ public class MetaTileEntityMagneticRefrigerator extends RecipeMapMultiblockContr
                 .where('F', MetaTileEntities.FLUID_IMPORT_HATCH[GTValues.LV], EnumFacing.WEST)
                 .where('D', MetaTileEntities.FLUID_EXPORT_HATCH[GTValues.LV], EnumFacing.EAST)
                 .where('H', MetaTileEntities.MUFFLER_HATCH[GTValues.LV], EnumFacing.UP)
-                .where('M', () -> ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH : MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.INVAR_HEATPROOF), EnumFacing.NORTH);
-        GregTechAPI.HEATING_COILS.entrySet().stream()
+                .where('M', () -> ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH : MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.ALUMINIUM_FROSTPROOF), EnumFacing.NORTH);
+        GregTechAPI.COOLING_COILS.entrySet().stream()
                 .sorted(Comparator.comparingInt(entry -> entry.getValue().getTier()))
-                .forEach(entry -> shapeInfo.add(builder.where('C', entry.getKey()).build()));
+                .forEach(entry -> shapeInfo.add(builder.where('C', entry.getKey()).build())); /* :gregtrolllaugh: */
         return shapeInfo;
     }
 
