@@ -1,0 +1,44 @@
+{
+  "forge_marker" : 1,
+  "variants" : {
+    "active=false,variant=manganese_iron_arsenic_phosphide" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/casings/coils/machine_coil_manganese_iron_arsenic_phosphide"
+      }
+    },
+    "active=true,variant=manganese_iron_arsenic_phosphide" : {
+      "model" : "gregtech:cube_2_layer_all",
+      "textures" : {
+        "bot_all" : "gregtech:blocks/casings/coils/machine_coil_manganese_iron_arsenic_phosphide",
+        "top_all" : "gregtech:blocks/casings/coils/machine_coil_manganese_iron_arsenic_phosphide_bloom"
+      }
+    },
+    "active=false,variant=praseodymium_nickel" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/casings/coils/praseodymium_nickel"
+      }
+    },
+    "active=true,variant=praseodymium_nickel" : {
+      "model" : "gregtech:cube_2_layer_all",
+      "textures" : {
+        "bot_all" : "gregtech:blocks/casings/coils/machine_coil_praseodymium_nickel",
+        "top_all" : "gregtech:blocks/casings/coils/machine_coil_praseodymium_nickel_bloom"
+      }
+    },
+    "active=false,variant=gadolinium_silicon_germanium" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/casings/coils/gadolinium_silicon_germanium"
+      }
+    },
+    "active=true,variant=gadolinium_silicon_germanium" : {
+      "model" : "gregtech:cube_2_layer_all",
+      "textures" : {
+        "bot_all" : "gregtech:blocks/casings/coils/machine_coil_gadolinium_silicon_germanium",
+        "top_all" : "gregtech:blocks/casings/coils/machine_coil_gadolinium_silicon_germanium_bloom"
+      }
+    }
+  }
+}

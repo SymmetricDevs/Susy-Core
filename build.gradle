@@ -67,6 +67,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.jetbrains:annotations:20.1.0'
     if (project.use_assetmover.toBoolean()) {
         deobfCompile 'com.cleanroommc:assetmover:0.2'
     }
@@ -74,8 +75,12 @@ dependencies {
         deobfCompile 'zone.rong:mixinbooter:5.0'
     }
     // format for dependencies: deobfCompile 'curse.maven:<project-slug>-<project-id>:<file-id>'
+    deobfCompile 'curse.maven:codechicken-lib-1-8-242818:2779848'
     deobfCompile 'curse.maven:gregtech-ce-unofficial-557242:4051202'
     deobfCompile 'curse.maven:gregicality-multiblocks-564858:4051163'
+
+    deobfCompile 'curse.maven:jei-238222:3043174'
+    deobfCompile 'curse.maven:the-one-probe-245211:2667280'
 }
 
 sourceSets {

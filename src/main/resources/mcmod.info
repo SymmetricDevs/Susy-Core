@@ -1,16 +1,17 @@
 [
   {
-    "modid": "susycore",
-    "name": "SuSy Core",
-    "description": "The coremod for Supersymmetry",
-    "version": "${version}",
-    "mcversion": "${mcversion}",
-    "url": "",
-    "updateUrl": "",
-    "authorList": [
-      "TechLord22,  beanie"
+    "modid" : "susy",
+    "name" : "Supersymmetry",
+    "description" : "The coremod for Supersymmetry",
+    "version" : "${version}",
+    "mcversion" : "${mcversion}",
+    "url" : "",
+    "updateUrl" : "",
+    "authorList" : [
+      "TechLord22",
+      "beanie"
     ],
-    "credits": "The Supersymmetry Dev Team",
+    "credits" : "The Supersymmetry Dev Team",
     "logoFile": "",
     "screenshots": [],
     "dependencies": []
