@@ -1,7 +1,6 @@
 {
-    "pack": {
-        "description": "susycore resources",
-        "pack_format": 3,
-        "_comment": "stuff for susy uwu"
-    }
+  "pack": {
+    "description": "SuSy Coremod Resources",
+    "pack_format": 3
+  }
 }

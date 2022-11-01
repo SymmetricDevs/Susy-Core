@@ -1,1 +1,1 @@
-core mod of susy uwu
+Coremod for the Supersymmetry Modpack.
