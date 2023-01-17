@@ -3,6 +3,7 @@ package supersymmetry;
 import gregtech.api.GTValues;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.common.CommonProxy;
@@ -19,6 +20,11 @@ public class Supersymmetry {
 
     @SidedProxy(modId = MODID, clientSide = "supersymmetry.client.ClientProxy", serverSide = "supersymmetry.common.CommonProxy")
     public static CommonProxy proxy;
+
+    @Mod.EventHandler
+    public void onModConstruction(FMLConstructionEvent event) {
+        GTValues.HT = true;
+    }
 
     @Mod.EventHandler
     public void onPreInit(@NotNull FMLPreInitializationEvent event) {
