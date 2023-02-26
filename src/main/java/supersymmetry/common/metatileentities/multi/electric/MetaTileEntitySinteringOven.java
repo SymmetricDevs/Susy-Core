@@ -7,6 +7,8 @@ import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.PatternMatchContext;
+import gregtech.api.recipes.Recipe;
 import gregtech.api.unification.material.Materials;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
@@ -15,11 +17,15 @@ import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.block.BlockSinteringBrick;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.recipe.SuSyRecipeMaps;
-import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.api.recipe.properties.CoilingCoilTemperatureProperty;
+import supersymmetry.api.recipe.properties.SinterProperty;
 
 public class MetaTileEntitySinteringOven extends RecipeMapMultiblockController {
+
+    private boolean canUsePlasma;
 
     public MetaTileEntitySinteringOven(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.SINTERING_RECIPES);
@@ -73,6 +79,28 @@ public class MetaTileEntitySinteringOven extends RecipeMapMultiblockController {
                 .where('#', air())
                 .where(' ', any())
                 .build();
+    }
+
+    @Override
+    protected void formStructure(PatternMatchContext context) {
+        super.formStructure(context);
+        Object type = context.get("SinteringBrickType");
+        if (type instanceof BlockSinteringBrick.SinteringBrickType) {
+            this.canUsePlasma = ((BlockSinteringBrick.SinteringBrickType) type).canResistPlasma;
+        } else {
+            this.canUsePlasma = false;
+        }
+    }
+
+    @Override
+    public void invalidateStructure() {
+        super.invalidateStructure();
+        this.canUsePlasma = false;
+    }
+
+    @Override
+    public boolean checkRecipe(@NotNull Recipe recipe, boolean consumeIfSuccess) {
+        return this.canUsePlasma || !(recipe.getProperty(SinterProperty.getInstance(), false));
     }
 
 }
