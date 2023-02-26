@@ -5,6 +5,7 @@ import gregtech.api.block.VariantItemBlock;
 import gregtech.api.unification.material.Material;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
+import static net.minecraft.block.material.Material.IRON;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLiving;
@@ -24,7 +25,7 @@ import java.util.List;
 public class BlockCoolingCoil extends VariantActiveBlock<BlockCoolingCoil.CoolingCoilType> {
 
     public BlockCoolingCoil() {
-        super(net.minecraft.block.material.Material.IRON);
+        super(IRON);
         setTranslationKey("cooling_coil");
         setHardness(5.0f);
         setResistance(10.0f);
