@@ -6,6 +6,7 @@ import gregtech.api.util.BlockInfo;
 import net.minecraft.block.state.IBlockState;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.block.BlockCoolingCoil;
+import supersymmetry.api.block.BlockSinteringBrick;
 import supersymmetry.common.blocks.SuSyBlocks;
 
 import java.util.Arrays;
@@ -35,8 +36,31 @@ public class SuSyPredicates {
             .toArray(BlockInfo[]::new)
     );
 
+    private static final Supplier<TraceabilityPredicate> SINTERING_BRICKS = () -> new TraceabilityPredicate(blockWorldState -> {
+        IBlockState state = blockWorldState.getBlockState();
+        if (state.getBlock() instanceof BlockSinteringBrick) {
+            BlockSinteringBrick.SinteringBrickType type = SuSyBlocks.SINTERING_BRICK.getState(state);
+            Object currentBrick = blockWorldState.getMatchContext().getOrPut("SinteringBrickType", type);
+            if (!currentBrick.equals(type)) {
+                blockWorldState.setError(new PatternStringError("gregtech.multiblock.pattern.error.sintering_bricks"));
+                return false;
+            }
+            blockWorldState.getMatchContext().getOrPut("VABlock", new LinkedList<>()).add(blockWorldState.getPos());
+            return true;
+        }
+        return false;
+    }, () -> Arrays.stream(BlockSinteringBrick.SinteringBrickType.values())
+            .map(type -> new BlockInfo(SuSyBlocks.SINTERING_BRICK.getState(type)))
+            .toArray(BlockInfo[]::new)
+    );
+
     @NotNull
     public static TraceabilityPredicate coolingCoils() {
         return COOLING_COILS.get();
+    }
+
+    @NotNull
+    public static TraceabilityPredicate sinteringBricks() {
+        return SINTERING_BRICKS.get();
     }
 }
