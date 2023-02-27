@@ -20,7 +20,6 @@ import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.block.BlockSinteringBrick;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.recipe.SuSyRecipeMaps;
-import supersymmetry.api.recipe.properties.CoilingCoilTemperatureProperty;
 import supersymmetry.api.recipe.properties.SinterProperty;
 
 public class MetaTileEntitySinteringOven extends RecipeMapMultiblockController {

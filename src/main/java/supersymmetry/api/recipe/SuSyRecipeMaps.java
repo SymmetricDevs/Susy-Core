@@ -1,7 +1,6 @@
 package supersymmetry.api.recipe;
 
 import gregtech.api.recipes.RecipeMap;
-import gregtech.api.recipes.builders.SimpleRecipeBuilder;
 import gregtech.core.sound.GTSoundEvents;
 import supersymmetry.api.recipe.builders.CoilingCoilRecipeBuilder;
 import supersymmetry.api.recipe.builders.SinteringRecipeBuilder;
