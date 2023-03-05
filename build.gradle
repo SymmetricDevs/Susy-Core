@@ -74,12 +74,19 @@ dependencies {
     if (project.use_mixins.toBoolean()) {
         deobfCompile 'zone.rong:mixinbooter:5.0'
     }
-    // format for dependencies: deobfCompile 'curse.maven:<project-slug>-<project-id>:<file-id>'
-    deobfCompile 'curse.maven:codechicken-lib-1-8-242818:2779848'
-    deobfCompile 'curse.maven:gregtech-ce-unofficial-557242:4051202'
-    deobfCompile 'curse.maven:gregicality-multiblocks-564858:4051163'
 
+    // format for dependencies: deobfCompile 'curse.maven:<project-slug>-<project-id>:<file-id>'
+
+    // CCL 3.2.3.358
+    deobfCompile 'curse.maven:codechicken-lib-1-8-242818:2779848'
+    // GTCEu 2.5.3
+    deobfCompile 'curse.maven:gregtech-ce-unofficial-557242:4422409'
+    // GCYM 1.2.0
+    deobfCompile 'curse.maven:gregicality-multiblocks-564858:4422413'
+
+    // JEI 4.16.1.302
     deobfCompile 'curse.maven:jei-238222:3043174'
+    // 1.4.28
     deobfCompile 'curse.maven:the-one-probe-245211:2667280'
 }
 
