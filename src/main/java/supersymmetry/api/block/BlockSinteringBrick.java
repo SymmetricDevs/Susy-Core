@@ -14,7 +14,7 @@ public class BlockSinteringBrick extends VariantActiveBlock<BlockSinteringBrick.
 
     public BlockSinteringBrick() {
         super(Material.ROCK);
-        setTranslationKey("sintering_block");
+        setTranslationKey("sintering_brick");
         setHardness(0.5f);
         setSoundType(SoundType.STONE);
         setHarvestLevel("wrench", 2);

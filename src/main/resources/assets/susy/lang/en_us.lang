@@ -5,8 +5,8 @@ tile.cooling_coil.praseodymium_nickel.name=Praseodymium-Nickel Cooling Coil
 tile.cooling_coil.gadolinium_silicon_germanium.name=Gadolinium Silicon Germanium Cooling Coil
 tile.cooling_coil.tooltip_temperature=Base Cooling Capacity: §b%,dK
 
-tile.sintering_block.sintering_block_brick.name=Brick Sintering Block
-tile.sintering_block.sintering_block_magnetoplated.name=Magnetoplated Sintering Block
+tile.sintering_brick.sintering_block_brick.name=Brick Sintering Block
+tile.sintering_brick.sintering_block_magnetoplated.name=Magnetoplated Sintering Block
 
 # Items
 
@@ -23,6 +23,8 @@ gregtech.multiblock.magnetic_refrigerator.min_temperature=§bTemperature Limit: 
 
 gregtech.machine.sintering_oven.name=Sintering Oven
 gregtech.multiblock.sintering_oven.can_use_plasma=Plasma enabled: %s
+gregtech.multiblocks.sintering_oven.use_plasma.affirmative=Yes
+gregtech.multiblocks.sintering_oven.use_plasma.negative=No
 
 # Properties
 gregtech.recipe.plasma_requirement=Requires plasma: %s
