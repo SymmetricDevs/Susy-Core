@@ -34,6 +34,10 @@ public class SinteringRecipeBuilder extends RecipeBuilder<SinteringRecipeBuilder
         return this;
     }
 
+    public SinteringRecipeBuilder usePlasma() {
+        return this.usePlasma(true);
+    }
+
     @Override
     public boolean applyProperty(@NotNull String key, Object value) {
         if (key.equals(CoilingCoilTemperatureProperty.KEY)) {
