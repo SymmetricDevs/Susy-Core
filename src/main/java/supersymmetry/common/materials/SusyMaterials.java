@@ -8,6 +8,8 @@ public class SusyMaterials {
     public static Material PraseodymiumNickel;
     public static Material GadoliniumSiliconGermanium;
 
+    public static Material Latex;
+
     public static void init() {
         SuSyElementMaterials.init();
         SuSyFirstDegreeMaterials.init();

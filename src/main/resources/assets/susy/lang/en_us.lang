@@ -12,8 +12,16 @@ tile.cooling_coil.tooltip_temperature=Base Cooling Capacity: §b%,dK
 material.manganese_iron_arsenic_phosphide=Manganese Iron Arsenic Phosphide
 material.praseodymium_nickel=Praseodymium-Nickel
 material.gadolinium_silicon_germanium=Gadolinium Silicon Germanium
+material.latex=Latex
 
 
 # Machines
 gregtech.machine.magnetic_refrigerator.name=Magnetic Refrigerator
 gregtech.multiblock.magnetic_refrigerator.min_temperature=§bTemperature Limit: %s
+
+# Latex Collector
+gregtech.machine.latex_collector.tooltip=Collects latex from adjacant rubber tree logs. Yields %d mL of latex per tick, per log adjacent.
+gregtech.machine.latex_collector.lv.name=Basic Latex Collector
+gregtech.machine.latex_collector.mv.name=Advanced Latex Collector
+gregtech.machine.latex_collector.hv.name=Advanced Latex Collector II
+gregtech.machine.latex_collector.ev.name=Basic Latex Collector III
