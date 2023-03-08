@@ -21,6 +21,7 @@ gregtech.multiblock.magnetic_refrigerator.min_temperature=§bTemperature Limit: 
 
 # Latex Collector
 gregtech.machine.latex_collector.tooltip=Collects latex from adjacant rubber tree logs. Yields %d mL of latex per tick, per log adjacent.
+gregtech.machine.latex_collector.bronze.name=Steam Latex Collector
 gregtech.machine.latex_collector.lv.name=Basic Latex Collector
 gregtech.machine.latex_collector.mv.name=Advanced Latex Collector
 gregtech.machine.latex_collector.hv.name=Advanced Latex Collector II

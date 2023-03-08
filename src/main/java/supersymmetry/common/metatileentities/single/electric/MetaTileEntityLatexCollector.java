@@ -62,7 +62,6 @@ public class MetaTileEntityLatexCollector extends TieredMetaTileEntity {
         builder.dynamicLabel(11, 30, tankWidget::getFormattedFluidAmount, 16777215);
         builder.dynamicLabel(11, 40, tankWidget::getFluidLocalizedName, 16777215);
         return builder.label(6, 6, this.getMetaFullName()).widget((new FluidContainerSlotWidget(this.importItems, 0, 90, 17, false)).setBackgroundTexture(new IGuiTexture[]{GuiTextures.SLOT, GuiTextures.IN_SLOT_OVERLAY})).widget(new ImageWidget(91, 36, 14, 15, GuiTextures.TANK_ICON)).widget((new SlotWidget(this.exportItems, 0, 90, 54, true, false)).setBackgroundTexture(new IGuiTexture[]{GuiTextures.SLOT, GuiTextures.OUT_SLOT_OVERLAY})).bindPlayerInventory(entityPlayer.inventory).build(this.getHolder(), entityPlayer);
-
     }
 
     public void onNeighborChanged() {
@@ -125,6 +124,8 @@ public class MetaTileEntityLatexCollector extends TieredMetaTileEntity {
 
         if (!this.getWorld().isRemote && this.getOffsetTimer() % 5L == 0L) {
             this.pushItemsIntoNearbyHandlers(new EnumFacing[]{this.getFrontFacing()});
+            this.fillContainerFromInternalTank();
+
         }
     }
     protected FluidTankList createExportFluidHandler() {
