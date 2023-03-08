@@ -1,9 +1,11 @@
 package supersymmetry.common.metatileentities.single.steam;
 
+import codechicken.lib.raytracer.CuboidRayTraceResult;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.ColourMultiplier;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
+import gregtech.api.GTValues;
 import gregtech.api.capability.impl.FilteredFluidHandler;
 import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.capability.impl.NotifiableItemStackHandler;
@@ -23,7 +25,9 @@ import java.util.List;
 import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.*;
@@ -31,6 +35,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.IFluidTank;
@@ -41,6 +46,8 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import supersymmetry.common.materials.SusyMaterials;
 
+import javax.annotation.Nullable;
+
 public class MetaTileEntitySteamLatexCollector extends MetaTileEntity {
     private boolean isWorkingEnabled = true;
     private boolean needsVenting = false;
@@ -49,6 +56,9 @@ public class MetaTileEntitySteamLatexCollector extends MetaTileEntity {
     private final int tankSize = 16000;
     private final long latexCollectionAmount = 3L;
     private int numberRubberLogs;
+
+    private EnumFacing outputFacingFluids;
+
 
     public MetaTileEntitySteamLatexCollector(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
@@ -80,22 +90,17 @@ public class MetaTileEntitySteamLatexCollector extends MetaTileEntity {
         ColourMultiplier multiplier = new ColourMultiplier(GTUtility.convertRGBtoOpaqueRGBA_CL(this.getPaintingColorForRendering()));
         IVertexOperation[] coloredPipeline = (IVertexOperation[])ArrayUtils.add(pipeline, multiplier);
         Textures.STEAM_CASING_BRONZE.render(renderState, translation, coloredPipeline);
-        EnumFacing[] var6 = EnumFacing.HORIZONTALS;
-        int var7 = var6.length;
 
-        for(int var8 = 0; var8 < var7; ++var8) {
-            EnumFacing renderSide = var6[var8];
-            if (renderSide == this.getFrontFacing()) {
-                Textures.PIPE_OUT_OVERLAY.renderSided(renderSide, renderState, translation, pipeline);
-            } else {
-                Textures.STEAM_MINER_OVERLAY.renderSided(renderSide, renderState, translation, coloredPipeline);
-            }
+        Textures.GAS_COLLECTOR_OVERLAY.renderOrientedState(renderState, translation, coloredPipeline, this.getFrontFacing(), this.isActive(), true);
+        if (this.getOutputFacingFluids() != null) {
+            Textures.PIPE_OUT_OVERLAY.renderSided(this.getOutputFacingFluids(), renderState, translation, coloredPipeline);
         }
-
-        Textures.STEAM_VENT_OVERLAY.renderSided(EnumFacing.UP, renderState, translation, pipeline);
-        Textures.PIPE_IN_OVERLAY.renderSided(EnumFacing.DOWN, renderState, translation, pipeline);
     }
 
+    @SideOnly(Side.CLIENT)
+    public Pair<TextureAtlasSprite, Integer> getParticleTexture() {
+        return Pair.of(Textures.STEAM_CASING_BRONZE.getSpriteOnSide(RenderSide.TOP), this.getPaintingColorForRendering());
+    }
     protected ModularUI createUI(EntityPlayer entityPlayer) {
         ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND_STEAM.get(false), 175, 176);
         builder.image(7, 16, 81, 55, GuiTextures.DISPLAY);
@@ -113,7 +118,10 @@ public class MetaTileEntitySteamLatexCollector extends MetaTileEntity {
         if (!this.drainEnergy(true)) {
             textList.add((new TextComponentTranslation("gregtech.multiblock.large_miner.steam", new Object[0])).setStyle((new Style()).setColor(TextFormatting.RED)));
         }
+    }
 
+    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
+        tooltip.add(I18n.format("gregtech.machine.latex_collector.tooltip", this.latexCollectionAmount));
     }
 
     public boolean drainEnergy(boolean simulate) {
@@ -131,6 +139,7 @@ public class MetaTileEntitySteamLatexCollector extends MetaTileEntity {
 
     public void update() {
         super.update();
+
         if (!this.getWorld().isRemote && this.numberRubberLogs != 0 && this.isWorkingEnabled) {
             if(this.drainEnergy(true)){
                 FluidStack latexStack = SusyMaterials.Latex.getFluid((int) this.latexCollectionAmount * this.numberRubberLogs);
@@ -143,37 +152,14 @@ public class MetaTileEntitySteamLatexCollector extends MetaTileEntity {
             }
         }
 
-
         if (!this.getWorld().isRemote && this.getOffsetTimer() % 5L == 0L) {
-            this.pushItemsIntoNearbyHandlers(new EnumFacing[]{this.getFrontFacing()});
+            if(this.getOutputFacingFluids() != null){
+                this.pushFluidsIntoNearbyHandlers(new EnumFacing[]{this.getOutputFacingFluids()});
+            }
             this.fillContainerFromInternalTank();
         }
 
     }
-
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
-        super.writeToNBT(data);
-        data.setInteger("numberRubberLogs", this.numberRubberLogs);
-        return data;
-    }
-
-    public void readFromNBT(NBTTagCompound data) {
-        super.readFromNBT(data);
-        if (data.hasKey("numberRubberLogs")) {
-            this.numberRubberLogs = data.getInteger("numberRubberLogs");
-        }
-    }
-
-    public void writeInitialSyncData(PacketBuffer buf) {
-        super.writeInitialSyncData(buf);
-        buf.writeBoolean(this.needsVenting);
-        buf.writeBoolean(this.ventingStuck);
-    }
-    @SideOnly(Side.CLIENT)
-    public Pair<TextureAtlasSprite, Integer> getParticleTexture() {
-        return Pair.of(Textures.STEAM_CASING_BRONZE.getSpriteOnSide(RenderSide.TOP), this.getPaintingColorForRendering());
-    }
-
 
     public void onNeighborChanged() {
         super.onNeighborChanged();
@@ -204,5 +190,81 @@ public class MetaTileEntitySteamLatexCollector extends MetaTileEntity {
     public <T> void addNotifiedInput(T input) {
         super.addNotifiedInput(input);
         this.onNeighborChanged();
+    }
+
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        super.writeToNBT(data);
+        data.setInteger("OutputFacingF", this.getOutputFacingFluids().getIndex());
+        data.setInteger("numberRubberLogs", this.numberRubberLogs);
+        return data;
+    }
+
+    public void readFromNBT(NBTTagCompound data) {
+        super.readFromNBT(data);
+        if (data.hasKey("numberRubberLogs")) {
+            this.numberRubberLogs = data.getInteger("numberRubberLogs");
+        }
+        if (data.hasKey("OutputFacingF")) {
+            this.outputFacingFluids = EnumFacing.byIndex(data.getInteger("OutputFacingF"));
+        }
+    }
+
+    public void writeInitialSyncData(PacketBuffer buf) {
+        super.writeInitialSyncData(buf);
+        buf.writeByte(this.getOutputFacingFluids().getIndex());
+    }
+
+    public void receiveInitialSyncData(PacketBuffer buf) {
+        super.receiveInitialSyncData(buf);
+        this.outputFacingFluids = EnumFacing.VALUES[buf.readByte()];
+    }
+
+    public void receiveCustomData(int dataId, PacketBuffer buf) {
+        super.receiveCustomData(dataId, buf);
+        if (dataId == 100) {
+            this.outputFacingFluids = EnumFacing.VALUES[buf.readByte()];
+            this.scheduleRenderUpdate();
+        }
+    }
+
+    public boolean onWrenchClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing, CuboidRayTraceResult hitResult) {
+        if (!playerIn.isSneaking()) {
+            if (this.getOutputFacingFluids() == facing) {
+                return false;
+            } else if (this.hasFrontFacing() && facing == this.getFrontFacing()) {
+                return false;
+            } else {
+                if (!this.getWorld().isRemote) {
+                    this.setOutputFacingFluids(facing);
+                }
+
+                return true;
+            }
+        } else {
+            return super.onWrenchClick(playerIn, hand, facing, hitResult);
+        }
+    }
+
+    public void setOutputFacingFluids(EnumFacing outputFacing) {
+        this.outputFacingFluids = outputFacing;
+        if (!this.getWorld().isRemote) {
+            this.notifyBlockUpdate();
+            this.writeCustomData(100, (buf) -> {
+                buf.writeByte(this.outputFacingFluids.getIndex());
+            });
+            this.markDirty();
+        }
+
+    }
+
+    public EnumFacing getOutputFacingFluids() {
+        return this.outputFacingFluids == null ? EnumFacing.SOUTH : this.outputFacingFluids;
+    }
+
+    public boolean needsSneakToRotate() {
+        return true;
+    }
+    public boolean getIsWeatherOrTerrainResistant() {
+        return true;
     }
 }
