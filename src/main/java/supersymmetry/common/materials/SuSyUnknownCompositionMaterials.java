@@ -11,7 +11,5 @@ public class SuSyUnknownCompositionMaterials {
                 .color(0xFFFADA)
                 .fluid()
                 .build();
-
-
     }
 }

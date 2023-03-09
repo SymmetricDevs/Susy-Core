@@ -25,5 +25,6 @@ public class Supersymmetry {
         SuSyMetaItems.initMetaItems();
         SuSyBlocks.init();
         SuSyMetaTileEntities.init();
+        proxy.preLoad();
     }
 }
