@@ -1,6 +1,6 @@
 package supersymmetry.api.recipe;
 
-import supersymmetry.common.item.SuSyMetaItems;
+import gregtech.api.unification.ore.OrePrefix;
 import supersymmetry.common.materials.SusyMaterials;
 
 public class CoagulationRecipes {
@@ -9,7 +9,7 @@ public class CoagulationRecipes {
         SuSyRecipeMaps.COAGULATION_RECIPES.recipeBuilder()
                 .duration(1)
                 .fluidInputs(SusyMaterials.Latex.getFluid(1000))
-                .output(SuSyMetaItems.COAGULATED_LATEX)
+                .output(OrePrefix.dust, SusyMaterials.Latex)
                 .EUt(1)
                 .buildAndRegister();
 

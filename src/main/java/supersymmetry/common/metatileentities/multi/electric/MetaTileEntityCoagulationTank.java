@@ -51,7 +51,7 @@ public class MetaTileEntityCoagulationTank extends RecipeMapPrimitiveMultiblockC
                 .aisle(new String[]{"XXX", "XXX", "XXX"})
                 .aisle(new String[]{"XXX", "X#X", "X#X"}).setRepeatable(1, 4)
                 .aisle(new String[]{"XXX", "XYX", "XXX"})
-                .where('X', states(new IBlockState[]{SuSyBlocks.COAGULATION_TANK_WALL.getState(BlockCoagulationTankWall.CoagulationTankWallType.WOODEN_COAGULATION_TANK_WALL)}).or(abilities(new MultiblockAbility[]{MultiblockAbility.EXPORT_ITEMS}).setExactLimit(1)).or(abilities(new MultiblockAbility[]{MultiblockAbility.IMPORT_FLUIDS}).setExactLimit(1)))
+                .where('X', states(new IBlockState[]{SuSyBlocks.COAGULATION_TANK_WALL.getState(BlockCoagulationTankWall.CoagulationTankWallType.WOODEN_COAGULATION_TANK_WALL)}).or(abilities(new MultiblockAbility[]{MultiblockAbility.EXPORT_ITEMS}).setMinGlobalLimited(0).setMaxGlobalLimited(1)).or(abilities(new MultiblockAbility[]{MultiblockAbility.IMPORT_FLUIDS}).setMinGlobalLimited(0).setMaxGlobalLimited(1)))
                 .where('#', air())
                 .where('Y', this.selfPredicate()).build();
     }
@@ -72,7 +72,7 @@ public class MetaTileEntityCoagulationTank extends RecipeMapPrimitiveMultiblockC
         builder.widget((new TankWidget(this.importFluids.getTankAt(0), 48, 39, 18, 18)).setAlwaysShowFull(true).setBackgroundTexture(GuiTextures.PRIMITIVE_SLOT).setContainerClicking(true, true));
         builder.widget((new SlotWidget(this.exportItems, 0, 106, 39, true, true).setBackgroundTexture(GuiTextures.PRIMITIVE_SLOT)));
 
-        return builder;
+        return builder.bindPlayerInventory(entityPlayer.inventory, GuiTextures.PRIMITIVE_SLOT, 0);
     }
 
     public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
@@ -87,7 +87,7 @@ public class MetaTileEntityCoagulationTank extends RecipeMapPrimitiveMultiblockC
                 if(iFluidTank.getFluid() != null){
                     NonNullList<FluidStack> fluidStacks = NonNullList.create();
                     int toFill = (this.importFluids.getTankAt(0).getCapacity() - this.importFluids.getTankAt(0).getFluidAmount());
-                    int amount = iFluidTank.getFluidAmount() >= toFill ? toFill : iFluidTank.getFluidAmount();
+                    int amount = Math.min(iFluidTank.getFluidAmount(), toFill);
                     fluidStacks.add(new FluidStack(iFluidTank.getFluid().getFluid(),amount));
                     if(GTTransferUtils.addFluidsToFluidHandler(this.importFluids,true, fluidStacks)) {
                         GTTransferUtils.addFluidsToFluidHandler(this.importFluids,false, fluidStacks);
@@ -97,9 +97,7 @@ public class MetaTileEntityCoagulationTank extends RecipeMapPrimitiveMultiblockC
             }
             for (int i = 0; i < this.exportItems.getSlots(); i++) {
                 ItemStack stack = this.exportItems.getStackInSlot(i);
-                if(stack != null){
-                    this.exportItems.setStackInSlot(i,GTTransferUtils.insertItem(this.outputInventory, stack,false));
-                }
+                this.exportItems.setStackInSlot(i,GTTransferUtils.insertItem(this.outputInventory, stack,false));
             }
             this.fillInternalTankFromFluidContainer();
         }

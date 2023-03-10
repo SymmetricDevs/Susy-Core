@@ -9,7 +9,9 @@ public class SuSyUnknownCompositionMaterials {
     public static void init() {
         Latex = new Material.Builder(27050, "latex")
                 .color(0xFFFADA)
+                .dust()
                 .fluid()
+                .fluidTemp(293)
                 .build();
     }
 }
