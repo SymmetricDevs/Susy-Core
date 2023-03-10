@@ -22,9 +22,9 @@ public class Supersymmetry {
 
     @Mod.EventHandler
     public void onPreInit(@NotNull FMLPreInitializationEvent event) {
+        proxy.preLoad();
         SuSyMetaItems.initMetaItems();
         SuSyBlocks.init();
         SuSyMetaTileEntities.init();
-        proxy.preLoad();
     }
 }

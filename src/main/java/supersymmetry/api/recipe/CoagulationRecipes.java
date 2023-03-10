@@ -13,6 +13,13 @@ public class CoagulationRecipes {
                 .EUt(1)
                 .buildAndRegister();
 
+        SuSyRecipeMaps.COAGULATION_RECIPES.recipeBuilder()
+                .duration(1)
+                .fluidInputs(SusyMaterials.Latex.getFluid(1000))
+                .output(OrePrefix.dust, SusyMaterials.Latex)
+                .EUt(1)
+                .buildAndRegister();
+
     }
 
 }
