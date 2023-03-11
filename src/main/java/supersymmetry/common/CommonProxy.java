@@ -24,11 +24,14 @@ import java.util.function.Function;
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class CommonProxy {
 
+    public void preLoad(){
+    }
     @SubscribeEvent
     public static void registerBlocks(@NotNull RegistryEvent.Register<Block> event) {
         IForgeRegistry<Block> registry = event.getRegistry();
 
         registry.register(SuSyBlocks.COOLING_COIL);
+        registry.register(SuSyBlocks.COAGULATION_TANK_WALL);
     }
 
     @SubscribeEvent
@@ -37,6 +40,7 @@ public class CommonProxy {
         SuSyMetaItems.initSubItems();
 
         registry.register(createItemBlock(SuSyBlocks.COOLING_COIL, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.COAGULATION_TANK_WALL, VariantItemBlock::new));
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)

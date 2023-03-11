@@ -9,6 +9,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.block.BlockCoagulationTankWall;
 import supersymmetry.api.block.BlockCoolingCoil;
 
 import java.util.Comparator;
@@ -19,15 +20,20 @@ import java.util.stream.Collectors;
 public class SuSyBlocks {
 
     public static BlockCoolingCoil COOLING_COIL;
+    public static BlockCoagulationTankWall COAGULATION_TANK_WALL;
+
 
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
         COOLING_COIL.setRegistryName("cooling_coil");
+        COAGULATION_TANK_WALL = new BlockCoagulationTankWall();
+        COAGULATION_TANK_WALL.setRegistryName("coagulation_tank_wall");
     }
 
     @SideOnly(Side.CLIENT)
     public static void registerItemModels() {
         COOLING_COIL.onModelRegister();
+        registerItemModel(COAGULATION_TANK_WALL);
     }
 
     @SideOnly(Side.CLIENT)

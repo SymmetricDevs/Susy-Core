@@ -14,7 +14,5 @@ public class FridgeRecipes {
                 .output(SuSyMetaTileEntities.MAGNETIC_REFRIGERATOR)
                 .temperature(2)
                 .buildAndRegister();
-
     }
-
 }

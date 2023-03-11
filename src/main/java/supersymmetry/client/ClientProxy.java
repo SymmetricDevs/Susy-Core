@@ -7,6 +7,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.Supersymmetry;
+import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.CommonProxy;
 import supersymmetry.common.blocks.SuSyBlocks;
 
@@ -14,6 +15,10 @@ import supersymmetry.common.blocks.SuSyBlocks;
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID, value = Side.CLIENT)
 public class ClientProxy extends CommonProxy {
 
+    public void preLoad(){
+        super.preLoad();
+        SusyTextures.preInit();
+    }
     @SubscribeEvent
     public static void registerModels(@NotNull ModelRegistryEvent event) {
         SuSyBlocks.registerItemModels();
