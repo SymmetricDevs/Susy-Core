@@ -54,9 +54,9 @@ public class BlockCoolingCoil extends VariantActiveBlock<BlockCoolingCoil.Coolin
 
     public enum CoolingCoilType implements IStringSerializable {
 
-        MANGANESE_IRON_ARSENIC_PHOSPHIDE("machine_coil_manganese_iron_arsenic_phosphide", 160, SusyMaterials.ManganeseIronArsenicPhosphide),
-        PRASEODYMIUM_NICKEL("machine_coil_praseodymium_nickel", 50, SusyMaterials.PraseodymiumNickel),
-        GADOLINIUM_SILICON_GERMANIUM("machine_coil_gadolinium_silicon_germanium", 1, SusyMaterials.GadoliniumSiliconGermanium);
+        MANGANESE_IRON_ARSENIC_PHOSPHIDE("manganese_iron_arsenic_phosphide", 160, SusyMaterials.ManganeseIronArsenicPhosphide),
+        PRASEODYMIUM_NICKEL("praseodymium_nickel", 50, SusyMaterials.PraseodymiumNickel),
+        GADOLINIUM_SILICON_GERMANIUM("gadolinium_silicon_germanium", 1, SusyMaterials.GadoliniumSiliconGermanium);
 
         public final String name;
         public final int coilTemperature;

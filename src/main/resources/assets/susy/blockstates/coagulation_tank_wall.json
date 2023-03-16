@@ -1,0 +1,22 @@
+{
+  "forge_marker" : 1,
+  "defaults": {
+    "model": "minecraft:cube_bottom_top",
+    "textures": {
+      "bottom": "gregtech:blocks/rendering_error",
+      "top": "gregtech:blocks/rendering_error",
+      "side": "gregtech:blocks/rendering_error"
+    }
+  },
+  "variants" : {
+    "variant" : {
+      "wooden_coagulation_tank_wall": {
+        "textures": {
+          "bottom": "gregtech:blocks/casings/wooden_coagulation_tank_wall/bottom",
+          "top": "gregtech:blocks/casings/wooden_coagulation_tank_wall/top",
+          "side": "gregtech:blocks/casings/wooden_coagulation_tank_wall/side"
+        }
+      }
+    }
+  }
+}

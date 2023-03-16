@@ -8,16 +8,15 @@ tile.cooling_coil.tooltip_temperature=Base Cooling Capacity: §b%,dK
 tile.sintering_brick.sintering_block_brick.name=Brick Sintering Block
 tile.sintering_brick.sintering_block_magnetoplated.name=Magnetoplated Sintering Block
 
-# Items
-
+tile.coagulation_tank_wall.wooden_coagulation_tank_wall.name=Wooden Coagulation Tank Wall
 
 # Materials
 material.manganese_iron_arsenic_phosphide=Manganese Iron Arsenic Phosphide
 material.praseodymium_nickel=Praseodymium-Nickel
 material.gadolinium_silicon_germanium=Gadolinium Silicon Germanium
+material.latex=Latex
 
-
-# Machines
+# Machines/Multiblocks
 gregtech.machine.magnetic_refrigerator.name=Magnetic Refrigerator
 gregtech.multiblock.magnetic_refrigerator.min_temperature=§bTemperature Limit: %s
 
@@ -28,3 +27,24 @@ gregtech.multiblocks.sintering_oven.use_plasma.negative=No
 
 # Properties
 gregtech.recipe.plasma_requirement=Requires plasma: %s
+
+gregtech.machine.coagulation_tank.name=Coagulation Tank
+
+# Latex Collector
+gregtech.machine.latex_collector.tooltip=Collects latex from adjacent rubber tree logs. Yields %d mL of latex per tick, per log adjacent.
+gregtech.machine.latex_collector.bronze.name=Steam Latex Collector
+gregtech.machine.latex_collector.lv.name=Basic Latex Collector
+gregtech.machine.latex_collector.mv.name=Advanced Latex Collector
+gregtech.machine.latex_collector.hv.name=Advanced Latex Collector II
+gregtech.machine.latex_collector.ev.name=Advanced Latex Collector III
+
+# Vulcanizing Press
+gregtech.machine.vulcanizing_press.steam.name=Steam Vulcanizing Press
+gregtech.machine.vulcanizing_press.lv.name=Basic Vulcanizing Press
+gregtech.machine.vulcanizing_press.mv.name=Advanced Vulcanizing Press
+gregtech.machine.vulcanizing_press.hv.name=Advanced Vulcanizing Press II
+gregtech.machine.vulcanizing_press.ev.name=Advanced Vulcanizing Press III
+
+# Recipemaps
+recipemap.coagulation_tank.name=Coagulation
+recipemap.vulcanizing_press.name=Vulcanization
