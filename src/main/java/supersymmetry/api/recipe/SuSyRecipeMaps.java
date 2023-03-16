@@ -4,7 +4,6 @@ import gregtech.api.recipes.RecipeMap;
 import gregtech.core.sound.GTSoundEvents;
 import gregtech.api.recipes.builders.PrimitiveRecipeBuilder;
 import gregtech.api.recipes.builders.SimpleRecipeBuilder;
-import gregtech.api.sound.GTSounds;
 import supersymmetry.api.recipe.builders.CoilingCoilRecipeBuilder;
 import supersymmetry.api.recipe.builders.SinteringRecipeBuilder;
 
