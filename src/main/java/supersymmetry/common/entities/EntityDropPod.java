@@ -10,6 +10,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 public class EntityDropPod extends EntityLiving implements IAnimatable {
 
+    private AnimationFactory factory = new AnimationFactory(this);
 
     public EntityDropPod(World worldIn) {
         super(worldIn);
@@ -32,6 +33,6 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
 
     @Override
     public AnimationFactory getFactory() {
-        return null;
+        return this.factory;
     }
 }
