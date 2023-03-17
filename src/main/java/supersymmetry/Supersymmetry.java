@@ -6,6 +6,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.common.CommonProxy;
+import supersymmetry.common.SusyMetaEntities;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
@@ -20,11 +21,15 @@ public class Supersymmetry {
     @SidedProxy(modId = MODID, clientSide = "supersymmetry.client.ClientProxy", serverSide = "supersymmetry.common.CommonProxy")
     public static CommonProxy proxy;
 
+    @Mod.Instance(Supersymmetry.MODID)
+    public static Supersymmetry instance;
+
     @Mod.EventHandler
     public void onPreInit(@NotNull FMLPreInitializationEvent event) {
         proxy.preLoad();
         SuSyMetaItems.initMetaItems();
         SuSyBlocks.init();
         SuSyMetaTileEntities.init();
+        SusyMetaEntities.init();
     }
 }
