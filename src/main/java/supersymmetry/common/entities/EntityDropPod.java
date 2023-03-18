@@ -31,8 +31,12 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
         this(worldIn, (float)pos.getX() - 0.5F, (float)pos.getY(), (float)pos.getZ() + 0.5);
     }
 
+    public boolean openingAnimationFinished() {
+        return false;
+    }
+
     public boolean canPlayerDismount() {
-        return this.isDead;
+        return this.isDead || this.openingAnimationFinished();
     }
 
     @Override
