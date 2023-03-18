@@ -16,10 +16,10 @@ public class EventHandlers {
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         if(!event.player.getEntityWorld().isRemote) {
 
-            EntityDropPod dropPod = new EntityDropPod(event.player.getEntityWorld(), event.player.posX, event.player.posY + 300, event.player.posZ);
+            EntityDropPod dropPod = new EntityDropPod(event.player.getEntityWorld(), event.player.posX, event.player.posY + 256, event.player.posZ);
 
-            GTTeleporter teleporter = new GTTeleporter((WorldServer) event.player.world, event.player.posX, event.player.posY + 300, event.player.posZ);
-            TeleportHandler.teleport(event.player, event.player.dimension, teleporter, event.player.posX, event.player.posY + 300, event.player.posZ);
+            GTTeleporter teleporter = new GTTeleporter((WorldServer) event.player.world, event.player.posX, event.player.posY + 256, event.player.posZ);
+            TeleportHandler.teleport(event.player, event.player.dimension, teleporter, event.player.posX, event.player.posY + 256, event.player.posZ);
 
             event.player.getEntityWorld().spawnEntity(dropPod);
             event.player.startRiding(dropPod);
