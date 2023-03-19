@@ -1,9 +1,14 @@
 package supersymmetry.common.entities;
 
+import jdk.nashorn.internal.ir.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -13,6 +18,9 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 public class EntityDropPod extends EntityLiving implements IAnimatable {
+
+    private static final DataParameter<Boolean> HAS_LANDED = EntityDataManager.<Boolean>createKey(EntityDropPod.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Integer> TIME_SINCE_LANDING = EntityDataManager.<Integer>createKey(EntityDropPod.class, DataSerializers.VARINT);
 
     private AnimationFactory factory = new AnimationFactory(this);
 
@@ -31,12 +39,45 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
         this(worldIn, (float)pos.getX() - 0.5F, (float)pos.getY(), (float)pos.getZ() + 0.5);
     }
 
-    public boolean openingAnimationFinished() {
-        return false;
+    public boolean canPlayerDismount() {
+        return this.isDead || this.getTimeSinceLanding() >= 60;
     }
 
-    public boolean canPlayerDismount() {
-        return this.isDead || this.openingAnimationFinished();
+    public boolean hasLanded() {
+        return this.dataManager.get(HAS_LANDED);
+    }
+
+    public void setLanded(boolean landed) {
+        this.dataManager.set(HAS_LANDED, landed);
+    }
+
+    public int getTimeSinceLanding() {
+        return this.dataManager.get(TIME_SINCE_LANDING);
+    }
+
+    private void setTimeSinceLanding(int timeSinceLanding) {
+        this.dataManager.set(TIME_SINCE_LANDING, timeSinceLanding);
+    }
+
+    @Override
+    protected void entityInit() {
+        super.entityInit();
+        this.dataManager.register(HAS_LANDED, false);
+        this.dataManager.register(TIME_SINCE_LANDING, 0);
+    }
+
+    @Override
+    public void writeEntityToNBT(NBTTagCompound compound) {
+        super.writeEntityToNBT(compound);
+        compound.setBoolean("landed", this.hasLanded());
+        compound.setInteger("time_since_landing", this.getTimeSinceLanding());
+    }
+
+    @Override
+    public void readEntityFromNBT(NBTTagCompound compound) {
+        super.readEntityFromNBT(compound);
+        this.setLanded(compound.getBoolean("Landed"));
+        this.setTimeSinceLanding(compound.getInteger("time_since_landing"));
     }
 
     @Override
@@ -44,6 +85,34 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
         super.onLivingUpdate();
         if(!this.onGround && this.motionY < 0.0D) {
             this.motionY *= 0.9D;
+        }
+
+        if(this.canPlayerDismount()) {
+            for(Entity rider : this.getRecursivePassengers()) {
+                rider.dismountRidingEntity();
+            }
+        }
+
+        if(!world.isRemote) {
+            this.setLanded(this.hasLanded() || this.onGround);
+
+            if (this.motionY <= 0.01D) {
+                BlockPos pos = new BlockPos(this.posX, this.posY - 1, this.posZ);
+                if (this.world.getBlockState(pos).getBlockHardness(this.world, pos) < 0.3) {
+                    this.world.setBlockToAir(pos);
+                }
+            }
+
+            if (this.hasLanded()) {
+                this.setTimeSinceLanding(this.getTimeSinceLanding() + 1);
+            }
+        }
+    }
+
+    @Override
+    protected void removePassenger(Entity passenger) {
+        if (this.canPlayerDismount()) {
+            super.removePassenger(passenger);
         }
     }
 
@@ -64,13 +133,6 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     @Override
     public void fall(float distance, float damageMultiplier) {
 
-    }
-
-    @Override
-    protected void removePassenger(Entity passenger) {
-        if (this.canPlayerDismount()) {
-            super.removePassenger(passenger);
-        }
     }
 
     @Override
