@@ -18,7 +18,7 @@ gregtech.multiblock.magnetic_refrigerator.min_temperature=§bTemperature Limit: 
 gregtech.machine.coagulation_tank.name=Coagulation Tank
 
 # Latex Collector
-gregtech.machine.latex_collector.tooltip=Collects latex from adjacent rubber tree logs. Yields %d mL of latex per tick, per log adjacent.
+gregtech.machine.latex_collector.tooltip=Collects latex from adjacent rubber tree log. Yields %d mL of latex per tick.
 gregtech.machine.latex_collector.bronze.name=Steam Latex Collector
 gregtech.machine.latex_collector.lv.name=Basic Latex Collector
 gregtech.machine.latex_collector.mv.name=Advanced Latex Collector

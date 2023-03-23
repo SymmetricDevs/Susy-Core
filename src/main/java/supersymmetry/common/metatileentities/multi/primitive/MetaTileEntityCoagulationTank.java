@@ -72,8 +72,10 @@ public class MetaTileEntityCoagulationTank extends RecipeMapPrimitiveMultiblockC
 
         builder.widget((new SlotWidget(this.importItems, 0, 30, 39, true, true).setBackgroundTexture(GuiTextures.PRIMITIVE_SLOT)));
         builder.widget((new SlotWidget(this.importItems, 1, 48, 39, true, true).setBackgroundTexture(GuiTextures.PRIMITIVE_SLOT)));
-        builder.widget((new TankWidget(this.importFluids.getTankAt(0), 12, 39, 18, 18)).setAlwaysShowFull(true).setBackgroundTexture(GuiTextures.FLUID_SLOT).setContainerClicking(true, true));
+        builder.widget((new TankWidget(this.importFluids.getTankAt(1), 30, 57, 18, 18)).setAlwaysShowFull(true).setBackgroundTexture(GuiTextures.FLUID_SLOT).setContainerClicking(true, true));
+        builder.widget((new TankWidget(this.importFluids.getTankAt(0), 48, 57, 18, 18)).setAlwaysShowFull(true).setBackgroundTexture(GuiTextures.FLUID_SLOT).setContainerClicking(true, true));
         builder.widget((new SlotWidget(this.exportItems, 0, 106, 39, true, false).setBackgroundTexture(GuiTextures.PRIMITIVE_SLOT)));
+
 
         return builder.bindPlayerInventory(entityPlayer.inventory, GuiTextures.PRIMITIVE_SLOT, 0);
     }
