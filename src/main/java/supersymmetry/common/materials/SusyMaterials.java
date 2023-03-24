@@ -7,7 +7,12 @@ public class SusyMaterials {
     public static Material ManganeseIronArsenicPhosphide;
     public static Material PraseodymiumNickel;
     public static Material GadoliniumSiliconGermanium;
-
+    public static Material Gabbro;
+    public static Material Gneiss;
+    public static Material Limestone;
+    public static Material Phyllite;
+    public static Material Shale;
+    public static Material Slate;
     public static Material Latex;
 
     public static void init() {

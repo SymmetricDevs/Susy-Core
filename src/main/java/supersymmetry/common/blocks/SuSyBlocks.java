@@ -1,5 +1,6 @@
 package supersymmetry.common.blocks;
 
+import gregtech.api.util.GTLog;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -11,6 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.block.BlockCoagulationTankWall;
 import supersymmetry.api.block.BlockCoolingCoil;
+import supersymmetry.api.block.SusyBlockStoneSmooth;
 
 import java.util.Comparator;
 import java.util.List;
@@ -21,6 +23,7 @@ public class SuSyBlocks {
 
     public static BlockCoolingCoil COOLING_COIL;
     public static BlockCoagulationTankWall COAGULATION_TANK_WALL;
+    public static SusyBlockStoneSmooth SUSY_STONE_SMOOTH;
 
 
     public static void init() {
@@ -28,6 +31,8 @@ public class SuSyBlocks {
         COOLING_COIL.setRegistryName("cooling_coil");
         COAGULATION_TANK_WALL = new BlockCoagulationTankWall();
         COAGULATION_TANK_WALL.setRegistryName("coagulation_tank_wall");
+        SUSY_STONE_SMOOTH = new SusyBlockStoneSmooth();
+        SUSY_STONE_SMOOTH.setRegistryName("susy_stone_smooth");
     }
 
     @SideOnly(Side.CLIENT)
@@ -39,7 +44,6 @@ public class SuSyBlocks {
     @SideOnly(Side.CLIENT)
     private static void registerItemModel(@NotNull Block block) {
         for (IBlockState state : block.getBlockState().getValidStates()) {
-            //noinspection ConstantConditions
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block),
                     block.getMetaFromState(state),
                     new ModelResourceLocation(block.getRegistryName(),

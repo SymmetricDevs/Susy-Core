@@ -32,6 +32,7 @@ public class CommonProxy {
 
         registry.register(SuSyBlocks.COOLING_COIL);
         registry.register(SuSyBlocks.COAGULATION_TANK_WALL);
+        registry.register(SuSyBlocks.SUSY_STONE_SMOOTH);
     }
 
     @SubscribeEvent
@@ -41,6 +42,7 @@ public class CommonProxy {
 
         registry.register(createItemBlock(SuSyBlocks.COOLING_COIL, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.COAGULATION_TANK_WALL, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.SUSY_STONE_SMOOTH, VariantItemBlock::new));
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
