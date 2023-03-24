@@ -9,65 +9,47 @@
         "textures" : {
           "all" : "gregtech:blocks/susy_stones/gabbro"
         }
-      }
-    },
-    "variant": {
+      },
       "gneiss" : {
         "textures" : {
           "all" : "gregtech:blocks/susy_stones/gneiss"
         }
-      }
-    },
-    "variant": {
+      },
       "graphite" : {
         "textures" : {
           "all" : "gregtech:blocks/susy_stones/graphite"
         }
-      }
-    },
-    "variant": {
+      },
       "limestone" : {
         "textures" : {
           "all" : "gregtech:blocks/susy_stones/limestone"
         }
-      }
-    },
-    "variant": {
+      },
       "mica" : {
         "textures" : {
           "all" : "gregtech:blocks/susy_stones/mica"
         }
-      }
-    },
-    "variant": {
+      },
       "phyllite" : {
         "textures" : {
           "all" : "gregtech:blocks/susy_stones/phyllite"
         }
-      }
-    },
-    "variant": {
+      },
       "quartzite" : {
         "textures" : {
           "all" : "gregtech:blocks/susy_stones/quartzite"
         }
-      }
-    },
-    "variant": {
+      },
       "shale" : {
         "textures" : {
           "all" : "gregtech:blocks/susy_stones/shale"
         }
-      }
-    },
-    "variant": {
+      },
       "slate" : {
         "textures" : {
           "all" : "gregtech:blocks/susy_stones/slate"
         }
-      }
-    },
-    "variant": {
+      },
       "soapstone" : {
         "textures" : {
           "all" : "gregtech:blocks/susy_stones/soapstone"

@@ -16,7 +16,43 @@ public class SuSySecondDegreeMaterials {
                 .dust()
                 .color(0x5C5C5C).iconSet(ROUGH)
                 .flags(NO_SMASHING, DECOMPOSITION_BY_CENTRIFUGING)
-                .components(Olivine, 6, Magnesia, 2, Calcium, 1, Oxygen, 1)
+                .components(Labradorite, 5, Bytownite, 3, Olivine, 2, Augite, 1, Biotite, 1)
                 .build();
+
+        Gneiss = new Material.Builder(27201, "gneiss")
+                .dust()
+                .color(0x643631).iconSet(ROUGH)
+                .flags(NO_SMASHING, DECOMPOSITION_BY_CENTRIFUGING)
+                .components(Biotite, 1, Albite, 4, Muscovite, 3, Graphite, 2)
+                .build();
+
+        Limestone = new Material.Builder(27202, "limestone")
+                .dust()
+                .color(0xa9a9a9).iconSet(ROUGH)
+                .flags(NO_SMASHING, DECOMPOSITION_BY_CENTRIFUGING)
+                .components(Calcite, 4, Dolomite, 1)
+                .build();
+
+        Phyllite = new Material.Builder(27203, "phyllite")
+                .dust()
+                .color(0x716f71).iconSet(ROUGH)
+                .flags(NO_SMASHING, DECOMPOSITION_BY_CENTRIFUGING)
+                .components(Albite, 3, SiliconDioxide, 3, Muscovite, 4)
+                .build();
+
+        Shale = new Material.Builder(27204, "shale")
+                .dust()
+                .color(0x3f2e2f).iconSet(ROUGH)
+                .flags(NO_SMASHING, DECOMPOSITION_BY_CENTRIFUGING)
+                .components(SiliconDioxide, 1, Calcite, 6, Fluorite, 1, Clay, 2)
+                .build();
+
+        Slate = new Material.Builder(27205, "slate")
+                .dust()
+                .color(0x756869).iconSet(ROUGH)
+                .flags(NO_SMASHING, DECOMPOSITION_BY_CENTRIFUGING)
+                .components(SiliconDioxide, 5, Muscovite, 2, Clinochlore, 2, Albite, 1)
+                .build();
+
     }
 }

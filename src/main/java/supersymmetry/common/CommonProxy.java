@@ -17,6 +17,7 @@ import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.loaders.SuSyRecipeLoader;
+import supersymmetry.loaders.SusyOreDictionaryLoader;
 
 import java.util.Objects;
 import java.util.function.Function;
@@ -52,6 +53,8 @@ public class CommonProxy {
 
     @SubscribeEvent()
     public static void registerRecipes(RegistryEvent.Register<IRecipe> event) {
+        SusyOreDictionaryLoader.init();
+
         SuSyRecipeLoader.init();
     }
 

@@ -15,6 +15,23 @@ public class SusyMaterials {
     public static Material Slate;
     public static Material Latex;
 
+    //Minerals
+
+    public static Material Anorthite;
+    public static Material Albite;
+    public static Material Oligoclase;
+    public static Material Andesine;
+    public static Material Labradorite;
+    public static Material Bytownite;
+    public static Material Clinochlore;
+    public static Material Augite;
+    public static Material Dolomite;
+    public static Material Muscovite;
+    public static Material Fluorite;
+
+
+
+
     public static void init() {
         SuSyElementMaterials.init();
         SuSyFirstDegreeMaterials.init();
