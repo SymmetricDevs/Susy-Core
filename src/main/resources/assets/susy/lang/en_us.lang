@@ -5,13 +5,44 @@ tile.cooling_coil.praseodymium_nickel.name=Praseodymium-Nickel Cooling Coil
 tile.cooling_coil.gadolinium_silicon_germanium.name=Gadolinium Silicon Germanium Cooling Coil
 tile.cooling_coil.tooltip_temperature=Base Cooling Capacity: §b%,dK
 tile.coagulation_tank_wall.wooden_coagulation_tank_wall.name=Wooden Coagulation Tank Wall
+# Rocks
 tile.stone_smooth.gabbro.name=Gabbro
+tile.stone_smooth.gneiss.name=Gneiss
+tile.stone_smooth.graphite.name=Graphite
+tile.stone_smooth.limestone.name=Limestone
+tile.stone_smooth.mica.name=Mica
+tile.stone_smooth.phyllite.name=Phyllite
+tile.stone_smooth.quartzite.name=Quartzite
+tile.stone_smooth.shale.name=Shale
+tile.stone_smooth.slate.name=Slate
+tile.stone_smooth.soapstone.name=Soapstone
 
 # Materials
 material.manganese_iron_arsenic_phosphide=Manganese Iron Arsenic Phosphide
 material.praseodymium_nickel=Praseodymium-Nickel
 material.gadolinium_silicon_germanium=Gadolinium Silicon Germanium
 material.latex=Latex
+# Rock/Mineral Materials
+material.fluorite=Fluorite
+material.gabbro=Gabbro
+material.slate=Slate
+material.shale=Shale
+material.phyllite=Phyllite
+material.limestone=Limestone
+material.gneiss=Gneiss
+material.muscovite=Muscovite
+material.dolomite=Dolomite
+material.augite=Augite
+material.chlinochlore=Chlinochlore
+material.bytownite=Bytownite
+material.labradorite=Labradorite
+material.andesine=Andesine
+material.oligoclase=Oligoclase
+material.albite=Albite
+material.anorthite=Anorthite
+
+
+
 
 # Machines/Multiblocks
 gregtech.machine.magnetic_refrigerator.name=Magnetic Refrigerator

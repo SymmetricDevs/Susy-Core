@@ -124,6 +124,7 @@ public class SuSyFirstDegreeMaterials {
         Fluorite = new Material.Builder(27113, "fluorite")
                 .dust()
                 .gem()
+                .ore()
                 .color(0x276a4c).iconSet(CERTUS)
                 .flags(NO_SMASHING, DECOMPOSITION_BY_ELECTROLYZING)
                 .components(Calcium, 1, Fluorine, 2)

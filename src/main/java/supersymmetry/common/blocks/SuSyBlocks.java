@@ -39,6 +39,7 @@ public class SuSyBlocks {
     public static void registerItemModels() {
         COOLING_COIL.onModelRegister();
         registerItemModel(COAGULATION_TANK_WALL);
+        registerItemModel(SUSY_STONE_SMOOTH);
     }
 
     @SideOnly(Side.CLIENT)
