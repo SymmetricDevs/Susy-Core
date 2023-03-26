@@ -1,6 +1,7 @@
 package supersymmetry.common.entities;
 
-import jdk.nashorn.internal.ir.Block;
+import gregtech.api.GTValues;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -9,13 +10,17 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import supersymmetry.client.renderer.particles.SusyParticleFlame;
+import supersymmetry.client.renderer.particles.SusyParticleSmoke;
 
 public class EntityDropPod extends EntityLiving implements IAnimatable {
 
@@ -59,6 +64,24 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
         this.dataManager.set(TIME_SINCE_LANDING, timeSinceLanding);
     }
 
+    protected void spawnFlightParticles() {
+        SusyParticleFlame flame = new SusyParticleFlame(this.world, this.posX, this.posY, this.posZ, 1.5*(GTValues.RNG.nextFloat()-0.5)*0.08, -1.5, 1.5*(GTValues.RNG.nextFloat()-0.5)*0.08);
+        SusyParticleSmoke smoke = new SusyParticleSmoke(this.world, this.posX, this.posY, this.posZ, 1.5*(GTValues.RNG.nextFloat()-0.5)*0.16, -1.5, 1.5*(GTValues.RNG.nextFloat()-0.5)*0.16);
+        Minecraft.getMinecraft().effectRenderer.addEffect(smoke);
+        Minecraft.getMinecraft().effectRenderer.addEffect(flame);
+    }
+
+    @Override
+    public void onDeath(@NotNull DamageSource source) {
+        super.onDeath(source);
+        this.explode();
+    }
+
+    private void explode() {
+        this.world.newExplosion(this, this.posX, this.posY, this.posZ, 12, true, true);
+        this.setDead();
+    }
+
     @Override
     protected void entityInit() {
         super.entityInit();
@@ -67,14 +90,14 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound compound) {
+    public void writeEntityToNBT(@NotNull NBTTagCompound compound) {
         super.writeEntityToNBT(compound);
         compound.setBoolean("landed", this.hasLanded());
         compound.setInteger("time_since_landing", this.getTimeSinceLanding());
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound compound) {
+    public void readEntityFromNBT(@NotNull NBTTagCompound compound) {
         super.readEntityFromNBT(compound);
         this.setLanded(compound.getBoolean("Landed"));
         this.setTimeSinceLanding(compound.getInteger("time_since_landing"));
@@ -110,19 +133,17 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     }
 
     @Override
-    protected void removePassenger(Entity passenger) {
+    protected void removePassenger(@NotNull Entity passenger) {
         if (this.canPlayerDismount()) {
             super.removePassenger(passenger);
         }
     }
 
     @Override
-    public void updatePassenger(Entity passenger) {
+    public void updatePassenger(@NotNull Entity passenger) {
         super.updatePassenger(passenger);
         float f = MathHelper.sin(this.renderYawOffset * 0.017453292F);
         float f1 = MathHelper.cos(this.renderYawOffset * 0.017453292F);
-        float f2 = 0.1F;
-        float f3 = 0.0F;
         passenger.setPosition(this.posX + (double)(0.1F * f), this.posY + (double)(this.height * 0.2F) + passenger.getYOffset() + 0.0D, this.posZ - (double)(0.1F * f1));
 
         if (passenger instanceof EntityLivingBase) {
@@ -141,7 +162,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     }
 
     @Override
-    public boolean canBeLeashedTo(EntityPlayer player) {
+    public boolean canBeLeashedTo(@NotNull EntityPlayer player) {
         return false;
     }
 
@@ -156,7 +177,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     }
 
     @Override
-    public void knockBack(Entity entityIn, float strength, double xRatio, double zRatio) {
+    public void knockBack(@NotNull Entity entityIn, float strength, double xRatio, double zRatio) {
 
     }
 
