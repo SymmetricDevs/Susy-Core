@@ -1,4 +1,3 @@
-
 # Blocks
 tile.cooling_coil.manganese_iron_arsenic_phosphide.name=Manganese Iron Arsenic Phosphide Cooling Coil
 tile.cooling_coil.praseodymium_nickel.name=Praseodymium-Nickel Cooling Coil
@@ -45,7 +44,17 @@ material.oligoclase=Oligoclase
 material.albite=Albite
 material.anorthite=Anorthite
 
-
+# Ore Stone Types
+item.material.oreprefix.oreGabbro=Gabbro %s Ore
+item.material.oreprefix.oreGneiss=Gneiss %s Ore
+item.material.oreprefix.oreGraphite=Graphite %s Ore
+item.material.oreprefix.oreLimestone=Limestone %s Ore
+item.material.oreprefix.oreMica=Mica %s Ore
+item.material.oreprefix.orePhyllite=Phyllite %s Ore
+item.material.oreprefix.oreQuartzite=Quartzite %s Ore
+item.material.oreprefix.oreShale=Shale %s Ore
+item.material.oreprefix.oreSlate=Slate %s Ore
+item.material.oreprefix.oreSoapstone=Soapstone %s Ore
 
 
 # Machines/Multiblocks
