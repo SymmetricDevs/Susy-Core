@@ -7,8 +7,8 @@ public class SuSyMetaItems {
     private static StandardMetaItem metaItem;
 
     public static void initMetaItems() {
-        metaItem = new StandardMetaItem();
-        metaItem.setRegistryName("meta_item");
+        //metaItem = new StandardMetaItem();
+        //metaItem.setRegistryName("meta_item");
     }
 
     public static void initSubItems() {

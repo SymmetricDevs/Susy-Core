@@ -31,6 +31,7 @@ public class CommonProxy {
         IForgeRegistry<Block> registry = event.getRegistry();
 
         registry.register(SuSyBlocks.COOLING_COIL);
+        registry.register(SuSyBlocks.SINTERING_BRICK);
         registry.register(SuSyBlocks.COAGULATION_TANK_WALL);
     }
 
@@ -40,6 +41,7 @@ public class CommonProxy {
         SuSyMetaItems.initSubItems();
 
         registry.register(createItemBlock(SuSyBlocks.COOLING_COIL, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.SINTERING_BRICK, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.COAGULATION_TANK_WALL, VariantItemBlock::new));
     }
 
