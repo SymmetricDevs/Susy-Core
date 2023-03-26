@@ -35,7 +35,6 @@ compileJava {
 configurations {
     embed
     implementation.extendsFrom(embed)
-    getAssets.enabled=false
 }
 
 minecraft {
