@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.block.BlockCoagulationTankWall;
 import supersymmetry.api.block.BlockCoolingCoil;
 import supersymmetry.api.block.SusyBlockStoneSmooth;
+import supersymmetry.api.block.BlockSinteringBrick;
 
 import java.util.Comparator;
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 public class SuSyBlocks {
 
     public static BlockCoolingCoil COOLING_COIL;
+    public static BlockSinteringBrick SINTERING_BRICK;
     public static BlockCoagulationTankWall COAGULATION_TANK_WALL;
     public static SusyBlockStoneSmooth SUSY_STONE_SMOOTH;
 
@@ -29,15 +31,22 @@ public class SuSyBlocks {
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
         COOLING_COIL.setRegistryName("cooling_coil");
+
+        SINTERING_BRICK = new BlockSinteringBrick();
+        SINTERING_BRICK.setRegistryName("sintering_brick");
+
         COAGULATION_TANK_WALL = new BlockCoagulationTankWall();
         COAGULATION_TANK_WALL.setRegistryName("coagulation_tank_wall");
+
         SUSY_STONE_SMOOTH = new SusyBlockStoneSmooth();
         SUSY_STONE_SMOOTH.setRegistryName("susy_stone_smooth");
+
     }
 
     @SideOnly(Side.CLIENT)
     public static void registerItemModels() {
         COOLING_COIL.onModelRegister();
+        SINTERING_BRICK.onModelRegister();
         registerItemModel(COAGULATION_TANK_WALL);
         registerItemModel(SUSY_STONE_SMOOTH);
     }

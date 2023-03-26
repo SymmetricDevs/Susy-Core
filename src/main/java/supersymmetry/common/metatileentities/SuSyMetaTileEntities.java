@@ -8,6 +8,7 @@ import supersymmetry.api.recipe.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCoagulationTank;
 import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityMagneticRefrigerator;
+import supersymmetry.common.metatileentities.multi.electric.MetaTileEntitySinteringOven;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityLatexCollector;
 import supersymmetry.common.metatileentities.single.steam.MetaTileEntitySteamLatexCollector;
 import supersymmetry.common.metatileentities.single.steam.MetaTileEntitySteamVulcanizingPress;
@@ -17,12 +18,15 @@ import static gregtech.common.metatileentities.MetaTileEntities.registerMetaTile
 public class SuSyMetaTileEntities {
 
     public static MetaTileEntityMagneticRefrigerator MAGNETIC_REFRIGERATOR;
+    
     public static MetaTileEntityCoagulationTank COAGULATION_TANK;
     public static final MetaTileEntityLatexCollector[] LATEX_COLLECTOR;
     public static MetaTileEntitySteamLatexCollector LATEX_COLLECTOR_BRONZE;
 
     public static SimpleMachineMetaTileEntity[] VULCANIZING_PRESS;
     public static MetaTileEntitySteamVulcanizingPress VULCANIZING_PRESS_BRONZE;
+    
+    public static MetaTileEntitySinteringOven SINTERING_OVEN;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -41,6 +45,8 @@ public class SuSyMetaTileEntities {
         VULCANIZING_PRESS[3] = registerMetaTileEntity(14518, new SimpleMachineMetaTileEntity(susyId("vulcanizing_press.ev"), SuSyRecipeMaps.VULCANIZATION_RECIPES, SusyTextures.VULCANIZING_PRESS_OVERLAY,4, true));
 
         VULCANIZING_PRESS_BRONZE = registerMetaTileEntity(14520, new MetaTileEntitySteamVulcanizingPress(susyId("vulcanizing_press.steam"), false));
+        
+        SINTERING_OVEN = registerMetaTileEntity(14521, new MetaTileEntitySinteringOven(susyId("sintering_oven")));
     }
 
     private static @NotNull ResourceLocation susyId(@NotNull String name) {
