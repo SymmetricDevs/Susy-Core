@@ -14,14 +14,12 @@ import gregtech.api.gui.widgets.*;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.TieredMetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.util.GTLog;
 import gregtech.api.util.GTTransferUtils;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.MetaBlocks;
 
 import java.util.List;
 import javax.annotation.Nullable;
-import javax.xml.soap.Text;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
@@ -34,7 +32,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.b3d.B3DModel;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.IFluidTank;
@@ -42,6 +39,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
+import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.materials.SusyMaterials;
 
 public class MetaTileEntityLatexCollector extends TieredMetaTileEntity {
@@ -79,7 +77,7 @@ public class MetaTileEntityLatexCollector extends TieredMetaTileEntity {
     @SideOnly(Side.CLIENT)
     public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
         super.renderMetaTileEntity(renderState, translation, pipeline);
-        Textures.GAS_COLLECTOR_OVERLAY.renderOrientedState(renderState, translation, pipeline, this.getFrontFacing(), this.isActive(), true);
+        SusyTextures.LATEX_COLLECTOR_OVERLAY.renderOrientedState(renderState, translation, pipeline, this.getFrontFacing(), this.isActive(), true);
         if (this.getOutputFacingFluids() != null) {
             Textures.PIPE_OUT_OVERLAY.renderSided(this.getOutputFacingFluids(), renderState, translation, pipeline);
         }
@@ -188,13 +186,12 @@ public class MetaTileEntityLatexCollector extends TieredMetaTileEntity {
         if (!playerIn.isSneaking()) {
             if (this.getOutputFacingFluids() == facing) {
                 return false;
-            } else if (this.hasFrontFacing() && facing == this.getFrontFacing()) {
+            } else if (this.hasFrontFacing() && (facing == this.getFrontFacing() || facing == this.getFrontFacing().getOpposite())) {
                 return false;
             } else {
                 if (!this.getWorld().isRemote) {
                     this.setOutputFacingFluids(facing);
                 }
-
                 return true;
             }
         } else {
@@ -211,7 +208,6 @@ public class MetaTileEntityLatexCollector extends TieredMetaTileEntity {
             });
             this.markDirty();
         }
-
     }
 
     public EnumFacing getOutputFacingFluids() {

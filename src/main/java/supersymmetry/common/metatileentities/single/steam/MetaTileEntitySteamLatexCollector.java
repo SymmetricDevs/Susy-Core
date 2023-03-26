@@ -5,7 +5,6 @@ import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.ColourMultiplier;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
-import gregtech.api.GTValues;
 import gregtech.api.capability.impl.FilteredFluidHandler;
 import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.capability.impl.NotifiableItemStackHandler;
@@ -44,19 +43,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.materials.SusyMaterials;
 
 import javax.annotation.Nullable;
 
 public class MetaTileEntitySteamLatexCollector extends MetaTileEntity {
-    private boolean isWorkingEnabled = true;
-    private boolean needsVenting = false;
-    private boolean ventingStuck = false;
     private final int energyPerTick = 16;
     private final int tankSize = 16000;
     private final long latexCollectionAmount = 3L;
-    private int numberRubberLogs;
-
+    private boolean hasRubberLog;
     private EnumFacing outputFacingFluids;
 
 
@@ -91,7 +87,7 @@ public class MetaTileEntitySteamLatexCollector extends MetaTileEntity {
         IVertexOperation[] coloredPipeline = (IVertexOperation[])ArrayUtils.add(pipeline, multiplier);
         Textures.STEAM_CASING_BRONZE.render(renderState, translation, coloredPipeline);
 
-        Textures.GAS_COLLECTOR_OVERLAY.renderOrientedState(renderState, translation, coloredPipeline, this.getFrontFacing(), this.isActive(), true);
+        SusyTextures.LATEX_COLLECTOR_OVERLAY.renderOrientedState(renderState, translation, coloredPipeline, this.getFrontFacing(), this.isActive(), true);
         if (this.getOutputFacingFluids() != null) {
             Textures.PIPE_OUT_OVERLAY.renderSided(this.getOutputFacingFluids(), renderState, translation, coloredPipeline);
         }
@@ -126,7 +122,7 @@ public class MetaTileEntitySteamLatexCollector extends MetaTileEntity {
 
     public boolean drainEnergy(boolean simulate) {
         int resultSteam = this.importFluids.getTankAt(0).getFluidAmount() - this.energyPerTick;
-        if (!this.ventingStuck && (long)resultSteam >= 0L && resultSteam <= this.importFluids.getTankAt(0).getCapacity()) {
+        if ((long)resultSteam >= 0L && resultSteam <= this.importFluids.getTankAt(0).getCapacity()) {
             if (!simulate) {
                 this.importFluids.getTankAt(0).drain(this.energyPerTick, true);
             }
@@ -140,9 +136,9 @@ public class MetaTileEntitySteamLatexCollector extends MetaTileEntity {
     public void update() {
         super.update();
 
-        if (!this.getWorld().isRemote && this.numberRubberLogs != 0 && this.isWorkingEnabled) {
+        if (!this.getWorld().isRemote && this.hasRubberLog) {
             if(this.drainEnergy(true)){
-                FluidStack latexStack = SusyMaterials.Latex.getFluid((int) this.latexCollectionAmount * this.numberRubberLogs);
+                FluidStack latexStack = SusyMaterials.Latex.getFluid((int) this.latexCollectionAmount);
                 NonNullList<FluidStack> fluidStacks = NonNullList.create();
                 fluidStacks.add(latexStack);
                 if (GTTransferUtils.addFluidsToFluidHandler(this.exportFluids, true, fluidStacks)) {
@@ -168,20 +164,16 @@ public class MetaTileEntitySteamLatexCollector extends MetaTileEntity {
 
     public void checkAdjacentBlocks(){
         if(this.getWorld() != null){
-            this.numberRubberLogs = 0;
+            this.hasRubberLog = false;
             if(!this.getWorld().isRemote) {
                 EnumFacing[] facings = EnumFacing.VALUES;
                 int numFacings = facings.length;
 
-                for (int i = 0; i < numFacings; ++i) {
-                    EnumFacing side = facings[i];
+                EnumFacing back = this.getFrontFacing().getOpposite();
 
-                    if (side != this.frontFacing && !side.getAxis().isVertical()) {
-                        Block block = this.getWorld().getBlockState(this.getPos().offset(side)).getBlock();
-                        if (block == MetaBlocks.RUBBER_LOG) {
-                            ++this.numberRubberLogs;
-                        }
-                    }
+                Block block = this.getWorld().getBlockState(this.getPos().offset(back)).getBlock();
+                if (block == MetaBlocks.RUBBER_LOG) {
+                    this.hasRubberLog = true;
                 }
             }
         }
@@ -195,14 +187,14 @@ public class MetaTileEntitySteamLatexCollector extends MetaTileEntity {
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setInteger("OutputFacingF", this.getOutputFacingFluids().getIndex());
-        data.setInteger("numberRubberLogs", this.numberRubberLogs);
+        data.setBoolean("hasRubberLogs", this.hasRubberLog);
         return data;
     }
 
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         if (data.hasKey("numberRubberLogs")) {
-            this.numberRubberLogs = data.getInteger("numberRubberLogs");
+            this.hasRubberLog = data.getBoolean("hasRubberLogs");
         }
         if (data.hasKey("OutputFacingF")) {
             this.outputFacingFluids = EnumFacing.byIndex(data.getInteger("OutputFacingF"));
@@ -231,7 +223,7 @@ public class MetaTileEntitySteamLatexCollector extends MetaTileEntity {
         if (!playerIn.isSneaking()) {
             if (this.getOutputFacingFluids() == facing) {
                 return false;
-            } else if (this.hasFrontFacing() && facing == this.getFrontFacing()) {
+            } else if (this.hasFrontFacing() && (facing == this.getFrontFacing() || facing == this.getFrontFacing().getOpposite())) {
                 return false;
             } else {
                 if (!this.getWorld().isRemote) {
