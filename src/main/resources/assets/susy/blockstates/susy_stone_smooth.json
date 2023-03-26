@@ -1,0 +1,60 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "minecraft:cube_all"
+  },
+  "variants": {
+    "variant": {
+      "gabbro" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/gabbro"
+        }
+      },
+      "gneiss" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/gneiss"
+        }
+      },
+      "graphite" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/graphite"
+        }
+      },
+      "limestone" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/limestone"
+        }
+      },
+      "mica" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/mica"
+        }
+      },
+      "phyllite" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/phyllite"
+        }
+      },
+      "quartzite" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/quartzite"
+        }
+      },
+      "shale" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/shale"
+        }
+      },
+      "slate" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/slate"
+        }
+      },
+      "soapstone" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/soapstone"
+        }
+      }
+    }
+  }
+}
