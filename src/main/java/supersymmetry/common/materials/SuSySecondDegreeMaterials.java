@@ -23,7 +23,7 @@ public class SuSySecondDegreeMaterials {
                 .dust()
                 .color(0x643631).iconSet(ROUGH)
                 .flags(NO_SMASHING, DECOMPOSITION_BY_CENTRIFUGING)
-                .components(Biotite, 1, Albite, 4, Muscovite, 3, Graphite, 2)
+                .components(Albite, 4, SiliconDioxide, 3, Biotite, 1, Muscovite, 1)
                 .build();
 
         Limestone = new Material.Builder(27202, "limestone")
@@ -44,7 +44,7 @@ public class SuSySecondDegreeMaterials {
                 .dust()
                 .color(0x3f2e2f).iconSet(ROUGH)
                 .flags(NO_SMASHING, DECOMPOSITION_BY_CENTRIFUGING)
-                .components(SiliconDioxide, 1, Calcite, 6, Fluorite, 1, Clay, 2)
+                .components(Calcite, 6, Clay, 2, SiliconDioxide, 1, Fluorite, 1)
                 .build();
 
         Slate = new Material.Builder(27205, "slate")

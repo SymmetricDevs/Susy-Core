@@ -1,7 +1,6 @@
 package supersymmetry.api.unification.ore;
 
 import gregtech.api.unification.material.Materials;
-import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.unification.ore.StoneType;
 import net.minecraft.block.SoundType;
 import supersymmetry.common.blocks.SuSyBlocks;
