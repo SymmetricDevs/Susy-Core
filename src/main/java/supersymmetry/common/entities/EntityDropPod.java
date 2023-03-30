@@ -17,6 +17,11 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import supersymmetry.client.renderer.particles.SusyParticleFlame;
@@ -297,9 +302,19 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
         super.setAir(300);
     }
 
+    private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
+        if (this.getTimeSinceLanding() > 0 && this.getTimeSinceLanding() < 20) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.drop_pod.door.open", ILoopType.EDefaultLoopTypes.HOLD_ON_LAST_FRAME));
+        }
+        if(this.getTimeSinceLanding() > 20 && this.getTimeSinceLanding() < 40) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.drop_pod.seat.open", ILoopType.EDefaultLoopTypes.HOLD_ON_LAST_FRAME));
+        }
+        return PlayState.CONTINUE;
+    }
+
     @Override
     public void registerControllers(AnimationData animationData) {
-
+        animationData.addAnimationController(new AnimationController<EntityDropPod>(this, "controller", 0, this::predicate));
     }
 
     @Override
