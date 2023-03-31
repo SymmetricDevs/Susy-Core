@@ -66,10 +66,10 @@ gregtech.multiblock.sintering_oven.can_use_plasma=Plasma enabled: %s
 gregtech.multiblocks.sintering_oven.use_plasma.affirmative=Yes
 gregtech.multiblocks.sintering_oven.use_plasma.negative=No
 
+gregtech.machine.coagulation_tank.name=Coagulation Tank
+
 # Properties
 gregtech.recipe.plasma_requirement=Requires plasma: %s
-
-gregtech.machine.coagulation_tank.name=Coagulation Tank
 
 # Latex Collector
 gregtech.machine.latex_collector.tooltip=Collects latex from adjacent rubber tree log. Yields %d mL of latex per tick.
