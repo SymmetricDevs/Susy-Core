@@ -303,11 +303,8 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        if (this.getTimeSinceLanding() > 0 && this.getTimeSinceLanding() < 20) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.drop_pod.door.open", ILoopType.EDefaultLoopTypes.HOLD_ON_LAST_FRAME));
-        }
-        if(this.getTimeSinceLanding() > 20 && this.getTimeSinceLanding() < 40) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.drop_pod.seat.open", ILoopType.EDefaultLoopTypes.HOLD_ON_LAST_FRAME));
+        if (this.getTimeSinceLanding() > 0 && this.getTimeSinceLanding() < 140) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.drop_pod.complete", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
         }
         return PlayState.CONTINUE;
     }
