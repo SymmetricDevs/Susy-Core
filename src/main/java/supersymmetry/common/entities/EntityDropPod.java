@@ -6,16 +6,20 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
+import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -46,11 +50,11 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     }
 
     public EntityDropPod(World worldIn, BlockPos pos) {
-        this(worldIn, (float)pos.getX() - 0.5F, (float)pos.getY(), (float)pos.getZ() + 0.5);
+        this(worldIn, (float) pos.getX() - 0.5F, (float) pos.getY(), (float) pos.getZ() + 0.5);
     }
 
     public boolean canPlayerDismount() {
-        return this.isDead || this.getTimeSinceLanding() >= 60;
+        return this.isDead || this.getTimeSinceLanding() >= 30;
     }
 
     public boolean hasLanded() {
@@ -70,7 +74,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     }
 
     public boolean hasTakenOff() {
-        return this.getTimeSinceLanding() > 140;
+        return this.getTimeSinceLanding() > 200;
     }
 
     protected void spawnFlightParticles() {
@@ -79,66 +83,66 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
                 this.posX + 0.8D,
                 this.posY + 0.9D,
                 this.posZ + 0.2D,
-                1.5*(GTValues.RNG.nextFloat()-0.2)*0.08,
+                1.5 * (GTValues.RNG.nextFloat() - 0.2) * 0.08,
                 -1.5,
-                1.5*(GTValues.RNG.nextFloat()-0.5)*0.08);
+                1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.08);
         SusyParticleFlame flame2 = new SusyParticleFlame(
                 this.world,
                 this.posX + 0.8D,
                 this.posY + 0.9D,
                 this.posZ - 0.2D,
-                1.5*(GTValues.RNG.nextFloat()-0.2)*0.08,
+                1.5 * (GTValues.RNG.nextFloat() - 0.2) * 0.08,
                 -1.5,
-                1.5*(GTValues.RNG.nextFloat()-0.5)*0.08);
+                1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.08);
         SusyParticleFlame flame3 = new SusyParticleFlame(
                 this.world,
                 this.posX - 0.8D,
                 this.posY + 0.9D,
                 this.posZ + 0.2D,
-                1.5*(GTValues.RNG.nextFloat()-0.8)*0.08,
+                1.5 * (GTValues.RNG.nextFloat() - 0.8) * 0.08,
                 -1.5,
-                1.5*(GTValues.RNG.nextFloat()-0.5)*0.08);
+                1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.08);
         SusyParticleFlame flame4 = new SusyParticleFlame(
                 this.world,
                 this.posX - 0.8D,
                 this.posY + 0.9D,
                 this.posZ - 0.2D,
-                1.5*(GTValues.RNG.nextFloat()-0.8)*0.08,
+                1.5 * (GTValues.RNG.nextFloat() - 0.8) * 0.08,
                 -1.5,
-                1.5*(GTValues.RNG.nextFloat()-0.5)*0.08);
+                1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.08);
 
         SusyParticleSmoke smoke1 = new SusyParticleSmoke(
                 this.world,
                 this.posX + 0.8D,
                 this.posY + 0.9D,
                 this.posZ + 0.2D,
-                1.5*(GTValues.RNG.nextFloat()-0.2)*0.16,
+                1.5 * (GTValues.RNG.nextFloat() - 0.2) * 0.16,
                 -1.5,
-                1.5*(GTValues.RNG.nextFloat()-0.5)*0.16);
+                1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.16);
         SusyParticleSmoke smoke2 = new SusyParticleSmoke(
                 this.world,
                 this.posX + 0.8D,
                 this.posY + 0.9D,
                 this.posZ - 0.2D,
-                1.5*(GTValues.RNG.nextFloat()-0.2)*0.16,
+                1.5 * (GTValues.RNG.nextFloat() - 0.2) * 0.16,
                 -1.5,
-                1.5*(GTValues.RNG.nextFloat()-0.5)*0.16);
+                1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.16);
         SusyParticleSmoke smoke3 = new SusyParticleSmoke(
                 this.world,
                 this.posX - 0.8D,
                 this.posY + 0.9D,
                 this.posZ + 0.2D,
-                1.5*(GTValues.RNG.nextFloat()-0.8)*0.16,
+                1.5 * (GTValues.RNG.nextFloat() - 0.8) * 0.16,
                 -1.5,
-                1.5*(GTValues.RNG.nextFloat()-0.5)*0.16);
+                1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.16);
         SusyParticleSmoke smoke4 = new SusyParticleSmoke(
                 this.world,
                 this.posX - 0.8D,
                 this.posY + 0.9D,
                 this.posZ - 0.2D,
-                1.5*(GTValues.RNG.nextFloat()-0.8)*0.16,
+                1.5 * (GTValues.RNG.nextFloat() - 0.8) * 0.16,
                 -1.5,
-                1.5*(GTValues.RNG.nextFloat()-0.5)*0.16);
+                1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.16);
 
         Minecraft.getMinecraft().effectRenderer.addEffect(smoke1);
         Minecraft.getMinecraft().effectRenderer.addEffect(smoke2);
@@ -205,14 +209,14 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     public void onLivingUpdate() {
         super.onLivingUpdate();
 
-        if(this.canPlayerDismount()) {
-            for(Entity rider : this.getRecursivePassengers()) {
+        if (this.canPlayerDismount()) {
+            for (Entity rider : this.getRecursivePassengers()) {
                 rider.dismountRidingEntity();
             }
         }
 
-        if(!world.isRemote) {
-            if(!this.onGround && this.motionY < 0.0D) {
+        if (!world.isRemote) {
+            if (!this.onGround && this.motionY < 0.0D) {
                 this.motionY *= 0.9D;
             }
 
@@ -253,9 +257,9 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     @Override
     public void updatePassenger(@NotNull Entity passenger) {
         super.updatePassenger(passenger);
-        float f = MathHelper.sin(this.renderYawOffset * 0.017453292F);
-        float f1 = MathHelper.cos(this.renderYawOffset * 0.017453292F);
-        passenger.setPosition(this.posX + (double)(0.1F * f), this.posY + (double)(this.height * 0.2F) + passenger.getYOffset() + 0.0D, this.posZ - (double)(0.1F * f1));
+        float xOffset = MathHelper.sin(this.renderYawOffset * 0.1F);
+        float zOffset = MathHelper.cos(this.renderYawOffset * 0.1F);
+        passenger.setPosition(this.posX + (double)(0.1F * xOffset), this.posY + (double)(this.height * 0.2F) + passenger.getYOffset() + 0.0D, this.posZ - (double)(0.1F * zOffset));
 
         if (passenger instanceof EntityLivingBase) {
             ((EntityLivingBase)passenger).renderYawOffset = this.renderYawOffset;
@@ -317,5 +321,11 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     @Override
     public AnimationFactory getFactory() {
         return this.factory;
+    }
+
+    @Override
+    protected void addPassenger(Entity passenger) {
+        if (this.getPassengers().isEmpty())
+            super.addPassenger(passenger);
     }
 }
