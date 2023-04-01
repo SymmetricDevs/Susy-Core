@@ -257,22 +257,13 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     @Override
     public void updatePassenger(@NotNull Entity passenger) {
         super.updatePassenger(passenger);
-        float f = MathHelper.sin(this.renderYawOffset * 0.1F);
-        float f1 = MathHelper.cos(this.renderYawOffset * 0.1F);
-/*        if (!hasLanded()) {
-            passenger.setPositionAndRotationDirect(this.posX + (double) (0.1F * f), this.posY + passenger.getYOffset() - 0.9D, this.posZ - (double) (0.1F * f1), passenger.rotationYaw, passenger.rotationPitch, 5, false);
-        } else {
-            passenger.setPosition(this.posX, this.posY + (double)(this.height * 0.2F) + passenger.getYOffset() + 0.0D, this.posZ);
-        }*/
-/*
+        float xOffset = MathHelper.sin(this.renderYawOffset * 0.1F);
+        float zOffset = MathHelper.cos(this.renderYawOffset * 0.1F);
+        passenger.setPosition(this.posX + (double)(0.1F * xOffset), this.posY + (double)(this.height * 0.2F) + passenger.getYOffset() + 0.0D, this.posZ - (double)(0.1F * zOffset));
+
         if (passenger instanceof EntityLivingBase) {
             ((EntityLivingBase)passenger).renderYawOffset = this.renderYawOffset;
-        }*/
-    }
-
-    @Override
-    public double getMountedYOffset() {
-        return /*hasLanded() ? */0.0D/* : -0.8D*/;
+        }
     }
 
     @Override
