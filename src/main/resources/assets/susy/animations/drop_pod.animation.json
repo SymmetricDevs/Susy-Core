@@ -2,8 +2,8 @@
 	"format_version": "1.8.0",
 	"animations": {
 		"animation.drop_pod.door.open": {
-			"loop": "hold_on_last_frame",
-			"animation_length": 1,
+			"loop": false,
+			"animation_length": 2,
 			"bones": {
 				"door": {
 					"position": {
@@ -35,7 +35,7 @@
 			}
 		},
 		"animation.drop_pod.seat.open": {
-			"loop": "hold_on_last_frame",
+      "loop": false,
 			"animation_length": 1,
 			"bones": {
 				"restraint": {

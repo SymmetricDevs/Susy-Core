@@ -16,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
+import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -50,7 +51,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     }
 
     public boolean canPlayerDismount() {
-        return this.isDead || this.getTimeSinceLanding() >= 60;
+        return this.isDead || this.getTimeSinceLanding() >= 30;
     }
 
     public boolean hasLanded() {
@@ -70,7 +71,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     }
 
     public boolean hasTakenOff() {
-        return this.getTimeSinceLanding() > 140;
+        return this.getTimeSinceLanding() > 200;
     }
 
     protected void spawnFlightParticles() {
@@ -252,14 +253,22 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
 
     @Override
     public void updatePassenger(@NotNull Entity passenger) {
-        super.updatePassenger(passenger);
-        float f = MathHelper.sin(this.renderYawOffset * 0.017453292F);
-        float f1 = MathHelper.cos(this.renderYawOffset * 0.017453292F);
-        passenger.setPosition(this.posX + (double)(0.1F * f), this.posY + (double)(this.height * 0.2F) + passenger.getYOffset() + 0.0D, this.posZ - (double)(0.1F * f1));
+        float f = MathHelper.sin(this.renderYawOffset * 0.1F);
+        float f1 = MathHelper.cos(this.renderYawOffset * 0.1F);
+        if (!hasLanded()) {
+            passenger.setPositionAndRotationDirect(this.posX + (double) (0.1F * f), this.posY + passenger.getYOffset() - 0.9D, this.posZ - (double) (0.1F * f1), passenger.rotationYaw, passenger.rotationPitch, 5, false);
+        } else {
+            passenger.setPosition(this.posX, this.posY + (double)(this.height * 0.2F) + passenger.getYOffset() + 0.0D, this.posZ);
+        }
 
         if (passenger instanceof EntityLivingBase) {
             ((EntityLivingBase)passenger).renderYawOffset = this.renderYawOffset;
         }
+    }
+
+    @Override
+    public double getMountedYOffset() {
+        return hasLanded() ? 0.0D : -0.8D;
     }
 
     @Override
@@ -303,10 +312,10 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        if (this.getTimeSinceLanding() > 0 && this.getTimeSinceLanding() < 20) {
+        if (this.getTimeSinceLanding() > 0 && this.getTimeSinceLanding() < 140) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.drop_pod.door.open", ILoopType.EDefaultLoopTypes.HOLD_ON_LAST_FRAME));
         }
-        if(this.getTimeSinceLanding() > 20 && this.getTimeSinceLanding() < 40) {
+        if(this.getTimeSinceLanding() > 20 && this.getTimeSinceLanding() < 140) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.drop_pod.seat.open", ILoopType.EDefaultLoopTypes.HOLD_ON_LAST_FRAME));
         }
         return PlayState.CONTINUE;
@@ -314,6 +323,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
 
     @Override
     public void registerControllers(AnimationData animationData) {
+        animationData.setResetSpeedInTicks(140);
         animationData.addAnimationController(new AnimationController<EntityDropPod>(this, "controller", 0, this::predicate));
     }
 
