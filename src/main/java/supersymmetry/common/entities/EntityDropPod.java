@@ -2,9 +2,11 @@ package supersymmetry.common.entities;
 
 import gregtech.api.GTValues;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.MovingSoundMinecart;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -348,5 +350,13 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     protected void addPassenger(Entity passenger) {
         if (this.getPassengers().isEmpty())
             super.addPassenger(passenger);
+    }
+
+    @Override
+    public void onAddedToWorld() {
+        super.onAddedToWorld();
+        if (this.world.isRemote) {
+            Minecraft.getMinecraft().getSoundHandler().playSound(new MovingSoundDropPod(this));
+        }
     }
 }
