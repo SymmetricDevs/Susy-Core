@@ -5,6 +5,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.sound.SusySounds;
 import supersymmetry.common.CommonProxy;
 import supersymmetry.common.SusyMetaEntities;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -29,6 +30,9 @@ public class Supersymmetry {
         proxy.preLoad();
         SuSyMetaItems.initMetaItems();
         SuSyBlocks.init();
+
+        SusySounds.registerSounds();
+
         SuSyMetaTileEntities.init();
         SusyMetaEntities.init();
     }

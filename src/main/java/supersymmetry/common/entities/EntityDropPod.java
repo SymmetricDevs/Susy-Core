@@ -6,20 +6,16 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
-import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -28,6 +24,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import supersymmetry.api.sound.SusySounds;
 import supersymmetry.client.renderer.particles.SusyParticleFlame;
 import supersymmetry.client.renderer.particles.SusyParticleSmoke;
 
@@ -35,6 +32,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
 
     private static final DataParameter<Boolean> HAS_LANDED = EntityDataManager.<Boolean>createKey(EntityDropPod.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> TIME_SINCE_LANDING = EntityDataManager.<Integer>createKey(EntityDropPod.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> TIME_SINCE_SPAWN = EntityDataManager.<Integer>createKey(EntityDropPod.class, DataSerializers.VARINT);
 
     private AnimationFactory factory = new AnimationFactory(this);
 
@@ -189,6 +187,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
         super.entityInit();
         this.dataManager.register(HAS_LANDED, false);
         this.dataManager.register(TIME_SINCE_LANDING, 0);
+        this.dataManager.register(TIME_SINCE_SPAWN, 0);
     }
 
     @Override
@@ -245,6 +244,15 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
                 this.isDead = this.posY > 300;
             }
         }
+
+        this.dataManager.set(TIME_SINCE_SPAWN, this.dataManager.get(TIME_SINCE_SPAWN) + 1);
+
+        if (!this.hasLanded() || this.hasTakenOff()) {
+            if (this.dataManager.get(TIME_SINCE_SPAWN) % 10 == 0) {
+                this.playSound(SusySounds.ROCKET_LOOP, 0.5f, 1.0f);
+            }
+        }
+
     }
 
     @Override
