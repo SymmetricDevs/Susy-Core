@@ -24,7 +24,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
-import supersymmetry.api.sound.SusySounds;
+import supersymmetry.client.audio.MovingSoundDropPod;
 import supersymmetry.client.renderer.particles.SusyParticleFlame;
 import supersymmetry.client.renderer.particles.SusyParticleSmoke;
 
@@ -35,6 +35,8 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     private static final DataParameter<Integer> TIME_SINCE_SPAWN = EntityDataManager.<Integer>createKey(EntityDropPod.class, DataSerializers.VARINT);
 
     private AnimationFactory factory = new AnimationFactory(this);
+
+    private MovingSoundDropPod soundDropPod = new MovingSoundDropPod(this);
 
     public EntityDropPod(World worldIn) {
         super(worldIn);
@@ -208,6 +210,12 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     public void onLivingUpdate() {
         super.onLivingUpdate();
 
+        if (this.firstUpdate) {
+            Minecraft.getMinecraft().getSoundHandler().playSound(soundDropPod);
+        }
+
+        this.soundDropPod.update();
+
         if (this.canPlayerDismount()) {
             for (Entity rider : this.getRecursivePassengers()) {
                 rider.dismountRidingEntity();
@@ -247,9 +255,14 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
 
         this.dataManager.set(TIME_SINCE_SPAWN, this.dataManager.get(TIME_SINCE_SPAWN) + 1);
 
-        if (!this.hasLanded() || this.hasTakenOff()) {
-            if (this.dataManager.get(TIME_SINCE_SPAWN) % 10 == 0) {
-                this.playSound(SusySounds.ROCKET_LOOP, 0.5f, 1.0f);
+        if (world.isRemote) {
+
+            if (!this.hasLanded() || this.hasTakenOff()) {
+                soundDropPod.startPlaying();
+            }
+
+            if (this.getTimeSinceLanding() == 0) {
+                soundDropPod.stopPlaying();
             }
         }
 
