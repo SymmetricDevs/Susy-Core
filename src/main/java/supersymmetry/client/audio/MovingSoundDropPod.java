@@ -10,27 +10,25 @@ public class MovingSoundDropPod extends MovingSound {
 
     private final EntityDropPod dropPod;
     private float distance = 0.0F;
-    private boolean play;
 
     public MovingSoundDropPod(EntityDropPod dropPod) {
         super(SusySounds.ROCKET_LOOP, SoundCategory.BLOCKS);
         this.dropPod = dropPod;
         this.repeat = true;
         this.repeatDelay = 0;
-        this.play = true;
     }
 
     public void startPlaying() {
-        this.play = true;
+        this.volume = 1.0F;
     }
 
     public void stopPlaying() {
-        this.play = false;
+        this.volume = 0.0F;
     }
 
     @Override
     public void update() {
-        if (this.dropPod.isDead || !this.play) {
+        if (this.dropPod.isDead) {
             this.donePlaying = true;
         } else {
             this.xPosF = (float) this.dropPod.posX;
@@ -38,7 +36,6 @@ public class MovingSoundDropPod extends MovingSound {
             this.zPosF = (float) this.dropPod.posZ;
 
             this.distance = MathHelper.clamp(this.distance + 0.0025F, 0.0F, 1.0F);
-            this.volume = 1.0F;
         }
     }
 

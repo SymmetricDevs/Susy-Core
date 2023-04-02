@@ -1,6 +1,9 @@
 package supersymmetry.common.entities;
 
 import gregtech.api.GTValues;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MovingSoundMinecart;
 import net.minecraft.entity.Entity;
@@ -38,7 +41,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
 
     private AnimationFactory factory = new AnimationFactory(this);
 
-    private MovingSoundDropPod soundDropPod = new MovingSoundDropPod(this);
+    private MovingSoundDropPod soundDropPod;
 
     public EntityDropPod(World worldIn) {
         super(worldIn);
@@ -212,12 +215,6 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     public void onLivingUpdate() {
         super.onLivingUpdate();
 
-        if (this.firstUpdate) {
-            Minecraft.getMinecraft().getSoundHandler().playSound(soundDropPod);
-        }
-
-        this.soundDropPod.update();
-
         if (this.canPlayerDismount()) {
             for (Entity rider : this.getRecursivePassengers()) {
                 rider.dismountRidingEntity();
@@ -237,6 +234,18 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
             this.setLanded(this.hasLanded() || this.onGround);
 
             if (this.hasLanded()) {
+                if (this.getTimeSinceLanding() == 0) {
+                    int posXRounded = MathHelper.floor(this.posX);
+                    int posYBeneath = MathHelper.floor(this.posY - 1.20000000298023224D);
+                    int posZRounded = MathHelper.floor(this.posZ);
+                    IBlockState blockBeneath = this.world.getBlockState(new BlockPos(posXRounded, posYBeneath, posZRounded));
+
+                    if (blockBeneath.getMaterial() != Material.AIR)
+                    {
+                        SoundType soundType = blockBeneath.getBlock().getSoundType(blockBeneath, world, new BlockPos(posXRounded, posYBeneath, posZRounded), this);
+                        this.playSound(soundType.getBreakSound(), soundType.getVolume() * 3.0F, soundType.getPitch() * 0.2F);
+                    }
+                }
                 this.setTimeSinceLanding(this.getTimeSinceLanding() + 1);
             }
 
@@ -257,13 +266,10 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
 
         this.dataManager.set(TIME_SINCE_SPAWN, this.dataManager.get(TIME_SINCE_SPAWN) + 1);
 
-        if (world.isRemote) {
-
+        if (world.isRemote && this.soundDropPod != null) {
             if (!this.hasLanded() || this.hasTakenOff()) {
                 soundDropPod.startPlaying();
-            }
-
-            if (this.getTimeSinceLanding() == 0) {
+            } else {
                 soundDropPod.stopPlaying();
             }
         }
@@ -356,7 +362,8 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     public void onAddedToWorld() {
         super.onAddedToWorld();
         if (this.world.isRemote) {
-            Minecraft.getMinecraft().getSoundHandler().playSound(new MovingSoundDropPod(this));
+            this.soundDropPod = new MovingSoundDropPod(this);
+            Minecraft.getMinecraft().getSoundHandler().playSound(this.soundDropPod);
         }
     }
 }
