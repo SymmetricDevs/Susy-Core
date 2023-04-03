@@ -16,10 +16,11 @@ public class MovingSoundDropPod extends MovingSound {
         this.dropPod = dropPod;
         this.repeat = true;
         this.repeatDelay = 0;
+        this.volume = 0.5F;
     }
 
     public void startPlaying() {
-        this.volume = 1.0F;
+        this.volume = 0.5F;
     }
 
     public void stopPlaying() {

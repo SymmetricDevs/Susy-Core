@@ -82,70 +82,71 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
         return this.getTimeSinceLanding() > 200;
     }
 
-    protected void spawnFlightParticles() {
+    protected void spawnFlightParticles(boolean goingUp) {
+        double offset = goingUp ? 0.0D : 1.5D;
         SusyParticleFlame flame1 = new SusyParticleFlame(
                 this.world,
                 this.posX + 0.8D,
-                this.posY + 0.9D,
+                this.posY + 0.9D + offset,
                 this.posZ + 0.2D,
-                1.5 * (GTValues.RNG.nextFloat() - 0.2) * 0.08,
+                1.5 * (GTValues.RNG.nextFloat() + 0.2) * 0.08,
                 -1.5,
                 1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.08);
         SusyParticleFlame flame2 = new SusyParticleFlame(
                 this.world,
                 this.posX + 0.8D,
-                this.posY + 0.9D,
+                this.posY + 0.9D + offset,
                 this.posZ - 0.2D,
-                1.5 * (GTValues.RNG.nextFloat() - 0.2) * 0.08,
+                1.5 * (GTValues.RNG.nextFloat() + 0.2) * 0.08,
                 -1.5,
                 1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.08);
         SusyParticleFlame flame3 = new SusyParticleFlame(
                 this.world,
                 this.posX - 0.8D,
-                this.posY + 0.9D,
+                this.posY + 0.9D + offset,
                 this.posZ + 0.2D,
-                1.5 * (GTValues.RNG.nextFloat() - 0.8) * 0.08,
+                1.5 * (GTValues.RNG.nextFloat() - 1.2) * 0.08,
                 -1.5,
                 1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.08);
         SusyParticleFlame flame4 = new SusyParticleFlame(
                 this.world,
                 this.posX - 0.8D,
-                this.posY + 0.9D,
+                this.posY + 0.9D + offset,
                 this.posZ - 0.2D,
-                1.5 * (GTValues.RNG.nextFloat() - 0.8) * 0.08,
+                1.5 * (GTValues.RNG.nextFloat() - 1.2) * 0.08,
                 -1.5,
                 1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.08);
 
         SusyParticleSmoke smoke1 = new SusyParticleSmoke(
                 this.world,
                 this.posX + 0.8D,
-                this.posY + 0.9D,
+                this.posY + 0.9D + offset,
                 this.posZ + 0.2D,
-                1.5 * (GTValues.RNG.nextFloat() - 0.2) * 0.16,
+                1.5 * (GTValues.RNG.nextFloat() + 0.2) * 0.16,
                 -1.5,
                 1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.16);
         SusyParticleSmoke smoke2 = new SusyParticleSmoke(
                 this.world,
                 this.posX + 0.8D,
-                this.posY + 0.9D,
+                this.posY + 0.9D + offset,
                 this.posZ - 0.2D,
-                1.5 * (GTValues.RNG.nextFloat() - 0.2) * 0.16,
+                1.5 * (GTValues.RNG.nextFloat() + 0.2) * 0.16,
                 -1.5,
                 1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.16);
         SusyParticleSmoke smoke3 = new SusyParticleSmoke(
                 this.world,
                 this.posX - 0.8D,
-                this.posY + 0.9D,
+                this.posY + 0.9D + offset,
                 this.posZ + 0.2D,
-                1.5 * (GTValues.RNG.nextFloat() - 0.8) * 0.16,
+                1.5 * (GTValues.RNG.nextFloat() - 1.2) * 0.16,
                 -1.5,
                 1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.16);
         SusyParticleSmoke smoke4 = new SusyParticleSmoke(
                 this.world,
                 this.posX - 0.8D,
-                this.posY + 0.9D,
+                this.posY + 0.9D + offset,
                 this.posZ - 0.2D,
-                1.5 * (GTValues.RNG.nextFloat() - 0.8) * 0.16,
+                1.5 * (GTValues.RNG.nextFloat() - 1.2) * 0.16,
                 -1.5,
                 1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.16);
 
@@ -228,7 +229,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
 
             if (!this.hasLanded()) {
                 this.handleCollidedBlocks();
-                this.spawnFlightParticles();
+                this.spawnFlightParticles(false);
             }
 
             this.setLanded(this.hasLanded() || this.onGround);
@@ -250,7 +251,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
             }
 
             if (this.hasTakenOff()) {
-                this.spawnFlightParticles();
+                this.spawnFlightParticles(true);
                 if (this.motionY < 10.D) {
                     if (this.motionY < 1.D) {
                         this.motionY += 0.1;
