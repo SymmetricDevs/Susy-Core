@@ -1,0 +1,11 @@
+{
+  "entity.rocket_loop": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "susy:rocket_loop",
+        "stream": false
+      }
+    ]
+  }
+}

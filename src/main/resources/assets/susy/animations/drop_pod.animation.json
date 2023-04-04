@@ -1,0 +1,46 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.drop_pod.complete": {
+			"animation_length": 7,
+			"bones": {
+				"restraint": {
+					"rotation": {
+						"1.5": {
+							"vector": [0, 0, 0]
+						},
+						"2.5": {
+							"vector": [-87.5, 0, 0]
+						},
+						"4.0": {
+							"vector": [-87.5, 0, 0]
+						},
+						"5.5": {
+							"vector": [0, 0, 0],
+							"easing": "easeInOutQuad"
+						}
+					}
+				},
+				"door": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [0, 30, 1.25],
+							"easing": "easeOutQuad"
+						},
+						"5.0": {
+							"vector": [0, 30, 1.25]
+						},
+						"6.5": {
+							"vector": [0, 0, 0],
+							"easing": "easeInOutQuad"
+						}
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

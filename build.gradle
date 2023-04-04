@@ -84,6 +84,9 @@ dependencies {
     // GCYM 1.2.0
     deobfCompile 'curse.maven:gregicality-multiblocks-564858:4422413'
 
+    //GeckoLib
+    deobfCompile 'curse.maven:geckolib-388172:4020277'
+
     // JEI 4.16.1.302
     deobfCompile 'curse.maven:jei-238222:3043174'
     // 1.4.28
