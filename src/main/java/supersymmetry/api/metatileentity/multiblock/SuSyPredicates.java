@@ -5,8 +5,8 @@ import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.util.BlockInfo;
 import net.minecraft.block.state.IBlockState;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.block.BlockCoolingCoil;
-import supersymmetry.api.block.BlockSinteringBrick;
+import supersymmetry.common.blocks.BlockCoolingCoil;
+import supersymmetry.common.blocks.BlockSinteringBrick;
 import supersymmetry.common.blocks.SuSyBlocks;
 
 import java.util.Arrays;

@@ -10,7 +10,6 @@ import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.unification.material.Materials;
-import gregtech.api.util.GTUtility;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMachineCasing;
@@ -22,10 +21,10 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.block.BlockSinteringBrick;
+import supersymmetry.common.blocks.BlockSinteringBrick;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
-import supersymmetry.api.recipe.SuSyRecipeMaps;
-import supersymmetry.api.recipe.properties.SinterProperty;
+import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.api.recipes.properties.SinterProperty;
 
 import java.util.List;
 

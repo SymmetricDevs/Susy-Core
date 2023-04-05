@@ -4,7 +4,7 @@ import gregtech.api.GTValues;
 import gregtech.api.metatileentity.SimpleMachineMetaTileEntity;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.recipe.SuSyRecipeMaps;
+import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCoagulationTank;
 import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityMagneticRefrigerator;

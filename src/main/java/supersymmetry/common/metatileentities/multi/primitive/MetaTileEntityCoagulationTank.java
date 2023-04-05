@@ -28,8 +28,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import supersymmetry.api.block.BlockCoagulationTankWall;
-import supersymmetry.api.recipe.SuSyRecipeMaps;
+import supersymmetry.common.blocks.BlockCoagulationTankWall;
+import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.SuSyBlocks;
 

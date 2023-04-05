@@ -3,7 +3,7 @@ package supersymmetry.loaders;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
-import supersymmetry.api.block.SusyBlockStoneSmooth;
+import supersymmetry.common.blocks.SusyBlockStoneSmooth;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.materials.SusyMaterials;
 
