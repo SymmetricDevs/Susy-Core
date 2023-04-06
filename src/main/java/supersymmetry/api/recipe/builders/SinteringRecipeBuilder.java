@@ -3,8 +3,6 @@ package supersymmetry.api.recipe.builders;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.recipes.RecipeMap;
-import gregtech.api.util.EnumValidationResult;
-import gregtech.api.util.GTLog;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipe.properties.CoilingCoilTemperatureProperty;
 import supersymmetry.api.recipe.properties.SinterProperty;

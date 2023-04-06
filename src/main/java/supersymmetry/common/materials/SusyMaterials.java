@@ -5,7 +5,7 @@ import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.properties.IMaterialProperty;
 import gregtech.api.unification.material.properties.MaterialProperties;
 import gregtech.api.unification.material.properties.PropertyKey;
-import gregtech.api.util.GTLog;
+import supersymmetry.api.SusyLog;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -62,7 +62,7 @@ public class SusyMaterials {
             //noinspection unchecked
             map = (Map<PropertyKey<? extends IMaterialProperty<?>>, IMaterialProperty<?>>) field.get(material.getProperties());
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            GTLog.logger.error("Failed to reflect material property map", e);
+            SusyLog.logger.error("Failed to reflect material property map", e);
         }
         if (map != null) {
             map.remove(key);
