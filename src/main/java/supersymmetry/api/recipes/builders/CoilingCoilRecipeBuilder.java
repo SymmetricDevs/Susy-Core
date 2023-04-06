@@ -1,4 +1,4 @@
-package supersymmetry.api.recipe.builders;
+package supersymmetry.api.recipes.builders;
 
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeBuilder;
@@ -8,7 +8,7 @@ import gregtech.api.util.GTLog;
 import gregtech.api.util.GTUtility;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.recipe.properties.CoilingCoilTemperatureProperty;
+import supersymmetry.api.recipes.properties.CoilingCoilTemperatureProperty;
 
 public class CoilingCoilRecipeBuilder extends RecipeBuilder<CoilingCoilRecipeBuilder> {
 

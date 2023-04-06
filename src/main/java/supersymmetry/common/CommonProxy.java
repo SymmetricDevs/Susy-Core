@@ -18,7 +18,7 @@ import supersymmetry.api.unification.ore.SusyStoneTypes;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.materials.SusyMaterials;
-import supersymmetry.loaders.SuSyRecipeLoader;
+import supersymmetry.loaders.recipes.SuSyRecipeLoader;
 import supersymmetry.loaders.SusyOreDictionaryLoader;
 
 import java.util.Objects;

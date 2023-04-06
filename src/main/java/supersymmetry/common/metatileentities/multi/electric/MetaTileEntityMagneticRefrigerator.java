@@ -26,10 +26,10 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.block.BlockCoolingCoil;
+import supersymmetry.common.blocks.BlockCoolingCoil;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
-import supersymmetry.api.recipe.SuSyRecipeMaps;
-import supersymmetry.api.recipe.properties.CoilingCoilTemperatureProperty;
+import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.api.recipes.properties.CoilingCoilTemperatureProperty;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 

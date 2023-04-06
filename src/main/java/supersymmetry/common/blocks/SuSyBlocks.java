@@ -1,6 +1,5 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.util.GTLog;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -10,10 +9,6 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.block.BlockCoagulationTankWall;
-import supersymmetry.api.block.BlockCoolingCoil;
-import supersymmetry.api.block.SusyBlockStoneSmooth;
-import supersymmetry.api.block.BlockSinteringBrick;
 
 import java.util.Comparator;
 import java.util.List;

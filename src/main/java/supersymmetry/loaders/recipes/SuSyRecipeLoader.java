@@ -1,8 +1,6 @@
-package supersymmetry.loaders;
+package supersymmetry.loaders.recipes;
 
-import supersymmetry.api.recipe.CoagulationRecipes;
-import supersymmetry.api.recipe.FridgeRecipes;
-import supersymmetry.api.recipe.VulcanizationRecipes;
+import supersymmetry.loaders.SuSyMetaTileEntityLoader;
 
 public class SuSyRecipeLoader {
 
@@ -11,6 +9,7 @@ public class SuSyRecipeLoader {
         FridgeRecipes.init();
         CoagulationRecipes.init();
         VulcanizationRecipes.init();
+        OreRecipeHandler.init();
         // make more loaders to categorize recipes and what is added
     }
 }

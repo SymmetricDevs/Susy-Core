@@ -4,7 +4,7 @@ import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.StoneType;
 import net.minecraft.block.SoundType;
 import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.api.block.SusyBlockStoneSmooth;
+import supersymmetry.common.blocks.SusyBlockStoneSmooth;
 import supersymmetry.common.materials.SusyMaterials;
 
 public class SusyStoneTypes {

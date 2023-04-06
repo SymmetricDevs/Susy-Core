@@ -1,12 +1,11 @@
-package supersymmetry.api.recipe;
+package supersymmetry.api.recipes;
 
 import gregtech.api.recipes.RecipeMap;
 import gregtech.core.sound.GTSoundEvents;
 import gregtech.api.recipes.builders.PrimitiveRecipeBuilder;
 import gregtech.api.recipes.builders.SimpleRecipeBuilder;
-import gregtech.core.sound.GTSoundEvents;
-import supersymmetry.api.recipe.builders.CoilingCoilRecipeBuilder;
-import supersymmetry.api.recipe.builders.SinteringRecipeBuilder;
+import supersymmetry.api.recipes.builders.CoilingCoilRecipeBuilder;
+import supersymmetry.api.recipes.builders.SinteringRecipeBuilder;
 
 public class SuSyRecipeMaps {
 

@@ -1,4 +1,4 @@
-package supersymmetry.api.recipe.properties;
+package supersymmetry.api.recipes.properties;
 
 import gregtech.api.recipes.recipeproperties.RecipeProperty;
 import net.minecraft.client.Minecraft;
