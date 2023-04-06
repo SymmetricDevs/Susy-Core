@@ -86,6 +86,25 @@ gregtech.machine.vulcanizing_press.mv.name=Advanced Vulcanizing Press
 gregtech.machine.vulcanizing_press.hv.name=Advanced Vulcanizing Press II
 gregtech.machine.vulcanizing_press.ev.name=Advanced Vulcanizing Press III
 
+# Roaster
+gregtech.machine.roaster.steam.name=Steam Roaster
+gregtech.machine.roaster.lv.name=Basic Roaster
+gregtech.machine.roaster.mv.name=Advanced Roaster
+gregtech.machine.roaster.hv.name=Advanced Roaster II
+gregtech.machine.roaster.ev.name=Advanced Roaster III
+gregtech.machine.roaster.iv.name=Elite Roaster
+gregtech.machine.roaster.luv.name=Elite Roaster II
+gregtech.machine.roaster.zpm.name=Elite Roaster III
+gregtech.machine.roaster.uv.name=Ultimate Roaster
+gregtech.machine.roaster.uhv.name=Epic Roaster
+gregtech.machine.roaster.uev.name=Epic Roaster II
+gregtech.machine.roaster.uiv.name=Epic Roaster III
+gregtech.machine.roaster.uxv.name=Epic Roaster IV
+gregtech.machine.roaster.opv.name=Legendary Roaster
+
+
+
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
 recipemap.vulcanizing_press.name=Vulcanization
+recipemap.roaster.name=Roasting
