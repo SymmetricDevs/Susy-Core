@@ -7,13 +7,8 @@ import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.common.materials.SusyMaterials;
 
 public class VulcanizationRecipes {
+
     public static void init(){
-        SuSyRecipeMaps.VULCANIZATION_RECIPES.recipeBuilder()
-                .duration(30)
-                .fluidInputs(Materials.AceticAcid.getFluid(200))
-                .input(OrePrefix.dust, SusyMaterials.Latex)
-                .output(Items.POTATO)
-                .EUt(32)
-                .buildAndRegister();
+
     }
 }
