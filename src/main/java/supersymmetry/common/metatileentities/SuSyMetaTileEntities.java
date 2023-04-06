@@ -11,6 +11,7 @@ import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityMagnet
 import supersymmetry.common.metatileentities.multi.electric.MetaTileEntitySinteringOven;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityLatexCollector;
 import supersymmetry.common.metatileentities.single.steam.MetaTileEntitySteamLatexCollector;
+import supersymmetry.common.metatileentities.single.steam.MetaTileEntitySteamRoaster;
 import supersymmetry.common.metatileentities.single.steam.MetaTileEntitySteamVulcanizingPress;
 
 import static gregtech.common.metatileentities.MetaTileEntities.registerMetaTileEntity;
@@ -25,7 +26,9 @@ public class SuSyMetaTileEntities {
 
     public static SimpleMachineMetaTileEntity[] VULCANIZING_PRESS;
     public static MetaTileEntitySteamVulcanizingPress VULCANIZING_PRESS_BRONZE;
-    
+
+    public static SimpleMachineMetaTileEntity[] ROASTER;
+    public static MetaTileEntitySteamRoaster ROASTER_BRONZE;
     public static MetaTileEntitySinteringOven SINTERING_OVEN;
 
     public static void init() {
@@ -45,8 +48,11 @@ public class SuSyMetaTileEntities {
         VULCANIZING_PRESS[3] = registerMetaTileEntity(14518, new SimpleMachineMetaTileEntity(susyId("vulcanizing_press.ev"), SuSyRecipeMaps.VULCANIZATION_RECIPES, SusyTextures.VULCANIZING_PRESS_OVERLAY,4, true));
 
         VULCANIZING_PRESS_BRONZE = registerMetaTileEntity(14520, new MetaTileEntitySteamVulcanizingPress(susyId("vulcanizing_press.steam"), false));
-        
+
         SINTERING_OVEN = registerMetaTileEntity(14521, new MetaTileEntitySinteringOven(susyId("sintering_oven")));
+
+        ROASTER_BRONZE = registerMetaTileEntity(14522, new MetaTileEntitySteamRoaster(susyId("roaster.steam"), false));
+
     }
 
     private static @NotNull ResourceLocation susyId(@NotNull String name) {
