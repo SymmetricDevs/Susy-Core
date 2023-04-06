@@ -8,6 +8,7 @@ import gregtech.api.util.GTLog;
 import gregtech.api.util.GTUtility;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.recipes.properties.CoilingCoilTemperatureProperty;
 
 public class CoilingCoilRecipeBuilder extends RecipeBuilder<CoilingCoilRecipeBuilder> {
@@ -41,7 +42,7 @@ public class CoilingCoilRecipeBuilder extends RecipeBuilder<CoilingCoilRecipeBui
 
     public CoilingCoilRecipeBuilder temperature(int temperature) {
         if (temperature <= 0) {
-            GTLog.logger.error("Temperature cannot be less than or equal to 0", new IllegalArgumentException());
+            SusyLog.logger.error("Temperature cannot be less than or equal to 0", new IllegalArgumentException());
             recipeStatus = EnumValidationResult.INVALID;
         }
         this.applyProperty(CoilingCoilTemperatureProperty.getInstance(), temperature);
