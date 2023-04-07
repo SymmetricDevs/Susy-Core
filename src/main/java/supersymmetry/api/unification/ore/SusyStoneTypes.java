@@ -18,6 +18,7 @@ public class SusyStoneTypes {
     public static StoneType SHALE;
     public static StoneType SLATE;
     public static StoneType SOAPSTONE;
+    public static StoneType KIMBERLITE;
 
     public SusyStoneTypes(){
     }
@@ -52,6 +53,9 @@ public class SusyStoneTypes {
         SOAPSTONE = new StoneType(21, "soapstone", SoundType.STONE, SusyOrePrefix.oreSoapstone, Materials.Soapstone,
                 () -> SuSyBlocks.SUSY_STONE_SMOOTH.getState(SusyBlockStoneSmooth.BlockType.SOAPSTONE),
                 state -> state.getBlock() instanceof SusyBlockStoneSmooth && ((SusyBlockStoneSmooth) state.getBlock()).getVariant(state) == SusyBlockStoneSmooth.BlockType.SOAPSTONE, false);
+        KIMBERLITE = new StoneType(22, "kimberlite", SoundType.STONE, SusyOrePrefix.oreKimberlite, SusyMaterials.Kimberlite,
+                () -> SuSyBlocks.SUSY_STONE_SMOOTH.getState(SusyBlockStoneSmooth.BlockType.KIMBERLITE),
+                state -> state.getBlock() instanceof SusyBlockStoneSmooth && ((SusyBlockStoneSmooth) state.getBlock()).getVariant(state) == SusyBlockStoneSmooth.BlockType.KIMBERLITE, false);
     }
 
 }

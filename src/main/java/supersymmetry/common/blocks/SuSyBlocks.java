@@ -21,6 +21,7 @@ public class SuSyBlocks {
     public static BlockSinteringBrick SINTERING_BRICK;
     public static BlockCoagulationTankWall COAGULATION_TANK_WALL;
     public static SusyBlockStoneSmooth SUSY_STONE_SMOOTH;
+    public static SusyBlockStoneCobble SUSY_STONE_COBBLE;
 
 
     public static void init() {
@@ -36,6 +37,9 @@ public class SuSyBlocks {
         SUSY_STONE_SMOOTH = new SusyBlockStoneSmooth();
         SUSY_STONE_SMOOTH.setRegistryName("susy_stone_smooth");
 
+        SUSY_STONE_COBBLE = new SusyBlockStoneCobble();
+        SUSY_STONE_COBBLE.setRegistryName("susy_stone_cobble");
+
     }
 
     @SideOnly(Side.CLIENT)
@@ -44,6 +48,7 @@ public class SuSyBlocks {
         SINTERING_BRICK.onModelRegister();
         registerItemModel(COAGULATION_TANK_WALL);
         registerItemModel(SUSY_STONE_SMOOTH);
+        registerItemModel(SUSY_STONE_COBBLE);
     }
 
     @SideOnly(Side.CLIENT)

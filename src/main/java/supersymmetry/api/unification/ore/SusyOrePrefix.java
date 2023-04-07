@@ -15,6 +15,7 @@ public class SusyOrePrefix {
     public static OrePrefix oreShale;
     public static OrePrefix oreSlate;
     public static OrePrefix oreSoapstone;
+    public static OrePrefix oreKimberlite;
 
     public SusyOrePrefix(){
     }
@@ -30,5 +31,6 @@ public class SusyOrePrefix {
         oreShale = new OrePrefix("oreShale", -1L, (Material) null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
         oreSlate = new OrePrefix("oreSlate", -1L, (Material) null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
         oreSoapstone = new OrePrefix("oreSoapstone", -1L, (Material) null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
+        oreKimberlite = new OrePrefix("oreKimberltie", -1L, (Material) null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
     }
 }

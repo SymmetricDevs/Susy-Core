@@ -19,6 +19,18 @@ tile.stone_smooth.quartzite.name=Quartzite
 tile.stone_smooth.shale.name=Shale
 tile.stone_smooth.slate.name=Slate
 tile.stone_smooth.soapstone.name=Soapstone
+tile.stone_smooth.kimberlite.name=Kimberlite
+tile.stone_cobble.gabbro.name=Gabbro Cobblestone
+tile.stone_cobble.gneiss.name=Gneiss Cobblestone
+tile.stone_cobble.graphite.name=Graphite Cobblestone
+tile.stone_cobble.limestone.name=Limestone Cobblestone
+tile.stone_cobble.mica.name=Mica Cobblestone
+tile.stone_cobble.phyllite.name=Phyllite Cobblestone
+tile.stone_cobble.quartzite.name=Quartzite Cobblestone
+tile.stone_cobble.shale.name=Shale Cobblestone
+tile.stone_cobble.slate.name=Slate Cobblestone
+tile.stone_cobble.soapstone.name=Soapstone Cobblestone
+tile.stone_cobble.kimberlite.name=Kimberlite Cobblestone
 
 # Materials
 material.manganese_iron_arsenic_phosphide=Manganese Iron Arsenic Phosphide
@@ -33,6 +45,7 @@ material.shale=Shale
 material.phyllite=Phyllite
 material.limestone=Limestone
 material.gneiss=Gneiss
+material.kimberlite=Kimberlite
 material.muscovite=Muscovite
 material.dolomite=Dolomite
 material.augite=Augite
@@ -43,6 +56,8 @@ material.andesine=Andesine
 material.oligoclase=Oligoclase
 material.albite=Albite
 material.anorthite=Anorthite
+material.forsterite=Forsterite
+material.lizardite=Lizardite
 
 # Ore Stone Types
 item.material.oreprefix.oreGabbro=Gabbro %s Ore
@@ -55,7 +70,7 @@ item.material.oreprefix.oreQuartzite=Quartzite %s Ore
 item.material.oreprefix.oreShale=Shale %s Ore
 item.material.oreprefix.oreSlate=Slate %s Ore
 item.material.oreprefix.oreSoapstone=Soapstone %s Ore
-
+item.material.oreprefix.oreKimberlite=Kimberlite %s Ore
 
 # Machines/Multiblocks
 gregtech.machine.magnetic_refrigerator.name=Magnetic Refrigerator
