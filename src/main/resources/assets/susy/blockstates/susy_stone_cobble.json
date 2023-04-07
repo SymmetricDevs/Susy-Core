@@ -7,57 +7,57 @@
     "variant": {
       "gabbro" : {
         "textures" : {
-          "all" : "gregtech:blocks/susy_stones/gabbro"
+          "all" : "gregtech:blocks/susy_stones/gabbro_cobble"
         }
       },
       "gneiss" : {
         "textures" : {
-          "all" : "gregtech:blocks/susy_stones/gneiss"
+          "all" : "gregtech:blocks/susy_stones/gneiss_cobble"
         }
       },
       "graphite" : {
         "textures" : {
-          "all" : "gregtech:blocks/susy_stones/graphite"
+          "all" : "gregtech:blocks/susy_stones/graphite_cobble"
         }
       },
       "limestone" : {
         "textures" : {
-          "all" : "gregtech:blocks/susy_stones/limestone"
+          "all" : "gregtech:blocks/susy_stones/limestone_cobble"
         }
       },
       "mica" : {
         "textures" : {
-          "all" : "gregtech:blocks/susy_stones/mica"
+          "all" : "gregtech:blocks/susy_stones/mica_cobble"
         }
       },
       "phyllite" : {
         "textures" : {
-          "all" : "gregtech:blocks/susy_stones/phyllite"
+          "all" : "gregtech:blocks/susy_stones/phyllite_cobble"
         }
       },
       "quartzite" : {
         "textures" : {
-          "all" : "gregtech:blocks/susy_stones/quartzite"
+          "all" : "gregtech:blocks/susy_stones/quartzite_cobble"
         }
       },
       "shale" : {
         "textures" : {
-          "all" : "gregtech:blocks/susy_stones/shale"
+          "all" : "gregtech:blocks/susy_stones/shale_cobble"
         }
       },
       "slate" : {
         "textures" : {
-          "all" : "gregtech:blocks/susy_stones/slate"
+          "all" : "gregtech:blocks/susy_stones/slate_cobble"
         }
       },
       "soapstone" : {
         "textures" : {
-          "all" : "gregtech:blocks/susy_stones/soapstone"
+          "all" : "gregtech:blocks/susy_stones/soapstone_cobble"
         }
       },
       "kimberlite" : {
         "textures" : {
-          "all" : "gregtech:blocks/susy_stones/kimberlite"
+          "all" : "gregtech:blocks/susy_stones/kimberlite_cobble"
         }
       }
     }

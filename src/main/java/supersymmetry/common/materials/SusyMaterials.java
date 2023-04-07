@@ -21,6 +21,7 @@ public class SusyMaterials {
     public static Material Phyllite;
     public static Material Shale;
     public static Material Slate;
+    public static Material Kimberlite;
     public static Material Latex;
 
     //Minerals
@@ -34,6 +35,8 @@ public class SusyMaterials {
     public static Material Augite;
     public static Material Dolomite;
     public static Material Muscovite;
+    public static Material Forsterite;
+    public static Material Lizardite;
     public static Material Fluorite;
 
 

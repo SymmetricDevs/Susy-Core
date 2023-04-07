@@ -20,6 +20,7 @@ public class SusyOreDictionaryLoader {
         OreDictUnifier.registerOre(SuSyBlocks.SUSY_STONE_SMOOTH.getItemVariant(SusyBlockStoneSmooth.BlockType.SHALE, 1), OrePrefix.stone, SusyMaterials.Shale);
         OreDictUnifier.registerOre(SuSyBlocks.SUSY_STONE_SMOOTH.getItemVariant(SusyBlockStoneSmooth.BlockType.SLATE, 1), OrePrefix.stone, SusyMaterials.Slate);
         OreDictUnifier.registerOre(SuSyBlocks.SUSY_STONE_SMOOTH.getItemVariant(SusyBlockStoneSmooth.BlockType.SOAPSTONE, 1), OrePrefix.stone, Materials.Soapstone);
+        OreDictUnifier.registerOre(SuSyBlocks.SUSY_STONE_SMOOTH.getItemVariant(SusyBlockStoneSmooth.BlockType.KIMBERLITE, 1), OrePrefix.stone, SusyMaterials.Kimberlite);
 
     }
 }

@@ -39,6 +39,7 @@ public class CommonProxy {
         registry.register(SuSyBlocks.SINTERING_BRICK);
         registry.register(SuSyBlocks.COAGULATION_TANK_WALL);
         registry.register(SuSyBlocks.SUSY_STONE_SMOOTH);
+        registry.register(SuSyBlocks.SUSY_STONE_COBBLE);
 
     }
 
@@ -51,6 +52,7 @@ public class CommonProxy {
         registry.register(createItemBlock(SuSyBlocks.SINTERING_BRICK, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.COAGULATION_TANK_WALL, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.SUSY_STONE_SMOOTH, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.SUSY_STONE_COBBLE, VariantItemBlock::new));
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)

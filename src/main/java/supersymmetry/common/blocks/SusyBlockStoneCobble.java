@@ -1,7 +1,5 @@
 package supersymmetry.common.blocks;
 
-import javax.annotation.Nonnull;
-
 import gregtech.api.block.VariantBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -11,25 +9,25 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
-public class SusyBlockStoneSmooth extends VariantBlock<SusyBlockStoneSmooth.BlockType> {
-    public SusyBlockStoneSmooth() {
+import javax.annotation.Nonnull;
+
+public class SusyBlockStoneCobble extends VariantBlock<SusyBlockStoneCobble.BlockType> {
+    public SusyBlockStoneCobble() {
         super(Material.IRON);
-        this.setTranslationKey("stone_smooth");
+        this.setTranslationKey("stone_cobble");
         this.setHardness(5.0F);
         this.setResistance(10.0F);
         this.setSoundType(SoundType.METAL);
         this.setHarvestLevel("pickaxe", 1);
-        this.setDefaultState(this.getState(SusyBlockStoneSmooth.BlockType.GABBRO));
+        this.setDefaultState(this.getState(SusyBlockStoneCobble.BlockType.GABBRO));
     }
-
     public boolean canCreatureSpawn(@Nonnull IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull EntityLiving.SpawnPlacementType type) {
-        return false;
+        return true;
     }
 
     public BlockType getVariant(IBlockState blockState) {
-        return (BlockType)blockState.getValue(this.VARIANT);
+        return (BlockType) blockState.getValue(this.VARIANT);
     }
-
     public enum BlockType implements IStringSerializable {
         GABBRO("gabbro"),
         GNEISS("gneiss"),

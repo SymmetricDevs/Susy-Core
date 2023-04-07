@@ -54,5 +54,12 @@ public class SuSySecondDegreeMaterials {
                 .components(SiliconDioxide, 5, Muscovite, 2, Clinochlore, 2, Albite, 1)
                 .build();
 
+        Kimberlite = new Material.Builder(27206, "kimberlite")
+                .dust()
+                .color(0x201313).iconSet(ROUGH)
+                .flags(NO_SMASHING, DECOMPOSITION_BY_CENTRIFUGING)
+                .components(Forsterite, 3, Augite, 3, Andradite, 2, Lizardite, 1)
+                .build();
+
     }
 }

@@ -7,8 +7,7 @@ import gregtech.api.unification.material.properties.BlastProperty;
 
 import static gregtech.api.unification.material.Materials.*;
 import static gregtech.api.unification.material.info.MaterialFlags.*;
-import static gregtech.api.unification.material.info.MaterialIconSet.CERTUS;
-import static gregtech.api.unification.material.info.MaterialIconSet.ROUGH;
+import static gregtech.api.unification.material.info.MaterialIconSet.*;
 import static supersymmetry.common.materials.SusyMaterials.*;
 
 public class SuSyFirstDegreeMaterials {
@@ -141,5 +140,22 @@ public class SuSyFirstDegreeMaterials {
                 .components(Calcium, 1, Fluorine, 2)
                 .build();
 
+        Forsterite = new Material.Builder(27114, "forsterite")
+                .dust()
+                .gem()
+                .color(0xeae2de).iconSet(GEM_HORIZONTAL)
+                .flags(NO_SMASHING, DECOMPOSITION_BY_ELECTROLYZING)
+                .components(Magnesium, 2, Sulfur, 1, Oxygen, 4)
+                .build()
+                .setFormula("Mg2(SiO4)",true);
+
+        Lizardite = new Material.Builder(27115, "lizardite")
+                .dust()
+                .gem()
+                .color(0xa79e42).iconSet(GEM_HORIZONTAL)
+                .flags(NO_SMASHING, DECOMPOSITION_BY_ELECTROLYZING)
+                .components(Magnesium, 3, Silicon, 2, Oxygen, 9, Hydrogen, 4)
+                .build()
+                .setFormula("Mg3Si2O5(OH)4",true);
     }
 }
