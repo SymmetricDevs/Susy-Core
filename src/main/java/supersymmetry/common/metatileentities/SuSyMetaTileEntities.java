@@ -11,6 +11,7 @@ import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityMagnet
 import supersymmetry.common.metatileentities.multi.electric.MetaTileEntitySinteringOven;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityLatexCollector;
 import supersymmetry.common.metatileentities.single.steam.MetaTileEntitySteamLatexCollector;
+import supersymmetry.common.metatileentities.single.steam.MetaTileEntitySteamMixer;
 import supersymmetry.common.metatileentities.single.steam.MetaTileEntitySteamRoaster;
 import supersymmetry.common.metatileentities.single.steam.MetaTileEntitySteamVulcanizingPress;
 
@@ -30,6 +31,8 @@ public class SuSyMetaTileEntities {
     public static SimpleMachineMetaTileEntity[] ROASTER;
     public static MetaTileEntitySteamRoaster ROASTER_BRONZE;
     public static MetaTileEntitySinteringOven SINTERING_OVEN;
+
+    public static MetaTileEntitySteamMixer MIXER_BRONZE;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -66,6 +69,9 @@ public class SuSyMetaTileEntities {
         ROASTER[10] = registerMetaTileEntity(14533, new SimpleMachineMetaTileEntity(susyId("roaster.uiv"), SuSyRecipeMaps.ROASTER_RECIPES, SusyTextures.ROASTER_OVERLAY, 11, true));
         ROASTER[11] = registerMetaTileEntity(14534, new SimpleMachineMetaTileEntity(susyId("roaster.uxv"), SuSyRecipeMaps.ROASTER_RECIPES, SusyTextures.ROASTER_OVERLAY, 12, true));
         ROASTER[12] = registerMetaTileEntity(14535, new SimpleMachineMetaTileEntity(susyId("roaster.opv"), SuSyRecipeMaps.ROASTER_RECIPES, SusyTextures.ROASTER_OVERLAY, 13, true));
+
+        MIXER_BRONZE = registerMetaTileEntity(14536, new MetaTileEntitySteamMixer(susyId("mixer.steam"), false));
+
 
     }
 
