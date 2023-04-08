@@ -26,7 +26,7 @@ public class SusyStoneTypes {
     public static void init(){
         GABBRO = new StoneType(12, "gabbro", SoundType.STONE, SusyOrePrefix.oreGabbro, SusyMaterials.Gabbro,
                 () -> gtStoneState(SusyStoneVariantBlock.StoneType.GABBRO),
-                state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.GABBRO), true);
+                state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.GABBRO), false);
         GNEISS = new StoneType(13, "gneiss", SoundType.STONE, SusyOrePrefix.oreGneiss, SusyMaterials.Gneiss,
                 () -> gtStoneState(SusyStoneVariantBlock.StoneType.GNEISS),
                 state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.GNEISS), false);
