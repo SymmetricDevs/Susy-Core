@@ -1,6 +1,5 @@
 package supersymmetry.common.metatileentities.single.steam;
 
-import gregtech.api.GTValues;
 import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.capability.impl.NotifiableItemStackHandler;
 import gregtech.api.gui.GuiTextures;
@@ -13,21 +12,19 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.SteamMetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.recipes.RecipeMaps;
-import gregtech.client.renderer.texture.Textures;
+
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.IFluidTank;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import supersymmetry.api.gui.SusyGuiTextures;
+import supersymmetry.client.renderer.textures.SusyTextures;
 
 
 public class MetaTileEntitySteamMixer extends SteamMetaTileEntity{
     public MetaTileEntitySteamMixer(ResourceLocation metaTileEntityId, boolean isHighPressure) {
-        super(metaTileEntityId, RecipeMaps.MIXER_RECIPES, Textures.MIXER_OVERLAY, isHighPressure);
+        super(metaTileEntityId, RecipeMaps.MIXER_RECIPES, SusyTextures.MIXER_OVERLAY_STEAM, isHighPressure);
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
@@ -72,12 +69,4 @@ public class MetaTileEntitySteamMixer extends SteamMetaTileEntity{
         return builder.build(this.getHolder(),player);
     }
 
-    @SideOnly(Side.CLIENT)
-    protected void randomDisplayTick(float x, float y, float z, EnumParticleTypes flame, EnumParticleTypes smoke) {
-        super.randomDisplayTick(x, y, z, flame, smoke);
-        if (GTValues.RNG.nextBoolean()) {
-            this.getWorld().spawnParticle(EnumParticleTypes.SMOKE_NORMAL, (double)x, (double)(y + 0.5F), (double)z, 0.0, 0.0, 0.0, new int[0]);
-        }
-
-    }
 }
