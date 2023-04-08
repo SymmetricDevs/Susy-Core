@@ -12,6 +12,8 @@ public class SusyTextures {
     public static OrientedOverlayRenderer VULCANIZING_PRESS_OVERLAY;
     public static OrientedOverlayRenderer LATEX_COLLECTOR_OVERLAY;
     public static OrientedOverlayRenderer ROASTER_OVERLAY;
+    public static OrientedOverlayRenderer MIXER_OVERLAY_STEAM;
+
     public SusyTextures(){
     }
 
@@ -20,6 +22,6 @@ public class SusyTextures {
         VULCANIZING_PRESS_OVERLAY = new OrientedOverlayRenderer("machines/vulcanizing_press",new OrientedOverlayRenderer.OverlayFace[]{OrientedOverlayRenderer.OverlayFace.FRONT, OrientedOverlayRenderer.OverlayFace.SIDE, OrientedOverlayRenderer.OverlayFace.TOP});
         LATEX_COLLECTOR_OVERLAY = new OrientedOverlayRenderer("machines/latex_collector");
         ROASTER_OVERLAY = new OrientedOverlayRenderer("machines/roaster");
+        MIXER_OVERLAY_STEAM = new OrientedOverlayRenderer("machines/mixer_steam");
     }
-
 }

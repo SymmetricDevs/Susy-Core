@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandlerModifiable;
+import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
 
@@ -57,9 +58,9 @@ public class MetaTileEntitySteamRoaster extends SteamMetaTileEntity{
         .widget((new SlotWidget(this.importItems, 1, 30, 39, true, true).setBackgroundTexture(GuiTextures.SLOT_STEAM.get(false))))
         .widget((new SlotWidget(this.exportItems, 0, 88, 39, true, true).setBackgroundTexture(GuiTextures.SLOT_STEAM.get(false))))
         .widget((new SlotWidget(this.exportItems, 1, 106, 39, true, true).setBackgroundTexture(GuiTextures.SLOT_STEAM.get(false))))
-        .widget((new TankWidget(this.exportFluids.getTankAt(0),88, 57, 18, 18)).setAlwaysShowFull(true).setBackgroundTexture(GuiTextures.FLUID_SLOT).setContainerClicking(false, true))
-        .widget((new TankWidget(this.exportFluids.getTankAt(1),106, 57, 18, 18)).setAlwaysShowFull(true).setBackgroundTexture(GuiTextures.FLUID_SLOT).setContainerClicking(false, true))
-        .widget((new TankWidget(this.exportFluids.getTankAt(2),124, 57, 18, 18)).setAlwaysShowFull(true).setBackgroundTexture(GuiTextures.FLUID_SLOT).setContainerClicking(false, true));
+        .widget((new TankWidget(this.exportFluids.getTankAt(0),88, 57, 18, 18)).setAlwaysShowFull(true).setBackgroundTexture(SusyGuiTextures.FLUID_SLOT_STEAM.get(false)).setContainerClicking(false, true))
+        .widget((new TankWidget(this.exportFluids.getTankAt(1),106, 57, 18, 18)).setAlwaysShowFull(true).setBackgroundTexture(SusyGuiTextures.FLUID_SLOT_STEAM.get(false)).setContainerClicking(false, true))
+        .widget((new TankWidget(this.exportFluids.getTankAt(2),124, 57, 18, 18)).setAlwaysShowFull(true).setBackgroundTexture(SusyGuiTextures.FLUID_SLOT_STEAM.get(false)).setContainerClicking(false, true));
 
         return builder.build(this.getHolder(),player);
     }

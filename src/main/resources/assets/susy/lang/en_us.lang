@@ -101,6 +101,9 @@ gregtech.machine.vulcanizing_press.mv.name=Advanced Vulcanizing Press
 gregtech.machine.vulcanizing_press.hv.name=Advanced Vulcanizing Press II
 gregtech.machine.vulcanizing_press.ev.name=Advanced Vulcanizing Press III
 
+# Steam Mixer
+gregtech.machine.mixer.steam.name=Steam Mixer
+
 # Roaster
 gregtech.machine.roaster.steam.name=Steam Roaster
 gregtech.machine.roaster.lv.name=Basic Roaster
