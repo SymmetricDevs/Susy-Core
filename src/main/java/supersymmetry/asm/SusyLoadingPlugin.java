@@ -13,7 +13,7 @@ import java.util.Map;
 // I am sorry for this - htmlcsjs
 @Name("SusyLoadingPlugin")
 @MCVersion(ForgeVersion.mcVersion)
-@TransformerExclusions("gregtech.asm.")
+@TransformerExclusions({"gregtech.asm.", "supersymmetry.asm."})
 @SortingIndex(2001) // random number idk
 public class SusyLoadingPlugin implements IFMLLoadingPlugin {
     @Override
