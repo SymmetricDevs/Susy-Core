@@ -11,6 +11,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -20,8 +21,7 @@ public class SuSyBlocks {
     public static BlockCoolingCoil COOLING_COIL;
     public static BlockSinteringBrick SINTERING_BRICK;
     public static BlockCoagulationTankWall COAGULATION_TANK_WALL;
-    public static SusyBlockStoneSmooth SUSY_STONE_SMOOTH;
-    public static SusyBlockStoneCobble SUSY_STONE_COBBLE;
+    public static final EnumMap<SusyStoneVariantBlock.StoneVariant, SusyStoneVariantBlock> SUSY_STONE_BLOCKS = new EnumMap(SusyStoneVariantBlock.StoneVariant.class);
 
 
     public static void init() {
@@ -34,11 +34,9 @@ public class SuSyBlocks {
         COAGULATION_TANK_WALL = new BlockCoagulationTankWall();
         COAGULATION_TANK_WALL.setRegistryName("coagulation_tank_wall");
 
-        SUSY_STONE_SMOOTH = new SusyBlockStoneSmooth();
-        SUSY_STONE_SMOOTH.setRegistryName("susy_stone_smooth");
-
-        SUSY_STONE_COBBLE = new SusyBlockStoneCobble();
-        SUSY_STONE_COBBLE.setRegistryName("susy_stone_cobble");
+        for (SusyStoneVariantBlock.StoneVariant shape : SusyStoneVariantBlock.StoneVariant.values()) {
+            SUSY_STONE_BLOCKS.put(shape, new SusyStoneVariantBlock(shape));
+        }
 
     }
 
@@ -47,8 +45,8 @@ public class SuSyBlocks {
         COOLING_COIL.onModelRegister();
         SINTERING_BRICK.onModelRegister();
         registerItemModel(COAGULATION_TANK_WALL);
-        registerItemModel(SUSY_STONE_SMOOTH);
-        registerItemModel(SUSY_STONE_COBBLE);
+        for (SusyStoneVariantBlock block : SUSY_STONE_BLOCKS.values())
+            registerItemModel(block);
     }
 
     @SideOnly(Side.CLIENT)

@@ -28,7 +28,8 @@ public class Supersymmetry {
 
     @Mod.EventHandler
     public void onModConstruction(FMLConstructionEvent event) {
-        GTValues.HT = true;
+        //This is now a config option I think
+        //GTValues.HT = true;
     }
 
     @Mod.EventHandler
