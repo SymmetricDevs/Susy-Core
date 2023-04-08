@@ -16,6 +16,7 @@ import supersymmetry.Supersymmetry;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.api.unification.ore.SusyStoneTypes;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.blocks.SusyStoneVariantBlock;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.loaders.recipes.SuSyRecipeLoader;
@@ -38,8 +39,7 @@ public class CommonProxy {
         registry.register(SuSyBlocks.COOLING_COIL);
         registry.register(SuSyBlocks.SINTERING_BRICK);
         registry.register(SuSyBlocks.COAGULATION_TANK_WALL);
-        registry.register(SuSyBlocks.SUSY_STONE_SMOOTH);
-        registry.register(SuSyBlocks.SUSY_STONE_COBBLE);
+        for (SusyStoneVariantBlock block : SuSyBlocks.SUSY_STONE_BLOCKS.values()) registry.register(block);
 
     }
 
@@ -51,8 +51,7 @@ public class CommonProxy {
         registry.register(createItemBlock(SuSyBlocks.COOLING_COIL, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.SINTERING_BRICK, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.COAGULATION_TANK_WALL, VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.SUSY_STONE_SMOOTH, VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.SUSY_STONE_COBBLE, VariantItemBlock::new));
+        for (SusyStoneVariantBlock block : SuSyBlocks.SUSY_STONE_BLOCKS.values()) registry.register(createItemBlock(block, VariantItemBlock::new));
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)

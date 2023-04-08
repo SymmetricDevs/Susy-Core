@@ -80,9 +80,11 @@ dependencies {
     // CCL 3.2.3.358
     deobfCompile 'curse.maven:codechicken-lib-1-8-242818:2779848'
     // GTCEu 2.5.4
-    deobfCompile 'curse.maven:gregtech-ce-unofficial-557242:4429261'
+    //deobfCompile 'curse.maven:gregtech-ce-unofficial-557242:4429261'
+    deobfCompile 'curse.maven:gregtech-ce-unofficial-557242:4480237'
     // GCYM 1.2.0
-    deobfCompile 'curse.maven:gregicality-multiblocks-564858:4422413'
+    //deobfCompile 'curse.maven:gregicality-multiblocks-564858:4422413'
+    deobfCompile 'curse.maven:gregicality-multiblocks-564858:4480254'
 
     //GeckoLib
     deobfCompile 'curse.maven:geckolib-388172:4020277'

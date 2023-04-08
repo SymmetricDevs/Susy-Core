@@ -1,16 +1,15 @@
 package supersymmetry.loaders.recipes;
 
 import gregtech.api.recipes.ModHandler;
-import gregtech.common.blocks.BlockStoneCobble;
-import gregtech.common.blocks.BlockStoneSmooth;
 import gregtech.common.blocks.MetaBlocks;
+import gregtech.common.blocks.StoneVariantBlock;
 import net.minecraft.item.ItemStack;
 import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.common.blocks.SusyBlockStoneCobble;
-import supersymmetry.common.blocks.SusyBlockStoneSmooth;
+import supersymmetry.common.blocks.SusyStoneVariantBlock;
 import supersymmetry.loaders.SuSyMetaTileEntityLoader;
 
 import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,11 +30,28 @@ public class SuSyRecipeLoader {
     }
 
     private static void registerStoneRecipes(){
-        List<ItemStack> susysmooths = Arrays.stream(SusyBlockStoneSmooth.BlockType.values()).map(SuSyBlocks.SUSY_STONE_SMOOTH::getItemVariant).collect(Collectors.toList());
-        List<ItemStack> susycobbles = Arrays.stream(SusyBlockStoneCobble.BlockType.values()).map(SuSyBlocks.SUSY_STONE_COBBLE::getItemVariant).collect(Collectors.toList());
+        EnumMap<SusyStoneVariantBlock.StoneVariant, List<ItemStack>> susyVariantListMap = new EnumMap<>(SusyStoneVariantBlock.StoneVariant.class);
+        for (SusyStoneVariantBlock.StoneVariant shape : SusyStoneVariantBlock.StoneVariant.values()) {
+            SusyStoneVariantBlock block = SuSyBlocks.SUSY_STONE_BLOCKS.get(shape);
+            susyVariantListMap.put(shape,
+                    Arrays.stream(SusyStoneVariantBlock.StoneType.values())
+                            .map(block::getItemVariant)
+                            .collect(Collectors.toList()));
+        }
+        List<ItemStack> susycobbles = susyVariantListMap.get(SusyStoneVariantBlock.StoneVariant.COBBLE);
+        List<ItemStack> susysmooths = susyVariantListMap.get(SusyStoneVariantBlock.StoneVariant.SMOOTH);
 
-        List<ItemStack> smooths = Arrays.stream(BlockStoneSmooth.BlockType.values()).map(MetaBlocks.STONE_SMOOTH::getItemVariant).collect(Collectors.toList());
-        List<ItemStack> cobbles = Arrays.stream(BlockStoneCobble.BlockType.values()).map(MetaBlocks.STONE_COBBLE::getItemVariant).collect(Collectors.toList());
+        EnumMap<StoneVariantBlock.StoneVariant, List<ItemStack>> variantListMap = new EnumMap<>(StoneVariantBlock.StoneVariant.class);
+        for (StoneVariantBlock.StoneVariant shape : StoneVariantBlock.StoneVariant.values()) {
+            StoneVariantBlock block = MetaBlocks.STONE_BLOCKS.get(shape);
+            variantListMap.put(shape,
+                    Arrays.stream(StoneVariantBlock.StoneType.values())
+                            .map(block::getItemVariant)
+                            .collect(Collectors.toList()));
+        }
+        List<ItemStack> cobbles = variantListMap.get(StoneVariantBlock.StoneVariant.COBBLE);
+        List<ItemStack> smooths = variantListMap.get(StoneVariantBlock.StoneVariant.SMOOTH);
+
 
         registerSmoothRecipe(susycobbles, susysmooths);
         registerCobbleRecipe(susysmooths, susycobbles);

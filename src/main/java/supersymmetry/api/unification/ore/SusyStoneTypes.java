@@ -3,8 +3,9 @@ package supersymmetry.api.unification.ore;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.StoneType;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.state.IBlockState;
 import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.common.blocks.SusyBlockStoneSmooth;
+import supersymmetry.common.blocks.SusyStoneVariantBlock;
 import supersymmetry.common.materials.SusyMaterials;
 
 public class SusyStoneTypes {
@@ -24,38 +25,46 @@ public class SusyStoneTypes {
     }
     public static void init(){
         GABBRO = new StoneType(12, "gabbro", SoundType.STONE, SusyOrePrefix.oreGabbro, SusyMaterials.Gabbro,
-                () -> SuSyBlocks.SUSY_STONE_SMOOTH.getState(SusyBlockStoneSmooth.BlockType.GABBRO),
-                state -> state.getBlock() instanceof SusyBlockStoneSmooth && ((SusyBlockStoneSmooth) state.getBlock()).getVariant(state) == SusyBlockStoneSmooth.BlockType.GABBRO, true);
+                () -> gtStoneState(SusyStoneVariantBlock.StoneType.GABBRO),
+                state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.GABBRO), false);
         GNEISS = new StoneType(13, "gneiss", SoundType.STONE, SusyOrePrefix.oreGneiss, SusyMaterials.Gneiss,
-                () -> SuSyBlocks.SUSY_STONE_SMOOTH.getState(SusyBlockStoneSmooth.BlockType.GNEISS),
-                state -> state.getBlock() instanceof SusyBlockStoneSmooth && ((SusyBlockStoneSmooth) state.getBlock()).getVariant(state) == SusyBlockStoneSmooth.BlockType.GNEISS, false);
+                () -> gtStoneState(SusyStoneVariantBlock.StoneType.GNEISS),
+                state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.GNEISS), false);
         GRAPHITE = new StoneType(14, "graphite", SoundType.STONE, SusyOrePrefix.oreGraphite, Materials.Graphite,
-                () -> SuSyBlocks.SUSY_STONE_SMOOTH.getState(SusyBlockStoneSmooth.BlockType.GRAPHITE),
-                state -> state.getBlock() instanceof SusyBlockStoneSmooth && ((SusyBlockStoneSmooth) state.getBlock()).getVariant(state) == SusyBlockStoneSmooth.BlockType.GRAPHITE, false);
+                () -> gtStoneState(SusyStoneVariantBlock.StoneType.GRAPHITE),
+                state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.GRAPHITE), false);
         LIMESTONE = new StoneType(15, "limestone", SoundType.STONE, SusyOrePrefix.oreLimestone, SusyMaterials.Limestone,
-                () -> SuSyBlocks.SUSY_STONE_SMOOTH.getState(SusyBlockStoneSmooth.BlockType.LIMESTONE),
-                state -> state.getBlock() instanceof SusyBlockStoneSmooth && ((SusyBlockStoneSmooth) state.getBlock()).getVariant(state) == SusyBlockStoneSmooth.BlockType.LIMESTONE, false);
+                () -> gtStoneState(SusyStoneVariantBlock.StoneType.LIMESTONE),
+                state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.LIMESTONE), false);
         MICA = new StoneType(16, "mica", SoundType.STONE, SusyOrePrefix.oreMica, Materials.Mica,
-                () -> SuSyBlocks.SUSY_STONE_SMOOTH.getState(SusyBlockStoneSmooth.BlockType.MICA),
-                state -> state.getBlock() instanceof SusyBlockStoneSmooth && ((SusyBlockStoneSmooth) state.getBlock()).getVariant(state) == SusyBlockStoneSmooth.BlockType.MICA, false);
+                () -> gtStoneState(SusyStoneVariantBlock.StoneType.MICA),
+                state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.MICA), false);
         PHYLLITE = new StoneType(17, "phyllite", SoundType.STONE, SusyOrePrefix.orePhyllite, SusyMaterials.Phyllite,
-                () -> SuSyBlocks.SUSY_STONE_SMOOTH.getState(SusyBlockStoneSmooth.BlockType.PHYLLITE),
-                state -> state.getBlock() instanceof SusyBlockStoneSmooth && ((SusyBlockStoneSmooth) state.getBlock()).getVariant(state) == SusyBlockStoneSmooth.BlockType.PHYLLITE, false);
+                () -> gtStoneState(SusyStoneVariantBlock.StoneType.PHYLLITE),
+                state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.PHYLLITE), false);
         QUARTZITE = new StoneType(18, "quartzite", SoundType.STONE, SusyOrePrefix.oreQuartzite, Materials.Quartzite,
-                () -> SuSyBlocks.SUSY_STONE_SMOOTH.getState(SusyBlockStoneSmooth.BlockType.QUARTZITE),
-                state -> state.getBlock() instanceof SusyBlockStoneSmooth && ((SusyBlockStoneSmooth) state.getBlock()).getVariant(state) == SusyBlockStoneSmooth.BlockType.QUARTZITE, false);
+                () -> gtStoneState(SusyStoneVariantBlock.StoneType.QUARTZITE),
+                state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.QUARTZITE), false);
         SHALE = new StoneType(19, "shale", SoundType.STONE, SusyOrePrefix.oreShale, SusyMaterials.Shale,
-                () -> SuSyBlocks.SUSY_STONE_SMOOTH.getState(SusyBlockStoneSmooth.BlockType.SHALE),
-                state -> state.getBlock() instanceof SusyBlockStoneSmooth && ((SusyBlockStoneSmooth) state.getBlock()).getVariant(state) == SusyBlockStoneSmooth.BlockType.SHALE, false);
+                () -> gtStoneState(SusyStoneVariantBlock.StoneType.SHALE),
+                state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.SHALE), false);
         SLATE = new StoneType(20, "slate", SoundType.STONE, SusyOrePrefix.oreSlate, SusyMaterials.Slate,
-                () -> SuSyBlocks.SUSY_STONE_SMOOTH.getState(SusyBlockStoneSmooth.BlockType.SLATE),
-                state -> state.getBlock() instanceof SusyBlockStoneSmooth && ((SusyBlockStoneSmooth) state.getBlock()).getVariant(state) == SusyBlockStoneSmooth.BlockType.SLATE, false);
+                () -> gtStoneState(SusyStoneVariantBlock.StoneType.SLATE),
+                state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.SLATE), false);
         SOAPSTONE = new StoneType(21, "soapstone", SoundType.STONE, SusyOrePrefix.oreSoapstone, Materials.Soapstone,
-                () -> SuSyBlocks.SUSY_STONE_SMOOTH.getState(SusyBlockStoneSmooth.BlockType.SOAPSTONE),
-                state -> state.getBlock() instanceof SusyBlockStoneSmooth && ((SusyBlockStoneSmooth) state.getBlock()).getVariant(state) == SusyBlockStoneSmooth.BlockType.SOAPSTONE, false);
+                () -> gtStoneState(SusyStoneVariantBlock.StoneType.SOAPSTONE),
+                state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.SOAPSTONE), false);
         KIMBERLITE = new StoneType(22, "kimberlite", SoundType.STONE, SusyOrePrefix.oreKimberlite, SusyMaterials.Kimberlite,
-                () -> SuSyBlocks.SUSY_STONE_SMOOTH.getState(SusyBlockStoneSmooth.BlockType.KIMBERLITE),
-                state -> state.getBlock() instanceof SusyBlockStoneSmooth && ((SusyBlockStoneSmooth) state.getBlock()).getVariant(state) == SusyBlockStoneSmooth.BlockType.KIMBERLITE, false);
+                () -> gtStoneState(SusyStoneVariantBlock.StoneType.KIMBERLITE),
+                state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.KIMBERLITE), false);
+
+    }
+    private static IBlockState gtStoneState(SusyStoneVariantBlock.StoneType stoneType) {
+        return SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH).getState(stoneType);
     }
 
+    private static boolean gtStonePredicate(IBlockState state, SusyStoneVariantBlock.StoneType stoneType) {
+        SusyStoneVariantBlock block = SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH);
+        return state.getBlock() == block && block.getState(state) == stoneType;
+    }
 }
