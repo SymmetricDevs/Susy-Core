@@ -29,7 +29,7 @@ def isCI = System.getenv("GITHUB_ACTION")
 def ref = System.getenv("GITHUB_PR_NUMBER")
 
 if(isCI) {
-    version = version + "-CI$" + (ref ? "-${ref}" : "")
+    version = version + "-CI" + (ref ? "-${ref}" : "")
 }
 
 println(repeat('*', 60))
