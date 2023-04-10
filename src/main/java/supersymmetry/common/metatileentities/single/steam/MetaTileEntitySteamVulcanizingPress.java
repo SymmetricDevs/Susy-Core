@@ -36,7 +36,7 @@ public class MetaTileEntitySteamVulcanizingPress extends SteamMetaTileEntity{
     }
 
     protected IItemHandlerModifiable createImportItemHandler() {
-        return new NotifiableItemStackHandler(3, this, false);
+        return new NotifiableItemStackHandler(4, this, false);
     }
     protected IItemHandlerModifiable createExportItemHandler() {
         return new NotifiableItemStackHandler(2, this, true);
@@ -44,7 +44,7 @@ public class MetaTileEntitySteamVulcanizingPress extends SteamMetaTileEntity{
 
     public FluidTankList createImportFluidHandler() {
         super.createImportFluidHandler();
-        return new FluidTankList(false, new IFluidTank[]{this.steamFluidTank, new FluidTank(16000)});
+        return new FluidTankList(false, new IFluidTank[]{this.steamFluidTank, new FluidTank(16000), new FluidTank(16000)});
     }
 
     protected FluidTankList createExportFluidHandler() {
@@ -56,10 +56,12 @@ public class MetaTileEntitySteamVulcanizingPress extends SteamMetaTileEntity{
 
         builder.widget(new RecipeProgressWidget(this.workableHandler::getProgressPercent, 76, 39, 20, 15, GuiTextures.PROGRESS_BAR_COMPRESS_STEAM.get(false), ProgressWidget.MoveType.HORIZONTAL, SuSyRecipeMaps.VULCANIZATION_RECIPES));
 
-        builder.widget((new SlotWidget(this.importItems, 0, 12, 39, true, true).setBackgroundTexture(GuiTextures.SLOT_STEAM.get(false))))
-        .widget((new SlotWidget(this.importItems, 1, 30, 39, true, true).setBackgroundTexture(GuiTextures.SLOT_STEAM.get(false))))
-        .widget((new SlotWidget(this.importItems, 2, 48, 39, true, true).setBackgroundTexture(GuiTextures.SLOT_STEAM.get(false))))
-        .widget((new TankWidget(this.importFluids.getTankAt(1), 48, 57, 18, 18)).setAlwaysShowFull(true).setBackgroundTexture(SusyGuiTextures.FLUID_SLOT_STEAM.get(false)).setContainerClicking(true, true))
+        builder.widget((new SlotWidget(this.importItems, 0, 30, 30, true, true).setBackgroundTexture(GuiTextures.SLOT_STEAM.get(false))))
+        .widget((new SlotWidget(this.importItems, 1, 48, 30, true, true).setBackgroundTexture(GuiTextures.SLOT_STEAM.get(false))))
+        .widget((new SlotWidget(this.importItems, 2, 30, 48, true, true).setBackgroundTexture(GuiTextures.SLOT_STEAM.get(false))))
+        .widget((new SlotWidget(this.importItems, 3, 48, 48, true, true).setBackgroundTexture(SusyGuiTextures.MOLD_OVERLAY_STEAM.get(false))))
+        .widget((new TankWidget(this.importFluids.getTankAt(1), 12, 30, 18, 18)).setAlwaysShowFull(true).setBackgroundTexture(SusyGuiTextures.FLUID_SLOT_STEAM.get(false)).setContainerClicking(true, true))
+        .widget((new TankWidget(this.importFluids.getTankAt(2), 12, 48, 18, 18)).setAlwaysShowFull(true).setBackgroundTexture(SusyGuiTextures.FLUID_SLOT_STEAM.get(false)).setContainerClicking(true, true))
         .widget((new SlotWidget(this.exportItems, 0, 106, 39, true, true).setBackgroundTexture(GuiTextures.SLOT_STEAM.get(false))))
         .widget((new SlotWidget(this.exportItems, 1, 124, 39, true, true).setBackgroundTexture(GuiTextures.SLOT_STEAM.get(false))))
         .widget((new TankWidget(this.exportFluids.getTankAt(0),142, 39, 18, 18)).setAlwaysShowFull(true).setBackgroundTexture(SusyGuiTextures.FLUID_SLOT_STEAM.get(false)).setContainerClicking(false, true));
