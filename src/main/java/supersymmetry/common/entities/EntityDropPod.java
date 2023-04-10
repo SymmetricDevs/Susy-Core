@@ -41,6 +41,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
 
     private AnimationFactory factory = new AnimationFactory(this);
 
+    @SideOnly(Side.CLIENT)
     private MovingSoundDropPod soundDropPod;
 
     public EntityDropPod(World worldIn) {
@@ -231,13 +232,12 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
 
             if (!this.hasLanded()) {
                 this.handleCollidedBlocks();
-                //this.spawnFlightParticles(false);
             }
 
             this.setLanded(this.hasLanded() || this.onGround);
 
             if (this.hasLanded()) {
-                /*if (this.getTimeSinceLanding() == 0) {
+                if (this.getTimeSinceLanding() == 0) {
                     int posXRounded = MathHelper.floor(this.posX);
                     int posYBeneath = MathHelper.floor(this.posY - 1.20000000298023224D);
                     int posZRounded = MathHelper.floor(this.posZ);
@@ -248,12 +248,11 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
                         SoundType soundType = blockBeneath.getBlock().getSoundType(blockBeneath, world, new BlockPos(posXRounded, posYBeneath, posZRounded), this);
                         this.playSound(soundType.getBreakSound(), soundType.getVolume() * 3.0F, soundType.getPitch() * 0.2F);
                     }
-                }*/
+                }
                 this.setTimeSinceLanding(this.getTimeSinceLanding() + 1);
             }
 
             if (this.hasTakenOff()) {
-                //this.spawnFlightParticles(true);
                 if (this.motionY < 10.D) {
                     if (this.motionY < 1.D) {
                         this.motionY += 0.1;
@@ -272,21 +271,10 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
             if (this.hasTakenOff()) {
                 this.spawnFlightParticles(true);
             }
-            if (this.getTimeSinceLanding() == 0) {
-                int posXRounded = MathHelper.floor(this.posX);
-                int posYBeneath = MathHelper.floor(this.posY - 1.20000000298023224D);
-                int posZRounded = MathHelper.floor(this.posZ);
-                IBlockState blockBeneath = this.world.getBlockState(new BlockPos(posXRounded, posYBeneath, posZRounded));
-
-                if (blockBeneath.getMaterial() != Material.AIR)
-                {
-                    SoundType soundType = blockBeneath.getBlock().getSoundType(blockBeneath, world, new BlockPos(posXRounded, posYBeneath, posZRounded), this);
-                    this.playSound(soundType.getBreakSound(), soundType.getVolume() * 3.0F, soundType.getPitch() * 0.2F);
-                }
-            }
         }
 
         this.dataManager.set(TIME_SINCE_SPAWN, this.dataManager.get(TIME_SINCE_SPAWN) + 1);
+
 
         if (world.isRemote && this.soundDropPod != null) {
             if (!this.hasLanded() || this.hasTakenOff()) {
@@ -384,8 +372,13 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     public void onAddedToWorld() {
         super.onAddedToWorld();
         if (this.world.isRemote) {
-            this.soundDropPod = new MovingSoundDropPod(this);
-            Minecraft.getMinecraft().getSoundHandler().playSound(this.soundDropPod);
+            setupDropPodSound();
         }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void setupDropPodSound() {
+        this.soundDropPod = new MovingSoundDropPod(this);
+        Minecraft.getMinecraft().getSoundHandler().playSound(this.soundDropPod);
     }
 }
