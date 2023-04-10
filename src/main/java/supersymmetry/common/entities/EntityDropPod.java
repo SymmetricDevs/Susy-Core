@@ -5,11 +5,9 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.MovingSoundMinecart;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -20,6 +18,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -82,8 +82,10 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
         return this.getTimeSinceLanding() > 200;
     }
 
+    @SideOnly(Side.CLIENT)
     protected void spawnFlightParticles(boolean goingUp) {
-        double offset = goingUp ? 0.0D : 1.5D;
+        //double offset = goingUp ? 0.0D : 1.5D;
+        double offset = goingUp ? 0.2D : 0.5D;
         SusyParticleFlame flame1 = new SusyParticleFlame(
                 this.world,
                 this.posX + 0.8D,
@@ -229,13 +231,13 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
 
             if (!this.hasLanded()) {
                 this.handleCollidedBlocks();
-                this.spawnFlightParticles(false);
+                //this.spawnFlightParticles(false);
             }
 
             this.setLanded(this.hasLanded() || this.onGround);
 
             if (this.hasLanded()) {
-                if (this.getTimeSinceLanding() == 0) {
+                /*if (this.getTimeSinceLanding() == 0) {
                     int posXRounded = MathHelper.floor(this.posX);
                     int posYBeneath = MathHelper.floor(this.posY - 1.20000000298023224D);
                     int posZRounded = MathHelper.floor(this.posZ);
@@ -246,12 +248,12 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
                         SoundType soundType = blockBeneath.getBlock().getSoundType(blockBeneath, world, new BlockPos(posXRounded, posYBeneath, posZRounded), this);
                         this.playSound(soundType.getBreakSound(), soundType.getVolume() * 3.0F, soundType.getPitch() * 0.2F);
                     }
-                }
+                }*/
                 this.setTimeSinceLanding(this.getTimeSinceLanding() + 1);
             }
 
             if (this.hasTakenOff()) {
-                this.spawnFlightParticles(true);
+                //this.spawnFlightParticles(true);
                 if (this.motionY < 10.D) {
                     if (this.motionY < 1.D) {
                         this.motionY += 0.1;
@@ -262,6 +264,25 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
                     this.handleCollidedBlocks(true);
                 }
                 this.isDead = this.posY > 300;
+            }
+        } else {
+            if (!this.hasLanded()) {
+                this.spawnFlightParticles(false);
+            }
+            if (this.hasTakenOff()) {
+                this.spawnFlightParticles(true);
+            }
+            if (this.getTimeSinceLanding() == 0) {
+                int posXRounded = MathHelper.floor(this.posX);
+                int posYBeneath = MathHelper.floor(this.posY - 1.20000000298023224D);
+                int posZRounded = MathHelper.floor(this.posZ);
+                IBlockState blockBeneath = this.world.getBlockState(new BlockPos(posXRounded, posYBeneath, posZRounded));
+
+                if (blockBeneath.getMaterial() != Material.AIR)
+                {
+                    SoundType soundType = blockBeneath.getBlock().getSoundType(blockBeneath, world, new BlockPos(posXRounded, posYBeneath, posZRounded), this);
+                    this.playSound(soundType.getBreakSound(), soundType.getVolume() * 3.0F, soundType.getPitch() * 0.2F);
+                }
             }
         }
 
