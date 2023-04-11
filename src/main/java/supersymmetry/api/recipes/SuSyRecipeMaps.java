@@ -1,6 +1,7 @@
 package supersymmetry.api.recipes;
 
 import gregtech.api.gui.GuiTextures;
+import gregtech.api.gui.widgets.ProgressWidget;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.core.sound.GTSoundEvents;
 import gregtech.api.recipes.builders.PrimitiveRecipeBuilder;
@@ -24,4 +25,8 @@ public class SuSyRecipeMaps {
 
     public static final RecipeMap<SimpleRecipeBuilder> ROASTER_RECIPES = new RecipeMap<>("roaster", 1, 2, 0, 2, 0, 0, 0, 3, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.COMBUSTION);
+
+    public static final RecipeMap<SimpleRecipeBuilder> VACUUM_CHAMBER = new RecipeMap<>("vacuum_chamber", 1, 4, 1, 1, 0, 0, 0, 0, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_COMPRESS, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.CENTRIFUGE);
 }
