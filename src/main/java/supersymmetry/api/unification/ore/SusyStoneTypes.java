@@ -30,34 +30,27 @@ public class SusyStoneTypes {
         GNEISS = new StoneType(13, "gneiss", SoundType.STONE, SusyOrePrefix.oreGneiss, SusyMaterials.Gneiss,
                 () -> gtStoneState(SusyStoneVariantBlock.StoneType.GNEISS),
                 state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.GNEISS), false);
-        GRAPHITE = new StoneType(14, "graphite", SoundType.STONE, SusyOrePrefix.oreGraphite, Materials.Graphite,
-                () -> gtStoneState(SusyStoneVariantBlock.StoneType.GRAPHITE),
-                state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.GRAPHITE), false);
-        LIMESTONE = new StoneType(15, "limestone", SoundType.STONE, SusyOrePrefix.oreLimestone, SusyMaterials.Limestone,
+        LIMESTONE = new StoneType(14, "limestone", SoundType.STONE, SusyOrePrefix.oreLimestone, SusyMaterials.Limestone,
                 () -> gtStoneState(SusyStoneVariantBlock.StoneType.LIMESTONE),
                 state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.LIMESTONE), false);
-        MICA = new StoneType(16, "mica", SoundType.STONE, SusyOrePrefix.oreMica, Materials.Mica,
-                () -> gtStoneState(SusyStoneVariantBlock.StoneType.MICA),
-                state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.MICA), false);
-        PHYLLITE = new StoneType(17, "phyllite", SoundType.STONE, SusyOrePrefix.orePhyllite, SusyMaterials.Phyllite,
+        PHYLLITE = new StoneType(15, "phyllite", SoundType.STONE, SusyOrePrefix.orePhyllite, SusyMaterials.Phyllite,
                 () -> gtStoneState(SusyStoneVariantBlock.StoneType.PHYLLITE),
                 state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.PHYLLITE), false);
-        QUARTZITE = new StoneType(18, "quartzite", SoundType.STONE, SusyOrePrefix.oreQuartzite, Materials.Quartzite,
+        QUARTZITE = new StoneType(16, "quartzite", SoundType.STONE, SusyOrePrefix.oreQuartzite, Materials.Quartzite,
                 () -> gtStoneState(SusyStoneVariantBlock.StoneType.QUARTZITE),
                 state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.QUARTZITE), false);
-        SHALE = new StoneType(19, "shale", SoundType.STONE, SusyOrePrefix.oreShale, SusyMaterials.Shale,
+        SHALE = new StoneType(17, "shale", SoundType.STONE, SusyOrePrefix.oreShale, SusyMaterials.Shale,
                 () -> gtStoneState(SusyStoneVariantBlock.StoneType.SHALE),
                 state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.SHALE), false);
-        SLATE = new StoneType(20, "slate", SoundType.STONE, SusyOrePrefix.oreSlate, SusyMaterials.Slate,
+        SLATE = new StoneType(18, "slate", SoundType.STONE, SusyOrePrefix.oreSlate, SusyMaterials.Slate,
                 () -> gtStoneState(SusyStoneVariantBlock.StoneType.SLATE),
                 state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.SLATE), false);
-        SOAPSTONE = new StoneType(21, "soapstone", SoundType.STONE, SusyOrePrefix.oreSoapstone, Materials.Soapstone,
+        SOAPSTONE = new StoneType(19, "soapstone", SoundType.STONE, SusyOrePrefix.oreSoapstone, Materials.Soapstone,
                 () -> gtStoneState(SusyStoneVariantBlock.StoneType.SOAPSTONE),
                 state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.SOAPSTONE), false);
-        KIMBERLITE = new StoneType(22, "kimberlite", SoundType.STONE, SusyOrePrefix.oreKimberlite, SusyMaterials.Kimberlite,
+        KIMBERLITE = new StoneType(20, "kimberlite", SoundType.STONE, SusyOrePrefix.oreKimberlite, SusyMaterials.Kimberlite,
                 () -> gtStoneState(SusyStoneVariantBlock.StoneType.KIMBERLITE),
                 state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.KIMBERLITE), false);
-
     }
     private static IBlockState gtStoneState(SusyStoneVariantBlock.StoneType stoneType) {
         return SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH).getState(stoneType);

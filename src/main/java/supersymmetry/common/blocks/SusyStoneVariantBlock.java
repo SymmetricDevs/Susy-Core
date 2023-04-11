@@ -110,9 +110,7 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
     public static enum StoneType implements IStringSerializable {
         GABBRO("gabbro", MapColor.GRAY),
         GNEISS("gneiss", MapColor.RED_STAINED_HARDENED_CLAY),
-        GRAPHITE("graphite", MapColor.BLACK),
         LIMESTONE("limestone", MapColor.GRAY_STAINED_HARDENED_CLAY),
-        MICA("mica", MapColor.WHITE_STAINED_HARDENED_CLAY),
         PHYLLITE("phyllite", MapColor.GRAY),
         QUARTZITE("quartzite", MapColor.QUARTZ),
         SHALE("shale", MapColor.RED_STAINED_HARDENED_CLAY),
@@ -137,9 +135,7 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
             switch (this) {
                 case GABBRO:
                 case GNEISS:
-                case GRAPHITE:
                 case LIMESTONE:
-                case MICA:
                 case PHYLLITE:
                 case QUARTZITE:
                 case SHALE:
@@ -158,12 +154,8 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
                     return SusyMaterials.Gabbro;
                 case GNEISS:
                     return SusyMaterials.Gneiss;
-                case GRAPHITE:
-                    return Materials.Graphite;
                 case LIMESTONE:
                     return SusyMaterials.Limestone;
-                case MICA:
-                    return Materials.Mica;
                 case PHYLLITE:
                     return SusyMaterials.Phyllite;
                 case QUARTZITE:
