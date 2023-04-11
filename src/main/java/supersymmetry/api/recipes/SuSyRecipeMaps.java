@@ -14,7 +14,6 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> VULCANIZATION_RECIPES;
     public static final RecipeMap<SimpleRecipeBuilder> ROASTER_RECIPES;
 
-
     static {
         COOLING_RECIPES = (new RecipeMap("magnetic_refrigerator", 1, 3, 0, 3, 0, 0, 0, 1, new SimpleRecipeBuilder(), false))
             .setSound(GTSoundEvents.COOLING);
