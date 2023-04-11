@@ -1,5 +1,10 @@
 package supersymmetry.loaders.recipes;
 
+import static gregtech.api.recipes.RecipeMaps.EXTRUDER_RECIPES;
+import static gregtech.api.recipes.RecipeMaps.FORGE_HAMMER_RECIPES;
+import static gregtech.api.recipes.RecipeMaps.MACERATOR_RECIPES;
+import static gregtech.api.unification.ore.OrePrefix.dust;
+import static gregtech.api.unification.ore.OrePrefix.stone;
 import static gregtech.common.items.MetaItems.SHAPE_EXTRUDER_BLOCK;
 
 import java.util.Arrays;
@@ -8,12 +13,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import gregtech.api.recipes.ModHandler;
-import gregtech.api.recipes.RecipeMaps;
+import gregtech.api.unification.material.Materials;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
 import net.minecraft.item.ItemStack;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
+import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.loaders.SuSyMetaTileEntityLoader;
 
 public class SuSyRecipeLoader {
@@ -48,19 +54,20 @@ public class SuSyRecipeLoader {
                             .map(block::getItemVariant)
                             .collect(Collectors.toList()));
         }
+
         List<ItemStack> cobbles = variantListMap.get(StoneVariantBlock.StoneVariant.COBBLE);
         List<ItemStack> smooths = variantListMap.get(StoneVariantBlock.StoneVariant.SMOOTH);
-
 
         registerSmoothRecipe(susycobbles, susysmooths);
         registerCobbleRecipe(susysmooths, susycobbles);
         registerCobbleSmashingRecipe(susysmooths, susycobbles);
         registerCobbleSmashingRecipe(smooths, cobbles);
+        registerMacerationToStoneDustRecipe();
     }
 
     private static void registerCobbleRecipe(List<ItemStack> smoothStack, List<ItemStack> cobbleStack) {
         for (int i = 0; i < smoothStack.size(); i++) {
-            RecipeMaps.FORGE_HAMMER_RECIPES.recipeBuilder()
+            FORGE_HAMMER_RECIPES.recipeBuilder()
                     .inputs(smoothStack.get(i))
                     .outputs(cobbleStack.get(i))
                     .duration(12).EUt(4).buildAndRegister();
@@ -71,7 +78,7 @@ public class SuSyRecipeLoader {
         for (int i = 0; i < roughStack.size(); i++) {
             ModHandler.addSmeltingRecipe(roughStack.get(i), smoothStack.get(i), 0.1f);
 
-            RecipeMaps.EXTRUDER_RECIPES.recipeBuilder()
+            EXTRUDER_RECIPES.recipeBuilder()
                     .inputs(roughStack.get(i))
                     .notConsumable(SHAPE_EXTRUDER_BLOCK.getStackForm())
                     .outputs(smoothStack.get(i))
@@ -85,5 +92,54 @@ public class SuSyRecipeLoader {
 
             ModHandler.addShapedRecipe(smoothStack.get(i).getDisplayName() + "_hammer_smashing", cobbleStack.get(i), "hS", 'S', smoothStack.get(i));
         }
+    }
+
+    private static void registerMacerationToStoneDustRecipe() {
+        MACERATOR_RECIPES.recipeBuilder()
+                .input(stone, SusyMaterials.Gabbro)
+                .output(dust, SusyMaterials.Gabbro)
+                .buildAndRegister();
+
+        MACERATOR_RECIPES.recipeBuilder()
+                .input(stone, SusyMaterials.Gneiss)
+                .output(dust, SusyMaterials.Gneiss)
+                .buildAndRegister();
+
+        MACERATOR_RECIPES.recipeBuilder()
+                .input(stone, SusyMaterials.Limestone)
+                .output(dust, SusyMaterials.Limestone)
+                .buildAndRegister();
+
+        MACERATOR_RECIPES.recipeBuilder()
+                .input(stone, SusyMaterials.Phyllite)
+                .output(dust, SusyMaterials.Phyllite)
+                .buildAndRegister();
+
+        MACERATOR_RECIPES.recipeBuilder()
+                .input(stone, Materials.Quartzite)
+                .output(dust, Materials.Quartzite)
+                .buildAndRegister();
+
+        MACERATOR_RECIPES.recipeBuilder()
+                .input(stone, SusyMaterials.Shale)
+                .output(dust, SusyMaterials.Shale)
+                .buildAndRegister();
+
+        MACERATOR_RECIPES.recipeBuilder()
+                .input(stone, SusyMaterials.Slate)
+                .output(dust, SusyMaterials.Slate)
+                .buildAndRegister();
+
+//        MACERATOR_RECIPES.recipeBuilder()
+//                .input(stone, Materials.Soapstone)
+//                .output(dust, Materials.Soapstone)
+//                .buildAndRegister();
+
+
+        MACERATOR_RECIPES.recipeBuilder()
+                .input(stone, SusyMaterials.Kimberlite)
+                .output(dust, SusyMaterials.Kimberlite)
+                .buildAndRegister();
+
     }
 }

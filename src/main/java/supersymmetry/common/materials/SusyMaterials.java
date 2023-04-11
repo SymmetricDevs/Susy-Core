@@ -51,7 +51,7 @@ public class SusyMaterials {
     }
 
     private static void changeProperties() {
-        removeProperty(PropertyKey.ORE, Materials.Graphite);
+        //removeProperty(PropertyKey.ORE, Materials.Graphite);
         removeProperty(PropertyKey.ORE, Materials.Soapstone);
         removeProperty(PropertyKey.ORE, Materials.Quartzite);
         removeProperty(PropertyKey.ORE, Materials.Mica);
