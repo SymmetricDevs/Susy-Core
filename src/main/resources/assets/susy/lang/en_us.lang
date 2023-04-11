@@ -120,9 +120,24 @@ gregtech.machine.roaster.uiv.name=Epic Roaster III
 gregtech.machine.roaster.uxv.name=Epic Roaster IV
 gregtech.machine.roaster.opv.name=Legendary Roaster
 
-
+# Vacuum Chamber
+gregtech.machine.vacuum_chamber.steam.name=Steam Vacuum Chamber
+gregtech.machine.vacuum_chamber.lv.name=Basic Vacuum Chamber
+gregtech.machine.vacuum_chamber.mv.name=Advanced Vacuum Chamber
+gregtech.machine.vacuum_chamber.hv.name=Advanced Vacuum Chamber II
+gregtech.machine.vacuum_chamber.ev.name=Advanced Vacuum Chamber III
+gregtech.machine.vacuum_chamber.iv.name=Elite Vacuum Chamber
+gregtech.machine.vacuum_chamber.luv.name=Elite Vacuum Chamber II
+gregtech.machine.vacuum_chamber.zpm.name=Elite Vacuum Chamber III
+gregtech.machine.vacuum_chamber.uv.name=Ultimate Vacuum Chamber
+gregtech.machine.vacuum_chamber.uhv.name=Epic Vacuum Chamber
+gregtech.machine.vacuum_chamber.uev.name=Epic Vacuum Chamber II
+gregtech.machine.vacuum_chamber.uiv.name=Epic Vacuum Chamber III
+gregtech.machine.vacuum_chamber.uxv.name=Epic Vacuum Chamber IV
+gregtech.machine.vacuum_chamber.opv.name=Legendary Vacuum Chamber
 
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
 recipemap.vulcanizing_press.name=Vulcanization
 recipemap.roaster.name=Roasting
+recipemap.vacuum_chamber.name=Vacuum Ejection
