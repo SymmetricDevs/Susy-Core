@@ -1,4 +1,4 @@
-﻿name: CI Suite
+name: CI Suite
 on:
   push:
     branches:
@@ -64,7 +64,8 @@ jobs:
         run: |
           ./gradlew build
       - name: Upload Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: Susy Jar
-          path: build/libs
+          path: build/libs/
+          if-no-files-found: error
