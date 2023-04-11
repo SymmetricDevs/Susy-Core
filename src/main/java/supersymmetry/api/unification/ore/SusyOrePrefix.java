@@ -21,16 +21,16 @@ public class SusyOrePrefix {
     }
 
     public static void  init(){
-        oreGabbro = new OrePrefix("oreGabbro", -1L, (Material) null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
-        oreGneiss = new OrePrefix("oreGneiss", -1L, (Material) null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
-        oreGraphite = new OrePrefix("oreGraphite", -1L, (Material) null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
-        oreLimestone = new OrePrefix("oreLimestone", -1L, (Material) null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
-        oreMica = new OrePrefix("oreMica", -1L, (Material) null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
-        orePhyllite = new OrePrefix("orePhyllite", -1L, (Material) null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
-        oreQuartzite = new OrePrefix("oreQuartzite", -1L, (Material) null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
-        oreShale = new OrePrefix("oreShale", -1L, (Material) null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
-        oreSlate = new OrePrefix("oreSlate", -1L, (Material) null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
-        oreSoapstone = new OrePrefix("oreSoapstone", -1L, (Material) null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
-        oreKimberlite = new OrePrefix("oreKimberltie", -1L, (Material) null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
+        oreGabbro = new OrePrefix("oreGabbro", -1L, null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
+        oreGneiss = new OrePrefix("oreGneiss", -1L, null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
+        oreGraphite = new OrePrefix("oreGraphite", -1L, null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
+        oreLimestone = new OrePrefix("oreLimestone", -1L, null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
+        oreMica = new OrePrefix("oreMica", -1L, null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
+        orePhyllite = new OrePrefix("orePhyllite", -1L, null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
+        oreQuartzite = new OrePrefix("oreQuartzite", -1L, null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
+        oreShale = new OrePrefix("oreShale", -1L, null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
+        oreSlate = new OrePrefix("oreSlate", -1L, null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
+        oreSoapstone = new OrePrefix("oreSoapstone", -1L, null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
+        oreKimberlite = new OrePrefix("oreKimberltie", -1L, null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
     }
 }

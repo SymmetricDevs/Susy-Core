@@ -19,6 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.common.materials.SusyMaterials;
 
 public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.StoneType> {
@@ -42,7 +43,7 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
     protected BlockStateContainer createBlockState() {
         this.VARIANT = PROPERTY;
         this.VALUES = SusyStoneVariantBlock.StoneType.values();
-        return new BlockStateContainer(this, new IProperty[]{this.VARIANT});
+        return new BlockStateContainer(this, this.VARIANT);
     }
 
     public boolean canCreatureSpawn(@Nonnull IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull EntityLiving.SpawnPlacementType type) {
@@ -61,11 +62,11 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
         return this.stoneVariant == SusyStoneVariantBlock.StoneVariant.SMOOTH;
     }
 
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return Item.getItemFromBlock((Block)(this.stoneVariant == SusyStoneVariantBlock.StoneVariant.SMOOTH ? (Block)SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.COBBLE) : this));
+    public @NotNull Item getItemDropped(@NotNull IBlockState state, @NotNull Random rand, int fortune) {
+        return Item.getItemFromBlock(this.stoneVariant == StoneVariant.SMOOTH ? SuSyBlocks.SUSY_STONE_BLOCKS.get(StoneVariant.COBBLE) : this);
     }
 
-    public static enum StoneVariant {
+    public enum StoneVariant {
         SMOOTH("susy_stone_smooth"),
         COBBLE("susy_stone_cobble", 2.0F, 10.0F);
 //      TODO
@@ -87,19 +88,19 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
         public final float hardness;
         public final float resistance;
 
-        private StoneVariant(@Nonnull String id) {
+        StoneVariant(@Nonnull String id) {
             this(id, id);
         }
 
-        private StoneVariant(@Nonnull String id, @Nonnull String translationKey) {
+        StoneVariant(@Nonnull String id, @Nonnull String translationKey) {
             this(id, translationKey, 1.5F, 10.0F);
         }
 
-        private StoneVariant(@Nonnull String id, float hardness, float resistance) {
+        StoneVariant(@Nonnull String id, float hardness, float resistance) {
             this(id, id, hardness, resistance);
         }
 
-        private StoneVariant(@Nonnull String id, @Nonnull String translationKey, float hardness, float resistance) {
+        StoneVariant(@Nonnull String id, @Nonnull String translationKey, float hardness, float resistance) {
             this.id = id;
             this.translationKey = translationKey;
             this.hardness = hardness;
@@ -107,7 +108,7 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
         }
     }
 
-    public static enum StoneType implements IStringSerializable {
+    public enum StoneType implements IStringSerializable {
         GABBRO("gabbro", MapColor.GRAY),
         GNEISS("gneiss", MapColor.RED_STAINED_HARDENED_CLAY),
         GRAPHITE("graphite", MapColor.BLACK),
@@ -123,7 +124,7 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
         private final String name;
         public final MapColor mapColor;
 
-        private StoneType(@Nonnull String name, @Nonnull MapColor mapColor) {
+        StoneType(@Nonnull String name, @Nonnull MapColor mapColor) {
             this.name = name;
             this.mapColor = mapColor;
         }

@@ -62,7 +62,7 @@ public class MetaTileEntityLatexCollector extends TieredMetaTileEntity {
     }
 
     protected FluidTankList createExportFluidHandler() {
-        return new FluidTankList(false, new IFluidTank[]{new FluidTank(this.tankSize)});
+        return new FluidTankList(false, new FluidTank(this.tankSize));
     }
 
     protected IItemHandlerModifiable createImportItemHandler() {
@@ -91,7 +91,7 @@ public class MetaTileEntityLatexCollector extends TieredMetaTileEntity {
         builder.label(11, 20, "gregtech.gui.fluid_amount", 16777215);
         builder.dynamicLabel(11, 30, tankWidget::getFormattedFluidAmount, 16777215);
         builder.dynamicLabel(11, 40, tankWidget::getFluidLocalizedName, 16777215);
-        return builder.label(6, 6, this.getMetaFullName()).widget((new FluidContainerSlotWidget(this.importItems, 0, 90, 17, false)).setBackgroundTexture(new IGuiTexture[]{GuiTextures.SLOT, GuiTextures.IN_SLOT_OVERLAY})).widget(new ImageWidget(91, 36, 14, 15, GuiTextures.TANK_ICON)).widget((new SlotWidget(this.exportItems, 0, 90, 54, true, false)).setBackgroundTexture(new IGuiTexture[]{GuiTextures.SLOT, GuiTextures.OUT_SLOT_OVERLAY})).bindPlayerInventory(entityPlayer.inventory).build(this.getHolder(), entityPlayer);
+        return builder.label(6, 6, this.getMetaFullName()).widget((new FluidContainerSlotWidget(this.importItems, 0, 90, 17, false)).setBackgroundTexture(GuiTextures.SLOT, GuiTextures.IN_SLOT_OVERLAY)).widget(new ImageWidget(91, 36, 14, 15, GuiTextures.TANK_ICON)).widget((new SlotWidget(this.exportItems, 0, 90, 54, true, false)).setBackgroundTexture(GuiTextures.SLOT, GuiTextures.OUT_SLOT_OVERLAY)).bindPlayerInventory(entityPlayer.inventory).build(this.getHolder(), entityPlayer);
     }
 
     public void update() {
@@ -110,7 +110,7 @@ public class MetaTileEntityLatexCollector extends TieredMetaTileEntity {
 
         if (!this.getWorld().isRemote && this.getOffsetTimer() % 5L == 0L) {
             if(this.getOutputFacingFluids() != null){
-                this.pushFluidsIntoNearbyHandlers(new EnumFacing[]{this.getOutputFacingFluids()});
+                this.pushFluidsIntoNearbyHandlers(this.getOutputFacingFluids());
             }
             this.fillContainerFromInternalTank();
         }
@@ -126,11 +126,8 @@ public class MetaTileEntityLatexCollector extends TieredMetaTileEntity {
             this.numberRubberLogs = 0;
             if(!this.getWorld().isRemote) {
                 EnumFacing[] facings = EnumFacing.VALUES;
-                int numFacings = facings.length;
 
-                for (int i = 0; i < numFacings; ++i) {
-                    EnumFacing side = facings[i];
-
+                for (EnumFacing side : facings) {
                     if (side != this.frontFacing && !side.getAxis().isVertical()) {
                         Block block = this.getWorld().getBlockState(this.getPos().offset(side)).getBlock();
                         if (block == MetaBlocks.RUBBER_LOG) {
@@ -203,9 +200,7 @@ public class MetaTileEntityLatexCollector extends TieredMetaTileEntity {
         this.outputFacingFluids = outputFacing;
         if (!this.getWorld().isRemote) {
             this.notifyBlockUpdate();
-            this.writeCustomData(100, (buf) -> {
-                buf.writeByte(this.outputFacingFluids.getIndex());
-            });
+            this.writeCustomData(100, (buf) -> buf.writeByte(this.outputFacingFluids.getIndex()));
             this.markDirty();
         }
     }
@@ -217,8 +212,8 @@ public class MetaTileEntityLatexCollector extends TieredMetaTileEntity {
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
         tooltip.add(I18n.format("gregtech.machine.latex_collector.tooltip", this.latexCollectionAmount));
 
-        tooltip.add(I18n.format("gregtech.universal.tooltip.voltage_in", new Object[]{this.energyContainer.getInputVoltage(), GTValues.VNF[this.getTier()]}));
-        tooltip.add(I18n.format("gregtech.universal.tooltip.energy_storage_capacity", new Object[]{this.energyContainer.getEnergyCapacity()}));
+        tooltip.add(I18n.format("gregtech.universal.tooltip.voltage_in", this.energyContainer.getInputVoltage(), GTValues.VNF[this.getTier()]));
+        tooltip.add(I18n.format("gregtech.universal.tooltip.energy_storage_capacity", this.energyContainer.getEnergyCapacity()));
     }
 
     public boolean needsSneakToRotate() {

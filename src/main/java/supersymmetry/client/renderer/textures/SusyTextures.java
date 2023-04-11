@@ -19,7 +19,7 @@ public class SusyTextures {
 
     public static void preInit(){
         WOODEN_COAGULATION_TANK_WALL = new SimpleSidedCubeRenderer("casings/wooden_coagulation_tank_wall");
-        VULCANIZING_PRESS_OVERLAY = new OrientedOverlayRenderer("machines/vulcanizing_press",new OrientedOverlayRenderer.OverlayFace[]{OrientedOverlayRenderer.OverlayFace.FRONT, OrientedOverlayRenderer.OverlayFace.SIDE, OrientedOverlayRenderer.OverlayFace.TOP});
+        VULCANIZING_PRESS_OVERLAY = new OrientedOverlayRenderer("machines/vulcanizing_press", OrientedOverlayRenderer.OverlayFace.FRONT, OrientedOverlayRenderer.OverlayFace.SIDE, OrientedOverlayRenderer.OverlayFace.TOP);
         LATEX_COLLECTOR_OVERLAY = new OrientedOverlayRenderer("machines/latex_collector");
         ROASTER_OVERLAY = new OrientedOverlayRenderer("machines/roaster");
         MIXER_OVERLAY_STEAM = new OrientedOverlayRenderer("machines/mixer_steam");

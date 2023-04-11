@@ -25,8 +25,8 @@ java {
     }
 }
 
-def isCI = System.getenv("GITHUB_ACTION")
-def ref = System.getenv("GITHUB_PR_NUMBER")
+def final isCI = System.getenv("GITHUB_ACTION")
+def final ref = System.getenv("GITHUB_PR_NUMBER")
 
 if(isCI) {
     version = version + "-CI" + (ref ? "-${ref}" : "")
@@ -42,9 +42,9 @@ println(repeat('*', 60))
 minecraft {
     mappings channel: 'stable', version: '39-1.12'
 
-    // if (project.has_access_transformer.toBoolean()) {
-    //     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-    // }
+    if (project.use_access_transformer.toBoolean()) {
+        accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    }
 
     runs {
         client {
@@ -135,6 +135,25 @@ fancyGradle {
     }
 }
 
+processJarTask jar
+
+if (isCI || project.build_deobfJar.toBoolean()) {
+    // Create deobf dev jars
+    tasks.register('deobfJar', Jar) {
+        archiveClassifier.set 'deobf'
+        from sourceSets.main.output
+    }
+    processJarTask deobfJar
+}
+
+if (isCI || project.build_sourceJar.toBoolean()) {
+    // Create source jar
+    tasks.register('sourcesJar', Jar) {
+        archiveClassifier.set 'sources'
+        from sourceSets.main.allJava
+    }
+}
+
 sourceSets {
     main {
         if (project.use_mixins.toBoolean()) {
@@ -221,7 +240,7 @@ private void processJarTask(task) {
             if (project.use_mixins.toBoolean()) {
                 attribute_map['TweakClass'] = 'org.spongepowered.asm.launch.MixinTweaker'
             }
-            if (project.has_access_transformer.toBoolean()) {
+            if (project.use_access_transformer.toBoolean()) {
                 attribute_map['FMLAT'] = project.archives_base_name + '_at.cfg'
             }
             attributes(attribute_map)

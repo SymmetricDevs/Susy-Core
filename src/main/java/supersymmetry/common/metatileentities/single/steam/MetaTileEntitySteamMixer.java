@@ -44,10 +44,10 @@ public class MetaTileEntitySteamMixer extends SteamMetaTileEntity{
 
     public FluidTankList createImportFluidHandler() {
         super.createImportFluidHandler();
-        return new FluidTankList(false, new IFluidTank[]{this.steamFluidTank, new FluidTank(16000), new FluidTank(16000)});
+        return new FluidTankList(false, this.steamFluidTank, new FluidTank(16000), new FluidTank(16000));
     }
     protected FluidTankList createExportFluidHandler() {
-        return new FluidTankList(false, new IFluidTank[]{new FluidTank(16000)});
+        return new FluidTankList(false, new FluidTank(16000));
     }
 
     public ModularUI createUI(EntityPlayer player) {

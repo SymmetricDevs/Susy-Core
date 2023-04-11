@@ -83,7 +83,7 @@ public class SuSyRecipeLoader {
     private static void registerCobbleSmashingRecipe(List<ItemStack> smoothStack, List<ItemStack> cobbleStack) {
         for (int i = 0; i < smoothStack.size(); i++) {
 
-            ModHandler.addShapedRecipe(smoothStack.get(i).getDisplayName() + "_hammer_smashing", cobbleStack.get(i), new Object[]{"hS", 'S', smoothStack.get(i)});
+            ModHandler.addShapedRecipe(smoothStack.get(i).getDisplayName() + "_hammer_smashing", cobbleStack.get(i), "hS", 'S', smoothStack.get(i));
         }
     }
 }

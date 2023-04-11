@@ -28,6 +28,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.items.IItemHandlerModifiable;
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.common.blocks.BlockCoagulationTankWall;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
@@ -46,12 +47,15 @@ public class MetaTileEntityCoagulationTank extends RecipeMapPrimitiveMultiblockC
         return new MetaTileEntityCoagulationTank(this.metaTileEntityId);
     }
 
-    protected BlockPattern createStructurePattern() {
+    protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle(new String[]{"XXX", "XXX", "XXX"})
-                .aisle(new String[]{"XXX", "X#X", "X#X"}).setRepeatable(1, 4)
-                .aisle(new String[]{"XXX", "XYX", "XXX"})
-                .where('X', states(new IBlockState[]{SuSyBlocks.COAGULATION_TANK_WALL.getState(BlockCoagulationTankWall.CoagulationTankWallType.WOODEN_COAGULATION_TANK_WALL)}).or(abilities(new MultiblockAbility[]{MultiblockAbility.EXPORT_ITEMS}).setMinGlobalLimited(0).setMaxGlobalLimited(1)).or(abilities(new MultiblockAbility[]{MultiblockAbility.IMPORT_FLUIDS}).setMinGlobalLimited(0).setMaxGlobalLimited(1)))
+                .aisle("XXX", "XXX", "XXX")
+                .aisle("XXX", "X#X", "X#X").setRepeatable(1, 4)
+                .aisle("XXX", "XYX", "XXX")
+                .where('X',
+                        states(new IBlockState[]{SuSyBlocks.COAGULATION_TANK_WALL.getState(BlockCoagulationTankWall.CoagulationTankWallType.WOODEN_COAGULATION_TANK_WALL)})
+                        .or(abilities(MultiblockAbility.EXPORT_ITEMS).setMinGlobalLimited(0).setMaxGlobalLimited(1))
+                        .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setMinGlobalLimited(0).setMaxGlobalLimited(1)))
                 .where('#', air())
                 .where('Y', this.selfPredicate()).build();
     }

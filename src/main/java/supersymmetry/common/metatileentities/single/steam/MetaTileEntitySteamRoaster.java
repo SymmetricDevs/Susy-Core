@@ -46,7 +46,7 @@ public class MetaTileEntitySteamRoaster extends SteamMetaTileEntity{
     }
 
     protected FluidTankList createExportFluidHandler() {
-        return new FluidTankList(false, new IFluidTank[]{new FluidTank(16000), new FluidTank(16000), new FluidTank(16000)});
+        return new FluidTankList(false, new FluidTank(16000), new FluidTank(16000), new FluidTank(16000));
     }
 
     public ModularUI createUI(EntityPlayer player) {
@@ -69,7 +69,7 @@ public class MetaTileEntitySteamRoaster extends SteamMetaTileEntity{
     protected void randomDisplayTick(float x, float y, float z, EnumParticleTypes flame, EnumParticleTypes smoke) {
         super.randomDisplayTick(x, y, z, flame, smoke);
         if (GTValues.RNG.nextBoolean()) {
-            this.getWorld().spawnParticle(EnumParticleTypes.SMOKE_NORMAL, (double)x, (double)(y + 0.5F), (double)z, 0.0, 0.0, 0.0, new int[0]);
+            this.getWorld().spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, (double)(y + 0.5F), z, 0.0, 0.0, 0.0);
         }
 
     }

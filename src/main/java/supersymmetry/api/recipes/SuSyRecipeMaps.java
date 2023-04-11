@@ -16,7 +16,7 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> ROASTER_RECIPES;
 
     static {
-        COOLING_RECIPES = (new RecipeMap<>("magnetic_refrigerator", 3, 3, 0, 1, new CoilingCoilRecipeBuilder(), false))
+        COOLING_RECIPES = new RecipeMap<>("magnetic_refrigerator", 3, 3, 0, 1, new CoilingCoilRecipeBuilder(), false)
             .setSound(GTSoundEvents.COOLING);
         SINTERING_RECIPES = new RecipeMap<>("sintering_oven", 4, 4, 2, 2, new SinteringRecipeBuilder(), false)
             .setSound(GTSoundEvents.COMBUSTION);

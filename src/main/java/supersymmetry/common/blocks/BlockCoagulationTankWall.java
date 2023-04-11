@@ -20,13 +20,13 @@ public class BlockCoagulationTankWall extends VariantBlock<BlockCoagulationTankW
         setDefaultState(getState(BlockCoagulationTankWall.CoagulationTankWallType.WOODEN_COAGULATION_TANK_WALL));
     }
 
-    public static enum CoagulationTankWallType implements IStringSerializable, IStateHarvestLevel {
+    public enum CoagulationTankWallType implements IStringSerializable, IStateHarvestLevel {
         WOODEN_COAGULATION_TANK_WALL("wooden_coagulation_tank_wall", 1);
 
         private final String name;
         private final int harvestLevel;
 
-        private CoagulationTankWallType(String name, int harvestLevel) {
+        CoagulationTankWallType(String name, int harvestLevel) {
             this.name = name;
             this.harvestLevel = harvestLevel;
         }

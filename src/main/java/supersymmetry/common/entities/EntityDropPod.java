@@ -35,11 +35,11 @@ import supersymmetry.client.renderer.particles.SusyParticleSmoke;
 
 public class EntityDropPod extends EntityLiving implements IAnimatable {
 
-    private static final DataParameter<Boolean> HAS_LANDED = EntityDataManager.<Boolean>createKey(EntityDropPod.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Integer> TIME_SINCE_LANDING = EntityDataManager.<Integer>createKey(EntityDropPod.class, DataSerializers.VARINT);
-    private static final DataParameter<Integer> TIME_SINCE_SPAWN = EntityDataManager.<Integer>createKey(EntityDropPod.class, DataSerializers.VARINT);
+    private static final DataParameter<Boolean> HAS_LANDED = EntityDataManager.createKey(EntityDropPod.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Integer> TIME_SINCE_LANDING = EntityDataManager.createKey(EntityDropPod.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> TIME_SINCE_SPAWN = EntityDataManager.createKey(EntityDropPod.class, DataSerializers.VARINT);
 
-    private AnimationFactory factory = new AnimationFactory(this);
+    private final AnimationFactory factory = new AnimationFactory(this);
 
     @SideOnly(Side.CLIENT)
     private MovingSoundDropPod soundDropPod;
@@ -354,7 +354,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
 
     @Override
     public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController<EntityDropPod>(this, "controller", 0, this::predicate));
+        animationData.addAnimationController(new AnimationController<>(this, "controller", 0, this::predicate));
     }
 
     @Override
@@ -363,7 +363,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     }
 
     @Override
-    protected void addPassenger(Entity passenger) {
+    protected void addPassenger(@NotNull Entity passenger) {
         if (this.getPassengers().isEmpty())
             super.addPassenger(passenger);
     }
