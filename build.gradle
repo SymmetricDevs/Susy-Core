@@ -87,6 +87,8 @@ repositories {
     maven { url 'https://dvs1.progwml6.com/files/maven/' }
     // CraftTweaker and JEI Backup
     maven { url 'https://maven.blamejared.com' }
+    // The One Probe
+    maven { url 'https://maven.tterrag.com/'}
 }
 
 dependencies {
@@ -99,14 +101,16 @@ dependencies {
     implementation files("libs/gregtech-1.12.2-2.6.1-beta-deobf.jar")
     // implementation fg.deobf("curse.maven:gregtech-ce-unofficial-${project.ceu_pid}:${project.ceu_fid}")
     implementation fg.deobf("curse.maven:gregicality-multiblocks-${project.gcm_pid}:${project.gcm_fid}")
+    implementation fg.deobf("curse.maven:geckolib-388172:4020277")
 
     // Soft Dependencies
     implementation "mezz.jei:jei_${project.minecraft_version}:${project.jei_version}"
     implementation "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-${project.crt_version}"
-    // implementation files("libs/groovyscript-0.4.0.jar")
+    // was at 1.4.28
+    implementation "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.11-5"
 
-    // GeckoLib (missing version pls help)
-    implementation fg.deobf("curse.maven:geckolib-388172:4020277")
+    implementation fg.deobf('curse.maven:realistic-terrain-generation-unofficial-648514:4404814')
+    implementation fg.deobf('curse.maven:biomes-o-plenty-220318:2842510')
 
     // Compile-Time Dependencies
     compileOnly "org.jetbrains:annotations:24.0.0"

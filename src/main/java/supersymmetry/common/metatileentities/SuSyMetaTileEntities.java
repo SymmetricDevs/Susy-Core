@@ -2,6 +2,8 @@ package supersymmetry.common.metatileentities;
 
 import gregtech.api.GTValues;
 import gregtech.api.metatileentity.SimpleMachineMetaTileEntity;
+import gregtech.client.renderer.texture.Textures;
+import gregtech.common.metatileentities.MetaTileEntities;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
@@ -10,18 +12,16 @@ import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCoagu
 import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityMagneticRefrigerator;
 import supersymmetry.common.metatileentities.multi.electric.MetaTileEntitySinteringOven;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityLatexCollector;
-import supersymmetry.common.metatileentities.single.steam.MetaTileEntitySteamLatexCollector;
-import supersymmetry.common.metatileentities.single.steam.MetaTileEntitySteamMixer;
-import supersymmetry.common.metatileentities.single.steam.MetaTileEntitySteamRoaster;
-import supersymmetry.common.metatileentities.single.steam.MetaTileEntitySteamVulcanizingPress;
+import supersymmetry.common.metatileentities.single.steam.*;
 
 import static gregtech.common.metatileentities.MetaTileEntities.registerMetaTileEntity;
 
 public class SuSyMetaTileEntities {
 
     public static MetaTileEntityMagneticRefrigerator MAGNETIC_REFRIGERATOR;
-    
+
     public static MetaTileEntityCoagulationTank COAGULATION_TANK;
+
     public static final MetaTileEntityLatexCollector[] LATEX_COLLECTOR;
     public static MetaTileEntitySteamLatexCollector LATEX_COLLECTOR_BRONZE;
 
@@ -30,9 +30,13 @@ public class SuSyMetaTileEntities {
 
     public static SimpleMachineMetaTileEntity[] ROASTER;
     public static MetaTileEntitySteamRoaster ROASTER_BRONZE;
+
     public static MetaTileEntitySinteringOven SINTERING_OVEN;
 
     public static MetaTileEntitySteamMixer MIXER_BRONZE;
+
+    public static MetaTileEntitySteamVacuumChamber VACUUM_CHAMBER_BRONZE;
+    public static SimpleMachineMetaTileEntity[] VACUUM_CHAMBER;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -72,7 +76,21 @@ public class SuSyMetaTileEntities {
 
         MIXER_BRONZE = registerMetaTileEntity(14536, new MetaTileEntitySteamMixer(susyId("mixer.steam"), false));
 
+        VACUUM_CHAMBER_BRONZE = registerMetaTileEntity(14537, new MetaTileEntitySteamVacuumChamber(susyId("vacuum_chamber.steam"), false));
 
+        VACUUM_CHAMBER[0] = registerMetaTileEntity(14538, new SimpleMachineMetaTileEntity(susyId("vacuum_chamber.lv"), SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY, 1, true));
+        VACUUM_CHAMBER[1] = registerMetaTileEntity(14539, new SimpleMachineMetaTileEntity(susyId("vacuum_chamber.mv"), SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY, 2, true));
+        VACUUM_CHAMBER[2] = registerMetaTileEntity(14540, new SimpleMachineMetaTileEntity(susyId("vacuum_chamber.hv"), SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY, 3, true));
+        VACUUM_CHAMBER[3] = registerMetaTileEntity(14541, new SimpleMachineMetaTileEntity(susyId("vacuum_chamber.ev"), SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY, 4, true));
+        VACUUM_CHAMBER[4] = registerMetaTileEntity(14542, new SimpleMachineMetaTileEntity(susyId("vacuum_chamber.iv"), SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY, 5, true));
+        VACUUM_CHAMBER[5] = registerMetaTileEntity(14543, new SimpleMachineMetaTileEntity(susyId("vacuum_chamber.luv"), SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY, 6, true));
+        VACUUM_CHAMBER[6] = registerMetaTileEntity(14544, new SimpleMachineMetaTileEntity(susyId("vacuum_chamber.zpm"), SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY, 7, true));
+        VACUUM_CHAMBER[7] = registerMetaTileEntity(14545, new SimpleMachineMetaTileEntity(susyId("vacuum_chamber.uv"), SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY, 8, true));
+        VACUUM_CHAMBER[8] = registerMetaTileEntity(14546, new SimpleMachineMetaTileEntity(susyId("vacuum_chamber.uhv"), SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY, 9, true));
+        VACUUM_CHAMBER[9] = registerMetaTileEntity(14547, new SimpleMachineMetaTileEntity(susyId("vacuum_chamber.uev"), SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY, 10, true));
+        VACUUM_CHAMBER[10] = registerMetaTileEntity(14548, new SimpleMachineMetaTileEntity(susyId("vacuum_chamber.uiv"), SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY, 11, true));
+        VACUUM_CHAMBER[11] = registerMetaTileEntity(14549, new SimpleMachineMetaTileEntity(susyId("vacuum_chamber.uxv"), SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY, 12, true));
+        VACUUM_CHAMBER[12] = registerMetaTileEntity(14550, new SimpleMachineMetaTileEntity(susyId("vacuum_chamber.opv"), SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY,13, true));
     }
 
     private static @NotNull ResourceLocation susyId(@NotNull String name) {
@@ -83,5 +101,6 @@ public class SuSyMetaTileEntities {
         LATEX_COLLECTOR = new MetaTileEntityLatexCollector[GTValues.EV];
         VULCANIZING_PRESS = new SimpleMachineMetaTileEntity[GTValues.EV];
         ROASTER = new SimpleMachineMetaTileEntity[GTValues.OpV];
+        VACUUM_CHAMBER = new SimpleMachineMetaTileEntity[GTValues.OpV];
     }
 }
