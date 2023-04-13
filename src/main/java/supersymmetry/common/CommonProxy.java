@@ -46,7 +46,8 @@ public class CommonProxy {
         registry.register(SuSyBlocks.SINTERING_BRICK);
         registry.register(SuSyBlocks.COAGULATION_TANK_WALL);
         for (SusyStoneVariantBlock block : SuSyBlocks.SUSY_STONE_BLOCKS.values()) registry.register(block);
-
+        registry.register(SuSyBlocks.ALTERNATOR_COIL);
+        registry.register(SuSyBlocks.TURBINE_ROTOR);
     }
 
     @SubscribeEvent
@@ -58,6 +59,8 @@ public class CommonProxy {
         registry.register(createItemBlock(SuSyBlocks.SINTERING_BRICK, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.COAGULATION_TANK_WALL, VariantItemBlock::new));
         for (SusyStoneVariantBlock block : SuSyBlocks.SUSY_STONE_BLOCKS.values()) registry.register(createItemBlock(block, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.ALTERNATOR_COIL, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.TURBINE_ROTOR, VariantItemBlock::new));
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
