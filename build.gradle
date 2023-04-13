@@ -106,8 +106,7 @@ dependencies {
     // Soft Dependencies
     implementation "mezz.jei:jei_${project.minecraft_version}:${project.jei_version}"
     implementation "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-${project.crt_version}"
-    // was at 1.4.28
-    implementation "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.11-5"
+    implementation "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.28-17"
 
     implementation fg.deobf('curse.maven:realistic-terrain-generation-unofficial-648514:4404814')
     implementation fg.deobf('curse.maven:biomes-o-plenty-220318:2842510')
