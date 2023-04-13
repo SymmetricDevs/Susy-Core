@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.Supersymmetry;
+import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.api.unification.ore.SusyStoneTypes;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -32,6 +33,7 @@ public class CommonProxy {
     public void preLoad(){
         SusyOrePrefix.init();
         SusyStoneTypes.init();
+        SuSyRecipeMaps.init();
     }
 
     public void load() {
