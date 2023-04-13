@@ -2,8 +2,9 @@ package supersymmetry.common.metatileentities;
 
 import gregtech.api.GTValues;
 import gregtech.api.metatileentity.SimpleMachineMetaTileEntity;
+import gregtech.api.unification.material.Materials;
 import gregtech.client.renderer.texture.Textures;
-import gregtech.common.metatileentities.MetaTileEntities;
+import gregtech.common.metatileentities.storage.MetaTileEntityDrum;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
@@ -37,6 +38,8 @@ public class SuSyMetaTileEntities {
 
     public static MetaTileEntitySteamVacuumChamber VACUUM_CHAMBER_BRONZE;
     public static SimpleMachineMetaTileEntity[] VACUUM_CHAMBER;
+
+    public static MetaTileEntityDrum LEAD_DRUM;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -91,6 +94,8 @@ public class SuSyMetaTileEntities {
         VACUUM_CHAMBER[10] = registerMetaTileEntity(14548, new SimpleMachineMetaTileEntity(susyId("vacuum_chamber.uiv"), SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY, 11, true));
         VACUUM_CHAMBER[11] = registerMetaTileEntity(14549, new SimpleMachineMetaTileEntity(susyId("vacuum_chamber.uxv"), SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY, 12, true));
         VACUUM_CHAMBER[12] = registerMetaTileEntity(14550, new SimpleMachineMetaTileEntity(susyId("vacuum_chamber.opv"), SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY,13, true));
+
+        LEAD_DRUM = registerMetaTileEntity(14551, new MetaTileEntityDrum(susyId("drum.lead"), Materials.Lead, 32000));
     }
 
     private static @NotNull ResourceLocation susyId(@NotNull String name) {

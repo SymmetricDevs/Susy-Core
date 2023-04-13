@@ -82,6 +82,7 @@ gregtech.multiblocks.sintering_oven.use_plasma.affirmative=Yes
 gregtech.multiblocks.sintering_oven.use_plasma.negative=No
 
 gregtech.machine.coagulation_tank.name=Coagulation Tank
+gregtech.machine.drum.lead.name=Lead Drum
 
 # Properties
 gregtech.recipe.plasma_requirement=Requires plasma: %s
