@@ -87,6 +87,9 @@ gregtech.multiblocks.sintering_oven.use_plasma.negative=No
 gregtech.machine.coagulation_tank.name=Coagulation Tank
 gregtech.machine.drum.lead.name=Lead Drum
 
+gregtech.machine.polymerization_tank.name=Polymerization Tank
+gregtech.machine.fluidized_bed_reactor.name=Fluidized Bed Reactor
+
 # Properties
 gregtech.recipe.plasma_requirement=Requires plasma: %s
 
@@ -140,8 +143,90 @@ gregtech.machine.vacuum_chamber.uiv.name=Epic Vacuum Chamber III
 gregtech.machine.vacuum_chamber.uxv.name=Epic Vacuum Chamber IV
 gregtech.machine.vacuum_chamber.opv.name=Legendary Vacuum Chamber
 
+# CSTR
+gregtech.machine.continuous_stirred_tank_reactor.lv.name=Basic Continuous Stirred Tank Reactor (CSTR)
+gregtech.machine.continuous_stirred_tank_reactor.mv.name=Advanced Continuous Stirred Tank Reactor (CSTR)
+gregtech.machine.continuous_stirred_tank_reactor.hv.name=Advanced Continuous Stirred Tank Reactor (CSTR) II
+gregtech.machine.continuous_stirred_tank_reactor.ev.name=Advanced Continuous Stirred Tank Reactor (CSTR) III
+gregtech.machine.continuous_stirred_tank_reactor.iv.name=Elite Continuous Stirred Tank Reactor (CSTR)
+gregtech.machine.continuous_stirred_tank_reactor.luv.name=Elite Continuous Stirred Tank Reactor (CSTR) II
+gregtech.machine.continuous_stirred_tank_reactor.zpm.name=Elite Continuous Stirred Tank Reactor (CSTR) III
+gregtech.machine.continuous_stirred_tank_reactor.uv.name=Ultimate Continuous Stirred Tank Reactor (CSTR)
+gregtech.machine.continuous_stirred_tank_reactor.uhv.name=Epic Continuous Stirred Tank Reactor (CSTR)
+gregtech.machine.continuous_stirred_tank_reactor.uev.name=Epic Continuous Stirred Tank Reactor (CSTR) II
+gregtech.machine.continuous_stirred_tank_reactor.uiv.name=Epic Continuous Stirred Tank Reactor (CSTR) III
+gregtech.machine.continuous_stirred_tank_reactor.uxv.name=Epic Continuous Stirred Tank Reactor (CSTR) IV
+gregtech.machine.continuous_stirred_tank_reactor.opv.name=Legendary Continuous Stirred Tank Reactor (CSTR)
+
+# Fixed Bed Reactor
+gregtech.machine.fixed_bed_reactor.lv.name=Basic Fixed Bed Reactor
+gregtech.machine.fixed_bed_reactor.mv.name=Advanced Fixed Bed Reactor
+gregtech.machine.fixed_bed_reactor.hv.name=Advanced Fixed Bed Reactor II
+gregtech.machine.fixed_bed_reactor.ev.name=Advanced Fixed Bed Reactor III
+gregtech.machine.fixed_bed_reactor.iv.name=Elite Fixed Bed Reactor
+gregtech.machine.fixed_bed_reactor.luv.name=Elite Fixed Bed Reactor II
+gregtech.machine.fixed_bed_reactor.zpm.name=Elite Fixed Bed Reactor III
+gregtech.machine.fixed_bed_reactor.uv.name=Ultimate Fixed Bed Reactor
+gregtech.machine.fixed_bed_reactor.uhv.name=Epic Fixed Bed Reactor
+gregtech.machine.fixed_bed_reactor.uev.name=Epic Fixed Bed Reactor II
+gregtech.machine.fixed_bed_reactor.uiv.name=Epic Fixed Bed Reactor III
+gregtech.machine.fixed_bed_reactor.uxv.name=Epic Fixed Bed Reactor IV
+gregtech.machine.fixed_bed_reactor.opv.name=Legendary Fixed Bed Reactor
+
+# Trickle Bed Reactor
+gregtech.machine.trickle_bed_reactor.lv.name=Basic Trickle Bed Reactor
+gregtech.machine.trickle_bed_reactor.mv.name=Advanced Trickle Bed Reactor
+gregtech.machine.trickle_bed_reactor.hv.name=Advanced Trickle Bed Reactor II
+gregtech.machine.trickle_bed_reactor.ev.name=Advanced Trickle Bed Reactor III
+gregtech.machine.trickle_bed_reactor.iv.name=Elite Trickle Bed Reactor
+gregtech.machine.trickle_bed_reactor.luv.name=Elite Trickle Bed Reactor II
+gregtech.machine.trickle_bed_reactor.zpm.name=Elite Trickle Bed Reactor III
+gregtech.machine.trickle_bed_reactor.uv.name=Ultimate Trickle Bed Reactor
+gregtech.machine.trickle_bed_reactor.uhv.name=Epic Trickle Bed Reactor
+gregtech.machine.trickle_bed_reactor.uev.name=Epic Trickle Bed Reactor II
+gregtech.machine.trickle_bed_reactor.uiv.name=Epic Trickle Bed Reactor III
+gregtech.machine.trickle_bed_reactor.uxv.name=Epic Trickle Bed Reactor IV
+gregtech.machine.trickle_bed_reactor.opv.name=Legendary Trickle Bed Reactor
+
+# Crystallizer
+gregtech.machine.crystallizer.lv.name=Basic Crystallizer
+gregtech.machine.crystallizer.mv.name=Advanced Crystallizer
+gregtech.machine.crystallizer.hv.name=Advanced Crystallizer II
+gregtech.machine.crystallizer.ev.name=Advanced Crystallizer III
+gregtech.machine.crystallizer.iv.name=Elite Crystallizer
+gregtech.machine.crystallizer.luv.name=Elite Crystallizer II
+gregtech.machine.crystallizer.zpm.name=Elite Crystallizer III
+gregtech.machine.crystallizer.uv.name=Ultimate Crystallizer
+gregtech.machine.crystallizer.uhv.name=Epic Crystallizer
+gregtech.machine.crystallizer.uev.name=Epic Crystallizer II
+gregtech.machine.crystallizer.uiv.name=Epic Crystallizer III
+gregtech.machine.crystallizer.uxv.name=Epic Crystallizer IV
+gregtech.machine.crystallizer.opv.name=Legendary Crystallizer
+
+# Bubble Column Reactor
+gregtech.machine.bubble_column_reactor.lv.name=Basic Bubble Column Reactor
+gregtech.machine.bubble_column_reactor.mv.name=Advanced Bubble Column Reactor
+gregtech.machine.bubble_column_reactor.hv.name=Advanced Bubble Column Reactor II
+gregtech.machine.bubble_column_reactor.ev.name=Advanced Bubble Column Reactor III
+gregtech.machine.bubble_column_reactor.iv.name=Elite Bubble Column Reactor
+gregtech.machine.bubble_column_reactor.luv.name=Elite Bubble Column Reactor II
+gregtech.machine.bubble_column_reactor.zpm.name=Elite Bubble Column Reactor III
+gregtech.machine.bubble_column_reactor.uv.name=Ultimate Bubble Column Reactor
+gregtech.machine.bubble_column_reactor.uhv.name=Epic Bubble Column Reactor
+gregtech.machine.bubble_column_reactor.uev.name=Epic Bubble Column Reactor II
+gregtech.machine.bubble_column_reactor.uiv.name=Epic Bubble Column Reactor III
+gregtech.machine.bubble_column_reactor.uxv.name=Epic Bubble Column Reactor IV
+gregtech.machine.bubble_column_reactor.opv.name=Legendary Bubble Column Reactor
+
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
 recipemap.vulcanizing_press.name=Vulcanization
 recipemap.roaster.name=Roasting
 recipemap.vacuum_chamber.name=Vacuum Ejection
+recipemap.continuous_stirred_tank_reactor.name=Continuous Stirred Tank Reactor
+recipemap.fixed_bed_reactor.name=Fixed Bed Reactor
+recipemap.trickle_bed_reactor.name=Trickle Bed Reactor
+recipemap.crystallizer.name=Crystallizer
+recipemap.bubble_column_reactor.name=Bubble Column Reactor
+recipemap.fluidized_bed_reactor.name=Fluidized Bed Reactor
+recipemap.polymerization_tank.name=Polymerization Tank
