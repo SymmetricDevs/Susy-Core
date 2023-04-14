@@ -1,0 +1,12 @@
+{
+  "forge_marker" : 1,
+  "defaults": {
+    "model": "minecraft:cube_all"
+  },
+  "variants" : {
+    "facing=north,variant=home_block_home": { "textures": {"all": "gregtech:blocks/home_blocks/home_block_home" } },
+    "facing=south,variant=home_block_home": { "textures": {"all": "gregtech:blocks/home_blocks/home_block_home" } },
+    "facing=west,variant=home_block_home": { "textures": {"all": "gregtech:blocks/home_blocks/home_block_home" } },
+    "facing=east,variant=home_block_home": { "textures": {"all": "gregtech:blocks/home_blocks/home_block_home" } }
+  }
+}

@@ -56,6 +56,10 @@ tile.resource_block.resource_block_caliche.name=Caliche
 tile.resource_block.resource_block_lignite.name=Lignite Seam Block
 tile.resource_block.resource_block_anthracite.name=Anthracite Seam Block
 
+tile.home_block.home_block_home.name="Home Block (Default)"
+tile.home.allowed=Spawn set
+tile.home.denied=Cannot set spawn
+
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
 tile.susy_stone_smooth.gneiss.name=Gneiss
