@@ -57,6 +57,70 @@ public class SusyMaterials {
         removeProperty(PropertyKey.ORE, Materials.Mica);
         removeProperty(PropertyKey.FLUID_PIPE, Materials.Lead);
         Materials.Lead.setProperty(PropertyKey.FLUID_PIPE, new FluidPipeProperties(1200, 8, true, true, false, false));
+
+        //Add dusts and fluids for elements that do not have them
+        Materials.Iodine.setProperty(PropertyKey.DUST, new DustProperty());
+
+	    Materials.Scandium.setProperty(PropertyKey.DUST, new DustProperty());
+
+	    Materials.Germanium.setProperty(PropertyKey.DUST, new DustProperty());
+
+	    Materials.Selenium.setProperty(PropertyKey.DUST, new DustProperty());
+
+	    Materials.Bromine.setProperty(PropertyKey.FLUID, new FluidProperty());
+
+	    Materials.Rubidium.setProperty(PropertyKey.DUST, new DustProperty());
+
+	    Materials.Strontium.setProperty(PropertyKey.DUST, new DustProperty());
+
+	    Materials.Zirconium.setProperty(PropertyKey.DUST, new DustProperty());
+
+        Materials.Technetium.setProperty(PropertyKey.DUST, new DustProperty());
+
+        Materials.Tellurium.setProperty(PropertyKey.DUST, new DustProperty());
+
+        Materials.Praseodymium.setProperty(PropertyKey.DUST, new DustProperty());
+
+        Materials.Promethium.setProperty(PropertyKey.DUST, new DustProperty());
+
+        Materials.Gadolinium.setProperty(PropertyKey.DUST, new DustProperty());
+
+        Materials.Terbium.setProperty(PropertyKey.DUST, new DustProperty());
+
+        Materials.Dysprosium.setProperty(PropertyKey.DUST, new DustProperty());
+
+        Materials.Holmium.setProperty(PropertyKey.DUST, new DustProperty());
+
+        Materials.Erbium.setProperty(PropertyKey.DUST, new DustProperty());
+
+        Materials.Thulium.setProperty(PropertyKey.DUST, new DustProperty());
+
+        Materials.Ytterbium.setProperty(PropertyKey.DUST, new DustProperty());
+
+        Materials.Hafnium.setProperty(PropertyKey.DUST, new DustProperty());
+
+        Materials.Rhenium.setProperty(PropertyKey.DUST, new DustProperty());
+
+        Materials.CalciumChloride.setProperty(PropertyKey.FLUID, new FluidProperty());
+
+        Materials.HydrochloricAcid.setFormula("(H2O)(HCl)", true);
+
+        removeProperty(PropertyKey.FLUID, Materials.Dimethyldichlorosilane);
+        Materials.Dimethyldichlorosilane.setProperty(PropertyKey.FLUID, new FluidProperty());
+
+        Materials.Iron3Chloride.setProperty(PropertyKey.DUST, new DustProperty());
+
+        Materials.Nitrochlorobenzene.setProperty(PropertyKey.DUST, new DustProperty());
+
+        Materials.Dichlorobenzene.setProperty(PropertyKey.DUST, new DustProperty());
+
+        Materials.Dichlorobenzidine.setProperty(PropertyKey.DUST, new DustProperty());
+
+        Materials.PhthalicAcid.setProperty(PropertyKey.DUST, new DustProperty());
+
+        Materials.DiphenylIsophtalate.setProperty(PropertyKey.DUST, new DustProperty());
+
+        Materials.Diaminobenzidine.setProperty(PropertyKey.DUST, new DustProperty());
     }
 
     private static void removeProperty(PropertyKey<?> key, Material material) {
