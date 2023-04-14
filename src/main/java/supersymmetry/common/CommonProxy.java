@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.Supersymmetry;
+import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.api.unification.ore.SusyStoneTypes;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -32,6 +33,7 @@ public class CommonProxy {
     public void preLoad(){
         SusyOrePrefix.init();
         SusyStoneTypes.init();
+        SuSyRecipeMaps.init();
     }
 
     public void load() {
@@ -46,7 +48,8 @@ public class CommonProxy {
         registry.register(SuSyBlocks.SINTERING_BRICK);
         registry.register(SuSyBlocks.COAGULATION_TANK_WALL);
         for (SusyStoneVariantBlock block : SuSyBlocks.SUSY_STONE_BLOCKS.values()) registry.register(block);
-
+        registry.register(SuSyBlocks.ALTERNATOR_COIL);
+        registry.register(SuSyBlocks.TURBINE_ROTOR);
     }
 
     @SubscribeEvent
@@ -58,6 +61,8 @@ public class CommonProxy {
         registry.register(createItemBlock(SuSyBlocks.SINTERING_BRICK, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.COAGULATION_TANK_WALL, VariantItemBlock::new));
         for (SusyStoneVariantBlock block : SuSyBlocks.SUSY_STONE_BLOCKS.values()) registry.register(createItemBlock(block, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.ALTERNATOR_COIL, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.TURBINE_ROTOR, VariantItemBlock::new));
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)

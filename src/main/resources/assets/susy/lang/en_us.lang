@@ -8,6 +8,9 @@ tile.sintering_brick.sintering_block_brick.name=Brick Sintering Block
 tile.sintering_brick.sintering_block_magnetoplated.name=Magnetoplated Sintering Block
 
 tile.coagulation_tank_wall.wooden_coagulation_tank_wall.name=Wooden Coagulation Tank Wall
+
+tile.alternator_coil.copper.name=Copper Alternator Coil
+tile.turbine_rotor.steel.name=Steel Turbine Block
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
 tile.susy_stone_smooth.gneiss.name=Gneiss
@@ -82,6 +85,7 @@ gregtech.multiblocks.sintering_oven.use_plasma.affirmative=Yes
 gregtech.multiblocks.sintering_oven.use_plasma.negative=No
 
 gregtech.machine.coagulation_tank.name=Coagulation Tank
+gregtech.machine.drum.lead.name=Lead Drum
 
 # Properties
 gregtech.recipe.plasma_requirement=Requires plasma: %s

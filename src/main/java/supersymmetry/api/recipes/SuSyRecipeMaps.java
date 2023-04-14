@@ -3,11 +3,13 @@ package supersymmetry.api.recipes;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.widgets.ProgressWidget;
 import gregtech.api.recipes.RecipeMap;
+import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.recipes.builders.PrimitiveRecipeBuilder;
 import gregtech.api.recipes.builders.SimpleRecipeBuilder;
 import gregtech.core.sound.GTSoundEvents;
 import supersymmetry.api.recipes.builders.CoilingCoilRecipeBuilder;
 import supersymmetry.api.recipes.builders.SinteringRecipeBuilder;
+
 
 public class SuSyRecipeMaps {
     public static final RecipeMap<CoilingCoilRecipeBuilder> COOLING_RECIPES;
@@ -31,5 +33,10 @@ public class SuSyRecipeMaps {
         VACUUM_CHAMBER = new RecipeMap<>("vacuum_chamber", 4, 1, 0, 0, new SimpleRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_COMPRESS, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.CENTRIFUGE);
+    }
+    public static void init(){
+        RecipeMaps.SIFTER_RECIPES.setMaxFluidInputs(1);
+        RecipeMaps.SIFTER_RECIPES.setMaxFluidOutputs(1);
+        RecipeMaps.SIFTER_RECIPES.setMaxInputs(2);
     }
 }

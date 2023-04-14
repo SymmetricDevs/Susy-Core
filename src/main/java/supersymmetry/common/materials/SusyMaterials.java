@@ -2,9 +2,7 @@ package supersymmetry.common.materials;
 
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
-import gregtech.api.unification.material.properties.IMaterialProperty;
-import gregtech.api.unification.material.properties.MaterialProperties;
-import gregtech.api.unification.material.properties.PropertyKey;
+import gregtech.api.unification.material.properties.*;
 import supersymmetry.api.SusyLog;
 
 import java.lang.reflect.Field;
@@ -48,6 +46,8 @@ public class SusyMaterials {
         SuSyOrganicChemistryMaterials.init();
         SuSyHighDegreeMaterials.init();
         SuSyUnknownCompositionMaterials.init();
+
+        Latex.getProperty(PropertyKey.FLUID).setFluidTemperature(293);
     }
 
     private static void changeProperties() {
@@ -55,6 +55,8 @@ public class SusyMaterials {
         removeProperty(PropertyKey.ORE, Materials.Soapstone);
         removeProperty(PropertyKey.ORE, Materials.Quartzite);
         removeProperty(PropertyKey.ORE, Materials.Mica);
+        removeProperty(PropertyKey.FLUID_PIPE, Materials.Lead);
+        Materials.Lead.setProperty(PropertyKey.FLUID_PIPE, new FluidPipeProperties(1200, 8, true, true, false, false));
     }
 
     private static void removeProperty(PropertyKey<?> key, Material material) {
