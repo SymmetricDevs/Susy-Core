@@ -3,19 +3,22 @@ package supersymmetry.common.metatileentities;
 import gregtech.api.GTValues;
 import gregtech.api.metatileentity.SimpleMachineMetaTileEntity;
 import gregtech.api.unification.material.Materials;
+import gregtech.api.util.GTUtility;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.metatileentities.storage.MetaTileEntityDrum;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityFluidizedBedReactor;
+import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityPolmyerizationTank;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCoagulationTank;
 import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityMagneticRefrigerator;
 import supersymmetry.common.metatileentities.multi.electric.MetaTileEntitySinteringOven;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityLatexCollector;
 import supersymmetry.common.metatileentities.single.steam.*;
 
-import static gregtech.common.metatileentities.MetaTileEntities.registerMetaTileEntity;
+import static gregtech.common.metatileentities.MetaTileEntities.*;
 
 public class SuSyMetaTileEntities {
 
@@ -40,6 +43,16 @@ public class SuSyMetaTileEntities {
     public static SimpleMachineMetaTileEntity[] VACUUM_CHAMBER;
 
     public static MetaTileEntityDrum LEAD_DRUM;
+
+    //Machines for chem overhaul
+    public static SimpleMachineMetaTileEntity[] CONTINUOUS_STIRRED_TANK_REACTOR;
+    public static SimpleMachineMetaTileEntity[] FIXED_BED_REACTOR;
+    public static SimpleMachineMetaTileEntity[] TRICKLE_BED_REACTOR;
+    public static SimpleMachineMetaTileEntity[] CRYSTALLIZER;
+    public static SimpleMachineMetaTileEntity[] BUBBLE_COLUMN_REACTOR;
+    public static MetaTileEntityFluidizedBedReactor FLUIDIZED_BED_REACTOR;
+    public static MetaTileEntityPolmyerizationTank POLYMERIZATION_TANK;
+
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -96,6 +109,15 @@ public class SuSyMetaTileEntities {
         VACUUM_CHAMBER[12] = registerMetaTileEntity(14550, new SimpleMachineMetaTileEntity(susyId("vacuum_chamber.opv"), SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY,13, true));
 
         LEAD_DRUM = registerMetaTileEntity(14551, new MetaTileEntityDrum(susyId("drum.lead"), Materials.Lead, 32000));
+
+        registerSimpleMetaTileEntity(CONTINUOUS_STIRRED_TANK_REACTOR, 14552, "continuous_stirred_tank_reactor", SuSyRecipeMaps.CSTR_RECIPES, SusyTextures.CONTINUOUS_STIRRED_TANK_REACTOR_OVERLAY, true, SuSyMetaTileEntities::susyId, GTUtility.defaultTankSizeFunction);
+        registerSimpleMetaTileEntity(FIXED_BED_REACTOR, 14565, "fixed_bed_reactor", SuSyRecipeMaps.FIXED_BED_REACTOR_RECIPES, SusyTextures.FIXED_BED_REACTOR_OVERLAY, true, SuSyMetaTileEntities::susyId, GTUtility.defaultTankSizeFunction);
+        registerSimpleMetaTileEntity(TRICKLE_BED_REACTOR, 14578, "trickle_bed_reactor", SuSyRecipeMaps.TRICKLE_BED_REACTOR_RECIPES, SusyTextures.TRICKLE_BED_REACTOR_OVERLAY, true, SuSyMetaTileEntities::susyId, GTUtility.defaultTankSizeFunction);
+        registerSimpleMetaTileEntity(CRYSTALLIZER, 14591, "crystallizer", SuSyRecipeMaps.CRYSTALLIZER_RECIPES, SusyTextures.CRYSTALLIZER_OVERLAY, true, SuSyMetaTileEntities::susyId, GTUtility.defaultTankSizeFunction);
+        registerSimpleMetaTileEntity(BUBBLE_COLUMN_REACTOR, 14604, "bubble_column_reactor", SuSyRecipeMaps.BUBBLE_COLUMN_REACTOR_RECIPES, SusyTextures.BUBBLE_COLUMN_REACTOR_OVERLAY, true, SuSyMetaTileEntities::susyId, GTUtility.defaultTankSizeFunction);
+
+        FLUIDIZED_BED_REACTOR = registerMetaTileEntity(14617, new MetaTileEntityFluidizedBedReactor(susyId("fluidized_bed_reactor")));
+        POLYMERIZATION_TANK = registerMetaTileEntity(14618, new MetaTileEntityPolmyerizationTank(susyId("polymerization_tank")));
     }
 
     private static @NotNull ResourceLocation susyId(@NotNull String name) {
@@ -107,5 +129,10 @@ public class SuSyMetaTileEntities {
         VULCANIZING_PRESS = new SimpleMachineMetaTileEntity[GTValues.EV];
         ROASTER = new SimpleMachineMetaTileEntity[GTValues.OpV];
         VACUUM_CHAMBER = new SimpleMachineMetaTileEntity[GTValues.OpV];
+        CONTINUOUS_STIRRED_TANK_REACTOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
+        FIXED_BED_REACTOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
+        TRICKLE_BED_REACTOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
+        CRYSTALLIZER = new SimpleMachineMetaTileEntity[GTValues.OpV];
+        BUBBLE_COLUMN_REACTOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
     }
 }

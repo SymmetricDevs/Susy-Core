@@ -32,6 +32,27 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_COMPRESS, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.CENTRIFUGE);
 
+    public static final RecipeMap<SimpleRecipeBuilder> CSTR_RECIPES = new RecipeMap<>("continuous_stirred_tank_reactor", 0, 0, 4, 2, new SimpleRecipeBuilder(), false)
+            .setSound(GTSoundEvents.CHEMICAL_REACTOR);
+
+    public static final RecipeMap<SimpleRecipeBuilder> FIXED_BED_REACTOR_RECIPES = new RecipeMap<>("fixed_bed_reactor", 1, 0, 3, 2, new SimpleRecipeBuilder(), false)
+            .setSound(GTSoundEvents.CHEMICAL_REACTOR);
+
+    public static final RecipeMap<SimpleRecipeBuilder> TRICKLE_BED_REACTOR_RECIPES = new RecipeMap<>("trickle_bed_reactor", 1, 0, 3, 2, new SimpleRecipeBuilder(), false)
+            .setSound(GTSoundEvents.CHEMICAL_REACTOR);
+
+    public static final RecipeMap<SimpleRecipeBuilder> CRYSTALLIZER_RECIPES = new RecipeMap<>("crystallizer",1, 1, 1, 1, new SimpleRecipeBuilder(), false);
+
+    public static final RecipeMap<SimpleRecipeBuilder> BUBBLE_COLUMN_REACTOR_RECIPES = new RecipeMap<>("bubble_column_reactor", 0, 0, 3, 2, new SimpleRecipeBuilder(), false)
+            .setSound(GTSoundEvents.CHEMICAL_REACTOR);
+
+    public static final RecipeMap<SimpleRecipeBuilder> FLUIDIZED_BED_REACTOR_RECIPES = new RecipeMap<>("fluidized_bed_reactor", 1, 0, 3, 2, new SimpleRecipeBuilder(), false)
+            .setSound(GTSoundEvents.CHEMICAL_REACTOR);
+
+    public static final RecipeMap<SimpleRecipeBuilder> POLYMERIZATION_RECIPES = new RecipeMap<>("polymerization_tank", 1, 1, 2, 1, new SimpleRecipeBuilder(), false)
+            .setSound(GTSoundEvents.CHEMICAL_REACTOR);
+
+
     public static void init(){
         RecipeMaps.SIFTER_RECIPES.setMaxFluidInputs(1);
         RecipeMaps.SIFTER_RECIPES.setMaxFluidOutputs(1);
