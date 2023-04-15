@@ -10,10 +10,10 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
@@ -46,11 +46,55 @@ public class BlockHome extends VariantBlock<BlockHome.HomeType> {
         return true;
     }
 
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
+    }
+
+    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+        return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING, placer.getHorizontalFacing().getOpposite());
+    }
+
+    public IBlockState withRotation(IBlockState state, Rotation rot) {
+        return state.withProperty(FACING, rot.rotate((EnumFacing) state.getValue(FACING)));
+    }
+
+    public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
+        return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
+    }
+
+    public IBlockState getStateFromMeta(int meta) {
+        int i = meta / 4;
+        int j = meta % 4 + 2;
+
+        EnumFacing enumfacing = EnumFacing.byIndex(j);
+
+        if (enumfacing.getAxis() == EnumFacing.Axis.Y)
+        {
+            enumfacing = EnumFacing.NORTH;
+        }
+
+        return this.getDefaultState().withProperty(FACING, enumfacing).withProperty(this.VARIANT, this.VALUES[i % this.VALUES.length]);
+    }
+
+    public int getMetaFromState(IBlockState state) {
+        int i = ((Enum)state.getValue(this.VARIANT)).ordinal();
+        int j = ((EnumFacing)state.getValue(FACING)).getIndex();
+        return j - 2 + i * 4;
+    }
+
     @Nonnull
     protected BlockStateContainer createBlockState() {
         super.createBlockState();
 
-        return new BlockStateContainer(this, this.VARIANT, FACING);
+        return new BlockStateContainer(this, new IProperty[]{this.VARIANT, this.FACING});
+    }
+
+    public ItemStack getItemVariant(BlockTurbineRotor.BlockTurbineRotorType variant, int amount) {
+        return new ItemStack(this, amount, variant.ordinal() * 4) ;
+    }
+
+    public int damageDropped(@Nonnull IBlockState state) {
+        return this.getMetaFromState(state) - ((EnumFacing)state.getValue(FACING)).getIndex() + 2;
     }
 
     @Override
