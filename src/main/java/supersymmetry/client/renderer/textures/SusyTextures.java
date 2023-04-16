@@ -13,6 +13,11 @@ public class SusyTextures {
     public static OrientedOverlayRenderer LATEX_COLLECTOR_OVERLAY;
     public static OrientedOverlayRenderer ROASTER_OVERLAY;
     public static OrientedOverlayRenderer MIXER_OVERLAY_STEAM;
+    public static OrientedOverlayRenderer CONTINUOUS_STIRRED_TANK_REACTOR_OVERLAY;
+    public static OrientedOverlayRenderer FIXED_BED_REACTOR_OVERLAY;
+    public static OrientedOverlayRenderer TRICKLE_BED_REACTOR_OVERLAY;
+    public static OrientedOverlayRenderer CRYSTALLIZER_OVERLAY;
+    public static OrientedOverlayRenderer BUBBLE_COLUMN_REACTOR_OVERLAY;
 
     public SusyTextures(){
     }
@@ -23,5 +28,10 @@ public class SusyTextures {
         LATEX_COLLECTOR_OVERLAY = new OrientedOverlayRenderer("machines/latex_collector");
         ROASTER_OVERLAY = new OrientedOverlayRenderer("machines/roaster");
         MIXER_OVERLAY_STEAM = new OrientedOverlayRenderer("machines/mixer_steam");
+        CONTINUOUS_STIRRED_TANK_REACTOR_OVERLAY = new OrientedOverlayRenderer("machines/continuous_stirred_tank_reactor");
+        FIXED_BED_REACTOR_OVERLAY = new OrientedOverlayRenderer("machines/fixed_bed_reactor");
+        TRICKLE_BED_REACTOR_OVERLAY = new OrientedOverlayRenderer("machines/trickle_bed_reactor");
+        CRYSTALLIZER_OVERLAY = new OrientedOverlayRenderer("machines/crystallizer");
+        BUBBLE_COLUMN_REACTOR_OVERLAY = new OrientedOverlayRenderer("machines/bubble_column_reactor");
     }
 }

@@ -55,11 +55,41 @@ public class BlockAlternatorCoil extends VariantBlock<BlockAlternatorCoil.Altern
         return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
     }
 
+    public IBlockState getStateFromMeta(int meta)
+    {
+        int i = meta / 4;
+        int j = meta % 4 + 2;
+
+        EnumFacing enumfacing = EnumFacing.byIndex(j);
+
+        if (enumfacing.getAxis() == EnumFacing.Axis.Y)
+        {
+            enumfacing = EnumFacing.NORTH;
+        }
+
+        return this.getDefaultState().withProperty(FACING, enumfacing).withProperty(this.VARIANT, this.VALUES[i % this.VALUES.length]);
+    }
+
+    public int getMetaFromState(IBlockState state)
+    {
+        int i = ((Enum)state.getValue(this.VARIANT)).ordinal();
+        int j = ((EnumFacing)state.getValue(FACING)).getIndex();
+        return j - 2 + i * 4;
+    }
+
     @Nonnull
     protected BlockStateContainer createBlockState() {
         super.createBlockState();
 
         return new BlockStateContainer(this, new IProperty[]{this.VARIANT, this.FACING});
+    }
+
+    public ItemStack getItemVariant(BlockTurbineRotor.BlockTurbineRotorType variant, int amount) {
+        return new ItemStack(this, amount, variant.ordinal() * 4) ;
+    }
+
+    public int damageDropped(@Nonnull IBlockState state) {
+        return this.getMetaFromState(state) - ((EnumFacing)state.getValue(FACING)).getIndex() + 2;
     }
 
     public static enum AlternatorCoilType implements IStringSerializable, IStateHarvestLevel {
