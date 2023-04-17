@@ -25,7 +25,7 @@ public class SuSyRecipeMaps {
             .setSlotOverlay(false, false, true, GuiTextures.MOLD_OVERLAY)
             .setSound(GTSoundEvents.COMBUSTION);
 
-    public static final RecipeMap<SimpleRecipeBuilder> ROASTER_RECIPES = new RecipeMap<>("roaster", 1, 2, 0, 2, 0, 0, 0, 3, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<SimpleRecipeBuilder> ROASTER_RECIPES = new RecipeMap<>("roaster", 1, 2, 0, 2, 0, 2, 0, 3, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.COMBUSTION);
 
     public static final RecipeMap<SimpleRecipeBuilder> VACUUM_CHAMBER = new RecipeMap<>("vacuum_chamber", 1, 4, 1, 1, 0, 0, 0, 0, new SimpleRecipeBuilder(), false)
