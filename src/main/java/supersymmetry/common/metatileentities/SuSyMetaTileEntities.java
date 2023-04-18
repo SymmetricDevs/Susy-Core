@@ -10,6 +10,7 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.common.metatileentities.storage.MetaTileEntityDrum;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.metatileentity.ContinuousMachineMetaTileEntity;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityFluidizedBedReactor;
@@ -49,11 +50,11 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityDrum LEAD_DRUM;
 
     //Machines for chem overhaul
-    public static SimpleMachineMetaTileEntity[] CONTINUOUS_STIRRED_TANK_REACTOR;
-    public static SimpleMachineMetaTileEntity[] FIXED_BED_REACTOR;
-    public static SimpleMachineMetaTileEntity[] TRICKLE_BED_REACTOR;
+    public static ContinuousMachineMetaTileEntity[] CONTINUOUS_STIRRED_TANK_REACTOR;
+    public static ContinuousMachineMetaTileEntity[] FIXED_BED_REACTOR;
+    public static ContinuousMachineMetaTileEntity[] TRICKLE_BED_REACTOR;
     public static SimpleMachineMetaTileEntity[] CRYSTALLIZER;
-    public static SimpleMachineMetaTileEntity[] BUBBLE_COLUMN_REACTOR;
+    public static ContinuousMachineMetaTileEntity[] BUBBLE_COLUMN_REACTOR;
     public static SimpleMachineMetaTileEntity[] DRYER;
     public static MetaTileEntityFluidizedBedReactor FLUIDIZED_BED_REACTOR;
     public static MetaTileEntityPolmyerizationTank POLYMERIZATION_TANK;
@@ -85,11 +86,11 @@ public class SuSyMetaTileEntities {
 
         LEAD_DRUM = registerMetaTileEntity(14551, new MetaTileEntityDrum(susyId("drum.lead"), Materials.Lead, 32000));
 
-        registerSimpleMTE(CONTINUOUS_STIRRED_TANK_REACTOR, 12, 14552, "continuous_stirred_tank_reactor", SuSyRecipeMaps.CSTR_RECIPES, SusyTextures.CONTINUOUS_STIRRED_TANK_REACTOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
-        registerSimpleMTE(FIXED_BED_REACTOR, 12, 14565, "fixed_bed_reactor", SuSyRecipeMaps.FIXED_BED_REACTOR_RECIPES, SusyTextures.FIXED_BED_REACTOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
-        registerSimpleMTE(TRICKLE_BED_REACTOR, 12, 14578, "trickle_bed_reactor", SuSyRecipeMaps.TRICKLE_BED_REACTOR_RECIPES, SusyTextures.TRICKLE_BED_REACTOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+        registerContinuousMachineMTE(CONTINUOUS_STIRRED_TANK_REACTOR, 12, 14552, "continuous_stirred_tank_reactor", SuSyRecipeMaps.CSTR_RECIPES, SusyTextures.CONTINUOUS_STIRRED_TANK_REACTOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+        registerContinuousMachineMTE(FIXED_BED_REACTOR, 12, 14565, "fixed_bed_reactor", SuSyRecipeMaps.FIXED_BED_REACTOR_RECIPES, SusyTextures.FIXED_BED_REACTOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+        registerContinuousMachineMTE(TRICKLE_BED_REACTOR, 12, 14578, "trickle_bed_reactor", SuSyRecipeMaps.TRICKLE_BED_REACTOR_RECIPES, SusyTextures.TRICKLE_BED_REACTOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         registerSimpleMTE(CRYSTALLIZER, 12, 14591, "crystallizer", SuSyRecipeMaps.CRYSTALLIZER_RECIPES, SusyTextures.CRYSTALLIZER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
-        registerSimpleMTE(BUBBLE_COLUMN_REACTOR, 12, 14604, "bubble_column_reactor", SuSyRecipeMaps.BUBBLE_COLUMN_REACTOR_RECIPES, SusyTextures.BUBBLE_COLUMN_REACTOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+        registerContinuousMachineMTE(BUBBLE_COLUMN_REACTOR, 12, 14604, "bubble_column_reactor", SuSyRecipeMaps.BUBBLE_COLUMN_REACTOR_RECIPES, SusyTextures.BUBBLE_COLUMN_REACTOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
 
         FLUIDIZED_BED_REACTOR = registerMetaTileEntity(14617, new MetaTileEntityFluidizedBedReactor(susyId("fluidized_bed_reactor")));
         POLYMERIZATION_TANK = registerMetaTileEntity(14618, new MetaTileEntityPolmyerizationTank(susyId("polymerization_tank")));
@@ -109,20 +110,27 @@ public class SuSyMetaTileEntities {
         }
     }
 
+    private static void registerContinuousMachineMTE(ContinuousMachineMetaTileEntity[] machines, int maxTier, int startId, String name, RecipeMap<?> map, ICubeRenderer texture, boolean hasFrontFacing, Function<Integer, Integer> tankScalingFunction) {
+        for (int i = 0; i <= maxTier; i++) {
+            machines[i] = registerMetaTileEntity(startId + i, new ContinuousMachineMetaTileEntity(susyId(String.format("%s.%s", name, GTValues.VN[i + 1].toLowerCase())), map, texture, i + 1, hasFrontFacing, tankScalingFunction));
+        }
+    }
+
     private static @NotNull ResourceLocation susyId(@NotNull String name) {
         return new ResourceLocation(GTValues.MODID, name);
     }
+
 
     static{
         LATEX_COLLECTOR = new MetaTileEntityLatexCollector[GTValues.EV];
         VULCANIZING_PRESS = new SimpleMachineMetaTileEntity[GTValues.EV];
         ROASTER = new SimpleMachineMetaTileEntity[GTValues.OpV];
         VACUUM_CHAMBER = new SimpleMachineMetaTileEntity[GTValues.OpV];
-        CONTINUOUS_STIRRED_TANK_REACTOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
-        FIXED_BED_REACTOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
-        TRICKLE_BED_REACTOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
+        CONTINUOUS_STIRRED_TANK_REACTOR = new ContinuousMachineMetaTileEntity[GTValues.OpV];
+        FIXED_BED_REACTOR = new ContinuousMachineMetaTileEntity[GTValues.OpV];
+        TRICKLE_BED_REACTOR = new ContinuousMachineMetaTileEntity[GTValues.OpV];
         CRYSTALLIZER = new SimpleMachineMetaTileEntity[GTValues.OpV];
-        BUBBLE_COLUMN_REACTOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
+        BUBBLE_COLUMN_REACTOR = new ContinuousMachineMetaTileEntity[GTValues.OpV];
         DRYER = new SimpleMachineMetaTileEntity[GTValues.OpV];
     }
 }
