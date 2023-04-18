@@ -2,27 +2,22 @@ package supersymmetry.common.blocks;
 
 import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantBlock;
-import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import supersymmetry.api.SusyLog;
+import supersymmetry.api.blocks.ISuSyHorizontalOrientable;
 
 import javax.annotation.Nonnull;
 
-public class BlockTurbineRotor extends VariantBlock<BlockTurbineRotor.BlockTurbineRotorType> {
-    public static final PropertyDirection FACING = BlockHorizontal.FACING;
-
+public class BlockTurbineRotor extends VariantBlock<BlockTurbineRotor.BlockTurbineRotorType> implements ISuSyHorizontalOrientable {
     public BlockTurbineRotor(){
         super(net.minecraft.block.material.Material.IRON);
         setTranslationKey("turbine_rotor");
@@ -34,39 +29,26 @@ public class BlockTurbineRotor extends VariantBlock<BlockTurbineRotor.BlockTurbi
         setDefaultState(getState(BlockTurbineRotorType.STEEL).withProperty(FACING, EnumFacing.NORTH));
     }
 
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
-    }
-
+    @Override
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
     {
         return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING, placer.getHorizontalFacing().getOpposite());
     }
 
-    public IBlockState withRotation(IBlockState state, Rotation rot) {
-        return state.withProperty(FACING, rot.rotate((EnumFacing) state.getValue(FACING)));
-    }
-
-    public IBlockState withMirror(IBlockState state, Mirror mirrorIn)
-    {
-        return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
-    }
-
+    @Override
     public IBlockState getStateFromMeta(int meta)
     {
         int i = meta / 4;
         int j = meta % 4 + 2;
 
-        EnumFacing enumfacing = EnumFacing.byIndex(j);
+        EnumFacing enumfacing = EnumFacing.byHorizontalIndex(j);
 
-        if (enumfacing.getAxis() == EnumFacing.Axis.Y)
-        {
-            enumfacing = EnumFacing.NORTH;
-        }
-
-        return this.getDefaultState().withProperty(FACING, enumfacing).withProperty(this.VARIANT, this.VALUES[i % this.VALUES.length]);
+        return this.getDefaultState()
+                .withProperty(FACING, enumfacing)
+                .withProperty(this.VARIANT, this.VALUES[i % this.VALUES.length]);
     }
 
+    @Override
     public int getMetaFromState(IBlockState state)
     {
         int i = ((Enum)state.getValue(this.VARIANT)).ordinal();
@@ -75,7 +57,8 @@ public class BlockTurbineRotor extends VariantBlock<BlockTurbineRotor.BlockTurbi
     }
 
     @Nonnull
-    protected BlockStateContainer createBlockState() {
+    @Override
+    public BlockStateContainer createBlockState() {
         super.createBlockState();
 
         return new BlockStateContainer(this, new IProperty[]{this.VARIANT, this.FACING});

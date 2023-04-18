@@ -18,6 +18,7 @@ public class SusyTextures {
     public static OrientedOverlayRenderer TRICKLE_BED_REACTOR_OVERLAY;
     public static OrientedOverlayRenderer CRYSTALLIZER_OVERLAY;
     public static OrientedOverlayRenderer BUBBLE_COLUMN_REACTOR_OVERLAY;
+    public static OrientedOverlayRenderer DRYER_OVERLAY;
 
     public SusyTextures(){
     }
@@ -33,5 +34,6 @@ public class SusyTextures {
         TRICKLE_BED_REACTOR_OVERLAY = new OrientedOverlayRenderer("machines/trickle_bed_reactor");
         CRYSTALLIZER_OVERLAY = new OrientedOverlayRenderer("machines/crystallizer");
         BUBBLE_COLUMN_REACTOR_OVERLAY = new OrientedOverlayRenderer("machines/bubble_column_reactor");
+        DRYER_OVERLAY = new OrientedOverlayRenderer("machines/dryer");
     }
 }

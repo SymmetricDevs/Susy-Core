@@ -218,6 +218,21 @@ gregtech.machine.bubble_column_reactor.uiv.name=Epic Bubble Column Reactor III
 gregtech.machine.bubble_column_reactor.uxv.name=Epic Bubble Column Reactor IV
 gregtech.machine.bubble_column_reactor.opv.name=Legendary Bubble Column Reactor
 
+# Dryer
+gregtech.machine.dryer.lv.name=Basic Dryer
+gregtech.machine.dryer.mv.name=Advanced Dryer
+gregtech.machine.dryer.hv.name=Advanced Dryer II
+gregtech.machine.dryer.ev.name=Advanced Dryer III
+gregtech.machine.dryer.iv.name=Elite Dryer
+gregtech.machine.dryer.luv.name=Elite Dryer II
+gregtech.machine.dryer.zpm.name=Elite Dryer III
+gregtech.machine.dryer.uv.name=Ultimate Dryer
+gregtech.machine.dryer.uhv.name=Epic Dryer
+gregtech.machine.dryer.uev.name=Epic Dryer II
+gregtech.machine.dryer.uiv.name=Epic Dryer III
+gregtech.machine.dryer.uxv.name=Epic Dryer IV
+gregtech.machine.dryer.opv.name=Legendary Dryer
+
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
 recipemap.vulcanizing_press.name=Vulcanization
