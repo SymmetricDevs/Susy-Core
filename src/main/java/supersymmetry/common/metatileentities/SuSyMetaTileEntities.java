@@ -21,6 +21,7 @@ import supersymmetry.common.metatileentities.single.electric.MetaTileEntityLatex
 import supersymmetry.common.metatileentities.single.steam.*;
 
 import java.util.Arrays;
+import java.util.function.Function;
 
 import static gregtech.common.metatileentities.MetaTileEntities.*;
 
@@ -124,7 +125,14 @@ public class SuSyMetaTileEntities {
         FLUIDIZED_BED_REACTOR = registerMetaTileEntity(14617, new MetaTileEntityFluidizedBedReactor(susyId("fluidized_bed_reactor")));
         POLYMERIZATION_TANK = registerMetaTileEntity(14618, new MetaTileEntityPolmyerizationTank(susyId("polymerization_tank")));
 
-        registerSimpleMetaTileEntity(DRYER, 14619, "dryer", SuSyRecipeMaps.DRYER, SusyTextures.DRYER_OVERLAY, true, SuSyMetaTileEntities::susyId, GTUtility.defaultTankSizeFunction);
+        registerSimpleMTE(DRYER, 14619, "dryer", 12, SuSyRecipeMaps.DRYER, SusyTextures.DRYER_OVERLAY, true, SuSyMetaTileEntities::susyId, GTUtility.defaultTankSizeFunction);
+    }
+
+    private static void registerSimpleMTE(SimpleMachineMetaTileEntity[] machines, int startId, String name, int maxTier, RecipeMap<?> map, ICubeRenderer texture, boolean hasFrontFacing, Function<String, ResourceLocation> resourceId, Function<Integer, Integer> tankScalingFunction) {
+        String[] tiers = {"lv", "mv", "hv", "ev", "iv", "luv", "zpm", "uv", "uhv", "uev", "uiv", "uxv", "opv"};
+        for (int i = 0; i <= maxTier; i++) {
+            machines[i] = registerMetaTileEntity(startId + i, new SimpleMachineMetaTileEntity(resourceId.apply(String.format("%s.%s", name, tiers[i])), map, texture, i, hasFrontFacing, tankScalingFunction));
+        }
     }
 
     private static @NotNull ResourceLocation susyId(@NotNull String name) {
