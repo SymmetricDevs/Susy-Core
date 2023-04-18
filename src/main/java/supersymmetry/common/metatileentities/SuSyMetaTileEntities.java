@@ -2,8 +2,10 @@ package supersymmetry.common.metatileentities;
 
 import gregtech.api.GTValues;
 import gregtech.api.metatileentity.SimpleMachineMetaTileEntity;
+import gregtech.api.recipes.RecipeMap;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.util.GTUtility;
+import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.metatileentities.storage.MetaTileEntityDrum;
 import net.minecraft.util.ResourceLocation;
@@ -17,6 +19,8 @@ import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityMagnet
 import supersymmetry.common.metatileentities.multi.electric.MetaTileEntitySinteringOven;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityLatexCollector;
 import supersymmetry.common.metatileentities.single.steam.*;
+
+import java.util.Arrays;
 
 import static gregtech.common.metatileentities.MetaTileEntities.*;
 
@@ -50,6 +54,7 @@ public class SuSyMetaTileEntities {
     public static SimpleMachineMetaTileEntity[] TRICKLE_BED_REACTOR;
     public static SimpleMachineMetaTileEntity[] CRYSTALLIZER;
     public static SimpleMachineMetaTileEntity[] BUBBLE_COLUMN_REACTOR;
+    public static SimpleMachineMetaTileEntity[] DRYER;
     public static MetaTileEntityFluidizedBedReactor FLUIDIZED_BED_REACTOR;
     public static MetaTileEntityPolmyerizationTank POLYMERIZATION_TANK;
 
@@ -118,6 +123,8 @@ public class SuSyMetaTileEntities {
 
         FLUIDIZED_BED_REACTOR = registerMetaTileEntity(14617, new MetaTileEntityFluidizedBedReactor(susyId("fluidized_bed_reactor")));
         POLYMERIZATION_TANK = registerMetaTileEntity(14618, new MetaTileEntityPolmyerizationTank(susyId("polymerization_tank")));
+
+        registerSimpleMetaTileEntity(DRYER, 14619, "dryer", SuSyRecipeMaps.DRYER, SusyTextures.DRYER_OVERLAY, true, SuSyMetaTileEntities::susyId, GTUtility.defaultTankSizeFunction);
     }
 
     private static @NotNull ResourceLocation susyId(@NotNull String name) {
@@ -134,5 +141,6 @@ public class SuSyMetaTileEntities {
         TRICKLE_BED_REACTOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
         CRYSTALLIZER = new SimpleMachineMetaTileEntity[GTValues.OpV];
         BUBBLE_COLUMN_REACTOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
+        DRYER = new SimpleMachineMetaTileEntity[GTValues.OpV];
     }
 }

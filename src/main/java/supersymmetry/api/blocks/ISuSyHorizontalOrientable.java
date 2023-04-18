@@ -28,6 +28,7 @@ public interface ISuSyHorizontalOrientable {
     default IBlockState withRotation(IBlockState state, Rotation rot) {
         return state.withProperty(FACING, rot.rotate((EnumFacing) state.getValue(FACING)));
     }
+
     default IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
         return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
     }
