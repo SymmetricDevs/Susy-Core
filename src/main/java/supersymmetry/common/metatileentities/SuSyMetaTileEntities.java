@@ -20,7 +20,6 @@ import supersymmetry.common.metatileentities.multi.electric.MetaTileEntitySinter
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityLatexCollector;
 import supersymmetry.common.metatileentities.single.steam.*;
 
-import java.util.Arrays;
 import java.util.function.Function;
 
 import static gregtech.common.metatileentities.MetaTileEntities.*;
@@ -71,67 +70,42 @@ public class SuSyMetaTileEntities {
 
         LATEX_COLLECTOR_BRONZE = registerMetaTileEntity(14510, new MetaTileEntitySteamLatexCollector(susyId("latex_collector.bronze")));
 
-        VULCANIZING_PRESS[0] = registerMetaTileEntity(14515, new SimpleMachineMetaTileEntity(susyId("vulcanizing_press.lv"), SuSyRecipeMaps.VULCANIZATION_RECIPES, SusyTextures.VULCANIZING_PRESS_OVERLAY,1, true));
-        VULCANIZING_PRESS[1] = registerMetaTileEntity(14516, new SimpleMachineMetaTileEntity(susyId("vulcanizing_press.mv"), SuSyRecipeMaps.VULCANIZATION_RECIPES, SusyTextures.VULCANIZING_PRESS_OVERLAY,2, true));
-        VULCANIZING_PRESS[2] = registerMetaTileEntity(14517, new SimpleMachineMetaTileEntity(susyId("vulcanizing_press.hv"), SuSyRecipeMaps.VULCANIZATION_RECIPES, SusyTextures.VULCANIZING_PRESS_OVERLAY,3, true));
-        VULCANIZING_PRESS[3] = registerMetaTileEntity(14518, new SimpleMachineMetaTileEntity(susyId("vulcanizing_press.ev"), SuSyRecipeMaps.VULCANIZATION_RECIPES, SusyTextures.VULCANIZING_PRESS_OVERLAY,4, true));
-
+        registerSimpleMTE(VULCANIZING_PRESS, 3, 14515, "vulcanizing_press", SuSyRecipeMaps.VULCANIZATION_RECIPES, SusyTextures.VULCANIZING_PRESS_OVERLAY, true);
         VULCANIZING_PRESS_BRONZE = registerMetaTileEntity(14520, new MetaTileEntitySteamVulcanizingPress(susyId("vulcanizing_press.steam"), false));
 
         SINTERING_OVEN = registerMetaTileEntity(14521, new MetaTileEntitySinteringOven(susyId("sintering_oven")));
 
         ROASTER_BRONZE = registerMetaTileEntity(14522, new MetaTileEntitySteamRoaster(susyId("roaster.steam"), false));
-
-        ROASTER[0] = registerMetaTileEntity(14523, new SimpleMachineMetaTileEntity(susyId("roaster.lv"), SuSyRecipeMaps.ROASTER_RECIPES, SusyTextures.ROASTER_OVERLAY, 1, true));
-        ROASTER[1] = registerMetaTileEntity(14524, new SimpleMachineMetaTileEntity(susyId("roaster.mv"), SuSyRecipeMaps.ROASTER_RECIPES, SusyTextures.ROASTER_OVERLAY, 2, true));
-        ROASTER[2] = registerMetaTileEntity(14525, new SimpleMachineMetaTileEntity(susyId("roaster.hv"), SuSyRecipeMaps.ROASTER_RECIPES, SusyTextures.ROASTER_OVERLAY, 3, true));
-        ROASTER[3] = registerMetaTileEntity(14526, new SimpleMachineMetaTileEntity(susyId("roaster.ev"), SuSyRecipeMaps.ROASTER_RECIPES, SusyTextures.ROASTER_OVERLAY, 4, true));
-        ROASTER[4] = registerMetaTileEntity(14527, new SimpleMachineMetaTileEntity(susyId("roaster.iv"), SuSyRecipeMaps.ROASTER_RECIPES, SusyTextures.ROASTER_OVERLAY, 5, true));
-        ROASTER[5] = registerMetaTileEntity(14528, new SimpleMachineMetaTileEntity(susyId("roaster.luv"), SuSyRecipeMaps.ROASTER_RECIPES, SusyTextures.ROASTER_OVERLAY, 6, true));
-        ROASTER[6] = registerMetaTileEntity(14529, new SimpleMachineMetaTileEntity(susyId("roaster.zpm"), SuSyRecipeMaps.ROASTER_RECIPES, SusyTextures.ROASTER_OVERLAY, 7, true));
-        ROASTER[7] = registerMetaTileEntity(14530, new SimpleMachineMetaTileEntity(susyId("roaster.uv"), SuSyRecipeMaps.ROASTER_RECIPES, SusyTextures.ROASTER_OVERLAY, 8, true));
-        ROASTER[8] = registerMetaTileEntity(14531, new SimpleMachineMetaTileEntity(susyId("roaster.uhv"), SuSyRecipeMaps.ROASTER_RECIPES, SusyTextures.ROASTER_OVERLAY, 9, true));
-        ROASTER[9] = registerMetaTileEntity(14532, new SimpleMachineMetaTileEntity(susyId("roaster.uev"), SuSyRecipeMaps.ROASTER_RECIPES, SusyTextures.ROASTER_OVERLAY, 10, true));
-        ROASTER[10] = registerMetaTileEntity(14533, new SimpleMachineMetaTileEntity(susyId("roaster.uiv"), SuSyRecipeMaps.ROASTER_RECIPES, SusyTextures.ROASTER_OVERLAY, 11, true));
-        ROASTER[11] = registerMetaTileEntity(14534, new SimpleMachineMetaTileEntity(susyId("roaster.uxv"), SuSyRecipeMaps.ROASTER_RECIPES, SusyTextures.ROASTER_OVERLAY, 12, true));
-        ROASTER[12] = registerMetaTileEntity(14535, new SimpleMachineMetaTileEntity(susyId("roaster.opv"), SuSyRecipeMaps.ROASTER_RECIPES, SusyTextures.ROASTER_OVERLAY, 13, true));
+        registerSimpleMTE(ROASTER, 12, 14523, "roaster", SuSyRecipeMaps.ROASTER_RECIPES, SusyTextures.ROASTER_OVERLAY, true);
 
         MIXER_BRONZE = registerMetaTileEntity(14536, new MetaTileEntitySteamMixer(susyId("mixer.steam"), false));
 
         VACUUM_CHAMBER_BRONZE = registerMetaTileEntity(14537, new MetaTileEntitySteamVacuumChamber(susyId("vacuum_chamber.steam"), false));
-
-        VACUUM_CHAMBER[0] = registerMetaTileEntity(14538, new SimpleMachineMetaTileEntity(susyId("vacuum_chamber.lv"), SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY, 1, true));
-        VACUUM_CHAMBER[1] = registerMetaTileEntity(14539, new SimpleMachineMetaTileEntity(susyId("vacuum_chamber.mv"), SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY, 2, true));
-        VACUUM_CHAMBER[2] = registerMetaTileEntity(14540, new SimpleMachineMetaTileEntity(susyId("vacuum_chamber.hv"), SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY, 3, true));
-        VACUUM_CHAMBER[3] = registerMetaTileEntity(14541, new SimpleMachineMetaTileEntity(susyId("vacuum_chamber.ev"), SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY, 4, true));
-        VACUUM_CHAMBER[4] = registerMetaTileEntity(14542, new SimpleMachineMetaTileEntity(susyId("vacuum_chamber.iv"), SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY, 5, true));
-        VACUUM_CHAMBER[5] = registerMetaTileEntity(14543, new SimpleMachineMetaTileEntity(susyId("vacuum_chamber.luv"), SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY, 6, true));
-        VACUUM_CHAMBER[6] = registerMetaTileEntity(14544, new SimpleMachineMetaTileEntity(susyId("vacuum_chamber.zpm"), SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY, 7, true));
-        VACUUM_CHAMBER[7] = registerMetaTileEntity(14545, new SimpleMachineMetaTileEntity(susyId("vacuum_chamber.uv"), SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY, 8, true));
-        VACUUM_CHAMBER[8] = registerMetaTileEntity(14546, new SimpleMachineMetaTileEntity(susyId("vacuum_chamber.uhv"), SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY, 9, true));
-        VACUUM_CHAMBER[9] = registerMetaTileEntity(14547, new SimpleMachineMetaTileEntity(susyId("vacuum_chamber.uev"), SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY, 10, true));
-        VACUUM_CHAMBER[10] = registerMetaTileEntity(14548, new SimpleMachineMetaTileEntity(susyId("vacuum_chamber.uiv"), SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY, 11, true));
-        VACUUM_CHAMBER[11] = registerMetaTileEntity(14549, new SimpleMachineMetaTileEntity(susyId("vacuum_chamber.uxv"), SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY, 12, true));
-        VACUUM_CHAMBER[12] = registerMetaTileEntity(14550, new SimpleMachineMetaTileEntity(susyId("vacuum_chamber.opv"), SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY,13, true));
+        registerSimpleMTE(VACUUM_CHAMBER, 12, 14538, "vacuum_chamber", SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY, true);
 
         LEAD_DRUM = registerMetaTileEntity(14551, new MetaTileEntityDrum(susyId("drum.lead"), Materials.Lead, 32000));
 
-        registerSimpleMetaTileEntity(CONTINUOUS_STIRRED_TANK_REACTOR, 14552, "continuous_stirred_tank_reactor", SuSyRecipeMaps.CSTR_RECIPES, SusyTextures.CONTINUOUS_STIRRED_TANK_REACTOR_OVERLAY, true, SuSyMetaTileEntities::susyId, GTUtility.defaultTankSizeFunction);
-        registerSimpleMetaTileEntity(FIXED_BED_REACTOR, 14565, "fixed_bed_reactor", SuSyRecipeMaps.FIXED_BED_REACTOR_RECIPES, SusyTextures.FIXED_BED_REACTOR_OVERLAY, true, SuSyMetaTileEntities::susyId, GTUtility.defaultTankSizeFunction);
-        registerSimpleMetaTileEntity(TRICKLE_BED_REACTOR, 14578, "trickle_bed_reactor", SuSyRecipeMaps.TRICKLE_BED_REACTOR_RECIPES, SusyTextures.TRICKLE_BED_REACTOR_OVERLAY, true, SuSyMetaTileEntities::susyId, GTUtility.defaultTankSizeFunction);
-        registerSimpleMetaTileEntity(CRYSTALLIZER, 14591, "crystallizer", SuSyRecipeMaps.CRYSTALLIZER_RECIPES, SusyTextures.CRYSTALLIZER_OVERLAY, true, SuSyMetaTileEntities::susyId, GTUtility.defaultTankSizeFunction);
-        registerSimpleMetaTileEntity(BUBBLE_COLUMN_REACTOR, 14604, "bubble_column_reactor", SuSyRecipeMaps.BUBBLE_COLUMN_REACTOR_RECIPES, SusyTextures.BUBBLE_COLUMN_REACTOR_OVERLAY, true, SuSyMetaTileEntities::susyId, GTUtility.defaultTankSizeFunction);
+        registerSimpleMTE(CONTINUOUS_STIRRED_TANK_REACTOR, 12, 14552, "continuous_stirred_tank_reactor", SuSyRecipeMaps.CSTR_RECIPES, SusyTextures.CONTINUOUS_STIRRED_TANK_REACTOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+        registerSimpleMTE(FIXED_BED_REACTOR, 12, 14565, "fixed_bed_reactor", SuSyRecipeMaps.FIXED_BED_REACTOR_RECIPES, SusyTextures.FIXED_BED_REACTOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+        registerSimpleMTE(TRICKLE_BED_REACTOR, 12, 14578, "trickle_bed_reactor", SuSyRecipeMaps.TRICKLE_BED_REACTOR_RECIPES, SusyTextures.TRICKLE_BED_REACTOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+        registerSimpleMTE(CRYSTALLIZER, 12, 14591, "crystallizer", SuSyRecipeMaps.CRYSTALLIZER_RECIPES, SusyTextures.CRYSTALLIZER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+        registerSimpleMTE(BUBBLE_COLUMN_REACTOR, 12, 14604, "bubble_column_reactor", SuSyRecipeMaps.BUBBLE_COLUMN_REACTOR_RECIPES, SusyTextures.BUBBLE_COLUMN_REACTOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
 
         FLUIDIZED_BED_REACTOR = registerMetaTileEntity(14617, new MetaTileEntityFluidizedBedReactor(susyId("fluidized_bed_reactor")));
         POLYMERIZATION_TANK = registerMetaTileEntity(14618, new MetaTileEntityPolmyerizationTank(susyId("polymerization_tank")));
 
-        registerSimpleMTE(DRYER, 14619, "dryer", 12, SuSyRecipeMaps.DRYER, SusyTextures.DRYER_OVERLAY, true, SuSyMetaTileEntities::susyId, GTUtility.defaultTankSizeFunction);
+        registerSimpleMTE(DRYER, 12, 14619, "dryer", SuSyRecipeMaps.DRYER, SusyTextures.DRYER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
     }
 
-    private static void registerSimpleMTE(SimpleMachineMetaTileEntity[] machines, int startId, String name, int maxTier, RecipeMap<?> map, ICubeRenderer texture, boolean hasFrontFacing, Function<String, ResourceLocation> resourceId, Function<Integer, Integer> tankScalingFunction) {
-        String[] tiers = {"lv", "mv", "hv", "ev", "iv", "luv", "zpm", "uv", "uhv", "uev", "uiv", "uxv", "opv"};
+    private static void registerSimpleMTE(SimpleMachineMetaTileEntity[] machines, int maxTier, int startId, String name, RecipeMap<?> map, ICubeRenderer texture, boolean hasFrontFacing) {
         for (int i = 0; i <= maxTier; i++) {
-            machines[i] = registerMetaTileEntity(startId + i, new SimpleMachineMetaTileEntity(resourceId.apply(String.format("%s.%s", name, tiers[i])), map, texture, i, hasFrontFacing, tankScalingFunction));
+            machines[i] = registerMetaTileEntity(startId + i, new SimpleMachineMetaTileEntity(susyId(String.format("%s.%s", name, GTValues.VN[i + 1].toLowerCase())), map, texture, i + 1, hasFrontFacing));
+        }
+    }
+
+    private static void registerSimpleMTE(SimpleMachineMetaTileEntity[] machines, int maxTier, int startId, String name, RecipeMap<?> map, ICubeRenderer texture, boolean hasFrontFacing, Function<Integer, Integer> tankScalingFunction) {
+        for (int i = 0; i <= maxTier; i++) {
+            machines[i] = registerMetaTileEntity(startId + i, new SimpleMachineMetaTileEntity(susyId(String.format("%s.%s", name, GTValues.VN[i + 1].toLowerCase())), map, texture, i + 1, hasFrontFacing, tankScalingFunction));
         }
     }
 
