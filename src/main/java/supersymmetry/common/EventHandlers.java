@@ -2,6 +2,7 @@ package supersymmetry.common;
 
 import gregtech.api.util.GTTeleporter;
 import gregtech.api.util.TeleportHandler;
+import gregtechfoodoption.item.GTFOMetaItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.WorldServer;
@@ -34,6 +35,8 @@ public class EventHandlers {
 
             event.player.getEntityWorld().spawnEntity(dropPod);
             event.player.startRiding(dropPod);
+
+            event.player.addItemStackToInventory(GTFOMetaItem.EMERGENCY_RATIONS.getStackForm(10));
         }
     }
 

@@ -98,6 +98,8 @@ dependencies {
     deobfCompile 'curse.maven:realistic-terrain-generation-unofficial-648514:4404814'
 
     deobfCompile 'curse.maven:biomes-o-plenty-220318:2842510'
+
+    deobfCompile 'curse.maven:gregtech-food-option-477021:4496053'
 }
 
 sourceSets {
