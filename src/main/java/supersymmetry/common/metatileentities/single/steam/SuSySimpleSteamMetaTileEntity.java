@@ -10,10 +10,15 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.SteamMetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.recipes.RecipeMap;
+import gregtech.api.recipes.ingredients.IntCircuitIngredient;
+import gregtech.api.util.GTTransferUtils;
 import gregtech.client.renderer.ICubeRenderer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -24,10 +29,16 @@ import net.minecraftforge.items.ItemStackHandler;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicator;
 
+import javax.annotation.Nullable;
+import java.util.Arrays;
+
 public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity {
 
-    SuSySteamProgressIndicator progressIndicator;
-    boolean isBrickedCasing;
+    protected SuSySteamProgressIndicator progressIndicator;
+    protected boolean isBrickedCasing;
+
+    @Nullable
+    protected GhostCircuitItemStackHandler circuitInventory;
 
     protected IItemHandler outputItemInventory;
     protected IFluidHandler outputFluidInventory;
@@ -37,7 +48,15 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity {
         super(metaTileEntityId, recipeMap, renderer, isHighPressure);
         this.progressIndicator = progressIndicator;
         this.isBrickedCasing = isBrickedCasing;
+        if (hasGhostCircuitInventory()) {
+            this.circuitInventory = new GhostCircuitItemStackHandler();
+            this.circuitInventory.addNotifiableMetaTileEntity(this);
+        }
         initializeInventory();
+    }
+
+    protected boolean hasGhostCircuitInventory() {
+        return true;
     }
 
     @Override
@@ -55,7 +74,7 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity {
 
     @Override
     public IItemHandlerModifiable getImportItems() {
-        if (actualImportItems == null) this.actualImportItems = super.getImportItems();
+        if (actualImportItems == null) this.actualImportItems = circuitInventory == null ? super.getImportItems() : new ItemHandlerList(Arrays.asList(super.getImportItems(), this.circuitInventory));
         return this.actualImportItems;
     }
 
@@ -104,6 +123,37 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity {
         if (GTValues.RNG.nextBoolean()) this.getWorld().spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y + 0.5F, z, 0.0, 0.0, 0.0, new int[0]);
     }
 
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        super.writeToNBT(data);
+        if (circuitInventory != null) this.circuitInventory.write(data);
+        return data;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound data) {
+        super.readFromNBT(data);
+        if (circuitInventory != null) {
+            if (data.hasKey("CircuitInventory", Constants.NBT.TAG_COMPOUND)) {
+                ItemStackHandler legacyCircuitInventory = new ItemStackHandler();
+                for (int i =0; i < legacyCircuitInventory.getSlots(); i++) {
+                    ItemStack stack = legacyCircuitInventory.getStackInSlot(i);
+                    if (stack.isEmpty()) continue;
+                    stack = GTTransferUtils.insertItem(this.importItems, stack, false);
+                    this.circuitInventory.setCircuitValueFromStack(stack);
+                }
+            } else {
+                this.circuitInventory.read(data);
+            }
+        }
+    }
+
+    public void setGhostCircuitConfig(int config) {
+        if (this.circuitInventory == null || this.circuitInventory.getCircuitValue() == config) return;
+        this.circuitInventory.setCircuitValue(config);
+        if (!getWorld().isRemote) markDirty();
+    }
+
     protected ModularUI.Builder createGuiTemplate(EntityPlayer player) {
         RecipeMap<?> recipeMap = workableHandler.getRecipeMap();
         int yOffset = 0;
@@ -113,7 +163,25 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity {
         addInventorySlotGroup(builder, importItems, importFluids, false, yOffset);
         addInventorySlotGroup(builder, exportItems, exportFluids, true, yOffset);
 
+        if (exportItems.getSlots() + exportFluids.getTanks() <= 9) {
+            if (this.circuitInventory != null) {
+                SlotWidget circuitSlot = new GhostCircuitSlotWidget(circuitInventory, 0, 124, 62 + yOffset)
+                        .setBackgroundTexture(GuiTextures.SLOT_STEAM.get(isHighPressure), getCircuitSlotOverlay());
+                builder.widget(getCircuitSlotToolTip(circuitSlot))
+                        .widget(new ClickButtonWidget(115, 62 + yOffset, 9, 9, "", click -> circuitInventory.addCircuitValue(click.isShiftClick ? 5 : 1)).setShouldClientCallback(true).setButtonTexture(GuiTextures.BUTTON_INT_CIRCUIT_PLUS).setDisplayFunction(() -> circuitInventory.hasCircuitValue() && circuitInventory.getCircuitValue() < IntCircuitIngredient.CIRCUIT_MAX))
+                        .widget(new ClickButtonWidget(115, 71 + yOffset, 9, 9, "", click -> circuitInventory.addCircuitValue(click.isShiftClick ? -5 : -1)).setShouldClientCallback(true).setButtonTexture(GuiTextures.BUTTON_INT_CIRCUIT_MINUS).setDisplayFunction(() -> circuitInventory.hasCircuitValue() && circuitInventory.getCircuitValue() > IntCircuitIngredient.CIRCUIT_MIN));
+            }
+        }
+
         return builder;
+    }
+
+    protected TextureArea getCircuitSlotOverlay() {
+        return GuiTextures.INT_CIRCUIT_OVERLAY;
+    }
+
+    protected SlotWidget getCircuitSlotToolTip(SlotWidget widget) {
+        return widget.setTooltipText("gregtech.gui.configurator_slot.tooltip");
     }
 
     protected void addRecipeProgressBar(ModularUI.Builder builder, RecipeMap<?> map, int yOffset) {
