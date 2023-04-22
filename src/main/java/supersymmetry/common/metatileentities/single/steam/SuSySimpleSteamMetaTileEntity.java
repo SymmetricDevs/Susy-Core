@@ -28,6 +28,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicator;
+import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -177,7 +178,7 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity {
     }
 
     protected TextureArea getCircuitSlotOverlay() {
-        return GuiTextures.INT_CIRCUIT_OVERLAY;
+        return SusyTextures.INT_CIRCUIT_OVERLAY.get(isHighPressure);
     }
 
     protected SlotWidget getCircuitSlotToolTip(SlotWidget widget) {
