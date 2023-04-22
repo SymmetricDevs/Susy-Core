@@ -121,6 +121,9 @@ public class SusyMaterials {
         Materials.DiphenylIsophtalate.setProperty(PropertyKey.DUST, new DustProperty());
 
         Materials.Diaminobenzidine.setProperty(PropertyKey.DUST, new DustProperty());
+
+        Materials.PolyvinylAcetate.setProperty(PropertyKey.DUST, new DustProperty());
+
     }
 
     private static void removeProperty(PropertyKey<?> key, Material material) {
