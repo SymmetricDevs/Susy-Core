@@ -19,14 +19,13 @@ import javax.annotation.Nonnull;
 
 public class BlockAlternatorCoil extends VariantBlock<BlockAlternatorCoil.AlternatorCoilType> implements ISuSyHorizontalOrientable {
 
-    public BlockAlternatorCoil(){
+    public BlockAlternatorCoil() {
         super(net.minecraft.block.material.Material.IRON);
         setTranslationKey("alternator_coil");
         setHardness(5.0f);
         setResistance(10.0f);
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 2);
-        SusyLog.logger.info(this.FACING);
         setDefaultState(getState(AlternatorCoilType.COPPER).withProperty(FACING, EnumFacing.NORTH));
     }
 
@@ -48,8 +47,8 @@ public class BlockAlternatorCoil extends VariantBlock<BlockAlternatorCoil.Altern
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        int i = ((Enum)state.getValue(this.VARIANT)).ordinal();
-        int j = ((EnumFacing)state.getValue(FACING)).getIndex();
+        int i = ((Enum) state.getValue(this.VARIANT)).ordinal();
+        int j = ((EnumFacing) state.getValue(FACING)).getIndex();
         return j - 2 + i * 4;
     }
 
@@ -62,11 +61,11 @@ public class BlockAlternatorCoil extends VariantBlock<BlockAlternatorCoil.Altern
     }
 
     public ItemStack getItemVariant(BlockTurbineRotor.BlockTurbineRotorType variant, int amount) {
-        return new ItemStack(this, amount, variant.ordinal() * 4) ;
+        return new ItemStack(this, amount, variant.ordinal() * 4);
     }
 
     public int damageDropped(@Nonnull IBlockState state) {
-        return this.getMetaFromState(state) - ((EnumFacing)state.getValue(FACING)).getIndex() + 2;
+        return this.getMetaFromState(state) - ((EnumFacing) state.getValue(FACING)).getIndex() + 2;
     }
 
     public static enum AlternatorCoilType implements IStringSerializable, IStateHarvestLevel {
