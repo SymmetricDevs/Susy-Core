@@ -1,9 +1,13 @@
 package supersymmetry.common.materials;
 
+import gregicality.multiblocks.api.unification.GCYMMaterialFlags;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
+import gregtech.api.unification.material.info.MaterialFlag;
+import gregtech.api.unification.material.info.MaterialFlags;
 import gregtech.api.unification.material.properties.*;
 import supersymmetry.api.SusyLog;
+import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -123,6 +127,8 @@ public class SusyMaterials {
         Materials.Diaminobenzidine.setProperty(PropertyKey.DUST, new DustProperty());
 
         Materials.PolyvinylAcetate.setProperty(PropertyKey.DUST, new DustProperty());
+
+        Materials.Platinum.addFlags(new MaterialFlag[]{ SuSyMaterialFlags.GENERATE_CATALYST_BED });
 
     }
 
