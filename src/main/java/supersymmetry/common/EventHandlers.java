@@ -71,7 +71,6 @@ public class EventHandlers {
             BlockCauldron cauldron = (BlockCauldron) blockState.getBlock();
             ItemCeramicBucket bucket = (ItemCeramicBucket) itemStack.getItem();
             FluidStack fluid = bucket.getFluid(itemStack);
-            SusyLog.logger.info("a");
             int level = blockState.getValue(BlockCauldron.LEVEL);
             if (fluid == null && level >= 3) {
                 if (!event.getEntityPlayer().capabilities.isCreativeMode) {
