@@ -26,7 +26,6 @@ public class BlockAlternatorCoil extends VariantBlock<BlockAlternatorCoil.Altern
         setResistance(10.0f);
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 2);
-        SusyLog.logger.info(this.FACING);
         setDefaultState(getState(AlternatorCoilType.COPPER).withProperty(FACING, EnumFacing.NORTH));
     }
 

@@ -25,7 +25,6 @@ public class BlockTurbineRotor extends VariantBlock<BlockTurbineRotor.BlockTurbi
         setResistance(10.0f);
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 2);
-        SusyLog.logger.info(this.FACING);
         setDefaultState(getState(BlockTurbineRotorType.STEEL).withProperty(FACING, EnumFacing.NORTH));
     }
 
