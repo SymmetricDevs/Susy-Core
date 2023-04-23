@@ -1,10 +1,7 @@
 package supersymmetry.common.materials;
 
-import gregicality.multiblocks.api.unification.GCYMMaterialFlags;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
-import gregtech.api.unification.material.info.MaterialFlag;
-import gregtech.api.unification.material.info.MaterialFlags;
 import gregtech.api.unification.material.properties.*;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
@@ -128,7 +125,19 @@ public class SusyMaterials {
 
         Materials.PolyvinylAcetate.setProperty(PropertyKey.DUST, new DustProperty());
 
-        Materials.Platinum.addFlags(new MaterialFlag[]{ SuSyMaterialFlags.GENERATE_CATALYST_BED });
+        Materials.Platinum.addFlags(SuSyMaterialFlags.GENERATE_CATALYST_BED);
+
+        Materials.BandedIron.addFlags(SuSyMaterialFlags.GENERATE_CATALYST_BED);
+
+        Materials.Cobalt.addFlags(SuSyMaterialFlags.GENERATE_CATALYST_BED);
+
+        Materials.Palladium.addFlags(SuSyMaterialFlags.GENERATE_CATALYST_BED);
+
+        Materials.CupricOxide.addFlags(SuSyMaterialFlags.GENERATE_CATALYST_BED);
+
+        Materials.Rhodium.addFlags(SuSyMaterialFlags.GENERATE_CATALYST_BED);
+
+        Materials.Copper.addFlags(SuSyMaterialFlags.GENERATE_CATALYST_BED);
 
     }
 

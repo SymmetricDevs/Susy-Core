@@ -35,12 +35,8 @@ import java.util.function.Function;
 public class CommonProxy {
 
     public void preLoad(){
-        SusyOrePrefix.init();
         SusyStoneTypes.init();
         SuSyRecipeMaps.init();
-        SuSyMaterialIconType.init();
-        MetaItems.addOrePrefix(new OrePrefix[]{ SusyOrePrefix.catalystBed });
-
     }
 
     public void load() {
@@ -75,6 +71,11 @@ public class CommonProxy {
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void registerMaterials(@NotNull GregTechAPI.MaterialEvent event) {
         SusyMaterials.init();
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static void postRegisterMaterials(@NotNull GregTechAPI.PostMaterialEvent event) {
+        MetaItems.addOrePrefix(SusyOrePrefix.catalystBed);
     }
 
     @SubscribeEvent()

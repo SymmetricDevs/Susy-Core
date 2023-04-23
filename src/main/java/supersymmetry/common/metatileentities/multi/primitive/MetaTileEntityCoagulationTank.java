@@ -108,14 +108,19 @@ public class MetaTileEntityCoagulationTank extends RecipeMapPrimitiveMultiblockC
         }
     }
 
+    @Override
     protected void formStructure(PatternMatchContext context) {
         super.formStructure(context);
-        this.initializeAbilities();
+        this.reinitializeAbilities();
     }
 
     @Override
     protected void initializeAbilities() {
         super.initializeAbilities();
+        this.reinitializeAbilities();
+    }
+
+    private void reinitializeAbilities() {
         this.outputInventory = new ItemHandlerList(this.getAbilities(MultiblockAbility.EXPORT_ITEMS));
         this.inputFluidInventory = new FluidTankList(false, this.getAbilities(MultiblockAbility.IMPORT_FLUIDS));
     }
@@ -124,6 +129,8 @@ public class MetaTileEntityCoagulationTank extends RecipeMapPrimitiveMultiblockC
     protected ICubeRenderer getFrontOverlay() {
         return Textures.PRIMITIVE_PUMP_OVERLAY;
     }
+
+    @Override
 
     public boolean hasMaintenanceMechanics() {
         return false;
