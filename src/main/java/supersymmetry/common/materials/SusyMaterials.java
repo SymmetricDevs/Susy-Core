@@ -4,6 +4,7 @@ import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.properties.*;
 import supersymmetry.api.SusyLog;
+import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -121,6 +122,23 @@ public class SusyMaterials {
         Materials.DiphenylIsophtalate.setProperty(PropertyKey.DUST, new DustProperty());
 
         Materials.Diaminobenzidine.setProperty(PropertyKey.DUST, new DustProperty());
+
+        Materials.PolyvinylAcetate.setProperty(PropertyKey.DUST, new DustProperty());
+
+        Materials.Platinum.addFlags(SuSyMaterialFlags.GENERATE_CATALYST_BED);
+
+        Materials.BandedIron.addFlags(SuSyMaterialFlags.GENERATE_CATALYST_BED);
+
+        Materials.Cobalt.addFlags(SuSyMaterialFlags.GENERATE_CATALYST_BED);
+
+        Materials.Palladium.addFlags(SuSyMaterialFlags.GENERATE_CATALYST_BED);
+
+        Materials.CupricOxide.addFlags(SuSyMaterialFlags.GENERATE_CATALYST_BED);
+
+        Materials.Rhodium.addFlags(SuSyMaterialFlags.GENERATE_CATALYST_BED);
+
+        Materials.Copper.addFlags(SuSyMaterialFlags.GENERATE_CATALYST_BED);
+
     }
 
     private static void removeProperty(PropertyKey<?> key, Material material) {

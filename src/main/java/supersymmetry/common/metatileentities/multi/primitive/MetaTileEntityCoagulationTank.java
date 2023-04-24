@@ -108,6 +108,7 @@ public class MetaTileEntityCoagulationTank extends RecipeMapPrimitiveMultiblockC
         }
     }
 
+    @Override
     protected void formStructure(PatternMatchContext context) {
         super.formStructure(context);
         this.reinitializeAbilities();
@@ -128,6 +129,8 @@ public class MetaTileEntityCoagulationTank extends RecipeMapPrimitiveMultiblockC
     protected ICubeRenderer getFrontOverlay() {
         return Textures.PRIMITIVE_PUMP_OVERLAY;
     }
+    @Override
+
     @Override
 
     public boolean hasMaintenanceMechanics() {
