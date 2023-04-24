@@ -16,11 +16,8 @@ import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicator;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicators;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
-import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityFluidizedBedReactor;
-import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityPolmyerizationTank;
+import supersymmetry.common.metatileentities.multi.electric.*;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCoagulationTank;
-import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityMagneticRefrigerator;
-import supersymmetry.common.metatileentities.multi.electric.MetaTileEntitySinteringOven;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityLatexCollector;
 import supersymmetry.common.metatileentities.single.steam.*;
 
@@ -82,7 +79,7 @@ public class SuSyMetaTileEntities {
         registerSimpleSteamMTE(STEAM_ROASTER, 14722, "roaster", SuSyRecipeMaps.ROASTER_RECIPES, SuSySteamProgressIndicators.ARROW, SusyTextures.ROASTER_OVERLAY, true);
         registerSimpleMTE(ROASTER, 12, 14523, "roaster", SuSyRecipeMaps.ROASTER_RECIPES, SusyTextures.ROASTER_OVERLAY, true);
 
-        registerSimpleSteamMTE(STEAM_MIXER, 14536, "mixer", RecipeMaps.MIXER_RECIPES, SuSySteamProgressIndicators.ARROW, SusyTextures.MIXER_OVERLAY_STEAM, false);
+        registerSimpleSteamMTE(STEAM_MIXER, 14536, "mixer", RecipeMaps.MIXER_RECIPES, SuSySteamProgressIndicators.MIXER, SusyTextures.MIXER_OVERLAY_STEAM, false);
 
         registerSimpleSteamMTE(STEAM_VACUUM_CHAMBER, 14538, "vacuum_chamber", SuSyRecipeMaps.VACUUM_CHAMBER, SuSySteamProgressIndicators.COMPRESS, Textures.GAS_COLLECTOR_OVERLAY, false);
         registerSimpleMTE(VACUUM_CHAMBER, 12, 14540, "vacuum_chamber", SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY, true);

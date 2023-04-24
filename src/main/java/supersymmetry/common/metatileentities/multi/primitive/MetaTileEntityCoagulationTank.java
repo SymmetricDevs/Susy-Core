@@ -129,6 +129,7 @@ public class MetaTileEntityCoagulationTank extends RecipeMapPrimitiveMultiblockC
     protected ICubeRenderer getFrontOverlay() {
         return Textures.PRIMITIVE_PUMP_OVERLAY;
     }
+    @Override
 
     @Override
 

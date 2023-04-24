@@ -61,6 +61,8 @@ public class SuSyRecipeMaps {
         RecipeMaps.SIFTER_RECIPES.setMaxFluidOutputs(1);
         RecipeMaps.SIFTER_RECIPES.setMaxInputs(2);
         RecipeMaps.CENTRIFUGE_RECIPES.setMaxFluidInputs(2);
+        RecipeMaps.CENTRIFUGE_RECIPES.setSlotOverlay(false, true, false, GuiTextures.CENTRIFUGE_OVERLAY);
+
         RecipeMaps.MIXER_RECIPES.setMaxFluidInputs(3);
         RecipeMaps.MIXER_RECIPES.setMaxFluidOutputs(2);
         RecipeMaps.ARC_FURNACE_RECIPES.setMaxInputs(2);

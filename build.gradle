@@ -100,6 +100,9 @@ dependencies {
     deobfCompile 'curse.maven:biomes-o-plenty-220318:2842510'
 
     deobfCompile 'curse.maven:gregtech-food-option-477021:4496053'
+
+    deobfCompile "curse.maven:no-tree-punching-289043:2983385" // No-tree-punching v2.0.21
+    deobfCompile "curse.maven:alcatrazcore-304493:2666560" // AlcatrazCore v1.0.4
 }
 
 sourceSets {
