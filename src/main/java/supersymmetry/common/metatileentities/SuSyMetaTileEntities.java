@@ -16,11 +16,8 @@ import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicator;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicators;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
-import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityFluidizedBedReactor;
-import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityPolmyerizationTank;
+import supersymmetry.common.metatileentities.multi.electric.*;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCoagulationTank;
-import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityMagneticRefrigerator;
-import supersymmetry.common.metatileentities.multi.electric.MetaTileEntitySinteringOven;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityLatexCollector;
 import supersymmetry.common.metatileentities.single.steam.*;
 
