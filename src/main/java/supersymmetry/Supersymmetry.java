@@ -11,6 +11,7 @@ import supersymmetry.api.sound.SusySounds;
 import supersymmetry.common.CommonProxy;
 import supersymmetry.common.SusyMetaEntities;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.covers.SuSyCoverBehaviors;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
@@ -49,5 +50,6 @@ public class Supersymmetry {
     @Mod.EventHandler
     public void onInit(@NotNull FMLInitializationEvent event) {
         proxy.load();
+        SuSyCoverBehaviors.init();
     }
 }
