@@ -14,6 +14,9 @@ public class SuSyCoverBehaviors {
         registerBehavior(new ResourceLocation("gregtech", "conveyor.steam"), SuSyMetaItems.CONVEYOR_STEAM, (tile, side) -> {
             return new SteamCoverConveyor(tile, side, 4);
         });
+        registerBehavior(new ResourceLocation("gregtech", "pump.steam"), SuSyMetaItems.PUMP_STEAM, (tile, side) -> {
+            return new SteamCoverPump(tile, side, 640);
+        });
     }
 
 }

@@ -254,3 +254,4 @@ recipemap.polymerization_tank.name=Polymerization Tank
 
 # MetaItems
 metaitem.conveyor.steam.name=Steam Conveyor
+metaitem.pump.steam.name=Steam Pump
