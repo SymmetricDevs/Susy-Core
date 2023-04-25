@@ -62,7 +62,7 @@ material.anorthite=Anorthite
 material.forsterite=Forsterite
 material.lizardite=Lizardite
 
-# Ore Stone Types (%s is the localised material name)
+# Ore Prefixes (%s is the localised material name)
 item.material.oreprefix.oreGabbro=Gabbro %s Ore
 item.material.oreprefix.oreGneiss=Gneiss %s Ore
 item.material.oreprefix.oreGraphite=Graphite %s Ore
@@ -75,6 +75,8 @@ item.material.oreprefix.oreSlate=Slate %s Ore
 item.material.oreprefix.oreSoapstone=Soapstone %s Ore
 item.material.oreprefix.oreKimberlite=Kimberlite %s Ore
 item.material.oreprefix.catalystBed=%s Catalyst Bed
+item.material.oreprefix.catalystPellet=%s Catalyst Pellet
+
 
 # Machines/Multiblocks
 gregtech.machine.magnetic_refrigerator.name=Magnetic Refrigerator
@@ -251,3 +253,6 @@ recipemap.crystallizer.name=Crystallizer
 recipemap.bubble_column_reactor.name=Bubble Column Reactor
 recipemap.fluidized_bed_reactor.name=Fluidized Bed Reactor
 recipemap.polymerization_tank.name=Polymerization Tank
+
+# Metaitems
+metaitem.catalyst_bed_support_grid.name=Catalyst Bed Support Grid
