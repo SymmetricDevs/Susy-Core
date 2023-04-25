@@ -26,7 +26,6 @@ public class SuSyBlocks {
     public static BlockAlternatorCoil ALTERNATOR_COIL;
     public static BlockTurbineRotor TURBINE_ROTOR;
 
-
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
         COOLING_COIL.setRegistryName("cooling_coil");

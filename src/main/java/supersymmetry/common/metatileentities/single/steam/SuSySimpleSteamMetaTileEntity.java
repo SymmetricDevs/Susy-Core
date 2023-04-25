@@ -21,12 +21,14 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicator;
 import supersymmetry.client.renderer.textures.SusyTextures;
@@ -38,10 +40,8 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity {
 
     protected SuSySteamProgressIndicator progressIndicator;
     protected boolean isBrickedCasing;
-
     @Nullable
     protected GhostCircuitItemStackHandler circuitInventory;
-
     protected IItemHandler outputItemInventory;
     protected IFluidHandler outputFluidInventory;
     private IItemHandlerModifiable actualImportItems;
@@ -55,6 +55,9 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity {
             this.circuitInventory.addNotifiableMetaTileEntity(this);
         }
         initializeInventory();
+        this.workableHandler = new RecipeLogicSteam(this,
+                recipeMap, isHighPressure, steamFluidTank, 1.0);
+
     }
 
     protected boolean hasGhostCircuitInventory() {
@@ -94,12 +97,12 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity {
 
     @Override
     public FluidTankList createImportFluidHandler() {
-        if (workableHandler == null) return new FluidTankList(false);
-        FluidTank[] fluidExports = new FluidTank[workableHandler.getRecipeMap().getMaxFluidInputs() + 1];
-        this.steamFluidTank = (new FilteredFluidHandler(16000)).setFillPredicate(ModHandler::isSteam);
-        fluidExports[0] = this.steamFluidTank;
-        for (int i = 1; i < fluidExports.length; i++) fluidExports[i] = new NotifiableFluidTank(16000, this, true);
-        return new FluidTankList(false, fluidExports);
+        super.createImportFluidHandler();
+        if (workableHandler == null) return new FluidTankList(false, new IFluidTank[]{this.steamFluidTank});
+        IFluidTank[] fluidImports = new IFluidTank[workableHandler.getRecipeMap().getMaxFluidInputs() + 1];
+        fluidImports[0] = this.steamFluidTank;
+        for (int i = 1; i < fluidImports.length; i++) fluidImports[i] = new NotifiableFluidTank(16000, this, false);
+        return new FluidTankList(false, fluidImports);
     }
 
     @Override

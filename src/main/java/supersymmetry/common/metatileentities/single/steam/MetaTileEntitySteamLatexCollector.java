@@ -84,7 +84,7 @@ public class MetaTileEntitySteamLatexCollector extends MetaTileEntity {
     @SideOnly(Side.CLIENT)
     public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
         ColourMultiplier multiplier = new ColourMultiplier(GTUtility.convertRGBtoOpaqueRGBA_CL(this.getPaintingColorForRendering()));
-        IVertexOperation[] coloredPipeline = (IVertexOperation[])ArrayUtils.add(pipeline, multiplier);
+        IVertexOperation[] coloredPipeline = ArrayUtils.add(pipeline, multiplier);
         Textures.STEAM_CASING_BRONZE.render(renderState, translation, coloredPipeline);
 
         SusyTextures.LATEX_COLLECTOR_OVERLAY.renderOrientedState(renderState, translation, coloredPipeline, this.getFrontFacing(), this.isActive(), true);
@@ -105,14 +105,14 @@ public class MetaTileEntitySteamLatexCollector extends MetaTileEntity {
         builder.label(11, 20, "gregtech.gui.fluid_amount", 16777215);
         builder.dynamicLabel(11, 30, tankWidget::getFormattedFluidAmount, 16777215);
         builder.dynamicLabel(11, 40, tankWidget::getFluidLocalizedName, 16777215);
-        builder.widget((new AdvancedTextWidget(10, 19, this::addDisplayText, 16777215)).setMaxWidthLimit(84));
+        builder.widget((new AdvancedTextWidget(11, 50, this::addDisplayText, 16777215)).setMaxWidthLimit(84));
         return builder.label(6, 6, this.getMetaFullName()).widget((new FluidContainerSlotWidget(this.importItems, 0, 90, 17, false)).setBackgroundTexture(new IGuiTexture[]{GuiTextures.SLOT_STEAM.get(false), GuiTextures.IN_SLOT_OVERLAY})).widget(new ImageWidget(91, 36, 14, 15, GuiTextures.TANK_ICON)).widget((new SlotWidget(this.exportItems, 0, 90, 54, true, false)).setBackgroundTexture(new IGuiTexture[]{GuiTextures.SLOT_STEAM.get(false), GuiTextures.OUT_SLOT_OVERLAY})).bindPlayerInventory(entityPlayer.inventory, GuiTextures.SLOT_STEAM.get(false), 10).build(this.getHolder(), entityPlayer);
 
     }
 
     void addDisplayText(List<ITextComponent> textList) {
         if (!this.drainEnergy(true)) {
-            textList.add((new TextComponentTranslation("gregtech.multiblock.large_miner.steam", new Object[0])).setStyle((new Style()).setColor(TextFormatting.RED)));
+            textList.add((new TextComponentTranslation("gregtech.machine.latex_collector.steam", new Object[0])).setStyle((new Style()).setColor(TextFormatting.RED)));
         }
     }
 
@@ -126,7 +126,6 @@ public class MetaTileEntitySteamLatexCollector extends MetaTileEntity {
             if (!simulate) {
                 this.importFluids.getTankAt(0).drain(this.energyPerTick, true);
             }
-
             return true;
         } else {
             return false;
@@ -156,6 +155,17 @@ public class MetaTileEntitySteamLatexCollector extends MetaTileEntity {
         }
 
     }
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        this.checkAdjacentBlocks();
+    }
+
+    @Override
+    public void onPlacement() {
+        super.onPlacement();
+        this.checkAdjacentBlocks();
+    }
 
     public void onNeighborChanged() {
         super.onNeighborChanged();
@@ -166,9 +176,6 @@ public class MetaTileEntitySteamLatexCollector extends MetaTileEntity {
         if(this.getWorld() != null){
             this.hasRubberLog = false;
             if(!this.getWorld().isRemote) {
-                EnumFacing[] facings = EnumFacing.VALUES;
-                int numFacings = facings.length;
-
                 EnumFacing back = this.getFrontFacing().getOpposite();
 
                 Block block = this.getWorld().getBlockState(this.getPos().offset(back)).getBlock();
@@ -193,7 +200,7 @@ public class MetaTileEntitySteamLatexCollector extends MetaTileEntity {
 
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        if (data.hasKey("numberRubberLogs")) {
+        if (data.hasKey("hasRubberLogs")) {
             this.hasRubberLog = data.getBoolean("hasRubberLogs");
         }
         if (data.hasKey("OutputFacingF")) {
@@ -229,11 +236,13 @@ public class MetaTileEntitySteamLatexCollector extends MetaTileEntity {
                 if (!this.getWorld().isRemote) {
                     this.setOutputFacingFluids(facing);
                 }
-
                 return true;
             }
         } else {
-            return super.onWrenchClick(playerIn, hand, facing, hitResult);
+            boolean wrenchClickResult = false;
+            if (this.getOutputFacingFluids() != facing.getOpposite() && this.getOutputFacingFluids() != facing) wrenchClickResult = super.onWrenchClick(playerIn, hand, facing, hitResult);
+            this.checkAdjacentBlocks();
+            return wrenchClickResult;
         }
     }
 
