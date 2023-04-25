@@ -251,3 +251,7 @@ recipemap.crystallizer.name=Crystallizer
 recipemap.bubble_column_reactor.name=Bubble Column Reactor
 recipemap.fluidized_bed_reactor.name=Fluidized Bed Reactor
 recipemap.polymerization_tank.name=Polymerization Tank
+
+# MetaItems
+metaitem.conveyor.steam.name=Steam Conveyor
+metaitem.pump.steam.name=Steam Pump
