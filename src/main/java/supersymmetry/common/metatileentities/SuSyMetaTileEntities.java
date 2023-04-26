@@ -60,6 +60,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityPolmyerizationTank POLYMERIZATION_TANK;
 
     public static MetaTileEntityElectrolyticCell ELECTROLYTIC_CELL;
+    public static MetaTileEntityCokingTower COKING_TOWER;
 
 
     public static void init() {
@@ -100,6 +101,7 @@ public class SuSyMetaTileEntities {
         registerSimpleMTE(DRYER, 12, 14621, "dryer", SuSyRecipeMaps.DRYER, SusyTextures.DRYER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
 
         ELECTROLYTIC_CELL = registerMetaTileEntity(14634, new MetaTileEntityElectrolyticCell(susyId("electrolytic_cell")));
+        COKING_TOWER = registerMetaTileEntity(14635, new MetaTileEntityCokingTower(susyId("coking_tower")));
 
     }
 

@@ -59,6 +59,9 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> ELECTROLYTIC_CELL_RECIPES = new RecipeMap<>("electrolytic_cell", 3, 3, 2, 3, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.ELECTROLYZER);
 
+    public static final RecipeMap<SimpleRecipeBuilder> COKING_RECIPES = new RecipeMap<>("coking_tower", 1, 1, 3, 2, new SimpleRecipeBuilder(), false)
+            .setSound(GTSoundEvents.COMBUSTION);
+
 
     public static void init(){
         RecipeMaps.SIFTER_RECIPES.setMaxFluidInputs(1);

@@ -95,6 +95,8 @@ gregtech.machine.fluidized_bed_reactor.name=Fluidized Bed Reactor
 
 gregtech.machine.electrolytic_cell.name=Electrolytic Cell
 
+gregtech.machine.coking_tower.name=Coking Tower
+
 # Properties
 gregtech.recipe.plasma_requirement=Requires plasma: %s
 
