@@ -9,6 +9,7 @@ import gregtech.api.gui.widgets.*;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.SteamMetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.api.recipes.ModHandler;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.ingredients.IntCircuitIngredient;
 import gregtech.api.util.GTTransferUtils;
@@ -198,7 +199,7 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity {
 
     protected void addInventorySlotGroup(ModularUI.Builder builder, IItemHandlerModifiable itemHandler, FluidTankList fluidHandler, boolean isOutputs, int yOffset) {
         int itemsSlotsCount = itemHandler.getSlots();
-        int fluidSlotsCount = isOutputs ?  fluidHandler.getTanks() : fluidHandler.getTanks() - 1;
+        int fluidSlotsCount = fluidHandler.getTanks() - ((isOutputs) ? 0 : 1) ; // Remove input steam tank
 
         boolean invertFluids = false;
         if (itemsSlotsCount == 0) {
@@ -221,9 +222,9 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity {
         int startInputsX = isOutputs ? 89 + progressIndicator.width / 2 + 9 : 89 - (progressIndicator.width / 2 + 9 + itemsSlotsLeft * 18);
         int startInputsY = yOffset + (isVerticalFluid ? 42 - ((itemsSlotsDown * 18) / 2) : 42 - (((fluidSlotsCount - 1) / 3 + 1) * 18));
 
-        boolean wasGroup = itemHandler.getSlots() + (isOutputs ?  fluidHandler.getTanks() : fluidHandler.getTanks() - 1) == 12;
+        boolean wasGroup = itemHandler.getSlots() + fluidHandler.getTanks() == 12;
         if (wasGroup) startInputsY -= 9;
-        else if (itemHandler.getSlots() >= 6 && (isOutputs ?  fluidHandler.getTanks() : fluidHandler.getTanks() - 1) >= 2 && !isOutputs) startInputsY -= 9;
+        else if (itemHandler.getSlots() >= 6 && fluidHandler.getTanks() >= 2 && !isOutputs) startInputsY -= 9;
 
         for (int i = 0; i < itemsSlotsDown; i++) {
             for (int j = 0; j < itemsSlotsLeft; j++) {
@@ -252,11 +253,10 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity {
     }
 
     protected void addSlot(ModularUI.Builder builder, int x, int y, int slotIndex, IItemHandlerModifiable itemHandler, FluidTankList fluidHandler, boolean isFluid, boolean isOutputs) {
-//        System.out.printf("AddSlot: \n\tisFluid: %b\n\tisOutputs: %b\n\tx,y: %d,%d\n\tindex: %d\n\n", isFluid, isOutputs, x, y, slotIndex);
-//        System.out.printf("Add Slot: x: %d, y: %d%n", x, y);
+        if (!isOutputs && isFluid) slotIndex++; //Skip steam slot
         if (!isFluid) builder.widget(new SlotWidget(itemHandler, slotIndex, x, y, true, !isOutputs)
                 .setBackgroundTexture(getOverlaysForSlot(isOutputs, false)));
-        else builder.widget(new TankWidget(fluidHandler.getTankAt( isOutputs ? slotIndex : slotIndex + 1), x, y, 18, 18).setAlwaysShowFull(true)
+        else builder.widget(new TankWidget(fluidHandler.getTankAt(slotIndex), x, y, 18, 18).setAlwaysShowFull(true)
                     .setBackgroundTexture(getOverlaysForSlot(isOutputs, true))
                     .setContainerClicking(true, !isOutputs));
     }
