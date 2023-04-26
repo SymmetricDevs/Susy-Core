@@ -84,6 +84,9 @@ public class SuSyRecipeMaps {
         RecipeMaps.ELECTROLYZER_RECIPES.setMaxInputs(4);
         RecipeMaps.ELECTROLYZER_RECIPES.setMaxFluidOutputs(3);
         RecipeMaps.ELECTROLYZER_RECIPES.setMaxOutputs(3);
+        RecipeMaps.ELECTROMAGNETIC_SEPARATOR_RECIPES.setMaxFluidOutputs(2);
+        RecipeMaps.ELECTROMAGNETIC_SEPARATOR_RECIPES.setMaxFluidInputs(1);
+
 
     }
 }
