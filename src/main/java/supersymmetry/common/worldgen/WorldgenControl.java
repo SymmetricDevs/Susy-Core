@@ -6,7 +6,6 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.*;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import rtg.api.world.gen.RTGChunkGenSettings;
 import rtg.world.gen.ChunkGeneratorRTG;
@@ -51,26 +50,16 @@ public final class WorldgenControl {
         final IChunkGenerator generator = ((ChunkProviderServer) provider).chunkGenerator;
 
         if (generator instanceof ChunkGeneratorOverworld) {
-            ChunkGeneratorSettings settings;
-            try {
-                Field field = ObfuscationReflectionHelper.findField(ChunkGeneratorOverworld.class, "settings");
-                field.setAccessible(true);
-                settings = (ChunkGeneratorSettings) field.get(generator);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException("Failed to reflect ChunkGeneratorSettings in dim " + world.provider.getDimensionType(), e);
-            }
-
-            assert settings != null;
-            disableOverworldStructures(settings);
+            disableOverworldStructures(((ChunkGeneratorOverworld) generator).settings);
         } else if (generator instanceof ChunkGeneratorHell) {
             disableNetherStructures((ChunkGeneratorHell) generator);
         } else if (generator instanceof ChunkGeneratorRTG) {
             RTGChunkGenSettings settings;
             try {
-                Field field = ObfuscationReflectionHelper.findField(ChunkGeneratorRTG.class, "settings");
+                Field field = ChunkGeneratorRTG.class.getDeclaredField("settings");
                 field.setAccessible(true);
                 settings = (RTGChunkGenSettings) field.get(generator);
-            } catch (IllegalAccessException e) {
+            } catch (NoSuchFieldException | IllegalAccessException e) {
                 throw new RuntimeException("Failed to reflect RTGChunkGenSettings in dim " + world.provider.getDimensionType(), e);
             }
 
