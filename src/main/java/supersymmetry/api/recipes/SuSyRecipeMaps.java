@@ -2,6 +2,7 @@ package supersymmetry.api.recipes;
 
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.widgets.ProgressWidget;
+import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.RecipeMaps;
 import gregtech.core.sound.GTSoundEvents;
@@ -54,6 +55,9 @@ public class SuSyRecipeMaps {
 
     public static final RecipeMap<SimpleRecipeBuilder> POLYMERIZATION_RECIPES = new RecipeMap<>("polymerization_tank", 2, 1, 2, 1, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.CHEMICAL_REACTOR);
+
+    public static final RecipeMap<SimpleRecipeBuilder> ELECTROLYTIC_CELL_RECIPES = new RecipeMap<>("electrolytic_cell", 3, 3, 2, 3, new SimpleRecipeBuilder(), false)
+            .setSound(GTSoundEvents.ELECTROLYZER);
 
 
     public static void init(){

@@ -59,6 +59,8 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityFluidizedBedReactor FLUIDIZED_BED_REACTOR;
     public static MetaTileEntityPolmyerizationTank POLYMERIZATION_TANK;
 
+    public static MetaTileEntityElectrolyticCell ELECTROLYTIC_CELL;
+
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -96,6 +98,8 @@ public class SuSyMetaTileEntities {
         POLYMERIZATION_TANK = registerMetaTileEntity(14620, new MetaTileEntityPolmyerizationTank(susyId("polymerization_tank")));
 
         registerSimpleMTE(DRYER, 12, 14621, "dryer", SuSyRecipeMaps.DRYER, SusyTextures.DRYER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+
+        ELECTROLYTIC_CELL = registerMetaTileEntity(14634, new MetaTileEntityElectrolyticCell(susyId("electrolytic_cell")));
 
     }
 
