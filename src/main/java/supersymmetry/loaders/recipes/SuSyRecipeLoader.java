@@ -1,11 +1,11 @@
 package supersymmetry.loaders.recipes;
 
+import gregtech.api.recipes.GTRecipeHandler;
 import gregtech.api.recipes.ModHandler;
 import gregtech.api.unification.material.Materials;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
 import net.minecraft.item.ItemStack;
-import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
 import supersymmetry.common.materials.SusyMaterials;
@@ -29,6 +29,7 @@ public class SuSyRecipeLoader {
         VulcanizationRecipes.init();
         SusyOreRecipeHandler.init();
         registerStoneRecipes();
+        GTRecipeHandler.removeAllRecipes(ELECTROLYZER_RECIPES);
         // make more loaders to categorize recipes and what is added
     }
 
