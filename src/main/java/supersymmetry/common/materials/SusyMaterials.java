@@ -1,12 +1,16 @@
 package supersymmetry.common.materials;
 
+import gregtech.api.GregTechAPI;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
+import gregtech.api.unification.material.info.MaterialFlag;
+import gregtech.api.unification.material.info.MaterialFlags;
 import gregtech.api.unification.material.properties.*;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
 
 import java.lang.reflect.Field;
+import java.util.HashSet;
 import java.util.Map;
 
 public class SusyMaterials {
@@ -40,19 +44,25 @@ public class SusyMaterials {
 
 
     public static void init() {
-        changeProperties();
         SuSyElementMaterials.init();
         SuSyFirstDegreeMaterials.init();
         SuSySecondDegreeMaterials.init();
         SuSyOrganicChemistryMaterials.init();
         SuSyHighDegreeMaterials.init();
         SuSyUnknownCompositionMaterials.init();
+        changeProperties();
+    }
 
-        Latex.getProperty(PropertyKey.FLUID).setFluidTemperature(293);
+    public static void removeFlags() {
+        for (Material material : GregTechAPI.MATERIAL_REGISTRY) {
+            if (material.hasFlag(MaterialFlags.DECOMPOSITION_BY_ELECTROLYZING)) removeFlag(MaterialFlags.DECOMPOSITION_BY_ELECTROLYZING, material);
+        }
     }
 
     private static void changeProperties() {
         //removeProperty(PropertyKey.ORE, Materials.Graphite);
+
+        Latex.getProperty(PropertyKey.FLUID).setFluidTemperature(293);
         removeProperty(PropertyKey.ORE, Materials.Soapstone);
         removeProperty(PropertyKey.ORE, Materials.Quartzite);
         removeProperty(PropertyKey.ORE, Materials.Mica);
@@ -149,6 +159,24 @@ public class SusyMaterials {
         }
         if (map != null) {
             map.remove(key);
+        }
+    }
+
+    private static void removeFlag(MaterialFlag flag, Material material) {
+        HashSet<MaterialFlag> set = null;
+        try {
+            Field field = MaterialFlags.class.getDeclaredField("flags");
+            field.setAccessible(true);
+
+            Field field2 = Material.class.getDeclaredField("flags");
+            field2.setAccessible(true);
+            //noinspection unchecked
+            set = (HashSet<MaterialFlag>) field.get(field2.get(material));
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            SusyLog.logger.error("Failed to reflect material flag hashset", e);
+        }
+        if (set != null) {
+            set.remove(flag);
         }
     }
 }

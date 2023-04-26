@@ -93,6 +93,8 @@ gregtech.machine.drum.lead.name=Lead Drum
 gregtech.machine.polymerization_tank.name=Polymerization Tank
 gregtech.machine.fluidized_bed_reactor.name=Fluidized Bed Reactor
 
+gregtech.machine.electrolytic_cell.name=Electrolytic Cell
+
 # Properties
 gregtech.recipe.plasma_requirement=Requires plasma: %s
 

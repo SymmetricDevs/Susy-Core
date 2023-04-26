@@ -2,6 +2,7 @@ package supersymmetry.api.recipes;
 
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.widgets.ProgressWidget;
+import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.RecipeMaps;
 import gregtech.core.sound.GTSoundEvents;
@@ -55,6 +56,9 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> POLYMERIZATION_RECIPES = new RecipeMap<>("polymerization_tank", 2, 1, 2, 1, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
+    public static final RecipeMap<SimpleRecipeBuilder> ELECTROLYTIC_CELL_RECIPES = new RecipeMap<>("electrolytic_cell", 3, 3, 2, 3, new SimpleRecipeBuilder(), false)
+            .setSound(GTSoundEvents.ELECTROLYZER);
+
 
     public static void init(){
         RecipeMaps.SIFTER_RECIPES.setMaxFluidInputs(1);
@@ -62,9 +66,12 @@ public class SuSyRecipeMaps {
         RecipeMaps.SIFTER_RECIPES.setMaxInputs(2);
         RecipeMaps.CENTRIFUGE_RECIPES.setMaxFluidInputs(2);
         RecipeMaps.CENTRIFUGE_RECIPES.setSlotOverlay(false, true, false, GuiTextures.CENTRIFUGE_OVERLAY);
-
         RecipeMaps.MIXER_RECIPES.setMaxFluidInputs(3);
         RecipeMaps.MIXER_RECIPES.setMaxFluidOutputs(2);
         RecipeMaps.ARC_FURNACE_RECIPES.setMaxInputs(2);
+        RecipeMaps.ELECTROLYZER_RECIPES.setMaxInputs(4);
+        RecipeMaps.ELECTROLYZER_RECIPES.setMaxFluidOutputs(3);
+        RecipeMaps.ELECTROLYZER_RECIPES.setMaxOutputs(3);
+
     }
 }
