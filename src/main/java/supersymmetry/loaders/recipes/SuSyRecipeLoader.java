@@ -28,6 +28,7 @@ public class SuSyRecipeLoader {
         CoagulationRecipes.init();
         VulcanizationRecipes.init();
         SusyOreRecipeHandler.init();
+        SuSyMaterialRecipeHandler.init();
         registerStoneRecipes();
         // make more loaders to categorize recipes and what is added
     }

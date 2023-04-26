@@ -127,13 +127,9 @@ public class SusyMaterials {
 
         Materials.Platinum.addFlags(SuSyMaterialFlags.GENERATE_CATALYST_BED);
 
-        Materials.BandedIron.addFlags(SuSyMaterialFlags.GENERATE_CATALYST_BED);
-
         Materials.Cobalt.addFlags(SuSyMaterialFlags.GENERATE_CATALYST_BED);
 
         Materials.Palladium.addFlags(SuSyMaterialFlags.GENERATE_CATALYST_BED);
-
-        Materials.CupricOxide.addFlags(SuSyMaterialFlags.GENERATE_CATALYST_BED);
 
         Materials.Rhodium.addFlags(SuSyMaterialFlags.GENERATE_CATALYST_BED);
 

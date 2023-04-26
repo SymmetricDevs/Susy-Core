@@ -75,6 +75,7 @@ public class CommonProxy {
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void postRegisterMaterials(@NotNull GregTechAPI.PostMaterialEvent event) {
+        MetaItems.addOrePrefix(SusyOrePrefix.catalystPellet);
         MetaItems.addOrePrefix(SusyOrePrefix.catalystBed);
     }
 
