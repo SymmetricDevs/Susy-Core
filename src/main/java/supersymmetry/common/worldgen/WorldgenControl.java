@@ -50,7 +50,9 @@ public final class WorldgenControl {
         final IChunkGenerator generator = ((ChunkProviderServer) provider).chunkGenerator;
 
         if (generator instanceof ChunkGeneratorOverworld) {
-            disableOverworldStructures(((ChunkGeneratorOverworld) generator).settings);
+            ChunkGeneratorSettings settings = ((ChunkGeneratorOverworld) generator).settings;
+            // the settings are nullable, as they are not always initialized
+            if (settings != null) disableOverworldStructures(settings);
         } else if (generator instanceof ChunkGeneratorHell) {
             disableNetherStructures((ChunkGeneratorHell) generator);
         } else if (generator instanceof ChunkGeneratorRTG) {
@@ -130,7 +132,6 @@ public final class WorldgenControl {
     private static void disableNetherStructures(@Nonnull ChunkGeneratorHell generator) {
         generator.generateStructures = false;
     }
-
 
     /**
      * Disables nether structures
