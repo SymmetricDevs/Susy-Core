@@ -110,12 +110,17 @@ dependencies {
 
     // Hard Dependencies
     implementation fg.deobf("curse.maven:codechicken-lib-1-8-${project.ccl_pid}:${project.ccl_fid}")
+    implementation fg.deobf("curse.maven:geckolib-388172:4020277")
+    
+    // GT Dependencies
     implementation "curse.maven:gregtech-ce-unofficial-${project.ceu_pid}:${project.ceu_fid}-sources-${project.ceu_sources}-api-${project.ceu_api}"
     implementation "curse.maven:gregicality-multiblocks-${project.gcm_pid}:${project.gcm_fid}-sources-${project.gcm_sources}"
-    implementation fg.deobf("curse.maven:geckolib-388172:4020277")
+    implementation fg.deobf("curse.maven:gregtech-food-option-477021:4496053")
 
     implementation fg.deobf('curse.maven:realistic-terrain-generation-unofficial-648514:4404814')
     implementation fg.deobf('curse.maven:biomes-o-plenty-220318:2842510')
+    implementation fg.deobf("curse.maven:no-tree-punching-289043:2983385") // No-tree-punching v2.0.21
+    implementation fg.deobf("curse.maven:alcatrazcore-304493:2666560") // AlcatrazCore v1.0.4
 
     // Soft Dependencies
     implementation "mezz.jei:jei_${project.minecraft_version}:${project.jei_version}"

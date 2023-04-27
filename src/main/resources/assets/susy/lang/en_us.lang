@@ -8,6 +8,9 @@ tile.sintering_brick.sintering_block_brick.name=Brick Sintering Block
 tile.sintering_brick.sintering_block_magnetoplated.name=Magnetoplated Sintering Block
 
 tile.coagulation_tank_wall.wooden_coagulation_tank_wall.name=Wooden Coagulation Tank Wall
+
+tile.alternator_coil.copper.name=Copper Alternator Coil
+tile.turbine_rotor.steel.name=Steel Turbine Block
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
 tile.susy_stone_smooth.gneiss.name=Gneiss
@@ -59,7 +62,7 @@ material.anorthite=Anorthite
 material.forsterite=Forsterite
 material.lizardite=Lizardite
 
-# Ore Stone Types
+# Ore Prefixes (%s is the localised material name)
 item.material.oreprefix.oreGabbro=Gabbro %s Ore
 item.material.oreprefix.oreGneiss=Gneiss %s Ore
 item.material.oreprefix.oreGraphite=Graphite %s Ore
@@ -71,6 +74,9 @@ item.material.oreprefix.oreShale=Shale %s Ore
 item.material.oreprefix.oreSlate=Slate %s Ore
 item.material.oreprefix.oreSoapstone=Soapstone %s Ore
 item.material.oreprefix.oreKimberlite=Kimberlite %s Ore
+item.material.oreprefix.catalystBed=%s Catalyst Bed
+item.material.oreprefix.catalystPellet=%s Catalyst Pellet
+
 
 # Machines/Multiblocks
 gregtech.machine.magnetic_refrigerator.name=Magnetic Refrigerator
@@ -82,11 +88,18 @@ gregtech.multiblocks.sintering_oven.use_plasma.affirmative=Yes
 gregtech.multiblocks.sintering_oven.use_plasma.negative=No
 
 gregtech.machine.coagulation_tank.name=Coagulation Tank
+gregtech.machine.drum.lead.name=Lead Drum
+
+gregtech.machine.polymerization_tank.name=Polymerization Tank
+gregtech.machine.fluidized_bed_reactor.name=Fluidized Bed Reactor
+
+gregtech.machine.electrolytic_cell.name=Electrolytic Cell
 
 # Properties
 gregtech.recipe.plasma_requirement=Requires plasma: %s
 
 # Latex Collector
+gregtech.machine.latex_collector.steam=Needs Steam!
 gregtech.machine.latex_collector.tooltip=Collects latex from adjacent rubber tree log. Yields %d mL of latex per tick.
 gregtech.machine.latex_collector.bronze.name=Steam Latex Collector
 gregtech.machine.latex_collector.lv.name=Basic Latex Collector
@@ -95,17 +108,20 @@ gregtech.machine.latex_collector.hv.name=Advanced Latex Collector II
 gregtech.machine.latex_collector.ev.name=Advanced Latex Collector III
 
 # Vulcanizing Press
-gregtech.machine.vulcanizing_press.steam.name=Steam Vulcanizing Press
+gregtech.machine.vulcanizing_press_bronze.name=Steam Vulcanizing Press
+gregtech.machine.vulcanizing_press_steel.name=High Pressure Steam Vulcanizing Press
 gregtech.machine.vulcanizing_press.lv.name=Basic Vulcanizing Press
 gregtech.machine.vulcanizing_press.mv.name=Advanced Vulcanizing Press
 gregtech.machine.vulcanizing_press.hv.name=Advanced Vulcanizing Press II
 gregtech.machine.vulcanizing_press.ev.name=Advanced Vulcanizing Press III
 
 # Steam Mixer
-gregtech.machine.mixer.steam.name=Steam Mixer
+gregtech.machine.mixer_bronze.name=Steam Mixer
+gregtech.machine.mixer_steel.name=High Pressure Steam Mixer
 
 # Roaster
-gregtech.machine.roaster.steam.name=Steam Roaster
+gregtech.machine.roaster_bronze.name=Steam Roaster
+gregtech.machine.roaster_steel.name=High Pressure Steam Roaster
 gregtech.machine.roaster.lv.name=Basic Roaster
 gregtech.machine.roaster.mv.name=Advanced Roaster
 gregtech.machine.roaster.hv.name=Advanced Roaster II
@@ -120,9 +136,127 @@ gregtech.machine.roaster.uiv.name=Epic Roaster III
 gregtech.machine.roaster.uxv.name=Epic Roaster IV
 gregtech.machine.roaster.opv.name=Legendary Roaster
 
+# Vacuum Chamber
+gregtech.machine.vacuum_chamber_bronze.name=Steam Vacuum Chamber
+gregtech.machine.vacuum_chamber_steel.name=High Pressure Steam Vacuum Chamber
+gregtech.machine.vacuum_chamber.lv.name=Basic Vacuum Chamber
+gregtech.machine.vacuum_chamber.mv.name=Advanced Vacuum Chamber
+gregtech.machine.vacuum_chamber.hv.name=Advanced Vacuum Chamber II
+gregtech.machine.vacuum_chamber.ev.name=Advanced Vacuum Chamber III
+gregtech.machine.vacuum_chamber.iv.name=Elite Vacuum Chamber
+gregtech.machine.vacuum_chamber.luv.name=Elite Vacuum Chamber II
+gregtech.machine.vacuum_chamber.zpm.name=Elite Vacuum Chamber III
+gregtech.machine.vacuum_chamber.uv.name=Ultimate Vacuum Chamber
+gregtech.machine.vacuum_chamber.uhv.name=Epic Vacuum Chamber
+gregtech.machine.vacuum_chamber.uev.name=Epic Vacuum Chamber II
+gregtech.machine.vacuum_chamber.uiv.name=Epic Vacuum Chamber III
+gregtech.machine.vacuum_chamber.uxv.name=Epic Vacuum Chamber IV
+gregtech.machine.vacuum_chamber.opv.name=Legendary Vacuum Chamber
 
+# CSTR
+gregtech.machine.continuous_stirred_tank_reactor.lv.name=Basic Continuous Stirred Tank Reactor (CSTR)
+gregtech.machine.continuous_stirred_tank_reactor.mv.name=Advanced Continuous Stirred Tank Reactor (CSTR)
+gregtech.machine.continuous_stirred_tank_reactor.hv.name=Advanced Continuous Stirred Tank Reactor (CSTR) II
+gregtech.machine.continuous_stirred_tank_reactor.ev.name=Advanced Continuous Stirred Tank Reactor (CSTR) III
+gregtech.machine.continuous_stirred_tank_reactor.iv.name=Elite Continuous Stirred Tank Reactor (CSTR)
+gregtech.machine.continuous_stirred_tank_reactor.luv.name=Elite Continuous Stirred Tank Reactor (CSTR) II
+gregtech.machine.continuous_stirred_tank_reactor.zpm.name=Elite Continuous Stirred Tank Reactor (CSTR) III
+gregtech.machine.continuous_stirred_tank_reactor.uv.name=Ultimate Continuous Stirred Tank Reactor (CSTR)
+gregtech.machine.continuous_stirred_tank_reactor.uhv.name=Epic Continuous Stirred Tank Reactor (CSTR)
+gregtech.machine.continuous_stirred_tank_reactor.uev.name=Epic Continuous Stirred Tank Reactor (CSTR) II
+gregtech.machine.continuous_stirred_tank_reactor.uiv.name=Epic Continuous Stirred Tank Reactor (CSTR) III
+gregtech.machine.continuous_stirred_tank_reactor.uxv.name=Epic Continuous Stirred Tank Reactor (CSTR) IV
+gregtech.machine.continuous_stirred_tank_reactor.opv.name=Legendary Continuous Stirred Tank Reactor (CSTR)
+
+# Fixed Bed Reactor
+gregtech.machine.fixed_bed_reactor.lv.name=Basic Fixed Bed Reactor
+gregtech.machine.fixed_bed_reactor.mv.name=Advanced Fixed Bed Reactor
+gregtech.machine.fixed_bed_reactor.hv.name=Advanced Fixed Bed Reactor II
+gregtech.machine.fixed_bed_reactor.ev.name=Advanced Fixed Bed Reactor III
+gregtech.machine.fixed_bed_reactor.iv.name=Elite Fixed Bed Reactor
+gregtech.machine.fixed_bed_reactor.luv.name=Elite Fixed Bed Reactor II
+gregtech.machine.fixed_bed_reactor.zpm.name=Elite Fixed Bed Reactor III
+gregtech.machine.fixed_bed_reactor.uv.name=Ultimate Fixed Bed Reactor
+gregtech.machine.fixed_bed_reactor.uhv.name=Epic Fixed Bed Reactor
+gregtech.machine.fixed_bed_reactor.uev.name=Epic Fixed Bed Reactor II
+gregtech.machine.fixed_bed_reactor.uiv.name=Epic Fixed Bed Reactor III
+gregtech.machine.fixed_bed_reactor.uxv.name=Epic Fixed Bed Reactor IV
+gregtech.machine.fixed_bed_reactor.opv.name=Legendary Fixed Bed Reactor
+
+# Trickle Bed Reactor
+gregtech.machine.trickle_bed_reactor.lv.name=Basic Trickle Bed Reactor
+gregtech.machine.trickle_bed_reactor.mv.name=Advanced Trickle Bed Reactor
+gregtech.machine.trickle_bed_reactor.hv.name=Advanced Trickle Bed Reactor II
+gregtech.machine.trickle_bed_reactor.ev.name=Advanced Trickle Bed Reactor III
+gregtech.machine.trickle_bed_reactor.iv.name=Elite Trickle Bed Reactor
+gregtech.machine.trickle_bed_reactor.luv.name=Elite Trickle Bed Reactor II
+gregtech.machine.trickle_bed_reactor.zpm.name=Elite Trickle Bed Reactor III
+gregtech.machine.trickle_bed_reactor.uv.name=Ultimate Trickle Bed Reactor
+gregtech.machine.trickle_bed_reactor.uhv.name=Epic Trickle Bed Reactor
+gregtech.machine.trickle_bed_reactor.uev.name=Epic Trickle Bed Reactor II
+gregtech.machine.trickle_bed_reactor.uiv.name=Epic Trickle Bed Reactor III
+gregtech.machine.trickle_bed_reactor.uxv.name=Epic Trickle Bed Reactor IV
+gregtech.machine.trickle_bed_reactor.opv.name=Legendary Trickle Bed Reactor
+
+# Crystallizer
+gregtech.machine.crystallizer.lv.name=Basic Crystallizer
+gregtech.machine.crystallizer.mv.name=Advanced Crystallizer
+gregtech.machine.crystallizer.hv.name=Advanced Crystallizer II
+gregtech.machine.crystallizer.ev.name=Advanced Crystallizer III
+gregtech.machine.crystallizer.iv.name=Elite Crystallizer
+gregtech.machine.crystallizer.luv.name=Elite Crystallizer II
+gregtech.machine.crystallizer.zpm.name=Elite Crystallizer III
+gregtech.machine.crystallizer.uv.name=Ultimate Crystallizer
+gregtech.machine.crystallizer.uhv.name=Epic Crystallizer
+gregtech.machine.crystallizer.uev.name=Epic Crystallizer II
+gregtech.machine.crystallizer.uiv.name=Epic Crystallizer III
+gregtech.machine.crystallizer.uxv.name=Epic Crystallizer IV
+gregtech.machine.crystallizer.opv.name=Legendary Crystallizer
+
+# Bubble Column Reactor
+gregtech.machine.bubble_column_reactor.lv.name=Basic Bubble Column Reactor
+gregtech.machine.bubble_column_reactor.mv.name=Advanced Bubble Column Reactor
+gregtech.machine.bubble_column_reactor.hv.name=Advanced Bubble Column Reactor II
+gregtech.machine.bubble_column_reactor.ev.name=Advanced Bubble Column Reactor III
+gregtech.machine.bubble_column_reactor.iv.name=Elite Bubble Column Reactor
+gregtech.machine.bubble_column_reactor.luv.name=Elite Bubble Column Reactor II
+gregtech.machine.bubble_column_reactor.zpm.name=Elite Bubble Column Reactor III
+gregtech.machine.bubble_column_reactor.uv.name=Ultimate Bubble Column Reactor
+gregtech.machine.bubble_column_reactor.uhv.name=Epic Bubble Column Reactor
+gregtech.machine.bubble_column_reactor.uev.name=Epic Bubble Column Reactor II
+gregtech.machine.bubble_column_reactor.uiv.name=Epic Bubble Column Reactor III
+gregtech.machine.bubble_column_reactor.uxv.name=Epic Bubble Column Reactor IV
+gregtech.machine.bubble_column_reactor.opv.name=Legendary Bubble Column Reactor
+
+# Dryer
+gregtech.machine.dryer.lv.name=Basic Dryer
+gregtech.machine.dryer.mv.name=Advanced Dryer
+gregtech.machine.dryer.hv.name=Advanced Dryer II
+gregtech.machine.dryer.ev.name=Advanced Dryer III
+gregtech.machine.dryer.iv.name=Elite Dryer
+gregtech.machine.dryer.luv.name=Elite Dryer II
+gregtech.machine.dryer.zpm.name=Elite Dryer III
+gregtech.machine.dryer.uv.name=Ultimate Dryer
+gregtech.machine.dryer.uhv.name=Epic Dryer
+gregtech.machine.dryer.uev.name=Epic Dryer II
+gregtech.machine.dryer.uiv.name=Epic Dryer III
+gregtech.machine.dryer.uxv.name=Epic Dryer IV
+gregtech.machine.dryer.opv.name=Legendary Dryer
 
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
 recipemap.vulcanizing_press.name=Vulcanization
 recipemap.roaster.name=Roasting
+recipemap.vacuum_chamber.name=Vacuum Ejection
+recipemap.continuous_stirred_tank_reactor.name=Continuous Stirred Tank Reactor
+recipemap.fixed_bed_reactor.name=Fixed Bed Reactor
+recipemap.trickle_bed_reactor.name=Trickle Bed Reactor
+recipemap.crystallizer.name=Crystallizer
+recipemap.bubble_column_reactor.name=Bubble Column Reactor
+recipemap.fluidized_bed_reactor.name=Fluidized Bed Reactor
+recipemap.polymerization_tank.name=Polymerization Tank
+
+# Metaitems
+metaitem.catalyst_bed_support_grid.name=Catalyst Bed Support Grid
+metaitem.conveyor.steam.name=Steam Conveyor
+metaitem.pump.steam.name=Steam Pum

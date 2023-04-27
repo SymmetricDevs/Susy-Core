@@ -68,12 +68,12 @@ public class MetaTileEntityCoagulationTank extends RecipeMapPrimitiveMultiblockC
     protected ModularUI.Builder createUITemplate(EntityPlayer entityPlayer) {
         ModularUI.Builder builder = ModularUI.builder(GuiTextures.PRIMITIVE_BACKGROUND, 176,166);
         builder.label(6, 6, this.getMetaFullName());
-        builder.widget(new RecipeProgressWidget(this.recipeMapWorkable::getProgressPercent, 76, 39, 20, 15, GuiTextures.PRIMITIVE_BLAST_FURNACE_PROGRESS_BAR, ProgressWidget.MoveType.HORIZONTAL, SuSyRecipeMaps.COAGULATION_RECIPES));
+        builder.widget(new RecipeProgressWidget(this.recipeMapWorkable::getProgressPercent, 76, 41, 20, 15, GuiTextures.PRIMITIVE_BLAST_FURNACE_PROGRESS_BAR, ProgressWidget.MoveType.HORIZONTAL, SuSyRecipeMaps.COAGULATION_RECIPES));
 
-        builder.widget((new SlotWidget(this.importItems, 0, 30, 39, true, true).setBackgroundTexture(GuiTextures.PRIMITIVE_SLOT)));
-        builder.widget((new SlotWidget(this.importItems, 1, 48, 39, true, true).setBackgroundTexture(GuiTextures.PRIMITIVE_SLOT)));
-        builder.widget((new TankWidget(this.importFluids.getTankAt(1), 30, 57, 18, 18)).setAlwaysShowFull(true).setBackgroundTexture(GuiTextures.FLUID_SLOT).setContainerClicking(true, true));
-        builder.widget((new TankWidget(this.importFluids.getTankAt(0), 48, 57, 18, 18)).setAlwaysShowFull(true).setBackgroundTexture(GuiTextures.FLUID_SLOT).setContainerClicking(true, true));
+        builder.widget((new SlotWidget(this.importItems, 0, 30, 30, true, true).setBackgroundTexture(GuiTextures.PRIMITIVE_SLOT)));
+        builder.widget((new SlotWidget(this.importItems, 1, 48, 30, true, true).setBackgroundTexture(GuiTextures.PRIMITIVE_SLOT)));
+        builder.widget((new TankWidget(this.importFluids.getTankAt(1), 30, 48, 18, 18)).setAlwaysShowFull(true).setBackgroundTexture(GuiTextures.FLUID_SLOT).setContainerClicking(true, true));
+        builder.widget((new TankWidget(this.importFluids.getTankAt(0), 48, 48, 18, 18)).setAlwaysShowFull(true).setBackgroundTexture(GuiTextures.FLUID_SLOT).setContainerClicking(true, true));
         builder.widget((new SlotWidget(this.exportItems, 0, 106, 39, true, false).setBackgroundTexture(GuiTextures.PRIMITIVE_SLOT)));
 
 
@@ -108,14 +108,19 @@ public class MetaTileEntityCoagulationTank extends RecipeMapPrimitiveMultiblockC
         }
     }
 
+    @Override
     protected void formStructure(PatternMatchContext context) {
         super.formStructure(context);
-        this.initializeAbilities();
+        this.reinitializeAbilities();
     }
 
     @Override
     protected void initializeAbilities() {
         super.initializeAbilities();
+        this.reinitializeAbilities();
+    }
+
+    private void reinitializeAbilities() {
         this.outputInventory = new ItemHandlerList(this.getAbilities(MultiblockAbility.EXPORT_ITEMS));
         this.inputFluidInventory = new FluidTankList(false, this.getAbilities(MultiblockAbility.IMPORT_FLUIDS));
     }
@@ -124,6 +129,8 @@ public class MetaTileEntityCoagulationTank extends RecipeMapPrimitiveMultiblockC
     protected ICubeRenderer getFrontOverlay() {
         return Textures.PRIMITIVE_PUMP_OVERLAY;
     }
+
+    @Override
 
     public boolean hasMaintenanceMechanics() {
         return false;

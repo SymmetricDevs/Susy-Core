@@ -1,0 +1,9 @@
+{
+  "forge_marker" : 1,
+  "variants" : {
+    "facing=north,variant=copper": { "model": "susy:alternator_coil/copper" },
+    "facing=south,variant=copper": { "model": "susy:alternator_coil/copper", "y": 180 },
+    "facing=west,variant=copper": { "model": "susy:alternator_coil/copper", "y": 270 },
+    "facing=east,variant=copper": { "model": "susy:alternator_coil/copper", "y": 90 }
+  }
+}

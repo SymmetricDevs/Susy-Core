@@ -5,11 +5,9 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.MovingSoundMinecart;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -20,6 +18,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -41,6 +41,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
 
     private AnimationFactory factory = new AnimationFactory(this);
 
+    @SideOnly(Side.CLIENT)
     private MovingSoundDropPod soundDropPod;
 
     public EntityDropPod(World worldIn) {
@@ -82,8 +83,10 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
         return this.getTimeSinceLanding() > 200;
     }
 
+    @SideOnly(Side.CLIENT)
     protected void spawnFlightParticles(boolean goingUp) {
-        double offset = goingUp ? 0.0D : 1.5D;
+        //double offset = goingUp ? 0.0D : 1.5D;
+        double offset = goingUp ? 0.2D : 0.5D;
         SusyParticleFlame flame1 = new SusyParticleFlame(
                 this.world,
                 this.posX + 0.8D,
@@ -229,7 +232,6 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
 
             if (!this.hasLanded()) {
                 this.handleCollidedBlocks();
-                this.spawnFlightParticles(false);
             }
 
             this.setLanded(this.hasLanded() || this.onGround);
@@ -251,7 +253,6 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
             }
 
             if (this.hasTakenOff()) {
-                this.spawnFlightParticles(true);
                 if (this.motionY < 10.D) {
                     if (this.motionY < 1.D) {
                         this.motionY += 0.1;
@@ -263,9 +264,17 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
                 }
                 this.isDead = this.posY > 300;
             }
+        } else {
+            if (!this.hasLanded()) {
+                this.spawnFlightParticles(false);
+            }
+            if (this.hasTakenOff()) {
+                this.spawnFlightParticles(true);
+            }
         }
 
         this.dataManager.set(TIME_SINCE_SPAWN, this.dataManager.get(TIME_SINCE_SPAWN) + 1);
+
 
         if (world.isRemote && this.soundDropPod != null) {
             if (!this.hasLanded() || this.hasTakenOff()) {
@@ -363,8 +372,13 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     public void onAddedToWorld() {
         super.onAddedToWorld();
         if (this.world.isRemote) {
-            this.soundDropPod = new MovingSoundDropPod(this);
-            Minecraft.getMinecraft().getSoundHandler().playSound(this.soundDropPod);
+            setupDropPodSound();
         }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void setupDropPodSound() {
+        this.soundDropPod = new MovingSoundDropPod(this);
+        Minecraft.getMinecraft().getSoundHandler().playSound(this.soundDropPod);
     }
 }

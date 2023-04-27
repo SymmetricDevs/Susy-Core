@@ -9,6 +9,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
+import scala.xml.dtd.impl.Base;
 
 import java.util.Comparator;
 import java.util.EnumMap;
@@ -22,7 +23,8 @@ public class SuSyBlocks {
     public static BlockSinteringBrick SINTERING_BRICK;
     public static BlockCoagulationTankWall COAGULATION_TANK_WALL;
     public static final EnumMap<SusyStoneVariantBlock.StoneVariant, SusyStoneVariantBlock> SUSY_STONE_BLOCKS = new EnumMap(SusyStoneVariantBlock.StoneVariant.class);
-
+    public static BlockAlternatorCoil ALTERNATOR_COIL;
+    public static BlockTurbineRotor TURBINE_ROTOR;
 
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
@@ -38,6 +40,12 @@ public class SuSyBlocks {
             SUSY_STONE_BLOCKS.put(shape, new SusyStoneVariantBlock(shape));
         }
 
+        ALTERNATOR_COIL = new BlockAlternatorCoil();
+        ALTERNATOR_COIL.setRegistryName("alternator_coil");
+
+        TURBINE_ROTOR = new BlockTurbineRotor();
+        TURBINE_ROTOR.setRegistryName("turbine_rotor");
+
     }
 
     @SideOnly(Side.CLIENT)
@@ -47,6 +55,8 @@ public class SuSyBlocks {
         registerItemModel(COAGULATION_TANK_WALL);
         for (SusyStoneVariantBlock block : SUSY_STONE_BLOCKS.values())
             registerItemModel(block);
+        registerItemModel(ALTERNATOR_COIL);
+        registerItemModel(TURBINE_ROTOR);
     }
 
     @SideOnly(Side.CLIENT)

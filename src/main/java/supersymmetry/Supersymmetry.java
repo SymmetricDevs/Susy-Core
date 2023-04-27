@@ -4,12 +4,14 @@ import gregtech.api.GTValues;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.sound.SusySounds;
 import supersymmetry.common.CommonProxy;
 import supersymmetry.common.SusyMetaEntities;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.covers.SuSyCoverBehaviors;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
@@ -35,6 +37,7 @@ public class Supersymmetry {
     @Mod.EventHandler
     public void onPreInit(@NotNull FMLPreInitializationEvent event) {
         proxy.preLoad();
+
         SuSyMetaItems.initMetaItems();
         SuSyBlocks.init();
 
@@ -42,5 +45,11 @@ public class Supersymmetry {
 
         SuSyMetaTileEntities.init();
         SusyMetaEntities.init();
+    }
+
+    @Mod.EventHandler
+    public void onInit(@NotNull FMLInitializationEvent event) {
+        proxy.load();
+        SuSyCoverBehaviors.init();
     }
 }
