@@ -175,9 +175,10 @@ if (isCI || project.build_sourceJar.toBoolean()) {
 
 sourceSets {
     main {
-        if (project.use_mixins.toBoolean()) {
-            ext.refMap = "mixins.${project.archives_base_name}.refmap.json"
-        }
+        // :troll: we are not using mixins, but a mod requires it
+        // if (project.use_mixins.toBoolean()) {
+        //     ext.refMap = "mixins.${project.name}.refmap.json"
+        // }
 
         java {
             srcDirs = ['src/main/java', 'src/api/java']
@@ -257,7 +258,7 @@ private void processJarTask(task) {
                 attribute_map['TweakClass'] = 'org.spongepowered.asm.launch.MixinTweaker'
             }
             if (project.use_access_transformer.toBoolean()) {
-                attribute_map['FMLAT'] = project.archives_base_name + '_at.cfg'
+                attribute_map['FMLAT'] = project.name + '_at.cfg'
             }
             attributes(attribute_map)
         }
@@ -266,12 +267,6 @@ private void processJarTask(task) {
         file('src/api/').eachDirRecurse { dir ->
             exclude dir.name
         }
-    }
-}
-
-if (project.use_mixins.toBoolean()) {
-    mixin {
-        add sourceSets.main, 'mixins.supersymmetry.refmap.json'
     }
 }
 
