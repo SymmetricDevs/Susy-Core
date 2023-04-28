@@ -113,20 +113,20 @@ gregtech.machine.latex_collector.hv.name=Advanced Latex Collector II
 gregtech.machine.latex_collector.ev.name=Advanced Latex Collector III
 
 # Vulcanizing Press
-gregtech.machine.vulcanizing_press_bronze.name=Steam Vulcanizing Press
-gregtech.machine.vulcanizing_press_steel.name=High Pressure Steam Vulcanizing Press
+gregtech.machine.vulcanizing_press.bronze.name=Steam Vulcanizing Press
+gregtech.machine.vulcanizing_press.steel.name=High Pressure Steam Vulcanizing Press
 gregtech.machine.vulcanizing_press.lv.name=Basic Vulcanizing Press
 gregtech.machine.vulcanizing_press.mv.name=Advanced Vulcanizing Press
 gregtech.machine.vulcanizing_press.hv.name=Advanced Vulcanizing Press II
 gregtech.machine.vulcanizing_press.ev.name=Advanced Vulcanizing Press III
 
 # Steam Mixer
-gregtech.machine.mixer_bronze.name=Steam Mixer
-gregtech.machine.mixer_steel.name=High Pressure Steam Mixer
+gregtech.machine.mixer.bronze.name=Steam Mixer
+gregtech.machine.mixer.steel.name=High Pressure Steam Mixer
 
 # Roaster
-gregtech.machine.roaster_bronze.name=Steam Roaster
-gregtech.machine.roaster_steel.name=High Pressure Steam Roaster
+gregtech.machine.roaster.bronze.name=Steam Roaster
+gregtech.machine.roaster.steel.name=High Pressure Steam Roaster
 gregtech.machine.roaster.lv.name=Basic Roaster
 gregtech.machine.roaster.mv.name=Advanced Roaster
 gregtech.machine.roaster.hv.name=Advanced Roaster II
@@ -142,8 +142,8 @@ gregtech.machine.roaster.uxv.name=Epic Roaster IV
 gregtech.machine.roaster.opv.name=Legendary Roaster
 
 # Vacuum Chamber
-gregtech.machine.vacuum_chamber_bronze.name=Steam Vacuum Chamber
-gregtech.machine.vacuum_chamber_steel.name=High Pressure Steam Vacuum Chamber
+gregtech.machine.vacuum_chamber.bronze.name=Steam Vacuum Chamber
+gregtech.machine.vacuum_chamber.steel.name=High Pressure Steam Vacuum Chamber
 gregtech.machine.vacuum_chamber.lv.name=Basic Vacuum Chamber
 gregtech.machine.vacuum_chamber.mv.name=Advanced Vacuum Chamber
 gregtech.machine.vacuum_chamber.hv.name=Advanced Vacuum Chamber II
