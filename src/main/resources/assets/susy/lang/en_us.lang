@@ -111,6 +111,8 @@ gregtech.machine.vacuum_distillation_tower.name=Vacuum Distillation Tower
 gregtech.machine.smoke_stack.name=Smoke Stack
 gregtech.machine.catalytic_reformer.name=Catalytic Reformer
 
+gregtech.machine.fermentation_vat.name=Fermentation Vat
+
 # Properties
 gregtech.recipe.plasma_requirement=Requires plasma: %s
 

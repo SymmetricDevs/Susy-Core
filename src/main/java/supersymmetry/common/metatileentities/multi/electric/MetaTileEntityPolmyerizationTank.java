@@ -59,7 +59,7 @@ public class MetaTileEntityPolmyerizationTank extends RecipeMapMultiblockControl
     }
 
     protected IBlockState getPipeCasingState() {
-        return MetaBlocks.BOILER_CASING.getState(BoilerCasingType.POLYTETRAFLUOROETHYLENE_PIPE);
+        return MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE);
     }
 
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
