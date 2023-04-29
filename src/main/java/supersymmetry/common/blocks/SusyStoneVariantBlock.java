@@ -67,11 +67,11 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
 
     public static enum StoneVariant {
         SMOOTH("susy_stone_smooth"),
-        COBBLE("susy_stone_cobble", 2.0F, 10.0F);
+        COBBLE("susy_stone_cobble", 2.0F, 10.0F),
+        BRICKS("susy_stone_bricks");
 //      TODO
 //        COBBLE_MOSSY("stone_cobble_mossy", 2.0F, 10.0F),
 //        POLISHED("stone_polished"),
-//        BRICKS("stone_bricks"),
 //        BRICKS_CRACKED("stone_bricks_cracked"),
 //        BRICKS_MOSSY("stone_bricks_mossy"),
 //        CHISELED("stone_chiseled"),

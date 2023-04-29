@@ -34,6 +34,17 @@ tile.susy_stone_cobble.shale.name=Shale Cobblestone
 tile.susy_stone_cobble.slate.name=Slate Cobblestone
 tile.susy_stone_cobble.soapstone.name=Soapstone Cobblestone
 tile.susy_stone_cobble.kimberlite.name=Kimberlite Cobblestone
+tile.susy_stone_bricks.gabbro.name=Gabbro Bricks
+tile.susy_stone_bricks.gneiss.name=Gneiss Bricks
+tile.susy_stone_bricks.graphite.name=Graphite Bricks
+tile.susy_stone_bricks.limestone.name=Limestone Bricks
+tile.susy_stone_bricks.mica.name=Mica Bricks
+tile.susy_stone_bricks.phyllite.name=Phyllite Bricks
+tile.susy_stone_bricks.quartzite.name=Quartzite Bricks
+tile.susy_stone_bricks.shale.name=Shale Bricks
+tile.susy_stone_bricks.slate.name=Slate Bricks
+tile.susy_stone_bricks.soapstone.name=Soapstone Bricks
+tile.susy_stone_bricks.kimberlite.name=Kimberlite Bricks
 
 # Materials
 material.manganese_iron_arsenic_phosphide=Manganese Iron Arsenic Phosphide
