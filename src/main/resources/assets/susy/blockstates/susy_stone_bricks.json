@@ -1,0 +1,65 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "minecraft:cube_all"
+  },
+  "variants": {
+    "variant": {
+      "gabbro" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/gabbro_bricks"
+        }
+      },
+      "gneiss" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/gneiss_bricks"
+        }
+      },
+      "graphite" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/graphite_bricks"
+        }
+      },
+      "limestone" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/limestone_bricks"
+        }
+      },
+      "mica" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/mica_bricks"
+        }
+      },
+      "phyllite" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/phyllite_bricks"
+        }
+      },
+      "quartzite" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/quartzite_bricks"
+        }
+      },
+      "shale" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/shale_bricks"
+        }
+      },
+      "slate" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/slate_bricks"
+        }
+      },
+      "soapstone" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/soapstone_bricks"
+        }
+      },
+      "kimberlite" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/kimberlite_bricks"
+        }
+      }
+    }
+  }
+}
