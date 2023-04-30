@@ -8,6 +8,7 @@ import gregtech.api.recipes.RecipeMaps;
 import gregtech.core.sound.GTSoundEvents;
 import gregtech.api.recipes.builders.PrimitiveRecipeBuilder;
 import gregtech.api.recipes.builders.SimpleRecipeBuilder;
+import gregtechfoodoption.recipe.GTFORecipeMaps;
 import supersymmetry.api.recipes.builders.CoilingCoilRecipeBuilder;
 import supersymmetry.api.recipes.builders.SinteringRecipeBuilder;
 
@@ -71,6 +72,8 @@ public class SuSyRecipeMaps {
 
     public static final RecipeMap<PrimitiveRecipeBuilder> SMOKE_STACK = new RecipeMap<>("smoke_stack", 0, 0, 1, 0, new PrimitiveRecipeBuilder(), false);
 
+    public static final RecipeMap<SimpleRecipeBuilder> FERMENTATION_VAT_RECIPES = new RecipeMap<>("vat_fermentation", 3, 3, 3, 3, new SimpleRecipeBuilder(), false)
+            .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
     public static void init(){
         RecipeMaps.SIFTER_RECIPES.setMaxFluidInputs(1);
@@ -86,7 +89,7 @@ public class SuSyRecipeMaps {
         RecipeMaps.ELECTROLYZER_RECIPES.setMaxOutputs(3);
         RecipeMaps.ELECTROMAGNETIC_SEPARATOR_RECIPES.setMaxFluidOutputs(2);
         RecipeMaps.ELECTROMAGNETIC_SEPARATOR_RECIPES.setMaxFluidInputs(1);
-
-
+        GTFORecipeMaps.GREENHOUSE_RECIPES.setMaxFluidInputs(4);
+        RecipeMaps.PYROLYSE_RECIPES.setMaxFluidOutputs(3);
     }
 }
