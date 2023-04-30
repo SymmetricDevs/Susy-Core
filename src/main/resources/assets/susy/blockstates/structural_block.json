@@ -1,5 +1,13 @@
 {
   "forge_marker" : 1,
+  "defaults": {
+    "model": "minecraft:cube_bottom_top",
+    "textures": {
+      "bottom": "gregtech:blocks/decorative/structural_blocks/base_structural_block",
+      "top": "gregtech:blocks/decorative/structural_blocks/base_structural_block",
+      "side": "gregtech:blocks/decorative/structural_blocks/base_structural_block"
+    }
+  },
   "variants" : {
     "variant=base_structural_block" : {
       "model" : "minecraft:cube_all",
@@ -8,16 +16,20 @@
       }
     },
     "variant=structural_block_low" : {
-      "model" : "minecraft:cube_all",
+      "model": "minecraft:cube_bottom_top",
       "textures" : {
-        "all" : "gregtech:blocks/decorative/structural_blocks/structural_block_low"
+        "side" : "gregtech:blocks/decorative/structural_blocks/structural_block_low"
       }
     },
     "variant=structural_block_lowlight" : {
-      "model" : "gregtech:cube_2_layer_all",
+      "model" : "gregtech:cube_2_layer_bottom_top",
       "textures" : {
-        "bot_all" : "gregtech:blocks/decorative/structural_blocks/structural_block_lowlight",
-        "top_all" : "gregtech:blocks/decorative/structural_blocks/structural_block_lowlight_bloom"
+        "bot_side" : "gregtech:blocks/decorative/structural_blocks/structural_block_lowlight",
+        "bot_top" : "gregtech:blocks/decorative/structural_blocks/base_structural_block",
+        "bot_bottom" : "gregtech:blocks/decorative/structural_blocks/base_structural_block",
+        "top_side" : "gregtech:blocks/decorative/structural_blocks/structural_block_lowlight_bloom",
+        "top_top" : "gregtech:blocks/decorative/structural_blocks/structural_block_lowlight_top_bloom",
+        "top_bottom" : "gregtech:blocks/decorative/structural_blocks/structural_block_lowlight_top_bloom"
       }
     }
   }
