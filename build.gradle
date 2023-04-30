@@ -18,7 +18,7 @@ group = 'supersymmetry'
 archivesBaseName = "supersymmetry-${project.minecraft_version}" // this will buid as supersymmetry-1.12.2-version
 
 def final isCI = System.getenv("GITHUB_ACTION")
-def final ref = System.getenv("GITHUB_PR_NUMBER")
+def final ref = System.getenv("GITHUB_PR_NUMBER") ? System.getenv("GITHUB_PR_NUMBER") : System.getenv("GITHUB_SHA")
 
 if(isCI) {
     version = version + "-CI" + (ref ? "-${ref}" : "")
