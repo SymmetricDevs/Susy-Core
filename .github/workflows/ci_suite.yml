@@ -30,7 +30,7 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Compile and run tests
         env:
-          GITHUB_PR_NUMBER: ${{github.event.pull_request.number}}
+          GITHUB_PR_NUMBER: ${{github.event.number}}
         run: |
           ./gradlew build
           ./gradlew test
