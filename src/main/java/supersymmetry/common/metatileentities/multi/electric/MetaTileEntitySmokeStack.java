@@ -1,6 +1,5 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -10,26 +9,21 @@ import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
-import gregtech.client.utils.TooltipHelper;
 import gregtech.common.blocks.BlockBoilerCasing.BoilerCasingType;
 import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
 
 import static gregtech.api.util.RelativeDirection.*;
 
 public class MetaTileEntitySmokeStack extends RecipeMapMultiblockController {
     public MetaTileEntitySmokeStack(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.SMOKE_STACK);
-        this.recipeMapWorkable = new MultiblockRecipeLogic(this, true);
+        this.recipeMapWorkable = new NoEnergyMultiblockRecipeLogic(this);
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
@@ -37,11 +31,14 @@ public class MetaTileEntitySmokeStack extends RecipeMapMultiblockController {
     }
 
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start(UP, RIGHT, FRONT)
-                .aisle(new String[]{"SPPPF"})
+        return FactoryBlockPattern.start(FRONT, RIGHT, UP)
+                .aisle(new String[]{"S"})
+                .aisle(new String[]{"P"}).setRepeatable(2,6)
+                .aisle(new String[]{"F"})
                 .where('S', this.selfPredicate())
                 .where('P', states(new IBlockState[]{this.getPipeCasingState()})
-                        .or(this.autoAbilities(false, false, false, false, true, false, false)))
+                        .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setExactLimit(1))
+                        .or(abilities(MultiblockAbility.MAINTENANCE_HATCH).setExactLimit(1)))
                 .where('F', abilities(MultiblockAbility.MUFFLER_HATCH).setExactLimit(1))
                 .build();
     }
@@ -50,11 +47,6 @@ public class MetaTileEntitySmokeStack extends RecipeMapMultiblockController {
     }
     protected IBlockState getPipeCasingState() {
         return MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE);
-    }
-
-    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
-        super.addInformation(stack, player, tooltip, advanced);
-        tooltip.add(TooltipHelper.RAINBOW_SLOW + I18n.format("gregtech.machine.perfect_oc", new Object[0]));
     }
 
     @Nonnull
