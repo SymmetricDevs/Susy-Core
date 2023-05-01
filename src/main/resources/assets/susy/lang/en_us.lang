@@ -261,6 +261,21 @@ gregtech.machine.dryer.uiv.name=Epic Dryer III
 gregtech.machine.dryer.uxv.name=Epic Dryer IV
 gregtech.machine.dryer.opv.name=Legendary Dryer
 
+# UV Light Box
+gregtech.machine.uv_light_box.lv.name=Basic UV Light Box
+gregtech.machine.uv_light_box.mv.name=Advanced UV Light Box
+gregtech.machine.uv_light_box.hv.name=Advanced UV Light Box II
+gregtech.machine.uv_light_box.ev.name=Advanced UV Light Box III
+gregtech.machine.uv_light_box.iv.name=Elite UV Light Box
+gregtech.machine.uv_light_box.luv.name=Elite UV Light Box II
+gregtech.machine.uv_light_box.zpm.name=Elite UV Light Box III
+gregtech.machine.uv_light_box.uv.name=UV Light Box Dryer
+gregtech.machine.uv_light_box.uhv.name=Epic UV Light Box
+gregtech.machine.uv_light_box.uev.name=Epic UV Light Box II
+gregtech.machine.uv_light_box.uiv.name=Epic UV Light Box III
+gregtech.machine.uv_light_box.uxv.name=Epic UV Light Box IV
+gregtech.machine.uv_light_box.opv.name=Legendary UV Light Box
+
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
 recipemap.vulcanizing_press.name=Vulcanization
@@ -273,6 +288,7 @@ recipemap.crystallizer.name=Crystallizer
 recipemap.bubble_column_reactor.name=Bubble Column Reactor
 recipemap.fluidized_bed_reactor.name=Fluidized Bed Reactor
 recipemap.polymerization_tank.name=Polymerization Tank
+recipemap.uv_light_box.name=UV Light Box
 
 # Metaitems
 metaitem.catalyst_bed_support_grid.name=Catalyst Bed Support Grid

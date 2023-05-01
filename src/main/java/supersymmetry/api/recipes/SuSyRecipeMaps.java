@@ -75,6 +75,9 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> FERMENTATION_VAT_RECIPES = new RecipeMap<>("vat_fermentation", 3, 3, 3, 3, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
+    public static final RecipeMap<SimpleRecipeBuilder> UV_RECIPES = new RecipeMap<>("uv_light_box", 2, 1, 0, 0, new SimpleRecipeBuilder(), false)
+            .setSound(GTSoundEvents.ELECTROLYZER);
+
     public static void init(){
         RecipeMaps.SIFTER_RECIPES.setMaxFluidInputs(1);
         RecipeMaps.SIFTER_RECIPES.setMaxFluidOutputs(1);
