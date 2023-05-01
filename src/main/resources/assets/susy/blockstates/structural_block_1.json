@@ -1,0 +1,55 @@
+{
+  "forge_marker" : 1,
+  "defaults": {
+    "model": "minecraft:cube_bottom_top",
+    "textures": {
+      "bottom": "gregtech:blocks/decorative/structural_blocks/base_structural_block",
+      "top": "gregtech:blocks/decorative/structural_blocks/base_structural_block",
+      "side": "gregtech:blocks/decorative/structural_blocks/base_structural_block"
+    }
+  },
+  "variants" : {
+    "variant=structural_block_exposed" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/decorative/structural_blocks/structural_block_exposed"
+      }
+    },
+    "variant=structural_block_exposed_1" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/decorative/structural_blocks/structural_block_exposed_1"
+      }
+    },
+    "variant=structural_block_exposed_2" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/decorative/structural_blocks/structural_block_exposed_2"
+      }
+    },
+    "variant=structural_block_danger_sign" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/decorative/structural_blocks/structural_block_danger_sign"
+      }
+    },
+    "variant=structural_block_cable" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/decorative/structural_blocks/structural_block_cable"
+      }
+    },
+    "variant=structural_block_cable_horizontal" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/decorative/structural_blocks/structural_block_cable_horizontal"
+      }
+    },
+    "variant=structural_block_cable_junction" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/decorative/structural_blocks/structural_block_cable_junction"
+      }
+    }
+  }
+}

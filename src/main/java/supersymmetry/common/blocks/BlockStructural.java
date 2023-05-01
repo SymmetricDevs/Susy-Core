@@ -32,7 +32,11 @@ public class BlockStructural extends VariantBlock<BlockStructural.StructuralBloc
         STRUCTURAL_BLOCK_COLUMN_OLD("structural_block_column_old", 1),
         STRUCTURAL_BLOCK_LIGHT("structural_block_light", 1),
         STRUCTURAL_BLOCK_LIGHT_BROKEN("structural_block_light_broken", 1),
-        STRUCTURAL_BLOCK_LIGHT_CABLE("structural_block_light_cable", 1);
+        STRUCTURAL_BLOCK_LIGHT_CABLE("structural_block_light_cable", 1),
+        STRUCTURAL_BLOCK_INSTRUMENTS("structural_block_instruments", 1),
+        STRUCTURAL_BLOCK_SIGN_0("structural_block_sign_0", 1),
+        STRUCTURAL_BLOCK_SIGN_1("structural_block_sign_1", 1),
+        STRUCTURAL_BLOCK_SIGN_2("structural_block_sign_2", 1);
 
         private final String name;
         private final int harvestLevel;
