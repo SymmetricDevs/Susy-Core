@@ -69,6 +69,8 @@ public class SuSyMetaTileEntities {
 
     public static MetaTileEntityFermentationVat FERMENTATION_VAT;
 
+    public static SimpleMachineMetaTileEntity[] UV_LIGHT_BOX;
+
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
         COAGULATION_TANK = registerMetaTileEntity(14501, new MetaTileEntityCoagulationTank(susyId("coagulation_tank")));
@@ -114,6 +116,8 @@ public class SuSyMetaTileEntities {
         CATALYTIC_REFORMER = registerMetaTileEntity(14638, new MetaTileEntityCatalyticReformer(susyId("catalytic_reformer")));
 
         FERMENTATION_VAT = registerMetaTileEntity(14639, new MetaTileEntityFermentationVat(susyId("fermentation_vat")));
+
+        registerSimpleMTE(UV_LIGHT_BOX, 12, 14640, "uv_light_box", SuSyRecipeMaps.UV_RECIPES, SusyTextures.UV_LIGHT_BOX_OVERLAY, true, GTUtility.defaultTankSizeFunction);
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name, RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator, ICubeRenderer texture, boolean isBricked) {
@@ -159,5 +163,6 @@ public class SuSyMetaTileEntities {
         CRYSTALLIZER = new SimpleMachineMetaTileEntity[GTValues.OpV];
         BUBBLE_COLUMN_REACTOR = new ContinuousMachineMetaTileEntity[GTValues.OpV];
         DRYER = new SimpleMachineMetaTileEntity[GTValues.OpV];
+        UV_LIGHT_BOX = new SimpleMachineMetaTileEntity[GTValues.OpV];
     }
 }
