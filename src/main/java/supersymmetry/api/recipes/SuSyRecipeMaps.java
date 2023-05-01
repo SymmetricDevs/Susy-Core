@@ -37,7 +37,7 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> CSTR_RECIPES = new RecipeMap<>("continuous_stirred_tank_reactor", 0, 0, 4, 2, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
-    public static final RecipeMap<SimpleRecipeBuilder> FIXED_BED_REACTOR_RECIPES = new RecipeMap<>("fixed_bed_reactor", 1, 0, 3, 2, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<SimpleRecipeBuilder> FIXED_BED_REACTOR_RECIPES = new RecipeMap<>("fixed_bed_reactor", 1, 1, 3, 2, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
     public static final RecipeMap<SimpleRecipeBuilder> TRICKLE_BED_REACTOR_RECIPES = new RecipeMap<>("trickle_bed_reactor", 1, 0, 3, 2, new SimpleRecipeBuilder(), false)
