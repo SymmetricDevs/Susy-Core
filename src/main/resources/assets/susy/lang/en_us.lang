@@ -11,6 +11,31 @@ tile.coagulation_tank_wall.wooden_coagulation_tank_wall.name=Wooden Coagulation 
 
 tile.alternator_coil.copper.name=Copper Alternator Coil
 tile.turbine_rotor.steel.name=Steel Turbine Block
+
+tile.structural_block.base_structural_block.name=Structural Block
+tile.structural_block.structural_block_low.name=Striped Structural Block
+tile.structural_block.structural_block_lowlight.name=Striped Light Structural Block
+tile.structural_block.structural_block_danger_a.name=Structural Block Warning (A)
+tile.structural_block.structural_block_danger_b.name=Structural Block Warning (B)
+tile.structural_block.structural_block_danger_c.name=Structural Block Warning (C)
+tile.structural_block.structural_block_danger_d.name=Structural Block Warning (D)
+tile.structural_block.structural_block_column.name=Structural Block Column
+tile.structural_block.structural_block_column_old.name=Old Structural Block Column
+tile.structural_block.structural_block_light.name=Structural Block Light
+tile.structural_block.structural_block_light_broken.name=Broken Structural Block Light
+tile.structural_block.structural_block_light_cable.name=Structural Block Wire
+tile.structural_block.structural_block_instruments.name=Structural Instruments Block
+tile.structural_block.structural_block_sign_0.name=Structural Block Zero Sign
+tile.structural_block.structural_block_sign_1.name=Structural Block One Sign
+tile.structural_block.structural_block_sign_2.name=Structural Block Two Sign
+tile.structural_block_1.structural_block_exposed.name=Exposed Structural Block (A)
+tile.structural_block_1.structural_block_exposed_1.name=Exposed Structural Block (B)
+tile.structural_block_1.structural_block_exposed_2.name=Exposed Structural Block (C)
+tile.structural_block_1.structural_block_danger_sign.name=Structural Danger Sign Block
+tile.structural_block_1.structural_block_cable.name=Structural Block Cable (Vertical)
+tile.structural_block_1.structural_block_cable_horizontal.name=Structural Block Cable (Horizontal)
+tile.structural_block_1.structural_block_cable_junction.name=Structural Block Cable (Turn)
+
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
 tile.susy_stone_smooth.gneiss.name=Gneiss
