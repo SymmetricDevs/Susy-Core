@@ -34,6 +34,17 @@ tile.susy_stone_cobble.shale.name=Shale Cobblestone
 tile.susy_stone_cobble.slate.name=Slate Cobblestone
 tile.susy_stone_cobble.soapstone.name=Soapstone Cobblestone
 tile.susy_stone_cobble.kimberlite.name=Kimberlite Cobblestone
+tile.susy_stone_bricks.gabbro.name=Gabbro Bricks
+tile.susy_stone_bricks.gneiss.name=Gneiss Bricks
+tile.susy_stone_bricks.graphite.name=Graphite Bricks
+tile.susy_stone_bricks.limestone.name=Limestone Bricks
+tile.susy_stone_bricks.mica.name=Mica Bricks
+tile.susy_stone_bricks.phyllite.name=Phyllite Bricks
+tile.susy_stone_bricks.quartzite.name=Quartzite Bricks
+tile.susy_stone_bricks.shale.name=Shale Bricks
+tile.susy_stone_bricks.slate.name=Slate Bricks
+tile.susy_stone_bricks.soapstone.name=Soapstone Bricks
+tile.susy_stone_bricks.kimberlite.name=Kimberlite Bricks
 
 # Materials
 material.manganese_iron_arsenic_phosphide=Manganese Iron Arsenic Phosphide
@@ -95,6 +106,13 @@ gregtech.machine.fluidized_bed_reactor.name=Fluidized Bed Reactor
 
 gregtech.machine.electrolytic_cell.name=Electrolytic Cell
 
+gregtech.machine.coking_tower.name=Coking Tower
+gregtech.machine.vacuum_distillation_tower.name=Vacuum Distillation Tower
+gregtech.machine.smoke_stack.name=Smoke Stack
+gregtech.machine.catalytic_reformer.name=Catalytic Reformer
+
+gregtech.machine.fermentation_vat.name=Fermentation Vat
+
 # Properties
 gregtech.recipe.plasma_requirement=Requires plasma: %s
 
@@ -108,20 +126,20 @@ gregtech.machine.latex_collector.hv.name=Advanced Latex Collector II
 gregtech.machine.latex_collector.ev.name=Advanced Latex Collector III
 
 # Vulcanizing Press
-gregtech.machine.vulcanizing_press_bronze.name=Steam Vulcanizing Press
-gregtech.machine.vulcanizing_press_steel.name=High Pressure Steam Vulcanizing Press
+gregtech.machine.vulcanizing_press.bronze.name=Steam Vulcanizing Press
+gregtech.machine.vulcanizing_press.steel.name=High Pressure Steam Vulcanizing Press
 gregtech.machine.vulcanizing_press.lv.name=Basic Vulcanizing Press
 gregtech.machine.vulcanizing_press.mv.name=Advanced Vulcanizing Press
 gregtech.machine.vulcanizing_press.hv.name=Advanced Vulcanizing Press II
 gregtech.machine.vulcanizing_press.ev.name=Advanced Vulcanizing Press III
 
 # Steam Mixer
-gregtech.machine.mixer_bronze.name=Steam Mixer
-gregtech.machine.mixer_steel.name=High Pressure Steam Mixer
+gregtech.machine.mixer.bronze.name=Steam Mixer
+gregtech.machine.mixer.steel.name=High Pressure Steam Mixer
 
 # Roaster
-gregtech.machine.roaster_bronze.name=Steam Roaster
-gregtech.machine.roaster_steel.name=High Pressure Steam Roaster
+gregtech.machine.roaster.bronze.name=Steam Roaster
+gregtech.machine.roaster.steel.name=High Pressure Steam Roaster
 gregtech.machine.roaster.lv.name=Basic Roaster
 gregtech.machine.roaster.mv.name=Advanced Roaster
 gregtech.machine.roaster.hv.name=Advanced Roaster II
@@ -137,8 +155,8 @@ gregtech.machine.roaster.uxv.name=Epic Roaster IV
 gregtech.machine.roaster.opv.name=Legendary Roaster
 
 # Vacuum Chamber
-gregtech.machine.vacuum_chamber_bronze.name=Steam Vacuum Chamber
-gregtech.machine.vacuum_chamber_steel.name=High Pressure Steam Vacuum Chamber
+gregtech.machine.vacuum_chamber.bronze.name=Steam Vacuum Chamber
+gregtech.machine.vacuum_chamber.steel.name=High Pressure Steam Vacuum Chamber
 gregtech.machine.vacuum_chamber.lv.name=Basic Vacuum Chamber
 gregtech.machine.vacuum_chamber.mv.name=Advanced Vacuum Chamber
 gregtech.machine.vacuum_chamber.hv.name=Advanced Vacuum Chamber II
@@ -259,4 +277,4 @@ recipemap.polymerization_tank.name=Polymerization Tank
 # Metaitems
 metaitem.catalyst_bed_support_grid.name=Catalyst Bed Support Grid
 metaitem.conveyor.steam.name=Steam Conveyor
-metaitem.pump.steam.name=Steam Pum
+metaitem.pump.steam.name=Steam Pump

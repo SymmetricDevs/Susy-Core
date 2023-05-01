@@ -7,6 +7,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.relauncher.Side;
 import supersymmetry.Supersymmetry;
 
+import static gregtech.client.renderer.texture.cube.OrientedOverlayRenderer.OverlayFace.FRONT;
+
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID, value = {Side.CLIENT})
 public class SusyTextures {
     public static SimpleSidedCubeRenderer WOODEN_COAGULATION_TANK_WALL;
@@ -22,12 +24,14 @@ public class SusyTextures {
     public static OrientedOverlayRenderer DRYER_OVERLAY;
     public static SteamTexture INT_CIRCUIT_OVERLAY;
 
+    public static OrientedOverlayRenderer CATALYTIC_REFORMER_OVERLAY;
+
     public SusyTextures(){
     }
 
     public static void preInit(){
         WOODEN_COAGULATION_TANK_WALL = new SimpleSidedCubeRenderer("casings/wooden_coagulation_tank_wall");
-        VULCANIZING_PRESS_OVERLAY = new OrientedOverlayRenderer("machines/vulcanizing_press",new OrientedOverlayRenderer.OverlayFace[]{OrientedOverlayRenderer.OverlayFace.FRONT, OrientedOverlayRenderer.OverlayFace.SIDE, OrientedOverlayRenderer.OverlayFace.TOP});
+        VULCANIZING_PRESS_OVERLAY = new OrientedOverlayRenderer("machines/vulcanizing_press",new OrientedOverlayRenderer.OverlayFace[]{FRONT, OrientedOverlayRenderer.OverlayFace.SIDE, OrientedOverlayRenderer.OverlayFace.TOP});
         LATEX_COLLECTOR_OVERLAY = new OrientedOverlayRenderer("machines/latex_collector");
         ROASTER_OVERLAY = new OrientedOverlayRenderer("machines/roaster");
         MIXER_OVERLAY_STEAM = new OrientedOverlayRenderer("machines/mixer_steam");
@@ -38,5 +42,6 @@ public class SusyTextures {
         BUBBLE_COLUMN_REACTOR_OVERLAY = new OrientedOverlayRenderer("machines/bubble_column_reactor");
         DRYER_OVERLAY = new OrientedOverlayRenderer("machines/dryer");
         INT_CIRCUIT_OVERLAY = SteamTexture.fullImage("textures/gui/progress_bar/int_circuit_overlay_%s.png");
+        CATALYTIC_REFORMER_OVERLAY = new OrientedOverlayRenderer("multiblock/catalytic_reformer", FRONT);
     }
 }

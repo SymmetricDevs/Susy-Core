@@ -25,39 +25,47 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class MetaTileEntityPolmyerizationTank extends RecipeMapMultiblockController {
-    public MetaTileEntityPolmyerizationTank(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SuSyRecipeMaps.POLYMERIZATION_RECIPES);
+import static gregtech.api.util.RelativeDirection.*;
+
+public class MetaTileEntityCokingTower extends RecipeMapMultiblockController {
+    public MetaTileEntityCokingTower(ResourceLocation metaTileEntityId) {
+        super(metaTileEntityId, SuSyRecipeMaps.COKING_RECIPES);
         this.recipeMapWorkable = new MultiblockRecipeLogic(this, true);
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
-        return new MetaTileEntityPolmyerizationTank(this.metaTileEntityId);
+        return new MetaTileEntityCokingTower(this.metaTileEntityId);
     }
 
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle(new String[]{"F F", "BBB", "XXX", "XXX", "TTT"})
-                .aisle(new String[]{"   ", "BPB", "XPX", "XPX", "TPT"})
-                .aisle(new String[]{"F F", "BSB", "XXX", "XXX", "TTT"})
+        return FactoryBlockPattern.start(RIGHT, FRONT, UP)
+                .aisle(new String[]{" CCSCCF", "PCP PCP"})
+                .aisle(new String[]{" CFCFCF", "PCP PCP"})
+                .aisle(new String[]{" CFCFCF", "PCP PCP"})
+                .aisle(new String[]{" CFCFCF", "PPP PPP"})
+                .aisle(new String[]{" CFCFCF", "  P   P"})
+                .aisle(new String[]{" CCCCCF", "  P   P"})
+                .aisle(new String[]{"  FFFFF", "  P   P"})
+                .aisle(new String[]{"  FF FF", "  P   P"})
+                .aisle(new String[]{"  FF FF", "  P   P"})
+                .aisle(new String[]{"  FF FF", "  P   P"})
+                .aisle(new String[]{"  FF FF", "       "})
+                .aisle(new String[]{"  FF FF", "       "})
                 .where('S', this.selfPredicate())
-                .where('F', states(new IBlockState[]{this.getFrameState()}))
                 .where('P', states(new IBlockState[]{this.getPipeCasingState()}))
-                .where('X', states(new IBlockState[]{this.getCasingState()}).or(this.autoAbilities(false, false, true, true, false, false, false)))
-                .where('T', states(new IBlockState[]{this.getCasingState()}).or(this.autoAbilities(false, true, false, false, false, true, false)))
-                .where('B', states(new IBlockState[]{this.getCasingState()}).or(this.autoAbilities(true, false, false, false, true, false, false))).build();
+                .where('F', states(new IBlockState[]{this.getFrameState()}))
+                .where('C', states(new IBlockState[]{this.getCasingState()}).or(this.autoAbilities()))
+                .build();
     }
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
         return Textures.SOLID_STEEL_CASING;
     }
-
-    protected IBlockState getCasingState() {
-        return MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID);
-    }
     protected IBlockState getFrameState() {
         return MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel);
     }
-
+    protected IBlockState getCasingState() {
+        return MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID);
+    }
     protected IBlockState getPipeCasingState() {
         return MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE);
     }
@@ -69,6 +77,6 @@ public class MetaTileEntityPolmyerizationTank extends RecipeMapMultiblockControl
 
     @Nonnull
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.LARGE_CHEMICAL_REACTOR_OVERLAY;
+        return Textures.BLAST_FURNACE_OVERLAY;
     }
 }

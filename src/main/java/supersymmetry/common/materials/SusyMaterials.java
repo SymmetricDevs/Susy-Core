@@ -114,7 +114,15 @@ public class SusyMaterials {
 
         Materials.CalciumChloride.setProperty(PropertyKey.FLUID, new FluidProperty());
 
+        Materials.MagnesiumChloride.setProperty(PropertyKey.FLUID, new FluidProperty());
+
+        Materials.RockSalt.setProperty(PropertyKey.FLUID, new FluidProperty());
+
+        Materials.Salt.setProperty(PropertyKey.FLUID, new FluidProperty());
+
         Materials.HydrochloricAcid.setFormula("(H2O)(HCl)", true);
+
+        Materials.HydrofluoricAcid.setFormula("(H2O)(HF)", true);
 
         removeProperty(PropertyKey.FLUID, Materials.Dimethyldichlorosilane);
         Materials.Dimethyldichlorosilane.setProperty(PropertyKey.FLUID, new FluidProperty());

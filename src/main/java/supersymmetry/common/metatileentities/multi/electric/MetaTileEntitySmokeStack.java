@@ -4,15 +4,14 @@ import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
+import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
-import gregtech.api.unification.material.Materials;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.utils.TooltipHelper;
 import gregtech.common.blocks.BlockBoilerCasing.BoilerCasingType;
-import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -25,39 +24,30 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class MetaTileEntityPolmyerizationTank extends RecipeMapMultiblockController {
-    public MetaTileEntityPolmyerizationTank(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SuSyRecipeMaps.POLYMERIZATION_RECIPES);
+import static gregtech.api.util.RelativeDirection.*;
+
+public class MetaTileEntitySmokeStack extends RecipeMapMultiblockController {
+    public MetaTileEntitySmokeStack(ResourceLocation metaTileEntityId) {
+        super(metaTileEntityId, SuSyRecipeMaps.SMOKE_STACK);
         this.recipeMapWorkable = new MultiblockRecipeLogic(this, true);
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
-        return new MetaTileEntityPolmyerizationTank(this.metaTileEntityId);
+        return new MetaTileEntitySmokeStack(this.metaTileEntityId);
     }
 
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle(new String[]{"F F", "BBB", "XXX", "XXX", "TTT"})
-                .aisle(new String[]{"   ", "BPB", "XPX", "XPX", "TPT"})
-                .aisle(new String[]{"F F", "BSB", "XXX", "XXX", "TTT"})
+        return FactoryBlockPattern.start(UP, RIGHT, FRONT)
+                .aisle(new String[]{"SPPPF"})
                 .where('S', this.selfPredicate())
-                .where('F', states(new IBlockState[]{this.getFrameState()}))
-                .where('P', states(new IBlockState[]{this.getPipeCasingState()}))
-                .where('X', states(new IBlockState[]{this.getCasingState()}).or(this.autoAbilities(false, false, true, true, false, false, false)))
-                .where('T', states(new IBlockState[]{this.getCasingState()}).or(this.autoAbilities(false, true, false, false, false, true, false)))
-                .where('B', states(new IBlockState[]{this.getCasingState()}).or(this.autoAbilities(true, false, false, false, true, false, false))).build();
+                .where('P', states(new IBlockState[]{this.getPipeCasingState()})
+                        .or(this.autoAbilities(false, false, false, false, true, false, false)))
+                .where('F', abilities(MultiblockAbility.MUFFLER_HATCH).setExactLimit(1))
+                .build();
     }
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
         return Textures.SOLID_STEEL_CASING;
     }
-
-    protected IBlockState getCasingState() {
-        return MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID);
-    }
-    protected IBlockState getFrameState() {
-        return MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel);
-    }
-
     protected IBlockState getPipeCasingState() {
         return MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE);
     }
@@ -69,6 +59,6 @@ public class MetaTileEntityPolmyerizationTank extends RecipeMapMultiblockControl
 
     @Nonnull
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.LARGE_CHEMICAL_REACTOR_OVERLAY;
+        return Textures.BLAST_FURNACE_OVERLAY;
     }
 }

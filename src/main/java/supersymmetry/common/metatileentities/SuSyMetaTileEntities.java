@@ -18,6 +18,7 @@ import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.metatileentities.multi.electric.*;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCoagulationTank;
+import supersymmetry.common.metatileentities.multi.electric.MetaTileEntitySmokeStack;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityLatexCollector;
 import supersymmetry.common.metatileentities.single.steam.*;
 
@@ -60,7 +61,13 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityPolmyerizationTank POLYMERIZATION_TANK;
 
     public static MetaTileEntityElectrolyticCell ELECTROLYTIC_CELL;
+    // Machines for Oil Overhaul
+    public static MetaTileEntityCokingTower COKING_TOWER;
+    public static MetaTileEntityVacuumDistillationTower VACUUM_DISTILLATION_TOWER;
+    public static MetaTileEntityCatalyticReformer CATALYTIC_REFORMER;
+    public static MetaTileEntitySmokeStack SMOKE_STACK;
 
+    public static MetaTileEntityFermentationVat FERMENTATION_VAT;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -101,6 +108,12 @@ public class SuSyMetaTileEntities {
 
         ELECTROLYTIC_CELL = registerMetaTileEntity(14634, new MetaTileEntityElectrolyticCell(susyId("electrolytic_cell")));
 
+        COKING_TOWER = registerMetaTileEntity(14635, new MetaTileEntityCokingTower(susyId("coking_tower")));
+        VACUUM_DISTILLATION_TOWER = registerMetaTileEntity(14636, new MetaTileEntityVacuumDistillationTower(susyId("vacuum_distillation_tower")));
+        SMOKE_STACK = registerMetaTileEntity(14637, new MetaTileEntitySmokeStack(susyId("smoke_stack")));
+        CATALYTIC_REFORMER = registerMetaTileEntity(14638, new MetaTileEntityCatalyticReformer(susyId("catalytic_reformer")));
+
+        FERMENTATION_VAT = registerMetaTileEntity(14639, new MetaTileEntityFermentationVat(susyId("fermentation_vat")));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name, RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator, ICubeRenderer texture, boolean isBricked) {
