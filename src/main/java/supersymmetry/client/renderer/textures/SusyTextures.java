@@ -1,6 +1,7 @@
 package supersymmetry.client.renderer.textures;
 
 import gregtech.api.gui.resources.SteamTexture;
+import gregtech.api.gui.resources.TextureArea;
 import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 import gregtech.client.renderer.texture.cube.SimpleSidedCubeRenderer;
 import net.minecraftforge.fml.common.Mod;
