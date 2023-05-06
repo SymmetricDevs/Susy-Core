@@ -6,6 +6,7 @@ import gregtech.api.recipes.RecipeMap;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.api.recipes.ingredients.SuSyRecipeCatalystInput;
 import supersymmetry.api.recipes.properties.CatalystProperty;
+import supersymmetry.api.recipes.properties.CatalystPropertyValue;
 
 public class CatalystRecipeBuilder extends RecipeBuilder<CatalystRecipeBuilder> {
 
@@ -35,7 +36,7 @@ public class CatalystRecipeBuilder extends RecipeBuilder<CatalystRecipeBuilder> 
     }
 
     public CatalystRecipeBuilder catalyst(CatalystGroup catalystGroup, int tier, int amount) {
-        applyProperty(CatalystProperty.getInstance(), tier);
+        applyProperty(CatalystProperty.getInstance(), new CatalystPropertyValue(tier, catalystGroup));
         return this.notConsumable((SuSyRecipeCatalystInput.getOrCreate(catalystGroup, tier, amount)));
     }
 
