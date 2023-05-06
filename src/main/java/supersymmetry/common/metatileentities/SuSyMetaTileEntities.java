@@ -71,6 +71,9 @@ public class SuSyMetaTileEntities {
 
     public static SimpleMachineMetaTileEntity[] UV_LIGHT_BOX;
 
+    public static SimpleMachineMetaTileEntity[] ION_IMPLANTER;
+    public static SimpleMachineMetaTileEntity[] CVD;
+
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
         COAGULATION_TANK = registerMetaTileEntity(14501, new MetaTileEntityCoagulationTank(susyId("coagulation_tank")));
@@ -118,6 +121,9 @@ public class SuSyMetaTileEntities {
         FERMENTATION_VAT = registerMetaTileEntity(14639, new MetaTileEntityFermentationVat(susyId("fermentation_vat")));
 
         registerSimpleMTE(UV_LIGHT_BOX, 12, 14640, "uv_light_box", SuSyRecipeMaps.UV_RECIPES, SusyTextures.UV_LIGHT_BOX_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+
+        registerSimpleMTE(CVD, 12, 14653, "cvd", SuSyRecipeMaps.CVD_RECIPES, SusyTextures.CVD_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+        registerSimpleMTE(ION_IMPLANTER, 12, 14666, "ion_implanter", SuSyRecipeMaps.ION_IMPLANTATION_RECIPES, SusyTextures.ION_IMPLANTER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name, RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator, ICubeRenderer texture, boolean isBricked) {
@@ -164,5 +170,7 @@ public class SuSyMetaTileEntities {
         BUBBLE_COLUMN_REACTOR = new ContinuousMachineMetaTileEntity[GTValues.OpV];
         DRYER = new SimpleMachineMetaTileEntity[GTValues.OpV];
         UV_LIGHT_BOX = new SimpleMachineMetaTileEntity[GTValues.OpV];
+        CVD = new SimpleMachineMetaTileEntity[GTValues.OpV];
+        ION_IMPLANTER = new SimpleMachineMetaTileEntity[GTValues.OpV];
     }
 }

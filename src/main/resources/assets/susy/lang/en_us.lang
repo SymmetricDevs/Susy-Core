@@ -294,12 +294,42 @@ gregtech.machine.uv_light_box.ev.name=Advanced UV Light Box III
 gregtech.machine.uv_light_box.iv.name=Elite UV Light Box
 gregtech.machine.uv_light_box.luv.name=Elite UV Light Box II
 gregtech.machine.uv_light_box.zpm.name=Elite UV Light Box III
-gregtech.machine.uv_light_box.uv.name=UV Light Box Dryer
+gregtech.machine.uv_light_box.uv.name=Ultimate UV Light Box
 gregtech.machine.uv_light_box.uhv.name=Epic UV Light Box
 gregtech.machine.uv_light_box.uev.name=Epic UV Light Box II
 gregtech.machine.uv_light_box.uiv.name=Epic UV Light Box III
 gregtech.machine.uv_light_box.uxv.name=Epic UV Light Box IV
 gregtech.machine.uv_light_box.opv.name=Legendary UV Light Box
+
+# CVD
+gregtech.machine.cvd.lv.name=Basic CVD Unit
+gregtech.machine.cvd.mv.name=Advanced CVD Unit
+gregtech.machine.cvd.hv.name=Advanced CVD Unit II
+gregtech.machine.cvd.ev.name=Advanced CVD Unit III
+gregtech.machine.cvd.iv.name=Elite CVD Unit
+gregtech.machine.cvd.luv.name=Elite CVD Unit II
+gregtech.machine.cvd.zpm.name=Elite CVD Unit III
+gregtech.machine.cvd.uv.name=Ultimate CVD Unit
+gregtech.machine.cvd.uhv.name=Epic CVD Unit
+gregtech.machine.cvd.uev.name=Epic CVD Unit II
+gregtech.machine.cvd.uiv.name=Epic CVD Unit III
+gregtech.machine.cvd.uxv.name=Epic CVD Unit IV
+gregtech.machine.cvd.opv.name=Legendary CVD Unit
+
+# Ion Implanter
+gregtech.machine.ion_implanter.lv.name=Basic Ion Implanter
+gregtech.machine.ion_implanter.mv.name=Advanced Ion Implanter
+gregtech.machine.ion_implanter.hv.name=Advanced Ion Implanter II
+gregtech.machine.ion_implanter.ev.name=Advanced Ion Implanter III
+gregtech.machine.ion_implanter.iv.name=Elite Ion Implanter
+gregtech.machine.ion_implanter.luv.name=Elite Ion Implanter II
+gregtech.machine.ion_implanter.zpm.name=Elite Ion Implanter III
+gregtech.machine.ion_implanter.uv.name=Ultimate Ion Implanter
+gregtech.machine.ion_implanter.uhv.name=Epic Ion Implanter
+gregtech.machine.ion_implanter.uev.name=Epic Ion Implanter II
+gregtech.machine.ion_implanter.uiv.name=Epic Ion Implanter III
+gregtech.machine.ion_implanter.uxv.name=Epic Ion Implanter IV
+gregtech.machine.ion_implanter.opv.name=Legendary Ion Implanter
 
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
@@ -314,6 +344,8 @@ recipemap.bubble_column_reactor.name=Bubble Column Reactor
 recipemap.fluidized_bed_reactor.name=Fluidized Bed Reactor
 recipemap.polymerization_tank.name=Polymerization Tank
 recipemap.uv_light_box.name=UV Light Box
+recipemap.ion_implantation.name=Ion Implantation
+recipemap.cvd.name=Chemical Vapor Deposition
 
 # Metaitems
 metaitem.catalyst_bed_support_grid.name=Catalyst Bed Support Grid
