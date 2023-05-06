@@ -23,6 +23,8 @@ public class SusyTextures {
     public static OrientedOverlayRenderer BUBBLE_COLUMN_REACTOR_OVERLAY;
     public static OrientedOverlayRenderer DRYER_OVERLAY;
     public static OrientedOverlayRenderer UV_LIGHT_BOX_OVERLAY;
+    public static OrientedOverlayRenderer ION_IMPLANTER_OVERLAY;
+    public static OrientedOverlayRenderer CVD_OVERLAY;
     public static SteamTexture INT_CIRCUIT_OVERLAY;
 
     public static OrientedOverlayRenderer CATALYTIC_REFORMER_OVERLAY;
@@ -43,6 +45,8 @@ public class SusyTextures {
         BUBBLE_COLUMN_REACTOR_OVERLAY = new OrientedOverlayRenderer("machines/bubble_column_reactor");
         DRYER_OVERLAY = new OrientedOverlayRenderer("machines/dryer");
         UV_LIGHT_BOX_OVERLAY = new OrientedOverlayRenderer("machines/uv_light_box");
+        CVD_OVERLAY = new OrientedOverlayRenderer("machines/cvd");
+        ION_IMPLANTER_OVERLAY = new OrientedOverlayRenderer("machines/ion_implanter");
         INT_CIRCUIT_OVERLAY = SteamTexture.fullImage("textures/gui/progress_bar/int_circuit_overlay_%s.png");
         CATALYTIC_REFORMER_OVERLAY = new OrientedOverlayRenderer("multiblock/catalytic_reformer", FRONT);
     }

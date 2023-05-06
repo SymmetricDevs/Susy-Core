@@ -75,8 +75,14 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> FERMENTATION_VAT_RECIPES = new RecipeMap<>("vat_fermentation", 3, 3, 3, 3, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
-    public static final RecipeMap<SimpleRecipeBuilder> UV_RECIPES = new RecipeMap<>("uv_light_box", 2, 1, 0, 0, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<SimpleRecipeBuilder> UV_RECIPES = new RecipeMap<>("uv_light_box", 2, 1, 1, 0, new SimpleRecipeBuilder(), false)
+            .setSound(GTSoundEvents.ARC);
+
+    public static final RecipeMap<SimpleRecipeBuilder> ION_IMPLANTATION_RECIPES = new RecipeMap<>("ion_implantation", 3, 1, 2, 0, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.ELECTROLYZER);
+
+    public static final RecipeMap<SimpleRecipeBuilder> CVD_RECIPES = new RecipeMap<>("cvd", 3, 1, 2, 0, new SimpleRecipeBuilder(), false)
+            .setSound(GTSoundEvents.ARC);
 
     public static void init(){
         RecipeMaps.SIFTER_RECIPES.setMaxFluidInputs(1);
@@ -94,5 +100,6 @@ public class SuSyRecipeMaps {
         RecipeMaps.ELECTROMAGNETIC_SEPARATOR_RECIPES.setMaxFluidInputs(1);
         GTFORecipeMaps.GREENHOUSE_RECIPES.setMaxFluidInputs(4);
         RecipeMaps.PYROLYSE_RECIPES.setMaxFluidOutputs(3);
+        RecipeMaps.LASER_ENGRAVER_RECIPES.setMaxFluidInputs(1);
     }
 }
