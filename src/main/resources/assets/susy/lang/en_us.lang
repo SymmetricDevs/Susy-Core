@@ -140,6 +140,7 @@ gregtech.machine.fermentation_vat.name=Fermentation Vat
 
 # Properties
 gregtech.recipe.plasma_requirement=Requires plasma: %s
+gregtech.recipe.catalyst=Requires Catalyst: %s
 
 # Latex Collector
 gregtech.machine.latex_collector.steam=Needs Steam!
@@ -319,3 +320,9 @@ recipemap.uv_light_box.name=UV Light Box
 metaitem.catalyst_bed_support_grid.name=Catalyst Bed Support Grid
 metaitem.conveyor.steam.name=Steam Conveyor
 metaitem.pump.steam.name=Steam Pump
+
+# Catalysts
+gregtech.universal.catalysts.tooltip.tier=Max Voltage: §a%d §7(§5%s§7)
+
+
+

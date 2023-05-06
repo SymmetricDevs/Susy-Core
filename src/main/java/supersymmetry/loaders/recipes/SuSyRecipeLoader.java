@@ -2,10 +2,14 @@ package supersymmetry.loaders.recipes;
 
 import gregtech.api.recipes.GTRecipeHandler;
 import gregtech.api.recipes.ModHandler;
+import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
 import net.minecraft.item.ItemStack;
+import supersymmetry.api.SusyLog;
+import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
 import supersymmetry.common.materials.SusyMaterials;
@@ -32,6 +36,25 @@ public class SuSyRecipeLoader {
         registerStoneRecipes();
         GTRecipeHandler.removeAllRecipes(ELECTROLYZER_RECIPES);
         // make more loaders to categorize recipes and what is added
+
+        SusyLog.logger.info("Hello");
+
+        SuSyRecipeMaps.TRICKLE_BED_REACTOR_RECIPES.recipeBuilder()
+                .fluidInputs(SusyMaterials.Latex.getFluid(1000))
+                .catalyst(CatalystGroup.OXIDATION_CATALYST_BEDS)
+                .fluidOutputs(SusyMaterials.Latex.getFluid(1000))
+                .duration(100)
+                .EUt(30)
+                .buildAndRegister();
+
+        SuSyRecipeMaps.FIXED_BED_REACTOR_RECIPES.recipeBuilder()
+                .fluidInputs(SusyMaterials.Latex.getFluid(1000))
+                .fluidOutputs(SusyMaterials.Latex.getFluid(1000))
+                .duration(100)
+                .EUt(30)
+                .buildAndRegister();
+
+
     }
 
     private static void registerStoneRecipes(){

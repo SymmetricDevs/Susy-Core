@@ -19,4 +19,20 @@ public class SusyOrePrefix {
     public static OrePrefix catalystBed = new OrePrefix("catalystBed", GTValues.M * 4, null, SuSyMaterialIconType.catalystBed, 1L, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_CATALYST_BED));
     public static OrePrefix catalystPellet = new OrePrefix("catalystPellet", GTValues.M / 4, null, SuSyMaterialIconType.catalystPellet, 1L, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_CATALYST_PELLET));
 
+
+    // Tiered Catalysts Beds
+
+    public static OrePrefix catalystBedReduction = new OrePrefix("catalystBedReduction", GTValues.M, null, SuSyMaterialIconType.catalystBed, 1L, mat -> false);
+    public static OrePrefix catalystBedOxidation = new OrePrefix("catalystBedOxidation", GTValues.M, null, SuSyMaterialIconType.catalystBed, 1L, mat -> false);
+    public static OrePrefix catalystBedCracking = new OrePrefix("catalystBedCracking", GTValues.M, null, SuSyMaterialIconType.catalystBed, 1L, mat -> false);
+    public static OrePrefix catalystBedZieglerNatta = new OrePrefix("catalystBedZieglerNatta", GTValues.M, null, SuSyMaterialIconType.catalystBed, 1L, mat -> false);
+
+
+    // Tiered Catalyst Pellets
+
+    public static OrePrefix catalystPelletReduction = new OrePrefix("catalystPelletReduction", GTValues.M * 4, null, SuSyMaterialIconType.catalystPellet, 1L, mat -> false);
+    public static OrePrefix catalystPelletOxidation = new OrePrefix("catalystPelletOxidation", GTValues.M * 4, null, SuSyMaterialIconType.catalystPellet, 1L, mat -> false);
+    public static OrePrefix catalystPelletCracking = new OrePrefix("catalystPelletCracking", GTValues.M * 4, null, SuSyMaterialIconType.catalystPellet, 1L, mat -> false);
+    public static OrePrefix catalystPelletZieglerNatta = new OrePrefix("catalystPelletZieglerNatta", GTValues.M * 4, null, SuSyMaterialIconType.catalystPellet, 1L, mat -> false);
+
 }
