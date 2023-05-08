@@ -50,6 +50,24 @@
       "textures" : {
         "all" : "gregtech:blocks/decorative/structural_blocks/structural_block_cable_junction"
       }
+    },
+    "variant=structural_block_pipocalypse" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/decorative/structural_blocks/structural_block_pipocalypse"
+      }
+    },
+    "variant=structural_block_vent" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/decorative/structural_blocks/structural_block_vent"
+      }
+    },
+    "variant=structural_block_vent_broken" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/decorative/structural_blocks/structural_block_vent_broken"
+      }
     }
   }
 }
