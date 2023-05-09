@@ -1,5 +1,6 @@
 package supersymmetry.common.materials;
 
+import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
 import gregtech.api.fluids.fluidType.FluidType;
 import gregtech.api.unification.material.Material;
@@ -69,6 +70,38 @@ public class SusyMaterials {
         removeProperty(PropertyKey.ORE, Materials.Mica);
         removeProperty(PropertyKey.FLUID_PIPE, Materials.Lead);
         Materials.Lead.setProperty(PropertyKey.FLUID_PIPE, new FluidPipeProperties(1200, 8, true, true, false, false));
+
+        Materials.Silver.setProperty(PropertyKey.FLUID_PIPE, new FluidPipeProperties(1234, 50, false, false, true, false));
+
+        removeProperty(PropertyKey.WIRE, Materials.ManganesePhosphide);
+        Materials.ManganesePhosphide.setProperty(PropertyKey.WIRE, new WireProperties(32, 2, 1));
+
+        removeProperty(PropertyKey.WIRE, Materials.MagnesiumDiboride);
+        Materials.MagnesiumDiboride.setProperty(PropertyKey.WIRE, new WireProperties(128, 4, 1));
+
+        removeProperty(PropertyKey.WIRE, Materials.MercuryBariumCalciumCuprate);
+        Materials.MercuryBariumCalciumCuprate.setProperty(PropertyKey.WIRE, new WireProperties(512, 4, 1));
+
+        removeProperty(PropertyKey.WIRE, Materials.UraniumTriplatinum);
+        Materials.UraniumTriplatinum.setProperty(PropertyKey.WIRE, new WireProperties(2048, 6, 1));
+
+        removeProperty(PropertyKey.WIRE, Materials.SamariumIronArsenicOxide);
+        Materials.SamariumIronArsenicOxide.setProperty(PropertyKey.WIRE, new WireProperties(8192, 6, 1));
+
+        removeProperty(PropertyKey.WIRE, Materials.IndiumTinBariumTitaniumCuprate);
+        Materials.IndiumTinBariumTitaniumCuprate.setProperty(PropertyKey.WIRE, new WireProperties(32768, 8, 1));
+
+        removeProperty(PropertyKey.WIRE, Materials.UraniumRhodiumDinaquadide);
+        Materials.UraniumRhodiumDinaquadide.setProperty(PropertyKey.WIRE, new WireProperties(131072, 8, 1));
+
+        removeProperty(PropertyKey.WIRE, Materials.EnrichedNaquadahTriniumEuropiumDuranide);
+        Materials.EnrichedNaquadahTriniumEuropiumDuranide.setProperty(PropertyKey.WIRE, new WireProperties(524288, 16, 1));
+
+        removeProperty(PropertyKey.WIRE, Materials.RutheniumTriniumAmericiumNeutronate);
+        Materials.RutheniumTriniumAmericiumNeutronate.setProperty(PropertyKey.WIRE, new WireProperties(2097152, 24, 1));
+
+        removeProperty(PropertyKey.WIRE, Materials.YttriumBariumCuprate);
+        Materials.YttriumBariumCuprate.setProperty(PropertyKey.WIRE, new WireProperties(8192, 6, 1));
 
         //Add dusts and fluids for elements that do not have them
         Materials.Iodine.setProperty(PropertyKey.DUST, new DustProperty());
