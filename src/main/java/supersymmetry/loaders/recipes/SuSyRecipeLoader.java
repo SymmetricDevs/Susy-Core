@@ -46,7 +46,7 @@ public class SuSyRecipeLoader {
                 .buildAndRegister();
 
         SuSyRecipeMaps.TRICKLE_BED_REACTOR_RECIPES.recipeBuilder()
-                .fluidInputs(SusyMaterials.Latex.getFluid(2000))
+                .fluidInputs(Materials.Ethylene.getFluid(2000))
                 .catalyst(CatalystGroup.OXIDATION_CATALYST_BEDS, 10)
                 .fluidOutputs(SusyMaterials.Latex.getFluid(1000))
                 .duration(100)
