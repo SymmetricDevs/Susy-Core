@@ -8,6 +8,7 @@ import gregtech.core.sound.GTSoundEvents;
 import gregtech.api.recipes.builders.PrimitiveRecipeBuilder;
 import gregtech.api.recipes.builders.SimpleRecipeBuilder;
 import gregtechfoodoption.recipe.GTFORecipeMaps;
+import net.minecraft.client.gui.Gui;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.recipes.builders.CoilingCoilRecipeBuilder;
 import supersymmetry.api.recipes.builders.NoEnergyRecipeBuilder;
@@ -54,17 +55,51 @@ public class SuSyRecipeMaps {
             .setSlotOverlay(true, true, GuiTextures.MOLECULAR_OVERLAY_3)
             .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
-    public static final RecipeMap<SimpleRecipeBuilder> CRYSTALLIZER_RECIPES = new RecipeMap<>("crystallizer",1, 1, 3, 1, new SimpleRecipeBuilder(), false)
-            .setSound(GTSoundEvents.CHEMICAL_REACTOR);
-
     public static final RecipeMap<SimpleRecipeBuilder> BUBBLE_COLUMN_REACTOR_RECIPES = new RecipeMap<>("bubble_column_reactor", 1, 0, 3, 2, new SimpleRecipeBuilder(), false)
             .setSlotOverlay(false, false, SusyGuiTextures.LARGE_REACTOR_ITEM_OVERLAY)
             .setSlotOverlay(false, true, GuiTextures.MOLECULAR_OVERLAY_3)
             .setSlotOverlay(true, true, GuiTextures.MOLECULAR_OVERLAY_3)
             .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
+    public static final RecipeMap<SimpleRecipeBuilder> BATCH_REACTOR_RECIPES = new RecipeMap<>("batch_reactor", 3, 3, 3, 3, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_MIXER, ProgressWidget.MoveType.CIRCULAR)
+            .setSlotOverlay(false, false, false, GuiTextures.DUST_OVERLAY)
+            .setSlotOverlay(false, false, true, GuiTextures.DUST_OVERLAY)
+            .setSlotOverlay(false, true, false, GuiTextures.BEAKER_OVERLAY_3)
+            .setSlotOverlay(false, true, true, GuiTextures.BEAKER_OVERLAY_3)
+            .setSlotOverlay(true, false, false, GuiTextures.DUST_OVERLAY)
+            .setSlotOverlay(true, false, true, GuiTextures.DUST_OVERLAY)
+            .setSlotOverlay(true, true, false, GuiTextures.BEAKER_OVERLAY_3)
+            .setSlotOverlay(true, true, true, GuiTextures.BEAKER_OVERLAY_3)
+            .setSound(GTSoundEvents.CHEMICAL_REACTOR);
+
+    public static final RecipeMap<SimpleRecipeBuilder> CRYSTALLIZER_RECIPES = new RecipeMap<>("crystallizer",1, 1, 3, 1, new SimpleRecipeBuilder(), false)
+            .setSound(GTSoundEvents.CHEMICAL_REACTOR);
+
     public static final RecipeMap<SimpleRecipeBuilder> DRYER = new RecipeMap<>("dryer", 1, 1, 1, 1, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.COOLING);
+
+    public static final RecipeMap<SimpleRecipeBuilder> ION_EXCHANGE_COLUMN_RECIPES = new RecipeMap<>("ion_exchange_column", 1, 1, 2, 2, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_SIFT, ProgressWidget.MoveType.VERTICAL)
+            .setSlotOverlay(false, false, true, SusyGuiTextures.CUBIC_LATTICE_OVERLAY)
+            .setSlotOverlay(false, true, true, GuiTextures.MOLECULAR_OVERLAY_4)
+            .setSlotOverlay(true, false, true, SusyGuiTextures.CUBIC_LATTICE_OVERLAY)
+            .setSlotOverlay(true, true, true, GuiTextures.MOLECULAR_OVERLAY_4)
+            .setSound(GTSoundEvents.CHEMICAL_REACTOR);
+
+    public static final RecipeMap<SimpleRecipeBuilder> ZONE_REFINER_RECIPES = new RecipeMap<>("zone_refiner", 1, 1, 0, 0, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_CRYSTALLIZATION, ProgressWidget.MoveType.HORIZONTAL)
+            .setSlotOverlay(false, false, true, GuiTextures.FURNACE_OVERLAY_1)
+            .setSlotOverlay(true, false, true, GuiTextures.CRYSTAL_OVERLAY)
+            .setSound(GTSoundEvents.FURNACE);
+
+    public static final RecipeMap<SimpleRecipeBuilder> TUBE_FURNACE_RECIPES = new RecipeMap<>("tube_furnace", 3, 1, 1, 0, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
+            .setSlotOverlay(false, false, false, GuiTextures.FURNACE_OVERLAY_1)
+            .setSlotOverlay(false, false, true, GuiTextures.FURNACE_OVERLAY_1)
+            .setSlotOverlay(false, true, true, GuiTextures.TURBINE_OVERLAY)
+            .setSlotOverlay(true, false, true, SusyGuiTextures.CUBIC_LATTICE_OVERLAY)
+            .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
     public static final RecipeMap<SimpleRecipeBuilder> FLUIDIZED_BED_REACTOR_RECIPES = new RecipeMap<>("fluidized_bed_reactor", 2, 1, 3, 2, new SimpleRecipeBuilder(), false)
             .setSlotOverlay(false, true, SusyGuiTextures.LARGE_REACTOR_FLUID_OVERLAY)
