@@ -6,6 +6,7 @@ import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 import gregtech.client.renderer.texture.cube.SimpleSidedCubeRenderer;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.relauncher.Side;
+import scala.tools.nsc.transform.patmat.Logic;
 import supersymmetry.Supersymmetry;
 
 import static gregtech.client.renderer.texture.cube.OrientedOverlayRenderer.OverlayFace.FRONT;
@@ -20,9 +21,15 @@ public class SusyTextures {
     public static OrientedOverlayRenderer CONTINUOUS_STIRRED_TANK_REACTOR_OVERLAY;
     public static OrientedOverlayRenderer FIXED_BED_REACTOR_OVERLAY;
     public static OrientedOverlayRenderer TRICKLE_BED_REACTOR_OVERLAY;
-    public static OrientedOverlayRenderer CRYSTALLIZER_OVERLAY;
     public static OrientedOverlayRenderer BUBBLE_COLUMN_REACTOR_OVERLAY;
+    public static OrientedOverlayRenderer BATCH_REACTOR_OVERLAY;
+
+    public static OrientedOverlayRenderer CRYSTALLIZER_OVERLAY;
     public static OrientedOverlayRenderer DRYER_OVERLAY;
+    public static OrientedOverlayRenderer ION_EXCHANGE_COLUMN_OVERLAY;
+    public static OrientedOverlayRenderer ZONE_REFINER_OVERLAY;
+    public static OrientedOverlayRenderer TUBE_FURNACE_OVERLAY;
+
     public static OrientedOverlayRenderer UV_LIGHT_BOX_OVERLAY;
     public static OrientedOverlayRenderer ION_IMPLANTER_OVERLAY;
     public static OrientedOverlayRenderer CVD_OVERLAY;
@@ -42,9 +49,15 @@ public class SusyTextures {
         CONTINUOUS_STIRRED_TANK_REACTOR_OVERLAY = new OrientedOverlayRenderer("machines/continuous_stirred_tank_reactor");
         FIXED_BED_REACTOR_OVERLAY = new OrientedOverlayRenderer("machines/fixed_bed_reactor");
         TRICKLE_BED_REACTOR_OVERLAY = new OrientedOverlayRenderer("machines/trickle_bed_reactor");
-        CRYSTALLIZER_OVERLAY = new OrientedOverlayRenderer("machines/crystallizer");
         BUBBLE_COLUMN_REACTOR_OVERLAY = new OrientedOverlayRenderer("machines/bubble_column_reactor");
+        BATCH_REACTOR_OVERLAY = new OrientedOverlayRenderer("machines/batch_reactor");
+
+        CRYSTALLIZER_OVERLAY = new OrientedOverlayRenderer("machines/crystallizer");
         DRYER_OVERLAY = new OrientedOverlayRenderer("machines/dryer");
+        ION_EXCHANGE_COLUMN_OVERLAY = new OrientedOverlayRenderer("machines/ion_exchange_column");
+        ZONE_REFINER_OVERLAY = new OrientedOverlayRenderer("machines/zone_refiner");
+        TUBE_FURNACE_OVERLAY = new OrientedOverlayRenderer("machines/tube_furnace");
+
         UV_LIGHT_BOX_OVERLAY = new OrientedOverlayRenderer("machines/uv_light_box");
         CVD_OVERLAY = new OrientedOverlayRenderer("machines/cvd");
         ION_IMPLANTER_OVERLAY = new OrientedOverlayRenderer("machines/ion_implanter");

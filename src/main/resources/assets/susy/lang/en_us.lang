@@ -241,21 +241,6 @@ gregtech.machine.trickle_bed_reactor.uiv.name=Epic Trickle Bed Reactor III
 gregtech.machine.trickle_bed_reactor.uxv.name=Epic Trickle Bed Reactor IV
 gregtech.machine.trickle_bed_reactor.opv.name=Legendary Trickle Bed Reactor
 
-# Crystallizer
-gregtech.machine.crystallizer.lv.name=Basic Crystallizer
-gregtech.machine.crystallizer.mv.name=Advanced Crystallizer
-gregtech.machine.crystallizer.hv.name=Advanced Crystallizer II
-gregtech.machine.crystallizer.ev.name=Advanced Crystallizer III
-gregtech.machine.crystallizer.iv.name=Elite Crystallizer
-gregtech.machine.crystallizer.luv.name=Elite Crystallizer II
-gregtech.machine.crystallizer.zpm.name=Elite Crystallizer III
-gregtech.machine.crystallizer.uv.name=Ultimate Crystallizer
-gregtech.machine.crystallizer.uhv.name=Epic Crystallizer
-gregtech.machine.crystallizer.uev.name=Epic Crystallizer II
-gregtech.machine.crystallizer.uiv.name=Epic Crystallizer III
-gregtech.machine.crystallizer.uxv.name=Epic Crystallizer IV
-gregtech.machine.crystallizer.opv.name=Legendary Crystallizer
-
 # Bubble Column Reactor
 gregtech.machine.bubble_column_reactor.lv.name=Basic Bubble Column Reactor
 gregtech.machine.bubble_column_reactor.mv.name=Advanced Bubble Column Reactor
@@ -271,6 +256,36 @@ gregtech.machine.bubble_column_reactor.uiv.name=Epic Bubble Column Reactor III
 gregtech.machine.bubble_column_reactor.uxv.name=Epic Bubble Column Reactor IV
 gregtech.machine.bubble_column_reactor.opv.name=Legendary Bubble Column Reactor
 
+# Batch Reactor
+gregtech.machine.batch_reactor.lv.name=Basic Batch Reactor
+gregtech.machine.batch_reactor.mv.name=Advanced Batch Reactor
+gregtech.machine.batch_reactor.hv.name=Advanced Batch Reactor II
+gregtech.machine.batch_reactor.ev.name=Advanced Batch Reactor III
+gregtech.machine.batch_reactor.iv.name=Elite Batch Reactor
+gregtech.machine.batch_reactor.luv.name=Elite Batch Reactor II
+gregtech.machine.batch_reactor.zpm.name=Elite Batch Reactor III
+gregtech.machine.batch_reactor.uv.name=Ultimate Batch Reactor
+gregtech.machine.batch_reactor.uhv.name=Epic Batch Reactor
+gregtech.machine.batch_reactor.uev.name=Epic Batch Reactor II
+gregtech.machine.batch_reactor.uiv.name=Epic Batch Reactor III
+gregtech.machine.batch_reactor.uxv.name=Epic Batch Reactor IV
+gregtech.machine.batch_reactor.opv.name=Legendary Batch Reactor
+
+# Crystallizer
+gregtech.machine.crystallizer.lv.name=Basic Crystallizer
+gregtech.machine.crystallizer.mv.name=Advanced Crystallizer
+gregtech.machine.crystallizer.hv.name=Advanced Crystallizer II
+gregtech.machine.crystallizer.ev.name=Advanced Crystallizer III
+gregtech.machine.crystallizer.iv.name=Elite Crystallizer
+gregtech.machine.crystallizer.luv.name=Elite Crystallizer II
+gregtech.machine.crystallizer.zpm.name=Elite Crystallizer III
+gregtech.machine.crystallizer.uv.name=Ultimate Crystallizer
+gregtech.machine.crystallizer.uhv.name=Epic Crystallizer
+gregtech.machine.crystallizer.uev.name=Epic Crystallizer II
+gregtech.machine.crystallizer.uiv.name=Epic Crystallizer III
+gregtech.machine.crystallizer.uxv.name=Epic Crystallizer IV
+gregtech.machine.crystallizer.opv.name=Legendary Crystallizer
+
 # Dryer
 gregtech.machine.dryer.lv.name=Basic Dryer
 gregtech.machine.dryer.mv.name=Advanced Dryer
@@ -285,6 +300,51 @@ gregtech.machine.dryer.uev.name=Epic Dryer II
 gregtech.machine.dryer.uiv.name=Epic Dryer III
 gregtech.machine.dryer.uxv.name=Epic Dryer IV
 gregtech.machine.dryer.opv.name=Legendary Dryer
+
+# Ion Exchange Column
+gregtech.machine.ion_exchange_column.lv.name=Basic Ion Exchange Column
+gregtech.machine.ion_exchange_column.mv.name=Advanced Ion Exchange Column
+gregtech.machine.ion_exchange_column.hv.name=Advanced Ion Exchange Column II
+gregtech.machine.ion_exchange_column.ev.name=Advanced Ion Exchange Column III
+gregtech.machine.ion_exchange_column.iv.name=Elite Ion Exchange Column
+gregtech.machine.ion_exchange_column.luv.name=Elite Ion Exchange Column II
+gregtech.machine.ion_exchange_column.zpm.name=Elite Ion Exchange Column III
+gregtech.machine.ion_exchange_column.uv.name=Ultimate Ion Exchange Column
+gregtech.machine.ion_exchange_column.uhv.name=Epic Ion Exchange Column
+gregtech.machine.ion_exchange_column.uev.name=Epic Ion Exchange Column II
+gregtech.machine.ion_exchange_column.uiv.name=Epic Ion Exchange Column III
+gregtech.machine.ion_exchange_column.uxv.name=Epic Ion Exchange Column IV
+gregtech.machine.ion_exchange_column.opv.name=Legendary Ion Exchange Column
+
+# Zone Refiner
+gregtech.machine.zone_refiner.lv.name=Basic Zone Refiner
+gregtech.machine.zone_refiner.mv.name=Advanced Zone Refiner
+gregtech.machine.zone_refiner.hv.name=Advanced Zone Refiner II
+gregtech.machine.zone_refiner.ev.name=Advanced Zone Refiner III
+gregtech.machine.zone_refiner.iv.name=Elite Zone Refiner
+gregtech.machine.zone_refiner.luv.name=Elite Zone Refiner II
+gregtech.machine.zone_refiner.zpm.name=Elite Zone Refiner III
+gregtech.machine.zone_refiner.uv.name=Ultimate Zone Refiner
+gregtech.machine.zone_refiner.uhv.name=Epic Zone Refiner
+gregtech.machine.zone_refiner.uev.name=Epic Zone Refiner II
+gregtech.machine.zone_refiner.uiv.name=Epic Zone Refiner III
+gregtech.machine.zone_refiner.uxv.name=Epic Zone Refiner IV
+gregtech.machine.zone_refiner.opv.name=Legendary Zone Refiner
+
+# Tube Furnace
+gregtech.machine.tube_furnace.lv.name=Basic Tube Furnace
+gregtech.machine.tube_furnace.mv.name=Advanced Tube Furnace
+gregtech.machine.tube_furnace.hv.name=Advanced Tube Furnace II
+gregtech.machine.tube_furnace.ev.name=Advanced Tube Furnace III
+gregtech.machine.tube_furnace.iv.name=Elite Tube Furnace
+gregtech.machine.tube_furnace.luv.name=Elite Tube Furnace II
+gregtech.machine.tube_furnace.zpm.name=Elite Tube Furnace III
+gregtech.machine.tube_furnace.uv.name=Ultimate Tube Furnace
+gregtech.machine.tube_furnace.uhv.name=Epic Tube Furnace
+gregtech.machine.tube_furnace.uev.name=Epic Tube Furnace II
+gregtech.machine.tube_furnace.uiv.name=Epic Tube Furnace III
+gregtech.machine.tube_furnace.uxv.name=Epic Tube Furnace IV
+gregtech.machine.tube_furnace.opv.name=Legendary Tube Furnace
 
 # UV Light Box
 gregtech.machine.uv_light_box.lv.name=Basic UV Light Box
