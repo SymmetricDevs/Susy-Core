@@ -18,4 +18,5 @@ public class SusyGuiTextures {
     public static final TextureArea SIFTER_FLUID_OVERLAY = TextureArea.fullImage("textures/gui/overlay/sifter_fluid_overlay.png");
     public static final TextureArea SIFTER_ITEM_INPUT_OVERLAY = TextureArea.fullImage("textures/gui/overlay/sifter_item_input_overlay.png");
     public static final TextureArea SIFTER_ITEM_OUTPUT_OVERLAY = TextureArea.fullImage("textures/gui/overlay/sifter_item_output_overlay.png");
+    public static final TextureArea CUBIC_LATTICE_OVERLAY = TextureArea.fullImage("textures/gui/overlay/cubic_lattice_overlay.png");
 }
