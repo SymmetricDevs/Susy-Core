@@ -35,6 +35,9 @@ tile.structural_block_1.structural_block_danger_sign.name=Structural Danger Sign
 tile.structural_block_1.structural_block_cable.name=Structural Block Cable (Vertical)
 tile.structural_block_1.structural_block_cable_horizontal.name=Structural Block Cable (Horizontal)
 tile.structural_block_1.structural_block_cable_junction.name=Structural Block Cable (Turn)
+tile.structural_block_1.structural_block_pipocalypse.name=Structural Block Dense Pipes
+tile.structural_block_1.structural_block_vent.name=Structural Block Vent
+tile.structural_block_1.structural_block_vent_broken.name=Structural Block Vent (Broken)
 
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
