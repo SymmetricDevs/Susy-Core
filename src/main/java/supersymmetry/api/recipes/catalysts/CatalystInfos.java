@@ -4,21 +4,24 @@ import gregtech.api.util.ItemStackHashStrategy;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nonnull;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class CatalystInfos {
 
-    private Map<ItemStack, CatalystInfo> map = new Object2ObjectOpenCustomHashMap<>(ItemStackHashStrategy.comparingItemDamageCount());
+    private final Map<ItemStack, CatalystInfo> map = new Object2ObjectOpenCustomHashMap<>(ItemStackHashStrategy.comparingAllButCount());
 
-    public void put(ItemStack itemStack, CatalystInfo catalystInfo) {
+    public void put(@Nonnull ItemStack itemStack, @Nonnull CatalystInfo catalystInfo) {
         map.put(itemStack, catalystInfo);
     }
 
-    public CatalystInfo get(ItemStack itemStack) {
+    public CatalystInfo get(@Nonnull ItemStack itemStack) {
         return map.get(itemStack);
     }
 
-    public Map<ItemStack, CatalystInfo> getMap() {
-        return map;
+    @Nonnull
+    public Stream<Map.Entry<ItemStack, CatalystInfo>> streamEntries() {
+        return map.entrySet().stream();
     }
 }

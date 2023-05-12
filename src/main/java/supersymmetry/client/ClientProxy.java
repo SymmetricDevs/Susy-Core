@@ -22,9 +22,8 @@ import supersymmetry.common.SusyMetaEntities;
 import supersymmetry.common.blocks.SuSyBlocks;
 
 import javax.annotation.Nonnull;
-import javax.xml.soap.Text;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 
 @SideOnly(Side.CLIENT)
@@ -41,8 +40,7 @@ public class ClientProxy extends CommonProxy {
     public static void addCatalystTooltipHandler(@Nonnull ItemTooltipEvent event) {
         ItemStack itemStack = event.getItemStack();
         // Handles Item tooltips
-        List<String> tooltips = new ArrayList<>();
-
+        Collection<String> tooltips = new ArrayList<>();
 
         if (itemStack.getItem() instanceof MetaOreDictItem) { // Test for OreDictItems
             MetaOreDictItem oreDictItem = (MetaOreDictItem) itemStack.getItem();
@@ -55,24 +53,19 @@ public class ClientProxy extends CommonProxy {
                     CatalystGroup.getCatalystGroups()) {
                 ItemStack is = itemStack.copy();
                 is.setCount(1);
-                if (group.getCatalystInfos().getMap().containsKey(is)){
-                    CatalystInfo catalystInfo = group.getCatalystInfos().getMap().get(is);
+                CatalystInfo catalystInfo = group.getCatalystInfos().get(is);
+                if (catalystInfo != null) {
                     tooltips.add(TextFormatting.UNDERLINE + (TextFormatting.BLUE + I18n.format("gregtech.catalyst_group." + group.getName() + ".name")));
-                    tooltips.add((I18n.format("gregtech.universal.catalysts.tooltip.tier", GTValues.V[catalystInfo.getTier()], GTValues.VNF[catalystInfo.getTier()])));
-                    tooltips.add((I18n.format("gregtech.universal.catalysts.tooltip.yield", catalystInfo.getYieldEfficiency())));
-                    tooltips.add((I18n.format("gregtech.universal.catalysts.tooltip.energy", catalystInfo.getEnergyEfficiency())));
-                    tooltips.add((I18n.format("gregtech.universal.catalysts.tooltip.speed", catalystInfo.getSpeedEfficiency())));
+                    tooltips.add(I18n.format("gregtech.universal.catalysts.tooltip.tier", GTValues.V[catalystInfo.getTier()], GTValues.VNF[catalystInfo.getTier()]));
+                    tooltips.add(I18n.format("gregtech.universal.catalysts.tooltip.yield", catalystInfo.getYieldEfficiency()));
+                    tooltips.add(I18n.format("gregtech.universal.catalysts.tooltip.energy", catalystInfo.getEnergyEfficiency()));
+                    tooltips.add(I18n.format("gregtech.universal.catalysts.tooltip.speed", catalystInfo.getSpeedEfficiency()));
                 }
             }
-            
-        } 
 
-        if (tooltips != null) {
-            for (String s : tooltips) {
-                if (s == null || s.isEmpty()) continue;
-                event.getToolTip().add(s);
-            }
         }
+
+        event.getToolTip().addAll(tooltips);
     }
 
 

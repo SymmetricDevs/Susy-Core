@@ -1,5 +1,6 @@
 package supersymmetry.api.recipes.builders;
 
+import gregtech.api.GTValues;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.recipes.RecipeMap;
@@ -14,7 +15,6 @@ import java.util.Map;
 public class CatalystRecipeBuilder extends RecipeBuilder<CatalystRecipeBuilder> {
 
     public CatalystRecipeBuilder() {
-
     }
 
     @SuppressWarnings("unused")
@@ -31,7 +31,7 @@ public class CatalystRecipeBuilder extends RecipeBuilder<CatalystRecipeBuilder> 
     }
 
     public CatalystRecipeBuilder catalyst(CatalystGroup catalystGroup) {
-        return catalyst(catalystGroup,0, 1);
+        return catalyst(catalystGroup, GTValues.ULV, 1);
     }
 
     public CatalystRecipeBuilder catalyst(CatalystGroup catalystGroup, int tier) {
@@ -41,8 +41,8 @@ public class CatalystRecipeBuilder extends RecipeBuilder<CatalystRecipeBuilder> 
     public CatalystRecipeBuilder catalyst(CatalystGroup catalystGroup, int tier, int amount) {
         applyProperty(CatalystProperty.getInstance(), new CatalystPropertyValue(tier, catalystGroup));
 
-         ItemStack[] inputStacks = catalystGroup.getCatalystInfos().getMap().entrySet().stream()
-                .filter(entry -> tier <= entry.getValue().getTier())
+        ItemStack[] inputStacks = catalystGroup.getCatalystInfos().streamEntries()
+                .filter(entry -> entry.getValue().getTier() >= tier)
                 .map(Map.Entry::getKey)
                 .map(is -> {
                     is = is.copy();
@@ -52,5 +52,4 @@ public class CatalystRecipeBuilder extends RecipeBuilder<CatalystRecipeBuilder> 
 
         return this.notConsumable(GTRecipeItemInput.getOrCreate(inputStacks));
     }
-
 }

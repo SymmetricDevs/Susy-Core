@@ -1,18 +1,20 @@
 package supersymmetry.api.recipes.catalysts;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class CatalystGroup {
 
-    private static NonNullList<CatalystGroup> catalystGroups = NonNullList.create();
-    public static CatalystGroup OXIDATION_CATALYST_BEDS = new CatalystGroup("oxidation_catalyst_beds");
-    public static CatalystGroup REDUCTION_CATALYST_BEDS = new CatalystGroup("reduction_catalyst_beds");
-    public static CatalystGroup STANDARD_CATALYSTS = new CatalystGroup("standard_catalysts");
+    private static final List<CatalystGroup> catalystGroups = new ArrayList<>();
+
     private final String name;
-    private CatalystInfos catalystInfos = new CatalystInfos();
-    public CatalystGroup(String name) {
+    private final CatalystInfos catalystInfos = new CatalystInfos();
+
+    public CatalystGroup(@Nonnull String name) {
         this.name = name;
         catalystGroups.add(this);
     }
@@ -20,24 +22,40 @@ public class CatalystGroup {
     public CatalystInfos getCatalystInfos() {
         return this.catalystInfos;
     }
-    public void add(ItemStack itemStack, CatalystInfo catalystInfo) {
+
+    public void add(@Nonnull ItemStack itemStack, @Nonnull CatalystInfo catalystInfo) {
+        if (itemStack == ItemStack.EMPTY) return;
         this.catalystInfos.put(itemStack, catalystInfo);
     }
+
     @Override
     public int hashCode() {
         return this.name.hashCode();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CatalystGroup that = (CatalystGroup) o;
+
+        return getName().equals(that.getName());
+    }
+
+    @Nonnull
     public String getName() {
         return name;
     }
 
     @Override
     public String toString() {
-        return getName();
+        return "CatalystGroup{" +
+                "name='" + name + '\'' +
+                '}';
     }
 
-    public static NonNullList<CatalystGroup> getCatalystGroups() {
+    public static List<CatalystGroup> getCatalystGroups() {
         return catalystGroups;
     }
 }

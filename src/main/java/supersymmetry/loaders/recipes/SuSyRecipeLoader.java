@@ -1,18 +1,17 @@
 package supersymmetry.loaders.recipes;
 
+import gregtech.api.GTValues;
 import gregtech.api.recipes.GTRecipeHandler;
 import gregtech.api.recipes.ModHandler;
-import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
 import net.minecraft.item.ItemStack;
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
-import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
 import supersymmetry.common.materials.SusyMaterials;
+import supersymmetry.common.recipes.CatalystGroups;
 import supersymmetry.loaders.SuSyMetaTileEntityLoader;
 
 import java.util.Arrays;
@@ -21,7 +20,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static gregtech.api.recipes.RecipeMaps.*;
-import static gregtech.api.unification.ore.OrePrefix.*;
+import static gregtech.api.unification.ore.OrePrefix.dust;
+import static gregtech.api.unification.ore.OrePrefix.stone;
 import static gregtech.common.items.MetaItems.SHAPE_EXTRUDER_BLOCK;
 
 public class SuSyRecipeLoader {
@@ -39,7 +39,7 @@ public class SuSyRecipeLoader {
 
         SuSyRecipeMaps.TRICKLE_BED_REACTOR_RECIPES.recipeBuilder()
                 .fluidInputs(SusyMaterials.Latex.getFluid(1000))
-                .catalyst(CatalystGroup.OXIDATION_CATALYST_BEDS)
+                .catalyst(CatalystGroups.OXIDATION_CATALYST_BEDS, GTValues.LV)
                 .fluidOutputs(SusyMaterials.Latex.getFluid(1000))
                 .duration(100)
                 .EUt(30)
@@ -47,7 +47,7 @@ public class SuSyRecipeLoader {
 
         SuSyRecipeMaps.TRICKLE_BED_REACTOR_RECIPES.recipeBuilder()
                 .fluidInputs(Materials.Ethylene.getFluid(2000))
-                .catalyst(CatalystGroup.OXIDATION_CATALYST_BEDS, 10)
+                .catalyst(CatalystGroups.OXIDATION_CATALYST_BEDS, GTValues.UEV)
                 .fluidOutputs(SusyMaterials.Latex.getFluid(1000))
                 .duration(100)
                 .EUt(30)
