@@ -40,6 +40,7 @@ public class ContinuousRecipeLogic extends RecipeLogicEnergy {
     // TODO: Make this part of a new MTE for catalysts. Make the continuous machines extend that MTE.
     public void tryFindCatalystInfo(Recipe recipe) {
         this.catalystInfo = null;
+        this.catalystTier = -1;
         if (recipe.hasProperty(CatalystProperty.getInstance())) {
             CatalystPropertyValue property = recipe.getProperty(CatalystProperty.getInstance(), null);
             List<CatalystInfo> candidates = new ArrayList<>();
@@ -54,6 +55,7 @@ public class ContinuousRecipeLogic extends RecipeLogicEnergy {
                 }
             }
             candidates.sort(Comparator.comparingInt(CatalystInfo::getTier).thenComparingDouble(CatalystInfo::getSpeedEfficiency));
+            this.catalystTier = property.getTier();
             this.catalystInfo = candidates.get(0);
         }
     }
@@ -165,12 +167,6 @@ public class ContinuousRecipeLogic extends RecipeLogicEnergy {
 
         IRecipePropertyStorage storage = recipe.getRecipePropertyStorage();
 
-        if(storage.hasRecipeProperty(CatalystProperty.getInstance())) {
-            catalystTier = storage.getRecipePropertyValue(CatalystProperty.getInstance(), null).getTier();
-        } else {
-            catalystTier = -1;
-        }
-
         double parallelLimitDouble = 1 / runContinuousOverclockingLogic(storage, recipe.getEUt(), getMaximumOverclockVoltage(), recipe.getDuration(), numberOfOCs)[1];
 
         setParallelLimit(parallelLimitDouble <= 1 ? 1 : (int) parallelLimitDouble);
@@ -178,8 +174,18 @@ public class ContinuousRecipeLogic extends RecipeLogicEnergy {
 
     @Override
     protected boolean checkCanOverclock(int recipeEUt) {
-        // Ugly solution but we have to run overclocking even if the recipe voltage isn't high enough. Option: We could make it so that catalyst bonuses only work on overclocked recipes.
-        // Ie your voltage has to be at least one tier higher than the recipe tier.
-        return isAllowOverclocking();
+        if (!isAllowOverclocking()) return false;
+
+        // Check if the voltage to run at is higher than the recipe, and that it is not ULV tier
+
+        // The maximum tier that the machine can overclock to
+        int overclockTier = getOverclockForTier(getMaximumOverclockVoltage());
+        // If the maximum tier that the machine can overclock to is ULV, return false.
+        // There is no overclocking allowed in ULV
+        if (overclockTier <= GTValues.LV) return false;
+        int recipeTier = GTUtility.getTierByVoltage(recipeEUt);
+
+        // Do overclock if the overclock tier is greater than the recipe tier or the catalyst tier is higher than the recipe catalyst tier
+        return overclockTier > recipeTier || catalystInfo.getTier() > catalystTier;
     }
 }
