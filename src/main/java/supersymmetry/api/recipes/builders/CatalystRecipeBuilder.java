@@ -3,10 +3,13 @@ package supersymmetry.api.recipes.builders;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.recipes.RecipeMap;
+import gregtech.api.recipes.ingredients.GTRecipeItemInput;
+import net.minecraft.item.ItemStack;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
-import supersymmetry.api.recipes.ingredients.SuSyRecipeCatalystInput;
 import supersymmetry.api.recipes.properties.CatalystProperty;
 import supersymmetry.api.recipes.properties.CatalystPropertyValue;
+
+import java.util.Map;
 
 public class CatalystRecipeBuilder extends RecipeBuilder<CatalystRecipeBuilder> {
 
@@ -37,7 +40,17 @@ public class CatalystRecipeBuilder extends RecipeBuilder<CatalystRecipeBuilder> 
 
     public CatalystRecipeBuilder catalyst(CatalystGroup catalystGroup, int tier, int amount) {
         applyProperty(CatalystProperty.getInstance(), new CatalystPropertyValue(tier, catalystGroup));
-        return this.notConsumable((SuSyRecipeCatalystInput.getOrCreate(catalystGroup, tier, amount)));
+
+         ItemStack[] inputStacks = catalystGroup.getCatalystInfos().getMap().entrySet().stream()
+                .filter(entry -> tier <= entry.getValue().getTier())
+                .map(Map.Entry::getKey)
+                .map(is -> {
+                    is = is.copy();
+                    is.setCount(amount);
+                    return is;
+                }).toArray(ItemStack[]::new);
+
+        return this.notConsumable(GTRecipeItemInput.getOrCreate(inputStacks));
     }
 
 }

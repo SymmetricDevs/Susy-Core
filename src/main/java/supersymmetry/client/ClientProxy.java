@@ -56,13 +56,12 @@ public class ClientProxy extends CommonProxy {
                 ItemStack is = itemStack.copy();
                 is.setCount(1);
                 if (group.getCatalystInfos().getMap().containsKey(is)){
-                    String localisedCatalystGroupName = I18n.format("gregtech.catalyst_group." + group.getName() + ".name");
                     CatalystInfo catalystInfo = group.getCatalystInfos().getMap().get(is);
-                    tooltips.add(TextFormatting.UNDERLINE + (TextFormatting.DARK_BLUE + I18n.format("gregtech.universal.catalysts.tooltip.title", localisedCatalystGroupName)));
+                    tooltips.add(TextFormatting.UNDERLINE + (TextFormatting.BLUE + I18n.format("gregtech.catalyst_group." + group.getName() + ".name")));
                     tooltips.add((I18n.format("gregtech.universal.catalysts.tooltip.tier", GTValues.V[catalystInfo.getTier()], GTValues.VNF[catalystInfo.getTier()])));
-                    if (catalystInfo.getYieldEfficiency() != 1) tooltips.add((I18n.format("gregtech.universal.catalysts.tooltip.yield", catalystInfo.getYieldEfficiency())));
-                    if (catalystInfo.getEnergyEfficiency() != 1) tooltips.add((I18n.format("gregtech.universal.catalysts.tooltip.energy", catalystInfo.getEnergyEfficiency())));
-                    if (catalystInfo.getSpeedEfficiency() != 1) tooltips.add((I18n.format("gregtech.universal.catalysts.tooltip.speed", catalystInfo.getSpeedEfficiency())));
+                    tooltips.add((I18n.format("gregtech.universal.catalysts.tooltip.yield", catalystInfo.getYieldEfficiency())));
+                    tooltips.add((I18n.format("gregtech.universal.catalysts.tooltip.energy", catalystInfo.getEnergyEfficiency())));
+                    tooltips.add((I18n.format("gregtech.universal.catalysts.tooltip.speed", catalystInfo.getSpeedEfficiency())));
                 }
             }
             

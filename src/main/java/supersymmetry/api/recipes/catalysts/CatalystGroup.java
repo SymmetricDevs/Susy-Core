@@ -9,6 +9,7 @@ public class CatalystGroup {
     private static NonNullList<CatalystGroup> catalystGroups = NonNullList.create();
     public static CatalystGroup OXIDATION_CATALYST_BEDS = new CatalystGroup("oxidation_catalyst_beds");
     public static CatalystGroup REDUCTION_CATALYST_BEDS = new CatalystGroup("reduction_catalyst_beds");
+    public static CatalystGroup STANDARD_CATALYSTS = new CatalystGroup("standard_catalysts");
     private final String name;
     private CatalystInfos catalystInfos = new CatalystInfos();
     public CatalystGroup(String name) {

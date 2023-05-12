@@ -29,7 +29,6 @@ public class SuSyOverclockingLogic {
             resultVoltage = potentialVoltage;
         }
 
-        SusyLog.logger.info(resultDuration);
         return new double[]{resultVoltage, resultDuration};
     }
 
