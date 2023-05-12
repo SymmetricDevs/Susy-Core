@@ -25,8 +25,10 @@ public class SuSyBlocks {
     public static final EnumMap<SusyStoneVariantBlock.StoneVariant, SusyStoneVariantBlock> SUSY_STONE_BLOCKS = new EnumMap(SusyStoneVariantBlock.StoneVariant.class);
     public static BlockAlternatorCoil ALTERNATOR_COIL;
     public static BlockTurbineRotor TURBINE_ROTOR;
+    public static BlockDrillHead DRILL_HEAD;
     public static BlockStructural STRUCTURAL_BLOCK;
     public static BlockStructural1 STRUCTURAL_BLOCK_1;
+    public static BlockDeposit DEPOSIT_BLOCK;
 
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
@@ -34,6 +36,9 @@ public class SuSyBlocks {
 
         SINTERING_BRICK = new BlockSinteringBrick();
         SINTERING_BRICK.setRegistryName("sintering_brick");
+
+        DRILL_HEAD = new BlockDrillHead();
+        DRILL_HEAD.setRegistryName("drill_head");
 
         COAGULATION_TANK_WALL = new BlockCoagulationTankWall();
         COAGULATION_TANK_WALL.setRegistryName("coagulation_tank_wall");
@@ -54,6 +59,9 @@ public class SuSyBlocks {
         STRUCTURAL_BLOCK_1 = new BlockStructural1();
         STRUCTURAL_BLOCK_1.setRegistryName("structural_block_1");
 
+        DEPOSIT_BLOCK = new BlockDeposit();
+        DEPOSIT_BLOCK.setRegistryName("deposit_block");
+
     }
 
     @SideOnly(Side.CLIENT)
@@ -64,9 +72,11 @@ public class SuSyBlocks {
         for (SusyStoneVariantBlock block : SUSY_STONE_BLOCKS.values())
             registerItemModel(block);
         registerItemModel(ALTERNATOR_COIL);
+        registerItemModel(DRILL_HEAD);
         registerItemModel(TURBINE_ROTOR);
         registerItemModel(STRUCTURAL_BLOCK);
         registerItemModel(STRUCTURAL_BLOCK_1);
+        registerItemModel(DEPOSIT_BLOCK);
     }
 
     @SideOnly(Side.CLIENT)

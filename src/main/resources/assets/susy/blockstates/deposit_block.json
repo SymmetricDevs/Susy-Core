@@ -1,0 +1,73 @@
+{
+  "forge_marker" : 1,
+  "defaults": {
+    "model": "minecraft:cube_bottom_top",
+    "textures": {
+      "bottom": "gregtech:blocks/deposit/deposit_block_carbon",
+      "top": "gregtech:blocks/deposit/deposit_block_carbon",
+      "side": "gregtech:blocks/deposit/deposit_block_carbon"
+    }
+  },
+  "variants" : {
+    "variant=deposit_block_carbon" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/deposit/deposit_block_carbon"
+      }
+    },
+    "variant=deposit_block_carbonate" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/deposit/deposit_block_carbonate"
+      }
+    },
+    "variant=deposit_block_clay" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/deposit/deposit_block_clay"
+      }
+    },
+    "variant=deposit_block_oxide" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/deposit/deposit_block_oxide"
+      }
+    },
+    "variant=deposit_block_phosphate" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/deposit/deposit_block_phosphate"
+      }
+    },
+    "variant=deposit_block_precious" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/deposit/deposit_block_precious"
+      }
+    },
+    "variant=deposit_block_radioactive" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/deposit/deposit_block_radioactive"
+      }
+    },
+    "variant=deposit_block_sedimentary" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/deposit/deposit_block_sedimentary"
+      }
+    },
+    "variant=deposit_block_silicate" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/deposit/deposit_block_silicate"
+      }
+    },
+    "variant=deposit_block_sulfur" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/deposit/deposit_block_sulfur"
+      }
+    }
+  }
+}

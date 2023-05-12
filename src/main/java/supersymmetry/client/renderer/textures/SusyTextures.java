@@ -34,8 +34,9 @@ public class SusyTextures {
     public static OrientedOverlayRenderer ION_IMPLANTER_OVERLAY;
     public static OrientedOverlayRenderer CVD_OVERLAY;
     public static SteamTexture INT_CIRCUIT_OVERLAY;
-
     public static OrientedOverlayRenderer CATALYTIC_REFORMER_OVERLAY;
+    public static OrientedOverlayRenderer FLUID_COMPRESSOR_OVERLAY;
+    public static OrientedOverlayRenderer FLUID_DECOMPRESSOR_OVERLAY;
 
     public SusyTextures(){
     }
@@ -63,5 +64,8 @@ public class SusyTextures {
         ION_IMPLANTER_OVERLAY = new OrientedOverlayRenderer("machines/ion_implanter");
         INT_CIRCUIT_OVERLAY = SteamTexture.fullImage("textures/gui/progress_bar/int_circuit_overlay_%s.png");
         CATALYTIC_REFORMER_OVERLAY = new OrientedOverlayRenderer("multiblock/catalytic_reformer", FRONT);
+
+        FLUID_COMPRESSOR_OVERLAY = new OrientedOverlayRenderer("machines/fluid_compressor");
+        FLUID_DECOMPRESSOR_OVERLAY = new OrientedOverlayRenderer("machines/fluid_decompressor");
     }
 }

@@ -12,5 +12,10 @@ public class SuSyUnknownCompositionMaterials {
                 .dust().fluid(FluidTypes.LIQUID)
                 .color(0xFFFADA)
                 .build();
+
+        Mud = new Material.Builder(27051, "mud")
+                .fluid(FluidTypes.LIQUID)
+                .color(0x211b14)
+                .build();
     }
 }

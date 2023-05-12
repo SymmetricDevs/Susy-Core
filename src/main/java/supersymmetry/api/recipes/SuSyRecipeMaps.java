@@ -14,7 +14,7 @@ import supersymmetry.api.recipes.builders.CoilingCoilRecipeBuilder;
 import supersymmetry.api.recipes.builders.NoEnergyRecipeBuilder;
 import supersymmetry.api.recipes.builders.SinteringRecipeBuilder;
 import supersymmetry.client.renderer.textures.SusyTextures;
-
+import gregtech.api.recipes.builders.*;
 
 public class SuSyRecipeMaps {
 
@@ -148,6 +148,63 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> CVD_RECIPES = new RecipeMap<>("cvd", 3, 1, 2, 0, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.ARC);
 
+    public static final RecipeMap<SimpleRecipeBuilder> ORE_SORTER_RECIPES = new RecipeMap<>("ore_sorter", 2, 16, 1, 1, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_EXTRACT, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.MACERATOR);
+
+    public static final RecipeMap<PrimitiveRecipeBuilder> COOLING_TOWER_RECIPES = new RecipeMap<>("cooling_tower", 0, 0, 2, 2, new PrimitiveRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.COOLING);
+
+    public static final RecipeMap<SimpleRecipeBuilder> COOLING_UNIT_RECIPES = new RecipeMap<>("cooling_unit", 0, 0, 1, 1, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.COOLING);
+
+    public static final RecipeMap<SimpleRecipeBuilder> FLUID_DECOMPRESSOR_RECIPES = new RecipeMap<>("fluid_decompressor", 0, 0, 1, 1, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_EXTRACT, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.COMPRESSOR);
+
+    public static final RecipeMap<SimpleRecipeBuilder> FLUID_COMPRESSOR_RECIPES = new RecipeMap<>("fluid_compressor", 0, 0, 1, 1, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_COMPRESS, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.COMPRESSOR);
+
+    public static final RecipeMap<PrimitiveRecipeBuilder> HEAT_EXCHANGER_RECIPES = new RecipeMap<>("heat_exchanger", 0, 0, 2, 2, new PrimitiveRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.COOLING);
+
+    public static final RecipeMap<PrimitiveRecipeBuilder> CONDENSER_RECIPES = new RecipeMap<>("condenser", 0, 0, 2, 2, new PrimitiveRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.COOLING);
+
+    public static final RecipeMap<PrimitiveRecipeBuilder> HEAT_RADIATOR_RECIPES = new RecipeMap<>("radiator", 0, 0, 1, 1, new PrimitiveRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_COMPRESS, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.COOLING);
+
+    public static final RecipeMap<SimpleRecipeBuilder> QUENCHER_RECIPES = new RecipeMap<>("quencher", 1, 1, 1, 1, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.COOLING);
+
+    public static final RecipeMap<SimpleRecipeBuilder> WEAPONS_FACTORY_RECIPES = new RecipeMap<>("weapons_factory", 9, 1, 2, 0, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_CIRCUIT, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.ASSEMBLER);
+
+    public static final RecipeMap<SimpleRecipeBuilder> LARGE_WEAPONS_FACTORY_RECIPES = new RecipeMap<>("large_weapons_factory", 9, 1, 3, 0, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_CIRCUIT, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.ASSEMBLER);
+
+    public static final RecipeMap<SimpleRecipeBuilder> RAILROAD_ENGINEERING_STATION_RECIPES = new RecipeMap<>("railroad_engineering_station", 16, 1, 4, 0, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.ASSEMBLER);
+
+    public static final RecipeMap<SimpleRecipeBuilder> MINING_DRILL_RECIPES = new RecipeMap<>("mining_drill", 1, 1, 1, 1, new SimpleRecipeBuilder(), false)
+            .setSlotOverlay(false, false, true, GuiTextures.CRUSHED_ORE_OVERLAY)
+            .setSlotOverlay(true, false, true, GuiTextures.DUST_OVERLAY)
+            .setSound(GTSoundEvents.MACERATOR);
+
+    public static final RecipeMap<FuelRecipeBuilder> MAGNETOHYDRODYNAMIC_FUELS = new RecipeMap<>("magnetohydrodynamic_generator", 0, 0, 1, 1, new FuelRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_FUSION, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.ARC);
+
     public static void init(){
         RecipeMaps.SIFTER_RECIPES.setMaxFluidInputs(1);
         RecipeMaps.SIFTER_RECIPES.setMaxFluidOutputs(1);
@@ -171,5 +228,7 @@ public class SuSyRecipeMaps {
         RecipeMaps.SIFTER_RECIPES.setSlotOverlay(false, false, SusyGuiTextures.SIFTER_ITEM_INPUT_OVERLAY);
         RecipeMaps.SIFTER_RECIPES.setSlotOverlay(true, false, SusyGuiTextures.SIFTER_ITEM_OUTPUT_OVERLAY);
         RecipeMaps.LASER_ENGRAVER_RECIPES.setMaxFluidInputs(1);
+        RecipeMaps.GAS_TURBINE_FUELS.setMaxFluidInputs(2);
+        RecipeMaps.GAS_TURBINE_FUELS.setMaxFluidOutputs(1);
     }
 }
