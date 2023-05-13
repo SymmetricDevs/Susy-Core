@@ -7,6 +7,7 @@ import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.ingredients.GTRecipeItemInput;
 import net.minecraft.item.ItemStack;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
+import supersymmetry.api.recipes.catalysts.CatalystInfo;
 import supersymmetry.api.recipes.properties.CatalystProperty;
 import supersymmetry.api.recipes.properties.CatalystPropertyValue;
 
@@ -31,7 +32,7 @@ public class CatalystRecipeBuilder extends RecipeBuilder<CatalystRecipeBuilder> 
     }
 
     public CatalystRecipeBuilder catalyst(CatalystGroup catalystGroup) {
-        return catalyst(catalystGroup, GTValues.ULV, 1);
+        return catalyst(catalystGroup, CatalystInfo.NO_TIER, 1);
     }
 
     public CatalystRecipeBuilder catalyst(CatalystGroup catalystGroup, int tier) {
@@ -52,4 +53,5 @@ public class CatalystRecipeBuilder extends RecipeBuilder<CatalystRecipeBuilder> 
 
         return this.notConsumable(GTRecipeItemInput.getOrCreate(inputStacks));
     }
+
 }

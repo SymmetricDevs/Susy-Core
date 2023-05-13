@@ -40,6 +40,12 @@ public class ContinuousRecipeLogic extends RecipeLogicEnergy {
         if (recipe.hasProperty(CatalystProperty.getInstance())) {
             CatalystPropertyValue property = recipe.getProperty(CatalystProperty.getInstance(), null);
 
+            // If it is a non-tiered catalyst, no bonuses need to be calculated
+            // We can safely skip the inventory scanning
+            if (property.getTier() == CatalystInfo.NO_TIER) {
+                return;
+            }
+
             // find the best catalyst in the inventory, and use that
             for (int i = 0; i < getInputInventory().getSlots(); i++) {
                 ItemStack is = getInputInventory().getStackInSlot(i);
@@ -184,7 +190,7 @@ public class ContinuousRecipeLogic extends RecipeLogicEnergy {
         // If the maximum tier that the machine can overclock to is ULV, return false.
         // There is no overclocking allowed in ULV
         // TODO apply catalyst info bonuses in the dedicated pre-oc phase in a future CEu Update
-        if (overclockTier <= GTValues.LV) return false;
+        if (overclockTier < GTValues.LV) return false;
         int recipeTier = GTUtility.getTierByVoltage(recipeEUt);
 
         // Do overclock if the overclock tier is greater than the recipe tier or the catalyst tier is higher than the recipe catalyst tier

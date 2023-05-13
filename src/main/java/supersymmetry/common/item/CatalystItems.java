@@ -15,6 +15,8 @@ public final class CatalystItems {
     public static final MetaOreDictItem.OreDictValueItem[] OXIDATION_CATALYST_BED = new MetaOreDictItem.OreDictValueItem[14];
     public static final MetaOreDictItem.OreDictValueItem[] REDUCTION_CATALYST_BED = new MetaOreDictItem.OreDictValueItem[14];
 
+    public static MetaOreDictItem.OreDictValueItem CRACKING_CATALYST_BED;
+
     private CatalystItems() {
     }
 
@@ -23,12 +25,21 @@ public final class CatalystItems {
         addTieredCatalystItem(OXIDATION_CATALYST_BED, 0, 0x7f64b6, SusyOrePrefix.catalystBedOxidation);
         addTieredCatalystItem(REDUCTION_CATALYST_BED, 14, 0x377f8a, SusyOrePrefix.catalystBedReduction);
 
+        CRACKING_CATALYST_BED = SuSyMetaItems.oreDictItem.addOreDictItem(28, "standard", 0x728a7a, MaterialIconSet.DULL, SusyOrePrefix.catalystBedCracking);
+
         initCatalysts();
     }
 
     public static void initCatalysts() {
         addTieredCatalystGroup(OXIDATION_CATALYST_BED, CatalystGroups.OXIDATION_CATALYST_BEDS);
         addTieredCatalystGroup(REDUCTION_CATALYST_BED, CatalystGroups.REDUCTION_CATALYST_BEDS);
+
+        CatalystGroups.CRACKING_CATALYST_BEDS.add(CRACKING_CATALYST_BED.getItemStack(), new CatalystInfo(
+                CatalystInfo.NO_TIER,
+                1,
+                1,
+                1.25
+        ));
     }
 
     private static void addTieredCatalystItem(MetaOreDictItem.OreDictValueItem[] items, int id, int RGB, OrePrefix prefix) {

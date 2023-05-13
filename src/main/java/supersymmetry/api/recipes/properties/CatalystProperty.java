@@ -5,6 +5,7 @@ import gregtech.api.recipes.recipeproperties.RecipeProperty;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.recipes.catalysts.CatalystInfo;
 
 public class CatalystProperty extends RecipeProperty<CatalystPropertyValue> {
 
@@ -26,7 +27,12 @@ public class CatalystProperty extends RecipeProperty<CatalystPropertyValue> {
     @Override
     public void drawInfo(@NotNull Minecraft minecraft, int x, int y, int color, Object value) {
         CatalystPropertyValue propertyValue = castValue(value);
+        int tier = propertyValue.getTier();
         String localisedCatalystGroupName = I18n.format("gregtech.catalyst_group." + propertyValue.getCatalystGroup().getName() + ".name");
-        minecraft.fontRenderer.drawString(I18n.format("gregtech.recipe.catalyst", GTValues.VN[propertyValue.getTier()], localisedCatalystGroupName), x, y, color);
+        if(tier == CatalystInfo.NO_TIER) {
+            minecraft.fontRenderer.drawString(I18n.format("gregtech.recipe.catalyst", localisedCatalystGroupName, ""), x, y, color);
+        } else {
+            minecraft.fontRenderer.drawString(I18n.format("gregtech.recipe.catalyst", GTValues.VN[tier], localisedCatalystGroupName), x, y, color);
+        }
     }
 }

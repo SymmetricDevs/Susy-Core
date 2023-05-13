@@ -14,8 +14,8 @@ public class CatalystGroup {
     private final String name;
     private final CatalystInfos catalystInfos = new CatalystInfos();
 
-    public CatalystGroup(@Nonnull String name) {
-        this.name = name;
+    public CatalystGroup(@Nonnull String registry_name) {
+        this.name = registry_name;
         catalystGroups.add(this);
     }
 

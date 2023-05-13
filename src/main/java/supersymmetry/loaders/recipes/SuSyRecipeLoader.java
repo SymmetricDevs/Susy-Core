@@ -53,6 +53,15 @@ public class SuSyRecipeLoader {
                 .EUt(30)
                 .buildAndRegister();
 
+
+        SuSyRecipeMaps.TRICKLE_BED_REACTOR_RECIPES.recipeBuilder()
+                .fluidInputs(Materials.Butadiene.getFluid(2000))
+                .catalyst(CatalystGroups.CRACKING_CATALYST_BEDS)
+                .fluidOutputs(SusyMaterials.Latex.getFluid(1000))
+                .duration(100)
+                .EUt(30)
+                .buildAndRegister();
+
         SuSyRecipeMaps.FIXED_BED_REACTOR_RECIPES.recipeBuilder()
                 .fluidInputs(SusyMaterials.Latex.getFluid(1000))
                 .fluidOutputs(SusyMaterials.Latex.getFluid(1000))

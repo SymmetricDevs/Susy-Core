@@ -323,9 +323,13 @@ metaitem.pump.steam.name=Steam Pump
 
 # Catalysts
 gregtech.universal.catalysts.tooltip.tier=§eMax Voltage: §f%,d EU/T (%s§f)
-gregtech.universal.catalysts.tooltip.yield=§aYield Boost: §fx%d §aper tier.§f
-gregtech.universal.catalysts.tooltip.energy=§aEnergy Usage: §fx%d §aper tier.§f
-gregtech.universal.catalysts.tooltip.speed=§aSpeed Boost: §fx%d §aper tier.§f
+gregtech.universal.catalysts.tooltip.non_tiered=§eNon-Tiered Catalyst§
+gregtech.universal.catalysts.tooltip.yield.tiered=§aYield Boost: §fx%d §aper tier.§f
+gregtech.universal.catalysts.tooltip.energy.tiered=§aEnergy Usage: §fx%d §aper tier.§f
+gregtech.universal.catalysts.tooltip.speed.tiered=§aSpeed Boost: §fx%d §aper tier.§f
+gregtech.universal.catalysts.tooltip.yield=§aYield Boost: §fx%d
+gregtech.universal.catalysts.tooltip.energy=§aEnergy Usage: §fx%d
+gregtech.universal.catalysts.tooltip.speed=§aSpeed Boost: §fx%d
 gregtech.universal.catalysts.tooltip.title=%s
 
 # Oxidation Catalyst Bed
@@ -364,3 +368,7 @@ metaitem.opv_catalyst_bed_reduction.name=OpV Reduction Catalyst Bed
 
 # Standard Catalyst
 gregtech.catalyst_group.standard_catalysts.name=Standard Catalyst
+
+# Cracking Catalyst
+gregtech.catalyst_group.cracking_catalyst_beds.name=Cracking Catalyst
+metaitem.standard_catalyst_bed_cracking.name=Cracking Catalyst Bed
