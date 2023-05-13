@@ -1,0 +1,9 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "top": "gregtech:blocks/casings/drill_head/steel/top",
+    "front": "gregtech:blocks/casings/drill_head/steel/side",
+    "side": "gregtech:blocks/casings/drill_head/steel/side",
+    "south": "gregtech:blocks/casings/drill_head/steel/side"
+  }
+}
