@@ -114,6 +114,8 @@ public class SusyMaterials {
 
         Materials.Rhenium.setProperty(PropertyKey.DUST, new DustProperty());
 
+        Materials.Thallium.setProperty(PropertyKey.DUST, new DustProperty());
+
         Materials.CalciumChloride.setProperty(PropertyKey.FLUID, new FluidProperty());
 
         Materials.MagnesiumChloride.setProperty(PropertyKey.FLUID, new FluidProperty());
