@@ -6,6 +6,7 @@ import gregtech.api.unification.ore.OrePrefix;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
+import supersymmetry.api.unification.material.info.SuSyMaterialIconSets;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.recipes.CatalystGroups;
 
@@ -44,7 +45,7 @@ public final class CatalystItems {
 
     private static void addTieredCatalystItem(MetaOreDictItem.OreDictValueItem[] items, int id, int RGB, OrePrefix prefix) {
         for (int i = 0; i < items.length; i++) {
-            items[i] = SuSyMetaItems.oreDictItem.addOreDictItem(id + i, SuSyValues.TierMaterials[i].toString(), RGB, MaterialIconSet.DULL, prefix);
+            items[i] = SuSyMetaItems.oreDictItem.addOreDictItem(id + i, SuSyValues.TierMaterials[i].toString(), RGB, SuSyMaterialIconSets.TIERS[i], prefix);
         }
     }
 

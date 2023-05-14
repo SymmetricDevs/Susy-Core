@@ -8,9 +8,12 @@ import static supersymmetry.common.materials.SusyMaterials.*;
 public class SuSyUnknownCompositionMaterials {
 
     public static void init() {
+
         Latex = new Material.Builder(27050, "latex")
                 .dust().fluid(FluidTypes.LIQUID)
                 .color(0xFFFADA)
                 .build();
+
     }
+
 }
