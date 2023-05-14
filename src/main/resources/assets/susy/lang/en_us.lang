@@ -53,6 +53,8 @@ tile.deposit_block.deposit_block_sulfur.name=Sulfur Deposit Block
 
 tile.resource_block.resource_block_bauxite.name=Bauxite Ore
 tile.resource_block.resource_block_caliche.name=Caliche
+tile.resource_block.resource_block_lignite.name=Lignite Seam Block
+tile.resource_block.resource_block_anthracite.name=Anthracite Seam Block
 
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
