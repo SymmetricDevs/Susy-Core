@@ -20,8 +20,13 @@ import supersymmetry.common.metatileentities.multi.electric.*;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCoagulationTank;
 import supersymmetry.common.metatileentities.multi.electric.MetaTileEntitySmokeStack;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimitiveMudPump;
+import supersymmetry.common.metatileentities.multiblockpart.SusyMetaTileEntityEnergyHatch;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityLatexCollector;
 import supersymmetry.common.metatileentities.single.steam.*;
+import gregtech.common.metatileentities.multi.multiblockpart.*;
+import gregtech.common.blocks.BlockTurbineCasing;
+import gregtech.common.blocks.MetaBlocks;
+import gregtech.common.metatileentities.MetaTileEntities;
 
 import java.util.function.Function;
 
@@ -88,7 +93,8 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityOreSorter ORE_SORTER;
     public static MetaTileEntityCondenser CONDENSER;
     public static MetaTileEntityCoolingUnit COOLING_UNIT;
-    public static MetaTileEntityGasTurbine GAS_TURBINE;
+    public static MetaTileEntitySUSYLargeTurbine BASIC_GAS_TURBINE;
+    public static MetaTileEntitySUSYLargeTurbine BASIC_STEAM_TURBINE;
     public static MetaTileEntityHeatExchanger HEAT_EXCHANGER;
     public static MetaTileEntityHeatRadiator HEAT_RADIATOR;
     public static MetaTileEntityLargeWeaponsFactory LARGE_WEAPONS_FACTORY;
@@ -97,16 +103,19 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityQuencher QUENCHER;
     public static MetaTileEntityRailroadEngineeringStation RAILROAD_ENGINEERING_STATION;
 
+    public static MetaTileEntityEnergyHatch[] NEW_ENERGY_OUTPUT_HATCH_4A = new MetaTileEntityEnergyHatch[3];
+    public static MetaTileEntityEnergyHatch[] NEW_ENERGY_OUTPUT_HATCH_16A = new MetaTileEntityEnergyHatch[4];
+
     public static MetaTileEntityPrimitiveMudPump PRIMITIVE_MUD_PUMP;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
         COAGULATION_TANK = registerMetaTileEntity(14501, new MetaTileEntityCoagulationTank(susyId("coagulation_tank")));
 
-        LATEX_COLLECTOR[0] = registerMetaTileEntity(14502, new MetaTileEntityLatexCollector(susyId("latex_collector.lv"),1));
-        LATEX_COLLECTOR[1] = registerMetaTileEntity(14503, new MetaTileEntityLatexCollector(susyId("latex_collector.mv"),2));
-        LATEX_COLLECTOR[2] = registerMetaTileEntity(14504, new MetaTileEntityLatexCollector(susyId("latex_collector.hv"),3));
-        LATEX_COLLECTOR[3] = registerMetaTileEntity(14505, new MetaTileEntityLatexCollector(susyId("latex_collector.ev"),4));
+        LATEX_COLLECTOR[0] = registerMetaTileEntity(14502, new MetaTileEntityLatexCollector(susyId("latex_collector.lv"), 1));
+        LATEX_COLLECTOR[1] = registerMetaTileEntity(14503, new MetaTileEntityLatexCollector(susyId("latex_collector.mv"), 2));
+        LATEX_COLLECTOR[2] = registerMetaTileEntity(14504, new MetaTileEntityLatexCollector(susyId("latex_collector.hv"), 3));
+        LATEX_COLLECTOR[3] = registerMetaTileEntity(14505, new MetaTileEntityLatexCollector(susyId("latex_collector.ev"), 4));
 
         LATEX_COLLECTOR_BRONZE = registerMetaTileEntity(14510, new MetaTileEntitySteamLatexCollector(susyId("latex_collector.bronze")));
         SINTERING_OVEN = registerMetaTileEntity(14521, new MetaTileEntitySinteringOven(susyId("sintering_oven")));
@@ -164,7 +173,6 @@ public class SuSyMetaTileEntities {
         ORE_SORTER = registerMetaTileEntity(15040, new MetaTileEntityOreSorter(susyId("ore_sorter")));
         CONDENSER = registerMetaTileEntity(15041, new MetaTileEntityCondenser(susyId("condenser")));
         COOLING_UNIT = registerMetaTileEntity(15042, new MetaTileEntityCoolingUnit(susyId("cooling_unit")));
-        GAS_TURBINE = registerMetaTileEntity(15043, new MetaTileEntityGasTurbine(susyId("gas_turbine")));
         HEAT_EXCHANGER = registerMetaTileEntity(15044, new MetaTileEntityHeatExchanger(susyId("heat_exchanger")));
         HEAT_RADIATOR = registerMetaTileEntity(15045, new MetaTileEntityHeatRadiator(susyId("heat_radiator")));
         LARGE_WEAPONS_FACTORY = registerMetaTileEntity(15046, new MetaTileEntityLargeWeaponsFactory(susyId("large_weapons_factory")));
@@ -176,6 +184,17 @@ public class SuSyMetaTileEntities {
         PRIMITIVE_MUD_PUMP = registerMetaTileEntity(15051, new MetaTileEntityPrimitiveMudPump(susyId("primitive_mud_pump")));
 
         LEAD_DRUM = registerMetaTileEntity(14553, new MetaTileEntityDrum(susyId("drum.lead"), Materials.Lead, 32000));
+
+        NEW_ENERGY_OUTPUT_HATCH_4A[0] = registerMetaTileEntity(16000, new SusyMetaTileEntityEnergyHatch(susyId("energy_hatch.output_4a.lv"), 1, 4, true));
+        NEW_ENERGY_OUTPUT_HATCH_16A[0] = registerMetaTileEntity(16001, new SusyMetaTileEntityEnergyHatch(susyId("energy_hatch.output_16a.lv"), 1, 16, true));
+        NEW_ENERGY_OUTPUT_HATCH_4A[1] = registerMetaTileEntity(16002, new SusyMetaTileEntityEnergyHatch(susyId("energy_hatch.output_4a.mv"), 2, 4, true));
+        NEW_ENERGY_OUTPUT_HATCH_16A[1] = registerMetaTileEntity(16003, new SusyMetaTileEntityEnergyHatch(susyId("energy_hatch.output_16a.mv"), 2, 16, true));
+        NEW_ENERGY_OUTPUT_HATCH_4A[2] = registerMetaTileEntity(16004, new SusyMetaTileEntityEnergyHatch(susyId("energy_hatch.output_4a.hv"), 3, 4, true));
+        NEW_ENERGY_OUTPUT_HATCH_16A[2] = registerMetaTileEntity(16005, new SusyMetaTileEntityEnergyHatch(susyId("energy_hatch.output_16a.hv"), 3, 16, true));
+        NEW_ENERGY_OUTPUT_HATCH_16A[3] = registerMetaTileEntity(16006, new SusyMetaTileEntityEnergyHatch(susyId("energy_hatch.output_16a.ev"), 4, 16, true));
+
+        BASIC_STEAM_TURBINE = registerMetaTileEntity(17000, new MetaTileEntitySUSYLargeTurbine(susyId("basic_steam_turbine"), RecipeMaps.STEAM_TURBINE_FUELS, 1, MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING), Textures.SOLID_STEEL_CASING, Textures.LARGE_STEAM_TURBINE_OVERLAY));
+        BASIC_GAS_TURBINE = registerMetaTileEntity(17001, new MetaTileEntitySUSYLargeTurbine(susyId("basic_gas_turbine"), RecipeMaps.GAS_TURBINE_FUELS, 2, MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING), Textures.SOLID_STEEL_CASING, Textures.LARGE_STEAM_TURBINE_OVERLAY));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name, RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator, ICubeRenderer texture, boolean isBricked) {
