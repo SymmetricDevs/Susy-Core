@@ -38,23 +38,25 @@ public final class CatalystItems {
         CatalystGroups.CRACKING_CATALYST_BEDS.add(CRACKING_CATALYST_BED.getItemStack(), new CatalystInfo(
                 CatalystInfo.NO_TIER,
                 1,
-                1,
+                0.95,
                 1.25
         ));
     }
 
-    private static void addTieredCatalystItem(MetaOreDictItem.OreDictValueItem[] items, int id, int RGB, OrePrefix prefix) {
+
+
+    public static void addTieredCatalystItem(MetaOreDictItem.OreDictValueItem[] items, int id, int RGB, OrePrefix prefix) {
         for (int i = 0; i < items.length; i++) {
             items[i] = SuSyMetaItems.oreDictItem.addOreDictItem(id + i, SuSyValues.TierMaterials[i].toString(), RGB, SuSyMaterialIconSets.TIERS[i], prefix);
         }
     }
 
-    private static void addTieredCatalystGroup(MetaOreDictItem.OreDictValueItem[] items, CatalystGroup catalystGroup) {
+    public static void addTieredCatalystGroup(MetaOreDictItem.OreDictValueItem[] items, CatalystGroup catalystGroup) {
         for (int i = 0; i < items.length; i++) {
             catalystGroup.add(items[i].getItemStack(), new CatalystInfo(
                     i,
                     1,
-                    1,
+                    0.95,
                     1.25
             ));
         }
