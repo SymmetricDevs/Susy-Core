@@ -1,0 +1,44 @@
+// Put dependencies here
+
+repositories {
+    maven {
+        url = "https://www.cursemaven.com"
+    }
+}
+
+dependencies {
+    /* format for dependencies: implementation('curse.maven:<project-slug>-<project-id>:<file-id>')
+    * If mod crashes because of NoSuchMethodError use:
+    * implementation rfg.deobf('curse.maven:<project-slug>-<project-id>:<file-id>') */
+
+    // CCL 3.2.3.358
+    implementation rfg.deobf('curse.maven:codechicken-lib-1-8-242818:2779848')
+
+    // GTCEu 2.6.0/2.6.1
+    implementation rfg.deobf('curse.maven:gregtech-ce-unofficial-557242:4483462')
+
+    // GCYM 1.2.0
+    implementation('curse.maven:gregicality-multiblocks-564858:4480254')
+
+    // GeckoLib 3.0.31
+    implementation('curse.maven:geckolib-388172:4020277')
+
+    // JEI 4.16.1.302
+    implementation('curse.maven:jei-238222:3043174')
+
+    // TOP 1.4.28
+    implementation('curse.maven:the-one-probe-245211:2667280')
+
+    // RTG 1.0.2
+    implementation('curse.maven:realistic-terrain-generation-unofficial-648514:4404814')
+
+    // BOP 7.0.1.2445
+    implementation('curse.maven:biomes-o-plenty-220318:2842510')
+
+    // GTFO 1.9.1 (use this until the 1.9.2 release)
+    implementation files('libs/GregTech Food Option-1.12.2-1.9.1.jar')
+
+    // No Tree Punching 2.0.21 / AlcatrazCore 1.0.4
+    implementation('curse.maven:alcatrazcore-304493:2666560')
+    implementation('curse.maven:no-tree-punching-289043:2983385')
+}
