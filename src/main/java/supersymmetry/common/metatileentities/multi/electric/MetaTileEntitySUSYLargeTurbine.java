@@ -1,7 +1,6 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
 import gregtech.api.GTValues;
-import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.metatileentity.ITieredMetaTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -10,7 +9,6 @@ import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
-import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.common.blocks.BlockTurbineCasing;
@@ -20,8 +18,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import gregtech.common.metatileentities.multi.electric.generator.*;
+import supersymmetry.api.capability.impl.SuSyTurbineRecipeLogic;
 import supersymmetry.common.blocks.BlockAlternatorCoil;
 import supersymmetry.common.blocks.BlockTurbineRotor;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -37,7 +34,6 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
     public final ICubeRenderer casingRenderer;
     public final ICubeRenderer frontOverlay;
 
-    public IFluidHandler exportFluidHandler;
 
     public MetaTileEntitySUSYLargeTurbine(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap, int tier, IBlockState casingState, ICubeRenderer casingRenderer, ICubeRenderer frontOverlay) {
         super(metaTileEntityId, recipeMap, tier);
@@ -45,7 +41,7 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
         this.casingRenderer = casingRenderer;
         this.frontOverlay = frontOverlay;
         this.tier = tier;
-        this.recipeMapWorkable = new LargeTurbineWorkableHandler(this, tier);
+        this.recipeMapWorkable = new SuSyTurbineRecipeLogic(this);
         this.recipeMapWorkable.setMaximumOverclockVoltage(GTValues.V[tier]);
     }
 
@@ -55,22 +51,9 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
     }
 
     @Override
-    public void invalidateStructure() {
-        super.invalidateStructure();
-        this.exportFluidHandler = null;
-    }
-
-    @Override
-    protected void formStructure(PatternMatchContext context) {
-        super.formStructure(context);
-        this.exportFluidHandler = new FluidTankList(true, getAbilities(MultiblockAbility.EXPORT_FLUIDS));
-        ((LargeTurbineWorkableHandler) this.recipeMapWorkable).updateTanks();
-    }
-
-    @Override
     protected void addDisplayText(List<ITextComponent> textList) {
         if (isStructureFormed()) {
-            FluidStack fuelStack = ((LargeTurbineWorkableHandler) recipeMapWorkable).getInputFluidStack();
+            FluidStack fuelStack = ((SuSyTurbineRecipeLogic) recipeMapWorkable).getInputFluidStack();
             int fuelAmount = fuelStack == null ? 0 : fuelStack.amount;
 
             ITextComponent fuelName = new TextComponentTranslation(fuelAmount == 0 ? "gregtech.fluid.empty" : fuelStack.getUnlocalizedName());
