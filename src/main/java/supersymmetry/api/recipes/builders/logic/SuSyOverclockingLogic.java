@@ -1,5 +1,6 @@
 package supersymmetry.api.recipes.builders.logic;
 
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
 
 import javax.annotation.Nonnull;
@@ -33,7 +34,7 @@ public final class SuSyOverclockingLogic {
 
 
     @Nonnull
-    public static int[] catalystOverclockingLogic(int recipeEUt, long maximumVoltage, int recipeDuration, int maxOverclocks, @Nonnull CatalystInfo catalystInfo, int recipeRequiredCatalystTier) {
+    public static int[] catalystOverclockingLogic(int recipeEUt, long maximumVoltage, int recipeDuration, int maxOverclocks, @Nonnull CatalystInfo catalystInfo, int recipeRequiredCatalystTier, double durationDivisor, double voltageMultiplier) {
         int amountAboveRecipeTier = catalystInfo.getTier() - recipeRequiredCatalystTier;
 
         double energyEfficiency = catalystInfo.getEnergyEfficiency();
@@ -46,18 +47,20 @@ public final class SuSyOverclockingLogic {
             recipeEUt *= Math.min(1, Math.pow(energyEfficiency, amountAboveRecipeTier));
 
             // overclock
-            int[] overclock = standardOverclockingLogic(recipeEUt, maximumVoltage, recipeDuration, amountAboveRecipeTier, catalystDurationDivisor, STANDARD_OVERCLOCK_VOLTAGE_MULTIPLIER);
+            double resultDurationDouble = recipeDuration / Math.pow(catalystDurationDivisor, amountAboveRecipeTier);
+
+            recipeDuration = resultDurationDouble < 1 ? 1 : (int) resultDurationDouble;
 
             // overclock normally
-            return standardOverclockingLogic(overclock[0], maximumVoltage, overclock[1], maxOverclocks, STANDARD_OVERCLOCK_DURATION_DIVISOR, STANDARD_OVERCLOCK_VOLTAGE_MULTIPLIER);
+            return standardOverclockingLogic(recipeEUt, maximumVoltage, recipeDuration, maxOverclocks, durationDivisor, voltageMultiplier);
         }
 
         // no perfects are performed, do normal overclocking
-        return standardOverclockingLogic(recipeEUt, maximumVoltage, recipeDuration, maxOverclocks, STANDARD_OVERCLOCK_DURATION_DIVISOR, STANDARD_OVERCLOCK_VOLTAGE_MULTIPLIER);
+        return standardOverclockingLogic(recipeEUt, maximumVoltage, recipeDuration, maxOverclocks, durationDivisor, voltageMultiplier);
     }
 
     @Nonnull
-    public static double[] continuousCatalystOverclockingLogic(int recipeEUt, long maximumVoltage, int recipeDuration, int maxOverclocks, @Nonnull CatalystInfo catalystInfo, int recipeRequiredCatalystTier) {
+    public static double[] continuousCatalystOverclockingLogic(int recipeEUt, long maximumVoltage, int recipeDuration, int maxOverclocks, @Nonnull CatalystInfo catalystInfo, int recipeRequiredCatalystTier, double durationDivisor, double voltageMultiplier) {
         int amountAboveRecipeTier = catalystInfo.getTier() - recipeRequiredCatalystTier;
 
         double energyEfficiency = catalystInfo.getEnergyEfficiency();
@@ -73,10 +76,10 @@ public final class SuSyOverclockingLogic {
             double resultDuration = recipeDuration / Math.pow(catalystDurationDivisor, amountAboveRecipeTier);
 
             // overclock normally
-            return continuousOverclockingLogic(recipeEUt, maximumVoltage, resultDuration, maxOverclocks, STANDARD_OVERCLOCK_DURATION_DIVISOR, STANDARD_OVERCLOCK_VOLTAGE_MULTIPLIER);
+            return continuousOverclockingLogic(recipeEUt, maximumVoltage, resultDuration, maxOverclocks, durationDivisor, voltageMultiplier);
         }
 
         // no catalyst duration bonus performed
-        return continuousOverclockingLogic(recipeEUt, maximumVoltage, recipeDuration, maxOverclocks, STANDARD_OVERCLOCK_DURATION_DIVISOR, STANDARD_OVERCLOCK_VOLTAGE_MULTIPLIER);
+        return continuousOverclockingLogic(recipeEUt, maximumVoltage, recipeDuration, maxOverclocks, durationDivisor, voltageMultiplier);
     }
 }
