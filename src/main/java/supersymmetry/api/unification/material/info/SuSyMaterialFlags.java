@@ -13,7 +13,6 @@ public class SuSyMaterialFlags {
             .requireFlags(GENERATE_CATALYST_PELLET)
             .build();
 
-
     public SuSyMaterialFlags(){
     }
 }

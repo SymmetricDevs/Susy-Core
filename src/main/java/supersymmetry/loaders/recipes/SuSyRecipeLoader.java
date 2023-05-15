@@ -6,9 +6,11 @@ import gregtech.api.unification.material.Materials;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
 import net.minecraft.item.ItemStack;
+import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
 import supersymmetry.common.materials.SusyMaterials;
+import supersymmetry.common.recipes.CatalystGroups;
 import supersymmetry.loaders.SuSyMetaTileEntityLoader;
 
 import java.util.Arrays;
@@ -17,7 +19,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static gregtech.api.recipes.RecipeMaps.*;
-import static gregtech.api.unification.ore.OrePrefix.*;
+import static gregtech.api.unification.ore.OrePrefix.dust;
+import static gregtech.api.unification.ore.OrePrefix.stone;
 import static gregtech.common.items.MetaItems.SHAPE_EXTRUDER_BLOCK;
 
 public class SuSyRecipeLoader {

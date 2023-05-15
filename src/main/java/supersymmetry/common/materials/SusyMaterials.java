@@ -44,7 +44,6 @@ public class SusyMaterials {
     public static Material Lizardite;
     public static Material Fluorite;
 
-
     public static void init() {
         SuSyElementMaterials.init();
         SuSyFirstDegreeMaterials.init();

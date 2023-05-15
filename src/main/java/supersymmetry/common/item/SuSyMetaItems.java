@@ -1,28 +1,38 @@
 package supersymmetry.common.item;
 
-import gregtech.api.items.metaitem.MetaItem;
+import gregtech.api.GTValues;
+import gregtech.api.items.metaitem.MetaItem.MetaValueItem;
+import gregtech.api.items.metaitem.MetaOreDictItem;
+import gregtech.api.items.metaitem.MetaOreDictItem.OreDictValueItem;
 import gregtech.api.items.metaitem.StandardMetaItem;
-import gregtech.api.items.metaitem.stats.IItemComponent;
+import gregtech.api.unification.material.info.MaterialIconSet;
+import gregtech.api.unification.ore.OrePrefix;
 import gregtech.common.items.behaviors.TooltipBehavior;
 import net.minecraft.client.resources.I18n;
+import supersymmetry.SuSyValues;
+import supersymmetry.api.unification.ore.SusyOrePrefix;
 
 public class SuSyMetaItems {
 
     private static StandardMetaItem metaItem;
-
-
-    public static MetaItem.MetaValueItem CATALYST_BED_SUPPORT_GRID;
-    public static MetaItem<?>.MetaValueItem CONVEYOR_STEAM;
-    public static MetaItem<?>.MetaValueItem PUMP_STEAM;
-
+    public static MetaOreDictItem oreDictItem;
+    public static MetaValueItem CATALYST_BED_SUPPORT_GRID;
+    public static MetaValueItem CONVEYOR_STEAM;
+    public static MetaValueItem PUMP_STEAM;
 
     public static void initMetaItems() {
         metaItem = new StandardMetaItem();
         metaItem.setRegistryName("meta_item");
+        oreDictItem = new MetaOreDictItem((short) 0);
+        oreDictItem.setRegistryName("susy_oredict_item");
+
+        CatalystItems.init();
+
     }
 
     public static void initSubItems() {
         initMetaItem();
+        CatalystItems.initCatalysts();
     }
 
     private static void initMetaItem() {
@@ -36,5 +46,13 @@ public class SuSyMetaItems {
             lines.add(I18n.format("metaitem.electric.pump.tooltip", new Object[0]));
             lines.add(I18n.format("gregtech.universal.tooltip.fluid_transfer_rate", new Object[]{32}));
         }));
+    }
+
+    private static void addTieredOredictItem (OreDictValueItem[] items, int id, int RGB, OrePrefix prefix) {
+
+        for (int i = 0; i < items.length; i++) {
+            items[i] = oreDictItem.addOreDictItem(id + i, SuSyValues.TierMaterials[i + 1].toString(), RGB, MaterialIconSet.DULL, prefix, I18n.format("gregtech.universal.catalysts.tooltip.tier", GTValues.V[i], GTValues.VN[i]));
+        }
+
     }
 }

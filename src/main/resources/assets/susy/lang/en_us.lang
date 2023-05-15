@@ -169,6 +169,7 @@ gregtech.machine.primitive_mud_pump.name=Primitive Mud Pump
 
 # Properties
 gregtech.recipe.plasma_requirement=Requires plasma: %s
+gregtech.recipe.catalyst=Catalyst: %s %s
 
 # Latex Collector
 gregtech.machine.latex_collector.steam=Needs Steam!
@@ -501,3 +502,55 @@ gregtech.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a S
 metaitem.catalyst_bed_support_grid.name=Catalyst Bed Support Grid
 metaitem.conveyor.steam.name=Steam Conveyor
 metaitem.pump.steam.name=Steam Pump
+
+# Catalysts
+gregtech.universal.catalysts.tooltip.tier=§eMax Voltage: §f%,d EU/T (%s§f)
+gregtech.universal.catalysts.tooltip.non_tiered=§eNon-Tiered Catalyst§
+gregtech.universal.catalysts.tooltip.yield.tiered=§aYield Boost: §fx%d §aper tier.§f
+gregtech.universal.catalysts.tooltip.energy.tiered=§aEnergy Usage: §fx%d §aper tier.§f
+gregtech.universal.catalysts.tooltip.speed.tiered=§aSpeed Boost: §fx%d §aper tier.§f
+gregtech.universal.catalysts.tooltip.yield=§aYield Boost: §fx%d
+gregtech.universal.catalysts.tooltip.energy=§aEnergy Usage: §fx%d
+gregtech.universal.catalysts.tooltip.speed=§aSpeed Boost: §fx%d
+gregtech.universal.catalysts.tooltip.title=%s
+
+# Oxidation Catalyst Bed
+gregtech.catalyst_group.oxidation_catalyst_beds.name=Oxidation Catalyst
+metaitem.ulv_catalyst_bed_oxidation.name=ULV Oxidation Catalyst Bed
+metaitem.lv_catalyst_bed_oxidation.name=LV Oxidation Catalyst Bed
+metaitem.mv_catalyst_bed_oxidation.name=MV Oxidation Catalyst Bed
+metaitem.hv_catalyst_bed_oxidation.name=HV Oxidation Catalyst Bed
+metaitem.ev_catalyst_bed_oxidation.name=EV Oxidation Catalyst Bed
+metaitem.iv_catalyst_bed_oxidation.name=IV Oxidation Catalyst Bed
+metaitem.luv_catalyst_bed_oxidation.name=LUV Oxidation Catalyst Bed
+metaitem.zpm_catalyst_bed_oxidation.name=ZPM Oxidation Catalyst Bed
+metaitem.uv_catalyst_bed_oxidation.name=UV Oxidation Catalyst Bed
+metaitem.uhv_catalyst_bed_oxidation.name=UHV Oxidation Catalyst Bed
+metaitem.uev_catalyst_bed_oxidation.name=UEV Oxidation Catalyst Bed
+metaitem.uiv_catalyst_bed_oxidation.name=UIV Oxidation Catalyst Bed
+metaitem.uxv_catalyst_bed_oxidation.name=UXV Oxidation Catalyst Bed
+metaitem.opv_catalyst_bed_oxidation.name=OpV Oxidation Catalyst Bed
+
+# Reduction Catalyst Bed
+gregtech.catalyst_group.reduction_catalyst_beds.name=Reduction Catalyst
+metaitem.ulv_catalyst_bed_reduction.name=ULV Reduction Catalyst Bed
+metaitem.lv_catalyst_bed_reduction.name=LV Reduction Catalyst Bed
+metaitem.mv_catalyst_bed_reduction.name=MV Reduction Catalyst Bed
+metaitem.hv_catalyst_bed_reduction.name=HV Reduction Catalyst Bed
+metaitem.ev_catalyst_bed_reduction.name=EV Reduction Catalyst Bed
+metaitem.iv_catalyst_bed_reduction.name=IV Reduction Catalyst Bed
+metaitem.luv_catalyst_bed_reduction.name=LUV Reduction Catalyst Bed
+metaitem.zpm_catalyst_bed_reduction.name=ZPM Reduction Catalyst Bed
+metaitem.uv_catalyst_bed_reduction.name=UV Reduction Catalyst Bed
+metaitem.uhv_catalyst_bed_reduction.name=UHV Reduction Catalyst Bed
+metaitem.uev_catalyst_bed_reduction.name=UEV Reduction Catalyst Bed
+metaitem.uiv_catalyst_bed_reduction.name=UIV Reduction Catalyst Bed
+metaitem.uxv_catalyst_bed_reduction.name=UXV Reduction Catalyst Bed
+metaitem.opv_catalyst_bed_reduction.name=OpV Reduction Catalyst Bed
+
+# Standard Catalyst
+gregtech.catalyst_group.standard_catalysts.name=Standard Catalyst
+
+# Cracking Catalyst
+gregtech.catalyst_group.cracking_catalyst_beds.name=Cracking Catalyst
+metaitem.standard_catalyst_bed_cracking.name=Cracking Catalyst Bed

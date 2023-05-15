@@ -15,6 +15,7 @@ public class SusyOreDictionaryLoader {
     }
 
     public static void loadStoneOredict(){
+
         for (SusyStoneVariantBlock.StoneType type : SusyStoneVariantBlock.StoneType.values()) {
             ItemStack smooth = SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH).getItemVariant(type);
             ItemStack cobble = SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.COBBLE).getItemVariant(type);

@@ -83,6 +83,7 @@ public class CommonProxy {
         MetaItems.addOrePrefix(SusyOrePrefix.catalystPellet);
         MetaItems.addOrePrefix(SusyOrePrefix.catalystBed);
         SusyMaterials.removeFlags();
+
     }
 
     @SubscribeEvent()
