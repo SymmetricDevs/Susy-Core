@@ -28,7 +28,10 @@ public class BlockStructural1 extends VariantBlock<BlockStructural1.StructuralBl
         STRUCTURAL_BLOCK_1_DANGER_SIGN("structural_block_danger_sign", 1),
         STRUCTURAL_BLOCK_1_CABLE("structural_block_cable", 1),
         STRUCTURAL_BLOCK_1_CABLE_HORIZONTAL("structural_block_cable_horizontal", 1),
-        STRUCTURAL_BLOCK_1_CABLE_JUNCTION("structural_block_cable_junction", 1);
+        STRUCTURAL_BLOCK_1_CABLE_JUNCTION("structural_block_cable_junction", 1),
+        STRUCTURAL_BLOCK_1_PIPOCALYPSE("structural_block_pipocalypse", 1),
+        STRUCTURAL_BLOCK_1_VENT("structural_block_vent", 1),
+        STRUCTURAL_BLOCK_1_VENT_BROKEN("structural_block_vent_broken", 1);
 
         private final String name;
         private final int harvestLevel;

@@ -11,6 +11,7 @@ tile.coagulation_tank_wall.wooden_coagulation_tank_wall.name=Wooden Coagulation 
 
 tile.alternator_coil.copper.name=Copper Alternator Coil
 tile.turbine_rotor.steel.name=Steel Turbine Block
+tile.drill_head.steel.name=Steel Drill Head
 
 tile.structural_block.base_structural_block.name=Structural Block
 tile.structural_block.structural_block_low.name=Striped Structural Block
@@ -35,6 +36,20 @@ tile.structural_block_1.structural_block_danger_sign.name=Structural Danger Sign
 tile.structural_block_1.structural_block_cable.name=Structural Block Cable (Vertical)
 tile.structural_block_1.structural_block_cable_horizontal.name=Structural Block Cable (Horizontal)
 tile.structural_block_1.structural_block_cable_junction.name=Structural Block Cable (Turn)
+tile.structural_block_1.structural_block_pipocalypse.name=Structural Block Dense Pipes
+tile.structural_block_1.structural_block_vent.name=Structural Block Vent
+tile.structural_block_1.structural_block_vent_broken.name=Structural Block Vent (Broken)
+
+tile.deposit_block.deposit_block_carbon.name=Carbon Deposit Block
+tile.deposit_block.deposit_block_carbonate.name=Carbonate Deposit Block
+tile.deposit_block.deposit_block_clay.name=Clay Deposit Block
+tile.deposit_block.deposit_block_oxide.name=Oxide Deposit Block
+tile.deposit_block.deposit_block_phosphate.name=Phosphate Deposit Block
+tile.deposit_block.deposit_block_precious.name=Precious Deposit Block
+tile.deposit_block.deposit_block_radioactive.name=Radioactive Deposit Block
+tile.deposit_block.deposit_block_sedimentary.name=Sedimentary Deposit Block
+tile.deposit_block.deposit_block_silicate.name=Silicate Deposit Block
+tile.deposit_block.deposit_block_sulfur.name=Sulfur Deposit Block
 
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
@@ -76,6 +91,8 @@ material.manganese_iron_arsenic_phosphide=Manganese Iron Arsenic Phosphide
 material.praseodymium_nickel=Praseodymium-Nickel
 material.gadolinium_silicon_germanium=Gadolinium Silicon Germanium
 material.latex=Latex
+material.mud=Mud
+
 # Rock/Mineral Materials
 material.fluorite=Fluorite
 material.gabbro=Gabbro
@@ -137,6 +154,18 @@ gregtech.machine.smoke_stack.name=Smoke Stack
 gregtech.machine.catalytic_reformer.name=Catalytic Reformer
 
 gregtech.machine.fermentation_vat.name=Fermentation Vat
+gregtech.machine.ore_sorter.name=Ore Sorter
+gregtech.machine.condenser.name=Condenser
+gregtech.machine.cooling_unit.name=Cooling Unit
+gregtech.machine.gas_turbine.name=Gas Turbine
+gregtech.machine.heat_exchanger.name=Heat Exchanger
+gregtech.machine.heat_radiator.name=Heat Radiator
+gregtech.machine.large_weapons_factory.name=Large Weapons Factory
+gregtech.machine.magnetohydrodynamic_generator.name=Magnetohydrodynamic (MHD) Generator
+gregtech.machine.mining_drill.name=Mining Drill
+gregtech.machine.quencher.name=Quencher
+gregtech.machine.railroad_engineering_station.name=Railroad Engineering Station
+gregtech.machine.primitive_mud_pump.name=Primitive Mud Pump
 
 # Properties
 gregtech.recipe.plasma_requirement=Requires plasma: %s
@@ -242,21 +271,6 @@ gregtech.machine.trickle_bed_reactor.uiv.name=Epic Trickle Bed Reactor III
 gregtech.machine.trickle_bed_reactor.uxv.name=Epic Trickle Bed Reactor IV
 gregtech.machine.trickle_bed_reactor.opv.name=Legendary Trickle Bed Reactor
 
-# Crystallizer
-gregtech.machine.crystallizer.lv.name=Basic Crystallizer
-gregtech.machine.crystallizer.mv.name=Advanced Crystallizer
-gregtech.machine.crystallizer.hv.name=Advanced Crystallizer II
-gregtech.machine.crystallizer.ev.name=Advanced Crystallizer III
-gregtech.machine.crystallizer.iv.name=Elite Crystallizer
-gregtech.machine.crystallizer.luv.name=Elite Crystallizer II
-gregtech.machine.crystallizer.zpm.name=Elite Crystallizer III
-gregtech.machine.crystallizer.uv.name=Ultimate Crystallizer
-gregtech.machine.crystallizer.uhv.name=Epic Crystallizer
-gregtech.machine.crystallizer.uev.name=Epic Crystallizer II
-gregtech.machine.crystallizer.uiv.name=Epic Crystallizer III
-gregtech.machine.crystallizer.uxv.name=Epic Crystallizer IV
-gregtech.machine.crystallizer.opv.name=Legendary Crystallizer
-
 # Bubble Column Reactor
 gregtech.machine.bubble_column_reactor.lv.name=Basic Bubble Column Reactor
 gregtech.machine.bubble_column_reactor.mv.name=Advanced Bubble Column Reactor
@@ -271,6 +285,36 @@ gregtech.machine.bubble_column_reactor.uev.name=Epic Bubble Column Reactor II
 gregtech.machine.bubble_column_reactor.uiv.name=Epic Bubble Column Reactor III
 gregtech.machine.bubble_column_reactor.uxv.name=Epic Bubble Column Reactor IV
 gregtech.machine.bubble_column_reactor.opv.name=Legendary Bubble Column Reactor
+
+# Batch Reactor
+gregtech.machine.batch_reactor.lv.name=Basic Batch Reactor
+gregtech.machine.batch_reactor.mv.name=Advanced Batch Reactor
+gregtech.machine.batch_reactor.hv.name=Advanced Batch Reactor II
+gregtech.machine.batch_reactor.ev.name=Advanced Batch Reactor III
+gregtech.machine.batch_reactor.iv.name=Elite Batch Reactor
+gregtech.machine.batch_reactor.luv.name=Elite Batch Reactor II
+gregtech.machine.batch_reactor.zpm.name=Elite Batch Reactor III
+gregtech.machine.batch_reactor.uv.name=Ultimate Batch Reactor
+gregtech.machine.batch_reactor.uhv.name=Epic Batch Reactor
+gregtech.machine.batch_reactor.uev.name=Epic Batch Reactor II
+gregtech.machine.batch_reactor.uiv.name=Epic Batch Reactor III
+gregtech.machine.batch_reactor.uxv.name=Epic Batch Reactor IV
+gregtech.machine.batch_reactor.opv.name=Legendary Batch Reactor
+
+# Crystallizer
+gregtech.machine.crystallizer.lv.name=Basic Crystallizer
+gregtech.machine.crystallizer.mv.name=Advanced Crystallizer
+gregtech.machine.crystallizer.hv.name=Advanced Crystallizer II
+gregtech.machine.crystallizer.ev.name=Advanced Crystallizer III
+gregtech.machine.crystallizer.iv.name=Elite Crystallizer
+gregtech.machine.crystallizer.luv.name=Elite Crystallizer II
+gregtech.machine.crystallizer.zpm.name=Elite Crystallizer III
+gregtech.machine.crystallizer.uv.name=Ultimate Crystallizer
+gregtech.machine.crystallizer.uhv.name=Epic Crystallizer
+gregtech.machine.crystallizer.uev.name=Epic Crystallizer II
+gregtech.machine.crystallizer.uiv.name=Epic Crystallizer III
+gregtech.machine.crystallizer.uxv.name=Epic Crystallizer IV
+gregtech.machine.crystallizer.opv.name=Legendary Crystallizer
 
 # Dryer
 gregtech.machine.dryer.lv.name=Basic Dryer
@@ -287,6 +331,51 @@ gregtech.machine.dryer.uiv.name=Epic Dryer III
 gregtech.machine.dryer.uxv.name=Epic Dryer IV
 gregtech.machine.dryer.opv.name=Legendary Dryer
 
+# Ion Exchange Column
+gregtech.machine.ion_exchange_column.lv.name=Basic Ion Exchange Column
+gregtech.machine.ion_exchange_column.mv.name=Advanced Ion Exchange Column
+gregtech.machine.ion_exchange_column.hv.name=Advanced Ion Exchange Column II
+gregtech.machine.ion_exchange_column.ev.name=Advanced Ion Exchange Column III
+gregtech.machine.ion_exchange_column.iv.name=Elite Ion Exchange Column
+gregtech.machine.ion_exchange_column.luv.name=Elite Ion Exchange Column II
+gregtech.machine.ion_exchange_column.zpm.name=Elite Ion Exchange Column III
+gregtech.machine.ion_exchange_column.uv.name=Ultimate Ion Exchange Column
+gregtech.machine.ion_exchange_column.uhv.name=Epic Ion Exchange Column
+gregtech.machine.ion_exchange_column.uev.name=Epic Ion Exchange Column II
+gregtech.machine.ion_exchange_column.uiv.name=Epic Ion Exchange Column III
+gregtech.machine.ion_exchange_column.uxv.name=Epic Ion Exchange Column IV
+gregtech.machine.ion_exchange_column.opv.name=Legendary Ion Exchange Column
+
+# Zone Refiner
+gregtech.machine.zone_refiner.lv.name=Basic Zone Refiner
+gregtech.machine.zone_refiner.mv.name=Advanced Zone Refiner
+gregtech.machine.zone_refiner.hv.name=Advanced Zone Refiner II
+gregtech.machine.zone_refiner.ev.name=Advanced Zone Refiner III
+gregtech.machine.zone_refiner.iv.name=Elite Zone Refiner
+gregtech.machine.zone_refiner.luv.name=Elite Zone Refiner II
+gregtech.machine.zone_refiner.zpm.name=Elite Zone Refiner III
+gregtech.machine.zone_refiner.uv.name=Ultimate Zone Refiner
+gregtech.machine.zone_refiner.uhv.name=Epic Zone Refiner
+gregtech.machine.zone_refiner.uev.name=Epic Zone Refiner II
+gregtech.machine.zone_refiner.uiv.name=Epic Zone Refiner III
+gregtech.machine.zone_refiner.uxv.name=Epic Zone Refiner IV
+gregtech.machine.zone_refiner.opv.name=Legendary Zone Refiner
+
+# Tube Furnace
+gregtech.machine.tube_furnace.lv.name=Basic Tube Furnace
+gregtech.machine.tube_furnace.mv.name=Advanced Tube Furnace
+gregtech.machine.tube_furnace.hv.name=Advanced Tube Furnace II
+gregtech.machine.tube_furnace.ev.name=Advanced Tube Furnace III
+gregtech.machine.tube_furnace.iv.name=Elite Tube Furnace
+gregtech.machine.tube_furnace.luv.name=Elite Tube Furnace II
+gregtech.machine.tube_furnace.zpm.name=Elite Tube Furnace III
+gregtech.machine.tube_furnace.uv.name=Ultimate Tube Furnace
+gregtech.machine.tube_furnace.uhv.name=Epic Tube Furnace
+gregtech.machine.tube_furnace.uev.name=Epic Tube Furnace II
+gregtech.machine.tube_furnace.uiv.name=Epic Tube Furnace III
+gregtech.machine.tube_furnace.uxv.name=Epic Tube Furnace IV
+gregtech.machine.tube_furnace.opv.name=Legendary Tube Furnace
+
 # UV Light Box
 gregtech.machine.uv_light_box.lv.name=Basic UV Light Box
 gregtech.machine.uv_light_box.mv.name=Advanced UV Light Box
@@ -295,12 +384,87 @@ gregtech.machine.uv_light_box.ev.name=Advanced UV Light Box III
 gregtech.machine.uv_light_box.iv.name=Elite UV Light Box
 gregtech.machine.uv_light_box.luv.name=Elite UV Light Box II
 gregtech.machine.uv_light_box.zpm.name=Elite UV Light Box III
-gregtech.machine.uv_light_box.uv.name=UV Light Box Dryer
+gregtech.machine.uv_light_box.uv.name=Ultimate UV Light Box
 gregtech.machine.uv_light_box.uhv.name=Epic UV Light Box
 gregtech.machine.uv_light_box.uev.name=Epic UV Light Box II
 gregtech.machine.uv_light_box.uiv.name=Epic UV Light Box III
 gregtech.machine.uv_light_box.uxv.name=Epic UV Light Box IV
 gregtech.machine.uv_light_box.opv.name=Legendary UV Light Box
+
+# CVD
+gregtech.machine.cvd.lv.name=Basic CVD Unit
+gregtech.machine.cvd.mv.name=Advanced CVD Unit
+gregtech.machine.cvd.hv.name=Advanced CVD Unit II
+gregtech.machine.cvd.ev.name=Advanced CVD Unit III
+gregtech.machine.cvd.iv.name=Elite CVD Unit
+gregtech.machine.cvd.luv.name=Elite CVD Unit II
+gregtech.machine.cvd.zpm.name=Elite CVD Unit III
+gregtech.machine.cvd.uv.name=Ultimate CVD Unit
+gregtech.machine.cvd.uhv.name=Epic CVD Unit
+gregtech.machine.cvd.uev.name=Epic CVD Unit II
+gregtech.machine.cvd.uiv.name=Epic CVD Unit III
+gregtech.machine.cvd.uxv.name=Epic CVD Unit IV
+gregtech.machine.cvd.opv.name=Legendary CVD Unit
+
+# Ion Implanter
+gregtech.machine.ion_implanter.lv.name=Basic Ion Implanter
+gregtech.machine.ion_implanter.mv.name=Advanced Ion Implanter
+gregtech.machine.ion_implanter.hv.name=Advanced Ion Implanter II
+gregtech.machine.ion_implanter.ev.name=Advanced Ion Implanter III
+gregtech.machine.ion_implanter.iv.name=Elite Ion Implanter
+gregtech.machine.ion_implanter.luv.name=Elite Ion Implanter II
+gregtech.machine.ion_implanter.zpm.name=Elite Ion Implanter III
+gregtech.machine.ion_implanter.uv.name=Ultimate Ion Implanter
+gregtech.machine.ion_implanter.uhv.name=Epic Ion Implanter
+gregtech.machine.ion_implanter.uev.name=Epic Ion Implanter II
+gregtech.machine.ion_implanter.uiv.name=Epic Ion Implanter III
+gregtech.machine.ion_implanter.uxv.name=Epic Ion Implanter IV
+gregtech.machine.ion_implanter.opv.name=Legendary Ion Implanter
+
+# Fluid Compressor
+gregtech.machine.fluid_compressor.lv.name=Basic Fluid Compressor
+gregtech.machine.fluid_compressor.mv.name=Advanced Fluid Compressor
+gregtech.machine.fluid_compressor.hv.name=Advanced Fluid Compressor II
+gregtech.machine.fluid_compressor.ev.name=Advanced Fluid Compressor III
+gregtech.machine.fluid_compressor.iv.name=Elite Fluid Compressor
+gregtech.machine.fluid_compressor.luv.name=Elite Fluid Compressor II
+gregtech.machine.fluid_compressor.zpm.name=Elite Fluid Compressor III
+gregtech.machine.fluid_compressor.uv.name=Ultimate Fluid Compressor
+gregtech.machine.fluid_compressor.uhv.name=Epic Fluid Compressor
+gregtech.machine.fluid_compressor.uev.name=Epic Fluid Compressor II
+gregtech.machine.fluid_compressor.uiv.name=Epic Fluid Compressor III
+gregtech.machine.fluid_compressor.uxv.name=Epic Fluid Compressor IV
+gregtech.machine.fluid_compressor.opv.name=Legendary Fluid Compressor
+
+# Fluid Decompressor
+gregtech.machine.fluid_decompressor.lv.name=Basic Fluid Decompressor
+gregtech.machine.fluid_decompressor.mv.name=Advanced Fluid Decompressor
+gregtech.machine.fluid_decompressor.hv.name=Advanced Fluid Decompressor II
+gregtech.machine.fluid_decompressor.ev.name=Advanced Fluid Decompressor III
+gregtech.machine.fluid_decompressor.iv.name=Elite Fluid Decompressor
+gregtech.machine.fluid_decompressor.luv.name=Elite Fluid Decompressor II
+gregtech.machine.fluid_decompressor.zpm.name=Elite Fluid Decompressor III
+gregtech.machine.fluid_decompressor.uv.name=Ultimate Fluid Decompressor
+gregtech.machine.fluid_decompressor.uhv.name=Epic Fluid Decompressor
+gregtech.machine.fluid_decompressor.uev.name=Epic Fluid Decompressor II
+gregtech.machine.fluid_decompressor.uiv.name=Epic Fluid Decompressor III
+gregtech.machine.fluid_decompressor.uxv.name=Epic Fluid Decompressor IV
+gregtech.machine.fluid_decompressor.opv.name=Legendary Fluid Decompressor
+
+# Weapons Factory
+gregtech.machine.weapons_factory.lv.name=Basic Weapons Factory
+gregtech.machine.weapons_factory.mv.name=Advanced Weapons Factory
+gregtech.machine.weapons_factory.hv.name=Advanced Weapons Factory II
+gregtech.machine.weapons_factory.ev.name=Advanced Weapons Factory III
+gregtech.machine.weapons_factory.iv.name=Elite Weapons Factory
+gregtech.machine.weapons_factory.luv.name=Elite Weapons Factory II
+gregtech.machine.weapons_factory.zpm.name=Elite Weapons Factory III
+gregtech.machine.weapons_factory.uv.name=Ultimate Weapons Factory
+gregtech.machine.weapons_factory.uhv.name=Epic Weapons Factory
+gregtech.machine.weapons_factory.uev.name=Epic Weapons Factory II
+gregtech.machine.weapons_factory.uiv.name=Epic Weapons Factory III
+gregtech.machine.weapons_factory.uxv.name=Epic Weapons Factory IV
+gregtech.machine.weapons_factory.opv.name=Legendary Weapons Factory
 
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
@@ -315,6 +479,24 @@ recipemap.bubble_column_reactor.name=Bubble Column Reactor
 recipemap.fluidized_bed_reactor.name=Fluidized Bed Reactor
 recipemap.polymerization_tank.name=Polymerization Tank
 recipemap.uv_light_box.name=UV Light Box
+recipemap.ion_implantation.name=Ion Implantation
+recipemap.cvd.name=Chemical Vapor Deposition
+recipemap.ore_sorter.name=Ore Sorting
+recipemap.cooling_tower.name=Cooling Tower
+recipemap.cooling_unit.name=Cooling Unit
+recipemap.fluid_decompressor.name=Fluid Decompressing
+recipemap.fluid_compressor.name=Fluid Compressing
+recipemap.heat_exchanger.name=Heat Exchanging
+recipemap.condenser.name=Condensing
+recipemap.radiator.name=Heat Radiator
+recipemap.quencher.name=Quenching
+recipemap.weapons_factory.name=Weapons Factory
+recipemap.large_weapons_factory.name=Large Weapons Factory
+recipemap.railroad_engineering_station.name=Railroad Engineering Station
+recipemap.mining_drill.name=Mining Drill
+recipemap.magnetohydrodynamic_generator.name=Magnetohydrodynamic Generator
+
+gregtech.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 
 # Metaitems
 metaitem.catalyst_bed_support_grid.name=Catalyst Bed Support Grid

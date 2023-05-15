@@ -1,6 +1,7 @@
 package supersymmetry.common.materials;
 
 import gregtech.api.GregTechAPI;
+import gregtech.api.fluids.fluidType.FluidType;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.info.MaterialFlag;
@@ -26,6 +27,7 @@ public class SusyMaterials {
     public static Material Slate;
     public static Material Kimberlite;
     public static Material Latex;
+    public static Material Mud;
 
     //Minerals
     public static Material Anorthite;
