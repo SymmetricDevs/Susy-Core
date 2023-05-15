@@ -35,39 +35,6 @@ public class SuSyRecipeLoader {
         registerStoneRecipes();
         GTRecipeHandler.removeAllRecipes(ELECTROLYZER_RECIPES);
         // make more loaders to categorize recipes and what is added
-
-        SuSyRecipeMaps.FLUIDIZED_BED_REACTOR_RECIPES.recipeBuilder()
-                .fluidInputs(Materials.Ethane.getFluid(1000))
-                .catalyst(CatalystGroups.OXIDATION_CATALYST_BEDS, 0)
-                .fluidOutputs(Materials.Ethanol.getFluid(1000))
-                .duration(1000)
-                .EUt(30)
-                .buildAndRegister();
-
-        SuSyRecipeMaps.FLUIDIZED_BED_REACTOR_RECIPES.recipeBuilder()
-                .fluidInputs(Materials.Ethane.getFluid(1000))
-                .catalyst(CatalystGroups.CRACKING_CATALYST_BEDS)
-                .fluidOutputs(Materials.Ethanol.getFluid(1000))
-                .duration(1000)
-                .EUt(30)
-                .buildAndRegister();
-
-        SuSyRecipeMaps.VULCANIZATION_RECIPES.recipeBuilder()
-                .fluidInputs(Materials.Ethane.getFluid(1000))
-                .catalyst(CatalystGroups.CRACKING_CATALYST_BEDS)
-                .fluidOutputs(Materials.Ethanol.getFluid(1000))
-                .duration(1000)
-                .EUt(30)
-                .buildAndRegister();
-
-        SuSyRecipeMaps.VULCANIZATION_RECIPES.recipeBuilder()
-                .fluidInputs(Materials.Ethane.getFluid(1000))
-                .catalyst(CatalystGroups.OXIDATION_CATALYST_BEDS, 0)
-                .fluidOutputs(Materials.Ethanol.getFluid(1000))
-                .duration(1000)
-                .EUt(30)
-                .buildAndRegister();
-
     }
 
     private static void registerStoneRecipes(){
