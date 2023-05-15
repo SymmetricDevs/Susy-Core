@@ -1,0 +1,37 @@
+{
+  "forge_marker" : 1,
+  "defaults": {
+    "model": "minecraft:cube_bottom_top",
+    "textures": {
+      "bottom": "gregtech:blocks/resource/resource_block_bauxite",
+      "top": "gregtech:blocks/resource/resource_block_bauxite",
+      "side": "gregtech:blocks/resource/resource_block_bauxite"
+    }
+  },
+  "variants" : {
+    "variant=resource_block_bauxite" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/resource/resource_block_bauxite"
+      }
+    },
+    "variant=resource_block_caliche" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/resource/resource_block_caliche"
+      }
+    },
+    "variant=resource_block_anthracite" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/resource/resource_block_anthracite"
+      }
+    },
+    "variant=resource_block_lignite" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/resource/resource_block_lignite"
+      }
+    }
+  }
+}

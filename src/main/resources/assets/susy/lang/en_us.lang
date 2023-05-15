@@ -51,6 +51,11 @@ tile.deposit_block.deposit_block_sedimentary.name=Sedimentary Deposit Block
 tile.deposit_block.deposit_block_silicate.name=Silicate Deposit Block
 tile.deposit_block.deposit_block_sulfur.name=Sulfur Deposit Block
 
+tile.resource_block.resource_block_bauxite.name=Bauxite Ore
+tile.resource_block.resource_block_caliche.name=Caliche
+tile.resource_block.resource_block_lignite.name=Lignite Seam Block
+tile.resource_block.resource_block_anthracite.name=Anthracite Seam Block
+
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
 tile.susy_stone_smooth.gneiss.name=Gneiss
@@ -166,6 +171,8 @@ gregtech.machine.mining_drill.name=Mining Drill
 gregtech.machine.quencher.name=Quencher
 gregtech.machine.railroad_engineering_station.name=Railroad Engineering Station
 gregtech.machine.primitive_mud_pump.name=Primitive Mud Pump
+gregtech.machine.basic_steam_turbine.name=Large Steam Turbine
+gregtech.machine.basic_gas_turbine.name=Large Gas Turbine
 
 # Properties
 gregtech.recipe.plasma_requirement=Requires plasma: %s
@@ -497,6 +504,16 @@ recipemap.mining_drill.name=Mining Drill
 recipemap.magnetohydrodynamic_generator.name=Magnetohydrodynamic Generator
 
 gregtech.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
+
+# Energy Hatches
+
+gregtech.machine.energy_hatch.output_4a.lv.name=LV 4A Dynamo Hatch
+gregtech.machine.energy_hatch.output_16a.lv.name=LV 16A Dynamo Hatch
+gregtech.machine.energy_hatch.output_4a.mv.name=MV 4A Dynamo Hatch
+gregtech.machine.energy_hatch.output_16a.mv.name=MV 16A Dynamo Hatch
+gregtech.machine.energy_hatch.output_4a.hv.name=HV 4A Dynamo Hatch
+gregtech.machine.energy_hatch.output_16a.hv.name=HV 16A Dynamo Hatch
+gregtech.machine.energy_hatch.output_16a.ev.name=EV 16A Dynamo Hatch
 
 # Metaitems
 metaitem.catalyst_bed_support_grid.name=Catalyst Bed Support Grid
