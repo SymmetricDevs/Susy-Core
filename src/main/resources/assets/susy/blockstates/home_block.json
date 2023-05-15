@@ -1,12 +1,43 @@
 {
   "forge_marker" : 1,
   "defaults": {
-    "model": "minecraft:cube_all"
+    "model": "minecraft:cube_bottom_top",
+    "textures": {
+      "bottom": "gregtech:blocks/rendering_error",
+      "top": "gregtech:blocks/rendering_error",
+      "side": "gregtech:blocks/rendering_error"
+    }
   },
   "variants" : {
-    "facing=north,variant=home_block_home": { "model": "susy:home_block/home" },
-    "facing=south,variant=home_block_home": { "model": "susy:home_block/home", "y": 180 },
-    "facing=west,variant=home_block_home": { "model": "susy:home_block/home", "y": 270 },
-    "facing=east,variant=home_block_home": { "model": "susy:home_block/home", "y": 90 }
+    "variant" : {
+      "primitive": {
+        "textures": {
+          "bottom": "gregtech:blocks/home_blocks/primitive/primitive_bottom",
+          "top": "gregtech:blocks/home_blocks/primitive/primitive_top",
+          "side": "gregtech:blocks/home_blocks/primitive/primitive_front"
+        }
+      },
+      "gt_brutalist": {
+        "textures": {
+          "bottom": "gregtech:blocks/home_blocks/gt_brutalist/gt_brutalist_bottom",
+          "top": "gregtech:blocks/home_blocks/gt_brutalist/gt_brutalist_top",
+          "side": "gregtech:blocks/home_blocks/gt_brutalist/gt_brutalist_front"
+        }
+      },
+      "renewal_brutalist": {
+        "textures": {
+          "bottom": "gregtech:blocks/home_blocks/renewal_brutalist/renewal_brutalist_bottom",
+          "top": "gregtech:blocks/home_blocks/renewal_brutalist/renewal_brutalist_top",
+          "side": "gregtech:blocks/home_blocks/renewal_brutalist/renewal_brutalist_front"
+        }
+      },
+      "scifi": {
+        "textures": {
+          "bottom": "gregtech:blocks/home_blocks/scifi/scifi_bottom",
+          "top": "gregtech:blocks/home_blocks/scifi/scifi_top",
+          "side": "gregtech:blocks/home_blocks/scifi/scifi_front"
+        }
+      }
+    }
   }
 }

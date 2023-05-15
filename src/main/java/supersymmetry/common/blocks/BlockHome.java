@@ -25,15 +25,13 @@ import javax.annotation.Nullable;
 
 public class BlockHome extends VariantBlock<BlockHome.HomeType> {
 
-    public static final PropertyDirection FACING = BlockHorizontal.FACING;
-
     public BlockHome() {
         super(Material.IRON);
         this.setTranslationKey("home_block");
         this.setHardness(0.5f);
         this.setSoundType(SoundType.METAL);
         this.setHarvestLevel("wrench", 2);
-        this.setDefaultState(getState(HomeType.HOME));
+        this.setDefaultState(getState(HomeType.PRIMITIVE));
     }
 
     @Override
@@ -44,57 +42,6 @@ public class BlockHome extends VariantBlock<BlockHome.HomeType> {
     @Override
     public boolean isBed(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable Entity player) {
         return true;
-    }
-
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
-    }
-
-    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-        return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING, placer.getHorizontalFacing().getOpposite());
-    }
-
-    public IBlockState withRotation(IBlockState state, Rotation rot) {
-        return state.withProperty(FACING, rot.rotate((EnumFacing) state.getValue(FACING)));
-    }
-
-    public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
-        return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
-    }
-
-    public IBlockState getStateFromMeta(int meta) {
-        int i = meta / 4;
-        int j = meta % 4 + 2;
-
-        EnumFacing enumfacing = EnumFacing.byIndex(j);
-
-        if (enumfacing.getAxis() == EnumFacing.Axis.Y)
-        {
-            enumfacing = EnumFacing.NORTH;
-        }
-
-        return this.getDefaultState().withProperty(FACING, enumfacing).withProperty(this.VARIANT, this.VALUES[i % this.VALUES.length]);
-    }
-
-    public int getMetaFromState(IBlockState state) {
-        int i = ((Enum)state.getValue(this.VARIANT)).ordinal();
-        int j = ((EnumFacing)state.getValue(FACING)).getIndex();
-        return j - 2 + i * 4;
-    }
-
-    @Nonnull
-    protected BlockStateContainer createBlockState() {
-        super.createBlockState();
-
-        return new BlockStateContainer(this, new IProperty[]{this.VARIANT, this.FACING});
-    }
-
-    public ItemStack getItemVariant(BlockTurbineRotor.BlockTurbineRotorType variant, int amount) {
-        return new ItemStack(this, amount, variant.ordinal() * 4) ;
-    }
-
-    public int damageDropped(@Nonnull IBlockState state) {
-        return this.getMetaFromState(state) - ((EnumFacing)state.getValue(FACING)).getIndex() + 2;
     }
 
     @Override
@@ -115,7 +62,11 @@ public class BlockHome extends VariantBlock<BlockHome.HomeType> {
     }
 
     public enum HomeType implements IStringSerializable {
-        HOME("home_block_home");
+        PRIMITIVE("primitive"),
+        GT_BRUTALIST("gt_brutalist"),
+        RENEWAL_BRUTALIST("renewal_brutalist"),
+        SCIFI("scifi");
+
 
         public final String name;
 
