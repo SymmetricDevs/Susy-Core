@@ -19,9 +19,9 @@
       },
       "gt_brutalist": {
         "textures": {
-          "bottom": "gregtech:blocks/home_blocks/gt_brutalist/gt_brutalist_bottom",
-          "top": "gregtech:blocks/home_blocks/gt_brutalist/gt_brutalist_top",
-          "side": "gregtech:blocks/home_blocks/gt_brutalist/gt_brutalist_front"
+          "bottom": "gregtech:blocks/home_blocks/gt_brutalist/brutalist_bottom",
+          "top": "gregtech:blocks/home_blocks/gt_brutalist/brutalist_top",
+          "side": "gregtech:blocks/home_blocks/gt_brutalist/brutalist_front"
         }
       },
       "renewal_brutalist": {

@@ -60,6 +60,15 @@ tile.home_block.home_block_home.name="Home Block (Default)"
 tile.home.allowed=Spawn set
 tile.home.denied=Cannot set spawn
 
+tile.home_block.primitive.name=Home Block
+tile.home_block.primitive.tooltip=Primitive
+tile.home_block.gt_brutalist.name=Home Block
+tile.home_block.gt_brutalist.tooltip=GT Brutalist
+tile.home_block.renewal_brutalist.name=Home Block
+tile.home_block.renewal_brutalist.tooltip=Renewal Brutalist
+tile.home_block.scifi.name=Home Block
+tile.home_block.scifi.tooltip=Sci-Fi
+
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
 tile.susy_stone_smooth.gneiss.name=Gneiss
