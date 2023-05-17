@@ -1,0 +1,9 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "front": "gregtech:blocks/home_blocks/home/front",
+    "side": "gregtech:blocks/home_blocks/home/side",
+    "south": "gregtech:blocks/home_blocks/home/front",
+    "top": "gregtech:blocks/home_blocks/home/side"
+  }
+}

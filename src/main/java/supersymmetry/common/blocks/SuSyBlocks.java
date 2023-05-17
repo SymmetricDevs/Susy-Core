@@ -30,6 +30,7 @@ public class SuSyBlocks {
     public static BlockStructural1 STRUCTURAL_BLOCK_1;
     public static BlockDeposit DEPOSIT_BLOCK;
     public static BlockResource RESOURCE_BLOCK;
+    public static BlockHome HOME;
 
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
@@ -65,6 +66,9 @@ public class SuSyBlocks {
 
         RESOURCE_BLOCK = new BlockResource();
         RESOURCE_BLOCK.setRegistryName("resource_block");
+
+        HOME = new BlockHome();
+        HOME.setRegistryName("home_block");
     }
 
     @SideOnly(Side.CLIENT)
@@ -81,6 +85,7 @@ public class SuSyBlocks {
         registerItemModel(STRUCTURAL_BLOCK_1);
         registerItemModel(DEPOSIT_BLOCK);
         registerItemModel(RESOURCE_BLOCK);
+        registerItemModel(HOME);
     }
 
     @SideOnly(Side.CLIENT)

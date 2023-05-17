@@ -4,18 +4,16 @@ import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.widgets.ProgressWidget;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.RecipeMaps;
-import gregtech.core.sound.GTSoundEvents;
+import gregtech.api.recipes.builders.FuelRecipeBuilder;
 import gregtech.api.recipes.builders.PrimitiveRecipeBuilder;
 import gregtech.api.recipes.builders.SimpleRecipeBuilder;
+import gregtech.core.sound.GTSoundEvents;
 import gregtechfoodoption.recipe.GTFORecipeMaps;
-import supersymmetry.api.recipes.builders.CatalystRecipeBuilder;
-import net.minecraft.client.gui.Gui;
 import supersymmetry.api.gui.SusyGuiTextures;
+import supersymmetry.api.recipes.builders.CatalystRecipeBuilder;
 import supersymmetry.api.recipes.builders.CoilingCoilRecipeBuilder;
 import supersymmetry.api.recipes.builders.NoEnergyRecipeBuilder;
 import supersymmetry.api.recipes.builders.SinteringRecipeBuilder;
-import supersymmetry.client.renderer.textures.SusyTextures;
-import gregtech.api.recipes.builders.*;
 
 public class SuSyRecipeMaps {
 
@@ -31,7 +29,7 @@ public class SuSyRecipeMaps {
             .setSlotOverlay(false, false, true, GuiTextures.MOLD_OVERLAY)
             .setSound(GTSoundEvents.COMBUSTION);
 
-    public static final RecipeMap<CatalystRecipeBuilder> ROASTER_RECIPES = new RecipeMap<>("roaster", 1, 2, 0, 2, 0, 2, 0, 3, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<CatalystRecipeBuilder> ROASTER_RECIPES = new RecipeMap<>("roaster", 1, 2, 0, 2, 0, 2, 0, 3, new CatalystRecipeBuilder(), false)
             .setSound(GTSoundEvents.COMBUSTION);
 
     public static final RecipeMap<SimpleRecipeBuilder> VACUUM_CHAMBER = new RecipeMap<>("vacuum_chamber", 1, 4, 1, 1, 0, 0, 0, 0, new SimpleRecipeBuilder(), false)
