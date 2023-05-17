@@ -45,7 +45,7 @@ public class BlockHome extends VariantBlock<BlockHome.HomeType> {
                                     float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote) {
             if (worldIn.provider.canRespawnHere() && worldIn.getBiome(pos) != net.minecraft.init.Biomes.HELL) {
-                playerIn.setSpawnPoint(pos, true);
+                playerIn.setSpawnPoint(pos, false);
                 playerIn.sendStatusMessage(new TextComponentTranslation("tile.home.allowed"), true);
             } else {
                 playerIn.sendStatusMessage(new TextComponentTranslation("tile.home.denied"), true);
