@@ -1,24 +1,31 @@
 package supersymmetry.common.blocks;
 
 import gregtech.api.block.VariantBlock;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class BlockHome extends VariantBlock<BlockHome.HomeType> {
+
+    public static final PropertyDirection FACING = BlockHorizontal.FACING;
 
     public BlockHome() {
         super(Material.IRON);
@@ -26,7 +33,7 @@ public class BlockHome extends VariantBlock<BlockHome.HomeType> {
         this.setHardness(0.5f);
         this.setSoundType(SoundType.METAL);
         this.setHarvestLevel("wrench", 2);
-        this.setDefaultState(getState(HomeType.PRIMITIVE));
+        this.setDefaultState(getState(HomeType.HOME));
     }
 
     @Override
@@ -39,66 +46,76 @@ public class BlockHome extends VariantBlock<BlockHome.HomeType> {
         return true;
     }
 
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
+    }
+
+    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+        return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING, placer.getHorizontalFacing().getOpposite());
+    }
+
+    public IBlockState withRotation(IBlockState state, Rotation rot) {
+        return state.withProperty(FACING, rot.rotate((EnumFacing) state.getValue(FACING)));
+    }
+
+    public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
+        return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
+    }
+
+    public IBlockState getStateFromMeta(int meta) {
+        int i = meta / 4;
+        int j = meta % 4 + 2;
+
+        EnumFacing enumfacing = EnumFacing.byIndex(j);
+
+        if (enumfacing.getAxis() == EnumFacing.Axis.Y)
+        {
+            enumfacing = EnumFacing.NORTH;
+        }
+
+        return this.getDefaultState().withProperty(FACING, enumfacing).withProperty(this.VARIANT, this.VALUES[i % this.VALUES.length]);
+    }
+
+    public int getMetaFromState(IBlockState state) {
+        int i = ((Enum)state.getValue(this.VARIANT)).ordinal();
+        int j = ((EnumFacing)state.getValue(FACING)).getIndex();
+        return j - 2 + i * 4;
+    }
+
+    @Nonnull
+    protected BlockStateContainer createBlockState() {
+        super.createBlockState();
+
+        return new BlockStateContainer(this, new IProperty[]{this.VARIANT, this.FACING});
+    }
+
+    public ItemStack getItemVariant(BlockTurbineRotor.BlockTurbineRotorType variant, int amount) {
+        return new ItemStack(this, amount, variant.ordinal() * 4) ;
+    }
+
+    public int damageDropped(@Nonnull IBlockState state) {
+        return this.getMetaFromState(state) - ((EnumFacing)state.getValue(FACING)).getIndex() + 2;
+    }
+
     @Override
-    public boolean onBlockActivated(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state,
-                                    @NotNull EntityPlayer playerIn, @NotNull EnumHand hand, @NotNull EnumFacing facing,
-                                    float hitX, float hitY, float hitZ) {
-        if (!worldIn.isRemote) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (worldIn.isRemote) {
+            return false;
+        } else {
             if (worldIn.provider.canRespawnHere() && worldIn.getBiome(pos) != net.minecraft.init.Biomes.HELL) {
-                playerIn.setSpawnPoint(pos, false);
                 playerIn.sendStatusMessage(new TextComponentTranslation("tile.home.allowed"), true);
+                net.minecraftforge.event.ForgeEventFactory.onPlayerSpawnSet(playerIn, pos, true);
+                playerIn.bedLocation = pos;
+                playerIn.setSpawnPoint(playerIn.bedLocation, false);
             } else {
                 playerIn.sendStatusMessage(new TextComponentTranslation("tile.home.denied"), true);
             }
+            return true;
         }
-        return true;
-    }
-
-    @Override
-    @Nullable
-    public BlockPos getBedSpawnPosition(@NotNull IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos, @Nullable EntityPlayer player) {
-        final int posX = pos.getX();
-        final int posY = pos.getY();
-        final int posZ = pos.getZ();
-
-        BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos(pos);
-        for (int x = -1; x <= 1; x++) {
-            for (int z = -1; z <= 1; z++) {
-                mutablePos.setPos(posX + x, posY, posZ + z);
-                if (hasRoomForPlayer(world, mutablePos)) {
-                    return mutablePos;
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
-     * @param world the world to check
-     * @param pos   the position of the block
-     * @return if there is room for the player to spawn at the block
-     */
-    private static boolean hasRoomForPlayer(@NotNull IBlockAccess world, @NotNull BlockPos pos) {
-        BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos(pos);
-        if (world.getBlockState(mutablePos).getMaterial().isSolid()) {
-            return false;
-        }
-
-        mutablePos.move(EnumFacing.UP);
-        if (world.getBlockState(mutablePos).getMaterial().isSolid()) {
-            return false;
-        }
-
-        mutablePos.move(EnumFacing.DOWN, 2);
-        return world.getBlockState(mutablePos).isSideSolid(world, mutablePos, EnumFacing.UP);
     }
 
     public enum HomeType implements IStringSerializable {
-        PRIMITIVE("primitive"),
-        GT_BRUTALIST("gt_brutalist"),
-        RENEWAL_BRUTALIST("renewal_brutalist"),
-        SCIFI("scifi");
-
+        HOME("home_block_home");
 
         public final String name;
 
