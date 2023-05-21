@@ -1,12 +1,21 @@
 {
   "forge_marker" : 1,
-  "defaults": {
-    "model": "minecraft:cube_all"
-  },
   "variants" : {
-    "facing=north,variant=home_block_home": { "model": "susy:home_block/home" },
-    "facing=south,variant=home_block_home": { "model": "susy:home_block/home", "y": 180 },
-    "facing=west,variant=home_block_home": { "model": "susy:home_block/home", "y": 270 },
-    "facing=east,variant=home_block_home": { "model": "susy:home_block/home", "y": 90 }
+    "facing=north,variant=home_primitive": { "model": "susy:home_block/primitive" },
+    "facing=south,variant=home_primitive": { "model": "susy:home_block/primitive", "y": 180 },
+    "facing=west,variant=home_primitive": { "model": "susy:home_block/primitive", "y": 270 },
+    "facing=east,variant=home_primitive": { "model": "susy:home_block/primitive", "y": 90 },
+    "facing=north,variant=home_gt_brutalist": { "model": "susy:home_block/gt_brutalist" },
+    "facing=south,variant=home_gt_brutalist": { "model": "susy:home_block/gt_brutalist", "y": 180 },
+    "facing=west,variant=home_gt_brutalist": { "model": "susy:home_block/gt_brutalist", "y": 270 },
+    "facing=east,variant=home_gt_brutalist": { "model": "susy:home_block/gt_brutalist", "y": 90 },
+    "facing=north,variant=home_renewal_brutalist": { "model": "susy:home_block/renewal_brutalist" },
+    "facing=south,variant=home_renewal_brutalist": { "model": "susy:home_block/renewal_brutalist", "y": 180 },
+    "facing=west,variant=home_renewal_brutalist": { "model": "susy:home_block/renewal_brutalist", "y": 270 },
+    "facing=east,variant=home_renewal_brutalist": { "model": "susy:home_block/renewal_brutalist", "y": 90 },
+    "facing=north,variant=home_scifi": { "model": "susy:home_block/scifi" },
+    "facing=south,variant=home_scifi": { "model": "susy:home_block/scifi", "y": 180 },
+    "facing=west,variant=home_scifi": { "model": "susy:home_block/scifi", "y": 270 },
+    "facing=east,variant=home_scifi": { "model": "susy:home_block/scifi", "y": 90 }
   }
 }

@@ -1,0 +1,9 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "front": "gregtech:blocks/home_blocks/gt_brutalist/brutalist_front",
+    "side": "gregtech:blocks/home_blocks/gt_brutalist/brutalist_left",
+    "south": "gregtech:blocks/home_blocks/gt_brutalist/brutalist_back",
+    "top": "gregtech:blocks/home_blocks/gt_brutalist/brutalist_top"
+  }
+}

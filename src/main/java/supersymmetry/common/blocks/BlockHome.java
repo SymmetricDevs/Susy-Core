@@ -32,8 +32,8 @@ public class BlockHome extends VariantBlock<BlockHome.HomeType> {
         this.setTranslationKey("home_block");
         this.setHardness(0.5f);
         this.setSoundType(SoundType.METAL);
-        this.setHarvestLevel("wrench", 2);
-        this.setDefaultState(getState(HomeType.HOME));
+        this.setHarvestLevel("pickaxe", 1);
+        this.setDefaultState(getState(HomeType.HOME_PRIMITIVE));
     }
 
     @Override
@@ -89,7 +89,7 @@ public class BlockHome extends VariantBlock<BlockHome.HomeType> {
         return new BlockStateContainer(this, new IProperty[]{this.VARIANT, this.FACING});
     }
 
-    public ItemStack getItemVariant(BlockTurbineRotor.BlockTurbineRotorType variant, int amount) {
+    public ItemStack getItemVariant(BlockHome.HomeType variant, int amount) {
         return new ItemStack(this, amount, variant.ordinal() * 4) ;
     }
 
@@ -115,7 +115,10 @@ public class BlockHome extends VariantBlock<BlockHome.HomeType> {
     }
 
     public enum HomeType implements IStringSerializable {
-        HOME("home_block_home");
+        HOME_PRIMITIVE("home_primitive"),
+        HOME_GT_BRUTALIST("home_gt_brutalist"),
+        HOME_RENEWAL_BRUTALIST("home_renewal_brutalist"),
+        HOME_SCIFI("home_scifi");
 
         public final String name;
 
