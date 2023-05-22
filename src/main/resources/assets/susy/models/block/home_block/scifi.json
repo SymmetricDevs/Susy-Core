@@ -1,0 +1,9 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "front": "gregtech:blocks/home_blocks/scifi/scifi_front",
+    "side": "gregtech:blocks/home_blocks/scifi/scifi_left",
+    "south": "gregtech:blocks/home_blocks/scifi/scifi_back",
+    "top": "gregtech:blocks/home_blocks/scifi/scifi_top"
+  }
+}
