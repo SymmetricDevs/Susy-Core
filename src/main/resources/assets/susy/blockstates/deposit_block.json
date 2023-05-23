@@ -3,70 +3,46 @@
   "defaults": {
     "model": "minecraft:cube_bottom_top",
     "textures": {
-      "bottom": "gregtech:blocks/deposit/deposit_block_carbon",
-      "top": "gregtech:blocks/deposit/deposit_block_carbon",
-      "side": "gregtech:blocks/deposit/deposit_block_carbon"
+      "bottom": "gregtech:blocks/deposit/orthomagmatic",
+      "top": "gregtech:blocks/deposit/orthomagmatic",
+      "side": "gregtech:blocks/deposit/orthomagmatic"
     }
   },
   "variants" : {
-    "variant=deposit_block_carbon" : {
+    "variant=orthomagmatic" : {
       "model" : "minecraft:cube_all",
       "textures" : {
-        "all" : "gregtech:blocks/deposit/deposit_block_carbon"
+        "all" : "gregtech:blocks/deposit/orthomagmatic"
       }
     },
-    "variant=deposit_block_carbonate" : {
+    "variant=metamorphic" : {
       "model" : "minecraft:cube_all",
       "textures" : {
-        "all" : "gregtech:blocks/deposit/deposit_block_carbonate"
+        "all" : "gregtech:blocks/deposit/metamorphic"
       }
     },
-    "variant=deposit_block_clay" : {
+    "variant=sedimentary" : {
       "model" : "minecraft:cube_all",
       "textures" : {
-        "all" : "gregtech:blocks/deposit/deposit_block_clay"
+        "all" : "gregtech:blocks/deposit/sedimentary"
       }
     },
-    "variant=deposit_block_oxide" : {
+    "variant=hydrothermal" : {
       "model" : "minecraft:cube_all",
       "textures" : {
-        "all" : "gregtech:blocks/deposit/deposit_block_oxide"
+        "all" : "gregtech:blocks/deposit/hydrothermal"
       }
     },
-    "variant=deposit_block_phosphate" : {
+    "variant=alluvial" : {
       "model" : "minecraft:cube_all",
       "textures" : {
-        "all" : "gregtech:blocks/deposit/deposit_block_phosphate"
+        "all" : "gregtech:blocks/deposit/alluvial"
       }
     },
-    "variant=deposit_block_precious" : {
+    "variant=magmatic_hydrothermal" : {
       "model" : "minecraft:cube_all",
       "textures" : {
-        "all" : "gregtech:blocks/deposit/deposit_block_precious"
-      }
-    },
-    "variant=deposit_block_radioactive" : {
-      "model" : "minecraft:cube_all",
-      "textures" : {
-        "all" : "gregtech:blocks/deposit/deposit_block_radioactive"
-      }
-    },
-    "variant=deposit_block_sedimentary" : {
-      "model" : "minecraft:cube_all",
-      "textures" : {
-        "all" : "gregtech:blocks/deposit/deposit_block_sedimentary"
-      }
-    },
-    "variant=deposit_block_silicate" : {
-      "model" : "minecraft:cube_all",
-      "textures" : {
-        "all" : "gregtech:blocks/deposit/deposit_block_silicate"
-      }
-    },
-    "variant=deposit_block_sulfur" : {
-      "model" : "minecraft:cube_all",
-      "textures" : {
-        "all" : "gregtech:blocks/deposit/deposit_block_sulfur"
+        "all" : "gregtech:blocks/deposit/magmatic_hydrothermal"
       }
     }
   }

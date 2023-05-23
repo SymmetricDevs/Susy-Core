@@ -9,28 +9,76 @@
     }
   },
   "variants" : {
-    "variant=resource_block_bauxite" : {
+    "variant=bauxite" : {
       "model" : "minecraft:cube_all",
       "textures" : {
-        "all" : "gregtech:blocks/resource/resource_block_bauxite"
+        "all" : "gregtech:blocks/resource/bauxite"
       }
     },
-    "variant=resource_block_caliche" : {
+    "variant=caliche" : {
       "model" : "minecraft:cube_all",
       "textures" : {
-        "all" : "gregtech:blocks/resource/resource_block_caliche"
+        "all" : "gregtech:blocks/resource/caliche"
       }
     },
-    "variant=resource_block_anthracite" : {
+    "variant=non_marine_evaporite" : {
       "model" : "minecraft:cube_all",
       "textures" : {
-        "all" : "gregtech:blocks/resource/resource_block_anthracite"
+        "all" : "gregtech:blocks/resource/non_marine_evaporite"
       }
     },
-    "variant=resource_block_lignite" : {
+    "variant=halide_evaporite" : {
       "model" : "minecraft:cube_all",
       "textures" : {
-        "all" : "gregtech:blocks/resource/resource_block_lignite"
+        "all" : "gregtech:blocks/resource/halide_evaporite"
+      }
+    },
+    "variant=sulfate_evaporite" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/resource/sulfate_evaporite"
+      }
+    },
+    "variant=carbonate_evaporite" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/resource/carbonate_evaporite"
+      }
+    },
+    "variant=monazite_alluvial" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/resource/monazite_alluvial"
+      }
+    },
+    "variant=bastnasite_alluvial" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/resource/bastnasite_alluvial"
+      }
+    },
+    "variant=euxenite_alluvial" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/resource/euxenite_alluvial"
+      }
+    },
+    "variant=xenotime_alluvial" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/resource/xenotime_alluvial"
+      }
+    },
+    "variant=platinum_placer" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/resource/platinum_placer"
+      }
+    },
+    "variant=gold_alluvial" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/resource/gold_alluvial"
       }
     }
   }
