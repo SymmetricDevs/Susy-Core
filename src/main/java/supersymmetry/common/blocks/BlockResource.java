@@ -13,18 +13,26 @@ public class BlockResource extends VariantBlock<BlockResource.ResourceBlockType>
     public BlockResource() {
         super(net.minecraft.block.material.Material.IRON);
         setTranslationKey("resource_block");
-        setHardness(5.0f);
-        setResistance(10.0f);
+        setHardness(3.0f);
+        setResistance(3.0f);
         setSoundType(SoundType.METAL);
         setHarvestLevel("pickaxe", 1);
-        setDefaultState(getState(ResourceBlockType.RESOURCE_BLOCK_BAUXITE));
+        setDefaultState(getState(ResourceBlockType.BAUXITE));
     }
 
     public static enum ResourceBlockType implements IStringSerializable, IStateHarvestLevel {
-        RESOURCE_BLOCK_BAUXITE("resource_block_bauxite", 1),
-        RESOURCE_BLOCK_CALICHE("resource_block_caliche", 1),
-        RESOURCE_BLOCK_ANTHRACITE("resource_block_anthracite", 1),
-        RESOURCE_BLOCK_LIGNITE("resource_block_lignite", 1);
+        BAUXITE("bauxite", 1),
+        CALICHE("caliche", 1),
+        NON_MARINE_EVAPORITE("non_marine_evaporite", 1),
+        HALIDE_EVAPORITE("halide_evaporite", 1),
+        SULFATE_EVAPORITE("sulfate_evaporite", 1),
+        CARBONATE_EVAPORITE("carbonate_evaporite", 1),
+        MONAZITE_ALLUVIAL("monazite_alluvial", 1),
+        BASTNASITE_ALLUVIAL("bastnasite_alluvial", 1),
+        EUXENITE_ALLUVIAL("euxenite_alluvial", 1),
+        XENOTIME_ALLUVIAL("xenotime_alluvial", 1),
+        PLATINUM_PLACER("platinum_placer", 1),
+        GOLD_ALLUVIAL("gold_alluvial", 1);
 
         private final String name;
         private final int harvestLevel;
@@ -44,7 +52,7 @@ public class BlockResource extends VariantBlock<BlockResource.ResourceBlockType>
         }
 
         public String getHarvestTool(IBlockState state) {
-            return "wrench";
+            return "pickaxe";
         }
     }
 }

@@ -17,20 +17,16 @@ public class BlockDeposit extends VariantBlock<BlockDeposit.DepositBlockType> {
         setResistance(1200.0f);
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 100);
-        setDefaultState(getState(DepositBlockType.DEPOSIT_BLOCK_CARBON));
+        setDefaultState(getState(DepositBlockType.ORTHOMAGMATIC));
     }
 
     public static enum DepositBlockType implements IStringSerializable, IStateHarvestLevel {
-        DEPOSIT_BLOCK_CARBON("deposit_block_carbon", 10),
-        DEPOSIT_BLOCK_CARBONATE("deposit_block_carbonate", 10),
-        DEPOSIT_BLOCK_CLAY("deposit_block_clay", 10),
-        DEPOSIT_BLOCK_OXIDE("deposit_block_oxide", 10),
-        DEPOSIT_BLOCK_PHOSPHATE("deposit_block_phosphate", 10),
-        DEPOSIT_BLOCK_PRECIOUS("deposit_block_precious", 10),
-        DEPOSIT_BLOCK_RADIOACTIVE("deposit_block_radioactive", 10),
-        DEPOSIT_BLOCK_SEDIMENTARY("deposit_block_sedimentary", 10),
-        DEPOSIT_BLOCK_SILICATE("deposit_block_silicate", 10),
-        DEPOSIT_BLOCK_SULFUR("deposit_block_sulfur", 10);
+        ORTHOMAGMATIC("orthomagmatic", 10),
+        METAMORPHIC("metamorphic", 10),
+        SEDIMENTARY("sedimentary", 10),
+        HYDROTHERMAL("hydrothermal", 10),
+        ALLUVIAL("alluvial", 10),
+        MAGMATIC_HYDROTHERMAL("magmatic_hydrothermal", 10);
 
         private final String name;
         private final int harvestLevel;
