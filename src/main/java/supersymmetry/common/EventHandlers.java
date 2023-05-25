@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -105,6 +106,11 @@ public class EventHandlers {
             event.setCanceled(true);
             cancelFillBucket = false;
         }
+    }
+
+    @SubscribeEvent
+    public static void onTrySpawnPortal(BlockEvent.PortalSpawnEvent event) {
+        event.setCanceled(true);
     }
 
 }
