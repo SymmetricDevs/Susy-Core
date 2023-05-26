@@ -9,7 +9,6 @@ import gregtech.api.gui.widgets.*;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.SteamMetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.recipes.ModHandler;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.ingredients.IntCircuitIngredient;
 import gregtech.api.util.GTTransferUtils;
@@ -28,10 +27,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicator;
-import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -184,7 +181,7 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity {
     }
 
     protected TextureArea getCircuitSlotOverlay() {
-        return SusyTextures.INT_CIRCUIT_OVERLAY.get(isHighPressure);
+        return SusyGuiTextures.STEAM_INT_CIRCUIT_OVERLAY.get(isHighPressure);
     }
 
     protected SlotWidget getCircuitSlotToolTip(SlotWidget widget) {
