@@ -8,6 +8,7 @@ tile.sintering_brick.sintering_block_brick.name=Brick Sintering Block
 tile.sintering_brick.sintering_block_magnetoplated.name=Magnetoplated Sintering Block
 
 tile.coagulation_tank_wall.wooden_coagulation_tank_wall.name=Wooden Coagulation Tank Wall
+tile.separator_rotor.steel.name=Steel Gravity Separator Rotor
 
 tile.alternator_coil.copper.name=Copper Alternator Coil
 tile.turbine_rotor.steel.name=Steel Turbine Block
@@ -177,6 +178,7 @@ gregtech.machine.catalytic_reformer.name=Catalytic Reformer
 
 gregtech.machine.fermentation_vat.name=Fermentation Vat
 gregtech.machine.ore_sorter.name=Ore Sorter
+gregtech.machine.gravity_separator.name=Gravity Separator
 gregtech.machine.condenser.name=Condenser
 gregtech.machine.cooling_unit.name=Cooling Unit
 gregtech.machine.gas_turbine.name=Gas Turbine
