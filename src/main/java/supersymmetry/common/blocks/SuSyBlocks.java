@@ -25,6 +25,7 @@ public class SuSyBlocks {
     public static final EnumMap<SusyStoneVariantBlock.StoneVariant, SusyStoneVariantBlock> SUSY_STONE_BLOCKS = new EnumMap(SusyStoneVariantBlock.StoneVariant.class);
     public static BlockAlternatorCoil ALTERNATOR_COIL;
     public static BlockTurbineRotor TURBINE_ROTOR;
+    public static BlockSeparatorRotor SEPARATOR_ROTOR;
     public static BlockDrillHead DRILL_HEAD;
     public static BlockStructural STRUCTURAL_BLOCK;
     public static BlockStructural1 STRUCTURAL_BLOCK_1;
@@ -55,6 +56,9 @@ public class SuSyBlocks {
         TURBINE_ROTOR = new BlockTurbineRotor();
         TURBINE_ROTOR.setRegistryName("turbine_rotor");
 
+        SEPARATOR_ROTOR = new BlockSeparatorRotor();
+        SEPARATOR_ROTOR.setRegistryName("separator_rotor");
+
         STRUCTURAL_BLOCK = new BlockStructural();
         STRUCTURAL_BLOCK.setRegistryName("structural_block");
 
@@ -81,6 +85,7 @@ public class SuSyBlocks {
         registerItemModel(ALTERNATOR_COIL);
         registerItemModel(DRILL_HEAD);
         registerItemModel(TURBINE_ROTOR);
+        registerItemModel(SEPARATOR_ROTOR);
         registerItemModel(STRUCTURAL_BLOCK);
         registerItemModel(STRUCTURAL_BLOCK_1);
         registerItemModel(DEPOSIT_BLOCK);

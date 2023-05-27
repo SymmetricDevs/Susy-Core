@@ -8,6 +8,7 @@ tile.sintering_brick.sintering_block_brick.name=Brick Sintering Block
 tile.sintering_brick.sintering_block_magnetoplated.name=Magnetoplated Sintering Block
 
 tile.coagulation_tank_wall.wooden_coagulation_tank_wall.name=Wooden Coagulation Tank Wall
+tile.separator_rotor.steel.name=Steel Gravity Separator Rotor
 
 tile.alternator_coil.copper.name=Copper Alternator Coil
 tile.turbine_rotor.steel.name=Steel Turbine Block
@@ -40,38 +41,34 @@ tile.structural_block_1.structural_block_pipocalypse.name=Structural Block Dense
 tile.structural_block_1.structural_block_vent.name=Structural Block Vent
 tile.structural_block_1.structural_block_vent_broken.name=Structural Block Vent (Broken)
 
-tile.deposit_block.orthomagmatic.name=Orthomagmatic Deposit Block
-tile.deposit_block.metamorphic.name=Metamorphic Deposit Block
-tile.deposit_block.sedimentary.name=Sedimentary Deposit Block
-tile.deposit_block.hydrothermal.name=Hydrothermal Deposit Block
-tile.deposit_block.alluvial.name=Alluvial Deposit Block
-tile.deposit_block.magmatic_hydrothermal.name=Magmatic Hydrothermal Deposit Block
+tile.deposit_block.deposit_block_carbon.name=Carbon Deposit Block
+tile.deposit_block.deposit_block_carbonate.name=Carbonate Deposit Block
+tile.deposit_block.deposit_block_clay.name=Clay Deposit Block
+tile.deposit_block.deposit_block_oxide.name=Oxide Deposit Block
+tile.deposit_block.deposit_block_phosphate.name=Phosphate Deposit Block
+tile.deposit_block.deposit_block_precious.name=Precious Deposit Block
+tile.deposit_block.deposit_block_radioactive.name=Radioactive Deposit Block
+tile.deposit_block.deposit_block_sedimentary.name=Sedimentary Deposit Block
+tile.deposit_block.deposit_block_silicate.name=Silicate Deposit Block
+tile.deposit_block.deposit_block_sulfur.name=Sulfur Deposit Block
 
-tile.resource_block.bauxite.name=Bauxite Ore
-tile.resource_block.caliche.name=Caliche
-tile.resource_block.non_marine_evaporite.name=Non Marine Evaporite Deposit
-tile.resource_block.halide_evaporite.name=Halide Evaporite Deposit
-tile.resource_block.sulfate_evaporite.name=Sulfate Evaporite
-tile.resource_block.carbonate_evaporite.name=Carbonate Evaporite Deposit
-tile.resource_block.monazite_alluvial.name=Alluvial Monazite Deposit
-tile.resource_block.bastnasite_alluvial.name=Alluvial Bastnasite Deposit
-tile.resource_block.euxenite_alluvial.name=Alluvial Euxenite Deposit
-tile.resource_block.xenotime_alluvial.name=Alluvial Xenotime Deposit
-tile.resource_block.gold_alluvial.name=Alluvial Gold Deposit
-tile.resource_block.platinum_placer.name=Platinum Placer Deposit
+tile.resource_block.resource_block_bauxite.name=Bauxite Ore
+tile.resource_block.resource_block_caliche.name=Caliche
+tile.resource_block.resource_block_lignite.name=Lignite Seam Block
+tile.resource_block.resource_block_anthracite.name=Anthracite Seam Block
 
 tile.home_block.home_block_home.name="Home Block (Default)"
 tile.home.allowed=Spawn set
 tile.home.denied=Cannot set spawn
 
-tile.home_block.home_primitive.name=Home Block
-tile.home_block.home_primitive.tooltip=Primitive
-tile.home_block.home_gt_brutalist.name=Home Block
-tile.home_block.home_gt_brutalist.tooltip=GT Brutalist
-tile.home_block.home_renewal_brutalist.name=Home Block
-tile.home_block.home_renewal_brutalist.tooltip=Renewal Brutalist
-tile.home_block.home_scifi.name=Home Block
-tile.home_block.home_scifi.tooltip=Sci-Fi
+tile.home_block.primitive.name=Home Block
+tile.home_block.primitive.tooltip=Primitive
+tile.home_block.gt_brutalist.name=Home Block
+tile.home_block.gt_brutalist.tooltip=GT Brutalist
+tile.home_block.renewal_brutalist.name=Home Block
+tile.home_block.renewal_brutalist.tooltip=Renewal Brutalist
+tile.home_block.scifi.name=Home Block
+tile.home_block.scifi.tooltip=Sci-Fi
 
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
@@ -177,6 +174,7 @@ gregtech.machine.catalytic_reformer.name=Catalytic Reformer
 
 gregtech.machine.fermentation_vat.name=Fermentation Vat
 gregtech.machine.ore_sorter.name=Ore Sorter
+gregtech.machine.gravity_separator.name=Gravity Separator
 gregtech.machine.condenser.name=Condenser
 gregtech.machine.cooling_unit.name=Cooling Unit
 gregtech.machine.gas_turbine.name=Gas Turbine

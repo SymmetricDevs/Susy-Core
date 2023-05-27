@@ -7,6 +7,7 @@ public class SusyGuiTextures {
     public static final SteamTexture PROGRESS_BAR_MIXER_STEAM = SteamTexture.fullImage("textures/gui/progress_bar/progress_bar_mixer_%s.png");
     public static final SteamTexture FLUID_SLOT_STEAM = SteamTexture.fullImage("textures/gui/base/fluid_slot_%s.png");
     public static final SteamTexture MOLD_OVERLAY_STEAM = SteamTexture.fullImage("textures/gui/overlay/mold_overlay_%s.png");
+    public static final SteamTexture INT_CIRCUIT_OVERLAY_STEAM = SteamTexture.fullImage("textures/gui/progress_bar/int_circuit_overlay_%s.png");
 
     public static final TextureArea CATALYST_BED_OVERLAY  = TextureArea.fullImage("textures/gui/overlay/catalyst_bed_overlay.png");
     public static final TextureArea CATALYST_PELLET_OVERLAY = TextureArea.fullImage("textures/gui/overlay/catalyst_pellet_overlay.png");
@@ -19,4 +20,5 @@ public class SusyGuiTextures {
     public static final TextureArea SIFTER_ITEM_INPUT_OVERLAY = TextureArea.fullImage("textures/gui/overlay/sifter_item_input_overlay.png");
     public static final TextureArea SIFTER_ITEM_OUTPUT_OVERLAY = TextureArea.fullImage("textures/gui/overlay/sifter_item_output_overlay.png");
     public static final TextureArea CUBIC_LATTICE_OVERLAY = TextureArea.fullImage("textures/gui/overlay/cubic_lattice_overlay.png");
+    public static final TextureArea ORE_CHUNK_OVERLAY = TextureArea.fullImage("textures/gui/overlay/ore_chunk_overlay.png");
 }

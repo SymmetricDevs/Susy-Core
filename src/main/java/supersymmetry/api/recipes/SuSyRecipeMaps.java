@@ -124,7 +124,7 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> COKING_RECIPES = new RecipeMap<>("coking_tower", 1, 1, 3, 2, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.COMBUSTION);
 
-    public static final RecipeMap<SimpleRecipeBuilder> VACUUM_DISTILLATION_RECIPES = new RecipeMap<>("vacuum_distillation", 0, 1, 1, 12, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<SimpleRecipeBuilder> VACUUM_DISTILLATION_RECIPES = new RecipeMap<>("vacuum_distillation", 0, 0, 1, 1, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
     public static final RecipeMap<CatalystRecipeBuilder> CATALYTIC_REFORMER_RECIPES = new RecipeMap<>("catalytic_reformer_recipes", 1, 0, 2, 4, new CatalystRecipeBuilder(), false)
@@ -200,6 +200,18 @@ public class SuSyRecipeMaps {
             .setSlotOverlay(true, false, true, GuiTextures.DUST_OVERLAY)
             .setSound(GTSoundEvents.MACERATOR);
 
+    public static final RecipeMap<SimpleRecipeBuilder> GRAVITY_SEPARATOR_RECIPES = new RecipeMap<>("gravity_separator", 1, 6, 1, 3, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, ProgressWidget.MoveType.VERTICAL)
+            .setSlotOverlay(false, false, true, SusyGuiTextures.ORE_CHUNK_OVERLAY)
+            .setSlotOverlay(false, true, false, SusyGuiTextures.SIFTER_FLUID_OVERLAY)
+            .setSlotOverlay(false, true, true, SusyGuiTextures.SIFTER_FLUID_OVERLAY)
+            .setSlotOverlay(true, false, false, GuiTextures.CRUSHED_ORE_OVERLAY)
+            .setSlotOverlay(true, false, true, GuiTextures.CRUSHED_ORE_OVERLAY)
+            .setSlotOverlay(true, true, false, SusyGuiTextures.SIFTER_FLUID_OVERLAY)
+            .setSlotOverlay(true, true, true, SusyGuiTextures.SIFTER_FLUID_OVERLAY)
+            .setSound(GTSoundEvents.MACERATOR);
+
+
     public static final RecipeMap<FuelRecipeBuilder> MAGNETOHYDRODYNAMIC_FUELS = new RecipeMap<>("magnetohydrodynamic_generator", 0, 0, 1, 1, new FuelRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_FUSION, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.ARC);
@@ -214,7 +226,6 @@ public class SuSyRecipeMaps {
         RecipeMaps.MIXER_RECIPES.setMaxFluidOutputs(2);
         RecipeMaps.ARC_FURNACE_RECIPES.setMaxInputs(2);
         RecipeMaps.ELECTROLYZER_RECIPES.setMaxInputs(4);
-        //RecipeMaps.CRACKING_RECIPES.setMaxInputs(2);
         RecipeMaps.ELECTROLYZER_RECIPES.setMaxFluidOutputs(3);
         RecipeMaps.ELECTROLYZER_RECIPES.setMaxOutputs(3);
         RecipeMaps.ELECTROMAGNETIC_SEPARATOR_RECIPES.setMaxFluidOutputs(2);
@@ -230,5 +241,6 @@ public class SuSyRecipeMaps {
         RecipeMaps.LASER_ENGRAVER_RECIPES.setMaxFluidInputs(1);
         RecipeMaps.GAS_TURBINE_FUELS.setMaxFluidInputs(2);
         RecipeMaps.GAS_TURBINE_FUELS.setMaxFluidOutputs(1);
+        RecipeMaps.AUTOCLAVE_RECIPES.setMaxFluidInputs(2);
     }
 }

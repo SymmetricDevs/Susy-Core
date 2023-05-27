@@ -32,7 +32,6 @@ public class ClientProxy extends CommonProxy {
 
     public void preLoad() {
         super.preLoad();
-        SusyTextures.preInit();
         SusyMetaEntities.initRenderers();
     }
 

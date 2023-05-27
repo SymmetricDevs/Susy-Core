@@ -1,0 +1,10 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "top": "gregtech:blocks/casings/separator_rotor/steel/top",
+    "bottom": "gregtech:blocks/casings/separator_rotor/steel/bottom",
+    "front": "gregtech:blocks/casings/separator_rotor/steel/front",
+    "side": "gregtech:blocks/casings/separator_rotor/steel/side",
+    "south": "gregtech:blocks/casings/separator_rotor/steel/back"
+  }
+}
