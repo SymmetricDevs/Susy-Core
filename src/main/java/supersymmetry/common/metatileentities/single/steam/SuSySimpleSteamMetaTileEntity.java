@@ -184,7 +184,7 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity {
     }
 
     protected TextureArea getCircuitSlotOverlay() {
-        return SusyTextures.INT_CIRCUIT_OVERLAY.get(isHighPressure);
+        return SusyGuiTextures.INT_CIRCUIT_OVERLAY_STEAM.get(isHighPressure);
     }
 
     protected SlotWidget getCircuitSlotToolTip(SlotWidget widget) {
