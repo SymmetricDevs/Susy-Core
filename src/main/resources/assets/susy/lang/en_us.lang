@@ -175,6 +175,8 @@ gregtech.machine.coking_tower.name=Coking Tower
 gregtech.machine.vacuum_distillation_tower.name=Vacuum Distillation Tower
 gregtech.machine.smoke_stack.name=Smoke Stack
 gregtech.machine.catalytic_reformer.name=Catalytic Reformer
+gregtech.machine.pressure_swing_adsorber.name=Pressure Swing Adsorber
+gregtech.machine.reaction_furnace.name=Reaction Furnace
 
 gregtech.machine.fermentation_vat.name=Fermentation Vat
 gregtech.machine.ore_sorter.name=Ore Sorter
@@ -521,6 +523,8 @@ recipemap.large_weapons_factory.name=Large Weapons Factory
 recipemap.railroad_engineering_station.name=Railroad Engineering Station
 recipemap.mining_drill.name=Mining Drill
 recipemap.magnetohydrodynamic_generator.name=Magnetohydrodynamic Generator
+recipemap.reaction_furnace.name=Reaction Furnace
+recipemap.pressure_swing_adsorption.name=Pressure Swing Adsorption
 
 gregtech.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 
