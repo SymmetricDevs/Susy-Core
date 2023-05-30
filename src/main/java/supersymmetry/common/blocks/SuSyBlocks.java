@@ -32,6 +32,9 @@ public class SuSyBlocks {
     public static BlockDeposit DEPOSIT_BLOCK;
     public static BlockResource RESOURCE_BLOCK;
     public static BlockHome HOME;
+    public static BlockMultiblockTank MULTIBLOCK_TANK;
+    public static BlockEvaporationBed EVAPORATION_BED;
+    public static BlockElectrodeAssembly ELECTRODE_ASSEMBLY;
 
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
@@ -73,6 +76,15 @@ public class SuSyBlocks {
 
         HOME = new BlockHome();
         HOME.setRegistryName("home_block");
+
+        EVAPORATION_BED = new BlockEvaporationBed();
+        EVAPORATION_BED.setRegistryName("evaporation_bed");
+
+        MULTIBLOCK_TANK = new BlockMultiblockTank();
+        MULTIBLOCK_TANK.setRegistryName("multiblock_tank");
+
+        ELECTRODE_ASSEMBLY = new BlockElectrodeAssembly();
+        ELECTRODE_ASSEMBLY.setRegistryName("electrode_assembly");
     }
 
     @SideOnly(Side.CLIENT)
@@ -91,6 +103,9 @@ public class SuSyBlocks {
         registerItemModel(DEPOSIT_BLOCK);
         registerItemModel(RESOURCE_BLOCK);
         registerItemModel(HOME);
+        registerItemModel(EVAPORATION_BED);
+        registerItemModel(MULTIBLOCK_TANK);
+        registerItemModel(ELECTRODE_ASSEMBLY);
     }
 
     @SideOnly(Side.CLIENT)

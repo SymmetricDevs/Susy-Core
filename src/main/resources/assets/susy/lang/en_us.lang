@@ -61,6 +61,13 @@ tile.resource_block.xenotime_alluvial.name=Alluvial Xenotime Deposit
 tile.resource_block.gold_alluvial.name=Alluvial Gold Deposit
 tile.resource_block.platinum_placer.name=Platinum Placer Deposit
 
+tile.multiblock_tank.clarifier.name=Clarifier Vat
+tile.multiblock_tank.flotation.name=Froth Flotation Vat
+
+tile.evaporation_bed.dirt.name=Evaporation Bed
+
+tile.electrode_assembly.carbon.name=Carbon Electrode Assembly
+
 tile.home_block.home_block_home.name="Home Block (Default)"
 tile.home.allowed=Spawn set
 tile.home.denied=Cannot set spawn
