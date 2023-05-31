@@ -32,7 +32,7 @@ public class BlockElectrodeAssembly extends VariantActiveBlock<BlockElectrodeAss
         } else if (layer == BlockRenderLayer.CUTOUT) return true;
 
         if (isBloomEnabled(type)) return layer == BloomEffectUtil.getRealBloomLayer();
-        return false;
+        return layer == BlockRenderLayer.CUTOUT;
     }
 
     protected boolean isBloomEnabled(ElectrodeAssemblyType value) {

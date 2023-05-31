@@ -103,9 +103,9 @@ public class SuSyBlocks {
         registerItemModel(DEPOSIT_BLOCK);
         registerItemModel(RESOURCE_BLOCK);
         registerItemModel(HOME);
-        registerItemModel(EVAPORATION_BED);
-        registerItemModel(MULTIBLOCK_TANK);
-        registerItemModel(ELECTRODE_ASSEMBLY);
+        EVAPORATION_BED.onModelRegister();
+        MULTIBLOCK_TANK.onModelRegister();
+        ELECTRODE_ASSEMBLY.onModelRegister();
     }
 
     @SideOnly(Side.CLIENT)

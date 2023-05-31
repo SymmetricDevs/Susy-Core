@@ -23,6 +23,7 @@ import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.metatileentities.multi.electric.*;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCoagulationTank;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimitiveMudPump;
+import supersymmetry.common.metatileentities.multiblockpart.SusyMetaTileEntityDumpingHatch;
 import supersymmetry.common.metatileentities.multiblockpart.SusyMetaTileEntityEnergyHatch;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityLatexCollector;
 import supersymmetry.common.metatileentities.single.steam.MetaTileEntitySteamLatexCollector;
@@ -111,6 +112,16 @@ public class SuSyMetaTileEntities {
 
     public static MetaTileEntityPressureSwingAdsorber PRESSURE_SWING_ADSORBER;
     public static MetaTileEntityReactionFurnace REACTION_FURNACE;
+
+    public static SusyMetaTileEntityDumpingHatch DUMPING_HATCH;
+
+    public static MetaTileEntityAdvancedArcFurnace ADVANCED_ARC_FURNACE;
+    public static MetaTileEntityClarifier CLARIFIER;
+    public static MetaTileEntityDumper DUMPER;
+    public static MetaTileEntityEvaporationPool EVAPORATION_POOL;
+    public static MetaTileEntityFlareStack FLARE_STACK;
+    public static MetaTileEntityFrothFlotationTank FROTH_FLOTATION_TANK;
+    public static MetaTileEntityMultiStageFlashDistiller MULTI_STAGE_FLASH_DISTILLER;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -204,7 +215,15 @@ public class SuSyMetaTileEntities {
         BASIC_STEAM_TURBINE = registerMetaTileEntity(17000, new MetaTileEntitySUSYLargeTurbine(susyId("basic_steam_turbine"), RecipeMaps.STEAM_TURBINE_FUELS, 1, MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING), Textures.SOLID_STEEL_CASING, Textures.LARGE_STEAM_TURBINE_OVERLAY));
         BASIC_GAS_TURBINE = registerMetaTileEntity(17001, new MetaTileEntitySUSYLargeTurbine(susyId("basic_gas_turbine"), RecipeMaps.GAS_TURBINE_FUELS, 2, MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING), Textures.SOLID_STEEL_CASING, Textures.LARGE_STEAM_TURBINE_OVERLAY));
 
+        DUMPING_HATCH  = registerMetaTileEntity(17002, new SusyMetaTileEntityDumpingHatch(susyId("dumping_hatch")));
 
+        ADVANCED_ARC_FURNACE = registerMetaTileEntity(17003, new MetaTileEntityAdvancedArcFurnace(susyId("advanced_arc_furnace")));
+        CLARIFIER = registerMetaTileEntity(17004, new MetaTileEntityClarifier(susyId("clarifier")));
+        DUMPER = registerMetaTileEntity(17005, new MetaTileEntityDumper(susyId("dumper")));
+        EVAPORATION_POOL = registerMetaTileEntity(17006, new MetaTileEntityEvaporationPool(susyId("evaporation_pool")));
+        FLARE_STACK = registerMetaTileEntity(17007, new MetaTileEntityFlareStack(susyId("flare_stack")));
+        FROTH_FLOTATION_TANK = registerMetaTileEntity(17008, new MetaTileEntityFrothFlotationTank(susyId("froth_flotation_tank")));
+        MULTI_STAGE_FLASH_DISTILLER = registerMetaTileEntity(17009, new MetaTileEntityMultiStageFlashDistiller(susyId("multi_stage_flash_distiller")));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name, RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator, ICubeRenderer texture, boolean isBricked) {
