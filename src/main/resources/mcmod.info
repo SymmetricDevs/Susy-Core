@@ -1,7 +1,7 @@
 [
   {
-    "modid" : "susy",
-    "name" : "Supersymmetry",
+    "modid" : "${modid}",
+    "name" : "${modname}",
     "description" : "The coremod for Supersymmetry",
     "version" : "${version}",
     "mcversion" : "${mcversion}",
