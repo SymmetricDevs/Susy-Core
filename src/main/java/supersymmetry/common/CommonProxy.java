@@ -57,6 +57,9 @@ public class CommonProxy {
         registry.register(SuSyBlocks.DEPOSIT_BLOCK);
         registry.register(SuSyBlocks.RESOURCE_BLOCK);
         registry.register(SuSyBlocks.HOME);
+        registry.register(SuSyBlocks.MULTIBLOCK_TANK);
+        registry.register(SuSyBlocks.EVAPORATION_BED);
+        registry.register(SuSyBlocks.ELECTRODE_ASSEMBLY);
     }
 
     @SubscribeEvent
@@ -77,6 +80,9 @@ public class CommonProxy {
         registry.register(createItemBlock(SuSyBlocks.DEPOSIT_BLOCK, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.RESOURCE_BLOCK, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.HOME, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.EVAPORATION_BED, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.MULTIBLOCK_TANK, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.ELECTRODE_ASSEMBLY, VariantItemBlock::new));
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)

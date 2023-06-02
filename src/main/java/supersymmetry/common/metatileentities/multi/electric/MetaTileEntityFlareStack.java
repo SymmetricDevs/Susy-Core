@@ -1,5 +1,6 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -10,6 +11,7 @@ import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockBoilerCasing.BoilerCasingType;
+import gregtech.common.blocks.BlockFireboxCasing;
 import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
@@ -20,33 +22,34 @@ import javax.annotation.Nonnull;
 
 import static gregtech.api.util.RelativeDirection.*;
 
-public class MetaTileEntitySmokeStack extends RecipeMapMultiblockController {
-    public MetaTileEntitySmokeStack(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SuSyRecipeMaps.SMOKE_STACK);
-        this.recipeMapWorkable = new NoEnergyMultiblockRecipeLogic(this);
+public class MetaTileEntityFlareStack extends RecipeMapMultiblockController {
+    public MetaTileEntityFlareStack(ResourceLocation metaTileEntityId) {
+        super(metaTileEntityId, SuSyRecipeMaps.FLARE_STACK);
+        this.recipeMapWorkable = new MultiblockRecipeLogic(this, true);
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
-        return new MetaTileEntitySmokeStack(this.metaTileEntityId);
+        return new MetaTileEntityFlareStack(this.metaTileEntityId);
     }
 
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start(FRONT, RIGHT, UP)
                 .aisle("S")
-                .aisle("P").setRepeatable(2,6)
+                .aisle("P").setRepeatable(3,7)
                 .aisle("F")
                 .where('S', this.selfPredicate())
-                .where('P', states(new IBlockState[]{this.getPipeCasingState()})
+                .where('P', states(new IBlockState[]{this.getFireboxCasingState()})
                         .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setExactLimit(1))
-                        .or(abilities(MultiblockAbility.MAINTENANCE_HATCH).setExactLimit(1)))
+                        .or(abilities(MultiblockAbility.MAINTENANCE_HATCH).setExactLimit(1))
+                        .or(abilities(MultiblockAbility.INPUT_ENERGY).setExactLimit(1)))
                 .where('F', abilities(MultiblockAbility.MUFFLER_HATCH).setExactLimit(1))
                 .build();
     }
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
         return Textures.SOLID_STEEL_CASING;
     }
-    protected IBlockState getPipeCasingState() {
-        return MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE);
+    protected IBlockState getFireboxCasingState() {
+        return MetaBlocks.BOILER_FIREBOX_CASING.getState(BlockFireboxCasing.FireboxCasingType.STEEL_FIREBOX);
     }
 
     @Nonnull

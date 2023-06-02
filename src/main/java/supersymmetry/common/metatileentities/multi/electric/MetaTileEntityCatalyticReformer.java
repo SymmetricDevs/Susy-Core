@@ -56,7 +56,7 @@ public class MetaTileEntityCatalyticReformer extends RecipeMapMultiblockControll
     @Nonnull
     @Override
     protected ICubeRenderer getFrontOverlay() {
-        return SusyTextures.CATALYTIC_REFORMER_OVERLAY;
+        return Textures.BLAST_FURNACE_OVERLAY;
     }
 
     @Override

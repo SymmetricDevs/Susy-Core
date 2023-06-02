@@ -71,6 +71,9 @@ public class BlockDrillHead extends VariantBlock<BlockDrillHead.DrillHeadType> i
         return this.getMetaFromState(state) - ((EnumFacing)state.getValue(FACING)).getIndex() + 2;
     }
 
+    //TODO: MAKE THIS CREATE MINING PARTICLES WHEN MINING DRILL IS ACTIVE
+    //TODO: MAKE THIS PLAY A LOUD MINING NOISE, PERHAPS HAVE STATUS EFFECTS FOR PLAYERS WHO COME NEAR THE MINING
+
     public static enum DrillHeadType implements IStringSerializable, IStateHarvestLevel {
         STEEL("steel", 1);
 
