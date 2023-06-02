@@ -161,6 +161,7 @@ gregtech.multiblocks.sintering_oven.use_plasma.negative=No
 
 gregtech.machine.coagulation_tank.name=Coagulation Tank
 gregtech.machine.drum.lead.name=Lead Drum
+gregtech.machine.drum.brass.name=Brass Drum
 
 gregtech.machine.polymerization_tank.name=Polymerization Tank
 gregtech.machine.fluidized_bed_reactor.name=Fluidized Bed Reactor
@@ -192,11 +193,13 @@ gregtech.machine.basic_gas_turbine.name=Large Gas Turbine
 # Properties
 gregtech.recipe.plasma_requirement=Requires plasma: %s
 gregtech.recipe.catalyst=Catalyst: %s %s
+gregtech.recipe.blocks=Blocks: %s
 
 # Latex Collector
 gregtech.machine.latex_collector.steam=Needs Steam!
 gregtech.machine.latex_collector.tooltip=Collects latex from adjacent rubber tree log. Yields %d mL of latex per tick.
 gregtech.machine.latex_collector.bronze.name=Steam Latex Collector
+gregtech.machine.latex_collector.steel.name=High Pressure Steam Latex Collector
 gregtech.machine.latex_collector.lv.name=Basic Latex Collector
 gregtech.machine.latex_collector.mv.name=Advanced Latex Collector
 gregtech.machine.latex_collector.hv.name=Advanced Latex Collector II
@@ -490,6 +493,7 @@ gregtech.machine.weapons_factory.opv.name=Legendary Weapons Factory
 
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
+recipemap.latex_collector.name=Arboreal Collector
 recipemap.vulcanizing_press.name=Vulcanization
 recipemap.roaster.name=Roasting
 recipemap.vacuum_chamber.name=Vacuum Ejection
@@ -499,6 +503,10 @@ recipemap.trickle_bed_reactor.name=Trickle Bed Reactor
 recipemap.crystallizer.name=Crystallizer
 recipemap.bubble_column_reactor.name=Bubble Column Reactor
 recipemap.fluidized_bed_reactor.name=Fluidized Bed Reactor
+recipemap.batch_reactor.name=Batch Reactor
+recipemap.tube_furnace.name=Tube Furnace
+recipemap.zone_refiner.name=Zone Refiner
+recipemap.ion_exchange_column.name=Ion Exchange Column
 recipemap.polymerization_tank.name=Polymerization Tank
 recipemap.uv_light_box.name=UV Light Box
 recipemap.ion_implantation.name=Ion Implantation
@@ -586,3 +594,9 @@ gregtech.catalyst_group.standard_catalysts.name=Standard Catalyst
 # Cracking Catalyst
 gregtech.catalyst_group.cracking_catalyst_beds.name=Cracking Catalyst
 metaitem.standard_catalyst_bed_cracking.name=Cracking Catalyst Bed
+
+# Resin Logs
+gregtech.block_group_members.extractable_logs.name=Acacia, Birch, Dark Oak, Jungle, Oak, and Spruce Log
+
+# Latex Logs
+gregtech.block_group_members.latex_logs.name=Rubber Log

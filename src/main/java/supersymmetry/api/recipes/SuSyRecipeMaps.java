@@ -7,13 +7,13 @@ import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.recipes.builders.FuelRecipeBuilder;
 import gregtech.api.recipes.builders.PrimitiveRecipeBuilder;
 import gregtech.api.recipes.builders.SimpleRecipeBuilder;
+import gregtech.api.unification.material.Materials;
+import gregtech.common.blocks.MetaBlocks;
 import gregtech.core.sound.GTSoundEvents;
 import gregtechfoodoption.recipe.GTFORecipeMaps;
 import supersymmetry.api.gui.SusyGuiTextures;
-import supersymmetry.api.recipes.builders.CatalystRecipeBuilder;
-import supersymmetry.api.recipes.builders.CoilingCoilRecipeBuilder;
-import supersymmetry.api.recipes.builders.NoEnergyRecipeBuilder;
-import supersymmetry.api.recipes.builders.SinteringRecipeBuilder;
+import supersymmetry.api.recipes.builders.*;
+import supersymmetry.common.materials.SusyMaterials;
 
 public class SuSyRecipeMaps {
 
@@ -24,6 +24,10 @@ public class SuSyRecipeMaps {
             .setSound(GTSoundEvents.COMBUSTION);
 
     public static final RecipeMap<PrimitiveRecipeBuilder> COAGULATION_RECIPES = new RecipeMap<>("coagulation_tank", 0, 2, 1, 1, 1, 2, 0, 0, new PrimitiveRecipeBuilder(), false);
+
+    public static final RecipeMap<PseudoMultiRecipeBuilder> LATEX_COLLECTOR_RECIPES = new RecipeMap<>("latex_collector", 0, 2, 1, 2, new PseudoMultiRecipeBuilder(), false)
+            .setProgressBar(SusyGuiTextures.PROGRESS_BAR_EXTRACTION, ProgressWidget.MoveType.VERTICAL_DOWNWARDS)
+            .setSound(GTSoundEvents.DRILL_TOOL);
 
     public static final RecipeMap<CatalystRecipeBuilder> VULCANIZATION_RECIPES = new RecipeMap<>("vulcanizing_press", 4, 2, 2, 1, new CatalystRecipeBuilder(), false)
             .setSlotOverlay(false, false, true, GuiTextures.MOLD_OVERLAY)
@@ -99,6 +103,8 @@ public class SuSyRecipeMaps {
             .setSlotOverlay(false, true, true, GuiTextures.TURBINE_OVERLAY)
             .setSlotOverlay(true, false, true, SusyGuiTextures.CUBIC_LATTICE_OVERLAY)
             .setSound(GTSoundEvents.CHEMICAL_REACTOR);
+
+
 
     public static final RecipeMap<CatalystRecipeBuilder> FLUIDIZED_BED_REACTOR_RECIPES = new RecipeMap<>("fluidized_bed_reactor", 2, 1, 3, 2, new CatalystRecipeBuilder(), false)
             .setSlotOverlay(false, true, SusyGuiTextures.LARGE_REACTOR_FLUID_OVERLAY)

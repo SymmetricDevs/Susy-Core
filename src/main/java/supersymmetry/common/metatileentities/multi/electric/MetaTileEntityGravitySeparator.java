@@ -17,6 +17,7 @@ import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.common.blocks.BlockSeparatorRotor;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
@@ -38,7 +39,7 @@ public class MetaTileEntityGravitySeparator extends RecipeMapMultiblockControlle
         return new MetaTileEntityGravitySeparator(this.metaTileEntityId);
     }
 
-    protected BlockPattern createStructurePattern() {
+    protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start(RIGHT, UP, FRONT)
                 //front of R facing right side
                 .aisle("C   C", "CC CC", "CFCFC", "CCSCC", " CCC ", " CCC ", "     ")
@@ -57,7 +58,7 @@ public class MetaTileEntityGravitySeparator extends RecipeMapMultiblockControlle
                 */
                 .where('S', selfPredicate())
                 .where('R', orientation())
-                .where('C', states(new IBlockState[] {MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID)}))
+                .where('C', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID)))
                 .where('M', states(new IBlockState[] {MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID)})
                         .or(abilities(MultiblockAbility.MAINTENANCE_HATCH)).setExactLimit(1))
                 .where('E', states(new IBlockState[] {MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID)})

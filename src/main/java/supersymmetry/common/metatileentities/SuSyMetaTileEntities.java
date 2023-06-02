@@ -16,16 +16,18 @@ import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.metatileentity.CatalystMachineMetaTileEntity;
 import supersymmetry.api.metatileentity.ContinuousMachineMetaTileEntity;
+import supersymmetry.api.metatileentity.PseudoMultiMachineMetaTileEntity;
+import supersymmetry.api.metatileentity.PseudoMultiSteamMachineMetaTileEntity;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicator;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicators;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.common.metatileentities.multi.electric.*;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCoagulationTank;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimitiveMudPump;
 import supersymmetry.common.metatileentities.multiblockpart.SusyMetaTileEntityEnergyHatch;
-import supersymmetry.common.metatileentities.single.electric.MetaTileEntityLatexCollector;
-import supersymmetry.common.metatileentities.single.steam.MetaTileEntitySteamLatexCollector;
+import supersymmetry.common.metatileentities.single.storage.MetaTileEntityCryoDrum;
 import supersymmetry.common.metatileentities.single.steam.SuSySimpleSteamMetaTileEntity;
 
 import java.util.function.Function;
@@ -38,8 +40,8 @@ public class SuSyMetaTileEntities {
 
     public static MetaTileEntityCoagulationTank COAGULATION_TANK;
 
-    public static final MetaTileEntityLatexCollector[] LATEX_COLLECTOR;
-    public static MetaTileEntitySteamLatexCollector LATEX_COLLECTOR_BRONZE;
+    public static final PseudoMultiMachineMetaTileEntity[] LATEX_COLLECTOR;
+    public static PseudoMultiSteamMachineMetaTileEntity[] STEAM_LATEX_COLLECTOR;
 
     public static CatalystMachineMetaTileEntity[] VULCANIZING_PRESS;
     public static SuSySimpleSteamMetaTileEntity[] STEAM_VULCANIZING_PRESS;
@@ -55,6 +57,7 @@ public class SuSyMetaTileEntities {
     public static SimpleMachineMetaTileEntity[] VACUUM_CHAMBER;
 
     public static MetaTileEntityDrum LEAD_DRUM;
+    public static MetaTileEntityCryoDrum BRASS_DRUM;
 
     //Machines for chem overhaul
     public static ContinuousMachineMetaTileEntity[] CONTINUOUS_STIRRED_TANK_REACTOR;
@@ -113,19 +116,22 @@ public class SuSyMetaTileEntities {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
         COAGULATION_TANK = registerMetaTileEntity(14501, new MetaTileEntityCoagulationTank(susyId("coagulation_tank")));
 
-        LATEX_COLLECTOR[0] = registerMetaTileEntity(14502, new MetaTileEntityLatexCollector(susyId("latex_collector.lv"), 1));
-        LATEX_COLLECTOR[1] = registerMetaTileEntity(14503, new MetaTileEntityLatexCollector(susyId("latex_collector.mv"), 2));
-        LATEX_COLLECTOR[2] = registerMetaTileEntity(14504, new MetaTileEntityLatexCollector(susyId("latex_collector.hv"), 3));
-        LATEX_COLLECTOR[3] = registerMetaTileEntity(14505, new MetaTileEntityLatexCollector(susyId("latex_collector.ev"), 4));
+        //LATEX_COLLECTOR[0] = registerMetaTileEntity(14502, new MetaTileEntityLatexCollector(susyId("latex_collector.lv"), 1));
+        //LATEX_COLLECTOR[1] = registerMetaTileEntity(14503, new MetaTileEntityLatexCollector(susyId("latex_collector.mv"), 2));
+        //LATEX_COLLECTOR[2] = registerMetaTileEntity(14504, new MetaTileEntityLatexCollector(susyId("latex_collector.hv"), 3));
+        //LATEX_COLLECTOR[3] = registerMetaTileEntity(14505, new MetaTileEntityLatexCollector(susyId("latex_collector.ev"), 4));
 
-        LATEX_COLLECTOR_BRONZE = registerMetaTileEntity(14510, new MetaTileEntitySteamLatexCollector(susyId("latex_collector.bronze")));
+        //LATEX_COLLECTOR_BRONZE = registerMetaTileEntity(14510, new MetaTileEntitySteamLatexCollector(susyId("latex_collector.bronze")));
+        registerPseudoMultiSteamMTE(STEAM_LATEX_COLLECTOR, 14510, "latex_collector", SuSyRecipeMaps.LATEX_COLLECTOR_RECIPES, SuSySteamProgressIndicators.EXTRACTION_STEAM, SusyTextures.LATEX_COLLECTOR_OVERLAY, false);
+        registerPseudoMultiMTE(LATEX_COLLECTOR, 3, 14502, "latex_collector", SuSyRecipeMaps.LATEX_COLLECTOR_RECIPES, SusyTextures.LATEX_COLLECTOR_OVERLAY, true, (tier) -> Math.min(GTUtility.defaultTankSizeFunction.apply(tier)*2, 64000));
+
         SINTERING_OVEN = registerMetaTileEntity(14521, new MetaTileEntitySinteringOven(susyId("sintering_oven")));
 
         registerSimpleSteamMTE(STEAM_VULCANIZING_PRESS, 14515, "vulcanizing_press", SuSyRecipeMaps.VULCANIZATION_RECIPES, SuSySteamProgressIndicators.COMPRESS, SusyTextures.VULCANIZING_PRESS_OVERLAY, true);
         registerCatalystMTE(VULCANIZING_PRESS, 3, 14517, "vulcanizing_press", SuSyRecipeMaps.VULCANIZATION_RECIPES, SusyTextures.VULCANIZING_PRESS_OVERLAY, true);
 
         registerSimpleSteamMTE(STEAM_ROASTER, 14679, "roaster", SuSyRecipeMaps.ROASTER_RECIPES, SuSySteamProgressIndicators.ARROW, SusyTextures.ROASTER_OVERLAY, true);
-        registerCatalystMTE(ROASTER, 12, 14523, "roaster", SuSyRecipeMaps.ROASTER_RECIPES, SusyTextures.ROASTER_OVERLAY, true);
+        registerCatalystMTE(ROASTER, 12, 14523, "roaster", SuSyRecipeMaps.ROASTER_RECIPES, SusyTextures.ROASTER_OVERLAY, true, (tier) -> Math.min((GTUtility.defaultTankSizeFunction.apply(tier)*3) >> 1, 64000));
 
         registerSimpleSteamMTE(STEAM_MIXER, 14536, "mixer", RecipeMaps.MIXER_RECIPES, SuSySteamProgressIndicators.MIXER, SusyTextures.MIXER_OVERLAY_STEAM, false);
 
@@ -186,6 +192,7 @@ public class SuSyMetaTileEntities {
         PRIMITIVE_MUD_PUMP = registerMetaTileEntity(15051, new MetaTileEntityPrimitiveMudPump(susyId("primitive_mud_pump")));
 
         LEAD_DRUM = registerMetaTileEntity(14553, new MetaTileEntityDrum(susyId("drum.lead"), Materials.Lead, 32000));
+        BRASS_DRUM = registerMetaTileEntity(17002, new MetaTileEntityCryoDrum(susyId("drum.brass"), Materials.Brass, 16000, 1280, false, false));
 
         NEW_ENERGY_OUTPUT_HATCH_4A[0] = registerMetaTileEntity(16000, new SusyMetaTileEntityEnergyHatch(susyId("energy_hatch.output_4a.lv"), 1, 4, true));
         NEW_ENERGY_OUTPUT_HATCH_16A[0] = registerMetaTileEntity(16001, new SusyMetaTileEntityEnergyHatch(susyId("energy_hatch.output_16a.lv"), 1, 16, true));
@@ -232,19 +239,30 @@ public class SuSyMetaTileEntities {
         registerCatalystMTE(machines, maxTier, startId, name, map, texture, hasFrontFacing, GTUtility.defaultTankSizeFunction);
     }
 
+    private static void registerPseudoMultiMTE(PseudoMultiMachineMetaTileEntity[] machines, int maxTier, int startId, String name, RecipeMap<?> map, ICubeRenderer texture, boolean hasFrontFacing, Function<Integer, Integer> tankScalingFunction) {
+        for (int i = 0; i <= maxTier; i++) {
+            machines[i] = registerMetaTileEntity(startId + i, new PseudoMultiMachineMetaTileEntity(susyId(String.format("%s.%s", name, GTValues.VN[i + 1].toLowerCase())), map, texture, i + 1, hasFrontFacing, tankScalingFunction));
+        }
+    }
+
+    private static void registerPseudoMultiSteamMTE(PseudoMultiSteamMachineMetaTileEntity[] machines, int startId, String name, RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator, ICubeRenderer texture, boolean isBricked) {
+        machines[0] = registerMetaTileEntity(startId, new PseudoMultiSteamMachineMetaTileEntity(susyId(String.format("%s.bronze", name)), recipeMap, progressIndicator, texture, isBricked, false));
+        machines[1] = registerMetaTileEntity(startId + 1, new PseudoMultiSteamMachineMetaTileEntity(susyId(String.format("%s.steel", name)), recipeMap, progressIndicator, texture, isBricked, true));
+    }
+
     private static @NotNull ResourceLocation susyId(@NotNull String name) {
         return new ResourceLocation(GTValues.MODID, name);
     }
 
     static{
-        LATEX_COLLECTOR = new MetaTileEntityLatexCollector[GTValues.EV];
+        STEAM_LATEX_COLLECTOR = new PseudoMultiSteamMachineMetaTileEntity[2];
         STEAM_VULCANIZING_PRESS = new SuSySimpleSteamMetaTileEntity[2];
-        STEAM_ROASTER = new SuSySimpleSteamMetaTileEntity[2];
         STEAM_ROASTER = new SuSySimpleSteamMetaTileEntity[2];
 
         STEAM_MIXER = new SuSySimpleSteamMetaTileEntity[2];
         STEAM_VACUUM_CHAMBER = new SuSySimpleSteamMetaTileEntity[2];
 
+        LATEX_COLLECTOR = new PseudoMultiMachineMetaTileEntity[GTValues.EV];
         VULCANIZING_PRESS = new CatalystMachineMetaTileEntity[GTValues.EV];
         ROASTER = new CatalystMachineMetaTileEntity[GTValues.OpV];
         VACUUM_CHAMBER = new SimpleMachineMetaTileEntity[GTValues.OpV];
