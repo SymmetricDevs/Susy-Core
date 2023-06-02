@@ -34,9 +34,9 @@ public class MetaTileEntityFlareStack extends RecipeMapMultiblockController {
 
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start(FRONT, RIGHT, UP)
-                .aisle(new String[]{"S"})
-                .aisle(new String[]{"P"}).setRepeatable(3,7)
-                .aisle(new String[]{"F"})
+                .aisle("S")
+                .aisle("P").setRepeatable(3,7)
+                .aisle("F")
                 .where('S', this.selfPredicate())
                 .where('P', states(new IBlockState[]{this.getFireboxCasingState()})
                         .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setExactLimit(1))

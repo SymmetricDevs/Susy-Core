@@ -61,7 +61,7 @@ public class MetaTileEntityClarifier extends RecipeMapMultiblockController {
                 .aisle("      AAAA BBB  ", "      AAAA BSB  ", "      AAAA      ", "                ")
                 .where('S', selfPredicate())
                 .where('A', states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT))
-                        .or(autoAbilities(true, true, true, true, true, true, false)))
+                        .or(autoAbilities()))
                 .where('B', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)))
                 .where('C', states(MetaBlocks.BOILER_CASING.getState((BoilerCasingType.STEEL_PIPE))))
                 .where('D', states(SuSyBlocks.MULTIBLOCK_TANK.getState(BlockMultiblockTank.MultiblockTankType.CLARIFIER)))

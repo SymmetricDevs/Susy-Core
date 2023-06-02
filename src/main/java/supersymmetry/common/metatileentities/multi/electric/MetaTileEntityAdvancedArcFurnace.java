@@ -50,7 +50,7 @@ public class MetaTileEntityAdvancedArcFurnace extends RecipeMapMultiblockControl
                 .aisle(" AAA ", " ASA ", " EEE ", "     ")
                 .where('S', selfPredicate())
                 .where('A', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
-                        .or(autoAbilities(true, true, true, true, true, true, false)))
+                        .or(autoAbilities()))
                 .where('C', states(SuSyBlocks.ELECTRODE_ASSEMBLY.getState(BlockElectrodeAssembly.ElectrodeAssemblyType.CARBON)))
                 .where('D', states(MetaBlocks.BOILER_CASING.getState((BoilerCasingType.STEEL_PIPE))))
                 .where('E', states(MetaBlocks.BOILER_FIREBOX_CASING.getState(BlockFireboxCasing.FireboxCasingType.STEEL_FIREBOX)))

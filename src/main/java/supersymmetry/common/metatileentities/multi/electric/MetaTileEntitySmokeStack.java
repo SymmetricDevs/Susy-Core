@@ -32,9 +32,9 @@ public class MetaTileEntitySmokeStack extends RecipeMapMultiblockController {
 
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start(FRONT, RIGHT, UP)
-                .aisle(new String[]{"S"})
-                .aisle(new String[]{"P"}).setRepeatable(2,6)
-                .aisle(new String[]{"F"})
+                .aisle("S")
+                .aisle("P").setRepeatable(2,6)
+                .aisle("F")
                 .where('S', this.selfPredicate())
                 .where('P', states(new IBlockState[]{this.getPipeCasingState()})
                         .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setExactLimit(1))

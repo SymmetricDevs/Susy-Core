@@ -106,4 +106,9 @@ public class SusyMetaTileEntityDumpingHatch extends MetaTileEntityMultiblockPart
     protected ModularUI createUI(EntityPlayer entityPlayer) {
         return null;
     }
+
+    @Override
+    protected boolean openGUIOnRightClick() {
+        return false;
+    }
 }
