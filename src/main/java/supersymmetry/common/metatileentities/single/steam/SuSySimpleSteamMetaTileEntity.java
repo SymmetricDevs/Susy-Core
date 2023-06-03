@@ -9,7 +9,6 @@ import gregtech.api.gui.widgets.*;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.SteamMetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.recipes.ModHandler;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.ingredients.IntCircuitIngredient;
 import gregtech.api.util.GTTransferUtils;
@@ -28,10 +27,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicator;
-import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -101,7 +98,7 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity {
         if (workableHandler == null) return new FluidTankList(false, new IFluidTank[]{this.steamFluidTank});
         IFluidTank[] fluidImports = new IFluidTank[workableHandler.getRecipeMap().getMaxFluidInputs() + 1];
         fluidImports[0] = this.steamFluidTank;
-        for (int i = 1; i < fluidImports.length; i++) fluidImports[i] = new NotifiableFluidTank(16000, this, false);
+        for (int i = 1; i < fluidImports.length; i++) fluidImports[i] = new NotifiableFluidTank(8000, this, false);
         return new FluidTankList(false, fluidImports);
     }
 
@@ -109,7 +106,7 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity {
     protected FluidTankList createExportFluidHandler() {
         if (workableHandler == null) return new FluidTankList(false);
         FluidTank[] fluidExports = new FluidTank[workableHandler.getRecipeMap().getMaxFluidOutputs()];
-        for (int i = 0; i < fluidExports.length; i++) fluidExports[i] = new NotifiableFluidTank(16000, this, true);
+        for (int i = 0; i < fluidExports.length; i++) fluidExports[i] = new NotifiableFluidTank(8000, this, true);
         return new FluidTankList(false, fluidExports);
     }
 
@@ -201,6 +198,7 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity {
         int itemsSlotsCount = itemHandler.getSlots();
         int fluidSlotsCount = fluidHandler.getTanks() - ((isOutputs) ? 0 : 1) ; // Remove input steam tank
 
+        //redundant to store item slots count if you know it's going to be 0
         boolean invertFluids = false;
         if (itemsSlotsCount == 0) {
             int tmp = itemsSlotsCount;
@@ -213,8 +211,9 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity {
         int itemsSlotsLeft = inputSlotGrid[0];
         int itemsSlotsDown = inputSlotGrid[1];
 
+        //if height of item slots > fluid slots AND primary[item] slot (can be item or fluid) don't take full length of 3
         boolean isVerticalFluid = itemsSlotsDown >= fluidSlotsCount && itemsSlotsLeft < 3;
-        int fluidGridHeight = ((fluidSlotsCount / 3 == 0) ? 1 : fluidSlotsCount / 3);
+        int fluidGridHeight = ((fluidSlotsCount / 3 == 0) ? 1 : fluidSlotsCount / 3); //fit into at most 3 wide by x tall
 
         int fullGridHeight = itemsSlotsDown + (isVerticalFluid ? 0 : fluidGridHeight);
         if (fullGridHeight >= 3) yOffset += 4;
