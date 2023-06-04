@@ -221,8 +221,6 @@ public class SuSyMetaTileEntities {
         BASIC_STEAM_TURBINE = registerMetaTileEntity(17000, new MetaTileEntitySUSYLargeTurbine(susyId("basic_steam_turbine"), RecipeMaps.STEAM_TURBINE_FUELS, 1, MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING), Textures.SOLID_STEEL_CASING, Textures.LARGE_STEAM_TURBINE_OVERLAY));
         BASIC_GAS_TURBINE = registerMetaTileEntity(17001, new MetaTileEntitySUSYLargeTurbine(susyId("basic_gas_turbine"), RecipeMaps.GAS_TURBINE_FUELS, 2, MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING), Textures.SOLID_STEEL_CASING, Textures.LARGE_STEAM_TURBINE_OVERLAY));
 
-        DUMPING_HATCH  = registerMetaTileEntity(17002, new SusyMetaTileEntityDumpingHatch(susyId("dumping_hatch")));
-
         ADVANCED_ARC_FURNACE = registerMetaTileEntity(17003, new MetaTileEntityAdvancedArcFurnace(susyId("advanced_arc_furnace")));
         CLARIFIER = registerMetaTileEntity(17004, new MetaTileEntityClarifier(susyId("clarifier")));
         DUMPER = registerMetaTileEntity(17005, new MetaTileEntityDumper(susyId("dumper")));
