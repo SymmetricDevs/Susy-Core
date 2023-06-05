@@ -162,6 +162,33 @@ public class SusyMaterials {
 
         Materials.Copper.addFlags(SuSyMaterialFlags.GENERATE_CATALYST_BED);
 
+        Materials.Electrum.setProperty(PropertyKey.ORE, new OreProperty());
+
+        Materials.Electrum.getProperty(PropertyKey.ORE).setEmissive(false);
+        Materials.Stibnite.getProperty(PropertyKey.ORE).setEmissive(false);
+        Materials.Realgar.getProperty(PropertyKey.ORE).setEmissive(false);
+        Materials.Saltpeter.getProperty(PropertyKey.ORE).setEmissive(false);
+        Materials.Cinnabar.getProperty(PropertyKey.ORE).setEmissive(false);
+        Materials.Galena.getProperty(PropertyKey.ORE).setEmissive(false);
+        Materials.Pyrolusite.getProperty(PropertyKey.ORE).setEmissive(false);
+        Materials.BandedIron.getProperty(PropertyKey.ORE).setEmissive(false);
+        Materials.Pyrite.getProperty(PropertyKey.ORE).setEmissive(false);
+        Materials.Sphalerite.getProperty(PropertyKey.ORE).setEmissive(false);
+        Materials.Apatite.getProperty(PropertyKey.ORE).setEmissive(false);
+        Materials.Malachite.getProperty(PropertyKey.ORE).setEmissive(false);
+        Materials.Chalcopyrite.getProperty(PropertyKey.ORE).setEmissive(false);
+        Materials.Magnetite.getProperty(PropertyKey.ORE).setEmissive(false);
+        Materials.Lapis.getProperty(PropertyKey.ORE).setEmissive(false);
+        Materials.Lazurite.getProperty(PropertyKey.ORE).setEmissive(false);
+        Materials.Sodalite.getProperty(PropertyKey.ORE).setEmissive(false);
+        SusyMaterials.Fluorite.getProperty(PropertyKey.ORE).setEmissive(false);
+        Materials.Coal.getProperty(PropertyKey.ORE).setEmissive(false);
+        Materials.Cassiterite.getProperty(PropertyKey.ORE).setEmissive(false);
+        Materials.Bornite.getProperty(PropertyKey.ORE).setEmissive(false);
+        Materials.Pentlandite.getProperty(PropertyKey.ORE).setEmissive(false);
+        Materials.Garnierite.getProperty(PropertyKey.ORE).setEmissive(false);
+        Materials.Chalcocite.getProperty(PropertyKey.ORE).setEmissive(false);
+        Materials.Tetrahedrite.getProperty(PropertyKey.ORE).setEmissive(false);
     }
 
     private static void removeProperty(PropertyKey<?> key, Material material) {
