@@ -60,6 +60,7 @@ tile.resource_block.euxenite_alluvial.name=Alluvial Euxenite Deposit
 tile.resource_block.xenotime_alluvial.name=Alluvial Xenotime Deposit
 tile.resource_block.gold_alluvial.name=Alluvial Gold Deposit
 tile.resource_block.platinum_placer.name=Platinum Placer Deposit
+tile.resource_block.phosphorite.name=Phosphorite Deposit
 
 tile.multiblock_tank.clarifier.name=Clarifier Vat
 tile.multiblock_tank.flotation.name=Froth Flotation Vat
