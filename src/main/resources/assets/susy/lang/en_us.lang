@@ -202,7 +202,7 @@ gregtech.machine.railroad_engineering_station.name=Railroad Engineering Station
 gregtech.machine.primitive_mud_pump.name=Primitive Mud Pump
 gregtech.machine.basic_steam_turbine.name=Large Steam Turbine
 gregtech.machine.basic_gas_turbine.name=Large Gas Turbine
-
+gregtech.machine.ocean_pumper.name=Ocean Driller
 gregtech.machine.advanced_arc_furnace.name=Advanced Arc Furnace
 gregtech.machine.clarifier.name=Clarifier
 gregtech.machine.dumper.name=Dumper
@@ -636,3 +636,7 @@ gregtech.block_group_members.extractable_logs.name=Acacia, Birch, Dark Oak, Jung
 
 # Latex Logs
 gregtech.block_group_members.latex_logs.name=Rubber Log
+
+# Machine Translations
+susy.ocean_pumper.full=Tanks are Full!
+susy.ocean_pumper.drainrate=Current Pumping Rate: %s
