@@ -123,6 +123,7 @@ material.praseodymium_nickel=Praseodymium-Nickel
 material.gadolinium_silicon_germanium=Gadolinium Silicon Germanium
 material.latex=Latex
 material.mud=Mud
+material.sea_water=Sea Water
 
 # Rock/Mineral Materials
 material.fluorite=Fluorite
@@ -559,6 +560,7 @@ recipemap.dumping.name=Dumping
 recipemap.froth_flotation.name=Froth Flotation
 
 gregtech.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
+gregtech.multiblock.ocean_pumper.description=The Ocean Driller is an electrically powered multiblock that collects a base amount of 8,000 L Seawater per second (at MV), but only if it is in an ocean biome, and when the controller is between Y = 70 and Y = 75 (Inclusive). It needs an output hatch, a maintenance hatch, and an energy input hatch.
 
 # Energy Hatches
 

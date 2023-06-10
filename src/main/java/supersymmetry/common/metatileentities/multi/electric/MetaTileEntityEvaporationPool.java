@@ -56,7 +56,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                 .aisle("AAAAAAAAAAAAAAASAAAAAAAAAAAAAAA", "                               ")
                 .where('S', selfPredicate())
                 .where('A', states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT))
-                        .or(autoAbilities()))
+                        .or(autoAbilities(true, false, true, true, true, true, false)))
                 .where('C', states(SuSyBlocks.EVAPORATION_BED.getState(BlockEvaporationBed.EvaporationBedType.DIRT)))
                 .where(' ', any())
                 .build();
@@ -71,6 +71,11 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                 evaporationParticles();
             }
         }
+    }
+
+    @Override
+    public boolean hasMaintenanceMechanics() {
+        return false;
     }
 
     @SideOnly(Side.CLIENT)

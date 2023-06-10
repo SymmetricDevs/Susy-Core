@@ -37,11 +37,16 @@ public class MetaTileEntitySmokeStack extends RecipeMapMultiblockController {
                 .aisle("F")
                 .where('S', this.selfPredicate())
                 .where('P', states(new IBlockState[]{this.getPipeCasingState()})
-                        .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setExactLimit(1))
-                        .or(abilities(MultiblockAbility.MAINTENANCE_HATCH).setExactLimit(1)))
+                        .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setExactLimit(1)))
                 .where('F', abilities(MultiblockAbility.MUFFLER_HATCH).setExactLimit(1))
                 .build();
     }
+
+    @Override
+    public boolean hasMaintenanceMechanics() {
+        return false;
+    }
+
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
         return Textures.SOLID_STEEL_CASING;
     }
