@@ -21,14 +21,15 @@ public class PseudoMultiRecipeLogic extends RecipeLogicEnergy {
 
     @Override
     public boolean checkRecipe(@NotNull Recipe recipe) {
-        if (this.pmMTE.getTargetBlockState() == null) return false; //if world was remote or null
-        return recipe.getProperty(PseudoMultiProperty.getInstance(), null)
+        if (this.pmMTE.getTargetBlockState() == null ) return false; //if world was remote or null
+        return !recipe.hasProperty(PseudoMultiProperty.getInstance()) || recipe.getProperty(PseudoMultiProperty.getInstance(), null)
                 .getValidBlockStates().contains(this.pmMTE.getTargetBlockState()) && super.checkRecipe(recipe);
     }
 
     @Override
     public boolean canProgressRecipe() {
-        return this.previousRecipe == null || this.previousRecipe.getProperty(PseudoMultiProperty.getInstance(), null).getValidBlockStates()
+        return this.previousRecipe == null || !previousRecipe.hasProperty(PseudoMultiProperty.getInstance()) ||
+                this.previousRecipe.getProperty(PseudoMultiProperty.getInstance(), null).getValidBlockStates()
                 .contains(this.pmMTE.getTargetBlockState()) && super.canProgressRecipe();
     }
 }

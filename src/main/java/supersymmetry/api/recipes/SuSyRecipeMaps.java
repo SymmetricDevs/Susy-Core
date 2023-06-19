@@ -274,5 +274,6 @@ public class SuSyRecipeMaps {
         RecipeMaps.GAS_TURBINE_FUELS.setMaxFluidInputs(2);
         RecipeMaps.GAS_TURBINE_FUELS.setMaxFluidOutputs(1);
         RecipeMaps.AUTOCLAVE_RECIPES.setMaxFluidInputs(2);
+        RecipeMaps.AUTOCLAVE_RECIPES.setMaxFluidOutputs(2);
     }
 }

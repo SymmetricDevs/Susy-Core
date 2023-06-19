@@ -6,6 +6,7 @@ import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 import java.util.Random;
 import javax.annotation.Nonnull;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -42,7 +43,7 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
     protected BlockStateContainer createBlockState() {
         this.VARIANT = PROPERTY;
         this.VALUES = SusyStoneVariantBlock.StoneType.values();
-        return new BlockStateContainer(this, new IProperty[]{this.VARIANT});
+        return new BlockStateContainer(this, this.VARIANT);
     }
 
     public boolean canCreatureSpawn(@Nonnull IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull EntityLiving.SpawnPlacementType type) {

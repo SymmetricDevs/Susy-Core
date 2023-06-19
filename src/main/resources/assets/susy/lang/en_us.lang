@@ -159,6 +159,7 @@ item.material.oreprefix.oreSoapstone=Soapstone %s Ore
 item.material.oreprefix.oreKimberlite=Kimberlite %s Ore
 item.material.oreprefix.catalystBed=%s Catalyst Bed
 item.material.oreprefix.catalystPellet=%s Catalyst Pellet
+item.material.oreprefix.sheetedFrame=%s Sheeted Frame Box
 
 
 # Machines/Multiblocks
@@ -631,8 +632,6 @@ gregtech.catalyst_group.standard_catalysts.name=Standard Catalyst
 gregtech.catalyst_group.cracking_catalyst_beds.name=Cracking Catalyst
 metaitem.standard_catalyst_bed_cracking.name=Cracking Catalyst Bed
 
-# Resin Logs
-gregtech.block_group_members.extractable_logs.name=Acacia, Birch, Dark Oak, Jungle, Oak, and Spruce Log
+#Any block (will be used when no block state is specified)
+gregtech.block_group_members.any.name=Any Block
 
-# Latex Logs
-gregtech.block_group_members.latex_logs.name=Rubber Log

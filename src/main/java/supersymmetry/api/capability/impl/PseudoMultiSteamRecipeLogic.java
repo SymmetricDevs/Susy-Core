@@ -19,14 +19,16 @@ public class PseudoMultiSteamRecipeLogic extends RecipeLogicSteam {
     @Override
     public boolean checkRecipe(@NotNull Recipe recipe) {
         if (this.pmsMTE.getTargetBlockState() == null) return false; //if world was remote or null
-        return recipe.getProperty(PseudoMultiProperty.getInstance(), null)
+        //if no property was given don't check if state matches
+        return !recipe.hasProperty(PseudoMultiProperty.getInstance()) || recipe.getProperty(PseudoMultiProperty.getInstance(), null)
                 .getValidBlockStates().contains(this.pmsMTE.getTargetBlockState()) && super.checkRecipe(recipe);
     }
 
     @Override
     public boolean canProgressRecipe() {
-        //recipe stalled due to valid block removal will complete on world reload (
-        return this.previousRecipe == null || this.previousRecipe.getProperty(PseudoMultiProperty.getInstance(), null).getValidBlockStates()
+        //recipe stalled due to valid block removal will complete on world reload
+        return this.previousRecipe == null || !this.previousRecipe.hasProperty(PseudoMultiProperty.getInstance()) ||
+                this.previousRecipe.getProperty(PseudoMultiProperty.getInstance(), null).getValidBlockStates()
                 .contains(this.pmsMTE.getTargetBlockState()) && super.canProgressRecipe();
     }
 }
