@@ -632,6 +632,7 @@ gregtech.catalyst_group.standard_catalysts.name=Standard Catalyst
 gregtech.catalyst_group.cracking_catalyst_beds.name=Cracking Catalyst
 metaitem.standard_catalyst_bed_cracking.name=Cracking Catalyst Bed
 
-#Any block (will be used when no block state is specified)
-gregtech.block_group_members.any.name=Any Block
+# Machine Translations
+susy.ocean_pumper.full=Tanks are Full!
+susy.ocean_pumper.drainrate=Current Pumping Rate: %s
 
