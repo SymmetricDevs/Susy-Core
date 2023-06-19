@@ -37,15 +37,14 @@ public class MetaTileEntityPolmyerizationTank extends RecipeMapMultiblockControl
 
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle(new String[]{"F F", "BBB", "XXX", "XXX", "TTT"})
-                .aisle(new String[]{"   ", "BPB", "XPX", "XPX", "TPT"})
-                .aisle(new String[]{"F F", "BSB", "XXX", "XXX", "TTT"})
+                .aisle(new String[]{"F F", "XXX", "XXX", "XXX", "XXX"})
+                .aisle(new String[]{"   ", "XPX", "XPX", "XPX", "XPX"})
+                .aisle(new String[]{"F F", "XSX", "XXX", "XXX", "XXX"})
                 .where('S', this.selfPredicate())
                 .where('F', states(new IBlockState[]{this.getFrameState()}))
                 .where('P', states(new IBlockState[]{this.getPipeCasingState()}))
                 .where('X', states(new IBlockState[]{this.getCasingState()}).or(this.autoAbilities(true, true, true, true, true, true, false)))
-                .where('T', states(new IBlockState[]{this.getCasingState()}).or(this.autoAbilities(true, true, true, true, true, true, false)))
-                .where('B', states(new IBlockState[]{this.getCasingState()}).or(this.autoAbilities(true, true, true, true, true, true, false))).build();
+                .build();
     }
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
         return Textures.SOLID_STEEL_CASING;
