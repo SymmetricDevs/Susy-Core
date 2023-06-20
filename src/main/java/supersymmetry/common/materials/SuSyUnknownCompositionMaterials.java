@@ -18,6 +18,11 @@ public class SuSyUnknownCompositionMaterials {
                 .fluid(FluidTypes.LIQUID)
                 .color(0x211b14)
                 .build();
+
+        Seawater = new Material.Builder(27052, "sea_water")
+                .fluid()
+                .color(0x3c5bc2)
+                .build();
     }
 
 }

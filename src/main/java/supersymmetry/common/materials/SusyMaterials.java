@@ -28,6 +28,7 @@ public class SusyMaterials {
     public static Material Kimberlite;
     public static Material Latex;
     public static Material Mud;
+    public static Material Seawater;
 
     //Minerals
     public static Material Anorthite;
@@ -123,6 +124,16 @@ public class SusyMaterials {
 
         Materials.Salt.setProperty(PropertyKey.FLUID, new FluidProperty());
 
+        Materials.SodiumHydroxide.setProperty(PropertyKey.FLUID, new FluidProperty());
+
+        Materials.Sodium.setProperty(PropertyKey.FLUID, new FluidProperty());
+
+        Materials.Phosphorus.setFormula("P4", true);
+        Materials.Phosphorus.setProperty(PropertyKey.INGOT, new IngotProperty());
+        Materials.Phosphorus.setProperty(PropertyKey.FLUID, new FluidProperty());
+        Materials.Phosphorus.getProperty(PropertyKey.FLUID).setFluidTemperature(317);
+        Materials.Phosphorus.setMaterialRGB(0xfffed6);
+
         Materials.HydrochloricAcid.setFormula("(H2O)(HCl)", true);
 
         Materials.HydrofluoricAcid.setFormula("(H2O)(HF)", true);
@@ -156,6 +167,7 @@ public class SusyMaterials {
 
         Materials.Copper.addFlags(SuSyMaterialFlags.GENERATE_CATALYST_BED);
 
+        Materials.Electrum.setProperty(PropertyKey.ORE, new OreProperty());
     }
 
     private static void removeProperty(PropertyKey<?> key, Material material) {

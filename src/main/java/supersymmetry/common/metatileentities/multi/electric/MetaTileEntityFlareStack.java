@@ -40,7 +40,6 @@ public class MetaTileEntityFlareStack extends RecipeMapMultiblockController {
                 .where('S', this.selfPredicate())
                 .where('P', states(new IBlockState[]{this.getFireboxCasingState()})
                         .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setExactLimit(1))
-                        .or(abilities(MultiblockAbility.MAINTENANCE_HATCH).setExactLimit(1))
                         .or(abilities(MultiblockAbility.INPUT_ENERGY).setExactLimit(1)))
                 .where('F', abilities(MultiblockAbility.MUFFLER_HATCH).setExactLimit(1))
                 .build();
@@ -50,6 +49,11 @@ public class MetaTileEntityFlareStack extends RecipeMapMultiblockController {
     }
     protected IBlockState getFireboxCasingState() {
         return MetaBlocks.BOILER_FIREBOX_CASING.getState(BlockFireboxCasing.FireboxCasingType.STEEL_FIREBOX);
+    }
+
+    @Override
+    public boolean hasMaintenanceMechanics() {
+        return false;
     }
 
     @Nonnull

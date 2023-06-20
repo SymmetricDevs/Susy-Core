@@ -80,6 +80,12 @@
       "textures" : {
         "all" : "gregtech:blocks/resource/gold_alluvial"
       }
+    },
+    "variant=phosphorite" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/resource/phosphorite"
+      }
     }
   }
 }

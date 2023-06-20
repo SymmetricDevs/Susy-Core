@@ -34,8 +34,6 @@ public class BlockEvaporationBed extends VariantActiveBlock<BlockEvaporationBed.
         return false;
     }
 
-    //TODO: MAKE THIS CREATE VAPOR PARTICLES WHEN EVAPORATION BED IS ACTIVE
-
     public static enum EvaporationBedType implements IStringSerializable, IStateHarvestLevel {
         DIRT("dirt", 0);
 

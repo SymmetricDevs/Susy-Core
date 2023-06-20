@@ -43,9 +43,9 @@ public class MetaTileEntityPolmyerizationTank extends RecipeMapMultiblockControl
                 .where('S', this.selfPredicate())
                 .where('F', states(new IBlockState[]{this.getFrameState()}))
                 .where('P', states(new IBlockState[]{this.getPipeCasingState()}))
-                .where('X', states(new IBlockState[]{this.getCasingState()}).or(this.autoAbilities(false, false, true, true, false, false, false)))
-                .where('T', states(new IBlockState[]{this.getCasingState()}).or(this.autoAbilities(false, true, false, false, false, true, false)))
-                .where('B', states(new IBlockState[]{this.getCasingState()}).or(this.autoAbilities(true, false, false, false, true, false, false))).build();
+                .where('X', states(new IBlockState[]{this.getCasingState()}).or(this.autoAbilities(true, true, true, true, true, true, false)))
+                .where('T', states(new IBlockState[]{this.getCasingState()}).or(this.autoAbilities(true, true, true, true, true, true, false)))
+                .where('B', states(new IBlockState[]{this.getCasingState()}).or(this.autoAbilities(true, true, true, true, true, true, false))).build();
     }
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
         return Textures.SOLID_STEEL_CASING;
