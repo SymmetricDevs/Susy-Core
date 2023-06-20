@@ -95,8 +95,9 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
             IBlockState state = blockWorldState.getBlockState();
             if (!(state.getBlock() instanceof BlockTurbineRotor)) return false;
             EnumFacing facing = MetaTileEntitySUSYLargeTurbine.this.getFrontFacing();
+            EnumFacing rotorFacing = EnumFacing.byHorizontalIndex((facing.getHorizontalIndex() +1) % 4).getOpposite())
             //makes sure rotor's front faces direction rotated 90 degrees CW of controller front, then the opposite is gotten such that it faces 90 CCW from controller front
-            return state == steelRotorState().withProperty(FACING, EnumFacing.byHorizontalIndex((facing.getHorizontalIndex() +1) % 4).getOpposite());
+            return state == steelRotorState().withProperty(FACING, rotorFacing) || state == steelRotorState().withProperty(FACING, rotorFacing.getOpposite());
         }, supplier);
     }
 
