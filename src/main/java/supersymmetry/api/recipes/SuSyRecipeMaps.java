@@ -245,7 +245,7 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<NoEnergyRecipeBuilder> DUMPING = new RecipeMap<>("dumping", 0, 0, 1, 0, new NoEnergyRecipeBuilder(), false)
             .setSound(GTSoundEvents.BATH);
 
-    public static final RecipeMap<SimpleRecipeBuilder> FROTH_FLOTATION = new RecipeMap<>("froth_flotation", 3, 6, 2, 2, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<SimpleRecipeBuilder> FROTH_FLOTATION = new RecipeMap<>("froth_flotation", 3, 6, 3, 2, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.BATH);
 
     public static void init(){
@@ -274,5 +274,6 @@ public class SuSyRecipeMaps {
         RecipeMaps.GAS_TURBINE_FUELS.setMaxFluidInputs(2);
         RecipeMaps.GAS_TURBINE_FUELS.setMaxFluidOutputs(1);
         RecipeMaps.AUTOCLAVE_RECIPES.setMaxFluidInputs(2);
+        RecipeMaps.AUTOCLAVE_RECIPES.setMaxFluidOutputs(2);
     }
 }

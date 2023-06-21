@@ -33,14 +33,17 @@ public class PseudoMultiRecipeBuilder extends RecipeBuilder<PseudoMultiRecipeBui
         return this;
     }
 
-    public PseudoMultiRecipeBuilder blockStates(String blockGroupName, BlockStateContainer blockStates) {
-        ArrayList<IBlockState> blockStatesArrayList = new ArrayList<>(blockStates.getValidStates().size());
-        for (IBlockState blockState : blockStates.getValidStates()) {
-            blockStatesArrayList.add(blockState);
+    public PseudoMultiRecipeBuilder blockStates(String blockGroupName, BlockStateContainer... blockStates) {
+        ArrayList<IBlockState> blockStatesArrayList = new ArrayList<>(blockStates.length * 16);
+        for (BlockStateContainer blockStateContainer : blockStates) {
+
+            blockStatesArrayList.addAll(blockStateContainer.getValidStates());
         }
 
         this.applyProperty(PseudoMultiProperty.getInstance(), new PseudoMultiPropertyValues(blockGroupName, blockStatesArrayList));
         return this;
     }
+
+
 
 }
