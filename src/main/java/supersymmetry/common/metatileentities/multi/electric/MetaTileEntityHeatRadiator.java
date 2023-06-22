@@ -17,6 +17,8 @@ import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 
 import javax.annotation.Nonnull;
 
+import static gregtech.api.util.RelativeDirection.*;
+
 public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
 
     public MetaTileEntityHeatRadiator(ResourceLocation metaTileEntityId) {
@@ -30,8 +32,10 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
 
     @Override
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle("AAAAASAAAAA", "DBBBBBBBBBC", "DBBBBBBBBBC", "DBBBBBBBBBC", "DBBBBBBBBBC", "DBBBBBBBBBC", "DBBBBBBBBBC", "DBBBBBBBBBC", "DBBBBBBBBBC", "DBBBBBBBBBC", "DBBBBBBBBBC", "DBBBBBBBBBC", "DBBBBBBBBBC", "DBBBBBBBBBC", "DBBBBBBBBBC", "DBBBBBBBBBC", "AAAAAAAAAAA")
+        return FactoryBlockPattern.start(RIGHT, FRONT, UP)
+                .aisle("AAAAASAAAAA")
+                .aisle("DBBBBBBBBBC").setRepeatable(1,14)
+                .aisle("AAAAAAAAAAA")
                 .where('S', selfPredicate())
                 .where('A', states(new IBlockState[]{MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)})
                         .or(autoAbilities(false, true, false, false, false, false, false)))

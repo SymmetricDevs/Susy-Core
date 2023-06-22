@@ -39,13 +39,13 @@ public class MetaTileEntityQuencher extends RecipeMapMultiblockController {
                 .aisle("  AAA", "  AAA", "     ")
                 .aisle("  ASA", "  AAA", "     ")
                 .where('S', selfPredicate())
-                .where('A', states(new IBlockState[]{MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)}))
+                .where('A', states(new IBlockState[]{MetaBlocks.METAL_CASING.getState(MetalCasingType.STAINLESS_CLEAN)}))
                 .where('B', states(new IBlockState[]{MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE)}))
-                .where('C', states(new IBlockState[]{MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)}))
-                .where('D', states(new IBlockState[]{MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)}))
+                .where('C', states(new IBlockState[]{MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STAINLESS_STEEL_GEARBOX)}))
+                .where('D', states(new IBlockState[]{MetaBlocks.FRAMES.get(Materials.StainlessSteel).getBlock(Materials.StainlessSteel)}))
                 .where('F', autoAbilities(false, false, false, false, false, true, false).setExactLimit(1)
                         .or(autoAbilities(false, false, false, false, true, false, false).setExactLimit(1)))
-                .where('G', states(new IBlockState[]{MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)})
+                .where('G', states(new IBlockState[]{MetaBlocks.METAL_CASING.getState(MetalCasingType.STAINLESS_CLEAN)})
                         .or(autoAbilities(true, true, true, true, false, false, false)))
                 .where(' ', any())
                 .build();
@@ -53,7 +53,7 @@ public class MetaTileEntityQuencher extends RecipeMapMultiblockController {
 
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
-        return Textures.SOLID_STEEL_CASING;
+        return Textures.CLEAN_STAINLESS_STEEL_CASING;
     }
 
     @Nonnull

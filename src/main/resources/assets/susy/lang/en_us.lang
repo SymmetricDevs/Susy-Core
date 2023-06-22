@@ -14,6 +14,8 @@ tile.alternator_coil.copper.name=Copper Alternator Coil
 tile.turbine_rotor.steel.name=Steel Turbine Block
 tile.drill_head.steel.name=Steel Drill Head
 
+tile.susy_multiblock_casing.silicon_carbide_casing.name=Tough Silicon Carbide Casing
+
 tile.structural_block.base_structural_block.name=Structural Block
 tile.structural_block.structural_block_low.name=Striped Structural Block
 tile.structural_block.structural_block_lowlight.name=Striped Light Structural Block
@@ -213,6 +215,7 @@ gregtech.machine.evaporation_pool.name=Evaporation Pool
 gregtech.machine.flare_stack.name=Flare Stack
 gregtech.machine.froth_flotation_tank.name=Froth Flotation Tank
 gregtech.machine.multi_stage_flash_distiller.name=Multi Stage Flash Distiller
+gregtech.machine.high_temperature_distillation_tower.name=High Temperature Distillation Tower
 
 # Properties
 gregtech.recipe.plasma_requirement=Requires plasma: %s
@@ -551,7 +554,9 @@ recipemap.mining_drill.name=Mining Drill
 recipemap.magnetohydrodynamic_generator.name=Magnetohydrodynamic Generator
 recipemap.reaction_furnace.name=Reaction Furnace
 recipemap.pressure_swing_adsorption.name=Pressure Swing Adsorption
-
+recipemap.high_temperature_distillation.name=High Temperature Distillation
+recipemap.in_situ_leacher.name=In-Situ Leaching
+recipemap.euv_lithography.name=Extreme UV Lithography
 recipemap.advanced_arc_furnace.name=Advanced Arc Furnace
 recipemap.evaporation_pool.name=Evaporation Pool
 recipemap.clarifier.name=Clarifier

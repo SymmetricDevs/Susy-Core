@@ -248,6 +248,15 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> FROTH_FLOTATION = new RecipeMap<>("froth_flotation", 3, 6, 3, 2, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.BATH);
 
+    public static final RecipeMap<SimpleRecipeBuilder> HIGH_TEMPERATURE_DISTILLATION = new RecipeMap<>("high_temperature_distillation", 1, 1, 1, 12, new SimpleRecipeBuilder(), false)
+            .setSound(GTSoundEvents.CHEMICAL_REACTOR);
+
+    public static final RecipeMap<SimpleRecipeBuilder> IN_SITU_LEACHER = new RecipeMap<>("in_situ_leacher", 2, 2, 2, 2, new SimpleRecipeBuilder(), false)
+            .setSound(GTSoundEvents.COMPRESSOR);
+
+    public static final RecipeMap<SimpleRecipeBuilder> EUV_LITHOGRAPHY = new RecipeMap<>("euv_lithography", 3, 3, 3, 3, new SimpleRecipeBuilder(), false)
+            .setSound(GTSoundEvents.ELECTROLYZER);
+
     public static void init(){
         RecipeMaps.SIFTER_RECIPES.setMaxFluidInputs(1);
         RecipeMaps.SIFTER_RECIPES.setMaxFluidOutputs(1);
