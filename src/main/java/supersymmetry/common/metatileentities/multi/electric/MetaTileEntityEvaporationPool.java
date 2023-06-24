@@ -28,6 +28,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.common.blocks.BlockEvaporationBed;
 import supersymmetry.common.blocks.BlockMultiblockTank;
@@ -40,7 +41,7 @@ import java.util.List;
 public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController {
     public MetaTileEntityEvaporationPool(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.EVAPORATION_POOL);
-        this.recipeMapWorkable = new MultiblockRecipeLogic(this, true);
+        this.recipeMapWorkable = new NoEnergyMultiblockRecipeLogic(this);
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
@@ -56,7 +57,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                 .aisle("AAAAAAAAAAAAAAASAAAAAAAAAAAAAAA", "                               ")
                 .where('S', selfPredicate())
                 .where('A', states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT))
-                        .or(autoAbilities(true, false, true, true, true, true, false)))
+                        .or(autoAbilities(false, false, true, true, true, true, false)))
                 .where('C', states(SuSyBlocks.EVAPORATION_BED.getState(BlockEvaporationBed.EvaporationBedType.DIRT)))
                 .where(' ', any())
                 .build();

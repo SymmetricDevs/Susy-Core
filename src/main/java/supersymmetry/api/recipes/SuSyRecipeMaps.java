@@ -230,7 +230,7 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> ADVANCED_ARC_FURNACE = new RecipeMap<>("advanced_arc_furnace", 4, 2, 3, 1, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.ARC);
 
-    public static final RecipeMap<SimpleRecipeBuilder> EVAPORATION_POOL = new RecipeMap<>("evaporation_pool", 1, 4, 1, 1, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<NoEnergyRecipeBuilder> EVAPORATION_POOL = new RecipeMap<>("evaporation_pool", 1, 4, 1, 1, new NoEnergyRecipeBuilder(), false)
             .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
     public static final RecipeMap<SimpleRecipeBuilder> CLARIFIER = new RecipeMap<>("clarifier", 1, 1, 1, 2, new SimpleRecipeBuilder(), false)
