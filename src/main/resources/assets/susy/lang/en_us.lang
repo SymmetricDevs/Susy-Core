@@ -63,6 +63,7 @@ tile.resource_block.xenotime_alluvial.name=Alluvial Xenotime Deposit
 tile.resource_block.gold_alluvial.name=Alluvial Gold Deposit
 tile.resource_block.platinum_placer.name=Platinum Placer Deposit
 tile.resource_block.phosphorite.name=Phosphorite Deposit
+tile.resource_block.potash.name=Potash Deposit
 
 tile.multiblock_tank.clarifier.name=Clarifier Vat
 tile.multiblock_tank.flotation.name=Froth Flotation Vat
@@ -216,6 +217,8 @@ gregtech.machine.flare_stack.name=Flare Stack
 gregtech.machine.froth_flotation_tank.name=Froth Flotation Tank
 gregtech.machine.multi_stage_flash_distiller.name=Multi Stage Flash Distiller
 gregtech.machine.high_temperature_distillation_tower.name=High Temperature Distillation Tower
+gregtech.machine.rotary_kiln.name=Rotary Kiln
+gregtech.machine.cryogenic_distillation_plant.name=Cryogenic Distillation Plant
 
 # Properties
 gregtech.recipe.plasma_requirement=Requires plasma: %s
@@ -564,6 +567,8 @@ recipemap.multi_stage_flash_distillation.name=Multi Stage Flash Distillation
 recipemap.flare_stack.name=Flare Stack
 recipemap.dumping.name=Dumping
 recipemap.froth_flotation.name=Froth Flotation
+recipemap.rotary_kiln.name=Rotary Kiln
+recipemap.cryogenic_distillation.name=Cryogenic Distillation
 
 gregtech.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 gregtech.multiblock.ocean_pumper.description=The Ocean Driller is an electrically powered multiblock that collects a base amount of 8,000 L Seawater per second (at MV), but only if it is in an ocean biome, and when the controller is between Y = 70 and Y = 75 (Inclusive). It needs an output hatch, a maintenance hatch, and an energy input hatch.

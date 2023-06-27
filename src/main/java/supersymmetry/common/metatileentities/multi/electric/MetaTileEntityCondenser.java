@@ -32,22 +32,19 @@ public class MetaTileEntityCondenser extends RecipeMapMultiblockController {
     @Override
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle("CCC", "BCB", "ACA")
-                .aisle("CCC", "CDC", "ACA").setRepeatable(4, 8)
-                .aisle("CCC", "BSB", "ACA")
+                .aisle("CCC", "CCC", "CCC", "CCC")
+                .aisle("CCC", "C C", "C C", "CCC")
+                .aisle("CCC", "CSC", "CCC", "CCC")
                 .where('S', selfPredicate())
-                .where('A', states(new IBlockState[]{MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)}))
-                .where('B', autoAbilities(false, false, false, false, false, true, false).setMinGlobalLimited(2)
-                .or(autoAbilities(false, false, false, false, true, false, false).setMinGlobalLimited(2)))
-                .where('C', states(new IBlockState[]{MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)})
-                        .or(autoAbilities(false, true, false, false, false, false, false)))
-                .where('D', states(new IBlockState[]{MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE)}))
+                .where('C', states(new IBlockState[]{MetaBlocks.METAL_CASING.getState(MetalCasingType.ALUMINIUM_FROSTPROOF)})
+                        .or(autoAbilities(true, true, false, false, true, true, false)))
+                .where(' ', air())
                 .build();
     }
 
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
-        return Textures.SOLID_STEEL_CASING;
+        return Textures.FROST_PROOF_CASING;
     }
 
     @Nonnull
