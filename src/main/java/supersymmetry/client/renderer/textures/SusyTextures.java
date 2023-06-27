@@ -1,6 +1,7 @@
 package supersymmetry.client.renderer.textures;
 
 import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
+import gregtech.client.renderer.texture.cube.SimpleOverlayRenderer;
 import gregtech.client.renderer.texture.cube.SimpleSidedCubeRenderer;
 
 import static gregtech.client.renderer.texture.cube.OrientedOverlayRenderer.OverlayFace.FRONT;
@@ -38,4 +39,5 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer FLUID_COMPRESSOR_OVERLAY = new OrientedOverlayRenderer("machines/fluid_compressor");
     public static final OrientedOverlayRenderer FLUID_DECOMPRESSOR_OVERLAY = new OrientedOverlayRenderer("machines/fluid_decompressor");
 
+    public static final SimpleOverlayRenderer SILICON_CARBIDE_CASING = new SimpleOverlayRenderer("multiblock_casing/silicon_carbide_casing");
 }

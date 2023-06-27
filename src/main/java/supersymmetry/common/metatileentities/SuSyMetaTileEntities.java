@@ -10,6 +10,7 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
+import gregtech.common.metatileentities.multi.electric.MetaTileEntityHighTemperatureDistillationTower;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityEnergyHatch;
 import gregtech.common.metatileentities.storage.MetaTileEntityDrum;
 import net.minecraft.util.ResourceLocation;
@@ -126,6 +127,9 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityMultiStageFlashDistiller MULTI_STAGE_FLASH_DISTILLER;
 
     public static MetaTileEntityOceanPumper OCEAN_PUMPER;
+    public static MetaTileEntityHighTemperatureDistillationTower HIGH_TEMPERATURE_DISTILLATION_TOWER;
+    public static MetaTileEntityRotaryKiln ROTARY_KILN;
+    public static MetaTileEntityCryogenicDistillationPlant CRYOGENIC_DISTILLATION_PLANT;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -232,7 +236,9 @@ public class SuSyMetaTileEntities {
         MULTI_STAGE_FLASH_DISTILLER = registerMetaTileEntity(17009, new MetaTileEntityMultiStageFlashDistiller(susyId("multi_stage_flash_distiller")));
 
         OCEAN_PUMPER = registerMetaTileEntity(17011, new MetaTileEntityOceanPumper(susyId("ocean_pumper")));
-
+        HIGH_TEMPERATURE_DISTILLATION_TOWER = registerMetaTileEntity(17012, new MetaTileEntityHighTemperatureDistillationTower(susyId("high_temperature_distillation_tower")));
+        ROTARY_KILN = registerMetaTileEntity(17013, new MetaTileEntityRotaryKiln(susyId("rotary_kiln")));
+        CRYOGENIC_DISTILLATION_PLANT = registerMetaTileEntity(17014, new MetaTileEntityCryogenicDistillationPlant(susyId("cryogenic_distillation_plant")));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name, RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator, ICubeRenderer texture, boolean isBricked) {

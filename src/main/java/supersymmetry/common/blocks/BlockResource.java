@@ -33,7 +33,8 @@ public class BlockResource extends VariantBlock<BlockResource.ResourceBlockType>
         XENOTIME_ALLUVIAL("xenotime_alluvial", 1),
         PLATINUM_PLACER("platinum_placer", 1),
         GOLD_ALLUVIAL("gold_alluvial", 1),
-        PHOSPHORITE("phosphorite", 1);
+        PHOSPHORITE("phosphorite", 1),
+        POTASH("potash", 1);
 
         private final String name;
         private final int harvestLevel;
