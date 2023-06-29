@@ -24,7 +24,7 @@ dependencies {
     // CCL 3.2.3.358
     implementation rfg.deobf('curse.maven:codechicken-lib-1-8-242818:2779848')
     // GTCEu 2.6.0/2.6.1
-    implementation rfg.deobf('curse.maven:gregtech-ce-unofficial-557242:4483462')
+    implementation rfg.deobf('curse.maven:gregtech-ce-unofficial-557242:4527757')
 
     // GCYM 1.2.0
     implementation rfg.deobf('curse.maven:gregicality-multiblocks-564858:4480254')
