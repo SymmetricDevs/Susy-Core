@@ -36,7 +36,8 @@ dependencies {
 
     implementation rfg.deobf('curse.maven:biomes-o-plenty-220318:2842510')
 
-    implementation rfg.deobf('curse.maven:gregtech-food-option-477021:4496053')
+    //implementation rfg.deobf('curse.maven:gregtech-food-option-477021:4496053')
+    implementation files('libs/GregTech Food Option-1.12.2-1.9.2-dev.jar')
 
     implementation rfg.deobf("curse.maven:no-tree-punching-289043:2983385") // No-tree-punching v2.0.21
     implementation rfg.deobf("curse.maven:alcatrazcore-304493:2666560") // AlcatrazCore v1.0.4
