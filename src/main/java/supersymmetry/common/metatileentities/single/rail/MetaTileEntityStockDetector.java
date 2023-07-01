@@ -11,49 +11,40 @@ import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.recipes.ModHandler;
-import gregtech.api.unification.material.properties.FluidPipeProperties;
-import gregtech.api.unification.material.properties.PropertyKey;
 import gregtech.api.util.GTUtility;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.utils.TooltipHelper;
-import gregtech.common.metatileentities.storage.MetaTileEntityDrum;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import supersymmetry.api.stockinteraction.IStockInteractor;
 import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
 import java.util.List;
 
-public class MetaTileEntityStockDetector extends MetaTileEntity implements ITickable
+public class MetaTileEntityStockDetector extends MetaTileEntity implements IStockInteractor
 {
-    public boolean detected;
     public int ticksAlive;
+    public boolean detected;
 
-    public String filterFullName;
-    public boolean usingFilter;
+    private String filterFullName;
+    private boolean usingFilter;
+    private Vec3d detectionArea;
 
     public MetaTileEntityStockDetector(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
@@ -66,7 +57,7 @@ public class MetaTileEntityStockDetector extends MetaTileEntity implements ITick
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
         return new MetaTileEntityStockDetector(this.metaTileEntityId);
     }
-
+    
     public int getLightOpacity() {
         return 1;
     }
@@ -90,11 +81,8 @@ public class MetaTileEntityStockDetector extends MetaTileEntity implements ITick
 
     public void writeInitialSyncData(PacketBuffer buf) {
         super.writeInitialSyncData(buf);
-
         buf.writeString(this.filterFullName == null ? "" : this.filterFullName);
-
         buf.writeByte(ToByte());
-
     }
 
     public void receiveInitialSyncData(PacketBuffer buf) {
@@ -110,13 +98,13 @@ public class MetaTileEntityStockDetector extends MetaTileEntity implements ITick
         {
             this.filterFullName = buf.readString(32767);
             byte stats = buf.readByte();
-            UsingFromByte(stats);
+            UsingFilterFromByte(stats);
             this.scheduleRenderUpdate();
         }
         else if (dataId == 124)
         {
             byte stats = buf.readByte();
-            UsingFromByte(stats);
+            UsingFilterFromByte(stats);
             this.scheduleRenderUpdate();
         }
         else if (dataId == 125)
@@ -131,7 +119,8 @@ public class MetaTileEntityStockDetector extends MetaTileEntity implements ITick
     public void update() {
         super.update();
 
-        //#fix# do checks here
+        if(this.getWorld().isRemote)
+            return;
     }
 
 
@@ -256,11 +245,11 @@ public class MetaTileEntityStockDetector extends MetaTileEntity implements ITick
 
     public void FromByte(byte stats)
     {
-        UsingFromByte(stats);
+        UsingFilterFromByte(stats);
         DetectingFromByte(stats);
     }
 
-    public void UsingFromByte(byte stats)
+    public void UsingFilterFromByte(byte stats)
     {
         this.usingFilter = (stats & 0b10) > 0;
     }
@@ -277,7 +266,6 @@ public class MetaTileEntityStockDetector extends MetaTileEntity implements ITick
     protected ModularUI createUI(EntityPlayer entityPlayer) {
         ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, 384, 192)
                 .label(10, 5, getMetaFullName());
-
 
 
         return builder.build(getHolder(), entityPlayer);
@@ -300,5 +288,33 @@ public class MetaTileEntityStockDetector extends MetaTileEntity implements ITick
 
     protected boolean shouldSerializeInventories() {
         return false;
+    }
+
+    public void SetInteractionArea(Vec3d area) {
+        this.detectionArea = area;
+    }
+
+    public Vec3d GetInteractionArea() {
+        return this.detectionArea;
+    }
+
+    public void SetFilterClass(String clazz) {
+        this.filterFullName = clazz;
+    }
+
+    public String GetFilterClass() {
+        return this.filterFullName;
+    }
+
+    public void SetUsingFilter(boolean usingFilter) {
+        this.usingFilter = usingFilter;
+    }
+
+    public boolean GetUsingFilter() {
+        return this.usingFilter;
+    }
+
+    public MetaTileEntity GetMetaTileEntity() {
+        return this;
     }
 }
