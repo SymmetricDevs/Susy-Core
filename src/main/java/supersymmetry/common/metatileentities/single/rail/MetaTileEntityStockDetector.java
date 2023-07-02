@@ -1,9 +1,8 @@
 package supersymmetry.common.metatileentities.single.rail;
 
-import codechicken.lib.colour.ColourRGBA;
+import cam72cam.immersiverailroading.entity.EntityRollingStock;
 import codechicken.lib.raytracer.CuboidRayTraceResult;
 import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.pipeline.ColourMultiplier;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Matrix4;
@@ -11,10 +10,7 @@ import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.util.GTUtility;
-import gregtech.client.renderer.texture.Textures;
 import gregtech.client.utils.TooltipHelper;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -26,12 +22,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.stockinteraction.IStockInteractor;
+import supersymmetry.api.stockinteraction.StockHelperFunctions;
 import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nullable;
@@ -42,16 +37,12 @@ public class MetaTileEntityStockDetector extends MetaTileEntity implements IStoc
     public int ticksAlive;
     public boolean detected;
 
-    private String filterFullName;
-    private boolean usingFilter;
-    private Vec3d detectionArea;
+    private byte filterIndex;
+    public final Vec3d detectionArea = new Vec3d(3, 0, 3);
 
     public MetaTileEntityStockDetector(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
-        //this.detected = false;
-        //this.ticksAlive = 0;
-        //this.filterFullName = "";
-        //this.usingFilter = false;
+        this.ticksAlive = 0;
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
@@ -62,7 +53,7 @@ public class MetaTileEntityStockDetector extends MetaTileEntity implements IStoc
         return 1;
     }
 
-
+    //#fix# should have comparitor interaction maybe
     public int getActualComparatorValue() {
         return 1;
     }
@@ -71,6 +62,7 @@ public class MetaTileEntityStockDetector extends MetaTileEntity implements IStoc
         return true;
     }
 
+    //#fix# pickaxe not it maybe
     public String getHarvestTool() {
         return "pickaxe";
     }
@@ -81,55 +73,62 @@ public class MetaTileEntityStockDetector extends MetaTileEntity implements IStoc
 
     public void writeInitialSyncData(PacketBuffer buf) {
         super.writeInitialSyncData(buf);
-        buf.writeString(this.filterFullName == null ? "" : this.filterFullName);
+        buf.writeByte(this.filterIndex);
         buf.writeByte(ToByte());
     }
 
     public void receiveInitialSyncData(PacketBuffer buf) {
         super.receiveInitialSyncData(buf);
-        this.filterFullName = buf.readString(32767);
-
-        FromByte(buf.readByte());
+        this.filterIndex = buf.readByte();
+        this.FromByte(buf.readByte());
+        this.UpdateRedstoneSignal();
     }
 
+    //all, use, det, ind
     public void receiveCustomData(int dataId, PacketBuffer buf) {
         super.receiveCustomData(dataId, buf);
-        if (dataId == 123)
+        if (dataId == 0x616C6C)
         {
-            this.filterFullName = buf.readString(32767);
-            byte stats = buf.readByte();
-            UsingFilterFromByte(stats);
+            this.filterIndex = buf.readByte();
             this.scheduleRenderUpdate();
         }
-        else if (dataId == 124)
+        else if (dataId == 0x646574)
         {
             byte stats = buf.readByte();
-            UsingFilterFromByte(stats);
+            this.DetectingFromByte(stats);
+            this.UpdateRedstoneSignal();
             this.scheduleRenderUpdate();
         }
-        else if (dataId == 125)
+        else if (dataId == 0x696E64)
         {
-            byte stats = buf.readByte();
-            DetectingFromByte(stats);
+            this.filterIndex = buf.readByte();
             this.scheduleRenderUpdate();
         }
-
     }
 
     public void update() {
         super.update();
 
+        //refresh redstone once on start?
+        if(this.ticksAlive == 0)
+            this.UpdateRedstoneSignal();
+
+        this.ticksAlive++;
+
         if(this.getWorld().isRemote)
             return;
-    }
 
-
-    public boolean onRightClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing, CuboidRayTraceResult hitResult) {
-        if (!playerIn.getHeldItem(hand).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, (EnumFacing)null)) {
-            return false;
-        } else {
-            return false;
-            //return this.getWorld().isRemote || !playerIn.isSneaking() && FluidUtil.interactWithFluidHandler(playerIn, hand, this.fluidTank);
+        if(this.ticksAlive % 20 == 0)
+        {
+            List<EntityRollingStock> stocks = StockHelperFunctions.GetStockInArea(this.filterIndex, this.getFrontFacing(), this, this.getWorld());
+            boolean newDetected = stocks.size() > 0;
+            if(newDetected != this.detected || this.ticksAlive == 0)
+            {
+                this.detected = newDetected;
+                this.writeCustomData(0x646574, (buf) -> buf.writeByte(this.ToByte()));
+                this.DetectingFromByte(this.ToByte());
+                this.UpdateRedstoneSignal();
+            }
         }
     }
 
@@ -137,121 +136,56 @@ public class MetaTileEntityStockDetector extends MetaTileEntity implements IStoc
         if (!playerIn.isSneaking()) {
             if (this.getWorld().isRemote) {
                 this.scheduleRenderUpdate();
-                return true;
             } else {
-                this.toggleFilterUse(playerIn);
-                return true;
+                this.CycleFilterUp();
+                playerIn.sendMessage(new TextComponentTranslation("Filter set to " + (this.filterIndex == 0 ? "none" : StockHelperFunctions.ClassNameMap[filterIndex])));
             }
-        } else {
-            return super.onScrewdriverClick(playerIn, hand, wrenchSide, hitResult);
+            return true;
         }
+        return super.onWrenchClick(playerIn, hand, wrenchSide, hitResult);
     }
 
-    private void toggleFilterUse(EntityPlayer playerIn) {
-        if(!this.usingFilter && (this.filterFullName == null || this.filterFullName == ""))
-        {
-            playerIn.sendMessage(new TextComponentTranslation("could not set to use filter, no filter set"));
-            //return;
-        }
-
-        this.usingFilter = !this.usingFilter;
-        playerIn.sendMessage(new TextComponentTranslation("set filter use to " + this.usingFilter));
-
-        //this.markDirty();
-        if (!this.getWorld().isRemote) {
-            //this.notifyBlockUpdate();
-            this.writeCustomData(124, (buf) -> {
-                buf.writeByte(ToByte());
-            });
-            markDirty();
-        }
-
-    }
-
-    @SideOnly(Side.CLIENT)
-    public Pair<TextureAtlasSprite, Integer> getParticleTexture() {
-        int color = ColourRGBA.multiply(GTUtility.convertRGBtoOpaqueRGBA_CL(0xFFFFFF), GTUtility.convertRGBtoOpaqueRGBA_CL(this.getPaintingColorForRendering()));
-        color = GTUtility.convertOpaqueRGBA_CLtoRGB(color);
-        return Pair.of(Textures.DRUM.getParticleTexture(), color);
+    public boolean needsSneakToRotate() {
+        return true;
     }
 
     public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
-        ColourMultiplier multiplier;
-
-        multiplier = new ColourMultiplier(ColourRGBA.multiply(GTUtility.convertRGBtoOpaqueRGBA_CL(0xFFFFFF), GTUtility.convertRGBtoOpaqueRGBA_CL(this.getPaintingColorForRendering())));
-        //Textures.DRUM.render(renderState, translation, (IVertexOperation[])ArrayUtils.add(pipeline, multiplier), this.getFrontFacing());
-        //SusyTextures.STOCK_DETECTOR.render(renderState, translation, pipeline, Cuboid6.full);//, getFrontFacing());
-        //Textures.DRUM_OVERLAY.render(renderState, translation, pipeline);
-        //Textures.MIXER_OVERLAY.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, getFrontFacing(), true, true);
-        //SusyTextures.STOCK_DETECTOR.renderSided();
-
-        byte state = ToByte();
-
-        switch(state)
-        {
-            case 0b00:
-                SusyTextures.STOCK_DETECTOR.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, getFrontFacing(), true, true);
-                break;
-            case 0b01:
-                SusyTextures.STOCK_DETECTOR_DETECTING.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, getFrontFacing(), true, true);
-                break;
-            case 0b10:
-                SusyTextures.STOCK_DETECTOR_FILTER.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, getFrontFacing(), true, true);
-                break;
-            case 0b11:
-                SusyTextures.STOCK_DETECTOR_BOTH.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, getFrontFacing(), true, true);
-                break;
+        byte state = this.ToByte();
+        switch (state) {
+            case 0b00 ->
+                    SusyTextures.STOCK_DETECTOR.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
+            case 0b01 ->
+                    SusyTextures.STOCK_DETECTOR_DETECTING.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
+            case 0b10 ->
+                    SusyTextures.STOCK_DETECTOR_FILTER.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
+            case 0b11 ->
+                    SusyTextures.STOCK_DETECTOR_BOTH.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
         }
     }
 
-    public int getDefaultPaintingColor() {
-        return 0xFFFFFF;
-    }
-
+    //#fix# figure out how to add translations like with I18n instead of just english
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, boolean advanced) {
         if (TooltipHelper.isShiftDown()) {
-            tooltip.add(I18n.format("gregtech.fluid_pipe.max_temperature", new Object[]{340}));
-            tooltip.add(I18n.format("gregtech.fluid_pipe.not_gas_proof", new Object[0]));
-
-
-            tooltip.add(I18n.format("gregtech.tool_action.screwdriver.access_covers", new Object[0]));
-            tooltip.add(I18n.format("gregtech.tool_action.screwdriver.auto_output_down", new Object[0]));
-            tooltip.add(I18n.format("gregtech.tool_action.crowbar", new Object[0]));
+            tooltip.add("Screwdriver to cycle filter");
+            tooltip.add(I18n.format("Detects in radius"));
         } else {
-            tooltip.add(I18n.format("gregtech.tooltip.tool_fluid_hold_shift", new Object[0]));
+            tooltip.add(I18n.format("gregtech.tooltip.tool_hold_shift"));
         }
-
-        NBTTagCompound tagCompound = stack.getTagCompound();
-        if (tagCompound != null && tagCompound.hasKey("Fluid", 10)) {
-            FluidStack fluidStack = FluidStack.loadFluidStackFromNBT(tagCompound.getCompoundTag("Fluid"));
-            if (fluidStack == null) {
-                return;
-            }
-
-            tooltip.add(I18n.format("gregtech.machine.fluid_tank.fluid", new Object[]{fluidStack.amount, I18n.format(fluidStack.getUnlocalizedName(), new Object[0])}));
-        }
-
     }
 
+    //converting boolean values to state byte for smaller packets
     public byte ToByte()
     {
         byte state = 0b00;
         state |= (this.detected ? 0b01 : 0b00);
-        state |= (this.usingFilter ? 0b10 : 0b00);
-
+        state |= (this.usingFilter() ? 0b10 : 0b00);
         return state;
     }
 
     public void FromByte(byte stats)
     {
-        UsingFilterFromByte(stats);
         DetectingFromByte(stats);
-    }
-
-    public void UsingFilterFromByte(byte stats)
-    {
-        this.usingFilter = (stats & 0b10) > 0;
     }
 
     public void DetectingFromByte(byte stats)
@@ -259,62 +193,78 @@ public class MetaTileEntityStockDetector extends MetaTileEntity implements IStoc
         this.detected = (stats & 0b01) > 0;
     }
 
+    public void UpdateRedstoneSignal() {
+        this.setOutputRedstoneSignal(EnumFacing.byIndex(0), this.detected ? 15 : 0);
+        this.setOutputRedstoneSignal(EnumFacing.byIndex(1), this.detected ? 15 : 0);
+        this.setOutputRedstoneSignal(EnumFacing.byIndex(2), this.detected ? 15 : 0);
+        this.setOutputRedstoneSignal(EnumFacing.byIndex(3), this.detected ? 15 : 0);
+        this.setOutputRedstoneSignal(EnumFacing.byIndex(4), this.detected ? 15 : 0);
+        this.setOutputRedstoneSignal(EnumFacing.byIndex(5), this.detected ? 15 : 0);
+    }
+
+    //#fix# what does this do
     public boolean showToolUsages() {
         return false;
     }
 
+    //#fix# does the block need UI? how does modular UI work? do research.
     protected ModularUI createUI(EntityPlayer entityPlayer) {
         ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, 384, 192)
                 .label(10, 5, getMetaFullName());
 
-
         return builder.build(getHolder(), entityPlayer);
     }
 
+    //#fix# does detected need to be saved or just refreshed on load? does ticks-alive need to be saved to prevent every one ticking at once?
+    //update system based on chunk and global time instead of ticks alive?
+    //should detection area be changeable and saved?
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setBoolean("detected", this.detected);
-        data.setString("filterFullName", this.filterFullName == null ? "" : this.filterFullName);
-        data.setBoolean("usingFilter", this.usingFilter);
+        data.setByte("filterIndex", filterIndex);
         return data;
     }
 
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         this.detected = data.getBoolean("detected");
-        this.filterFullName = data.getString("filterFullName");
-        this.usingFilter = data.getBoolean("usingFilter");
+        this.filterIndex = data.getByte("filterIndex");
     }
 
+    //#fix# what does this do
     protected boolean shouldSerializeInventories() {
         return false;
-    }
-
-    public void SetInteractionArea(Vec3d area) {
-        this.detectionArea = area;
     }
 
     public Vec3d GetInteractionArea() {
         return this.detectionArea;
     }
 
-    public void SetFilterClass(String clazz) {
-        this.filterFullName = clazz;
+    public void SetFilterIndex(byte index) {
+        this.filterIndex = index;
     }
 
-    public String GetFilterClass() {
-        return this.filterFullName;
+    public void CycleFilter(boolean up) {
+        this.filterIndex = StockHelperFunctions.CycleFilter(this.filterIndex, up);
+        this.writeCustomData(0x696E64, (buf) -> buf.writeByte(this.filterIndex));
     }
 
-    public void SetUsingFilter(boolean usingFilter) {
-        this.usingFilter = usingFilter;
+    public void CycleFilterUp() {
+        this.CycleFilter(true);
     }
 
-    public boolean GetUsingFilter() {
-        return this.usingFilter;
+    public byte GetFilterIndex() {
+        return this.filterIndex;
     }
 
+    public boolean usingFilter() {
+        return this.filterIndex != 0;
+    }
     public MetaTileEntity GetMetaTileEntity() {
         return this;
+    }
+
+    protected boolean canMachineConnectRedstone(EnumFacing side) {
+        return true;
     }
 }

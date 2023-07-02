@@ -6,33 +6,76 @@ import cam72cam.immersiverailroading.registry.EntityRollingStockDefinition;
 import cam72cam.mod.entity.CustomEntity;
 import cam72cam.mod.entity.ModdedEntity;
 import cam72cam.mod.item.ItemStack;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
 
 import javax.vecmath.Vector3d;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-public class StockHelperFunctions
-{
+public class StockHelperFunctions {
+    public static final String[] ClassNameMap =
+        {
+            "",
+            "locomotive",
+            "tank",
+            "freight",
+            "coupleable",
+        };
+
+    public static final Class[] ClassMap =
+        {
+            EntityRollingStock.class,
+            Locomotive.class,
+            FreightTank.class,
+            Freight.class,
+            EntityCoupleableRollingStock.class,
+        };
+
+    public static final HashMap<String, Class> StrHashMap;
+    static {
+        StrHashMap = new HashMap<>();
+        for(int i = 0; i < ClassNameMap.length; i++)
+            StrHashMap.put(ClassNameMap[i], ClassMap[i]);
+    }
+
+    public static byte CycleFilter(byte current, boolean up)
+    {
+        byte addition = (byte)(up ? 1 : -1);
+        current += addition + (byte)ClassMap.length;
+        current %= ClassMap.length;
+        return current;
+    }
+
+    //not used anymore since classes arent loaded from items, but from a preset class array
     public static ItemStack StackToBadStack(net.minecraft.item.ItemStack stack)
     {
         ItemStack irStack = new ItemStack(stack);
         return irStack;
     }
 
+    //not used anymore since classes arent loaded from items, but from a preset class array
     public Class GetClass(net.minecraft.item.ItemStack stack)
     {
         return GetClass(StackToBadStack(stack));
     }
 
+    //not used anymore since classes arent loaded from items, but from a preset class array
     public static Class GetClass(ItemStack stack)
     {
         ItemRollingStock.Data data = new ItemRollingStock.Data(stack);
@@ -50,6 +93,7 @@ public class StockHelperFunctions
         }
     }
 
+    //for splitting an object into classes (class selection UI was planned, not class filters are ints)
     public static List<String> DecomposeClass(Object obj)
     {
         return DecomposeClass(obj.getClass());
@@ -88,24 +132,14 @@ public class StockHelperFunctions
         return (str.substring(0, str.length() - 2));
     }
 
+    //mostly unused since filter stored as int
     public static boolean IsInFilter(Object stockEntity, String filter) {
         return GetClassFromString(filter).isInstance(stockEntity);
     }
 
+    //mostly unused since filter stored as int
     public static Class GetClassFromString(String filter) {
-        switch(filter) {
-            case "":
-                return EntityRollingStock.class;
-            case "locomotive":
-                return Locomotive.class;
-            case "tank":
-                return FreightTank.class;
-            case "freight":
-                return Freight.class;
-            case "coupleable":
-                return EntityCoupleableRollingStock.class;
-        }
-        return null;
+        return StrHashMap.get(filter);
     }
 
     public static List<EntityRollingStock> GetAnyStockInArea(EnumFacing facing, IStockInteractor interactor, World world)
@@ -113,7 +147,34 @@ public class StockHelperFunctions
         return GetStockInArea(EntityRollingStock.class, facing, interactor, world);
     }
 
+    public static <T extends EntityRollingStock> List<T> GetStockInArea(byte checkClass, EnumFacing facing, IStockInteractor interactor, World world)
+    {
+        return GetStockInArea(ClassMap[checkClass], facing, interactor, world);
+    }
+
     public static <T extends EntityRollingStock> List<T> GetStockInArea(Class<T> checkClass, EnumFacing facing, IStockInteractor interactor, World world)
+    {
+        AxisAlignedBB box = GetBox(interactor, facing);
+
+        //get entities in box and filter for only wanted ones
+        List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, box);
+        List<T> stocks = new ArrayList<T>();
+        entities.forEach(ent ->
+        {
+            if(ent instanceof ModdedEntity)
+            {
+                //get the CustomEntity : Entity off of the modded entity, then check if its the right class
+                CustomEntity customEntity = ((ModdedEntity)ent).getSelf();
+                if(checkClass.isInstance(customEntity))
+                {
+                    stocks.add((T)customEntity);
+                }
+            }
+        });
+        return stocks;
+    }
+
+    public static AxisAlignedBB GetBox(IStockInteractor interactor, EnumFacing facing)
     {
         //get base position and facing directions, as well as both non facing directions
         Vector3f pos = fromVec3i(interactor.GetMetaTileEntity().getPos());
@@ -124,7 +185,6 @@ public class StockHelperFunctions
         double width = interactor.GetInteractionArea().x;
         double depth = interactor.GetInteractionArea().z;
         double halfwidth = 0.5 * width;
-
 
         //get the position of the front of the block
         Vector3f facingDirHalved = copyVec(facingDir);
@@ -146,25 +206,8 @@ public class StockHelperFunctions
         Vector3f cornerB = Vector3f.add(blockFront, localRightUp, null);
         cornerB = Vector3f.add(cornerB, farVec, null);
         AxisAlignedBB box = new AxisAlignedBB(cornerA.getX(), cornerA.getY(), cornerA.getZ(), cornerB.getX(), cornerB.getY(), cornerB.getZ());
-
-        //get entities in box and filter for only wanted ones
-        List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, box);
-        List<T> stocks = new ArrayList<T>();
-        entities.forEach(ent ->
-        {
-            if(ent instanceof ModdedEntity)
-            {
-                //get the CustomEntity : Entity off of the modded entity, then check if its the right class
-                CustomEntity customEntity = ((ModdedEntity)ent).getSelf();
-                if(customEntity.getClass().isAssignableFrom(checkClass))
-                {
-                    stocks.add((T)customEntity);
-                }
-            }
-        });
-        return stocks;
+        return box;
     }
-
 
     public static Vector3f copyVec(Vector3f vec) {
         return new Vector3f(vec.getX(), vec.getY(), vec.getZ());
@@ -172,7 +215,33 @@ public class StockHelperFunctions
 
     public static Vector3f fromVec3i(Vec3i pos)
     {
-
         return new Vector3f(pos.getX(), pos.getY(), pos.getZ());
+    }
+
+    public static void renderBoundingBox(AxisAlignedBB boundingBox) {
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferBuilder = tessellator.getBuffer();
+
+        bufferBuilder.begin(GL11.GL_LINE_STRIP, DefaultVertexFormats.POSITION_COLOR);
+        bufferBuilder.pos(boundingBox.minX, boundingBox.minY, boundingBox.minZ).color(1.0F, 0.0F, 0.0F, 0.4F).endVertex();
+        bufferBuilder.pos(boundingBox.maxX, boundingBox.minY, boundingBox.minZ).color(1.0F, 0.0F, 0.0F, 0.4F).endVertex();
+        bufferBuilder.pos(boundingBox.maxX, boundingBox.minY, boundingBox.maxZ).color(1.0F, 0.0F, 0.0F, 0.4F).endVertex();
+        bufferBuilder.pos(boundingBox.minX, boundingBox.minY, boundingBox.maxZ).color(1.0F, 0.0F, 0.0F, 0.4F).endVertex();
+        bufferBuilder.pos(boundingBox.minX, boundingBox.minY, boundingBox.minZ).color(1.0F, 0.0F, 0.0F, 0.4F).endVertex();
+
+        bufferBuilder.pos(boundingBox.minX, boundingBox.maxY, boundingBox.minZ).color(1.0F, 0.0F, 0.0F, 0.4F).endVertex();
+        bufferBuilder.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.minZ).color(1.0F, 0.0F, 0.0F, 0.4F).endVertex();
+        bufferBuilder.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ).color(1.0F, 0.0F, 0.0F, 0.4F).endVertex();
+        bufferBuilder.pos(boundingBox.minX, boundingBox.maxY, boundingBox.maxZ).color(1.0F, 0.0F, 0.0F, 0.4F).endVertex();
+        bufferBuilder.pos(boundingBox.minX, boundingBox.maxY, boundingBox.minZ).color(1.0F, 0.0F, 0.0F, 0.4F).endVertex();
+
+        tessellator.draw();
+
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
     }
 }
