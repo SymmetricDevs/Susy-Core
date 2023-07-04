@@ -8,36 +8,29 @@ import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
-import gregtech.api.unification.material.Materials;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
-import gregtech.client.utils.TooltipHelper;
-import gregtech.common.blocks.BlockBoilerCasing.BoilerCasingType;
-import gregtech.common.blocks.BlockGlassCasing;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiFluidHatch;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
+import supersymmetry.common.blocks.SuSyBlocks;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
 
 import static gregtech.api.util.RelativeDirection.*;
 
-public class MetaTileEntityCryogenicDistillationPlant extends RecipeMapMultiblockController {
-    public MetaTileEntityCryogenicDistillationPlant(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SuSyRecipeMaps.CRYOGENIC_DISTILLATION);
+public class MetaTileEntitySingleColumnCryogenicDistillationPlant extends RecipeMapMultiblockController {
+    public MetaTileEntitySingleColumnCryogenicDistillationPlant(ResourceLocation metaTileEntityId) {
+        super(metaTileEntityId, SuSyRecipeMaps.SINGLE_COLUMN_CRYOGENIC_DISTILLATION);
         this.recipeMapWorkable = new MultiblockRecipeLogic(this, false);
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
-        return new MetaTileEntityCryogenicDistillationPlant(this.metaTileEntityId);
+        return new MetaTileEntitySingleColumnCryogenicDistillationPlant(this.metaTileEntityId);
     }
 
     protected BlockPattern createStructurePattern() {
@@ -45,13 +38,14 @@ public class MetaTileEntityCryogenicDistillationPlant extends RecipeMapMultibloc
                 .aisle(new String[]{"CCC", "CCC", "CCC"})
                 .aisle(new String[]{"CSC", "CFC", "CCC"})
                 .aisle(new String[]{"XXX", "XFX", "XXX"}).setRepeatable(1,16)
+                .aisle(new String[]{"CEC", "E E", "CEC"})
                 .aisle(new String[]{"DDD", "DDD", "DDD"})
                 .where('S', this.selfPredicate())
                 .where('C', states(new IBlockState[]{this.getCasingState()})
                         .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(3))
                         .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMaxGlobalLimited(1))
-                        .or(abilities(MultiblockAbility.MAINTENANCE_HATCH).setMaxGlobalLimited(1)))
-                .where('F', states(getFrameState()))
+                        .or(autoAbilities(false, true, false, false, false, false, false).setExactLimit(1)))
+                .where('F', states(SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.STRUCTURAL_PACKING)))
                 .where('X', states(getCasingState())
                         .or(metaTileEntities(MultiblockAbility.REGISTRY.get(MultiblockAbility.EXPORT_FLUIDS).stream()
                                 .filter(mte->!(mte instanceof MetaTileEntityMultiFluidHatch))
@@ -62,16 +56,15 @@ public class MetaTileEntityCryogenicDistillationPlant extends RecipeMapMultibloc
                                 .toArray(MetaTileEntity[]::new))
                                 .setMaxLayerLimited(1)))
                 .where('D', states(new IBlockState[]{this.getCasingState()}))
+                .where('E', states(new IBlockState[]{this.getCasingState()})
+                        .or(abilities(MultiblockAbility.PASSTHROUGH_HATCH)))
                 .where('#', air())
+                .where(' ', any())
                 .build();
     }
 
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
         return Textures.FROST_PROOF_CASING;
-    }
-
-    protected IBlockState getFrameState() {
-        return MetaBlocks.FRAMES.get(Materials.StainlessSteel).getBlock(Materials.StainlessSteel);
     }
 
     protected IBlockState getCasingState() {

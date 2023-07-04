@@ -14,6 +14,7 @@ import net.minecraft.util.ResourceLocation;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import gregtech.common.blocks.BlockBoilerCasing.BoilerCasingType;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
+import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
 
 import javax.annotation.Nonnull;
 
@@ -23,6 +24,7 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
 
     public MetaTileEntityHeatRadiator(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.HEAT_RADIATOR_RECIPES);
+        this.recipeMapWorkable = new NoEnergyMultiblockRecipeLogic(this);
     }
 
     @Override
