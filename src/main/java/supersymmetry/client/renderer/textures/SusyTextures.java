@@ -5,8 +5,6 @@ import gregtech.client.renderer.texture.cube.SimpleOrientedCubeRenderer;
 import gregtech.client.renderer.texture.cube.SimpleOverlayRenderer;
 import gregtech.client.renderer.texture.cube.SimpleSidedCubeRenderer;
 
-import static gregtech.client.renderer.texture.cube.OrientedOverlayRenderer.OverlayFace.FRONT;
-
 public class SusyTextures {
 
     public SusyTextures(){
@@ -42,8 +40,16 @@ public class SusyTextures {
 
     public static final SimpleOverlayRenderer SILICON_CARBIDE_CASING = new SimpleOverlayRenderer("multiblock_casing/silicon_carbide_casing");
 
-    public static final SimpleOrientedCubeRenderer STOCK_DETECTOR = new SimpleOrientedCubeRenderer("rail_interfaces/stock_detector/stock_detector_neither");
+    public static final SimpleOrientedCubeRenderer STOCK_DETECTOR_NEITHER = new SimpleOrientedCubeRenderer("rail_interfaces/stock_detector/stock_detector_neither");
     public static final SimpleOrientedCubeRenderer STOCK_DETECTOR_DETECTING = new SimpleOrientedCubeRenderer("rail_interfaces/stock_detector/stock_detector_detecting");
     public static final SimpleOrientedCubeRenderer STOCK_DETECTOR_FILTER = new SimpleOrientedCubeRenderer("rail_interfaces/stock_detector/stock_detector_filter");
     public static final SimpleOrientedCubeRenderer STOCK_DETECTOR_BOTH = new SimpleOrientedCubeRenderer("rail_interfaces/stock_detector/stock_detector_both");
+
+    public static final SimpleOrientedCubeRenderer STOCK_FLUID_EXCHANGER_INACTIVE = new SimpleOrientedCubeRenderer("rail_interfaces/fluid_exchanger/fluid_exchanger_inactive");
+    public static final SimpleOrientedCubeRenderer STOCK_FLUID_EXCHANGER_PULLING = new SimpleOrientedCubeRenderer("rail_interfaces/fluid_exchanger/fluid_exchanger_pulling");
+    public static final SimpleOrientedCubeRenderer STOCK_FLUID_EXCHANGER_PUSHING = new SimpleOrientedCubeRenderer("rail_interfaces/fluid_exchanger/fluid_exchanger_pushing");
+
+    public static final SimpleOrientedCubeRenderer STOCK_ITEM_EXCHANGER_INACTIVE = new SimpleOrientedCubeRenderer("rail_interfaces/item_exchanger/item_exchanger_inactive");
+    public static final SimpleOrientedCubeRenderer STOCK_ITEM_EXCHANGER_PULLING = new SimpleOrientedCubeRenderer("rail_interfaces/item_exchanger/item_exchanger_pulling");
+    public static final SimpleOrientedCubeRenderer STOCK_ITEM_EXCHANGER_PUSHING = new SimpleOrientedCubeRenderer("rail_interfaces/item_exchanger/item_exchanger_pushing");
 }

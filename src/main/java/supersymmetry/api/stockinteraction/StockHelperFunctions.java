@@ -6,7 +6,6 @@ import cam72cam.immersiverailroading.registry.EntityRollingStockDefinition;
 import cam72cam.mod.entity.CustomEntity;
 import cam72cam.mod.entity.ModdedEntity;
 import cam72cam.mod.item.ItemStack;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -14,15 +13,11 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
 
-import javax.vecmath.Vector3d;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,9 +51,14 @@ public class StockHelperFunctions {
 
     public static byte CycleFilter(byte current, boolean up)
     {
+        return CycleFilter(current, up, (byte)ClassMap.length);
+    }
+
+    public static byte CycleFilter(byte current, boolean up, byte len)
+    {
         byte addition = (byte)(up ? 1 : -1);
-        current += addition + (byte)ClassMap.length;
-        current %= ClassMap.length;
+        current += addition + len;
+        current %= len;
         return current;
     }
 
@@ -182,8 +182,8 @@ public class StockHelperFunctions {
         Vector3f facingDir = fromVec3i(facing.getDirectionVec());
         Vector3f nonFacingDirs = Vector3f.sub(one, facingDir, null);
 
-        double width = interactor.GetInteractionArea().x;
-        double depth = interactor.GetInteractionArea().z;
+        double width = interactor.getInteractionArea().x;
+        double depth = interactor.getInteractionArea().z;
         double halfwidth = 0.5 * width;
 
         //get the position of the front of the block
