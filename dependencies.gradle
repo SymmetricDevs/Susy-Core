@@ -21,10 +21,12 @@
  */
 dependencies {
 
+    implementation rfg.deobf(files("libs/gregtech-1.12.2-2.6.1-beta.jar"))
     // CCL 3.2.3.358
     implementation rfg.deobf('curse.maven:codechicken-lib-1-8-242818:2779848')
     // GTCEu 2.6.0/2.6.1
-    implementation rfg.deobf('curse.maven:gregtech-ce-unofficial-557242:4527757')
+    //implementation rfg.deobf('curse.maven:gregtech-ce-unofficial-557242:4483462')
+
 
     // GCYM 1.2.0
     implementation rfg.deobf('curse.maven:gregicality-multiblocks-564858:4480254')
@@ -41,4 +43,12 @@ dependencies {
 
     implementation rfg.deobf("curse.maven:no-tree-punching-289043:2983385") // No-tree-punching v2.0.21
     implementation rfg.deobf("curse.maven:alcatrazcore-304493:2666560") // AlcatrazCore v1.0.4
+
+    implementation rfg.deobf("curse.maven:immersive-railroading-277736:3437738") // Immersive-Railroading v1.9.1
+    implementation rfg.deobf("curse.maven:universal-mod-core-371784:3654955") // Universal-Mod-Care v1.1.4
+    implementation rfg.deobf("curse.maven:track-api-282613:2825260") // Track-API v1.2.0
+
+    implementation rfg.deobf("curse.maven:ctm-267602:2915363") // CTM 1.0.2.31
+
+
 }
