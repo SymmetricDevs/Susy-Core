@@ -106,6 +106,8 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
         // When changing the structure, do not forget to update the preview and the structure AABB - It's best ot just bug MTBO if you do not understand what that means
         return FactoryBlockPattern.start()
                 .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
+                .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
+                .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
                 .aisle("  CCC  BBB  CCC  ", "  CCC  BBB  CCC  ", "   C    B    C   ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "       F F       ", "       F F       ")
                 .aisle("CCCCCCCCCCCCCCCCC", "CCCFCCCCFCCCCFCCC", "CCCFCCCCFCCCCFCCC", "   F    F    F   ", "   F    F    F   ", "   F    F    F   ", "   F    F    F   ", " FFFFFFFFFFFFFFF ", "  FF   FGF   FF  ", "       F F       ")
                 .aisle("CCCCCCCCCCCCCCCCC", "CCCCCCCCCCCCCCCCC", "   C    C    C   ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "       F F       ", "       F F       ")
@@ -117,6 +119,8 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
                 .aisle("CCCCCCCCCCCCCCCCC", "CCCCCCCCCCCCCCCCC", "   C    C    C   ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "       F F       ", "       F F       ")
                 .aisle("CCCCCCCCCCCCCCCCC", "CCCFCCCCFCCCCFCCC", "CCCFCCCCFCCCCFCCC", "   F    F    F   ", "   F    F    F   ", "   F    F    F   ", "   F    F    F   ", " FFFFFFFFFFFFFFF ", "  FF   FGF   FF  ", "       F F       ")
                 .aisle("  CCC  CCC  CCC  ", "  CCC  CSC  CCC  ", "   C    C    C   ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "       F F       ", "       F F       ")
+                .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
+                .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
                 .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
                 .where('S', selfPredicate())
                 .where('F', states(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)))
@@ -147,6 +151,8 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
 
         MultiblockShapeInfo.Builder builder = MultiblockShapeInfo.builder()
                 .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
+                .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
+                .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
                 .aisle("  CCC  CCC  CCC  ", "  CCC  CCC  CCC  ", "   C    C    C   ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "       F F       ", "       F F       ")
                 .aisle("CCCCCCCCCCCCCCCCC", "CCCFCCCCFCCCCFCCC", "CCCFCCCCFCCCCFCCC", "   F    F    F   ", "   F    F    F   ", "   F    F    F   ", "   F    F    F   ", " FFFFFFFFFFFFFFF ", "  FF   FGF   FF  ", "       F F       ")
                 .aisle("CCCCCCCCCCCCCCCCC", "CCCCCCCCCCCCCCCCC", "   C    C    C   ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "       F F       ", "       F F       ")
@@ -159,6 +165,8 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
                 .aisle("CCCCCCCCCCCCCCCCC", "CCCFCCCCFCCCCFCCC", "CCCFCCCCFCCCCFCCC", "   F    F    F   ", "   F    F    F   ", "   F    F    F   ", "   F    F    F   ", " FFFFFFFFFFFFFFF ", "  FF   FGF   FF  ", "       F F       ")
                 .aisle("  CCC  CCC  CCC  ", "  CCC  CSC  CCC  ", "   C    C    C   ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "       F F       ", "       F F       ")
                 .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
+                .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
+                .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
                 .where('S', SuSyMetaTileEntities.RAILROAD_ENGINEERING_STATION, EnumFacing.SOUTH)
                 .where('F', MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel))
                 .where('M', MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
@@ -169,6 +177,7 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
 
         MultiblockShapeInfo preInfo = builder.build();
 
+        /*
         if(Loader.isModLoaded(SuSyValues.MODID_IMMERSIVERAILROADING)) {
             ItemStack trackBlueprintStack = new ItemStack(IRItems.ITEM_TRACK_BLUEPRINT, 0);
             trackBlueprintStack.internal.setTagInfo("length", new NBTTagInt(17));
@@ -198,6 +207,8 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
             }
             preInfo = new MultiblockShapeInfo(blockInfos);
         }
+
+         */
 
         shapeInfo.add(preInfo);
 
