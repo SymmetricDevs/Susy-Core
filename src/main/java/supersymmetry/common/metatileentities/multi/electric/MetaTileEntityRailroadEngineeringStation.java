@@ -177,6 +177,7 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
 
         MultiblockShapeInfo preInfo = builder.build();
 
+        /*
         if(Loader.isModLoaded(SuSyValues.MODID_IMMERSIVERAILROADING)) {
             ItemStack trackBlueprintStack = new ItemStack(IRItems.ITEM_TRACK_BLUEPRINT, 0);
             trackBlueprintStack.internal.setTagInfo("length", new NBTTagInt(17));
@@ -206,6 +207,8 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
             }
             preInfo = new MultiblockShapeInfo(blockInfos);
         }
+
+         */
 
         shapeInfo.add(preInfo);
 
