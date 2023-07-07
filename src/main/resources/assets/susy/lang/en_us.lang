@@ -205,7 +205,7 @@ gregtech.machine.magnetohydrodynamic_generator.name=Magnetohydrodynamic (MHD) Ge
 gregtech.machine.mining_drill.name=Mining Drill
 gregtech.machine.quencher.name=Quencher
 gregtech.machine.railroad_engineering_station.name=Railroad Engineering Station
-gregtech.machine.railroad_engineering_station.tooltip=Place Immersive Railroading Tracks in the middle to form the multiblock
+gregtech.machine.railroad_engineering_station.tooltip=Place Immersive Railroading Tracks in the middle to form the multiblock\nThe concrete below the tracks can be substituted with any block, including pipes or air
 
 gregtech.machine.primitive_mud_pump.name=Primitive Mud Pump
 gregtech.machine.basic_steam_turbine.name=Large Steam Turbine
