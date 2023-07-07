@@ -165,7 +165,7 @@ public class SuSyMetaTileEntities {
         registerContinuousMachineMTE(TRICKLE_BED_REACTOR, 12, 14580, "trickle_bed_reactor", SuSyRecipeMaps.TRICKLE_BED_REACTOR_RECIPES, SusyTextures.TRICKLE_BED_REACTOR_OVERLAY, true, reactorTankSizeFunction);
         registerContinuousMachineMTE(BUBBLE_COLUMN_REACTOR, 12, 14606, "bubble_column_reactor", SuSyRecipeMaps.BUBBLE_COLUMN_REACTOR_RECIPES, SusyTextures.BUBBLE_COLUMN_REACTOR_OVERLAY, true, reactorTankSizeFunction);
 
-        registerSimpleMTE(BATCH_REACTOR, 12, 14681, "batch_reactor", SuSyRecipeMaps.BATCH_REACTOR_RECIPES, SusyTextures.BATCH_REACTOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+        registerSimpleMTE(BATCH_REACTOR, 12, 14681, "batch_reactor", SuSyRecipeMaps.BATCH_REACTOR_RECIPES, SusyTextures.BATCH_REACTOR_OVERLAY, true, reactorTankSizeFunction);
 
         //max tier = 12 -> OpV [excludes ULv] -> 13 ids taken (add maxTier +1 to start ID to get next valid id)
         registerSimpleMTE(CRYSTALLIZER, 12, 14593, "crystallizer", SuSyRecipeMaps.CRYSTALLIZER_RECIPES, SusyTextures.CRYSTALLIZER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
