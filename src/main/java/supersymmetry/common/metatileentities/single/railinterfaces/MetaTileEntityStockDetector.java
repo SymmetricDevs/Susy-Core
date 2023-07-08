@@ -3,19 +3,25 @@ package supersymmetry.common.metatileentities.single.railinterfaces;
 import cam72cam.immersiverailroading.entity.EntityRollingStock;
 import codechicken.lib.raytracer.CuboidRayTraceResult;
 import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.ColourMultiplier;
 import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.texture.TextureUtils;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Matrix4;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.api.util.GTUtility;
+import gregtech.client.renderer.texture.Textures;
 import gregtech.client.utils.TooltipHelper;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
@@ -24,6 +30,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.stockinteraction.IStockInteractor;
 import supersymmetry.api.stockinteraction.StockHelperFunctions;
@@ -225,10 +232,6 @@ public class MetaTileEntityStockDetector extends MetaTileEntity implements IStoc
         return this.detectionArea;
     }
 
-    public void setFilterIndex(byte index) {
-        this.filterIndex = index;
-    }
-
     public void cycleFilter(boolean up) {
         this.filterIndex = StockHelperFunctions.CycleFilter(this.filterIndex, up);
         this.writeCustomData(PackIDFilterIndex, (buf) -> buf.writeByte(this.filterIndex));
@@ -241,6 +244,8 @@ public class MetaTileEntityStockDetector extends MetaTileEntity implements IStoc
     public byte getFilterIndex() {
         return this.filterIndex;
     }
+
+    public Class getFilter() { return StockHelperFunctions.ClassMap[this.getFilterIndex()]; }
 
     public boolean usingFilter() {
         return this.filterIndex != 0;

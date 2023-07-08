@@ -171,6 +171,7 @@ public class MetaTileEntityStockFluidExchanger extends MetaTileEntity implements
         }
         else if (dataId == PackIDActive) {
             this.active = buf.readBoolean();
+            this.scheduleRenderUpdate();
         }
     }
 
@@ -182,6 +183,8 @@ public class MetaTileEntityStockFluidExchanger extends MetaTileEntity implements
 
         if(this.ticksAlive % 20 == 0)
         {
+            this.onNeighborChanged();
+
             List<EntityRollingStock> stocks = StockHelperFunctions.GetStockInArea(this.filterIndex, this.getFrontFacing(), this, this.getWorld());
             boolean newValidNearby = stocks.size() > 0;
             if(newValidNearby != this.validStockNearby || this.ticksAlive == 0)
@@ -235,9 +238,10 @@ public class MetaTileEntityStockFluidExchanger extends MetaTileEntity implements
         return super.onScrewdriverClick(playerIn, hand, wrenchSide, hitResult);
     }
     public void onNeighborChanged() {
+        if(this.getWorld().isRemote)
+            return;
         this.updateInputRedstoneSignals();
         this.active = this.isBlockRedstonePowered();
-        this.scheduleRenderUpdate();
         this.writeCustomData(PackIDActive, (buf) -> buf.writeBoolean(this.active));
     }
 
@@ -259,14 +263,23 @@ public class MetaTileEntityStockFluidExchanger extends MetaTileEntity implements
     }
 
     public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
-        if (!this.active) {
-            SusyTextures.STOCK_FLUID_EXCHANGER_INACTIVE.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
-        }
-        else if (this.pulling) {
-            SusyTextures.STOCK_FLUID_EXCHANGER_PULLING.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
-        }
-        else {
-            SusyTextures.STOCK_FLUID_EXCHANGER_PUSHING.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
+        byte state = 0b00;
+        state |= active ? 0b01 : 0b00;
+        state |= pulling ? 0b10 : 0b00;
+
+        switch (state) {
+            case 0b00:
+                SusyTextures.STOCK_FLUID_EXCHANGER_PUSHING_OFF.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
+                break;
+            case 0b01:
+                SusyTextures.STOCK_FLUID_EXCHANGER_PUSHING_ON.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
+                break;
+            case 0b10:
+                SusyTextures.STOCK_FLUID_EXCHANGER_PULLING_OFF.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
+                break;
+            case 0b11:
+                SusyTextures.STOCK_FLUID_EXCHANGER_PULLING_ON.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
+                break;
         }
     }
 
@@ -348,6 +361,9 @@ public class MetaTileEntityStockFluidExchanger extends MetaTileEntity implements
     public byte getFilterIndex() {
         return this.filterIndex;
     }
+
+
+    public Class getFilter() { return StockHelperFunctions.ClassMap[this.getFilterIndex()]; }
 
     public void CycleTransferState() {
         this.pulling = !this.pulling;

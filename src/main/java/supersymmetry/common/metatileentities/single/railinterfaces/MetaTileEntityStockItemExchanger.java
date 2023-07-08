@@ -13,6 +13,7 @@ import gregtech.api.gui.widgets.SlotWidget;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.client.utils.TooltipHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -39,13 +40,12 @@ import java.util.List;
 
 public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements IStockInteractor
 {
-    public int ticksAlive;
+    public int ticksAlive; //does not need to be saved?
 
-    private byte filterIndex;
-    public boolean validStockNearby;
+    public boolean validStockNearby; //this should be saved
     public boolean pulling;
 
-    private boolean active; //purely for client side rendering, server checks if block is powered #fix# ask about update order (placing redstone wire borks it)
+    private boolean active; //purely for client side rendering, server checks if block is powered (initialized on load, does not need to be saved?)
 
     public final Vec3d detectionArea = new Vec3d(5, 0, 5);
 
@@ -54,7 +54,7 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
 
     //locomotive, tank
     private final byte[] subClassMap = { 1, 3 };
-    private final byte[] invClassMap = { -99, 0, -99, 1 };
+    private byte subFilterIndex;
 
     private final int PacketIDAll = 0x616C6C;
     private final int PacketIDValidNearby = 0x6E656172;
@@ -64,8 +64,8 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
 
     public MetaTileEntityStockItemExchanger(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
-        this.ticksAlive = 0;
-        this.filterIndex = 1;
+        //this.ticksAlive = 0;
+        //this.subFilterIndex = 0;
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
@@ -102,7 +102,7 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
 
     public void writeInitialSyncData(PacketBuffer buf) {
         super.writeInitialSyncData(buf);
-        buf.writeByte(this.filterIndex);
+        buf.writeByte(this.subFilterIndex);
         buf.writeBoolean(this.validStockNearby);
         buf.writeBoolean(this.pulling);
         buf.writeBoolean(this.active);
@@ -117,7 +117,7 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
 
     public void receiveInitialSyncData(PacketBuffer buf) {
         super.receiveInitialSyncData(buf);
-        this.filterIndex = buf.readByte();
+        this.subFilterIndex = buf.readByte();
         this.validStockNearby = buf.readBoolean();
         this.pulling = buf.readBoolean();
         this.active = buf.readBoolean();
@@ -137,14 +137,14 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
         super.receiveCustomData(dataId, buf);
         if (dataId == PacketIDAll)
         {
-            this.filterIndex = buf.readByte();
+            this.subFilterIndex = buf.readByte();
             this.validStockNearby = buf.readBoolean();
             this.pulling = buf.readBoolean();
             this.scheduleRenderUpdate();
         }
         else if (dataId == PackIDFilterIndex)
         {
-            this.filterIndex = buf.readByte();
+            this.subFilterIndex = buf.readByte();
             this.scheduleRenderUpdate();
         }
         else if (dataId == PacketIDValidNearby)
@@ -158,6 +158,8 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
         }
         else if (dataId == PackIDActive) {
             this.active = buf.readBoolean();
+            Minecraft.getMinecraft().player.sendMessage(new TextComponentTranslation("set active to " + this.active + " and isremote: " + this.getWorld().isRemote));
+            this.scheduleRenderUpdate();
         }
     }
 
@@ -169,7 +171,9 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
 
         if(this.ticksAlive % 20 == 0)
         {
-            List<EntityRollingStock> stocks = StockHelperFunctions.GetStockInArea(this.filterIndex, this.getFrontFacing(), this, this.getWorld());
+            this.onNeighborChanged(); //#fix# bandaid for active not saving properly (block spawns in inactive on loaded)
+
+            List<EntityRollingStock> stocks = StockHelperFunctions.GetStockInArea(this.subFilterIndex, this.getFrontFacing(), this, this.getWorld());
             boolean newValidNearby = stocks.size() > 0;
             if(newValidNearby != this.validStockNearby || this.ticksAlive == 0)
             {
@@ -200,10 +204,12 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
         for(int i = 0; i < from.getSlots(); i++) {
             if(!from.getStackInSlot(i).isEmpty())
             {
-                for(int j = 0; j < to.getSlots(); j++) {
+                for(int j = 0; j < to.getSlots();) {
                     if(to.getStackInSlot(j).isEmpty() || ItemHandlerHelper.canItemStacksStack(from.getStackInSlot(i), to.getStackInSlot(j))) {
                         from.setStackInSlot(i, to.insertItem(j, from.getStackInSlot(i), false));
-                        j = to.getSlots() + 1;
+                        j++;
+                        if(from.getStackInSlot(i).isEmpty())
+                            j = to.getSlots() + 1;
                     }
                 }
             }
@@ -216,13 +222,16 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
                 this.scheduleRenderUpdate();
             } else {
                 this.cycleFilterUp();
-                playerIn.sendMessage(new TextComponentTranslation("Filter set to " + (this.filterIndex == 0 ? "none" : StockHelperFunctions.ClassNameMap[filterIndex])));
+                playerIn.sendMessage(new TextComponentTranslation("Filter set to " + StockHelperFunctions.ClassNameMap[this.getFilterIndex()]));
             }
             return true;
         }
         return super.onScrewdriverClick(playerIn, hand, wrenchSide, hitResult);
     }
+
     public void onNeighborChanged() {
+        if(this.getWorld().isRemote)
+            return;
         this.updateInputRedstoneSignals();
         this.active = this.isBlockRedstonePowered();
         this.scheduleRenderUpdate();
@@ -247,14 +256,23 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
     }
 
     public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
-        if (!this.active) {
-            SusyTextures.STOCK_ITEM_EXCHANGER_INACTIVE.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
-        }
-        else if (this.pulling) {
-            SusyTextures.STOCK_ITEM_EXCHANGER_PULLING.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
-        }
-        else {
-            SusyTextures.STOCK_ITEM_EXCHANGER_PUSHING.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
+        byte state = 0b00;
+        state |= active ? 0b01 : 0b00;
+        state |= pulling ? 0b10 : 0b00;
+
+        switch (state) {
+            case 0b00:
+                SusyTextures.STOCK_ITEM_EXCHANGER_PUSHING_OFF.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
+                break;
+            case 0b01:
+                SusyTextures.STOCK_ITEM_EXCHANGER_PUSHING_ON.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
+                break;
+            case 0b10:
+                SusyTextures.STOCK_ITEM_EXCHANGER_PULLING_OFF.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
+                break;
+            case 0b11:
+                SusyTextures.STOCK_ITEM_EXCHANGER_PULLING_ON.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
+                break;
         }
     }
 
@@ -275,20 +293,22 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
     }
 
     protected ModularUI createUI(EntityPlayer entityPlayer) {
-        int w = 96;
-        int h = 128;
+        int w = 174;
+        int h = 90 + 73;
         int buffer = 16;
         ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, w, h)
                 .label(buffer, buffer / 2, getMetaFullName());
 
-        int six = buffer * 2;
-        int siy = buffer;
-        int ibuf = 16;
+        int six = buffer / 2;
+        int siy = (buffer * 3) / 2;
+        int ibuf = 20;
         int wrap = 8;
         for(int i = 0; i < inventorySlots; i++) {
-            int posx = six + (i & wrap) * ibuf;
+            int posx = six + (i % wrap) * ibuf;
             int posy = siy + Math.floorDiv(i, 8) * ibuf;
-            builder = builder.widget(new SlotWidget(this.itemTank, i, posx, posy, true, true));
+            builder = builder.widget(new SlotWidget(this.itemTank, i, posx, posy, true, true)
+                    .setBackgroundTexture(GuiTextures.BACKGROUND))
+                    .bindPlayerInventory(entityPlayer.inventory);
         }
 
         return builder.build(getHolder(), entityPlayer);
@@ -299,7 +319,7 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
     //should detection area be changeable and saved?
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        data.setByte("filterIndex", this.filterIndex);
+        data.setByte("filterIndex", this.subFilterIndex);
         data.setBoolean("validStockNearby", this.validStockNearby);
         data.setBoolean("pulling", this.pulling);
         return data;
@@ -307,7 +327,7 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
 
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        this.filterIndex = data.getByte("filterIndex");
+        this.subFilterIndex = data.getByte("filterIndex");
         this.validStockNearby = data.getBoolean("validStockNearby");
         this.pulling = data.getBoolean("pulling");
     }
@@ -325,13 +345,9 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
         return this.detectionArea;
     }
 
-    public void setFilterIndex(byte index) {
-        this.filterIndex = index;
-    }
-
     public void cycleFilter(boolean up) {
-        this.filterIndex = subClassMap[StockHelperFunctions.CycleFilter(invClassMap[this.filterIndex], up, (byte)subClassMap.length)];
-        this.writeCustomData(PackIDFilterIndex, (buf) -> buf.writeByte(this.filterIndex));
+        this.subFilterIndex = StockHelperFunctions.CycleFilter(this.subFilterIndex, this.subClassMap);
+        this.writeCustomData(PackIDFilterIndex, (buf) -> buf.writeByte(this.subFilterIndex));
     }
 
     public void cycleFilterUp() {
@@ -339,8 +355,9 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
     }
 
     public byte getFilterIndex() {
-        return this.filterIndex;
+        return this.subFilterIndex;
     }
+    public Class getFilter() { return StockHelperFunctions.ClassMap[this.getFilterIndex()]; }
 
     public void CycleTransferState() {
         this.pulling = !this.pulling;

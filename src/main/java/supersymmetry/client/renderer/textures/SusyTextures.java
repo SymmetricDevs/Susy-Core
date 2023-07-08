@@ -1,5 +1,6 @@
 package supersymmetry.client.renderer.textures;
 
+import gregtech.api.gui.resources.picturetexture.AnimatedPictureTexture;
 import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 import gregtech.client.renderer.texture.cube.SimpleOrientedCubeRenderer;
 import gregtech.client.renderer.texture.cube.SimpleOverlayRenderer;
@@ -45,11 +46,17 @@ public class SusyTextures {
     public static final SimpleOrientedCubeRenderer STOCK_DETECTOR_FILTER = new SimpleOrientedCubeRenderer("rail_interfaces/stock_detector/stock_detector_filter");
     public static final SimpleOrientedCubeRenderer STOCK_DETECTOR_BOTH = new SimpleOrientedCubeRenderer("rail_interfaces/stock_detector/stock_detector_both");
 
-    public static final SimpleOrientedCubeRenderer STOCK_FLUID_EXCHANGER_INACTIVE = new SimpleOrientedCubeRenderer("rail_interfaces/fluid_exchanger/fluid_exchanger_inactive");
-    public static final SimpleOrientedCubeRenderer STOCK_FLUID_EXCHANGER_PULLING = new SimpleOrientedCubeRenderer("rail_interfaces/fluid_exchanger/fluid_exchanger_pulling");
-    public static final SimpleOrientedCubeRenderer STOCK_FLUID_EXCHANGER_PUSHING = new SimpleOrientedCubeRenderer("rail_interfaces/fluid_exchanger/fluid_exchanger_pushing");
 
-    public static final SimpleOrientedCubeRenderer STOCK_ITEM_EXCHANGER_INACTIVE = new SimpleOrientedCubeRenderer("rail_interfaces/item_exchanger/item_exchanger_inactive");
-    public static final SimpleOrientedCubeRenderer STOCK_ITEM_EXCHANGER_PULLING = new SimpleOrientedCubeRenderer("rail_interfaces/item_exchanger/item_exchanger_pulling");
-    public static final SimpleOrientedCubeRenderer STOCK_ITEM_EXCHANGER_PUSHING = new SimpleOrientedCubeRenderer("rail_interfaces/item_exchanger/item_exchanger_pushing");
+    public static final SimpleOrientedCubeRenderer STOCK_FLUID_EXCHANGER_PULLING_ON = new SimpleOrientedCubeRenderer("rail_interfaces/fluid_exchanger/fluid_exchanger_pulling_on");
+    public static final SimpleOrientedCubeRenderer STOCK_FLUID_EXCHANGER_PULLING_OFF = new SimpleOrientedCubeRenderer("rail_interfaces/fluid_exchanger/fluid_exchanger_pulling_off");
+    public static final SimpleOrientedCubeRenderer STOCK_FLUID_EXCHANGER_PUSHING_ON = new SimpleOrientedCubeRenderer("rail_interfaces/fluid_exchanger/fluid_exchanger_pushing_on");
+    public static final SimpleOrientedCubeRenderer STOCK_FLUID_EXCHANGER_PUSHING_OFF = new SimpleOrientedCubeRenderer("rail_interfaces/fluid_exchanger/fluid_exchanger_pushing_off");
+
+    public static final SimpleOrientedCubeRenderer STOCK_ITEM_EXCHANGER_PULLING_ON = new SimpleOrientedCubeRenderer("rail_interfaces/item_exchanger/item_exchanger_pulling_on");
+    public static final SimpleOrientedCubeRenderer STOCK_ITEM_EXCHANGER_PULLING_OFF = new SimpleOrientedCubeRenderer("rail_interfaces/item_exchanger/item_exchanger_pulling_off");
+    public static final SimpleOrientedCubeRenderer STOCK_ITEM_EXCHANGER_PUSHING_ON = new SimpleOrientedCubeRenderer("rail_interfaces/item_exchanger/item_exchanger_pushing_on");
+    public static final SimpleOrientedCubeRenderer STOCK_ITEM_EXCHANGER_PUSHING_OFF = new SimpleOrientedCubeRenderer("rail_interfaces/item_exchanger/item_exchanger_pushing_off");
+
+    public static final SimpleOrientedCubeRenderer STOCK_READER_ITEM = new SimpleOrientedCubeRenderer("rail_interfaces/content_reader/content_reader_item");
+    public static final SimpleOrientedCubeRenderer STOCK_READER_FLUID = new SimpleOrientedCubeRenderer("rail_interfaces/content_reader/content_reader_fluid");
 }
