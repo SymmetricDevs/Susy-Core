@@ -158,7 +158,6 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
         }
         else if (dataId == PackIDActive) {
             this.active = buf.readBoolean();
-            Minecraft.getMinecraft().player.sendMessage(new TextComponentTranslation("set active to " + this.active + " and isremote: " + this.getWorld().isRemote));
             this.scheduleRenderUpdate();
         }
     }
@@ -297,7 +296,7 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
         int h = 90 + 73;
         int buffer = 16;
         ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, w, h)
-                .label(buffer, buffer / 2, getMetaFullName());
+                .label(buffer, buffer / 2, "Item exchanger"); //getMetaFullName()) #fix# add translations
 
         int six = buffer / 2;
         int siy = (buffer * 3) / 2;

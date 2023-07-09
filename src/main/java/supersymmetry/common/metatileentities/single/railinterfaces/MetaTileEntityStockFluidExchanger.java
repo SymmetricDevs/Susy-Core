@@ -304,7 +304,7 @@ public class MetaTileEntityStockFluidExchanger extends MetaTileEntity implements
         int h = 128;
         int buffer = 16;
         ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, w, h)
-                .label(buffer, buffer / 2, getMetaFullName())
+                .label(buffer, buffer / 2, "Fluid exchanger") //getMetaFullName()) #fix# add translations
                 .widget(new TankWidget(this.fluidTank, buffer, 2 * buffer, w - (2 *buffer), h - 3 * buffer).setBackgroundTexture(GuiTextures.BACKGROUND));
 
         return builder.build(getHolder(), entityPlayer);

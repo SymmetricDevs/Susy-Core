@@ -233,9 +233,11 @@ public class MetaTileEntityStockReader extends MetaTileEntity implements IStockI
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, boolean advanced) {
         if (TooltipHelper.isShiftDown()) {
-            tooltip.add("Screwdriver to cycle filter, wrench to change detection mode");
+            //tooltip.add("Screwdriver to cycle filter, wrench to change detection mode");
         } else {
-            tooltip.add(I18n.format("gregtech.tooltip.tool_hold_shift"));
+            tooltip.add("this block outputs redstone signal based on the inventory/tank of the stock in front of it");
+            tooltip.add("right click for configuration gui");
+            //tooltip.add(I18n.format("gregtech.tooltip.tool_hold_shift"));
         }
     }
 
@@ -323,7 +325,7 @@ public class MetaTileEntityStockReader extends MetaTileEntity implements IStockI
         };
 
         //row 1
-        LabelWidget header = new LabelWidget(w / 2, row1y, getMetaFullName());
+        LabelWidget header = new LabelWidget(w / 2, row1y, "Stock reader"); //getMetaFullName()) #fix# add translations
         header.setXCentered(true);
 
         //row 2

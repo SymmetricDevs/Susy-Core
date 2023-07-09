@@ -174,9 +174,11 @@ public class MetaTileEntityStockDetector extends MetaTileEntity implements IStoc
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, boolean advanced) {
         if (TooltipHelper.isShiftDown()) {
-            tooltip.add("Screwdriver to cycle filter");
+            //tooltip.add("Screwdriver to cycle filter");
         } else {
-            tooltip.add(I18n.format("gregtech.tooltip.tool_hold_shift"));
+            tooltip.add("this block outputs redstone signal if a stock is detected.");
+            tooltip.add("Screwdriver to cycle filter");
+            //tooltip.add(I18n.format("gregtech.tooltip.tool_hold_shift"));
         }
     }
 
@@ -201,10 +203,12 @@ public class MetaTileEntityStockDetector extends MetaTileEntity implements IStoc
 
     //#fix# does the block need UI? how does modular UI work? do research.
     protected ModularUI createUI(EntityPlayer entityPlayer) {
+        return null;
+        /* fix later after 0.1.0
         ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, 384, 192)
-                .label(10, 5, getMetaFullName());
+                .label(10, 5, "Stock Detector");// getMetaFullName());
 
-        return builder.build(getHolder(), entityPlayer);
+        return builder.build(getHolder(), entityPlayer);*/
     }
 
     //#fix# does detected need to be saved or just refreshed on load? does ticks-alive need to be saved to prevent every one ticking at once?

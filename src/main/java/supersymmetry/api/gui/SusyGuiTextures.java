@@ -23,4 +23,6 @@ public class SusyGuiTextures {
     public static final TextureArea SIFTER_ITEM_OUTPUT_OVERLAY = TextureArea.fullImage("textures/gui/overlay/sifter_item_output_overlay.png");
     public static final TextureArea CUBIC_LATTICE_OVERLAY = TextureArea.fullImage("textures/gui/overlay/cubic_lattice_overlay.png");
     public static final TextureArea ORE_CHUNK_OVERLAY = TextureArea.fullImage("textures/gui/overlay/ore_chunk_overlay.png");
+    public static final TextureArea VERTICAL_SLIDER_BACKGROUND = TextureArea.fullImage("textures/gui/widget/vertical_slider_background.png");
+    public static final TextureArea VERTICAL_SLIDER_ICON = TextureArea.fullImage("textures/gui/widget/vertical_slider.png");
 }
