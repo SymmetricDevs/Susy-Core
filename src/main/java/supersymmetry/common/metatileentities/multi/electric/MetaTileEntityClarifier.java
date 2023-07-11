@@ -83,4 +83,9 @@ public class MetaTileEntityClarifier extends RecipeMapMultiblockController {
     protected ICubeRenderer getFrontOverlay() {
         return Textures.BLAST_FURNACE_OVERLAY;
     }
+
+    @Override
+    public boolean getIsWeatherOrTerrainResistant() {
+        return true;
+    }
 }
