@@ -35,7 +35,7 @@ dependencies {
 
     implementation rfg.deobf('curse.maven:biomes-o-plenty-220318:2842510')
 
-    implementation files('libs/gregtechfoodoption-1.9.3.jar')
+    implementation rfg.deobf('curse.maven:gregtech-food-option-477021:4638588')
 
     implementation rfg.deobf('curse.maven:applecore-224472:2969118')
 

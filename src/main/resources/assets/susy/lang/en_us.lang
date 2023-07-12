@@ -128,34 +128,34 @@ tile.susy_stone_bricks.soapstone.name=Soapstone Bricks
 tile.susy_stone_bricks.kimberlite.name=Kimberlite Bricks
 
 # Materials
-material.manganese_iron_arsenic_phosphide=Manganese Iron Arsenic Phosphide
-material.praseodymium_nickel=Praseodymium-Nickel
-material.gadolinium_silicon_germanium=Gadolinium Silicon Germanium
-material.latex=Latex
-material.mud=Mud
-material.sea_water=Sea Water
+gregtech.material.manganese_iron_arsenic_phosphide=Manganese Iron Arsenic Phosphide
+gregtech.material.praseodymium_nickel=Praseodymium-Nickel
+gregtech.material.gadolinium_silicon_germanium=Gadolinium Silicon Germanium
+gregtech.material.latex=Latex
+gregtech.material.mud=Mud
+gregtech.material.sea_water=Sea Water
 
 # Rock/Mineral Materials
-material.fluorite=Fluorite
-material.gabbro=Gabbro
-material.slate=Slate
-material.shale=Shale
-material.phyllite=Phyllite
-material.limestone=Limestone
-material.gneiss=Gneiss
-material.kimberlite=Kimberlite
-material.muscovite=Muscovite
-material.dolomite=Dolomite
-material.augite=Augite
-material.chlinochlore=Chlinochlore
-material.bytownite=Bytownite
-material.labradorite=Labradorite
-material.andesine=Andesine
-material.oligoclase=Oligoclase
-material.albite=Albite
-material.anorthite=Anorthite
-material.forsterite=Forsterite
-material.lizardite=Lizardite
+gregtech.material.fluorite=Fluorite
+gregtech.material.gabbro=Gabbro
+gregtech.material.slate=Slate
+gregtech.material.shale=Shale
+gregtech.material.phyllite=Phyllite
+gregtech.material.limestone=Limestone
+gregtech.material.gneiss=Gneiss
+gregtech.material.kimberlite=Kimberlite
+gregtech.material.muscovite=Muscovite
+gregtech.material.dolomite=Dolomite
+gregtech.material.augite=Augite
+gregtech.material.chlinochlore=Chlinochlore
+gregtech.material.bytownite=Bytownite
+gregtech.material.labradorite=Labradorite
+gregtech.material.andesine=Andesine
+gregtech.material.oligoclase=Oligoclase
+gregtech.material.albite=Albite
+gregtech.material.anorthite=Anorthite
+gregtech.material.forsterite=Forsterite
+gregtech.material.lizardite=Lizardite
 
 # Ore Prefixes (%s is the localised material name)
 item.material.oreprefix.oreGabbro=Gabbro %s Ore
