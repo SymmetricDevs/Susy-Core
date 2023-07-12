@@ -5,6 +5,7 @@ import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.info.MaterialIconSet;
 import gregtech.api.unification.material.properties.BlastProperty;
 import gregtech.api.util.GTUtility;
+import supersymmetry.api.util.SusyUtility;
 
 import static gregtech.api.unification.material.Materials.*;
 import static gregtech.api.unification.material.info.MaterialFlags.*;
@@ -15,7 +16,7 @@ public class SuSyFirstDegreeMaterials {
 
     public static void init() {
 
-        ManganeseIronArsenicPhosphide = new Material.Builder(27100, GTUtility.gregtechId("manganese_iron_arsenic_phosphide"))
+        ManganeseIronArsenicPhosphide = new Material.Builder(27100, SusyUtility.susyId("manganese_iron_arsenic_phosphide"))
                 .ingot()
                 .color(0x03FCF0).iconSet(MaterialIconSet.METALLIC)
                 .cableProperties(GTValues.V[4], 2, 4)
@@ -23,7 +24,7 @@ public class SuSyFirstDegreeMaterials {
                 .blastTemp(2100, BlastProperty.GasTier.LOW)
                 .build();
 
-        PraseodymiumNickel = new Material.Builder(27101, GTUtility.gregtechId("praseodymium_nickel"))
+        PraseodymiumNickel = new Material.Builder(27101, SusyUtility.susyId("praseodymium_nickel"))
                 .ingot()
                 .color(0x03BAFC).iconSet(MaterialIconSet.METALLIC)
                 .cableProperties(GTValues.V[4], 2, 4)
@@ -31,7 +32,7 @@ public class SuSyFirstDegreeMaterials {
                 .blastTemp(2100, BlastProperty.GasTier.MID)
                 .build();
 
-        GadoliniumSiliconGermanium = new Material.Builder(27102, GTUtility.gregtechId("gadolinium_silicon_germanium"))
+        GadoliniumSiliconGermanium = new Material.Builder(27102, SusyUtility.susyId("gadolinium_silicon_germanium"))
                 .ingot()
                 .color(0x0388FC).iconSet(MaterialIconSet.SHINY)
                 .cableProperties(GTValues.V[4], 2, 4)
@@ -41,7 +42,7 @@ public class SuSyFirstDegreeMaterials {
 
         //Minerals
 
-        Anorthite = new Material.Builder(27103, GTUtility.gregtechId("anorthite"))
+        Anorthite = new Material.Builder(27103, SusyUtility.susyId("anorthite"))
                 .dust()
                 .gem()
                 .color(0x595853).iconSet(CERTUS)
@@ -51,7 +52,7 @@ public class SuSyFirstDegreeMaterials {
                 .setFormula("Ca(Al2Si2O8)", true);
 
 
-        Albite = new Material.Builder(27104, GTUtility.gregtechId("albite"))
+        Albite = new Material.Builder(27104, SusyUtility.susyId("albite"))
                 .dust()
                 .gem()
                 .color(0xc4a997).iconSet(CERTUS)
@@ -60,7 +61,7 @@ public class SuSyFirstDegreeMaterials {
                 .build()
                 .setFormula("Na(AlSi3O8)", true);
 
-        Oligoclase = new Material.Builder(27105, GTUtility.gregtechId("oligoclase"))
+        Oligoclase = new Material.Builder(27105, SusyUtility.susyId("oligoclase"))
                 .dust()
                 .gem()
                 .color(0xd5c4b8).iconSet(CERTUS)
@@ -69,7 +70,7 @@ public class SuSyFirstDegreeMaterials {
                 .build()
                 .setFormula("(Na,Ca)(Si,Al)4O8", true);
 
-        Andesine = new Material.Builder(27106, GTUtility.gregtechId("andesine"))
+        Andesine = new Material.Builder(27106, SusyUtility.susyId("andesine"))
                 .dust()
                 .gem()
                 .color(0xe18e6f).iconSet(EMERALD)
@@ -78,7 +79,7 @@ public class SuSyFirstDegreeMaterials {
                 .build()
                 .setFormula("(Na,Ca)(Si,Al)4O8", true);
 
-        Labradorite = new Material.Builder(27107, GTUtility.gregtechId("labradorite"))
+        Labradorite = new Material.Builder(27107, SusyUtility.susyId("labradorite"))
                 .dust()
                 .gem()
                 .color(0x5c7181).iconSet(RUBY)
@@ -87,7 +88,7 @@ public class SuSyFirstDegreeMaterials {
                 .build()
                 .setFormula("(Na,Ca)(Si,Al)4O8", true);
 
-        Bytownite = new Material.Builder(27108, GTUtility.gregtechId("bytownite"))
+        Bytownite = new Material.Builder(27108, SusyUtility.susyId("bytownite"))
                 .dust()
                 .gem()
                 .color(0xc99c67).iconSet(LAPIS)
@@ -96,7 +97,7 @@ public class SuSyFirstDegreeMaterials {
                 .build()
                 .setFormula("(Na,Ca)(Si,Al)4O8", true);
 
-        Clinochlore = new Material.Builder(27109, GTUtility.gregtechId("chlinochlore"))
+        Clinochlore = new Material.Builder(27109, SusyUtility.susyId("chlinochlore"))
                 .dust()
                 .gem()
                 .color(0x303e38).iconSet(EMERALD)
@@ -105,7 +106,7 @@ public class SuSyFirstDegreeMaterials {
                 .build()
                 .setFormula("(Mg5Al)(AlSi3)O10(OH)8", true);
 
-        Augite = new Material.Builder(27110, GTUtility.gregtechId("augite"))
+        Augite = new Material.Builder(27110, SusyUtility.susyId("augite"))
                 .dust()
                 .color(0x1b1717).iconSet(ROUGH)
                 .flags(NO_SMASHING, DECOMPOSITION_BY_ELECTROLYZING)
@@ -114,7 +115,7 @@ public class SuSyFirstDegreeMaterials {
                 .setFormula("(Ca2MgFe)(MgFe)2(Si2O6)4", true);
 
 
-        Dolomite = new Material.Builder(27111, GTUtility.gregtechId("dolomite"))
+        Dolomite = new Material.Builder(27111, SusyUtility.susyId("dolomite"))
                 .dust()
                 .color(0xbbb8b2)
                 .flags(NO_SMASHING, DECOMPOSITION_BY_ELECTROLYZING)
@@ -122,7 +123,7 @@ public class SuSyFirstDegreeMaterials {
                 .build()
                 .setFormula("CaMg(CO3)2", true);
 
-        Muscovite = new Material.Builder(27112, GTUtility.gregtechId("muscovite"))
+        Muscovite = new Material.Builder(27112, SusyUtility.susyId("muscovite"))
                 .dust()
                 .color(0x8b876a)
                 .flags(NO_SMASHING, DECOMPOSITION_BY_ELECTROLYZING)
@@ -130,7 +131,7 @@ public class SuSyFirstDegreeMaterials {
                 .build()
                 .setFormula("KAl2(AlSi3O10)(OH)2)", true);
 
-        Fluorite = new Material.Builder(27113, GTUtility.gregtechId("fluorite"))
+        Fluorite = new Material.Builder(27113, SusyUtility.susyId("fluorite"))
                 .dust()
                 .gem()
                 .ore()
@@ -139,7 +140,7 @@ public class SuSyFirstDegreeMaterials {
                 .components(Calcium, 1, Fluorine, 2)
                 .build();
 
-        Forsterite = new Material.Builder(27114, GTUtility.gregtechId("forsterite"))
+        Forsterite = new Material.Builder(27114, SusyUtility.susyId("forsterite"))
                 .dust()
                 .gem()
                 .color(0x1d640f).iconSet(LAPIS)
@@ -148,7 +149,7 @@ public class SuSyFirstDegreeMaterials {
                 .build()
                 .setFormula("Mg2(SiO4)",true);
 
-        Lizardite = new Material.Builder(27115, GTUtility.gregtechId("lizardite"))
+        Lizardite = new Material.Builder(27115, SusyUtility.susyId("lizardite"))
                 .dust()
                 .color(0xa79e42)
                 .flags(NO_SMASHING, DECOMPOSITION_BY_ELECTROLYZING)
