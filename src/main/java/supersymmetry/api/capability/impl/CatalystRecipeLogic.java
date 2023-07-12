@@ -165,7 +165,6 @@ public class CatalystRecipeLogic extends RecipeLogicEnergy {
         return runOverclockingLogic(recipe.getRecipePropertyStorage(), recipe.getEUt(), getMaximumOverclockVoltage(), recipe.getDuration(), numberOfOCs);
     }
 
-    @Override
     protected boolean checkCanOverclock(int recipeEUt) {
         if (!isAllowOverclocking()) return false;
 

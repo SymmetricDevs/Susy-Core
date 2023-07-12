@@ -576,7 +576,6 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
 
         @Override
         protected void completeRecipe() {
-            performMaintenanceMufflerOperations();
             GTTransferUtils.addFluidsToFluidHandler(this.getOutputTank(), false, this.fluidOutputs);
             this.progressTime = 0;
             this.setMaxProgress(0);
