@@ -96,7 +96,7 @@ public class CommonProxy {
     public static void postRegisterMaterials(@NotNull GregTechAPI.PostMaterialEvent event) {
         MetaItems.addOrePrefix(SusyOrePrefix.catalystPellet);
         MetaItems.addOrePrefix(SusyOrePrefix.catalystBed);
-        SusyMaterials.removeFlags();
+        //SusyMaterials.removeFlags();
 
     }
 
