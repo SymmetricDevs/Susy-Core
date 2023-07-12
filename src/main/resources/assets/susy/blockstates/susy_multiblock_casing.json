@@ -26,6 +26,12 @@
       "textures" : {
         "all" : "gregtech:blocks/multiblock_casing/structural_packing"
       }
+    },
+    "variant=ulv_structural_casing" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/multiblock_casing/ulv_structural_casing"
+      }
     }
   }
 }
