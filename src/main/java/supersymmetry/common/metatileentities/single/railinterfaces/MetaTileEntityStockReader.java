@@ -84,7 +84,6 @@ public class MetaTileEntityStockReader extends MetaTileEntity implements IStockI
         return true;
     }
 
-    //#fix# pickaxe not it maybe
     public String getHarvestTool() {
         return "wrench";
     }
@@ -229,16 +228,10 @@ public class MetaTileEntityStockReader extends MetaTileEntity implements IStockI
         }
     }
 
-    //#fix# figure out how to add translations like with I18n instead of just english
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, boolean advanced) {
-        if (TooltipHelper.isShiftDown()) {
-            //tooltip.add("Screwdriver to cycle filter, wrench to change detection mode");
-        } else {
-            tooltip.add("this block outputs redstone signal based on the inventory/tank of the stock in front of it");
-            tooltip.add("right click for configuration gui");
-            //tooltip.add(I18n.format("gregtech.tooltip.tool_hold_shift"));
-        }
+        tooltip.add(I18n.format("susy.stock_interfaces.stock_reader.description"));
+        tooltip.add(I18n.format("susy.stock_interfaces.right_click_for_gui"));
     }
 
     public void UpdateRedstoneSignal() {
@@ -325,7 +318,7 @@ public class MetaTileEntityStockReader extends MetaTileEntity implements IStockI
         };
 
         //row 1
-        LabelWidget header = new LabelWidget(w / 2, row1y, "Stock reader"); //getMetaFullName()) #fix# add translations
+        LabelWidget header = new LabelWidget(w / 2, row1y, I18n.format("gregtech.machine.stock_content_reader.name")); //getMetaFullName()) #fix# add translations
         header.setXCentered(true);
 
         //row 2
@@ -335,7 +328,7 @@ public class MetaTileEntityStockReader extends MetaTileEntity implements IStockI
                 SetAllVis.accept(0);
             });
 
-        CycleButtonWidget filterIndexButton = new CycleButtonWidget(buffer + r2b1w + buffer +  + (leftoverR2 / 3), row2y, r2b2w + (leftoverR2 / 3), row2height, StockHelperFunctions.ClassNameMap, () -> this.filterIndex, (x) -> this.uiCycleFilter());
+        CycleButtonWidget filterIndexButton = new CycleButtonWidget(buffer + r2b1w + buffer + (leftoverR2 / 3), row2y, r2b2w + (leftoverR2 / 3), row2height, StockHelperFunctions.ClassNameMap, () -> this.filterIndex, (x) -> this.uiCycleFilter());
 
         CycleButtonWidget typeToggleButton = new CycleButtonWidget(buffer + r2b1w + buffer + r2b2w + buffer +  + (2 * leftoverR2 / 3), row2y, r2b3w + (leftoverR2 / 3), row2height, new String[]{"items", "fluid"}, () -> this.readingItems ? 0 : 1,
             (x) -> {
@@ -344,8 +337,8 @@ public class MetaTileEntityStockReader extends MetaTileEntity implements IStockI
             });
 
         //item only (rows 3 and 4)
-        SliderWidget fullnessSlider = new SliderWidget("fullness required: ", buffer, row3y, w - buffer - buffer, row3height, 0, 1, this.stackFillNeeded, (x) -> this.stackFillNeeded = x);
-        SliderWidget slotNeedSlider = new SliderWidget("slots required: ", buffer, row4y, w - buffer - buffer, row4height, 0, 99, this.slotUseNeeded, (x) -> this.slotUseNeeded = (int)x);
+        SliderWidget fullnessSlider = new SliderWidget("fullness required", buffer, row3y, w - buffer - buffer, row3height, 0, 1, this.stackFillNeeded, (x) -> this.stackFillNeeded = x);
+        SliderWidget slotNeedSlider = new SliderWidget("slots required", buffer, row4y, w - buffer - buffer, row4height, 0, 99, this.slotUseNeeded, (x) -> this.slotUseNeeded = (int)x);
         itemOnlyWidgets.add(fullnessSlider);
         itemOnlyWidgets.add(slotNeedSlider);
 
@@ -409,6 +402,16 @@ public class MetaTileEntityStockReader extends MetaTileEntity implements IStockI
 
     public byte getFilterIndex() {
         return this.filterIndex;
+    }
+
+    @Override
+    public boolean setFilterIndex(byte index) {
+        if(index >= StockHelperFunctions.ClassMap.length || index < 0) {
+            this.filterIndex = 0;
+            return false;
+        }
+        this.filterIndex = index;
+        return true;
     }
 
     public Class getFilter() { return StockHelperFunctions.ClassMap[this.getFilterIndex()]; }

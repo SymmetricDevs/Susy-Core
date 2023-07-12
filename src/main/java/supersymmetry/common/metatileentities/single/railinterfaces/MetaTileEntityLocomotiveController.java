@@ -8,13 +8,10 @@ import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Matrix4;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
-import gregtech.api.gui.Widget;
 import gregtech.api.gui.widgets.CycleButtonWidget;
 import gregtech.api.gui.widgets.LabelWidget;
-import gregtech.api.gui.widgets.SliderWidget;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.client.utils.TooltipHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
@@ -35,16 +32,15 @@ import supersymmetry.api.stockinteraction.StockHelperFunctions;
 import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nullable;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class MetaTileEntityLocomotiveController  extends MetaTileEntity implements IStockInteractor
 {
     public int ticksAlive;
 
     public boolean active;
+    //#fix# may need to filter types of locomotives later on
     public static final int filterIndex = 1;
 
     //control settings
@@ -142,10 +138,9 @@ public class MetaTileEntityLocomotiveController  extends MetaTileEntity implemen
             if(!(stocks.size() > 0))
                 return;
 
-            if(!(stocks.get(0) instanceof Locomotive))
+            if(!(stocks.get(0) instanceof Locomotive loco))
                 return;
 
-            Locomotive loco = ((Locomotive)stocks.get(0));
             this.active = this.isBlockRedstonePowered();
             this.writeCustomData(0b1, buf -> buf.writeBoolean(this.active));
 
@@ -177,16 +172,10 @@ public class MetaTileEntityLocomotiveController  extends MetaTileEntity implemen
         SusyTextures.STOCK_CONTROLLER.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
     }
 
-    //#fix# figure out how to add translations like with I18n instead of just english
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, boolean advanced) {
-        if (TooltipHelper.isShiftDown()) {
-           // tooltip.add("Screwdriver to cycle filter");
-        } else {
-            tooltip.add(I18n.format("this block controls the locomotive throttle"));
-            tooltip.add(I18n.format("right click to open ui and configure powered and unpowered orders"));
-            //tooltip.add(I18n.format("gregtech.tooltip.tool_hold_shift"));
-        }
+        tooltip.add(I18n.format("susy.stock_interfaces.locomotive_controller.description"));
+        tooltip.add(I18n.format("susy.stock_interfaces.right_click_for_gui"));
     }
 
     @Override
@@ -195,38 +184,34 @@ public class MetaTileEntityLocomotiveController  extends MetaTileEntity implemen
         int w = 192;
         int h = 256;
         FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
-        int strh = fontRenderer.FONT_HEIGHT;
+        int fontHeight = fontRenderer.FONT_HEIGHT;
         int buffer = 8;
 
-        List<VerticalSliderWidget> leftWidgets = new ArrayList<VerticalSliderWidget>();
-        List<VerticalSliderWidget> rightWidgets = new ArrayList<VerticalSliderWidget>();
+        List<VerticalSliderWidget> leftWidgets = new ArrayList<>();
+        List<VerticalSliderWidget> rightWidgets = new ArrayList<>();
 
         int r1y = buffer;
-
-        int r2y = r1y + strh + buffer * 2;
-
-        int r3y = r2y + strh + buffer;
+        int r2y = r1y; // = r1y + fontHeight + buffer * 2;
+        int r3y = r2y + fontHeight + buffer;
         int r3h = 25;
 
         int rsw = 16;
 
         //row 1
-        LabelWidget header = new LabelWidget(w / 2, r1y, "locomotive controller"); //getMetaFullName()) #fix# add translations
+        LabelWidget header = new LabelWidget(w / 2, r1y, I18n.format("gregtech.machine.stock_controller.name")); //getMetaFullName()) #fix# add translations
         header.setXCentered(true);
 
-        int bufbar = buffer + rsw;
-        int midb = bufbar + buffer / 2;
-        int lrw = fontRenderer.getStringWidth("powered (off)") + 8;
-        int rrw = fontRenderer.getStringWidth("unpowered (off)") + 8;
-        int trw = Math.max(lrw, rrw);
-        int btnmid = midb - (trw / 2);
+        int bufBar = buffer + rsw;
+        int midB = bufBar + buffer / 2;
+        int trw = fontRenderer.getStringWidth("unpowered (off)") + 8;
+        int btnMid = midB - (trw / 2);
 
-        int r4y = r3y + buffer + 16;
+        int r4y = r3y + buffer + 32;
 
-        LabelWidget infoLabel = new LabelWidget(midb, w / 2, " break | throttle");
+        LabelWidget infoLabel = new LabelWidget(w / 2, r4y - 12, "  break | throttle");
         infoLabel.setXCentered(true);
 
-        CycleButtonWidget leftToggleWidget = new CycleButtonWidget(btnmid, r3y, trw, r3h, new String[]{ "powered (off)", "powered (on)"}, () -> (this.activeBreak < 0f) ? 0 : 1,
+        CycleButtonWidget leftToggleWidget = new CycleButtonWidget(btnMid + 22, r3y, trw, r3h, new String[]{ "powered (off)", "powered (on)"}, () -> (this.activeBreak < 0f) ? 0 : 1,
                 (x) -> {
                     if(x == 0) {
                         this.activeBreak = -1.0f;
@@ -242,7 +227,7 @@ public class MetaTileEntityLocomotiveController  extends MetaTileEntity implemen
                     }
                 });
 
-        CycleButtonWidget rightToggleWidget = new CycleButtonWidget(w - btnmid - trw, r3y, trw, r3h, new String[]{ "unpowered (off)", "unpowered (on)"}, () -> (this.inactiveBreak < 0f) ? 0 : 1,
+        CycleButtonWidget rightToggleWidget = new CycleButtonWidget(w - (btnMid + trw + 22), r3y, trw, r3h, new String[]{ "unpowered (off)", "unpowered (on)"}, () -> (this.inactiveBreak < 0f) ? 0 : 1,
                 (x) -> {
                     if(x == 0) {
                         this.inactiveBreak = -1.0f;
@@ -258,19 +243,19 @@ public class MetaTileEntityLocomotiveController  extends MetaTileEntity implemen
                     }
                 });
 
-        int yspaceleft = h - buffer - r4y - buffer;
-        VerticalSliderWidget leftBreakSlide = new VerticalSliderWidget("leftBreak", buffer, r4y, rsw, yspaceleft, 0.0f, 1.0f, 1.0f - this.activeBreak, (x) -> this.activeBreak = 1.0f - x);
+        int ySpaceLeft = h - buffer - r4y - buffer;
+        VerticalSliderWidget leftBreakSlide = new VerticalSliderWidget("leftBreak", buffer, r4y, rsw, ySpaceLeft, 0.0f, 1.0f, 1.0f - this.activeBreak, (x) -> this.activeBreak = 1.0f - x);
         leftWidgets.add(leftBreakSlide);
-        VerticalSliderWidget leftThrottleSide = new VerticalSliderWidget("leftThrottle", buffer + bufbar + buffer, r4y, rsw, yspaceleft, 0.0f, 1.0f, (1.0f - this.activeThrottle) / 2.0f, (x) -> this.activeThrottle = 1.0f - 2 * x);
+        VerticalSliderWidget leftThrottleSide = new VerticalSliderWidget("leftThrottle", buffer + bufBar + buffer, r4y, rsw, ySpaceLeft, 0.0f, 1.0f, (1.0f - this.activeThrottle) / 2.0f, (x) -> this.activeThrottle = 1.0f - 2 * x);
         leftWidgets.add(leftThrottleSide);
 
-        VerticalSliderWidget rightBreakSlide = new VerticalSliderWidget("rightBreak", w - (buffer + bufbar + buffer + rsw), r4y, rsw, yspaceleft, 0.0f, 1.0f, 1.0f - this.inactiveBreak, (x) -> this.inactiveBreak = 1.0f - x);
+        VerticalSliderWidget rightBreakSlide = new VerticalSliderWidget("rightBreak", w - (buffer + bufBar + buffer + rsw), r4y, rsw, ySpaceLeft, 0.0f, 1.0f, 1.0f - this.inactiveBreak, (x) -> this.inactiveBreak = 1.0f - x);
         rightWidgets.add(rightBreakSlide);
-        VerticalSliderWidget rightThrottleSide = new VerticalSliderWidget("rightThrottle", w - (buffer + rsw), r4y, rsw, yspaceleft, 0.0f, 1.0f, (1.0f - this.inactiveThrottle) / 2.0f, (x) -> this.inactiveThrottle = 1.0f  - 2 * x);
+        VerticalSliderWidget rightThrottleSide = new VerticalSliderWidget("rightThrottle", w - (buffer + rsw), r4y, rsw, ySpaceLeft, 0.0f, 1.0f, (1.0f - this.inactiveThrottle) / 2.0f, (x) -> this.inactiveThrottle = 1.0f  - 2 * x);
         rightWidgets.add(rightThrottleSide);
 
         int sy = r4y;
-        int ey = h - buffer - strh - buffer - buffer;
+        int ey = h - buffer - fontHeight - buffer - buffer;
         int hy = (ey + sy) / 2;
         LabelWidget oneLabel = new LabelWidget(w / 2, sy, "1.0");
         oneLabel.setXCentered(true);
@@ -298,10 +283,10 @@ public class MetaTileEntityLocomotiveController  extends MetaTileEntity implemen
                 .widget(zeroLabel)
                 ;
 
-        ModularUI modd =  builder.build(getHolder(), entityPlayer);
-        modd.holder.markAsDirty();
+        ModularUI modularUI =  builder.build(getHolder(), entityPlayer);
+        modularUI.holder.markAsDirty();
 
-        return modd;
+        return modularUI;
     }
 
     //#fix# does detected need to be saved or just refreshed on load? does ticks-alive need to be saved to prevent every one ticking at once?
@@ -333,7 +318,12 @@ public class MetaTileEntityLocomotiveController  extends MetaTileEntity implemen
     }
 
     @Override
-    public Class getFilter() {
+    public boolean setFilterIndex(byte index) {
+        return false;
+    }
+
+    @Override
+    public Class<?> getFilter() {
         return StockHelperFunctions.ClassMap[filterIndex];
     }
 

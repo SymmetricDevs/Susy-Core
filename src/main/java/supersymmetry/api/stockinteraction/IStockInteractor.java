@@ -6,12 +6,13 @@ import net.minecraft.util.math.Vec3d;
 public interface IStockInteractor
 {
     //x is width, y is not used, z is depth. no setter since final
-    public Vec3d getInteractionArea();
+    Vec3d getInteractionArea();
 
-    public void cycleFilter(boolean up);
-    public void cycleFilterUp();
-    public byte getFilterIndex();
-    public Class getFilter();
+    void cycleFilter(boolean up);
+    void cycleFilterUp();
+    byte getFilterIndex();
+    boolean setFilterIndex(byte index);
+    Class<?> getFilter();
 
-    public MetaTileEntity GetMetaTileEntity();
+    MetaTileEntity GetMetaTileEntity();
 }

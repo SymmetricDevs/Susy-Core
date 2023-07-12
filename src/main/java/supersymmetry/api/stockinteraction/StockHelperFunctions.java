@@ -26,7 +26,7 @@ import java.util.List;
 public class StockHelperFunctions {
     public static final String[] ClassNameMap =
         {
-            "",
+            "any",
             "locomotive",
             "tank",
             "freight",
@@ -60,17 +60,6 @@ public class StockHelperFunctions {
         current += addition + len;
         current %= len;
         return current;
-    }
-
-    public static byte CycleFilter(byte trueCurrent, byte[] map) {
-        return CycleFilter(trueCurrent, map, true);
-    }
-
-    public static byte CycleFilter(byte trueCurrent, byte[] map, boolean up) {
-        byte addition = (byte)(up ? 1 : -1);
-        trueCurrent += addition + map.length;
-        trueCurrent %= map.length;
-        return map[trueCurrent];
     }
 
     //not used anymore since classes arent loaded from items, but from a preset class array

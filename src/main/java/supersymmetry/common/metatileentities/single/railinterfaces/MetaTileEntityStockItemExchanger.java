@@ -9,6 +9,7 @@ import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Matrix4;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
+import gregtech.api.gui.widgets.CycleButtonWidget;
 import gregtech.api.gui.widgets.SlotWidget;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -52,15 +53,10 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
     private final int inventorySlots = 24;
     private ItemStackHandler itemTank;
 
-    //locomotive, tank
+    //locomotive, tank #fix# redo sub class map system
     private final byte[] subClassMap = { 1, 3 };
     private byte subFilterIndex;
-
-    private final int PacketIDAll = 0x616C6C;
-    private final int PacketIDValidNearby = 0x6E656172;
-    private final int PacketIDTransferState = 0x7461726E;
-    private final int PackIDFilterIndex = 0x696E64;
-    private final int PackIDActive = 0x616374;
+    private static final String[] subClassNameMap = { StockHelperFunctions.ClassNameMap[1], StockHelperFunctions.ClassNameMap[3] };
 
     public MetaTileEntityStockItemExchanger(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
@@ -135,31 +131,21 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
 
     public void receiveCustomData(int dataId, PacketBuffer buf) {
         super.receiveCustomData(dataId, buf);
-        if (dataId == PacketIDAll)
-        {
-            this.subFilterIndex = buf.readByte();
+
+        if((dataId & 0b1) > 0) {
+            this.setSubFilterIndex(buf.readByte());
+        }
+        if ((dataId & 0b10) > 0) {
             this.validStockNearby = buf.readBoolean();
+        }
+        if ((dataId & 0b100) > 0) {
             this.pulling = buf.readBoolean();
-            this.scheduleRenderUpdate();
         }
-        else if (dataId == PackIDFilterIndex)
-        {
-            this.subFilterIndex = buf.readByte();
-            this.scheduleRenderUpdate();
-        }
-        else if (dataId == PacketIDValidNearby)
-        {
-            this.validStockNearby = buf.readBoolean();
-            this.scheduleRenderUpdate();
-        }
-        else if (dataId == PacketIDTransferState) {
-            this.pulling = buf.readBoolean();
-            this.scheduleRenderUpdate();
-        }
-        else if (dataId == PackIDActive) {
+        if ((dataId & 0b1000) > 0) {
             this.active = buf.readBoolean();
-            this.scheduleRenderUpdate();
         }
+
+        this.scheduleRenderUpdate();
     }
 
     public void update() {
@@ -178,7 +164,7 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
             {
                 //#fix# if buffer is sent to server, then this should be run twice? test.
                 this.validStockNearby = newValidNearby;
-                this.writeCustomData(PacketIDValidNearby, (buf) -> buf.writeBoolean(newValidNearby));
+                this.writeCustomData(0b10, (buf) -> buf.writeBoolean(newValidNearby));
             }
 
             if(!validStockNearby || !this.isBlockRedstonePowered())
@@ -216,15 +202,6 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
     }
 
     public boolean onScrewdriverClick(EntityPlayer playerIn, EnumHand hand, EnumFacing wrenchSide, CuboidRayTraceResult hitResult) {
-        if (!playerIn.isSneaking()) {
-            if (this.getWorld().isRemote) {
-                this.scheduleRenderUpdate();
-            } else {
-                this.cycleFilterUp();
-                playerIn.sendMessage(new TextComponentTranslation("Filter set to " + StockHelperFunctions.ClassNameMap[this.getFilterIndex()]));
-            }
-            return true;
-        }
         return super.onScrewdriverClick(playerIn, hand, wrenchSide, hitResult);
     }
 
@@ -234,19 +211,10 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
         this.updateInputRedstoneSignals();
         this.active = this.isBlockRedstonePowered();
         this.scheduleRenderUpdate();
-        this.writeCustomData(PackIDActive, (buf) -> buf.writeBoolean(this.active));
+        this.writeCustomData(0b1000, (buf) -> buf.writeBoolean(this.active));
     }
 
     public boolean onWrenchClick(EntityPlayer playerIn, EnumHand hand, EnumFacing wrenchSide, CuboidRayTraceResult hitResult) {
-        if (!playerIn.isSneaking()) {
-            if (this.getWorld().isRemote) {
-                this.scheduleRenderUpdate();
-            } else {
-                this.CycleTransferState();
-                playerIn.sendMessage(new TextComponentTranslation("Set transfer state to " + (this.pulling ? "taking from stock" : "giving to stock")));
-            }
-            return true;
-        }
         return super.onWrenchClick(playerIn, hand, wrenchSide, hitResult);
     }
 
@@ -275,15 +243,11 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
         }
     }
 
-    //#fix# figure out how to add translations like with I18n instead of just english
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, boolean advanced) {
-        if (TooltipHelper.isShiftDown()) {
-            tooltip.add("Screwdriver to cycle filter");
-            tooltip.add("Wrench to cycle transfer state");
-        } else {
-            tooltip.add(I18n.format("gregtech.tooltip.tool_hold_shift"));
-        }
+        tooltip.add(I18n.format("susy.stock_interfaces.item_exchanger.description"));
+        tooltip.add(I18n.format("susy.stock_interfaces.screwdriver_cycle"));
+        tooltip.add(I18n.format("susy.stock_interfaces.wrench_toggle"));
     }
 
     //#fix# what does this do
@@ -292,11 +256,11 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
     }
 
     protected ModularUI createUI(EntityPlayer entityPlayer) {
-        int w = 174;
+        int w = 250;
         int h = 90 + 73;
         int buffer = 16;
         ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, w, h)
-                .label(buffer, buffer / 2, "Item exchanger"); //getMetaFullName()) #fix# add translations
+                .label(buffer, buffer / 2, I18n.format(getMetaFullName()));
 
         int six = buffer / 2;
         int siy = (buffer * 3) / 2;
@@ -310,7 +274,20 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
                     .bindPlayerInventory(entityPlayer.inventory);
         }
 
+        int cyclex = six + 8 * ibuf + buffer / 2;
+        int cycley = (buffer * 3) / 2;
+
+        CycleButtonWidget filterIndexButton = new CycleButtonWidget(cyclex, cycley, 60, 24, subClassNameMap, () -> this.subFilterIndex, (x) -> this.uiCycleFilter());
+        CycleButtonWidget cycleStateButton = new CycleButtonWidget(cyclex, cycley + buffer + 12/*24?*/, 60, 24, new String[]{"pulling", "pushing"}, () -> this.pulling ? 0 : 1, (x) -> this.SetTransferState(x == 0));
+
+        builder.widget(filterIndexButton);
+        builder.widget(cycleStateButton);
+
         return builder.build(getHolder(), entityPlayer);
+    }
+
+    private void uiCycleFilter() {
+        this.cycleFilter(true);
     }
 
     //#fix# does detected need to be saved or just refreshed on load? does ticks-alive need to be saved to prevent every one ticking at once?
@@ -345,8 +322,8 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
     }
 
     public void cycleFilter(boolean up) {
-        this.subFilterIndex = StockHelperFunctions.CycleFilter(this.subFilterIndex, this.subClassMap);
-        this.writeCustomData(PackIDFilterIndex, (buf) -> buf.writeByte(this.subFilterIndex));
+        this.subFilterIndex = StockHelperFunctions.CycleFilter(this.subFilterIndex, up, (byte)this.subClassMap.length);
+        this.writeCustomData(0b1, (buf) -> buf.writeByte(this.subFilterIndex));
     }
 
     public void cycleFilterUp() {
@@ -356,11 +333,27 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
     public byte getFilterIndex() {
         return this.subFilterIndex;
     }
+
+    public boolean setFilterIndex(byte index) {
+        for(byte i = 0; i < subClassMap.length; i++) {
+            if(subClassMap[i] == index) {
+                this.setSubFilterIndex(i);
+                return true;
+            }
+        }
+        this.setSubFilterIndex((byte)0);
+        return false;
+    }
+
+    public void setSubFilterIndex(byte index) {
+        this.subFilterIndex = index;
+    }
+
     public Class getFilter() { return StockHelperFunctions.ClassMap[this.getFilterIndex()]; }
 
-    public void CycleTransferState() {
-        this.pulling = !this.pulling;
-        this.writeCustomData(PacketIDTransferState, (buf) -> buf.writeBoolean(this.pulling));
+    public void SetTransferState(boolean state) {
+        this.pulling = state;
+        this.writeCustomData(0b100, (buf) -> buf.writeBoolean(this.pulling));
     }
 
     public MetaTileEntity GetMetaTileEntity() {

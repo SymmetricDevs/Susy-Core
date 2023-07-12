@@ -3,25 +3,23 @@ package supersymmetry.common.metatileentities.single.railinterfaces;
 import cam72cam.immersiverailroading.entity.EntityRollingStock;
 import codechicken.lib.raytracer.CuboidRayTraceResult;
 import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.pipeline.ColourMultiplier;
 import codechicken.lib.render.pipeline.IVertexOperation;
-import codechicken.lib.texture.TextureUtils;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Matrix4;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
+import gregtech.api.gui.widgets.CycleButtonWidget;
+import gregtech.api.gui.widgets.LabelWidget;
+import gregtech.api.gui.widgets.TankWidget;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.util.GTUtility;
-import gregtech.client.renderer.texture.Textures;
-import gregtech.client.utils.TooltipHelper;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
@@ -30,7 +28,6 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.stockinteraction.IStockInteractor;
 import supersymmetry.api.stockinteraction.StockHelperFunctions;
@@ -48,10 +45,6 @@ public class MetaTileEntityStockDetector extends MetaTileEntity implements IStoc
     public boolean detecting;
 
     public final Vec3d detectionArea = new Vec3d(5, 0, 5);
-
-    private final int PacketIDAll = 0x616C6C;
-    private final int PacketIDDetect = 0x646574;
-    private final int PackIDFilterIndex = 0x696E64;
 
     public MetaTileEntityStockDetector(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
@@ -98,22 +91,13 @@ public class MetaTileEntityStockDetector extends MetaTileEntity implements IStoc
 
     public void receiveCustomData(int dataId, PacketBuffer buf) {
         super.receiveCustomData(dataId, buf);
-        if (dataId == PacketIDAll)
-        {
+        if((dataId & 0b1) > 0) {
             this.filterIndex = buf.readByte();
+        }
+        if((dataId & 0b10) > 0) {
             this.setDetecting(buf.readBoolean());
-            this.scheduleRenderUpdate();
         }
-        else if (dataId == PackIDFilterIndex)
-        {
-            this.filterIndex = buf.readByte();
-            this.scheduleRenderUpdate();
-        }
-        else if (dataId == PacketIDDetect)
-        {
-            this.setDetecting(buf.readBoolean());
-            this.scheduleRenderUpdate();
-        }
+        this.scheduleRenderUpdate();
     }
 
     public void update() {
@@ -129,7 +113,7 @@ public class MetaTileEntityStockDetector extends MetaTileEntity implements IStoc
             if(newDetected != this.detecting || this.ticksAlive == 0)
             {
                 this.setDetecting(newDetected);
-                this.writeCustomData(PacketIDDetect, (buf) -> buf.writeBoolean(newDetected));
+                this.writeCustomData(0b10, (buf) -> buf.writeBoolean(newDetected));
             }
         }
 
@@ -170,16 +154,10 @@ public class MetaTileEntityStockDetector extends MetaTileEntity implements IStoc
         }
     }
 
-    //#fix# figure out how to add translations like with I18n instead of just english
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, boolean advanced) {
-        if (TooltipHelper.isShiftDown()) {
-            //tooltip.add("Screwdriver to cycle filter");
-        } else {
-            tooltip.add("this block outputs redstone signal if a stock is detected.");
-            tooltip.add("Screwdriver to cycle filter");
-            //tooltip.add(I18n.format("gregtech.tooltip.tool_hold_shift"));
-        }
+        tooltip.add(I18n.format("susy.stock_interfaces.stock_detector.description"));
+        tooltip.add(I18n.format("susy.stock_interfaces.screwdriver_cycle"));
     }
 
     public void setDetecting(boolean detected) {
@@ -202,13 +180,24 @@ public class MetaTileEntityStockDetector extends MetaTileEntity implements IStoc
     }
 
     //#fix# does the block need UI? how does modular UI work? do research.
+    //may update later to include detection area
     protected ModularUI createUI(EntityPlayer entityPlayer) {
-        return null;
-        /* fix later after 0.1.0
-        ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, 384, 192)
-                .label(10, 5, "Stock Detector");// getMetaFullName());
+        int w = 96;
+        int h = 64;
+        int buffer = 16;
+        FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
+        int fontHeight = fontRenderer.FONT_HEIGHT;
 
-        return builder.build(getHolder(), entityPlayer);*/
+        LabelWidget header = new LabelWidget(buffer, buffer / 2, I18n.format(getMetaFullName()));
+
+        CycleButtonWidget filterIndexButton = new CycleButtonWidget(buffer, fontHeight + 8 + buffer / 2, w - (2 * buffer), h - (2 * buffer + fontHeight), StockHelperFunctions.ClassNameMap, () -> this.filterIndex, (x) -> this.cycleFilterUp());
+
+        ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, w, h)
+                .widget(header)
+                .widget(filterIndexButton)
+                ;
+
+        return builder.build(getHolder(), entityPlayer);
     }
 
     //#fix# does detected need to be saved or just refreshed on load? does ticks-alive need to be saved to prevent every one ticking at once?
@@ -238,7 +227,7 @@ public class MetaTileEntityStockDetector extends MetaTileEntity implements IStoc
 
     public void cycleFilter(boolean up) {
         this.filterIndex = StockHelperFunctions.CycleFilter(this.filterIndex, up);
-        this.writeCustomData(PackIDFilterIndex, (buf) -> buf.writeByte(this.filterIndex));
+        this.writeCustomData(0b1, (buf) -> buf.writeByte(this.filterIndex));
     }
 
     public void cycleFilterUp() {
@@ -249,7 +238,17 @@ public class MetaTileEntityStockDetector extends MetaTileEntity implements IStoc
         return this.filterIndex;
     }
 
-    public Class getFilter() { return StockHelperFunctions.ClassMap[this.getFilterIndex()]; }
+    @Override
+    public boolean setFilterIndex(byte index) {
+        if(index >= StockHelperFunctions.ClassMap.length || index < 0) {
+            this.filterIndex = 0;
+            return false;
+        }
+        this.filterIndex = index;
+        return true;
+    }
+
+    public Class<?> getFilter() { return StockHelperFunctions.ClassMap[this.getFilterIndex()]; }
 
     public boolean usingFilter() {
         return this.filterIndex != 0;
