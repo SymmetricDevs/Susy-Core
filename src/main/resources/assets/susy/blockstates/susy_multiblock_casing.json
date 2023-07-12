@@ -14,6 +14,12 @@
       "textures" : {
         "all" : "gregtech:blocks/multiblock_casing/silicon_carbide_casing"
       }
+    },
+    "variant=ulv_structural_casing" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/multiblock_casing/ulv_structural_casing"
+      }
     }
   }
 }

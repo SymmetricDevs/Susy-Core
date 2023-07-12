@@ -15,6 +15,9 @@ tile.turbine_rotor.steel.name=Steel Turbine Block
 tile.drill_head.steel.name=Steel Drill Head
 
 tile.susy_multiblock_casing.silicon_carbide_casing.name=Tough Silicon Carbide Casing
+tile.susy_multiblock_casing.ulv_structural_casing.name=Basic Structural Casing
+
+tile.serpentine.basic.name=Copper Tubing Serpentine Block
 
 tile.structural_block.base_structural_block.name=Structural Block
 tile.structural_block.structural_block_low.name=Striped Structural Block
