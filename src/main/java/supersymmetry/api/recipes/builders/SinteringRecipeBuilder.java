@@ -4,7 +4,6 @@ import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.recipes.RecipeMap;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.recipes.properties.CoilingCoilTemperatureProperty;
 import supersymmetry.api.recipes.properties.SinterProperty;
 
 public class SinteringRecipeBuilder extends RecipeBuilder<SinteringRecipeBuilder> {
@@ -38,7 +37,7 @@ public class SinteringRecipeBuilder extends RecipeBuilder<SinteringRecipeBuilder
 
     @Override
     public boolean applyProperty(@NotNull String key, Object value) {
-        if (key.equals(CoilingCoilTemperatureProperty.KEY)) {
+        if (key.equals(SinterProperty.KEY)) {
             this.usePlasma((Boolean) value);
             return true;
         }
