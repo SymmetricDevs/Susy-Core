@@ -9,26 +9,26 @@ import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.unification.material.Materials;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
+import gregtech.common.blocks.BlockBoilerCasing.BoilerCasingType;
+import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
-import supersymmetry.api.recipes.SuSyRecipeMaps;
-import gregtech.common.blocks.BlockBoilerCasing.BoilerCasingType;
-import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
+import supersymmetry.api.recipes.SuSyRecipeMaps;
 
 import javax.annotation.Nonnull;
 
-public class MetaTileEntityHeatExchanger extends RecipeMapMultiblockController {
+public class MetaTileEntityTappedOffHeatExchanger extends RecipeMapMultiblockController {
 
-    public MetaTileEntityHeatExchanger(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SuSyRecipeMaps.HEAT_EXCHANGER_RECIPES);
+    public MetaTileEntityTappedOffHeatExchanger(ResourceLocation metaTileEntityId) {
+        super(metaTileEntityId, SuSyRecipeMaps.TAPPED_OFF_HEAT_EXCHANGER_RECIPES);
         this.recipeMapWorkable = new NoEnergyMultiblockRecipeLogic(this);
     }
 
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
-        return new MetaTileEntityHeatExchanger(metaTileEntityId);
+        return new MetaTileEntityTappedOffHeatExchanger(metaTileEntityId);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class MetaTileEntityHeatExchanger extends RecipeMapMultiblockController {
                 .aisle("CCC", "CDC", "ACA")
                 .aisle("CCC", "CDC", "ACA")
                 .aisle("CCC", "CDC", "ACA")
-                .aisle("CCC", "CDC", "ACA")
+                .aisle("CEC", "EDE", "AEA")
                 .aisle("CCC", "CDC", "ACA")
                 .aisle("CCC", "CDC", "ACA")
                 .aisle("CCC", "CDC", "ACA")
@@ -50,6 +50,8 @@ public class MetaTileEntityHeatExchanger extends RecipeMapMultiblockController {
                 .where('C', states(new IBlockState[]{MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)})
                         .or(autoAbilities(false, true, false, false, false, false, false)))
                 .where('D', states(new IBlockState[]{MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE)}))
+                .where('E', states(new IBlockState[]{MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)})
+                        .or(autoAbilities(false, false, false, false, false, true, false).setExactLimit(1)))
                 .build();
     }
 

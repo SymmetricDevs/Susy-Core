@@ -85,7 +85,7 @@ public class SuSyRecipeMaps {
             .setSlotOverlay(false, true, true, GuiTextures.MOLECULAR_OVERLAY_4)
             .setSlotOverlay(true, false, true, SusyGuiTextures.CUBIC_LATTICE_OVERLAY)
             .setSlotOverlay(true, true, true, GuiTextures.MOLECULAR_OVERLAY_4)
-            .setSound(GTSoundEvents.CHEMICAL_REACTOR);
+            .setSound(GTSoundEvents.BATH);
 
     public static final RecipeMap<SimpleRecipeBuilder> ZONE_REFINER_RECIPES = new RecipeMap<>("zone_refiner", 1, 1, 0, 0, new SimpleRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_CRYSTALLIZATION, ProgressWidget.MoveType.HORIZONTAL)
@@ -173,6 +173,10 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.COOLING);
 
+    public static final RecipeMap<NoEnergyRecipeBuilder> TAPPED_OFF_HEAT_EXCHANGER_RECIPES = new RecipeMap<>("tapped_off_heat_exchanger", 0, 0, 2, 3, new NoEnergyRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.COOLING);
+
     public static final RecipeMap<NoEnergyRecipeBuilder> CONDENSER_RECIPES = new RecipeMap<>("condenser", 0, 0, 2, 2, new NoEnergyRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.COOLING);
@@ -241,7 +245,7 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.COOLING);
 
-    public static final RecipeMap<SimpleRecipeBuilder> FLARE_STACK = new RecipeMap<>("flare_stack", 0, 0, 1, 0, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<NoEnergyRecipeBuilder> FLARE_STACK = new RecipeMap<>("flare_stack", 0, 0, 1, 0, new NoEnergyRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_SIFT, ProgressWidget.MoveType.VERTICAL)
             .setSound(GTSoundEvents.FURNACE);
 
@@ -266,9 +270,33 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.MACERATOR);
 
-    public static final RecipeMap<SimpleRecipeBuilder> CRYOGENIC_DISTILLATION = new RecipeMap<>("cryogenic_distillation", 1, 0, 9, 9, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<SimpleRecipeBuilder> HIGH_PRESSURE_CRYOGENIC_DISTILLATION = new RecipeMap<>("high_puressure_cryogenic_distillation", 1, 0, 9, 9, new SimpleRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_SIFT, ProgressWidget.MoveType.VERTICAL_DOWNWARDS)
             .setSound(GTSoundEvents.COOLING);
+
+    public static final RecipeMap<SimpleRecipeBuilder> LOW_PRESSURE_CRYOGENIC_DISTILLATION = new RecipeMap<>("low_pressure_cryogenic_distillation", 1, 0, 9, 9, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_SIFT, ProgressWidget.MoveType.VERTICAL)
+            .setSound(GTSoundEvents.COOLING);
+
+    public static final RecipeMap<SimpleRecipeBuilder> SINGLE_COLUMN_CRYOGENIC_DISTILLATION = new RecipeMap<>("single_column_cryogenic_distillation", 1, 0, 9, 9, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_SIFT, ProgressWidget.MoveType.VERTICAL)
+            .setSound(GTSoundEvents.COOLING);
+
+    public static final RecipeMap<NoEnergyRecipeBuilder> REVERBERATORY_FURNACE = new RecipeMap<>("reverberatory_furnace", 3, 3, 3, 3, new NoEnergyRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.FURNACE);
+
+    public static final RecipeMap<SimpleRecipeBuilder> PHASE_SEPARATOR = new RecipeMap<>("phase_separator", 0, 0, 2, 2, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_EXTRACT, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.BATH);
+
+    public static final RecipeMap<SimpleRecipeBuilder> CONTACT_COOLER = new RecipeMap<>("contact_cooler", 0, 0, 2, 2, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_SIFT, ProgressWidget.MoveType.VERTICAL_DOWNWARDS)
+            .setSound(GTSoundEvents.BATH);
+
+    public static final RecipeMap<NoEnergyRecipeBuilder> BATH_CONDENSER = new RecipeMap<>("bath_condenser", 0, 0, 2, 2, new NoEnergyRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_SIFT, ProgressWidget.MoveType.VERTICAL)
+            .setSound(GTSoundEvents.BATH);
 
     public static void init(){
         RecipeMaps.SIFTER_RECIPES.setMaxFluidInputs(1);
