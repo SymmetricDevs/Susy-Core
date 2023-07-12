@@ -60,5 +60,6 @@ public class SusyTextures {
     public static final SimpleOrientedCubeRenderer STOCK_READER_ITEM = new SimpleOrientedCubeRenderer("rail_interfaces/content_reader/content_reader_item");
     public static final SimpleOrientedCubeRenderer STOCK_READER_FLUID = new SimpleOrientedCubeRenderer("rail_interfaces/content_reader/content_reader_fluid");
 
-    public static final SimpleOrientedCubeRenderer STOCK_CONTROLLER = new SimpleOrientedCubeRenderer("rail_interfaces/stock_controller/stock_controller");
+    public static final SimpleOrientedCubeRenderer STOCK_CONTROLLER_ON = new SimpleOrientedCubeRenderer("rail_interfaces/stock_controller/stock_controller_on");
+    public static final SimpleOrientedCubeRenderer STOCK_CONTROLLER_OFF = new SimpleOrientedCubeRenderer("rail_interfaces/stock_controller/stock_controller_off");
 }

@@ -169,7 +169,12 @@ public class MetaTileEntityLocomotiveController  extends MetaTileEntity implemen
     }
 
     public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
-        SusyTextures.STOCK_CONTROLLER.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
+        if(this.active) {
+            SusyTextures.STOCK_CONTROLLER_ON.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
+        }
+        else {
+            SusyTextures.STOCK_CONTROLLER_OFF.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
+        }
     }
 
     @SideOnly(Side.CLIENT)
