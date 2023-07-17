@@ -1,10 +1,8 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import cam72cam.immersiverailroading.Config;
 import cam72cam.immersiverailroading.IRBlocks;
 import cam72cam.immersiverailroading.IRItems;
 import cam72cam.immersiverailroading.entity.EntityBuildableRollingStock;
-import cam72cam.immersiverailroading.entity.EntityCoupleableRollingStock;
 import cam72cam.immersiverailroading.entity.EntityMoveableRollingStock;
 import cam72cam.immersiverailroading.entity.EntityRollingStock;
 import cam72cam.immersiverailroading.items.ItemRollingStock;
@@ -24,6 +22,7 @@ import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.world.World;
+import gregtech.api.GTValues;
 import gregtech.api.capability.impl.ItemHandlerList;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.capability.impl.NotifiableItemStackHandler;
@@ -50,6 +49,7 @@ import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
 import gregtech.common.metatileentities.MetaTileEntities;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
@@ -63,10 +63,13 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.client.renderer.particles.SusyParticleFlame;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
 
@@ -75,7 +78,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultiblockController {
-
     private AxisAlignedBB structureAABB;
     private Gauge gauge = Gauge.from(Gauge.STANDARD);
     private boolean canFindTrain = true;
@@ -104,17 +106,21 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
         // When changing the structure, do not forget to update the preview and the structure AABB - It's best ot just bug MTBO if you do not understand what that means
         return FactoryBlockPattern.start()
                 .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
+                .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
+                .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
                 .aisle("  CCC  BBB  CCC  ", "  CCC  BBB  CCC  ", "   C    B    C   ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "       F F       ", "       F F       ")
                 .aisle("CCCCCCCCCCCCCCCCC", "CCCFCCCCFCCCCFCCC", "CCCFCCCCFCCCCFCCC", "   F    F    F   ", "   F    F    F   ", "   F    F    F   ", "   F    F    F   ", " FFFFFFFFFFFFFFF ", "  FF   FGF   FF  ", "       F F       ")
                 .aisle("CCCCCCCCCCCCCCCCC", "CCCCCCCCCCCCCCCCC", "   C    C    C   ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "       F F       ", "       F F       ")
                 .aisle("CCCCCCCCCCCCCCCCC", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
                 .aisle("CCCCCCCCCCCCCCCCC", "RRRRRRRRRRRRRRRRR", "                 ", "                 ", "                 ", "                 ", "                 ", "       MMM       ", "       FGF       ", "       MMM       ")
-                .aisle("CCCCCCCCCCCCCCCCC", "RRRRRRRRRRRRRRRRR", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       FMF       ", "                 ")
+                .aisle("                 ", "RRRRRRRRRRRRRRRRR", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       FMF       ", "                 ")
                 .aisle("CCCCCCCCCCCCCCCCC", "RRRRRRRRRRRRRRRRR", "                 ", "                 ", "                 ", "                 ", "                 ", "       MMM       ", "       FGF       ", "       MAM       ")
                 .aisle("CCCCCCCCCCCCCCCCC", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
                 .aisle("CCCCCCCCCCCCCCCCC", "CCCCCCCCCCCCCCCCC", "   C    C    C   ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "       F F       ", "       F F       ")
                 .aisle("CCCCCCCCCCCCCCCCC", "CCCFCCCCFCCCCFCCC", "CCCFCCCCFCCCCFCCC", "   F    F    F   ", "   F    F    F   ", "   F    F    F   ", "   F    F    F   ", " FFFFFFFFFFFFFFF ", "  FF   FGF   FF  ", "       F F       ")
                 .aisle("  CCC  CCC  CCC  ", "  CCC  CSC  CCC  ", "   C    C    C   ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "       F F       ", "       F F       ")
+                .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
+                .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
                 .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
                 .where('S', selfPredicate())
                 .where('F', states(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)))
@@ -122,7 +128,7 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
                 .where('G', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('C', states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)))
                 .where('A', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)).or(this.autoAbilities(true,false)))
-                .where('B', this.autoAbilities(true,false, true, true, true, false, false))
+                .where('B', states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)).or(autoAbilities(true,false, true, true, true, false, false)))
                 .where(' ', any())
                 .where('R', SuSyPredicates.rails())
                 .build();
@@ -145,6 +151,8 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
 
         MultiblockShapeInfo.Builder builder = MultiblockShapeInfo.builder()
                 .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
+                .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
+                .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
                 .aisle("  CCC  CCC  CCC  ", "  CCC  CCC  CCC  ", "   C    C    C   ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "       F F       ", "       F F       ")
                 .aisle("CCCCCCCCCCCCCCCCC", "CCCFCCCCFCCCCFCCC", "CCCFCCCCFCCCCFCCC", "   F    F    F   ", "   F    F    F   ", "   F    F    F   ", "   F    F    F   ", " FFFFFFFFFFFFFFF ", "  FF   FGF   FF  ", "       F F       ")
                 .aisle("CCCCCCCCCCCCCCCCC", "CCCCCCCCCCCCCCCCC", "   C    C    C   ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "       F F       ", "       F F       ")
@@ -157,6 +165,8 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
                 .aisle("CCCCCCCCCCCCCCCCC", "CCCFCCCCFCCCCFCCC", "CCCFCCCCFCCCCFCCC", "   F    F    F   ", "   F    F    F   ", "   F    F    F   ", "   F    F    F   ", " FFFFFFFFFFFFFFF ", "  FF   FGF   FF  ", "       F F       ")
                 .aisle("  CCC  CCC  CCC  ", "  CCC  CSC  CCC  ", "   C    C    C   ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "       F F       ", "       F F       ")
                 .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
+                .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
+                .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
                 .where('S', SuSyMetaTileEntities.RAILROAD_ENGINEERING_STATION, EnumFacing.SOUTH)
                 .where('F', MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel))
                 .where('M', MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
@@ -167,6 +177,7 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
 
         MultiblockShapeInfo preInfo = builder.build();
 
+        /*
         if(Loader.isModLoaded(SuSyValues.MODID_IMMERSIVERAILROADING)) {
             ItemStack trackBlueprintStack = new ItemStack(IRItems.ITEM_TRACK_BLUEPRINT, 0);
             trackBlueprintStack.internal.setTagInfo("length", new NBTTagInt(17));
@@ -196,6 +207,8 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
             }
             preInfo = new MultiblockShapeInfo(blockInfos);
         }
+
+         */
 
         shapeInfo.add(preInfo);
 
@@ -233,7 +246,7 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
             if(recipeMapWorkable.isActive()) {
                 List<EntityPlayer> players = getWorld().getEntitiesWithinAABB(EntityPlayer.class, this.structureAABB);
                 for (EntityPlayer player : players) {
-                    player.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 11, 1));
+                    player.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 21, 1));
                 }
             }
 
@@ -262,6 +275,14 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
                     );
                 }
             }
+        }
+    }
+
+    @Override
+    public void update() {
+        super.update();
+        if (this.getWorld().isRemote && this.isActive() && this.getOffsetTimer() % 2 == 0) {
+            this.spawnWorkingParticles();
         }
     }
 
@@ -294,6 +315,22 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
         );
     }
 
+    public float getTrainSpawnAngle() {
+        if (this.frontFacing == EnumFacing.NORTH) {
+            return 90;
+        } else if (this.frontFacing == EnumFacing.EAST) {
+            return 180;
+        } else if (this.frontFacing == EnumFacing.SOUTH) {
+            return 270;
+        } else {
+            return 0;
+        }
+    }
+
+    public BlockPos getRailPos(net.minecraft.util.math.Vec3i direction) {
+        return getPos().add(direction.getX() * 5, 0, direction.getZ() * 5);
+    }
+
     public EntityRollingStock spawnRollingStock(ItemStack stack) {
         ItemRollingStock.Data data = new ItemRollingStock.Data(stack);
 
@@ -302,20 +339,21 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
         if (def != null) {
             World irWorld = World.get(getWorld());
 
-            net.minecraft.util.math.Vec3i direction = this.getFrontFacing().getOpposite().getDirectionVec();
+            //net.minecraft.util.math.Vec3i direction = this.getFrontFacing().getOpposite().getDirectionVec();
 
             // Centered around the middle rail
 
-            double offset = def.getCouplerPosition(EntityCoupleableRollingStock.CouplerType.BACK, gauge) - Config.ConfigDebug.couplerRange;
+            //double offset = def.getCouplerPosition(EntityCoupleableRollingStock.CouplerType.BACK, gauge) - Config.ConfigDebug.couplerRange;
 
-            BlockPos railPos = getPos().add(direction.getX() * 5 + offset * direction.getZ(), 0, direction.getZ() * 5 +  offset * direction.getZ());
+            BlockPos railPos = getRailPos(this.getFrontFacing().getOpposite().getDirectionVec());
+
             TickPos tp = new TickPos(
                     0,
                     Speed.ZERO,
                     (new Vec3d(railPos.getX() , railPos.getY(), railPos.getZ())).add(0.0, 0.25, 0.0).add(0.5, 0.0, 0.5),
-                    0,
-                    0,
-                    0,
+                    this.getTrainSpawnAngle(),
+                    this.getTrainSpawnAngle(),
+                    this.getTrainSpawnAngle(),
                     0.0F,
                     false);
             EntityRollingStock stock = def.spawn(irWorld, tp.position, 0, gauge, data.texture);
@@ -345,7 +383,6 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
             int idx = (int) (recipeProgress * spawnedRollingStackComponentsSorted.size());
             ((EntityBuildableRollingStock) this.spawnedRollingStock).setComponents(spawnedRollingStackComponentsSorted.subList(0, idx));
         }
-
     }
 
     public void completeSpawnedStock() {
@@ -444,6 +481,19 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
         }
 
         this.structureAABB = new AxisAlignedBB(getPos().add(offsetBottomLeft), getPos().add(offsetTopRight));
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void spawnWorkingParticles() {
+        SusyParticleFlame spark = new SusyParticleFlame(
+                this.getWorld(),
+                this.getPos().getX() + this.getFrontFacing().getOpposite().getDirectionVec().getX() * 5 + (1 - this.getFrontFacing().getOpposite().getDirectionVec().getX()) * 3 * (GTValues.RNG.nextFloat() - 0.5),
+                this.getPos().getY() + 0.5,
+                this.getPos().getZ() + this.getFrontFacing().getOpposite().getDirectionVec().getZ() * 5 + (1 - this.getFrontFacing().getOpposite().getDirectionVec().getZ()) * 3 * (GTValues.RNG.nextFloat() - 0.5),
+                (GTValues.RNG.nextFloat() - 0.5) * 1.2F,
+                GTValues.RNG.nextFloat() * 1.5F,
+                (GTValues.RNG.nextFloat() - 0.5) * 1.2F);
+        Minecraft.getMinecraft().effectRenderer.addEffect(spark);
     }
 
     protected static class RailroadEngineeringStationWorkable extends MultiblockRecipeLogic {

@@ -66,9 +66,14 @@ public class MetaTileEntityPrimitiveMudPump extends MultiblockControllerBase imp
     private int getAmount() {
         Biome biome = getWorld().getBiome(getPos());
         Set<BiomeDictionary.Type> biomeTypes = BiomeDictionary.getTypes(biome);
-        if (!biomeTypes.contains(BiomeDictionary.Type.RIVER) || getPos().getY() < 64 || getPos().getY() > 80) {
+        if (getPos().getY() < 64 || getPos().getY() > 80) {
             return -1; // Disabled
         }
+
+        if (!biomeTypes.contains(BiomeDictionary.Type.RIVER) && !biomeTypes.contains(BiomeDictionary.Type.SWAMP)) {
+            return -1; // Disabled
+        }
+
         return 250;
     }
 

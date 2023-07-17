@@ -30,7 +30,10 @@ public class BlockSuSyMultiblockCasing extends VariantBlock<BlockSuSyMultiblockC
 
     public enum CasingType implements IStringSerializable {
 
-        SILICON_CARBIDE_CASING("silicon_carbide_casing");
+        SILICON_CARBIDE_CASING("silicon_carbide_casing"),
+        SIEVE_TRAY("sieve_tray"),
+        STRUCTURAL_PACKING("structural_packing"),
+        ULV_STRUCTURAL_CASING("ulv_structural_casing");
 
         private final String name;
 

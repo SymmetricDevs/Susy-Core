@@ -34,6 +34,8 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer UV_LIGHT_BOX_OVERLAY = new OrientedOverlayRenderer("machines/uv_light_box");
     public static final OrientedOverlayRenderer CVD_OVERLAY = new OrientedOverlayRenderer("machines/cvd");
     public static final OrientedOverlayRenderer ION_IMPLANTER_OVERLAY = new OrientedOverlayRenderer("machines/ion_implanter");
+    public static final OrientedOverlayRenderer PHASE_SEPARATOR_OVERLAY = new OrientedOverlayRenderer("machines/phase_separator");
+    public static final OrientedOverlayRenderer BATH_CONDENSER_OVERLAY = new OrientedOverlayRenderer("machines/bath_condenser");
     public static final OrientedOverlayRenderer CATALYTIC_REFORMER_OVERLAY = new OrientedOverlayRenderer("multiblock/catalytic_reformer");
 
     public static final OrientedOverlayRenderer FLUID_COMPRESSOR_OVERLAY = new OrientedOverlayRenderer("machines/fluid_compressor");
@@ -41,11 +43,12 @@ public class SusyTextures {
 
     public static final SimpleOverlayRenderer SILICON_CARBIDE_CASING = new SimpleOverlayRenderer("multiblock_casing/silicon_carbide_casing");
 
+    public static final SimpleOverlayRenderer ULV_STRUCTURAL_CASING = new SimpleOverlayRenderer("multiblock_casing/ulv_structural_casing");
+  
     public static final SimpleOrientedCubeRenderer STOCK_DETECTOR_NEITHER = new SimpleOrientedCubeRenderer("rail_interfaces/stock_detector/stock_detector_neither");
     public static final SimpleOrientedCubeRenderer STOCK_DETECTOR_DETECTING = new SimpleOrientedCubeRenderer("rail_interfaces/stock_detector/stock_detector_detecting");
     public static final SimpleOrientedCubeRenderer STOCK_DETECTOR_FILTER = new SimpleOrientedCubeRenderer("rail_interfaces/stock_detector/stock_detector_filter");
     public static final SimpleOrientedCubeRenderer STOCK_DETECTOR_BOTH = new SimpleOrientedCubeRenderer("rail_interfaces/stock_detector/stock_detector_both");
-
 
     public static final SimpleOrientedCubeRenderer STOCK_FLUID_EXCHANGER_PULLING_ON = new SimpleOrientedCubeRenderer("rail_interfaces/fluid_exchanger/fluid_exchanger_pulling_on");
     public static final SimpleOrientedCubeRenderer STOCK_FLUID_EXCHANGER_PULLING_OFF = new SimpleOrientedCubeRenderer("rail_interfaces/fluid_exchanger/fluid_exchanger_pulling_off");
@@ -62,4 +65,5 @@ public class SusyTextures {
 
     public static final SimpleOrientedCubeRenderer STOCK_CONTROLLER_ON = new SimpleOrientedCubeRenderer("rail_interfaces/stock_controller/stock_controller_on");
     public static final SimpleOrientedCubeRenderer STOCK_CONTROLLER_OFF = new SimpleOrientedCubeRenderer("rail_interfaces/stock_controller/stock_controller_off");
+
 }

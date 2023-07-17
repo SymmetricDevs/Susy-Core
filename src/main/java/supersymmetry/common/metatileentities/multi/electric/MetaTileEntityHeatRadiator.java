@@ -12,8 +12,10 @@ import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
-import gregtech.common.blocks.BlockBoilerCasing.BoilerCasingType;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
+import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
+import supersymmetry.common.blocks.BlockSerpentine;
+import supersymmetry.common.blocks.SuSyBlocks;
 
 import javax.annotation.Nonnull;
 
@@ -23,6 +25,7 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
 
     public MetaTileEntityHeatRadiator(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.HEAT_RADIATOR_RECIPES);
+        this.recipeMapWorkable = new NoEnergyMultiblockRecipeLogic(this);
     }
 
     @Override
@@ -37,14 +40,18 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
                 .aisle("DBBBBBBBBBC").setRepeatable(1,14)
                 .aisle("AAAAAAAAAAA")
                 .where('S', selfPredicate())
-                .where('A', states(new IBlockState[]{MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)})
+                .where('A', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
                         .or(autoAbilities(false, true, false, false, false, false, false)))
-                .where('B', states(new IBlockState[]{MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE)}))
-                .where('C', states(new IBlockState[]{MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)})
+                .where('B', states(getRadiatorElementState()))
+                .where('C', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
                         .or(autoAbilities(false, false, false, false, true, false, false)))
-                .where('D', states(new IBlockState[]{MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)})
+                .where('D', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
                         .or(autoAbilities(false, false, false, false, false, true, false)))
                 .build();
+    }
+
+    public IBlockState getRadiatorElementState() {
+        return SuSyBlocks.SERPENTINE.getState(BlockSerpentine.SerpentineType.BASIC);
     }
 
     @Override

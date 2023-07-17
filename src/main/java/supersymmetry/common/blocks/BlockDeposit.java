@@ -9,9 +9,8 @@ import net.minecraft.util.IStringSerializable;
 import javax.annotation.Nonnull;
 
 public class BlockDeposit extends VariantBlock<BlockDeposit.DepositBlockType> {
-
     public BlockDeposit() {
-        super(net.minecraft.block.material.Material.IRON);
+        super(net.minecraft.block.material.Material.ANVIL);
         setTranslationKey("deposit_block");
         setHardness(50.0f);
         setResistance(1200.0f);

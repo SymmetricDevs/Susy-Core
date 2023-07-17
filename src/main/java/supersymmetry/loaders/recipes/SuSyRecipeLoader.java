@@ -38,10 +38,14 @@ public class SuSyRecipeLoader {
         SusyOreRecipeHandler.init();
         SuSyMaterialRecipeHandler.init();
         registerStoneRecipes();
-        GTRecipeHandler.removeAllRecipes(ELECTROLYZER_RECIPES);
+
+        //GTRecipeHandler.removeAllRecipes(ELECTROLYZER_RECIPES);
+
         // make more loaders to categorize recipes and what is added
 
+        //RES Example Recipe
 
+        /*
         TagCompound tag = new TagCompound();
 
         tag.setString("defID", "rolling_stock/locomotives/k4_pacific.json");
@@ -63,6 +67,8 @@ public class SuSyRecipeLoader {
                 .EUt(GTValues.VA[4])
                 .duration(4000)
                 .buildAndRegister();
+
+         */
 
 
     }

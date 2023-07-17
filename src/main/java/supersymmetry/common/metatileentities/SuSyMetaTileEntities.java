@@ -10,6 +10,7 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
+import gregtech.common.metatileentities.multi.MetaTileEntityReverberatoryFurnace;
 import gregtech.common.metatileentities.multi.electric.MetaTileEntityHighTemperatureDistillationTower;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityEnergyHatch;
 import gregtech.common.metatileentities.storage.MetaTileEntityDrum;
@@ -101,6 +102,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntitySUSYLargeTurbine BASIC_GAS_TURBINE;
     public static MetaTileEntitySUSYLargeTurbine BASIC_STEAM_TURBINE;
     public static MetaTileEntityHeatExchanger HEAT_EXCHANGER;
+    public static MetaTileEntityTappedOffHeatExchanger TAPPED_OFF_HEAT_EXCHANGER;
     public static MetaTileEntityHeatRadiator HEAT_RADIATOR;
     public static MetaTileEntityLargeWeaponsFactory LARGE_WEAPONS_FACTORY;
     public static MetaTileEntityMagnetohydrodynamicGenerator MAGNETOHYDRODYNAMIC_GENERATOR;
@@ -130,7 +132,14 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityOceanPumper OCEAN_PUMPER;
     public static MetaTileEntityHighTemperatureDistillationTower HIGH_TEMPERATURE_DISTILLATION_TOWER;
     public static MetaTileEntityRotaryKiln ROTARY_KILN;
-    public static MetaTileEntityCryogenicDistillationPlant CRYOGENIC_DISTILLATION_PLANT;
+    public static MetaTileEntityHighPressureCryogenicDistillationPlant HIGH_PRESSURE_CRYOGENIC_DISTILLATION_PLANT;
+    public static MetaTileEntityLowPressureCryogenicDistillationPlant LOW_PRESSURE_CRYOGENIC_DISTILLATION_PLANT;
+    public static MetaTileEntitySingleColumnCryogenicDistillationPlant SINGLE_COLUMN_CRYOGENIC_DISTILLATION_PLANT;
+    public static MetaTileEntityContactCooler CONTACT_COOLER;
+    public static MetaTileEntityReverberatoryFurnace REVERBERATORY_FURNACE;
+
+    public static SimpleMachineMetaTileEntity[] PHASE_SEPARATOR;
+    public static SimpleMachineMetaTileEntity[] BATH_CONDENSER;
 
     public static MetaTileEntityStockDetector STOCK_DETECTOR;
     public static MetaTileEntityStockFluidExchanger STOCK_FLUID_EXCHANGER;
@@ -245,9 +254,17 @@ public class SuSyMetaTileEntities {
         OCEAN_PUMPER = registerMetaTileEntity(17011, new MetaTileEntityOceanPumper(susyId("ocean_pumper")));
         HIGH_TEMPERATURE_DISTILLATION_TOWER = registerMetaTileEntity(17012, new MetaTileEntityHighTemperatureDistillationTower(susyId("high_temperature_distillation_tower")));
         ROTARY_KILN = registerMetaTileEntity(17013, new MetaTileEntityRotaryKiln(susyId("rotary_kiln")));
-        CRYOGENIC_DISTILLATION_PLANT = registerMetaTileEntity(17014, new MetaTileEntityCryogenicDistillationPlant(susyId("cryogenic_distillation_plant")));
+      
+        HIGH_PRESSURE_CRYOGENIC_DISTILLATION_PLANT = registerMetaTileEntity(17014, new MetaTileEntityHighPressureCryogenicDistillationPlant(susyId("high_pressure_cryogenic_distillation_plant")));
+        LOW_PRESSURE_CRYOGENIC_DISTILLATION_PLANT = registerMetaTileEntity(17015, new MetaTileEntityLowPressureCryogenicDistillationPlant(susyId("low_pressure_cryogenic_distillation_plant")));
+        CONTACT_COOLER = registerMetaTileEntity(17016, new MetaTileEntityContactCooler(susyId("contact_cooler")));
+        REVERBERATORY_FURNACE = registerMetaTileEntity(17017, new MetaTileEntityReverberatoryFurnace(susyId("reverberatory_furnace")));
+        TAPPED_OFF_HEAT_EXCHANGER = registerMetaTileEntity(17018, new MetaTileEntityTappedOffHeatExchanger(susyId("tapped_off_heat_exchanger")));
+        SINGLE_COLUMN_CRYOGENIC_DISTILLATION_PLANT = registerMetaTileEntity(17019, new MetaTileEntitySingleColumnCryogenicDistillationPlant(susyId("single_column_cryogenic_distillation_plant")));
 
-        //rail interfaces
+        registerSimpleMTE(PHASE_SEPARATOR, 12, 17020, "phase_separator", SuSyRecipeMaps.PHASE_SEPARATOR, SusyTextures.PHASE_SEPARATOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+        registerSimpleMTE(BATH_CONDENSER, 0, 17034, "bath_condenser", SuSyRecipeMaps.BATH_CONDENSER, SusyTextures.BATH_CONDENSER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+      
         STOCK_DETECTOR = registerMetaTileEntity(18000, new MetaTileEntityStockDetector(susyId("stock_detector")));
         STOCK_FLUID_EXCHANGER = registerMetaTileEntity(18001, new MetaTileEntityStockFluidExchanger(susyId("stock_fluid_exchanger")));
         STOCK_ITEM_EXCHANGER = registerMetaTileEntity(18002, new MetaTileEntityStockItemExchanger(susyId("stock_item_exchanger")));
@@ -336,5 +353,8 @@ public class SuSyMetaTileEntities {
         FLUID_COMPRESSOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
         FLUID_DECOMPRESSOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
         WEAPONS_FACTORY = new SimpleMachineMetaTileEntity[GTValues.OpV];
+        PHASE_SEPARATOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
+
+        BATH_CONDENSER = new SimpleMachineMetaTileEntity[1];
     }
 }
