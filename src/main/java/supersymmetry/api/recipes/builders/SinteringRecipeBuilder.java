@@ -3,6 +3,7 @@ package supersymmetry.api.recipes.builders;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.recipes.RecipeMap;
+import gregtech.api.util.ValidationResult;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.properties.SinterProperty;
 
@@ -42,6 +43,14 @@ public class SinteringRecipeBuilder extends RecipeBuilder<SinteringRecipeBuilder
             return true;
         }
         return super.applyProperty(key, value);
+    }
+
+    @Override
+    public ValidationResult<Recipe> build() {
+        if (!this.recipePropertyStorage.hasRecipeProperty(SinterProperty.getInstance())) {
+            this.usePlasma(false);
+        }
+        return super.build();
     }
 
 }
