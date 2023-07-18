@@ -47,7 +47,7 @@ public class SinteringRecipeBuilder extends RecipeBuilder<SinteringRecipeBuilder
 
     @Override
     public ValidationResult<Recipe> build() {
-        if (!this.recipePropertyStorage.hasRecipeProperty(SinterProperty.getInstance())) {
+        if (this.recipePropertyStorage == null || !this.recipePropertyStorage.hasRecipeProperty(SinterProperty.getInstance())) {
             this.usePlasma(false);
         }
         return super.build();
