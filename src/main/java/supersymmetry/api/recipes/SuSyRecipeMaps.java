@@ -49,7 +49,7 @@ public class SuSyRecipeMaps {
             .setSlotOverlay(true, true, GuiTextures.MOLECULAR_OVERLAY_3)
             .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
-    public static final RecipeMap<CatalystRecipeBuilder> TRICKLE_BED_REACTOR_RECIPES = new RecipeMap<>("trickle_bed_reactor", 1, 0, 3, 2, new CatalystRecipeBuilder(), false)
+    public static final RecipeMap<CatalystRecipeBuilder> TRICKLE_BED_REACTOR_RECIPES = new RecipeMap<>("trickle_bed_reactor", 2, 0, 3, 2, new CatalystRecipeBuilder(), false)
             .setSlotOverlay(false, false, SusyGuiTextures.CATALYST_PELLET_OVERLAY)
             .setSlotOverlay(false, true, GuiTextures.MOLECULAR_OVERLAY_3)
             .setSlotOverlay(true, true, GuiTextures.MOLECULAR_OVERLAY_3)

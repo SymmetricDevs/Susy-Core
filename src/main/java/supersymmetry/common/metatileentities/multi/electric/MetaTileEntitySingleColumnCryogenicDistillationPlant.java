@@ -38,6 +38,7 @@ public class MetaTileEntitySingleColumnCryogenicDistillationPlant extends Recipe
                 .aisle(new String[]{"CCC", "CCC", "CCC"})
                 .aisle(new String[]{"CSC", "CFC", "CCC"})
                 .aisle(new String[]{"XXX", "XFX", "XXX"}).setRepeatable(1,16)
+                .aisle(new String[]{"CCC", "CCC", "CCC"})
                 .aisle(new String[]{"CEC", "E E", "CEC"})
                 .aisle(new String[]{"DDD", "DDD", "DDD"})
                 .where('S', this.selfPredicate())
