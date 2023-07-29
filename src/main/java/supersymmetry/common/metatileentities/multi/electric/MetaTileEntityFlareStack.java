@@ -39,7 +39,7 @@ public class MetaTileEntityFlareStack extends RecipeMapMultiblockController {
                 .aisle("P").setRepeatable(3,7)
                 .aisle("F")
                 .where('S', this.selfPredicate())
-                .where('P', states(new IBlockState[]{this.getFireboxCasingState()})
+                .where('P', states(this.getFireboxCasingState())
                         .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setExactLimit(1)))
                 .where('F', abilities(MultiblockAbility.MUFFLER_HATCH).setExactLimit(1))
                 .build();

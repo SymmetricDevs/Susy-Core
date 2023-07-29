@@ -44,13 +44,13 @@ public class MetaTileEntityTappedOffHeatExchanger extends RecipeMapMultiblockCon
                 .aisle("CCC", "CDC", "ACA")
                 .aisle("CCC", "BSB", "ACA")
                 .where('S', selfPredicate())
-                .where('A', states(new IBlockState[]{MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)}))
+                .where('A', states(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)))
                 .where('B', autoAbilities(false, false, false, false, false, true, false).setMinGlobalLimited(2)
                         .or(autoAbilities(false, false, false, false, true, false, false).setMinGlobalLimited(2)))
-                .where('C', states(new IBlockState[]{MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)})
+                .where('C', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
                         .or(autoAbilities(false, true, false, false, false, false, false)))
-                .where('D', states(new IBlockState[]{MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE)}))
-                .where('E', states(new IBlockState[]{MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)})
+                .where('D', states(MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE)))
+                .where('E', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
                         .or(autoAbilities(false, false, false, false, false, true, false).setExactLimit(1)))
                 .build();
     }

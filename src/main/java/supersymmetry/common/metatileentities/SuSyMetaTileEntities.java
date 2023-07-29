@@ -10,8 +10,6 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
-import gregtech.common.metatileentities.multi.MetaTileEntityReverberatoryFurnace;
-import gregtech.common.metatileentities.multi.electric.MetaTileEntityHighTemperatureDistillationTower;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityEnergyHatch;
 import gregtech.common.metatileentities.storage.MetaTileEntityDrum;
 import net.minecraft.util.ResourceLocation;
@@ -31,6 +29,8 @@ import supersymmetry.common.metatileentities.multiblockpart.SusyMetaTileEntityDu
 import supersymmetry.common.metatileentities.multiblockpart.SusyMetaTileEntityEnergyHatch;
 import supersymmetry.common.metatileentities.single.storage.MetaTileEntityCryoDrum;
 import supersymmetry.common.metatileentities.single.steam.SuSySimpleSteamMetaTileEntity;
+import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityReverberatoryFurnace;
+import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityHighTemperatureDistillationTower;
 
 import java.util.function.Function;
 

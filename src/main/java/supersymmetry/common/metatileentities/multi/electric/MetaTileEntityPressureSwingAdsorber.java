@@ -35,9 +35,9 @@ public class MetaTileEntityPressureSwingAdsorber extends RecipeMapMultiblockCont
                 .aisle("AAA", "ABA", "ABA", "AAA")
                 .aisle("AAA", "ASA", "AAA", "AAA")
                 .where('S', selfPredicate())
-                .where('A', states(new IBlockState[]{MetaBlocks.METAL_CASING.getState(MetalCasingType.ALUMINIUM_FROSTPROOF)})
+                .where('A', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.ALUMINIUM_FROSTPROOF))
                         .or(autoAbilities(true, true, true, true, true, true, false)))
-                .where('B', states(new IBlockState[]{MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE)}))
+                .where('B', states(MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE)))
                 .build();
     }
 

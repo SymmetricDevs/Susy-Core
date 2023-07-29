@@ -66,7 +66,7 @@ public class MetaTileEntityPrimitiveMudPump extends MultiblockControllerBase imp
     private int getAmount() {
         Biome biome = getWorld().getBiome(getPos());
         Set<BiomeDictionary.Type> biomeTypes = BiomeDictionary.getTypes(biome);
-        if (getPos().getY() < 64 || getPos().getY() > 80) {
+        if (getPos().getY() < 40 || getPos().getY() > 80) {
             return -1; // Disabled
         }
 
@@ -133,8 +133,8 @@ public class MetaTileEntityPrimitiveMudPump extends MultiblockControllerBase imp
                 .aisle("       ", "       ", "       ", "       ", "       ", "       ")
                 .where('S', selfPredicate())
                 .where('A', frames(Materials.TreatedWood))
-                .where('B', states(new IBlockState[]{MetaBlocks.PLANKS.getState(BlockGregPlanks.BlockType.TREATED_PLANK)}))
-                .where('C', states(new IBlockState[]{MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.BRONZE_BRICKS)}).or(abilities(MultiblockAbility.PUMP_FLUID_HATCH)).or(metaTileEntities(MetaTileEntities.FLUID_EXPORT_HATCH[0], MetaTileEntities.FLUID_EXPORT_HATCH[1])))
+                .where('B', states(MetaBlocks.PLANKS.getState(BlockGregPlanks.BlockType.TREATED_PLANK)))
+                .where('C', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.BRONZE_BRICKS)).or(abilities(MultiblockAbility.PUMP_FLUID_HATCH)).or(metaTileEntities(MetaTileEntities.FLUID_EXPORT_HATCH[0], MetaTileEntities.FLUID_EXPORT_HATCH[1])))
                 .where(' ', any())
                 .build();
     }

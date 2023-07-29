@@ -36,7 +36,7 @@ public class MetaTileEntitySmokeStack extends RecipeMapMultiblockController {
                 .aisle("P").setRepeatable(2,6)
                 .aisle("F")
                 .where('S', this.selfPredicate())
-                .where('P', states(new IBlockState[]{this.getPipeCasingState()})
+                .where('P', states(this.getPipeCasingState())
                         .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setExactLimit(1)))
                 .where('F', abilities(MultiblockAbility.MUFFLER_HATCH).setExactLimit(1))
                 .build();

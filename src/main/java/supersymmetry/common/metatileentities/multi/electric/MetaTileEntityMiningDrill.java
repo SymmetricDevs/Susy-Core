@@ -61,7 +61,7 @@ public class MetaTileEntityMiningDrill extends RecipeMapMultiblockController {
                 .aisle("               ", "     DDDDD     ", "     DDDDD     ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ")
                 .where('S', selfPredicate())
                 .where('A', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)))
-                .where('B', states(new IBlockState[]{MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)})
+                .where('B', states(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel))
                         .or(autoAbilities(true, true, true, true, true, true, false)))
                 .where('C', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('D', states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)))
