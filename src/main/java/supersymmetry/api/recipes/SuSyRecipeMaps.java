@@ -298,6 +298,8 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_SIFT, ProgressWidget.MoveType.VERTICAL)
             .setSound(GTSoundEvents.BATH);
 
+    public static final RecipeMap<DronePadRecipeBuilder> DRONE_PAD = new RecipeMap<>("drone_pad", 1, 9, 0, 0, new DronePadRecipeBuilder(), false);
+
     public static void init(){
         RecipeMaps.SIFTER_RECIPES.setMaxFluidInputs(1);
         RecipeMaps.SIFTER_RECIPES.setMaxFluidOutputs(1);

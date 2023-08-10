@@ -1,0 +1,13 @@
+{
+  "ctm": {
+    "ctm_version": 1,
+    "type": "CTM",
+    "layer": "SOLID",
+    "textures": [
+      "gregtech:blocks/multiblock_casing/drone_pad_ctm"
+    ],
+    "extra": {
+      "connect_inside": true
+    }
+  }
+}
