@@ -4,18 +4,17 @@ import net.minecraft.client.audio.MovingSound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 import supersymmetry.api.sound.SusySounds;
-import supersymmetry.common.entities.EntityDropPod;
+import supersymmetry.common.entities.EntityDrone;
 
-public class MovingSoundDropPod extends MovingSound {
+public class MovingSoundDrone extends MovingSound {
 
-    private final EntityDropPod dropPod;
+    private final EntityDrone drone;
     private float distance = 0.0F;
 
-    public MovingSoundDropPod(EntityDropPod dropPod) {
-        super(SusySounds.ROCKET_LOOP, SoundCategory.NEUTRAL);
-        this.dropPod = dropPod;
-        this.repeat = true;
-        this.repeatDelay = 0;
+    public MovingSoundDrone(EntityDrone drone) {
+        super(SusySounds.DRONE_TAKEOFF, SoundCategory.NEUTRAL);
+        this.drone = drone;
+        this.repeat = false;
         this.volume = 0.5F;
     }
 
@@ -29,12 +28,12 @@ public class MovingSoundDropPod extends MovingSound {
 
     @Override
     public void update() {
-        if (this.dropPod.isDead) {
+        if (this.drone.isDead) {
             this.donePlaying = true;
         } else {
-            this.xPosF = (float) this.dropPod.posX;
-            this.yPosF = (float) this.dropPod.posY;
-            this.zPosF = (float) this.dropPod.posZ;
+            this.xPosF = (float) this.drone.posX;
+            this.yPosF = (float) this.drone.posY;
+            this.zPosF = (float) this.drone.posZ;
 
             this.distance = MathHelper.clamp(this.distance + 0.0025F, 0.0F, 1.0F);
         }
