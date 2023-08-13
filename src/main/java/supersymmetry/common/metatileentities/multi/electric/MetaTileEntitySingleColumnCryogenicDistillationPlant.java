@@ -40,7 +40,7 @@ public class MetaTileEntitySingleColumnCryogenicDistillationPlant extends Recipe
                 .aisle("XXX", "XFX", "XXX").setRepeatable(1,16)
                 .aisle("CCC", "CCC", "CCC")
                 .aisle("CEC", "E E", "CEC")
-                .aisle("DDD", "DDD", "DDD")
+                .aisle("DDD", "DED", "DDD")
                 .where('S', this.selfPredicate())
                 .where('C', states(this.getCasingState())
                         .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(3))
