@@ -7,6 +7,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -34,8 +35,14 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
     }
 
     public EntityDrone(World worldIn, double x, double y, double z) {
-        this(worldIn);
+        super(worldIn);
+        this.setLocationAndAngles(x, y, z, 0.F, 0.F);
+        this.setSize(1, 1);
         this.setEntityBoundingBox(new AxisAlignedBB(x-1, y+0, z-1, x+1, y+1, z+1));
+    }
+
+    public EntityDrone(World worldIn, BlockPos pos) {
+        this(worldIn, pos.getX() + 0.5F, pos.getZ() + 0.5F, pos.getZ() + 0.5F);
     }
 
     @Override

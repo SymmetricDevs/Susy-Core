@@ -61,6 +61,11 @@ public class DronePadRecipeBuilder extends RecipeBuilder<DronePadRecipeBuilder> 
         return this;
     }
 
+    @Override
+    public DronePadRecipeBuilder duration(int duration) {
+        return super.duration(Math.max(duration, 400));
+    }
+
     public IntList getDimensionIDs() {
         return this.recipePropertyStorage == null ? IntLists.EMPTY_LIST :
                 this.recipePropertyStorage.getRecipePropertyValue(DroneDimensionProperty.getInstance(),
