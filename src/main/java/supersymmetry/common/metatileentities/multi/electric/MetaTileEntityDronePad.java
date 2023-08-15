@@ -9,7 +9,6 @@ import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.recipes.Recipe;
-import gregtech.api.util.GTTransferUtils;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing;
@@ -29,7 +28,7 @@ import supersymmetry.common.entities.EntityDrone;
 public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
 
     private AxisAlignedBB landingAreaBB;
-    public EntityDrone drone;
+    public EntityDrone drone = null;
 
     public MetaTileEntityDronePad(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.DRONE_PAD);
@@ -81,12 +80,17 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
     }
 
     public void spawnDroneEntity() {
+        SusyLog.logger.info("Spawning Drone");
+        SusyLog.logger.info(String.valueOf(this.getWorld().provider.getDimension()));
+        SusyLog.logger.info(String.valueOf(this.getDroneSpawnPosition().getX()));
+        SusyLog.logger.info(String.valueOf(this.getDroneSpawnPosition().getY()));
+        SusyLog.logger.info(String.valueOf(this.getDroneSpawnPosition().getZ()));
         drone = new EntityDrone(this.getWorld(), this.getDroneSpawnPosition());
         this.getWorld().spawnEntity(drone);
     }
 
     public BlockPos getDroneSpawnPosition() {
-        net.minecraft.util.math.BlockPos offset = new net.minecraft.util.math.BlockPos(0, 1, 1.5);
+        net.minecraft.util.math.BlockPos offset = new net.minecraft.util.math.BlockPos(0, 2, 1.5);
 
         switch (this.getFrontFacing()) {
             case EAST -> {
@@ -112,7 +116,6 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
     }
 
     public void setStructureAABB() {
-        // Had to make it overshoot a little :(
         net.minecraft.util.math.BlockPos offsetBottomLeft = new net.minecraft.util.math.BlockPos(-1, 1, -1);
         net.minecraft.util.math.BlockPos offsetTopRight = new net.minecraft.util.math.BlockPos(1, 2, -3);
 
@@ -151,7 +154,6 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
         @Override
         protected void setupRecipe(Recipe recipe) {
             super.setupRecipe(recipe);
-            SusyLog.logger.info("Spawning Drone");
             this.getMetaTileEntity().spawnDroneEntity();
         }
 
