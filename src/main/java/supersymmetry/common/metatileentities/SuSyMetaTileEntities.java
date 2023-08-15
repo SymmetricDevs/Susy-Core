@@ -139,6 +139,7 @@ public class SuSyMetaTileEntities {
 
     public static SimpleMachineMetaTileEntity[] PHASE_SEPARATOR;
     public static SimpleMachineMetaTileEntity[] BATH_CONDENSER;
+    public static SimpleMachineMetaTileEntity[] ELECTROSTATIC_SEPARATOR;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -256,6 +257,8 @@ public class SuSyMetaTileEntities {
 
         registerSimpleMTE(PHASE_SEPARATOR, 12, 17020, "phase_separator", SuSyRecipeMaps.PHASE_SEPARATOR, SusyTextures.PHASE_SEPARATOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         registerSimpleMTE(BATH_CONDENSER, 0, 17034, "bath_condenser", SuSyRecipeMaps.BATH_CONDENSER, SusyTextures.BATH_CONDENSER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+
+        registerSimpleMTE(ELECTROSTATIC_SEPARATOR, 12, 17035, "electrostatic_separator", SuSyRecipeMaps.ELECTROSTATIC_SEPARATOR, SusyTextures.ELECTROSTATIC_SEPARATOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name, RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator, ICubeRenderer texture, boolean isBricked) {
@@ -340,6 +343,8 @@ public class SuSyMetaTileEntities {
         FLUID_DECOMPRESSOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
         WEAPONS_FACTORY = new SimpleMachineMetaTileEntity[GTValues.OpV];
         PHASE_SEPARATOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
+
+        ELECTROSTATIC_SEPARATOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
 
         BATH_CONDENSER = new SimpleMachineMetaTileEntity[1];
     }

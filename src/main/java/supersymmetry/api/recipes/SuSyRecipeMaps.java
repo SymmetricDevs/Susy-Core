@@ -298,6 +298,12 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_SIFT, ProgressWidget.MoveType.VERTICAL)
             .setSound(GTSoundEvents.BATH);
 
+    public static final RecipeMap<SimpleRecipeBuilder> ELECTROSTATIC_SEPARATOR = new RecipeMap<>("electrostatic_separator", 3, 3, 3, 3, new SimpleRecipeBuilder(), false)
+            .setSlotOverlay(false, false, GuiTextures.CRUSHED_ORE_OVERLAY)
+            .setSlotOverlay(true, false, GuiTextures.DUST_OVERLAY)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_MAGNET, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.ARC);
+
     public static void init(){
         RecipeMaps.SIFTER_RECIPES.setMaxFluidInputs(1);
         RecipeMaps.SIFTER_RECIPES.setMaxFluidOutputs(1);
