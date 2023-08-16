@@ -14,12 +14,14 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -80,33 +82,32 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
     }
 
     public void spawnDroneEntity() {
-        SusyLog.logger.info("Spawning Drone");
-        SusyLog.logger.info(String.valueOf(this.getWorld().provider.getDimension()));
-        SusyLog.logger.info(String.valueOf(this.getDroneSpawnPosition().getX()));
-        SusyLog.logger.info(String.valueOf(this.getDroneSpawnPosition().getY()));
-        SusyLog.logger.info(String.valueOf(this.getDroneSpawnPosition().getZ()));
-        drone = new EntityDrone(this.getWorld(), this.getDroneSpawnPosition());
-        this.getWorld().spawnEntity(drone);
+
+        NBTTagCompound nbttagcompound = new NBTTagCompound();
+        nbttagcompound.setString("id", "susy:drone");
+        Vec3d pos = this.getDroneSpawnPosition();
+
+        drone = (EntityDrone) AnvilChunkLoader.readWorldEntityPos(nbttagcompound, this.getWorld(), pos.x, pos.y, pos.z, true);
+
     }
 
-    public BlockPos getDroneSpawnPosition() {
-        net.minecraft.util.math.BlockPos offset = new net.minecraft.util.math.BlockPos(0, 2, 1.5);
+    public Vec3d getDroneSpawnPosition() {
 
         switch (this.getFrontFacing()) {
             case EAST -> {
-                offset = offset.rotate(Rotation.CLOCKWISE_90);
+                return new Vec3d(this.getPos().getX() - 1.5, this.getPos().getY() + 1., this.getPos().getZ() + 0.5);
             }
             case SOUTH -> {
-                offset = offset.rotate(Rotation.CLOCKWISE_180);
+                return new Vec3d(this.getPos().getX() + 0.5, this.getPos().getY() + 1., this.getPos().getZ() - 1.5);
             }
             case WEST -> {
-                offset = offset.rotate(Rotation.COUNTERCLOCKWISE_90);
+                return new Vec3d(this.getPos().getX() + 2.5, this.getPos().getY() + 1., this.getPos().getZ() + 0.5);
             }
             default -> {
+                return new Vec3d(this.getPos().getX() + 0.5, this.getPos().getY() + 1., this.getPos().getZ() + 2.5);
             }
         }
 
-        return getPos().add(offset);
     }
 
     @Override

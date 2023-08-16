@@ -32,12 +32,15 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
 
     public EntityDrone(World worldIn) {
         super(worldIn);
+        this.setSize(1.F, 1.F);
+        rideCooldown = -1;
     }
 
     public EntityDrone(World worldIn, double x, double y, double z) {
         super(worldIn);
         this.setLocationAndAngles(x, y, z, 0.F, 0.F);
-        this.setSize(1, 1);
+        this.setSize(1.F, 1.F);
+        rideCooldown = -1;
         this.setEntityBoundingBox(new AxisAlignedBB(x-1, y+0, z-1, x+1, y+1, z+1));
     }
 
