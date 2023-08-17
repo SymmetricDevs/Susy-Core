@@ -18,10 +18,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -31,6 +31,7 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
 
     private AxisAlignedBB landingAreaBB;
     public EntityDrone drone = null;
+    public boolean droneReachedSky;
 
     public MetaTileEntityDronePad(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.DRONE_PAD);
@@ -81,30 +82,36 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
         return this.drone != null && !this.drone.isDead;
     }
 
-    public void spawnDroneEntity() {
+    public void spawnDroneEntity(boolean descending) {
 
         NBTTagCompound nbttagcompound = new NBTTagCompound();
         nbttagcompound.setString("id", "susy:drone");
-        Vec3d pos = this.getDroneSpawnPosition();
+        Vec3d pos = this.getDroneSpawnPosition(descending);
 
         drone = (EntityDrone) AnvilChunkLoader.readWorldEntityPos(nbttagcompound, this.getWorld(), pos.x, pos.y, pos.z, true);
 
+        if (descending && drone != null) {
+            drone.setDescendingMode();
+            drone.setPadAltitude(this.getPos().getY());
+        }
     }
 
-    public Vec3d getDroneSpawnPosition() {
+    public Vec3d getDroneSpawnPosition(boolean descending) {
+
+        double altitude = descending ? 296.D : this.getPos().getY() + 1.;
 
         switch (this.getFrontFacing()) {
             case EAST -> {
-                return new Vec3d(this.getPos().getX() - 1.5, this.getPos().getY() + 1., this.getPos().getZ() + 0.5);
+                return new Vec3d(this.getPos().getX() - 1.5, altitude, this.getPos().getZ() + 0.5);
             }
             case SOUTH -> {
-                return new Vec3d(this.getPos().getX() + 0.5, this.getPos().getY() + 1., this.getPos().getZ() - 1.5);
+                return new Vec3d(this.getPos().getX() + 0.5, altitude, this.getPos().getZ() - 1.5);
             }
             case WEST -> {
-                return new Vec3d(this.getPos().getX() + 2.5, this.getPos().getY() + 1., this.getPos().getZ() + 0.5);
+                return new Vec3d(this.getPos().getX() + 2.5, altitude, this.getPos().getZ() + 0.5);
             }
             default -> {
-                return new Vec3d(this.getPos().getX() + 0.5, this.getPos().getY() + 1., this.getPos().getZ() + 2.5);
+                return new Vec3d(this.getPos().getX() + 0.5, altitude, this.getPos().getZ() + 2.5);
             }
         }
 
@@ -153,9 +160,25 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
         }
 
         @Override
+        public boolean isAllowOverclocking() {
+            return false;
+        }
+
+        @Override
         protected void setupRecipe(Recipe recipe) {
             super.setupRecipe(recipe);
-            this.getMetaTileEntity().spawnDroneEntity();
+            this.getMetaTileEntity().spawnDroneEntity(false);
+        }
+
+        @Override
+        protected void updateRecipeProgress() {
+            super.updateRecipeProgress();
+
+            this.getMetaTileEntity().droneReachedSky |= this.getMetaTileEntity().drone != null && this.getMetaTileEntity().drone.reachedSky();
+
+            if (progressTime == 400 && this.getMetaTileEntity().droneReachedSky) {
+                this.getMetaTileEntity().spawnDroneEntity(true);
+            }
         }
 
         @Override
@@ -174,6 +197,7 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
                 this.parallelRecipesPerformed = 0;
                 this.overclockResults = new int[]{0, 0};
             }
+            this.getMetaTileEntity().droneReachedSky = false;
         }
     }
 
