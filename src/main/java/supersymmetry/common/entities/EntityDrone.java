@@ -10,6 +10,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -72,6 +73,23 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
         super.onAddedToWorld();
         if (this.world.isRemote) {
             setupDroneSound();
+        }
+    }
+
+    public void setRotationFromFacing(EnumFacing facing) {
+        switch (facing) {
+            case EAST -> {
+                this.setRotation(90.F, 0.F);
+            }
+            case SOUTH -> {
+                this.setRotation(180.F, 0.F);
+            }
+            case WEST -> {
+                this.setRotation(270.F, 0.F);
+            }
+            default -> {
+                this.setRotation(0.F, 0.F);
+            }
         }
     }
 
@@ -153,9 +171,6 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
                     this.explode();
                 }
 
-                if (this.isDead) {
-                    this.motionY = 0.;
-                }
 
             } else if (descendingMode) {
                 this.motionY = -1.D * Math.min((this.posY - padAltitude) * 0.125, 2.);
@@ -168,7 +183,11 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
                 }
             }
 
-            this.isDead = this.posY > 300 || age > 255;
+            this.isDead |= this.posY > 300 || (age > 255 && !descendingMode);
+
+            if (this.isDead) {
+                this.motionY = 0.;
+            }
 
         } else if (this.soundDrone != null) {
 
@@ -177,7 +196,7 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
             }
 
             if (this.dataManager.get(HAS_LANDED)) {
-                this.soundDrone.startPlaying();
+                this.soundDrone.stopPlaying();
             }
 
         }

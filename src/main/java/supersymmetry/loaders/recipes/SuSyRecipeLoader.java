@@ -69,14 +69,15 @@ public class SuSyRecipeLoader {
                 .duration(4000)
                 .buildAndRegister();
 
-         */
+
         SuSyRecipeMaps.DRONE_PAD.recipeBuilder()
                 .input(ingot, Materials.Iron)
                 .output(Items.BEEF, 16)
                 .duration(10)
-                .EUt(7)
+                .dimension(0)
+                .EUt(2)
                 .buildAndRegister();
-
+        */
     }
 
     private static void registerStoneRecipes(){

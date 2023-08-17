@@ -13,6 +13,7 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
+import it.unimi.dsi.fastutil.ints.IntLists;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
@@ -23,9 +24,12 @@ import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.api.recipes.properties.DroneDimensionProperty;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.entities.EntityDrone;
+
+import java.util.List;
 
 public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
 
@@ -79,7 +83,14 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
     }
 
     public boolean hasDrone() {
-        return this.drone != null && !this.drone.isDead;
+        if (this.drone != null && !this.drone.isDead) {
+            for (EntityDrone entity : this.getWorld().getEntitiesWithinAABB(EntityDrone.class, this.landingAreaBB)) {
+                if (entity == this.drone) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public void spawnDroneEntity(boolean descending) {
@@ -90,9 +101,12 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
 
         drone = (EntityDrone) AnvilChunkLoader.readWorldEntityPos(nbttagcompound, this.getWorld(), pos.x, pos.y, pos.z, true);
 
-        if (descending && drone != null) {
-            drone.setDescendingMode();
-            drone.setPadAltitude(this.getPos().getY());
+        if (drone != null) {
+            drone.setRotationFromFacing(this.getFrontFacing());
+            if (descending) {
+                drone.setDescendingMode();
+                drone.setPadAltitude(this.getPos().getY());
+            }
         }
     }
 
@@ -124,27 +138,36 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
     }
 
     public void setStructureAABB() {
-        net.minecraft.util.math.BlockPos offsetBottomLeft = new net.minecraft.util.math.BlockPos(-1, 1, -1);
-        net.minecraft.util.math.BlockPos offsetTopRight = new net.minecraft.util.math.BlockPos(1, 2, -3);
+
+        double x = this.getPos().getX();
+        double y = this.getPos().getY();
+        double z = this.getPos().getZ();
 
         switch (this.getFrontFacing()) {
+
             case EAST -> {
-                offsetBottomLeft = offsetBottomLeft.rotate(Rotation.CLOCKWISE_90);
-                offsetTopRight = offsetTopRight.rotate(Rotation.CLOCKWISE_90);
+                this.landingAreaBB = new AxisAlignedBB(x - 1, y + 1, z + 1, x - 3, y + 2, z - 1);
             }
             case SOUTH -> {
-                offsetBottomLeft = offsetBottomLeft.rotate(Rotation.CLOCKWISE_180);
-                offsetTopRight = offsetTopRight.rotate(Rotation.CLOCKWISE_180);
+                this.landingAreaBB = new AxisAlignedBB(x - 1, y + 1, z - 1, x + 1, y + 2, z - 3);
             }
             case WEST -> {
-                offsetBottomLeft = offsetBottomLeft.rotate(Rotation.COUNTERCLOCKWISE_90);
-                offsetTopRight = offsetTopRight.rotate(Rotation.COUNTERCLOCKWISE_90);
+                this.landingAreaBB = new AxisAlignedBB(x + 1, y + 1, z - 1, x + 3, y + 2, z + 1);
             }
             default -> {
+                this.landingAreaBB = new AxisAlignedBB(x + 1, y + 1, z + 1, x - 1, y + 2, z + 3);
             }
         }
 
-        this.landingAreaBB = new AxisAlignedBB(getPos().add(offsetBottomLeft), getPos().add(offsetTopRight));
+    }
+
+    public boolean checkRecipe(@NotNull Recipe recipe) {
+        for (int dimension : recipe.getProperty(DroneDimensionProperty.getInstance(), IntLists.EMPTY_LIST)) {
+            if (dimension == this.getWorld().provider.getDimension()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static class DronePadWorkable extends MultiblockRecipeLogic {
@@ -165,6 +188,11 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
         }
 
         @Override
+        public boolean checkRecipe(@NotNull Recipe recipe) {
+            return ((MetaTileEntityDronePad) metaTileEntity).checkRecipe(recipe) && super.checkRecipe(recipe);
+        }
+
+        @Override
         protected void setupRecipe(Recipe recipe) {
             super.setupRecipe(recipe);
             this.getMetaTileEntity().spawnDroneEntity(false);
@@ -176,7 +204,7 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
 
             this.getMetaTileEntity().droneReachedSky |= this.getMetaTileEntity().drone != null && this.getMetaTileEntity().drone.reachedSky();
 
-            if (progressTime == 400 && this.getMetaTileEntity().droneReachedSky) {
+            if (maxProgressTime - progressTime == 240 && this.getMetaTileEntity().droneReachedSky) {
                 this.getMetaTileEntity().spawnDroneEntity(true);
             }
         }
@@ -197,6 +225,7 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
                 this.parallelRecipesPerformed = 0;
                 this.overclockResults = new int[]{0, 0};
             }
+            this.getMetaTileEntity().drone.setDead();
             this.getMetaTileEntity().droneReachedSky = false;
         }
     }

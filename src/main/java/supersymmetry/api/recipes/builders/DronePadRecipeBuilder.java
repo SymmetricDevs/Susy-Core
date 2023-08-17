@@ -63,7 +63,7 @@ public class DronePadRecipeBuilder extends RecipeBuilder<DronePadRecipeBuilder> 
 
     @Override
     public DronePadRecipeBuilder duration(int duration) {
-        return super.duration(Math.max(duration, 400));
+        return super.duration(Math.max(duration, 800));
     }
 
     public IntList getDimensionIDs() {

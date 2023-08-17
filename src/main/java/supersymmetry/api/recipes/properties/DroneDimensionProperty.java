@@ -8,6 +8,8 @@ import gregtech.api.recipes.recipeproperties.RecipeProperty;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.client.resources.I18n;
 
+import java.util.Map;
+
 public class DroneDimensionProperty extends RecipeProperty<IntList> {
 
     public static final String KEY = "dimension";
@@ -31,7 +33,7 @@ public class DroneDimensionProperty extends RecipeProperty<IntList> {
     }
 
     private static String getDimensionsForRecipe(IntList value) {
-        Int2ObjectMap<String> dimNames = (Int2ObjectMap<String>) WorldGenRegistry.getNamedDimensions();
+        Map<Integer, String> dimNames = WorldGenRegistry.getNamedDimensions();
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < value.size(); i++) {
             builder.append(dimNames.getOrDefault(value.getInt(i), String.valueOf(value.getInt(i))));
