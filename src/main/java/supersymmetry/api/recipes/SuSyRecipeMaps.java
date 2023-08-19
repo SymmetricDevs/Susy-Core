@@ -108,7 +108,7 @@ public class SuSyRecipeMaps {
             .setSlotOverlay(true, false, SusyGuiTextures.LARGE_REACTOR_ITEM_OVERLAY)
             .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
-    public static final RecipeMap<CatalystRecipeBuilder> POLYMERIZATION_RECIPES = new RecipeMap<>("polymerization_tank", 2, 1, 2, 1, new CatalystRecipeBuilder(), false)
+    public static final RecipeMap<CatalystRecipeBuilder> POLYMERIZATION_RECIPES = new RecipeMap<>("polymerization_tank", 2, 1, 3, 1, new CatalystRecipeBuilder(), false)
             .setSlotOverlay(false, true, GuiTextures.MOLECULAR_OVERLAY_3)
             .setSlotOverlay(true, true, GuiTextures.MOLECULAR_OVERLAY_3)
             .setSlotOverlay(false, false, GuiTextures.MOLECULAR_OVERLAY_1)
