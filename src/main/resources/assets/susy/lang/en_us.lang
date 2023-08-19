@@ -548,6 +548,21 @@ gregtech.machine.phase_separator.uiv.name=Epic Phase Separator III
 gregtech.machine.phase_separator.uxv.name=Epic Phase Separator IV
 gregtech.machine.phase_separator.opv.name=Legendary Phase Separator
 
+# Electrostatic Separator
+gregtech.machine.electrostatic_separator.lv.name=Basic Electrostatic Separator
+gregtech.machine.electrostatic_separator.mv.name=Advanced Electrostatic Separator
+gregtech.machine.electrostatic_separator.hv.name=Advanced Electrostatic Separator II
+gregtech.machine.electrostatic_separator.ev.name=Advanced Electrostatic Separator III
+gregtech.machine.electrostatic_separator.iv.name=Elite Electrostatic Separator
+gregtech.machine.electrostatic_separator.luv.name=Elite Electrostatic Separator II
+gregtech.machine.electrostatic_separator.zpm.name=Elite Electrostatic Separator III
+gregtech.machine.electrostatic_separator.uv.name=Ultimate Electrostatic Separator
+gregtech.machine.electrostatic_separator.uhv.name=Epic Electrostatic Separator
+gregtech.machine.electrostatic_separator.uev.name=Epic Electrostatic Separator II
+gregtech.machine.electrostatic_separator.uiv.name=Epic Electrostatic Separator III
+gregtech.machine.electrostatic_separator.uxv.name=Epic Electrostatic Separator IV
+gregtech.machine.electrostatic_separator.opv.name=Legendary Electrostatic Separator
+
 gregtech.machine.bath_condenser.lv.name=Bath Condenser
 gregtech.machine.bath_condenser.lv.tooltip=Only works inside a Cryogenic Distillation Tower
 
