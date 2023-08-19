@@ -11,6 +11,7 @@ import gregtech.api.recipes.ingredients.nbtmatch.NBTTagType;
 import gregtech.api.unification.material.Materials;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -68,9 +69,15 @@ public class SuSyRecipeLoader {
                 .duration(4000)
                 .buildAndRegister();
 
-         */
 
-
+        SuSyRecipeMaps.DRONE_PAD.recipeBuilder()
+                .input(ingot, Materials.Iron)
+                .output(Items.BEEF, 16)
+                .duration(10)
+                .dimension(0)
+                .EUt(2)
+                .buildAndRegister();
+        */
     }
 
     private static void registerStoneRecipes(){

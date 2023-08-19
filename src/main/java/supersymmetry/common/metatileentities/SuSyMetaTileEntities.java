@@ -117,6 +117,7 @@ public class SuSyMetaTileEntities {
 
     public static MetaTileEntityPressureSwingAdsorber PRESSURE_SWING_ADSORBER;
     public static MetaTileEntityReactionFurnace REACTION_FURNACE;
+    public static MetaTileEntityDronePad DRONE_PAD;
 
     public static SusyMetaTileEntityDumpingHatch DUMPING_HATCH;
 
@@ -222,6 +223,8 @@ public class SuSyMetaTileEntities {
 
         PRESSURE_SWING_ADSORBER = registerMetaTileEntity(15060, new MetaTileEntityPressureSwingAdsorber(susyId("pressure_swing_adsorber")));
         REACTION_FURNACE = registerMetaTileEntity(15061, new MetaTileEntityReactionFurnace(susyId("reaction_furnace")));
+
+        DRONE_PAD = registerMetaTileEntity(15062, new MetaTileEntityDronePad(susyId("drone_pad")));
 
         LEAD_DRUM = registerMetaTileEntity(14553, new MetaTileEntityDrum(susyId("drum.lead"), Materials.Lead, 32000));
         BRASS_DRUM = registerMetaTileEntity(17010, new MetaTileEntityCryoDrum(susyId("drum.brass"), Materials.Brass, 16000, 1280, false, false));
