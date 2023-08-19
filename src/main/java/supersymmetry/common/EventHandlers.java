@@ -4,6 +4,7 @@ import com.alcatrazescapee.notreepunching.common.items.ItemCeramicBucket;
 import com.alcatrazescapee.notreepunching.common.items.ModItems;
 import gregtech.api.util.GTTeleporter;
 import gregtech.api.util.TeleportHandler;
+import gregtech.common.items.MetaItems;
 import gregtechfoodoption.item.GTFOMetaItem;
 import net.minecraft.block.BlockCauldron;
 import net.minecraft.block.state.IBlockState;
@@ -57,6 +58,7 @@ public class EventHandlers {
             event.player.startRiding(dropPod);
 
             event.player.addItemStackToInventory(GTFOMetaItem.EMERGENCY_RATIONS.getStackForm(10));
+            event.player.addItemStackToInventory(MetaItems.PROSPECTOR_LV.getChargedStack(100000));
         }
     }
 
