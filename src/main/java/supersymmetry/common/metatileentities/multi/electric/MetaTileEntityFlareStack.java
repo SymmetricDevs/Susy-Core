@@ -18,6 +18,7 @@ import net.minecraft.util.ResourceLocation;
 import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
+import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nonnull;
 
@@ -58,8 +59,9 @@ public class MetaTileEntityFlareStack extends RecipeMapMultiblockController {
     }
 
     @Nonnull
+    @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.BLAST_FURNACE_OVERLAY;
+        return SusyTextures.FLARE_STACK_OVERLAY;
     }
 
     @Override
