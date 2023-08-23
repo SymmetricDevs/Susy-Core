@@ -51,6 +51,6 @@ public class MetaTileEntityCondenser extends RecipeMapMultiblockController {
     @Nonnull
     @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.BLAST_FURNACE_OVERLAY;
+        return SusyTextures.CONDENSER_OVERLAY;
     }
 }

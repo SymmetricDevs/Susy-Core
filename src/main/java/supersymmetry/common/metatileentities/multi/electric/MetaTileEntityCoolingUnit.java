@@ -60,6 +60,6 @@ public class MetaTileEntityCoolingUnit extends RecipeMapMultiblockController {
     @Nonnull
     @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.BLAST_FURNACE_OVERLAY;
+        return SusyTextures.COOLING_UNIT_OVERLAY;
     }
 }
