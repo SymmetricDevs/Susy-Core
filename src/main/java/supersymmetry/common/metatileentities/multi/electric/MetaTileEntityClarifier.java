@@ -83,7 +83,7 @@ public class MetaTileEntityClarifier extends RecipeMapMultiblockController {
     @Nonnull
     @Override
     protected ICubeRenderer getFrontOverlay() {
-        return SusyTextures.CLARIFIER_OVERLAY;
+        return Textures.BLAST_FURNACE_OVERLAY;
     }
 
     @Override
