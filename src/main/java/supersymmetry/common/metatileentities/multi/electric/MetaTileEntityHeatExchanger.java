@@ -51,7 +51,7 @@ public class MetaTileEntityHeatExchanger extends RecipeMapMultiblockController {
                         .or(autoAbilities(false, true, false, false, false, false, false)))
                 .where('D', states(MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE)))
                 .where('E', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
-                        .or(autoAbilities(false, false, true, false, false, true, false)))
+                        .or(autoAbilities(false, false, true, false, false, false, false)))
                 .build();
     }
 
