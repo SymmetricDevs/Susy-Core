@@ -282,7 +282,7 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.FURNACE);
 
-    public static final RecipeMap<SimpleRecipeBuilder> PHASE_SEPARATOR = new RecipeMap<>("phase_separator", 0, 0, 2, 2, new NoEnergyRecipeBuilder(), false)
+    public static final RecipeMap<NoEnergyRecipeBuilder> PHASE_SEPARATOR = new RecipeMap<>("phase_separator", 0, 0, 2, 2, new NoEnergyRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_EXTRACT, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.BATH);
 
