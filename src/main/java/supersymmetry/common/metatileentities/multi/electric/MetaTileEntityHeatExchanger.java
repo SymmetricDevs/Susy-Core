@@ -42,7 +42,7 @@ public class MetaTileEntityHeatExchanger extends RecipeMapMultiblockController {
                 .aisle("CCC", "CDC", "ACA")
                 .aisle("CCC", "CDC", "ACA")
                 .aisle("CCC", "CDC", "ACA")
-                .aisle("CCC", "BSB", "ABA")
+                .aisle("CCC", "BSB", "AEA")
                 .where('S', selfPredicate())
                 .where('A', states(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)))
                 .where('B', autoAbilities(false, false, false, false, false, true, false).setMinGlobalLimited(2)
