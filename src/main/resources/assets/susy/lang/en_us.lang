@@ -230,9 +230,7 @@ gregtech.machine.rotary_kiln.name=Rotary Kiln
 gregtech.machine.low_pressure_cryogenic_distillation_plant.name=Low Pressure Cryogenic Distillation Plant
 gregtech.machine.high_pressure_cryogenic_distillation_plant.name=High Pressure Cryogenic Distillation Plant
 gregtech.machine.single_column_cryogenic_distillation_plant.name=Single Column Cryogenic Distillation Plant
-gregtech.machine.contact_cooler.name=Contact Cooler
 gregtech.machine.reverberatory_furnace.name=Reverberatory Furnace
-gregtech.machine.tapped_off_heat_exchanger.name=Tapped-Off Heat Exchanger
 
 gregtech.machine.drone_pad.name=Drone Pad
 
@@ -538,19 +536,7 @@ gregtech.machine.weapons_factory.uxv.name=Epic Weapons Factory IV
 gregtech.machine.weapons_factory.opv.name=Legendary Weapons Factory
 
 # Phase Separator
-gregtech.machine.phase_separator.lv.name=Basic Phase Separator
-gregtech.machine.phase_separator.mv.name=Advanced Phase Separator
-gregtech.machine.phase_separator.hv.name=Advanced Phase Separator II
-gregtech.machine.phase_separator.ev.name=Advanced Phase Separator III
-gregtech.machine.phase_separator.iv.name=Elite Phase Separator
-gregtech.machine.phase_separator.luv.name=Elite Phase Separator II
-gregtech.machine.phase_separator.zpm.name=Elite Phase Separator III
-gregtech.machine.phase_separator.uv.name=Ultimate Phase Separator
-gregtech.machine.phase_separator.uhv.name=Epic Phase Separator
-gregtech.machine.phase_separator.uev.name=Epic Phase Separator II
-gregtech.machine.phase_separator.uiv.name=Epic Phase Separator III
-gregtech.machine.phase_separator.uxv.name=Epic Phase Separator IV
-gregtech.machine.phase_separator.opv.name=Legendary Phase Separator
+gregtech.machine.phase_separator.lv.name=Phase Separator
 
 # Electrostatic Separator
 gregtech.machine.electrostatic_separator.lv.name=Basic Electrostatic Separator
@@ -619,11 +605,9 @@ recipemap.froth_flotation.name=Froth Flotation
 recipemap.rotary_kiln.name=Rotary Kiln
 recipemap.low_pressure_cryogenic_distillation.name=Low Pressure Cryogenic Distillation
 recipemap.high_pressure_cryogenic_distillation.name=High Pressure Cryogenic Distillation
-recipemap.contact_cooler.name=Contact Cooling
 recipemap.reverberatory_furnace.name=Reverberatory Furnace
 recipemap.phase_separator.name=Phase Separation
 recipemap.bath_condenser.name=Bath Condenser
-recipemap.tapped_off_heat_exchanger.name=Tapped-Off Heat Exchanger
 recipemap.drone_pad.name=Drone Pad
 
 gregtech.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.

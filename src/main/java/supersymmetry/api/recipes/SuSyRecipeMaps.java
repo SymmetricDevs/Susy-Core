@@ -169,11 +169,7 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_COMPRESS, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.COMPRESSOR);
 
-    public static final RecipeMap<NoEnergyRecipeBuilder> HEAT_EXCHANGER_RECIPES = new RecipeMap<>("heat_exchanger", 0, 0, 2, 2, new NoEnergyRecipeBuilder(), false)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressWidget.MoveType.HORIZONTAL)
-            .setSound(GTSoundEvents.COOLING);
-
-    public static final RecipeMap<NoEnergyRecipeBuilder> TAPPED_OFF_HEAT_EXCHANGER_RECIPES = new RecipeMap<>("tapped_off_heat_exchanger", 0, 0, 2, 3, new NoEnergyRecipeBuilder(), false)
+    public static final RecipeMap<NoEnergyRecipeBuilder> HEAT_EXCHANGER_RECIPES = new RecipeMap<>("heat_exchanger", 1, 0, 2, 2, new NoEnergyRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.COOLING);
 
@@ -286,12 +282,8 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.FURNACE);
 
-    public static final RecipeMap<SimpleRecipeBuilder> PHASE_SEPARATOR = new RecipeMap<>("phase_separator", 0, 0, 2, 2, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<NoEnergyRecipeBuilder> PHASE_SEPARATOR = new RecipeMap<>("phase_separator", 0, 0, 2, 2, new NoEnergyRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_EXTRACT, ProgressWidget.MoveType.HORIZONTAL)
-            .setSound(GTSoundEvents.BATH);
-
-    public static final RecipeMap<SimpleRecipeBuilder> CONTACT_COOLER = new RecipeMap<>("contact_cooler", 0, 0, 2, 2, new SimpleRecipeBuilder(), false)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_SIFT, ProgressWidget.MoveType.VERTICAL_DOWNWARDS)
             .setSound(GTSoundEvents.BATH);
 
     public static final RecipeMap<NoEnergyRecipeBuilder> BATH_CONDENSER = new RecipeMap<>("bath_condenser", 0, 0, 2, 3, new NoEnergyRecipeBuilder(), false)

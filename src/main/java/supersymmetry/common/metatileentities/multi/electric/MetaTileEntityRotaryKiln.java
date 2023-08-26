@@ -41,8 +41,8 @@ public class MetaTileEntityRotaryKiln extends RecipeMapMultiblockController {
 
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle("A    A    A", "A    A    A", "L    A    R", "LCCCCMCCCCR", "L    A    R")
-                .aisle("A    A    A", "A    A    A", "LCCCCMCCCCR", "L#########R", "LCCCCMCCCCR")
+                .aisle("A    A    A", "A    A    A", "L    A    R", "LCCCCNCCCCR", "L    A    R")
+                .aisle("A    A    A", "A    A    A", "LCCCCNCCCCR", "L#########R", "LCCCCMCCCCR")
                 .aisle("A    A    A", "A    A    A", "L    A    R", "LCCCCSCCCCR", "L    A    R")
                 .where('S', selfPredicate())
                 .where('A', states(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)))
@@ -54,8 +54,8 @@ public class MetaTileEntityRotaryKiln extends RecipeMapMultiblockController {
                         .or(autoAbilities(false, false, false, true, true, false, false))
                         .or(autoAbilities(true, false, false, false, false, false, false).setMinGlobalLimited(0)))
                 .where('M', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
-                        .or(autoAbilities(false, true, false, false, false, false, false))
-                        .or(autoAbilities(true, false, false, false, false, false, false).setMinGlobalLimited(0)))
+                        .or(autoAbilities(false, true, false, false, false, false, false)))
+                .where('N', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)))
                 .where(' ', any())
                 .where('#', air())
                 .build();
