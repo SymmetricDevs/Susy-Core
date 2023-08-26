@@ -40,6 +40,8 @@ public class MetaTileEntityMultiStageFlashDistiller extends RecipeMapMultiblockC
     }
 
     protected BlockPattern createStructurePattern() {
+        TraceabilityPredicate maintenanceEnergy = autoAbilities(true, true, false, false, false, false, false);
+
         return FactoryBlockPattern.start()
                 .aisle(" EEEB", " BEEB", " BEEB", " EEEB", "  BBB")
                 .aisle(" AAA ", " B#B ", " B#BB", " AAA ", "  B  ")
@@ -57,18 +59,18 @@ public class MetaTileEntityMultiStageFlashDistiller extends RecipeMapMultiblockC
                 .aisle(" AAAC", " B#BC", " B#BC", " AAAC", "  BCC")
                 .aisle(" FFF ", " FSF ", " FFF ", " FFF ", "  B  ")
                 .where('S', selfPredicate())
-                .where('A', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
-                        .or(abilities(MultiblockAbility.INPUT_ENERGY).setMaxGlobalLimited(1))
-                        .or(abilities(MultiblockAbility.MAINTENANCE_HATCH).setMaxGlobalLimited(1)))
-                .where('B', states(MetaBlocks.BOILER_CASING.getState((BoilerCasingType.STEEL_PIPE))))
+                .where('B', states(MetaBlocks.BOILER_CASING.getState((BlockBoilerCasing.BoilerCasingType.STEEL_PIPE))))
                 .where('C', states(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)))
+                .where('A', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
+                        .or(maintenanceEnergy))
                 .where('D', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STAINLESS_CLEAN))
-                        .or(abilities(MultiblockAbility.INPUT_ENERGY).setMaxGlobalLimited(1))
-                        .or(abilities(MultiblockAbility.MAINTENANCE_HATCH).setMaxGlobalLimited(1)))
+                        .or(maintenanceEnergy))
                 .where('E', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
-                        .or(autoAbilities(true, true, false, false, false, true, false)))
+                        .or(maintenanceEnergy)
+                        .or(autoAbilities(false, false, false, false, false, true, false)))
                 .where('F', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
-                        .or(autoAbilities(true, true, false, false, true, false, false)))
+                        .or(maintenanceEnergy)
+                        .or(autoAbilities(false, false, false, false, true, false, false)))
                 .where(' ', any())
                 .where('#', air())
                 .build();
