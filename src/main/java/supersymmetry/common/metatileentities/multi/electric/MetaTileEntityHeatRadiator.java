@@ -37,16 +37,15 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start(RIGHT, FRONT, UP)
                 .aisle("AAAAASAAAAA")
-                .aisle("DBBBBBBBBBC").setRepeatable(1,14)
+                .aisle("CBBBBBBBBBC").setRepeatable(1,14)
                 .aisle("AAAAAAAAAAA")
                 .where('S', selfPredicate())
                 .where('A', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
                         .or(autoAbilities(false, true, false, false, false, false, false)))
                 .where('B', states(getRadiatorElementState()))
                 .where('C', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
-                        .or(autoAbilities(false, false, false, false, true, false, false)))
-                .where('D', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
-                        .or(autoAbilities(false, false, false, false, false, true, false)))
+                        .or(autoAbilities(false, false, false, false, true, false, false)).setMinGlobalLimited(1)
+                        .or(autoAbilities(false, false, false, false, false, true, false)).setMinGlobalLimited(1))
                 .build();
     }
 
