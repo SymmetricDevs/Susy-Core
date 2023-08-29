@@ -3,6 +3,7 @@ package supersymmetry.client;
 import gregtech.api.GTValues;
 import gregtech.api.items.metaitem.MetaOreDictItem;
 import gregtech.api.unification.OreDictUnifier;
+import gregtech.api.unification.stack.UnificationEntry;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
@@ -18,7 +19,9 @@ import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
 import supersymmetry.common.CommonProxy;
 import supersymmetry.common.SusyMetaEntities;
+import supersymmetry.common.blocks.SheetedFrameItemBlock;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.blocks.SuSyMetaBlocks;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -35,13 +38,28 @@ public class ClientProxy extends CommonProxy {
     }
 
     @SubscribeEvent
+    public static void addMaterialFormulaHandler(@Nonnull ItemTooltipEvent event) {
+        //ensure itemstack is a sheetedframe
+        ItemStack itemStack = event.getItemStack();
+        if (!(itemStack.getItem() instanceof SheetedFrameItemBlock)) return;
+
+        UnificationEntry unificationEntry = OreDictUnifier.getUnificationEntry(itemStack);
+
+        //ensure chemical composition does exist to be added
+        if (unificationEntry != null && unificationEntry.material != null) {
+            if (unificationEntry.material.getChemicalFormula() != null && !unificationEntry.material.getChemicalFormula().isEmpty())
+                //pretty YELLOW is being auto-converted to a string
+                event.getToolTip().add(TextFormatting.YELLOW + unificationEntry.material.getChemicalFormula());
+        }
+    }
+
+    @SubscribeEvent
     public static void addCatalystTooltipHandler(@Nonnull ItemTooltipEvent event) {
         ItemStack itemStack = event.getItemStack();
         // Handles Item tooltips
         Collection<String> tooltips = new ArrayList<>();
 
-        if (itemStack.getItem() instanceof MetaOreDictItem) { // Test for OreDictItems
-            MetaOreDictItem oreDictItem = (MetaOreDictItem) itemStack.getItem();
+        if (itemStack.getItem() instanceof MetaOreDictItem oreDictItem) { // Test for OreDictItems
             Optional<String> oreDictName = OreDictUnifier.getOreDictionaryNames(itemStack).stream().findFirst();
             if (oreDictName.isPresent() && oreDictItem.OREDICT_TO_FORMULA.containsKey(oreDictName.get()) && !oreDictItem.OREDICT_TO_FORMULA.get(oreDictName.get()).isEmpty()) {
                 tooltips.add(TextFormatting.YELLOW + oreDictItem.OREDICT_TO_FORMULA.get(oreDictName.get()));
@@ -76,5 +94,6 @@ public class ClientProxy extends CommonProxy {
     @SubscribeEvent
     public static void registerModels(@NotNull ModelRegistryEvent event) {
         SuSyBlocks.registerItemModels();
+        SuSyMetaBlocks.registerItemModels();
     }
 }

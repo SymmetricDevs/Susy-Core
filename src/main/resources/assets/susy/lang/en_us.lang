@@ -161,7 +161,6 @@ item.material.oreprefix.catalystBed=%s Catalyst Bed
 item.material.oreprefix.catalystPellet=%s Catalyst Pellet
 item.material.oreprefix.sheetedFrame=%s Sheeted Frame Box
 
-
 # Machines/Multiblocks
 gregtech.machine.magnetic_refrigerator.name=Magnetic Refrigerator
 gregtech.multiblock.magnetic_refrigerator.min_temperature=§bTemperature Limit: %s
