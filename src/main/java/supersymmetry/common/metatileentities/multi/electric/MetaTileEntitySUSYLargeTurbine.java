@@ -14,6 +14,7 @@ import gregtech.api.recipes.RecipeMap;
 import gregtech.api.util.BlockInfo;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.common.blocks.BlockMetalCasing;
+import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
@@ -76,13 +77,13 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
                 .aisle("GAAAOOOOO", "GDDDDCCCF", "GAAAAAAAA")
                 .aisle("GAAAAAAAO", "GSAAAAAAO", "G   A   A")
                 .where('S', selfPredicate())
-                .where('A', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID)))
-                .where('O', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID))
+                .where('A', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING)))
+                .where('O', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING))
                         .or(autoAbilities(false, true, false, false, false, true, false)))
                 .where('C', coilOrientation())
                 .where('D', rotorOrientation())
                 .where('F', abilities(MultiblockAbility.OUTPUT_ENERGY))
-                .where('G', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID))
+                .where('G', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING))
                         .or(autoAbilities(false, false, false, false, true, false, false)))
                 .where(' ', any())
                 .build();
@@ -94,8 +95,9 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
             IBlockState state = blockWorldState.getBlockState();
             if (!(state.getBlock() instanceof BlockTurbineRotor)) return false;
             EnumFacing facing = MetaTileEntitySUSYLargeTurbine.this.getFrontFacing();
+            EnumFacing rotorFacing = EnumFacing.byHorizontalIndex((facing.getHorizontalIndex() +1) % 4).getOpposite();
             //makes sure rotor's front faces direction rotated 90 degrees CW of controller front, then the opposite is gotten such that it faces 90 CCW from controller front
-            return state == steelRotorState().withProperty(FACING, EnumFacing.byHorizontalIndex((facing.getHorizontalIndex() +1) % 4).getOpposite());
+            return state == steelRotorState().withProperty(FACING, rotorFacing) || state == steelRotorState().withProperty(FACING, rotorFacing.getOpposite());
         }, supplier);
     }
 
