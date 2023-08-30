@@ -18,7 +18,6 @@ import gregtech.client.utils.TooltipHelper;
 import gregtech.common.blocks.*;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.StoneVariantBlock;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
