@@ -129,6 +129,7 @@ public class MetaTileEntityMiningDrill extends RecipeMapMultiblockController {
         super.addInformation(stack, player, tooltip, advanced);
         tooltip.add(TooltipHelper.RAINBOW_SLOW + I18n.format("gregtech.machine.perfect_oc", new Object[0]));
     }
+    
     protected static class IndustrialDrillWorkableHandler extends MultiblockRecipeLogic {
 
         public IndustrialDrillWorkableHandler(RecipeMapMultiblockController tileEntity, boolean hasPerfectOC) {
