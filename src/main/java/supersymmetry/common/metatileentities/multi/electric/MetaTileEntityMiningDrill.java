@@ -14,13 +14,16 @@ import gregtech.api.recipes.Recipe;
 import gregtech.api.util.GTUtility;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
+import gregtech.client.utils.TooltipHelper;
 import gregtech.common.blocks.*;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.StoneVariantBlock;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import gregtech.api.unification.material.Materials;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
@@ -28,12 +31,14 @@ import supersymmetry.common.blocks.BlockDrillHead;
 import supersymmetry.common.blocks.SuSyBlocks;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class MetaTileEntityMiningDrill extends RecipeMapMultiblockController {
     protected BlockPos targetBlock = null;
     public MetaTileEntityMiningDrill(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.MINING_DRILL_RECIPES);
-        this.recipeMapWorkable = new IndustrialDrillWorkableHandler(this);
+        this.recipeMapWorkable = new IndustrialDrillWorkableHandler(this, true);
     }
 
     @Override
@@ -121,10 +126,14 @@ public class MetaTileEntityMiningDrill extends RecipeMapMultiblockController {
         return false;
     }
 
+    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
+        super.addInformation(stack, player, tooltip, advanced);
+        tooltip.add(TooltipHelper.RAINBOW_SLOW + I18n.format("gregtech.machine.perfect_oc", new Object[0]));
+    }
     protected static class IndustrialDrillWorkableHandler extends MultiblockRecipeLogic {
 
-        public IndustrialDrillWorkableHandler(RecipeMapMultiblockController tileEntity) {
-            super(tileEntity);
+        public IndustrialDrillWorkableHandler(RecipeMapMultiblockController tileEntity, boolean hasPerfectOC) {
+            super(tileEntity, hasPerfectOC);
         }
 
         @Override
