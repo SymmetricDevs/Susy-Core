@@ -129,10 +129,10 @@ public class SuSyMaterialRecipeHandler {
         if (mat.hasFluid()) {
             //L = 144L aka 1 ingot. Considered using M, but I'm pretty sure that isn't meant to be used anywhere other than oredict
             RecipeMaps.EXTRACTOR_RECIPES.recipeBuilder()
-                    .input(SusyOrePrefix.sheetedFrame, mat, 6)
-                    .fluidOutputs(mat.getFluid(L * 5))
+                    .input(SusyOrePrefix.sheetedFrame, mat, 1)
+                    .fluidOutputs(mat.getFluid(120)) // L *5/6
                     .EUt(VA[LV] * voltageMultiplier) //should prevent getting any fluids before you should and fits standard
-                    .duration(matRecycleTime)
+                    .duration((matRecycleTime /6))
                     .buildAndRegister();
         }
 
