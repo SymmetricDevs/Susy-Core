@@ -34,6 +34,8 @@ public class SuSyBlocks {
     public static BlockMultiblockTank MULTIBLOCK_TANK;
     public static BlockEvaporationBed EVAPORATION_BED;
     public static BlockElectrodeAssembly ELECTRODE_ASSEMBLY;
+    public static BlockSuSyMultiblockCasing MULTIBLOCK_CASING;
+    public static BlockSerpentine SERPENTINE;
 
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
@@ -84,6 +86,13 @@ public class SuSyBlocks {
 
         ELECTRODE_ASSEMBLY = new BlockElectrodeAssembly();
         ELECTRODE_ASSEMBLY.setRegistryName("electrode_assembly");
+
+        MULTIBLOCK_CASING = new BlockSuSyMultiblockCasing();
+        MULTIBLOCK_CASING.setRegistryName("susy_multiblock_casing");
+
+        SERPENTINE = new BlockSerpentine();
+        SERPENTINE.setRegistryName("serpentine");
+
     }
 
     @SideOnly(Side.CLIENT)
@@ -105,6 +114,8 @@ public class SuSyBlocks {
         EVAPORATION_BED.onModelRegister();
         MULTIBLOCK_TANK.onModelRegister();
         ELECTRODE_ASSEMBLY.onModelRegister();
+        registerItemModel(MULTIBLOCK_CASING);
+        SERPENTINE.onModelRegister();
     }
 
     @SideOnly(Side.CLIENT)

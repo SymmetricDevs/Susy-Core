@@ -3,8 +3,8 @@ package supersymmetry.api.recipes.builders;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.recipes.RecipeMap;
+import gregtech.api.util.ValidationResult;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.recipes.properties.CoilingCoilTemperatureProperty;
 import supersymmetry.api.recipes.properties.SinterProperty;
 
 public class SinteringRecipeBuilder extends RecipeBuilder<SinteringRecipeBuilder> {
@@ -38,11 +38,19 @@ public class SinteringRecipeBuilder extends RecipeBuilder<SinteringRecipeBuilder
 
     @Override
     public boolean applyProperty(@NotNull String key, Object value) {
-        if (key.equals(CoilingCoilTemperatureProperty.KEY)) {
+        if (key.equals(SinterProperty.KEY)) {
             this.usePlasma((Boolean) value);
             return true;
         }
         return super.applyProperty(key, value);
+    }
+
+    @Override
+    public ValidationResult<Recipe> build() {
+        if (this.recipePropertyStorage == null || !this.recipePropertyStorage.hasRecipeProperty(SinterProperty.getInstance())) {
+            this.usePlasma(false);
+        }
+        return super.build();
     }
 
 }

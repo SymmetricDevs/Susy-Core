@@ -17,6 +17,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
 
 import javax.annotation.Nonnull;
 
@@ -25,7 +26,7 @@ import static gregtech.api.util.RelativeDirection.*;
 public class MetaTileEntityFlareStack extends RecipeMapMultiblockController {
     public MetaTileEntityFlareStack(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.FLARE_STACK);
-        this.recipeMapWorkable = new MultiblockRecipeLogic(this, true);
+        this.recipeMapWorkable = new NoEnergyMultiblockRecipeLogic(this);
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
@@ -38,15 +39,15 @@ public class MetaTileEntityFlareStack extends RecipeMapMultiblockController {
                 .aisle("P").setRepeatable(3,7)
                 .aisle("F")
                 .where('S', this.selfPredicate())
-                .where('P', states(new IBlockState[]{this.getFireboxCasingState()})
-                        .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setExactLimit(1))
-                        .or(abilities(MultiblockAbility.INPUT_ENERGY).setExactLimit(1)))
+                .where('P', states(this.getFireboxCasingState())
+                        .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setExactLimit(1)))
                 .where('F', abilities(MultiblockAbility.MUFFLER_HATCH).setExactLimit(1))
                 .build();
     }
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
         return Textures.SOLID_STEEL_CASING;
     }
+
     protected IBlockState getFireboxCasingState() {
         return MetaBlocks.BOILER_FIREBOX_CASING.getState(BlockFireboxCasing.FireboxCasingType.STEEL_FIREBOX);
     }

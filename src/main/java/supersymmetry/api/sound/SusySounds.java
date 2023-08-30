@@ -8,9 +8,11 @@ import supersymmetry.Supersymmetry;
 public class SusySounds {
 
     public static SoundEvent ROCKET_LOOP;
+    public static SoundEvent DRONE_TAKEOFF;
 
     public static void registerSounds() {
         ROCKET_LOOP = registerSound("entity.rocket_loop");
+        DRONE_TAKEOFF = registerSound("entity.drone_takeoff");
     }
 
     private static SoundEvent registerSound(String soundNameIn) {

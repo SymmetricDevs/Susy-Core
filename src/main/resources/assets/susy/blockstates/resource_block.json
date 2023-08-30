@@ -86,6 +86,12 @@
       "textures" : {
         "all" : "gregtech:blocks/resource/phosphorite"
       }
+    },
+    "variant=potash" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/resource/potash"
+      }
     }
   }
 }

@@ -62,6 +62,8 @@ public class CommonProxy {
         registry.register(SuSyBlocks.MULTIBLOCK_TANK);
         registry.register(SuSyBlocks.EVAPORATION_BED);
         registry.register(SuSyBlocks.ELECTRODE_ASSEMBLY);
+        registry.register(SuSyBlocks.MULTIBLOCK_CASING);
+        registry.register(SuSyBlocks.SERPENTINE);
 
         SHEETED_FRAMES.values().stream().distinct().forEach(registry::register);
     }
@@ -87,6 +89,8 @@ public class CommonProxy {
         registry.register(createItemBlock(SuSyBlocks.EVAPORATION_BED, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.MULTIBLOCK_TANK, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.ELECTRODE_ASSEMBLY, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.MULTIBLOCK_CASING, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.SERPENTINE, VariantItemBlock::new));
 
 
         SHEETED_FRAMES.values()
@@ -105,8 +109,7 @@ public class CommonProxy {
         MetaItems.addOrePrefix(SusyOrePrefix.catalystPellet);
         MetaItems.addOrePrefix(SusyOrePrefix.catalystBed);
 
-        SusyMaterials.removeFlags();
-
+        //SusyMaterials.removeFlags();
     }
 
     @SubscribeEvent()

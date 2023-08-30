@@ -39,13 +39,13 @@ public class MetaTileEntityElectrolyticCell extends RecipeMapMultiblockControlle
 
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle(new String[]{"CCCCC", "CCCCC", "CCCCC"})
-                .aisle(new String[]{"CCCCC", "CPPPC", "CPPPC"})
-                .aisle(new String[]{"CCCCC", "CPPPC", "CPPPC"})
-                .aisle(new String[]{"CCCCC", "CCSCC", "CCCCC"})
+                .aisle("CCCCC", "CCCCC", "CCCCC")
+                .aisle("CCCCC", "CPPPC", "CPPPC")
+                .aisle("CCCCC", "CPPPC", "CPPPC")
+                .aisle("CCCCC", "CCSCC", "CCCCC")
                 .where('S', this.selfPredicate())
-                .where('P', states(new IBlockState[]{this.getPipeCasingState()}))
-                .where('C', states(new IBlockState[]{this.getCasingState()}).or(this.autoAbilities()))
+                .where('P', states(this.getPipeCasingState()))
+                .where('C', states(this.getCasingState()).or(this.autoAbilities()))
                 .build();
     }
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {

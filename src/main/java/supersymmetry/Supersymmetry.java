@@ -1,6 +1,5 @@
 package supersymmetry;
 
-import gregtech.api.GTValues;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
@@ -15,9 +14,10 @@ import supersymmetry.common.blocks.SuSyMetaBlocks;
 import supersymmetry.common.covers.SuSyCoverBehaviors;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
+import gregtech.GTInternalTags;
 
-@Mod(name = Supersymmetry.NAME, modid = Supersymmetry.MODID, version = Tags.VERSION,
-        dependencies = GTValues.MOD_VERSION_DEP + "required-after:gcym")
+@Mod(name = Supersymmetry.NAME, modid = Supersymmetry.MODID, version = Tags.VERSION, dependencies = GTInternalTags.DEP_VERSION_STRING + ";required-after:gcym;after:immersiverailroading")
+
 public class Supersymmetry {
 
     public static final String NAME = "Supersymmetry";
