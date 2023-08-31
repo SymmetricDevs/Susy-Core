@@ -22,9 +22,9 @@ public class SusyOrePrefix {
     public static OrePrefix catalystBed = new OrePrefix("catalystBed", GTValues.M * 4, null, SuSyMaterialIconType.catalystBed, 1L, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_CATALYST_BED));
     public static OrePrefix catalystPellet = new OrePrefix("catalystPellet", GTValues.M / 4, null, SuSyMaterialIconType.catalystPellet, 1L, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_CATALYST_PELLET));
 
-    // Sheeted Frames (10 ingots of materials in at the cheapest, 6 sheeted frames out)
-    //M *10 /6 = materialAmount (I do not know what M means), 1L = ENABLE_UNIFICATION
-    //public static OrePrefix frameGt = new OrePrefix("frameGt", M * 2, null, null, ENABLE_UNIFICATION, material -> material.hasFlag(GENERATE_FRAME));
+    // Sheeted Frames (10 ingots of materials in, 12 sheeted frames out)
+    //M *10 / 12 [5/6] = materialAmount (I do not know what M means), 1L = ENABLE_UNIFICATION
+    //public static OrePrefix frameGt = new OrePrefix("frameGt", M * 2, null, null, ENABLE_UNIFICATION, material -> material.hasFlag(GENERATE_FRAME)); [for reference]
     public static OrePrefix sheetedFrame = new OrePrefix("sheetedFrame", (GTValues.M * 5) /6, null, SuSyMaterialIconType.sheetedFrame, ENABLE_UNIFICATION, (material) -> material.hasFlag(MaterialFlags.GENERATE_FRAME));
 
     // Tiered Catalysts Beds
