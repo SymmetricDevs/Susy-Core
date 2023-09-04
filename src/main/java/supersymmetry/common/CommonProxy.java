@@ -17,8 +17,7 @@ import supersymmetry.Supersymmetry;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.api.unification.ore.SusyStoneTypes;
-import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.common.blocks.SusyStoneVariantBlock;
+import supersymmetry.common.blocks.*;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.loaders.SuSyWorldLoader;
@@ -27,6 +26,8 @@ import supersymmetry.loaders.SusyOreDictionaryLoader;
 
 import java.util.Objects;
 import java.util.function.Function;
+
+import static supersymmetry.common.blocks.SuSyMetaBlocks.SHEETED_FRAMES;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class CommonProxy {
@@ -38,6 +39,7 @@ public class CommonProxy {
 
     public void load() {
         SuSyWorldLoader.init();
+        SuSyMetaBlocks.registerColors();
     }
 
     @SubscribeEvent
@@ -62,6 +64,8 @@ public class CommonProxy {
         registry.register(SuSyBlocks.ELECTRODE_ASSEMBLY);
         registry.register(SuSyBlocks.MULTIBLOCK_CASING);
         registry.register(SuSyBlocks.SERPENTINE);
+
+        SHEETED_FRAMES.values().stream().distinct().forEach(registry::register);
     }
 
     @SubscribeEvent
@@ -87,6 +91,12 @@ public class CommonProxy {
         registry.register(createItemBlock(SuSyBlocks.ELECTRODE_ASSEMBLY, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.MULTIBLOCK_CASING, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.SERPENTINE, VariantItemBlock::new));
+
+
+        SHEETED_FRAMES.values()
+                .stream().distinct()
+                .map(block -> createItemBlock(block, SheetedFrameItemBlock::new))
+                .forEach(registry::register);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
@@ -98,13 +108,14 @@ public class CommonProxy {
     public static void postRegisterMaterials(@NotNull GregTechAPI.PostMaterialEvent event) {
         MetaItems.addOrePrefix(SusyOrePrefix.catalystPellet);
         MetaItems.addOrePrefix(SusyOrePrefix.catalystBed);
-        //SusyMaterials.removeFlags();
 
+        //SusyMaterials.removeFlags();
     }
 
     @SubscribeEvent()
     public static void registerRecipes(RegistryEvent.Register<IRecipe> event) {
         SusyOreDictionaryLoader.init();
+        SuSyMetaBlocks.registerOreDict();
         SuSyRecipeLoader.init();
     }
 
