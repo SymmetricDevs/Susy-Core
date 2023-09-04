@@ -14,6 +14,7 @@ import net.minecraft.util.ResourceLocation;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
+import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockSerpentine;
 import supersymmetry.common.blocks.SuSyBlocks;
 
@@ -62,6 +63,6 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
     @Nonnull
     @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.BLAST_FURNACE_OVERLAY;
+        return SusyTextures.RADIATOR_OVERLAY;
     }
 }

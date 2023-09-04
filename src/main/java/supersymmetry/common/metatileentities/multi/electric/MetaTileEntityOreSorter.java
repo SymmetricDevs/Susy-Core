@@ -15,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.BlockBoilerCasing.BoilerCasingType;
+import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nonnull;
 
@@ -58,6 +59,6 @@ public class MetaTileEntityOreSorter extends RecipeMapMultiblockController {
     @Nonnull
     @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.BLAST_FURNACE_OVERLAY;
+        return SusyTextures.ORE_SORTER_OVERLAY;
     }
 }

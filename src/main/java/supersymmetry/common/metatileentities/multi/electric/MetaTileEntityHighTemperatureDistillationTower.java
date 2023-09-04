@@ -78,7 +78,7 @@ public class MetaTileEntityHighTemperatureDistillationTower extends RecipeMapMul
     @Nonnull
     @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.DISTILLATION_TOWER_OVERLAY;
+        return SusyTextures.HTDT_OVERLAY;
     }
 
     @Override
