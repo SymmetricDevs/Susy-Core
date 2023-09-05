@@ -23,6 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockElectrodeAssembly;
 import supersymmetry.common.blocks.BlockMultiblockTank;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -68,7 +69,8 @@ public class MetaTileEntityAdvancedArcFurnace extends RecipeMapMultiblockControl
     }
 
     @Nonnull
+    @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.BLAST_FURNACE_OVERLAY;
+        return SusyTextures.ARC_FURNACE_OVERLAY;
     }
 }

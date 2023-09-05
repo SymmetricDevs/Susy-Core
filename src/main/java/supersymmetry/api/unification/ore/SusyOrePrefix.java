@@ -1,10 +1,13 @@
 package supersymmetry.api.unification.ore;
 
 import gregtech.api.GTValues;
+import gregtech.api.unification.material.info.MaterialFlags;
 import gregtech.api.unification.material.info.MaterialIconType;
 import gregtech.api.unification.ore.OrePrefix;
 import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
 import supersymmetry.api.unification.material.info.SuSyMaterialIconType;
+
+import static gregtech.api.unification.ore.OrePrefix.Flags.ENABLE_UNIFICATION;
 
 public class SusyOrePrefix {
     public static OrePrefix oreGabbro = new OrePrefix("oreGabbro", -1L,  null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
@@ -19,6 +22,10 @@ public class SusyOrePrefix {
     public static OrePrefix catalystBed = new OrePrefix("catalystBed", GTValues.M * 4, null, SuSyMaterialIconType.catalystBed, 1L, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_CATALYST_BED));
     public static OrePrefix catalystPellet = new OrePrefix("catalystPellet", GTValues.M / 4, null, SuSyMaterialIconType.catalystPellet, 1L, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_CATALYST_PELLET));
 
+    // Sheeted Frames (10 ingots of materials in, 12 sheeted frames out)
+    //M *10 / 12 [5/6] = materialAmount (I do not know what M means), 1L = ENABLE_UNIFICATION
+    //public static OrePrefix frameGt = new OrePrefix("frameGt", M * 2, null, null, ENABLE_UNIFICATION, material -> material.hasFlag(GENERATE_FRAME)); [for reference]
+    public static OrePrefix sheetedFrame = new OrePrefix("sheetedFrame", (GTValues.M * 5) /6, null, SuSyMaterialIconType.sheetedFrame, ENABLE_UNIFICATION, (material) -> material.hasFlag(MaterialFlags.GENERATE_FRAME));
 
     // Tiered Catalysts Beds
 

@@ -15,6 +15,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
+import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nonnull;
 
@@ -63,6 +64,6 @@ public class MetaTileEntityLargeWeaponsFactory extends RecipeMapMultiblockContro
     @Nonnull
     @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.BLAST_FURNACE_OVERLAY;
+        return SusyTextures.LARGE_WEAPONS_FACTORY_OVERLAY;
     }
 }

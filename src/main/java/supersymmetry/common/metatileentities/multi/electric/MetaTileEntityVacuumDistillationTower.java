@@ -23,6 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -88,7 +89,8 @@ public class MetaTileEntityVacuumDistillationTower extends RecipeMapMultiblockCo
     }
 
     @Nonnull
+    @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.BLAST_FURNACE_OVERLAY;
+        return SusyTextures.VDT_OVERLAY;
     }
 }
