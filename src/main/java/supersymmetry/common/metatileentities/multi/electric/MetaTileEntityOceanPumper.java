@@ -25,9 +25,11 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import gregtech.common.blocks.*;
+import gregtech.client.utils.TooltipHelper;
 import net.minecraft.client.resources.I18n;
 import supersymmetry.common.materials.SusyMaterials;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -36,12 +38,14 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.World;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -158,7 +162,7 @@ public class MetaTileEntityOceanPumper extends MultiblockWithDisplayBase impleme
 
     public boolean insertFluid(boolean simulate) {
         if (!isInValidLocation()) return false;
-        int fillamount = 500 * (1 << (GTUtility.getTierByVoltage(this.energyContainers.getInputVoltage()) - 1) * 2);
+        int fillamount = (int)Math.min(1L * Integer.MAX_VALUE, 500L * (1 << (GTUtility.getTierByVoltage(this.energyContainers.getInputVoltage()) - 1) * 2));
         FluidStack Seawater = SusyMaterials.Seawater.getFluid(fillamount);
         int caninsertamount = outputTankInventory.fill(Seawater, false);
         if (!simulate) {
@@ -279,6 +283,11 @@ public class MetaTileEntityOceanPumper extends MultiblockWithDisplayBase impleme
     public String[] getDescription() {
         return Stream.of(
                 new String[]{I18n.format("gregtech.multiblock.ocean_pumper.description")}).flatMap(Stream::of).toArray(String[]::new);
+    }
+
+    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
+        super.addInformation(stack, player, tooltip, advanced);
+        tooltip.add(TooltipHelper.RAINBOW_SLOW + I18n.format("gregtech.machine.perfect_oc", new Object[0]));
     }
 
     @Override
