@@ -22,6 +22,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import supersymmetry.api.capability.impl.ContinuousMultiblockRecipeLogic;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -65,7 +66,8 @@ public class MetaTileEntityElectrolyticCell extends RecipeMapMultiblockControlle
     }
 
     @Nonnull
+    @Override
     protected ICubeRenderer getFrontOverlay() {
-        return GCYMTextures.LARGE_ELECTROLYZER_OVERLAY;
+        return SusyTextures.ELECTROLYTIC_CELL_OVERLAY;
     }
 }

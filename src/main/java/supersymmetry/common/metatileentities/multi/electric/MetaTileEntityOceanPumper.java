@@ -23,11 +23,10 @@ import gregtech.api.unification.material.Materials;
 import gregtech.api.util.GTUtility;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
+import supersymmetry.client.renderer.textures.SusyTextures;
 import gregtech.client.utils.TooltipHelper;
 import gregtech.common.blocks.*;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import supersymmetry.common.materials.SusyMaterials;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.network.PacketBuffer;
@@ -297,7 +296,7 @@ public class MetaTileEntityOceanPumper extends MultiblockWithDisplayBase impleme
     @Nonnull
     @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.LARGE_MINER_OVERLAY_ADVANCED;
+        return SusyTextures.OCEANIC_DRILL_OVERLAY;
     }
 
     protected IBlockState getCasingState() {

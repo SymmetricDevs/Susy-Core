@@ -24,6 +24,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import supersymmetry.api.capability.impl.ContinuousMultiblockRecipeLogic;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.client.renderer.textures.SusyTextures;
 
 public class MetaTileEntityFluidizedBedReactor extends RecipeMapMultiblockController {
     public MetaTileEntityFluidizedBedReactor(ResourceLocation metaTileEntityId) {
@@ -67,7 +68,8 @@ public class MetaTileEntityFluidizedBedReactor extends RecipeMapMultiblockContro
     }
 
     @Nonnull
+    @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.LARGE_CHEMICAL_REACTOR_OVERLAY;
+        return SusyTextures.FLUIDIZED_BED_OVERLAY;
     }
 }

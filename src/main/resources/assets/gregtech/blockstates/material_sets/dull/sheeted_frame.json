@@ -1,0 +1,27 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "gregtech:tinted_cube_column",
+    "textures": {
+      "end": "gregtech:blocks/material_sets/dull/frame_gt",
+      "side": "gregtech:blocks/material_sets/dull/sheeted_frame"
+    }
+  },
+  "variants": {
+    "axis": {
+      "none": {
+        "textures": {
+          "end": "#side"
+        }
+      },
+      "x": {
+        "x": 90,
+        "y": 90
+      },
+      "y": {},
+      "z": {
+        "x": 90
+      }
+    }
+  }
+}

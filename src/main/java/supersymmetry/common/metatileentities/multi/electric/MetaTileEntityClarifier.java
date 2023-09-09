@@ -21,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockDrillHead;
 import supersymmetry.common.blocks.BlockMultiblockTank;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -80,8 +81,9 @@ public class MetaTileEntityClarifier extends RecipeMapMultiblockController {
     }
 
     @Nonnull
+    @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.BLAST_FURNACE_OVERLAY;
+        return SusyTextures.CLARIFIER_OVERLAY;
     }
 
     @Override

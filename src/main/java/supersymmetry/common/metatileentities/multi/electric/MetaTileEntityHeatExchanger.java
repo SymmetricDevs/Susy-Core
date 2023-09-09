@@ -16,6 +16,7 @@ import supersymmetry.api.recipes.SuSyRecipeMaps;
 import gregtech.common.blocks.BlockBoilerCasing.BoilerCasingType;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
+import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nonnull;
 
@@ -63,6 +64,6 @@ public class MetaTileEntityHeatExchanger extends RecipeMapMultiblockController {
     @Nonnull
     @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.BLAST_FURNACE_OVERLAY;
+        return SusyTextures.HEAT_EXCHANGER_OVERLAY;
     }
 }
