@@ -282,11 +282,11 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.FURNACE);
 
-    public static final RecipeMap<NoEnergyRecipeBuilder> PHASE_SEPARATOR = new RecipeMap<>("phase_separator", 0, 0, 2, 2, new NoEnergyRecipeBuilder(), false)
+    public static final RecipeMap<PrimitiveRecipeBuilder> PHASE_SEPARATOR = new RecipeMap<>("phase_separator", 0, 0, 2, 2, new PrimitiveRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_EXTRACT, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.BATH);
 
-    public static final RecipeMap<NoEnergyRecipeBuilder> BATH_CONDENSER = new RecipeMap<>("bath_condenser", 0, 0, 2, 3, new NoEnergyRecipeBuilder(), false)
+    public static final RecipeMap<PrimitiveRecipeBuilder> BATH_CONDENSER = new RecipeMap<>("bath_condenser", 0, 0, 2, 3, new PrimitiveRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_SIFT, ProgressWidget.MoveType.VERTICAL)
             .setSound(GTSoundEvents.BATH);
 
@@ -321,8 +321,9 @@ public class SuSyRecipeMaps {
         RecipeMaps.SIFTER_RECIPES.setSlotOverlay(false, false, SusyGuiTextures.SIFTER_ITEM_INPUT_OVERLAY);
         RecipeMaps.SIFTER_RECIPES.setSlotOverlay(true, false, SusyGuiTextures.SIFTER_ITEM_OUTPUT_OVERLAY);
         RecipeMaps.LASER_ENGRAVER_RECIPES.setMaxFluidInputs(1);
-        RecipeMaps.GAS_TURBINE_FUELS.setMaxFluidInputs(2);
+        RecipeMaps.GAS_TURBINE_FUELS.setMaxFluidInputs(3);
         RecipeMaps.GAS_TURBINE_FUELS.setMaxFluidOutputs(1);
+        RecipeMaps.STEAM_TURBINE_FUELS.setMaxFluidInputs(2);
         RecipeMaps.AUTOCLAVE_RECIPES.setMaxFluidInputs(2);
         RecipeMaps.AUTOCLAVE_RECIPES.setMaxFluidOutputs(2);
     }
