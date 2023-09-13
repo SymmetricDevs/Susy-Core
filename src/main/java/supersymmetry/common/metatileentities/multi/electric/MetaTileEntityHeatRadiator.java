@@ -44,8 +44,8 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
                         .or(autoAbilities(false, true, false, false, false, false, false)))
                 .where('B', states(getRadiatorElementState()))
                 .where('C', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
-                        .or(autoAbilities(false, false, false, false, true, false, false)).setMinGlobalLimited(1)
-                        .or(autoAbilities(false, false, false, false, false, true, false)).setMinGlobalLimited(1))
+                        .or(autoAbilities(false, false, false, false, true, false, false).setMinGlobalLimited(1))
+                        .or(autoAbilities(false, false, false, false, false, true, false).setMinGlobalLimited(1)))
                 .build();
     }
 
