@@ -70,6 +70,7 @@ import supersymmetry.SuSyValues;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.particles.SusyParticleFlame;
+import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
 
@@ -142,7 +143,7 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
     @Nonnull
     @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.BLAST_FURNACE_OVERLAY;
+        return SusyTextures.RAILROAD_ENGINEERING_STATION_OVERLAY;
     }
 
     @Override

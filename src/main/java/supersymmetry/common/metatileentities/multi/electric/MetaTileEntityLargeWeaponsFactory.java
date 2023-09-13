@@ -15,6 +15,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
+import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nonnull;
 
@@ -41,15 +42,15 @@ public class MetaTileEntityLargeWeaponsFactory extends RecipeMapMultiblockContro
                 .aisle("CBC", " A ")
                 .aisle("DDD", "DSD")
                 .where('S', selfPredicate())
-                .where('A', states(new IBlockState[]{MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)}))
-                .where('B', states(new IBlockState[]{MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)}))
-                .where('C', states(new IBlockState[]{MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)})
+                .where('A', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)))
+                .where('B', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
+                .where('C', states(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel))
                 .or(autoAbilities(false, true, false, false, false, false, false).setExactLimit(1)))
-                .where('D', states(new IBlockState[]{MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)})
+                .where('D', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
                 .or(autoAbilities(false, false, true, false, true, false, false)))
-                .where('E', states(new IBlockState[]{MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)})
+                .where('E', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
                 .or(autoAbilities(true, false, false, false, false, false, false)))
-                .where('F', states(new IBlockState[]{MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)})
+                .where('F', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
                 .or(autoAbilities(false, false, false, true, false, false, false)))
                 .where(' ', any())
                 .build();
@@ -63,6 +64,6 @@ public class MetaTileEntityLargeWeaponsFactory extends RecipeMapMultiblockContro
     @Nonnull
     @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.BLAST_FURNACE_OVERLAY;
+        return SusyTextures.LARGE_WEAPONS_FACTORY_OVERLAY;
     }
 }

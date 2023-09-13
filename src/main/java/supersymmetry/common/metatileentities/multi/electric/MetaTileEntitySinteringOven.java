@@ -21,11 +21,15 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockSinteringBrick;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.properties.SinterProperty;
+import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
+import supersymmetry.common.blocks.SuSyBlocks;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public class MetaTileEntitySinteringOven extends RecipeMapMultiblockController {
@@ -54,17 +58,17 @@ public class MetaTileEntitySinteringOven extends RecipeMapMultiblockController {
 
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart multiblockPart) {
-        return Textures.VOLTAGE_CASINGS[0];
+        return SusyTextures.ULV_STRUCTURAL_CASING;
     }
 
-    @NotNull
+    @Nonnull
     @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.PYROLYSE_OVEN_OVERLAY;
+        return SusyTextures.SINTERING_OVERLAY;
     }
 
     protected IBlockState getCasingState() {
-        return MetaBlocks.MACHINE_CASING.getState(BlockMachineCasing.MachineCasingType.ULV);
+        return SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.ULV_STRUCTURAL_CASING);
     }
 
     protected IBlockState getFrameState() {

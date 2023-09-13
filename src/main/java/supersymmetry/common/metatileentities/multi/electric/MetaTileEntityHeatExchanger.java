@@ -15,6 +15,8 @@ import net.minecraft.util.ResourceLocation;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import gregtech.common.blocks.BlockBoilerCasing.BoilerCasingType;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
+import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
+import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nonnull;
 
@@ -22,6 +24,7 @@ public class MetaTileEntityHeatExchanger extends RecipeMapMultiblockController {
 
     public MetaTileEntityHeatExchanger(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.HEAT_EXCHANGER_RECIPES);
+        this.recipeMapWorkable = new NoEnergyMultiblockRecipeLogic(this);
     }
 
     @Override
@@ -33,15 +36,23 @@ public class MetaTileEntityHeatExchanger extends RecipeMapMultiblockController {
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
                 .aisle("CCC", "BCB", "ACA")
-                .aisle("CCC", "CDC", "ACA").setRepeatable(4, 10)
-                .aisle("CCC", "BSB", "ACA")
+                .aisle("CCC", "CDC", "ACA")
+                .aisle("CCC", "CDC", "ACA")
+                .aisle("CCC", "CDC", "ACA")
+                .aisle("CCC", "CDC", "ACA")
+                .aisle("CCC", "CDC", "ACA")
+                .aisle("CCC", "CDC", "ACA")
+                .aisle("CCC", "CDC", "ACA")
+                .aisle("CCC", "BSB", "AEA")
                 .where('S', selfPredicate())
-                .where('A', states(new IBlockState[]{MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)}))
+                .where('A', states(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)))
                 .where('B', autoAbilities(false, false, false, false, false, true, false).setMinGlobalLimited(2)
                         .or(autoAbilities(false, false, false, false, true, false, false).setMinGlobalLimited(2)))
-                .where('C', states(new IBlockState[]{MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)})
+                .where('C', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
                         .or(autoAbilities(false, true, false, false, false, false, false)))
-                .where('D', states(new IBlockState[]{MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE)}))
+                .where('D', states(MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE)))
+                .where('E', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
+                        .or(autoAbilities(false, false, true, false, false, false, false)))
                 .build();
     }
 
@@ -53,6 +64,6 @@ public class MetaTileEntityHeatExchanger extends RecipeMapMultiblockController {
     @Nonnull
     @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.BLAST_FURNACE_OVERLAY;
+        return SusyTextures.HEAT_EXCHANGER_OVERLAY;
     }
 }

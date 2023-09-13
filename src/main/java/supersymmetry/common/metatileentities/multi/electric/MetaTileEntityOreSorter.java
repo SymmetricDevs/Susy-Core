@@ -15,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.BlockBoilerCasing.BoilerCasingType;
+import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nonnull;
 
@@ -38,11 +39,12 @@ public class MetaTileEntityOreSorter extends RecipeMapMultiblockController {
                 .aisle("ABBBA", "B###B", "ABBBA", " D D ")
                 .aisle("ABSBA", "ABBBA", "ABBBA", " D D ")
                 .where('S', selfPredicate())
-                .where('A', states(new IBlockState[]{MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)}))
-                .where('B', states(new IBlockState[]{MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)})
+                .where('A', states(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)))
+                .where('B', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
                         .setMinGlobalLimited(16)
                         .or(autoAbilities(true, true, true, true, false, false, false)))
                 .where('C', states(new IBlockState[]{MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE)}))
+                        .or(autoAbilities(false, false, false, false, true, true, false)))
                 .where('D', states(new IBlockState[]{MetaBlocks.FRAMES.get(Materials.Aluminium).getBlock(Materials.Aluminium)}))
                 .where(' ', any())
                 .where('#', air())
@@ -57,6 +59,6 @@ public class MetaTileEntityOreSorter extends RecipeMapMultiblockController {
     @Nonnull
     @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.BLAST_FURNACE_OVERLAY;
+        return SusyTextures.ORE_SORTER_OVERLAY;
     }
 }

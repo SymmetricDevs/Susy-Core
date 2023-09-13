@@ -15,6 +15,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nonnull;
 
@@ -36,7 +37,7 @@ public class MetaTileEntitySmokeStack extends RecipeMapMultiblockController {
                 .aisle("P").setRepeatable(2,6)
                 .aisle("F")
                 .where('S', this.selfPredicate())
-                .where('P', states(new IBlockState[]{this.getPipeCasingState()})
+                .where('P', states(this.getPipeCasingState())
                         .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setExactLimit(1)))
                 .where('F', abilities(MultiblockAbility.MUFFLER_HATCH).setExactLimit(1))
                 .build();
@@ -55,8 +56,9 @@ public class MetaTileEntitySmokeStack extends RecipeMapMultiblockController {
     }
 
     @Nonnull
+    @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.BLAST_FURNACE_OVERLAY;
+        return SusyTextures.SMOKE_STACK_OVERLAY;
     }
 
     @Override

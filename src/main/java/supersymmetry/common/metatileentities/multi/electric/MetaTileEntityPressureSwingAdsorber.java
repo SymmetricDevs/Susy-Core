@@ -14,6 +14,7 @@ import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nonnull;
 
@@ -35,9 +36,9 @@ public class MetaTileEntityPressureSwingAdsorber extends RecipeMapMultiblockCont
                 .aisle("AAA", "ABA", "ABA", "AAA")
                 .aisle("AAA", "ASA", "AAA", "AAA")
                 .where('S', selfPredicate())
-                .where('A', states(new IBlockState[]{MetaBlocks.METAL_CASING.getState(MetalCasingType.ALUMINIUM_FROSTPROOF)})
+                .where('A', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.ALUMINIUM_FROSTPROOF)).setMinGlobalLimited(25)
                         .or(autoAbilities(true, true, true, true, true, true, false)))
-                .where('B', states(new IBlockState[]{MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE)}))
+                .where('B', states(MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE)))
                 .build();
     }
 
@@ -49,6 +50,6 @@ public class MetaTileEntityPressureSwingAdsorber extends RecipeMapMultiblockCont
     @Nonnull
     @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.BLAST_FURNACE_OVERLAY;
+        return SusyTextures.PRESSURE_SWING_ABSORBER_OVERLAY;
     }
 }

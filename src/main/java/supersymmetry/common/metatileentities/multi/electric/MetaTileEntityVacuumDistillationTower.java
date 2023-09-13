@@ -23,6 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -42,21 +43,21 @@ public class MetaTileEntityVacuumDistillationTower extends RecipeMapMultiblockCo
 
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start(RIGHT, FRONT, UP)
-                .aisle(new String[]{" CSC  ", "CCCCCC", "CCCCCC", "CCCCCC", " CCC  "})
-                .aisle(new String[]{" CGC  ", "C#F#CC", "IFFF#P", "C#F#CC", " CCC  "})
-                .aisle(new String[]{" CCC  ", "C#F#CC", "CFFFCC", "C#F#CC", " CCC  "})
-                .aisle(new String[]{" XXX  ", "X#F#D ", "XFFFD ", "X#F#D ", " XXX  "}).setRepeatable(1,12)
-                .aisle(new String[]{" DDD  ", "DDDDD ", "DDDDD ", "DDDDD ", " DDD  "})
+                .aisle(" CSC  ", "CCCCCC", "CCCCCC", "CCCCCC", " CCC  ")
+                .aisle(" CGC  ", "C#F#CC", "IFFF#P", "C#F#CC", " CCC  ")
+                .aisle(" CCC  ", "C#F#CC", "CFFFCC", "C#F#CC", " CCC  ")
+                .aisle(" XXX  ", "X#F#D ", "XFFFD ", "X#F#D ", " XXX  ").setRepeatable(1,12)
+                .aisle(" DDD  ", "DDDDD ", "DDDDD ", "DDDDD ", " DDD  ")
                 .where('S', this.selfPredicate())
-                .where('G', states(new IBlockState[]{this.getGlassState()}))
-                .where('P', states(new IBlockState[]{this.getPipeCasingState()}))
-                .where('F', states(new IBlockState[]{this.getFrameState()}))
-                .where('C', states(new IBlockState[]{this.getCasingState()})
+                .where('G', states(this.getGlassState()))
+                .where('P', states(this.getPipeCasingState()))
+                .where('F', states(this.getFrameState()))
+                .where('C', states(this.getCasingState())
                         .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(3))
                         .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1))
                         .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMaxGlobalLimited(1)))
                 .where('I', abilities(MultiblockAbility.EXPORT_ITEMS).setMaxGlobalLimited(1))
-                .where('D', states(new IBlockState[]{this.getCasingState()}))
+                .where('D', states(this.getCasingState()))
                 .where('X', states(getCasingState())
                         .or(metaTileEntities(MultiblockAbility.REGISTRY.get(MultiblockAbility.EXPORT_FLUIDS).stream()
                                 .filter(mte->!(mte instanceof MetaTileEntityMultiFluidHatch))
@@ -88,7 +89,8 @@ public class MetaTileEntityVacuumDistillationTower extends RecipeMapMultiblockCo
     }
 
     @Nonnull
+    @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.BLAST_FURNACE_OVERLAY;
+        return SusyTextures.VDT_OVERLAY;
     }
 }

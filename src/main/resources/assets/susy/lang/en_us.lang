@@ -16,6 +16,13 @@ tile.drill_head.steel.name=Steel Drill Head
 
 tile.susy_multiblock_casing.silicon_carbide_casing.name=Tough Silicon Carbide Casing
 
+tile.susy_multiblock_casing.sieve_tray.name=Sieve Tray
+tile.susy_multiblock_casing.structural_packing.name=Structural Packing
+tile.susy_multiblock_casing.ulv_structural_casing.name=Basic Structural Casing
+tile.susy_multiblock_casing.drone_pad.name=Drone Pad
+
+tile.serpentine.basic.name=Copper Tubing Serpentine Block
+
 tile.structural_block.base_structural_block.name=Structural Block
 tile.structural_block.structural_block_low.name=Striped Structural Block
 tile.structural_block.structural_block_lowlight.name=Striped Light Structural Block
@@ -166,7 +173,6 @@ item.material.oreprefix.catalystBed=%s Catalyst Bed
 item.material.oreprefix.catalystPellet=%s Catalyst Pellet
 item.material.oreprefix.sheetedFrame=%s Sheeted Frame Box
 
-
 # Machines/Multiblocks
 gregtech.machine.magnetic_refrigerator.name=Magnetic Refrigerator
 gregtech.multiblock.magnetic_refrigerator.min_temperature=§bTemperature Limit: %s
@@ -210,7 +216,7 @@ gregtech.machine.railroad_engineering_station.tooltip=Place Immersive Railroadin
 gregtech.machine.primitive_mud_pump.name=Primitive Mud Pump
 gregtech.machine.basic_steam_turbine.name=Large Steam Turbine
 gregtech.machine.basic_gas_turbine.name=Large Gas Turbine
-gregtech.machine.ocean_pumper.name=Ocean Driller
+gregtech.machine.ocean_pumper.name=Ocean Pumper
 gregtech.machine.advanced_arc_furnace.name=Advanced Arc Furnace
 gregtech.machine.clarifier.name=Clarifier
 gregtech.machine.dumper.name=Dumper
@@ -220,7 +226,12 @@ gregtech.machine.froth_flotation_tank.name=Froth Flotation Tank
 gregtech.machine.multi_stage_flash_distiller.name=Multi Stage Flash Distiller
 gregtech.machine.high_temperature_distillation_tower.name=High Temperature Distillation Tower
 gregtech.machine.rotary_kiln.name=Rotary Kiln
-gregtech.machine.cryogenic_distillation_plant.name=Cryogenic Distillation Plant
+gregtech.machine.low_pressure_cryogenic_distillation_plant.name=Low Pressure Cryogenic Distillation Plant
+gregtech.machine.high_pressure_cryogenic_distillation_plant.name=High Pressure Cryogenic Distillation Plant
+gregtech.machine.single_column_cryogenic_distillation_plant.name=Single Column Cryogenic Distillation Plant
+gregtech.machine.reverberatory_furnace.name=Reverberatory Furnace
+
+gregtech.machine.drone_pad.name=Drone Pad
 
 # Properties
 gregtech.recipe.plasma_requirement=Requires plasma: %s
@@ -523,6 +534,27 @@ gregtech.machine.weapons_factory.uiv.name=Epic Weapons Factory III
 gregtech.machine.weapons_factory.uxv.name=Epic Weapons Factory IV
 gregtech.machine.weapons_factory.opv.name=Legendary Weapons Factory
 
+# Phase Separator
+gregtech.machine.phase_separator.lv.name=Phase Separator
+
+# Electrostatic Separator
+gregtech.machine.electrostatic_separator.lv.name=Basic Electrostatic Separator
+gregtech.machine.electrostatic_separator.mv.name=Advanced Electrostatic Separator
+gregtech.machine.electrostatic_separator.hv.name=Advanced Electrostatic Separator II
+gregtech.machine.electrostatic_separator.ev.name=Advanced Electrostatic Separator III
+gregtech.machine.electrostatic_separator.iv.name=Elite Electrostatic Separator
+gregtech.machine.electrostatic_separator.luv.name=Elite Electrostatic Separator II
+gregtech.machine.electrostatic_separator.zpm.name=Elite Electrostatic Separator III
+gregtech.machine.electrostatic_separator.uv.name=Ultimate Electrostatic Separator
+gregtech.machine.electrostatic_separator.uhv.name=Epic Electrostatic Separator
+gregtech.machine.electrostatic_separator.uev.name=Epic Electrostatic Separator II
+gregtech.machine.electrostatic_separator.uiv.name=Epic Electrostatic Separator III
+gregtech.machine.electrostatic_separator.uxv.name=Epic Electrostatic Separator IV
+gregtech.machine.electrostatic_separator.opv.name=Legendary Electrostatic Separator
+
+gregtech.machine.bath_condenser.lv.name=Bath Condenser
+gregtech.machine.bath_condenser.lv.tooltip=Only works inside a Cryogenic Distillation Tower
+
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
 recipemap.latex_collector.name=Arboreal Collector
@@ -570,10 +602,15 @@ recipemap.flare_stack.name=Flare Stack
 recipemap.dumping.name=Dumping
 recipemap.froth_flotation.name=Froth Flotation
 recipemap.rotary_kiln.name=Rotary Kiln
-recipemap.cryogenic_distillation.name=Cryogenic Distillation
+recipemap.low_pressure_cryogenic_distillation.name=Low Pressure Cryogenic Distillation
+recipemap.high_pressure_cryogenic_distillation.name=High Pressure Cryogenic Distillation
+recipemap.reverberatory_furnace.name=Reverberatory Furnace
+recipemap.phase_separator.name=Phase Separation
+recipemap.bath_condenser.name=Bath Condenser
+recipemap.drone_pad.name=Drone Pad
 
 gregtech.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
-gregtech.multiblock.ocean_pumper.description=The Ocean Driller is an electrically powered multiblock that collects a base amount of 8,000 L Seawater per second (at MV), but only if it is in an ocean biome, and when the controller is between Y = 70 and Y = 75 (Inclusive). It needs an output hatch, a maintenance hatch, and an energy input hatch.
+gregtech.multiblock.ocean_pumper.description=The Ocean Pumper is an electrically powered multiblock that collects a base amount of 8,000 L Seawater per second (at MV), but only if it is in an ocean biome, and when the controller is between Y = 70 and Y = 75 (Inclusive). It needs an output hatch, a maintenance hatch, and an energy input hatch.
 
 # Energy Hatches
 
@@ -653,3 +690,6 @@ susy.ocean_pumper.drainrate=Current Pumping Rate: %s
 
 # Latex Logs
 gregtech.block_group_members.latex_logs.name=Rubber Log
+
+# Extra recipe info
+susy.recipe.dimensions=Dimensions: %s

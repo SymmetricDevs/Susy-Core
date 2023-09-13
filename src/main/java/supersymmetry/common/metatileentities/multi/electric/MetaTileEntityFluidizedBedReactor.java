@@ -24,6 +24,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import supersymmetry.api.capability.impl.ContinuousMultiblockRecipeLogic;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.client.renderer.textures.SusyTextures;
 
 public class MetaTileEntityFluidizedBedReactor extends RecipeMapMultiblockController {
     public MetaTileEntityFluidizedBedReactor(ResourceLocation metaTileEntityId) {
@@ -37,15 +38,14 @@ public class MetaTileEntityFluidizedBedReactor extends RecipeMapMultiblockContro
 
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle(new String[]{"F F", "BBB", "XXX", "XXX", "TTT"})
-                .aisle(new String[]{"   ", "BPB", "XPX", "XPX", "TPT"})
-                .aisle(new String[]{"F F", "BSB", "XXX", "XXX", "TTT"})
+                .aisle("F F", "XXX", "XXX", "XXX", "XXX")
+                .aisle("   ", "XPX", "XPX", "XPX", "XPX")
+                .aisle("F F", "XSX", "XXX", "XXX", "XXX")
                 .where('S', this.selfPredicate())
-                .where('F', states(new IBlockState[]{this.getFrameState()}))
-                .where('P', states(new IBlockState[]{this.getPipeCasingState()}))
-                .where('X', states(new IBlockState[]{this.getCasingState()}).or(this.autoAbilities(true, true, true, true, true, true, false)))
-                .where('T', states(new IBlockState[]{this.getCasingState()}).or(this.autoAbilities(true, true, true, true, true, true, false)))
-                .where('B', states(new IBlockState[]{this.getCasingState()}).or(this.autoAbilities(true, true, true, true, true, true, false))).build();
+                .where('F', states(this.getFrameState()))
+                .where('P', states(this.getPipeCasingState()))
+                .where('X', states(this.getCasingState()).or(this.autoAbilities(true, true, true, true, true, true, false)))
+                .build();
     }
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
         return Textures.INERT_PTFE_CASING;
@@ -68,7 +68,8 @@ public class MetaTileEntityFluidizedBedReactor extends RecipeMapMultiblockContro
     }
 
     @Nonnull
+    @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.LARGE_CHEMICAL_REACTOR_OVERLAY;
+        return SusyTextures.FLUIDIZED_BED_OVERLAY;
     }
 }

@@ -23,6 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockElectrodeAssembly;
 import supersymmetry.common.blocks.BlockMultiblockTank;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -49,7 +50,7 @@ public class MetaTileEntityAdvancedArcFurnace extends RecipeMapMultiblockControl
                 .aisle("AAAAA", "A###A", "E###E", " AAA ")
                 .aisle(" AAA ", " ASA ", " EEE ", "     ")
                 .where('S', selfPredicate())
-                .where('A', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
+                .where('A', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)).setMinGlobalLimited(28)
                         .or(autoAbilities()))
                 .where('C', states(SuSyBlocks.ELECTRODE_ASSEMBLY.getState(BlockElectrodeAssembly.ElectrodeAssemblyType.CARBON)))
                 .where('D', states(MetaBlocks.BOILER_CASING.getState((BoilerCasingType.STEEL_PIPE))))
@@ -68,7 +69,8 @@ public class MetaTileEntityAdvancedArcFurnace extends RecipeMapMultiblockControl
     }
 
     @Nonnull
+    @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.BLAST_FURNACE_OVERLAY;
+        return SusyTextures.ARC_FURNACE_OVERLAY;
     }
 }

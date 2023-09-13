@@ -37,13 +37,13 @@ public class MetaTileEntityPolmyerizationTank extends RecipeMapMultiblockControl
 
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle(new String[]{"F F", "XXX", "XXX", "XXX", "XXX"})
-                .aisle(new String[]{"   ", "XPX", "XPX", "XPX", "XPX"})
-                .aisle(new String[]{"F F", "XSX", "XXX", "XXX", "XXX"})
+                .aisle("F F", "XXX", "XXX", "XXX", "XXX")
+                .aisle("   ", "XPX", "XPX", "XPX", "XPX")
+                .aisle("F F", "XSX", "XXX", "XXX", "XXX")
                 .where('S', this.selfPredicate())
-                .where('F', states(new IBlockState[]{this.getFrameState()}))
-                .where('P', states(new IBlockState[]{this.getPipeCasingState()}))
-                .where('X', states(new IBlockState[]{this.getCasingState()}).or(this.autoAbilities(true, true, true, true, true, true, false)))
+                .where('F', states(this.getFrameState()))
+                .where('P', states(this.getPipeCasingState()))
+                .where('X', states(this.getCasingState()).or(this.autoAbilities(true, true, true, true, true, true, false)))
                 .build();
     }
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {

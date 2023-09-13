@@ -7,23 +7,19 @@ import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.unification.material.Materials;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.utils.TooltipHelper;
-import gregtech.common.blocks.BlockBoilerCasing.BoilerCasingType;
+import gregtech.common.blocks.BlockBoilerCasing;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
-import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
-import gregtech.common.blocks.StoneVariantBlock;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
-import supersymmetry.common.blocks.BlockMultiblockTank;
-import supersymmetry.common.blocks.SuSyBlocks;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -40,6 +36,8 @@ public class MetaTileEntityMultiStageFlashDistiller extends RecipeMapMultiblockC
     }
 
     protected BlockPattern createStructurePattern() {
+        TraceabilityPredicate maintenanceEnergy = autoAbilities(true, true, false, false, false, false, false);
+
         return FactoryBlockPattern.start()
                 .aisle(" EEEB", " BEEB", " BEEB", " EEEB", "  BBB")
                 .aisle(" AAA ", " B#B ", " B#BB", " AAA ", "  B  ")
@@ -57,16 +55,18 @@ public class MetaTileEntityMultiStageFlashDistiller extends RecipeMapMultiblockC
                 .aisle(" AAAC", " B#BC", " B#BC", " AAAC", "  BCC")
                 .aisle(" FFF ", " FSF ", " FFF ", " FFF ", "  B  ")
                 .where('S', selfPredicate())
-                .where('A', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
-                        .or(autoAbilities(true, true, false, false, false, false, false)))
-                .where('B', states(MetaBlocks.BOILER_CASING.getState((BoilerCasingType.STEEL_PIPE))))
+                .where('B', states(MetaBlocks.BOILER_CASING.getState((BlockBoilerCasing.BoilerCasingType.STEEL_PIPE))))
                 .where('C', states(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)))
+                .where('A', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
+                        .or(maintenanceEnergy))
                 .where('D', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STAINLESS_CLEAN))
-                        .or(autoAbilities(true, true, false, false, false, false, false)))
+                        .or(maintenanceEnergy))
                 .where('E', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
-                        .or(autoAbilities(true, true, false, false, false, true, false)))
+                        .or(maintenanceEnergy)
+                        .or(autoAbilities(false, false, false, false, false, true, false)))
                 .where('F', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
-                        .or(autoAbilities(true, true, false, false, true, false, false)))
+                        .or(maintenanceEnergy)
+                        .or(autoAbilities(false, false, false, false, true, false, false)))
                 .where(' ', any())
                 .where('#', air())
                 .build();

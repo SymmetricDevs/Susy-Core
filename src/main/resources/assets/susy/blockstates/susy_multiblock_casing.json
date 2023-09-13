@@ -14,6 +14,30 @@
       "textures" : {
         "all" : "gregtech:blocks/multiblock_casing/silicon_carbide_casing"
       }
+    },
+    "variant=sieve_tray" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/multiblock_casing/sieve_tray"
+      }
+    },
+    "variant=structural_packing" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/multiblock_casing/structural_packing"
+      }
+    },
+    "variant=ulv_structural_casing" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/multiblock_casing/ulv_structural_casing"
+      }
+    },
+    "variant=drone_pad" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/multiblock_casing/drone_pad"
+      }
     }
   }
 }
