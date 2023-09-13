@@ -1,10 +1,19 @@
 {
   "entity.rocket_loop": {
-    "category": "block",
+    "category": "neutral",
     "sounds": [
       {
         "name": "susy:rocket_loop",
         "stream": false
+      }
+    ]
+  },
+  "entity.drone_takeoff": {
+    "category": "neutral",
+    "sounds": [
+      {
+        "name": "susy:drone_takeoff",
+        "stream": true
       }
     ]
   }

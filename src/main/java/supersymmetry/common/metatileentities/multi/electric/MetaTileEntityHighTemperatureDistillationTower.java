@@ -1,4 +1,4 @@
-package gregtech.common.metatileentities.multi.electric;
+package supersymmetry.common.metatileentities.multi.electric;
 
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -78,7 +78,7 @@ public class MetaTileEntityHighTemperatureDistillationTower extends RecipeMapMul
     @Nonnull
     @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.DISTILLATION_TOWER_OVERLAY;
+        return SusyTextures.HTDT_OVERLAY;
     }
 
     @Override

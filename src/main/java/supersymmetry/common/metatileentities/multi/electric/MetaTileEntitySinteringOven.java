@@ -29,6 +29,7 @@ import supersymmetry.api.recipes.properties.SinterProperty;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public class MetaTileEntitySinteringOven extends RecipeMapMultiblockController {
@@ -60,10 +61,10 @@ public class MetaTileEntitySinteringOven extends RecipeMapMultiblockController {
         return SusyTextures.ULV_STRUCTURAL_CASING;
     }
 
-    @NotNull
+    @Nonnull
     @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.PYROLYSE_OVEN_OVERLAY;
+        return SusyTextures.SINTERING_OVERLAY;
     }
 
     protected IBlockState getCasingState() {

@@ -22,6 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockMultiblockTank;
 import supersymmetry.common.blocks.SuSyBlocks;
 
@@ -41,8 +42,8 @@ public class MetaTileEntityRotaryKiln extends RecipeMapMultiblockController {
 
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle("A    A    A", "A    A    A", "L    A    R", "LCCCCMCCCCR", "L    A    R")
-                .aisle("A    A    A", "A    A    A", "LCCCCMCCCCR", "L#########R", "LCCCCMCCCCR")
+                .aisle("A    A    A", "A    A    A", "L    A    R", "LCCCCNCCCCR", "L    A    R")
+                .aisle("A    A    A", "A    A    A", "LCCCCNCCCCR", "L#########R", "LCCCCMCCCCR")
                 .aisle("A    A    A", "A    A    A", "L    A    R", "LCCCCSCCCCR", "L    A    R")
                 .where('S', selfPredicate())
                 .where('A', states(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)))
@@ -54,8 +55,8 @@ public class MetaTileEntityRotaryKiln extends RecipeMapMultiblockController {
                         .or(autoAbilities(false, false, false, true, true, false, false))
                         .or(autoAbilities(true, false, false, false, false, false, false).setMinGlobalLimited(0)))
                 .where('M', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
-                        .or(autoAbilities(false, true, false, false, false, false, false))
-                        .or(autoAbilities(true, false, false, false, false, false, false).setMinGlobalLimited(0)))
+                        .or(autoAbilities(false, true, false, false, false, false, false)))
+                .where('N', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)))
                 .where(' ', any())
                 .where('#', air())
                 .build();
@@ -66,7 +67,8 @@ public class MetaTileEntityRotaryKiln extends RecipeMapMultiblockController {
     }
 
     @Nonnull
+    @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.BLAST_FURNACE_OVERLAY;
+        return SusyTextures.ROTARY_KILN_OVERLAY;
     }
 }

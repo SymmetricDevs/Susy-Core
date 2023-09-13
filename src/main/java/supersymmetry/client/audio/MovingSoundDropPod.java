@@ -12,7 +12,7 @@ public class MovingSoundDropPod extends MovingSound {
     private float distance = 0.0F;
 
     public MovingSoundDropPod(EntityDropPod dropPod) {
-        super(SusySounds.ROCKET_LOOP, SoundCategory.BLOCKS);
+        super(SusySounds.ROCKET_LOOP, SoundCategory.NEUTRAL);
         this.dropPod = dropPod;
         this.repeat = true;
         this.repeatDelay = 0;

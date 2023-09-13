@@ -20,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 
@@ -39,12 +40,12 @@ public class MetaTileEntityHighPressureCryogenicDistillationPlant extends Recipe
 
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start(RIGHT, FRONT, UP)
-                .aisle(new String[]{"CCC", "CCC", "CCC"})
-                .aisle(new String[]{"CSC", "CFC", "CCC"})
-                .aisle(new String[]{"XXX", "XFX", "XXX"}).setRepeatable(1,16)
-                .aisle(new String[]{"DDD", "DDD", "DDD"})
+                .aisle("CCC", "CCC", "CCC")
+                .aisle("CSC", "CFC", "CCC")
+                .aisle("XXX", "XFX", "XXX").setRepeatable(1,16)
+                .aisle("DDD", "DDD", "DDD")
                 .where('S', this.selfPredicate())
-                .where('C', states(new IBlockState[]{this.getCasingState()})
+                .where('C', states(this.getCasingState())
                         .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(3))
                         .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMaxGlobalLimited(1))
                         .or(autoAbilities(false, true, false, false, false, false, false).setExactLimit(1)))
@@ -58,7 +59,7 @@ public class MetaTileEntityHighPressureCryogenicDistillationPlant extends Recipe
                                 .filter(mte->!(mte instanceof MetaTileEntityMultiFluidHatch))
                                 .toArray(MetaTileEntity[]::new))
                                 .setMaxLayerLimited(1)))
-                .where('D', states(new IBlockState[]{this.getCasingState()}))
+                .where('D', states(this.getCasingState()))
                 .where('#', air())
                 .build();
     }
@@ -72,7 +73,8 @@ public class MetaTileEntityHighPressureCryogenicDistillationPlant extends Recipe
     }
 
     @Nonnull
+    @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.BLAST_FURNACE_OVERLAY;
+        return SusyTextures.HPCDT_OVERLAY;
     }
 }

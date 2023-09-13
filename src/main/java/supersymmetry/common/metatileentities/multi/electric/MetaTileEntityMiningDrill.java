@@ -14,26 +14,31 @@ import gregtech.api.recipes.Recipe;
 import gregtech.api.util.GTUtility;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
+import gregtech.client.utils.TooltipHelper;
 import gregtech.common.blocks.*;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.StoneVariantBlock;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import gregtech.api.unification.material.Materials;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockDrillHead;
 import supersymmetry.common.blocks.SuSyBlocks;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class MetaTileEntityMiningDrill extends RecipeMapMultiblockController {
     protected BlockPos targetBlock = null;
     public MetaTileEntityMiningDrill(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.MINING_DRILL_RECIPES);
-        this.recipeMapWorkable = new IndustrialDrillWorkableHandler(this);
+        this.recipeMapWorkable = new IndustrialDrillWorkableHandler(this, true);
     }
 
     @Override
@@ -61,7 +66,7 @@ public class MetaTileEntityMiningDrill extends RecipeMapMultiblockController {
                 .aisle("               ", "     DDDDD     ", "     DDDDD     ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ")
                 .where('S', selfPredicate())
                 .where('A', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)))
-                .where('B', states(new IBlockState[]{MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)})
+                .where('B', states(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel))
                         .or(autoAbilities(true, true, true, true, true, true, false)))
                 .where('C', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('D', states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)))
@@ -81,7 +86,7 @@ public class MetaTileEntityMiningDrill extends RecipeMapMultiblockController {
     @Nonnull
     @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.BLAST_FURNACE_OVERLAY;
+        return SusyTextures.MINING_DRILL_OVERLAY;
     }
 
     @Nonnull
@@ -121,10 +126,15 @@ public class MetaTileEntityMiningDrill extends RecipeMapMultiblockController {
         return false;
     }
 
+    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
+        super.addInformation(stack, player, tooltip, advanced);
+        tooltip.add(TooltipHelper.RAINBOW_SLOW + I18n.format("gregtech.machine.perfect_oc", new Object[0]));
+    }
+    
     protected static class IndustrialDrillWorkableHandler extends MultiblockRecipeLogic {
 
-        public IndustrialDrillWorkableHandler(RecipeMapMultiblockController tileEntity) {
-            super(tileEntity);
+        public IndustrialDrillWorkableHandler(RecipeMapMultiblockController tileEntity, boolean hasPerfectOC) {
+            super(tileEntity, hasPerfectOC);
         }
 
         @Override

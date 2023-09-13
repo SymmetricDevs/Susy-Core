@@ -15,6 +15,7 @@ import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nonnull;
 
@@ -36,7 +37,7 @@ public class MetaTileEntityCondenser extends RecipeMapMultiblockController {
                 .aisle("CCC", "C C", "C C", "CCC")
                 .aisle("CCC", "CSC", "CCC", "CCC")
                 .where('S', selfPredicate())
-                .where('C', states(new IBlockState[]{MetaBlocks.METAL_CASING.getState(MetalCasingType.ALUMINIUM_FROSTPROOF)})
+                .where('C', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.ALUMINIUM_FROSTPROOF))
                         .or(autoAbilities(true, true, false, false, true, true, false)))
                 .where(' ', air())
                 .build();
@@ -50,6 +51,6 @@ public class MetaTileEntityCondenser extends RecipeMapMultiblockController {
     @Nonnull
     @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.BLAST_FURNACE_OVERLAY;
+        return SusyTextures.CONDENSER_OVERLAY;
     }
 }
