@@ -214,7 +214,6 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
             if (this.getMetaTileEntity().hasDrone()) {
                 super.completeRecipe();
             } else {
-                this.performMaintenanceMufflerOperations();
                 this.progressTime = 0;
                 this.setMaxProgress(0);
                 this.recipeEUt = 0;

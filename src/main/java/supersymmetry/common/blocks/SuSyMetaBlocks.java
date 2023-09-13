@@ -5,6 +5,7 @@ import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.properties.PropertyKey;
+import gregtech.api.unification.material.registry.MaterialRegistry;
 import gregtech.api.unification.stack.ItemMaterialInfo;
 import gregtech.api.unification.stack.MaterialStack;
 import net.minecraft.block.Block;
@@ -52,7 +53,7 @@ public class SuSyMetaBlocks {
     protected static void createGeneratedBlock(Predicate<Material> materialPredicate, BiConsumer<Material[], Integer> blockGenerator) {
         Map<Integer, Material[]> blocksToGenerate = new TreeMap<>();
 
-        for (Material material : GregTechAPI.MATERIAL_REGISTRY) {
+        for (Material material : GregTechAPI.materialManager.getRegisteredMaterials()) {
             if (materialPredicate.test(material)) {
                 int id = material.getId();
                 //all bits more significant than last four = metaBlockID = key in blocksToGenerate map
