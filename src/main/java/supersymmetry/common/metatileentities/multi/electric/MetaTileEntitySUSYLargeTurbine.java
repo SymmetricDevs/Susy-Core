@@ -77,14 +77,15 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
                 .aisle("GAAAOOOOO", "GDDDDCCCF", "GAAAAAAAA")
                 .aisle("GAAAAAAAO", "GSAAAAAAO", "G   A   A")
                 .where('S', selfPredicate())
-                .where('A', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING)))
+                .where('A', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING))
+                       .or(autoAbilities(false, true, false, false, false, false, false)) )
                 .where('O', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING))
                         .or(autoAbilities(false, true, false, false, false, true, false)))
                 .where('C', coilOrientation())
                 .where('D', rotorOrientation())
                 .where('F', abilities(MultiblockAbility.OUTPUT_ENERGY))
                 .where('G', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING))
-                        .or(autoAbilities(false, false, false, false, true, false, false)))
+                        .or(autoAbilities(false, true, false, false, true, false, false)))
                 .where(' ', any())
                 .build();
     }
