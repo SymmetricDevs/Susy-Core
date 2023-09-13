@@ -121,34 +121,34 @@ tile.susy_stone_bricks.soapstone.name=Soapstone Bricks
 tile.susy_stone_bricks.kimberlite.name=Kimberlite Bricks
 
 # Materials
-gregtech.material.manganese_iron_arsenic_phosphide=Manganese Iron Arsenic Phosphide
-gregtech.material.praseodymium_nickel=Praseodymium-Nickel
-gregtech.material.gadolinium_silicon_germanium=Gadolinium Silicon Germanium
-gregtech.material.latex=Latex
-gregtech.material.mud=Mud
-gregtech.material.sea_water=Sea Water
+susy.material.manganese_iron_arsenic_phosphide=Manganese Iron Arsenic Phosphide
+susy.material.praseodymium_nickel=Praseodymium-Nickel
+susy.material.gadolinium_silicon_germanium=Gadolinium Silicon Germanium
+susy.material.latex=Latex
+susy.material.mud=Mud
+susy.material.sea_water=Sea Water
 
 # Rock/Mineral Materials
-gregtech.material.fluorite=Fluorite
-gregtech.material.gabbro=Gabbro
-gregtech.material.slate=Slate
-gregtech.material.shale=Shale
-gregtech.material.phyllite=Phyllite
-gregtech.material.limestone=Limestone
-gregtech.material.gneiss=Gneiss
-gregtech.material.kimberlite=Kimberlite
-gregtech.material.muscovite=Muscovite
-gregtech.material.dolomite=Dolomite
-gregtech.material.augite=Augite
-gregtech.material.chlinochlore=Chlinochlore
-gregtech.material.bytownite=Bytownite
-gregtech.material.labradorite=Labradorite
-gregtech.material.andesine=Andesine
-gregtech.material.oligoclase=Oligoclase
-gregtech.material.albite=Albite
-gregtech.material.anorthite=Anorthite
-gregtech.material.forsterite=Forsterite
-gregtech.material.lizardite=Lizardite
+susy.material.fluorite=Fluorite
+susy.material.gabbro=Gabbro
+susy.material.slate=Slate
+susy.material.shale=Shale
+susy.material.phyllite=Phyllite
+susy.material.limestone=Limestone
+susy.material.gneiss=Gneiss
+susy.material.kimberlite=Kimberlite
+susy.material.muscovite=Muscovite
+susy.material.dolomite=Dolomite
+susy.material.augite=Augite
+susy.material.chlinochlore=Chlinochlore
+susy.material.bytownite=Bytownite
+susy.material.labradorite=Labradorite
+susy.material.andesine=Andesine
+susy.material.oligoclase=Oligoclase
+susy.material.albite=Albite
+susy.material.anorthite=Anorthite
+susy.material.forsterite=Forsterite
+susy.material.lizardite=Lizardite
 
 # Ore Prefixes (%s is the localised material name)
 item.material.oreprefix.oreGabbro=Gabbro %s Ore
