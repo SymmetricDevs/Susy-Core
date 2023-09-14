@@ -1,0 +1,695 @@
+# Blocks
+tile.cooling_coil.manganese_iron_arsenic_phosphide.name=锰铁砷磷冷却线圈
+tile.cooling_coil.praseodymium_nickel.name=镨镍冷却线圈
+tile.cooling_coil.gadolinium_silicon_germanium.name=钆硅锗冷却线圈
+tile.cooling_coil.tooltip_temperature=基础冷却能力：§b%,dK
+
+tile.sintering_brick.sintering_block_brick.name=砖烧结块
+tile.sintering_brick.sintering_block_magnetoplated.name=磁镀烧结块
+
+tile.coagulation_tank_wall.wooden_coagulation_tank_wall.name=木质凝固罐壁
+tile.separator_rotor.steel.name=钢质重力分离转子
+
+tile.alternator_coil.copper.name=铜交流发电机线圈
+tile.turbine_rotor.steel.name=钢涡轮块
+tile.drill_head.steel.name=钢钻头
+
+tile.susy_multiblock_casing.silicon_carbide_casing.name=硬质碳化硅壳体
+
+tile.susy_multiblock_casing.sieve_tray.name=筛盘
+tile.susy_multiblock_casing.structural_packing.name=结构填料
+tile.susy_multiblock_casing.ulv_structural_casing.name=基础结构壳体
+tile.susy_multiblock_casing.drone_pad.name=无人机平台
+
+tile.serpentine.basic.name=蛇形铜管方块
+
+tile.structural_block.base_structural_block.name=结构方块
+tile.structural_block.structural_block_low.name=结构方块-条纹
+tile.structural_block.structural_block_lowlight.name=结构方块-反光条纹
+tile.structural_block.structural_block_danger_a.name=结构方块-警示标志A
+tile.structural_block.structural_block_danger_b.name=结构方块-警示标志B
+tile.structural_block.structural_block_danger_c.name=结构方块-警示标志C
+tile.structural_block.structural_block_danger_d.name=结构方块-警示标志D
+tile.structural_block.structural_block_column.name=结构方块-竖纹
+tile.structural_block.structural_block_column_old.name=结构方块-磨损竖纹
+tile.structural_block.structural_block_light.name=结构方块-灯带
+tile.structural_block.structural_block_light_broken.name=结构方块-损坏灯带
+tile.structural_block.structural_block_light_cable.name=结构方块-电缆
+tile.structural_block.structural_block_instruments.name=结构方块-仪表
+tile.structural_block.structural_block_sign_0.name=结构方块-数字0标志
+tile.structural_block.structural_block_sign_1.name=结构方块-数字1标志
+tile.structural_block.structural_block_sign_2.name=结构方块-数字2标志
+tile.structural_block_1.structural_block_exposed.name=结构方块-裸露结构A
+tile.structural_block_1.structural_block_exposed_1.name=结构方块-裸露结构B
+tile.structural_block_1.structural_block_exposed_2.name=结构方块-裸露结构C
+tile.structural_block_1.structural_block_danger_sign.name=结构方块-危险标志
+tile.structural_block_1.structural_block_cable.name=结构方块-电缆（垂直）
+tile.structural_block_1.structural_block_cable_horizontal.name=结构方块-电缆（水平）
+tile.structural_block_1.structural_block_cable_junction.name=结构方块-电缆（转角）
+tile.structural_block_1.structural_block_pipocalypse.name=结构方块-密集管道
+tile.structural_block_1.structural_block_vent.name=结构方块-通风口
+tile.structural_block_1.structural_block_vent_broken.name=结构方块-破损通风口
+
+tile.deposit_block.orthomagmatic.name=正火成岩
+tile.deposit_block.metamorphic.name=变质岩
+tile.deposit_block.sedimentary.name=沉积岩
+tile.deposit_block.hydrothermal.name=热液岩
+tile.deposit_block.alluvial.name=冲积岩
+tile.deposit_block.magmatic_hydrothermal.name=岩浆热液岩
+
+tile.resource_block.bauxite.name=铝土矿
+tile.resource_block.caliche.name=硬土
+tile.resource_block.non_marine_evaporite.name=非海相蒸发矿
+tile.resource_block.halide_evaporite.name=卤化物蒸发矿
+tile.resource_block.sulfate_evaporite.name=硫酸盐蒸发矿
+tile.resource_block.carbonate_evaporite.name=碳酸盐蒸发矿
+tile.resource_block.monazite_alluvial.name=冲积独居石矿
+tile.resource_block.bastnasite_alluvial.name=冲积氟碳铈矿
+tile.resource_block.euxenite_alluvial.name=冲积黑稀土矿
+tile.resource_block.xenotime_alluvial.name=冲积磷钇矿
+tile.resource_block.gold_alluvial.name=冲积金矿
+tile.resource_block.platinum_placer.name=铂砂矿
+tile.resource_block.phosphorite.name=磷灰石矿
+tile.resource_block.potash.name=钾盐矿
+
+tile.multiblock_tank.clarifier.name=澄清槽
+tile.multiblock_tank.flotation.name=泡沫浮选槽
+
+tile.evaporation_bed.dirt.name=蒸发床
+
+tile.electrode_assembly.carbon.name=碳电极组件
+
+tile.home_block.home_block_home.name="重生点标识（默认）"
+tile.home.allowed=设置出生点
+tile.home.denied=不能设置出生点
+
+tile.home_block.home_primitive.name=重生点标识
+tile.home_block.home_primitive.tooltip=原始风格
+tile.home_block.home_gt_brutalist.name=重生点标识
+tile.home_block.home_gt_brutalist.tooltip=G简风格
+tile.home_block.home_renewal_brutalist.name=重生点标识
+tile.home_block.home_renewal_brutalist.tooltip=潮流G简风格
+tile.home_block.home_scifi.name=重生点标识
+tile.home_block.home_scifi.tooltip=科幻风格
+
+# Rocks
+tile.susy_stone_smooth.gabbro.name=辉长岩
+tile.susy_stone_smooth.gneiss.name=片麻岩
+tile.susy_stone_smooth.graphite.name=石墨
+tile.susy_stone_smooth.limestone.name=石灰岩
+tile.susy_stone_smooth.mica.name=云母
+tile.susy_stone_smooth.phyllite.name=叶片岩
+tile.susy_stone_smooth.quartzite.name=石英岩
+tile.susy_stone_smooth.shale.name=页岩
+tile.susy_stone_smooth.slate.name=板岩
+tile.susy_stone_smooth.soapstone.name=皂石
+tile.susy_stone_smooth.kimberlite.name=金伯利岩
+tile.susy_stone_cobble.gabbro.name=辉长岩鹅卵石
+tile.susy_stone_cobble.gneiss.name=片麻岩鹅卵石
+tile.susy_stone_cobble.graphite.name=石墨鹅卵石
+tile.susy_stone_cobble.limestone.name=石灰岩鹅卵石
+tile.susy_stone_cobble.mica.name=云母鹅卵石
+tile.susy_stone_cobble.phyllite.name=叶片岩鹅卵石
+tile.susy_stone_cobble.quartzite.name=石英岩鹅卵石
+tile.susy_stone_cobble.shale.name=页岩鹅卵石
+tile.susy_stone_cobble.slate.name=板岩鹅卵石
+tile.susy_stone_cobble.soapstone.name=皂石鹅卵石
+tile.susy_stone_cobble.kimberlite.name=金伯利岩鹅卵石
+tile.susy_stone_bricks.gabbro.name=辉长岩砖
+tile.susy_stone_bricks.gneiss.name=片麻岩砖
+tile.susy_stone_bricks.graphite.name=石墨砖
+tile.susy_stone_bricks.limestone.name=石灰岩砖
+tile.susy_stone_bricks.mica.name=云母砖
+tile.susy_stone_bricks.phyllite.name=叶片岩砖
+tile.susy_stone_bricks.quartzite.name=石英岩砖
+tile.susy_stone_bricks.shale.name=页岩砖
+tile.susy_stone_bricks.slate.name=板岩砖
+tile.susy_stone_bricks.soapstone.name=皂石砖
+tile.susy_stone_bricks.kimberlite.name=金伯利岩砖
+
+# Materials
+material.manganese_iron_arsenic_phosphide=锰铁砷磷
+material.praseodymium_nickel=镨镍
+material.gadolinium_silicon_germanium=钆硅锗
+material.latex=乳胶
+material.mud=泥浆
+material.sea_water=海水
+
+# Rock/Mineral Materials
+material.fluorite=萤石
+material.gabbro=辉长岩
+material.slate=板岩
+material.shale=页岩
+material.phyllite=叶片岩
+material.limestone=石灰岩
+material.gneiss=片麻岩
+material.kimberlite=金伯利岩
+material.muscovite=白云母
+material.dolomite=白云石
+material.augite=榴辉石
+material.chlinochlore=绿泥石
+material.bytownite=钙钠长石
+material.labradorite=拉长石
+material.andesine=安山长石
+material.oligoclase=钠钙长石
+material.albite=钠长石
+material.anorthite=钙长石
+material.forsterite=镁橄榄石
+material.lizardite=蜥蜴石
+
+# Ore Prefixes (%sis the localised material name)
+item.material.oreprefix.oreGabbro=辉长岩%s矿
+item.material.oreprefix.oreGneiss=片麻岩%s矿
+item.material.oreprefix.oreGraphite=石墨%s矿
+item.material.oreprefix.oreLimestone=石灰岩%s矿
+item.material.oreprefix.oreMica=云母%s矿
+item.material.oreprefix.orePhyllite=叶片岩%s矿
+item.material.oreprefix.oreQuartzite=石英岩%s矿
+item.material.oreprefix.oreShale=页岩%s矿
+item.material.oreprefix.oreSlate=板岩%s矿
+item.material.oreprefix.oreSoapstone=皂石%s矿
+item.material.oreprefix.oreKimberlite=金伯利岩%s矿
+item.material.oreprefix.catalystBed=%s催化剂床
+item.material.oreprefix.catalystPellet=%s催化剂颗粒
+item.material.oreprefix.sheetedFrame=%s镀层框架盒
+
+# Machines/Multiblocks
+gregtech.machine.magnetic_refrigerator.name=磁性冰箱
+gregtech.multiblock.magnetic_refrigerator.min_temperature=§b最低温度：%s
+
+gregtech.machine.sintering_oven.name=烧结炉
+gregtech.multiblock.sintering_oven.can_use_plasma=支持输入等离子体：%s
+gregtech.multiblocks.sintering_oven.use_plasma.affirmative=支持
+gregtech.multiblocks.sintering_oven.use_plasma.negative=不支持
+
+gregtech.machine.coagulation_tank.name=凝固罐
+gregtech.machine.drum.lead.name=铅桶
+gregtech.machine.drum.brass.name=黄铜桶
+
+gregtech.machine.polymerization_tank.name=聚合罐
+gregtech.machine.fluidized_bed_reactor.name=流化床反应器
+
+gregtech.machine.electrolytic_cell.name=电解槽
+
+gregtech.machine.coking_tower.name=焦化塔
+gregtech.machine.vacuum_distillation_tower.name=真空蒸馏塔
+gregtech.machine.smoke_stack.name=烟囱
+gregtech.machine.catalytic_reformer.name=催化重整器
+gregtech.machine.pressure_swing_adsorber.name=压力摆动吸附器
+gregtech.machine.reaction_furnace.name=反应炉
+
+gregtech.machine.fermentation_vat.name=发酵槽
+gregtech.machine.ore_sorter.name=矿石分选机
+gregtech.machine.gravity_separator.name=重力分离器
+gregtech.machine.condenser.name=冷凝器
+gregtech.machine.cooling_unit.name=冷却单元
+gregtech.machine.gas_turbine.name=燃气涡轮机
+gregtech.machine.heat_exchanger.name=热交换器
+gregtech.machine.heat_radiator.name=散热器
+gregtech.machine.large_weapons_factory.name=大型武器工厂
+gregtech.machine.magnetohydrodynamic_generator.name=磁流体发电机
+gregtech.machine.mining_drill.name=岩芯钻头
+gregtech.machine.quencher.name=淬火机
+gregtech.machine.railroad_engineering_station.name=铁路工程站
+gregtech.machine.railroad_engineering_station.tooltip=在中间放置沉浸铁路模组的轨道，使其形成多方块结构\n轨道下方的混凝土可以替换成包括管道或空气在内的任意方块
+
+gregtech.machine.primitive_mud_pump.name=原始泥浆泵
+gregtech.machine.basic_steam_turbine.name=大型蒸汽涡轮机
+gregtech.machine.basic_gas_turbine.name=大型燃气涡轮机
+gregtech.machine.ocean_pumper.name=海洋钻井平台
+gregtech.machine.advanced_arc_furnace.name=高级电弧炉
+gregtech.machine.clarifier.name=澄清器
+gregtech.machine.dumper.name=翻车机
+gregtech.machine.evaporation_pool.name=蒸发池
+gregtech.machine.flare_stack.name=火炬塔
+gregtech.machine.froth_flotation_tank.name=泡沫浮选槽
+gregtech.machine.multi_stage_flash_distiller.name=多级闪蒸蒸馏机
+gregtech.machine.high_temperature_distillation_tower.name=高温蒸馏塔
+gregtech.machine.rotary_kiln.name=回转窑
+gregtech.machine.low_pressure_cryogenic_distillation_plant.name=低压低温蒸馏装置
+gregtech.machine.high_pressure_cryogenic_distillation_plant.name=高压低温蒸馏装置
+gregtech.machine.single_column_cryogenic_distillation_plant.name=单塔低温蒸馏装置
+gregtech.machine.reverberatory_furnace.name=反射炉
+
+gregtech.machine.drone_pad.name=无人机平台
+
+# Properties
+gregtech.recipe.plasma_requirement=需要等离子体：%s
+gregtech.recipe.catalyst=催化剂：%s%s
+gregtech.recipe.blocks=方块：%s
+
+# Latex Collector
+gregtech.machine.latex_collector.steam=需要蒸汽！
+gregtech.machine.latex_collector.tooltip=从相邻的橡胶树木收集乳胶。每刻产生 %d 毫升的乳胶。
+gregtech.machine.latex_collector.bronze.name=蒸汽乳胶收集器
+gregtech.machine.latex_collector.steel.name=高压蒸汽乳胶收集器
+gregtech.machine.latex_collector.lv.name=基础乳胶收集器
+gregtech.machine.latex_collector.mv.name=高级乳胶收集器
+gregtech.machine.latex_collector.hv.name=高级乳胶收集器 II
+gregtech.machine.latex_collector.ev.name=高级乳胶收集器 III
+
+# Vulcanizing Press
+gregtech.machine.vulcanizing_press.bronze.name=蒸汽加压硫化机
+gregtech.machine.vulcanizing_press.steel.name=高压蒸汽加压硫化机
+gregtech.machine.vulcanizing_press.lv.name=基础加压硫化机
+gregtech.machine.vulcanizing_press.mv.name=高级加压硫化机
+gregtech.machine.vulcanizing_press.hv.name=高级加压硫化机 II
+gregtech.machine.vulcanizing_press.ev.name=高级加压硫化机 III
+
+# 蒸汽Mixer
+gregtech.machine.mixer.bronze.name=蒸汽搅拌机
+gregtech.machine.mixer.steel.name=高压蒸汽搅拌机
+
+# Roaster
+gregtech.machine.roaster.bronze.name=蒸汽焙烧炉
+gregtech.machine.roaster.steel.name=高压蒸汽焙烧炉
+gregtech.machine.roaster.lv.name=基础焙烧炉
+gregtech.machine.roaster.mv.name=高级焙烧炉
+gregtech.machine.roaster.hv.name=高级焙烧炉 II
+gregtech.machine.roaster.ev.name=高级焙烧炉 III
+gregtech.machine.roaster.iv.name=精英焙烧炉
+gregtech.machine.roaster.luv.name=精英焙烧炉 II
+gregtech.machine.roaster.zpm.name=精英焙烧炉 III
+gregtech.machine.roaster.uv.name=超级焙烧炉
+gregtech.machine.roaster.uhv.name=史诗焙烧炉
+gregtech.machine.roaster.uev.name=史诗焙烧炉 II
+gregtech.machine.roaster.uiv.name=史诗焙烧炉 III
+gregtech.machine.roaster.uxv.name=史诗焙烧炉 IV
+gregtech.machine.roaster.opv.name=传说焙烧炉
+
+# Vacuum Chamber
+gregtech.machine.vacuum_chamber.bronze.name=蒸汽真空泵
+gregtech.machine.vacuum_chamber.steel.name=高压蒸汽真空泵
+gregtech.machine.vacuum_chamber.lv.name=基础真空泵
+gregtech.machine.vacuum_chamber.mv.name=高级真空泵
+gregtech.machine.vacuum_chamber.hv.name=高级真空泵 II
+gregtech.machine.vacuum_chamber.ev.name=高级真空泵 III
+gregtech.machine.vacuum_chamber.iv.name=精英真空泵
+gregtech.machine.vacuum_chamber.luv.name=精英真空泵 II
+gregtech.machine.vacuum_chamber.zpm.name=精英真空泵 III
+gregtech.machine.vacuum_chamber.uv.name=超级真空泵
+gregtech.machine.vacuum_chamber.uhv.name=史诗真空泵
+gregtech.machine.vacuum_chamber.uev.name=史诗真空泵 II
+gregtech.machine.vacuum_chamber.uiv.name=史诗真空泵 III
+gregtech.machine.vacuum_chamber.uxv.name=史诗真空泵 IV
+gregtech.machine.vacuum_chamber.opv.name=传说真空泵
+
+# CSTR
+gregtech.machine.continuous_stirred_tank_reactor.lv.name=基础连续搅拌槽反应器
+gregtech.machine.continuous_stirred_tank_reactor.mv.name=高级连续搅拌槽反应器
+gregtech.machine.continuous_stirred_tank_reactor.hv.name=高级连续搅拌槽反应器 II
+gregtech.machine.continuous_stirred_tank_reactor.ev.name=高级连续搅拌槽反应器 III
+gregtech.machine.continuous_stirred_tank_reactor.iv.name=精英连续搅拌槽反应器
+gregtech.machine.continuous_stirred_tank_reactor.luv.name=精英连续搅拌槽反应器 II
+gregtech.machine.continuous_stirred_tank_reactor.zpm.name=精英连续搅拌槽反应器 III
+gregtech.machine.continuous_stirred_tank_reactor.uv.name=超级连续搅拌槽反应器
+gregtech.machine.continuous_stirred_tank_reactor.uhv.name=史诗连续搅拌槽反应器
+gregtech.machine.continuous_stirred_tank_reactor.uev.name=史诗连续搅拌槽反应器 II
+gregtech.machine.continuous_stirred_tank_reactor.uiv.name=史诗连续搅拌槽反应器 III
+gregtech.machine.continuous_stirred_tank_reactor.uxv.name=史诗连续搅拌槽反应器 IV
+gregtech.machine.continuous_stirred_tank_reactor.opv.name=传说连续搅拌槽反应器
+
+# Fixed Bed Reactor
+gregtech.machine.fixed_bed_reactor.lv.name=基础固定床反应器
+gregtech.machine.fixed_bed_reactor.mv.name=高级固定床反应器
+gregtech.machine.fixed_bed_reactor.hv.name=高级固定床反应器 II
+gregtech.machine.fixed_bed_reactor.ev.name=高级固定床反应器 III
+gregtech.machine.fixed_bed_reactor.iv.name=精英固定床反应器
+gregtech.machine.fixed_bed_reactor.luv.name=精英固定床反应器 II
+gregtech.machine.fixed_bed_reactor.zpm.name=精英固定床反应器 III
+gregtech.machine.fixed_bed_reactor.uv.name=超级固定床反应器
+gregtech.machine.fixed_bed_reactor.uhv.name=史诗固定床反应器
+gregtech.machine.fixed_bed_reactor.uev.name=史诗固定床反应器 II
+gregtech.machine.fixed_bed_reactor.uiv.name=史诗固定床反应器 III
+gregtech.machine.fixed_bed_reactor.uxv.name=史诗固定床反应器 IV
+gregtech.machine.fixed_bed_reactor.opv.name=传说固定床反应器
+
+# Trickle Bed Reactor
+gregtech.machine.trickle_bed_reactor.lv.name=基础涓流床反应器
+gregtech.machine.trickle_bed_reactor.mv.name=高级涓流床反应器
+gregtech.machine.trickle_bed_reactor.hv.name=高级涓流床反应器 II
+gregtech.machine.trickle_bed_reactor.ev.name=高级涓流床反应器 III
+gregtech.machine.trickle_bed_reactor.iv.name=精英涓流床反应器
+gregtech.machine.trickle_bed_reactor.luv.name=精英涓流床反应器 II
+gregtech.machine.trickle_bed_reactor.zpm.name=精英涓流床反应器 III
+gregtech.machine.trickle_bed_reactor.uv.name=超级涓流床反应器
+gregtech.machine.trickle_bed_reactor.uhv.name=史诗涓流床反应器
+gregtech.machine.trickle_bed_reactor.uev.name=史诗涓流床反应器 II
+gregtech.machine.trickle_bed_reactor.uiv.name=史诗涓流床反应器 III
+gregtech.machine.trickle_bed_reactor.uxv.name=史诗涓流床反应器 IV
+gregtech.machine.trickle_bed_reactor.opv.name=传说涓流床反应器
+
+# Bubble Column Reactor
+gregtech.machine.bubble_column_reactor.lv.name=基础鼓泡反应器
+gregtech.machine.bubble_column_reactor.mv.name=高级鼓泡反应器
+gregtech.machine.bubble_column_reactor.hv.name=高级鼓泡反应器 II
+gregtech.machine.bubble_column_reactor.ev.name=高级鼓泡反应器 III
+gregtech.machine.bubble_column_reactor.iv.name=精英鼓泡反应器
+gregtech.machine.bubble_column_reactor.luv.name=精英鼓泡反应器 II
+gregtech.machine.bubble_column_reactor.zpm.name=精英鼓泡反应器 III
+gregtech.machine.bubble_column_reactor.uv.name=超级鼓泡反应器
+gregtech.machine.bubble_column_reactor.uhv.name=史诗鼓泡反应器
+gregtech.machine.bubble_column_reactor.uev.name=史诗鼓泡反应器 II
+gregtech.machine.bubble_column_reactor.uiv.name=史诗鼓泡反应器 III
+gregtech.machine.bubble_column_reactor.uxv.name=史诗鼓泡反应器 IV
+gregtech.machine.bubble_column_reactor.opv.name=传说鼓泡反应器
+
+# Batch Reactor
+gregtech.machine.batch_reactor.lv.name=基础间歇式反应器
+gregtech.machine.batch_reactor.mv.name=高级间歇式反应器
+gregtech.machine.batch_reactor.hv.name=高级间歇式反应器 II
+gregtech.machine.batch_reactor.ev.name=高级间歇式反应器 III
+gregtech.machine.batch_reactor.iv.name=精英间歇式反应器
+gregtech.machine.batch_reactor.luv.name=精英间歇式反应器 II
+gregtech.machine.batch_reactor.zpm.name=精英间歇式反应器 III
+gregtech.machine.batch_reactor.uv.name=超级间歇式反应器
+gregtech.machine.batch_reactor.uhv.name=史诗间歇式反应器
+gregtech.machine.batch_reactor.uev.name=史诗间歇式反应器 II
+gregtech.machine.batch_reactor.uiv.name=史诗间歇式反应器 III
+gregtech.machine.batch_reactor.uxv.name=史诗间歇式反应器 IV
+gregtech.machine.batch_reactor.opv.name=传说间歇式反应器
+
+# Crystallizer
+gregtech.machine.crystallizer.lv.name=基础结晶器
+gregtech.machine.crystallizer.mv.name=高级结晶器
+gregtech.machine.crystallizer.hv.name=高级结晶器 II
+gregtech.machine.crystallizer.ev.name=高级结晶器 III
+gregtech.machine.crystallizer.iv.name=精英结晶器
+gregtech.machine.crystallizer.luv.name=精英结晶器 II
+gregtech.machine.crystallizer.zpm.name=精英结晶器 III
+gregtech.machine.crystallizer.uv.name=超级结晶器
+gregtech.machine.crystallizer.uhv.name=史诗结晶器
+gregtech.machine.crystallizer.uev.name=史诗结晶器 II
+gregtech.machine.crystallizer.uiv.name=史诗结晶器 III
+gregtech.machine.crystallizer.uxv.name=史诗结晶器 IV
+gregtech.machine.crystallizer.opv.name=传说结晶器
+
+# Dryer
+gregtech.machine.dryer.lv.name=基础干燥机
+gregtech.machine.dryer.mv.name=高级干燥机
+gregtech.machine.dryer.hv.name=高级干燥机 II
+gregtech.machine.dryer.ev.name=高级干燥机 III
+gregtech.machine.dryer.iv.name=精英干燥机
+gregtech.machine.dryer.luv.name=精英干燥机 II
+gregtech.machine.dryer.zpm.name=精英干燥机 III
+gregtech.machine.dryer.uv.name=超级干燥机
+gregtech.machine.dryer.uhv.name=史诗干燥机
+gregtech.machine.dryer.uev.name=史诗干燥机 II
+gregtech.machine.dryer.uiv.name=史诗干燥机 III
+gregtech.machine.dryer.uxv.name=史诗干燥机 IV
+gregtech.machine.dryer.opv.name=传说干燥机
+
+# Ion Exchange Column
+gregtech.machine.ion_exchange_column.lv.name=基础离子交换塔
+gregtech.machine.ion_exchange_column.mv.name=高级离子交换塔
+gregtech.machine.ion_exchange_column.hv.name=高级离子交换塔 II
+gregtech.machine.ion_exchange_column.ev.name=高级离子交换塔 III
+gregtech.machine.ion_exchange_column.iv.name=精英离子交换塔
+gregtech.machine.ion_exchange_column.luv.name=精英离子交换塔 II
+gregtech.machine.ion_exchange_column.zpm.name=精英离子交换塔 III
+gregtech.machine.ion_exchange_column.uv.name=超级离子交换塔
+gregtech.machine.ion_exchange_column.uhv.name=史诗离子交换塔
+gregtech.machine.ion_exchange_column.uev.name=史诗离子交换塔 II
+gregtech.machine.ion_exchange_column.uiv.name=史诗离子交换塔 III
+gregtech.machine.ion_exchange_column.uxv.name=史诗离子交换塔 IV
+gregtech.machine.ion_exchange_column.opv.name=传说离子交换塔
+
+# Zone Refiner
+gregtech.machine.zone_refiner.lv.name=基础区域精炼炉
+gregtech.machine.zone_refiner.mv.name=高级区域精炼炉
+gregtech.machine.zone_refiner.hv.name=高级区域精炼炉 II
+gregtech.machine.zone_refiner.ev.name=高级区域精炼炉 III
+gregtech.machine.zone_refiner.iv.name=精英区域精炼炉
+gregtech.machine.zone_refiner.luv.name=精英区域精炼炉 II
+gregtech.machine.zone_refiner.zpm.name=精英区域精炼炉 III
+gregtech.machine.zone_refiner.uv.name=超级区域精炼炉
+gregtech.machine.zone_refiner.uhv.name=史诗区域精炼炉
+gregtech.machine.zone_refiner.uev.name=史诗区域精炼炉 II
+gregtech.machine.zone_refiner.uiv.name=史诗区域精炼炉 III
+gregtech.machine.zone_refiner.uxv.name=史诗区域精炼炉 IV
+gregtech.machine.zone_refiner.opv.name=传说区域精炼炉
+
+# Tube Furnace
+gregtech.machine.tube_furnace.lv.name=基础管式炉
+gregtech.machine.tube_furnace.mv.name=高级管式炉
+gregtech.machine.tube_furnace.hv.name=高级管式炉 II
+gregtech.machine.tube_furnace.ev.name=高级管式炉 III
+gregtech.machine.tube_furnace.iv.name=精英管式炉
+gregtech.machine.tube_furnace.luv.name=精英管式炉 II
+gregtech.machine.tube_furnace.zpm.name=精英管式炉 III
+gregtech.machine.tube_furnace.uv.name=超级管式炉
+gregtech.machine.tube_furnace.uhv.name=史诗管式炉
+gregtech.machine.tube_furnace.uev.name=史诗管式炉 II
+gregtech.machine.tube_furnace.uiv.name=史诗管式炉 III
+gregtech.machine.tube_furnace.uxv.name=史诗管式炉 IV
+gregtech.machine.tube_furnace.opv.name=传说管式炉
+
+# UV Light Box
+gregtech.machine.uv_light_box.lv.name=基础紫外光箱
+gregtech.machine.uv_light_box.mv.name=高级紫外光箱
+gregtech.machine.uv_light_box.hv.name=高级紫外光箱 II
+gregtech.machine.uv_light_box.ev.name=高级紫外光箱 III
+gregtech.machine.uv_light_box.iv.name=精英紫外光箱
+gregtech.machine.uv_light_box.luv.name=精英紫外光箱 II
+gregtech.machine.uv_light_box.zpm.name=精英紫外光箱 III
+gregtech.machine.uv_light_box.uv.name=超级紫外光箱
+gregtech.machine.uv_light_box.uhv.name=史诗紫外光箱
+gregtech.machine.uv_light_box.uev.name=史诗紫外光箱 II
+gregtech.machine.uv_light_box.uiv.name=史诗紫外光箱 III
+gregtech.machine.uv_light_box.uxv.name=史诗紫外光箱 IV
+gregtech.machine.uv_light_box.opv.name=传说紫外光箱
+
+# CVD
+gregtech.machine.cvd.lv.name=基础化学气相沉积器
+gregtech.machine.cvd.mv.name=高级化学气相沉积器
+gregtech.machine.cvd.hv.name=高级化学气相沉积器 II
+gregtech.machine.cvd.ev.name=高级化学气相沉积器 III
+gregtech.machine.cvd.iv.name=精英化学气相沉积器
+gregtech.machine.cvd.luv.name=精英化学气相沉积器 II
+gregtech.machine.cvd.zpm.name=精英化学气相沉积器 III
+gregtech.machine.cvd.uv.name=超级化学气相沉积器
+gregtech.machine.cvd.uhv.name=史诗化学气相沉积器
+gregtech.machine.cvd.uev.name=史诗化学气相沉积器 II
+gregtech.machine.cvd.uiv.name=史诗化学气相沉积器 III
+gregtech.machine.cvd.uxv.name=史诗化学气相沉积器 IV
+gregtech.machine.cvd.opv.name=传说化学气相沉积器
+
+# Ion Implanter
+gregtech.machine.ion_implanter.lv.name=基础离子注入机
+gregtech.machine.ion_implanter.mv.name=高级离子注入机
+gregtech.machine.ion_implanter.hv.name=高级离子注入机 II
+gregtech.machine.ion_implanter.ev.name=高级离子注入机 III
+gregtech.machine.ion_implanter.iv.name=精英离子注入机
+gregtech.machine.ion_implanter.luv.name=精英离子注入机 II
+gregtech.machine.ion_implanter.zpm.name=精英离子注入机 III
+gregtech.machine.ion_implanter.uv.name=超级离子注入机
+gregtech.machine.ion_implanter.uhv.name=史诗离子注入机
+gregtech.machine.ion_implanter.uev.name=史诗离子注入机 II
+gregtech.machine.ion_implanter.uiv.name=史诗离子注入机 III
+gregtech.machine.ion_implanter.uxv.name=史诗离子注入机 IV
+gregtech.machine.ion_implanter.opv.name=传说离子注入机
+
+# Fluid Compressor
+gregtech.machine.fluid_compressor.lv.name=基础流体压缩机
+gregtech.machine.fluid_compressor.mv.name=高级流体压缩机
+gregtech.machine.fluid_compressor.hv.name=高级流体压缩机 II
+gregtech.machine.fluid_compressor.ev.name=高级流体压缩机 III
+gregtech.machine.fluid_compressor.iv.name=精英流体压缩机
+gregtech.machine.fluid_compressor.luv.name=精英流体压缩机 II
+gregtech.machine.fluid_compressor.zpm.name=精英流体压缩机 III
+gregtech.machine.fluid_compressor.uv.name=超级流体压缩机
+gregtech.machine.fluid_compressor.uhv.name=史诗流体压缩机
+gregtech.machine.fluid_compressor.uev.name=史诗流体压缩机 II
+gregtech.machine.fluid_compressor.uiv.name=史诗流体压缩机 III
+gregtech.machine.fluid_compressor.uxv.name=史诗流体压缩机 IV
+gregtech.machine.fluid_compressor.opv.name=传说流体压缩机
+
+# Fluid Decompressor
+gregtech.machine.fluid_decompressor.lv.name=基础流体减压器
+gregtech.machine.fluid_decompressor.mv.name=高级流体减压器
+gregtech.machine.fluid_decompressor.hv.name=高级流体减压器 II
+gregtech.machine.fluid_decompressor.ev.name=高级流体减压器 III
+gregtech.machine.fluid_decompressor.iv.name=精英流体减压器
+gregtech.machine.fluid_decompressor.luv.name=精英流体减压器 II
+gregtech.machine.fluid_decompressor.zpm.name=精英流体减压器 III
+gregtech.machine.fluid_decompressor.uv.name=超级流体减压器
+gregtech.machine.fluid_decompressor.uhv.name=史诗流体减压器
+gregtech.machine.fluid_decompressor.uev.name=史诗流体减压器 II
+gregtech.machine.fluid_decompressor.uiv.name=史诗流体减压器 III
+gregtech.machine.fluid_decompressor.uxv.name=史诗流体减压器 IV
+gregtech.machine.fluid_decompressor.opv.name=传说流体减压器
+
+# Weapons Factory
+gregtech.machine.weapons_factory.lv.name=基础武器工厂
+gregtech.machine.weapons_factory.mv.name=高级武器工厂
+gregtech.machine.weapons_factory.hv.name=高级武器工厂 II
+gregtech.machine.weapons_factory.ev.name=高级武器工厂 III
+gregtech.machine.weapons_factory.iv.name=精英武器工厂
+gregtech.machine.weapons_factory.luv.name=精英武器工厂 II
+gregtech.machine.weapons_factory.zpm.name=精英武器工厂 III
+gregtech.machine.weapons_factory.uv.name=超级武器工厂
+gregtech.machine.weapons_factory.uhv.name=史诗武器工厂
+gregtech.machine.weapons_factory.uev.name=史诗武器工厂 II
+gregtech.machine.weapons_factory.uiv.name=史诗武器工厂 III
+gregtech.machine.weapons_factory.uxv.name=史诗武器工厂 IV
+gregtech.machine.weapons_factory.opv.name=传说武器工厂
+
+# Phase Separator
+gregtech.machine.phase_separator.lv.name=相分离器
+
+# Electrostatic Separator
+gregtech.machine.electrostatic_separator.lv.name=基础静电分选机
+gregtech.machine.electrostatic_separator.mv.name=高级静电分选机
+gregtech.machine.electrostatic_separator.hv.name=高级静电分选机 II
+gregtech.machine.electrostatic_separator.ev.name=高级静电分选机 III
+gregtech.machine.electrostatic_separator.iv.name=精英静电分选机
+gregtech.machine.electrostatic_separator.luv.name=精英静电分选机 II
+gregtech.machine.electrostatic_separator.zpm.name=精英静电分选机 III
+gregtech.machine.electrostatic_separator.uv.name=超级静电分选机
+gregtech.machine.electrostatic_separator.uhv.name=史诗静电分选机
+gregtech.machine.electrostatic_separator.uev.name=史诗静电分选机 II
+gregtech.machine.electrostatic_separator.uiv.name=史诗静电分选机 III
+gregtech.machine.electrostatic_separator.uxv.name=史诗静电分选机 IV
+gregtech.machine.electrostatic_separator.opv.name=传说静电分选机
+
+gregtech.machine.bath_condenser.lv.name=浴槽冷凝器
+gregtech.machine.bath_condenser.lv.tooltip=只能在低温蒸馏塔内工作
+
+# Recipemaps
+recipemap.coagulation_tank.name=凝固罐
+recipemap.latex_collector.name=乳胶收集器
+recipemap.vulcanizing_press.name=加压硫化
+recipemap.roaster.name=焙烧炉
+recipemap.vacuum_chamber.name=真空泵
+recipemap.continuous_stirred_tank_reactor.name=连续搅拌槽反应器
+recipemap.fixed_bed_reactor.name=固定床反应器
+recipemap.trickle_bed_reactor.name=涓流床反应器
+recipemap.crystallizer.name=结晶器
+recipemap.bubble_column_reactor.name=鼓泡反应器
+recipemap.fluidized_bed_reactor.name=流化床反应器
+recipemap.batch_reactor.name=间歇式反应器
+recipemap.tube_furnace.name=管式炉
+recipemap.zone_refiner.name=区域精炼炉
+recipemap.ion_exchange_column.name=离子交换塔
+recipemap.polymerization_tank.name=聚合罐
+recipemap.uv_light_box.name=紫外光箱
+recipemap.ion_implantation.name=离子注入器
+recipemap.cvd.name=化学气相沉积器
+recipemap.ore_sorter.name=矿石分选机
+recipemap.cooling_tower.name=冷却塔
+recipemap.cooling_unit.name=冷却单元
+recipemap.fluid_decompressor.name=流体减压器
+recipemap.fluid_compressor.name=流体压缩器
+recipemap.heat_exchanger.name=热交换器
+recipemap.condenser.name=冷凝器
+recipemap.radiator.name=散热器
+recipemap.quencher.name=淬火机
+recipemap.weapons_factory.name=武器工厂
+recipemap.large_weapons_factory.name=大型武器工厂
+recipemap.railroad_engineering_station.name=铁路工程站
+recipemap.mining_drill.name=岩芯钻探
+recipemap.magnetohydrodynamic_generator.name=磁流体发电机
+recipemap.reaction_furnace.name=反应炉
+recipemap.pressure_swing_adsorption.name=压力摆动吸附
+recipemap.high_temperature_distillation.name=高温蒸馏
+recipemap.in_situ_leacher.name=原地浸出
+recipemap.euv_lithography.name=极紫外光刻
+recipemap.advanced_arc_furnace.name=高级电弧炉
+recipemap.evaporation_pool.name=蒸发池
+recipemap.clarifier.name=澄清器
+recipemap.multi_stage_flash_distillation.name=多级闪蒸蒸馏
+recipemap.flare_stack.name=火炬塔
+recipemap.dumping.name=Dumping
+recipemap.froth_flotation.name=泡沫浮选
+recipemap.rotary_kiln.name=回转窑
+recipemap.low_pressure_cryogenic_distillation.name=低压低温蒸馏机
+recipemap.high_pressure_cryogenic_distillation.name=高压低温蒸馏机
+recipemap.reverberatory_furnace.name=反射炉
+recipemap.phase_separator.name=相分离器
+recipemap.bath_condenser.name=浴式冷凝器
+recipemap.drone_pad.name=无人机平台
+
+gregtech.multiblock.primitive_mud_pump.description=原始泥浆泵是一个蒸汽时代的多方块结构。将其置于河流生物群系中，并使其控制器Y轴高度为64~80，它会每秒收集一次泥浆。它可以使用泵、ULV输出仓或LV输出仓。
+gregtech.multiblock.ocean_pumper.description=海洋钻井平台是一个电动多方块结构，将其置于于海洋生物群系中，并使其控制器Y轴高度为70~75，那么在在MV电压等级下，它每秒可以收集基础量为8000 L的海水。它需要输出仓、维护仓、能量输入仓各一个。
+
+# Energy Hatches
+
+gregtech.machine.energy_hatch.output_4a.lv.name=4安发电仓（LV）
+gregtech.machine.energy_hatch.output_16a.lv.name=16安发电仓（LV）
+gregtech.machine.energy_hatch.output_4a.mv.name=4安发电仓（MV）
+gregtech.machine.energy_hatch.output_16a.mv.name=16安发电仓（MV）
+gregtech.machine.energy_hatch.output_4a.hv.name=4安发电仓（HV）
+gregtech.machine.energy_hatch.output_16a.hv.name=16安发电仓（HV）
+gregtech.machine.energy_hatch.output_16a.ev.name=16安发电仓（EV）
+
+# Other multiblock parts
+
+gregtech.machine.dumping_hatch=卸货仓
+gregtech.machine.dumping_hatch.lv.name=卸货仓
+
+# Metaitems
+metaitem.catalyst_bed_support_grid.name=催化床支撑网
+metaitem.conveyor.steam.name=蒸汽传送带
+metaitem.pump.steam.name=蒸汽泵
+
+# Catalysts
+gregtech.universal.catalysts.tooltip.tier=§e最高电压: §f%,d EU/T (%s§f)
+gregtech.universal.catalysts.tooltip.non_tiered=§e无等级催化剂§
+gregtech.universal.catalysts.tooltip.yield.tiered=§a每级增加产出：§fx%d。§f
+gregtech.universal.catalysts.tooltip.energy.tiered=§a每级增加能耗：§fx%d。§f
+gregtech.universal.catalysts.tooltip.speed.tiered=§a每级提高速度：§fx%d。§f
+gregtech.universal.catalysts.tooltip.yield=§a增加产出：§fx%d
+gregtech.universal.catalysts.tooltip.energy=§a能量消耗：§fx%d
+gregtech.universal.catalysts.tooltip.speed=§a提高速度：§fx%d
+gregtech.universal.catalysts.tooltip.title=%s
+
+# Oxidation Catalyst Bed
+gregtech.catalyst_group.oxidation_catalyst_beds.name=催化氧化
+metaitem.ulv_catalyst_bed_oxidation.name=ULV 催化氧化床
+metaitem.lv_catalyst_bed_oxidation.name=LV 催化氧化床
+metaitem.mv_catalyst_bed_oxidation.name=MV 催化氧化床
+metaitem.hv_catalyst_bed_oxidation.name=HV 催化氧化床
+metaitem.ev_catalyst_bed_oxidation.name=EV 催化氧化床
+metaitem.iv_catalyst_bed_oxidation.name=IV 催化氧化床
+metaitem.luv_catalyst_bed_oxidation.name=LUV 催化氧化床
+metaitem.zpm_catalyst_bed_oxidation.name=ZPM 催化氧化床
+metaitem.uv_catalyst_bed_oxidation.name=UV 催化氧化床
+metaitem.uhv_catalyst_bed_oxidation.name=UHV 催化氧化床
+metaitem.uev_catalyst_bed_oxidation.name=UEV 催化氧化床
+metaitem.uiv_catalyst_bed_oxidation.name=UIV 催化氧化床
+metaitem.uxv_catalyst_bed_oxidation.name=UXV 催化氧化床
+metaitem.opv_catalyst_bed_oxidation.name=OpV 催化氧化床
+
+# Reduction Catalyst Bed
+gregtech.catalyst_group.reduction_catalyst_beds.name=催化还原
+metaitem.ulv_catalyst_bed_reduction.name=ULV 催化还原床
+metaitem.lv_catalyst_bed_reduction.name=LV 催化还原床
+metaitem.mv_catalyst_bed_reduction.name=MV 催化还原床
+metaitem.hv_catalyst_bed_reduction.name=HV 催化还原床
+metaitem.ev_catalyst_bed_reduction.name=EV 催化还原床
+metaitem.iv_catalyst_bed_reduction.name=IV 催化还原床
+metaitem.luv_catalyst_bed_reduction.name=LUV 催化还原床
+metaitem.zpm_catalyst_bed_reduction.name=ZPM 催化还原床
+metaitem.uv_catalyst_bed_reduction.name=UV 催化还原床
+metaitem.uhv_catalyst_bed_reduction.name=UHV 催化还原床
+metaitem.uev_catalyst_bed_reduction.name=UEV 催化还原床
+metaitem.uiv_catalyst_bed_reduction.name=UIV 催化还原床
+metaitem.uxv_catalyst_bed_reduction.name=UXV 催化还原床
+metaitem.opv_catalyst_bed_reduction.name=OpV 催化还原床
+
+# Standard Catalyst
+gregtech.catalyst_group.standard_catalysts.name=标准催化剂
+
+# Cracking Catalyst
+gregtech.catalyst_group.cracking_catalyst_beds.name=裂化剂
+metaitem.standard_catalyst_bed_cracking.name=裂化床
+
+# Machine Translations
+susy.ocean_pumper.full=储罐已满！
+susy.ocean_pumper.drainrate=当前产出速率: %s
+
+# Latex Logs
+gregtech.block_group_members.latex_logs.name=橡胶树原木
+
+# Extra recipe info
+susy.recipe.dimensions=维度: %s
