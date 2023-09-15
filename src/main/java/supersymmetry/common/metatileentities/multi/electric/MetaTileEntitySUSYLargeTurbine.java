@@ -72,20 +72,25 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
+        TraceabilityPredicate maintenance = autoAbilities(false, true, false, false, false, false, false).setMaxGlobalLimited(1);
+
         return FactoryBlockPattern.start()
                 .aisle("GAAAAAAAO", "GAAAAAAAO", "G   A   A")
                 .aisle("GAAAOOOOO", "GDDDDCCCF", "GAAAAAAAA")
                 .aisle("GAAAAAAAO", "GSAAAAAAO", "G   A   A")
                 .where('S', selfPredicate())
                 .where('A', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING))
-                       .or(autoAbilities(false, true, false, false, false, false, false)) )
+                       .or(autoAbilities(false, false, false, false, false, false, false)))
+                       .or(maintenance)
                 .where('O', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING))
-                        .or(autoAbilities(false, true, false, false, false, true, false)))
+                        .or(autoAbilities(false, false, false, false, false, true, false)))
+                        .or(maintenance)
                 .where('C', coilOrientation())
                 .where('D', rotorOrientation())
                 .where('F', abilities(MultiblockAbility.OUTPUT_ENERGY))
                 .where('G', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING))
-                        .or(autoAbilities(false, true, false, false, true, false, false)))
+                        .or(autoAbilities(false, false, false, false, true, false, false)))
+                        .or(maintenance)
                 .where(' ', any())
                 .build();
     }
