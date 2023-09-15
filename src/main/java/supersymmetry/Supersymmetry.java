@@ -6,10 +6,12 @@ import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.fluids.SusyFluids;
 import supersymmetry.api.sound.SusySounds;
 import supersymmetry.common.CommonProxy;
 import supersymmetry.common.SusyMetaEntities;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.blocks.SuSyMetaBlocks;
 import supersymmetry.common.covers.SuSyCoverBehaviors;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
@@ -38,8 +40,10 @@ public class Supersymmetry {
     public void onPreInit(@NotNull FMLPreInitializationEvent event) {
         proxy.preLoad();
 
+        SuSyMetaBlocks.init();
         SuSyMetaItems.initMetaItems();
         SuSyBlocks.init();
+        SusyFluids.init();
 
         SusySounds.registerSounds();
 

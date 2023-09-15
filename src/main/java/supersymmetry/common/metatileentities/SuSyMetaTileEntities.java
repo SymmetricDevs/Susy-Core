@@ -21,6 +21,7 @@ import supersymmetry.api.metatileentity.PseudoMultiSteamMachineMetaTileEntity;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicator;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicators;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.metatileentities.multi.electric.*;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCoagulationTank;
@@ -101,7 +102,6 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntitySUSYLargeTurbine BASIC_GAS_TURBINE;
     public static MetaTileEntitySUSYLargeTurbine BASIC_STEAM_TURBINE;
     public static MetaTileEntityHeatExchanger HEAT_EXCHANGER;
-    public static MetaTileEntityTappedOffHeatExchanger TAPPED_OFF_HEAT_EXCHANGER;
     public static MetaTileEntityHeatRadiator HEAT_RADIATOR;
     public static MetaTileEntityLargeWeaponsFactory LARGE_WEAPONS_FACTORY;
     public static MetaTileEntityMagnetohydrodynamicGenerator MAGNETOHYDRODYNAMIC_GENERATOR;
@@ -135,7 +135,6 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityHighPressureCryogenicDistillationPlant HIGH_PRESSURE_CRYOGENIC_DISTILLATION_PLANT;
     public static MetaTileEntityLowPressureCryogenicDistillationPlant LOW_PRESSURE_CRYOGENIC_DISTILLATION_PLANT;
     public static MetaTileEntitySingleColumnCryogenicDistillationPlant SINGLE_COLUMN_CRYOGENIC_DISTILLATION_PLANT;
-    public static MetaTileEntityContactCooler CONTACT_COOLER;
     public static MetaTileEntityReverberatoryFurnace REVERBERATORY_FURNACE;
 
     public static SimpleMachineMetaTileEntity[] PHASE_SEPARATOR;
@@ -153,7 +152,7 @@ public class SuSyMetaTileEntities {
 
         //LATEX_COLLECTOR_BRONZE = registerMetaTileEntity(14510, new MetaTileEntitySteamLatexCollector(susyId("latex_collector.bronze")));
         registerPseudoMultiSteamMTE(STEAM_LATEX_COLLECTOR, 14510, "latex_collector", SuSyRecipeMaps.LATEX_COLLECTOR_RECIPES, SuSySteamProgressIndicators.EXTRACTION_STEAM, SusyTextures.LATEX_COLLECTOR_OVERLAY, false);
-        registerPseudoMultiMTE(LATEX_COLLECTOR, 3, 14502, "latex_collector", SuSyRecipeMaps.LATEX_COLLECTOR_RECIPES, SusyTextures.LATEX_COLLECTOR_OVERLAY, true, (tier) -> Math.min(GTUtility.defaultTankSizeFunction.apply(tier)*2, 64000));
+        registerPseudoMultiMTE(LATEX_COLLECTOR, 3, 14502, "latex_collector", SuSyRecipeMaps.LATEX_COLLECTOR_RECIPES, SusyTextures.LATEX_COLLECTOR_OVERLAY, true, SuSyUtility.collectorTankSizeFunction);
 
         SINTERING_OVEN = registerMetaTileEntity(14521, new MetaTileEntitySinteringOven(susyId("sintering_oven")));
 
@@ -161,7 +160,7 @@ public class SuSyMetaTileEntities {
         registerCatalystMTE(VULCANIZING_PRESS, 3, 14517, "vulcanizing_press", SuSyRecipeMaps.VULCANIZATION_RECIPES, SusyTextures.VULCANIZING_PRESS_OVERLAY, true);
 
         registerSimpleSteamMTE(STEAM_ROASTER, 14679, "roaster", SuSyRecipeMaps.ROASTER_RECIPES, SuSySteamProgressIndicators.ARROW, SusyTextures.ROASTER_OVERLAY, true);
-        registerCatalystMTE(ROASTER, 12, 14523, "roaster", SuSyRecipeMaps.ROASTER_RECIPES, SusyTextures.ROASTER_OVERLAY, true, (tier) -> Math.min((GTUtility.defaultTankSizeFunction.apply(tier)*3) >> 1, 64000));
+        registerCatalystMTE(ROASTER, 12, 14523, "roaster", SuSyRecipeMaps.ROASTER_RECIPES, SusyTextures.ROASTER_OVERLAY, true, SuSyUtility.bulkTankSizeFunction);
 
         registerSimpleSteamMTE(STEAM_MIXER, 14536, "mixer", RecipeMaps.MIXER_RECIPES, SuSySteamProgressIndicators.MIXER, SusyTextures.MIXER_OVERLAY_STEAM, false);
 
@@ -169,15 +168,15 @@ public class SuSyMetaTileEntities {
         registerSimpleMTE(VACUUM_CHAMBER, 12, 14540, "vacuum_chamber", SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY, true);
 
         //chem overhaul
-        registerContinuousMachineMTE(CONTINUOUS_STIRRED_TANK_REACTOR, 12, 14554, "continuous_stirred_tank_reactor", SuSyRecipeMaps.CSTR_RECIPES, SusyTextures.CONTINUOUS_STIRRED_TANK_REACTOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
-        registerContinuousMachineMTE(FIXED_BED_REACTOR, 12, 14567, "fixed_bed_reactor", SuSyRecipeMaps.FIXED_BED_REACTOR_RECIPES, SusyTextures.FIXED_BED_REACTOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
-        registerContinuousMachineMTE(TRICKLE_BED_REACTOR, 12, 14580, "trickle_bed_reactor", SuSyRecipeMaps.TRICKLE_BED_REACTOR_RECIPES, SusyTextures.TRICKLE_BED_REACTOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
-        registerContinuousMachineMTE(BUBBLE_COLUMN_REACTOR, 12, 14606, "bubble_column_reactor", SuSyRecipeMaps.BUBBLE_COLUMN_REACTOR_RECIPES, SusyTextures.BUBBLE_COLUMN_REACTOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+        registerContinuousMachineMTE(CONTINUOUS_STIRRED_TANK_REACTOR, 12, 14554, "continuous_stirred_tank_reactor", SuSyRecipeMaps.CSTR_RECIPES, SusyTextures.CONTINUOUS_STIRRED_TANK_REACTOR_OVERLAY, true, SuSyUtility.reactorTankSizeFunction);
+        registerContinuousMachineMTE(FIXED_BED_REACTOR, 12, 14567, "fixed_bed_reactor", SuSyRecipeMaps.FIXED_BED_REACTOR_RECIPES, SusyTextures.FIXED_BED_REACTOR_OVERLAY, true, SuSyUtility.reactorTankSizeFunction);
+        registerContinuousMachineMTE(TRICKLE_BED_REACTOR, 12, 14580, "trickle_bed_reactor", SuSyRecipeMaps.TRICKLE_BED_REACTOR_RECIPES, SusyTextures.TRICKLE_BED_REACTOR_OVERLAY, true, SuSyUtility.reactorTankSizeFunction);
+        registerContinuousMachineMTE(BUBBLE_COLUMN_REACTOR, 12, 14606, "bubble_column_reactor", SuSyRecipeMaps.BUBBLE_COLUMN_REACTOR_RECIPES, SusyTextures.BUBBLE_COLUMN_REACTOR_OVERLAY, true, SuSyUtility.reactorTankSizeFunction);
 
-        registerSimpleMTE(BATCH_REACTOR, 12, 14681, "batch_reactor", SuSyRecipeMaps.BATCH_REACTOR_RECIPES, SusyTextures.BATCH_REACTOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+        registerSimpleMTE(BATCH_REACTOR, 12, 14681, "batch_reactor", SuSyRecipeMaps.BATCH_REACTOR_RECIPES, SusyTextures.BATCH_REACTOR_OVERLAY, true, SuSyUtility.reactorTankSizeFunction);
 
         //max tier = 12 -> OpV [excludes ULv] -> 13 ids taken (add maxTier +1 to start ID to get next valid id)
-        registerSimpleMTE(CRYSTALLIZER, 12, 14593, "crystallizer", SuSyRecipeMaps.CRYSTALLIZER_RECIPES, SusyTextures.CRYSTALLIZER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+        registerSimpleMTE(CRYSTALLIZER, 12, 14593, "crystallizer", SuSyRecipeMaps.CRYSTALLIZER_RECIPES, SusyTextures.CRYSTALLIZER_OVERLAY, true, SuSyUtility.reactorTankSizeFunction);
         registerSimpleMTE(DRYER, 12, 14621, "dryer", SuSyRecipeMaps.DRYER, SusyTextures.DRYER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         registerSimpleMTE(ION_EXCHANGE_COLUMN, 12, 14694, "ion_exchange_column", SuSyRecipeMaps.ION_EXCHANGE_COLUMN_RECIPES, SusyTextures.ION_EXCHANGE_COLUMN_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         registerSimpleMTE(ZONE_REFINER, 12, 14707, "zone_refiner", SuSyRecipeMaps.ZONE_REFINER_RECIPES, SusyTextures.ZONE_REFINER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
@@ -253,13 +252,11 @@ public class SuSyMetaTileEntities {
         ROTARY_KILN = registerMetaTileEntity(17013, new MetaTileEntityRotaryKiln(susyId("rotary_kiln")));
         HIGH_PRESSURE_CRYOGENIC_DISTILLATION_PLANT = registerMetaTileEntity(17014, new MetaTileEntityHighPressureCryogenicDistillationPlant(susyId("high_pressure_cryogenic_distillation_plant")));
         LOW_PRESSURE_CRYOGENIC_DISTILLATION_PLANT = registerMetaTileEntity(17015, new MetaTileEntityLowPressureCryogenicDistillationPlant(susyId("low_pressure_cryogenic_distillation_plant")));
-        CONTACT_COOLER = registerMetaTileEntity(17016, new MetaTileEntityContactCooler(susyId("contact_cooler")));
-        REVERBERATORY_FURNACE = registerMetaTileEntity(17017, new MetaTileEntityReverberatoryFurnace(susyId("reverberatory_furnace")));
-        TAPPED_OFF_HEAT_EXCHANGER = registerMetaTileEntity(17018, new MetaTileEntityTappedOffHeatExchanger(susyId("tapped_off_heat_exchanger")));
-        SINGLE_COLUMN_CRYOGENIC_DISTILLATION_PLANT = registerMetaTileEntity(17019, new MetaTileEntitySingleColumnCryogenicDistillationPlant(susyId("single_column_cryogenic_distillation_plant")));
+        REVERBERATORY_FURNACE = registerMetaTileEntity(17016, new MetaTileEntityReverberatoryFurnace(susyId("reverberatory_furnace")));
+        SINGLE_COLUMN_CRYOGENIC_DISTILLATION_PLANT = registerMetaTileEntity(17017, new MetaTileEntitySingleColumnCryogenicDistillationPlant(susyId("single_column_cryogenic_distillation_plant")));
 
-        registerSimpleMTE(PHASE_SEPARATOR, 12, 17020, "phase_separator", SuSyRecipeMaps.PHASE_SEPARATOR, SusyTextures.PHASE_SEPARATOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
-        registerSimpleMTE(BATH_CONDENSER, 0, 17034, "bath_condenser", SuSyRecipeMaps.BATH_CONDENSER, SusyTextures.BATH_CONDENSER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+        registerSimpleMTE(PHASE_SEPARATOR, 0, 17018, "phase_separator", SuSyRecipeMaps.PHASE_SEPARATOR, SusyTextures.PHASE_SEPARATOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+        registerSimpleMTE(BATH_CONDENSER, 0, 17019, "bath_condenser", SuSyRecipeMaps.BATH_CONDENSER, SusyTextures.BATH_CONDENSER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
 
         registerSimpleMTE(ELECTROSTATIC_SEPARATOR, 12, 17035, "electrostatic_separator", SuSyRecipeMaps.ELECTROSTATIC_SEPARATOR, SusyTextures.ELECTROSTATIC_SEPARATOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
     }
@@ -345,10 +342,10 @@ public class SuSyMetaTileEntities {
         FLUID_COMPRESSOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
         FLUID_DECOMPRESSOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
         WEAPONS_FACTORY = new SimpleMachineMetaTileEntity[GTValues.OpV];
-        PHASE_SEPARATOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
 
         ELECTROSTATIC_SEPARATOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
 
+        PHASE_SEPARATOR = new SimpleMachineMetaTileEntity[1];
         BATH_CONDENSER = new SimpleMachineMetaTileEntity[1];
     }
 }
