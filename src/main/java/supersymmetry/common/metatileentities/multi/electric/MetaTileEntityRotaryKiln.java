@@ -41,6 +41,8 @@ public class MetaTileEntityRotaryKiln extends RecipeMapMultiblockController {
     }
 
     protected BlockPattern createStructurePattern() {
+        TraceabilityPredicate maintenance = autoAbilities(false, true, false, false, false, false, false).setMaxGlobalLimited(1);
+
         return FactoryBlockPattern.start()
                 .aisle("A    A    A", "A    A    A", "L    A    R", "LCCCCMCCCCR", "L    A    R")
                 .aisle("A    A    A", "A    A    A", "LCCCCMCCCCR", "L#########R", "LCCCCMCCCCR")
@@ -49,13 +51,15 @@ public class MetaTileEntityRotaryKiln extends RecipeMapMultiblockController {
                 .where('A', states(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)))
                 .where('C', states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)))
                 .where('L', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
-                        .or(autoAbilities(false, true, true, false, false, true, false))
-                        .or(autoAbilities(true, false, false, false, false, false, false).setMinGlobalLimited(0)))
+                        .or(autoAbilities(false, false, true, false, false, true, false))
+                        .or(autoAbilities(true, false, false, false, false, false, false).setMinGlobalLimited(0))
+                        .or(maintenance))
                 .where('R', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
-                        .or(autoAbilities(false, true, false, true, true, false, false))
-                        .or(autoAbilities(true, false, false, false, false, false, false).setMinGlobalLimited(0)))
+                        .or(autoAbilities(false, false, false, true, true, false, false))
+                        .or(autoAbilities(true, false, false, false, false, false, false).setMinGlobalLimited(0))
+                        .or(maintenance))
                 .where('M', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
-                        .or(autoAbilities(false, true, false, false, false, false, false)))
+                        .or(maintenance))
                 .where(' ', any())
                 .where('#', air())
                 .build();
