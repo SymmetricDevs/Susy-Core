@@ -75,9 +75,9 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
         TraceabilityPredicate maintenance = autoAbilities(false, true, false, false, false, false, false).setMaxGlobalLimited(1);
 
         return FactoryBlockPattern.start()
-                .aisle("GAAAAAAAO", "GAAAAAAAO", "G   A   A")
-                .aisle("GAAAOOOOO", "GDDDDCCCF", "GAAAAAAAA")
-                .aisle("GAAAAAAAO", "GSAAAAAAO", "G   A   A")
+                .aisle("GAAAAAAAO", "GAAAAAAAO", "G   A   O")
+                .aisle("GAAAAAAAO", "GDDDDCCCF", "GAAAAAAAO")
+                .aisle("GAAAAAAAO", "GSAAAAAAO", "G   A   O")
                 .where('S', selfPredicate())
                 .where('A', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING))
                        .or(autoAbilities(false, false, false, false, false, false, false)))
