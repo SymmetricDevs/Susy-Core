@@ -6,7 +6,7 @@ import supersymmetry.Supersymmetry;
 
 import java.util.function.Function;
 
-public class SuSyUtility {
+public class SusyUtility {
     public static final Function<Integer, Integer> reactorTankSizeFunction = tier -> {
         if (tier <= GTValues.LV)
             return 12000;
