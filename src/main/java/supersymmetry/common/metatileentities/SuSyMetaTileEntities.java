@@ -21,7 +21,7 @@ import supersymmetry.api.metatileentity.PseudoMultiSteamMachineMetaTileEntity;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicator;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicators;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
-import supersymmetry.api.util.SusyUtility;
+import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.metatileentities.multi.electric.*;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCoagulationTank;
@@ -152,7 +152,7 @@ public class SuSyMetaTileEntities {
 
         //LATEX_COLLECTOR_BRONZE = registerMetaTileEntity(14510, new MetaTileEntitySteamLatexCollector(susyId("latex_collector.bronze")));
         registerPseudoMultiSteamMTE(STEAM_LATEX_COLLECTOR, 14510, "latex_collector", SuSyRecipeMaps.LATEX_COLLECTOR_RECIPES, SuSySteamProgressIndicators.EXTRACTION_STEAM, SusyTextures.LATEX_COLLECTOR_OVERLAY, false);
-        registerPseudoMultiMTE(LATEX_COLLECTOR, 3, 14502, "latex_collector", SuSyRecipeMaps.LATEX_COLLECTOR_RECIPES, SusyTextures.LATEX_COLLECTOR_OVERLAY, true, SusyUtility.collectorTankSizeFunction);
+        registerPseudoMultiMTE(LATEX_COLLECTOR, 3, 14502, "latex_collector", SuSyRecipeMaps.LATEX_COLLECTOR_RECIPES, SusyTextures.LATEX_COLLECTOR_OVERLAY, true, SuSyUtility.collectorTankSizeFunction);
 
         SINTERING_OVEN = registerMetaTileEntity(14521, new MetaTileEntitySinteringOven(susyId("sintering_oven")));
 
@@ -160,7 +160,7 @@ public class SuSyMetaTileEntities {
         registerCatalystMTE(VULCANIZING_PRESS, 3, 14517, "vulcanizing_press", SuSyRecipeMaps.VULCANIZATION_RECIPES, SusyTextures.VULCANIZING_PRESS_OVERLAY, true);
 
         registerSimpleSteamMTE(STEAM_ROASTER, 14679, "roaster", SuSyRecipeMaps.ROASTER_RECIPES, SuSySteamProgressIndicators.ARROW, SusyTextures.ROASTER_OVERLAY, true);
-        registerCatalystMTE(ROASTER, 12, 14523, "roaster", SuSyRecipeMaps.ROASTER_RECIPES, SusyTextures.ROASTER_OVERLAY, true, SusyUtility.bulkTankSizeFunction);
+        registerCatalystMTE(ROASTER, 12, 14523, "roaster", SuSyRecipeMaps.ROASTER_RECIPES, SusyTextures.ROASTER_OVERLAY, true, SuSyUtility.bulkTankSizeFunction);
 
         registerSimpleSteamMTE(STEAM_MIXER, 14536, "mixer", RecipeMaps.MIXER_RECIPES, SuSySteamProgressIndicators.MIXER, SusyTextures.MIXER_OVERLAY_STEAM, false);
 
@@ -168,15 +168,15 @@ public class SuSyMetaTileEntities {
         registerSimpleMTE(VACUUM_CHAMBER, 12, 14540, "vacuum_chamber", SuSyRecipeMaps.VACUUM_CHAMBER, Textures.GAS_COLLECTOR_OVERLAY, true);
 
         //chem overhaul
-        registerContinuousMachineMTE(CONTINUOUS_STIRRED_TANK_REACTOR, 12, 14554, "continuous_stirred_tank_reactor", SuSyRecipeMaps.CSTR_RECIPES, SusyTextures.CONTINUOUS_STIRRED_TANK_REACTOR_OVERLAY, true, SusyUtility.reactorTankSizeFunction);
-        registerContinuousMachineMTE(FIXED_BED_REACTOR, 12, 14567, "fixed_bed_reactor", SuSyRecipeMaps.FIXED_BED_REACTOR_RECIPES, SusyTextures.FIXED_BED_REACTOR_OVERLAY, true, SusyUtility.reactorTankSizeFunction);
-        registerContinuousMachineMTE(TRICKLE_BED_REACTOR, 12, 14580, "trickle_bed_reactor", SuSyRecipeMaps.TRICKLE_BED_REACTOR_RECIPES, SusyTextures.TRICKLE_BED_REACTOR_OVERLAY, true, SusyUtility.reactorTankSizeFunction);
-        registerContinuousMachineMTE(BUBBLE_COLUMN_REACTOR, 12, 14606, "bubble_column_reactor", SuSyRecipeMaps.BUBBLE_COLUMN_REACTOR_RECIPES, SusyTextures.BUBBLE_COLUMN_REACTOR_OVERLAY, true, SusyUtility.reactorTankSizeFunction);
+        registerContinuousMachineMTE(CONTINUOUS_STIRRED_TANK_REACTOR, 12, 14554, "continuous_stirred_tank_reactor", SuSyRecipeMaps.CSTR_RECIPES, SusyTextures.CONTINUOUS_STIRRED_TANK_REACTOR_OVERLAY, true, SuSyUtility.reactorTankSizeFunction);
+        registerContinuousMachineMTE(FIXED_BED_REACTOR, 12, 14567, "fixed_bed_reactor", SuSyRecipeMaps.FIXED_BED_REACTOR_RECIPES, SusyTextures.FIXED_BED_REACTOR_OVERLAY, true, SuSyUtility.reactorTankSizeFunction);
+        registerContinuousMachineMTE(TRICKLE_BED_REACTOR, 12, 14580, "trickle_bed_reactor", SuSyRecipeMaps.TRICKLE_BED_REACTOR_RECIPES, SusyTextures.TRICKLE_BED_REACTOR_OVERLAY, true, SuSyUtility.reactorTankSizeFunction);
+        registerContinuousMachineMTE(BUBBLE_COLUMN_REACTOR, 12, 14606, "bubble_column_reactor", SuSyRecipeMaps.BUBBLE_COLUMN_REACTOR_RECIPES, SusyTextures.BUBBLE_COLUMN_REACTOR_OVERLAY, true, SuSyUtility.reactorTankSizeFunction);
 
-        registerSimpleMTE(BATCH_REACTOR, 12, 14681, "batch_reactor", SuSyRecipeMaps.BATCH_REACTOR_RECIPES, SusyTextures.BATCH_REACTOR_OVERLAY, true, SusyUtility.reactorTankSizeFunction);
+        registerSimpleMTE(BATCH_REACTOR, 12, 14681, "batch_reactor", SuSyRecipeMaps.BATCH_REACTOR_RECIPES, SusyTextures.BATCH_REACTOR_OVERLAY, true, SuSyUtility.reactorTankSizeFunction);
 
         //max tier = 12 -> OpV [excludes ULv] -> 13 ids taken (add maxTier +1 to start ID to get next valid id)
-        registerSimpleMTE(CRYSTALLIZER, 12, 14593, "crystallizer", SuSyRecipeMaps.CRYSTALLIZER_RECIPES, SusyTextures.CRYSTALLIZER_OVERLAY, true, SusyUtility.reactorTankSizeFunction);
+        registerSimpleMTE(CRYSTALLIZER, 12, 14593, "crystallizer", SuSyRecipeMaps.CRYSTALLIZER_RECIPES, SusyTextures.CRYSTALLIZER_OVERLAY, true, SuSyUtility.reactorTankSizeFunction);
         registerSimpleMTE(DRYER, 12, 14621, "dryer", SuSyRecipeMaps.DRYER, SusyTextures.DRYER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         registerSimpleMTE(ION_EXCHANGE_COLUMN, 12, 14694, "ion_exchange_column", SuSyRecipeMaps.ION_EXCHANGE_COLUMN_RECIPES, SusyTextures.ION_EXCHANGE_COLUMN_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         registerSimpleMTE(ZONE_REFINER, 12, 14707, "zone_refiner", SuSyRecipeMaps.ZONE_REFINER_RECIPES, SusyTextures.ZONE_REFINER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
