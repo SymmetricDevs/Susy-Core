@@ -181,7 +181,6 @@ public class ContinuousRecipeLogic extends RecipeLogicEnergy {
         setParallelLimit(parallelLimitDouble <= 1 ? 1 : (int) parallelLimitDouble);
     }
 
-    @Override
     protected boolean checkCanOverclock(int recipeEUt) {
         if (!isAllowOverclocking()) return false;
 

@@ -1,7 +1,6 @@
 package supersymmetry.common.materials;
 
 import gregtech.api.GregTechAPI;
-import gregtech.api.fluids.fluidType.FluidType;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.info.MaterialFlag;
@@ -56,7 +55,7 @@ public class SusyMaterials {
     }
 
     public static void removeFlags() {
-        for (Material material : GregTechAPI.MATERIAL_REGISTRY) {
+        for (Material material : GregTechAPI.materialManager.getRegisteredMaterials()) {
             if (material.hasFlag(MaterialFlags.DECOMPOSITION_BY_ELECTROLYZING)) removeFlag(MaterialFlags.DECOMPOSITION_BY_ELECTROLYZING, material);
         }
     }
@@ -171,12 +170,12 @@ public class SusyMaterials {
     }
 
     private static void removeProperty(PropertyKey<?> key, Material material) {
-        Map<PropertyKey<? extends IMaterialProperty<?>>, IMaterialProperty<?>> map = null;
+        Map<PropertyKey<?>, IMaterialProperty> map = null;
         try {
             Field field = MaterialProperties.class.getDeclaredField("propertyMap");
             field.setAccessible(true);
             //noinspection unchecked
-            map = (Map<PropertyKey<? extends IMaterialProperty<?>>, IMaterialProperty<?>>) field.get(material.getProperties());
+            map = (Map<PropertyKey<?>, IMaterialProperty>) field.get(material.getProperties());
         } catch (NoSuchFieldException | IllegalAccessException e) {
             SusyLog.logger.error("Failed to reflect material property map", e);
         }

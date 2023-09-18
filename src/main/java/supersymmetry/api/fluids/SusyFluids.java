@@ -7,18 +7,14 @@ import gregtech.api.fluids.MaterialFluid;
 import gregtech.api.fluids.fluidType.FluidType;
 import gregtech.api.fluids.fluidType.FluidTypes;
 import gregtech.api.unification.material.Material;
-import gregtech.api.unification.material.info.MaterialFlag;
 import gregtech.api.unification.material.info.MaterialIconType;
-import gregtech.api.unification.material.properties.PropertyKey;
 import gregtech.api.util.FluidTooltipUtil;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.LocalizationUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.Fluid;
-import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
-
 import net.minecraftforge.fluids.FluidRegistry;
+import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +24,7 @@ public class SusyFluids {
     private static final Table<Material, FluidType, ResourceLocation> fluidTextures = HashBasedTable.create();
 
     public static void init() {
-        for (Material material : GregTechAPI.MATERIAL_REGISTRY) {
+        for (Material material : GregTechAPI.materialManager.getRegisteredMaterials()) {
             boolean slurryFlag = material.hasFlag(SuSyMaterialFlags.GENERATE_SLURRIES);
 
             if (slurryFlag) {
