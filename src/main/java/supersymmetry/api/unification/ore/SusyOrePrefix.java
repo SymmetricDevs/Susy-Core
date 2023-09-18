@@ -6,8 +6,8 @@ import gregtech.api.unification.material.info.MaterialIconType;
 import gregtech.api.unification.ore.OrePrefix;
 import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
 import supersymmetry.api.unification.material.info.SuSyMaterialIconType;
-
 import static gregtech.api.unification.ore.OrePrefix.Flags.ENABLE_UNIFICATION;
+import static gregtech.api.unification.ore.OrePrefix.Conditions.*;
 
 public class SusyOrePrefix {
     public static OrePrefix oreGabbro = new OrePrefix("oreGabbro", -1L,  null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
@@ -42,4 +42,9 @@ public class SusyOrePrefix {
     public static OrePrefix catalystPelletCracking = new OrePrefix("catalystPelletCracking", GTValues.M * 4, null, SuSyMaterialIconType.catalystPellet, 1L, mat -> false);
     public static OrePrefix catalystPelletZieglerNatta = new OrePrefix("catalystPelletZieglerNatta", GTValues.M * 4, null, SuSyMaterialIconType.catalystPellet, 1L, mat -> false);
 
+    // Ore Processing Intermediates
+
+    public static final OrePrefix sifted = new OrePrefix("sifted", -1, null, SuSyMaterialIconType.sifted, 1L, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_SIFTED));
+    public static final OrePrefix flotated = new OrePrefix("flotated", -1, null, SuSyMaterialIconType.flotated, 1L, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_SIFTED));
+    public static final OrePrefix concentrate = new OrePrefix("concentrate", -1, null, SuSyMaterialIconType.concentrate, 1L, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_CONCENTRATE));
 }

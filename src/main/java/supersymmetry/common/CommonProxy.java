@@ -110,6 +110,9 @@ public class CommonProxy {
     public static void postRegisterMaterials(@NotNull PostMaterialEvent event) {
         MetaItems.addOrePrefix(SusyOrePrefix.catalystPellet);
         MetaItems.addOrePrefix(SusyOrePrefix.catalystBed);
+        MetaItems.addOrePrefix(SusyOrePrefix.flotated);
+        MetaItems.addOrePrefix(SusyOrePrefix.sifted);
+        MetaItems.addOrePrefix(SusyOrePrefix.concentrate);
 
         //SusyMaterials.removeFlags();
     }
