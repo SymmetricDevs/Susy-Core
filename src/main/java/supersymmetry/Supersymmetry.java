@@ -35,7 +35,8 @@ public class Supersymmetry {
     public void onModConstruction(FMLConstructionEvent event) {
         //This is now a config option I think
         //GTValues.HT = true;
-        SuSyIRLoader.init();
+        SuSyIRLoader.initDefinitions();
+        SuSyIRLoader.initEntities();
     }
 
     @Mod.EventHandler
