@@ -16,6 +16,7 @@ import supersymmetry.common.covers.SuSyCoverBehaviors;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 import gregtech.GTInternalTags;
+import supersymmetry.loaders.SuSyIRLoader;
 
 @Mod(name = Supersymmetry.NAME, modid = Supersymmetry.MODID, version = Tags.VERSION, dependencies = GTInternalTags.DEP_VERSION_STRING + ";required-after:gcym;after:immersiverailroading")
 
@@ -34,6 +35,7 @@ public class Supersymmetry {
     public void onModConstruction(FMLConstructionEvent event) {
         //This is now a config option I think
         //GTValues.HT = true;
+        SuSyIRLoader.init();
     }
 
     @Mod.EventHandler
