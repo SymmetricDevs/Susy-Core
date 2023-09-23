@@ -323,7 +323,9 @@ public class SuSyRecipeMaps {
         RecipeMaps.LASER_ENGRAVER_RECIPES.setMaxFluidInputs(1);
         RecipeMaps.GAS_TURBINE_FUELS.setMaxFluidInputs(3);
         RecipeMaps.GAS_TURBINE_FUELS.setMaxFluidOutputs(1);
+        RecipeMaps.GAS_TURBINE_FUELS.setMaxInputs(1);
         RecipeMaps.STEAM_TURBINE_FUELS.setMaxFluidInputs(2);
+        RecipeMaps.STEAM_TURBINE_FUELS.setMaxInputs(1);
         RecipeMaps.AUTOCLAVE_RECIPES.setMaxFluidInputs(2);
         RecipeMaps.AUTOCLAVE_RECIPES.setMaxFluidOutputs(2);
     }
