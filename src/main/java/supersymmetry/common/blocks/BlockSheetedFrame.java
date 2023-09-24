@@ -41,7 +41,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class BlockSheetedFrame extends BlockRotatedPillar {
+public class BlockSheetedFrame extends Block {
 
     public static final PropertyEnum<BlockSheetedFrame.FrameEnumAxis> SHEETED_FRAME_AXIS = PropertyEnum.<BlockSheetedFrame.FrameEnumAxis>create("axis", BlockSheetedFrame.FrameEnumAxis.class);
 

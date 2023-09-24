@@ -206,7 +206,6 @@ public class ContinuousMultiblockRecipeLogic extends MultiblockRecipeLogic {
         setParallelLimit(parallelLimitDouble <= 1 ? 1 : (int) parallelLimitDouble);
     }
 
-    @Override
     protected boolean checkCanOverclock(int recipeEUt) {
         if (!isAllowOverclocking()) return false;
 

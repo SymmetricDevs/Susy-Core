@@ -23,6 +23,8 @@ import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.loaders.SuSyWorldLoader;
 import supersymmetry.loaders.recipes.SuSyRecipeLoader;
 import supersymmetry.loaders.SusyOreDictionaryLoader;
+import gregtech.api.unification.material.event.MaterialEvent;
+import gregtech.api.unification.material.event.PostMaterialEvent;
 
 import java.util.Objects;
 import java.util.function.Function;
@@ -100,14 +102,17 @@ public class CommonProxy {
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
-    public static void registerMaterials(@NotNull GregTechAPI.MaterialEvent event) {
+    public static void registerMaterials(@NotNull MaterialEvent event) {
         SusyMaterials.init();
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
-    public static void postRegisterMaterials(@NotNull GregTechAPI.PostMaterialEvent event) {
+    public static void postRegisterMaterials(@NotNull PostMaterialEvent event) {
         MetaItems.addOrePrefix(SusyOrePrefix.catalystPellet);
         MetaItems.addOrePrefix(SusyOrePrefix.catalystBed);
+        MetaItems.addOrePrefix(SusyOrePrefix.flotated);
+        MetaItems.addOrePrefix(SusyOrePrefix.sifted);
+        MetaItems.addOrePrefix(SusyOrePrefix.concentrate);
 
         //SusyMaterials.removeFlags();
     }

@@ -6,6 +6,7 @@ import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.fluids.SusyFluids;
 import supersymmetry.api.sound.SusySounds;
 import supersymmetry.common.CommonProxy;
 import supersymmetry.common.SusyMetaEntities;
@@ -42,6 +43,7 @@ public class Supersymmetry {
         SuSyMetaBlocks.init();
         SuSyMetaItems.initMetaItems();
         SuSyBlocks.init();
+        SusyFluids.init();
 
         SusySounds.registerSounds();
 

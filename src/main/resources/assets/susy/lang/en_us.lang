@@ -128,34 +128,34 @@ tile.susy_stone_bricks.soapstone.name=Soapstone Bricks
 tile.susy_stone_bricks.kimberlite.name=Kimberlite Bricks
 
 # Materials
-material.manganese_iron_arsenic_phosphide=Manganese Iron Arsenic Phosphide
-material.praseodymium_nickel=Praseodymium-Nickel
-material.gadolinium_silicon_germanium=Gadolinium Silicon Germanium
-material.latex=Latex
-material.mud=Mud
-material.sea_water=Sea Water
+susy.material.manganese_iron_arsenic_phosphide=Manganese Iron Arsenic Phosphide
+susy.material.praseodymium_nickel=Praseodymium-Nickel
+susy.material.gadolinium_silicon_germanium=Gadolinium Silicon Germanium
+susy.material.latex=Latex
+susy.material.mud=Mud
+susy.material.sea_water=Sea Water
 
 # Rock/Mineral Materials
-material.fluorite=Fluorite
-material.gabbro=Gabbro
-material.slate=Slate
-material.shale=Shale
-material.phyllite=Phyllite
-material.limestone=Limestone
-material.gneiss=Gneiss
-material.kimberlite=Kimberlite
-material.muscovite=Muscovite
-material.dolomite=Dolomite
-material.augite=Augite
-material.chlinochlore=Chlinochlore
-material.bytownite=Bytownite
-material.labradorite=Labradorite
-material.andesine=Andesine
-material.oligoclase=Oligoclase
-material.albite=Albite
-material.anorthite=Anorthite
-material.forsterite=Forsterite
-material.lizardite=Lizardite
+susy.material.fluorite=Fluorite
+susy.material.gabbro=Gabbro
+susy.material.slate=Slate
+susy.material.shale=Shale
+susy.material.phyllite=Phyllite
+susy.material.limestone=Limestone
+susy.material.gneiss=Gneiss
+susy.material.kimberlite=Kimberlite
+susy.material.muscovite=Muscovite
+susy.material.dolomite=Dolomite
+susy.material.augite=Augite
+susy.material.chlinochlore=Chlinochlore
+susy.material.bytownite=Bytownite
+susy.material.labradorite=Labradorite
+susy.material.andesine=Andesine
+susy.material.oligoclase=Oligoclase
+susy.material.albite=Albite
+susy.material.anorthite=Anorthite
+susy.material.forsterite=Forsterite
+susy.material.lizardite=Lizardite
 
 # Ore Prefixes (%s is the localised material name)
 item.material.oreprefix.oreGabbro=Gabbro %s Ore
@@ -171,7 +171,13 @@ item.material.oreprefix.oreSoapstone=Soapstone %s Ore
 item.material.oreprefix.oreKimberlite=Kimberlite %s Ore
 item.material.oreprefix.catalystBed=%s Catalyst Bed
 item.material.oreprefix.catalystPellet=%s Catalyst Pellet
+item.material.oreprefix.flotated=Flotated %s Ore
+item.material.oreprefix.concentrate=Concentrated %s Ore
+item.material.oreprefix.sifted=Sifted %s Ore
 item.material.oreprefix.sheetedFrame=%s Sheeted Frame Box
+
+fluid.slurry.impure=Impure %s Slurry
+fluid.slurry.pure=Pure %s Slurry
 
 # Machines/Multiblocks
 gregtech.machine.magnetic_refrigerator.name=Magnetic Refrigerator

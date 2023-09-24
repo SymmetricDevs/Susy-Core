@@ -7,6 +7,7 @@ import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.unification.material.Materials;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
@@ -41,22 +42,25 @@ public class MetaTileEntityRotaryKiln extends RecipeMapMultiblockController {
     }
 
     protected BlockPattern createStructurePattern() {
+        TraceabilityPredicate maintenance = autoAbilities(false, true, false, false, false, false, false).setMaxGlobalLimited(1);
+
         return FactoryBlockPattern.start()
-                .aisle("A    A    A", "A    A    A", "L    A    R", "LCCCCNCCCCR", "L    A    R")
-                .aisle("A    A    A", "A    A    A", "LCCCCNCCCCR", "L#########R", "LCCCCMCCCCR")
+                .aisle("A    A    A", "A    A    A", "L    A    R", "LCCCCMCCCCR", "L    A    R")
+                .aisle("A    A    A", "A    A    A", "LCCCCMCCCCR", "L#########R", "LCCCCMCCCCR")
                 .aisle("A    A    A", "A    A    A", "L    A    R", "LCCCCSCCCCR", "L    A    R")
                 .where('S', selfPredicate())
                 .where('A', states(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)))
                 .where('C', states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)))
                 .where('L', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
                         .or(autoAbilities(false, false, true, false, false, true, false))
-                        .or(autoAbilities(true, false, false, false, false, false, false).setMinGlobalLimited(0)))
+                        .or(autoAbilities(true, false, false, false, false, false, false).setMinGlobalLimited(0))
+                        .or(maintenance))
                 .where('R', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
                         .or(autoAbilities(false, false, false, true, true, false, false))
-                        .or(autoAbilities(true, false, false, false, false, false, false).setMinGlobalLimited(0)))
+                        .or(autoAbilities(true, false, false, false, false, false, false).setMinGlobalLimited(0))
+                        .or(maintenance))
                 .where('M', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
-                        .or(autoAbilities(false, true, false, false, false, false, false)))
-                .where('N', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)))
+                        .or(maintenance))
                 .where(' ', any())
                 .where('#', air())
                 .build();
