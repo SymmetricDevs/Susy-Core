@@ -51,7 +51,7 @@ public class MetaTileEntityFrothFlotationTank extends RecipeMapMultiblockControl
                 .aisle("   B   ", "   B   ", "   S   ", "       ", "       ")
                 .where('S', selfPredicate())
                 .where('A', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STAINLESS_CLEAN)).setMinGlobalLimited(51)
-                        .or(autoAbilities().setMaxGlobalLimited(12)))
+                        .or(autoAbilities(true, true, true, true, true, true, true)))
                 .where('B', states(MetaBlocks.BOILER_CASING.getState((BoilerCasingType.STEEL_PIPE))))
                 .where('D', states(SuSyBlocks.MULTIBLOCK_TANK.getState(BlockMultiblockTank.MultiblockTankType.FLOTATION)))
                 .where('E', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
