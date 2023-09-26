@@ -38,16 +38,20 @@ dependencies {
     implementation rfg.deobf('curse.maven:gregtech-food-option-477021:4716101')
 
     implementation rfg.deobf('curse.maven:applecore-224472:2969118')
+    // No-tree-punching v2.0.21
+    implementation rfg.deobf("curse.maven:no-tree-punching-289043:2983385")
+    // AlcatrazCore v1.0.4
+    implementation rfg.deobf("curse.maven:alcatrazcore-304493:2666560")
 
-    implementation rfg.deobf("curse.maven:no-tree-punching-289043:2983385") // No-tree-punching v2.0.21
-    implementation rfg.deobf("curse.maven:alcatrazcore-304493:2666560") // AlcatrazCore v1.0.4
-
-
-    implementation rfg.deobf("curse.maven:universal-mod-core-371784:3654955") // Universal-Mod-Care v1.1.4
-    implementation rfg.deobf("curse.maven:track-api-282613:2825260") // Track-API v1.2.0
-
-    implementation rfg.deobf("curse.maven:immersive-railroading-277736:3437738") // Immersive-Railroading v1.9.1
-
-    implementation rfg.deobf("curse.maven:ctm-267602:2915363") // CTM 1.0.2.31
+    // Universal-Mod-Care v1.1.4
+    //implementation rfg.deobf("curse.maven:universal-mod-core-371784:3654955")
+    implementation rfg.deobf("cam72cam.universalmodcore:UniversalModCore:1.12.2-forge-1.1.4-4af046d")
+    // Track-API v1.2.0
+    implementation rfg.deobf("curse.maven:track-api-282613:2825260")
+    // Immersive-Railroading v1.9.1
+    //implementation rfg.deobf("curse.maven:immersive-railroading-277736:3437738")
+    implementation rfg.deobf("cam72cam.immersiverailroading:ImmersiveRailroading:1.12.2-forge-1.9.1-a16da23")
+    // CTM 1.0.2.31
+    implementation rfg.deobf("curse.maven:ctm-267602:2915363")
     implementation rfg.deobf("curse.maven:groovyscript-687577:4749823")
 }

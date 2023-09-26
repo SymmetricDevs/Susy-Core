@@ -22,8 +22,8 @@ public class SusyTransformer implements IClassTransformer, Opcodes {
 */
         if(internalName.equals(DefinitionManagerVisitor.TARGET_CLASS_NAME)) {
             ClassReader classReader = new ClassReader(basicClass);
-            ClassWriter classWriter = new ClassWriter(0);
-            classReader.accept(new DefinitionManagerVisitor(classWriter), 0);
+            ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
+            classReader.accept(new DefinitionManagerVisitor(classWriter), ClassReader.SKIP_FRAMES);
             byte[] sus = classWriter.toByteArray();
             SusyLog.logger.info(String.format("Transformed class %s", name));
             return sus;

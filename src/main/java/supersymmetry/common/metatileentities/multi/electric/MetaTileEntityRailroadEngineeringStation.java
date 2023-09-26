@@ -299,6 +299,11 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
     }
 
     private net.minecraft.item.ItemStack getTrainItemStack(EntityRollingStock rollingStock) {
+        // What the actual fucking shit is wrong with the shit fucking stupid fucking IR codebase I fucking cant
+        // why the fuck is there no fuckingapi what the fuck
+        // what hte fuck is a Itemstack.internal why the fuck would you do this
+        // I will fucjing stab you to death with your stupid giant fucking wrench
+
         EntityRollingStockDefinition def = rollingStock.getDefinition();
         ItemStack stack = new ItemStack(IRItems.ITEM_ROLLING_STOCK, 1);
         ItemRollingStock.Data data = new ItemRollingStock.Data(stack);

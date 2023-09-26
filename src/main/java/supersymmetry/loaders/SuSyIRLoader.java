@@ -5,11 +5,12 @@ import cam72cam.immersiverailroading.entity.EntityMoveableRollingStock;
 import cam72cam.immersiverailroading.model.StockModel;
 import cam72cam.immersiverailroading.registry.DefinitionManager;
 import cam72cam.immersiverailroading.registry.EntityRollingStockDefinition;
+import cam72cam.immersiverailroading.util.DataBlock;
 import cam72cam.mod.ModCore;
 import cam72cam.mod.entity.EntityRegistry;
 import cam72cam.mod.render.EntityRenderer;
 import cam72cam.mod.render.IEntityRender;
-import com.google.gson.JsonObject;
+import cam72cam.mod.render.opengl.RenderState;
 import supersymmetry.api.SusyLog;
 import supersymmetry.common.entities.EntityTunnelBore;
 import supersymmetry.integration.immersiverailroading.registry.TunnelBoreDefinition;
@@ -20,10 +21,10 @@ import java.util.Map;
 public class SuSyIRLoader {
     public static void initDefinitions() {
         try {
-            Field jsonLoadersField = DefinitionManager.class.getDeclaredField("jsonLoaders");
+            Field jsonLoadersField = DefinitionManager.class.getDeclaredField("stockLoaders");
             jsonLoadersField.setAccessible(true);
-            Map<String, JsonLoader> jsonLoaders = (Map<String, JsonLoader>) jsonLoadersField.get(DefinitionManager.class);
-            jsonLoaders.put("tunnel_bore", TunnelBoreDefinition::new);
+            Map<String, StockLoader> stockLoaders = (Map<String, StockLoader>) jsonLoadersField.get(DefinitionManager.class);
+            stockLoaders.put("tunnel_bore", TunnelBoreDefinition::new);
         } catch (NoSuchFieldException e) {
             SusyLog.logger.error("Failed to reflect definition manager json loaders", e);
         } catch (IllegalAccessException e) {
@@ -45,18 +46,28 @@ public class SuSyIRLoader {
     }
 
     public static void initEntityRenderers() {
-        IEntityRender<EntityMoveableRollingStock> stockRender = (entity, partialTicks) -> {
-            StockModel<?> renderer = entity.getDefinition().getModel();
-            if (renderer != null) {
-                renderer.render(entity, partialTicks);
+        IEntityRender<EntityMoveableRollingStock> stockRender = new IEntityRender<>() {
+            public void render(EntityMoveableRollingStock entity, RenderState state, float partialTicks) {
+                StockModel<?, ?> renderer = entity.getDefinition().getModel();
+                if (renderer != null) {
+                    renderer.render(entity, state, partialTicks);
+                }
+
             }
 
+            public void postRender(EntityMoveableRollingStock entity, RenderState state, float partialTicks) {
+                StockModel<?, ?> renderer = entity.getDefinition().getModel();
+                if (renderer != null) {
+                    renderer.postRender(entity, state, partialTicks);
+                }
+
+            }
         };
         EntityRenderer.register(EntityTunnelBore.class, stockRender);
     }
 
     @FunctionalInterface
-    private interface JsonLoader {
-        EntityRollingStockDefinition apply(String var1, JsonObject var2) throws Exception;
+    private interface StockLoader {
+        EntityRollingStockDefinition apply(String var1, DataBlock var2) throws Exception;
     }
 }

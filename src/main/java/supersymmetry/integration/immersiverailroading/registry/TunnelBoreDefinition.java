@@ -1,11 +1,11 @@
 package supersymmetry.integration.immersiverailroading.registry;
 
 import cam72cam.immersiverailroading.registry.EntityRollingStockDefinition;
-import com.google.gson.JsonObject;
+import cam72cam.immersiverailroading.util.DataBlock;
 import supersymmetry.common.entities.EntityTunnelBore;
 
 public class TunnelBoreDefinition extends EntityRollingStockDefinition {
-    public TunnelBoreDefinition(String defID, JsonObject data) throws Exception {
+    public TunnelBoreDefinition(String defID, DataBlock data) throws Exception {
         super(EntityTunnelBore.class, defID, data);
     }
 
