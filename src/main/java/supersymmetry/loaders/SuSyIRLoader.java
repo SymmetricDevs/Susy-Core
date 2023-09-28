@@ -57,7 +57,7 @@ public class SuSyIRLoader {
 
             Map<String, StockLoader> stockLoaders = (Map<String, StockLoader>) jsonLoadersField.get(null);
 
-            stockLoaders.put("tunnelbore", TunnelBoreDefinition::new);
+            stockLoaders.put("tunnel_bore", TunnelBoreDefinition::new);
 
         } catch (NoSuchFieldException e) {
             SusyLog.logger.error("Failed to reflect definition manager json loaders", e);
