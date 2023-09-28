@@ -1,6 +1,6 @@
 # Blocks
 tile.cooling_coil.manganese_iron_arsenic_phosphide.name=锰铁砷磷冷却线圈
-tile.cooling_coil.praseodymium_nickel.name=镨镍冷却线圈
+tile.cooling_coil.praseodymium_nickel.name=镨镍合金冷却线圈
 tile.cooling_coil.gadolinium_silicon_germanium.name=钆硅锗合金冷却线圈
 tile.cooling_coil.tooltip_temperature=基础制冷：§b%,dK
 
@@ -128,8 +128,8 @@ tile.susy_stone_bricks.soapstone.name=皂石砖
 tile.susy_stone_bricks.kimberlite.name=金伯利岩砖
 
 # Materials
-susy.material.manganese_iron_arsenic_phosphide=锰铁砷磷
-susy.material.praseodymium_nickel=镨镍
+susy.material.manganese_iron_arsenic_phosphide=锰铁砷磷合金
+susy.material.praseodymium_nickel=镨镍合金
 susy.material.gadolinium_silicon_germanium=钆硅锗合金
 susy.material.latex=胶乳
 susy.material.mud=泥
@@ -639,7 +639,7 @@ metaitem.conveyor.steam.name=蒸汽传送带
 metaitem.pump.steam.name=蒸汽泵
 
 # Catalysts
-gregtech.universal.catalysts.tooltip.tier=§e最高电压：§f%,d EU/T（%s§f）
+gregtech.universal.catalysts.tooltip.tier=§e最高电压：§f%,d EU/t（%s§f）
 gregtech.universal.catalysts.tooltip.non_tiered=§e非分级催化剂§
 gregtech.universal.catalysts.tooltip.yield.tiered=§a产率加成：§fx%d/电压等级§f
 gregtech.universal.catalysts.tooltip.energy.tiered=§a耗能功率：§fx%d/电压等级§f
@@ -651,44 +651,44 @@ gregtech.universal.catalysts.tooltip.title=%s
 
 # Oxidation Catalyst Bed
 gregtech.catalyst_group.oxidation_catalyst_beds.name=氧化催化剂
-metaitem.ulv_catalyst_bed_oxidation.name=ULV氧化催化剂催化床
-metaitem.lv_catalyst_bed_oxidation.name=LV氧化催化剂催化床
-metaitem.mv_catalyst_bed_oxidation.name=MV氧化催化剂催化床
-metaitem.hv_catalyst_bed_oxidation.name=HV氧化催化剂催化床
-metaitem.ev_catalyst_bed_oxidation.name=EV氧化催化剂催化床
-metaitem.iv_catalyst_bed_oxidation.name=IV氧化催化剂催化床
-metaitem.luv_catalyst_bed_oxidation.name=LUV氧化催化剂催化床
-metaitem.zpm_catalyst_bed_oxidation.name=ZPM氧化催化剂催化床
-metaitem.uv_catalyst_bed_oxidation.name=UV氧化催化剂催化床
-metaitem.uhv_catalyst_bed_oxidation.name=UHV氧化催化剂催化床
-metaitem.uev_catalyst_bed_oxidation.name=UEV氧化催化剂催化床
-metaitem.uiv_catalyst_bed_oxidation.name=UIV氧化催化剂催化床
-metaitem.uxv_catalyst_bed_oxidation.name=UXV氧化催化剂催化床
-metaitem.opv_catalyst_bed_oxidation.name=OpV氧化催化剂催化床
+metaitem.ulv_catalyst_bed_oxidation.name=ULV氧化催化床
+metaitem.lv_catalyst_bed_oxidation.name=LV氧化催化床
+metaitem.mv_catalyst_bed_oxidation.name=MV氧化催化床
+metaitem.hv_catalyst_bed_oxidation.name=HV氧化催化床
+metaitem.ev_catalyst_bed_oxidation.name=EV氧化催化床
+metaitem.iv_catalyst_bed_oxidation.name=IV氧化催化床
+metaitem.luv_catalyst_bed_oxidation.name=LUV氧化催化床
+metaitem.zpm_catalyst_bed_oxidation.name=ZPM氧化催化床
+metaitem.uv_catalyst_bed_oxidation.name=UV氧化催化床
+metaitem.uhv_catalyst_bed_oxidation.name=UHV氧化催化床
+metaitem.uev_catalyst_bed_oxidation.name=UEV氧化催化床
+metaitem.uiv_catalyst_bed_oxidation.name=UIV氧化催化床
+metaitem.uxv_catalyst_bed_oxidation.name=UXV氧化催化床
+metaitem.opv_catalyst_bed_oxidation.name=OpV氧化催化床
 
 # Reduction Catalyst Bed
 gregtech.catalyst_group.reduction_catalyst_beds.name=还原催化剂
-metaitem.ulv_catalyst_bed_reduction.name=ULV还原催化剂催化床
-metaitem.lv_catalyst_bed_reduction.name=LV还原催化剂催化床
-metaitem.mv_catalyst_bed_reduction.name=MV还原催化剂催化床
-metaitem.hv_catalyst_bed_reduction.name=HV还原催化剂催化床
-metaitem.ev_catalyst_bed_reduction.name=EV还原催化剂催化床
-metaitem.iv_catalyst_bed_reduction.name=IV还原催化剂催化床
-metaitem.luv_catalyst_bed_reduction.name=LUV还原催化剂催化床
-metaitem.zpm_catalyst_bed_reduction.name=ZPM还原催化剂催化床
-metaitem.uv_catalyst_bed_reduction.name=UV还原催化剂催化床
-metaitem.uhv_catalyst_bed_reduction.name=UHV还原催化剂催化床
-metaitem.uev_catalyst_bed_reduction.name=UEV还原催化剂催化床
-metaitem.uiv_catalyst_bed_reduction.name=UIV还原催化剂催化床
-metaitem.uxv_catalyst_bed_reduction.name=UXV还原催化剂催化床
-metaitem.opv_catalyst_bed_reduction.name=OpV还原催化剂催化床
+metaitem.ulv_catalyst_bed_reduction.name=ULV还原催化床
+metaitem.lv_catalyst_bed_reduction.name=LV还原催化床
+metaitem.mv_catalyst_bed_reduction.name=MV还原催化床
+metaitem.hv_catalyst_bed_reduction.name=HV还原催化床
+metaitem.ev_catalyst_bed_reduction.name=EV还原催化床
+metaitem.iv_catalyst_bed_reduction.name=IV还原催化床
+metaitem.luv_catalyst_bed_reduction.name=LUV还原催化床
+metaitem.zpm_catalyst_bed_reduction.name=ZPM还原催化床
+metaitem.uv_catalyst_bed_reduction.name=UV还原催化床
+metaitem.uhv_catalyst_bed_reduction.name=UHV还原催化床
+metaitem.uev_catalyst_bed_reduction.name=UEV还原催化床
+metaitem.uiv_catalyst_bed_reduction.name=UIV还原催化床
+metaitem.uxv_catalyst_bed_reduction.name=UXV还原催化床
+metaitem.opv_catalyst_bed_reduction.name=OpV还原催化床
 
 # Standard Catalyst
 gregtech.catalyst_group.standard_catalysts.name=标准催化剂
 
 # Cracking Catalyst
 gregtech.catalyst_group.cracking_catalyst_beds.name=裂化催化剂
-metaitem.standard_catalyst_bed_cracking.name=裂化催化剂催化床
+metaitem.standard_catalyst_bed_cracking.name=裂化催化床
 
 # Machine Translations
 susy.ocean_pumper.full=输出仓已满！
