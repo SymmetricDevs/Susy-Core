@@ -12,15 +12,18 @@ import cam72cam.mod.render.EntityRenderer;
 import cam72cam.mod.render.IEntityRender;
 import cam72cam.mod.render.opengl.RenderState;
 import supersymmetry.api.SusyLog;
+import supersymmetry.asm.StockLoaderBridgeClassLoader;
+import supersymmetry.asm.StockLoaderBridgeGenerator;
 import supersymmetry.common.entities.EntityTunnelBore;
 import supersymmetry.integration.immersiverailroading.registry.TunnelBoreDefinition;
 
 import java.lang.reflect.Field;
-import java.util.Map;
+import java.lang.reflect.InvocationTargetException;
 
 public class SuSyIRLoader {
     public static void initDefinitions() {
-        try {
+        // Left as a warning to all future generations -- MTBO
+        /*try {
             Field jsonLoadersField = DefinitionManager.class.getDeclaredField("stockLoaders");
             jsonLoadersField.setAccessible(true);
             Map<String, StockLoader> stockLoaders = (Map<String, StockLoader>) jsonLoadersField.get(DefinitionManager.class);
@@ -29,6 +32,42 @@ public class SuSyIRLoader {
             SusyLog.logger.error("Failed to reflect definition manager json loaders", e);
         } catch (IllegalAccessException e) {
             SusyLog.logger.error("Failed to access definition manager json loaders", e);
+        }*/
+        /*try {
+            Class<?> definitionManagerClass = Class.forName("cam72cam.immersiverailroading.registry.DefinitionManager");
+            Method addStockLoaderMethod = definitionManagerClass.getMethod("addStockLoader", String.class, StockLoader.class);
+            String loaderName = "tunnel_bore";
+            StockLoader loader = TunnelBoreDefinition::new;
+            try {
+                addStockLoaderMethod.invoke(null, loaderName, loader);
+            } catch (java.lang.reflect.InvocationTargetException e) {
+                // Print the actual exception that occurred within addStockLoader method
+                Throwable actualException = e.getTargetException();
+                actualException.printStackTrace();
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }*/
+
+        try {
+            Field jsonLoadersField = DefinitionManager.class.getDeclaredField("stockLoaders");
+            jsonLoadersField.setAccessible(true);
+            jsonLoadersField.get("locomotives");
+
+            byte[] classBytes = StockLoaderBridgeGenerator.generateStockLoaderClass();
+
+            StockLoaderBridgeClassLoader loader = new StockLoaderBridgeClassLoader();
+            Class<?> stockLoaderClass = loader.defineClass(StockLoaderBridgeGenerator.TARGET_CLASS_NAME_LOADER, classBytes);
+
+            Object stockLoaderInstance = stockLoaderClass.getDeclaredConstructor(Class.class).newInstance(TunnelBoreDefinition.class);
+            SusyLog.logger.info("Test");
+        } catch (NoSuchFieldException e) {
+            SusyLog.logger.error("Failed to reflect definition manager json loaders", e);
+        } catch (NoSuchMethodException e) {
+            SusyLog.logger.error("Failed to get the constructor for the StockLoaderBridge", e);
+        } catch (InvocationTargetException | IllegalAccessException | InstantiationException e) {
+            SusyLog.logger.error("Failed to instantiate StockLoaderBridge", e);
         }
     }
 
@@ -54,7 +93,6 @@ public class SuSyIRLoader {
                 }
 
             }
-
             public void postRender(EntityMoveableRollingStock entity, RenderState state, float partialTicks) {
                 StockModel<?, ?> renderer = entity.getDefinition().getModel();
                 if (renderer != null) {
@@ -67,7 +105,7 @@ public class SuSyIRLoader {
     }
 
     @FunctionalInterface
-    private interface StockLoader {
+    public interface StockLoader {
         EntityRollingStockDefinition apply(String var1, DataBlock var2) throws Exception;
     }
 }
