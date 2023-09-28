@@ -53,7 +53,6 @@ public class SuSyIRLoader {
         try {
             Field jsonLoadersField = DefinitionManager.class.getDeclaredField("stockLoaders");
             jsonLoadersField.setAccessible(true);
-            jsonLoadersField.get("locomotives");
 
             byte[] classBytes = StockLoaderBridgeGenerator.generateStockLoaderClass();
 

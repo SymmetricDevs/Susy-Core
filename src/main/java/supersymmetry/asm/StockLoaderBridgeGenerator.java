@@ -3,8 +3,8 @@ package supersymmetry.asm;
 import org.objectweb.asm.*;
 
 public class StockLoaderBridgeGenerator {
-    public static String TARGET_CLASS_NAME = "cam72cam/immersiverailroading/registry/DefinitionManager$StockLoaderBridge";
-    public static String TARGET_CLASS_NAME_LOADER = "cam72cam.immersiverailroading.registry.DefinitionManager$StockLoaderBridge";
+    public static String TARGET_CLASS_NAME = "supersymmetry/asm/StockLoaderBridge";
+    public static String TARGET_CLASS_NAME_LOADER = TARGET_CLASS_NAME.replace("/", ".");
 
     // If anyone reads this, stop.
     // Do not read this.

@@ -6,11 +6,7 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import supersymmetry.api.SusyLog;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 public class SusyTransformer implements IClassTransformer, Opcodes {
-    public static final String DEFINITION_MANAGER_CLASS_NAME = "cam72cam/immersiverailroading/registry/DefinitionManager";
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
@@ -25,12 +21,10 @@ public class SusyTransformer implements IClassTransformer, Opcodes {
             return sus;
         }
         */
-        if(internalName.equals(DEFINITION_MANAGER_CLASS_NAME)) {
+        if(internalName.equals(DefinitionManagerVisitor.TARGET_CLASS_NAME)) {
             ClassReader cr = new ClassReader(basicClass);
             ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-            cr.accept(cw, 0);
-            cw.visitInnerClass("cam72cam/immersiverailroading/registry/DefinitionManager$StockLoaderBridge", "cam72cam/immersiverailroading/registry/DefinitionManager", "StockLoaderBridge", Opcodes.ACC_PUBLIC);
-
+            cr.accept(new DefinitionManagerVisitor(cw), 0);
             byte[] sus = cw.toByteArray();
             SusyLog.logger.info(String.format("Transformed class %s", name));
             return sus;
