@@ -12,20 +12,21 @@ import cam72cam.mod.render.EntityRenderer;
 import cam72cam.mod.render.IEntityRender;
 import cam72cam.mod.render.opengl.RenderState;
 import supersymmetry.api.SusyLog;
-import supersymmetry.asm.StockLoaderBridgeClassLoader;
-import supersymmetry.asm.StockLoaderBridgeGenerator;
 import supersymmetry.common.entities.EntityTunnelBore;
 import supersymmetry.integration.immersiverailroading.registry.TunnelBoreDefinition;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 
 public class SuSyIRLoader {
     public static void initDefinitions() {
         // Left as a warning to all future generations -- MTBO
+        // Actually you didn't do anything wrong, you just need to put null as input
+        // when you're getting object from field because it's a static field -- Surreal
         /*try {
             Field jsonLoadersField = DefinitionManager.class.getDeclaredField("stockLoaders");
             jsonLoadersField.setAccessible(true);
+                                                                                                       ↓ this should be null
             Map<String, StockLoader> stockLoaders = (Map<String, StockLoader>) jsonLoadersField.get(DefinitionManager.class);
             stockLoaders.put("tunnel_bore", TunnelBoreDefinition::new);
         } catch (NoSuchFieldException e) {
@@ -54,18 +55,13 @@ public class SuSyIRLoader {
             Field jsonLoadersField = DefinitionManager.class.getDeclaredField("stockLoaders");
             jsonLoadersField.setAccessible(true);
 
-            byte[] classBytes = StockLoaderBridgeGenerator.generateStockLoaderClass();
+            Map<String, StockLoader> stockLoaders = (Map<String, StockLoader>) jsonLoadersField.get(null);
 
-            StockLoaderBridgeClassLoader loader = new StockLoaderBridgeClassLoader();
-            Class<?> stockLoaderClass = loader.defineClass(StockLoaderBridgeGenerator.TARGET_CLASS_NAME_LOADER, classBytes);
+            stockLoaders.put("tunnel_bore", TunnelBoreDefinition::new);
 
-            Object stockLoaderInstance = stockLoaderClass.getDeclaredConstructor(Class.class).newInstance(TunnelBoreDefinition.class);
-            SusyLog.logger.info("Test");
         } catch (NoSuchFieldException e) {
             SusyLog.logger.error("Failed to reflect definition manager json loaders", e);
-        } catch (NoSuchMethodException e) {
-            SusyLog.logger.error("Failed to get the constructor for the StockLoaderBridge", e);
-        } catch (InvocationTargetException | IllegalAccessException | InstantiationException e) {
+        } catch (IllegalAccessException e) {
             SusyLog.logger.error("Failed to instantiate StockLoaderBridge", e);
         }
     }
