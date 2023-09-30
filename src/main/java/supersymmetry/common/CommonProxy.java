@@ -41,7 +41,6 @@ public class CommonProxy {
 
     public void load() {
         SuSyWorldLoader.init();
-        SuSyMetaBlocks.registerColors();
     }
 
     @SubscribeEvent
