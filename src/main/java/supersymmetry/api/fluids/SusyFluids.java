@@ -45,7 +45,7 @@ public class SusyFluids {
         impureSlurry.setTemperature(293);
         impureSlurry.setDensity((int) (material.getMass() * 100));
 
-        Fluid pureSlurry = new MaterialFluid("pure_" + material "_slurry", material, SusyFluidTypes.PURE_SLURRY, textureLocation);
+        Fluid pureSlurry = new MaterialFluid(material "_slurry", material, SusyFluidTypes.PURE_SLURRY, textureLocation);
         pureSlurry.setTemperature(293);
         pureSlurry.setDensity((int) (material.getMass() * 100));
 
