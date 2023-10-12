@@ -1,7 +1,7 @@
 {
 	"name": "Black Mesa Tunnel Bore",
 	"works": "Black Mesa",
-	"model": "immersiverailroading:models/rolling_stock/tunnel_bore/black_mesa_tunnel_bore/engine_one.obj",
+	"model": "immersiverailroading:models/rolling_stock/tunnel_bore/black_mesa_tunnel_bore/bore.obj",
 	"modeler": "Zalgo",
 	"pack": "Supersymmetry Engines",
 	"properties": {
