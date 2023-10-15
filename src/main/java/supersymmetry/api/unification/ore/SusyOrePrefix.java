@@ -18,7 +18,7 @@ public class SusyOrePrefix {
     public static OrePrefix oreShale = new OrePrefix("oreShale", -1L, null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
     public static OrePrefix oreSlate = new OrePrefix("oreSlate", -1L, null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
     public static OrePrefix oreSoapstone = new OrePrefix("oreSoapstone", -1L, null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
-    public static OrePrefix oreKimberlite = new OrePrefix("oreKimberltie", -1L, null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
+    public static OrePrefix oreKimberlite = new OrePrefix("oreKimberlite", -1L, null, MaterialIconType.ore, 1L, OrePrefix.Conditions.hasOreProperty);
     public static OrePrefix catalystBed = new OrePrefix("catalystBed", GTValues.M * 4, null, SuSyMaterialIconType.catalystBed, 1L, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_CATALYST_BED));
     public static OrePrefix catalystPellet = new OrePrefix("catalystPellet", GTValues.M / 4, null, SuSyMaterialIconType.catalystPellet, 1L, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_CATALYST_PELLET));
 
@@ -44,7 +44,7 @@ public class SusyOrePrefix {
 
     // Ore Processing Intermediates
 
-    public static final OrePrefix sifted = new OrePrefix("sifted", -1, null, SuSyMaterialIconType.sifted, 1L, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_SIFTED));
-    public static final OrePrefix flotated = new OrePrefix("flotated", -1, null, SuSyMaterialIconType.flotated, 1L, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_SIFTED));
-    public static final OrePrefix concentrate = new OrePrefix("concentrate", -1, null, SuSyMaterialIconType.concentrate, 1L, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_CONCENTRATE));
+    public static final OrePrefix sifted = new OrePrefix("dustSifted", -1, null, SuSyMaterialIconType.sifted, 1L, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_SIFTED));
+    public static final OrePrefix flotated = new OrePrefix("dustFlotated", -1, null, SuSyMaterialIconType.flotated, 1L, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_SIFTED));
+    public static final OrePrefix concentrate = new OrePrefix("dustConcentrate", -1, null, SuSyMaterialIconType.concentrate, 1L, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_CONCENTRATE));
 }

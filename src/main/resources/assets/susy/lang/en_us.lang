@@ -171,13 +171,13 @@ item.material.oreprefix.oreSoapstone=Soapstone %s Ore
 item.material.oreprefix.oreKimberlite=Kimberlite %s Ore
 item.material.oreprefix.catalystBed=%s Catalyst Bed
 item.material.oreprefix.catalystPellet=%s Catalyst Pellet
-item.material.oreprefix.flotated=Flotated %s Ore
-item.material.oreprefix.concentrate=Concentrated %s Ore
-item.material.oreprefix.sifted=Sifted %s Ore
+item.material.oreprefix.dustFlotated=Flotated %s Dust
+item.material.oreprefix.dustConcentrate=%s Concentrate Dust
+item.material.oreprefix.dustSifted=Sifted %s Dust
 item.material.oreprefix.sheetedFrame=%s Sheeted Frame Box
 
 fluid.slurry.impure=Impure %s Slurry
-fluid.slurry.pure=Pure %s Slurry
+fluid.slurry.pure=%s Slurry
 
 # Machines/Multiblocks
 gregtech.machine.magnetic_refrigerator.name=Magnetic Refrigerator
