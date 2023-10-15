@@ -177,7 +177,7 @@ item.material.oreprefix.dustSifted=Sifted %s Dust
 item.material.oreprefix.sheetedFrame=%s Sheeted Frame Box
 
 fluid.slurry.impure=Impure %s Slurry
-fluid.slurry.pure=Pure %s Slurry
+fluid.slurry.pure=%s Slurry
 
 # Machines/Multiblocks
 gregtech.machine.magnetic_refrigerator.name=Magnetic Refrigerator
