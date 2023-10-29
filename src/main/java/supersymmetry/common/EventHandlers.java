@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.management.PlayerList;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
@@ -36,6 +37,8 @@ import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.event.MobHordeEvent;
 import supersymmetry.common.entities.EntityDropPod;
+import supersymmetry.common.event.MobHordePlayerData;
+import supersymmetry.common.event.MobHordeWorldData;
 
 import java.util.List;
 import java.util.Map;
@@ -69,6 +72,8 @@ public class EventHandlers {
             event.player.addItemStackToInventory(GTFOMetaItem.EMERGENCY_RATIONS.getStackForm(10));
             event.player.addItemStackToInventory(MetaItems.PROSPECTOR_LV.getChargedStack(100000));
         }
+
+
     }
 
     @SubscribeEvent
@@ -125,11 +130,27 @@ public class EventHandlers {
     }
 
     @SubscribeEvent
-    public static void onServerTick(TickEvent.PlayerTickEvent event) {
-        if (!event.player.world.isRemote && event.player.world.provider.isSurfaceWorld() && !event.player.world.getDifficulty().equals(EnumDifficulty.PEACEFUL) && Math.random() < 0.01) {
-            List<MobHordeEvent> doableEvents = MobHordeEvent.EVENTS.stream().filter(e -> e.canRun((EntityPlayerMP) event.player)).toList();
-            if (!doableEvents.isEmpty())
-                doableEvents.get((int) (Math.random() * doableEvents.size())).run(event.player);
+    public static void on(TickEvent.WorldTickEvent event) {
+
+        World world = event.world;
+
+        if (world.isRemote) {
+            return;
+        }
+
+        if (event.phase != TickEvent.Phase.END) {
+            return;
+        }
+
+        if (world.provider.getDimension() != 0) {
+            return;
+        }
+
+        if (world instanceof WorldServer server) {
+            PlayerList list = server.getMinecraftServer().getPlayerList();
+            MobHordeWorldData mobHordeWorldData = MobHordeWorldData.get(world);
+            list.getPlayers().forEach(p -> mobHordeWorldData.getPlayerData(p.getPersistentID()).update(p));
+            mobHordeWorldData.markDirty();
         }
     }
 }
