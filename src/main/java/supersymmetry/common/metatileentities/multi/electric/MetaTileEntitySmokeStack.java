@@ -36,6 +36,7 @@ public class MetaTileEntitySmokeStack extends RecipeMapMultiblockController {
         return new MetaTileEntitySmokeStack(this.metaTileEntityId);
     }
 
+    @Nonnull
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start(FRONT, RIGHT, UP)
                 .aisle("S")
@@ -86,10 +87,14 @@ public class MetaTileEntitySmokeStack extends RecipeMapMultiblockController {
         List<IMultipleTankHandler.MultiFluidTankEntry> tanksToDrain = this.getInputFluidInventory().getFluidTanks();
 
         //if gas is not found and is not present in name [regex checks for gas not preceded or followed by any letters]
-        //if (!gases.contains(tankToDrain.getFluid().getFluid()) && !tankToDrain.getFluid().getUnlocalizedName().matches("(?<![A-Za-z])(gas)(?![A-Za-z])")) { return; }
         for (IMultipleTankHandler.MultiFluidTankEntry currTank : tanksToDrain) {
             //if no fluids in tank, or if it's not gaseous in name or based on forge continue
-            if (currTank.getFluid() == null || (!currTank.getFluid().getFluid().isGaseous() && !currTank.getFluid().getUnlocalizedName().matches("(?<![A-Za-z])(gas)(?![A-Za-z])"))) {
+            if (currTank.getFluid() == null ||
+                    //checks if fluid is not considered gaseous by forge and if it also doesn't have gas in its name
+                    (!currTank.getFluid().getFluid().isGaseous() &&
+                    !currTank.getFluid().getUnlocalizedName().matches("(?<![A-Za-z])(gas)(?![A-Za-z])")) ||
+                    //checks if any fluid input from any flare stack recipe matches current fluid
+                    SuSyRecipeMaps.FLARE_STACK.getRecipeList().stream().anyMatch(recipe -> recipe.getFluidInputs().stream().anyMatch(gtRecipeInput -> gtRecipeInput.getInputFluidStack() == currTank.getFluid()))) {
                 continue;
             }
 
