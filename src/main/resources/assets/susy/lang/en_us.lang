@@ -558,6 +558,21 @@ gregtech.machine.electrostatic_separator.uiv.name=Epic Electrostatic Separator I
 gregtech.machine.electrostatic_separator.uxv.name=Epic Electrostatic Separator IV
 gregtech.machine.electrostatic_separator.opv.name=Legendary Electrostatic Separator
 
+# Polishing Machine
+gregtech.machine.polishing_machine.lv.name=Basic Polishing Machine
+gregtech.machine.polishing_machine.mv.name=Advanced Polishing Machine
+gregtech.machine.polishing_machine.hv.name=Advanced Polishing Machine II
+gregtech.machine.polishing_machine.ev.name=Advanced Polishing Machine III
+gregtech.machine.polishing_machine.iv.name=Elite Polishing Machine
+gregtech.machine.polishing_machine.luv.name=Elite Polishing Machine II
+gregtech.machine.polishing_machine.zpm.name=Elite Polishing Machine III
+gregtech.machine.polishing_machine.uv.name=Ultimate Polishing Machine
+gregtech.machine.polishing_machine.uhv.name=Epic Polishing Machine
+gregtech.machine.polishing_machine.uev.name=Epic Polishing Machine II
+gregtech.machine.polishing_machine.uiv.name=Epic Polishing Machine III
+gregtech.machine.polishing_machine.uxv.name=Epic Polishing Machine IV
+gregtech.machine.polishing_machine.opv.name=Legendary Polishing Machine
+
 gregtech.machine.bath_condenser.lv.name=Bath Condenser
 gregtech.machine.bath_condenser.lv.tooltip=Only works inside a Cryogenic Distillation Tower
 

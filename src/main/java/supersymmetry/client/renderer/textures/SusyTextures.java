@@ -41,6 +41,7 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer FLUID_COMPRESSOR_OVERLAY = new OrientedOverlayRenderer("machines/fluid_compressor");
     public static final OrientedOverlayRenderer FLUID_DECOMPRESSOR_OVERLAY = new OrientedOverlayRenderer("machines/fluid_decompressor");
     public static final OrientedOverlayRenderer ELECTROSTATIC_SEPARATOR_OVERLAY = new OrientedOverlayRenderer("machines/electrostatic_separator");
+    public static final OrientedOverlayRenderer POLISHING_MACHINE_OVERLAY = new OrientedOverlayRenderer("machines/polishing_machine");
     public static final OrientedOverlayRenderer ARC_FURNACE_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/arc_furnace");
     public static final OrientedOverlayRenderer CLARIFIER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/clarifier");
     public static final OrientedOverlayRenderer CONDENSER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/condenser");
