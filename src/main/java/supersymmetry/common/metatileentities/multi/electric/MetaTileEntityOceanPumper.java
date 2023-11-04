@@ -322,7 +322,8 @@ public class MetaTileEntityOceanPumper extends MultiblockWithDisplayBase impleme
         return isWorking;
     }
 
-
-
-
+    @Override
+    public boolean getIsWeatherOrTerrainResistant() {
+        return true;
+    }
 }
