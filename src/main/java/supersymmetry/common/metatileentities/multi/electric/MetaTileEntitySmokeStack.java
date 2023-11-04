@@ -1,5 +1,6 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -7,6 +8,7 @@ import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.PatternMatchContext;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockBoilerCasing.BoilerCasingType;
@@ -19,9 +21,12 @@ import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nonnull;
 
+import java.util.List;
+
 import static gregtech.api.util.RelativeDirection.*;
 
 public class MetaTileEntitySmokeStack extends RecipeMapMultiblockController {
+
     public MetaTileEntitySmokeStack(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.SMOKE_STACK);
         this.recipeMapWorkable = new NoEnergyMultiblockRecipeLogic(this);
@@ -70,4 +75,33 @@ public class MetaTileEntitySmokeStack extends RecipeMapMultiblockController {
     public boolean getIsWeatherOrTerrainResistant() {
         return true;
     }
+
+    public void update() {
+        super.update();
+
+        //stop if not loaded and ensure only occurs every second
+        if(this.getWorld().isRemote || !(this.getOffsetTimer() == 0)  || this.inputFluidInventory == null ) { return; }
+
+        //get tanks to drain
+        List<IMultipleTankHandler.MultiFluidTankEntry> tanksToDrain = this.getInputFluidInventory().getFluidTanks();
+
+        //if gas is not found and is not present in name [regex checks for gas not preceded or followed by any letters]
+        //if (!gases.contains(tankToDrain.getFluid().getFluid()) && !tankToDrain.getFluid().getUnlocalizedName().matches("(?<![A-Za-z])(gas)(?![A-Za-z])")) { return; }
+        for (IMultipleTankHandler.MultiFluidTankEntry currTank : tanksToDrain) {
+            //if no fluids in tank, or if it's not gaseous in name or based on forge continue
+            if (currTank.getFluid() == null || (!currTank.getFluid().getFluid().isGaseous() && !currTank.getFluid().getUnlocalizedName().matches("(?<![A-Za-z])(gas)(?![A-Za-z])"))) {
+                continue;
+            }
+
+            //perform draining if and only if fluid is a gas
+            currTank.drain(currTank.getFluidAmount(), true);
+        }
+    }
+
+    public void formStructure(PatternMatchContext context) {
+        super.formStructure(context);
+    }
+
 }
+
+
