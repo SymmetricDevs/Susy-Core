@@ -112,6 +112,7 @@ public class CommonProxy {
         MetaItems.addOrePrefix(SusyOrePrefix.flotated);
         MetaItems.addOrePrefix(SusyOrePrefix.sifted);
         MetaItems.addOrePrefix(SusyOrePrefix.concentrate);
+        MetaItems.addOrePrefix(SusyOrePrefix.wetFiber);
 
         //SusyMaterials.removeFlags();
     }

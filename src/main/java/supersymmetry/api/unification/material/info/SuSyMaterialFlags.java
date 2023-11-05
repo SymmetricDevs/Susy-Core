@@ -30,6 +30,10 @@ public class SuSyMaterialFlags {
             .requireProps(new PropertyKey[]{PropertyKey.ORE})
             .build();
 
+    public static MaterialFlag GENERATE_WET_FIBER = (new MaterialFlag.Builder("generate_wet_fiber"))
+            .requireProps(new PropertyKey[]{PropertyKey.FIBER})
+            .build();
+
     public SuSyMaterialFlags(){
     }
 }
