@@ -53,8 +53,9 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
                 ticksUntilCanSpawn = gracePeriod;
                 int index = doableEvents.get((int) (Math.random() * doableEvents.size()));
                 MobHordeEvent event = MobHordeEvent.EVENTS.get(index);
-                event.run(player);
-                invasionTimers[index] = event.getNextDelay();
+                if (event.run(player)) {
+                    invasionTimers[index] = event.getNextDelay();
+                }
             }
         }
     }

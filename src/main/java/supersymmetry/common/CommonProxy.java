@@ -43,7 +43,7 @@ public class CommonProxy {
 
     public void load() {
         SuSyWorldLoader.init();
-        new MobHordeEvent((p) -> new EntityZombie(p.world), 4, 8);
+        new MobHordeEvent((p) -> new EntityZombie(p.world), 4, 8).setMaximumDistanceUnderground(10);
     }
 
     @SubscribeEvent

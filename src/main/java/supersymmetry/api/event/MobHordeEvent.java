@@ -5,6 +5,7 @@ import gregtech.api.util.TeleportHandler;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementManager;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -30,6 +31,7 @@ public class MobHordeEvent {
     private int timerMax;
     private int dimension = 0;
     private int maximumDistanceUnderground = -1;
+    private boolean canUsePods = true;
 
     public static final List<MobHordeEvent> EVENTS = new ArrayList<>();
 
@@ -50,11 +52,19 @@ public class MobHordeEvent {
         return this;
     }
 
-    public void run(EntityPlayer player) {
+    public boolean run(EntityPlayer player) {
         int quantity = quantityMin + (int) (Math.random() * quantityMax);
-        for (int i = 0; i < quantity; i++) {
-            spawnMobWithPod(player);
+        boolean didSpawn = false;
+        if (hasToBeUnderground(player) || !canUsePods) {
+            for (int i = 0; i < quantity; i++) {
+                didSpawn |= spawnMobWithoutPod(player);
+            }
+        } else {
+            for (int i = 0; i < quantity; i++) {
+                didSpawn |= spawnMobWithPod(player);
+            }
         }
+        return didSpawn;
     }
 
     public boolean canRun(EntityPlayerMP player) {
@@ -66,10 +76,7 @@ public class MobHordeEvent {
         if (player.dimension != this.dimension) {
             return false;
         }
-        if (maximumDistanceUnderground != -1 && !player.world.canBlockSeeSky(new BlockPos(player).up())) {
-            return false;
-        }
-        return !(player.world.isDaytime() && nightOnly);
+        return !(player.world.isDaytime() && nightOnly) || hasToBeUnderground(player);
     }
 
     private static Advancement resourceLocationToAdvancement(ResourceLocation location, World world) {
@@ -77,7 +84,7 @@ public class MobHordeEvent {
         return advManager.getAdvancement(location);
     }
 
-    public void spawnMobWithPod(EntityPlayer player) {
+    public boolean spawnMobWithPod(EntityPlayer player) {
         EntityDropPod pod = new EntityDropPod(player.world);
         pod.rotationYaw = (float) Math.random() * 360;
         EntityLiving mob = entitySupplier.apply(player);
@@ -94,8 +101,31 @@ public class MobHordeEvent {
         player.world.spawnEntity(mob);
 
         mob.startRiding(pod, true);
+        mob.onInitialSpawn(player.world.getDifficultyForLocation(new BlockPos(mob)), (IEntityLivingData) null);
         mob.enablePersistence();
 
+        return true;
+    }
+
+    public boolean spawnMobWithoutPod(EntityPlayer player) {
+        EntityLiving mob = entitySupplier.apply(player);
+
+        for (int i = 0; i < 3; i++) {
+            double angle = Math.random() * 2 * Math.PI;
+            int x = (int) (player.posX + 15 * Math.cos(angle));
+            int z = (int) (player.posZ + 15 * Math.sin(angle));
+
+            mob.setPosition(x, player.posY - 5, z);
+            while (!mob.getCanSpawnHere() || !mob.isNotColliding() && mob.posY < player.posY + 12) {
+                mob.setPosition(x, mob.posY + 1, z);
+            }
+            if (mob.posY < player.posY + 12) {
+                player.world.spawnEntity(mob);
+                mob.enablePersistence();
+                return true;
+            }
+        }
+        return false;
     }
 
     public int getNextDelay() {
@@ -116,5 +146,14 @@ public class MobHordeEvent {
     public MobHordeEvent setMaximumDistanceUnderground(int maximumDistanceUnderground) {
         this.maximumDistanceUnderground = maximumDistanceUnderground;
         return this;
+    }
+
+    public MobHordeEvent setCanUsePods(boolean canUsePods) {
+        this.canUsePods = canUsePods;
+        return this;
+    }
+
+    protected boolean hasToBeUnderground(EntityPlayer player) {
+        return (maximumDistanceUnderground != -1 && !player.world.canBlockSeeSky(new BlockPos(player).up(maximumDistanceUnderground)));
     }
 }
