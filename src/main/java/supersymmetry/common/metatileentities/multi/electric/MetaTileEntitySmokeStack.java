@@ -8,24 +8,27 @@ import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
-import gregtech.api.pattern.PatternMatchContext;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockBoilerCasing.BoilerCasingType;
 import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
+
 import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nonnull;
 
-import java.util.List;
+import java.util.Collections;
 
 import static gregtech.api.util.RelativeDirection.*;
 
 public class MetaTileEntitySmokeStack extends RecipeMapMultiblockController {
+
+    //isActive check prevents running while mufflerTier is invalid
+    //int mufflerTier = 1;
 
     public MetaTileEntitySmokeStack(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.SMOKE_STACK);
@@ -80,32 +83,36 @@ public class MetaTileEntitySmokeStack extends RecipeMapMultiblockController {
     public void update() {
         super.update();
 
-        //stop if not loaded and ensure only occurs every second
-        if(this.getWorld().isRemote || !(this.getOffsetTimer() == 0)  || this.inputFluidInventory == null ) { return; }
+        //skip processing if unloaded, inactive, or if no fluid inventory. Also limits speed through offset timer
+        if(this.getWorld().isRemote || !this.isActive() || !(this.getOffsetTimer() % 100 == 0)  || this.inputFluidInventory == null) { return; }
 
-        //get tanks to drain
-        List<IMultipleTankHandler.MultiFluidTankEntry> tanksToDrain = this.getInputFluidInventory().getFluidTanks();
-
-        //if gas is not found and is not present in name [regex checks for gas not preceded or followed by any letters]
-        for (IMultipleTankHandler.MultiFluidTankEntry currTank : tanksToDrain) {
-            //if no fluids in tank, or if it's not gaseous in name or based on forge continue
-            if (currTank.getFluid() == null ||
-                    //checks if fluid is not considered gaseous by forge and if it also doesn't have gas in its name
-                    (!currTank.getFluid().getFluid().isGaseous() &&
-                    !currTank.getFluid().getUnlocalizedName().matches("(?<![A-Za-z])(gas)(?![A-Za-z])")) ||
-                    //checks if any fluid input from any flare stack recipe matches current fluid
-                    SuSyRecipeMaps.FLARE_STACK.getRecipeList().stream().anyMatch(recipe -> recipe.getFluidInputs().stream().anyMatch(gtRecipeInput -> gtRecipeInput.getInputFluidStack() == currTank.getFluid()))) {
+        //passes over all tanks in fluid input inventory
+        for (IMultipleTankHandler.MultiFluidTankEntry currTank : this.getInputFluidInventory().getFluidTanks()) {
+            //checks for fluid existence, gaseousness, and absence in recipes of flare stack
+            if (currTank.getFluid() == null || !currTank.getFluid().getFluid().isGaseous() || SuSyRecipeMaps.FLARE_STACK.findRecipe(Integer.MAX_VALUE, Collections.emptyList(), Collections.singletonList(currTank.getFluid())) != null) {
                 continue;
             }
 
-            //perform draining if and only if fluid is a gas
+            //perform draining if and only if all above conditions are false
             currTank.drain(currTank.getFluidAmount(), true);
         }
     }
 
+    /* I can't figure out how to tell if something is a muffler hatch or not
     public void formStructure(PatternMatchContext context) {
         super.formStructure(context);
+
+        //don't look for muffler in unformed structure
+        if (!this.isStructureFormed()) { return; }
+
+        //go up structure until muffler hatch is found
+        BlockPos currPos = this.getPos();
+        while (!(this.getWorld().getTileEntity(currPos) == GregTechAPI.MTE_REGISTRY.) && currPos.getY() < this.getPos().getY() + 9) { currPos.add(0, 1, 0); }
+        TileEntity.getKey(GregTechAPI)
+        this.mufflerTier = ((MetaTileEntityMufflerHatch) this.getWorld().getBlockState(currPos)).getTier()
+
     }
+     */
 
 }
 
