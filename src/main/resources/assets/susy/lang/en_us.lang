@@ -652,6 +652,8 @@ gregtech.machine.dumping_hatch.lv.name=Dumping Hatch
 metaitem.catalyst_bed_support_grid.name=Catalyst Bed Support Grid
 metaitem.conveyor.steam.name=Steam Conveyor
 metaitem.pump.steam.name=Steam Pump
+metaitem.air_vent.name=Air Vent
+metaitem.air_vent.tooltip=Passively collects a Dimension's Air for your Machines
 
 # Catalysts
 gregtech.universal.catalysts.tooltip.tier=§eMax Voltage: §f%,d EU/T (%s§f)
