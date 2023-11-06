@@ -2,6 +2,7 @@ package supersymmetry.api.unification.material.info;
 
 import gregtech.api.unification.material.info.MaterialFlag;
 import gregtech.api.unification.material.properties.PropertyKey;
+import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 
 public class SuSyMaterialFlags {
 
@@ -31,7 +32,7 @@ public class SuSyMaterialFlags {
             .build();
 
     public static MaterialFlag GENERATE_WET_FIBER = (new MaterialFlag.Builder("generate_wet_fiber"))
-            .requireProps(new PropertyKey[]{PropertyKey.FIBER})
+            .requireProps(new PropertyKey[]{SuSyPropertyKey.FIBER})
             .build();
 
     public SuSyMaterialFlags(){
