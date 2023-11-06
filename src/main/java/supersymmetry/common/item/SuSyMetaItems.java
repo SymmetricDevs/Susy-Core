@@ -48,7 +48,7 @@ public class SuSyMetaItems {
             lines.add(I18n.format("gregtech.universal.tooltip.fluid_transfer_rate", new Object[]{32}));
         }));
         AIR_VENT = metaItem.addItem(4, "air_vent").addComponents(new TooltipBehavior((lines) -> {
-            lines.add(I18n.format("gregtech.universal.tooltip.fluid_transfer_rate", 200));
+            lines.add(I18n.format("gregtech.universal.tooltip.fluid_transfer_rate", 100));
         }));
     }
 

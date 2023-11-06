@@ -16,7 +16,7 @@ public class SuSyCoverBehaviors {
         registerBehavior(new ResourceLocation("gregtech", "pump.steam"), SuSyMetaItems.PUMP_STEAM,
                 (tile, side) -> new SteamCoverPump(tile, side, 640));
         registerBehavior(new ResourceLocation("gregtech", "air_vent"), SuSyMetaItems.AIR_VENT,
-                (tile, side) -> new AirVentCover(tile, side, 200));
+                (tile, side) -> new AirVentCover(tile, side, 100));
 
     }
 
