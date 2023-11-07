@@ -30,6 +30,6 @@ public class FiberProperty implements IMaterialProperty {
         if (properties.hasProperty(PropertyKey.FLUID) && this.heatResistant) { throw new IllegalStateException("Material " + properties.getMaterial() + " has both Fluid and Heat Resistant Fiber Property, which is not allowed!"); }
         
         if (this.solutionSpun) { properties.getMaterial().addFlags(SuSyMaterialFlags.GENERATE_WET_FIBER); }
-        properties.getMaterial().addFlags(MaterialFlags.GENERATE_FINE_WIRE, MaterialFlags.DISABLE_DECOMPOSITION, MaterialFlags.NO_UNIFICATION);
+        properties.getMaterial().addFlags(SuSyMaterialFlags.GENERATE_FIBER, MaterialFlags.DISABLE_DECOMPOSITION, MaterialFlags.NO_UNIFICATION);
     }
 }

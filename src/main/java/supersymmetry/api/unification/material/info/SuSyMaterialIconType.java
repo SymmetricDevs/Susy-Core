@@ -9,5 +9,6 @@ public class SuSyMaterialIconType {
     public static MaterialIconType sifted = new MaterialIconType("sifted");
     public static MaterialIconType flotated = new MaterialIconType("flotated");
     public static MaterialIconType concentrate = new MaterialIconType("concentrate");
+    public static MaterialIconType fiber = new MaterialIconType("fiber");
     public static MaterialIconType wetFiber = new MaterialIconType("wetFiber");
 }

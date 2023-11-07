@@ -48,5 +48,6 @@ public class SusyOrePrefix {
     public static final OrePrefix concentrate = new OrePrefix("dustConcentrate", -1, null, SuSyMaterialIconType.concentrate, 1L, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_CONCENTRATE));
 
     // Fiber
-    public static final OrePrefix wetFiber = new OrePrefix("fiberWet", GTValues.M / 8, null, SuSyMaterialIconType.wetFiber,1L, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_WET_FIBER));
+    public static final OrePrefix fiber = new OrePrefix("fiber", GTValues.M / 8, null, SuSyMaterialIconType.fiber, 1L, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_FIBER));
+    public static final OrePrefix wetFiber = new OrePrefix("fiberWet", GTValues.M / 8, null, SuSyMaterialIconType.wetFiber, 1L, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_WET_FIBER));
 }

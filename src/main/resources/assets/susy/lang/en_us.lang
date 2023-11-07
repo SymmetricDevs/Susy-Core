@@ -175,6 +175,7 @@ item.material.oreprefix.dustFlotated=Flotated %s Dust
 item.material.oreprefix.dustConcentrate=%s Concentrate Dust
 item.material.oreprefix.dustSifted=Sifted %s Dust
 item.material.oreprefix.sheetedFrame=%s Sheeted Frame Box
+item.material.oreprefix.fiber=%s Fiber
 item.material.oreprefix.fiberWet=Wet %s Fiber
 
 fluid.slurry.impure=Impure %s Slurry
