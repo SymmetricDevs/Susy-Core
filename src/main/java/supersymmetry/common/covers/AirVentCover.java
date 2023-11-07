@@ -40,6 +40,9 @@ public class AirVentCover extends CoverBehavior implements ITickable {
 
     public void update() {
         if (!this.coverHolder.getWorld().isRemote && this.coverHolder.getOffsetTimer() % 20L == 0L) {
+            if (this.coverHolder.getWorld().getBlockState(this.coverHolder.getPos().offset(this.attachedSide)).isFullBlock()) {
+                return;
+            }
             IFluidHandler fluidHandler = this.coverHolder.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, this.attachedSide);
             if (fluidHandler != null) {
                 if (cachedAirType == null) {
