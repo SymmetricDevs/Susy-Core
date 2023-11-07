@@ -10,7 +10,7 @@ import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
 public class FiberProperty implements IMaterialProperty {
 
     // For generating wet fibers
-    private boolean solutionSpun;
+    public boolean solutionSpun;
 
     // To prevent a fluid and a HR-fiber from coinciding
     private boolean heatResistant;

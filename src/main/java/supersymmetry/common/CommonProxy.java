@@ -17,12 +17,14 @@ import supersymmetry.Supersymmetry;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.api.unification.ore.SusyStoneTypes;
+import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 import supersymmetry.common.blocks.*;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.loaders.SuSyWorldLoader;
 import supersymmetry.loaders.recipes.SuSyRecipeLoader;
 import supersymmetry.loaders.SusyOreDictionaryLoader;
+import supersymmetry.loaders.recipes.SuSyMaterialRecipeHandler;
 import gregtech.api.unification.material.event.MaterialEvent;
 import gregtech.api.unification.material.event.PostMaterialEvent;
 
@@ -123,6 +125,7 @@ public class CommonProxy {
         SusyOreDictionaryLoader.init();
         SuSyMetaBlocks.registerOreDict();
         SuSyRecipeLoader.init();
+        SusyOrePrefix.fiber.addProcessingHandler(SuSyPropertyKey.FIBER, SuSyMaterialRecipeHandler::processFiber);
     }
 
     private static <T extends Block> ItemBlock createItemBlock(T block, Function<T, ItemBlock> producer) {
