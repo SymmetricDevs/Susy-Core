@@ -125,7 +125,6 @@ public class CommonProxy {
         SusyOreDictionaryLoader.init();
         SuSyMetaBlocks.registerOreDict();
         SuSyRecipeLoader.init();
-        SusyOrePrefix.fiber.addProcessingHandler(SuSyPropertyKey.FIBER, SuSyMaterialRecipeHandler::processFiber);
     }
 
     private static <T extends Block> ItemBlock createItemBlock(T block, Function<T, ItemBlock> producer) {

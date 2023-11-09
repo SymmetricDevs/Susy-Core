@@ -30,6 +30,7 @@ public class SuSyMaterialRecipeHandler {
         SusyOrePrefix.catalystPellet.addProcessingHandler(PropertyKey.DUST, SuSyMaterialRecipeHandler::processCatalystPellet);
         SusyOrePrefix.sheetedFrame.addProcessingHandler(PropertyKey.DUST, SuSyMaterialRecipeHandler::processSheetedFrame);
         SusyOrePrefix.sheetedFrame.addProcessingHandler(PropertyKey.DUST, RecyclingRecipeHandler::processCrushing);
+        SusyOrePrefix.fiber.addProcessingHandler(SuSyPropertyKey.FIBER, SuSyMaterialRecipeHandler::processFiber);
     }
 
     public static void processCatalystBed(OrePrefix catalystBedPrefix, Material mat, DustProperty property) {
