@@ -330,5 +330,6 @@ public class SuSyRecipeMaps {
         RecipeMaps.AUTOCLAVE_RECIPES.setMaxFluidOutputs(2);
         RecipeMaps.CHEMICAL_BATH_RECIPES.setMaxFluidInputs(3);
         RecipeMaps.CHEMICAL_BATH_RECIPES.setMaxFluidOutputs(3);
+        Recipemaps.EXTRUDER_RECIPES.setMaxOutputs(2);
     }
 }
