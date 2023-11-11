@@ -328,5 +328,7 @@ public class SuSyRecipeMaps {
         RecipeMaps.STEAM_TURBINE_FUELS.setMaxInputs(1);
         RecipeMaps.AUTOCLAVE_RECIPES.setMaxFluidInputs(2);
         RecipeMaps.AUTOCLAVE_RECIPES.setMaxFluidOutputs(2);
+        RecipeMaps.CHEMICAL_BATH_RECIPES.setMaxFluidInputs(3);
+        RecipeMaps.CHEMICAL_BATH_RECIPES.setMaxFluidOutputs(3);
     }
 }
