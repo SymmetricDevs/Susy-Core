@@ -101,6 +101,16 @@ public class SuSyRecipeMaps {
             .setSlotOverlay(true, false, true, SusyGuiTextures.CUBIC_LATTICE_OVERLAY)
             .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
+    public static final RecipeMap<SimpleRecipeBuilder> ELECTROSTATIC_SEPARATOR = new RecipeMap<>("electrostatic_separator", 3, 3, 3, 3, new SimpleRecipeBuilder(), false)
+            .setSlotOverlay(false, false, GuiTextures.CRUSHED_ORE_OVERLAY)
+            .setSlotOverlay(true, false, GuiTextures.DUST_OVERLAY)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_MAGNET, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.ARC);
+
+    public static final RecipeMap<SimpleRecipeBuilder> SPINNING_RECIPES = new RecipeMap<>("spinning", 1, 1, 0, 0, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_MAGNET, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.CENTRIFUGE);
+
     public static final RecipeMap<CatalystRecipeBuilder> FLUIDIZED_BED_REACTOR_RECIPES = new RecipeMap<>("fluidized_bed_reactor", 2, 2, 3, 2, new CatalystRecipeBuilder(), false)
             .setSlotOverlay(false, true, SusyGuiTextures.LARGE_REACTOR_FLUID_OVERLAY)
             .setSlotOverlay(true, true, SusyGuiTextures.LARGE_REACTOR_FLUID_OVERLAY)
@@ -289,12 +299,6 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<PrimitiveRecipeBuilder> BATH_CONDENSER = new RecipeMap<>("bath_condenser", 0, 0, 2, 3, new PrimitiveRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_SIFT, ProgressWidget.MoveType.VERTICAL)
             .setSound(GTSoundEvents.BATH);
-
-    public static final RecipeMap<SimpleRecipeBuilder> ELECTROSTATIC_SEPARATOR = new RecipeMap<>("electrostatic_separator", 3, 3, 3, 3, new SimpleRecipeBuilder(), false)
-            .setSlotOverlay(false, false, GuiTextures.CRUSHED_ORE_OVERLAY)
-            .setSlotOverlay(true, false, GuiTextures.DUST_OVERLAY)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_MAGNET, ProgressWidget.MoveType.HORIZONTAL)
-            .setSound(GTSoundEvents.ARC);
 
     public static final RecipeMap<DronePadRecipeBuilder> DRONE_PAD = new RecipeMap<>("drone_pad", 4, 9, 0, 0, new DronePadRecipeBuilder(), false);
 

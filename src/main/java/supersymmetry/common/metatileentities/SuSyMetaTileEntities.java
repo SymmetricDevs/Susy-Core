@@ -140,6 +140,7 @@ public class SuSyMetaTileEntities {
     public static SimpleMachineMetaTileEntity[] PHASE_SEPARATOR;
     public static SimpleMachineMetaTileEntity[] BATH_CONDENSER;
     public static SimpleMachineMetaTileEntity[] ELECTROSTATIC_SEPARATOR;
+    public static SimpleMachineMetaTileEntity[] TEXTILE_SPINNER;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -259,6 +260,7 @@ public class SuSyMetaTileEntities {
         registerSimpleMTE(BATH_CONDENSER, 0, 17019, "bath_condenser", SuSyRecipeMaps.BATH_CONDENSER, SusyTextures.BATH_CONDENSER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
 
         registerSimpleMTE(ELECTROSTATIC_SEPARATOR, 12, 17035, "electrostatic_separator", SuSyRecipeMaps.ELECTROSTATIC_SEPARATOR, SusyTextures.ELECTROSTATIC_SEPARATOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+        registerSimpleMTE(TEXTILE_SPINNER, 12, 17061, "textile_spinner", SuSyRecipeMaps.SPINNING_RECIPES, SusyTextures.TEXTILE_SPINNER_OVERLAY_OVERLAY, true, GTUtility.defaultTankSizeFunction);
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name, RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator, ICubeRenderer texture, boolean isBricked) {

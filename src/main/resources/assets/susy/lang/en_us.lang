@@ -560,6 +560,21 @@ gregtech.machine.electrostatic_separator.uiv.name=Epic Electrostatic Separator I
 gregtech.machine.electrostatic_separator.uxv.name=Epic Electrostatic Separator IV
 gregtech.machine.electrostatic_separator.opv.name=Legendary Electrostatic Separator
 
+# Textile Spinner
+gregtech.machine.textile_spinner.lv.name=Basic Textile Spinner
+gregtech.machine.textile_spinner.mv.name=Advanced Textile Spinner
+gregtech.machine.textile_spinner.hv.name=Advanced Textile Spinner II
+gregtech.machine.textile_spinner.ev.name=Advanced Textile Spinner III
+gregtech.machine.textile_spinner.iv.name=Elite Textile Spinner
+gregtech.machine.textile_spinner.luv.name=Elite Textile Spinner II
+gregtech.machine.textile_spinner.zpm.name=Elite Textile Spinner III
+gregtech.machine.textile_spinner.uv.name=Ultimate Textile Spinner
+gregtech.machine.textile_spinner.uhv.name=Epic Textile Spinner
+gregtech.machine.textile_spinner.uev.name=Epic Textile Spinner II
+gregtech.machine.textile_spinner.uiv.name=Epic Textile Spinner III
+gregtech.machine.textile_spinner.uxv.name=Epic Textile Spinner IV
+gregtech.machine.textile_spinner.opv.name=Legendary Textile Spinner
+
 gregtech.machine.bath_condenser.lv.name=Bath Condenser
 gregtech.machine.bath_condenser.lv.tooltip=Only works inside a Cryogenic Distillation Tower
 
