@@ -629,6 +629,7 @@ recipemap.reverberatory_furnace.name=Reverberatory Furnace
 recipemap.phase_separator.name=Phase Separation
 recipemap.bath_condenser.name=Bath Condenser
 recipemap.drone_pad.name=Drone Pad
+recipemap.polishing_machine=Polishing
 
 gregtech.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 gregtech.multiblock.ocean_pumper.description=The Ocean Pumper is an electrically powered multiblock that collects a base amount of 8,000 L Seawater per second (at MV), but only if it is in an ocean biome, and when the controller is between Y = 70 and Y = 75 (Inclusive). It needs an output hatch, a maintenance hatch, and an energy input hatch.
