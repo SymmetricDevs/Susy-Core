@@ -12,12 +12,12 @@ public class FiberProperty implements IMaterialProperty {
     // For generating wet fibers
     public boolean solutionSpun;
 
-    // To prevent a fluid and a HR-fiber from coinciding
-    private boolean heatResistant;
+    // To allow for fluid generation
+    private boolean meltSpun;
 
-    public FiberProperty(boolean solutionSpun, boolean heatResistant) {
+    public FiberProperty(boolean solutionSpun, boolean meltSpun) {
         this.solutionSpun = solutionSpun;
-        this.heatResistant = heatResistant;
+        this.meltSpun = meltSpun;
     }
 
     // Default constructor
@@ -27,9 +27,9 @@ public class FiberProperty implements IMaterialProperty {
 
     @Override
     public void verifyProperty(MaterialProperties properties) {
-        if (properties.hasProperty(PropertyKey.FLUID) && this.heatResistant) { throw new IllegalStateException("Material " + properties.getMaterial() + " has both Fluid and Heat Resistant Fiber Property, which is not allowed!"); }
-        
+        if (properties.hasProperty(PropertyKey.FLUID) && !this.meltSpun) { throw new IllegalStateException("Material " + properties.getMaterial() + " has both a fluid property and is not a melt spun fiber, which is not allowed!"); }
         if (this.solutionSpun) { properties.getMaterial().addFlags(SuSyMaterialFlags.GENERATE_WET_FIBER); }
-        properties.getMaterial().addFlags(SuSyMaterialFlags.GENERATE_FIBER, MaterialFlags.DISABLE_DECOMPOSITION);
+
+        properties.getMaterial().addFlags(SuSyMaterialFlags.GENERATE_FIBER, SuSyMaterialFlags.GENERATE_THREAD, MaterialFlags.DISABLE_DECOMPOSITION);
     }
 }

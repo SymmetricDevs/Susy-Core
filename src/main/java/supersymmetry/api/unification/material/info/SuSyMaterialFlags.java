@@ -39,6 +39,10 @@ public class SuSyMaterialFlags {
             .requireProps(new PropertyKey[]{SuSyPropertyKey.FIBER})
             .build();
 
+    public static MaterialFlag GENERATE_THREAD = (new MaterialFlag.Builder("generate_thread"))
+            .requireProps(new PropertyKey[]{SuSyPropertyKey.FIBER})
+            .build();
+
     public SuSyMaterialFlags(){
     }
 }

@@ -31,6 +31,7 @@ public class SuSyMaterialRecipeHandler {
         SusyOrePrefix.sheetedFrame.addProcessingHandler(PropertyKey.DUST, SuSyMaterialRecipeHandler::processSheetedFrame);
         SusyOrePrefix.sheetedFrame.addProcessingHandler(PropertyKey.DUST, RecyclingRecipeHandler::processCrushing);
         SusyOrePrefix.fiber.addProcessingHandler(SuSyPropertyKey.FIBER, SuSyMaterialRecipeHandler::processFiber);
+        SusyOrePrefix.thread.addProcessingHandler(SuSyPropertyKey.FIBER, SuSyMaterialRecipeHandler::processThread);
     }
 
     public static void processCatalystBed(OrePrefix catalystBedPrefix, Material mat, DustProperty property) {
@@ -70,6 +71,15 @@ public class SuSyMaterialRecipeHandler {
                 .EUt(VA[HV])
                 .buildAndRegister();
         }
+    }
+
+    public static void processThread(OrePrefix threadPrefix, Material mat, @NotNull FiberProperty property) {
+        SuSyRecipeMaps.SPINNING_RECIPES.recipeBuilder()
+                .inputs(OreDictUnifier.get(SusyOrePrefix.fiber, mat, 4))
+                .outputs(OreDictUnifier.get(threadPrefix, mat, 1))
+                .duration(20)
+                .EUt(VA[LV])
+                .buildAndRegister();
     }
 
     public static void processSheetedFrame(OrePrefix sheetedFramePrefix, Material mat, DustProperty property) {
