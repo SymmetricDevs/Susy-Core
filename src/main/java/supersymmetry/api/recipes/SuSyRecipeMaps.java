@@ -111,6 +111,10 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_MAGNET, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.CENTRIFUGE);
 
+    public static final RecipeMap<SimpleRecipeBuilder> POLISHING_MACHINE = new RecipeMap<>("polishing_machine", 1, 1, 2, 1, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_MIXER, ProgressWidget.MoveType.CIRCULAR)
+            .setSound(GTSoundEvents.CENTRIFUGE);
+
     public static final RecipeMap<CatalystRecipeBuilder> FLUIDIZED_BED_REACTOR_RECIPES = new RecipeMap<>("fluidized_bed_reactor", 2, 2, 3, 2, new CatalystRecipeBuilder(), false)
             .setSlotOverlay(false, true, SusyGuiTextures.LARGE_REACTOR_FLUID_OVERLAY)
             .setSlotOverlay(true, true, SusyGuiTextures.LARGE_REACTOR_FLUID_OVERLAY)
@@ -335,5 +339,6 @@ public class SuSyRecipeMaps {
         RecipeMaps.CHEMICAL_BATH_RECIPES.setMaxFluidInputs(3);
         RecipeMaps.CHEMICAL_BATH_RECIPES.setMaxFluidOutputs(3);
         RecipeMaps.EXTRUDER_RECIPES.setMaxOutputs(3);
+        RecipeMaps.CUTTER_RECIPES.setMaxOutputs(4);
     }
 }

@@ -576,6 +576,21 @@ gregtech.machine.textile_spinner.uiv.name=Epic Textile Spinner III
 gregtech.machine.textile_spinner.uxv.name=Epic Textile Spinner IV
 gregtech.machine.textile_spinner.opv.name=Legendary Textile Spinner
 
+# Polishing Machine
+gregtech.machine.polishing_machine.lv.name=Basic Polishing Machine
+gregtech.machine.polishing_machine.mv.name=Advanced Polishing Machine
+gregtech.machine.polishing_machine.hv.name=Advanced Polishing Machine II
+gregtech.machine.polishing_machine.ev.name=Advanced Polishing Machine III
+gregtech.machine.polishing_machine.iv.name=Elite Polishing Machine
+gregtech.machine.polishing_machine.luv.name=Elite Polishing Machine II
+gregtech.machine.polishing_machine.zpm.name=Elite Polishing Machine III
+gregtech.machine.polishing_machine.uv.name=Ultimate Polishing Machine
+gregtech.machine.polishing_machine.uhv.name=Epic Polishing Machine
+gregtech.machine.polishing_machine.uev.name=Epic Polishing Machine II
+gregtech.machine.polishing_machine.uiv.name=Epic Polishing Machine III
+gregtech.machine.polishing_machine.uxv.name=Epic Polishing Machine IV
+gregtech.machine.polishing_machine.opv.name=Legendary Polishing Machine
+
 gregtech.machine.bath_condenser.lv.name=Bath Condenser
 gregtech.machine.bath_condenser.lv.tooltip=Only works inside a Cryogenic Distillation Tower
 
@@ -657,6 +672,8 @@ gregtech.machine.dumping_hatch.lv.name=Dumping Hatch
 metaitem.catalyst_bed_support_grid.name=Catalyst Bed Support Grid
 metaitem.conveyor.steam.name=Steam Conveyor
 metaitem.pump.steam.name=Steam Pump
+metaitem.air_vent.name=Air Vent
+metaitem.air_vent.tooltip=Passively collects a Dimension's Air for your Machines when facing Air
 
 # Catalysts
 gregtech.universal.catalysts.tooltip.tier=§eMax Voltage: §f%,d EU/T (%s§f)
