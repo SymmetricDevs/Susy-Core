@@ -107,7 +107,7 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_MAGNET, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.ARC);
 
-    public static final RecipeMap<SimpleRecipeBuilder> SPINNING_RECIPES = new RecipeMap<>("spinning", 1, 1, 0, 0, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<SimpleRecipeBuilder> SPINNING_RECIPES = new RecipeMap<>("spinning", 1, 1, 1, 0, new SimpleRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_MAGNET, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.CENTRIFUGE);
 
@@ -338,6 +338,7 @@ public class SuSyRecipeMaps {
         RecipeMaps.AUTOCLAVE_RECIPES.setMaxFluidOutputs(2);
         RecipeMaps.CHEMICAL_BATH_RECIPES.setMaxFluidInputs(3);
         RecipeMaps.CHEMICAL_BATH_RECIPES.setMaxFluidOutputs(3);
+        RecipeMaps.CHEMICAL_BATH_RECIPES.setMaxOutputs(3);
         RecipeMaps.EXTRUDER_RECIPES.setMaxOutputs(3);
         RecipeMaps.CUTTER_RECIPES.setMaxOutputs(4);
     }

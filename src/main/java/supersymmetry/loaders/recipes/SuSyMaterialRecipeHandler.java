@@ -22,6 +22,7 @@ import supersymmetry.common.item.SuSyMetaItems;
 
 import static gregtech.api.GTValues.*;
 import static gregtech.api.unification.ore.OrePrefix.dust;
+import static gregtech.api.unification.material.Materials.*;
 
 public class SuSyMaterialRecipeHandler {
 
@@ -76,6 +77,7 @@ public class SuSyMaterialRecipeHandler {
     public static void processThread(OrePrefix threadPrefix, Material mat, @NotNull FiberProperty property) {
         SuSyRecipeMaps.SPINNING_RECIPES.recipeBuilder()
                 .inputs(OreDictUnifier.get(SusyOrePrefix.fiber, mat, 4))
+                .fluidInputs(Air.getFluid(100))
                 .outputs(OreDictUnifier.get(threadPrefix, mat, 1))
                 .duration(20)
                 .EUt(VA[LV])
