@@ -19,6 +19,7 @@ public class SuSyMetaItems {
     public static MetaValueItem CATALYST_BED_SUPPORT_GRID;
     public static MetaValueItem CONVEYOR_STEAM;
     public static MetaValueItem PUMP_STEAM;
+    public static MetaValueItem AIR_VENT;
 
     public static void initMetaItems() {
         metaItem = new StandardMetaItem();
@@ -39,12 +40,15 @@ public class SuSyMetaItems {
         // initialize metaitems here
         CATALYST_BED_SUPPORT_GRID = metaItem.addItem(1, "catalyst_bed_support_grid");
         CONVEYOR_STEAM = metaItem.addItem(2, "conveyor.steam").addComponents(new TooltipBehavior((lines) -> {
-            lines.add(I18n.format("metaitem.conveyor.module.tooltip", new Object[0]));
+            lines.add(I18n.format("metaitem.conveyor.module.tooltip"));
             lines.add(I18n.format("gregtech.universal.tooltip.item_transfer_rate", new Object[]{4}));
         }));
         PUMP_STEAM = metaItem.addItem(3, "pump.steam").addComponents(new TooltipBehavior((lines) -> {
-            lines.add(I18n.format("metaitem.electric.pump.tooltip", new Object[0]));
+            lines.add(I18n.format("metaitem.electric.pump.tooltip"));
             lines.add(I18n.format("gregtech.universal.tooltip.fluid_transfer_rate", new Object[]{32}));
+        }));
+        AIR_VENT = metaItem.addItem(4, "air_vent").addComponents(new TooltipBehavior((lines) -> {
+            lines.add(I18n.format("gregtech.universal.tooltip.fluid_transfer_rate", 100));
         }));
     }
 
