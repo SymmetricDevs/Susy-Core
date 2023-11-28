@@ -175,6 +175,9 @@ item.material.oreprefix.dustFlotated=浮选%s粉
 item.material.oreprefix.dustConcentrate=%s精矿粉
 item.material.oreprefix.dustSifted=筛选%s粉
 item.material.oreprefix.sheetedFrame=%s板箱框
+item.material.oreprefix.fiber=%s纤维
+item.material.oreprefix.fiberWet=湿%s纤维
+item.material.oreprefix.thread=%s丝
 
 fluid.slurry.impure=含杂%s浆液
 fluid.slurry.pure=%s浆液
@@ -558,7 +561,22 @@ gregtech.machine.electrostatic_separator.uiv.name=史诗静电分离器 III
 gregtech.machine.electrostatic_separator.uxv.name=史诗静电分离器 IV
 gregtech.machine.electrostatic_separator.opv.name=传说静电分离器
 
-# 抛光机
+# Textile Spinner
+gregtech.machine.textile_spinner.lv.name=基础纺织机
+gregtech.machine.textile_spinner.mv.name=进阶纺织机
+gregtech.machine.textile_spinner.hv.name=进阶纺织机 II
+gregtech.machine.textile_spinner.ev.name=进阶纺织机 III
+gregtech.machine.textile_spinner.iv.name=精英纺织机
+gregtech.machine.textile_spinner.luv.name=精英纺织机 II
+gregtech.machine.textile_spinner.zpm.name=精英纺织机 III
+gregtech.machine.textile_spinner.uv.name=终极纺织机
+gregtech.machine.textile_spinner.uhv.name=史诗纺织机
+gregtech.machine.textile_spinner.uev.name=史诗纺织机 II
+gregtech.machine.textile_spinner.uiv.name=史诗纺织机 III
+gregtech.machine.textile_spinner.uxv.name=史诗纺织机 IV
+gregtech.machine.textile_spinner.opv.name=传说纺织机
+
+# Polishing Machine
 gregtech.machine.polishing_machine.lv.name=基础 
 gregtech.machine.polishing_machine.mv.name=进阶抛光机
 gregtech.machine.polishing_machine.hv.name=进阶抛光机 II
@@ -635,13 +653,13 @@ gregtech.multiblock.ocean_pumper.description=海水泵机是一台电力时代�
 
 # Energy Hatches
 
-gregtech.machine.energy_hatch.output_4a.lv.name=4 安发电仓（LV）
-gregtech.machine.energy_hatch.output_16a.lv.name=16 安发电仓（LV）
-gregtech.machine.energy_hatch.output_4a.mv.name=4 安发电仓（MV）
-gregtech.machine.energy_hatch.output_16a.mv.name=16 安发电仓（MV）
-gregtech.machine.energy_hatch.output_4a.hv.name=4 安发电仓（HV）
-gregtech.machine.energy_hatch.output_16a.hv.name=16 安发电仓（HV）
-gregtech.machine.energy_hatch.output_16a.ev.name=16 安发电仓（EV）
+gregtech.machine.energy_hatch.output_4a.lv.name=4 安动力仓（LV）
+gregtech.machine.energy_hatch.output_16a.lv.name=16 安动力仓（LV）
+gregtech.machine.energy_hatch.output_4a.mv.name=4 安动力仓（MV）
+gregtech.machine.energy_hatch.output_16a.mv.name=16 安动力仓（MV）
+gregtech.machine.energy_hatch.output_4a.hv.name=4 安动力仓（HV）
+gregtech.machine.energy_hatch.output_16a.hv.name=16 安动力仓（HV）
+gregtech.machine.energy_hatch.output_16a.ev.name=16 安动力仓（EV）
 
 # Other multiblock parts
 
