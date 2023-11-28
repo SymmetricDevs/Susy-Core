@@ -53,7 +53,7 @@ tile.structural_block_1.structural_block_vent_broken.name=损坏通风口结构�
 tile.deposit_block.orthomagmatic.name=正岩浆岩矿床方块
 tile.deposit_block.metamorphic.name=变质岩矿床方块
 tile.deposit_block.sedimentary.name=沉积岩矿床方块
-tile.deposit_block.hydrothermal.name=沉积岩矿床方块
+tile.deposit_block.hydrothermal.name=热液岩矿床方块
 tile.deposit_block.alluvial.name=冲积岩矿床方块
 tile.deposit_block.magmatic_hydrothermal.name=岩浆热液岩矿床方块
 
@@ -72,16 +72,16 @@ tile.resource_block.platinum_placer.name=铂砂矿床
 tile.resource_block.phosphorite.name=磷块岩矿床
 tile.resource_block.potash.name=钾盐矿床
 
-tile.multiblock_tank.clarifier.name=澄清池
-tile.multiblock_tank.flotation.name=浮选机
+tile.multiblock_tank.clarifier.name=沉淀槽体
+tile.multiblock_tank.flotation.name=浮选槽体
 
 tile.evaporation_bed.dirt.name=蒸发池
 
 tile.electrode_assembly.carbon.name=碳电极部件
 
 tile.home_block.home_block_home.name="家方块（默认）"
-tile.home.allowed=已设置出生点
-tile.home.denied=无法设置出生点
+tile.home.allowed=已设置重生点
+tile.home.denied=无法设置重生点
 
 tile.home_block.home_primitive.name=家方块
 tile.home_block.home_primitive.tooltip=原始
@@ -171,13 +171,16 @@ item.material.oreprefix.oreSoapstone=皂石%s矿石
 item.material.oreprefix.oreKimberlite=金伯利岩%s矿石
 item.material.oreprefix.catalystBed=%s催化床
 item.material.oreprefix.catalystPellet=%s催化剂颗粒
-item.material.oreprefix.flotated=浮选%s矿石
-item.material.oreprefix.concentrate=%s精矿
-item.material.oreprefix.sifted=筛选%s矿石
+item.material.oreprefix.dustFlotated=浮选%s粉
+item.material.oreprefix.dustConcentrate=%s精矿粉
+item.material.oreprefix.dustSifted=筛选%s粉
 item.material.oreprefix.sheetedFrame=%s板箱框
+item.material.oreprefix.fiber=%s纤维
+item.material.oreprefix.fiberWet=湿%s纤维
+item.material.oreprefix.thread=%s丝
 
 fluid.slurry.impure=含杂%s浆液
-fluid.slurry.pure=纯净%s浆液
+fluid.slurry.pure=%s浆液
 
 # Machines/Multiblocks
 gregtech.machine.magnetic_refrigerator.name=磁制冷机
@@ -228,7 +231,7 @@ gregtech.machine.clarifier.name=澄清池
 gregtech.machine.dumper.name=废液排放机
 gregtech.machine.evaporation_pool.name=蒸发池
 gregtech.machine.flare_stack.name=火炬塔
-gregtech.machine.froth_flotation_tank.name=浮选机
+gregtech.machine.froth_flotation_tank.name=泡沫浮选机
 gregtech.machine.multi_stage_flash_distiller.name=多级闪蒸室
 gregtech.machine.high_temperature_distillation_tower.name=高温蒸馏塔
 gregtech.machine.rotary_kiln.name=回转炉
@@ -361,19 +364,19 @@ gregtech.machine.bubble_column_reactor.uxv.name=史诗鼓泡反应器 IV
 gregtech.machine.bubble_column_reactor.opv.name=传说鼓泡反应器
 
 # Batch Reactor
-gregtech.machine.batch_reactor.lv.name=基础间歇式反应器
-gregtech.machine.batch_reactor.mv.name=进阶间歇式反应器
-gregtech.machine.batch_reactor.hv.name=进阶间歇式反应器 II
-gregtech.machine.batch_reactor.ev.name=进阶间歇式反应器 III
-gregtech.machine.batch_reactor.iv.name=精英间歇式反应器
-gregtech.machine.batch_reactor.luv.name=精英间歇式反应器 II
-gregtech.machine.batch_reactor.zpm.name=精英间歇式反应器 III
-gregtech.machine.batch_reactor.uv.name=终极间歇式反应器
-gregtech.machine.batch_reactor.uhv.name=史诗间歇式反应器
-gregtech.machine.batch_reactor.uev.name=史诗间歇式反应器 II
-gregtech.machine.batch_reactor.uiv.name=史诗间歇式反应器 III
-gregtech.machine.batch_reactor.uxv.name=史诗间歇式反应器 IV
-gregtech.machine.batch_reactor.opv.name=传说间歇式反应器
+gregtech.machine.batch_reactor.lv.name=基础间歇式反应釜
+gregtech.machine.batch_reactor.mv.name=进阶间歇式反应釜
+gregtech.machine.batch_reactor.hv.name=进阶间歇式反应釜 II
+gregtech.machine.batch_reactor.ev.name=进阶间歇式反应釜 III
+gregtech.machine.batch_reactor.iv.name=精英间歇式反应釜
+gregtech.machine.batch_reactor.luv.name=精英间歇式反应釜 II
+gregtech.machine.batch_reactor.zpm.name=精英间歇式反应釜 III
+gregtech.machine.batch_reactor.uv.name=终极间歇式反应釜
+gregtech.machine.batch_reactor.uhv.name=史诗间歇式反应釜
+gregtech.machine.batch_reactor.uev.name=史诗间歇式反应釜 II
+gregtech.machine.batch_reactor.uiv.name=史诗间歇式反应釜 III
+gregtech.machine.batch_reactor.uxv.name=史诗间歇式反应釜 IV
+gregtech.machine.batch_reactor.opv.name=传说间歇式反应釜
 
 # Crystallizer
 gregtech.machine.crystallizer.lv.name=基础结晶器
@@ -558,6 +561,36 @@ gregtech.machine.electrostatic_separator.uiv.name=史诗静电分离器 III
 gregtech.machine.electrostatic_separator.uxv.name=史诗静电分离器 IV
 gregtech.machine.electrostatic_separator.opv.name=传说静电分离器
 
+# Textile Spinner
+gregtech.machine.textile_spinner.lv.name=基础纺织机
+gregtech.machine.textile_spinner.mv.name=进阶纺织机
+gregtech.machine.textile_spinner.hv.name=进阶纺织机 II
+gregtech.machine.textile_spinner.ev.name=进阶纺织机 III
+gregtech.machine.textile_spinner.iv.name=精英纺织机
+gregtech.machine.textile_spinner.luv.name=精英纺织机 II
+gregtech.machine.textile_spinner.zpm.name=精英纺织机 III
+gregtech.machine.textile_spinner.uv.name=终极纺织机
+gregtech.machine.textile_spinner.uhv.name=史诗纺织机
+gregtech.machine.textile_spinner.uev.name=史诗纺织机 II
+gregtech.machine.textile_spinner.uiv.name=史诗纺织机 III
+gregtech.machine.textile_spinner.uxv.name=史诗纺织机 IV
+gregtech.machine.textile_spinner.opv.name=传说纺织机
+
+# Polishing Machine
+gregtech.machine.polishing_machine.lv.name=基础 
+gregtech.machine.polishing_machine.mv.name=进阶抛光机
+gregtech.machine.polishing_machine.hv.name=进阶抛光机 II
+gregtech.machine.polishing_machine.ev.name=进阶抛光机 III
+gregtech.machine.polishing_machine.iv.name=精英抛光机
+gregtech.machine.polishing_machine.luv.name=精英抛光机 II
+gregtech.machine.polishing_machine.zpm.name=精英抛光机 III
+gregtech.machine.polishing_machine.uv.name=终极抛光机
+gregtech.machine.polishing_machine.uhv.name=史诗抛光机
+gregtech.machine.polishing_machine.uev.name=史诗抛光机 II
+gregtech.machine.polishing_machine.uiv.name=史诗抛光机 III
+gregtech.machine.polishing_machine.uxv.name=史诗抛光机 IV
+gregtech.machine.polishing_machine.opv.name=传说抛光机
+
 gregtech.machine.bath_condenser.lv.name=浴式冷凝器
 gregtech.machine.bath_condenser.lv.tooltip=仅在低温蒸馏塔中工作
 
@@ -606,7 +639,7 @@ recipemap.clarifier.name=澄清池
 recipemap.multi_stage_flash_distillation.name=多级闪蒸
 recipemap.flare_stack.name=尾气燃烧
 recipemap.dumping.name=废液排放
-recipemap.froth_flotation.name=浮选
+recipemap.froth_flotation.name=泡沫浮选
 recipemap.rotary_kiln.name=回转炉
 recipemap.low_pressure_cryogenic_distillation.name=低压低温蒸馏
 recipemap.high_pressure_cryogenic_distillation.name=高压低温蒸馏
@@ -614,19 +647,22 @@ recipemap.reverberatory_furnace.name=反射炉
 recipemap.phase_separator.name=相分离
 recipemap.bath_condenser.name=浴式冷凝
 recipemap.drone_pad.name=无人机坪
+recipemap.polishing_machine=抛光
+recipemap.gravity_separator=重力分离
+recipemap.spinning.name=纺织
 
 gregtech.multiblock.primitive_mud_pump.description=简易泥泵是一台蒸汽时代的多方块机器。当它的控制器方块被放置在河流生物群系中，且高度介于Y = 64与Y = 80（含）之间时将每秒收集一次泥。它可以使用ULV、LV输出仓或水泵输出仓。
-gregtech.multiblock.ocean_pumper.description=海水泵机是一台电力时代的多方块机器。当它的控制器方块被放置在海洋生物群系中，且高度介于Y = 70与Y = 75（含）之间时将每秒收集8,000 L海水。他需要输出总线、维修仓、能源仓各一。
+gregtech.multiblock.ocean_pumper.description=海水泵机是一台电力时代的多方块机器。当它的控制器方块被放置在海洋生物群系中，且高度介于Y = 70与Y = 75（含）之间时将每秒收集8,000 L海水。它需要输出总线、维修仓、能源仓各一。
 
 # Energy Hatches
 
-gregtech.machine.energy_hatch.output_4a.lv.name=4 安发电仓（LV）
-gregtech.machine.energy_hatch.output_16a.lv.name=16 安发电仓（LV）
-gregtech.machine.energy_hatch.output_4a.mv.name=4 安发电仓（MV）
-gregtech.machine.energy_hatch.output_16a.mv.name=16 安发电仓（MV）
-gregtech.machine.energy_hatch.output_4a.hv.name=4 安发电仓（HV）
-gregtech.machine.energy_hatch.output_16a.hv.name=16 安发电仓（HV）
-gregtech.machine.energy_hatch.output_16a.ev.name=16 安发电仓（EV）
+gregtech.machine.energy_hatch.output_4a.lv.name=4 安动力仓（LV）
+gregtech.machine.energy_hatch.output_16a.lv.name=16 安动力仓（LV）
+gregtech.machine.energy_hatch.output_4a.mv.name=4 安动力仓（MV）
+gregtech.machine.energy_hatch.output_16a.mv.name=16 安动力仓（MV）
+gregtech.machine.energy_hatch.output_4a.hv.name=4 安动力仓（HV）
+gregtech.machine.energy_hatch.output_16a.hv.name=16 安动力仓（HV）
+gregtech.machine.energy_hatch.output_16a.ev.name=16 安动力仓（EV）
 
 # Other multiblock parts
 
@@ -637,6 +673,8 @@ gregtech.machine.dumping_hatch.lv.name=销毁仓
 metaitem.catalyst_bed_support_grid.name=催化床载体网格
 metaitem.conveyor.steam.name=蒸汽传送带
 metaitem.pump.steam.name=蒸汽泵
+metaitem.air_vent.name=进气扇
+metaitem.air_vent.tooltip=当面向空气时，为机器收集所处维度的空气
 
 # Catalysts
 gregtech.universal.catalysts.tooltip.tier=§e最高电压：§f%,d EU/t（%s§f）
