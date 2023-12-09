@@ -75,7 +75,7 @@ tile.resource_block.potash.name=钾盐矿床
 tile.multiblock_tank.clarifier.name=沉淀槽体
 tile.multiblock_tank.flotation.name=浮选槽体
 
-tile.evaporation_bed.dirt.name=蒸发池
+tile.evaporation_bed.dirt.name=蒸发床
 
 tile.electrode_assembly.carbon.name=碳电极部件
 
