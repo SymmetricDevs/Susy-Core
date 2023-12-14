@@ -306,7 +306,7 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_MIXER, ProgressWidget.MoveType.CIRCULAR)
             .setSound(GTSoundEvents.CENTRIFUGE);
 
-    public static final RecipeMap<SimpleRecipeBuilder> LARGE_MIXER_RECIPES = new RecipeMap<>("large_mixer", 7, 1, 6, 2, new SimpleRecipeBuilder().EUt(VA[LV]), false)
+    public static final RecipeMap<SimpleRecipeBuilder> BLENDER_RECIPES = new RecipeMap<>("blender", 6, 1, 6, 1, new SimpleRecipeBuilder().EUt(VA[LV]), false)
             .setSlotOverlay(false, false, false, GuiTextures.MOLECULAR_OVERLAY_1)
             .setSlotOverlay(false, false, true, GuiTextures.MOLECULAR_OVERLAY_2)
             .setSlotOverlay(false, true, false, GuiTextures.MOLECULAR_OVERLAY_3)
@@ -350,7 +350,7 @@ public class SuSyRecipeMaps {
         RecipeMaps.CUTTER_RECIPES.setMaxOutputs(4);
         RecipeMaps.LARGE_CHEMICAL_RECIPES.setMaxFluidInputs(6);
         RecipeMaps.MIXER_RECIPES.onRecipeBuild(recipeBuilder -> {
-            SuSyRecipeMaps.LARGE_MIXER_RECIPES.recipeBuilder()
+            SuSyRecipeMaps.BLENDER_RECIPES.recipeBuilder()
                     .inputs(recipeBuilder.getInputs().toArray(new GTRecipeInput[0]))
                     .fluidInputs(recipeBuilder.getFluidInputs())
                     .outputs(recipeBuilder.getOutputs())
