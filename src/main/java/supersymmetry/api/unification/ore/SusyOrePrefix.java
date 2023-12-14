@@ -34,7 +34,6 @@ public class SusyOrePrefix {
     public static OrePrefix catalystBedCracking = new OrePrefix("catalystBedCracking", GTValues.M, null, SuSyMaterialIconType.catalystBed, 1L, mat -> false);
     public static OrePrefix catalystBedZieglerNatta = new OrePrefix("catalystBedZieglerNatta", GTValues.M, null, SuSyMaterialIconType.catalystBed, 1L, mat -> false);
 
-
     // Tiered Catalyst Pellets
 
     public static OrePrefix catalystPelletReduction = new OrePrefix("catalystPelletReduction", GTValues.M * 4, null, SuSyMaterialIconType.catalystPellet, 1L, mat -> false);
@@ -47,4 +46,9 @@ public class SusyOrePrefix {
     public static final OrePrefix sifted = new OrePrefix("dustSifted", -1, null, SuSyMaterialIconType.sifted, 1L, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_SIFTED));
     public static final OrePrefix flotated = new OrePrefix("dustFlotated", -1, null, SuSyMaterialIconType.flotated, 1L, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_FLOTATED));
     public static final OrePrefix concentrate = new OrePrefix("dustConcentrate", -1, null, SuSyMaterialIconType.concentrate, 1L, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_CONCENTRATE));
+
+    // Fiber
+    public static final OrePrefix fiber = new OrePrefix("fiber", GTValues.M / 8, null, SuSyMaterialIconType.fiber, 1L, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_FIBER));
+    public static final OrePrefix wetFiber = new OrePrefix("fiberWet", GTValues.M / 8, null, SuSyMaterialIconType.wetFiber, 1L, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_WET_FIBER));
+    public static final OrePrefix thread = new OrePrefix("thread", GTValues.M / 8, null, SuSyMaterialIconType.thread, 1L, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_THREAD));
 }
