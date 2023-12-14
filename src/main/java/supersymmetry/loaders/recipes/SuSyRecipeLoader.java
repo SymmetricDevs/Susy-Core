@@ -176,10 +176,10 @@ public class SuSyRecipeLoader {
                 .output(dust, SusyMaterials.Slate)
                 .buildAndRegister();
 
-//        MACERATOR_RECIPES.recipeBuilder()
-//                .input(stone, Materials.Soapstone)
-//                .output(dust, Materials.Soapstone)
-//                .buildAndRegister();
+        MACERATOR_RECIPES.recipeBuilder()
+                .input(stone, Materials.Soapstone)
+                .output(dust, Materials.Soapstone)
+                .buildAndRegister();
 
 
         MACERATOR_RECIPES.recipeBuilder()
