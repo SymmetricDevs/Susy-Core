@@ -239,6 +239,7 @@ gregtech.machine.low_pressure_cryogenic_distillation_plant.name=Low Pressure Cry
 gregtech.machine.high_pressure_cryogenic_distillation_plant.name=High Pressure Cryogenic Distillation Plant
 gregtech.machine.single_column_cryogenic_distillation_plant.name=Single Column Cryogenic Distillation Plant
 gregtech.machine.reverberatory_furnace.name=Reverberatory Furnace
+gregtech.machine.blender.name=Blender
 
 gregtech.machine.drone_pad.name=Drone Pad
 
@@ -644,6 +645,7 @@ recipemap.rotary_kiln.name=Rotary Kiln
 recipemap.low_pressure_cryogenic_distillation.name=Low Pressure Cryogenic Distillation
 recipemap.high_pressure_cryogenic_distillation.name=High Pressure Cryogenic Distillation
 recipemap.reverberatory_furnace.name=Reverberatory Furnace
+recipemap.blender.name=Blender
 recipemap.phase_separator.name=Phase Separation
 recipemap.bath_condenser.name=Bath Condenser
 recipemap.drone_pad.name=Drone Pad
