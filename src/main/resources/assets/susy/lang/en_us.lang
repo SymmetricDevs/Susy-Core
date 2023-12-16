@@ -71,6 +71,7 @@ tile.resource_block.gold_alluvial.name=Alluvial Gold Deposit
 tile.resource_block.platinum_placer.name=Platinum Placer Deposit
 tile.resource_block.phosphorite.name=Phosphorite Deposit
 tile.resource_block.potash.name=Potash Deposit
+tile.resource_block.sulfur.name=Sulfur Deposit
 
 tile.multiblock_tank.clarifier.name=Clarifier Vat
 tile.multiblock_tank.flotation.name=Froth Flotation Vat
