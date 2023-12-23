@@ -594,7 +594,7 @@ gregtech.machine.polishing_machine.uxv.name=Epic Polishing Machine IV
 gregtech.machine.polishing_machine.opv.name=Legendary Polishing Machine
 
 gregtech.machine.bath_condenser.name=Bath Condenser
-gregtech.machine.bath_condenser.lv.tooltip=Only works inside a Cryogenic Distillation Tower
+gregtech.machine.bath_condenser.tooltip=Only works inside a Cryogenic Distillation Tower
 
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
