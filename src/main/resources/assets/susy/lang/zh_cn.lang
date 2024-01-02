@@ -541,7 +541,7 @@ gregtech.machine.weapons_factory.uxv.name=史诗武器工厂 IV
 gregtech.machine.weapons_factory.opv.name=传说武器工厂
 
 # Phase Separator
-gregtech.machine.phase_separator.lv.name=相分离器
+gregtech.machine.phase_separator.name=相分离器
 
 # Electrostatic Separator
 gregtech.machine.electrostatic_separator.lv.name=基础静电分离器
@@ -558,8 +558,8 @@ gregtech.machine.electrostatic_separator.uiv.name=史诗静电分离器 III
 gregtech.machine.electrostatic_separator.uxv.name=史诗静电分离器 IV
 gregtech.machine.electrostatic_separator.opv.name=传说静电分离器
 
-gregtech.machine.bath_condenser.lv.name=浴式冷凝器
-gregtech.machine.bath_condenser.lv.tooltip=仅在低温蒸馏塔中工作
+gregtech.machine.bath_condenser.name=浴式冷凝器
+gregtech.machine.bath_condenser.tooltip=仅在低温蒸馏塔中工作
 
 # Recipemaps
 recipemap.coagulation_tank.name=凝固
