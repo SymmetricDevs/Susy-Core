@@ -86,12 +86,22 @@ public class MetaTileEntityBathCondenser extends SimpleMachineMetaTileEntity imp
 
         @Override
         public boolean checkRecipe(@NotNull Recipe recipe) {
-            Boolean value = recipe.getProperty(CryogenicEnvironmentProperty.getInstance(), null);
-            if (value != null && value && getMetaTileEntity().getCryogenicProvider() == null) {
-                return false;
+            if (super.checkRecipe(recipe)) {
+                Boolean value = recipe.getProperty(CryogenicEnvironmentProperty.getInstance(), null);
+                return value == null || !value || getMetaTileEntity().getCryogenicProvider() != null;
             }
 
-            return super.checkRecipe(recipe);
+            return false;
+        }
+
+        @Override
+        protected boolean canProgressRecipe() {
+            if (super.canProgressRecipe()) {
+                if (previousRecipe == null) return true;
+                Boolean value = previousRecipe.getProperty(CryogenicEnvironmentProperty.getInstance(), null);
+                return value == null || !value || getMetaTileEntity().getCryogenicProvider() != null;
+            }
+            return false;
         }
 
         @Override

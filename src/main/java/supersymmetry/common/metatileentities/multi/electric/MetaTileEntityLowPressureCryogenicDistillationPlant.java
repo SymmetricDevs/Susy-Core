@@ -44,8 +44,8 @@ public class MetaTileEntityLowPressureCryogenicDistillationPlant extends RecipeM
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start(RIGHT, FRONT, UP)
                 .aisle("CCC", "CCC", "CCC")
-                .aisle("CSC", "E E", "CEC")
                 .aisle("XXX", "XFX", "XXX").setRepeatable(1,16)
+                .aisle("CSC", "E E", "CEC")
                 .aisle("DDD", "DDD", "DDD")
                 .where('S', this.selfPredicate())
                 .where('C', states(this.getCasingState())
