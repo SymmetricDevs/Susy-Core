@@ -47,7 +47,12 @@ public class MetaTileEntityBathCondenser extends SimpleMachineMetaTileEntity imp
 
     @Override
     protected void reinitializeEnergyContainer() {
-        this.energyContainer = new EnergyContainerHandler(this, 0, 0, 0, 0, 0);
+        this.energyContainer = new EnergyContainerHandler(this, 0, 0, 0, 0, 0) {
+            @Override
+            public boolean isOneProbeHidden() {
+                return true;
+            }
+        };
     }
 
     @Override
