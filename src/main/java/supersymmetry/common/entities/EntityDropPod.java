@@ -232,6 +232,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
 
             if (!this.hasLanded()) {
                 this.handleCollidedBlocks();
+                this.getPassengers().forEach(e -> e.fallDistance = 0);
             }
 
             this.setLanded(this.hasLanded() || this.onGround);

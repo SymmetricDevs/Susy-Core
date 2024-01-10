@@ -3,6 +3,7 @@ package supersymmetry.common;
 import gregtech.api.block.VariantItemBlock;
 import gregtech.common.items.MetaItems;
 import net.minecraft.block.Block;
+import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.crafting.IRecipe;
@@ -13,15 +14,18 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.Supersymmetry;
+import supersymmetry.api.event.MobHordeEvent;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.api.unification.ore.SusyStoneTypes;
+import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 import supersymmetry.common.blocks.*;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.loaders.SuSyWorldLoader;
 import supersymmetry.loaders.recipes.SuSyRecipeLoader;
 import supersymmetry.loaders.SusyOreDictionaryLoader;
+import supersymmetry.loaders.recipes.SuSyMaterialRecipeHandler;
 import gregtech.api.unification.material.event.MaterialEvent;
 import gregtech.api.unification.material.event.PostMaterialEvent;
 
@@ -40,6 +44,7 @@ public class CommonProxy {
 
     public void load() {
         SuSyWorldLoader.init();
+        //new MobHordeEvent((p) -> new EntityZombie(p.world), 4, 8).setMaximumDistanceUnderground(10);
     }
 
     @SubscribeEvent
@@ -111,6 +116,9 @@ public class CommonProxy {
         MetaItems.addOrePrefix(SusyOrePrefix.flotated);
         MetaItems.addOrePrefix(SusyOrePrefix.sifted);
         MetaItems.addOrePrefix(SusyOrePrefix.concentrate);
+        MetaItems.addOrePrefix(SusyOrePrefix.fiber);
+        MetaItems.addOrePrefix(SusyOrePrefix.wetFiber);
+        MetaItems.addOrePrefix(SusyOrePrefix.thread);
 
         //SusyMaterials.removeFlags();
     }
