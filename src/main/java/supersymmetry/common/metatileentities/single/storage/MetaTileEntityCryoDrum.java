@@ -106,14 +106,14 @@ public class MetaTileEntityCryoDrum extends MetaTileEntity {
                 if (fluid.getTemperature() > maxFluidTemp) return false;
                 else {
                     if (fluid instanceof AttributedFluid) {
+                        if (fluid.getState() == FluidState.PLASMA && !this.isPlasmaProof) return false;
+                        
                         for (FluidAttributes attribute : fluid.getAttributes()) {
                             if (attribute == FluidAttributes.ACID) {
                                 if (!this.isAcidProof) return false;
                                 break;
                             }
                         }
-                        
-                        if (fluid.getState() == FluidState.PLASMA && !this.isPlasmaProof) return false;
                     }
 
                     return true;
