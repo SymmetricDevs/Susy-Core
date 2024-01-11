@@ -1,6 +1,5 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import cam72cam.immersiverailroading.IRBlocks;
 import cam72cam.immersiverailroading.IRItems;
 import cam72cam.immersiverailroading.entity.EntityBuildableRollingStock;
 import cam72cam.immersiverailroading.entity.EntityMoveableRollingStock;
@@ -10,17 +9,10 @@ import cam72cam.immersiverailroading.library.Gauge;
 import cam72cam.immersiverailroading.library.ItemComponentType;
 import cam72cam.immersiverailroading.physics.TickPos;
 import cam72cam.immersiverailroading.registry.EntityRollingStockDefinition;
-import cam72cam.immersiverailroading.tile.TileRail;
-import cam72cam.immersiverailroading.tile.TileRailBase;
-import cam72cam.immersiverailroading.track.BuilderBase;
-import cam72cam.immersiverailroading.track.TrackBase;
-import cam72cam.immersiverailroading.util.PlacementInfo;
-import cam72cam.immersiverailroading.util.RailInfo;
 import cam72cam.immersiverailroading.util.Speed;
 import cam72cam.mod.entity.ModdedEntity;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
-import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.world.World;
 import gregtech.api.GTValues;
 import gregtech.api.capability.impl.ItemHandlerList;
@@ -36,9 +28,7 @@ import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.unification.material.Materials;
-import gregtech.api.util.BlockInfo;
 import gregtech.api.util.GTTransferUtils;
-import gregtech.api.util.world.DummyWorld;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.ConfigHolder;
@@ -54,28 +44,26 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagFloat;
-import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import supersymmetry.SuSyValues;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.particles.SusyParticleFlame;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
-
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultiblockController {
@@ -405,8 +393,8 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
     @Override
     protected void initializeInventory() {
         super.initializeInventory();
-        trainOutputSlot = new NotifiableItemStackHandler(1, this, true);
-        trainInputSlot = new NotifiableItemStackHandler(1, this, false);
+        trainOutputSlot = new NotifiableItemStackHandler(this, 1, this, true);
+        trainInputSlot = new NotifiableItemStackHandler(this, 1, this, false);
     }
 
     @Override
