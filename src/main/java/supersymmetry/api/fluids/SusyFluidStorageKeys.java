@@ -22,6 +22,6 @@ public final class SusyFluidStorageKeys {
         UnaryOperator.identity(),
         m -> "susy.fluid.impure_slurry");
 
-    private FluidStorageKeys() {}
+    private SusyFluidStorageKeys() {}
     
 }
