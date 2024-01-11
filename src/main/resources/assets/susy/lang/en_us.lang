@@ -650,7 +650,7 @@ recipemap.blender.name=Blender
 recipemap.phase_separator.name=Phase Separation
 recipemap.bath_condenser.name=Bath Condenser
 recipemap.drone_pad.name=Drone Pad
-recipemap.polishing_machine=Polishing
+recipemap.polishing_machine.name=Polishing
 recipemap.gravity_separator=Gravity Separation
 recipemap.spinning.name=Textile Spinning
 
