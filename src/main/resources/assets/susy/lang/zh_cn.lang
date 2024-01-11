@@ -176,8 +176,8 @@ item.material.oreprefix.concentrate=%s精矿
 item.material.oreprefix.sifted=筛选%s矿石
 item.material.oreprefix.sheetedFrame=%s板箱框
 
-fluid.slurry.impure=含杂%s浆液
-fluid.slurry.pure=纯净%s浆液
+susy.fluid.impure_slurry=含杂%s浆液
+susy.fluid.slurry=纯净%s浆液
 
 # Machines/Multiblocks
 gregtech.machine.magnetic_refrigerator.name=磁制冷机

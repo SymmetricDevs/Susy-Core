@@ -7,9 +7,10 @@ import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
 import gregtech.api.capability.impl.FilteredFluidHandler;
 import gregtech.api.capability.impl.ThermalFluidHandlerItemStack;
-import gregtech.api.fluids.MaterialFluid;
-import gregtech.api.fluids.fluidType.FluidType;
-import gregtech.api.fluids.fluidType.FluidTypes;
+import gregtech.api.fluids.FluidState;
+import gregtech.api.fluids.attribute.AttributedFluid;
+import gregtech.api.fluids.attribute.FluidAttribute;
+import gregtech.api.fluids.attribute.FluidAttributes;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -99,16 +100,20 @@ public class MetaTileEntityCryoDrum extends MetaTileEntity {
         this.fluidTank = (new FilteredFluidHandler(this.tankSize)).setFillPredicate((stack) -> {
             if (stack != null && stack.getFluid() != null) {
                 Fluid fluid = stack.getFluid();
-                FluidType fluidType;
 
                 //I want to use materials for these drums that do not have fluid pipe properties, so these cases are handled with bools directly
                 //Additionally, if something is a cryo drum its assumed that it is gas and cryo proof
                 if (fluid.getTemperature() > maxFluidTemp) return false;
                 else {
-                    if (fluid instanceof MaterialFluid) {
-                        fluidType = ((MaterialFluid)fluid).getFluidType();
-                        if (fluidType == FluidTypes.ACID && !this.isAcidProof) return false;
-                        if (fluidType == FluidTypes.PLASMA && !this.isPlasmaProof) return false;
+                    if (fluid instanceof AttributedFluid) {
+                        for (FluidAttributes attribute : fluid.getAttributes()) {
+                            if (attribute == FluidAttributes.ACID) {
+                                if (!this.isAcidProof) return false;
+                                break;
+                            }
+                        }
+                        
+                        if (fluid.getState() == FluidState.PLASMA && !this.isPlasmaProof) return false;
                     }
 
                     return true;

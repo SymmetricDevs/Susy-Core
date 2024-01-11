@@ -180,8 +180,8 @@ item.material.oreprefix.fiber=%s Fiber
 item.material.oreprefix.fiberWet=Wet %s Fiber
 item.material.oreprefix.thread=%s Thread
 
-fluid.slurry.impure=Impure %s Slurry
-fluid.slurry.pure=%s Slurry
+susy.fluid.impure_slurry=Impure %s Slurry
+susy.fluid.slurry=%s Slurry
 
 # Machines/Multiblocks
 gregtech.machine.magnetic_refrigerator.name=Magnetic Refrigerator
