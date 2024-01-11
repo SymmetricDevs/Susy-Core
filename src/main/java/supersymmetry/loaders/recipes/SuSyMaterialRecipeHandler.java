@@ -12,12 +12,17 @@ import gregtech.api.unification.stack.UnificationEntry;
 import gregtech.common.items.MetaItems;
 import gregtech.common.items.ToolItems;
 import gregtech.loaders.recipe.handlers.RecyclingRecipeHandler;
+import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
+import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
+import supersymmetry.api.unification.material.properties.FiberProperty;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.item.SuSyMetaItems;
 
 import static gregtech.api.GTValues.*;
 import static gregtech.api.unification.ore.OrePrefix.dust;
+import static gregtech.api.unification.material.Materials.*;
 
 public class SuSyMaterialRecipeHandler {
 
@@ -26,6 +31,10 @@ public class SuSyMaterialRecipeHandler {
         SusyOrePrefix.catalystPellet.addProcessingHandler(PropertyKey.DUST, SuSyMaterialRecipeHandler::processCatalystPellet);
         SusyOrePrefix.sheetedFrame.addProcessingHandler(PropertyKey.DUST, SuSyMaterialRecipeHandler::processSheetedFrame);
         SusyOrePrefix.sheetedFrame.addProcessingHandler(PropertyKey.DUST, RecyclingRecipeHandler::processCrushing);
+        SusyOrePrefix.fiber.addProcessingHandler(SuSyPropertyKey.FIBER, SuSyMaterialRecipeHandler::processFiber);
+        SusyOrePrefix.thread.addProcessingHandler(SuSyPropertyKey.FIBER, SuSyMaterialRecipeHandler::processThread);
+        SusyOrePrefix.fiber.addProcessingHandler(PropertyKey.DUST, RecyclingRecipeHandler::processCrushing);
+        SusyOrePrefix.thread.addProcessingHandler(PropertyKey.DUST, RecyclingRecipeHandler::processCrushing);
     }
 
     public static void processCatalystBed(OrePrefix catalystBedPrefix, Material mat, DustProperty property) {
@@ -54,6 +63,27 @@ public class SuSyMaterialRecipeHandler {
                     .EUt(VA[ULV]).duration(64)
                     .buildAndRegister();
         }
+    }
+
+    public static void processFiber(OrePrefix fiberPrefix, Material mat, @NotNull FiberProperty property) {
+        if (property.solutionSpun) {
+            SuSyRecipeMaps.DRYER_RECIPES.recipeBuilder()
+                .inputs(OreDictUnifier.get(SusyOrePrefix.wetFiber, mat, 8))
+                .outputs(OreDictUnifier.get(fiberPrefix, mat, 8))
+                .duration(20)
+                .EUt(VA[HV])
+                .buildAndRegister();
+        }
+    }
+
+    public static void processThread(OrePrefix threadPrefix, Material mat, @NotNull FiberProperty property) {
+        SuSyRecipeMaps.SPINNING_RECIPES.recipeBuilder()
+                .inputs(OreDictUnifier.get(SusyOrePrefix.fiber, mat, 4))
+                .fluidInputs(Air.getFluid(100))
+                .outputs(OreDictUnifier.get(threadPrefix, mat, 1))
+                .duration(20)
+                .EUt(VA[LV])
+                .buildAndRegister();
     }
 
     public static void processSheetedFrame(OrePrefix sheetedFramePrefix, Material mat, DustProperty property) {
