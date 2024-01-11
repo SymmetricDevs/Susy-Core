@@ -25,8 +25,8 @@ dependencies {
     implementation rfg.deobf('curse.maven:codechicken-lib-1-8-242818:2779848')
     // GTCEu 2.8.5 beta
     implementation rfg.deobf("curse.maven:gregtech-ce-unofficial-557242:4965457-deobf-4965458-sources-4965459")
-    // GCYM 1.2.4
-    implementation rfg.deobf('curse.maven:gregicality-multiblocks-564858:4701685')
+    // GCYM 1.2.7
+    implementation rfg.deobf('curse.maven:gregicality-multiblocks-564858:4910674-deobf-4910675-sources-4910676')
 
     //GeckoLib
     implementation rfg.deobf('curse.maven:geckolib-388172:4020277')
@@ -35,7 +35,7 @@ dependencies {
 
     implementation rfg.deobf('curse.maven:biomes-o-plenty-220318:2842510')
 
-    implementation rfg.deobf('curse.maven:gregtech-food-option-477021:4716101')
+    implementation rfg.deobf('curse.maven:gregtech-food-option-477021:4904513') // GT-FO 1.10.2
 
     implementation rfg.deobf('curse.maven:applecore-224472:2969118')
 
@@ -49,5 +49,5 @@ dependencies {
     implementation rfg.deobf("curse.maven:immersive-railroading-277736:3437738") // Immersive-Railroading v1.9.1
 
     implementation rfg.deobf("curse.maven:ctm-267602:2915363") // CTM 1.0.2.31
-    implementation rfg.deobf("curse.maven:groovyscript-687577:4749823")
+    implementation rfg.deobf("curse.maven:groovyscript-687577:4991701") // GRS 0.7.3
 }
