@@ -83,6 +83,6 @@ public class CoverSteamPump extends CoverPump {
 
     @Override
     protected String getUITitle() {
-        return "cover.conveyor.steam.title";
+        return "cover.pump.steam.title";
     }
 }

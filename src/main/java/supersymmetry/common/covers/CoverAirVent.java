@@ -52,7 +52,7 @@ public class CoverAirVent extends CoverBase implements ITickable {
             return;
         }
 
-        TileEntity tileEntity = getNeighbor(getAttachedSide());
+        TileEntity tileEntity = getTileEntityHere();
         if (tileEntity == null) return;
 
         IFluidHandler fluidHandler = tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, getAttachedSide().getOpposite());
