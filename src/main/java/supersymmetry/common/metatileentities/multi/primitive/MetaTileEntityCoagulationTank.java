@@ -53,7 +53,9 @@ public class MetaTileEntityCoagulationTank extends RecipeMapPrimitiveMultiblockC
                         states(new IBlockState[]{SuSyBlocks.COAGULATION_TANK_WALL
                                 .getState(BlockCoagulationTankWall.CoagulationTankWallType.WOODEN_COAGULATION_TANK_WALL)})
                         .or(abilities(MultiblockAbility.EXPORT_ITEMS)
-                        .or(abilities(MultiblockAbility.IMPORT_FLUIDS))))
+                                .setMaxGlobalLimited(1))
+                        .or(abilities(MultiblockAbility.IMPORT_FLUIDS)
+                                    .setMaxGlobalLimited(1)))
                 .where('#', air())
                 .where('S', this.selfPredicate()).build();
     }
