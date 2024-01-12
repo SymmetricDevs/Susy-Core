@@ -1,10 +1,7 @@
 package supersymmetry.common.blocks;
 
-import gregicality.multiblocks.common.block.blocks.BlockUniqueCasing;
 import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantActiveBlock;
-import gregtech.api.block.VariantBlock;
-import gregtech.client.utils.BloomEffectUtil;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockRenderLayer;
@@ -25,12 +22,8 @@ public class BlockMultiblockTank extends VariantActiveBlock<BlockMultiblockTank.
     }
 
     @Override
-    public boolean canRenderInLayer(@Nonnull IBlockState state, @Nonnull BlockRenderLayer layer) {
-        MultiblockTankType type = getState(state);
-
-        if (layer == BlockRenderLayer.CUTOUT) return true;
-
-        return false;
+    public BlockRenderLayer getRenderLayer() {
+        return BlockRenderLayer.SOLID;
     }
 
     public static enum MultiblockTankType implements IStringSerializable, IStateHarvestLevel {
