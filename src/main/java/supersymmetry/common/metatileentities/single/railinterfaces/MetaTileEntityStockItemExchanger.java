@@ -9,12 +9,10 @@ import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Matrix4;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
+import gregtech.api.gui.resources.IGuiTexture;
 import gregtech.api.gui.widgets.CycleButtonWidget;
-import gregtech.api.gui.widgets.SlotWidget;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.client.utils.TooltipHelper;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -24,7 +22,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -50,7 +47,8 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
 
     public final Vec3d detectionArea = new Vec3d(5, 0, 5);
 
-    private final int inventorySlots = 24;
+    public final int inventoryArrayHeight = 5;
+    private final int inventoryArrayWidth = 5;
     private ItemStackHandler itemTank;
 
     //locomotive, tank #fix# redo sub class map system
@@ -92,7 +90,7 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
 
     protected void initializeInventory() {
         super.initializeInventory();
-        this.itemTank = (new ItemStackHandler(this.inventorySlots));
+        this.itemTank = (new ItemStackHandler(this.inventoryArrayHeight * this.inventoryArrayWidth));
         this.itemInventory = this.itemTank;
     }
 
@@ -103,7 +101,7 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
         buf.writeBoolean(this.pulling);
         buf.writeBoolean(this.active);
 
-        for(int i = 0; i < this.inventorySlots; i++) {
+        for(int i = 0; i < this.inventoryArrayHeight * this.inventoryArrayWidth; i++) {
             ItemStack stack = this.itemTank.getStackInSlot(i);
             NBTTagCompound tagCompound = new NBTTagCompound();
             stack.writeToNBT(tagCompound);
@@ -119,7 +117,7 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
         this.active = buf.readBoolean();
         this.scheduleRenderUpdate();
 
-        for(int i = 0; i < this.inventorySlots; i++) {
+        for(int i = 0; i < this.inventoryArrayHeight * this.inventoryArrayWidth; i++) {
             NBTTagCompound tagCompound = null;
             try {
                 ItemStack stack = new ItemStack(buf.readCompoundTag());
@@ -158,7 +156,7 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
         {
             this.onNeighborChanged(); //#fix# bandaid for active not saving properly (block spawns in inactive on loaded)
 
-            List<EntityRollingStock> stocks = StockHelperFunctions.GetStockInArea(this.subFilterIndex, this.getFrontFacing(), this, this.getWorld());
+            List<EntityRollingStock> stocks = StockHelperFunctions.GetStockInArea(this.subClassMap[this.subFilterIndex], this.getFrontFacing(), this, this.getWorld());
             boolean newValidNearby = stocks.size() > 0;
             if(newValidNearby != this.validStockNearby || this.ticksAlive == 0)
             {
@@ -256,34 +254,22 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
     }
 
     protected ModularUI createUI(EntityPlayer entityPlayer) {
-        int w = 250;
-        int h = 90 + 73;
-        int buffer = 16;
-        ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, w, h)
-                .label(buffer, buffer / 2, I18n.format(getMetaFullName()));
+        ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, 176, Math.max(166, 18 + 18 * this.inventoryArrayHeight + 94));
 
-        int six = buffer / 2;
-        int siy = (buffer * 3) / 2;
-        int ibuf = 20;
-        int wrap = 8;
-        for(int i = 0; i < inventorySlots; i++) {
-            int posx = six + (i % wrap) * ibuf;
-            int posy = siy + Math.floorDiv(i, 8) * ibuf;
-            builder = builder.widget(new SlotWidget(this.itemTank, i, posx, posy, true, true)
-                    .setBackgroundTexture(GuiTextures.BACKGROUND))
-                    .bindPlayerInventory(entityPlayer.inventory);
+
+        for(int j = 0; j < inventoryArrayHeight; j++) {
+            for(int i = 0; i < inventoryArrayWidth; i++) {
+                builder = builder.slot(this.itemTank, j * inventoryArrayWidth + i, 8 + i * 18, 18 + j * 18, true, true, new IGuiTexture[]{GuiTextures.SLOT});
+            }
         }
 
-        int cyclex = six + 8 * ibuf + buffer / 2;
-        int cycley = (buffer * 3) / 2;
-
-        CycleButtonWidget filterIndexButton = new CycleButtonWidget(cyclex, cycley, 60, 24, subClassNameMap, () -> this.subFilterIndex, (x) -> this.uiCycleFilter());
-        CycleButtonWidget cycleStateButton = new CycleButtonWidget(cyclex, cycley + buffer + 12/*24?*/, 60, 24, new String[]{"pulling", "pushing"}, () -> this.pulling ? 0 : 1, (x) -> this.SetTransferState(x == 0));
+        CycleButtonWidget filterIndexButton = new CycleButtonWidget(9 + 8 + 5 * 18, 18, 60, 18, subClassNameMap, () -> this.subFilterIndex, (x) -> this.uiCycleFilter());
+        CycleButtonWidget cycleStateButton = new CycleButtonWidget(9 + 8 + 5 * 18, 36, 60, 18, new String[]{"pulling", "pushing"}, () -> this.pulling ? 0 : 1, (x) -> this.SetTransferState(x == 0));
 
         builder.widget(filterIndexButton);
         builder.widget(cycleStateButton);
 
-        return builder.build(getHolder(), entityPlayer);
+        return builder.label(6, 6, I18n.format(getMetaFullName())).bindPlayerInventory(entityPlayer.inventory, GuiTextures.SLOT, 8, 18 + 18 * inventoryArrayHeight + 12).build(getHolder(), entityPlayer);
     }
 
     private void uiCycleFilter() {
