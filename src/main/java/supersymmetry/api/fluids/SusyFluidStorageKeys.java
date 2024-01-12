@@ -10,7 +10,7 @@ import static supersymmetry.api.util.SuSyUtility.susyId;
 
 public final class SusyFluidStorageKeys {
 
-    public static final FluidStorageKey SLURRY = new FluidStorageKey(susyId("liquid"),
+    public static final FluidStorageKey SLURRY = new FluidStorageKey(susyId("slurry"),
             SuSyMaterialIconType.slurry,
             UnaryOperator.identity(),
             m -> "susy.fluid.slurry",
