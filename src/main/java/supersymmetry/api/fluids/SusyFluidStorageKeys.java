@@ -12,13 +12,13 @@ public final class SusyFluidStorageKeys {
             SuSyMaterialIconType.slurry,
             s -> s + "_slurry",
             m -> "susy.fluid.slurry",
-            FluidState.LIQUID);
+            FluidState.LIQUID, -1);
 
     public static final FluidStorageKey IMPURE_SLURRY = new FluidStorageKey(susyId("impure_slurry"),
             SuSyMaterialIconType.slurry,
             s -> "impure_" + s + "_slurry",
             m -> "susy.fluid.impure_slurry",
-            FluidState.LIQUID);
+            FluidState.LIQUID, -1);
 
     private SusyFluidStorageKeys() {}
 }
