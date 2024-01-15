@@ -1,5 +1,5 @@
 package supersymmetry.common.metatileentities.single.railinterfaces;
-
+/*
 import cam72cam.immersiverailroading.entity.EntityRollingStock;
 import codechicken.lib.raytracer.CuboidRayTraceResult;
 import codechicken.lib.render.CCRenderState;
@@ -10,7 +10,6 @@ import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.widgets.CycleButtonWidget;
 import gregtech.api.gui.widgets.LabelWidget;
-import gregtech.api.gui.widgets.TankWidget;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import net.minecraft.client.Minecraft;
@@ -262,3 +261,4 @@ public class MetaTileEntityStockDetector extends MetaTileEntity implements IStoc
         return true;
     }
 }
+*/

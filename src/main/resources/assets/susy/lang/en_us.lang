@@ -759,5 +759,13 @@ susy.stock_interfaces.item_exchanger.description=Transfers items in and out of n
 gregtech.machine.stock_content_reader.name=Stock Reader
 susy.stock_interfaces.stock_reader.description=Outputs redstone signal based on the inventory/tank of the stock in front of it
 
+susy.gui.stock_filter.filter_button.tooltip.enabled=Will interact with %s
+susy.gui.stock_filter.filter_button.tooltip.disabled=Will not interact with %s
+susy.gui.stock_interactor.render_bounding_box.tooltip.enabled=Render Interaction Area
+susy.gui.stock_interactor.render_bounding_box.tooltip.disabled=Render Interaction Area
+
+susy.machine.stock_interactor.tab.filter=Stock Filter
+susy.machine.stock_interactor.tab.config=Config
+
 # Extra recipe info
 susy.recipe.dimensions=Dimensions: %s

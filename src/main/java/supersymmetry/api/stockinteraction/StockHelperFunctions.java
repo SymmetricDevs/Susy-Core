@@ -3,14 +3,13 @@ package supersymmetry.api.stockinteraction;
 import cam72cam.immersiverailroading.entity.*;
 import cam72cam.immersiverailroading.items.ItemRollingStock;
 import cam72cam.immersiverailroading.registry.EntityRollingStockDefinition;
-import cam72cam.mod.entity.CustomEntity;
 import cam72cam.mod.entity.ModdedEntity;
 import cam72cam.mod.item.ItemStack;
+import gregtech.client.utils.RenderBufferHelper;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3i;
@@ -22,6 +21,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class StockHelperFunctions {
     public static final String[] ClassNameMap =
@@ -142,48 +142,31 @@ public class StockHelperFunctions {
         return StrHashMap.get(filter);
     }
 
-    public static List<EntityRollingStock> GetAnyStockInArea(EnumFacing facing, IStockInteractor interactor, World world)
+    public static List<EntityRollingStock> getStocksInArea(World world, AxisAlignedBB box)
     {
-        return GetStockInArea(EntityRollingStock.class, facing, interactor, world);
-    }
-
-    public static <T extends EntityRollingStock> List<T> GetStockInArea(byte checkClass, EnumFacing facing, IStockInteractor interactor, World world)
-    {
-        return GetStockInArea(ClassMap[checkClass], facing, interactor, world);
-    }
-
-    public static <T extends EntityRollingStock> List<T> GetStockInArea(Class<T> checkClass, EnumFacing facing, IStockInteractor interactor, World world)
-    {
-        AxisAlignedBB box = GetBox(interactor, facing);
-
         //get entities in box and filter for only wanted ones
-        List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, box);
-        List<T> stocks = new ArrayList<T>();
-        entities.forEach(ent ->
-        {
-            if(ent instanceof ModdedEntity)
-            {
-                //get the CustomEntity : Entity off of the modded entity, then check if its the right class
-                CustomEntity customEntity = ((ModdedEntity)ent).getSelf();
-                if(checkClass.isInstance(customEntity))
-                {
-                    stocks.add((T)customEntity);
-                }
-            }
-        });
+        List<ModdedEntity> entities = world.getEntitiesWithinAABB(ModdedEntity.class, box);
+        List<EntityRollingStock> stocks = entities
+                .stream()
+                .map(moddedEntity -> moddedEntity.getSelf())
+                .filter(EntityRollingStock.class::isInstance)
+                .map(EntityRollingStock.class::cast)
+                .collect(Collectors.toList());
         return stocks;
+
     }
 
-    public static AxisAlignedBB GetBox(IStockInteractor interactor, EnumFacing facing)
+    public static AxisAlignedBB GetBox(Vec3i pos, EnumFacing facing, double width, double depth) {
+        return GetBox(fromVec3i(pos), facing, width, depth);
+    }
+
+    public static AxisAlignedBB GetBox(Vector3f pos, EnumFacing facing, double width, double depth)
     {
         //get base position and facing directions, as well as both non facing directions
-        Vector3f pos = fromVec3i(interactor.GetMetaTileEntity().getPos());
         Vector3f one = new Vector3f(1, 1, 1);
         Vector3f facingDir = fromVec3i(facing.getDirectionVec());
         Vector3f nonFacingDirs = Vector3f.sub(one, facingDir, null);
 
-        double width = interactor.getInteractionArea().x;
-        double depth = interactor.getInteractionArea().z;
         double halfwidth = 0.5 * width;
 
         //get the position of the front of the block
@@ -219,29 +202,21 @@ public class StockHelperFunctions {
     }
 
     public static void renderBoundingBox(AxisAlignedBB boundingBox) {
-        GlStateManager.enableBlend();
+        GlStateManager.disableDepth();
         GlStateManager.disableTexture2D();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.glLineWidth(5);
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
 
-        bufferBuilder.begin(GL11.GL_LINE_STRIP, DefaultVertexFormats.POSITION_COLOR);
-        bufferBuilder.pos(boundingBox.minX, boundingBox.minY, boundingBox.minZ).color(1.0F, 0.0F, 0.0F, 0.4F).endVertex();
-        bufferBuilder.pos(boundingBox.maxX, boundingBox.minY, boundingBox.minZ).color(1.0F, 0.0F, 0.0F, 0.4F).endVertex();
-        bufferBuilder.pos(boundingBox.maxX, boundingBox.minY, boundingBox.maxZ).color(1.0F, 0.0F, 0.0F, 0.4F).endVertex();
-        bufferBuilder.pos(boundingBox.minX, boundingBox.minY, boundingBox.maxZ).color(1.0F, 0.0F, 0.0F, 0.4F).endVertex();
-        bufferBuilder.pos(boundingBox.minX, boundingBox.minY, boundingBox.minZ).color(1.0F, 0.0F, 0.0F, 0.4F).endVertex();
+        bufferBuilder.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
 
-        bufferBuilder.pos(boundingBox.minX, boundingBox.maxY, boundingBox.minZ).color(1.0F, 0.0F, 0.0F, 0.4F).endVertex();
-        bufferBuilder.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.minZ).color(1.0F, 0.0F, 0.0F, 0.4F).endVertex();
-        bufferBuilder.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ).color(1.0F, 0.0F, 0.0F, 0.4F).endVertex();
-        bufferBuilder.pos(boundingBox.minX, boundingBox.maxY, boundingBox.maxZ).color(1.0F, 0.0F, 0.0F, 0.4F).endVertex();
-        bufferBuilder.pos(boundingBox.minX, boundingBox.maxY, boundingBox.minZ).color(1.0F, 0.0F, 0.0F, 0.4F).endVertex();
+        RenderBufferHelper.renderCubeFrame(bufferBuilder, boundingBox.minX, boundingBox.minY, boundingBox.minZ, boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ, 1F,0F,0F,0.4F);
 
         tessellator.draw();
 
         GlStateManager.enableTexture2D();
-        GlStateManager.disableBlend();
+        GlStateManager.enableDepth();
+        GlStateManager.color(1, 1, 1, 1);
     }
 }

@@ -1,5 +1,5 @@
 package supersymmetry.common.metatileentities.single.railinterfaces;
-
+/*
 import cam72cam.immersiverailroading.entity.EntityRollingStock;
 import cam72cam.immersiverailroading.entity.Locomotive;
 import codechicken.lib.render.CCRenderState;
@@ -341,3 +341,4 @@ public class MetaTileEntityLocomotiveController  extends MetaTileEntity implemen
         return true;
     }
 }
+*/

@@ -1,5 +1,5 @@
 package supersymmetry.common.metatileentities.single.railinterfaces;
-
+/*
 import cam72cam.immersiverailroading.entity.EntityRollingStock;
 import cam72cam.immersiverailroading.entity.Freight;
 import codechicken.lib.raytracer.CuboidRayTraceResult;
@@ -28,7 +28,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.stockinteraction.IStockInteractor;
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.stockinteraction.StockHelperFunctions;
 import supersymmetry.client.renderer.textures.SusyTextures;
 
@@ -36,30 +36,18 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.List;
 
-public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements IStockInteractor
+public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInteractor
 {
-    public int ticksAlive; //does not need to be saved?
-
-    public boolean validStockNearby; //this should be saved
     public boolean pulling;
-
-    private boolean active; //purely for client side rendering, server checks if block is powered (initialized on load, does not need to be saved?)
-
-    public final Vec3d detectionArea = new Vec3d(5, 0, 5);
 
     public final int inventoryArrayHeight = 5;
     private final int inventoryArrayWidth = 5;
     private ItemStackHandler itemTank;
 
     //locomotive, tank #fix# redo sub class map system
-    private final byte[] subClassMap = { 1, 3 };
-    private byte subFilterIndex;
-    private static final String[] subClassNameMap = { StockHelperFunctions.ClassNameMap[1], StockHelperFunctions.ClassNameMap[3] };
 
     public MetaTileEntityStockItemExchanger(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
-        //this.ticksAlive = 0;
-        //this.subFilterIndex = 0;
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
@@ -96,10 +84,8 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
 
     public void writeInitialSyncData(PacketBuffer buf) {
         super.writeInitialSyncData(buf);
-        buf.writeByte(this.subFilterIndex);
         buf.writeBoolean(this.validStockNearby);
         buf.writeBoolean(this.pulling);
-        buf.writeBoolean(this.active);
 
         for(int i = 0; i < this.inventoryArrayHeight * this.inventoryArrayWidth; i++) {
             ItemStack stack = this.itemTank.getStackInSlot(i);
@@ -111,18 +97,16 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
 
     public void receiveInitialSyncData(PacketBuffer buf) {
         super.receiveInitialSyncData(buf);
-        this.subFilterIndex = buf.readByte();
         this.validStockNearby = buf.readBoolean();
         this.pulling = buf.readBoolean();
-        this.active = buf.readBoolean();
         this.scheduleRenderUpdate();
 
         for(int i = 0; i < this.inventoryArrayHeight * this.inventoryArrayWidth; i++) {
-            NBTTagCompound tagCompound = null;
             try {
                 ItemStack stack = new ItemStack(buf.readCompoundTag());
                 this.itemTank.insertItem(i, stack, false);
             } catch (IOException e) {
+                SusyLog.logger.warn("Could not deserialize stock item exchanger inventory at " + getPos());
             }
         }
     }
@@ -130,17 +114,8 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
     public void receiveCustomData(int dataId, PacketBuffer buf) {
         super.receiveCustomData(dataId, buf);
 
-        if((dataId & 0b1) > 0) {
-            this.setSubFilterIndex(buf.readByte());
-        }
-        if ((dataId & 0b10) > 0) {
-            this.validStockNearby = buf.readBoolean();
-        }
-        if ((dataId & 0b100) > 0) {
+        if (dataId == 6501) {
             this.pulling = buf.readBoolean();
-        }
-        if ((dataId & 0b1000) > 0) {
-            this.active = buf.readBoolean();
         }
 
         this.scheduleRenderUpdate();
@@ -152,10 +127,8 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
         if(this.getWorld().isRemote)
             return;
 
-        if(this.ticksAlive % 20 == 0)
+        if(this.getOffsetTimer() % 20 == 0)
         {
-            this.onNeighborChanged(); //#fix# bandaid for active not saving properly (block spawns in inactive on loaded)
-
             List<EntityRollingStock> stocks = StockHelperFunctions.GetStockInArea(this.subClassMap[this.subFilterIndex], this.getFrontFacing(), this, this.getWorld());
             boolean newValidNearby = stocks.size() > 0;
             if(newValidNearby != this.validStockNearby || this.ticksAlive == 0)
@@ -179,8 +152,6 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
                 this.TransferAll(this.itemTank, stockStackHandler);
             }
         }
-
-        this.ticksAlive++;
     }
 
     public void TransferAll(ItemStackHandler from, ItemStackHandler to) {
@@ -281,7 +252,6 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
     //should detection area be changeable and saved?
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        data.setByte("filterIndex", this.subFilterIndex);
         data.setBoolean("validStockNearby", this.validStockNearby);
         data.setBoolean("pulling", this.pulling);
         return data;
@@ -289,7 +259,6 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
 
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        this.subFilterIndex = data.getByte("filterIndex");
         this.validStockNearby = data.getBoolean("validStockNearby");
         this.pulling = data.getBoolean("pulling");
     }
@@ -350,3 +319,4 @@ public class MetaTileEntityStockItemExchanger  extends MetaTileEntity implements
         return true;
     }
 }
+*/
