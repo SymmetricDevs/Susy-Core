@@ -8,7 +8,6 @@ import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.*;
 import gregtech.api.util.BlockInfo;
-import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockWireCoil;
@@ -24,7 +23,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
@@ -37,7 +35,6 @@ import java.util.ArrayList;
 import java.util.function.Supplier;
 
 import static gregtech.api.GregTechAPI.HEATING_COILS;
-import static gregtech.api.block.VariantActiveBlock.ACTIVE_DEPRECATED;
 
 public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController {
 
@@ -347,10 +344,13 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     }
 
     /*
-        apparently the structurepattern's worldstate is being set to error at the furthest and leftmost coil block whenever
+        Apparently the structurepattern's worldstate is being set to error at the furthest and leftmost coil block whenever
         multiple coils are destroyed, which causes weird behavior when attempting to reform the structure. The only way to get around
-        this without more thoroughly understanding how the structure checks work is to manually change the error to any invalid center block.
+        this without more thoroughly understanding how the structure checks work is to manually change the error to any invalid center block,
+        though I suspect even if I did know what the issue was more specifically this would still be the only solution.
+        Incomprehensibly bugged kila code lets fucking go
      */
+
     @Override
     public void checkStructurePattern() {
         super.checkStructurePattern();
@@ -374,43 +374,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         } catch (Exception e) {
             SusyLog.logger.atError().log("failed to do reflection for evaporation pool");
         }
-
-        return;
-
-        /*
-        //get failure pos from failureIndex
-        EnumFacing back = this.getFrontFacing().getOpposite();
-        EnumFacing right = this.getFrontFacing().rotateYCCW(); //right if you are looking at controller; left from controller's pov
-        BlockPos.MutableBlockPos failurePos = new BlockPos.MutableBlockPos(getPos()).move(right.getOpposite(), controllerPosition); //place pos on furthest left column
-        failurePos = failurePos.move(back, failureIndex/columnCount +1).move(right, failureIndex % columnCount); //move back to appropriate row and then right <= columnCount -1 blocks
-
-        //get coords of first error location in custom pattern check
-        int pX = failurePos.getX();
-        int pY = failurePos.getY(); //no vertical distance is traveled;
-        int pZ = failurePos.getZ();
-
-        //get coords from error string. Substring has inclusive start, exclusive end and lastIndexOf gives index of first char in str provided (I think)
-        String patternErrorString = structurePattern.getError().getErrorInfo();
-        int eX = Integer.decode(patternErrorString.substring(patternErrorString.lastIndexOf("x=") +2, patternErrorString.lastIndexOf("y=") -2));
-        int eY = Integer.decode(patternErrorString.substring(patternErrorString.lastIndexOf("y=") +2, patternErrorString.lastIndexOf("z=") -2));
-        int eZ = Integer.decode(patternErrorString.substring(patternErrorString.lastIndexOf("z=") +2, patternErrorString.length() -3)); //"tosses" last three characters ["})."]
-        BlockPos.MutableBlockPos errorPos = new BlockPos.MutableBlockPos(eX, eY, eZ);
-
-        SusyLog.logger.atError().log("proceeding with cabaling of errors with blockPos: " + failurePos.toString());
-
-        if (pY != eY) return; //exit if structure issue isn't on floor level
-        if (pX != eX || pZ != eZ) {
-            //hopefully cause proper check of structure
-            try {
-                Field privateField = structurePattern.getClass().getDeclaredField("worldState"); //grab worldState field
-                privateField.setAccessible(true); //make world state accessible
-                BlockWorldState structurePatternWorldState = (BlockWorldState)privateField.get(structurePattern); //grab worldState
-                structurePatternWorldState.setError(null);
-            } catch (Exception e) {
-                SusyLog.logger.atError().log("failed to do reflection for evaporation pool");
-            }
-        }
-         */
     }
 
     //for future reference
