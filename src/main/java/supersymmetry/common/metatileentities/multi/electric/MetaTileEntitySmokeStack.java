@@ -1,6 +1,5 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -21,14 +20,9 @@ import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nonnull;
 
-import java.util.Collections;
-
 import static gregtech.api.util.RelativeDirection.*;
 
 public class MetaTileEntitySmokeStack extends RecipeMapMultiblockController {
-
-    //isActive check prevents running while mufflerTier is invalid
-    //int mufflerTier = 1;
 
     public MetaTileEntitySmokeStack(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.SMOKE_STACK);
@@ -79,41 +73,4 @@ public class MetaTileEntitySmokeStack extends RecipeMapMultiblockController {
     public boolean getIsWeatherOrTerrainResistant() {
         return true;
     }
-
-    public void update() {
-        super.update();
-
-        //skip processing if unloaded, inactive, or if no fluid inventory. Also limits speed through offset timer
-        if(this.getWorld().isRemote || !this.isActive() || !(this.getOffsetTimer() % 100 == 0)  || this.inputFluidInventory == null) { return; }
-
-        //passes over all tanks in fluid input inventory
-        for (IMultipleTankHandler.MultiFluidTankEntry currTank : this.getInputFluidInventory().getFluidTanks()) {
-            //checks for fluid existence, gaseousness, and absence in recipes of flare stack
-            if (currTank.getFluid() == null || !currTank.getFluid().getFluid().isGaseous() || SuSyRecipeMaps.FLARE_STACK.findRecipe(Integer.MAX_VALUE, Collections.emptyList(), Collections.singletonList(currTank.getFluid())) != null) {
-                continue;
-            }
-
-            //perform draining if and only if all above conditions are false
-            currTank.drain(currTank.getFluidAmount(), true);
-        }
-    }
-
-    /* I can't figure out how to tell if something is a muffler hatch or not
-    public void formStructure(PatternMatchContext context) {
-        super.formStructure(context);
-
-        //don't look for muffler in unformed structure
-        if (!this.isStructureFormed()) { return; }
-
-        //go up structure until muffler hatch is found
-        BlockPos currPos = this.getPos();
-        while (!(this.getWorld().getTileEntity(currPos) == GregTechAPI.MTE_REGISTRY.) && currPos.getY() < this.getPos().getY() + 9) { currPos.add(0, 1, 0); }
-        TileEntity.getKey(GregTechAPI)
-        this.mufflerTier = ((MetaTileEntityMufflerHatch) this.getWorld().getBlockState(currPos)).getTier()
-
-    }
-     */
-
 }
-
-
