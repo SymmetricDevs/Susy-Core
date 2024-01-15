@@ -14,13 +14,18 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class StockFilter implements INBTSerializable<NBTTagCompound> {
-
+    // TODO: Filter for specific entities
+    // TODO: Support passing predicates that must be fulfilled by entities in order to pass
+    // TODO: Priority stock filters for larger interaction area: Sort the entities by some specific rules
+    // TODO: Default values for filters
     private HashMap<String, Boolean> selection;
 
     private List<String> subFilter;
 
     private static HashMap<String, Class> nameToStockClassMap = new HashMap<>();
     static {
+        // TODO: Put into enum, add localisation
+        // TODO: Properly catch every case (including Freight, FreightTank, the Tunnelbore (:troll:)
         nameToStockClassMap.put("any", EntityRollingStock.class);
         nameToStockClassMap.put("locomotive", Locomotive.class);
         nameToStockClassMap.put("freight_tank", CarTank.class);
@@ -67,6 +72,10 @@ public class StockFilter implements INBTSerializable<NBTTagCompound> {
         this.subFilter = subFilter;
     }
 
+    /*
+     * Widget group that can be added to a UI tab
+     * Configures the filter
+     */
     public AbstractWidgetGroup getFilterWidgetGroup() {
         WidgetGroup widgetGroup = new WidgetGroup();
 

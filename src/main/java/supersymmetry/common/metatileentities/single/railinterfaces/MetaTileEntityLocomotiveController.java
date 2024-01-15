@@ -1,4 +1,5 @@
 package supersymmetry.common.metatileentities.single.railinterfaces;
+// TODO: Adapt to MetaTileEntityStockInteractor
 /*
 import cam72cam.immersiverailroading.entity.EntityRollingStock;
 import cam72cam.immersiverailroading.entity.Locomotive;

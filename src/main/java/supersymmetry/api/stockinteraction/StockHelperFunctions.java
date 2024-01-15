@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class StockHelperFunctions {
+    // TODO: Remove redundant code, general refactor of existing code
     public static final String[] ClassNameMap =
         {
             "any",
@@ -202,6 +203,7 @@ public class StockHelperFunctions {
     }
 
     public static void renderBoundingBox(AxisAlignedBB boundingBox) {
+        // TODO: If anyone reads this that actually knows how to do opengl, please fix this
         GlStateManager.disableDepth();
         GlStateManager.disableTexture2D();
         GlStateManager.glLineWidth(5);
