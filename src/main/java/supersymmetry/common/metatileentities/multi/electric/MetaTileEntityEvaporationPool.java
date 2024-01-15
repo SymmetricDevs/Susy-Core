@@ -6,10 +6,9 @@ import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
-import gregtech.api.pattern.BlockPattern;
-import gregtech.api.pattern.FactoryBlockPattern;
-import gregtech.api.pattern.TraceabilityPredicate;
+import gregtech.api.pattern.*;
 import gregtech.api.util.BlockInfo;
+import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockWireCoil;
@@ -25,6 +24,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
@@ -32,6 +32,7 @@ import supersymmetry.common.blocks.BlockEvaporationBed;
 import supersymmetry.common.blocks.SuSyBlocks;
 
 import javax.annotation.Nonnull;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.function.Supplier;
 
@@ -47,30 +48,23 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
     static final int maxColumns = 12; //two edge layers on either side, shouldn't exceed chunk boundary at max size
 
+    public static final int structuralDimensionsID = 1051354;
     protected int columnCount = 1; //number of columns in row of controller (1 -> EDGEself(controller)EDGE, 2 -> EsCOLUMNe)
-    public static final int columnCountID = 104;
-
     protected int rowCount = 1; //number of rows where controller is placed on "edge" row
-    public static final int rowCountID = 108;
-
     protected int controllerPosition = 0; //column placement from left to right, where 0 = one from edge [ESCCCCE]
-    public static final int controllerPositionID = 112;
 
+    public static final int predicateID = 10142156;
     boolean isHeated = false;
-    public static final int isHeatedID = 113;
+    int coilStateMeta = -1; //order is last in order dependent ops because I'm lazy
 
+    public static final int energyValuesID = 10868607;
     int exposedBlocks = 0;
-    public static final int exposedBlocksID = 116;
-
     //about 1000J/s on a sunny day for 1/m^2 of area
     int kiloJoules = 0;
-    public static final int kiloJoulesID = 120;
-
     int tickTimer = 0;
-    public static final int tickTimerID = 124;
 
-    int coilStateMeta;
-    public static final int coilStateMetaID = 126;
+    //to avoid repeated checks; is not saved
+    boolean areCoilsValid = false;
 
 
 
@@ -97,25 +91,18 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     @Override
     public void invalidateStructure() {
         super.invalidateStructure();
-        SusyLog.logger.atFatal().log("its zalgover; invalidating structure");
-        this.isHeated = false;
         this.exposedBlocks = 0;
         this.kiloJoules = 0;
         this.tickTimer = 0;
     }
 
     public boolean updateStructureDimensions() {
-        SusyLog.logger.atFatal().log("I am checking the structure's dimensions");
-
-        isHeated = false; //check for coils must be redone
 
         World world = getWorld();
         EnumFacing front = this.getFrontFacing();
         EnumFacing back = front.getOpposite();
         EnumFacing right = front.rotateYCCW();
         EnumFacing left = right.getOpposite(); //left as if you were looking at it, not controller's left
-
-        SusyLog.logger.atError().log("front: " + front.toString() + ", left: " + left.toString());
 
         //distance to use when located edges of structure, moved inwards to container block portion for detection purposes
         BlockPos.MutableBlockPos lPos = new BlockPos.MutableBlockPos(getPos().offset(back, 2)); //start in container section
@@ -147,21 +134,11 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         controllerPosition = lDist; //if there are no blocks to the left controller is left most spot
 
         //store the known dimensions for structure check
-        this.writeCustomData(columnCountID, (buf) -> {
+        this.writeCustomData(structuralDimensionsID, (buf) -> {
             buf.writeInt(columnCount);
-        });
-
-        this.writeCustomData(rowCountID, (buf) -> {
             buf.writeInt(rowCount);
-        });
-
-        this.writeCustomData(controllerPositionID, (buf) -> {
             buf.writeInt(controllerPosition);
         });
-
-        SusyLog.logger.atError().log("Valid Structure; Finished Checking: \n\n");
-        SusyLog.logger.atError().log("columnCount: " + columnCount + ", controllerPosition: " + controllerPosition + ", rowCount: " + rowCount);
-        SusyLog.logger.atError().log("lDist: " + lDist + ", rDist: " + rDist + ", bDist: " + bDist);
 
         return true; //successful formation
     }
@@ -198,11 +175,9 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                 } else if ((j -2 & 3) == 1) { //if j % 4 == 1, then do further crossover column
                     //if on last row (++i = rowCount) use "C" [1], otherwise use "G" [0]
                     containerRowBuilder.replace(j, j +1, flooring[(i +1)/rowCount]);
-                    SusyLog.logger.atFatal().log("01 row: " + (i +1)/rowCount);
                 } else { //if j % 4 == 3, then do closer crossover column
                     //if on first row then use "C" [1], otherwise use "G" [0] (0 is only number which is non neg after * -1. this means bit flip keeps most sig as 1)
                     containerRowBuilder.replace(j, j +1, flooring[(~(i * -1)) >>> 31]);
-                    SusyLog.logger.atFatal().log("11 row: " + ((~i) >>> 31) + ", ~i: " + ~i);
                 }
             }
 
@@ -221,10 +196,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             'S' for self, or controller.
             'C' for "container blocks" that can be coils, with coils required for powered heating.
             'G' for ground blocks which must be some non coil block
-
          */
-
-        SusyLog.logger.atFatal().log("I am checking the structure pattern");
 
         // return the default structure, even if there is no valid size found
         // this means auto-build will still work, and prevents terminal crashes.
@@ -237,10 +209,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         //abstracted away construction of center rows for later use
         String[] containerRows = centerRowsPattern();
 
-        for (int i = 0; i < rowCount; ++i) {
-            SusyLog.logger.atError().log(containerRows[i]);
-        }
-
         FactoryBlockPattern pattern;
 
         //do first two rows including controller row and row behind controller
@@ -250,9 +218,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
         //place all generated aisles (rows stored closer to further, this wants them further to closer) and save to pattern explicitly (unsure if the explicit assignment is necessary; probably no harm in being safe)
         for (int i = 0; i < rowCount; ++i) { pattern = pattern.aisle(containerRows[rowCount -1 -i], " E".concat(repeat("#", columnCount).concat("E "))); }
-
-        SusyLog.logger.atError().log("columnCount: " + columnCount + ", controllerPosition: " + controllerPosition + ", rowCount: " + rowCount);
-        SusyLog.logger.atError().log("Controller Row: " + repeat("E",controllerPosition +2).concat("S").concat(repeat("E",columnCount +1 -controllerPosition)), repeat(" ", columnCount +4));
 
         //place last two aisles
         pattern = pattern.aisle(repeat("E",columnCount +4), " ".concat(repeat("E",columnCount +2)).concat(" "))
@@ -304,83 +269,148 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
         Supplier<BlockInfo[]> supplier = () -> blockInfos; //return blockInfos as info supplier
 
-        //returns true if either "ground" blockstate or some type of coil
         return new TraceabilityPredicate(blockWorldState -> {
             IBlockState state = blockWorldState.getBlockState();
-
-            SusyLog.logger.atError().log("Checking container block with isHeated == " + isHeated + " and blockstate: " + state.toString());
 
             //if isHeated is true check on all coil blocks have been performed and target may be assessed individually
             if (isHeated) {
                 //compare string value of querying state and stored/known state
-                if (state.toString().equals(MetaBlocks.WIRE_COIL.getStateFromMeta(coilStateMeta).toString())) return true;
-
-                return false;
+                if (state.toString().equals(MetaBlocks.WIRE_COIL.getStateFromMeta(coilStateMeta).toString())) return true; //no need to set areCoilsValid as whenever isHeated -> true areCoilsValid -> true
+                areCoilsValid = false;
+                return false; //calls invalidate structure
             }
 
             //if block is not coil structure do ground check
             if (!MetaBlocks.WIRE_COIL.getBlockState().getValidStates().contains(state)) return isGround().test(blockWorldState);
 
-            //first coil block has been found; ensure full coil pattern is present so that future validation checks may be skipped
-            String[] centerPattern = centerRowsPattern();
-            IBlockState coilState = null;
-
-            EnumFacing right = getFrontFacing().rotateYCCW(); //right if you are looking at controller
-            EnumFacing back = getFrontFacing().getOpposite(); //further from front of controller
-
-            //get blockpos of first row, leftmost center block
-            BlockPos.MutableBlockPos coilPos = new BlockPos.MutableBlockPos(getPos().offset(back, 2)); //place on first row
-            coilPos.move(right.getOpposite(), controllerPosition +1); //move to the furthest left center block +1 (looking at controller) to account for immediate right deviation in j loop
-
-            SusyLog.logger.atError().log("initial coords: " + coilPos.toString());
-
-            //traverse center pattern rows (closer to further)
-            for (int i = 0; i < rowCount; ++i) {
-                //traverse center pattern columns in 'i'th row, skipping edges
-                for (int j = 2; j < columnCount + 2; ++j) {
-                    coilPos.move(right); //go right one first to allow for continue to be used later
-
-                    SusyLog.logger.atError().log("Examining block at [" + i + "][" + j + "]: " + centerPattern[i].charAt(j) + "; coords: " + coilPos.toString() +  " with state: " + getWorld().getBlockState(coilPos).toString());
-
-                    if (centerPattern[i].charAt(j) != 'C') continue; //skip non coil blocks
-
-                    //store state of first coil. Might do weird stuff if meta of coilState > 7, as jei error-ed when trying to display them even though they are same material type
-                    if (coilState == null) {
-                        coilState = getWorld().getBlockState(coilPos); //establish coil type from first coil
-                        if (MetaBlocks.WIRE_COIL.getBlockState().getValidStates().contains(coilState)) continue; //if first coil position found ensure it is valid coil and continue if it is
-                        SusyLog.logger.atError().log("Assigning coil state at [" + i + "][" + j + "]: " + centerPattern[i].charAt(j) + "; coords: " + coilPos.toString() +  " to saved state: " + coilState.toString());
-                    }
-                    else if (getWorld().getBlockState(coilPos).toString().equals(coilState.toString())) continue; //proceed only if current coil is exact same as previous coil(s). equals seems to fail, so a string comparison works best)
-
-                    SusyLog.logger.atError().log("About to error in coil check with char at [" + i + "][" + j + "]: " + centerPattern[i].charAt(j) + "; current coil: " + getWorld().getBlockState(coilPos) + ", saved state: " + coilState.toString());
-
-                    //current coilpos block is either not a coil (first coil position), or it is not identical to previous coil(s)
-                    isHeated = false;
-                    return false; //indicate failure of solid coil structure
-                }
-
-                coilPos.move(back); //go back one row
-                coilPos.move(right.getOpposite(), columnCount); //reset to leftmost center position +1 unit left due to order of traversal inside nested loop
-            }
-
+            boolean passedCoilCheck = this.coilPatternCheck() < 0; //check coil pattern, setting coilStateMeta
+            if (!passedCoilCheck) {
+                if (coilStateMeta != -1 && !isHeated) coilStateMeta = -1; //if this is second time invalid coil state has been found remove saved coil state
+                this.isHeated = false;
+                areCoilsValid = false;
+                return false;
+            }; //block is a coil at this point, so if coil pattern fails exit with false (invalidates structure)
 
             //if check is passed structure is valid heatable evap pool
             isHeated = true;
-            coilStateMeta = coilState.getBlock().getMetaFromState(coilState);
+            areCoilsValid = true;
 
-            this.writeCustomData(isHeatedID, (buf) -> {
+            this.writeCustomData(predicateID, (buf) -> {
                 buf.writeBoolean(isHeated);
-            });
-
-            this.writeCustomData(coilStateMetaID, (buf) -> {
                 buf.writeInt(coilStateMeta);
             });
-
-
 
             return true;
 
         }, supplier);
+    }
+
+    //returns <0 (-1) for no errors found, else it returns position of failure, counting from left to right then closer to further
+    public int coilPatternCheck() {
+        //first coil block has been found; ensure full coil pattern is present so that future validation checks may be skipped
+        String[] centerPattern = centerRowsPattern();
+        IBlockState coilState = (coilStateMeta == -1) ? null : MetaBlocks.WIRE_COIL.getStateFromMeta(coilStateMeta); //if stored coilstate exists
+
+        EnumFacing right = getFrontFacing().rotateYCCW(); //right if you are looking at controller
+        EnumFacing back = getFrontFacing().getOpposite(); //further from front of controller
+
+        //get blockpos of first row, leftmost center block
+        BlockPos.MutableBlockPos coilPos = new BlockPos.MutableBlockPos(getPos().offset(back, 2)); //place on first row
+        coilPos.move(right.getOpposite(), controllerPosition +1); //move to the furthest left center block +1 (looking at controller) to account for immediate right deviation in j loop
+
+        //traverse center pattern rows (closer to further)
+        for (int i = 0; i < rowCount; ++i) {
+            //traverse center pattern columns in 'i'th row, skipping edges
+            for (int j = 2; j < columnCount + 2; ++j) {
+                coilPos.move(right); //go right one first to allow for continue to be used later
+
+                if (centerPattern[i].charAt(j) != 'C') continue; //skip non coil entries
+
+                //store state of first coil. Might do weird stuff if meta of coilState > 7, as jei error-ed when trying to display them even though they are same material type
+                if (coilState == null) {
+                    coilState = getWorld().getBlockState(coilPos); //establish coil type from first coil
+                    if (MetaBlocks.WIRE_COIL.getBlockState().getValidStates().contains(coilState)) continue; //if first coil position found ensure it is valid coil and continue if it is
+                }
+                else if (getWorld().getBlockState(coilPos).toString().equals(coilState.toString())) continue; //proceed only if current coil is exact same as previous coil(s). equals seems to fail, so a string comparison works best)
+
+
+                //current coilpos block is either not a coil (first coil position), or it is not identical to previous coil(s)
+                return i * columnCount + j -2; //indicate failure of solid coil structure through >0 value. Stores relative position of failure in int
+            }
+
+            coilPos.move(back); //go back one row
+            coilPos.move(right.getOpposite(), columnCount); //reset to leftmost center position +1 unit left due to order of traversal inside nested loop
+        }
+
+        coilStateMeta = coilState.getBlock().getMetaFromState(coilState); //store correct coilstate (necessary as passing coilState would pass the reference by value, meaning reassignment would not carry to caller)
+        return -1; //no checks failed (<0)
+    }
+
+    /*
+        apparently the structurepattern's worldstate is being set to error at the furthest and leftmost coil block whenever
+        multiple coils are destroyed, which causes weird behavior when attempting to reform the structure. The only way to get around
+        this without more thoroughly understanding how the structure checks work is to manually change the error to any invalid center block.
+     */
+    @Override
+    public void checkStructurePattern() {
+        super.checkStructurePattern();
+        if (structurePattern == null || structurePattern.getError() == null) return; // don't continue if these values aren't valid
+
+        //exit if current error is not related to coils or if it is related to coils, but the coils are actually invalid
+        if (!structurePattern.getError().getErrorInfo().contains("coil") || !areCoilsValid) return;
+
+        int failureIndex = this.coilPatternCheck(); //check if coils are actually broken or not
+        if (!(failureIndex < 0)) {
+            areCoilsValid = false; //coils are issue; do not remove error
+            return; //if issue with coils exists do not attempt to force error removal
+        }
+
+        //if error is related to coils, yet all coils are present, remove error
+        try {
+            Field privateField = structurePattern.getClass().getDeclaredField("worldState"); //grab worldState field
+            privateField.setAccessible(true); //make world state accessible
+            BlockWorldState structurePatternWorldState = (BlockWorldState)privateField.get(structurePattern); //grab worldState
+            structurePatternWorldState.setError(null);
+        } catch (Exception e) {
+            SusyLog.logger.atError().log("failed to do reflection for evaporation pool");
+        }
+
+        return;
+
+        /*
+        //get failure pos from failureIndex
+        EnumFacing back = this.getFrontFacing().getOpposite();
+        EnumFacing right = this.getFrontFacing().rotateYCCW(); //right if you are looking at controller; left from controller's pov
+        BlockPos.MutableBlockPos failurePos = new BlockPos.MutableBlockPos(getPos()).move(right.getOpposite(), controllerPosition); //place pos on furthest left column
+        failurePos = failurePos.move(back, failureIndex/columnCount +1).move(right, failureIndex % columnCount); //move back to appropriate row and then right <= columnCount -1 blocks
+
+        //get coords of first error location in custom pattern check
+        int pX = failurePos.getX();
+        int pY = failurePos.getY(); //no vertical distance is traveled;
+        int pZ = failurePos.getZ();
+
+        //get coords from error string. Substring has inclusive start, exclusive end and lastIndexOf gives index of first char in str provided (I think)
+        String patternErrorString = structurePattern.getError().getErrorInfo();
+        int eX = Integer.decode(patternErrorString.substring(patternErrorString.lastIndexOf("x=") +2, patternErrorString.lastIndexOf("y=") -2));
+        int eY = Integer.decode(patternErrorString.substring(patternErrorString.lastIndexOf("y=") +2, patternErrorString.lastIndexOf("z=") -2));
+        int eZ = Integer.decode(patternErrorString.substring(patternErrorString.lastIndexOf("z=") +2, patternErrorString.length() -3)); //"tosses" last three characters ["})."]
+        BlockPos.MutableBlockPos errorPos = new BlockPos.MutableBlockPos(eX, eY, eZ);
+
+        SusyLog.logger.atError().log("proceeding with cabaling of errors with blockPos: " + failurePos.toString());
+
+        if (pY != eY) return; //exit if structure issue isn't on floor level
+        if (pX != eX || pZ != eZ) {
+            //hopefully cause proper check of structure
+            try {
+                Field privateField = structurePattern.getClass().getDeclaredField("worldState"); //grab worldState field
+                privateField.setAccessible(true); //make world state accessible
+                BlockWorldState structurePatternWorldState = (BlockWorldState)privateField.get(structurePattern); //grab worldState
+                structurePatternWorldState.setError(null);
+            } catch (Exception e) {
+                SusyLog.logger.atError().log("failed to do reflection for evaporation pool");
+            }
+        }
+         */
     }
 
     //for future reference
@@ -449,10 +479,14 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     public void update() {
         super.update();
 
-        //ensure timer is non-negative
-        tickTimer = tickTimer & 0b1000000000000000000000;
+        if (!isStructureFormed() && this.getOffsetTimer() % 20 == 0) {
+            //this.checkStructurePattern();
+        }
 
-        //should skip/cost an extra tick the first time and then anywhere from 1-19 when rolling over. Applies sunlight energy gain
+        //ensure timer is non-negative by anding sign bit with 0
+        tickTimer = tickTimer & 0b01111111111111111111111111111111;
+
+        //should skip/cost an extra tick the first time and then anywhere from 1-19 when rolling over. Determines exposedblocks
         if (tickTimer % 20 == 0 && tickTimer != 0) {
 
             //checks for ow and skylight access to prevent beneath portal issues (-1 = the Nether, 0 = normal world)
@@ -467,11 +501,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
                 //one exposed block found which can contribute to energy from sunlight
                 if (getWorld().canBlockSeeSky(skyCheckPos) && getWorld().isDaytime()) { ++exposedBlocks; }
-
-                //store exposedBlock count
-                this.writeCustomData(exposedBlocksID, buf -> {
-                    buf.writeInt(exposedBlocks);
-                });
             }
 
         } //finish once a ~second check
@@ -483,8 +512,11 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             make it unclear the specific amount. Just going to round to one sig fig and leave it at 10J -> 1EU
          */
 
-        if (this.getOffsetTimer() % 100 == 0) {
+        if (this.getOffsetTimer() % 250 == 0) {
             SusyLog.logger.atFatal().log("I am still alive");
+            SusyLog.logger.atError().log("columnCount: " + columnCount + ", controllerPosition: " + controllerPosition + ", rowCount: " + rowCount);
+            SusyLog.logger.atError().log("isHeated: " + isHeated + ", kiloJoules: " + kiloJoules + ", tickTimer: " + tickTimer + ", coilStateMeta: " + coilStateMeta);
+
         }
 
         if (this.isActive()) {
@@ -495,11 +527,16 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             if (getWorld().isRemote) {
                 evaporationParticles();
             }
+
+
         }
 
         ++tickTimer;
 
-        this.writeCustomData(tickTimerID, buf -> {
+        //store relevant values
+        this.writeCustomData(energyValuesID, buf -> {
+            buf.writeInt(exposedBlocks);
+            buf.writeInt(kiloJoules);
             buf.writeInt(tickTimer);
         });
     }
@@ -578,6 +615,19 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     @Override
     public void receiveCustomData(int dataId, PacketBuffer buf) {
         super.receiveCustomData(dataId, buf);
+        if (dataId == structuralDimensionsID) {
+            this.columnCount = buf.readInt();
+            this.rowCount = buf.readInt();
+            this.controllerPosition = buf.readInt();
+        } else if (dataId == predicateID) {
+            this.isHeated = buf.readBoolean();
+            this.coilStateMeta = buf.readInt();
+        } else if (dataId == energyValuesID) {
+            this.exposedBlocks = buf.readInt();
+            this.kiloJoules = buf.readInt();
+            this.tickTimer = buf.readInt();
+        }
+        /*
         if (dataId == columnCountID) {
             this.columnCount = buf.readInt();
             //I think this is where you would do any updates resulting from data modifications
@@ -596,6 +646,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         } else if (dataId == coilStateMetaID) {
             this.coilStateMeta = buf.readInt();
         }
+        */
     }
 
     @Override
