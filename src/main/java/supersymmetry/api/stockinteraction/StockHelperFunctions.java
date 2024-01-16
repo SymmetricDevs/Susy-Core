@@ -5,16 +5,10 @@ import cam72cam.immersiverailroading.items.ItemRollingStock;
 import cam72cam.immersiverailroading.registry.EntityRollingStockDefinition;
 import cam72cam.mod.entity.ModdedEntity;
 import cam72cam.mod.item.ItemStack;
-import gregtech.client.utils.RenderBufferHelper;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
 
 import java.lang.reflect.Field;
@@ -201,24 +195,4 @@ public class StockHelperFunctions {
     {
         return new Vector3f(pos.getX(), pos.getY(), pos.getZ());
     }
-
-    public static void renderBoundingBox(AxisAlignedBB boundingBox) {
-        // TODO: If anyone reads this that actually knows how to do opengl, please fix this
-        GlStateManager.disableDepth();
-        GlStateManager.disableTexture2D();
-        GlStateManager.glLineWidth(5);
-
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferBuilder = tessellator.getBuffer();
-
-        bufferBuilder.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
-
-        RenderBufferHelper.renderCubeFrame(bufferBuilder, boundingBox.minX, boundingBox.minY, boundingBox.minZ, boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ, 1F,0F,0F,0.4F);
-
-        tessellator.draw();
-
-        GlStateManager.enableTexture2D();
-        GlStateManager.enableDepth();
-        GlStateManager.color(1, 1, 1, 1);
     }
-}

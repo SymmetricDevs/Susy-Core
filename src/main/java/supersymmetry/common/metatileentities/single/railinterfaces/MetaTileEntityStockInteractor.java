@@ -11,7 +11,13 @@ import gregtech.api.gui.widgets.tab.ItemTabInfo;
 import gregtech.api.metatileentity.IFastRenderMetaTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.util.Position;
+import gregtech.client.utils.RenderBufferHelper;
+import gregtech.client.utils.RenderUtil;
 import gregtech.common.items.MetaItems;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,6 +26,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.stockinteraction.IStockInteractor;
 import supersymmetry.api.stockinteraction.StockFilter;
@@ -32,7 +39,7 @@ import java.util.List;
 public abstract class MetaTileEntityStockInteractor extends MetaTileEntity implements IStockInteractor, IFastRenderMetaTileEntity {
 
     AxisAlignedBB interactionBoundingBox;
-    private double interactionWidth = 5.;
+    private double interactionWidth = 11.;
     private double interactionDepth = 5.;
 
     // This defines which stock classes can be interacted with
@@ -125,7 +132,32 @@ public abstract class MetaTileEntityStockInteractor extends MetaTileEntity imple
     @SideOnly(Side.CLIENT)
     public void renderMetaTileEntity(double x, double y, double z, float partialTicks) {
         if(this.shouldRenderBoundingBox()) {
-            StockHelperFunctions.renderBoundingBox(getInteractionBoundingBox());
+            GlStateManager.pushMatrix();
+
+            RenderUtil.moveToFace(x,y,z,getFrontFacing());
+            GlStateManager.translate(0, -.5, 0);
+            RenderUtil.rotateToFace(getFrontFacing(), null);
+
+            GlStateManager.enableBlend();
+            GlStateManager.disableLighting();
+            GlStateManager.disableTexture2D();
+            GlStateManager.blendFunc(770, 771);
+            GlStateManager.glLineWidth(15);
+
+            Tessellator tessellator = Tessellator.getInstance();
+            BufferBuilder buffer = tessellator.getBuffer();
+            buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+
+            RenderBufferHelper.renderCubeFrame(buffer, -this.getInteractionWidth() / 2, 0, 0, this.getInteractionWidth() / 2,  (-this.getInteractionDepth() - this.getInteractionWidth()) / 2, this.getInteractionDepth(), 1, 0, 0, 0.6F);
+            tessellator.draw();
+
+            GlStateManager.disableBlend();
+            GlStateManager.enableLighting();
+            GlStateManager.enableTexture2D();
+            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+
+            GlStateManager.popMatrix();
+
         }
     }
 
