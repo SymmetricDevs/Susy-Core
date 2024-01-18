@@ -1,12 +1,16 @@
 package supersymmetry;
 
+import gregtech.api.GTValues;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.fluids.SusyFluids;
+import supersymmetry.api.integration.theoneprobe.TheOneProbeCompatibility;
 import supersymmetry.api.sound.SusySounds;
 import supersymmetry.common.CommonProxy;
 import supersymmetry.common.SusyMetaEntities;
@@ -55,5 +59,9 @@ public class Supersymmetry {
     public void onInit(@NotNull FMLInitializationEvent event) {
         proxy.load();
         SuSyCoverBehaviors.init();
+        if (Loader.isModLoaded(GTValues.MODID_TOP)) {
+            SusyLog.logger.info("TheOneProbe found. Enabling integration...");
+            TheOneProbeCompatibility.registerCompatibility();
+        }
     }
 }
