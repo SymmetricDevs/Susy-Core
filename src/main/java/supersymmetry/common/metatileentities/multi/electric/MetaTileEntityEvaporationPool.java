@@ -1,5 +1,11 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import codechicken.lib.texture.TextureUtils;
+import codechicken.lib.vec.Cuboid6;
+import codechicken.lib.vec.Matrix4;
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+
 import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -9,33 +15,34 @@ import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.*;
 import gregtech.api.util.BlockInfo;
-import gregtech.api.util.GTUtility;
-import gregtech.api.util.TextFormattingUtil;
+import gregtech.client.renderer.CubeRendererState;
 import gregtech.client.renderer.ICubeRenderer;
+import gregtech.client.renderer.cclop.ColourOperation;
+import gregtech.client.renderer.cclop.LightMapOperation;
 import gregtech.client.renderer.texture.Textures;
+import gregtech.client.utils.BloomEffectUtil;
 import gregtech.client.utils.TooltipHelper;
 import gregtech.common.blocks.BlockWireCoil;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
 import gregtech.common.metatileentities.MetaTileEntities;
-import mcjty.theoneprobe.TheOneProbe;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.lang3.ArrayUtils;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
@@ -45,6 +52,8 @@ import supersymmetry.common.blocks.SuSyBlocks;
 import javax.annotation.Nonnull;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -75,6 +84,9 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     //about 1000J/s on a sunny day for 1/m^2 of area
     int kiloJoules = 0;
     int tickTimer = 0;
+
+    public static final int fluidNameID = 12090539;
+    String currentFluidName = "water";
 
     public static final ArrayList<IBlockState> validContainerStates = new ArrayList<>();
 
@@ -271,14 +283,22 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
     //ensures coil pattern is either entirely there or completely absent for structure to be valid. Sets isHeated accordingly
     protected TraceabilityPredicate isContainer() {
-        //store all valid blockinfo related to different materials
-        BlockInfo[] blockInfos = new BlockInfo[HEATING_COILS.size()];
-        for (int i = 0; i < blockInfos.length; ++i) {
-            BlockWireCoil.CoilType type = BlockWireCoil.CoilType.values()[i]; //type of coil
-            blockInfos[i] = new BlockInfo(MetaBlocks.WIRE_COIL.getState(type)); //associated blockstate as blockInfo instance
-        }
+        Supplier<BlockInfo[]> supplier = () -> {
+            ArrayList<BlockInfo> containerInfo = new ArrayList();
 
-        Supplier<BlockInfo[]> supplier = () -> blockInfos; //return blockInfos as info supplier
+            //add evap bed types
+            for (BlockEvaporationBed.EvaporationBedType type : BlockEvaporationBed.EvaporationBedType.values()) {
+                containerInfo.add(new BlockInfo(SuSyBlocks.EVAPORATION_BED.getState(type)));
+            }
+
+            //add coil types
+            GregTechAPI.HEATING_COILS.entrySet().stream()
+                    .sorted(Comparator.comparingInt(entry -> entry.getValue().getTier())).forEach(entry -> containerInfo.add(new BlockInfo(entry.getKey())));
+
+            //create array of correct size to "move" entries to
+            BlockInfo[] containerInfoArray = new BlockInfo[containerInfo.size()];
+            return containerInfo.toArray(containerInfoArray);
+        };
 
         return new TraceabilityPredicate(blockWorldState -> {
             IBlockState state = blockWorldState.getBlockState();
@@ -290,16 +310,9 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
     @Override
     public List<MultiblockShapeInfo> getMatchingShapes() {
-        BlockInfo[] blockInfos = new BlockInfo[HEATING_COILS.size()];
-        for (int i = 0; i < blockInfos.length; ++i) {
-            BlockWireCoil.CoilType type = BlockWireCoil.CoilType.values()[i]; //type of coil
-            blockInfos[i] = new BlockInfo(MetaBlocks.WIRE_COIL.getState(type)); //associated blockstate as blockInfo instance
-        }
-
-        Supplier<BlockInfo[]> supplier = () -> blockInfos; //return blockInfos as info supplier
-
         ArrayList<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
         MultiblockShapeInfo.Builder builder = MultiblockShapeInfo.builder()
+                /* is backwards but lighting looks better
                 .aisle("EEEEEESEEE", "          ")
                 .aisle("EEEEEEEEEE", " EEEEEEEE ")
                 .aisle("EEGCCCGCEE", " E######E ")
@@ -310,17 +323,31 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                 .aisle("EECCGCCCEE", " E######E ")
                 .aisle("EEEEEEEEEE", " EEEEEEEE ")
                 .aisle("efFIEEEEEE", "          ")
-                .where('S', GregTechAPI.MTE_REGISTRY.getObjectById(EVAPORATION_POOL_ID), EnumFacing.NORTH)
+                 */
+                .aisle("efFIEEEEEE", "          ")
+                .aisle("EEEEEEEEEE", " EEEEEEEE ")
+                .aisle("EECCCGCCEE", " E######E ")
+                .aisle("EECGCGCGEE", " E######E ")
+                .aisle("EECGCGCGEE", " E######E ")
+                .aisle("EECGCGCGEE", " E######E ")
+                .aisle("EECGCGCGEE", " E######E ")
+                .aisle("EECGCCCGEE", " E######E ")
+                .aisle("EEEEEEEEEE", " EEEEEEEE ")
+                .aisle("EEESEEEEEE", "          ")
+                .where('S', GregTechAPI.MTE_REGISTRY.getObjectById(EVAPORATION_POOL_ID), EnumFacing.SOUTH)
                 .where('E', MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT))
-                .where('C', MetaBlocks.WIRE_COIL.getDefaultState())
                 .where('G', SuSyBlocks.EVAPORATION_BED.getState(BlockEvaporationBed.EvaporationBedType.DIRT))
                 .where('#', Blocks.AIR.getDefaultState())
                 .where(' ', Blocks.AIR.getDefaultState()) //supposed to be any
-                .where('e', MetaTileEntities.ENERGY_INPUT_HATCH[GTValues.LV], EnumFacing.SOUTH)
-                .where('f', MetaTileEntities.FLUID_IMPORT_HATCH[GTValues.LV], EnumFacing.SOUTH)
-                .where('F', MetaTileEntities.FLUID_EXPORT_HATCH[GTValues.LV], EnumFacing.SOUTH)
-                .where('I', MetaTileEntities.ITEM_EXPORT_BUS[GTValues.LV], EnumFacing.SOUTH);
-        shapeInfo.add(builder.build());
+                .where('e', MetaTileEntities.ENERGY_INPUT_HATCH[GTValues.LV], EnumFacing.NORTH)
+                .where('f', MetaTileEntities.FLUID_IMPORT_HATCH[GTValues.LV], EnumFacing.NORTH)
+                .where('F', MetaTileEntities.FLUID_EXPORT_HATCH[GTValues.LV], EnumFacing.NORTH)
+                .where('I', MetaTileEntities.ITEM_EXPORT_BUS[GTValues.LV], EnumFacing.NORTH);
+
+        GregTechAPI.HEATING_COILS.entrySet().stream()
+                .sorted(Comparator.comparingInt(entry -> entry.getValue().getTier()))
+                .forEach(entry -> shapeInfo.add(builder.where('C', entry.getKey()).build()));
+
         return shapeInfo;
     }
 
@@ -415,6 +442,11 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         if ((tickTimer/20 & 3) == 0 && structurePattern.getError() == null) {
             handleCoilCheckResult(coilPatternCheck(false));
         }
+
+        if (structurePattern.getError() != null) {
+            SusyLog.logger.atError().log(structurePattern.getError().getErrorInfo());
+        }
+
         /*
         if (structurePattern == null || structurePattern.getError() == null) return; // don't continue if these values aren't valid
         String errorString = structurePattern.getError().getErrorInfo();
@@ -568,6 +600,52 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         }
     }
 
+    public BlockPos.MutableBlockPos getCorner(boolean isClose) {
+        BlockPos.MutableBlockPos corner = new BlockPos.MutableBlockPos(getPos());
+        EnumFacing back = getFrontFacing().getOpposite();
+        EnumFacing left = getFrontFacing().rotateY(); //left if you're looking at controller
+
+        corner.move(EnumFacing.UP); //place on level of fluid in pool
+        if (isClose) {
+            corner.move(left, controllerPosition); //line up with leftmost column of interior
+            corner.move(back, 2); //place in interior
+        } else {
+            corner.move(left.getOpposite(), columnCount - controllerPosition -1); //line up w/ furthest right interior column
+            corner.move(back, rowCount +1); //move onto last row
+        }
+
+        return corner;
+    }
+
+    @Override
+    public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
+        super.renderMetaTileEntity(renderState, translation, pipeline);
+        getFrontOverlay().renderOrientedState(renderState, translation, pipeline, getFrontFacing(), recipeMapWorkable.isActive(), recipeMapWorkable.isWorkingEnabled());
+
+        //display fluid in evap pool
+        if (recipeMapWorkable.isActive() && isStructureFormed() && currentFluidName != null && FluidRegistry.getFluid(currentFluidName).getStill() != null) {
+            EnumFacing back = getFrontFacing().getOpposite();
+            BlockPos.MutableBlockPos closerCorner = getCorner(true);
+            BlockPos.MutableBlockPos furtherCorner = getCorner(false);
+            double minX = Math.min(closerCorner.getX(), furtherCorner.getX());
+            double minY = closerCorner.getY(); //will give bottom of block
+            double minZ = Math.min(closerCorner.getZ(), furtherCorner.getZ());
+
+            double maxX = Math.max(closerCorner.getX(), furtherCorner.getX());
+            double maxY = minY + 0.8125; //should come up to fluid level
+            double maxZ = Math.max(closerCorner.getZ(), furtherCorner.getZ());
+
+            Matrix4 offset = translation.copy().translate(back.getXOffset(), -0.3, back.getZOffset());
+            CubeRendererState op = Textures.RENDER_STATE.get();
+            Textures.RENDER_STATE.set(new CubeRendererState(op.layer, CubeRendererState.PASS_MASK, op.world));
+            Textures.renderFace(renderState, offset,
+                    ArrayUtils.addAll(pipeline, new LightMapOperation(240, 240), new ColourOperation(0xFFFFFFFF)),
+                    EnumFacing.UP, Cuboid6.full,
+                    TextureUtils.getTexture(FluidRegistry.getFluid(currentFluidName).getStill()), BlockRenderLayer.TRANSLUCENT);
+            Textures.RENDER_STATE.set(op);
+        }
+    }
+
     @Override
     public void update() {
         super.update();
@@ -602,21 +680,22 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             make it unclear the specific amount. Just going to round to one sig fig and leave it at 10J -> 1EU
          */
 
-        if (this.getOffsetTimer() % 250 == 0) {
-            SusyLog.logger.atFatal().log("I am still alive");
+        if (tickTimer % 100 == 0) {
+            SusyLog.logger.atFatal().log("I am still alive at " + getPos());
             SusyLog.logger.atError().log("columnCount: " + columnCount + ", controllerPosition: " + controllerPosition + ", rowCount: " + rowCount);
             SusyLog.logger.atError().log("isHeated: " + isHeated + ", kiloJoules: " + kiloJoules + ", tickTimer: " + tickTimer + ", coilStateMeta: " + coilStateMeta);
-
         }
 
         if (this.isActive()) {
             //get energy from sunlight when attempting to run recipe
-            kiloJoules += exposedBlocks; //1kJ/s /m^2
+            if (tickTimer % 20 == 0) kiloJoules += exposedBlocks; //1kJ/s /m^2
 
-            //if world is clientside
+            //if world is clientside do custom rendering
             if (getWorld().isRemote) {
                 evaporationParticles();
             }
+
+
 
 
         }
@@ -642,6 +721,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         data.setInteger("kiloJoules", this.kiloJoules);
         data.setInteger("tickTimer", this.tickTimer);
         data.setInteger("coilStateMeta", this.coilStateMeta);
+        data.setString("currentFluidName", this.currentFluidName);
         return data;
     }
 
@@ -672,7 +752,16 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         if (data.hasKey("coilStateMeta")) {
             this.coilStateMeta = data.getInteger("coilStateMeta");
         }
+        if (data.hasKey("currentFluidName")) {
+            this.currentFluidName = data.getString("currentFluidName");
+        }
+        SusyLog.logger.atFatal().log("before reinit");
+        SusyLog.logger.atError().log("columnCount: " + columnCount + ", controllerPosition: " + controllerPosition + ", rowCount: " + rowCount);
+        SusyLog.logger.atError().log("isHeated: " + isHeated + ", kiloJoules: " + kiloJoules + ", tickTimer: " + tickTimer + ", coilStateMeta: " + coilStateMeta);
         reinitializeStructurePattern();
+        SusyLog.logger.atFatal().log("after reinit");
+        SusyLog.logger.atError().log("columnCount: " + columnCount + ", controllerPosition: " + controllerPosition + ", rowCount: " + rowCount);
+        SusyLog.logger.atError().log("isHeated: " + isHeated + ", kiloJoules: " + kiloJoules + ", tickTimer: " + tickTimer + ", coilStateMeta: " + coilStateMeta);
     }
 
     //order matters for these
@@ -687,6 +776,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         buf.writeInt(this.kiloJoules);
         buf.writeInt(this.tickTimer);
         buf.writeInt(this.coilStateMeta);
+        buf.writeString(this.currentFluidName);
     }
 
     @Override
@@ -700,6 +790,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         this.kiloJoules = buf.readInt();
         this.tickTimer = buf.readInt();
         this.coilStateMeta = buf.readInt();
+        this.currentFluidName = buf.readString(100); //probably long enough to cover all fluids
         reinitializeStructurePattern();
 
     }
@@ -718,6 +809,8 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             this.exposedBlocks = buf.readInt();
             this.kiloJoules = buf.readInt();
             this.tickTimer = buf.readInt();
+        } else if (dataId == fluidNameID) {
+            this.currentFluidName = buf.readString(100);
         }
     }
 
@@ -728,15 +821,31 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
     @SideOnly(Side.CLIENT)
     private void evaporationParticles() {
-        BlockPos pos = this.getPos();
-        EnumFacing facing = this.getFrontFacing().getOpposite();
+        final EnumFacing back = this.getFrontFacing().getOpposite();
+        final EnumFacing left = back.rotateYCCW();
 
-        for (int i = 0; i < 10; i++) {
-            float xPos = facing.getXOffset() * 15F + pos.getX() + 27 * (GTValues.RNG.nextFloat() - 0.5F);
-            float yPos = pos.getY() + 0.25F;
-            float zPos = facing.getZOffset() * 15F + pos.getZ() + 27 * (GTValues.RNG.nextFloat() - 0.5F);
+        //place pos in closest leftmost corner. For some reason getPos rounds X pos of controller up and Z pos of controller down
+        final BlockPos pos = this.getPos().offset(left, controllerPosition +1).offset(back, 2);
 
-            float ySpd = facing.getYOffset() * 0.1F + 0.4F + 0.2F * GTValues.RNG.nextFloat();
+        if (tickTimer % 100 == 0) {
+            SusyLog.logger.atFatal().log("I am about to generate particles and am at " + getPos());
+            SusyLog.logger.atError().log("columnCount: " + columnCount + ", controllerPosition: " + controllerPosition + ", rowCount: " + rowCount);
+            SusyLog.logger.atError().log("isHeated: " + isHeated + ", kiloJoules: " + kiloJoules + ", tickTimer: " + tickTimer + ", coilStateMeta: " + coilStateMeta);
+        }
+
+        //Spawn number of particles on range [1, 3 * colCount * rowCount/9] (~3 particles for every 3x3 = 9m^2)
+        for (int i = 0; i < columnCount * rowCount/3; i++) {
+            //either single line along x axis intersects all rows, or it intersects all columns. Same applies to z axis. getXOffset indicates +, -, or "0" direction of facing for given axis
+            float xLength = (back.getXOffset() * rowCount) + (left.getXOffset() * columnCount * -1); //we start on leftmost closest corner and want to go back and to the right
+            float zLength = (back.getZOffset() * rowCount) + (left.getZOffset() * columnCount * -1); //so we invert the sign of the left offsets to effectively get right displacement
+
+            if (tickTimer % 100 == 0) SusyLog.logger.atError().log("xLength: " + xLength + ", zLength: " + zLength + ", pos: " + pos + ", controller pos: " + getPos());
+
+            float xPos = pos.getX() + (xLength * GTValues.RNG.nextFloat()); //scale x length by random amount to get output coord
+            float yPos = pos.getY() + 0.75F; //shit out particles one quarter of a block below the surface of the interior to give effect of gases rising from bottom
+            float zPos = pos.getZ() + (zLength * GTValues.RNG.nextFloat());
+
+            float ySpd = 0.4F + 0.2F * GTValues.RNG.nextFloat();
             getWorld().spawnParticle(EnumParticleTypes.CLOUD, xPos, yPos, zPos, 0, ySpd, 0);
         }
     }
