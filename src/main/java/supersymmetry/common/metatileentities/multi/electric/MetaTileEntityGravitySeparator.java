@@ -95,7 +95,7 @@ public class MetaTileEntityGravitySeparator extends RecipeMapMultiblockControlle
             IBlockState state = blockWorldState.getBlockState();
             if (!(state.getBlock() instanceof BlockSeparatorRotor)) return false;
             EnumFacing facing = MetaTileEntityGravitySeparator.this.getFrontFacing();
-                return state == SuSyBlocks.SEPARATOR_ROTOR.getState(BlockSeparatorRotor.BlockSeparatorRotorType.STEEL).withProperty(FACING, facing);
+                return state == steelRotorState().withProperty(FACING, facing);
         }, supplier);
     }
 

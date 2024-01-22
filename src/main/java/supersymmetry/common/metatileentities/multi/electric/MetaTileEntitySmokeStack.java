@@ -13,6 +13,7 @@ import gregtech.common.blocks.BlockBoilerCasing.BoilerCasingType;
 import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
+
 import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
@@ -22,6 +23,7 @@ import javax.annotation.Nonnull;
 import static gregtech.api.util.RelativeDirection.*;
 
 public class MetaTileEntitySmokeStack extends RecipeMapMultiblockController {
+
     public MetaTileEntitySmokeStack(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.SMOKE_STACK);
         this.recipeMapWorkable = new NoEnergyMultiblockRecipeLogic(this);
@@ -31,6 +33,7 @@ public class MetaTileEntitySmokeStack extends RecipeMapMultiblockController {
         return new MetaTileEntitySmokeStack(this.metaTileEntityId);
     }
 
+    @Nonnull
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start(FRONT, RIGHT, UP)
                 .aisle("S")

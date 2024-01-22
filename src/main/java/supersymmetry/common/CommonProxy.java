@@ -1,6 +1,5 @@
 package supersymmetry.common;
 
-import gregtech.api.GregTechAPI;
 import gregtech.api.block.VariantItemBlock;
 import gregtech.common.items.MetaItems;
 import net.minecraft.block.Block;

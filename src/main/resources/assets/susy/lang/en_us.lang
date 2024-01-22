@@ -223,6 +223,13 @@ gregtech.machine.quencher.name=Quencher
 gregtech.machine.railroad_engineering_station.name=Railroad Engineering Station
 gregtech.machine.railroad_engineering_station.tooltip=Place Immersive Railroading Tracks in the middle to form the multiblock\nThe concrete below the tracks can be substituted with any block, including pipes or air
 
+gregtech.machine.evaporation_pool.name=Evaporation Pool
+gregtech.machine.evaporation_pool.tooltip.structure_info=Evaporation Pools can be formed with any internal dimensions ranging from a 1x1 to a %dx%d, even if it is non square. To form a valid heated evaporation pool, coils should be placed following the pattern shown in the preview.
+gregtech.top.evaporation_pool_heated_preface=Coil Pattern:
+gregtech.top.evaporation_pool_is_heated=VALID; May be heated.
+gregtech.top.evaporation_pool_not_heated=INVALID; Will not heat.
+gregtech.multiblock.evaporation_pool.description=The Evaporation Pool has interior dimensions specified in its description and a concrete exterior for IO/controller placement, with at most two of each IO type. The controller may be placed anywhere along the protruding bottom row "in front" of the interior.            The Evaporation Pool can run recipes both unpowered and powered. In order to power recipes, the multiblock will need to be formed with a "snaking" coil pattern of uniform type, as shown in the preview. Unpowered Evaporation Pools do not require any coils.                                                 The speed of any recipe depends on the heat provided to the multi, which is based off of the number of interior blocks exposed to sunlight, the energy provided, and the tier of coil.
+
 gregtech.machine.primitive_mud_pump.name=Primitive Mud Pump
 gregtech.machine.basic_steam_turbine.name=Large Steam Turbine
 gregtech.machine.basic_gas_turbine.name=Large Gas Turbine
@@ -230,7 +237,6 @@ gregtech.machine.ocean_pumper.name=Ocean Pumper
 gregtech.machine.advanced_arc_furnace.name=Advanced Arc Furnace
 gregtech.machine.clarifier.name=Clarifier
 gregtech.machine.dumper.name=Dumper
-gregtech.machine.evaporation_pool.name=Evaporation Pool
 gregtech.machine.flare_stack.name=Flare Stack
 gregtech.machine.froth_flotation_tank.name=Froth Flotation Tank
 gregtech.machine.multi_stage_flash_distiller.name=Multi Stage Flash Distiller
