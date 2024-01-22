@@ -9,7 +9,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import supersymmetry.Supersymmetry;
-import supersymmetry.api.SusyLog;
 import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityEvaporationPool;
 
 import javax.annotation.Nonnull;
@@ -31,6 +30,7 @@ public class EvaporationPoolInfoProvider implements IProbeInfoProvider {
             if (metaTileEntity instanceof MetaTileEntityEvaporationPool) {
                 MetaTileEntityEvaporationPool evapPool = ((MetaTileEntityEvaporationPool) metaTileEntity);
                 probeInfo.text(TextStyleClass.INFO + "{*gregtech.top.evaporation_pool_heated_preface*} " + (evapPool.isHeated ? ( TextFormatting.GREEN + "{*gregtech.top.evaporation_pool_is_heated*} ") : (TextFormatting.RED + "{*gregtech.top.evaporation_pool_not_heated*} ")));
+                probeInfo.text(TextStyleClass.INFO + "{*gregtech.top.evaporation_pool.energy_transferred*} " + ( TextFormatting.GREEN +  Integer.toString(evapPool.getKiloJoules()) ) + ( TextFormatting.WHITE + " {*gregtech.top.evaporation_pool.kilojoules*}" ) );
             }
         }
     }
