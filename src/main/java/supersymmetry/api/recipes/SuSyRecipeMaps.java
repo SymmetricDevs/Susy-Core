@@ -322,6 +322,12 @@ public class SuSyRecipeMaps {
             .setSound(GTSoundEvents.CHEMICAL_REACTOR)
             .setSmallRecipeMap(MIXER_RECIPES);
 
+    public static final RecipeMap<FuelRecipeBuilder> LARGE_STEAM_TURBINE = new RecipeMap<>("large_steam_turbine", 1, 0, 2, 1, new FuelRecipeBuilder(), false)
+            .setSlotOverlay(false, true, GuiTextures.CENTRIFUGE_OVERLAY)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.TURBINE)
+            .allowEmptyOutput();
+
     public static void init(){
         RecipeMaps.SIFTER_RECIPES.setMaxFluidInputs(1);
         RecipeMaps.SIFTER_RECIPES.setMaxFluidOutputs(1);
@@ -348,8 +354,6 @@ public class SuSyRecipeMaps {
         RecipeMaps.GAS_TURBINE_FUELS.setMaxFluidInputs(3);
         RecipeMaps.GAS_TURBINE_FUELS.setMaxFluidOutputs(1);
         RecipeMaps.GAS_TURBINE_FUELS.setMaxInputs(1);
-        RecipeMaps.STEAM_TURBINE_FUELS.setMaxFluidInputs(2);
-        RecipeMaps.STEAM_TURBINE_FUELS.setMaxInputs(1);
         RecipeMaps.AUTOCLAVE_RECIPES.setMaxFluidInputs(2);
         RecipeMaps.AUTOCLAVE_RECIPES.setMaxFluidOutputs(2);
         RecipeMaps.CHEMICAL_BATH_RECIPES.setMaxFluidInputs(3);
