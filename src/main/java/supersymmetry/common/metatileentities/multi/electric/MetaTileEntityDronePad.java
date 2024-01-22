@@ -83,7 +83,7 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
     }
 
     @Override
-    public boolean getIsWeatherOrTerrainResistant() {
+    public boolean isMultiblockPartWeatherResistant(@Nonnull IMultiblockPart part) {
         return true;
     }
 
