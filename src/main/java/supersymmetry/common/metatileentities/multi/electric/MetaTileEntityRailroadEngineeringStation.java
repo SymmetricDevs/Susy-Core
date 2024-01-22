@@ -447,6 +447,11 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
         }
     }
 
+    @Override
+    public boolean getIsWeatherOrTerrainResistant() {
+        return true;
+    }
+
     public void setStructureAABB() {
         // Had to make it overshoot a little :(
         net.minecraft.util.math.BlockPos offsetBottomLeft = new net.minecraft.util.math.BlockPos(9, -1, 2);
