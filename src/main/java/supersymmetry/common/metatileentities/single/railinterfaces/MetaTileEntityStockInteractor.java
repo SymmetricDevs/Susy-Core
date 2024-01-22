@@ -75,7 +75,6 @@ public abstract class MetaTileEntityStockInteractor extends MetaTileEntity imple
                 .setTooltipText("susy.gui.stock_interactor.render_bounding_box.tooltip")
                 .shouldUseBaseBackground());
 
-        //widgetGroup.addWidget();
 
         return widgetGroup;
     }
@@ -189,6 +188,8 @@ public abstract class MetaTileEntityStockInteractor extends MetaTileEntity imple
     public void writeInitialSyncData(PacketBuffer buf) {
         super.writeInitialSyncData(buf);
         buf.writeCompoundTag(this.filter.serializeNBT());
+        buf.writeDouble(this.getInteractionWidth());
+        buf.writeDouble(this.getInteractionDepth());
         buf.writeBoolean(this.renderBoundingBox);
     }
 
@@ -200,6 +201,8 @@ public abstract class MetaTileEntityStockInteractor extends MetaTileEntity imple
         } catch (IOException e) {
             SusyLog.logger.info("Could not deserialize stock filter in stock interactor at " + getPos());
         }
+        this.setInteractionWidth(buf.readDouble());
+        this.setInteractionDepth(buf.readDouble());
         this.renderBoundingBox = buf.readBoolean();
 
     }
