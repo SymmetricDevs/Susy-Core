@@ -82,6 +82,11 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
         return new MetaTileEntityDronePad(this.metaTileEntityId);
     }
 
+    @Override
+    public boolean getIsWeatherOrTerrainResistant() {
+        return true;
+    }
+
     public boolean hasDrone() {
         if (this.drone != null && !this.drone.isDead) {
             for (EntityDrone entity : this.getWorld().getEntitiesWithinAABB(EntityDrone.class, this.landingAreaBB)) {
