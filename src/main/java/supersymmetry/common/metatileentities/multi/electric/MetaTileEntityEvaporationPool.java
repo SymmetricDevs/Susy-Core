@@ -1,11 +1,10 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.texture.TextureUtils;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Matrix4;
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.pipeline.IVertexOperation;
-
 import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -13,16 +12,17 @@ import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
-import gregtech.api.pattern.*;
+import gregtech.api.pattern.BlockPattern;
+import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.MultiblockShapeInfo;
+import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.util.BlockInfo;
 import gregtech.client.renderer.CubeRendererState;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.cclop.ColourOperation;
 import gregtech.client.renderer.cclop.LightMapOperation;
 import gregtech.client.renderer.texture.Textures;
-import gregtech.client.utils.BloomEffectUtil;
 import gregtech.client.utils.TooltipHelper;
-import gregtech.common.blocks.BlockWireCoil;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
 import gregtech.common.metatileentities.MetaTileEntities;
@@ -38,7 +38,6 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -50,15 +49,11 @@ import supersymmetry.common.blocks.BlockEvaporationBed;
 import supersymmetry.common.blocks.SuSyBlocks;
 
 import javax.annotation.Nonnull;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 
-import static gregtech.api.GregTechAPI.HEATING_COILS;
 import static supersymmetry.common.metatileentities.SuSyMetaTileEntities.EVAPORATION_POOL_ID;
 
 public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController {
@@ -82,7 +77,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     public static final int energyValuesID = 10868607;
     int exposedBlocks = 0;
     //about 1000J/s on a sunny day for 1/m^2 of area
-    int kiloJoules = 0;
+    private int kiloJoules = 0;
     int tickTimer = 0;
 
     public static final int fluidNameID = 12090539;
@@ -437,7 +432,14 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
      */
     @Override
     public void checkStructurePattern() {
+        // This is here so that it automatically updates the dimensions once a second if it isn't formed
+        // hope this doesn't put too much of a toll on TPS - It really should not
+        if (!this.isStructureFormed()) {
+            reinitializeStructurePattern();
+        }
+
         super.checkStructurePattern();
+
         //only do check every 4 seconds while structure is formed
         if ((tickTimer/20 & 3) == 0 && structurePattern.getError() == null) {
             handleCoilCheckResult(coilPatternCheck(false));
@@ -862,5 +864,9 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     @Override
     public boolean getIsWeatherOrTerrainResistant() {
         return true;
+    }
+
+    public int getKiloJoules() {
+        return kiloJoules;
     }
 }
