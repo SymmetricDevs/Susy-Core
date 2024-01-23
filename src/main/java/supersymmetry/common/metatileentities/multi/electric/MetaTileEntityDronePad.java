@@ -29,6 +29,7 @@ import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.entities.EntityDrone;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
@@ -84,6 +85,11 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
 
     @Override
     public boolean isMultiblockPartWeatherResistant(@Nonnull IMultiblockPart part) {
+        return true;
+    }
+
+    @Override
+    public boolean getIsWeatherOrTerrainResistant() {
         return true;
     }
 
