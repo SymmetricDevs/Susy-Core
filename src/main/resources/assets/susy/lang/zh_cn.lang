@@ -180,8 +180,8 @@ item.material.oreprefix.fiber=%s纤维
 item.material.oreprefix.fiberWet=湿%s纤维
 item.material.oreprefix.thread=%s纱线
 
-fluid.slurry.impure=含杂%s浆液
-fluid.slurry.pure=%s浆液
+susy.fluid.impure_slurry=含杂%s浆液
+susy.fluid.slurry=%s浆液
 
 # Machines/Multiblocks
 gregtech.machine.magnetic_refrigerator.name=磁制冷机
