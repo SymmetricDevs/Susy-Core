@@ -5,6 +5,7 @@ import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.ColourMultiplier;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
+import gregtech.api.capability.impl.CommonFluidFilters;
 import gregtech.api.capability.impl.FilteredFluidHandler;
 import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.capability.impl.NotifiableItemStackHandler;
@@ -14,13 +15,9 @@ import gregtech.api.gui.resources.IGuiTexture;
 import gregtech.api.gui.widgets.*;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.recipes.ModHandler;
-import gregtech.api.util.GTTransferUtils;
 import gregtech.api.util.GTUtility;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.renderer.texture.cube.SimpleSidedCubeRenderer.RenderSide;
-import java.util.List;
-
 import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -29,13 +26,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fml.relauncher.Side;
@@ -47,6 +45,7 @@ import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.materials.SusyMaterials;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class MetaTileEntitySteamLatexCollector extends MetaTileEntity {
     private final int energyPerTick = 16;
@@ -66,7 +65,7 @@ public class MetaTileEntitySteamLatexCollector extends MetaTileEntity {
     }
 
     public FluidTankList createImportFluidHandler() {
-        return new FluidTankList(false, new IFluidTank[]{(new FilteredFluidHandler(16000)).setFillPredicate(ModHandler::isSteam)});
+        return new FluidTankList(false, new FilteredFluidHandler(16000).setFilter(CommonFluidFilters.STEAM));
     }
 
     protected FluidTankList createExportFluidHandler() {
@@ -74,11 +73,11 @@ public class MetaTileEntitySteamLatexCollector extends MetaTileEntity {
     }
 
     protected IItemHandlerModifiable createImportItemHandler() {
-        return new NotifiableItemStackHandler(1, this, false);
+        return new NotifiableItemStackHandler(this, 1, this, false);
     }
 
     protected IItemHandlerModifiable createExportItemHandler() {
-        return new NotifiableItemStackHandler(1, this, true);
+        return new NotifiableItemStackHandler(this, 1, this, true);
     }
 
     @SideOnly(Side.CLIENT)

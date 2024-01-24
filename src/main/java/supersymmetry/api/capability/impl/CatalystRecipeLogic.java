@@ -1,6 +1,5 @@
 package supersymmetry.api.capability.impl;
 
-import gregtech.api.GTValues;
 import gregtech.api.capability.IEnergyContainer;
 import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.impl.RecipeLogicEnergy;
@@ -9,38 +8,34 @@ import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.logic.OverclockingLogic;
 import gregtech.api.recipes.recipeproperties.IRecipePropertyStorage;
-import gregtech.api.util.GTUtility;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.recipes.builders.logic.SuSyOverclockingLogic;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
 import supersymmetry.api.recipes.properties.CatalystProperty;
 import supersymmetry.api.recipes.properties.CatalystPropertyValue;
 
-import javax.annotation.Nonnull;
 import java.util.function.Supplier;
-
-import static gregtech.api.GTValues.ULV;
 
 public class CatalystRecipeLogic extends RecipeLogicEnergy {
 
-    private CatalystInfo catalystInfo;
-    private int requiredCatalystTier;
+    protected @Nullable CatalystInfo catalystInfo;
+    protected int requiredCatalystTier;
 
-    public CatalystRecipeLogic(MetaTileEntity tileEntity, RecipeMap recipeMap, Supplier<IEnergyContainer> energyContainer) {
+    public CatalystRecipeLogic(MetaTileEntity tileEntity, RecipeMap<?> recipeMap, Supplier<IEnergyContainer> energyContainer) {
         super(tileEntity, recipeMap, energyContainer);
     }
 
-    // This will be made part of the MTE eventually.
-    // TODO: Make this part of a new MTE for catalysts. Make the continuous machines extend that MTE.
-    public void tryFindCatalystInfo(@Nonnull Recipe recipe) {
+    protected void tryFindCatalystInfo(@NotNull Recipe recipe) {
         this.catalystInfo = null;
         this.requiredCatalystTier = CatalystInfo.NO_TIER;
 
         if (recipe.hasProperty(CatalystProperty.getInstance())) {
             CatalystPropertyValue property = recipe.getProperty(CatalystProperty.getInstance(), null);
+            if (property == null) return;
 
             // If it is a non-tiered catalyst, no bonuses need to be calculated
             // We can safely skip the inventory scanning
@@ -54,12 +49,8 @@ public class CatalystRecipeLogic extends RecipeLogicEnergy {
                 if (!is.isEmpty()) {
                     CatalystInfo info = property.getCatalystGroup().getCatalystInfos().get(is);
 
-                    if (info != null) {
-                        if (this.catalystInfo == null) {
-                            this.catalystInfo = info;
-                        } else if (this.catalystInfo.compareTo(info) > 0) {
-                            this.catalystInfo = info;
-                        }
+                    if (info != null && (this.catalystInfo == null || this.catalystInfo.compareTo(info) > 0)) {
+                        this.catalystInfo = info;
                     }
 
                 }
@@ -71,27 +62,6 @@ public class CatalystRecipeLogic extends RecipeLogicEnergy {
                 this.requiredCatalystTier = property.getTier();
             }
         }
-    }
-
-    @Override
-    protected boolean prepareRecipe(Recipe recipe) {
-        recipe = Recipe.trimRecipeOutputs(recipe, this.getRecipeMap(), this.metaTileEntity.getItemOutputLimit(), this.metaTileEntity.getFluidOutputLimit());
-
-        recipe = findParallelRecipe(
-                this,
-                recipe,
-                getInputInventory(),
-                getInputTank(),
-                getOutputInventory(),
-                getOutputTank(),
-                getMaxParallelVoltage(),
-                getParallelLimit());
-
-        if (recipe != null && this.setupAndConsumeRecipeInputs(recipe, this.getInputInventory())) {
-            this.setupRecipe(recipe);
-            return true;
-        }
-        return false;
     }
 
     @Override
@@ -108,7 +78,7 @@ public class CatalystRecipeLogic extends RecipeLogicEnergy {
         } else {
             currentRecipe = findRecipe(maxVoltage, importInventory, importFluids);
         }
-
+        // If a recipe was found, then inputs were valid. Cache found recipe.
         if (currentRecipe != null) {
             this.previousRecipe = currentRecipe;
             tryFindCatalystInfo(currentRecipe);
@@ -120,6 +90,20 @@ public class CatalystRecipeLogic extends RecipeLogicEnergy {
         if (currentRecipe != null && checkRecipe(currentRecipe)) {
             prepareRecipe(currentRecipe);
         }
+    }
+
+    @Override
+    public boolean checkRecipe(@NotNull Recipe recipe) {
+        CatalystPropertyValue property = recipe.getProperty(CatalystProperty.getInstance(), null);
+        if (property == null || property.getTier() == CatalystInfo.NO_TIER) {
+            return super.checkRecipe(recipe);
+        }
+
+        if (catalystInfo == null) {
+            return false;
+        }
+
+        return catalystInfo.getTier() >= property.getTier() && super.checkRecipe(recipe);
     }
 
     @Override
@@ -148,38 +132,11 @@ public class CatalystRecipeLogic extends RecipeLogicEnergy {
     }
 
     @Override
-    protected int[] performOverclocking(@Nonnull Recipe recipe) {
-        int recipeTier = GTUtility.getTierByVoltage(recipe.getEUt());
-        int maximumTier = getOverclockForTier(getMaximumOverclockVoltage());
-
-        // The maximum number of overclocks is determined by the difference between the tier the recipe is running at,
-        // and the maximum tier that the machine can overclock to.
-        int numberOfOCs = maximumTier - recipeTier;
-        if (recipeTier == ULV) numberOfOCs--; // no ULV overclocking
-
-        // Usually this would cancel overclocking here if num of OCs is 0 or less.
-        // Since we need to take catalyst overclocks into account, we have to continue even if numberOfOCs is 0 or less.
-
-
-        // This will perform the actual overclocking
-        return runOverclockingLogic(recipe.getRecipePropertyStorage(), recipe.getEUt(), getMaximumOverclockVoltage(), recipe.getDuration(), numberOfOCs);
-    }
-
-    protected boolean checkCanOverclock(int recipeEUt) {
-        if (!isAllowOverclocking()) return false;
-
-        // Check if the voltage to run at is higher than the recipe, and that it is not ULV tier
-
-        // The maximum tier that the machine can overclock to
-        int overclockTier = getOverclockForTier(getMaximumOverclockVoltage());
-        // If the maximum tier that the machine can overclock to is ULV, return false.
-        // There is no overclocking allowed in ULV
-        // TODO apply catalyst info bonuses in the dedicated pre-oc phase in a future CEu Update
-        if (overclockTier < GTValues.LV) return false;
-        int recipeTier = GTUtility.getTierByVoltage(recipeEUt);
-
-        // Do overclock if the overclock tier is greater than the recipe tier or the catalyst tier is higher than the recipe catalyst tier
-        return overclockTier > recipeTier ||
-                (catalystInfo != null && catalystInfo.getTier() > requiredCatalystTier);
+    protected void modifyOverclockPre(int @NotNull [] values, @NotNull IRecipePropertyStorage storage) {
+        super.modifyOverclockPre(values, storage);
+        if (catalystInfo != null) {
+            values[0] = Math.min(1, (int) (values[0] * catalystInfo.getEnergyEfficiency()));
+            values[1] = Math.min(1, (int) (values[1] * catalystInfo.getSpeedEfficiency()));
+        }
     }
 }
