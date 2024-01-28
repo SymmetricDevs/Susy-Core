@@ -99,19 +99,15 @@ public class BlockHome extends VariantBlock<BlockHome.HomeType> {
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (worldIn.isRemote) {
-            return false;
+        if ((worldIn.provider.canRespawnHere() && worldIn.getBiome(pos) != net.minecraft.init.Biomes.HELL) && !worldIn.isRemote) {
+            playerIn.sendStatusMessage(new TextComponentTranslation("tile.home.allowed"), true);
+            net.minecraftforge.event.ForgeEventFactory.onPlayerSpawnSet(playerIn, pos, true);
+            playerIn.bedLocation = pos;
+            playerIn.setSpawnPoint(playerIn.bedLocation, false);
         } else {
-            if (worldIn.provider.canRespawnHere() && worldIn.getBiome(pos) != net.minecraft.init.Biomes.HELL) {
-                playerIn.sendStatusMessage(new TextComponentTranslation("tile.home.allowed"), true);
-                net.minecraftforge.event.ForgeEventFactory.onPlayerSpawnSet(playerIn, pos, true);
-                playerIn.bedLocation = pos;
-                playerIn.setSpawnPoint(playerIn.bedLocation, false);
-            } else {
-                playerIn.sendStatusMessage(new TextComponentTranslation("tile.home.denied"), true);
-            }
-            return true;
+            playerIn.sendStatusMessage(new TextComponentTranslation("tile.home.denied"), true);
         }
+        return false;
     }
 
     public enum HomeType implements IStringSerializable {
