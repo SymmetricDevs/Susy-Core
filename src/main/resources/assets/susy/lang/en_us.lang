@@ -180,8 +180,8 @@ item.material.oreprefix.fiber=%s Fiber
 item.material.oreprefix.fiberWet=Wet %s Fiber
 item.material.oreprefix.thread=%s Thread
 
-fluid.slurry.impure=Impure %s Slurry
-fluid.slurry.pure=%s Slurry
+susy.fluid.impure_slurry=Impure %s Slurry
+susy.fluid.slurry=%s Slurry
 
 # Machines/Multiblocks
 gregtech.machine.magnetic_refrigerator.name=Magnetic Refrigerator
@@ -651,9 +651,10 @@ recipemap.blender.name=Blender
 recipemap.phase_separator.name=Phase Separation
 recipemap.bath_condenser.name=Bath Condenser
 recipemap.drone_pad.name=Drone Pad
-recipemap.polishing_machine=Polishing
+recipemap.polishing_machine.name=Polishing
 recipemap.gravity_separator=Gravity Separation
 recipemap.spinning.name=Textile Spinning
+recipemap.large_steam_turbine.name=Large Steam Turbine
 
 gregtech.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 gregtech.multiblock.ocean_pumper.description=The Ocean Pumper is an electrically powered multiblock that collects a base amount of 8,000 L Seawater per second (at MV), but only if it is in an ocean biome, and when the controller is between Y = 70 and Y = 75 (Inclusive). It needs an output hatch, a maintenance hatch, and an energy input hatch.
@@ -676,7 +677,9 @@ gregtech.machine.dumping_hatch.lv.name=Dumping Hatch
 # Metaitems
 metaitem.catalyst_bed_support_grid.name=Catalyst Bed Support Grid
 metaitem.conveyor.steam.name=Steam Conveyor
+cover.conveyor.steam.title=Steam Conveyor Module
 metaitem.pump.steam.name=Steam Pump
+cover.pump.steam.title=Steam Pump
 metaitem.air_vent.name=Air Vent
 metaitem.air_vent.tooltip=Passively collects a Dimension's Air for your Machines when facing Air
 
