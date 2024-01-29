@@ -93,7 +93,7 @@ public class MetaTileEntityBathCondenser extends SimpleMachineMetaTileEntity imp
         public boolean checkRecipe(@NotNull Recipe recipe) {
             if (super.checkRecipe(recipe)) {
                 Boolean value = recipe.getProperty(CryogenicEnvironmentProperty.getInstance(), null);
-                return value == null || !value || getMetaTileEntity().getCryogenicProvider() != null;
+                return value == null || !value || (getMetaTileEntity().getCryogenicProvider() != null && getMetaTileEntity().getCryogenicProvider().isStructureFormed());
             }
 
             return false;
@@ -104,7 +104,7 @@ public class MetaTileEntityBathCondenser extends SimpleMachineMetaTileEntity imp
             if (super.canProgressRecipe()) {
                 if (previousRecipe == null) return true;
                 Boolean value = previousRecipe.getProperty(CryogenicEnvironmentProperty.getInstance(), null);
-                return value == null || !value || getMetaTileEntity().getCryogenicProvider() != null;
+                return value == null || !value || (getMetaTileEntity().getCryogenicProvider() != null && getMetaTileEntity().getCryogenicProvider().isStructureFormed());
             }
             return false;
         }

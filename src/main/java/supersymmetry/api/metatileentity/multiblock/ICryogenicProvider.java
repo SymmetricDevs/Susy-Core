@@ -46,4 +46,6 @@ public interface ICryogenicProvider {
             return info;
         });
     }
+
+    boolean isStructureFormed();
 }
