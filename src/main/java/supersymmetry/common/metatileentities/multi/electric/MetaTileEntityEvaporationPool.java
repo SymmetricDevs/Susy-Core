@@ -7,6 +7,7 @@ import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Matrix4;
 import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
+import gregtech.api.block.IHeatingCoilBlockStats;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -43,7 +44,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.ArrayUtils;
 import supersymmetry.api.SusyLog;
-import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
+import supersymmetry.api.capability.impl.EvapRecipeLogic;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.common.blocks.BlockEvaporationBed;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -54,34 +55,43 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Supplier;
 
+import static gregtech.api.GregTechAPI.HEATING_COILS;
 import static supersymmetry.common.metatileentities.SuSyMetaTileEntities.EVAPORATION_POOL_ID;
 
-public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController {
+public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController{
 
     /*
         For future reference: "((IGregTechTileEntity)world.getTileEntity(pos)).getMetaTileEntity() instanceof IMultiblockAbilityPart"
         is the way ceu gets mte from te. You might also try using MetaTileEntityHolder.
      */
 
-    static final int maxColumns = 12; //two edge layers on either side, shouldn't exceed chunk boundary at max size
+    public static final int MAX_COLUMNS = 12; //two edge layers on either side, shouldn't exceed chunk boundary at max size
 
     public static final int structuralDimensionsID = 1051354;
-    protected int columnCount = 1; //number of columns in row of controller (1 -> EDGEself(controller)EDGE, 2 -> EsCOLUMNe)
-    protected int rowCount = 1; //number of rows where controller is placed on "edge" row
-    protected int controllerPosition = 0; //column placement from left to right, where 0 = one from edge [ESCCCCE]
+    int columnCount = 1; //number of columns in row of controller (1 -> EDGEself(controller)EDGE, 2 -> EsCOLUMNe)
+    int rowCount = 1; //number of rows where controller is placed on "edge" row
+    int controllerPosition = 0; //column placement from left to right, where 0 = one from edge [ESCCCCE]
 
     public static final int predicateID = 10142156;
     public boolean isHeated = false;
-    int coilStateMeta = -1; //order is last in order dependent ops because I'm lazy
+    public int coilStateMeta = -1; //order is last in order dependent ops because I'm lazy
 
     public static final int energyValuesID = 10868607;
     int exposedBlocks = 0;
     //about 1000J/s on a sunny day for 1/m^2 of area
-    private int kiloJoules = 0;
+    int kiloJoules = 0;
+    int joulesBuffer = 0;
     int tickTimer = 0;
 
     public static final int fluidNameID = 12090539;
     String currentFluidName = "water";
+
+    //just initialized on formation
+    public IHeatingCoilBlockStats coilStats;
+
+    public int getColumnCount() { return columnCount; }
+    public int getRowCount() { return rowCount; }
+    public int getControllerPosition() { return controllerPosition; }
 
     public static final ArrayList<IBlockState> validContainerStates = new ArrayList<>();
 
@@ -93,7 +103,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
     public MetaTileEntityEvaporationPool(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.EVAPORATION_POOL);
-        this.recipeMapWorkable = new NoEnergyMultiblockRecipeLogic(this);
+        this.recipeMapWorkable = new EvapRecipeLogic(this);
 
         columnCount = 1; //minimum of one column for controller to be placed on
         controllerPosition = 0; //controller starts off furthest to left
@@ -106,11 +116,24 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     @Override
     public void invalidateStructure() {
         super.invalidateStructure();
+        SusyLog.logger.atError().log("Invalidating Structure");
+        this.isHeated = false;
+        this.coilStateMeta = -1;
+
         this.exposedBlocks = 0;
         this.kiloJoules = 0;
         this.tickTimer = 0;
-        this.isHeated = false;
-        this.coilStateMeta = -1;
+
+        this.writeCustomData(predicateID, (buf) -> {
+            buf.writeBoolean(isHeated);
+            buf.writeInt(coilStateMeta);
+        });
+
+        this.writeCustomData(energyValuesID, buf -> {
+            buf.writeInt(exposedBlocks);
+            buf.writeInt(kiloJoules);
+            buf.writeInt(tickTimer);
+        });
     }
 
     public boolean updateStructureDimensions() {
@@ -131,24 +154,32 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         int rDist = -1;
         int bDist = -1;
 
-        //find when container block section is exited left, right, anb back
-        for (int i = 1; i < maxColumns +1; i++) {
+        SusyLog.logger.atError().log("BEFORE CALCS lDist: " + lDist + ", rDist: " + rDist + ", bDist: " + bDist);
+
+        //find when container block section is exited left, right, and back
+        for (int i = 1; i < MAX_COLUMNS +1; i++) {
             if (lDist == -1 && !isContainerBlock(world, lPos, left)) lDist += i; //0 -> immediate left is !container
             if (rDist == -1 && !isContainerBlock(world, rPos, right)) rDist += i; //0 -> immediate left is !container
             if (bDist == -1 && !isContainerBlock(world, bPos, back)) bDist += i; //0 -> no container block section
             if (lDist != -1 && rDist != -1 && bDist != -1) break;
         }
 
-        //if l or r dist exceed max, or if bdist exceeds max/ is 0
-        if (lDist < 0 || rDist < 0 || bDist < 1) {
+        //if l or r dist exceed max, or if bdist exceeds max/ is 0, or if l and r dist individually don't exceed max, but produce a columnCount > max
+        if (lDist < 0 || rDist < 0 || bDist < 1 || lDist + rDist +1 > MAX_COLUMNS) {
             invalidateStructure();
             return false;
         }
+
+        SusyLog.logger.atError().log("AFTER CALCS lDist: " + lDist + ", rDist: " + rDist + ", bDist: " + bDist);
 
         //r,l dist = #container blocks in respective dir. +1 for controller block
         columnCount = rDist + lDist +1;
         rowCount = bDist; //"Depth" of container blocks
         controllerPosition = lDist; //if there are no blocks to the left controller is left most spot
+
+        SusyLog.logger.atFatal().log("I have just finished structure check" + getPos());
+        SusyLog.logger.atError().log("columnCount: " + columnCount + ", controllerPosition: " + controllerPosition + ", rowCount: " + rowCount);
+        SusyLog.logger.atError().log("isHeated: " + isHeated + ", kiloJoules: " + kiloJoules + ", tickTimer: " + tickTimer + ", coilStateMeta: " + coilStateMeta);
 
         //store the known dimensions for structure check
         this.writeCustomData(structuralDimensionsID, (buf) -> {
@@ -215,9 +246,17 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             'G' for ground blocks which must be some non coil block
          */
 
+        int currColCount = columnCount;
+        int currRowCount = rowCount;
+        int currContPos = controllerPosition;
+
         // return the default structure, even if there is no valid size found
         // this means auto-build will still work, and prevents terminal crashes.
         if (getWorld() != null) updateStructureDimensions();
+
+        coilStats = coilStateMeta > -1 ? HEATING_COILS.get(MetaBlocks.WIRE_COIL.getStateFromMeta(coilStateMeta)) : null;
+
+        if (structurePattern != null && currColCount == columnCount && currRowCount == rowCount && currContPos == controllerPosition) return structurePattern;
 
         // these can sometimes get set to 0 when loading the game, breaking JEI (Apparently; text from cleanroom impl)
         if (columnCount < 1) columnCount = 1;
@@ -432,90 +471,22 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
      */
     @Override
     public void checkStructurePattern() {
+        SusyLog.logger.atError().log("Checking structure pattern");
         // This is here so that it automatically updates the dimensions once a second if it isn't formed
         // hope this doesn't put too much of a toll on TPS - It really should not
-        if (!this.isStructureFormed()) {
+        if (!isStructureFormed() || structurePattern == null) {
             reinitializeStructurePattern();
         }
 
         super.checkStructurePattern();
+        SusyLog.logger.atError().log("Finished Super structure pattern check");
 
         //only do check every 4 seconds while structure is formed
-        if ((tickTimer/20 & 3) == 0 && structurePattern.getError() == null) {
+        if ((tickTimer / 20 & 3) == 0 && structurePattern != null && structurePattern.getError() == null) {
             handleCoilCheckResult(coilPatternCheck(false));
         }
 
-        if (structurePattern.getError() != null) {
-            SusyLog.logger.atError().log(structurePattern.getError().getErrorInfo());
-        }
-
-        /*
-        if (structurePattern == null || structurePattern.getError() == null) return; // don't continue if these values aren't valid
-        String errorString = structurePattern.getError().getErrorInfo();
-
-        boolean isCoilRelated = errorString.contains("Coil"); //if upcoming return is passed then isCoilRelated indicates if issue is coil or bed
-
-        //exit if current error is unrelated to relevant checks, or if checks have already been performed such that no action is needed. Do check every 5 seconds just in case caught in false loop as well
-        if (!isCoilRelated && !errorString.contains("bed")) return;
-
-        SusyLog.logger.atError().log(errorString);
-        SusyLog.logger.atError().log("contains Coil: " + isCoilRelated + " contains bed: " + errorString.contains("bed"));
-
-        //if errorPos is null this error is new and must have coords pulled
-        if (errorPos == null) {
-            //get coord info starting indices
-            int eX = errorString.lastIndexOf("x=");
-            int eY = errorString.lastIndexOf("y="); //would love to make this search more efficient, but apparently this method takes any passed argument as a new endpoint. Would be cool to set the start too
-            int eZ = errorString.lastIndexOf("z=");
-
-            SusyLog.logger.atError().log("eX substr pos: " + eX + " substr at eX: " + errorString.substring(eX) +  " eY substr pos: " + eY + " eZ substr pos: " + eZ);
-
-            //get coords from starting string starting indices (substr returns chars on [start, end))
-            eX = Integer.decode(errorString.substring(eX +2, eY -2));
-            eY = Integer.decode(errorString.substring(eY +2, eZ -2));
-            eZ = Integer.decode(errorString.substring(eZ +2, errorString.length() -3)); // z coord ends before }). at end of string
-
-            SusyLog.logger.atError().log("\neX: " + eX + " eY: " + eY + " eZ: " + eZ);
-
-            errorPos = new BlockPos.MutableBlockPos(eX, eY, eZ);
-        }
-
-        if (isCoilRelated) {
-            if (!isValidCoil(getWorld().getBlockState(errorPos))) return; //do not perform any logic if error is valid
-        } else {
-            if (!isValidGround(getWorld().getBlockState(errorPos))) return;
-        }
-
-        SusyLog.logger.atError().log("[0] invalidCenterPos: " + ((invalidCenterPos == null) ? "null" : invalidCenterPos.toString()) + ", initializedToNull: " + initializedToNull);
-
-        //if is coil issue and null is due to lack of initialization
-        if (invalidCenterPos == null && !initializedToNull) {
-            //initialize invalidCenterPos
-            handleCoilCheckResult(coilPatternCheck(!isCoilRelated));
-            SusyLog.logger.atError().log("[1] invalidCenterPos: " + ((invalidCenterPos == null) ? "null" : invalidCenterPos.toString()) + ", initializedToNull: " + initializedToNull);
-        }
-        //check again once initialization has been done, or handle case where no initialization was done in above conditional block
-        if (invalidCenterPos == null && initializedToNull) {
-            removeError(); //error coil related, but no error found when checked "manually"
-            return;
-        }
-
-        //if custom method found error in same location as reported error do not erase error
-        if (invalidCenterPos.equals(errorPos)) {
-            return;
-        } else if ((isCoilRelated && !isValidCoil(getWorld().getBlockState(invalidCenterPos))) || (!isCoilRelated && !isValidGround(getWorld().getBlockState(invalidCenterPos)))) {
-            return;
-        }
-
-        //if there is disagreement between reported error and found error check if manually checked position is still erroring
-        handleCoilCheckResult(coilPatternCheck(isCoilRelated)); //set next error pos as either
-        SusyLog.logger.atError().log("[2] invalidCenterPos: " + ((invalidCenterPos == null) ? "null" : invalidCenterPos.toString()) + ", initializedToNull: " + initializedToNull);
-
-        //remove error if no additional errors were found, otherwise repeating logic with newly located error
-        if (invalidCenterPos == null) {
-            removeError();
-        }
-         */
+        SusyLog.logger.atError().log("StructurePattern: " + (structurePattern == null ? "null" : (structurePattern.getError() == null ? "No Error" : structurePattern.getError().getErrorInfo())));
     }
 
     //for future reference
@@ -598,7 +569,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     @Override
     public void addInformation(ItemStack stack, World player, List<String> tooltip, boolean advanced) {
         if (TooltipHelper.isShiftDown()) {
-            tooltip.add(I18n.format("gregtech.machine.evaporation_pool.tooltip.structure_info", maxColumns, maxColumns) + "\n");
+            tooltip.add(I18n.format("gregtech.machine.evaporation_pool.tooltip.structure_info", MAX_COLUMNS, MAX_COLUMNS) + "\n");
         }
     }
 
@@ -655,51 +626,62 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         //ensure timer is non-negative by anding sign bit with 0
         tickTimer = tickTimer & 0b01111111111111111111111111111111;
 
-        //should skip/cost an extra tick the first time and then anywhere from 1-19 when rolling over. Determines exposedblocks
+        //should skip/cost an extra tick the first time and then anywhere from 1-19 extra when rolling over. Determines exposedblocks
         if (tickTimer % 20 == 0 && tickTimer != 0) {
-            //no sunlight heat generated when raining. May be incongruent with partial exposure to sun, but oh well
-            if (getWorld().isRainingAt(getPos().offset(getFrontFacing().getOpposite(), 2))) { exposedBlocks = 0; }
+            //no sunlight heat generated when raining or during night. May be incongruent with partial exposure to sun, but oh well
+            if (getWorld().isRainingAt(getPos().offset(getFrontFacing().getOpposite(), 2)) || !getWorld().isDaytime()) {
+                SusyLog.logger.atError().log("setting exposed blocks to 0");
+                exposedBlocks = 0;
+            }
             //checks for ow and skylight access to prevent beneath portal issues (-1 = the Nether, 0 = normal world)
             else if (getWorld().provider.getDimension() == 0) {
-                int row = tickTimer/columnCount; //going left to right, top to bottom checking skylight access.
-                int col = tickTimer - row * columnCount; //effectively doing ticktimer % colcount
-
+                int row = ((tickTimer/20) /columnCount) % rowCount; //going left to right, top to bottom checking skylight access.
+                int col = ((tickTimer/20) % columnCount) -1;
                 //places blockpos for skycheck into correct position. Row counts from furthest to closest (kinda inconsistent but oh well)
-                BlockPos.MutableBlockPos skyCheckPos = new BlockPos.MutableBlockPos(getPos().offset(getFrontFacing().getOpposite(), rowCount - row +1)); //place on correct row
+                BlockPos.MutableBlockPos skyCheckPos = new BlockPos.MutableBlockPos(getPos()); //place on correct row
+                skyCheckPos.move(getFrontFacing().getOpposite(), rowCount - row +1);
                 skyCheckPos.move(getFrontFacing().rotateY(), controllerPosition); //move to the furthest left
                 skyCheckPos.move(getFrontFacing().rotateYCCW(), col); //traverse down row
 
+                SusyLog.logger.atError().log("About to check sky access for block at pos: " + skyCheckPos);
+
                 //one exposed block found which can contribute to energy from sunlight
-                if (getWorld().canBlockSeeSky(skyCheckPos) && getWorld().isDaytime()) { ++exposedBlocks; }
+                if (!getWorld().canBlockSeeSky(skyCheckPos)) {
+                    SusyLog.logger.atError().log("Failed sky check at " + skyCheckPos + " ; " + getWorld().canBlockSeeSky(skyCheckPos) + " w/ exposedBlocks: " + exposedBlocks);
+                    exposedBlocks = Math.max(0, exposedBlocks -1);
+                }
+                else if (exposedBlocks < rowCount * columnCount) {
+                    SusyLog.logger.atError().log("Passed sky check at " + skyCheckPos + " ; " + getWorld().canBlockSeeSky(skyCheckPos) + " w/ exposedBlocks: " + exposedBlocks);
+                    ++exposedBlocks;
+                    SusyLog.logger.atError().log("exposedBlock: " + exposedBlocks);
+                }
             }
 
         } //finish once a ~second check
 
-        /*
-            if we assume a solar boiler to have an approximately 1m^2 "collecting" surface, and take the hp to be less inefficient,
-            one can approximate the J to EU conversion via 18L/t -> 9EU/t -> 180EU/s -> 1000J/180EU ~= 6J in one EU.
-            Assuming solar actually gets slightly less sunlight than 1m^2 conversion may be ~= 5, but potential inefficiencies
-            make it unclear the specific amount. Just going to round to one sig fig and leave it at 10J -> 1EU
-         */
-
         if (tickTimer % 100 == 0) {
             SusyLog.logger.atFatal().log("I am still alive at " + getPos());
             SusyLog.logger.atError().log("columnCount: " + columnCount + ", controllerPosition: " + controllerPosition + ", rowCount: " + rowCount);
-            SusyLog.logger.atError().log("isHeated: " + isHeated + ", kiloJoules: " + kiloJoules + ", tickTimer: " + tickTimer + ", coilStateMeta: " + coilStateMeta);
+            SusyLog.logger.atError().log("isHeated: " + isHeated + ", exposedBlocks: " + exposedBlocks + ", kiloJoules: " + kiloJoules + ", joulesBuffer: " + joulesBuffer + ", tickTimer: " + tickTimer + ", coilStateMeta: " + coilStateMeta);
         }
+
+        inputEnergy(exposedBlocks * 50); //1kJ/s /m^2 -> 50J/t
 
         if (this.isActive()) {
             //get energy from sunlight when attempting to run recipe
-            if (tickTimer % 20 == 0) kiloJoules += exposedBlocks; //1kJ/s /m^2
 
-            //if world is clientside do custom rendering
+            //if world is clientside (remote from server) do custom rendering
             if (getWorld().isRemote) {
                 evaporationParticles();
             }
+        }
 
-
-
-
+        //convert joules in buffer to kJ
+        if (joulesBuffer >= 1000) {
+            int tempBuffer = joulesBuffer;
+            joulesBuffer = 0;
+            //if energy was not stored into kiloJoules, place everything back into buffer manually
+            if (!inputEnergy(tempBuffer)) joulesBuffer = tempBuffer;
         }
 
         ++tickTimer;
@@ -829,12 +811,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         //place pos in closest leftmost corner. For some reason getPos rounds X pos of controller up and Z pos of controller down
         final BlockPos pos = this.getPos().offset(left, controllerPosition +1).offset(back, 2);
 
-        if (tickTimer % 100 == 0) {
-            SusyLog.logger.atFatal().log("I am about to generate particles and am at " + getPos());
-            SusyLog.logger.atError().log("columnCount: " + columnCount + ", controllerPosition: " + controllerPosition + ", rowCount: " + rowCount);
-            SusyLog.logger.atError().log("isHeated: " + isHeated + ", kiloJoules: " + kiloJoules + ", tickTimer: " + tickTimer + ", coilStateMeta: " + coilStateMeta);
-        }
-
         //Spawn number of particles on range [1, 3 * colCount * rowCount/9] (~3 particles for every 3x3 = 9m^2)
         for (int i = 0; i < columnCount * rowCount/3; i++) {
             //either single line along x axis intersects all rows, or it intersects all columns. Same applies to z axis. getXOffset indicates +, -, or "0" direction of facing for given axis
@@ -868,5 +844,52 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
     public int getKiloJoules() {
         return kiloJoules;
+    }
+
+    public int getJoulesBuffer() {
+        return joulesBuffer;
+    }
+
+    public boolean getIsHeated() {
+        return isHeated;
+    }
+
+    public void setKiloJoules(int kiloJoules) {
+        this.kiloJoules = kiloJoules;
+    }
+
+    public void setJoulesBuffer(int joulesBuffer) {
+        this.joulesBuffer = joulesBuffer;
+    }
+
+    public void setIsHeated(boolean isHeated) {
+        this.isHeated = isHeated;
+    }
+
+    public boolean inputEnergy(int joules) {
+        int kJ = joules/1000;
+        joules -= kJ * 1000;
+        //only fill buffer if there is space
+        if (Integer.MAX_VALUE - joulesBuffer >= joules) joulesBuffer += joules;
+        //if there isn't space to store joules skip the storage step
+        if (Integer.MAX_VALUE - getKiloJoules() < kJ) return false;
+
+        //store kJ
+        setKiloJoules(getKiloJoules() + kJ);
+        return true;
+    }
+
+    public int calcMaxSteps(int jStepSize) {
+        //do in two parts to ensure no overflow occurs when multiplied by one thousand
+        int upperKJtoJ = (getKiloJoules() & 0b01111111111100000000000000000000); //remaining upper bits
+        int lowerKJtoJ = (getKiloJoules() & 0b00000000000011111111111111111111); //equivalent to dividing max size by 1024
+        int stepCount = (upperKJtoJ * 1000)/jStepSize;
+        stepCount += (lowerKJtoJ * 1000)/jStepSize;
+
+        //catch case where sum of remainders yields an additional step
+        stepCount += ((upperKJtoJ *1000) % jStepSize + (lowerKJtoJ * 1000) % jStepSize)/jStepSize;
+
+        stepCount += joulesBuffer/jStepSize;
+        return stepCount;
     }
 }
