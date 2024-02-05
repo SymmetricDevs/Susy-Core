@@ -623,6 +623,14 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     public void update() {
         super.update();
 
+        if(this.getWorld().isRemote) {
+            if (this.isActive()) {
+                //if world is clientside (remote from server) do custom rendering
+                evaporationParticles();
+            }
+            return;
+        }
+
         //ensure timer is non-negative by anding sign bit with 0
         tickTimer = tickTimer & 0b01111111111111111111111111111111;
 
@@ -635,10 +643,10 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             }
             //checks for ow and skylight access to prevent beneath portal issues (-1 = the Nether, 0 = normal world)
             else if (getWorld().provider.getDimension() == 0) {
-                int row = ((tickTimer/20) /columnCount) % rowCount; //going left to right, top to bottom checking skylight access.
-                int col = ((tickTimer/20) % columnCount) -1;
+                int row = ((tickTimer%20) /columnCount) % rowCount; //going left to right, top to bottom checking skylight access.
+                int col = ((tickTimer%20) % columnCount) - 1;
                 //places blockpos for skycheck into correct position. Row counts from furthest to closest (kinda inconsistent but oh well)
-                BlockPos.MutableBlockPos skyCheckPos = new BlockPos.MutableBlockPos(getPos()); //place on correct row
+                BlockPos.MutableBlockPos skyCheckPos = new BlockPos.MutableBlockPos(getPos().offset(EnumFacing.UP, 2)); //place on correct row
                 skyCheckPos.move(getFrontFacing().getOpposite(), rowCount - row +1);
                 skyCheckPos.move(getFrontFacing().rotateY(), controllerPosition); //move to the furthest left
                 skyCheckPos.move(getFrontFacing().rotateYCCW(), col); //traverse down row
@@ -666,15 +674,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         }
 
         inputEnergy(exposedBlocks * 50); //1kJ/s /m^2 -> 50J/t
-
-        if (this.isActive()) {
-            //get energy from sunlight when attempting to run recipe
-
-            //if world is clientside (remote from server) do custom rendering
-            if (getWorld().isRemote) {
-                evaporationParticles();
-            }
-        }
 
         //convert joules in buffer to kJ
         if (joulesBuffer >= 1000) {
