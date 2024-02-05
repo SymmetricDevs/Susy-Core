@@ -224,7 +224,7 @@ gregtech.machine.railroad_engineering_station.name=Railroad Engineering Station
 gregtech.machine.railroad_engineering_station.tooltip=Place Immersive Railroading Tracks in the middle to form the multiblock\nThe concrete below the tracks can be substituted with any block, including pipes or air
 
 gregtech.machine.evaporation_pool.name=Evaporation Pool
-gregtech.machine.evaporation_pool.tooltip.structure_info=Evaporation Pools can be formed with any internal dimensions ranging from a 1x1 to a %dx%d, even if it is non square. To form a valid heated evaporation pool, coils should be placed following the pattern shown in the preview.
+gregtech.machine.evaporation_pool.tooltip.structure_info=Evaporation Pools can be formed with any internal dimensions ranging from a 1x1 to a %dx%d, even if it is non square. To form a valid heated evaporation pool, coils should be placed following the pattern shown in the preview. For a more detailed explanation, view the info tab in jei.
 gregtech.top.evaporation_pool_heated_preface=Coil Pattern:
 gregtech.top.evaporation_pool_is_heated=VALID; May be heated.
 gregtech.top.evaporation_pool_not_heated=INVALID; Will not heat.
