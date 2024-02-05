@@ -1,16 +1,12 @@
 package supersymmetry.api.capability.impl;
 
 import gregtech.api.GTValues;
-import gregtech.api.capability.IEnergyContainer;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
-
-import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.logic.OverclockingLogic;
 import gregtech.api.recipes.recipeproperties.IRecipePropertyStorage;
 import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityEvaporationPool;
 
 import javax.annotation.Nonnull;
-import java.util.function.Supplier;
 
 import static supersymmetry.api.util.SuSyUtility.JOULES_PER_EU;
 
