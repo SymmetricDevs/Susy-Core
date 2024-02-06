@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
 
 public class NoEnergyMultiblockRecipeLogic extends MultiblockRecipeLogic {
     public NoEnergyMultiblockRecipeLogic(RecipeMapMultiblockController tileEntity) {
-        super(tileEntity);
+            super(tileEntity);
     }
 
     protected long getEnergyInputPerSecond() {

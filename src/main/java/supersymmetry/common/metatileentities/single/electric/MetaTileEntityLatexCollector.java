@@ -97,6 +97,44 @@ public class MetaTileEntityLatexCollector extends TieredMetaTileEntity {
     public void update() {
         super.update();
 
+        /*
+        //if ~client world skip update
+        if (this.getWorld().isRemote) return;
+
+        //if rubber log and energy
+        if (this.hasRubberLog && this.drainEnergy(true)) {
+            //inspect tank, amount, and capacity
+            IFluidTank tank = this.exportFluids.getTankAt(0);
+            assert tank != null;
+
+            int stored = tank.getFluidAmount();
+            int capacity = tank.getCapacity();
+
+            //collection
+            if (stored < capacity) {
+                //is pseudo full if full collection amount can't be inserted
+                boolean isOutputFull = stored + this.latexCollectionAmount >= capacity;
+
+                //handle cases
+                if (isOutputFull) {
+                    tank.fill(SusyMaterials.Latex.getFluid(capacity - stored), true);
+                } else {
+                    tank.fill(SusyMaterials.Latex.getFluid((int) this.latexCollectionAmount), true);
+                }
+
+                //take energy (steam)
+                this.drainEnergy(false);
+            }
+        }
+
+        //attempt pumping every 5 ticks
+        if (this.getOffsetTimer() % 5L == 0L) {
+            if(this.getOutputFacingFluids() != null){
+                this.pushFluidsIntoNearbyHandlers(new EnumFacing[]{this.getOutputFacingFluids()});
+            }
+            this.fillContainerFromInternalTank();
+        }*/
+
         if (!this.getWorld().isRemote && this.energyContainer.getEnergyStored() >= this.euT && this.numberRubberLogs != 0) {
             FluidStack latexStack = SusyMaterials.Latex.getFluid((int) this.latexCollectionAmount * this.numberRubberLogs);
             NonNullList<FluidStack> fluidStacks = NonNullList.create();
