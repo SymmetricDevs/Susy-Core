@@ -33,7 +33,10 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.*;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -55,76 +58,7 @@ import java.util.function.Supplier;
 import static gregtech.api.GregTechAPI.HEATING_COILS;
 import static supersymmetry.common.metatileentities.SuSyMetaTileEntities.EVAPORATION_POOL_ID;
 
-public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController {
-
-    //reinventing the wheel
-    class BitArray {
-        int[] intArray;
-
-        //assumes little endian [> index -> > significance]
-        public BitArray(byte[] byteArray) {
-            int bitCount = 0;
-            bitCount += (byteArray[0]);
-            bitCount += (byteArray[1] << 8);
-            bitCount += (byteArray[2] << 16);
-            bitCount += (byteArray[3] << 24);
-
-            int byteCount = ((bitCount >> 3) + (((bitCount & 7) * -1) >>> 31) +4);
-            intArray = new int[(bitCount >> 5) + (((bitCount & 31) * -1) >>> 31) +1];
-            intArray[0] = bitCount;
-
-            for (int i = 4; i < byteCount; ++i) {
-                //all ints in array start as zero; bits are little endian and thus must be shifted by 8 "left" index % 4 times
-                intArray[i/4] += byteArray[i] << (8 * (i & 3));
-            }
-        }
-
-        public BitArray(int bitCount) {
-            //(~(i * -1)) >>> 31
-            intArray = new int[(bitCount >> 5) + (((bitCount & 31) * -1) >> 31) +1];
-            intArray[0] = bitCount;
-        }
-
-        public BitArray(int bitCount, boolean initialState) {
-            //0 * -1 is the only value in which the sign bit is not swapped after-wards and thus >>> 31 is 0 for 0
-            intArray = new int[(bitCount >> 5) + (((bitCount & 31) * -1) >>> 31) +1];
-            intArray[0] = bitCount;
-            SusyLog.logger.atError().log("number of ints: " + (bitCount >> 5) + (((bitCount & 31) * -1) >>> 31) + " with size: " + bitCount + "; size limit: " + (bitCount >> 5) +1);
-            for (int i = 1; initialState && (i < (bitCount >> 5) +2); ++i) {
-                intArray[i] = 0xFFFFFFFF; //set all to true if condition is true
-            }
-        }
-
-        //index = 0 is least sig, with index = 31 as most sig.
-        public boolean getBit(int index) {
-            //index into integers based on index's multiple of 32 (index >> 5), then discard all less sig bits and mask all more sig bits. If result is 1 return 1, else 0
-            return ((intArray[(index >> 5) +1] >> (index & 31)) & 1) == 1;
-        }
-
-        public void setBit(int index, boolean value) {
-            int entry = intArray[(index >> 5) +1];
-            //set appropriate integer equal to itself with single target bit at index masked, then or passed value into spot
-            intArray[(index >> 5) +1] = entry & ~(1 << (index & 31)) | ((value ? 1 : 0) << (index & 31));
-        }
-
-        //uses little endian [> index -> > significance]
-        public byte[] toByteArray() {
-            int bitCount = intArray[0];
-            int byteCount = ((bitCount >> 3) + (((bitCount & 7) * -1) >>> 31) +4);
-            byte[] byteArray = new byte[byteCount];
-
-            byteArray[0] = (byte) (bitCount & 0x00_00_00_FF);
-            byteArray[1] = (byte) (bitCount & 0x00_00_FF_00);
-            byteArray[2] = (byte) (bitCount & 0x00_FF_00_00);
-            byteArray[3] = (byte) (bitCount & 0xFF_00_00_00);
-
-            for (int i = 4; i < byteCount; ++i) {
-                byteArray[i] = (byte) (intArray[i/4] & (0x00_00_00_FF << (8 * (i & 3))) );
-            }
-
-            return byteArray;
-        }
-    }
+public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController{
 
     /*
         For future reference: "((IGregTechTileEntity)world.getTileEntity(pos)).getMetaTileEntity() instanceof IMultiblockAbilityPart"
@@ -144,8 +78,8 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
     public static final int energyValuesID = 10868607;
     int exposedBlocks = 0;
-    BitArray wasExposed; //indexed with row*col + col with row = 0 being furthest and col 0 being leftmost when looking at controller
-    int kiloJoules = 0; //about 1000J/s on a sunny day for 1/m^2 of area
+    //about 1000J/s on a sunny day for 1/m^2 of area
+    int kiloJoules = 0;
     int joulesBuffer = 0;
     int tickTimer = 0;
 
@@ -187,7 +121,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         this.coilStateMeta = -1;
 
         this.exposedBlocks = 0;
-        this.wasExposed = new BitArray(0);
         this.kiloJoules = 0;
         this.tickTimer = 0;
 
@@ -198,7 +131,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
         this.writeCustomData(energyValuesID, buf -> {
             buf.writeInt(exposedBlocks);
-            buf.writeByteArray(wasExposed.toByteArray());
             buf.writeInt(kiloJoules);
             buf.writeInt(tickTimer);
         });
@@ -324,14 +256,11 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
         coilStats = coilStateMeta > -1 ? HEATING_COILS.get(MetaBlocks.WIRE_COIL.getStateFromMeta(coilStateMeta)) : null;
 
+        if (structurePattern != null && currColCount == columnCount && currRowCount == rowCount && currContPos == controllerPosition) return structurePattern;
+
         // these can sometimes get set to 0 when loading the game, breaking JEI (Apparently; text from cleanroom impl)
         if (columnCount < 1) columnCount = 1;
         if (rowCount < 1) rowCount = 1;
-
-        //Unforgiving (deducts from total even on previously unexposed blocks) on initial pass to avoid incongruency with exposedBlocks. Should only happen first time being formed
-        if (wasExposed == null) wasExposed = new BitArray(columnCount * rowCount, true);
-
-        if (structurePattern != null && currColCount == columnCount && currRowCount == rowCount && currContPos == controllerPosition) return structurePattern;
 
         //abstracted away construction of center rows for later use
         String[] containerRows = centerRowsPattern();
@@ -699,19 +628,11 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                 //if world is clientside (remote from server) do custom rendering
                 evaporationParticles();
             }
-            return; //dont do logic on client
+            return;
         }
-
-        //dont do processing for unformed blocks
-        if (structurePattern.getError() != null) return;
 
         //ensure timer is non-negative by anding sign bit with 0
         tickTimer = tickTimer & 0b01111111111111111111111111111111;
-
-        final int CUBE_HEAT_CAPACITY = 100; //kJ/m^3
-        if (getKiloJoules() > CUBE_HEAT_CAPACITY * columnCount * rowCount) {
-            setKiloJoules(CUBE_HEAT_CAPACITY * columnCount * rowCount);
-        }
 
         //should skip/cost an extra tick the first time and then anywhere from 1-19 extra when rolling over. Determines exposedblocks
         if (tickTimer % 20 == 0 && tickTimer != 0) {
@@ -720,34 +641,26 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                 SusyLog.logger.atError().log("setting exposed blocks to 0");
                 exposedBlocks = 0;
             }
-
             //checks for ow and skylight access to prevent beneath portal issues (-1 = the Nether, 0 = normal world)
             else if (getWorld().provider.getDimension() == 0) {
-                //tickTimer is always multiple of 20 at this point, so division by 20 yields proper counter. You can treat (tickTimer/20) as 'i'
-                int row = ((tickTimer /20) /columnCount) % rowCount; //going left to right, top to bottom checking skylight access.
-                int col = ((tickTimer /20) % columnCount);
-                SusyLog.logger.atError().log("Back: " + getFrontFacing().getOpposite() + ", Left: " + getFrontFacing().rotateY() + ", Right: " + getFrontFacing().rotateYCCW() + "; row: " + row + ", col: " + col);
+                int row = ((tickTimer%20) /columnCount) % rowCount; //going left to right, top to bottom checking skylight access.
+                int col = ((tickTimer%20) % columnCount) - 1;
                 //places blockpos for skycheck into correct position. Row counts from furthest to closest (kinda inconsistent but oh well)
-                BlockPos.MutableBlockPos skyCheckPos = new BlockPos.MutableBlockPos(getPos().offset(EnumFacing.UP, 2));
+                BlockPos.MutableBlockPos skyCheckPos = new BlockPos.MutableBlockPos(getPos().offset(EnumFacing.UP, 2)); //place on correct row
                 skyCheckPos.move(getFrontFacing().getOpposite(), rowCount - row +1);
                 skyCheckPos.move(getFrontFacing().rotateY(), controllerPosition); //move to the furthest left
                 skyCheckPos.move(getFrontFacing().rotateYCCW(), col); //traverse down row
 
                 SusyLog.logger.atError().log("About to check sky access for block at pos: " + skyCheckPos);
 
-                //Perform skylight check
+                //one exposed block found which can contribute to energy from sunlight
                 if (!getWorld().canBlockSeeSky(skyCheckPos)) {
                     SusyLog.logger.atError().log("Failed sky check at " + skyCheckPos + " ; " + getWorld().canBlockSeeSky(skyCheckPos) + " w/ exposedBlocks: " + exposedBlocks);
-                    //only decrement exposedBlocks if previously exposed block is found to no longer be exposed.
-                    if (wasExposed.getBit(row*col + col)) {
-                        exposedBlocks = Math.max(0, exposedBlocks -1);
-                        wasExposed.setBit(row*col + col, false);
-                    }
+                    exposedBlocks = Math.max(0, exposedBlocks -1);
                 }
-                else {
+                else if (exposedBlocks < rowCount * columnCount) {
                     SusyLog.logger.atError().log("Passed sky check at " + skyCheckPos + " ; " + getWorld().canBlockSeeSky(skyCheckPos) + " w/ exposedBlocks: " + exposedBlocks);
-                    if (exposedBlocks < rowCount * columnCount) ++exposedBlocks;
-                    wasExposed.setBit(row*col + col, true);
+                    ++exposedBlocks;
                     SusyLog.logger.atError().log("exposedBlock: " + exposedBlocks);
                 }
             }
@@ -775,7 +688,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         //store relevant values
         this.writeCustomData(energyValuesID, buf -> {
             buf.writeInt(exposedBlocks);
-            buf.writeByteArray(wasExposed == null ? new BitArray(0).toByteArray() : wasExposed.toByteArray());
             buf.writeInt(kiloJoules);
             buf.writeInt(tickTimer);
         });
@@ -789,7 +701,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         data.setInteger("controllerPosition", this.controllerPosition);
         data.setBoolean("isHeated", this.isHeated);
         data.setInteger("exposedBlocks", this.exposedBlocks);
-        data.setByteArray("wasExposed", this.wasExposed == null ? new BitArray(0).toByteArray() : this.wasExposed.toByteArray());
         data.setInteger("kiloJoules", this.kiloJoules);
         data.setInteger("tickTimer", this.tickTimer);
         data.setInteger("coilStateMeta", this.coilStateMeta);
@@ -814,9 +725,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         }
         if (data.hasKey("exposedBlocks")) {
             this.exposedBlocks = data.getInteger("exposedBlocks");
-        }
-        if (data.hasKey("wasExposed")) {
-            this.wasExposed = new BitArray(data.getByteArray("wasExposed"));
         }
         if (data.hasKey("kiloJoules")) {
             this.kiloJoules = data.getInteger("kiloJoules");
@@ -848,7 +756,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         buf.writeInt(this.controllerPosition);
         buf.writeBoolean(this.isHeated);
         buf.writeInt(this.exposedBlocks);
-        buf.writeByteArray(this.wasExposed == null ? new BitArray(0).toByteArray() : this.wasExposed.toByteArray());
         buf.writeInt(this.kiloJoules);
         buf.writeInt(this.tickTimer);
         buf.writeInt(this.coilStateMeta);
@@ -863,7 +770,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         this.controllerPosition = buf.readInt();
         this.isHeated = buf.readBoolean();
         this.exposedBlocks = buf.readInt();
-        this.wasExposed = new BitArray(buf.readByteArray());
         this.kiloJoules = buf.readInt();
         this.tickTimer = buf.readInt();
         this.coilStateMeta = buf.readInt();
@@ -884,7 +790,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             this.coilStateMeta = buf.readInt();
         } else if (dataId == energyValuesID) {
             this.exposedBlocks = buf.readInt();
-            this.wasExposed = new BitArray(buf.readByteArray());
             this.kiloJoules = buf.readInt();
             this.tickTimer = buf.readInt();
         } else if (dataId == fluidNameID) {
@@ -963,7 +868,10 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     public boolean inputEnergy(int joules) {
         int kJ = joules/1000;
         joules -= kJ * 1000;
-        joulesBuffer += joules;
+        //only fill buffer if there is space
+        if (Integer.MAX_VALUE - joulesBuffer >= joules) joulesBuffer += joules;
+        //if there isn't space to store joules skip the storage step
+        if (Integer.MAX_VALUE - getKiloJoules() < kJ) return false;
 
         //store kJ
         setKiloJoules(getKiloJoules() + kJ);
@@ -971,13 +879,16 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     }
 
     public int calcMaxSteps(int jStepSize) {
-        int stepCount = (getKiloJoules() * 1000)/jStepSize;
-        int remainder = getKiloJoules() * 1000 - stepCount * jStepSize;
+        //do in two parts to ensure no overflow occurs when multiplied by one thousand
+        int upperKJtoJ = (getKiloJoules() & 0b01111111111100000000000000000000); //remaining upper bits
+        int lowerKJtoJ = (getKiloJoules() & 0b00000000000011111111111111111111); //equivalent to dividing max size by 1024
+        int stepCount = (upperKJtoJ * 1000)/jStepSize;
+        stepCount += (lowerKJtoJ * 1000)/jStepSize;
 
-        if (joulesBuffer > remainder) ++stepCount;
-        else remainder = 0;
+        //catch case where sum of remainders yields an additional step
+        stepCount += ((upperKJtoJ *1000) % jStepSize + (lowerKJtoJ * 1000) % jStepSize)/jStepSize;
 
-        stepCount += (joulesBuffer - remainder)/jStepSize;
+        stepCount += joulesBuffer/jStepSize;
         return stepCount;
     }
 }
