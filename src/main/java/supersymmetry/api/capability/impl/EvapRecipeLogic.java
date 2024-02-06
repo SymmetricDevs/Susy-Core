@@ -35,7 +35,6 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
 
         if (this.canRecipeProgress && maxSteps > 0) {
             hasNotEnoughEnergy = false;
-
             int actualSteps =  Math.min(this.maxProgressTime / MAX_STEP_FRACTION, maxSteps);
             progressTime += actualSteps;
 

@@ -55,7 +55,7 @@ import java.util.function.Supplier;
 import static gregtech.api.GregTechAPI.HEATING_COILS;
 import static supersymmetry.common.metatileentities.SuSyMetaTileEntities.EVAPORATION_POOL_ID;
 
-public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController{
+public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController {
 
     //reinventing the wheel
     class BitArray {
@@ -699,7 +699,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                 //if world is clientside (remote from server) do custom rendering
                 evaporationParticles();
             }
-
             return; //dont do logic on client
         }
 
@@ -722,7 +721,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                 exposedBlocks = 0;
             }
 
-
             //checks for ow and skylight access to prevent beneath portal issues (-1 = the Nether, 0 = normal world)
             else if (getWorld().provider.getDimension() == 0) {
                 //tickTimer is always multiple of 20 at this point, so division by 20 yields proper counter. You can treat (tickTimer/20) as 'i'
@@ -736,7 +734,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                 skyCheckPos.move(getFrontFacing().rotateYCCW(), col); //traverse down row
 
                 SusyLog.logger.atError().log("About to check sky access for block at pos: " + skyCheckPos);
-
 
                 //Perform skylight check
                 if (!getWorld().canBlockSeeSky(skyCheckPos)) {
