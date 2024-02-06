@@ -15,8 +15,7 @@ import gregtech.api.gui.widgets.*;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.recipes.ModHandler;
-import gregtech.api.recipes.Recipe;
-import gregtech.api.unification.material.Material;
+import gregtech.api.util.GTTransferUtils;
 import gregtech.api.util.GTUtility;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.renderer.texture.cube.SimpleSidedCubeRenderer.RenderSide;
@@ -24,7 +23,6 @@ import java.util.List;
 
 import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -37,6 +35,7 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fml.relauncher.Side;
@@ -44,7 +43,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import supersymmetry.api.recipes.properties.PseudoMultiProperty;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.materials.SusyMaterials;
 
@@ -55,8 +53,8 @@ public class MetaTileEntitySteamLatexCollector extends MetaTileEntity {
     private final int tankSize = 16000;
     private final long latexCollectionAmount = 3L;
     private boolean hasRubberLog;
-    private boolean hasResinLog;
     private EnumFacing outputFacingFluids;
+
 
     public MetaTileEntitySteamLatexCollector(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
@@ -141,7 +139,7 @@ public class MetaTileEntitySteamLatexCollector extends MetaTileEntity {
         if (this.getWorld().isRemote) return;
 
         //if rubber log and energy (steam)
-        if ( (this.hasRubberLog || this.hasResinLog) && this.drainEnergy(true)) {
+        if (this.hasRubberLog && this.drainEnergy(true)) {
             //inspect tank, amount, and capacity
             IFluidTank tank = this.exportFluids.getTankAt(0);
             assert tank != null;
@@ -154,20 +152,15 @@ public class MetaTileEntitySteamLatexCollector extends MetaTileEntity {
                 //is pseudo full if full collection amount can't be inserted
                 boolean isOutputFull = stored + this.latexCollectionAmount >= capacity;
 
-                Material fluidCreated = SusyMaterials.Latex;//(hasRubberLog) ? (SusyMaterials.Latex) : (SusyMaterials.Resin);
+                //handle cases
+                if (isOutputFull) {
+                    tank.fill(SusyMaterials.Latex.getFluid(capacity - stored), true);
+                } else {
+                    tank.fill(SusyMaterials.Latex.getFluid((int) this.latexCollectionAmount), true);
+                }
 
-                //if fluid in tank is the same as fluid attempting to be pushed, or if tank is empty, push
-                //if (tank.getFluidAmount() == 0 || tank.getFluid().getFluid() == fluidCreated.getFluid() ) {
-                    //handle cases
-                    if (isOutputFull) {
-                        tank.fill(fluidCreated.getFluid(capacity - stored), true);
-                    } else {
-                        tank.fill(fluidCreated.getFluid((int) this.latexCollectionAmount), true);
-                    }
-
-                    //take energy (steam)
-                    this.drainEnergy(false);
-                //}
+                //take energy (steam)
+                this.drainEnergy(false);
             }
         }
 
