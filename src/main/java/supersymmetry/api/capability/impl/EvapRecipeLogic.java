@@ -23,7 +23,7 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
     @Override
     protected void updateRecipeProgress() {
         //if null then no heating can be done, otherwise add joules according to coil values and energy available
-        if (pool.coilStats != null) {
+        if (pool.coilStats != null && pool.getIsHeated()) {
             int coilHeat = pool.coilStats.getCoilTemperature();
             //assumes specific heat of 1J/(g*delta temp) and perfect heat transfer on one face of the coil for 1/6 of total delta temp. Uses mass as a multiplier and 1/4 because its not a solid block of material
             int heatingJoules = (coilHeat/HEAT_DENOMINATOR) * ((int)pool.coilStats.getMaterial().getMass()/4) * ( ((pool.getColumnCount()/2 +1) * pool.getRowCount()) + pool.getColumnCount()/2);
@@ -35,21 +35,23 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
 
         if (this.canRecipeProgress && maxSteps > 0) {
             hasNotEnoughEnergy = false;
-            int actualSteps =  Math.min(this.maxProgressTime >> 2, maxSteps);
+            int actualSteps =  Math.min(this.maxProgressTime / MAX_STEP_FRACTION, maxSteps);
             progressTime += actualSteps;
 
-            int resultingEnergy;
-
-            //take energy from buffer first to avoid muddying kJ calculations
-            if (pool.getJoulesBuffer()/(recipeEUt * JOULES_PER_EU) > 0) {
-                resultingEnergy =  pool.getJoulesBuffer()/(recipeEUt * JOULES_PER_EU);
-                actualSteps -= resultingEnergy;
-                resultingEnergy = pool.getJoulesBuffer() - (resultingEnergy * (recipeEUt * JOULES_PER_EU));
-                pool.setJoulesBuffer(resultingEnergy);
+            int energyToDrain = actualSteps * recipeEUt * JOULES_PER_EU;
+            //attempt to cleanly drain joules
+            if (energyToDrain % 1000 <= pool.getJoulesBuffer()) {
+                pool.setJoulesBuffer(pool.getJoulesBuffer() - (energyToDrain % 1000));
+            } else {
+                //drain extra kJ to cover joule cost
+                pool.setKiloJoules(pool.getKiloJoules() -1);
             }
 
-            resultingEnergy = pool.getKiloJoules() - (recipeEUt * JOULES_PER_EU * actualSteps)/1000 - (recipeEUt * JOULES_PER_EU * actualSteps % 1000 == 0 ? 0 : 1);
-            pool.setKiloJoules(resultingEnergy);
+            //casts off remainder which joulesBuffer covered and converts to kJ
+            energyToDrain = energyToDrain/1000;
+
+            //do draining
+            pool.setKiloJoules(pool.getKiloJoules() - energyToDrain);
 
             if (this.progressTime > this.maxProgressTime) completeRecipe();
         } else {
