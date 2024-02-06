@@ -256,6 +256,7 @@ gregtech.machine.drone_pad.name=Drone Pad
 gregtech.recipe.plasma_requirement=Requires plasma: %s
 gregtech.recipe.catalyst=Catalyst: %s %s
 gregtech.recipe.blocks=Blocks: %s
+gregtech.recipe.evaporation=Required Energy: %d kJ
 
 # Latex Collector
 gregtech.machine.latex_collector.steam=Needs Steam!
