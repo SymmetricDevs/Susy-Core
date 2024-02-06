@@ -18,6 +18,7 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
     public EvapRecipeLogic(MetaTileEntityEvaporationPool tileEntity) {
         super(tileEntity);
         pool = tileEntity;
+        
     }
 
     @Override

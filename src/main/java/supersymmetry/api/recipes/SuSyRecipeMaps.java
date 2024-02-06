@@ -249,7 +249,7 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.ARC);
 
-    public static final RecipeMap<NoEnergyRecipeBuilder> EVAPORATION_POOL = new RecipeMap<>("evaporation_pool", 2, 4, 1, 1, new NoEnergyRecipeBuilder(), false)
+    public static final RecipeMap<EvaporationPoolRecipeBuilder> EVAPORATION_POOL = new RecipeMap<>("evaporation_pool", 2, 4, 1, 1, new EvaporationPoolRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_SIFT, ProgressWidget.MoveType.VERTICAL)
             .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
