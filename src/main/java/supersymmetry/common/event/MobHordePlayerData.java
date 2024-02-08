@@ -33,7 +33,7 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
     @Override
     public void deserializeNBT(NBTTagCompound nbt) {
         ticksUntilCanSpawn = nbt.getInteger("ticksUntilCanSpawn");
-        invasionTimers = nbt.getIntArray("invasionTimers");
+        invasionTimers = Arrays.copyOf(nbt.getIntArray("invasionTimers"), MobHordeEvent.EVENTS.size());
     }
 
     public void update(EntityPlayerMP player) {
