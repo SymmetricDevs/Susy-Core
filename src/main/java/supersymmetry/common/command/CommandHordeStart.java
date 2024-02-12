@@ -52,7 +52,7 @@ public class CommandHordeStart extends CommandBase {
                 }
 
                 if (!event.canRun(player)) {
-                    throw new CommandException("susy.command.horde.start.unable_to_run");
+                    throw new CommandException("susy.command.horde.start.unable_to_run", name);
                 }
 
                 if (playerData.hasActiveInvasion) {

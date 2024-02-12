@@ -127,7 +127,7 @@ public class MobHordeEvent {
             int z = (int) (player.posZ + 15 * Math.sin(angle));
 
             mob.setPosition(x, player.posY - 5, z);
-            while (!mob.getCanSpawnHere() || !mob.isNotColliding() && mob.posY < player.posY + 12) {
+            while ((!mob.getCanSpawnHere() || !mob.isNotColliding()) && mob.posY < player.posY + 12) {
                 mob.setPosition(x, mob.posY + 1, z);
             }
             if (mob.posY < player.posY + 12) {
