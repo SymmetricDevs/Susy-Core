@@ -6,11 +6,16 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.event.MobHordeEvent;
+import supersymmetry.common.event.MobHordePlayerData;
+import supersymmetry.common.event.MobHordeWorldData;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CommandHordeStart extends CommandBase {
 
@@ -28,7 +33,7 @@ public class CommandHordeStart extends CommandBase {
 
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
-        return super.getTabCompletions(server, sender, args, targetPos);
+        return MobHordeEvent.EVENTS.values().stream().map(event -> event.KEY).collect(Collectors.toList());
     }
 
     @Override
@@ -39,18 +44,35 @@ public class CommandHordeStart extends CommandBase {
                 String name = args[0];
                 MobHordeEvent event = MobHordeEvent.EVENTS.get(name);
 
-                if(event == null) {
+                MobHordePlayerData playerData = MobHordeWorldData.get(player.world)
+                        .getPlayerData(player.getPersistentID());
+
+                if (event == null) {
                     throw new CommandException("susy.command.horde.start.no_such_horde", name);
                 }
 
-                if(!event.canRun(player)) {
+                if (!event.canRun(player)) {
                     throw new CommandException("susy.command.horde.start.unable_to_run");
                 }
 
-                if(!event.run(player)) {
+                if (playerData.hasActiveInvasion) {
+                    // true => overwrite existing invasion
+                    if (args.length > 1 && args[1] == "true") {
+                        playerData.stopInvasion(player);
+                    } else {
+                        ITextComponent textComponent = new TextComponentTranslation("susy.command.horde.start.has_active_invasion", playerData.currentInvasion);
+                        sender.sendMessage(textComponent);
+                        return;
+                    }
+                }
+
+                if (!event.run(player, playerData::addEntity)) {
                     throw new CommandException("susy.command.horde.start.error_executing_horde");
                 }
 
+                playerData.setCurrentInvasion(event);
+                ITextComponent textComponent = new TextComponentTranslation("susy.command.horde.start.started", event.KEY);
+                sender.sendMessage(textComponent);
             }
         }
     }

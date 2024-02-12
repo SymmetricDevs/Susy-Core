@@ -15,6 +15,7 @@ import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SuSyMetaBlocks;
 import supersymmetry.common.command.CommandHordeBase;
 import supersymmetry.common.command.CommandHordeStart;
+import supersymmetry.common.command.CommandHordeStop;
 import supersymmetry.common.covers.SuSyCoverBehaviors;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
@@ -64,6 +65,7 @@ public class Supersymmetry {
         event.registerServerCommand(hordeCommand);
 
         hordeCommand.addSubcommand(new CommandHordeStart());
+        hordeCommand.addSubcommand(new CommandHordeStop());
 
     }
 }

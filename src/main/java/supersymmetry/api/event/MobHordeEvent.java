@@ -14,9 +14,13 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import supersymmetry.common.entities.EntityDropPod;
+import supersymmetry.common.event.MobHordePlayerData;
+import supersymmetry.common.event.MobHordeWorldData;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class MobHordeEvent {
@@ -30,7 +34,7 @@ public class MobHordeEvent {
     private int dimension = 0;
     private int maximumDistanceUnderground = -1;
     private boolean canUsePods = true;
-    private String KEY;
+    public String KEY;
 
     public static final Map<String, MobHordeEvent> EVENTS = new HashMap<>();
 
@@ -53,15 +57,20 @@ public class MobHordeEvent {
     }
 
     public boolean run(EntityPlayer player) {
+        MobHordeWorldData worldData = MobHordeWorldData.get(player.world);
+        MobHordePlayerData playerData = worldData.getPlayerData(player.getPersistentID());
+        return run(player, playerData::addEntity);
+    }
+    public boolean run(EntityPlayer player, Consumer<UUID> uuidConsumer) {
         int quantity = quantityMin + (int) (Math.random() * quantityMax);
         boolean didSpawn = false;
         if (hasToBeUnderground(player) || !canUsePods) {
             for (int i = 0; i < quantity; i++) {
-                didSpawn |= spawnMobWithoutPod(player);
+                didSpawn |= spawnMobWithoutPod(player, uuidConsumer);
             }
         } else {
             for (int i = 0; i < quantity; i++) {
-                didSpawn |= spawnMobWithPod(player);
+                didSpawn |= spawnMobWithPod(player, uuidConsumer);
             }
         }
         return didSpawn;
@@ -84,7 +93,7 @@ public class MobHordeEvent {
         return advManager.getAdvancement(location);
     }
 
-    public boolean spawnMobWithPod(EntityPlayer player) {
+    public boolean spawnMobWithPod(EntityPlayer player, Consumer<UUID> uuidConsumer) {
         EntityDropPod pod = new EntityDropPod(player.world);
         pod.rotationYaw = (float) Math.random() * 360;
         EntityLiving mob = entitySupplier.apply(player);
@@ -104,10 +113,12 @@ public class MobHordeEvent {
         mob.onInitialSpawn(player.world.getDifficultyForLocation(new BlockPos(mob)), (IEntityLivingData) null);
         mob.enablePersistence();
 
+        uuidConsumer.accept(mob.getPersistentID());
+
         return true;
     }
 
-    public boolean spawnMobWithoutPod(EntityPlayer player) {
+    public boolean spawnMobWithoutPod(EntityPlayer player, Consumer<UUID> uuidConsumer) {
         EntityLiving mob = entitySupplier.apply(player);
 
         for (int i = 0; i < 3; i++) {
@@ -122,6 +133,7 @@ public class MobHordeEvent {
             if (mob.posY < player.posY + 12) {
                 player.world.spawnEntity(mob);
                 mob.enablePersistence();
+                uuidConsumer.accept(mob.getPersistentID());
                 return true;
             }
         }
