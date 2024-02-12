@@ -81,7 +81,7 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
                         .collect(Collectors.toList()).get(index);
                 if (event.run(player, this::addEntity)) {
                     invasionTimers[index] = event.getNextDelay();
-
+                    this.setCurrentInvasion(event);
                 }
             }
         }
