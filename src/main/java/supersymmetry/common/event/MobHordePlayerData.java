@@ -67,9 +67,11 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
         }
         if (ticksUntilCanSpawn <= 0 && Math.random() < 0.001) {
             List<Integer> doableEvents = new ArrayList<>();
+            List<MobHordeEvent> events = MobHordeEvent.EVENTS.values().stream()
+                    .collect(Collectors.toList());
+            MobHordeEvent event;
             for (int i = 0; i < MobHordeEvent.EVENTS.values().size(); i++) {
-                MobHordeEvent event = MobHordeEvent.EVENTS.values().stream()
-                        .collect(Collectors.toList()).get(i);
+                event = events.get(i);
                 if (event.canRun(player) && invasionTimers[i] <= 0) {
                     doableEvents.add(i);
                 }
@@ -77,8 +79,7 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
             if (!doableEvents.isEmpty()) {
                 ticksUntilCanSpawn = gracePeriod;
                 int index = doableEvents.get((int) (Math.random() * doableEvents.size()));
-                MobHordeEvent event = MobHordeEvent.EVENTS.values().stream()
-                        .collect(Collectors.toList()).get(index);
+                event = events.get(index);
                 if (event.run(player, this::addEntity)) {
                     invasionTimers[index] = event.getNextDelay();
                     this.setCurrentInvasion(event);
