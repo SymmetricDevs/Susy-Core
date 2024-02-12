@@ -6,7 +6,6 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementManager;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
@@ -16,10 +15,9 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import supersymmetry.common.entities.EntityDropPod;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class MobHordeEvent {
     private Function<EntityPlayer, EntityLiving> entitySupplier;
@@ -32,14 +30,16 @@ public class MobHordeEvent {
     private int dimension = 0;
     private int maximumDistanceUnderground = -1;
     private boolean canUsePods = true;
+    private String KEY;
 
-    public static final List<MobHordeEvent> EVENTS = new ArrayList<>();
+    public static final Map<String, MobHordeEvent> EVENTS = new HashMap<>();
 
-    public MobHordeEvent(Function<EntityPlayer, EntityLiving> entitySupplier, int quantityMin, int quantityMax) {
+    public MobHordeEvent(Function<EntityPlayer, EntityLiving> entitySupplier, int quantityMin, int quantityMax, String name) {
         this.entitySupplier = entitySupplier;
         this.quantityMin = quantityMin;
         this.quantityMax = quantityMax;
-        this.EVENTS.add(this);
+        this.KEY = name;
+        this.EVENTS.put(name, this);
     }
 
     public MobHordeEvent setNightOnly(boolean nightOnly) {

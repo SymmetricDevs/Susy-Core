@@ -1,7 +1,8 @@
 package supersymmetry.common;
 
-import gregtech.api.GregTechAPI;
 import gregtech.api.block.VariantItemBlock;
+import gregtech.api.unification.material.event.MaterialEvent;
+import gregtech.api.unification.material.event.PostMaterialEvent;
 import gregtech.common.items.MetaItems;
 import net.minecraft.block.Block;
 import net.minecraft.entity.monster.EntityZombie;
@@ -19,16 +20,15 @@ import supersymmetry.api.event.MobHordeEvent;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.api.unification.ore.SusyStoneTypes;
-import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
-import supersymmetry.common.blocks.*;
+import supersymmetry.common.blocks.SheetedFrameItemBlock;
+import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.blocks.SuSyMetaBlocks;
+import supersymmetry.common.blocks.SusyStoneVariantBlock;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.loaders.SuSyWorldLoader;
-import supersymmetry.loaders.recipes.SuSyRecipeLoader;
 import supersymmetry.loaders.SusyOreDictionaryLoader;
-import supersymmetry.loaders.recipes.SuSyMaterialRecipeHandler;
-import gregtech.api.unification.material.event.MaterialEvent;
-import gregtech.api.unification.material.event.PostMaterialEvent;
+import supersymmetry.loaders.recipes.SuSyRecipeLoader;
 
 import java.util.Objects;
 import java.util.function.Function;
@@ -45,7 +45,7 @@ public class CommonProxy {
 
     public void load() {
         SuSyWorldLoader.init();
-        //new MobHordeEvent((p) -> new EntityZombie(p.world), 4, 8).setMaximumDistanceUnderground(10);
+        new MobHordeEvent((p) -> new EntityZombie(p.world), 4, 8, "zombies").setMaximumDistanceUnderground(10);
     }
 
     @SubscribeEvent

@@ -744,3 +744,12 @@ gregtech.block_group_members.latex_logs.name=Rubber Log
 
 # Extra recipe info
 susy.recipe.dimensions=Dimensions: %s
+
+# Commands
+
+susy.command.horde.usage=Usage: /mobHorde <start/stop>
+susy.command.horde.start.usage=Usage: /mobHorde start <name>
+susy.command.horde.start.no_such_horde=No such horde %s exists.
+
+
+
