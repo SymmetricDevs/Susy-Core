@@ -57,7 +57,7 @@ public class CommandHordeStart extends CommandBase {
 
                 if (playerData.hasActiveInvasion) {
                     // true => overwrite existing invasion
-                    if (args.length > 1 && args[1] == "true") {
+                    if (args.length > 1 && args[1].equals("true")) {
                         playerData.stopInvasion(player);
                     } else {
                         ITextComponent textComponent = new TextComponentTranslation("susy.command.horde.start.has_active_invasion", playerData.currentInvasion);
