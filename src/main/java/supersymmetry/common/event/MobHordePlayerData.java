@@ -1,10 +1,15 @@
 package supersymmetry.common.event;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTUtil;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import supersymmetry.api.event.MobHordeEvent;
 
 import java.util.*;
@@ -15,6 +20,9 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
     public int ticksUntilCanSpawn;
     public int gracePeriod;
     public int[] invasionTimers;
+    public boolean hasActiveInvasion = false;
+    public List<UUID> invasionEntitiesUUIDs = new ArrayList<>();
+    public String currentInvasion = "";
 
     public MobHordePlayerData(int gracePeriod) {
         this.ticksUntilCanSpawn = gracePeriod;
@@ -27,24 +35,43 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
         NBTTagCompound result = new NBTTagCompound();
         result.setInteger("ticksUntilCanSpawn", ticksUntilCanSpawn);
         result.setIntArray("invasionTimers", invasionTimers);
+        result.setBoolean("hasActiveInvasion", hasActiveInvasion);
+        if(this.hasActiveInvasion && !this.invasionEntitiesUUIDs.isEmpty()) {
+            result.setString("currentInvasion", currentInvasion);
+            NBTTagList tagList = new NBTTagList();
+            invasionEntitiesUUIDs.stream()
+                    .forEach(uuid -> tagList.appendTag(NBTUtil.createUUIDTag(uuid)));
+            result.setTag("invasionEntitiesUUIDs", tagList);
+        }
         return result;
     }
 
     @Override
     public void deserializeNBT(NBTTagCompound nbt) {
         ticksUntilCanSpawn = nbt.getInteger("ticksUntilCanSpawn");
-        invasionTimers = nbt.getIntArray("invasionTimers");
+        invasionTimers = Arrays.copyOf(nbt.getIntArray("invasionTimers"), MobHordeEvent.EVENTS.size());
+        hasActiveInvasion = nbt.getBoolean("hasActiveInvasion");
+        if (hasActiveInvasion) {
+            invasionEntitiesUUIDs.clear();
+            this.currentInvasion = nbt.getString("currentInvasion");
+            NBTTagList tagList = nbt.getTagList("invasionEntitiesUUIDs", Constants.NBT.TAG_COMPOUND);
+            tagList.forEach(compound -> invasionEntitiesUUIDs.add(NBTUtil.getUUIDFromTag((NBTTagCompound) compound)));
+        }
     }
 
     public void update(EntityPlayerMP player) {
+        if (hasActiveInvasion) return;
         ticksUntilCanSpawn--;
         for (int i = 0; i < invasionTimers.length; i++) {
             invasionTimers[i]--;
         }
         if (ticksUntilCanSpawn <= 0 && Math.random() < 0.001) {
             List<Integer> doableEvents = new ArrayList<>();
-            for (int i = 0; i < MobHordeEvent.EVENTS.size(); i++) {
-                MobHordeEvent event = MobHordeEvent.EVENTS.get(i);
+            List<MobHordeEvent> events = MobHordeEvent.EVENTS.values().stream()
+                    .collect(Collectors.toList());
+            MobHordeEvent event;
+            for (int i = 0; i < MobHordeEvent.EVENTS.values().size(); i++) {
+                event = events.get(i);
                 if (event.canRun(player) && invasionTimers[i] <= 0) {
                     doableEvents.add(i);
                 }
@@ -52,11 +79,58 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
             if (!doableEvents.isEmpty()) {
                 ticksUntilCanSpawn = gracePeriod;
                 int index = doableEvents.get((int) (Math.random() * doableEvents.size()));
-                MobHordeEvent event = MobHordeEvent.EVENTS.get(index);
-                if (event.run(player)) {
+                event = events.get(index);
+                if (event.run(player, this::addEntity)) {
                     invasionTimers[index] = event.getNextDelay();
+                    this.setCurrentInvasion(event);
                 }
             }
+        }
+    }
+
+    @SubscribeEvent
+    public void onEntityDeath(LivingDeathEvent event) {
+        EntityLivingBase deadEntity = event.getEntityLiving();
+        UUID deadEntityUUID = deadEntity.getPersistentID();
+
+        if (invasionEntitiesUUIDs.contains(deadEntityUUID)) {
+            removeDeadEntity(deadEntityUUID);
+
+            // Check if all spawned entities are dead
+            if (invasionEntitiesUUIDs.isEmpty()) {
+                this.finishInvasion();
+            }
+        }
+    }
+
+    public void setCurrentInvasion(MobHordeEvent event) {
+        this.currentInvasion = event.KEY;
+        this.hasActiveInvasion = true;
+    }
+
+    public void addEntity(UUID uuid) {
+        this.invasionEntitiesUUIDs.add(uuid);
+    }
+
+    private void removeDeadEntity(UUID deadEntityUUID) {
+        this.invasionEntitiesUUIDs.remove(deadEntityUUID);
+    }
+
+    public void finishInvasion() {
+        this.hasActiveInvasion = false;
+        this.currentInvasion = "";
+
+    }
+
+    public void stopInvasion(EntityPlayerMP player) {
+        if(this.hasActiveInvasion) {
+            WorldServer world = player.getServerWorld();
+            this.invasionEntitiesUUIDs.stream()
+                    .map(uuid -> world.getEntityFromUuid(uuid))
+                    .filter(Objects::nonNull)
+                    .forEach(entity -> entity.setDead());
+            // Will get called implicitly from onEntityDeath, but I am doing it again just to be sure
+            this.finishInvasion();
         }
     }
 }

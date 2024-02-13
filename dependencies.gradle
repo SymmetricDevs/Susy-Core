@@ -28,14 +28,17 @@ dependencies {
     // GCYM 1.2.7
     implementation rfg.deobf('curse.maven:gregicality-multiblocks-564858:4910674-deobf-4910675-sources-4910676')
 
+    // AE2UEL 0.55.6 (transitive gt dep)
+    compileOnly rfg.deobf("curse.maven:ae2-extended-life-570458:4402048")
+
     //GeckoLib
     implementation rfg.deobf('curse.maven:geckolib-388172:4020277')
 
     implementation rfg.deobf('curse.maven:realistic-terrain-generation-unofficial-648514:4404814')
 
-    implementation rfg.deobf('curse.maven:biomes-o-plenty-220318:2842510')
+    compileOnly rfg.deobf('curse.maven:biomes-o-plenty-220318:2842510')
 
-    implementation rfg.deobf('curse.maven:gregtech-food-option-477021:4904513') // GT-FO 1.10.2
+    implementation rfg.deobf('curse.maven:gregtech-food-option-477021:5085993') // GT-FO 1.10.2
 
     implementation rfg.deobf('curse.maven:applecore-224472:2969118')
 

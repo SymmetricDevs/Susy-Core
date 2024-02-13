@@ -248,6 +248,7 @@ gregtech.machine.drone_pad.name=Drone Pad
 gregtech.recipe.plasma_requirement=Requires plasma: %s
 gregtech.recipe.catalyst=Catalyst: %s %s
 gregtech.recipe.blocks=Blocks: %s
+gregtech.recipe.cryogenic_environment=Requires Cryogenic Environment
 
 # Latex Collector
 gregtech.machine.latex_collector.steam=Needs Steam!
@@ -593,8 +594,8 @@ gregtech.machine.polishing_machine.uiv.name=Epic Polishing Machine III
 gregtech.machine.polishing_machine.uxv.name=Epic Polishing Machine IV
 gregtech.machine.polishing_machine.opv.name=Legendary Polishing Machine
 
-gregtech.machine.bath_condenser.lv.name=Bath Condenser
-gregtech.machine.bath_condenser.lv.tooltip=Only works inside a Cryogenic Distillation Tower
+gregtech.machine.bath_condenser.name=Bath Condenser
+gregtech.machine.bath_condenser.tooltip=Only works inside a Cryogenic Distillation Tower
 
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
@@ -743,3 +744,17 @@ gregtech.block_group_members.latex_logs.name=Rubber Log
 
 # Extra recipe info
 susy.recipe.dimensions=Dimensions: %s
+
+# Commands
+
+susy.command.horde.usage=/mobHorde <start/stop>
+susy.command.horde.start.usage=/mobHorde start <name>
+susy.command.horde.start.argument_required=Use /mobHorde start <name>.
+susy.command.horde.start.no_such_horde=No such horde %s exists.
+susy.command.horde.start.unable_to_run=The %s horde can't be executed. This may be due to dimensional restrictions, daylight, etc.
+susy.command.horde.start.error_executing_horde=Horde mobs were not spawned correctly.
+susy.command.horde.start.has_active_invasion=You already have an active %s invasion.
+susy.command.horde.start.started=Successfully started %s invasion.
+susy.command.horde.stop.usage=/mobHorde stop
+susy.command.horde.stop.has_active_no_invasion=No active invasion to stop.
+susy.command.horde.stop.stopped=Successfully stopped %s invasion.
