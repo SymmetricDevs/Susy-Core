@@ -6,12 +6,16 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.sound.SusySounds;
 import supersymmetry.common.CommonProxy;
 import supersymmetry.common.SusyMetaEntities;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SuSyMetaBlocks;
+import supersymmetry.common.command.CommandHordeBase;
+import supersymmetry.common.command.CommandHordeStart;
+import supersymmetry.common.command.CommandHordeStop;
 import supersymmetry.common.covers.SuSyCoverBehaviors;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
@@ -53,5 +57,15 @@ public class Supersymmetry {
     public void onInit(@NotNull FMLInitializationEvent event) {
         proxy.load();
         SuSyCoverBehaviors.init();
+    }
+
+    @Mod.EventHandler
+    public void onServerStarting(@NotNull FMLServerStartingEvent event) {
+        CommandHordeBase hordeCommand = new CommandHordeBase();
+        event.registerServerCommand(hordeCommand);
+
+        hordeCommand.addSubcommand(new CommandHordeStart());
+        hordeCommand.addSubcommand(new CommandHordeStop());
+
     }
 }
