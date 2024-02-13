@@ -26,7 +26,7 @@ public class NoEnergyRecipeBuilder extends RecipeBuilder<NoEnergyRecipeBuilder> 
     }
 
     public ValidationResult<Recipe> build() {
-        this.EUt(-1);
+        this.EUt(1);
         this.applyProperty(PrimitiveProperty.getInstance(), true);
         return super.build();
     }
