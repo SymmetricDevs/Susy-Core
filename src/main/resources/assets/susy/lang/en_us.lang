@@ -749,8 +749,9 @@ susy.recipe.dimensions=Dimensions: %s
 
 susy.command.horde.usage=/mobHorde <start/stop>
 susy.command.horde.start.usage=/mobHorde start <name>
+susy.command.horde.start.argument_required=Use /mobHorde start <name>.
 susy.command.horde.start.no_such_horde=No such horde %s exists.
-susy.command.horde.start.unable_to_run=The %s horde can't be executed. This may be due to dimensional restrictions, daylight,...
+susy.command.horde.start.unable_to_run=The %s horde can't be executed. This may be due to dimensional restrictions, daylight, etc.
 susy.command.horde.start.error_executing_horde=Horde mobs were not spawned correctly.
 susy.command.horde.start.has_active_invasion=You already have an active %s invasion.
 susy.command.horde.start.started=Successfully started %s invasion.

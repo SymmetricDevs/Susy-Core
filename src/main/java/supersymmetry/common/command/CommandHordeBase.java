@@ -34,4 +34,8 @@ public class CommandHordeBase extends CommandTreeBase {
         super.execute(server, sender, args);
     }
 
+    @Override
+    public int getRequiredPermissionLevel() {
+        return 2;
+    }
 }

@@ -73,6 +73,8 @@ public class CommandHordeStart extends CommandBase {
                 playerData.setCurrentInvasion(event);
                 ITextComponent textComponent = new TextComponentTranslation("susy.command.horde.start.started", event.KEY);
                 sender.sendMessage(textComponent);
+            } else {
+                throw new CommandException("susy.command.horde.start.argument_required");
             }
         }
     }

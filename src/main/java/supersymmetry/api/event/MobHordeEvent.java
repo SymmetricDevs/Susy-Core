@@ -141,7 +141,7 @@ public class MobHordeEvent {
     }
 
     public int getNextDelay() {
-        return timerMin + (int) (Math.random() * timerMax);
+        return timerMin + (int) (Math.random() * (double) (timerMax - timerMin));
     }
 
     public MobHordeEvent setTimer(int min, int max) {
