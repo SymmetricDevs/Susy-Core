@@ -76,7 +76,7 @@ tile.resource_block.sulfur.name=硫矿床
 tile.multiblock_tank.clarifier.name=沉淀槽体
 tile.multiblock_tank.flotation.name=浮选槽体
 
-tile.evaporation_bed.dirt.name=蒸发池
+tile.evaporation_bed.dirt.name=砂壤土
 
 tile.electrode_assembly.carbon.name=碳电极部件
 
@@ -248,6 +248,7 @@ gregtech.machine.drone_pad.name=无人机坪
 gregtech.recipe.plasma_requirement=需要等离子体：%s
 gregtech.recipe.catalyst=催化剂：%s %s
 gregtech.recipe.blocks=有效方块：%s
+gregtech.recipe.cryogenic_environment=需要低温环境
 
 # Latex Collector
 gregtech.machine.latex_collector.steam=需要蒸汽！
@@ -593,8 +594,8 @@ gregtech.machine.polishing_machine.uiv.name=史诗抛光机 III
 gregtech.machine.polishing_machine.uxv.name=史诗抛光机 IV
 gregtech.machine.polishing_machine.opv.name=传说抛光机
 
-gregtech.machine.bath_condenser.lv.name=浴式冷凝器
-gregtech.machine.bath_condenser.lv.tooltip=仅在低温蒸馏厂中工作
+gregtech.machine.bath_condenser.name=浴式冷凝器
+gregtech.machine.bath_condenser.tooltip=仅在低温蒸馏厂中工作
 
 # Recipemaps
 recipemap.coagulation_tank.name=凝固
@@ -653,6 +654,7 @@ recipemap.drone_pad.name=无人机坪
 recipemap.polishing_machine.name=抛光
 recipemap.gravity_separator=重力分离
 recipemap.spinning.name=纺线
+recipemap.large_steam_turbine.name=大型蒸汽轮机
 
 gregtech.multiblock.primitive_mud_pump.description=简易泥泵是一台蒸汽时代的多方块机器。当它的控制器方块处于河流生物群系，且高度介于 Y = 64 与 Y = 80 （含）之间时将每秒收集一次泥。它可以使用 ULV、LV 输出仓或水泵输出仓。
 gregtech.multiblock.ocean_pumper.description=海水泵机是一台电力时代的多方块机器。当它的控制器方块处于海洋生物群系，且高度介于 Y = 70 与 Y = 75 （含）之间时将每秒收集 8,000 L 海水。他需要输出总线、维修仓、能源仓各一。
@@ -675,7 +677,9 @@ gregtech.machine.dumping_hatch.lv.name=销毁仓
 # Metaitems
 metaitem.catalyst_bed_support_grid.name=催化床载体网格
 metaitem.conveyor.steam.name=蒸汽传送带
+cover.conveyor.steam.title=蒸汽传送带
 metaitem.pump.steam.name=蒸汽泵
+cover.pump.steam.title=蒸汽泵
 metaitem.air_vent.name=进气扇
 metaitem.air_vent.tooltip=当面向空气时，为机器收集所处维度的空气
 
@@ -740,3 +744,17 @@ gregtech.block_group_members.latex_logs.name=橡胶木
 
 # Extra recipe info
 susy.recipe.dimensions=维度：%s
+
+# Commands
+
+susy.command.horde.usage=/mobHorde <start/stop>
+susy.command.horde.start.usage=/mobHorde start <名称>
+susy.command.horde.start.argument_required=用法：/mobHorde start <名称>.
+susy.command.horde.start.no_such_horde=不存在名为%s的军团
+susy.command.horde.start.unable_to_run=无法生成%s军团，这可能是由维度限制或光照等原因造成。
+susy.command.horde.start.error_executing_horde=军团生物未正确生成。
+susy.command.horde.start.has_active_invasion=已有正在进行中的%s入侵。
+susy.command.horde.start.started=%s入侵已开始。
+susy.command.horde.stop.usage=/mobHorde stop
+susy.command.horde.stop.has_active_no_invasion=没有正在进行中的入侵。
+susy.command.horde.stop.stopped=%s入侵已结束。
