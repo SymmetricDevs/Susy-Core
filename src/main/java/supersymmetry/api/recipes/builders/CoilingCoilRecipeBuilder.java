@@ -4,7 +4,6 @@ import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.util.EnumValidationResult;
-import gregtech.api.util.GTUtility;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.SusyLog;
@@ -57,8 +56,7 @@ public class CoilingCoilRecipeBuilder extends RecipeBuilder<CoilingCoilRecipeBui
     public String toString() {
         return new ToStringBuilder(this)
                 .appendSuper(super.toString())
-                .append(CoilingCoilTemperatureProperty.getInstance().getKey(),
-                        GTUtility.formatNumbers(getTemperature()))
+                .append(CoilingCoilTemperatureProperty.getInstance().getKey(), getTemperature())
                 .toString();
     }
 }
