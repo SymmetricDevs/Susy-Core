@@ -744,3 +744,17 @@ gregtech.block_group_members.latex_logs.name=Rubber Log
 
 # Extra recipe info
 susy.recipe.dimensions=Dimensions: %s
+
+# Commands
+
+susy.command.horde.usage=/mobHorde <start/stop>
+susy.command.horde.start.usage=/mobHorde start <name>
+susy.command.horde.start.argument_required=Use /mobHorde start <name>.
+susy.command.horde.start.no_such_horde=No such horde %s exists.
+susy.command.horde.start.unable_to_run=The %s horde can't be executed. This may be due to dimensional restrictions, daylight, etc.
+susy.command.horde.start.error_executing_horde=Horde mobs were not spawned correctly.
+susy.command.horde.start.has_active_invasion=You already have an active %s invasion.
+susy.command.horde.start.started=Successfully started %s invasion.
+susy.command.horde.stop.usage=/mobHorde stop
+susy.command.horde.stop.has_active_no_invasion=No active invasion to stop.
+susy.command.horde.stop.stopped=Successfully stopped %s invasion.

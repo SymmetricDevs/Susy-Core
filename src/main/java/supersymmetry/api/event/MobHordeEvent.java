@@ -6,7 +6,6 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementManager;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
@@ -15,11 +14,14 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import supersymmetry.common.entities.EntityDropPod;
+import supersymmetry.common.event.MobHordePlayerData;
+import supersymmetry.common.event.MobHordeWorldData;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class MobHordeEvent {
     private Function<EntityPlayer, EntityLiving> entitySupplier;
@@ -32,14 +34,16 @@ public class MobHordeEvent {
     private int dimension = 0;
     private int maximumDistanceUnderground = -1;
     private boolean canUsePods = true;
+    public String KEY;
 
-    public static final List<MobHordeEvent> EVENTS = new ArrayList<>();
+    public static final Map<String, MobHordeEvent> EVENTS = new HashMap<>();
 
-    public MobHordeEvent(Function<EntityPlayer, EntityLiving> entitySupplier, int quantityMin, int quantityMax) {
+    public MobHordeEvent(Function<EntityPlayer, EntityLiving> entitySupplier, int quantityMin, int quantityMax, String name) {
         this.entitySupplier = entitySupplier;
         this.quantityMin = quantityMin;
         this.quantityMax = quantityMax;
-        this.EVENTS.add(this);
+        this.KEY = name;
+        this.EVENTS.put(name, this);
     }
 
     public MobHordeEvent setNightOnly(boolean nightOnly) {
@@ -53,15 +57,20 @@ public class MobHordeEvent {
     }
 
     public boolean run(EntityPlayer player) {
+        MobHordeWorldData worldData = MobHordeWorldData.get(player.world);
+        MobHordePlayerData playerData = worldData.getPlayerData(player.getPersistentID());
+        return run(player, playerData::addEntity);
+    }
+    public boolean run(EntityPlayer player, Consumer<UUID> uuidConsumer) {
         int quantity = quantityMin + (int) (Math.random() * quantityMax);
         boolean didSpawn = false;
         if (hasToBeUnderground(player) || !canUsePods) {
             for (int i = 0; i < quantity; i++) {
-                didSpawn |= spawnMobWithoutPod(player);
+                didSpawn |= spawnMobWithoutPod(player, uuidConsumer);
             }
         } else {
             for (int i = 0; i < quantity; i++) {
-                didSpawn |= spawnMobWithPod(player);
+                didSpawn |= spawnMobWithPod(player, uuidConsumer);
             }
         }
         return didSpawn;
@@ -84,7 +93,7 @@ public class MobHordeEvent {
         return advManager.getAdvancement(location);
     }
 
-    public boolean spawnMobWithPod(EntityPlayer player) {
+    public boolean spawnMobWithPod(EntityPlayer player, Consumer<UUID> uuidConsumer) {
         EntityDropPod pod = new EntityDropPod(player.world);
         pod.rotationYaw = (float) Math.random() * 360;
         EntityLiving mob = entitySupplier.apply(player);
@@ -104,10 +113,12 @@ public class MobHordeEvent {
         mob.onInitialSpawn(player.world.getDifficultyForLocation(new BlockPos(mob)), (IEntityLivingData) null);
         mob.enablePersistence();
 
+        uuidConsumer.accept(mob.getPersistentID());
+
         return true;
     }
 
-    public boolean spawnMobWithoutPod(EntityPlayer player) {
+    public boolean spawnMobWithoutPod(EntityPlayer player, Consumer<UUID> uuidConsumer) {
         EntityLiving mob = entitySupplier.apply(player);
 
         for (int i = 0; i < 3; i++) {
@@ -116,12 +127,13 @@ public class MobHordeEvent {
             int z = (int) (player.posZ + 15 * Math.sin(angle));
 
             mob.setPosition(x, player.posY - 5, z);
-            while (!mob.getCanSpawnHere() || !mob.isNotColliding() && mob.posY < player.posY + 12) {
+            while ((!mob.getCanSpawnHere() || !mob.isNotColliding()) && mob.posY < player.posY + 12) {
                 mob.setPosition(x, mob.posY + 1, z);
             }
             if (mob.posY < player.posY + 12) {
                 player.world.spawnEntity(mob);
                 mob.enablePersistence();
+                uuidConsumer.accept(mob.getPersistentID());
                 return true;
             }
         }
@@ -129,7 +141,7 @@ public class MobHordeEvent {
     }
 
     public int getNextDelay() {
-        return timerMin + (int) (Math.random() * timerMax);
+        return timerMin + (int) (Math.random() * (double) (timerMax - timerMin));
     }
 
     public MobHordeEvent setTimer(int min, int max) {
