@@ -18,6 +18,7 @@ import gregtech.api.gui.widgets.*;
 import gregtech.api.gui.widgets.tab.ItemTabInfo;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.api.util.GTUtility;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -89,7 +90,8 @@ public class MetaTileEntityStockFluidExchanger extends MetaTileEntityStockIntera
     }
 
     protected IItemHandlerModifiable createImportItemHandler() {
-        return (new FilteredItemHandler(1)).setFillPredicate(FilteredItemHandler.getCapabilityFilter(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY));
+        return new FilteredItemHandler(this, 1).setFillPredicate(
+                FilteredItemHandler.getCapabilityFilter(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY));
     }
 
     protected IItemHandlerModifiable createExportItemHandler() {
@@ -258,19 +260,14 @@ public class MetaTileEntityStockFluidExchanger extends MetaTileEntityStockIntera
 
     private Consumer<List<ITextComponent>> getFluidNameText(TankWidget tankWidget) {
         return (list) -> {
-            String fluidName = "";
-            if (tankWidget.getFluidUnlocalizedName().isEmpty()) {
-                if (this.lockedFluid != null) {
-                    fluidName = this.lockedFluid.getUnlocalizedName();
-                }
-            } else {
-                fluidName = tankWidget.getFluidUnlocalizedName();
+            TextComponentTranslation componentTranslation = tankWidget.getFluidTextComponent();
+            // No fluid in the tank, so we try to get the locked fluid instead
+            if (componentTranslation == null) {
+                componentTranslation = GTUtility.getFluidTranslation(this.lockedFluid);
             }
-
-            if (!fluidName.isEmpty()) {
-                list.add(new TextComponentTranslation(fluidName, new Object[0]));
+            if (componentTranslation != null) {
+                list.add(componentTranslation);
             }
-
         };
     }
 

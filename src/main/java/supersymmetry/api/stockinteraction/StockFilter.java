@@ -114,7 +114,7 @@ public class StockFilter implements INBTSerializable<NBTTagCompound> {
             String className = entry.getKey();
             Class targetClass = nameToStockClassMap.get(className);
 
-            if (entry.getValue() && targetClass.isInstance(entity) && entity.getClass().equals(targetClass))
+            if (entry.getValue() && targetClass.isInstance(entity))
                 return true;
         }
         return false;
