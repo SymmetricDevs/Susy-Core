@@ -260,10 +260,6 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.COOLING);
 
-    public static final RecipeMap<NoEnergyRecipeBuilder> FLARE_STACK = new RecipeMap<>("flare_stack", 0, 0, 1, 0, new NoEnergyRecipeBuilder(), false)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_SIFT, ProgressWidget.MoveType.VERTICAL)
-            .setSound(GTSoundEvents.FURNACE);
-
     public static final RecipeMap<NoEnergyRecipeBuilder> DUMPING = new RecipeMap<>("dumping", 0, 0, 1, 0, new NoEnergyRecipeBuilder(), false)
             .setSound(GTSoundEvents.BATH);
 
