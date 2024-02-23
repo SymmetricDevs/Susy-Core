@@ -35,7 +35,7 @@ public class SuSyRecipeMaps {
             .setSlotOverlay(false, false, true, GuiTextures.MOLD_OVERLAY)
             .setSound(GTSoundEvents.COMBUSTION);
 
-    public static final RecipeMap<CatalystRecipeBuilder> ROASTER_RECIPES = new RecipeMap<>("roaster", 3, 2, 2, 3, new CatalystRecipeBuilder(), false)
+    public static final RecipeMap<CatalystRecipeBuilder> ROASTER_RECIPES = new RecipeMap<>("roaster", 2, 2, 2, 3, new CatalystRecipeBuilder(), false)
             .setSound(GTSoundEvents.COMBUSTION);
 
     public static final RecipeMap<SimpleRecipeBuilder> VACUUM_CHAMBER = new RecipeMap<>("vacuum_chamber", 4, 1, 2, 2, new SimpleRecipeBuilder(), false)
@@ -106,7 +106,7 @@ public class SuSyRecipeMaps {
             .setSlotOverlay(true, false, true, SusyGuiTextures.CUBIC_LATTICE_OVERLAY)
             .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
-    public static final RecipeMap<SimpleRecipeBuilder> ELECTROSTATIC_SEPARATOR = new RecipeMap<>("electrostatic_separator", 3, 3, 6, 6, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<SimpleRecipeBuilder> ELECTROSTATIC_SEPARATOR = new RecipeMap<>("electrostatic_separator", 3, 6, 3, 3, new SimpleRecipeBuilder(), false)
             .setSlotOverlay(false, false, GuiTextures.CRUSHED_ORE_OVERLAY)
             .setSlotOverlay(true, false, GuiTextures.DUST_OVERLAY)
             .setProgressBar(GuiTextures.PROGRESS_BAR_MAGNET, ProgressWidget.MoveType.HORIZONTAL)
