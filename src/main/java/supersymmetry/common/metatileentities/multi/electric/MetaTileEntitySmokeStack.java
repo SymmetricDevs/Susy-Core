@@ -5,6 +5,8 @@ import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.fluids.GTFluid;
+import gregtech.api.fluids.store.FluidStorageKey;
+import gregtech.api.fluids.store.FluidStorageKeys;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -15,6 +17,7 @@ import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.info.MaterialFlags;
+import gregtech.api.unification.material.properties.PropertyKey;
 import gregtech.api.util.TextComponentUtil;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
@@ -74,9 +77,11 @@ public class MetaTileEntitySmokeStack extends MultiblockWithDisplayBase {
                     Fluid fluid = fs.getFluid();
                     if(fluid instanceof GTFluid.GTMaterialFluid gtFluid) {
                         Material mat = gtFluid.getMaterial();
+                        FluidStorageKey key = mat.getProperty(PropertyKey.FLUID).getPrimaryKey();
                         // Anything that is gaseous (ignoring density) and not flammable may be smoke stacked
+                        boolean exhaustible = key.equals(FluidStorageKeys.GAS);
                         //TODO: Cache this?
-                        if(gtFluid.isGaseous() && !mat.hasFlag(MaterialFlags.FLAMMABLE)) {
+                        if(exhaustible && !mat.hasFlag(MaterialFlags.FLAMMABLE)) {
                             tank.drain(this.getActualVoidingRate(), true);
                             this.active = true;
                         }
