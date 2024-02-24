@@ -3,20 +3,14 @@ package supersymmetry.common.metatileentities.multi.electric;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
-import gregtech.api.fluids.GTFluid;
-import gregtech.api.fluids.store.FluidStorageKey;
-import gregtech.api.fluids.store.FluidStorageKeys;
+import gregtech.api.fluids.FluidState;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
-import gregtech.api.metatileentity.multiblock.MultiblockWithDisplayBase;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
-import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
-import gregtech.api.unification.material.info.MaterialFlags;
-import gregtech.api.unification.material.properties.PropertyKey;
 import gregtech.api.util.TextComponentUtil;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
@@ -24,7 +18,6 @@ import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
@@ -32,26 +25,18 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidTank;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import supersymmetry.api.fluids.SusyFluidStorageKeys;
 import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.metatileentities.multi.VoidingMultiblockBase;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class MetaTileEntityDumper extends MultiblockWithDisplayBase {
-    // Multiplies fluid voiding rate, hardcoded for now
-    private final int rateBonus = 1;
-    // Amount of ticks between voiding
-    private int voidingFrequency = 10;
-
-    private boolean active = false;
+public class MetaTileEntityDumper extends VoidingMultiblockBase {
     public MetaTileEntityDumper(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
     }
@@ -60,32 +45,20 @@ public class MetaTileEntityDumper extends MultiblockWithDisplayBase {
         return new MetaTileEntityDumper(this.metaTileEntityId);
     }
 
+    // Hardcode these annoyances for now
+    static {
+        fluidCache.put(FluidRegistry.WATER, true);
+        fluidCache.put(FluidRegistry.LAVA, true);
+    }
+
     @Override
-    protected void updateFormedValid() {
-        if(this.getWorld().isRemote) return;
-        if(getOffsetTimer() % voidingFrequency == 0) {
-            this.active = false;
-            for (IFluidTank tank:
-                    getAbilities(MultiblockAbility.IMPORT_FLUIDS)) {
-                FluidStack fs = tank.getFluid();
-                if(fs != null) {
-                    Fluid fluid = fs.getFluid();
-                    if(fluid instanceof GTFluid.GTMaterialFluid gtFluid) {
-                        Material mat = gtFluid.getMaterial();
-                        FluidStorageKey key = mat.getProperty(PropertyKey.FLUID).getPrimaryKey();
-                        // Anything that is a liquid and not flammable may be dumped
-                        boolean dumpeable = key.equals(FluidStorageKeys.LIQUID)
-                                || key.equals(SusyFluidStorageKeys.IMPURE_SLURRY)
-                                || key.equals(SusyFluidStorageKeys.SLURRY);
-                        //TODO: Cache this?
-                        if(dumpeable && !mat.hasFlag(MaterialFlags.FLAMMABLE)) {
-                            tank.drain(this.getActualVoidingRate(), true);
-                            this.active = true;
-                        }
-                    }
-                }
-            }
-        }
+    public boolean canVoidState(FluidState state) {
+        return state == FluidState.LIQUID;
+    }
+
+    @Override
+    public int getBaseVoidingRate() {
+        return 16000;
     }
 
     protected BlockPattern createStructurePattern() {
@@ -114,29 +87,12 @@ public class MetaTileEntityDumper extends MultiblockWithDisplayBase {
         }
     }
 
-    // In liters
-    public int getActualVoidingRate() {
-        return 16000 * rateBonus;
-    }
-
-    @Override
-    public void writeInitialSyncData(PacketBuffer buf) {
-        super.writeInitialSyncData(buf);
-        buf.writeBoolean(active);
-    }
-
-    @Override
-    public void receiveInitialSyncData(PacketBuffer buf) {
-        super.receiveInitialSyncData(buf);
-        this.active = buf.readBoolean();
-    }
-
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
         super.addDisplayText(textList);
         if(isStructureFormed()) {
             ITextComponent componentRate = TextComponentUtil.stringWithColor(TextFormatting.DARK_PURPLE,
-                    String.valueOf(this.getActualVoidingRate()));
+                    String.valueOf(this.getBaseVoidingRate()));
 
             textList.add(TextComponentUtil.translationWithColor(
                     TextFormatting.GRAY,
@@ -148,7 +104,7 @@ public class MetaTileEntityDumper extends MultiblockWithDisplayBase {
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
         super.addInformation(stack, world, tooltip, advanced);
-        tooltip.add(I18n.format("gregtech.machine.dumper.tooltip.1", getActualVoidingRate()));
+        tooltip.add(I18n.format("gregtech.machine.dumper.tooltip.1", getBaseVoidingRate()));
     }
 
     @Override

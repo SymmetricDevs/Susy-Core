@@ -1,23 +1,14 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.pipeline.IVertexOperation;
-import codechicken.lib.vec.Matrix4;
 import gregtech.api.capability.GregtechDataCodes;
-import gregtech.api.fluids.GTFluid;
-import gregtech.api.fluids.store.FluidStorageKey;
-import gregtech.api.fluids.store.FluidStorageKeys;
+import gregtech.api.fluids.FluidState;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
-import gregtech.api.metatileentity.multiblock.MultiblockWithDisplayBase;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.PatternMatchContext;
-import gregtech.api.unification.material.Material;
-import gregtech.api.unification.material.info.MaterialFlags;
-import gregtech.api.unification.material.properties.PropertyKey;
 import gregtech.api.util.TextComponentUtil;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
@@ -35,28 +26,20 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidTank;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.metatileentities.multi.VoidingMultiblockBase;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 
 import static gregtech.api.util.RelativeDirection.*;
 
-public class MetaTileEntitySmokeStack extends MultiblockWithDisplayBase {
-
+public class MetaTileEntitySmokeStack extends VoidingMultiblockBase {
     // Storing this, just in case it is ever needed
     private int height = 5;
-    // Multiplies fluid voiding rate, based on structure height
-    private int rateBonus = 1;
-    // Amount of ticks between voiding
-    private int voidingFrequency = 10;
 
-    private boolean active = false;
     public MetaTileEntitySmokeStack(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
     }
@@ -66,30 +49,8 @@ public class MetaTileEntitySmokeStack extends MultiblockWithDisplayBase {
     }
 
     @Override
-    protected void updateFormedValid() {
-        if(this.getWorld().isRemote) return;
-        if(getOffsetTimer() % voidingFrequency == 0) {
-            this.active = false;
-            for (IFluidTank tank:
-                    getAbilities(MultiblockAbility.IMPORT_FLUIDS)) {
-                FluidStack fs = tank.getFluid();
-                if(fs != null) {
-                    Fluid fluid = fs.getFluid();
-                    if(fluid instanceof GTFluid.GTMaterialFluid gtFluid) {
-                        Material mat = gtFluid.getMaterial();
-                        FluidStorageKey key = mat.getProperty(PropertyKey.FLUID).getPrimaryKey();
-                        // Anything that is gaseous (ignoring density) and not flammable may be smoke stacked
-                        boolean exhaustible = key.equals(FluidStorageKeys.GAS);
-                        //TODO: Cache this?
-                        if(exhaustible && !mat.hasFlag(MaterialFlags.FLAMMABLE)) {
-                            tank.drain(this.getActualVoidingRate(), true);
-                            this.active = true;
-                        }
-                    }
-                }
-            }
-        }
-
+    public boolean canVoidState(FluidState state) {
+        return state == FluidState.GAS;
     }
 
     protected BlockPattern createStructurePattern() {
@@ -137,21 +98,9 @@ public class MetaTileEntitySmokeStack extends MultiblockWithDisplayBase {
         return false;
     }
 
-    // In liters
-    public int getActualVoidingRate() {
-        return 1000 * rateBonus;
-    }
-
     @Override
     public boolean isActive() {
         return active;
-    }
-
-    @Override
-    public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
-        super.renderMetaTileEntity(renderState, translation, pipeline);
-        this.getFrontOverlay().renderOrientedState(renderState, translation, pipeline, getFrontFacing(),
-                this.isActive(), true);
     }
 
     @Override
@@ -160,10 +109,6 @@ public class MetaTileEntitySmokeStack extends MultiblockWithDisplayBase {
         if(dataId == GregtechDataCodes.UPDATE_STRUCTURE_SIZE) {
             this.height = buf.readInt();
             this.rateBonus = buf.readInt();
-        }
-
-        if(dataId == GregtechDataCodes.IS_WORKING) {
-            this.active = this.lastActive;
         }
     }
 
@@ -187,7 +132,6 @@ public class MetaTileEntitySmokeStack extends MultiblockWithDisplayBase {
         super.writeInitialSyncData(buf);
         buf.writeInt(height);
         buf.writeInt(rateBonus);
-        buf.writeBoolean(active);
     }
 
     @Override
@@ -195,7 +139,6 @@ public class MetaTileEntitySmokeStack extends MultiblockWithDisplayBase {
         super.receiveInitialSyncData(buf);
         this.height = buf.readInt();
         this.rateBonus = buf.readInt();
-        this.active = buf.readBoolean();
     }
 
     @Override
@@ -218,14 +161,9 @@ public class MetaTileEntitySmokeStack extends MultiblockWithDisplayBase {
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
         super.addInformation(stack, world, tooltip, advanced);
-        tooltip.add(I18n.format("gregtech.machine.smoke_stack.tooltip.1"));
+        tooltip.add(I18n.format("gregtech.machine.smoke_stack.tooltip.1", getBaseVoidingRate()));
     }
 
-
-    @Override
-    public boolean hasMaintenanceMechanics() {
-        return false;
-    }
 
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
         return Textures.SOLID_STEEL_CASING;
@@ -245,8 +183,4 @@ public class MetaTileEntitySmokeStack extends MultiblockWithDisplayBase {
         return true;
     }
 
-    @Override
-    public boolean getIsWeatherOrTerrainResistant() {
-        return true;
-    }
 }
