@@ -182,6 +182,7 @@ public class MetaTileEntitySmokeStack extends MultiblockWithDisplayBase {
         super.writeInitialSyncData(buf);
         buf.writeInt(height);
         buf.writeInt(rateBonus);
+        buf.writeBoolean(active);
     }
 
     @Override
@@ -189,6 +190,7 @@ public class MetaTileEntitySmokeStack extends MultiblockWithDisplayBase {
         super.receiveInitialSyncData(buf);
         this.height = buf.readInt();
         this.rateBonus = buf.readInt();
+        this.active = buf.readBoolean();
     }
 
     @Override
