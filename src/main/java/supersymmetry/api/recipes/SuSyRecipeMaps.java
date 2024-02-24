@@ -256,9 +256,6 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.COOLING);
 
-    public static final RecipeMap<NoEnergyRecipeBuilder> DUMPING = new RecipeMap<>("dumping", 0, 0, 1, 0, new NoEnergyRecipeBuilder(), false)
-            .setSound(GTSoundEvents.BATH);
-
     public static final RecipeMap<SimpleRecipeBuilder> FROTH_FLOTATION = new RecipeMap<>("froth_flotation", 3, 2, 4, 2, new SimpleRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_MIXER, ProgressWidget.MoveType.CIRCULAR)
             .setSound(GTSoundEvents.BATH);

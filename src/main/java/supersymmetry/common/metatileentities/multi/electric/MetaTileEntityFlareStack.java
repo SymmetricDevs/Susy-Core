@@ -86,7 +86,6 @@ public class MetaTileEntityFlareStack extends MultiblockWithDisplayBase {
                 }
             }
         }
-
     }
 
     protected BlockPattern createStructurePattern() {
