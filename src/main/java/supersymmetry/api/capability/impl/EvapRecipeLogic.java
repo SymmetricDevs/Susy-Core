@@ -2,8 +2,11 @@ package supersymmetry.api.capability.impl;
 
 import gregtech.api.GTValues;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
+import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.logic.OverclockingLogic;
 import gregtech.api.recipes.recipeproperties.IRecipePropertyStorage;
+import supersymmetry.api.SusyLog;
+import supersymmetry.api.recipes.properties.EvaporationEnergyProperty;
 import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityEvaporationPool;
 
 import javax.annotation.Nonnull;
@@ -20,45 +23,69 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
         pool = tileEntity;
     }
 
+    public int getJt() {
+        if (!this.previousRecipe.hasProperty(EvaporationEnergyProperty.getInstance())) {
+            return -1;
+        }
+
+        return this.previousRecipe.getProperty(EvaporationEnergyProperty.getInstance(), -1);
+    }
+
+    //do not attempt to run invalid recipes
+    @Override
+    public boolean checkRecipe(Recipe recipe) {
+        return recipe.hasProperty(EvaporationEnergyProperty.getInstance()) && recipe.getProperty(EvaporationEnergyProperty.getInstance(), -1) != -1;
+    }
+
+
     @Override
     protected void updateRecipeProgress() {
         //if null then no heating can be done, otherwise add joules according to coil values and energy available
         if (pool.coilStats != null && pool.getIsHeated()) {
             int coilHeat = pool.coilStats.getCoilTemperature();
-            //assumes specific heat of 1J/(g*delta temp) and perfect heat transfer on one face of the coil for 1/6 of total delta temp. Uses mass as a multiplier and 1/4 because its not a solid block of material
+            //assumes specific heat of 1J/(g*delta temp) and perfect heat transfer on one face of the coil for 1/6 of total delta temp. Uses mass as a multiplier and 1/4 because coil is not solid block of primary material. Last portion calculates number of coils.
             int heatingJoules = (coilHeat/HEAT_DENOMINATOR) * ((int)pool.coilStats.getMaterial().getMass()/4) * ( ((pool.getColumnCount()/2 +1) * pool.getRowCount()) + pool.getColumnCount()/2);
-            heatingJoules = Math.min(((int)getEnergyStored()) * JOULES_PER_EU, heatingJoules);
-            pool.inputEnergy(heatingJoules);
+            heatingJoules = Math.min(((int)getEnergyStored()) * JOULES_PER_EU, heatingJoules); //attempt to transfer entire heatingJoules amount or what is left in energy container
+            boolean couldInput = pool.inputEnergy(heatingJoules);
+            if (couldInput) pool.getEnergyContainer().removeEnergy(heatingJoules/JOULES_PER_EU);
         }
 
-        int maxSteps = pool.calcMaxSteps(recipeEUt * JOULES_PER_EU);
+        int maxSteps = pool.calcMaxSteps(getJt());
 
-        if (this.canRecipeProgress && maxSteps > 0) {
+        //if the recipe can progress and at least one step can be taken
+        if (maxSteps > 0) {
             hasNotEnoughEnergy = false;
 
             int actualSteps =  Math.min(this.maxProgressTime / MAX_STEP_FRACTION, maxSteps);
-            progressTime += actualSteps;
+            progressTime += actualSteps; //actualSteps <= maxSteps, meaning it can always be progressed this amount
 
-            int energyToDrain = actualSteps * recipeEUt * JOULES_PER_EU;
-            //attempt to cleanly drain joules
-            if (energyToDrain % 1000 <= pool.getJoulesBuffer()) {
-                pool.setJoulesBuffer(pool.getJoulesBuffer() - (energyToDrain % 1000));
+            int kJFloor = getJt() * actualSteps /1000;
+            int joulesNeeded;
+
+            //if kJ store is insufficient to cover full cost, joulesNeeded is whatever remains after kJ covers cost
+            if (pool.getKiloJoules() < kJFloor) {
+                joulesNeeded = getJt() * actualSteps - pool.getKiloJoules() * 1000;
             } else {
-                //drain extra kJ to cover joule cost
-                pool.setKiloJoules(pool.getKiloJoules() -1);
+                joulesNeeded = getJt() * actualSteps - kJFloor * 1000; //difference in joules betweeen kJ losslessly required and J actually required (4kJ losslessly covers 3kJ out of 3600J, meaning 600J are needed to avoid wasting kJ
             }
 
-            //casts off remainder which joulesBuffer covered and converts to kJ
-            energyToDrain = energyToDrain/1000;
+            //if buffer cant cover draw entirely from kiloJoules
+            if (pool.getJoulesBuffer() < joulesNeeded) {
+                ++kJFloor;
+                joulesNeeded = 0;
+            }
 
-            //do draining
-            pool.setKiloJoules(pool.getKiloJoules() - energyToDrain);
+            SusyLog.logger.atError().log("kJFloor: " + kJFloor + ", joulesNeeded: " + joulesNeeded + ", actualSteps: " + actualSteps + ", kJ: " + pool.getKiloJoules() + ", joulesBuffer: " + pool.getJoulesBuffer());
+
+            //drain appropriately
+            pool.setKiloJoules(pool.getKiloJoules() - kJFloor);
+            pool.setJoulesBuffer(pool.getJoulesBuffer() - joulesNeeded);
 
             if (this.progressTime > this.maxProgressTime) completeRecipe();
         } else {
             this.hasNotEnoughEnergy = true;
-            //only decrease progress once a tick when using max sized pool
-            if (pool.getOffsetTimer() % (pool.MAX_COLUMNS * pool.MAX_COLUMNS)/(pool.getColumnCount() * pool.getRowCount()) == 0L) this.decreaseProgress();
+            //only decrease progress once a tick when using max sized pool (two sequential divisions to avoid cast to long)
+            if (pool.getOffsetTimer() % (((MetaTileEntityEvaporationPool.MAX_COLUMNS * MetaTileEntityEvaporationPool.MAX_COLUMNS)/pool.getColumnCount()) /pool.getRowCount()) == 0) this.decreaseProgress();
         }
     }
 

@@ -124,6 +124,20 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
             return byteArray;
         }
+
+        public String toString() {
+            int bitCount = intArray[0];
+            String output = "";
+            for (int i = 0; i < bitCount; ++i) {
+                if ((i & 7) == 0) {
+                    output += "\n"; //new line for new byte
+                }
+
+                output += getBit(i) ? "1" : "0";
+            }
+
+            return output;
+        }
     }
 
     /*
@@ -328,8 +342,11 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         if (columnCount < 1) columnCount = 1;
         if (rowCount < 1) rowCount = 1;
 
-        //Unforgiving (deducts from total even on previously unexposed blocks) on initial pass to avoid incongruency with exposedBlocks. Should only happen first time being formed
-        if (wasExposed == null) wasExposed = new BitArray(columnCount * rowCount, true);
+        //if no bits are being stored, initialize
+        if (wasExposed.intArray[0] == 0) {
+            wasExposed = new BitArray(columnCount * rowCount, false);
+            this.exposedBlocks = 0; //ensure exposedBlocks dont go higher than expected
+        }
 
         if (structurePattern != null && currColCount == columnCount && currRowCount == rowCount && currContPos == controllerPosition) return structurePattern;
 
@@ -709,11 +726,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         //ensure timer is non-negative by anding sign bit with 0
         tickTimer = tickTimer & 0b01111111111111111111111111111111;
 
-        final int CUBE_HEAT_CAPACITY = 100; //kJ/m^3
-        if (getKiloJoules() > CUBE_HEAT_CAPACITY * columnCount * rowCount) {
-            setKiloJoules(CUBE_HEAT_CAPACITY * columnCount * rowCount);
-        }
-
         //should skip/cost an extra tick the first time and then anywhere from 1-19 extra when rolling over. Determines exposedblocks
         if (tickTimer % 20 == 0 && tickTimer != 0) {
             //no sunlight heat generated when raining or during night. May be incongruent with partial exposure to sun, but oh well
@@ -726,7 +738,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             //checks for ow and skylight access to prevent beneath portal issues (-1 = the Nether, 0 = normal world)
             else if (getWorld().provider.getDimension() == 0) {
                 //tickTimer is always multiple of 20 at this point, so division by 20 yields proper counter. You can treat (tickTimer/20) as 'i'
-                int row = ((tickTimer /20) /columnCount) % rowCount; //going left to right, top to bottom checking skylight access.
+                int row = ((tickTimer /20) /columnCount) % rowCount; //going left to right, further to closer checking skylight access.
                 int col = ((tickTimer /20) % columnCount);
                 SusyLog.logger.atError().log("Back: " + getFrontFacing().getOpposite() + ", Left: " + getFrontFacing().rotateY() + ", Right: " + getFrontFacing().rotateYCCW() + "; row: " + row + ", col: " + col);
                 //places blockpos for skycheck into correct position. Row counts from furthest to closest (kinda inconsistent but oh well)
@@ -735,22 +747,24 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                 skyCheckPos.move(getFrontFacing().rotateY(), controllerPosition); //move to the furthest left
                 skyCheckPos.move(getFrontFacing().rotateYCCW(), col); //traverse down row
 
-                SusyLog.logger.atError().log("About to check sky access for block at pos: " + skyCheckPos);
-
+                SusyLog.logger.atError().log("About to check sky access for block at pos: " + skyCheckPos + " with bitArray: " + wasExposed.toString());
 
                 //Perform skylight check
                 if (!getWorld().canBlockSeeSky(skyCheckPos)) {
                     SusyLog.logger.atError().log("Failed sky check at " + skyCheckPos + " ; " + getWorld().canBlockSeeSky(skyCheckPos) + " w/ exposedBlocks: " + exposedBlocks);
-                    //only decrement exposedBlocks if previously exposed block is found to no longer be exposed.
-                    if (wasExposed.getBit(row*col + col)) {
+                    //only decrement exposedBlocks if previously exposed block is found to no longer be exposed and one full pass has occurred
+                    if (wasExposed.getBit((row * columnCount) + col) && tickTimer/20 > rowCount * columnCount) {
                         exposedBlocks = Math.max(0, exposedBlocks -1);
-                        wasExposed.setBit(row*col + col, false);
+                        wasExposed.setBit((row * columnCount) + col, false);
                     }
                 }
                 else {
                     SusyLog.logger.atError().log("Passed sky check at " + skyCheckPos + " ; " + getWorld().canBlockSeeSky(skyCheckPos) + " w/ exposedBlocks: " + exposedBlocks);
-                    if (exposedBlocks < rowCount * columnCount) ++exposedBlocks;
-                    wasExposed.setBit(row*col + col, true);
+                    //only increment if block was not previously exposed
+                    if (!wasExposed.getBit((row * columnCount) + col)) {
+                        if (exposedBlocks < rowCount * columnCount) ++exposedBlocks;
+                        wasExposed.setBit((row * columnCount) + col, true);
+                    }
                     SusyLog.logger.atError().log("exposedBlock: " + exposedBlocks);
                 }
             }
@@ -964,6 +978,12 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     }
 
     public boolean inputEnergy(int joules) {
+        //limit amount of energy stored
+        final int CUBE_HEAT_CAPACITY = 100; //kJ/m^3
+        if (getKiloJoules() > CUBE_HEAT_CAPACITY * columnCount * rowCount) {
+            return false;
+        }
+
         int kJ = joules/1000;
         joules -= kJ * 1000;
         joulesBuffer += joules;
@@ -974,13 +994,13 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     }
 
     public int calcMaxSteps(int jStepSize) {
-        int stepCount = (getKiloJoules() * 1000)/jStepSize;
-        int remainder = getKiloJoules() * 1000 - stepCount * jStepSize;
+        int stepCount = (getKiloJoules() * 1000)/jStepSize; //max number of times jStepSize can cleanly be deducted from kiloJoules
+        int remainder = (stepCount +1) * jStepSize - getKiloJoules() * 1000; //remaining joules needed to not waste partial kJ
 
         if (joulesBuffer > remainder) ++stepCount;
         else remainder = 0;
 
-        stepCount += (joulesBuffer - remainder)/jStepSize;
+        stepCount += (joulesBuffer - remainder)/jStepSize; //number of jSteps which can come entirely from joulesBuffer
         return stepCount;
     }
 }

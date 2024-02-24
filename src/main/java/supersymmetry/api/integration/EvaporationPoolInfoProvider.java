@@ -30,8 +30,25 @@ public class EvaporationPoolInfoProvider implements IProbeInfoProvider {
             if (metaTileEntity instanceof MetaTileEntityEvaporationPool) {
                 MetaTileEntityEvaporationPool evapPool = ((MetaTileEntityEvaporationPool) metaTileEntity);
                 probeInfo.text(TextStyleClass.INFO + "{*gregtech.top.evaporation_pool_heated_preface*} " + (evapPool.isHeated ? ( TextFormatting.GREEN + "{*gregtech.top.evaporation_pool_is_heated*} ") : (TextFormatting.RED + "{*gregtech.top.evaporation_pool_not_heated*} ")));
-                probeInfo.text(TextStyleClass.INFO + "{*gregtech.top.evaporation_pool.energy_transferred*} " + ( TextFormatting.GREEN +  Integer.toString(evapPool.getKiloJoules()) ) + ( TextFormatting.WHITE + " {*gregtech.top.evaporation_pool.kilojoules*}" ) );
+                probeInfo.text(TextStyleClass.INFO + "{*gregtech.top.evaporation_pool.energy_transferred*} " + (TextFormatting.GREEN + (evapPool.getKiloJoules() + "."))
+                        + (TextFormatting.GREEN + constLengthToString(evapPool.getJoulesBuffer())) + (TextFormatting.WHITE + ("{*gregtech.top.evaporation_pool.kilojoules*}")));
             }
         }
+    }
+
+    public String constLengthToString(int i) {
+        String output = Integer.toString(i);
+        int length = output.length();
+
+        while (length < 3) {
+            output = "0" + output;
+            ++length;
+        }
+
+        if (length > 3) {
+            output = output.substring(length -3);
+        }
+
+        return output;
     }
 }
