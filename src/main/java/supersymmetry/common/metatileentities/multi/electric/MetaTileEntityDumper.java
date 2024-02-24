@@ -39,16 +39,13 @@ import java.util.List;
 public class MetaTileEntityDumper extends VoidingMultiblockBase {
     public MetaTileEntityDumper(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
+        // Hardcode these annoyances for now
+        fluidCache.put(FluidRegistry.WATER, true);
+        fluidCache.put(FluidRegistry.LAVA, true);
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
         return new MetaTileEntityDumper(this.metaTileEntityId);
-    }
-
-    // Hardcode these annoyances for now
-    static {
-        fluidCache.put(FluidRegistry.WATER, true);
-        fluidCache.put(FluidRegistry.LAVA, true);
     }
 
     @Override

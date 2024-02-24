@@ -26,7 +26,7 @@ public abstract class VoidingMultiblockBase extends MultiblockWithDisplayBase {
     public final int voidingFrequency = 10;
     public boolean active = false;
 
-    public static Object2BooleanOpenHashMap<Fluid> fluidCache = new Object2BooleanOpenHashMap<>();
+    public Object2BooleanOpenHashMap<Fluid> fluidCache = new Object2BooleanOpenHashMap<>();
 
     public VoidingMultiblockBase(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
