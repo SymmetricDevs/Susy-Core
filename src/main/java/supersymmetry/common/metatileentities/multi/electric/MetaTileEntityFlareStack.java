@@ -159,6 +159,9 @@ public class MetaTileEntityFlareStack extends MultiblockWithDisplayBase {
             this.height = buf.readInt();
             this.rateBonus = buf.readInt();
         }
+        if(dataId == GregtechDataCodes.IS_WORKING) {
+            this.active = this.lastActive;
+        }
     }
 
     @Override
