@@ -150,10 +150,6 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<CatalystRecipeBuilder> CATALYTIC_REFORMER_RECIPES = new RecipeMap<>("catalytic_reformer_recipes", 1, 0, 2, 4, new CatalystRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_CRACKING, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.FURNACE);
-
-    public static final RecipeMap<NoEnergyRecipeBuilder> SMOKE_STACK = new RecipeMap<>("smoke_stack", 0, 0, 1, 0, new NoEnergyRecipeBuilder(), false)
-            .setSound(GTSoundEvents.FURNACE);
-
     public static final RecipeMap<SimpleRecipeBuilder> FERMENTATION_VAT_RECIPES = new RecipeMap<>("vat_fermentation", 3, 3, 3, 3, new SimpleRecipeBuilder(), false)
             .setSlotOverlay(false, false, true, GuiTextures.DUST_OVERLAY)
             .setSlotOverlay(true, false, true, GuiTextures.DUST_OVERLAY)
