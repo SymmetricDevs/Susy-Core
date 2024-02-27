@@ -813,3 +813,11 @@ susy.command.horde.status.no_active_invasion=Player %s has no active invasion.
 susy.fluid.voiding.liquid=Voidable with Dumper
 susy.fluid.voiding.gas=Voidable with Smoke Stack
 susy.fluid.voiding.flammable=Voidable with Flare Stack
+
+death.attack.toxic_atmo=%s's lungs were shredded
+death.attack.suffocation=%s couldn't breathe
+
+metaitem.simple_gas_mask.name=Primitive Gas Mask
+metaitem.simple_gas_mask.tooltip=Survive in oxygenless environments
+metaitem.gas_mask.name=Gas Mask
+metaitem.gas_mask.tooltip=Survive in toxic environments
