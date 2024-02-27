@@ -29,6 +29,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -37,6 +38,7 @@ import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.event.MobHordeEvent;
 import supersymmetry.common.entities.EntityDropPod;
+import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.event.MobHordePlayerData;
 import supersymmetry.common.event.MobHordeWorldData;
 
@@ -130,7 +132,7 @@ public class EventHandlers {
     }
 
     @SubscribeEvent
-    public static void on(TickEvent.WorldTickEvent event) {
+    public static void onWorldTick(TickEvent.WorldTickEvent event) {
 
         World world = event.world;
 
@@ -151,6 +153,13 @@ public class EventHandlers {
             MobHordeWorldData mobHordeWorldData = MobHordeWorldData.get(world);
             list.getPlayers().forEach(p -> mobHordeWorldData.getPlayerData(p.getPersistentID()).update(p));
             mobHordeWorldData.markDirty();
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if (FMLCommonHandler.instance().getMinecraftServerInstance().getTickCounter() % 20 == 0) {
+            DimensionBreathabilityHandler.checkPlayer(event.player);
         }
     }
 }

@@ -758,3 +758,11 @@ susy.command.horde.start.started=Successfully started %s invasion.
 susy.command.horde.stop.usage=/mobHorde stop
 susy.command.horde.stop.has_active_no_invasion=No active invasion to stop.
 susy.command.horde.stop.stopped=Successfully stopped %s invasion.
+
+death.attack.toxic_atmo=%s's lungs were shredded
+death.attack.suffocation=%s couldn't breathe
+
+metaitem.simple_gas_mask.name=Primitive Gas Mask
+metaitem.simple_gas_mask.tooltip=Survive in oxygenless environments
+metaitem.gas_mask.name=Gas Mask
+metaitem.gas_mask.tooltip=Survive in toxic environments

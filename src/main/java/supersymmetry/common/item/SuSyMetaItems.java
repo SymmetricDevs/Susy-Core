@@ -1,31 +1,39 @@
 package supersymmetry.common.item;
 
 import gregtech.api.GTValues;
+import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.items.metaitem.MetaItem.MetaValueItem;
 import gregtech.api.items.metaitem.MetaOreDictItem;
 import gregtech.api.items.metaitem.MetaOreDictItem.OreDictValueItem;
 import gregtech.api.items.metaitem.StandardMetaItem;
 import gregtech.api.unification.material.info.MaterialIconSet;
 import gregtech.api.unification.ore.OrePrefix;
+import gregtech.common.ConfigHolder;
 import gregtech.common.items.behaviors.TooltipBehavior;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 
 public class SuSyMetaItems {
 
     private static StandardMetaItem metaItem;
+    private static ArmorMetaItem<ArmorMetaItem<?>.ArmorMetaValueItem> armorItem;
     public static MetaOreDictItem oreDictItem;
     public static MetaValueItem CATALYST_BED_SUPPORT_GRID;
     public static MetaValueItem CONVEYOR_STEAM;
     public static MetaValueItem PUMP_STEAM;
     public static MetaValueItem AIR_VENT;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem SIMPLE_GAS_MASK;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_MASK;
 
     public static void initMetaItems() {
         metaItem = new StandardMetaItem();
         metaItem.setRegistryName("meta_item");
         oreDictItem = new MetaOreDictItem((short) 0);
         oreDictItem.setRegistryName("susy_oredict_item");
+        armorItem = new ArmorMetaItem<>();
+        armorItem.setRegistryName("susy_armor_item");
 
         CatalystItems.init();
 
@@ -50,6 +58,11 @@ public class SuSyMetaItems {
         AIR_VENT = metaItem.addItem(4, "air_vent").addComponents(new TooltipBehavior((lines) -> {
             lines.add(I18n.format("gregtech.universal.tooltip.fluid_transfer_rate", 100));
         }));
+        SIMPLE_GAS_MASK = armorItem.addItem(0, "simple_gas_mask")
+                .setArmorLogic(new SimpleGasMask());
+        GAS_MASK = armorItem.addItem(1, "gas_mask").setArmorLogic(new GasMask(2,
+                80_000L * (long) Math.max(1, Math.pow(1, ConfigHolder.tools.voltageTierNightVision - 1)),
+                ConfigHolder.tools.voltageTierNightVision, EntityEquipmentSlot.HEAD));
     }
 
     private static void addTieredOredictItem (OreDictValueItem[] items, int id, int RGB, OrePrefix prefix) {

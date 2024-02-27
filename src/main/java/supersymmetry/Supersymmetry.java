@@ -17,6 +17,7 @@ import supersymmetry.common.command.CommandHordeBase;
 import supersymmetry.common.command.CommandHordeStart;
 import supersymmetry.common.command.CommandHordeStop;
 import supersymmetry.common.covers.SuSyCoverBehaviors;
+import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
@@ -51,6 +52,8 @@ public class Supersymmetry {
 
         SuSyMetaTileEntities.init();
         SusyMetaEntities.init();
+
+        DimensionBreathabilityHandler.loadConfig();
     }
 
     @Mod.EventHandler
