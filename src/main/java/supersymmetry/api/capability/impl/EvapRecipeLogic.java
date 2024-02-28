@@ -15,7 +15,7 @@ import static supersymmetry.api.util.SuSyUtility.JOULES_PER_EU;
 
 public class EvapRecipeLogic extends MultiblockRecipeLogic {
     private final MetaTileEntityEvaporationPool pool;
-    public static final int HEAT_DENOMINATOR = 6*20; //transfers one sixth of its energy every second (20 ticks)
+    public static final int HEAT_DENOMINATOR = 6*10; //transfers one sixth of its energy every half a second (10 ticks) as 1/6th every second seemed too low, with cupro depositing 1ALv/t
     public static final int MAX_STEP_FRACTION = 4; //denominator of fraction of progress which can be done in one step. (1/(MAX_STEP_FRACTION)) = max percent allowed
 
     public EvapRecipeLogic(MetaTileEntityEvaporationPool tileEntity) {
@@ -40,14 +40,16 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
 
     @Override
     protected void updateRecipeProgress() {
+        SusyLog.logger.atError().log("isHeated: " + pool.getIsHeated() + ", coilStateMeta: " + pool.coilStateMeta + ", coilStats: " + (pool.coilStats == null ? ("null") : (pool.coilStats)));
         //if null then no heating can be done, otherwise add joules according to coil values and energy available
         if (pool.coilStats != null && pool.getIsHeated()) {
             int coilHeat = pool.coilStats.getCoilTemperature();
             //assumes specific heat of 1J/(g*delta temp) and perfect heat transfer on one face of the coil for 1/6 of total delta temp. Uses mass as a multiplier and 1/4 because coil is not solid block of primary material. Last portion calculates number of coils.
-            int heatingJoules = (coilHeat/HEAT_DENOMINATOR) * ((int)pool.coilStats.getMaterial().getMass()/4) * ( ((pool.getColumnCount()/2 +1) * pool.getRowCount()) + pool.getColumnCount()/2);
-            heatingJoules = Math.min(((int)getEnergyStored()) * JOULES_PER_EU, heatingJoules); //attempt to transfer entire heatingJoules amount or what is left in energy container
+            int heatingJoules = (coilHeat/HEAT_DENOMINATOR) * ((int)pool.coilStats.getMaterial().getMass()/4) * ( ((pool.getColumnCount()/2 +1) * pool.getRowCount()) + pool.getColumnCount()/2); //20 should limit it to reasonable per tick levels
+            heatingJoules = Math.min( ((int)getEnergyStored()) * JOULES_PER_EU, heatingJoules); //attempt to transfer entire heatingJoules amount or what is left in energy container
             boolean couldInput = pool.inputEnergy(heatingJoules);
-            if (couldInput) pool.getEnergyContainer().removeEnergy(heatingJoules/JOULES_PER_EU);
+            if (couldInput) pool.getEnergyContainer().removeEnergy(heatingJoules/(JOULES_PER_EU * pool.coilStats.getEnergyDiscount())); //energy should always be available as heatingJoules is either itself or energy*JpEU
+            SusyLog.logger.atError().log("Attempted to deposit " + heatingJoules + "; success state of: " + couldInput + " and pool buffer of: " + pool.getKiloJoules() + "." + pool.getJoulesBuffer());
         }
 
         int maxSteps = pool.calcMaxSteps(getJt());
