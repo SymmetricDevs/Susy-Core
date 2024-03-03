@@ -39,10 +39,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
+import supersymmetry.api.metatileentity.PseudoMultiMachineMetaTileEntity;
+import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.materials.SusyMaterials;
 
-public class MetaTileEntityLatexCollector extends TieredMetaTileEntity {
+public class MetaTileEntityLatexCollector extends PseudoMultiMachineMetaTileEntity {
     private final int tankSize;
     private final long latexCollectionAmount;
     private final long euT;
@@ -50,7 +53,7 @@ public class MetaTileEntityLatexCollector extends TieredMetaTileEntity {
     private EnumFacing outputFacingFluids;
 
     public MetaTileEntityLatexCollector(ResourceLocation metaTileEntityId, int tier) {
-        super(metaTileEntityId, tier);
+        super(metaTileEntityId, SuSyRecipeMaps.LATEX_COLLECTOR_RECIPES, SusyTextures.LATEX_COLLECTOR_OVERLAY, tier, true, SuSyUtility.collectorTankSizeFunction);
         this.tankSize = 16000;
         this.latexCollectionAmount = 5L * (long)tier;
         this.euT = GTValues.V[tier];
@@ -215,14 +218,8 @@ public class MetaTileEntityLatexCollector extends TieredMetaTileEntity {
     }
 
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
-        tooltip.add(I18n.format("gregtech.machine.latex_collector.tooltip", this.latexCollectionAmount));
-
-        tooltip.add(I18n.format("gregtech.universal.tooltip.voltage_in", new Object[]{this.energyContainer.getInputVoltage(), GTValues.VNF[this.getTier()]}));
-        tooltip.add(I18n.format("gregtech.universal.tooltip.energy_storage_capacity", new Object[]{this.energyContainer.getEnergyCapacity()}));
-    }
-
-    public boolean needsSneakToRotate() {
-        return true;
+        super.addInformation(stack, player, tooltip, advanced);
+        tooltip.set(1, I18n.format("gregtech.machine.latex_collector.tooltip", new Object[]{this.latexCollectionAmount})); // Note that
     }
     public boolean getIsWeatherOrTerrainResistant() {
         return true;
