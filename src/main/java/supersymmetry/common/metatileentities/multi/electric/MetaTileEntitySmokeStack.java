@@ -183,4 +183,8 @@ public class MetaTileEntitySmokeStack extends VoidingMultiblockBase {
         return true;
     }
 
+    @Override
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
 }

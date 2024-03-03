@@ -201,4 +201,10 @@ public class MetaTileEntityFlareStack extends VoidingMultiblockBase {
     public boolean hasMufflerMechanics() {
         return true;
     }
+
+
+    @Override
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
 }
