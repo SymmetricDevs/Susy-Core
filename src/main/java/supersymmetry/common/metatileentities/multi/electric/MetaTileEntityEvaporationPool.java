@@ -8,6 +8,7 @@ import codechicken.lib.vec.Matrix4;
 import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
 import gregtech.api.block.IHeatingCoilBlockStats;
+import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -28,6 +29,7 @@ import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
 import gregtech.common.metatileentities.MetaTileEntities;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -35,8 +37,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.ArrayUtils;
@@ -124,6 +128,20 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
             return byteArray;
         }
+
+        public String toString() {
+            int bitCount = intArray[0];
+            String output = "";
+            for (int i = 0; i < bitCount; ++i) {
+                if ((i & 7) == 0) {
+                    output += "\n"; //new line for new byte
+                }
+
+                output += getBit(i) ? "1" : "0";
+            }
+
+            return output;
+        }
     }
 
     /*
@@ -150,7 +168,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     int tickTimer = 0;
 
     public static final int fluidNameID = 12090539;
-    String currentFluidName = "water";
 
     //just initialized on formation
     public IHeatingCoilBlockStats coilStats;
@@ -322,14 +339,17 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         // this means auto-build will still work, and prevents terminal crashes.
         if (getWorld() != null) updateStructureDimensions();
 
-        coilStats = coilStateMeta > -1 ? HEATING_COILS.get(MetaBlocks.WIRE_COIL.getStateFromMeta(coilStateMeta)) : null;
+        initializeCoilStats();
 
         // these can sometimes get set to 0 when loading the game, breaking JEI (Apparently; text from cleanroom impl)
         if (columnCount < 1) columnCount = 1;
         if (rowCount < 1) rowCount = 1;
 
-        //Unforgiving (deducts from total even on previously unexposed blocks) on initial pass to avoid incongruency with exposedBlocks. Should only happen first time being formed
-        if (wasExposed == null) wasExposed = new BitArray(columnCount * rowCount, true);
+        //if no bits are being stored, initialize
+        if (wasExposed == null || wasExposed.intArray[0] == 0) {
+            wasExposed = new BitArray(columnCount * rowCount, false);
+            this.exposedBlocks = 0; //ensure exposedBlocks dont go higher than expected
+        }
 
         if (structurePattern != null && currColCount == columnCount && currRowCount == rowCount && currContPos == controllerPosition) return structurePattern;
 
@@ -353,8 +373,8 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                 //begin predicates
                 .where('S', selfPredicate())
                 .where('E', isEdge()
-                        .or(autoAbilities(false, false, true, true, true, true, false).setMaxGlobalLimited(4))
-                        .or(abilities(MultiblockAbility.INPUT_ENERGY).setPreviewCount(0)))
+                        .or(autoAbilities(false, false, true, true, true, true, false).setMaxGlobalLimited(8))
+                        .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(0).setMaxGlobalLimited(2).setPreviewCount(0)))
                 .where('G', isGround())
                 .where('C', isContainer())
                 .where('#', air())
@@ -507,11 +527,13 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         if (result != -1) {
             coilStateMeta = -1;
             isHeated = false;
+            initializeCoilStats();
             return false;
         }; //block is a coil at this point, so if coil pattern fails exit with false (invalidates structure)
 
         //if check is passed structure is valid heatable evap pool
         isHeated = true;
+        initializeCoilStats();
 
         this.writeCustomData(predicateID, (buf) -> {
             buf.writeBoolean(isHeated);
@@ -520,6 +542,8 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
         return true;
     }
+
+    public void initializeCoilStats() { coilStats = coilStateMeta > -1 ? HEATING_COILS.get(MetaBlocks.WIRE_COIL.getStateFromMeta(coilStateMeta)) : null; }
 
     public boolean isValidCoil(IBlockState state) {
         if (!MetaBlocks.WIRE_COIL.getBlockState().getValidStates().contains(state)) return this.isValidGround(state);
@@ -644,55 +668,95 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         }
     }
 
-    public BlockPos.MutableBlockPos getCorner(boolean isClose) {
+    public BlockPos.MutableBlockPos getCorner(boolean isClose, boolean isLeft) {
         BlockPos.MutableBlockPos corner = new BlockPos.MutableBlockPos(getPos());
         EnumFacing back = getFrontFacing().getOpposite();
         EnumFacing left = getFrontFacing().rotateY(); //left if you're looking at controller
 
         corner.move(EnumFacing.UP); //place on level of fluid in pool
-        if (isClose) {
+
+        //Puts on leftmost or rightmost column
+        if (isLeft) {
             corner.move(left, controllerPosition); //line up with leftmost column of interior
-            corner.move(back, 2); //place in interior
         } else {
             corner.move(left.getOpposite(), columnCount - controllerPosition -1); //line up w/ furthest right interior column
+        }
+
+        //Puts on closest or furthest row
+        if (isClose) {
+            corner.move(back, 2); //place in interior
+        } else {
             corner.move(back, rowCount +1); //move onto last row
         }
 
         return corner;
     }
 
+    public <T extends MultiblockRecipeLogic> void renderFluid(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline, IBlockAccess world, EnumFacing frontFacing, T recipeMapWorkable) {
+
+        if ((this.tickTimer +1) % 20 == 0) {
+            SusyLog.logger.atError().log("About to attempt rendering with getWorld: " + (world == null ? "null" : world) + ", isStructureFormed: " + (isStructureFormed()) + ", isActive: " + (recipeMapWorkable == null ? "null" : (recipeMapWorkable.isActive()) + ", previousRecipe: " + (recipeMapWorkable.getPreviousRecipe() == null ? "null" : recipeMapWorkable.isActive())));
+        }
+
+        //display fluid in evap pool (not running for some reason)
+        if (this.getWorld() == null || !this.isStructureFormed() || !recipeMapWorkable.isActive() || recipeMapWorkable.getPreviousRecipe() == null) { return; }
+
+        SusyLog.logger.atError().log("Passed rendering check");
+
+        //Create a box with slight margins since going from exactly 0 to exactly 1 causes some faces to not render properly
+        Cuboid6 partialFluidBox = new Cuboid6(0.001, 0.001, 0.001, 0.999,
+                0.875, 0.999);
+
+        //Set our box to the percentage of the tank that is full
+        partialFluidBox.max.y = 0.875f; //should be 15 pixels out of 16 full
+
+        //when looking at controller facing south leftmost col is West, and when facing West leftmost is North
+        boolean isLeftMostColumn = frontFacing == EnumFacing.SOUTH || frontFacing == EnumFacing.WEST;
+        boolean isFurthestRow = frontFacing == EnumFacing.SOUTH || frontFacing == EnumFacing.WEST;
+
+        //scale only works into positive direction, so we want block in most negative corner for both coords [W, N]
+        BlockPos.MutableBlockPos corner = getCorner(isFurthestRow, isLeftMostColumn);
+
+        int EWFacing = frontFacing.getHorizontalIndex() & 1; //odd horizontal index
+        int NSFacing = (frontFacing.getHorizontalIndex() +1) & 1; //even horizontal index
+
+        //apply translations to scale properly; "back distance and length are switched in the case of WEST and EAST as a form of "rotation" since translation.rotate is broken..."
+        translation.translate((corner.getX() - getPos().getX()), 1, corner.getZ() - getPos().getZ());
+        translation.scale(EWFacing * rowCount + NSFacing * columnCount, 1, EWFacing * columnCount + NSFacing * rowCount);
+
+        //previous recipe is actually previously found recipe which is now being run, or attempting to be run
+        FluidStack fluidStack = recipeMapWorkable.getPreviousRecipe().getFluidInputs().get(0).getInputFluidStack();
+
+        //store previous renderer state
+        CubeRendererState op = Textures.RENDER_STATE.get();
+
+        renderState.setBrightness(getWorld(), getPos());
+
+        //modify render state for own uses and then render top
+        Textures.RENDER_STATE.set(new CubeRendererState(op.layer, CubeRendererState.PASS_MASK, op.world));
+        renderState.setFluidColour(fluidStack);
+        Textures.renderFace(renderState, translation, pipeline, EnumFacing.UP, partialFluidBox,
+                TextureUtils.getTexture(fluidStack.getFluid().getStill()),
+                BlockRenderLayer.CUTOUT_MIPPED);
+
+        //return renderer to original state
+        Textures.RENDER_STATE.set(op);
+    }
+
     @Override
     public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
+        if ((this.tickTimer +1) % 20 == 0) {
+            SusyLog.logger.atError().log("BEFORE RENDER CALL with world: " + (this.getWorld() == null ? "null" : this.getWorld()) + ", isStructureFormed: " + (this.isStructureFormed()) + ", isActive: " + (this.getRecipeMapWorkable() == null ? "null" : (this.getRecipeMapWorkable().isActive()) + ", previousRecipe: " + (this.getRecipeMapWorkable().getPreviousRecipe() == null ? "null" : this.getRecipeMapWorkable().isActive())));
+        }
+
         super.renderMetaTileEntity(renderState, translation, pipeline);
         getFrontOverlay().renderOrientedState(renderState, translation, pipeline, getFrontFacing(), recipeMapWorkable.isActive(), recipeMapWorkable.isWorkingEnabled());
-
-        //display fluid in evap pool
-        if (recipeMapWorkable.isActive() && isStructureFormed() && currentFluidName != null && FluidRegistry.getFluid(currentFluidName).getStill() != null) {
-            EnumFacing back = getFrontFacing().getOpposite();
-            BlockPos.MutableBlockPos closerCorner = getCorner(true);
-            BlockPos.MutableBlockPos furtherCorner = getCorner(false);
-            double minX = Math.min(closerCorner.getX(), furtherCorner.getX());
-            double minY = closerCorner.getY(); //will give bottom of block
-            double minZ = Math.min(closerCorner.getZ(), furtherCorner.getZ());
-
-            double maxX = Math.max(closerCorner.getX(), furtherCorner.getX());
-            double maxY = minY + 0.8125; //should come up to fluid level
-            double maxZ = Math.max(closerCorner.getZ(), furtherCorner.getZ());
-
-            Matrix4 offset = translation.copy().translate(back.getXOffset(), -0.3, back.getZOffset());
-            CubeRendererState op = Textures.RENDER_STATE.get();
-            Textures.RENDER_STATE.set(new CubeRendererState(op.layer, CubeRendererState.PASS_MASK, op.world));
-            Textures.renderFace(renderState, offset,
-                    ArrayUtils.addAll(pipeline, new LightMapOperation(240, 240), new ColourOperation(0xFFFFFFFF)),
-                    EnumFacing.UP, Cuboid6.full,
-                    TextureUtils.getTexture(FluidRegistry.getFluid(currentFluidName).getStill()), BlockRenderLayer.TRANSLUCENT);
-            Textures.RENDER_STATE.set(op);
-        }
+        renderFluid(renderState, translation, pipeline, this.getWorld(), this.getFrontFacing(), this.getRecipeMapWorkable());
     }
 
     @Override
     public void update() {
-        super.update();
+        super.update(); //means recipe logic happens before heating is added
 
         if(this.getWorld().isRemote) {
             if (this.isActive()) {
@@ -709,11 +773,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         //ensure timer is non-negative by anding sign bit with 0
         tickTimer = tickTimer & 0b01111111111111111111111111111111;
 
-        final int CUBE_HEAT_CAPACITY = 100; //kJ/m^3
-        if (getKiloJoules() > CUBE_HEAT_CAPACITY * columnCount * rowCount) {
-            setKiloJoules(CUBE_HEAT_CAPACITY * columnCount * rowCount);
-        }
-
         //should skip/cost an extra tick the first time and then anywhere from 1-19 extra when rolling over. Determines exposedblocks
         if (tickTimer % 20 == 0 && tickTimer != 0) {
             //no sunlight heat generated when raining or during night. May be incongruent with partial exposure to sun, but oh well
@@ -726,7 +785,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             //checks for ow and skylight access to prevent beneath portal issues (-1 = the Nether, 0 = normal world)
             else if (getWorld().provider.getDimension() == 0) {
                 //tickTimer is always multiple of 20 at this point, so division by 20 yields proper counter. You can treat (tickTimer/20) as 'i'
-                int row = ((tickTimer /20) /columnCount) % rowCount; //going left to right, top to bottom checking skylight access.
+                int row = ((tickTimer /20) /columnCount) % rowCount; //going left to right, further to closer checking skylight access.
                 int col = ((tickTimer /20) % columnCount);
                 SusyLog.logger.atError().log("Back: " + getFrontFacing().getOpposite() + ", Left: " + getFrontFacing().rotateY() + ", Right: " + getFrontFacing().rotateYCCW() + "; row: " + row + ", col: " + col);
                 //places blockpos for skycheck into correct position. Row counts from furthest to closest (kinda inconsistent but oh well)
@@ -735,22 +794,24 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                 skyCheckPos.move(getFrontFacing().rotateY(), controllerPosition); //move to the furthest left
                 skyCheckPos.move(getFrontFacing().rotateYCCW(), col); //traverse down row
 
-                SusyLog.logger.atError().log("About to check sky access for block at pos: " + skyCheckPos);
-
+                SusyLog.logger.atError().log("About to check sky access for block at pos: " + skyCheckPos + " with bitArray: " + wasExposed.toString());
 
                 //Perform skylight check
                 if (!getWorld().canBlockSeeSky(skyCheckPos)) {
                     SusyLog.logger.atError().log("Failed sky check at " + skyCheckPos + " ; " + getWorld().canBlockSeeSky(skyCheckPos) + " w/ exposedBlocks: " + exposedBlocks);
-                    //only decrement exposedBlocks if previously exposed block is found to no longer be exposed.
-                    if (wasExposed.getBit(row*col + col)) {
+                    //only decrement exposedBlocks if previously exposed block is found to no longer be exposed and one full pass has occurred
+                    if (wasExposed.getBit((row * columnCount) + col) && tickTimer/20 > rowCount * columnCount) {
                         exposedBlocks = Math.max(0, exposedBlocks -1);
-                        wasExposed.setBit(row*col + col, false);
+                        wasExposed.setBit((row * columnCount) + col, false);
                     }
                 }
                 else {
                     SusyLog.logger.atError().log("Passed sky check at " + skyCheckPos + " ; " + getWorld().canBlockSeeSky(skyCheckPos) + " w/ exposedBlocks: " + exposedBlocks);
-                    if (exposedBlocks < rowCount * columnCount) ++exposedBlocks;
-                    wasExposed.setBit(row*col + col, true);
+                    //only increment if block was not previously exposed
+                    if (!wasExposed.getBit((row * columnCount) + col)) {
+                        if (exposedBlocks < rowCount * columnCount) ++exposedBlocks;
+                        wasExposed.setBit((row * columnCount) + col, true);
+                    }
                     SusyLog.logger.atError().log("exposedBlock: " + exposedBlocks);
                 }
             }
@@ -796,7 +857,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         data.setInteger("kiloJoules", this.kiloJoules);
         data.setInteger("tickTimer", this.tickTimer);
         data.setInteger("coilStateMeta", this.coilStateMeta);
-        data.setString("currentFluidName", this.currentFluidName);
         return data;
     }
 
@@ -829,9 +889,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         }
         if (data.hasKey("coilStateMeta")) {
             this.coilStateMeta = data.getInteger("coilStateMeta");
-        }
-        if (data.hasKey("currentFluidName")) {
-            this.currentFluidName = data.getString("currentFluidName");
+            initializeCoilStats();
         }
         SusyLog.logger.atFatal().log("before reinit");
         SusyLog.logger.atError().log("columnCount: " + columnCount + ", controllerPosition: " + controllerPosition + ", rowCount: " + rowCount);
@@ -855,7 +913,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         buf.writeInt(this.kiloJoules);
         buf.writeInt(this.tickTimer);
         buf.writeInt(this.coilStateMeta);
-        buf.writeString(this.currentFluidName);
     }
 
     @Override
@@ -870,9 +927,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         this.kiloJoules = buf.readInt();
         this.tickTimer = buf.readInt();
         this.coilStateMeta = buf.readInt();
-        this.currentFluidName = buf.readString(100); //probably long enough to cover all fluids
         reinitializeStructurePattern();
-
     }
 
     @Override
@@ -885,13 +940,12 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         } else if (dataId == predicateID) {
             this.isHeated = buf.readBoolean();
             this.coilStateMeta = buf.readInt();
+            initializeCoilStats();
         } else if (dataId == energyValuesID) {
             this.exposedBlocks = buf.readInt();
             this.wasExposed = new BitArray(buf.readByteArray());
             this.kiloJoules = buf.readInt();
             this.tickTimer = buf.readInt();
-        } else if (dataId == fluidNameID) {
-            this.currentFluidName = buf.readString(100);
         }
     }
 
@@ -964,6 +1018,12 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     }
 
     public boolean inputEnergy(int joules) {
+        //limit amount of energy stored
+        final int CUBE_HEAT_CAPACITY = 100; //kJ/m^3
+        if (getKiloJoules() > CUBE_HEAT_CAPACITY * columnCount * rowCount) {
+            return false;
+        }
+
         int kJ = joules/1000;
         joules -= kJ * 1000;
         joulesBuffer += joules;
@@ -974,13 +1034,13 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     }
 
     public int calcMaxSteps(int jStepSize) {
-        int stepCount = (getKiloJoules() * 1000)/jStepSize;
-        int remainder = getKiloJoules() * 1000 - stepCount * jStepSize;
+        int stepCount = (getKiloJoules() * 1000)/jStepSize; //max number of times jStepSize can cleanly be deducted from kiloJoules
+        int remainder = (stepCount +1) * jStepSize - getKiloJoules() * 1000; //remaining joules needed to not waste partial kJ
 
         if (joulesBuffer > remainder) ++stepCount;
         else remainder = 0;
 
-        stepCount += (joulesBuffer - remainder)/jStepSize;
+        stepCount += (joulesBuffer - remainder)/jStepSize; //number of jSteps which can come entirely from joulesBuffer
         return stepCount;
     }
 }
