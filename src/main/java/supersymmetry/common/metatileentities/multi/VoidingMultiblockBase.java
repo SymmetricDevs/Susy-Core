@@ -115,6 +115,13 @@ public abstract class VoidingMultiblockBase extends MultiblockWithDisplayBase {
     }
 
     @Override
+    public void invalidateStructure() {
+        super.invalidateStructure();
+        this.active = false;
+        this.writeCustomData(GregtechDataCodes.IS_WORKING, (buf -> buf.writeBoolean(false)));
+    }
+
+    @Override
     public boolean hasMaintenanceMechanics() {
         return false;
     }

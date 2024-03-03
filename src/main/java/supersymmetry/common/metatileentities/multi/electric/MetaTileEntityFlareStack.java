@@ -82,13 +82,27 @@ public class MetaTileEntityFlareStack extends VoidingMultiblockBase {
     @Override
     protected void formStructure(PatternMatchContext context) {
         super.formStructure(context);
+        this.updateHeight();
+    }
+
+    // Update the height when rotating the multiblock
+    @Override
+    public void setUpwardsFacing(EnumFacing upwardsFacing) {
+        super.setUpwardsFacing(upwardsFacing);
+        this.updateHeight();
+    }
+
+    public void updateHeight() {
         World world = getWorld();
         // Minimum height
         int height = 5;
         // One block below the minimum height
-        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(getPos().up(height - 2));
+
+        EnumFacing relativeUp = UP.getRelativeFacing(this.getFrontFacing(), this.getUpwardsFacing(), this.isFlipped());
+
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(getPos().offset(relativeUp, height - 2));
         for ( ; height < 10 ; height++ ) {
-            if(isBlockMuffler(world, pos.move(EnumFacing.UP))) break;
+            if(isBlockMuffler(world, pos.move(relativeUp))) break;
         }
 
         this.height = height;
@@ -205,6 +219,6 @@ public class MetaTileEntityFlareStack extends VoidingMultiblockBase {
 
     @Override
     public boolean allowsExtendedFacing() {
-        return false;
+        return true;
     }
 }
