@@ -159,7 +159,7 @@ public class EventHandlers {
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (FMLCommonHandler.instance().getMinecraftServerInstance().getTickCounter() % 20 == 0) {
-            DimensionBreathabilityHandler.checkPlayer(event.player);
+            DimensionBreathabilityHandler.tickPlayer(event.player);
         }
     }
 }

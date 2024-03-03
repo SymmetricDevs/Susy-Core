@@ -4,6 +4,7 @@ import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.items.armor.IArmorLogic;
 import gregtech.api.items.metaitem.stats.IItemBehaviour;
 
+import gregtech.api.items.metaitem.stats.IItemDurabilityManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -14,8 +15,10 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+import supersymmetry.common.event.DimensionBreathabilityHandler;
 
-public class SimpleGasMask implements IArmorLogic {
+public class SimpleGasMask implements IArmorLogic, IItemDurabilityManager {
+    double damage = 1;
 
     @Override
     public EntityEquipmentSlot getEquipmentSlot(ItemStack itemStack) {
@@ -52,5 +55,17 @@ public class SimpleGasMask implements IArmorLogic {
         }
 
         return ActionResult.newResult(EnumActionResult.PASS, player.getHeldItem(hand));
+    }
+
+    public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
+        if (DimensionBreathabilityHandler.isInHazardousEnvironment(player)) {
+            damage -= 1. / (20. * 60. * 15.); // 20 ticks per second * 60 seconds per minute * 15 minutes
+        }
+    }
+
+
+    @Override
+    public double getDurabilityForDisplay(ItemStack itemStack) {
+        return 0;
     }
 }

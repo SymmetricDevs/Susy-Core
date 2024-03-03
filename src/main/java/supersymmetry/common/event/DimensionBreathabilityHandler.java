@@ -40,7 +40,7 @@ public final class DimensionBreathabilityHandler {
         // Nether
         dimensionBreathabilityMap.put(-1, new DimensionBreathabilityHandler.BreathabilityInfo(true, true, 1, 0));
         // Beneath
-        dimensionBreathabilityMap.put(111, new DimensionBreathabilityHandler.BreathabilityInfo(true, true, 4, 0));
+        dimensionBreathabilityMap.put(10, new DimensionBreathabilityHandler.BreathabilityInfo(true, true, 4, 0));
 
 
         itemBreathabilityMap.clear();
@@ -50,7 +50,7 @@ public final class DimensionBreathabilityHandler {
                 new BreathabilityInfo(true, true, 15, 0));
     }
 
-    public static void checkPlayer(EntityPlayer player) {
+    public static void tickPlayer(EntityPlayer player) {
         BreathabilityInfo dimInfo = dimensionBreathabilityMap.get(player.dimension);
         if (dimInfo == null) {
             dimInfo = defaultDimensionBreathability;
@@ -62,9 +62,17 @@ public final class DimensionBreathabilityHandler {
         hasSuffocated = false;
     }
 
+    public static boolean isInHazardousEnvironment(EntityPlayer player) {
+        BreathabilityInfo dimInfo = dimensionBreathabilityMap.get(player.dimension);
+        if (dimInfo == null) {
+            dimInfo = defaultDimensionBreathability;
+        }
+        return dimInfo.suffocation || dimInfo.toxic || dimInfo.radiation;
+    }
+
     private static void suffocationCheck(EntityPlayer player) {
         BreathabilityInfo itemInfo = itemBreathabilityMap.get(getItemKey(player, HEAD));
-        if (itemInfo != null && itemInfo.suffocation && drainOxy(player)) return;
+        if (itemInfo != null && itemInfo.suffocation && tickAir(player)) return;
         suffocate(player);
     }
 
@@ -79,17 +87,17 @@ public final class DimensionBreathabilityHandler {
         if (itemInfo != null && itemInfo.toxic) {
             // if sealed, no need for toxicity check
             if (itemInfo.isSealed) {
-                if (drainOxy(player)) return;
+                if (tickAir(player)) return;
                 suffocate(player);
             } else if (dimRating > itemInfo.toxicityRating) {
-                toxificate(player, dimRating - itemInfo.toxicityRating);
+                causeToxicDamage(player, dimRating - itemInfo.toxicityRating);
                 return;
             }
         }
-        toxificate(player, 100);
+        causeToxicDamage(player, 100);
     }
 
-    private static void toxificate(EntityPlayer player, int mult) {
+    private static void causeToxicDamage(EntityPlayer player, int mult) {
         player.attackEntityFrom(SuSyDamageSources.getToxicAtmoDamage(), 0.03f * mult);
     }
 
@@ -117,7 +125,7 @@ public final class DimensionBreathabilityHandler {
         return new BreathabilityItemMapKey(player.getItemStackFromSlot(slot));
     }
 
-    private static boolean drainOxy(EntityPlayer player) {
+    private static boolean tickAir(EntityPlayer player) {
         // don't drain if we are in creative
         if (player.isCreative()) return true;
         Optional<IFluidHandlerItem> tank = player.inventory.mainInventory.stream()
