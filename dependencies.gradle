@@ -23,10 +23,10 @@ dependencies {
 
     // CCL 3.2.3.358
     implementation rfg.deobf('curse.maven:codechicken-lib-1-8-242818:2779848')
-    // GTCEu 2.8.6 beta
-    implementation rfg.deobf("curse.maven:gregtech-ce-unofficial-557242:5050979-deobf-5050980-sources-5050981")
-    // GCYM 1.2.7
-    implementation rfg.deobf('curse.maven:gregicality-multiblocks-564858:4910674-deobf-4910675-sources-4910676')
+    // GTCEu 2.8.7 beta
+    implementation rfg.deobf("curse.maven:gregtech-ce-unofficial-557242:5121638-deobf-5121638-sources-5121638")
+    // GCYM 1.2.8
+    implementation rfg.deobf('curse.maven:gregicality-multiblocks-564858:5121714-deobf-5121714-sources-5121714')
 
     // AE2UEL 0.55.6 (transitive gt dep)
     compileOnly rfg.deobf("curse.maven:ae2-extended-life-570458:4402048")
@@ -38,7 +38,7 @@ dependencies {
 
     compileOnly rfg.deobf('curse.maven:biomes-o-plenty-220318:2842510')
 
-    implementation rfg.deobf('curse.maven:gregtech-food-option-477021:5085993') // GT-FO 1.10.2
+    implementation rfg.deobf('curse.maven:gregtech-food-option-477021:5085993') // GT-FO 1.11.0.1
 
     implementation rfg.deobf('curse.maven:applecore-224472:2969118')
 
