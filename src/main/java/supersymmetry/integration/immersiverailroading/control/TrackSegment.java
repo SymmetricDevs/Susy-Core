@@ -1,20 +1,10 @@
 package supersymmetry.integration.immersiverailroading.control;
 
-import cam72cam.immersiverailroading.items.nbt.RailSettings;
-import cam72cam.immersiverailroading.library.TrackDirection;
-import cam72cam.immersiverailroading.util.PlacementInfo;
-import cam72cam.mod.item.ItemStack;
-import cam72cam.mod.math.Vec3d;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static cam72cam.immersiverailroading.IRItems.*;
-
 /*
     Helper for manipulating and placing track segments.
  */
 
+/*
 public class TrackSegment {
 
     public PlacementInfo info;
@@ -82,3 +72,4 @@ public class TrackSegment {
     }
 
 }
+*/

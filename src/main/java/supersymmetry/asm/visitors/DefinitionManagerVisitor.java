@@ -14,13 +14,13 @@ public class DefinitionManagerVisitor extends ClassNode implements Opcodes {
 
     @Override
     public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
-        if (name.equals("stockLoaders")) signature = "Ljava/util/Map<Ljava/lang/String;Lsupersymmetry/loaders/SuSyIRLoader$StockLoader;>;";
+        if (name.equals("jsonLoaders")) signature = "Ljava/util/Map<Ljava/lang/String;Lsupersymmetry/loaders/SuSyIRLoader$JsonLoader;>;";
         return super.visitField(access, name, desc, signature, value);
     }
 
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-        if (name.equals("lambda$initModels$4")) {
+        if (name.equals("lambda$initModels$3")) {
             MethodNode method = new LambdaMethodVisitor(access, name, desc, signature, exceptions);
             methods.add(method);
             return method;
@@ -36,13 +36,13 @@ public class DefinitionManagerVisitor extends ClassNode implements Opcodes {
 
         @Override
         public void visitTypeInsn(int opcode, String type) {
-            if (type.equals("cam72cam/immersiverailroading/registry/DefinitionManager$StockLoader")) type = "supersymmetry/loaders/SuSyIRLoader$StockLoader";
+            if (type.equals("cam72cam/immersiverailroading/registry/DefinitionManager$JsonLoader")) type = "supersymmetry/loaders/SuSyIRLoader$JsonLoader";
             super.visitTypeInsn(opcode, type);
         }
 
         @Override
         public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
-            if (owner.equals("cam72cam/immersiverailroading/registry/DefinitionManager$StockLoader")) owner = "supersymmetry/loaders/SuSyIRLoader$StockLoader";
+            if (owner.equals("cam72cam/immersiverailroading/registry/DefinitionManager$JsonLoader")) owner = "supersymmetry/loaders/SuSyIRLoader$JsonLoader";
             super.visitMethodInsn(opcode, owner, name, desc, itf);
         }
     }
