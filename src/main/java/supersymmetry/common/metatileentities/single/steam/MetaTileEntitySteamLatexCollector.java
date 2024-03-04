@@ -55,7 +55,7 @@ import java.util.List;
 public class MetaTileEntitySteamLatexCollector extends PseudoMultiSteamMachineMetaTileEntity {
     private final int energyPerTick = 16;
     private final int tankSize = 16000;
-    private final long latexCollectionAmount = 3L;
+    private long latexCollectionAmount;
     private boolean hasRubberLog;
     private EnumFacing outputFacingFluids;
 
@@ -63,6 +63,7 @@ public class MetaTileEntitySteamLatexCollector extends PseudoMultiSteamMachineMe
     public MetaTileEntitySteamLatexCollector(ResourceLocation metaTileEntityId, boolean isHighPressure) {
         super(metaTileEntityId, SuSyRecipeMaps.LATEX_COLLECTOR_RECIPES, SuSySteamProgressIndicators.EXTRACTION_STEAM, SusyTextures.LATEX_COLLECTOR_OVERLAY, false, isHighPressure);
         this.initializeInventory();
+        latexCollectionAmount = isHighPressure ? 6L : 3L;
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity, boolean isHighPressure) {
