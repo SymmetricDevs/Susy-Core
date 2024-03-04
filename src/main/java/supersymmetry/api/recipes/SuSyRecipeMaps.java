@@ -7,20 +7,25 @@ import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.recipes.builders.FuelRecipeBuilder;
 import gregtech.api.recipes.builders.PrimitiveRecipeBuilder;
 import gregtech.api.recipes.builders.SimpleRecipeBuilder;
+import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.core.sound.GTSoundEvents;
 import gregtechfoodoption.recipe.GTFORecipeMaps;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.recipes.builders.*;
 
+import static gregtech.api.GTValues.LV;
+import static gregtech.api.GTValues.VA;
+import static gregtech.api.recipes.RecipeMaps.MIXER_RECIPES;
+
 public class SuSyRecipeMaps {
 
-    public static final RecipeMap<CoilingCoilRecipeBuilder> COOLING_RECIPES = new RecipeMap<>("magnetic_refrigerator", 1, 3, 0, 3, 0, 0, 0, 1, new CoilingCoilRecipeBuilder(), false)
+    public static final RecipeMap<CoilingCoilRecipeBuilder> COOLING_RECIPES = new RecipeMap<>("magnetic_refrigerator", 3, 3, 0, 1, new CoilingCoilRecipeBuilder(), false)
             .setSound(GTSoundEvents.COOLING);
 
-    public static final RecipeMap<SinteringRecipeBuilder> SINTERING_RECIPES = new RecipeMap<>("sintering_oven", 1, 4, 1, 4, 1, 2, 0, 2, new SinteringRecipeBuilder(), false)
+    public static final RecipeMap<SinteringRecipeBuilder> SINTERING_RECIPES = new RecipeMap<>("sintering_oven", 4, 4, 2, 2, new SinteringRecipeBuilder(), false)
             .setSound(GTSoundEvents.COMBUSTION);
 
-    public static final RecipeMap<PrimitiveRecipeBuilder> COAGULATION_RECIPES = new RecipeMap<>("coagulation_tank", 0, 2, 1, 1, 1, 2, 0, 0, new PrimitiveRecipeBuilder(), false);
+    public static final RecipeMap<PrimitiveRecipeBuilder> COAGULATION_RECIPES = new RecipeMap<>("coagulation_tank", 2, 1, 2, 0, new PrimitiveRecipeBuilder(), false);
 
     public static final RecipeMap<PseudoMultiRecipeBuilder> LATEX_COLLECTOR_RECIPES = new RecipeMap<>("latex_collector", 0, 2, 1, 2, new PseudoMultiRecipeBuilder(), false)
             .setProgressBar(SusyGuiTextures.PROGRESS_BAR_EXTRACTION, ProgressWidget.MoveType.VERTICAL_DOWNWARDS)
@@ -30,20 +35,20 @@ public class SuSyRecipeMaps {
             .setSlotOverlay(false, false, true, GuiTextures.MOLD_OVERLAY)
             .setSound(GTSoundEvents.COMBUSTION);
 
-    public static final RecipeMap<CatalystRecipeBuilder> ROASTER_RECIPES = new RecipeMap<>("roaster", 1, 2, 0, 2, 0, 2, 0, 3, new CatalystRecipeBuilder(), false)
+    public static final RecipeMap<CatalystRecipeBuilder> ROASTER_RECIPES = new RecipeMap<>("roaster", 2, 2, 2, 3, new CatalystRecipeBuilder(), false)
             .setSound(GTSoundEvents.COMBUSTION);
 
-    public static final RecipeMap<SimpleRecipeBuilder> VACUUM_CHAMBER = new RecipeMap<>("vacuum_chamber", 1, 4, 1, 1, 0, 2, 0, 2, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<SimpleRecipeBuilder> VACUUM_CHAMBER = new RecipeMap<>("vacuum_chamber", 4, 1, 2, 2, new SimpleRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_COMPRESS, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.CENTRIFUGE);
 
-    public static final RecipeMap<CatalystRecipeBuilder> CSTR_RECIPES = new RecipeMap<>("continuous_stirred_tank_reactor", 0, 0, 4, 2, new CatalystRecipeBuilder(), false)
+    public static final RecipeMap<CatalystRecipeBuilder> CSTR_RECIPES = new RecipeMap<>("continuous_stirred_tank_reactor", 1, 0, 4, 2, new CatalystRecipeBuilder(), false)
             .setSlotOverlay(false, true, false, GuiTextures.MOLECULAR_OVERLAY_3)
             .setSlotOverlay(false, true, true, GuiTextures.MOLECULAR_OVERLAY_4)
             .setSlotOverlay(true, true, GuiTextures.VIAL_OVERLAY_2)
             .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
-    public static final RecipeMap<CatalystRecipeBuilder> FIXED_BED_REACTOR_RECIPES = new RecipeMap<>("fixed_bed_reactor", 1, 1, 3, 2, new CatalystRecipeBuilder(), false)
+    public static final RecipeMap<CatalystRecipeBuilder> FIXED_BED_REACTOR_RECIPES = new RecipeMap<>("fixed_bed_reactor", 2, 1, 3, 2, new CatalystRecipeBuilder(), false)
             .setSlotOverlay(false, false, SusyGuiTextures.CATALYST_BED_OVERLAY)
             .setSlotOverlay(false, true, GuiTextures.MOLECULAR_OVERLAY_3)
             .setSlotOverlay(true, true, GuiTextures.MOLECULAR_OVERLAY_3)
@@ -76,7 +81,7 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> CRYSTALLIZER_RECIPES = new RecipeMap<>("crystallizer",3, 2, 3, 3, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
-    public static final RecipeMap<SimpleRecipeBuilder> DRYER = new RecipeMap<>("dryer", 1, 2, 1, 1, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<SimpleRecipeBuilder> DRYER_RECIPES = new RecipeMap<>("dryer", 2, 2, 2, 2, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.COOLING);
 
     public static final RecipeMap<SimpleRecipeBuilder> ION_EXCHANGE_COLUMN_RECIPES = new RecipeMap<>("ion_exchange_column", 1, 1, 2, 2, new SimpleRecipeBuilder(), false)
@@ -101,6 +106,20 @@ public class SuSyRecipeMaps {
             .setSlotOverlay(true, false, true, SusyGuiTextures.CUBIC_LATTICE_OVERLAY)
             .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
+    public static final RecipeMap<SimpleRecipeBuilder> ELECTROSTATIC_SEPARATOR = new RecipeMap<>("electrostatic_separator", 3, 6, 3, 3, new SimpleRecipeBuilder(), false)
+            .setSlotOverlay(false, false, GuiTextures.CRUSHED_ORE_OVERLAY)
+            .setSlotOverlay(true, false, GuiTextures.DUST_OVERLAY)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_MAGNET, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.ARC);
+
+    public static final RecipeMap<SimpleRecipeBuilder> SPINNING_RECIPES = new RecipeMap<>("spinning", 1, 1, 1, 0, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_MAGNET, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.CENTRIFUGE);
+
+    public static final RecipeMap<SimpleRecipeBuilder> POLISHING_MACHINE = new RecipeMap<>("polishing_machine", 1, 1, 2, 1, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_MIXER, ProgressWidget.MoveType.CIRCULAR)
+            .setSound(GTSoundEvents.CENTRIFUGE);
+
     public static final RecipeMap<CatalystRecipeBuilder> FLUIDIZED_BED_REACTOR_RECIPES = new RecipeMap<>("fluidized_bed_reactor", 2, 2, 3, 2, new CatalystRecipeBuilder(), false)
             .setSlotOverlay(false, true, SusyGuiTextures.LARGE_REACTOR_FLUID_OVERLAY)
             .setSlotOverlay(true, true, SusyGuiTextures.LARGE_REACTOR_FLUID_OVERLAY)
@@ -108,7 +127,7 @@ public class SuSyRecipeMaps {
             .setSlotOverlay(true, false, SusyGuiTextures.LARGE_REACTOR_ITEM_OVERLAY)
             .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
-    public static final RecipeMap<CatalystRecipeBuilder> POLYMERIZATION_RECIPES = new RecipeMap<>("polymerization_tank", 2, 1, 3, 1, new CatalystRecipeBuilder(), false)
+    public static final RecipeMap<CatalystRecipeBuilder> POLYMERIZATION_RECIPES = new RecipeMap<>("polymerization_tank", 3, 1, 3, 2, new CatalystRecipeBuilder(), false)
             .setSlotOverlay(false, true, GuiTextures.MOLECULAR_OVERLAY_3)
             .setSlotOverlay(true, true, GuiTextures.MOLECULAR_OVERLAY_3)
             .setSlotOverlay(false, false, GuiTextures.MOLECULAR_OVERLAY_1)
@@ -125,7 +144,7 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> COKING_RECIPES = new RecipeMap<>("coking_tower", 1, 1, 3, 2, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.COMBUSTION);
 
-    public static final RecipeMap<SimpleRecipeBuilder> VACUUM_DISTILLATION_RECIPES = new RecipeMap<>("vacuum_distillation", 1, 1, 1, 12, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<SimpleRecipeBuilder> VACUUM_DISTILLATION_RECIPES = new RecipeMap<>("vacuum_distillation", 1, true, 1, true, 1, true, 12, false, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
     public static final RecipeMap<CatalystRecipeBuilder> CATALYTIC_REFORMER_RECIPES = new RecipeMap<>("catalytic_reformer_recipes", 1, 0, 2, 4, new CatalystRecipeBuilder(), false)
@@ -282,21 +301,32 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.FURNACE);
 
-    public static final RecipeMap<PrimitiveRecipeBuilder> PHASE_SEPARATOR = new RecipeMap<>("phase_separator", 0, 0, 2, 2, new PrimitiveRecipeBuilder(), false)
+    public static final RecipeMap<PrimitiveRecipeBuilder> PHASE_SEPARATOR = new RecipeMap<>("phase_separator", 0, 1, 2, 2, new PrimitiveRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_EXTRACT, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.BATH);
 
-    public static final RecipeMap<PrimitiveRecipeBuilder> BATH_CONDENSER = new RecipeMap<>("bath_condenser", 0, 0, 2, 3, new PrimitiveRecipeBuilder(), false)
+    public static final RecipeMap<BathCondenserRecipeBuilder> BATH_CONDENSER = new RecipeMap<>("bath_condenser", 0, 0, 2, 3, new BathCondenserRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_SIFT, ProgressWidget.MoveType.VERTICAL)
             .setSound(GTSoundEvents.BATH);
 
-    public static final RecipeMap<SimpleRecipeBuilder> ELECTROSTATIC_SEPARATOR = new RecipeMap<>("electrostatic_separator", 3, 3, 3, 3, new SimpleRecipeBuilder(), false)
-            .setSlotOverlay(false, false, GuiTextures.CRUSHED_ORE_OVERLAY)
-            .setSlotOverlay(true, false, GuiTextures.DUST_OVERLAY)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_MAGNET, ProgressWidget.MoveType.HORIZONTAL)
-            .setSound(GTSoundEvents.ARC);
-
     public static final RecipeMap<DronePadRecipeBuilder> DRONE_PAD = new RecipeMap<>("drone_pad", 4, 9, 0, 0, new DronePadRecipeBuilder(), false);
+
+    public static final RecipeMap<SimpleRecipeBuilder> BLENDER_RECIPES = new RecipeMap<>("blender", 6, 1, 6, 2, new SimpleRecipeBuilder().EUt(VA[LV]), false)
+            .setSlotOverlay(false, false, false, GuiTextures.MOLECULAR_OVERLAY_1)
+            .setSlotOverlay(false, false, true, GuiTextures.MOLECULAR_OVERLAY_2)
+            .setSlotOverlay(false, true, false, GuiTextures.MOLECULAR_OVERLAY_3)
+            .setSlotOverlay(false, true, true, GuiTextures.MOLECULAR_OVERLAY_4)
+            .setSlotOverlay(true, false, GuiTextures.VIAL_OVERLAY_1)
+            .setSlotOverlay(true, true, GuiTextures.VIAL_OVERLAY_2)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.CHEMICAL_REACTOR)
+            .setSmallRecipeMap(MIXER_RECIPES);
+
+    public static final RecipeMap<FuelRecipeBuilder> LARGE_STEAM_TURBINE = new RecipeMap<>("large_steam_turbine", 1, 0, 2, 1, new FuelRecipeBuilder(), false)
+            .setSlotOverlay(false, true, GuiTextures.CENTRIFUGE_OVERLAY)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.TURBINE)
+            .allowEmptyOutput();
 
     public static void init(){
         RecipeMaps.SIFTER_RECIPES.setMaxFluidInputs(1);
@@ -323,8 +353,28 @@ public class SuSyRecipeMaps {
         RecipeMaps.LASER_ENGRAVER_RECIPES.setMaxFluidInputs(1);
         RecipeMaps.GAS_TURBINE_FUELS.setMaxFluidInputs(3);
         RecipeMaps.GAS_TURBINE_FUELS.setMaxFluidOutputs(1);
-        RecipeMaps.STEAM_TURBINE_FUELS.setMaxFluidInputs(2);
+        RecipeMaps.GAS_TURBINE_FUELS.setMaxInputs(1);
         RecipeMaps.AUTOCLAVE_RECIPES.setMaxFluidInputs(2);
         RecipeMaps.AUTOCLAVE_RECIPES.setMaxFluidOutputs(2);
+        RecipeMaps.CHEMICAL_BATH_RECIPES.setMaxFluidInputs(3);
+        RecipeMaps.CHEMICAL_BATH_RECIPES.setMaxFluidOutputs(3);
+        RecipeMaps.CHEMICAL_BATH_RECIPES.setMaxOutputs(3);
+        RecipeMaps.EXTRUDER_RECIPES.setMaxOutputs(3);
+        RecipeMaps.EXTRUDER_RECIPES.setMaxFluidInputs(1);
+        RecipeMaps.CUTTER_RECIPES.setMaxOutputs(4);
+        RecipeMaps.LARGE_CHEMICAL_RECIPES.setMaxInputs(4);
+        RecipeMaps.LARGE_CHEMICAL_RECIPES.setMaxFluidInputs(6);
+        RecipeMaps.MIXER_RECIPES.onRecipeBuild(recipeBuilder -> {
+            SuSyRecipeMaps.BLENDER_RECIPES.recipeBuilder()
+                    .inputs(recipeBuilder.getInputs().toArray(new GTRecipeInput[0]))
+                    .fluidInputs(recipeBuilder.getFluidInputs())
+                    .outputs(recipeBuilder.getOutputs())
+                    .chancedOutputs(recipeBuilder.getChancedOutputs())
+                    .fluidOutputs(recipeBuilder.getFluidOutputs())
+                    .cleanroom(recipeBuilder.getCleanroom())
+                    .duration(recipeBuilder.getDuration())
+                    .EUt(recipeBuilder.getEUt())
+                    .buildAndRegister();
+        });
     }
 }

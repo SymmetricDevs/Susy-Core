@@ -92,6 +92,12 @@
       "textures" : {
         "all" : "gregtech:blocks/resource/potash"
       }
+    },
+    "variant=sulfur" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/resource/sulfur"
+      }
     }
   }
 }

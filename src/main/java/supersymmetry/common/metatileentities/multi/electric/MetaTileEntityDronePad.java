@@ -29,6 +29,7 @@ import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.entities.EntityDrone;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
@@ -80,6 +81,16 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
         return new MetaTileEntityDronePad(this.metaTileEntityId);
+    }
+
+    @Override
+    public boolean isMultiblockPartWeatherResistant(@Nonnull IMultiblockPart part) {
+        return true;
+    }
+
+    @Override
+    public boolean getIsWeatherOrTerrainResistant() {
+        return true;
     }
 
     public boolean hasDrone() {
@@ -224,7 +235,7 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
                 this.parallelRecipesPerformed = 0;
                 this.overclockResults = new int[]{0, 0};
             }
-            this.getMetaTileEntity().drone.setDead();
+            if(this.getMetaTileEntity().drone != null) this.getMetaTileEntity().drone.setDead();
             this.getMetaTileEntity().droneReachedSky = false;
         }
     }

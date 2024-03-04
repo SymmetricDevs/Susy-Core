@@ -39,6 +39,12 @@ public class ClientProxy extends CommonProxy {
         SuSyIRLoader.initEntityRenderers();
     }
 
+    @Override
+    public void load() {
+        super.load();
+        SuSyMetaBlocks.registerColors();
+    }
+
     @SubscribeEvent
     public static void addMaterialFormulaHandler(@Nonnull ItemTooltipEvent event) {
         //ensure itemstack is a sheetedframe

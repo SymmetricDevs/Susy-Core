@@ -11,20 +11,19 @@ import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.recipes.Recipe;
+import gregtech.api.unification.material.Materials;
 import gregtech.api.util.GTUtility;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.utils.TooltipHelper;
 import gregtech.common.blocks.*;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
-import gregtech.common.blocks.StoneVariantBlock;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import gregtech.api.unification.material.Materials;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockDrillHead;
@@ -103,7 +102,7 @@ public class MetaTileEntityMiningDrill extends RecipeMapMultiblockController {
     @Override
     protected void initializeAbilities() {
         super.initializeAbilities();
-        this.inputInventory = new NotifiableItemStackHandler(1, this, false);
+        this.inputInventory = new NotifiableItemStackHandler(this, 1, this, false);
     }
 
     @Override
@@ -124,6 +123,11 @@ public class MetaTileEntityMiningDrill extends RecipeMapMultiblockController {
     @Override
     public boolean canBeDistinct() {
         return false;
+    }
+
+    @Override
+    public boolean getIsWeatherOrTerrainResistant() {
+        return true;
     }
 
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
