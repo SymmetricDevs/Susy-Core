@@ -13,6 +13,11 @@ import java.util.List;
 
 public class EntityTunnelBore extends Locomotive {
 
+    // In revolutions/second
+    private float borerVelocity = 1;
+    // In degrees
+    private float borerAngle = 0;
+
     private int distanceToGo = 50;
     private ArrayList<TunnelBoreControl> controlSequence = new ArrayList<>();
     public FluidQuantity getTankCapacity() {
@@ -29,10 +34,12 @@ public class EntityTunnelBore extends Locomotive {
         return false;
     }
 
-
     @Override
     public void onTick() {
         super.onTick();
+
+        this.updateBorer();
+
 
         if(this.getRotationYaw() % 90 != 0) return;
 
@@ -64,13 +71,23 @@ public class EntityTunnelBore extends Locomotive {
                 List<TrackBase> tracks = trackBuilder.getTracksForRender();
                 trackBuilder.build();
                 this.distanceToGo = this.distanceToGo >= 10 ? this.distanceToGo - 10 : 0;
+                this.resimulateCooldown = 0;
             }*/
         }
+    }
+
+    public void updateBorer() {
+        this.borerAngle += 360 / 20 * borerVelocity;
+        this.borerAngle %= 360;
     }
 
     @Override
     protected int getAvailableHP() {
         return this.getDefinition().getHorsePower(this.gauge);
+    }
+
+    public float getBorerAngle() {
+        return borerAngle;
     }
 }
 
