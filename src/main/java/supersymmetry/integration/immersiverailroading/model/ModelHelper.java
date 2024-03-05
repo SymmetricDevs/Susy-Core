@@ -24,12 +24,12 @@ public class ModelHelper {
             Set<String> ids = (Set<String>) method.invoke(provider, regexString);
 
             if (!ids.isEmpty()) {
-                Field modelField = ComponentProvider.class.getField("model");
+                Field modelField = ComponentProvider.class.getDeclaredField("model");
                 modelField.setAccessible(true);
                 OBJModel model = (OBJModel) modelField.get(provider);
                 ModelComponent component = new ModelComponent(ModelComponentType.IMMERSIVERAILROADING_BASE_COMPONENT, null, null, model, ids);
 
-                Field componentsField = ComponentProvider.class.getField("components");
+                Field componentsField = ComponentProvider.class.getDeclaredField("components");
                 componentsField.setAccessible(true);
                 List<ModelComponent> components = (List<ModelComponent>) componentsField.get(provider);
                 components.add(component);
