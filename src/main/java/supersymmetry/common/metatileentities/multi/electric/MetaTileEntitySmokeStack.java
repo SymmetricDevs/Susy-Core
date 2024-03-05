@@ -82,6 +82,9 @@ public class MetaTileEntitySmokeStack extends VoidingMultiblockBase {
 
     public void updateHeight() {
         World world = getWorld();
+        if (world == null) { // JEI previews
+            return;
+        }
         // Minimum height
         int height = 5;
         // One block below the minimum height
@@ -104,7 +107,10 @@ public class MetaTileEntitySmokeStack extends VoidingMultiblockBase {
     }
 
     // For determining the multiblocks height
-    public boolean isBlockMuffler(@NotNull World world, @NotNull BlockPos pos) {
+    public boolean isBlockMuffler(World world, @NotNull BlockPos pos) {
+        if (world == null) { // JEI previews
+            return true;
+        }
         if (world.getTileEntity(pos) instanceof IGregTechTileEntity gtTe) {
             MetaTileEntity mte = gtTe.getMetaTileEntity();
             return mte instanceof MetaTileEntityMufflerHatch;
