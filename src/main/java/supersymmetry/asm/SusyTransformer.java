@@ -23,9 +23,9 @@ public class SusyTransformer implements IClassTransformer, Opcodes {
             SusyLog.logger.info("Transforming {}", name);
             return writeDefinitionManager(basicClass);
         }
-        if (name.equals("cam72cam.immersiverailroading.registry.DefinitionManager$JsonLoader")) {
+        if (name.equals("cam72cam.immersiverailroading.registry.DefinitionManager$StockLoader")) {
             SusyLog.logger.info("Transforming {}", name);
-            return writeJsonLoader(basicClass);
+            return writeStockLoader(basicClass);
         }
 
         return basicClass;
@@ -46,14 +46,14 @@ public class SusyTransformer implements IClassTransformer, Opcodes {
         return writer.toByteArray();
     }
 
-    private byte[] writeJsonLoader(byte[] basicClass) {
+    private byte[] writeStockLoader(byte[] basicClass) {
 
         ClassNode cls = new ClassNode();
 
         ClassReader reader = new ClassReader(basicClass);
         reader.accept(cls, 0);
 
-        cls.interfaces = Collections.singletonList("supersymmetry/loaders/SuSyIRLoader$JsonLoader");
+        cls.interfaces = Collections.singletonList("supersymmetry/loaders/SuSyIRLoader$StockLoader");
 
         ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
         cls.accept(writer);

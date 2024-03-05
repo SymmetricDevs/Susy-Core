@@ -1,29 +1,22 @@
 package supersymmetry.integration.immersiverailroading.model;
 
-import cam72cam.immersiverailroading.model.ComponentRenderer;
 import cam72cam.immersiverailroading.model.StockModel;
 import cam72cam.immersiverailroading.model.components.ComponentProvider;
-import cam72cam.immersiverailroading.registry.EntityRollingStockDefinition;
 import supersymmetry.common.entities.EntityTunnelBore;
 import supersymmetry.integration.immersiverailroading.model.part.Borer;
+import supersymmetry.integration.immersiverailroading.registry.TunnelBoreDefinition;
 
-public class TunnelBoreModel extends StockModel<EntityTunnelBore> {
+public class TunnelBoreModel extends StockModel<EntityTunnelBore, TunnelBoreDefinition> {
 
     public Borer borer;
 
-    public TunnelBoreModel(EntityRollingStockDefinition def) throws Exception {
+    public TunnelBoreModel(TunnelBoreDefinition def) throws Exception {
         super(def);
     }
 
     @Override
-    protected void parseComponents(ComponentProvider provider, EntityRollingStockDefinition def) {
+    protected void parseComponents(ComponentProvider provider, TunnelBoreDefinition def) {
         super.parseComponents(provider, def);
-        this.borer = new Borer(provider);
-    }
-
-    @Override
-    protected void render(EntityTunnelBore bore, ComponentRenderer draw, double distanceTraveled) {
-        super.render(bore, draw, distanceTraveled);
-        this.borer.render(bore.getBorerAngle(), draw);
+        this.borer = new Borer(provider, this.base, (stock) -> stock.getBorerAngle());
     }
 }

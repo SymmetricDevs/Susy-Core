@@ -1,11 +1,14 @@
 package supersymmetry.integration.immersiverailroading.model.part;
 
-import cam72cam.immersiverailroading.model.ComponentRenderer;
+import cam72cam.immersiverailroading.model.ModelState;
 import cam72cam.immersiverailroading.model.components.ComponentProvider;
 import cam72cam.immersiverailroading.model.components.ModelComponent;
 import cam72cam.mod.math.Vec3d;
-import org.lwjgl.opengl.GL11;
+import supersymmetry.common.entities.EntityTunnelBore;
 import supersymmetry.integration.immersiverailroading.model.ModelHelper;
+import util.Matrix4;
+
+import java.util.function.Function;
 
 public class Borer {
 
@@ -14,35 +17,16 @@ public class Borer {
 
     protected final ModelComponent borer;
 
-    public Borer(ComponentProvider provider) {
+    public Borer(ComponentProvider provider, ModelState state, Function<EntityTunnelBore, Float> angle) {
         this.borer = ModelHelper.parseCustomComponent(provider, BORER_COMPONENT_REGEX);
-    }
-
-    public void render(float angle, ComponentRenderer draw) {
-        Vec3d borerPos = this.borer.center;
-        ComponentRenderer matrix = draw.push();
-        Throwable var5 = null;
-
-        try {
-            GL11.glTranslated(borerPos.x, borerPos.y, borerPos.z);
-            GL11.glRotated(angle, 1.0, 0.0, 0.0);
-            GL11.glTranslated(-borerPos.x, -borerPos.y, -borerPos.z);
-            matrix.render(this.borer);
-        } catch (Throwable var14) {
-            var5 = var14;
-            throw var14;
-        } finally {
-            if (matrix != null) {
-                if (var5 != null) {
-                    try {
-                        matrix.close();
-                    } catch (Throwable var13) {
-                        var5.addSuppressed(var13);
-                    }
-                } else {
-                    matrix.close();
-                }
-            }
-        }
+        Vec3d wheelPos = borer.center;
+        state.push(settings -> settings.add((ModelState.Animator) (stock, partialTicks) ->
+                new Matrix4()
+                        .translate(wheelPos.x, wheelPos.y, wheelPos.z)
+                        .rotate(Math.toRadians(stock instanceof EntityTunnelBore bore ?
+                                angle.apply(bore) : 0),
+                                1, 0, 0)
+                        .translate(-wheelPos.x, -wheelPos.y, -wheelPos.z))
+        ).include(borer);
     }
 }
