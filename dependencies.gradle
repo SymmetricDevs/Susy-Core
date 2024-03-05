@@ -49,7 +49,7 @@ dependencies {
     implementation rfg.deobf("curse.maven:universal-mod-core-371784:3654955") // Universal-Mod-Care v1.1.4
     implementation rfg.deobf("curse.maven:track-api-282613:2825260") // Track-API v1.2.0
 
-    implementation rfg.deobf("curse.maven:immersive-railroading-277736:3437738") // Immersive-Railroading v1.9.1
+    implementation rfg.deobf("curse.maven:immersive-railroading-277736:4970105") // Immersive-Railroading v1.9.1
 
     implementation rfg.deobf("curse.maven:ctm-267602:2915363") // CTM 1.0.2.31
     implementation rfg.deobf("curse.maven:groovyscript-687577:4991701") // GRS 0.7.3
