@@ -25,7 +25,7 @@ public class Borer {
 
         try {
             GL11.glTranslated(borerPos.x, borerPos.y, borerPos.z);
-            GL11.glRotated(angle, 0.0, 0.0, 1.0);
+            GL11.glRotated(angle, 1.0, 0.0, 0.0);
             GL11.glTranslated(-borerPos.x, -borerPos.y, -borerPos.z);
             matrix.render(this.borer);
         } catch (Throwable var14) {
