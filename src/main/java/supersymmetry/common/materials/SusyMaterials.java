@@ -169,6 +169,8 @@ public class SusyMaterials {
         Materials.Copper.addFlags(SuSyMaterialFlags.GENERATE_CATALYST_BED);
 
         Materials.Electrum.setProperty(PropertyKey.ORE, new OreProperty());
+
+        Materials.Hydrogen.addFlags(MaterialFlags.FLAMMABLE);
     }
 
     private static void removeProperty(PropertyKey<?> key, Material material) {
