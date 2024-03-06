@@ -7,21 +7,12 @@ import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
 import gregtech.api.GTValues;
 import gregtech.api.capability.impl.FluidTankList;
-import gregtech.api.gui.GuiTextures;
-import gregtech.api.gui.ModularUI;
-import gregtech.api.gui.resources.IGuiTexture;
-import gregtech.api.gui.widgets.*;
 import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.TieredMetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.util.GTTransferUtils;
 import gregtech.client.renderer.texture.Textures;
-import gregtech.common.blocks.MetaBlocks;
-
 import java.util.List;
 import javax.annotation.Nullable;
-
-import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -55,7 +46,7 @@ public class MetaTileEntityLatexCollector extends PseudoMultiMachineMetaTileEnti
     public MetaTileEntityLatexCollector(ResourceLocation metaTileEntityId, int tier) {
         super(metaTileEntityId, SuSyRecipeMaps.LATEX_COLLECTOR_RECIPES, SusyTextures.LATEX_COLLECTOR_OVERLAY, tier, true, SuSyUtility.collectorTankSizeFunction);
         this.tankSize = 16000;
-        this.latexCollectionAmount = 5L * (long)tier;
+        this.latexCollectionAmount = 3L + 5L * (long)tier;
         this.euT = GTValues.V[tier];
         this.initializeInventory();
     }
@@ -86,7 +77,7 @@ public class MetaTileEntityLatexCollector extends PseudoMultiMachineMetaTileEnti
         }
     }
 
-    protected ModularUI createUI(EntityPlayer entityPlayer) {
+    /*protected ModularUI createUI(EntityPlayer entityPlayer) {
         ModularUI.Builder builder = ModularUI.defaultBuilder();
         builder.image(7, 16, 81, 55, GuiTextures.DISPLAY);
         TankWidget tankWidget = (new TankWidget(this.exportFluids.getTankAt(0), 69, 52, 18, 18)).setHideTooltip(true).setAlwaysShowFull(true);
@@ -95,7 +86,7 @@ public class MetaTileEntityLatexCollector extends PseudoMultiMachineMetaTileEnti
         builder.dynamicLabel(11, 30, tankWidget::getFormattedFluidAmount, 16777215);
         builder.dynamicLabel(11, 40, tankWidget::getFluidLocalizedName, 16777215);
         return builder.label(6, 6, this.getMetaFullName()).widget((new FluidContainerSlotWidget(this.importItems, 0, 90, 17, false)).setBackgroundTexture(new IGuiTexture[]{GuiTextures.SLOT, GuiTextures.IN_SLOT_OVERLAY})).widget(new ImageWidget(91, 36, 14, 15, GuiTextures.TANK_ICON)).widget((new SlotWidget(this.exportItems, 0, 90, 54, true, false)).setBackgroundTexture(new IGuiTexture[]{GuiTextures.SLOT, GuiTextures.OUT_SLOT_OVERLAY})).bindPlayerInventory(entityPlayer.inventory).build(this.getHolder(), entityPlayer);
-    }
+    }*/
 
     public void update() {
         super.update();
@@ -122,27 +113,6 @@ public class MetaTileEntityLatexCollector extends PseudoMultiMachineMetaTileEnti
     public void onNeighborChanged() {
         super.onNeighborChanged();
         this.checkAdjacentBlocks();
-    }
-
-    public void checkAdjacentBlocks(){
-        if(this.getWorld() != null){
-            this.numberRubberLogs = 0;
-            if(!this.getWorld().isRemote) {
-                EnumFacing[] facings = EnumFacing.VALUES;
-                int numFacings = facings.length;
-
-                for (int i = 0; i < numFacings; ++i) {
-                    EnumFacing side = facings[i];
-
-                    if (side != this.frontFacing && !side.getAxis().isVertical()) {
-                        Block block = this.getWorld().getBlockState(this.getPos().offset(side)).getBlock();
-                        if (block == MetaBlocks.RUBBER_LOG) {
-                            ++numberRubberLogs;
-                        }
-                    }
-                }
-            }
-        }
     }
 
     public <T> void addNotifiedInput(T input) {
@@ -219,7 +189,7 @@ public class MetaTileEntityLatexCollector extends PseudoMultiMachineMetaTileEnti
 
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
-        tooltip.set(1, I18n.format("gregtech.machine.latex_collector.tooltip", new Object[]{this.latexCollectionAmount})); // Note that
+        tooltip.set(1, I18n.format("gregtech.machine.latex_collector.tooltip", this.latexCollectionAmount));
     }
     public boolean getIsWeatherOrTerrainResistant() {
         return true;
