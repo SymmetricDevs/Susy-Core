@@ -19,6 +19,7 @@ import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.world.World;
+import net.minecraft.init.Blocks;
 import supersymmetry.integration.immersiverailroading.control.TunnelBoreControl;
 
 import java.util.ArrayList;
@@ -26,12 +27,12 @@ import java.util.List;
 
 public class EntityTunnelBore extends Locomotive {
 
-    // In revolutions/second
-    private float borerVelocity = 1;
     // In degrees
     private float borerAngle = 0;
 
-    private int distanceToGo = 50;
+    private int distanceToGo = 150;
+
+    private ItemStack railBedFill = new ItemStack(new net.minecraft.item.ItemStack(Blocks.CONCRETE));
     private ArrayList<TunnelBoreControl> controlSequence = new ArrayList<>();
     public FluidQuantity getTankCapacity() {
         return FluidQuantity.ZERO;
@@ -85,14 +86,14 @@ public class EntityTunnelBore extends Locomotive {
                                 TrackSmoothing.BOTH,
                                 TrackDirection.NONE,
                                 ItemStack.EMPTY,
-                                ItemStack.EMPTY,
+                                this.railBedFill,
                                 false,
                                 false
                         );
                         ItemStack trackBlueprintStack = new ItemStack(IRItems.ITEM_TRACK_BLUEPRINT, 0);
                         settings.write(trackBlueprintStack);
                         PlacementInfo placementInfo = new PlacementInfo(trackBlueprintStack, this.getRotationYaw(), new Vec3d(0.5, 0.5, 0.5));
-                        RailInfo railInfo = new RailInfo(trackBlueprintStack, placementInfo, (PlacementInfo) null);
+                        RailInfo railInfo = new RailInfo(trackBlueprintStack, placementInfo, null);
                         World irWorld = getWorld();
                         BuilderBase trackBuilder = railInfo.getBuilder(irWorld, new Vec3i(getPosition()));
                         List<TrackBase> tracks = trackBuilder.getTracksForRender();
@@ -106,9 +107,23 @@ public class EntityTunnelBore extends Locomotive {
         }
     }
 
+    /*
+     * Assumes uniform circular motion.
+     * Angle in degrees.
+     */
+
     public void updateBorer() {
-        this.borerAngle += 360 / 20 * borerVelocity;
+        this.borerAngle += 360 / 20 * this.getBorerVelocity();
         this.borerAngle %= 360;
+    }
+
+    /*
+     * Determines the velocity at which the bore head rotates. Returns the velocity in units revolutions per second
+     * Based on current locomotive throttle. Maximum throttle corresponds to a speed of 0.2 revolutions per second.
+     *
+     */
+    public double getBorerVelocity() {
+        return this.getThrottle() / 5;
     }
 
     public float getBorerAngle() {
