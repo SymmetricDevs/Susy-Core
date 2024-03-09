@@ -4,22 +4,23 @@ import cam72cam.immersiverailroading.IRItems;
 import cam72cam.immersiverailroading.entity.Locomotive;
 import cam72cam.immersiverailroading.entity.physics.Simulation;
 import cam72cam.immersiverailroading.entity.physics.SimulationState;
+import cam72cam.immersiverailroading.inventory.SlotFilter;
 import cam72cam.immersiverailroading.items.nbt.RailSettings;
-import cam72cam.immersiverailroading.library.TrackDirection;
-import cam72cam.immersiverailroading.library.TrackItems;
-import cam72cam.immersiverailroading.library.TrackPositionType;
-import cam72cam.immersiverailroading.library.TrackSmoothing;
+import cam72cam.immersiverailroading.library.*;
 import cam72cam.immersiverailroading.physics.MovementTrack;
 import cam72cam.immersiverailroading.thirdparty.trackapi.ITrack;
 import cam72cam.immersiverailroading.track.BuilderBase;
 import cam72cam.immersiverailroading.util.*;
+import cam72cam.mod.entity.Player;
 import cam72cam.mod.fluid.Fluid;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.world.World;
 import net.minecraft.init.Blocks;
+import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.integration.immersiverailroading.control.TunnelBoreControl;
+import supersymmetry.integration.immersiverailroading.gui.SuSyIRGUITypes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +29,6 @@ public class EntityTunnelBore extends Locomotive {
 
     // In degrees
     private float borerAngle = 0;
-
-    private int distanceToGo = 150;
 
     private final int trackLength = 10;
 
@@ -43,7 +42,7 @@ public class EntityTunnelBore extends Locomotive {
         return new ArrayList();
     }
     public int getInventoryWidth() {
-        return 2;
+        return 9;
     }
     public boolean providesElectricalPower() {
         return false;
@@ -57,6 +56,29 @@ public class EntityTunnelBore extends Locomotive {
         double speed_M_S = Math.abs(speed.metric()) / 3.6;
         double maxPowerAtSpeed = maxPower_W * efficiency / speed_M_S;
         return maxPowerAtSpeed * (double)this.getThrottle() * (double)this.getReverser();
+    }
+
+    // Invent handling
+    @Override
+    public int getInventorySize() {
+        return 36;
+    }
+
+    @Override
+    protected void initContainerFilter() {
+        this.cargoItems.filter.clear();
+        ItemStack trackSegmentStack = new ItemStack(SuSyMetaItems.TRACK_SEGMENT.getStackForm());
+        SlotFilter filter = ItemStack -> ItemStack.is(trackSegmentStack);
+        this.cargoItems.defaultFilter = filter;
+    }
+
+    @Override
+    public boolean openGui(Player player) {
+        if (player.hasPermission(Permissions.LOCOMOTIVE_CONTROL)) {
+            SuSyIRGUITypes.TUNNEL_BORE.open(player, this);
+        }
+
+        return true;
     }
 
     @Override
@@ -105,27 +127,31 @@ public class EntityTunnelBore extends Locomotive {
     }
 
     public void placeTrack() {
-        if(this.distanceToGo > 0) {
-            int placeableLength = this.distanceToGo > this.trackLength ? this.trackLength : this.distanceToGo;
+        for (int i = 0; i < this.cargoItems.getSlotCount(); i++) {
+            ItemStack stack = this.cargoItems.get(i);
+            if (!stack.isEmpty()) {
+                int placeableLength = this.trackLength;
 
-            RailSettings settings = null;
+                RailSettings settings;
 
-            if(this.getRotationPitch() <= 0) settings = getSettingsStraight(placeableLength);
-            else settings = getSettingsSlope(placeableLength);
+                if(this.getRotationPitch() <= 0) settings = getSettingsStraight(placeableLength);
+                else settings = getSettingsSlope(placeableLength);
 
-            ItemStack trackBlueprintStack = new ItemStack(IRItems.ITEM_TRACK_BLUEPRINT, 0);
-            settings.write(trackBlueprintStack);
-            PlacementInfo placementInfo = new PlacementInfo(trackBlueprintStack, this.getRotationYaw(), new Vec3d(0.5, 0.5, 0.5));
-            RailInfo railInfo = new RailInfo(trackBlueprintStack, placementInfo, null);
-            World irWorld = getWorld();
-            BuilderBase trackBuilder = railInfo.getBuilder(irWorld, new Vec3i(getPosition()));
-            trackBuilder.build();
+                ItemStack trackBlueprintStack = new ItemStack(IRItems.ITEM_TRACK_BLUEPRINT, 0);
+                settings.write(trackBlueprintStack);
+                PlacementInfo placementInfo = new PlacementInfo(trackBlueprintStack, this.getRotationYaw(), new Vec3d(0.5, 0.5, 0.5));
+                RailInfo railInfo = new RailInfo(trackBlueprintStack, placementInfo, null);
+                World irWorld = getWorld();
+                BuilderBase trackBuilder = railInfo.getBuilder(irWorld, new Vec3i(getPosition()));
+                trackBuilder.build();
 
-            Simulation.forceQuickUpdates = true;
-            this.states = new ArrayList<>();
-            this.distanceToGo -= placeableLength;
+                Simulation.forceQuickUpdates = true;
+                this.states = new ArrayList<>();
+
+                this.cargoItems.extract(i, 1, false);
+                return;
+            }
         }
-
     }
 
     public RailSettings getSettingsStraight (int length) {

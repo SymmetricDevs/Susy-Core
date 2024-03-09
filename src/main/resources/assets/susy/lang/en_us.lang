@@ -682,6 +682,9 @@ metaitem.pump.steam.name=Steam Pump
 cover.pump.steam.title=Steam Pump
 metaitem.air_vent.name=Air Vent
 metaitem.air_vent.tooltip=Passively collects a Dimension's Air for your Machines when facing Air
+metaitem.track_segment.name=Monorail Track Segment
+metaitem.track_segment.tooltip=For use in the tunnel bore
+metaitem.track_segment.length_info=10 blocks worth of monorail track
 
 # Catalysts
 gregtech.universal.catalysts.tooltip.tier=§eMax Voltage: §f%,d EU/T (%s§f)
