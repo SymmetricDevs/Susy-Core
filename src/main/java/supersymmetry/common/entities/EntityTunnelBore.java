@@ -17,7 +17,8 @@ import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.world.World;
-import net.minecraft.init.Blocks;
+import gregtech.common.blocks.MetaBlocks;
+import gregtech.common.blocks.StoneVariantBlock;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.integration.immersiverailroading.control.TunnelBoreControl;
 import supersymmetry.integration.immersiverailroading.gui.SuSyIRGUITypes;
@@ -32,7 +33,6 @@ public class EntityTunnelBore extends Locomotive {
 
     private final int trackLength = 10;
 
-    private ItemStack railBedFill = new ItemStack(new net.minecraft.item.ItemStack(Blocks.CONCRETE));
     private ArrayList<TunnelBoreControl> controlSequence = new ArrayList<>();
     public FluidQuantity getTankCapacity() {
         return FluidQuantity.ZERO;
@@ -68,7 +68,7 @@ public class EntityTunnelBore extends Locomotive {
     protected void initContainerFilter() {
         this.cargoItems.filter.clear();
         ItemStack trackSegmentStack = new ItemStack(SuSyMetaItems.TRACK_SEGMENT.getStackForm());
-        SlotFilter filter = ItemStack -> ItemStack.is(trackSegmentStack);
+        SlotFilter filter = ItemStack -> ItemStack.is(trackSegmentStack) || ItemStack.is(this.getRailBedFill());
         this.cargoItems.defaultFilter = filter;
     }
 
@@ -126,10 +126,38 @@ public class EntityTunnelBore extends Locomotive {
         return borerAngle;
     }
 
+    ItemStack getRailBedFill() {
+        return new ItemStack(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getItemVariant(StoneVariantBlock.StoneType.CONCRETE_LIGHT));
+    }
+
+    public int getAmountInInventory(ItemStack stack) {
+        int amount = 0;
+        for (int i = 0; i < this.cargoItems.getSlotCount(); i++) {
+            ItemStack stackInInv = this.cargoItems.get(i);
+            if (!stack.isEmpty() && stackInInv.is(stack)) amount += stackInInv.getCount();
+        }
+
+        return amount;
+    }
+
+    public void extractFromCargo(ItemStack stack, int amount) {
+        for (int i = 0; i < this.cargoItems.getSlotCount(); i++) {
+            if(amount <= 0) return;
+            ItemStack stackInInv = this.cargoItems.get(i);
+            if (!stack.isEmpty() && stackInInv.is(stack)) {
+                ItemStack extracted = this.cargoItems.extract(i, amount, false);
+                amount -= extracted.getCount();
+            }
+        }
+
+    }
+
     public void placeTrack() {
+        ItemStack trackSegmentStack = new ItemStack(SuSyMetaItems.TRACK_SEGMENT.getStackForm());
+
         for (int i = 0; i < this.cargoItems.getSlotCount(); i++) {
             ItemStack stack = this.cargoItems.get(i);
-            if (!stack.isEmpty()) {
+            if (!stack.isEmpty() && stack.is(trackSegmentStack)) {
                 int placeableLength = this.trackLength;
 
                 RailSettings settings;
@@ -143,12 +171,16 @@ public class EntityTunnelBore extends Locomotive {
                 RailInfo railInfo = new RailInfo(trackBlueprintStack, placementInfo, null);
                 World irWorld = getWorld();
                 BuilderBase trackBuilder = railInfo.getBuilder(irWorld, new Vec3i(getPosition()));
+
+                int cost = trackBuilder.costFill();
+                if(this.getAmountInInventory(this.getRailBedFill()) < cost) return;
+
                 trackBuilder.build();
 
                 Simulation.forceQuickUpdates = true;
                 this.states = new ArrayList<>();
-
                 this.cargoItems.extract(i, 1, false);
+                this.extractFromCargo(this.getRailBedFill(), cost);
                 return;
             }
         }
@@ -166,7 +198,7 @@ public class EntityTunnelBore extends Locomotive {
                 TrackSmoothing.BOTH,
                 TrackDirection.NONE,
                 ItemStack.EMPTY,
-                this.railBedFill,
+                this.getRailBedFill(),
                 false,
                 false
         );
@@ -184,7 +216,7 @@ public class EntityTunnelBore extends Locomotive {
                 TrackSmoothing.BOTH,
                 TrackDirection.NONE,
                 ItemStack.EMPTY,
-                this.railBedFill,
+                this.getRailBedFill(),
                 false,
                 false
         );

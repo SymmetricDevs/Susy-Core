@@ -30,5 +30,9 @@ public class SusyOreDictionaryLoader {
             OreDictionary.registerOre("stone", smooth);
             OreDictionary.registerOre("cobblestone", cobble);
         }
+
+        // For IR railbeds
+        ItemStack concreteLightSmooth = MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getItemVariant(StoneVariantBlock.StoneType.CONCRETE_LIGHT);
+        OreDictionary.registerOre("railBed", concreteLightSmooth);
     }
 }
