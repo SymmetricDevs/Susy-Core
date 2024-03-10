@@ -10,7 +10,7 @@ tile.sintering_brick.sintering_block_magnetoplated.name=镀磁烧结炉砖块
 tile.coagulation_tank_wall.wooden_coagulation_tank_wall.name=凝固缸壁面
 tile.separator_rotor.steel.name=钢制重力分离器转子
 
-tile.alternator_coil.copper.name=铜交流线圈
+tile.alternator_coil.copper.name=铜制交流线圈
 tile.turbine_rotor.steel.name=钢制涡轮方块
 tile.drill_head.steel.name=钢制钻头
 
@@ -152,7 +152,7 @@ susy.material.chlinochlore=斜绿泥石
 susy.material.bytownite=倍长石
 susy.material.labradorite=拉长石
 susy.material.andesine=中长石
-susy.material.oligoclase=中长石
+susy.material.oligoclase=奥长石
 susy.material.albite=钠长石
 susy.material.anorthite=钙长石
 susy.material.forsterite=镁橄榄石
@@ -203,7 +203,6 @@ gregtech.machine.electrolytic_cell.name=电解池
 
 gregtech.machine.coking_tower.name=焦化塔
 gregtech.machine.vacuum_distillation_tower.name=真空蒸馏塔
-gregtech.machine.smoke_stack.name=烟囱
 gregtech.machine.catalytic_reformer.name=催化重整器
 gregtech.machine.pressure_swing_adsorber.name=变压吸附器
 gregtech.machine.reaction_furnace.name=反应炉
@@ -219,9 +218,10 @@ gregtech.machine.heat_radiator.name=散热器
 gregtech.machine.large_weapons_factory.name=大型武器工厂
 gregtech.machine.magnetohydrodynamic_generator.name=磁流体动力学（MHD）发电机
 gregtech.machine.mining_drill.name=采矿钻机
-gregtech.machine.quencher.name=淬火机床
+gregtech.machine.quencher.name=淬火槽
 gregtech.machine.railroad_engineering_station.name=铁路工程站
-gregtech.machine.railroad_engineering_station.tooltip=在多方块结构的中心放置沉浸铁路的铁轨以使之成型\n铁轨下的混凝土可以被包括管道和空气在内的任意方块替换
+gregtech.machine.railroad_engineering_station.tooltip=在多方块结构的中心放置沉浸铁路的铁轨以使之成型
+gregtech.machine.railroad_engineering_station.tooltip.1=铁轨下的混凝土可以被包括管道和空气在内的任意方块替换
 
 gregtech.machine.primitive_mud_pump.name=简易泥泵
 gregtech.machine.basic_steam_turbine.name=大型蒸汽轮机
@@ -229,9 +229,25 @@ gregtech.machine.basic_gas_turbine.name=大型燃气轮机
 gregtech.machine.ocean_pumper.name=海水泵机
 gregtech.machine.advanced_arc_furnace.name=高级电弧炉
 gregtech.machine.clarifier.name=澄清池
-gregtech.machine.dumper.name=废液排放机
 gregtech.machine.evaporation_pool.name=蒸发池
 gregtech.machine.flare_stack.name=火炬塔
+gregtech.machine.flare_stack.height=塔高：%s
+gregtech.machine.flare_stack.rate=焚烧速率：%s
+gregtech.machine.flare_stack.rate_hover=由火炬塔高度决定的焚烧速率倍数。
+gregtech.machine.flare_stack.tooltip=工业肺癌传播者。
+gregtech.machine.flare_stack.tooltip.1=§6基础焚烧速率：§7§f%d L 每 10 ticks
+gregtech.machine.flare_stack.tooltip.2=在5格的基础高度之上，每增加一格，焚烧速率翻倍。
+gregtech.machine.smoke_stack.name=烟囱
+gregtech.machine.smoke_stack.height=塔高：%s
+gregtech.machine.smoke_stack.rate=排放速率：%s
+gregtech.machine.smoke_stack.rate_hover=由烟囱高度决定的排放速率倍数。
+gregtech.machine.smoke_stack.tooltip=给你星球的大气层加点料。
+gregtech.machine.smoke_stack.tooltip.1=§8基础排放速率：§7§f%d L 每 10 ticks
+gregtech.machine.smoke_stack.tooltip.2=在5格的基础高度之上，每增加一格，排放速率翻倍。
+gregtech.machine.dumper.name=废液排放机
+gregtech.machine.dumper.rate=排污速率：%s
+gregtech.machine.dumper.tooltip=污染你附近的整个生态系统。
+gregtech.machine.dumper.tooltip.1=§2基础排污速率：§7§f%d L 每 10 ticks
 gregtech.machine.froth_flotation_tank.name=泡沫浮选机
 gregtech.machine.multi_stage_flash_distiller.name=多级闪蒸室
 gregtech.machine.high_temperature_distillation_tower.name=高温蒸馏塔
@@ -252,7 +268,7 @@ gregtech.recipe.cryogenic_environment=需要低温环境
 
 # Latex Collector
 gregtech.machine.latex_collector.steam=需要蒸汽！
-gregtech.machine.latex_collector.tooltip=以每tick%dL的速率从相邻的橡胶木中收集乳胶。
+gregtech.machine.latex_collector.tooltip=从相邻的原木中提取液体。
 gregtech.machine.latex_collector.bronze.name=蒸汽胶乳收集器
 gregtech.machine.latex_collector.steel.name=高压蒸汽胶乳收集器
 gregtech.machine.latex_collector.lv.name=基础胶乳收集器
@@ -640,8 +656,6 @@ recipemap.advanced_arc_furnace.name=高级电弧炉
 recipemap.evaporation_pool.name=蒸发池
 recipemap.clarifier.name=澄清池
 recipemap.multi_stage_flash_distillation.name=多级闪蒸
-recipemap.flare_stack.name=尾气燃烧
-recipemap.dumping.name=废液排放
 recipemap.froth_flotation.name=泡沫浮选
 recipemap.rotary_kiln.name=回转炉
 recipemap.low_pressure_cryogenic_distillation.name=低压低温蒸馏
@@ -656,18 +670,18 @@ recipemap.gravity_separator=重力分离
 recipemap.spinning.name=纺线
 recipemap.large_steam_turbine.name=大型蒸汽轮机
 
-gregtech.multiblock.primitive_mud_pump.description=简易泥泵是一台蒸汽时代的多方块机器。当它的控制器方块处于河流生物群系，且高度介于 Y = 64 与 Y = 80 （含）之间时将每秒收集一次泥。它可以使用 ULV、LV 输出仓或水泵输出仓。
-gregtech.multiblock.ocean_pumper.description=海水泵机是一台电力时代的多方块机器。当它的控制器方块处于海洋生物群系，且高度介于 Y = 70 与 Y = 75 （含）之间时将每秒收集 8,000 L 海水。他需要输出总线、维修仓、能源仓各一。
+gregtech.multiblock.primitive_mud_pump.description=简易泥泵是一台蒸汽时代的多方块机器。当它的控制器方块处于河流生物群系，且高度介于 Y = 64 与 Y = 80（含）之间时将每秒收集一次泥。它可以使用 ULV、LV 输出仓或水泵输出仓。
+gregtech.multiblock.ocean_pumper.description=海水泵机是一台电力时代的多方块机器。当它的控制器方块处于海洋生物群系，且高度介于 Y = 70 与 Y = 75（含）之间时将每秒收集 8,000 L 海水。他需要输出总线、维修仓、能源仓各一。
 
 # Energy Hatches
 
-gregtech.machine.energy_hatch.output_4a.lv.name=4 安动力仓（LV）
-gregtech.machine.energy_hatch.output_16a.lv.name=16 安动力仓（LV）
-gregtech.machine.energy_hatch.output_4a.mv.name=4 安动力仓（MV）
-gregtech.machine.energy_hatch.output_16a.mv.name=16 安动力仓（MV）
-gregtech.machine.energy_hatch.output_4a.hv.name=4 安动力仓（HV）
-gregtech.machine.energy_hatch.output_16a.hv.name=16 安动力仓（HV）
-gregtech.machine.energy_hatch.output_16a.ev.name=16 安动力仓（EV）
+gregtech.machine.energy_hatch.output_4a.lv.name=4安动力仓（LV）
+gregtech.machine.energy_hatch.output_16a.lv.name=16安动力仓（LV）
+gregtech.machine.energy_hatch.output_4a.mv.name=4安动力仓（MV）
+gregtech.machine.energy_hatch.output_16a.mv.name=16安动力仓（MV）
+gregtech.machine.energy_hatch.output_4a.hv.name=4安动力仓（HV）
+gregtech.machine.energy_hatch.output_16a.hv.name=16安动力仓（HV）
+gregtech.machine.energy_hatch.output_16a.ev.name=16安动力仓（EV）
 
 # Other multiblock parts
 
@@ -682,6 +696,7 @@ metaitem.pump.steam.name=蒸汽泵
 cover.pump.steam.title=蒸汽泵
 metaitem.air_vent.name=进气扇
 metaitem.air_vent.tooltip=当面向空气时，为机器收集所处维度的空气
+metaitem.air_vent.tooltip.1=§b收集速率: §f%,d L/s
 
 # Catalysts
 gregtech.universal.catalysts.tooltip.tier=§e最高电压：§f%,d EU/t（%s§f）
