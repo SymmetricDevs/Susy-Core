@@ -261,7 +261,7 @@ gregtech.recipe.cryogenic_environment=需要低温环境
 
 # Latex Collector
 gregtech.machine.latex_collector.steam=需要蒸汽！
-gregtech.machine.latex_collector.tooltip=以每tick%dL的速率从相邻的橡胶木中收集乳胶。
+gregtech.machine.latex_collector.tooltip=从相邻的原木中提取液体。
 gregtech.machine.latex_collector.bronze.name=蒸汽胶乳收集器
 gregtech.machine.latex_collector.steel.name=高压蒸汽胶乳收集器
 gregtech.machine.latex_collector.lv.name=基础胶乳收集器
