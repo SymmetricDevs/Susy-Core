@@ -695,6 +695,7 @@ metaitem.pump.steam.name=蒸汽泵
 cover.pump.steam.title=蒸汽泵
 metaitem.air_vent.name=进气扇
 metaitem.air_vent.tooltip=当面向空气时，为机器收集所处维度的空气
+metaitem.air_vent.tooltip.1=§b收集速率: §f%,d L/s
 
 # Catalysts
 gregtech.universal.catalysts.tooltip.tier=§e最高电压：§f%,d EU/t（%s§f）
