@@ -220,7 +220,8 @@ gregtech.machine.magnetohydrodynamic_generator.name=Magnetohydrodynamic (MHD) Ge
 gregtech.machine.mining_drill.name=Mining Drill
 gregtech.machine.quencher.name=Quencher
 gregtech.machine.railroad_engineering_station.name=Railroad Engineering Station
-gregtech.machine.railroad_engineering_station.tooltip=Place Immersive Railroading Tracks in the middle to form the multiblock\nThe concrete below the tracks can be substituted with any block, including pipes or air
+gregtech.machine.railroad_engineering_station.tooltip=Place Immersive Railroading Tracks in the middle to form the multiblock
+gregtech.machine.railroad_engineering_station.tooltip.1=The concrete below the tracks can be substituted with any block, including pipes or air
 
 gregtech.machine.primitive_mud_pump.name=Primitive Mud Pump
 gregtech.machine.basic_steam_turbine.name=Large Steam Turbine
@@ -759,8 +760,10 @@ gregtech.block_group_members.latex_logs.name=Rubber Log
 # Extra recipe info
 susy.recipe.dimensions=Dimensions: %s
 
-# Commands
+# TOP info
+susy.top.voiding_multiblock=§7Voiding %s §7L/10t§r
 
+# Commands
 susy.command.horde.usage=/mobHorde <start/stop>
 susy.command.horde.start.usage=/mobHorde start <name>
 susy.command.horde.start.argument_required=Use /mobHorde start <name>.
