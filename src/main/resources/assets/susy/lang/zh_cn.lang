@@ -220,7 +220,8 @@ gregtech.machine.magnetohydrodynamic_generator.name=磁流体动力学（MHD）�
 gregtech.machine.mining_drill.name=采矿钻机
 gregtech.machine.quencher.name=淬火槽
 gregtech.machine.railroad_engineering_station.name=铁路工程站
-gregtech.machine.railroad_engineering_station.tooltip=在多方块结构的中心放置沉浸铁路的铁轨以使之成型\n铁轨下的混凝土可以被包括管道和空气在内的任意方块替换
+gregtech.machine.railroad_engineering_station.tooltip=在多方块结构的中心放置沉浸铁路的铁轨以使之成型
+gregtech.machine.railroad_engineering_station.tooltip.1=铁轨下的混凝土可以被包括管道和空气在内的任意方块替换
 
 gregtech.machine.primitive_mud_pump.name=简易泥泵
 gregtech.machine.basic_steam_turbine.name=大型蒸汽轮机
