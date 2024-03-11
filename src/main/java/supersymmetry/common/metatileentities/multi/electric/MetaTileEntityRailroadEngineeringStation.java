@@ -40,6 +40,7 @@ import gregtech.common.blocks.StoneVariantBlock;
 import gregtech.common.metatileentities.MetaTileEntities;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
@@ -53,6 +54,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandlerModifiable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.particles.SusyParticleFlame;
@@ -121,6 +124,12 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
                 .where(' ', any())
                 .where('R', SuSyPredicates.rails())
                 .build();
+    }
+
+    @Override
+    public void addInformation(net.minecraft.item.ItemStack stack, @Nullable net.minecraft.world.World world, @NotNull List<String> tooltip, boolean advanced) {
+        super.addInformation(stack, world, tooltip, advanced);
+        tooltip.add(I18n.format("gregtech.machine.railroad_engineering_station.tooltip.1"));
     }
 
     @Override

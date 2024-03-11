@@ -89,7 +89,7 @@ public class MetaTileEntityDumper extends VoidingMultiblockBase {
         super.addDisplayText(textList);
         if(isStructureFormed()) {
             ITextComponent componentRate = TextComponentUtil.stringWithColor(TextFormatting.DARK_PURPLE,
-                    String.valueOf(this.getBaseVoidingRate()));
+                    this.getBaseVoidingRate() + " L/10t");
 
             textList.add(TextComponentUtil.translationWithColor(
                     TextFormatting.GRAY,
