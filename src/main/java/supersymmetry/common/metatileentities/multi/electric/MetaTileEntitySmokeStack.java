@@ -166,7 +166,7 @@ public class MetaTileEntitySmokeStack extends VoidingMultiblockBase {
         super.addDisplayText(textList);
         if(isStructureFormed()) {
             ITextComponent componentHeight = TextComponentUtil.stringWithColor(TextFormatting.BLUE,
-                    this.height + " blocks");
+                    String.valueOf(this.height));
             ITextComponent componentRateBonus = TextComponentUtil.stringWithColor(TextFormatting.DARK_PURPLE,
                     this.rateBonus + "x");
             ITextComponent componentRateBase = TextComponentUtil.translationWithColor(TextFormatting.GRAY,
