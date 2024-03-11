@@ -193,6 +193,8 @@ gregtech.multiblocks.sintering_oven.use_plasma.affirmative=是
 gregtech.multiblocks.sintering_oven.use_plasma.negative=否
 
 gregtech.machine.coagulation_tank.name=凝固缸
+gregtech.machine.coagulation_tank.tooltip=不能用于止血。
+gregtech.machine.coagulation_tank.tooltip.1=每延长一格，并行数加一
 gregtech.machine.drum.lead.name=铅桶
 gregtech.machine.drum.brass.name=黄铜桶
 

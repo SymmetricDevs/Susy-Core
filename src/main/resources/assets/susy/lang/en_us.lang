@@ -193,6 +193,8 @@ gregtech.multiblocks.sintering_oven.use_plasma.affirmative=Yes
 gregtech.multiblocks.sintering_oven.use_plasma.negative=No
 
 gregtech.machine.coagulation_tank.name=Coagulation Tank
+gregtech.machine.coagulation_tank.tooltip=Can't be used to stop bleeding.
+gregtech.machine.coagulation_tank.tooltip.1=Gains one parallel per block longer
 gregtech.machine.drum.lead.name=Lead Drum
 gregtech.machine.drum.brass.name=Brass Drum
 
