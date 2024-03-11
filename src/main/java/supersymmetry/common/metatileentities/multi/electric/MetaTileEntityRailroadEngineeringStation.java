@@ -131,6 +131,7 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
         super.addInformation(stack, world, tooltip, advanced);
         tooltip.add(I18n.format("gregtech.machine.railroad_engineering_station.tooltip.1"));
     }
+
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
         return Textures.SOLID_STEEL_CASING;
