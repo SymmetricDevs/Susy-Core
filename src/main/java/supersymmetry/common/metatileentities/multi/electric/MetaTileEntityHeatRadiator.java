@@ -70,7 +70,7 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
                 rowBuilder.append("B");
                 rowBuilder.insert(0, "B");
                 topBuilder.append("A");
-                rowBuilder.insert(0, "A");
+                topBuilder.insert(0, "A");
             }
         }
 
@@ -80,7 +80,7 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
         rowBuilder.append("C");
         rowBuilder.insert(0, "C");
         topBuilder.append("A");
-        rowBuilder.insert(0, "A");
+        topBuilder.insert(0, "A");
 
         return FactoryBlockPattern.start(RIGHT, FRONT, UP)
                 .aisle(topBuilder.toString())
