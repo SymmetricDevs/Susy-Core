@@ -177,6 +177,8 @@ public class EntityTunnelBore extends Locomotive {
                 if(this.getRotationPitch() < 0) {
                     pos = pos.offset(facing, 9).down();
                     placementAngle = facing.getOpposite().getAngle();
+                    // We have the bottom of the world, don't try to go down further
+                    if(pos.y < 1) return;
                 }
 
                 PlacementInfo placementInfo = new PlacementInfo(trackBlueprintStack, placementAngle, new Vec3d(0.5, 0.5, 0.5));
