@@ -28,6 +28,8 @@ import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCoagu
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimitiveMudPump;
 import supersymmetry.common.metatileentities.multiblockpart.SusyMetaTileEntityDumpingHatch;
 import supersymmetry.common.metatileentities.multiblockpart.SusyMetaTileEntityEnergyHatch;
+import supersymmetry.common.metatileentities.single.railinterfaces.*;
+import supersymmetry.common.metatileentities.single.storage.MetaTileEntityCryoDrum;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityBathCondenser;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityLatexCollector;
 import supersymmetry.common.metatileentities.single.steam.MetaTileEntitySteamLatexCollector;
@@ -143,6 +145,12 @@ public class SuSyMetaTileEntities {
     public static SimpleMachineMetaTileEntity[] ELECTROSTATIC_SEPARATOR;
     public static SimpleMachineMetaTileEntity[] TEXTILE_SPINNER;
     public static SimpleMachineMetaTileEntity[] POLISHING_MACHINE;
+
+    /*public static MetaTileEntityStockDetector STOCK_DETECTOR;*/
+    public static MetaTileEntityStockFluidExchanger STOCK_FLUID_EXCHANGER;/*
+    public static MetaTileEntityStockItemExchanger STOCK_ITEM_EXCHANGER;
+    public static MetaTileEntityStockReader STOCK_CONTENT_READER;
+    public static MetaTileEntityLocomotiveController STOCK_CONTROLLER;*/
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -266,6 +274,12 @@ public class SuSyMetaTileEntities {
         registerSimpleMTE(ELECTROSTATIC_SEPARATOR, 12, 17035, "electrostatic_separator", SuSyRecipeMaps.ELECTROSTATIC_SEPARATOR, SusyTextures.ELECTROSTATIC_SEPARATOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         registerSimpleMTE(POLISHING_MACHINE, 12, 17048, "polishing_machine", SuSyRecipeMaps.POLISHING_MACHINE, SusyTextures.POLISHING_MACHINE_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         registerSimpleMTE(TEXTILE_SPINNER, 12, 17061, "textile_spinner", SuSyRecipeMaps.SPINNING_RECIPES, SusyTextures.TEXTILE_SPINNER_OVERLAY, true);
+
+        /*STOCK_DETECTOR = registerMetaTileEntity(18000, new MetaTileEntityStockDetector(susyId("stock_detector")));*/
+        STOCK_FLUID_EXCHANGER = registerMetaTileEntity(18001, new MetaTileEntityStockFluidExchanger(susyId("stock_fluid_exchanger")));/*
+        STOCK_ITEM_EXCHANGER = registerMetaTileEntity(18002, new MetaTileEntityStockItemExchanger(susyId("stock_item_exchanger")));
+        STOCK_CONTENT_READER = registerMetaTileEntity(18003, new MetaTileEntityStockReader(susyId("stock_content_reader")));
+        STOCK_CONTROLLER = registerMetaTileEntity(18004, new MetaTileEntityLocomotiveController(susyId("stock_controller")));*/
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name, RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator, ICubeRenderer texture, boolean isBricked) {
