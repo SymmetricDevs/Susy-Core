@@ -217,6 +217,10 @@ gregtech.machine.cooling_unit.name=Cooling Unit
 gregtech.machine.gas_turbine.name=Gas Turbine
 gregtech.machine.heat_exchanger.name=Heat Exchanger
 gregtech.machine.heat_radiator.name=Heat Radiator
+gregtech.multiblock.heat_radiator.tooltip.1=Efficiency is proportional to the area of dissipation.
+gregtech.multiblock.heat_radiator.tooltip.2=§bSize: §f3x3 to 11x16
+gregtech.machine.heat_radiator.parallel=Maximum Parallel: %s
+gregtech.machine.heat_radiator.parallel_hover=Parallel amount is determined by the amount of the tube block.
 gregtech.machine.large_weapons_factory.name=Large Weapons Factory
 gregtech.machine.magnetohydrodynamic_generator.name=Magnetohydrodynamic (MHD) Generator
 gregtech.machine.mining_drill.name=Mining Drill
@@ -226,9 +230,11 @@ gregtech.machine.railroad_engineering_station.tooltip=Place Immersive Railroadin
 gregtech.machine.railroad_engineering_station.tooltip.1=The concrete below the tracks can be substituted with any block, including pipes or air
 
 gregtech.machine.primitive_mud_pump.name=Primitive Mud Pump
+gregtech.machine.primitive_mud_pump.tooltip=Works only in River biomes between Y=64 and Y=80
 gregtech.machine.basic_steam_turbine.name=Large Steam Turbine
 gregtech.machine.basic_gas_turbine.name=Large Gas Turbine
 gregtech.machine.ocean_pumper.name=Ocean Pumper
+gregtech.machine.ocean_pumper.tooltip=Works only in Ocean biomes between Y=70 and Y=75
 gregtech.machine.advanced_arc_furnace.name=Advanced Arc Furnace
 gregtech.machine.clarifier.name=Clarifier
 gregtech.machine.evaporation_pool.name=Evaporation Pool
