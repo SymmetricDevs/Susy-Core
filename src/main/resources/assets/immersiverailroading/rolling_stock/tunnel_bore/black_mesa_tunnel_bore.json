@@ -2,8 +2,9 @@
 	"name": "Black Mesa Tunnel Bore",
 	"works": "Black Mesa",
 	"model": "immersiverailroading:models/rolling_stock/tunnel_bore/black_mesa_tunnel_bore/bore.obj",
-	"modeler": "Zalgo",
+	"modeler": "Memeexp",
 	"pack": "Supersymmetry Engines",
+    "darken_model": "-0.01",
 	"properties": {
 		"horsepower": 3000,
 		"tractive_effort_lbf": 92000,
