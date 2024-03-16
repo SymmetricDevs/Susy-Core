@@ -16,6 +16,7 @@ import cam72cam.mod.fluid.Fluid;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
+import cam72cam.mod.util.Facing;
 import cam72cam.mod.world.World;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
@@ -161,16 +162,27 @@ public class EntityTunnelBore extends Locomotive {
                 int placeableLength = this.trackLength;
 
                 RailSettings settings;
-
-                if(this.getRotationPitch() <= 0) settings = getSettingsStraight(placeableLength);
+                // Can be 360 for some reason
+                if(this.getRotationPitch() % 360 == 0) settings = getSettingsStraight(placeableLength);
                 else settings = getSettingsSlope(placeableLength);
 
                 ItemStack trackBlueprintStack = new ItemStack(IRItems.ITEM_TRACK_BLUEPRINT, 0);
                 settings.write(trackBlueprintStack);
-                PlacementInfo placementInfo = new PlacementInfo(trackBlueprintStack, this.getRotationYaw(), new Vec3d(0.5, 0.5, 0.5));
+
+                Facing facing = Facing.fromAngle(this.getRotationYaw());
+                Vec3i pos = (new Vec3i(getPosition())).offset(facing);
+                float placementAngle = facing.getAngle();
+
+                // We are going down, need to change placement anchor
+                if(this.getRotationPitch() < 0) {
+                    pos = pos.offset(facing, 9).down();
+                    placementAngle = facing.getOpposite().getAngle();
+                }
+
+                PlacementInfo placementInfo = new PlacementInfo(trackBlueprintStack, placementAngle, new Vec3d(0.5, 0.5, 0.5));
                 RailInfo railInfo = new RailInfo(trackBlueprintStack, placementInfo, null);
                 World irWorld = getWorld();
-                BuilderBase trackBuilder = railInfo.getBuilder(irWorld, new Vec3i(getPosition()));
+                BuilderBase trackBuilder = railInfo.getBuilder(irWorld, pos);
 
                 int cost = trackBuilder.costFill();
                 if(this.getAmountInInventory(this.getRailBedFill()) < cost) return;
