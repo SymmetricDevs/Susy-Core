@@ -88,10 +88,9 @@ public class SuSyMaterialRecipeHandler {
     }
 
     public static void processThreadWeaving(OrePrefix platePrefix, Material mat, @NotNull FiberProperty property) {
-        println("Registering thread weaving!");
-
         if (mat.hasFlag(MaterialFlags.GENERATE_PLATE)) {
             RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
+                .circuitMeta(1)
                 .inputs(OreDictUnifier.get(SusyOrePrefix.thread, mat, 8))
                 .outputs(OreDictUnifier.get(platePrefix, mat, 1))
                 .duration(20)
