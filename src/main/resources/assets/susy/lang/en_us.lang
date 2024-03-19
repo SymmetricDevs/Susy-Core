@@ -193,6 +193,8 @@ gregtech.multiblocks.sintering_oven.use_plasma.affirmative=Yes
 gregtech.multiblocks.sintering_oven.use_plasma.negative=No
 
 gregtech.machine.coagulation_tank.name=Coagulation Tank
+gregtech.machine.coagulation_tank.tooltip=Can't be used to stop bleeding.
+gregtech.machine.coagulation_tank.tooltip.1=Gains one parallel per block longer
 gregtech.machine.drum.lead.name=Lead Drum
 gregtech.machine.drum.brass.name=Brass Drum
 
@@ -203,7 +205,6 @@ gregtech.machine.electrolytic_cell.name=Electrolytic Cell
 
 gregtech.machine.coking_tower.name=Coking Tower
 gregtech.machine.vacuum_distillation_tower.name=Vacuum Distillation Tower
-gregtech.machine.smoke_stack.name=Smoke Stack
 gregtech.machine.catalytic_reformer.name=Catalytic Reformer
 gregtech.machine.pressure_swing_adsorber.name=Pressure Swing Adsorber
 gregtech.machine.reaction_furnace.name=Reaction Furnace
@@ -216,22 +217,45 @@ gregtech.machine.cooling_unit.name=Cooling Unit
 gregtech.machine.gas_turbine.name=Gas Turbine
 gregtech.machine.heat_exchanger.name=Heat Exchanger
 gregtech.machine.heat_radiator.name=Heat Radiator
+gregtech.multiblock.heat_radiator.tooltip.1=Efficiency is proportional to the area of dissipation.
+gregtech.multiblock.heat_radiator.tooltip.2=§bSize: §f3x3 to 11x16
+gregtech.machine.heat_radiator.parallel=Maximum Parallel: %s
+gregtech.machine.heat_radiator.parallel_hover=Parallel amount is determined by the amount of the tube block.
 gregtech.machine.large_weapons_factory.name=Large Weapons Factory
 gregtech.machine.magnetohydrodynamic_generator.name=Magnetohydrodynamic (MHD) Generator
 gregtech.machine.mining_drill.name=Mining Drill
 gregtech.machine.quencher.name=Quencher
 gregtech.machine.railroad_engineering_station.name=Railroad Engineering Station
-gregtech.machine.railroad_engineering_station.tooltip=Place Immersive Railroading Tracks in the middle to form the multiblock\nThe concrete below the tracks can be substituted with any block, including pipes or air
+gregtech.machine.railroad_engineering_station.tooltip=Place Immersive Railroading Tracks in the middle to form the multiblock
+gregtech.machine.railroad_engineering_station.tooltip.1=The concrete below the tracks can be substituted with any block, including pipes or air
 
 gregtech.machine.primitive_mud_pump.name=Primitive Mud Pump
+gregtech.machine.primitive_mud_pump.tooltip=Works only in River biomes between Y=64 and Y=80
 gregtech.machine.basic_steam_turbine.name=Large Steam Turbine
 gregtech.machine.basic_gas_turbine.name=Large Gas Turbine
 gregtech.machine.ocean_pumper.name=Ocean Pumper
+gregtech.machine.ocean_pumper.tooltip=Works only in Ocean biomes between Y=70 and Y=75
 gregtech.machine.advanced_arc_furnace.name=Advanced Arc Furnace
 gregtech.machine.clarifier.name=Clarifier
-gregtech.machine.dumper.name=Dumper
 gregtech.machine.evaporation_pool.name=Evaporation Pool
 gregtech.machine.flare_stack.name=Flare Stack
+gregtech.machine.flare_stack.height=Stack Height: %s blocks
+gregtech.machine.flare_stack.rate=Flaring Rate: %s
+gregtech.machine.flare_stack.rate_hover=Flaring rate multiplier set by the height of the flare stack.
+gregtech.machine.flare_stack.tooltip=Industrial lung cancer propagator.
+gregtech.machine.flare_stack.tooltip.1=§6Base Flaring Rate:§7 §f%d L every 10 ticks
+gregtech.machine.flare_stack.tooltip.2=Doubles its speed for each block taller than 5
+gregtech.machine.smoke_stack.name=Smoke Stack
+gregtech.machine.smoke_stack.height=Stack Height: %s blocks
+gregtech.machine.smoke_stack.rate=Exhaustion Rate: %s
+gregtech.machine.smoke_stack.rate_hover=Exhaustion rate multiplier set by the height of the smoke stack.
+gregtech.machine.smoke_stack.tooltip=For enriching your planets atmosphere.
+gregtech.machine.smoke_stack.tooltip.1=§8Base Exhaustion Rate:§7 §f%d L every 10 ticks
+gregtech.machine.smoke_stack.tooltip.2=Doubles its speed for each block taller than 5
+gregtech.machine.dumper.name=Dumper
+gregtech.machine.dumper.rate=Dumping Rate: %s
+gregtech.machine.dumper.tooltip=Contaminates all your local ecosystems.
+gregtech.machine.dumper.tooltip.1=§2Base Dumping Rate:§7 §f %d L every 10 ticks
 gregtech.machine.froth_flotation_tank.name=Froth Flotation Tank
 gregtech.machine.multi_stage_flash_distiller.name=Multi Stage Flash Distiller
 gregtech.machine.high_temperature_distillation_tower.name=High Temperature Distillation Tower
@@ -252,7 +276,7 @@ gregtech.recipe.cryogenic_environment=Requires Cryogenic Environment
 
 # Latex Collector
 gregtech.machine.latex_collector.steam=Needs Steam!
-gregtech.machine.latex_collector.tooltip=Collects latex from adjacent rubber tree log. Yields %d mL of latex per tick.
+gregtech.machine.latex_collector.tooltip=Extracts liquids from adjacent logs.
 gregtech.machine.latex_collector.bronze.name=Steam Latex Collector
 gregtech.machine.latex_collector.steel.name=High Pressure Steam Latex Collector
 gregtech.machine.latex_collector.lv.name=Basic Latex Collector
@@ -640,8 +664,6 @@ recipemap.advanced_arc_furnace.name=Advanced Arc Furnace
 recipemap.evaporation_pool.name=Evaporation Pool
 recipemap.clarifier.name=Clarifier
 recipemap.multi_stage_flash_distillation.name=Multi Stage Flash Distillation
-recipemap.flare_stack.name=Flare Stack
-recipemap.dumping.name=Dumping
 recipemap.froth_flotation.name=Froth Flotation
 recipemap.rotary_kiln.name=Rotary Kiln
 recipemap.low_pressure_cryogenic_distillation.name=Low Pressure Cryogenic Distillation
@@ -682,6 +704,7 @@ metaitem.pump.steam.name=Steam Pump
 cover.pump.steam.title=Steam Pump
 metaitem.air_vent.name=Air Vent
 metaitem.air_vent.tooltip=Passively collects a Dimension's Air for your Machines when facing Air
+metaitem.air_vent.tooltip.1=§bCollecting Rate: §f%,d L/s
 
 # Catalysts
 gregtech.universal.catalysts.tooltip.tier=§eMax Voltage: §f%,d EU/T (%s§f)
