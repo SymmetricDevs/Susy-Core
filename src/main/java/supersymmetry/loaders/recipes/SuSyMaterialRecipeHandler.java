@@ -82,6 +82,7 @@ public class SuSyMaterialRecipeHandler {
                 .inputs(OreDictUnifier.get(SusyOrePrefix.fiber, mat, 4))
                 .fluidInputs(Air.getFluid(100))
                 .outputs(OreDictUnifier.get(threadPrefix, mat, 1))
+                .circuitMeta(1)
                 .duration(20)
                 .EUt(VA[LV])
                 .buildAndRegister();
