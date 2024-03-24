@@ -19,6 +19,8 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
     // Player cooldown for all events.
     public int ticksUntilCanSpawn;
     public int gracePeriod;
+    public int ticksActive;
+    public int timeoutPeriod;
     public int[] invasionTimers;
     public boolean hasActiveInvasion = false;
     public List<UUID> invasionEntitiesUUIDs = new ArrayList<>();
@@ -38,6 +40,8 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
         result.setBoolean("hasActiveInvasion", hasActiveInvasion);
         if(this.hasActiveInvasion && !this.invasionEntitiesUUIDs.isEmpty()) {
             result.setString("currentInvasion", currentInvasion);
+            result.setInteger("timeoutPeriod", this.timeoutPeriod);
+            result.setInteger("", this.timeoutPeriod);
             NBTTagList tagList = new NBTTagList();
             invasionEntitiesUUIDs.stream()
                     .forEach(uuid -> tagList.appendTag(NBTUtil.createUUIDTag(uuid)));
@@ -60,7 +64,11 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
     }
 
     public void update(EntityPlayerMP player) {
-        if (hasActiveInvasion) return;
+        if (hasActiveInvasion) {
+            if (this.ticksActive > this.timeoutPeriod) {
+                this.finishInvasion();
+            } else return;
+        }
         ticksUntilCanSpawn--;
         for (int i = 0; i < invasionTimers.length; i++) {
             invasionTimers[i]--;
@@ -82,6 +90,7 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
                 event = events.get(index);
                 if (event.run(player, this::addEntity)) {
                     invasionTimers[index] = event.getNextDelay();
+
                     this.setCurrentInvasion(event);
                 }
             }
@@ -105,6 +114,7 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
 
     public void setCurrentInvasion(MobHordeEvent event) {
         this.currentInvasion = event.KEY;
+        this.timeoutPeriod = event.timeoutPeriod;
         this.hasActiveInvasion = true;
     }
 
