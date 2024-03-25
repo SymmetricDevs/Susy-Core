@@ -90,6 +90,7 @@ public class SuSyMaterialRecipeHandler {
     public static void processThreadWeaving(OrePrefix threadPrefix, Material mat, @NotNull FiberProperty property) {
         if (mat.hasFlag(MaterialFlags.GENERATE_PLATE)) {
             RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
+                .circuitMeta(1)
                 .inputs(OreDictUnifier.get(threadPrefix, mat, 8))
                 .outputs(OreDictUnifier.get(OrePrefix.plate, mat, 1))
                 .duration(20)
