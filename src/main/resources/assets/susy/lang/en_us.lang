@@ -768,8 +768,10 @@ gregtech.block_group_members.latex_logs.name=Rubber Log
 # Extra recipe info
 susy.recipe.dimensions=Dimensions: %s
 
-# Commands
+# TOP info
+susy.top.voiding_multiblock=§7Voiding %s §7L/10t§r
 
+# Commands
 susy.command.horde.usage=/mobHorde <start/stop>
 susy.command.horde.start.usage=/mobHorde start <name>
 susy.command.horde.start.argument_required=Use /mobHorde start <name>.

@@ -242,7 +242,7 @@ gregtech.machine.flare_stack.rate=焚烧速率：%s
 gregtech.machine.flare_stack.rate_hover=由火炬塔高度决定的焚烧速率倍数。
 gregtech.machine.flare_stack.tooltip=工业肺癌传播者。
 gregtech.machine.flare_stack.tooltip.1=§6基础焚烧速率：§7§f%d L 每 10 ticks
-gregtech.machine.flare_stack.tooltip.2=在5格的基础高度之上，每增加一格，焚烧速率翻倍。
+gregtech.machine.flare_stack.tooltip.2=在5格的基础高度之上，每增加一格，焚烧速率翻一倍。
 gregtech.machine.smoke_stack.name=烟囱
 gregtech.machine.smoke_stack.height=塔高：%s格
 gregtech.machine.smoke_stack.rate=排放速率：%s
@@ -766,8 +766,10 @@ gregtech.block_group_members.latex_logs.name=橡胶木
 # Extra recipe info
 susy.recipe.dimensions=维度：%s
 
-# Commands
+# TOP info
+susy.top.voiding_multiblock=§7销毁 %s §7L/10t§r
 
+# Commands
 susy.command.horde.usage=/mobHorde <start/stop>
 susy.command.horde.start.usage=/mobHorde start <名称>
 susy.command.horde.start.argument_required=用法：/mobHorde start <名称>.

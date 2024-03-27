@@ -69,7 +69,7 @@ public abstract class VoidingMultiblockBase extends MultiblockWithDisplayBase {
         return false;
     }
 
-    private int getActualVoidingRate() {
+    public int getActualVoidingRate() {
         return rateBonus * getBaseVoidingRate();
     }
 
