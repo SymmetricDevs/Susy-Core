@@ -29,6 +29,8 @@ import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimi
 import supersymmetry.common.metatileentities.multiblockpart.SusyMetaTileEntityDumpingHatch;
 import supersymmetry.common.metatileentities.multiblockpart.SusyMetaTileEntityEnergyHatch;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityBathCondenser;
+import supersymmetry.common.metatileentities.single.electric.MetaTileEntityLatexCollector;
+import supersymmetry.common.metatileentities.single.steam.MetaTileEntitySteamLatexCollector;
 import supersymmetry.common.metatileentities.single.steam.SuSySimpleSteamMetaTileEntity;
 import supersymmetry.common.metatileentities.single.storage.MetaTileEntityCryoDrum;
 
@@ -42,7 +44,7 @@ public class SuSyMetaTileEntities {
 
     public static MetaTileEntityCoagulationTank COAGULATION_TANK;
 
-    public static final PseudoMultiMachineMetaTileEntity[] LATEX_COLLECTOR;
+    public static PseudoMultiMachineMetaTileEntity[] LATEX_COLLECTOR;
     public static PseudoMultiSteamMachineMetaTileEntity[] STEAM_LATEX_COLLECTOR;
 
     public static CatalystMachineMetaTileEntity[] VULCANIZING_PRESS;
@@ -146,14 +148,15 @@ public class SuSyMetaTileEntities {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
         COAGULATION_TANK = registerMetaTileEntity(14501, new MetaTileEntityCoagulationTank(susyId("coagulation_tank")));
 
-        //LATEX_COLLECTOR[0] = registerMetaTileEntity(14502, new MetaTileEntityLatexCollector(susyId("latex_collector.lv"), 1));
-        //LATEX_COLLECTOR[1] = registerMetaTileEntity(14503, new MetaTileEntityLatexCollector(susyId("latex_collector.mv"), 2));
-        //LATEX_COLLECTOR[2] = registerMetaTileEntity(14504, new MetaTileEntityLatexCollector(susyId("latex_collector.hv"), 3));
-        //LATEX_COLLECTOR[3] = registerMetaTileEntity(14505, new MetaTileEntityLatexCollector(susyId("latex_collector.ev"), 4));
+        LATEX_COLLECTOR[0] = registerMetaTileEntity(14502, new MetaTileEntityLatexCollector(susyId("latex_collector.lv"), 1));
+        LATEX_COLLECTOR[1] = registerMetaTileEntity(14503, new MetaTileEntityLatexCollector(susyId("latex_collector.mv"), 2));
+        LATEX_COLLECTOR[2] = registerMetaTileEntity(14504, new MetaTileEntityLatexCollector(susyId("latex_collector.hv"), 3));
+        LATEX_COLLECTOR[3] = registerMetaTileEntity(14505, new MetaTileEntityLatexCollector(susyId("latex_collector.ev"), 4));
 
-        //LATEX_COLLECTOR_BRONZE = registerMetaTileEntity(14510, new MetaTileEntitySteamLatexCollector(susyId("latex_collector.bronze")));
-        registerPseudoMultiSteamMTE(STEAM_LATEX_COLLECTOR, 14510, "latex_collector", SuSyRecipeMaps.LATEX_COLLECTOR_RECIPES, SuSySteamProgressIndicators.EXTRACTION_STEAM, SusyTextures.LATEX_COLLECTOR_OVERLAY, false);
-        registerPseudoMultiMTE(LATEX_COLLECTOR, 3, 14502, "latex_collector", SuSyRecipeMaps.LATEX_COLLECTOR_RECIPES, SusyTextures.LATEX_COLLECTOR_OVERLAY, true, SuSyUtility.collectorTankSizeFunction);
+        STEAM_LATEX_COLLECTOR[0] = registerMetaTileEntity(14510, new MetaTileEntitySteamLatexCollector(susyId("latex_collector.bronze"), false));
+        STEAM_LATEX_COLLECTOR[1] = registerMetaTileEntity(14511, new MetaTileEntitySteamLatexCollector(susyId("latex_collector.steel"), true));
+        //registerPseudoMultiSteamMTE(STEAM_LATEX_COLLECTOR, 14510, "latex_collector", SuSyRecipeMaps.LATEX_COLLECTOR_RECIPES, SuSySteamProgressIndicators.EXTRACTION_STEAM, SusyTextures.LATEX_COLLECTOR_OVERLAY, false);
+        //registerPseudoMultiMTE(LATEX_COLLECTOR, 3, 14502, "latex_collector", SuSyRecipeMaps.LATEX_COLLECTOR_RECIPES, SusyTextures.LATEX_COLLECTOR_OVERLAY, true, SuSyUtility.collectorTankSizeFunction);
 
         SINTERING_OVEN = registerMetaTileEntity(14521, new MetaTileEntitySinteringOven(susyId("sintering_oven")));
 

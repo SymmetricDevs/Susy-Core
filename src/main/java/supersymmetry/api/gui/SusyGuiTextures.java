@@ -9,6 +9,8 @@ public class SusyGuiTextures {
     public static final SteamTexture FLUID_SLOT_STEAM = SteamTexture.fullImage("textures/gui/base/fluid_slot_%s.png");
     public static final SteamTexture MOLD_OVERLAY_STEAM = SteamTexture.fullImage("textures/gui/overlay/mold_overlay_%s.png");
     public static final SteamTexture INT_CIRCUIT_OVERLAY_STEAM = SteamTexture.fullImage("textures/gui/progress_bar/int_circuit_overlay_%s.png");
+    public static final SteamTexture BUTTON_INT_CIRCUIT_PLUS_STEAM = SteamTexture.fullImage("textures/gui/widget/button_circuit_plus_%s.png");
+    public static final SteamTexture BUTTON_INT_CIRCUIT_MINUS_STEAM = SteamTexture.fullImage("textures/gui/widget/button_circuit_minus_%s.png");
 
     public static final TextureArea PROGRESS_BAR_EXTRACTION = TextureArea.fullImage("textures/gui/progress_bar/progress_bar_extraction.png");
     public static final TextureArea CATALYST_BED_OVERLAY  = TextureArea.fullImage("textures/gui/overlay/catalyst_bed_overlay.png");
@@ -23,4 +25,7 @@ public class SusyGuiTextures {
     public static final TextureArea SIFTER_ITEM_OUTPUT_OVERLAY = TextureArea.fullImage("textures/gui/overlay/sifter_item_output_overlay.png");
     public static final TextureArea CUBIC_LATTICE_OVERLAY = TextureArea.fullImage("textures/gui/overlay/cubic_lattice_overlay.png");
     public static final TextureArea ORE_CHUNK_OVERLAY = TextureArea.fullImage("textures/gui/overlay/ore_chunk_overlay.png");
+    public static final TextureArea BUTTON_INT_CIRCUIT_PLUS_PRIMITIVE = TextureArea.fullImage("textures/gui/widget/button_circuit_plus_primitive.png");
+    public static final TextureArea BUTTON_INT_CIRCUIT_MINUS_PRIMITIVE = TextureArea.fullImage("textures/gui/widget/button_circuit_minus_primitive.png");
+    public static final TextureArea FLUID_SLOT_PRIMITIVE = TextureArea.fullImage("textures/gui/base/fluid_slot_primitive.png");
 }
