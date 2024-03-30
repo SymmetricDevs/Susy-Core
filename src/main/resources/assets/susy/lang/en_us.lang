@@ -705,8 +705,8 @@ cover.pump.steam.title=Steam Pump
 metaitem.air_vent.name=Air Vent
 metaitem.air_vent.tooltip=Passively collects a Dimension's Air for your Machines when facing Air
 metaitem.track_segment.name=Monorail Track Segment
-metaitem.track_segment.tooltip=For use in the tunnel bore
-metaitem.track_segment.length_info=10 blocks worth of monorail track
+metaitem.track_segment.tooltip=For use in the §8tunnelbore.
+metaitem.track_segment.length_info=§610 blocks §7worth of monorail track.
 metaitem.air_vent.tooltip.1=§bCollecting Rate: §f%,d L/s
 
 # Catalysts
