@@ -4,6 +4,7 @@ import cam72cam.immersiverailroading.IRItems;
 import cam72cam.immersiverailroading.entity.Locomotive;
 import cam72cam.immersiverailroading.entity.physics.Simulation;
 import cam72cam.immersiverailroading.entity.physics.SimulationState;
+import cam72cam.immersiverailroading.inventory.FilteredStackHandler;
 import cam72cam.immersiverailroading.inventory.SlotFilter;
 import cam72cam.immersiverailroading.items.nbt.RailSettings;
 import cam72cam.immersiverailroading.library.*;
@@ -12,12 +13,16 @@ import cam72cam.immersiverailroading.thirdparty.trackapi.ITrack;
 import cam72cam.immersiverailroading.track.BuilderBase;
 import cam72cam.immersiverailroading.util.*;
 import cam72cam.mod.entity.Player;
+import cam72cam.mod.entity.sync.TagSync;
 import cam72cam.mod.fluid.Fluid;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
+import cam72cam.mod.serialization.TagField;
 import cam72cam.mod.util.Facing;
 import cam72cam.mod.world.World;
+import gregtech.api.capability.GregtechCapabilities;
+import gregtech.api.capability.IElectricItem;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
 import supersymmetry.common.item.SuSyMetaItems;
@@ -30,9 +35,16 @@ import java.util.List;
 public class EntityTunnelBore extends Locomotive {
 
     // In degrees
+    @TagField("borerAngle")
+    @TagSync
     private float borerAngle = 0;
 
+    // Make it use one amp of LV @max throttle
+    private int euT = 30;
+    private boolean hasGTElectricalPower = false;
+
     private final int trackLength = 10;
+
 
     private ArrayList<TunnelBoreControl> controlSequence = new ArrayList<>();
     public FluidQuantity getTankCapacity() {
@@ -55,8 +67,12 @@ public class EntityTunnelBore extends Locomotive {
         double maxPower_W = (double)this.getDefinition().getHorsePower(this.gauge) * 745.7;
         double efficiency = 0.82;
         double speed_M_S = Math.abs(speed.metric()) / 3.6;
-        double maxPowerAtSpeed = maxPower_W * efficiency / speed_M_S;
+        double maxPowerAtSpeed = this.hasGTElectricalPower ? maxPower_W * efficiency / Math.max(0.001, speed_M_S) : 0.;
         return maxPowerAtSpeed * (double)this.getThrottle() * (double)this.getReverser();
+    }
+
+    public long getElectricalPowerConsumption() {
+        return (long) (this.getThrottle() * this.euT);
     }
 
     // Invent handling
@@ -65,11 +81,18 @@ public class EntityTunnelBore extends Locomotive {
         return 36;
     }
 
+    private boolean isNonEmptyBattery(ItemStack is) {
+        net.minecraft.item.ItemStack internal = is.internal;
+        IElectricItem electricItem = internal.getCapability(GregtechCapabilities.CAPABILITY_ELECTRIC_ITEM, null);
+        return electricItem != null && electricItem.canProvideChargeExternally() && electricItem.getCharge() > 0L;
+
+    }
+
     @Override
     protected void initContainerFilter() {
         this.cargoItems.filter.clear();
         ItemStack trackSegmentStack = new ItemStack(SuSyMetaItems.TRACK_SEGMENT.getStackForm());
-        SlotFilter filter = ItemStack -> ItemStack.is(trackSegmentStack) || ItemStack.is(this.getRailBedFill());
+        SlotFilter filter = stack -> stack.is(trackSegmentStack) || stack.is(this.getRailBedFill()) || isNonEmptyBattery(stack);
         this.cargoItems.defaultFilter = filter;
     }
 
@@ -82,23 +105,49 @@ public class EntityTunnelBore extends Locomotive {
         return true;
     }
 
+    private List<IElectricItem> getNonEmptyBatteries() {
+        FilteredStackHandler inventory = this.cargoItems;
+        List<IElectricItem> batteries = new ArrayList();
+
+        for(int i = 0; i < inventory.getSlotCount(); ++i) {
+            net.minecraft.item.ItemStack batteryStack = inventory.get(i).internal;
+            IElectricItem electricItem = batteryStack.getCapability(GregtechCapabilities.CAPABILITY_ELECTRIC_ITEM, null);
+            if (electricItem != null && electricItem.canProvideChargeExternally() && electricItem.getCharge() > 0L) {
+                batteries.add(electricItem);
+            }
+        }
+
+        return batteries;
+    }
+
     @Override
     public void onTick() {
         super.onTick();
-
         this.updateBorer();
-        if(this.getRotationYaw() % 90 != 0) return;
+        if(!this.getWorld().isClient) {
+            long discharged = 0;
+            long consumption = this.getElectricalPowerConsumption();
+            this.hasGTElectricalPower = false;
+            List<IElectricItem> electricItems = this.getNonEmptyBatteries();
+            for (IElectricItem electricItem:
+                 electricItems) {
+                discharged += electricItem.discharge(consumption - discharged, 20, false, true, false);
+                if (discharged >= consumption) this.hasGTElectricalPower = true;
+            }
 
-        if(!this.states.isEmpty()) {
-            SimulationState currentState = getCurrentState();
-            int idx = this.states.indexOf(currentState);
-            SimulationState nextState = this.states.get(idx + 1);
-            if(nextState != null) {
-                Vec3d positionFront = VecUtil.fromWrongYawPitch(nextState.config.offsetFront, nextState.yaw, nextState.pitch).add(nextState.position);
-                ITrack trackFront = MovementTrack.findTrack(nextState.config.world, positionFront, nextState.yawFront, nextState.config.gauge.value());
-                // We have reached the end of the track
-                if(trackFront == null) {
-                    this.placeTrack();
+            if(this.getRotationYaw() % 90 != 0) return;
+
+            if(!this.states.isEmpty()) {
+                SimulationState currentState = getCurrentState();
+                int idx = this.states.indexOf(currentState);
+                SimulationState nextState = this.states.get(idx + 1);
+                if(nextState != null) {
+                    Vec3d positionFront = VecUtil.fromWrongYawPitch(nextState.config.offsetFront, nextState.yaw, nextState.pitch).add(nextState.position);
+                    ITrack trackFront = MovementTrack.findTrack(nextState.config.world, positionFront, nextState.yawFront, nextState.config.gauge.value());
+                    // We have reached the end of the track
+                    if(trackFront == null) {
+                        this.placeTrack();
+                    }
                 }
             }
         }
