@@ -25,8 +25,6 @@ public class TunnelBoreContainer extends BaseContainer {
         ItemStack battery = new ItemStack(MetaItems.BATTERY_HULL_LV.getStackForm());
         ItemStack trackSegment = new ItemStack(SuSyMetaItems.TRACK_SEGMENT.getStackForm());
 
-
-
         for (int i = 0; i < rows; i++) {
 
             for (int j = 0; j < batteriesPerRow; j++) {
@@ -43,8 +41,6 @@ public class TunnelBoreContainer extends BaseContainer {
 
         container.drawBottomBar(0, currY, batteriesPerRow);
         currY = container.drawBottomBar(batteriesPerRow * 18 + 18, currY, tracksPerRow);
-        currY = container.drawTopBar(0, currY, this.getSlotsX());
-
 
         currY = container.drawSlotBlock(this.stock.cargoItems, this.stock.getBatterySlots() + this.stock.getTrackSlots(), this.stock.getInventoryWidth(), 0, currY);
         currY = container.drawPlayerInventoryConnector(0, currY, this.stock.getInventoryWidth());
