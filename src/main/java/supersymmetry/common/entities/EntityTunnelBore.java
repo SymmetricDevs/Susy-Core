@@ -45,8 +45,8 @@ public class EntityTunnelBore extends Locomotive {
 
     private final int trackLength = 10;
 
-
     private ArrayList<TunnelBoreControl> controlSequence = new ArrayList<>();
+
     public FluidQuantity getTankCapacity() {
         return FluidQuantity.ZERO;
     }
@@ -54,6 +54,15 @@ public class EntityTunnelBore extends Locomotive {
     public List<Fluid> getFluidFilter() {
         return new ArrayList();
     }
+
+    public int getBatterySlots() {
+        return 4;
+    }
+
+    public int getTrackSlots() {
+        return 12;
+    }
+
     public int getInventoryWidth() {
         return 9;
     }
@@ -78,7 +87,7 @@ public class EntityTunnelBore extends Locomotive {
     // Invent handling
     @Override
     public int getInventorySize() {
-        return 36;
+        return 36 + this.getBatterySlots() + this.getTrackSlots();
     }
 
     private boolean isNonEmptyBattery(ItemStack is) {
@@ -91,9 +100,18 @@ public class EntityTunnelBore extends Locomotive {
     @Override
     protected void initContainerFilter() {
         this.cargoItems.filter.clear();
+        SlotFilter filter = stack -> stack.is(this.getRailBedFill());
         ItemStack trackSegmentStack = new ItemStack(SuSyMetaItems.TRACK_SEGMENT.getStackForm());
-        SlotFilter filter = stack -> stack.is(trackSegmentStack) || stack.is(this.getRailBedFill()) || isNonEmptyBattery(stack);
+        SlotFilter trackSegmentFilter = stack -> stack.is(trackSegmentStack);
         this.cargoItems.defaultFilter = filter;
+
+        for (int i = 0; i < this.getBatterySlots(); i++) {
+            this.cargoItems.filter.put(i, this::isNonEmptyBattery);
+        }
+
+        for (int i = this.getBatterySlots(); i < this.getBatterySlots() + this.getTrackSlots() ; i++) {
+            this.cargoItems.filter.put(i, trackSegmentFilter);
+        }
     }
 
     @Override
