@@ -1,6 +1,5 @@
 package supersymmetry;
 
-import gregtech.GTInternalTags;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
@@ -19,6 +18,8 @@ import supersymmetry.common.command.CommandHordeStop;
 import supersymmetry.common.covers.SuSyCoverBehaviors;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
+import gregtech.GTInternalTags;
+import supersymmetry.loaders.SuSyIRLoader;
 
 @Mod(name = Supersymmetry.NAME, modid = Supersymmetry.MODID, version = Tags.VERSION, dependencies = GTInternalTags.DEP_VERSION_STRING + ";required-after:gcym;after:immersiverailroading")
 
@@ -37,6 +38,8 @@ public class Supersymmetry {
     public void onModConstruction(FMLConstructionEvent event) {
         //This is now a config option I think
         //GTValues.HT = true;
+        SuSyIRLoader.initDefinitions();
+        SuSyIRLoader.initEntities();
     }
 
     @Mod.EventHandler

@@ -434,6 +434,10 @@ repositories {
             }
         }
         maven {
+            name 'Team Open Industry Maven'
+            url 'https://teamopenindustry.cc/maven'
+        }
+        maven {
             name 'Cleanroom Maven'
             url 'https://maven.cleanroommc.com'
         }
