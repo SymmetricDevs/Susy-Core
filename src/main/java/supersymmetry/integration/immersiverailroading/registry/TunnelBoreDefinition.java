@@ -15,7 +15,7 @@ public class TunnelBoreDefinition extends LocomotiveDefinitionBridge {
         super(EntityTunnelBore.class, defID, data);
     }
     protected GuiBuilder getDefaultOverlay(DataBlock data) throws IOException {
-        return GuiBuilder.parse(new Identifier("immersiverailroading", "gui/default/handcar.caml"));
+        return GuiBuilder.parse(new Identifier("immersiverailroading", "gui/default/tunnelbore.caml"));
     }
     protected StockModel<EntityTunnelBore, TunnelBoreDefinition> createModel() throws Exception {
         return new TunnelBoreModel(this);
