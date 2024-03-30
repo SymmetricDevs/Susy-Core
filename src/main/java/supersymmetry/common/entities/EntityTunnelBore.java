@@ -127,7 +127,7 @@ public class EntityTunnelBore extends Locomotive {
         FilteredStackHandler inventory = this.cargoItems;
         List<IElectricItem> batteries = new ArrayList();
 
-        for(int i = 0; i < inventory.getSlotCount(); ++i) {
+        for(int i = 0; i < this.getBatterySlots(); ++i) {
             net.minecraft.item.ItemStack batteryStack = inventory.get(i).internal;
             IElectricItem electricItem = batteryStack.getCapability(GregtechCapabilities.CAPABILITY_ELECTRIC_ITEM, null);
             if (electricItem != null && electricItem.canProvideChargeExternally() && electricItem.getCharge() > 0L) {
@@ -209,7 +209,7 @@ public class EntityTunnelBore extends Locomotive {
     }
 
     public void extractFromCargo(ItemStack stack, int amount) {
-        for (int i = 0; i < this.cargoItems.getSlotCount(); i++) {
+        for (int i = this.getBatterySlots() + this.getTrackSlots(); i < this.cargoItems.getSlotCount(); i++) {
             if(amount <= 0) return;
             ItemStack stackInInv = this.cargoItems.get(i);
             if (!stack.isEmpty() && stackInInv.is(stack)) {
@@ -223,7 +223,7 @@ public class EntityTunnelBore extends Locomotive {
     public void placeTrack() {
         ItemStack trackSegmentStack = new ItemStack(SuSyMetaItems.TRACK_SEGMENT.getStackForm());
 
-        for (int i = 0; i < this.cargoItems.getSlotCount(); i++) {
+        for (int i = this.getBatterySlots(); i < this.getBatterySlots() + this.getTrackSlots(); i++) {
             ItemStack stack = this.cargoItems.get(i);
             if (!stack.isEmpty() && stack.is(trackSegmentStack)) {
                 int placeableLength = this.trackLength;
