@@ -175,7 +175,7 @@ item.material.oreprefix.catalystPellet=%s催化剂颗粒
 item.material.oreprefix.dustFlotated=浮选%s粉
 item.material.oreprefix.dustConcentrate=%s精矿粉
 item.material.oreprefix.dustSifted=筛选%s粉
-item.material.oreprefix.sheetedFrame=%s板框箱
+item.material.oreprefix.sheetedFrame=%s镶板框架
 item.material.oreprefix.fiber=%s纤维
 item.material.oreprefix.fiberWet=湿%s纤维
 item.material.oreprefix.thread=%s纱线
@@ -230,9 +230,11 @@ gregtech.machine.railroad_engineering_station.tooltip=在多方块结构的中�
 gregtech.machine.railroad_engineering_station.tooltip.1=铁轨下的混凝土可以被包括管道和空气在内的任意方块替换
 
 gregtech.machine.primitive_mud_pump.name=简易泥泵
+gregtech.machine.primitive_mud_pump.tooltip=仅在Y=64与Y=80之间的河流群系工作。
 gregtech.machine.basic_steam_turbine.name=大型蒸汽轮机
 gregtech.machine.basic_gas_turbine.name=大型燃气轮机
 gregtech.machine.ocean_pumper.name=海水泵机
+gregtech.machine.ocean_pumper.tooltip=仅在Y=70与Y=75之间的海洋群系工作。
 gregtech.machine.advanced_arc_furnace.name=高级电弧炉
 gregtech.machine.clarifier.name=澄清池
 gregtech.machine.evaporation_pool.name=蒸发池
@@ -703,6 +705,9 @@ cover.pump.steam.title=蒸汽泵
 metaitem.air_vent.name=进气扇
 metaitem.air_vent.tooltip=当面向空气时，为机器收集所处维度的空气
 metaitem.air_vent.tooltip.1=§b收集速率: §f%,d L/s
+metaitem.track_segment.name=单轨铁道段
+metaitem.track_segment.tooltip=在§8隧道掘进机§7中使用。
+metaitem.track_segment.length_info=等价于§610格§7单轨铁道。
 
 # Catalysts
 gregtech.universal.catalysts.tooltip.tier=§e最高电压：§f%,d EU/t（%s§f）
