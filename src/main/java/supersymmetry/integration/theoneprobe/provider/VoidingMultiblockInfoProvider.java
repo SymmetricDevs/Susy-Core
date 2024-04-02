@@ -7,6 +7,7 @@ import gregtech.api.util.TextComponentUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
@@ -31,9 +32,11 @@ public class VoidingMultiblockInfoProvider implements IProbeInfoProvider {
 
             MetaTileEntity metaTileEntity = ((IGregTechTileEntity) tileEntity).getMetaTileEntity();
             if (metaTileEntity instanceof VoidingMultiblockBase && metaTileEntity.isActive()) {
-                probeInfo.text(TextComponentUtil.translationWithColor(TextFormatting.RED,
+                ITextComponent componentVoidingRate = TextComponentUtil.translationWithColor(TextFormatting.RED,
+                        String.valueOf(((VoidingMultiblockBase) metaTileEntity).getActualVoidingRate()));
+                probeInfo.text(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
                         "susy.top.voiding_multiblock",
-                        ((VoidingMultiblockBase) metaTileEntity).getActualVoidingRate()).getFormattedText());
+                        componentVoidingRate).getFormattedText());
             }
         }
     }

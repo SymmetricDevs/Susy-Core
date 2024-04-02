@@ -10,11 +10,11 @@ import mcjty.theoneprobe.api.ProbeMode;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.Supersymmetry;
-import supersymmetry.common.metatileentities.multi.VoidingMultiblockBase;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCoagulationTank;
 
 public class CoagulationTankParallelProvider implements IProbeInfoProvider {
@@ -31,9 +31,11 @@ public class CoagulationTankParallelProvider implements IProbeInfoProvider {
 
             MetaTileEntity metaTileEntity = ((IGregTechTileEntity) tileEntity).getMetaTileEntity();
             if (metaTileEntity instanceof MetaTileEntityCoagulationTank && metaTileEntity.isActive()) {
-                probeInfo.text(TextComponentUtil.translationWithColor(TextFormatting.AQUA,
+                ITextComponent componentParallelAmount = TextComponentUtil.translationWithColor(TextFormatting.AQUA,
+                        String.valueOf(((MetaTileEntityCoagulationTank) metaTileEntity).getSize()));
+                probeInfo.text(TextComponentUtil.translationWithColor(TextFormatting.WHITE,
                         "susy.top.coagulation_tank_parallel",
-                        ((MetaTileEntityCoagulationTank) metaTileEntity).getSize()).getFormattedText());
+                        componentParallelAmount).getFormattedText());
             }
         }
     }

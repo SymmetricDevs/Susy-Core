@@ -772,8 +772,8 @@ gregtech.block_group_members.latex_logs.name=橡胶木
 susy.recipe.dimensions=维度：%s
 
 # TOP info
-susy.top.voiding_multiblock=§7销毁 %s §7L/10t§r
-susy.top.coagulation_tank_parallel=§f最大并行：%s
+susy.top.voiding_multiblock=销毁 %s L/10t
+susy.top.coagulation_tank_parallel=最大并行：%s
 
 # Commands
 susy.command.horde.usage=/mobHorde <start/stop>
