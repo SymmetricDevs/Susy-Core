@@ -239,14 +239,14 @@ gregtech.machine.advanced_arc_furnace.name=Advanced Arc Furnace
 gregtech.machine.clarifier.name=Clarifier
 gregtech.machine.evaporation_pool.name=Evaporation Pool
 gregtech.machine.flare_stack.name=Flare Stack
-gregtech.machine.flare_stack.height=Stack Height: %s blocks
+gregtech.machine.flare_stack.height=Stack Height: %s §9blocks
 gregtech.machine.flare_stack.rate=Flaring Rate: %s
 gregtech.machine.flare_stack.rate_hover=Flaring rate multiplier set by the height of the flare stack.
 gregtech.machine.flare_stack.tooltip=Industrial lung cancer propagator.
 gregtech.machine.flare_stack.tooltip.1=§6Base Flaring Rate:§7 §f%d L every 10 ticks
 gregtech.machine.flare_stack.tooltip.2=Doubles its speed for each block taller than 5
 gregtech.machine.smoke_stack.name=Smoke Stack
-gregtech.machine.smoke_stack.height=Stack Height: %s blocks
+gregtech.machine.smoke_stack.height=Stack Height: %s §9blocks
 gregtech.machine.smoke_stack.rate=Exhaustion Rate: %s
 gregtech.machine.smoke_stack.rate_hover=Exhaustion rate multiplier set by the height of the smoke stack.
 gregtech.machine.smoke_stack.tooltip=For enriching your planets atmosphere.
@@ -704,6 +704,9 @@ metaitem.pump.steam.name=Steam Pump
 cover.pump.steam.title=Steam Pump
 metaitem.air_vent.name=Air Vent
 metaitem.air_vent.tooltip=Passively collects a Dimension's Air for your Machines when facing Air
+metaitem.track_segment.name=Monorail Track Segment
+metaitem.track_segment.tooltip=For use in the §8tunnelbore.
+metaitem.track_segment.length_info=§610 blocks §7worth of monorail track.
 metaitem.air_vent.tooltip.1=§bCollecting Rate: §f%,d L/s
 
 # Catalysts

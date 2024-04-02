@@ -88,6 +88,12 @@ public class MetaTileEntityMiningDrill extends RecipeMapMultiblockController {
         return SusyTextures.MINING_DRILL_OVERLAY;
     }
 
+    @Override
+    public boolean isMultiblockPartWeatherResistant(@Nonnull IMultiblockPart part) {
+        return true;
+    }
+
+
     @Nonnull
     protected TraceabilityPredicate depositPredicate() {
         return new TraceabilityPredicate(blockWorldState -> {
