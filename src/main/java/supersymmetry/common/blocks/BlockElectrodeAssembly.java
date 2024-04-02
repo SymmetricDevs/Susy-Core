@@ -9,6 +9,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.IStringSerializable;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
@@ -22,6 +23,12 @@ public class BlockElectrodeAssembly extends VariantActiveBlock<BlockElectrodeAss
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 1);
         setDefaultState(getState(ElectrodeAssemblyType.CARBON));
+    }
+
+    @NotNull
+    @Override
+    public BlockRenderLayer getRenderLayer() {
+        return BlockRenderLayer.SOLID;
     }
 
     @Override
