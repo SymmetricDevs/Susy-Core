@@ -77,4 +77,8 @@ public class MetaTileEntityHighPressureCryogenicDistillationPlant extends Recipe
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.HPCDT_OVERLAY;
     }
+
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
 }

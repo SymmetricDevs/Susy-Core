@@ -596,4 +596,8 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
             this.getMetaTileEntity().completeSpawnedStock();
         }
     }
+
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
 }
