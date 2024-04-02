@@ -773,6 +773,7 @@ susy.recipe.dimensions=Dimensions: %s
 
 # TOP info
 susy.top.voiding_multiblock=§7Voiding %s §7L/10t§r
+susy.top.coagulation_tank_parallel=§fMax Parallels: %s
 
 # Commands
 susy.command.horde.usage=/mobHorde <start/stop>

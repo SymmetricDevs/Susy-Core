@@ -53,7 +53,7 @@ public class MetaTileEntityCoagulationTank extends RecipeMapPrimitiveMultiblockC
     @Nullable
     protected GhostCircuitItemStackHandler circuitInventory;
     private IItemHandlerModifiable actualImportItems;
-    public int size;
+    private int size;
 
     public MetaTileEntityCoagulationTank(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.COAGULATION_RECIPES);
@@ -250,7 +250,11 @@ public class MetaTileEntityCoagulationTank extends RecipeMapPrimitiveMultiblockC
         }
     }
 
-    public class ParallelablePrimitiveMultiblockRecipeLogic extends PrimitiveRecipeLogic {
+    public int getSize() {
+        return this.size;
+    }
+
+    public static class ParallelablePrimitiveMultiblockRecipeLogic extends PrimitiveRecipeLogic {
 
         public ParallelablePrimitiveMultiblockRecipeLogic(RecipeMapPrimitiveMultiblockController tileEntity, RecipeMap<?> recipeMap) {
             super(tileEntity, recipeMap);

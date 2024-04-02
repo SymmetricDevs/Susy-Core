@@ -330,7 +330,7 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
         return SusyTextures.RADIATOR_OVERLAY;
     }
 
-    private class ParallelableNoEnergyMultiblockRecipeLogic extends NoEnergyMultiblockRecipeLogic {
+    private static class ParallelableNoEnergyMultiblockRecipeLogic extends NoEnergyMultiblockRecipeLogic {
         public ParallelableNoEnergyMultiblockRecipeLogic(RecipeMapMultiblockController tileEntity) {
             super(tileEntity);
         }

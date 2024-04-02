@@ -33,7 +33,7 @@ public class CoagulationTankParallelProvider implements IProbeInfoProvider {
             if (metaTileEntity instanceof MetaTileEntityCoagulationTank && metaTileEntity.isActive()) {
                 probeInfo.text(TextComponentUtil.translationWithColor(TextFormatting.AQUA,
                         "susy.top.coagulation_tank_parallel",
-                        ((MetaTileEntityCoagulationTank) metaTileEntity).size).getFormattedText());
+                        ((MetaTileEntityCoagulationTank) metaTileEntity).getSize()).getFormattedText());
             }
         }
     }
