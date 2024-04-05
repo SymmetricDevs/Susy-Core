@@ -331,4 +331,8 @@ public class MetaTileEntityOceanPumper extends MultiblockWithDisplayBase impleme
     public boolean getIsWeatherOrTerrainResistant() {
         return true;
     }
+
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
 }

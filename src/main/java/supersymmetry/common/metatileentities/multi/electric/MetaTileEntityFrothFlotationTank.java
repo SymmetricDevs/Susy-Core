@@ -72,4 +72,8 @@ public class MetaTileEntityFrothFlotationTank extends RecipeMapMultiblockControl
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.FROTH_FLOTATION_OVERLAY;
     }
+
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
 }

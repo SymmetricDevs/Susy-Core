@@ -112,4 +112,8 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     public boolean getIsWeatherOrTerrainResistant() {
         return true;
     }
+
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
 }

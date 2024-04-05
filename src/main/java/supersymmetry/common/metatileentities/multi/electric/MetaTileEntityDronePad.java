@@ -240,4 +240,7 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
         }
     }
 
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
 }
