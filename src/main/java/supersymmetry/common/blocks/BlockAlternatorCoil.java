@@ -6,19 +6,24 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import supersymmetry.api.SusyLog;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.blocks.ISuSyHorizontalOrientable;
 
 import javax.annotation.Nonnull;
 
 public class BlockAlternatorCoil extends VariantBlock<BlockAlternatorCoil.AlternatorCoilType> implements ISuSyHorizontalOrientable {
-
+        
     public BlockAlternatorCoil() {
         super(net.minecraft.block.material.Material.IRON);
         setTranslationKey("alternator_coil");
@@ -39,19 +44,25 @@ public class BlockAlternatorCoil extends VariantBlock<BlockAlternatorCoil.Altern
         int j = meta % 4 + 2;
 
         EnumFacing enumfacing = EnumFacing.byHorizontalIndex(j);
-
         return this.getDefaultState()
                 .withProperty(FACING, enumfacing)
                 .withProperty(this.VARIANT, this.VALUES[i % this.VALUES.length]);
     }
 
+    // Ignore facing
     @Override
     public int getMetaFromState(IBlockState state) {
-        int i = ((Enum) state.getValue(this.VARIANT)).ordinal();
-        int j = ((EnumFacing) state.getValue(FACING)).getIndex();
-        return j - 2 + i * 4;
+        return state.getValue(this.VARIANT).ordinal() * 4;
     }
 
+    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items)
+    {
+        for (AlternatorCoilType alternatorCoilType:
+                AlternatorCoilType.values()) {
+            items.add(this.getItemVariant(alternatorCoilType));
+        }
+    }
+    
     @Nonnull
     @Override
     public BlockStateContainer createBlockState() {
@@ -60,21 +71,35 @@ public class BlockAlternatorCoil extends VariantBlock<BlockAlternatorCoil.Altern
         return new BlockStateContainer(this, new IProperty[]{this.VARIANT, this.FACING});
     }
 
-    public ItemStack getItemVariant(BlockTurbineRotor.BlockTurbineRotorType variant, int amount) {
+    @Override
+    public ItemStack getItemVariant(AlternatorCoilType variant) {
+        return this.getItemVariant(variant, 1);
+    }
+
+    @Override
+    public ItemStack getItemVariant(@NotNull AlternatorCoilType variant, int amount) {
         return new ItemStack(this, amount, variant.ordinal() * 4);
     }
 
-    public int damageDropped(@Nonnull IBlockState state) {
-        return this.getMetaFromState(state) - ((EnumFacing) state.getValue(FACING)).getIndex() + 2;
+    @Nullable
+    @Override
+    public EnumFacing[] getValidRotations(World world, BlockPos pos) {
+        return super.getValidRotations(world, pos);
     }
 
-    public static enum AlternatorCoilType implements IStringSerializable, IStateHarvestLevel {
+
+    @Override
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+        return super.getPickBlock(state, target, world, pos, player);
+    }
+
+    public enum AlternatorCoilType implements IStringSerializable, IStateHarvestLevel {
         COPPER("copper", 1);
 
         private final String name;
         private final int harvestLevel;
 
-        private AlternatorCoilType(String name, int harvestLevel) {
+        AlternatorCoilType(String name, int harvestLevel) {
             this.name = name;
             this.harvestLevel = harvestLevel;
         }
