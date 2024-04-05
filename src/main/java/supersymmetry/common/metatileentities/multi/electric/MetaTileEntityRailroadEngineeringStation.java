@@ -1,5 +1,6 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import cam72cam.immersiverailroading.IRBlocks;
 import cam72cam.immersiverailroading.IRItems;
 import cam72cam.immersiverailroading.entity.EntityBuildableRollingStock;
 import cam72cam.immersiverailroading.entity.EntityMoveableRollingStock;
@@ -9,10 +10,17 @@ import cam72cam.immersiverailroading.library.Gauge;
 import cam72cam.immersiverailroading.library.ItemComponentType;
 import cam72cam.immersiverailroading.physics.TickPos;
 import cam72cam.immersiverailroading.registry.EntityRollingStockDefinition;
+import cam72cam.immersiverailroading.tile.TileRail;
+import cam72cam.immersiverailroading.tile.TileRailBase;
+import cam72cam.immersiverailroading.track.BuilderBase;
+import cam72cam.immersiverailroading.track.TrackBase;
+import cam72cam.immersiverailroading.util.PlacementInfo;
+import cam72cam.immersiverailroading.util.RailInfo;
 import cam72cam.immersiverailroading.util.Speed;
 import cam72cam.mod.entity.ModdedEntity;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
+import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.world.World;
 import gregtech.api.GTValues;
 import gregtech.api.capability.impl.ItemHandlerList;
@@ -28,7 +36,9 @@ import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.unification.material.Materials;
+import gregtech.api.util.BlockInfo;
 import gregtech.api.util.GTTransferUtils;
+import gregtech.api.util.world.DummyWorld;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.ConfigHolder;
@@ -45,6 +55,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagFloat;
+import net.minecraft.nbt.NBTTagInt;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -120,7 +133,7 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
                 .where('G', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('C', states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)))
                 .where('A', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)).or(this.autoAbilities(true,false)))
-                .where('B', states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)).or(autoAbilities(true,false, true, true, true, false, false)))
+                .where('B', states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)).or(autoAbilities(true,false, true, false, true, false, false)))
                 .where(' ', any())
                 .where('R', SuSyPredicates.rails())
                 .build();
@@ -151,7 +164,7 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
                 .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
                 .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
                 .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
-                .aisle("  CCC  CCC  CCC  ", "  CCC  CCC  CCC  ", "   C    C    C   ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "       F F       ", "       F F       ")
+                .aisle("  CCC  EIH  CCC  ", "  CCC  CCC  CCC  ", "   C    C    C   ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "       F F       ", "       F F       ")
                 .aisle("CCCCCCCCCCCCCCCCC", "CCCFCCCCFCCCCFCCC", "CCCFCCCCFCCCCFCCC", "   F    F    F   ", "   F    F    F   ", "   F    F    F   ", "   F    F    F   ", " FFFFFFFFFFFFFFF ", "  FF   FGF   FF  ", "       F F       ")
                 .aisle("CCCCCCCCCCCCCCCCC", "CCCCCCCCCCCCCCCCC", "   C    C    C   ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "       F F       ", "       F F       ")
                 .aisle("CCCCCCCCCCCCCCCCC", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
@@ -171,43 +184,42 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
                 .where('A', () -> ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH : MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID), EnumFacing.SOUTH)
                 .where('G', MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX))
                 .where('C', MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT))
+                .where('I', MetaTileEntities.ITEM_IMPORT_BUS[3], EnumFacing.NORTH)
+                .where('E', MetaTileEntities.ENERGY_INPUT_HATCH[3], EnumFacing.NORTH)
+                .where('H', MetaTileEntities.FLUID_IMPORT_HATCH[3], EnumFacing.NORTH)
                 .where(' ', Blocks.AIR.getDefaultState());
 
         MultiblockShapeInfo preInfo = builder.build();
 
-        /*
-        if(Loader.isModLoaded(SuSyValues.MODID_IMMERSIVERAILROADING)) {
-            ItemStack trackBlueprintStack = new ItemStack(IRItems.ITEM_TRACK_BLUEPRINT, 0);
-            trackBlueprintStack.internal.setTagInfo("length", new NBTTagInt(17));
-            trackBlueprintStack.internal.setTagInfo("degrees", new NBTTagFloat(0));
-            PlacementInfo placementInfo = new PlacementInfo(trackBlueprintStack, 270, new Vec3d(0.5,0.5,0.5));
-            RailInfo railInfo = new RailInfo(trackBlueprintStack, placementInfo, (PlacementInfo)null);
-            World irWorld = World.get(DummyWorld.INSTANCE);
-            BuilderBase trackBuilder = railInfo.getBuilder(irWorld, new Vec3i(0,1,6));
-            List<TrackBase> tracks = trackBuilder.getTracksForRender();
+        ItemStack trackBlueprintStack = new ItemStack(IRItems.ITEM_TRACK_BLUEPRINT, 0);
+        trackBlueprintStack.internal.setTagInfo("length", new NBTTagInt(17));
+        trackBlueprintStack.internal.setTagInfo("degrees", new NBTTagFloat(0));
+        trackBlueprintStack.internal.setTagInfo("track", new NBTTagString("immersiverailroading:track/bmtrack.json"));
+        PlacementInfo placementInfo = new PlacementInfo(trackBlueprintStack, 270, new Vec3d(0.5,0.5,0.5));
+        RailInfo railInfo = new RailInfo(trackBlueprintStack, placementInfo, null);
+        World irWorld = World.get(DummyWorld.INSTANCE);
+        BuilderBase trackBuilder = railInfo.getBuilder(irWorld, new Vec3i(0,1,8));
+        List<TrackBase> tracks = trackBuilder.getTracksForRender();
 
-            BlockInfo[][][] blockInfos = preInfo.getBlocks();
+        BlockInfo[][][] blockInfos = preInfo.getBlocks();
 
-            for(TrackBase track : tracks) {
-                track.setRailHeight(0.5F);
-                TileRailBase tr = track.placeTrack(true);
+        for(TrackBase track : tracks) {
+            track.setRailHeight(0.5F);
+            TileRailBase tr = track.placeTrack(true);
 
-                BlockInfo blockInfo;
+            BlockInfo blockInfo;
 
-                if(tr instanceof TileRail) {
-                    blockInfo = new BlockInfo(IRBlocks.BLOCK_RAIL.internal.getDefaultState(), tr.internal);
-                } else {
-                    blockInfo = new BlockInfo(IRBlocks.BLOCK_RAIL_GAG.internal.getDefaultState(), tr.internal);
-                }
-
-                blockInfos[track.getPos().x][1][track.getPos().z] = blockInfo;
-
+            if(tr instanceof TileRail) {
+                blockInfo = new BlockInfo(IRBlocks.BLOCK_RAIL.internal.getDefaultState(), tr.internal);
+            } else {
+                blockInfo = new BlockInfo(IRBlocks.BLOCK_RAIL_GAG.internal.getDefaultState(), tr.internal);
             }
-            preInfo = new MultiblockShapeInfo(blockInfos);
+
+            blockInfos[track.getPos().x][1][track.getPos().z] = blockInfo;
+
         }
 
-         */
-
+        preInfo = new MultiblockShapeInfo(blockInfos);
         shapeInfo.add(preInfo);
 
         return shapeInfo;
