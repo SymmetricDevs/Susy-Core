@@ -367,12 +367,15 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
                     0,
                     Speed.ZERO,
                     (new Vec3d(railPos.getX() , railPos.getY(), railPos.getZ())).add(0.0, 0.25, 0.0).add(0.5, 0.0, 0.5),
-                    this.getTrainSpawnAngle(),
-                    this.getTrainSpawnAngle(),
-                    this.getTrainSpawnAngle(),
+                    0,
+                    0,
+                    0,
                     0.0F,
                     false);
             EntityRollingStock stock = def.spawn(irWorld, tp.position, 0, gauge, data.texture);
+
+            float yaw = this.getTrainSpawnAngle();
+            stock.setRotationYaw(yaw);
 
             if (stock instanceof EntityMoveableRollingStock) {
                 EntityMoveableRollingStock mrs = (EntityMoveableRollingStock)stock;
