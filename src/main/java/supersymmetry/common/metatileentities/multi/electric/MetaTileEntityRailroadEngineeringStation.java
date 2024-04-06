@@ -449,7 +449,7 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
     public void readFromNBT(NBTTagCompound data) {
         // UUIDs get saved as two IDs I guess
         super.readFromNBT(data);
-        if(data.hasKey("RollingStockEntityID")) {
+        if(data.hasKey("RollingStockEntityIDMost")) {
             this.setStructureAABB();
             this.previousEntityUUID = data.getUniqueId("RollingStockEntityID");
         }
