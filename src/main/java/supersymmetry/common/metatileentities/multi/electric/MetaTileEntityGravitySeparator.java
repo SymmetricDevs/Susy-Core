@@ -111,4 +111,8 @@ public class MetaTileEntityGravitySeparator extends RecipeMapMultiblockControlle
     protected ICubeRenderer getFrontOverlay() {
         return Textures.BLAST_FURNACE_OVERLAY;
     }
+
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
 }

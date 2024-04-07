@@ -90,4 +90,8 @@ public class MetaTileEntityClarifier extends RecipeMapMultiblockController {
     public boolean getIsWeatherOrTerrainResistant() {
         return true;
     }
+
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
 }

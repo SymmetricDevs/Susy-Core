@@ -93,4 +93,8 @@ public class MetaTileEntityVacuumDistillationTower extends RecipeMapMultiblockCo
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.VDT_OVERLAY;
     }
+
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
 }

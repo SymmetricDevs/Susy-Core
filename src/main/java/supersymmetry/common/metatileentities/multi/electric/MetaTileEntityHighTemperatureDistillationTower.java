@@ -88,4 +88,8 @@ public class MetaTileEntityHighTemperatureDistillationTower extends RecipeMapMul
     public int getFluidOutputLimit() {
         return getOutputFluidInventory().getTanks();
     }
+
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
 }

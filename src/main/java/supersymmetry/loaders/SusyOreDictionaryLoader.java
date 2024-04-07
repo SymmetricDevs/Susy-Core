@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
+import supersymmetry.common.item.SuSyMetaItems;
 
 
 public class SusyOreDictionaryLoader {
@@ -34,5 +35,9 @@ public class SusyOreDictionaryLoader {
         // For IR railbeds
         ItemStack concreteLightSmooth = MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getItemVariant(StoneVariantBlock.StoneType.CONCRETE_LIGHT);
         OreDictionary.registerOre("railBed", concreteLightSmooth);
+
+        // For IR tracks
+        ItemStack trackSegmentStack = SuSyMetaItems.TRACK_SEGMENT.getStackForm();
+        OreDictionary.registerOre("trackMaglev", trackSegmentStack);
     }
 }

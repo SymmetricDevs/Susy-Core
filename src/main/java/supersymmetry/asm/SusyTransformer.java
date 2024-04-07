@@ -41,8 +41,6 @@ public class SusyTransformer implements IClassTransformer, Opcodes {
         ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
         cls.accept(writer);
 
-        writeClass(cls);
-
         return writer.toByteArray();
     }
 
@@ -59,22 +57,5 @@ public class SusyTransformer implements IClassTransformer, Opcodes {
         cls.accept(writer);
 
         return writer.toByteArray();
-    }
-
-    public static void writeClass(ClassNode cls) {
-        FileOutputStream stream;
-        File file = new File(Minecraft.getMinecraft().gameDir, "classOutputs/" + cls.name + ".class");
-        file.getParentFile().mkdirs();
-
-        ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
-        cls.accept(writer);
-
-        try {
-            stream = new FileOutputStream(file);
-            stream.write(writer.toByteArray());
-            stream.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

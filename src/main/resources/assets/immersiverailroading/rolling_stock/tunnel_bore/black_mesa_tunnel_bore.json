@@ -8,7 +8,7 @@
 	"properties": {
 		"horsepower": 3000,
 		"tractive_effort_lbf": 92000,
-		"max_speed_kmh": 30,
+		"max_speed_kmh": 15,
 		"weight_kg": 3000,
 		"horn_sustained": true
 	},

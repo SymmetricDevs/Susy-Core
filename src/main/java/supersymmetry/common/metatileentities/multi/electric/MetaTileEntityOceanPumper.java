@@ -74,6 +74,11 @@ public class MetaTileEntityOceanPumper extends MultiblockWithDisplayBase impleme
     }
 
     @Override
+    public boolean isMultiblockPartWeatherResistant(@Nonnull IMultiblockPart part) {
+        return true;
+    }
+
+    @Override
     public void writeInitialSyncData(PacketBuffer buf) {
         super.writeInitialSyncData(buf);
         buf.writeBoolean(isWorking);
@@ -325,5 +330,9 @@ public class MetaTileEntityOceanPumper extends MultiblockWithDisplayBase impleme
     @Override
     public boolean getIsWeatherOrTerrainResistant() {
         return true;
+    }
+
+    public boolean allowsExtendedFacing() {
+        return false;
     }
 }

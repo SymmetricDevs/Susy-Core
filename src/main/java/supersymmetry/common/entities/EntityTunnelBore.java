@@ -256,6 +256,10 @@ public class EntityTunnelBore extends Locomotive {
                 int cost = trackBuilder.costFill();
                 if(this.getAmountInInventory(this.getRailBedFill()) < cost) return;
 
+                List<ItemStack> trackSegments = new ArrayList<>();
+                trackSegments.add(trackSegmentStack);
+                trackBuilder.setDrops(trackSegments);
+
                 trackBuilder.build();
 
                 Simulation.forceQuickUpdates = true;
