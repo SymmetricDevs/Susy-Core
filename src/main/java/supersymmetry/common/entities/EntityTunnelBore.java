@@ -141,6 +141,9 @@ public class EntityTunnelBore extends Locomotive {
     @Override
     public void onTick() {
         super.onTick();
+
+        if(!this.isBuilt()) return;
+
         this.updateBorer();
         if(!this.getWorld().isClient) {
             long discharged = 0;

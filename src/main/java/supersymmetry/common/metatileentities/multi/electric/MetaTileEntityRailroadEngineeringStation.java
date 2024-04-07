@@ -23,6 +23,7 @@ import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.world.World;
 import gregtech.api.GTValues;
+import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.impl.ItemHandlerList;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.capability.impl.NotifiableItemStackHandler;
@@ -366,12 +367,15 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
                     0,
                     Speed.ZERO,
                     (new Vec3d(railPos.getX() , railPos.getY(), railPos.getZ())).add(0.0, 0.25, 0.0).add(0.5, 0.0, 0.5),
-                    this.getTrainSpawnAngle(),
-                    this.getTrainSpawnAngle(),
-                    this.getTrainSpawnAngle(),
+                    0,
+                    0,
+                    0,
                     0.0F,
                     false);
             EntityRollingStock stock = def.spawn(irWorld, tp.position, 0, gauge, data.texture);
+
+            float yaw = this.getTrainSpawnAngle();
+            stock.setRotationYaw(yaw);
 
             if (stock instanceof EntityMoveableRollingStock) {
                 EntityMoveableRollingStock mrs = (EntityMoveableRollingStock)stock;
@@ -394,16 +398,16 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
     }
 
     public void updateSpawnedStock(float recipeProgress) {
-        if(this.spawnedRollingStock instanceof EntityBuildableRollingStock) {
+        if(this.spawnedRollingStock instanceof EntityBuildableRollingStock buildableRollingStock && spawnedRollingStackComponentsSorted.size() > 0) {
             int idx = (int) (recipeProgress * spawnedRollingStackComponentsSorted.size());
-            ((EntityBuildableRollingStock) this.spawnedRollingStock).setComponents(spawnedRollingStackComponentsSorted.subList(0, idx));
+            buildableRollingStock.setComponents(spawnedRollingStackComponentsSorted.subList(0, idx));
         }
     }
 
     public void completeSpawnedStock() {
-        if(this.spawnedRollingStock instanceof EntityBuildableRollingStock) {
+        if(this.spawnedRollingStock instanceof EntityBuildableRollingStock buildableRollingStock && spawnedRollingStackComponentsSorted.size() > 0) {
             // Finish the rolling stock
-            ((EntityBuildableRollingStock) this.spawnedRollingStock).setComponents(((EntityBuildableRollingStock) this.spawnedRollingStock).getItemComponents());
+            buildableRollingStock.setComponents(buildableRollingStock.getItemComponents());
         } else {
             this.setStockInWorld(this.spawnedRollingStock);
         }
@@ -550,8 +554,8 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
         }
 
         @Override
-        protected boolean setupAndConsumeRecipeInputs(Recipe recipe, IItemHandlerModifiable importInventory) {
-            boolean result = super.setupAndConsumeRecipeInputs(recipe, importInventory);
+        protected boolean setupAndConsumeRecipeInputs(@NotNull Recipe recipe, @NotNull IItemHandlerModifiable importInventory, @NotNull IMultipleTankHandler importFluids) {
+            boolean result = super.setupAndConsumeRecipeInputs(recipe, importInventory, importFluids);
 
             if (result) {
                 MetaTileEntityRailroadEngineeringStation mte = this.getMetaTileEntity();
