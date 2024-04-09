@@ -8,13 +8,11 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,7 +39,7 @@ public class BlockAlternatorCoil extends VariantBlock<BlockAlternatorCoil.Altern
     @Override
     public IBlockState getStateFromMeta(int meta) {
         int i = meta / 4;
-        int j = meta % 4 + 2;
+        int j = meta % 4;
 
         EnumFacing enumfacing = EnumFacing.byHorizontalIndex(j);
         return this.getDefaultState()
@@ -49,10 +47,9 @@ public class BlockAlternatorCoil extends VariantBlock<BlockAlternatorCoil.Altern
                 .withProperty(this.VARIANT, this.VALUES[i % this.VALUES.length]);
     }
 
-    // Ignore facing
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(this.VARIANT).ordinal() * 4;
+        return state.getValue(this.VARIANT).ordinal() * 4 + state.getValue(this.FACING).getHorizontalIndex() - 1;
     }
 
     public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items)
@@ -87,10 +84,9 @@ public class BlockAlternatorCoil extends VariantBlock<BlockAlternatorCoil.Altern
         return super.getValidRotations(world, pos);
     }
 
-
     @Override
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-        return super.getPickBlock(state, target, world, pos, player);
+    public int damageDropped(@NotNull IBlockState state) {
+        return state.getValue(this.VARIANT).ordinal() * 4;
     }
 
     public enum AlternatorCoilType implements IStringSerializable, IStateHarvestLevel {
