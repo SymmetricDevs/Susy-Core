@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.jetbrains.annotations.NotNull;
+import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
@@ -37,6 +38,7 @@ import static supersymmetry.common.blocks.SuSyMetaBlocks.SHEETED_FRAMES;
 public class CommonProxy {
 
     public void preLoad(){
+        GeckoLib.initialize();
         SusyStoneTypes.init();
         SuSyRecipeMaps.init();
     }
