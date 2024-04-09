@@ -478,6 +478,11 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
         return true;
     }
 
+    @Override
+    public boolean isMultiblockPartWeatherResistant(@NotNull IMultiblockPart part) {
+        return true;
+    }
+
     public void setStructureAABB() {
         // Had to make it overshoot a little :(
         net.minecraft.util.math.BlockPos offsetBottomLeft = new net.minecraft.util.math.BlockPos(9, -1, 2);
