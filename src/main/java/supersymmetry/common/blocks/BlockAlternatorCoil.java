@@ -49,7 +49,7 @@ public class BlockAlternatorCoil extends VariantBlock<BlockAlternatorCoil.Altern
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(this.VARIANT).ordinal() * 4 + state.getValue(this.FACING).getHorizontalIndex() - 1;
+        return state.getValue(this.VARIANT).ordinal() * 4 + state.getValue(this.FACING).getHorizontalIndex();
     }
 
     public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items)
