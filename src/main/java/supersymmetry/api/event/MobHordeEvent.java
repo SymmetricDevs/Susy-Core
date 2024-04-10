@@ -57,6 +57,11 @@ public class MobHordeEvent {
         return this;
     }
 
+    public MobHordeEvent setTimeout(int timeout) {
+        this.timeoutPeriod = timeout;
+        return this;
+    }
+
     public MobHordeEvent setAdvancementUnlock(ResourceLocation advancementUnlock) {
         this.advancementUnlock = advancementUnlock;
         return this;

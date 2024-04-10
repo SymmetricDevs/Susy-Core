@@ -41,7 +41,7 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
         if(this.hasActiveInvasion && !this.invasionEntitiesUUIDs.isEmpty()) {
             result.setString("currentInvasion", currentInvasion);
             result.setInteger("timeoutPeriod", this.timeoutPeriod);
-            result.setInteger("", this.timeoutPeriod);
+            result.setInteger("ticksActive", this.ticksActive);
             NBTTagList tagList = new NBTTagList();
             invasionEntitiesUUIDs.stream()
                     .forEach(uuid -> tagList.appendTag(NBTUtil.createUUIDTag(uuid)));
@@ -58,6 +58,8 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
         if (hasActiveInvasion) {
             invasionEntitiesUUIDs.clear();
             this.currentInvasion = nbt.getString("currentInvasion");
+            this.timeoutPeriod = nbt.getInteger("timeoutPeriod");
+            this.ticksActive = nbt.getInteger("ticksActive");
             NBTTagList tagList = nbt.getTagList("invasionEntitiesUUIDs", Constants.NBT.TAG_COMPOUND);
             tagList.forEach(compound -> invasionEntitiesUUIDs.add(NBTUtil.getUUIDFromTag((NBTTagCompound) compound)));
         }
@@ -65,6 +67,7 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
 
     public void update(EntityPlayerMP player) {
         if (hasActiveInvasion) {
+            ++ticksActive;
             if (this.ticksActive > this.timeoutPeriod) {
                 this.finishInvasion();
             } else return;
@@ -116,6 +119,7 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
         this.currentInvasion = event.KEY;
         this.timeoutPeriod = event.timeoutPeriod;
         this.hasActiveInvasion = true;
+        this.ticksActive = 0;
     }
 
     public void addEntity(UUID uuid) {
@@ -129,7 +133,7 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
     public void finishInvasion() {
         this.hasActiveInvasion = false;
         this.currentInvasion = "";
-
+        this.ticksActive = 0;
     }
 
     public void stopInvasion(EntityPlayerMP player) {
