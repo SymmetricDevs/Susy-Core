@@ -31,6 +31,7 @@ public class MobHordeEvent {
     private ResourceLocation advancementUnlock;
     private int timerMin;
     private int timerMax;
+    public int timeoutPeriod;
     private int dimension = 0;
     private int maximumDistanceUnderground = -1;
     private boolean canUsePods = true;
@@ -39,10 +40,15 @@ public class MobHordeEvent {
     public static final Map<String, MobHordeEvent> EVENTS = new HashMap<>();
 
     public MobHordeEvent(Function<EntityPlayer, EntityLiving> entitySupplier, int quantityMin, int quantityMax, String name) {
+        this(entitySupplier, quantityMin, quantityMax, name, 18000);
+    }
+
+    public MobHordeEvent(Function<EntityPlayer, EntityLiving> entitySupplier, int quantityMin, int quantityMax, String name, int timeoutPeriod) {
         this.entitySupplier = entitySupplier;
         this.quantityMin = quantityMin;
         this.quantityMax = quantityMax;
         this.KEY = name;
+        this.timeoutPeriod = timeoutPeriod;
         this.EVENTS.put(name, this);
     }
 
