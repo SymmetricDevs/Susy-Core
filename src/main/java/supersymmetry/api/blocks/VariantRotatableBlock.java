@@ -1,10 +1,9 @@
 package supersymmetry.api.blocks;
 
 import gregtech.api.block.VariantBlock;
-import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -20,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nonnull;
 
 public class VariantRotatableBlock<T extends Enum<T> & IStringSerializable> extends VariantBlock<T> {
-    PropertyDirection FACING = BlockHorizontal.FACING;
+    public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 
     public VariantRotatableBlock(Material materialIn) {
         super(materialIn);
@@ -38,9 +37,10 @@ public class VariantRotatableBlock<T extends Enum<T> & IStringSerializable> exte
     @Nonnull
     @Override
     public BlockStateContainer createBlockState() {
-        super.createBlockState();
-
-        return new BlockStateContainer(this, new IProperty[]{this.VARIANT, this.FACING});
+        Class<T> enumClass = getActualTypeParameter(this.getClass(), VariantRotatableBlock.class);
+        this.VARIANT = PropertyEnum.create("variant", enumClass);
+        this.VALUES = enumClass.getEnumConstants();
+        return new BlockStateContainer(this, this.VARIANT, this.FACING);
     }
 
     @Override
@@ -66,6 +66,6 @@ public class VariantRotatableBlock<T extends Enum<T> & IStringSerializable> exte
 
     @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-        return super.getPickBlock(state, target, world, pos, player);
+        return this.getItemVariant(state.getValue(this.VARIANT), 1);
     }
 }
