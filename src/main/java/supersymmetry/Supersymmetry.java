@@ -57,11 +57,6 @@ public class Supersymmetry {
 
         SuSyMetaTileEntities.init();
         SusyMetaEntities.init();
-
-        new MobHordeEvent((player) -> {return new EntityZombie(player.world);}, 5, 10, "zombie_medium")
-                .setNightOnly(true)
-                .setTimeout(200)
-                .setTimer(144000, 216000);	// 2 - 3 hours
     }
 
     @Mod.EventHandler
