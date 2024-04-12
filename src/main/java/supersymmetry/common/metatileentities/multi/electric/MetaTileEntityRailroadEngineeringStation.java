@@ -284,6 +284,7 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
                             0,
                             net.minecraft.item.ItemStack.EMPTY
                     );
+                    this.selectedRollingStock = null;
                 }
             }
         }
