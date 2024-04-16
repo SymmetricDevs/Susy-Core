@@ -255,17 +255,6 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
         this.droneReachedSky = buf.readBoolean();
     }
 
-    @Override
-    protected void addDisplayText(List<ITextComponent> textList) {
-        if(isStructureFormed()) {
-            textList.add(TextComponentUtil.stringWithColor(TextFormatting.AQUA, "Has Drone Native: " + this.hasDrone()));
-            textList.add(TextComponentUtil.stringWithColor(TextFormatting.AQUA, "Has Drone: " + (getDrone() != null)));
-            textList.add(TextComponentUtil.stringWithColor(TextFormatting.AQUA, "Has Drone Reached Sky: " + this.droneReachedSky));
-            textList.add(TextComponentUtil.stringWithColor(TextFormatting.AQUA, "Drone: " + (getDrone() != null ? getDrone().getUniqueID() : "null")));
-        }
-        super.addDisplayText(textList);
-    }
-
     public boolean allowsExtendedFacing() {
         return false;
     }
