@@ -144,6 +144,8 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
                 getDrone().setDescendingMode();
                 getDrone().setPadAltitude(this.getPos().getY());
             }
+        } else {
+            SusyLog.logger.error("Failed to spawn drone entity at: {}", pos);
         }
     }
 
@@ -300,7 +302,7 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
         protected void updateRecipeProgress() {
             super.updateRecipeProgress();
 
-            if (this.getMetaTileEntity().getDrone() != null && this.getMetaTileEntity().getDrone().reachedSky()) {
+            if (!this.getMetaTileEntity().droneReachedSky && this.getMetaTileEntity().getDrone() != null && this.getMetaTileEntity().getDrone().reachedSky()) {
                 this.getMetaTileEntity().setDroneDead(true);
             }
 //
@@ -325,8 +327,9 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
                 this.wasActiveAndNeedsUpdate = true;
                 this.parallelRecipesPerformed = 0;
                 this.overclockResults = new int[]{0, 0};
+                this.getMetaTileEntity().setDroneDead(false);
             }
-            if(this.getMetaTileEntity().getDrone() != null) this.getMetaTileEntity().setDroneDead(false);
+            this.getMetaTileEntity().setDroneDead(false);
         }
     }
 }
