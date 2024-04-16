@@ -18,6 +18,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.common.blocks.BlockAlternatorCoil;
 import supersymmetry.common.blocks.BlockSeparatorRotor;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
@@ -57,7 +58,7 @@ public class MetaTileEntityGravitySeparator extends RecipeMapMultiblockControlle
                 .aisle("C CC  C", "C CC CC", "CCCSCCC", "CRCRC  ", " CRCRC ", " CCCCRC", "    CJC")
                 */
                 .where('S', selfPredicate())
-                .where('R', orientation())
+                .where('R', rotorOrientation())
                 .where('C', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID)))
                 .where('M', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID))
                         .or(abilities(MultiblockAbility.MAINTENANCE_HATCH)).setExactLimit(1))
@@ -88,14 +89,14 @@ public class MetaTileEntityGravitySeparator extends RecipeMapMultiblockControlle
      */
 
     //makes sure block at position is properly oriented rotor
-    protected TraceabilityPredicate orientation() {
-        //required so that the rotors show up in the preview facing the correct direction
-        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(steelRotorState().withProperty(FACING, EnumFacing.SOUTH))};
+    protected TraceabilityPredicate rotorOrientation() {
+        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(steelRotorState().withProperty(FACING, EnumFacing.WEST))};
         return new TraceabilityPredicate(blockWorldState -> {
             IBlockState state = blockWorldState.getBlockState();
             if (!(state.getBlock() instanceof BlockSeparatorRotor)) return false;
-            EnumFacing facing = MetaTileEntityGravitySeparator.this.getFrontFacing();
-                return state == SuSyBlocks.SEPARATOR_ROTOR.getState(BlockSeparatorRotor.BlockSeparatorRotorType.STEEL).withProperty(FACING, facing);
+            EnumFacing facing = this.getFrontFacing();
+            facing = facing.rotateYCCW();
+            return state == steelRotorState().withProperty(FACING, facing) || state == steelRotorState().withProperty(FACING, facing.getOpposite());
         }, supplier);
     }
 
