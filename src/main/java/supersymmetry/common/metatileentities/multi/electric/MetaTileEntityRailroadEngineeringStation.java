@@ -284,6 +284,7 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
                             0,
                             net.minecraft.item.ItemStack.EMPTY
                     );
+                    this.selectedRollingStock = null;
                 }
             }
         }
@@ -479,6 +480,11 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
 
     @Override
     public boolean getIsWeatherOrTerrainResistant() {
+        return true;
+    }
+
+    @Override
+    public boolean isMultiblockPartWeatherResistant(@NotNull IMultiblockPart part) {
         return true;
     }
 

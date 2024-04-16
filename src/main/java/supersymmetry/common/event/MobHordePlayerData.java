@@ -19,6 +19,8 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
     // Player cooldown for all events.
     public int ticksUntilCanSpawn;
     public int gracePeriod;
+    public int ticksActive;
+    public int timeoutPeriod;
     public int[] invasionTimers;
     public boolean hasActiveInvasion = false;
     public List<UUID> invasionEntitiesUUIDs = new ArrayList<>();
@@ -38,6 +40,8 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
         result.setBoolean("hasActiveInvasion", hasActiveInvasion);
         if(this.hasActiveInvasion && !this.invasionEntitiesUUIDs.isEmpty()) {
             result.setString("currentInvasion", currentInvasion);
+            result.setInteger("timeoutPeriod", this.timeoutPeriod);
+            result.setInteger("ticksActive", this.ticksActive);
             NBTTagList tagList = new NBTTagList();
             invasionEntitiesUUIDs.stream()
                     .forEach(uuid -> tagList.appendTag(NBTUtil.createUUIDTag(uuid)));
@@ -54,13 +58,20 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
         if (hasActiveInvasion) {
             invasionEntitiesUUIDs.clear();
             this.currentInvasion = nbt.getString("currentInvasion");
+            this.timeoutPeriod = nbt.getInteger("timeoutPeriod");
+            this.ticksActive = nbt.getInteger("ticksActive");
             NBTTagList tagList = nbt.getTagList("invasionEntitiesUUIDs", Constants.NBT.TAG_COMPOUND);
             tagList.forEach(compound -> invasionEntitiesUUIDs.add(NBTUtil.getUUIDFromTag((NBTTagCompound) compound)));
         }
     }
 
     public void update(EntityPlayerMP player) {
-        if (hasActiveInvasion) return;
+        if (hasActiveInvasion) {
+            ++ticksActive;
+            if (this.ticksActive > this.timeoutPeriod) {
+                this.finishInvasion();
+            } else return;
+        }
         ticksUntilCanSpawn--;
         for (int i = 0; i < invasionTimers.length; i++) {
             invasionTimers[i]--;
@@ -82,6 +93,7 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
                 event = events.get(index);
                 if (event.run(player, this::addEntity)) {
                     invasionTimers[index] = event.getNextDelay();
+
                     this.setCurrentInvasion(event);
                 }
             }
@@ -105,7 +117,9 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
 
     public void setCurrentInvasion(MobHordeEvent event) {
         this.currentInvasion = event.KEY;
+        this.timeoutPeriod = event.timeoutPeriod;
         this.hasActiveInvasion = true;
+        this.ticksActive = 0;
     }
 
     public void addEntity(UUID uuid) {
@@ -119,7 +133,7 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
     public void finishInvasion() {
         this.hasActiveInvasion = false;
         this.currentInvasion = "";
-
+        this.ticksActive = 0;
     }
 
     public void stopInvasion(EntityPlayerMP player) {
