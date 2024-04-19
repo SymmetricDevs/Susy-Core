@@ -100,10 +100,10 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
         return new TraceabilityPredicate(blockWorldState -> {
             IBlockState state = blockWorldState.getBlockState();
             if (!(state.getBlock() instanceof BlockTurbineRotor)) return false;
-            EnumFacing facing = MetaTileEntitySUSYLargeTurbine.this.getFrontFacing();
-            EnumFacing rotorFacing = EnumFacing.byHorizontalIndex((facing.getHorizontalIndex() +1) % 4).getOpposite();
+            EnumFacing facing = this.getFrontFacing();
+            facing = facing.rotateYCCW();
             //makes sure rotor's front faces direction rotated 90 degrees CW of controller front, then the opposite is gotten such that it faces 90 CCW from controller front
-            return state == steelRotorState().withProperty(FACING, rotorFacing) || state == steelRotorState().withProperty(FACING, rotorFacing.getOpposite());
+            return state == steelRotorState().withProperty(FACING, facing) || state == steelRotorState().withProperty(FACING, facing.getOpposite());
         }, supplier);
     }
 
@@ -112,10 +112,10 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
         return new TraceabilityPredicate(blockWorldState -> {
             IBlockState state = blockWorldState.getBlockState();
             if (!(state.getBlock() instanceof BlockAlternatorCoil)) return false;
-            EnumFacing facing = MetaTileEntitySUSYLargeTurbine.this.getFrontFacing();
+            EnumFacing facing = this.getFrontFacing();
+            facing = facing.rotateYCCW();
             //has coilFacing as same facing as rotor, but either this or the opposite is acceptable
-            EnumFacing coilFacing = EnumFacing.byHorizontalIndex((facing.getHorizontalIndex() +1) % 4);
-            return state == copperCoilState().withProperty(FACING, coilFacing) || state == copperCoilState().withProperty(FACING, coilFacing.getOpposite());
+            return state == copperCoilState().withProperty(FACING, facing) || state == copperCoilState().withProperty(FACING, facing.getOpposite());
         }, supplier);
     }
 
