@@ -310,7 +310,6 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
                 this.wasActiveAndNeedsUpdate = true;
                 this.parallelRecipesPerformed = 0;
                 this.overclockResults = new int[]{0, 0};
-                this.getMetaTileEntity().setDroneDead(false);
             }
             this.getMetaTileEntity().setDroneDead(false);
         }
