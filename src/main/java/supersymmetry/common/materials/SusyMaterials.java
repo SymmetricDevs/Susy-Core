@@ -128,7 +128,6 @@ public class SusyMaterials {
 
         Materials.Sodium.setProperty(PropertyKey.FLUID, new FluidProperty());
 
-        Materials.Phosphorus.setFormula("P4", true);
         Materials.Phosphorus.setProperty(PropertyKey.INGOT, new IngotProperty());
         FluidProperty fluidProperty = new FluidProperty();
         fluidProperty.getStorage().enqueueRegistration(FluidStorageKeys.LIQUID, new FluidBuilder().temperature(317));
