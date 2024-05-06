@@ -41,24 +41,20 @@ import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import supersymmetry.api.metatileentity.PseudoMultiSteamMachineMetaTileEntity;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicators;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
-import supersymmetry.common.materials.SusyMaterials;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class MetaTileEntitySteamLatexCollector extends PseudoMultiSteamMachineMetaTileEntity {
+
     private final int energyPerTick = 16;
     private final int tankSize = 16000;
     private long latexCollectionAmount;
-    private boolean hasRubberLog;
-    private EnumFacing outputFacingFluids;
-
 
     public MetaTileEntitySteamLatexCollector(ResourceLocation metaTileEntityId, boolean isHighPressure) {
         super(metaTileEntityId, SuSyRecipeMaps.LATEX_COLLECTOR_RECIPES, SuSySteamProgressIndicators.EXTRACTION_STEAM, SusyTextures.LATEX_COLLECTOR_OVERLAY, false, isHighPressure);
@@ -70,39 +66,40 @@ public class MetaTileEntitySteamLatexCollector extends PseudoMultiSteamMachineMe
         return new MetaTileEntitySteamLatexCollector(this.metaTileEntityId, isHighPressure);
     }
 
+    @Override
     public FluidTankList createImportFluidHandler() {
         return new FluidTankList(false, new FilteredFluidHandler(16000).setFilter(CommonFluidFilters.STEAM));
     }
 
+    @Override
     protected FluidTankList createExportFluidHandler() {
         return new FluidTankList(false, new IFluidTank[]{new FluidTank(this.tankSize)});
     }
 
+    @Override
     protected IItemHandlerModifiable createImportItemHandler() {
         return new NotifiableItemStackHandler(this, 1, this, false);
     }
 
+    @Override
     protected IItemHandlerModifiable createExportItemHandler() {
         return new NotifiableItemStackHandler(this, 1, this, true);
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
-        ColourMultiplier multiplier = new ColourMultiplier(GTUtility.convertRGBtoOpaqueRGBA_CL(this.getPaintingColorForRendering()));
-        IVertexOperation[] coloredPipeline = ArrayUtils.add(pipeline, multiplier);
-        SimpleSidedCubeRenderer casingRenderer = isHighPressure ? Textures.STEAM_CASING_STEEL : Textures.STEAM_CASING_BRONZE;
-        casingRenderer.render(renderState, translation, coloredPipeline);
-
-        SusyTextures.LATEX_COLLECTOR_OVERLAY.renderOrientedState(renderState, translation, coloredPipeline, this.getFrontFacing(), this.isActive(), true);
-        if (this.getOutputFacingFluids() != null) {
-            Textures.PIPE_OUT_OVERLAY.renderSided(this.getOutputFacingFluids(), renderState, translation, coloredPipeline);
-        }
+        super.renderMetaTileEntity(renderState, translation, pipeline);
+        SusyTextures.LATEX_COLLECTOR_OVERLAY.renderOrientedState(renderState, translation, pipeline, this.getFrontFacing(), this.isActive(), true);
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     public Pair<TextureAtlasSprite, Integer> getParticleTexture() {
         return Pair.of(Textures.STEAM_CASING_BRONZE.getSpriteOnSide(RenderSide.TOP), this.getPaintingColorForRendering());
     }
+
+    @Override
     protected ModularUI createUI(EntityPlayer entityPlayer) {
         ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND_STEAM.get(false), 175, 176);
         builder.image(7, 16, 81, 55, GuiTextures.DISPLAY);
@@ -138,160 +135,5 @@ public class MetaTileEntitySteamLatexCollector extends PseudoMultiSteamMachineMe
         } else {
             return false;
         }
-    }
-
-    public void update() {
-        super.update();
-
-        //if ~client world skip update
-        if (this.getWorld().isRemote) return;
-
-        //if rubber log and energy (steam)
-        if (this.hasRubberLog && this.drainEnergy(true)) {
-            //inspect tank, amount, and capacity
-            IFluidTank tank = this.exportFluids.getTankAt(0);
-            assert tank != null;
-
-            int stored = tank.getFluidAmount();
-            int capacity = tank.getCapacity();
-
-            //collection
-            if (stored < capacity) {
-                //is pseudo full if full collection amount can't be inserted
-                boolean isOutputFull = stored + this.latexCollectionAmount >= capacity;
-
-                //handle cases
-                if (isOutputFull) {
-                    tank.fill(SusyMaterials.Latex.getFluid(capacity - stored), true);
-                } else {
-                    tank.fill(SusyMaterials.Latex.getFluid((int) this.latexCollectionAmount), true);
-                }
-
-                //take energy (steam)
-                this.drainEnergy(false);
-            }
-        }
-
-        //attempt pumping every 5 ticks
-        if (this.getOffsetTimer() % 5L == 0L) {
-            if(this.getOutputFacingFluids() != null){
-                this.pushFluidsIntoNearbyHandlers(new EnumFacing[]{this.getOutputFacingFluids()});
-            }
-            this.fillContainerFromInternalTank();
-        }
-    }
-    
-    @Override
-    public void onLoad() {
-        super.onLoad();
-        this.checkAdjacentBlocks();
-    }
-
-    @Override
-    public void onPlacement() {
-        super.onPlacement();
-        this.checkAdjacentBlocks();
-    }
-
-    public void onNeighborChanged() {
-        super.onNeighborChanged();
-        this.checkAdjacentBlocks();
-    }
-
-    public void checkAdjacentBlocks(){
-        if(this.getWorld() != null){
-            this.hasRubberLog = false;
-            if(!this.getWorld().isRemote) {
-                EnumFacing back = this.getFrontFacing().getOpposite();
-
-                Block block = this.getWorld().getBlockState(this.getPos().offset(back)).getBlock();
-                if (block == MetaBlocks.RUBBER_LOG) {
-                    this.hasRubberLog = true;
-                }
-            }
-        }
-    }
-
-    public <T> void addNotifiedInput(T input) {
-        super.addNotifiedInput(input);
-        this.onNeighborChanged();
-    }
-
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
-        super.writeToNBT(data);
-        data.setInteger("OutputFacingF", this.getOutputFacingFluids().getIndex());
-        data.setBoolean("hasRubberLogs", this.hasRubberLog);
-        return data;
-    }
-
-    public void readFromNBT(NBTTagCompound data) {
-        super.readFromNBT(data);
-        if (data.hasKey("hasRubberLogs")) {
-            this.hasRubberLog = data.getBoolean("hasRubberLogs");
-        }
-        if (data.hasKey("OutputFacingF")) {
-            this.outputFacingFluids = EnumFacing.byIndex(data.getInteger("OutputFacingF"));
-        }
-    }
-
-    public void writeInitialSyncData(PacketBuffer buf) {
-        super.writeInitialSyncData(buf);
-        buf.writeByte(this.getOutputFacingFluids().getIndex());
-    }
-
-    public void receiveInitialSyncData(PacketBuffer buf) {
-        super.receiveInitialSyncData(buf);
-        this.outputFacingFluids = EnumFacing.VALUES[buf.readByte()];
-    }
-
-    public void receiveCustomData(int dataId, PacketBuffer buf) {
-        super.receiveCustomData(dataId, buf);
-        if (dataId == 100) {
-            this.outputFacingFluids = EnumFacing.VALUES[buf.readByte()];
-            this.scheduleRenderUpdate();
-        }
-    }
-
-    public boolean onWrenchClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing, CuboidRayTraceResult hitResult) {
-        if (!playerIn.isSneaking()) {
-            if (this.getOutputFacingFluids() == facing) {
-                return false;
-            } else if (this.hasFrontFacing() && (facing == this.getFrontFacing() || facing == this.getFrontFacing().getOpposite())) {
-                return false;
-            } else {
-                if (!this.getWorld().isRemote) {
-                    this.setOutputFacingFluids(facing);
-                }
-                return true;
-            }
-        } else {
-            boolean wrenchClickResult = false;
-            if (this.getOutputFacingFluids() != facing.getOpposite() && this.getOutputFacingFluids() != facing) wrenchClickResult = super.onWrenchClick(playerIn, hand, facing, hitResult);
-            this.checkAdjacentBlocks();
-            return wrenchClickResult;
-        }
-    }
-
-    public void setOutputFacingFluids(EnumFacing outputFacing) {
-        this.outputFacingFluids = outputFacing;
-        if (!this.getWorld().isRemote) {
-            this.notifyBlockUpdate();
-            this.writeCustomData(100, (buf) -> {
-                buf.writeByte(this.outputFacingFluids.getIndex());
-            });
-            this.markDirty();
-        }
-
-    }
-
-    public EnumFacing getOutputFacingFluids() {
-        return this.outputFacingFluids == null ? EnumFacing.SOUTH : this.outputFacingFluids;
-    }
-
-    public boolean needsSneakToRotate() {
-        return true;
-    }
-    public boolean getIsWeatherOrTerrainResistant() {
-        return true;
     }
 }

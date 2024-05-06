@@ -15,11 +15,13 @@ import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicator;
 import supersymmetry.common.metatileentities.single.steam.SuSySimpleSteamMetaTileEntity;
 
 public class PseudoMultiSteamMachineMetaTileEntity extends SuSySimpleSteamMetaTileEntity {
+
     private IBlockState targetBlockState;
 
     public IBlockState getTargetBlockState() {
         return targetBlockState;
     }
+
     public PseudoMultiSteamMachineMetaTileEntity(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator, ICubeRenderer renderer, boolean isBrickedCasing, boolean isHighPressure) {
         super(metaTileEntityId, recipeMap, progressIndicator, renderer, isBrickedCasing, isHighPressure);
         this.workableHandler = new PseudoMultiSteamRecipeLogic(this, recipeMap, isHighPressure, steamFluidTank, 1.0);
@@ -66,8 +68,6 @@ public class PseudoMultiSteamMachineMetaTileEntity extends SuSySimpleSteamMetaTi
         return wrenchClickSucceeded;
     }
 
-    @Override
-    public boolean needsSneakToRotate() { return true; }
     @Override
     public boolean getIsWeatherOrTerrainResistant() {
         return true;
