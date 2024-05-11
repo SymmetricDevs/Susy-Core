@@ -69,6 +69,7 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
                 joulesNeeded = getJt() * actualSteps - pool.getKiloJoules() * 1000;
             } else {
                 joulesNeeded = getJt() * actualSteps - kJFloor * 1000; //difference in joules betweeen kJ losslessly required and J actually required (4kJ losslessly covers 3kJ out of 3600J, meaning 600J are needed to avoid wasting kJ
+
             }
 
             //if buffer cant cover draw entirely from kiloJoules

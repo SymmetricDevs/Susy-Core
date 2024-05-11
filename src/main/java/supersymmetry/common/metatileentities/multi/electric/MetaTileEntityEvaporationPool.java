@@ -811,7 +811,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                     ArrayUtils.addAll(pipeline, new LightMapOperation(240, 240), new ColourOperation(0xFFFFFFFF)),
                     EnumFacing.UP, Cuboid6.full, TextureUtils.getBlockTexture("lava_still"), BloomEffectUtil.getRealBloomLayer());
             Textures.RENDER_STATE.set(op);
-
     }
     */
 
