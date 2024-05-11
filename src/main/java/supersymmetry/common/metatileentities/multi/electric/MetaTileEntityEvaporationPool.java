@@ -18,17 +18,21 @@ import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.pattern.TraceabilityPredicate;
+import gregtech.api.unification.material.Materials;
 import gregtech.api.util.BlockInfo;
 import gregtech.client.renderer.CubeRendererState;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.cclop.ColourOperation;
 import gregtech.client.renderer.cclop.LightMapOperation;
 import gregtech.client.renderer.texture.Textures;
+import gregtech.client.utils.BloomEffectUtil;
 import gregtech.client.utils.TooltipHelper;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
 import gregtech.common.metatileentities.MetaTileEntities;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
@@ -692,14 +696,49 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         return corner;
     }
 
-    public <T extends MultiblockRecipeLogic> void renderFluid(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline, IBlockAccess world, EnumFacing frontFacing, T recipeMapWorkable) {
+    /*
+    public static void renderTankFluid(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline, FluidTank tank, IBlockAccess world, BlockPos pos, EnumFacing frontFacing) {
+        float lastBrightnessX = OpenGlHelper.lastBrightnessX;
+        float lastBrightnessY = OpenGlHelper.lastBrightnessY;
+        if (world != null) {
+            renderState.setBrightness(world, pos);
+        }
+        FluidStack stack = tank.getFluid();
+        if (stack == null || stack.amount == 0)
+            return;
+
+        Cuboid6 partialFluidBox = new Cuboid6(1.0625 / 16.0, 2.0625 / 16.0, 1.0625 / 16.0, 14.9375 / 16.0, 14.9375 / 16.0, 14.9375 / 16.0);
+
+        double fillFraction = (double) stack.amount / tank.getCapacity();
+        if (tank.getFluid().getFluid().isGaseous()) {
+            partialFluidBox.min.y = Math.max(13.9375 - (11.875 * fillFraction), 2.0) / 16.0;
+        } else {
+            partialFluidBox.max.y = Math.min((11.875 * fillFraction) + 2.0625, 14.0) / 16.0;
+        }
+
+        renderState.setFluidColour(stack);
+        ResourceLocation fluidStill = stack.getFluid().getStill(stack);
+        TextureAtlasSprite fluidStillSprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluidStill.toString());
+        for (EnumFacing facing : EnumFacing.VALUES) {
+            Textures.renderFace(renderState, translation, pipeline, facing, partialFluidBox, fluidStillSprite, BlockRenderLayer.CUTOUT_MIPPED);
+        }
+        GlStateManager.resetColor();
+
+        renderState.reset();
+    }
+     */
+
+    public <T extends MultiblockRecipeLogic> void renderFluid(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline, IBlockAccess world, EnumFacing frontFacing, T recipeMapWorkable, BlockPos.MutableBlockPos controllerPos) {
 
         if ((this.tickTimer +1) % 20 == 0) {
             SusyLog.logger.atError().log("About to attempt rendering with getWorld: " + (world == null ? "null" : world) + ", isStructureFormed: " + (isStructureFormed()) + ", isActive: " + (recipeMapWorkable == null ? "null" : (recipeMapWorkable.isActive()) + ", previousRecipe: " + (recipeMapWorkable.getPreviousRecipe() == null ? "null" : recipeMapWorkable.isActive())));
         }
 
-        //display fluid in evap pool (not running for some reason)
-        if (this.getWorld() == null || !this.isStructureFormed() || !recipeMapWorkable.isActive() || recipeMapWorkable.getPreviousRecipe() == null) { return; }
+        if (world != null) {
+            renderState.setBrightness(world, controllerPos);
+        }
+
+        if (controllerPos == null || !this.isStructureFormed() || !recipeMapWorkable.isActive() || recipeMapWorkable.getPreviousRecipe() == null) { return; }
 
         SusyLog.logger.atError().log("Passed rendering check");
 
@@ -708,7 +747,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                 0.875, 0.999);
 
         //Set our box to the percentage of the tank that is full
-        partialFluidBox.max.y = 0.875f; //should be 15 pixels out of 16 full
+        //partialFluidBox.max.y = 0.875f; //should be 15 pixels out of 16 full
 
         //when looking at controller facing south leftmost col is West, and when facing West leftmost is North
         boolean isLeftMostColumn = frontFacing == EnumFacing.SOUTH || frontFacing == EnumFacing.WEST;
@@ -721,38 +760,60 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         int NSFacing = (frontFacing.getHorizontalIndex() +1) & 1; //even horizontal index
 
         //apply translations to scale properly; "back distance and length are switched in the case of WEST and EAST as a form of "rotation" since translation.rotate is broken..."
-        translation.translate((corner.getX() - getPos().getX()), 1, corner.getZ() - getPos().getZ());
+        translation.translate((corner.getX() - controllerPos.getX()), 1, corner.getZ() - controllerPos.getZ());
         translation.scale(EWFacing * rowCount + NSFacing * columnCount, 1, EWFacing * columnCount + NSFacing * rowCount);
 
+        FluidStack fluidStack = Materials.Water.getFluid(1000); //default is water
+
         //previous recipe is actually previously found recipe which is now being run, or attempting to be run
-        FluidStack fluidStack = recipeMapWorkable.getPreviousRecipe().getFluidInputs().get(0).getInputFluidStack();
+        if (recipeMapWorkable.getPreviousRecipe().getFluidInputs() != null) {
+            fluidStack = recipeMapWorkable.getPreviousRecipe().getFluidInputs().get(0).getInputFluidStack();
+        }
 
         //store previous renderer state
-        CubeRendererState op = Textures.RENDER_STATE.get();
-
-        renderState.setBrightness(getWorld(), getPos());
+        //CubeRendererState op = Textures.RENDER_STATE.get();
+        renderState.setBrightness(getWorld(), controllerPos);
 
         //modify render state for own uses and then render top
-        Textures.RENDER_STATE.set(new CubeRendererState(op.layer, CubeRendererState.PASS_MASK, op.world));
+        //Textures.RENDER_STATE.set(new CubeRendererState(op.layer, CubeRendererState.PASS_MASK, op.world));
         renderState.setFluidColour(fluidStack);
-        Textures.renderFace(renderState, translation, pipeline, EnumFacing.UP, partialFluidBox,
-                TextureUtils.getTexture(fluidStack.getFluid().getStill()),
-                BlockRenderLayer.CUTOUT_MIPPED);
+        TextureAtlasSprite fluidStillSprite = Minecraft.getMinecraft().getTextureMapBlocks()
+                .getAtlasSprite(fluidStack.getFluid().getStill(fluidStack).toString());
 
-        //return renderer to original state
-        Textures.RENDER_STATE.set(op);
+        for (EnumFacing facing : EnumFacing.VALUES) {
+            Textures.renderFace(renderState, translation, pipeline, facing, partialFluidBox, fluidStillSprite,
+                    BlockRenderLayer.CUTOUT_MIPPED);
+        }
+
+        //Go back to normal for the next rendering call
+        GlStateManager.resetColor();
+
+        renderState.reset();
     }
 
+    /* I give up
     @Override
     public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
-        if ((this.tickTimer +1) % 20 == 0) {
+        if ((tickTimer +1) % 20 == 0) {
             SusyLog.logger.atError().log("BEFORE RENDER CALL with world: " + (this.getWorld() == null ? "null" : this.getWorld()) + ", isStructureFormed: " + (this.isStructureFormed()) + ", isActive: " + (this.getRecipeMapWorkable() == null ? "null" : (this.getRecipeMapWorkable().isActive()) + ", previousRecipe: " + (this.getRecipeMapWorkable().getPreviousRecipe() == null ? "null" : this.getRecipeMapWorkable().isActive())));
+            SusyLog.logger.atError().log("BEFORE RENDER CALL; pos: " + getPos());
         }
 
         super.renderMetaTileEntity(renderState, translation, pipeline);
         getFrontOverlay().renderOrientedState(renderState, translation, pipeline, getFrontFacing(), recipeMapWorkable.isActive(), recipeMapWorkable.isWorkingEnabled());
-        renderFluid(renderState, translation, pipeline, this.getWorld(), this.getFrontFacing(), this.getRecipeMapWorkable());
+        renderFluid(renderState, translation, pipeline, getWorld(), getFrontFacing(), getRecipeMapWorkable(), new BlockPos.MutableBlockPos(getPos()));
+
+            EnumFacing back = getFrontFacing().getOpposite();
+            Matrix4 offset = translation.copy().translate(back.getXOffset(), -0.3, back.getZOffset());
+            CubeRendererState op = Textures.RENDER_STATE.get();
+            Textures.RENDER_STATE.set(new CubeRendererState(op.layer, CubeRendererState.PASS_MASK, op.world));
+            Textures.renderFace(renderState, offset,
+                    ArrayUtils.addAll(pipeline, new LightMapOperation(240, 240), new ColourOperation(0xFFFFFFFF)),
+                    EnumFacing.UP, Cuboid6.full, TextureUtils.getBlockTexture("lava_still"), BloomEffectUtil.getRealBloomLayer());
+            Textures.RENDER_STATE.set(op);
+
     }
+    */
 
     @Override
     public void update() {
@@ -780,7 +841,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                 SusyLog.logger.atError().log("setting exposed blocks to 0");
                 exposedBlocks = 0;
             }
-
 
             //checks for ow and skylight access to prevent beneath portal issues (-1 = the Nether, 0 = normal world)
             else if (getWorld().provider.getDimension() == 0) {
@@ -959,16 +1019,21 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         final EnumFacing back = this.getFrontFacing().getOpposite();
         final EnumFacing left = back.rotateYCCW();
 
-        //place pos in closest leftmost corner. For some reason getPos rounds X pos of controller up and Z pos of controller down
-        final BlockPos pos = this.getPos().offset(left, controllerPosition +1).offset(back, 2);
+        //conversion from blockpos to in world pos places particle position at corner of block such that relative direction must be accounted for
+        //add 1 if x pos or z pos (offsets mutually exclusively non-zero for given facing) as conversion to float pos rounds down in both coords
+        int leftOffset = ((left.getXOffset() * -1) >>> 31) + ((left.getZOffset() * -1) >>> 31);
+        int backOffset = ((back.getXOffset() * -1) >>> 31) + ((back.getZOffset() * -1) >>> 31);
+
+        //place pos in closest leftmost corner
+        final BlockPos pos = this.getPos().offset(left, controllerPosition + leftOffset).offset(back, 1 + backOffset);
 
         //Spawn number of particles on range [1, 3 * colCount * rowCount/9] (~3 particles for every 3x3 = 9m^2)
-        for (int i = 0; i < columnCount * rowCount/3; i++) {
+        for (int i = 0; i < Math.max(1, columnCount * rowCount/3); i++) {
             //either single line along x axis intersects all rows, or it intersects all columns. Same applies to z axis. getXOffset indicates +, -, or "0" direction of facing for given axis
             float xLength = (back.getXOffset() * rowCount) + (left.getXOffset() * columnCount * -1); //we start on leftmost closest corner and want to go back and to the right
             float zLength = (back.getZOffset() * rowCount) + (left.getZOffset() * columnCount * -1); //so we invert the sign of the left offsets to effectively get right displacement
 
-            if (tickTimer % 100 == 0) SusyLog.logger.atError().log("xLength: " + xLength + ", zLength: " + zLength + ", pos: " + pos + ", controller pos: " + getPos());
+            if (tickTimer % 100 == 0) SusyLog.logger.atError().log("xLength: " + xLength + ", zLength: " + zLength + ", leftOffset: " + leftOffset + ", backOffset: " + backOffset + ", pos: " + pos + ", controller pos: " + getPos());
 
             float xPos = pos.getX() + (xLength * GTValues.RNG.nextFloat()); //scale x length by random amount to get output coord
             float yPos = pos.getY() + 0.75F; //shit out particles one quarter of a block below the surface of the interior to give effect of gases rising from bottom
