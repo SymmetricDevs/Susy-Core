@@ -1,6 +1,5 @@
 package supersymmetry.common.item;
 
-import gregtech.GregTechMod;
 import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
 import gregtech.api.items.metaitem.MetaItem.MetaValueItem;
