@@ -703,6 +703,9 @@ cover.pump.steam.title=蒸汽泵
 metaitem.air_vent.name=进气扇
 metaitem.air_vent.tooltip=当面向空气时，为机器收集所处维度的空气
 metaitem.air_vent.tooltip.1=§b收集速率: §f%,d L/s
+metaitem.spray.can.waterproof.name=喷漆罐（防水涂料）
+behaviour.waterproofspray.tooltip=可以使方块防水
+behaviour.waterproofspray.offhand=副手手持以自动喷涂所放置方块。
 
 # Catalysts
 gregtech.universal.catalysts.tooltip.tier=§e最高电压：§f%,d EU/t（%s§f）

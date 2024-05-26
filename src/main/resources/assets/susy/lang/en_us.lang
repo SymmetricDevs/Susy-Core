@@ -708,6 +708,9 @@ metaitem.track_segment.name=Monorail Track Segment
 metaitem.track_segment.tooltip=For use in the §8tunnelbore.
 metaitem.track_segment.length_info=§610 blocks §7worth of monorail track.
 metaitem.air_vent.tooltip.1=§bCollecting Rate: §f%,d L/s
+metaitem.spray.can.waterproof.name=Spray Can (Waterproof)
+behaviour.waterproofspray.tooltip=Can waterproof blocks
+behaviour.waterproofspray.offhand=Hold in offhand to waterproof placed blocks
 
 # Catalysts
 gregtech.universal.catalysts.tooltip.tier=§eMax Voltage: §f%,d EU/T (%s§f)

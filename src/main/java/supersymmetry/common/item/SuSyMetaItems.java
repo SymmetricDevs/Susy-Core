@@ -1,6 +1,8 @@
 package supersymmetry.common.item;
 
+import gregtech.GregTechMod;
 import gregtech.api.GTValues;
+import gregtech.api.GregTechAPI;
 import gregtech.api.items.metaitem.MetaItem.MetaValueItem;
 import gregtech.api.items.metaitem.MetaOreDictItem;
 import gregtech.api.items.metaitem.MetaOreDictItem.OreDictValueItem;
@@ -10,6 +12,9 @@ import gregtech.api.unification.ore.OrePrefix;
 import gregtech.common.items.behaviors.TooltipBehavior;
 import net.minecraft.client.resources.I18n;
 import supersymmetry.SuSyValues;
+import supersymmetry.common.item.behaviours.WaterproofSprayBehaviour;
+
+import static gregtech.common.items.MetaItems.SPRAY_EMPTY;
 
 public class SuSyMetaItems {
 
@@ -20,6 +25,7 @@ public class SuSyMetaItems {
     public static MetaValueItem PUMP_STEAM;
     public static MetaValueItem AIR_VENT;
     public static MetaValueItem TRACK_SEGMENT;
+    public static MetaValueItem SPRAY_CAN_WATERPROOF;
 
     public static void initMetaItems() {
         metaItem = new StandardMetaItem();
@@ -50,10 +56,13 @@ public class SuSyMetaItems {
         AIR_VENT = metaItem.addItem(4, "air_vent").addComponents(new TooltipBehavior((lines) -> {
             lines.add(I18n.format("metaitem.air_vent.tooltip.1", 100));
         }));
-
         TRACK_SEGMENT = metaItem.addItem(5, "track_segment").addComponents(new TooltipBehavior((lines) -> {
             lines.add(I18n.format("metaitem.track_segment.length_info"));
         }));
+        SPRAY_CAN_WATERPROOF = metaItem.addItem(6, "spray.can.waterproof")
+                .setMaxStackSize(1)
+                .addComponents(new WaterproofSprayBehaviour(SPRAY_EMPTY.getStackForm(), 32))
+                .setCreativeTabs(GregTechAPI.TAB_GREGTECH_TOOLS);
     }
 
     private static void addTieredOredictItem (OreDictValueItem[] items, int id, int RGB, OrePrefix prefix) {
