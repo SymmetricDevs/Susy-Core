@@ -189,7 +189,11 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     }
 
     private void explode() {
-        this.world.newExplosion(this, this.posX, this.posY, this.posZ, 6, true, true);
+        int explosionStrength = 2;
+        if (getRidingEntity() != null && getRidingEntity() instanceof EntityPlayer) {
+            explosionStrength = 6;
+        }
+        this.world.newExplosion(this, this.posX, this.posY, this.posZ, explosionStrength, true, true);
         this.setDead();
     }
 
@@ -381,5 +385,10 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     public void setupDropPodSound() {
         this.soundDropPod = new MovingSoundDropPod(this);
         Minecraft.getMinecraft().getSoundHandler().playSound(this.soundDropPod);
+    }
+
+    @Override
+    public boolean canBeSteered() {
+        return false;
     }
 }
