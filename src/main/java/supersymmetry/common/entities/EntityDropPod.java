@@ -391,7 +391,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     }
 
     @Override
-    public boolean canBeSteered() {
+    public boolean canPassengerSteer() {
         return false;
     }
 }
