@@ -255,6 +255,9 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
                     }
                 }
                 this.setTimeSinceLanding(this.getTimeSinceLanding() + 1);
+                if (this.getTimeSinceLanding() > 1000) {
+                    this.setDead();
+                }
             }
 
             if (this.hasTakenOff()) {
@@ -317,7 +320,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
 
     @Override
     protected boolean canDespawn() {
-        return false;
+        return this.getTimeSinceLanding() > 1000;
     }
 
     @Override
