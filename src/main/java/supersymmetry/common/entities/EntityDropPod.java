@@ -248,8 +248,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
                     int posZRounded = MathHelper.floor(this.posZ);
                     IBlockState blockBeneath = this.world.getBlockState(new BlockPos(posXRounded, posYBeneath, posZRounded));
 
-                    if (blockBeneath.getMaterial() != Material.AIR)
-                    {
+                    if (blockBeneath.getMaterial() != Material.AIR) {
                         SoundType soundType = blockBeneath.getBlock().getSoundType(blockBeneath, world, new BlockPos(posXRounded, posYBeneath, posZRounded), this);
                         this.playSound(soundType.getBreakSound(), soundType.getVolume() * 3.0F, soundType.getPitch() * 0.2F);
                     }
@@ -298,6 +297,9 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     protected void removePassenger(@NotNull Entity passenger) {
         if (this.canPlayerDismount()) {
             super.removePassenger(passenger);
+            if (passenger instanceof EntityLiving living) {
+                living.setNoAI(false);
+            }
         }
     }
 
@@ -306,10 +308,10 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
         super.updatePassenger(passenger);
         float xOffset = MathHelper.sin(this.renderYawOffset * 0.1F);
         float zOffset = MathHelper.cos(this.renderYawOffset * 0.1F);
-        passenger.setPosition(this.posX + (double)(0.1F * xOffset), this.posY + (double)(this.height * 0.2F) + passenger.getYOffset() + 0.0D, this.posZ - (double)(0.1F * zOffset));
+        passenger.setPosition(this.posX + (double) (0.1F * xOffset), this.posY + (double) (this.height * 0.2F) + passenger.getYOffset() + 0.0D, this.posZ - (double) (0.1F * zOffset));
 
         if (passenger instanceof EntityLivingBase) {
-            ((EntityLivingBase)passenger).renderYawOffset = this.renderYawOffset;
+            ((EntityLivingBase) passenger).renderYawOffset = this.renderYawOffset;
         }
     }
 
@@ -372,9 +374,14 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
 
     @Override
     protected void addPassenger(Entity passenger) {
-        if (this.getPassengers().isEmpty())
+        if (this.getPassengers().isEmpty()) {
             super.addPassenger(passenger);
+            if (passenger instanceof EntityLiving living) {
+                living.setNoAI(true);
+            }
+        }
     }
+
 
     @Override
     public void onAddedToWorld() {
@@ -390,8 +397,5 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
         Minecraft.getMinecraft().getSoundHandler().playSound(this.soundDropPod);
     }
 
-    @Override
-    public boolean canPassengerSteer() {
-        return false;
-    }
+
 }
