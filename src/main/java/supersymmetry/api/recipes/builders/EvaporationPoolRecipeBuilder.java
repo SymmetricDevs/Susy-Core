@@ -32,7 +32,9 @@ public class EvaporationPoolRecipeBuilder  extends RecipeBuilder<EvaporationPool
                     , new IllegalArgumentException());
             recipeStatus = EnumValidationResult.INVALID;
         }
+
         eutStorage = Jt;
+
         this.applyProperty(EvaporationEnergyProperty.getInstance(), Jt);
         return this;
     }
