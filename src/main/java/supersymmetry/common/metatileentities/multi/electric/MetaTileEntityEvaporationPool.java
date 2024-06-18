@@ -2,7 +2,6 @@ package supersymmetry.common.metatileentities.multi.electric;
 
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
-import codechicken.lib.texture.TextureUtils;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Matrix4;
 import gregtech.api.GTValues;
@@ -20,12 +19,8 @@ import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.util.BlockInfo;
-import gregtech.client.renderer.CubeRendererState;
 import gregtech.client.renderer.ICubeRenderer;
-import gregtech.client.renderer.cclop.ColourOperation;
-import gregtech.client.renderer.cclop.LightMapOperation;
 import gregtech.client.renderer.texture.Textures;
-import gregtech.client.utils.BloomEffectUtil;
 import gregtech.client.utils.TooltipHelper;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
@@ -43,11 +38,10 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.ArrayUtils;
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.capability.impl.EvapRecipeLogic;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
@@ -97,7 +91,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             //0 * -1 is the only value in which the sign bit is not swapped after-wards and thus >>> 31 is 0 for 0
             intArray = new int[(bitCount >> 5) + (((bitCount & 31) * -1) >>> 31) +1];
             intArray[0] = bitCount;
-            SusyLog.logger.atError().log("number of ints: " + (bitCount >> 5) + (((bitCount & 31) * -1) >>> 31) + " with size: " + bitCount + "; size limit: " + (bitCount >> 5) +1);
+            //SusyLog.logger.atError().log("number of ints: " + (bitCount >> 5) + (((bitCount & 31) * -1) >>> 31) + " with size: " + bitCount + "; size limit: " + (bitCount >> 5) +1);
             for (int i = 1; initialState && (i < (bitCount >> 5) +2); ++i) {
                 intArray[i] = 0xFFFFFFFF; //set all to true if condition is true
             }
@@ -184,8 +178,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
     static {
         validContainerStates.add(SuSyBlocks.EVAPORATION_BED.getState(BlockEvaporationBed.EvaporationBedType.DIRT));
-        //add all coils as valid container blocks
-        for (IBlockState state : MetaBlocks.WIRE_COIL.getBlockState().getValidStates()) { validContainerStates.add(state); }
+        validContainerStates.addAll(MetaBlocks.WIRE_COIL.getBlockState().getValidStates()); //add all coils as valid container blocks
     }
 
     public MetaTileEntityEvaporationPool(ResourceLocation metaTileEntityId) {
@@ -203,7 +196,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     @Override
     public void invalidateStructure() {
         super.invalidateStructure();
-        SusyLog.logger.atError().log("Invalidating Structure");
+        //SusyLog.logger.atError().log("Invalidating Structure");
         this.isHeated = false;
         this.coilStateMeta = -1;
 
@@ -243,7 +236,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         int rDist = -1;
         int bDist = -1;
 
-        SusyLog.logger.atError().log("BEFORE CALCS lDist: " + lDist + ", rDist: " + rDist + ", bDist: " + bDist);
+        //SusyLog.logger.atError().log("BEFORE CALCS lDist: " + lDist + ", rDist: " + rDist + ", bDist: " + bDist);
 
         //find when container block section is exited left, right, and back
         for (int i = 1; i < MAX_COLUMNS +1; i++) {
@@ -259,16 +252,16 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             return false;
         }
 
-        SusyLog.logger.atError().log("AFTER CALCS lDist: " + lDist + ", rDist: " + rDist + ", bDist: " + bDist);
+        //SusyLog.logger.atError().log("AFTER CALCS lDist: " + lDist + ", rDist: " + rDist + ", bDist: " + bDist);
 
         //r,l dist = #container blocks in respective dir. +1 for controller block
         columnCount = rDist + lDist +1;
         rowCount = bDist; //"Depth" of container blocks
         controllerPosition = lDist; //if there are no blocks to the left controller is left most spot
 
-        SusyLog.logger.atFatal().log("I have just finished structure check" + getPos());
-        SusyLog.logger.atError().log("columnCount: " + columnCount + ", controllerPosition: " + controllerPosition + ", rowCount: " + rowCount);
-        SusyLog.logger.atError().log("isHeated: " + isHeated + ", kiloJoules: " + kiloJoules + ", tickTimer: " + tickTimer + ", coilStateMeta: " + coilStateMeta);
+        //SusyLog.logger.atFatal().log("I have just finished structure check" + getPos());
+        //SusyLog.logger.atError().log("columnCount: " + columnCount + ", controllerPosition: " + controllerPosition + ", rowCount: " + rowCount);
+        //SusyLog.logger.atError().log("isHeated: " + isHeated + ", kiloJoules: " + kiloJoules + ", tickTimer: " + tickTimer + ", coilStateMeta: " + coilStateMeta);
 
         //store the known dimensions for structure check
         this.writeCustomData(structuralDimensionsID, (buf) -> {
@@ -405,7 +398,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         //returns true if blockstate is "ground"
         return new TraceabilityPredicate(blockWorldState -> {
             IBlockState state = blockWorldState.getBlockState();
-            SusyLog.logger.atError().log("Checking 'G' predicate with state: " + state.toString());
+            //SusyLog.logger.atError().log("Checking 'G' predicate with state: " + state.toString());
             return isValidGround(state);
         }, supplier);
     }
@@ -413,7 +406,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     //ensures coil pattern is either entirely there or completely absent for structure to be valid. Sets isHeated accordingly
     protected TraceabilityPredicate isContainer() {
         Supplier<BlockInfo[]> supplier = () -> {
-            ArrayList<BlockInfo> containerInfo = new ArrayList();
+            ArrayList<BlockInfo> containerInfo = new ArrayList<BlockInfo>();
 
             //add evap bed types
             for (BlockEvaporationBed.EvaporationBedType type : BlockEvaporationBed.EvaporationBedType.values()) {
@@ -431,7 +424,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
         return new TraceabilityPredicate(blockWorldState -> {
             IBlockState state = blockWorldState.getBlockState();
-            SusyLog.logger.atError().log("Checking 'C' predicate with state: " + state.toString());
+            //SusyLog.logger.atError().log("Checking 'C' predicate with state: " + state.toString());
 
             return isValidCoil(state);
         }, supplier);
@@ -533,7 +526,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             isHeated = false;
             initializeCoilStats();
             return false;
-        }; //block is a coil at this point, so if coil pattern fails exit with false (invalidates structure)
+        } //block is a coil at this point, so if coil pattern fails exit with false (invalidates structure)
 
         //if check is passed structure is valid heatable evap pool
         isHeated = true;
@@ -570,7 +563,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
      */
     @Override
     public void checkStructurePattern() {
-        SusyLog.logger.atError().log("Checking structure pattern");
+        //SusyLog.logger.atError().log("Checking structure pattern");
         // This is here so that it automatically updates the dimensions once a second if it isn't formed
         // hope this doesn't put too much of a toll on TPS - It really should not
         if (!isStructureFormed() || structurePattern == null) {
@@ -578,14 +571,14 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         }
 
         super.checkStructurePattern();
-        SusyLog.logger.atError().log("Finished Super structure pattern check");
+        //SusyLog.logger.atError().log("Finished Super structure pattern check");
 
         //only do check every 4 seconds while structure is formed
         if ((tickTimer / 20 & 3) == 0 && structurePattern != null && structurePattern.getError() == null) {
             handleCoilCheckResult(coilPatternCheck(false));
         }
 
-        SusyLog.logger.atError().log("StructurePattern: " + (structurePattern == null ? "null" : (structurePattern.getError() == null ? "No Error" : structurePattern.getError().getErrorInfo())));
+        //SusyLog.logger.atError().log("StructurePattern: " + (structurePattern == null ? "null" : (structurePattern.getError() == null ? "No Error" : structurePattern.getError().getErrorInfo())));
     }
 
     //for future reference
@@ -666,7 +659,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
      */
 
     @Override
-    public void addInformation(ItemStack stack, World player, List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, World player, @NotNull List<String> tooltip, boolean advanced) {
         if (TooltipHelper.isShiftDown()) {
             tooltip.add(I18n.format("gregtech.machine.evaporation_pool.tooltip.structure_info", MAX_COLUMNS, MAX_COLUMNS) + "\n");
         }
@@ -732,7 +725,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
         if ((this.tickTimer +1) % 20 == 0) {
             SusyLog.logger.atError().log("About to attempt rendering with getWorld: " + (world == null ? "null" : world) + ", isStructureFormed: " + (isStructureFormed()) + ", isActive: " + (recipeMapWorkable == null ? "null" : (recipeMapWorkable.isActive()) + ", previousRecipe: " + (recipeMapWorkable.getPreviousRecipe() == null ? "null" : recipeMapWorkable.isActive())));
-        }
+        } else { return; }
 
         if (world != null) {
             renderState.setBrightness(world, controllerPos);
@@ -838,7 +831,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         if (tickTimer % 20 == 0 && tickTimer != 0) {
             //no sunlight heat generated when raining or during night. May be incongruent with partial exposure to sun, but oh well
             if (getWorld().isRainingAt(getPos().offset(getFrontFacing().getOpposite(), 2)) || !getWorld().isDaytime()) {
-                SusyLog.logger.atError().log("setting exposed blocks to 0");
+                //SusyLog.logger.atError().log("setting exposed blocks to 0");
                 exposedBlocks = 0;
             }
 
@@ -847,18 +840,18 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                 //tickTimer is always multiple of 20 at this point, so division by 20 yields proper counter. You can treat (tickTimer/20) as 'i'
                 int row = ((tickTimer /20) /columnCount) % rowCount; //going left to right, further to closer checking skylight access.
                 int col = ((tickTimer /20) % columnCount);
-                SusyLog.logger.atError().log("Back: " + getFrontFacing().getOpposite() + ", Left: " + getFrontFacing().rotateY() + ", Right: " + getFrontFacing().rotateYCCW() + "; row: " + row + ", col: " + col);
+                //SusyLog.logger.atError().log("Back: " + getFrontFacing().getOpposite() + ", Left: " + getFrontFacing().rotateY() + ", Right: " + getFrontFacing().rotateYCCW() + "; row: " + row + ", col: " + col);
                 //places blockpos for skycheck into correct position. Row counts from furthest to closest (kinda inconsistent but oh well)
                 BlockPos.MutableBlockPos skyCheckPos = new BlockPos.MutableBlockPos(getPos().offset(EnumFacing.UP, 2));
                 skyCheckPos.move(getFrontFacing().getOpposite(), rowCount - row +1);
                 skyCheckPos.move(getFrontFacing().rotateY(), controllerPosition); //move to the furthest left
                 skyCheckPos.move(getFrontFacing().rotateYCCW(), col); //traverse down row
 
-                SusyLog.logger.atError().log("About to check sky access for block at pos: " + skyCheckPos + " with bitArray: " + wasExposed.toString());
+                //SusyLog.logger.atError().log("About to check sky access for block at pos: " + skyCheckPos + " with bitArray: " + wasExposed.toString());
 
                 //Perform skylight check
                 if (!getWorld().canBlockSeeSky(skyCheckPos)) {
-                    SusyLog.logger.atError().log("Failed sky check at " + skyCheckPos + " ; " + getWorld().canBlockSeeSky(skyCheckPos) + " w/ exposedBlocks: " + exposedBlocks);
+                    //SusyLog.logger.atError().log("Failed sky check at " + skyCheckPos + " ; " + getWorld().canBlockSeeSky(skyCheckPos) + " w/ exposedBlocks: " + exposedBlocks);
                     //only decrement exposedBlocks if previously exposed block is found to no longer be exposed and one full pass has occurred
                     if (wasExposed.getBit((row * columnCount) + col) && tickTimer/20 > rowCount * columnCount) {
                         exposedBlocks = Math.max(0, exposedBlocks -1);
@@ -866,23 +859,23 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                     }
                 }
                 else {
-                    SusyLog.logger.atError().log("Passed sky check at " + skyCheckPos + " ; " + getWorld().canBlockSeeSky(skyCheckPos) + " w/ exposedBlocks: " + exposedBlocks);
+                    //SusyLog.logger.atError().log("Passed sky check at " + skyCheckPos + " ; " + getWorld().canBlockSeeSky(skyCheckPos) + " w/ exposedBlocks: " + exposedBlocks);
                     //only increment if block was not previously exposed
                     if (!wasExposed.getBit((row * columnCount) + col)) {
                         if (exposedBlocks < rowCount * columnCount) ++exposedBlocks;
                         wasExposed.setBit((row * columnCount) + col, true);
                     }
-                    SusyLog.logger.atError().log("exposedBlock: " + exposedBlocks);
+                    //SusyLog.logger.atError().log("exposedBlock: " + exposedBlocks);
                 }
             }
 
         } //finish once a ~second check
 
-        if (tickTimer % 100 == 0) {
-            SusyLog.logger.atFatal().log("I am still alive at " + getPos());
-            SusyLog.logger.atError().log("columnCount: " + columnCount + ", controllerPosition: " + controllerPosition + ", rowCount: " + rowCount);
-            SusyLog.logger.atError().log("isHeated: " + isHeated + ", exposedBlocks: " + exposedBlocks + ", kiloJoules: " + kiloJoules + ", joulesBuffer: " + joulesBuffer + ", tickTimer: " + tickTimer + ", coilStateMeta: " + coilStateMeta);
-        }
+        //if (tickTimer % 100 == 0) {
+            //SusyLog.logger.atFatal().log("I am still alive at " + getPos());
+            //SusyLog.logger.atError().log("columnCount: " + columnCount + ", controllerPosition: " + controllerPosition + ", rowCount: " + rowCount);
+            //SusyLog.logger.atError().log("isHeated: " + isHeated + ", exposedBlocks: " + exposedBlocks + ", kiloJoules: " + kiloJoules + ", joulesBuffer: " + joulesBuffer + ", tickTimer: " + tickTimer + ", coilStateMeta: " + coilStateMeta);
+        //}
 
         inputEnergy(exposedBlocks * 50); //1kJ/s /m^2 -> 50J/t
 
@@ -951,13 +944,13 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             this.coilStateMeta = data.getInteger("coilStateMeta");
             initializeCoilStats();
         }
-        SusyLog.logger.atFatal().log("before reinit");
-        SusyLog.logger.atError().log("columnCount: " + columnCount + ", controllerPosition: " + controllerPosition + ", rowCount: " + rowCount);
-        SusyLog.logger.atError().log("isHeated: " + isHeated + ", kiloJoules: " + kiloJoules + ", tickTimer: " + tickTimer + ", coilStateMeta: " + coilStateMeta);
+        //SusyLog.logger.atFatal().log("before reinit");
+        //SusyLog.logger.atError().log("columnCount: " + columnCount + ", controllerPosition: " + controllerPosition + ", rowCount: " + rowCount);
+        //SusyLog.logger.atError().log("isHeated: " + isHeated + ", kiloJoules: " + kiloJoules + ", tickTimer: " + tickTimer + ", coilStateMeta: " + coilStateMeta);
         reinitializeStructurePattern();
-        SusyLog.logger.atFatal().log("after reinit");
-        SusyLog.logger.atError().log("columnCount: " + columnCount + ", controllerPosition: " + controllerPosition + ", rowCount: " + rowCount);
-        SusyLog.logger.atError().log("isHeated: " + isHeated + ", kiloJoules: " + kiloJoules + ", tickTimer: " + tickTimer + ", coilStateMeta: " + coilStateMeta);
+        //SusyLog.logger.atFatal().log("after reinit");
+        //SusyLog.logger.atError().log("columnCount: " + columnCount + ", controllerPosition: " + controllerPosition + ", rowCount: " + rowCount);
+        //SusyLog.logger.atError().log("isHeated: " + isHeated + ", kiloJoules: " + kiloJoules + ", tickTimer: " + tickTimer + ", coilStateMeta: " + coilStateMeta);
     }
 
     //order matters for these
@@ -1033,7 +1026,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             float xLength = (back.getXOffset() * rowCount) + (left.getXOffset() * columnCount * -1); //we start on leftmost closest corner and want to go back and to the right
             float zLength = (back.getZOffset() * rowCount) + (left.getZOffset() * columnCount * -1); //so we invert the sign of the left offsets to effectively get right displacement
 
-            if (tickTimer % 100 == 0) SusyLog.logger.atError().log("xLength: " + xLength + ", zLength: " + zLength + ", leftOffset: " + leftOffset + ", backOffset: " + backOffset + ", pos: " + pos + ", controller pos: " + getPos());
+            //if (tickTimer % 100 == 0) SusyLog.logger.atError().log("xLength: " + xLength + ", zLength: " + zLength + ", leftOffset: " + leftOffset + ", backOffset: " + backOffset + ", pos: " + pos + ", controller pos: " + getPos());
 
             float xPos = pos.getX() + (xLength * GTValues.RNG.nextFloat()); //scale x length by random amount to get output coord
             float yPos = pos.getY() + 0.75F; //shit out particles one quarter of a block below the surface of the interior to give effect of gases rising from bottom
