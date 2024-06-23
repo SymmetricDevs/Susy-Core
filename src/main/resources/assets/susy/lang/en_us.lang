@@ -787,3 +787,8 @@ susy.command.horde.stop.stopped=Successfully stopped %s invasion.
 susy.command.horde.status.usage=/mobHorde status <player>
 susy.command.horde.status.has_active_invasion=Player %s has an active %s invasion for %d ticks. It will time out in %s ticks.
 susy.command.horde.status.no_active_invasion=Player %s has no active invasion.
+
+# Fluid Tooltips
+susy.fluid.voiding.liquid=Voidable with Dumper
+susy.fluid.voiding.gas=Voidable with Smoke Stack
+susy.fluid.voiding.flammable=Voidable with Flare Stack
