@@ -34,7 +34,6 @@ public class MetaTileEntityLatexCollector extends PseudoMultiMachineMetaTileEnti
 
     public MetaTileEntityLatexCollector(ResourceLocation metaTileEntityId, int tier) {
         super(metaTileEntityId, SuSyRecipeMaps.LATEX_COLLECTOR_RECIPES, SusyTextures.LATEX_COLLECTOR_OVERLAY, tier, true, SuSyUtility.collectorTankSizeFunction);
-        this.initializeInventory();
     }
 
     @Override
@@ -78,7 +77,9 @@ public class MetaTileEntityLatexCollector extends PseudoMultiMachineMetaTileEnti
     @Override
     public void setFrontFacing(EnumFacing frontFacing) {
         super.setFrontFacing(frontFacing);
-        this.setOutputFacing(frontFacing.rotateY());
+        if (this.getOutputFacingFluids() == frontFacing.getOpposite() || this.getOutputFacingItems() == frontFacing.getOpposite()) {
+            this.setOutputFacing(frontFacing.rotateY());
+        }
     }
 
     @Override
