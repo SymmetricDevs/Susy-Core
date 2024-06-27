@@ -248,7 +248,7 @@ public class MetaTileEntityCryoDrum extends MetaTileEntity {
             if (fluidTank.getFilter() instanceof IPropertyFluidFilter filter) {
                 filter.getContainedAttributes().forEach(a -> a.appendContainerTooltips(tooltip));
             }
-        } else if (fluidTank.getFilter() instanceof IPropertyFluidFilter filter && !filter.getContainedAttributes().isEmpty()) {
+        } else {
             tooltip.add(I18n.format("gregtech.tooltip.tool_fluid_hold_shift"));
         }
 
