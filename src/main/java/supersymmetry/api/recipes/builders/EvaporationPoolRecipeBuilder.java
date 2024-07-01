@@ -32,6 +32,9 @@ public class EvaporationPoolRecipeBuilder  extends RecipeBuilder<EvaporationPool
                     , new IllegalArgumentException());
             recipeStatus = EnumValidationResult.INVALID;
         }
+
+        eutStorage = Jt;
+
         this.applyProperty(EvaporationEnergyProperty.getInstance(), Jt);
         return this;
     }
@@ -56,13 +59,11 @@ public class EvaporationPoolRecipeBuilder  extends RecipeBuilder<EvaporationPool
     @Override
     public ValidationResult<Recipe> build() {
         if (this.recipePropertyStorage == null || !this.recipePropertyStorage.hasRecipeProperty(EvaporationEnergyProperty.getInstance())) {
-            if (eutStorage == -1) {
-                this.Jt(40800 * 55 * getFluidInputs().get(0).getAmount() /getDuration()); //use latent heat of vaporization for water w/ 55mol/L in case of recipes with no energy specified
+            if (eutStorage <= 0) {
+                this.Jt(40800 * 55 * getFluidInputs().get(0).getAmount() / (getDuration() == 0 ? 200 : getDuration())); //use latent heat of vaporization for water w/ 55mol/L in case of recipes with no energy specified
             } else {
                 //calculate joules needed per tick from EUt -> J/t and use eutStorage as variable, as it will no longer be needed
-                eutStorage = (eutStorage * SuSyUtility.JOULES_PER_EU);
-                if (eutStorage < 1) eutStorage = 1;
-                this.Jt(eutStorage);
+                this.Jt(eutStorage * SuSyUtility.JOULES_PER_EU);
             }
         }
 

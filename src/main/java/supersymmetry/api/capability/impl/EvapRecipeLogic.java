@@ -24,7 +24,7 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
     }
 
     public int getJt() {
-        if (!this.previousRecipe.hasProperty(EvaporationEnergyProperty.getInstance())) {
+        if (this.previousRecipe == null || !this.previousRecipe.hasProperty(EvaporationEnergyProperty.getInstance())) {
             return -1;
         }
 
@@ -69,6 +69,7 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
                 joulesNeeded = getJt() * actualSteps - pool.getKiloJoules() * 1000;
             } else {
                 joulesNeeded = getJt() * actualSteps - kJFloor * 1000; //difference in joules betweeen kJ losslessly required and J actually required (4kJ losslessly covers 3kJ out of 3600J, meaning 600J are needed to avoid wasting kJ
+
             }
 
             //if buffer cant cover draw entirely from kiloJoules
@@ -109,6 +110,24 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
 
     @Override
     protected boolean drawEnergy(int recipeEUt, boolean simulate) { return true; }
+
+    // stops multi from "filling" with energy due to -1 EuT required (?) for custom power logic
+    @Override
+    protected boolean hasEnoughPower(@Nonnull int[] resultOverclock) {
+        int totalEUt = resultOverclock[0] * resultOverclock[1];
+        int capacity;
+        if (totalEUt >= 0) {
+            if ((long)totalEUt > this.getEnergyCapacity() / 2L) {
+                capacity = resultOverclock[0];
+            } else {
+                capacity = totalEUt;
+            }
+
+            return this.getEnergyStored() >= (long)capacity;
+        } else {
+            return true;
+        }
+    }
 
     @Override
     protected long getMaxVoltage() {
