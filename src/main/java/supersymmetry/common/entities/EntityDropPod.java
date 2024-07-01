@@ -29,6 +29,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import supersymmetry.api.SusyLog;
 import supersymmetry.client.audio.MovingSoundDropPod;
 import supersymmetry.client.renderer.particles.SusyParticleFlame;
 import supersymmetry.client.renderer.particles.SusyParticleSmoke;
@@ -85,7 +86,10 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
 
     @SideOnly(Side.CLIENT)
     protected void spawnFlightParticles(boolean goingUp) {
-        //double offset = goingUp ? 0.0D : 1.5D;
+        if (this.isDead || (goingUp && this.getTimeSinceLanding() > 500)) {
+            return;
+        }
+
         double offset = goingUp ? 0.2D : 0.5D;
         SusyParticleFlame flame1 = new SusyParticleFlame(
                 this.world,
@@ -171,7 +175,8 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
                 if (this.world.getBlockState(pos).getBlockHardness(this.world, pos) < 0.3) {
                     this.world.setBlockToAir(pos);
                 } else if (above) {
-                    this.damageEntity(DamageSource.FLY_INTO_WALL, 1);
+                    this.explode();
+                    this.world.removeEntityDangerously(this);
                     break;
                 }
             }
@@ -189,11 +194,11 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     }
 
     private void explode() {
-        int explosionStrength = 2;
+        int explosionStrength = 1;
         if (getRidingEntity() != null && getRidingEntity() instanceof EntityPlayer) {
             explosionStrength = 6;
         }
-        this.world.newExplosion(this, this.posX, this.posY, this.posZ, explosionStrength, true, true);
+        this.world.newExplosion(this, this.posX, this.posY, this.posZ, explosionStrength, false, false);
         this.setDead();
     }
 
@@ -266,9 +271,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
                     }
                     this.motionY *= 1.1D;
                 }
-                if (this.motionY < 0.1D) {
-                    this.handleCollidedBlocks(true);
-                }
+                this.handleCollidedBlocks(true);
                 this.isDead = this.posY > 300;
             }
         } else {

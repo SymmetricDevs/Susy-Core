@@ -15,6 +15,8 @@ public class SusyParticleSmoke extends ParticleSmokeNormal {
         super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn, 3.F);
     }
 
+
+
     @SideOnly(Side.CLIENT)
     public static class Factory implements IParticleFactory {
 
