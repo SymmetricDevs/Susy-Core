@@ -15,7 +15,7 @@ import static supersymmetry.api.util.SuSyUtility.JOULES_PER_EU;
 
 public class EvapRecipeLogic extends MultiblockRecipeLogic {
     private final MetaTileEntityEvaporationPool pool;
-    public static final int HEAT_DENOMINATOR = 6*10; //transfers one sixth of its energy every half a second (10 ticks) as 1/6th every second seemed too low, with cupro depositing 1ALv/t
+    public static final int HEAT_DENOMINATOR = 6 * 10; //transfers one sixth of its energy every half a second (10 ticks) as 1/6th every second seemed too low, with cupro depositing 1ALv/t
     public static final int MAX_STEP_FRACTION = 4; //denominator of fraction of progress which can be done in one step. (1/(MAX_STEP_FRACTION)) = max percent allowed
 
     public EvapRecipeLogic(MetaTileEntityEvaporationPool tileEntity) {
@@ -40,16 +40,15 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
 
     @Override
     protected void updateRecipeProgress() {
-        SusyLog.logger.atError().log("isHeated: " + pool.getIsHeated() + ", coilStateMeta: " + pool.coilStateMeta + ", coilStats: " + (pool.coilStats == null ? ("null") : (pool.coilStats)));
         //if null then no heating can be done, otherwise add joules according to coil values and energy available
         if (pool.coilStats != null && pool.getIsHeated()) {
             int coilHeat = pool.coilStats.getCoilTemperature();
             //assumes specific heat of 1J/(g*delta temp) and perfect heat transfer on one face of the coil for 1/6 of total delta temp. Uses mass as a multiplier and 1/4 because coil is not solid block of primary material. Last portion calculates number of coils.
-            int heatingJoules = (coilHeat/HEAT_DENOMINATOR) * ((int)pool.coilStats.getMaterial().getMass()/4) * ( ((pool.getColumnCount()/2 +1) * pool.getRowCount()) + pool.getColumnCount()/2); //20 should limit it to reasonable per tick levels
-            heatingJoules = Math.min( ((int)getEnergyStored()) * JOULES_PER_EU, heatingJoules); //attempt to transfer entire heatingJoules amount or what is left in energy container
+            int heatingJoules = (coilHeat / HEAT_DENOMINATOR) * ((int) pool.coilStats.getMaterial().getMass() / 4) * (((pool.getColumnCount() / 2 + 1) * pool.getRowCount()) + pool.getColumnCount() / 2); //20 should limit it to reasonable per tick levels
+            heatingJoules = Math.min(((int) getEnergyStored()) * JOULES_PER_EU, heatingJoules); //attempt to transfer entire heatingJoules amount or what is left in energy container
             boolean couldInput = pool.inputEnergy(heatingJoules);
-            if (couldInput) pool.getEnergyContainer().removeEnergy(heatingJoules/(JOULES_PER_EU * pool.coilStats.getEnergyDiscount())); //energy should always be available as heatingJoules is either itself or energy*JpEU
-            SusyLog.logger.atError().log("Attempted to deposit " + heatingJoules + "; success state of: " + couldInput + " and pool buffer of: " + pool.getKiloJoules() + "." + pool.getJoulesBuffer());
+            if (couldInput)
+                pool.getEnergyContainer().removeEnergy(heatingJoules / (JOULES_PER_EU * pool.coilStats.getEnergyDiscount())); //energy should always be available as heatingJoules is either itself or energy*JpEU
         }
 
         int maxSteps = pool.calcMaxSteps(getJt());
@@ -58,10 +57,10 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
         if (maxSteps > 0) {
             hasNotEnoughEnergy = false;
 
-            int actualSteps =  Math.min(this.maxProgressTime / MAX_STEP_FRACTION, maxSteps);
+            int actualSteps = Math.min(this.maxProgressTime / MAX_STEP_FRACTION, maxSteps);
             progressTime += actualSteps; //actualSteps <= maxSteps, meaning it can always be progressed this amount
 
-            int kJFloor = getJt() * actualSteps /1000;
+            int kJFloor = getJt() * actualSteps / 1000;
             int joulesNeeded;
 
             //if kJ store is insufficient to cover full cost, joulesNeeded is whatever remains after kJ covers cost
@@ -69,7 +68,6 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
                 joulesNeeded = getJt() * actualSteps - pool.getKiloJoules() * 1000;
             } else {
                 joulesNeeded = getJt() * actualSteps - kJFloor * 1000; //difference in joules betweeen kJ losslessly required and J actually required (4kJ losslessly covers 3kJ out of 3600J, meaning 600J are needed to avoid wasting kJ
-
             }
 
             //if buffer cant cover draw entirely from kiloJoules
@@ -77,8 +75,6 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
                 ++kJFloor;
                 joulesNeeded = 0;
             }
-
-            SusyLog.logger.atError().log("kJFloor: " + kJFloor + ", joulesNeeded: " + joulesNeeded + ", actualSteps: " + actualSteps + ", kJ: " + pool.getKiloJoules() + ", joulesBuffer: " + pool.getJoulesBuffer());
 
             //drain appropriately
             pool.setKiloJoules(pool.getKiloJoules() - kJFloor);
@@ -88,14 +84,15 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
         } else {
             this.hasNotEnoughEnergy = true;
             //only decrease progress once a tick when using max sized pool (two sequential divisions to avoid cast to long)
-            if (pool.getOffsetTimer() % (((MetaTileEntityEvaporationPool.MAX_COLUMNS * MetaTileEntityEvaporationPool.MAX_COLUMNS)/pool.getColumnCount()) /pool.getRowCount()) == 0) this.decreaseProgress();
+            if (pool.getOffsetTimer() % (((MetaTileEntityEvaporationPool.MAX_COLUMNS * MetaTileEntityEvaporationPool.MAX_COLUMNS) / pool.getColumnCount()) / pool.getRowCount()) == 0)
+                this.decreaseProgress();
         }
     }
 
     //copied from NoEnergyMultiblockRecipeLogic and modified to allow energy and no energy
     @Override
     protected long getEnergyInputPerSecond() {
-        return super.getEnergyInputPerSecond() == 0? 2147483647L : super.getEnergyInputPerSecond();
+        return super.getEnergyInputPerSecond() == 0 ? 2147483647L : super.getEnergyInputPerSecond();
     }
 
     @Override
@@ -109,7 +106,9 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
     }
 
     @Override
-    protected boolean drawEnergy(int recipeEUt, boolean simulate) { return true; }
+    protected boolean drawEnergy(int recipeEUt, boolean simulate) {
+        return true;
+    }
 
     // stops multi from "filling" with energy due to -1 EuT required (?) for custom power logic
     @Override
@@ -117,20 +116,20 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
         int totalEUt = resultOverclock[0] * resultOverclock[1];
         int capacity;
         if (totalEUt >= 0) {
-            if ((long)totalEUt > this.getEnergyCapacity() / 2L) {
+            if ((long) totalEUt > this.getEnergyCapacity() / 2L) {
                 capacity = resultOverclock[0];
             } else {
                 capacity = totalEUt;
             }
 
-            return this.getEnergyStored() >= (long)capacity;
+            return this.getEnergyStored() >= (long) capacity;
         } else {
             return true;
         }
     }
 
     @Override
-    protected long getMaxVoltage() {
+    public long getMaxVoltage() {
         return Math.max(1L, super.getMaxVoltage());
     }
 
@@ -141,7 +140,7 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
 
     @Override
     public long getMaximumOverclockVoltage() {
-        return getEnergyCapacity() == 0? GTValues.V[1] : super.getMaximumOverclockVoltage();
+        return getEnergyCapacity() == 0 ? GTValues.V[1] : super.getMaximumOverclockVoltage();
     }
 
     public void invalidate() {
