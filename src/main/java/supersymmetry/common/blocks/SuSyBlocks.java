@@ -21,7 +21,7 @@ public class SuSyBlocks {
     public static BlockCoolingCoil COOLING_COIL;
     public static BlockSinteringBrick SINTERING_BRICK;
     public static BlockCoagulationTankWall COAGULATION_TANK_WALL;
-    public static final EnumMap<SusyStoneVariantBlock.StoneVariant, SusyStoneVariantBlock> SUSY_STONE_BLOCKS = new EnumMap<>(SusyStoneVariantBlock.StoneVariant.class);
+    public static final EnumMap<SuSyStoneVariantBlock.StoneVariant, SuSyStoneVariantBlock> SUSY_STONE_BLOCKS = new EnumMap<>(SuSyStoneVariantBlock.StoneVariant.class);
     public static BlockAlternatorCoil ALTERNATOR_COIL;
     public static BlockTurbineRotor TURBINE_ROTOR;
     public static BlockSeparatorRotor SEPARATOR_ROTOR;
@@ -50,8 +50,8 @@ public class SuSyBlocks {
         COAGULATION_TANK_WALL = new BlockCoagulationTankWall();
         COAGULATION_TANK_WALL.setRegistryName("coagulation_tank_wall");
 
-        for (SusyStoneVariantBlock.StoneVariant shape : SusyStoneVariantBlock.StoneVariant.values()) {
-            SUSY_STONE_BLOCKS.put(shape, new SusyStoneVariantBlock(shape));
+        for (SuSyStoneVariantBlock.StoneVariant shape : SuSyStoneVariantBlock.StoneVariant.values()) {
+            SUSY_STONE_BLOCKS.put(shape, new SuSyStoneVariantBlock(shape));
         }
 
         ALTERNATOR_COIL = new BlockAlternatorCoil();
@@ -100,7 +100,7 @@ public class SuSyBlocks {
         COOLING_COIL.onModelRegister();
         SINTERING_BRICK.onModelRegister();
         registerItemModel(COAGULATION_TANK_WALL);
-        for (SusyStoneVariantBlock block : SUSY_STONE_BLOCKS.values())
+        for (SuSyStoneVariantBlock block : SUSY_STONE_BLOCKS.values())
             registerItemModel(block);
         registerItemModel(ALTERNATOR_COIL);
         registerItemModel(DRILL_HEAD);

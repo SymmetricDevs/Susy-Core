@@ -1,24 +1,14 @@
 package supersymmetry.loaders.recipes;
 
-import cam72cam.immersiverailroading.IRItems;
-import cam72cam.mod.serialization.TagCompound;
-import gregtech.api.GTValues;
-import gregtech.api.recipes.GTRecipeHandler;
 import gregtech.api.recipes.ModHandler;
-import gregtech.api.recipes.ingredients.nbtmatch.NBTCondition;
-import gregtech.api.recipes.ingredients.nbtmatch.NBTMatcher;
-import gregtech.api.recipes.ingredients.nbtmatch.NBTTagType;
 import gregtech.api.unification.material.Materials;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.common.blocks.SusyStoneVariantBlock;
+import supersymmetry.common.blocks.SuSyStoneVariantBlock;
 import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.loaders.SuSyMetaTileEntityLoader;
-import trackapi.lib.Gauges;
 
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -81,16 +71,16 @@ public class SuSyRecipeLoader {
     }
 
     private static void registerStoneRecipes(){
-        EnumMap<SusyStoneVariantBlock.StoneVariant, List<ItemStack>> susyVariantListMap = new EnumMap<>(SusyStoneVariantBlock.StoneVariant.class);
-        for (SusyStoneVariantBlock.StoneVariant shape : SusyStoneVariantBlock.StoneVariant.values()) {
-            SusyStoneVariantBlock block = SuSyBlocks.SUSY_STONE_BLOCKS.get(shape);
+        EnumMap<SuSyStoneVariantBlock.StoneVariant, List<ItemStack>> susyVariantListMap = new EnumMap<>(SuSyStoneVariantBlock.StoneVariant.class);
+        for (SuSyStoneVariantBlock.StoneVariant shape : SuSyStoneVariantBlock.StoneVariant.values()) {
+            SuSyStoneVariantBlock block = SuSyBlocks.SUSY_STONE_BLOCKS.get(shape);
             susyVariantListMap.put(shape,
-                    Arrays.stream(SusyStoneVariantBlock.StoneType.values())
+                    Arrays.stream(SuSyStoneVariantBlock.StoneType.values())
                             .map(block::getItemVariant)
                             .collect(Collectors.toList()));
         }
-        List<ItemStack> susycobbles = susyVariantListMap.get(SusyStoneVariantBlock.StoneVariant.COBBLE);
-        List<ItemStack> susysmooths = susyVariantListMap.get(SusyStoneVariantBlock.StoneVariant.SMOOTH);
+        List<ItemStack> susycobbles = susyVariantListMap.get(SuSyStoneVariantBlock.StoneVariant.COBBLE);
+        List<ItemStack> susysmooths = susyVariantListMap.get(SuSyStoneVariantBlock.StoneVariant.SMOOTH);
 
         EnumMap<StoneVariantBlock.StoneVariant, List<ItemStack>> variantListMap = new EnumMap<>(StoneVariantBlock.StoneVariant.class);
         for (StoneVariantBlock.StoneVariant shape : StoneVariantBlock.StoneVariant.values()) {

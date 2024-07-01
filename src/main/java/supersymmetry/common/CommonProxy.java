@@ -22,7 +22,7 @@ import supersymmetry.api.unification.ore.SusyStoneTypes;
 import supersymmetry.common.blocks.SheetedFrameItemBlock;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SuSyMetaBlocks;
-import supersymmetry.common.blocks.SusyStoneVariantBlock;
+import supersymmetry.common.blocks.SuSyStoneVariantBlock;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.loaders.SuSyWorldLoader;
@@ -55,7 +55,7 @@ public class CommonProxy {
         registry.register(SuSyBlocks.COOLING_COIL);
         registry.register(SuSyBlocks.SINTERING_BRICK);
         registry.register(SuSyBlocks.COAGULATION_TANK_WALL);
-        for (SusyStoneVariantBlock block : SuSyBlocks.SUSY_STONE_BLOCKS.values()) registry.register(block);
+        for (SuSyStoneVariantBlock block : SuSyBlocks.SUSY_STONE_BLOCKS.values()) registry.register(block);
         registry.register(SuSyBlocks.ALTERNATOR_COIL);
         registry.register(SuSyBlocks.TURBINE_ROTOR);
         registry.register(SuSyBlocks.SEPARATOR_ROTOR);
@@ -82,7 +82,7 @@ public class CommonProxy {
         registry.register(createItemBlock(SuSyBlocks.COOLING_COIL, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.SINTERING_BRICK, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.COAGULATION_TANK_WALL, VariantItemBlock::new));
-        for (SusyStoneVariantBlock block : SuSyBlocks.SUSY_STONE_BLOCKS.values()) registry.register(createItemBlock(block, VariantItemBlock::new));
+        for (SuSyStoneVariantBlock block : SuSyBlocks.SUSY_STONE_BLOCKS.values()) registry.register(createItemBlock(block, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.ALTERNATOR_COIL, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.DRILL_HEAD, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.TURBINE_ROTOR, VariantItemBlock::new));
