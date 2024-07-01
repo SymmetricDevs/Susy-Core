@@ -5,7 +5,11 @@ import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
@@ -18,6 +22,12 @@ public class BlockCoagulationTankWall extends VariantBlock<BlockCoagulationTankW
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 2);
         setDefaultState(getState(BlockCoagulationTankWall.CoagulationTankWallType.WOODEN_COAGULATION_TANK_WALL));
+    }
+
+    @Override
+    public boolean canCreatureSpawn(@NotNull IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos,
+                                    @NotNull EntityLiving.SpawnPlacementType type) {
+        return false;
     }
 
     public static enum CoagulationTankWallType implements IStringSerializable, IStateHarvestLevel {

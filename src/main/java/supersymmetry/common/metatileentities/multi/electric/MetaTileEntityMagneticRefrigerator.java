@@ -4,6 +4,7 @@ import gregtech.api.GTValues;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
+import gregtech.api.metatileentity.multiblock.MultiblockDisplayText;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
@@ -11,6 +12,8 @@ import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.util.GTUtility;
+import gregtech.api.util.TextComponentUtil;
+import gregtech.api.util.TextFormattingUtil;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.ConfigHolder;
@@ -26,10 +29,10 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.common.blocks.BlockCoolingCoil;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.properties.CoilingCoilTemperatureProperty;
+import supersymmetry.common.blocks.BlockCoolingCoil;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
@@ -53,12 +56,26 @@ public class MetaTileEntityMagneticRefrigerator extends RecipeMapMultiblockContr
 
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
-        if (isStructureFormed()) {
-            textList.add(new TextComponentTranslation("gregtech.multiblock.magnetic_refrigerator.min_temperature",
-                    new TextComponentTranslation(GTUtility.formatNumbers(temperature) + "K")
-                            .setStyle(new Style().setColor(TextFormatting.AQUA))));
-        }
-        super.addDisplayText(textList);
+        MultiblockDisplayText.builder(textList, isStructureFormed())
+                .setWorkingStatus(recipeMapWorkable.isWorkingEnabled(), recipeMapWorkable.isActive())
+                .addEnergyUsageLine(getEnergyContainer())
+                .addEnergyTierLine(GTUtility.getTierByVoltage(recipeMapWorkable.getMaxVoltage()))
+                .addCustom(tl -> {
+                    // Coil heat capacity line
+                    if (isStructureFormed()) {
+                        ITextComponent heatString = TextComponentUtil.stringWithColor(
+                                TextFormatting.RED,
+                                TextFormattingUtil.formatNumbers(temperature) + "K");
+
+                        tl.add(TextComponentUtil.translationWithColor(
+                                TextFormatting.GRAY,
+                                "gregtech.multiblock.blast_furnace.max_temperature",
+                                heatString));
+                    }
+                })
+                .addParallelsLine(recipeMapWorkable.getParallelLimit())
+                .addWorkingStatusLine()
+                .addProgressLine(recipeMapWorkable.getProgressPercent());
     }
 
     @Override
@@ -137,7 +154,7 @@ public class MetaTileEntityMagneticRefrigerator extends RecipeMapMultiblockContr
     public List<ITextComponent> getDataInfo() {
         List<ITextComponent> list = super.getDataInfo();
         list.add(new TextComponentTranslation("gregtech.multiblock.magnetic_refrigerator.min_temperature",
-                new TextComponentTranslation(GTUtility.formatNumbers(temperature) + "K")
+                new TextComponentTranslation(TextFormattingUtil.formatNumbers(temperature) + "K")
                         .setStyle(new Style().setColor(TextFormatting.BLUE))));
         return list;
     }

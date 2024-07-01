@@ -23,19 +23,22 @@ dependencies {
 
     // CCL 3.2.3.358
     implementation rfg.deobf('curse.maven:codechicken-lib-1-8-242818:2779848')
-    // GTCEu 2.7 beta
-    implementation rfg.deobf('curse.maven:gregtech-ce-unofficial-557242:4701483')
-    // GCYM 1.2.4
-    implementation rfg.deobf('curse.maven:gregicality-multiblocks-564858:4701685')
+    // GTCEu 2.8.7 beta
+    implementation rfg.deobf("curse.maven:gregtech-ce-unofficial-557242:5121638-deobf-5121638-sources-5121638")
+    // GCYM 1.2.8
+    implementation rfg.deobf('curse.maven:gregicality-multiblocks-564858:5121714-deobf-5121714-sources-5121714')
+
+    // AE2UEL 0.55.6 (transitive gt dep)
+    compileOnly rfg.deobf("curse.maven:ae2-extended-life-570458:4402048")
 
     //GeckoLib
     implementation rfg.deobf('curse.maven:geckolib-388172:4020277')
 
     implementation rfg.deobf('curse.maven:realistic-terrain-generation-unofficial-648514:4404814')
 
-    implementation rfg.deobf('curse.maven:biomes-o-plenty-220318:2842510')
+    compileOnly rfg.deobf('curse.maven:biomes-o-plenty-220318:2842510')
 
-    implementation rfg.deobf('curse.maven:gregtech-food-option-477021:4716101')
+    implementation rfg.deobf('curse.maven:gregtech-food-option-477021:5085993') // GT-FO 1.11.0.1
 
     implementation rfg.deobf('curse.maven:applecore-224472:2969118')
 
@@ -43,11 +46,11 @@ dependencies {
     implementation rfg.deobf("curse.maven:alcatrazcore-304493:2666560") // AlcatrazCore v1.0.4
 
 
-    implementation rfg.deobf("curse.maven:universal-mod-core-371784:3654955") // Universal-Mod-Care v1.1.4
+    implementation rfg.deobf("curse.maven:universal-mod-core-371784:4975229") // Universal-Mod-Care v1.2.1
     implementation rfg.deobf("curse.maven:track-api-282613:2825260") // Track-API v1.2.0
 
-    implementation rfg.deobf("curse.maven:immersive-railroading-277736:3437738") // Immersive-Railroading v1.9.1
+    implementation rfg.deobf("curse.maven:immersive-railroading-277736:4970105") // Immersive-Railroading v1.10.0
 
     implementation rfg.deobf("curse.maven:ctm-267602:2915363") // CTM 1.0.2.31
-    implementation rfg.deobf("curse.maven:groovyscript-687577:4749823")
+    implementation rfg.deobf("curse.maven:groovyscript-687577:4991701") // GRS 0.7.3
 }

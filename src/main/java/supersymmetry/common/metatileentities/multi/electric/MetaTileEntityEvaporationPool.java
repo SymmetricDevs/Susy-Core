@@ -1100,4 +1100,8 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         stepCount += (joulesBuffer - remainder)/jStepSize; //number of jSteps which can come entirely from joulesBuffer
         return stepCount;
     }
+
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
 }

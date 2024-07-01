@@ -5,6 +5,7 @@ import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.ColourMultiplier;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
+import gregtech.api.capability.impl.CommonFluidFilters;
 import gregtech.api.capability.impl.FilteredFluidHandler;
 import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.capability.impl.NotifiableItemStackHandler;
@@ -14,13 +15,11 @@ import gregtech.api.gui.resources.IGuiTexture;
 import gregtech.api.gui.widgets.*;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.recipes.ModHandler;
-import gregtech.api.util.GTTransferUtils;
 import gregtech.api.util.GTUtility;
 import gregtech.client.renderer.texture.Textures;
+import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
+import gregtech.client.renderer.texture.cube.SimpleSidedCubeRenderer;
 import gregtech.client.renderer.texture.cube.SimpleSidedCubeRenderer.RenderSide;
-import java.util.List;
-
 import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -29,13 +28,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fml.relauncher.Side;
@@ -43,30 +43,35 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import supersymmetry.api.metatileentity.PseudoMultiSteamMachineMetaTileEntity;
+import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicators;
+import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.materials.SusyMaterials;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
-public class MetaTileEntitySteamLatexCollector extends MetaTileEntity {
+public class MetaTileEntitySteamLatexCollector extends PseudoMultiSteamMachineMetaTileEntity {
     private final int energyPerTick = 16;
     private final int tankSize = 16000;
-    private final long latexCollectionAmount = 3L;
+    private long latexCollectionAmount;
     private boolean hasRubberLog;
     private EnumFacing outputFacingFluids;
 
 
-    public MetaTileEntitySteamLatexCollector(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId);
+    public MetaTileEntitySteamLatexCollector(ResourceLocation metaTileEntityId, boolean isHighPressure) {
+        super(metaTileEntityId, SuSyRecipeMaps.LATEX_COLLECTOR_RECIPES, SuSySteamProgressIndicators.EXTRACTION_STEAM, SusyTextures.LATEX_COLLECTOR_OVERLAY, false, isHighPressure);
         this.initializeInventory();
+        latexCollectionAmount = isHighPressure ? 6L : 3L;
     }
 
-    public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
-        return new MetaTileEntitySteamLatexCollector(this.metaTileEntityId);
+    public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity, boolean isHighPressure) {
+        return new MetaTileEntitySteamLatexCollector(this.metaTileEntityId, isHighPressure);
     }
 
     public FluidTankList createImportFluidHandler() {
-        return new FluidTankList(false, new IFluidTank[]{(new FilteredFluidHandler(16000)).setFillPredicate(ModHandler::isSteam)});
+        return new FluidTankList(false, new FilteredFluidHandler(16000).setFilter(CommonFluidFilters.STEAM));
     }
 
     protected FluidTankList createExportFluidHandler() {
@@ -74,18 +79,19 @@ public class MetaTileEntitySteamLatexCollector extends MetaTileEntity {
     }
 
     protected IItemHandlerModifiable createImportItemHandler() {
-        return new NotifiableItemStackHandler(1, this, false);
+        return new NotifiableItemStackHandler(this, 1, this, false);
     }
 
     protected IItemHandlerModifiable createExportItemHandler() {
-        return new NotifiableItemStackHandler(1, this, true);
+        return new NotifiableItemStackHandler(this, 1, this, true);
     }
 
     @SideOnly(Side.CLIENT)
     public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
         ColourMultiplier multiplier = new ColourMultiplier(GTUtility.convertRGBtoOpaqueRGBA_CL(this.getPaintingColorForRendering()));
         IVertexOperation[] coloredPipeline = ArrayUtils.add(pipeline, multiplier);
-        Textures.STEAM_CASING_BRONZE.render(renderState, translation, coloredPipeline);
+        SimpleSidedCubeRenderer casingRenderer = isHighPressure ? Textures.STEAM_CASING_STEEL : Textures.STEAM_CASING_BRONZE;
+        casingRenderer.render(renderState, translation, coloredPipeline);
 
         SusyTextures.LATEX_COLLECTOR_OVERLAY.renderOrientedState(renderState, translation, coloredPipeline, this.getFrontFacing(), this.isActive(), true);
         if (this.getOutputFacingFluids() != null) {
@@ -116,7 +122,9 @@ public class MetaTileEntitySteamLatexCollector extends MetaTileEntity {
         }
     }
 
+    @Override
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
+        super.addInformation(stack, player, tooltip, advanced);
         tooltip.add(I18n.format("gregtech.machine.latex_collector.tooltip", this.latexCollectionAmount));
     }
 

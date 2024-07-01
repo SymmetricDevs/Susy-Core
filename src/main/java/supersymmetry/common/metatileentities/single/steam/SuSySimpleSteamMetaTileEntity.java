@@ -1,6 +1,6 @@
 package supersymmetry.common.metatileentities.single.steam;
 
-import gregtech.api.GTValues;
+import gregtech.api.capability.IGhostSlotConfigurable;
 import gregtech.api.capability.impl.*;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
@@ -16,14 +16,12 @@ import gregtech.client.renderer.ICubeRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
@@ -33,7 +31,7 @@ import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicator;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 
-public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity {
+public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity implements IGhostSlotConfigurable {
 
     protected SuSySteamProgressIndicator progressIndicator;
     protected boolean isBrickedCasing;
@@ -48,7 +46,7 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity {
         this.progressIndicator = progressIndicator;
         this.isBrickedCasing = isBrickedCasing;
         if (hasGhostCircuitInventory()) {
-            this.circuitInventory = new GhostCircuitItemStackHandler();
+            this.circuitInventory = new GhostCircuitItemStackHandler(this);
             this.circuitInventory.addNotifiableMetaTileEntity(this);
         }
         initializeInventory();
@@ -57,8 +55,20 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity {
 
     }
 
-    protected boolean hasGhostCircuitInventory() {
+    @Override
+    public boolean hasGhostCircuitInventory() {
         return true;
+    }
+
+    @Override
+    public void setGhostCircuitConfig(int config) {
+        if (this.circuitInventory == null || this.circuitInventory.getCircuitValue() == config) {
+            return;
+        }
+        this.circuitInventory.setCircuitValue(config);
+        if (!getWorld().isRemote) {
+            markDirty();
+        }
     }
 
     @Override
@@ -83,13 +93,13 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity {
     @Override
     protected IItemHandlerModifiable createImportItemHandler() {
         if (workableHandler == null) return new ItemStackHandler(0);
-        return new NotifiableItemStackHandler(workableHandler.getRecipeMap().getMaxInputs(), this, false);
+        return new NotifiableItemStackHandler(this, workableHandler.getRecipeMap().getMaxInputs(), this, false);
     }
 
     @Override
     protected IItemHandlerModifiable createExportItemHandler() {
         if (workableHandler == null) return new ItemStackHandler(0);
-        return new NotifiableItemStackHandler(workableHandler.getRecipeMap().getMaxOutputs(), this, true);
+        return new NotifiableItemStackHandler(this, workableHandler.getRecipeMap().getMaxOutputs(), this, true);
     }
 
     @Override
@@ -120,13 +130,6 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity {
         return createGuiTemplate(entityPlayer).build(getHolder(), entityPlayer);
     }
 
-    @SideOnly(Side.CLIENT)
-    @Override
-    protected void randomDisplayTick(float x, float y, float z, EnumParticleTypes flame, EnumParticleTypes smoke) {
-        super.randomDisplayTick(x, y, z, flame, smoke);
-        if (GTValues.RNG.nextBoolean()) this.getWorld().spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y + 0.5F, z, 0.0, 0.0, 0.0, new int[0]);
-    }
-
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
@@ -152,12 +155,6 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity {
         }
     }
 
-    public void setGhostCircuitConfig(int config) {
-        if (this.circuitInventory == null || this.circuitInventory.getCircuitValue() == config) return;
-        this.circuitInventory.setCircuitValue(config);
-        if (!getWorld().isRemote) markDirty();
-    }
-
     protected ModularUI.Builder createGuiTemplate(EntityPlayer player) {
         RecipeMap<?> recipeMap = workableHandler.getRecipeMap();
         int yOffset = 0;
@@ -171,9 +168,9 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity {
             if (this.circuitInventory != null) {
                 SlotWidget circuitSlot = new GhostCircuitSlotWidget(circuitInventory, 0, 124, 62 + yOffset)
                         .setBackgroundTexture(GuiTextures.SLOT_STEAM.get(isHighPressure), getCircuitSlotOverlay());
-                builder.widget(getCircuitSlotToolTip(circuitSlot))
-                        .widget(new ClickButtonWidget(115, 62 + yOffset, 9, 9, "", click -> circuitInventory.addCircuitValue(click.isShiftClick ? 5 : 1)).setShouldClientCallback(true).setButtonTexture(GuiTextures.BUTTON_INT_CIRCUIT_PLUS).setDisplayFunction(() -> circuitInventory.hasCircuitValue() && circuitInventory.getCircuitValue() < IntCircuitIngredient.CIRCUIT_MAX))
-                        .widget(new ClickButtonWidget(115, 71 + yOffset, 9, 9, "", click -> circuitInventory.addCircuitValue(click.isShiftClick ? -5 : -1)).setShouldClientCallback(true).setButtonTexture(GuiTextures.BUTTON_INT_CIRCUIT_MINUS).setDisplayFunction(() -> circuitInventory.hasCircuitValue() && circuitInventory.getCircuitValue() > IntCircuitIngredient.CIRCUIT_MIN));
+                builder.widget(circuitSlot.setConsumer(this::getCircuitSlotTooltip))
+                        .widget(new ClickButtonWidget(115, 62 + yOffset, 9, 9, "", click -> circuitInventory.addCircuitValue(click.isShiftClick ? 5 : 1)).setShouldClientCallback(true).setButtonTexture(SusyGuiTextures.BUTTON_INT_CIRCUIT_PLUS_STEAM.get(isHighPressure)).setDisplayFunction(() -> circuitInventory.hasCircuitValue() && circuitInventory.getCircuitValue() < IntCircuitIngredient.CIRCUIT_MAX))
+                        .widget(new ClickButtonWidget(115, 71 + yOffset, 9, 9, "", click -> circuitInventory.addCircuitValue(click.isShiftClick ? -5 : -1)).setShouldClientCallback(true).setButtonTexture(SusyGuiTextures.BUTTON_INT_CIRCUIT_MINUS_STEAM.get(isHighPressure)).setDisplayFunction(() -> circuitInventory.hasCircuitValue() && circuitInventory.getCircuitValue() > IntCircuitIngredient.CIRCUIT_MIN));
             }
         }
 
@@ -184,8 +181,15 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity {
         return SusyGuiTextures.INT_CIRCUIT_OVERLAY_STEAM.get(isHighPressure);
     }
 
-    protected SlotWidget getCircuitSlotToolTip(SlotWidget widget) {
-        return widget.setTooltipText("gregtech.gui.configurator_slot.tooltip");
+    protected void getCircuitSlotTooltip(SlotWidget widget) {
+        String configString;
+        if (circuitInventory == null || circuitInventory.getCircuitValue() == GhostCircuitItemStackHandler.NO_CONFIG) {
+            configString = new TextComponentTranslation("gregtech.gui.configurator_slot.no_value").getFormattedText();
+        } else {
+            configString = String.valueOf(circuitInventory.getCircuitValue());
+        }
+
+        widget.setTooltipText("gregtech.gui.configurator_slot.tooltip", configString);
     }
 
     protected void addRecipeProgressBar(ModularUI.Builder builder, RecipeMap<?> map, int yOffset) {

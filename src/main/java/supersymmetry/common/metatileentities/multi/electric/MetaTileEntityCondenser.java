@@ -53,4 +53,8 @@ public class MetaTileEntityCondenser extends RecipeMapMultiblockController {
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.CONDENSER_OVERLAY;
     }
+
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
 }

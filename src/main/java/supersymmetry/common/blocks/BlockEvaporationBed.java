@@ -10,6 +10,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.IStringSerializable;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
@@ -25,13 +26,10 @@ public class BlockEvaporationBed extends VariantActiveBlock<BlockEvaporationBed.
         setDefaultState(getState(EvaporationBedType.DIRT));
     }
 
+    @NotNull
     @Override
-    public boolean canRenderInLayer(@Nonnull IBlockState state, @Nonnull BlockRenderLayer layer) {
-        EvaporationBedType type = getState(state);
-
-        if (layer == BlockRenderLayer.CUTOUT) return true;
-
-        return false;
+    public BlockRenderLayer getRenderLayer() {
+        return BlockRenderLayer.SOLID;
     }
 
     public static enum EvaporationBedType implements IStringSerializable, IStateHarvestLevel {
