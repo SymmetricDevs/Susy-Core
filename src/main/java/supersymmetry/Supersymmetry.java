@@ -61,7 +61,6 @@ public class Supersymmetry {
     public void onInit(@NotNull FMLInitializationEvent event) {
         proxy.load();
         SuSyCoverBehaviors.init();
-        SuSyBlocks.registerWalkingSpeedBonus();
     }
 
     @Mod.EventHandler

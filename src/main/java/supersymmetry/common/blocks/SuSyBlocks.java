@@ -54,6 +54,7 @@ public class SuSyBlocks {
         for (SuSyStoneVariantBlock.StoneVariant shape : SuSyStoneVariantBlock.StoneVariant.values()) {
             SUSY_STONE_BLOCKS.put(shape, new SuSyStoneVariantBlock(shape));
         }
+        registerWalkingSpeedBonus();
 
         ALTERNATOR_COIL = new BlockAlternatorCoil();
         ALTERNATOR_COIL.setRegistryName("alternator_coil");
@@ -93,7 +94,6 @@ public class SuSyBlocks {
 
         SERPENTINE = new BlockSerpentine();
         SERPENTINE.setRegistryName("serpentine");
-
     }
 
     @SideOnly(Side.CLIENT)
