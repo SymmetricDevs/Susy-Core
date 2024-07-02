@@ -4,8 +4,6 @@ import gregtech.api.GregTechAPI;
 import gregtech.api.block.VariantBlock;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
-import gregtech.common.blocks.MetaBlocks;
-import gregtech.common.blocks.StoneVariantBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -55,8 +53,8 @@ public class SuSyStoneVariantBlock extends VariantBlock<SuSyStoneVariantBlock.St
     @NotNull
     @Override
     public Item getItemDropped(@NotNull IBlockState state, @NotNull Random rand, int fortune) {
-        return Item.getItemFromBlock(this.stoneVariant == SuSyStoneVariantBlock.StoneVariant.SMOOTH ?
-                MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.COBBLE) : this);
+        return Item.getItemFromBlock(this.stoneVariant == StoneVariant.SMOOTH ?
+                SuSyBlocks.SUSY_STONE_BLOCKS.get(StoneVariant.COBBLE) : this);
     }
 
     public enum StoneVariant {

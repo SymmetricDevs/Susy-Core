@@ -7,7 +7,6 @@ import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.properties.PropertyKey;
 import gregtech.api.unification.stack.ItemMaterialInfo;
 import gregtech.api.unification.stack.MaterialStack;
-import gregtech.api.util.BlockUtility;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -29,7 +28,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static gregtech.api.unification.material.info.MaterialFlags.GENERATE_FRAME;
-import static supersymmetry.common.blocks.SuSyBlocks.SUSY_STONE_BLOCKS;
 
 public class SuSyMetaBlocks {
     public static final Map<Material, BlockSheetedFrame> SHEETED_FRAMES = new HashMap<>();
@@ -124,14 +122,6 @@ public class SuSyMetaBlocks {
             Minecraft.getMinecraft().getItemColors().registerItemColorHandler(FRAME_ITEM_COLOR, block);
         });
          */
-    }
-
-    public static void registerWalkingSpeedBonus() {
-        for (SuSyStoneVariantBlock block : SUSY_STONE_BLOCKS.values()) {
-            for (IBlockState state : block.getBlockState().getValidStates()) {
-                BlockUtility.setWalkingSpeedBonus(state, BlockUtility.ASPHALT_WALKING_SPEED_BONUS);
-            }
-        }
     }
 
     public static void registerOreDict() {
