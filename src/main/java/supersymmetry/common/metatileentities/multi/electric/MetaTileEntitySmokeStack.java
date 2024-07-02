@@ -208,9 +208,4 @@ public class MetaTileEntitySmokeStack extends VoidingMultiblockBase {
     public boolean hasMufflerMechanics() {
         return true;
     }
-
-    @Override
-    public boolean allowsExtendedFacing() {
-        return true;
-    }
 }

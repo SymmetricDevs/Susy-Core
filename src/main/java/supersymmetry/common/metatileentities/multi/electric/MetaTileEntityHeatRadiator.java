@@ -16,6 +16,7 @@ import gregtech.api.util.TextComponentUtil;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.ConfigHolder;
+import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.MetaTileEntities;
 import net.minecraft.block.state.IBlockState;
@@ -29,19 +30,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import supersymmetry.api.recipes.SuSyRecipeMaps;
-import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
+import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockSerpentine;
 import supersymmetry.common.blocks.SuSyBlocks;
-
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
-import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -354,6 +352,5 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
         public @NotNull ParallelLogicType getParallelLogicType() {
             return ParallelLogicType.MULTIPLY;
         }
-
     }
 }

@@ -619,6 +619,7 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
         }
     }
 
+    @Override
     public boolean allowsExtendedFacing() {
         return false;
     }
