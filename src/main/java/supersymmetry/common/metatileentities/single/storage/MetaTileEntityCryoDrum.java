@@ -248,7 +248,7 @@ public class MetaTileEntityCryoDrum extends MetaTileEntity {
             if (fluidTank.getFilter() instanceof IPropertyFluidFilter filter) {
                 filter.getContainedAttributes().forEach(a -> a.appendContainerTooltips(tooltip));
             }
-        } else if (fluidTank.getFilter() instanceof IPropertyFluidFilter filter && !filter.getContainedAttributes().isEmpty()) {
+        } else {
             tooltip.add(I18n.format("gregtech.tooltip.tool_fluid_hold_shift"));
         }
 
@@ -263,7 +263,7 @@ public class MetaTileEntityCryoDrum extends MetaTileEntity {
             FluidStack fluidStack = FluidStack.loadFluidStackFromNBT(tagCompound.getCompoundTag("Fluid"));
             if (fluidStack == null) return;
             tooltip.add(I18n.format("gregtech.machine.fluid_tank.fluid", fluidStack.amount,
-                    I18n.format(fluidStack.getUnlocalizedName())));
+                    fluidStack.getFluid().getLocalizedName(fluidStack)));
         }
     }
 
