@@ -29,7 +29,7 @@ public class VariantAxialRotatableBlock<T extends Enum<T> & IStringSerializable>
     @Override
     @SuppressWarnings("deprecation")
     public IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull EnumFacing facing, float hitX, float hitY, float hitZ, int meta, @NotNull EntityLivingBase placer) {
-        return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(AXIS, placer.getHorizontalFacing().getAxis());
+        return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(AXIS, EnumFacing.getDirectionFromEntityLiving(pos, placer).getAxis());
     }
 
     @Override

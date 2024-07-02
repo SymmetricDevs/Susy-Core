@@ -12,6 +12,7 @@ import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.util.BlockInfo;
+import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
@@ -31,6 +32,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.function.Supplier;
 
+import static supersymmetry.api.blocks.VariantAxialRotatableBlock.AXIS;
 import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
 
 public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController implements ITieredMetaTileEntity {
@@ -107,14 +109,12 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
     }
 
     protected TraceabilityPredicate coilOrientation() {
-        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(copperCoilState().withProperty(FACING, EnumFacing.WEST))};
+        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(copperCoilState().withProperty(AXIS, EnumFacing.Axis.X))};
         return new TraceabilityPredicate(blockWorldState -> {
             IBlockState state = blockWorldState.getBlockState();
             if (!(state.getBlock() instanceof BlockAlternatorCoil)) return false;
-            EnumFacing facing = this.getFrontFacing();
-            facing = facing.rotateYCCW();
-            //has coilFacing as same facing as rotor, but either this or the opposite is acceptable
-            return state == copperCoilState().withProperty(FACING, facing) || state == copperCoilState().withProperty(FACING, facing.getOpposite());
+            EnumFacing.Axis axis = RelativeDirection.LEFT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), isFlipped()).getAxis();
+            return state == copperCoilState().withProperty(AXIS, axis);
         }, supplier);
     }
 
