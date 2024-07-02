@@ -18,10 +18,10 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
-public class VariantRotatableBlock<T extends Enum<T> & IStringSerializable> extends VariantBlock<T> {
+public class VariantHorizontalRotatableBlock<T extends Enum<T> & IStringSerializable> extends VariantBlock<T> {
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 
-    public VariantRotatableBlock(Material materialIn) {
+    public VariantHorizontalRotatableBlock(Material materialIn) {
         super(materialIn);
         this.setDefaultState(this.blockState.getBaseState().withProperty(this.VARIANT, this.VALUES[0]).withProperty(FACING, EnumFacing.NORTH));
     }
@@ -37,7 +37,7 @@ public class VariantRotatableBlock<T extends Enum<T> & IStringSerializable> exte
     @Nonnull
     @Override
     public BlockStateContainer createBlockState() {
-        Class<T> enumClass = getActualTypeParameter(this.getClass(), VariantRotatableBlock.class);
+        Class<T> enumClass = getActualTypeParameter(this.getClass(), VariantHorizontalRotatableBlock.class);
         this.VARIANT = PropertyEnum.create("variant", enumClass);
         this.VALUES = enumClass.getEnumConstants();
         return new BlockStateContainer(this, this.VARIANT, this.FACING);

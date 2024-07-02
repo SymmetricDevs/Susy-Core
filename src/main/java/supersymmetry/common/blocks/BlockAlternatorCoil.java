@@ -4,11 +4,11 @@ import gregtech.api.block.IStateHarvestLevel;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.IStringSerializable;
-import supersymmetry.api.blocks.VariantRotatableBlock;
+import supersymmetry.api.blocks.VariantAxialRotatableBlock;
 
 import javax.annotation.Nonnull;
 
-public class BlockAlternatorCoil extends VariantRotatableBlock<BlockAlternatorCoil.AlternatorCoilType> {
+public class BlockAlternatorCoil extends VariantAxialRotatableBlock<BlockAlternatorCoil.AlternatorCoilType> {
     public BlockAlternatorCoil() {
         super(net.minecraft.block.material.Material.IRON);
         setTranslationKey("alternator_coil");

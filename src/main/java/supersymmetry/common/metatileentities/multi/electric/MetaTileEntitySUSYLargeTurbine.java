@@ -13,7 +13,6 @@ import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.util.BlockInfo;
 import gregtech.client.renderer.ICubeRenderer;
-import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
@@ -32,7 +31,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.function.Supplier;
 
-import static supersymmetry.api.blocks.ISuSyHorizontalOrientable.FACING;
+import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
 
 public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController implements ITieredMetaTileEntity {
 
@@ -160,6 +159,11 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
 
     @Override
     protected boolean shouldShowVoidingModeButton() {
+        return false;
+    }
+
+    @Override
+    public boolean allowsExtendedFacing() {
         return false;
     }
 }

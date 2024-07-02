@@ -18,17 +18,15 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.common.blocks.BlockAlternatorCoil;
+import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.common.blocks.BlockSeparatorRotor;
 import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.api.recipes.SuSyRecipeMaps;
 
 import javax.annotation.Nonnull;
-
 import java.util.function.Supplier;
 
 import static gregtech.api.util.RelativeDirection.*;
-import static supersymmetry.api.blocks.ISuSyHorizontalOrientable.FACING;
+import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
 
 public class MetaTileEntityGravitySeparator extends RecipeMapMultiblockController {
     public MetaTileEntityGravitySeparator(ResourceLocation metaTileEntityId) {
@@ -113,6 +111,7 @@ public class MetaTileEntityGravitySeparator extends RecipeMapMultiblockControlle
         return Textures.BLAST_FURNACE_OVERLAY;
     }
 
+    @Override
     public boolean allowsExtendedFacing() {
         return false;
     }

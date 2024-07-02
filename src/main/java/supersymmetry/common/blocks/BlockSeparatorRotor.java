@@ -4,11 +4,11 @@ import gregtech.api.block.IStateHarvestLevel;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.IStringSerializable;
-import supersymmetry.api.blocks.VariantRotatableBlock;
+import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
 import javax.annotation.Nonnull;
 
-public class BlockSeparatorRotor extends VariantRotatableBlock<BlockSeparatorRotor.BlockSeparatorRotorType> {
+public class BlockSeparatorRotor extends VariantHorizontalRotatableBlock<BlockSeparatorRotor.BlockSeparatorRotorType> {
     public BlockSeparatorRotor() {
         super(net.minecraft.block.material.Material.IRON);
         setTranslationKey("separator_rotor");
