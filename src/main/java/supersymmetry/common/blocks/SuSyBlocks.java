@@ -1,5 +1,6 @@
 package supersymmetry.common.blocks;
 
+import gregtech.api.util.BlockUtility;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -21,7 +22,7 @@ public class SuSyBlocks {
     public static BlockCoolingCoil COOLING_COIL;
     public static BlockSinteringBrick SINTERING_BRICK;
     public static BlockCoagulationTankWall COAGULATION_TANK_WALL;
-    public static final EnumMap<SusyStoneVariantBlock.StoneVariant, SusyStoneVariantBlock> SUSY_STONE_BLOCKS = new EnumMap<>(SusyStoneVariantBlock.StoneVariant.class);
+    public static final EnumMap<SuSyStoneVariantBlock.StoneVariant, SuSyStoneVariantBlock> SUSY_STONE_BLOCKS = new EnumMap<>(SuSyStoneVariantBlock.StoneVariant.class);
     public static BlockAlternatorCoil ALTERNATOR_COIL;
     public static BlockTurbineRotor TURBINE_ROTOR;
     public static BlockSeparatorRotor SEPARATOR_ROTOR;
@@ -50,9 +51,10 @@ public class SuSyBlocks {
         COAGULATION_TANK_WALL = new BlockCoagulationTankWall();
         COAGULATION_TANK_WALL.setRegistryName("coagulation_tank_wall");
 
-        for (SusyStoneVariantBlock.StoneVariant shape : SusyStoneVariantBlock.StoneVariant.values()) {
-            SUSY_STONE_BLOCKS.put(shape, new SusyStoneVariantBlock(shape));
+        for (SuSyStoneVariantBlock.StoneVariant shape : SuSyStoneVariantBlock.StoneVariant.values()) {
+            SUSY_STONE_BLOCKS.put(shape, new SuSyStoneVariantBlock(shape));
         }
+        registerWalkingSpeedBonus();
 
         ALTERNATOR_COIL = new BlockAlternatorCoil();
         ALTERNATOR_COIL.setRegistryName("alternator_coil");
@@ -92,7 +94,6 @@ public class SuSyBlocks {
 
         SERPENTINE = new BlockSerpentine();
         SERPENTINE.setRegistryName("serpentine");
-
     }
 
     @SideOnly(Side.CLIENT)
@@ -100,7 +101,7 @@ public class SuSyBlocks {
         COOLING_COIL.onModelRegister();
         SINTERING_BRICK.onModelRegister();
         registerItemModel(COAGULATION_TANK_WALL);
-        for (SusyStoneVariantBlock block : SUSY_STONE_BLOCKS.values())
+        for (SuSyStoneVariantBlock block : SUSY_STONE_BLOCKS.values())
             registerItemModel(block);
         registerItemModel(ALTERNATOR_COIL);
         registerItemModel(DRILL_HEAD);
@@ -151,6 +152,14 @@ public class SuSyBlocks {
         }
 
         return stringbuilder.toString();
+    }
+
+    public static void registerWalkingSpeedBonus() {
+        for (SuSyStoneVariantBlock block : SUSY_STONE_BLOCKS.values()) {
+            for (IBlockState state : block.getBlockState().getValidStates()) {
+                BlockUtility.setWalkingSpeedBonus(state, BlockUtility.ASPHALT_WALKING_SPEED_BONUS);
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")

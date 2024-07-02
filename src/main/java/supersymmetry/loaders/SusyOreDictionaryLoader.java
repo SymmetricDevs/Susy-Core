@@ -6,7 +6,7 @@ import gregtech.common.blocks.StoneVariantBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.common.blocks.SusyStoneVariantBlock;
+import supersymmetry.common.blocks.SuSyStoneVariantBlock;
 import supersymmetry.common.item.SuSyMetaItems;
 
 
@@ -17,9 +17,9 @@ public class SusyOreDictionaryLoader {
 
     public static void loadStoneOredict(){
 
-        for (SusyStoneVariantBlock.StoneType type : SusyStoneVariantBlock.StoneType.values()) {
-            ItemStack smooth = SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH).getItemVariant(type);
-            ItemStack cobble = SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.COBBLE).getItemVariant(type);
+        for (SuSyStoneVariantBlock.StoneType type : SuSyStoneVariantBlock.StoneType.values()) {
+            ItemStack smooth = SuSyBlocks.SUSY_STONE_BLOCKS.get(SuSyStoneVariantBlock.StoneVariant.SMOOTH).getItemVariant(type);
+            ItemStack cobble = SuSyBlocks.SUSY_STONE_BLOCKS.get(SuSyStoneVariantBlock.StoneVariant.COBBLE).getItemVariant(type);
             OreDictUnifier.registerOre(smooth, type.getOrePrefix(), type.getMaterial());
             OreDictionary.registerOre("stone", smooth);
             OreDictionary.registerOre("cobblestone", cobble);
