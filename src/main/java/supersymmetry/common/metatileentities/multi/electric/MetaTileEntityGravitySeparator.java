@@ -10,6 +10,7 @@ import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.util.BlockInfo;
+import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing;
@@ -26,7 +27,7 @@ import javax.annotation.Nonnull;
 import java.util.function.Supplier;
 
 import static gregtech.api.util.RelativeDirection.*;
-import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
+import static supersymmetry.api.blocks.VariantAxialRotatableBlock.AXIS;
 
 public class MetaTileEntityGravitySeparator extends RecipeMapMultiblockController {
     public MetaTileEntityGravitySeparator(ResourceLocation metaTileEntityId) {
@@ -88,13 +89,13 @@ public class MetaTileEntityGravitySeparator extends RecipeMapMultiblockControlle
 
     //makes sure block at position is properly oriented rotor
     protected TraceabilityPredicate rotorOrientation() {
-        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(steelRotorState().withProperty(FACING, EnumFacing.WEST))};
+        EnumFacing.Axis axis = RelativeDirection.RIGHT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), isFlipped()).getAxis();
+
+        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(steelRotorState().withProperty(AXIS, axis))};
         return new TraceabilityPredicate(blockWorldState -> {
             IBlockState state = blockWorldState.getBlockState();
             if (!(state.getBlock() instanceof BlockSeparatorRotor)) return false;
-            EnumFacing facing = this.getFrontFacing();
-            facing = facing.rotateYCCW();
-            return state == steelRotorState().withProperty(FACING, facing) || state == steelRotorState().withProperty(FACING, facing.getOpposite());
+            return state == steelRotorState().withProperty(AXIS, axis);
         }, supplier);
     }
 

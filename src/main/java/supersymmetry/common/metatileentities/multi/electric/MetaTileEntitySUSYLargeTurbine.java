@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import static supersymmetry.api.blocks.VariantAxialRotatableBlock.AXIS;
-import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
+import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
 
 public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController implements ITieredMetaTileEntity {
 
@@ -97,23 +97,24 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
     }
 
     protected TraceabilityPredicate rotorOrientation() {
-        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(steelRotorState().withProperty(FACING, EnumFacing.WEST))};
+        //makes sure rotor's front faces the left side (relative to the player) of controller front
+        EnumFacing leftFacing = RelativeDirection.RIGHT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), isFlipped());
+
+        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(steelRotorState().withProperty(FACING, leftFacing))};
         return new TraceabilityPredicate(blockWorldState -> {
             IBlockState state = blockWorldState.getBlockState();
             if (!(state.getBlock() instanceof BlockTurbineRotor)) return false;
-            EnumFacing facing = this.getFrontFacing();
-            facing = facing.rotateYCCW();
-            //makes sure rotor's front faces direction rotated 90 degrees CW of controller front, then the opposite is gotten such that it faces 90 CCW from controller front
-            return state == steelRotorState().withProperty(FACING, facing) || state == steelRotorState().withProperty(FACING, facing.getOpposite());
+            return state == steelRotorState().withProperty(FACING, leftFacing);
         }, supplier);
     }
 
     protected TraceabilityPredicate coilOrientation() {
-        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(copperCoilState().withProperty(AXIS, EnumFacing.Axis.X))};
+        EnumFacing.Axis axis = RelativeDirection.RIGHT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), isFlipped()).getAxis();
+
+        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(copperCoilState().withProperty(AXIS, axis))};
         return new TraceabilityPredicate(blockWorldState -> {
             IBlockState state = blockWorldState.getBlockState();
             if (!(state.getBlock() instanceof BlockAlternatorCoil)) return false;
-            EnumFacing.Axis axis = RelativeDirection.LEFT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), isFlipped()).getAxis();
             return state == copperCoilState().withProperty(AXIS, axis);
         }, supplier);
     }

@@ -18,14 +18,15 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nonnull;
 
 public class VariantAxialRotatableBlock<T extends Enum<T> & IStringSerializable> extends VariantBlock<T> {
+
     public static final PropertyEnum<EnumFacing.Axis> AXIS = PropertyEnum.create("axis", EnumFacing.Axis.class);
 
     public VariantAxialRotatableBlock(Material materialIn) {
         super(materialIn);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(this.VARIANT, this.VALUES[0]).withProperty(AXIS, EnumFacing.Axis.X));
+        this.setDefaultState(blockState.getBaseState().withProperty(VARIANT, VALUES[0]).withProperty(AXIS, EnumFacing.Axis.X));
     }
 
-    @NotNull
+    @Nonnull
     @Override
     @SuppressWarnings("deprecation")
     public IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull EnumFacing facing, float hitX, float hitY, float hitZ, int meta, @NotNull EntityLivingBase placer) {
@@ -51,7 +52,7 @@ public class VariantAxialRotatableBlock<T extends Enum<T> & IStringSerializable>
         return state.getValue(VARIANT).ordinal() * 3;
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public IBlockState getStateFromMeta(int meta) {
         int i = meta / 3;
@@ -68,9 +69,20 @@ public class VariantAxialRotatableBlock<T extends Enum<T> & IStringSerializable>
         return state.getValue(VARIANT).ordinal() * 3 + state.getValue(AXIS).ordinal();
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public ItemStack getPickBlock(IBlockState state, @NotNull RayTraceResult target, @NotNull World world, @NotNull BlockPos pos, @NotNull EntityPlayer player) {
         return this.getItemVariant(state.getValue(VARIANT), 1);
+    }
+
+    @Override
+    public boolean rotateBlock(World world, @NotNull BlockPos pos, EnumFacing axis) {
+        IBlockState state = world.getBlockState(pos);
+        EnumFacing.Axis currentAxis = state.getValue(AXIS);
+        if (currentAxis == axis.getAxis()) {
+            return false;
+        }
+        world.setBlockState(pos, state.withProperty(AXIS, axis.getAxis()));
+        return true;
     }
 }

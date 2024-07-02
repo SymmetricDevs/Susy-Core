@@ -18,30 +18,30 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
-public class VariantHorizontalRotatableBlock<T extends Enum<T> & IStringSerializable> extends VariantBlock<T> {
-    public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+public class VariantDirectionalRotatableBlock<T extends Enum<T> & IStringSerializable> extends VariantBlock<T> {
+    public static final PropertyDirection FACING = PropertyDirection.create("facing");
 
-    public VariantHorizontalRotatableBlock(Material materialIn) {
+    public VariantDirectionalRotatableBlock(Material materialIn) {
         super(materialIn);
-        this.setDefaultState(blockState.getBaseState().withProperty(VARIANT, VALUES[0]).withProperty(FACING, EnumFacing.NORTH));
+        this.setDefaultState(blockState.getBaseState().withProperty(VARIANT, VALUES[0]).withProperty(FACING, EnumFacing.SOUTH));
     }
 
     @Nonnull
     @Override
     @SuppressWarnings("deprecation")
     public IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull EnumFacing facing, float hitX, float hitY, float hitZ, int meta, @NotNull EntityLivingBase placer) {
-        return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING, placer.getHorizontalFacing().getOpposite());
+        return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING, EnumFacing.getDirectionFromEntityLiving(pos, placer));
     }
 
     @Override
     public ItemStack getItemVariant(T variant, int amount) {
-        return new ItemStack(this, amount, variant.ordinal() * 4);
+        return new ItemStack(this, amount, variant.ordinal() * 6);
     }
 
     @Nonnull
     @Override
     public BlockStateContainer createBlockState() {
-        Class<T> enumClass = getActualTypeParameter(getClass(), VariantHorizontalRotatableBlock.class);
+        Class<T> enumClass = getActualTypeParameter(getClass(), VariantDirectionalRotatableBlock.class);
         this.VARIANT = PropertyEnum.create("variant", enumClass);
         this.VALUES = enumClass.getEnumConstants();
         return new BlockStateContainer(this, VARIANT, FACING);
@@ -49,16 +49,17 @@ public class VariantHorizontalRotatableBlock<T extends Enum<T> & IStringSerializ
 
     @Override
     public int damageDropped(@NotNull IBlockState state) {
-        return state.getValue(VARIANT).ordinal() * 4;
+        return state.getValue(VARIANT).ordinal() * 6;
     }
 
     @Nonnull
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        int i = meta / 4;
-        int j = meta % 4;
+        int i = meta / 6;
+        // Makes meta = 0 -> EAST(ord = 5)
+        int j = (meta + 5) % 6;
 
-        EnumFacing enumfacing = EnumFacing.byHorizontalIndex(j);
+        EnumFacing enumfacing = EnumFacing.byIndex(j);
         return getDefaultState()
                 .withProperty(FACING, enumfacing)
                 .withProperty(VARIANT, VALUES[i % VALUES.length]);
@@ -66,7 +67,7 @@ public class VariantHorizontalRotatableBlock<T extends Enum<T> & IStringSerializ
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(VARIANT).ordinal() * 4 + state.getValue(FACING).getHorizontalIndex();
+        return state.getValue(VARIANT).ordinal() * 6 + (state.getValue(FACING).getIndex() + 1) % 6;
     }
 
     @Nonnull

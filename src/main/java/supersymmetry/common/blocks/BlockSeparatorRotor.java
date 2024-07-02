@@ -3,12 +3,16 @@ package supersymmetry.common.blocks;
 import gregtech.api.block.IStateHarvestLevel;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.IStringSerializable;
-import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.blocks.VariantAxialRotatableBlock;
 
 import javax.annotation.Nonnull;
 
-public class BlockSeparatorRotor extends VariantHorizontalRotatableBlock<BlockSeparatorRotor.BlockSeparatorRotorType> {
+public class BlockSeparatorRotor extends VariantAxialRotatableBlock<BlockSeparatorRotor.BlockSeparatorRotorType> {
     public BlockSeparatorRotor() {
         super(net.minecraft.block.material.Material.IRON);
         setTranslationKey("separator_rotor");
@@ -16,6 +20,12 @@ public class BlockSeparatorRotor extends VariantHorizontalRotatableBlock<BlockSe
         setResistance(10.0f);
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 2);
+    }
+
+    @Override
+    public boolean canCreatureSpawn(@NotNull IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos,
+                                    @NotNull EntityLiving.SpawnPlacementType type) {
+        return false;
     }
 
     public enum BlockSeparatorRotorType implements IStringSerializable, IStateHarvestLevel {

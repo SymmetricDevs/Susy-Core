@@ -1,20 +1,27 @@
 package supersymmetry.common.blocks;
 
+import gregtech.api.cover.CoverRayTracer;
+import gregtech.common.items.tool.rotation.CustomBlockRotations;
+import gregtech.common.items.tool.rotation.ICustomRotationBehavior;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.blocks.VariantAxialRotatableBlock;
 
 import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static gregtech.common.items.tool.rotation.CustomBlockRotations.BLOCK_DIRECTIONAL_BEHAVIOR;
 
 public class SuSyBlocks {
 
@@ -37,63 +44,17 @@ public class SuSyBlocks {
     public static BlockSuSyMultiblockCasing MULTIBLOCK_CASING;
     public static BlockSerpentine SERPENTINE;
 
-    public static void init() {
-        COOLING_COIL = new BlockCoolingCoil();
-        COOLING_COIL.setRegistryName("cooling_coil");
-
-        SINTERING_BRICK = new BlockSinteringBrick();
-        SINTERING_BRICK.setRegistryName("sintering_brick");
-
-        DRILL_HEAD = new BlockDrillHead();
-        DRILL_HEAD.setRegistryName("drill_head");
-
-        COAGULATION_TANK_WALL = new BlockCoagulationTankWall();
-        COAGULATION_TANK_WALL.setRegistryName("coagulation_tank_wall");
-
-        for (SusyStoneVariantBlock.StoneVariant shape : SusyStoneVariantBlock.StoneVariant.values()) {
-            SUSY_STONE_BLOCKS.put(shape, new SusyStoneVariantBlock(shape));
+    public static final ICustomRotationBehavior BLOCK_AXIAL_BEHAVIOR = (state, world, pos, hitResult) -> {
+        EnumFacing gridSide = CoverRayTracer.determineGridSideHit(hitResult);
+        if (gridSide == null) return false;
+        EnumFacing.Axis axis = gridSide.getAxis();
+        if (axis != state.getValue(VariantAxialRotatableBlock.AXIS)) {
+            state = state.withProperty(VariantAxialRotatableBlock.AXIS, axis);
+            world.setBlockState(pos, state);
+            return true;
         }
-
-        ALTERNATOR_COIL = new BlockAlternatorCoil();
-        ALTERNATOR_COIL.setRegistryName("alternator_coil");
-
-        TURBINE_ROTOR = new BlockTurbineRotor();
-        TURBINE_ROTOR.setRegistryName("turbine_rotor");
-
-        SEPARATOR_ROTOR = new BlockSeparatorRotor();
-        SEPARATOR_ROTOR.setRegistryName("separator_rotor");
-
-        STRUCTURAL_BLOCK = new BlockStructural();
-        STRUCTURAL_BLOCK.setRegistryName("structural_block");
-
-        STRUCTURAL_BLOCK_1 = new BlockStructural1();
-        STRUCTURAL_BLOCK_1.setRegistryName("structural_block_1");
-
-        DEPOSIT_BLOCK = new BlockDeposit();
-        DEPOSIT_BLOCK.setRegistryName("deposit_block");
-
-        RESOURCE_BLOCK = new BlockResource();
-        RESOURCE_BLOCK.setRegistryName("resource_block");
-
-        HOME = new BlockHome();
-        HOME.setRegistryName("home_block");
-
-        EVAPORATION_BED = new BlockEvaporationBed();
-        EVAPORATION_BED.setRegistryName("evaporation_bed");
-
-        MULTIBLOCK_TANK = new BlockMultiblockTank();
-        MULTIBLOCK_TANK.setRegistryName("multiblock_tank");
-
-        ELECTRODE_ASSEMBLY = new BlockElectrodeAssembly();
-        ELECTRODE_ASSEMBLY.setRegistryName("electrode_assembly");
-
-        MULTIBLOCK_CASING = new BlockSuSyMultiblockCasing();
-        MULTIBLOCK_CASING.setRegistryName("susy_multiblock_casing");
-
-        SERPENTINE = new BlockSerpentine();
-        SERPENTINE.setRegistryName("serpentine");
-
-    }
+        return false;
+    };
 
     @SideOnly(Side.CLIENT)
     public static void registerItemModels() {
@@ -156,5 +117,70 @@ public class SuSyBlocks {
     @SuppressWarnings("unchecked")
     private static <T extends Comparable<T>> @NotNull String getPropertyName(@NotNull IProperty<T> property, Comparable<?> value) {
         return property.getName((T) value);
+    }
+
+    public static void init() {
+        COOLING_COIL = new BlockCoolingCoil();
+        COOLING_COIL.setRegistryName("cooling_coil");
+
+        SINTERING_BRICK = new BlockSinteringBrick();
+        SINTERING_BRICK.setRegistryName("sintering_brick");
+
+        DRILL_HEAD = new BlockDrillHead();
+        DRILL_HEAD.setRegistryName("drill_head");
+
+        COAGULATION_TANK_WALL = new BlockCoagulationTankWall();
+        COAGULATION_TANK_WALL.setRegistryName("coagulation_tank_wall");
+
+        for (SusyStoneVariantBlock.StoneVariant shape : SusyStoneVariantBlock.StoneVariant.values()) {
+            SUSY_STONE_BLOCKS.put(shape, new SusyStoneVariantBlock(shape));
+        }
+
+        ALTERNATOR_COIL = new BlockAlternatorCoil();
+        ALTERNATOR_COIL.setRegistryName("alternator_coil");
+
+        TURBINE_ROTOR = new BlockTurbineRotor();
+        TURBINE_ROTOR.setRegistryName("turbine_rotor");
+
+        SEPARATOR_ROTOR = new BlockSeparatorRotor();
+        SEPARATOR_ROTOR.setRegistryName("separator_rotor");
+        registerCustomRotations();
+
+        STRUCTURAL_BLOCK = new BlockStructural();
+        STRUCTURAL_BLOCK.setRegistryName("structural_block");
+
+        STRUCTURAL_BLOCK_1 = new BlockStructural1();
+        STRUCTURAL_BLOCK_1.setRegistryName("structural_block_1");
+
+        DEPOSIT_BLOCK = new BlockDeposit();
+        DEPOSIT_BLOCK.setRegistryName("deposit_block");
+
+        RESOURCE_BLOCK = new BlockResource();
+        RESOURCE_BLOCK.setRegistryName("resource_block");
+
+        HOME = new BlockHome();
+        HOME.setRegistryName("home_block");
+
+        EVAPORATION_BED = new BlockEvaporationBed();
+        EVAPORATION_BED.setRegistryName("evaporation_bed");
+
+        MULTIBLOCK_TANK = new BlockMultiblockTank();
+        MULTIBLOCK_TANK.setRegistryName("multiblock_tank");
+
+        ELECTRODE_ASSEMBLY = new BlockElectrodeAssembly();
+        ELECTRODE_ASSEMBLY.setRegistryName("electrode_assembly");
+
+        MULTIBLOCK_CASING = new BlockSuSyMultiblockCasing();
+        MULTIBLOCK_CASING.setRegistryName("susy_multiblock_casing");
+
+        SERPENTINE = new BlockSerpentine();
+        SERPENTINE.setRegistryName("serpentine");
+
+    }
+
+    private static void registerCustomRotations() {
+        CustomBlockRotations.registerCustomRotation(ALTERNATOR_COIL, BLOCK_AXIAL_BEHAVIOR);
+        CustomBlockRotations.registerCustomRotation(SEPARATOR_ROTOR, BLOCK_AXIAL_BEHAVIOR);
+        CustomBlockRotations.registerCustomRotation(TURBINE_ROTOR, BLOCK_DIRECTIONAL_BEHAVIOR);
     }
 }
