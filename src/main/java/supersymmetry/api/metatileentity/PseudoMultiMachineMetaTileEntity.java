@@ -16,11 +16,13 @@ import supersymmetry.api.capability.impl.PseudoMultiRecipeLogic;
 import java.util.function.Function;
 
 public class PseudoMultiMachineMetaTileEntity extends SimpleMachineMetaTileEntity {
+
     private IBlockState targetBlockState;
 
     public IBlockState getTargetBlockState() {
         return targetBlockState;
     }
+
     public PseudoMultiMachineMetaTileEntity(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap, ICubeRenderer renderer, int tier, boolean hasFrontFacing, Function<Integer, Integer> tankScalingFunction) {
         super(metaTileEntityId, recipeMap, renderer, tier, hasFrontFacing, tankScalingFunction);
     }
