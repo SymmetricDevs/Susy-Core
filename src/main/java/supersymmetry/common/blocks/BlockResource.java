@@ -20,7 +20,7 @@ public class BlockResource extends VariantBlock<BlockResource.ResourceBlockType>
         setDefaultState(getState(ResourceBlockType.BAUXITE));
     }
 
-    public static enum ResourceBlockType implements IStringSerializable, IStateHarvestLevel {
+    public enum ResourceBlockType implements IStringSerializable, IStateHarvestLevel {
         BAUXITE("bauxite", 1),
         CALICHE("caliche", 1),
         NON_MARINE_EVAPORITE("non_marine_evaporite", 1),
@@ -40,7 +40,7 @@ public class BlockResource extends VariantBlock<BlockResource.ResourceBlockType>
         private final String name;
         private final int harvestLevel;
 
-        private ResourceBlockType(String name, int harvestLevel) {
+        ResourceBlockType(String name, int harvestLevel) {
             this.name = name;
             this.harvestLevel = harvestLevel;
         }

@@ -3,9 +3,15 @@ package supersymmetry.common.blocks;
 import gregtech.api.block.VariantActiveBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nonnull;
 
 public class BlockSerpentine extends VariantActiveBlock<BlockSerpentine.SerpentineType> {
 
@@ -16,6 +22,12 @@ public class BlockSerpentine extends VariantActiveBlock<BlockSerpentine.Serpenti
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 2);
         setDefaultState(getState(SerpentineType.BASIC));
+    }
+
+    @Override
+    public boolean canCreatureSpawn(@NotNull IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos,
+                                    @NotNull EntityLiving.SpawnPlacementType type) {
+        return false;
     }
 
     @NotNull
@@ -33,6 +45,7 @@ public class BlockSerpentine extends VariantActiveBlock<BlockSerpentine.Serpenti
             this.name = name;
         }
 
+        @Nonnull
         @Override
         public String getName() {
             return this.name;
