@@ -569,7 +569,7 @@ gregtech.machine.weapons_factory.uxv.name=史诗武器工厂 IV
 gregtech.machine.weapons_factory.opv.name=传说武器工厂
 
 # Phase Separator
-gregtech.machine.phase_separator.lv.name=相分离器
+gregtech.machine.phase_separator.name=相分离器
 
 # Electrostatic Separator
 gregtech.machine.electrostatic_separator.lv.name=基础静电分离器
