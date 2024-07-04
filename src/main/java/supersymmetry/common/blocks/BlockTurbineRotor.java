@@ -3,12 +3,16 @@ package supersymmetry.common.blocks;
 import gregtech.api.block.IStateHarvestLevel;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.IStringSerializable;
-import supersymmetry.api.blocks.VariantRotatableBlock;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
 import javax.annotation.Nonnull;
 
-public class BlockTurbineRotor extends VariantRotatableBlock<BlockTurbineRotor.BlockTurbineRotorType> {
+public class BlockTurbineRotor extends VariantHorizontalRotatableBlock<BlockTurbineRotor.BlockTurbineRotorType> {
     public BlockTurbineRotor() {
         super(net.minecraft.block.material.Material.IRON);
         setTranslationKey("turbine_rotor");
@@ -16,6 +20,12 @@ public class BlockTurbineRotor extends VariantRotatableBlock<BlockTurbineRotor.B
         setResistance(10.0f);
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 2);
+    }
+
+    @Override
+    public boolean canCreatureSpawn(@NotNull IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos,
+                                    @NotNull EntityLiving.SpawnPlacementType type) {
+        return false;
     }
 
     public enum BlockTurbineRotorType implements IStringSerializable, IStateHarvestLevel {
@@ -30,14 +40,17 @@ public class BlockTurbineRotor extends VariantRotatableBlock<BlockTurbineRotor.B
         }
 
         @Nonnull
+        @Override
         public String getName() {
             return this.name;
         }
 
+        @Override
         public int getHarvestLevel(IBlockState state) {
             return this.harvestLevel;
         }
 
+        @Override
         public String getHarvestTool(IBlockState state) {
             return "wrench";
         }

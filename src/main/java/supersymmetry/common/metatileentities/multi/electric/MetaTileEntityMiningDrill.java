@@ -168,6 +168,7 @@ public class MetaTileEntityMiningDrill extends RecipeMapMultiblockController {
         }
     }
 
+    @Override
     public boolean allowsExtendedFacing() {
         return false;
     }

@@ -229,6 +229,15 @@ gregtech.machine.railroad_engineering_station.name=Railroad Engineering Station
 gregtech.machine.railroad_engineering_station.tooltip=Place Immersive Railroading Tracks in the middle to form the multiblock
 gregtech.machine.railroad_engineering_station.tooltip.1=The concrete below the tracks can be substituted with any block, including pipes or air
 
+gregtech.machine.evaporation_pool.name=Evaporation Pool
+gregtech.machine.evaporation_pool.tooltip.structure_info=Evaporation Pools can be formed with any internal dimensions ranging from a 1x1 to a %dx%d, even if it is non-square. To form a valid heated evaporation pool, coils should be placed following the pattern shown in the preview. For a more detailed explanation, view the info tab in JEI.
+gregtech.top.evaporation_pool_heated_preface=Coil Pattern:
+gregtech.top.evaporation_pool_is_heated=VALID; May be heated.
+gregtech.top.evaporation_pool_not_heated=INVALID; Will not heat.
+gregtech.top.evaporation_pool.energy_transferred=Thermal Energy Stored:
+gregtech.top.evaporation_pool.kilojoules=kJ
+gregtech.multiblock.evaporation_pool.description=The Evaporation Pool has interior dimensions specified in its description and a concrete exterior for IO/controller placement, with at most two of each IO type. The controller may be placed anywhere along the protruding bottom row "in front" of the interior.            The Evaporation Pool can run recipes both unpowered and powered. In order to power recipes, the multiblock will need to be formed with a "snaking" coil pattern of uniform type, as shown in the preview. Unpowered Evaporation Pools do not require any coils.                                                 The speed of any recipe depends on the heat provided to the multi, which is based off of the number of interior blocks exposed to sunlight, the energy provided, and the tier of coil. [1EU = 10J currently]
+
 gregtech.machine.primitive_mud_pump.name=Primitive Mud Pump
 gregtech.machine.primitive_mud_pump.tooltip=Works only in River biomes between Y=64 and Y=80
 gregtech.machine.basic_steam_turbine.name=Large Steam Turbine
@@ -237,6 +246,7 @@ gregtech.machine.ocean_pumper.name=Ocean Pumper
 gregtech.machine.ocean_pumper.tooltip=Works only in Ocean biomes between Y=70 and Y=75
 gregtech.machine.advanced_arc_furnace.name=Advanced Arc Furnace
 gregtech.machine.clarifier.name=Clarifier
+gregtech.machine.dumper.name=Dumper
 gregtech.machine.evaporation_pool.name=Evaporation Pool
 gregtech.machine.flare_stack.name=Flare Stack
 gregtech.machine.flare_stack.height=Stack Height: %s §9blocks
@@ -272,6 +282,7 @@ gregtech.machine.drone_pad.name=Drone Pad
 gregtech.recipe.plasma_requirement=Requires plasma: %s
 gregtech.recipe.catalyst=Catalyst: %s %s
 gregtech.recipe.blocks=Blocks: %s
+gregtech.recipe.evaporation=Required Energy: %d J/t
 gregtech.recipe.cryogenic_environment=Requires Cryogenic Environment
 
 # Latex Collector
@@ -571,7 +582,7 @@ gregtech.machine.weapons_factory.uxv.name=Epic Weapons Factory IV
 gregtech.machine.weapons_factory.opv.name=Legendary Weapons Factory
 
 # Phase Separator
-gregtech.machine.phase_separator.lv.name=Phase Separator
+gregtech.machine.phase_separator.name=Phase Separator
 
 # Electrostatic Separator
 gregtech.machine.electrostatic_separator.lv.name=Basic Electrostatic Separator
