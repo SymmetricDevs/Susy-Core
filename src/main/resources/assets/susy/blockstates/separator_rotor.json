@@ -1,9 +1,16 @@
 {
   "forge_marker" : 1,
   "variants" : {
-    "facing=north,variant=steel": { "model": "susy:separator_rotor/steel" },
-    "facing=south,variant=steel": { "model": "susy:separator_rotor/steel", "y": 180 },
-    "facing=west,variant=steel": { "model": "susy:separator_rotor/steel", "y": 270 },
-    "facing=east,variant=steel": { "model": "susy:separator_rotor/steel", "y": 90 }
+    "axis=y,variant=steel" : {
+      "model" : "susy:separator_rotor/steel",
+      "x" : 90
+    },
+    "axis=z,variant=steel" : {
+      "model" : "susy:separator_rotor/steel"
+    },
+    "axis=x,variant=steel" : {
+      "model" : "susy:separator_rotor/steel",
+      "y" : 90
+    }
   }
 }

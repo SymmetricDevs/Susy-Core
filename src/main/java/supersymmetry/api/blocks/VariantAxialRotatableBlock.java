@@ -70,11 +70,12 @@ public class VariantAxialRotatableBlock<T extends Enum<T> & IStringSerializable>
 
     @Nonnull
     @Override
+    @SuppressWarnings("deprecation")
     public IBlockState getStateFromMeta(int meta) {
         int i = meta / 3;
         int j = meta % 3;
 
-        EnumFacing.Axis axis = EnumFacing.Axis.values()[j];
+        EnumFacing.Axis axis = EnumFacing.Axis.values()[(j + 2) % 3];
         return getDefaultState()
                 .withProperty(AXIS, axis)
                 .withProperty(VARIANT, VALUES[i % VALUES.length]);
@@ -82,7 +83,7 @@ public class VariantAxialRotatableBlock<T extends Enum<T> & IStringSerializable>
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(VARIANT).ordinal() * 3 + state.getValue(AXIS).ordinal();
+        return state.getValue(VARIANT).ordinal() * 3 + (state.getValue(AXIS).ordinal() + 1) % 3;
     }
 
     @Nonnull

@@ -27,7 +27,7 @@ import javax.annotation.Nonnull;
 import java.util.function.Supplier;
 
 import static gregtech.api.util.RelativeDirection.*;
-import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
+import static supersymmetry.api.blocks.VariantAxialRotatableBlock.AXIS;
 
 public class MetaTileEntityGravitySeparator extends RecipeMapMultiblockController {
     public MetaTileEntityGravitySeparator(ResourceLocation metaTileEntityId) {
@@ -89,21 +89,17 @@ public class MetaTileEntityGravitySeparator extends RecipeMapMultiblockControlle
 
     //makes sure block at position is properly oriented rotor
     protected TraceabilityPredicate rotorOrientation() {
-        //makes sure rotor's front faces the left side (relative to the player) of controller front
-        EnumFacing leftFacing = RelativeDirection.RIGHT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), isFlipped());
+        //makes sure rotor's axis the same as the axis of the left side of the controller front
+        EnumFacing.Axis leftAxis = RelativeDirection.RIGHT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), isFlipped()).getAxis();
 
-        // converting the left facing to positive x or z axis direction
-        // this is needed for the following update which converts this rotatable block from horizontal directional into axial directional.
-        EnumFacing axialFacing = leftFacing.getIndex() < 4 ? EnumFacing.NORTH : EnumFacing.EAST;
-
-        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(steelRotorState().withProperty(FACING, axialFacing))};
+        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(steelRotorState().withProperty(AXIS, leftAxis))};
         return new TraceabilityPredicate(blockWorldState -> {
             IBlockState state = blockWorldState.getBlockState();
             if (!(state.getBlock() instanceof BlockSeparatorRotor)) return false;
 
             // auto-correct rotor orientation
-            if (state != steelRotorState().withProperty(FACING, axialFacing)) {
-                getWorld().setBlockState(blockWorldState.getPos(), steelRotorState().withProperty(FACING, axialFacing));
+            if (state != steelRotorState().withProperty(AXIS, leftAxis)) {
+                getWorld().setBlockState(blockWorldState.getPos(), steelRotorState().withProperty(AXIS, leftAxis));
             }
             return true;
         }, supplier);

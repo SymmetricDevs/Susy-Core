@@ -32,7 +32,8 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.function.Supplier;
 
-import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
+import static supersymmetry.api.blocks.VariantAxialRotatableBlock.AXIS;
+import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
 
 public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController implements ITieredMetaTileEntity {
 
@@ -99,39 +100,31 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
         //makes sure rotor's front faces the left side (relative to the player) of controller front
         EnumFacing leftFacing = RelativeDirection.RIGHT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), isFlipped());
 
-        // converting the left facing to positive x or z axis direction
-        // this is needed for the following update which converts this rotatable block from horizontal directional into axial directional.
-        EnumFacing axialFacing = leftFacing.getIndex() < 4 ? EnumFacing.NORTH : EnumFacing.EAST;
-
-        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(steelRotorState().withProperty(FACING, axialFacing))};
+        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(steelRotorState().withProperty(FACING, leftFacing))};
         return new TraceabilityPredicate(blockWorldState -> {
             IBlockState state = blockWorldState.getBlockState();
             if (!(state.getBlock() instanceof BlockTurbineRotor)) return false;
 
             // auto-correct rotor orientation
-            if (state != steelRotorState().withProperty(FACING, axialFacing)) {
-                getWorld().setBlockState(blockWorldState.getPos(), steelRotorState().withProperty(FACING, axialFacing));
+            if (state != steelRotorState().withProperty(FACING, leftFacing)) {
+                getWorld().setBlockState(blockWorldState.getPos(), steelRotorState().withProperty(FACING, leftFacing));
             }
             return true;
         }, supplier);
     }
 
     protected TraceabilityPredicate coilOrientation() {
-        //makes sure rotor's front faces the left side (relative to the player) of controller front
-        EnumFacing leftFacing = RelativeDirection.RIGHT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), isFlipped());
+        //makes sure rotor's axis the same as the axis of the left side of the controller front
+        EnumFacing.Axis leftAxis = RelativeDirection.RIGHT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), isFlipped()).getAxis();
 
-        // converting the left facing to positive x or z axis direction
-        // this is needed for the following update which converts this rotatable block from horizontal directional into axial directional.
-        EnumFacing axialFacing = leftFacing.getIndex() < 4 ? EnumFacing.NORTH : EnumFacing.EAST;
-
-        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(copperCoilState().withProperty(FACING, axialFacing))};
+        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(copperCoilState().withProperty(AXIS, leftAxis))};
         return new TraceabilityPredicate(blockWorldState -> {
             IBlockState state = blockWorldState.getBlockState();
             if (!(state.getBlock() instanceof BlockAlternatorCoil)) return false;
 
             // auto-correct rotor orientation
-            if (state != copperCoilState().withProperty(FACING, axialFacing)) {
-                getWorld().setBlockState(blockWorldState.getPos(), copperCoilState().withProperty(FACING, axialFacing));
+            if (state != copperCoilState().withProperty(AXIS, leftAxis)) {
+                getWorld().setBlockState(blockWorldState.getPos(), copperCoilState().withProperty(AXIS, leftAxis));
             }
             return true;
         }, supplier);
