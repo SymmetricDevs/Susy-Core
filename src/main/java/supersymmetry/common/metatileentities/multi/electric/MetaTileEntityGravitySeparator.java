@@ -94,7 +94,7 @@ public class MetaTileEntityGravitySeparator extends RecipeMapMultiblockControlle
 
         // converting the left facing to positive x or z axis direction
         // this is needed for the following update which converts this rotatable block from horizontal directional into axial directional.
-        EnumFacing axialFacing = leftFacing.getIndex() < 4 ? EnumFacing.NORTH : EnumFacing.EAST;
+        EnumFacing axialFacing = leftFacing.getIndex() < 4 ? EnumFacing.SOUTH : EnumFacing.WEST;
 
         Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(steelRotorState().withProperty(FACING, axialFacing))};
         return new TraceabilityPredicate(blockWorldState -> {
