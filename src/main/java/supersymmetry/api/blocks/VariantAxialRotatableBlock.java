@@ -75,6 +75,9 @@ public class VariantAxialRotatableBlock<T extends Enum<T> & IStringSerializable>
         int i = meta / 3;
         int j = meta % 3;
 
+        // Makes meta = 0 <-> Axis.Z(ord = 2)
+        //              1 <-> Axis.X(ord = 0)
+        //              2 <-> Axis.Y(ord = 1)
         EnumFacing.Axis axis = EnumFacing.Axis.values()[(j + 2) % 3];
         return getDefaultState()
                 .withProperty(AXIS, axis)
@@ -83,6 +86,9 @@ public class VariantAxialRotatableBlock<T extends Enum<T> & IStringSerializable>
 
     @Override
     public int getMetaFromState(IBlockState state) {
+        // Makes meta = 0 <-> Axis.Z(ord = 2)
+        //              1 <-> Axis.X(ord = 0)
+        //              2 <-> Axis.Y(ord = 1)
         return state.getValue(VARIANT).ordinal() * 3 + (state.getValue(AXIS).ordinal() + 1) % 3;
     }
 
