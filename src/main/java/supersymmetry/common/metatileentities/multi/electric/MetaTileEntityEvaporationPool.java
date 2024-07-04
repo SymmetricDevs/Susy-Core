@@ -1101,6 +1101,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         return stepCount;
     }
 
+    @Override
     public boolean allowsExtendedFacing() {
         return false;
     }

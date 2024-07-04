@@ -29,7 +29,8 @@ public class BlockSinteringBrick extends VariantActiveBlock<BlockSinteringBrick.
     }
 
     @Override
-    public boolean canCreatureSpawn(@NotNull IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos, @NotNull EntityLiving.SpawnPlacementType type) {
+    public boolean canCreatureSpawn(@NotNull IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos,
+                                    @NotNull EntityLiving.SpawnPlacementType type) {
         return false;
     }
 
@@ -55,6 +56,5 @@ public class BlockSinteringBrick extends VariantActiveBlock<BlockSinteringBrick.
         public String toString() {
             return this.getName();
         }
-
     }
 }
