@@ -24,10 +24,10 @@ dependencies {
     // CCL 3.2.3.358
     implementation rfg.deobf('curse.maven:codechicken-lib-1-8-242818:2779848')
     // GTCEu 2.8.7 beta
-    //implementation rfg.deobf("curse.maven:gregtech-ce-unofficial-557242:5121638-deobf-5121638-sources-5121638")
+    implementation rfg.deobf("curse.maven:gregtech-ce-unofficial-557242:5322654-deobf-5322654-sources-5322654")
     // GCYM 1.2.8
     implementation rfg.deobf('curse.maven:gregicality-multiblocks-564858:5121714-deobf-5121714-sources-5121714')
-    implementation files("libs/gregtech-1.12.2-2.8.7-beta.jar")
+//    implementation files("libs/gregtech-1.12.2-2.8.7-beta.jar")
     // AE2UEL 0.55.6 (transitive gt dep)
     compileOnly rfg.deobf("curse.maven:ae2-extended-life-570458:4402048")
 

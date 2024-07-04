@@ -101,7 +101,7 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
 
         // converting the left facing to positive x or z axis direction
         // this is needed for the following update which converts this rotatable block from horizontal directional into axial directional.
-        EnumFacing axialFacing = EnumFacing.Plane.HORIZONTAL.facings()[leftFacing.getIndex() % 2];
+        EnumFacing axialFacing = leftFacing.getIndex() < 4 ? EnumFacing.NORTH : EnumFacing.EAST;
 
         Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(steelRotorState().withProperty(FACING, axialFacing))};
         return new TraceabilityPredicate(blockWorldState -> {
@@ -122,7 +122,7 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
 
         // converting the left facing to positive x or z axis direction
         // this is needed for the following update which converts this rotatable block from horizontal directional into axial directional.
-        EnumFacing axialFacing = EnumFacing.Plane.HORIZONTAL.facings()[leftFacing.getIndex() % 2];
+        EnumFacing axialFacing = leftFacing.getIndex() < 4 ? EnumFacing.NORTH : EnumFacing.EAST;
 
         Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(copperCoilState().withProperty(FACING, axialFacing))};
         return new TraceabilityPredicate(blockWorldState -> {
