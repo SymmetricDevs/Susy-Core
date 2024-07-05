@@ -98,4 +98,8 @@ public class MetaTileEntityLowPressureCryogenicDistillationPlant extends RecipeM
         this.receiver = receiver;
     }
 
+    @Override
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
 }

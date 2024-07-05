@@ -193,6 +193,8 @@ gregtech.multiblocks.sintering_oven.use_plasma.affirmative=Yes
 gregtech.multiblocks.sintering_oven.use_plasma.negative=No
 
 gregtech.machine.coagulation_tank.name=Coagulation Tank
+gregtech.machine.coagulation_tank.tooltip=Can't be used to stop bleeding.
+gregtech.machine.coagulation_tank.tooltip.1=Gains one parallel per block longer
 gregtech.machine.drum.lead.name=Lead Drum
 gregtech.machine.drum.brass.name=Brass Drum
 
@@ -203,7 +205,6 @@ gregtech.machine.electrolytic_cell.name=Electrolytic Cell
 
 gregtech.machine.coking_tower.name=Coking Tower
 gregtech.machine.vacuum_distillation_tower.name=Vacuum Distillation Tower
-gregtech.machine.smoke_stack.name=Smoke Stack
 gregtech.machine.catalytic_reformer.name=Catalytic Reformer
 gregtech.machine.pressure_swing_adsorber.name=Pressure Swing Adsorber
 gregtech.machine.reaction_furnace.name=Reaction Furnace
@@ -216,22 +217,55 @@ gregtech.machine.cooling_unit.name=Cooling Unit
 gregtech.machine.gas_turbine.name=Gas Turbine
 gregtech.machine.heat_exchanger.name=Heat Exchanger
 gregtech.machine.heat_radiator.name=Heat Radiator
+gregtech.multiblock.heat_radiator.tooltip.1=Efficiency is proportional to the area of dissipation.
+gregtech.multiblock.heat_radiator.tooltip.2=§bSize: §f3x3 to 11x16
+gregtech.machine.heat_radiator.parallel=Maximum Parallel: %s
+gregtech.machine.heat_radiator.parallel_hover=Parallel amount is determined by the amount of the tube block.
 gregtech.machine.large_weapons_factory.name=Large Weapons Factory
 gregtech.machine.magnetohydrodynamic_generator.name=Magnetohydrodynamic (MHD) Generator
 gregtech.machine.mining_drill.name=Mining Drill
 gregtech.machine.quencher.name=Quencher
 gregtech.machine.railroad_engineering_station.name=Railroad Engineering Station
-gregtech.machine.railroad_engineering_station.tooltip=Place Immersive Railroading Tracks in the middle to form the multiblock\nThe concrete below the tracks can be substituted with any block, including pipes or air
+gregtech.machine.railroad_engineering_station.tooltip=Place Immersive Railroading Tracks in the middle to form the multiblock
+gregtech.machine.railroad_engineering_station.tooltip.1=The concrete below the tracks can be substituted with any block, including pipes or air
+
+gregtech.machine.evaporation_pool.name=Evaporation Pool
+gregtech.machine.evaporation_pool.tooltip.structure_info=Evaporation Pools can be formed with any internal dimensions ranging from a 1x1 to a %dx%d, even if it is non-square. To form a valid heated evaporation pool, coils should be placed following the pattern shown in the preview. For a more detailed explanation, view the info tab in JEI.
+gregtech.top.evaporation_pool_heated_preface=Coil Pattern:
+gregtech.top.evaporation_pool_is_heated=VALID; May be heated.
+gregtech.top.evaporation_pool_not_heated=INVALID; Will not heat.
+gregtech.top.evaporation_pool.energy_transferred=Thermal Energy Stored:
+gregtech.top.evaporation_pool.kilojoules=kJ
+gregtech.multiblock.evaporation_pool.description=The Evaporation Pool has interior dimensions specified in its description and a concrete exterior for IO/controller placement, with at most two of each IO type. The controller may be placed anywhere along the protruding bottom row "in front" of the interior.            The Evaporation Pool can run recipes both unpowered and powered. In order to power recipes, the multiblock will need to be formed with a "snaking" coil pattern of uniform type, as shown in the preview. Unpowered Evaporation Pools do not require any coils.                                                 The speed of any recipe depends on the heat provided to the multi, which is based off of the number of interior blocks exposed to sunlight, the energy provided, and the tier of coil. [1EU = 10J currently]
 
 gregtech.machine.primitive_mud_pump.name=Primitive Mud Pump
+gregtech.machine.primitive_mud_pump.tooltip=Works only in River biomes between Y=64 and Y=80
 gregtech.machine.basic_steam_turbine.name=Large Steam Turbine
 gregtech.machine.basic_gas_turbine.name=Large Gas Turbine
 gregtech.machine.ocean_pumper.name=Ocean Pumper
+gregtech.machine.ocean_pumper.tooltip=Works only in Ocean biomes between Y=70 and Y=75
 gregtech.machine.advanced_arc_furnace.name=Advanced Arc Furnace
 gregtech.machine.clarifier.name=Clarifier
 gregtech.machine.dumper.name=Dumper
 gregtech.machine.evaporation_pool.name=Evaporation Pool
 gregtech.machine.flare_stack.name=Flare Stack
+gregtech.machine.flare_stack.height=Stack Height: %s §9blocks
+gregtech.machine.flare_stack.rate=Flaring Rate: %s
+gregtech.machine.flare_stack.rate_hover=Flaring rate multiplier set by the height of the flare stack.
+gregtech.machine.flare_stack.tooltip=Industrial lung cancer propagator.
+gregtech.machine.flare_stack.tooltip.1=§6Base Flaring Rate:§7 §f%d L every 10 ticks
+gregtech.machine.flare_stack.tooltip.2=Doubles its speed for each block taller than 5
+gregtech.machine.smoke_stack.name=Smoke Stack
+gregtech.machine.smoke_stack.height=Stack Height: %s §9blocks
+gregtech.machine.smoke_stack.rate=Exhaustion Rate: %s
+gregtech.machine.smoke_stack.rate_hover=Exhaustion rate multiplier set by the height of the smoke stack.
+gregtech.machine.smoke_stack.tooltip=For enriching your planets atmosphere.
+gregtech.machine.smoke_stack.tooltip.1=§8Base Exhaustion Rate:§7 §f%d L every 10 ticks
+gregtech.machine.smoke_stack.tooltip.2=Doubles its speed for each block taller than 5
+gregtech.machine.dumper.name=Dumper
+gregtech.machine.dumper.rate=Dumping Rate: %s
+gregtech.machine.dumper.tooltip=Contaminates all your local ecosystems.
+gregtech.machine.dumper.tooltip.1=§2Base Dumping Rate:§7 §f %d L every 10 ticks
 gregtech.machine.froth_flotation_tank.name=Froth Flotation Tank
 gregtech.machine.multi_stage_flash_distiller.name=Multi Stage Flash Distiller
 gregtech.machine.high_temperature_distillation_tower.name=High Temperature Distillation Tower
@@ -248,11 +282,12 @@ gregtech.machine.drone_pad.name=Drone Pad
 gregtech.recipe.plasma_requirement=Requires plasma: %s
 gregtech.recipe.catalyst=Catalyst: %s %s
 gregtech.recipe.blocks=Blocks: %s
+gregtech.recipe.evaporation=Required Energy: %d J/t
 gregtech.recipe.cryogenic_environment=Requires Cryogenic Environment
 
 # Latex Collector
 gregtech.machine.latex_collector.steam=Needs Steam!
-gregtech.machine.latex_collector.tooltip=Collects latex from adjacent rubber tree log. Yields %d mL of latex per tick.
+gregtech.machine.latex_collector.tooltip=Extracts liquids from adjacent logs.
 gregtech.machine.latex_collector.bronze.name=Steam Latex Collector
 gregtech.machine.latex_collector.steel.name=High Pressure Steam Latex Collector
 gregtech.machine.latex_collector.lv.name=Basic Latex Collector
@@ -547,7 +582,7 @@ gregtech.machine.weapons_factory.uxv.name=Epic Weapons Factory IV
 gregtech.machine.weapons_factory.opv.name=Legendary Weapons Factory
 
 # Phase Separator
-gregtech.machine.phase_separator.lv.name=Phase Separator
+gregtech.machine.phase_separator.name=Phase Separator
 
 # Electrostatic Separator
 gregtech.machine.electrostatic_separator.lv.name=Basic Electrostatic Separator
@@ -640,8 +675,6 @@ recipemap.advanced_arc_furnace.name=Advanced Arc Furnace
 recipemap.evaporation_pool.name=Evaporation Pool
 recipemap.clarifier.name=Clarifier
 recipemap.multi_stage_flash_distillation.name=Multi Stage Flash Distillation
-recipemap.flare_stack.name=Flare Stack
-recipemap.dumping.name=Dumping
 recipemap.froth_flotation.name=Froth Flotation
 recipemap.rotary_kiln.name=Rotary Kiln
 recipemap.low_pressure_cryogenic_distillation.name=Low Pressure Cryogenic Distillation
@@ -682,6 +715,10 @@ metaitem.pump.steam.name=Steam Pump
 cover.pump.steam.title=Steam Pump
 metaitem.air_vent.name=Air Vent
 metaitem.air_vent.tooltip=Passively collects a Dimension's Air for your Machines when facing Air
+metaitem.track_segment.name=Monorail Track Segment
+metaitem.track_segment.tooltip=For use in the §8tunnelbore.
+metaitem.track_segment.length_info=§610 blocks §7worth of monorail track.
+metaitem.air_vent.tooltip.1=§bCollecting Rate: §f%,d L/s
 
 # Catalysts
 gregtech.universal.catalysts.tooltip.tier=§eMax Voltage: §f%,d EU/T (%s§f)
@@ -747,7 +784,7 @@ susy.recipe.dimensions=Dimensions: %s
 
 # Commands
 
-susy.command.horde.usage=/mobHorde <start/stop>
+susy.command.horde.usage=/mobHorde <start/stop/status>
 susy.command.horde.start.usage=/mobHorde start <name>
 susy.command.horde.start.argument_required=Use /mobHorde start <name>.
 susy.command.horde.start.no_such_horde=No such horde %s exists.
@@ -758,6 +795,14 @@ susy.command.horde.start.started=Successfully started %s invasion.
 susy.command.horde.stop.usage=/mobHorde stop
 susy.command.horde.stop.has_active_no_invasion=No active invasion to stop.
 susy.command.horde.stop.stopped=Successfully stopped %s invasion.
+susy.command.horde.status.usage=/mobHorde status <player>
+susy.command.horde.status.has_active_invasion=Player %s has an active %s invasion for %d ticks. It will time out in %s ticks.
+susy.command.horde.status.no_active_invasion=Player %s has no active invasion.
+
+# Fluid Tooltips
+susy.fluid.voiding.liquid=Voidable with Dumper
+susy.fluid.voiding.gas=Voidable with Smoke Stack
+susy.fluid.voiding.flammable=Voidable with Flare Stack
 
 death.attack.toxic_atmo=%s's lungs were shredded
 death.attack.suffocation=%s couldn't breathe

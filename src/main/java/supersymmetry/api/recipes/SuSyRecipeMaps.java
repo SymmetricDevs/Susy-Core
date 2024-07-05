@@ -8,6 +8,7 @@ import gregtech.api.recipes.builders.FuelRecipeBuilder;
 import gregtech.api.recipes.builders.PrimitiveRecipeBuilder;
 import gregtech.api.recipes.builders.SimpleRecipeBuilder;
 import gregtech.api.recipes.ingredients.GTRecipeInput;
+import gregtech.api.unification.material.Materials;
 import gregtech.core.sound.GTSoundEvents;
 import gregtechfoodoption.recipe.GTFORecipeMaps;
 import supersymmetry.api.gui.SusyGuiTextures;
@@ -98,7 +99,7 @@ public class SuSyRecipeMaps {
             .setSlotOverlay(true, false, true, GuiTextures.CRYSTAL_OVERLAY)
             .setSound(GTSoundEvents.FURNACE);
 
-    public static final RecipeMap<SimpleRecipeBuilder> TUBE_FURNACE_RECIPES = new RecipeMap<>("tube_furnace", 3, 1, 1, 0, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<SimpleRecipeBuilder> TUBE_FURNACE_RECIPES = new RecipeMap<>("tube_furnace", 3, 1, 1, 1, new SimpleRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
             .setSlotOverlay(false, false, false, GuiTextures.FURNACE_OVERLAY_1)
             .setSlotOverlay(false, false, true, GuiTextures.FURNACE_OVERLAY_1)
@@ -150,10 +151,6 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<CatalystRecipeBuilder> CATALYTIC_REFORMER_RECIPES = new RecipeMap<>("catalytic_reformer_recipes", 1, 0, 2, 4, new CatalystRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_CRACKING, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.FURNACE);
-
-    public static final RecipeMap<NoEnergyRecipeBuilder> SMOKE_STACK = new RecipeMap<>("smoke_stack", 0, 0, 1, 0, new NoEnergyRecipeBuilder(), false)
-            .setSound(GTSoundEvents.FURNACE);
-
     public static final RecipeMap<SimpleRecipeBuilder> FERMENTATION_VAT_RECIPES = new RecipeMap<>("vat_fermentation", 3, 3, 3, 3, new SimpleRecipeBuilder(), false)
             .setSlotOverlay(false, false, true, GuiTextures.DUST_OVERLAY)
             .setSlotOverlay(true, false, true, GuiTextures.DUST_OVERLAY)
@@ -248,7 +245,7 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.ARC);
 
-    public static final RecipeMap<NoEnergyRecipeBuilder> EVAPORATION_POOL = new RecipeMap<>("evaporation_pool", 1, 4, 1, 1, new NoEnergyRecipeBuilder(), false)
+    public static final RecipeMap<EvaporationPoolRecipeBuilder> EVAPORATION_POOL = new RecipeMap<>("evaporation_pool", 2, 4, 1, 1, new EvaporationPoolRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_SIFT, ProgressWidget.MoveType.VERTICAL)
             .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
@@ -259,13 +256,6 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> MULTI_STAGE_FLASH_DISTILLATION = new RecipeMap<>("multi_stage_flash_distillation", 0, 0, 3, 3, new SimpleRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.COOLING);
-
-    public static final RecipeMap<NoEnergyRecipeBuilder> FLARE_STACK = new RecipeMap<>("flare_stack", 0, 0, 1, 0, new NoEnergyRecipeBuilder(), false)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_SIFT, ProgressWidget.MoveType.VERTICAL)
-            .setSound(GTSoundEvents.FURNACE);
-
-    public static final RecipeMap<NoEnergyRecipeBuilder> DUMPING = new RecipeMap<>("dumping", 0, 0, 1, 0, new NoEnergyRecipeBuilder(), false)
-            .setSound(GTSoundEvents.BATH);
 
     public static final RecipeMap<SimpleRecipeBuilder> FROTH_FLOTATION = new RecipeMap<>("froth_flotation", 3, 2, 4, 2, new SimpleRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_MIXER, ProgressWidget.MoveType.CIRCULAR)

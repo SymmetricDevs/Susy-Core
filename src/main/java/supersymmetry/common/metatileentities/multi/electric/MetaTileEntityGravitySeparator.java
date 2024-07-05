@@ -10,6 +10,7 @@ import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.util.BlockInfo;
+import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing;
@@ -18,16 +19,15 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.common.blocks.BlockSeparatorRotor;
 import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.api.recipes.SuSyRecipeMaps;
 
 import javax.annotation.Nonnull;
-
 import java.util.function.Supplier;
 
 import static gregtech.api.util.RelativeDirection.*;
-import static supersymmetry.api.blocks.ISuSyHorizontalOrientable.FACING;
+import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
 
 public class MetaTileEntityGravitySeparator extends RecipeMapMultiblockController {
     public MetaTileEntityGravitySeparator(ResourceLocation metaTileEntityId) {
@@ -57,7 +57,7 @@ public class MetaTileEntityGravitySeparator extends RecipeMapMultiblockControlle
                 .aisle("C CC  C", "C CC CC", "CCCSCCC", "CRCRC  ", " CRCRC ", " CCCCRC", "    CJC")
                 */
                 .where('S', selfPredicate())
-                .where('R', orientation())
+                .where('R', rotorOrientation())
                 .where('C', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID)))
                 .where('M', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID))
                         .or(abilities(MultiblockAbility.MAINTENANCE_HATCH)).setExactLimit(1))
@@ -88,14 +88,24 @@ public class MetaTileEntityGravitySeparator extends RecipeMapMultiblockControlle
      */
 
     //makes sure block at position is properly oriented rotor
-    protected TraceabilityPredicate orientation() {
-        //required so that the rotors show up in the preview facing the correct direction
-        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(steelRotorState().withProperty(FACING, EnumFacing.SOUTH))};
+    protected TraceabilityPredicate rotorOrientation() {
+        //makes sure rotor's front faces the left side (relative to the player) of controller front
+        EnumFacing leftFacing = RelativeDirection.RIGHT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), isFlipped());
+
+        // converting the left facing to positive x or z axis direction
+        // this is needed for the following update which converts this rotatable block from horizontal directional into axial directional.
+        EnumFacing axialFacing = leftFacing.getIndex() < 4 ? EnumFacing.SOUTH : EnumFacing.WEST;
+
+        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(steelRotorState().withProperty(FACING, axialFacing))};
         return new TraceabilityPredicate(blockWorldState -> {
             IBlockState state = blockWorldState.getBlockState();
             if (!(state.getBlock() instanceof BlockSeparatorRotor)) return false;
-            EnumFacing facing = MetaTileEntityGravitySeparator.this.getFrontFacing();
-                return state == SuSyBlocks.SEPARATOR_ROTOR.getState(BlockSeparatorRotor.BlockSeparatorRotorType.STEEL).withProperty(FACING, facing);
+
+            // auto-correct rotor orientation
+            if (state != steelRotorState().withProperty(FACING, axialFacing)) {
+                getWorld().setBlockState(blockWorldState.getPos(), steelRotorState().withProperty(FACING, axialFacing));
+            }
+            return true;
         }, supplier);
     }
 
@@ -110,5 +120,10 @@ public class MetaTileEntityGravitySeparator extends RecipeMapMultiblockControlle
     @Nonnull
     protected ICubeRenderer getFrontOverlay() {
         return Textures.BLAST_FURNACE_OVERLAY;
+    }
+
+    @Override
+    public boolean allowsExtendedFacing() {
+        return false;
     }
 }

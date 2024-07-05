@@ -13,7 +13,6 @@ import gregtech.common.items.behaviors.TooltipBehavior;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import supersymmetry.SuSyValues;
-import supersymmetry.api.unification.ore.SusyOrePrefix;
 
 public class SuSyMetaItems {
 
@@ -24,6 +23,7 @@ public class SuSyMetaItems {
     public static MetaValueItem CONVEYOR_STEAM;
     public static MetaValueItem PUMP_STEAM;
     public static MetaValueItem AIR_VENT;
+    public static MetaValueItem TRACK_SEGMENT;
     public static ArmorMetaItem<?>.ArmorMetaValueItem SIMPLE_GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_MASK;
 
@@ -56,7 +56,11 @@ public class SuSyMetaItems {
             lines.add(I18n.format("gregtech.universal.tooltip.fluid_transfer_rate", new Object[]{32}));
         }));
         AIR_VENT = metaItem.addItem(4, "air_vent").addComponents(new TooltipBehavior((lines) -> {
-            lines.add(I18n.format("gregtech.universal.tooltip.fluid_transfer_rate", 100));
+            lines.add(I18n.format("metaitem.air_vent.tooltip.1", 100));
+        }));
+
+        TRACK_SEGMENT = metaItem.addItem(5, "track_segment").addComponents(new TooltipBehavior((lines) -> {
+            lines.add(I18n.format("metaitem.track_segment.length_info"));
         }));
         SIMPLE_GAS_MASK = armorItem.addItem(0, "simple_gas_mask")
                 .setArmorLogic(new SimpleGasMask());
