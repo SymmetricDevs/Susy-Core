@@ -26,7 +26,7 @@ dependencies {
     // GTCEu 2.8.7 beta
     implementation rfg.deobf("curse.maven:gregtech-ce-unofficial-557242:5506419")
     // GCYM 1.2.8
-    implementation rfg.deobf('curse.maven:gregicality-multiblocks-564858:5506497')
+    implementation rfg.deobf('curse.maven:gregicality-multiblocks-564858:5508050')
     // AE2UEL 0.55.6 (transitive gt dep)
     compileOnly rfg.deobf("curse.maven:ae2-extended-life-570458:4402048")
 
@@ -51,5 +51,6 @@ dependencies {
     implementation rfg.deobf("curse.maven:immersive-railroading-277736:4970105") // Immersive-Railroading v1.10.0
 
     implementation rfg.deobf("curse.maven:ctm-267602:2915363") // CTM 1.0.2.31
-    implementation rfg.deobf("curse.maven:groovyscript-687577:5439031") // GRS 1.1.0
+    implementation rfg.deobf("curse.maven:groovyscript-687577:5507936") // GRS 1.1.0
+    implementation rfg.deobf("curse.maven:modularui-624243:5153413")
 }
