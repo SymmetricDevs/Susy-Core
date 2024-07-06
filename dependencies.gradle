@@ -52,4 +52,6 @@ dependencies {
 
     implementation rfg.deobf("curse.maven:ctm-267602:2915363") // CTM 1.0.2.31
     implementation rfg.deobf("curse.maven:groovyscript-687577:5439031") // GRS 1.1.0
+
+    runtimeOnly rfg.deobf("curse.maven:the-beneath-254629:3425551")
 }
