@@ -22,6 +22,7 @@ public class BlockDeposit extends VariantBlock<BlockDeposit.DepositBlockType> {
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 100);
         setDefaultState(getState(DepositBlockType.ORTHOMAGMATIC));
+        setBlockUnbreakable();
     }
 
     @Override
