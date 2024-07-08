@@ -15,6 +15,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.Supersymmetry;
+import supersymmetry.api.integration.theoneprobe.TheOneProbeCompatibility;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
 import supersymmetry.common.CommonProxy;
@@ -45,6 +46,7 @@ public class ClientProxy extends CommonProxy {
         super.load();
         SuSyMetaBlocks.registerColors();
         SuSyFluidTooltipLoader.registerTooltips();
+        TheOneProbeCompatibility.registerCompatibility();
     }
 
     @SubscribeEvent

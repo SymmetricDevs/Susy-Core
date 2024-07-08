@@ -5,7 +5,6 @@ import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.logic.OverclockingLogic;
 import gregtech.api.recipes.recipeproperties.IRecipePropertyStorage;
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.recipes.properties.EvaporationEnergyProperty;
 import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityEvaporationPool;
 
@@ -15,7 +14,7 @@ import static supersymmetry.api.util.SuSyUtility.JOULES_PER_EU;
 
 public class EvapRecipeLogic extends MultiblockRecipeLogic {
     private final MetaTileEntityEvaporationPool pool;
-    public static final int HEAT_DENOMINATOR = 6 * 10; //transfers one sixth of its energy every half a second (10 ticks) as 1/6th every second seemed too low, with cupro depositing 1ALv/t
+    public static final int HEAT_DENOMINATOR = 10; //transfers all of its energy every half a second (10 ticks) as 1/6th every second seemed too low, with cupro depositing 1ALv/t
     public static final int MAX_STEP_FRACTION = 4; //denominator of fraction of progress which can be done in one step. (1/(MAX_STEP_FRACTION)) = max percent allowed
 
     public EvapRecipeLogic(MetaTileEntityEvaporationPool tileEntity) {
@@ -41,14 +40,14 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
     @Override
     protected void updateRecipeProgress() {
         //if null then no heating can be done, otherwise add joules according to coil values and energy available
-        if (pool.coilStats != null && pool.getIsHeated()) {
+        if (pool.coilStats != null && pool.isHeated()) {
             int coilHeat = pool.coilStats.getCoilTemperature();
-            //assumes specific heat of 1J/(g*delta temp) and perfect heat transfer on one face of the coil for 1/6 of total delta temp. Uses mass as a multiplier and 1/4 because coil is not solid block of primary material. Last portion calculates number of coils.
-            int heatingJoules = (coilHeat / HEAT_DENOMINATOR) * ((int) pool.coilStats.getMaterial().getMass() / 4) * (((pool.getColumnCount() / 2 + 1) * pool.getRowCount()) + pool.getColumnCount() / 2); //20 should limit it to reasonable per tick levels
+            //assumes specific heat of 1J/(g*delta temp) and perfect heat transfer on one face of the coil for 1/6 of total delta temp.  Last portion calculates number of coils.
+            int heatingJoules = (coilHeat / HEAT_DENOMINATOR) * (((pool.getColumnCount() / 2 + 1) * pool.getRowCount()) + pool.getColumnCount() / 2); //20 should limit it to reasonable per tick levels
             heatingJoules = Math.min(((int) getEnergyStored()) * JOULES_PER_EU, heatingJoules); //attempt to transfer entire heatingJoules amount or what is left in energy container
             boolean couldInput = pool.inputEnergy(heatingJoules);
             if (couldInput)
-                pool.getEnergyContainer().removeEnergy(heatingJoules / (JOULES_PER_EU * pool.coilStats.getEnergyDiscount())); //energy should always be available as heatingJoules is either itself or energy*JpEU
+                pool.getEnergyContainer().removeEnergy((heatingJoules / JOULES_PER_EU) / pool.coilStats.getEnergyDiscount()); //energy should always be available as heatingJoules is either itself or energy*JpEU
         }
 
         int maxSteps = pool.calcMaxSteps(getJt());
@@ -83,8 +82,8 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
             if (this.progressTime > this.maxProgressTime) completeRecipe();
         } else {
             this.hasNotEnoughEnergy = true;
-            //only decrease progress once a tick when using max sized pool (two sequential divisions to avoid cast to long)
-            if (pool.getOffsetTimer() % (((MetaTileEntityEvaporationPool.MAX_COLUMNS * MetaTileEntityEvaporationPool.MAX_COLUMNS) / pool.getColumnCount()) / pool.getRowCount()) == 0)
+            //50% chance to decrease progress by one once a tick when using max sized pool (two sequential divisions to avoid cast to long)
+            if (pool.getOffsetTimer() % ( 1 + ((MetaTileEntityEvaporationPool.MAX_COLUMNS * MetaTileEntityEvaporationPool.MAX_COLUMNS) / pool.getColumnCount()) / pool.getRowCount()) == 0)
                 this.decreaseProgress();
         }
     }

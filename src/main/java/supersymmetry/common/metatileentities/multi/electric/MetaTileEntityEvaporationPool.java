@@ -12,13 +12,14 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
+import gregtech.api.metatileentity.multiblock.MultiblockDisplayText;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
-import gregtech.api.pattern.BlockPattern;
-import gregtech.api.pattern.FactoryBlockPattern;
-import gregtech.api.pattern.MultiblockShapeInfo;
-import gregtech.api.pattern.TraceabilityPredicate;
+import gregtech.api.pattern.*;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.util.BlockInfo;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.TextComponentUtil;
+import gregtech.api.util.TextFormattingUtil;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.utils.TooltipHelper;
@@ -36,6 +37,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
@@ -44,6 +47,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.capability.impl.EvapRecipeLogic;
+import supersymmetry.api.integration.EvaporationPoolInfoProvider;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.common.blocks.BlockEvaporationBed;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -51,6 +55,7 @@ import supersymmetry.common.blocks.SuSyBlocks;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -58,89 +63,6 @@ import static gregtech.api.GregTechAPI.HEATING_COILS;
 import static supersymmetry.common.metatileentities.SuSyMetaTileEntities.EVAPORATION_POOL_ID;
 
 public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController{
-
-    //reinventing the wheel
-    class BitArray {
-        int[] intArray;
-
-        //assumes little endian [> index -> > significance]
-        public BitArray(byte[] byteArray) {
-            int bitCount = 0;
-            bitCount += (byteArray[0]);
-            bitCount += (byteArray[1] << 8);
-            bitCount += (byteArray[2] << 16);
-            bitCount += (byteArray[3] << 24);
-
-            int byteCount = ((bitCount >> 3) + (((bitCount & 7) * -1) >>> 31) +4);
-            intArray = new int[(bitCount >> 5) + (((bitCount & 31) * -1) >>> 31) +1];
-            intArray[0] = bitCount;
-
-            for (int i = 4; i < byteCount; ++i) {
-                //all ints in array start as zero; bits are little endian and thus must be shifted by 8 "left" index % 4 times
-                intArray[i/4] += byteArray[i] << (8 * (i & 3));
-            }
-        }
-
-        public BitArray(int bitCount) {
-            //(~(i * -1)) >>> 31
-            intArray = new int[(bitCount >> 5) + (((bitCount & 31) * -1) >> 31) +1];
-            intArray[0] = bitCount;
-        }
-
-        public BitArray(int bitCount, boolean initialState) {
-            //0 * -1 is the only value in which the sign bit is not swapped after-wards and thus >>> 31 is 0 for 0
-            intArray = new int[(bitCount >> 5) + (((bitCount & 31) * -1) >>> 31) +1];
-            intArray[0] = bitCount;
-            //SusyLog.logger.atError().log("number of ints: " + (bitCount >> 5) + (((bitCount & 31) * -1) >>> 31) + " with size: " + bitCount + "; size limit: " + (bitCount >> 5) +1);
-            for (int i = 1; initialState && (i < (bitCount >> 5) +2); ++i) {
-                intArray[i] = 0xFFFFFFFF; //set all to true if condition is true
-            }
-        }
-
-        //index = 0 is least sig, with index = 31 as most sig.
-        public boolean getBit(int index) {
-            //index into integers based on index's multiple of 32 (index >> 5), then discard all less sig bits and mask all more sig bits. If result is 1 return 1, else 0
-            return ((intArray[(index >> 5) +1] >> (index & 31)) & 1) == 1;
-        }
-
-        public void setBit(int index, boolean value) {
-            int entry = intArray[(index >> 5) +1];
-            //set appropriate integer equal to itself with single target bit at index masked, then or passed value into spot
-            intArray[(index >> 5) +1] = entry & ~(1 << (index & 31)) | ((value ? 1 : 0) << (index & 31));
-        }
-
-        //uses little endian [> index -> > significance]
-        public byte[] toByteArray() {
-            int bitCount = intArray[0];
-            int byteCount = ((bitCount >> 3) + (((bitCount & 7) * -1) >>> 31) +4);
-            byte[] byteArray = new byte[byteCount];
-
-            byteArray[0] = (byte) (bitCount & 0x00_00_00_FF);
-            byteArray[1] = (byte) (bitCount & 0x00_00_FF_00);
-            byteArray[2] = (byte) (bitCount & 0x00_FF_00_00);
-            byteArray[3] = (byte) (bitCount & 0xFF_00_00_00);
-
-            for (int i = 4; i < byteCount; ++i) {
-                byteArray[i] = (byte) (intArray[i/4] & (0x00_00_00_FF << (8 * (i & 3))) );
-            }
-
-            return byteArray;
-        }
-
-        public String toString() {
-            int bitCount = intArray[0];
-            String output = "";
-            for (int i = 0; i < bitCount; ++i) {
-                if ((i & 7) == 0) {
-                    output += "\n"; //new line for new byte
-                }
-
-                output += getBit(i) ? "1" : "0";
-            }
-
-            return output;
-        }
-    }
 
     /*
         For future reference: "((IGregTechTileEntity)world.getTileEntity(pos)).getMetaTileEntity() instanceof IMultiblockAbilityPart"
@@ -160,10 +82,11 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
     public static final int energyValuesID = 10868607;
     int exposedBlocks = 0;
-    BitArray wasExposed; //indexed with row*col + col with row = 0 being furthest and col 0 being leftmost when looking at controller
+    byte[] wasExposed; //indexed with row*col + col with row = 0 being furthest and col 0 being leftmost when looking at controller
     int kiloJoules = 0; //about 1000J/s on a sunny day for 1/m^2 of area
     int joulesBuffer = 0;
     int tickTimer = 0;
+    int currMaxStepCount = 0;
 
     public static final int fluidNameID = 12090539;
 
@@ -201,9 +124,16 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         this.coilStateMeta = -1;
 
         this.exposedBlocks = 0;
-        this.wasExposed = new BitArray(0);
+        this.wasExposed = new byte[0];
         this.kiloJoules = 0;
         this.tickTimer = 0;
+        this.currMaxStepCount = 0;
+
+        if (lastActive) {
+            this.setLastActive(false);
+            this.markDirty();
+            this.replaceVariantBlocksActive(false);
+        }
 
         this.writeCustomData(predicateID, (buf) -> {
             buf.writeBoolean(isHeated);
@@ -212,7 +142,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
         this.writeCustomData(energyValuesID, buf -> {
             buf.writeInt(exposedBlocks);
-            buf.writeByteArray(wasExposed.toByteArray());
+            buf.writeByteArray(wasExposed);
             buf.writeInt(kiloJoules);
             buf.writeInt(tickTimer);
         });
@@ -319,6 +249,14 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         return containerRows;
     }
 
+    @Override
+    protected void formStructure(PatternMatchContext context) {
+        super.formStructure(context);
+        this.variantActiveBlocks = context.getOrDefault("VABlock", new LinkedList<>());
+        this.replaceVariantBlocksActive(isHeated());
+    }
+
+    @Override
     protected BlockPattern createStructurePattern() {
         /*
             'E' for "edge" block, that is to say essentially the blocks that contain the water.
@@ -343,10 +281,12 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         if (rowCount < 1) rowCount = 1;
 
         //if no bits are being stored, initialize
-        if (wasExposed == null || wasExposed.intArray[0] == 0) {
-            wasExposed = new BitArray(columnCount * rowCount, false);
+        if (wasExposed == null || wasExposed.length == 0) {
+            wasExposed = new byte[columnCount * rowCount]; // all set to 0
             this.exposedBlocks = 0; //ensure exposedBlocks dont go higher than expected
         }
+
+        this.currMaxStepCount = 0;
 
         if (structurePattern != null && currColCount == columnCount && currRowCount == rowCount && currContPos == controllerPosition) return structurePattern;
 
@@ -434,18 +374,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     public List<MultiblockShapeInfo> getMatchingShapes() {
         ArrayList<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
         MultiblockShapeInfo.Builder builder = MultiblockShapeInfo.builder()
-                /* is backwards but lighting looks better
-                .aisle("EEEEEESEEE", "          ")
-                .aisle("EEEEEEEEEE", " EEEEEEEE ")
-                .aisle("EEGCCCGCEE", " E######E ")
-                .aisle("EEGCGCGCEE", " E######E ")
-                .aisle("EEGCGCGCEE", " E######E ")
-                .aisle("EEGCGCGCEE", " E######E ")
-                .aisle("EEGCGCGCEE", " E######E ")
-                .aisle("EECCGCCCEE", " E######E ")
-                .aisle("EEEEEEEEEE", " EEEEEEEE ")
-                .aisle("efFIEEEEEE", "          ")
-                 */
                 .aisle("efFIEEEEEE", "          ")
                 .aisle("EEEEEEEEEE", " EEEEEEEE ")
                 .aisle("EECCCGCCEE", " E######E ")
@@ -530,6 +458,11 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
         //if check is passed structure is valid heatable evap pool
         isHeated = true;
+        if (!lastActive) {
+            this.setLastActive(true);
+            this.markDirty();
+            this.replaceVariantBlocksActive(true);
+        }
         initializeCoilStats();
 
         this.writeCustomData(predicateID, (buf) -> {
@@ -564,99 +497,24 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     @Override
     public void checkStructurePattern() {
         //SusyLog.logger.atError().log("Checking structure pattern");
-        // This is here so that it automatically updates the dimensions once a second if it isn't formed
+        // This is here so that it automatically updates the dimensions once a second if it isn't formed [this method is called once a second]
         // hope this doesn't put too much of a toll on TPS - It really should not
         if (!isStructureFormed() || structurePattern == null) {
-            reinitializeStructurePattern();
+            structurePattern = null; // should erase any faulty errors picked up from reloading world
+            this.currMaxStepCount = 0;
+            reinitializeStructurePattern(); // creates new structure pattern again
         }
 
         super.checkStructurePattern();
         //SusyLog.logger.atError().log("Finished Super structure pattern check");
 
-        //only do check every 4 seconds while structure is formed
-        if ((tickTimer / 20 & 3) == 0 && structurePattern != null && structurePattern.getError() == null) {
+        //only do check every 2 seconds while structure is formed
+        if (((tickTimer / 20) & 1) == 0 && structurePattern != null && structurePattern.getError() == null) {
             handleCoilCheckResult(coilPatternCheck(false));
         }
 
         //SusyLog.logger.atError().log("StructurePattern: " + (structurePattern == null ? "null" : (structurePattern.getError() == null ? "No Error" : structurePattern.getError().getErrorInfo())));
     }
-
-    //for future reference
-    /*
-    public void removeError() {
-        try {
-            Field privateField = structurePattern.getClass().getDeclaredField("worldState"); //grab worldState field
-            privateField.setAccessible(true); //make world state accessible
-            BlockWorldState structurePatternWorldState = (BlockWorldState)privateField.get(structurePattern); //grab worldState
-            structurePatternWorldState.setError(null);
-            SusyLog.logger.atError().log("Caballed error.");
-        } catch (Exception e) {
-            SusyLog.logger.atError().log("failed to do reflection for evaporation pool");
-        }
-    }
-     */
-
-    //for future reference
-    /*
-    @Override
-    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
-        super.addInformation(stack, player, tooltip, advanced);
-        tooltip.add(TooltipHelper.RAINBOW_SLOW + I18n.format("gregtech.machine.perfect_oc", new Object[0]));
-
-        //adds visual for edge blocks, "container blocks", and the controller where E -> 0, C -> o, and S -> X.
-        tooltip.add("00".concat(repeat("o", controllerPosition).concat("X").concat(repeat("o", columnCount -controllerPosition -1))).concat("00"));
-    }
-
-    @Override
-    protected void addDisplayText(List<ITextComponent> textList) {
-        textList.add(new TextComponentString("00".concat(repeat("o", controllerPosition).concat("X").concat(repeat("o", columnCount -controllerPosition -1))).concat("00")));
-        super.addDisplayText(textList);
-    }
-
-    //felt like using this instead of a gui to vary controller pos. Custom logic on runs on crouch so player can choose if they want it muted or not after.
-    @Override
-    public boolean onHardHammerClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing, CuboidRayTraceResult hitResult) {
-        // if not sneaking, don't perform special logic. If sneaking, don't perform muting logic
-        if (!playerIn.isSneaking()) {
-            return super.onHardHammerClick(playerIn, hand, facing, hitResult);
-        }
-
-        controllerPosition = (controllerPosition +1) % columnCount; // increase controller position/index on range [0, columnCount -1]
-
-        this.writeCustomData(108, (buf) -> {
-            buf.writeInt(controllerPosition);
-        });
-
-        return true;
-    }
-
-    //nothing takes advantage of this being open, so I'm going to use it to control number of columns. More important property is more easily accessed.
-    @Override
-    public void onLeftClick(EntityPlayer player, EnumFacing facing, CuboidRayTraceResult hitResult) {
-        //if not sneaking, don't perform special logic
-        if (!player.isSneaking()) {
-            super.onLeftClick(player, facing, hitResult);
-            return;
-        }
-
-        //increase number of columns on range [1, maxColumns]
-        columnCount = (columnCount +1) % maxColumns +1;
-
-        if (columnCount == 0) {
-            ++columnCount; //ensure at least one column at all times
-            controllerPosition = 0; //ensure controller position <= columnCount
-        }
-
-        //write custom data (not sure if this is necessary or not)
-        this.writeCustomData(104, (buf) -> {
-            buf.writeInt(columnCount);
-        });
-
-        this.writeCustomData(108, (buf) -> {
-            buf.writeInt(controllerPosition);
-        });
-    }
-     */
 
     @Override
     public void addInformation(ItemStack stack, World player, @NotNull List<String> tooltip, boolean advanced) {
@@ -852,17 +710,17 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                 if (!getWorld().canBlockSeeSky(skyCheckPos)) {
                     //SusyLog.logger.atError().log("Failed sky check at " + skyCheckPos + " ; " + getWorld().canBlockSeeSky(skyCheckPos) + " w/ exposedBlocks: " + exposedBlocks);
                     //only decrement exposedBlocks if previously exposed block is found to no longer be exposed and one full pass has occurred
-                    if (wasExposed.getBit((row * columnCount) + col) && tickTimer/20 > rowCount * columnCount) {
+                    if (wasExposed[(row * columnCount) + col] != 0 && tickTimer/20 > rowCount * columnCount) {
                         exposedBlocks = Math.max(0, exposedBlocks -1);
-                        wasExposed.setBit((row * columnCount) + col, false);
+                        wasExposed[(row * columnCount) + col] = 0;
                     }
                 }
                 else {
                     //SusyLog.logger.atError().log("Passed sky check at " + skyCheckPos + " ; " + getWorld().canBlockSeeSky(skyCheckPos) + " w/ exposedBlocks: " + exposedBlocks);
                     //only increment if block was not previously exposed
-                    if (!wasExposed.getBit((row * columnCount) + col)) {
+                    if (wasExposed[(row * columnCount) + col] == 0) {
                         if (exposedBlocks < rowCount * columnCount) ++exposedBlocks;
-                        wasExposed.setBit((row * columnCount) + col, true);
+                        wasExposed[(row * columnCount) + col] = 1;
                     }
                     //SusyLog.logger.atError().log("exposedBlock: " + exposedBlocks);
                 }
@@ -891,10 +749,97 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         //store relevant values
         this.writeCustomData(energyValuesID, buf -> {
             buf.writeInt(exposedBlocks);
-            buf.writeByteArray(wasExposed == null ? new BitArray(0).toByteArray() : wasExposed.toByteArray());
+            buf.writeByteArray(wasExposed == null ? new byte[0] : wasExposed);
             buf.writeInt(kiloJoules);
             buf.writeInt(tickTimer);
         });
+    }
+
+    /*
+    gregtech.top.evaporation_pool_heated_preface=Coil Pattern:
+gregtech.top.evaporation_pool_is_heated=VALID; May be heated.
+gregtech.top.evaporation_pool_not_heated=INVALID; Will not heat.
+gregtech.top.evaporation_pool.energy_transferred=Thermal Energy Stored:
+gregtech.top.evaporation_pool.kilojoules=kJ
+gregtech.top.evaporation_pool.recipe_step_count=Max Recipe Steps for Energy:
+gregtech.top.evaporation_pool.recipe_step_units=Recipe Ticks
+     */
+
+    @Override
+    protected void addDisplayText(List<ITextComponent> textList) {
+        MultiblockDisplayText.builder(textList, isStructureFormed())
+                .setWorkingStatus(recipeMapWorkable.isWorkingEnabled(), recipeMapWorkable.isActive())
+                .addEnergyUsageLine(getEnergyContainer())
+                .addCustom(tl -> {
+                    // coil coefficient
+                    if (isStructureFormed()) {
+                        // handle heating contributions
+                        if (isHeated()) {
+                            tl.add(TextComponentUtil.translationWithColor(
+                                    TextFormatting.WHITE,
+                                    "gregtech.top.evaporation_pool_heated_preface"
+                            ).appendText(" ").appendSibling(TextComponentUtil.translationWithColor(
+                                    TextFormatting.GREEN,
+                                    "gregtech.top.evaporation_pool_is_heated"
+                            )));
+
+                            ITextComponent heatingJoulesString = TextComponentUtil.stringWithColor(
+                                    TextFormatting.YELLOW,
+                                    TextFormattingUtil.formatNumbers((this.coilStats.getCoilTemperature() / 10) * ((((columnCount + 1) / 2 ) * rowCount) + columnCount / 2)));
+
+                            tl.add(TextComponentUtil.translationWithColor(
+                                    TextFormatting.WHITE,
+                                    "gregtech.multiblock.evaporation_pool.heating_joules"
+                            ).appendText(" ").appendSibling(heatingJoulesString));
+
+                        } else {
+                            tl.add(TextComponentUtil.translationWithColor(
+                                    TextFormatting.WHITE,
+                                    "gregtech.top.evaporation_pool_heated_preface"
+                            ).appendSibling(TextComponentUtil.translationWithColor(
+                                    TextFormatting.RED,
+                                    "gregtech.top.evaporation_pool_is_heated"
+                            )));
+                        }
+
+                        tl.add(TextComponentUtil.translationWithColor(
+                                TextFormatting.WHITE,
+                                "gregtech.multiblock.evaporation_pool.exposed_blocks"
+                        ).appendText(" ").appendSibling(TextComponentUtil.translationWithColor(
+                                TextFormatting.GREEN,
+                                TextFormattingUtil.formatNumbers(exposedBlocks)
+                        )));
+
+                        tl.add(TextComponentUtil.translationWithColor(
+                                TextFormatting.WHITE,
+                                "gregtech.top.evaporation_pool.energy_transferred"
+                        ).appendText(" ").appendSibling(TextComponentUtil.stringWithColor(
+                                TextFormatting.YELLOW,
+                                TextFormattingUtil.formatNumbers(this.getKiloJoules())
+                        ).appendText(".").appendSibling(TextComponentUtil.stringWithColor(
+                                TextFormatting.YELLOW,
+                                EvaporationPoolInfoProvider.constLengthToString(this.getJoulesBuffer())
+                        )).appendText(" ").appendSibling(TextComponentUtil.translationWithColor(
+                                TextFormatting.WHITE,
+                                "gregtech.top.evaporation_pool.kilojoules"
+                        ))));
+
+                        tl.add(TextComponentUtil.translationWithColor(
+                                TextFormatting.WHITE,
+                                "gregtech.top.evaporation_pool.recipe_step_count"
+                        ).appendText(" ").appendSibling(TextComponentUtil.translationWithColor(
+                                TextFormatting.GREEN,
+                                TextFormattingUtil.formatNumbers(this.getCurrMaxStepCount())
+                        )).appendText(" ").appendSibling(TextComponentUtil.translationWithColor(
+                                TextFormatting.WHITE,
+                                "gregtech.top.evaporation_pool.recipe_step_units"
+                        )));
+                    }
+                })
+                .addEnergyTierLine(GTUtility.getTierByVoltage(recipeMapWorkable.getMaxVoltage()))
+                .addParallelsLine(recipeMapWorkable.getParallelLimit())
+                .addWorkingStatusLine()
+                .addProgressLine(recipeMapWorkable.getProgressPercent());
     }
 
     @Override
@@ -905,7 +850,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         data.setInteger("controllerPosition", this.controllerPosition);
         data.setBoolean("isHeated", this.isHeated);
         data.setInteger("exposedBlocks", this.exposedBlocks);
-        data.setByteArray("wasExposed", this.wasExposed == null ? new BitArray(0).toByteArray() : this.wasExposed.toByteArray());
+        data.setByteArray("wasExposed", this.wasExposed == null ? new byte[0] : this.wasExposed);
         data.setInteger("kiloJoules", this.kiloJoules);
         data.setInteger("tickTimer", this.tickTimer);
         data.setInteger("coilStateMeta", this.coilStateMeta);
@@ -931,7 +876,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             this.exposedBlocks = data.getInteger("exposedBlocks");
         }
         if (data.hasKey("wasExposed")) {
-            this.wasExposed = new BitArray(data.getByteArray("wasExposed"));
+            this.wasExposed = data.getByteArray("wasExposed");
         }
         if (data.hasKey("kiloJoules")) {
             this.kiloJoules = data.getInteger("kiloJoules");
@@ -946,6 +891,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         //SusyLog.logger.atFatal().log("before reinit");
         //SusyLog.logger.atError().log("columnCount: " + columnCount + ", controllerPosition: " + controllerPosition + ", rowCount: " + rowCount);
         //SusyLog.logger.atError().log("isHeated: " + isHeated + ", kiloJoules: " + kiloJoules + ", tickTimer: " + tickTimer + ", coilStateMeta: " + coilStateMeta);
+        this.currMaxStepCount = 0;
         reinitializeStructurePattern();
         //SusyLog.logger.atFatal().log("after reinit");
         //SusyLog.logger.atError().log("columnCount: " + columnCount + ", controllerPosition: " + controllerPosition + ", rowCount: " + rowCount);
@@ -961,7 +907,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         buf.writeInt(this.controllerPosition);
         buf.writeBoolean(this.isHeated);
         buf.writeInt(this.exposedBlocks);
-        buf.writeByteArray(this.wasExposed == null ? new BitArray(0).toByteArray() : this.wasExposed.toByteArray());
+        buf.writeByteArray(this.wasExposed == null ? new byte[0] : this.wasExposed);
         buf.writeInt(this.kiloJoules);
         buf.writeInt(this.tickTimer);
         buf.writeInt(this.coilStateMeta);
@@ -975,10 +921,11 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         this.controllerPosition = buf.readInt();
         this.isHeated = buf.readBoolean();
         this.exposedBlocks = buf.readInt();
-        this.wasExposed = new BitArray(buf.readByteArray());
+        this.wasExposed = buf.readByteArray();
         this.kiloJoules = buf.readInt();
         this.tickTimer = buf.readInt();
         this.coilStateMeta = buf.readInt();
+        this.currMaxStepCount = 0;
         reinitializeStructurePattern();
     }
 
@@ -995,7 +942,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             initializeCoilStats();
         } else if (dataId == energyValuesID) {
             this.exposedBlocks = buf.readInt();
-            this.wasExposed = new BitArray(buf.readByteArray());
+            this.wasExposed = buf.readByteArray();
             this.kiloJoules = buf.readInt();
             this.tickTimer = buf.readInt();
         }
@@ -1058,8 +1005,12 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         return joulesBuffer;
     }
 
-    public boolean getIsHeated() {
+    public boolean isHeated() {
         return isHeated;
+    }
+
+    public int getCurrMaxStepCount() {
+        return currMaxStepCount;
     }
 
     public void setKiloJoules(int kiloJoules) {
@@ -1098,6 +1049,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         else remainder = 0;
 
         stepCount += (joulesBuffer - remainder)/jStepSize; //number of jSteps which can come entirely from joulesBuffer
+        this.currMaxStepCount = stepCount;
         return stepCount;
     }
 
