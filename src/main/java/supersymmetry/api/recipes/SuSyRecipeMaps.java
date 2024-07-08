@@ -107,7 +107,7 @@ public class SuSyRecipeMaps {
             .setSlotOverlay(true, false, true, SusyGuiTextures.CUBIC_LATTICE_OVERLAY)
             .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
-    public static final RecipeMap<SimpleRecipeBuilder> ELECTROSTATIC_SEPARATOR = new RecipeMap<>("electrostatic_separator", 3, 3, 3, 3, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<SimpleRecipeBuilder> ELECTROSTATIC_SEPARATOR = new RecipeMap<>("electrostatic_separator", 3, 3, 6, 6, new SimpleRecipeBuilder(), false)
             .setSlotOverlay(false, false, GuiTextures.CRUSHED_ORE_OVERLAY)
             .setSlotOverlay(true, false, GuiTextures.DUST_OVERLAY)
             .setProgressBar(GuiTextures.PROGRESS_BAR_MAGNET, ProgressWidget.MoveType.HORIZONTAL)
@@ -145,7 +145,7 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> COKING_RECIPES = new RecipeMap<>("coking_tower", 1, 1, 3, 2, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.COMBUSTION);
 
-    public static final RecipeMap<SimpleRecipeBuilder> VACUUM_DISTILLATION_RECIPES = new RecipeMap<>("vacuum_distillation", 1, 1, 1, 12, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<SimpleRecipeBuilder> VACUUM_DISTILLATION_RECIPES = new RecipeMap<>("vacuum_distillation", 1, true, 1, true, 1, true, 12, false, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
     public static final RecipeMap<CatalystRecipeBuilder> CATALYTIC_REFORMER_RECIPES = new RecipeMap<>("catalytic_reformer_recipes", 1, 0, 2, 4, new CatalystRecipeBuilder(), false)
@@ -363,6 +363,7 @@ public class SuSyRecipeMaps {
         RecipeMaps.EXTRUDER_RECIPES.setMaxOutputs(3);
         RecipeMaps.EXTRUDER_RECIPES.setMaxFluidInputs(1);
         RecipeMaps.CUTTER_RECIPES.setMaxOutputs(4);
+        RecipeMaps.LARGE_CHEMICAL_RECIPES.setMaxInputs(4);
         RecipeMaps.LARGE_CHEMICAL_RECIPES.setMaxFluidInputs(6);
         RecipeMaps.MIXER_RECIPES.onRecipeBuild(recipeBuilder -> {
             SuSyRecipeMaps.BLENDER_RECIPES.recipeBuilder()
