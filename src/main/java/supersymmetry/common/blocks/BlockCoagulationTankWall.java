@@ -1,7 +1,6 @@
 package supersymmetry.common.blocks;
 
 import gregtech.api.block.IStateHarvestLevel;
-
 import gregtech.api.block.VariantBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -30,13 +29,13 @@ public class BlockCoagulationTankWall extends VariantBlock<BlockCoagulationTankW
         return false;
     }
 
-    public static enum CoagulationTankWallType implements IStringSerializable, IStateHarvestLevel {
+    public enum CoagulationTankWallType implements IStringSerializable, IStateHarvestLevel {
         WOODEN_COAGULATION_TANK_WALL("wooden_coagulation_tank_wall", 1);
 
         private final String name;
         private final int harvestLevel;
 
-        private CoagulationTankWallType(String name, int harvestLevel) {
+        CoagulationTankWallType(String name, int harvestLevel) {
             this.name = name;
             this.harvestLevel = harvestLevel;
         }

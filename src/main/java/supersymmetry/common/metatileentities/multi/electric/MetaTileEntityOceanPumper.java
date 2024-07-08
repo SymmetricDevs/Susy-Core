@@ -23,12 +23,10 @@ import gregtech.api.unification.material.Materials;
 import gregtech.api.util.GTUtility;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
-import supersymmetry.client.renderer.textures.SusyTextures;
-import gregtech.common.blocks.*;
 import gregtech.client.utils.TooltipHelper;
-import net.minecraft.client.resources.I18n;
-import supersymmetry.common.materials.SusyMaterials;
+import gregtech.common.blocks.*;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
@@ -37,12 +35,14 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.materials.SusyMaterials;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -71,6 +71,11 @@ public class MetaTileEntityOceanPumper extends MultiblockWithDisplayBase impleme
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
         return new MetaTileEntityOceanPumper(metaTileEntityId);
+    }
+
+    @Override
+    public boolean isMultiblockPartWeatherResistant(@Nonnull IMultiblockPart part) {
+        return true;
     }
 
     @Override
@@ -325,5 +330,10 @@ public class MetaTileEntityOceanPumper extends MultiblockWithDisplayBase impleme
     @Override
     public boolean getIsWeatherOrTerrainResistant() {
         return true;
+    }
+
+    @Override
+    public boolean allowsExtendedFacing() {
+        return false;
     }
 }

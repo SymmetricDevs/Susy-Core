@@ -27,10 +27,6 @@ public class SuSyMaterialFlags {
             .requireProps(new PropertyKey[]{PropertyKey.ORE})
             .build();
 
-    public static MaterialFlag GENERATE_SLURRIES = (new MaterialFlag.Builder("generate_slurries"))
-            .requireProps(new PropertyKey[]{PropertyKey.ORE})
-            .build();
-
     public static MaterialFlag GENERATE_FIBER = (new MaterialFlag.Builder("generate_fiber"))
             .requireProps(new PropertyKey[]{SuSyPropertyKey.FIBER})
             .build();
@@ -43,6 +39,6 @@ public class SuSyMaterialFlags {
             .requireProps(new PropertyKey[]{SuSyPropertyKey.FIBER})
             .build();
 
-    public SuSyMaterialFlags(){
-    }
+    public SuSyMaterialFlags() {}
+    
 }

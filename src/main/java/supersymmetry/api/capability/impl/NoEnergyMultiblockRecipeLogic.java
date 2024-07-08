@@ -3,51 +3,58 @@ package supersymmetry.api.capability.impl;
 import gregtech.api.GTValues;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
-import gregtech.api.recipes.logic.OverclockingLogic;
 import gregtech.api.recipes.recipeproperties.IRecipePropertyStorage;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
+import static gregtech.api.recipes.logic.OverclockingLogic.standardOverclockingLogic;
 
 public class NoEnergyMultiblockRecipeLogic extends MultiblockRecipeLogic {
+
     public NoEnergyMultiblockRecipeLogic(RecipeMapMultiblockController tileEntity) {
         super(tileEntity);
     }
 
+    @Override
     protected long getEnergyInputPerSecond() {
-        return 2147483647L;
+        return Integer.MAX_VALUE;
     }
 
+    @Override
     protected long getEnergyStored() {
-        return 0L;
+        return Integer.MAX_VALUE;
     }
 
+    @Override
     protected long getEnergyCapacity() {
-        return 2147483647L;
+        return Integer.MAX_VALUE;
     }
 
+    @Override
     protected boolean drawEnergy(int recipeEUt, boolean simulate) {
-        return true;
+        return true; // spoof energy being drawn
     }
 
-    protected long getMaxVoltage() {
-        return 1L;
+    @Override
+    public long getMaxVoltage() {
+        return GTValues.LV;
     }
 
-    protected int[] runOverclockingLogic(@Nonnull IRecipePropertyStorage propertyStorage, int recipeEUt, long maxVoltage, int recipeDuration, int amountOC) {
-        return OverclockingLogic.standardOverclockingLogic(1, this.getMaxVoltage(), recipeDuration, amountOC, this.getOverclockingDurationDivisor(), this.getOverclockingVoltageMultiplier());
+    @Override
+    protected int @NotNull [] runOverclockingLogic(@NotNull IRecipePropertyStorage propertyStorage, int recipeEUt,
+                                                   long maxVoltage, int recipeDuration, int amountOC) {
+        return standardOverclockingLogic(
+                1,
+                getMaxVoltage(),
+                recipeDuration,
+                amountOC,
+                getOverclockingDurationDivisor(),
+                getOverclockingVoltageMultiplier()
+
+        );
     }
 
+    @Override
     public long getMaximumOverclockVoltage() {
-        return GTValues.V[1];
-    }
-
-    public void invalidate() {
-        this.previousRecipe = null;
-        this.progressTime = 0;
-        this.maxProgressTime = 0;
-        this.recipeEUt = 0;
-        this.fluidOutputs = null;
-        this.itemOutputs = null;
-        this.setActive(false);
+        return GTValues.V[GTValues.LV];
     }
 }

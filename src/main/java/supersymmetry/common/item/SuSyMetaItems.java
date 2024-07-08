@@ -10,7 +10,6 @@ import gregtech.api.unification.ore.OrePrefix;
 import gregtech.common.items.behaviors.TooltipBehavior;
 import net.minecraft.client.resources.I18n;
 import supersymmetry.SuSyValues;
-import supersymmetry.api.unification.ore.SusyOrePrefix;
 
 public class SuSyMetaItems {
 
@@ -20,6 +19,7 @@ public class SuSyMetaItems {
     public static MetaValueItem CONVEYOR_STEAM;
     public static MetaValueItem PUMP_STEAM;
     public static MetaValueItem AIR_VENT;
+    public static MetaValueItem TRACK_SEGMENT;
 
     public static void initMetaItems() {
         metaItem = new StandardMetaItem();
@@ -48,7 +48,11 @@ public class SuSyMetaItems {
             lines.add(I18n.format("gregtech.universal.tooltip.fluid_transfer_rate", new Object[]{32}));
         }));
         AIR_VENT = metaItem.addItem(4, "air_vent").addComponents(new TooltipBehavior((lines) -> {
-            lines.add(I18n.format("gregtech.universal.tooltip.fluid_transfer_rate", 100));
+            lines.add(I18n.format("metaitem.air_vent.tooltip.1", 100));
+        }));
+
+        TRACK_SEGMENT = metaItem.addItem(5, "track_segment").addComponents(new TooltipBehavior((lines) -> {
+            lines.add(I18n.format("metaitem.track_segment.length_info"));
         }));
     }
 

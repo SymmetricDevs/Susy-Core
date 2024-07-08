@@ -8,7 +8,6 @@ import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.client.renderer.ICubeRenderer;
-import gregtech.client.renderer.texture.Textures;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiFluidHatch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
@@ -84,5 +83,10 @@ public class MetaTileEntityHighTemperatureDistillationTower extends RecipeMapMul
     @Override
     public int getFluidOutputLimit() {
         return getOutputFluidInventory().getTanks();
+    }
+
+    @Override
+    public boolean allowsExtendedFacing() {
+        return false;
     }
 }

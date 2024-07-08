@@ -17,19 +17,17 @@ import it.unimi.dsi.fastutil.ints.IntLists;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.properties.DroneDimensionProperty;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.entities.EntityDrone;
 
-import java.util.List;
+import javax.annotation.Nonnull;
 
 public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
 
@@ -80,6 +78,16 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
         return new MetaTileEntityDronePad(this.metaTileEntityId);
+    }
+
+    @Override
+    public boolean isMultiblockPartWeatherResistant(@Nonnull IMultiblockPart part) {
+        return true;
+    }
+
+    @Override
+    public boolean getIsWeatherOrTerrainResistant() {
+        return true;
     }
 
     public boolean hasDrone() {
@@ -229,4 +237,8 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
         }
     }
 
+    @Override
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
 }

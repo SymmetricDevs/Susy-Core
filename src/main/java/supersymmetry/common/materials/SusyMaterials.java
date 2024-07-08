@@ -1,6 +1,8 @@
 package supersymmetry.common.materials;
 
 import gregtech.api.GregTechAPI;
+import gregtech.api.fluids.FluidBuilder;
+import gregtech.api.fluids.store.FluidStorageKeys;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.info.MaterialFlag;
@@ -62,7 +64,7 @@ public class SusyMaterials {
 
     private static void changeProperties() {
         //removeProperty(PropertyKey.ORE, Materials.Graphite);
-        Latex.getProperty(PropertyKey.FLUID).setFluidTemperature(293);
+
         removeProperty(PropertyKey.ORE, Materials.Soapstone);
         removeProperty(PropertyKey.ORE, Materials.Quartzite);
         removeProperty(PropertyKey.ORE, Materials.Mica);
@@ -122,6 +124,16 @@ public class SusyMaterials {
 
         Materials.Salt.setProperty(PropertyKey.FLUID, new FluidProperty());
 
+        Materials.SodiumHydroxide.setProperty(PropertyKey.FLUID, new FluidProperty());
+
+        Materials.Sodium.setProperty(PropertyKey.FLUID, new FluidProperty());
+
+        Materials.Phosphorus.setProperty(PropertyKey.INGOT, new IngotProperty());
+        FluidProperty fluidProperty = new FluidProperty();
+        fluidProperty.getStorage().enqueueRegistration(FluidStorageKeys.LIQUID, new FluidBuilder().temperature(317));
+        Materials.Phosphorus.setProperty(PropertyKey.FLUID, fluidProperty);
+        Materials.Phosphorus.setMaterialRGB(0xfffed6);
+
         Materials.HydrochloricAcid.setFormula("(H2O)(HCl)", true);
 
         Materials.HydrofluoricAcid.setFormula("(H2O)(HF)", true);
@@ -154,6 +166,10 @@ public class SusyMaterials {
         Materials.Rhodium.addFlags(SuSyMaterialFlags.GENERATE_CATALYST_BED);
 
         Materials.Copper.addFlags(SuSyMaterialFlags.GENERATE_CATALYST_BED);
+
+        Materials.Electrum.setProperty(PropertyKey.ORE, new OreProperty());
+
+        Materials.Hydrogen.addFlags(MaterialFlags.FLAMMABLE);
     }
 
     private static void removeProperty(PropertyKey<?> key, Material material) {

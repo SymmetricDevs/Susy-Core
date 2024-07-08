@@ -3,21 +3,17 @@ package supersymmetry.common.blocks;
 import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantBlock;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import supersymmetry.api.SusyLog;
-import supersymmetry.api.blocks.ISuSyHorizontalOrientable;
+import net.minecraft.world.IBlockAccess;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
-public class BlockDrillHead extends VariantBlock<BlockDrillHead.DrillHeadType> implements ISuSyHorizontalOrientable {
+public class BlockDrillHead extends VariantBlock<BlockDrillHead.DrillHeadType> {
     public BlockDrillHead(){
         super(net.minecraft.block.material.Material.IRON);
         setTranslationKey("drill_head");
@@ -25,62 +21,31 @@ public class BlockDrillHead extends VariantBlock<BlockDrillHead.DrillHeadType> i
         setResistance(10.0f);
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 2);
-        setDefaultState(getState(DrillHeadType.STEEL).withProperty(FACING, EnumFacing.NORTH));
+        setDefaultState(getState(DrillHeadType.STEEL));
     }
 
     @Override
-    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
-    {
-        return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING, placer.getHorizontalFacing().getOpposite());
-    }
-
-    @Override
-    public IBlockState getStateFromMeta(int meta)
-    {
-        int i = meta / 4;
-        int j = meta % 4 + 2;
-
-        EnumFacing enumfacing = EnumFacing.byHorizontalIndex(j);
-
-        return this.getDefaultState()
-                .withProperty(FACING, enumfacing)
-                .withProperty(this.VARIANT, this.VALUES[i % this.VALUES.length]);
-    }
-
-    @Override
-    public int getMetaFromState(IBlockState state)
-    {
-        int i = ((Enum)state.getValue(this.VARIANT)).ordinal();
-        int j = ((EnumFacing)state.getValue(FACING)).getIndex();
-        return j - 2 + i * 4;
-    }
-
-    @Nonnull
-    @Override
-    public BlockStateContainer createBlockState() {
-        super.createBlockState();
-
-        return new BlockStateContainer(this, new IProperty[]{this.VARIANT, this.FACING});
-    }
-
-    public ItemStack getItemVariant(BlockTurbineRotor.BlockTurbineRotorType variant, int amount) {
-        return new ItemStack(this, amount, variant.ordinal() * 4) ;
-    }
-
-    public int damageDropped(@Nonnull IBlockState state) {
-        return this.getMetaFromState(state) - ((EnumFacing)state.getValue(FACING)).getIndex() + 2;
+    public boolean canCreatureSpawn(@NotNull IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos,
+                                    @NotNull EntityLiving.SpawnPlacementType type) {
+        return false;
     }
 
     //TODO: MAKE THIS CREATE MINING PARTICLES WHEN MINING DRILL IS ACTIVE
     //TODO: MAKE THIS PLAY A LOUD MINING NOISE, PERHAPS HAVE STATUS EFFECTS FOR PLAYERS WHO COME NEAR THE MINING
 
-    public static enum DrillHeadType implements IStringSerializable, IStateHarvestLevel {
+    @NotNull
+    @Override
+    public BlockRenderLayer getRenderLayer() {
+        return BlockRenderLayer.SOLID;
+    }
+
+    public enum DrillHeadType implements IStringSerializable, IStateHarvestLevel {
         STEEL("steel", 1);
 
         private final String name;
         private final int harvestLevel;
 
-        private DrillHeadType(String name, int harvestLevel) {
+        DrillHeadType(String name, int harvestLevel) {
             this.name = name;
             this.harvestLevel = harvestLevel;
         }
