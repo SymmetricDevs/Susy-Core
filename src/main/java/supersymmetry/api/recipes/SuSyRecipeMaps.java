@@ -366,5 +366,11 @@ public class SuSyRecipeMaps {
                     .EUt(recipeBuilder.getEUt())
                     .buildAndRegister();
         });
+
+        SuSyRecipeMaps.EVAPORATION_POOL.recipeBuilder()
+                .fluidInputs(Materials.Water.getFluid(10000))
+                .EUt(30) //300J/t -> 6kJ/s -> 6 exposed blocks
+                .duration(200)
+                .buildAndRegister();
     }
 }

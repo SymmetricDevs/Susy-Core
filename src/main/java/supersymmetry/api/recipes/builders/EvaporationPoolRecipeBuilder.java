@@ -53,7 +53,7 @@ public class EvaporationPoolRecipeBuilder  extends RecipeBuilder<EvaporationPool
     //store provided EUt for later calculations for the sake of supporting old recipes
     @Override
     public EvaporationPoolRecipeBuilder EUt(int EUt) {
-        eutStorage = EUt;
+        eutStorage = EUt * 10;
         return super.EUt(EUt);
     }
 

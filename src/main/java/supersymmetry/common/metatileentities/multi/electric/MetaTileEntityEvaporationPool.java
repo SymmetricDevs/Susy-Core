@@ -366,7 +366,13 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             IBlockState state = blockWorldState.getBlockState();
             //SusyLog.logger.atError().log("Checking 'C' predicate with state: " + state.toString());
 
-            return isValidCoil(state);
+            int containerStateResult = isValidCoil(state);
+            if (containerStateResult == -1) return false;
+            if (containerStateResult == 1) {
+                blockWorldState.getMatchContext().getOrPut("VABlock", new LinkedList<>()).add(blockWorldState.getPos());
+            }
+
+            return true;
         }, supplier);
     }
 
@@ -475,12 +481,13 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
     public void initializeCoilStats() { coilStats = coilStateMeta > -1 ? HEATING_COILS.get(MetaBlocks.WIRE_COIL.getStateFromMeta(coilStateMeta)) : null; }
 
-    public boolean isValidCoil(IBlockState state) {
-        if (!MetaBlocks.WIRE_COIL.getBlockState().getValidStates().contains(state)) return this.isValidGround(state);
+    // returns -1 for not a valid container, 0 for valid container, invalid coil, and 1 for valid coil
+    public int isValidCoil(IBlockState state) {
+        if (!MetaBlocks.WIRE_COIL.getBlockState().getValidStates().contains(state)) return this.isValidGround(state) ? 0 : -1;
 
         //if not contained in valid coil states this part of method wouldn't have run
-        if (coilStateMeta == -1) return true;
-        return state.toString().equals(MetaBlocks.WIRE_COIL.getStateFromMeta(coilStateMeta).toString());
+        if (coilStateMeta == -1) return 1;
+        return state.toString().equals(MetaBlocks.WIRE_COIL.getStateFromMeta(coilStateMeta).toString()) ? 1 : 0;
     }
 
     public boolean isValidGround(IBlockState state) {
@@ -796,7 +803,7 @@ gregtech.top.evaporation_pool.recipe_step_units=Recipe Ticks
                             tl.add(TextComponentUtil.translationWithColor(
                                     TextFormatting.WHITE,
                                     "gregtech.top.evaporation_pool_heated_preface"
-                            ).appendSibling(TextComponentUtil.translationWithColor(
+                            ).appendText(" ").appendSibling(TextComponentUtil.translationWithColor(
                                     TextFormatting.RED,
                                     "gregtech.top.evaporation_pool_is_heated"
                             )));
