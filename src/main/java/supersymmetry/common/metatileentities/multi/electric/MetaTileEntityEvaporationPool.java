@@ -735,11 +735,13 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
         } //finish once a ~second check
 
-        //if (tickTimer % 100 == 0) {
-            //SusyLog.logger.atFatal().log("I am still alive at " + getPos());
-            //SusyLog.logger.atError().log("columnCount: " + columnCount + ", controllerPosition: " + controllerPosition + ", rowCount: " + rowCount);
-            //SusyLog.logger.atError().log("isHeated: " + isHeated + ", exposedBlocks: " + exposedBlocks + ", kiloJoules: " + kiloJoules + ", joulesBuffer: " + joulesBuffer + ", tickTimer: " + tickTimer + ", coilStateMeta: " + coilStateMeta);
-        //}
+        /*
+        if (tickTimer % 100 == 0) {
+            SusyLog.logger.atFatal().log("I am still alive at " + getPos());
+            SusyLog.logger.atError().log("columnCount: " + columnCount + ", controllerPosition: " + controllerPosition + ", rowCount: " + rowCount);
+            SusyLog.logger.atError().log("isHeated: " + isHeated + ", exposedBlocks: " + exposedBlocks + ", kiloJoules: " + kiloJoules + ", joulesBuffer: " + joulesBuffer + ", tickTimer: " + tickTimer + ", coilStateMeta: " + coilStateMeta);
+        }
+         */
 
         inputEnergy(exposedBlocks * 50); //1kJ/s /m^2 -> 50J/t
 
@@ -1049,6 +1051,10 @@ gregtech.top.evaporation_pool.recipe_step_units=Recipe Ticks
     }
 
     public int calcMaxSteps(int jStepSize) {
+        // on world load, jStepSize is 0
+        if (jStepSize < 0) {
+
+        }
         int stepCount = (getKiloJoules() * 1000)/jStepSize; //max number of times jStepSize can cleanly be deducted from kiloJoules
         int remainder = (stepCount +1) * jStepSize - getKiloJoules() * 1000; //remaining joules needed to not waste partial kJ
 

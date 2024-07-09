@@ -5,6 +5,7 @@ import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.logic.OverclockingLogic;
 import gregtech.api.recipes.recipeproperties.IRecipePropertyStorage;
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.recipes.properties.EvaporationEnergyProperty;
 import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityEvaporationPool;
 
@@ -24,7 +25,13 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
 
     public int getJt() {
         if (this.previousRecipe == null || !this.previousRecipe.hasProperty(EvaporationEnergyProperty.getInstance())) {
-            return -1;
+            trySearchNewRecipe(); // try to recover recipe which was last being worked on
+
+            // if recipe is not recovered, invalidate recipe logic
+            if (this.previousRecipe == null || !this.previousRecipe.hasProperty(EvaporationEnergyProperty.getInstance())) {
+                invalidate();
+                return 0;
+            }
         }
 
         return this.previousRecipe.getProperty(EvaporationEnergyProperty.getInstance(), -1);
@@ -49,6 +56,8 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
             if (couldInput)
                 pool.getEnergyContainer().removeEnergy((heatingJoules / JOULES_PER_EU) / pool.coilStats.getEnergyDiscount()); //energy should always be available as heatingJoules is either itself or energy*JpEU
         }
+
+        //SusyLog.logger.atError().log("ProgressTime at start: " + progressTime);
 
         int maxSteps = pool.calcMaxSteps(getJt());
 
@@ -86,6 +95,8 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
             if (pool.getOffsetTimer() % ( 1 + ((MetaTileEntityEvaporationPool.MAX_COLUMNS * MetaTileEntityEvaporationPool.MAX_COLUMNS) / pool.getColumnCount()) / pool.getRowCount()) == 0)
                 this.decreaseProgress();
         }
+
+        //SusyLog.logger.atError().log("ProgressTime at end: " + progressTime);
     }
 
     //copied from NoEnergyMultiblockRecipeLogic and modified to allow energy and no energy
@@ -140,15 +151,5 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
     @Override
     public long getMaximumOverclockVoltage() {
         return getEnergyCapacity() == 0 ? GTValues.V[1] : super.getMaximumOverclockVoltage();
-    }
-
-    public void invalidate() {
-        this.previousRecipe = null;
-        this.progressTime = 0;
-        this.maxProgressTime = 0;
-        this.recipeEUt = 0;
-        this.fluidOutputs = null;
-        this.itemOutputs = null;
-        this.setActive(false);
     }
 }
