@@ -805,7 +805,7 @@ gregtech.top.evaporation_pool.recipe_step_units=Recipe Ticks
                                     "gregtech.top.evaporation_pool_heated_preface"
                             ).appendText(" ").appendSibling(TextComponentUtil.translationWithColor(
                                     TextFormatting.RED,
-                                    "gregtech.top.evaporation_pool_is_heated"
+                                    "gregtech.top.evaporation_pool_not_heated"
                             )));
                         }
 
