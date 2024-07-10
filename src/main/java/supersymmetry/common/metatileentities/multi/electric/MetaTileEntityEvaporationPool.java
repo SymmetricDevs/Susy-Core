@@ -69,7 +69,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         is the way ceu gets mte from te. You might also try using MetaTileEntityHolder.
      */
 
-    public static final int MAX_COLUMNS = 12; //two edge layers on either side, shouldn't exceed chunk boundary at max size
+    public static final int MAX_SQUARE_SIDE_LENGTH = 12; //two edge layers on either side, shouldn't exceed chunk boundary at max size
 
     public static final int structuralDimensionsID = 1051354;
     int columnCount = 1; //number of columns in row of controller (1 -> EDGEself(controller)EDGE, 2 -> EsCOLUMNe)
@@ -169,7 +169,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         //SusyLog.logger.atError().log("BEFORE CALCS lDist: " + lDist + ", rDist: " + rDist + ", bDist: " + bDist);
 
         //find when container block section is exited left, right, and back
-        for (int i = 1; i < MAX_COLUMNS +1; i++) {
+        for (int i = 1; i < MAX_SQUARE_SIDE_LENGTH +1; i++) {
             if (lDist == -1 && !isContainerBlock(world, lPos, left)) lDist += i; //0 -> immediate left is !container
             if (rDist == -1 && !isContainerBlock(world, rPos, right)) rDist += i; //0 -> immediate left is !container
             if (bDist == -1 && !isContainerBlock(world, bPos, back)) bDist += i; //0 -> no container block section
@@ -177,7 +177,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         }
 
         //if l or r dist exceed max, or if bdist exceeds max/ is 0, or if l and r dist individually don't exceed max, but produce a columnCount > max
-        if (lDist < 0 || rDist < 0 || bDist < 1 || lDist + rDist +1 > MAX_COLUMNS) {
+        if (lDist < 0 || rDist < 0 || bDist < 1 || lDist + rDist +1 > MAX_SQUARE_SIDE_LENGTH) {
             invalidateStructure();
             return false;
         }
@@ -280,8 +280,8 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         if (columnCount < 1) columnCount = 1;
         if (rowCount < 1) rowCount = 1;
 
-        //if no bits are being stored, initialize
-        if (wasExposed == null || wasExposed.length == 0) {
+        //if wasExposed has not been created, or is the wrong length, handle appropriately
+        if (wasExposed == null || wasExposed.length != columnCount * rowCount) {
             wasExposed = new byte[columnCount * rowCount]; // all set to 0
             this.exposedBlocks = 0; //ensure exposedBlocks dont go higher than expected
         }
@@ -459,6 +459,11 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             coilStateMeta = -1;
             isHeated = false;
             initializeCoilStats();
+            if (lastActive) {
+                this.setLastActive(false);
+                this.markDirty();
+                this.replaceVariantBlocksActive(false);
+            }
             return false;
         } //block is a coil at this point, so if coil pattern fails exit with false (invalidates structure)
 
@@ -525,8 +530,9 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
     @Override
     public void addInformation(ItemStack stack, World player, @NotNull List<String> tooltip, boolean advanced) {
+        tooltip.add(I18n.format("gregtech.machine.evaporation_pool.tooltip.info", MAX_SQUARE_SIDE_LENGTH, MAX_SQUARE_SIDE_LENGTH));
         if (TooltipHelper.isShiftDown()) {
-            tooltip.add(I18n.format("gregtech.machine.evaporation_pool.tooltip.structure_info", MAX_COLUMNS, MAX_COLUMNS) + "\n");
+            tooltip.add(I18n.format("gregtech.machine.evaporation_pool.tooltip.structure_info", MAX_SQUARE_SIDE_LENGTH, MAX_SQUARE_SIDE_LENGTH) + "\n");
         }
     }
 
@@ -691,8 +697,17 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         //ensure timer is non-negative by anding sign bit with 0
         tickTimer = tickTimer & 0b01111111111111111111111111111111;
 
+        // update in display base will constantly try to turn the last active on even if the heating is off based on multiblock activity, so it must be manually undone
+        if (lastActive ^ isHeated()) {
+            this.setLastActive(isHeated);
+            this.markDirty();
+            this.replaceVariantBlocksActive(isHeated);
+        }
+
         //should skip/cost an extra tick the first time and then anywhere from 1-19 extra when rolling over. Determines exposedblocks
         if (tickTimer % 20 == 0 && tickTimer != 0) {
+            // when lastActive and isHeated disagree, do update to invert lastActive
+
             //no sunlight heat generated when raining or during night. May be incongruent with partial exposure to sun, but oh well
             if (getWorld().isRainingAt(getPos().offset(getFrontFacing().getOpposite(), 2)) || !getWorld().isDaytime()) {
                 //SusyLog.logger.atError().log("setting exposed blocks to 0");
@@ -712,6 +727,12 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                 skyCheckPos.move(getFrontFacing().rotateYCCW(), col); //traverse down row
 
                 //SusyLog.logger.atError().log("About to check sky access for block at pos: " + skyCheckPos + " with bitArray: " + wasExposed.toString());
+
+                if (wasExposed == null || wasExposed.length != rowCount * columnCount) {
+                    wasExposed = new byte[rowCount * columnCount];
+                    exposedBlocks = 0;
+                    SusyLog.logger.atError().log("Detected evaporation pool with invalid wasExposed array at pos: " + this.getPos() + "; setting explosed blocks to 0");
+                }
 
                 //Perform skylight check
                 if (!getWorld().canBlockSeeSky(skyCheckPos)) {
@@ -758,7 +779,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         //store relevant values
         this.writeCustomData(energyValuesID, buf -> {
             buf.writeInt(exposedBlocks);
-            buf.writeByteArray(wasExposed == null ? new byte[0] : wasExposed);
+            buf.writeByteArray(wasExposed);
             buf.writeInt(kiloJoules);
             buf.writeInt(tickTimer);
         });
@@ -859,7 +880,7 @@ gregtech.top.evaporation_pool.recipe_step_units=Recipe Ticks
         data.setInteger("controllerPosition", this.controllerPosition);
         data.setBoolean("isHeated", this.isHeated);
         data.setInteger("exposedBlocks", this.exposedBlocks);
-        data.setByteArray("wasExposed", this.wasExposed == null ? new byte[0] : this.wasExposed);
+        data.setByteArray("wasExposed", this.wasExposed);
         data.setInteger("kiloJoules", this.kiloJoules);
         data.setInteger("tickTimer", this.tickTimer);
         data.setInteger("coilStateMeta", this.coilStateMeta);
@@ -916,7 +937,7 @@ gregtech.top.evaporation_pool.recipe_step_units=Recipe Ticks
         buf.writeInt(this.controllerPosition);
         buf.writeBoolean(this.isHeated);
         buf.writeInt(this.exposedBlocks);
-        buf.writeByteArray(this.wasExposed == null ? new byte[0] : this.wasExposed);
+        buf.writeByteArray(this.wasExposed);
         buf.writeInt(this.kiloJoules);
         buf.writeInt(this.tickTimer);
         buf.writeInt(this.coilStateMeta);
@@ -1051,10 +1072,6 @@ gregtech.top.evaporation_pool.recipe_step_units=Recipe Ticks
     }
 
     public int calcMaxSteps(int jStepSize) {
-        // on world load, jStepSize is 0
-        if (jStepSize < 0) {
-
-        }
         int stepCount = (getKiloJoules() * 1000)/jStepSize; //max number of times jStepSize can cleanly be deducted from kiloJoules
         int remainder = (stepCount +1) * jStepSize - getKiloJoules() * 1000; //remaining joules needed to not waste partial kJ
 

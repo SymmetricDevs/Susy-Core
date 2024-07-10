@@ -5,7 +5,6 @@ import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.logic.OverclockingLogic;
 import gregtech.api.recipes.recipeproperties.IRecipePropertyStorage;
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.recipes.properties.EvaporationEnergyProperty;
 import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityEvaporationPool;
 
@@ -57,15 +56,14 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
                 pool.getEnergyContainer().removeEnergy((heatingJoules / JOULES_PER_EU) / pool.coilStats.getEnergyDiscount()); //energy should always be available as heatingJoules is either itself or energy*JpEU
         }
 
-        //SusyLog.logger.atError().log("ProgressTime at start: " + progressTime);
-
         int maxSteps = pool.calcMaxSteps(getJt());
 
         //if the recipe can progress and at least one step can be taken
         if (maxSteps > 0) {
             hasNotEnoughEnergy = false;
 
-            int actualSteps = Math.min(this.maxProgressTime / MAX_STEP_FRACTION, maxSteps);
+            // occasionally actualSteps would be 0 for some reason, which is why one should be minimum
+            int actualSteps = Math.min(Math.max((this.maxProgressTime / MAX_STEP_FRACTION), 1), maxSteps);
             progressTime += actualSteps; //actualSteps <= maxSteps, meaning it can always be progressed this amount
 
             int kJFloor = getJt() * actualSteps / 1000;
@@ -92,11 +90,9 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
         } else {
             this.hasNotEnoughEnergy = true;
             //50% chance to decrease progress by one once a tick when using max sized pool (two sequential divisions to avoid cast to long)
-            if (pool.getOffsetTimer() % ( 1 + ((MetaTileEntityEvaporationPool.MAX_COLUMNS * MetaTileEntityEvaporationPool.MAX_COLUMNS) / pool.getColumnCount()) / pool.getRowCount()) == 0)
+            if (pool.getOffsetTimer() % ( 1 + ((MetaTileEntityEvaporationPool.MAX_SQUARE_SIDE_LENGTH * MetaTileEntityEvaporationPool.MAX_SQUARE_SIDE_LENGTH) / pool.getColumnCount()) / pool.getRowCount()) == 0)
                 this.decreaseProgress();
         }
-
-        //SusyLog.logger.atError().log("ProgressTime at end: " + progressTime);
     }
 
     //copied from NoEnergyMultiblockRecipeLogic and modified to allow energy and no energy
