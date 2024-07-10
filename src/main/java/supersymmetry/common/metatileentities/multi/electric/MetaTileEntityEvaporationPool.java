@@ -280,8 +280,8 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         if (columnCount < 1) columnCount = 1;
         if (rowCount < 1) rowCount = 1;
 
-        //if no bits are being stored, initialize
-        if (wasExposed == null || wasExposed.length == 0) {
+        //if wasExposed has not been created, or is the wrong length, handle appropriately
+        if (wasExposed == null || wasExposed.length != columnCount * rowCount) {
             wasExposed = new byte[columnCount * rowCount]; // all set to 0
             this.exposedBlocks = 0; //ensure exposedBlocks dont go higher than expected
         }
@@ -713,6 +713,12 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
                 //SusyLog.logger.atError().log("About to check sky access for block at pos: " + skyCheckPos + " with bitArray: " + wasExposed.toString());
 
+                if (wasExposed == null || wasExposed.length != rowCount * columnCount) {
+                    wasExposed = new byte[rowCount * columnCount];
+                    exposedBlocks = 0;
+                    SusyLog.logger.atError().log("Detected evaporation pool with invalid wasExposed array at pos: " + this.getPos() + "; setting explosed blocks to 0");
+                }
+
                 //Perform skylight check
                 if (!getWorld().canBlockSeeSky(skyCheckPos)) {
                     //SusyLog.logger.atError().log("Failed sky check at " + skyCheckPos + " ; " + getWorld().canBlockSeeSky(skyCheckPos) + " w/ exposedBlocks: " + exposedBlocks);
@@ -758,7 +764,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         //store relevant values
         this.writeCustomData(energyValuesID, buf -> {
             buf.writeInt(exposedBlocks);
-            buf.writeByteArray(wasExposed == null ? new byte[0] : wasExposed);
+            buf.writeByteArray(wasExposed);
             buf.writeInt(kiloJoules);
             buf.writeInt(tickTimer);
         });
@@ -859,7 +865,7 @@ gregtech.top.evaporation_pool.recipe_step_units=Recipe Ticks
         data.setInteger("controllerPosition", this.controllerPosition);
         data.setBoolean("isHeated", this.isHeated);
         data.setInteger("exposedBlocks", this.exposedBlocks);
-        data.setByteArray("wasExposed", this.wasExposed == null ? new byte[0] : this.wasExposed);
+        data.setByteArray("wasExposed", this.wasExposed);
         data.setInteger("kiloJoules", this.kiloJoules);
         data.setInteger("tickTimer", this.tickTimer);
         data.setInteger("coilStateMeta", this.coilStateMeta);
@@ -916,7 +922,7 @@ gregtech.top.evaporation_pool.recipe_step_units=Recipe Ticks
         buf.writeInt(this.controllerPosition);
         buf.writeBoolean(this.isHeated);
         buf.writeInt(this.exposedBlocks);
-        buf.writeByteArray(this.wasExposed == null ? new byte[0] : this.wasExposed);
+        buf.writeByteArray(this.wasExposed);
         buf.writeInt(this.kiloJoules);
         buf.writeInt(this.tickTimer);
         buf.writeInt(this.coilStateMeta);
