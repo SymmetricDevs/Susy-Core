@@ -42,7 +42,7 @@ public class MetaTileEntityRotaryKiln extends RecipeMapMultiblockController {
     }
 
     protected BlockPattern createStructurePattern() {
-        TraceabilityPredicate maintenance = autoAbilities(false, true, false, false, false, false, false).setMaxGlobalLimited(1);
+        TraceabilityPredicate maintenance = abilities(MultiblockAbility.MAINTENANCE_HATCH).setMaxGlobalLimited(1);
 
         return FactoryBlockPattern.start()
                 .aisle("A    A    A", "A    A    A", "L    A    R", "LCCCCMCCCCR", "L    A    R")

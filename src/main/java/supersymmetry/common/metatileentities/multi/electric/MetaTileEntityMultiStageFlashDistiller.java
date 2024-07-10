@@ -36,7 +36,9 @@ public class MetaTileEntityMultiStageFlashDistiller extends RecipeMapMultiblockC
     }
 
     protected BlockPattern createStructurePattern() {
-        TraceabilityPredicate maintenanceEnergy = autoAbilities(true, true, false, false, false, false, false);
+        // Different characters use common constraints. Copied from GCyM
+        TraceabilityPredicate casingPredicate = states(getCasingState()).setMinGlobalLimited(70);
+        TraceabilityPredicate maintenanceEnergy = super.autoAbilities(true, true);
 
         return FactoryBlockPattern.start()
                 .aisle(" EEEB", " BEEB", " BEEB", " EEEB", "  BBB")
@@ -57,14 +59,14 @@ public class MetaTileEntityMultiStageFlashDistiller extends RecipeMapMultiblockC
                 .where('S', selfPredicate())
                 .where('B', states(MetaBlocks.BOILER_CASING.getState((BlockBoilerCasing.BoilerCasingType.STEEL_PIPE))))
                 .where('C', states(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)))
-                .where('A', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
+                .where('A', casingPredicate
                         .or(maintenanceEnergy))
                 .where('D', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STAINLESS_CLEAN))
                         .or(maintenanceEnergy))
-                .where('E', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
+                .where('E', casingPredicate
                         .or(maintenanceEnergy)
                         .or(autoAbilities(false, false, false, false, false, true, false)))
-                .where('F', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
+                .where('F', casingPredicate
                         .or(maintenanceEnergy)
                         .or(autoAbilities(false, false, false, false, true, false, false)))
                 .where(' ', any())
@@ -83,5 +85,9 @@ public class MetaTileEntityMultiStageFlashDistiller extends RecipeMapMultiblockC
     @Nonnull
     protected ICubeRenderer getFrontOverlay() {
         return Textures.BLAST_FURNACE_OVERLAY;
+    }
+
+    protected static IBlockState getCasingState() {
+        return MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID);
     }
 }
