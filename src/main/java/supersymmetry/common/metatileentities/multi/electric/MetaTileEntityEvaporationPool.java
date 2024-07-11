@@ -469,11 +469,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
         //if check is passed structure is valid heatable evap pool
         isHeated = true;
-        if (!lastActive) {
-            this.setLastActive(true);
-            this.markDirty();
-            this.replaceVariantBlocksActive(true);
-        }
         initializeCoilStats();
 
         this.writeCustomData(predicateID, (buf) -> {
@@ -698,7 +693,8 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         tickTimer = tickTimer & 0b01111111111111111111111111111111;
 
         // update in display base will constantly try to turn the last active on even if the heating is off based on multiblock activity, so it must be manually undone
-        if (lastActive ^ isHeated()) {
+        // when lastActive and isRunningHeated disagree, do update to invert lastActive
+        if (lastActive ^ isRunningHeated()) {
             this.setLastActive(isHeated);
             this.markDirty();
             this.replaceVariantBlocksActive(isHeated);
@@ -706,8 +702,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
         //should skip/cost an extra tick the first time and then anywhere from 1-19 extra when rolling over. Determines exposedblocks
         if (tickTimer % 20 == 0 && tickTimer != 0) {
-            // when lastActive and isHeated disagree, do update to invert lastActive
-
             //no sunlight heat generated when raining or during night. May be incongruent with partial exposure to sun, but oh well
             if (getWorld().isRainingAt(getPos().offset(getFrontFacing().getOpposite(), 2)) || !getWorld().isDaytime()) {
                 //SusyLog.logger.atError().log("setting exposed blocks to 0");
@@ -1037,6 +1031,10 @@ gregtech.top.evaporation_pool.recipe_step_units=Recipe Ticks
 
     public boolean isHeated() {
         return isHeated;
+    }
+
+    public boolean isRunningHeated() {
+        return isHeated && recipeMapWorkable.isActive();
     }
 
     public int getCurrMaxStepCount() {
