@@ -76,8 +76,9 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     int rowCount = 1; //number of rows where controller is placed on "edge" row
     int controllerPosition = 0; //column placement from left to right, where 0 = one from edge [ESCCCCE]
 
-    public static final int predicateID = 10142156;
+    public static final int coilDataID = 10142156;
     public boolean isHeated = false;
+    public boolean areCoilsHeating = false;
     public int coilStateMeta = -1; //order is last in order dependent ops because I'm lazy
 
     public static final int energyValuesID = 10868607;
@@ -121,6 +122,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         super.invalidateStructure();
         //SusyLog.logger.atError().log("Invalidating Structure");
         this.isHeated = false;
+        this.areCoilsHeating = false;
         this.coilStateMeta = -1;
 
         this.exposedBlocks = 0;
@@ -129,13 +131,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         this.tickTimer = 0;
         this.currMaxStepCount = 0;
 
-        if (lastActive) {
-            this.setLastActive(false);
-            this.markDirty();
-            this.replaceVariantBlocksActive(false);
-        }
-
-        this.writeCustomData(predicateID, (buf) -> {
+        this.writeCustomData(coilDataID, (buf) -> {
             buf.writeBoolean(isHeated);
             buf.writeInt(coilStateMeta);
         });
@@ -346,7 +342,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     //ensures coil pattern is either entirely there or completely absent for structure to be valid. Sets isHeated accordingly
     protected TraceabilityPredicate isContainer() {
         Supplier<BlockInfo[]> supplier = () -> {
-            ArrayList<BlockInfo> containerInfo = new ArrayList<BlockInfo>();
+            ArrayList<BlockInfo> containerInfo = new ArrayList<>();
 
             //add evap bed types
             for (BlockEvaporationBed.EvaporationBedType type : BlockEvaporationBed.EvaporationBedType.values()) {
@@ -459,11 +455,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             coilStateMeta = -1;
             isHeated = false;
             initializeCoilStats();
-            if (lastActive) {
-                this.setLastActive(false);
-                this.markDirty();
-                this.replaceVariantBlocksActive(false);
-            }
             return false;
         } //block is a coil at this point, so if coil pattern fails exit with false (invalidates structure)
 
@@ -471,7 +462,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         isHeated = true;
         initializeCoilStats();
 
-        this.writeCustomData(predicateID, (buf) -> {
+        this.writeCustomData(coilDataID, (buf) -> {
             buf.writeBoolean(isHeated);
             buf.writeInt(coilStateMeta);
         });
@@ -686,19 +677,12 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             return; //dont do logic on client
         }
 
-        //dont do processing for unformed blocks
-        if (structurePattern.getError() != null) return;
+        setCoilActivity(false); // solves world issue reload where coils would be active even if multi was not running
+        if (structurePattern.getError() != null) return; //dont do processing for unformed multis
 
         //ensure timer is non-negative by anding sign bit with 0
         tickTimer = tickTimer & 0b01111111111111111111111111111111;
-
-        // update in display base will constantly try to turn the last active on even if the heating is off based on multiblock activity, so it must be manually undone
-        // when lastActive and isRunningHeated disagree, do update to invert lastActive
-        if (lastActive ^ isRunningHeated()) {
-            this.setLastActive(isHeated);
-            this.markDirty();
-            this.replaceVariantBlocksActive(isHeated);
-        }
+        checkCoilActivity(); // make coils active if they should be
 
         //should skip/cost an extra tick the first time and then anywhere from 1-19 extra when rolling over. Determines exposedblocks
         if (tickTimer % 20 == 0 && tickTimer != 0) {
@@ -707,7 +691,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                 //SusyLog.logger.atError().log("setting exposed blocks to 0");
                 exposedBlocks = 0;
             }
-
             //checks for ow and skylight access to prevent beneath portal issues (-1 = the Nether, 0 = normal world)
             else if (getWorld().provider.getDimension() == 0) {
                 //tickTimer is always multiple of 20 at this point, so division by 20 yields proper counter. You can treat (tickTimer/20) as 'i'
@@ -778,16 +761,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             buf.writeInt(tickTimer);
         });
     }
-
-    /*
-    gregtech.top.evaporation_pool_heated_preface=Coil Pattern:
-gregtech.top.evaporation_pool_is_heated=VALID; May be heated.
-gregtech.top.evaporation_pool_not_heated=INVALID; Will not heat.
-gregtech.top.evaporation_pool.energy_transferred=Thermal Energy Stored:
-gregtech.top.evaporation_pool.kilojoules=kJ
-gregtech.top.evaporation_pool.recipe_step_count=Max Recipe Steps for Energy:
-gregtech.top.evaporation_pool.recipe_step_units=Recipe Ticks
-     */
 
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
@@ -874,7 +847,7 @@ gregtech.top.evaporation_pool.recipe_step_units=Recipe Ticks
         data.setInteger("controllerPosition", this.controllerPosition);
         data.setBoolean("isHeated", this.isHeated);
         data.setInteger("exposedBlocks", this.exposedBlocks);
-        data.setByteArray("wasExposed", this.wasExposed);
+        data.setByteArray("wasExposed", this.wasExposed == null ? new byte[this.rowCount * this.columnCount] : this.wasExposed);
         data.setInteger("kiloJoules", this.kiloJoules);
         data.setInteger("tickTimer", this.tickTimer);
         data.setInteger("coilStateMeta", this.coilStateMeta);
@@ -931,7 +904,7 @@ gregtech.top.evaporation_pool.recipe_step_units=Recipe Ticks
         buf.writeInt(this.controllerPosition);
         buf.writeBoolean(this.isHeated);
         buf.writeInt(this.exposedBlocks);
-        buf.writeByteArray(this.wasExposed);
+        buf.writeByteArray(this.wasExposed == null ? new byte[this.rowCount * this.columnCount] : this.wasExposed);
         buf.writeInt(this.kiloJoules);
         buf.writeInt(this.tickTimer);
         buf.writeInt(this.coilStateMeta);
@@ -949,6 +922,7 @@ gregtech.top.evaporation_pool.recipe_step_units=Recipe Ticks
         this.kiloJoules = buf.readInt();
         this.tickTimer = buf.readInt();
         this.coilStateMeta = buf.readInt();
+
         this.currMaxStepCount = 0;
         reinitializeStructurePattern();
     }
@@ -960,7 +934,7 @@ gregtech.top.evaporation_pool.recipe_step_units=Recipe Ticks
             this.columnCount = buf.readInt();
             this.rowCount = buf.readInt();
             this.controllerPosition = buf.readInt();
-        } else if (dataId == predicateID) {
+        } else if (dataId == coilDataID) {
             this.isHeated = buf.readBoolean();
             this.coilStateMeta = buf.readInt();
             initializeCoilStats();
@@ -1029,12 +1003,44 @@ gregtech.top.evaporation_pool.recipe_step_units=Recipe Ticks
         return joulesBuffer;
     }
 
+    public void checkCoilActivity(String source) {
+        boolean isRunningHeated = isRunningHeated();
+        if (lastActive ^ isRunningHeated) {
+            this.setLastActive(isRunningHeated);
+            this.markDirty();
+            this.replaceVariantBlocksActive(isRunningHeated);
+        }
+    }
+
+    public void checkCoilActivity() {
+        boolean isRunningHeated = isRunningHeated();
+        if (lastActive ^ isRunningHeated) {
+            this.setLastActive(isRunningHeated);
+            this.markDirty();
+            this.replaceVariantBlocksActive(isRunningHeated);
+        }
+    }
+
+    // controller disappears if you set variant blocks to same state as they already were
+    public void setCoilActivity(boolean state) {
+        if (state == lastActive) {
+            this.setLastActive(!state);
+            this.markDirty();
+            this.replaceVariantBlocksActive(!state);
+        }
+
+        this.setLastActive(state);
+        this.markDirty();
+        this.replaceVariantBlocksActive(state);
+
+    }
+
     public boolean isHeated() {
         return isHeated;
     }
 
     public boolean isRunningHeated() {
-        return isHeated && recipeMapWorkable.isActive();
+        return isHeated && isActive() && areCoilsHeating;
     }
 
     public int getCurrMaxStepCount() {
