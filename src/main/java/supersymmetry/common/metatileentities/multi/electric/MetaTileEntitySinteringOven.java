@@ -8,6 +8,7 @@ import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.PatternMatchContext;
+import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.unification.material.Materials;
 import gregtech.client.renderer.ICubeRenderer;
@@ -78,6 +79,9 @@ public class MetaTileEntitySinteringOven extends RecipeMapMultiblockController {
     @NotNull
     @Override
     public BlockPattern createStructurePattern() {
+        // Different characters use common constraints. Copied from GCyM
+        TraceabilityPredicate casingPredicate = states(getCasingState()).setMinGlobalLimited(33);
+
         return FactoryBlockPattern.start()
                 .aisle("CCCCC", "CCCCC", "CCCCC", "CCCCC", "CCCCC")
                 .aisle("     ", " BBB ", " B#B ", " BBB ", "     ")
@@ -91,8 +95,10 @@ public class MetaTileEntitySinteringOven extends RecipeMapMultiblockController {
                 .aisle("     ", " BBB ", " B#B ", " BBB ", "     ")
                 .aisle("DDDDD", "DDSDD", "DDDDD", "DDDDD", "DDDDD")
                 .where('S', selfPredicate())
-                .where('D', states(getCasingState()).or(autoAbilities(true, true, false, true, true, false, false)))
-                .where('C', states(getCasingState()).or(autoAbilities(false, false, true, false, false, true, false)))
+                .where('D', casingPredicate
+                        .or(autoAbilities(true, true, false, true, true, false, false)))
+                .where('C', casingPredicate
+                        .or(autoAbilities(false, false, true, false, false, true, false)))
                 .where('F', states(getFrameState()))
                 .where('B', SuSyPredicates.sinteringBricks())
                 .where('#', air())
