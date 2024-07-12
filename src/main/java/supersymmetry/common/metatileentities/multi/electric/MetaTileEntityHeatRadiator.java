@@ -69,9 +69,8 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
         if (sDist < MIN_RADIUS) sDist = MIN_RADIUS;
         if (bDist < MIN_HEIGHT) bDist = MIN_HEIGHT;
 
-
         return FactoryBlockPattern.start(RIGHT, FRONT, UP)
-                .aisle(rowPattern(rowType.BOTTOM, sDist).toString())
+                .aisle(rowPattern(rowType.BOTTOM, sDist))
                 .aisle(rowPattern(rowType.MIDDLE, sDist)).setRepeatable(1, bDist)
                 .aisle(rowPattern(rowType.TOP, sDist))
                 .where('S', selfPredicate())
@@ -79,8 +78,8 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
                         .or(autoAbilities(false, true, false, false, false, false, false)))
                 .where('B', states(getRadiatorElementState()))
                 .where('C', states(getCasingState())
-                        .or(autoAbilities(false, false, false, false, true, false, false).setMinGlobalLimited(1))
-                        .or(autoAbilities(false, false, false, false, false, true, false).setMinGlobalLimited(1)))
+                        .or(autoAbilities(false, false, false, false, true, false, false).setExactLimit(1))
+                        .or(autoAbilities(false, false, false, false, false, true, false).setExactLimit(1)))
                 .build();
     }
 

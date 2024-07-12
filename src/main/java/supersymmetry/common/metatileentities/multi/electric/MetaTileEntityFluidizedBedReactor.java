@@ -44,7 +44,8 @@ public class MetaTileEntityFluidizedBedReactor extends RecipeMapMultiblockContro
                 .where('S', this.selfPredicate())
                 .where('F', states(this.getFrameState()))
                 .where('P', states(this.getPipeCasingState()))
-                .where('X', states(this.getCasingState()).or(this.autoAbilities(true, true, true, true, true, true, false)))
+                .where('X', states(this.getCasingState()).setMinGlobalLimited(18)
+                        .or(this.autoAbilities(true, true, true, true, true, true, false)))
                 .build();
     }
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {

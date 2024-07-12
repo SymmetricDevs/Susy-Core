@@ -6,6 +6,7 @@ import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.unification.material.Materials;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
@@ -33,6 +34,9 @@ public class MetaTileEntityQuencher extends RecipeMapMultiblockController {
 
     @Override
     protected BlockPattern createStructurePattern() {
+        // Different characters use common constraints. Copied from GCyM
+        TraceabilityPredicate casingPredicate = states(getCasingState()).setMinGlobalLimited(15);
+
         return FactoryBlockPattern.start()
                 .aisle("GGBBF", "GG   ", "     ")
                 .aisle("GABC ", "GG D ", " CDD ")
@@ -40,13 +44,13 @@ public class MetaTileEntityQuencher extends RecipeMapMultiblockController {
                 .aisle("  AAA", "  AAA", "     ")
                 .aisle("  ASA", "  AAA", "     ")
                 .where('S', selfPredicate())
-                .where('A', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STAINLESS_CLEAN)))
+                .where('A', casingPredicate)
                 .where('B', states(MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE)))
                 .where('C', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STAINLESS_STEEL_GEARBOX)))
                 .where('D', states(MetaBlocks.FRAMES.get(Materials.StainlessSteel).getBlock(Materials.StainlessSteel)))
                 .where('F', autoAbilities(false, false, false, false, false, true, false).setExactLimit(1)
                         .or(autoAbilities(false, false, false, false, true, false, false).setExactLimit(1)))
-                .where('G', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STAINLESS_CLEAN))
+                .where('G', casingPredicate
                         .or(autoAbilities(true, true, true, true, false, false, false)))
                 .where(' ', any())
                 .build();
@@ -61,5 +65,9 @@ public class MetaTileEntityQuencher extends RecipeMapMultiblockController {
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.QUENCHER_OVERLAY;
+    }
+
+    protected static IBlockState getCasingState() {
+        return MetaBlocks.METAL_CASING.getState(MetalCasingType.STAINLESS_CLEAN);
     }
 }
