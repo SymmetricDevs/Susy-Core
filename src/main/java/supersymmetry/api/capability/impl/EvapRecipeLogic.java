@@ -5,6 +5,7 @@ import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.logic.OverclockingLogic;
 import gregtech.api.recipes.recipeproperties.IRecipePropertyStorage;
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.recipes.properties.EvaporationEnergyProperty;
 import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityEvaporationPool;
 
@@ -15,7 +16,6 @@ import static supersymmetry.api.util.SuSyUtility.JOULES_PER_EU;
 public class EvapRecipeLogic extends MultiblockRecipeLogic {
     private final MetaTileEntityEvaporationPool pool;
     public static final int HEAT_DENOMINATOR = 10; //transfers all of its energy every half a second (10 ticks) as 1/6th every second seemed too low, with cupro depositing 1ALv/t
-    public static final int MAX_STEP_FRACTION = 4; //denominator of fraction of progress which can be done in one step. (1/(MAX_STEP_FRACTION)) = max percent allowed
 
     public EvapRecipeLogic(MetaTileEntityEvaporationPool tileEntity) {
         super(tileEntity);
@@ -46,15 +46,20 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
     @Override
     protected void updateRecipeProgress() {
         //if null then no heating can be done, otherwise add joules according to coil values and energy available
+        boolean coilHeated = false;
         if (pool.coilStats != null && pool.isHeated()) {
             int coilHeat = pool.coilStats.getCoilTemperature();
             //assumes specific heat of 1J/(g*delta temp) and perfect heat transfer on one face of the coil for 1/6 of total delta temp.  Last portion calculates number of coils.
             int heatingJoules = (coilHeat / HEAT_DENOMINATOR) * (((pool.getColumnCount() / 2 + 1) * pool.getRowCount()) + pool.getColumnCount() / 2); //20 should limit it to reasonable per tick levels
             heatingJoules = Math.min(((int) getEnergyStored()) * JOULES_PER_EU, heatingJoules); //attempt to transfer entire heatingJoules amount or what is left in energy container
             boolean couldInput = pool.inputEnergy(heatingJoules);
-            if (couldInput)
+            if (couldInput) {
                 pool.getEnergyContainer().removeEnergy((heatingJoules / JOULES_PER_EU) / pool.coilStats.getEnergyDiscount()); //energy should always be available as heatingJoules is either itself or energy*JpEU
+                coilHeated = heatingJoules > 0;
+            }
         }
+
+        pool.areCoilsHeating = coilHeated;
 
         int maxSteps = pool.calcMaxSteps(getJt());
 
@@ -63,7 +68,7 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
             hasNotEnoughEnergy = false;
 
             // occasionally actualSteps would be 0 for some reason, which is why one should be minimum
-            int actualSteps = Math.min(Math.max((this.maxProgressTime / MAX_STEP_FRACTION), 1), maxSteps);
+            int actualSteps = Math.min(Math.max((this.maxProgressTime >>> 2), 1), maxSteps);
             progressTime += actualSteps; //actualSteps <= maxSteps, meaning it can always be progressed this amount
 
             int kJFloor = getJt() * actualSteps / 1000;
@@ -90,7 +95,8 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
         } else {
             this.hasNotEnoughEnergy = true;
             //50% chance to decrease progress by one once a tick when using max sized pool (two sequential divisions to avoid cast to long)
-            if (pool.getOffsetTimer() % ( 1 + ((MetaTileEntityEvaporationPool.MAX_SQUARE_SIDE_LENGTH * MetaTileEntityEvaporationPool.MAX_SQUARE_SIDE_LENGTH) / pool.getColumnCount()) / pool.getRowCount()) == 0)
+            if ((this.progressTime & (Math.max(1, (this.maxProgressTime >>> 2) - 1))) != 0 &&
+                    pool.getOffsetTimer() % ( 1 + ((MetaTileEntityEvaporationPool.MAX_SQUARE_SIDE_LENGTH * MetaTileEntityEvaporationPool.MAX_SQUARE_SIDE_LENGTH) / pool.getColumnCount()) / pool.getRowCount()) == 0)
                 this.decreaseProgress();
         }
     }
