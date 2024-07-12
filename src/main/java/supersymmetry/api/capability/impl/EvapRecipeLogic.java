@@ -103,8 +103,7 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
         } else {
             this.hasNotEnoughEnergy = true;
             //50% chance to decrease progress by one once a tick when using max sized pool (two sequential divisions to avoid cast to long)
-            if ((this.progressTime & (Math.max(1, (this.maxProgressTime >>> 2) - 1))) != 0 &&
-                    pool.getOffsetTimer() % ( 1 + ((MetaTileEntityEvaporationPool.MAX_SQUARE_SIDE_LENGTH * MetaTileEntityEvaporationPool.MAX_SQUARE_SIDE_LENGTH) / pool.getColumnCount()) / pool.getRowCount()) == 0)
+            if ((this.progressTime & (Math.max(1, (this.maxProgressTime >>> 2) - 1))) != 0 && pool.getOffsetTimer() % (1 + ((MetaTileEntityEvaporationPool.MAX_SQUARE_SIDE_LENGTH * MetaTileEntityEvaporationPool.MAX_SQUARE_SIDE_LENGTH) / pool.getColumnCount()) / pool.getRowCount()) == 0)
                 this.decreaseProgress();
         }
     }

@@ -62,7 +62,7 @@ import java.util.function.Supplier;
 import static gregtech.api.GregTechAPI.HEATING_COILS;
 import static supersymmetry.common.metatileentities.SuSyMetaTileEntities.EVAPORATION_POOL_ID;
 
-public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController{
+public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController {
 
     /*
         For future reference: "((IGregTechTileEntity)world.getTileEntity(pos)).getMetaTileEntity() instanceof IMultiblockAbilityPart"
@@ -94,9 +94,17 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     //just initialized on formation
     public IHeatingCoilBlockStats coilStats;
 
-    public int getColumnCount() { return columnCount; }
-    public int getRowCount() { return rowCount; }
-    public int getControllerPosition() { return controllerPosition; }
+    public int getColumnCount() {
+        return columnCount;
+    }
+
+    public int getRowCount() {
+        return rowCount;
+    }
+
+    public int getControllerPosition() {
+        return controllerPosition;
+    }
 
     public static final ArrayList<IBlockState> validContainerStates = new ArrayList<>();
 
@@ -120,7 +128,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     @Override
     public void invalidateStructure() {
         super.invalidateStructure();
-        //SusyLog.logger.atError().log("Invalidating Structure");
         this.isHeated = false;
         this.areCoilsHeating = false;
         this.coilStateMeta = -1;
@@ -162,10 +169,8 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         int rDist = -1;
         int bDist = -1;
 
-        //SusyLog.logger.atError().log("BEFORE CALCS lDist: " + lDist + ", rDist: " + rDist + ", bDist: " + bDist);
-
         //find when container block section is exited left, right, and back
-        for (int i = 1; i < MAX_SQUARE_SIDE_LENGTH +1; i++) {
+        for (int i = 1; i < MAX_SQUARE_SIDE_LENGTH + 1; i++) {
             if (lDist == -1 && !isContainerBlock(world, lPos, left)) lDist += i; //0 -> immediate left is !container
             if (rDist == -1 && !isContainerBlock(world, rPos, right)) rDist += i; //0 -> immediate left is !container
             if (bDist == -1 && !isContainerBlock(world, bPos, back)) bDist += i; //0 -> no container block section
@@ -173,21 +178,15 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         }
 
         //if l or r dist exceed max, or if bdist exceeds max/ is 0, or if l and r dist individually don't exceed max, but produce a columnCount > max
-        if (lDist < 0 || rDist < 0 || bDist < 1 || lDist + rDist +1 > MAX_SQUARE_SIDE_LENGTH) {
+        if (lDist < 0 || rDist < 0 || bDist < 1 || lDist + rDist + 1 > MAX_SQUARE_SIDE_LENGTH) {
             invalidateStructure();
             return false;
         }
 
-        //SusyLog.logger.atError().log("AFTER CALCS lDist: " + lDist + ", rDist: " + rDist + ", bDist: " + bDist);
-
         //r,l dist = #container blocks in respective dir. +1 for controller block
-        columnCount = rDist + lDist +1;
+        columnCount = rDist + lDist + 1;
         rowCount = bDist; //"Depth" of container blocks
         controllerPosition = lDist; //if there are no blocks to the left controller is left most spot
-
-        //SusyLog.logger.atFatal().log("I have just finished structure check" + getPos());
-        //SusyLog.logger.atError().log("columnCount: " + columnCount + ", controllerPosition: " + controllerPosition + ", rowCount: " + rowCount);
-        //SusyLog.logger.atError().log("isHeated: " + isHeated + ", kiloJoules: " + kiloJoules + ", tickTimer: " + tickTimer + ", coilStateMeta: " + coilStateMeta);
 
         //store the known dimensions for structure check
         this.writeCustomData(structuralDimensionsID, (buf) -> {
@@ -204,8 +203,12 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     }
 
     public static String repeat(String s, int count) {
-        if (s.length() == 0 || count < 1) { return ""; }
-        if (count == 1) { return s; }
+        if (s.length() == 0 || count < 1) {
+            return "";
+        }
+        if (count == 1) {
+            return s;
+        }
 
         //create empty char array, convert to string which places null terminators in all its positions, then replace all
         return new String(new char[count * s.length()]).replace("\0", s);
@@ -220,25 +223,25 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         //i = row number, j = col number goes from closer rows to further rows
         for (int i = 0; i < rowCount; ++i) {
             //construct row builder for i'th row, setting first two entries to edge blocks
-            StringBuilder containerRowBuilder = new StringBuilder(columnCount +4);
+            StringBuilder containerRowBuilder = new StringBuilder(columnCount + 4);
             containerRowBuilder.replace(0, 2, "EE");
 
-            for (int j = 2; j < columnCount +2; ++j) {
+            for (int j = 2; j < columnCount + 2; ++j) {
                 //if even (least sig bit [2^0] is 0) then do coil column
                 if ((j & 1) == 0) {
                     //coil columns always have coils at their position
-                    containerRowBuilder.replace(j, j +1, "C");
-                } else if ((j -2 & 3) == 1) { //if j % 4 == 1, then do further crossover column
+                    containerRowBuilder.replace(j, j + 1, "C");
+                } else if ((j - 2 & 3) == 1) { //if j % 4 == 1, then do further crossover column
                     //if on last row (++i = rowCount) use "C" [1], otherwise use "G" [0]
-                    containerRowBuilder.replace(j, j +1, flooring[(i +1)/rowCount]);
+                    containerRowBuilder.replace(j, j + 1, flooring[(i + 1) / rowCount]);
                 } else { //if j % 4 == 3, then do closer crossover column
                     //if on first row then use "C" [1], otherwise use "G" [0] (0 is only number which is non neg after * -1. this means bit flip keeps most sig as 1)
-                    containerRowBuilder.replace(j, j +1, flooring[(~(i * -1)) >>> 31]);
+                    containerRowBuilder.replace(j, j + 1, flooring[(~(i * -1)) >>> 31]);
                 }
             }
 
             //place edge blocks in last two positions, then store current row
-            containerRowBuilder.replace(columnCount +2, columnCount +4, "EE");
+            containerRowBuilder.replace(columnCount + 2, columnCount + 4, "EE");
             containerRows[i] = containerRowBuilder.toString();
         }
 
@@ -284,7 +287,8 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
         this.currMaxStepCount = 0;
 
-        if (structurePattern != null && currColCount == columnCount && currRowCount == rowCount && currContPos == controllerPosition) return structurePattern;
+        if (structurePattern != null && currColCount == columnCount && currRowCount == rowCount && currContPos == controllerPosition)
+            return structurePattern;
 
         //abstracted away construction of center rows for later use
         String[] containerRows = centerRowsPattern();
@@ -292,26 +296,18 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         FactoryBlockPattern pattern;
 
         //do first two rows including controller row and row behind controller
-        pattern = FactoryBlockPattern.start()
-                .aisle(repeat("E", columnCount +4), repeat(" ", columnCount +4))
-                .aisle(repeat("E",columnCount +4), " ".concat(repeat("E",columnCount +2)).concat(" "));
+        pattern = FactoryBlockPattern.start().aisle(repeat("E", columnCount + 4), repeat(" ", columnCount + 4)).aisle(repeat("E", columnCount + 4), " ".concat(repeat("E", columnCount + 2)).concat(" "));
 
         //place all generated aisles (rows stored closer to further, this wants them further to closer) and save to pattern explicitly (unsure if the explicit assignment is necessary; probably no harm in being safe)
-        for (int i = 0; i < rowCount; ++i) { pattern = pattern.aisle(containerRows[rowCount -1 -i], " E".concat(repeat("#", columnCount).concat("E "))); }
+        for (int i = 0; i < rowCount; ++i) {
+            pattern = pattern.aisle(containerRows[rowCount - 1 - i], " E".concat(repeat("#", columnCount).concat("E ")));
+        }
 
         //place last two aisles
-        pattern = pattern.aisle(repeat("E",columnCount +4), " ".concat(repeat("E",columnCount +2)).concat(" "))
-                .aisle(repeat("E",controllerPosition +2).concat("S").concat(repeat("E",columnCount +1 -controllerPosition)), repeat(" ", columnCount +4))
+        pattern = pattern.aisle(repeat("E", columnCount + 4), " ".concat(repeat("E", columnCount + 2)).concat(" ")).aisle(repeat("E", controllerPosition + 2).concat("S").concat(repeat("E", columnCount + 1 - controllerPosition)), repeat(" ", columnCount + 4))
 
                 //begin predicates
-                .where('S', selfPredicate())
-                .where('E', isEdge()
-                        .or(autoAbilities(false, false, true, true, true, true, false).setMaxGlobalLimited(8))
-                        .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(0).setMaxGlobalLimited(2).setPreviewCount(0)))
-                .where('G', isGround())
-                .where('C', isContainer())
-                .where('#', air())
-                .where(' ', any());
+                .where('S', selfPredicate()).where('E', isEdge().or(autoAbilities(false, false, true, true, true, true, false).setMaxGlobalLimited(8)).or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(0).setMaxGlobalLimited(2).setPreviewCount(0))).where('G', isGround()).where('C', isContainer()).where('#', air()).where(' ', any());
 
         return pattern.build();
     }
@@ -334,7 +330,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         //returns true if blockstate is "ground"
         return new TraceabilityPredicate(blockWorldState -> {
             IBlockState state = blockWorldState.getBlockState();
-            //SusyLog.logger.atError().log("Checking 'G' predicate with state: " + state.toString());
             return isValidGround(state);
         }, supplier);
     }
@@ -350,8 +345,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             }
 
             //add coil types
-            GregTechAPI.HEATING_COILS.entrySet().stream()
-                    .sorted(Comparator.comparingInt(entry -> entry.getValue().getTier())).forEach(entry -> containerInfo.add(new BlockInfo(entry.getKey())));
+            GregTechAPI.HEATING_COILS.entrySet().stream().sorted(Comparator.comparingInt(entry -> entry.getValue().getTier())).forEach(entry -> containerInfo.add(new BlockInfo(entry.getKey())));
 
             //create array of correct size to "move" entries to
             BlockInfo[] containerInfoArray = new BlockInfo[containerInfo.size()];
@@ -360,7 +354,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
         return new TraceabilityPredicate(blockWorldState -> {
             IBlockState state = blockWorldState.getBlockState();
-            //SusyLog.logger.atError().log("Checking 'C' predicate with state: " + state.toString());
 
             int containerStateResult = isValidCoil(state);
             if (containerStateResult == -1) return false;
@@ -375,30 +368,10 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     @Override
     public List<MultiblockShapeInfo> getMatchingShapes() {
         ArrayList<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
-        MultiblockShapeInfo.Builder builder = MultiblockShapeInfo.builder()
-                .aisle("efFIEEEEEE", "          ")
-                .aisle("EEEEEEEEEE", " EEEEEEEE ")
-                .aisle("EECCCGCCEE", " E######E ")
-                .aisle("EECGCGCGEE", " E######E ")
-                .aisle("EECGCGCGEE", " E######E ")
-                .aisle("EECGCGCGEE", " E######E ")
-                .aisle("EECGCGCGEE", " E######E ")
-                .aisle("EECGCCCGEE", " E######E ")
-                .aisle("EEEEEEEEEE", " EEEEEEEE ")
-                .aisle("EEESEEEEEE", "          ")
-                .where('S', GregTechAPI.MTE_REGISTRY.getObjectById(EVAPORATION_POOL_ID), EnumFacing.SOUTH)
-                .where('E', MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT))
-                .where('G', SuSyBlocks.EVAPORATION_BED.getState(BlockEvaporationBed.EvaporationBedType.DIRT))
-                .where('#', Blocks.AIR.getDefaultState())
-                .where(' ', Blocks.AIR.getDefaultState()) //supposed to be any
-                .where('e', MetaTileEntities.ENERGY_INPUT_HATCH[GTValues.LV], EnumFacing.NORTH)
-                .where('f', MetaTileEntities.FLUID_IMPORT_HATCH[GTValues.LV], EnumFacing.NORTH)
-                .where('F', MetaTileEntities.FLUID_EXPORT_HATCH[GTValues.LV], EnumFacing.NORTH)
-                .where('I', MetaTileEntities.ITEM_EXPORT_BUS[GTValues.LV], EnumFacing.NORTH);
+        MultiblockShapeInfo.Builder builder = MultiblockShapeInfo.builder().aisle("efFIEEEEEE", "          ").aisle("EEEEEEEEEE", " EEEEEEEE ").aisle("EECCCGCCEE", " E######E ").aisle("EECGCGCGEE", " E######E ").aisle("EECGCGCGEE", " E######E ").aisle("EECGCGCGEE", " E######E ").aisle("EECGCGCGEE", " E######E ").aisle("EECGCCCGEE", " E######E ").aisle("EEEEEEEEEE", " EEEEEEEE ").aisle("EEESEEEEEE", "          ").where('S', GregTechAPI.MTE_REGISTRY.getObjectById(EVAPORATION_POOL_ID), EnumFacing.SOUTH).where('E', MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)).where('G', SuSyBlocks.EVAPORATION_BED.getState(BlockEvaporationBed.EvaporationBedType.DIRT)).where('#', Blocks.AIR.getDefaultState()).where(' ', Blocks.AIR.getDefaultState()) //supposed to be any
+                .where('e', MetaTileEntities.ENERGY_INPUT_HATCH[GTValues.LV], EnumFacing.NORTH).where('f', MetaTileEntities.FLUID_IMPORT_HATCH[GTValues.LV], EnumFacing.NORTH).where('F', MetaTileEntities.FLUID_EXPORT_HATCH[GTValues.LV], EnumFacing.NORTH).where('I', MetaTileEntities.ITEM_EXPORT_BUS[GTValues.LV], EnumFacing.NORTH);
 
-        GregTechAPI.HEATING_COILS.entrySet().stream()
-                .sorted(Comparator.comparingInt(entry -> entry.getValue().getTier()))
-                .forEach(entry -> shapeInfo.add(builder.where('C', entry.getKey()).build()));
+        GregTechAPI.HEATING_COILS.entrySet().stream().sorted(Comparator.comparingInt(entry -> entry.getValue().getTier())).forEach(entry -> shapeInfo.add(builder.where('C', entry.getKey()).build()));
 
         return shapeInfo;
     }
@@ -414,7 +387,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
         //get blockpos of first row, leftmost center block
         BlockPos.MutableBlockPos targetPos = new BlockPos.MutableBlockPos(getPos().offset(back, 2)); //place on first row
-        targetPos.move(right.getOpposite(), controllerPosition +1); //move to the furthest left center block +1 (looking at controller) to account for immediate right deviation in j loop
+        targetPos.move(right.getOpposite(), controllerPosition + 1); //move to the furthest left center block +1 (looking at controller) to account for immediate right deviation in j loop
 
         //traverse center pattern rows (closer to further)
         for (int i = 0; i < rowCount; ++i) {
@@ -426,26 +399,29 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                     if (!checkGround) continue; //skip non coil entries if checkGround is false
 
                     //do not error out if invalid
-                    if (getWorld().getBlockState(targetPos) == SuSyBlocks.EVAPORATION_BED.getState(BlockEvaporationBed.EvaporationBedType.DIRT)) continue;
-                    return ((i * columnCount + j -2) * -1) -2; //ground check failed; return index number's negative shifted down two such that range => [0, INT_MAX] -> [-INT_MAX, -2]
+                    if (getWorld().getBlockState(targetPos) == SuSyBlocks.EVAPORATION_BED.getState(BlockEvaporationBed.EvaporationBedType.DIRT))
+                        continue;
+                    return ((i * columnCount + j - 2) * -1) - 2; //ground check failed; return index number's negative shifted down two such that range => [0, INT_MAX] -> [-INT_MAX, -2]
                 }
 
                 //store state of first coil. Might do weird stuff if meta of coilState > 7, as jei error-ed when trying to display them even though they are same material type
                 if (targetState == null) {
                     targetState = getWorld().getBlockState(targetPos); //establish coil type from first coil
-                    if (MetaBlocks.WIRE_COIL.getBlockState().getValidStates().contains(targetState)) continue; //if first coil position found ensure it is valid coil and continue if it is
-                }
-                else if (getWorld().getBlockState(targetPos).toString().equals(targetState.toString())) continue; //proceed only if current coil is exact same as previous coil(s). equals seems to fail, so a string comparison works best)
+                    if (MetaBlocks.WIRE_COIL.getBlockState().getValidStates().contains(targetState))
+                        continue; //if first coil position found ensure it is valid coil and continue if it is
+                } else if (getWorld().getBlockState(targetPos).toString().equals(targetState.toString()))
+                    continue; //proceed only if current coil is exact same as previous coil(s). equals seems to fail, so a string comparison works best)
 
                 //current coilpos block is either not a coil (first coil position), or it is not identical to previous coil(s)
-                return i * columnCount + j -2; //indicate failure of solid coil structure through >0 value. Stores relative position of failure in int (kind of pointless now; was for old code that got pos from this)
+                return i * columnCount + j - 2; //indicate failure of solid coil structure through >0 value. Stores relative position of failure in int (kind of pointless now; was for old code that got pos from this)
             }
 
             targetPos.move(back); //go back one row
             targetPos.move(right.getOpposite(), columnCount); //reset to leftmost center position +1 unit left due to order of traversal inside nested loop
         }
 
-        if (!checkGround) coilStateMeta = targetState.getBlock().getMetaFromState(targetState); //store correct coilstate (necessary as passing coilState would pass the reference by value, meaning reassignment would not carry to caller)
+        if (!checkGround)
+            coilStateMeta = targetState.getBlock().getMetaFromState(targetState); //store correct coilstate (necessary as passing coilState would pass the reference by value, meaning reassignment would not carry to caller)
         return -1; //no checks failed
     }
 
@@ -470,11 +446,14 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         return true;
     }
 
-    public void initializeCoilStats() { coilStats = coilStateMeta > -1 ? HEATING_COILS.get(MetaBlocks.WIRE_COIL.getStateFromMeta(coilStateMeta)) : null; }
+    public void initializeCoilStats() {
+        coilStats = coilStateMeta > -1 ? HEATING_COILS.get(MetaBlocks.WIRE_COIL.getStateFromMeta(coilStateMeta)) : null;
+    }
 
     // returns -1 for not a valid container, 0 for valid container, invalid coil, and 1 for valid coil
     public int isValidCoil(IBlockState state) {
-        if (!MetaBlocks.WIRE_COIL.getBlockState().getValidStates().contains(state)) return this.isValidGround(state) ? 0 : -1;
+        if (!MetaBlocks.WIRE_COIL.getBlockState().getValidStates().contains(state))
+            return this.isValidGround(state) ? 0 : -1;
 
         //if not contained in valid coil states this part of method wouldn't have run
         if (coilStateMeta == -1) return 1;
@@ -494,7 +473,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
      */
     @Override
     public void checkStructurePattern() {
-        //SusyLog.logger.atError().log("Checking structure pattern");
         // This is here so that it automatically updates the dimensions once a second if it isn't formed [this method is called once a second]
         // hope this doesn't put too much of a toll on TPS - It really should not
         if (!isStructureFormed() || structurePattern == null) {
@@ -504,14 +482,12 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         }
 
         super.checkStructurePattern();
-        //SusyLog.logger.atError().log("Finished Super structure pattern check");
 
         //only do check every 2 seconds while structure is formed
         if (((tickTimer / 20) & 1) == 0 && structurePattern != null && structurePattern.getError() == null) {
             handleCoilCheckResult(coilPatternCheck(false));
         }
 
-        //SusyLog.logger.atError().log("StructurePattern: " + (structurePattern == null ? "null" : (structurePattern.getError() == null ? "No Error" : structurePattern.getError().getErrorInfo())));
     }
 
     @Override
@@ -533,14 +509,14 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         if (isLeft) {
             corner.move(left, controllerPosition); //line up with leftmost column of interior
         } else {
-            corner.move(left.getOpposite(), columnCount - controllerPosition -1); //line up w/ furthest right interior column
+            corner.move(left.getOpposite(), columnCount - controllerPosition - 1); //line up w/ furthest right interior column
         }
 
         //Puts on closest or furthest row
         if (isClose) {
             corner.move(back, 2); //place in interior
         } else {
-            corner.move(back, rowCount +1); //move onto last row
+            corner.move(back, rowCount + 1); //move onto last row
         }
 
         return corner;
@@ -580,21 +556,24 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
     public <T extends MultiblockRecipeLogic> void renderFluid(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline, IBlockAccess world, EnumFacing frontFacing, T recipeMapWorkable, BlockPos.MutableBlockPos controllerPos) {
 
-        if ((this.tickTimer +1) % 20 == 0) {
+        if ((this.tickTimer + 1) % 20 == 0) {
             SusyLog.logger.atError().log("About to attempt rendering with getWorld: " + (world == null ? "null" : world) + ", isStructureFormed: " + (isStructureFormed()) + ", isActive: " + (recipeMapWorkable == null ? "null" : (recipeMapWorkable.isActive()) + ", previousRecipe: " + (recipeMapWorkable.getPreviousRecipe() == null ? "null" : recipeMapWorkable.isActive())));
-        } else { return; }
+        } else {
+            return;
+        }
 
         if (world != null) {
             renderState.setBrightness(world, controllerPos);
         }
 
-        if (controllerPos == null || !this.isStructureFormed() || !recipeMapWorkable.isActive() || recipeMapWorkable.getPreviousRecipe() == null) { return; }
+        if (controllerPos == null || !this.isStructureFormed() || !recipeMapWorkable.isActive() || recipeMapWorkable.getPreviousRecipe() == null) {
+            return;
+        }
 
         SusyLog.logger.atError().log("Passed rendering check");
 
         //Create a box with slight margins since going from exactly 0 to exactly 1 causes some faces to not render properly
-        Cuboid6 partialFluidBox = new Cuboid6(0.001, 0.001, 0.001, 0.999,
-                0.875, 0.999);
+        Cuboid6 partialFluidBox = new Cuboid6(0.001, 0.001, 0.001, 0.999, 0.875, 0.999);
 
         //Set our box to the percentage of the tank that is full
         //partialFluidBox.max.y = 0.875f; //should be 15 pixels out of 16 full
@@ -607,7 +586,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         BlockPos.MutableBlockPos corner = getCorner(isFurthestRow, isLeftMostColumn);
 
         int EWFacing = frontFacing.getHorizontalIndex() & 1; //odd horizontal index
-        int NSFacing = (frontFacing.getHorizontalIndex() +1) & 1; //even horizontal index
+        int NSFacing = (frontFacing.getHorizontalIndex() + 1) & 1; //even horizontal index
 
         //apply translations to scale properly; "back distance and length are switched in the case of WEST and EAST as a form of "rotation" since translation.rotate is broken..."
         translation.translate((corner.getX() - controllerPos.getX()), 1, corner.getZ() - controllerPos.getZ());
@@ -627,12 +606,10 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         //modify render state for own uses and then render top
         //Textures.RENDER_STATE.set(new CubeRendererState(op.layer, CubeRendererState.PASS_MASK, op.world));
         renderState.setFluidColour(fluidStack);
-        TextureAtlasSprite fluidStillSprite = Minecraft.getMinecraft().getTextureMapBlocks()
-                .getAtlasSprite(fluidStack.getFluid().getStill(fluidStack).toString());
+        TextureAtlasSprite fluidStillSprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluidStack.getFluid().getStill(fluidStack).toString());
 
         for (EnumFacing facing : EnumFacing.VALUES) {
-            Textures.renderFace(renderState, translation, pipeline, facing, partialFluidBox, fluidStillSprite,
-                    BlockRenderLayer.CUTOUT_MIPPED);
+            Textures.renderFace(renderState, translation, pipeline, facing, partialFluidBox, fluidStillSprite, BlockRenderLayer.CUTOUT_MIPPED);
         }
 
         //Go back to normal for the next rendering call
@@ -668,7 +645,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     public void update() {
         super.update(); //means recipe logic happens before heating is added
 
-        if(this.getWorld().isRemote) {
+        if (this.getWorld().isRemote) {
             if (this.isActive()) {
                 //if world is clientside (remote from server) do custom rendering
                 evaporationParticles();
@@ -688,22 +665,18 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         if (tickTimer % 20 == 0 && tickTimer != 0) {
             //no sunlight heat generated when raining or during night. May be incongruent with partial exposure to sun, but oh well
             if (getWorld().isRainingAt(getPos().offset(getFrontFacing().getOpposite(), 2)) || !getWorld().isDaytime()) {
-                //SusyLog.logger.atError().log("setting exposed blocks to 0");
                 exposedBlocks = 0;
             }
             //checks for ow and skylight access to prevent beneath portal issues (-1 = the Nether, 0 = normal world)
             else if (getWorld().provider.getDimension() == 0) {
                 //tickTimer is always multiple of 20 at this point, so division by 20 yields proper counter. You can treat (tickTimer/20) as 'i'
-                int row = ((tickTimer /20) /columnCount) % rowCount; //going left to right, further to closer checking skylight access.
-                int col = ((tickTimer /20) % columnCount);
-                //SusyLog.logger.atError().log("Back: " + getFrontFacing().getOpposite() + ", Left: " + getFrontFacing().rotateY() + ", Right: " + getFrontFacing().rotateYCCW() + "; row: " + row + ", col: " + col);
+                int row = ((tickTimer / 20) / columnCount) % rowCount; //going left to right, further to closer checking skylight access.
+                int col = ((tickTimer / 20) % columnCount);
                 //places blockpos for skycheck into correct position. Row counts from furthest to closest (kinda inconsistent but oh well)
                 BlockPos.MutableBlockPos skyCheckPos = new BlockPos.MutableBlockPos(getPos().offset(EnumFacing.UP, 2));
-                skyCheckPos.move(getFrontFacing().getOpposite(), rowCount - row +1);
+                skyCheckPos.move(getFrontFacing().getOpposite(), rowCount - row + 1);
                 skyCheckPos.move(getFrontFacing().rotateY(), controllerPosition); //move to the furthest left
                 skyCheckPos.move(getFrontFacing().rotateYCCW(), col); //traverse down row
-
-                //SusyLog.logger.atError().log("About to check sky access for block at pos: " + skyCheckPos + " with bitArray: " + wasExposed.toString());
 
                 if (wasExposed == null || wasExposed.length != rowCount * columnCount) {
                     wasExposed = new byte[rowCount * columnCount];
@@ -713,33 +686,21 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
                 //Perform skylight check
                 if (!getWorld().canBlockSeeSky(skyCheckPos)) {
-                    //SusyLog.logger.atError().log("Failed sky check at " + skyCheckPos + " ; " + getWorld().canBlockSeeSky(skyCheckPos) + " w/ exposedBlocks: " + exposedBlocks);
                     //only decrement exposedBlocks if previously exposed block is found to no longer be exposed and one full pass has occurred
-                    if (wasExposed[(row * columnCount) + col] != 0 && tickTimer/20 > rowCount * columnCount) {
-                        exposedBlocks = Math.max(0, exposedBlocks -1);
+                    if (wasExposed[(row * columnCount) + col] != 0 && tickTimer / 20 > rowCount * columnCount) {
+                        exposedBlocks = Math.max(0, exposedBlocks - 1);
                         wasExposed[(row * columnCount) + col] = 0;
                     }
-                }
-                else {
-                    //SusyLog.logger.atError().log("Passed sky check at " + skyCheckPos + " ; " + getWorld().canBlockSeeSky(skyCheckPos) + " w/ exposedBlocks: " + exposedBlocks);
+                } else {
                     //only increment if block was not previously exposed
                     if (wasExposed[(row * columnCount) + col] == 0) {
                         if (exposedBlocks < rowCount * columnCount) ++exposedBlocks;
                         wasExposed[(row * columnCount) + col] = 1;
                     }
-                    //SusyLog.logger.atError().log("exposedBlock: " + exposedBlocks);
                 }
             }
 
         } //finish once a ~second check
-
-        /*
-        if (tickTimer % 100 == 0) {
-            SusyLog.logger.atFatal().log("I am still alive at " + getPos());
-            SusyLog.logger.atError().log("columnCount: " + columnCount + ", controllerPosition: " + controllerPosition + ", rowCount: " + rowCount);
-            SusyLog.logger.atError().log("isHeated: " + isHeated + ", exposedBlocks: " + exposedBlocks + ", kiloJoules: " + kiloJoules + ", joulesBuffer: " + joulesBuffer + ", tickTimer: " + tickTimer + ", coilStateMeta: " + coilStateMeta);
-        }
-         */
 
         inputEnergy(exposedBlocks * 50); //1kJ/s /m^2 -> 50J/t
 
@@ -764,79 +725,28 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
-        MultiblockDisplayText.builder(textList, isStructureFormed())
-                .setWorkingStatus(recipeMapWorkable.isWorkingEnabled(), recipeMapWorkable.isActive())
-                .addEnergyUsageLine(getEnergyContainer())
-                .addCustom(tl -> {
-                    // coil coefficient
-                    if (isStructureFormed()) {
-                        // handle heating contributions
-                        if (isHeated()) {
-                            tl.add(TextComponentUtil.translationWithColor(
-                                    TextFormatting.WHITE,
-                                    "gregtech.top.evaporation_pool_heated_preface"
-                            ).appendText(" ").appendSibling(TextComponentUtil.translationWithColor(
-                                    TextFormatting.GREEN,
-                                    "gregtech.top.evaporation_pool_is_heated"
-                            )));
+        MultiblockDisplayText.builder(textList, isStructureFormed()).setWorkingStatus(recipeMapWorkable.isWorkingEnabled(), recipeMapWorkable.isActive()).addEnergyUsageLine(getEnergyContainer()).addCustom(tl -> {
+            // coil coefficient
+            if (isStructureFormed()) {
+                // handle heating contributions
+                if (isHeated()) {
+                    tl.add(TextComponentUtil.translationWithColor(TextFormatting.WHITE, "gregtech.top.evaporation_pool_heated_preface").appendText(" ").appendSibling(TextComponentUtil.translationWithColor(TextFormatting.GREEN, "gregtech.top.evaporation_pool_is_heated")));
 
-                            ITextComponent heatingJoulesString = TextComponentUtil.stringWithColor(
-                                    TextFormatting.YELLOW,
-                                    TextFormattingUtil.formatNumbers((this.coilStats.getCoilTemperature() / 10) * ((((columnCount + 1) / 2 ) * rowCount) + columnCount / 2)));
+                    ITextComponent heatingJoulesString = TextComponentUtil.stringWithColor(TextFormatting.YELLOW, TextFormattingUtil.formatNumbers((this.coilStats.getCoilTemperature() / 10) * ((((columnCount + 1) / 2) * rowCount) + columnCount / 2)));
 
-                            tl.add(TextComponentUtil.translationWithColor(
-                                    TextFormatting.WHITE,
-                                    "gregtech.multiblock.evaporation_pool.heating_joules"
-                            ).appendText(" ").appendSibling(heatingJoulesString));
+                    tl.add(TextComponentUtil.translationWithColor(TextFormatting.WHITE, "gregtech.multiblock.evaporation_pool.heating_joules").appendText(" ").appendSibling(heatingJoulesString));
 
-                        } else {
-                            tl.add(TextComponentUtil.translationWithColor(
-                                    TextFormatting.WHITE,
-                                    "gregtech.top.evaporation_pool_heated_preface"
-                            ).appendText(" ").appendSibling(TextComponentUtil.translationWithColor(
-                                    TextFormatting.RED,
-                                    "gregtech.top.evaporation_pool_not_heated"
-                            )));
-                        }
+                } else {
+                    tl.add(TextComponentUtil.translationWithColor(TextFormatting.WHITE, "gregtech.top.evaporation_pool_heated_preface").appendText(" ").appendSibling(TextComponentUtil.translationWithColor(TextFormatting.RED, "gregtech.top.evaporation_pool_not_heated")));
+                }
 
-                        tl.add(TextComponentUtil.translationWithColor(
-                                TextFormatting.WHITE,
-                                "gregtech.multiblock.evaporation_pool.exposed_blocks"
-                        ).appendText(" ").appendSibling(TextComponentUtil.translationWithColor(
-                                TextFormatting.GREEN,
-                                TextFormattingUtil.formatNumbers(exposedBlocks)
-                        )));
+                tl.add(TextComponentUtil.translationWithColor(TextFormatting.WHITE, "gregtech.multiblock.evaporation_pool.exposed_blocks").appendText(" ").appendSibling(TextComponentUtil.translationWithColor(TextFormatting.GREEN, TextFormattingUtil.formatNumbers(exposedBlocks))));
 
-                        tl.add(TextComponentUtil.translationWithColor(
-                                TextFormatting.WHITE,
-                                "gregtech.top.evaporation_pool.energy_transferred"
-                        ).appendText(" ").appendSibling(TextComponentUtil.stringWithColor(
-                                TextFormatting.YELLOW,
-                                TextFormattingUtil.formatNumbers(this.getKiloJoules())
-                        ).appendText(".").appendSibling(TextComponentUtil.stringWithColor(
-                                TextFormatting.YELLOW,
-                                EvaporationPoolInfoProvider.constLengthToString(this.getJoulesBuffer())
-                        )).appendText(" ").appendSibling(TextComponentUtil.translationWithColor(
-                                TextFormatting.WHITE,
-                                "gregtech.top.evaporation_pool.kilojoules"
-                        ))));
+                tl.add(TextComponentUtil.translationWithColor(TextFormatting.WHITE, "gregtech.top.evaporation_pool.energy_transferred").appendText(" ").appendSibling(TextComponentUtil.stringWithColor(TextFormatting.YELLOW, TextFormattingUtil.formatNumbers(this.getKiloJoules())).appendText(".").appendSibling(TextComponentUtil.stringWithColor(TextFormatting.YELLOW, EvaporationPoolInfoProvider.constLengthToString(this.getJoulesBuffer()))).appendText(" ").appendSibling(TextComponentUtil.translationWithColor(TextFormatting.WHITE, "gregtech.top.evaporation_pool.kilojoules"))));
 
-                        tl.add(TextComponentUtil.translationWithColor(
-                                TextFormatting.WHITE,
-                                "gregtech.top.evaporation_pool.recipe_step_count"
-                        ).appendText(" ").appendSibling(TextComponentUtil.translationWithColor(
-                                TextFormatting.GREEN,
-                                TextFormattingUtil.formatNumbers(this.getCurrMaxStepCount())
-                        )).appendText(" ").appendSibling(TextComponentUtil.translationWithColor(
-                                TextFormatting.WHITE,
-                                "gregtech.top.evaporation_pool.recipe_step_units"
-                        )));
-                    }
-                })
-                .addEnergyTierLine(GTUtility.getTierByVoltage(recipeMapWorkable.getMaxVoltage()))
-                .addParallelsLine(recipeMapWorkable.getParallelLimit())
-                .addWorkingStatusLine()
-                .addProgressLine(recipeMapWorkable.getProgressPercent());
+                tl.add(TextComponentUtil.translationWithColor(TextFormatting.WHITE, "gregtech.top.evaporation_pool.recipe_step_count").appendText(" ").appendSibling(TextComponentUtil.translationWithColor(TextFormatting.GREEN, TextFormattingUtil.formatNumbers(this.getCurrMaxStepCount()))).appendText(" ").appendSibling(TextComponentUtil.translationWithColor(TextFormatting.WHITE, "gregtech.top.evaporation_pool.recipe_step_units")));
+            }
+        }).addEnergyTierLine(GTUtility.getTierByVoltage(recipeMapWorkable.getMaxVoltage())).addParallelsLine(recipeMapWorkable.getParallelLimit()).addWorkingStatusLine().addProgressLine(recipeMapWorkable.getProgressPercent());
     }
 
     @Override
@@ -885,14 +795,8 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             this.coilStateMeta = data.getInteger("coilStateMeta");
             initializeCoilStats();
         }
-        //SusyLog.logger.atFatal().log("before reinit");
-        //SusyLog.logger.atError().log("columnCount: " + columnCount + ", controllerPosition: " + controllerPosition + ", rowCount: " + rowCount);
-        //SusyLog.logger.atError().log("isHeated: " + isHeated + ", kiloJoules: " + kiloJoules + ", tickTimer: " + tickTimer + ", coilStateMeta: " + coilStateMeta);
         this.currMaxStepCount = 0;
         reinitializeStructurePattern();
-        //SusyLog.logger.atFatal().log("after reinit");
-        //SusyLog.logger.atError().log("columnCount: " + columnCount + ", controllerPosition: " + controllerPosition + ", rowCount: " + rowCount);
-        //SusyLog.logger.atError().log("isHeated: " + isHeated + ", kiloJoules: " + kiloJoules + ", tickTimer: " + tickTimer + ", coilStateMeta: " + coilStateMeta);
     }
 
     //order matters for these
@@ -965,7 +869,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         final BlockPos pos = this.getPos().offset(left, controllerPosition + leftOffset).offset(back, 1 + backOffset);
 
         //Spawn number of particles on range [1, 3 * colCount * rowCount/9] (~3 particles for every 3x3 = 9m^2)
-        for (int i = 0; i < Math.max(1, columnCount * rowCount/3); i++) {
+        for (int i = 0; i < Math.max(1, columnCount * rowCount / 3); i++) {
             //either single line along x axis intersects all rows, or it intersects all columns. Same applies to z axis. getXOffset indicates +, -, or "0" direction of facing for given axis
             float xLength = (back.getXOffset() * rowCount) + (left.getXOffset() * columnCount * -1); //we start on leftmost closest corner and want to go back and to the right
             float zLength = (back.getZOffset() * rowCount) + (left.getZOffset() * columnCount * -1); //so we invert the sign of the left offsets to effectively get right displacement
@@ -1066,7 +970,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             return false;
         }
 
-        int kJ = joules/1000;
+        int kJ = joules / 1000;
         joules -= kJ * 1000;
         joulesBuffer += joules;
 
@@ -1076,13 +980,13 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     }
 
     public int calcMaxSteps(int jStepSize) {
-        int stepCount = (getKiloJoules() * 1000)/jStepSize; //max number of times jStepSize can cleanly be deducted from kiloJoules
-        int remainder = (stepCount +1) * jStepSize - getKiloJoules() * 1000; //remaining joules needed to not waste partial kJ
+        int stepCount = (getKiloJoules() * 1000) / jStepSize; //max number of times jStepSize can cleanly be deducted from kiloJoules
+        int remainder = (stepCount + 1) * jStepSize - getKiloJoules() * 1000; //remaining joules needed to not waste partial kJ
 
         if (joulesBuffer > remainder) ++stepCount;
         else remainder = 0;
 
-        stepCount += (joulesBuffer - remainder)/jStepSize; //number of jSteps which can come entirely from joulesBuffer
+        stepCount += (joulesBuffer - remainder) / jStepSize; //number of jSteps which can come entirely from joulesBuffer
         this.currMaxStepCount = stepCount;
         return stepCount;
     }
