@@ -54,7 +54,7 @@ public class MetaTileEntityCokingTower extends RecipeMapMultiblockController {
                 .where('S', this.selfPredicate())
                 .where('P', states(this.getPipeCasingState()))
                 .where('F', states(this.getFrameState()))
-                .where('C', states(this.getCasingState()).setMinGlobalLimited(14)
+                .where('C', states(this.getCasingState()).setMinGlobalLimited(20)
                         .or(this.autoAbilities()))
                 .build();
     }
