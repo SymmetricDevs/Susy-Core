@@ -46,7 +46,8 @@ public class MetaTileEntityElectrolyticCell extends RecipeMapMultiblockControlle
                 .aisle("CCCCC", "CCSCC", "CCCCC")
                 .where('S', this.selfPredicate())
                 .where('P', states(this.getPipeCasingState()))
-                .where('C', states(this.getCasingState()).or(this.autoAbilities()))
+                .where('C', states(this.getCasingState()).setMinGlobalLimited(30)
+                        .or(this.autoAbilities()))
                 .build();
     }
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {

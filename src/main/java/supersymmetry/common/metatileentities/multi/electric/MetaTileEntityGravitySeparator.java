@@ -39,7 +39,12 @@ public class MetaTileEntityGravitySeparator extends RecipeMapMultiblockControlle
         return new MetaTileEntityGravitySeparator(this.metaTileEntityId);
     }
 
-    protected @NotNull BlockPattern createStructurePattern() {
+    @NotNull
+    @Override
+    protected BlockPattern createStructurePattern() {
+        // Different characters use common constraints. Copied from GCyM
+        TraceabilityPredicate casingPredicate = states(getCasingState()).setMinGlobalLimited(90);
+
         return FactoryBlockPattern.start(RIGHT, UP, FRONT)
                 //front of R facing right side
                 .aisle("C   C", "CC CC", "CFCFC", "CCSCC", " CCC ", " CCC ", "     ")
@@ -58,18 +63,18 @@ public class MetaTileEntityGravitySeparator extends RecipeMapMultiblockControlle
                 */
                 .where('S', selfPredicate())
                 .where('R', rotorOrientation())
-                .where('C', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID)))
-                .where('M', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID))
+                .where('C', casingPredicate)
+                .where('M', casingPredicate
                         .or(abilities(MultiblockAbility.MAINTENANCE_HATCH)).setExactLimit(1))
-                .where('E', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID))
+                .where('E', casingPredicate
                         .or(autoAbilities(true, false, false, false, false, false, false)))
-                .where('I', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID))
+                .where('I', casingPredicate
                         .or(autoAbilities(false, false, true, false, false, false, false)))
-                .where('O', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID))
+                .where('O', casingPredicate
                         .or(autoAbilities(false, false, false, true, false, false, false)))
-                .where('J', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID))
+                .where('J', casingPredicate
                         .or(autoAbilities(false, false, false, false, true, false, false)))
-                .where('F', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID))
+                .where('F', casingPredicate
                         .or(autoAbilities(false, false, false, false, false, true, false)))
                 .where('#', air())
                 .where(' ', any())
@@ -115,6 +120,10 @@ public class MetaTileEntityGravitySeparator extends RecipeMapMultiblockControlle
 
     protected IBlockState steelRotorState() {
         return SuSyBlocks.SEPARATOR_ROTOR.getState(BlockSeparatorRotor.BlockSeparatorRotorType.STEEL);
+    }
+
+    protected static IBlockState getCasingState() {
+        return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID);
     }
 
     @Nonnull
