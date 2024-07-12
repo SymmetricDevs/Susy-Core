@@ -28,7 +28,7 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
 
             // if recipe is not recovered, invalidate recipe logic
             if (this.previousRecipe == null || !this.previousRecipe.hasProperty(EvaporationEnergyProperty.getInstance())) {
-                invalidate();
+                SusyLog.logger.atError().log("Recipe could not be located");
                 return 0;
             }
         }
@@ -60,8 +60,15 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
         }
 
         pool.areCoilsHeating = coilHeated;
+        int Jt = getJt();
+        if (Jt <= 0) {
+            this.invalidate();
+            this.setActive(false);
+            pool.areCoilsHeating = false;
+            return;
+        }
 
-        int maxSteps = pool.calcMaxSteps(getJt());
+        int maxSteps = pool.calcMaxSteps(Jt);
 
         //if the recipe can progress and at least one step can be taken
         if (maxSteps > 0) {
