@@ -51,11 +51,12 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
             int coilHeat = pool.coilStats.getCoilTemperature();
             //assumes specific heat of 1J/(g*delta temp) and perfect heat transfer on one face of the coil for 1/6 of total delta temp.  Last portion calculates number of coils.
             int heatingJoules = (coilHeat / HEAT_DENOMINATOR) * (((pool.getColumnCount() / 2 + 1) * pool.getRowCount()) + pool.getColumnCount() / 2); //20 should limit it to reasonable per tick levels
-            heatingJoules = Math.min(((int) getEnergyStored()) * JOULES_PER_EU, heatingJoules); //attempt to transfer entire heatingJoules amount or what is left in energy container
-            boolean couldInput = pool.inputEnergy(heatingJoules);
+            pool.inputEnergy(heatingJoules);
+            int electricJoules = (int) getEnergyStored() * JOULES_PER_EU * pool.coilStats.getEnergyDiscount(); //attempt to transfer entire heatingJoules amount or what is left in energy container
+            boolean couldInput = pool.inputEnergy(electricJoules);
             if (couldInput) {
-                pool.getEnergyContainer().removeEnergy((heatingJoules / JOULES_PER_EU) / pool.coilStats.getEnergyDiscount()); //energy should always be available as heatingJoules is either itself or energy*JpEU
-                coilHeated = heatingJoules > 0;
+                pool.getEnergyContainer().removeEnergy((electricJoules / JOULES_PER_EU) / pool.coilStats.getEnergyDiscount()); //energy should always be available as heatingJoules is either itself or energy*JpEU
+                coilHeated = electricJoules > 0;
             }
         }
 
