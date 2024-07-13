@@ -49,11 +49,12 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
         if (pool.coilStats != null && pool.isHeated()) {
             // attempt to input energy from coil dependent on its heat and the number of coils for the given size pool
             int coilHeat = pool.coilStats.getCoilTemperature();
-            int electricJoules = coilHeat * (((pool.getColumnCount() / 2 + 1) * pool.getRowCount()) + pool.getColumnCount() / 2);
-            boolean couldInput = pool.inputEnergy(electricJoules); // if room is available in thermal energy storage
+            int electricEnergy = coilHeat * (((pool.getColumnCount() / 2 + 1) * pool.getRowCount()) + pool.getColumnCount() / 2) / JOULES_PER_EU; // converted to EU to save on divisions
+            if (electricEnergy > pool.getEnergyContainer().getEnergyStored()) electricEnergy = (int) pool.getEnergyContainer().getEnergyStored();
+            boolean couldInput = pool.inputEnergy(electricEnergy * JOULES_PER_EU); // if room is available in thermal energy storage
             if (couldInput) {
-                pool.getEnergyContainer().removeEnergy((electricJoules / JOULES_PER_EU) / pool.coilStats.getEnergyDiscount()); //energy should always be available as heatingJoules is either itself or energy*JpEU
-                coilHeated = electricJoules > 0;
+                pool.getEnergyContainer().removeEnergy((electricEnergy) / pool.coilStats.getEnergyDiscount()); //energy should always be available as heatingJoules is either itself or energy*JpEU
+                coilHeated = electricEnergy > 0;
             }
         }
 
@@ -71,6 +72,7 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
         //if the recipe can progress and at least one step can be taken
         if (maxSteps > 0) {
             hasNotEnoughEnergy = false;
+            pool.isRecipeStalled = false;
 
             // occasionally actualSteps would be 0 for some reason, which is why one should be minimum
             int actualSteps = Math.min(Math.max((this.maxProgressTime >>> 2), 1), maxSteps);
@@ -99,9 +101,7 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
             if (this.progressTime > this.maxProgressTime) completeRecipe();
         } else {
             this.hasNotEnoughEnergy = true;
-            //50% chance to decrease progress by one once a tick when using max sized pool (two sequential divisions to avoid cast to long)
-            if ((this.progressTime & (Math.max(1, (this.maxProgressTime >>> 2) - 1))) != 0 && pool.getOffsetTimer() % (1 + ((MetaTileEntityEvaporationPool.MAX_SQUARE_SIDE_LENGTH * MetaTileEntityEvaporationPool.MAX_SQUARE_SIDE_LENGTH) / pool.getColumnCount()) / pool.getRowCount()) == 0)
-                this.decreaseProgress();
+            pool.isRecipeStalled = true;
         }
     }
 

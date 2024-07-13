@@ -33,7 +33,7 @@ public class EvaporationPoolInfoProvider implements IProbeInfoProvider {
                 probeInfo.text(TextStyleClass.INFO + "{*gregtech.top.evaporation_pool_heated_preface*} " + (evapPool.isHeated ? ( TextFormatting.GREEN + "{*gregtech.top.evaporation_pool_is_heated*} ") : (TextFormatting.RED + "{*gregtech.top.evaporation_pool_not_heated*} ")));
                 probeInfo.text(TextStyleClass.INFO + "{*gregtech.top.evaporation_pool.energy_transferred*} " + (TextFormatting.YELLOW + (evapPool.getKiloJoules() + "."))
                         + (TextFormatting.YELLOW + constLengthToString(evapPool.getJoulesBuffer())) + (TextFormatting.WHITE + (" {*gregtech.top.evaporation_pool.kilojoules*}")));
-                probeInfo.text(TextStyleClass.INFO + "{*gregtech.top.evaporation_pool.recipe_step_count*} " + (TextFormatting.GREEN + (Integer.toString(evapPool.getCurrMaxStepCount()))) + (TextFormatting.WHITE + " {*gregtech.top.evaporation_pool.recipe_step_units*}"));
+                probeInfo.text(TextStyleClass.INFO + "{*gregtech.multiblock.evaporation_pool.average_speed*} " + (TextFormatting.GREEN + (Float.toString(((int) evapPool.getAverageRecipeSpeed() * 100) / 100F))) + (TextFormatting.WHITE + "x"));
             }
         }
     }
