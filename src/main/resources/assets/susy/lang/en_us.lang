@@ -238,6 +238,8 @@ gregtech.top.evaporation_pool.energy_transferred=Thermal Energy Stored:
 gregtech.top.evaporation_pool.kilojoules=kJ
 gregtech.multiblock.evaporation_pool.description=The Evaporation Pool has interior dimensions specified in its description and a concrete exterior for IO/controller placement, with at most two of each IO type. The controller may be placed anywhere along the protruding bottom row "in front" of the interior.            The Evaporation Pool can run recipes both unpowered and powered. In order to power recipes, the multiblock will need to be formed with a "snaking" coil pattern of uniform type, as shown in the preview. Unpowered Evaporation Pools do not require any coils.                                                 The speed of any recipe depends on the heat provided to the multi, which is based off of the number of interior blocks exposed to sunlight, the energy provided, and the tier of coil. [1EU = 10J currently]
 
+gregtech.machine.steam_extractor_bronze.tooltip=Extracting your first rubber!/n§cSteam Extractors cannot melt items.
+gregtech.machine.steam_extractor_steel.tooltip=Extracting your first rubber!/n§cSteam Extractors cannot melt items.
 gregtech.machine.primitive_mud_pump.name=Primitive Mud Pump
 gregtech.machine.primitive_mud_pump.tooltip=Works only in River biomes between Y=64 and Y=80
 gregtech.machine.basic_steam_turbine.name=Large Steam Turbine
