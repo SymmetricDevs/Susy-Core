@@ -1,6 +1,7 @@
 package supersymmetry.common.metatileentities;
 
 import gregtech.api.GTValues;
+import gregtech.api.capability.impl.PropertyFluidFilter;
 import gregtech.api.metatileentity.SimpleMachineMetaTileEntity;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.RecipeMaps;
@@ -33,7 +34,6 @@ import supersymmetry.common.metatileentities.single.electric.MetaTileEntityLatex
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityPhaseSeparator;
 import supersymmetry.common.metatileentities.single.steam.MetaTileEntitySteamLatexCollector;
 import supersymmetry.common.metatileentities.single.steam.SuSySimpleSteamMetaTileEntity;
-import supersymmetry.common.metatileentities.single.storage.MetaTileEntityCryoDrum;
 
 import java.util.function.Function;
 
@@ -62,7 +62,7 @@ public class SuSyMetaTileEntities {
     public static SimpleMachineMetaTileEntity[] VACUUM_CHAMBER;
 
     public static MetaTileEntityDrum LEAD_DRUM;
-    public static MetaTileEntityCryoDrum BRASS_DRUM;
+    public static MetaTileEntityDrum BRASS_DRUM;
 
     //Machines for chem overhaul
     public static ContinuousMachineMetaTileEntity[] CONTINUOUS_STIRRED_TANK_REACTOR;
@@ -230,7 +230,7 @@ public class SuSyMetaTileEntities {
         DRONE_PAD = registerMetaTileEntity(15062, new MetaTileEntityDronePad(susyId("drone_pad")));
 
         LEAD_DRUM = registerMetaTileEntity(14553, new MetaTileEntityDrum(susyId("drum.lead"), Materials.Lead, 32000));
-        BRASS_DRUM = registerMetaTileEntity(17010, new MetaTileEntityCryoDrum(susyId("drum.brass"), 16000, 1280, false, false, Materials.Brass.getMaterialRGB()));
+        BRASS_DRUM = registerMetaTileEntity(17010, new MetaTileEntityDrum(susyId("drum.brass"), new PropertyFluidFilter(1280, true, false, true, false), false, Materials.Brass.getMaterialRGB(), 16000));
 
         NEW_ENERGY_OUTPUT_HATCH_4A[0] = registerMetaTileEntity(16000, new SusyMetaTileEntityEnergyHatch(susyId("energy_hatch.output_4a.lv"), 1, 4, true));
         NEW_ENERGY_OUTPUT_HATCH_16A[0] = registerMetaTileEntity(16001, new SusyMetaTileEntityEnergyHatch(susyId("energy_hatch.output_16a.lv"), 1, 16, true));
