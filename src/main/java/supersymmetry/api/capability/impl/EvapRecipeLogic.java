@@ -15,7 +15,6 @@ import static supersymmetry.api.util.SuSyUtility.JOULES_PER_EU;
 
 public class EvapRecipeLogic extends MultiblockRecipeLogic {
     private final MetaTileEntityEvaporationPool pool;
-    public static final int HEAT_DENOMINATOR = 10; //transfers all of its energy every half a second (10 ticks) as 1/6th every second seemed too low, with cupro depositing 1ALv/t
 
     public EvapRecipeLogic(MetaTileEntityEvaporationPool tileEntity) {
         super(tileEntity);
@@ -48,12 +47,10 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
         //if null then no heating can be done, otherwise add joules according to coil values and energy available
         boolean coilHeated = false;
         if (pool.coilStats != null && pool.isHeated()) {
+            // attempt to input energy from coil dependent on its heat and the number of coils for the given size pool
             int coilHeat = pool.coilStats.getCoilTemperature();
-            //assumes specific heat of 1J/(g*delta temp) and perfect heat transfer on one face of the coil for 1/6 of total delta temp.  Last portion calculates number of coils.
-            int heatingJoules = (coilHeat / HEAT_DENOMINATOR) * (((pool.getColumnCount() / 2 + 1) * pool.getRowCount()) + pool.getColumnCount() / 2); //20 should limit it to reasonable per tick levels
-            pool.inputEnergy(heatingJoules);
-            int electricJoules = (int) getEnergyStored() * JOULES_PER_EU * pool.coilStats.getEnergyDiscount(); //attempt to transfer entire heatingJoules amount or what is left in energy container
-            boolean couldInput = pool.inputEnergy(electricJoules);
+            int electricJoules = coilHeat * (((pool.getColumnCount() / 2 + 1) * pool.getRowCount()) + pool.getColumnCount() / 2);
+            boolean couldInput = pool.inputEnergy(electricJoules); // if room is available in thermal energy storage
             if (couldInput) {
                 pool.getEnergyContainer().removeEnergy((electricJoules / JOULES_PER_EU) / pool.coilStats.getEnergyDiscount()); //energy should always be available as heatingJoules is either itself or energy*JpEU
                 coilHeated = electricJoules > 0;
