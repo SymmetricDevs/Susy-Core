@@ -153,8 +153,8 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
     }
 
     @Override
-    protected int[] runOverclockingLogic(@Nonnull IRecipePropertyStorage propertyStorage, int recipeEUt, long maxVoltage, int recipeDuration, int amountOC) {
-        return OverclockingLogic.standardOverclockingLogic(recipeEUt, this.getMaxVoltage(), recipeDuration, amountOC, this.getOverclockingDurationDivisor(), this.getOverclockingVoltageMultiplier());
+    protected int getNumberOfOCs(int recipeEUt) {
+        return 0;
     }
 
     @Override
