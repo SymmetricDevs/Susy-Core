@@ -225,11 +225,11 @@ public abstract class MetaTileEntityStockInteractor extends MetaTileEntity imple
 
     @Override
     public AxisAlignedBB getInteractionBoundingBox() {
-        return interactionBoundingBox == null ? interactionBoundingBox = StockHelperFunctions.GetBox(this.getPos(), this.getFrontFacing(), this.getInteractionWidth(), this.getInteractionDepth()) : interactionBoundingBox;
+        return interactionBoundingBox == null ? interactionBoundingBox = StockHelperFunctions.getBox(this.getPos(), this.getFrontFacing(), this.getInteractionWidth(), this.getInteractionDepth()) : interactionBoundingBox;
     }
 
     public void recalculateBoundingBox() {
-        this.interactionBoundingBox = StockHelperFunctions.GetBox(this.getPos(), this.getFrontFacing(), this.getInteractionWidth(), this.getInteractionDepth());
+        this.interactionBoundingBox = StockHelperFunctions.getBox(this.getPos(), this.getFrontFacing(), this.getInteractionWidth(), this.getInteractionDepth());
     }
 
     public double getInteractionWidth() {

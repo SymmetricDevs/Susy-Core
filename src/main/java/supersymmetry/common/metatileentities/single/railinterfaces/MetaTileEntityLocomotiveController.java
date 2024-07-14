@@ -1,6 +1,4 @@
 package supersymmetry.common.metatileentities.single.railinterfaces;
-// TODO: Adapt to MetaTileEntityStockInteractor
-/*
 import cam72cam.immersiverailroading.entity.EntityRollingStock;
 import cam72cam.immersiverailroading.entity.Locomotive;
 import codechicken.lib.render.CCRenderState;
@@ -22,6 +20,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -38,6 +37,7 @@ import java.util.List;
 
 public class MetaTileEntityLocomotiveController  extends MetaTileEntity implements IStockInteractor
 {
+    AxisAlignedBB interactionBoundingBox;
     public int ticksAlive;
 
     public boolean active;
@@ -60,12 +60,6 @@ public class MetaTileEntityLocomotiveController  extends MetaTileEntity implemen
         return new MetaTileEntityLocomotiveController(this.metaTileEntityId);
     }
 
-
-    //#fix# should have comparitor interaction maybe
-    public int getActualComparatorValue() {
-        return 1;
-    }
-
     public boolean isOpaqueCube() {
         return true;
     }
@@ -77,11 +71,6 @@ public class MetaTileEntityLocomotiveController  extends MetaTileEntity implemen
 
     public boolean hasFrontFacing() {
         return true;
-    }
-
-    @Override
-    public Vec3d getInteractionArea() {
-        return detectionArea;
     }
 
     public void writeStatsToBuffer(PacketBuffer buf) {
@@ -134,7 +123,7 @@ public class MetaTileEntityLocomotiveController  extends MetaTileEntity implemen
         {
             this.onNeighborChanged();
 
-            List<EntityRollingStock> stocks = StockHelperFunctions.GetStockInArea(getFilterIndex(), this.getFrontFacing(), this, this.getWorld());
+            List<EntityRollingStock> stocks = StockHelperFunctions.getStocksInArea(this.getWorld(), this.getInteractionBoundingBox());
 
             if(!(stocks.size() > 0))
                 return;
@@ -308,38 +297,13 @@ public class MetaTileEntityLocomotiveController  extends MetaTileEntity implemen
         super.readFromNBT(data);
         this.active = data.getBoolean("active");
     }
-    @Override
-    public void cycleFilter(boolean up) {
 
-    }
-
-    @Override
-    public void cycleFilterUp() {
-
-    }
-
-    @Override
-    public byte getFilterIndex() {
-        return filterIndex;
-    }
-
-    @Override
-    public boolean setFilterIndex(byte index) {
-        return false;
-    }
-
-    @Override
-    public Class<?> getFilter() {
-        return StockHelperFunctions.ClassMap[filterIndex];
-    }
-
-    @Override
-    public MetaTileEntity GetMetaTileEntity() {
-        return this;
-    }
 
     protected boolean canMachineConnectRedstone(EnumFacing side) {
         return true;
     }
+
+    public AxisAlignedBB getInteractionBoundingBox() {
+        return interactionBoundingBox == null ? interactionBoundingBox = StockHelperFunctions.getBox(this.getPos(), this.getFrontFacing(), 8, 8) : interactionBoundingBox;
+    }
 }
-*/

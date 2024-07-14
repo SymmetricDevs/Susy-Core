@@ -1,5 +1,4 @@
 package supersymmetry.common.metatileentities.single.railinterfaces;
-/*
 // TODO: Adapt to MetaTileEntityStockInteractor
 import cam72cam.immersiverailroading.entity.EntityRollingStock;
 import cam72cam.immersiverailroading.entity.Freight;
@@ -12,6 +11,7 @@ import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.resources.IGuiTexture;
 import gregtech.api.gui.widgets.CycleButtonWidget;
+import gregtech.api.gui.widgets.TabGroup;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import net.minecraft.client.resources.I18n;
@@ -44,6 +44,8 @@ public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInterac
     public final int inventoryArrayHeight = 5;
     private final int inventoryArrayWidth = 5;
     private ItemStackHandler itemTank;
+    private boolean validStockNearby;
+    private boolean active;
 
     //locomotive, tank #fix# redo sub class map system
 
@@ -56,11 +58,6 @@ public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInterac
     }
 
     public int getLightOpacity() {
-        return 1;
-    }
-
-    //#fix# should have comparitor interaction maybe
-    public int getActualComparatorValue() {
         return 1;
     }
 
@@ -130,9 +127,9 @@ public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInterac
 
         if(this.getOffsetTimer() % 20 == 0)
         {
-            List<EntityRollingStock> stocks = StockHelperFunctions.GetStockInArea(this.subClassMap[this.subFilterIndex], this.getFrontFacing(), this, this.getWorld());
+            List<EntityRollingStock> stocks = StockHelperFunctions.getStocksInArea(this.getWorld(), this.getInteractionBoundingBox());
             boolean newValidNearby = stocks.size() > 0;
-            if(newValidNearby != this.validStockNearby || this.ticksAlive == 0)
+            if(newValidNearby != this.validStockNearby)
             {
                 //#fix# if buffer is sent to server, then this should be run twice? test.
                 this.validStockNearby = newValidNearby;
@@ -228,24 +225,24 @@ public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInterac
     protected ModularUI createUI(EntityPlayer entityPlayer) {
         ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, 176, Math.max(166, 18 + 18 * this.inventoryArrayHeight + 94));
 
-
         for(int j = 0; j < inventoryArrayHeight; j++) {
             for(int i = 0; i < inventoryArrayWidth; i++) {
                 builder = builder.slot(this.itemTank, j * inventoryArrayWidth + i, 8 + i * 18, 18 + j * 18, true, true, new IGuiTexture[]{GuiTextures.SLOT});
             }
         }
 
-        CycleButtonWidget filterIndexButton = new CycleButtonWidget(9 + 8 + 5 * 18, 18, 60, 18, subClassNameMap, () -> this.subFilterIndex, (x) -> this.uiCycleFilter());
+        //CycleButtonWidget filterIndexButton = new CycleButtonWidget(9 + 8 + 5 * 18, 18, 60, 18, subClassNameMap, () -> this.subFilterIndex, (x) -> this.uiCycleFilter());
         CycleButtonWidget cycleStateButton = new CycleButtonWidget(9 + 8 + 5 * 18, 36, 60, 18, new String[]{"pulling", "pushing"}, () -> this.pulling ? 0 : 1, (x) -> this.SetTransferState(x == 0));
 
-        builder.widget(filterIndexButton);
+        //builder.widget(filterIndexButton);
         builder.widget(cycleStateButton);
 
         return builder.label(6, 6, I18n.format(getMetaFullName())).bindPlayerInventory(entityPlayer.inventory, GuiTextures.SLOT, 8, 18 + 18 * inventoryArrayHeight + 12).build(getHolder(), entityPlayer);
     }
 
-    private void uiCycleFilter() {
-        this.cycleFilter(true);
+    @Override
+    protected void appendDefaultTab(EntityPlayer entityPlayer, TabGroup tabGroup) {
+
     }
 
     //#fix# does detected need to be saved or just refreshed on load? does ticks-alive need to be saved to prevent every one ticking at once?
@@ -268,56 +265,12 @@ public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInterac
         return super.onRightClick(playerIn, hand, facing, hitResult);
     }
 
-    //#fix# what does this do
-    protected boolean shouldSerializeInventories() {
-        return false;
-    }
-
-    public Vec3d getInteractionArea() {
-        return this.detectionArea;
-    }
-
-    public void cycleFilter(boolean up) {
-        this.subFilterIndex = StockHelperFunctions.CycleFilter(this.subFilterIndex, up, (byte)this.subClassMap.length);
-        this.writeCustomData(0b1, (buf) -> buf.writeByte(this.subFilterIndex));
-    }
-
-    public void cycleFilterUp() {
-        this.cycleFilter(true);
-    }
-
-    public byte getFilterIndex() {
-        return this.subFilterIndex;
-    }
-
-    public boolean setFilterIndex(byte index) {
-        for(byte i = 0; i < subClassMap.length; i++) {
-            if(subClassMap[i] == index) {
-                this.setSubFilterIndex(i);
-                return true;
-            }
-        }
-        this.setSubFilterIndex((byte)0);
-        return false;
-    }
-
-    public void setSubFilterIndex(byte index) {
-        this.subFilterIndex = index;
-    }
-
-    public Class getFilter() { return StockHelperFunctions.ClassMap[this.getFilterIndex()]; }
-
     public void SetTransferState(boolean state) {
         this.pulling = state;
         this.writeCustomData(0b100, (buf) -> buf.writeBoolean(this.pulling));
-    }
-
-    public MetaTileEntity GetMetaTileEntity() {
-        return this;
     }
 
     protected boolean canMachineConnectRedstone(EnumFacing side) {
         return true;
     }
 }
-*/

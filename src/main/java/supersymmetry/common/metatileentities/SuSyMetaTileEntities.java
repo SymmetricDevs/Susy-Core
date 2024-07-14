@@ -30,7 +30,6 @@ import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimi
 import supersymmetry.common.metatileentities.multiblockpart.SusyMetaTileEntityDumpingHatch;
 import supersymmetry.common.metatileentities.multiblockpart.SusyMetaTileEntityEnergyHatch;
 import supersymmetry.common.metatileentities.single.railinterfaces.*;
-import supersymmetry.common.metatileentities.single.storage.MetaTileEntityCryoDrum;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityBathCondenser;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityLatexCollector;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityPhaseSeparator;
