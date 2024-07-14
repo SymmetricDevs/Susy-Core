@@ -1,6 +1,5 @@
 package supersymmetry.common;
 
-import gregtech.api.block.VariantActiveBlock;
 import gregtech.api.block.VariantItemBlock;
 import gregtech.api.unification.material.event.MaterialEvent;
 import gregtech.api.unification.material.event.PostMaterialEvent;
@@ -8,7 +7,6 @@ import gregtech.client.utils.TooltipHelper;
 import gregtech.common.blocks.BlockWireCoil;
 import gregtech.common.items.MetaItems;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.item.Item;
@@ -142,10 +140,11 @@ public class CommonProxy {
     }
 
     private static void handleCoilTooltips(ItemTooltipEvent event) {
-        if(event.getItemStack().getItem().getRegistryName().toString().equals("gregtech:wire_coil") && TooltipHelper.isShiftDown()) {
+        Block block = Block.getBlockFromItem(event.getItemStack().getItem());
+        if(block instanceof BlockWireCoil && TooltipHelper.isShiftDown()) {
             ItemStack itemStack = event.getItemStack();
             Item item = itemStack.getItem();
-            BlockWireCoil wireCoilBlock = (BlockWireCoil)Block.getBlockFromItem(item);
+            BlockWireCoil wireCoilBlock = (BlockWireCoil)block;
             VariantItemBlock itemBlock = (VariantItemBlock)item;
             BlockWireCoil.CoilType coilType = (BlockWireCoil.CoilType)wireCoilBlock.getState(itemBlock.getBlockState(itemStack));
             event.getToolTip().add(I18n.format("tile.wire_coil.tooltip_evaporation", new Object[0]));
