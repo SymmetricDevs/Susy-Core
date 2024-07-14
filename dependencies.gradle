@@ -23,11 +23,10 @@ dependencies {
 
     // CCL 3.2.3.358
     implementation rfg.deobf('curse.maven:codechicken-lib-1-8-242818:2779848')
-    // GTCEu 2.8.6 beta
-    implementation rfg.deobf("curse.maven:gregtech-ce-unofficial-557242:5050979-deobf-5050980-sources-5050981")
-    // GCYM 1.2.7
-    implementation rfg.deobf('curse.maven:gregicality-multiblocks-564858:4910674-deobf-4910675-sources-4910676')
-
+    // GTCEu 2.8.10 beta
+    implementation rfg.deobf("curse.maven:gregtech-ce-unofficial-557242:5519022")
+    // GCYM 1.2.10
+    implementation rfg.deobf('curse.maven:gregicality-multiblocks-564858:5508050')
     // AE2UEL 0.55.6 (transitive gt dep)
     compileOnly rfg.deobf("curse.maven:ae2-extended-life-570458:4402048")
 
@@ -38,7 +37,7 @@ dependencies {
 
     compileOnly rfg.deobf('curse.maven:biomes-o-plenty-220318:2842510')
 
-    implementation rfg.deobf('curse.maven:gregtech-food-option-477021:5085993') // GT-FO 1.10.2
+    implementation rfg.deobf('curse.maven:gregtech-food-option-477021:5500516') // GT-FO 1.11.3
 
     implementation rfg.deobf('curse.maven:applecore-224472:2969118')
 
@@ -46,11 +45,12 @@ dependencies {
     implementation rfg.deobf("curse.maven:alcatrazcore-304493:2666560") // AlcatrazCore v1.0.4
 
 
-    implementation rfg.deobf("curse.maven:universal-mod-core-371784:3654955") // Universal-Mod-Care v1.1.4
+    implementation rfg.deobf("curse.maven:universal-mod-core-371784:4975229") // Universal-Mod-Care v1.2.1
     implementation rfg.deobf("curse.maven:track-api-282613:2825260") // Track-API v1.2.0
 
-    implementation rfg.deobf("curse.maven:immersive-railroading-277736:3437738") // Immersive-Railroading v1.9.1
+    implementation rfg.deobf("curse.maven:immersive-railroading-277736:4970105") // Immersive-Railroading v1.10.0
 
     implementation rfg.deobf("curse.maven:ctm-267602:2915363") // CTM 1.0.2.31
-    implementation rfg.deobf("curse.maven:groovyscript-687577:4991701") // GRS 0.7.3
+    implementation rfg.deobf("curse.maven:groovyscript-687577:5507936") // GRS 1.1.1
+    implementation rfg.deobf("curse.maven:modularui-624243:5153413")
 }

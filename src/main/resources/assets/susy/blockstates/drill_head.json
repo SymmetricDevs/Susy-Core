@@ -1,9 +1,6 @@
 {
   "forge_marker" : 1,
   "variants" : {
-    "facing=north,variant=steel": { "model": "susy:drill_head/steel" },
-    "facing=south,variant=steel": { "model": "susy:drill_head/steel", "y": 180 },
-    "facing=west,variant=steel": { "model": "susy:drill_head/steel", "y": 270 },
-    "facing=east,variant=steel": { "model": "susy:drill_head/steel", "y": 90 }
+    "variant=steel": { "model": "susy:drill_head/steel" }
   }
 }

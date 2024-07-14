@@ -6,13 +6,10 @@ import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
-import gregtech.api.unification.material.Materials;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
-import gregtech.common.blocks.BlockBoilerCasing.BoilerCasingType;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
@@ -37,7 +34,7 @@ public class MetaTileEntityCondenser extends RecipeMapMultiblockController {
                 .aisle("CCC", "C C", "C C", "CCC")
                 .aisle("CCC", "CSC", "CCC", "CCC")
                 .where('S', selfPredicate())
-                .where('C', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.ALUMINIUM_FROSTPROOF))
+                .where('C', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.ALUMINIUM_FROSTPROOF)).setMinGlobalLimited(27)
                         .or(autoAbilities(true, true, false, false, true, true, false)))
                 .where(' ', air())
                 .build();
@@ -52,5 +49,10 @@ public class MetaTileEntityCondenser extends RecipeMapMultiblockController {
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.CONDENSER_OVERLAY;
+    }
+
+    @Override
+    public boolean allowsExtendedFacing() {
+        return false;
     }
 }

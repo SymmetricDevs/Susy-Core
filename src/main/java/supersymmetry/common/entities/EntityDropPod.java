@@ -29,6 +29,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import supersymmetry.api.SusyLog;
 import supersymmetry.client.audio.MovingSoundDropPod;
 import supersymmetry.client.renderer.particles.SusyParticleFlame;
 import supersymmetry.client.renderer.particles.SusyParticleSmoke;
@@ -85,7 +86,10 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
 
     @SideOnly(Side.CLIENT)
     protected void spawnFlightParticles(boolean goingUp) {
-        //double offset = goingUp ? 0.0D : 1.5D;
+        if (this.isDead || (goingUp && this.getTimeSinceLanding() > 500)) {
+            return;
+        }
+
         double offset = goingUp ? 0.2D : 0.5D;
         SusyParticleFlame flame1 = new SusyParticleFlame(
                 this.world,
@@ -171,7 +175,8 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
                 if (this.world.getBlockState(pos).getBlockHardness(this.world, pos) < 0.3) {
                     this.world.setBlockToAir(pos);
                 } else if (above) {
-                    this.damageEntity(DamageSource.FLY_INTO_WALL, 1);
+                    this.explode();
+                    this.world.removeEntityDangerously(this);
                     break;
                 }
             }
@@ -189,7 +194,11 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     }
 
     private void explode() {
-        this.world.newExplosion(this, this.posX, this.posY, this.posZ, 6, true, true);
+        int explosionStrength = 1;
+        if (getRidingEntity() != null && getRidingEntity() instanceof EntityPlayer) {
+            explosionStrength = 6;
+        }
+        this.world.newExplosion(this, this.posX, this.posY, this.posZ, explosionStrength, false, false);
         this.setDead();
     }
 
@@ -244,13 +253,15 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
                     int posZRounded = MathHelper.floor(this.posZ);
                     IBlockState blockBeneath = this.world.getBlockState(new BlockPos(posXRounded, posYBeneath, posZRounded));
 
-                    if (blockBeneath.getMaterial() != Material.AIR)
-                    {
+                    if (blockBeneath.getMaterial() != Material.AIR) {
                         SoundType soundType = blockBeneath.getBlock().getSoundType(blockBeneath, world, new BlockPos(posXRounded, posYBeneath, posZRounded), this);
                         this.playSound(soundType.getBreakSound(), soundType.getVolume() * 3.0F, soundType.getPitch() * 0.2F);
                     }
                 }
                 this.setTimeSinceLanding(this.getTimeSinceLanding() + 1);
+                if (this.getTimeSinceLanding() > 1000) {
+                    this.setDead();
+                }
             }
 
             if (this.hasTakenOff()) {
@@ -260,9 +271,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
                     }
                     this.motionY *= 1.1D;
                 }
-                if (this.motionY < 0.1D) {
-                    this.handleCollidedBlocks(true);
-                }
+                this.handleCollidedBlocks(true);
                 this.isDead = this.posY > 300;
             }
         } else {
@@ -291,6 +300,9 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     protected void removePassenger(@NotNull Entity passenger) {
         if (this.canPlayerDismount()) {
             super.removePassenger(passenger);
+            if (passenger instanceof EntityLiving living) {
+                living.setNoAI(false);
+            }
         }
     }
 
@@ -299,10 +311,10 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
         super.updatePassenger(passenger);
         float xOffset = MathHelper.sin(this.renderYawOffset * 0.1F);
         float zOffset = MathHelper.cos(this.renderYawOffset * 0.1F);
-        passenger.setPosition(this.posX + (double)(0.1F * xOffset), this.posY + (double)(this.height * 0.2F) + passenger.getYOffset() + 0.0D, this.posZ - (double)(0.1F * zOffset));
+        passenger.setPosition(this.posX + (double) (0.1F * xOffset), this.posY + (double) (this.height * 0.2F) + passenger.getYOffset() + 0.0D, this.posZ - (double) (0.1F * zOffset));
 
         if (passenger instanceof EntityLivingBase) {
-            ((EntityLivingBase)passenger).renderYawOffset = this.renderYawOffset;
+            ((EntityLivingBase) passenger).renderYawOffset = this.renderYawOffset;
         }
     }
 
@@ -313,7 +325,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
 
     @Override
     protected boolean canDespawn() {
-        return false;
+        return this.getTimeSinceLanding() > 1000;
     }
 
     @Override
@@ -365,9 +377,14 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
 
     @Override
     protected void addPassenger(Entity passenger) {
-        if (this.getPassengers().isEmpty())
+        if (this.getPassengers().isEmpty()) {
             super.addPassenger(passenger);
+            if (passenger instanceof EntityLiving living) {
+                living.setNoAI(true);
+            }
+        }
     }
+
 
     @Override
     public void onAddedToWorld() {
@@ -382,4 +399,6 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
         this.soundDropPod = new MovingSoundDropPod(this);
         Minecraft.getMinecraft().getSoundHandler().playSound(this.soundDropPod);
     }
+
+
 }

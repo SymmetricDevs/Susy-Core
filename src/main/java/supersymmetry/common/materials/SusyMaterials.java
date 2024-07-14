@@ -2,6 +2,7 @@ package supersymmetry.common.materials;
 
 import gregtech.api.GregTechAPI;
 import gregtech.api.fluids.FluidBuilder;
+import gregtech.api.fluids.store.FluidStorageKey;
 import gregtech.api.fluids.store.FluidStorageKeys;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
@@ -80,7 +81,7 @@ public class SusyMaterials {
 
 	    Materials.Selenium.setProperty(PropertyKey.DUST, new DustProperty());
 
-	    Materials.Bromine.setProperty(PropertyKey.FLUID, new FluidProperty());
+	    Materials.Bromine.setProperty(PropertyKey.FLUID, new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
 
 	    Materials.Rubidium.setProperty(PropertyKey.DUST, new DustProperty());
 
@@ -116,23 +117,20 @@ public class SusyMaterials {
 
         Materials.Thallium.setProperty(PropertyKey.DUST, new DustProperty());
 
-        Materials.CalciumChloride.setProperty(PropertyKey.FLUID, new FluidProperty());
+        Materials.CalciumChloride.setProperty(PropertyKey.FLUID, new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
 
-        Materials.MagnesiumChloride.setProperty(PropertyKey.FLUID, new FluidProperty());
+        Materials.MagnesiumChloride.setProperty(PropertyKey.FLUID, new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
 
-        Materials.RockSalt.setProperty(PropertyKey.FLUID, new FluidProperty());
+        Materials.RockSalt.setProperty(PropertyKey.FLUID, new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
 
-        Materials.Salt.setProperty(PropertyKey.FLUID, new FluidProperty());
+        Materials.Salt.setProperty(PropertyKey.FLUID, new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
 
-        Materials.SodiumHydroxide.setProperty(PropertyKey.FLUID, new FluidProperty());
+        Materials.SodiumHydroxide.setProperty(PropertyKey.FLUID, new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
 
-        Materials.Sodium.setProperty(PropertyKey.FLUID, new FluidProperty());
+        Materials.Sodium.setProperty(PropertyKey.FLUID, new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
 
-        Materials.Phosphorus.setFormula("P4", true);
         Materials.Phosphorus.setProperty(PropertyKey.INGOT, new IngotProperty());
-        FluidProperty fluidProperty = new FluidProperty();
-        fluidProperty.getStorage().enqueueRegistration(FluidStorageKeys.LIQUID, new FluidBuilder().temperature(317));
-        Materials.Phosphorus.setProperty(PropertyKey.FLUID, fluidProperty);
+        Materials.Phosphorus.setProperty(PropertyKey.FLUID, new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder().temperature(317)));
         Materials.Phosphorus.setMaterialRGB(0xfffed6);
 
         Materials.HydrochloricAcid.setFormula("(H2O)(HCl)", true);
@@ -140,7 +138,7 @@ public class SusyMaterials {
         Materials.HydrofluoricAcid.setFormula("(H2O)(HF)", true);
 
         removeProperty(PropertyKey.FLUID, Materials.Dimethyldichlorosilane);
-        Materials.Dimethyldichlorosilane.setProperty(PropertyKey.FLUID, new FluidProperty());
+        Materials.Dimethyldichlorosilane.setProperty(PropertyKey.FLUID, new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
 
         Materials.Iron3Chloride.setProperty(PropertyKey.DUST, new DustProperty());
 
@@ -169,6 +167,8 @@ public class SusyMaterials {
         Materials.Copper.addFlags(SuSyMaterialFlags.GENERATE_CATALYST_BED);
 
         Materials.Electrum.setProperty(PropertyKey.ORE, new OreProperty());
+
+        Materials.Hydrogen.addFlags(MaterialFlags.FLAMMABLE);
     }
 
     private static void removeProperty(PropertyKey<?> key, Material material) {

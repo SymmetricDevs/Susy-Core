@@ -17,12 +17,10 @@ import it.unimi.dsi.fastutil.ints.IntLists;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.properties.DroneDimensionProperty;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
@@ -30,7 +28,6 @@ import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.entities.EntityDrone;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 
 public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
 
@@ -240,4 +237,8 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
         }
     }
 
+    @Override
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
 }

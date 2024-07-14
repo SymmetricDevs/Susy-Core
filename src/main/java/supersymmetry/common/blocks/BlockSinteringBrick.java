@@ -5,6 +5,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -21,8 +22,15 @@ public class BlockSinteringBrick extends VariantActiveBlock<BlockSinteringBrick.
         setDefaultState(getState(SinteringBrickType.BRICK));
     }
 
+    @NotNull
     @Override
-    public boolean canCreatureSpawn(@NotNull IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos, @NotNull EntityLiving.SpawnPlacementType type) {
+    public BlockRenderLayer getRenderLayer() {
+        return BlockRenderLayer.SOLID;
+    }
+
+    @Override
+    public boolean canCreatureSpawn(@NotNull IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos,
+                                    @NotNull EntityLiving.SpawnPlacementType type) {
         return false;
     }
 
@@ -48,6 +56,5 @@ public class BlockSinteringBrick extends VariantActiveBlock<BlockSinteringBrick.
         public String toString() {
             return this.getName();
         }
-
     }
 }

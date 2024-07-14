@@ -45,13 +45,13 @@ public class MetaTileEntityLargeWeaponsFactory extends RecipeMapMultiblockContro
                 .where('A', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)))
                 .where('B', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('C', states(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel))
-                .or(autoAbilities(false, true, false, false, false, false, false).setExactLimit(1)))
-                .where('D', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
-                .or(autoAbilities(false, false, true, false, true, false, false)))
+                        .or(autoAbilities(false, true, false, false, false, false, false).setExactLimit(1)))
+                .where('D', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)).setMinGlobalLimited(4)
+                        .or(autoAbilities(false, false, true, false, true, false, false)))
                 .where('E', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
-                .or(autoAbilities(true, false, false, false, false, false, false)))
+                        .or(autoAbilities(true, false, false, false, false, false, false)))
                 .where('F', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
-                .or(autoAbilities(false, false, false, true, false, false, false)))
+                        .or(autoAbilities(false, false, false, true, false, false, false)))
                 .where(' ', any())
                 .build();
     }
