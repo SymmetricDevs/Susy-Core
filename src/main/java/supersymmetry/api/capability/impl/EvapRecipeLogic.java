@@ -3,7 +3,6 @@ package supersymmetry.api.capability.impl;
 import gregtech.api.GTValues;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.recipes.Recipe;
-import gregtech.api.recipes.logic.OverclockingLogic;
 import gregtech.api.recipes.recipeproperties.IRecipePropertyStorage;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.recipes.properties.EvaporationEnergyProperty;
@@ -151,7 +150,7 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
 
     @Override
     protected int[] runOverclockingLogic(@Nonnull IRecipePropertyStorage propertyStorage, int recipeEUt, long maxVoltage, int recipeDuration, int amountOC) {
-        return OverclockingLogic.standardOverclockingLogic(recipeEUt, this.getMaxVoltage(), recipeDuration, amountOC, this.getOverclockingDurationDivisor(), this.getOverclockingVoltageMultiplier());
+        return new int[]{recipeEUt, recipeDuration}; // change nothing with overclocking
     }
 
     @Override
