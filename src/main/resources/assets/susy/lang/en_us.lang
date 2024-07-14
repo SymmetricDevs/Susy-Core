@@ -185,6 +185,9 @@ item.material.oreprefix.thread=%s Thread
 susy.fluid.impure_slurry=Impure %s Slurry
 susy.fluid.slurry=%s Slurry
 
+# Tooltip Warnings
+gregtech.machine.steam_extractor_cannot_melt_items.warning=Steam Extractors cannot melt items!
+
 # Machines/Multiblocks
 gregtech.machine.magnetic_refrigerator.name=Magnetic Refrigerator
 gregtech.multiblock.magnetic_refrigerator.min_temperature=§bTemperature Limit: %s

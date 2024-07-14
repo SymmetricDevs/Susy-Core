@@ -137,6 +137,7 @@ public class CommonProxy {
     @SideOnly(Side.CLIENT)
     public static void itemToolTip(ItemTooltipEvent event) {
         handleCoilTooltips(event);
+        addTooltip(event, "gregtech.machine.steam_extractor", TooltipHelper.BLINKING_ORANGE + I18n.format("gregtech.machine.steam_extractor_cannot_melt_items.warning"), 2);
     }
 
     private static void handleCoilTooltips(ItemTooltipEvent event) {
@@ -149,6 +150,14 @@ public class CommonProxy {
             BlockWireCoil.CoilType coilType = (BlockWireCoil.CoilType)wireCoilBlock.getState(itemBlock.getBlockState(itemStack));
             event.getToolTip().add(I18n.format("tile.wire_coil.tooltip_evaporation", new Object[0]));
             event.getToolTip().add(I18n.format("tile.wire_coil.tooltip_energy_evaporating", new Object[]{coilType.getCoilTemperature()/1000}));
+        }
+    }
+
+    // Since this function checks if the key is in the translation key, you can sometimes add tooltips to multiple items
+    //   with a single call of the function. Useful for hitting both basic and high pressure steam machines, for example.
+    private static void addTooltip(ItemTooltipEvent event, String key, String toolTip, int index) {
+        if(event.getItemStack().getTranslationKey().contains(key)) {
+            event.getToolTip().add(index, toolTip);
         }
     }
 
