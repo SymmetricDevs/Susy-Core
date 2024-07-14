@@ -1,5 +1,6 @@
 package supersymmetry.common.blocks;
 
+import gregtech.api.util.BlockUtility;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -53,6 +54,7 @@ public class SuSyBlocks {
         for (SusyStoneVariantBlock.StoneVariant shape : SusyStoneVariantBlock.StoneVariant.values()) {
             SUSY_STONE_BLOCKS.put(shape, new SusyStoneVariantBlock(shape));
         }
+        registerWalkingSpeedBonus();
 
         ALTERNATOR_COIL = new BlockAlternatorCoil();
         ALTERNATOR_COIL.setRegistryName("alternator_coil");
@@ -151,6 +153,14 @@ public class SuSyBlocks {
         }
 
         return stringbuilder.toString();
+    }
+
+    public static void registerWalkingSpeedBonus() {
+        for (SusyStoneVariantBlock block : SUSY_STONE_BLOCKS.values()) {
+            for (IBlockState state : block.getBlockState().getValidStates()) {
+                BlockUtility.setWalkingSpeedBonus(state, BlockUtility.ASPHALT_WALKING_SPEED_BONUS);
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")
