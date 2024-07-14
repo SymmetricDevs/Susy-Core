@@ -9,6 +9,7 @@ import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -39,7 +40,7 @@ import static supersymmetry.common.blocks.SuSyMetaBlocks.SHEETED_FRAMES;
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class CommonProxy {
 
-    public void preLoad(){
+    public void preLoad() {
         GeckoLib.initialize();
         SusyStoneTypes.init();
         SuSyRecipeMaps.init();
@@ -47,7 +48,9 @@ public class CommonProxy {
 
     public void load() {
         SuSyWorldLoader.init();
-        new MobHordeEvent((p) -> new EntityZombie(p.world), 4, 8, "zombies").setMaximumDistanceUnderground(10).setNightOnly(true);
+        if ((boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment")) {
+            new MobHordeEvent((p) -> new EntityZombie(p.world), 4, 8, "zombies").setMaximumDistanceUnderground(10).setNightOnly(true);
+        }
     }
 
     @SubscribeEvent
@@ -84,7 +87,8 @@ public class CommonProxy {
         registry.register(createItemBlock(SuSyBlocks.COOLING_COIL, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.SINTERING_BRICK, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.COAGULATION_TANK_WALL, VariantItemBlock::new));
-        for (SusyStoneVariantBlock block : SuSyBlocks.SUSY_STONE_BLOCKS.values()) registry.register(createItemBlock(block, VariantItemBlock::new));
+        for (SusyStoneVariantBlock block : SuSyBlocks.SUSY_STONE_BLOCKS.values())
+            registry.register(createItemBlock(block, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.ALTERNATOR_COIL, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.DRILL_HEAD, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.TURBINE_ROTOR, VariantItemBlock::new));
