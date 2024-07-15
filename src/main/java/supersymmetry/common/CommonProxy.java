@@ -3,17 +3,24 @@ package supersymmetry.common;
 import gregtech.api.block.VariantItemBlock;
 import gregtech.api.unification.material.event.MaterialEvent;
 import gregtech.api.unification.material.event.PostMaterialEvent;
+import gregtech.client.utils.TooltipHelper;
+import gregtech.common.blocks.BlockWireCoil;
 import gregtech.common.items.MetaItems;
 import net.minecraft.block.Block;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.GeckoLib;
@@ -128,6 +135,34 @@ public class CommonProxy {
         MetaItems.addOrePrefix(SusyOrePrefix.thread);
 
         //SusyMaterials.removeFlags();
+    }
+
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public static void itemToolTip(ItemTooltipEvent event) {
+        handleCoilTooltips(event);
+        addTooltip(event, "gregtech.machine.steam_extractor", TooltipHelper.BLINKING_ORANGE + I18n.format("gregtech.machine.steam_extractor_cannot_melt_items.warning"), 2);
+    }
+
+    private static void handleCoilTooltips(ItemTooltipEvent event) {
+        Block block = Block.getBlockFromItem(event.getItemStack().getItem());
+        if(block instanceof BlockWireCoil && TooltipHelper.isShiftDown()) {
+            ItemStack itemStack = event.getItemStack();
+            Item item = itemStack.getItem();
+            BlockWireCoil wireCoilBlock = (BlockWireCoil)block;
+            VariantItemBlock itemBlock = (VariantItemBlock)item;
+            BlockWireCoil.CoilType coilType = (BlockWireCoil.CoilType)wireCoilBlock.getState(itemBlock.getBlockState(itemStack));
+            event.getToolTip().add(I18n.format("tile.wire_coil.tooltip_evaporation", new Object[0]));
+            event.getToolTip().add(I18n.format("tile.wire_coil.tooltip_energy_evaporating", new Object[]{coilType.getCoilTemperature()/1000}));
+        }
+    }
+
+    // Since this function checks if the key is in the translation key, you can sometimes add tooltips to multiple items
+    //   with a single call of the function. Useful for hitting both basic and high pressure steam machines, for example.
+    private static void addTooltip(ItemTooltipEvent event, String key, String toolTip, int index) {
+        if(event.getItemStack().getTranslationKey().contains(key)) {
+            event.getToolTip().add(index, toolTip);
+        }
     }
 
     @SubscribeEvent()
