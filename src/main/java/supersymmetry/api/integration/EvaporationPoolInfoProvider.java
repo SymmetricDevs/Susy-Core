@@ -12,6 +12,7 @@ import supersymmetry.Supersymmetry;
 import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityEvaporationPool;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
 
 public class EvaporationPoolInfoProvider implements IProbeInfoProvider {
 
@@ -30,25 +31,21 @@ public class EvaporationPoolInfoProvider implements IProbeInfoProvider {
             if (metaTileEntity instanceof MetaTileEntityEvaporationPool) {
                 MetaTileEntityEvaporationPool evapPool = ((MetaTileEntityEvaporationPool) metaTileEntity);
                 probeInfo.text(TextStyleClass.INFO + "{*gregtech.top.evaporation_pool_heated_preface*} " + (evapPool.isHeated ? ( TextFormatting.GREEN + "{*gregtech.top.evaporation_pool_is_heated*} ") : (TextFormatting.RED + "{*gregtech.top.evaporation_pool_not_heated*} ")));
-                probeInfo.text(TextStyleClass.INFO + "{*gregtech.top.evaporation_pool.energy_transferred*} " + (TextFormatting.GREEN + (evapPool.getKiloJoules() + "."))
-                        + (TextFormatting.GREEN + constLengthToString(evapPool.getJoulesBuffer())) + (TextFormatting.WHITE + ("{*gregtech.top.evaporation_pool.kilojoules*}")));
+                probeInfo.text(TextStyleClass.INFO + "{*gregtech.multiblock.evaporation_pool.average_speed*} " + (TextFormatting.GREEN + (evapPool.getAverageRecipeSpeedString())) + (TextFormatting.WHITE + "x"));
+                probeInfo.text(TextStyleClass.INFO + "{*gregtech.top.evaporation_pool.energy_transferred*} " + (TextFormatting.YELLOW + (evapPool.getKiloJoules() + "."))
+                        + (TextFormatting.YELLOW + constLengthToString(evapPool.getJoulesBuffer())) + (TextFormatting.WHITE + (" {*gregtech.top.evaporation_pool.kilojoules*}")));
             }
         }
     }
 
-    public String constLengthToString(int i) {
-        String output = Integer.toString(i);
-        int length = output.length();
-
-        while (length < 3) {
-            output = "0" + output;
-            ++length;
+    public static String constLengthToString(int i) {
+        String result = Integer.toString(i);
+        if (i < 1000) {
+            char[] padding = new char[3 - result.length()];
+            Arrays.fill(padding, '0');
+            return new StringBuilder().append(padding).append(result).toString();
+        } else {
+            return result.substring(result.length() - 3);
         }
-
-        if (length > 3) {
-            output = output.substring(length -3);
-        }
-
-        return output;
     }
 }
