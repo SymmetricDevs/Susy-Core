@@ -75,16 +75,15 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
 
             // occasionally actualSteps would be 0 for some reason, which is why one should be minimum
             int actualSteps = Math.min(Math.max((this.maxProgressTime >>> 2), 1), maxSteps);
-            progressTime += actualSteps; //actualSteps <= maxSteps, meaning it can always be progressed this amount
 
             int kJFloor = getJt() * actualSteps / 1000;
             int joulesNeeded;
 
             //if kJ store is insufficient to cover full cost, joulesNeeded is whatever remains after kJ covers cost
-            if (pool.getKiloJoules() < kJFloor) {
-                joulesNeeded = getJt() * actualSteps - pool.getKiloJoules() * 1000;
+            if (pool.getKiloJoules() <= kJFloor) {
+                joulesNeeded = getJt() * actualSteps - pool.getKiloJoules() * 1000; // because actualSteps is <= max steps with energy available, pool should always be able to cover it
             } else {
-                joulesNeeded = getJt() * actualSteps - kJFloor * 1000; //difference in joules betweeen kJ losslessly required and J actually required (4kJ losslessly covers 3kJ out of 3600J, meaning 600J are needed to avoid wasting kJ
+                joulesNeeded = getJt() * actualSteps - kJFloor * 1000; //difference in joules betweeen kJ losslessly required and J actually required (4kJ covers 3kJ out of 3600J, but 600J are needed to avoid wasting kJ)
             }
 
             //if buffer cant cover draw entirely from kiloJoules
@@ -97,7 +96,8 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
             pool.setKiloJoules(pool.getKiloJoules() - kJFloor);
             pool.setJoulesBuffer(pool.getJoulesBuffer() - joulesNeeded);
 
-            if (this.progressTime > this.maxProgressTime) completeRecipe();
+            progressTime += actualSteps; //actualSteps <= maxSteps, meaning it can always be progressed this amount
+            if (this.progressTime >= this.maxProgressTime) completeRecipe();
         } else {
             this.hasNotEnoughEnergy = true;
             pool.isRecipeStalled = true;

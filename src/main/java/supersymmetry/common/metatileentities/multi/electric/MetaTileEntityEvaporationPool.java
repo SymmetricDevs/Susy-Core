@@ -137,6 +137,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
         this.writeCustomData(coilDataID, (buf) -> {
             buf.writeBoolean(isHeated);
+            buf.writeBoolean(areCoilsHeating);
             buf.writeInt(coilStateMeta);
         });
 
@@ -450,6 +451,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
         this.writeCustomData(coilDataID, (buf) -> {
             buf.writeBoolean(isHeated);
+            buf.writeBoolean(areCoilsHeating);
             buf.writeInt(coilStateMeta);
         });
 
@@ -671,8 +673,8 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         checkCoilActivity(); // make coils active if they should be
         rollingAverage[tickTimer % 20] = 0; // reset rolling average for this tick index
 
-        //should skip/cost an extra tick the first time and then anywhere from 1-19 extra when rolling over. Determines exposedblocks
-        if (tickTimer % 20 == 0 && tickTimer != 0) {
+        //should skip/cost an extra tick the first time and then anywhere from 1-9 extra when rolling over. Determines exposedblocks
+        if (tickTimer % 10 == 0 && tickTimer != 0) {
             //no sunlight heat generated when raining or during night. May be incongruent with partial exposure to sun, but oh well
             if (getWorld().isRainingAt(getPos().offset(getFrontFacing().getOpposite(), 2)) || !getWorld().isDaytime()) {
                 exposedBlocks = 0;
@@ -743,23 +745,17 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                 if (isHeated()) {
                     tl.add(TextComponentUtil.translationWithColor(TextFormatting.WHITE, "gregtech.top.evaporation_pool_heated_preface").appendText(" ").appendSibling(TextComponentUtil.translationWithColor(TextFormatting.GREEN, "gregtech.top.evaporation_pool_is_heated")));
 
-                    //ITextComponent heatingJoulesString = TextComponentUtil.stringWithColor(TextFormatting.YELLOW, TextFormattingUtil.formatNumbers((this.coilStats.getCoilTemperature() / 10) * ((((columnCount + 1) / 2) * rowCount) + columnCount / 2)));
-
-                    //tl.add(TextComponentUtil.translationWithColor(TextFormatting.WHITE, "gregtech.multiblock.evaporation_pool.heating_joules").appendText(" ").appendSibling(heatingJoulesString));
-
                 } else {
                     tl.add(TextComponentUtil.translationWithColor(TextFormatting.WHITE, "gregtech.top.evaporation_pool_heated_preface").appendText(" ").appendSibling(TextComponentUtil.translationWithColor(TextFormatting.RED, "gregtech.top.evaporation_pool_not_heated")));
                 }
 
                 tl.add(TextComponentUtil.translationWithColor(TextFormatting.WHITE, "gregtech.multiblock.evaporation_pool.exposed_blocks").appendText(" ").appendSibling(TextComponentUtil.translationWithColor(TextFormatting.GREEN, TextFormattingUtil.formatNumbers(exposedBlocks))));
 
-                tl.add(TextComponentUtil.translationWithColor(TextFormatting.WHITE, "gregtech.top.evaporation_pool.energy_transferred").appendText(" ").appendSibling(TextComponentUtil.stringWithColor(TextFormatting.YELLOW, TextFormattingUtil.formatNumbers(this.getKiloJoules())).appendText(".").appendSibling(TextComponentUtil.stringWithColor(TextFormatting.YELLOW, EvaporationPoolInfoProvider.constLengthToString(this.getJoulesBuffer()))).appendText(" ").appendSibling(TextComponentUtil.translationWithColor(TextFormatting.WHITE, "gregtech.top.evaporation_pool.kilojoules"))));
+                tl.add(TextComponentUtil.translationWithColor(TextFormatting.WHITE, "gregtech.multiblock.evaporation_pool.average_speed").appendText(" ").appendSibling(TextComponentUtil.stringWithColor(TextFormatting.GREEN, getAverageRecipeSpeedString())).appendSibling(TextComponentUtil.stringWithColor(TextFormatting.WHITE, "x"))); // add empty space to visually separate evap pool custom stats
 
                 tl.add(TextComponentUtil.translationWithColor(TextFormatting.WHITE, "gregtech.mutliblock.evaporation_pool.rolling_average").appendText(" ").appendSibling(TextComponentUtil.stringWithColor(TextFormatting.YELLOW, TextFormattingUtil.formatNumbers(getRollingAverageJt()))).appendText(" ").appendSibling(TextComponentUtil.translationWithColor(TextFormatting.WHITE, "gregtech.multiblock.evaporation_pool.joules_per_tick")));
 
-                //tl.add(TextComponentUtil.translationWithColor(TextFormatting.WHITE, "gregtech.top.evaporation_pool.recipe_step_count").appendText(" ").appendSibling(TextComponentUtil.translationWithColor(TextFormatting.GREEN, TextFormattingUtil.formatNumbers(this.getCurrMaxStepCount()))).appendText(" ").appendSibling(TextComponentUtil.translationWithColor(TextFormatting.WHITE, "gregtech.top.evaporation_pool.recipe_step_units")));
-
-                tl.add(TextComponentUtil.translationWithColor(TextFormatting.WHITE, "gregtech.multiblock.evaporation_pool.average_speed").appendText(" ").appendSibling(TextComponentUtil.stringWithColor(TextFormatting.GREEN, TextFormattingUtil.formatNumbers(((int) getAverageRecipeSpeed() * 100) / 100F))).appendSibling(TextComponentUtil.stringWithColor(TextFormatting.WHITE, "x"))); // add empty space to visually separate evap pool custom stats
+                tl.add(TextComponentUtil.translationWithColor(TextFormatting.WHITE, "gregtech.top.evaporation_pool.energy_transferred").appendText(" ").appendSibling(TextComponentUtil.stringWithColor(TextFormatting.YELLOW, TextFormattingUtil.formatNumbers(this.getKiloJoules())).appendText(".").appendSibling(TextComponentUtil.stringWithColor(TextFormatting.YELLOW, EvaporationPoolInfoProvider.constLengthToString(this.getJoulesBuffer()))).appendText(" ").appendSibling(TextComponentUtil.translationWithColor(TextFormatting.WHITE, "gregtech.top.evaporation_pool.kilojoules"))));
             }
         }).addEnergyTierLine(GTUtility.getTierByVoltage(recipeMapWorkable.getMaxVoltage())).addParallelsLine(recipeMapWorkable.getParallelLimit()).addWorkingStatusLine().addProgressLine(recipeMapWorkable.getProgressPercent());
     }
@@ -771,6 +767,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         data.setInteger("rowCount", this.rowCount);
         data.setInteger("controllerPosition", this.controllerPosition);
         data.setBoolean("isHeated", this.isHeated);
+        data.setBoolean("areCoilsHeating", this.areCoilsHeating);
         data.setInteger("exposedBlocks", this.exposedBlocks);
         data.setByteArray("wasExposed", this.wasExposed == null ? new byte[this.rowCount * this.columnCount] : this.wasExposed);
         data.setInteger("kiloJoules", this.kiloJoules);
@@ -794,6 +791,9 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         }
         if (data.hasKey("isHeated")) {
             this.isHeated = data.getBoolean("isHeated");
+        }
+        if (data.hasKey("areCoilsHeating")) {
+            this.areCoilsHeating = data.getBoolean("areCoilsHeating");
         }
         if (data.hasKey("exposedBlocks")) {
             this.exposedBlocks = data.getInteger("exposedBlocks");
@@ -826,6 +826,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         buf.writeInt(this.rowCount);
         buf.writeInt(this.controllerPosition);
         buf.writeBoolean(this.isHeated);
+        buf.writeBoolean(this.areCoilsHeating);
         buf.writeInt(this.exposedBlocks);
         buf.writeByteArray(this.wasExposed == null ? new byte[this.rowCount * this.columnCount] : this.wasExposed);
         buf.writeInt(this.kiloJoules);
@@ -841,6 +842,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         this.rowCount = buf.readInt();
         this.controllerPosition = buf.readInt();
         this.isHeated = buf.readBoolean();
+        this.areCoilsHeating = buf.readBoolean();
         this.exposedBlocks = buf.readInt();
         this.wasExposed = buf.readByteArray();
         this.kiloJoules = buf.readInt();
@@ -861,6 +863,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             this.controllerPosition = buf.readInt();
         } else if (dataId == coilDataID) {
             this.isHeated = buf.readBoolean();
+            this.areCoilsHeating = buf.readBoolean();
             this.coilStateMeta = buf.readInt();
             initializeCoilStats();
         } else if (dataId == energyValuesID) {
@@ -942,6 +945,10 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         return (exposedBlocks * 50 + Arrays.stream(rollingAverage).sum() / 20F) / recipeJt;
     }
 
+    public String getAverageRecipeSpeedString() {
+        return Float.toString(((int) (getAverageRecipeSpeed() * 100) / 100F));
+    }
+
     public void checkCoilActivity(String source) {
         boolean isRunningHeated = isRunningHeated();
         if (lastActive ^ isRunningHeated) {
@@ -1015,7 +1022,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         int stepCount = (getKiloJoules() * 1000) / jStepSize; //max number of times jStepSize can cleanly be deducted from kiloJoules
         int remainder = (stepCount + 1) * jStepSize - getKiloJoules() * 1000; //remaining joules needed to not waste partial kJ
 
-        if (joulesBuffer > remainder) ++stepCount;
+        if (joulesBuffer >= remainder) ++stepCount;
         else remainder = 0;
 
         stepCount += (joulesBuffer - remainder) / jStepSize; //number of jSteps which can come entirely from joulesBuffer
