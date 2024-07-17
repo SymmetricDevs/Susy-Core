@@ -39,7 +39,7 @@ public class MetaTileEntityMultiStageFlashDistiller extends RecipeMapMultiblockC
     protected BlockPattern createStructurePattern() {
         // Different characters use common constraints. Copied from GCyM
         TraceabilityPredicate casingPredicate = states(getCasingState()).setMinGlobalLimited(70);
-        TraceabilityPredicate maintenanceEnergy = super.autoAbilities(true, true);
+        TraceabilityPredicate maintenanceEnergy = super.autoAbilities(true, true, false, false, false, false, false);
 
         return FactoryBlockPattern.start()
                 .aisle(" EEEB", " BEEB", " BEEB", " EEEB", "  BBB")
