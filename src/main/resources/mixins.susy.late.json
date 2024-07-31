@@ -1,0 +1,17 @@
+{
+  "package" : "supersymmetry.mixins",
+  "refmap" : "mixins.susy.refmap.json",
+  "target" : "@env(DEFAULT)",
+  "minVersion" : "0.8",
+  "compatibilityLevel" : "JAVA_8",
+  "mixins" : [
+    "gregtech.BlockMachineMixin",
+    "rftools.InventoryInfoMixin",
+    "rftools.PacketGetInventoryInfoMixin",
+    "rftools.PacketReturnInventoryInfoMixin"
+  ],
+  "client" : [
+    "rftools.GuiStorageScannerMixin"
+  ],
+  "server" : []
+}
