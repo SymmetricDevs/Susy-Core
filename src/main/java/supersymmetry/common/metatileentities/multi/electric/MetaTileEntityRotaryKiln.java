@@ -4,6 +4,7 @@ import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
+import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
@@ -21,7 +22,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockMultiblockTank;
@@ -37,12 +38,21 @@ public class MetaTileEntityRotaryKiln extends RecipeMapMultiblockController {
         this.recipeMapWorkable = new MultiblockRecipeLogic(this);
     }
 
+    protected static IBlockState getCasingState() {
+        return MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID);
+    }
+
+    @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
         return new MetaTileEntityRotaryKiln(this.metaTileEntityId);
     }
 
+    @NotNull
+    @Override
     protected BlockPattern createStructurePattern() {
-        TraceabilityPredicate maintenance = autoAbilities(false, true, false, false, false, false, false).setMaxGlobalLimited(1);
+        // Different characters use common constraints. Copied from GCyM
+        TraceabilityPredicate casingPredicate = states(getCasingState()).setMinGlobalLimited(8);
+        TraceabilityPredicate maintenance = abilities(MultiblockAbility.MAINTENANCE_HATCH).setMaxGlobalLimited(1);
 
         return FactoryBlockPattern.start()
                 .aisle("A    A    A", "A    A    A", "L    A    R", "LCCCCMCCCCR", "L    A    R")
@@ -51,15 +61,15 @@ public class MetaTileEntityRotaryKiln extends RecipeMapMultiblockController {
                 .where('S', selfPredicate())
                 .where('A', states(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)))
                 .where('C', states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)))
-                .where('L', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
+                .where('L', casingPredicate
                         .or(autoAbilities(false, false, true, false, false, true, false))
                         .or(autoAbilities(true, false, false, false, false, false, false).setMinGlobalLimited(0))
                         .or(maintenance))
-                .where('R', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
+                .where('R', casingPredicate
                         .or(autoAbilities(false, false, false, true, true, false, false))
                         .or(autoAbilities(true, false, false, false, false, false, false).setMinGlobalLimited(0))
                         .or(maintenance))
-                .where('M', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
+                .where('M', casingPredicate
                         .or(maintenance))
                 .where(' ', any())
                 .where('#', air())

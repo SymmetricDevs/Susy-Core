@@ -7,10 +7,10 @@ import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.recipes.builders.FuelRecipeBuilder;
 import gregtech.api.recipes.builders.PrimitiveRecipeBuilder;
 import gregtech.api.recipes.builders.SimpleRecipeBuilder;
-import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.api.unification.material.Materials;
 import gregtech.core.sound.GTSoundEvents;
 import gregtechfoodoption.recipe.GTFORecipeMaps;
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.recipes.builders.*;
 
@@ -121,7 +121,7 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_MIXER, ProgressWidget.MoveType.CIRCULAR)
             .setSound(GTSoundEvents.CENTRIFUGE);
 
-    public static final RecipeMap<CatalystRecipeBuilder> FLUIDIZED_BED_REACTOR_RECIPES = new RecipeMap<>("fluidized_bed_reactor", 2, 2, 3, 2, new CatalystRecipeBuilder(), false)
+    public static final RecipeMap<CatalystRecipeBuilder> FLUIDIZED_BED_REACTOR_RECIPES = new RecipeMap<>("fluidized_bed_reactor", 2, 3, 3, 2, new CatalystRecipeBuilder(), false)
             .setSlotOverlay(false, true, SusyGuiTextures.LARGE_REACTOR_FLUID_OVERLAY)
             .setSlotOverlay(true, true, SusyGuiTextures.LARGE_REACTOR_FLUID_OVERLAY)
             .setSlotOverlay(false, false, SusyGuiTextures.LARGE_REACTOR_ITEM_OVERLAY)
@@ -354,17 +354,11 @@ public class SuSyRecipeMaps {
         RecipeMaps.CUTTER_RECIPES.setMaxOutputs(4);
         RecipeMaps.LARGE_CHEMICAL_RECIPES.setMaxInputs(4);
         RecipeMaps.LARGE_CHEMICAL_RECIPES.setMaxFluidInputs(6);
-        RecipeMaps.MIXER_RECIPES.onRecipeBuild(recipeBuilder -> {
-            SuSyRecipeMaps.BLENDER_RECIPES.recipeBuilder()
-                    .inputs(recipeBuilder.getInputs().toArray(new GTRecipeInput[0]))
-                    .fluidInputs(recipeBuilder.getFluidInputs())
-                    .outputs(recipeBuilder.getOutputs())
-                    .chancedOutputs(recipeBuilder.getChancedOutputs())
-                    .fluidOutputs(recipeBuilder.getFluidOutputs())
-                    .cleanroom(recipeBuilder.getCleanroom())
-                    .duration(recipeBuilder.getDuration())
-                    .EUt(recipeBuilder.getEUt())
-                    .buildAndRegister();
-        });
+
+        SuSyRecipeMaps.EVAPORATION_POOL.recipeBuilder()
+                .fluidInputs(Materials.Water.getFluid(1000))
+                .Jt(300)
+                .duration(10)
+                .buildAndRegister();
     }
 }

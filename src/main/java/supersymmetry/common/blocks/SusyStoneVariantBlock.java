@@ -4,25 +4,22 @@ import gregtech.api.GregTechAPI;
 import gregtech.api.block.VariantBlock;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
-import java.util.Random;
-import javax.annotation.Nonnull;
-
-import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.Item;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.common.materials.SusyMaterials;
 
+import javax.annotation.Nonnull;
+import java.util.Random;
+
 public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.StoneType> {
+
     private static final PropertyEnum<StoneType> PROPERTY = PropertyEnum.create("variant", StoneType.class);
     private final StoneVariant stoneVariant;
 
@@ -46,27 +43,20 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
         return new BlockStateContainer(this, this.VARIANT);
     }
 
-    public boolean canCreatureSpawn(@Nonnull IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull EntityLiving.SpawnPlacementType type) {
-        return false;
-    }
-
-    public double getWalkingSpeedBonus() {
-        return 1.6;
-    }
-
-    public boolean checkApplicableBlocks(@Nonnull IBlockState state) {
-        return false;
-    }
-
+    @Override
+    @SuppressWarnings("deprecation")
     protected boolean canSilkHarvest() {
         return this.stoneVariant == SusyStoneVariantBlock.StoneVariant.SMOOTH;
     }
 
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return Item.getItemFromBlock((Block)(this.stoneVariant == SusyStoneVariantBlock.StoneVariant.SMOOTH ? (Block)SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.COBBLE) : this));
+    @NotNull
+    @Override
+    public Item getItemDropped(@NotNull IBlockState state, @NotNull Random rand, int fortune) {
+        return Item.getItemFromBlock(this.stoneVariant == StoneVariant.SMOOTH ?
+                SuSyBlocks.SUSY_STONE_BLOCKS.get(StoneVariant.COBBLE) : this);
     }
 
-    public static enum StoneVariant {
+    public enum StoneVariant {
         SMOOTH("susy_stone_smooth"),
         COBBLE("susy_stone_cobble", 2.0F, 10.0F),
         BRICKS("susy_stone_bricks");
@@ -88,19 +78,19 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
         public final float hardness;
         public final float resistance;
 
-        private StoneVariant(@Nonnull String id) {
+        StoneVariant(@Nonnull String id) {
             this(id, id);
         }
 
-        private StoneVariant(@Nonnull String id, @Nonnull String translationKey) {
+        StoneVariant(@Nonnull String id, @Nonnull String translationKey) {
             this(id, translationKey, 1.5F, 10.0F);
         }
 
-        private StoneVariant(@Nonnull String id, float hardness, float resistance) {
+        StoneVariant(@Nonnull String id, float hardness, float resistance) {
             this(id, id, hardness, resistance);
         }
 
-        private StoneVariant(@Nonnull String id, @Nonnull String translationKey, float hardness, float resistance) {
+        StoneVariant(@Nonnull String id, @Nonnull String translationKey, float hardness, float resistance) {
             this.id = id;
             this.translationKey = translationKey;
             this.hardness = hardness;
@@ -108,7 +98,7 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
         }
     }
 
-    public static enum StoneType implements IStringSerializable {
+    public enum StoneType implements IStringSerializable {
         GABBRO("gabbro", MapColor.GRAY),
         GNEISS("gneiss", MapColor.RED_STAINED_HARDENED_CLAY),
         LIMESTONE("limestone", MapColor.GRAY_STAINED_HARDENED_CLAY),
@@ -122,7 +112,7 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
         private final String name;
         public final MapColor mapColor;
 
-        private StoneType(@Nonnull String name, @Nonnull MapColor mapColor) {
+        StoneType(@Nonnull String name, @Nonnull MapColor mapColor) {
             this.name = name;
             this.mapColor = mapColor;
         }
@@ -133,45 +123,24 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
         }
 
         public OrePrefix getOrePrefix() {
-            switch (this) {
-                case GABBRO:
-                case GNEISS:
-                case LIMESTONE:
-                case PHYLLITE:
-                case QUARTZITE:
-                case SHALE:
-                case SLATE:
-                case SOAPSTONE:
-                case KIMBERLITE:
-                    return OrePrefix.stone;
-                default:
-                    throw new IllegalStateException("Unreachable");
-            }
+            return switch (this) {
+                case GABBRO, GNEISS, LIMESTONE, PHYLLITE, QUARTZITE, SHALE, SLATE, SOAPSTONE, KIMBERLITE ->
+                        OrePrefix.stone;
+            };
         }
 
         public gregtech.api.unification.material.Material getMaterial() {
-            switch (this) {
-                case GABBRO:
-                    return SusyMaterials.Gabbro;
-                case GNEISS:
-                    return SusyMaterials.Gneiss;
-                case LIMESTONE:
-                    return SusyMaterials.Limestone;
-                case PHYLLITE:
-                    return SusyMaterials.Phyllite;
-                case QUARTZITE:
-                    return Materials.Quartzite;
-                case SHALE:
-                    return SusyMaterials.Shale;
-                case SLATE:
-                    return SusyMaterials.Slate;
-                case SOAPSTONE:
-                    return Materials.Soapstone;
-                case KIMBERLITE:
-                    return SusyMaterials.Kimberlite;
-                default:
-                    throw new IllegalStateException("Unreachable");
-            }
+            return switch (this) {
+                case GABBRO -> SusyMaterials.Gabbro;
+                case GNEISS -> SusyMaterials.Gneiss;
+                case LIMESTONE -> SusyMaterials.Limestone;
+                case PHYLLITE -> SusyMaterials.Phyllite;
+                case QUARTZITE -> Materials.Quartzite;
+                case SHALE -> SusyMaterials.Shale;
+                case SLATE -> SusyMaterials.Slate;
+                case SOAPSTONE -> Materials.Soapstone;
+                case KIMBERLITE -> SusyMaterials.Kimberlite;
+            };
         }
     }
 }
