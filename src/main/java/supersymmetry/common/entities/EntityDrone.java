@@ -1,5 +1,6 @@
 package supersymmetry.common.entities;
 
+import gregtech.api.util.GTUtility;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -26,6 +27,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import supersymmetry.client.audio.MovingSoundDrone;
+import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityDronePad;
 
 public class EntityDrone extends EntityLiving implements IAnimatable {
 
@@ -36,10 +38,11 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
 
     private static final BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
 
-    private AnimationFactory factory = new AnimationFactory(this);
+    private final AnimationFactory factory = new AnimationFactory(this);
 
     @SideOnly(Side.CLIENT)
     private MovingSoundDrone soundDrone;
+    private BlockPos padPos;
 
     public EntityDrone(World worldIn) {
         super(worldIn);
@@ -59,6 +62,11 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
         this(worldIn, pos.getX() + 0.5F, pos.getZ() + 0.5F, pos.getZ() + 0.5F);
     }
 
+    public EntityDrone withPadPos(BlockPos pos) {
+        this.padPos = pos;
+        return this;
+    }
+
     @Override
     protected void entityInit() {
         super.entityInit();
@@ -69,27 +77,37 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
     }
 
     @Override
+    public void onRemovedFromWorld() {
+        super.onRemovedFromWorld();
+        if (padPos != null) {
+            MetaTileEntityDronePad pad = (MetaTileEntityDronePad) GTUtility.getMetaTileEntity(world, padPos);
+            this.padPos = null;
+            if (pad != null) {
+                pad.setDrone(null);
+            }
+        }
+    }
+
+    @Override
     public void onAddedToWorld() {
         super.onAddedToWorld();
         if (this.world.isRemote) {
             setupDroneSound();
         }
+        if (padPos != null) {
+            MetaTileEntityDronePad pad = (MetaTileEntityDronePad) GTUtility.getMetaTileEntity(world, padPos);
+            if (pad != null) {
+                pad.setDrone(this);
+            }
+        }
     }
 
     public void setRotationFromFacing(EnumFacing facing) {
         switch (facing) {
-            case EAST -> {
-                this.setRotation(90.F, 0.F);
-            }
-            case SOUTH -> {
-                this.setRotation(180.F, 0.F);
-            }
-            case WEST -> {
-                this.setRotation(270.F, 0.F);
-            }
-            default -> {
-                this.setRotation(0.F, 0.F);
-            }
+            case EAST -> setRotation(90.F, 0.F);
+            case SOUTH -> setRotation(180.F, 0.F);
+            case WEST -> setRotation(270.F, 0.F);
+            default -> setRotation(0.F, 0.F);
         }
     }
 
@@ -205,7 +223,8 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
     }
 
     public boolean isCollidingWithBlocks() {
-        return this.world.getBlockState(mutableBlockPos.setPos(this.posX, this.posY + 1, this.posZ)) != Blocks.AIR.getDefaultState() || this.world.getBlockState(mutableBlockPos.setPos(this.posX, this.posY - 1, this.posZ)) != Blocks.AIR.getDefaultState();
+        return this.world.getBlockState(mutableBlockPos.setPos(this.posX, this.posY + 1, this.posZ)) != Blocks.AIR.getDefaultState()
+                || this.world.getBlockState(mutableBlockPos.setPos(this.posX, this.posY - 1, this.posZ)) != Blocks.AIR.getDefaultState();
     }
 
     public boolean reachedSky() {
@@ -217,21 +236,23 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound compound) {
+    public void writeEntityToNBT(@NotNull NBTTagCompound compound) {
         super.writeEntityToNBT(compound);;
         compound.setInteger("Age", this.dataManager.get(AGE));
         compound.setInteger("PadAltitude", this.dataManager.get(PAD_ALTITUDE));
         compound.setBoolean("DescendingMode", this.dataManager.get(DESCENDING_MODE));
         compound.setBoolean("HasLanded", this.dataManager.get(HAS_LANDED));
+        compound.setLong("PadPos", padPos.toLong());
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound compound) {
+    public void readEntityFromNBT(@NotNull NBTTagCompound compound) {
         super.readEntityFromNBT(compound);
         this.dataManager.set(AGE, compound.getInteger("Age"));
         this.dataManager.set(PAD_ALTITUDE, compound.getInteger("PadAltitude"));
         this.dataManager.set(DESCENDING_MODE, compound.getBoolean("DescendingMode"));
         this.dataManager.set(HAS_LANDED, compound.getBoolean("HasLanded"));
+        this.padPos = BlockPos.fromLong(compound.getLong("PadPos"));
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
