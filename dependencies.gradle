@@ -55,10 +55,11 @@ dependencies {
     implementation rfg.deobf("curse.maven:modularui-624243:5153413")
 
     compileOnly rfg.deobf("curse.maven:ynet-an-xnet-fork-999559:5243319") // XNet-1.8.3-ynet
-    compileOnly rfg.deobf("curse.maven:rftools-224641:2861573") // RFTools 7.73
-    compileOnly rfg.deobf("curse.maven:mcjtylib-233105:2745846")
+    implementation rfg.deobf("curse.maven:rftools-224641:2861573") // RFTools 7.73
+    implementation rfg.deobf("curse.maven:mcjtylib-233105:2745846")
     compileOnly rfg.deobf("curse.maven:redstone-flux-270789:2920436")
-    compileOnly rfg.deobf("curse.maven:rftools-224641:2861573")
     compileOnly rfg.deobf("curse.maven:tesla-244651:2487959")
     compileOnly rfg.deobf("curse.maven:hwyla-253449:2568751")
+
+    implementation rfg.deobf("curse.maven:barrels-drums-storage-more-319404:2708193")
 }
