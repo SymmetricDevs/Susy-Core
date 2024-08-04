@@ -16,11 +16,14 @@ import gregtech.common.blocks.MetaBlocks;
 import it.unimi.dsi.fastutil.ints.IntLists;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.properties.DroneDimensionProperty;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
@@ -32,7 +35,7 @@ import javax.annotation.Nonnull;
 public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
 
     private AxisAlignedBB landingAreaBB;
-    public EntityDrone drone = null;
+    private EntityDrone drone = null;
     public boolean droneReachedSky;
 
     public MetaTileEntityDronePad(ResourceLocation metaTileEntityId) {
@@ -40,9 +43,12 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
         this.recipeMapWorkable = new DronePadWorkable(this);
     }
 
-    @Override
-    public boolean hasMaintenanceMechanics() {
-        return false;
+    protected static IBlockState getCasingState() {
+        return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID);
+    }
+
+    protected static IBlockState getPadState() {
+        return SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.DRONE_PAD);
     }
 
     @NotNull
@@ -56,18 +62,11 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
                 .aisle(" CSC ", "     ", "     ")
                 .where(' ', any())
                 .where('A', air())
-                .where('S', this.selfPredicate())
-                .where('C', states(this.getCasingState()).or(autoAbilities(true, false, true, true, false, false, false)))
-                .where('P', states(this.getPadState()))
+                .where('S', selfPredicate())
+                .where('C', states(getCasingState()).setMinGlobalLimited(6)
+                        .or(autoAbilities(true, false, true, true, false, false, false)))
+                .where('P', states(getPadState()))
                 .build();
-    }
-
-    protected IBlockState getCasingState() {
-        return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID);
-    }
-
-    protected IBlockState getPadState() {
-        return SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.DRONE_PAD);
     }
 
     @Override
@@ -77,23 +76,30 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
 
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
-        return new MetaTileEntityDronePad(this.metaTileEntityId);
+        return new MetaTileEntityDronePad(metaTileEntityId);
     }
 
-    @Override
-    public boolean isMultiblockPartWeatherResistant(@Nonnull IMultiblockPart part) {
-        return true;
+    @Nullable
+    public EntityDrone getDrone() {
+        return this.drone;
     }
 
-    @Override
-    public boolean getIsWeatherOrTerrainResistant() {
-        return true;
+    public void setDrone(@Nullable EntityDrone drone) {
+        this.drone = drone;
+    }
+
+    public void setDroneDead(boolean setReachedSky) {
+        if (this.drone != null) {
+            this.drone.setDead();
+            this.drone = null;
+        }
+        this.droneReachedSky = setReachedSky;
     }
 
     public boolean hasDrone() {
-        if (this.drone != null && !this.drone.isDead) {
+        if (getDrone() != null && !getDrone().isDead) {
             for (EntityDrone entity : this.getWorld().getEntitiesWithinAABB(EntityDrone.class, this.landingAreaBB)) {
-                if (entity == this.drone) {
+                if (entity == getDrone()) {
                     return true;
                 }
             }
@@ -107,14 +113,20 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
         nbttagcompound.setString("id", "susy:drone");
         Vec3d pos = this.getDroneSpawnPosition(descending);
 
-        drone = (EntityDrone) AnvilChunkLoader.readWorldEntityPos(nbttagcompound, this.getWorld(), pos.x, pos.y, pos.z, true);
+        EntityDrone drone = ((EntityDrone) AnvilChunkLoader.readWorldEntityPos(nbttagcompound, this.getWorld(), pos.x, pos.y, pos.z, true));
 
         if (drone != null) {
-            drone.setRotationFromFacing(this.getFrontFacing());
+            setDrone(drone.withPadPos(getPos()));
+        }
+
+        if (getDrone() != null) {
+            getDrone().setRotationFromFacing(this.getFrontFacing());
             if (descending) {
-                drone.setDescendingMode();
-                drone.setPadAltitude(this.getPos().getY());
+                getDrone().setDescendingMode();
+                getDrone().setPadAltitude(this.getPos().getY());
             }
+        } else {
+            SusyLog.logger.error("Failed to spawn drone entity at: {}", pos);
         }
     }
 
@@ -136,7 +148,6 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
                 return new Vec3d(this.getPos().getX() + 0.5, altitude, this.getPos().getZ() + 2.5);
             }
         }
-
     }
 
     @Override
@@ -178,6 +189,51 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
         return false;
     }
 
+    @Override
+    public NBTTagCompound writeToNBT(@NotNull NBTTagCompound data) {
+        super.writeToNBT(data);
+        data.setBoolean("droneReachedSky", this.droneReachedSky);
+        return data;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound data) {
+        super.readFromNBT(data);
+        this.droneReachedSky = data.getBoolean("droneReachedSky");
+    }
+
+    @Override
+    public void writeInitialSyncData(PacketBuffer buf) {
+        super.writeInitialSyncData(buf);
+        buf.writeBoolean(this.droneReachedSky);
+    }
+
+    @Override
+    public void receiveInitialSyncData(PacketBuffer buf) {
+        super.receiveInitialSyncData(buf);
+        this.droneReachedSky = buf.readBoolean();
+    }
+
+    @Override
+    public boolean isMultiblockPartWeatherResistant(@Nonnull IMultiblockPart part) {
+        return true;
+    }
+
+    @Override
+    public boolean getIsWeatherOrTerrainResistant() {
+        return true;
+    }
+
+    @Override
+    public boolean hasMaintenanceMechanics() {
+        return false;
+    }
+
+    @Override
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
+
     public static class DronePadWorkable extends MultiblockRecipeLogic {
 
         public DronePadWorkable(RecipeMapMultiblockController tileEntity) {
@@ -210,7 +266,9 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
         protected void updateRecipeProgress() {
             super.updateRecipeProgress();
 
-            this.getMetaTileEntity().droneReachedSky |= this.getMetaTileEntity().drone != null && this.getMetaTileEntity().drone.reachedSky();
+            if (!this.getMetaTileEntity().droneReachedSky && this.getMetaTileEntity().getDrone() != null && this.getMetaTileEntity().getDrone().reachedSky()) {
+                this.getMetaTileEntity().setDroneDead(true);
+            }
 
             if (maxProgressTime - progressTime == 240 && this.getMetaTileEntity().droneReachedSky) {
                 this.getMetaTileEntity().spawnDroneEntity(true);
@@ -232,13 +290,7 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
                 this.parallelRecipesPerformed = 0;
                 this.overclockResults = new int[]{0, 0};
             }
-            if(this.getMetaTileEntity().drone != null) this.getMetaTileEntity().drone.setDead();
-            this.getMetaTileEntity().droneReachedSky = false;
+            this.getMetaTileEntity().setDroneDead(false);
         }
-    }
-
-    @Override
-    public boolean allowsExtendedFacing() {
-        return false;
     }
 }
