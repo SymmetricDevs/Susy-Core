@@ -1,18 +1,19 @@
 {
-  "package" : "supersymmetry.mixins",
-  "refmap" : "mixins.susy.refmap.json",
-  "target" : "@env(DEFAULT)",
-  "minVersion" : "0.8",
-  "compatibilityLevel" : "JAVA_8",
-  "mixins" : [
+  "package": "supersymmetry.mixins",
+  "refmap": "mixins.susy.refmap.json",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
     "bdsandm.BlockBarrelBaseMixin",
+    "bdsandm.ItemBarrelMixin",
     "gregtech.BlockMachineMixin",
     "rftools.InventoryInfoMixin",
     "rftools.PacketGetInventoryInfoMixin",
     "rftools.PacketReturnInventoryInfoMixin"
   ],
-  "client" : [
+  "client": [
     "rftools.GuiStorageScannerMixin"
   ],
-  "server" : []
+  "server": []
 }
