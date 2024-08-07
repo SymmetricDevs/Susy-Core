@@ -58,6 +58,7 @@ public class VariantHorizontalRotatableBlock<T extends Enum<T> & IStringSerializ
 
     @Nonnull
     @Override
+    @SuppressWarnings("deprecation")
     public IBlockState getStateFromMeta(int meta) {
         int i = meta / 4;
         int j = meta % 4;
