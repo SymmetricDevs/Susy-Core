@@ -678,6 +678,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             //no sunlight heat generated when raining or during night. May be incongruent with partial exposure to sun, but oh well
             if (getWorld().isRainingAt(getPos().offset(getFrontFacing().getOpposite(), 2)) || !getWorld().isDaytime()) {
                 exposedBlocks = 0;
+                for (int i = 0; i < wasExposed.length; ++i) wasExposed[i] = 0; // do not leave discrepancy between exposedBlock count and wasExposed
             }
             //checks for ow and skylight access to prevent beneath portal issues (-1 = the Nether, 0 = normal world)
             else if (getWorld().provider.getDimension() == 0) {
