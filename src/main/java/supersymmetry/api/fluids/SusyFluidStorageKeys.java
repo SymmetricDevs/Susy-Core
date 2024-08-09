@@ -20,5 +20,11 @@ public final class SusyFluidStorageKeys {
             m -> "susy.fluid.impure_slurry",
             FluidState.LIQUID, -1);
 
+    public static final FluidStorageKey SUPERCRITICAL = new FluidStorageKey(susyId("supercritical"),
+            SuSyMaterialIconType.supercritical,
+            s -> "supercritical_" + s,
+            m -> "susy.fluid.supercritical",
+            FluidState.GAS, -1);
+
     private SusyFluidStorageKeys() {}
 }
