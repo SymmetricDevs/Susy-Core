@@ -48,7 +48,7 @@ public class MetaTileEntityLargeWeaponsFactory extends RecipeMapMultiblockContro
                 .where('S', selfPredicate())
                 .where('A', casingPredicate)
                 .where('B', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
-                .where('C', states(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel))
+                .where('C', frames(Materials.Steel)
                         .or(autoAbilities(false, true, false, false, false, false, false).setExactLimit(1)))
                 .where('D', casingPredicate
                         .or(autoAbilities(false, false, true, false, true, false, false)))

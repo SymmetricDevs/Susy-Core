@@ -47,7 +47,7 @@ public class MetaTileEntityQuencher extends RecipeMapMultiblockController {
                 .where('A', casingPredicate)
                 .where('B', states(MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE)))
                 .where('C', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STAINLESS_STEEL_GEARBOX)))
-                .where('D', states(MetaBlocks.FRAMES.get(Materials.StainlessSteel).getBlock(Materials.StainlessSteel)))
+                .where('D', frames(Materials.StainlessSteel))
                 .where('F', autoAbilities(false, false, false, false, false, true, false).setExactLimit(1)
                         .or(autoAbilities(false, false, false, false, true, false, false).setExactLimit(1)))
                 .where('G', casingPredicate

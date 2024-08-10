@@ -42,7 +42,7 @@ public class MetaTileEntityFluidizedBedReactor extends RecipeMapMultiblockContro
                 .aisle("   ", "XPX", "XPX", "XPX", "XPX")
                 .aisle("F F", "XSX", "XXX", "XXX", "XXX")
                 .where('S', this.selfPredicate())
-                .where('F', states(this.getFrameState()))
+                .where('F', frames(Materials.Steel))
                 .where('P', states(this.getPipeCasingState()))
                 .where('X', states(this.getCasingState()).setMinGlobalLimited(18)
                         .or(this.autoAbilities(true, true, true, true, true, true, false)))
@@ -52,14 +52,11 @@ public class MetaTileEntityFluidizedBedReactor extends RecipeMapMultiblockContro
         return Textures.INERT_PTFE_CASING;
     }
 
-    protected IBlockState getCasingState() {
+    protected static IBlockState getCasingState() {
         return MetaBlocks.METAL_CASING.getState(MetalCasingType.PTFE_INERT_CASING);
     }
-    protected IBlockState getFrameState() {
-        return MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel);
-    }
 
-    protected IBlockState getPipeCasingState() {
+    protected static IBlockState getPipeCasingState() {
         return MetaBlocks.BOILER_CASING.getState(BoilerCasingType.POLYTETRAFLUOROETHYLENE_PIPE);
     }
 
