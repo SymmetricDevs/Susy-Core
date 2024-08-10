@@ -41,7 +41,7 @@ public class MetaTileEntityCatalyticReformer extends RecipeMapMultiblockControll
                         .setMinGlobalLimited(24)
                         .or(autoAbilities(true, true, true, true, true, true, false)))
                 .where('P', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.TITANIUM_PIPE)))
-                .where('F', states(MetaBlocks.FRAMES.get(Materials.Titanium).getBlock(Materials.Titanium)))
+                .where('F', frames(Materials.Titanium))
                 .where('M', abilities(MultiblockAbility.MUFFLER_HATCH))
                 .where(' ', any())
                 .where('#', air())

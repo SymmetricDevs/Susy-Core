@@ -213,7 +213,7 @@ public class MetaTileEntityFlareStack extends VoidingMultiblockBase {
         return Textures.SOLID_STEEL_CASING;
     }
 
-    protected IBlockState getFireboxCasingState() {
+    protected static IBlockState getFireboxCasingState() {
         return MetaBlocks.BOILER_FIREBOX_CASING.getState(BlockFireboxCasing.FireboxCasingType.STEEL_FIREBOX);
     }
 

@@ -51,8 +51,8 @@ public class MetaTileEntityCoolingUnit extends RecipeMapMultiblockController {
                 .where('S', selfPredicate())
                 .where('A', casingPredicate
                         .or(autoAbilities(true, true, true, true, true, true, false)))
-                .where('B', states(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)))
-                .where('C', states(MetaBlocks.FRAMES.get(Materials.StainlessSteel).getBlock(Materials.StainlessSteel)))
+                .where('B', frames(Materials.Steel))
+                .where('C', frames(Materials.StainlessSteel))
                 .where('D', states(MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE)))
                 .where('E', casingPredicate)
                 .where(' ', any())

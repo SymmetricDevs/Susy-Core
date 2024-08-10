@@ -59,7 +59,7 @@ public class MetaTileEntityMultiStageFlashDistiller extends RecipeMapMultiblockC
                 .aisle(" FFF ", " FSF ", " FFF ", " FFF ", "  B  ")
                 .where('S', selfPredicate())
                 .where('B', states(MetaBlocks.BOILER_CASING.getState((BlockBoilerCasing.BoilerCasingType.STEEL_PIPE))))
-                .where('C', states(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)))
+                .where('C', frames(Materials.Steel))
                 .where('A', casingPredicate
                         .or(maintenanceEnergy))
                 .where('D', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STAINLESS_CLEAN))
