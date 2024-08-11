@@ -5,12 +5,11 @@ import gregtech.api.metatileentity.multiblock.MultiblockWithDisplayBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import supersymmetry.Supersymmetry;
 
 public abstract class ItemVoidingMultiblockBase extends MultiblockWithDisplayBase {
     public final int voidingFrequency = 10;
     public int bonusMultiplier = 1;
-    public boolean active = true;
+    public boolean active = false;
 
     public ItemVoidingMultiblockBase(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
@@ -22,7 +21,8 @@ public abstract class ItemVoidingMultiblockBase extends MultiblockWithDisplayBas
     private int actualVoidingRate() {
         return baseVoidingRate() * this.bonusMultiplier;
     }
-    protected void doVoiding() {
+    protected void voidingCycle() {
+        active = false;
         int toSubtract = actualVoidingRate();
         for(IItemHandlerModifiable storage: getAbilities(MultiblockAbility.IMPORT_ITEMS)) {
             for(int i = 0; i < storage.getSlots() && toSubtract > 0; i++) {
@@ -36,13 +36,14 @@ public abstract class ItemVoidingMultiblockBase extends MultiblockWithDisplayBas
                 }
             }
         }
+        if(toSubtract < actualVoidingRate()) active = true;
     }
 
     @Override
     protected void updateFormedValid() {
         if(getWorld().isRemote) return;
         if(getOffsetTimer() % voidingFrequency == 0) {
-            doVoiding();
+            voidingCycle();
         }
     }
 
