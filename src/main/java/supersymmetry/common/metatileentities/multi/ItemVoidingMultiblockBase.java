@@ -28,10 +28,8 @@ public abstract class ItemVoidingMultiblockBase extends MultiblockWithDisplayBas
             for(int i = 0; i < storage.getSlots() && toSubtract > 0; i++) {
                 ItemStack stack = storage.getStackInSlot(i);
                 if(!stack.isEmpty()) {
-                    ItemStack replaceWith = stack.copy();
                     int removeFromThisStack = Integer.min(stack.getCount(), toSubtract);
-                    replaceWith.setCount(stack.getCount() - removeFromThisStack);
-                    storage.setStackInSlot(i, replaceWith);
+                    storage.extractItem(i, removeFromThisStack, false);
                     toSubtract -= removeFromThisStack;
                 }
             }
