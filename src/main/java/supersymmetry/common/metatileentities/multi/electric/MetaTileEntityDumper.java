@@ -31,12 +31,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import supersymmetry.client.renderer.textures.SusyTextures;
-import supersymmetry.common.metatileentities.multi.VoidingMultiblockBase;
+import supersymmetry.common.metatileentities.multi.FluidVoidingMultiblockBase;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class MetaTileEntityDumper extends VoidingMultiblockBase {
+public class MetaTileEntityDumper extends FluidVoidingMultiblockBase {
     public MetaTileEntityDumper(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
         // Hardcode these annoyances for now

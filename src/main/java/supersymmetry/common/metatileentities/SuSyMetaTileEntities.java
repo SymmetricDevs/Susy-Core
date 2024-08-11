@@ -129,6 +129,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityEvaporationPool EVAPORATION_POOL;
     public static int EVAPORATION_POOL_ID;
     public static MetaTileEntityFlareStack FLARE_STACK;
+    public static MetaTileEntityIncinerator INCINERATOR;
     public static MetaTileEntityFrothFlotationTank FROTH_FLOTATION_TANK;
     public static MetaTileEntityMultiStageFlashDistiller MULTI_STAGE_FLASH_DISTILLER;
 
@@ -266,6 +267,7 @@ public class SuSyMetaTileEntities {
         registerSimpleMTE(ELECTROSTATIC_SEPARATOR, 12, 17035, "electrostatic_separator", SuSyRecipeMaps.ELECTROSTATIC_SEPARATOR, SusyTextures.ELECTROSTATIC_SEPARATOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         registerSimpleMTE(POLISHING_MACHINE, 12, 17048, "polishing_machine", SuSyRecipeMaps.POLISHING_MACHINE, SusyTextures.POLISHING_MACHINE_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         registerSimpleMTE(TEXTILE_SPINNER, 12, 17061, "textile_spinner", SuSyRecipeMaps.SPINNING_RECIPES, SusyTextures.TEXTILE_SPINNER_OVERLAY, true);
+        registerMetaTileEntity(17074, new MetaTileEntityIncinerator(susyId("incinerator")));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name, RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator, ICubeRenderer texture, boolean isBricked) {

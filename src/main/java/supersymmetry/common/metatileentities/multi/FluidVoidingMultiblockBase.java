@@ -18,7 +18,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 
-public abstract class VoidingMultiblockBase extends MultiblockWithDisplayBase {
+public abstract class FluidVoidingMultiblockBase extends MultiblockWithDisplayBase {
     // Update this value based on your needs
     // For instance, if you want your glorified trashcan to be tiered
     public int rateBonus = 1;
@@ -28,7 +28,7 @@ public abstract class VoidingMultiblockBase extends MultiblockWithDisplayBase {
 
     public Object2BooleanOpenHashMap<Fluid> fluidCache = new Object2BooleanOpenHashMap<>();
 
-    public VoidingMultiblockBase(ResourceLocation metaTileEntityId) {
+    public FluidVoidingMultiblockBase(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
     }
 

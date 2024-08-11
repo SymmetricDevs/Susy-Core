@@ -32,14 +32,14 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import supersymmetry.client.renderer.textures.SusyTextures;
-import supersymmetry.common.metatileentities.multi.VoidingMultiblockBase;
+import supersymmetry.common.metatileentities.multi.FluidVoidingMultiblockBase;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 
 import static gregtech.api.util.RelativeDirection.*;
 
-public class MetaTileEntityFlareStack extends VoidingMultiblockBase {
+public class MetaTileEntityFlareStack extends FluidVoidingMultiblockBase {
     // Storing this, just in case it is ever needed
     private int height = 5;
 
