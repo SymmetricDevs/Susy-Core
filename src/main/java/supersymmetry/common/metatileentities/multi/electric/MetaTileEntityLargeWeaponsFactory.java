@@ -6,15 +6,17 @@ import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.unification.material.Materials;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
+import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
-import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nonnull;
@@ -30,8 +32,10 @@ public class MetaTileEntityLargeWeaponsFactory extends RecipeMapMultiblockContro
         return new MetaTileEntityLargeWeaponsFactory(metaTileEntityId);
     }
 
+    @NotNull
     @Override
     protected BlockPattern createStructurePattern() {
+        TraceabilityPredicate casingPredicate = states(getCasingState()).setMinGlobalLimited(4);
         return FactoryBlockPattern.start()
                 .aisle("FBF", "FFF")
                 .aisle("CBC", " A ")
@@ -42,15 +46,15 @@ public class MetaTileEntityLargeWeaponsFactory extends RecipeMapMultiblockContro
                 .aisle("CBC", " A ")
                 .aisle("DDD", "DSD")
                 .where('S', selfPredicate())
-                .where('A', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)))
+                .where('A', casingPredicate)
                 .where('B', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('C', states(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel))
                         .or(autoAbilities(false, true, false, false, false, false, false).setExactLimit(1)))
-                .where('D', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)).setMinGlobalLimited(4)
+                .where('D', casingPredicate
                         .or(autoAbilities(false, false, true, false, true, false, false)))
-                .where('E', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
+                .where('E', casingPredicate
                         .or(autoAbilities(true, false, false, false, false, false, false)))
-                .where('F', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
+                .where('F', casingPredicate
                         .or(autoAbilities(false, false, false, true, false, false, false)))
                 .where(' ', any())
                 .build();
@@ -65,5 +69,9 @@ public class MetaTileEntityLargeWeaponsFactory extends RecipeMapMultiblockContro
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.LARGE_WEAPONS_FACTORY_OVERLAY;
+    }
+
+    protected static IBlockState getCasingState() {
+        return MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID);
     }
 }
