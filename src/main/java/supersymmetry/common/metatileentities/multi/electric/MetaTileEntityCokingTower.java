@@ -53,7 +53,7 @@ public class MetaTileEntityCokingTower extends RecipeMapMultiblockController {
                 .aisle("  FF FF", "       ")
                 .where('S', this.selfPredicate())
                 .where('P', states(this.getPipeCasingState()))
-                .where('F', states(this.getFrameState()))
+                .where('F', frames(Materials.Steel))
                 .where('C', states(this.getCasingState()).setMinGlobalLimited(20)
                         .or(this.autoAbilities()))
                 .build();
@@ -61,13 +61,11 @@ public class MetaTileEntityCokingTower extends RecipeMapMultiblockController {
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
         return Textures.SOLID_STEEL_CASING;
     }
-    protected IBlockState getFrameState() {
-        return MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel);
-    }
-    protected IBlockState getCasingState() {
+
+    protected static IBlockState getCasingState() {
         return MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID);
     }
-    protected IBlockState getPipeCasingState() {
+    protected static IBlockState getPipeCasingState() {
         return MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE);
     }
 

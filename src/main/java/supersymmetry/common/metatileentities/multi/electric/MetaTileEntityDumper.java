@@ -64,7 +64,7 @@ public class MetaTileEntityDumper extends FluidVoidingMultiblockBase {
                 .aisle("BBBB", "C##A", "BBBB")
                 .aisle("A  A", "BSBB", "A  A")
                 .where('S', selfPredicate())
-                .where('A', states(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)))
+                .where('A', frames(Materials.Steel))
                 .where('B', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)))
                 .where('C', abilities(MultiblockAbility.IMPORT_FLUIDS).setExactLimit(1))
                 .where(' ', any())

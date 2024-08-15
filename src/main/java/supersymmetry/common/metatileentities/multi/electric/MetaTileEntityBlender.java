@@ -63,7 +63,7 @@ public class MetaTileEntityBlender extends RecipeMapMultiblockController {
                 .where('X', casing.or(abilities))
                 .where('P', states(getPipeCasingState()))
                 .where('D', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STAINLESS_CLEAN))) 
-                .where('E', states(MetaBlocks.FRAMES.get(Materials.StainlessSteel).getBlock(Materials.StainlessSteel)))
+                .where('E', frames(Materials.StainlessSteel))
                 .where('C', states(MetaBlocks.TURBINE_CASING.getState(TurbineCasingType.STAINLESS_STEEL_GEARBOX)))
                 .where(' ', any())
                 .build();
@@ -75,11 +75,11 @@ public class MetaTileEntityBlender extends RecipeMapMultiblockController {
         return Textures.INERT_PTFE_CASING;
     }
 
-    protected IBlockState getCasingState() {
+    protected static IBlockState getCasingState() {
         return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.PTFE_INERT_CASING);
     }
 
-    protected IBlockState getPipeCasingState() {
+    protected static IBlockState getPipeCasingState() {
         return MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.POLYTETRAFLUOROETHYLENE_PIPE);
     }
 

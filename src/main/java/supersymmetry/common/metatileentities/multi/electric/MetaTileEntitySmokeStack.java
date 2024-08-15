@@ -194,7 +194,7 @@ public class MetaTileEntitySmokeStack extends FluidVoidingMultiblockBase {
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
         return Textures.SOLID_STEEL_CASING;
     }
-    protected IBlockState getPipeCasingState() {
+    protected static IBlockState getPipeCasingState() {
         return MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE);
     }
 

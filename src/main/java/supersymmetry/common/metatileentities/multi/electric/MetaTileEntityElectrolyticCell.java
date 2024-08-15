@@ -54,10 +54,10 @@ public class MetaTileEntityElectrolyticCell extends RecipeMapMultiblockControlle
         return Textures.SOLID_STEEL_CASING;
     }
 
-    protected IBlockState getCasingState() {
+    protected static IBlockState getCasingState() {
         return MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID);
     }
-    protected IBlockState getPipeCasingState() {
+    protected static IBlockState getPipeCasingState() {
         return MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE);
     }
 

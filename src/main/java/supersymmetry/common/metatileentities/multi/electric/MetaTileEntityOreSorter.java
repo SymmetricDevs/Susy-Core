@@ -39,7 +39,7 @@ public class MetaTileEntityOreSorter extends RecipeMapMultiblockController {
                 .aisle("ABBBA", "B###B", "ABBBA", " D D ")
                 .aisle("ABSBA", "ABBBA", "ABBBA", " D D ")
                 .where('S', selfPredicate())
-                .where('A', states(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)))
+                .where('A', frames(Materials.Steel))
                 .where('B', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
                         .setMinGlobalLimited(16)
                         .or(autoAbilities(true, true, true, true, false, false, false)))
