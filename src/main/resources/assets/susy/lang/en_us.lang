@@ -256,6 +256,7 @@ gregtech.machine.ocean_pumper.name=Ocean Pumper
 gregtech.machine.ocean_pumper.tooltip=Works only in Ocean biomes between Y=70 and Y=75
 gregtech.machine.advanced_arc_furnace.name=Advanced Arc Furnace
 gregtech.machine.clarifier.name=Clarifier
+gregtech.machine.incinerator.name=Incinerator
 gregtech.machine.dumper.name=Dumper
 gregtech.machine.evaporation_pool.name=Evaporation Pool
 gregtech.machine.flare_stack.name=Flare Stack
