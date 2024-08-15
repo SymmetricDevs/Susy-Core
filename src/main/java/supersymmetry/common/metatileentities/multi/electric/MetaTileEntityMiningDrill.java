@@ -5,6 +5,7 @@ import gregtech.api.capability.impl.NotifiableItemStackHandler;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
+import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
@@ -65,7 +66,7 @@ public class MetaTileEntityMiningDrill extends RecipeMapMultiblockController {
                 .aisle("               ", "     DDDDD     ", "     DDDDD     ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ")
                 .where('S', selfPredicate())
                 .where('A', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)))
-                .where('B', frames(Materials.Steel).setMinGlobalLimited(275)
+                .where('B', frames(Materials.Steel)
                         .or(autoAbilities(true, true, true, true, true, true, false)))
                 .where('C', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('D', states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)))
@@ -76,6 +77,33 @@ public class MetaTileEntityMiningDrill extends RecipeMapMultiblockController {
                 .where(' ', any())
                 .build();
     }
+
+    @Override
+    public TraceabilityPredicate autoAbilities(boolean checkEnergyIn, boolean checkMaintenance, boolean checkItemIn, boolean checkItemOut, boolean checkFluidIn, boolean checkFluidOut, boolean checkMuffler) {
+        TraceabilityPredicate predicate = super.autoAbilities(checkMaintenance, checkMuffler);
+        if (checkEnergyIn) {
+            predicate = predicate.or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2).setPreviewCount(1));
+        }
+
+        if (checkItemIn && this.recipeMap.getMaxInputs() > 0) {
+            predicate = predicate.or(abilities(MultiblockAbility.IMPORT_ITEMS).setMaxGlobalLimited(2).setPreviewCount(1));
+        }
+
+        if (checkItemOut && this.recipeMap.getMaxOutputs() > 0) {
+            predicate = predicate.or(abilities(MultiblockAbility.EXPORT_ITEMS).setMaxGlobalLimited(2).setPreviewCount(1));
+        }
+
+        if (checkFluidIn && this.recipeMap.getMaxFluidInputs() > 0) {
+            predicate = predicate.or(abilities(MultiblockAbility.IMPORT_FLUIDS).setMaxGlobalLimited(2).setPreviewCount(1));
+        }
+
+        if (checkFluidOut && this.recipeMap.getMaxFluidOutputs() > 0) {
+            predicate = predicate.or(abilities(MultiblockAbility.EXPORT_FLUIDS).setMaxGlobalLimited(2).setPreviewCount(1));
+        }
+
+        return predicate;
+    }
+
 
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
@@ -171,5 +199,10 @@ public class MetaTileEntityMiningDrill extends RecipeMapMultiblockController {
     @Override
     public boolean allowsExtendedFacing() {
         return false;
+    }
+
+    @Override
+    public boolean allowsFlip() {
+        return true;
     }
 }
