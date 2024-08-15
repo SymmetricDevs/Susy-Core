@@ -51,7 +51,7 @@ public class MetaTileEntityVacuumDistillationTower extends RecipeMapMultiblockCo
                 .where('S', this.selfPredicate())
                 .where('G', states(this.getGlassState()))
                 .where('P', states(this.getPipeCasingState()))
-                .where('F', states(this.getFrameState()))
+                .where('F', frames(Materials.Steel))
                 .where('C', states(this.getCasingState())
                         .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(3))
                         .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1))
@@ -70,16 +70,14 @@ public class MetaTileEntityVacuumDistillationTower extends RecipeMapMultiblockCo
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
         return Textures.SOLID_STEEL_CASING;
     }
-    protected IBlockState getFrameState() {
-        return MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel);
-    }
-    protected IBlockState getGlassState() {
+
+    protected static IBlockState getGlassState() {
         return MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.TEMPERED_GLASS);
     }
-    protected IBlockState getCasingState() {
+    protected static IBlockState getCasingState() {
         return MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID);
     }
-    protected IBlockState getPipeCasingState() {
+    protected static IBlockState getPipeCasingState() {
         return MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE);
     }
 

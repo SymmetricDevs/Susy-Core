@@ -59,7 +59,7 @@ public class MetaTileEntityRotaryKiln extends RecipeMapMultiblockController {
                 .aisle("A    A    A", "A    A    A", "LCCCCMCCCCR", "L#########R", "LCCCCMCCCCR")
                 .aisle("A    A    A", "A    A    A", "L    A    R", "LCCCCSCCCCR", "L    A    R")
                 .where('S', selfPredicate())
-                .where('A', states(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)))
+                .where('A', frames(Materials.Steel))
                 .where('C', states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)))
                 .where('L', casingPredicate
                         .or(autoAbilities(false, false, true, false, false, true, false))

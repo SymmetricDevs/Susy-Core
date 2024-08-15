@@ -84,7 +84,7 @@ public class MetaTileEntitySingleColumnCryogenicDistillationPlant extends Recipe
         return Textures.FROST_PROOF_CASING;
     }
 
-    protected IBlockState getCasingState() {
+    protected static IBlockState getCasingState() {
         return MetaBlocks.METAL_CASING.getState(MetalCasingType.ALUMINIUM_FROSTPROOF);
     }
 
