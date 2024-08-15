@@ -42,7 +42,7 @@ jobs:
 
       - name: Publish to Curseforge
         env:
-          CURSEFORGE_API_KEY: "e29b804a-ced8-4f42-bbd1-8afa84eb99cb" # TODO: waiting on planet to make this a secret...
+          CURSEFORGE_API_KEY: "${{ secrets.CURSEFORGE_API_KEY }}"
           CURSEFORGE_PROJECT_ID: "846224"
           CHANGELOG_LOCATION: "${{ env.CHANGELOG_LOCATION }}"
           RELEASE_TYPE: "${{ env.RELEASE_TYPE }}"
