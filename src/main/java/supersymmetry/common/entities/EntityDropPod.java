@@ -29,6 +29,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import supersymmetry.api.SusyLog;
 import supersymmetry.client.audio.MovingSoundDropPod;
 import supersymmetry.client.renderer.particles.SusyParticleFlame;
 import supersymmetry.client.renderer.particles.SusyParticleSmoke;
@@ -297,10 +298,11 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
 
     @Override
     protected void removePassenger(@NotNull Entity passenger) {
-        if (passenger instanceof EntityPlayer && !canPlayerDismount()) return;
-        super.removePassenger(passenger);
-        if (passenger instanceof EntityLiving living) {
-            living.setNoAI(false);
+        if (this.canPlayerDismount()) {
+            super.removePassenger(passenger);
+            if (passenger instanceof EntityLiving living) {
+                living.setNoAI(false);
+            }
         }
     }
 
