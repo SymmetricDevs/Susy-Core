@@ -288,6 +288,12 @@ gregtech.machine.reverberatory_furnace.name=Reverberatory Furnace
 gregtech.machine.blender.name=Blender
 
 gregtech.machine.drone_pad.name=Drone Pad
+gregtech.machine.primitive_smelter.name=Primitive Smelter
+
+gregtech.machine.primitive_item_import.name=Primitive Item Import Bus
+gregtech.machine.primitive_item_import.tooltip=Only for use with the Primitive Smelter
+gregtech.machine.primitive_item_export.name=Primitive Item Export Bus
+gregtech.machine.primitive_item_export.tooltip=Only for use with the Primitive Smelter
 
 # Properties
 gregtech.recipe.plasma_requirement=Requires plasma: %s
@@ -699,6 +705,7 @@ recipemap.polishing_machine.name=Polishing
 recipemap.gravity_separator=Gravity Separation
 recipemap.spinning.name=Textile Spinning
 recipemap.large_steam_turbine.name=Large Steam Turbine
+recipemap.primitive_smelter=Primitive Smelting
 
 gregtech.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 gregtech.multiblock.ocean_pumper.description=The Ocean Pumper is an electrically powered multiblock that collects a base amount of 8,000 L Seawater per second (at MV), but only if it is in an ocean biome, and when the controller is between Y = 70 and Y = 75 (Inclusive). It needs an output hatch, a maintenance hatch, and an energy input hatch.

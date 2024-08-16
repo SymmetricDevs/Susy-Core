@@ -318,6 +318,11 @@ public class SuSyRecipeMaps {
             .setSound(GTSoundEvents.TURBINE)
             .allowEmptyOutput();
 
+    public static final RecipeMap<PrimitiveRecipeBuilder> PRIMITIVE_SMELTER = new RecipeMap<>("primitive_smelter", 3, 1, 0, 0, new PrimitiveRecipeBuilder(), false)
+            .setSlotOverlay(false, false, GuiTextures.FURNACE_OVERLAY_1)
+            .setSlotOverlay(true, false, GuiTextures.FURNACE_OVERLAY_2)
+            .setSound(GTSoundEvents.FURNACE);
+
     public static void init(){
         RecipeMaps.SIFTER_RECIPES.setMaxFluidInputs(1);
         RecipeMaps.SIFTER_RECIPES.setMaxFluidOutputs(1);

@@ -1,6 +1,7 @@
 package supersymmetry;
 
 import gregtech.GTInternalTags;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
@@ -63,7 +64,8 @@ public class Supersymmetry {
         proxy.load();
         SuSyCoverBehaviors.init();
 
-        BDSAndMModule.init();
+        if (Loader.isModLoaded("bdsandm"))
+            BDSAndMModule.init();
     }
 
     @Mod.EventHandler
