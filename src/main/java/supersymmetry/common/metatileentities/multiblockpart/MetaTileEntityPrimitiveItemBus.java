@@ -23,6 +23,11 @@ public class MetaTileEntityPrimitiveItemBus extends MetaTileEntityItemBus {
     }
 
     @Override
+    public int getDefaultPaintingColor() {
+        return 0xFFFFFF;
+    }
+
+    @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
         return new MetaTileEntityPrimitiveItemBus(this.metaTileEntityId, this.isExportHatch);
     }

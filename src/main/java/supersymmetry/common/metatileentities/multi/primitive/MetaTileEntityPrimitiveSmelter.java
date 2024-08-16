@@ -1,23 +1,33 @@
 package supersymmetry.common.metatileentities.multi.primitive;
 
 import com.codetaylor.mc.pyrotech.modules.core.ModuleCore;
+import gregtech.api.capability.impl.PrimitiveRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
+import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapPrimitiveMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.pattern.TraceabilityPredicate;
+import gregtech.api.recipes.RecipeMap;
 import gregtech.client.renderer.ICubeRenderer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
+
+import java.util.Collections;
+import java.util.List;
 
 public class MetaTileEntityPrimitiveSmelter extends RecipeMapPrimitiveMultiblockController {
     public MetaTileEntityPrimitiveSmelter(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.PRIMITIVE_SMELTER);
+        this.recipeMapWorkable = new PrimitiveSmelterRecipeLogic(this);
     }
 
     @Override
@@ -47,5 +57,23 @@ public class MetaTileEntityPrimitiveSmelter extends RecipeMapPrimitiveMultiblock
         return new MetaTileEntityPrimitiveSmelter(this.metaTileEntityId);
     }
 
+    @Override
+    public List<MultiblockShapeInfo> getMatchingShapes() {
+        return Collections.singletonList(MultiblockShapeInfo.builder()
+                .aisle("BBB", "BBB", "SBS")
+                .aisle("BBB", "B B", "BBB")
+                .aisle("BOB", "ICI", "SBS")
+                .where('B', ModuleCore.Blocks.MASONRY_BRICK.getDefaultState())
+                .where('C', SuSyMetaTileEntities.PRIMITIVE_SMELTER, EnumFacing.SOUTH)
+                .where('I', SuSyMetaTileEntities.PRIMITIVE_ITEM_IMPORT, EnumFacing.SOUTH)
+                .where('O', SuSyMetaTileEntities.PRIMITIVE_ITEM_EXPORT, EnumFacing.SOUTH)
+                .build());
+    }
 
+    public static class PrimitiveSmelterRecipeLogic extends PrimitiveRecipeLogic {
+        public PrimitiveSmelterRecipeLogic(RecipeMapPrimitiveMultiblockController tileEntity) {
+            super(tileEntity, SuSyRecipeMaps.PRIMITIVE_SMELTER);
+            setParallelLimit(8);
+        }
+    }
 }
