@@ -169,7 +169,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         int bDist = -1;
 
         //find when container block section is exited left, right, and back
-        for (int i = 1; i < MAX_SQUARE_SIDE_LENGTH + 1; i++) {
+        for (int i = 1; i < MAX_SQUARE_SIDE_LENGTH + 2; i++) { // must be plus two due to how bDist is calc'd
             if (lDist == -1 && !isContainerBlock(world, lPos, left)) lDist += i; //0 -> immediate left is !container
             if (rDist == -1 && !isContainerBlock(world, rPos, right)) rDist += i; //0 -> immediate left is !container
             if (bDist == -1 && !isContainerBlock(world, bPos, back)) bDist += i; //0 -> no container block section
@@ -678,6 +678,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             //no sunlight heat generated when raining or during night. May be incongruent with partial exposure to sun, but oh well
             if (getWorld().isRainingAt(getPos().offset(getFrontFacing().getOpposite(), 2)) || !getWorld().isDaytime()) {
                 exposedBlocks = 0;
+                for (int i = 0; i < wasExposed.length; ++i) wasExposed[i] = 0; // do not leave discrepancy between exposedBlock count and wasExposed
             }
             //checks for ow and skylight access to prevent beneath portal issues (-1 = the Nether, 0 = normal world)
             else if (getWorld().provider.getDimension() == 0) {

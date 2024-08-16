@@ -40,7 +40,7 @@ public class MetaTileEntityFermentationVat extends RecipeMapMultiblockController
                 .where('X', states(MetaBlocks.MACHINE_CASING.getState(MachineCasingType.ULV))
                         .setMinGlobalLimited(40)
                         .or(autoAbilities(true, true, true, true, true, true, false)))
-                .where('F', states(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)))
+                .where('F', frames(Materials.Steel))
                 .where('M', abilities(MultiblockAbility.MUFFLER_HATCH))
                 .where(' ', any())
                 .where('#', air())
