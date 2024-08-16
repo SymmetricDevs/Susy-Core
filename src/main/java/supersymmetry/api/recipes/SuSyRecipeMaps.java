@@ -206,7 +206,8 @@ public class SuSyRecipeMaps {
 
     public static final RecipeMap<SimpleRecipeBuilder> LARGE_WEAPONS_FACTORY_RECIPES = new RecipeMap<>("large_weapons_factory", 9, 1, 3, 0, new SimpleRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_CIRCUIT, ProgressWidget.MoveType.HORIZONTAL)
-            .setSound(GTSoundEvents.ASSEMBLER);
+            .setSound(GTSoundEvents.ASSEMBLER)
+            .setSmallRecipeMap(WEAPONS_FACTORY_RECIPES);
 
     public static final RecipeMap<SimpleRecipeBuilder> RAILROAD_ENGINEERING_STATION_RECIPES = new RecipeMap<>("railroad_engineering_station", 16, 1, 4, 0, new SimpleRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressWidget.MoveType.HORIZONTAL)
