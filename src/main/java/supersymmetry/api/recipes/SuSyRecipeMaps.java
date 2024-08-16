@@ -10,7 +10,6 @@ import gregtech.api.recipes.builders.SimpleRecipeBuilder;
 import gregtech.api.unification.material.Materials;
 import gregtech.core.sound.GTSoundEvents;
 import gregtechfoodoption.recipe.GTFORecipeMaps;
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.recipes.builders.*;
 
@@ -354,6 +353,7 @@ public class SuSyRecipeMaps {
         RecipeMaps.CUTTER_RECIPES.setMaxOutputs(4);
         RecipeMaps.LARGE_CHEMICAL_RECIPES.setMaxInputs(4);
         RecipeMaps.LARGE_CHEMICAL_RECIPES.setMaxFluidInputs(6);
+        RecipeMaps.FORMING_PRESS_RECIPES.setMaxFluidInputs(1);
 
         SuSyRecipeMaps.EVAPORATION_POOL.recipeBuilder()
                 .fluidInputs(Materials.Water.getFluid(1000))
