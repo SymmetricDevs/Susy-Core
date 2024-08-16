@@ -62,4 +62,7 @@ dependencies {
     compileOnly rfg.deobf("curse.maven:hwyla-253449:2568751")
 
     compileOnly rfg.deobf("curse.maven:barrels-drums-storage-more-319404:2708193")
+    implementation rfg.deobf("curse.maven:pyrotech-306676:5351359")
+    implementation rfg.deobf("curse.maven:athenaeum-284350:4633750")
+    implementation rfg.deobf("curse.maven:dropt-284973:5405050")
 }
