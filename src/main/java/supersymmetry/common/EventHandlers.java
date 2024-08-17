@@ -2,15 +2,21 @@ package supersymmetry.common;
 
 import com.alcatrazescapee.notreepunching.common.items.ItemCeramicBucket;
 import com.alcatrazescapee.notreepunching.common.items.ModItems;
+import com.codetaylor.mc.pyrotech.modules.ignition.item.ItemIgniterBase;
+import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.util.GTTeleporter;
+import gregtech.api.util.GTUtility;
 import gregtech.api.util.TeleportHandler;
 import gregtech.common.items.MetaItems;
 import gregtechfoodoption.item.GTFOMetaItem;
 import net.minecraft.block.BlockCauldron;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,6 +28,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -36,9 +43,11 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.event.MobHordeEvent;
+import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.event.MobHordePlayerData;
 import supersymmetry.common.event.MobHordeWorldData;
+import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimitiveSmelter;
 
 import java.util.List;
 import java.util.Map;
@@ -56,7 +65,7 @@ public class EventHandlers {
         NBTTagCompound playerData = event.player.getEntityData();
         NBTTagCompound data = playerData.hasKey(EntityPlayer.PERSISTED_NBT_TAG) ? playerData.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG) : new NBTTagCompound();
 
-        if(!event.player.getEntityWorld().isRemote && !data.getBoolean(FIRST_SPAWN)) {
+        if (!event.player.getEntityWorld().isRemote && !data.getBoolean(FIRST_SPAWN)) {
 
             data.setBoolean(FIRST_SPAWN, true);
             playerData.setTag(EntityPlayer.PERSISTED_NBT_TAG, data);
@@ -151,6 +160,21 @@ public class EventHandlers {
             MobHordeWorldData mobHordeWorldData = MobHordeWorldData.get(world);
             list.getPlayers().forEach(p -> mobHordeWorldData.getPlayerData(p.getPersistentID()).update(p));
             mobHordeWorldData.markDirty();
+        }
+    }
+
+    @SubscribeEvent
+    public static void onItemUseEnd(LivingEntityUseItemEvent.Finish event) {
+        EntityLivingBase player = event.getEntityLiving();
+        World world = player.getEntityWorld();
+        if (!world.isRemote && player instanceof EntityPlayer && event.getItem().getItem() instanceof ItemIgniterBase) {
+            RayTraceResult rayTraceResult = SuSyUtility.rayTrace(world, (EntityPlayer) player, false);
+
+            MetaTileEntity mte = GTUtility.getMetaTileEntity(world, rayTraceResult.getBlockPos());
+
+            if (mte instanceof MetaTileEntityPrimitiveSmelter smelter) {
+                smelter.activate();
+            }
         }
     }
 }

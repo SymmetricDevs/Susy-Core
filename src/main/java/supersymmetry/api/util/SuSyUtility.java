@@ -1,7 +1,12 @@
 package supersymmetry.api.util;
 
 import gregtech.api.GTValues;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import supersymmetry.Supersymmetry;
 
 import java.util.function.Function;
@@ -55,5 +60,14 @@ public class SuSyUtility {
 
     public static ResourceLocation susyId(String path) {
         return new ResourceLocation(Supersymmetry.MODID, path);
+    }
+
+    public static RayTraceResult rayTrace(World worldIn, EntityPlayer playerIn, boolean useLiquids)
+    {
+        Vec3d start = playerIn.getPositionEyes(1.0F);
+        Vec3d lookVec = playerIn.getLookVec();
+        double reach = playerIn.getEntityAttribute(EntityPlayer.REACH_DISTANCE).getAttributeValue();
+        Vec3d end = start.add(lookVec.scale(reach));
+        return worldIn.rayTraceBlocks(start, end, useLiquids, !useLiquids, false);
     }
 }
