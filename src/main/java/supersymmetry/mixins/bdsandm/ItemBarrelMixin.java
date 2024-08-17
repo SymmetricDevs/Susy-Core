@@ -12,9 +12,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(ItemBarrel.class)
+@Mixin(value = ItemBarrel.class, remap = false)
 public class ItemBarrelMixin extends ItemBlock {
-    //Need to extend ItemBlock to use super.getNBTShareTag
+
+    // Need to extend ItemBlock to use super.getNBTShareTag
     public ItemBarrelMixin(Block block) {
         super(block);
     }
@@ -28,9 +29,8 @@ public class ItemBarrelMixin extends ItemBlock {
     // fire from the network handler for a given player and kick them.
     // This hack reduces the scope of the bug to incorrect (not present) barrel metadata on the client.
     @Inject(method = "getNBTShareTag",
-            remap = false,
             at = @At(value = "INVOKE",
-                    target = "Lfunwayguy/bdsandm/inventory/capability/CapabilityBarrel;serializeNBT()Lnet/minecraft/nbt/NBTTagCompound;"),
+                     target = "Lfunwayguy/bdsandm/inventory/capability/CapabilityBarrel;serializeNBT()Lnet/minecraft/nbt/NBTTagCompound;"),
             cancellable = true)
     public void returnIfNull(ItemStack stack, CallbackInfoReturnable<NBTTagCompound> cir, @Local CapabilityBarrel barrel) {
         if (barrel == null) {
