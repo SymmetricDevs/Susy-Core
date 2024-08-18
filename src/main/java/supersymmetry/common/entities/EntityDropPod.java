@@ -171,6 +171,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 BlockPos pos = new BlockPos(this.posX + i, above ? this.posY + 2 : this.posY - 1, this.posZ + j);
+                if (this.world.getBlockState(pos).getMaterial().isLiquid()) return;
                 if (this.world.getBlockState(pos).getBlockHardness(this.world, pos) < 0.3) {
                     this.world.setBlockToAir(pos);
                 } else if (above) {
@@ -297,10 +298,11 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
 
     @Override
     protected void removePassenger(@NotNull Entity passenger) {
-        if (passenger instanceof EntityPlayer && !canPlayerDismount()) return;
-        super.removePassenger(passenger);
-        if (passenger instanceof EntityLiving living) {
-            living.setNoAI(false);
+        if (this.canPlayerDismount()) {
+            super.removePassenger(passenger);
+            if (passenger instanceof EntityLiving living) {
+                living.setNoAI(false);
+            }
         }
     }
 
@@ -314,6 +316,16 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
         if (passenger instanceof EntityLivingBase) {
             ((EntityLivingBase) passenger).renderYawOffset = this.renderYawOffset;
         }
+    }
+
+    @Override
+    public boolean shouldDismountInWater(@NotNull Entity rider) {
+        return false;
+    }
+
+    @Override
+    public boolean handleWaterMovement() {
+        return isInWater();
     }
 
     @Override
