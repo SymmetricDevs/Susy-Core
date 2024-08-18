@@ -35,7 +35,6 @@ public class ItemBarrelMixin extends ItemBlock {
     public void returnIfNull(ItemStack stack, CallbackInfoReturnable<NBTTagCompound> cir, @Local CapabilityBarrel barrel) {
         if (barrel == null) {
             cir.setReturnValue(super.getNBTShareTag(stack));
-            cir.cancel();
         }
     }
 }
