@@ -1,9 +1,11 @@
 package supersymmetry.common.metatileentities.multi.primitive;
 
+import codechicken.lib.raytracer.CuboidRayTraceResult;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
 import com.codetaylor.mc.pyrotech.modules.core.ModuleCore;
+import gregtech.api.GTValues;
 import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.capability.impl.ItemHandlerList;
 import gregtech.api.capability.impl.PrimitiveRecipeLogic;
@@ -11,6 +13,8 @@ import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.widgets.*;
 import gregtech.api.items.itemhandlers.GTItemStackHandler;
+import gregtech.api.items.metaitem.MetaItem;
+import gregtech.api.items.metaitem.stats.IItemBehaviour;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -21,11 +25,18 @@ import gregtech.api.pattern.*;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.RecipeMaps;
 import gregtech.client.renderer.ICubeRenderer;
+import gregtech.common.items.behaviors.LighterBehaviour;
 import gregtechfoodoption.client.GTFOClientHandler;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemFireball;
+import net.minecraft.item.ItemFlintAndSteel;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
@@ -35,6 +46,7 @@ import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class MetaTileEntityPrimitiveSmelter extends RecipeMapPrimitiveMultiblockController {
     protected IItemHandlerModifiable inputInventory;
@@ -187,5 +199,28 @@ public class MetaTileEntityPrimitiveSmelter extends RecipeMapPrimitiveMultiblock
         return outputInventory;
     }
 
+    @Override
+    public boolean onRightClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing, CuboidRayTraceResult hitResult) {
+        if (!this.isActive()) {
+            ItemStack itemStack = playerIn.getHeldItem(hand);
+            boolean willLight = false;
+            if (itemStack.getItem() instanceof ItemFireball || itemStack.getItem() instanceof ItemFlintAndSteel) {
+                willLight = true;
+                itemStack.damageItem(1, playerIn);
+            } else if (itemStack.getItem() instanceof MetaItem<?> metaItem) {
+                Optional<IItemBehaviour> behaviour = metaItem.getBehaviours(itemStack).stream().filter(b -> b instanceof LighterBehaviour).findFirst();
+                if (behaviour.isPresent()) {
+                    willLight = ((LighterBehaviour) behaviour.get()).consumeFuel(playerIn, itemStack);
+                }
+            }
 
+            if (willLight) {
+                playerIn.getEntityWorld().playSound(null, playerIn.getPosition(), SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 1.0F, GTValues.RNG.nextFloat() * 0.4F + 0.8F);
+                this.activate();
+                return true;
+            }
+        }
+
+        return super.onRightClick(playerIn, hand, facing, hitResult);
+    }
 }
