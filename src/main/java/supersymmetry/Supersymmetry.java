@@ -20,7 +20,6 @@ import supersymmetry.common.command.CommandHordeStop;
 import supersymmetry.common.covers.SuSyCoverBehaviors;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
-import supersymmetry.integration.bdsandm.BDSAndMModule;
 import supersymmetry.loaders.SuSyIRLoader;
 
 @Mod(name = Supersymmetry.NAME, modid = Supersymmetry.MODID, version = Tags.VERSION, dependencies = GTInternalTags.DEP_VERSION_STRING + ";required-after:gcym;after:immersiverailroading")
@@ -62,8 +61,6 @@ public class Supersymmetry {
     public void onInit(@NotNull FMLInitializationEvent event) {
         proxy.load();
         SuSyCoverBehaviors.init();
-
-        BDSAndMModule.init();
     }
 
     @Mod.EventHandler
