@@ -34,3 +34,4 @@ jobs:
           files: "build/libs/*.jar"
           fail_on_unmatched_files: true
           make_latest: false
+          tag_name: "latest-v${{ github.ref_name }}"
