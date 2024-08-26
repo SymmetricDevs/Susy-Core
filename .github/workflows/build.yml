@@ -1,0 +1,37 @@
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+
+concurrency:
+  group: publish-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write # needed to create GitHub releases
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Build
+        uses: ./.github/actions/build_setup
+
+      - name: Build Project
+        run: ./gradlew build --warning-mode all --build-cache
+
+      - name: Publish to GitHub
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "latest-v${{ github.ref_name }}"
+          files: "build/libs/*.jar"
+          fail_on_unmatched_files: true
+          make_latest: false
+          tag_name: "latest-v${{ github.ref_name }}"
