@@ -665,7 +665,8 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             return; //dont do logic on client
         }
 
-        setCoilActivity(false); // solves world issue reload where coils would be active even if multi was not running
+        // apparently causes significant lag; removal of this call will result in rendering issues due to super update concluding coils should be on innappropriately
+        // setCoilActivity(false); // solves world issue reload where coils would be active even if multi was not running
         if (structurePattern.getError() != null) return; //dont do processing for unformed multis
 
         //ensure timer is non-negative by anding sign bit with 0
