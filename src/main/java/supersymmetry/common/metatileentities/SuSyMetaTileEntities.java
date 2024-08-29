@@ -30,7 +30,7 @@ import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimi
 import supersymmetry.common.metatileentities.multiblockpart.SusyMetaTileEntityDumpingHatch;
 import supersymmetry.common.metatileentities.multiblockpart.SusyMetaTileEntityEnergyHatch;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityBathCondenser;
-import supersymmetry.common.metatileentities.single.electric.MetaTileEntityLandfill;
+import supersymmetry.common.metatileentities.single.electric.MetaTileEntityIncinerator;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityLatexCollector;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityPhaseSeparator;
 import supersymmetry.common.metatileentities.single.steam.MetaTileEntitySteamLatexCollector;
@@ -147,7 +147,7 @@ public class SuSyMetaTileEntities {
     public static SimpleMachineMetaTileEntity[] TEXTILE_SPINNER;
     public static SimpleMachineMetaTileEntity[] POLISHING_MACHINE;
 
-    public static MetaTileEntityLandfill[] LANDFILL = new MetaTileEntityLandfill[4];
+    public static MetaTileEntityIncinerator[] INCINERATOR = new MetaTileEntityIncinerator[4];
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -243,10 +243,10 @@ public class SuSyMetaTileEntities {
         NEW_ENERGY_OUTPUT_HATCH_16A[2] = registerMetaTileEntity(16005, new SusyMetaTileEntityEnergyHatch(susyId("energy_hatch.output_16a.hv"), 3, 16, true));
         NEW_ENERGY_OUTPUT_HATCH_16A[3] = registerMetaTileEntity(16006, new SusyMetaTileEntityEnergyHatch(susyId("energy_hatch.output_16a.ev"), 4, 16, true));
 
-        LANDFILL[0] = registerMetaTileEntity(16500, new MetaTileEntityLandfill(susyId("landfill.lv"), 1));
-        LANDFILL[1] = registerMetaTileEntity(16501, new MetaTileEntityLandfill(susyId("landfill.mv"), 2));
-        LANDFILL[2] = registerMetaTileEntity(16502, new MetaTileEntityLandfill(susyId("landfill.hv"), 3));
-        LANDFILL[3] = registerMetaTileEntity(16503, new MetaTileEntityLandfill(susyId("landfill.ev"), 4));
+        INCINERATOR[0] = registerMetaTileEntity(16500, new MetaTileEntityIncinerator(susyId("incinerator.lv"), 1, 4, 1));
+        INCINERATOR[1] = registerMetaTileEntity(16501, new MetaTileEntityIncinerator(susyId("incinerator.mv"), 2, 2, 1));
+        INCINERATOR[2] = registerMetaTileEntity(16502, new MetaTileEntityIncinerator(susyId("incinerator.hv"), 3, 1, 1));
+        INCINERATOR[3] = registerMetaTileEntity(16503, new MetaTileEntityIncinerator(susyId("incinerator.ev"), 4, 1, 2));
 
 
         BASIC_STEAM_TURBINE = registerMetaTileEntity(17000, new MetaTileEntitySUSYLargeTurbine(susyId("basic_steam_turbine"), SuSyRecipeMaps.LARGE_STEAM_TURBINE, 1, MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING), Textures.SOLID_STEEL_CASING, SusyTextures.LARGE_STEAM_TURBINE_OVERLAY));

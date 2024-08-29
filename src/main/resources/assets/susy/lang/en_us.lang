@@ -643,6 +643,16 @@ gregtech.machine.polishing_machine.opv.name=Legendary Polishing Machine
 gregtech.machine.bath_condenser.name=Bath Condenser
 gregtech.machine.bath_condenser.tooltip=Only works inside a Cryogenic Distillation Tower
 
+gregtech.machine.incinerator.lv.name=Basic Incinerator
+gregtech.machine.incinerator.mv.name=Advanced Incinerator
+gregtech.machine.incinerator.hv.name=Advanced Incinerator II
+gregtech.machine.incinerator.ev.name=Advanced Incinerator III
+gregtech.machine.incinerator.tooltip.1=§6Incinerates§r %s item(s) per %s tick(s)
+gregtech.machine.incinerator.tooltip.2=§cNeeds eight blocks of air to release gasses into
+gregtech.machine.incinerator.tooltip.3=§8Don't worry about where the heavy metals are going.
+gregtech.multiblock.incinerator.clogged=§4Clogged! (Is the top blocked?)
+gregtech.multiblock.incinerator.working=§2Clog-free
+
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
 recipemap.latex_collector.name=Arboreal Collector
