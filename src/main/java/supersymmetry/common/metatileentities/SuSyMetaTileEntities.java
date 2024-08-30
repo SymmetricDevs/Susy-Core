@@ -243,10 +243,10 @@ public class SuSyMetaTileEntities {
         NEW_ENERGY_OUTPUT_HATCH_16A[2] = registerMetaTileEntity(16005, new SusyMetaTileEntityEnergyHatch(susyId("energy_hatch.output_16a.hv"), 3, 16, true));
         NEW_ENERGY_OUTPUT_HATCH_16A[3] = registerMetaTileEntity(16006, new SusyMetaTileEntityEnergyHatch(susyId("energy_hatch.output_16a.ev"), 4, 16, true));
 
-        INCINERATOR[0] = registerMetaTileEntity(16500, new MetaTileEntityIncinerator(susyId("incinerator.lv"), 1, 4, 1));
-        INCINERATOR[1] = registerMetaTileEntity(16501, new MetaTileEntityIncinerator(susyId("incinerator.mv"), 2, 2, 1));
-        INCINERATOR[2] = registerMetaTileEntity(16502, new MetaTileEntityIncinerator(susyId("incinerator.hv"), 3, 1, 1));
-        INCINERATOR[3] = registerMetaTileEntity(16503, new MetaTileEntityIncinerator(susyId("incinerator.ev"), 4, 1, 2));
+        INCINERATOR[0] = registerMetaTileEntity(16500, new MetaTileEntityIncinerator(susyId("incinerator.lv"), 1, 20, 10));
+        INCINERATOR[1] = registerMetaTileEntity(16501, new MetaTileEntityIncinerator(susyId("incinerator.mv"), 2, 20, 20));
+        INCINERATOR[2] = registerMetaTileEntity(16502, new MetaTileEntityIncinerator(susyId("incinerator.hv"), 3, 20, 40));
+        INCINERATOR[3] = registerMetaTileEntity(16503, new MetaTileEntityIncinerator(susyId("incinerator.ev"), 4, 10, 40));
 
 
         BASIC_STEAM_TURBINE = registerMetaTileEntity(17000, new MetaTileEntitySUSYLargeTurbine(susyId("basic_steam_turbine"), SuSyRecipeMaps.LARGE_STEAM_TURBINE, 1, MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING), Textures.SOLID_STEEL_CASING, SusyTextures.LARGE_STEAM_TURBINE_OVERLAY));
