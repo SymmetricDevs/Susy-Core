@@ -10,13 +10,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  publish:
-    name: Publish
+  build:
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: write # needed to create GitHub releases
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -27,11 +22,8 @@ jobs:
       - name: Build Project
         run: ./gradlew build --warning-mode all --build-cache
 
-      - name: Publish to GitHub
-        uses: softprops/action-gh-release@v2
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v4.4.0
         with:
-          name: "latest-v${{ github.ref_name }}"
-          files: "build/libs/*.jar"
-          fail_on_unmatched_files: true
-          make_latest: false
-          tag_name: "latest-v${{ github.ref_name }}"
+            name: susy_core
+            path: build/libs
