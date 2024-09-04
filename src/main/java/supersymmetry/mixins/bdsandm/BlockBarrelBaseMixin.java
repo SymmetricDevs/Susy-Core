@@ -5,16 +5,14 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(BlockBarrelBase.class)
+@Mixin(value = BlockBarrelBase.class, remap = false)
 public class BlockBarrelBaseMixin {
 
     @Redirect(method = "withdrawItem",
-            remap = false,
-            at = @At(value = "INVOKE",
-                    target = "Ljava/lang/Math;min(II)I",
-                    ordinal = 0))
+              at = @At(value = "INVOKE",
+                       target = "Ljava/lang/Math;min(II)I",
+                       ordinal = 0))
     private int redirectMin(int a, int b) {
         return b;
     }
-
 }
