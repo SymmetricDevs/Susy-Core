@@ -23,6 +23,7 @@ public class FacadeItemBlockMixin {
             at = @At(
                     value = "INVOKE",
                     target = "Lmcjty/xnet/blocks/facade/FacadeItemBlock;setMimicBlock(Lnet/minecraft/item/ItemStack;Lnet/minecraft/block/state/IBlockState;)V",
+                    remap = false,
                     ordinal = 0),
             cancellable = true)
     private void skipGTTiles(EntityPlayer why, World the, BlockPos hell, EnumHand are, EnumFacing there, float so, float many, float variants,
