@@ -13,6 +13,7 @@ import supersymmetry.client.renderer.textures.SusyTextures;
 import java.util.List;
 
 public class MetaTileEntityPrimitiveItemBus extends MetaTileEntityItemBus {
+
     public MetaTileEntityPrimitiveItemBus(ResourceLocation metaTileEntityId, boolean isExportHatch) {
         super(metaTileEntityId, 0, isExportHatch);
     }
@@ -35,5 +36,10 @@ public class MetaTileEntityPrimitiveItemBus extends MetaTileEntityItemBus {
     @Override
     public void registerAbilities(List<IItemHandlerModifiable> abilityList) {
         abilityList.add(isExportHatch ? this.exportItems : this.importItems);
+    }
+
+    @Override
+    public int getDefaultPaintingColor() {
+        return 0xFFFFFF;
     }
 }
