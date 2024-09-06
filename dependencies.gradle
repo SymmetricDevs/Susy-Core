@@ -41,9 +41,6 @@ dependencies {
 
     implementation rfg.deobf('curse.maven:applecore-224472:2969118')
 
-    implementation rfg.deobf("curse.maven:no-tree-punching-289043:2983385") // No-tree-punching v2.0.21
-    implementation rfg.deobf("curse.maven:alcatrazcore-304493:2666560") // AlcatrazCore v1.0.4
-
 
     implementation rfg.deobf("curse.maven:universal-mod-core-371784:4975229") // Universal-Mod-Care v1.2.1
     implementation rfg.deobf("curse.maven:track-api-282613:2825260") // Track-API v1.2.0
