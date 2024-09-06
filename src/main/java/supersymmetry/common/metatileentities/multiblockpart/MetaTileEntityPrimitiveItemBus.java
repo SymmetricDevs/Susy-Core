@@ -16,6 +16,7 @@ public class MetaTileEntityPrimitiveItemBus extends MetaTileEntityItemBus {
 
     public MetaTileEntityPrimitiveItemBus(ResourceLocation metaTileEntityId, boolean isExportHatch) {
         super(metaTileEntityId, 0, isExportHatch);
+        initializeInventory();
     }
 
     @Override
@@ -41,5 +42,10 @@ public class MetaTileEntityPrimitiveItemBus extends MetaTileEntityItemBus {
     @Override
     public int getDefaultPaintingColor() {
         return 0xFFFFFF;
+    }
+
+    @Override
+    public boolean hasGhostCircuitInventory() {
+        return false;
     }
 }

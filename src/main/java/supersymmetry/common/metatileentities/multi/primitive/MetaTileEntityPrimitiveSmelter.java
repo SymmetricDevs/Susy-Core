@@ -4,6 +4,7 @@ import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
 import com.codetaylor.mc.pyrotech.modules.core.ModuleCore;
+import gregtech.api.capability.impl.ItemHandlerList;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -11,6 +12,7 @@ import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.RecipeMapPrimitiveMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.client.renderer.CubeRendererState;
 import gregtech.client.renderer.ICubeRenderer;
@@ -29,12 +31,25 @@ import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
 
 public class MetaTileEntityPrimitiveSmelter extends RecipeMapPrimitiveMultiblockController {
+
     public MetaTileEntityPrimitiveSmelter(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.PRIMITIVE_SMELTER);
     }
 
     public static TraceabilityPredicate casingPredicate() {
         return states(ModuleCore.Blocks.MASONRY_BRICK.getDefaultState());
+    }
+
+    @Override
+    protected void initializeAbilities() {
+        this.importItems = new ItemHandlerList(getAbilities(SuSyMultiblockAbilities.PRIMITIVE_IMPORT_ITEMS));
+        this.exportItems = new ItemHandlerList(getAbilities(SuSyMultiblockAbilities.PRIMITIVE_EXPORT_ITEMS));
+    }
+
+    @Override
+    protected void formStructure(PatternMatchContext context) {
+        super.formStructure(context);
+        this.initializeAbilities();
     }
 
     @Override
