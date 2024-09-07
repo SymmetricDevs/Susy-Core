@@ -134,8 +134,8 @@ public class MobHordeEvent {
 
         for (int i = 0; i < 3; i++) {
             double angle = Math.random() * 2 * Math.PI;
-            int x = (int) (player.posX + 15 * Math.cos(angle));
-            int z = (int) (player.posZ + 15 * Math.sin(angle));
+            int x = (int) (player.posX + 30 * Math.cos(angle));
+            int z = (int) (player.posZ + 30 * Math.sin(angle));
 
             mob.setPosition(x, player.posY - 5, z);
             while ((!mob.getCanSpawnHere() || !mob.isNotColliding()) && mob.posY < player.posY + 12) {

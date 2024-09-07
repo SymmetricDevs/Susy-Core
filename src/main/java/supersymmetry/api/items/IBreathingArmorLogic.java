@@ -6,8 +6,8 @@ import net.minecraft.item.ItemStack;
 
 public interface IBreathingArmorLogic extends IArmorLogic {
 
-    boolean isValid(ItemStack stack, int dimension);
+    boolean mayBreatheWith(ItemStack stack, int dimension);
 
 
-    boolean tryTick(ItemStack stack, EntityPlayer player, int dimension);
+    double tryTick(ItemStack stack, EntityPlayer player, int dimension);
 }

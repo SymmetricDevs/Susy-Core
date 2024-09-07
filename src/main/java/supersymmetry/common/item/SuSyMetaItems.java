@@ -17,14 +17,14 @@ import supersymmetry.SuSyValues;
 public class SuSyMetaItems {
 
     private static StandardMetaItem metaItem;
-    private static ArmorMetaItem<ArmorMetaItem<?>.ArmorMetaValueItem> armorItem;
+    private static SuSyArmorItem armorItem;
     public static MetaOreDictItem oreDictItem;
     public static MetaValueItem CATALYST_BED_SUPPORT_GRID;
     public static MetaValueItem CONVEYOR_STEAM;
     public static MetaValueItem PUMP_STEAM;
     public static MetaValueItem AIR_VENT;
     public static MetaValueItem TRACK_SEGMENT;
-    public static ArmorMetaItem<?>.ArmorMetaValueItem SIMPLE_GAS_MASK;
+    public static SuSyArmorItem.SuSyArmorMetaValueItem SIMPLE_GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_MASK;
 
     public static void initMetaItems() {
@@ -32,7 +32,7 @@ public class SuSyMetaItems {
         metaItem.setRegistryName("meta_item");
         oreDictItem = new MetaOreDictItem((short) 0);
         oreDictItem.setRegistryName("susy_oredict_item");
-        armorItem = new ArmorMetaItem<>();
+        armorItem = new SuSyArmorItem();
         armorItem.setRegistryName("susy_armor_item");
 
         CatalystItems.init();

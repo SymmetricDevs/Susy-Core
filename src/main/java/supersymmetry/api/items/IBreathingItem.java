@@ -6,5 +6,5 @@ import net.minecraft.item.ItemStack;
 public interface IBreathingItem {
     boolean isValid(ItemStack stack, int dimension);
 
-    boolean tryTick(ItemStack stack, EntityPlayer player, int dimension);
+    double tryTick(ItemStack stack, EntityPlayer player, int dimension);
 }

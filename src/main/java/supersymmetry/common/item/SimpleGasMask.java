@@ -1,7 +1,6 @@
 package supersymmetry.common.item;
 
 import gregtech.api.items.armor.ArmorMetaItem;
-import gregtech.api.items.armor.IArmorLogic;
 import gregtech.api.items.metaitem.stats.IItemBehaviour;
 
 import gregtech.api.items.metaitem.stats.IItemDurabilityManager;
@@ -9,17 +8,18 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.items.IBreathingArmorLogic;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 
-public class SimpleGasMask implements IArmorLogic, IItemDurabilityManager {
-    double damage = 1;
-
+public class SimpleGasMask implements IBreathingArmorLogic, IItemDurabilityManager {
     @Override
     public EntityEquipmentSlot getEquipmentSlot(ItemStack itemStack) {
         return EntityEquipmentSlot.HEAD;
@@ -57,15 +57,58 @@ public class SimpleGasMask implements IArmorLogic, IItemDurabilityManager {
         return ActionResult.newResult(EnumActionResult.PASS, player.getHeldItem(hand));
     }
 
-    public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
-        if (DimensionBreathabilityHandler.isInHazardousEnvironment(player)) {
-            damage -= 1. / (20. * 60. * 15.); // 20 ticks per second * 60 seconds per minute * 15 minutes
-        }
-    }
 
 
     @Override
     public double getDurabilityForDisplay(ItemStack itemStack) {
+        return 1 - getDamage(itemStack);
+    }
+
+    @Override
+    public boolean canBreakWithDamage(ItemStack stack) {
+        return getDamage(stack) >= 1;
+    }
+
+    @Override
+    public boolean mayBreatheWith(ItemStack stack, int dimension) {
+        return getDamage(stack) < 1;
+    }
+
+
+    @Override
+    public boolean isValidArmor(ItemStack itemStack, Entity entity, EntityEquipmentSlot equipmentSlot) {
+        return true;
+    }
+
+    @Override
+    public double tryTick(ItemStack stack, EntityPlayer player, int dimension) {
+        if (DimensionBreathabilityHandler.isInHazardousEnvironment(player)) {
+            changeDamage(stack, 1. / 30.); // It's actually ticked every overall second, not just every tick.
+        }
+        if (getDamage(stack) >= 1) {
+            player.renderBrokenItemStack(stack);
+            stack.shrink(1);
+            player.setItemStackToSlot(EntityEquipmentSlot.HEAD, ItemStack.EMPTY);
+        }
         return 0;
     }
+
+    private double getDamage(ItemStack stack) {
+        if (stack.getTagCompound() == null) {
+            stack.setTagCompound(new NBTTagCompound());
+        }
+        if (!stack.getTagCompound().hasKey("damage")) {
+            stack.getTagCompound().setDouble("damage", 0);
+        }
+        return stack.getTagCompound().getDouble("damage");
+    }
+
+    private void changeDamage(ItemStack stack, double damageChange) {
+        NBTTagCompound compound = stack.getTagCompound();
+        compound.setDouble("damage", getDamage(stack) + damageChange);
+        stack.setTagCompound(compound);
+    }
+
+
+
 }

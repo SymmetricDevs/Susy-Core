@@ -5,10 +5,8 @@ import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.items.armor.IArmorLogic;
 import gregtech.api.items.metaitem.stats.IItemComponent;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.items.IBreathingArmorLogic;
 import supersymmetry.api.items.IBreathingItem;
 
@@ -18,11 +16,11 @@ public class SuSyArmorItem extends ArmorMetaItem<SuSyArmorItem.SuSyArmorMetaValu
 
     @Override
     public boolean isValid(ItemStack stack, int dimension) {
-        return getItem(stack).armorLogic.isValid(stack, dimension);
+        return getItem(stack).armorLogic.mayBreatheWith(stack, dimension);
     }
 
     @Override
-    public boolean tryTick(ItemStack stack, EntityPlayer player, int dimension) {
+    public double tryTick(ItemStack stack, EntityPlayer player, int dimension) {
         return getItem(stack).armorLogic.tryTick(stack, player, dimension);
     }
 
@@ -34,11 +32,13 @@ public class SuSyArmorItem extends ArmorMetaItem<SuSyArmorItem.SuSyArmorMetaValu
         }
 
         public SuSyArmorMetaValueItem setArmorLogic(IBreathingArmorLogic armorLogic) {
-            Preconditions.checkNotNull(armorLogic, "Cannot set ArmorLogic to null");
+            super.setArmorLogic(armorLogic);
             this.armorLogic = armorLogic;
-            this.armorLogic.addToolComponents(this);
+            if (armorLogic instanceof IItemComponent)
+                this.addComponents((IItemComponent) armorLogic);
             return this;
         }
+
     }
 
     protected SuSyArmorMetaValueItem constructMetaValueItem(short metaValue, String unlocalizedName) {
