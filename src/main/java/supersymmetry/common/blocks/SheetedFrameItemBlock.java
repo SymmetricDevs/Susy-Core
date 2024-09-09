@@ -1,11 +1,14 @@
 package supersymmetry.common.blocks;
 
 import gregtech.api.unification.material.Material;
+import gregtech.client.utils.TooltipHelper;
 import gregtech.common.ConfigHolder;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 
@@ -44,6 +47,13 @@ public class SheetedFrameItemBlock extends ItemBlock {
     @Override
     public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<String> tooltip, @Nonnull ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
+        tooltip.add(I18n.format("tile.sheeted_frame_block.tooltip"));
+        if (TooltipHelper.isShiftDown()) {
+            tooltip.add(TextFormatting.GREEN +  I18n.format("tile.sheeted_frame_block.tooltip_extra"));
+        } else {
+            tooltip.add(TextFormatting.DARK_GRAY + I18n.format("gregtech.tooltip.hold_shift"));
+        }
+
         if (ConfigHolder.misc.debug) {
             tooltip.add("MetaItem Id: sheeted_frame" + frameBlock.getGtMaterial(stack.getMetadata()).toCamelCaseString());
         }

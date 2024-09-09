@@ -1,16 +1,23 @@
 package supersymmetry.common.blocks;
 
 import gregtech.api.GregTechAPI;
+import gregtech.api.capability.GregtechDataCodes;
+import gregtech.api.items.toolitem.ToolClasses;
+import gregtech.api.pipenet.block.BlockPipe;
+import gregtech.api.pipenet.block.ItemBlockPipe;
+import gregtech.api.pipenet.tile.IPipeTile;
+import gregtech.api.pipenet.tile.TileEntityPipeBase;
 import gregtech.api.recipes.ModHandler;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.util.GTUtility;
+import gregtech.common.blocks.BlockFrame;
+import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.properties.PropertyMaterial;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockRotatedPillar;
+import net.minecraft.block.BlockAir;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.EnumPushReaction;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
@@ -20,8 +27,11 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -35,13 +45,19 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.SusyLog;
+import supersymmetry.api.blocks.IForcedStates;
 import supersymmetry.api.unification.material.info.SuSyMaterialIconType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Map;
 
+import static supersymmetry.common.blocks.SuSyMetaBlocks.SHEETED_FRAMES;
+
 public class BlockSheetedFrame extends Block {
+
+    public static final int UPDATE_ROTATION_STATE = GregtechDataCodes.assignId();
 
     public static final PropertyEnum<BlockSheetedFrame.FrameEnumAxis> SHEETED_FRAME_AXIS = PropertyEnum.<BlockSheetedFrame.FrameEnumAxis>create("axis", BlockSheetedFrame.FrameEnumAxis.class);
 
@@ -68,7 +84,7 @@ public class BlockSheetedFrame extends Block {
      * IBlockstate
      */
     @Override @NotNull
-    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
+    public IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, @NotNull EntityLivingBase placer)
     {
         return this.getStateFromMeta(meta).withProperty(SHEETED_FRAME_AXIS, BlockSheetedFrame.FrameEnumAxis.fromFacingAxis(facing.getAxis()));
     }
@@ -89,40 +105,37 @@ public class BlockSheetedFrame extends Block {
      * fine.
      */
     @Override
-    public IBlockState withRotation(IBlockState state, Rotation rot)
+    public @NotNull IBlockState withRotation(@NotNull IBlockState state, Rotation rot)
     {
-        switch (rot)
-        {
-            case COUNTERCLOCKWISE_90:
-            case CLOCKWISE_90:
+        switch (rot) {
+            case COUNTERCLOCKWISE_90, CLOCKWISE_90 -> {
+                return switch (state.getValue(SHEETED_FRAME_AXIS)) {
+                    case X -> state.withProperty(SHEETED_FRAME_AXIS, FrameEnumAxis.Z);
+                    case Z -> state.withProperty(SHEETED_FRAME_AXIS, FrameEnumAxis.X);
+                    default -> state;
+                };
+            }
 
-                switch (state.getValue(SHEETED_FRAME_AXIS))
-                {
-                    case X:
-                        return state.withProperty(SHEETED_FRAME_AXIS, BlockSheetedFrame.FrameEnumAxis.Z);
-                    case Z:
-                        return state.withProperty(SHEETED_FRAME_AXIS, BlockSheetedFrame.FrameEnumAxis.X);
-                    default:
-                        return state;
-                }
-
-            default:
+            default -> {
                 return state;
+            }
         }
     }
 
-    public static enum FrameEnumAxis implements IStringSerializable
+    public enum FrameEnumAxis implements IStringSerializable
     {
-        X("x"),
-        Y("y"),
-        Z("z"),
-        NONE("none");
+        X("x", EnumFacing.Axis.X),
+        Y("y", EnumFacing.Axis.Y),
+        Z("z", EnumFacing.Axis.Z),
+        NONE("none", null);
 
         private final String name;
 
-        private FrameEnumAxis(String name)
-        {
+        private final EnumFacing.Axis axis;
+
+        FrameEnumAxis(String name, EnumFacing.Axis axis) {
             this.name = name;
+            this.axis = axis;
         }
 
         public String toString()
@@ -132,31 +145,33 @@ public class BlockSheetedFrame extends Block {
 
         public static FrameEnumAxis fromFacingAxis(EnumFacing.Axis axis)
         {
-            switch (axis)
-            {
-                case X:
-                    return X;
-                case Y:
-                    return Y;
-                case Z:
-                    return Z;
-                default:
-                    return NONE;
-            }
+            if (axis == null) return NONE;
+            return switch (axis) {
+                case X -> X;
+                case Y -> Y;
+                case Z -> Z;
+            };
         }
 
-        public String getName()
+        public @NotNull String getName()
         {
             return this.name;
+        }
+
+        public @Nullable EnumFacing.Axis getAxis() { return this.axis; }
+
+        // never returns none
+        public static FrameEnumAxis fromFacing(EnumFacing facing) {
+            return FrameEnumAxis.values()[facing.getAxis().ordinal()];
         }
     }
 
     @Override @Deprecated
-    public boolean isOpaqueCube(IBlockState state) { return false; }
+    public boolean isOpaqueCube(@NotNull IBlockState state) { return false; }
 
 
     @Override @SideOnly(Side.CLIENT)
-    public BlockRenderLayer getRenderLayer()
+    public @NotNull BlockRenderLayer getRenderLayer()
     {
         return BlockRenderLayer.CUTOUT_MIPPED;
     }
@@ -212,12 +227,39 @@ public class BlockSheetedFrame extends Block {
                 .forEach(blockState -> list.add(getItem(blockState)));
     }
 
-    public static ItemStack getItem(IBlockState blockState) {
-        return GTUtility.toItem(blockState);
+    // returns null to indicate an invalid/ non-existent sheeted frame state equivalent, or returns the equivalent sheeted state
+    public static IBlockState determineSheetedState(IBlockAccess world, BlockPos pos) {
+        IBlockState state = world.getBlockState(pos);
+
+        if (state.getBlock() instanceof BlockSheetedFrame) {
+            return state;
+        }
+
+        if (state.getBlock() instanceof BlockPipe) {
+            IPipeTile<?, ?> pipetile = ((BlockPipe<?, ?, ?>) state.getBlock()).getPipeTileEntity(world, pos);
+            if (pipetile == null) return null;
+
+            int rotationOrdinal = ((IForcedStates) pipetile).getForcedState() - 1;
+            Material mat = pipetile.getFrameMaterial();
+            if (rotationOrdinal < 0 || mat == null) return null;
+
+            return SHEETED_FRAMES.get(mat).getDefaultState().withProperty(SHEETED_FRAME_AXIS, FrameEnumAxis.values()[rotationOrdinal]);
+        }
+
+        return null;
     }
 
     public ItemStack getItem(Material material) {
         return getItem(this.getDefaultState().withProperty(this.variantProperty, material).withProperty(SHEETED_FRAME_AXIS, FrameEnumAxis.Y));
+    }
+
+    // doesn't really make sense to drop based on orientation, but the method is here just in case
+    public ItemStack getItem(Material material, int orientationOrdinal) {
+        return getItem(this.getDefaultState().withProperty(this.variantProperty, material).withProperty(SHEETED_FRAME_AXIS, FrameEnumAxis.values()[orientationOrdinal]));
+    }
+
+    public static ItemStack getItem(IBlockState blockState) {
+        return GTUtility.toItem(blockState);
     }
 
     public IBlockState getBlock(Material material) {
@@ -237,107 +279,231 @@ public class BlockSheetedFrame extends Block {
         return false;
     }
 
-    /*
-    public boolean replaceWithFramedPipe(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, ItemStack stackInHand, EnumFacing facing) {
-        BlockPipe<?, ?, ?> blockPipe = (BlockPipe)((ItemBlockPipe)stackInHand.getItem()).getBlock();
-        if (((IPipeType)blockPipe.getItemPipeType(stackInHand)).getThickness() < 1.0F) {
-            ItemBlock itemBlock = (ItemBlock)stackInHand.getItem();
-            IBlockState pipeState = blockPipe.getDefaultState();
-            itemBlock.placeBlockAt(stackInHand, playerIn, worldIn, pos, facing, 0.0F, 0.0F, 0.0F, pipeState);
-            IPipeTile<?, ?> pipeTile = blockPipe.getPipeTileEntity(worldIn, pos);
-            if (pipeTile instanceof TileEntityPipeBase) {
-                ((TileEntityPipeBase)pipeTile).setFrameMaterial(this.getGtMaterial(this.getMetaFromState(state)));
-                SoundType type = blockPipe.getSoundType(state, worldIn, pos, playerIn);
-                worldIn.playSound(playerIn, pos, type.getPlaceSound(), SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 2.0F, type.getPitch() * 0.8F);
-                if (!playerIn.capabilities.isCreativeMode) {
-                    stackInHand.shrink(1);
-                }
+    public enum ToolReactions {
+        ROTATE,
+        MUTATE,
+        NONE;
 
-                return true;
+        public static ToolReactions getReaction(ItemStack stack) {
+            if (stack == null) return NONE;
+            if (stack.getItem().getToolClasses(stack).contains(ToolClasses.SCREWDRIVER)) return ROTATE;
+            if (stack.getItem().getToolClasses(stack).contains(ToolClasses.HARD_HAMMER)) return MUTATE;
+            return NONE;
+        }
+
+        public static int reactionResult(ToolReactions reaction, int state) {
+            if (reaction == ROTATE) {
+                return (state + 1) % 3;
+            } else if (reaction == MUTATE) {
+                return state == FrameEnumAxis.NONE.ordinal() ? FrameEnumAxis.Y.ordinal() : FrameEnumAxis.NONE.ordinal();
+            }
+
+            return state;
+        }
+    }
+
+    @Override
+    public boolean onBlockActivated(@NotNull World world, @NotNull BlockPos pos, @NotNull IBlockState state,
+                                    @NotNull EntityPlayer player, @NotNull EnumHand hand, @NotNull EnumFacing facing,
+                                    float hitX, float hitY, float hitZ) {
+        return onBlockActivated(false, world, pos, state, player, hand, facing, hitX, hitY, hitZ);
+    }
+
+    public boolean onBlockActivated(boolean isPipe, @NotNull World world, @NotNull BlockPos pos, @NotNull IBlockState state,
+                                    @NotNull EntityPlayer player, @NotNull EnumHand hand, @NotNull EnumFacing facing,
+                                    float hitX, float hitY, float hitZ) {
+        ItemStack stack = player.getHeldItem(hand);
+        if (stack.isEmpty()) {
+            return false;
+        }
+
+        // pipes surrounded by frames have their own implementation within the mixin for these behaviors
+        if (!isPipe) {
+            // special action on screwdrivers and wrenches, though changes are done pipe-side if blockstate "contains" pipe
+            if ((state.getBlock() instanceof BlockSheetedFrame)) {
+                if (ToolReactions.getReaction(stack) == ToolReactions.MUTATE) {
+                    world.setBlockState(pos, state.withProperty(SHEETED_FRAME_AXIS, state.getValue(SHEETED_FRAME_AXIS) == FrameEnumAxis.NONE ? FrameEnumAxis.Y : FrameEnumAxis.NONE));
+                    return true;
+                } else if (ToolReactions.getReaction(stack) == ToolReactions.ROTATE) {
+                    world.setBlockState(pos, state.withProperty(SHEETED_FRAME_AXIS, FrameEnumAxis.values()[(state.getValue(SHEETED_FRAME_AXIS).ordinal() + 1) % 3]));
+                    return true;
+                }
+            }
+
+            // replace frame with pipe and set the frame material to this frame
+            if (stack.getItem() instanceof ItemBlockPipe) {
+                return replaceWithFramedPipe(world, pos, state, player, stack, facing);
+            }
+        }
+
+        // check if frame block, return if not
+        BlockSheetedFrame sheetedFrameBlock = getFrameBlockFromItem(stack);
+        if (sheetedFrameBlock == null) return false;
+
+        BlockPos.PooledMutableBlockPos blockPos = BlockPos.PooledMutableBlockPos.retain();
+        blockPos.setPos(pos);
+
+        // determine ordinal for orientation
+        int rotationOrdinal;
+        if (state.getBlock() instanceof BlockSheetedFrame) {
+            rotationOrdinal = state.getValue(SHEETED_FRAME_AXIS).ordinal();
+        } else {
+            // in theory te should always be pipe, otherwise this would never be called, but other methods double check, so I will too
+            TileEntity te = world.getTileEntity(blockPos);
+
+            // get rotationOrdinal from stack in hand if state at pos is not valid
+            if (!(te instanceof IPipeTile) || ((IPipeTile<?, ?>) te).getFrameMaterial() == null || ((IForcedStates) te).getForcedState() == 0) { // stored state of 0 implies no value, so 0 - 1 -> no value/ default 0) {
+                rotationOrdinal = getStateFromMeta(stack.getMetadata()).getValue(SHEETED_FRAME_AXIS).ordinal(); // always going to be y
             } else {
-                GTLog.logger.error("Pipe was not placed!");
+                rotationOrdinal = ((IForcedStates) te).getForcedState() - 1; // stored state of 0 implies no value, so 0 - 1 -> no value/ default
+            }
+        }
+
+        EnumFacing currBaseDir = facing; // default to side clicked if orientation is NONE
+        if (rotationOrdinal != FrameEnumAxis.NONE.ordinal()) {
+            try {
+                // default to positive, or do neg if target has NONE in pos dir and only sheeted frame ahead (this is a monster)
+                currBaseDir = EnumFacing.getFacingFromAxis(EnumFacing.AxisDirection.POSITIVE, FrameEnumAxis.values()[rotationOrdinal].axis);
+                IBlockState currDirState = world.getBlockState((pos.offset(currBaseDir)));
+                Block oppDirBlock = world.getBlockState((pos.offset(currBaseDir.getOpposite()))).getBlock();
+                if (!(currDirState.getBlock() instanceof BlockAir) && oppDirBlock instanceof BlockAir ||
+                        oppDirBlock instanceof BlockSheetedFrame &&
+                        currDirState.getBlock() instanceof BlockSheetedFrame &&
+                        currDirState.getValue(SHEETED_FRAME_AXIS) == FrameEnumAxis.NONE) {
+
+                    currBaseDir = currBaseDir.getOpposite();
+                }
+            } catch (Exception e) {
+                // if an error occurred, don't try to place
                 return false;
             }
-        } else {
-            return false;
         }
-    }
 
-    public boolean removeFrame(World world, BlockPos pos, EntityPlayer player, ItemStack stack) {
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof TileEntityPipeBase && ((IPipeTile)te).getFrameMaterial() != null) {
-            TileEntityPipeBase<?, ?> pipeTile = (TileEntityPipeBase)te;
-            Material frameMaterial = pipeTile.getFrameMaterial();
-            pipeTile.setFrameMaterial((Material)null);
-            Block.spawnAsEntity(world, pos, this.getItem(frameMaterial));
-            ToolHelper.damageItem(stack, player);
-            ToolHelper.playToolSound(stack, player);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean onBlockActivated(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state, EntityPlayer playerIn, @Nonnull EnumHand hand, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ) {
-        ItemStack stackInHand = playerIn.getHeldItem(hand);
-        if (stackInHand.isEmpty()) {
-            return false;
-        } else if (stackInHand.getItem() instanceof ItemBlockPipe) {
-            return this.replaceWithFramedPipe(worldIn, pos, state, playerIn, stackInHand, facing);
-        } else if (stackInHand.getItem().getToolClasses(stackInHand).contains("crowbar")) {
-            return this.removeFrame(worldIn, pos, playerIn, stackInHand);
-        } else if (!(stackInHand.getItem() instanceof FrameItemBlock)) {
-            return false;
-        } else {
-            BlockPos.PooledMutableBlockPos blockPos = BlockPos.PooledMutableBlockPos.retain();
-            blockPos.setPos(pos);
-
-            for(int i = 0; i < 32; ++i) {
-                if (worldIn.getBlockState(blockPos).getBlock() instanceof BlockFrame) {
-                    blockPos.move(EnumFacing.UP);
-                } else {
-                    TileEntity te = worldIn.getTileEntity(blockPos);
-                    if (!(te instanceof IPipeTile) || ((IPipeTile)te).getFrameMaterial() == null) {
-                        if (this.canPlaceBlockAt(worldIn, blockPos)) {
-                            worldIn.setBlockState(blockPos, ((FrameItemBlock)stackInHand.getItem()).getBlockState(stackInHand));
-                            SoundType type = this.getSoundType(stackInHand);
-                            worldIn.playSound((EntityPlayer)null, pos, type.getPlaceSound(), SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 2.0F, type.getPitch() * 0.8F);
-                            if (!playerIn.capabilities.isCreativeMode) {
-                                stackInHand.shrink(1);
-                            }
-
-                            blockPos.release();
-                            return true;
-                        } else if (te instanceof TileEntityPipeBase && ((TileEntityPipeBase)te).getFrameMaterial() == null) {
-                            Material material = ((BlockFrame)((FrameItemBlock)stackInHand.getItem()).getBlock()).getGtMaterial(stackInHand.getMetadata());
-                            ((TileEntityPipeBase)te).setFrameMaterial(material);
-                            SoundType type = this.getSoundType(stackInHand);
-                            worldIn.playSound((EntityPlayer)null, pos, type.getPlaceSound(), SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 2.0F, type.getPitch() * 0.8F);
-                            if (!playerIn.capabilities.isCreativeMode) {
-                                stackInHand.shrink(1);
-                            }
-
-                            blockPos.release();
-                            return true;
-                        } else {
-                            blockPos.release();
-                            return false;
-                        }
-                    }
-
-                    blockPos.move(EnumFacing.UP);
-                }
+        // attempts to place more frames vertically, up to 32 block tall tower
+        for (int i = 0; i < 32; i++) {
+            IBlockState targetState = world.getBlockState(blockPos);
+            if (targetState.getBlock() instanceof BlockFrame || targetState.getBlock() instanceof BlockSheetedFrame) {
+                blockPos.move(currBaseDir);
+                continue;
             }
 
-            blockPos.release();
-            return false;
+            // skips over pipes with non-null frame materials (has frame around it)
+            TileEntity te = world.getTileEntity(blockPos);
+            if (te instanceof IPipeTile && ((IPipeTile<?, ?>) te).getFrameMaterial() != null) {
+                blockPos.move(currBaseDir);
+                continue;
+            }
+
+            // try to place frame block if allowed, and if not check if the obstruction is a pipe base which can be framed
+            if (canPlaceBlockAt(world, blockPos)) {
+                // ensure placed block orientation matches base
+                world.setBlockState(blockPos,
+                        sheetedFrameBlock.getStateFromMeta(stack.getItem().getMetadata(stack.getItemDamage())).withProperty(SHEETED_FRAME_AXIS, FrameEnumAxis.fromFacing(currBaseDir)));
+
+                SoundType type = ModHandler.isMaterialWood(sheetedFrameBlock.getGtMaterial(stack)) ? SoundType.WOOD : SoundType.METAL;
+                world.playSound(null, pos, type.getPlaceSound(), SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 2.0F,
+                        type.getPitch() * 0.8F);
+                if (!player.capabilities.isCreativeMode) {
+                    stack.shrink(1);
+                }
+                blockPos.release();
+                return true;
+            } else if (te instanceof TileEntityPipeBase<?, ?> pipeTile && pipeTile.getFrameMaterial() == null) {
+                // "sheet" pipe if it is blocking further frame scaffolding
+                pipeTile.setFrameMaterial(sheetedFrameBlock.getGtMaterial(stack));
+                ((IForcedStates) pipeTile).setForcedState(rotationOrdinal + 1); // should work with mixin to store orientation
+
+                // clear "blocked" connections [setConnection is the connection facing relative to the one calling, the connection state, and if the neighbor is the one making the call/ "updating" caller
+                if (rotationOrdinal != BlockSheetedFrame.FrameEnumAxis.NONE.ordinal()) {
+                    for (EnumFacing.Axis currAxis : EnumFacing.Axis.values()) {
+                        if (currAxis.ordinal() == rotationOrdinal) continue; // don't prune connections on axis
+                        pipeTile.setConnection(EnumFacing.getFacingFromAxis(EnumFacing.AxisDirection.POSITIVE, currAxis), false, false);
+                        pipeTile.setConnection(EnumFacing.getFacingFromAxis(EnumFacing.AxisDirection.NEGATIVE, currAxis), false, false);
+                    }
+                }
+
+                SoundType type = ModHandler.isMaterialWood(getGtMaterial(stack)) ? SoundType.WOOD : SoundType.METAL;
+                world.playSound(null, pos, type.getPlaceSound(), SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 2.0F,
+                        type.getPitch() * 0.8F);
+                if (!player.capabilities.isCreativeMode) {
+                    stack.shrink(1);
+                }
+
+                blockPos.release();
+                return true;
+            } else { // stops at obstructions, rather than continuing
+                blockPos.release();
+                return false;
+            }
         }
+
+        blockPos.release();
+        return false;
     }
-     */
+
+    public boolean replaceWithFramedPipe(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
+                                         ItemStack stackInHand, EnumFacing facing) {
+        BlockPipe<?, ?, ?> blockPipe = (BlockPipe<?, ?, ?>) ((ItemBlockPipe<?, ?>) stackInHand.getItem()).getBlock();
+        if (blockPipe.getItemPipeType(stackInHand).getThickness() < 1) {
+            ItemBlock itemBlock = (ItemBlock) stackInHand.getItem();
+            IBlockState pipeState = blockPipe.getDefaultState();
+
+            // these 0 values are not actually used by forge
+            itemBlock.placeBlockAt(stackInHand, playerIn, worldIn, pos, facing, 0, 0, 0, pipeState);
+
+            IPipeTile<?, ?> pipeTile = blockPipe.getPipeTileEntity(worldIn, pos);
+            if (pipeTile instanceof TileEntityPipeBase) {
+                ((TileEntityPipeBase<?, ?>) pipeTile).setFrameMaterial(getGtMaterial(state));
+                ((IForcedStates) pipeTile).setForcedState(state.getValue(SHEETED_FRAME_AXIS).ordinal() + 1);
+            } else {
+                SusyLog.logger.atError().log("Pipe was not placed!");
+                return false;
+            }
+
+            SoundType type = blockPipe.getSoundType(state, worldIn, pos, playerIn);
+            worldIn.playSound(playerIn, pos, type.getPlaceSound(), SoundCategory.BLOCKS,
+                    (type.getVolume() + 1.0F) / 2.0F, type.getPitch() * 0.8F);
+            if (!playerIn.capabilities.isCreativeMode) {
+                stackInHand.shrink(1);
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    public SoundType getSoundType(ItemStack stack) {
+        return ModHandler.isMaterialWood(getGtMaterial(stack)) ? SoundType.WOOD : SoundType.METAL;
+    }
+
+    public Material getGtMaterial(ItemStack stack) {
+        return variantProperty.getAllowedValues().get(stack.getMetadata() & 3);
+    }
+
+    public static BlockFrame getFrameFromSheeted(ItemStack stack) {
+        BlockSheetedFrame itemBlock = getFrameBlockFromItem(stack);
+        if (itemBlock == null) return null;
+
+        return MetaBlocks.FRAMES.get(itemBlock.getGtMaterial(stack));
+    }
+
+    public static @Nullable BlockSheetedFrame getFrameBlockFromItem(ItemStack stack) {
+        Item item = stack.getItem();
+        if (item instanceof ItemBlock) {
+            Block block = ((ItemBlock)item).getBlock();
+            if (block instanceof BlockSheetedFrame) {
+                return (BlockSheetedFrame)block;
+            }
+        }
+
+        return null;
+    }
 
     public void onEntityCollision(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state, Entity entityIn) {
+        // this is only called when the "shorter" side is collided with for some reason. Colliding with a solid block does nothing
         entityIn.motionX = MathHelper.clamp(entityIn.motionX, -0.15, 0.15);
         entityIn.motionZ = MathHelper.clamp(entityIn.motionZ, -0.15, 0.15);
+
         entityIn.fallDistance = 0.0F;
         if (entityIn.motionY < -0.15) {
             entityIn.motionY = -0.15;
@@ -358,16 +524,16 @@ public class BlockSheetedFrame extends Block {
         return EnumPushReaction.NORMAL;
     }
 
+    @Override @NotNull
     public AxisAlignedBB getCollisionBoundingBox(@Nonnull IBlockState blockState, @Nonnull IBlockAccess worldIn, @Nonnull BlockPos pos) {
-        AxisAlignedBB boundingBox = switch (this.getMetaFromState(blockState) >>> 2) {
+        return switch (this.getMetaFromState(blockState) >>> 2) {
             //x
-            case (0) -> new AxisAlignedBB(0.05, 0.0, 0.00, 0.95, 1.0, 1.00);
+            case (0) -> new AxisAlignedBB(0.05, 0.0, 0.0, 0.95, 1.0, 1.0);
             //z
-            case (2) -> new AxisAlignedBB(0.00, 0.0, 0.05, 1.0, 1.0, 0.95);
+            case (2) -> new AxisAlignedBB(0.0, 0.0, 0.05, 1.0, 1.0, 0.95);
             //NONE (all sided) or y [1] as the climbable axis would be on the top of the block
-            default -> new AxisAlignedBB(0.00, 0.0, 0.00, 1.0, 1.0, 1.0);
+            default -> new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
         };
-        return boundingBox;
     }
 
     @Nonnull
@@ -392,7 +558,7 @@ public class BlockSheetedFrame extends Block {
     }
      */
 
-    //function adapted by me from tictem's original implementation
+    // function adapted by me [Eight/EightXOR8] from tictem's original implementation
     @SideOnly(Side.CLIENT)
     public void onModelRegister() {
         Map<IBlockState, ModelResourceLocation> map = new Object2ObjectOpenHashMap<>();

@@ -3,15 +3,17 @@
   "defaults": {
     "model": "susy:no_cull_tinted_cube_column",
     "textures": {
-      "end": "gregtech:blocks/material_sets/dull/frame_gt",
-      "side": "gregtech:blocks/material_sets/dull/sheeted_frame"
+      "end": "gregtech:blocks/material_sets/dull/sheeted_frame_end",
+      "side": "gregtech:blocks/material_sets/dull/sheeted_frame",
+      "all": "gregtech:blocks/material_sets/dull/sheeted_frame_all"
     }
   },
   "variants": {
     "axis": {
       "none": {
         "textures": {
-          "end": "#side"
+          "end": "#all",
+          "side": "#all"
         }
       },
       "x": {
