@@ -104,28 +104,6 @@ public abstract class BlockPipeMixin<PipeType extends Enum<PipeType> & IPipeType
             spawnAsEntity(world, pos, SHEETED_FRAMES.get(prevMat).getItem(prevMat));
             callBackInfoR.setReturnValue(true);
         }
-
-        /*
-        BlockSheetedFrame sheetedFrame = BlockSheetedFrame.getFrameBlockFromItem(handStack);
-        if (sheetedFrame == null) return; // avoids cancellation if item is not sheeted frame
-
-        // sets forced state
-        Material newMat = sheetedFrame.getStateFromMeta(handStack.getMetadata()).getValue(sheetedFrame.variantProperty);
-        Material prevMat = pipeTile.getFrameMaterial();
-        if (newMat.equals(prevMat)) return; // cancel custom logic if the materials are the same
-        ((TileEntityPipeBase) pipeTile).setFrameMaterial(newMat);
-
-        SoundType type = sheetedFrame.getSoundType(handStack);
-        world.playSound(entityPlayer, pos, type.getPlaceSound(), SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 2.0F, type.getPitch() * 0.8F);
-        if (!entityPlayer.capabilities.isCreativeMode) {
-            handStack.shrink(1);
-        }
-
-        // drop old frame
-        spawnAsEntity(world, pos, SHEETED_FRAMES.get(prevMat).getItem(prevMat));
-
-        callBackInfoR.setReturnValue(true);
-         */
     }
 
     @Inject(method = "activateFrame(Lnet/minecraft/world/World;Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/util/EnumHand;Lcodechicken/lib/raytracer/CuboidRayTraceResult;Lgregtech/api/pipenet/tile/IPipeTile;)Z",
@@ -145,16 +123,6 @@ public abstract class BlockPipeMixin<PipeType extends Enum<PipeType> & IPipeType
         SHEETED_FRAMES.get(pipeTile.getFrameMaterial()).onEntityCollision(worldIn, pos, state, entityIn);
         callbackInfo.cancel(); // don't do frame logic
     }
-
-    /*
-    @Inject(method = "getCollisionBox(Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/Entity;)Ljava/util/List;", at = @At("HEAD"), cancellable = true)
-    private void getCollisionBox(IBlockAccess world, BlockPos pos, @Nullable Entity entityIn, CallbackInfoReturnable<List<IndexedCuboid6>> callbackInfoR) {
-        IPipeTile<PipeType, NodeDataType> pipeTile = getPipeTileEntity(world, pos);
-        if (pipeTile == null || pipeTile.getFrameMaterial() == null || ((IForcedStates) pipeTile).getForcedState() == 0) return;
-        callbackInfoR.setReturnValue(Collections.singletonList(new IndexedCuboid6(null,
-                SHEETED_FRAMES.get(pipeTile.getFrameMaterial()).getCollisionBoundingBox(BlockSheetedFrame.determineSheetedState(world, pos), world, pos))));
-    }
-    */
 
     // <Lnet/minecraft/item/ItemStack;> - https://fabricmc.net/wiki/tutorial:mixin_injects : because generics dont exist at run time, they arent needed
     @Inject(method = "getDrops(Lnet/minecraft/util/NonNullList;Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;I)V",
