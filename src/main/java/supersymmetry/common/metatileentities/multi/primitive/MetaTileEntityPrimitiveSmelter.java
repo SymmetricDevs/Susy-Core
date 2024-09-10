@@ -27,6 +27,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -174,5 +175,14 @@ public class MetaTileEntityPrimitiveSmelter extends RecipeMapPrimitiveMultiblock
     @Override
     protected boolean openGUIOnRightClick() {
         return false;
+    }
+
+    @Override
+    public void clearMachineInventory(NonNullList<ItemStack> itemBuffer) {
+        // Don't do anything since exportItems/importItems are proxies
+        // This is called when the machine block is broken
+        // The other way of fixing this could be writing a custom recipe workable,
+        // which redirects getInputInventory() and getOutputInventory()
+        // just like what MultiblockRecipeLogic did.
     }
 }
