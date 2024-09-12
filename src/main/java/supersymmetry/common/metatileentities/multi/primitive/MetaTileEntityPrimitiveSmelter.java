@@ -135,8 +135,26 @@ public class MetaTileEntityPrimitiveSmelter extends RecipeMapPrimitiveMultiblock
         if (this.isActive()) {
             VanillaParticleEffects.defaultFrontEffect(this, 0.3F, EnumParticleTypes.SMOKE_LARGE,
                     EnumParticleTypes.FLAME);
+
+            BlockPos pos = getPos();
+
+            EnumFacing facing = getFrontFacing().getOpposite();
+            float x = (float)facing.getXOffset() + (float)pos.getX() + 0.5F;
+            float y = (float)facing.getYOffset() + (float)pos.getY() + 1.2F + (float)(GTValues.RNG.nextDouble() * 2.0 / 16.0);;
+            float z = (float)facing.getZOffset() + (float)pos.getZ() + 0.5F;
+
+            for (int i = 0; i < 4; i++) {
+                double offsetX = (GTValues.RNG.nextDouble() * 2.0 - 1.0) * 0.3;
+                double offsetY = (GTValues.RNG.nextDouble() * 2.0 - 1.0) * 0.3;
+                double offsetZ = (GTValues.RNG.nextDouble() * 2.0 - 1.0) * 0.3;
+                getWorld().spawnParticle(EnumParticleTypes.FLAME, x + offsetX, y + offsetY, z + offsetZ, 0.0, 0.0, 0.0);
+
+                if (GTValues.RNG.nextDouble() < 0.05) {
+                    getWorld().spawnParticle(EnumParticleTypes.LAVA, x + offsetX, y + offsetY, z + offsetZ, 0.0, 0.0, 0.0);
+                }
+            }
+
             if (ConfigHolder.machines.machineSounds && GTValues.RNG.nextDouble() < 0.1) {
-                BlockPos pos = getPos();
                 getWorld().playSound(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F,
                         SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
             }
