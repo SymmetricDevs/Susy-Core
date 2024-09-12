@@ -70,7 +70,7 @@ public class MetaTileEntityPrimitiveSmelter extends RecipeMapPrimitiveMultiblock
                 .aisle("OOO", "III", "SIS")
                 .aisle("OOO", "I I", "I I")
                 .aisle("OOO", "ICI", "SIS")
-                .where('I', casingPredicate().or(abilities(SuSyMultiblockAbilities.PRIMITIVE_IMPORT_ITEMS).setMaxGlobalLimited(3)))
+                .where('I', casingPredicate().or(abilities(SuSyMultiblockAbilities.PRIMITIVE_IMPORT_ITEMS).setMaxGlobalLimited(4)))
                 .where('C', selfPredicate())
                 .where('O', casingPredicate().or(abilities(SuSyMultiblockAbilities.PRIMITIVE_EXPORT_ITEMS).setMaxGlobalLimited(2)))
                 .where('S', states(ModuleCore.Blocks.MASONRY_BRICK_SLAB.getDefaultState()))
