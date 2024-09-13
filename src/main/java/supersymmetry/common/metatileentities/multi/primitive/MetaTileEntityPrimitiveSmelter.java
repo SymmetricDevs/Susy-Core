@@ -185,4 +185,9 @@ public class MetaTileEntityPrimitiveSmelter extends RecipeMapPrimitiveMultiblock
         // which redirects getInputInventory() and getOutputInventory()
         // just like what MultiblockRecipeLogic did.
     }
+
+    @Override
+    public String getHarvestTool() {
+        return "pickaxe";
+    }
 }

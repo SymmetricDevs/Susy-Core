@@ -48,4 +48,9 @@ public class MetaTileEntityPrimitiveItemBus extends MetaTileEntityItemBus {
     public boolean hasGhostCircuitInventory() {
         return false;
     }
+
+    @Override
+    public String getHarvestTool() {
+        return "pickaxe";
+    }
 }
