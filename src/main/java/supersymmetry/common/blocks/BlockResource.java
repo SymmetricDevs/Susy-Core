@@ -36,7 +36,7 @@ public class BlockResource extends VariantBlock<BlockResource.ResourceBlockType>
         PHOSPHORITE("phosphorite", 1),
         POTASH("potash", 1),
         SULFUR("sulfur", 1),
-        COAL("coal", 1);
+        COAL("coal", 0);
 
         private final String name;
         private final int harvestLevel;
