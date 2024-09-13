@@ -59,10 +59,10 @@ public final class DimensionBreathabilityHandler {
     public static void tickPlayer(EntityPlayer player) {
         if (isInHazardousEnvironment(player)) {
             if (player.getItemStackFromSlot(HEAD).getItem() instanceof SuSyArmorItem item) {
-                if (item.isValid(player.getItemStackFromSlot(HEAD), player.dimension)) {
-                    double remainingDamage = item.tryTick(player.getItemStackFromSlot(HEAD), player, player.dimension);
-                    if (remainingDamage > 0) {
-                        player.getItemStackFromSlot(HEAD).damageItem((int) remainingDamage, player);
+                if (item.isValid(player.getItemStackFromSlot(HEAD), player)) {
+                    double damageAbsorbed = item.tryTick(player.getItemStackFromSlot(HEAD), player);
+                    if (damageAbsorbed > 0) {
+                        dimensionBreathabilityMap.get(player.dimension).damagePlayer(player, damageAbsorbed);
                     }
                     return;
                 }
@@ -84,5 +84,9 @@ public final class DimensionBreathabilityHandler {
         public void damagePlayer(EntityPlayer player) {
             player.attackEntityFrom(damageType, (float) defaultDamage);
         }
+        public void damagePlayer(EntityPlayer player, double amount) {
+            player.attackEntityFrom(damageType, (float) defaultDamage - (float) amount);
+        }
+
     }
 }

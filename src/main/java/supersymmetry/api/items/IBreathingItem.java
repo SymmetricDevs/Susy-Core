@@ -4,7 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 public interface IBreathingItem {
-    boolean isValid(ItemStack stack, int dimension);
+    boolean isValid(ItemStack stack, EntityPlayer player);
 
-    double tryTick(ItemStack stack, EntityPlayer player, int dimension);
+    double tryTick(ItemStack stack, EntityPlayer player);
 }

@@ -1,4 +1,4 @@
-package supersymmetry.common.item;
+package supersymmetry.common.item.armor;
 
 import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.items.metaitem.stats.IItemBehaviour;
@@ -15,7 +15,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.items.IBreathingArmorLogic;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 
@@ -70,7 +69,7 @@ public class SimpleGasMask implements IBreathingArmorLogic, IItemDurabilityManag
     }
 
     @Override
-    public boolean mayBreatheWith(ItemStack stack, int dimension) {
+    public boolean mayBreatheWith(ItemStack stack, EntityPlayer player) {
         return getDamage(stack) < 1;
     }
 
@@ -81,9 +80,9 @@ public class SimpleGasMask implements IBreathingArmorLogic, IItemDurabilityManag
     }
 
     @Override
-    public double tryTick(ItemStack stack, EntityPlayer player, int dimension) {
+    public double tryTick(ItemStack stack, EntityPlayer player) {
         if (DimensionBreathabilityHandler.isInHazardousEnvironment(player)) {
-            changeDamage(stack, 1. / 30.); // It's actually ticked every overall second, not just every tick.
+            changeDamage(stack, 1. / (60. * 6.)); // It's actually ticked every overall second, not just every tick.
         }
         if (getDamage(stack) >= 1) {
             player.renderBrokenItemStack(stack);
@@ -108,6 +107,7 @@ public class SimpleGasMask implements IBreathingArmorLogic, IItemDurabilityManag
         compound.setDouble("damage", getDamage(stack) + damageChange);
         stack.setTagCompound(compound);
     }
+
 
 
 

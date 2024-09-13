@@ -15,13 +15,13 @@ public class SuSyArmorItem extends ArmorMetaItem<SuSyArmorItem.SuSyArmorMetaValu
 
 
     @Override
-    public boolean isValid(ItemStack stack, int dimension) {
-        return getItem(stack).armorLogic.mayBreatheWith(stack, dimension);
+    public boolean isValid(ItemStack stack, EntityPlayer player) {
+        return getItem(stack).armorLogic.mayBreatheWith(stack, player);
     }
 
     @Override
-    public double tryTick(ItemStack stack, EntityPlayer player, int dimension) {
-        return getItem(stack).armorLogic.tryTick(stack, player, dimension);
+    public double tryTick(ItemStack stack, EntityPlayer player) {
+        return getItem(stack).armorLogic.tryTick(stack, player);
     }
 
     public class SuSyArmorMetaValueItem extends ArmorMetaItem<SuSyArmorItem.SuSyArmorMetaValueItem>.ArmorMetaValueItem {

@@ -8,11 +8,15 @@ import gregtech.api.items.metaitem.MetaOreDictItem.OreDictValueItem;
 import gregtech.api.items.metaitem.StandardMetaItem;
 import gregtech.api.unification.material.info.MaterialIconSet;
 import gregtech.api.unification.ore.OrePrefix;
-import gregtech.common.ConfigHolder;
 import gregtech.common.items.behaviors.TooltipBehavior;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import supersymmetry.SuSyValues;
+import supersymmetry.common.item.armor.AdvancedBreathingApparatus;
+import supersymmetry.common.item.armor.BreathingApparatus;
+import supersymmetry.common.item.armor.SimpleGasMask;
+
+import static net.minecraft.inventory.EntityEquipmentSlot.*;
 
 public class SuSyMetaItems {
 
@@ -26,6 +30,22 @@ public class SuSyMetaItems {
     public static MetaValueItem TRACK_SEGMENT;
     public static SuSyArmorItem.SuSyArmorMetaValueItem SIMPLE_GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_MASK;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_TANK;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem ASBESTOS_MASK;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem ASBESTOS_CHESTPLATE;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem ASBESTOS_LEGGINGS;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem ASBESTOS_BOOTS;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem REBREATHER_TANK;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem REFLECTIVE_MASK;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem REFLECTIVE_CHESTPLATE;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem REFLECTIVE_LEGGINGS;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem REFLECTIVE_BOOTS;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem FILTERED_TANK;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem NOMEX_MASK;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem NOMEX_CHESTPLATE;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem NOMEX_LEGGINGS;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem NOMEX_BOOTS;
+
 
     public static void initMetaItems() {
         metaItem = new StandardMetaItem();
@@ -64,12 +84,25 @@ public class SuSyMetaItems {
         }));
         SIMPLE_GAS_MASK = armorItem.addItem(0, "simple_gas_mask")
                 .setArmorLogic(new SimpleGasMask());
-        GAS_MASK = armorItem.addItem(1, "gas_mask").setArmorLogic(new GasMask(2,
-                80_000L * (long) Math.max(1, Math.pow(1, ConfigHolder.tools.voltageTierNightVision - 1)),
-                ConfigHolder.tools.voltageTierNightVision, EntityEquipmentSlot.HEAD));
+        GAS_MASK = armorItem.addItem(1, "gas_mask").setArmorLogic(new BreathingApparatus(HEAD));
+        GAS_TANK = armorItem.addItem(2, "gas_tank").setArmorLogic(new BreathingApparatus(CHEST));
+        ASBESTOS_MASK = armorItem.addItem(3, "asbestos_mask").setArmorLogic(new AdvancedBreathingApparatus(HEAD, 1, "asbestos", 0));
+        ASBESTOS_CHESTPLATE = armorItem.addItem(4, "asbestos_chestplate").setArmorLogic(new AdvancedBreathingApparatus(CHEST, 1, "asbestos", 0));
+        ASBESTOS_LEGGINGS = armorItem.addItem(5, "asbestos_leggings").setArmorLogic(new AdvancedBreathingApparatus(LEGS, 1, "asbestos", 0));
+        ASBESTOS_BOOTS = armorItem.addItem(6, "asbestos_boots").setArmorLogic(new AdvancedBreathingApparatus(FEET, 1, "asbestos", 0));
+        REBREATHER_TANK = armorItem.addItem(7, "rebreather_tank").setArmorLogic(new AdvancedBreathingApparatus(CHEST, 1, "asbestos", 0));
+        REFLECTIVE_MASK = armorItem.addItem(8, "reflective_mask").setArmorLogic(new AdvancedBreathingApparatus(HEAD, 5, "reflective", 0));
+        REFLECTIVE_CHESTPLATE = armorItem.addItem(9, "reflective_chestplate").setArmorLogic(new AdvancedBreathingApparatus(CHEST, 5, "reflective", 0));
+        REFLECTIVE_LEGGINGS = armorItem.addItem(10, "reflective_leggings").setArmorLogic(new AdvancedBreathingApparatus(LEGS, 5, "reflective", 0));
+        REFLECTIVE_BOOTS = armorItem.addItem(11, "reflective_boots").setArmorLogic(new AdvancedBreathingApparatus(FEET, 5, "reflective", 0));
+        FILTERED_TANK = armorItem.addItem(12, "filtered_tank").setArmorLogic(new AdvancedBreathingApparatus(CHEST, 5, "filtered", 0));
+        NOMEX_MASK = armorItem.addItem(13, "nomex_mask").setArmorLogic(new AdvancedBreathingApparatus(HEAD, 0, "nomex", 1));
+        NOMEX_CHESTPLATE = armorItem.addItem(14, "nomex_chestplate").setArmorLogic(new AdvancedBreathingApparatus(CHEST, 0, "nomex", 1));
+        NOMEX_LEGGINGS = armorItem.addItem(15, "nomex_leggings").setArmorLogic(new AdvancedBreathingApparatus(LEGS, 0, "nomex", 1));
+        NOMEX_BOOTS = armorItem.addItem(16, "nomex_boots").setArmorLogic(new AdvancedBreathingApparatus(FEET, 0, "nomex", 1));
     }
 
-    private static void addTieredOredictItem (OreDictValueItem[] items, int id, int RGB, OrePrefix prefix) {
+    private static void addTieredOredictItem(OreDictValueItem[] items, int id, int RGB, OrePrefix prefix) {
 
         for (int i = 0; i < items.length; i++) {
             items[i] = oreDictItem.addOreDictItem(id + i, SuSyValues.TierMaterials[i + 1].toString(), RGB, MaterialIconSet.DULL, prefix, I18n.format("gregtech.universal.catalysts.tooltip.tier", GTValues.V[i], GTValues.VN[i]));
