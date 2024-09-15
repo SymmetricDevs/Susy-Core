@@ -13,4 +13,5 @@ public class SuSyMaterialIconType {
     public static MaterialIconType wetFiber = new MaterialIconType("wetFiber");
     public static MaterialIconType thread = new MaterialIconType("thread");
     public static MaterialIconType slurry = new MaterialIconType("slurry");
+    public static MaterialIconType supercritical = new MaterialIconType("supercritical");
 }
