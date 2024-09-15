@@ -29,7 +29,6 @@ import gregtech.common.blocks.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -246,12 +245,10 @@ public class MetaTileEntityOceanPumper extends MultiblockWithDisplayBase impleme
     protected void addDisplayText(List<ITextComponent> textList) {
         super.addDisplayText(textList);
         MultiblockDisplayText.builder(textList, isStructureFormed())
-            .setWorkingStatus(isWorkingEnabled(), isActive())
             .addEnergyUsageLine(energyContainer)
-            .addEnergyTierLine(GTUtility.getTierByVoltage(energyContainer.getInputVoltage()))
             .addWorkingStatusLine();
             if (this.isActive() && drainEnergy(true)) {
-                //textList.add(new TextComponentTranslation("gregtech.machine.miner.working").setStyle(new Style().setColor(TextFormatting.GOLD)));
+                textList.add(new TextComponentTranslation("gregtech.machine.miner.working").setStyle(new Style().setColor(TextFormatting.GOLD)));
                 textList.add(new TextComponentTranslation("susy.ocean_pumper.drainrate", drainRate));
             }
             else if (!isInValidLocation())
@@ -322,22 +319,4 @@ public class MetaTileEntityOceanPumper extends MultiblockWithDisplayBase impleme
     public boolean allowsExtendedFacing() {
         return false;
     }
-
-    @Override
-    public void writeInitialSyncData(PacketBuffer buf) {
-        super.writeInitialSyncData(buf);
-        buf.writeBoolean(isWorking);
-    }
-    @Override
-    public void receiveInitialSyncData(PacketBuffer buf) {
-        super.receiveInitialSyncData(buf);
-        this.isWorking = buf.readBoolean();
-    }
-    @Override
-    public void receiveCustomData(int dataId, PacketBuffer buf) {
-        super.receiveCustomData(dataId, buf);
-        if (dataId == WORKABLE_ACTIVE) {
-            this.isWorking = buf.readBoolean();
-            scheduleRenderUpdate();
-        }}
 }
