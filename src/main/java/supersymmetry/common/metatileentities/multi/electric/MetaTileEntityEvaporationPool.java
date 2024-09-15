@@ -507,6 +507,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         if (TooltipHelper.isShiftDown()) {
             tooltip.add(I18n.format("gregtech.machine.evaporation_pool.tooltip.structure_info", MAX_SQUARE_SIDE_LENGTH, MAX_SQUARE_SIDE_LENGTH) + "\n");
         }
+        super.addInformation(stack, player, tooltip, advanced);
     }
 
     public BlockPos.MutableBlockPos getCorner(boolean isClose, boolean isLeft) {

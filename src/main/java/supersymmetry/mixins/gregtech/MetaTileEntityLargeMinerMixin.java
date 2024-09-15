@@ -1,7 +1,7 @@
 package supersymmetry.mixins.gregtech;
 
 import gregtech.api.metatileentity.multiblock.MultiblockWithDisplayBase;
-import gregtech.common.metatileentities.multi.electric.MetaTileEntityFluidDrill;
+import gregtech.common.metatileentities.multi.electric.MetaTileEntityLargeMiner;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -11,10 +11,10 @@ import org.spongepowered.asm.mixin.Mixin;
 import javax.annotation.Nullable;
 import java.util.List;
 
-@Mixin(MetaTileEntityFluidDrill.class)
-public abstract class MetaTileEntityFluidDrillMixin extends MultiblockWithDisplayBase {
+@Mixin(MetaTileEntityLargeMiner.class)
+public abstract class MetaTileEntityLargeMinerMixin extends MultiblockWithDisplayBase {
 
-    public MetaTileEntityFluidDrillMixin(ResourceLocation metaTileEntityId) {
+    public MetaTileEntityLargeMinerMixin(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
     }
 
