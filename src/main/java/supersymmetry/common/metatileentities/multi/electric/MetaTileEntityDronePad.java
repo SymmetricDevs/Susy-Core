@@ -15,12 +15,9 @@ import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
 import it.unimi.dsi.fastutil.ints.IntLists;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
@@ -34,7 +31,6 @@ import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.entities.EntityDrone;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 
 public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
 
@@ -71,10 +67,6 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
                         .or(autoAbilities(true, false, true, true, false, false, false)))
                 .where('P', states(getPadState()))
                 .build();
-    }
-    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
-        super.addInformation(stack, player, tooltip, advanced);
-        tooltip.add(I18n.format("susy.weather_resistance"));
     }
 
     @Override

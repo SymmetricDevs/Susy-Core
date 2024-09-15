@@ -104,7 +104,6 @@ public class MetaTileEntityLatexCollector extends PseudoMultiMachineMetaTileEnti
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
         tooltip.set(1, I18n.format("gregtech.machine.latex_collector.tooltip"));
-        tooltip.add(I18n.format("susy.weather_resistance", new Object[0]));
     }
 
     @Override

@@ -786,8 +786,6 @@ metaitem.standard_catalyst_bed_cracking.name=Cracking Catalyst Bed
 # Machine Translations
 susy.ocean_pumper.full=Tanks are Full!
 susy.ocean_pumper.drainrate=Current Pumping Rate: %s
-susy.wrongbiome=Machine can not work in this biome!
-susy.weather_resistance=§2Will not explode from water, lava, fire or rain.
 
 # Latex Logs
 gregtech.block_group_members.latex_logs.name=Rubber Log

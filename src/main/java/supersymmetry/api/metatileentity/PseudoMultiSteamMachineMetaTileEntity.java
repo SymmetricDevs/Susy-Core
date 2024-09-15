@@ -6,19 +6,13 @@ import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.client.renderer.ICubeRenderer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import supersymmetry.api.capability.impl.PseudoMultiSteamRecipeLogic;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicator;
 import supersymmetry.common.metatileentities.single.steam.SuSySimpleSteamMetaTileEntity;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class PseudoMultiSteamMachineMetaTileEntity extends SuSySimpleSteamMetaTileEntity {
 
@@ -36,11 +30,6 @@ public class PseudoMultiSteamMachineMetaTileEntity extends SuSySimpleSteamMetaTi
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
         return new PseudoMultiSteamMachineMetaTileEntity(metaTileEntityId, workableHandler.getRecipeMap(), progressIndicator, renderer, isBrickedCasing, isHighPressure);
-    }
-
-    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
-        super.addInformation(stack, player, tooltip, advanced);
-        tooltip.add(I18n.format("susy.weather_resistance"));
     }
 
     public void checkAdjacentBlocks(){
