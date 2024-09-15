@@ -245,11 +245,12 @@ public class MetaTileEntityOceanPumper extends MultiblockWithDisplayBase impleme
     protected void addDisplayText(List<ITextComponent> textList) {
         super.addDisplayText(textList);
         MultiblockDisplayText.builder(textList, isStructureFormed())
-            .addEnergyUsageLine(energyContainer)
-            .addWorkingStatusLine();
-            if (this.isActive() && drainEnergy(true)) {
-                textList.add(new TextComponentTranslation("gregtech.machine.miner.working").setStyle(new Style().setColor(TextFormatting.GOLD)));
-                textList.add(new TextComponentTranslation("susy.ocean_pumper.drainrate", drainRate));
+                .setWorkingStatus(isWorkingEnabled(), isActive())
+                .addEnergyUsageLine(energyContainer)
+                .addEnergyTierLine(GTUtility.getTierByVoltage(energyContainer.getInputVoltage()))
+                .addWorkingStatusLine();
+        if (this.isActive() && drainEnergy(true)) {
+            //textList.add(new TextComponentTranslation("gregtech.machine.miner.working").setStyle(new Style().setColor(TextFormatting.GOLD)));                textList.add(new TextComponentTranslation("susy.ocean_pumper.drainrate", drainRate));
             }
             else if (!isInValidLocation())
                 textList.add(new TextComponentTranslation("susy.wrong.biome").setStyle(new Style().setColor(TextFormatting.RED)));
