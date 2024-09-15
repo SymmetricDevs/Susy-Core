@@ -126,7 +126,7 @@ public class MetaTileEntityOceanPumper extends MultiblockWithDisplayBase impleme
                 .aisle("FF***********FF", "FF***********FF", "*FF*********FF*", "*FF*********FF*", "***************", "*****FFFFF*****", "***************", "***************", "***************", "***************", "***************", "***************", "***************", "***************", "***************", "***************")
                 .aisle("FF***********FF", "FF***********FF", "***************", "***************", "***************", "***************", "***************", "***************", "***************", "***************", "***************", "***************", "***************", "***************" ,"***************", "***************")
                 .where('S', selfPredicate())
-                .where('C', states(getCasingState()).setMinGlobalLimited(88)
+                .where('C', states(getCasingState()).setMinGlobalLimited(80)
                         .or(abilities(MultiblockAbility.EXPORT_FLUIDS).setMinGlobalLimited(1))
                         .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(3))
                         .or(autoAbilities(true, false)))
