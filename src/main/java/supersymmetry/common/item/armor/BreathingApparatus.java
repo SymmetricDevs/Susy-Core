@@ -47,7 +47,7 @@ public class BreathingApparatus implements IBreathingArmorLogic, IItemDurability
         ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
         if (chest.getItem() instanceof SuSyArmorItem item) {
             if (item.getItem(chest).getArmorLogic() instanceof BreathingApparatus tank) {
-                tank.changeOxygen(stack, 1);
+                tank.changeOxygen(stack, -1);
                 return 0;
             }
         }
@@ -69,7 +69,7 @@ public class BreathingApparatus implements IBreathingArmorLogic, IItemDurability
             stack.setTagCompound(new NBTTagCompound());
         }
         if (!stack.getTagCompound().hasKey("oxygen")) {
-            stack.getTagCompound().setDouble("oxygen", 0);
+            stack.getTagCompound().setDouble("oxygen", getMaxOxygen(stack));
         }
         return stack.getTagCompound().getDouble("oxygen");
     }
@@ -81,7 +81,7 @@ public class BreathingApparatus implements IBreathingArmorLogic, IItemDurability
         if (!stack.getTagCompound().hasKey("maxOxygen")) {
             stack.getTagCompound().setDouble("maxOxygen", 1000);
         }
-        return stack.getTagCompound().getDouble("oxygen");
+        return stack.getTagCompound().getDouble("maxOxygen");
     }
 
     void changeOxygen(ItemStack stack, double oxygenChange) {

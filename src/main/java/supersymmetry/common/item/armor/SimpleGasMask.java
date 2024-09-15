@@ -26,7 +26,7 @@ public class SimpleGasMask implements IBreathingArmorLogic, IItemDurabilityManag
 
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-        return "gregtech:textures/armor/simple_gas_mask.json.png";
+        return "gregtech:textures/armor/simple_gas_mask.png";
     }
 
     @Override
@@ -82,7 +82,7 @@ public class SimpleGasMask implements IBreathingArmorLogic, IItemDurabilityManag
     @Override
     public double tryTick(ItemStack stack, EntityPlayer player) {
         if (DimensionBreathabilityHandler.isInHazardousEnvironment(player)) {
-            changeDamage(stack, 1. / (60. * 6.)); // It's actually ticked every overall second, not just every tick.
+            changeDamage(stack, 1. / (60. * 20.)); // It's actually ticked every overall second, not just every tick.
         }
         if (getDamage(stack) >= 1) {
             player.renderBrokenItemStack(stack);
