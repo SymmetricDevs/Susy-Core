@@ -101,6 +101,7 @@ public class MetaTileEntityDumper extends VoidingMultiblockBase {
     public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
         super.addInformation(stack, world, tooltip, advanced);
         tooltip.add(I18n.format("gregtech.machine.dumper.tooltip.1", getBaseVoidingRate()));
+        tooltip.add(I18n.format("susy.weather_resistance"));
     }
 
     @Override

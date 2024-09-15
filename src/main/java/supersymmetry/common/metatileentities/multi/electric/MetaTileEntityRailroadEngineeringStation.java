@@ -146,6 +146,7 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
     public void addInformation(net.minecraft.item.ItemStack stack, @Nullable net.minecraft.world.World world, @NotNull List<String> tooltip, boolean advanced) {
         super.addInformation(stack, world, tooltip, advanced);
         tooltip.add(I18n.format("gregtech.machine.railroad_engineering_station.tooltip.1"));
+        tooltip.add(I18n.format("susy.weather_resistance"));
     }
 
     @Override

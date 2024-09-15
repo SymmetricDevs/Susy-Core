@@ -504,6 +504,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     @Override
     public void addInformation(ItemStack stack, World player, @NotNull List<String> tooltip, boolean advanced) {
         tooltip.add(I18n.format("gregtech.machine.evaporation_pool.tooltip.info", MAX_SQUARE_SIDE_LENGTH, MAX_SQUARE_SIDE_LENGTH));
+        tooltip.add(I18n.format("susy.weather_resistance"));
         if (TooltipHelper.isShiftDown()) {
             tooltip.add(I18n.format("gregtech.machine.evaporation_pool.tooltip.structure_info", MAX_SQUARE_SIDE_LENGTH, MAX_SQUARE_SIDE_LENGTH) + "\n");
         }
