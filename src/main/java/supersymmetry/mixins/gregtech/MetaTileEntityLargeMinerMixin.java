@@ -17,13 +17,13 @@ public abstract class MetaTileEntityLargeMinerMixin extends MultiblockWithDispla
     public MetaTileEntityLargeMinerMixin(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
     }
-
+    public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, boolean advanced) {
+        super.addInformation(stack, player, tooltip, advanced);
+    }
     @Override
     public boolean getIsWeatherOrTerrainResistant() {
         return true;
     }
 
-    public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, boolean advanced) {
-        super.addInformation(stack, player, tooltip, advanced);
-    }
+
 }

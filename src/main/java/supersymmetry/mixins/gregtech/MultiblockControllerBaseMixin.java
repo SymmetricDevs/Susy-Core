@@ -21,8 +21,7 @@ public abstract class MultiblockControllerBaseMixin extends MetaTileEntity {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip,
-                               boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
         super.addInformation(stack, world, tooltip, advanced);
         if (ConfigHolder.machines.doTerrainExplosion && getIsWeatherOrTerrainResistant()) {
             tooltip.add(I18n.format("gregtech.universal.tooltip.terrain_resist"));
