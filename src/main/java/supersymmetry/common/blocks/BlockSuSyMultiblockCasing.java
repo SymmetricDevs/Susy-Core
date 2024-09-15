@@ -3,11 +3,14 @@ package supersymmetry.common.blocks;
 import gregtech.api.block.VariantBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
@@ -21,6 +24,16 @@ public class BlockSuSyMultiblockCasing extends VariantBlock<BlockSuSyMultiblockC
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 2);
         setDefaultState(getState(CasingType.SILICON_CARBIDE_CASING));
+    }
+
+    @SuppressWarnings("deprecation")
+    @NotNull
+    @Override
+    public BlockFaceShape getBlockFaceShape(@NotNull IBlockAccess worldIn, @NotNull IBlockState state, @NotNull BlockPos pos, @NotNull EnumFacing face) {
+        if (state == getState(CasingType.DRONE_PAD)) {
+            return BlockFaceShape.CENTER_BIG;
+        }
+        return super.getBlockFaceShape(worldIn, state, pos, face);
     }
 
     @Override
