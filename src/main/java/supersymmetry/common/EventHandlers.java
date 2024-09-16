@@ -53,6 +53,8 @@ public class EventHandlers {
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
 
+        if (event.player.isCreative()) return;
+
         NBTTagCompound playerData = event.player.getEntityData();
         NBTTagCompound data = playerData.hasKey(EntityPlayer.PERSISTED_NBT_TAG) ? playerData.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG) : new NBTTagCompound();
 
