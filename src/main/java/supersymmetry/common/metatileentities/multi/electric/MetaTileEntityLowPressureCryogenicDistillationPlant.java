@@ -47,15 +47,15 @@ public class MetaTileEntityLowPressureCryogenicDistillationPlant extends MetaTil
     @NotNull
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start(RIGHT, FRONT, UP)
-                .aisle("CCC", "CCC", "CCC")
+                .aisle("DDD", "DDD", "DDD")
+                .aisle("CSC", "EZE", "CEC")
                 .aisle("XXX", "XFX", "XXX").setRepeatable(1,16)
-                .aisle("CSC", "E E", "CEC")
                 .aisle("DDD", "DDD", "DDD")
                 .where('S', this.selfPredicate())
                 .where('C', states(getCasingState())
                         .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(3))
                         .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMaxGlobalLimited(1))
-                        .or(autoAbilities(false, true, false, false, false, false, false).setExactLimit(1)))
+                        ..or(autoAbilities(true, false).setExactLimit(1)))
                 .where('F', states(SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.STRUCTURAL_PACKING)))
                 .where('X', states(getCasingState())
                         .or(metaTileEntities(MultiblockAbility.REGISTRY.get(MultiblockAbility.EXPORT_FLUIDS).stream()
@@ -70,7 +70,7 @@ public class MetaTileEntityLowPressureCryogenicDistillationPlant extends MetaTil
                 .where('E', states(getCasingState())
                         .or(abilities(MultiblockAbility.PASSTHROUGH_HATCH)))
                 .where('#', air())
-                .where(' ', cryogenicRecieverPredicate())
+                .where('Z', cryogenicRecieverPredicate())
                 .build();
     }
 
