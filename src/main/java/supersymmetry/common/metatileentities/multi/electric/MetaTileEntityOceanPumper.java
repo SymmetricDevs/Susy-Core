@@ -259,8 +259,6 @@ public class MetaTileEntityOceanPumper extends MultiblockWithDisplayBase impleme
                 textList.add(new TextComponentTranslation("susy.wrong.biome").setStyle(new Style().setColor(TextFormatting.RED)));
             else if (!insertFluid(true))
                 textList.add(new TextComponentTranslation("gregtech.machine.miner.invfull").setStyle(new Style().setColor(TextFormatting.RED)));
-            else if (!drainEnergy(true))
-                textList.add(new TextComponentTranslation("gregtech.multiblock.not_enough_energy").setStyle(new Style().setColor(TextFormatting.YELLOW)));
         }
     }
 
