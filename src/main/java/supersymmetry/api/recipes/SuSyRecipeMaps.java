@@ -299,6 +299,10 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_SIFT, ProgressWidget.MoveType.VERTICAL)
             .setSound(GTSoundEvents.BATH);
 
+    public static final RecipeMap<SimpleRecipeBuilder> PUMPING_RECIPES = new RecipeMap<>("large_fluid_pump", 1, 0, 0, 1, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressWidget.MoveType.VERTICAL)
+            .setSound(GTSoundEvents.MINER);
+
     public static final RecipeMap<DronePadRecipeBuilder> DRONE_PAD = new RecipeMap<>("drone_pad", 4, 9, 0, 0, new DronePadRecipeBuilder(), false);
 
     public static final RecipeMap<SimpleRecipeBuilder> BLENDER_RECIPES = new RecipeMap<>("blender", 9, 1, 6, 2, new SimpleRecipeBuilder().EUt(VA[LV]), false)

@@ -133,6 +133,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityMultiStageFlashDistiller MULTI_STAGE_FLASH_DISTILLER;
 
     public static MetaTileEntityOceanPumper OCEAN_PUMPER;
+    public static MetaTileEntityLargeFluidPump LARGE_FLUID_PUMP;
     public static MetaTileEntityHighTemperatureDistillationTower HIGH_TEMPERATURE_DISTILLATION_TOWER;
     public static MetaTileEntityRotaryKiln ROTARY_KILN;
     public static MetaTileEntityHighPressureCryogenicDistillationPlant HIGH_PRESSURE_CRYOGENIC_DISTILLATION_PLANT;
@@ -259,6 +260,7 @@ public class SuSyMetaTileEntities {
         REVERBERATORY_FURNACE = registerMetaTileEntity(17016, new MetaTileEntityReverberatoryFurnace(susyId("reverberatory_furnace")));
         SINGLE_COLUMN_CRYOGENIC_DISTILLATION_PLANT = registerMetaTileEntity(17017, new MetaTileEntitySingleColumnCryogenicDistillationPlant(susyId("single_column_cryogenic_distillation_plant")));
         BLENDER = registerMetaTileEntity(17020, new MetaTileEntityBlender(susyId("blender")));
+        LARGE_FLUID_PUMP = registerMetaTileEntity(17021, new MetaTileEntityLargeFluidPump(susyId("large_fluid_pump")));
 
         PHASE_SEPARATOR[0] = registerMetaTileEntity(17018, new MetaTileEntityPhaseSeparator(susyId("phase_separator")));
         BATH_CONDENSER[0] = registerMetaTileEntity(17019, new MetaTileEntityBathCondenser(susyId("bath_condenser")));
