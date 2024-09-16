@@ -116,6 +116,7 @@ public class SuSyBlocks {
         registerItemModel(STRUCTURAL_BLOCK_1);
         registerItemModel(DEPOSIT_BLOCK);
         registerItemModel(RESOURCE_BLOCK);
+        registerItemModel(RESOURCE_BLOCK_1);
         registerItemModel(HOME);
         EVAPORATION_BED.onModelRegister();
         MULTIBLOCK_TANK.onModelRegister();

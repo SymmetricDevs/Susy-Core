@@ -8,6 +8,7 @@ import net.minecraft.util.IStringSerializable;
 import javax.annotation.Nonnull;
 
 public class BlockResource1 extends VariantBlock<BlockResource1.ResourceBlockType> {
+
     public BlockResource1() {
         super(net.minecraft.block.material.Material.IRON);
         setTranslationKey("resource_block_1");
