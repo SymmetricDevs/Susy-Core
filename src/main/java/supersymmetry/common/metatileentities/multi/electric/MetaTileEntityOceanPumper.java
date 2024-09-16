@@ -29,6 +29,7 @@ import gregtech.common.blocks.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -243,30 +244,24 @@ public class MetaTileEntityOceanPumper extends MultiblockWithDisplayBase impleme
     }
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
-        super.addDisplayText(textList);
+        //super.addDisplayText(textList);
         MultiblockDisplayText.builder(textList, isStructureFormed())
                 .setWorkingStatus(isWorkingEnabled(), isActive())
                 .addEnergyUsageLine(energyContainer)
                 .addEnergyTierLine(GTUtility.getTierByVoltage(energyContainer.getInputVoltage()))
-                .addWorkingStatusLine();
-        if (this.isActive() && drainEnergy(true)) {
-            //textList.add(new TextComponentTranslation("gregtech.machine.miner.working").setStyle(new Style().setColor(TextFormatting.GOLD)));
-            textList.add(new TextComponentTranslation("susy.ocean_pumper.drainrate", drainRate));
-            }
-            else if (!isInValidLocation())
+                .addWorkingStatusLine()
+                .addLowPowerLine(isStructureFormed() && !drainEnergy(true));
+        if (isStructureFormed()) {
+            if (this.isActive() && drainEnergy(true)) {
+                //textList.add(new TextComponentTranslation("gregtech.machine.miner.working").setStyle(new Style().setColor(TextFormatting.GOLD)));
+                textList.add(new TextComponentTranslation("susy.ocean_pumper.drainrate", drainRate));
+            } else if (!isInValidLocation())
                 textList.add(new TextComponentTranslation("susy.wrong.biome").setStyle(new Style().setColor(TextFormatting.RED)));
             else if (!insertFluid(true))
-                textList.add(new TextComponentTranslation("susy.ocean_pumper.full").setStyle(new Style().setColor(TextFormatting.RED)));
+                textList.add(new TextComponentTranslation("gregtech.machine.miner.invfull").setStyle(new Style().setColor(TextFormatting.RED)));
             else if (!drainEnergy(true))
                 textList.add(new TextComponentTranslation("gregtech.multiblock.not_enough_energy").setStyle(new Style().setColor(TextFormatting.YELLOW)));
-            else if (!this.isWorkingEnabled())
-                textList.add(new TextComponentTranslation("gregtech.multiblock.work_paused"));
-    }
-
-    @Override
-    protected void addWarningText(List<ITextComponent> textList) {
-        MultiblockDisplayText.builder(textList, isStructureFormed(), false)
-                .addLowPowerLine(isStructureFormed() && !drainEnergy(true));
+        }
     }
 
     @Override
@@ -321,4 +316,24 @@ public class MetaTileEntityOceanPumper extends MultiblockWithDisplayBase impleme
     public boolean allowsExtendedFacing() {
         return false;
     }
+
+    @Override
+    public void writeInitialSyncData(PacketBuffer buf) {
+        super.writeInitialSyncData(buf);
+        buf.writeBoolean(isWorking);
+    }
+    @Override
+    public void receiveInitialSyncData(PacketBuffer buf) {
+        super.receiveInitialSyncData(buf);
+        this.isWorking = buf.readBoolean();
+    }
+    @Override
+    public void receiveCustomData(int dataId, PacketBuffer buf) {
+        super.receiveCustomData(dataId, buf);
+        if (dataId == WORKABLE_ACTIVE) {
+            this.isWorking = buf.readBoolean();
+            scheduleRenderUpdate();
+        }
+    }
+
 }

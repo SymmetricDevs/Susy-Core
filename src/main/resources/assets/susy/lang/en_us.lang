@@ -784,7 +784,6 @@ gregtech.catalyst_group.cracking_catalyst_beds.name=Cracking Catalyst
 metaitem.standard_catalyst_bed_cracking.name=Cracking Catalyst Bed
 
 # Machine Translations
-susy.ocean_pumper.full=Tanks are Full!
 susy.ocean_pumper.drainrate=Current Pumping Rate: %s
 susy.wrongbiome=Machine can not work in this biome!
 
