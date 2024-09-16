@@ -75,6 +75,8 @@ tile.resource_block.phosphorite.name=Phosphorite Deposit
 tile.resource_block.potash.name=Potash Deposit
 tile.resource_block.sulfur.name=Sulfur Deposit
 tile.resource_block.coal.name=Coal Deposit
+tile.resource_block_1.native_copper.name=Native Copper Deposit
+
 
 tile.multiblock_tank.clarifier.name=Clarifier Vat
 tile.multiblock_tank.flotation.name=Froth Flotation Vat
