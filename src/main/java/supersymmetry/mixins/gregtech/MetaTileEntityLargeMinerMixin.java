@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import javax.annotation.Nullable;
 import java.util.List;
 
-@Mixin(MetaTileEntityLargeMiner.class)
+@Mixin(value = MetaTileEntityLargeMiner.class, remap = false)
 public abstract class MetaTileEntityLargeMinerMixin extends MultiblockWithDisplayBase {
 
     public MetaTileEntityLargeMinerMixin(ResourceLocation metaTileEntityId) {
