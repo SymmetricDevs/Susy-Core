@@ -95,6 +95,9 @@ tile.home_block.home_renewal_brutalist.tooltip=Renewal Brutalist
 tile.home_block.home_scifi.name=Home Block
 tile.home_block.home_scifi.tooltip=Sci-Fi
 
+tile.sheeted_frame_block.tooltip=Use a screwdriver to rotate, a hammer to toggle omnidirectionality, and a crowbar to remove from pipes.
+tile.sheeted_frame_block.tooltip_extra=Lighting bugs are known. Pipe connections may only be made "on axis" with the surrounding sheeted frame, save for the omnidirectional state. Omnidirectional sheeted frames, when clicked with a frame, place with the orientation of the side clicked. All sheeted frames adjacent to an omnidirectional sheeted frame place away from it, on their axis, when they are clicked with a sheeted frame. The side facing open air will be preferred for all frames, or the positive direction if neither/ both face open air. Contact me (Eight) for any other bugs.
+
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
 tile.susy_stone_smooth.gneiss.name=Gneiss
