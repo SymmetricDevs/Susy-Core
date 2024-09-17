@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.annotation.Nullable;
 import java.util.List;
+
 @Mixin(value = MetaTileEntityFluidDrill.class, remap = false)
 public abstract class MetaTileEntityFluidDrillMixin extends MultiblockWithDisplayBase {
 
@@ -20,7 +21,12 @@ public abstract class MetaTileEntityFluidDrillMixin extends MultiblockWithDispla
         super(metaTileEntityId);
     }
 
-    @Inject(method = "addInformation", at = @At("TAIL"))
+    @Inject(method = "addInformation",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Ljava/util/List;add(Ljava/lang/Object;)Z",
+                    ordinal = 3,
+                    shift = At.Shift.AFTER))
     public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, boolean advanced, CallbackInfo ci) {
         super.addInformation(stack, player, tooltip, advanced);
     }
