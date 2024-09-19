@@ -39,8 +39,8 @@ public class BiomeMultiProperty extends RecipeProperty<BiomeMultiPropertyList> {
                     getBiomesForRecipe(castValue(value).blackListBiomes)), x, y, color);
     }
 
-    private static String getBiomesForRecipe(IntList value) {
-        Int2ObjectMap<String> biomeNames = WorldGenRegistry.getNamedDimensions();
+    private static String getBiomesForRecipe(String[] value) {
+        //Int2ObjectMap<String> biomeNames = WorldGenRegistry.getNamedDimensions();
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < value.size(); i++) {
             builder.append(biomeNames.getOrDefault(value.getInt(i), String.valueOf(value.getInt(i))));

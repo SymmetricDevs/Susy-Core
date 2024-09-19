@@ -37,18 +37,17 @@ public class BiomeMultiRecipeBuilder extends RecipeBuilder<BiomeMultiRecipeBuild
             this.applyProperty(BiomeMultiProperty.getInstance(), biomes);
         }
         biomes.add(biome, toBlackList);
-        return (BiomeMultiRecipeBuilder) this;
+        return this;
     }
 
     public BiomeMultiPropertyList getCompleteBiomes() {
         return this.recipePropertyStorage == null ? BiomeMultiPropertyList.EMPTY_LIST :
-                this.recipePropertyStorage.getRecipePropertyValue(BiomeMultiProperty.getInstance(),
-                        BiomeMultiPropertyList.EMPTY_LIST);
+                this.recipePropertyStorage.getRecipePropertyValue(BiomeMultiProperty.getInstance(), BiomeMultiPropertyList.EMPTY_LIST);
     }
 
     public IntList getBiomes() {
         return this.recipePropertyStorage == null ? IntLists.EMPTY_LIST :
-                this.recipePropertyStorage.getRecipePropertyValue(BiomeMultiProperty.getInstance(),BiomeMultiPropertyList.EMPTY_LIST).whiteListBiomes;
+                this.recipePropertyStorage.getRecipePropertyValue(BiomeMultiProperty.getInstance(), BiomeMultiPropertyList.EMPTY_LIST).whiteListBiomes;
     }
 
     public IntList getBlockedBiomes() {

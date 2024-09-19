@@ -1,10 +1,9 @@
 package supersymmetry.api.recipes.properties;
 
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
 
-import java.util.ArrayList;
+import java.util.Set;
 
 public class BiomeMultiPropertyList {
 
@@ -30,8 +29,12 @@ public class BiomeMultiPropertyList {
 
     public boolean checkBiome(Biome biome) {
         boolean valid = true;
-        if (!this.blackListBiomes.isEmpty()) valid = !this.blackListBiomes.contains(biome);
-        if (!this.whiteListBiomes.isEmpty()) valid = this.whiteListBiomes.contains(biome);
+        Set<BiomeDictionary.Type> biomeTypes = BiomeDictionary.getTypes(biome);
+        if (!this.blackListBiomes.isEmpty())
+           // valid = !this.blackListBiomes.contains(biome);
+            valid = biomeTypes.contains(BiomeDictionary.Type.WATER);
+        if (!this.whiteListBiomes.isEmpty())
+            valid = this.whiteListBiomes.contains(biome);
         return valid;
     }
 }
