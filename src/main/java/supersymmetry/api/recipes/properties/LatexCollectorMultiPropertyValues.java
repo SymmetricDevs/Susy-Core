@@ -6,17 +6,17 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class PseudoMultiPropertyValues {
+public class LatexCollectorMultiPropertyValues {
     public ArrayList<IBlockState> validBlockStates;
 
     public final String blockGroupName;
 
-    public PseudoMultiPropertyValues(@Nonnull String blockGroupName, @Nonnull IBlockState... validBlockStates) {
+    public LatexCollectorMultiPropertyValues(@Nonnull String blockGroupName, @Nonnull IBlockState... validBlockStates) {
         this.validBlockStates = new ArrayList<>(Arrays.asList(validBlockStates));
         this.blockGroupName = blockGroupName;
     }
 
-    public PseudoMultiPropertyValues(@Nonnull String blockGroupName, @Nonnull ArrayList<IBlockState> validBlocks) {
+    public LatexCollectorMultiPropertyValues(@Nonnull String blockGroupName, @Nonnull ArrayList<IBlockState> validBlocks) {
         this.validBlockStates = validBlocks;
         this.blockGroupName = blockGroupName;
     }

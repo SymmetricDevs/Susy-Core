@@ -17,8 +17,8 @@ import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.metatileentity.CatalystMachineMetaTileEntity;
 import supersymmetry.api.metatileentity.ContinuousMachineMetaTileEntity;
-import supersymmetry.api.metatileentity.PseudoMultiMachineMetaTileEntity;
-import supersymmetry.api.metatileentity.PseudoMultiSteamMachineMetaTileEntity;
+import supersymmetry.api.metatileentity.LatexCollectorMultiMachineMetaTileEntity;
+import supersymmetry.api.metatileentity.LatexCollectorMultiSteamMachineMetaTileEntity;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicator;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicators;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
@@ -45,8 +45,8 @@ public class SuSyMetaTileEntities {
 
     public static MetaTileEntityCoagulationTank COAGULATION_TANK;
 
-    public static PseudoMultiMachineMetaTileEntity[] LATEX_COLLECTOR;
-    public static PseudoMultiSteamMachineMetaTileEntity[] STEAM_LATEX_COLLECTOR;
+    public static LatexCollectorMultiMachineMetaTileEntity[] LATEX_COLLECTOR;
+    public static LatexCollectorMultiSteamMachineMetaTileEntity[] STEAM_LATEX_COLLECTOR;
 
     public static CatalystMachineMetaTileEntity[] VULCANIZING_PRESS;
     public static SuSySimpleSteamMetaTileEntity[] STEAM_VULCANIZING_PRESS;
@@ -310,14 +310,14 @@ public class SuSyMetaTileEntities {
     static{
         EVAPORATION_POOL_ID = 17006;
 
-        STEAM_LATEX_COLLECTOR = new PseudoMultiSteamMachineMetaTileEntity[2];
+        STEAM_LATEX_COLLECTOR = new LatexCollectorMultiSteamMachineMetaTileEntity[2];
         STEAM_VULCANIZING_PRESS = new SuSySimpleSteamMetaTileEntity[2];
         STEAM_ROASTER = new SuSySimpleSteamMetaTileEntity[2];
 
         STEAM_MIXER = new SuSySimpleSteamMetaTileEntity[2];
         STEAM_VACUUM_CHAMBER = new SuSySimpleSteamMetaTileEntity[2];
 
-        LATEX_COLLECTOR = new PseudoMultiMachineMetaTileEntity[GTValues.EV];
+        LATEX_COLLECTOR = new LatexCollectorMultiMachineMetaTileEntity[GTValues.EV];
         VULCANIZING_PRESS = new CatalystMachineMetaTileEntity[GTValues.EV];
         ROASTER = new CatalystMachineMetaTileEntity[GTValues.OpV];
         VACUUM_CHAMBER = new SimpleMachineMetaTileEntity[GTValues.OpV];
