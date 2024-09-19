@@ -1,12 +1,27 @@
 package supersymmetry.common.item.armor;
 
+import gregtech.api.capability.GregtechCapabilities;
+import gregtech.api.capability.IElectricItem;
+import gregtech.api.items.armor.ArmorMetaItem;
+import gregtech.api.items.metaitem.ElectricStats;
+import gregtech.common.items.behaviors.TooltipBehavior;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
+import net.minecraft.world.World;
+import net.minecraftforge.common.ISpecialArmor;
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.item.SuSyArmorItem;
+
+import java.util.List;
 
 import static net.minecraft.inventory.EntityEquipmentSlot.*;
 
@@ -14,12 +29,14 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
     private final double hoursOfLife;
     private final String name;
     private final int tier;
+    private final double relativeAbsorption;
 
-    public AdvancedBreathingApparatus(EntityEquipmentSlot slot, double hoursOfLife, String name, int tier) {
+    public AdvancedBreathingApparatus(EntityEquipmentSlot slot, double hoursOfLife, String name, int tier, double relativeAbsorption) {
         super(slot);
         this.hoursOfLife = hoursOfLife;
         this.name = name;
         this.tier = tier;
+        this.relativeAbsorption = relativeAbsorption;
     }
 
     @Override
@@ -111,4 +128,48 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
             return 1 - getDamage(itemStack);
         }
     }
+
+    @Override
+    public float getHeatResistance() {
+        return 0.25F;
+    }
+
+    @Override
+    public ISpecialArmor.ArmorProperties getProperties(EntityLivingBase player, @NotNull ItemStack armor, DamageSource source,
+                                                       double damage, EntityEquipmentSlot equipmentSlot) {
+        int damageLimit = Integer.MAX_VALUE;
+        if (source.isUnblockable()) return new ISpecialArmor.ArmorProperties(0, 0.0, 0);
+        return new ISpecialArmor.ArmorProperties(0, getAbsorption(armor) * relativeAbsorption, damageLimit);
+    }
+
+    protected float getAbsorption(ItemStack itemStack) {
+        return getAbsorption(this.SLOT);
+    }
+
+    protected float getAbsorption(EntityEquipmentSlot slot) {
+        return switch (slot) {
+            case HEAD, FEET -> 0.15F;
+            case CHEST -> 0.4F;
+            case LEGS -> 0.3F;
+            default -> 0.0F;
+        };
+    }
+
+
+    @Override
+    public void addToolComponents(ArmorMetaItem.ArmorMetaValueItem mvi) {
+        mvi.addComponents(new TooltipBehavior(this::addInfo));
+    }
+
+    private void addInfo(List<String> strings) {
+        int armor = (int) Math.round(20.0F * this.getAbsorption(this.SLOT) * this.relativeAbsorption);
+        if (armor > 0)
+            strings.add(I18n.format("attribute.modifier.plus.0", armor, I18n.format("attribute.name.generic.armor")));
+    }
+
+    @Override
+    public int getArmorDisplay(EntityPlayer player, ItemStack armor, int slot) {
+        return (int) Math.round(20.0F * this.getAbsorption(armor) * relativeAbsorption);
+    }
+
 }

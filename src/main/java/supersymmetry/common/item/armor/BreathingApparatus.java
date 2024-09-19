@@ -2,10 +2,14 @@ package supersymmetry.common.item.armor;
 
 import gregtech.api.items.metaitem.stats.IItemDurabilityManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
+import net.minecraftforge.common.ISpecialArmor;
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.items.IBreathingArmorLogic;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.item.SuSyArmorItem;
@@ -89,5 +93,4 @@ public class BreathingApparatus implements IBreathingArmorLogic, IItemDurability
         compound.setDouble("oxygen", getOxygen(stack) + oxygenChange);
         stack.setTagCompound(compound);
     }
-
 }

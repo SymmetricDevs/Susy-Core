@@ -5,15 +5,12 @@ import gregtech.api.items.metaitem.stats.IItemBehaviour;
 
 import gregtech.api.items.metaitem.stats.IItemDurabilityManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import supersymmetry.api.items.IBreathingArmorLogic;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
@@ -107,8 +104,4 @@ public class SimpleGasMask implements IBreathingArmorLogic, IItemDurabilityManag
         compound.setDouble("damage", getDamage(stack) + damageChange);
         stack.setTagCompound(compound);
     }
-
-
-
-
 }
