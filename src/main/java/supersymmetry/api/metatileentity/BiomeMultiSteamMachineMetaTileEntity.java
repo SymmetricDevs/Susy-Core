@@ -1,0 +1,75 @@
+package supersymmetry.api.metatileentity;
+
+import codechicken.lib.raytracer.CuboidRayTraceResult;
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.api.recipes.RecipeMap;
+import gregtech.client.renderer.ICubeRenderer;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
+import supersymmetry.api.capability.impl.BiomeMultiSteamRecipeLogic;
+import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicator;
+import supersymmetry.common.metatileentities.single.steam.SuSySimpleSteamMetaTileEntity;
+
+public class BiomeMultiSteamMachineMetaTileEntity extends SuSySimpleSteamMetaTileEntity {
+
+    private IBlockState targetBlockState;
+
+    public IBlockState getTargetBlockState() {
+        return targetBlockState;
+    }
+
+    public BiomeMultiSteamMachineMetaTileEntity(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator, ICubeRenderer renderer, boolean isBrickedCasing, boolean isHighPressure) {
+        super(metaTileEntityId, recipeMap, progressIndicator, renderer, isBrickedCasing, isHighPressure);
+        this.workableHandler = new BiomeMultiSteamRecipeLogic(this, recipeMap, isHighPressure, steamFluidTank, 1.0);
+    }
+
+    @Override
+    public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
+        return new BiomeMultiSteamMachineMetaTileEntity(metaTileEntityId, workableHandler.getRecipeMap(), progressIndicator, renderer, isBrickedCasing, isHighPressure);
+    }
+
+    public void checkAdjacentBlocks(){
+        if(this.getWorld() == null || this.getWorld().isRemote) {
+            targetBlockState = null;
+            return;
+        }
+
+        //the traditional "back" side of this type of MTE is actually treated as its front for recipe purposes,
+        //making wrench movement feel as though you are holding onto or manipulating the back side to point the MTE.
+        targetBlockState = this.getWorld().getBlockState(this.getPos().offset(this.getFrontFacing().getOpposite()));
+    }
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        this.checkAdjacentBlocks();
+    }
+
+    @Override
+    public void onPlacement() {
+        super.onPlacement();
+        this.checkAdjacentBlocks();
+    }
+
+    @Override
+    public void onNeighborChanged() {
+        super.onNeighborChanged();
+        this.checkAdjacentBlocks();
+    }
+
+    @Override
+    public boolean onWrenchClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing, CuboidRayTraceResult hitResult) {
+        boolean wrenchClickSucceeded = super.onWrenchClick(playerIn, hand, facing, hitResult);
+        if (wrenchClickSucceeded) this.checkAdjacentBlocks();
+        return wrenchClickSucceeded;
+    }
+
+    @Override
+    public boolean getIsWeatherOrTerrainResistant() {
+        return true;
+    }
+}
