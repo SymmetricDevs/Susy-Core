@@ -4,12 +4,14 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.world.biome.Biome;
 
+import java.util.ArrayList;
+
 public class BiomeMultiPropertyList {
 
     public static BiomeMultiPropertyList EMPTY_LIST = new BiomeMultiPropertyList();
 
-    public IntList whiteListBiomes = new IntArrayList();
-    public IntList blackListBiomes = new IntArrayList();
+    public String[] whiteListBiomes= new String[16]; //I will change this hardcoded limit if you somehow whitelist more than 16,
+    public String[] blackListBiomes= new String[16];
 
     public void add(String key, boolean toBlacklist) {
         if (toBlacklist) {

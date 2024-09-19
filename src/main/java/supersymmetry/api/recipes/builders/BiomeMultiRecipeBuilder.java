@@ -48,14 +48,12 @@ public class BiomeMultiRecipeBuilder extends RecipeBuilder<BiomeMultiRecipeBuild
 
     public IntList getBiomes() {
         return this.recipePropertyStorage == null ? IntLists.EMPTY_LIST :
-                this.recipePropertyStorage.getRecipePropertyValue(BiomeMultiProperty.getInstance(),
-                        BiomeMultiPropertyList.EMPTY_LIST).whiteListBiomes;
+                this.recipePropertyStorage.getRecipePropertyValue(BiomeMultiProperty.getInstance(),BiomeMultiPropertyList.EMPTY_LIST).whiteListBiomes;
     }
 
     public IntList getBlockedBiomes() {
         return this.recipePropertyStorage == null ? IntLists.EMPTY_LIST :
-                this.recipePropertyStorage.getRecipePropertyValue(BiomeMultiProperty.getInstance(),
-                        BiomeMultiPropertyList.EMPTY_LIST).blackListBiomes;
+                this.recipePropertyStorage.getRecipePropertyValue(BiomeMultiProperty.getInstance(), BiomeMultiPropertyList.EMPTY_LIST).blackListBiomes;
     }
 
 
