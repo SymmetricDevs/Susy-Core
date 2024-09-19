@@ -11,6 +11,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+
 public class BiomeMultiProperty extends RecipeProperty<BiomeMultiPropertyList> {
     public static final String KEY = "biome";
 
@@ -39,12 +41,11 @@ public class BiomeMultiProperty extends RecipeProperty<BiomeMultiPropertyList> {
                     getBiomesForRecipe(castValue(value).blackListBiomes)), x, y, color);
     }
 
-    private static String getBiomesForRecipe(String[] value) {
-        //Int2ObjectMap<String> biomeNames = WorldGenRegistry.getNamedDimensions();
+    private static String getBiomesForRecipe(ArrayList<String> biomeNames) {
         StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < value.size(); i++) {
-            builder.append(biomeNames.getOrDefault(value.getInt(i), String.valueOf(value.getInt(i))));
-            if (i != value.size() - 1)
+        for (int i = 0; i < biomeNames.size(); i++) {
+            builder.append(biomeNames.get(i));
+            if (i != biomeNames.size() - 1)
                 builder.append(", ");
         }
         String str = builder.toString();

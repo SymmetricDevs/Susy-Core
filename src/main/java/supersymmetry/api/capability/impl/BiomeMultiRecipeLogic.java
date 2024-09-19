@@ -33,7 +33,8 @@ public class BiomeMultiRecipeLogic extends RecipeLogicEnergy {
     protected boolean checkBiomeRequirement(@NotNull Recipe recipe) {
         if (!recipe.hasProperty(BiomeMultiProperty.getInstance())) return true;
         Biome biome = getWorld().getBiome(this.getMetaTileEntity().getPos());
-        return recipe.getProperty(BiomeMultiProperty.getInstance(), BiomeMultiPropertyList.EMPTY_LIST)
+        return recipe
+                .getProperty(BiomeMultiProperty.getInstance(), BiomeMultiPropertyList.EMPTY_LIST)
                 .checkBiome(biome);
     }
 

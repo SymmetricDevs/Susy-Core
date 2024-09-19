@@ -6,8 +6,12 @@ import gregtech.api.recipes.RecipeMap;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.ints.IntLists;
 import net.minecraft.world.biome.Biome;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.recipes.properties.BiomeMultiProperty;
 import supersymmetry.api.recipes.properties.BiomeMultiPropertyList;
+
+import java.util.ArrayList;
 
 public class BiomeMultiRecipeBuilder extends RecipeBuilder<BiomeMultiRecipeBuilder>{
     public BiomeMultiRecipeBuilder() {
@@ -41,18 +45,21 @@ public class BiomeMultiRecipeBuilder extends RecipeBuilder<BiomeMultiRecipeBuild
     }
 
     public BiomeMultiPropertyList getCompleteBiomes() {
-        return this.recipePropertyStorage == null ? BiomeMultiPropertyList.EMPTY_LIST :
-                this.recipePropertyStorage.getRecipePropertyValue(BiomeMultiProperty.getInstance(), BiomeMultiPropertyList.EMPTY_LIST);
+        return this.recipePropertyStorage == null
+                ? BiomeMultiPropertyList.EMPTY_LIST
+                : this.recipePropertyStorage.getRecipePropertyValue(BiomeMultiProperty.getInstance(), BiomeMultiPropertyList.EMPTY_LIST);
     }
 
-    public IntList getBiomes() {
-        return this.recipePropertyStorage == null ? IntLists.EMPTY_LIST :
-                this.recipePropertyStorage.getRecipePropertyValue(BiomeMultiProperty.getInstance(), BiomeMultiPropertyList.EMPTY_LIST).whiteListBiomes;
+    public BiomeMultiPropertyList getBiomes() {
+        return this.recipePropertyStorage == null
+                ? BiomeMultiPropertyList.EMPTY_LIST
+                : this.recipePropertyStorage.getRecipePropertyValue(BiomeMultiProperty.getInstance(), BiomeMultiPropertyList.EMPTY_LIST).whiteListBiomes;
     }
 
-    public IntList getBlockedBiomes() {
-        return this.recipePropertyStorage == null ? IntLists.EMPTY_LIST :
-                this.recipePropertyStorage.getRecipePropertyValue(BiomeMultiProperty.getInstance(), BiomeMultiPropertyList.EMPTY_LIST).blackListBiomes;
+    public BiomeMultiPropertyList getBlockedBiomes() {
+        return this.recipePropertyStorage == null
+                ? BiomeMultiPropertyList.EMPTY_LIST
+                : this.recipePropertyStorage.getRecipePropertyValue(BiomeMultiProperty.getInstance(), BiomeMultiPropertyList.EMPTY_LIST).blackListBiomes;
     }
 
 
