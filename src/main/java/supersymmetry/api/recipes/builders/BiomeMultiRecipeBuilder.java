@@ -26,11 +26,11 @@ public class BiomeMultiRecipeBuilder extends RecipeBuilder<BiomeMultiRecipeBuild
         return new BiomeMultiRecipeBuilder(this);
     }
 
-    public BiomeMultiRecipeBuilder biome(Biome biome) {
+    public BiomeMultiRecipeBuilder biome(String biome) {
         return biome(biome, false);
     }
 
-    public BiomeMultiRecipeBuilder biome(Biome biome, boolean toBlackList) {
+    public BiomeMultiRecipeBuilder biome(String biome, boolean toBlackList) {
         BiomeMultiPropertyList biomes = getCompleteBiomes();
         if (biomes == BiomeMultiPropertyList.EMPTY_LIST) {
             biomes = new BiomeMultiPropertyList();
