@@ -307,19 +307,19 @@ public class MetaTileEntityOceanPumper extends MultiblockWithDisplayBase impleme
         return SusyTextures.OCEANIC_DRILL_OVERLAY;
     }
 
-    protected IBlockState getCasingState() {
+    protected static IBlockState getCasingState() {
         return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID);
     }
 
-    protected IBlockState getGrateState() {
+    protected static IBlockState getGrateState() {
         return MetaBlocks.MULTIBLOCK_CASING.getState(BlockMultiblockCasing.MultiblockCasingType.GRATE_CASING);
     }
 
-    protected IBlockState getPipeCasingState() {
+    protected static IBlockState getPipeCasingState() {
         return MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE);
     }
 
-    protected IBlockState getConcreteState() {
+    protected static IBlockState getConcreteState() {
         return MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT);
     }
 

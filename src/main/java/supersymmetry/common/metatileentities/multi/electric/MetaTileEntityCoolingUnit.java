@@ -6,18 +6,18 @@ import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.unification.material.Materials;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
+import gregtech.common.blocks.BlockBoilerCasing.BoilerCasingType;
+import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
-import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
-import gregtech.common.blocks.BlockBoilerCasing.BoilerCasingType;
 import supersymmetry.client.renderer.textures.SusyTextures;
-
-import javax.annotation.Nonnull;
 
 public class MetaTileEntityCoolingUnit extends RecipeMapMultiblockController {
 
@@ -30,8 +30,16 @@ public class MetaTileEntityCoolingUnit extends RecipeMapMultiblockController {
         return new MetaTileEntityCoolingUnit(metaTileEntityId);
     }
 
+    protected static IBlockState getCasingState() {
+        return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID);
+    }
+
+    @NotNull
     @Override
     protected BlockPattern createStructurePattern() {
+        // Different characters use common constraints. Copied from GCyM
+        TraceabilityPredicate casingPredicate = states(getCasingState()).setMinGlobalLimited(270);
+
         return FactoryBlockPattern.start()
                 .aisle("AAAAAAA", "AAAAAAA", "AAAAAAA", "AAAAAAA", "AADDDAA", "AAAAAAA", "AAAAAAA", "AAAAAAA", "AAAAAAA", "       ", "  EEE  ")
                 .aisle("AAAAAAA", "A#####A", "A#####A", "A#####A", "A#####A", "A#####A", "A#####A", "A#####A", "AAAAAAA", " EEEEE ", " EEEEE ")
@@ -41,12 +49,12 @@ public class MetaTileEntityCoolingUnit extends RecipeMapMultiblockController {
                 .aisle("AAAAAAA", "A#####A", "A#####A", "A#####A", "A#####A", "A#####A", "A#####A", "A#####A", "AAAAAAA", " EEEEE ", " EEEEE ")
                 .aisle("AAASAAA", "AAAAAAA", "AAAAAAA", "AAAAAAA", "AADDDAA", "AAAAAAA", "AAAAAAA", "AAAAAAA", "AAAAAAA", "       ", "  EEE  ")
                 .where('S', selfPredicate())
-                .where('A', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)).setMinGlobalLimited(270)
+                .where('A', casingPredicate
                         .or(autoAbilities(true, true, true, true, true, true, false)))
-                .where('B', states(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)))
-                .where('C', states(MetaBlocks.FRAMES.get(Materials.StainlessSteel).getBlock(Materials.StainlessSteel)))
+                .where('B', frames(Materials.Steel))
+                .where('C', frames(Materials.StainlessSteel))
                 .where('D', states(MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE)))
-                .where('E', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)))
+                .where('E', casingPredicate)
                 .where(' ', any())
                 .where('#', air())
                 .build();
@@ -57,7 +65,7 @@ public class MetaTileEntityCoolingUnit extends RecipeMapMultiblockController {
         return Textures.SOLID_STEEL_CASING;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.COOLING_UNIT_OVERLAY;

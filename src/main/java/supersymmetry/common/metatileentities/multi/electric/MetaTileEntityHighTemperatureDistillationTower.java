@@ -70,7 +70,7 @@ public class MetaTileEntityHighTemperatureDistillationTower extends RecipeMapMul
         return SusyTextures.SILICON_CARBIDE_CASING;
     }
 
-    protected IBlockState getCasingState() {
+    protected static IBlockState getCasingState() {
         return SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.SILICON_CARBIDE_CASING);
     }
 

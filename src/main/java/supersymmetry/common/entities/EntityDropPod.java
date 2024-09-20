@@ -29,7 +29,6 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
-import supersymmetry.api.SusyLog;
 import supersymmetry.client.audio.MovingSoundDropPod;
 import supersymmetry.client.renderer.particles.SusyParticleFlame;
 import supersymmetry.client.renderer.particles.SusyParticleSmoke;
@@ -172,6 +171,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 BlockPos pos = new BlockPos(this.posX + i, above ? this.posY + 2 : this.posY - 1, this.posZ + j);
+                if (this.world.getBlockState(pos).getMaterial().isLiquid()) return;
                 if (this.world.getBlockState(pos).getBlockHardness(this.world, pos) < 0.3) {
                     this.world.setBlockToAir(pos);
                 } else if (above) {
@@ -316,6 +316,16 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
         if (passenger instanceof EntityLivingBase) {
             ((EntityLivingBase) passenger).renderYawOffset = this.renderYawOffset;
         }
+    }
+
+    @Override
+    public boolean shouldDismountInWater(@NotNull Entity rider) {
+        return false;
+    }
+
+    @Override
+    public boolean handleWaterMovement() {
+        return isInWater();
     }
 
     @Override
