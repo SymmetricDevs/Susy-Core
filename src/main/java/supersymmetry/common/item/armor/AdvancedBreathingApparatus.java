@@ -48,10 +48,12 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
     }
 
     @Override
+    public boolean mayBreatheWith(ItemStack stack, EntityPlayer player) {
+        return player.dimension == DimensionBreathabilityHandler.BENEATH_ID || player.dimension == DimensionBreathabilityHandler.NETHER_ID;
+    }
+
+    @Override
     public double tryTick(ItemStack stack, EntityPlayer player) {
-        if (!DimensionBreathabilityHandler.isInHazardousEnvironment(player)) {
-            return 0;
-        }
         this.handleDamage(stack, player);
 
         ItemStack chest = player.getItemStackFromSlot(CHEST);
@@ -108,7 +110,7 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
 
 
     void handleDamage(ItemStack stack, EntityPlayer player) {
-        if (hoursOfLife == 0) {
+        if (hoursOfLife == 0 || player.dimension == DimensionBreathabilityHandler.BENEATH_ID) {
             return; // No damage
         }
         double amount = (1. / (60. * 60. * hoursOfLife));
@@ -143,7 +145,7 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
     }
 
     protected float getAbsorption(ItemStack itemStack) {
-        return getAbsorption(this.SLOT);
+        return getAbsorption(getEquipmentSlot(itemStack));
     }
 
     protected float getAbsorption(EntityEquipmentSlot slot) {
@@ -156,12 +158,20 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
     }
 
 
-    @Override
-    public void addToolComponents(ArmorMetaItem.ArmorMetaValueItem mvi) {
-        mvi.addComponents(new TooltipBehavior(this::addInfo));
-    }
+    public void addInformation(ItemStack stack, List<String> strings) {
+        if (getEquipmentSlot(stack) == CHEST) {
+            int oxygen = (int) getOxygen(stack);
+            int maxOxygen = (int) getMaxOxygen(stack);
+            strings.add(I18n.format("supersymmetry.oxygen", oxygen, maxOxygen));
+            if (hoursOfLife == 0) {
+                double lifetime = 60 * 60 * hoursOfLife;
+                int secondsRemaining = (int) (lifetime - getDamage(stack) * lifetime);
+                strings.add(I18n.format("supersymmetry.seconds_left", secondsRemaining));
+            } else {
+                strings.add(I18n.format("supersymmetry.unlimited"));
+            }
+        }
 
-    private void addInfo(List<String> strings) {
         int armor = (int) Math.round(20.0F * this.getAbsorption(this.SLOT) * this.relativeAbsorption);
         if (armor > 0)
             strings.add(I18n.format("attribute.modifier.plus.0", armor, I18n.format("attribute.name.generic.armor")));

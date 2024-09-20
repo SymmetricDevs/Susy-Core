@@ -4,6 +4,7 @@ import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.items.metaitem.stats.IItemBehaviour;
 
 import gregtech.api.items.metaitem.stats.IItemDurabilityManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,7 +16,10 @@ import net.minecraft.world.World;
 import supersymmetry.api.items.IBreathingArmorLogic;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 
+import java.util.List;
+
 public class SimpleGasMask implements IBreathingArmorLogic, IItemDurabilityManager {
+    public static final double LIFETIME = 1200;
     @Override
     public EntityEquipmentSlot getEquipmentSlot(ItemStack itemStack) {
         return EntityEquipmentSlot.HEAD;
@@ -24,33 +28,6 @@ public class SimpleGasMask implements IBreathingArmorLogic, IItemDurabilityManag
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
         return "gregtech:textures/armor/simple_gas_mask.png";
-    }
-
-    @Override
-    public void addToolComponents(ArmorMetaItem.ArmorMetaValueItem mvi) {
-        mvi.addComponents(new IItemBehaviour() {
-
-            @Override
-            public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-                return onRightClick(world, player, hand);
-            }
-        });
-    }
-
-    public ActionResult<ItemStack> onRightClick(World world, EntityPlayer player, EnumHand hand) {
-        if (player.getHeldItem(hand).getItem() instanceof ArmorMetaItem) {
-            ItemStack armor = player.getHeldItem(hand);
-            if (armor.getItem() instanceof ArmorMetaItem &&
-                    player.inventory.armorInventory.get(EntityEquipmentSlot.HEAD.getIndex()).isEmpty() &&
-                    !player.isSneaking()) {
-                player.inventory.armorInventory.set(EntityEquipmentSlot.HEAD.getIndex(), armor.copy());
-                player.setHeldItem(hand, ItemStack.EMPTY);
-                player.playSound(new SoundEvent(new ResourceLocation("item.armor.equip_generic")), 1.0F, 1.0F);
-                return ActionResult.newResult(EnumActionResult.SUCCESS, armor);
-            }
-        }
-
-        return ActionResult.newResult(EnumActionResult.PASS, player.getHeldItem(hand));
     }
 
 
@@ -67,7 +44,7 @@ public class SimpleGasMask implements IBreathingArmorLogic, IItemDurabilityManag
 
     @Override
     public boolean mayBreatheWith(ItemStack stack, EntityPlayer player) {
-        return getDamage(stack) < 1;
+        return player.dimension == DimensionBreathabilityHandler.BENEATH_ID && getDamage(stack) < 1;
     }
 
 
@@ -79,7 +56,7 @@ public class SimpleGasMask implements IBreathingArmorLogic, IItemDurabilityManag
     @Override
     public double tryTick(ItemStack stack, EntityPlayer player) {
         if (DimensionBreathabilityHandler.isInHazardousEnvironment(player)) {
-            changeDamage(stack, 1. / (60. * 20.)); // It's actually ticked every overall second, not just every tick.
+            changeDamage(stack, 1. / LIFETIME); // It's actually ticked every overall second, not just every tick.
         }
         if (getDamage(stack) >= 1) {
             player.renderBrokenItemStack(stack);
@@ -87,6 +64,12 @@ public class SimpleGasMask implements IBreathingArmorLogic, IItemDurabilityManag
             player.setItemStackToSlot(EntityEquipmentSlot.HEAD, ItemStack.EMPTY);
         }
         return 0;
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, List<String> tooltips) {
+        int secondsRemaining = (int) (LIFETIME - getDamage(stack) * LIFETIME);
+        tooltips.add(I18n.format("supersymmetry.seconds_left", secondsRemaining));
     }
 
     private double getDamage(ItemStack stack) {

@@ -25,6 +25,9 @@ public final class DimensionBreathabilityHandler {
 
     private static final Map<Integer, BreathabilityInfo> dimensionBreathabilityMap = new HashMap<>();
 
+    public static final int BENEATH_ID = 10;
+    public static final int NETHER_ID = -1;
+
     private DimensionBreathabilityHandler() {}
 
     public static void loadConfig() {
