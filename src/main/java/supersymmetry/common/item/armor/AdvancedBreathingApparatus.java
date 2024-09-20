@@ -163,13 +163,13 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
             int oxygen = (int) getOxygen(stack);
             int maxOxygen = (int) getMaxOxygen(stack);
             strings.add(I18n.format("supersymmetry.oxygen", oxygen, maxOxygen));
-            if (hoursOfLife == 0) {
-                double lifetime = 60 * 60 * hoursOfLife;
-                int secondsRemaining = (int) (lifetime - getDamage(stack) * lifetime);
-                strings.add(I18n.format("supersymmetry.seconds_left", secondsRemaining));
-            } else {
-                strings.add(I18n.format("supersymmetry.unlimited"));
-            }
+        }
+        if (hoursOfLife == 0) {
+            double lifetime = 60 * 60 * hoursOfLife;
+            int secondsRemaining = (int) (lifetime - getDamage(stack) * lifetime);
+            strings.add(I18n.format("supersymmetry.seconds_left", secondsRemaining));
+        } else {
+            strings.add(I18n.format("supersymmetry.unlimited"));
         }
 
         int armor = (int) Math.round(20.0F * this.getAbsorption(this.SLOT) * this.relativeAbsorption);
