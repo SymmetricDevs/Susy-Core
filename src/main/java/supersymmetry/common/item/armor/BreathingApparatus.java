@@ -44,7 +44,7 @@ public class BreathingApparatus implements IBreathingArmorLogic, IItemDurability
         ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
         if (chest.getItem() instanceof SuSyArmorItem item) {
             if (item.getItem(chest).getArmorLogic() instanceof BreathingApparatus tank) {
-                return tank.getOxygen(stack) < tank.getMaxOxygen(stack);
+                return tank.getOxygen(stack) > 0;
             }
         }
         return false;
@@ -78,7 +78,7 @@ public class BreathingApparatus implements IBreathingArmorLogic, IItemDurability
     @Override
     public double getDurabilityForDisplay(ItemStack itemStack) {
         if (SLOT == EntityEquipmentSlot.CHEST) {
-            return 1 - (getOxygen(itemStack) / getMaxOxygen(itemStack));
+            return (getOxygen(itemStack) / getMaxOxygen(itemStack));
         } else {
             return 1;
         }
