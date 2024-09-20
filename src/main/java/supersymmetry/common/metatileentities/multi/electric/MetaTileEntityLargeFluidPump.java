@@ -46,15 +46,16 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
                 .aisle("       ", "      P", "       ")
                 .aisle("FCCCC  ", "CCCCC P", "FCECC  ")
                 .aisle("CCSGC  ", "OPPPPPP", "FCECC  ")
-                .aisle("FCCC   ", "CCCCC  ", "FCCC   ")
+                .aisle("FCCC   ", "CCCCC  ", "FCEC   ")
                 .where(' ', any())
                 .where('S', selfPredicate())
                 .where('P', states(getPipeCasingState()))
                 .where('G', states(getGearboxState()))
                 .where('F', frames(Materials.Steel))
-                .where('C', states(getCasingState()).setMinGlobalLimited(20))
+                .where('C', states(getCasingState()))
+                .where('E', states(getCasingState())
+                        .or(abilities(MultiblockAbility.INPUT_ENERGY)))
                 .where('O', abilities(MultiblockAbility.EXPORT_FLUIDS))
-                .where('E', abilities(MultiblockAbility.INPUT_ENERGY))
                 .build();
     }
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
