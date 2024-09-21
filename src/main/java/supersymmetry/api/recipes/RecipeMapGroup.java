@@ -16,29 +16,27 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class RecipeMapGroup<R extends RecipeBuilder<R>> extends RecipeMap<R> {
 
-    private final RecipeMap<?>[] recipeMaps;
+    protected final RecipeMap<?>[] recipeMaps;
 
-    public RecipeMapGroup(@NotNull String unlocalizedName, int maxInputs, int maxOutputs, int maxFluidInputs, int maxFluidOutputs, @NotNull R defaultRecipeBuilder, boolean isHidden, @NotNull RecipeMap<?>[] recipeMaps) {
+    protected RecipeMapGroup(@NotNull String unlocalizedName, int maxInputs, int maxOutputs, int maxFluidInputs, int maxFluidOutputs, @NotNull R defaultRecipeBuilder, boolean isHidden, @NotNull RecipeMap<?>[] recipeMaps) {
         super(unlocalizedName, maxInputs, maxOutputs, maxFluidInputs, maxFluidOutputs, defaultRecipeBuilder, isHidden);
         this.recipeMaps = recipeMaps;
     }
 
     @Nonnull
-    public static RecipeMapGroup<SimpleRecipeBuilder> create(@NotNull String unlocalizedName, @NotNull RecipeMap<?>[] recipeMaps) {
-        AtomicInteger maxInputs = new AtomicInteger(), maxOutputs = new AtomicInteger(),
-                maxFluidInputs = new AtomicInteger(), maxFluidOutputs = new AtomicInteger();
-        Arrays.stream(recipeMaps).forEach(recipeMap -> {
-            maxInputs.set(Math.max(maxInputs.get(), recipeMap.getMaxInputs()));
-            maxOutputs.set(Math.max(maxOutputs.get(), recipeMap.getMaxOutputs()));
-            maxFluidInputs.set(Math.max(maxFluidInputs.get(), recipeMap.getMaxFluidInputs()));
-            maxFluidOutputs.set(Math.max(maxFluidOutputs.get(), recipeMap.getMaxFluidOutputs()));
-        });
-        return new RecipeMapGroup<>(unlocalizedName, maxInputs.get(), maxOutputs.get(), maxFluidInputs.get(), maxFluidOutputs.get(), new SimpleRecipeBuilder(), true, recipeMaps);
+    public static RecipeMapGroup<SimpleRecipeBuilder> create(@NotNull String unlocalizedName, @NotNull RecipeMap<?>... recipeMaps) {
+        int maxInputs = 0, maxOutputs = 0, maxFluidInputs = 0, maxFluidOutputs = 0;
+        for (RecipeMap<?> recipeMap : recipeMaps) {
+            maxInputs = Math.max(maxInputs, recipeMap.getMaxInputs());
+            maxOutputs = Math.max(maxOutputs, recipeMap.getMaxOutputs());
+            maxFluidInputs = Math.max(maxFluidInputs, recipeMap.getMaxFluidInputs());
+            maxFluidOutputs = Math.max(maxFluidOutputs, recipeMap.getMaxFluidOutputs());
+        }
+        return new RecipeMapGroup<>(unlocalizedName, maxInputs, maxOutputs, maxFluidInputs, maxFluidOutputs, new SimpleRecipeBuilder(), true, recipeMaps);
     }
 
     @Nullable
@@ -58,11 +56,7 @@ public class RecipeMapGroup<R extends RecipeBuilder<R>> extends RecipeMap<R> {
     public Map<GTRecipeCategory, List<Recipe>> getRecipesByCategory() {
         Map<GTRecipeCategory, List<Recipe>> res = new Object2ObjectOpenHashMap<>();
         for (RecipeMap<?> recipeMap : recipeMaps) {
-            recipeMap.getRecipesByCategory().forEach((category, recipes) -> {
-                List<Recipe> list = res.getOrDefault(category, new java.util.ArrayList<>());
-                list.addAll(recipes);
-                res.put(category, list);
-            });
+            res.putAll(recipeMap.getRecipesByCategory());
         }
         return Collections.unmodifiableMap(res);
     }
