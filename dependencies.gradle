@@ -62,5 +62,7 @@ dependencies {
     compileOnly rfg.deobf("curse.maven:hwyla-253449:2568751")
     compileOnly rfg.deobf("curse.maven:travelers-backpack-321117:3150850")
 
+    compileOnly rfg.deobf("curse.maven:bubbles-a-baubles-fork-995393:5719448")
+
     compileOnly rfg.deobf("curse.maven:barrels-drums-storage-more-319404:2708193")
 }
