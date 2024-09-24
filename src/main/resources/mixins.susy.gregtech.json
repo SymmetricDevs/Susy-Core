@@ -8,9 +8,7 @@
     "BlockMachineMixin",
     "MetaTileEntityFluidDrillMixin",
     "MetaTileEntityLargeMinerMixin",
-    "MetaTileEntityMinerMixin"
-  ],
-  "client" : [
+    "MetaTileEntityMinerMixin",
     "MultiblockControllerBaseMixin"
   ]
 }
