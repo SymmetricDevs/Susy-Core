@@ -59,7 +59,11 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
         ItemStack chest = player.getItemStackFromSlot(CHEST);
         if (chest.getItem() instanceof SuSyArmorItem item) {
             if (item.getItem(chest).getArmorLogic() instanceof AdvancedBreathingApparatus tank && tank.tier == tier) {
-                tank.changeOxygen(chest, 1.);
+                if (tank.getOxygen(chest) <= 0) {
+                    return 0.0625;
+                } else {
+                    tank.changeOxygen(chest, -1.);
+                }
                 tank.handleDamage(chest, player);
 
                 int piecesCount = 0;
@@ -124,11 +128,14 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
 
     @Override
     public double getDurabilityForDisplay(ItemStack itemStack) {
-        if (SLOT == CHEST) {
-            return 1 - (getOxygen(itemStack) / getMaxOxygen(itemStack));
+        if (SLOT == CHEST && getMaxOxygen(itemStack) != -1) {
+            return getOxygen(itemStack) / getMaxOxygen(itemStack);
         } else {
-            return 1 - getDamage(itemStack);
+            if (hoursOfLife > 0) {
+                return 1 - getDamage(itemStack);
+            }
         }
+        return 1;
     }
 
     @Override
@@ -159,10 +166,15 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
 
 
     public void addInformation(ItemStack stack, List<String> strings) {
+
         if (getEquipmentSlot(stack) == CHEST) {
-            int oxygen = (int) getOxygen(stack);
             int maxOxygen = (int) getMaxOxygen(stack);
-            strings.add(I18n.format("supersymmetry.oxygen", oxygen, maxOxygen));
+            if (maxOxygen == -1) {
+                strings.add(I18n.format("supersymmetry.unlimited_oxygen"));
+            } else {
+                int oxygen = (int) getOxygen(stack);
+                strings.add(I18n.format("supersymmetry.oxygen", oxygen, maxOxygen));
+            }
         }
         if (hoursOfLife > 0) {
             double lifetime = 60 * 60 * hoursOfLife;

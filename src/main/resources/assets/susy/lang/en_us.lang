@@ -856,6 +856,7 @@ metaitem.nomex_boots.name=Nomex Boots
 metaitem.nomex_boots.tooltip=Stay indefinitely in the mantle!
 
 supersymmetry.oxygen=Remaining air: §b%s seconds§r (out of %s)
+supersymmetry.oxygen=Remaining air: §2Unlimited§r
 supersymmetry.seconds_left=Remaining life: §2%s seconds§r
 supersymmetry.unlimited=Remaining life: §2Unlimited§r
 
