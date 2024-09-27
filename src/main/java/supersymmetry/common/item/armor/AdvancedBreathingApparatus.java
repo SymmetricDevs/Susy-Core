@@ -60,13 +60,13 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
         if (chest.getItem() instanceof SuSyArmorItem item) {
             if (item.getItem(chest).getArmorLogic() instanceof AdvancedBreathingApparatus tank && tank.tier == tier) {
                 tank.changeOxygen(stack, 1.);
-                tank.handleDamage(stack, player);
+                tank.handleDamage(chest, player);
 
                 int piecesCount = 0;
                 ItemStack leggings = player.getItemStackFromSlot(LEGS);
                 if (leggings.getItem() instanceof SuSyArmorItem item2) {
                     if (item2.getItem(leggings).getArmorLogic() instanceof AdvancedBreathingApparatus legLogic) {
-                        legLogic.handleDamage(stack, player);
+                        legLogic.handleDamage(leggings, player);
                         piecesCount++;
                     }
                 }
@@ -74,7 +74,7 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
                 ItemStack boots = player.getItemStackFromSlot(FEET);
                 if (boots.getItem() instanceof SuSyArmorItem item2) {
                     if (item2.getItem(boots).getArmorLogic() instanceof AdvancedBreathingApparatus bootLogic) {
-                        bootLogic.handleDamage(stack, player);
+                        bootLogic.handleDamage(boots, player);
                         piecesCount++;
                     }
                 }
@@ -109,7 +109,7 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
     }
 
 
-    void handleDamage(ItemStack stack, EntityPlayer player) {
+    private void handleDamage(ItemStack stack, EntityPlayer player) {
         if (hoursOfLife == 0 || player.dimension == DimensionBreathabilityHandler.BENEATH_ID) {
             return; // No damage
         }
@@ -164,7 +164,7 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
             int maxOxygen = (int) getMaxOxygen(stack);
             strings.add(I18n.format("supersymmetry.oxygen", oxygen, maxOxygen));
         }
-        if (hoursOfLife == 0) {
+        if (hoursOfLife > 0) {
             double lifetime = 60 * 60 * hoursOfLife;
             int secondsRemaining = (int) (lifetime - getDamage(stack) * lifetime);
             strings.add(I18n.format("supersymmetry.seconds_left", secondsRemaining));
