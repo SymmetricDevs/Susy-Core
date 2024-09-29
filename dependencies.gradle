@@ -63,4 +63,6 @@ dependencies {
     compileOnly rfg.deobf("curse.maven:travelers-backpack-321117:3150850")
 
     compileOnly rfg.deobf("curse.maven:barrels-drums-storage-more-319404:2708193")
+
+    api("CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.700")
 }
