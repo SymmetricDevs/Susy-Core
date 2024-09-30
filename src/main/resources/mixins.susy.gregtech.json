@@ -5,6 +5,10 @@
   "minVersion" : "0.8",
   "compatibilityLevel" : "JAVA_8",
   "mixins" : [
-    "BlockMachineMixin"
+    "BlockMachineMixin",
+    "MetaTileEntityFluidDrillMixin",
+    "MetaTileEntityLargeMinerMixin",
+    "MetaTileEntityMinerMixin",
+    "MultiblockControllerBaseMixin"
   ]
 }

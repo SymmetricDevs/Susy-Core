@@ -204,9 +204,9 @@ public class MetaTileEntityFlareStack extends VoidingMultiblockBase {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
-        super.addInformation(stack, world, tooltip, advanced);
         tooltip.add(I18n.format("gregtech.machine.flare_stack.tooltip.1", getBaseVoidingRate()));
         tooltip.add(I18n.format("gregtech.machine.flare_stack.tooltip.2"));
+        super.addInformation(stack, world, tooltip, advanced);
     }
 
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
