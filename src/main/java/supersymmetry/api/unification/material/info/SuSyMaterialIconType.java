@@ -1,6 +1,7 @@
 package supersymmetry.api.unification.material.info;
 
 import gregtech.api.unification.material.info.MaterialIconType;
+import org.jetbrains.annotations.Nullable;
 
 public class SuSyMaterialIconType {
     public static MaterialIconType catalystBed = new MaterialIconType("catalystBed");
@@ -14,4 +15,5 @@ public class SuSyMaterialIconType {
     public static MaterialIconType thread = new MaterialIconType("thread");
     public static MaterialIconType slurry = new MaterialIconType("slurry");
     public static MaterialIconType supercritical = new MaterialIconType("supercritical");
+    public static MaterialIconType wetDust = new MaterialIconType("wetDust");
 }

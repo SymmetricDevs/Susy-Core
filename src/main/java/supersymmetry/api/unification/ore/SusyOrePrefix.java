@@ -51,4 +51,7 @@ public class SusyOrePrefix {
     public static final OrePrefix fiber = new OrePrefix("fiber", GTValues.M / 8, null, SuSyMaterialIconType.fiber, OrePrefix.Flags.ENABLE_UNIFICATION   , mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_FIBER));
     public static final OrePrefix wetFiber = new OrePrefix("fiberWet", GTValues.M / 8, null, SuSyMaterialIconType.wetFiber, OrePrefix.Flags.ENABLE_UNIFICATION  , mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_WET_FIBER));
     public static final OrePrefix thread = new OrePrefix("thread", GTValues.M / 8, null, SuSyMaterialIconType.thread, OrePrefix.Flags.ENABLE_UNIFICATION    , mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_THREAD));
+
+    // Wet dust
+    public static final OrePrefix wetDust = new OrePrefix("wetDust", -1, null, SuSyMaterialIconType.wetDust, OrePrefix.Flags.ENABLE_UNIFICATION   , mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_WET_DUST));
 }
