@@ -79,6 +79,7 @@ public class CommonProxy {
         registry.register(SuSyBlocks.DRILL_HEAD);
         registry.register(SuSyBlocks.DEPOSIT_BLOCK);
         registry.register(SuSyBlocks.RESOURCE_BLOCK);
+        registry.register(SuSyBlocks.RESOURCE_BLOCK_1);
         registry.register(SuSyBlocks.HOME);
         registry.register(SuSyBlocks.MULTIBLOCK_TANK);
         registry.register(SuSyBlocks.EVAPORATION_BED);
@@ -107,6 +108,7 @@ public class CommonProxy {
         registry.register(createItemBlock(SuSyBlocks.STRUCTURAL_BLOCK_1, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.DEPOSIT_BLOCK, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.RESOURCE_BLOCK, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.RESOURCE_BLOCK_1, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.HOME, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.EVAPORATION_BED, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.MULTIBLOCK_TANK, VariantItemBlock::new));
