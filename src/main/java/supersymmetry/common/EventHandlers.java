@@ -27,8 +27,6 @@ public class EventHandlers {
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
 
-        if (event.player.isCreative()) return;
-
         NBTTagCompound playerData = event.player.getEntityData();
         NBTTagCompound data = playerData.hasKey(EntityPlayer.PERSISTED_NBT_TAG) ? playerData.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG) : new NBTTagCompound();
 
@@ -36,6 +34,7 @@ public class EventHandlers {
 
             data.setBoolean(FIRST_SPAWN, true);
             playerData.setTag(EntityPlayer.PERSISTED_NBT_TAG, data);
+            if (event.player.isCreative()) return;
 
             EntityDropPod dropPod = new EntityDropPod(event.player.getEntityWorld(), event.player.posX, event.player.posY + 256, event.player.posZ);
 

@@ -1,11 +1,13 @@
 package supersymmetry.common;
 
 import gregtech.api.block.VariantItemBlock;
+import gregtech.api.modules.ModuleContainerRegistryEvent;
 import gregtech.api.unification.material.event.MaterialEvent;
 import gregtech.api.unification.material.event.PostMaterialEvent;
 import gregtech.client.utils.TooltipHelper;
 import gregtech.common.blocks.BlockWireCoil;
 import gregtech.common.items.MetaItems;
+import gregtech.modules.ModuleManager;
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.monster.EntityZombie;
@@ -38,6 +40,7 @@ import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.loaders.SuSyWorldLoader;
 import supersymmetry.loaders.SusyOreDictionaryLoader;
 import supersymmetry.loaders.recipes.SuSyRecipeLoader;
+import supersymmetry.modules.SuSyModules;
 
 import java.util.Objects;
 import java.util.function.Function;
@@ -173,6 +176,12 @@ public class CommonProxy {
         SuSyMetaBlocks.registerOreDict();
         SuSyRecipeLoader.init();
     }
+
+    @SubscribeEvent
+    public static void registerModuleContainer(ModuleContainerRegistryEvent event) {
+        ModuleManager.getInstance().registerContainer(new SuSyModules());
+    }
+
 
     private static <T extends Block> ItemBlock createItemBlock(T block, Function<T, ItemBlock> producer) {
         ItemBlock itemBlock = producer.apply(block);

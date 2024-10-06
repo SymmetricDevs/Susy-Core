@@ -62,7 +62,10 @@ dependencies {
     compileOnly rfg.deobf("curse.maven:bubbles-a-baubles-fork-995393:5719448")
 
     compileOnly rfg.deobf("curse.maven:barrels-drums-storage-more-319404:2708193")
+
     implementation rfg.deobf("curse.maven:pyrotech-306676:5351359")
     implementation rfg.deobf("curse.maven:athenaeum-284350:4633750")
     implementation rfg.deobf("curse.maven:dropt-284973:5405050")
+
+    api("CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.700")
 }
