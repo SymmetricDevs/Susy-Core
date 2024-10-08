@@ -20,7 +20,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
-import supersymmetry.api.metatileentity.PseudoMultiMachineMetaTileEntity;
+import supersymmetry.api.metatileentity.LatexCollectorMultiMachineMetaTileEntity;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.renderer.textures.SusyTextures;
@@ -28,7 +28,7 @@ import supersymmetry.client.renderer.textures.SusyTextures;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class MetaTileEntityLatexCollector extends PseudoMultiMachineMetaTileEntity {
+public class MetaTileEntityLatexCollector extends LatexCollectorMultiMachineMetaTileEntity {
 
     private final int tankSize = 16000;
 

@@ -19,7 +19,7 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import supersymmetry.api.metatileentity.PseudoMultiSteamMachineMetaTileEntity;
+import supersymmetry.api.metatileentity.LatexCollectorMultiSteamMachineMetaTileEntity;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicators;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
@@ -27,7 +27,7 @@ import supersymmetry.client.renderer.textures.SusyTextures;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class MetaTileEntitySteamLatexCollector extends PseudoMultiSteamMachineMetaTileEntity {
+public class MetaTileEntitySteamLatexCollector extends LatexCollectorMultiSteamMachineMetaTileEntity {
 
     private final int tankSize = 16000;
     private final long latexCollectionAmount;
