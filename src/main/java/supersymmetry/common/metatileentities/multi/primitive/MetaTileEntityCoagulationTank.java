@@ -68,9 +68,9 @@ public class MetaTileEntityCoagulationTank extends RecipeMapPrimitiveMultiblockC
 
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle("XXX", "XSX", "XXX")
-                .aisle("XXX", "XIX", "X#X")
                 .aisle("XXX", "XXX", "XXX")
+                .aisle("XXX", "XIX", "X#X")
+                .aisle("XXX", "XSX", "XXX")
                 .where('X',
                         states(new IBlockState[]{SuSyBlocks.COAGULATION_TANK_WALL
                                 .getState(BlockCoagulationTankWall.CoagulationTankWallType.WOODEN_COAGULATION_TANK_WALL)})
