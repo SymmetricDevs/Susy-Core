@@ -15,7 +15,7 @@ import java.util.List;
 public class MetaTileEntityPrimitiveItemBus extends MetaTileEntityItemBus {
 
     public MetaTileEntityPrimitiveItemBus(ResourceLocation metaTileEntityId, boolean isExportHatch) {
-        super(metaTileEntityId, 0, isExportHatch);
+        super(metaTileEntityId, 1, isExportHatch);
         initializeInventory();
     }
 
