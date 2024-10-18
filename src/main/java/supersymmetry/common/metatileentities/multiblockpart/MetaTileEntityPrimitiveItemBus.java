@@ -1,5 +1,7 @@
 package supersymmetry.common.metatileentities.multiblockpart;
 
+import gregtech.api.capability.impl.NotifiableItemStackHandler;
+import gregtech.api.items.itemhandlers.GTItemStackHandler;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
@@ -15,7 +17,7 @@ import java.util.List;
 public class MetaTileEntityPrimitiveItemBus extends MetaTileEntityItemBus {
 
     public MetaTileEntityPrimitiveItemBus(ResourceLocation metaTileEntityId, boolean isExportHatch) {
-        super(metaTileEntityId, 0, isExportHatch);
+        super(metaTileEntityId, 1, isExportHatch);
         initializeInventory();
     }
 
@@ -52,5 +54,27 @@ public class MetaTileEntityPrimitiveItemBus extends MetaTileEntityItemBus {
     @Override
     public String getHarvestTool() {
         return "pickaxe";
+    }
+
+    @Override
+    protected IItemHandlerModifiable createExportItemHandler() {
+        return !isExportHatch ? new GTItemStackHandler(this, 0) :
+                new NotifiableItemStackHandler(this, 4, getController(), true) {
+                    @Override
+                    public int getSlotLimit(int slot) {
+                        return 16;
+                    }
+                };
+    }
+
+    @Override
+    protected IItemHandlerModifiable createImportItemHandler() {
+        return isExportHatch ? new GTItemStackHandler(this, 0) :
+                new NotifiableItemStackHandler(this, 4, getController(), false) {
+                    @Override
+                    public int getSlotLimit(int slot) {
+                        return 16;
+                    }
+                };
     }
 }
