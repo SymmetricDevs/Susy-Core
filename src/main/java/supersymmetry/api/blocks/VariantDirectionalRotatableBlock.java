@@ -58,20 +58,32 @@ public class VariantDirectionalRotatableBlock<T extends Enum<T> & IStringSeriali
 
     @Nonnull
     @Override
+    @SuppressWarnings("deprecation")
     public IBlockState getStateFromMeta(int meta) {
         int i = meta / 6;
-        // Makes meta = 0 -> EAST(ord = 5)
-        int j = (meta + 5) % 6;
+        int j = meta % 6;
 
+        // Makes meta = 0 <-> SOUTH(ord = 3)
+        //              1 <-> WEST(ord = 4)
+        //              2 <-> EAST(ord = 5)
+        //              3 <-> DOWN(ord = 0)
+        //              4 <-> UP(ord = 1)
+        //              5 <-> NORTH(ord = 2)
         EnumFacing enumfacing = EnumFacing.byIndex(j);
         return getDefaultState()
                 .withProperty(FACING, enumfacing)
-                .withProperty(VARIANT, VALUES[i % VALUES.length]);
+                .withProperty(VARIANT, VALUES[(i + 3) % VALUES.length]);
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(VARIANT).ordinal() * 6 + (state.getValue(FACING).getIndex() + 1) % 6;
+        // Makes meta = 0 <-> SOUTH(ord = 3)
+        //              1 <-> WEST(ord = 4)
+        //              2 <-> EAST(ord = 5)
+        //              3 <-> DOWN(ord = 0)
+        //              4 <-> UP(ord = 1)
+        //              5 <-> NORTH(ord = 2)
+        return state.getValue(VARIANT).ordinal() * 6 + (state.getValue(FACING).ordinal() + 3) % 6;
     }
 
     @Nonnull
