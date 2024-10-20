@@ -804,6 +804,10 @@ gregtech.block_group_members.latex_logs.name=Rubber Log
 
 # Extra recipe info
 susy.recipe.dimensions=Dimensions: %s
+susy.recipe.biomes=Biomes: %s
+susy.recipe.biomes_blocked=Blocked Biomes: %s
+susy.recipe.biomeTypes=BiomeTypes: %s
+susy.recipe.biomeTypes_blocked=Blocked BiomeTypes: %s
 
 # Commands
 
