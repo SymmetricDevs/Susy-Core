@@ -9,6 +9,8 @@ import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -73,7 +75,7 @@ public class MobHordeEvent {
         return run(player, playerData::addEntity);
     }
     public boolean run(EntityPlayer player, Consumer<UUID> uuidConsumer) {
-        int quantity = quantityMin + (int) (Math.random() * quantityMax);
+        int quantity = (int) (Math.random() * (quantityMax - quantityMin) + quantityMin);
         boolean didSpawn = false;
         if (hasToBeUnderground(player) || !canUsePods) {
             for (int i = 0; i < quantity; i++) {
@@ -132,16 +134,26 @@ public class MobHordeEvent {
     public boolean spawnMobWithoutPod(EntityPlayer player, Consumer<UUID> uuidConsumer) {
         EntityLiving mob = entitySupplier.apply(player);
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             double angle = Math.random() * 2 * Math.PI;
-            int x = (int) (player.posX + 15 * Math.cos(angle));
-            int z = (int) (player.posZ + 15 * Math.sin(angle));
+            int radius = 16 + (int) (20 * Math.random());
+            double x = (int) (player.posX + radius * Math.cos(angle)) + 0.5;
+            double z = (int) (player.posZ + radius * Math.sin(angle)) + 0.5;
+            double y = Math.floor(player.posY) + 7;
+            BlockPos pos = new BlockPos(x, y, z);
+            IBlockState blockstate = player.world.getBlockState(pos);
+            Block block = blockstate.getBlock();
 
-            mob.setPosition(x, player.posY - 5, z);
-            while ((!mob.getCanSpawnHere() || !mob.isNotColliding()) && mob.posY < player.posY + 12) {
-                mob.setPosition(x, mob.posY + 1, z);
+            mob.setPosition(x, y, z);
+            while ((!mob.getCanSpawnHere() || !mob.isNotColliding() || block.isAir(blockstate, player.world, pos)) 
+                    && (Math.abs(mob.posY - player.posY) < 8)) {
+                mob.setPosition(x, mob.posY - 1, z);
+                pos = new BlockPos(x, mob.posY - 1, z);
+                blockstate = player.world.getBlockState(pos);
+                block = blockstate.getBlock();
             }
-            if (mob.posY < player.posY + 12) {
+
+            if ((Math.abs(mob.posY - player.posY) < 8) && !block.isAir(blockstate, player.world, pos)) {
                 player.world.spawnEntity(mob);
                 mob.enablePersistence();
                 uuidConsumer.accept(mob.getPersistentID());
