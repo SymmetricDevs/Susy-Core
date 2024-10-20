@@ -8,6 +8,7 @@ import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.recipes.Recipe;
 import gregtech.api.unification.material.Materials;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
@@ -20,9 +21,11 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.api.recipes.properties.BiomeProperty;
 import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nonnull;
@@ -34,18 +37,36 @@ import static gregtech.api.util.RelativeDirection.*;
 public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController {
     public MetaTileEntityLargeFluidPump(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.PUMPING_RECIPES);
-        this.recipeMapWorkable = new MultiblockRecipeLogic(this, true);
+
+        this.recipeMapWorkable = new LargePumpRecipeLogic(this);
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
         return new MetaTileEntityLargeFluidPump(this.metaTileEntityId);
     }
 
+    @Override
+    public boolean isMultiblockPartWeatherResistant(@Nonnull IMultiblockPart part) {
+        return true;
+    }
+
+    @Override
+    public boolean getIsWeatherOrTerrainResistant() {
+        return true;
+    }
+
+    @Override
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
+
+
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start(RIGHT, FRONT, UP)
                 .aisle("       ", "      P", "       ")
+                .aisle("       ", "      P", "       ")
                 .aisle("FCCCC  ", "CCCCC P", "FCECC  ")
-                .aisle("CCSGC  ", "OPPPPPP", "FCECC  ")
+                .aisle("CCSGC  ", "OPPPPPP", "CCECC  ")
                 .aisle("FCCC   ", "CCCCC  ", "FCEC   ")
                 .where(' ', any())
                 .where('S', selfPredicate())
@@ -53,7 +74,8 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
                 .where('G', states(getGearboxState()))
                 .where('F', frames(Materials.Steel))
                 .where('C', states(getCasingState())
-                        .or(abilities(MultiblockAbility.IMPORT_ITEMS)))
+                        .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMaxGlobalLimited(1))
+                        .or(autoAbilities(true, false)))
                 .where('E', states(getCasingState())
                         .or(abilities(MultiblockAbility.INPUT_ENERGY)))
                 .where('O', abilities(MultiblockAbility.EXPORT_FLUIDS))
@@ -74,6 +96,8 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
     }
 
     public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, boolean advanced) {
+        tooltip.add(I18n.format("gregtech.machine.large_fluid_pump.tooltip.1"));
+        tooltip.add(I18n.format("gregtech.machine.large_fluid_pump.tooltip.2"));
         super.addInformation(stack, player, tooltip, advanced);
         tooltip.add(TooltipHelper.RAINBOW_SLOW + I18n.format("gregtech.machine.perfect_oc", new Object[0]));
     }
@@ -82,4 +106,46 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.OCEANIC_DRILL_OVERLAY;
     }
+
+    /**
+     * A custom recipeLogic class, for adding our check for biomes
+     * This can be moved out to a stand-alone class.
+     * But generally speaking if you do not plan to re-use this, making it an inner class should be fine.
+     * CEu itself has many such cases.
+     */
+    public static class LargePumpRecipeLogic extends MultiblockRecipeLogic {
+
+        public LargePumpRecipeLogic(RecipeMapMultiblockController tileEntity) {
+            super(tileEntity, true);
+        }
+
+
+        /**
+         * Overriding this to add our own custom checks
+         * Don't forget super calls
+         */
+        @Override
+        public boolean checkRecipe(@NotNull Recipe recipe) {
+            return checkHeightRequirement() && checkBiomeRequirement(recipe) && super.checkRecipe(recipe);
+        }
+
+        public boolean checkHeightRequirement() {
+            return getMetaTileEntity().getPos().getY() == 64;
+        }
+        /**
+         * This is a method for biome checking
+         */
+        public boolean checkBiomeRequirement(@NotNull Recipe recipe) {
+            if (!recipe.hasProperty(BiomeProperty.getInstance())) return true;
+            BlockPos tempPos = getMetaTileEntity().getPos();
+            return recipe.getProperty(BiomeProperty.getInstance(), BiomeProperty.BiomePropertyList.EMPTY_LIST)
+                    .checkBiome(getMetaTileEntity().getWorld().getBiome(getMetaTileEntity().getPos()));
+        }
+
+        @Override
+        public int getParallelLimit() {
+            return 256;
+        }
+    }
+
 }

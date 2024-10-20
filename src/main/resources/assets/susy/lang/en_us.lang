@@ -256,6 +256,9 @@ gregtech.machine.primitive_mud_pump.name=Primitive Mud Pump
 gregtech.machine.primitive_mud_pump.tooltip=Works only in River biomes between Y=64 and Y=80
 gregtech.machine.basic_steam_turbine.name=Large Steam Turbine
 gregtech.machine.basic_gas_turbine.name=Large Gas Turbine
+gregtech.machine.large_fluid_pump.name=Large Fluid Pump
+gregtech.machine.large_fluid_pump.tooltip.1=This would definitely affect the local trout population.
+gregtech.machine.large_fluid_pump.tooltip.2=Only works when the controller is at Y=64
 gregtech.machine.ocean_pumper.name=Ocean Pumper
 gregtech.machine.ocean_pumper.tooltip=Works only in Ocean biomes between Y=70 and Y=75
 gregtech.machine.advanced_arc_furnace.name=Advanced Arc Furnace
