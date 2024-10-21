@@ -300,7 +300,7 @@ public class SuSyRecipeMaps {
             .setSound(GTSoundEvents.BATH);
 
     public static final RecipeMap<BiomeRecipeBuilder> PUMPING_RECIPES = new RecipeMap<>("large_fluid_pump", 1, 0, 0, 1, new BiomeRecipeBuilder(), false)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressWidget.MoveType.VERTICAL)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.MINER);
 
     public static final RecipeMap<DronePadRecipeBuilder> DRONE_PAD = new RecipeMap<>("drone_pad", 4, 9, 0, 0, new DronePadRecipeBuilder(), false);
