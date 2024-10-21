@@ -34,7 +34,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import static gregtech.api.util.RelativeDirection.*;
-import static net.minecraft.util.EnumFacing.*;
 
 public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController {
     public MetaTileEntityLargeFluidPump(ResourceLocation metaTileEntityId) {
@@ -139,8 +138,7 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
          */
         public boolean checkBiomeRequirement(@NotNull Recipe recipe) {
             if (!recipe.hasProperty(BiomeProperty.getInstance())) return true;
-            BlockPos tempPos = getMetaTileEntity().getPos();
-            tempPos.offset(getMetaTileEntity().getFrontFacing().rotateYCCW(), 2);
+            BlockPos tempPos = getMetaTileEntity().getPos().offset(getMetaTileEntity().getFrontFacing().rotateYCCW(), 2);
             return recipe.getProperty(BiomeProperty.getInstance(), BiomeProperty.BiomePropertyList.EMPTY_LIST)
                     .checkBiome(getMetaTileEntity().getWorld().getBiome(tempPos));
         }
