@@ -10,6 +10,7 @@ import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.unification.material.Materials;
+import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.utils.TooltipHelper;
@@ -33,6 +34,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import static gregtech.api.util.RelativeDirection.*;
+import static net.minecraft.util.EnumFacing.*;
 
 public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController {
     public MetaTileEntityLargeFluidPump(ResourceLocation metaTileEntityId) {
@@ -62,7 +64,7 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
 
 
     protected @NotNull BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start(RIGHT, FRONT, UP)
+        return FactoryBlockPattern.start(RIGHT, FRONT, RelativeDirection.UP)
                 .aisle("       ", "      P", "       ")
                 .aisle("       ", "      P", "       ")
                 .aisle("FCCCC  ", "CCCCC P", "FCECC  ")
@@ -138,8 +140,9 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
         public boolean checkBiomeRequirement(@NotNull Recipe recipe) {
             if (!recipe.hasProperty(BiomeProperty.getInstance())) return true;
             BlockPos tempPos = getMetaTileEntity().getPos();
+            tempPos.offset(getMetaTileEntity().getFrontFacing().rotateYCCW(), 2);
             return recipe.getProperty(BiomeProperty.getInstance(), BiomeProperty.BiomePropertyList.EMPTY_LIST)
-                    .checkBiome(getMetaTileEntity().getWorld().getBiome(getMetaTileEntity().getPos()));
+                    .checkBiome(getMetaTileEntity().getWorld().getBiome(tempPos));
         }
 
         @Override
