@@ -5,6 +5,7 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
+import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
@@ -21,6 +22,7 @@ import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -138,7 +140,13 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
          */
         public boolean checkBiomeRequirement(@NotNull Recipe recipe) {
             if (!recipe.hasProperty(BiomeProperty.getInstance())) return true;
-            BlockPos tempPos = getMetaTileEntity().getPos().offset(getMetaTileEntity().getFrontFacing().rotateYCCW(), 2);
+            EnumFacing rightSide = RelativeDirection.RIGHT
+                    .getRelativeFacing(
+                            getMetaTileEntity().getFrontFacing(),
+                            ((MultiblockControllerBase) getMetaTileEntity()).getUpwardsFacing(),
+                            ((MultiblockControllerBase) getMetaTileEntity()).isFlipped()
+                    );
+            BlockPos tempPos = getMetaTileEntity().getPos().offset(rightSide, 2);
             return recipe.getProperty(BiomeProperty.getInstance(), BiomeProperty.BiomePropertyList.EMPTY_LIST)
                     .checkBiome(getMetaTileEntity().getWorld().getBiome(tempPos));
         }
