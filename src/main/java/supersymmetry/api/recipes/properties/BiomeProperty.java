@@ -30,7 +30,7 @@ public class BiomeProperty extends RecipeProperty<BiomeProperty.BiomePropertyLis
     private static String getBiomesForRecipe(List<Biome> value) {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < value.size(); i++) {
-            builder.append(value.get(i).getBiomeName());
+            builder.append(value.get(i).biomeName);
             if (i != value.size() - 1)
                 builder.append(", ");
         }
