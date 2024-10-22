@@ -140,13 +140,19 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
          */
         public boolean checkBiomeRequirement(@NotNull Recipe recipe) {
             if (!recipe.hasProperty(BiomeProperty.getInstance())) return true;
-            EnumFacing rightSide = RelativeDirection.RIGHT
+            EnumFacing leftSide = RelativeDirection.LEFT
                     .getRelativeFacing(
                             getMetaTileEntity().getFrontFacing(),
                             ((MultiblockControllerBase) getMetaTileEntity()).getUpwardsFacing(),
                             ((MultiblockControllerBase) getMetaTileEntity()).isFlipped()
                     );
-            BlockPos tempPos = getMetaTileEntity().getPos().offset(rightSide, 4);
+            EnumFacing backSide = RelativeDirection.BACK
+                    .getRelativeFacing(
+                            getMetaTileEntity().getFrontFacing(),
+                            ((MultiblockControllerBase) getMetaTileEntity()).getUpwardsFacing(),
+                            ((MultiblockControllerBase) getMetaTileEntity()).isFlipped()
+                    );
+            BlockPos tempPos = getMetaTileEntity().getPos().offset(leftSide, 4).offset(backSide);
             return recipe.getProperty(BiomeProperty.getInstance(), BiomeProperty.BiomePropertyList.EMPTY_LIST)
                     .checkBiome(getMetaTileEntity().getWorld().getBiome(tempPos));
         }
