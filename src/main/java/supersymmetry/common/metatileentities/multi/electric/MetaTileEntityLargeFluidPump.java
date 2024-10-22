@@ -35,15 +35,17 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static gregtech.api.util.RelativeDirection.*;
+import static gregtech.api.util.RelativeDirection.FRONT;
+import static gregtech.api.util.RelativeDirection.RIGHT;
 
 public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController {
+
     public MetaTileEntityLargeFluidPump(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.PUMPING_RECIPES);
-
         this.recipeMapWorkable = new LargePumpRecipeLogic(this);
     }
 
+    @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
         return new MetaTileEntityLargeFluidPump(this.metaTileEntityId);
     }
@@ -63,8 +65,9 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
         return false;
     }
 
-
-    protected @NotNull BlockPattern createStructurePattern() {
+    @NotNull
+    @Override
+    protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start(RIGHT, FRONT, RelativeDirection.UP)
                 .aisle("       ", "      P", "       ")
                 .aisle("       ", "      P", "       ")
@@ -84,6 +87,8 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
                 .where('O', abilities(MultiblockAbility.EXPORT_FLUIDS))
                 .build();
     }
+
+    @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
         return Textures.SOLID_STEEL_CASING;
     }
@@ -91,13 +96,16 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
     protected static IBlockState getCasingState() {
         return MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID);
     }
+
     protected static IBlockState getPipeCasingState() {
         return MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE);
     }
+
     protected static IBlockState getGearboxState() {
         return MetaBlocks.TURBINE_CASING.getState(TurbineCasingType.STEEL_GEARBOX);
     }
 
+    @Override
     public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, boolean advanced) {
         tooltip.add(I18n.format("gregtech.machine.large_fluid_pump.tooltip.1"));
         tooltip.add(I18n.format("gregtech.machine.large_fluid_pump.tooltip.2"));
@@ -106,6 +114,7 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
     }
 
     @Nonnull
+    @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.OCEANIC_DRILL_OVERLAY;
     }
@@ -122,7 +131,6 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
             super(tileEntity, true);
         }
 
-
         /**
          * Overriding this to add our own custom checks
          * Don't forget super calls
@@ -135,6 +143,7 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
         public boolean checkHeightRequirement() {
             return getMetaTileEntity().getPos().getY() == 64;
         }
+
         /**
          * This is a method for biome checking
          */

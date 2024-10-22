@@ -261,6 +261,7 @@ public class SuSyMetaTileEntities {
         FLARE_STACK = registerMetaTileEntity(17007, new MetaTileEntityFlareStack(susyId("flare_stack")));
         FROTH_FLOTATION_TANK = registerMetaTileEntity(17008, new MetaTileEntityFrothFlotationTank(susyId("froth_flotation_tank")));
         MULTI_STAGE_FLASH_DISTILLER = registerMetaTileEntity(17009, new MetaTileEntityMultiStageFlashDistiller(susyId("multi_stage_flash_distiller")));
+
         OCEAN_PUMPER = registerMetaTileEntity(17011, new MetaTileEntityOceanPumper(susyId("ocean_pumper")));
         HIGH_TEMPERATURE_DISTILLATION_TOWER = registerMetaTileEntity(17012, new MetaTileEntityHighTemperatureDistillationTower(susyId("high_temperature_distillation_tower")));
         ROTARY_KILN = registerMetaTileEntity(17013, new MetaTileEntityRotaryKiln(susyId("rotary_kiln")));
