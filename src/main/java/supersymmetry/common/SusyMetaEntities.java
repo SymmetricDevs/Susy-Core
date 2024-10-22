@@ -18,7 +18,7 @@ public class SusyMetaEntities {
     public static void init() {
         EntityRegistry.registerModEntity(new ResourceLocation(Supersymmetry.MODID, "drop_pod"), EntityDropPod.class, "Drop Pod", 1, Supersymmetry.instance, 64, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(Supersymmetry.MODID, "drone"), EntityDrone.class, "Drone", 2, Supersymmetry.instance, 64, 3, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(Supersymmetry.MODID, "rocket_basic"), EntityRocket.class, "Rocket", 1, Supersymmetry.instance, 64, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(Supersymmetry.MODID, "rocket_basic"), EntityRocket.class, "Rocket", 3, Supersymmetry.instance, 64, 3, true);
     }
 
     @SideOnly(Side.CLIENT)
