@@ -146,7 +146,7 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
                             ((MultiblockControllerBase) getMetaTileEntity()).getUpwardsFacing(),
                             ((MultiblockControllerBase) getMetaTileEntity()).isFlipped()
                     );
-            BlockPos tempPos = getMetaTileEntity().getPos().offset(rightSide, 2);
+            BlockPos tempPos = getMetaTileEntity().getPos().offset(rightSide, 4);
             return recipe.getProperty(BiomeProperty.getInstance(), BiomeProperty.BiomePropertyList.EMPTY_LIST)
                     .checkBiome(getMetaTileEntity().getWorld().getBiome(tempPos));
         }
