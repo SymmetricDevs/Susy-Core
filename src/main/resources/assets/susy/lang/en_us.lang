@@ -802,8 +802,8 @@ susy.ocean_pumper.full=Tanks are Full!
 susy.ocean_pumper.drainrate=Current Pumping Rate: %s
 susy.wrongbiome=Machine can not work in this biome!
 susy.weather_resistance=§2Will not explode from water, lava, fire or rain.
-susy.large_fluid_pump.y_level=Current Controller Y level: Y=
-susy.large_fluid_pump.biome=Current bottom Pipe Casing biome: 
+susy.large_fluid_pump.y_level=Current Controller Y level: Y=%s
+susy.large_fluid_pump.biome=Current bottom Pipe Casing biome: %s
 
 # Latex Logs
 gregtech.block_group_members.latex_logs.name=Rubber Log

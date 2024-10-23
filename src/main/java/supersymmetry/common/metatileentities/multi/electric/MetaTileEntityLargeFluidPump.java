@@ -1,6 +1,5 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import gregtech.api.GTValues;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -12,7 +11,6 @@ import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.unification.material.Materials;
-import gregtech.api.util.GTUtility;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
@@ -133,7 +131,7 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
                         getUpwardsFacing(),
                         isFlipped()
                 );
-        BlockPos tempPos = this.getPos().offset(leftSide, 4).offset(backSide);
+        BlockPos tempPos = getPos().offset(leftSide, 4).offset(backSide);
         int yLevel = getPos().getY();
         String biome = getWorld().getBiome(tempPos).biomeName;
         textList.add(new TextComponentTranslation("susy.large_fluid_pump.y_level", yLevel).setStyle(new Style().setColor(TextFormatting.YELLOW)));
