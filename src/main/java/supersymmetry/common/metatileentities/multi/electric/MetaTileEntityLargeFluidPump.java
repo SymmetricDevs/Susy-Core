@@ -1,5 +1,6 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import gregtech.api.GTValues;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -11,6 +12,7 @@ import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.unification.material.Materials;
+import gregtech.api.util.GTUtility;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
@@ -25,6 +27,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
@@ -111,6 +117,27 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
         tooltip.add(I18n.format("gregtech.machine.large_fluid_pump.tooltip.2"));
         super.addInformation(stack, player, tooltip, advanced);
         tooltip.add(TooltipHelper.RAINBOW_SLOW + I18n.format("gregtech.machine.perfect_oc", new Object[0]));
+    }
+    @Override
+    protected void addDisplayText(List<ITextComponent> textList) {
+        super.addDisplayText(textList);
+        EnumFacing leftSide = RelativeDirection.LEFT
+                .getRelativeFacing(
+                        getFrontFacing(),
+                        getUpwardsFacing(),
+                        isFlipped()
+                );
+        EnumFacing backSide = RelativeDirection.BACK
+                .getRelativeFacing(
+                        getFrontFacing(),
+                        getUpwardsFacing(),
+                        isFlipped()
+                );
+        BlockPos tempPos = this.getPos().offset(leftSide, 4).offset(backSide);
+        int yLevel = getPos().getY();
+        String biome = getWorld().getBiome(tempPos).biomeName;
+        textList.add(new TextComponentTranslation("susy.large_fluid_pump.y_level", yLevel).setStyle(new Style().setColor(TextFormatting.YELLOW)));
+        textList.add(new TextComponentTranslation("susy.large_fluid_pump.biome", biome).setStyle(new Style().setColor(TextFormatting.YELLOW)));
     }
 
     @Nonnull
