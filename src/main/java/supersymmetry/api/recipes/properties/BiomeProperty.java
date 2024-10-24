@@ -36,8 +36,8 @@ public class BiomeProperty extends RecipeProperty<BiomeProperty.BiomePropertyLis
         }
         String str = builder.toString();
 
-        if (str.length() >= 13) {
-            str = str.substring(0, 10) + "..";
+        if (str.length() >= 26) {
+            str = str.substring(0, 23) + "..";
         }
         return str;
     }
