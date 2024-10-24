@@ -256,6 +256,9 @@ gregtech.machine.primitive_mud_pump.name=Primitive Mud Pump
 gregtech.machine.primitive_mud_pump.tooltip=Works only in River biomes between Y=64 and Y=80
 gregtech.machine.basic_steam_turbine.name=Large Steam Turbine
 gregtech.machine.basic_gas_turbine.name=Large Gas Turbine
+gregtech.machine.large_fluid_pump.name=Large Fluid Pump
+gregtech.machine.large_fluid_pump.tooltip.1=This would definitely affect the local trout population.
+gregtech.machine.large_fluid_pump.tooltip.2=Only works when the controller is at Y=64 and the bottom Steel Pipe Casing is located in the right biome.
 gregtech.machine.ocean_pumper.name=Ocean Pumper
 gregtech.machine.ocean_pumper.tooltip=Works only in Ocean biomes between Y=70 and Y=75
 gregtech.machine.advanced_arc_furnace.name=Advanced Arc Furnace
@@ -709,6 +712,7 @@ recipemap.gravity_separator=Gravity Separation
 recipemap.spinning.name=Textile Spinning
 recipemap.large_steam_turbine.name=Large Steam Turbine
 recipemap.primitive_smelter.name=Primitive Smelting
+recipemap.large_fluid_pump.name=Large Fluid Pump
 
 gregtech.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 gregtech.multiblock.ocean_pumper.description=The Ocean Pumper is an electrically powered multiblock that collects a base amount of 8,000 L Seawater per second (at MV), but only if it is in an ocean biome, and when the controller is between Y = 70 and Y = 75 (Inclusive). It needs an output hatch, a maintenance hatch, and an energy input hatch.
@@ -798,12 +802,18 @@ susy.ocean_pumper.full=Tanks are Full!
 susy.ocean_pumper.drainrate=Current Pumping Rate: %s
 susy.wrongbiome=Machine can not work in this biome!
 susy.weather_resistance=§2Will not explode from water, lava, fire or rain.
+susy.large_fluid_pump.y_level=Current Controller Y level: Y=%s
+susy.large_fluid_pump.biome=Current bottom Pipe Casing biome: %s
 
 # Latex Logs
 gregtech.block_group_members.latex_logs.name=Rubber Log
 
 # Extra recipe info
 susy.recipe.dimensions=Dimensions: %s
+susy.recipe.biomes=Biomes: %s
+susy.recipe.biomes_blocked=Blocked Biomes: %s
+susy.recipe.biomeTypes=BiomeTypes: %s
+susy.recipe.biomeTypes_blocked=Blocked BiomeTypes: %s
 
 # Commands
 
