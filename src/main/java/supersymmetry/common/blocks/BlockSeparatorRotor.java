@@ -8,11 +8,11 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
+import supersymmetry.api.blocks.VariantAxialRotatableBlock;
 
 import javax.annotation.Nonnull;
 
-public class BlockSeparatorRotor extends VariantHorizontalRotatableBlock<BlockSeparatorRotor.BlockSeparatorRotorType> {
+public class BlockSeparatorRotor extends VariantAxialRotatableBlock<BlockSeparatorRotor.BlockSeparatorRotorType> {
 
     public BlockSeparatorRotor() {
         super(net.minecraft.block.material.Material.IRON);
