@@ -1,0 +1,162 @@
+# Blender 4.2.3 LTS MTL File: 'soyuz.blend'
+# www.blender.org
+
+newmtl Rocket
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 2
+map_Kd soyuz.png
+map_d soyuz.png
+
+newmtl Rocket.001
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 2
+map_Kd C:/Users/Monza/3D Objects/Textures/soyuz_mainbody.png
+map_d C:/Users/Monza/3D Objects/Textures/soyuz_mainbody.png
+
+newmtl Rocket.002
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 2
+map_Kd C:/Users/Monza/3D Objects/Textures/soyuz_mainbody.png
+map_d C:/Users/Monza/3D Objects/Textures/soyuz_mainbody.png
+
+newmtl Rocket.003
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 2
+map_Kd C:/Users/Monza/3D Objects/Textures/soyuz_mainbody.png
+map_d C:/Users/Monza/3D Objects/Textures/soyuz_mainbody.png
+
+newmtl Rocket.004
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 2
+map_Kd C:/Users/Monza/3D Objects/Textures/soyuz_mainbody.png
+map_d C:/Users/Monza/3D Objects/Textures/soyuz_mainbody.png
+
+newmtl Rocket.005
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 2
+map_Kd C:/Users/Monza/3D Objects/Textures/soyuz_mainbody.png
+map_d C:/Users/Monza/3D Objects/Textures/soyuz_mainbody.png
+
+newmtl Rocket.006
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 2
+map_Kd C:/Users/Monza/3D Objects/Textures/soyuz_mainbody.png
+map_d C:/Users/Monza/3D Objects/Textures/soyuz_mainbody.png
+
+newmtl Rocket.008
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 2
+map_Kd C:/Users/Monza/3D Objects/Textures/soyuz_mainbody.png
+map_d C:/Users/Monza/3D Objects/Textures/soyuz_mainbody.png
+
+newmtl Rocket.009
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 2
+map_Kd C:/Users/Monza/3D Objects/Textures/soyuz_mainbody.png
+map_d C:/Users/Monza/3D Objects/Textures/soyuz_mainbody.png
+
+newmtl Rocket.010
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 2
+map_Kd C:/Users/Monza/3D Objects/Textures/soyuz_mainbody.png
+map_d C:/Users/Monza/3D Objects/Textures/soyuz_mainbody.png
+
+newmtl Rocket.012
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 2
+map_Kd C:/Users/Monza/3D Objects/Textures/soyuz_mainbody.png
+map_d C:/Users/Monza/3D Objects/Textures/soyuz_mainbody.png
+
+newmtl Rocket.013
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 2
+map_Kd C:/Users/Monza/3D Objects/Textures/soyuz_mainbody.png
+map_d C:/Users/Monza/3D Objects/Textures/soyuz_mainbody.png
+
+newmtl Rocket.014
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 2
+map_Kd C:/Users/Monza/3D Objects/Textures/soyuz_mainbody.png
+map_d C:/Users/Monza/3D Objects/Textures/soyuz_mainbody.png
+
+newmtl Rocket.015
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 2
+map_Kd C:/Users/Monza/3D Objects/Textures/soyuz_mainbody.png
+map_d C:/Users/Monza/3D Objects/Textures/soyuz_mainbody.png
+
+newmtl Rocket.016
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 2
+map_Kd C:/Users/Monza/3D Objects/Textures/soyuz_mainbody.png
+map_d C:/Users/Monza/3D Objects/Textures/soyuz_mainbody.png
+
+newmtl Rocket.017
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 2
+map_Kd C:/Users/Monza/3D Objects/Textures/soyuz_mainbody.png
+map_d C:/Users/Monza/3D Objects/Textures/soyuz_mainbody.png
