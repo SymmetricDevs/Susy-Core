@@ -16,6 +16,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import supersymmetry.SuSyValues;
 import supersymmetry.Supersymmetry;
 import supersymmetry.common.entities.EntityRocket;
 
@@ -25,8 +26,6 @@ import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class RocketRenderer<T extends EntityRocket> extends Render<T> {
-
-    private static final ModelResourceLocation N1model = new ModelResourceLocation(new ResourceLocation(Supersymmetry.MODID, "N1"), "inventory");
     private ModelManager manager = null;
 
     public RocketRenderer(RenderManager renderManager) {
@@ -69,7 +68,7 @@ public class RocketRenderer<T extends EntityRocket> extends Render<T> {
             GlStateManager.enableOutlineMode(this.getTeamColor(entity));
         }
 
-        model = this.manager.getModel(N1model); // Get the model
+        model = this.manager.getModel(SuSyValues.modelRocket); // Get the model
         this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE); // Bind the blocks texture. See Test#stitchTexture(TextureStitchEvent.Pre) for more information.
 
         bufferbuilder.begin(7, DefaultVertexFormats.BLOCK); // I guess DefaultVertexFormats#ITEM would work too. Needs some test.
