@@ -18,7 +18,7 @@ import java.util.List;
 public class BiomeProperty extends RecipeProperty<BiomeProperty.BiomePropertyList> {
 
     public static final String KEY = "biome";
-    private static final Position POSITION = new Position(80, 43);
+    private static final Position POSITION = new Position(80, 45);
     private static final Size SIZE = new Size(16, 16);
     private static final TextureArea ICON = TextureArea.fullImage("textures/gui/widget/information.png");
 
