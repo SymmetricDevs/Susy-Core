@@ -84,7 +84,7 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
                 .where('G', states(getGearboxState()))
                 .where('F', frames(Materials.Steel))
                 .where('C', states(getCasingState())
-                        .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMaxGlobalLimited(1))
+                        .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMinGlobalLimited(1).setMaxGlobalLimited(1))
                         .or(autoAbilities(true, false)))
                 .where('E', states(getCasingState())
                         .or(abilities(MultiblockAbility.INPUT_ENERGY)).setMinGlobalLimited(1).setMaxGlobalLimited(2))
