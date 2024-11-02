@@ -76,7 +76,7 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
                 .aisle("       ", "      P", "       ")
                 .aisle("       ", "      P", "       ")
                 .aisle("FCCCC  ", "CCCCC P", "FCECC  ")
-                .aisle("CCSGC  ", "OPPPPPP", "CCECC  ")
+                .aisle("CCSGC  ", "OPPPPPP", "CCEGC  ")
                 .aisle("FCCC   ", "CCCCC  ", "FCEC   ")
                 .where(' ', any())
                 .where('S', selfPredicate())
