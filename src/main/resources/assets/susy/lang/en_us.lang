@@ -286,6 +286,7 @@ gregtech.machine.high_pressure_cryogenic_distillation_plant.name=High Pressure C
 gregtech.machine.single_column_cryogenic_distillation_plant.name=Single Column Cryogenic Distillation Plant
 gregtech.machine.reverberatory_furnace.name=Reverberatory Furnace
 gregtech.machine.blender.name=Blender
+gregtech.machine.sieve_distillation_tower.name=Sieve Distillation Tower
 
 gregtech.machine.drone_pad.name=Drone Pad
 
