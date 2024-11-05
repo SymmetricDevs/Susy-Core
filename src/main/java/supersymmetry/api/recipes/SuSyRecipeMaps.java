@@ -148,7 +148,7 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> VACUUM_DISTILLATION_RECIPES = new RecipeMap<>("vacuum_distillation", 1, true, 1, true, 1, true, 12, false, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
-    public static final RecipeMap<SimpleRecipeBuilder> SIEVE_DISTILLATION_RECIPES = new RecipeMap<>("sieve_distillation", 1, true, 1, true, 1, true, 12, false, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<SimpleRecipeBuilder> SIEVE_DISTILLATION_RECIPES = new RecipeMap<>("sieve_distillation", 1, true, 1, true, 2, true, 12, false, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
 
