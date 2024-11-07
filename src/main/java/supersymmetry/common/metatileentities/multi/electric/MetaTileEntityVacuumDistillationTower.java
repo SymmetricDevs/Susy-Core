@@ -1,5 +1,7 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import gregtech.api.capability.IDistillationTower;
+import gregtech.api.capability.impl.DistillationTowerLogicHandler;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -21,20 +23,26 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import supersymmetry.api.metatileentity.multiblock.MetaTileEntityOrderedDT;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.recipes.DistillationTowerRecipeLogic;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Function;
 
 import static gregtech.api.util.RelativeDirection.*;
 
-public class MetaTileEntityVacuumDistillationTower extends RecipeMapMultiblockController {
+public class MetaTileEntityVacuumDistillationTower extends MetaTileEntityOrderedDT {
+    protected DistillationTowerLogicHandler handler;
+
     public MetaTileEntityVacuumDistillationTower(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.VACUUM_DISTILLATION_RECIPES);
-        this.recipeMapWorkable = new MultiblockRecipeLogic(this, true);
+        this.recipeMapWorkable = new DistillationTowerRecipeLogic(this);
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
@@ -54,7 +62,7 @@ public class MetaTileEntityVacuumDistillationTower extends RecipeMapMultiblockCo
                 .where('F', frames(Materials.Steel))
                 .where('C', states(this.getCasingState())
                         .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(3))
-                        .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1))
+                        .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setMaxGlobalLimited(2))
                         .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMaxGlobalLimited(1)))
                 .where('I', abilities(MultiblockAbility.EXPORT_ITEMS).setMaxGlobalLimited(1))
                 .where('D', states(this.getCasingState()))
@@ -90,10 +98,5 @@ public class MetaTileEntityVacuumDistillationTower extends RecipeMapMultiblockCo
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.VDT_OVERLAY;
-    }
-
-    @Override
-    public boolean allowsExtendedFacing() {
-        return false;
     }
 }
