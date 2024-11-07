@@ -1,6 +1,7 @@
 package supersymmetry.common.metatileentities;
 
 import gregtech.api.GTValues;
+import gregtech.api.GregTechAPI;
 import gregtech.api.capability.impl.PropertyFluidFilter;
 import gregtech.api.metatileentity.SimpleMachineMetaTileEntity;
 import gregtech.api.recipes.RecipeMap;
@@ -15,6 +16,7 @@ import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityEnerg
 import gregtech.common.metatileentities.storage.MetaTileEntityDrum;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.metatileentity.CatalystMachineMetaTileEntity;
 import supersymmetry.api.metatileentity.ContinuousMachineMetaTileEntity;
 import supersymmetry.api.metatileentity.PseudoMultiMachineMetaTileEntity;
@@ -153,6 +155,8 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityPrimitiveItemBus PRIMITIVE_ITEM_IMPORT;
     public static MetaTileEntityPrimitiveItemBus PRIMITIVE_ITEM_EXPORT;
 
+    public static MetaTileEntitySieveDistillationTower SIEVE_DISTILLATION_TOWER;
+
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
         COAGULATION_TANK = registerMetaTileEntity(14501, new MetaTileEntityCoagulationTank(susyId("coagulation_tank")));
@@ -161,6 +165,7 @@ public class SuSyMetaTileEntities {
         LATEX_COLLECTOR[1] = registerMetaTileEntity(14503, new MetaTileEntityLatexCollector(susyId("latex_collector.mv"), 2));
         LATEX_COLLECTOR[2] = registerMetaTileEntity(14504, new MetaTileEntityLatexCollector(susyId("latex_collector.hv"), 3));
         LATEX_COLLECTOR[3] = registerMetaTileEntity(14505, new MetaTileEntityLatexCollector(susyId("latex_collector.ev"), 4));
+        SIEVE_DISTILLATION_TOWER = registerMetaTileEntity(14506, new MetaTileEntitySieveDistillationTower(susyId("sieve_distillation_tower")));
 
         STEAM_LATEX_COLLECTOR[0] = registerMetaTileEntity(14510, new MetaTileEntitySteamLatexCollector(susyId("latex_collector.bronze"), false));
         STEAM_LATEX_COLLECTOR[1] = registerMetaTileEntity(14511, new MetaTileEntitySteamLatexCollector(susyId("latex_collector.steel"), true));
@@ -213,6 +218,10 @@ public class SuSyMetaTileEntities {
         registerSimpleMTE(UV_LIGHT_BOX, 12, 14640, "uv_light_box", SuSyRecipeMaps.UV_RECIPES, SusyTextures.UV_LIGHT_BOX_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         registerSimpleMTE(CVD, 12, 14653, "cvd", SuSyRecipeMaps.CVD_RECIPES, SusyTextures.CVD_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         registerSimpleMTE(ION_IMPLANTER, 12, 14666, "ion_implanter", SuSyRecipeMaps.ION_IMPLANTATION_RECIPES, SusyTextures.ION_IMPLANTER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+
+        int i = 14500;
+        while (GregTechAPI.MTE_REGISTRY.getObjectById(i) != null) i++;
+        SusyLog.logger.debug("The next available ID is: " + i);
 
         //thermodynamic stuff
         registerSimpleMTE(FLUID_COMPRESSOR, 12, 15000, "fluid_compressor", SuSyRecipeMaps.FLUID_COMPRESSOR_RECIPES, SusyTextures.FLUID_COMPRESSOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);

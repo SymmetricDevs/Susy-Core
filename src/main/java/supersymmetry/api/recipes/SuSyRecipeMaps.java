@@ -148,6 +148,10 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> VACUUM_DISTILLATION_RECIPES = new RecipeMap<>("vacuum_distillation", 1, true, 1, true, 1, true, 12, false, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
+    public static final RecipeMap<SimpleRecipeBuilder> SIEVE_DISTILLATION_RECIPES = new RecipeMap<>("sieve_distillation", 1, true, 1, true, 2, true, 12, false, new SimpleRecipeBuilder(), false)
+            .setSound(GTSoundEvents.CHEMICAL_REACTOR);
+
+
     public static final RecipeMap<CatalystRecipeBuilder> CATALYTIC_REFORMER_RECIPES = new RecipeMap<>("catalytic_reformer_recipes", 1, 0, 2, 4, new CatalystRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_CRACKING, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.FURNACE);
