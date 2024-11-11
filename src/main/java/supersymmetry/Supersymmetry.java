@@ -74,7 +74,7 @@ public class Supersymmetry {
     @SubscribeEvent
     public void stitchTexture(TextureStitchEvent.Pre event) {
         TextureMap map = event.getMap();
-        map.registerSprite(new ResourceLocation(MODID, "entity/soyuz"));
+        map.registerSprite(new ResourceLocation(MODID, "entities/soyuz"));
     }
 
 
