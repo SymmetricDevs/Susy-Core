@@ -48,7 +48,6 @@ public class MetaTileEntitySieveDistillationTower extends MetaTileEntityOrderedD
 
     public MetaTileEntitySieveDistillationTower(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SIEVE_DISTILLATION_RECIPES);
-        this.recipeMapWorkable = new DistillationTowerRecipeLogic(this);
         this.handler = new DistillationTowerLogicHandler(this);
     }
 

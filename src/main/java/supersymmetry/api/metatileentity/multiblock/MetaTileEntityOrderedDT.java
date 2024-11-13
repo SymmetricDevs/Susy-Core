@@ -13,6 +13,7 @@ import gregtech.client.renderer.ICubeRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.common.recipes.DistillationTowerRecipeLogic;
 
 import java.util.function.Function;
 
@@ -24,6 +25,7 @@ public class MetaTileEntityOrderedDT extends RecipeMapMultiblockController imple
     public MetaTileEntityOrderedDT(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap) {
         super(metaTileEntityId, recipeMap);
         this.handler = new DistillationTowerLogicHandler(this);
+        this.recipeMapWorkable = new DistillationTowerRecipeLogic(this);
     }
 
     @Override
