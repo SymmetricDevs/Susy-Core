@@ -59,7 +59,7 @@ public class RocketRenderer<T extends EntityRocket> extends Render<T> {
         GlStateManager.disableLighting(); // Lighting is outside of this scope.
         GlStateManager.color(1F, 1F, 1F, 1F);
         GlStateManager.translate((float) x - 0.31F, (float) y + 0.19F, (float) z + 0.31F); // You shouldn't forget to translate to x, y, z before rendering. Other specific are made so Rubik's cube renders at the middle.
-        GlStateManager.scale(0.1625F, 0.1625F, 0.1625F); // Yep models are too ginormous for buffer builder.
+        GlStateManager.scale(1F, 1F, 1F); // Yep models are too ginormous for buffer builder.
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
 
