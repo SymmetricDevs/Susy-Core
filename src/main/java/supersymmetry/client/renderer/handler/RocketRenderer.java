@@ -56,7 +56,7 @@ public class RocketRenderer<T extends EntityRocket> extends Render<T> {
         }
 
         GlStateManager.pushMatrix(); // pushMatrix because we'll translate and rotate stuff
-        GlStateManager.disableLighting(); // Lighting is outside of this scope.
+        GlStateManager.disableCull();
         GlStateManager.color(1F, 1F, 1F, 1F);
         GlStateManager.translate((float) x - 0.31F, (float) y + 0.19F, (float) z + 0.31F); // You shouldn't forget to translate to x, y, z before rendering. Other specific are made so Rubik's cube renders at the middle.
         GlStateManager.scale(1F, 1F, 1F); // Yep models are too ginormous for buffer builder.
@@ -71,7 +71,7 @@ public class RocketRenderer<T extends EntityRocket> extends Render<T> {
         model = this.manager.getModel(SuSyValues.modelRocket); // Get the model
         this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE); // Bind the blocks texture. See Test#stitchTexture(TextureStitchEvent.Pre) for more information.
 
-        bufferbuilder.begin(7, DefaultVertexFormats.BLOCK); // I guess DefaultVertexFormats#ITEM would work too. Needs some test.
+        bufferbuilder.begin(7, DefaultVertexFormats.ITEM); // I guess DefaultVertexFormats#ITEM would work too. Needs some test.
 
         // Gets model quads for rendering
         // State can be null. Because it checks if state is an instance of IExtendedState which it uses it to get unlisted properties for some data. We don't use it and need it.
@@ -81,7 +81,7 @@ public class RocketRenderer<T extends EntityRocket> extends Render<T> {
         quads.forEach(q -> bufferbuilder.addVertexData(q.getVertexData())); // Add quad data to buffer builder
         tessellator.draw(); // Then draw it
 
-        GlStateManager.enableLighting(); // Don't forget to free the values you have changed. But color is kind of a slut that gets changed every render method to white so you will most certainly not need to free it.
+        GlStateManager.enableCull();
         GlStateManager.popMatrix();
     }
 
