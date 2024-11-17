@@ -33,10 +33,10 @@ public class EntityRocket extends Entity {
     public EntityRocket(World worldIn, double x, double y, double z) {
         super(worldIn);
         this.setLocationAndAngles(x, y, z, this.rotationYaw, 180.0F);
-        this.setSize(3F, 31F);
+        this.setSize(11F, 46F);
         rideCooldown = -1;
         ignoreFrustumCheck = true;
-        this.setEntityBoundingBox(new AxisAlignedBB(x - 1, y + 0.1, z - 1, x + 1, y + 40, z + 1));
+        this.setEntityBoundingBox(new AxisAlignedBB(x - 5, y + 0.1, z - 5, x + 5, y + 46, z + 5));
     }
 
     public EntityRocket(World worldIn, BlockPos pos) {
