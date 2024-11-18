@@ -32,8 +32,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.metatileentity.multiblock.MetaTileEntityOrderedDT;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.recipes.DistillationTowerRecipeLogic;
 
 import java.util.List;
 import java.util.function.Function;
@@ -41,40 +43,16 @@ import java.util.function.Function;
 import static gregtech.api.util.RelativeDirection.*;
 import static supersymmetry.api.recipes.SuSyRecipeMaps.SIEVE_DISTILLATION_RECIPES;
 
-public class MetaTileEntitySieveDistillationTower extends RecipeMapMultiblockController implements IDistillationTower {
+public class MetaTileEntitySieveDistillationTower extends MetaTileEntityOrderedDT implements IDistillationTower {
     protected DistillationTowerLogicHandler handler;
 
     public MetaTileEntitySieveDistillationTower(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SIEVE_DISTILLATION_RECIPES);
-        this.recipeMapWorkable = new SieveDistillationTowerRecipeLogic(this);
         this.handler = new DistillationTowerLogicHandler(this);
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
         return new MetaTileEntitySieveDistillationTower(this.metaTileEntityId);
-    }
-
-    /**
-     * Used if MultiblockPart Abilities need to be sorted a certain way, like
-     * Distillation Tower and Assembly Line. <br>
-     * <br>
-     * There will be <i>consequences</i> if this is changed. Make sure to set the logic handler to one with
-     * a properly overriden {@link DistillationTowerLogicHandler#determineOrderedFluidOutputs()}
-     */
-    @Override
-    protected Function<BlockPos, Integer> multiblockPartSorter() {
-        return UP.getSorter(getFrontFacing(), getUpwardsFacing(), isFlipped());
-    }
-
-    /**
-     * Whether this multi can be rotated or face upwards. <br>
-     * <br>
-     * There will be <i>consequences</i> if this returns true. Make sure to set the logic handler to one with
-     * a properly overriden {@link DistillationTowerLogicHandler#determineOrderedFluidOutputs()}
-     */
-    @Override
-    public boolean allowsExtendedFacing() {
-        return false;
     }
 
     @Override
@@ -93,19 +71,6 @@ public class MetaTileEntitySieveDistillationTower extends RecipeMapMultiblockCon
         super.addDisplayText(textList);
     }
 
-    @Override
-    protected void formStructure(PatternMatchContext context) {
-        super.formStructure(context);
-        if (this.handler == null || this.structurePattern == null) return;
-        handler.determineLayerCount(this.structurePattern);
-        handler.determineOrderedFluidOutputs();
-    }
-
-    @Override
-    public void invalidateStructure() {
-        super.invalidateStructure();
-        if (this.handler != null) handler.invalidate();
-    }
 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
@@ -123,11 +88,6 @@ public class MetaTileEntitySieveDistillationTower extends RecipeMapMultiblockCon
                         .or(autoAbilities(true, false)))
                 .where('#', states(getSieveState()))
                 .build();
-    }
-
-    @Override
-    public boolean allowSameFluidFillForOutputs() {
-        return false;
     }
 
     @SideOnly(Side.CLIENT)
@@ -156,64 +116,4 @@ public class MetaTileEntitySieveDistillationTower extends RecipeMapMultiblockCon
         return Textures.DISTILLATION_TOWER_OVERLAY;
     }
 
-    @Override
-    public int getFluidOutputLimit() {
-        if (this.handler != null) return this.handler.getLayerCount();
-        else return super.getFluidOutputLimit();
-    }
-
-    protected class SieveDistillationTowerRecipeLogic extends MultiblockRecipeLogic {
-
-        public SieveDistillationTowerRecipeLogic(MetaTileEntitySieveDistillationTower tileEntity) {
-            super(tileEntity);
-        }
-
-        @Override
-        protected void outputRecipeOutputs() {
-            GTTransferUtils.addItemsToItemHandler(getOutputInventory(), false, itemOutputs);
-            handler.applyFluidToOutputs(fluidOutputs, true);
-        }
-
-        @Override
-        protected boolean setupAndConsumeRecipeInputs(@NotNull Recipe recipe,
-                                                      @NotNull IItemHandlerModifiable importInventory,
-                                                      @NotNull IMultipleTankHandler importFluids) {
-            this.overclockResults = calculateOverclock(recipe);
-
-            modifyOverclockPost(overclockResults, recipe.getRecipePropertyStorage());
-
-            if (!hasEnoughPower(overclockResults)) {
-                return false;
-            }
-
-            IItemHandlerModifiable exportInventory = getOutputInventory();
-
-            // We have already trimmed outputs and chanced outputs at this time
-            // Attempt to merge all outputs + chanced outputs into the output bus, to prevent voiding chanced outputs
-            if (!metaTileEntity.canVoidRecipeItemOutputs() &&
-                    !GTTransferUtils.addItemsToItemHandler(exportInventory, true, recipe.getAllItemOutputs())) {
-                this.isOutputsFull = true;
-                return false;
-            }
-
-            // We have already trimmed fluid outputs at this time
-            if (!metaTileEntity.canVoidRecipeFluidOutputs() &&
-                    !handler.applyFluidToOutputs(recipe.getAllFluidOutputs(), false)) {
-                this.isOutputsFull = true;
-                return false;
-            }
-
-            this.isOutputsFull = false;
-            if (recipe.matches(true, importInventory, importFluids)) {
-                this.metaTileEntity.addNotifiedInput(importInventory);
-                return true;
-            }
-            return false;
-        }
-
-        @Override
-        protected IMultipleTankHandler getOutputTank() {
-            return handler.getFluidTanks();
-        }
-    }
 }
