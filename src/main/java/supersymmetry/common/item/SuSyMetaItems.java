@@ -20,6 +20,7 @@ public class SuSyMetaItems {
     public static MetaValueItem PUMP_STEAM;
     public static MetaValueItem AIR_VENT;
     public static MetaValueItem TRACK_SEGMENT;
+    public static MetaValueItem EARTH_ORBITAL_SCRAP;
 
     public static void initMetaItems() {
         metaItem = new StandardMetaItem();
@@ -54,6 +55,8 @@ public class SuSyMetaItems {
         TRACK_SEGMENT = metaItem.addItem(5, "track_segment").addComponents(new TooltipBehavior((lines) -> {
             lines.add(I18n.format("metaitem.track_segment.length_info"));
         }));
+
+        EARTH_ORBITAL_SCRAP = metaItem.addItem(6, "orbital.scrap.earth").setMaxStackSize(8);
     }
 
     private static void addTieredOredictItem (OreDictValueItem[] items, int id, int RGB, OrePrefix prefix) {
