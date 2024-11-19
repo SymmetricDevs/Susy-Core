@@ -1,17 +1,28 @@
 package supersymmetry.common.entities;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import supersymmetry.client.audio.MovingSoundRocket;
+import supersymmetry.client.renderer.particles.SusyParticleFlameLarge;
+import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
+
+import java.util.List;
+import java.util.Random;
 
 public class EntityRocket extends Entity {
 
+    private static final Random rnd = new Random();
     protected static final float jerk = 0.0001F;
 
     private static final DataParameter<Boolean> LAUNCHED = EntityDataManager.<Boolean>createKey(EntityRocket.class, DataSerializers.BOOLEAN);
@@ -22,6 +33,9 @@ public class EntityRocket extends Entity {
     private static final DataParameter<Integer> FLIGHT_TIME = EntityDataManager.<Integer>createKey(EntityRocket.class, DataSerializers.VARINT);
 
     private static final DataParameter<Float> START_POS = EntityDataManager.<Float>createKey(EntityRocket.class, DataSerializers.FLOAT);
+
+    @SideOnly(Side.CLIENT)
+    private MovingSoundRocket soundRocket;
 
     public EntityRocket(World worldIn) {
         super(worldIn);
@@ -103,13 +117,21 @@ public class EntityRocket extends Entity {
     public void startCountdown(){
         this.setCountdownStarted(true);
         this.setLaunchTime(this.getAge() + 200);
-        // TODO: Play sounds
         this.setStartPos((float)this.posY);
     }
 
     public void LaunchRocket(){
         this.setLaunched(true);
+        if (world.isRemote) {
+            soundRocket.startPlaying();
+        }
         this.isAirBorne = true;
+    }
+
+    @Override
+    public void setDead() {
+        super.setDead();
+        if (world.isRemote && soundRocket != null) soundRocket.stopPlaying();
     }
 
     public void explode() {
@@ -138,6 +160,127 @@ public class EntityRocket extends Entity {
         compound.setInteger("LaunchTime", this.getLaunchTime());
         compound.setInteger("FlightTime", this.getFlightTime());
         compound.setFloat("StartPos", this.getStartPos());
+    }
+
+    protected void spawnFlightParticles(){
+        // Main engine
+        SusyParticleFlameLarge flame_0 = new SusyParticleFlameLarge(this.world, this.posX, this.posY, this.posZ, 1.5*(rnd.nextFloat()-0.5)*0.08, -1.5, 1.5*(rnd.nextFloat()-0.5)*0.08);
+        SusyParticleSmokeLarge smoke_0 = new SusyParticleSmokeLarge(this.world, this.posX, this.posY, this.posZ, 1.5*(rnd.nextFloat()-0.5)*0.16, -1.5, 1.5*(rnd.nextFloat()-0.5)*0.16);
+        Minecraft.getMinecraft().effectRenderer.addEffect(smoke_0);
+        Minecraft.getMinecraft().effectRenderer.addEffect(flame_0);
+
+        // Main engine
+        SusyParticleFlameLarge flame_1 = new SusyParticleFlameLarge(this.world, this.posX + 3, this.posY, this.posZ, 1.5*(rnd.nextFloat()-0.5)*0.08, -1.5, 1.5*(rnd.nextFloat()-0.5)*0.08);
+        SusyParticleSmokeLarge smoke_1 = new SusyParticleSmokeLarge(this.world, this.posX + 3, this.posY, this.posZ, 1.5*(rnd.nextFloat()-0.5)*0.16, -1.5, 1.5*(rnd.nextFloat()-0.5)*0.16);
+        Minecraft.getMinecraft().effectRenderer.addEffect(smoke_1);
+        Minecraft.getMinecraft().effectRenderer.addEffect(flame_1);
+
+        // Main engine
+        SusyParticleFlameLarge flame_2 = new SusyParticleFlameLarge(this.world, this.posX, this.posY, this.posZ + 3, 1.5*(rnd.nextFloat()-0.5)*0.08, -1.5, 1.5*(rnd.nextFloat()-0.5)*0.08);
+        SusyParticleSmokeLarge smoke_2 = new SusyParticleSmokeLarge(this.world, this.posX, this.posY, this.posZ + 3, 1.5*(rnd.nextFloat()-0.5)*0.16, -1.5, 1.5*(rnd.nextFloat()-0.5)*0.16);
+        Minecraft.getMinecraft().effectRenderer.addEffect(smoke_2);
+        Minecraft.getMinecraft().effectRenderer.addEffect(flame_2);
+
+        // Main engine
+        SusyParticleFlameLarge flame_3 = new SusyParticleFlameLarge(this.world, this.posX - 3, this.posY, this.posZ, 1.5*(rnd.nextFloat()-0.5)*0.08, -1.5, 1.5*(rnd.nextFloat()-0.5)*0.08);
+        SusyParticleSmokeLarge smoke_3 = new SusyParticleSmokeLarge(this.world, this.posX - 3, this.posY, this.posZ, 1.5*(rnd.nextFloat()-0.5)*0.16, -1.5, 1.5*(rnd.nextFloat()-0.5)*0.16);
+        Minecraft.getMinecraft().effectRenderer.addEffect(smoke_3);
+        Minecraft.getMinecraft().effectRenderer.addEffect(flame_3);
+
+        // Main engine
+        SusyParticleFlameLarge flame_4 = new SusyParticleFlameLarge(this.world, this.posX, this.posY, this.posZ - 3, 1.5*(rnd.nextFloat()-0.5)*0.08, -1.5, 1.5*(rnd.nextFloat()-0.5)*0.08);
+        SusyParticleSmokeLarge smoke_4 = new SusyParticleSmokeLarge(this.world, this.posX, this.posY, this.posZ - 3, 1.5*(rnd.nextFloat()-0.5)*0.16, -1.5, 1.5*(rnd.nextFloat()-0.5)*0.16);
+        Minecraft.getMinecraft().effectRenderer.addEffect(smoke_4);
+        Minecraft.getMinecraft().effectRenderer.addEffect(flame_4);
+    }
+
+    protected void spawnLaunchParticles(double v){
+        float startPos = this.getStartPos();
+        float randFloat = rnd.nextFloat();
+        float randSpeed = rnd.nextFloat();
+        SusyParticleSmokeLarge smoke_x1 = new SusyParticleSmokeLarge(this.world, this.posX, startPos - 3, this.posZ, 0.5 + randSpeed, v*(randFloat-0.5)*0.16, v*(randFloat-0.5)*0.16);
+        SusyParticleSmokeLarge smoke_x2 = new SusyParticleSmokeLarge(this.world, this.posX, startPos - 3, this.posZ, -(0.5 + randSpeed), v*(randFloat-0.5)*0.16, v*(randFloat-0.5)*0.16);
+        SusyParticleSmokeLarge smoke_z1 = new SusyParticleSmokeLarge(this.world, this.posX, startPos - 3, this.posZ, v*(randFloat-0.5)*0.16, v*(randFloat-0.5)*0.16, 0.5 + randSpeed);
+        SusyParticleSmokeLarge smoke_z2 = new SusyParticleSmokeLarge(this.world, this.posX, startPos - 3, this.posZ, v*(randFloat-0.5)*0.16, v*(randFloat-0.5)*0.16, -(0.5 + randSpeed));
+        Minecraft.getMinecraft().effectRenderer.addEffect(smoke_x1);
+        Minecraft.getMinecraft().effectRenderer.addEffect(smoke_x2);
+        Minecraft.getMinecraft().effectRenderer.addEffect(smoke_z1);
+        Minecraft.getMinecraft().effectRenderer.addEffect(smoke_z2);
+    }
+
+    @Override
+    public void onUpdate() {
+
+        if(this.firstUpdate){
+            this.startCountdown();
+        }
+
+        super.onUpdate();
+
+        boolean launched = this.isLaunched();
+        int age = this.getAge();
+        int launchTime = this.getLaunchTime();
+
+        if (this.isCountDownStarted() && !launched && age >= launchTime) {
+            this.LaunchRocket();
+        }
+
+        if (launched) {
+            int flightTime = getFlightTime();
+            float startPos = this.getStartPos();
+            this.prevPosX = this.posX;
+            this.prevPosY = this.posY;
+            this.prevPosZ = this.posZ;
+            this.motionY = jerk * Math.pow(getFlightTime(), 2) / 2;
+            this.setPosition(this.posX, startPos + jerk * Math.pow(flightTime, 3) / 6, this.posZ);
+            this.setFlightTime(flightTime + 1);
+
+            if(flightTime % 2 == 0) {
+                this.spawnFlightParticles();
+            }
+
+            if (this.posY > 600 || flightTime > 2400) {
+                this.setDead();
+            }
+
+            if(this.world.collidesWithAnyBlock(this.getEntityBoundingBox())) {
+                this.explode();
+            }
+
+            List<Entity> collidingEntities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox());
+
+            if(!collidingEntities.isEmpty()) {
+                for(Entity entity : collidingEntities) {
+                    entity.attackEntityFrom(DamageSource.FLY_INTO_WALL, (float) this.motionY * 10.f);
+                }
+            }
+        }
+/*
+        if(age % 2 == 0 && this.isCountDownStarted()) {
+            if(launchTime - age < 60 && launchTime - age > 0) {
+                this.spawnLaunchParticles(0.025*(age - launchTime + 60));
+            }else if(launchTime - age > -100 && launchTime - age < 0) {
+                this.spawnLaunchParticles(1.5);
+            }else if(launchTime - age > -150 && launchTime - age < -100) {
+                this.spawnLaunchParticles(-0.03*(age - launchTime + 150));
+            }
+        }
+*/
+        this.setAge(age + 1);
+    }
+
+    @Override
+    public void onAddedToWorld() {
+        super.onAddedToWorld();
+        if (this.world.isRemote) {
+            setupRocketSound();
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void setupRocketSound() {
+        this.soundRocket = new MovingSoundRocket(this);
+        Minecraft.getMinecraft().getSoundHandler().playSound(this.soundRocket);
     }
 
 }

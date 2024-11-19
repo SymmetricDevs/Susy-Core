@@ -16,5 +16,14 @@
         "stream": true
       }
     ]
+  },
+  "entity.rocket_launch": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "susy:rocket_launch",
+        "stream": false
+      }
+    ]
   }
 }
