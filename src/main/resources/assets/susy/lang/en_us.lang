@@ -184,6 +184,7 @@ item.material.oreprefix.sheetedFrame=%s Sheeted Frame Box
 item.material.oreprefix.fiber=%s Fiber
 item.material.oreprefix.fiberWet=Wet %s Fiber
 item.material.oreprefix.thread=%s Thread
+item.material.oreprefix.dustWet=Wet %s Dust
 
 susy.fluid.supercritical=Supercritical %s
 susy.fluid.impure_slurry=Impure %s Slurry
