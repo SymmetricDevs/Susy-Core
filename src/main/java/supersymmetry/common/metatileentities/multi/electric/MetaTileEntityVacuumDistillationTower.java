@@ -66,7 +66,7 @@ public class MetaTileEntityVacuumDistillationTower extends MetaTileEntityOrdered
                         .filter(mte -> !(mte instanceof MetaTileEntityMultiFluidHatch))
                         .toArray(MetaTileEntity[]::new))
                         .setMaxLayerLimited(1))
-                )
+                        .or(autoAbilities(true, false)))
                 .where('#', air())
                 .build();
     }
