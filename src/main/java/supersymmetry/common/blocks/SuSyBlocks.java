@@ -10,6 +10,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.common.blocks.rocketry.BlockOuterHatch;
 
 import java.util.Comparator;
 import java.util.EnumMap;
@@ -45,6 +46,8 @@ public class SuSyBlocks {
     public static BlocksCustomSheets CUSTOMSHEETS;
     public static BlockConveyor CONVEYOR_BELT;
     public static BlockRocketAssemblerCasing ROCKET_ASSEMBLER_CASING;
+
+    public static BlockOuterHatch OUTER_HATCH;
 
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
@@ -117,9 +120,12 @@ public class SuSyBlocks {
 
         CONVEYOR_BELT = new BlockConveyor();
         CONVEYOR_BELT.setRegistryName("conveyor_belt");
-      
+
         ROCKET_ASSEMBLER_CASING = new BlockRocketAssemblerCasing();
         ROCKET_ASSEMBLER_CASING.setRegistryName("rocket_assembler_casing");
+
+        OUTER_HATCH = new BlockOuterHatch();
+        OUTER_HATCH.setRegistryName("rocket_outer_hatch");
     }
 
     @SideOnly(Side.CLIENT)
