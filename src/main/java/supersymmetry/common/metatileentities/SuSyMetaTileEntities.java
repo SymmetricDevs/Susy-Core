@@ -33,6 +33,7 @@ import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityPrimit
 import supersymmetry.common.metatileentities.multiblockpart.SusyMetaTileEntityDumpingHatch;
 import supersymmetry.common.metatileentities.multiblockpart.SusyMetaTileEntityEnergyHatch;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityBathCondenser;
+import supersymmetry.common.metatileentities.single.electric.MetaTileEntityComponentScanner;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityLatexCollector;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityPhaseSeparator;
 import supersymmetry.common.metatileentities.single.steam.MetaTileEntitySteamLatexCollector;
@@ -153,9 +154,13 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityPrimitiveItemBus PRIMITIVE_ITEM_IMPORT;
     public static MetaTileEntityPrimitiveItemBus PRIMITIVE_ITEM_EXPORT;
 
-    //Space Multis
+    //Space multis
     public static MetaTileEntityLandingPad LANDING_PAD;
     public static MetaTileEntityScrapRecycler SCRAP_RECYCLER;
+    public static MetaTileEntityBuildingCleanroom BUILDING_CLEANROOM;
+
+    //Space singulars
+    public static MetaTileEntityComponentScanner COMPONENT_SCANNER;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -285,6 +290,8 @@ public class SuSyMetaTileEntities {
         //Space machines
         LANDING_PAD = registerMetaTileEntity(18000, new MetaTileEntityLandingPad(susyId("landing_pad")));
         SCRAP_RECYCLER = registerMetaTileEntity(18001, new MetaTileEntityScrapRecycler(susyId("scrap_recycler")));
+        BUILDING_CLEANROOM = registerMetaTileEntity(18002, new MetaTileEntityBuildingCleanroom(susyId("building_cleanroom")));
+        COMPONENT_SCANNER = registerMetaTileEntity(18003, new MetaTileEntityComponentScanner((susyId("component_scanner"))));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name, RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator, ICubeRenderer texture, boolean isBricked) {

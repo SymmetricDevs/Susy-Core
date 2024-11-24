@@ -10,6 +10,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.common.blocks.rocketry.BlockOuterHatch;
 
 import java.util.Comparator;
 import java.util.EnumMap;
@@ -38,6 +39,8 @@ public class SuSyBlocks {
     public static BlockElectrodeAssembly ELECTRODE_ASSEMBLY;
     public static BlockSuSyMultiblockCasing MULTIBLOCK_CASING;
     public static BlockSerpentine SERPENTINE;
+
+    public static BlockOuterHatch OUTER_HATCH;
 
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
@@ -99,6 +102,8 @@ public class SuSyBlocks {
         SERPENTINE = new BlockSerpentine();
         SERPENTINE.setRegistryName("serpentine");
 
+        OUTER_HATCH = new BlockOuterHatch();
+        OUTER_HATCH.setRegistryName("rocket_outer_hatch");
     }
 
     @SideOnly(Side.CLIENT)
