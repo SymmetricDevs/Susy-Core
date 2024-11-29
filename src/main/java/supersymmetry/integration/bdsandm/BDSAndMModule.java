@@ -37,5 +37,7 @@ public class BDSAndMModule extends IntegrationSubmodule {
         SusyLog.logger.info("BDSAndM found. Enabling integration...");
         CustomBlockRotations.registerCustomRotation(BDSM.blockMetalBarrel, BDSAndM_BARREL_BEHAVIOR);
         CustomBlockRotations.registerCustomRotation(BDSM.blockWoodBarrel, BDSAndM_BARREL_BEHAVIOR);
+        CustomBlockRotations.registerCustomRotation(BDSM.blockMetalCrate, BDSAndM_BARREL_BEHAVIOR);
+        CustomBlockRotations.registerCustomRotation(BDSM.blockWoodCrate, BDSAndM_BARREL_BEHAVIOR);
     }
 }
