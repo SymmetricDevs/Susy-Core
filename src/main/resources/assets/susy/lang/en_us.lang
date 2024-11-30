@@ -730,6 +730,24 @@ gregtech.machine.energy_hatch.output_4a.hv.name=HV 4A Dynamo Hatch
 gregtech.machine.energy_hatch.output_16a.hv.name=HV 16A Dynamo Hatch
 gregtech.machine.energy_hatch.output_16a.ev.name=EV 16A Dynamo Hatch
 
+# Quadruple & Nonuple Fluid Hatches
+
+gregtech.machine.fluid_hatch.import_4x.lv.name=LV Quadruple Input Hatch
+gregtech.machine.fluid_hatch.import_4x.mv.name=MV Quadruple Input Hatch
+gregtech.machine.fluid_hatch.import_4x.hv.name=HV Quadruple Input Hatch
+
+gregtech.machine.fluid_hatch.import_9x.lv.name=LV Nonuple Input Hatch
+gregtech.machine.fluid_hatch.import_9x.mv.name=MV Nonuple Input Hatch
+gregtech.machine.fluid_hatch.import_9x.hv.name=HV Nonuple Input Hatch
+
+gregtech.machine.fluid_hatch.export_4x.lv.name=LV Quadruple Output Hatch
+gregtech.machine.fluid_hatch.export_4x.mv.name=LV Quadruple Output Hatch
+gregtech.machine.fluid_hatch.export_4x.hv.name=LV Quadruple Output Hatch
+
+gregtech.machine.fluid_hatch.export_9x.lv.name=LV Nonuple Output Hatch
+gregtech.machine.fluid_hatch.export_9x.mv.name=MV Nonuple Output Hatch
+gregtech.machine.fluid_hatch.export_9x.hv.name=HV Nonuple Output Hatch
+
 # Other multiblock parts
 
 gregtech.machine.dumping_hatch=Dumping Hatch
