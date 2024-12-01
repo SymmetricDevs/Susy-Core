@@ -21,7 +21,7 @@ public class EntityTransporterErector extends Freight {
 
     @Override
     public int getInventoryWidth() {
-        return 0;
+        return 1;
     }
 
     @Override
