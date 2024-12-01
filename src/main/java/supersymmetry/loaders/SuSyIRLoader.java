@@ -75,6 +75,7 @@ public class SuSyIRLoader {
             instanceField.setAccessible(true);
             ModCore.Mod instance = (ModCore.Mod) instanceField.get(ImmersiveRailroading.class);
             EntityRegistry.register(instance, EntityTunnelBore::new, 512);
+            EntityRegistry.register(instance, EntityTransporterErector::new, 512);
         } catch (NoSuchFieldException e) {
             SusyLog.logger.error("Failed to reflect immersive railroading instance", e);
         } catch (IllegalAccessException e) {
