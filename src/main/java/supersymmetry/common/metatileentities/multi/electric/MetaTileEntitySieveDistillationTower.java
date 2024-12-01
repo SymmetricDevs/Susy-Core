@@ -13,6 +13,7 @@ import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.recipes.Recipe;
+import gregtech.api.unification.material.Materials;
 import gregtech.api.util.GTTransferUtils;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.TextComponentUtil;
@@ -76,7 +77,7 @@ public class MetaTileEntitySieveDistillationTower extends MetaTileEntityOrderedD
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start(RIGHT, FRONT, UP)
                 .aisle("YSY", "YYY", "YYY")
-                .aisle("XXX", "X#X", "XXX").setRepeatable(1, 11)
+                .aisle("FXF", "X#X", "FXF").setRepeatable(1, 11)
                 .aisle("XXX", "XXX", "XXX")
                 .where('S', selfPredicate())
                 .where('Y', states(getCasingState())
@@ -87,6 +88,7 @@ public class MetaTileEntitySieveDistillationTower extends MetaTileEntityOrderedD
                         .or(abilities(MultiblockAbility.EXPORT_FLUIDS).setMaxLayerLimited(1, 1))
                         .or(autoAbilities(true, false)))
                 .where('#', states(getSieveState()))
+                .where('F', frames(Materials.StainlessSteel))
                 .build();
     }
 
