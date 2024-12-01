@@ -50,7 +50,7 @@ public class MetaTileEntityCatalyticReformer extends RecipeMapMultiblockControll
 
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
-        return Textures.STABLE_TITANIUM_CASING;
+        return Textures.CLEAN_STAINLESS_STEEL_CASING;
     }
 
     @Nonnull
