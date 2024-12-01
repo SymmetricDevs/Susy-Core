@@ -65,7 +65,7 @@ public class MetaTileEntityGravitySeparator extends RecipeMapMultiblockControlle
                 .where('R', rotorOrientation())
                 .where('C', casingPredicate)
                 .where('M', casingPredicate
-                        .or(abilities(MultiblockAbility.MAINTENANCE_HATCH)).setExactLimit(1))
+                        .or(autoAbilities(true, false)))
                 .where('E', casingPredicate
                         .or(autoAbilities(true, false, false, false, false, false, false)))
                 .where('I', casingPredicate

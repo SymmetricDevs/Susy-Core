@@ -1,7 +1,11 @@
 package supersymmetry.api.unification.ore;
 
+import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
+import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.unification.ore.StoneType;
+import gregtech.api.unification.stack.MaterialStack;
+import gregtech.common.ConfigHolder;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -23,6 +27,7 @@ public class SusyStoneTypes {
 
     public SusyStoneTypes(){
     }
+
     public static void init(){
         GABBRO = new StoneType(12, "gabbro", SoundType.STONE, SusyOrePrefix.oreGabbro, SusyMaterials.Gabbro,
                 () -> gtStoneState(SusyStoneVariantBlock.StoneType.GABBRO),
@@ -51,7 +56,24 @@ public class SusyStoneTypes {
         KIMBERLITE = new StoneType(20, "kimberlite", SoundType.STONE, SusyOrePrefix.oreKimberlite, SusyMaterials.Kimberlite,
                 () -> gtStoneState(SusyStoneVariantBlock.StoneType.KIMBERLITE),
                 state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.KIMBERLITE), false);
+
+        if (ConfigHolder.worldgen.allUniqueStoneTypes) {
+            addSecondary(SusyOrePrefix.oreGabbro, SusyMaterials.Gabbro);
+            addSecondary(SusyOrePrefix.oreGneiss, SusyMaterials.Gneiss);
+            addSecondary(SusyOrePrefix.oreLimestone, SusyMaterials.Limestone);
+            addSecondary(SusyOrePrefix.orePhyllite, SusyMaterials.Phyllite);
+            addSecondary(SusyOrePrefix.oreQuartzite, Materials.Quartzite);
+            addSecondary(SusyOrePrefix.oreShale, SusyMaterials.Shale);
+            addSecondary(SusyOrePrefix.oreSlate, SusyMaterials.Slate);
+            addSecondary(SusyOrePrefix.oreSoapstone, Materials.Soapstone);
+            addSecondary(SusyOrePrefix.oreKimberlite, SusyMaterials.Kimberlite);
+        }
     }
+
+    private static void addSecondary(OrePrefix prefix, Material material) {
+        prefix.addSecondaryMaterial(new MaterialStack(material, OrePrefix.dust.getMaterialAmount(material)));
+    }
+
     private static IBlockState gtStoneState(SusyStoneVariantBlock.StoneType stoneType) {
         return SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH).getState(stoneType);
     }

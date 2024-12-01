@@ -39,7 +39,7 @@ public class MetaTileEntityMultiStageFlashDistiller extends RecipeMapMultiblockC
     protected BlockPattern createStructurePattern() {
         // Different characters use common constraints. Copied from GCyM
         TraceabilityPredicate casingPredicate = states(getCasingState()).setMinGlobalLimited(70);
-        TraceabilityPredicate maintenanceEnergy = super.autoAbilities(true, true);
+        TraceabilityPredicate maintenanceEnergy = super.autoAbilities(true, true, false, false, false, false, false);
 
         return FactoryBlockPattern.start()
                 .aisle(" EEEB", " BEEB", " BEEB", " EEEB", "  BBB")
@@ -59,7 +59,7 @@ public class MetaTileEntityMultiStageFlashDistiller extends RecipeMapMultiblockC
                 .aisle(" FFF ", " FSF ", " FFF ", " FFF ", "  B  ")
                 .where('S', selfPredicate())
                 .where('B', states(MetaBlocks.BOILER_CASING.getState((BlockBoilerCasing.BoilerCasingType.STEEL_PIPE))))
-                .where('C', states(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)))
+                .where('C', frames(Materials.Steel))
                 .where('A', casingPredicate
                         .or(maintenanceEnergy))
                 .where('D', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STAINLESS_CLEAN))

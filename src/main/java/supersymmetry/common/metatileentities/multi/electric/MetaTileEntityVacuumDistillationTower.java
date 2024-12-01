@@ -1,5 +1,7 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import gregtech.api.capability.IDistillationTower;
+import gregtech.api.capability.impl.DistillationTowerLogicHandler;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -22,6 +24,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import supersymmetry.api.metatileentity.multiblock.MetaTileEntityOrderedDT;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
 
@@ -31,10 +34,10 @@ import java.util.List;
 
 import static gregtech.api.util.RelativeDirection.*;
 
-public class MetaTileEntityVacuumDistillationTower extends RecipeMapMultiblockController {
+public class MetaTileEntityVacuumDistillationTower extends MetaTileEntityOrderedDT {
+
     public MetaTileEntityVacuumDistillationTower(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.VACUUM_DISTILLATION_RECIPES);
-        this.recipeMapWorkable = new MultiblockRecipeLogic(this, true);
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
@@ -46,40 +49,41 @@ public class MetaTileEntityVacuumDistillationTower extends RecipeMapMultiblockCo
                 .aisle(" CSC  ", "CCCCCC", "CCCCCC", "CCCCCC", " CCC  ")
                 .aisle(" CGC  ", "C#F#CC", "IFFF#P", "C#F#CC", " CCC  ")
                 .aisle(" CCC  ", "C#F#CC", "CFFFCC", "C#F#CC", " CCC  ")
-                .aisle(" XXX  ", "X#F#D ", "XFFFD ", "X#F#D ", " XXX  ").setRepeatable(1,12)
+                .aisle(" XXX  ", "X#F#D ", "XFFFD ", "X#F#D ", " XXX  ").setRepeatable(1, 12)
                 .aisle(" DDD  ", "DDDDD ", "DDDDD ", "DDDDD ", " DDD  ")
                 .where('S', this.selfPredicate())
                 .where('G', states(this.getGlassState()))
                 .where('P', states(this.getPipeCasingState()))
-                .where('F', states(this.getFrameState()))
+                .where('F', frames(Materials.Steel))
                 .where('C', states(this.getCasingState())
                         .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(3))
-                        .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1))
+                        .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setMaxGlobalLimited(2))
                         .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMaxGlobalLimited(1)))
                 .where('I', abilities(MultiblockAbility.EXPORT_ITEMS).setMaxGlobalLimited(1))
                 .where('D', states(this.getCasingState()))
                 .where('X', states(getCasingState())
                         .or(metaTileEntities(MultiblockAbility.REGISTRY.get(MultiblockAbility.EXPORT_FLUIDS).stream()
-                                .filter(mte->!(mte instanceof MetaTileEntityMultiFluidHatch))
-                                .toArray(MetaTileEntity[]::new))
-                                .setMinLayerLimited(1).setMaxLayerLimited(1))
+                        .filter(mte -> !(mte instanceof MetaTileEntityMultiFluidHatch))
+                        .toArray(MetaTileEntity[]::new))
+                        .setMaxLayerLimited(1))
                         .or(autoAbilities(true, false)))
                 .where('#', air())
                 .build();
     }
+
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
         return Textures.SOLID_STEEL_CASING;
     }
-    protected IBlockState getFrameState() {
-        return MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel);
-    }
-    protected IBlockState getGlassState() {
+
+    protected static IBlockState getGlassState() {
         return MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.TEMPERED_GLASS);
     }
-    protected IBlockState getCasingState() {
+
+    protected static IBlockState getCasingState() {
         return MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID);
     }
-    protected IBlockState getPipeCasingState() {
+
+    protected static IBlockState getPipeCasingState() {
         return MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE);
     }
 
@@ -92,10 +96,5 @@ public class MetaTileEntityVacuumDistillationTower extends RecipeMapMultiblockCo
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.VDT_OVERLAY;
-    }
-
-    @Override
-    public boolean allowsExtendedFacing() {
-        return false;
     }
 }

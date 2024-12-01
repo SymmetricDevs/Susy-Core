@@ -185,16 +185,16 @@ public class MetaTileEntitySmokeStack extends VoidingMultiblockBase {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
-        super.addInformation(stack, world, tooltip, advanced);
         tooltip.add(I18n.format("gregtech.machine.smoke_stack.tooltip.1", getBaseVoidingRate()));
         tooltip.add(I18n.format("gregtech.machine.smoke_stack.tooltip.2"));
+        super.addInformation(stack, world, tooltip, advanced);
     }
 
 
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
         return Textures.SOLID_STEEL_CASING;
     }
-    protected IBlockState getPipeCasingState() {
+    protected static IBlockState getPipeCasingState() {
         return MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE);
     }
 

@@ -18,6 +18,7 @@ import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.metatileentity.multiblock.ICryogenicProvider;
 import supersymmetry.api.metatileentity.multiblock.ICryogenicReceiver;
+import supersymmetry.api.metatileentity.multiblock.MetaTileEntityOrderedDT;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
@@ -28,13 +29,12 @@ import javax.annotation.Nullable;
 
 import static gregtech.api.util.RelativeDirection.*;
 
-public class MetaTileEntityLowPressureCryogenicDistillationPlant extends RecipeMapMultiblockController implements ICryogenicProvider {
+public class MetaTileEntityLowPressureCryogenicDistillationPlant extends MetaTileEntityOrderedDT implements ICryogenicProvider {
 
     private @Nullable ICryogenicReceiver receiver;
 
     public MetaTileEntityLowPressureCryogenicDistillationPlant(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.LOW_PRESSURE_CRYOGENIC_DISTILLATION);
-        this.recipeMapWorkable = new MultiblockRecipeLogic(this, false);
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
@@ -83,7 +83,7 @@ public class MetaTileEntityLowPressureCryogenicDistillationPlant extends RecipeM
         return Textures.FROST_PROOF_CASING;
     }
 
-    protected IBlockState getCasingState() {
+    protected static IBlockState getCasingState() {
         return MetaBlocks.METAL_CASING.getState(MetalCasingType.ALUMINIUM_FROSTPROOF);
     }
 

@@ -12,9 +12,6 @@ import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.unification.material.Materials;
 import gregtech.client.renderer.ICubeRenderer;
-import gregtech.client.renderer.texture.Textures;
-import gregtech.common.blocks.BlockMachineCasing;
-import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -68,12 +65,8 @@ public class MetaTileEntitySinteringOven extends RecipeMapMultiblockController {
         return SusyTextures.SINTERING_OVERLAY;
     }
 
-    protected IBlockState getCasingState() {
+    protected static IBlockState getCasingState() {
         return SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.ULV_STRUCTURAL_CASING);
-    }
-
-    protected IBlockState getFrameState() {
-        return MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel);
     }
 
     @NotNull
@@ -99,7 +92,7 @@ public class MetaTileEntitySinteringOven extends RecipeMapMultiblockController {
                         .or(autoAbilities(true, true, false, true, true, false, false)))
                 .where('C', casingPredicate
                         .or(autoAbilities(false, false, true, false, false, true, false)))
-                .where('F', states(getFrameState()))
+                .where('F', frames(Materials.Steel))
                 .where('B', SuSyPredicates.sinteringBricks())
                 .where('#', air())
                 .where(' ', any())

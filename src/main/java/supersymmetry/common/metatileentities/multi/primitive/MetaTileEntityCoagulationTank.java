@@ -12,7 +12,10 @@ import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.widgets.*;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.metatileentity.multiblock.*;
+import gregtech.api.metatileentity.multiblock.IMultiblockPart;
+import gregtech.api.metatileentity.multiblock.MultiblockAbility;
+import gregtech.api.metatileentity.multiblock.ParallelLogicType;
+import gregtech.api.metatileentity.multiblock.RecipeMapPrimitiveMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.PatternMatchContext;
@@ -66,21 +69,19 @@ public class MetaTileEntityCoagulationTank extends RecipeMapPrimitiveMultiblockC
         return new MetaTileEntityCoagulationTank(this.metaTileEntityId);
     }
 
+    @NotNull
+    @Override
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle(new String[]{"XXX", "XXX", "XXX"})
-                .aisle(new String[]{"XXX", "XIX", "X#X"}).setRepeatable(1, 4)
-                .aisle(new String[]{"XXX", "XSX", "XXX"})
-                .where('X',
-                        states(new IBlockState[]{SuSyBlocks.COAGULATION_TANK_WALL
-                                .getState(BlockCoagulationTankWall.CoagulationTankWallType.WOODEN_COAGULATION_TANK_WALL)})
-                        .or(abilities(MultiblockAbility.EXPORT_ITEMS)
-                                .setMaxGlobalLimited(1))
-                        .or(abilities(MultiblockAbility.IMPORT_FLUIDS)
-                                    .setMaxGlobalLimited(1)))
+                .aisle("XXX", "XXX", "XXX")
+                .aisle("XXX", "XIX", "X#X").setRepeatable(1, 4)
+                .aisle("XXX", "XSX", "XXX")
+                .where('X', states(getCasingState())
+                        .or(abilities(MultiblockAbility.EXPORT_ITEMS, MultiblockAbility.IMPORT_FLUIDS)))
                 .where('#', air())
                 .where('I', isIndicatorPredicate())
-                .where('S', this.selfPredicate()).build();
+                .where('S', selfPredicate())
+                .build();
     }
 
     public static TraceabilityPredicate isIndicatorPredicate() {
@@ -91,6 +92,11 @@ public class MetaTileEntityCoagulationTank extends RecipeMapPrimitiveMultiblockC
             } else
                 return false;
         });
+    }
+
+    protected static IBlockState getCasingState() {
+        return SuSyBlocks.COAGULATION_TANK_WALL
+                .getState(BlockCoagulationTankWall.CoagulationTankWallType.WOODEN_COAGULATION_TANK_WALL);
     }
 
     @Override

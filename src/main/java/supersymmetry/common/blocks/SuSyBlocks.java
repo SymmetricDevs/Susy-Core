@@ -1,5 +1,6 @@
 package supersymmetry.common.blocks;
 
+import gregtech.api.util.BlockUtility;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -30,6 +31,7 @@ public class SuSyBlocks {
     public static BlockStructural1 STRUCTURAL_BLOCK_1;
     public static BlockDeposit DEPOSIT_BLOCK;
     public static BlockResource RESOURCE_BLOCK;
+    public static BlockResource1 RESOURCE_BLOCK_1;
     public static BlockHome HOME;
     public static BlockMultiblockTank MULTIBLOCK_TANK;
     public static BlockEvaporationBed EVAPORATION_BED;
@@ -53,6 +55,7 @@ public class SuSyBlocks {
         for (SusyStoneVariantBlock.StoneVariant shape : SusyStoneVariantBlock.StoneVariant.values()) {
             SUSY_STONE_BLOCKS.put(shape, new SusyStoneVariantBlock(shape));
         }
+        registerWalkingSpeedBonus();
 
         ALTERNATOR_COIL = new BlockAlternatorCoil();
         ALTERNATOR_COIL.setRegistryName("alternator_coil");
@@ -74,6 +77,9 @@ public class SuSyBlocks {
 
         RESOURCE_BLOCK = new BlockResource();
         RESOURCE_BLOCK.setRegistryName("resource_block");
+
+        RESOURCE_BLOCK_1 = new BlockResource1();
+        RESOURCE_BLOCK_1.setRegistryName("resource_block_1");
 
         HOME = new BlockHome();
         HOME.setRegistryName("home_block");
@@ -110,6 +116,7 @@ public class SuSyBlocks {
         registerItemModel(STRUCTURAL_BLOCK_1);
         registerItemModel(DEPOSIT_BLOCK);
         registerItemModel(RESOURCE_BLOCK);
+        registerItemModel(RESOURCE_BLOCK_1);
         registerItemModel(HOME);
         EVAPORATION_BED.onModelRegister();
         MULTIBLOCK_TANK.onModelRegister();
@@ -151,6 +158,14 @@ public class SuSyBlocks {
         }
 
         return stringbuilder.toString();
+    }
+
+    public static void registerWalkingSpeedBonus() {
+        for (SusyStoneVariantBlock block : SUSY_STONE_BLOCKS.values()) {
+            for (IBlockState state : block.getBlockState().getValidStates()) {
+                BlockUtility.setWalkingSpeedBonus(state, BlockUtility.ASPHALT_WALKING_SPEED_BONUS);
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")

@@ -39,6 +39,11 @@ public class SuSyMaterialFlags {
             .requireProps(new PropertyKey[]{SuSyPropertyKey.FIBER})
             .build();
 
+    public static MaterialFlag GENERATE_WET_DUST = (new MaterialFlag.Builder("generate_wet_dust"))
+            .requireProps(new PropertyKey[]{PropertyKey.DUST})
+            .build();
+
+
     public SuSyMaterialFlags() {}
     
 }
