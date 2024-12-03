@@ -1,6 +1,9 @@
 package supersymmetry.api.util;
 
 import gregtech.api.GTValues;
+import gregtech.api.capability.GregtechCapabilities;
+import gregtech.api.capability.IElectricItem;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import supersymmetry.Supersymmetry;
 
@@ -56,4 +59,18 @@ public class SuSyUtility {
     public static ResourceLocation susyId(String path) {
         return new ResourceLocation(Supersymmetry.MODID, path);
     }
+
+    /* Used in GS to craft some battery types charged */
+    @SuppressWarnings("unused")
+    public static ItemStack makeCharged(ItemStack itemStack) {
+        if (itemStack != null) {
+            IElectricItem electricItem = itemStack.getCapability(GregtechCapabilities.CAPABILITY_ELECTRIC_ITEM, null);
+            if (electricItem == null) {
+                throw new IllegalStateException("Not an electric item");
+            }
+            electricItem.charge(electricItem.getMaxCharge(), Integer.MAX_VALUE, true, false);
+        }
+        return itemStack;
+    }
+
 }
