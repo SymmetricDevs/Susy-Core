@@ -753,9 +753,19 @@ gregtech.machine.fluid_hatch.export_9x.mv.name=MV Nonuple Output Hatch
 gregtech.machine.fluid_hatch.export_9x.hv.name=HV Nonuple Output Hatch
 
 # Other multiblock parts
-
 gregtech.machine.dumping_hatch=Dumping Hatch
 gregtech.machine.dumping_hatch.lv.name=Dumping Hatch
+
+# Logistics
+gregtech.machine.bridge.inv.name=Inventory Bridge
+gregtech.machine.bridge.tank.name=Tank Bridge
+gregtech.machine.bridge.inv_tank.name=Inventory and Tank Bridge
+gregtech.machine.bridge.universal.name=Universal Bridge
+
+gregtech.machine.extender.inv.name=Inventory Extender
+gregtech.machine.extender.tank.name=Tank Extender
+gregtech.machine.extender.inv_tank.name=Inventory and Tank Extender
+gregtech.machine.extender.universal.name=Universal Extender
 
 # Metaitems
 metaitem.catalyst_bed_support_grid.name=Catalyst Bed Support Grid
