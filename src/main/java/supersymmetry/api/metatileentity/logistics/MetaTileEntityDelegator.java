@@ -57,7 +57,7 @@ public abstract class MetaTileEntityDelegator extends MetaTileEntity implements 
     }
 
     protected <T> T getDefaultCapability(Capability<T> capability, EnumFacing side) {
-        return capFilter.test(capability) && DefaultCapabilities.hasCapability(capability) ? DefaultCapabilities.getCapability(capability) : super.getCapability(capability, side);
+        return side != null && capFilter.test(capability) && DefaultCapabilities.hasCapability(capability) ? DefaultCapabilities.getCapability(capability) : super.getCapability(capability, side);
     }
 
     protected <T> T getDelegatedCapability(Capability<T> capability, EnumFacing side) {
