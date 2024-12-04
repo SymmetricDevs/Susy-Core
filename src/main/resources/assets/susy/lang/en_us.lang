@@ -207,6 +207,10 @@ gregtech.machine.coagulation_tank.tooltip=Can't be used to stop bleeding.
 gregtech.machine.coagulation_tank.tooltip.1=Gains one parallel per block longer
 gregtech.machine.drum.lead.name=Lead Drum
 gregtech.machine.drum.brass.name=Brass Drum
+gregtech.machine.drum.pe.name=Polyethylene (PE) Can
+gregtech.machine.drum.pp.name=Polypropylene (PP) Can
+gregtech.machine.drum.pmma.name=Polymethylmethacrylate (PMMA) Can
+gregtech.machine.drum.ptfe.name=Polytetrafluoroethylene (PTFE) Can
 
 gregtech.machine.polymerization_tank.name=Polymerization Tank
 gregtech.machine.fluidized_bed_reactor.name=Fluidized Bed Reactor

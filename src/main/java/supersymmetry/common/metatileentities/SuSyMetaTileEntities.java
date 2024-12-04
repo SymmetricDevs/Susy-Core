@@ -39,6 +39,7 @@ import supersymmetry.common.metatileentities.single.electric.MetaTileEntityLatex
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityPhaseSeparator;
 import supersymmetry.common.metatileentities.single.steam.MetaTileEntitySteamLatexCollector;
 import supersymmetry.common.metatileentities.single.steam.SuSySimpleSteamMetaTileEntity;
+import supersymmetry.common.metatileentities.storage.MetaTileEntityPlasticCan;
 
 import java.util.function.Function;
 
@@ -69,6 +70,10 @@ public class SuSyMetaTileEntities {
 
     public static MetaTileEntityDrum LEAD_DRUM;
     public static MetaTileEntityDrum BRASS_DRUM;
+    public static MetaTileEntityPlasticCan PE_CAN;
+    public static MetaTileEntityPlasticCan PP_CAN;
+    public static MetaTileEntityPlasticCan PMMA_CAN;
+    public static MetaTileEntityPlasticCan PTFE_CAN;
 
     //Machines for chem overhaul
     public static ContinuousMachineMetaTileEntity[] CONTINUOUS_STIRRED_TANK_REACTOR;
@@ -174,8 +179,14 @@ public class SuSyMetaTileEntities {
         LATEX_COLLECTOR[3] = registerMetaTileEntity(14505, new MetaTileEntityLatexCollector(susyId("latex_collector.ev"), 4));
         SIEVE_DISTILLATION_TOWER = registerMetaTileEntity(14506, new MetaTileEntitySieveDistillationTower(susyId("sieve_distillation_tower")));
 
+        PE_CAN = registerMetaTileEntity(14507, new MetaTileEntityPlasticCan(susyId("drum.pe"), Materials.Polyethylene, 64_000));
+        PP_CAN = registerMetaTileEntity(14508, new MetaTileEntityPlasticCan(susyId("drum.pp"), new PropertyFluidFilter(444, true, true, false, false), 0xdfe39a, 128_000));
+        PMMA_CAN = registerMetaTileEntity(14509, new MetaTileEntityPlasticCan(susyId("drum.pmma"), new PropertyFluidFilter(438, true, true, false, false), 0x72e0c9, 256_000));
+
         STEAM_LATEX_COLLECTOR[0] = registerMetaTileEntity(14510, new MetaTileEntitySteamLatexCollector(susyId("latex_collector.bronze"), false));
         STEAM_LATEX_COLLECTOR[1] = registerMetaTileEntity(14511, new MetaTileEntitySteamLatexCollector(susyId("latex_collector.steel"), true));
+
+        PTFE_CAN = registerMetaTileEntity(14512, new MetaTileEntityPlasticCan(susyId("drum.ptfe"), Materials.Polytetrafluoroethylene, 512_000)); // sadly I have to put it here
 
         SINTERING_OVEN = registerMetaTileEntity(14521, new MetaTileEntitySinteringOven(susyId("sintering_oven")));
 
