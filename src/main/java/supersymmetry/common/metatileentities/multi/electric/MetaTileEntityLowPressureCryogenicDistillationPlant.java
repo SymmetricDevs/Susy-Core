@@ -1,5 +1,6 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import gregtech.api.capability.impl.DistillationTowerLogicHandler;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -16,6 +17,7 @@ import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMulti
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.capability.impl.ExtendedDistillationTowerLogic;
 import supersymmetry.api.metatileentity.multiblock.ICryogenicProvider;
 import supersymmetry.api.metatileentity.multiblock.ICryogenicReceiver;
 import supersymmetry.api.metatileentity.multiblock.MetaTileEntityOrderedDT;
@@ -35,6 +37,7 @@ public class MetaTileEntityLowPressureCryogenicDistillationPlant extends MetaTil
 
     public MetaTileEntityLowPressureCryogenicDistillationPlant(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.LOW_PRESSURE_CRYOGENIC_DISTILLATION);
+        this.handler = new ExtendedDistillationTowerLogic(this, -1);
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
