@@ -3,25 +3,24 @@ package supersymmetry.api.metatileentity.logistics;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.ColourMultiplier;
 import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Matrix4;
-import gregtech.api.GTValues;
 import gregtech.api.capability.GregtechCapabilities;
 import gregtech.api.capability.IEnergyContainer;
 import gregtech.api.gui.ModularUI;
-import gregtech.api.metatileentity.IDataInfoProvider;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.MetaTileEntityHolder;
 import gregtech.api.util.GTUtility;
 import gregtech.client.renderer.texture.Textures;
-import gregtech.client.renderer.texture.cube.SimpleSidedCubeRenderer;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
@@ -36,18 +35,19 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
 
-public abstract class MetaTileEntityDelegator extends MetaTileEntity implements IDelegator, IDataInfoProvider {
+public abstract class MetaTileEntityDelegator extends MetaTileEntity implements IDelegator {
 
     protected final Predicate<Capability<?>> capFilter;
+    protected final int baseColor;
 
-    public MetaTileEntityDelegator(ResourceLocation metaTileEntityId, Predicate<Capability<?>> capFilter) {
+    public MetaTileEntityDelegator(ResourceLocation metaTileEntityId, Predicate<Capability<?>> capFilter, int baseColor) {
         super(metaTileEntityId);
         this.capFilter = capFilter;
+        this.baseColor = baseColor;
     }
 
     @Override
@@ -75,30 +75,31 @@ public abstract class MetaTileEntityDelegator extends MetaTileEntity implements 
     public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
         IVertexOperation[] colouredPipeline = ArrayUtils.add(pipeline,
                 new ColourMultiplier(GTUtility.convertRGBtoOpaqueRGBA_CL(this.getPaintingColorForRendering())));
-        getBaseRenderer().render(renderState, translation, colouredPipeline);
+        for (EnumFacing facing : EnumFacing.values()) {
+            Textures.renderFace(renderState, translation, colouredPipeline, facing, Cuboid6.full, this.getBaseTexture(), BlockRenderLayer.CUTOUT_MIPPED);
+        }
     }
 
     @SideOnly(Side.CLIENT)
-    protected SimpleSidedCubeRenderer getBaseRenderer() {
-        return Textures.VOLTAGE_CASINGS[GTValues.LV];
+    protected TextureAtlasSprite getBaseTexture() {
+        return Textures.PIPE_SIDE;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
         super.addInformation(stack, world, tooltip, advanced);
-        // TODO
+        tooltip.add(I18n.format("gregtech.machine.delegator.tooltip.non_recursion"));
     }
 
     @SideOnly(Side.CLIENT)
     public Pair<TextureAtlasSprite, Integer> getParticleTexture() {
-        return Pair.of(getBaseRenderer().getParticleSprite(), getPaintingColorForRendering());
+        return Pair.of(getBaseTexture(), getPaintingColorForRendering());
     }
 
     @Override
-    @NotNull
-    public List<ITextComponent> getDataInfo() {
-        return new ArrayList<>(); // TODO
+    public int getDefaultPaintingColor() {
+        return this.baseColor;
     }
 
     @Override

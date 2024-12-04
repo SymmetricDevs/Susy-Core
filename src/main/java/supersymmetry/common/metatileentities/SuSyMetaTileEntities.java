@@ -236,15 +236,15 @@ public class SuSyMetaTileEntities {
         ELECTROLYTIC_CELL = registerMetaTileEntity(14634, new MetaTileEntityElectrolyticCell(susyId("electrolytic_cell")));
         GRAVITY_SEPARATOR = registerMetaTileEntity(15052, new MetaTileEntityGravitySeparator(susyId("gravity_separator")));
 
-        INV_BRIDGE = registerMetaTileEntity(14733, new MetaTileEntityBridge(susyId("bridge.inv"), cap -> cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, SusyTextures.INV_BRIDGE));
-        TANK_BRIDGE = registerMetaTileEntity(14734, new MetaTileEntityBridge(susyId("bridge.tank"), cap -> cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, SusyTextures.TANK_BRIDGE));
-        INV_TANK_BRIDGE = registerMetaTileEntity(14735, new MetaTileEntityBridge(susyId("bridge.inv_tank"), cap -> cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, SusyTextures.INV_TANK_BRIDGE));
-        UNIVERSAL_BRIDGE = registerMetaTileEntity(14736, new MetaTileEntityBridge(susyId("bridge.universal"), cap -> true, SusyTextures.UNIVERSAL_BRIDGE));
+        INV_BRIDGE = registerMetaTileEntity(14733, new MetaTileEntityBridge(susyId("bridge.inv"), cap -> cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, SusyTextures.INV_BRIDGE, Materials.Steel));
+        TANK_BRIDGE = registerMetaTileEntity(14734, new MetaTileEntityBridge(susyId("bridge.tank"), cap -> cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, SusyTextures.TANK_BRIDGE, Materials.Steel));
+        INV_TANK_BRIDGE = registerMetaTileEntity(14735, new MetaTileEntityBridge(susyId("bridge.inv_tank"), cap -> cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, SusyTextures.INV_TANK_BRIDGE, Materials.Steel));
+        UNIVERSAL_BRIDGE = registerMetaTileEntity(14736, new MetaTileEntityBridge(susyId("bridge.universal"), cap -> true, SusyTextures.UNIVERSAL_BRIDGE, Materials.StainlessSteel));
 
-        INV_EXTENDER = registerMetaTileEntity(14737, new MetaTileEntityExtender(susyId("extender.inv"), cap -> cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, SusyTextures.INV_EXTENDER));
-        TANK_EXTENDER = registerMetaTileEntity(14738, new MetaTileEntityExtender(susyId("extender.tank"), cap -> cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, SusyTextures.TANK_EXTENDER));
-        INV_TANK_EXTENDER = registerMetaTileEntity(14739, new MetaTileEntityExtender(susyId("extender.inv_tank"), cap -> cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, SusyTextures.INV_TANK_EXTENDER));
-        UNIVERSAL_EXTENDER = registerMetaTileEntity(14740, new MetaTileEntityExtender(susyId("extender.universal"), cap -> true, SusyTextures.UNIVERSAL_EXTENDER));
+        INV_EXTENDER = registerMetaTileEntity(14737, new MetaTileEntityExtender(susyId("extender.inv"), cap -> cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, SusyTextures.INV_EXTENDER, Materials.Steel));
+        TANK_EXTENDER = registerMetaTileEntity(14738, new MetaTileEntityExtender(susyId("extender.tank"), cap -> cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, SusyTextures.TANK_EXTENDER, Materials.Steel));
+        INV_TANK_EXTENDER = registerMetaTileEntity(14739, new MetaTileEntityExtender(susyId("extender.inv_tank"), cap -> cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, SusyTextures.INV_TANK_EXTENDER, Materials.Steel));
+        UNIVERSAL_EXTENDER = registerMetaTileEntity(14740, new MetaTileEntityExtender(susyId("extender.universal"), cap -> true, SusyTextures.UNIVERSAL_EXTENDER, Materials.StainlessSteel));
 
         PRIMITIVE_SMELTER = registerMetaTileEntity(14800, new MetaTileEntityPrimitiveSmelter(susyId("primitive_smelter")));
         PRIMITIVE_ITEM_IMPORT = registerMetaTileEntity(14801, new MetaTileEntityPrimitiveItemBus(susyId("primitive_item_import"), false));

@@ -5,6 +5,7 @@ import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.api.unification.material.Material;
 import gregtech.client.renderer.ICubeRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -18,14 +19,18 @@ public class MetaTileEntityBridge extends MetaTileEntityDelegator {
 
     protected final ICubeRenderer renderer;
 
-    public MetaTileEntityBridge(ResourceLocation metaTileEntityId, Predicate<Capability<?>> capFilter, ICubeRenderer renderer) {
-        super(metaTileEntityId, capFilter);
+    public MetaTileEntityBridge(ResourceLocation metaTileEntityId, Predicate<Capability<?>> capFilter, ICubeRenderer renderer, Material baseMaterial) {
+        this(metaTileEntityId, capFilter, renderer, baseMaterial.getMaterialRGB());
+    }
+
+    public MetaTileEntityBridge(ResourceLocation metaTileEntityId, Predicate<Capability<?>> capFilter, ICubeRenderer renderer, int baseColor) {
+        super(metaTileEntityId, capFilter, baseColor);
         this.renderer = renderer;
     }
 
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
-        return new MetaTileEntityBridge(metaTileEntityId, capFilter, renderer);
+        return new MetaTileEntityBridge(metaTileEntityId, capFilter, renderer, baseColor);
     }
 
     @Override

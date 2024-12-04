@@ -6,6 +6,7 @@ import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.api.unification.material.Material;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -31,14 +32,18 @@ public class MetaTileEntityExtender extends MetaTileEntityDelegator {
     protected final ExtenderRender renderer;
     protected EnumFacing inputFacing;
 
-    public MetaTileEntityExtender(ResourceLocation metaTileEntityId, Predicate<Capability<?>> capFilter, ExtenderRender renderer) {
-        super(metaTileEntityId, capFilter);
+    public MetaTileEntityExtender(ResourceLocation metaTileEntityId, Predicate<Capability<?>> capFilter, ExtenderRender renderer, Material baseMaterial) {
+        this(metaTileEntityId, capFilter, renderer, baseMaterial.getMaterialRGB());
+    }
+
+    public MetaTileEntityExtender(ResourceLocation metaTileEntityId, Predicate<Capability<?>> capFilter, ExtenderRender renderer, int baseColor) {
+        super(metaTileEntityId, capFilter, baseColor);
         this.renderer = renderer;
     }
 
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
-        return new MetaTileEntityExtender(metaTileEntityId, capFilter, renderer);
+        return new MetaTileEntityExtender(metaTileEntityId, capFilter, renderer, baseColor);
     }
 
     @Override
@@ -103,7 +108,7 @@ public class MetaTileEntityExtender extends MetaTileEntityDelegator {
 
     @Override
     public boolean isValidFrontFacing(EnumFacing facing) {
-        return super.isValidFrontFacing(facing) && facing != inputFacing;
+        return facing != getFrontFacing() && facing != inputFacing;
     }
 
     @Override

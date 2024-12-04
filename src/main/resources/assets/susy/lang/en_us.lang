@@ -757,15 +757,26 @@ gregtech.machine.dumping_hatch=Dumping Hatch
 gregtech.machine.dumping_hatch.lv.name=Dumping Hatch
 
 # Logistics
+gregtech.machine.delegator.tooltip.non_recursion=§6Cannot be attached to other Delegators!
+gregtech.top.delegator.delegating_face=Delegating: %s
+
 gregtech.machine.bridge.inv.name=Inventory Bridge
+gregtech.machine.bridge.inv.tooltip=§bRelays Inventories
 gregtech.machine.bridge.tank.name=Tank Bridge
+gregtech.machine.bridge.tank.tooltip=§bRelays Tanks
 gregtech.machine.bridge.inv_tank.name=Inventory and Tank Bridge
+gregtech.machine.bridge.inv_tank.tooltip=§bRelays Inventories and Tanks
 gregtech.machine.bridge.universal.name=Universal Bridge
+gregtech.machine.bridge.universal.tooltip=§bRelays Everything
 
 gregtech.machine.extender.inv.name=Inventory Extender
+gregtech.machine.extender.inv.tooltip=§bRelays Inventories
 gregtech.machine.extender.tank.name=Tank Extender
+gregtech.machine.extender.tank.tooltip=§bRelays Tanks
 gregtech.machine.extender.inv_tank.name=Inventory and Tank Extender
+gregtech.machine.extender.inv_tank.tooltip=§bRelays Inventories and Tanks
 gregtech.machine.extender.universal.name=Universal Extender
+gregtech.machine.extender.universal.tooltip=§bRelays Everything
 
 # Metaitems
 metaitem.catalyst_bed_support_grid.name=Catalyst Bed Support Grid
