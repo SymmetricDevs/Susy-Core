@@ -18,11 +18,9 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ExtendedDistillationTowerLogic extends DistillationTowerLogicHandler {
-    private int yOffset;
-    public ExtendedDistillationTowerLogic(IDistillationTower tower, int yOffset) {
+public class LPDistillationTowerLogic extends DistillationTowerLogicHandler {
+    public LPDistillationTowerLogic(IDistillationTower tower, int yOffset) {
         super(tower);
-        this.yOffset = yOffset;
     }
 
 
@@ -39,7 +37,7 @@ public class ExtendedDistillationTowerLogic extends DistillationTowerLogicHandle
         }).map((iMultiblockPart) -> (MetaTileEntityMultiblockPart)iMultiblockPart).collect(Collectors.toList());
         List<IFluidHandler> orderedHandlerList = new ObjectArrayList();
         List<IFluidTank> tankList = new ObjectArrayList();
-        int firstY = this.tower.getPos().getY() + yOffset;
+        int firstY = this.tower.getPos().getY() - this.getLayerCount();
         int exportIndex = 0;
 
         for(int y = firstY; y < firstY + this.getLayerCount(); ++y) {
