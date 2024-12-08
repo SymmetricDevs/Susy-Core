@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "variant=basic": { "model": "susy:rocket_struct/rocketturbopump" }
+  }
+}

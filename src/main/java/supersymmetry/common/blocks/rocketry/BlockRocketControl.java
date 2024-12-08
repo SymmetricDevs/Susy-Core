@@ -7,27 +7,28 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.IStringSerializable;
 import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
-public class BlockInterStage extends VariantHorizontalRotatableBlock<BlockInterStage.InterStageType> {
-    public BlockInterStage() {
+public class BlockRocketControl extends VariantHorizontalRotatableBlock<BlockRocketControl.RocketControlType> {
+
+    public BlockRocketControl() {
         super(Material.IRON);
-        setTranslationKey("rocket_interstage");
+        setTranslationKey("rocket_control");
         setHardness(5f);
         setResistance(15f);
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench",2);
-        setDefaultState(getState(InterStageType.AL_7075));
+        setDefaultState(getState(RocketControlType.ROCKET_CONTROL));
     }
 
-    public enum InterStageType implements IStringSerializable, IStateHarvestLevel {
-        AL_7075("al_7075",2);
-        String name;
-        int harvest;
+    public enum RocketControlType implements IStringSerializable, IStateHarvestLevel {
+        ROCKET_CONTROL("basic", 1);
 
-        InterStageType(String name, int harvest) {
+        private String name;
+        private int harvest;
+
+        RocketControlType(String name, int harvest) {
             this.name = name;
             this.harvest = harvest;
         }
-
         @Override
         public int getHarvestLevel(IBlockState iBlockState) {
             return harvest;

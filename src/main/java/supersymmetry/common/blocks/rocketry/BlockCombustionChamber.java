@@ -1,31 +1,39 @@
 package supersymmetry.common.blocks.rocketry;
 
 import gregtech.api.block.IStateHarvestLevel;
+import gregtech.api.block.VariantBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.IStringSerializable;
-import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
-public class BlockInterStage extends VariantHorizontalRotatableBlock<BlockInterStage.InterStageType> {
-    public BlockInterStage() {
+public class BlockCombustionChamber extends VariantBlock<BlockCombustionChamber.CombustionType> {
+
+    public BlockCombustionChamber() {
         super(Material.IRON);
-        setTranslationKey("rocket_interstage");
+        setTranslationKey("rocket_combustion_chamber");
         setHardness(5f);
         setResistance(15f);
         setSoundType(SoundType.METAL);
-        setHarvestLevel("wrench",2);
-        setDefaultState(getState(InterStageType.AL_7075));
+        setHarvestLevel("wrench", 2);
+        setDefaultState(getState(CombustionType.BIPROPELLANT));
     }
 
-    public enum InterStageType implements IStringSerializable, IStateHarvestLevel {
-        AL_7075("al_7075",2);
+    public enum CombustionType implements IStringSerializable, IStateHarvestLevel {
+        BIPROPELLANT("bipropellant",2),
+        MONOPROPELLANT("monopropellant",2),
+        OXIDISER("oxidiser",2);
+
         String name;
         int harvest;
 
-        InterStageType(String name, int harvest) {
+        CombustionType(String name, int harvest) {
             this.name = name;
             this.harvest = harvest;
+        }
+        @Override
+        public String getName() {
+            return name;
         }
 
         @Override
@@ -35,12 +43,7 @@ public class BlockInterStage extends VariantHorizontalRotatableBlock<BlockInterS
 
         @Override
         public String getHarvestTool(IBlockState state) {
-            return IStateHarvestLevel.super.getHarvestTool(state);
-        }
-
-        @Override
-        public String getName() {
-            return name;
+            return "wrench";
         }
     }
 }
