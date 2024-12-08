@@ -30,7 +30,7 @@ public class BlockOuterHatch extends VariantHorizontalRotatableBlock<BlockOuterH
     }
 
     public enum OuterHatchType implements IStringSerializable, IStateHarvestLevel {
-        OUTER_HATCH("Al-2219",2);
+        OUTER_HATCH("al_2219",2);
         private final String name;
         private final int harvestLevel;
         OuterHatchType(String name, int harvestLevel) {

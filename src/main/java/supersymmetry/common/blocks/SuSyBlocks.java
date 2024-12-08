@@ -10,7 +10,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.common.blocks.rocketry.BlockOuterHatch;
+import supersymmetry.common.blocks.rocketry.*;
 
 import java.util.Comparator;
 import java.util.EnumMap;
@@ -48,6 +48,13 @@ public class SuSyBlocks {
     public static BlockRocketAssemblerCasing ROCKET_ASSEMBLER_CASING;
 
     public static BlockOuterHatch OUTER_HATCH;
+    public static BlockInterStage INTERSTAGE;
+    public static BlockFairingHull FAIRING_HULL;
+    public static BlockRocketControl ROCKET_CONTROL;
+    public static BlockTankShell TANK_SHELL;
+    public static BlockTurboPump TURBOPUMP;
+    public static BlockRocketNozzle ROCKET_NOZZLE;
+    public static BlockCombustionChamber COMBUSTION_CHAMBER;
 
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
@@ -126,6 +133,27 @@ public class SuSyBlocks {
 
         OUTER_HATCH = new BlockOuterHatch();
         OUTER_HATCH.setRegistryName("rocket_outer_hatch");
+
+        FAIRING_HULL = new BlockFairingHull();
+        FAIRING_HULL.setRegistryName("rocket_fairing");
+
+        ROCKET_CONTROL = new BlockRocketControl();
+        ROCKET_CONTROL.setRegistryName("rocket_control");
+
+        TANK_SHELL = new BlockTankShell();
+        TANK_SHELL.setRegistryName("rocket_tank_shell");
+
+        INTERSTAGE = new BlockInterStage();
+        //INTERSTAGE.setRegistryName("rocket_interstage");
+
+        COMBUSTION_CHAMBER = new BlockCombustionChamber();
+        COMBUSTION_CHAMBER.setRegistryName("rocket_combustion_chamber");
+
+        TURBOPUMP = new BlockTurboPump();
+        TURBOPUMP.setRegistryName("rocket_turbopump");
+
+        ROCKET_NOZZLE = new BlockRocketNozzle();
+        ROCKET_NOZZLE.setRegistryName("rocket_nozzle");
     }
 
     @SideOnly(Side.CLIENT)
@@ -146,6 +174,14 @@ public class SuSyBlocks {
         registerItemModel(RESOURCE_BLOCK);
         registerItemModel(RESOURCE_BLOCK_1);
         registerItemModel(HOME);
+        //registerItemModel(INTERSTAGE);
+        registerItemModel(TANK_SHELL);
+        registerItemModel(OUTER_HATCH);
+        registerItemModel(FAIRING_HULL);
+        registerItemModel(ROCKET_CONTROL);
+        registerItemModel(ROCKET_NOZZLE);
+        registerItemModel(COMBUSTION_CHAMBER);
+        registerItemModel(TURBOPUMP);
         EVAPORATION_BED.onModelRegister();
         MULTIBLOCK_TANK.onModelRegister();
         ELECTRODE_ASSEMBLY.onModelRegister();

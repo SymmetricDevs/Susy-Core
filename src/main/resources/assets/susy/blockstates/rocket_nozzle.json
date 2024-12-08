@@ -1,0 +1,6 @@
+{
+  "forge_marker" : 1,
+  "variants": {
+    "variant=bell_basic": { "model": "susy:rocket_struct/rocket_nozzle" }
+  }
+}

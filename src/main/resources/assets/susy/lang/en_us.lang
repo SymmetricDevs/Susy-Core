@@ -52,6 +52,13 @@ tile.structural_block_1.structural_block_pipocalypse.name=Structural Block Dense
 tile.structural_block_1.structural_block_vent.name=Structural Block Vent
 tile.structural_block_1.structural_block_vent_broken.name=Structural Block Vent (Broken)
 
+tile.rocket_turbopump.basic.name=Basic Rocket Turbopump
+tile.rocket_control.basic.name=Basic Rocket Control System
+tile.rocket_outer_hatch.al_2219.name=Al-2219 Rocket Hatch
+tile.rocket_tank_shell.al_2219.name=Al-2219 Tank Shell
+tile.rocket_interstage.al_7075.name=Al-7075 Rocket Interstage
+tile.rocket_fairing.al_7075.name=Al-7075 Payload Fairing Panel
+
 tile.deposit_block.orthomagmatic.name=Orthomagmatic Deposit Block
 tile.deposit_block.metamorphic.name=Metamorphic Deposit Block
 tile.deposit_block.sedimentary.name=Sedimentary Deposit Block

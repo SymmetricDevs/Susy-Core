@@ -87,6 +87,14 @@ public class CommonProxy {
         registry.register(SuSyBlocks.ELECTRODE_ASSEMBLY);
         registry.register(SuSyBlocks.MULTIBLOCK_CASING);
         registry.register(SuSyBlocks.SERPENTINE);
+        registry.register(SuSyBlocks.FAIRING_HULL);
+        registry.register(SuSyBlocks.OUTER_HATCH);
+        //registry.register(SuSyBlocks.INTERSTAGE);
+        registry.register(SuSyBlocks.ROCKET_CONTROL);
+        registry.register(SuSyBlocks.TANK_SHELL);
+        registry.register(SuSyBlocks.COMBUSTION_CHAMBER);
+        registry.register(SuSyBlocks.ROCKET_NOZZLE);
+        registry.register(SuSyBlocks.TURBOPUMP);
         registry.register(SuSyBlocks.HARDBLOCKS);
         registry.register(SuSyBlocks.CUSTOMSHEETS);
         registry.register(SuSyBlocks.CONVEYOR_BELT);
@@ -121,6 +129,15 @@ public class CommonProxy {
         registry.register(createItemBlock(SuSyBlocks.ELECTRODE_ASSEMBLY, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.MULTIBLOCK_CASING, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.SERPENTINE, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.FAIRING_HULL,VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.OUTER_HATCH,VariantItemBlock::new));
+        //registry.register(createItemBlock(SuSyBlocks.INTERSTAGE,VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.ROCKET_CONTROL,VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.TANK_SHELL,VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.COMBUSTION_CHAMBER, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.ROCKET_NOZZLE, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.TURBOPUMP, VariantItemBlock::new));
+
         registry.register(createItemBlock(SuSyBlocks.HARDBLOCKS, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.CUSTOMSHEETS, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.CONVEYOR_BELT, VariantItemBlock::new));
