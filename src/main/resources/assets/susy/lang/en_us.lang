@@ -824,6 +824,12 @@ gregtech.catalyst_group.standard_catalysts.name=Standard Catalyst
 gregtech.catalyst_group.cracking_catalyst_beds.name=Cracking Catalyst
 metaitem.standard_catalyst_bed_cracking.name=Cracking Catalyst Bed
 
+# Armors
+metaitem.jet_wingpack.name=Jet Wingpack
+metaarmor.hud.engine_status=Engine: %s
+metaarmor.jet_wingpack.engine_active=Jet Wingpack: Engine Activated
+metaarmor.jet_wingpack.engine_inactive=Jet Wingpack: Engine Deactivated
+
 # Machine Translations
 susy.ocean_pumper.full=Tanks are Full!
 susy.ocean_pumper.drainrate=Current Pumping Rate: %s
