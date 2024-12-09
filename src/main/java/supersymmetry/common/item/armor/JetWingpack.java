@@ -8,8 +8,7 @@ import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.items.armor.ArmorUtils;
 import gregtech.api.items.metaitem.stats.*;
 import gregtech.api.recipes.Recipe;
-import gregtech.api.recipes.RecipeMaps;
-import gregtech.api.unification.material.Materials;
+import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.GradientUtil;
 import gregtech.api.util.input.KeyBind;
@@ -29,6 +28,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
@@ -40,6 +40,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.capability.IElytraFlyingProvider;
 import supersymmetry.api.capability.SuSyCapabilities;
+import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.util.ElytraFlyingUtils;
 import supersymmetry.client.renderer.handler.JetWingpackModel;
 
@@ -47,15 +48,16 @@ import java.awt.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 
 
 public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
 
     public static final int TANK_CAPACITY = 32000;
-    public static final Function<FluidStack, Integer> COMBUSTION_FUEL_BURN_TIME = fluidStack -> {
-        Recipe recipe = RecipeMaps.GAS_TURBINE_FUELS.findRecipe(
-                Integer.MAX_VALUE,
+    public static final Function<FluidStack, Integer> FUEL_BURN_TIME = fluidStack -> {
+        Recipe recipe = SuSyRecipeMaps.JET_WINGPACK_FUELS.findRecipe(
+                GTValues.V[GTValues.MV],
                 Collections.emptyList(),
                 Collections.singletonList(fluidStack));
         return recipe != null ? recipe.getDuration() : 0;
@@ -197,7 +199,7 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
         FluidStack fuelStack = fluidHandler.drain(amount, false);
         if (fuelStack == null) return false;
 
-        int burnTime = COMBUSTION_FUEL_BURN_TIME.apply(fuelStack);
+        int burnTime = FUEL_BURN_TIME.apply(fuelStack);
         if (burnTime <= 0) return false;
 
         if (!simulate) {
@@ -245,12 +247,11 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
     // Yeah, this is a bit bloat...
     public class JetWingpackBehaviour implements IItemDurabilityManager, IItemCapabilityProvider, IItemBehaviour, ISubItemHandler {
 
-        private static final IFilter<FluidStack> JETPACK_FUEL_FILTER = new IFilter<>() {
+        private static final IFilter<FluidStack> JET_WINGPACK_FUEL_FILTER = new IFilter<>() {
 
             @Override
             public boolean test(@NotNull FluidStack fluidStack) {
-                return RecipeMaps.COMBUSTION_GENERATOR_FUELS.find(Collections.emptyList(),
-                        Collections.singletonList(fluidStack), (Objects::nonNull)) != null;
+                return FUEL_BURN_TIME.apply(fluidStack) > 0;
             }
 
             @Override
@@ -285,7 +286,7 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
         @Override
         public ICapabilityProvider createProvider(ItemStack itemStack) {
             return new GTFluidHandlerItemStack(itemStack, maxCapacity)
-                    .setFilter(JETPACK_FUEL_FILTER);
+                    .setFilter(JET_WINGPACK_FUEL_FILTER);
         }
 
         @Override
@@ -313,11 +314,22 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
         @Override
         public void getSubItems(ItemStack itemStack, CreativeTabs creativeTab, NonNullList<ItemStack> subItems) {
             ItemStack copy = itemStack.copy();
-            IFluidHandlerItem fluidHandlerItem = copy
-                    .getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+            IFluidHandlerItem fluidHandlerItem = copy.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
             if (fluidHandlerItem != null) {
-                fluidHandlerItem.fill(Materials.Diesel.getFluid(TANK_CAPACITY), true);
-                subItems.add(copy);
+                Optional<Recipe> firstRecipe = SuSyRecipeMaps.JET_WINGPACK_FUELS.getRecipeList().stream().findFirst();
+                firstRecipe.ifPresent(recipe -> {
+                    Optional<FluidStack> inputFluidStack = recipe.getFluidInputs().stream()
+                            .map(GTRecipeInput::getInputFluidStack)
+                            .filter(Objects::nonNull)
+                            .findFirst();
+                    inputFluidStack.ifPresent(stack -> {
+                        Fluid fluid = stack.getFluid();
+                        if (fluid != null && stack.amount > 0) {
+                            fluidHandlerItem.fill(new FluidStack(fluid, maxCapacity), true);
+                            subItems.add(copy);
+                        }
+                    });
+                });
             } else {
                 subItems.add(itemStack);
             }
