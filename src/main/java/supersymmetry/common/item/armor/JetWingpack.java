@@ -169,6 +169,7 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
         mvi.addComponents(new JetWingpackBehaviour(TANK_CAPACITY));
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot,
                                     ModelBiped defaultModel) {
