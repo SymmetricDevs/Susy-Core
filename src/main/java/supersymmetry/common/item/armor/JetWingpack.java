@@ -54,7 +54,7 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
 
     public static final int TANK_CAPACITY = 32000;
     public static final Function<FluidStack, Integer> COMBUSTION_FUEL_BURN_TIME = fluidStack -> {
-        Recipe recipe = RecipeMaps.COMBUSTION_GENERATOR_FUELS.findRecipe(
+        Recipe recipe = RecipeMaps.GAS_TURBINE_FUELS.findRecipe(
                 Integer.MAX_VALUE,
                 Collections.emptyList(),
                 Collections.singletonList(fluidStack));
