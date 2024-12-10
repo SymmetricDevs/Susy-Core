@@ -1,9 +1,7 @@
 {
-  "parent": "block/orientable",
+  "parent" : "block/cube_column",
   "textures": {
-    "top": "gregtech:blocks/casings/alternator_coil/copper/top",
-    "front": "gregtech:blocks/casings/alternator_coil/copper/front",
-    "side": "gregtech:blocks/casings/alternator_coil/copper/side",
-    "south": "gregtech:blocks/casings/alternator_coil/copper/front"
+    "end" : "gregtech:blocks/casings/alternator_coil/copper/top",
+    "side" : "gregtech:blocks/casings/alternator_coil/copper/side"
   }
 }
