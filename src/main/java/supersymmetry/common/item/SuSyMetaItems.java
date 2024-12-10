@@ -1,6 +1,7 @@
 package supersymmetry.common.item;
 
 import gregtech.api.GTValues;
+import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.items.metaitem.MetaItem.MetaValueItem;
 import gregtech.api.items.metaitem.MetaOreDictItem;
 import gregtech.api.items.metaitem.MetaOreDictItem.OreDictValueItem;
@@ -10,6 +11,7 @@ import gregtech.api.unification.ore.OrePrefix;
 import gregtech.common.items.behaviors.TooltipBehavior;
 import net.minecraft.client.resources.I18n;
 import supersymmetry.SuSyValues;
+import supersymmetry.common.item.armor.SuSyMetaArmor;
 
 public class SuSyMetaItems {
 
@@ -20,13 +22,15 @@ public class SuSyMetaItems {
     public static MetaValueItem PUMP_STEAM;
     public static MetaValueItem AIR_VENT;
     public static MetaValueItem TRACK_SEGMENT;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem JET_WINGPACK;
 
     public static void initMetaItems() {
         metaItem = new StandardMetaItem();
         metaItem.setRegistryName("meta_item");
         oreDictItem = new MetaOreDictItem((short) 0);
         oreDictItem.setRegistryName("susy_oredict_item");
-
+        SuSyMetaArmor armor = new SuSyMetaArmor();
+        armor.setRegistryName("susy_armor");
         CatalystItems.init();
 
     }
