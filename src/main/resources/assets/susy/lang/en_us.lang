@@ -827,6 +827,7 @@ metaitem.standard_catalyst_bed_cracking.name=Cracking Catalyst Bed
 
 # Armors
 metaitem.jet_wingpack.name=Jet Wingpack
+metaitem.jet_wingpack.tooltip=Hold shift to brake when engine activated
 metaarmor.hud.engine_status=Engine: %s
 metaarmor.jet_wingpack.engine_active=Jet Wingpack: Engine Activated
 metaarmor.jet_wingpack.engine_inactive=Jet Wingpack: Engine Deactivated
