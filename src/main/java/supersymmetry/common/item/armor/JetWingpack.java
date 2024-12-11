@@ -26,6 +26,7 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ISpecialArmor;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.Fluid;
@@ -54,8 +55,17 @@ import java.util.function.Function;
 
 public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
 
-    public static final int TANK_CAPACITY = 32000;
-    public static final Function<FluidStack, Integer> FUEL_BURN_TIME = fluidStack -> {
+    protected static final int TANK_CAPACITY = 32000;
+
+    protected static final int MAX_SPEED = 2;
+    protected static final double MIN_SPEED = 0.02;
+    protected static final double THRUST = 0.05D;
+    protected static final double REVERSE_THRUST = 0.05D;
+    protected static final double FALLING = 0.005D;
+
+    protected static final ISpecialArmor.ArmorProperties DEFAULT_PROPERTIES = new ISpecialArmor.ArmorProperties(Integer.MIN_VALUE, -2, Integer.MAX_VALUE);
+
+    protected static final Function<FluidStack, Integer> FUEL_BURN_TIME = fluidStack -> {
         Recipe recipe = SuSyRecipeMaps.JET_WINGPACK_FUELS.findRecipe(
                 GTValues.V[GTValues.MV],
                 Collections.emptyList(),
@@ -124,15 +134,17 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
         }
 
         if (engineActive && player.isElytraFlying() && drainFuel(itemStack, getEnergyPerUse(), true)) {
-            Vec3d vec3d = player.getLookVec();
+            Vec3d lookVec = player.getLookVec();
             if (KeyBind.VANILLA_SNEAK.isKeyDown(player)) {
-                player.motionX += vec3d.x * 0.001D - 0.05D * player.motionX;
-                player.motionY += -0.005D - 0.05D * player.motionY;
-                player.motionZ += vec3d.z * 0.001D - 0.05D * player.motionZ;
+                // handles braking
+                player.motionX -= REVERSE_THRUST * (player.motionX - MIN_SPEED * lookVec.x); // v(t+1) = v(t) - THRUST * (v(t) - MIN_SPEED)
+                player.motionY -= REVERSE_THRUST * player.motionY + FALLING;                 // so that you won't fly upwards when braking
+                player.motionZ -= REVERSE_THRUST * (player.motionZ - MIN_SPEED * lookVec.z);
             } else {
-                player.motionX += 0.05D * (2 * vec3d.x - player.motionX);
-                player.motionY += 0.05D * (2 * vec3d.y - player.motionY);
-                player.motionZ += 0.05D * (2 * vec3d.z - player.motionZ);
+                // handles acceleration
+                player.motionX += THRUST * (MAX_SPEED * lookVec.x - player.motionX); // v(t+1) = v(t) + THRUST * (MAX_SPEED - v(t))
+                player.motionY += THRUST * (MAX_SPEED * lookVec.y - player.motionY); // or dv/dt = THRUST * (MAX_SPEED - v)
+                player.motionZ += THRUST * (MAX_SPEED * lookVec.z - player.motionZ);
                 world.spawnParticle(EnumParticleTypes.CLOUD, player.posX, player.posY, player.posZ, 0.0, 0.0, 0.0);
             }
             drainFuel(itemStack, getEnergyPerUse(), false);
@@ -167,7 +179,7 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
 
     @Override
     public void addToolComponents(ArmorMetaItem.ArmorMetaValueItem mvi) {
-        mvi.addComponents(new TestElytraFlyingProvider());
+        mvi.addComponents(new ElytraFlyingProvider());
         mvi.addComponents(new JetWingpackBehaviour(TANK_CAPACITY));
     }
 
@@ -180,7 +192,19 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
 
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-        return "susy:textures/armor/jet_wingpack.png"; // actually useless
+        return "susy:textures/armor/jet_wingpack.png";
+    }
+
+    @Override
+    public boolean handleUnblockableDamage(EntityLivingBase entity, @NotNull ItemStack armor, DamageSource source,
+                                           double damage, EntityEquipmentSlot equipmentSlot) {
+        return (source == DamageSource.FLY_INTO_WALL && entity.isElytraFlying());
+    }
+
+    @Override
+    public ISpecialArmor.ArmorProperties getProperties(EntityLivingBase entity, @NotNull ItemStack armor, DamageSource source, double damage, EntityEquipmentSlot slot) {
+        // triple the amount of kinetic damages :trollface:
+        return source == DamageSource.FLY_INTO_WALL ? DEFAULT_PROPERTIES : super.getProperties(entity, armor, source, damage, slot);
     }
 
     protected boolean drainFuel(@NotNull ItemStack stack, int amount, boolean simulate) {
@@ -213,7 +237,7 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
         return stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
     }
 
-    private static class TestElytraFlyingProvider implements IItemComponent, IElytraFlyingProvider, ICapabilityProvider, IItemCapabilityProvider {
+    private static class ElytraFlyingProvider implements IItemComponent, IElytraFlyingProvider, ICapabilityProvider, IItemCapabilityProvider {
 
         @Override
         public boolean isElytraFlying(@NotNull EntityLivingBase entity, @NotNull ItemStack itemStack, boolean shouldStop) {
@@ -244,7 +268,6 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
         }
     }
 
-    // Yeah, this is a bit bloat...
     public class JetWingpackBehaviour implements IItemDurabilityManager, IItemCapabilityProvider, IItemBehaviour, ISubItemHandler {
 
         private static final IFilter<FluidStack> JET_WINGPACK_FUEL_FILTER = new IFilter<>() {
@@ -259,6 +282,7 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
                 return IFilter.whitelistLikePriority();
             }
         };
+
         public final int maxCapacity;
         private final Pair<Color, Color> durabilityBarColors;
 
@@ -330,9 +354,8 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
                         }
                     });
                 });
-            } else {
-                subItems.add(itemStack);
             }
+            subItems.add(itemStack);
         }
     }
 }
