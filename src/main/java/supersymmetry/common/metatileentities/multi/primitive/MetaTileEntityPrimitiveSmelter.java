@@ -48,10 +48,6 @@ public class MetaTileEntityPrimitiveSmelter extends RecipeMapPrimitiveMultiblock
         super(metaTileEntityId, SuSyRecipeMaps.PRIMITIVE_SMELTER);
     }
 
-    public static TraceabilityPredicate casingPredicate() {
-        return states(ModuleCore.Blocks.MASONRY_BRICK.getDefaultState());
-    }
-
     @Override
     protected void initializeAbilities() {
         this.importItems = new ItemHandlerList(getAbilities(SuSyMultiblockAbilities.PRIMITIVE_IMPORT_ITEMS));
@@ -64,17 +60,23 @@ public class MetaTileEntityPrimitiveSmelter extends RecipeMapPrimitiveMultiblock
         this.initializeAbilities();
     }
 
+    public static IBlockState getCasingState() {
+        return ModuleCore.Blocks.MASONRY_BRICK.getDefaultState();
+    }
+
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle("OOO", "III", "SIS")
-                .aisle("OOO", "I I", "I I")
-                .aisle("OOO", "ICI", "SIS")
-                .where('I', casingPredicate().or(abilities(SuSyMultiblockAbilities.PRIMITIVE_IMPORT_ITEMS).setMaxGlobalLimited(4)))
+                .aisle("BBB", "BBB", "SBS")
+                .aisle("BBB", "B#B", "B B")
+                .aisle("BBB", "BCB", "SBS")
+                .where('B', states(getCasingState()).setMinGlobalLimited(14)
+                        .or(abilities(SuSyMultiblockAbilities.PRIMITIVE_IMPORT_ITEMS).setPreviewCount(1))
+                        .or(abilities(SuSyMultiblockAbilities.PRIMITIVE_EXPORT_ITEMS).setPreviewCount(1)))
                 .where('C', selfPredicate())
-                .where('O', casingPredicate().or(abilities(SuSyMultiblockAbilities.PRIMITIVE_EXPORT_ITEMS).setMaxGlobalLimited(2)))
                 .where('S', states(ModuleCore.Blocks.MASONRY_BRICK_SLAB.getDefaultState()))
-                .where(' ', air().or(SNOW_PREDICATE))
+                .where('#', air().or(SNOW_PREDICATE))
+                .where(' ', air())
                 .build();
     }
 

@@ -923,6 +923,11 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     }
 
     @Override
+    public boolean isMultiblockPartWeatherResistant(@Nonnull IMultiblockPart part) {
+        return true;
+    }
+
+    @Override
     public boolean getIsWeatherOrTerrainResistant() {
         return true;
     }

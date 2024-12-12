@@ -12,6 +12,7 @@ import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMulti
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import supersymmetry.api.metatileentity.multiblock.MetaTileEntityOrderedDT;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
@@ -22,7 +23,7 @@ import java.util.function.Function;
 
 import static gregtech.api.util.RelativeDirection.*;
 
-public class MetaTileEntityHighTemperatureDistillationTower extends RecipeMapMultiblockController {
+public class MetaTileEntityHighTemperatureDistillationTower extends MetaTileEntityOrderedDT {
 
     public MetaTileEntityHighTemperatureDistillationTower(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.HIGH_TEMPERATURE_DISTILLATION);
@@ -58,11 +59,6 @@ public class MetaTileEntityHighTemperatureDistillationTower extends RecipeMapMul
                         .or(autoAbilities(true, false)))
                 .where('#', air())
                 .build();
-    }
-
-    @Override
-    protected boolean allowSameFluidFillForOutputs() {
-        return false;
     }
 
     @Override
