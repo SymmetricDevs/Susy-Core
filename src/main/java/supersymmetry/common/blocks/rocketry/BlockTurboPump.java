@@ -6,16 +6,16 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.IStringSerializable;
-import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
+import supersymmetry.api.blocks.VariantAxialRotatableBlock;
+import supersymmetry.api.blocks.VariantDirectionalRotatableBlock;
 
-public class BlockTurboPump extends VariantBlock<BlockTurboPump.HPPType> {
+public class BlockTurboPump extends VariantDirectionalRotatableBlock<BlockTurboPump.HPPType> {
     public BlockTurboPump() {
         super(Material.IRON);
         setTranslationKey("rocket_turbopump");
         setHardness(5f);
         setResistance(15f);
         setSoundType(SoundType.METAL);
-        setDefaultState(getState(HPPType.BASIC));
     }
     @Override
     public boolean isOpaqueCube(IBlockState state) {

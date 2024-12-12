@@ -10,6 +10,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import supersymmetry.SuSyValues;
+import supersymmetry.common.blocks.SuSyBlocks;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -24,8 +25,12 @@ public class StructAnalysis {
         HULL_WEAK,
         HULL_FULL,
         NO_NOZZLE,
-        NOZZLE_MALFORMED, ERROR, INVALID_AIRLIKE
+        NOZZLE_MALFORMED, ERROR, WRONG_NUM_C_CHAMBERS, WRONG_NUM_PUMPS, WEIRD_PUMP, C_CHAMBER_INSIDE, INVALID_AIRLIKE, EXTRANEOUS_BLOCKS;
     };
+    public World world;
+    public StructAnalysis(World world) {
+        this.world=world;
+    }
 
     public static Vec3i layerVecs[] = new Vec3i[] {new Vec3i(1,0,0), new Vec3i(0, 0, 1)};
     public static Vec3i orthVecs[] = new Vec3i[] {new Vec3i(1,0,0), new Vec3i(0,1,0), new Vec3i(0, 0, 1)};
@@ -66,7 +71,7 @@ public class StructAnalysis {
         }
         return ret;
     }
-    public Set<BlockPos> getBlockConn(World world, AxisAlignedBB aaBB, BlockPos beg) {
+    public Set<BlockPos> getBlockConn(AxisAlignedBB aaBB, BlockPos beg) {
         if (!aaBB.contains(new Vec3d(beg))) {
             return new HashSet<BlockPos>(); //wtf moment
         }
@@ -78,13 +83,13 @@ public class StructAnalysis {
         while (!uncheckedBlocks.isEmpty()) {
             BlockPos bp = uncheckedBlocks.remove();
             blocksCollected.add(bp);
-            uncheckedBlocks.addAll(getBlockNeighbors(world, bp, aaBB).stream()
+            uncheckedBlocks.addAll(getBlockNeighbors(bp, aaBB).stream()
                     .filter(p -> !world.isAirBlock(p) && !blocksCollected.contains(p) && !uncheckedBlocks.contains(p)).collect(Collectors.toSet()));
         }
         return blocksCollected;
     }
 
-    public Set<BlockPos> checkHull(World world, AxisAlignedBB aaBB, Set<BlockPos> actualBlocks, boolean testStrength) {
+    public Set<BlockPos> checkHull(AxisAlignedBB aaBB, Set<BlockPos> actualBlocks, boolean testStrength) {
         AxisAlignedBB floodBB = aaBB.grow(1);// initializes flood fill box
         BlockPos bottom = new BlockPos(floodBB.minX, floodBB.minY, floodBB.minZ); // initializes flood fill start
         Queue<BlockPos> uncheckedBlocks = new ArrayDeque<>();
@@ -104,7 +109,7 @@ public class StructAnalysis {
                 hullBlocks.add(pos);
             } else {
                 airBlocks.add(pos);
-                uncheckedBlocks.addAll(getBlockNeighbors(world, pos, floodBB, orthVecs).stream().filter(
+                uncheckedBlocks.addAll(getBlockNeighbors(pos, floodBB, orthVecs).stream().filter(
                                 p -> floodBB.grow(1).contains(new Vec3d(p)) && !(airBlocks.contains(p) || uncheckedBlocks.contains(p)))
                         .collect(Collectors.toSet()));
             }
@@ -119,17 +124,20 @@ public class StructAnalysis {
     }
 
 
-    public ArrayList<BlockPos> getBlockNeighbors(World world, BlockPos beg, AxisAlignedBB aaBB) {
-        return getBlockNeighbors(world, beg, aaBB, neighborVecs);
+    public ArrayList<BlockPos> getBlockNeighbors(BlockPos beg, AxisAlignedBB aaBB) {
+        return getBlockNeighbors(beg, aaBB, neighborVecs);
     }
 
 
-    public ArrayList<BlockPos> getBlockNeighbors(World world, BlockPos beg) {
-        Vec3i neighborVecs[] = new Vec3i[] {new Vec3i(1,0,0),};
-        return getBlockNeighbors(world,beg,MAX_BB, neighborVecs);
+    public ArrayList<BlockPos> getBlockNeighbors(BlockPos beg) {
+        return getBlockNeighbors(beg,MAX_BB, neighborVecs);
     }
 
-    public ArrayList<BlockPos> getBlockNeighbors(World world, BlockPos beg, AxisAlignedBB aaBB, Vec3i[] neighborVecs) {
+    public ArrayList<BlockPos> getBlockNeighbors(BlockPos beg, Vec3i[] neighborVecs) {
+        return getBlockNeighbors(beg,MAX_BB, neighborVecs);
+    }
+
+    public ArrayList<BlockPos> getBlockNeighbors(BlockPos beg, AxisAlignedBB aaBB, Vec3i[] neighborVecs) {
         ArrayList<BlockPos> neighbors = new ArrayList<>();
         for (Vec3i vec: neighborVecs) {
             BlockPos newPos = beg.add(vec);
@@ -167,8 +175,8 @@ public class StructAnalysis {
             while (!remaining.isEmpty()) {
                 BlockPos bp = remaining.pop();
                 bPart.add(bp);
-                Stream<BlockPos> stream = getBlockNeighbors(world, bp, sect, layerVecs).stream().filter(pos->!bPart.contains(pos)&&world.isAirBlock(pos));
-                remaining.addAll(getBlockNeighbors(world, bp, sect, layerVecs).stream().filter(pos->!bPart.contains(pos)&&world.isAirBlock(pos)).collect(Collectors.toList()));
+                Stream<BlockPos> stream = getBlockNeighbors(bp, sect, layerVecs).stream().filter(pos->!bPart.contains(pos)&&world.isAirBlock(pos));
+                remaining.addAll(getBlockNeighbors(bp, sect, layerVecs).stream().filter(pos->!bPart.contains(pos)&&world.isAirBlock(pos)).collect(Collectors.toList()));
                 stream.forEach(blocks::remove);
             }
             partitions.add(bPart);
@@ -177,7 +185,7 @@ public class StructAnalysis {
             status = BuildError.NOZZLE_MALFORMED;
             return null;
         } else {
-            List<Boolean> res = partitions.stream().map(set -> getPerimeter(world, set, layerVecs).stream().allMatch(p -> blockCont(sect,p))).collect(Collectors.toList());
+            List<Boolean> res = partitions.stream().map(set -> getPerimeter(set, layerVecs).stream().allMatch(p -> blockCont(sect,p))).collect(Collectors.toList());
             for (int i = 0; i < 2; i++) {
                 if (res.get(i)) {
                     return partitions.get(i);
@@ -188,10 +196,10 @@ public class StructAnalysis {
         return null;
     }
 
-    public Set<BlockPos> getPerimeter(World world, Collection<BlockPos> blocks, Vec3i vecs[]) {
+    public Set<BlockPos> getPerimeter(Collection<BlockPos> blocks, Vec3i vecs[]) {
         Set<BlockPos> ret = new HashSet<>();
         for (BlockPos block: blocks) {
-            ret.addAll(getBlockNeighbors(world, block, MAX_BB, vecs));
+            ret.addAll(getBlockNeighbors(block, MAX_BB, vecs));
         }
         return ret;
     }
@@ -208,4 +216,9 @@ public class StructAnalysis {
         }
         return new AxisAlignedBB(minX,minY,minZ,maxX,maxY,maxZ);
     }
+    public Stream<BlockPos> getOfBlockType(Collection<BlockPos> bp, Block block) {
+        return bp.stream()
+                .filter(p -> world.getBlockState(p).getBlock().equals(block));
+    }
 }
+
