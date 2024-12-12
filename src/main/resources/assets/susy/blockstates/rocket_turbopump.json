@@ -1,5 +1,11 @@
 {
   "variants": {
-    "variant=basic": { "model": "susy:rocket_struct/rocketturbopump" }
+    "normal,variant=basic": { "model": "susy:rocket_struct/rocketturbopump" },
+    "facing=north,variant=basic": { "model": "susy:rocket_struct/rocketturbopump", "x": 90 },
+    "facing=south,variant=basic": {  "model": "susy:rocket_struct/rocketturbopump", "x": 90, "y": 180 },
+    "facing=west,variant=basic":  { "model": "susy:rocket_struct/rocketturbopump", "x": 90, "y": 270 },
+    "facing=east,variant=basic":  { "model": "susy:rocket_struct/rocketturbopump", "x": 90, "y": 90 },
+    "facing=up,variant=basic":  { "model": "susy:rocket_struct/rocketturbopump" },
+    "facing=down,variant=basic":  { "model": "susy:rocket_struct/rocketturbopump", "x": 180  }
   }
 }

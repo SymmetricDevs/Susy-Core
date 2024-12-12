@@ -20,16 +20,18 @@ public class BlockCombustionChamber extends VariantBlock<BlockCombustionChamber.
     }
 
     public enum CombustionType implements IStringSerializable, IStateHarvestLevel {
-        BIPROPELLANT("bipropellant",2),
-        MONOPROPELLANT("monopropellant",2),
-        OXIDISER("oxidiser",2);
+        BIPROPELLANT("bipropellant",2,2),
+        MONOPROPELLANT("monopropellant",2,1),
+        OXIDISER("oxidiser",2, 2);
 
         String name;
         int harvest;
+        int pumps;
 
-        CombustionType(String name, int harvest) {
+        CombustionType(String name, int harvest, int pumps) {
             this.name = name;
             this.harvest = harvest;
+            this.pumps = pumps;
         }
         @Override
         public String getName() {
@@ -45,5 +47,7 @@ public class BlockCombustionChamber extends VariantBlock<BlockCombustionChamber.
         public String getHarvestTool(IBlockState state) {
             return "wrench";
         }
+
+        public int getMinPumps() {return pumps;}
     }
 }
