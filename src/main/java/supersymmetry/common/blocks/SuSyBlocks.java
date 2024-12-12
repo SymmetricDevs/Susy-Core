@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static gregtech.common.blocks.MetaBlocks.ASPHALT;
+
 public class SuSyBlocks {
 
     public static BlockCoolingCoil COOLING_COIL;
@@ -166,6 +168,9 @@ public class SuSyBlocks {
                 continue;
             for (IBlockState state : block.getBlockState().getValidStates())
                 BlockUtility.setWalkingSpeedBonus(state, block.getWalkingSpeed());
+        }
+        for (IBlockState state : ASPHALT.getBlockState().getValidStates()) {
+            BlockUtility.setWalkingSpeedBonus(state, 1); // Buff from 0.6F
         }
     }
 
