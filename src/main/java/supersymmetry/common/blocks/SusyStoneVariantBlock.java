@@ -56,10 +56,14 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
                 SuSyBlocks.SUSY_STONE_BLOCKS.get(StoneVariant.COBBLE) : this);
     }
 
+    public double getWalkingSpeed() {
+        return this.stoneVariant.walkingSpeed;
+    }
+
     public enum StoneVariant {
         SMOOTH("susy_stone_smooth"),
         COBBLE("susy_stone_cobble", 2.0F, 10.0F),
-        BRICKS("susy_stone_bricks");
+        BRICKS("susy_stone_bricks", 0.25);
 //      TODO
 //        COBBLE_MOSSY("stone_cobble_mossy", 2.0F, 10.0F),
 //        POLISHED("stone_polished"),
@@ -77,24 +81,31 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
         public final String translationKey;
         public final float hardness;
         public final float resistance;
+        public final double walkingSpeed;
 
         StoneVariant(@Nonnull String id) {
             this(id, id);
         }
 
+        StoneVariant(@Nonnull String id, double walkingSpeed) {
+            this(id, id, 1.5F, 10.0F, walkingSpeed);
+        }
+
+
         StoneVariant(@Nonnull String id, @Nonnull String translationKey) {
-            this(id, translationKey, 1.5F, 10.0F);
+            this(id, translationKey, 1.5F, 10.0F, 0);
         }
 
         StoneVariant(@Nonnull String id, float hardness, float resistance) {
-            this(id, id, hardness, resistance);
+            this(id, id, hardness, resistance, 0);
         }
 
-        StoneVariant(@Nonnull String id, @Nonnull String translationKey, float hardness, float resistance) {
+        StoneVariant(@Nonnull String id, @Nonnull String translationKey, float hardness, float resistance, double walkingSpeed) {
             this.id = id;
             this.translationKey = translationKey;
             this.hardness = hardness;
             this.resistance = resistance;
+            this.walkingSpeed = walkingSpeed;
         }
     }
 

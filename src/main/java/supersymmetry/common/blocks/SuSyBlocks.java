@@ -162,9 +162,10 @@ public class SuSyBlocks {
 
     public static void registerWalkingSpeedBonus() {
         for (SusyStoneVariantBlock block : SUSY_STONE_BLOCKS.values()) {
-            for (IBlockState state : block.getBlockState().getValidStates()) {
-                BlockUtility.setWalkingSpeedBonus(state, BlockUtility.ASPHALT_WALKING_SPEED_BONUS);
-            }
+            if (block.getWalkingSpeed() == 0)
+                continue;
+            for (IBlockState state : block.getBlockState().getValidStates())
+                BlockUtility.setWalkingSpeedBonus(state, block.getWalkingSpeed());
         }
     }
 
