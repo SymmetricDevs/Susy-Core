@@ -2,19 +2,27 @@ package supersymmetry.common.metatileentities.single.rocket;
 
 import crafttweaker.api.block.IBlock;
 import gregtech.api.block.VariantBlock;
+import gregtech.api.capability.GregtechTileCapabilities;
+import gregtech.api.capability.IControllable;
+import gregtech.api.capability.IDistinctBusController;
+import gregtech.api.capability.IEnergyContainer;
+import gregtech.api.capability.impl.ItemHandlerList;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
-import gregtech.api.gui.widgets.ClickButtonWidget;
-import gregtech.api.gui.widgets.SlotWidget;
+import gregtech.api.gui.Widget;
+import gregtech.api.gui.resources.TextureArea;
+import gregtech.api.gui.widgets.*;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.ICleanroomProvider;
 import gregtech.api.metatileentity.multiblock.ICleanroomReceiver;
+import gregtech.api.metatileentity.multiblock.IProgressBarMultiblock;
 import gregtech.api.pattern.BlockWorldState;
 import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.pattern.TraceabilityPredicate;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -22,9 +30,16 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.terraingen.OreGenEvent;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
+import scala.xml.dtd.impl.Base;
+import supersymmetry.api.capability.impl.ScannerLogic;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.rocketry.BlockCombustionChamber;
@@ -41,13 +56,17 @@ import java.util.stream.Stream;
 import static gregtech.api.metatileentity.multiblock.MultiblockControllerBase.blocks;
 import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
 
-public class MetaTileEntityComponentScanner extends MetaTileEntity implements ICleanroomReceiver {
+public class MetaTileEntityComponentScanner extends MetaTileEntity implements ICleanroomReceiver, IControllable {
     private MetaTileEntityBuildingCleanroom linkedCleanroom;
-
+    private final ScannerLogic scannerLogic;
+    private float scanDuration = 0;
 
     public StructAnalysis struct;
     public MetaTileEntityComponentScanner(ResourceLocation mteId) {
         super(mteId);
+        struct = new StructAnalysis(getWorld());
+        importItems = new ItemStackHandler();
+        scannerLogic = new ScannerLogic(this);
     }
 
     @Override
@@ -56,7 +75,10 @@ public class MetaTileEntityComponentScanner extends MetaTileEntity implements IC
     }
 
     public void scanPart() {
-        if (!linkedCleanroom.isClean()) return;
+        if (linkedCleanroom == null && !linkedCleanroom.isClean()) {
+            struct.status = StructAnalysis.BuildError.UNCLEAN;
+            return;
+        }
         AxisAlignedBB interior = linkedCleanroom.getInteriorBB();
         int solidBlocks = 0;
         ArrayList<BlockPos> blockList = struct.getBlocks(getWorld(), interior, true);
@@ -68,6 +90,8 @@ public class MetaTileEntityComponentScanner extends MetaTileEntity implements IC
             this.struct.status = StructAnalysis.BuildError.EMPTY;
             return;
         }
+
+        scanDuration = (float)blockList.size()/3;
 
         Set<BlockPos> blocksConnected = struct.getBlockConn(interior, blockList.get(0));
 
@@ -217,12 +241,79 @@ public class MetaTileEntityComponentScanner extends MetaTileEntity implements IC
     protected ModularUI createUI(EntityPlayer entityPlayer) {
         return this.createGUITemplate(entityPlayer).build(this.getHolder(), entityPlayer);
     }
+    private void handleScan(Widget.ClickData click) {
+        if (linkedCleanroom==null) {
+            struct.status= StructAnalysis.BuildError.UNCLEAN;
+        }
+        if (scannerLogic.isActive()&&this.isWorkingEnabled()) {
+            scannerLogic.setWorkingEnabled(true);
+            scanPart();
+        }
+    }
 
     private ModularUI.Builder createGUITemplate(EntityPlayer entityPlayer) {
-        ModularUI.Builder builder = ModularUI.builder(GuiTextures.BORDERED_BACKGROUND, 176, 166);
-        builder.widget(new ClickButtonWidget(10, 140,35,20,"Scan", click -> scanPart()));
-        builder.widget(new SlotWidget(importItems, 0, 140,140, true, true));
+        ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, 198, 208);
+        //Spliced from MultiblockWithDisplayBase
+        // Display
+        builder.image(4, 4, 190, 109, GuiTextures.DISPLAY);
+
+        // single bar
+        ProgressWidget progressBar = new ProgressWidget(
+                scannerLogic::getProgressPercent,
+                4, 115, 190, 7,
+                GuiTextures.PROGRESS_BAR_MULTI_ENERGY_YELLOW, ProgressWidget.MoveType.HORIZONTAL)
+                .setHoverTextConsumer(list -> addBarHoverText(list, 0));
+        builder.widget(progressBar);
+        builder.widget(new IndicatorImageWidget(174, 93, 17, 17, GuiTextures.GREGTECH_LOGO_DARK)
+                .setWarningStatus(GuiTextures.GREGTECH_LOGO_BLINKING_YELLOW, this::addWarningText)
+                .setErrorStatus(GuiTextures.GREGTECH_LOGO_BLINKING_RED, this::addErrorText));
+
+        builder.label(9, 9, getMetaFullName(), 0xFFFFFF);
+        builder.widget(new AdvancedTextWidget(9, 20, this::addDisplayText, 0xFFFFFF)
+                .setMaxWidthLimit(181)
+                .setClickHandler(this::handleDisplayClick));
+
+        // Power Button
+        IControllable controllable = getCapability(GregtechTileCapabilities.CAPABILITY_CONTROLLABLE, null);
+        if (controllable != null) {
+            builder.widget(new ImageCycleButtonWidget(173, 183, 18, 18, GuiTextures.BUTTON_POWER,
+                    controllable::isWorkingEnabled, controllable::setWorkingEnabled));
+            builder.widget(new ImageWidget(173, 201, 18, 6, GuiTextures.BUTTON_POWER_DETAIL));
+        }
+
+
+        //Scan Button
+        builder.widget(new ClickButtonWidget(68,46,54,18,new TextComponentTranslation("gregtech.machine.component_scanner.scan_button").getUnformattedComponentText(),this::handleScan))
+                .slot(importItems,0,90,95,GuiTextures.SLOT);
+
+
+        builder.bindPlayerInventory(entityPlayer.inventory, 125);
         return builder;
+    }
+
+
+    private void handleDisplayClick(String s, Widget.ClickData clickData) {
+
+    }
+
+    private void addBarHoverText(List<ITextComponent> list, int i) {
+
+    }
+
+    private void addWarningText(List<ITextComponent> iTextComponents) {
+
+    }
+
+    private void addDisplayText(List<ITextComponent> iTextComponents) {
+
+    }
+
+    private void addErrorText(List<ITextComponent> iTextComponents) {
+        if (struct.status== StructAnalysis.BuildError.SUCCESS&&scannerLogic.getProgressPercent()!=1) {
+            iTextComponents.add(new TextComponentTranslation(StructAnalysis.BuildError.UNSCANNED.getCode()));
+        } else {
+            iTextComponents.add(new TextComponentTranslation(struct.status.getCode()));
+        }
     }
 
     @Override
@@ -234,5 +325,42 @@ public class MetaTileEntityComponentScanner extends MetaTileEntity implements IC
     public void setCleanroom(ICleanroomProvider iCleanroomProvider) {
         if (iCleanroomProvider instanceof MetaTileEntityBuildingCleanroom)
             linkedCleanroom = (MetaTileEntityBuildingCleanroom)iCleanroomProvider;
+    }
+
+    @Override
+    public boolean isWorkingEnabled() {
+        return scannerLogic.isWorkingEnabled()&&linkedCleanroom!=null&&linkedCleanroom.isWorkingEnabled();
+    }
+
+    public void setWorkingEnabled(boolean isActivationAllowed) {
+        this.scannerLogic.setWorkingEnabled(isActivationAllowed);
+    }
+
+    public boolean drainEnergy(boolean simulate) {
+        if (linkedCleanroom == null) {
+            return false;
+        }
+        IEnergyContainer energyContainer = linkedCleanroom.getEnergyContainer();
+        long resultEnergy = energyContainer.getEnergyStored()-4;
+        if (resultEnergy >= 0L && resultEnergy <= energyContainer.getEnergyCapacity()) {
+            if (!simulate)
+                energyContainer.changeEnergy(-4);
+            return true;
+        }
+        return false;
+    }
+
+    public void update() {
+        if (!getWorld().isRemote) {
+            this.scannerLogic.updateLogic();
+        }
+    }
+
+    @Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing side) {
+        if (capability == GregtechTileCapabilities.CAPABILITY_CONTROLLABLE) {
+            return GregtechTileCapabilities.CAPABILITY_CONTROLLABLE.cast(this);
+        }
+        return super.getCapability(capability, side);
     }
 }

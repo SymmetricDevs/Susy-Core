@@ -4,10 +4,12 @@ import gregtech.api.pattern.BlockWorldState;
 import gregtech.api.pattern.PatternMatchContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import supersymmetry.SuSyValues;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -19,13 +21,30 @@ import java.util.stream.*;
 public class StructAnalysis {
     public BuildError status = BuildError.SUCCESS;
     public enum BuildError {
-        SUCCESS,
-        DISCONNECTED,
-        EMPTY,
-        HULL_WEAK,
-        HULL_FULL,
-        NO_NOZZLE,
-        NOZZLE_MALFORMED, ERROR, WRONG_NUM_C_CHAMBERS, WRONG_NUM_PUMPS, WEIRD_PUMP, C_CHAMBER_INSIDE, INVALID_AIRLIKE, EXTRANEOUS_BLOCKS;
+        SUCCESS("susy.msg.rocket_component.build_success"),
+        UNSCANNED("susy.msg.rocket_component.unscanned"),
+        DISCONNECTED("susy.msg.rocket_component.blocks_unconnected"),
+        EMPTY("susy.msg.rocket_component.no_blocks"),
+        HULL_WEAK("susy.msg.rocket_component.hull_weak"),
+        HULL_FULL("susy.msg.rocket_component.hull_full"),
+        NO_NOZZLE("susy.msg.rocket_component.no_nozzle"),
+        NOZZLE_MALFORMED("susy.msg.rocket_component.nozzle_invalid"),
+        ERROR("susy.msg.rocket_component.unknown_error"),
+        WRONG_NUM_C_CHAMBERS("susy.msg.rocket_component.wrong_num_c_chambers"),
+        WRONG_NUM_PUMPS("susy.msg.rocket_component.wrong_num_pumps"),
+        WEIRD_PUMP("susy.msg.rocket_component.weird_pump"),
+        C_CHAMBER_INSIDE("susy.msg.rocket_component.chamber_wrong_place"),
+        INVALID_AIRLIKE("susy.msg.rocket_component.invalid_transparent"),
+        EXTRANEOUS_BLOCKS("susy.msg.rocket_component.extraneous_blocks"),
+        UNCLEAN("susy.msg.rocket_component.cleanroom_not_clean");
+
+        String code;
+        BuildError(String code) {
+            this.code = code;
+        }
+        public String getCode() {
+            return code;
+        }
     };
     public World world;
     public StructAnalysis(World world) {

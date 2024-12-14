@@ -659,6 +659,10 @@ gregtech.machine.polishing_machine.opv.name=Legendary Polishing Machine
 gregtech.machine.bath_condenser.name=Bath Condenser
 gregtech.machine.bath_condenser.tooltip=Only works inside a Cryogenic Distillation Tower
 
+gregtech.machine.component_scanner.name=Spacecraft Component Scanner
+gregtech.machine.component_scanner.scan_button=Scan Part
+
+
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
 recipemap.latex_collector.name=Arboreal Collector
@@ -833,3 +837,21 @@ susy.command.horde.status.no_active_invasion=Player %s has no active invasion.
 susy.fluid.voiding.liquid=Voidable with Dumper
 susy.fluid.voiding.gas=Voidable with Smoke Stack
 susy.fluid.voiding.flammable=Voidable with Flare Stack
+
+# Error Messages
+susy.msg.rocket_component.build_success=Component successfully analyzed.
+susy.msg.rocket_component.unscanned=Component not scanned.
+susy.msg.rocket_component.blocks_unconnected=Some blocks are not connected to rest of the structure.
+susy.msg.rocket_component.no_blocks=No blocks were found in scanning zone.
+susy.msg.rocket_component.hull_weak=A hull block was found unsuitable for flight.
+susy.msg.rocket_component.hull_full=The component is lacking interior space (at least 2 blocks).
+susy.msg.rocket_component.no_nozzle=Nozzle blocks are missing.
+susy.msg.rocket_component.nozzle_invalid=The nozzle shape is incorrect.
+susy.msg.rocket_component.unknown_error=An unknown error occurred.
+susy.msg.rocket_component.wrong_num_c_chambers=There are too many or not enough combustion chambers.
+susy.msg.rocket_component.wrong_num_pumps=There are extraneous unused turbopumps.
+susy.msg.rocket_component.weird_pump=For some reason, a pump is facing upwards. Why?
+susy.msg.rocket_component.chamber_wrong_place=A combustion chamber is inside the rocket nozzle. That's strange...
+susy.msg.rocket_component.invalid_transparent=A transparent block is in this component!
+susy.msg.rocket_component.chamber_extraneous_blocks=An unneeded block was found in the component!
+susy.msg.rocket_component.cleanroom_not_clean=The Cleanroom is not clean yet (or you haven't hooked up to one)!
