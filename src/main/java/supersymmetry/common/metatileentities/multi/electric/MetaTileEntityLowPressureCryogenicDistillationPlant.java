@@ -1,5 +1,6 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import gregtech.api.capability.impl.DistillationTowerLogicHandler;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -14,7 +15,7 @@ import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMulti
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.capability.impl.LPDistillationTowerLogic;
+import supersymmetry.api.capability.impl.ExtendedDTLogicHandler;
 import supersymmetry.api.metatileentity.multiblock.ICryogenicProvider;
 import supersymmetry.api.metatileentity.multiblock.ICryogenicReceiver;
 import supersymmetry.api.metatileentity.multiblock.MetaTileEntityOrderedDT;
@@ -30,25 +31,28 @@ import static gregtech.api.util.RelativeDirection.*;
 
 public class MetaTileEntityLowPressureCryogenicDistillationPlant extends MetaTileEntityOrderedDT implements ICryogenicProvider {
 
-    private @Nullable ICryogenicReceiver receiver;
+    @Nullable
+    private ICryogenicReceiver receiver;
 
     public MetaTileEntityLowPressureCryogenicDistillationPlant(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.LOW_PRESSURE_CRYOGENIC_DISTILLATION);
-        this.handler = new LPDistillationTowerLogic(this, -1);
     }
 
+    @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
         return new MetaTileEntityLowPressureCryogenicDistillationPlant(this.metaTileEntityId);
     }
 
-    protected @NotNull BlockPattern createStructurePattern() {
+    @Override
+    @NotNull
+    protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start(RIGHT, FRONT, UP)
                 .aisle("CCC", "CCC", "CCC")
                 .aisle("XXX", "XFX", "XXX").setRepeatable(1,16)
                 .aisle("CSC", "E E", "CEC")
                 .aisle("DDD", "DDD", "DDD")
                 .where('S', this.selfPredicate())
-                .where('C', states(this.getCasingState())
+                .where('C', states(getCasingState())
                         .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(3))
                         .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMaxGlobalLimited(1))
                         .or(autoAbilities(false, true, false, false, false, false, false).setExactLimit(1)))
@@ -62,12 +66,18 @@ public class MetaTileEntityLowPressureCryogenicDistillationPlant extends MetaTil
                                 .filter(mte->!(mte instanceof MetaTileEntityMultiFluidHatch))
                                 .toArray(MetaTileEntity[]::new))
                                 .setMaxLayerLimited(1)))
-                .where('D', states(this.getCasingState()))
-                .where('E', states(this.getCasingState())
+                .where('D', states(getCasingState()))
+                .where('E', states(getCasingState())
                         .or(abilities(MultiblockAbility.PASSTHROUGH_HATCH)))
                 .where('#', air())
                 .where(' ', cryogenicRecieverPredicate())
                 .build();
+    }
+
+    @Override
+    @NotNull
+    public DistillationTowerLogicHandler createHandler() {
+        return new ExtendedDTLogicHandler(this, 1, i -> -i);
     }
 
     @Override
@@ -79,12 +89,13 @@ public class MetaTileEntityLowPressureCryogenicDistillationPlant extends MetaTil
         }
     }
 
-    public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
-        return Textures.FROST_PROOF_CASING;
-    }
-
     protected static IBlockState getCasingState() {
         return MetaBlocks.METAL_CASING.getState(MetalCasingType.ALUMINIUM_FROSTPROOF);
+    }
+
+    @Override
+    public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
+        return Textures.FROST_PROOF_CASING;
     }
 
     @Nonnull
@@ -96,10 +107,5 @@ public class MetaTileEntityLowPressureCryogenicDistillationPlant extends MetaTil
     @Override
     public void setReceiver(@NotNull ICryogenicReceiver receiver) {
         this.receiver = receiver;
-    }
-
-    @Override
-    public boolean allowsExtendedFacing() {
-        return false;
     }
 }

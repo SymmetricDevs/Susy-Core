@@ -13,6 +13,7 @@ import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiFluidHatch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.metatileentity.multiblock.MetaTileEntityOrderedDT;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
@@ -28,42 +29,46 @@ public class MetaTileEntityHighPressureCryogenicDistillationPlant extends MetaTi
         super(metaTileEntityId, SuSyRecipeMaps.HIGH_PRESSURE_CRYOGENIC_DISTILLATION);
     }
 
+    @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
         return new MetaTileEntityHighPressureCryogenicDistillationPlant(this.metaTileEntityId);
     }
 
+    @Override
+    @NotNull
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start(RIGHT, FRONT, UP)
                 .aisle("CCC", "CCC", "CCC")
                 .aisle("CSC", "CFC", "CCC")
-                .aisle("XXX", "XFX", "XXX").setRepeatable(1,16)
+                .aisle("XXX", "XFX", "XXX").setRepeatable(1, 16)
                 .aisle("DDD", "DDD", "DDD")
                 .where('S', this.selfPredicate())
-                .where('C', states(this.getCasingState())
+                .where('C', states(getCasingState())
                         .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(3))
                         .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMaxGlobalLimited(1))
                         .or(autoAbilities(false, true, false, false, false, false, false).setExactLimit(1)))
                 .where('F', states(SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.SIEVE_TRAY)))
                 .where('X', states(getCasingState())
                         .or(metaTileEntities(MultiblockAbility.REGISTRY.get(MultiblockAbility.EXPORT_FLUIDS).stream()
-                                .filter(mte->!(mte instanceof MetaTileEntityMultiFluidHatch))
+                                .filter(mte -> !(mte instanceof MetaTileEntityMultiFluidHatch))
                                 .toArray(MetaTileEntity[]::new))
                                 .setMaxLayerLimited(1))
                         .or(metaTileEntities(MultiblockAbility.REGISTRY.get(MultiblockAbility.IMPORT_FLUIDS).stream()
-                                .filter(mte->!(mte instanceof MetaTileEntityMultiFluidHatch))
+                                .filter(mte -> !(mte instanceof MetaTileEntityMultiFluidHatch))
                                 .toArray(MetaTileEntity[]::new))
                                 .setMaxLayerLimited(1)))
-                .where('D', states(this.getCasingState()))
+                .where('D', states(getCasingState()))
                 .where('#', air())
                 .build();
     }
 
-    public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
-        return Textures.FROST_PROOF_CASING;
-    }
-
     protected static IBlockState getCasingState() {
         return MetaBlocks.METAL_CASING.getState(MetalCasingType.ALUMINIUM_FROSTPROOF);
+    }
+
+    @Override
+    public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
+        return Textures.FROST_PROOF_CASING;
     }
 
     @Nonnull

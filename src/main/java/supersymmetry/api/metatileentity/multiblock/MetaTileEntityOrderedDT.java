@@ -2,14 +2,9 @@ package supersymmetry.api.metatileentity.multiblock;
 
 import gregtech.api.capability.IDistillationTower;
 import gregtech.api.capability.impl.DistillationTowerLogicHandler;
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
-import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.recipes.RecipeMap;
-import gregtech.client.renderer.ICubeRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.NotNull;
@@ -19,28 +14,19 @@ import java.util.function.Function;
 
 import static gregtech.api.util.RelativeDirection.UP;
 
-public class MetaTileEntityOrderedDT extends RecipeMapMultiblockController implements IDistillationTower {
+public abstract class MetaTileEntityOrderedDT extends RecipeMapMultiblockController implements IDistillationTower {
+
     protected DistillationTowerLogicHandler handler;
 
     public MetaTileEntityOrderedDT(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap) {
         super(metaTileEntityId, recipeMap);
-        this.handler = new DistillationTowerLogicHandler(this);
+        this.handler = createHandler();
         this.recipeMapWorkable = new DistillationTowerRecipeLogic(this);
     }
 
-    @Override
-    protected @NotNull BlockPattern createStructurePattern() {
-        return null;
-    }
-
-    @Override
-    public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
-        return null;
-    }
-
-    @Override
-    public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
-        return null;
+    @NotNull
+    public DistillationTowerLogicHandler createHandler() {
+        return new DistillationTowerLogicHandler(this);
     }
 
     @Override
@@ -51,7 +37,6 @@ public class MetaTileEntityOrderedDT extends RecipeMapMultiblockController imple
     public DistillationTowerLogicHandler getHandler() {
         return handler;
     }
-
 
     /**
      * Used if MultiblockPart Abilities need to be sorted a certain way, like
