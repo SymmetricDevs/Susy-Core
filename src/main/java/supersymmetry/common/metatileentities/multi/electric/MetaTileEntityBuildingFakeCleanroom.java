@@ -1,53 +1,37 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
 import gregtech.api.capability.GregtechDataCodes;
-import gregtech.api.capability.IEnergyContainer;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.MetaTileEntityHolder;
 import gregtech.api.metatileentity.multiblock.ICleanroomReceiver;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
-import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.pattern.TraceabilityPredicate;
-import gregtech.common.ConfigHolder;
-import gregtech.common.blocks.BlockCleanroomCasing;
-import gregtech.common.blocks.MetaBlocks;
-import gregtech.common.metatileentities.MetaTileEntities;
 import gregtech.common.metatileentities.multi.electric.MetaTileEntityCleanroom;
-import net.minecraft.block.BlockDoor;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import scala.tools.nsc.interpreter.EchoReader;
-import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 import supersymmetry.common.metatileentities.single.rocket.MetaTileEntityComponentScanner;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.lang.reflect.*;
 import java.util.Collection;
-import java.util.List;
 
-public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
+public class MetaTileEntityBuildingFakeCleanroom extends MetaTileEntityCleanroom {
     // Unfortunately, this class has to be cursed.
     protected Field lDist_f;
     protected Field rDist_f;
     protected Field bDist_f;
     protected Field fDist_f;
     protected Field hDist_f;
-    protected Field energy_cont_f;
     protected Field receivers_f;
-
-    public MetaTileEntityComponentScanner scanner;
-    public MetaTileEntityBuildingCleanroom(ResourceLocation metaTileEntityId) {
+    public MetaTileEntityBuildingFakeCleanroom(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
         try {
             hDist_f = getClass().getDeclaredField("hDist");
@@ -55,8 +39,7 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
             bDist_f = getClass().getDeclaredField("bDist");
             fDist_f = getClass().getDeclaredField("fDist");
             lDist_f = getClass().getDeclaredField("lDist");
-            receivers_f = getClass().getDeclaredField("cleanroomReceivers");
-            energy_cont_f = getClass().getDeclaredField("energyContainer");
+            receivers_f = getClass().getDeclaredField("cleanroomRecievers");
         } catch (Exception e) { // this shouldn't happen UNLESS there is a bug
             return;
         }
@@ -131,6 +114,7 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
         });
         return true;
     }
+
 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
@@ -242,78 +226,11 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
                         } catch (Exception e) {
                             return false;
                         }
-                        scanner = (MetaTileEntityComponentScanner) metaTileEntity;
                     }
                     return true;
                 }
             }
             return false;
         })));
-    }
-    public List<MultiblockShapeInfo> getMatchingShapes() {
-        ArrayList<MultiblockShapeInfo> shapeInfo = new ArrayList();
-        MultiblockShapeInfo.Builder builder = MultiblockShapeInfo.builder()
-                .aisle(new String[]{"XXXXX", "XIHLX", "XXDXX", "XXXXX", "XXXXX"})
-                .aisle(new String[]{"XXXXX", "X   X", "G   G", "X   X", "XFFFX"})
-                .aisle(new String[]{"XXXXX", "X   X", "G   G", "X   X", "XFSFX"})
-                .aisle(new String[]{"XXXXX", "X   X", "G   G", "X   X", "XFFFX"})
-                .aisle(new String[]{"XMXEX", "XXOCX", "XXRXX", "XXXXX", "XXXXX"})
-
-                .where('X', MetaBlocks.CLEANROOM_CASING.getState(BlockCleanroomCasing.CasingType.PLASCRETE))
-                .where('G', MetaBlocks.TRANSPARENT_CASING.getState(gregtech.common.blocks.BlockGlassCasing.CasingType.CLEANROOM_GLASS))
-                .where('S', SuSyMetaTileEntities.BUILDING_CLEANROOM, EnumFacing.SOUTH).where(' ', Blocks.AIR.getDefaultState())
-                .where('E', MetaTileEntities.ENERGY_INPUT_HATCH[1], EnumFacing.SOUTH)
-                .where('I', MetaTileEntities.PASSTHROUGH_HATCH_ITEM, EnumFacing.NORTH)
-                .where('L', MetaTileEntities.PASSTHROUGH_HATCH_FLUID, EnumFacing.NORTH)
-                .where('C', SuSyMetaTileEntities.COMPONENT_SCANNER,EnumFacing.NORTH)
-                .where('H', MetaTileEntities.HULL[3], EnumFacing.NORTH)
-                .where('D', MetaTileEntities.DIODES[3], EnumFacing.NORTH).where('M', () -> {
-                    return ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH : MetaBlocks.CLEANROOM_CASING.getState(BlockCleanroomCasing.CasingType.PLASCRETE);
-                }, EnumFacing.SOUTH)
-                .where('O', Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.NORTH).withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.LOWER))
-                .where('R', Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.NORTH).withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER));
-        Arrays.stream(BlockCleanroomCasing.CasingType.values()).filter((casingType) -> {
-            return !casingType.equals(BlockCleanroomCasing.CasingType.PLASCRETE);
-        }).forEach((casingType) -> {
-            shapeInfo.add(builder.where('F', MetaBlocks.CLEANROOM_CASING.getState(casingType)).build());
-        });
-        return shapeInfo;
-    }
-    public AxisAlignedBB getInteriorBB() {
-        EnumFacing front = this.getFrontFacing();
-        EnumFacing back = front.getOpposite();
-        EnumFacing left = front.rotateYCCW();
-        EnumFacing right = left.getOpposite();
-        Vec3i down = new Vec3i(0,0,-1);
-        try {
-            BlockPos frontleftdown = getPos().add(multiply(front.getDirectionVec(), fDist_f.getInt(this) - 1))
-                    .add(multiply(left.getDirectionVec(), lDist_f.getInt(this) - 1))
-                    .add(multiply(down, hDist_f.getInt(this) - 1));
-            BlockPos backrightup = getPos().add(multiply(back.getDirectionVec(), bDist_f.getInt(this) - 1))
-                    .add(multiply(right.getDirectionVec(), rDist_f.getInt(this) - 1));
-            return new AxisAlignedBB(frontleftdown, backrightup);
-        } catch (Exception e) {
-             return null;
-        }
-    }
-
-    @Override
-    public void invalidateStructure() {
-        super.invalidateStructure();
-        if (scanner != null) {
-            scanner.invalidate();
-        }
-    }
-
-    private Vec3i multiply(Vec3i bp, int val) {
-        return new Vec3i(bp.getX()*val, bp.getY()*val, bp.getZ()*val);
-    }
-
-    public IEnergyContainer getEnergyContainer() {
-        try {
-            return (IEnergyContainer) energy_cont_f.get(this);
-        } catch (IllegalAccessException e) {
-            return null;
-        }
     }
 }
