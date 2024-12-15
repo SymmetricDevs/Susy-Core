@@ -214,6 +214,8 @@ gregtech.machine.drum.pp.name=Polypropylene (PP) Can
 gregtech.machine.drum.ptfe.name=Polytetrafluoroethylene (PTFE) Can
 gregtech.machine.drum.uhmwpe.name=Ultra High Molecular Weight Polyethylene (UHMWPE) Can
 
+gregtech.machine.crate.pe.name=Hermetically Sealed Crate
+
 gregtech.machine.polymerization_tank.name=Polymerization Tank
 gregtech.machine.fluidized_bed_reactor.name=Fluidized Bed Reactor
 
