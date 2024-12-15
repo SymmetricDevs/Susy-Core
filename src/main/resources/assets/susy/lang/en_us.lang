@@ -722,6 +722,7 @@ recipemap.large_steam_turbine.name=Large Steam Turbine
 recipemap.primitive_smelter.name=Primitive Smelting
 recipemap.large_fluid_pump.name=Large Fluid Pump
 recipemap.sieve_distillation.name=Fractional Distillation
+recipemap.jet_wingpack_fuels.name=Jet Wingpack Fuels
 
 gregtech.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 gregtech.multiblock.ocean_pumper.description=The Ocean Pumper is an electrically powered multiblock that collects a base amount of 8,000 L Seawater per second (at MV), but only if it is in an ocean biome, and when the controller is between Y = 70 and Y = 75 (Inclusive). It needs an output hatch, a maintenance hatch, and an energy input hatch.
@@ -823,6 +824,13 @@ gregtech.catalyst_group.standard_catalysts.name=Standard Catalyst
 # Cracking Catalyst
 gregtech.catalyst_group.cracking_catalyst_beds.name=Cracking Catalyst
 metaitem.standard_catalyst_bed_cracking.name=Cracking Catalyst Bed
+
+# Armors
+metaitem.jet_wingpack.name=Jet Wingpack
+metaitem.jet_wingpack.tooltip=Hold shift to brake when engine activated
+metaarmor.hud.engine_status=Engine: %s
+metaarmor.jet_wingpack.engine_active=Jet Wingpack: Engine Activated
+metaarmor.jet_wingpack.engine_inactive=Jet Wingpack: Engine Deactivated
 
 # Machine Translations
 susy.ocean_pumper.full=Tanks are Full!
