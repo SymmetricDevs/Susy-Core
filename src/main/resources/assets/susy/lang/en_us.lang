@@ -722,6 +722,7 @@ recipemap.large_steam_turbine.name=Large Steam Turbine
 recipemap.primitive_smelter.name=Primitive Smelting
 recipemap.large_fluid_pump.name=Large Fluid Pump
 recipemap.sieve_distillation.name=Fractional Distillation
+recipemap.jet_wingpack_fuels.name=Jet Wingpack Fuels
 
 gregtech.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 gregtech.multiblock.ocean_pumper.description=The Ocean Pumper is an electrically powered multiblock that collects a base amount of 8,000 L Seawater per second (at MV), but only if it is in an ocean biome, and when the controller is between Y = 70 and Y = 75 (Inclusive). It needs an output hatch, a maintenance hatch, and an energy input hatch.
@@ -755,13 +756,34 @@ gregtech.machine.fluid_hatch.export_9x.mv.name=MV Nonuple Output Hatch
 gregtech.machine.fluid_hatch.export_9x.hv.name=HV Nonuple Output Hatch
 
 # Other multiblock parts
-
 gregtech.machine.dumping_hatch=Dumping Hatch
 gregtech.machine.dumping_hatch.lv.name=Dumping Hatch
 
 # Distillation tower explanations
 gregtech.machine.ordered_dt.tooltip.1=Fluid input and output hatches are on the same layers
 gregtech.machine.ordered_dt.tooltip.2=§cNot putting a fluid output in the Nth layer from the bottom voids the Nth output§7
+
+# Logistics
+gregtech.machine.delegator.tooltip.non_recursion=§6Cannot be attached to other Delegators!
+gregtech.top.delegator.delegating_face=Delegating: %s
+
+gregtech.machine.bridge.inv.name=Inventory Bridge
+gregtech.machine.bridge.inv.tooltip=§bRelays Inventories
+gregtech.machine.bridge.tank.name=Tank Bridge
+gregtech.machine.bridge.tank.tooltip=§bRelays Tanks
+gregtech.machine.bridge.inv_tank.name=Inventory and Tank Bridge
+gregtech.machine.bridge.inv_tank.tooltip=§bRelays Inventories and Tanks
+gregtech.machine.bridge.universal.name=Universal Bridge
+gregtech.machine.bridge.universal.tooltip=§bRelays Everything
+
+gregtech.machine.extender.inv.name=Inventory Extender
+gregtech.machine.extender.inv.tooltip=§bRelays Inventories
+gregtech.machine.extender.tank.name=Tank Extender
+gregtech.machine.extender.tank.tooltip=§bRelays Tanks
+gregtech.machine.extender.inv_tank.name=Inventory and Tank Extender
+gregtech.machine.extender.inv_tank.tooltip=§bRelays Inventories and Tanks
+gregtech.machine.extender.universal.name=Universal Extender
+gregtech.machine.extender.universal.tooltip=§bRelays Everything
 
 # Metaitems
 metaitem.catalyst_bed_support_grid.name=Catalyst Bed Support Grid
@@ -827,6 +849,13 @@ gregtech.catalyst_group.standard_catalysts.name=Standard Catalyst
 # Cracking Catalyst
 gregtech.catalyst_group.cracking_catalyst_beds.name=Cracking Catalyst
 metaitem.standard_catalyst_bed_cracking.name=Cracking Catalyst Bed
+
+# Armors
+metaitem.jet_wingpack.name=Jet Wingpack
+metaitem.jet_wingpack.tooltip=Hold shift to brake when engine activated
+metaarmor.hud.engine_status=Engine: %s
+metaarmor.jet_wingpack.engine_active=Jet Wingpack: Engine Activated
+metaarmor.jet_wingpack.engine_inactive=Jet Wingpack: Engine Deactivated
 
 # Machine Translations
 susy.ocean_pumper.full=Tanks are Full!
