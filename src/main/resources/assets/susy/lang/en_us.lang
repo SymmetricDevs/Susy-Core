@@ -759,6 +759,10 @@ gregtech.machine.fluid_hatch.export_9x.hv.name=HV Nonuple Output Hatch
 gregtech.machine.dumping_hatch=Dumping Hatch
 gregtech.machine.dumping_hatch.lv.name=Dumping Hatch
 
+# Distillation tower explanations
+gregtech.machine.ordered_dt.tooltip.1=Fluid input and output hatches are on the same layers
+gregtech.machine.ordered_dt.tooltip.2=§cNot putting a fluid output in the Nth layer from the bottom voids the Nth output§7
+
 # Metaitems
 metaitem.catalyst_bed_support_grid.name=Catalyst Bed Support Grid
 metaitem.conveyor.steam.name=Steam Conveyor

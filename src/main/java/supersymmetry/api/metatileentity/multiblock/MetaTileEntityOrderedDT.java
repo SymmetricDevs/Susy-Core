@@ -5,11 +5,17 @@ import gregtech.api.capability.impl.DistillationTowerLogicHandler;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.recipes.RecipeMap;
+import gregtech.client.utils.TooltipHelper;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import supersymmetry.common.recipes.DistillationTowerRecipeLogic;
 
+import java.util.List;
 import java.util.function.Function;
 
 import static gregtech.api.util.RelativeDirection.UP;
@@ -75,5 +81,12 @@ public abstract class MetaTileEntityOrderedDT extends RecipeMapMultiblockControl
     @Override
     public boolean allowsExtendedFacing() {
         return false;
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
+        super.addInformation(stack, world, tooltip, advanced);
+        tooltip.add(I18n.format("gregtech.machine.ordered_dt.tooltip.1"));
+        tooltip.add(I18n.format("gregtech.machine.ordered_dt.tooltip.2"));
     }
 }
