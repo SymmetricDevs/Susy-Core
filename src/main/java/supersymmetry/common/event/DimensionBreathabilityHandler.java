@@ -37,7 +37,7 @@ public final class DimensionBreathabilityHandler {
         // Nether
         dimensionBreathabilityMap.put(-1, new DimensionBreathabilityHandler.BreathabilityInfo(SuSyDamageSources.getToxicAtmoDamage(), 2));
         // Beneath
-        dimensionBreathabilityMap.put(10, new DimensionBreathabilityHandler.BreathabilityInfo(SuSyDamageSources.getSuffocationDamage(), 1));
+        dimensionBreathabilityMap.put(10, new DimensionBreathabilityHandler.BreathabilityInfo(SuSyDamageSources.getSuffocationDamage(), 0.5));
 
     }
 
@@ -88,7 +88,9 @@ public final class DimensionBreathabilityHandler {
             player.attackEntityFrom(damageType, (float) defaultDamage);
         }
         public void damagePlayer(EntityPlayer player, double amount) {
-            player.attackEntityFrom(damageType, (float) defaultDamage - (float) amount);
+            if (defaultDamage > amount) {
+                player.attackEntityFrom(damageType, (float) defaultDamage - (float) amount);
+            }
         }
 
     }

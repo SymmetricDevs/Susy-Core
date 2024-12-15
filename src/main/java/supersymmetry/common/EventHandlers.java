@@ -8,6 +8,7 @@ import gregtech.common.items.MetaItems;
 import gregtechfoodoption.item.GTFOMetaItem;
 import net.minecraft.block.BlockCauldron;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.boss.dragon.phase.PhaseHoldingPattern;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -160,7 +161,7 @@ public class EventHandlers {
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (FMLCommonHandler.instance().getMinecraftServerInstance().getTickCounter() % 20 == 0) {
+        if (FMLCommonHandler.instance().getMinecraftServerInstance().getTickCounter() % 20 == 0 && event.phase == TickEvent.Phase.START) {
             DimensionBreathabilityHandler.tickPlayer(event.player);
         }
     }
