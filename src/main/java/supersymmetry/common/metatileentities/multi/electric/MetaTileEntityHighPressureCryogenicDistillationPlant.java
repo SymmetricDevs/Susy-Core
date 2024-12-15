@@ -1,5 +1,6 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import gregtech.api.capability.impl.DistillationTowerLogicHandler;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -14,6 +15,7 @@ import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMulti
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.capability.impl.ExtendedDTLogicHandler;
 import supersymmetry.api.metatileentity.multiblock.MetaTileEntityOrderedDT;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
@@ -61,6 +63,13 @@ public class MetaTileEntityHighPressureCryogenicDistillationPlant extends MetaTi
                 .where('#', air())
                 .build();
     }
+
+    @Override
+    @NotNull
+    public DistillationTowerLogicHandler createHandler() {
+        return new ExtendedDTLogicHandler(this, 2, ignored -> 1);
+    }
+
 
     protected static IBlockState getCasingState() {
         return MetaBlocks.METAL_CASING.getState(MetalCasingType.ALUMINIUM_FROSTPROOF);
