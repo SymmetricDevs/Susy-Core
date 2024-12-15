@@ -198,6 +198,9 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
         } else if (!engineActive && jetEngineSound.isPlaying()) {
             jetEngineSound.stopPlaying();
         }
+        if (jetEngineSound.isThrottled() != KeyBind.VANILLA_SNEAK.isKeyDown(player)) {
+            jetEngineSound.setThrottled(KeyBind.VANILLA_SNEAK.isKeyDown(player));
+        }
     }
 
     @Override

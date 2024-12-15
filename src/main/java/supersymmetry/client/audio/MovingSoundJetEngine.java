@@ -11,7 +11,9 @@ import supersymmetry.api.sound.SusySounds;
 public class MovingSoundJetEngine extends MovingSound {
 
     private static final float MAX_VOLUME = 1.0F;
+    private boolean isThrottled = false;
     private final EntityPlayer player;
+    private float baseVolume = 0.0F;
 
     public MovingSoundJetEngine(EntityPlayer player) {
         super(SusySounds.JET_ENGINE_LOOP, SoundCategory.PLAYERS);
@@ -22,11 +24,19 @@ public class MovingSoundJetEngine extends MovingSound {
     }
 
     public void startPlaying() {
-        this.volume = MAX_VOLUME;
+        this.baseVolume = MAX_VOLUME;
     }
 
     public void stopPlaying() {
-        this.volume = 0.0F;
+        this.baseVolume = 0;
+    }
+
+    public boolean isThrottled() {
+        return this.isThrottled;
+    }
+
+    public void setThrottled(boolean isThrottled) {
+        this.isThrottled = isThrottled;
     }
 
     public boolean isPlaying() {
@@ -41,6 +51,12 @@ public class MovingSoundJetEngine extends MovingSound {
             this.xPosF = (float) (player.posX + player.motionX);
             this.yPosF = (float) (player.posY + player.motionY);
             this.zPosF = (float) (player.posZ + player.motionZ);
+        }
+        float throttleMultiplier = isThrottled ? 0.2F : 1;
+        if (volume < baseVolume * throttleMultiplier) {
+            volume += 0.05F;
+        } else {
+            volume -= 0.02F;
         }
     }
 }
