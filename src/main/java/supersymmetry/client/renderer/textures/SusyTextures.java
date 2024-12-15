@@ -4,6 +4,7 @@ import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 import gregtech.client.renderer.texture.cube.SimpleCubeRenderer;
 import gregtech.client.renderer.texture.cube.SimpleOverlayRenderer;
 import gregtech.client.renderer.texture.cube.SimpleSidedCubeRenderer;
+import supersymmetry.client.renderer.textures.custom.ExtenderRender;
 import gregtech.client.renderer.texture.custom.DrumRenderer;
 
 public class SusyTextures {
@@ -13,6 +14,15 @@ public class SusyTextures {
 
     public static final SimpleSidedCubeRenderer WOODEN_COAGULATION_TANK_WALL = new SimpleSidedCubeRenderer("casings/wooden_coagulation_tank_wall");
     public static final SimpleSidedCubeRenderer PLASTIC_CAN_OVERLAY = new SimpleSidedCubeRenderer("storage/drums/plastic_can_top");
+    public static final SimpleSidedCubeRenderer INV_BRIDGE = new SimpleSidedCubeRenderer("logistics/bridges/inv");
+    public static final SimpleSidedCubeRenderer TANK_BRIDGE = new SimpleSidedCubeRenderer("logistics/bridges/tank");
+    public static final SimpleSidedCubeRenderer INV_TANK_BRIDGE = new SimpleSidedCubeRenderer("logistics/bridges/inv_tank");
+    public static final SimpleSidedCubeRenderer UNIVERSAL_BRIDGE = new SimpleSidedCubeRenderer("logistics/bridges/universal");
+
+    public static final ExtenderRender INV_EXTENDER = new ExtenderRender("logistics/extenders/inv");
+    public static final ExtenderRender TANK_EXTENDER = new ExtenderRender("logistics/extenders/tank");
+    public static final ExtenderRender INV_TANK_EXTENDER = new ExtenderRender("logistics/extenders/inv_tank");
+    public static final ExtenderRender UNIVERSAL_EXTENDER = new ExtenderRender("logistics/extenders/universal");
 
     public static final OrientedOverlayRenderer VULCANIZING_PRESS_OVERLAY = new OrientedOverlayRenderer("machines/vulcanizing_press");
     public static final OrientedOverlayRenderer LATEX_COLLECTOR_OVERLAY = new OrientedOverlayRenderer("machines/latex_collector");
