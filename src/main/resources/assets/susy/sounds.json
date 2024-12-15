@@ -16,5 +16,14 @@
         "stream": true
       }
     ]
+  },
+  "item.jet_wingpack_engine_active" : {
+    "category" : "player",
+    "sounds" : [
+      {
+        "name" : "susy:jet_engine_active",
+        "stream" : true
+      }
+    ]
   }
 }
