@@ -1,7 +1,5 @@
-package gregtech.integration.jei.basic;
+package supersymmetry.integration.jei.basic;
 
-import gregtech.api.nuclear.fission.CoolantRegistry;
-import gregtech.api.nuclear.fission.ICoolantStats;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
@@ -11,6 +9,8 @@ import net.minecraftforge.fluids.FluidStack;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
+import supersymmetry.api.nuclear.fission.CoolantRegistry;
+import supersymmetry.api.nuclear.fission.ICoolantStats;
 
 public class CoolantInfo implements IRecipeWrapper {
 

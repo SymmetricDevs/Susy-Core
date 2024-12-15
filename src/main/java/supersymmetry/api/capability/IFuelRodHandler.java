@@ -1,10 +1,10 @@
-package gregtech.api.capability;
+package supersymmetry.api.capability;
 
-import gregtech.api.items.itemhandlers.LockableItemStackHandler;
-import gregtech.api.nuclear.fission.IFissionFuelStats;
-import gregtech.api.nuclear.fission.components.FuelRod;
 
 import net.minecraft.item.ItemStack;
+import supersymmetry.api.items.itemhandlers.LockableItemStackHandler;
+import supersymmetry.api.nuclear.fission.IFissionFuelStats;
+import supersymmetry.api.nuclear.fission.components.FuelRod;
 
 public interface IFuelRodHandler extends ILockableHandler<ItemStack> {
 

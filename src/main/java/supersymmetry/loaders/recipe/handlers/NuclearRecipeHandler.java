@@ -1,20 +1,23 @@
-package gregtech.loaders.recipe.handlers;
+package supersymmetry.loaders.recipe.handlers;
 
 import gregtech.api.unification.material.Material;
-import gregtech.api.unification.material.properties.FissionFuelProperty;
-import gregtech.api.unification.material.properties.PropertyKey;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.common.items.MetaItems;
+import supersymmetry.api.unification.material.properties.FissionFuelProperty;
+import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
+import supersymmetry.api.unification.ore.SusyOrePrefix;
+import supersymmetry.common.item.SuSyMetaItems;
 
 import static gregtech.api.GTValues.*;
 import static gregtech.api.recipes.RecipeMaps.*;
-import static gregtech.api.unification.material.Materials.*;
 import static gregtech.api.unification.ore.OrePrefix.*;
+import static supersymmetry.api.recipes.SuSyRecipeMaps.SPENT_FUEL_POOL_RECIPES;
+import static supersymmetry.api.unification.ore.SusyOrePrefix.*;
 
 public class NuclearRecipeHandler {
 
     public static void register() {
-        OrePrefix.fuelRod.addProcessingHandler(PropertyKey.FISSION_FUEL, NuclearRecipeHandler::processFuelRod);
+        SusyOrePrefix.fuelRod.addProcessingHandler(SuSyPropertyKey.FISSION_FUEL, NuclearRecipeHandler::processFuelRod);
     }
 
     private static void processFuelRod(OrePrefix orePrefix, Material material, FissionFuelProperty oreProperty) {
@@ -26,7 +29,7 @@ public class NuclearRecipeHandler {
 
         CANNER_RECIPES.recipeBuilder().duration(200).EUt(VA[HV])
                 .input(fuelRodDepleted, material)
-                .output(MetaItems.FUEL_CLADDING)
+                .output(SuSyMetaItems.FUEL_CLADDING)
                 .output(fuelPelletDepleted, material, 16)
                 .buildAndRegister();
 
@@ -38,7 +41,7 @@ public class NuclearRecipeHandler {
 
         CANNER_RECIPES.recipeBuilder().duration(300).EUt(VA[HV])
                 .input(fuelPellet, material, 16)
-                .input(MetaItems.FUEL_CLADDING)
+                .input(SuSyMetaItems.FUEL_CLADDING)
                 .output(fuelRod, material)
                 .buildAndRegister();
     }

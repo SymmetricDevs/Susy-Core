@@ -67,5 +67,7 @@ dependencies {
     implementation rfg.deobf("curse.maven:athenaeum-284350:4633750")
     implementation rfg.deobf("curse.maven:dropt-284973:5405050")
 
+    compileOnly rfg.deobf("curse.maven:opencomputers-223008:5274236")
+
     api("CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.700")
 }

@@ -1,10 +1,8 @@
-package gregtech.common.metatileentities.multi.multiblockpart;
+package supersymmetry.common.metatileentities.multi.multiblockpart;
 
 import gregtech.api.capability.IControllable;
-import gregtech.api.capability.ICoolantHandler;
 import gregtech.api.capability.impl.FilteredItemHandler;
 import gregtech.api.capability.impl.FluidTankList;
-import gregtech.api.capability.impl.LockableFluidTank;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.widgets.FluidContainerSlotWidget;
@@ -13,15 +11,11 @@ import gregtech.api.gui.widgets.SlotWidget;
 import gregtech.api.gui.widgets.TankWidget;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.metatileentity.multiblock.IFissionReactorHatch;
 import gregtech.api.metatileentity.multiblock.IMultiblockAbilityPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
-import gregtech.api.nuclear.fission.ICoolantStats;
 import gregtech.client.renderer.texture.Textures;
-import gregtech.common.blocks.BlockFissionCasing;
-import gregtech.common.blocks.MetaBlocks;
-import gregtech.common.metatileentities.MetaTileEntities;
 
+import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockNotifiablePart;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -41,10 +35,19 @@ import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import supersymmetry.api.capability.ICoolantHandler;
+import supersymmetry.api.capability.impl.LockableFluidTank;
+import supersymmetry.api.metatileentity.multiblock.IFissionReactorHatch;
+import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
+import supersymmetry.api.nuclear.fission.ICoolantStats;
+import supersymmetry.common.blocks.BlockFissionCasing;
+import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
 import java.util.List;
 
-import static gregtech.api.capability.GregtechDataCodes.FISSION_LOCK_UPDATE;
+import static supersymmetry.api.nuclear.fission.FissionValues.FISSION_LOCK_UPDATE;
+
 
 public class MetaTileEntityCoolantImportHatch extends MetaTileEntityMultiblockNotifiablePart
                                               implements IMultiblockAbilityPart<ICoolantHandler>, ICoolantHandler,
@@ -122,20 +125,20 @@ public class MetaTileEntityCoolantImportHatch extends MetaTileEntityMultiblockNo
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(this.getPos());
         for (int i = 1; i < depth; i++) {
             if (getWorld().getBlockState(pos.move(this.frontFacing.getOpposite())) !=
-                    MetaBlocks.FISSION_CASING.getState(BlockFissionCasing.FissionCasingType.COOLANT_CHANNEL)) {
+                    SuSyBlocks.FISSION_CASING.getState(BlockFissionCasing.FissionCasingType.COOLANT_CHANNEL)) {
                 return false;
             }
         }
         if (getWorld()
                 .getTileEntity(pos.move(this.frontFacing.getOpposite())) instanceof IGregTechTileEntity gtTe) {
-            return gtTe.getMetaTileEntity().metaTileEntityId.equals(MetaTileEntities.COOLANT_OUTPUT.metaTileEntityId);
+            return gtTe.getMetaTileEntity().metaTileEntityId.equals(SuSyMetaTileEntities.COOLANT_OUTPUT.metaTileEntityId);
         }
         return false;
     }
 
     @Override
     public MultiblockAbility<ICoolantHandler> getAbility() {
-        return MultiblockAbility.IMPORT_COOLANT;
+        return SuSyMultiblockAbilities.IMPORT_COOLANT;
     }
 
     @Override

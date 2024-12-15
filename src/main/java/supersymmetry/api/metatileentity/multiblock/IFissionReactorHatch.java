@@ -1,4 +1,4 @@
-package gregtech.api.metatileentity.multiblock;
+package supersymmetry.api.metatileentity.multiblock;
 
 import net.minecraft.util.math.BlockPos;
 

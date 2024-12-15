@@ -1,4 +1,4 @@
-package gregtech.common.metatileentities.multi.electric;
+package supersymmetry.common.metatileentities.multi.electric;
 
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -8,12 +8,9 @@ import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.PatternMatchContext;
-import gregtech.api.recipes.RecipeMaps;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockBoilerCasing;
-import gregtech.common.blocks.BlockGasCentrifugeCasing;
-import gregtech.common.blocks.BlockNuclearCasing;
 import gregtech.common.blocks.MetaBlocks;
 
 import net.minecraft.block.state.IBlockState;
@@ -24,6 +21,11 @@ import net.minecraft.world.World;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.blocks.BlockGasCentrifugeCasing;
+import supersymmetry.common.blocks.BlockNuclearCasing;
+import supersymmetry.common.blocks.SuSyBlocks;
 
 import java.util.List;
 
@@ -32,7 +34,7 @@ import static gregtech.api.util.RelativeDirection.*;
 public class MetaTileEntityGasCentrifuge extends RecipeMapMultiblockController {
 
     public MetaTileEntityGasCentrifuge(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, RecipeMaps.GAS_CENTRIFUGE_RECIPES);
+        super(metaTileEntityId, SuSyRecipeMaps.GAS_CENTRIFUGE_RECIPES);
         this.recipeMapWorkable = new MultiblockRecipeLogic(this);
     }
 
@@ -79,16 +81,16 @@ public class MetaTileEntityGasCentrifuge extends RecipeMapMultiblockController {
     }
 
     private IBlockState getHeaterState() {
-        return MetaBlocks.NUCLEAR_CASING.getState(
+        return SuSyBlocks.NUCLEAR_CASING.getState(
                 BlockNuclearCasing.NuclearCasingType.GAS_CENTRIFUGE_HEATER);
     }
 
     private IBlockState getCentrifugeState() {
-        return MetaBlocks.GAS_CENTRIFUGE_CASING
+        return SuSyBlocks.GAS_CENTRIFUGE_CASING
                 .getState(BlockGasCentrifugeCasing.GasCentrifugeCasingType.GAS_CENTRIFUGE_COLUMN);
     }
 
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.GAS_CENTRIFUGE_OVERLAY;
+        return SusyTextures.GAS_CENTRIFUGE_OVERLAY;
     }
 }

@@ -1,4 +1,4 @@
-package gregtech.common.metatileentities.multi;
+package supersymmetry.common.metatileentities.multi;
 
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -11,7 +11,6 @@ import gregtech.api.recipes.RecipeMaps;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing;
-import gregtech.common.blocks.BlockNuclearCasing;
 import gregtech.common.blocks.MetaBlocks;
 
 import net.minecraft.block.state.IBlockState;
@@ -23,6 +22,10 @@ import net.minecraft.world.World;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.blocks.BlockNuclearCasing;
+import supersymmetry.common.blocks.SuSyBlocks;
 
 import java.util.List;
 
@@ -31,7 +34,7 @@ import static gregtech.api.util.RelativeDirection.*;
 public class MetaTileEntitySpentFuelPool extends RecipeMapMultiblockController {
 
     public MetaTileEntitySpentFuelPool(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, RecipeMaps.SPENT_FUEL_POOL_RECIPES);
+        super(metaTileEntityId, SuSyRecipeMaps.SPENT_FUEL_POOL_RECIPES);
     }
 
     @Override
@@ -58,7 +61,7 @@ public class MetaTileEntitySpentFuelPool extends RecipeMapMultiblockController {
                 //spotless:on
                 .where('S', selfPredicate())
                 .where('.', any())
-                .where('C', blocks(MetaBlocks.PANELLING))
+                .where('C', blocks(SuSyBlocks.PANELLING))
                 .where('W', blocks(Blocks.WATER).or(blocks(Blocks.FLOWING_WATER)))
                 .where('U', blocks(Blocks.WATER))
                 .where('R', states(getRodState()))
@@ -80,11 +83,11 @@ public class MetaTileEntitySpentFuelPool extends RecipeMapMultiblockController {
     @NotNull
     @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.SPENT_FUEL_POOL_OVERLAY;
+        return SusyTextures.SPENT_FUEL_POOL_OVERLAY;
     }
 
     private IBlockState getRodState() {
-        return MetaBlocks.NUCLEAR_CASING.getState(BlockNuclearCasing.NuclearCasingType.SPENT_FUEL_CASING);
+        return SuSyBlocks.NUCLEAR_CASING.getState(BlockNuclearCasing.NuclearCasingType.SPENT_FUEL_CASING);
     }
 
     private IBlockState getMetalCasingState() {

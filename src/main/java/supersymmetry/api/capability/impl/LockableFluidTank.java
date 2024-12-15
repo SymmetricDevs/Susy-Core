@@ -1,6 +1,6 @@
-package gregtech.api.capability.impl;
+package supersymmetry.api.capability.impl;
 
-import gregtech.api.capability.ILockableHandler;
+import gregtech.api.capability.impl.NotifiableFluidTank;
 import gregtech.api.metatileentity.MetaTileEntity;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -8,6 +8,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
+import supersymmetry.api.capability.ILockableHandler;
 
 public class LockableFluidTank extends NotifiableFluidTank implements ILockableHandler<Fluid> {
 

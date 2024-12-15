@@ -29,9 +29,12 @@ import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicators;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.metatileentities.multi.MetaTileEntityFissionReactor;
+import supersymmetry.common.metatileentities.multi.MetaTileEntitySpentFuelPool;
 import supersymmetry.common.metatileentities.logistics.MetaTileEntityBridge;
 import supersymmetry.common.metatileentities.logistics.MetaTileEntityExtender;
 import supersymmetry.common.metatileentities.multi.electric.*;
+import supersymmetry.common.metatileentities.multi.multiblockpart.*;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCoagulationTank;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimitiveMudPump;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimitiveSmelter;
@@ -183,6 +186,18 @@ public class SuSyMetaTileEntities {
     public static final MetaTileEntityMultiFluidHatch[] SUSY_NONUPLE_IMPORT_HATCH = new MetaTileEntityMultiFluidHatch[3];   // LV-HV
     public static final MetaTileEntityMultiFluidHatch[] SUSY_QUADRUPLE_EXPORT_HATCH = new MetaTileEntityMultiFluidHatch[3]; // LV-HV
     public static final MetaTileEntityMultiFluidHatch[] SUSY_NONUPLE_EXPORT_HATCH = new MetaTileEntityMultiFluidHatch[3];   // LV-HV
+
+
+    // Nuclear MTEs
+    public static MetaTileEntityFissionReactor FISSION_REACTOR;
+    public static MetaTileEntityFuelRodImportBus FUEL_ROD_INPUT;
+    public static MetaTileEntityFuelRodExportBus FUEL_ROD_OUTPUT;
+    public static MetaTileEntityCoolantImportHatch COOLANT_INPUT;
+    public static MetaTileEntityCoolantExportHatch COOLANT_OUTPUT;
+    public static MetaTileEntityControlRodPort CONTROL_ROD;
+    public static MetaTileEntityControlRodPort CONTROL_ROD_MODERATED;
+    public static MetaTileEntitySpentFuelPool SPENT_FUEL_POOL;
+    public static MetaTileEntityGasCentrifuge GAS_CENTRIFUGE;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -346,6 +361,17 @@ public class SuSyMetaTileEntities {
         registerSimpleMTE(ELECTROSTATIC_SEPARATOR, 12, 17035, "electrostatic_separator", SuSyRecipeMaps.ELECTROSTATIC_SEPARATOR, SusyTextures.ELECTROSTATIC_SEPARATOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         registerSimpleMTE(POLISHING_MACHINE, 12, 17048, "polishing_machine", SuSyRecipeMaps.POLISHING_MACHINE, SusyTextures.POLISHING_MACHINE_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         registerSimpleMTE(TEXTILE_SPINNER, 12, 17061, "textile_spinner", SuSyRecipeMaps.SPINNING_RECIPES, SusyTextures.TEXTILE_SPINNER_OVERLAY, true);
+
+        FISSION_REACTOR = registerMetaTileEntity(1043, new MetaTileEntityFissionReactor(gregtechId("fission_reactor")));
+        SPENT_FUEL_POOL = registerMetaTileEntity(1044, new MetaTileEntitySpentFuelPool(gregtechId("spent_fuel_pool")));
+        GAS_CENTRIFUGE = registerMetaTileEntity(1046, new MetaTileEntityGasCentrifuge(gregtechId("gas_centrifuge")));
+
+        FUEL_ROD_INPUT = registerMetaTileEntity(1800, new MetaTileEntityFuelRodImportBus(gregtechId("fuel_rod_input")));
+        FUEL_ROD_OUTPUT = registerMetaTileEntity(1801, new MetaTileEntityFuelRodExportBus(gregtechId("fuel_rod_output")));
+        COOLANT_INPUT = registerMetaTileEntity(1802, new MetaTileEntityCoolantImportHatch(gregtechId("coolant_input")));
+        COOLANT_OUTPUT = registerMetaTileEntity(1803, new MetaTileEntityCoolantExportHatch(gregtechId("coolant_output")));
+        CONTROL_ROD = registerMetaTileEntity(1804, new MetaTileEntityControlRodPort(gregtechId("control_rod"), false));
+        CONTROL_ROD_MODERATED = registerMetaTileEntity(1805, new MetaTileEntityControlRodPort(gregtechId("control_rod_moderated"), true));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name, RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator, ICubeRenderer texture, boolean isBricked) {

@@ -1,8 +1,9 @@
-package gregtech.integration.jei.basic;
+package supersymmetry.integration.jei.basic;
 
 import gregtech.api.gui.GuiTextures;
 import gregtech.common.metatileentities.MetaTileEntities;
 
+import gregtech.integration.jei.basic.BasicRecipeCategory;
 import net.minecraft.client.Minecraft;
 
 import mezz.jei.api.IGuiHelper;
@@ -12,6 +13,7 @@ import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import org.jetbrains.annotations.Nullable;
+import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
 public class FissionFuelCategory extends BasicRecipeCategory<FissionFuelInfo, FissionFuelInfo> {
 
@@ -22,7 +24,7 @@ public class FissionFuelCategory extends BasicRecipeCategory<FissionFuelInfo, Fi
     public FissionFuelCategory(IGuiHelper guiHelper) {
         super("fission_fuel", "fission.fuel.name", guiHelper.createBlankDrawable(176, 90), guiHelper);
 
-        this.icon = guiHelper.createDrawableIngredient(MetaTileEntities.FISSION_REACTOR.getStackForm());
+        this.icon = guiHelper.createDrawableIngredient(SuSyMetaTileEntities.FISSION_REACTOR.getStackForm());
         this.slot = guiHelper.drawableBuilder(GuiTextures.SLOT.imageLocation, 0, 0, 18, 18).setTextureSize(18, 18)
                 .build();
         this.arrow = guiHelper.drawableBuilder(GuiTextures.PROGRESS_BAR_ARROW.imageLocation, 0, 20, 20, 20)

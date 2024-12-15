@@ -1,23 +1,16 @@
-package gregtech.common.metatileentities.multi.multiblockpart;
+package supersymmetry.common.metatileentities.multi.multiblockpart;
 
 import gregtech.api.capability.IControllable;
-import gregtech.api.capability.IFuelRodHandler;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.widgets.BlockableSlotWidget;
-import gregtech.api.items.itemhandlers.LockableItemStackHandler;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.metatileentity.multiblock.IFissionReactorHatch;
 import gregtech.api.metatileentity.multiblock.IMultiblockAbilityPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
-import gregtech.api.nuclear.fission.FissionFuelRegistry;
-import gregtech.api.nuclear.fission.IFissionFuelStats;
-import gregtech.api.nuclear.fission.components.FuelRod;
 import gregtech.client.renderer.texture.Textures;
-import gregtech.common.blocks.BlockFissionCasing;
-import gregtech.common.blocks.MetaBlocks;
 
+import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockNotifiablePart;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -34,11 +27,21 @@ import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import supersymmetry.api.capability.IFuelRodHandler;
+import supersymmetry.api.items.itemhandlers.LockableItemStackHandler;
+import supersymmetry.api.metatileentity.multiblock.IFissionReactorHatch;
+import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
+import supersymmetry.api.nuclear.fission.FissionFuelRegistry;
+import supersymmetry.api.nuclear.fission.IFissionFuelStats;
+import supersymmetry.api.nuclear.fission.components.FuelRod;
+import supersymmetry.common.blocks.BlockFissionCasing;
+import supersymmetry.common.blocks.SuSyBlocks;
 
 import java.io.IOException;
 import java.util.List;
 
-import static gregtech.api.capability.GregtechDataCodes.FISSION_LOCK_UPDATE;
+import static supersymmetry.api.nuclear.fission.FissionValues.FISSION_LOCK_UPDATE;
+
 
 public class MetaTileEntityFuelRodImportBus extends MetaTileEntityMultiblockNotifiablePart
                                             implements IMultiblockAbilityPart<IFuelRodHandler>, IFuelRodHandler,
@@ -112,7 +115,7 @@ public class MetaTileEntityFuelRodImportBus extends MetaTileEntityMultiblockNoti
 
     @Override
     public MultiblockAbility<IFuelRodHandler> getAbility() {
-        return MultiblockAbility.IMPORT_FUEL_ROD;
+        return SuSyMultiblockAbilities.IMPORT_FUEL_ROD;
     }
 
     @Override
@@ -230,7 +233,7 @@ public class MetaTileEntityFuelRodImportBus extends MetaTileEntityMultiblockNoti
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(this.getPos());
         for (int i = 1; i < depth; i++) {
             if (getWorld().getBlockState(pos.move(this.frontFacing.getOpposite())) !=
-                    MetaBlocks.FISSION_CASING.getState(BlockFissionCasing.FissionCasingType.FUEL_CHANNEL)) {
+                    SuSyBlocks.FISSION_CASING.getState(BlockFissionCasing.FissionCasingType.FUEL_CHANNEL)) {
                 return null;
             }
         }

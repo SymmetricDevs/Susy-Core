@@ -1,7 +1,7 @@
-package gregtech.api.nuclear.fission.components;
+package supersymmetry.api.nuclear.fission.components;
 
-import gregtech.api.capability.ICoolantHandler;
-import gregtech.api.nuclear.fission.ICoolantStats;
+import supersymmetry.api.capability.ICoolantHandler;
+import supersymmetry.api.nuclear.fission.ICoolantStats;
 
 import java.util.List;
 

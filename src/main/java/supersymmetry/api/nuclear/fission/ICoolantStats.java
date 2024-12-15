@@ -1,4 +1,4 @@
-package gregtech.api.nuclear.fission;
+package supersymmetry.api.nuclear.fission;
 
 import net.minecraftforge.fluids.Fluid;
 

@@ -1,10 +1,6 @@
-package gregtech.common.metatileentities.multi;
+package supersymmetry.common.metatileentities.multi;
 
-import gregtech.api.capability.GregtechDataCodes;
-import gregtech.api.capability.ICoolantHandler;
-import gregtech.api.capability.IFuelRodHandler;
 import gregtech.api.capability.IMaintenanceHatch;
-import gregtech.api.cover.ICustomEnergyCover;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.Widget;
@@ -13,47 +9,30 @@ import gregtech.api.gui.widgets.ImageWidget;
 import gregtech.api.gui.widgets.ProgressWidget;
 import gregtech.api.gui.widgets.SliderWidget;
 import gregtech.api.gui.widgets.ToggleButtonWidget;
-import gregtech.api.gui.widgets.UpdatedSliderWidget;
 import gregtech.api.metatileentity.IDataInfoProvider;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.MetaTileEntityHolder;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.metatileentity.multiblock.IFissionReactorHatch;
 import gregtech.api.metatileentity.multiblock.IMultiblockAbilityPart;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.IProgressBarMultiblock;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.MultiblockWithDisplayBase;
-import gregtech.api.nuclear.fission.CoolantRegistry;
-import gregtech.api.nuclear.fission.FissionFuelRegistry;
-import gregtech.api.nuclear.fission.FissionReactor;
-import gregtech.api.nuclear.fission.ICoolantStats;
-import gregtech.api.nuclear.fission.IFissionFuelStats;
-import gregtech.api.nuclear.fission.components.ControlRod;
-import gregtech.api.nuclear.fission.components.CoolantChannel;
-import gregtech.api.nuclear.fission.components.FuelRod;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.pattern.PatternStringError;
 import gregtech.api.pattern.TraceabilityPredicate;
-import gregtech.api.unification.material.Materials;
 import gregtech.api.util.BlockInfo;
-import gregtech.api.util.GTStringUtils;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.RelativeDirection;
 import gregtech.api.util.TextComponentUtil;
 import gregtech.api.util.TextFormattingUtil;
 import gregtech.client.renderer.ICubeRenderer;
-import gregtech.client.renderer.texture.Textures;
 import gregtech.common.ConfigHolder;
-import gregtech.common.blocks.BlockFissionCasing;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.MetaTileEntities;
-import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityControlRodPort;
-import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityCoolantExportHatch;
-import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityFuelRodImportBus;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -77,11 +56,33 @@ import codechicken.lib.vec.Matrix4;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import supersymmetry.api.capability.ICoolantHandler;
+import supersymmetry.api.capability.IFuelRodHandler;
+import supersymmetry.api.cover.ICustomEnergyCover;
+import supersymmetry.api.gui.SusyGuiTextures;
+import supersymmetry.api.gui.widgets.UpdatedSliderWidget;
+import supersymmetry.api.metatileentity.multiblock.IFissionReactorHatch;
+import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
+import supersymmetry.api.nuclear.fission.*;
+import supersymmetry.api.nuclear.fission.components.ControlRod;
+import supersymmetry.api.nuclear.fission.components.CoolantChannel;
+import supersymmetry.api.nuclear.fission.components.FuelRod;
+import supersymmetry.api.util.SuSyUtility;
+import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.blocks.BlockFissionCasing;
+import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
+import supersymmetry.common.metatileentities.multi.multiblockpart.MetaTileEntityControlRodPort;
+import supersymmetry.common.metatileentities.multi.multiblockpart.MetaTileEntityCoolantExportHatch;
+import supersymmetry.common.metatileentities.multi.multiblockpart.MetaTileEntityFuelRodImportBus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+
+import static supersymmetry.api.nuclear.fission.FissionValues.SYNC_LOCKING_STATE;
+import static supersymmetry.api.nuclear.fission.FissionValues.SYNC_REACTOR_STATS;
 
 public class MetaTileEntityFissionReactor extends MultiblockWithDisplayBase
                                           implements IDataInfoProvider, IProgressBarMultiblock, ICustomEnergyCover {
@@ -127,21 +128,21 @@ public class MetaTileEntityFissionReactor extends MultiblockWithDisplayBase
         ProgressWidget progressBar = new ProgressWidget(
                 () -> this.getFillPercentage(0),
                 4, 115, 76, 7,
-                GuiTextures.PROGRESS_BAR_FISSION_HEAT, ProgressWidget.MoveType.HORIZONTAL)
+                SusyGuiTextures.PROGRESS_BAR_FISSION_HEAT, ProgressWidget.MoveType.HORIZONTAL)
                         .setHoverTextConsumer(list -> this.addBarHoverText(list, 0));
         builder.widget(progressBar);
 
         progressBar = new ProgressWidget(
                 () -> this.getFillPercentage(1),
                 82, 115, 76, 7,
-                GuiTextures.PROGRESS_BAR_FISSION_PRESSURE, ProgressWidget.MoveType.HORIZONTAL)
+                SusyGuiTextures.PROGRESS_BAR_FISSION_PRESSURE, ProgressWidget.MoveType.HORIZONTAL)
                         .setHoverTextConsumer(list -> this.addBarHoverText(list, 1));
         builder.widget(progressBar);
 
         progressBar = new ProgressWidget(
                 () -> this.getFillPercentage(2),
                 160, 115, 76, 7,
-                GuiTextures.PROGRESS_BAR_FISSION_ENERGY, ProgressWidget.MoveType.HORIZONTAL)
+                SusyGuiTextures.PROGRESS_BAR_FISSION_ENERGY, ProgressWidget.MoveType.HORIZONTAL)
                         .setHoverTextConsumer(list -> this.addBarHoverText(list, 2));
         builder.widget(progressBar);
 
@@ -157,10 +158,10 @@ public class MetaTileEntityFissionReactor extends MultiblockWithDisplayBase
                 return I18n.format("gregtech.gui.fission.control_rod_insertion",
                         String.format("%.2f%%", this.getSliderValue() * 100));
             }
-        }.setBackground(GuiTextures.DARK_SLIDER_BACKGROUND).setSliderIcon(GuiTextures.DARK_SLIDER_ICON));
+        }.setBackground(SusyGuiTextures.DARK_SLIDER_BACKGROUND).setSliderIcon(SusyGuiTextures.DARK_SLIDER_ICON));
         builder.widget(new SliderWidget("gregtech.gui.fission.coolant_flow", 10, 80, 220, 18, 0.0f, 16000.f, flowRate,
-                this::setFlowRate).setBackground(GuiTextures.DARK_SLIDER_BACKGROUND)
-                        .setSliderIcon(GuiTextures.DARK_SLIDER_ICON));
+                this::setFlowRate).setBackground(SusyGuiTextures.DARK_SLIDER_BACKGROUND)
+                        .setSliderIcon(SusyGuiTextures.DARK_SLIDER_ICON));
 
         builder.widget(new AdvancedTextWidget(9, 20, this::addDisplayText, 0xFFFFFF)
                 .setMaxWidthLimit(220)
@@ -204,7 +205,7 @@ public class MetaTileEntityFissionReactor extends MultiblockWithDisplayBase
     @Override
     protected @NotNull Widget getFlexButton(int x, int y, int width, int height) {
         return new ToggleButtonWidget(x, y, width, height, this::areControlRodsRegulated,
-                this::toggleControlRodRegulation).setButtonTexture(GuiTextures.BUTTON_CONTROL_ROD_HELPER)
+                this::toggleControlRodRegulation).setButtonTexture(SusyGuiTextures.BUTTON_CONTROL_ROD_HELPER)
                         .setTooltipText("gregtech.gui.fission.helper");
     }
 
@@ -299,7 +300,7 @@ public class MetaTileEntityFissionReactor extends MultiblockWithDisplayBase
                                   int steps) {
         pos.move(direction, steps);
 
-        if (world.getBlockState(pos).getBlock() == MetaBlocks.FISSION_CASING) {
+        if (world.getBlockState(pos).getBlock() == SuSyBlocks.FISSION_CASING) {
             pos.move(direction.getOpposite(), steps);
             return false;
         }
@@ -375,7 +376,7 @@ public class MetaTileEntityFissionReactor extends MultiblockWithDisplayBase
                 if (this.fissionReactor.isDepleted()) {
                     boolean canWork = true;
                     boolean needsReset = false;
-                    for (IFuelRodHandler fuelImport : this.getAbilities(MultiblockAbility.IMPORT_FUEL_ROD)) {
+                    for (IFuelRodHandler fuelImport : this.getAbilities(SuSyMultiblockAbilities.IMPORT_FUEL_ROD)) {
                         if (fuelImport.getStackHandler().extractItem(0, 1, true).isEmpty()) {
                             canWork = false;
                             this.lockingState = LockingState.MISSING_FUEL;
@@ -394,7 +395,7 @@ public class MetaTileEntityFissionReactor extends MultiblockWithDisplayBase
 
                     }
 
-                    for (IFuelRodHandler fuelImport : this.getAbilities(MultiblockAbility.IMPORT_FUEL_ROD)) {
+                    for (IFuelRodHandler fuelImport : this.getAbilities(SuSyMultiblockAbilities.IMPORT_FUEL_ROD)) {
                         if (fissionReactor.needsOutput) {
                             ((MetaTileEntityFuelRodImportBus) fuelImport).getExportHatch(this.height - 1)
                                     .getExportItems().insertItem(0,
@@ -446,17 +447,17 @@ public class MetaTileEntityFissionReactor extends MultiblockWithDisplayBase
         pos = pos.move(this.getFrontFacing().getOpposite(), diameter / 2);
         placeCorium(pos, EnumFacing.UP);
         for (int i = 0; i <= this.heightBottom; i++) {
-            this.getWorld().setBlockState(pos, Materials.Corium.getFluid().getBlock().getDefaultState());
+            this.getWorld().setBlockState(pos, SuSyUtility.Corium().getFluid().getBlock().getDefaultState());
             for (EnumFacing facing : EnumFacing.HORIZONTALS) {
                 placeCorium(pos, facing);
             }
             pos.move(EnumFacing.DOWN);
         }
-        this.getWorld().setBlockState(pos.add(0, 1, 0), Materials.Corium.getFluid().getBlock().getDefaultState());
+        this.getWorld().setBlockState(pos.add(0, 1, 0), SuSyUtility.Corium().getFluid().getBlock().getDefaultState());
     }
 
     private void placeCorium(BlockPos.MutableBlockPos pos, EnumFacing facing) {
-        this.getWorld().setBlockState(pos.move(facing), Materials.Corium.getFluid().getBlock().getDefaultState());
+        this.getWorld().setBlockState(pos.move(facing), SuSyUtility.Corium().getFluid().getBlock().getDefaultState());
         pos.move(facing.getOpposite());
     }
 
@@ -526,14 +527,14 @@ public class MetaTileEntityFissionReactor extends MultiblockWithDisplayBase
                 if (Math.pow(outerI - Math.floor(this.diameter / 2.), 2) +
                         Math.pow(j - Math.floor(this.diameter / 2.), 2) >
                         Math.pow(radius + 0.5f, 2)) {
-                    interiorSlice[i] = GTStringUtils.replace(interiorSlice[i], j, 'B');
+                    interiorSlice[i] = SuSyUtility.replace(interiorSlice[i], j, 'B');
                 }
 
                 int outerJ = j + (int) Math.signum(j - (diameter / 2));
                 if (Math.pow(i - Math.floor(this.diameter / 2.), 2) +
                         Math.pow(outerJ - Math.floor(this.diameter / 2.), 2) >
                         Math.pow(radius + 0.5f, 2)) {
-                    interiorSlice[i] = GTStringUtils.replace(interiorSlice[i], j, 'B');
+                    interiorSlice[i] = SuSyUtility.replace(interiorSlice[i], j, 'B');
                 }
             }
         }
@@ -564,7 +565,7 @@ public class MetaTileEntityFissionReactor extends MultiblockWithDisplayBase
                 // O for the outputs on the bottom
                 .where('O',
                         states(getVesselState())
-                                .or(abilities(MultiblockAbility.EXPORT_COOLANT, MultiblockAbility.EXPORT_FUEL_ROD)))
+                                .or(abilities(SuSyMultiblockAbilities.EXPORT_COOLANT, SuSyMultiblockAbilities.EXPORT_FUEL_ROD)))
                 // B for the vessel blocks on the walls
                 .where('B',
                         states(getVesselState())
@@ -575,8 +576,8 @@ public class MetaTileEntityFissionReactor extends MultiblockWithDisplayBase
     }
 
     public TraceabilityPredicate getImportPredicate() {
-        MultiblockAbility<?>[] allowedAbilities = { MultiblockAbility.IMPORT_COOLANT, MultiblockAbility.IMPORT_FUEL_ROD,
-                MultiblockAbility.CONTROL_ROD_PORT };
+        MultiblockAbility<?>[] allowedAbilities = { SuSyMultiblockAbilities.IMPORT_COOLANT, SuSyMultiblockAbilities.IMPORT_FUEL_ROD,
+                SuSyMultiblockAbilities.CONTROL_ROD_PORT };
         return tilePredicate((state, tile) -> {
             if (!(tile instanceof IMultiblockAbilityPart<?> &&
                     ArrayUtils.contains(allowedAbilities, ((IMultiblockAbilityPart<?>) tile).getAbility()))) {
@@ -617,34 +618,34 @@ public class MetaTileEntityFissionReactor extends MultiblockWithDisplayBase
 
     @NotNull
     protected IBlockState getVesselState() {
-        return MetaBlocks.FISSION_CASING.getState(BlockFissionCasing.FissionCasingType.REACTOR_VESSEL);
+        return SuSyBlocks.FISSION_CASING.getState(BlockFissionCasing.FissionCasingType.REACTOR_VESSEL);
     }
 
     @NotNull
     protected IBlockState getFuelChannelState() {
-        return MetaBlocks.FISSION_CASING.getState(BlockFissionCasing.FissionCasingType.FUEL_CHANNEL);
+        return SuSyBlocks.FISSION_CASING.getState(BlockFissionCasing.FissionCasingType.FUEL_CHANNEL);
     }
 
     @NotNull
     protected IBlockState getControlRodChannelState() {
-        return MetaBlocks.FISSION_CASING.getState(BlockFissionCasing.FissionCasingType.CONTROL_ROD_CHANNEL);
+        return SuSyBlocks.FISSION_CASING.getState(BlockFissionCasing.FissionCasingType.CONTROL_ROD_CHANNEL);
     }
 
     @NotNull
     IBlockState getCoolantChannelState() {
-        return MetaBlocks.FISSION_CASING.getState(BlockFissionCasing.FissionCasingType.COOLANT_CHANNEL);
+        return SuSyBlocks.FISSION_CASING.getState(BlockFissionCasing.FissionCasingType.COOLANT_CHANNEL);
     }
 
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
-        return Textures.FISSION_REACTOR_TEXTURE;
+        return SusyTextures.FISSION_REACTOR_TEXTURE;
     }
 
     @SideOnly(Side.CLIENT)
     @NotNull
     @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.FISSION_REACTOR_OVERLAY;
+        return SusyTextures.FISSION_REACTOR_OVERLAY;
     }
 
     @Override
@@ -766,7 +767,7 @@ public class MetaTileEntityFissionReactor extends MultiblockWithDisplayBase
         this.controlRodInsertionValue = this.fissionReactor.controlRodInsertion;
         this.fuelDepletionPercent = Math.max(0, this.fissionReactor.fuelDepletion) /
                 this.fissionReactor.maxFuelDepletion;
-        writeCustomData(GregtechDataCodes.SYNC_REACTOR_STATS, (packetBuffer -> {
+        writeCustomData(SYNC_REACTOR_STATS, (packetBuffer -> {
             packetBuffer.writeDouble(this.temperature);
             packetBuffer.writeDouble(this.maxTemperature);
             packetBuffer.writeDouble(this.pressure);
@@ -784,7 +785,7 @@ public class MetaTileEntityFissionReactor extends MultiblockWithDisplayBase
     public void receiveCustomData(int dataId, PacketBuffer buf) {
         super.receiveCustomData(dataId, buf);
 
-        if (dataId == GregtechDataCodes.SYNC_REACTOR_STATS) {
+        if (dataId == SYNC_REACTOR_STATS) {
             this.temperature = buf.readDouble();
             this.maxTemperature = buf.readDouble();
             this.pressure = buf.readDouble();
@@ -794,26 +795,26 @@ public class MetaTileEntityFissionReactor extends MultiblockWithDisplayBase
             this.kEff = buf.readDouble();
             this.controlRodInsertionValue = buf.readDouble();
             this.fuelDepletionPercent = buf.readDouble();
-        } else if (dataId == GregtechDataCodes.SYNC_LOCKING_STATE) {
+        } else if (dataId == SYNC_LOCKING_STATE) {
             this.lockingState = buf.readEnumValue(LockingState.class);
             this.scheduleRenderUpdate();
         }
     }
 
     protected void lockAll() {
-        for (ICoolantHandler handler : this.getAbilities(MultiblockAbility.IMPORT_COOLANT)) {
+        for (ICoolantHandler handler : this.getAbilities(SuSyMultiblockAbilities.IMPORT_COOLANT)) {
             handler.setLock(true);
         }
-        for (IFuelRodHandler handler : this.getAbilities(MultiblockAbility.IMPORT_FUEL_ROD)) {
+        for (IFuelRodHandler handler : this.getAbilities(SuSyMultiblockAbilities.IMPORT_FUEL_ROD)) {
             handler.setLock(true);
         }
     }
 
     protected void unlockAll() {
-        for (ICoolantHandler handler : this.getAbilities(MultiblockAbility.IMPORT_COOLANT)) {
+        for (ICoolantHandler handler : this.getAbilities(SuSyMultiblockAbilities.IMPORT_COOLANT)) {
             handler.setLock(false);
         }
-        for (IFuelRodHandler handler : this.getAbilities(MultiblockAbility.IMPORT_FUEL_ROD)) {
+        for (IFuelRodHandler handler : this.getAbilities(SuSyMultiblockAbilities.IMPORT_FUEL_ROD)) {
             handler.setLock(false);
         }
         if (this.fissionReactor != null) {
@@ -917,7 +918,7 @@ public class MetaTileEntityFissionReactor extends MultiblockWithDisplayBase
 
     protected void setLockingState(LockingState lockingState) {
         if (this.lockingState != lockingState) {
-            writeCustomData(GregtechDataCodes.SYNC_LOCKING_STATE, (buf) -> buf.writeEnumValue(lockingState));
+            writeCustomData(SYNC_LOCKING_STATE, (buf) -> buf.writeEnumValue(lockingState));
         }
         this.lockingState = lockingState;
     }
@@ -995,14 +996,14 @@ public class MetaTileEntityFissionReactor extends MultiblockWithDisplayBase
                     if (Math.pow(outerI - Math.floor(diameter / 2.), 2) +
                             Math.pow(j - Math.floor(diameter / 2.), 2) >
                             Math.pow(radius + 0.5f, 2)) {
-                        interiorSlice[i] = GTStringUtils.replace(interiorSlice[i], j, 'V');
+                        interiorSlice[i] = SuSyUtility.replace(interiorSlice[i], j, 'V');
                     }
 
                     int outerJ = j + (int) Math.signum(j - (diameter / 2));
                     if (Math.pow(i - Math.floor(diameter / 2.), 2) +
                             Math.pow(outerJ - Math.floor(diameter / 2.), 2) >
                             Math.pow(radius + 0.5f, 2)) {
-                        interiorSlice[i] = GTStringUtils.replace(interiorSlice[i], j, 'V');
+                        interiorSlice[i] = SuSyUtility.replace(interiorSlice[i], j, 'V');
                     }
                 }
             }
@@ -1039,8 +1040,7 @@ public class MetaTileEntityFissionReactor extends MultiblockWithDisplayBase
                 topSlice[i] = topSlice[i].replace('A', 'V');
                 bottomSlice[i] = bottomSlice[i].replace('A', 'V');
             }
-            MultiblockShapeInfo.Builder builder = MultiblockShapeInfo.builder(RelativeDirection.RIGHT,
-                    RelativeDirection.FRONT, RelativeDirection.UP);
+            MultiblockShapeInfo.Builder builder = MultiblockShapeInfo.builder(/*TODO*/);
             builder.aisle(topSlice);
             for (int i = 0; i < heightBottom - 1; i++) {
                 builder.aisle(interiorSlice);
@@ -1050,7 +1050,7 @@ public class MetaTileEntityFissionReactor extends MultiblockWithDisplayBase
                 builder.aisle(interiorSlice);
             }
             builder.aisle(bottomSlice);
-            shapes.add(builder.where('S', MetaTileEntities.FISSION_REACTOR, EnumFacing.NORTH)
+            shapes.add(builder.where('S', SuSyMetaTileEntities.FISSION_REACTOR, EnumFacing.NORTH)
                     // A for interior components, which are air here
                     .where('A', Blocks.AIR.getDefaultState())
                     // Technically a duplicate, but this just makes things easier
@@ -1060,12 +1060,12 @@ public class MetaTileEntityFissionReactor extends MultiblockWithDisplayBase
                     .where('f', this.getFuelChannelState())
                     .where('c', this.getCoolantChannelState())
                     .where('r', this.getControlRodChannelState())
-                    .where('e', MetaTileEntities.FUEL_ROD_INPUT, EnumFacing.UP)
-                    .where('g', MetaTileEntities.FUEL_ROD_OUTPUT, EnumFacing.DOWN)
-                    .where('b', MetaTileEntities.COOLANT_INPUT, EnumFacing.UP)
-                    .where('d', MetaTileEntities.COOLANT_OUTPUT, EnumFacing.DOWN)
-                    .where('q', MetaTileEntities.CONTROL_ROD, EnumFacing.UP)
-                    .where('m', MetaTileEntities.CONTROL_ROD_MODERATED, EnumFacing.UP)
+                    .where('e', SuSyMetaTileEntities.FUEL_ROD_INPUT, EnumFacing.UP)
+                    .where('g', SuSyMetaTileEntities.FUEL_ROD_OUTPUT, EnumFacing.DOWN)
+                    .where('b', SuSyMetaTileEntities.COOLANT_INPUT, EnumFacing.UP)
+                    .where('d', SuSyMetaTileEntities.COOLANT_OUTPUT, EnumFacing.DOWN)
+                    .where('q', SuSyMetaTileEntities.CONTROL_ROD, EnumFacing.UP)
+                    .where('m', SuSyMetaTileEntities.CONTROL_ROD_MODERATED, EnumFacing.UP)
 
                     // B for the vessel blocks on the walls
                     .where('M', () -> ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH :

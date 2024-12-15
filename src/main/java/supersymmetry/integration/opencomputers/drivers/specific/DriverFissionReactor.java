@@ -1,9 +1,8 @@
-package gregtech.integration.opencomputers.drivers.specific;
+package supersymmetry.integration.opencomputers.drivers.specific;
 
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.common.metatileentities.multi.MetaTileEntityFissionReactor;
-import gregtech.integration.opencomputers.drivers.EnvironmentMetaTileEntity;
 
+import gregtech.integration.opencomputers.drivers.EnvironmentMetaTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -14,6 +13,7 @@ import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.ManagedEnvironment;
 import li.cil.oc.api.prefab.DriverSidedTileEntity;
+import supersymmetry.common.metatileentities.multi.MetaTileEntityFissionReactor;
 
 public class DriverFissionReactor extends DriverSidedTileEntity {
 
@@ -42,7 +42,7 @@ public class DriverFissionReactor extends DriverSidedTileEntity {
     }
 
     public final static class EnvironmentFissionReactor extends
-                                                        EnvironmentMetaTileEntity<MetaTileEntityFissionReactor> {
+            EnvironmentMetaTileEntity<MetaTileEntityFissionReactor> {
 
         public EnvironmentFissionReactor(IGregTechTileEntity holder, MetaTileEntityFissionReactor tileEntity) {
             super(holder, tileEntity, "gt_fissionReactor");

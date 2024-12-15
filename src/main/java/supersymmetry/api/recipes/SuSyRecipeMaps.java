@@ -331,6 +331,12 @@ public class SuSyRecipeMaps {
             .setSlotOverlay(true, false, GuiTextures.FURNACE_OVERLAY_2)
             .setSound(GTSoundEvents.FURNACE);
 
+    public static final RecipeMap<SimpleRecipeBuilder> SPENT_FUEL_POOL_RECIPES = new RecipeMap<>("spent_fuel_pool", 1, 1, 1, 1, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_BATH, ProgressWidget.MoveType.HORIZONTAL);
+
+    public static final RecipeMap<SimpleRecipeBuilder> GAS_CENTRIFUGE_RECIPES = new RecipeMap<>("gas_centrifuge", 0, 0, 1, 2, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_MIXER, ProgressWidget.MoveType.CIRCULAR)
+            .setSound(GTSoundEvents.CENTRIFUGE);
 
     public static final RecipeMap<NoEnergyRecipeBuilder> JET_WINGPACK_FUELS = new RecipeMap<>("jet_wingpack_fuels", 0, 0, 1, 0, new NoEnergyRecipeBuilder(), false)
             .setSlotOverlay(false, false, GuiTextures.DARK_CANISTER_OVERLAY)

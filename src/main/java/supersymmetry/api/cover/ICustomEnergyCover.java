@@ -1,4 +1,4 @@
-package gregtech.api.cover;
+package supersymmetry.api.cover;
 
 /**
  * Simple interface specifying that an attached energy detector(advanced or not) cover reads custom EU values from the

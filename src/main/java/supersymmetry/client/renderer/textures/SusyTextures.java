@@ -80,10 +80,16 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer SINTERING_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/sintering");
     public static final OrientedOverlayRenderer SMOKE_STACK_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/smoke_stack");
     public static final OrientedOverlayRenderer PRIMITIVE_SMELTER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/primitive_smelter");
+    public static final OrientedOverlayRenderer FISSION_REACTOR_OVERLAY = new OrientedOverlayRenderer("multiblock/fission_reactor");
+    public static final OrientedOverlayRenderer SPENT_FUEL_POOL_OVERLAY = new OrientedOverlayRenderer("multiblock/spent_fuel_pool");
+    public static final OrientedOverlayRenderer GAS_CENTRIFUGE_OVERLAY = new OrientedOverlayRenderer("multiblock/gas_centrifuge");
 
     public static final SimpleOverlayRenderer SILICON_CARBIDE_CASING = new SimpleOverlayRenderer("multiblock_casing/silicon_carbide_casing");
     public static final SimpleOverlayRenderer ULV_STRUCTURAL_CASING = new SimpleOverlayRenderer("multiblock_casing/ulv_structural_casing");
     public static final SimpleOverlayRenderer SLAG_HOT = new SimpleOverlayRenderer("resource/slag_hot");
+    public static final SimpleOverlayRenderer FISSION_REACTOR_TEXTURE = new SimpleOverlayRenderer("casings/fission/reactor_vessel");
+    public static final SimpleOverlayRenderer CONTROL_ROD = new SimpleOverlayRenderer("overlay/machine/overlay_control_rod");
+    public static final SimpleOverlayRenderer CONTROL_ROD_MODERATED = new SimpleOverlayRenderer("overlay/machine/overlay_control_rod_moderated");
 
     public static final SimpleCubeRenderer MASONRY_BRICK = new SimpleCubeRenderer("gregtech:blocks/multiblock_casing/masonry_brick");
 

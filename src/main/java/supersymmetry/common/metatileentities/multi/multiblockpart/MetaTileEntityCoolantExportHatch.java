@@ -1,10 +1,8 @@
-package gregtech.common.metatileentities.multi.multiblockpart;
+package supersymmetry.common.metatileentities.multi.multiblockpart;
 
 import gregtech.api.capability.IControllable;
-import gregtech.api.capability.ICoolantHandler;
 import gregtech.api.capability.impl.FilteredItemHandler;
 import gregtech.api.capability.impl.FluidTankList;
-import gregtech.api.capability.impl.LockableFluidTank;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.widgets.FluidContainerSlotWidget;
@@ -13,12 +11,11 @@ import gregtech.api.gui.widgets.SlotWidget;
 import gregtech.api.gui.widgets.TankWidget;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.metatileentity.multiblock.IFissionReactorHatch;
 import gregtech.api.metatileentity.multiblock.IMultiblockAbilityPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
-import gregtech.api.nuclear.fission.ICoolantStats;
 import gregtech.client.renderer.texture.Textures;
 
+import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockNotifiablePart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
@@ -32,10 +29,16 @@ import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.capability.ICoolantHandler;
+import supersymmetry.api.capability.impl.LockableFluidTank;
+import supersymmetry.api.metatileentity.multiblock.IFissionReactorHatch;
+import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
+import supersymmetry.api.nuclear.fission.ICoolantStats;
 
 import java.util.List;
 
-import static gregtech.api.capability.GregtechDataCodes.FISSION_LOCK_UPDATE;
+import static supersymmetry.api.nuclear.fission.FissionValues.FISSION_LOCK_UPDATE;
+
 
 public class MetaTileEntityCoolantExportHatch extends MetaTileEntityMultiblockNotifiablePart
                                               implements IMultiblockAbilityPart<ICoolantHandler>, ICoolantHandler,
@@ -143,7 +146,7 @@ public class MetaTileEntityCoolantExportHatch extends MetaTileEntityMultiblockNo
 
     @Override
     public MultiblockAbility<ICoolantHandler> getAbility() {
-        return MultiblockAbility.EXPORT_COOLANT;
+        return SuSyMultiblockAbilities.EXPORT_COOLANT;
     }
 
     @Override

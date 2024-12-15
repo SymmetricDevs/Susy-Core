@@ -1,4 +1,4 @@
-package gregtech.api.nuclear.fission.components;
+package supersymmetry.api.nuclear.fission.components;
 
 public class ReactorComponent {
 

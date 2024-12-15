@@ -1,6 +1,7 @@
-package gregtech.api.nuclear.fission.components;
+package supersymmetry.api.nuclear.fission.components;
 
-import gregtech.api.nuclear.fission.IFissionFuelStats;
+
+import supersymmetry.api.nuclear.fission.IFissionFuelStats;
 
 public class FuelRod extends ReactorComponent {
 

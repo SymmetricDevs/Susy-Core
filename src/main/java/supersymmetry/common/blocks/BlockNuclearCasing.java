@@ -1,4 +1,4 @@
-package gregtech.common.blocks;
+package supersymmetry.common.blocks;
 
 import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantActiveBlock;

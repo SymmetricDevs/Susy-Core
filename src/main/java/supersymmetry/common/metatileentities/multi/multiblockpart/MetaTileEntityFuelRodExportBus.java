@@ -1,4 +1,4 @@
-package gregtech.common.metatileentities.multi.multiblockpart;
+package supersymmetry.common.metatileentities.multi.multiblockpart;
 
 import gregtech.api.capability.IControllable;
 import gregtech.api.gui.GuiTextures;
@@ -6,11 +6,11 @@ import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.widgets.SlotWidget;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.metatileentity.multiblock.IFissionReactorHatch;
 import gregtech.api.metatileentity.multiblock.IMultiblockAbilityPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.client.renderer.texture.Textures;
 
+import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockNotifiablePart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -19,12 +19,14 @@ import net.minecraftforge.items.ItemStackHandler;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
+import supersymmetry.api.metatileentity.multiblock.IFissionReactorHatch;
+import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
 
 import java.util.List;
 
 public class MetaTileEntityFuelRodExportBus extends MetaTileEntityMultiblockNotifiablePart
                                             implements IMultiblockAbilityPart<IItemHandlerModifiable>, IControllable,
-                                            IFissionReactorHatch {
+        IFissionReactorHatch {
 
     private boolean workingEnabled;
 
@@ -91,7 +93,7 @@ public class MetaTileEntityFuelRodExportBus extends MetaTileEntityMultiblockNoti
 
     @Override
     public MultiblockAbility<IItemHandlerModifiable> getAbility() {
-        return MultiblockAbility.EXPORT_FUEL_ROD;
+        return SuSyMultiblockAbilities.EXPORT_FUEL_ROD;
     }
 
     @Override

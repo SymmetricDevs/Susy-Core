@@ -1,27 +1,29 @@
-package gregtech.common.metatileentities.multi.multiblockpart;
+package supersymmetry.common.metatileentities.multi.multiblockpart;
 
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Matrix4;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.metatileentity.multiblock.IFissionReactorHatch;
 import gregtech.api.metatileentity.multiblock.IMultiblockAbilityPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.client.renderer.texture.Textures;
-import gregtech.common.blocks.BlockFissionCasing;
 import gregtech.common.blocks.MetaBlocks;
-
+import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockNotifiablePart;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.pipeline.IVertexOperation;
-import codechicken.lib.vec.Matrix4;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import supersymmetry.api.metatileentity.multiblock.IFissionReactorHatch;
+import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
+import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.blocks.BlockFissionCasing;
+import supersymmetry.common.blocks.SuSyBlocks;
 
 import java.util.List;
 
@@ -56,17 +58,17 @@ public class MetaTileEntityControlRodPort extends MetaTileEntityMultiblockNotifi
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(this.getPos());
         for (int i = 1; i < depth; i++) {
             if (getWorld().getBlockState(pos.move(this.frontFacing.getOpposite())) !=
-                    MetaBlocks.FISSION_CASING.getState(BlockFissionCasing.FissionCasingType.CONTROL_ROD_CHANNEL)) {
+                    SuSyBlocks.FISSION_CASING.getState(BlockFissionCasing.FissionCasingType.CONTROL_ROD_CHANNEL)) {
                 return false;
             }
         }
         return getWorld().getBlockState(pos.move(this.frontFacing.getOpposite())) ==
-                MetaBlocks.FISSION_CASING.getState(BlockFissionCasing.FissionCasingType.REACTOR_VESSEL);
+                SuSyBlocks.FISSION_CASING.getState(BlockFissionCasing.FissionCasingType.REACTOR_VESSEL);
     }
 
     @Override
     public MultiblockAbility<MetaTileEntityControlRodPort> getAbility() {
-        return MultiblockAbility.CONTROL_ROD_PORT;
+        return SuSyMultiblockAbilities.CONTROL_ROD_PORT;
     }
 
     @Override
@@ -89,9 +91,9 @@ public class MetaTileEntityControlRodPort extends MetaTileEntityMultiblockNotifi
     public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
         super.renderMetaTileEntity(renderState, translation, pipeline);
         if (!this.hasModeratorTip) {
-            Textures.CONTROL_ROD.renderSided(getFrontFacing(), renderState, translation, pipeline);
+            SusyTextures.CONTROL_ROD.renderSided(getFrontFacing(), renderState, translation, pipeline);
         } else {
-            Textures.CONTROL_ROD_MODERATED.renderSided(getFrontFacing(), renderState, translation, pipeline);
+            SusyTextures.CONTROL_ROD_MODERATED.renderSided(getFrontFacing(), renderState, translation, pipeline);
         }
     }
 }

@@ -1,7 +1,10 @@
 package supersymmetry.common;
 
+import gregtech.api.GregTechAPI;
 import gregtech.api.block.VariantItemBlock;
 import gregtech.api.modules.ModuleContainerRegistryEvent;
+import gregtech.api.unification.OreDictUnifier;
+import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.event.MaterialEvent;
 import gregtech.api.unification.material.event.PostMaterialEvent;
 import gregtech.client.utils.TooltipHelper;
@@ -28,7 +31,12 @@ import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.event.MobHordeEvent;
+import supersymmetry.api.nuclear.fission.CoolantRegistry;
+import supersymmetry.api.nuclear.fission.FissionFuelRegistry;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.api.unification.material.properties.CoolantProperty;
+import supersymmetry.api.unification.material.properties.FissionFuelProperty;
+import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.api.unification.ore.SusyStoneTypes;
 import supersymmetry.common.blocks.SheetedFrameItemBlock;
@@ -86,6 +94,10 @@ public class CommonProxy {
         registry.register(SuSyBlocks.ELECTRODE_ASSEMBLY);
         registry.register(SuSyBlocks.MULTIBLOCK_CASING);
         registry.register(SuSyBlocks.SERPENTINE);
+        registry.register(SuSyBlocks.FISSION_CASING);
+        registry.register(SuSyBlocks.NUCLEAR_CASING);
+        registry.register(SuSyBlocks.GAS_CENTRIFUGE_CASING);
+        registry.register(SuSyBlocks.PANELLING);
 
         SHEETED_FRAMES.values().stream().distinct().forEach(registry::register);
     }
@@ -115,12 +127,16 @@ public class CommonProxy {
         registry.register(createItemBlock(SuSyBlocks.ELECTRODE_ASSEMBLY, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.MULTIBLOCK_CASING, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.SERPENTINE, VariantItemBlock::new));
-
+        registry.register(createItemBlock(SuSyBlocks.FISSION_CASING, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.NUCLEAR_CASING, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.GAS_CENTRIFUGE_CASING, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.PANELLING, VariantItemBlock::new));
 
         SHEETED_FRAMES.values()
                 .stream().distinct()
                 .map(block -> createItemBlock(block, SheetedFrameItemBlock::new))
                 .forEach(registry::register);
+
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
@@ -141,6 +157,18 @@ public class CommonProxy {
         MetaItems.addOrePrefix(SusyOrePrefix.dustWet);
 
         //SusyMaterials.removeFlags();
+
+        for (Material material : GregTechAPI.materialManager.getRegisteredMaterials()) {
+            if (material.hasProperty(SuSyPropertyKey.FISSION_FUEL)) {
+                FissionFuelProperty prop = material.getProperty(SuSyPropertyKey.FISSION_FUEL);
+                FissionFuelRegistry.registerFuel(OreDictUnifier.get(SusyOrePrefix.fuelRod, material), prop,
+                        OreDictUnifier.get(SusyOrePrefix.fuelRodHotDepleted, material));
+            }
+            if (material.hasProperty(SuSyPropertyKey.COOLANT)) {
+                CoolantProperty prop = material.getProperty(SuSyPropertyKey.COOLANT);
+                CoolantRegistry.registerCoolant(material.getFluid(prop.getCoolantKey()), prop);
+            }
+        }
     }
 
     @SubscribeEvent

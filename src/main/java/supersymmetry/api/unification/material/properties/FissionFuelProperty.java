@@ -1,6 +1,10 @@
-package gregtech.api.unification.material.properties;
+package supersymmetry.api.unification.material.properties;
 
-import gregtech.api.nuclear.fission.IFissionFuelStats;
+
+import gregtech.api.unification.material.properties.IMaterialProperty;
+import gregtech.api.unification.material.properties.MaterialProperties;
+import gregtech.api.unification.material.properties.PropertyKey;
+import supersymmetry.api.nuclear.fission.IFissionFuelStats;
 
 public class FissionFuelProperty implements IMaterialProperty, IFissionFuelStats {
 

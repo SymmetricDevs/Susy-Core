@@ -1,4 +1,4 @@
-package gregtech.api.capability;
+package supersymmetry.api.capability;
 
 import org.jetbrains.annotations.Nullable;
 

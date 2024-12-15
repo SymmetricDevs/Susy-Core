@@ -1,7 +1,5 @@
-package gregtech.integration.jei.basic;
+package supersymmetry.integration.jei.basic;
 
-import gregtech.api.nuclear.fission.FissionFuelRegistry;
-import gregtech.api.nuclear.fission.IFissionFuelStats;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
@@ -10,6 +8,8 @@ import net.minecraft.item.ItemStack;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
+import supersymmetry.api.nuclear.fission.FissionFuelRegistry;
+import supersymmetry.api.nuclear.fission.IFissionFuelStats;
 
 public class FissionFuelInfo implements IRecipeWrapper {
 
