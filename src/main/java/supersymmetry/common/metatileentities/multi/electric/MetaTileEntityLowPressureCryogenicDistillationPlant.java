@@ -65,7 +65,7 @@ public class MetaTileEntityLowPressureCryogenicDistillationPlant extends MetaTil
                         .or(metaTileEntities(MultiblockAbility.REGISTRY.get(MultiblockAbility.IMPORT_FLUIDS).stream()
                                 .filter(mte->!(mte instanceof MetaTileEntityMultiFluidHatch))
                                 .toArray(MetaTileEntity[]::new))
-                                .setMaxLayerLimited(1)))
+                                .setMaxLayerLimited(4)))
                 .where('D', states(getCasingState()))
                 .where('E', states(getCasingState())
                         .or(abilities(MultiblockAbility.PASSTHROUGH_HATCH)))

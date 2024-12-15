@@ -64,7 +64,7 @@ public class MetaTileEntitySingleColumnCryogenicDistillationPlant extends MetaTi
                         .or(metaTileEntities(MultiblockAbility.REGISTRY.get(MultiblockAbility.IMPORT_FLUIDS).stream()
                                 .filter(mte -> !(mte instanceof MetaTileEntityMultiFluidHatch))
                                 .toArray(MetaTileEntity[]::new))
-                                .setMaxLayerLimited(1)))
+                                .setMaxLayerLimited(4)))
                 .where('D', states(getCasingState()))
                 .where('E', states(getCasingState())
                         .or(abilities(MultiblockAbility.PASSTHROUGH_HATCH)))
