@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(ZombieVillagerRoom.class)
+@Mixin(value = ZombieVillagerRoom.class, remap = false)
 public abstract class MixinZombieVillagerRoom extends MineshaftPiece {
 
     @Redirect(method = "addComponentParts", at = @At(value = "INVOKE", target = "Lcom/yungnickyoung/minecraft/bettermineshafts/world/generator/pieces/ZombieVillagerRoom;setBlockState(Lnet/minecraft/world/World;Lnet/minecraft/block/state/IBlockState;IIILnet/minecraft/world/gen/structure/StructureBoundingBox;)V"))
