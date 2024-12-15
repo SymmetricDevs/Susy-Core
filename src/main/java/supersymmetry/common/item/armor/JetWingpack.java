@@ -12,6 +12,7 @@ import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.GradientUtil;
 import gregtech.api.util.input.KeyBind;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
@@ -43,6 +44,7 @@ import supersymmetry.api.capability.IElytraFlyingProvider;
 import supersymmetry.api.capability.SuSyCapabilities;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.util.ElytraFlyingUtils;
+import supersymmetry.client.audio.MovingSoundJetEngine;
 import supersymmetry.client.renderer.handler.JetWingpackModel;
 
 import java.awt.*;
@@ -75,6 +77,9 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
 
     @SideOnly(Side.CLIENT)
     private ArmorUtils.ModularHUD HUD;
+
+    @SideOnly(Side.CLIENT)
+    protected MovingSoundJetEngine jetEngineSound;
 
     protected JetWingpack() {
         super(1, TANK_CAPACITY, GTValues.EV, EntityEquipmentSlot.CHEST);
@@ -133,6 +138,10 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
             }
         }
 
+        if (world.isRemote) {
+            handleSounds(player, engineActive);
+        }
+
         if (engineActive && player.isElytraFlying() && drainFuel(itemStack, getEnergyPerUse(), true)) {
             Vec3d lookVec = player.getLookVec();
             if (KeyBind.VANILLA_SNEAK.isKeyDown(player)) {
@@ -175,6 +184,20 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
         data.setBoolean("engineActive", engineActive);
 
         player.inventoryContainer.detectAndSendChanges();
+    }
+
+    // I hate this...
+    @SideOnly(Side.CLIENT)
+    public void handleSounds(EntityPlayer player, boolean engineActive) {
+        if (this.jetEngineSound == null) {
+            this.jetEngineSound = new MovingSoundJetEngine(player);
+            Minecraft.getMinecraft().getSoundHandler().playSound(jetEngineSound);
+        }
+        if (engineActive && !jetEngineSound.isPlaying()) {
+            jetEngineSound.startPlaying();
+        } else if (!engineActive && jetEngineSound.isPlaying()) {
+            jetEngineSound.stopPlaying();
+        }
     }
 
     @Override
