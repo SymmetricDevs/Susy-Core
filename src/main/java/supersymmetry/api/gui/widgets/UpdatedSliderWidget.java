@@ -5,7 +5,6 @@ import gregtech.api.gui.widgets.SliderWidget;
 import gregtech.api.util.Position;
 import gregtech.api.util.Size;
 import gregtech.api.util.function.FloatConsumer;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import supersymmetry.api.util.function.FloatSupplier;
@@ -31,13 +30,13 @@ public class UpdatedSliderWidget extends SliderWidget {
             self.getBackgroundArea().draw(pos.x, pos.y, size.width, size.height);
         }
         self.setSliderPosition((detector.get() - self.getMin()) / (self.getMax() - self.getMin()));
-        self.setDisplayString(getDisplayString());
+        self.setDisplayString2(getDisplayString());
 
         self.getSliderIcon().draw(pos.x + (int) (self.getSliderPosition() * (float) (size.width - 8)), pos.y, self.getSliderWidth(),
                 size.height);
         FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
-        fontRenderer.drawString(self.getDisplayString(),
-                pos.x + size.width / 2 - fontRenderer.getStringWidth(self.getDisplayString()) / 2,
+        fontRenderer.drawString(self.getDisplayString2(),
+                pos.x + size.width / 2 - fontRenderer.getStringWidth(self.getDisplayString2()) / 2,
                 pos.y + size.height / 2 - fontRenderer.FONT_HEIGHT / 2, self.getTextColor());
     }
 }

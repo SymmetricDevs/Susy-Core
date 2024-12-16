@@ -27,10 +27,10 @@ public interface SliderWidgetAccessor {
     float getMax();
 
     @Accessor("displayString")
-    String getDisplayString();
+    String getDisplayString2();
 
     @Accessor("displayString")
-    void setDisplayString(String displayString);
+    void setDisplayString2(String displayString);
 
     @Accessor("textColor")
     int getTextColor();
