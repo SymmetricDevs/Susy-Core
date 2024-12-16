@@ -4,6 +4,9 @@ import com.yungnickyoung.minecraft.bettermineshafts.world.generator.pieces.Mines
 import com.yungnickyoung.minecraft.bettermineshafts.world.generator.pieces.SideRoom;
 import net.minecraft.block.BlockFurnace;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,6 +21,11 @@ public abstract class MixinSideRoom extends MineshaftPiece {
         if (iBlockState.getBlock() instanceof BlockFurnace) {
             setBlockState(world, AIR, i1, i2, i3, structureBoundingBox);
         }
+    }
+
+    @Redirect(method = "addComponentParts", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;<init>(Lnet/minecraft/item/Item;I)V"))
+    private void susycore$removeCoal(ItemStack instance, Item itemIn, int amount) {
+        if (itemIn == Items.COAL) instance.setCount(0);
     }
 
 }
