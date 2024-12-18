@@ -1,0 +1,937 @@
+# Blocks
+tile.cooling_coil.manganese_iron_arsenic_phosphide.name=Катушка из фосфида марганца, железа и мышьяка
+tile.cooling_coil.praseodymium_nickel.name=Катушка из празеодима и никеля
+tile.cooling_coil.gadolinium_silicon_germanium.name=Катушка из гадолиния, кремния, германия
+tile.cooling_coil.tooltip_temperature=Базовая холодопроизводительность: §b%,dK
+tile.wire_coil.tooltip_evaporation=§8Бассейн для испарения
+tile.wire_coil.tooltip_energy_evaporating=§cВыработка тепла: §f%,d кДж/т
+
+tile.sintering_brick.sintering_block_brick.name=Корпус спекающей печи
+tile.sintering_brick.sintering_block_magnetoplated.name=Магнитопокрытый блок для спекания
+
+tile.coagulation_tank_wall.wooden_coagulation_tank_wall.name=Деревянная стенка коагуляционного резервуара
+tile.separator_rotor.steel.name=Ротор стального гравитационного сепаратора
+
+tile.alternator_coil.copper.name=Медная катушка генератора переменного тока
+tile.turbine_rotor.steel.name=Стальной турбинный блок
+tile.drill_head.steel.name=Стальная буровая головка
+
+tile.susy_multiblock_casing.silicon_carbide_casing.name=Прочный корпус из карбида кремния
+
+tile.susy_multiblock_casing.sieve_tray.name=Сито Лоток
+tile.susy_multiblock_casing.structural_packing.name=Структурная упаковка
+tile.susy_multiblock_casing.ulv_structural_casing.name=Базовый структурный корпус
+tile.susy_multiblock_casing.drone_pad.name=Площадка для дронов
+
+tile.serpentine.basic.name=Медный трубчатый змеевики
+
+tile.structural_block.base_structural_block.name=Структурный блок
+tile.structural_block.structural_block_low.name=Полосатый структурный блок
+tile.structural_block.structural_block_lowlight.name=Полосатый легкий структурный блок
+tile.structural_block.structural_block_danger_a.name=Предупреждение о структурном блокировании (A)
+tile.structural_block.structural_block_danger_b.name=Предупреждение о структурном блокировании (B)
+tile.structural_block.structural_block_danger_c.name=Предупреждение о структурном блокировании (C)
+tile.structural_block.structural_block_danger_d.name=Предупреждение о структурном блокировании (D)
+tile.structural_block.structural_block_column.name=Структурный блок-колонна
+tile.structural_block.structural_block_column_old.name=Колонна старого структурного блока
+tile.structural_block.structural_block_light.name=Структурный блок света
+tile.structural_block.structural_block_light_broken.name=Сломанный структурный блок света
+tile.structural_block.structural_block_light_cable.name=Структурный блок провода
+tile.structural_block.structural_block_instruments.name=Блок структурных инструментов
+tile.structural_block.structural_block_sign_0.name=Структурный блок с нулевым знаком
+tile.structural_block.structural_block_sign_1.name=Структурный блок знак 1
+tile.structural_block.structural_block_sign_2.name=Структурный блок знак 2
+tile.structural_block_1.structural_block_exposed.name=Открытый структурный блок (A)
+tile.structural_block_1.structural_block_exposed_1.name=Открытый структурный блок (B)
+tile.structural_block_1.structural_block_exposed_2.name=Открытый структурный блок (C)
+tile.structural_block_1.structural_block_danger_sign.name=Структурный блок знаков опасности
+tile.structural_block_1.structural_block_cable.name=Структурный блок-кабель (вертикальный)
+tile.structural_block_1.structural_block_cable_horizontal.name=Структурный блок-кабель (горизонтальный)
+tile.structural_block_1.structural_block_cable_junction.name=Структурный блок-кабель (поворотный)
+tile.structural_block_1.structural_block_pipocalypse.name=Структурные блочные плотные трубы
+tile.structural_block_1.structural_block_vent.name=Структурный блок вентиляционный
+tile.structural_block_1.structural_block_vent_broken.name=Структурный блок вентиляционного отверстия (сломан)
+
+tile.deposit_block.orthomagmatic.name=Блок ортомагматических месторождений
+tile.deposit_block.metamorphic.name=Блок метаморфических месторождений
+tile.deposit_block.sedimentary.name=Блок осадочных месторождений
+tile.deposit_block.hydrothermal.name=Блок гидротермальных месторождений
+tile.deposit_block.alluvial.name=Блок россыпных месторождений
+tile.deposit_block.magmatic_hydrothermal.name=Блок магматических гидротермальных месторождений
+
+tile.resource_block.bauxite.name=Бокситовая руда
+tile.resource_block.caliche.name=CalicheКаличе
+tile.resource_block.non_marine_evaporite.name=Неморское месторождение эвапорита
+tile.resource_block.halide_evaporite.name=Месторождение галоидных эвапоритов
+tile.resource_block.sulfate_evaporite.name=Сульфат эвапорит
+tile.resource_block.carbonate_evaporite.name=Карбонатно-эвапоритовое месторождение
+tile.resource_block.monazite_alluvial.name=Россыпное месторождение монацита
+tile.resource_block.bastnasite_alluvial.name=Аллювиальное месторождение бастназита
+tile.resource_block.euxenite_alluvial.name=Аллювиальное месторождение эвксенитов
+tile.resource_block.xenotime_alluvial.name=Аллювиальные ксенотимовые отложения
+tile.resource_block.gold_alluvial.name=Месторождение россыпного золота
+tile.resource_block.platinum_placer.name=Платиновая россыпь
+tile.resource_block.phosphorite.name=Фосфоритовое месторождение
+tile.resource_block.potash.name=Калийное месторождение
+tile.resource_block.sulfur.name=Месторождение серы
+tile.resource_block.coal.name=Месторождение угля
+tile.resource_block_1.native_copper.name=Месторождение самородной меди
+
+
+tile.multiblock_tank.clarifier.name=Осветлительная Ванна
+tile.multiblock_tank.flotation.name=Ванна для пенной флотации
+
+tile.evaporation_bed.dirt.name=Испарительная кровать
+
+tile.electrode_assembly.carbon.name=Углеродный электрод в сборе
+
+tile.home_block.home_block_home.name="Домашний блок (по умолчанию)»
+tile.home.allowed=Набор спавна
+tile.home.denied=Не могу установить спавн
+
+tile.home_block.home_primitive.name=Домашний блок
+tile.home_block.home_primitive.tooltip=Примитивный
+tile.home_block.home_gt_brutalist.name=Домашний блок
+tile.home_block.home_gt_brutalist.tooltip=GT Бруталист
+tile.home_block.home_renewal_brutalist.name=Домашний блок
+tile.home_block.home_renewal_brutalist.tooltip=Обновление Бруталиста
+tile.home_block.home_scifi.name=Домашний блок
+tile.home_block.home_scifi.tooltip=Научная фантастика
+
+# Rocks
+tile.susy_stone_smooth.gabbro.name=Габбро
+tile.susy_stone_smooth.gneiss.name=Гнейс
+tile.susy_stone_smooth.graphite.name=Графит
+tile.susy_stone_smooth.limestone.name=Известняк
+tile.susy_stone_smooth.mica.name=Слюда
+tile.susy_stone_smooth.phyllite.name=Филлит
+tile.susy_stone_smooth.quartzite.name=Кварцит
+tile.susy_stone_smooth.shale.name=Сланец
+tile.susy_stone_smooth.slate.name=сланец
+tile.susy_stone_smooth.soapstone.name=Мыльный камень
+tile.susy_stone_smooth.kimberlite.name=Кимберлит
+tile.susy_stone_cobble.gabbro.name=Габбро Булыжник
+tile.susy_stone_cobble.gneiss.name=Гнейсовый булыжник
+tile.susy_stone_cobble.graphite.name=Графитовый булыжник
+tile.susy_stone_cobble.limestone.name=Известняковый булыжник
+tile.susy_stone_cobble.mica.name=Слюда Булыжник
+tile.susy_stone_cobble.phyllite.name=Филлитовый булыжник
+tile.susy_stone_cobble.quartzite.name=Кварцитовый булыжник
+tile.susy_stone_cobble.shale.name=Сланцевый булыжник
+tile.susy_stone_cobble.slate.name=Сланцевый булыжник
+tile.susy_stone_cobble.soapstone.name=Мыльный камень Булыжник
+tile.susy_stone_cobble.kimberlite.name=Кимберлитовый булыжник
+tile.susy_stone_bricks.gabbro.name=Габбро Кирпичи
+tile.susy_stone_bricks.gneiss.name=Гнейсовые кирпичи
+tile.susy_stone_bricks.graphite.name=Графитовый кирпич
+tile.susy_stone_bricks.limestone.name=Известняковые кирпичи
+tile.susy_stone_bricks.mica.name=Слюдяные кирпичи
+tile.susy_stone_bricks.phyllite.name=Филлитовый кирпич
+tile.susy_stone_bricks.quartzite.name=Кварцитовый кирпич
+tile.susy_stone_bricks.shale.name=Сланцевый кирпич
+tile.susy_stone_bricks.slate.name=Сланцевые Кирпичи
+tile.susy_stone_bricks.soapstone.name=Кирпичи из мыльного камня
+tile.susy_stone_bricks.kimberlite.name=Кимберлитовые кирпичи
+
+# Materials
+susy.material.manganese_iron_arsenic_phosphide=Марганец-железо-мышьяк-фосфид
+susy.material.praseodymium_nickel=Празеодим-никель
+susy.material.gadolinium_silicon_germanium=Гадолиний Кремний Германий
+susy.material.latex=Латекс
+susy.material.mud=Грязь
+susy.material.sea_water=Морская вода
+
+# Rock/Mineral Materials
+susy.material.fluorite=Флюорит
+susy.material.gabbro=Габбро
+susy.material.slate=сланец
+susy.material.shale=Сланец
+susy.material.phyllite=Филлит
+susy.material.limestone=Известняк
+susy.material.gneiss=Гнейс
+susy.material.kimberlite=Кимберлит
+susy.material.muscovite=Мусковит
+susy.material.dolomite=Доломит
+susy.material.augite=авгит
+susy.material.chlinochlore=Клинохлор
+susy.material.bytownite=Битовнит
+susy.material.labradorite=Лабрадорит
+susy.material.andesine=Андезин
+susy.material.oligoclase=Олигоклаз
+susy.material.albite=Альбит
+susy.material.anorthite=Анортит
+susy.material.forsterite=Форстерит
+susy.material.lizardite=Лизардит
+
+# Ore Prefixes (%s is the localised material name)
+item.material.oreprefix.oreGabbro=Габбро %s руды
+item.material.oreprefix.oreGneiss=Гнейс %s руды
+item.material.oreprefix.oreGraphite=Графит %s руды
+item.material.oreprefix.oreLimestone=Известняк %s руды
+item.material.oreprefix.oreMica=Слюда %s руды
+item.material.oreprefix.orePhyllite=Филлит %s руды
+item.material.oreprefix.oreQuartzite=Кварцит %s руды
+item.material.oreprefix.oreShale=Сланец %s руды
+item.material.oreprefix.oreSlate=Сланец %s руды
+item.material.oreprefix.oreSoapstone=Мыльный камень %s руды
+item.material.oreprefix.oreKimberlite=Кимберлит %s руды
+item.material.oreprefix.catalystBed=%s Катализатор
+item.material.oreprefix.catalystPellet=%s Гранулы катализатора
+item.material.oreprefix.dustFlotated=Всплывшая пыль %s
+item.material.oreprefix.dustConcentrate=%s Концентрат пыли
+item.material.oreprefix.dustSifted=Просеяно %s пыли
+item.material.oreprefix.sheetedFrame=%s Листовая рама Коробка
+item.material.oreprefix.fiber=%s Волокно
+item.material.oreprefix.fiberWet=Мокрые волокна %s
+item.material.oreprefix.thread=%s Нить
+
+susy.fluid.impure_slurry=Нечистая суспензия %s
+susy.fluid.slurry=%s суспензия
+susy.fluid.slurry=%s Шлам
+
+# Tooltip Warnings
+gregtech.machine.steam_extractor_cannot_melt_items.warning=Паровые экстракторы не могут расплавить предметы!
+
+# Machines/Multiblocks
+gregtech.machine.magnetic_refrigerator.name=Магнитный Холодильник
+gregtech.multiblock.magnetic_refrigerator.min_temperature=§Предел температуры: %s
+
+gregtech.machine.sintering_oven.name=Спекающая печь
+gregtech.multiblock.sintering_oven.can_use_plasma=Плазма включена: %s
+gregtech.multiblocks.sintering_oven.use_plasma.affirmative=Да
+gregtech.multiblocks.sintering_oven.use_plasma.negative=Нет
+
+gregtech.machine.coagulation_tank.name=Коагуляционный резервуар
+gregtech.machine.coagulation_tank.tooltip=Нельзя использовать для остановки кровотечения..
+gregtech.machine.coagulation_tank.tooltip.1=Получает одну параллель на блок дольше
+gregtech.machine.drum.lead.name=Свинцовая бочка
+gregtech.machine.drum.brass.name=Латунная бочка
+
+gregtech.machine.polymerization_tank.name=Бак для полимеризации
+gregtech.machine.fluidized_bed_reactor.name=Реактор с псевдоожиженным слоем
+
+gregtech.machine.electrolytic_cell.name=Электролитическая ячейка
+
+gregtech.machine.coking_tower.name=Коксовая башня
+gregtech.machine.vacuum_distillation_tower.name=Вакуумная дистилляционная башня
+gregtech.machine.catalytic_reformer.name=Каталитический риформер
+gregtech.machine.pressure_swing_adsorber.name=Адсорбер с переменным давлением
+gregtech.machine.reaction_furnace.name=Реакционная печь
+
+gregtech.machine.fermentation_vat.name=Бродильный чан
+gregtech.machine.ore_sorter.name=Сортировщик руды
+gregtech.machine.gravity_separator.name=Гравитационный сепаратор
+gregtech.machine.condenser.name=Конденсатор
+gregtech.machine.cooling_unit.name=Охлаждающий агрегат
+gregtech.machine.gas_turbine.name=Газовая турбина
+gregtech.machine.heat_exchanger.name=Теплообменник
+gregtech.machine.heat_radiator.name=Тепловой радиатор
+gregtech.multiblock.heat_radiator.tooltip.1=КПД пропорционален площади рассеивания.
+gregtech.multiblock.heat_radiator.tooltip.2=§bРазмер: от §f3x3 до 11x16.
+gregtech.machine.heat_radiator.parallel=Максимальная параллель: %s
+gregtech.machine.heat_radiator.parallel_hover=Параллельное количество определяется размером трубного блока.
+gregtech.machine.large_weapons_factory.name=Большой оружейный завод
+gregtech.machine.magnetohydrodynamic_generator.name=Магнитогидродинамический (МГД) генератор
+gregtech.machine.mining_drill.name=Горный бур
+gregtech.machine.quencher.name=Утопитель
+gregtech.machine.railroad_engineering_station.name=Железнодорожная инженерная станция
+gregtech.machine.railroad_engineering_station.tooltip=Поместите иммерсивные железнодорожные пути посередине, чтобы сформировать мультиблок.
+gregtech.machine.railroad_engineering_station.tooltip.1=Бетон под путями можно заменить любым блоком, в том числе трубным или воздушным.
+
+gregtech.machine.evaporation_pool.name=Испарительный бассейн
+gregtech.machine.evaporation_pool.tooltip.info=Максимальный внутренний квадрат %dx%d, минимум 1x1. Читайте вкладку информации и информацию об инструменте для получения более подробной информации.
+gregtech.machine.evaporation_pool.tooltip.structure_info=Бассейны испарения могут быть сформированы с любыми внутренними размерами от 1x1 до %dx%d, даже если они неквадратные. Чтобы сформировать полноценный испарительный бассейн с подогревом, змеевики следует разместить по схеме, показанной на предварительном просмотре. Более подробное объяснение можно найти на вкладке «Информация» в JEI.
+gregtech.top.evaporation_pool_heated_preface=Схема катушки:
+gregtech.top.evaporation_pool_is_heated=ДЕЙСТВИТЕЛЬНЫЙ; Может быть с подогревом.
+gregtech.top.evaporation_pool_not_heated=НЕВЕРНЫЙ; Не будет нагреваться.
+gregtech.top.evaporation_pool.energy_transferred=Сохраненная тепловая энергия:
+gregtech.mutliblock.evaporation_pool.rolling_average=Средняя энергия в:
+gregtech.multiblock.evaporation_pool.joules_per_tick=J/t
+gregtech.top.evaporation_pool.kilojoules=кДж
+gregtech.multiblock.evaporation_pool.description=Испарительный бассейн имеет внутренние размеры, указанные в его описании, и бетонную внешнюю поверхность для размещения входов/контроллеров, не более двух входов каждого типа. Контроллер можно разместить в любом месте выступающего нижнего ряда «перед» салоном. Испарительный бассейн может выполнять рецепты как без питания, так и с питанием. Для питания рецептов мультиблок необходимо будет сформировать со «змееподобным» рисунком катушки однородного типа, как показано на превью. Испарительные бассейны без электропитания не требуют никаких змеевиков. Скорость любого рецепта зависит от тепла, подаваемого в мульти, которое зависит от количества внутренних блоков, подвергающихся воздействию солнечного света, подаваемой энергии и уровня катушки. [1 EU = 10 Дж в настоящее время]
+gregtech.multiblock.evaporation_pool.average_speed=Средняя скорость:
+gregtech.multiblock.evaporation_pool.exposed_blocks=Количество открытых блоков:
+
+gregtech.machine.primitive_mud_pump.name=Примитивный грязевой насос
+gregtech.machine.primitive_mud_pump.tooltip=Работает только в речных биомах между Y=64 и Y=80.
+gregtech.machine.basic_steam_turbine.name=Большая паровая турбина
+gregtech.machine.basic_gas_turbine.name=Большая газовая турбина
+gregtech.machine.ocean_pumper.name=Океанский насос
+gregtech.machine.ocean_pumper.tooltip=Работает только в биомах океана между Y=70 и Y=75.
+gregtech.machine.advanced_arc_furnace.name=Усовершенствованная дуговая печь
+gregtech.machine.clarifier.name=Осветлитель
+gregtech.machine.dumper.name=Самосвал
+gregtech.machine.evaporation_pool.name=Испарительный бассейн
+gregtech.machine.flare_stack.name=Факельная установка
+gregtech.machine.flare_stack.height=Высота стека: %s §9блоков
+gregtech.machine.flare_stack.rate=Скорость сжигания: %s
+gregtech.machine.flare_stack.rate_hover=Множитель скорости сжигания, устанавливаемый высотой факельной трубы.
+gregtech.machine.flare_stack.tooltip=Промышленный распространитель рака легких.
+gregtech.machine.flare_stack.tooltip.1=§6Базовая скорость разгорания:§7 §f%d L каждые 10 тиков
+gregtech.machine.flare_stack.tooltip.2=Удваивает скорость за каждый блок выше 5.
+gregtech.machine.smoke_stack.name=Дымовая труба
+gregtech.machine.smoke_stack.height=Высота стека: %s §9блоков
+gregtech.machine.smoke_stack.rate=Скорость истощения: %s
+gregtech.machine.smoke_stack.rate_hover=Множитель скорости истощения, зависящий от высоты дымовой трубы.
+gregtech.machine.smoke_stack.tooltip=Для обогащения атмосферы вашей планеты.
+gregtech.machine.smoke_stack.tooltip.1=§8Базовый уровень истощения:§7 §f%d L каждые 10 тиков
+gregtech.machine.smoke_stack.tooltip.2=Удваивает скорость за каждый блок выше 5.
+gregtech.machine.dumper.name=Самосвал
+gregtech.machine.dumper.rate=Уровень сброса: %s
+gregtech.machine.dumper.tooltip=Загрязняет все ваши местные экосистемы.
+gregtech.machine.dumper.tooltip.1=§2Базовая ставка сброса:§7 §f %d L каждые 10 тиков
+gregtech.machine.froth_flotation_tank.name=Пенный флотационный резервуар
+gregtech.machine.multi_stage_flash_distiller.name=Многоступенчатый флэш-дистиллятор
+gregtech.machine.high_temperature_distillation_tower.name=Высокотемпературная дистилляционная башня
+gregtech.machine.rotary_kiln.name=Вращающаяся печь
+gregtech.machine.low_pressure_cryogenic_distillation_plant.name=Криогенная перегонная установка низкого давления
+gregtech.machine.high_pressure_cryogenic_distillation_plant.name=Криогенная перегонная установка высокого давления
+gregtech.machine.single_column_cryogenic_distillation_plant.name=Одноколонная криогенная дистилляционная установка
+gregtech.machine.reverberatory_furnace.name=Реверберационная печь
+gregtech.machine.blender.name=Блендер
+
+gregtech.machine.drone_pad.name=Drone Pad
+gregtech.machine.primitive_smelter.name=Примитивный плавильный печь
+
+gregtech.machine.primitive_item_import.name=Примитивная шина импорта  предметов
+gregtech.machine.primitive_item_import.tooltip=Только для использования с примитивной плавильной печью.
+gregtech.machine.primitive_item_export.name=Примитивная шина экспорта  предметов экспорта
+gregtech.machine.primitive_item_export.tooltip=Только для использования с примитивной плавильной печью.
+
+# Properties
+gregtech.recipe.plasma_requirement=Требуется плазма: %s
+gregtech.recipe.catalyst=Катализатор: %s %s
+gregtech.recipe.blocks=Блоки: %s
+gregtech.recipe.evaporation=Требуемая энергия: %d Дж/т
+gregtech.recipe.cryogenic_environment=Требуется криогенная среда
+
+# Latex Collector
+gregtech.machine.latex_collector.steam=Нужен Пар!
+gregtech.machine.latex_collector.tooltip=Извлекает жидкости из соседних бревен.
+gregtech.machine.latex_collector.bronze.name=Паровой сборщик латекса
+gregtech.machine.latex_collector.steel.name=Паровой сборщик латекса высокого давления
+gregtech.machine.latex_collector.lv.name=Обычный сборщик латекса
+gregtech.machine.latex_collector.mv.name=Улучшеный сборщик латекса
+gregtech.machine.latex_collector.hv.name=Улучшеный сборщик латекса II
+gregtech.machine.latex_collector.ev.name=Улучшеный сборщик латекса III
+
+# Vulcanizing Press
+gregtech.machine.vulcanizing_press.bronze.name=Паровой вулканизационный пресс
+gregtech.machine.vulcanizing_press.steel.name=Паровой вулканизационный пресс высокого давления
+gregtech.machine.vulcanizing_press.lv.name=Базовый вулканизационный пресс
+gregtech.machine.vulcanizing_press.mv.name=Улучшеный вулканизационный пресс
+gregtech.machine.vulcanizing_press.hv.name=Улучшеный вулканизационный пресс II
+gregtech.machine.vulcanizing_press.ev.name=Улучшеный вулканизационный пресс III
+
+# Steam Mixer
+gregtech.machine.mixer.bronze.name=Паровой смеситель
+gregtech.machine.mixer.steel.name=Паровой смеситель высокого давления
+
+# Roaster
+gregtech.machine.roaster.bronze.name=Паровой ростер
+gregtech.machine.roaster.steel.name=Паровая жаровня высокого давления
+gregtech.machine.roaster.lv.name=Обычный ростер
+gregtech.machine.roaster.mv.name=Улучшеный ростер
+gregtech.machine.roaster.hv.name=Улучшеный ростер II
+gregtech.machine.roaster.ev.name=Улучшеный ростер III
+gregtech.machine.roaster.iv.name=Превосходный ростер
+gregtech.machine.roaster.luv.name=Превосходный ростер II
+gregtech.machine.roaster.zpm.name=Превосходный ростер III
+gregtech.machine.roaster.uv.name=Безупречный ростер
+gregtech.machine.roaster.uhv.name=Идеальный ростер
+gregtech.machine.roaster.uev.name=Идеальный ростер II
+gregtech.machine.roaster.uiv.name=Идеальный ростер III
+gregtech.machine.roaster.uxv.name=Идеальный ростер IV
+gregtech.machine.roaster.opv.name=Совершенный ростер
+
+# Vacuum Chamber
+gregtech.machine.vacuum_chamber.bronze.name=Паровая вакуумная камера
+gregtech.machine.vacuum_chamber.steel.name=Паровая вакуумная камера высокого давления
+gregtech.machine.vacuum_chamber.lv.name=Обычная вакуумная камера
+gregtech.machine.vacuum_chamber.mv.name=Улучшеная вакуумная камера
+gregtech.machine.vacuum_chamber.hv.name=Улучшеная вакуумная камера II
+gregtech.machine.vacuum_chamber.ev.name=Улучшеная вакуумная камера III
+gregtech.machine.vacuum_chamber.iv.name=Превосходная вакуумная камера
+gregtech.machine.vacuum_chamber.luv.name=Превосходная вакуумная камера II
+gregtech.machine.vacuum_chamber.zpm.name=Превосходная вакуумная камера III
+gregtech.machine.vacuum_chamber.uv.name=Безупречная вакуумная камера
+gregtech.machine.vacuum_chamber.uhv.name=Идеальная вакуумная камера
+gregtech.machine.vacuum_chamber.uev.name=Идеальная вакуумная камера II
+gregtech.machine.vacuum_chamber.uiv.name=Идеальная вакуумная камера III
+gregtech.machine.vacuum_chamber.uxv.name=Идеальная вакуумная камера IV
+gregtech.machine.vacuum_chamber.opv.name=Совершенная вакуумная камера
+
+# Р.Р.Н.П (CSTR)
+gregtech.machine.continuous_stirred_tank_reactor.lv.name=Обычный Р.Н.П. реактор
+gregtech.machine.continuous_stirred_tank_reactor.mv.name=Улучшеный Р.Н.П. реактор
+gregtech.machine.continuous_stirred_tank_reactor.hv.name=Улучшеный Р.Н.П. реактор II
+gregtech.machine.continuous_stirred_tank_reactor.ev.name=Улучшеный Р.Н.П. реактор III
+gregtech.machine.continuous_stirred_tank_reactor.iv.name=Превосходный Р.Н.П. реактор
+gregtech.machine.continuous_stirred_tank_reactor.luv.name=Превосходный Р.Н.П. реактор II
+gregtech.machine.continuous_stirred_tank_reactor.zpm.name=Превосходный Р.Н.П. реактор III
+gregtech.machine.continuous_stirred_tank_reactor.uv.name=Безупречный Р.Н.П. реактор
+gregtech.machine.continuous_stirred_tank_reactor.uhv.name=Идеальный Р.Н.П. реактор 
+gregtech.machine.continuous_stirred_tank_reactor.uev.name=Идеальный Р.Н.П. реактор II
+gregtech.machine.continuous_stirred_tank_reactor.uiv.name=Идеальный Р.Н.П. реактор III
+gregtech.machine.continuous_stirred_tank_reactor.uxv.name=Идеальный Р.Н.П. реактор IV
+gregtech.machine.continuous_stirred_tank_reactor.opv.name=Совершенный Р.Н.П. реактор
+
+# реактор с неподвижным слоем (Р.Н.С)
+gregtech.machine.fixed_bed_reactor.lv.name=Обычный реактор Р.Н.С
+gregtech.machine.fixed_bed_reactor.mv.name=Улучшеный реактор Р.Н.С
+gregtech.machine.fixed_bed_reactor.hv.name=Улучшеный реактор Р.Н.С II
+gregtech.machine.fixed_bed_reactor.ev.name=Улучшеный реактор Р.Н.С III
+gregtech.machine.fixed_bed_reactor.iv.name=Превосходный реактор Р.Н.С
+gregtech.machine.fixed_bed_reactor.luv.name=Превосходный реактор Р.Н.С II
+gregtech.machine.fixed_bed_reactor.zpm.name=Превосходный реактор Р.Н.С III
+gregtech.machine.fixed_bed_reactor.uv.name=Безупречный реактор Р.Н.С
+gregtech.machine.fixed_bed_reactor.uhv.name=Идеальный реактор Р.Н.С
+gregtech.machine.fixed_bed_reactor.uev.name=Идеальный реактор Р.Н.С II
+gregtech.machine.fixed_bed_reactor.uiv.name=Идеальный реактор Р.Н.С III
+gregtech.machine.fixed_bed_reactor.uxv.name=Идеальный реактор Р.Н.С IV
+gregtech.machine.fixed_bed_reactor.opv.name=Совершенный реактор Р.Н.С
+
+# Реактор с орошаемым слоем (Trickle Bed Reactor)
+gregtech.machine.trickle_bed_reactor.lv.name=Обычный Р.О.С реактор
+gregtech.machine.trickle_bed_reactor.mv.name=Улучшеный Р.О.С реактор
+gregtech.machine.trickle_bed_reactor.hv.name=Улучшеный Р.О.С реактор II
+gregtech.machine.trickle_bed_reactor.ev.name=Улучшеный Р.О.С реактор III
+gregtech.machine.trickle_bed_reactor.iv.name=Превосходный Р.О.С реактор
+gregtech.machine.trickle_bed_reactor.luv.name=Превосходный Р.О.С реактор II
+gregtech.machine.trickle_bed_reactor.zpm.name=Превосходный Р.О.С реактор III
+gregtech.machine.trickle_bed_reactor.uv.name=Безупречный Р.О.С реактор
+gregtech.machine.trickle_bed_reactor.uhv.name=Идеальный Р.О.С реактор
+gregtech.machine.trickle_bed_reactor.uev.name=Идеальный Р.О.С реактор II
+gregtech.machine.trickle_bed_reactor.uiv.name=Идеальный Р.О.С реактор III
+gregtech.machine.trickle_bed_reactor.uxv.name=Идеальный Р.О.С реактор IV
+gregtech.machine.trickle_bed_reactor.opv.name=Совершенный Р.О.С реактор
+
+# реактор с барботажной колонной (Р.Б.К) (Bubble Column Reactor)
+gregtech.machine.bubble_column_reactor.lv.name=Обычный Р.Б.К реактор
+gregtech.machine.bubble_column_reactor.mv.name=Улучшеный Р.Б.К реактор
+gregtech.machine.bubble_column_reactor.hv.name=Улучшеный Р.Б.К реактор II
+gregtech.machine.bubble_column_reactor.ev.name=Улучшеный Р.Б.К реактор III
+gregtech.machine.bubble_column_reactor.iv.name=Превосходный Р.Б.К реактор
+gregtech.machine.bubble_column_reactor.luv.name=Превосходный Р.Б.К реактор II
+gregtech.machine.bubble_column_reactor.zpm.name=Превосходный Р.Б.К реактор III
+gregtech.machine.bubble_column_reactor.uv.name=Безупречный Р.Б.К реактор
+gregtech.machine.bubble_column_reactor.uhv.name=Идеальный Р.Б.К реактор
+gregtech.machine.bubble_column_reactor.uev.name=Идеальный Р.Б.К реактор II
+gregtech.machine.bubble_column_reactor.uiv.name=Идеальный Р.Б.К реактор III
+gregtech.machine.bubble_column_reactor.uxv.name=Идеальный Р.Б.К реактор IV
+gregtech.machine.bubble_column_reactor.opv.name=Совершенный Р.Б.К реактор
+
+# реактор периодического действия (Р.П.Д) (Batch Reactor)
+gregtech.machine.batch_reactor.lv.name=Обычный Р.П.Д реактор 
+gregtech.machine.batch_reactor.mv.name=Улучшеный Р.П.Д реактор
+gregtech.machine.batch_reactor.hv.name=Улучшеный Р.П.Д реактор II
+gregtech.machine.batch_reactor.ev.name=Улучшеный Р.П.Д реактор III
+gregtech.machine.batch_reactor.iv.name=Превосходный Р.П.Д реактор
+gregtech.machine.batch_reactor.luv.name=Превосходный Р.П.Д реактор II
+gregtech.machine.batch_reactor.zpm.name=Превосходный Р.П.Д реактор III
+gregtech.machine.batch_reactor.uv.name=Безупречный Р.П.Д реактор
+gregtech.machine.batch_reactor.uhv.name=Идеальный Р.П.Д реактор
+gregtech.machine.batch_reactor.uev.name=Идеальный Р.П.Д реактор II
+gregtech.machine.batch_reactor.uiv.name=Идеальный Р.П.Д реактор III
+gregtech.machine.batch_reactor.uxv.name=Идеальный Р.П.Д реактор IV
+gregtech.machine.batch_reactor.opv.name=Совершенный Р.П.Д реактор
+
+# Crystallizer
+gregtech.machine.crystallizer.lv.name=Обычный кристаллизатор
+gregtech.machine.crystallizer.mv.name=Улучшеный кристаллизатор
+gregtech.machine.crystallizer.hv.name=Улучшеный кристаллизатор II
+gregtech.machine.crystallizer.ev.name=Улучшеный кристаллизатор III
+gregtech.machine.crystallizer.iv.name=Превосходный кристаллизатор
+gregtech.machine.crystallizer.luv.name=Превосходный кристаллизатор II
+gregtech.machine.crystallizer.zpm.name=Превосходный кристаллизатор III
+gregtech.machine.crystallizer.uv.name=Безупречный кристаллизатор
+gregtech.machine.crystallizer.uhv.name=Идеальный кристаллизатор
+gregtech.machine.crystallizer.uev.name=Идеальный кристаллизатор II
+gregtech.machine.crystallizer.uiv.name=Идеальный кристаллизатор III
+gregtech.machine.crystallizer.uxv.name=Идеальный кристаллизатор IV
+gregtech.machine.crystallizer.opv.name=Совершенный кристаллизатор
+
+# Dryer
+gregtech.machine.dryer.lv.name=Обычная сушилка
+gregtech.machine.dryer.mv.name=Улучшеная сушилка
+gregtech.machine.dryer.hv.name=Улучшеная сушилка II
+gregtech.machine.dryer.ev.name=Улучшеная сушилка III
+gregtech.machine.dryer.iv.name=Превосходная сушилка
+gregtech.machine.dryer.luv.name=Превосходная сушилка II
+gregtech.machine.dryer.zpm.name=Превосходная сушилка III
+gregtech.machine.dryer.uv.name=Безупречная сушилка
+gregtech.machine.dryer.uhv.name=Идеальная сушилка
+gregtech.machine.dryer.uev.name=Идеальная сушилка II
+gregtech.machine.dryer.uiv.name=Идеальная сушилка III
+gregtech.machine.dryer.uxv.name=Идеальная сушилка IV
+gregtech.machine.dryer.opv.name=Совершенная сушилка
+
+# Ion Exchange Column
+gregtech.machine.ion_exchange_column.lv.name=Обычная ионообменная колонка
+gregtech.machine.ion_exchange_column.mv.name=Улучшеная ионообменная колонка
+gregtech.machine.ion_exchange_column.hv.name=Улучшеная ионообменная колонка II
+gregtech.machine.ion_exchange_column.ev.name=Улучшеная ионообменная колонка III
+gregtech.machine.ion_exchange_column.iv.name=Превосходная ионообменная колонка
+gregtech.machine.ion_exchange_column.luv.name=Превосходная ионообменная колонка II
+gregtech.machine.ion_exchange_column.zpm.name=Превосходная ионообменная колонка III
+gregtech.machine.ion_exchange_column.uv.name=Безупречная ионообменная колонка
+gregtech.machine.ion_exchange_column.uhv.name=Идеальная ионообменная колонка
+gregtech.machine.ion_exchange_column.uev.name=Идеальная ионообменная колонка II
+gregtech.machine.ion_exchange_column.uiv.name=Идеальная ионообменная колонка III
+gregtech.machine.ion_exchange_column.uxv.name=Идеальная ионообменная колонка IV
+gregtech.machine.ion_exchange_column.opv.name=Совершенная ионообменная колонка
+
+# Zone Refiner
+gregtech.machine.zone_refiner.lv.name=Обычный зонный рафинер
+gregtech.machine.zone_refiner.mv.name=Улучшеный зонный рафинер
+gregtech.machine.zone_refiner.hv.name=Улучшеный зонный рафинер II
+gregtech.machine.zone_refiner.ev.name=Улучшеный зонный рафинер III
+gregtech.machine.zone_refiner.iv.name=Превосходный зонный рафинер
+gregtech.machine.zone_refiner.luv.name=Превосходный зонный рафинер II
+gregtech.machine.zone_refiner.zpm.name=Превосходный зонный рафинер III
+gregtech.machine.zone_refiner.uv.name=Безупречный зонный рафинер
+gregtech.machine.zone_refiner.uhv.name=Идеальный зонный рафинер
+gregtech.machine.zone_refiner.uev.name=Идеальный зонный рафинер II
+gregtech.machine.zone_refiner.uiv.name=Идеальный зонный рафинер III
+gregtech.machine.zone_refiner.uxv.name=Идеальный зонный рафинер IV
+gregtech.machine.zone_refiner.opv.name=Совершенный зонный рафинер
+
+# Tube Furnace
+gregtech.machine.tube_furnace.lv.name=Обычная трубчатая печь
+gregtech.machine.tube_furnace.mv.name=Улучшеная трубчатая печь
+gregtech.machine.tube_furnace.hv.name=Улучшеная трубчатая печь II
+gregtech.machine.tube_furnace.ev.name=Улучшеная трубчатая печь III
+gregtech.machine.tube_furnace.iv.name=Превосходная трубчатая печь
+gregtech.machine.tube_furnace.luv.name=Превосходная трубчатая печь II
+gregtech.machine.tube_furnace.zpm.name=Превосходная трубчатая печь III
+gregtech.machine.tube_furnace.uv.name=Безупречная трубчатая печь
+gregtech.machine.tube_furnace.uhv.name=Идеальная трубчатая печь
+gregtech.machine.tube_furnace.uev.name=Идеальная трубчатая печь II
+gregtech.machine.tube_furnace.uiv.name=Идеальная трубчатая печь III
+gregtech.machine.tube_furnace.uxv.name=Идеальная трубчатая печь IV
+gregtech.machine.tube_furnace.opv.name=Совершенная трубчатая печь
+
+# UV Light Box
+gregtech.machine.uv_light_box.lv.name=Обычный УФ-световой короб
+gregtech.machine.uv_light_box.mv.name=Улучшеный УФ-световой короб
+gregtech.machine.uv_light_box.hv.name=Улучшеный УФ-световой короб II
+gregtech.machine.uv_light_box.ev.name=Улучшеный УФ-световой короб III
+gregtech.machine.uv_light_box.iv.name=Превосходный УФ-световой короб
+gregtech.machine.uv_light_box.luv.name=Превосходный УФ-световой короб II
+gregtech.machine.uv_light_box.zpm.name=Превосходный УФ-световой короб III
+gregtech.machine.uv_light_box.uv.name=Безупречный УФ-световая коробка
+gregtech.machine.uv_light_box.uhv.name=Идеальный УФ-световой короб
+gregtech.machine.uv_light_box.uev.name=Идеальный УФ-световой короб II
+gregtech.machine.uv_light_box.uiv.name=Идеальный УФ-световой короб III
+gregtech.machine.uv_light_box.uxv.name=Идеальный УФ-световой короб IV
+gregtech.machine.uv_light_box.opv.name=Совершенный УФ-световой короб
+
+# Установка химического осаждения из газовой фазы (Х.О.Г.Ф.) (CVD) 
+gregtech.machine.cvd.lv.name=Обычная Х.О.Г.Ф. установка
+gregtech.machine.cvd.mv.name=Улучшеная Х.О.Г.Ф. установка
+gregtech.machine.cvd.hv.name=Улучшеная Х.О.Г.Ф. установка II
+gregtech.machine.cvd.ev.name=Улучшеная Х.О.Г.Ф. установка III
+gregtech.machine.cvd.iv.name=Превосходная Х.О.Г.Ф. установка
+gregtech.machine.cvd.luv.name=Превосходная Х.О.Г.Ф. установка II
+gregtech.machine.cvd.zpm.name=Превосходная Х.О.Г.Ф. установка III
+gregtech.machine.cvd.uv.name=Безупречная Х.О.Г.Ф. установка
+gregtech.machine.cvd.uhv.name=Идеальная Х.О.Г.Ф. установка
+gregtech.machine.cvd.uev.name=Идеальная Х.О.Г.Ф. установка II
+gregtech.machine.cvd.uiv.name=Идеальная Х.О.Г.Ф. установка III
+gregtech.machine.cvd.uxv.name=Идеальная Х.О.Г.Ф. установка IV
+gregtech.machine.cvd.opv.name=Совершенная Х.О.Г.Ф. установка
+
+# Ion Implanter
+gregtech.machine.ion_implanter.lv.name=Обычный ионный имплантатор
+gregtech.machine.ion_implanter.mv.name=Улучшеный ионный имплантатор
+gregtech.machine.ion_implanter.hv.name=Улучшеный ионный имплантатор II
+gregtech.machine.ion_implanter.ev.name=Улучшеный ионный имплантатор III
+gregtech.machine.ion_implanter.iv.name=Превосходный ионный имплантатор
+gregtech.machine.ion_implanter.luv.name=Превосходный ионный имплантатор II
+gregtech.machine.ion_implanter.zpm.name=Превосходный ионный имплантатор III
+gregtech.machine.ion_implanter.uv.name=Безупречный ионный имплантатор
+gregtech.machine.ion_implanter.uhv.name=Идеальный ионный имплантатор
+gregtech.machine.ion_implanter.uev.name=Идеальный ионный имплантатор II
+gregtech.machine.ion_implanter.uiv.name=Идеальный ионный имплантатор III
+gregtech.machine.ion_implanter.uxv.name=Идеальный ионный имплантатор IV
+gregtech.machine.ion_implanter.opv.name=Совершенный ионный имплантатор
+
+# Fluid Compressor
+gregtech.machine.fluid_compressor.lv.name=Обычный жидкостный компрессор
+gregtech.machine.fluid_compressor.mv.name=Улучшеный жидкостный компрессор
+gregtech.machine.fluid_compressor.hv.name=Улучшеный жидкостный компрессор II
+gregtech.machine.fluid_compressor.ev.name=Улучшеный жидкостный компрессор III
+gregtech.machine.fluid_compressor.iv.name=Превосходный жидкостный компрессор
+gregtech.machine.fluid_compressor.luv.name=Превосходный жидкостный компрессор II
+gregtech.machine.fluid_compressor.zpm.name=Превосходный жидкостный компрессор III
+gregtech.machine.fluid_compressor.uv.name=Безупречный жидкостный компрессор
+gregtech.machine.fluid_compressor.uhv.name=Идеальный жидкостный компрессор
+gregtech.machine.fluid_compressor.uev.name=Идеальный жидкостный компрессор II
+gregtech.machine.fluid_compressor.uiv.name=Идеальный жидкостный компрессор III
+gregtech.machine.fluid_compressor.uxv.name=Идеальный жидкостный компрессор IV
+gregtech.machine.fluid_compressor.opv.name=Совершенный жидкостный компрессор
+
+# Fluid Decompressor
+gregtech.machine.fluid_decompressor.lv.name=Обычный декомпрессор жидкости
+gregtech.machine.fluid_decompressor.mv.name=Улучшеный декомпрессор жидкости
+gregtech.machine.fluid_decompressor.hv.name=Улучшеный декомпрессор жидкости II
+gregtech.machine.fluid_decompressor.ev.name=Улучшеный декомпрессор жидкости III
+gregtech.machine.fluid_decompressor.iv.name=Превосходный декомпрессор жидкости
+gregtech.machine.fluid_decompressor.luv.name=Превосходный декомпрессор жидкости II
+gregtech.machine.fluid_decompressor.zpm.name=Превосходный декомпрессор жидкости III
+gregtech.machine.fluid_decompressor.uv.name=Безупречный декомпрессор жидкости
+gregtech.machine.fluid_decompressor.uhv.name=Идеальный жидкостный декомпрессор
+gregtech.machine.fluid_decompressor.uev.name=Идеальный жидкостный декомпрессор II
+gregtech.machine.fluid_decompressor.uiv.name=Идеальный жидкостный декомпрессор III
+gregtech.machine.fluid_decompressor.uxv.name=Идеальный жидкостный декомпрессор IV
+gregtech.machine.fluid_decompressor.opv.name=Совершенный декомпрессор жидкости
+
+# Weapons Factory
+gregtech.machine.weapons_factory.lv.name=Обычный оружейный завод
+gregtech.machine.weapons_factory.mv.name=Улучшеный оружейный завод
+gregtech.machine.weapons_factory.hv.name=Улучшеный оружейный завод II
+gregtech.machine.weapons_factory.ev.name=Улучшеный оружейный завод III
+gregtech.machine.weapons_factory.iv.name=Превосходный оружейный завод
+gregtech.machine.weapons_factory.luv.name=Превосходный оружейный завод II
+gregtech.machine.weapons_factory.zpm.name=Превосходный оружейный завод III
+gregtech.machine.weapons_factory.uv.name=Безупречный оружейный завод
+gregtech.machine.weapons_factory.uhv.name=Идеальный оружейный завод
+gregtech.machine.weapons_factory.uev.name=Идеальный оружейный завод II
+gregtech.machine.weapons_factory.uiv.name=Идеальный оружейный завод III
+gregtech.machine.weapons_factory.uxv.name=Идеальный оружейный завод IV
+gregtech.machine.weapons_factory.opv.name=Совершенный оружейный завод
+
+# Phase Separator
+gregtech.machine.phase_separator.name=Фазовый сепаратор
+
+# Electrostatic Separator
+gregtech.machine.electrostatic_separator.lv.name=Обычный электростатический сепаратор
+gregtech.machine.electrostatic_separator.mv.name=Улучшеный электростатический сепаратор
+gregtech.machine.electrostatic_separator.hv.name=Улучшеный электростатический сепаратор II
+gregtech.machine.electrostatic_separator.ev.name=Улучшеный электростатический сепаратор III
+gregtech.machine.electrostatic_separator.iv.name=Превосходный электростатический сепаратор
+gregtech.machine.electrostatic_separator.luv.name=Превосходный электростатический сепаратор II
+gregtech.machine.electrostatic_separator.zpm.name=Превосходный электростатический сепаратор III
+gregtech.machine.electrostatic_separator.uv.name=Безупречный электростатический сепаратор
+gregtech.machine.electrostatic_separator.uhv.name=Идеальный электростатический сепаратор
+gregtech.machine.electrostatic_separator.uev.name=Идеальный электростатический сепаратор II
+gregtech.machine.electrostatic_separator.uiv.name=Идеальный электростатический сепаратор III
+gregtech.machine.electrostatic_separator.uxv.name=Идеальный электростатический сепаратор IV
+gregtech.machine.electrostatic_separator.opv.name=Совершенный электростатический сепаратор
+
+# Textile Spinner
+gregtech.machine.textile_spinner.lv.name=Обычный текстильный прядильщик
+gregtech.machine.textile_spinner.mv.name=Улучшеный текстильный прядильщик
+gregtech.machine.textile_spinner.hv.name=Улучшеный текстильный прядильщик II
+gregtech.machine.textile_spinner.ev.name=Улучшеный текстильный прядильщик III
+gregtech.machine.textile_spinner.iv.name=Превосходный текстильный прядильщик
+gregtech.machine.textile_spinner.luv.name=Превосходный текстильный прядильщик II
+gregtech.machine.textile_spinner.zpm.name=Превосходный текстильный прядильщик III
+gregtech.machine.textile_spinner.uv.name=Безупречный текстильный прядильщик
+gregtech.machine.textile_spinner.uhv.name=Идеальный текстильный прядильщик
+gregtech.machine.textile_spinner.uev.name=Идеальный текстильный прядильщик II
+gregtech.machine.textile_spinner.uiv.name=Идеальный текстильный прядильщик III
+gregtech.machine.textile_spinner.uxv.name=Идеальный текстильный прядильщик IV
+gregtech.machine.textile_spinner.opv.name=Совершенный текстильный прядильщик
+
+# Polishing Machine
+gregtech.machine.polishing_machine.lv.name=Обычная полировальная машина
+gregtech.machine.polishing_machine.mv.name=Улучшеная полировальная машина
+gregtech.machine.polishing_machine.hv.name=Улучшеная полировальная машина II
+gregtech.machine.polishing_machine.ev.name=Улучшеная полировальная машина III
+gregtech.machine.polishing_machine.iv.name=Превосходная полировальная машина
+gregtech.machine.polishing_machine.luv.name=Превосходная полировальная машина II
+gregtech.machine.polishing_machine.zpm.name=Превосходная полировальная машина III
+gregtech.machine.polishing_machine.uv.name=Безупречная полировальная машина
+gregtech.machine.polishing_machine.uhv.name=Идеальная полировальная машина
+gregtech.machine.polishing_machine.uev.name=Идеальная полировальная машина II
+gregtech.machine.polishing_machine.uiv.name=Идеальная полировальная машина III
+gregtech.machine.polishing_machine.uxv.name=Идеальная полировальная машина IV
+gregtech.machine.polishing_machine.opv.name=Совершенная полировальная машина
+
+gregtech.machine.bath_condenser.name=Конденсатор для ванны
+gregtech.machine.bath_condenser.tooltip=Работает только внутри криогенной дистилляционной башни.
+
+# Recipemaps
+recipemap.coagulation_tank.name=Коагуляция
+recipemap.latex_collector.name=Древесный коллектор
+recipemap.vulcanizing_press.name=Вулканизация
+recipemap.roaster.name=Обжарка
+recipemap.vacuum_chamber.name=Вакуумная эжекция
+recipemap.continuous_stirred_tank_reactor.name=Реактор непрерывного действия с мешалкой
+recipemap.fixed_bed_reactor.name=Реактор с неподвижным слоем
+recipemap.trickle_bed_reactor.name=Реактор с орошаемым слоем
+recipemap.crystallizer.name=Кристаллизатор
+recipemap.bubble_column_reactor.name=Реактор с барботажной колонной
+recipemap.fluidized_bed_reactor.name=Реактор с псевдоожиженным слоем
+recipemap.batch_reactor.name=Реактор периодического действия
+recipemap.tube_furnace.name=Трубчатая печь
+recipemap.zone_refiner.name=Зонный рафинер
+recipemap.ion_exchange_column.name=Ионообменная колонка
+recipemap.polymerization_tank.name=Полимеризационный резервуар
+recipemap.uv_light_box.name=УФ-световой короб
+recipemap.ion_implantation.name=Ионная имплантация
+recipemap.cvd.name=Химическое осаждение из паровой фазы
+recipemap.ore_sorter.name=Сортировка руды
+recipemap.cooling_tower.name=Градирни
+recipemap.cooling_unit.name=Охлаждающий блок
+recipemap.fluid_decompressor.name=Декомпрессия жидкости
+recipemap.fluid_compressor.name=Сжатие жидкости
+recipemap.heat_exchanger.name=Теплообмен
+recipemap.condenser.name=Конденсация
+recipemap.radiator.name=Радиатор тепла
+recipemap.quencher.name=Закалка
+recipemap.weapons_factory.name=Оружейный завод
+recipemap.large_weapons_factory.name=Крупный оружейный завод
+recipemap.railroad_engineering_station.name=Железнодорожная инженерная станция
+recipemap.mining_drill.name=Горнодобывающая дрель
+recipemap.magnetohydrodynamic_generator.name=Магнитогидродинамический генератор
+recipemap.reaction_furnace.name=Реакционная печь
+recipemap.pressure_swing_adsorption.name=Адсорбция при переменном давлении
+recipemap.high_temperature_distillation.name=Высокотемпературная дистилляция
+recipemap.in_situ_leacher.name=Подземное выщелачивание
+recipemap.euv_lithography.name=Экстремальная УФ-литография
+recipemap.advanced_arc_furnace.name=Усовершенствованная дуговая печь
+recipemap.evaporation_pool.name=Испарительный бассейн
+recipemap.clarifier.name=Осветлитель
+recipemap.multi_stage_flash_distillation.name=Многоступенчатая флэш-дистилляция
+recipemap.froth_flotation.name=Пенная флотация
+recipemap.rotary_kiln.name=Вращающаяся печь
+recipemap.low_pressure_cryogenic_distillation.name=Криогенная дистилляция низкого давления
+recipemap.high_pressure_cryogenic_distillation.name=Криогенная дистилляция высокого давления
+recipemap.reverberatory_furnace.name=Отражательная печь
+recipemap.blender.name=Блендер
+recipemap.phase_separator.name=Разделение фаз
+recipemap.bath_condenser.name=Конденсатор для ванны
+recipemap.drone_pad.name=Площадка для дронов
+recipemap.polishing_machine.name=Полировка
+recipemap.gravity_separator=Гравитационное разделение
+recipemap.spinning.name=Текстильное прядение
+recipemap.large_steam_turbine.name=Большая паровая турбина
+recipemap.primitive_smelter.name=Первобытная плавка
+
+gregtech.multiblock.primitive_mud_pump.description=Primitive Mud Pump — это мультиблок Steam Era, который собирает грязь раз в секунду, но только если он находится в речном биоме и когда контроллер находится между Y = 64 и Y = 80 (включительно). Он может использовать выходной люк Pump, ULV или LV.
+gregtech.multiblock.ocean_pumper.description=Ocean Pumper — это многофункциональный электрический блок, который собирает базовое количество морской воды в размере 8000 л в секунду (при MV), но только если он находится в биоме океана и когда контроллер находится между Y = 70 и Y = 75 (включительно). Ему нужен выходной люк, люк для обслуживания и люк для входа энергии.
+
+# Energy Hatches
+
+gregtech.machine.energy_hatch.output_4a.lv.name=LV 4A Динамо-люк
+gregtech.machine.energy_hatch.output_16a.lv.name=LV 16A Динамо-люк
+gregtech.machine.energy_hatch.output_4a.mv.name=MV 4A Динамо-люк
+gregtech.machine.energy_hatch.output_16a.mv.name=MV 16A Динамо-люк
+gregtech.machine.energy_hatch.output_4a.hv.name=HV 4A Динамо-люк
+gregtech.machine.energy_hatch.output_16a.hv.name=HV 16A Динамо-люк
+gregtech.machine.energy_hatch.output_16a.ev.name=EV 16A Динамо-люк
+
+# Other multiblock parts
+
+gregtech.machine.dumping_hatch=Люк для сброса
+gregtech.machine.dumping_hatch.lv.name=Dumping Hatch
+
+# Metaitems
+metaitem.catalyst_bed_support_grid.name=Решетка поддержки слоя катализатора
+metaitem.conveyor.steam.name=Паровой конвейер
+cover.conveyor.steam.title=Модуль парового конвейера
+metaitem.pump.steam.name=Паровой насос
+cover.pump.steam.title=Паровой насос
+metaitem.air_vent.name=Вентиляция
+metaitem.air_vent.tooltip=Пассивно собирает Воздух Измерения для ваших Машин при столкновении с Воздухом
+metaitem.track_segment.name=Участок монорельсовой дороги
+metaitem.track_segment.tooltip=Для использования в §8туннельном стволе.
+metaitem.track_segment.length_info=610 блоков стоимостью 7 фунтов стерлингов для монорельсовой дороги.
+metaitem.air_vent.tooltip.1=§bСтавка сбора: §f%,d л/с
+
+# Catalysts
+gregtech.universal.catalysts.tooltip.tier=§eМакс. напряжение: §f%,d EU/T (%s§f)
+gregtech.universal.catalysts.tooltip.non_tiered=§eНеуровневый катализатор§
+gregtech.universal.catalysts.tooltip.yield.tiered=§aУвеличение доходности: §fx%d §aper tier.§f
+gregtech.universal.catalysts.tooltip.energy.tiered=§aИспользование энергии: §fx%d §aper tier.§f
+gregtech.universal.catalysts.tooltip.speed.tiered=§aУвеличение скорости: §fx%d §aper tier.§f
+gregtech.universal.catalysts.tooltip.yield=§aУвеличение доходности: §fx%d
+gregtech.universal.catalysts.tooltip.energy=§aИспользование энергии: §fx%d
+gregtech.universal.catalysts.tooltip.speed=§aУвеличение скорости: §fx%d
+gregtech.universal.catalysts.tooltip.title=%s
+
+# Oxidation Catalyst Bed
+gregtech.catalyst_group.oxidation_catalyst_beds.name=Катализатор окисления
+metaitem.ulv_catalyst_bed_oxidation.name=ULV Слой катализатора окисления
+metaitem.lv_catalyst_bed_oxidation.name=LV Слой катализатора окисления
+metaitem.mv_catalyst_bed_oxidation.name=MV Слой катализатора окисления
+metaitem.hv_catalyst_bed_oxidation.name=HV Слой катализатора окисления
+metaitem.ev_catalyst_bed_oxidation.name=EV Слой катализатора окисления
+metaitem.iv_catalyst_bed_oxidation.name=IV Слой катализатора окисления
+metaitem.luv_catalyst_bed_oxidation.name=LUV Слой катализатора окисления
+metaitem.zpm_catalyst_bed_oxidation.name=ZPM Слой катализатора окисления
+metaitem.uv_catalyst_bed_oxidation.name=UV Слой катализатора окисления
+metaitem.uhv_catalyst_bed_oxidation.name=UHV Слой катализатора окисления
+metaitem.uev_catalyst_bed_oxidation.name=UEV Слой катализатора окисления
+metaitem.uiv_catalyst_bed_oxidation.name=UIV Слой катализатора окисления
+metaitem.uxv_catalyst_bed_oxidation.name=UXV Слой катализатора окисления
+metaitem.opv_catalyst_bed_oxidation.name=OpV Слой катализатора окисления
+
+# Reduction Catalyst Bed
+gregtech.catalyst_group.reduction_catalyst_beds.name=Катализатор восстановления
+metaitem.ulv_catalyst_bed_reduction.name=ULV Слой катализатора восстановления
+metaitem.lv_catalyst_bed_reduction.name=LV Слой катализатора восстановления
+metaitem.mv_catalyst_bed_reduction.name=MV Слой катализатора восстановления
+metaitem.hv_catalyst_bed_reduction.name=HV Слой катализатора восстановления
+metaitem.ev_catalyst_bed_reduction.name=EV Слой катализатора восстановления
+metaitem.iv_catalyst_bed_reduction.name=IV Слой катализатора восстановления
+metaitem.luv_catalyst_bed_reduction.name=LUV Слой катализатора восстановления
+metaitem.zpm_catalyst_bed_reduction.name=ZPM Слой катализатора восстановления
+metaitem.uv_catalyst_bed_reduction.name=UV Слой катализатора восстановления
+metaitem.uhv_catalyst_bed_reduction.name=UHV Слой катализатора восстановления
+metaitem.uev_catalyst_bed_reduction.name=UEV Слой катализатора восстановления
+metaitem.uiv_catalyst_bed_reduction.name=UIV Слой катализатора восстановления
+metaitem.uxv_catalyst_bed_reduction.name=UXV Слой катализатора восстановления
+metaitem.opv_catalyst_bed_reduction.name=OpV Слой катализатора восстановления
+
+# Standard Catalyst
+gregtech.catalyst_group.standard_catalysts.name=Стандартный катализатор
+
+# Cracking Catalyst
+gregtech.catalyst_group.cracking_catalyst_beds.name=Катализатор крекинга
+metaitem.standard_catalyst_bed_cracking.name=Слой катализатора крекинга
+
+# Machine Translations
+susy.ocean_pumper.full=Баки полны!
+susy.ocean_pumper.drainrate=Текущая скорость откачки: %s
+susy.wrongbiome=Машина не может работать в этом биоме!
+susy.weather_resistance=§2Не взрывается от воды, лавы, огня или дождя.
+
+# Latex Logs
+gregtech.block_group_members.latex_logs.name=Резиновый журнал
+
+# Extra recipe info
+susy.recipe.dimensions=Размеры: %s
+
+# Commands
+
+susy.command.horde.usage=/mobHorde <start/stop/status>
+susy.command.horde.start.usage=/mobHorde start <name>
+susy.command.horde.start.argument_required=Use /mobHorde start <name>.
+susy.command.horde.start.no_such_horde=No such horde %s exists.
+susy.command.horde.start.unable_to_run=The %s horde can't be executed. This may be due to dimensional restrictions, daylight, etc.
+susy.command.horde.start.error_executing_horde=Horde mobs were not spawned correctly.
+susy.command.horde.start.has_active_invasion=You already have an active %s invasion.
+susy.command.horde.start.started=Successfully started %s invasion.
+susy.command.horde.stop.usage=/mobHorde stop
+susy.command.horde.stop.has_active_no_invasion=No active invasion to stop.
+susy.command.horde.stop.stopped=Successfully stopped %s invasion.
+susy.command.horde.status.usage=/mobHorde status <player>
+susy.command.horde.status.has_active_invasion=Player %s has an active %s invasion for %d ticks. It will time out in %s ticks.
+susy.command.horde.status.no_active_invasion=Player %s has no active invasion.
+
+# Fluid Tooltips
+susy.fluid.voiding.liquid=Аннулируется с помощью Dumper
+susy.fluid.voiding.gas=Можно отменить с помощью дымовой трубы
+susy.fluid.voiding.flammable=Аннулируется с помощью Факельной установки
+
+
+
+
+
+
+
+
+
+
+
+
+
+#пояснения от автора (не удалять)
+gregtech.machine.continuous_stirred_tank_reactor.lv.tooltip=Реактор непрерывного перемешивания
+gregtech.machine.continuous_stirred_tank_reactor.mv.tooltip=Реактор непрерывного перемешивания
+gregtech.machine.continuous_stirred_tank_reactor.hv.tooltip=Реактор непрерывного перемешивания
+gregtech.machine.continuous_stirred_tank_reactor.ev.tooltip=Реактор непрерывного перемешивания
+gregtech.machine.continuous_stirred_tank_reactor.iv.tooltip=Реактор непрерывного перемешивания
+gregtech.machine.continuous_stirred_tank_reactor.luv.tooltip=Реактор непрерывного перемешивания
+gregtech.machine.continuous_stirred_tank_reactor.zpm.tooltip=Реактор непрерывного перемешивания
+gregtech.machine.continuous_stirred_tank_reactor.uv.tooltip=Реактор непрерывного перемешивания
+gregtech.machine.continuous_stirred_tank_reactor.uhv.tooltip=Реактор непрерывного перемешивания
+gregtech.machine.continuous_stirred_tank_reactor.uev.tooltip=Реактор непрерывного перемешивания
+gregtech.machine.continuous_stirred_tank_reactor.uiv.tooltip=Реактор непрерывного перемешивания
+gregtech.machine.continuous_stirred_tank_reactor.uxv.tooltip=Реактор непрерывного перемешивания
+gregtech.machine.continuous_stirred_tank_reactor.opv.tooltip=Реактор непрерывного перемешивания
+
+gregtech.machine.fixed_bed_reactor.lv.tooltip=Реактор с неподвижным слоем
+gregtech.machine.fixed_bed_reactor.mv.tooltip=Реактор с неподвижным слоем
+gregtech.machine.fixed_bed_reactor.hv.tooltip=Реактор с неподвижным слоем
+gregtech.machine.fixed_bed_reactor.ev.tooltip=Реактор с неподвижным слоем
+gregtech.machine.fixed_bed_reactor.iv.tooltip=Реактор с неподвижным слоем
+gregtech.machine.fixed_bed_reactor.luv.tooltip=Реактор с неподвижным слоем
+gregtech.machine.fixed_bed_reactor.zpm.tooltip=Реактор с неподвижным слоем
+gregtech.machine.fixed_bed_reactor.uv.tooltip=Реактор с неподвижным слоем
+gregtech.machine.fixed_bed_reactor.uhv.tooltip=Реактор с неподвижным слоем
+gregtech.machine.fixed_bed_reactor.uev.tooltip=Реактор с неподвижным слоем
+gregtech.machine.fixed_bed_reactor.uiv.tooltip=Реактор с неподвижным слоем
+gregtech.machine.fixed_bed_reactor.uxv.tooltip=Реактор с неподвижным слоем
+gregtech.machine.fixed_bed_reactor.opv.tooltip=Реактор с неподвижным слоем
+
+gregtech.machine.trickle_bed_reactor.lv.tooltip=Реактор с орошаемым слоем
+gregtech.machine.trickle_bed_reactor.mv.tooltip=Реактор с орошаемым слоем
+gregtech.machine.trickle_bed_reactor.hv.tooltip=Реактор с орошаемым слоем
+gregtech.machine.trickle_bed_reactor.ev.tooltip=Реактор с орошаемым слоем
+gregtech.machine.trickle_bed_reactor.iv.tooltip=Реактор с орошаемым слоем
+gregtech.machine.trickle_bed_reactor.luv.tooltip=Реактор с орошаемым слоем
+gregtech.machine.trickle_bed_reactor.zpm.tooltip=Реактор с орошаемым слоем
+gregtech.machine.trickle_bed_reactor.uv.tooltip=Реактор с орошаемым слоем
+gregtech.machine.trickle_bed_reactor.uhv.tooltip=Реактор с орошаемым слоем
+gregtech.machine.trickle_bed_reactor.uev.tooltip=Реактор с орошаемым слоем
+gregtech.machine.trickle_bed_reactor.uiv.tooltip=Реактор с орошаемым слоем
+gregtech.machine.trickle_bed_reactor.uxv.tooltip=Реактор с орошаемым слоем
+gregtech.machine.trickle_bed_reactor.opv.tooltip=Реактор с орошаемым слоем
+
+gregtech.machine.bubble_column_reactor.lv.tooltip=Реактор с барботажной колонной
+gregtech.machine.bubble_column_reactor.mv.tooltip=Реактор с барботажной колонной
+gregtech.machine.bubble_column_reactor.hv.tooltip=Реактор с барботажной колонной
+gregtech.machine.bubble_column_reactor.ev.tooltip=Реактор с барботажной колонной
+gregtech.machine.bubble_column_reactor.iv.tooltip=Реактор с барботажной колонной
+gregtech.machine.bubble_column_reactor.luv.tooltip=Реактор с барботажной колонной
+gregtech.machine.bubble_column_reactor.zpm.tooltip=Реактор с барботажной колонной
+gregtech.machine.bubble_column_reactor.uv.tooltip=Реактор с барботажной колонной
+gregtech.machine.bubble_column_reactor.uhv.tooltip=Реактор с барботажной колонной
+gregtech.machine.bubble_column_reactor.uev.tooltip=Реактор с барботажной колонной
+gregtech.machine.bubble_column_reactor.uiv.tooltip=Реактор с барботажной колонной
+gregtech.machine.bubble_column_reactor.uxv.tooltip=Реактор с барботажной колонной
+gregtech.machine.bubble_column_reactor.opv.tooltip=Реактор с барботажной колонной
+
+gregtech.machine.batch_reactor.lv.tooltip=Реактор периодического действия
+gregtech.machine.batch_reactor.mv.tooltip=Реактор периодического действия
+gregtech.machine.batch_reactor.hv.tooltip=Реактор периодического действия
+gregtech.machine.batch_reactor.ev.tooltip=Реактор периодического действия
+gregtech.machine.batch_reactor.iv.tooltip=Реактор периодического действия
+gregtech.machine.batch_reactor.luv.tooltip=Реактор периодического действия
+gregtech.machine.batch_reactor.zpm.tooltip=Реактор периодического действия
+gregtech.machine.batch_reactor.uv.tooltip=Реактор периодического действия
+gregtech.machine.batch_reactor.uhv.tooltip=Реактор периодического действия
+gregtech.machine.batch_reactor.uev.tooltip=Реактор периодического действия
+gregtech.machine.batch_reactor.uiv.tooltip=Реактор периодического действия
+gregtech.machine.batch_reactor.uxv.tooltip=Реактор периодического действия
+gregtech.machine.batch_reactor.opv.tooltip=Реактор периодического действия
+
+gregtech.machine.cvd.lv.tooltip=Установка химического осаждения из газовой фазы
+gregtech.machine.cvd.mv.tooltip=Установка химического осаждения из газовой фазы
+gregtech.machine.cvd.hv.tooltip=Установка химического осаждения из газовой фазы
+gregtech.machine.cvd.ev.tooltip=Установка химического осаждения из газовой фазы
+gregtech.machine.cvd.iv.tooltip=Установка химического осаждения из газовой фазы
+gregtech.machine.cvd.luv.tooltip=Установка химического осаждения из газовой фазы
+gregtech.machine.cvd.zpm.tooltip=Установка химического осаждения из газовой фазы
+gregtech.machine.cvd.uv.tooltip=Установка химического осаждения из газовой фазы
+gregtech.machine.cvd.uhv.tooltip=Установка химического осаждения из газовой фазы
+gregtech.machine.cvd.uev.tooltip=Установка химического осаждения из газовой фазы
+gregtech.machine.cvd.uiv.tooltip=Установка химического осаждения из газовой фазы
+gregtech.machine.cvd.uxv.tooltip=Установка химического осаждения из газовой фазы
+gregtech.machine.cvd.opv.tooltip=Установка химического осаждения из газовой фазы
+
+
+
+
+
+
+
+
+
+# От переводчика
+
+gregtech.machine.quencher.tooltip=Охладитель горячих слитков
