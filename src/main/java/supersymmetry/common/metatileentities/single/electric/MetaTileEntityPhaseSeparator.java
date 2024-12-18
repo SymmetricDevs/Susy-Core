@@ -26,7 +26,7 @@ import static gregtech.api.recipes.logic.OverclockingLogic.standardOverclockingL
 public class MetaTileEntityPhaseSeparator extends SimpleMachineMetaTileEntity {
 
     public MetaTileEntityPhaseSeparator(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SuSyRecipeMaps.PHASE_SEPARATOR, SusyTextures.PHASE_SEPARATOR_OVERLAY, 1, true);
+        super(metaTileEntityId, SuSyRecipeMaps.PHASE_SEPARATOR, SusyTextures.PHASE_SEPARATOR_OVERLAY, 3, true);
     }
 
     @Override
