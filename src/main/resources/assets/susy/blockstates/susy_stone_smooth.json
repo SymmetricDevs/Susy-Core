@@ -59,6 +59,11 @@
         "textures" : {
           "all" : "gregtech:blocks/susy_stones/kimberlite"
         }
+      },
+      "industrial_concrete" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/industrial_concrete"
+        }
       }
     }
   }
