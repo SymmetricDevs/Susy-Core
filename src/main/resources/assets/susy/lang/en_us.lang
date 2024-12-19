@@ -112,6 +112,7 @@ tile.susy_stone_smooth.shale.name=Shale
 tile.susy_stone_smooth.slate.name=Slate
 tile.susy_stone_smooth.soapstone.name=Soapstone
 tile.susy_stone_smooth.kimberlite.name=Kimberlite
+tile.susy_stone_smooth.industrial_concrete.name=Industrial Concrete
 tile.susy_stone_cobble.gabbro.name=Gabbro Cobblestone
 tile.susy_stone_cobble.gneiss.name=Gneiss Cobblestone
 tile.susy_stone_cobble.graphite.name=Graphite Cobblestone
@@ -123,6 +124,7 @@ tile.susy_stone_cobble.shale.name=Shale Cobblestone
 tile.susy_stone_cobble.slate.name=Slate Cobblestone
 tile.susy_stone_cobble.soapstone.name=Soapstone Cobblestone
 tile.susy_stone_cobble.kimberlite.name=Kimberlite Cobblestone
+tile.susy_stone_cobble.industrial_concrete.name=Industrial Concrete Cobblestone
 tile.susy_stone_bricks.gabbro.name=Gabbro Bricks
 tile.susy_stone_bricks.gneiss.name=Gneiss Bricks
 tile.susy_stone_bricks.graphite.name=Graphite Bricks
@@ -134,6 +136,7 @@ tile.susy_stone_bricks.shale.name=Shale Bricks
 tile.susy_stone_bricks.slate.name=Slate Bricks
 tile.susy_stone_bricks.soapstone.name=Soapstone Bricks
 tile.susy_stone_bricks.kimberlite.name=Kimberlite Bricks
+tile.susy_stone_bricks.industrial_concrete.name=Industrial Concrete Bricks
 
 # Materials
 susy.material.manganese_iron_arsenic_phosphide=Manganese Iron Arsenic Phosphide
