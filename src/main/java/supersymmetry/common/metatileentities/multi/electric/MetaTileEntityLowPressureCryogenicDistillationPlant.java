@@ -55,7 +55,7 @@ public class MetaTileEntityLowPressureCryogenicDistillationPlant extends MetaTil
                 .where('C', states(getCasingState())
                         .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(3))
                         .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMaxGlobalLimited(1))
-                        ..or(autoAbilities(true, false).setExactLimit(1)))
+                        .or(autoAbilities(true, false).setExactLimit(1)))
                 .where('F', states(SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.STRUCTURAL_PACKING)))
                 .where('X', states(getCasingState())
                         .or(metaTileEntities(MultiblockAbility.REGISTRY.get(MultiblockAbility.EXPORT_FLUIDS).stream()
