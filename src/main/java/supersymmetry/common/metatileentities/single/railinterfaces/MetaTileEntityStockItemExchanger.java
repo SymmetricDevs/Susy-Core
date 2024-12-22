@@ -1,7 +1,7 @@
 package supersymmetry.common.metatileentities.single.railinterfaces;
-// TODO: Adapt to MetaTileEntityStockInteractor
-import cam72cam.immersiverailroading.entity.EntityRollingStock;
+
 import cam72cam.immersiverailroading.entity.Freight;
+import cam72cam.immersiverailroading.entity.FreightTank;
 import codechicken.lib.raytracer.CuboidRayTraceResult;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
@@ -22,7 +22,6 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -30,24 +29,27 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.SusyLog;
-import supersymmetry.api.stockinteraction.StockHelperFunctions;
 import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInteractor
 {
     public boolean pulling;
-
     public final int inventoryArrayHeight = 5;
     private final int inventoryArrayWidth = 5;
     private ItemStackHandler itemTank;
     private boolean validStockNearby;
-    private boolean active;
 
-    //locomotive, tank #fix# redo sub class map system
+    //locomotive, freight
+    public static List<String> subFilter = new ArrayList<>();
+    static{
+        subFilter.add("locomotive");
+        subFilter.add("freight");
+    }
 
     public MetaTileEntityStockItemExchanger(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
@@ -65,7 +67,6 @@ public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInterac
         return true;
     }
 
-    //#fix# pickaxe not it maybe
     public String getHarvestTool() {
         return "wrench";
     }
@@ -125,23 +126,11 @@ public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInterac
         if(this.getWorld().isRemote)
             return;
 
-        if(this.getOffsetTimer() % 20 == 0)
+        if(this.isWorkingEnabled() && this.getOffsetTimer() % 20 == 0 && this.stocks.size() > 0)
         {
-            List<EntityRollingStock> stocks = StockHelperFunctions.getStocksInArea(this.getWorld(), this.getInteractionBoundingBox());
-            boolean newValidNearby = stocks.size() > 0;
-            if(newValidNearby != this.validStockNearby)
-            {
-                //#fix# if buffer is sent to server, then this should be run twice? test.
-                this.validStockNearby = newValidNearby;
-                this.writeCustomData(0b10, (buf) -> buf.writeBoolean(newValidNearby));
-            }
-
-            if(!validStockNearby || !this.isBlockRedstonePowered())
-                return;
-
-            Freight invStock = (Freight)stocks.get(0);
-            cam72cam.immersiverailroading.inventory.FilteredStackHandler umodFilteredHandler = invStock.cargoItems;
-            ItemStackHandler stockStackHandler = umodFilteredHandler.internal;
+            Freight freightStock = (FreightTank)stocks.get(0);
+            cam72cam.mod.item.ItemStackHandler umodStockStackHandler = freightStock.cargoItems;
+            ItemStackHandler stockStackHandler = umodStockStackHandler.internal;
 
             if(pulling) {
                 this.TransferAll(stockStackHandler, this.itemTank);
@@ -172,15 +161,6 @@ public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInterac
         return super.onScrewdriverClick(playerIn, hand, wrenchSide, hitResult);
     }
 
-    public void onNeighborChanged() {
-        if(this.getWorld().isRemote)
-            return;
-        this.updateInputRedstoneSignals();
-        this.active = this.isBlockRedstonePowered();
-        this.scheduleRenderUpdate();
-        this.writeCustomData(0b1000, (buf) -> buf.writeBoolean(this.active));
-    }
-
     public boolean onWrenchClick(EntityPlayer playerIn, EnumHand hand, EnumFacing wrenchSide, CuboidRayTraceResult hitResult) {
         return super.onWrenchClick(playerIn, hand, wrenchSide, hitResult);
     }
@@ -191,7 +171,7 @@ public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInterac
 
     public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
         byte state = 0b00;
-        state |= active ? 0b01 : 0b00;
+        state |= this.isWorkingEnabled() ? 0b01 : 0b00;
         state |= pulling ? 0b10 : 0b00;
 
         switch (state) {
@@ -268,9 +248,5 @@ public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInterac
     public void SetTransferState(boolean state) {
         this.pulling = state;
         this.writeCustomData(0b100, (buf) -> buf.writeBoolean(this.pulling));
-    }
-
-    protected boolean canMachineConnectRedstone(EnumFacing side) {
-        return true;
     }
 }

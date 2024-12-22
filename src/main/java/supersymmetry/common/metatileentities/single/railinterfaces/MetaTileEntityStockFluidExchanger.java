@@ -2,7 +2,6 @@ package supersymmetry.common.metatileentities.single.railinterfaces;
 
 import cam72cam.immersiverailroading.entity.FreightTank;
 import codechicken.lib.raytracer.CuboidRayTraceResult;
-import codechicken.lib.raytracer.IndexedCuboid6;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Cuboid6;
@@ -25,7 +24,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
@@ -62,7 +60,6 @@ public class MetaTileEntityStockFluidExchanger extends MetaTileEntityStockIntera
     public int transferRate = 4000;
     private final int tankSize = 16000;
     private FluidTank fluidTank;
-    //private EnumFacing outputFacing;
     private boolean locked;
     private FluidStack lockedFluid;
 
@@ -79,14 +76,6 @@ public class MetaTileEntityStockFluidExchanger extends MetaTileEntityStockIntera
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
         return new MetaTileEntityStockFluidExchanger(this.metaTileEntityId);
-    }
-
-    protected FluidTankList createImportFluidHandler() {
-        return new FluidTankList(false, new IFluidTank[]{this.fluidTank});
-    }
-
-    protected FluidTankList createExportFluidHandler() {
-        return new FluidTankList(false, new IFluidTank[]{this.fluidTank});
     }
 
     protected IItemHandlerModifiable createImportItemHandler() {
@@ -109,7 +98,7 @@ public class MetaTileEntityStockFluidExchanger extends MetaTileEntityStockIntera
     protected void initializeInventory() {
         super.initializeInventory();
         this.fluidTank = (new LockableFluidTank(this.tankSize));
-        this.fluidInventory = this.fluidTank;
+        this.fluidInventory = (new LockableFluidTank(this.tankSize));
         this.importFluids = new FluidTankList(false, new IFluidTank[]{this.fluidTank});
         this.exportFluids = new FluidTankList(false, new IFluidTank[]{this.fluidTank});
     }
@@ -154,8 +143,9 @@ public class MetaTileEntityStockFluidExchanger extends MetaTileEntityStockIntera
 
         if(dataId == 6501) {
             this.pulling = buf.readBoolean();
-            this.scheduleRenderUpdate();
         }
+
+        this.scheduleRenderUpdate();
     }
 
     public void update() {
@@ -167,7 +157,7 @@ public class MetaTileEntityStockFluidExchanger extends MetaTileEntityStockIntera
         this.fillContainerFromInternalTank();
         this.fillInternalTankFromFluidContainer();
 
-        if(this.getOffsetTimer() % 20 == 0 && this.stocks.size() > 0)
+        if(this.isWorkingEnabled() && this.getOffsetTimer() % 20 == 0 && this.stocks.size() > 0)
         {
 
             FreightTank tankStock = (FreightTank)stocks.get(0);
@@ -197,7 +187,7 @@ public class MetaTileEntityStockFluidExchanger extends MetaTileEntityStockIntera
     @SideOnly(Side.CLIENT)
     public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
         byte state = 0b00;
-        state |= 0b00;
+        state |= this.isWorkingEnabled() ? 0b01 : 0b00;
         state |= pulling ? 0b10 : 0b00;
 
         switch (state) {
@@ -348,10 +338,6 @@ public class MetaTileEntityStockFluidExchanger extends MetaTileEntityStockIntera
         }
     }
 
-    protected boolean canMachineConnectRedstone(EnumFacing side) {
-        return true;
-    }
-
     public boolean isOpaqueCube() {
         return false;
     }
@@ -361,37 +347,11 @@ public class MetaTileEntityStockFluidExchanger extends MetaTileEntityStockIntera
     }
 
     @Override
-    public boolean hasAnyCover() {
-        return super.hasAnyCover();
-    }
-
-    @Override
-    public void renderCovers(CCRenderState renderState, Matrix4 translation, BlockRenderLayer layer) {
-        super.renderCovers(renderState, translation, layer);
-    }
-
-    @Override
-    public void addCoverCollisionBoundingBox(List<? super IndexedCuboid6> collisionList) {
-        super.addCoverCollisionBoundingBox(collisionList);
-    }
-
-    @Override
-    public int getItemOutputLimit() {
-        return super.getItemOutputLimit();
-    }
-
-    @Override
-    public int getFluidOutputLimit() {
-        return super.getFluidOutputLimit();
-    }
-
-    @Override
     public void renderMetaTileEntityFast(CCRenderState renderState, Matrix4 translation, float partialTicks) {
         super.renderMetaTileEntityFast(renderState, translation, partialTicks);
     }
 
     // Most of the locking logic taken from Quantum Tanks, can potentially be abstracted
-
     private class LockableFluidTank extends FluidTank implements IFilteredFluidContainer, IFilter<FluidStack> {
         public LockableFluidTank(int capacity) {
             super(capacity);

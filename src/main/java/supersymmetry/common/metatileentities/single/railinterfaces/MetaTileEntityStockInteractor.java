@@ -1,6 +1,9 @@
 package supersymmetry.common.metatileentities.single.railinterfaces;
 
 import cam72cam.immersiverailroading.entity.EntityRollingStock;
+import gregtech.api.capability.GregtechDataCodes;
+import gregtech.api.capability.GregtechTileCapabilities;
+import gregtech.api.capability.IControllable;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.widgets.AbstractWidgetGroup;
@@ -22,8 +25,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
@@ -36,7 +42,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class MetaTileEntityStockInteractor extends MetaTileEntity implements IStockInteractor, IFastRenderMetaTileEntity {
+public abstract class MetaTileEntityStockInteractor extends MetaTileEntity implements IStockInteractor, IFastRenderMetaTileEntity, IControllable {
 
     AxisAlignedBB interactionBoundingBox;
     private double interactionWidth = 11.;
@@ -48,6 +54,9 @@ public abstract class MetaTileEntityStockInteractor extends MetaTileEntity imple
     private boolean renderBoundingBox = false;
     List<EntityRollingStock> stocks;
 
+    private boolean workingEnabled = true;
+
+
     public MetaTileEntityStockInteractor(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
         this.filter = new StockFilter();
@@ -58,6 +67,43 @@ public abstract class MetaTileEntityStockInteractor extends MetaTileEntity imple
         this.filter = new StockFilter(subFilter);
         this.stocks = new ArrayList<>();
     }
+
+    @Override
+    public void update() {
+        super.update();
+
+        if(this.getWorld().isRemote)
+            return;
+
+        if(this.getOffsetTimer() % 20 == 0 && this.workingEnabled) {
+            this.stocks.clear();
+            this.stocks = this.filter.filterEntities(StockHelperFunctions.getStocksInArea(this.getWorld(), this.getInteractionBoundingBox()));
+        }
+    }
+
+    @Override
+    public void setWorkingEnabled(boolean workingEnabled) {
+        this.workingEnabled = workingEnabled;
+        World world = this.getWorld();
+        if (world != null && !world.isRemote) {
+            this.writeCustomData(GregtechDataCodes.WORKING_ENABLED, (buf) -> {
+                buf.writeBoolean(workingEnabled);
+            });
+        }
+
+    }
+
+    @Override
+    public boolean isWorkingEnabled() {
+        return this.workingEnabled;
+    }
+
+    @Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing side) {
+        return capability == GregtechTileCapabilities.CAPABILITY_CONTROLLABLE ? GregtechTileCapabilities.CAPABILITY_CONTROLLABLE.cast(this) : super.getCapability(capability, side);
+    }
+
+    // UI
 
     @Override
     protected ModularUI createUI(EntityPlayer entityPlayer) {
@@ -110,24 +156,6 @@ public abstract class MetaTileEntityStockInteractor extends MetaTileEntity imple
     }
 
     @Override
-    public boolean isActive() {
-        return true;
-    }
-
-    @Override
-    public void update() {
-        super.update();
-
-        if(this.getWorld().isRemote)
-            return;
-
-        if(this.getOffsetTimer() % 20 == 0 && this.isActive()) {
-            this.stocks.clear();
-            this.stocks = this.filter.filterEntities(StockHelperFunctions.getStocksInArea(this.getWorld(), this.getInteractionBoundingBox()));
-        }
-    }
-
-    @Override
     @SideOnly(Side.CLIENT)
     public void renderMetaTileEntity(double x, double y, double z, float partialTicks) {
         if(this.shouldRenderBoundingBox()) {
@@ -171,7 +199,7 @@ public abstract class MetaTileEntityStockInteractor extends MetaTileEntity imple
         data.setDouble("interactionWidth", this.interactionWidth);
         data.setDouble("interactionDepth", this.interactionDepth);
         data.setBoolean("renderBoundingBox", this.renderBoundingBox);
-
+        data.setBoolean("workingEnabled", this.workingEnabled);
         return data;
     }
 
@@ -182,6 +210,7 @@ public abstract class MetaTileEntityStockInteractor extends MetaTileEntity imple
         this.setInteractionWidth(data.getDouble("interactionWidth"));
         this.setInteractionDepth(data.getDouble("interactionDepth"));
         this.renderBoundingBox = data.getBoolean("renderBoundingBox");
+        this.workingEnabled = data.getBoolean("workingEnabled");
     }
 
     @Override
@@ -191,6 +220,7 @@ public abstract class MetaTileEntityStockInteractor extends MetaTileEntity imple
         buf.writeDouble(this.getInteractionWidth());
         buf.writeDouble(this.getInteractionDepth());
         buf.writeBoolean(this.renderBoundingBox);
+        buf.writeBoolean(this.workingEnabled);
     }
 
     @Override
@@ -204,7 +234,7 @@ public abstract class MetaTileEntityStockInteractor extends MetaTileEntity imple
         this.setInteractionWidth(buf.readDouble());
         this.setInteractionDepth(buf.readDouble());
         this.renderBoundingBox = buf.readBoolean();
-
+        this.workingEnabled = buf.readBoolean();
     }
 
     @Override
@@ -213,14 +243,18 @@ public abstract class MetaTileEntityStockInteractor extends MetaTileEntity imple
 
         if(dataId == 6500) {
             this.renderBoundingBox = buf.readBoolean();
-            this.scheduleRenderUpdate();
         }
 
         // Front facing changed
         if(dataId == -2) {
             this.recalculateBoundingBox();
-            this.scheduleRenderUpdate();
         }
+
+        if(dataId == GregtechDataCodes.WORKING_ENABLED) {
+            this.workingEnabled = buf.readBoolean();
+        }
+        this.scheduleRenderUpdate();
+
     }
 
     @Override
