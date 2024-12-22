@@ -14,6 +14,7 @@ import gregtech.api.gui.widgets.CycleButtonWidget;
 import gregtech.api.gui.widgets.TabGroup;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.api.util.GTTransferUtils;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -22,6 +23,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -133,15 +135,16 @@ public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInterac
             ItemStackHandler stockStackHandler = umodStockStackHandler.internal;
 
             if(pulling) {
-                this.TransferAll(stockStackHandler, this.itemTank);
+
+                GTTransferUtils.moveInventoryItems(stockStackHandler, this.itemTank);
             }
             else {
-                this.TransferAll(this.itemTank, stockStackHandler);
+                GTTransferUtils.moveInventoryItems(this.itemTank, stockStackHandler);
             }
         }
     }
 
-    public void TransferAll(ItemStackHandler from, ItemStackHandler to) {
+    public void transferAll(ItemStackHandler from, ItemStackHandler to) {
         for(int i = 0; i < from.getSlots(); i++) {
             if(!from.getStackInSlot(i).isEmpty())
             {
@@ -155,14 +158,6 @@ public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInterac
                 }
             }
         }
-    }
-
-    public boolean onScrewdriverClick(EntityPlayer playerIn, EnumHand hand, EnumFacing wrenchSide, CuboidRayTraceResult hitResult) {
-        return super.onScrewdriverClick(playerIn, hand, wrenchSide, hitResult);
-    }
-
-    public boolean onWrenchClick(EntityPlayer playerIn, EnumHand hand, EnumFacing wrenchSide, CuboidRayTraceResult hitResult) {
-        return super.onWrenchClick(playerIn, hand, wrenchSide, hitResult);
     }
 
     public boolean needsSneakToRotate() {
@@ -241,12 +236,23 @@ public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInterac
         this.pulling = data.getBoolean("pulling");
     }
 
-    public boolean onRightClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing, CuboidRayTraceResult hitResult) {
-        return super.onRightClick(playerIn, hand, facing, hitResult);
-    }
-
     public void SetTransferState(boolean state) {
         this.pulling = state;
         this.writeCustomData(0b100, (buf) -> buf.writeBoolean(this.pulling));
+    }
+
+    public boolean onScrewdriverClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing, CuboidRayTraceResult hitResult) {
+        this.pulling = !this.pulling;
+
+        if (!this.getWorld().isRemote) {
+            String displayName = I18n.format(this.getMetaFullName());
+            if (this.pulling) {
+                playerIn.sendStatusMessage(new TextComponentTranslation("susy.stock_interfaces.pull", displayName), true);
+            } else {
+                playerIn.sendStatusMessage(new TextComponentTranslation("susy.stock_interfaces.push", displayName), true);
+            }
+        }
+
+        return true;
     }
 }

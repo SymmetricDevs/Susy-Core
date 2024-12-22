@@ -831,9 +831,8 @@ gregtech.block_group_members.latex_logs.name=Rubber Log
 
 
 # Stock Interfaces
-susy.stock_interfaces.right_click_for_gui=Right click for configuration gui
-susy.stock_interfaces.screwdriver_cycle=Screwdriver to cycle filter
-susy.stock_interfaces.wrench_toggle=Wrench to toggle I/O
+susy.stock_interfaces.pull=%s will try to pull from trains.
+susy.stock_interfaces.push=%s will try to push to trains.
 
 gregtech.machine.stock_controller.name=Locomotive Controller
 susy.stock_interfaces.locomotive_controller.description=Controls nearby locomotives thrust and break depending on redstone input

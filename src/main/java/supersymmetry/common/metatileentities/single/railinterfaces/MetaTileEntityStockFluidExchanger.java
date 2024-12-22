@@ -171,14 +171,6 @@ public class MetaTileEntityStockFluidExchanger extends MetaTileEntityStockIntera
         }
     }
 
-    public boolean onScrewdriverClick(EntityPlayer playerIn, EnumHand hand, EnumFacing wrenchSide, CuboidRayTraceResult hitResult) {
-        return super.onScrewdriverClick(playerIn, hand, wrenchSide, hitResult);
-    }
-
-    public boolean onWrenchClick(EntityPlayer playerIn, EnumHand hand, EnumFacing wrenchSide, CuboidRayTraceResult hitResult) {
-        return super.onWrenchClick(playerIn, hand, wrenchSide, hitResult);
-    }
-
     public boolean needsSneakToRotate() {
         return true;
     }
@@ -386,6 +378,21 @@ public class MetaTileEntityStockFluidExchanger extends MetaTileEntityStockIntera
         public int getPriority() {
             return MetaTileEntityStockFluidExchanger.this.locked && MetaTileEntityStockFluidExchanger.this.lockedFluid != null ? IFilter.whitelistPriority(1) : IFilter.noPriority();
         }
+    }
+
+    public boolean onScrewdriverClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing, CuboidRayTraceResult hitResult) {
+        this.pulling = !this.pulling;
+
+        if (!this.getWorld().isRemote) {
+            String displayName = I18n.format(this.getMetaFullName());
+            if (this.pulling) {
+                playerIn.sendStatusMessage(new TextComponentTranslation("susy.stock_interfaces.pull", displayName), true);
+            } else {
+                playerIn.sendStatusMessage(new TextComponentTranslation("susy.stock_interfaces.push", displayName), true);
+            }
+        }
+
+        return true;
     }
 
 }
