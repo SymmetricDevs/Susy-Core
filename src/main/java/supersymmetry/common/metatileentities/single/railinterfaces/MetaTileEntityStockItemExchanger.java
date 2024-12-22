@@ -27,7 +27,6 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.SusyLog;
@@ -144,22 +143,6 @@ public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInterac
         }
     }
 
-    public void transferAll(ItemStackHandler from, ItemStackHandler to) {
-        for(int i = 0; i < from.getSlots(); i++) {
-            if(!from.getStackInSlot(i).isEmpty())
-            {
-                for(int j = 0; j < to.getSlots();) {
-                    if(to.getStackInSlot(j).isEmpty() || ItemHandlerHelper.canItemStacksStack(from.getStackInSlot(i), to.getStackInSlot(j))) {
-                        from.setStackInSlot(i, to.insertItem(j, from.getStackInSlot(i), false));
-                        j++;
-                        if(from.getStackInSlot(i).isEmpty())
-                            j = to.getSlots() + 1;
-                    }
-                }
-            }
-        }
-    }
-
     public boolean needsSneakToRotate() {
         return true;
     }
@@ -207,7 +190,7 @@ public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInterac
         }
 
         //CycleButtonWidget filterIndexButton = new CycleButtonWidget(9 + 8 + 5 * 18, 18, 60, 18, subClassNameMap, () -> this.subFilterIndex, (x) -> this.uiCycleFilter());
-        CycleButtonWidget cycleStateButton = new CycleButtonWidget(9 + 8 + 5 * 18, 36, 60, 18, new String[]{"pulling", "pushing"}, () -> this.pulling ? 0 : 1, (x) -> this.SetTransferState(x == 0));
+        CycleButtonWidget cycleStateButton = new CycleButtonWidget(9 + 8 + 5 * 18, 36, 60, 18, new String[]{"pulling", "pushing"}, () -> this.pulling ? 0 : 1, (x) -> this.setTransferState(x == 0));
 
         //builder.widget(filterIndexButton);
         builder.widget(cycleStateButton);
@@ -236,13 +219,13 @@ public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInterac
         this.pulling = data.getBoolean("pulling");
     }
 
-    public void SetTransferState(boolean state) {
+    public void setTransferState(boolean state) {
         this.pulling = state;
         this.writeCustomData(0b100, (buf) -> buf.writeBoolean(this.pulling));
     }
 
     public boolean onScrewdriverClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing, CuboidRayTraceResult hitResult) {
-        this.pulling = !this.pulling;
+        this.setTransferState(!this.pulling);
 
         if (!this.getWorld().isRemote) {
             String displayName = I18n.format(this.getMetaFullName());

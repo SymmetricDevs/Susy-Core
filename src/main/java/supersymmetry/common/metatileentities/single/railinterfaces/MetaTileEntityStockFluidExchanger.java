@@ -381,7 +381,7 @@ public class MetaTileEntityStockFluidExchanger extends MetaTileEntityStockIntera
     }
 
     public boolean onScrewdriverClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing, CuboidRayTraceResult hitResult) {
-        this.pulling = !this.pulling;
+        this.setTransferState(!this.pulling);
 
         if (!this.getWorld().isRemote) {
             String displayName = I18n.format(this.getMetaFullName());
