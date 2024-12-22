@@ -60,12 +60,12 @@ public abstract class MetaTileEntityStockInteractor extends MetaTileEntity imple
     public MetaTileEntityStockInteractor(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
         this.filter = new StockFilter();
+        this.stocks = new ArrayList<>();
     }
 
     public MetaTileEntityStockInteractor(ResourceLocation metaTileEntityId, List<String> subFilter) {
         this(metaTileEntityId);
         this.filter = new StockFilter(subFilter);
-        this.stocks = new ArrayList<>();
     }
 
     @Override
