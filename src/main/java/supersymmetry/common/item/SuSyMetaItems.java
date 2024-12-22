@@ -17,6 +17,7 @@ import supersymmetry.common.item.armor.BreathingApparatus;
 import supersymmetry.common.item.armor.SimpleGasMask;
 
 import static net.minecraft.inventory.EntityEquipmentSlot.*;
+import supersymmetry.common.item.armor.SuSyMetaArmor;
 
 public class SuSyMetaItems {
 
@@ -46,15 +47,15 @@ public class SuSyMetaItems {
     public static ArmorMetaItem<?>.ArmorMetaValueItem NOMEX_LEGGINGS;
     public static ArmorMetaItem<?>.ArmorMetaValueItem NOMEX_BOOTS;
 
+    public static ArmorMetaItem<?>.ArmorMetaValueItem JET_WINGPACK;
 
     public static void initMetaItems() {
         metaItem = new StandardMetaItem();
         metaItem.setRegistryName("meta_item");
         oreDictItem = new MetaOreDictItem((short) 0);
         oreDictItem.setRegistryName("susy_oredict_item");
-        armorItem = new SuSyArmorItem();
-        armorItem.setRegistryName("susy_armor_item");
-
+        SuSyMetaArmor armor = new SuSyMetaArmor();
+        armor.setRegistryName("susy_armor");
         CatalystItems.init();
 
     }

@@ -98,6 +98,12 @@
       "textures" : {
         "all" : "gregtech:blocks/resource/sulfur"
       }
+    },
+    "variant=coal" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/resource/coal"
+      }
     }
   }
 }

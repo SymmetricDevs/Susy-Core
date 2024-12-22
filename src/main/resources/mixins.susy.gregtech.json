@@ -6,11 +6,10 @@
   "compatibilityLevel" : "JAVA_8",
   "mixins" : [
     "BlockMachineMixin",
+    "MetaTileEntityDrumAccessor",
     "MetaTileEntityFluidDrillMixin",
     "MetaTileEntityLargeMinerMixin",
-    "MetaTileEntityMinerMixin"
-  ],
-  "client" : [
+    "MetaTileEntityMinerMixin",
     "MultiblockControllerBaseMixin"
   ]
 }

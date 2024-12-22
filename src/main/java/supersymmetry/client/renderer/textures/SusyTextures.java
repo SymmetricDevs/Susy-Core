@@ -1,8 +1,11 @@
 package supersymmetry.client.renderer.textures;
 
 import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
+import gregtech.client.renderer.texture.cube.SimpleCubeRenderer;
 import gregtech.client.renderer.texture.cube.SimpleOverlayRenderer;
 import gregtech.client.renderer.texture.cube.SimpleSidedCubeRenderer;
+import supersymmetry.client.renderer.textures.custom.ExtenderRender;
+import gregtech.client.renderer.texture.custom.DrumRenderer;
 
 public class SusyTextures {
 
@@ -10,6 +13,17 @@ public class SusyTextures {
     }
 
     public static final SimpleSidedCubeRenderer WOODEN_COAGULATION_TANK_WALL = new SimpleSidedCubeRenderer("casings/wooden_coagulation_tank_wall");
+    public static final SimpleSidedCubeRenderer PLASTIC_CAN_OVERLAY = new SimpleSidedCubeRenderer("storage/drums/plastic_can_top");
+    public static final SimpleSidedCubeRenderer INV_BRIDGE = new SimpleSidedCubeRenderer("logistics/bridges/inv");
+    public static final SimpleSidedCubeRenderer TANK_BRIDGE = new SimpleSidedCubeRenderer("logistics/bridges/tank");
+    public static final SimpleSidedCubeRenderer INV_TANK_BRIDGE = new SimpleSidedCubeRenderer("logistics/bridges/inv_tank");
+    public static final SimpleSidedCubeRenderer UNIVERSAL_BRIDGE = new SimpleSidedCubeRenderer("logistics/bridges/universal");
+
+    public static final ExtenderRender INV_EXTENDER = new ExtenderRender("logistics/extenders/inv");
+    public static final ExtenderRender TANK_EXTENDER = new ExtenderRender("logistics/extenders/tank");
+    public static final ExtenderRender INV_TANK_EXTENDER = new ExtenderRender("logistics/extenders/inv_tank");
+    public static final ExtenderRender UNIVERSAL_EXTENDER = new ExtenderRender("logistics/extenders/universal");
+
     public static final OrientedOverlayRenderer VULCANIZING_PRESS_OVERLAY = new OrientedOverlayRenderer("machines/vulcanizing_press");
     public static final OrientedOverlayRenderer LATEX_COLLECTOR_OVERLAY = new OrientedOverlayRenderer("machines/latex_collector");
     public static final OrientedOverlayRenderer ROASTER_OVERLAY = new OrientedOverlayRenderer("machines/roaster");
@@ -65,7 +79,13 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer ROTARY_KILN_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/rotary_kiln");
     public static final OrientedOverlayRenderer SINTERING_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/sintering");
     public static final OrientedOverlayRenderer SMOKE_STACK_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/smoke_stack");
+    public static final OrientedOverlayRenderer PRIMITIVE_SMELTER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/primitive_smelter");
 
     public static final SimpleOverlayRenderer SILICON_CARBIDE_CASING = new SimpleOverlayRenderer("multiblock_casing/silicon_carbide_casing");
     public static final SimpleOverlayRenderer ULV_STRUCTURAL_CASING = new SimpleOverlayRenderer("multiblock_casing/ulv_structural_casing");
+    public static final SimpleOverlayRenderer SLAG_HOT = new SimpleOverlayRenderer("resource/slag_hot");
+
+    public static final SimpleCubeRenderer MASONRY_BRICK = new SimpleCubeRenderer("gregtech:blocks/multiblock_casing/masonry_brick");
+
+    public static final DrumRenderer PLASTIC_CAN = new DrumRenderer("storage/drums/plastic_can");
 }
