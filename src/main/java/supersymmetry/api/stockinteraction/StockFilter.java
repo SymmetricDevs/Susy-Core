@@ -43,13 +43,6 @@ public class StockFilter implements INBTSerializable<NBTTagCompound> {
         this.selection = new HashMap<>();
     }
 
-    public List<Class> getSelection() {
-        return selection.entrySet().stream()
-                .filter(Map.Entry::getValue)
-                .map(entry -> nameToStockClassMap.get(entry.getKey()))
-                .collect(Collectors.toList());
-    }
-
     public void setFilterIsSelected(String name, boolean isSelected) {
         if(this.getSubFilter().contains(name))
             this.selection.put(name, isSelected);
@@ -57,11 +50,6 @@ public class StockFilter implements INBTSerializable<NBTTagCompound> {
 
     public boolean getFilterIsSelected(String name) {
         return this.selection.getOrDefault(name, false);
-    }
-
-    public void toggleFilterSelected(String name) {
-        if(this.getSubFilter().contains(name))
-            this.selection.put(name, !this.selection.getOrDefault(name, false));
     }
 
     public List<String> getSubFilter() {
@@ -83,7 +71,7 @@ public class StockFilter implements INBTSerializable<NBTTagCompound> {
             String name = getSubFilter().get(i);
             widgetGroup.addWidget(
                 new ToggleButtonWidget(7, 8 + i * 18, 18, 18, GuiTextures.BUTTON_LOCK, () -> this.getFilterIsSelected(name), (isSelected) -> this.setFilterIsSelected(name, isSelected))
-                    .setTooltipText("susy.gui.stock_filter.filter_button.tooltip", new Object[]{name})
+                    .setTooltipText("susy.gui.stock_filter.filter_button.tooltip", name)
                     .shouldUseBaseBackground());
         }
         
