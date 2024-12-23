@@ -11,6 +11,7 @@ public class SuSyMetaArmor extends ArmorMetaItem<ArmorMetaItem<?>.ArmorMetaValue
 
     @Override
     public void registerSubItems() {
+        SIMPLE_GAS_MASK = addItem(0, "simple_gas_mask").setArmorLogic(new SimpleGasMask());
         SuSyMetaItems.JET_WINGPACK = addItem(1, "jet_wingpack").setArmorLogic(new JetWingpack());
         GAS_MASK = addItem(2, "gas_mask").setArmorLogic(new BreathingApparatus(HEAD));
         GAS_TANK = addItem(3, "gas_tank").setArmorLogic(new BreathingApparatus(CHEST));

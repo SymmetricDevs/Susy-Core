@@ -113,5 +113,6 @@ public class ClientProxy extends CommonProxy {
     public static void stitchTexture(TextureStitchEvent.Pre event) {
         TextureMap map = event.getMap();
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "armor/jet_wingpack"));
+        map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "armor/nomex_head"));
     }
 }

@@ -5,6 +5,7 @@ import gregtech.api.capability.IElectricItem;
 import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.items.metaitem.ElectricStats;
 import gregtech.common.items.behaviors.TooltipBehavior;
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -17,7 +18,11 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import supersymmetry.client.renderer.handler.BreathingApparatusModel;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.item.SuSyArmorItem;
 
@@ -30,6 +35,8 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
     private final String name;
     private final int tier;
     private final double relativeAbsorption;
+    @SideOnly(Side.CLIENT)
+    private BreathingApparatusModel model;
 
     public AdvancedBreathingApparatus(EntityEquipmentSlot slot, double hoursOfLife, String name, int tier, double relativeAbsorption) {
         super(slot);
@@ -41,10 +48,15 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
 
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-        if (this.SLOT == LEGS) {
-            return "gregtech:textures/armor/" + name + "/legs.png";
-        }
-        return "gregtech:textures/armor/" + name + "/not_legs.png";
+        return "susy:textures/armor/" + name + "_" + slot.getName() + ".png";
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public @Nullable ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped defaultModel) {
+        if (model == null)
+            model = new BreathingApparatusModel(name + "_" + armorSlot.getName());
+        return model;
     }
 
     @Override

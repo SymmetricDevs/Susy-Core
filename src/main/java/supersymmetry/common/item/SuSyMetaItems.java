@@ -29,7 +29,7 @@ public class SuSyMetaItems {
     public static MetaValueItem PUMP_STEAM;
     public static MetaValueItem AIR_VENT;
     public static MetaValueItem TRACK_SEGMENT;
-    public static SuSyArmorItem.SuSyArmorMetaValueItem SIMPLE_GAS_MASK;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem SIMPLE_GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_TANK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem ASBESTOS_MASK;
@@ -83,8 +83,6 @@ public class SuSyMetaItems {
         TRACK_SEGMENT = metaItem.addItem(5, "track_segment").addComponents(new TooltipBehavior((lines) -> {
             lines.add(I18n.format("metaitem.track_segment.length_info"));
         }));
-        SIMPLE_GAS_MASK = armorItem.addItem(0, "simple_gas_mask")
-                .setArmorLogic(new SimpleGasMask());
     }
 
     private static void addTieredOredictItem(OreDictValueItem[] items, int id, int RGB, OrePrefix prefix) {

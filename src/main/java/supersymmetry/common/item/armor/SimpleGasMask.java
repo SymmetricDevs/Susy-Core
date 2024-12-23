@@ -30,8 +30,6 @@ public class SimpleGasMask implements IBreathingArmorLogic, IItemDurabilityManag
         return "gregtech:textures/armor/simple_gas_mask.png";
     }
 
-
-
     @Override
     public double getDurabilityForDisplay(ItemStack itemStack) {
         return 1 - getDamage(itemStack);
