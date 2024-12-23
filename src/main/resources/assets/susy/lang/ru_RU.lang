@@ -76,6 +76,8 @@ tile.resource_block.potash.name=Калийное месторождение
 tile.resource_block.sulfur.name=Месторождение серы
 tile.resource_block.coal.name=Месторождение угля
 tile.resource_block_1.native_copper.name=Месторождение самородной меди
+tile.resource_block_1.anthracite.name=Месторождение антрацита
+tile.resource_block_1.lignite.name=Месторождение лигнита
 
 
 tile.multiblock_tank.clarifier.name=Осветлительная Ванна
@@ -110,6 +112,7 @@ tile.susy_stone_smooth.shale.name=Сланец
 tile.susy_stone_smooth.slate.name=сланец
 tile.susy_stone_smooth.soapstone.name=Мыльный камень
 tile.susy_stone_smooth.kimberlite.name=Кимберлит
+tile.susy_stone_smooth.industrial_concrete.name=Промышленный бетон
 tile.susy_stone_cobble.gabbro.name=Габбро Булыжник
 tile.susy_stone_cobble.gneiss.name=Гнейсовый булыжник
 tile.susy_stone_cobble.graphite.name=Графитовый булыжник
@@ -121,6 +124,7 @@ tile.susy_stone_cobble.shale.name=Сланцевый булыжник
 tile.susy_stone_cobble.slate.name=Сланцевый булыжник
 tile.susy_stone_cobble.soapstone.name=Мыльный камень Булыжник
 tile.susy_stone_cobble.kimberlite.name=Кимберлитовый булыжник
+tile.susy_stone_cobble.industrial_concrete.name=Промышленный бетонный булыжник
 tile.susy_stone_bricks.gabbro.name=Габбро Кирпичи
 tile.susy_stone_bricks.gneiss.name=Гнейсовые кирпичи
 tile.susy_stone_bricks.graphite.name=Графитовый кирпич
@@ -132,6 +136,7 @@ tile.susy_stone_bricks.shale.name=Сланцевый кирпич
 tile.susy_stone_bricks.slate.name=Сланцевые Кирпичи
 tile.susy_stone_bricks.soapstone.name=Кирпичи из мыльного камня
 tile.susy_stone_bricks.kimberlite.name=Кимберлитовые кирпичи
+tile.susy_stone_bricks.industrial_concrete.name=Industrial Concrete Bricks
 
 # Materials
 susy.material.manganese_iron_arsenic_phosphide=Марганец-железо-мышьяк-фосфид
@@ -184,6 +189,7 @@ item.material.oreprefix.sheetedFrame=%s Листовая рама Коробка
 item.material.oreprefix.fiber=%s Волокно
 item.material.oreprefix.fiberWet=Мокрые волокна %s
 item.material.oreprefix.thread=%s Нить
+item.material.oreprefix.dustWet=Мокрая %s пыль
 
 susy.fluid.impure_slurry=Нечистая суспензия %s
 susy.fluid.slurry=%s суспензия
@@ -206,6 +212,12 @@ gregtech.machine.coagulation_tank.tooltip=Нельзя использовать 
 gregtech.machine.coagulation_tank.tooltip.1=Получает одну параллель на блок дольше
 gregtech.machine.drum.lead.name=Свинцовая бочка
 gregtech.machine.drum.brass.name=Латунная бочка
+gregtech.machine.drum.pe.name=Полиэтиленовая  бочка
+gregtech.machine.drum.pp.name=Полипропиленовая банка
+gregtech.machine.drum.ptfe.name=Политетрафторэтиленовая бочка
+gregtech.machine.drum.uhmwpe.name=Сверхвысокомолекулярная полиэтиленовая бочка
+
+gregtech.machine.crate.pe.name=Герметично запечатанный ящик
 
 gregtech.machine.polymerization_tank.name=Бак для полимеризации
 gregtech.machine.fluidized_bed_reactor.name=Реактор с псевдоожиженным слоем
@@ -256,7 +268,10 @@ gregtech.machine.primitive_mud_pump.name=Примитивный грязевой
 gregtech.machine.primitive_mud_pump.tooltip=Работает только в речных биомах между Y=64 и Y=80.
 gregtech.machine.basic_steam_turbine.name=Большая паровая турбина
 gregtech.machine.basic_gas_turbine.name=Большая газовая турбина
-gregtech.machine.ocean_pumper.name=Океанский насос
+gregtgregtech.machine.large_fluid_pump.name=Большой жидкостный насос
+gregtech.machine.large_fluid_pump.tooltip.1=Это определенно повлияет на местную популяцию форели.
+gregtech.machine.large_fluid_pump.tooltip.2=Работает только в том случае, если контроллер находится в положении Y=64, а нижняя обшивка стальной трубы расположена в правильном биоме.
+ech.machine.ocean_pumper.name=Океанский насос
 gregtech.machine.ocean_pumper.tooltip=Работает только в биомах океана между Y=70 и Y=75.
 gregtech.machine.advanced_arc_furnace.name=Усовершенствованная дуговая печь
 gregtech.machine.clarifier.name=Осветлитель
@@ -289,6 +304,7 @@ gregtech.machine.high_pressure_cryogenic_distillation_plant.name=Криоген�
 gregtech.machine.single_column_cryogenic_distillation_plant.name=Одноколонная криогенная дистилляционная установка
 gregtech.machine.reverberatory_furnace.name=Реверберационная печь
 gregtech.machine.blender.name=Блендер
+gregtech.machine.sieve_distillation_tower.name=Ситовая дистилляционная башня
 
 gregtech.machine.drone_pad.name=Drone Pad
 gregtech.machine.primitive_smelter.name=Примитивный плавильный печь
@@ -709,6 +725,9 @@ recipemap.gravity_separator=Гравитационное разделение
 recipemap.spinning.name=Текстильное прядение
 recipemap.large_steam_turbine.name=Большая паровая турбина
 recipemap.primitive_smelter.name=Первобытная плавка
+recipemap.large_fluid_pump.name=Большой жидкостный насос
+recipemap.sieve_distillation.name=Фракционная перегонка
+recipemap.jet_wingpack_fuels.name=Топливо для реактивных крыльев
 
 gregtech.multiblock.primitive_mud_pump.description=Primitive Mud Pump — это мультиблок Steam Era, который собирает грязь раз в секунду, но только если он находится в речном биоме и когда контроллер находится между Y = 64 и Y = 80 (включительно). Он может использовать выходной люк Pump, ULV или LV.
 gregtech.multiblock.ocean_pumper.description=Ocean Pumper — это многофункциональный электрический блок, который собирает базовое количество морской воды в размере 8000 л в секунду (при MV), но только если он находится в биоме океана и когда контроллер находится между Y = 70 и Y = 75 (включительно). Ему нужен выходной люк, люк для обслуживания и люк для входа энергии.
@@ -723,10 +742,53 @@ gregtech.machine.energy_hatch.output_4a.hv.name=HV 4A Динамо-люк
 gregtech.machine.energy_hatch.output_16a.hv.name=HV 16A Динамо-люк
 gregtech.machine.energy_hatch.output_16a.ev.name=EV 16A Динамо-люк
 
-# Other multiblock parts
+# Quadruple & Nonuple Fluid Hatches
 
+gregtech.machine.fluid_hatch.import_4x.lv.name=Жидкостный 4-х входной люк LV
+gregtech.machine.fluid_hatch.import_4x.mv.name=Жидкостный 4-х входной люк MV
+gregtech.machine.fluid_hatch.import_4x.hv.name=Жидкостный 4-х входной люк HV
+
+gregtech.machine.fluid_hatch.import_9x.lv.name=Жидкостный 9-х входной люк LV
+gregtech.machine.fluid_hatch.import_9x.mv.name=Жидкостный 9-х входной люк MV
+gregtech.machine.fluid_hatch.import_9x.hv.name=Жидкостный 9-х входной люк HV
+
+gregtech.machine.fluid_hatch.export_4x.lv.name=Жидкостный 4-х выходной люк LV
+gregtech.machine.fluid_hatch.export_4x.mv.name=Жидкостный 4-х выходной люк MV
+gregtech.machine.fluid_hatch.export_4x.hv.name=Жидкостный 4-х выходной люк HV
+
+gregtech.machine.fluid_hatch.export_9x.lv.name=Жидкостный 9-х выходной люк LV
+gregtech.machine.fluid_hatch.export_9x.mv.name=Жидкостный 9-х выходной люк MV
+gregtech.machine.fluid_hatch.export_9x.hv.name=Жидкостный 9-х выходной люк HV
+
+# Other multiblock parts
 gregtech.machine.dumping_hatch=Люк для сброса
-gregtech.machine.dumping_hatch.lv.name=Dumping Hatch
+gregtech.machine.dumping_hatch.lv.name=Люк для сброса
+
+# Distillation tower explanations
+gregtech.machine.ordered_dt.tooltip.1=Входные и выходные люки для жидкости находятся на одних и тех же уровнях.
+gregtech.machine.ordered_dt.tooltip.2=§c Невыполнение вывода жидкости в N-й слой снизу делает N-й вывод недействительным §7
+
+# Logistics
+gregtech.machine.delegator.tooltip.non_recursion=§6 Невозможно присоединить к другим Делегаторам!
+gregtech.top.delegator.delegating_face=Делегирование: %s
+
+gregtech.machine.bridge.inv.name=Инвентарный мост
+gregtech.machine.bridge.inv.tooltip=§b Реле Инвентарь
+gregtech.machine.bridge.tank.name=Танковый мост
+gregtech.machine.bridge.tank.tooltip=§b Реле Танки
+gregtech.machine.bridge.inv_tank.name=Инвентарь и танковый мост
+gregtech.machine.bridge.inv_tank.tooltip=§b Реле Инвентарь и Резервуары
+gregtech.machine.bridge.universal.name=Универсальный мост
+gregtech.machine.bridge.universal.tooltip=§b Реле Все
+
+gregtech.machine.extender.inv.name=Расширитель инвентаря
+gregtech.machine.extender.inv.tooltip=§b Реле Инвентарь
+gregtech.machine.extender.tank.name=Расширитель бака
+gregtech.machine.extender.tank.tooltip=§b Реле Танки
+gregtech.machine.extender.inv_tank.name=Инвентарь и расширитель бака
+gregtech.machine.extender.inv_tank.tooltip=§b Реле Инвентарь и Резервуары
+gregtech.machine.extender.universal.name=Универсальный удлинитель
+gregtech.machine.extender.universal.tooltip=§bРеле всего
 
 # Metaitems
 metaitem.catalyst_bed_support_grid.name=Решетка поддержки слоя катализатора
@@ -793,17 +855,30 @@ gregtech.catalyst_group.standard_catalysts.name=Стандартный ката�
 gregtech.catalyst_group.cracking_catalyst_beds.name=Катализатор крекинга
 metaitem.standard_catalyst_bed_cracking.name=Слой катализатора крекинга
 
+# Armors
+metaitem.jet_wingpack.name=Реактивный ранец-крыло
+metaitem.jet_wingpack.tooltip=Удерживайте клавишу Shift для торможения при включенном двигателе
+metaarmor.hud.engine_status=Движок: %s
+metaarmor.jet_wingpack.engine_active=Реактивный крылатый ранец: двигатель активирован
+metaarmor.jet_wingpack.engine_inactive=Реактивный крылатый ранец: Двигатель отключен
+
 # Machine Translations
 susy.ocean_pumper.full=Баки полны!
 susy.ocean_pumper.drainrate=Текущая скорость откачки: %s
 susy.wrongbiome=Машина не может работать в этом биоме!
 susy.weather_resistance=§2Не взрывается от воды, лавы, огня или дождя.
+susy.large_fluid_pump.y_level=Текущий уровень контроллера Y: Y=%s
+susy.large_fluid_pump.biome=Текущий биом нижней обсадной трубы: %s
 
 # Latex Logs
 gregtech.block_group_members.latex_logs.name=Резиновый журнал
 
 # Extra recipe info
 susy.recipe.dimensions=Размеры: %s
+susy.recipe.biomes=Биомы: %s
+susy.recipe.biomes_blocked=Заблокированные биомы: %s
+susy.recipe.biomeTypes=Типы биомов: %s
+susy.recipe.biomeTypes_blocked=Заблокированные типы биомов: %s
 
 # Commands
 
