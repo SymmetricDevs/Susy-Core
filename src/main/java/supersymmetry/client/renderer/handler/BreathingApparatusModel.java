@@ -1,13 +1,14 @@
 package supersymmetry.client.renderer.handler;
 
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.util.ResourceLocation;
 
 import static supersymmetry.api.util.SuSyUtility.susyId;
 
 public class BreathingApparatusModel extends ModelBiped {
-    private final OBJModelRender objModel;
-
-    public BreathingApparatusModel(String loc) {
+    public BreathingApparatusModel(String name, EntityEquipmentSlot slot) {
         this.textureWidth = 64;
         this.textureHeight = 64;
 
@@ -19,7 +20,35 @@ public class BreathingApparatusModel extends ModelBiped {
         this.bipedLeftLeg.cubeList.clear();
         this.bipedRightLeg.cubeList.clear();
 
-        this.objModel = new OBJModelRender(this, susyId("models/armor/" + loc + ".obj"));
-        this.bipedHead.addChild(objModel);
+        addChildren(name, slot);
+    }
+
+    public void addChildren(String name, EntityEquipmentSlot slot) {
+        switch (slot) {
+            case FEET -> {
+                this.bipedLeftLeg.addChild(modelForPart(name, "left_foot"));
+                this.bipedRightLeg.addChild(modelForPart(name, "right_foot"));
+            }
+            case CHEST -> {
+                this.bipedBody.addChild(modelForPart(name, "chest"));
+                this.bipedLeftArm.addChild(modelForPart(name, "left_arm"));
+                this.bipedRightArm.addChild(modelForPart(name, "right_arm"));
+            }
+            case LEGS -> {
+                this.bipedLeftLeg.addChild(modelForPart(name, "left_leg"));
+                this.bipedRightLeg.addChild(modelForPart(name, "right_leg"));
+            }
+            case HEAD -> {
+                this.bipedHead.addChild(modelForPart(name, "head"));
+            }
+        }
+    }
+
+    public ResourceLocation resourceFromPart(String armor, String model) {
+        return susyId("models/armor/" + armor + "_" + model + ".obj");
+    }
+
+    public OBJModelRender modelForPart(String armor, String model) {
+        return new OBJModelRender(this, resourceFromPart(armor, model), 17);
     }
 }

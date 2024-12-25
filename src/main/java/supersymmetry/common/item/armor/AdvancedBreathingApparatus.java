@@ -55,7 +55,7 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
     @Override
     public @Nullable ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped defaultModel) {
         if (model == null)
-            model = new BreathingApparatusModel(name + "_" + armorSlot.getName());
+            model = new BreathingApparatusModel(name, armorSlot);
         return model;
     }
 
