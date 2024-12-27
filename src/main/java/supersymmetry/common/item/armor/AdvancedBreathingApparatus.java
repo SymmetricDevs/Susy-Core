@@ -1,10 +1,5 @@
 package supersymmetry.common.item.armor;
 
-import gregtech.api.capability.GregtechCapabilities;
-import gregtech.api.capability.IElectricItem;
-import gregtech.api.items.armor.ArmorMetaItem;
-import gregtech.api.items.metaitem.ElectricStats;
-import gregtech.common.items.behaviors.TooltipBehavior;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
@@ -13,24 +8,25 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
-import net.minecraft.world.World;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ISpecialArmor;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import supersymmetry.client.renderer.handler.BreathingApparatusModel;
+import supersymmetry.client.renderer.handler.ITextureRegistrar;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.item.SuSyArmorItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static net.minecraft.inventory.EntityEquipmentSlot.*;
+import static supersymmetry.api.util.SuSyUtility.susyId;
 
-public class AdvancedBreathingApparatus extends BreathingApparatus {
+public class AdvancedBreathingApparatus extends BreathingApparatus implements ITextureRegistrar {
     private final double hoursOfLife;
     private final String name;
     private final int tier;
@@ -206,4 +202,11 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
         return (int) Math.round(20.0F * this.getAbsorption(armor) * relativeAbsorption);
     }
 
+    @Override
+    @SideOnly(Side.CLIENT)
+    public List<ResourceLocation> getTextureLocations() {
+        List<ResourceLocation> models = new ArrayList<>();
+        models.add(susyId("armor/" + name + "_" + this.SLOT.toString()));
+        return models;
+    }
 }

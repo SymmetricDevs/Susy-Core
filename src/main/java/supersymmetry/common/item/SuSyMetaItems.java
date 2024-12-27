@@ -22,7 +22,7 @@ import supersymmetry.common.item.armor.SuSyMetaArmor;
 public class SuSyMetaItems {
 
     private static StandardMetaItem metaItem;
-    private static SuSyArmorItem armorItem;
+    public static SuSyArmorItem armorItem;
     public static MetaOreDictItem oreDictItem;
     public static MetaValueItem CATALYST_BED_SUPPORT_GRID;
     public static MetaValueItem CONVEYOR_STEAM;
@@ -54,8 +54,8 @@ public class SuSyMetaItems {
         metaItem.setRegistryName("meta_item");
         oreDictItem = new MetaOreDictItem((short) 0);
         oreDictItem.setRegistryName("susy_oredict_item");
-        SuSyMetaArmor armor = new SuSyMetaArmor();
-        armor.setRegistryName("susy_armor");
+        armorItem = new SuSyMetaArmor();
+        armorItem.setRegistryName("susy_armor");
         CatalystItems.init();
 
     }

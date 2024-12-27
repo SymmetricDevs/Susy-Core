@@ -1,14 +1,14 @@
 package supersymmetry.common.item;
 
-import com.google.common.base.Preconditions;
 import gregtech.api.items.armor.ArmorMetaItem;
-import gregtech.api.items.armor.IArmorLogic;
 import gregtech.api.items.metaitem.stats.IItemComponent;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.util.ResourceLocation;
 import supersymmetry.api.items.IBreathingArmorLogic;
 import supersymmetry.api.items.IBreathingItem;
+import supersymmetry.client.renderer.handler.ITextureRegistrar;
 
 
 public class SuSyArmorItem extends ArmorMetaItem<SuSyArmorItem.SuSyArmorMetaValueItem> implements IBreathingItem {
@@ -45,4 +45,13 @@ public class SuSyArmorItem extends ArmorMetaItem<SuSyArmorItem.SuSyArmorMetaValu
         return new SuSyArmorMetaValueItem(metaValue, unlocalizedName);
     }
 
+    public void registerIngameModels(TextureMap map) {
+        for (SuSyArmorMetaValueItem item : this.getAllItems()) {
+            if (item.getArmorLogic() instanceof ITextureRegistrar registrar) {
+                for (ResourceLocation model : registrar.getTextureLocations()) {
+                    map.registerSprite(model);
+                }
+            }
+        }
+    }
 }

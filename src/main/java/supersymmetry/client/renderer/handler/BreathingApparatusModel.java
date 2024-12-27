@@ -1,9 +1,11 @@
 package supersymmetry.client.renderer.handler;
 
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static supersymmetry.api.util.SuSyUtility.susyId;
 
@@ -38,17 +40,15 @@ public class BreathingApparatusModel extends ModelBiped {
                 this.bipedLeftLeg.addChild(modelForPart(name, "left_leg"));
                 this.bipedRightLeg.addChild(modelForPart(name, "right_leg"));
             }
-            case HEAD -> {
-                this.bipedHead.addChild(modelForPart(name, "head"));
-            }
+            case HEAD -> this.bipedHead.addChild(modelForPart(name, "head"));
         }
     }
 
-    public ResourceLocation resourceFromPart(String armor, String model) {
+    public ResourceLocation modelLocationFromPart(String armor, String model) {
         return susyId("models/armor/" + armor + "_" + model + ".obj");
     }
 
     public OBJModelRender modelForPart(String armor, String model) {
-        return new OBJModelRender(this, resourceFromPart(armor, model), 17);
+        return new OBJModelRender(this, modelLocationFromPart(armor, model), 17);
     }
 }
