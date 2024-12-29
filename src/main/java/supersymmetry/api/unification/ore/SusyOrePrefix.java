@@ -4,8 +4,12 @@ import gregtech.api.GTValues;
 import gregtech.api.unification.material.info.MaterialFlags;
 import gregtech.api.unification.material.info.MaterialIconType;
 import gregtech.api.unification.ore.OrePrefix;
+import net.minecraft.client.resources.I18n;
 import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
 import supersymmetry.api.unification.material.info.SuSyMaterialIconType;
+import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
+
+import java.util.Collections;
 
 import static gregtech.api.unification.ore.OrePrefix.Flags.ENABLE_UNIFICATION;
 
@@ -54,4 +58,28 @@ public class SusyOrePrefix {
 
     // Wet dust
     public static final OrePrefix dustWet = new OrePrefix("dustWet", -1, null, SuSyMaterialIconType.dustWet, OrePrefix.Flags.ENABLE_UNIFICATION, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_WET_DUST));
+
+    // Nuclear stuff, introduced by Zalgo and Bruberu
+    public static final OrePrefix fuelRod = new OrePrefix("fuelRod", -1, null, SuSyMaterialIconType.fuelRod, 0,
+            material -> material.hasProperty(SuSyPropertyKey.FISSION_FUEL),
+            mat -> Collections.singletonList(I18n.format("metaitem.nuclear.tooltip.radioactive")));
+    public static final OrePrefix fuelRodDepleted = new OrePrefix("fuelRodDepleted", -1, null,
+            SuSyMaterialIconType.fuelRodDepleted, 0, material -> material.hasProperty(SuSyPropertyKey.FISSION_FUEL),
+            mat -> Collections.singletonList(I18n.format("metaitem.nuclear.tooltip.radioactive")));
+    public static final OrePrefix fuelRodHotDepleted = new OrePrefix("fuelRodHotDepleted", -1, null,
+            SuSyMaterialIconType.fuelRodHotDepleted, 0, material -> material.hasProperty(SuSyPropertyKey.FISSION_FUEL),
+            mat -> Collections.singletonList(I18n.format("metaitem.nuclear.tooltip.radioactive")));
+    public static final OrePrefix fuelPellet = new OrePrefix("fuelPellet", -1, null,
+            SuSyMaterialIconType.fuelPellet, 0, material -> material.hasProperty(SuSyPropertyKey.FISSION_FUEL),
+            mat -> Collections.singletonList(I18n.format("metaitem.nuclear.tooltip.radioactive")));
+    public static final OrePrefix fuelPelletDepleted = new OrePrefix("fuelPelletDepleted", -1, null,
+            SuSyMaterialIconType.fuelPelletDepleted, 0, material -> material.hasProperty(SuSyPropertyKey.FISSION_FUEL),
+            mat -> Collections.singletonList(I18n.format("metaitem.nuclear.tooltip.radioactive")));
+
+    public static final OrePrefix dustSpentFuel = new OrePrefix("dustSpentFuel", -1, null,
+            SuSyMaterialIconType.dustSpentFuel, 0, material -> material.hasProperty(SuSyPropertyKey.FISSION_FUEL));
+    public static final OrePrefix dustBredFuel = new OrePrefix("dustBredFuel", -1, null,
+            SuSyMaterialIconType.dustBredFuel, 0, material -> material.hasProperty(SuSyPropertyKey.FISSION_FUEL));
+    public static final OrePrefix dustFissionByproduct = new OrePrefix("dustFissionByproduct", -1, null,
+            SuSyMaterialIconType.dustFissionByproduct, 0, material -> material.hasProperty(SuSyPropertyKey.FISSION_FUEL));
 }

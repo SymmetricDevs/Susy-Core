@@ -8,9 +8,11 @@ import gregtech.api.items.metaitem.MetaOreDictItem.OreDictValueItem;
 import gregtech.api.items.metaitem.StandardMetaItem;
 import gregtech.api.unification.material.info.MaterialIconSet;
 import gregtech.api.unification.ore.OrePrefix;
+import gregtech.common.items.MetaItems;
 import gregtech.common.items.behaviors.TooltipBehavior;
 import net.minecraft.client.resources.I18n;
 import supersymmetry.SuSyValues;
+import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
 
 public class SuSyMetaItems {
@@ -22,6 +24,10 @@ public class SuSyMetaItems {
     public static MetaValueItem PUMP_STEAM;
     public static MetaValueItem AIR_VENT;
     public static MetaValueItem TRACK_SEGMENT;
+    // Nuclear
+    public static MetaValueItem ANODE_BASKET;
+    public static MetaValueItem FUEL_CLADDING;
+
     public static ArmorMetaItem<?>.ArmorMetaValueItem JET_WINGPACK;
 
     public static void initMetaItems() {
@@ -58,13 +64,28 @@ public class SuSyMetaItems {
         TRACK_SEGMENT = metaItem.addItem(5, "track_segment").addComponents(new TooltipBehavior((lines) -> {
             lines.add(I18n.format("metaitem.track_segment.length_info"));
         }));
+        ANODE_BASKET = metaItem.addItem(6, "basket.anode");
+        FUEL_CLADDING = metaItem.addItem(7, "cladding.fuel");
     }
 
-    private static void addTieredOredictItem (OreDictValueItem[] items, int id, int RGB, OrePrefix prefix) {
+    private static void addTieredOredictItem(OreDictValueItem[] items, int id, int RGB, OrePrefix prefix) {
 
         for (int i = 0; i < items.length; i++) {
             items[i] = oreDictItem.addOreDictItem(id + i, SuSyValues.TierMaterials[i + 1].toString(), RGB, MaterialIconSet.DULL, prefix, I18n.format("gregtech.universal.catalysts.tooltip.tier", GTValues.V[i], GTValues.VN[i]));
         }
 
+    }
+
+    static {
+        MetaItems.addOrePrefix(
+                SusyOrePrefix.fuelRod,
+                SusyOrePrefix.fuelRodDepleted,
+                SusyOrePrefix.fuelRodHotDepleted,
+                SusyOrePrefix.fuelPellet,
+                SusyOrePrefix.fuelPelletDepleted,
+                SusyOrePrefix.dustSpentFuel,
+                SusyOrePrefix.dustBredFuel,
+                SusyOrePrefix.dustFissionByproduct
+        );
     }
 }

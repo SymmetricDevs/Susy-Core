@@ -41,6 +41,12 @@ public class SuSyBlocks {
     public static BlockSuSyMultiblockCasing MULTIBLOCK_CASING;
     public static BlockSerpentine SERPENTINE;
 
+    // Nuclear Blocks
+    public static BlockFissionCasing FISSION_CASING;
+    public static BlockNuclearCasing NUCLEAR_CASING;
+    public static BlockGasCentrifugeCasing GAS_CENTRIFUGE_CASING;
+    public static BlockPanelling PANELLING;
+
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
         COOLING_COIL.setRegistryName("cooling_coil");
@@ -101,6 +107,16 @@ public class SuSyBlocks {
         SERPENTINE = new BlockSerpentine();
         SERPENTINE.setRegistryName("serpentine");
 
+        FISSION_CASING = new BlockFissionCasing();
+        FISSION_CASING.setRegistryName("fission_casing");
+        NUCLEAR_CASING = new BlockNuclearCasing();
+        NUCLEAR_CASING.setRegistryName("nuclear_casing");
+        GAS_CENTRIFUGE_CASING = new BlockGasCentrifugeCasing();
+        GAS_CENTRIFUGE_CASING.setRegistryName("gas_centrifuge_casing");
+
+        PANELLING = new BlockPanelling();
+        PANELLING.setRegistryName("panelling");
+
     }
 
     @SideOnly(Side.CLIENT)
@@ -120,11 +136,15 @@ public class SuSyBlocks {
         registerItemModel(RESOURCE_BLOCK);
         registerItemModel(RESOURCE_BLOCK_1);
         registerItemModel(HOME);
+        registerItemModel(FISSION_CASING);
+        registerItemModel(GAS_CENTRIFUGE_CASING);
+        registerItemModel(PANELLING);
         EVAPORATION_BED.onModelRegister();
         MULTIBLOCK_TANK.onModelRegister();
         ELECTRODE_ASSEMBLY.onModelRegister();
         registerItemModel(MULTIBLOCK_CASING);
         SERPENTINE.onModelRegister();
+        NUCLEAR_CASING.onModelRegister();
     }
 
     @SideOnly(Side.CLIENT)
