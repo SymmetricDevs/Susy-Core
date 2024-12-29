@@ -34,6 +34,7 @@ public class BreathingApparatusModel extends ModelBiped {
                 this.bipedRightArm.addChild(modelForPart(name, "right_arm"));
             }
             case LEGS -> {
+                this.bipedBody.addChild(modelForPart(name, "belt"));
                 this.bipedLeftLeg.addChild(modelForPart(name, "left_leg"));
                 this.bipedRightLeg.addChild(modelForPart(name, "right_leg"));
             }
