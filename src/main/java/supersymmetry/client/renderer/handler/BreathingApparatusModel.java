@@ -4,9 +4,6 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.ResourceLocation;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static supersymmetry.api.util.SuSyUtility.susyId;
 
 public class BreathingApparatusModel extends ModelBiped {
