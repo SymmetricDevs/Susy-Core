@@ -207,6 +207,9 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IT
     public List<ResourceLocation> getTextureLocations() {
         List<ResourceLocation> models = new ArrayList<>();
         models.add(susyId("armor/" + name + "_" + this.SLOT.toString()));
+        if (this.SLOT == LEGS) {
+            models.add(susyId("armor/" + name + "_belt"));
+        }
         return models;
     }
 }
