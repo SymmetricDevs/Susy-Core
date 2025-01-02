@@ -3,25 +3,23 @@ package supersymmetry.api.util;
 import gregtech.api.pattern.BlockWorldState;
 import gregtech.api.pattern.PatternMatchContext;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockAir;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import supersymmetry.SuSyValues;
-import supersymmetry.common.blocks.SuSyBlocks;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.*;
 
 public class StructAnalysis {
-    public BuildError status = BuildError.SUCCESS;
-    public enum BuildError {
+    public BuildStat status = BuildStat.SUCCESS;
+    public enum BuildStat {
         SUCCESS("susy.msg.rocket_component.build_success"),
+        SCANNING("susy.msg.rocket_component.scanning"),
         UNSCANNED("susy.msg.rocket_component.unscanned"),
         DISCONNECTED("susy.msg.rocket_component.blocks_unconnected"),
         EMPTY("susy.msg.rocket_component.no_blocks"),
@@ -36,10 +34,10 @@ public class StructAnalysis {
         C_CHAMBER_INSIDE("susy.msg.rocket_component.chamber_wrong_place"),
         INVALID_AIRLIKE("susy.msg.rocket_component.invalid_transparent"),
         EXTRANEOUS_BLOCKS("susy.msg.rocket_component.extraneous_blocks"),
-        UNCLEAN("susy.msg.rocket_component.cleanroom_not_clean");
+        UNCLEAN("susy.msg.rocket_component.cleanroom_not_clean"), NOT_LAVAL("susy.msg.rocket_component.nozzle_not_laval");
 
         String code;
-        BuildError(String code) {
+        BuildStat(String code) {
             this.code = code;
         }
         public String getCode() {
@@ -70,9 +68,9 @@ public class StructAnalysis {
     };
     private static AxisAlignedBB MAX_BB = new AxisAlignedBB(-3.0E7,-3.0E7,0,3.0E7,3.0E7,255);
     public ArrayList<BlockPos> getBlocks(World world, AxisAlignedBB faaBB, boolean checkAir) {
-        AxisAlignedBB aaBB = new AxisAlignedBB(Math.round(faaBB.minX),Math.round(faaBB.maxX),
-                Math.round(faaBB.minY),Math.round(faaBB.maxY),
-                Math.round(faaBB.minZ),Math.round(faaBB.maxZ));
+        AxisAlignedBB aaBB = new AxisAlignedBB(Math.round(faaBB.minX),Math.round(faaBB.minY),
+                Math.round(faaBB.minZ),Math.round(faaBB.maxX),
+                Math.round(faaBB.maxY),Math.round(faaBB.maxZ));
         ArrayList<BlockPos> ret = new ArrayList<>();
         for (int x = (int)aaBB.minX; x < aaBB.maxX; x++) {
             for (int y = (int)aaBB.minY; y < aaBB.maxY; y++) {
@@ -80,7 +78,7 @@ public class StructAnalysis {
                     BlockPos bp = new BlockPos(x,y,z);
                     if (!world.isAirBlock(bp)) {
                         if (checkAir && world.getBlockState(bp).getCollisionBoundingBox(world, bp) == null) {
-                            status = BuildError.INVALID_AIRLIKE;
+                            status = BuildStat.INVALID_AIRLIKE;
                             return null;
                         }
                         ret.add(bp);
@@ -91,7 +89,7 @@ public class StructAnalysis {
         return ret;
     }
     public Set<BlockPos> getBlockConn(AxisAlignedBB aaBB, BlockPos beg) {
-        if (!aaBB.contains(new Vec3d(beg))) {
+        if (!blockCont(aaBB,beg)) {
             return new HashSet<BlockPos>(); //wtf moment
         }
         Set<BlockPos> blocksCollected = new HashSet<BlockPos>();
@@ -122,7 +120,7 @@ public class StructAnalysis {
                 BlockWorldState bws = new BlockWorldState(); // this is awful but I guess it works?
                 bws.update(world, pos,pmc,null,null, SuSyValues.rocketHullBlocks);
                 if (testStrength && !SuSyValues.rocketHullBlocks.test(bws)) {
-                    status = BuildError.HULL_WEAK;
+                    status = BuildStat.HULL_WEAK;
                     return null;
                 }
                 hullBlocks.add(pos);
@@ -136,7 +134,7 @@ public class StructAnalysis {
         long volume = Math.round((floodBB.maxX - floodBB.minX + 1)) * Math.round((floodBB.maxY - floodBB.minY + 1)) * Math.round((floodBB.maxZ - floodBB.minZ + 1));
         long remainingAir = volume - airBlocks.size() - actualBlocks.size(); // the .grow() is factored in with airBlocks.size()
         if (remainingAir < 2) { // considering you need a seat and an air block above it
-            status = BuildError.HULL_FULL;
+            status = BuildStat.HULL_FULL;
             return null;
         }
         return hullBlocks;
@@ -159,14 +157,16 @@ public class StructAnalysis {
     public ArrayList<BlockPos> getBlockNeighbors(BlockPos beg, AxisAlignedBB aaBB, Vec3i[] neighborVecs) {
         ArrayList<BlockPos> neighbors = new ArrayList<>();
         for (Vec3i vec: neighborVecs) {
-            BlockPos newPos = beg.add(vec);
-            if (aaBB.grow(1).contains(new Vec3d(newPos)))
-                neighbors.add(newPos);
+            for (int i = -1; i < 2; i+=2) {
+                BlockPos newPos = beg.add(multiply(i,vec));
+                if (blockCont(aaBB, newPos))
+                    neighbors.add(newPos);
+            }
         }
         return neighbors;
     }
 
-    public boolean blockCont(AxisAlignedBB bb, BlockPos bp) {
+    public static boolean blockCont(AxisAlignedBB bb, BlockPos bp) {
         return bb.minX <= bp.getX() && bb.minY <= bp.getY() && bb.minZ <= bp.getZ() &&
                 bb.maxX > bp.getX() && bb.maxY > bp.getY() && bb.maxZ > bp.getZ();
     }
@@ -185,23 +185,31 @@ public class StructAnalysis {
 
     public Set<BlockPos> getLayerAir(World world, AxisAlignedBB section, int y) {
         AxisAlignedBB sect = new AxisAlignedBB(section.minX-1,y,section.minZ-1,section.maxX+1,y+1,section.maxZ+1);
-        Set<BlockPos> blocks = getBlocks(sect).stream().filter(world::isAirBlock).collect(Collectors.toSet());
+        Predicate<BlockPos> isNotObstacle = ((Predicate<BlockPos>)world::isAirBlock).or(bp -> !blockCont(section,bp));
+        Set<BlockPos> blocks = getBlocks(sect).stream().filter(isNotObstacle).collect(Collectors.toSet()); // the one-argument getBlocks doesn't care about air blocks
         List<HashSet<BlockPos>> partitions = new ArrayList<>();
+        Set<BlockPos> consumed = new HashSet<>();
         for (BlockPos block: blocks) {
+            if (consumed.contains(block)) {
+                continue;
+            }
+            consumed.add(block);
             ArrayDeque<BlockPos> remaining = new ArrayDeque<>();
             HashSet<BlockPos> bPart = new HashSet<>();
             remaining.add(block);
             while (!remaining.isEmpty()) {
                 BlockPos bp = remaining.pop();
                 bPart.add(bp);
-                Stream<BlockPos> stream = getBlockNeighbors(bp, sect, layerVecs).stream().filter(pos->!bPart.contains(pos)&&world.isAirBlock(pos));
-                remaining.addAll(getBlockNeighbors(bp, sect, layerVecs).stream().filter(pos->!bPart.contains(pos)&&world.isAirBlock(pos)).collect(Collectors.toList()));
-                stream.forEach(blocks::remove);
+                Stream<BlockPos> stream = getBlockNeighbors(bp, sect, layerVecs).stream().filter(((Predicate<BlockPos>)bPart::contains).negate().and(isNotObstacle));
+                remaining.addAll(getBlockNeighbors(bp, sect, layerVecs).stream().filter(((Predicate<BlockPos>)bPart::contains).negate().and(isNotObstacle)).
+                        collect(Collectors.toList()));
+                stream.forEach(consumed::add);
             }
             partitions.add(bPart);
         }
-        if (partitions.size() > 2) {
-            status = BuildError.NOZZLE_MALFORMED;
+        // This looks cursed, but the idea is to ensure that
+        if (partitions.size() != 2) {
+            status = BuildStat.NOZZLE_MALFORMED;
             return null;
         } else {
             List<Boolean> res = partitions.stream().map(set -> getPerimeter(set, layerVecs).stream().allMatch(p -> blockCont(sect,p))).collect(Collectors.toList());
@@ -211,24 +219,25 @@ public class StructAnalysis {
                 }
             }
         }
-        status = BuildError.ERROR;
+        status = BuildStat.ERROR;
         return null;
     }
 
+    //
     public Set<BlockPos> getPerimeter(Collection<BlockPos> blocks, Vec3i vecs[]) {
         Set<BlockPos> ret = new HashSet<>();
         for (BlockPos block: blocks) {
-            ret.addAll(getBlockNeighbors(block, MAX_BB, vecs));
+            ret.addAll(getBlockNeighbors(block, MAX_BB, vecs).stream().filter(((Predicate<BlockPos>)blocks::contains).negate()).collect(Collectors.toSet()));
         }
         return ret;
     }
 
     public AxisAlignedBB getBB(Collection<BlockPos> blocks) {
-        int minX=0,minY=0,minZ=0,maxX = 0,maxY=0,maxZ = 0;
+        int minX=(int)3.0E7,minY=(int)3.0E7,minZ=(int)3.0E7,maxX = (int)-3.0E7,maxY=(int)-3.0E7,maxZ = (int)-3.0E7;
         for (BlockPos block: blocks) {
-            maxX = Math.max(block.getX(), maxX);
-            maxY = Math.max(block.getY(),maxY);
-            maxZ = Math.max(block.getZ(),maxZ);
+            maxX = Math.max(block.getX()+1, maxX);
+            maxY = Math.max(block.getY()+1,maxY);
+            maxZ = Math.max(block.getZ()+1,maxZ);
             minX = Math.min(block.getX(),minX);
             minY = Math.min(block.getY(),minY);
             minZ = Math.min(block.getZ(),minZ);
@@ -238,6 +247,10 @@ public class StructAnalysis {
     public Stream<BlockPos> getOfBlockType(Collection<BlockPos> bp, Block block) {
         return bp.stream()
                 .filter(p -> world.getBlockState(p).getBlock().equals(block));
+    }
+
+    public Vec3i multiply(int mult, Vec3i inp) {
+        return new Vec3i(mult*inp.getX(), mult*inp.getY(), mult*inp.getZ());
     }
 }
 
