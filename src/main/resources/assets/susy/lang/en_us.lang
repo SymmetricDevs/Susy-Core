@@ -58,6 +58,10 @@ tile.rocket_outer_hatch.al_2219.name=Al-2219 Rocket Hatch
 tile.rocket_tank_shell.al_2219.name=Al-2219 Tank Shell
 tile.rocket_interstage.al_7075.name=Al-7075 Rocket Interstage
 tile.rocket_fairing.al_7075.name=Al-7075 Payload Fairing Panel
+tile.rocket_nozzle.bell_basic.name=Bell Rocket Nozzle Shell
+tile.rocket_combustion_chamber.monopropellant.name=Monopropellant Combustion Chamber
+tile.rocket_combustion_chamber.bipropellant.name=Bipropellant Combustion Chamber
+tile.rocket_combustion_chamber.oxidiser.name=Oxidiser Combustion Chamber
 
 tile.deposit_block.orthomagmatic.name=Orthomagmatic Deposit Block
 tile.deposit_block.metamorphic.name=Metamorphic Deposit Block
@@ -690,6 +694,10 @@ gregtech.machine.bath_condenser.tooltip=Only works inside a Cryogenic Distillati
 
 gregtech.machine.component_scanner.name=Spacecraft Component Scanner
 gregtech.machine.component_scanner.scan_button=Scan Part
+gregtech.machine.component_scanner.unscanned=Component unscanned.
+gregtech.machine.component_scanner.failure=Scan failed.
+gregtech.machine.component_scanner.success=Component successfully analyzed.
+gregtech.machine.component_scanner.scanning=Scanning...
 
 
 gregtech.machine.incinerator.lv.name=Basic Incinerator
@@ -898,6 +906,12 @@ metaitem.jet_wingpack.tooltip=Hold shift to brake when engine activated
 metaarmor.hud.engine_status=Engine: %s
 metaarmor.jet_wingpack.engine_active=Jet Wingpack: Engine Activated
 metaarmor.jet_wingpack.engine_inactive=Jet Wingpack: Engine Deactivated
+
+# Structure Data Cards
+metaitem.data_card.name=Empty Structure Card
+metaitem.data_card.tooltip.1=Insert into a Component Scanner to store the part representation.
+metaitem.data_card.active.name=Loaded Structure Card
+metaitem.data_card.active.tooltip.1=Load this into a Rocket Assembler to build the component.
 
 # Machine Translations
 susy.wrongbiome=Machine can not work in this biome!

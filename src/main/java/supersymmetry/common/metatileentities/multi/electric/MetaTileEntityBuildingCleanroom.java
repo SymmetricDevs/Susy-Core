@@ -4,12 +4,14 @@ import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.IEnergyContainer;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.MetaTileEntityHolder;
+import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.ICleanroomReceiver;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.pattern.TraceabilityPredicate;
+import gregtech.api.util.GTUtility;
 import gregtech.common.ConfigHolder;
 import gregtech.common.blocks.BlockCleanroomCasing;
 import gregtech.common.blocks.MetaBlocks;
@@ -26,7 +28,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
-import scala.tools.nsc.interpreter.EchoReader;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 import supersymmetry.common.metatileentities.single.rocket.MetaTileEntityComponentScanner;
 
@@ -50,18 +51,29 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
     public MetaTileEntityBuildingCleanroom(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
         try {
-            hDist_f = getClass().getDeclaredField("hDist");
-            rDist_f = getClass().getDeclaredField("rDist");
-            bDist_f = getClass().getDeclaredField("bDist");
-            fDist_f = getClass().getDeclaredField("fDist");
-            lDist_f = getClass().getDeclaredField("lDist");
-            receivers_f = getClass().getDeclaredField("cleanroomReceivers");
-            energy_cont_f = getClass().getDeclaredField("energyContainer");
+            hDist_f = MetaTileEntityCleanroom.class.getDeclaredField("hDist");
+            hDist_f.setAccessible(true);
+            rDist_f = MetaTileEntityCleanroom.class.getDeclaredField("rDist");
+            rDist_f.setAccessible(true);
+            bDist_f = MetaTileEntityCleanroom.class.getDeclaredField("bDist");
+            bDist_f.setAccessible(true);
+            fDist_f = MetaTileEntityCleanroom.class.getDeclaredField("fDist");
+            fDist_f.setAccessible(true);
+            lDist_f = MetaTileEntityCleanroom.class.getDeclaredField("lDist");
+            lDist_f.setAccessible(true);
+            receivers_f = MetaTileEntityCleanroom.class.getDeclaredField("cleanroomReceivers");
+            receivers_f.setAccessible(true);
+            energy_cont_f = MetaTileEntityCleanroom.class.getDeclaredField("energyContainer");
+            energy_cont_f.setAccessible(true);
         } catch (Exception e) { // this shouldn't happen UNLESS there is a bug
             return;
         }
     }
 
+    @Override
+    public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
+        return new MetaTileEntityBuildingCleanroom(metaTileEntityId);
+    }
 
     /**
      * Scans for blocks around the controller to update the dimensions
@@ -207,7 +219,7 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
             Arrays.fill(slice, insideBuilder.toString());
             slice[0] = wallBuilder.toString();
             slice[slice.length - 1] = roofBuilder.toString();
-            String[] center = (String[]) Arrays.copyOf(slice, slice.length);
+            String[] center = Arrays.copyOf(slice, slice.length);
             if (this.frontFacing != EnumFacing.NORTH && this.frontFacing != EnumFacing.SOUTH) {
                 center[0] = centerBuilder.toString();
                 center[center.length - 1] = controllerBuilder.toString();
@@ -216,14 +228,34 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
                 center[center.length - 1] = controllerBuilder.reverse().toString();
             }
 
-            TraceabilityPredicate wallPredicate = states(new IBlockState[]{this.getCasingState(), this.getGlassState()});
-            TraceabilityPredicate basePredicate = this.autoAbilities().or(abilities(new MultiblockAbility[]{MultiblockAbility.INPUT_ENERGY}).setMinGlobalLimited(1).setMaxGlobalLimited(3));
-            return FactoryBlockPattern.start().aisle(wall).aisle(slice).setRepeatable(bDist_f.getInt(this) - 1).aisle(center).aisle(slice).setRepeatable(fDist_f.getInt(this)-1).aisle(wall).
-                    where('S', this.selfPredicate()).where('B', states(new IBlockState[]{this.getCasingState()}).or(basePredicate)).where('X', wallPredicate.or(basePredicate).or(doorPredicate().setMaxGlobalLimited(8)).or(abilities(new MultiblockAbility[]{MultiblockAbility.PASSTHROUGH_HATCH}).setMaxGlobalLimited(30))
-                            .or(scannerPredicate().setExactLimit(1))).
-                    where('K', wallPredicate).where('F', this.filterPredicate()).where('C', this.scannerPredicate()).where(' ', this.innerPredicate()).build();
+            TraceabilityPredicate wallPredicate = states(this.getCasingState(), this.getGlassState());
+            TraceabilityPredicate basePredicate = this.autoAbilities()
+                    .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(3));
+            return FactoryBlockPattern.start()
+                    .aisle(wall)
+                    .aisle(slice).setRepeatable(bDist_f.getInt(this) - 1)
+                    .aisle(center)
+                    .aisle(slice).setRepeatable(fDist_f.getInt(this)-1)
+                    .aisle(wall)
+                    .where('S', this.selfPredicate())
+                    .where('B', states(this.getCasingState()).or(basePredicate))
+                    .where('X', wallPredicate.or(basePredicate)
+                            .or(doorPredicate().setMaxGlobalLimited(8))
+                            .or(this.scannerPredicate().setMaxGlobalLimited(1))
+                            .or(abilities(MultiblockAbility.PASSTHROUGH_HATCH).setMaxGlobalLimited(30)))
+                    .where('K', wallPredicate)
+                    .where('F', this.filterPredicate())
+                    .where(' ', this.innerPredicate()).build();
         } catch (Exception e) {
             return null;
+        }
+    }
+    @Override
+    public int getEnergyTier() {
+        try {
+            return this.energy_cont_f.get(this) == null ? 1 : Math.max(4, GTUtility.getFloorTierByVoltage(((IEnergyContainer)energy_cont_f.get(this)).getInputVoltage()));
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -234,7 +266,7 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
             if (tile instanceof MetaTileEntityHolder) {
                 MetaTileEntity metaTileEntity = ((MetaTileEntityHolder) tile).getMetaTileEntity();
                 if (metaTileEntity instanceof MetaTileEntityComponentScanner) {
-                    ICleanroomReceiver cleanroomReceiver = (ICleanroomReceiver)metaTileEntity;
+                    ICleanroomReceiver cleanroomReceiver = (MetaTileEntityComponentScanner)metaTileEntity;
                     if (cleanroomReceiver.getCleanroom() != this) {
                         cleanroomReceiver.setCleanroom(this);
                         try {
@@ -284,14 +316,16 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
         EnumFacing back = front.getOpposite();
         EnumFacing left = front.rotateYCCW();
         EnumFacing right = left.getOpposite();
-        Vec3i down = new Vec3i(0,0,-1);
+        Vec3i down = new Vec3i(0,-1,0);
         try {
             BlockPos frontleftdown = getPos().add(multiply(front.getDirectionVec(), fDist_f.getInt(this) - 1))
                     .add(multiply(left.getDirectionVec(), lDist_f.getInt(this) - 1))
                     .add(multiply(down, hDist_f.getInt(this) - 1));
             BlockPos backrightup = getPos().add(multiply(back.getDirectionVec(), bDist_f.getInt(this) - 1))
                     .add(multiply(right.getDirectionVec(), rDist_f.getInt(this) - 1));
-            return new AxisAlignedBB(frontleftdown, backrightup);
+            AxisAlignedBB nearRet = new AxisAlignedBB(frontleftdown, backrightup);
+            return new AxisAlignedBB(nearRet.minX,nearRet.minY,nearRet.minZ,
+                    nearRet.maxX+1,nearRet.maxY,nearRet.maxZ+1); // here to be consistent with block analysis
         } catch (Exception e) {
              return null;
         }

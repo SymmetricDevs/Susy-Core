@@ -1,6 +1,7 @@
 package supersymmetry.common.item;
 
 import gregtech.api.GTValues;
+import gregtech.api.items.metaitem.MetaItem;
 import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.items.metaitem.MetaItem.MetaValueItem;
 import gregtech.api.items.metaitem.MetaOreDictItem;
@@ -10,11 +11,16 @@ import gregtech.api.unification.material.info.MaterialIconSet;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.common.items.behaviors.TooltipBehavior;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import supersymmetry.SuSyValues;
 
 import supersymmetry.common.item.armor.SuSyMetaArmor;
 
+import java.util.Objects;
+
 public class SuSyMetaItems {
+
 
     private static StandardMetaItem metaItem;
     public static SuSyArmorItem armorItem;
@@ -26,6 +32,8 @@ public class SuSyMetaItems {
     public static MetaValueItem RESTRICTIVE_FILTER;
     public static MetaValueItem TRACK_SEGMENT;
     public static MetaValueItem EARTH_ORBITAL_SCRAP;
+    public static MetaValueItem DATA_CARD;
+    public static MetaValueItem DATA_CARD_ACTIVE;
     public static ArmorMetaItem<?>.ArmorMetaValueItem SIMPLE_GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_TANK;
@@ -81,6 +89,15 @@ public class SuSyMetaItems {
             lines.add(I18n.format("metaitem.track_segment.length_info"));
         }));
 
+        EARTH_ORBITAL_SCRAP = metaItem.addItem(6, "orbital.scrap.earth").setMaxStackSize(8);
+
+        DATA_CARD = metaItem.addItem(7,"data_card").setMaxStackSize(1).addComponents(new TooltipBehavior((lines) -> {
+            lines.add(I18n.format("metaitem.data_card.tooltip.1"));
+        }));
+
+        DATA_CARD_ACTIVE = metaItem.addItem(8,"data_card.active").setMaxStackSize(1).addComponents(new TooltipBehavior((lines) -> {
+            lines.add(I18n.format("metaitem.data_card.active.tooltip.1"));
+        }));
         RESTRICTIVE_FILTER = metaItem.addItem(6, "restrictive_filter");
       EARTH_ORBITAL_SCRAP = metaItem.addItem(7, "orbital.scrap.earth").setMaxStackSize(8);
     }
@@ -91,5 +108,9 @@ public class SuSyMetaItems {
             items[i] = oreDictItem.addOreDictItem(id + i, SuSyValues.TierMaterials[i + 1].toString(), RGB, MaterialIconSet.DULL, prefix, I18n.format("gregtech.universal.catalysts.tooltip.tier", GTValues.V[i], GTValues.VN[i]));
         }
 
+    }
+
+    public static int isMetaItem(ItemStack i) {
+        return (i.getItem() instanceof MetaItem<?>) && (i.getItem().equals(metaItem)) ? Objects.requireNonNull(((MetaItem<?>) i.getItem()).getItem(i)).metaValue : -1;
     }
 }
