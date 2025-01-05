@@ -40,6 +40,7 @@ public class SuSyBlocks {
     public static BlockElectrodeAssembly ELECTRODE_ASSEMBLY;
     public static BlockSuSyMultiblockCasing MULTIBLOCK_CASING;
     public static BlockSerpentine SERPENTINE;
+    public static BlocksHardened HARDBLOCKS;
 
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
@@ -101,6 +102,8 @@ public class SuSyBlocks {
         SERPENTINE = new BlockSerpentine();
         SERPENTINE.setRegistryName("serpentine");
 
+        HARDBLOCKS = new BlocksHardened();
+        HARDBLOCKS.setRegistryName("hardened_blocks");
     }
 
     @SideOnly(Side.CLIENT)
@@ -125,6 +128,7 @@ public class SuSyBlocks {
         ELECTRODE_ASSEMBLY.onModelRegister();
         registerItemModel(MULTIBLOCK_CASING);
         SERPENTINE.onModelRegister();
+        registerItemModel(HARDBLOCKS);
     }
 
     @SideOnly(Side.CLIENT)

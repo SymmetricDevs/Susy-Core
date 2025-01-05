@@ -1,0 +1,43 @@
+{
+  "forge_marker" : 1,
+  "defaults": {
+    "model": "minecraft:cube_bottom_top",
+    "textures": {
+      "bottom": "gregtech:blocks/hardened_blocks/lair10",
+      "top": "gregtech:blocks/hardened_blocks/lair10",
+      "side": "gregtech:blocks/hardened_blocks/lair10"
+    }
+  },
+  "variants" : {
+    "variant=lair10" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/hardened_blocks/lair10"
+      }
+    },
+    "variant=lair11" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/hardened_blocks/lair11"
+      }
+    },
+    "variant=lair7" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/hardened_blocks/lair7"
+      }
+    },
+    "variant=kryp7" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/hardened_blocks/kryp7"
+      }
+    },
+    "variant=kryp8" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/hardened_blocks/kryp8"
+      }
+    }
+  }
+}
