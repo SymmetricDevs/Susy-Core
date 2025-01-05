@@ -86,6 +86,7 @@ public class CommonProxy {
         registry.register(SuSyBlocks.ELECTRODE_ASSEMBLY);
         registry.register(SuSyBlocks.MULTIBLOCK_CASING);
         registry.register(SuSyBlocks.SERPENTINE);
+        registry.register(SuSyBlocks.ROCKET_ASSEMBLER_CASING);
         registry.register(SuSyBlocks.FAIRING_HULL);
         registry.register(SuSyBlocks.OUTER_HATCH);
         //registry.register(SuSyBlocks.INTERSTAGE);
@@ -131,6 +132,7 @@ public class CommonProxy {
         registry.register(createItemBlock(SuSyBlocks.COMBUSTION_CHAMBER, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.ROCKET_NOZZLE, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.TURBOPUMP, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.ROCKET_ASSEMBLER_CASING, VariantItemBlock::new));
 
 
         SHEETED_FRAMES.values()

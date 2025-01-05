@@ -161,6 +161,7 @@ public class SuSyMetaTileEntities {
 
     //Space singulars
     public static MetaTileEntityComponentScanner COMPONENT_SCANNER;
+    public static MetaTileEntityRocketAssembler ROCKET_ASSEMBLER;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -292,6 +293,7 @@ public class SuSyMetaTileEntities {
         SCRAP_RECYCLER = registerMetaTileEntity(18001, new MetaTileEntityScrapRecycler(susyId("scrap_recycler")));
         BUILDING_CLEANROOM = registerMetaTileEntity(18002, new MetaTileEntityBuildingCleanroom(susyId("building_cleanroom")));
         COMPONENT_SCANNER = registerMetaTileEntity(18003, new MetaTileEntityComponentScanner((susyId("component_scanner"))));
+        ROCKET_ASSEMBLER = registerMetaTileEntity(18002, new MetaTileEntityRocketAssembler(susyId("rocket_assembler")));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name, RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator, ICubeRenderer texture, boolean isBricked) {

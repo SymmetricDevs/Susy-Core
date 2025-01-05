@@ -39,6 +39,7 @@ public class SuSyBlocks {
     public static BlockElectrodeAssembly ELECTRODE_ASSEMBLY;
     public static BlockSuSyMultiblockCasing MULTIBLOCK_CASING;
     public static BlockSerpentine SERPENTINE;
+    public static BlockRocketAssemblerCasing ROCKET_ASSEMBLER_CASING;
 
     public static BlockOuterHatch OUTER_HATCH;
     public static BlockInterStage INTERSTAGE;
@@ -132,6 +133,10 @@ public class SuSyBlocks {
 
         ROCKET_NOZZLE = new BlockRocketNozzle();
         ROCKET_NOZZLE.setRegistryName("rocket_nozzle");
+
+        ROCKET_ASSEMBLER_CASING = new BlockRocketAssemblerCasing();
+        ROCKET_ASSEMBLER_CASING.setRegistryName("rocket_assembler_casing");
+
     }
 
     @SideOnly(Side.CLIENT)
@@ -164,6 +169,7 @@ public class SuSyBlocks {
         ELECTRODE_ASSEMBLY.onModelRegister();
         registerItemModel(MULTIBLOCK_CASING);
         SERPENTINE.onModelRegister();
+        registerItemModel(ROCKET_ASSEMBLER_CASING);
     }
 
     @SideOnly(Side.CLIENT)
