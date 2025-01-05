@@ -24,6 +24,7 @@ import supersymmetry.common.command.CommandHordeStop;
 import supersymmetry.common.covers.SuSyCoverBehaviors;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
+import supersymmetry.common.worldgen.SuSyTerrainGenEventHandler;
 import supersymmetry.loaders.SuSyIRLoader;
 
 @Mod(name = Supersymmetry.NAME, modid = Supersymmetry.MODID, version = Tags.VERSION, dependencies = GTInternalTags.DEP_VERSION_STRING + ";required-after:gcym;after:immersiverailroading")
@@ -38,6 +39,8 @@ public class Supersymmetry {
 
     @Mod.Instance(Supersymmetry.MODID)
     public static Supersymmetry instance;
+
+    public static SuSyTerrainGenEventHandler terrainGenEventHandler;
 
     @Mod.EventHandler
     public void onModConstruction(FMLConstructionEvent event) {
@@ -61,6 +64,9 @@ public class Supersymmetry {
         SuSyCapabilities.init();
 
         SusyMetaEntities.init();
+
+        terrainGenEventHandler = new SuSyTerrainGenEventHandler();
+        terrainGenEventHandler.init();
 
         if (FMLLaunchHandler.side() == Side.CLIENT) {
             OBJLoader.INSTANCE.addDomain(MODID);

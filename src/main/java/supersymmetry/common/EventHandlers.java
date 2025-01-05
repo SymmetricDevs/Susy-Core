@@ -4,26 +4,19 @@ import gregtech.api.util.GTTeleporter;
 import gregtech.api.util.TeleportHandler;
 import gregtech.common.items.MetaItems;
 import gregtechfoodoption.item.GTFOMetaItem;
-import ivorius.reccomplex.world.gen.feature.WorldStructureGenerationData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.management.PlayerList;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import supersymmetry.Supersymmetry;
 import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.event.MobHordeWorldData;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class EventHandlers {
@@ -54,8 +47,6 @@ public class EventHandlers {
             event.player.addItemStackToInventory(GTFOMetaItem.EMERGENCY_RATIONS.getStackForm(10));
             event.player.addItemStackToInventory(MetaItems.PROSPECTOR_LV.getChargedStack(100000));
         }
-
-
     }
 
     @SubscribeEvent
@@ -85,17 +76,6 @@ public class EventHandlers {
             MobHordeWorldData mobHordeWorldData = MobHordeWorldData.get(world);
             list.getPlayers().forEach(p -> mobHordeWorldData.getPlayerData(p.getPersistentID()).update(p));
             mobHordeWorldData.markDirty();
-        }
-    }
-
-    @SubscribeEvent
-    public void onDecoration(DecorateBiomeEvent.Decorate event) {
-        if (event.getType() == DecorateBiomeEvent.Decorate.EventType.TREE) {
-            List<WorldStructureGenerationData.Entry> entries = WorldStructureGenerationData.get(event.getWorld()).entriesAt(event.getPlacementPos())
-                    .collect(Collectors.toCollection(ArrayList::new));
-            if(!entries.isEmpty()) {
-                event.setResult(Event.Result.DENY);
-            }
         }
     }
 }
