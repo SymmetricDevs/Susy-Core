@@ -70,4 +70,8 @@ dependencies {
     compileOnly rfg.deobf("curse.maven:yungs-better-mineshafts-forge-389665:3247154")
 
     api("CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.700")
+
+    implementation rfg.deobf("curse.maven:recurrent-complex-223150:5615733")
+    implementation rfg.deobf("curse.maven:ivtoolkit-224535:2443253")
+
 }
