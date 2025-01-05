@@ -35,9 +35,9 @@ public final class DimensionBreathabilityHandler {
         dimensionBreathabilityMap.clear();
 
         // Nether
-        dimensionBreathabilityMap.put(-1, new DimensionBreathabilityHandler.BreathabilityInfo(SuSyDamageSources.getToxicAtmoDamage(), 2));
+        dimensionBreathabilityMap.put(-1, new BreathabilityInfo(SuSyDamageSources.getToxicAtmoDamage(), 2));
         // Beneath
-        dimensionBreathabilityMap.put(10, new DimensionBreathabilityHandler.BreathabilityInfo(SuSyDamageSources.getSuffocationDamage(), 0.5));
+        dimensionBreathabilityMap.put(10, new BreathabilityInfo(SuSyDamageSources.getSuffocationDamage(), 0.5));
 
     }
 

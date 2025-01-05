@@ -1,9 +1,11 @@
 package supersymmetry.client.renderer.handler;
 
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static supersymmetry.api.util.SuSyUtility.susyId;
 
@@ -31,17 +33,13 @@ public class BreathingApparatusModel extends ModelBiped {
             }
             case CHEST -> {
                 this.bipedBody.addChild(modelForPart(name, "chest"));
-                ModelRenderer leftArm = modelForPart(name, "left_arm", 12.125F);
-                leftArm.offsetX = 0.0625F;
-                this.bipedLeftArm.addChild(leftArm);
-                ModelRenderer rightArm = modelForPart(name, "right_arm", 12.125F);
-                rightArm.offsetX = -0.0625F;
-                this.bipedRightArm.addChild(rightArm);
+                this.bipedLeftArm.addChild(modelForPart(name, "left_arm"));
+                this.bipedRightArm.addChild(modelForPart(name, "right_arm"));
             }
             case LEGS -> {
-                this.bipedBody.addChild(modelForPart(name, "belt", 17.5F));
-                this.bipedLeftLeg.addChild(modelForPart(name, "left_leg", 16.5F));
-                this.bipedRightLeg.addChild(modelForPart(name, "right_leg", 16.5F));
+                this.bipedBody.addChild(modelForPart(name, "belt"));
+                this.bipedLeftLeg.addChild(modelForPart(name, "left_leg"));
+                this.bipedRightLeg.addChild(modelForPart(name, "right_leg"));
             }
             case HEAD -> this.bipedHead.addChild(modelForPart(name, "head"));
         }
@@ -52,10 +50,6 @@ public class BreathingApparatusModel extends ModelBiped {
     }
 
     public OBJModelRender modelForPart(String armor, String model) {
-        return modelForPart(armor, model, 17);
-    }
-
-    public OBJModelRender modelForPart(String armor, String model, float size) {
-        return new OBJModelRender(this, modelLocationFromPart(armor, model), size);
+        return new OBJModelRender(this, modelLocationFromPart(armor, model), 17);
     }
 }

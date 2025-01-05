@@ -39,14 +39,14 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
     @Nonnull
     protected BlockStateContainer createBlockState() {
         this.VARIANT = PROPERTY;
-        this.VALUES = SusyStoneVariantBlock.StoneType.values();
+        this.VALUES = StoneType.values();
         return new BlockStateContainer(this, this.VARIANT);
     }
 
     @Override
     @SuppressWarnings("deprecation")
     protected boolean canSilkHarvest() {
-        return this.stoneVariant == SusyStoneVariantBlock.StoneVariant.SMOOTH;
+        return this.stoneVariant == StoneVariant.SMOOTH;
     }
 
     @NotNull

@@ -24,7 +24,7 @@ public class SuSyArmorItem extends ArmorMetaItem<SuSyArmorItem.SuSyArmorMetaValu
         return getItem(stack).armorLogic.tryTick(stack, player);
     }
 
-    public class SuSyArmorMetaValueItem extends ArmorMetaItem<SuSyArmorItem.SuSyArmorMetaValueItem>.ArmorMetaValueItem {
+    public class SuSyArmorMetaValueItem extends ArmorMetaItem<SuSyArmorMetaValueItem>.ArmorMetaValueItem {
         private IBreathingArmorLogic armorLogic = null;
         protected SuSyArmorMetaValueItem(int metaValue, String unlocalizedName) {
             super(metaValue, unlocalizedName);
