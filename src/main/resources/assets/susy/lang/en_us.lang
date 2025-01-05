@@ -875,6 +875,34 @@ susy.large_fluid_pump.biome=Current bottom Pipe Casing biome: %s
 # Latex Logs
 gregtech.block_group_members.latex_logs.name=Rubber Log
 
+
+# Stock Interfaces
+susy.stock_interfaces.pull=%s will try to pull from trains.
+susy.stock_interfaces.push=%s will try to push to trains.
+
+gregtech.machine.stock_controller.name=Locomotive Controller
+susy.stock_interfaces.locomotive_controller.description=Controls nearby locomotives thrust and break depending on redstone input
+
+gregtech.machine.stock_detector.name=Stock Detector
+susy.stock_interfaces.stock_detector.description=Detects nearby stock and outputs redstone signal
+
+gregtech.machine.stock_fluid_exchanger.name=Fluid Exchanger
+susy.stock_interfaces.fluid_exchanger.description=Transfers fluid in and out of nearby stock
+
+gregtech.machine.stock_item_exchanger.name=Item Exchanger
+susy.stock_interfaces.item_exchanger.description=Transfers items in and out of nearby stock
+
+gregtech.machine.stock_content_reader.name=Stock Reader
+susy.stock_interfaces.stock_reader.description=Outputs redstone signal based on the inventory/tank of the stock in front of it
+
+susy.gui.stock_filter.filter_button.tooltip.enabled=Will interact with %s
+susy.gui.stock_filter.filter_button.tooltip.disabled=Will not interact with %s
+susy.gui.stock_interactor.render_bounding_box.tooltip.enabled=Render Interaction Area
+susy.gui.stock_interactor.render_bounding_box.tooltip.disabled=Render Interaction Area
+
+susy.machine.stock_interactor.tab.filter=Stock Filter
+susy.machine.stock_interactor.tab.config=Config
+
 # Extra recipe info
 susy.recipe.dimensions=Dimensions: %s
 susy.recipe.biomes=Biomes: %s
