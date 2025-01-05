@@ -903,3 +903,10 @@ susy.command.horde.status.no_active_invasion=Player %s has no active invasion.
 susy.fluid.voiding.liquid=Voidable with Dumper
 susy.fluid.voiding.gas=Voidable with Smoke Stack
 susy.fluid.voiding.flammable=Voidable with Flare Stack
+
+#Hardened blocks
+tile.hardened_blocks.lair7.name=Hardened Lair 7
+tile.hardened_blocks.lair10.name=Hardened Lair 10
+tile.hardened_blocks.lair11.name=Hardened Lair 11
+tile.hardened_blocks.kryp7.name=Hardened Kryp 7
+tile.hardened_blocks.kryp8.name=Hardened Kryp 8
