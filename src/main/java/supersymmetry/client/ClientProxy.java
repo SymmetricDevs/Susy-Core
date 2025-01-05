@@ -4,10 +4,13 @@ import gregtech.api.GTValues;
 import gregtech.api.items.metaitem.MetaOreDictItem;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.stack.UnificationEntry;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -15,7 +18,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.Supersymmetry;
-import supersymmetry.api.integration.theoneprobe.TheOneProbeCompatibility;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
 import supersymmetry.common.CommonProxy;
@@ -46,7 +48,6 @@ public class ClientProxy extends CommonProxy {
         super.load();
         SuSyMetaBlocks.registerColors();
         SuSyFluidTooltipLoader.registerTooltips();
-        TheOneProbeCompatibility.registerCompatibility();
     }
 
     @SubscribeEvent
@@ -106,5 +107,11 @@ public class ClientProxy extends CommonProxy {
     public static void registerModels(@NotNull ModelRegistryEvent event) {
         SuSyBlocks.registerItemModels();
         SuSyMetaBlocks.registerItemModels();
+    }
+
+    @SubscribeEvent
+    public static void stitchTexture(TextureStitchEvent.Pre event) {
+        TextureMap map = event.getMap();
+        map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "armor/jet_wingpack"));
     }
 }

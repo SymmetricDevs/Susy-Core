@@ -76,6 +76,8 @@ tile.resource_block.potash.name=Potash Deposit
 tile.resource_block.sulfur.name=Sulfur Deposit
 tile.resource_block.coal.name=Coal Deposit
 tile.resource_block_1.native_copper.name=Native Copper Deposit
+tile.resource_block_1.anthracite.name=Anthracite Deposit
+tile.resource_block_1.lignite.name=Lignite Deposit
 
 
 tile.multiblock_tank.clarifier.name=Clarifier Vat
@@ -110,6 +112,7 @@ tile.susy_stone_smooth.shale.name=Shale
 tile.susy_stone_smooth.slate.name=Slate
 tile.susy_stone_smooth.soapstone.name=Soapstone
 tile.susy_stone_smooth.kimberlite.name=Kimberlite
+tile.susy_stone_smooth.industrial_concrete.name=Industrial Concrete
 tile.susy_stone_cobble.gabbro.name=Gabbro Cobblestone
 tile.susy_stone_cobble.gneiss.name=Gneiss Cobblestone
 tile.susy_stone_cobble.graphite.name=Graphite Cobblestone
@@ -121,6 +124,7 @@ tile.susy_stone_cobble.shale.name=Shale Cobblestone
 tile.susy_stone_cobble.slate.name=Slate Cobblestone
 tile.susy_stone_cobble.soapstone.name=Soapstone Cobblestone
 tile.susy_stone_cobble.kimberlite.name=Kimberlite Cobblestone
+tile.susy_stone_cobble.industrial_concrete.name=Industrial Concrete Cobblestone
 tile.susy_stone_bricks.gabbro.name=Gabbro Bricks
 tile.susy_stone_bricks.gneiss.name=Gneiss Bricks
 tile.susy_stone_bricks.graphite.name=Graphite Bricks
@@ -132,6 +136,7 @@ tile.susy_stone_bricks.shale.name=Shale Bricks
 tile.susy_stone_bricks.slate.name=Slate Bricks
 tile.susy_stone_bricks.soapstone.name=Soapstone Bricks
 tile.susy_stone_bricks.kimberlite.name=Kimberlite Bricks
+tile.susy_stone_bricks.industrial_concrete.name=Industrial Concrete Bricks
 
 # Materials
 susy.material.manganese_iron_arsenic_phosphide=Manganese Iron Arsenic Phosphide
@@ -207,6 +212,12 @@ gregtech.machine.coagulation_tank.tooltip=Can't be used to stop bleeding.
 gregtech.machine.coagulation_tank.tooltip.1=Gains one parallel per block longer
 gregtech.machine.drum.lead.name=Lead Drum
 gregtech.machine.drum.brass.name=Brass Drum
+gregtech.machine.drum.pe.name=Polyethylene (PE) Can
+gregtech.machine.drum.pp.name=Polypropylene (PP) Can
+gregtech.machine.drum.ptfe.name=Polytetrafluoroethylene (PTFE) Can
+gregtech.machine.drum.uhmwpe.name=Ultra High Molecular Weight Polyethylene (UHMWPE) Can
+
+gregtech.machine.crate.pe.name=Hermetically Sealed Crate
 
 gregtech.machine.polymerization_tank.name=Polymerization Tank
 gregtech.machine.fluidized_bed_reactor.name=Fluidized Bed Reactor
@@ -716,6 +727,7 @@ recipemap.large_steam_turbine.name=Large Steam Turbine
 recipemap.primitive_smelter.name=Primitive Smelting
 recipemap.large_fluid_pump.name=Large Fluid Pump
 recipemap.sieve_distillation.name=Fractional Distillation
+recipemap.jet_wingpack_fuels.name=Jet Wingpack Fuels
 
 gregtech.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 gregtech.multiblock.ocean_pumper.description=The Ocean Pumper is an electrically powered multiblock that collects a base amount of 8,000 L Seawater per second (at MV), but only if it is in an ocean biome, and when the controller is between Y = 70 and Y = 75 (Inclusive). It needs an output hatch, a maintenance hatch, and an energy input hatch.
@@ -749,9 +761,34 @@ gregtech.machine.fluid_hatch.export_9x.mv.name=MV Nonuple Output Hatch
 gregtech.machine.fluid_hatch.export_9x.hv.name=HV Nonuple Output Hatch
 
 # Other multiblock parts
-
 gregtech.machine.dumping_hatch=Dumping Hatch
 gregtech.machine.dumping_hatch.lv.name=Dumping Hatch
+
+# Distillation tower explanations
+gregtech.machine.ordered_dt.tooltip.1=Fluid input and output hatches are on the same layers
+gregtech.machine.ordered_dt.tooltip.2=§cNot putting a fluid output in the Nth layer from the bottom voids the Nth output§7
+
+# Logistics
+gregtech.machine.delegator.tooltip.non_recursion=§6Cannot be attached to other Delegators!
+gregtech.top.delegator.delegating_face=Delegating: %s
+
+gregtech.machine.bridge.inv.name=Inventory Bridge
+gregtech.machine.bridge.inv.tooltip=§bRelays Inventories
+gregtech.machine.bridge.tank.name=Tank Bridge
+gregtech.machine.bridge.tank.tooltip=§bRelays Tanks
+gregtech.machine.bridge.inv_tank.name=Inventory and Tank Bridge
+gregtech.machine.bridge.inv_tank.tooltip=§bRelays Inventories and Tanks
+gregtech.machine.bridge.universal.name=Universal Bridge
+gregtech.machine.bridge.universal.tooltip=§bRelays Everything
+
+gregtech.machine.extender.inv.name=Inventory Extender
+gregtech.machine.extender.inv.tooltip=§bRelays Inventories
+gregtech.machine.extender.tank.name=Tank Extender
+gregtech.machine.extender.tank.tooltip=§bRelays Tanks
+gregtech.machine.extender.inv_tank.name=Inventory and Tank Extender
+gregtech.machine.extender.inv_tank.tooltip=§bRelays Inventories and Tanks
+gregtech.machine.extender.universal.name=Universal Extender
+gregtech.machine.extender.universal.tooltip=§bRelays Everything
 
 # Metaitems
 metaitem.catalyst_bed_support_grid.name=Catalyst Bed Support Grid
@@ -760,6 +797,8 @@ cover.conveyor.steam.title=Steam Conveyor Module
 metaitem.pump.steam.name=Steam Pump
 cover.pump.steam.title=Steam Pump
 metaitem.air_vent.name=Air Vent
+metaitem.restrictive_filter.name=Restrictive Item Filter
+metaitem.restrictive_filter.tooltip=Allows only §6one stack§7 of any type of item inside. Can replace robot arms. %n§oHere you may come, but no further.§r §7Job 38:11
 metaitem.air_vent.tooltip=Passively collects a Dimension's Air for your Machines when facing Air
 metaitem.track_segment.name=Monorail Track Segment
 metaitem.track_segment.tooltip=For use in the §8tunnelbore.
@@ -817,6 +856,13 @@ gregtech.catalyst_group.standard_catalysts.name=Standard Catalyst
 # Cracking Catalyst
 gregtech.catalyst_group.cracking_catalyst_beds.name=Cracking Catalyst
 metaitem.standard_catalyst_bed_cracking.name=Cracking Catalyst Bed
+
+# Armors
+metaitem.jet_wingpack.name=Jet Wingpack
+metaitem.jet_wingpack.tooltip=Hold shift to brake when engine activated
+metaarmor.hud.engine_status=Engine: %s
+metaarmor.jet_wingpack.engine_active=Jet Wingpack: Engine Activated
+metaarmor.jet_wingpack.engine_inactive=Jet Wingpack: Engine Deactivated
 
 # Machine Translations
 susy.ocean_pumper.full=Tanks are Full!
