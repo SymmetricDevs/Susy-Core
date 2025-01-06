@@ -3,11 +3,14 @@ package supersymmetry.common.entities;
 import cam72cam.immersiverailroading.entity.Freight;
 import cam72cam.immersiverailroading.inventory.SlotFilter;
 import cam72cam.mod.entity.Entity;
+import cam72cam.mod.entity.sync.TagSync;
+import cam72cam.mod.serialization.TagField;
 import supersymmetry.integration.immersiverailroading.registry.TransporterErectorDefinition;
 
 public class EntityTransporterErector extends Freight {
-
-    private boolean isRocketLoaded = true;
+    @TagField("borerAngle")
+    @TagSync
+    private boolean isRocketLoaded;
 
     public EntityTransporterErector() {
     }
