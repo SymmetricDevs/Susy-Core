@@ -21,6 +21,7 @@ public class SuSyMetaItems {
     public static MetaValueItem CONVEYOR_STEAM;
     public static MetaValueItem PUMP_STEAM;
     public static MetaValueItem AIR_VENT;
+    public static MetaValueItem RESTRICTIVE_FILTER;
     public static MetaValueItem TRACK_SEGMENT;
     public static ArmorMetaItem<?>.ArmorMetaValueItem JET_WINGPACK;
 
@@ -58,6 +59,8 @@ public class SuSyMetaItems {
         TRACK_SEGMENT = metaItem.addItem(5, "track_segment").addComponents(new TooltipBehavior((lines) -> {
             lines.add(I18n.format("metaitem.track_segment.length_info"));
         }));
+
+        RESTRICTIVE_FILTER = metaItem.addItem(6, "restrictive_filter");
     }
 
     private static void addTieredOredictItem (OreDictValueItem[] items, int id, int RGB, OrePrefix prefix) {

@@ -22,6 +22,8 @@ public final class SuSyCoverBehaviors {
 
         registerBehavior(SuSyUtility.susyId("air_vent"), SuSyMetaItems.AIR_VENT,
                 (definition, coverableView, attachedSide) -> new CoverAirVent(definition, coverableView, attachedSide, 100));
+
+        registerBehavior(SuSyUtility.susyId("restrictive_filter"), SuSyMetaItems.RESTRICTIVE_FILTER, CoverRestrictive::new);
     }
 
 }
