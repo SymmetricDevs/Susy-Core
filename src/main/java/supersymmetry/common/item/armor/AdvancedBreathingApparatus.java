@@ -31,8 +31,6 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IT
     private final String name;
     private final int tier;
     private final double relativeAbsorption;
-    @SideOnly(Side.CLIENT)
-    private BreathingApparatusModel model;
 
     public AdvancedBreathingApparatus(EntityEquipmentSlot slot, double hoursOfLife, String name, int tier, double relativeAbsorption) {
         super(slot);

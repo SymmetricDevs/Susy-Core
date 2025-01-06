@@ -94,7 +94,7 @@ public class EventHandlers {
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (FMLCommonHandler.instance().getMinecraftServerInstance().getTickCounter() % 20 == 0 && event.phase == TickEvent.Phase.START) {
+        if (event.player.world.getWorldTime() % 20 == 0 && event.phase == TickEvent.Phase.START) {
             DimensionBreathabilityHandler.tickPlayer(event.player);
         }
     }
