@@ -1,13 +1,15 @@
 {
-	"name": "Transporter Erector",
-	"works": "Black Mesa",
-	"model": "immersiverailroading:models/rolling_stock/freight/70t_hopper_slsf/70t_hopper_slsf.obj",
+	"name": "Soyuz Transporter",
+	"model": "immersiverailroading:models/rolling_stock/transporter_erector/soyuz_transporter/soyuz_transporter.obj",
 	"modeler": "Memeexp",
 	"pack": "Supersymmetry Engines",
     "darken_model": "-0.01",
 	"properties": {
-		"weight_kg": 21318,
-		"independent_brake": true
+		"horsepower": 3000,
+		"tractive_effort_lbf": 92000,
+		"max_speed_kmh": 15,
+		"weight_kg": 3000,
+		"horn_sustained": true
 	},
 	"trucks": {
 		"front": 1.2, 
