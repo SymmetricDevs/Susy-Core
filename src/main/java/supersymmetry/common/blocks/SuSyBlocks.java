@@ -41,6 +41,7 @@ public class SuSyBlocks {
     public static BlockSuSyMultiblockCasing MULTIBLOCK_CASING;
     public static BlockSerpentine SERPENTINE;
     public static BlocksHardened HARDBLOCKS;
+    public static BlocksCustomSheets CUSTOMSHEETS;
 
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
@@ -104,6 +105,9 @@ public class SuSyBlocks {
 
         HARDBLOCKS = new BlocksHardened();
         HARDBLOCKS.setRegistryName("hardened_blocks");
+
+        CUSTOMSHEETS = new BlocksCustomSheets();
+        CUSTOMSHEETS.setRegistryName("custom_sheets");
     }
 
     @SideOnly(Side.CLIENT)
@@ -129,6 +133,7 @@ public class SuSyBlocks {
         registerItemModel(MULTIBLOCK_CASING);
         SERPENTINE.onModelRegister();
         registerItemModel(HARDBLOCKS);
+        registerItemModel(CUSTOMSHEETS);
     }
 
     @SideOnly(Side.CLIENT)

@@ -4,8 +4,8 @@ import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 import gregtech.client.renderer.texture.cube.SimpleCubeRenderer;
 import gregtech.client.renderer.texture.cube.SimpleOverlayRenderer;
 import gregtech.client.renderer.texture.cube.SimpleSidedCubeRenderer;
-import supersymmetry.client.renderer.textures.custom.ExtenderRender;
 import gregtech.client.renderer.texture.custom.DrumRenderer;
+import supersymmetry.client.renderer.textures.custom.ExtenderRender;
 
 public class SusyTextures {
 
@@ -84,6 +84,7 @@ public class SusyTextures {
     public static final SimpleOverlayRenderer SILICON_CARBIDE_CASING = new SimpleOverlayRenderer("multiblock_casing/silicon_carbide_casing");
     public static final SimpleOverlayRenderer ULV_STRUCTURAL_CASING = new SimpleOverlayRenderer("multiblock_casing/ulv_structural_casing");
     public static final SimpleOverlayRenderer SLAG_HOT = new SimpleOverlayRenderer("resource/slag_hot");
+    public static final SimpleOverlayRenderer RESTRICTIVE_FILTER_FILTER_OVERLAY = new SimpleOverlayRenderer("cover/overlay_restrictive_filter");
 
     public static final SimpleCubeRenderer MASONRY_BRICK = new SimpleCubeRenderer("gregtech:blocks/multiblock_casing/masonry_brick");
 
