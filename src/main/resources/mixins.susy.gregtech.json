@@ -10,6 +10,7 @@
     "MetaTileEntityFluidDrillMixin",
     "MetaTileEntityLargeMinerMixin",
     "MetaTileEntityMinerMixin",
-    "MultiblockControllerBaseMixin"
+    "MultiblockControllerBaseMixin",
+    "SliderWidgetAccessor"
   ]
 }
