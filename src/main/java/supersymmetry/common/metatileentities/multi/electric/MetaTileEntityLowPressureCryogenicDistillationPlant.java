@@ -15,7 +15,6 @@ import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMulti
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.capability.impl.ExtendedDTLogicHandler;
 import supersymmetry.api.metatileentity.multiblock.ICryogenicProvider;
 import supersymmetry.api.metatileentity.multiblock.ICryogenicReceiver;
 import supersymmetry.api.metatileentity.multiblock.MetaTileEntityOrderedDT;
@@ -72,12 +71,6 @@ public class MetaTileEntityLowPressureCryogenicDistillationPlant extends MetaTil
                 .where('#', air())
                 .where('Z', cryogenicRecieverPredicate())
                 .build();
-    }
-
-    @Override
-    @NotNull
-    public DistillationTowerLogicHandler createHandler() {
-        return new ExtendedDTLogicHandler(this, 1, i -> -i);
     }
 
     @Override
