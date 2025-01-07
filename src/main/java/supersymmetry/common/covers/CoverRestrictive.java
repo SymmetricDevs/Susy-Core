@@ -9,21 +9,21 @@ import gregtech.api.cover.CoverBase;
 import gregtech.api.cover.CoverDefinition;
 import gregtech.api.cover.CoverableView;
 import gregtech.api.util.ItemStackHashStrategy;
-import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenCustomHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.recipes.catalysts.CatalystInfo;
 import supersymmetry.client.renderer.textures.SusyTextures;
 
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 
 public class CoverRestrictive extends CoverBase {
 
@@ -66,35 +66,60 @@ public class CoverRestrictive extends CoverBase {
     }
 
     protected static class ItemHandlerRestrictive extends ItemHandlerDelegate {
-        private final Map<ItemStack, Integer> map = new Object2IntOpenCustomHashMap<>(ItemStackHashStrategy.comparingAllButCount());
+        private final Map<ItemStack, Set<Integer>> multimap = new Object2ObjectOpenCustomHashMap<>(ItemStackHashStrategy.comparingAllButCount());
 
         public ItemHandlerRestrictive(IItemHandler delegate) {
             super(delegate);
         }
 
+        private void addToMap(int slot, ItemStack stack) {
+            if (multimap.containsKey(stack)) {
+                multimap.get(stack).add(slot);
+            } else {
+                Set set = new ObjectArraySet<>();
+                set.add(slot);
+                multimap.put(stack, set);
+            }
+        }
+
         @NotNull
         @Override
         public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-            if (stack.isEmpty() || stack.isItemEqual(getStackInSlot(slot))) {
+            // Check if the current slot already has the item (by checking if it stacks). If not:
+            // Check if it happens to be somewhere else. This is cached in a multimap.
+            // If it is, we reject the stack, but otherwise, we let it through.
+            // (The whole point is to prevent more than one slot from automatically filling up.)
+
+            if (!getStackInSlot(slot).isEmpty() && ItemHandlerHelper.canItemStacksStack(stack, getStackInSlot(slot))) {
                 return super.insertItem(slot, stack, simulate);
             }
-            // Makes things more efficient for common items.
-            if (map.containsKey(stack)) {
-                int location = map.get(stack);
-                if (stack.isItemEqual(getStackInSlot(location))) {
-                    return super.insertItem(location, stack, simulate);
-                } else {
-                    map.remove(stack);
+            if (getStackInSlot(slot).isEmpty()) {
+                if (multimap.containsKey(stack)) {
+                    // We do have to make sure it's actually there! (We also have to stop CMEs.)
+                    for (int i : new ArrayList<>(multimap.get(stack))) {
+                        if (ItemHandlerHelper.canItemStacksStack(stack, getStackInSlot(i))) {
+                            return stack;
+                        } else {
+                            multimap.get(stack).remove(i);
+                        }
+                    }
+                    // Well, I guess it was already removed, then.
                 }
-            }
-            // If it's not already in the map of what goes where, we search if it happens to be anywhere already, for some reason.
-            for (int i = 0; i < getSlots(); i++) {
-                if (i != slot && stack.isItemEqual(getStackInSlot(i))) {
-                    map.put(stack, i);
-                    return super.insertItem(i, stack, simulate);
+                // If it's not already in the set of what goes where, we search if it happens to be anywhere already, for some reason.
+                for (int i = 0; i < getSlots(); i++) {
+                    if (ItemHandlerHelper.canItemStacksStack(stack, getStackInSlot(i))) {
+                        addToMap(i, stack);
+                        return stack;
+                    }
                 }
+                // OK, we let it through now that we know it's not anywhere else.
+                return super.insertItem(slot, stack, simulate);
+
             }
-            return super.insertItem(slot, stack, simulate);
+            // It simply wouldn't even fit in that slot anyway.
+            return stack;
         }
+
+
     }
 }
