@@ -35,7 +35,10 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.*;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -47,11 +50,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.capability.impl.EvapRecipeLogic;
-import supersymmetry.api.integration.EvaporationPoolInfoProvider;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.properties.EvaporationEnergyProperty;
 import supersymmetry.common.blocks.BlockEvaporationBed;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.integration.theoneprobe.provider.EvaporationPoolInfoProvider;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -507,6 +510,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         if (TooltipHelper.isShiftDown()) {
             tooltip.add(I18n.format("gregtech.machine.evaporation_pool.tooltip.structure_info", MAX_SQUARE_SIDE_LENGTH, MAX_SQUARE_SIDE_LENGTH) + "\n");
         }
+        super.addInformation(stack, player, tooltip, advanced);
     }
 
     public BlockPos.MutableBlockPos getCorner(boolean isClose, boolean isLeft) {
@@ -665,7 +669,8 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             return; //dont do logic on client
         }
 
-        setCoilActivity(false); // solves world issue reload where coils would be active even if multi was not running
+        // apparently causes significant lag; removal of this call will result in rendering issues due to super update concluding coils should be on innappropriately
+        // setCoilActivity(false); // solves world issue reload where coils would be active even if multi was not running
         if (structurePattern.getError() != null) return; //dont do processing for unformed multis
 
         //ensure timer is non-negative by anding sign bit with 0
@@ -918,6 +923,11 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     @Nonnull
     protected ICubeRenderer getFrontOverlay() {
         return Textures.BLAST_FURNACE_OVERLAY;
+    }
+
+    @Override
+    public boolean isMultiblockPartWeatherResistant(@Nonnull IMultiblockPart part) {
+        return true;
     }
 
     @Override

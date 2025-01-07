@@ -41,9 +41,6 @@ dependencies {
 
     implementation rfg.deobf('curse.maven:applecore-224472:2969118')
 
-    implementation rfg.deobf("curse.maven:no-tree-punching-289043:2983385") // No-tree-punching v2.0.21
-    implementation rfg.deobf("curse.maven:alcatrazcore-304493:2666560") // AlcatrazCore v1.0.4
-
 
     implementation rfg.deobf("curse.maven:universal-mod-core-371784:4975229") // Universal-Mod-Care v1.2.1
     implementation rfg.deobf("curse.maven:track-api-282613:2825260") // Track-API v1.2.0
@@ -60,6 +57,17 @@ dependencies {
     compileOnly rfg.deobf("curse.maven:redstone-flux-270789:2920436")
     compileOnly rfg.deobf("curse.maven:tesla-244651:2487959")
     compileOnly rfg.deobf("curse.maven:hwyla-253449:2568751")
+    compileOnly rfg.deobf("curse.maven:travelers-backpack-321117:3150850")
+
+    compileOnly rfg.deobf("curse.maven:bubbles-a-baubles-fork-995393:5719448")
 
     compileOnly rfg.deobf("curse.maven:barrels-drums-storage-more-319404:2708193")
+
+    implementation rfg.deobf("curse.maven:pyrotech-306676:5351359")
+    implementation rfg.deobf("curse.maven:athenaeum-284350:4633750")
+    implementation rfg.deobf("curse.maven:dropt-284973:5405050")
+
+    compileOnly rfg.deobf("curse.maven:yungs-better-mineshafts-forge-389665:3247154")
+
+    api("CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.700")
 }

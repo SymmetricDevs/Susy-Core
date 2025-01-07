@@ -1,24 +1,12 @@
 package supersymmetry.loaders.recipes;
 
-import cam72cam.immersiverailroading.IRItems;
-import cam72cam.mod.serialization.TagCompound;
-import gregtech.api.GTValues;
-import gregtech.api.recipes.GTRecipeHandler;
 import gregtech.api.recipes.ModHandler;
-import gregtech.api.recipes.ingredients.nbtmatch.NBTCondition;
-import gregtech.api.recipes.ingredients.nbtmatch.NBTMatcher;
-import gregtech.api.recipes.ingredients.nbtmatch.NBTTagType;
-import gregtech.api.unification.material.Materials;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
-import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.loaders.SuSyMetaTileEntityLoader;
-import trackapi.lib.Gauges;
 
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -141,51 +129,15 @@ public class SuSyRecipeLoader {
     }
 
     private static void registerMacerationToStoneDustRecipe() {
-        MACERATOR_RECIPES.recipeBuilder()
-                .input(stone, SusyMaterials.Gabbro)
-                .output(dust, SusyMaterials.Gabbro)
-                .buildAndRegister();
-
-        MACERATOR_RECIPES.recipeBuilder()
-                .input(stone, SusyMaterials.Gneiss)
-                .output(dust, SusyMaterials.Gneiss)
-                .buildAndRegister();
-
-        MACERATOR_RECIPES.recipeBuilder()
-                .input(stone, SusyMaterials.Limestone)
-                .output(dust, SusyMaterials.Limestone)
-                .buildAndRegister();
-
-        MACERATOR_RECIPES.recipeBuilder()
-                .input(stone, SusyMaterials.Phyllite)
-                .output(dust, SusyMaterials.Phyllite)
-                .buildAndRegister();
-
-        MACERATOR_RECIPES.recipeBuilder()
-                .input(stone, Materials.Quartzite)
-                .output(dust, Materials.Quartzite)
-                .buildAndRegister();
-
-        MACERATOR_RECIPES.recipeBuilder()
-                .input(stone, SusyMaterials.Shale)
-                .output(dust, SusyMaterials.Shale)
-                .buildAndRegister();
-
-        MACERATOR_RECIPES.recipeBuilder()
-                .input(stone, SusyMaterials.Slate)
-                .output(dust, SusyMaterials.Slate)
-                .buildAndRegister();
-
-        MACERATOR_RECIPES.recipeBuilder()
-                .input(stone, Materials.Soapstone)
-                .output(dust, Materials.Soapstone)
-                .buildAndRegister();
-
-
-        MACERATOR_RECIPES.recipeBuilder()
-                .input(stone, SusyMaterials.Kimberlite)
-                .output(dust, SusyMaterials.Kimberlite)
-                .buildAndRegister();
-
+        for (SusyStoneVariantBlock.StoneType stoneType : SusyStoneVariantBlock.StoneType.values()) {
+            MACERATOR_RECIPES.recipeBuilder()
+                    .inputs(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH).getItemVariant(stoneType))
+                    .output(dust, stoneType.getMaterial())
+                    .buildAndRegister();
+            MACERATOR_RECIPES.recipeBuilder()
+                    .inputs(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.COBBLE).getItemVariant(stoneType))
+                    .output(dust, stoneType.getMaterial())
+                    .buildAndRegister();
+        }
     }
 }

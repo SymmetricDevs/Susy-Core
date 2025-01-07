@@ -16,13 +16,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(value = FacadeItemBlock.class, remap = false)
+@Mixin(value = FacadeItemBlock.class)
 public class FacadeItemBlockMixin {
 
-    @Inject(method = "onItemUse",
+    @Inject(method = "onItemUse(Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/EnumHand;Lnet/minecraft/util/EnumFacing;FFF)Lnet/minecraft/util/EnumActionResult;",
             at = @At(
                     value = "INVOKE",
                     target = "Lmcjty/xnet/blocks/facade/FacadeItemBlock;setMimicBlock(Lnet/minecraft/item/ItemStack;Lnet/minecraft/block/state/IBlockState;)V",
+                    remap = false,
                     ordinal = 0),
             cancellable = true)
     private void skipGTTiles(EntityPlayer why, World the, BlockPos hell, EnumHand are, EnumFacing there, float so, float many, float variants,

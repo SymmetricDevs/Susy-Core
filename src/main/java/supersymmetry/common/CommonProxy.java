@@ -1,11 +1,13 @@
 package supersymmetry.common;
 
 import gregtech.api.block.VariantItemBlock;
+import gregtech.api.modules.ModuleContainerRegistryEvent;
 import gregtech.api.unification.material.event.MaterialEvent;
 import gregtech.api.unification.material.event.PostMaterialEvent;
 import gregtech.client.utils.TooltipHelper;
 import gregtech.common.blocks.BlockWireCoil;
 import gregtech.common.items.MetaItems;
+import gregtech.modules.ModuleManager;
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.monster.EntityZombie;
@@ -38,6 +40,7 @@ import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.loaders.SuSyWorldLoader;
 import supersymmetry.loaders.SusyOreDictionaryLoader;
 import supersymmetry.loaders.recipes.SuSyRecipeLoader;
+import supersymmetry.modules.SuSyModules;
 
 import java.util.Objects;
 import java.util.function.Function;
@@ -76,6 +79,7 @@ public class CommonProxy {
         registry.register(SuSyBlocks.DRILL_HEAD);
         registry.register(SuSyBlocks.DEPOSIT_BLOCK);
         registry.register(SuSyBlocks.RESOURCE_BLOCK);
+        registry.register(SuSyBlocks.RESOURCE_BLOCK_1);
         registry.register(SuSyBlocks.HOME);
         registry.register(SuSyBlocks.MULTIBLOCK_TANK);
         registry.register(SuSyBlocks.EVAPORATION_BED);
@@ -104,6 +108,7 @@ public class CommonProxy {
         registry.register(createItemBlock(SuSyBlocks.STRUCTURAL_BLOCK_1, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.DEPOSIT_BLOCK, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.RESOURCE_BLOCK, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.RESOURCE_BLOCK_1, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.HOME, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.EVAPORATION_BED, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.MULTIBLOCK_TANK, VariantItemBlock::new));
@@ -133,6 +138,7 @@ public class CommonProxy {
         MetaItems.addOrePrefix(SusyOrePrefix.fiber);
         MetaItems.addOrePrefix(SusyOrePrefix.wetFiber);
         MetaItems.addOrePrefix(SusyOrePrefix.thread);
+        MetaItems.addOrePrefix(SusyOrePrefix.dustWet);
 
         //SusyMaterials.removeFlags();
     }
@@ -171,6 +177,12 @@ public class CommonProxy {
         SuSyMetaBlocks.registerOreDict();
         SuSyRecipeLoader.init();
     }
+
+    @SubscribeEvent
+    public static void registerModuleContainer(ModuleContainerRegistryEvent event) {
+        ModuleManager.getInstance().registerContainer(new SuSyModules());
+    }
+
 
     private static <T extends Block> ItemBlock createItemBlock(T block, Function<T, ItemBlock> producer) {
         ItemBlock itemBlock = producer.apply(block);

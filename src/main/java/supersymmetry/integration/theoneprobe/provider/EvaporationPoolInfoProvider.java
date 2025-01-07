@@ -1,4 +1,4 @@
-package supersymmetry.api.integration;
+package supersymmetry.integration.theoneprobe.provider;
 
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;

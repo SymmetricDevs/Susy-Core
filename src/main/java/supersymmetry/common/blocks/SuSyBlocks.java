@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static gregtech.common.blocks.MetaBlocks.ASPHALT;
+
 public class SuSyBlocks {
 
     public static BlockCoolingCoil COOLING_COIL;
@@ -31,6 +33,7 @@ public class SuSyBlocks {
     public static BlockStructural1 STRUCTURAL_BLOCK_1;
     public static BlockDeposit DEPOSIT_BLOCK;
     public static BlockResource RESOURCE_BLOCK;
+    public static BlockResource1 RESOURCE_BLOCK_1;
     public static BlockHome HOME;
     public static BlockMultiblockTank MULTIBLOCK_TANK;
     public static BlockEvaporationBed EVAPORATION_BED;
@@ -77,6 +80,9 @@ public class SuSyBlocks {
         RESOURCE_BLOCK = new BlockResource();
         RESOURCE_BLOCK.setRegistryName("resource_block");
 
+        RESOURCE_BLOCK_1 = new BlockResource1();
+        RESOURCE_BLOCK_1.setRegistryName("resource_block_1");
+
         HOME = new BlockHome();
         HOME.setRegistryName("home_block");
 
@@ -112,6 +118,7 @@ public class SuSyBlocks {
         registerItemModel(STRUCTURAL_BLOCK_1);
         registerItemModel(DEPOSIT_BLOCK);
         registerItemModel(RESOURCE_BLOCK);
+        registerItemModel(RESOURCE_BLOCK_1);
         registerItemModel(HOME);
         EVAPORATION_BED.onModelRegister();
         MULTIBLOCK_TANK.onModelRegister();
@@ -157,9 +164,13 @@ public class SuSyBlocks {
 
     public static void registerWalkingSpeedBonus() {
         for (SusyStoneVariantBlock block : SUSY_STONE_BLOCKS.values()) {
-            for (IBlockState state : block.getBlockState().getValidStates()) {
-                BlockUtility.setWalkingSpeedBonus(state, BlockUtility.ASPHALT_WALKING_SPEED_BONUS);
-            }
+            if (block.getWalkingSpeed() == 0)
+                continue;
+            for (IBlockState state : block.getBlockState().getValidStates())
+                BlockUtility.setWalkingSpeedBonus(state, block.getWalkingSpeed());
+        }
+        for (IBlockState state : ASPHALT.getBlockState().getValidStates()) {
+            BlockUtility.setWalkingSpeedBonus(state, 1); // Buff from 0.6F
         }
     }
 

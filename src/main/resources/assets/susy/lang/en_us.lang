@@ -74,6 +74,11 @@ tile.resource_block.platinum_placer.name=Platinum Placer Deposit
 tile.resource_block.phosphorite.name=Phosphorite Deposit
 tile.resource_block.potash.name=Potash Deposit
 tile.resource_block.sulfur.name=Sulfur Deposit
+tile.resource_block.coal.name=Coal Deposit
+tile.resource_block_1.native_copper.name=Native Copper Deposit
+tile.resource_block_1.anthracite.name=Anthracite Deposit
+tile.resource_block_1.lignite.name=Lignite Deposit
+
 
 tile.multiblock_tank.clarifier.name=Clarifier Vat
 tile.multiblock_tank.flotation.name=Froth Flotation Vat
@@ -107,6 +112,7 @@ tile.susy_stone_smooth.shale.name=Shale
 tile.susy_stone_smooth.slate.name=Slate
 tile.susy_stone_smooth.soapstone.name=Soapstone
 tile.susy_stone_smooth.kimberlite.name=Kimberlite
+tile.susy_stone_smooth.industrial_concrete.name=Industrial Concrete
 tile.susy_stone_cobble.gabbro.name=Gabbro Cobblestone
 tile.susy_stone_cobble.gneiss.name=Gneiss Cobblestone
 tile.susy_stone_cobble.graphite.name=Graphite Cobblestone
@@ -118,6 +124,7 @@ tile.susy_stone_cobble.shale.name=Shale Cobblestone
 tile.susy_stone_cobble.slate.name=Slate Cobblestone
 tile.susy_stone_cobble.soapstone.name=Soapstone Cobblestone
 tile.susy_stone_cobble.kimberlite.name=Kimberlite Cobblestone
+tile.susy_stone_cobble.industrial_concrete.name=Industrial Concrete Cobblestone
 tile.susy_stone_bricks.gabbro.name=Gabbro Bricks
 tile.susy_stone_bricks.gneiss.name=Gneiss Bricks
 tile.susy_stone_bricks.graphite.name=Graphite Bricks
@@ -129,6 +136,7 @@ tile.susy_stone_bricks.shale.name=Shale Bricks
 tile.susy_stone_bricks.slate.name=Slate Bricks
 tile.susy_stone_bricks.soapstone.name=Soapstone Bricks
 tile.susy_stone_bricks.kimberlite.name=Kimberlite Bricks
+tile.susy_stone_bricks.industrial_concrete.name=Industrial Concrete Bricks
 
 # Materials
 susy.material.manganese_iron_arsenic_phosphide=Manganese Iron Arsenic Phosphide
@@ -181,6 +189,7 @@ item.material.oreprefix.sheetedFrame=%s Sheeted Frame Box
 item.material.oreprefix.fiber=%s Fiber
 item.material.oreprefix.fiberWet=Wet %s Fiber
 item.material.oreprefix.thread=%s Thread
+item.material.oreprefix.dustWet=Wet %s Dust
 
 susy.fluid.supercritical=Supercritical %s
 susy.fluid.impure_slurry=Impure %s Slurry
@@ -203,6 +212,12 @@ gregtech.machine.coagulation_tank.tooltip=Can't be used to stop bleeding.
 gregtech.machine.coagulation_tank.tooltip.1=Gains one parallel per block longer
 gregtech.machine.drum.lead.name=Lead Drum
 gregtech.machine.drum.brass.name=Brass Drum
+gregtech.machine.drum.pe.name=Polyethylene (PE) Can
+gregtech.machine.drum.pp.name=Polypropylene (PP) Can
+gregtech.machine.drum.ptfe.name=Polytetrafluoroethylene (PTFE) Can
+gregtech.machine.drum.uhmwpe.name=Ultra High Molecular Weight Polyethylene (UHMWPE) Can
+
+gregtech.machine.crate.pe.name=Hermetically Sealed Crate
 
 gregtech.machine.polymerization_tank.name=Polymerization Tank
 gregtech.machine.fluidized_bed_reactor.name=Fluidized Bed Reactor
@@ -253,6 +268,9 @@ gregtech.machine.primitive_mud_pump.name=Primitive Mud Pump
 gregtech.machine.primitive_mud_pump.tooltip=Works only in River biomes between Y=64 and Y=80
 gregtech.machine.basic_steam_turbine.name=Large Steam Turbine
 gregtech.machine.basic_gas_turbine.name=Large Gas Turbine
+gregtech.machine.large_fluid_pump.name=Large Fluid Pump
+gregtech.machine.large_fluid_pump.tooltip.1=This would definitely affect the local trout population.
+gregtech.machine.large_fluid_pump.tooltip.2=Only works when the controller is at Y=64 and the bottom Steel Pipe Casing is located in the right biome.
 gregtech.machine.ocean_pumper.name=Ocean Pumper
 gregtech.machine.ocean_pumper.tooltip=Works only in Ocean biomes between Y=70 and Y=75
 gregtech.machine.advanced_arc_furnace.name=Advanced Arc Furnace
@@ -286,8 +304,15 @@ gregtech.machine.high_pressure_cryogenic_distillation_plant.name=High Pressure C
 gregtech.machine.single_column_cryogenic_distillation_plant.name=Single Column Cryogenic Distillation Plant
 gregtech.machine.reverberatory_furnace.name=Reverberatory Furnace
 gregtech.machine.blender.name=Blender
+gregtech.machine.sieve_distillation_tower.name=Sieve Distillation Tower
 
 gregtech.machine.drone_pad.name=Drone Pad
+gregtech.machine.primitive_smelter.name=Primitive Smelter
+
+gregtech.machine.primitive_item_import.name=Primitive Item Import Bus
+gregtech.machine.primitive_item_import.tooltip=Only for use with the Primitive Smelter
+gregtech.machine.primitive_item_export.name=Primitive Item Export Bus
+gregtech.machine.primitive_item_export.tooltip=Only for use with the Primitive Smelter
 
 # Properties
 gregtech.recipe.plasma_requirement=Requires plasma: %s
@@ -709,6 +734,10 @@ recipemap.polishing_machine.name=Polishing
 recipemap.gravity_separator=Gravity Separation
 recipemap.spinning.name=Textile Spinning
 recipemap.large_steam_turbine.name=Large Steam Turbine
+recipemap.primitive_smelter.name=Primitive Smelting
+recipemap.large_fluid_pump.name=Large Fluid Pump
+recipemap.sieve_distillation.name=Fractional Distillation
+recipemap.jet_wingpack_fuels.name=Jet Wingpack Fuels
 
 gregtech.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 gregtech.multiblock.ocean_pumper.description=The Ocean Pumper is an electrically powered multiblock that collects a base amount of 8,000 L Seawater per second (at MV), but only if it is in an ocean biome, and when the controller is between Y = 70 and Y = 75 (Inclusive). It needs an output hatch, a maintenance hatch, and an energy input hatch.
@@ -723,10 +752,53 @@ gregtech.machine.energy_hatch.output_4a.hv.name=HV 4A Dynamo Hatch
 gregtech.machine.energy_hatch.output_16a.hv.name=HV 16A Dynamo Hatch
 gregtech.machine.energy_hatch.output_16a.ev.name=EV 16A Dynamo Hatch
 
-# Other multiblock parts
+# Quadruple & Nonuple Fluid Hatches
 
+gregtech.machine.fluid_hatch.import_4x.lv.name=LV Quadruple Input Hatch
+gregtech.machine.fluid_hatch.import_4x.mv.name=MV Quadruple Input Hatch
+gregtech.machine.fluid_hatch.import_4x.hv.name=HV Quadruple Input Hatch
+
+gregtech.machine.fluid_hatch.import_9x.lv.name=LV Nonuple Input Hatch
+gregtech.machine.fluid_hatch.import_9x.mv.name=MV Nonuple Input Hatch
+gregtech.machine.fluid_hatch.import_9x.hv.name=HV Nonuple Input Hatch
+
+gregtech.machine.fluid_hatch.export_4x.lv.name=LV Quadruple Output Hatch
+gregtech.machine.fluid_hatch.export_4x.mv.name=LV Quadruple Output Hatch
+gregtech.machine.fluid_hatch.export_4x.hv.name=LV Quadruple Output Hatch
+
+gregtech.machine.fluid_hatch.export_9x.lv.name=LV Nonuple Output Hatch
+gregtech.machine.fluid_hatch.export_9x.mv.name=MV Nonuple Output Hatch
+gregtech.machine.fluid_hatch.export_9x.hv.name=HV Nonuple Output Hatch
+
+# Other multiblock parts
 gregtech.machine.dumping_hatch=Dumping Hatch
 gregtech.machine.dumping_hatch.lv.name=Dumping Hatch
+
+# Distillation tower explanations
+gregtech.machine.ordered_dt.tooltip.1=Fluid input and output hatches are on the same layers
+gregtech.machine.ordered_dt.tooltip.2=§cNot putting a fluid output in the Nth layer from the bottom voids the Nth output§7
+
+# Logistics
+gregtech.machine.delegator.tooltip.non_recursion=§6Cannot be attached to other Delegators!
+gregtech.top.delegator.delegating_face=Delegating: %s
+
+gregtech.machine.bridge.inv.name=Inventory Bridge
+gregtech.machine.bridge.inv.tooltip=§bRelays Inventories
+gregtech.machine.bridge.tank.name=Tank Bridge
+gregtech.machine.bridge.tank.tooltip=§bRelays Tanks
+gregtech.machine.bridge.inv_tank.name=Inventory and Tank Bridge
+gregtech.machine.bridge.inv_tank.tooltip=§bRelays Inventories and Tanks
+gregtech.machine.bridge.universal.name=Universal Bridge
+gregtech.machine.bridge.universal.tooltip=§bRelays Everything
+
+gregtech.machine.extender.inv.name=Inventory Extender
+gregtech.machine.extender.inv.tooltip=§bRelays Inventories
+gregtech.machine.extender.tank.name=Tank Extender
+gregtech.machine.extender.tank.tooltip=§bRelays Tanks
+gregtech.machine.extender.inv_tank.name=Inventory and Tank Extender
+gregtech.machine.extender.inv_tank.tooltip=§bRelays Inventories and Tanks
+gregtech.machine.extender.universal.name=Universal Extender
+gregtech.machine.extender.universal.tooltip=§bRelays Everything
 
 # Metaitems
 metaitem.catalyst_bed_support_grid.name=Catalyst Bed Support Grid
@@ -735,6 +807,8 @@ cover.conveyor.steam.title=Steam Conveyor Module
 metaitem.pump.steam.name=Steam Pump
 cover.pump.steam.title=Steam Pump
 metaitem.air_vent.name=Air Vent
+metaitem.restrictive_filter.name=Restrictive Item Filter
+metaitem.restrictive_filter.tooltip=Allows only §6one stack§7 of any type of item inside. Can replace robot arms. %n§oHere you may come, but no further.§r §7Job 38:11
 metaitem.air_vent.tooltip=Passively collects a Dimension's Air for your Machines when facing Air
 metaitem.track_segment.name=Monorail Track Segment
 metaitem.track_segment.tooltip=For use in the §8tunnelbore.
@@ -793,15 +867,30 @@ gregtech.catalyst_group.standard_catalysts.name=Standard Catalyst
 gregtech.catalyst_group.cracking_catalyst_beds.name=Cracking Catalyst
 metaitem.standard_catalyst_bed_cracking.name=Cracking Catalyst Bed
 
+# Armors
+metaitem.jet_wingpack.name=Jet Wingpack
+metaitem.jet_wingpack.tooltip=Hold shift to brake when engine activated
+metaarmor.hud.engine_status=Engine: %s
+metaarmor.jet_wingpack.engine_active=Jet Wingpack: Engine Activated
+metaarmor.jet_wingpack.engine_inactive=Jet Wingpack: Engine Deactivated
+
 # Machine Translations
 susy.ocean_pumper.full=Tanks are Full!
 susy.ocean_pumper.drainrate=Current Pumping Rate: %s
+susy.wrongbiome=Machine can not work in this biome!
+susy.weather_resistance=§2Will not explode from water, lava, fire or rain.
+susy.large_fluid_pump.y_level=Current Controller Y level: Y=%s
+susy.large_fluid_pump.biome=Current bottom Pipe Casing biome: %s
 
 # Latex Logs
 gregtech.block_group_members.latex_logs.name=Rubber Log
 
 # Extra recipe info
 susy.recipe.dimensions=Dimensions: %s
+susy.recipe.biomes=Biomes: %s
+susy.recipe.biomes_blocked=Blocked Biomes: %s
+susy.recipe.biomeTypes=BiomeTypes: %s
+susy.recipe.biomeTypes_blocked=Blocked BiomeTypes: %s
 
 # Commands
 
