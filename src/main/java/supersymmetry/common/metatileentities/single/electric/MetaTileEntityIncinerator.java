@@ -46,7 +46,7 @@ import static gregtech.api.capability.GregtechDataCodes.WORKING_ENABLED;
 public class MetaTileEntityIncinerator extends TieredMetaTileEntity implements IControllable {
 
     private boolean isWorkingEnabled = true;
-    private boolean isActive;
+    private boolean canProgress;
     private boolean hasItems = false;
     private int progress = 0;
     private boolean isClogged = false;
@@ -64,7 +64,7 @@ public class MetaTileEntityIncinerator extends TieredMetaTileEntity implements I
     @Override
     public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
         super.renderMetaTileEntity(renderState, translation, pipeline);
-        SusyTextures.INCINERATOR_OVERLAY.renderOrientedState(renderState, translation, pipeline, getFrontFacing(), isActive && isWorkingEnabled, true);
+        SusyTextures.INCINERATOR_OVERLAY.renderOrientedState(renderState, translation, pipeline, getFrontFacing(), this.isActive(), true);
     }
 
     @Override
@@ -92,56 +92,65 @@ public class MetaTileEntityIncinerator extends TieredMetaTileEntity implements I
 
         if (isWorkingEnabled && !this.getWorld().isRemote && (hasItems || this.notifiedItemInputList != null)) {
             if (this.getOffsetTimer() % 40 == 0) {
-                for (BlockPos pos : BlockPos.getAllInBox(getPos().up(1), getPos().up(8))) {
-                    IBlockState state = getWorld().getBlockState(pos);
-                    if (!state.getBlock().isAir(state, getWorld(), pos)) {
-                        setWorkingEnabled(false);
-                        setClogged(true);
-                    }
-                }
+                checkClogged();
             }
 
             this.hasItems = true;
             int startSlot = GTFOUtils.getFirstUnemptyItemSlot(this.importItems, 0);
             if (startSlot == -1) {
                 this.hasItems = false;
+                progress = 0;
+                if (this.canProgress)
+                    setCanProgress(false);
             } else if (this.energyContainer.removeEnergy(V[getTier()] / 2) == -V[getTier()] / 2) {
-                if (!this.isActive)
-                    setActive(true);
+                if (!this.canProgress)
+                    setCanProgress(true);
                 progress++;
                 if (progress >= maxProgress) {
                     this.importItems.extractItem(startSlot, itemsPerRun, false);
                     progress = 0;
                 }
             } else {
-                if (this.isActive)
-                    setActive(false);
+                if (this.canProgress)
+                    setCanProgress(false);
             }
-
         }
+    }
+
+    public void checkClogged() {
+        for (BlockPos pos : BlockPos.getAllInBox(getPos().up(1), getPos().up(8))) {
+            IBlockState state = getWorld().getBlockState(pos);
+            if (!state.getBlock().isAir(state, getWorld(), pos)) {
+                setWorkingEnabled(false);
+                setClogged(true);
+                return;
+            }
+        }
+        setClogged(false);
     }
 
     @Override
     public boolean isActive() {
-        return isActive;
+        return canProgress && isWorkingEnabled && !isClogged;
     }
 
-    public void setActive(boolean active) {
-        isActive = active;
-        this.writeCustomData(UPDATE_ACTIVE, buf -> buf.writeBoolean(active));
+    public void setCanProgress(boolean canProgress) {
+        this.canProgress = canProgress;
+        this.writeCustomData(UPDATE_ACTIVE, buf -> buf.writeBoolean(canProgress));
     }
 
     @SideOnly(Side.CLIENT)
     private void incineratingParticles() {
         BlockPos pos = this.getPos();
-        double xPos = pos.getX() + Math.random();
+        double xPos = pos.getX() + Math.random() / 2;
         double yPos = pos.getY() + 0.5D;
-        double zPos = pos.getZ() + Math.random();
+        double zPos = pos.getZ() + Math.random() / 2;
 
-        double ySpd = 1 + Math.random();
-        double xSpd = (Math.random() - 0.5D) / 4;
-        double zSpd = (Math.random() - 0.5D) / 4;
+        double ySpd = 0.1D + Math.random() / 3;
+        double xSpd = (Math.random() - 0.5D) / 3;
+        double zSpd = (Math.random() - 0.5D) / 3;
 
+        getWorld().spawnParticle(EnumParticleTypes.SMOKE_LARGE, xPos, yPos, zPos, xSpd, ySpd, zSpd);
         getWorld().spawnParticle(EnumParticleTypes.SMOKE_LARGE, xPos, yPos, zPos, xSpd, ySpd, zSpd);
     }
 
@@ -207,10 +216,13 @@ public class MetaTileEntityIncinerator extends TieredMetaTileEntity implements I
         super.receiveCustomData(dataId, buf);
         if (dataId == WORKING_ENABLED) {
             this.isWorkingEnabled = buf.readBoolean();
+            scheduleRenderUpdate();
         } else if (dataId == UPDATE_CLOGGED) {
             this.isClogged = buf.readBoolean();
+            scheduleRenderUpdate();
         } else if (dataId == UPDATE_ACTIVE) {
-            this.isActive = buf.readBoolean();
+            this.canProgress = buf.readBoolean();
+            scheduleRenderUpdate();
         }
     }
 
@@ -219,7 +231,7 @@ public class MetaTileEntityIncinerator extends TieredMetaTileEntity implements I
         data.setBoolean("workingEnabled", this.isWorkingEnabled);
         data.setInteger("progress", this.progress);
         data.setBoolean("isClogged", this.isClogged);
-        data.setBoolean("isActive", this.isActive);
+        data.setBoolean("canProgress", this.canProgress);
         return super.writeToNBT(data);
     }
 
@@ -230,23 +242,25 @@ public class MetaTileEntityIncinerator extends TieredMetaTileEntity implements I
         this.isWorkingEnabled = data.getBoolean("workingEnabled");
         this.progress = data.getInteger("progress");
         this.isClogged = data.getBoolean("isClogged");
-        this.isActive = data.getBoolean("isActive");
+        this.canProgress = data.getBoolean("canProgress");
     }
 
     @Override
     public void writeInitialSyncData(@NotNull PacketBuffer buf) {
         super.writeInitialSyncData(buf);
+        buf.writeBoolean(this.isWorkingEnabled);
         buf.writeInt(this.progress);
         buf.writeBoolean(this.isClogged);
-        buf.writeBoolean(this.isActive);
+        buf.writeBoolean(this.canProgress);
     }
 
     @Override
     public void receiveInitialSyncData(@NotNull PacketBuffer buf) {
         super.receiveInitialSyncData(buf);
+        this.isWorkingEnabled = buf.readBoolean();
         this.progress = buf.readInt();
         this.isClogged = buf.readBoolean();
-        this.isActive = buf.readBoolean();
+        this.canProgress = buf.readBoolean();
     }
 
     @Override
