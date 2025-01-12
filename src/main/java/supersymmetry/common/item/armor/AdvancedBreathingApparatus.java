@@ -65,11 +65,6 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IT
         ItemStack chest = player.getItemStackFromSlot(CHEST);
         if (chest.getItem() instanceof SuSyArmorItem item) {
             if (item.getItem(chest).getArmorLogic() instanceof AdvancedBreathingApparatus tank && tank.tier == tier) {
-                if (tank.getOxygen(chest) <= 0) {
-                    return 0.0625;
-                } else {
-                    tank.changeOxygen(chest, -1.);
-                }
                 tank.handleDamage(chest, player);
 
                 int piecesCount = 0;
@@ -87,6 +82,12 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IT
                         bootLogic.handleDamage(boots, player);
                         piecesCount++;
                     }
+                }
+
+                if (tank.getOxygen(chest) <= 0) {
+                    return 0.0625;
+                } else {
+                    tank.changeOxygen(chest, -1.);
                 }
                 switch (piecesCount) {
                     case 0:
