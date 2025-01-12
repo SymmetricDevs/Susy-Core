@@ -89,12 +89,10 @@ public class MetaTileEntityIncinerator extends TieredMetaTileEntity implements I
                 getWorld().playSound(null, getPos(), SoundEvents.ENTITY_GENERIC_BURN, SoundCategory.BLOCKS, 1.0F, 1.0F);
             }
         }
-
-        if (isWorkingEnabled && !this.getWorld().isRemote && (hasItems || this.notifiedItemInputList != null)) {
-            if (this.getOffsetTimer() % 40 == 0) {
-                checkClogged();
-            }
-
+        if (!this.getWorld().isRemote && this.getOffsetTimer() % 40 == 0) {
+            checkClogged();
+        }
+        if (!isClogged && isWorkingEnabled && !this.getWorld().isRemote && (hasItems || this.notifiedItemInputList != null)) {
             this.hasItems = true;
             int startSlot = GTFOUtils.getFirstUnemptyItemSlot(this.importItems, 0);
             if (startSlot == -1) {
@@ -121,8 +119,8 @@ public class MetaTileEntityIncinerator extends TieredMetaTileEntity implements I
         for (BlockPos pos : BlockPos.getAllInBox(getPos().up(1), getPos().up(8))) {
             IBlockState state = getWorld().getBlockState(pos);
             if (!state.getBlock().isAir(state, getWorld(), pos)) {
-                setWorkingEnabled(false);
                 setClogged(true);
+                progress = 0;
                 return;
             }
         }
