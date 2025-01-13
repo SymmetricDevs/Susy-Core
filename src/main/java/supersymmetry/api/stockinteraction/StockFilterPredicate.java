@@ -82,4 +82,32 @@ public abstract class StockFilterPredicate {
             return entity.getClass() == classToMatch;
         }
     }
+
+    public static abstract class StringMatcherPredicate extends StockFilterPredicate {
+
+        private static String stringToMatch;
+
+        public static String getStringToMatch() {
+            return stringToMatch;
+        }
+
+        public static void setStringToMatch(String stringToMatch) {
+            StringMatcherPredicate.stringToMatch = stringToMatch;
+        }
+
+        abstract String stringFromEntity (EntityRollingStock entity);
+
+        @Override
+        public boolean test(EntityRollingStock entity) {
+            return getStringToMatch().equals(stringFromEntity(entity));
+        }
+    }
+
+    public static class NameMatcherPredicate extends StringMatcherPredicate {
+        @Override
+        public String stringFromEntity(EntityRollingStock entity) {
+            return entity.internal.getName();
+        }
+    }
+
 }
