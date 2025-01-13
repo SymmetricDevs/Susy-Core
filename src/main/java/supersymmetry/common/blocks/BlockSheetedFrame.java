@@ -43,7 +43,7 @@ import java.util.Map;
 
 public class BlockSheetedFrame extends Block {
 
-    public static final PropertyEnum<BlockSheetedFrame.FrameEnumAxis> SHEETED_FRAME_AXIS = PropertyEnum.<BlockSheetedFrame.FrameEnumAxis>create("axis", BlockSheetedFrame.FrameEnumAxis.class);
+    public static final PropertyEnum<FrameEnumAxis> SHEETED_FRAME_AXIS = PropertyEnum.<FrameEnumAxis>create("axis", FrameEnumAxis.class);
 
     public final PropertyMaterial variantProperty;
 
@@ -70,7 +70,7 @@ public class BlockSheetedFrame extends Block {
     @Override @NotNull
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
     {
-        return this.getStateFromMeta(meta).withProperty(SHEETED_FRAME_AXIS, BlockSheetedFrame.FrameEnumAxis.fromFacingAxis(facing.getAxis()));
+        return this.getStateFromMeta(meta).withProperty(SHEETED_FRAME_AXIS, FrameEnumAxis.fromFacingAxis(facing.getAxis()));
     }
 
     protected BlockStateContainer createStateContainer() {
@@ -99,9 +99,9 @@ public class BlockSheetedFrame extends Block {
                 switch (state.getValue(SHEETED_FRAME_AXIS))
                 {
                     case X:
-                        return state.withProperty(SHEETED_FRAME_AXIS, BlockSheetedFrame.FrameEnumAxis.Z);
+                        return state.withProperty(SHEETED_FRAME_AXIS, FrameEnumAxis.Z);
                     case Z:
-                        return state.withProperty(SHEETED_FRAME_AXIS, BlockSheetedFrame.FrameEnumAxis.X);
+                        return state.withProperty(SHEETED_FRAME_AXIS, FrameEnumAxis.X);
                     default:
                         return state;
                 }

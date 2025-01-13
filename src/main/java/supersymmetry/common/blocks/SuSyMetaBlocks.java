@@ -146,7 +146,7 @@ public class SuSyMetaBlocks {
                 .sorted(Comparator.comparing(c -> c.getKey().getName()))
                 .collect(Collectors.toList());
 
-        for (Map.Entry<IProperty<?>, Comparable<?>> entry : entries) {
+        for (Entry<IProperty<?>, Comparable<?>> entry : entries) {
             if (stringbuilder.length() != 0) {
                 stringbuilder.append(",");
             }

@@ -51,6 +51,8 @@ dependencies {
     implementation rfg.deobf("curse.maven:groovyscript-687577:5507936") // GRS 1.1.1
     implementation rfg.deobf("curse.maven:modularui-624243:5153413")
 
+    runtimeOnly rfg.deobf("curse.maven:the-beneath-254629:3425551")
+
     compileOnly rfg.deobf("curse.maven:ynet-an-xnet-fork-999559:5243319") // XNet-1.8.3-ynet
     compileOnly rfg.deobf("curse.maven:rftools-224641:2861573") // RFTools 7.73
     compileOnly rfg.deobf("curse.maven:mcjtylib-233105:2745846")

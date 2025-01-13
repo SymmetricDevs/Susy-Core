@@ -273,7 +273,7 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.drone.landing", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
         }
 
-        return software.bernie.geckolib3.core.PlayState.CONTINUE;
+        return PlayState.CONTINUE;
     }
 
     @Override

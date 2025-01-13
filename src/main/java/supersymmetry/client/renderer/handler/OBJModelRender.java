@@ -37,6 +37,12 @@ public class OBJModelRender extends ModelRenderer {
     private int displayList;
     private boolean compiled = false;
     private IBakedModel objModel;
+    private float scaleMultiplier = 1F;
+
+    public OBJModelRender(ModelBase baseModel, ResourceLocation customModel, float scaleMultiplier) {
+        this(baseModel, customModel);
+        this.scaleMultiplier = scaleMultiplier;
+    }
 
     public OBJModelRender(ModelBase baseModel, ResourceLocation customModel) {
         super(baseModel);
@@ -109,7 +115,7 @@ public class OBJModelRender extends ModelRenderer {
 
     private void compileDisplayList(float scale) {
         if (this.scale == 0) {
-            this.scale = scale;
+            this.scale = scale * scaleMultiplier;
         }
 
         if (objModel == null) {

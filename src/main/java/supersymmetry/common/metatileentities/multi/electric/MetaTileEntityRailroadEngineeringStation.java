@@ -184,7 +184,7 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
                 .where('S', SuSyMetaTileEntities.RAILROAD_ENGINEERING_STATION, EnumFacing.SOUTH)
                 .where('F', MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel))
                 .where('M', MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
-                .where('A', () -> ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH : MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID), EnumFacing.SOUTH)
+                .where('A', () -> ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH : MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID), EnumFacing.SOUTH)
                 .where('G', MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX))
                 .where('C', MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT))
                 .where('I', MetaTileEntities.ITEM_IMPORT_BUS[3], EnumFacing.NORTH)

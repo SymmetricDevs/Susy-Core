@@ -4,18 +4,30 @@ import gregtech.api.util.GTTeleporter;
 import gregtech.api.util.TeleportHandler;
 import gregtech.common.items.MetaItems;
 import gregtechfoodoption.item.GTFOMetaItem;
+import net.minecraft.block.BlockCauldron;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.boss.dragon.phase.PhaseHoldingPattern;
+import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.management.PlayerList;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import supersymmetry.Supersymmetry;
+import supersymmetry.api.SusyLog;
 import supersymmetry.common.entities.EntityDropPod;
+import supersymmetry.common.event.DimensionBreathabilityHandler;
+import supersymmetry.common.event.MobHordePlayerData;
 import supersymmetry.common.event.MobHordeWorldData;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
@@ -57,7 +69,7 @@ public class EventHandlers {
     }
 
     @SubscribeEvent
-    public static void on(TickEvent.WorldTickEvent event) {
+    public static void onWorldTick(TickEvent.WorldTickEvent event) {
 
         World world = event.world;
 
@@ -78,6 +90,13 @@ public class EventHandlers {
             MobHordeWorldData mobHordeWorldData = MobHordeWorldData.get(world);
             list.getPlayers().forEach(p -> mobHordeWorldData.getPlayerData(p.getPersistentID()).update(p));
             mobHordeWorldData.markDirty();
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if (event.player.world.getTotalWorldTime() % 20 == 0 && event.phase == TickEvent.Phase.START) {
+            DimensionBreathabilityHandler.tickPlayer(event.player);
         }
     }
 }
