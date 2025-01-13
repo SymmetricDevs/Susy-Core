@@ -105,8 +105,12 @@ public abstract class StockFilterPredicate {
 
     public static class NameMatcherPredicate extends StringMatcherPredicate {
         @Override
-        public String stringFromEntity(EntityRollingStock entity) {
-            return entity.internal.getName();
+        public String stringFromEntity(EntityRollingStock stock) {
+            String name = stock.getDefinition().name();
+            if (stock.tag != null && !stock.tag.isEmpty()) {
+                name = stock.tag;
+            }
+            return name;
         }
     }
 
