@@ -3,6 +3,7 @@ package supersymmetry.common.metatileentities.single.electric;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
+import gregtech.api.GTValues;
 import gregtech.api.capability.GregtechTileCapabilities;
 import gregtech.api.capability.IControllable;
 import gregtech.api.capability.impl.NotifiableItemStackHandler;
@@ -270,6 +271,9 @@ public class MetaTileEntityIncinerator extends TieredMetaTileEntity implements I
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, boolean advanced) {
+        tooltip.add(I18n.format("gregtech.universal.tooltip.max_voltage_in", energyContainer.getInputVoltage(), GTValues.VNF[getTier()]));
+        tooltip.add(I18n.format("gregtech.universal.tooltip.energy_storage_capacity", energyContainer.getEnergyCapacity()));
+        tooltip.add(I18n.format("gregtech.universal.tooltip.item_storage_capacity", getInventorySize()));
         tooltip.add(I18n.format("gregtech.machine.incinerator.tooltip.1", itemsPerRun, maxProgress));
         tooltip.add(I18n.format("gregtech.machine.incinerator.tooltip.2"));
         tooltip.add(I18n.format("gregtech.machine.incinerator.tooltip.3"));
