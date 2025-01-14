@@ -72,11 +72,12 @@ public abstract class MetaTileEntityStockInteractor extends MetaTileEntity imple
     public void update() {
         super.update();
 
-        if(this.getWorld().isRemote)
+        if (this.getWorld().isRemote)
             return;
 
-        if(this.getOffsetTimer() % 20 == 0 && this.workingEnabled) {
+        if(this.getOffsetTimer() % 20 == 0 && this.isWorkingEnabled()) {
             this.stocks.clear();
+            // Do the filtering later?
             this.stocks = this.filter.filterEntities(StockHelperFunctions.getStocksInArea(this.getWorld(), this.getInteractionBoundingBox()));
         }
     }
@@ -100,7 +101,10 @@ public abstract class MetaTileEntityStockInteractor extends MetaTileEntity imple
 
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing side) {
-        return capability == GregtechTileCapabilities.CAPABILITY_CONTROLLABLE ? GregtechTileCapabilities.CAPABILITY_CONTROLLABLE.cast(this) : super.getCapability(capability, side);
+        if (capability == GregtechTileCapabilities.CAPABILITY_CONTROLLABLE) {
+            return GregtechTileCapabilities.CAPABILITY_CONTROLLABLE.cast(this);
+        }
+        return super.getCapability(capability, side);
     }
 
     // UI
@@ -111,7 +115,9 @@ public abstract class MetaTileEntityStockInteractor extends MetaTileEntity imple
     }
 
     // Override this if the machine needs a custom front page
-    protected abstract void appendDefaultTab(EntityPlayer entityPlayer, TabGroup tabGroup);
+    protected void appendDefaultTab(EntityPlayer entityPlayer, TabGroup tabGroup) {
+
+    }
 
     // Override this to append custom configs
     private AbstractWidgetGroup getConfigWidgetGroup() {

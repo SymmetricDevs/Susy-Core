@@ -74,7 +74,7 @@ public class StockFilter implements INBTSerializable<NBTTagCompound> {
                     .setTooltipText("susy.gui.stock_filter.filter_button.tooltip", name)
                     .shouldUseBaseBackground());
         }
-        
+
         return widgetGroup;
     }
 
