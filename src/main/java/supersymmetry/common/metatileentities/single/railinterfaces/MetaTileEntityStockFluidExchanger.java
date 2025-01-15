@@ -6,6 +6,17 @@ import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Matrix4;
+import com.cleanroommc.modularui.api.drawable.IKey;
+import com.cleanroommc.modularui.factory.PosGuiData;
+import com.cleanroommc.modularui.screen.ModularPanel;
+import com.cleanroommc.modularui.utils.Alignment;
+import com.cleanroommc.modularui.value.BoolValue;
+import com.cleanroommc.modularui.value.sync.BooleanSyncValue;
+import com.cleanroommc.modularui.value.sync.GuiSyncManager;
+import com.cleanroommc.modularui.widgets.SlotGroupWidget;
+import com.cleanroommc.modularui.widgets.ToggleButton;
+import com.cleanroommc.modularui.widgets.layout.Column;
+import com.cleanroommc.modularui.widgets.layout.Row;
 import gregtech.api.capability.IFilter;
 import gregtech.api.capability.IFilteredFluidContainer;
 import gregtech.api.capability.impl.FilteredItemHandler;
@@ -72,6 +83,33 @@ public class MetaTileEntityStockFluidExchanger extends MetaTileEntityStockIntera
 
     public MetaTileEntityStockFluidExchanger(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, subFilter);
+    }
+
+    @Override
+    public ModularPanel buildUI(PosGuiData guiData, GuiSyncManager guiSyncManager) {
+
+        BooleanSyncValue workingStateValue = new BooleanSyncValue(() -> workingEnabled, val -> workingEnabled = val);
+        guiSyncManager.syncValue("working_state", workingStateValue);
+        BooleanSyncValue renderBoundingBoxValue = new BooleanSyncValue(() -> renderBoundingBox, val -> renderBoundingBox = val);
+        guiSyncManager.syncValue("render_bounding_box", renderBoundingBoxValue);
+
+
+        return defaultPanel(this)
+                .child(IKey.lang(getMetaFullName()).asWidget().pos(5, 5))
+                .child(SlotGroupWidget.playerInventory().left(7).bottom(7))
+                .child(getLogo().asWidget().size(17).pos(152, 61))
+                .child(new Column().top(18).margin(7, 0)
+                        .widthRel(1f).coverChildrenHeight()
+                        .child(new Row().coverChildrenHeight()
+                                .marginBottom(2).widthRel(1f)
+                                .child(new ToggleButton().size(20).marginRight(2)
+                                        .value(new BoolValue.Dynamic(renderBoundingBoxValue::getBoolValue,
+                                                renderBoundingBoxValue::setBoolValue))
+                                )
+                                .child(IKey.lang("Render AABB").asWidget()
+                                        .align(Alignment.CenterRight).height(18))
+                        )
+                );
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {

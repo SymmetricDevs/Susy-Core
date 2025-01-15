@@ -1,7 +1,11 @@
 package supersymmetry.api.gui;
 
+import com.cleanroommc.modularui.drawable.UITexture;
+import gregtech.api.GTValues;
 import gregtech.api.gui.resources.SteamTexture;
 import gregtech.api.gui.resources.TextureArea;
+
+import static com.cleanroommc.modularui.drawable.UITexture.fullImage;
 
 public class SusyGuiTextures {
     public static final SteamTexture PROGRESS_BAR_MIXER_STEAM = SteamTexture.fullImage("textures/gui/progress_bar/progress_bar_mixer_%s.png");
@@ -30,4 +34,15 @@ public class SusyGuiTextures {
     public static final TextureArea BUTTON_INT_CIRCUIT_PLUS_PRIMITIVE = TextureArea.fullImage("textures/gui/widget/button_circuit_plus_primitive.png");
     public static final TextureArea BUTTON_INT_CIRCUIT_MINUS_PRIMITIVE = TextureArea.fullImage("textures/gui/widget/button_circuit_minus_primitive.png");
     public static final TextureArea FLUID_SLOT_PRIMITIVE = TextureArea.fullImage("textures/gui/base/fluid_slot_primitive.png");
+
+    public static final UITexture BACKGROUND_POPUP = UITexture.builder()
+            .location(GTValues.MODID, "textures/gui/base/background_popup.png")
+            .imageSize(195, 136)
+            .adaptable(4)
+            .name("gregtech_cover_bg")
+            .canApplyTheme()
+            .build();
+
+    public static final UITexture GREGTECH_LOGO = fullImage(GTValues.MODID, "textures/gui/icon/gregtech_logo.png", false);
+    public static final UITexture GREGTECH_LOGO_XMAS = fullImage(GTValues.MODID, "textures/gui/icon/gregtech_logo_xmas.png", false);
 }

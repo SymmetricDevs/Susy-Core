@@ -12,7 +12,6 @@ import gregtech.api.gui.widgets.ToggleButtonWidget;
 import gregtech.api.gui.widgets.WidgetGroup;
 import gregtech.api.gui.widgets.tab.ItemTabInfo;
 import gregtech.api.metatileentity.IFastRenderMetaTileEntity;
-import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.util.Position;
 import gregtech.client.utils.RenderBufferHelper;
 import gregtech.client.utils.RenderUtil;
@@ -34,6 +33,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import supersymmetry.api.SusyLog;
+import supersymmetry.api.metatileentity.Mui2MetaTileEntity;
 import supersymmetry.api.stockinteraction.IStockInteractor;
 import supersymmetry.api.stockinteraction.StockFilter;
 import supersymmetry.api.stockinteraction.StockHelperFunctions;
@@ -42,7 +42,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class MetaTileEntityStockInteractor extends MetaTileEntity implements IStockInteractor, IFastRenderMetaTileEntity, IControllable {
+public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity implements IStockInteractor, IFastRenderMetaTileEntity, IControllable {
 
     AxisAlignedBB interactionBoundingBox;
     private double interactionWidth = 11.;
@@ -51,10 +51,10 @@ public abstract class MetaTileEntityStockInteractor extends MetaTileEntity imple
     // This defines which stock classes can be interacted with
     private StockFilter filter;
     // If the current bounding box should be rendered
-    private boolean renderBoundingBox = false;
+    protected boolean renderBoundingBox = false;
     List<EntityRollingStock> stocks;
 
-    private boolean workingEnabled = true;
+    protected boolean workingEnabled = true;
 
 
     public MetaTileEntityStockInteractor(ResourceLocation metaTileEntityId) {
