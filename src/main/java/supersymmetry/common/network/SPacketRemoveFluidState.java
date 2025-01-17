@@ -1,15 +1,14 @@
 package supersymmetry.common.network;
 
-import git.jbredwards.fluidlogged_api.api.util.FluidState;
-import git.jbredwards.fluidlogged_api.api.util.FluidloggedUtils;
 import gregtech.api.network.IClientExecutor;
 import gregtech.api.network.IPacket;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class SPacketRemoveFluidState implements IPacket, IClientExecutor {
     private BlockPos blockPosition;
@@ -22,6 +21,7 @@ public class SPacketRemoveFluidState implements IPacket, IClientExecutor {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void executeClient(NetHandlerPlayClient netHandlerPlayClient) {
         World world = Minecraft.getMinecraft().world;
         world.setBlockToAir(blockPosition);
