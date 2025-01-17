@@ -39,10 +39,7 @@ import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimi
 import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityPrimitiveItemBus;
 import supersymmetry.common.metatileentities.multiblockpart.SusyMetaTileEntityDumpingHatch;
 import supersymmetry.common.metatileentities.multiblockpart.SusyMetaTileEntityEnergyHatch;
-import supersymmetry.common.metatileentities.single.electric.MetaTileEntityBathCondenser;
-import supersymmetry.common.metatileentities.single.electric.MetaTileEntityIncinerator;
-import supersymmetry.common.metatileentities.single.electric.MetaTileEntityLatexCollector;
-import supersymmetry.common.metatileentities.single.electric.MetaTileEntityPhaseSeparator;
+import supersymmetry.common.metatileentities.single.electric.*;
 import supersymmetry.common.metatileentities.single.steam.MetaTileEntitySteamLatexCollector;
 import supersymmetry.common.metatileentities.single.steam.SuSySimpleSteamMetaTileEntity;
 import supersymmetry.common.metatileentities.storage.MetaTileEntityPlasticCan;
@@ -190,6 +187,8 @@ public class SuSyMetaTileEntities {
 
     public static MetaTileEntityIncinerator[] INCINERATOR = new MetaTileEntityIncinerator[4];
 
+    public static MetaTileEntityRTG[] RTG = new MetaTileEntityRTG[8];
+
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
         COAGULATION_TANK = registerMetaTileEntity(14501, new MetaTileEntityCoagulationTank(susyId("coagulation_tank")));
@@ -318,6 +317,8 @@ public class SuSyMetaTileEntities {
         INCINERATOR[2] = registerMetaTileEntity(16502, new MetaTileEntityIncinerator(susyId("incinerator.hv"), 3, 20, 40));
         INCINERATOR[3] = registerMetaTileEntity(16503, new MetaTileEntityIncinerator(susyId("incinerator.ev"), 4, 10, 40));
 
+        // RTGs: 16504-16511
+        RTG[0] = registerMetaTileEntity(16504, new MetaTileEntityRTG(susyId("rtg.lv"), 1));
 
         BASIC_STEAM_TURBINE = registerMetaTileEntity(17000, new MetaTileEntitySUSYLargeTurbine(susyId("basic_steam_turbine"), SuSyRecipeMaps.LARGE_STEAM_TURBINE, 1, MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING), Textures.SOLID_STEEL_CASING, SusyTextures.LARGE_STEAM_TURBINE_OVERLAY));
         BASIC_GAS_TURBINE = registerMetaTileEntity(17001, new MetaTileEntitySUSYLargeTurbine(susyId("basic_gas_turbine"), RecipeMaps.GAS_TURBINE_FUELS, 2, MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING), Textures.SOLID_STEEL_CASING, SusyTextures.LARGE_GAS_TURBINE_OVERLAY));

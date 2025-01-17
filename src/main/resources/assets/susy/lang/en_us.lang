@@ -620,6 +620,10 @@ gregtech.machine.weapons_factory.opv.name=Legendary Weapons Factory
 # Phase Separator
 gregtech.machine.phase_separator.name=Phase Separator
 
+# RTG
+gregtech.machine.rtg.lv.name=Basic RTG
+
+
 # Electrostatic Separator
 gregtech.machine.electrostatic_separator.lv.name=Basic Electrostatic Separator
 gregtech.machine.electrostatic_separator.mv.name=Advanced Electrostatic Separator
