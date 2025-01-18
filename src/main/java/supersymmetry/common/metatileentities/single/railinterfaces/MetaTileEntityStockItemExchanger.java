@@ -78,6 +78,8 @@ public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInterac
         if(this.getWorld().isRemote)
             return;
 
+        this.itemInventory = null;
+
         if(this.isWorkingEnabled() && this.getOffsetTimer() % 20 == 0 && this.stocks.size() > 0)
         {
             Freight freightStock = (Freight) stocks.get(0);
