@@ -13,7 +13,7 @@ import supersymmetry.common.event.DimensionBreathabilityHandler;
 import java.util.List;
 
 public class SimpleGasMask implements IBreathingArmorLogic, IItemDurabilityManager {
-    public static final double LIFETIME = 1200;
+    public static final double LIFETIME = 600;
     @Override
     public EntityEquipmentSlot getEquipmentSlot(ItemStack itemStack) {
         return EntityEquipmentSlot.HEAD;
