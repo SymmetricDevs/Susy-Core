@@ -20,7 +20,7 @@ public class BlockStructural extends VariantBlock<BlockStructural.StructuralBloc
         setDefaultState(getState(StructuralBlockType.BASE_STRUCTURAL_BLOCK));
     }
 
-    public static enum StructuralBlockType implements IStringSerializable, IStateHarvestLevel {
+    public enum StructuralBlockType implements IStringSerializable, IStateHarvestLevel {
         BASE_STRUCTURAL_BLOCK("base_structural_block", 1),
         STRUCTURAL_BLOCK_LOW("structural_block_low", 1),
         STRUCTURAL_BLOCK_LOWLIGHT("structural_block_lowlight", 1),

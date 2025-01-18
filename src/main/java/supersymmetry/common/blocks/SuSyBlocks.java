@@ -42,6 +42,8 @@ public class SuSyBlocks {
     public static BlockSerpentine SERPENTINE;
     public static BlocksHardened HARDBLOCKS;
     public static BlocksCustomSheets CUSTOMSHEETS;
+    public static BlockRustySteelFrame RUSTY_STEEL_FRAME;
+
 
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
@@ -108,6 +110,9 @@ public class SuSyBlocks {
 
         CUSTOMSHEETS = new BlocksCustomSheets();
         CUSTOMSHEETS.setRegistryName("custom_sheets");
+
+        RUSTY_STEEL_FRAME = new BlockRustySteelFrame();
+        RUSTY_STEEL_FRAME.setRegistryName("rusty_steel_frame");
     }
 
     @SideOnly(Side.CLIENT)
@@ -134,6 +139,7 @@ public class SuSyBlocks {
         SERPENTINE.onModelRegister();
         registerItemModel(HARDBLOCKS);
         registerItemModel(CUSTOMSHEETS);
+        registerItemModel(RUSTY_STEEL_FRAME);
     }
 
     @SideOnly(Side.CLIENT)
