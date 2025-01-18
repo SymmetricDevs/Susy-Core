@@ -57,7 +57,7 @@ public final class DimensionBreathabilityHandler {
         if (isInHazardousEnvironment(player)) {
             if (player.getItemStackFromSlot(HEAD).getItem() instanceof SuSyArmorItem item) {
                 if (item.isValid(player.getItemStackFromSlot(HEAD), player)) {
-                    double damageAbsorbed = item.tryTick(player.getItemStackFromSlot(HEAD), player);
+                    double damageAbsorbed = item.getDamageAbsorbed(player.getItemStackFromSlot(HEAD), player);
                     dimensionBreathabilityMap.get(player.dimension).damagePlayer(player, damageAbsorbed);
                     return;
                 }

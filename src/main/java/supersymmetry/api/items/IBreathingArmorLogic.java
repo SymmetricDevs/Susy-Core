@@ -20,7 +20,7 @@ public interface IBreathingArmorLogic extends ISpecialArmorLogic {
     boolean mayBreatheWith(ItemStack stack, EntityPlayer player);
 
 
-    double tryTick(ItemStack stack, EntityPlayer player);
+    double getDamageAbsorbed(ItemStack stack, EntityPlayer player);
 
     default ISpecialArmor.ArmorProperties getProperties(EntityLivingBase player, @NotNull ItemStack armor, DamageSource source, double damage,
                                                         EntityEquipmentSlot equipmentSlot) {

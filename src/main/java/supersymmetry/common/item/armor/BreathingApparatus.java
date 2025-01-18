@@ -72,7 +72,7 @@ public class BreathingApparatus implements IBreathingArmorLogic, IItemDurability
     }
 
     @Override
-    public double tryTick(ItemStack stack, EntityPlayer player) {
+    public double getDamageAbsorbed(ItemStack stack, EntityPlayer player) {
         if (!DimensionBreathabilityHandler.isInHazardousEnvironment(player)) {
             return 0.5;
         }

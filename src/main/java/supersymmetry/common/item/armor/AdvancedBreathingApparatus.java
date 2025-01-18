@@ -61,7 +61,7 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IT
     }
 
     @Override
-    public double tryTick(ItemStack stack, EntityPlayer player) {
+    public double getDamageAbsorbed(ItemStack stack, EntityPlayer player) {
         this.handleDamage(stack, player);
 
         ItemStack chest = player.getItemStackFromSlot(CHEST);

@@ -46,7 +46,7 @@ public class SimpleGasMask implements IBreathingArmorLogic, IItemDurabilityManag
     }
 
     @Override
-    public double tryTick(ItemStack stack, EntityPlayer player) {
+    public double getDamageAbsorbed(ItemStack stack, EntityPlayer player) {
         if (DimensionBreathabilityHandler.isInHazardousEnvironment(player)) {
             changeDamage(stack, 1. / LIFETIME); // It's actually ticked every overall second, not just every tick.
         }
