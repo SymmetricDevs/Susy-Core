@@ -1,7 +1,6 @@
 package supersymmetry.api.items;
 
 import gregtech.api.items.armor.ArmorMetaItem;
-import gregtech.api.items.armor.IArmorLogic;
 import gregtech.api.items.armor.ISpecialArmorLogic;
 import gregtech.api.items.metaitem.stats.IItemBehaviour;
 import gregtech.common.items.behaviors.TooltipBehavior;

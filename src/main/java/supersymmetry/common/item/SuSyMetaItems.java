@@ -10,13 +10,8 @@ import gregtech.api.unification.material.info.MaterialIconSet;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.common.items.behaviors.TooltipBehavior;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import supersymmetry.SuSyValues;
-import supersymmetry.common.item.armor.AdvancedBreathingApparatus;
-import supersymmetry.common.item.armor.BreathingApparatus;
-import supersymmetry.common.item.armor.SimpleGasMask;
 
-import static net.minecraft.inventory.EntityEquipmentSlot.*;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
 
 public class SuSyMetaItems {

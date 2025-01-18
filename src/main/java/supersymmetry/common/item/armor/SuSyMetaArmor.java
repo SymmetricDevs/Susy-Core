@@ -1,12 +1,10 @@
 package supersymmetry.common.item.armor;
 
-import gregtech.api.items.armor.ArmorMetaItem;
 import supersymmetry.common.item.SuSyArmorItem;
 import supersymmetry.common.item.SuSyMetaItems;
 
 import static supersymmetry.common.item.SuSyMetaItems.*;
 import static net.minecraft.inventory.EntityEquipmentSlot.*;
-import static net.minecraft.inventory.EntityEquipmentSlot.FEET;
 
 public class SuSyMetaArmor extends SuSyArmorItem {
 

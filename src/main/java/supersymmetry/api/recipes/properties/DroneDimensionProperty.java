@@ -1,7 +1,6 @@
 package supersymmetry.api.recipes.properties;
 
 import gregtech.api.worldgen.config.WorldGenRegistry;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.client.Minecraft;
 
 import gregtech.api.recipes.recipeproperties.RecipeProperty;

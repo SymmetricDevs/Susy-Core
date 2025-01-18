@@ -1,18 +1,12 @@
 package supersymmetry.common.item.armor;
 
-import gregtech.api.items.armor.ArmorMetaItem;
-import gregtech.api.items.metaitem.stats.IItemBehaviour;
-
 import gregtech.api.items.metaitem.stats.IItemDurabilityManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.*;
-import net.minecraft.world.World;
 import supersymmetry.api.items.IBreathingArmorLogic;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 

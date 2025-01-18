@@ -12,7 +12,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.TextFormatting;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 

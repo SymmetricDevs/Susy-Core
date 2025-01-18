@@ -1,12 +1,6 @@
 package supersymmetry.common.event;
 
-import gregtech.api.damagesources.DamageSources;
-import gregtech.api.unification.material.Materials;
-
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;

@@ -15,7 +15,6 @@ import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.util.ResourceLocation;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
-import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nonnull;
 

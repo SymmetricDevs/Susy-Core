@@ -3,7 +3,6 @@ package supersymmetry.modules;
 import gregtech.api.GregTechAPI;
 import gregtech.api.modules.GregTechModule;
 import gregtech.api.modules.IGregTechModule;
-import gregtech.core.network.packets.PacketUIOpen;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.Supersymmetry;
