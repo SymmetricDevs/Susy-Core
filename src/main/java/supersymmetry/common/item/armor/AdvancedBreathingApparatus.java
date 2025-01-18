@@ -99,7 +99,7 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IT
                 }
             }
         }
-        return 0.0625;
+        return 0;
     }
 
 
