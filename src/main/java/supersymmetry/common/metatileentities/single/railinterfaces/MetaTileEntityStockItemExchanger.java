@@ -28,10 +28,6 @@ import java.util.List;
 
 public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInteractor
 {
-    public boolean pulling;
-    public final int inventoryArrayHeight = 5;
-    private final int inventoryArrayWidth = 5;
-
     //locomotive, freight
     public static List<String> subFilter = new ArrayList<>();
     static{
@@ -102,23 +98,10 @@ public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInterac
     }
 
     public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
-        byte state = 0b00;
-        state |= this.isWorkingEnabled() ? 0b01 : 0b00;
-        state |= pulling ? 0b10 : 0b00;
-
-        switch (state) {
-            case 0b00:
-                SusyTextures.STOCK_ITEM_EXCHANGER_PUSHING_OFF.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
-                break;
-            case 0b01:
-                SusyTextures.STOCK_ITEM_EXCHANGER_PUSHING_ON.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
-                break;
-            case 0b10:
-                SusyTextures.STOCK_ITEM_EXCHANGER_PULLING_OFF.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
-                break;
-            case 0b11:
-                SusyTextures.STOCK_ITEM_EXCHANGER_PULLING_ON.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
-                break;
+        if (this.isWorkingEnabled()) {
+            SusyTextures.STOCK_ITEM_EXCHANGER_PULLING_OFF.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
+        } else {
+            SusyTextures.STOCK_ITEM_EXCHANGER_PULLING_ON.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
         }
     }
 
