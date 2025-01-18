@@ -196,6 +196,20 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IT
             strings.add(I18n.format("attribute.modifier.plus.0", armor, I18n.format("attribute.name.generic.armor")));
     }
 
+    void changeOxygen(ItemStack stack, double oxygenChange) {
+        if (getMaxOxygen(stack) == -1) {
+            return;
+        }
+        super.changeOxygen(stack, oxygenChange);
+    }
+
+    double getOxygen(ItemStack stack) {
+        if (getMaxOxygen(stack) == -1) {
+            return 12000;
+        }
+        return super.getOxygen(stack);
+    }
+
     @Override
     public int getArmorDisplay(EntityPlayer player, ItemStack armor, int slot) {
         return (int) Math.round(20.0F * this.getAbsorption(armor) * relativeAbsorption);
