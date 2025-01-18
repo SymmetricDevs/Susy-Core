@@ -72,17 +72,17 @@ public class BreathingApparatus implements IBreathingArmorLogic, IItemDurability
     @Override
     public double tryTick(ItemStack stack, EntityPlayer player) {
         if (!DimensionBreathabilityHandler.isInHazardousEnvironment(player)) {
-            return 0.0625;
+            return 0.5;
         }
 
         ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
         if (chest.getItem() instanceof SuSyArmorItem item) {
             if (item.getItem(chest).getArmorLogic() instanceof BreathingApparatus tank) {
                 tank.changeOxygen(stack, -1);
-                return 0.0625;
+                return 0.5;
             }
         }
-        return 0.5;
+        return 0.0625;
     }
 
     @Override
