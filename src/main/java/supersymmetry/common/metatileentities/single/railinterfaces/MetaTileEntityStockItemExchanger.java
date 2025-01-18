@@ -5,6 +5,9 @@ import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Matrix4;
+import com.cleanroommc.modularui.factory.PosGuiData;
+import com.cleanroommc.modularui.screen.ModularPanel;
+import com.cleanroommc.modularui.value.sync.GuiSyncManager;
 import gregtech.api.gui.widgets.TabGroup;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -37,6 +40,11 @@ public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInterac
 
     public MetaTileEntityStockItemExchanger(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, subFilter);
+    }
+
+    @Override
+    public ModularPanel buildUI(PosGuiData guiData, GuiSyncManager guiSyncManager) {
+        return null;
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
