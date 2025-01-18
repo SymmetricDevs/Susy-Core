@@ -171,18 +171,7 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IT
         };
     }
 
-
     public void addInformation(ItemStack stack, List<String> strings) {
-
-        if (getEquipmentSlot(stack) == CHEST) {
-            int maxOxygen = (int) getMaxOxygen(stack);
-            if (maxOxygen == -1) {
-                strings.add(I18n.format("supersymmetry.unlimited_oxygen"));
-            } else {
-                int oxygen = (int) getOxygen(stack);
-                strings.add(I18n.format("supersymmetry.oxygen", oxygen, maxOxygen));
-            }
-        }
         if (hoursOfLife > 0) {
             double lifetime = 60 * 60 * hoursOfLife;
             int secondsRemaining = (int) (lifetime - getDamage(stack) * lifetime);
@@ -196,19 +185,6 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IT
             strings.add(I18n.format("attribute.modifier.plus.0", armor, I18n.format("attribute.name.generic.armor")));
     }
 
-    void changeOxygen(ItemStack stack, double oxygenChange) {
-        if (getMaxOxygen(stack) == -1) {
-            return;
-        }
-        super.changeOxygen(stack, oxygenChange);
-    }
-
-    double getOxygen(ItemStack stack) {
-        if (getMaxOxygen(stack) == -1) {
-            return 12000;
-        }
-        return super.getOxygen(stack);
-    }
 
     @Override
     public int getArmorDisplay(EntityPlayer player, ItemStack armor, int slot) {
