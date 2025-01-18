@@ -32,6 +32,8 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IT
     private final int tier;
     private final double relativeAbsorption;
 
+    private final double DEFAULT_ABSORPTION = 0;
+
     public AdvancedBreathingApparatus(EntityEquipmentSlot slot, double hoursOfLife, String name, int tier, double relativeAbsorption) {
         super(slot);
         this.hoursOfLife = hoursOfLife;
@@ -85,7 +87,7 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IT
                 }
 
                 if (tank.getOxygen(chest) <= 0) {
-                    return 0.0625;
+                    return DEFAULT_ABSORPTION;
                 } else {
                     tank.changeOxygen(chest, -1.);
                 }
@@ -99,7 +101,7 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IT
                 }
             }
         }
-        return 0;
+        return DEFAULT_ABSORPTION;
     }
 
 

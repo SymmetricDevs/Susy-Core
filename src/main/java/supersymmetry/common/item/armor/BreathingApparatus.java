@@ -31,6 +31,8 @@ public class BreathingApparatus implements IBreathingArmorLogic, IItemDurability
 
     protected final EntityEquipmentSlot SLOT;
 
+    private final double DEFAULT_ABSORPTION = 0;
+
     public BreathingApparatus(EntityEquipmentSlot slot) {
         SLOT = slot;
     }
@@ -82,7 +84,7 @@ public class BreathingApparatus implements IBreathingArmorLogic, IItemDurability
                 return 0.5;
             }
         }
-        return 0;
+        return DEFAULT_ABSORPTION;
     }
 
     @Override
