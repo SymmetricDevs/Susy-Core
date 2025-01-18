@@ -156,9 +156,10 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IT
     @Override
     public ISpecialArmor.ArmorProperties getProperties(EntityLivingBase player, @NotNull ItemStack armor, DamageSource source,
                                                        double damage, EntityEquipmentSlot equipmentSlot) {
-        int damageLimit = Integer.MAX_VALUE;
-        if (source.isUnblockable()) return new ISpecialArmor.ArmorProperties(0, 0.0, 0);
-        return new ISpecialArmor.ArmorProperties(0, getAbsorption(armor) * relativeAbsorption, damageLimit);
+        ISpecialArmor.ArmorProperties prop = new ISpecialArmor.ArmorProperties(0, 0.0, 0);
+        if (source.isUnblockable()) return prop;
+        prop.Armor = getAbsorption(armor) * relativeAbsorption;
+        return prop;
     }
 
     protected float getAbsorption(ItemStack itemStack) {
