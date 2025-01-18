@@ -157,7 +157,6 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IT
     public ISpecialArmor.ArmorProperties getProperties(EntityLivingBase player, @NotNull ItemStack armor, DamageSource source,
                                                        double damage, EntityEquipmentSlot equipmentSlot) {
         int damageLimit = Integer.MAX_VALUE;
-        if (source.isUnblockable()) return new ISpecialArmor.ArmorProperties(0, 0.0, 0);
         return new ISpecialArmor.ArmorProperties(0, getAbsorption(armor) * relativeAbsorption, damageLimit);
     }
 
