@@ -118,7 +118,6 @@ public class EventHandlers {
             ItemStack boots = player.getItemStackFromSlot(EntityEquipmentSlot.FEET);
             if (!boots.isEmpty() && boots.getItem() instanceof SuSyArmorItem) {
                 player.fallDistance = event.getDistance();
-                event.setCanceled(false);
             }
         }
     }

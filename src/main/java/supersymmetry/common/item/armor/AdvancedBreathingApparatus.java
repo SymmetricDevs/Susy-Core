@@ -158,7 +158,7 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IT
                                                        double damage, EntityEquipmentSlot equipmentSlot) {
         ISpecialArmor.ArmorProperties prop = new ISpecialArmor.ArmorProperties(0, 0.0, 0);
         if (source.isUnblockable()) return prop;
-        prop.Armor = getAbsorption(armor) * relativeAbsorption;
+        prop.Armor = getAbsorption(armor) * relativeAbsorption * 20;
         return prop;
     }
 
