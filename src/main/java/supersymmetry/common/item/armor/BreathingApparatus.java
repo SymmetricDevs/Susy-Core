@@ -24,12 +24,15 @@ import java.util.List;
 
 import static net.minecraft.inventory.EntityEquipmentSlot.CHEST;
 import static supersymmetry.api.util.SuSyUtility.susyId;
+import static supersymmetry.common.event.DimensionBreathabilityHandler.ABSORB_ALL;
 
 public class BreathingApparatus implements IBreathingArmorLogic, IItemDurabilityManager, ITextureRegistrar {
     @SideOnly(Side.CLIENT)
     protected ModelBiped model;
 
     protected final EntityEquipmentSlot SLOT;
+
+    private static final double DEFAULT_ABSORPTION = 0;
 
     public BreathingApparatus(EntityEquipmentSlot slot) {
         SLOT = slot;
@@ -63,26 +66,26 @@ public class BreathingApparatus implements IBreathingArmorLogic, IItemDurability
         ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
         if (chest.getItem() instanceof SuSyArmorItem item) {
             if (item.getItem(chest).getArmorLogic() instanceof BreathingApparatus tank) {
-                return tank.getOxygen(stack) > 0;
+                return tank.getOxygen(chest) > 0;
             }
         }
         return false;
     }
 
     @Override
-    public double tryTick(ItemStack stack, EntityPlayer player) {
+    public double getDamageAbsorbed(ItemStack stack, EntityPlayer player) {
         if (!DimensionBreathabilityHandler.isInHazardousEnvironment(player)) {
-            return 0.5;
+            return ABSORB_ALL;
         }
 
         ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
         if (chest.getItem() instanceof SuSyArmorItem item) {
             if (item.getItem(chest).getArmorLogic() instanceof BreathingApparatus tank) {
-                tank.changeOxygen(stack, -1);
-                return 0.5;
+                tank.changeOxygen(chest, -1);
+                return ABSORB_ALL;
             }
         }
-        return 0.0625;
+        return DEFAULT_ABSORPTION;
     }
 
     @Override

@@ -25,12 +25,15 @@ import java.util.List;
 
 import static net.minecraft.inventory.EntityEquipmentSlot.*;
 import static supersymmetry.api.util.SuSyUtility.susyId;
+import static supersymmetry.common.event.DimensionBreathabilityHandler.ABSORB_ALL;
 
 public class AdvancedBreathingApparatus extends BreathingApparatus implements ITextureRegistrar {
     private final double hoursOfLife;
     private final String name;
     private final int tier;
     private final double relativeAbsorption;
+
+    private static final double DEFAULT_ABSORPTION = 0;
 
     public AdvancedBreathingApparatus(EntityEquipmentSlot slot, double hoursOfLife, String name, int tier, double relativeAbsorption) {
         super(slot);
@@ -59,7 +62,7 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IT
     }
 
     @Override
-    public double tryTick(ItemStack stack, EntityPlayer player) {
+    public double getDamageAbsorbed(ItemStack stack, EntityPlayer player) {
         this.handleDamage(stack, player);
 
         ItemStack chest = player.getItemStackFromSlot(CHEST);
@@ -85,7 +88,7 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IT
                 }
 
                 if (tank.getOxygen(chest) <= 0) {
-                    return 0.0625;
+                    return DEFAULT_ABSORPTION;
                 } else {
                     tank.changeOxygen(chest, -1.);
                 }
@@ -95,11 +98,11 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IT
                     case 1:
                         return 1;
                     case 2:
-                        return 2;
+                        return ABSORB_ALL;
                 }
             }
         }
-        return 0.0625;
+        return DEFAULT_ABSORPTION;
     }
 
 
@@ -153,9 +156,10 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IT
     @Override
     public ISpecialArmor.ArmorProperties getProperties(EntityLivingBase player, @NotNull ItemStack armor, DamageSource source,
                                                        double damage, EntityEquipmentSlot equipmentSlot) {
-        int damageLimit = Integer.MAX_VALUE;
-        if (source.isUnblockable()) return new ISpecialArmor.ArmorProperties(0, 0.0, 0);
-        return new ISpecialArmor.ArmorProperties(0, getAbsorption(armor) * relativeAbsorption, damageLimit);
+        ISpecialArmor.ArmorProperties prop = new ISpecialArmor.ArmorProperties(0, 0.0, 0);
+        if (source.isUnblockable()) return prop;
+        prop.Armor = getAbsorption(armor) * relativeAbsorption * 20;
+        return prop;
     }
 
     protected float getAbsorption(ItemStack itemStack) {
@@ -171,18 +175,7 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IT
         };
     }
 
-
     public void addInformation(ItemStack stack, List<String> strings) {
-
-        if (getEquipmentSlot(stack) == CHEST) {
-            int maxOxygen = (int) getMaxOxygen(stack);
-            if (maxOxygen == -1) {
-                strings.add(I18n.format("supersymmetry.unlimited_oxygen"));
-            } else {
-                int oxygen = (int) getOxygen(stack);
-                strings.add(I18n.format("supersymmetry.oxygen", oxygen, maxOxygen));
-            }
-        }
         if (hoursOfLife > 0) {
             double lifetime = 60 * 60 * hoursOfLife;
             int secondsRemaining = (int) (lifetime - getDamage(stack) * lifetime);
@@ -196,19 +189,6 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IT
             strings.add(I18n.format("attribute.modifier.plus.0", armor, I18n.format("attribute.name.generic.armor")));
     }
 
-    void changeOxygen(ItemStack stack, double oxygenChange) {
-        if (getMaxOxygen(stack) == -1) {
-            return;
-        }
-        super.changeOxygen(stack, oxygenChange);
-    }
-
-    double getOxygen(ItemStack stack) {
-        if (getMaxOxygen(stack) == -1) {
-            return 12000;
-        }
-        return super.getOxygen(stack);
-    }
 
     @Override
     public int getArmorDisplay(EntityPlayer player, ItemStack armor, int slot) {

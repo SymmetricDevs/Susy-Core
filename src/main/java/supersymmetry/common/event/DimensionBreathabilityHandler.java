@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import static net.minecraft.inventory.EntityEquipmentSlot.*;
+import static net.minecraft.inventory.EntityEquipmentSlot.HEAD;
 
 public final class DimensionBreathabilityHandler {
 
@@ -21,6 +21,8 @@ public final class DimensionBreathabilityHandler {
 
     public static final int BENEATH_ID = 10;
     public static final int NETHER_ID = -1;
+
+    public static final double ABSORB_ALL = -1;
 
     private DimensionBreathabilityHandler() {}
 
@@ -57,10 +59,9 @@ public final class DimensionBreathabilityHandler {
         if (isInHazardousEnvironment(player)) {
             if (player.getItemStackFromSlot(HEAD).getItem() instanceof SuSyArmorItem item) {
                 if (item.isValid(player.getItemStackFromSlot(HEAD), player)) {
-                    double damageAbsorbed = item.tryTick(player.getItemStackFromSlot(HEAD), player);
-                    if (damageAbsorbed > 0) {
-                        dimensionBreathabilityMap.get(player.dimension).damagePlayer(player, damageAbsorbed);
-                    }
+                    double damageAbsorbed = item.getDamageAbsorbed(player.getItemStackFromSlot(HEAD), player);
+                    if (damageAbsorbed != ABSORB_ALL)
+                    dimensionBreathabilityMap.get(player.dimension).damagePlayer(player, damageAbsorbed);
                     return;
                 }
             }
@@ -81,9 +82,9 @@ public final class DimensionBreathabilityHandler {
         public void damagePlayer(EntityPlayer player) {
             player.attackEntityFrom(damageType, (float) defaultDamage);
         }
-        public void damagePlayer(EntityPlayer player, double amount) {
-            if (defaultDamage > amount) {
-                player.attackEntityFrom(damageType, (float) defaultDamage - (float) amount);
+        public void damagePlayer(EntityPlayer player, double amountAbsorbed) {
+            if (defaultDamage > amountAbsorbed) {
+                player.attackEntityFrom(damageType, (float) defaultDamage - (float) amountAbsorbed);
             }
         }
 

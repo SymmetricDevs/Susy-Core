@@ -20,8 +20,8 @@ public class SuSyArmorItem extends ArmorMetaItem<SuSyArmorItem.SuSyArmorMetaValu
     }
 
     @Override
-    public double tryTick(ItemStack stack, EntityPlayer player) {
-        return getItem(stack).armorLogic.tryTick(stack, player);
+    public double getDamageAbsorbed(ItemStack stack, EntityPlayer player) {
+        return getItem(stack).armorLogic.getDamageAbsorbed(stack, player);
     }
 
     public class SuSyArmorMetaValueItem extends ArmorMetaItem<SuSyArmorMetaValueItem>.ArmorMetaValueItem {
