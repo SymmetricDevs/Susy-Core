@@ -39,7 +39,6 @@ public class SimpleGasMask implements IBreathingArmorLogic, IItemDurabilityManag
         return player.dimension == DimensionBreathabilityHandler.BENEATH_ID && getDamage(stack) < 1;
     }
 
-
     @Override
     public boolean isValidArmor(ItemStack itemStack, Entity entity, EntityEquipmentSlot equipmentSlot) {
         return true;
@@ -55,7 +54,7 @@ public class SimpleGasMask implements IBreathingArmorLogic, IItemDurabilityManag
             stack.shrink(1);
             player.setItemStackToSlot(EntityEquipmentSlot.HEAD, ItemStack.EMPTY);
         }
-        return 0;
+        return 0.5;
     }
 
     @Override
