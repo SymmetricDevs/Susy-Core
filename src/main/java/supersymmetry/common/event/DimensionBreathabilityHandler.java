@@ -22,6 +22,8 @@ public final class DimensionBreathabilityHandler {
     public static final int BENEATH_ID = 10;
     public static final int NETHER_ID = -1;
 
+    public static final double ABSORB_ALL = -1;
+
     private DimensionBreathabilityHandler() {}
 
     public static void loadConfig() {
@@ -57,7 +59,8 @@ public final class DimensionBreathabilityHandler {
         if (isInHazardousEnvironment(player)) {
             if (player.getItemStackFromSlot(HEAD).getItem() instanceof SuSyArmorItem item) {
                 if (item.isValid(player.getItemStackFromSlot(HEAD), player)) {
-                    double damageAbsorbed = item.tryTick(player.getItemStackFromSlot(HEAD), player);
+                    double damageAbsorbed = item.getDamageAbsorbed(player.getItemStackFromSlot(HEAD), player);
+                    if (damageAbsorbed != ABSORB_ALL)
                     dimensionBreathabilityMap.get(player.dimension).damagePlayer(player, damageAbsorbed);
                     return;
                 }

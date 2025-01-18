@@ -12,6 +12,8 @@ import supersymmetry.common.event.DimensionBreathabilityHandler;
 
 import java.util.List;
 
+import static supersymmetry.common.event.DimensionBreathabilityHandler.ABSORB_ALL;
+
 public class SimpleGasMask implements IBreathingArmorLogic, IItemDurabilityManager {
     public static final double LIFETIME = 600;
     @Override
@@ -39,14 +41,13 @@ public class SimpleGasMask implements IBreathingArmorLogic, IItemDurabilityManag
         return player.dimension == DimensionBreathabilityHandler.BENEATH_ID && getDamage(stack) < 1;
     }
 
-
     @Override
     public boolean isValidArmor(ItemStack itemStack, Entity entity, EntityEquipmentSlot equipmentSlot) {
         return true;
     }
 
     @Override
-    public double tryTick(ItemStack stack, EntityPlayer player) {
+    public double getDamageAbsorbed(ItemStack stack, EntityPlayer player) {
         if (DimensionBreathabilityHandler.isInHazardousEnvironment(player)) {
             changeDamage(stack, 1. / LIFETIME); // It's actually ticked every overall second, not just every tick.
         }
@@ -55,7 +56,7 @@ public class SimpleGasMask implements IBreathingArmorLogic, IItemDurabilityManag
             stack.shrink(1);
             player.setItemStackToSlot(EntityEquipmentSlot.HEAD, ItemStack.EMPTY);
         }
-        return 0;
+        return ABSORB_ALL;
     }
 
     @Override
