@@ -25,6 +25,7 @@ import java.util.List;
 
 import static net.minecraft.inventory.EntityEquipmentSlot.*;
 import static supersymmetry.api.util.SuSyUtility.susyId;
+import static supersymmetry.common.event.DimensionBreathabilityHandler.ABSORB_ALL;
 
 public class AdvancedBreathingApparatus extends BreathingApparatus implements ITextureRegistrar {
     private final double hoursOfLife;
@@ -32,7 +33,7 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IT
     private final int tier;
     private final double relativeAbsorption;
 
-    private final double DEFAULT_ABSORPTION = 0;
+    private static final double DEFAULT_ABSORPTION = 0;
 
     public AdvancedBreathingApparatus(EntityEquipmentSlot slot, double hoursOfLife, String name, int tier, double relativeAbsorption) {
         super(slot);
@@ -97,7 +98,7 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IT
                     case 1:
                         return 1;
                     case 2:
-                        return 2;
+                        return ABSORB_ALL;
                 }
             }
         }
