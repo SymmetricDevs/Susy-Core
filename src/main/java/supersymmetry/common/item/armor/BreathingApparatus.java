@@ -14,7 +14,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.items.IBreathingArmorLogic;
-import supersymmetry.client.renderer.handler.BreathingApparatusModel;
 import supersymmetry.client.renderer.handler.ITextureRegistrar;
 import supersymmetry.client.renderer.handler.SimpleBreathingApparatusModel;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
@@ -73,14 +72,14 @@ public class BreathingApparatus implements IBreathingArmorLogic, IItemDurability
     @Override
     public double tryTick(ItemStack stack, EntityPlayer player) {
         if (!DimensionBreathabilityHandler.isInHazardousEnvironment(player)) {
-            return 0;
+            return 0.0625;
         }
 
         ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
         if (chest.getItem() instanceof SuSyArmorItem item) {
             if (item.getItem(chest).getArmorLogic() instanceof BreathingApparatus tank) {
                 tank.changeOxygen(stack, -1);
-                return 0;
+                return 0.0625;
             }
         }
         return 0.5;
