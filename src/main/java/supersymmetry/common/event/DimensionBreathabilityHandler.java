@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import static net.minecraft.inventory.EntityEquipmentSlot.*;
+import static net.minecraft.inventory.EntityEquipmentSlot.HEAD;
 
 public final class DimensionBreathabilityHandler {
 
@@ -58,9 +58,7 @@ public final class DimensionBreathabilityHandler {
             if (player.getItemStackFromSlot(HEAD).getItem() instanceof SuSyArmorItem item) {
                 if (item.isValid(player.getItemStackFromSlot(HEAD), player)) {
                     double damageAbsorbed = item.tryTick(player.getItemStackFromSlot(HEAD), player);
-                    if (damageAbsorbed > 0) {
-                        dimensionBreathabilityMap.get(player.dimension).damagePlayer(player, damageAbsorbed);
-                    }
+                    dimensionBreathabilityMap.get(player.dimension).damagePlayer(player, damageAbsorbed);
                     return;
                 }
             }
@@ -81,9 +79,9 @@ public final class DimensionBreathabilityHandler {
         public void damagePlayer(EntityPlayer player) {
             player.attackEntityFrom(damageType, (float) defaultDamage);
         }
-        public void damagePlayer(EntityPlayer player, double amount) {
-            if (defaultDamage > amount) {
-                player.attackEntityFrom(damageType, (float) defaultDamage - (float) amount);
+        public void damagePlayer(EntityPlayer player, double amountAbsorbed) {
+            if (defaultDamage > amountAbsorbed) {
+                player.attackEntityFrom(damageType, (float) defaultDamage - (float) amountAbsorbed);
             }
         }
 
