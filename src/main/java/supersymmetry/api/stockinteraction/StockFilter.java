@@ -41,6 +41,7 @@ public class StockFilter implements INBTSerializable<NBTTagCompound> {
     public StockFilter(List<String> subFilter) {
         this.setSubFilter(subFilter);
         this.selection = new HashMap<>();
+        subFilter.forEach(name -> this.setFilterIsSelected(name, true) );
     }
 
     public void setFilterIsSelected(String name, boolean isSelected) {

@@ -1,6 +1,9 @@
 package supersymmetry.common.metatileentities.single.railinterfaces;
 
 import cam72cam.immersiverailroading.entity.EntityRollingStock;
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Matrix4;
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.GregtechTileCapabilities;
 import gregtech.api.capability.IControllable;
@@ -13,6 +16,7 @@ import gregtech.api.gui.widgets.WidgetGroup;
 import gregtech.api.gui.widgets.tab.ItemTabInfo;
 import gregtech.api.metatileentity.IFastRenderMetaTileEntity;
 import gregtech.api.util.Position;
+import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.utils.RenderBufferHelper;
 import gregtech.client.utils.RenderUtil;
 import gregtech.common.items.MetaItems;
@@ -37,6 +41,7 @@ import supersymmetry.api.metatileentity.Mui2MetaTileEntity;
 import supersymmetry.api.stockinteraction.IStockInteractor;
 import supersymmetry.api.stockinteraction.StockFilter;
 import supersymmetry.api.stockinteraction.StockHelperFunctions;
+import supersymmetry.client.renderer.textures.SusyTextures;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,22 +55,30 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
 
     // This defines which stock classes can be interacted with
     private StockFilter filter;
-    // If the current bounding box should be rendered
-    protected boolean renderBoundingBox = false;
+
     List<EntityRollingStock> stocks;
 
     protected boolean workingEnabled = true;
+    // Rendering
+    protected final ICubeRenderer renderer;
+
+    // If the current bounding box should be rendered
+    protected boolean renderBoundingBox = false;
 
 
-    public MetaTileEntityStockInteractor(ResourceLocation metaTileEntityId) {
+
+    public MetaTileEntityStockInteractor(ResourceLocation metaTileEntityId, ICubeRenderer renderer) {
         super(metaTileEntityId);
+        this.renderer = renderer;
         this.filter = new StockFilter();
         this.stocks = new ArrayList<>();
     }
 
-    public MetaTileEntityStockInteractor(ResourceLocation metaTileEntityId, List<String> subFilter) {
-        this(metaTileEntityId);
+    public MetaTileEntityStockInteractor(ResourceLocation metaTileEntityId, ICubeRenderer renderer,  List<String> subFilter) {
+        super(metaTileEntityId);
+        this.renderer = renderer;
         this.filter = new StockFilter(subFilter);
+        this.stocks = new ArrayList<>();
     }
 
     @Override
@@ -192,6 +205,14 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
             GlStateManager.popMatrix();
 
         }
+    }
+
+
+
+    @Override
+    public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
+        SusyTextures.STOCK_MACHINE_CASING.render(renderState,translation,pipeline);
+        this.renderer.renderOrientedState(renderState, translation, pipeline, this.getFrontFacing(), true, this.isWorkingEnabled());
     }
 
     @Override

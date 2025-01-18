@@ -1,11 +1,7 @@
 package supersymmetry.client.renderer.textures;
 
-import gregtech.api.gui.resources.picturetexture.AnimatedPictureTexture;
-import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
-import gregtech.client.renderer.texture.cube.SimpleOrientedCubeRenderer;
-import gregtech.client.renderer.texture.cube.SimpleCubeRenderer;
-import gregtech.client.renderer.texture.cube.SimpleOverlayRenderer;
-import gregtech.client.renderer.texture.cube.SimpleSidedCubeRenderer;
+import gregtech.client.renderer.texture.Textures;
+import gregtech.client.renderer.texture.cube.*;
 import gregtech.client.renderer.texture.custom.DrumRenderer;
 import supersymmetry.client.renderer.textures.custom.ExtenderRender;
 
@@ -92,26 +88,23 @@ public class SusyTextures {
 
     public static final DrumRenderer PLASTIC_CAN = new DrumRenderer("storage/drums/plastic_can");
 
+
+    // Stock stuff
+    //public static final SimpleCubeRenderer STOCK_MACHINE_CASING = new SimpleCubeRenderer("rail_interfaces/stock_machine_casing/stock_machine_casing");
+    public static final SimpleSidedCubeRenderer STOCK_MACHINE_CASING = Textures.VOLTAGE_CASINGS[1];
+
+    public static final OrientedOverlayRenderer STOCK_FLUID_EXCHANGER = new OrientedOverlayRenderer("rail_interfaces/fluid_exchanger");
+    public static final OrientedOverlayRenderer STOCK_ITEM_EXCHANGER = new OrientedOverlayRenderer("rail_interfaces/item_exchanger");
+
     public static final SimpleOrientedCubeRenderer STOCK_DETECTOR_NEITHER = new SimpleOrientedCubeRenderer("rail_interfaces/stock_detector/stock_detector_neither");
     public static final SimpleOrientedCubeRenderer STOCK_DETECTOR_DETECTING = new SimpleOrientedCubeRenderer("rail_interfaces/stock_detector/stock_detector_detecting");
     public static final SimpleOrientedCubeRenderer STOCK_DETECTOR_FILTER = new SimpleOrientedCubeRenderer("rail_interfaces/stock_detector/stock_detector_filter");
     public static final SimpleOrientedCubeRenderer STOCK_DETECTOR_BOTH = new SimpleOrientedCubeRenderer("rail_interfaces/stock_detector/stock_detector_both");
 
-    public static final SimpleOrientedCubeRenderer STOCK_FLUID_EXCHANGER_PULLING_ON = new SimpleOrientedCubeRenderer("rail_interfaces/fluid_exchanger/fluid_exchanger_pulling_on");
-    public static final SimpleOrientedCubeRenderer STOCK_FLUID_EXCHANGER_PULLING_OFF = new SimpleOrientedCubeRenderer("rail_interfaces/fluid_exchanger/fluid_exchanger_pulling_off");
-    public static final SimpleOrientedCubeRenderer STOCK_FLUID_EXCHANGER_PUSHING_ON = new SimpleOrientedCubeRenderer("rail_interfaces/fluid_exchanger/fluid_exchanger_pushing_on");
-    public static final SimpleOrientedCubeRenderer STOCK_FLUID_EXCHANGER_PUSHING_OFF = new SimpleOrientedCubeRenderer("rail_interfaces/fluid_exchanger/fluid_exchanger_pushing_off");
-
-    public static final SimpleOrientedCubeRenderer STOCK_ITEM_EXCHANGER_PULLING_ON = new SimpleOrientedCubeRenderer("rail_interfaces/item_exchanger/item_exchanger_pulling_on");
-    public static final SimpleOrientedCubeRenderer STOCK_ITEM_EXCHANGER_PULLING_OFF = new SimpleOrientedCubeRenderer("rail_interfaces/item_exchanger/item_exchanger_pulling_off");
-    public static final SimpleOrientedCubeRenderer STOCK_ITEM_EXCHANGER_PUSHING_ON = new SimpleOrientedCubeRenderer("rail_interfaces/item_exchanger/item_exchanger_pushing_on");
-    public static final SimpleOrientedCubeRenderer STOCK_ITEM_EXCHANGER_PUSHING_OFF = new SimpleOrientedCubeRenderer("rail_interfaces/item_exchanger/item_exchanger_pushing_off");
-
     public static final SimpleOrientedCubeRenderer STOCK_READER_ITEM = new SimpleOrientedCubeRenderer("rail_interfaces/content_reader/content_reader_item");
     public static final SimpleOrientedCubeRenderer STOCK_READER_FLUID = new SimpleOrientedCubeRenderer("rail_interfaces/content_reader/content_reader_fluid");
 
-    public static final SimpleOrientedCubeRenderer STOCK_CONTROLLER_ON = new SimpleOrientedCubeRenderer("rail_interfaces/stock_controller/stock_controller_on");
-    public static final SimpleOrientedCubeRenderer STOCK_CONTROLLER_OFF = new SimpleOrientedCubeRenderer("rail_interfaces/stock_controller/stock_controller_off");
+    public static final OrientedOverlayRenderer STOCK_CONTROLLER = new OrientedOverlayRenderer("rail_interfaces/stock_controller");
 
 
 }

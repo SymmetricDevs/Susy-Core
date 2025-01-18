@@ -1,10 +1,10 @@
 package supersymmetry.common.metatileentities.single.railinterfaces;
+
 import cam72cam.immersiverailroading.entity.EntityRollingStock;
 import cam72cam.immersiverailroading.entity.Locomotive;
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.pipeline.IVertexOperation;
-import codechicken.lib.vec.Cuboid6;
-import codechicken.lib.vec.Matrix4;
+import com.cleanroommc.modularui.factory.PosGuiData;
+import com.cleanroommc.modularui.screen.ModularPanel;
+import com.cleanroommc.modularui.value.sync.GuiSyncManager;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.widgets.CycleButtonWidget;
@@ -21,13 +21,11 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.gui.widgets.VerticalSliderWidget;
-import supersymmetry.api.stockinteraction.IStockInteractor;
 import supersymmetry.api.stockinteraction.StockHelperFunctions;
 import supersymmetry.client.renderer.textures.SusyTextures;
 
@@ -35,7 +33,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MetaTileEntityLocomotiveController  extends MetaTileEntity implements IStockInteractor
+public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInteractor
 {
     AxisAlignedBB interactionBoundingBox;
     public int ticksAlive;
@@ -50,11 +48,15 @@ public class MetaTileEntityLocomotiveController  extends MetaTileEntity implemen
     public float inactiveBreak;
     public float inactiveThrottle;
 
-    public final Vec3d detectionArea = new Vec3d(5, 0, 5);
-
     public MetaTileEntityLocomotiveController(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId);
+        super(metaTileEntityId, SusyTextures.STOCK_CONTROLLER);
     }
+
+    @Override
+    public ModularPanel buildUI(PosGuiData guiData, GuiSyncManager guiSyncManager) {
+        return null;
+    }
+
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
         return new MetaTileEntityLocomotiveController(this.metaTileEntityId);
@@ -156,15 +158,6 @@ public class MetaTileEntityLocomotiveController  extends MetaTileEntity implemen
 
     public boolean needsSneakToRotate() {
         return true;
-    }
-
-    public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
-        if(this.active) {
-            SusyTextures.STOCK_CONTROLLER_ON.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
-        }
-        else {
-            SusyTextures.STOCK_CONTROLLER_OFF.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
-        }
     }
 
     @SideOnly(Side.CLIENT)

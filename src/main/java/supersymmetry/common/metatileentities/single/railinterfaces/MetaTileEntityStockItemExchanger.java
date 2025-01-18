@@ -1,18 +1,12 @@
 package supersymmetry.common.metatileentities.single.railinterfaces;
 
 import cam72cam.immersiverailroading.entity.Freight;
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.pipeline.IVertexOperation;
-import codechicken.lib.vec.Cuboid6;
-import codechicken.lib.vec.Matrix4;
 import com.cleanroommc.modularui.factory.PosGuiData;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.value.sync.GuiSyncManager;
-import gregtech.api.gui.widgets.TabGroup;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -22,6 +16,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.client.renderer.textures.SusyTextures;
 
@@ -31,6 +26,7 @@ import java.util.List;
 
 public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInteractor
 {
+    ItemStackHandler internalInventory = new ItemStackHandler(0);
     //locomotive, freight
     public static List<String> subFilter = new ArrayList<>();
     static{
@@ -39,7 +35,7 @@ public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInterac
     }
 
     public MetaTileEntityStockItemExchanger(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, subFilter);
+        super(metaTileEntityId, SusyTextures.STOCK_ITEM_EXCHANGER, subFilter);
     }
 
     @Override
@@ -69,7 +65,7 @@ public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInterac
 
     protected void initializeInventory() {
         super.initializeInventory();
-        this.itemInventory = null;
+        this.itemInventory = internalInventory;
     }
 
     public void update() {
@@ -78,7 +74,9 @@ public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInterac
         if(this.getWorld().isRemote)
             return;
 
-        this.itemInventory = null;
+        if (this.stocks.size() == 0 || !this.isWorkingEnabled()) {
+            this.itemInventory = internalInventory;
+        }
 
         if(this.isWorkingEnabled() && this.getOffsetTimer() % 20 == 0 && this.stocks.size() > 0)
         {
@@ -98,21 +96,9 @@ public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInterac
         return super.getCapability(capability, side);
     }
 
-    @Override
-    protected void appendDefaultTab(EntityPlayer entityPlayer, TabGroup tabGroup) {
-
-    }
 
     public boolean needsSneakToRotate() {
         return true;
-    }
-
-    public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
-        if (this.isWorkingEnabled()) {
-            SusyTextures.STOCK_ITEM_EXCHANGER_PULLING_ON.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
-        } else {
-            SusyTextures.STOCK_ITEM_EXCHANGER_PULLING_OFF.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, this.getFrontFacing(), true, true);
-        }
     }
 
     @SideOnly(Side.CLIENT)
