@@ -82,7 +82,7 @@ public class BreathingApparatus implements IBreathingArmorLogic, IItemDurability
                 return 0.5;
             }
         }
-        return 0.0625;
+        return 0;
     }
 
     @Override
