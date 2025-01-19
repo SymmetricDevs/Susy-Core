@@ -241,7 +241,7 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
                     .where('B', states(this.getCasingState()).or(basePredicate))
                     .where('X', wallPredicate.or(basePredicate)
                             .or(doorPredicate().setMaxGlobalLimited(8))
-                            .or(this.scannerPredicate().setMaxGlobalLimited(1))
+                            .or(this.scannerPredicate().setMaxGlobalLimited(1).setMinGlobalLimited(1))
                             .or(abilities(MultiblockAbility.PASSTHROUGH_HATCH).setMaxGlobalLimited(30)))
                     .where('K', wallPredicate)
                     .where('F', this.filterPredicate())

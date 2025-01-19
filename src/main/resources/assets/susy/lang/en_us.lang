@@ -699,6 +699,7 @@ gregtech.machine.component_scanner.failure=Scan failed.
 gregtech.machine.component_scanner.success=Component successfully analyzed.
 gregtech.machine.component_scanner.scanning=Scanning...
 
+gregtech.machine.building_cleanroom.name=Spacecraft Component Cleanroom
 
 gregtech.machine.incinerator.lv.name=Basic Incinerator
 gregtech.machine.incinerator.mv.name=Advanced Incinerator

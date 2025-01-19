@@ -1,12 +1,14 @@
 package supersymmetry.common.metatileentities.single.rocket;
 
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Matrix4;
 import gregtech.api.block.VariantBlock;
 import gregtech.api.capability.*;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.Widget;
 import gregtech.api.gui.widgets.*;
-import gregtech.api.metatileentity.IDataInfoProvider;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.ICleanroomProvider;
@@ -19,14 +21,18 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
 import net.minecraft.block.Block;
+import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
@@ -34,6 +40,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import scala.Int;
 import supersymmetry.api.capability.impl.ScannerLogic;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.api.util.StructAnalysis;
@@ -44,7 +51,6 @@ import supersymmetry.common.blocks.rocketry.BlockTurboPump;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityBuildingCleanroom;
 
-import javax.swing.text.Style;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -63,7 +69,8 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         super(mteId,0); // it kind of is and isn't
         shownStatus = StructAnalysis.BuildStat.UNSCANNED;
         struct = new StructAnalysis(getWorld());
-        importItems = new DataStorageLoader(this,is -> SuSyMetaItems.isMetaItem(is) == SuSyMetaItems.DATA_CARD.metaValue);
+        importItems = new DataStorageLoader(this,is -> {int metaV = SuSyMetaItems.isMetaItem(is);
+            return metaV == SuSyMetaItems.DATA_CARD.metaValue || metaV == SuSyMetaItems.DATA_CARD_ACTIVE.metaValue;});
         scannerLogic = new ScannerLogic(this);
     }
 
@@ -73,8 +80,9 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
     }
 
     public void scanPart() {
+        ((DataStorageLoader)importItems).clearNBT();
         struct = new StructAnalysis(getWorld());
-        if (linkedCleanroom == null && !linkedCleanroom.isClean()) {
+        if (linkedCleanroom == null || !linkedCleanroom.isClean()) {
             struct.status = StructAnalysis.BuildStat.UNCLEAN;
             return;
         }
@@ -105,7 +113,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             IBlockState state = getWorld().getBlockState(bp);
         }
 
-        Set<BlockPos> exterior = struct.checkHull(interior, blocksConnected, false);
+        Tuple<Set<BlockPos>, Set<BlockPos>> exterior = struct.checkHull(interior, blocksConnected, false);
         Predicate<BlockPos> engineDetect = bp -> getWorld().getBlockState(bp).getBlock()
                 .equals(SuSyBlocks.COMBUSTION_CHAMBER);
         Predicate<BlockPos> controlPodDetect = bp -> getWorld().getBlockState(bp).getBlock()
@@ -119,14 +127,17 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
 
         Stream<BlockPos> blockStream = blockList.stream();
         boolean hasAir = struct.status != StructAnalysis.BuildStat.HULL_FULL;
+
         if (blockStream.anyMatch(engineDetect)) {
-            analyzeEngine(struct, blocksConnected);
+            analyzeEngine(blocksConnected);
         } else if (blockStream.anyMatch(controlPodDetect)) {
 
-        } else if (blockStream.anyMatch(fuelTankDetect) && exterior != null) {
+        } else if (blockStream.anyMatch(fuelTankDetect) && exterior != null && hasAir) {
+            Set<BlockPos> allBlocks = struct.getBlocks(interior);
+
             // Check if all blocks are facing the correct direction and are of the right type
             // Save the fuel capacity & type
-
+            analyzeFuelTank(blocksConnected, exterior);
         } else if (blockStream.anyMatch(fairingDetect)) {
 
         } else if (blockStream.anyMatch(interstageDetect)) {
@@ -174,7 +185,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         */
     }
 
-    public void analyzeEngine(StructAnalysis base, Set<BlockPos> blocks) {
+    public void analyzeEngine(Set<BlockPos> blocks) {
         Set<BlockPos> nozzle = struct.getOfBlockType(blocks,SuSyBlocks.ROCKET_NOZZLE)
                 .collect(Collectors.toSet());
         if (nozzle.isEmpty()) {
@@ -203,7 +214,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             return;
         }
         boolean decreasing = false; // this may be changed later
-        int throat_area = Integer.MAX_VALUE;
+        int throat_area = 1; // ooh what if LittleTiles was abused here?
         int inlet_area = 1;  // at least for now?
         int outlet_area = 0;
         for (int a: areas) {
@@ -273,6 +284,23 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             mass += getMass(getWorld().getBlockState(block));
         }
         modifyItem("mass", Double.valueOf(mass).toString());
+    }
+
+    public void analyzeFuelTank(Set<BlockPos> blocks, Tuple<Set<BlockPos>, Set<BlockPos>> hullData) {
+        Set<BlockPos> hullBlocks = hullData.getFirst();
+        Set<BlockPos> airBlocks = hullData.getSecond();
+
+        for (BlockPos block : hullBlocks) {
+            ArrayList<BlockPos> neighbors = struct.getBlockNeighbors(block,StructAnalysis.orthVecs);
+            for (BlockPos neighbor : neighbors) {
+                if (airBlocks.contains(neighbor)) {
+                    BlockPos invDiff = new BlockPos(struct.diff(block,neighbor));
+                    if (!getWorld().getBlockState(block).getValue(FACING).getDirectionVec().equals(invDiff)) {
+
+                    }
+                }
+            }
+        }
     }
 
     private double getMass(IBlockState state) {
@@ -370,14 +398,14 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
     }
 
     private void addWarningText(List<ITextComponent> iTextComponents) {
-
+        if (struct.status==StructAnalysis.BuildStat.UNSCANNED) {
+            iTextComponents.add(new TextComponentTranslation(StructAnalysis.BuildStat.UNSCANNED.getCode()));
+        }
     }
 
     private void addErrorText(List<ITextComponent> iTextComponents) {
-        if (struct.status== StructAnalysis.BuildStat.SUCCESS&&scannerLogic.getProgressPercent()!=1) {
+        if (struct.status!=StructAnalysis.BuildStat.SUCCESS&&struct.status!=StructAnalysis.BuildStat.SCANNING&&struct.status!=StructAnalysis.BuildStat.UNSCANNED) {
             iTextComponents.add(new TextComponentTranslation(StructAnalysis.BuildStat.UNSCANNED.getCode()));
-        } else {
-            iTextComponents.add(new TextComponentTranslation(shownStatus.getCode()));
         }
     }
 
@@ -403,6 +431,11 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
 
     @Override
     public @Nullable ICleanroomProvider getCleanroom() {
+        return linkedCleanroom;
+    }
+
+    @Override
+    public @Nullable MultiblockControllerBase getController() {
         return linkedCleanroom;
     }
 
@@ -450,16 +483,19 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         }
     }
 
-    @Override // the issue is that ObjectHandler overrides thi
+    @Override
+    public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
+        super.renderMetaTileEntity(renderState, translation, pipeline);
+        this.getFrontOverlay().renderOrientedState(renderState, translation, pipeline, this.getFrontFacing(), this.isActive(), this.isWorkingEnabled());
+    }
+
+    @Override
     public ICubeRenderer getBaseTexture() {
-        MultiblockControllerBase controller = this.getController();
-        if (controller != null) {
-            return this.hatchTexture = controller.getBaseTexture(this);
-        } else if (this.hatchTexture != null) {
-            return this.hatchTexture != Textures.getInactiveTexture(this.hatchTexture) ? (this.hatchTexture = Textures.getInactiveTexture(this.hatchTexture)) : this.hatchTexture;
-        } else {
-            return Textures.VOLTAGE_CASINGS[0];
-        }
+        return Textures.VOLTAGE_CASINGS[4];
+    }
+
+    public ICubeRenderer getFrontOverlay() {
+        return Textures.RESEARCH_STATION_OVERLAY;
     }
 
     public void finishScan() {

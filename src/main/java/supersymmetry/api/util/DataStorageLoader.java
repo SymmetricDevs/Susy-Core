@@ -78,6 +78,12 @@ public class DataStorageLoader extends NotifiableItemStackHandler implements IIt
         return locked;
     }
 
+    public void clearNBT() {
+        if (dataStorage.hasTagCompound()) {
+            dataStorage.setTagCompound(new NBTTagCompound());
+        }
+    }
+
     public void mutateItem(String key, String value) {
         if (!dataStorage.hasTagCompound()) {
             dataStorage.setTagCompound(new NBTTagCompound());

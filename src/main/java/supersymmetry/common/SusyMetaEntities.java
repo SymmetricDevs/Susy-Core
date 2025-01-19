@@ -26,6 +26,7 @@ public class SusyMetaEntities {
         RenderingRegistry.registerEntityRenderingHandler(EntityDropPod.class, DropPodRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityDrone.class, DroneRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityRocket.class, RocketRenderer::new);
+
     }
 
 }
