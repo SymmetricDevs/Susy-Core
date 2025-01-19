@@ -25,6 +25,7 @@ tile.susy_multiblock_casing.drone_pad.name=Drone Pad
 
 tile.serpentine.basic.name=Copper Tubing Serpentine Block
 
+# Decoration
 tile.structural_block.base_structural_block.name=Structural Block
 tile.structural_block.structural_block_low.name=Striped Structural Block
 tile.structural_block.structural_block_lowlight.name=Striped Light Structural Block
@@ -51,6 +52,15 @@ tile.structural_block_1.structural_block_cable_junction.name=Structural Block Ca
 tile.structural_block_1.structural_block_pipocalypse.name=Structural Block Dense Pipes
 tile.structural_block_1.structural_block_vent.name=Structural Block Vent
 tile.structural_block_1.structural_block_vent_broken.name=Structural Block Vent (Broken)
+
+tile.rusty_steel_frame.variant_1.name=Rusty Steel Frame
+tile.rusty_steel_frame.variant_2.name=Rusty Steel Frame
+tile.rusty_steel_frame.variant_3.name=Rusty Steel Frame
+tile.rusty_steel_frame.variant_4.name=Rusty Steel Frame
+tile.rusty_steel_frame.variant_5.name=Rusty Steel Frame
+tile.rusty_steel_frame.variant_6.name=Rusty Steel Frame
+tile.rusty_steel_frame.variant_7.name=Rusty Steel Frame
+tile.rusty_steel_frame.variant_8.name=Rusty Steel Frame
 
 tile.deposit_block.orthomagmatic.name=Orthomagmatic Deposit Block
 tile.deposit_block.metamorphic.name=Metamorphic Deposit Block

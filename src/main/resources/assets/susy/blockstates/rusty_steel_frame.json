@@ -8,9 +8,11 @@
       }
     },
     "variant=variant_2" : {
-      "model" : "minecraft:cube_all",
+      "model" : "minecraft:cube_bottom_top",
       "textures" : {
-        "all" : "gregtech:blocks/decorative/rusty_steel_frames/full_steel"
+        "top" : "gregtech:blocks/decorative/rusty_steel_frames/full_steel",
+        "side" : "gregtech:blocks/decorative/rusty_steel_frames/variant_2",
+        "bottom" : "gregtech:blocks/decorative/rusty_steel_frames/full_steel"
       }
     },
     "variant=variant_3" : {
@@ -22,44 +24,45 @@
       }
     },
     "variant=variant_4" : {
-      "model" : "minecraft:cube_bottom_top",
-      "textures" : {
-        "top" : "gregtech:blocks/decorative/rusty_steel_frames/full_rust",
-        "side" : "gregtech:blocks/decorative/rusty_steel_frames/variant_4",
-        "bottom" : "gregtech:blocks/decorative/rusty_steel_frames/full_steel"
-      },
-      "variant=variant_5" : {
-        "model": "minecraft:cube_bottom_top",
-        "textures": {
-          "top": "gregtech:blocks/decorative/rusty_steel_frames/full_rust",
-          "side": "gregtech:blocks/decorative/rusty_steel_frames/variant_5",
-          "bottom": "gregtech:blocks/decorative/rusty_steel_frames/full_rust"
-        }
-      },
-      "variant=variant_6" : {
-        "model": "minecraft:cube_bottom_top",
-        "textures": {
-          "top": "gregtech:blocks/decorative/rusty_steel_frames/full_steel",
-          "side": "gregtech:blocks/decorative/rusty_steel_frames/variant_6",
-          "bottom": "gregtech:blocks/decorative/rusty_steel_frames/full_steel"
-        },
-        "variant=variant_7" : {
-          "model": "minecraft:cube_bottom_top",
-          "textures": {
-            "top": "gregtech:blocks/decorative/rusty_steel_frames/full_steel",
-            "side": "gregtech:blocks/decorative/rusty_steel_frames/variant_7",
-            "bottom": "gregtech:blocks/decorative/rusty_steel_frames/full_rust"
-          },
-          "variant=variant_8" : {
-            "model": "minecraft:cube_bottom_top",
-            "textures": {
-              "top": "gregtech:blocks/decorative/rusty_steel_frames/full_steel",
-              "side": "gregtech:blocks/decorative/rusty_steel_frames/variant_8",
-              "bottom": "gregtech:blocks/decorative/rusty_steel_frames/full_rust"
-            }
-          }
-        }
+      "model": "minecraft:cube_bottom_top",
+      "textures": {
+        "top": "gregtech:blocks/decorative/rusty_steel_frames/full_rust",
+        "side": "gregtech:blocks/decorative/rusty_steel_frames/variant_4",
+        "bottom": "gregtech:blocks/decorative/rusty_steel_frames/full_steel"
+      }
+    },
+    "variant=variant_5" : {
+      "model": "minecraft:cube_bottom_top",
+      "textures": {
+        "top": "gregtech:blocks/decorative/rusty_steel_frames/full_rust",
+        "side": "gregtech:blocks/decorative/rusty_steel_frames/variant_5",
+        "bottom": "gregtech:blocks/decorative/rusty_steel_frames/full_rust"
+      }
+    },
+    "variant=variant_6" : {
+      "model": "minecraft:cube_bottom_top",
+      "textures": {
+        "top": "gregtech:blocks/decorative/rusty_steel_frames/full_steel",
+        "side": "gregtech:blocks/decorative/rusty_steel_frames/variant_6",
+        "bottom": "gregtech:blocks/decorative/rusty_steel_frames/full_steel"
+      }
+    },
+    "variant=variant_7" : {
+      "model": "minecraft:cube_bottom_top",
+      "textures": {
+        "top": "gregtech:blocks/decorative/rusty_steel_frames/full_steel",
+        "side": "gregtech:blocks/decorative/rusty_steel_frames/variant_7",
+        "bottom": "gregtech:blocks/decorative/rusty_steel_frames/full_rust"
+      }
+    },
+    "variant=variant_8" : {
+      "model": "minecraft:cube_bottom_top",
+      "textures": {
+        "top": "gregtech:blocks/decorative/rusty_steel_frames/full_steel",
+        "side": "gregtech:blocks/decorative/rusty_steel_frames/variant_8",
+        "bottom": "gregtech:blocks/decorative/rusty_steel_frames/full_rust"
       }
     }
   }
 }
+
