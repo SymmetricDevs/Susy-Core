@@ -8,11 +8,9 @@
       }
     },
     "variant=variant_2" : {
-      "model" : "minecraft:cube_bottom_top",
+      "model" : "minecraft:cube_all",
       "textures" : {
-        "top" : "gregtech:blocks/decorative/rusty_steel_frames/full_steel",
-        "side" : "gregtech:blocks/decorative/rusty_steel_frames/variant_2",
-        "bottom" : "gregtech:blocks/decorative/rusty_steel_frames/full_steel"
+        "all" : "gregtech:blocks/decorative/rusty_steel_frames/variant_2"
       }
     },
     "variant=variant_3" : {
