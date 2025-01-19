@@ -54,8 +54,9 @@ public class MetaTileEntityLowPressureCryogenicDistillationPlant extends MetaTil
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start(RIGHT, FRONT, UP)
                 .aisle("DDD", "DDD", "DDD")
-                .aisle("CSC", "EZE", "CEC")
+                .aisle("CSC", "CFC", "CCC")
                 .aisle("XXX", "XFX", "XXX").setRepeatable(1,16)
+                .aisle("DED", "EZE", "DED")
                 .aisle("DDD", "DDD", "DDD")
                 .where('S', this.selfPredicate())
                 .where('C', states(getCasingState())
