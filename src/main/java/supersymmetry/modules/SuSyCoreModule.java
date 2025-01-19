@@ -19,4 +19,8 @@ public class SuSyCoreModule implements IGregTechModule {
     public @NotNull Logger getLogger() {
         return SusyLog.logger;
     }
+
+    @Override
+    public void registerPackets() {
+    }
 }

@@ -1,13 +1,16 @@
 package supersymmetry.api.util;
 
+import com.google.common.collect.Sets;
 import gregtech.api.pattern.BlockWorldState;
 import gregtech.api.pattern.PatternMatchContext;
 import net.minecraft.block.Block;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.tuple.Pair;
 import supersymmetry.SuSyValues;
 
 import java.util.*;
@@ -106,7 +109,7 @@ public class StructAnalysis {
         return blocksCollected;
     }
 
-    public Set<BlockPos> checkHull(AxisAlignedBB aaBB, Set<BlockPos> actualBlocks, boolean testStrength) {
+    public Tuple<Set<BlockPos>,Set<BlockPos>> checkHull(AxisAlignedBB aaBB, Set<BlockPos> actualBlocks, boolean testStrength) {
         AxisAlignedBB floodBB = aaBB.grow(1);// initializes flood fill box
         BlockPos bottom = new BlockPos(floodBB.minX, floodBB.minY, floodBB.minZ); // initializes flood fill start
         Queue<BlockPos> uncheckedBlocks = new ArrayDeque<>();
@@ -132,12 +135,15 @@ public class StructAnalysis {
             }
         }
         long volume = Math.round((floodBB.maxX - floodBB.minX + 1)) * Math.round((floodBB.maxY - floodBB.minY + 1)) * Math.round((floodBB.maxZ - floodBB.minZ + 1));
-        long remainingAir = volume - airBlocks.size() - actualBlocks.size(); // the .grow() is factored in with airBlocks.size()
+        int remainingAir = (int) (volume - airBlocks.size() - actualBlocks.size()); // the .grow() is factored in with airBlocks.size()
+        HashSet<BlockPos> air = getBlocks(aaBB);
+        air.removeAll(hullBlocks);
+        air.removeAll(airBlocks);
         if (remainingAir < 2) { // considering you need a seat and an air block above it
             status = BuildStat.HULL_FULL;
             return null;
         }
-        return hullBlocks;
+        return new Tuple<>(hullBlocks, air);
     }
 
 
@@ -171,8 +177,8 @@ public class StructAnalysis {
                 bb.maxX > bp.getX() && bb.maxY > bp.getY() && bb.maxZ > bp.getZ();
     }
 
-    public ArrayList<BlockPos> getBlocks(AxisAlignedBB bb) {
-        ArrayList<BlockPos> ret = new ArrayList<>();
+    public HashSet<BlockPos> getBlocks(AxisAlignedBB bb) {
+        HashSet<BlockPos> ret = new HashSet<>();
         for (int x = (int)bb.minX; x < bb.maxX; x++) {
             for (int y = (int)bb.minY; y < bb.maxY; y++) {
                 for (int z = (int)bb.minZ; z < bb.maxZ; z++) {
@@ -251,6 +257,10 @@ public class StructAnalysis {
 
     public Vec3i multiply(int mult, Vec3i inp) {
         return new Vec3i(mult*inp.getX(), mult*inp.getY(), mult*inp.getZ());
+    }
+
+    public Vec3i diff(Vec3i one, Vec3i two) {
+        return new Vec3i(one.getX()-two.getX(),one.getY()-two.getY(),one.getZ()-two.getZ());
     }
 }
 

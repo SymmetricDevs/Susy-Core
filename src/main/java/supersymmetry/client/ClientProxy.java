@@ -30,6 +30,7 @@ import supersymmetry.Supersymmetry;
 import supersymmetry.api.integration.theoneprobe.TheOneProbeCompatibility;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
+import supersymmetry.client.renderer.handler.VariantCoverableBlockRenderer;
 import supersymmetry.common.CommonProxy;
 import supersymmetry.common.SusyMetaEntities;
 import supersymmetry.common.blocks.SheetedFrameItemBlock;
@@ -51,6 +52,7 @@ public class ClientProxy extends CommonProxy {
         super.preLoad();
         SusyMetaEntities.initRenderers();
         SuSyIRLoader.initEntityRenderers();
+        VariantCoverableBlockRenderer.preInit();
     }
 
     @Override

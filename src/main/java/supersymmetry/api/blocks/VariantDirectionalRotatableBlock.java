@@ -19,6 +19,10 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+
 import static gregtech.common.items.tool.rotation.CustomBlockRotations.BLOCK_DIRECTIONAL_BEHAVIOR;
 
 public class VariantDirectionalRotatableBlock<T extends Enum<T> & IStringSerializable> extends VariantBlock<T> {
@@ -79,4 +83,24 @@ public class VariantDirectionalRotatableBlock<T extends Enum<T> & IStringSeriali
     public ItemStack getPickBlock(IBlockState state, @NotNull RayTraceResult target, @NotNull World world, @NotNull BlockPos pos, @NotNull EntityPlayer player) {
         return getItemVariant(state.getValue(VARIANT), 1);
     }
+
+//    protected static <T, R> Class<T> getActualTypeParameter(Class<? extends R> thisClass, Class<R> declaringClass) {
+//        Type type = thisClass.getGenericSuperclass();
+//
+//        while(!(type instanceof ParameterizedType) || ((ParameterizedType)type).getRawType() != declaringClass) {
+//            if (type instanceof ParameterizedType) {
+//                type = ((Class)((ParameterizedType)type).getRawType()).getGenericSuperclass();
+//            } else {
+//                type = ((Class)type).getGenericSuperclass();
+//            }
+//        }
+//
+//        Object output = ((ParameterizedType)type).getActualTypeArguments()[0];
+//
+//        if (output instanceof TypeVariable<?>){
+//            return (Class)((TypeVariable)output).getBounds()[0];
+//        }
+//        return (Class)output;
+
+//    }
 }

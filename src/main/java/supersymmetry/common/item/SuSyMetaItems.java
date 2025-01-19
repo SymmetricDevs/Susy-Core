@@ -10,7 +10,6 @@ import gregtech.api.unification.material.info.MaterialIconSet;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.common.items.behaviors.TooltipBehavior;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import supersymmetry.SuSyValues;
 
@@ -85,5 +84,10 @@ public class SuSyMetaItems {
 
     public static int isMetaItem(ItemStack i) {
         return (i.getItem() instanceof MetaItem<?>) && (i.getItem().equals(metaItem)) ? Objects.requireNonNull(((MetaItem<?>) i.getItem()).getItem(i)).metaValue : -1;
+    }
+
+    public static ItemStack getItem(String valueName) {
+        MetaItem<?>.MetaValueItem item = metaItem.getItem(valueName);
+        return item != null ? item.getStackForm() : ItemStack.EMPTY;
     }
 }
