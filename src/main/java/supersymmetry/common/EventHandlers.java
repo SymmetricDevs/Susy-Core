@@ -54,7 +54,7 @@ public class EventHandlers {
             event.player.getEntityWorld().spawnEntity(dropPod);
             event.player.startRiding(dropPod);
 
-            event.player.addItemStackToInventory(GTFOMetaItem.EMERGENCY_RATIONS.getStackForm(10));
+            event.player.addItemStackToInventory(GTFOMetaItem.EMERGENCY_RATIONS.getStackForm(32));
             event.player.addItemStackToInventory(MetaItems.PROSPECTOR_LV.getChargedStack(100000));
         }
 
