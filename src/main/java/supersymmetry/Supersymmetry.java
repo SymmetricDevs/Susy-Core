@@ -1,7 +1,11 @@
 package supersymmetry;
 
 import gregtech.GTInternalTags;
+import net.minecraft.util.datafix.FixTypes;
 import net.minecraftforge.client.model.obj.OBJLoader;
+import net.minecraftforge.common.util.ModFixs;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
@@ -25,6 +29,7 @@ import supersymmetry.common.covers.SuSyCoverBehaviors;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
+import supersymmetry.datafix.SupercriticalDataFixer;
 import supersymmetry.loaders.SuSyIRLoader;
 
 @Mod(name = Supersymmetry.NAME, modid = Supersymmetry.MODID, version = Tags.VERSION, dependencies = GTInternalTags.DEP_VERSION_STRING + ";required-after:gcym;after:immersiverailroading")
@@ -74,6 +79,14 @@ public class Supersymmetry {
     public void onInit(@NotNull FMLInitializationEvent event) {
         proxy.load();
         SuSyCoverBehaviors.init();
+
+        final ModFixs modFixs = FMLCommonHandler.instance().getDataFixer().init(MODID, 3);
+
+        if (Loader.isModLoaded(SuSyValues.MODID_SUPERCRITICAL)) {
+            modFixs.registerFix(FixTypes.ITEM_INSTANCE, new SupercriticalDataFixer());
+            modFixs.registerFix(FixTypes.CHUNK, new SupercriticalDataFixer());
+            modFixs.registerFix(FixTypes.LEVEL, new SupercriticalDataFixer());
+        }
     }
 
     @Mod.EventHandler
