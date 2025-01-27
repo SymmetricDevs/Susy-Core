@@ -620,6 +620,9 @@ gregtech.machine.weapons_factory.opv.name=Совершенный оружейн�
 # Phase Separator
 gregtech.machine.phase_separator.name=Фазовый сепаратор
 
+# RTG
+gregtech.machine.rtg.lv.name=Basic RTG
+
 # Electrostatic Separator
 gregtech.machine.electrostatic_separator.lv.name=Обычный электростатический сепаратор
 gregtech.machine.electrostatic_separator.mv.name=Улучшеный электростатический сепаратор
@@ -667,6 +670,16 @@ gregtech.machine.polishing_machine.opv.name=Совершенная полиро�
 
 gregtech.machine.bath_condenser.name=Конденсатор для ванны
 gregtech.machine.bath_condenser.tooltip=Работает только внутри криогенной дистилляционной башни.
+
+gregtech.machine.incinerator.lv.name=Обычный мусоросжигатель
+gregtech.machine.incinerator.mv.name=Улучшеный мусоросжигатель
+gregtech.machine.incinerator.hv.name=Улучшеный мусоросжигатель II
+gregtech.machine.incinerator.ev.name=Улучшеный мусоросжигатель III
+gregtech.machine.incinerator.tooltip.1=§6Испепеляет§r %s предмет(ов) за %s тик(ов)
+gregtech.machine.incinerator.tooltip.2=§cДля сброса газов в атмосферу требует наличия 8-ми блоков воздуха над машиной
+gregtech.machine.incinerator.tooltip.3=§8Не беспокойтесь о том, куда деваются тяжелые металлы.
+gregtech.multiblock.incinerator.clogged=§4Засор! (Заслонена верхняя часть?)
+gregtech.multiblock.incinerator.working=§2Засоров не обнаружено
 
 # Recipemaps
 recipemap.coagulation_tank.name=Коагуляция
@@ -797,6 +810,8 @@ cover.conveyor.steam.title=Модуль парового конвейера
 metaitem.pump.steam.name=Паровой насос
 cover.pump.steam.title=Паровой насос
 metaitem.air_vent.name=Вентиляция
+metaitem.restrictive_filter.name=Ограничительный фильтр предметов
+metaitem.restrictive_filter.tooltip=Допускает нахождение только §6одного стака§7 любого типа предмета внутри. Может заменить руки робота. %n§o "You shall not pass"§r
 metaitem.air_vent.tooltip=Пассивно собирает Воздух Измерения для ваших Машин при столкновении с Воздухом
 metaitem.track_segment.name=Участок монорельсовой дороги
 metaitem.track_segment.tooltip=Для использования в §8туннельном стволе.
@@ -902,6 +917,59 @@ susy.fluid.voiding.liquid=Аннулируется с помощью Dumper
 susy.fluid.voiding.gas=Можно отменить с помощью дымовой трубы
 susy.fluid.voiding.flammable=Аннулируется с помощью Факельной установки
 
+death.attack.toxic_atmo=Легкие %s были разорваны в клочья
+death.attack.suffocation=%s не мог дышать
+
+metaitem.simple_gas_mask.name=Примитивный противогаз
+metaitem.simple_gas_mask.tooltip=Позволяет существовать в бескислородной среде
+metaitem.gas_mask.name=Противогаз
+metaitem.gas_mask.tooltip=Позволяет существовать в бескислородной среде дольше
+metaitem.gas_tank.name=Газовый балон
+metaitem.gas_tank.tooltip=Позволяет существовать в бескислородной среде дольше
+metaitem.asbestos_mask.name=Асбестовый противогаз
+metaitem.asbestos_mask.tooltip=Позволяет выжить в жарких условиях
+metaitem.asbestos_chestplate.name=Асбестовая куртка с воздушным балоном
+metaitem.asbestos_chestplate.tooltip=Позволяет выжить в жарких условиях
+metaitem.asbestos_leggings.name=Асбестовые штаны
+metaitem.asbestos_leggings.tooltip=Позволяет выжить в жарких условиях
+metaitem.asbestos_boots.name=Асбестовые ботинки
+metaitem.asbestos_boots.tooltip=Позволяет выжить в жарких условиях
+metaitem.rebreather_tank.name=Асбестовая куртка с воздушным балоном + фильтр
+metaitem.rebreather_tank.tooltip=Удерживает кислород дольше
+metaitem.reflective_mask.name=Отражающий противогаз
+metaitem.reflective_mask.tooltip=Уменьшение ущерба от нагрева
+metaitem.reflective_chestplate.name=Отражающая куртка
+metaitem.reflective_chestplate.tooltip=Уменьшение ущерба от нагрева
+metaitem.reflective_leggings.name=Отражающие штаны
+metaitem.reflective_leggings.tooltip=Уменьшение ущерба от нагрева
+metaitem.reflective_boots.name=Отражающие ботинки
+metaitem.reflective_boots.tooltip=Уменьшение ущерба от нагрева
+metaitem.filtered_tank.name=Отражающая куртка с  ЗСД
+metaitem.filtered_tank.tooltip=Удерживает кислород очень долго
+metaitem.nomex_mask.name=Противогаз Nomex
+metaitem.nomex_mask.tooltip=Оставайтесь в Бездне вечно!
+metaitem.nomex_chestplate.name=Куртка Nomex
+metaitem.nomex_chestplate.tooltip=Оставайтесь в Бездне вечно!
+metaitem.nomex_leggings.name=Штаны Nomex
+metaitem.nomex_leggings.tooltip=Оставайтесь в Бездне вечно!
+metaitem.nomex_boots.name=Ботинки Nomex
+metaitem.nomex_boots.tooltip=Оставайтесь в Бездне вечно!
+
+supersymmetry.oxygen=Remaining air: §b%s секунд§r (из %s)
+supersymmetry.unlimited_oxygen=Оставшийся воздух: §bБезлимит§r
+supersymmetry.seconds_left=Оставшийся срок: §2%s секунд§r
+supersymmetry.unlimited=Оставшийся срок: §bБезлимит§r
+
+#Hardened blocks
+tile.hardened_blocks.lair7.name=Укрепленное логово 7
+tile.hardened_blocks.lair10.name=Укрепленное логово 10
+tile.hardened_blocks.lair11.name=Укрепленное логово 11
+tile.hardened_blocks.kryp7.name=Укрепленный Крип 7
+tile.hardened_blocks.kryp8.name=Укрепленный Крип 8
+
+#Custom Sheets
+tile.custom_sheets.darkwhitemetalsheet.name=Более темный белый металлический лист
+tile.custom_sheets.lightergraymetalsheet.name=Светло-серый металлический лист
 
 
 
@@ -914,7 +982,7 @@ susy.fluid.voiding.flammable=Аннулируется с помощью Факе
 
 
 
-#пояснения от автора (не удалять)
+#пояснения от автора перевода (не удалять)
 gregtech.machine.continuous_stirred_tank_reactor.lv.tooltip=Реактор непрерывного перемешивания
 gregtech.machine.continuous_stirred_tank_reactor.mv.tooltip=Реактор непрерывного перемешивания
 gregtech.machine.continuous_stirred_tank_reactor.hv.tooltip=Реактор непрерывного перемешивания
@@ -999,14 +1067,5 @@ gregtech.machine.cvd.uiv.tooltip=Установка химического ос�
 gregtech.machine.cvd.uxv.tooltip=Установка химического осаждения из газовой фазы
 gregtech.machine.cvd.opv.tooltip=Установка химического осаждения из газовой фазы
 
-
-
-
-
-
-
-
-
-# От переводчика
 
 gregtech.machine.quencher.tooltip=Охладитель горячих слитков
