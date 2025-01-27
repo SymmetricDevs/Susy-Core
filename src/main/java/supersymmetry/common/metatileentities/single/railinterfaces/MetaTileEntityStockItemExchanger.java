@@ -1,9 +1,6 @@
 package supersymmetry.common.metatileentities.single.railinterfaces;
 
 import cam72cam.immersiverailroading.entity.Freight;
-import com.cleanroommc.modularui.factory.PosGuiData;
-import com.cleanroommc.modularui.screen.ModularPanel;
-import com.cleanroommc.modularui.value.sync.GuiSyncManager;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import net.minecraft.client.resources.I18n;
@@ -35,12 +32,7 @@ public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInterac
     }
 
     public MetaTileEntityStockItemExchanger(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SusyTextures.STOCK_ITEM_EXCHANGER, subFilter);
-    }
-
-    @Override
-    public ModularPanel buildUI(PosGuiData guiData, GuiSyncManager guiSyncManager) {
-        return null;
+        super(metaTileEntityId, SusyTextures.STOCK_ITEM_EXCHANGER);
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {

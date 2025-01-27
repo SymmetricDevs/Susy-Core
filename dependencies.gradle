@@ -33,7 +33,7 @@ dependencies {
     //GeckoLib
     implementation rfg.deobf('curse.maven:geckolib-388172:4020277')
 
-    implementation rfg.deobf('curse.maven:realistic-terrain-generation-unofficial-648514:4404814')
+    compileOnly rfg.deobf('curse.maven:realistic-terrain-generation-unofficial-648514:4404814')
 
     compileOnly rfg.deobf('curse.maven:biomes-o-plenty-220318:2842510')
 
@@ -48,8 +48,8 @@ dependencies {
     implementation rfg.deobf("curse.maven:immersive-railroading-277736:4970105") // Immersive-Railroading v1.10.0
 
     implementation rfg.deobf("curse.maven:ctm-267602:2915363") // CTM 1.0.2.31
-    implementation rfg.deobf("curse.maven:groovyscript-687577:5507936") // GRS 1.1.1
-    implementation rfg.deobf("curse.maven:modularui-624243:5153413")
+    api("com.cleanroommc:groovyscript:1.2.0-hotfix1") { transitive = false }
+    api("com.cleanroommc:modularui:2.5.0-rc3") { transitive = false }
 
     compileOnly rfg.deobf("curse.maven:ynet-an-xnet-fork-999559:5243319") // XNet-1.8.3-ynet
     compileOnly rfg.deobf("curse.maven:rftools-224641:2861573") // RFTools 7.73

@@ -43,6 +43,19 @@ public class SusyGuiTextures {
             .canApplyTheme()
             .build();
 
-    public static final UITexture GREGTECH_LOGO = fullImage(GTValues.MODID, "textures/gui/icon/gregtech_logo.png", false);
-    public static final UITexture GREGTECH_LOGO_XMAS = fullImage(GTValues.MODID, "textures/gui/icon/gregtech_logo_xmas.png", false);
+    public static final UITexture MC_BUTTON = new UITexture.Builder()
+            .location("modularui", "gui/widgets/mc_button.png")
+            .imageSize(16, 32)
+            .uv(0.0f, 0.0f, 1.0f, 0.5f)
+            .adaptable(2)
+            .build();
+
+    public static final UITexture GREGTECH_LOGO = fullImage(GTValues.MODID, "textures/gui/icon/gregtech_logo.png");
+    public static final UITexture GREGTECH_LOGO_XMAS = fullImage(GTValues.MODID, "textures/gui/icon/gregtech_logo_xmas.png");
+    public static final UITexture OREDICT_ERROR = fullImage(GTValues.MODID, "textures/gui/widget/ore_filter/error.png");
+    public static final UITexture OREDICT_INFO = fullImage(GTValues.MODID, "textures/gui/widget/ore_filter/info.png");
+    public static final UITexture OREDICT_SUCCESS = fullImage(GTValues.MODID, "textures/gui/widget/ore_filter/success.png");
+    public static final UITexture OREDICT_WAITING = fullImage(GTValues.MODID, "textures/gui/widget/ore_filter/waiting.png");
+    public static final UITexture RENDER_AREA_OVERLAY = fullImage(GTValues.MODID, "textures/gui/overlay/render_area_overlay.png");
+    public static final UITexture FILTER_SETTINGS_OVERLAY = fullImage(GTValues.MODID, "textures/gui/overlay/filter_settings_overlay.png");
 }
