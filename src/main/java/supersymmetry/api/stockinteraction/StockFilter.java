@@ -15,7 +15,6 @@ import com.cleanroommc.modularui.widgets.SlotGroupWidget;
 import com.cleanroommc.modularui.widgets.layout.Flow;
 import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
@@ -54,12 +53,12 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
     @Override
     public boolean test(EntityRollingStock entityRollingStock) {
         String name = entityRollingStock.getDefinition().name();
-        return definitions.containsValue(name) && matchesName(entityRollingStock.internal);
+        return definitions.containsValue(name) && matchesName(entityRollingStock.tag);
     }
 
-    protected boolean matchesName(Entity entity) {
+    protected boolean matchesName(String tag) {
         return errored || patternString.isEmpty() || pattern == null
-                || pattern.asPredicate().test(entity.getName());
+                || pattern.asPredicate().test(tag);
     }
 
     @Override
@@ -78,7 +77,8 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
         errored = nbt.getBoolean("errored");
         handler.deserializeNBT(nbt.getCompoundTag("handler"));
         refreshAllDefinitions();
-        this.errored = compilePattern();
+        this.pattern = null;
+        this.errored = !compilePattern();
     }
 
     public void refreshAllDefinitions() {
@@ -124,7 +124,10 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
         SlotGroup filterInventory = new SlotGroup("filter_inv", 3, 1000, true);
         syncManager.registerSlotGroup(filterInventory);
 
-        StringSyncValue patternString = new StringSyncValue(() -> this.patternString, val -> this.patternString = val);
+        StringSyncValue patternString = new StringSyncValue(() -> this.patternString, val -> {
+            this.patternString = val;
+            this.errored = !compilePattern();
+        });
 //        syncManager.syncValue("patternString", patternString);
 
         return Flow.column().coverChildrenHeight()
