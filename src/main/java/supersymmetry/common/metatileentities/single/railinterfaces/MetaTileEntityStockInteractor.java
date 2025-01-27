@@ -4,28 +4,29 @@ import cam72cam.immersiverailroading.entity.EntityRollingStock;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
+import com.cleanroommc.modularui.api.drawable.IKey;
+import com.cleanroommc.modularui.factory.PosGuiData;
+import com.cleanroommc.modularui.screen.ModularPanel;
+import com.cleanroommc.modularui.utils.Alignment;
+import com.cleanroommc.modularui.value.BoolValue;
+import com.cleanroommc.modularui.value.sync.BooleanSyncValue;
+import com.cleanroommc.modularui.value.sync.PanelSyncHandler;
+import com.cleanroommc.modularui.value.sync.PanelSyncManager;
+import com.cleanroommc.modularui.widgets.ButtonWidget;
+import com.cleanroommc.modularui.widgets.SlotGroupWidget;
+import com.cleanroommc.modularui.widgets.ToggleButton;
+import com.cleanroommc.modularui.widgets.layout.Flow;
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.GregtechTileCapabilities;
 import gregtech.api.capability.IControllable;
-import gregtech.api.gui.GuiTextures;
-import gregtech.api.gui.ModularUI;
-import gregtech.api.gui.widgets.AbstractWidgetGroup;
-import gregtech.api.gui.widgets.TabGroup;
-import gregtech.api.gui.widgets.ToggleButtonWidget;
-import gregtech.api.gui.widgets.WidgetGroup;
-import gregtech.api.gui.widgets.tab.ItemTabInfo;
 import gregtech.api.metatileentity.IFastRenderMetaTileEntity;
-import gregtech.api.util.Position;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.utils.RenderBufferHelper;
 import gregtech.client.utils.RenderUtil;
-import gregtech.common.items.MetaItems;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
@@ -37,6 +38,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import supersymmetry.api.SusyLog;
+import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.metatileentity.Mui2MetaTileEntity;
 import supersymmetry.api.stockinteraction.IStockInteractor;
 import supersymmetry.api.stockinteraction.StockFilter;
@@ -54,7 +56,7 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
     private double interactionDepth = 5.;
 
     // This defines which stock classes can be interacted with
-    private StockFilter filter;
+    protected StockFilter filter;
 
     List<EntityRollingStock> stocks;
 
@@ -66,18 +68,10 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
     protected boolean renderBoundingBox = false;
 
 
-
     public MetaTileEntityStockInteractor(ResourceLocation metaTileEntityId, ICubeRenderer renderer) {
         super(metaTileEntityId);
         this.renderer = renderer;
-        this.filter = new StockFilter();
-        this.stocks = new ArrayList<>();
-    }
-
-    public MetaTileEntityStockInteractor(ResourceLocation metaTileEntityId, ICubeRenderer renderer,  List<String> subFilter) {
-        super(metaTileEntityId);
-        this.renderer = renderer;
-        this.filter = new StockFilter(subFilter);
+        this.filter = new StockFilter(9);
         this.stocks = new ArrayList<>();
     }
 
@@ -123,56 +117,105 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
     // UI
 
     @Override
-    protected ModularUI createUI(EntityPlayer entityPlayer) {
-        return createGUITemplate(entityPlayer).build(getHolder(), entityPlayer);
+    public ModularPanel buildUI(PosGuiData guiData, PanelSyncManager syncManager) {
+
+        PanelSyncHandler panel = (PanelSyncHandler) syncManager.panel("filter_panel",
+                (panelSyncManager, syncHandler) -> filter.createPopupPanel(panelSyncManager),
+                true);
+
+
+        BooleanSyncValue workingStateValue = new BooleanSyncValue(() -> workingEnabled, val -> workingEnabled = val);
+        syncManager.syncValue("working_state", workingStateValue);
+        BooleanSyncValue renderBoundingBoxValue = new BooleanSyncValue(() -> renderBoundingBox, val -> renderBoundingBox = val);
+        syncManager.syncValue("render_bounding_box", renderBoundingBoxValue);
+
+        return defaultPanel(this)
+                .child(IKey.lang(getMetaFullName()).asWidget().pos(5, 5))
+                .child(SlotGroupWidget.playerInventory().left(7).bottom(7))
+                .child(getLogo().asWidget().size(17).pos(152, 61))
+                .child(Flow.column().top(18).margin(7, 0)
+                        .widthRel(1f).coverChildrenHeight()
+                        .child(Flow.row().coverChildrenHeight()
+                                .marginBottom(2).widthRel(1f)
+                                .child(new ToggleButton()
+                                        .overlay(SusyGuiTextures.RENDER_AREA_OVERLAY.asIcon().size(16))
+                                        .value(new BoolValue.Dynamic(
+                                                renderBoundingBoxValue::getBoolValue,
+                                                renderBoundingBoxValue::setBoolValue))
+                                )
+                                .child(IKey.lang("Render AABB").asWidget()
+                                        .align(Alignment.CenterRight).height(18))
+                        )
+                        .child(Flow.row().coverChildrenHeight()
+                                .marginBottom(2).widthRel(1f)
+                                .child(new ButtonWidget<>()
+                                        .overlay(SusyGuiTextures.FILTER_SETTINGS_OVERLAY.asIcon().size(16))
+                                        .onMousePressed(mouseButton -> {
+                                            if (!panel.isPanelOpen()) {
+                                                panel.openPanel();
+                                            } else {
+                                                panel.closePanel();
+                                            }
+                                            return true;
+                                        })
+                                )
+                                .child(IKey.lang("Stock Filter").asWidget()
+                                        .align(Alignment.CenterRight).height(18))
+                        )
+                );
     }
 
-    // Override this if the machine needs a custom front page
-    protected void appendDefaultTab(EntityPlayer entityPlayer, TabGroup tabGroup) {
-
-    }
+//    @Override
+//    protected ModularUI createUI(EntityPlayer entityPlayer) {
+//        return createGUITemplate(entityPlayer).build(getHolder(), entityPlayer);
+//    }
+//
+//    // Override this if the machine needs a custom front page
+//    protected void appendDefaultTab(EntityPlayer entityPlayer, TabGroup tabGroup) {
+//
+//    }
 
     // Override this to append custom configs
-    private AbstractWidgetGroup getConfigWidgetGroup() {
-        WidgetGroup widgetGroup = new WidgetGroup();
+//    private AbstractWidgetGroup getConfigWidgetGroup() {
+//        WidgetGroup widgetGroup = new WidgetGroup();
+//
+//        widgetGroup.addWidget(new ToggleButtonWidget(7, 8, 18, 18, GuiTextures.BUTTON_LOCK, this::shouldRenderBoundingBox, this::setRenderBoundingBox)
+//                .setTooltipText("susy.gui.stock_interactor.render_bounding_box.tooltip")
+//                .shouldUseBaseBackground());
+//
+//
+//        return widgetGroup;
+//    }
 
-        widgetGroup.addWidget(new ToggleButtonWidget(7, 8, 18, 18, GuiTextures.BUTTON_LOCK, this::shouldRenderBoundingBox, this::setRenderBoundingBox)
-                .setTooltipText("susy.gui.stock_interactor.render_bounding_box.tooltip")
-                .shouldUseBaseBackground());
-
-
-        return widgetGroup;
-    }
-
-    private void appendTabs(TabGroup tabGroup) {
-        AbstractWidgetGroup filterTabGroup = filter.getFilterWidgetGroup();
-        if(filterTabGroup != null)
-            tabGroup.addTab(new ItemTabInfo("susy.machine.stock_interactor.tab.filter",
-                            new ItemStack(MetaItems.ITEM_FILTER.getMetaItem())),
-                    filterTabGroup);
-
-        AbstractWidgetGroup configWidgetGroup = this.getConfigWidgetGroup();
-        if(configWidgetGroup != null)
-            tabGroup.addTab(new ItemTabInfo("susy.machine.stock_interactor.tab.config",
-                            new ItemStack(MetaItems.TERMINAL.getMetaItem())),
-                    configWidgetGroup);
-    }
+//    private void appendTabs(TabGroup tabGroup) {
+//        AbstractWidgetGroup filterTabGroup = filter.getFilterWidgetGroup();
+//        if(filterTabGroup != null)
+//            tabGroup.addTab(new ItemTabInfo("susy.machine.stock_interactor.tab.filter",
+//                            new ItemStack(MetaItems.ITEM_FILTER.getMetaItem())),
+//                    filterTabGroup);
+//
+//        AbstractWidgetGroup configWidgetGroup = this.getConfigWidgetGroup();
+//        if(configWidgetGroup != null)
+//            tabGroup.addTab(new ItemTabInfo("susy.machine.stock_interactor.tab.config",
+//                            new ItemStack(MetaItems.TERMINAL.getMetaItem())),
+//                    configWidgetGroup);
+//    }
 
     // Default UI for setting the filter as well as setting and rendering the bounding box
-    protected ModularUI.Builder createGUITemplate(EntityPlayer entityPlayer) {
-        ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, 176, 221)
-                .bindPlayerInventory(entityPlayer.inventory, 138);
-        builder.label(5, 5, getMetaFullName());
-
-        TabGroup<AbstractWidgetGroup> tabGroup = new TabGroup<>(TabGroup.TabLocation.HORIZONTAL_TOP_LEFT, Position.ORIGIN);
-
-        this.appendDefaultTab(entityPlayer, tabGroup);
-        this.appendTabs(tabGroup);
-
-        builder.widget(tabGroup);
-
-        return builder;
-    }
+//    protected ModularUI.Builder createGUITemplate(EntityPlayer entityPlayer) {
+//        ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, 176, 221)
+//                .bindPlayerInventory(entityPlayer.inventory, 138);
+//        builder.label(5, 5, getMetaFullName());
+//
+//        TabGroup<AbstractWidgetGroup> tabGroup = new TabGroup<>(TabGroup.TabLocation.HORIZONTAL_TOP_LEFT, Position.ORIGIN);
+//
+//        this.appendDefaultTab(entityPlayer, tabGroup);
+//        this.appendTabs(tabGroup);
+//
+//        builder.widget(tabGroup);
+//
+//        return builder;
+//    }
 
     @Override
     @SideOnly(Side.CLIENT)
@@ -222,7 +265,7 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
 
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        data.setTag("stockFilter", this.filter.serializeNBT());
+        data.setTag("filter", this.filter.serializeNBT());
         data.setDouble("interactionWidth", this.interactionWidth);
         data.setDouble("interactionDepth", this.interactionDepth);
         data.setBoolean("renderBoundingBox", this.renderBoundingBox);
@@ -233,7 +276,7 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        this.filter.deserializeNBT(data.getCompoundTag("stockFilter"));
+        this.filter.deserializeNBT(data.getCompoundTag("filter"));
         this.setInteractionWidth(data.getDouble("interactionWidth"));
         this.setInteractionDepth(data.getDouble("interactionDepth"));
         this.renderBoundingBox = data.getBoolean("renderBoundingBox");

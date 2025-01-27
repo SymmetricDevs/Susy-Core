@@ -1,19 +1,16 @@
 package supersymmetry.api.stockinteraction;
 
-import cam72cam.immersiverailroading.entity.*;
+import cam72cam.immersiverailroading.entity.EntityRollingStock;
 import cam72cam.immersiverailroading.items.ItemRollingStock;
-import cam72cam.immersiverailroading.registry.EntityRollingStockDefinition;
 import cam72cam.mod.entity.ModdedEntity;
 import cam72cam.mod.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.util.vector.Vector3f;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -80,4 +77,13 @@ public class StockHelperFunctions {
     {
         return new Vector3f(pos.getX(), pos.getY(), pos.getZ());
     }
+
+    @Nullable
+    public static String getDefinitionNameFromStack(net.minecraft.item.ItemStack stack) {
+        var data = new ItemRollingStock.Data(new ItemStack(stack));
+        if (data.def != null) {
+            return data.def.name();
+        }
+        return null;
     }
+}

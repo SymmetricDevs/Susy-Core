@@ -2,17 +2,6 @@ package supersymmetry.common.metatileentities.single.railinterfaces;
 
 import cam72cam.immersiverailroading.entity.FreightTank;
 import codechicken.lib.raytracer.CuboidRayTraceResult;
-import com.cleanroommc.modularui.api.drawable.IKey;
-import com.cleanroommc.modularui.factory.PosGuiData;
-import com.cleanroommc.modularui.screen.ModularPanel;
-import com.cleanroommc.modularui.utils.Alignment;
-import com.cleanroommc.modularui.value.BoolValue;
-import com.cleanroommc.modularui.value.sync.BooleanSyncValue;
-import com.cleanroommc.modularui.value.sync.GuiSyncManager;
-import com.cleanroommc.modularui.widgets.SlotGroupWidget;
-import com.cleanroommc.modularui.widgets.ToggleButton;
-import com.cleanroommc.modularui.widgets.layout.Column;
-import com.cleanroommc.modularui.widgets.layout.Row;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import net.minecraft.client.resources.I18n;
@@ -49,36 +38,12 @@ public class MetaTileEntityStockFluidExchanger extends MetaTileEntityStockIntera
         subFilter.add("freight_tank");
     }
 
+
     public MetaTileEntityStockFluidExchanger(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SusyTextures.STOCK_FLUID_EXCHANGER, subFilter);
+        super(metaTileEntityId, SusyTextures.STOCK_FLUID_EXCHANGER);
     }
 
-    @Override
-    public ModularPanel buildUI(PosGuiData guiData, GuiSyncManager guiSyncManager) {
 
-        BooleanSyncValue workingStateValue = new BooleanSyncValue(() -> workingEnabled, val -> workingEnabled = val);
-        guiSyncManager.syncValue("working_state", workingStateValue);
-        BooleanSyncValue renderBoundingBoxValue = new BooleanSyncValue(() -> renderBoundingBox, val -> renderBoundingBox = val);
-        guiSyncManager.syncValue("render_bounding_box", renderBoundingBoxValue);
-
-
-        return defaultPanel(this)
-                .child(IKey.lang(getMetaFullName()).asWidget().pos(5, 5))
-                .child(SlotGroupWidget.playerInventory().left(7).bottom(7))
-                .child(getLogo().asWidget().size(17).pos(152, 61))
-                .child(new Column().top(18).margin(7, 0)
-                        .widthRel(1f).coverChildrenHeight()
-                        .child(new Row().coverChildrenHeight()
-                                .marginBottom(2).widthRel(1f)
-                                .child(new ToggleButton().size(20).marginRight(2)
-                                        .value(new BoolValue.Dynamic(renderBoundingBoxValue::getBoolValue,
-                                                renderBoundingBoxValue::setBoolValue))
-                                )
-                                .child(IKey.lang("Render AABB").asWidget()
-                                        .align(Alignment.CenterRight).height(18))
-                        )
-                );
-    }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
         return new MetaTileEntityStockFluidExchanger(this.metaTileEntityId);
@@ -147,5 +112,4 @@ public class MetaTileEntityStockFluidExchanger extends MetaTileEntityStockIntera
             return this.getWorld().isRemote || !playerIn.isSneaking() && FluidUtil.interactWithFluidHandler(playerIn, hand, this.fluidInventory);
         }
     }
-
 }
