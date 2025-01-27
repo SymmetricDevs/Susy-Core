@@ -145,7 +145,7 @@ public class MobHordeEvent {
             Block block = blockstate.getBlock();
 
             mob.setPosition(x, y, z);
-            while ((!mob.getCanSpawnHere() || !mob.isNotColliding() || block.isAir(blockstate, player.world, pos)) 
+            while ((!mob.getCanSpawnHere() || !mob.isNotColliding() || block.isAir(blockstate, player.world, pos))
                     && (Math.abs(mob.posY - player.posY) < 8)) {
                 mob.setPosition(x, mob.posY - 1, z);
                 pos = new BlockPos(x, mob.posY - 1, z);

@@ -7,25 +7,17 @@ import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
-import gregtech.api.pattern.PatternStringError;
-import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.unification.material.Materials;
-import gregtech.api.util.BlockInfo;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockBoilerCasing;
 import gregtech.common.blocks.BlockFireboxCasing;
-import gregtech.common.blocks.BlockMachineCasing.MachineCasingType;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
-import org.apache.commons.lang3.ArrayUtils;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 
 import javax.annotation.Nonnull;
-import java.util.Arrays;
-import java.util.LinkedList;
 
 public class MetaTileEntityReactionFurnace extends RecipeMapMultiblockController {
 

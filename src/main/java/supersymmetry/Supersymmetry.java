@@ -22,6 +22,7 @@ import supersymmetry.common.command.CommandHordeStart;
 import supersymmetry.common.command.CommandHordeStatus;
 import supersymmetry.common.command.CommandHordeStop;
 import supersymmetry.common.covers.SuSyCoverBehaviors;
+import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 import supersymmetry.loaders.SuSyIRLoader;
@@ -65,6 +66,8 @@ public class Supersymmetry {
         if (FMLLaunchHandler.side() == Side.CLIENT) {
             OBJLoader.INSTANCE.addDomain(MODID);
         }
+
+        DimensionBreathabilityHandler.loadConfig();
     }
 
     @Mod.EventHandler

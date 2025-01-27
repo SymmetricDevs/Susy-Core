@@ -25,6 +25,7 @@ import supersymmetry.common.SusyMetaEntities;
 import supersymmetry.common.blocks.SheetedFrameItemBlock;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SuSyMetaBlocks;
+import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.loaders.SuSyFluidTooltipLoader;
 import supersymmetry.loaders.SuSyIRLoader;
 
@@ -113,5 +114,6 @@ public class ClientProxy extends CommonProxy {
     public static void stitchTexture(TextureStitchEvent.Pre event) {
         TextureMap map = event.getMap();
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "armor/jet_wingpack"));
+        SuSyMetaItems.armorItem.registerIngameModels(map);
     }
 }

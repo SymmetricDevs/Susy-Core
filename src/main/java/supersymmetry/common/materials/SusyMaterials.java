@@ -2,7 +2,6 @@ package supersymmetry.common.materials;
 
 import gregtech.api.GregTechAPI;
 import gregtech.api.fluids.FluidBuilder;
-import gregtech.api.fluids.store.FluidStorageKey;
 import gregtech.api.fluids.store.FluidStorageKeys;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;

@@ -620,6 +620,10 @@ gregtech.machine.weapons_factory.opv.name=Legendary Weapons Factory
 # Phase Separator
 gregtech.machine.phase_separator.name=Phase Separator
 
+# RTG
+gregtech.machine.rtg.lv.name=Basic RTG
+
+
 # Electrostatic Separator
 gregtech.machine.electrostatic_separator.lv.name=Basic Electrostatic Separator
 gregtech.machine.electrostatic_separator.mv.name=Advanced Electrostatic Separator
@@ -667,6 +671,16 @@ gregtech.machine.polishing_machine.opv.name=Legendary Polishing Machine
 
 gregtech.machine.bath_condenser.name=Bath Condenser
 gregtech.machine.bath_condenser.tooltip=Only works inside a Cryogenic Distillation Tower
+
+gregtech.machine.incinerator.lv.name=Basic Incinerator
+gregtech.machine.incinerator.mv.name=Advanced Incinerator
+gregtech.machine.incinerator.hv.name=Advanced Incinerator II
+gregtech.machine.incinerator.ev.name=Advanced Incinerator III
+gregtech.machine.incinerator.tooltip.1=§6Incinerates§r %s item(s) per %s tick(s)
+gregtech.machine.incinerator.tooltip.2=§cNeeds eight blocks of air to release gasses into
+gregtech.machine.incinerator.tooltip.3=§8Don't worry about where the heavy metals are going.
+gregtech.multiblock.incinerator.clogged=§4Clogged! (Is the top blocked?)
+gregtech.multiblock.incinerator.working=§2Clog-free
 
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
@@ -753,8 +767,8 @@ gregtech.machine.fluid_hatch.import_9x.mv.name=MV Nonuple Input Hatch
 gregtech.machine.fluid_hatch.import_9x.hv.name=HV Nonuple Input Hatch
 
 gregtech.machine.fluid_hatch.export_4x.lv.name=LV Quadruple Output Hatch
-gregtech.machine.fluid_hatch.export_4x.mv.name=LV Quadruple Output Hatch
-gregtech.machine.fluid_hatch.export_4x.hv.name=LV Quadruple Output Hatch
+gregtech.machine.fluid_hatch.export_4x.mv.name=MV Quadruple Output Hatch
+gregtech.machine.fluid_hatch.export_4x.hv.name=HV Quadruple Output Hatch
 
 gregtech.machine.fluid_hatch.export_9x.lv.name=LV Nonuple Output Hatch
 gregtech.machine.fluid_hatch.export_9x.mv.name=MV Nonuple Output Hatch
@@ -797,6 +811,8 @@ cover.conveyor.steam.title=Steam Conveyor Module
 metaitem.pump.steam.name=Steam Pump
 cover.pump.steam.title=Steam Pump
 metaitem.air_vent.name=Air Vent
+metaitem.restrictive_filter.name=Restrictive Item Filter
+metaitem.restrictive_filter.tooltip=Allows only §6one stack§7 of any type of item inside. Can replace robot arms. %n§oHere you may come, but no further.§r §7Job 38:11
 metaitem.air_vent.tooltip=Passively collects a Dimension's Air for your Machines when facing Air
 metaitem.track_segment.name=Monorail Track Segment
 metaitem.track_segment.tooltip=For use in the §8tunnelbore.
@@ -901,3 +917,96 @@ susy.command.horde.status.no_active_invasion=Player %s has no active invasion.
 susy.fluid.voiding.liquid=Voidable with Dumper
 susy.fluid.voiding.gas=Voidable with Smoke Stack
 susy.fluid.voiding.flammable=Voidable with Flare Stack
+
+death.attack.toxic_atmo=%s's lungs were shredded
+death.attack.suffocation=%s couldn't breathe
+
+metaitem.simple_gas_mask.name=Primitive Gas Mask
+metaitem.simple_gas_mask.tooltip=Survive in oxygenless environments
+metaitem.gas_mask.name=Gas Mask
+metaitem.gas_mask.tooltip=Survive in oxygenless environments for longer
+metaitem.gas_tank.name=Gas Tank
+metaitem.gas_tank.tooltip=Survive in oxygenless environments for longer
+metaitem.asbestos_mask.name=Asbestos Gas Mask
+metaitem.asbestos_mask.tooltip=Survive in hot environments
+metaitem.asbestos_chestplate.name=Asbestos Tank
+metaitem.asbestos_chestplate.tooltip=Survive in hot environments
+metaitem.asbestos_leggings.name=Asbestos Leggings
+metaitem.asbestos_leggings.tooltip=Survive in hot environments
+metaitem.asbestos_boots.name=Asbestos Boots
+metaitem.asbestos_boots.tooltip=Survive in hot environments
+metaitem.rebreather_tank.name=Rebreather Tank
+metaitem.rebreather_tank.tooltip=Holds oxygen for longer
+metaitem.reflective_mask.name=Reflective Gas Mask
+metaitem.reflective_mask.tooltip=Reduce heating damage
+metaitem.reflective_chestplate.name=Reflective Tank
+metaitem.reflective_chestplate.tooltip=Reduce heating damage
+metaitem.reflective_leggings.name=Reflective Leggings
+metaitem.reflective_leggings.tooltip=Reduce heating damage
+metaitem.reflective_boots.name=Reflective Boots
+metaitem.reflective_boots.tooltip=Reduce heating damage
+metaitem.filtered_tank.name=Filtered Tank
+metaitem.filtered_tank.tooltip=Holds oxygen for very long
+metaitem.nomex_mask.name=Nomex Gas Mask
+metaitem.nomex_mask.tooltip=Stay indefinitely in the mantle!
+metaitem.nomex_chestplate.name=Nomex Tank
+metaitem.nomex_chestplate.tooltip=Stay indefinitely in the mantle!
+metaitem.nomex_leggings.name=Nomex Leggings
+metaitem.nomex_leggings.tooltip=Stay indefinitely in the mantle!
+metaitem.nomex_boots.name=Nomex Boots
+metaitem.nomex_boots.tooltip=Stay indefinitely in the mantle!
+
+supersymmetry.oxygen=Remaining air: §b%s seconds§r (out of %s)
+supersymmetry.unlimited_oxygen=Remaining air: §bUnlimited§r
+supersymmetry.seconds_left=Remaining life: §2%s seconds§r
+supersymmetry.unlimited=Remaining life: §bUnlimited§r
+
+
+death.attack.toxic_atmo=%s's lungs were shredded
+death.attack.suffocation=%s couldn't breathe
+
+metaitem.simple_gas_mask.name=Primitive Gas Mask
+metaitem.simple_gas_mask.tooltip=Survive in oxygenless environments
+metaitem.gas_mask.name=Gas Mask
+metaitem.gas_mask.tooltip=Survive in oxygenless environments for longer
+metaitem.gas_tank.name=Gas Tank
+metaitem.gas_tank.tooltip=Survive in oxygenless environments for longer
+metaitem.asbestos_mask.name=Asbestos Gas Mask
+metaitem.asbestos_mask.tooltip=Survive in hot environments
+metaitem.asbestos_chestplate.name=Asbestos Tank
+metaitem.asbestos_chestplate.tooltip=Survive in hot environments
+metaitem.asbestos_leggings.name=Asbestos Leggings
+metaitem.asbestos_leggings.tooltip=Survive in hot environments
+metaitem.asbestos_boots.name=Asbestos Boots
+metaitem.asbestos_boots.tooltip=Survive in hot environments
+metaitem.rebreather_tank.name=Rebreather Tank
+metaitem.rebreather_tank.tooltip=Holds oxygen for longer
+metaitem.reflective_mask.name=Reflective Gas Mask
+metaitem.reflective_mask.tooltip=Reduce heating damage
+metaitem.reflective_chestplate.name=Reflective Tank
+metaitem.reflective_chestplate.tooltip=Reduce heating damage
+metaitem.reflective_leggings.name=Reflective Leggings
+metaitem.reflective_leggings.tooltip=Reduce heating damage
+metaitem.reflective_boots.name=Reflective Boots
+metaitem.reflective_boots.tooltip=Reduce heating damage
+metaitem.filtered_tank.name=Filtered Tank
+metaitem.filtered_tank.tooltip=Holds oxygen for very long
+metaitem.nomex_mask.name=Nomex Gas Mask
+metaitem.nomex_mask.tooltip=Stay indefinitely in the mantle!
+metaitem.nomex_chestplate.name=Nomex Tank
+metaitem.nomex_chestplate.tooltip=Stay indefinitely in the mantle!
+metaitem.nomex_leggings.name=Nomex Leggings
+metaitem.nomex_leggings.tooltip=Stay indefinitely in the mantle!
+metaitem.nomex_boots.name=Nomex Boots
+metaitem.nomex_boots.tooltip=Stay indefinitely in the mantle!
+
+#Hardened blocks
+tile.hardened_blocks.lair7.name=Hardened Lair 7
+tile.hardened_blocks.lair10.name=Hardened Lair 10
+tile.hardened_blocks.lair11.name=Hardened Lair 11
+tile.hardened_blocks.kryp7.name=Hardened Kryp 7
+tile.hardened_blocks.kryp8.name=Hardened Kryp 8
+
+#Custom Sheets
+tile.custom_sheets.darkwhitemetalsheet.name=Darker White Metal Sheet
+tile.custom_sheets.lightergraymetalsheet.name=Lighter Gray Metal Sheet
