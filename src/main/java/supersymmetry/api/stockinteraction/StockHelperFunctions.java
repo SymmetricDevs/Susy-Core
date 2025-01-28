@@ -12,33 +12,45 @@ import org.jetbrains.annotations.Nullable;
 import org.lwjgl.util.vector.Vector3f;
 
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class StockHelperFunctions {
 
+    //mostly unused since stockFilter stored as int
+    public static List<EntityRollingStock> getStocksInArea(World world, AxisAlignedBB box) {
+        return getStocksInArea(world, box, stock -> true);
+    }
 
-
-    //mostly unused since filter stored as int
-    public static List<EntityRollingStock> getStocksInArea(World world, AxisAlignedBB box)
-    {
-        //get entities in box and filter for only wanted ones
-        List<ModdedEntity> entities = world.getEntitiesWithinAABB(ModdedEntity.class, box);
-        List<EntityRollingStock> stocks = entities
+    public static List<EntityRollingStock> getStocksInArea(World world, AxisAlignedBB box, Predicate<EntityRollingStock> filter) {
+        //get entities in box and stockFilter for only wanted ones
+        return world.getEntitiesWithinAABB(ModdedEntity.class, box)
                 .stream()
-                .map(moddedEntity -> moddedEntity.getSelf())
+                .map(ModdedEntity::getSelf)
                 .filter(EntityRollingStock.class::isInstance)
                 .map(EntityRollingStock.class::cast)
+                .filter(filter)
                 .collect(Collectors.toList());
-        return stocks;
 
+    }
+
+    @Nullable
+    public static EntityRollingStock getStockFrom(World world, AxisAlignedBB box, Predicate<EntityRollingStock> filter) {
+        //get entities in box and stockFilter for only wanted ones
+        return world.getEntitiesWithinAABB(ModdedEntity.class, box)
+                .stream()
+                .map(ModdedEntity::getSelf)
+                .filter(EntityRollingStock.class::isInstance)
+                .map(EntityRollingStock.class::cast)
+                .filter(filter)
+                .findFirst().orElse(null);
     }
 
     public static AxisAlignedBB getBox(Vec3i pos, EnumFacing facing, double width, double depth) {
         return getBox(fromVec3i(pos), facing, width, depth);
     }
 
-    public static AxisAlignedBB getBox(Vector3f pos, EnumFacing facing, double width, double depth)
-    {
+    public static AxisAlignedBB getBox(Vector3f pos, EnumFacing facing, double width, double depth) {
         //get base position and facing directions, as well as both non facing directions
         Vector3f one = new Vector3f(1, 1, 1);
         Vector3f facingDir = fromVec3i(facing.getDirectionVec());
