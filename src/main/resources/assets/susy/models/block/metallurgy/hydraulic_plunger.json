@@ -1,0 +1,9 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "top": "gregtech:blocks/casings/metallurgy/hydraulic_plunger/top",
+    "front": "gregtech:blocks/casings/metallurgy/hydraulic_plunger/side",
+    "side": "gregtech:blocks/casings/metallurgy/hydraulic_plunger/side",
+    "south": "gregtech:blocks/casings/metallurgy/hydraulic_plunger/side"
+  }
+}

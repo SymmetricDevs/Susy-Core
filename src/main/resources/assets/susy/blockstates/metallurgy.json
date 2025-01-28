@@ -1,0 +1,21 @@
+{
+  "forge_marker" : 1,
+  "variants" : {
+    "facing=north,variant=steel_gas_jet": { "model": "susy:metallurgy/steel_gas_jet" },
+    "facing=south,variant=steel_gas_jet": { "model": "susy:metallurgy/steel_gas_jet", "y": 180 },
+    "facing=west,variant=steel_gas_jet": { "model": "susy:metallurgy/steel_gas_jet", "y": 270 },
+    "facing=east,variant=steel_gas_jet": { "model": "susy:metallurgy/steel_gas_jet", "y": 90 },
+    "facing=north,variant=roll": { "model": "susy:metallurgy/roll" },
+    "facing=south,variant=roll": { "model": "susy:metallurgy/roll", "y": 180 },
+    "facing=west,variant=roll": { "model": "susy:metallurgy/roll", "y": 270 },
+    "facing=east,variant=roll": { "model": "susy:metallurgy/roll", "y": 90 },
+    "facing=north,variant=hydraulic_press": { "model": "susy:metallurgy/hydraulic_press" },
+    "facing=south,variant=hydraulic_press": { "model": "susy:metallurgy/hydraulic_press", "y": 180 },
+    "facing=west,variant=hydraulic_press": { "model": "susy:metallurgy/hydraulic_press", "y": 270 },
+    "facing=east,variant=hydraulic_press": { "model": "susy:metallurgy/hydraulic_press", "y": 90 },
+    "facing=north,variant=hydraulic_plunger": { "model": "susy:metallurgy/hydraulic_plunger" },
+    "facing=south,variant=hydraulic_plunger": { "model": "susy:metallurgy/hydraulic_plunger", "y": 180 },
+    "facing=west,variant=hydraulic_plunger": { "model": "susy:metallurgy/hydraulic_plunger", "y": 270 },
+    "facing=east,variant=hydraulic_plunger": { "model": "susy:metallurgy/hydraulic_plunger", "y": 90 }
+  }
+}
