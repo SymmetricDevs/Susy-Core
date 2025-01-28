@@ -22,6 +22,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
@@ -33,13 +34,13 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInteractor
-{
+public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInteractor {
+
     AxisAlignedBB interactionBoundingBox;
     public int ticksAlive;
 
     public boolean active;
-    //#fix# may need to filter types of locomotives later on
+    //#fix# may need to stockFilter types of locomotives later on
     public static final int filterIndex = 1;
 
     //control settings
@@ -53,26 +54,13 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
     }
 
     @Override
-    public ModularPanel buildUI(PosGuiData guiData, PanelSyncManager syncManager) {
-        return null;
-    }
-
-    @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
         return new MetaTileEntityLocomotiveController(this.metaTileEntityId);
     }
 
-    public boolean isOpaqueCube() {
-        return true;
-    }
-
-    //#fix# pickaxe not it maybe
-    public String getHarvestTool() {
-        return "wrench";
-    }
-
-    public boolean hasFrontFacing() {
-        return true;
+    @Override
+    public ModularPanel buildUI(PosGuiData guiData, PanelSyncManager syncManager) {
+        return null;
     }
 
     public void writeStatsToBuffer(PacketBuffer buf) {
@@ -91,13 +79,15 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
     }
 
 
-    public void writeInitialSyncData(PacketBuffer buf) {
+    @Override
+    public void writeInitialSyncData(@NotNull PacketBuffer buf) {
         super.writeInitialSyncData(buf);
         buf.writeBoolean(this.active);
         this.writeStatsToBuffer(buf);
     }
 
-    public void receiveInitialSyncData(PacketBuffer buf) {
+    @Override
+    public void receiveInitialSyncData(@NotNull PacketBuffer buf) {
         super.receiveInitialSyncData(buf);
         this.active = buf.readBoolean();
         this.readStatsFromBuffer(buf);
@@ -105,7 +95,8 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
         this.scheduleRenderUpdate();
     }
 
-    public void receiveCustomData(int dataId, PacketBuffer buf) {
+    @Override
+    public void receiveCustomData(int dataId, @NotNull PacketBuffer buf) {
         super.receiveCustomData(dataId, buf);
         if((dataId & 0b1) > 0) {
             this.active = buf.readBoolean();
@@ -115,6 +106,7 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
         }
     }
 
+    @Override
     public void update() {
         super.update();
 
@@ -127,7 +119,7 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
 
             List<EntityRollingStock> stocks = StockHelperFunctions.getStocksInArea(this.getWorld(), this.getInteractionBoundingBox());
 
-            if(!(stocks.size() > 0))
+            if (stocks.isEmpty())
                 return;
 
             if(!(stocks.get(0) instanceof Locomotive loco))
@@ -137,10 +129,10 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
             this.writeCustomData(0b1, buf -> buf.writeBoolean(this.active));
 
             if(this.active && this.activeBreak >= 0) {
-                loco.setAirBrake(this.activeBreak);
+                loco.setTrainBrake(this.activeBreak);
                 loco.setThrottle(this.activeThrottle);
             } else if(!this.active && this.inactiveBreak >= 0) {
-                loco.setAirBrake(this.inactiveBreak);
+                loco.setTrainBrake(this.inactiveBreak);
                 loco.setThrottle(this.inactiveThrottle);
             }
         }
@@ -148,6 +140,12 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
         this.ticksAlive++;
     }
 
+    @Override
+    protected <T> T getStockCapability(Capability<T> capability, EnumFacing side) {
+        return null;
+    }
+
+    @Override
     public void onNeighborChanged() {
         if(this.getWorld().isRemote)
             return;
@@ -156,11 +154,8 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
         this.writeCustomData(0b1, (buf) -> buf.writeBoolean(this.active));
     }
 
-    public boolean needsSneakToRotate() {
-        return true;
-    }
-
     @SideOnly(Side.CLIENT)
+    @Override
     public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, boolean advanced) {
         tooltip.add(I18n.format("susy.stock_interfaces.locomotive_controller.description"));
         tooltip.add(I18n.format("susy.stock_interfaces.right_click_for_gui"));
@@ -280,22 +275,26 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
     //#fix# does detected need to be saved or just refreshed on load? does ticks-alive need to be saved to prevent every one ticking at once?
     //update system based on chunk and global time instead of ticks alive?
     //should detection area be changeable and saved?
+    @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setBoolean("active", this.active);
         return data;
     }
 
+    @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         this.active = data.getBoolean("active");
     }
 
 
+    @Override
     protected boolean canMachineConnectRedstone(EnumFacing side) {
         return true;
     }
 
+    @Override
     public AxisAlignedBB getInteractionBoundingBox() {
         return interactionBoundingBox == null ? interactionBoundingBox = StockHelperFunctions.getBox(this.getPos(), this.getFrontFacing(), 8, 8) : interactionBoundingBox;
     }

@@ -13,96 +13,43 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 
-public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInteractor
-{
-    ItemStackHandler internalInventory = new ItemStackHandler(0);
-    //locomotive, freight
-    public static List<String> subFilter = new ArrayList<>();
-    static{
-        subFilter.add("locomotive");
-        subFilter.add("freight");
-    }
+public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInteractor {
 
     public MetaTileEntityStockItemExchanger(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SusyTextures.STOCK_ITEM_EXCHANGER);
     }
 
+    @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
         return new MetaTileEntityStockItemExchanger(this.metaTileEntityId);
     }
 
-    public int getLightOpacity() {
-        return 1;
-    }
-
-    public boolean isOpaqueCube() {
-        return true;
-    }
-
-    public String getHarvestTool() {
-        return "wrench";
-    }
-
-    public boolean hasFrontFacing() {
-        return true;
-    }
-
-    protected void initializeInventory() {
-        super.initializeInventory();
-        this.itemInventory = internalInventory;
-    }
-
-    public void update() {
-        super.update();
-
-        if(this.getWorld().isRemote)
-            return;
-
-        if (this.stocks.size() == 0 || !this.isWorkingEnabled()) {
-            this.itemInventory = internalInventory;
-        }
-
-        if(this.isWorkingEnabled() && this.getOffsetTimer() % 20 == 0 && this.stocks.size() > 0)
-        {
-            Freight freightStock = (Freight) stocks.get(0);
-            cam72cam.mod.item.ItemStackHandler umodStockStackHandler = freightStock.cargoItems;
-            this.itemInventory = umodStockStackHandler.internal;
-        }
-    }
-
+    // TODO: cache this?
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing side) {
+    protected <T> T getStockCapability(Capability<T> capability, EnumFacing side) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            IItemHandler itemHandler = this.itemInventory;
-            return itemHandler != null && itemHandler.getSlots() > 0 ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(itemHandler) : null;
+            IItemHandler itemHandler = null;
+            if (this.delegatingStock instanceof Freight itemStock) {
+                itemHandler = itemStock.cargoItems.internal;
+            } // TODO: add more if-else arguments if there's more kinds of stocks. Or maybe a utility method
+            if (itemHandler != null && itemHandler.getSlots() > 0) {
+                return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(itemHandler);
+            }
         }
-
-        return super.getCapability(capability, side);
-    }
-
-
-    public boolean needsSneakToRotate() {
-        return true;
+        return null;
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, boolean advanced) {
         tooltip.add(I18n.format("susy.stock_interfaces.item_exchanger.description"));
         tooltip.add(I18n.format("susy.stock_interfaces.screwdriver_cycle"));
         tooltip.add(I18n.format("susy.stock_interfaces.wrench_toggle"));
     }
-
-    //#fix# what does this do
-    public boolean showToolUsages() {
-        return false;
-    }
-
 }
