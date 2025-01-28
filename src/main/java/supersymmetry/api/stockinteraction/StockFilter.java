@@ -77,8 +77,7 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
         errored = nbt.getBoolean("errored");
         handler.deserializeNBT(nbt.getCompoundTag("handler"));
         refreshAllDefinitions();
-        this.pattern = null;
-        this.errored = !compilePattern();
+        refreshPattern();
     }
 
     public void refreshAllDefinitions() {
@@ -124,11 +123,7 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
         SlotGroup filterInventory = new SlotGroup("filter_inv", 3, 1000, true);
         syncManager.registerSlotGroup(filterInventory);
 
-        StringSyncValue patternString = new StringSyncValue(() -> this.patternString, val -> {
-            this.patternString = val;
-            this.errored = !compilePattern();
-        });
-//        syncManager.syncValue("patternString", patternString);
+        StringSyncValue patternString = new StringSyncValue(this::getPatternString, this::setPatternString);
 
         return Flow.column().coverChildrenHeight()
                 .child(SlotGroupWidget.builder()
@@ -156,7 +151,7 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
                                         .tooltipBuilder(this::createStatusTooltip)
                                         .tooltip(tooltip -> tooltip.setAutoUpdate(true))))
                         .child(new HighlightedTextField()
-                                .onUnfocus(() -> this.errored = !compilePattern())
+                                .onUnfocus(this::refreshPattern)
                                 .setHighlightRule(this::highlightRule)
                                 .setTextColor(Color.WHITE.darker(1))
                                 .value(patternString).marginBottom(4)
@@ -209,14 +204,23 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
         return builder.toString();
     }
 
-    protected boolean compilePattern() {
+    protected String getPatternString() {
+        return patternString;
+    }
+
+    protected void setPatternString(String patternString) {
+        this.patternString = patternString;
+        refreshPattern();
+    }
+
+    protected void refreshPattern() {
         this.pattern = null;
         try {
             this.pattern = Pattern.compile(this.patternString);
         } catch (PatternSyntaxException e) {
-            return false;
+            this.errored = true;
         }
-        return true;
+        this.errored = false;
     }
 
     protected void getStatusIcon(Widget<?> widget) {
