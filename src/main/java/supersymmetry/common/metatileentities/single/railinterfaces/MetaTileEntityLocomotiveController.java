@@ -2,10 +2,23 @@ package supersymmetry.common.metatileentities.single.railinterfaces;
 
 import cam72cam.immersiverailroading.entity.EntityRollingStock;
 import cam72cam.immersiverailroading.entity.Locomotive;
+import com.cleanroommc.modularui.api.GuiAxis;
+import com.cleanroommc.modularui.api.drawable.IKey;
+import com.cleanroommc.modularui.drawable.GuiTextures;
+import com.cleanroommc.modularui.drawable.Rectangle;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.cleanroommc.modularui.factory.PosGuiData;
 import com.cleanroommc.modularui.screen.ModularPanel;
+import com.cleanroommc.modularui.utils.Alignment;
+import com.cleanroommc.modularui.value.sync.BooleanSyncValue;
+import com.cleanroommc.modularui.value.sync.DoubleSyncValue;
+import com.cleanroommc.modularui.value.sync.PanelSyncHandler;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
-import gregtech.api.gui.GuiTextures;
+import com.cleanroommc.modularui.widget.Widget;
+import com.cleanroommc.modularui.widgets.ButtonWidget;
+import com.cleanroommc.modularui.widgets.SliderWidget;
+import com.cleanroommc.modularui.widgets.ToggleButton;
+import com.cleanroommc.modularui.widgets.layout.Flow;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.widgets.CycleButtonWidget;
 import gregtech.api.gui.widgets.LabelWidget;
@@ -26,28 +39,32 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.gui.widgets.VerticalSliderWidget;
+import supersymmetry.api.metatileentity.Mui2MetaTileEntity;
 import supersymmetry.api.stockinteraction.StockHelperFunctions;
 import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInteractor {
 
     AxisAlignedBB interactionBoundingBox;
-    public int ticksAlive;
 
     public boolean active;
     //#fix# may need to stockFilter types of locomotives later on
     public static final int filterIndex = 1;
 
     //control settings
-    public float activeBreak;
-    public float activeThrottle;
-    public float inactiveBreak;
-    public float inactiveThrottle;
+    protected boolean controlActive = true;
+    protected float activeBrake = 0;
+    protected float activeThrottle = 0;
+    protected boolean controlInactive = true;
+    protected float inactiveBrake = 0;
+    protected float inactiveThrottle = 0;
 
     public MetaTileEntityLocomotiveController(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SusyTextures.STOCK_CONTROLLER);
@@ -60,21 +77,115 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
 
     @Override
     public ModularPanel buildUI(PosGuiData guiData, PanelSyncManager syncManager) {
-        return null;
+
+        PanelSyncHandler panel = (PanelSyncHandler) syncManager.panel("controller_panel",
+                (panelSyncManager, syncHandler) -> createPopupPanel(panelSyncManager),
+                true);
+
+        ModularPanel mainPanel = super.buildUI(guiData, syncManager);
+        mainPanel.height(186);
+        Flow flow = (Flow) mainPanel.getChildren().get(4);
+        flow.child(Flow.row().coverChildrenHeight()
+                .marginBottom(2).widthRel(1f)
+                .child(new ButtonWidget<>()
+                        .overlay(SusyGuiTextures.FILTER_SETTINGS_OVERLAY.asIcon().size(16))
+                        .onMousePressed(mouseButton -> {
+                            if (!panel.isPanelOpen()) {
+                                panel.openPanel();
+                            } else {
+                                panel.closePanel();
+                            }
+                            return true;
+                        })
+                )
+                .child(IKey.lang("Controller Settings").asWidget()
+                        .align(Alignment.CenterRight).height(18))
+        );
+        return mainPanel;
+    }
+
+    public ModularPanel createPopupPanel(PanelSyncManager syncManager) {
+
+        BooleanSyncValue controlActive = new BooleanSyncValue(() -> this.controlActive, x -> this.controlActive = x);
+        BooleanSyncValue controlInactive = new BooleanSyncValue(() -> this.controlInactive, x -> this.controlInactive = x);
+
+        DoubleSyncValue activeBrake = new DoubleSyncValue(() -> this.activeBrake, x -> this.activeBrake = (float) x);
+        DoubleSyncValue activeThrottle = new DoubleSyncValue(() -> this.activeThrottle, x -> this.activeThrottle = (float) x);
+        DoubleSyncValue inactiveBrake = new DoubleSyncValue(() -> this.inactiveBrake, x -> this.inactiveBrake = (float) x);
+        DoubleSyncValue inactiveThrottle = new DoubleSyncValue(() -> this.inactiveThrottle, x -> this.inactiveThrottle = (float) x);
+
+        return Mui2MetaTileEntity.createPopupPanel("controller_settings", 128, 150)
+                .padding(4)
+                .coverChildrenWidth()
+                .child(IKey.str("Settings").asWidget()
+                        .pos(5, 5))
+                .child(Flow.row()
+                        .top(18)
+                        .coverChildren()
+                        .child(Flow.column()
+                                .coverChildren()
+                                .child(new ToggleButton()
+                                        .value(controlActive)
+                                        .invertSelected(true)
+                                        .size(24, 8)
+                                        .marginBottom(2))
+                                .child(Flow.row()
+                                        .setEnabledIf(widget -> controlActive.getValue())
+                                        .coverChildrenWidth()
+                                        .height(116)
+                                        .child(createSliderColumn("active_brake", SusyGuiTextures.BRAKE_ACTIVE, activeBrake, 0, 1))
+                                        .child(createSliderColumn("active_throttle", SusyGuiTextures.THROTTLE_ACTIVE, activeThrottle, -1, 1))))
+                        .child(new Rectangle().setColor(0xFF555555).asWidget()
+                                .width(1)
+                                .height(124)
+                                .margin(4, 0))
+                        .child(Flow.column()
+                                .coverChildrenWidth()
+                                .coverChildrenHeight()
+                                .child(new ToggleButton()
+                                        .value(controlInactive)
+                                        .invertSelected(true)
+                                        .size(24, 8)
+                                        .marginBottom(2))
+                                .child(Flow.row()
+                                        .setEnabledIf(widget -> controlInactive.getValue())
+                                        .coverChildrenWidth()
+                                        .height(116)
+                                        .child(createSliderColumn("inactive_brake", SusyGuiTextures.BRAKE_INACTIVE, inactiveBrake, 0, 1))
+                                        .child(createSliderColumn("inactive_throttle", SusyGuiTextures.THROTTLE_INACTIVE, inactiveThrottle, -1, 1)))));
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    @ParametersAreNonnullByDefault
+    protected Widget<?> createSliderColumn(String name, UITexture texture, DoubleSyncValue value, double min, double max) {
+        return Flow.column()
+                .width(16)
+                .child(texture.asWidget()
+                        .size(12, 12)
+                        .marginBottom(2))
+                .child(new SliderWidget()
+                        .background(GuiTextures.SLOT_FLUID)
+                        .setAxis(GuiAxis.Y)
+                        .size(8, 100)
+                        .sliderSize(8, 6)
+                        .value(value)
+                        .bounds(min, max)
+                        .tooltipAutoUpdate(true) // TODO: ↓ this might be kinda buggy idk.
+                        .tooltipDynamic(tooltip -> tooltip.add(String.format("%.2f", value.getValue()))));
     }
 
     public void writeStatsToBuffer(PacketBuffer buf) {
 
-        buf.writeFloat(this.activeBreak);
+        buf.writeFloat(this.activeBrake);
         buf.writeFloat(this.activeThrottle);
-        buf.writeFloat(this.inactiveBreak);
+        buf.writeFloat(this.inactiveBrake);
         buf.writeFloat(this.inactiveThrottle);
     }
 
     public void readStatsFromBuffer(PacketBuffer buf) {
-        this.activeBreak = buf.readFloat();
+        this.activeBrake = buf.readFloat();
         this.activeThrottle = buf.readFloat();
-        this.inactiveBreak = buf.readFloat();
+        this.inactiveBrake = buf.readFloat();
         this.inactiveThrottle = buf.readFloat();
     }
 
@@ -91,7 +202,6 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
         super.receiveInitialSyncData(buf);
         this.active = buf.readBoolean();
         this.readStatsFromBuffer(buf);
-
         this.scheduleRenderUpdate();
     }
 
@@ -113,7 +223,7 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
         if(this.getWorld().isRemote)
             return;
 
-        if(this.ticksAlive % 20 == 0)
+        if (getOffsetTimer() % 20 == 0)
         {
             this.onNeighborChanged();
 
@@ -128,16 +238,14 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
             this.active = this.isBlockRedstonePowered();
             this.writeCustomData(0b1, buf -> buf.writeBoolean(this.active));
 
-            if(this.active && this.activeBreak >= 0) {
-                loco.setTrainBrake(this.activeBreak);
+            if (this.active && this.activeBrake >= 0) {
+                loco.setTrainBrake(this.activeBrake);
                 loco.setThrottle(this.activeThrottle);
-            } else if(!this.active && this.inactiveBreak >= 0) {
-                loco.setTrainBrake(this.inactiveBreak);
+            } else if (!this.active && this.inactiveBrake >= 0) {
+                loco.setTrainBrake(this.inactiveBrake);
                 loco.setThrottle(this.inactiveThrottle);
             }
         }
-
-        this.ticksAlive++;
     }
 
     @Override
@@ -194,45 +302,45 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
         LabelWidget infoLabel = new LabelWidget(w / 2, r4y - 12, "  break | throttle");
         infoLabel.setXCentered(true);
 
-        CycleButtonWidget leftToggleWidget = new CycleButtonWidget(btnMid + 22, r3y, trw, r3h, new String[]{ "powered (off)", "powered (on)"}, () -> (this.activeBreak < 0f) ? 0 : 1,
+        CycleButtonWidget leftToggleWidget = new CycleButtonWidget(btnMid + 22, r3y, trw, r3h, new String[]{"powered (off)", "powered (on)"}, () -> (this.activeBrake < 0f) ? 0 : 1,
                 (x) -> {
                     if(x == 0) {
-                        this.activeBreak = -1.0f;
+                        this.activeBrake = -1.0f;
                         this.activeThrottle = 0;
                         leftWidgets.forEach((l) -> l.setVisible(false));
                     }
                     else {
-                        this.activeBreak = 0.0f;
+                        this.activeBrake = 0.0f;
                         this.activeThrottle = 0.0f;
                         leftWidgets.forEach((l) -> l.setVisible(true));
-                        leftWidgets.get(0).setSliderValue(1.0f - this.activeBreak);
+                        leftWidgets.get(0).setSliderValue(1.0f - this.activeBrake);
                         leftWidgets.get(1).setSliderValue((1.0f - this.activeThrottle) / 2.0f);
                     }
                 });
 
-        CycleButtonWidget rightToggleWidget = new CycleButtonWidget(w - (btnMid + trw + 22), r3y, trw, r3h, new String[]{ "unpowered (off)", "unpowered (on)"}, () -> (this.inactiveBreak < 0f) ? 0 : 1,
+        CycleButtonWidget rightToggleWidget = new CycleButtonWidget(w - (btnMid + trw + 22), r3y, trw, r3h, new String[]{"unpowered (off)", "unpowered (on)"}, () -> (this.inactiveBrake < 0f) ? 0 : 1,
                 (x) -> {
                     if(x == 0) {
-                        this.inactiveBreak = -1.0f;
+                        this.inactiveBrake = -1.0f;
                         this.inactiveThrottle = 0.0f;
                         rightWidgets.forEach((l) -> l.setVisible(false));
                     }
                     else {
-                        this.inactiveBreak = 0.0f;
+                        this.inactiveBrake = 0.0f;
                         this.inactiveThrottle = 0.0f;
                         rightWidgets.forEach((l) -> l.setVisible(true));
-                        rightWidgets.get(0).setSliderValue(1.0f - this.inactiveBreak);
+                        rightWidgets.get(0).setSliderValue(1.0f - this.inactiveBrake);
                         rightWidgets.get(1).setSliderValue((1.0f - this.inactiveThrottle) / 2.0f);
                     }
                 });
 
         int ySpaceLeft = h - buffer - r4y - buffer;
-        VerticalSliderWidget leftBreakSlide = new VerticalSliderWidget("leftBreak", buffer, r4y, rsw, ySpaceLeft, 0.0f, 1.0f, 1.0f - this.activeBreak, (x) -> this.activeBreak = 1.0f - x);
+        VerticalSliderWidget leftBreakSlide = new VerticalSliderWidget("leftBreak", buffer, r4y, rsw, ySpaceLeft, 0.0f, 1.0f, 1.0f - this.activeBrake, (x) -> this.activeBrake = 1.0f - x);
         leftWidgets.add(leftBreakSlide);
         VerticalSliderWidget leftThrottleSide = new VerticalSliderWidget("leftThrottle", buffer + bufBar + buffer, r4y, rsw, ySpaceLeft, 0.0f, 1.0f, (1.0f - this.activeThrottle) / 2.0f, (x) -> this.activeThrottle = 1.0f - 2 * x);
         leftWidgets.add(leftThrottleSide);
 
-        VerticalSliderWidget rightBreakSlide = new VerticalSliderWidget("rightBreak", w - (buffer + bufBar + buffer + rsw), r4y, rsw, ySpaceLeft, 0.0f, 1.0f, 1.0f - this.inactiveBreak, (x) -> this.inactiveBreak = 1.0f - x);
+        VerticalSliderWidget rightBreakSlide = new VerticalSliderWidget("rightBreak", w - (buffer + bufBar + buffer + rsw), r4y, rsw, ySpaceLeft, 0.0f, 1.0f, 1.0f - this.inactiveBrake, (x) -> this.inactiveBrake = 1.0f - x);
         rightWidgets.add(rightBreakSlide);
         VerticalSliderWidget rightThrottleSide = new VerticalSliderWidget("rightThrottle", w - (buffer + rsw), r4y, rsw, ySpaceLeft, 0.0f, 1.0f, (1.0f - this.inactiveThrottle) / 2.0f, (x) -> this.inactiveThrottle = 1.0f  - 2 * x);
         rightWidgets.add(rightThrottleSide);
@@ -248,7 +356,7 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
         zeroLabel.setXCentered(true);
 
 
-        ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, w, h)
+        ModularUI.Builder builder = ModularUI.builder(SusyGuiTextures.VERTICAL_SLIDER_BACKGROUND, w, h)
                 .widget(header)
 
                 .widget(infoLabel)
@@ -286,6 +394,11 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         this.active = data.getBoolean("active");
+    }
+
+    @Override
+    public boolean useMui() {
+        return getPos().getY() % 2 == 0; // For testing purposes
     }
 
 

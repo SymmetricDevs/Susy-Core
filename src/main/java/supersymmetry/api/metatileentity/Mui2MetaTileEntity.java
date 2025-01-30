@@ -2,7 +2,6 @@ package supersymmetry.api.metatileentity;
 
 import codechicken.lib.raytracer.CuboidRayTraceResult;
 import com.cleanroommc.modularui.api.IGuiHolder;
-import com.cleanroommc.modularui.api.widget.Interactable;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.cleanroommc.modularui.factory.PosGuiData;
 import com.cleanroommc.modularui.screen.ModularPanel;
@@ -61,10 +60,14 @@ public abstract class Mui2MetaTileEntity extends MetaTileEntity implements IGuiH
     @Override
     public abstract ModularPanel buildUI(PosGuiData guiData, PanelSyncManager syncManager);
 
+    public boolean useMui() {
+        return true;
+    }
+
     @Override
     public boolean onRightClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing,
                                 CuboidRayTraceResult hitResult) {
-        if (!playerIn.isSneaking() && openGUIOnRightClick()) {
+        if (useMui() && !playerIn.isSneaking() && openGUIOnRightClick()) {
             if (getWorld() != null && !getWorld().isRemote) {
                 MetaTileEntityGuiFactory.open(playerIn, this);
             }
