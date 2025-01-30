@@ -8,11 +8,11 @@ import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.factory.PosGuiData;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.utils.Alignment;
-import com.cleanroommc.modularui.value.BoolValue;
 import com.cleanroommc.modularui.value.sync.BooleanSyncValue;
 import com.cleanroommc.modularui.value.sync.PanelSyncHandler;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
 import com.cleanroommc.modularui.widgets.ButtonWidget;
+import com.cleanroommc.modularui.widgets.CycleButtonWidget;
 import com.cleanroommc.modularui.widgets.SlotGroupWidget;
 import com.cleanroommc.modularui.widgets.ToggleButton;
 import com.cleanroommc.modularui.widgets.layout.Flow;
@@ -136,24 +136,23 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
                 true);
 
         BooleanSyncValue workingStateValue = new BooleanSyncValue(() -> workingEnabled, val -> workingEnabled = val);
-        syncManager.syncValue("working_state", workingStateValue);
         BooleanSyncValue renderBoundingBoxValue = new BooleanSyncValue(() -> renderBoundingBox, val -> renderBoundingBox = val);
-        syncManager.syncValue("render_bounding_box", renderBoundingBoxValue);
 
         return defaultPanel(this)
                 .child(IKey.lang(getMetaFullName()).asWidget().pos(5, 5))
                 .child(SlotGroupWidget.playerInventory().left(7).bottom(7))
-                .child(getLogo().asWidget().size(17).pos(152, 61))
+                .child(getLogo().asWidget().size(17).right(7).bottom(88))
+                .child(new CycleButtonWidget()
+                        .left(7).bottom(90)
+                        .overlay(SusyGuiTextures.RENDER_AREA_OVERLAY.asIcon().size(16))
+                        .value(workingStateValue))
                 .child(Flow.column().top(18).margin(7, 0)
                         .widthRel(1f).coverChildrenHeight()
                         .child(Flow.row().coverChildrenHeight()
                                 .marginBottom(2).widthRel(1f)
                                 .child(new ToggleButton()
                                         .overlay(SusyGuiTextures.RENDER_AREA_OVERLAY.asIcon().size(16))
-                                        .value(new BoolValue.Dynamic(
-                                                renderBoundingBoxValue::getBoolValue,
-                                                renderBoundingBoxValue::setBoolValue))
-                                )
+                                        .value(renderBoundingBoxValue))
                                 .child(IKey.lang("Render AABB").asWidget()
                                         .align(Alignment.CenterRight).height(18))
                         )

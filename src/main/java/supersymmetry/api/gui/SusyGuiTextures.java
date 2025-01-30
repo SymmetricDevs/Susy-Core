@@ -58,4 +58,8 @@ public class SusyGuiTextures {
     public static final UITexture OREDICT_WAITING = fullImage(GTValues.MODID, "textures/gui/widget/ore_filter/waiting.png");
     public static final UITexture RENDER_AREA_OVERLAY = fullImage(GTValues.MODID, "textures/gui/overlay/render_area_overlay.png");
     public static final UITexture FILTER_SETTINGS_OVERLAY = fullImage(GTValues.MODID, "textures/gui/overlay/filter_settings_overlay.png");
+    public static final UITexture BRAKE_ACTIVE = fullImage(GTValues.MODID, "textures/gui/widget/icon_brake_active.png");
+    public static final UITexture BRAKE_INACTIVE = fullImage(GTValues.MODID, "textures/gui/widget/icon_brake_inactive.png");
+    public static final UITexture THROTTLE_ACTIVE = fullImage(GTValues.MODID, "textures/gui/widget/icon_throttle_active.png");
+    public static final UITexture THROTTLE_INACTIVE = fullImage(GTValues.MODID, "textures/gui/widget/icon_throttle_inactive.png");
 }
