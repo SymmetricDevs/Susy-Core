@@ -29,8 +29,6 @@ public class SusyGuiTextures {
     public static final TextureArea SIFTER_ITEM_OUTPUT_OVERLAY = TextureArea.fullImage("textures/gui/overlay/sifter_item_output_overlay.png");
     public static final TextureArea CUBIC_LATTICE_OVERLAY = TextureArea.fullImage("textures/gui/overlay/cubic_lattice_overlay.png");
     public static final TextureArea ORE_CHUNK_OVERLAY = TextureArea.fullImage("textures/gui/overlay/ore_chunk_overlay.png");
-    public static final TextureArea VERTICAL_SLIDER_BACKGROUND = TextureArea.fullImage("textures/gui/widget/vertical_slider_background.png");
-    public static final TextureArea VERTICAL_SLIDER_ICON = TextureArea.fullImage("textures/gui/widget/vertical_slider.png");
     public static final TextureArea BUTTON_INT_CIRCUIT_PLUS_PRIMITIVE = TextureArea.fullImage("textures/gui/widget/button_circuit_plus_primitive.png");
     public static final TextureArea BUTTON_INT_CIRCUIT_MINUS_PRIMITIVE = TextureArea.fullImage("textures/gui/widget/button_circuit_minus_primitive.png");
     public static final TextureArea FLUID_SLOT_PRIMITIVE = TextureArea.fullImage("textures/gui/base/fluid_slot_primitive.png");
@@ -43,11 +41,9 @@ public class SusyGuiTextures {
             .canApplyTheme()
             .build();
 
-    public static final UITexture MC_BUTTON = new UITexture.Builder()
-            .location("modularui", "gui/widgets/mc_button.png")
-            .imageSize(16, 32)
-            .uv(0.0f, 0.0f, 1.0f, 0.5f)
-            .adaptable(2)
+    public static final UITexture BUTTON_POWER = UITexture.builder()
+            .location(GTValues.MODID, "textures/gui/widget/button_power_2.png")
+            .imageSize(18, 36)
             .build();
 
     public static final UITexture GREGTECH_LOGO = fullImage(GTValues.MODID, "textures/gui/icon/gregtech_logo.png");
@@ -56,8 +52,9 @@ public class SusyGuiTextures {
     public static final UITexture OREDICT_INFO = fullImage(GTValues.MODID, "textures/gui/widget/ore_filter/info.png");
     public static final UITexture OREDICT_SUCCESS = fullImage(GTValues.MODID, "textures/gui/widget/ore_filter/success.png");
     public static final UITexture OREDICT_WAITING = fullImage(GTValues.MODID, "textures/gui/widget/ore_filter/waiting.png");
-    public static final UITexture RENDER_AREA_OVERLAY = fullImage(GTValues.MODID, "textures/gui/overlay/render_area_overlay.png");
-    public static final UITexture FILTER_SETTINGS_OVERLAY = fullImage(GTValues.MODID, "textures/gui/overlay/filter_settings_overlay.png");
+    public static final UITexture BUTTON_RENDER_AREA = fullImage(GTValues.MODID, "textures/gui/widget/button_render_area.png");
+    public static final UITexture BUTTON_SETTINGS = fullImage(GTValues.MODID, "textures/gui/widget/button_settings.png");
+    public static final UITexture BUTTON_STOCK_FILTER = fullImage(GTValues.MODID, "textures/gui/widget/button_stock_filter.png");
     public static final UITexture BRAKE_ACTIVE = fullImage(GTValues.MODID, "textures/gui/widget/icon_brake_active.png");
     public static final UITexture BRAKE_INACTIVE = fullImage(GTValues.MODID, "textures/gui/widget/icon_brake_inactive.png");
     public static final UITexture THROTTLE_ACTIVE = fullImage(GTValues.MODID, "textures/gui/widget/icon_throttle_active.png");

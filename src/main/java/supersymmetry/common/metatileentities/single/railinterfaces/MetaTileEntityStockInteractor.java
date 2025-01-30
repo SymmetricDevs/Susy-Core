@@ -5,6 +5,7 @@ import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
 import com.cleanroommc.modularui.api.drawable.IKey;
+import com.cleanroommc.modularui.drawable.GuiTextures;
 import com.cleanroommc.modularui.factory.PosGuiData;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.utils.Alignment;
@@ -66,10 +67,8 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
     protected boolean workingEnabled = true;
     // Rendering
     protected final ICubeRenderer renderer;
-
     // If the current bounding box should be rendered
     protected boolean renderBoundingBox = false;
-
 
     public MetaTileEntityStockInteractor(ResourceLocation metaTileEntityId, ICubeRenderer renderer) {
         super(metaTileEntityId);
@@ -144,22 +143,27 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
                 .child(getLogo().asWidget().size(17).right(7).bottom(88))
                 .child(new CycleButtonWidget()
                         .left(7).bottom(90)
-                        .overlay(SusyGuiTextures.RENDER_AREA_OVERLAY.asIcon().size(16))
+                        .background(GuiTextures.BUTTON_CLEAN)
+                        .hoverBackground(GuiTextures.BUTTON_CLEAN)
+                        .stateCount(2)
+                        .stateOverlay(SusyGuiTextures.BUTTON_POWER)
                         .value(workingStateValue))
                 .child(Flow.column().top(18).margin(7, 0)
                         .widthRel(1f).coverChildrenHeight()
                         .child(Flow.row().coverChildrenHeight()
                                 .marginBottom(2).widthRel(1f)
                                 .child(new ToggleButton()
-                                        .overlay(SusyGuiTextures.RENDER_AREA_OVERLAY.asIcon().size(16))
+                                        .overlay(SusyGuiTextures.BUTTON_RENDER_AREA.asIcon().size(16))
+                                        .addTooltipLine(IKey.lang("susy.gui.stock_interactor.button.render_bounding_box.tooltip"))
                                         .value(renderBoundingBoxValue))
-                                .child(IKey.lang("Render AABB").asWidget()
+                                .child(IKey.lang("susy.gui.stock_interactor.title.render_bounding_box").asWidget()
                                         .align(Alignment.CenterRight).height(18))
                         )
                         .child(Flow.row().coverChildrenHeight()
                                 .marginBottom(2).widthRel(1f)
                                 .child(new ButtonWidget<>()
-                                        .overlay(SusyGuiTextures.FILTER_SETTINGS_OVERLAY.asIcon().size(16))
+                                        .overlay(SusyGuiTextures.BUTTON_STOCK_FILTER.asIcon().size(16))
+                                        .addTooltipLine(IKey.lang("susy.gui.stock_interactor.button.stock_filter.tooltip"))
                                         .onMousePressed(mouseButton -> {
                                             if (!panel.isPanelOpen()) {
                                                 panel.openPanel();
@@ -169,7 +173,7 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
                                             return true;
                                         })
                                 )
-                                .child(IKey.lang("Stock Filter").asWidget()
+                                .child(IKey.lang("susy.gui.stock_interactor.title.stock_filter").asWidget()
                                         .align(Alignment.CenterRight).height(18))
                         )
                 );

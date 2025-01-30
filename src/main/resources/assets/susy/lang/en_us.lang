@@ -877,9 +877,6 @@ gregtech.block_group_members.latex_logs.name=Rubber Log
 
 
 # Stock Interfaces
-susy.stock_interfaces.pull=%s will try to pull from trains.
-susy.stock_interfaces.push=%s will try to push to trains.
-
 gregtech.machine.stock_controller.name=Locomotive Controller
 susy.stock_interfaces.locomotive_controller.description=Controls nearby locomotives thrust and break depending on redstone input
 
@@ -895,13 +892,26 @@ susy.stock_interfaces.item_exchanger.description=Transfers items in and out of n
 gregtech.machine.stock_content_reader.name=Stock Reader
 susy.stock_interfaces.stock_reader.description=Outputs redstone signal based on the inventory/tank of the stock in front of it
 
-susy.gui.stock_filter.filter_button.tooltip.enabled=Will interact with %s
-susy.gui.stock_filter.filter_button.tooltip.disabled=Will not interact with %s
-susy.gui.stock_interactor.render_bounding_box.tooltip.enabled=Render Interaction Area
-susy.gui.stock_interactor.render_bounding_box.tooltip.disabled=Render Interaction Area
+susy.gui.stock_interactor.button.stock_filter.tooltip=Click to open stock filter GUI
+susy.gui.stock_interactor.button.controller_setting.tooltip=Click to open controller settings GUI
+susy.gui.stock_interactor.button.render_bounding_box.tooltip=Click to toggle rendering of interaction area
 
-susy.machine.stock_interactor.tab.filter=Stock Filter
-susy.machine.stock_interactor.tab.config=Config
+susy.gui.stock_interactor.title.render_bounding_box=Render Interaction Area
+susy.gui.stock_interactor.title.stock_filter=Stock Filter
+susy.gui.stock_interactor.title.controller_setting=Settings
+
+susy.gui.stock_interactor.stock_filter.regex.tooltip.info=§bAccepts regex expressions, case sensitive\n§6^§r for start of string\n§6$§r for end of string\n§6*§r for wildcard (i.e. 0 or more characters)\n§6a*§r for zero or more consecutive `a` characters\n§6?§r for any 1 character\n§6()§r for matching empty entry\n§bYou can learn more about regex at regex101.com§r
+susy.gui.stock_interactor.stock_filter.regex.tooltip.error=§4Error compiling regex pattern!§r\nName filter will not get applied!
+susy.gui.stock_interactor.stock_filter.regex.tooltip.waiting=No regex pattern set\nName filter will not get applied!
+susy.gui.stock_interactor.stock_filter.regex.tooltip.success=§aRegex compiled successfully!§r\nName filter will get applied!
+
+susy.gui.stock_interactor.controller_setting.button.control_active.tooltip=Click to toggle whether to control locomotives when the controller is powered by redstone
+susy.gui.stock_interactor.controller_setting.button.control_inactive.tooltip=Click to toggle whether to control locomotives when the controller is not powered by redstone
+
+susy.gui.stock_interactor.controller_setting.active_brake.tooltip=Brake (Powered)
+susy.gui.stock_interactor.controller_setting.active_throttle.tooltip=Throttle (Powered)
+susy.gui.stock_interactor.controller_setting.inactive_brake.tooltip=Brake (Unpowered)
+susy.gui.stock_interactor.controller_setting.inactive_throttle.tooltip=Throttle (Unpowered)
 
 # Extra recipe info
 susy.recipe.dimensions=Dimensions: %s
