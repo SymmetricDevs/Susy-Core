@@ -14,7 +14,6 @@ import com.cleanroommc.modularui.widgets.ItemSlot;
 import com.cleanroommc.modularui.widgets.SlotGroupWidget;
 import com.cleanroommc.modularui.widgets.layout.Flow;
 import com.cleanroommc.modularui.widgets.slot.SlotGroup;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
@@ -27,12 +26,10 @@ import supersymmetry.common.mui.widget.HighlightedTextField;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-import java.util.stream.Collectors;
 
 public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<EntityRollingStock> {
 
@@ -99,21 +96,11 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
         }
     }
 
-    public List<EntityRollingStock> filterEntities(List<EntityRollingStock> entities) {
-        return entities.stream()
-                .filter(this::shouldIncludeEntity)
-                .collect(Collectors.toList());
-    }
-
-    private boolean shouldIncludeEntity(EntityRollingStock entity) {
-        return test(entity);
-    }
-
     @SuppressWarnings("deprecation")
     @NotNull
     public ModularPanel createPopupPanel(PanelSyncManager syncManager) { // TODO: loc
         return Mui2MetaTileEntity.createPopupPanel("simple_stock_filter", 86, 101).padding(4)
-                .child(IKey.str("Stock Filter").asWidget().pos(5, 5))
+                .child(IKey.lang("susy.gui.stock_interactor.title.stock_filter").asWidget().pos(5, 5))
                 .child(createWidgets(syncManager).top(22));
     }
 
@@ -144,11 +131,12 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
                                 .coverChildrenWidth().marginRight(2)
                                 .child(SusyGuiTextures.OREDICT_INFO.asWidget()
                                         .size(8).top(0)
-                                        .addTooltipLine(IKey.lang("stock_filter.info")))
+                                        .addTooltipLine(IKey.lang("susy.gui.stock_interactor.stock_filter.regex.tooltip.info")))
                                 .child(new Widget<>()
                                         .size(8).bottom(0)
                                         .onUpdateListener(this::getStatusIcon)
                                         .tooltipBuilder(this::createStatusTooltip)
+                                        .tooltipAutoUpdate(true)
                                         .tooltip(tooltip -> tooltip.setAutoUpdate(true))))
                         .child(new HighlightedTextField()
                                 .onUnfocus(this::refreshPattern)
@@ -158,27 +146,32 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
                                 .height(18).width(44)));
     }
 
+    // TODO: fix this up
     protected String highlightRule(String text) {
         StringBuilder builder = new StringBuilder(text);
         for (int i = 0; i < builder.length(); i++) {
             switch (builder.charAt(i)) {
-                case '|', '&', '^', '(', ')' -> {
-                    builder.insert(i, TextFormatting.GOLD);
+                case '|', '&', '.', '[', ']' -> {
+                    builder.insert(i, TextFormatting.GREEN);
                     i += 2;
                 }
                 case '*', '?' -> {
-                    builder.insert(i, TextFormatting.GREEN);
+                    builder.insert(i, TextFormatting.DARK_AQUA);
                     i += 2;
                 }
                 case '!' -> {
                     builder.insert(i, TextFormatting.RED);
                     i += 2;
                 }
-                case '\\' -> {
-                    builder.insert(i++, TextFormatting.YELLOW);
+                case '^', '$' -> {
+                    builder.insert(i++, TextFormatting.GOLD);
                     i += 2;
                 }
-                case '$' -> { // TODO: remove this switch case in 2.9
+                case '(', ')' -> {
+                    builder.insert(i, TextFormatting.LIGHT_PURPLE);
+                    i += 2;
+                }
+                case '\\' -> {
                     builder.insert(i, TextFormatting.DARK_GREEN);
                     for (; i < builder.length(); i++) {
                         switch (builder.charAt(i)) {
@@ -219,6 +212,7 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
             this.pattern = Pattern.compile(this.patternString);
         } catch (PatternSyntaxException e) {
             this.errored = true;
+            return;
         }
         this.errored = false;
     }
@@ -238,12 +232,13 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
     protected void createStatusTooltip(RichTooltip tooltip) {
 
         if (!this.patternString.isEmpty()) {
-            String text;
             if (errored) {
-                tooltip.add(I18n.format("stock_filter.status.err"));
+                tooltip.add(IKey.lang("susy.gui.stock_interactor.stock_filter.regex.tooltip.error"));
             } else {
-                tooltip.add(I18n.format("stock_filter.status.success"));
+                tooltip.add(IKey.lang("susy.gui.stock_interactor.stock_filter.regex.tooltip.success"));
             }
+        } else {
+            tooltip.add(IKey.lang("susy.gui.stock_interactor.stock_filter.regex.tooltip.waiting"));
         }
     }
 
@@ -257,7 +252,6 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
         public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
             validateSlotIndex(slot);
             if (!stack.isEmpty()) {
-//                if (StockHelperFunctions.getDefinitionNameFromStack(stack) == null) return;
                 stack.setCount(Math.min(stack.getCount(), 1)); // TODO: check this
             }
             this.stacks.set(slot, stack);

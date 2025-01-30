@@ -66,10 +66,13 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
         ModularPanel mainPanel = super.buildUI(guiData, syncManager);
         mainPanel.height(186);
         Flow flow = (Flow) mainPanel.getChildren().get(4);
-        flow.child(Flow.row().coverChildrenHeight()
-                .marginBottom(2).widthRel(1f)
+        flow.child(Flow.row()
+                .coverChildrenHeight()
+                .marginBottom(2)
+                .widthRel(1f)
                 .child(new ButtonWidget<>()
-                        .overlay(SusyGuiTextures.FILTER_SETTINGS_OVERLAY.asIcon().size(16))
+                        .overlay(SusyGuiTextures.BUTTON_SETTINGS.asIcon().size(16))
+                        .addTooltipLine(IKey.lang("susy.gui.stock_interactor.button.controller_setting.tooltip"))
                         .onMousePressed(mouseButton -> {
                             if (!panel.isPanelOpen()) {
                                 panel.openPanel();
@@ -79,7 +82,7 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
                             return true;
                         })
                 )
-                .child(IKey.lang("Controller Settings").asWidget()
+                .child(IKey.lang("susy.gui.stock_interactor.title.controller_setting").asWidget()
                         .align(Alignment.CenterRight).height(18))
         );
         return mainPanel;
@@ -95,10 +98,9 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
         DoubleSyncValue inactiveBrake = new DoubleSyncValue(() -> this.inactiveBrake, x -> this.inactiveBrake = (float) x);
         DoubleSyncValue inactiveThrottle = new DoubleSyncValue(() -> this.inactiveThrottle, x -> this.inactiveThrottle = (float) x);
 
-        return Mui2MetaTileEntity.createPopupPanel("controller_settings", 128, 150)
+        return Mui2MetaTileEntity.createPopupPanel("controller_settings", 81, 150)
                 .padding(4)
-                .coverChildrenWidth()
-                .child(IKey.str("Settings").asWidget()
+                .child(IKey.lang("susy.gui.stock_interactor.title.controller_setting").asWidget()
                         .pos(5, 5))
                 .child(Flow.row()
                         .top(18)
@@ -109,6 +111,7 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
                                         .value(controlActive)
                                         .invertSelected(true)
                                         .size(24, 8)
+                                        .addTooltipLine(IKey.lang("susy.gui.stock_interactor.controller_setting.button.control_active.tooltip"))
                                         .marginBottom(2))
                                 .child(Flow.row()
                                         .setEnabledIf(widget -> controlActive.getValue())
@@ -127,6 +130,7 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
                                         .value(controlInactive)
                                         .invertSelected(true)
                                         .size(24, 8)
+                                        .addTooltipLine(IKey.lang("susy.gui.stock_interactor.controller_setting.button.control_inactive.tooltip"))
                                         .marginBottom(2))
                                 .child(Flow.row()
                                         .setEnabledIf(widget -> controlInactive.getValue())
@@ -143,6 +147,7 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
                 .width(16)
                 .child(texture.asWidget()
                         .size(12, 12)
+                        .addTooltipLine(IKey.lang("susy.gui.stock_interactor.controller_setting." + name + ".tooltip"))
                         .marginBottom(2))
                 .child(new SliderWidget()
                         .background(GuiTextures.SLOT_FLUID)
