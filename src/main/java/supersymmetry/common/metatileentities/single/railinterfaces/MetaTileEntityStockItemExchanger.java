@@ -35,7 +35,7 @@ public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInterac
     protected <T> T getStockCapability(Capability<T> capability, EnumFacing side) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             IItemHandler itemHandler = null;
-            if (this.delegatingStock instanceof Freight itemStock) {
+            if (this.stock instanceof Freight itemStock) {
                 itemHandler = itemStock.cargoItems.internal;
             } // TODO: add more if-else arguments if there's more kinds of stocks. Or maybe a utility method
             if (itemHandler != null && itemHandler.getSlots() > 0) {
