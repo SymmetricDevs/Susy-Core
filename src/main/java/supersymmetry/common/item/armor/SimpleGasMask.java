@@ -3,10 +3,12 @@ package supersymmetry.common.item.armor;
 import gregtech.api.items.metaitem.stats.IItemDurabilityManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import supersymmetry.api.items.IBreathingArmorLogic;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 
@@ -79,5 +81,11 @@ public class SimpleGasMask implements IBreathingArmorLogic, IItemDurabilityManag
         NBTTagCompound compound = stack.getTagCompound();
         compound.setDouble("damage", getDamage(stack) + damageChange);
         stack.setTagCompound(compound);
+    }
+
+    @Override
+    public void damageArmor(EntityLivingBase entity, ItemStack itemStack, DamageSource source, int damage, EntityEquipmentSlot equipmentSlot) {
+        double amount = 1. / LIFETIME;
+        changeDamage(itemStack, amount * damage);
     }
 }

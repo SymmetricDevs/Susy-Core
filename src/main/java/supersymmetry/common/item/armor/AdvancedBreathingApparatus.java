@@ -196,6 +196,17 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IT
     }
 
     @Override
+    public void damageArmor(EntityLivingBase entity, ItemStack itemStack, DamageSource source, int damage, EntityEquipmentSlot equipmentSlot) {
+        double amount = (1. / (60. * 60. * hoursOfLife));
+        changeDamage(itemStack, amount * damage);
+    }
+
+    @Override
+    public boolean canBreakWithDamage(ItemStack stack) {
+        return getDamage(stack) >= 1;
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
     public List<ResourceLocation> getTextureLocations() {
         List<ResourceLocation> models = new ArrayList<>();
