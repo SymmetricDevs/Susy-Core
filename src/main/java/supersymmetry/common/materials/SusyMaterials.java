@@ -86,7 +86,7 @@ public class SusyMaterials {
 
 	    Materials.Strontium.setProperty(PropertyKey.DUST, new DustProperty());
 
-	    Materials.Zirconium.setProperty(PropertyKey.DUST, new DustProperty());
+	    //Materials.Zirconium.setProperty(PropertyKey.DUST, new DustProperty());
 
         Materials.Technetium.setProperty(PropertyKey.DUST, new DustProperty());
 
@@ -110,7 +110,7 @@ public class SusyMaterials {
 
         Materials.Ytterbium.setProperty(PropertyKey.DUST, new DustProperty());
 
-        Materials.Hafnium.setProperty(PropertyKey.DUST, new DustProperty());
+        //Materials.Hafnium.setProperty(PropertyKey.DUST, new DustProperty());
 
         Materials.Rhenium.setProperty(PropertyKey.DUST, new DustProperty());
 
@@ -122,7 +122,7 @@ public class SusyMaterials {
 
         Materials.RockSalt.setProperty(PropertyKey.FLUID, new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
 
-        Materials.Salt.setProperty(PropertyKey.FLUID, new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
+        //Materials.Salt.setProperty(PropertyKey.FLUID, new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
 
         Materials.SodiumHydroxide.setProperty(PropertyKey.FLUID, new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
 
