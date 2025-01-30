@@ -29,6 +29,8 @@ dependencies {
     implementation rfg.deobf('curse.maven:gregicality-multiblocks-564858:5508050')
     // AE2UEL 0.55.6 (transitive gt dep)
     compileOnly rfg.deobf("curse.maven:ae2-extended-life-570458:4402048")
+    // Supercritical 0.0.1
+    implementation rfg.deobf("curse.maven:supercritical-1185871:6118700")
 
     //GeckoLib
     implementation rfg.deobf('curse.maven:geckolib-388172:4020277')
