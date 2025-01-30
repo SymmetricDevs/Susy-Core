@@ -61,7 +61,7 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
     protected StockFilter stockFilter;
 
     @Nullable
-    protected EntityRollingStock delegatingStock;
+    protected EntityRollingStock stock;
 
     protected boolean workingEnabled = true;
     // Rendering
@@ -86,7 +86,7 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
 
         if(this.getOffsetTimer() % 20 == 0 && this.isWorkingEnabled()) {
             // Do the filtering later?
-            this.delegatingStock = StockHelperFunctions.getStockFrom(getWorld(), getInteractionBoundingBox(), stockFilter);
+            this.stock = StockHelperFunctions.getStockFrom(getWorld(), getInteractionBoundingBox(), stockFilter);
         }
     }
 
@@ -113,7 +113,7 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
         if (capability == GregtechTileCapabilities.CAPABILITY_CONTROLLABLE) {
             return GregtechTileCapabilities.CAPABILITY_CONTROLLABLE.cast(this);
         }
-        if (delegatingStock != null && !delegatingStock.isDead()) {
+        if (stock != null && !stock.isDead()) {
             T stockCapability = getStockCapability(capability, side);
             if (stockCapability != null) {
                 return stockCapability;

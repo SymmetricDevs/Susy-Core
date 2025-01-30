@@ -36,7 +36,7 @@ public class MetaTileEntityStockFluidExchanger extends MetaTileEntityStockIntera
     protected <T> T getStockCapability(Capability<T> capability, EnumFacing side) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
             IFluidHandler fluidHandler = null;
-            if (this.delegatingStock instanceof FreightTank tankStock) {
+            if (this.stock instanceof FreightTank tankStock) {
                 fluidHandler = tankStock.theTank.internal;
             } // TODO: add more if-else arguments if there's more kinds of stocks. Or maybe a utility method
             if (fluidHandler != null && fluidHandler.getTankProperties().length > 0) {
@@ -52,14 +52,4 @@ public class MetaTileEntityStockFluidExchanger extends MetaTileEntityStockIntera
         tooltip.add(I18n.format("susy.stock_interfaces.fluid_exchanger.description"));
         tooltip.add(I18n.format("susy.stock_interfaces.right_click_for_gui"));
     }
-
-    // TODO: is this really needed?
-//    @Override
-//    public boolean onRightClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing, CuboidRayTraceResult hitResult) {
-//        if (!playerIn.getHeldItem(hand).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
-//            return super.onRightClick(playerIn, hand, facing, hitResult);
-//        } else {
-//            return this.getWorld().isRemote || !playerIn.isSneaking() && FluidUtil.interactWithFluidHandler(playerIn, hand, this.fluidInventory);
-//        }
-//    }
 }
