@@ -125,15 +125,21 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
                                 .slot(SyncHandlers.phantomItemSlot(this.handler, index)
                                         .slotGroup(filterInventory)
                                         .filter(stack -> StockHelperFunctions.getDefinitionNameFromStack(stack) != null)))
-                        .build().marginRight(4))
-                .child(Flow.row().coverChildrenHeight().coverChildrenWidth()
-                        .child(Flow.column().height(18)
-                                .coverChildrenWidth().marginRight(2)
+                        .build()
+                        .marginRight(4))
+                .child(Flow.row()
+                        .coverChildren()
+                        .child(Flow.column()
+                                .height(18)
+                                .coverChildrenWidth()
+                                .marginRight(2)
                                 .child(SusyGuiTextures.OREDICT_INFO.asWidget()
-                                        .size(8).top(0)
+                                        .size(8)
+                                        .top(0)
                                         .addTooltipLine(IKey.lang("susy.gui.stock_interactor.stock_filter.regex.tooltip.info")))
                                 .child(new Widget<>()
-                                        .size(8).bottom(0)
+                                        .size(8)
+                                        .bottom(0)
                                         .onUpdateListener(this::getStatusIcon)
                                         .tooltipBuilder(this::createStatusTooltip)
                                         .tooltipAutoUpdate(true)
@@ -143,7 +149,7 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
                                 .setHighlightRule(this::highlightRule)
                                 .setTextColor(Color.WHITE.darker(1))
                                 .value(patternString).marginBottom(4)
-                                .height(18).width(44)));
+                                .size(44, 18)));
     }
 
     // TODO: fix this up
@@ -173,20 +179,7 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
                 }
                 case '\\' -> {
                     builder.insert(i, TextFormatting.DARK_GREEN);
-                    for (; i < builder.length(); i++) {
-                        switch (builder.charAt(i)) {
-                            case ' ', '\t', '\n', '\r' -> {
-                            }
-                            case '\\' -> {
-                                i++;
-                                continue;
-                            }
-                            default -> {
-                                continue;
-                            }
-                        }
-                        break;
-                    }
+                    i += 2;
                 }
                 default -> {
                     continue;

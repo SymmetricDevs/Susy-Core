@@ -79,12 +79,7 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
     @Override
     public void update() {
         super.update();
-
-        if (this.getWorld().isRemote)
-            return;
-
-        if(this.getOffsetTimer() % 20 == 0 && this.isWorkingEnabled()) {
-            // Do the filtering later?
+        if (!getWorld().isRemote && this.isWorkingEnabled() && this.getOffsetTimer() % 20 == 0) {
             this.stock = StockHelperFunctions.getStockFrom(getWorld(), getInteractionBoundingBox(), stockFilter);
         }
     }
@@ -138,29 +133,44 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
         BooleanSyncValue renderBoundingBoxValue = new BooleanSyncValue(() -> renderBoundingBox, val -> renderBoundingBox = val);
 
         return defaultPanel(this)
-                .child(IKey.lang(getMetaFullName()).asWidget().pos(5, 5))
-                .child(SlotGroupWidget.playerInventory().left(7).bottom(7))
-                .child(getLogo().asWidget().size(17).right(7).bottom(88))
+                .child(IKey.lang(getMetaFullName()).asWidget()
+                        .pos(5, 5))
+                .child(SlotGroupWidget.playerInventory()
+                        .left(7)
+                        .bottom(7))
+                .child(getLogo().asWidget()
+                        .size(17)
+                        .right(7)
+                        .bottom(88))
                 .child(new CycleButtonWidget()
-                        .left(7).bottom(90)
+                        .left(7)
+                        .bottom(90)
                         .background(GuiTextures.BUTTON_CLEAN)
                         .hoverBackground(GuiTextures.BUTTON_CLEAN)
                         .stateCount(2)
                         .stateOverlay(SusyGuiTextures.BUTTON_POWER)
                         .value(workingStateValue))
-                .child(Flow.column().top(18).margin(7, 0)
-                        .widthRel(1f).coverChildrenHeight()
-                        .child(Flow.row().coverChildrenHeight()
-                                .marginBottom(2).widthRel(1f)
+                .child(Flow.column()
+                        .top(18)
+                        .margin(7, 0)
+                        .widthRel(1f)
+                        .coverChildrenHeight()
+                        .child(Flow.row()
+                                .coverChildrenHeight()
+                                .marginBottom(2)
+                                .widthRel(1f)
                                 .child(new ToggleButton()
                                         .overlay(SusyGuiTextures.BUTTON_RENDER_AREA.asIcon().size(16))
                                         .addTooltipLine(IKey.lang("susy.gui.stock_interactor.button.render_bounding_box.tooltip"))
                                         .value(renderBoundingBoxValue))
                                 .child(IKey.lang("susy.gui.stock_interactor.title.render_bounding_box").asWidget()
-                                        .align(Alignment.CenterRight).height(18))
+                                        .align(Alignment.CenterRight)
+                                        .height(18))
                         )
-                        .child(Flow.row().coverChildrenHeight()
-                                .marginBottom(2).widthRel(1f)
+                        .child(Flow.row()
+                                .coverChildrenHeight()
+                                .marginBottom(2)
+                                .widthRel(1f)
                                 .child(new ButtonWidget<>()
                                         .overlay(SusyGuiTextures.BUTTON_STOCK_FILTER.asIcon().size(16))
                                         .addTooltipLine(IKey.lang("susy.gui.stock_interactor.button.stock_filter.tooltip"))

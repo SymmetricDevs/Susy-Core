@@ -176,7 +176,7 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
     @Override
     public void update() {
         super.update();
-        if (!this.getWorld().isRemote && getOffsetTimer() % 20 == 0) {
+        if (!this.getWorld().isRemote && this.isWorkingEnabled() && getOffsetTimer() % 20 == 0) {
             performControl();
         }
     }
