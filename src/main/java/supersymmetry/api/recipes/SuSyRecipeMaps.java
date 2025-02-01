@@ -338,6 +338,9 @@ public class SuSyRecipeMaps {
             .setSound(GTSoundEvents.TURBINE)
             .allowEmptyOutput();
 
+    public static final RecipeMap<SimpleRecipeBuilder> STRAND_CASTER = new RecipeMap<>("strand_caster", 6, 0, 6, 1, new SimpleRecipeBuilder(), false)
+            .setSound(GTSoundEvents.ARC);
+
     public static void init(){
         RecipeMaps.SIFTER_RECIPES.setMaxFluidInputs(1);
         RecipeMaps.SIFTER_RECIPES.setMaxFluidOutputs(1);
