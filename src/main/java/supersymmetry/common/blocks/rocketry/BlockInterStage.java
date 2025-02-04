@@ -1,13 +1,17 @@
 package supersymmetry.common.blocks.rocketry;
 
 import gregtech.api.block.IStateHarvestLevel;
+import gregtech.api.unification.OreDictUnifier;
+import gregtech.api.unification.material.Materials;
+import gregtech.api.unification.ore.OrePrefix;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.IStringSerializable;
+import supersymmetry.api.blocks.VariantDirectionalCoverableBlock;
 import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
-public class BlockInterStage extends VariantHorizontalRotatableBlock<BlockInterStage.InterStageType> {
+public class BlockInterStage extends VariantDirectionalCoverableBlock<BlockInterStage.InterStageType> {
     public BlockInterStage() {
         super(Material.IRON);
         setTranslationKey("rocket_interstage");
@@ -16,6 +20,7 @@ public class BlockInterStage extends VariantHorizontalRotatableBlock<BlockInterS
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench",2);
         setDefaultState(getState(InterStageType.AL_7075));
+        validCover = itemStack -> OreDictUnifier.get(OrePrefix.plate, Materials.Aluminium).isItemEqual(itemStack);
     }
 
     public enum InterStageType implements IStringSerializable, IStateHarvestLevel {

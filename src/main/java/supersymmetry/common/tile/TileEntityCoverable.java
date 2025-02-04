@@ -108,7 +108,13 @@ public class TileEntityCoverable extends TickableTileEntityBase {
                 setCovered(enumFacing, false);
             } else if (inp.isItemEqual(coverType)) {
                 ret = coverType.copy();
-                ret.setCount(inp.getCount()+1);
+                if (inp.getCount() == 64) {
+                    ItemStack dropped = coverType.copy();
+                    dropped.setCount(1);
+                    player.dropItem(dropped, false, true);
+                } else {
+                    ret.setCount(inp.getCount() + 1);
+                }
                 setCovered(enumFacing, false);
             } else {
                 ItemStack dropped = coverType.copy();
@@ -118,7 +124,7 @@ public class TileEntityCoverable extends TickableTileEntityBase {
                 coverType=inp.copy();
                 coverType.setCount(1);
                 setCovered(enumFacing, true);
-                ret.setCount(ret.getCount()-1);
+                ret.setCount(inp.getCount()-1);
             }
         } else {
             if (inp.isEmpty()) {

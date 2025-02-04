@@ -49,6 +49,10 @@ public class SuSyBlocks {
     public static BlockTurboPump TURBOPUMP;
     public static BlockRocketNozzle ROCKET_NOZZLE;
     public static BlockCombustionChamber COMBUSTION_CHAMBER;
+    public static BlockLifeSupport LIFE_SUPPORT;
+    public static BlockRoomPadding ROOM_PADDING;
+    public static BlockFairingConnector FAIRING_CONNECTOR;
+    public static BlockSpacecraftHull SPACECRAFT_HULL;
 
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
@@ -123,7 +127,7 @@ public class SuSyBlocks {
         TANK_SHELL.setRegistryName("rocket_tank_shell");
 
         INTERSTAGE = new BlockInterStage();
-        //INTERSTAGE.setRegistryName("rocket_interstage");
+        INTERSTAGE.setRegistryName("rocket_interstage");
 
         COMBUSTION_CHAMBER = new BlockCombustionChamber();
         COMBUSTION_CHAMBER.setRegistryName("rocket_combustion_chamber");
@@ -136,6 +140,18 @@ public class SuSyBlocks {
 
         ROCKET_ASSEMBLER_CASING = new BlockRocketAssemblerCasing();
         ROCKET_ASSEMBLER_CASING.setRegistryName("rocket_assembler_casing");
+
+        LIFE_SUPPORT = new BlockLifeSupport();
+        LIFE_SUPPORT.setRegistryName("life_support");
+
+        SPACECRAFT_HULL = new BlockSpacecraftHull();
+        SPACECRAFT_HULL.setRegistryName("spacecraft_hull");
+
+        FAIRING_CONNECTOR = new BlockFairingConnector();
+        FAIRING_CONNECTOR.setRegistryName("fairing_connector");
+
+        ROOM_PADDING = new BlockRoomPadding();
+        ROOM_PADDING.setRegistryName("room_padding");
 
     }
 
@@ -156,7 +172,7 @@ public class SuSyBlocks {
         registerItemModel(RESOURCE_BLOCK);
         registerItemModel(RESOURCE_BLOCK_1);
         registerItemModel(HOME);
-        //registerItemModel(INTERSTAGE);
+        registerItemModel(INTERSTAGE);
         registerItemModel(TANK_SHELL);
         registerItemModel(OUTER_HATCH);
         registerItemModel(FAIRING_HULL);
@@ -164,6 +180,10 @@ public class SuSyBlocks {
         registerItemModel(ROCKET_NOZZLE);
         registerItemModel(COMBUSTION_CHAMBER);
         registerItemModel(TURBOPUMP);
+        registerItemModel(ROOM_PADDING);
+        registerItemModel(FAIRING_CONNECTOR);
+        registerItemModel(LIFE_SUPPORT);
+        registerItemModel(SPACECRAFT_HULL);
         EVAPORATION_BED.onModelRegister();
         MULTIBLOCK_TANK.onModelRegister();
         ELECTRODE_ASSEMBLY.onModelRegister();

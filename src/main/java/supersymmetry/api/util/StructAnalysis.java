@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import gregtech.api.pattern.BlockWorldState;
 import gregtech.api.pattern.PatternMatchContext;
 import net.minecraft.block.Block;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -17,6 +18,9 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.*;
+
+import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
+
 
 public class StructAnalysis {
     public BuildStat status = BuildStat.SUCCESS;
@@ -37,7 +41,10 @@ public class StructAnalysis {
         C_CHAMBER_INSIDE("susy.msg.rocket_component.chamber_wrong_place"),
         INVALID_AIRLIKE("susy.msg.rocket_component.invalid_transparent"),
         EXTRANEOUS_BLOCKS("susy.msg.rocket_component.extraneous_blocks"),
-        UNCLEAN("susy.msg.rocket_component.cleanroom_not_clean"), NOT_LAVAL("susy.msg.rocket_component.nozzle_not_laval");
+        UNCLEAN("susy.msg.rocket_component.cleanroom_not_clean"), NOT_LAVAL("susy.msg.rocket_component.nozzle_not_laval"),
+        MISSING_TILE("susy.msg.rocket_component.tile_missing"),
+        INTERSTAGE_NOT_CYLINDRICAL("susy.msg.rocket_component.interstage_not_cylindrical"),
+        FAIRING_CONN_WEIRD("susy.msg.rocket_component.fairing_conn_weird"); // if the connectors do not form a loop
 
         String code;
         BuildStat(String code) {
@@ -109,6 +116,10 @@ public class StructAnalysis {
         return blocksCollected;
     }
 
+    /**
+     * Returns as a tuple:
+     * - The blocks comprising the exterior
+     * - The air within */
     public Tuple<Set<BlockPos>,Set<BlockPos>> checkHull(AxisAlignedBB aaBB, Set<BlockPos> actualBlocks, boolean testStrength) {
         AxisAlignedBB floodBB = aaBB.grow(1);// initializes flood fill box
         BlockPos bottom = new BlockPos(floodBB.minX, floodBB.minY, floodBB.minZ); // initializes flood fill start
@@ -238,6 +249,7 @@ public class StructAnalysis {
         return ret;
     }
 
+    // Obtains the bounding box of all blocks in the collection blocks
     public AxisAlignedBB getBB(Collection<BlockPos> blocks) {
         int minX=(int)3.0E7,minY=(int)3.0E7,minZ=(int)3.0E7,maxX = (int)-3.0E7,maxY=(int)-3.0E7,maxZ = (int)-3.0E7;
         for (BlockPos block: blocks) {
@@ -250,6 +262,35 @@ public class StructAnalysis {
         }
         return new AxisAlignedBB(minX,minY,minZ,maxX,maxY,maxZ);
     }
+
+    public double getApproximateRadius(Collection<BlockPos> blocks) {
+        double avgX = 0, avgZ = 0;
+
+        for (BlockPos block : blocks) {
+            avgX += block.getX();
+            avgZ += block.getZ();
+        }
+        avgX /= blocks.size();
+        avgZ /= blocks.size();
+
+        double radius = 0;
+
+        for (BlockPos block : blocks) {
+            radius += block.distanceSq(avgX,block.getY(),avgZ);
+        }
+
+        return radius / blocks.size();
+    }
+
+    // Used to analyze fairing connectors
+    public boolean isFacingOutwards(BlockPos bp) {
+        if (world.getBlockState(bp).getPropertyKeys().contains(FACING)) {
+            return false;
+        }
+        EnumFacing facing = world.getBlockState(bp).getValue(FACING);
+        return !world.isAirBlock(bp.add(facing.getOpposite().getDirectionVec())) && world.isAirBlock(bp.add(facing.getDirectionVec()));
+    }
+
     public Stream<BlockPos> getOfBlockType(Collection<BlockPos> bp, Block block) {
         return bp.stream()
                 .filter(p -> world.getBlockState(p).getBlock().equals(block));

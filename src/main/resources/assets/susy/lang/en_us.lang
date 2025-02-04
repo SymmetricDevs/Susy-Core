@@ -870,3 +870,5 @@ susy.msg.rocket_component.chamber_wrong_place=A combustion chamber is inside the
 susy.msg.rocket_component.invalid_transparent=A transparent block is in this component!
 susy.msg.rocket_component.chamber_extraneous_blocks=An unneeded block was found in the component!
 susy.msg.rocket_component.cleanroom_not_clean=The Cleanroom is not clean yet (or you haven't hooked up to one)!
+susy.msg.rocket_component.nozzle_not_laval=The rocket nozzle does not resemble a de Laval nozzle!
+susy.msg.rocket_component.tile_missing=There is a tile missing on the hull tank!
