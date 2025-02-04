@@ -89,7 +89,7 @@ public class CommonProxy {
         registry.register(SuSyBlocks.SERPENTINE);
         registry.register(SuSyBlocks.FAIRING_HULL);
         registry.register(SuSyBlocks.OUTER_HATCH);
-        //registry.register(SuSyBlocks.INTERSTAGE);
+        registry.register(SuSyBlocks.INTERSTAGE);
         registry.register(SuSyBlocks.ROCKET_CONTROL);
         registry.register(SuSyBlocks.TANK_SHELL);
         registry.register(SuSyBlocks.COMBUSTION_CHAMBER);
@@ -99,6 +99,9 @@ public class CommonProxy {
         registry.register(SuSyBlocks.CUSTOMSHEETS);
         registry.register(SuSyBlocks.CONVEYOR_BELT);
         registry.register(SuSyBlocks.ROCKET_ASSEMBLER_CASING);
+        registry.register(SuSyBlocks.ROOM_PADDING);
+        registry.register(SuSyBlocks.FAIRING_CONNECTOR);
+        registry.register(SuSyBlocks.LIFE_SUPPORT);
 
         SHEETED_FRAMES.values().stream().distinct().forEach(registry::register);
     }
@@ -131,7 +134,7 @@ public class CommonProxy {
         registry.register(createItemBlock(SuSyBlocks.SERPENTINE, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.FAIRING_HULL,VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.OUTER_HATCH,VariantItemBlock::new));
-        //registry.register(createItemBlock(SuSyBlocks.INTERSTAGE,VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.INTERSTAGE,VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.ROCKET_CONTROL,VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.TANK_SHELL,VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.COMBUSTION_CHAMBER, VariantItemBlock::new));
@@ -142,6 +145,10 @@ public class CommonProxy {
         registry.register(createItemBlock(SuSyBlocks.CUSTOMSHEETS, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.CONVEYOR_BELT, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.ROCKET_ASSEMBLER_CASING, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.SPACECRAFT_HULL, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.ROOM_PADDING, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.FAIRING_CONNECTOR, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.LIFE_SUPPORT, VariantItemBlock::new));
 
         SHEETED_FRAMES.values()
                 .stream().distinct()

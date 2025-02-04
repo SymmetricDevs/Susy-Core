@@ -14,6 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.client.renderer.handler.VariantCoverableBlockRenderer;
@@ -23,8 +24,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
-import static gregtech.common.items.tool.rotation.CustomBlockRotations.BLOCK_DIRECTIONAL_BEHAVIOR;
-import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
 
 public class VariantDirectionalCoverableBlock<T extends Enum<T> & IStringSerializable> extends VariantDirectionalRotatableBlock<T> implements ITileEntityProvider {
     public VariantDirectionalCoverableBlock(Material materialIn) {
@@ -46,47 +45,6 @@ public class VariantDirectionalCoverableBlock<T extends Enum<T> & IStringSeriali
         return new BlockStateContainer(this, VARIANT, FACING);
     }
 
-//    @Nonnull
-//    @Override
-//    @SuppressWarnings("deprecation")
-//    public IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull EnumFacing facing, float hitX, float hitY, float hitZ, int meta, @NotNull EntityLivingBase placer) {
-//        return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING, EnumFacing.getDirectionFromEntityLiving(pos, placer));
-//    }
-//
-//    @Override
-//    public ItemStack getItemVariant(T variant, int amount) {
-//        return new ItemStack(this, amount, variant.ordinal() * 6);
-//    }
-//
-//    @Override
-//    public int damageDropped(@NotNull IBlockState state) {
-//        return state.getValue(VARIANT).ordinal() * 6;
-//    }
-//
-//    @Nonnull
-//    @Override
-//    public IBlockState getStateFromMeta(int meta) {
-//        int i = meta / 6;
-//        // Makes meta = 0 -> EAST(ord = 5)
-//        int j = (meta + 5) % 6;
-//
-//        EnumFacing enumfacing = EnumFacing.byIndex(j);
-//        return getDefaultState()
-//                .withProperty(FACING, enumfacing)
-//                .withProperty(VARIANT, VALUES[i % VALUES.length]);
-//    }
-//
-//    @Override
-//    public int getMetaFromState(IBlockState state) {
-//        return state.getValue(VARIANT).ordinal() * 6 + (state.getValue(FACING).getIndex() + 1) % 6;
-//    }
-//
-//    @Nonnull
-//    @Override
-//    public ItemStack getPickBlock(IBlockState state, @NotNull RayTraceResult target, @NotNull World world, @NotNull BlockPos pos, @NotNull EntityPlayer player) {
-//        return getItemVariant(state.getValue(VARIANT), 1);
-//    }
-
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         super.breakBlock(worldIn, pos, state);
@@ -104,6 +62,12 @@ public class VariantDirectionalCoverableBlock<T extends Enum<T> & IStringSeriali
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face)
+    {
+        return TileEntityCoverable.RENDER_SWITCH || !((TileEntityCoverable)world.getTileEntity(pos)).isCovered(face);
     }
 
     @Override
