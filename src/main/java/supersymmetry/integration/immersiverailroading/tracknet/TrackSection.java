@@ -2,40 +2,39 @@ package supersymmetry.integration.immersiverailroading.tracknet;
 
 import cam72cam.immersiverailroading.tile.TileRail;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import supersymmetry.integration.immersiverailroading.util.TrackUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TrackSection /* extends INBTSerializable<NBTTagCompound>*/ {
 
-    // This is arbitrary, since tracks don't have a preferred direction
-    private TrackSectionBorder border_front;
-    private TrackSectionBorder border_back;
     private TrackDirection direction;
 
-    public List<TrackSection> getNeighboursInLeaveDirection(Vec3d enterPos) {
-        return null;
+    // Based on the direction of the first segment that was placed in a section, pretty much arbitrary
+    private List<TrackSection> frontNeighbours;
+    private List<TrackSection> backNeighbours;
+
+    public Vec3i frontPos;
+    public Vec3i backPos;
+
+    public List<TrackSection> getNeighbours(TrackDirection leaveDirection) {
+        switch (leaveDirection) {
+            case FORWARD:
+                return this.frontNeighbours;
+            case BACKWARD:
+                return this.backNeighbours;
+        }
+        return new ArrayList<>();
     }
 
     public TrackSection(TileRail rail) {
-        this.border_front = new TrackSectionBorder(TrackUtil.getRailEnd(rail, false).internal());
-        this.border_back = new TrackSectionBorder(TrackUtil.getRailEnd(rail, true).internal());
+
     }
 
-    public void addRail(TileRail rail, boolean back) {
-        cam72cam.mod.math.Vec3d mergePos = TrackUtil.getRailEnd(rail, back);
-        cam72cam.mod.math.Vec3d newBorderPos = TrackUtil.getRailEnd(rail, !back);
-
-        if (border_back.closer(border_front, mergePos.internal())) {
-            border_back.move(newBorderPos.internal());
-        } else {
-            border_front.move(newBorderPos.internal());
-        }
-    }
-
-
-    public static TrackSection merge(TrackSection frontSection, TrackSection backSection, TileRail mergeRail) {
-        Vec3d frontMergePos = TrackUtil.getRailEnd(mergeRail, false).internal();
+    public void merge(TrackSection other, TileRail rail) {
+        Vec3d frontMergePos = TrackUtil.getRailEnd(rail, false).internal();
         TrackSectionBorder newBorderFront;
         if(frontSection.border_front.closer(frontSection.border_back, frontMergePos)) {
             newBorderFront = frontSection.border_back;
@@ -43,7 +42,7 @@ public class TrackSection /* extends INBTSerializable<NBTTagCompound>*/ {
             newBorderFront = frontSection.border_front;
         }
 
-        Vec3d backMergePos = TrackUtil.getRailEnd(mergeRail, true).internal();
+        Vec3d backMergePos = TrackUtil.getRailEnd(rail, true).internal();
         TrackSectionBorder newBorderBack;
         if(backSection.border_front.closer(backSection.border_back, backMergePos)) {
             newBorderBack = backSection.border_back;
@@ -55,11 +54,11 @@ public class TrackSection /* extends INBTSerializable<NBTTagCompound>*/ {
         frontSection.border_back = newBorderBack;
 
         return frontSection;
-    }
 
+        }
 
     private enum TrackDirection {
-        // border_front -> border_back
+        // border_back -> border_front
         FORWARD,
         BACKWARD,
         BOTH

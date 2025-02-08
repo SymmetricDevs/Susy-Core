@@ -1,5 +1,6 @@
 package supersymmetry.integration.immersiverailroading.tracknet;
 
+import cam72cam.immersiverailroading.library.TrackItems;
 import cam72cam.immersiverailroading.tile.TileRail;
 import cam72cam.immersiverailroading.tile.TileRailBase;
 import cam72cam.mod.math.Vec3i;
@@ -49,9 +50,14 @@ public class WorldTrackNet extends WorldSavedData {
 
     public void handleNewTrack(TileRail rail) {
 
-        // Cursed solution - since the straight path gets generated before the turn, we let the turn handle both of them so that we can correctly split this into separate track segments
+        // Is a switch
         if (rail.findSwitchParent() != null) {
+            // When a switch is built,
+            if (rail.info.settings.type.equals(TrackItems.TURN)) {
+                return;
+            }
 
+            return;
         }
 
         TileRailBase frontRail = TrackUtil.nextRail(rail, false);
@@ -68,18 +74,15 @@ public class WorldTrackNet extends WorldSavedData {
 
         if (frontRail != null) {
             frontSection = trackSectionByRailPos.get(frontRail.getPos());
-            frontSection.addRail(rail, false);
         }
 
         if (backRail != null) {
             TrackSection backSection = trackSectionByRailPos.get(backRail.getPos());
             if (frontSection != null) {
-                TrackSection newTrackSection = TrackSection.merge(frontSection, backSection, rail);
-                trackSectionByRailPos.put(rail.getPos(), newTrackSection);
-                replaceSection(frontSection, newTrackSection);
-                replaceSection(backSection, newTrackSection);
+                frontSection.merge(backSection, rail);
+                trackSectionByRailPos.put(rail.getPos(), frontSection);
+                replaceSection(backSection, frontSection);
             } else {
-                backSection.addRail(rail, true);
                 trackSectionByRailPos.put(rail.getPos(), backSection);
             }
         } else {
@@ -93,7 +96,7 @@ public class WorldTrackNet extends WorldSavedData {
     }
 
     public void replaceSection(TrackSection oldSection, TrackSection newSection) {
-        trackSectionByRailPos.replaceAll((pos, section) -> section == oldSection ? newSection : oldSection);
+        trackSectionByRailPos.replaceAll((pos, section) -> section == oldSection ? newSection : section);
     }
 
     public static WorldTrackNet getWorldTrackNet(World world) {
