@@ -2,14 +2,14 @@ package supersymmetry.api.metatileentity;
 
 import codechicken.lib.raytracer.CuboidRayTraceResult;
 import com.cleanroommc.modularui.api.IGuiHolder;
-import com.cleanroommc.modularui.api.widget.Interactable;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.cleanroommc.modularui.factory.PosGuiData;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.utils.Alignment;
-import com.cleanroommc.modularui.value.sync.GuiSyncManager;
+import com.cleanroommc.modularui.value.sync.PanelSyncManager;
 import com.cleanroommc.modularui.widgets.ButtonWidget;
 import gregtech.api.GTValues;
+import gregtech.api.gui.ModularUI;
 import gregtech.api.metatileentity.MetaTileEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
@@ -53,12 +53,21 @@ public abstract class Mui2MetaTileEntity extends MetaTileEntity implements IGuiH
         return new PopupPanel(name, width, height, disableBelow, closeOnOutsideClick);
     }
 
-    public abstract ModularPanel buildUI(PosGuiData guiData, GuiSyncManager guiSyncManager);
+    protected ModularUI createUI(EntityPlayer player) {
+        return null;
+    }
+
+    @Override
+    public abstract ModularPanel buildUI(PosGuiData guiData, PanelSyncManager syncManager);
+
+    public boolean useMui() {
+        return true;
+    }
 
     @Override
     public boolean onRightClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing,
                                 CuboidRayTraceResult hitResult) {
-        if (!playerIn.isSneaking() && openGUIOnRightClick()) {
+        if (useMui() && !playerIn.isSneaking() && openGUIOnRightClick()) {
             if (getWorld() != null && !getWorld().isRemote) {
                 MetaTileEntityGuiFactory.open(playerIn, this);
             }
@@ -82,7 +91,6 @@ public abstract class Mui2MetaTileEntity extends MetaTileEntity implements IGuiH
                     .onMousePressed(mouseButton -> {
                         if (mouseButton == 0 || mouseButton == 1) {
                             this.closeIfOpen(true);
-                            Interactable.playButtonClickSound();
                             return true;
                         }
                         return false;
