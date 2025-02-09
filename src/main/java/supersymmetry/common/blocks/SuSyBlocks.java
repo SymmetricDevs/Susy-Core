@@ -43,6 +43,8 @@ public class SuSyBlocks {
     public static BlocksHardened HARDBLOCKS;
     public static BlocksCustomSheets CUSTOMSHEETS;
     public static BlockMetallurgy METALLURGY;
+    public static BlockMetallurgy2 METALLURGY_2;
+    public static BlockMetallurgyRoll METALLURGY_ROLL;
 
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
@@ -112,6 +114,12 @@ public class SuSyBlocks {
 
         METALLURGY = new BlockMetallurgy();
         METALLURGY.setRegistryName("metallurgy");
+
+        METALLURGY_2 = new BlockMetallurgy2();
+        METALLURGY_2.setRegistryName("metallurgy_2");
+
+        METALLURGY_ROLL = new BlockMetallurgyRoll();
+        METALLURGY_ROLL.setRegistryName("metallurgy_roll");
     }
 
     @SideOnly(Side.CLIENT)
@@ -139,6 +147,8 @@ public class SuSyBlocks {
         registerItemModel(HARDBLOCKS);
         registerItemModel(CUSTOMSHEETS);
         registerItemModel(METALLURGY);
+        registerItemModel(METALLURGY_2);
+        registerItemModel(METALLURGY_ROLL);
     }
 
     @SideOnly(Side.CLIENT)

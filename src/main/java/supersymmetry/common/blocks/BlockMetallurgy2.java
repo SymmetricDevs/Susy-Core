@@ -4,25 +4,24 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.IStringSerializable;
 import supersymmetry.api.blocks.VariantDirectionalRotatableBlock;
-import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
-public class BlockMetallurgy extends VariantDirectionalRotatableBlock<BlockMetallurgy.BlockMetallurgyType> {
-    public BlockMetallurgy() {
+public class BlockMetallurgy2 extends VariantDirectionalRotatableBlock<BlockMetallurgy2.BlockMetallurgy2Type> {
+    public BlockMetallurgy2() {
         super(Material.IRON);
-        setTranslationKey("metallurgy");
+        setTranslationKey("metallurgy_2");
         setHardness(5.0f);
         setResistance(10.0f);
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 2);
-        setDefaultState(getState(BlockMetallurgyType.ROLL_MOTOR));
+        setDefaultState(getState(BlockMetallurgy2Type.STEEL_GAS_JET));
     }
 
-    public enum BlockMetallurgyType implements IStringSerializable {
-        ROLL_MOTOR("roll_motor"),
-        HYDRAULIC_PRESS("hydraulic_press");
+    public enum BlockMetallurgy2Type implements IStringSerializable {
+        HYDRAULIC_PLUNGER("hydraulic_plunger"),
+        STEEL_GAS_JET("steel_gas_jet");
         private String name;
 
-        BlockMetallurgyType(String name) {
+        BlockMetallurgy2Type(String name) {
             this.name = name;
         }
 

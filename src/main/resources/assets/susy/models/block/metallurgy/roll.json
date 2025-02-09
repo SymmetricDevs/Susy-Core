@@ -1,9 +1,7 @@
 {
-  "parent": "block/orientable",
+  "parent": "block/cube_column",
   "textures": {
-    "top": "gregtech:blocks/casings/metallurgy/roll/top",
-    "front": "gregtech:blocks/casings/metallurgy/roll/side",
-    "side": "gregtech:blocks/casings/metallurgy/roll/side",
-    "south": "gregtech:blocks/casings/metallurgy/roll/side"
+    "end": "gregtech:blocks/casings/metallurgy/roll/top",
+    "side": "gregtech:blocks/casings/metallurgy/roll/side"
   }
 }
