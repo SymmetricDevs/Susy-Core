@@ -623,6 +623,7 @@ gregtech.machine.phase_separator.name=Фазовый сепаратор
 # RTG
 gregtech.machine.rtg.lv.name=Basic RTG
 
+
 # Electrostatic Separator
 gregtech.machine.electrostatic_separator.lv.name=Обычный электростатический сепаратор
 gregtech.machine.electrostatic_separator.mv.name=Улучшеный электростатический сепаратор
