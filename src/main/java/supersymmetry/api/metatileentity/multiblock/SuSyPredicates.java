@@ -6,9 +6,12 @@ import gregtech.api.block.IHeatingCoilBlockStats;
 import gregtech.api.pattern.PatternStringError;
 import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.util.BlockInfo;
+import gregtech.common.blocks.BlockColored;
+import gregtech.common.blocks.MetaBlocks;
 import gregtech.api.util.RelativeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraftforge.fml.common.Loader;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
@@ -126,6 +129,46 @@ public class SuSyPredicates {
             new BlockInfo[]{new BlockInfo(SuSyBlocks.EVAPORATION_BED.getDefaultState())})
             .addTooltips("susy.multiblock.pattern.error.coils_or_bed");
 
+    /**
+     * A predicate for allowing using only the same type of metal sheet blocks in a structure
+     * This includes predicate for both small & large metal sheets
+     * but only supplies {@link BlockInfo[]} for small ones
+     *
+     * @see #LARGE_METAL_SHEETS
+     */
+    private static final Supplier<TraceabilityPredicate> METAL_SHEETS = () -> new TraceabilityPredicate(blockWorldState -> {
+        IBlockState state = blockWorldState.getBlockState();
+        if (state.getBlock() instanceof BlockColored colored) {
+            IBlockState defaultState = colored.getDefaultState();
+            int colorValue = colored.getState(state).getMetadata();
+            int typeValue = defaultState == MetaBlocks.METAL_SHEET.getDefaultState() ? 0 :
+                    defaultState == MetaBlocks.LARGE_METAL_SHEET.getDefaultState() ? 1 : -1;
+            if (typeValue >= 0) {
+                byte value = (byte) (typeValue << 4 | colorValue);
+                Object currentCoil = blockWorldState.getMatchContext().getOrPut("MetalSheet", value);
+                if (!currentCoil.equals(value)) {
+                    blockWorldState.setError(new PatternStringError("gregtech.multiblock.pattern.error.metal_sheets"));
+                    return false;
+                }
+                return true;
+            }
+        }
+        return false;
+    }, () -> Arrays.stream(EnumDyeColor.values())
+            .map(type -> new BlockInfo(MetaBlocks.METAL_SHEET.getState(type)))
+            .toArray(BlockInfo[]::new)
+    );
+
+    /**
+     * This only supplies {@link BlockInfo[]} for large metal sheet blocks.
+     *
+     * @see #METAL_SHEETS
+     */
+    private static final Supplier<TraceabilityPredicate> LARGE_METAL_SHEETS = () -> new TraceabilityPredicate(blockWorldState -> false, () -> Arrays.stream(EnumDyeColor.values())
+            .map(type -> new BlockInfo(MetaBlocks.LARGE_METAL_SHEET.getState(type)))
+            .toArray(BlockInfo[]::new)
+    );
+
     @NotNull
     public static TraceabilityPredicate coolingCoils() {
         return COOLING_COILS.get();
@@ -149,5 +192,10 @@ public class SuSyPredicates {
     @NotNull
     public static TraceabilityPredicate coilsOrBeds() {
         return COILS_OR_BED.get().or(EVAP_BED.get());
+    }
+
+    @NotNull
+    public static TraceabilityPredicate metalSheets() {
+        return METAL_SHEETS.get().or(LARGE_METAL_SHEETS.get());
     }
 }
