@@ -3,6 +3,7 @@ package supersymmetry.client.renderer.textures;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.renderer.texture.cube.*;
 import gregtech.client.renderer.texture.custom.DrumRenderer;
+import net.minecraft.item.EnumDyeColor;
 import supersymmetry.client.renderer.textures.custom.ExtenderRender;
 
 public class SusyTextures {
@@ -127,4 +128,13 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer STOCK_CONTROLLER = new OrientedOverlayRenderer("rail_interfaces/stock_controller");
 
 
+
+    public static final SimpleCubeRenderer[] METAL_SHEETS = new SimpleCubeRenderer[32];
+
+    static {
+        for (EnumDyeColor color : EnumDyeColor.values()) {
+            METAL_SHEETS[color.getMetadata()] = new SimpleCubeRenderer("gregtech:blocks/decoration/metalsheet_" + color.getName());
+            METAL_SHEETS[color.getMetadata() + 16] = new SimpleCubeRenderer("gregtech:blocks/decoration/large_metalsheet_" + color.getName());
+        }
+    }
 }
