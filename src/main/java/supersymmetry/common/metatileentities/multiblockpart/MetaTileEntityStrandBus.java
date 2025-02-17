@@ -1,11 +1,16 @@
 package supersymmetry.common.metatileentities.multiblockpart;
 
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Matrix4;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockAbilityPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.util.GTTransferUtils;
+import gregtech.client.renderer.texture.Textures;
+import gregtech.client.renderer.texture.cube.SimpleOverlayRenderer;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -17,6 +22,7 @@ import supersymmetry.api.capability.IStrandProvider;
 import supersymmetry.api.capability.Strand;
 import supersymmetry.api.capability.SuSyCapabilities;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
+import supersymmetry.client.renderer.textures.SusyTextures;
 
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -34,6 +40,8 @@ public class MetaTileEntityStrandBus extends MetaTileEntityMultiblockPart implem
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
         return new MetaTileEntityStrandBus(metaTileEntityId, isExport);
     }
+
+
 
     @Override
     protected ModularUI createUI(EntityPlayer entityPlayer) {
@@ -124,4 +132,15 @@ public class MetaTileEntityStrandBus extends MetaTileEntityMultiblockPart implem
     public void registerAbilities(List<IStrandProvider> abilityList) {
         abilityList.add(this);
     }
+
+    public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
+        super.renderMetaTileEntity(renderState, translation, pipeline);
+        if (this.shouldRenderOverlay()) {
+            SimpleOverlayRenderer renderer = this.isExport ? Textures.PIPE_OUT_OVERLAY : Textures.PIPE_IN_OVERLAY;
+            renderer.renderSided(this.getFrontFacing(), renderState, translation, pipeline);
+            SusyTextures.STRAND_BUS_OVERLAY.renderSided(this.getFrontFacing(), renderState, translation, pipeline);
+        }
+
+    }
+
 }

@@ -15,13 +15,13 @@ public class MetaTileEntityFlyingShear extends MetaTileEntityStrandShaper {
     }
 
     @Override
-    protected long getVoltage() {
+    public long getVoltage() {
         return 64;
     }
 
     @Override
-    protected void consumeInputsAndSetupRecipe() {
-
+    protected boolean consumeInputsAndSetupRecipe() {
+        return false;
     }
 
     @Override

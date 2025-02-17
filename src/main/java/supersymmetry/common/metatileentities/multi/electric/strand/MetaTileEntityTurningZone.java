@@ -34,16 +34,18 @@ public class MetaTileEntityTurningZone extends MetaTileEntityStrandShaper {
     }
 
     @Override
-    protected long getVoltage() {
+    public long getVoltage() {
         return energyContainer.getInputVoltage();
     }
 
     @Override
-    protected void consumeInputsAndSetupRecipe() {
+    protected boolean consumeInputsAndSetupRecipe() {
+        if (output.getStrand() != null) return false;
         FluidStack stack = getFirstMaterialFluid().copy();
         stack.amount = 2304;
         this.inputFluidInventory.drain(stack, true);
         this.maxProgress = 20;
+        return true;
     }
 
     @Override
@@ -145,7 +147,7 @@ public class MetaTileEntityTurningZone extends MetaTileEntityStrandShaper {
                 .where('F', states(SuSyMetaBlocks.SHEETED_FRAMES.get(Materials.Steel).getBlock(Materials.Steel)
                         .withProperty(BlockSheetedFrame.SHEETED_FRAME_AXIS, BlockSheetedFrame.FrameEnumAxis
                                 .fromFacingAxis(getRelativeFacing(RelativeDirection.UP).getAxis())))
-                        .or(abilities(MultiblockAbility.MAINTENANCE_HATCH, MultiblockAbility.INPUT_ENERGY)))
+                        .or(abilities(MultiblockAbility.MAINTENANCE_HATCH, MultiblockAbility.INPUT_ENERGY).setMaxGlobalLimited(3)))
                 .where(' ', any())
                 .build();
     }
@@ -163,6 +165,7 @@ public class MetaTileEntityTurningZone extends MetaTileEntityStrandShaper {
     protected EnumFacing getRelativeFacing(RelativeDirection dir) {
         return dir.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), isFlipped());
     }
+
 
     @Override
     public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {

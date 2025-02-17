@@ -7,24 +7,30 @@ import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
 import gregtech.api.capability.IEnergyContainer;
 import gregtech.api.capability.IMultipleTankHandler;
+import gregtech.api.capability.IWorkable;
 import gregtech.api.capability.impl.EnergyContainerList;
 import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.capability.impl.ItemHandlerList;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
+import gregtech.api.metatileentity.multiblock.MultiblockDisplayText;
 import gregtech.api.metatileentity.multiblock.MultiblockWithDisplayBase;
 import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.unification.FluidUnifier;
 import gregtech.api.unification.material.Material;
+import gregtech.api.util.GTUtility;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import supersymmetry.api.capability.IStrandProvider;
 import supersymmetry.api.capability.Strand;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
 
-public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBase {
+import java.util.List;
+
+public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBase implements IWorkable {
 
     protected Strand strand;
     protected IStrandProvider input;
@@ -67,8 +73,10 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
         }
         // Check if there is a resulting strand
         // Consume input strand if it exists
-        if (!isActive && resultingStrand() != null && !getWorld().isRemote) {
-            consumeInputsAndSetupRecipe();
+        if (!getWorld().isRemote && !isActive && resultingStrand() != null ) {
+            if (!consumeInputsAndSetupRecipe()) {
+                return;
+            }
             strand = resultingStrand();
             isActive = true;
             this.markDirty();
@@ -93,9 +101,9 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
         return null;
     }
 
-    protected abstract long getVoltage();
+    public abstract long getVoltage();
 
-    protected abstract void consumeInputsAndSetupRecipe();
+    protected abstract boolean consumeInputsAndSetupRecipe();
 
     protected abstract Strand resultingStrand();
 
@@ -163,5 +171,39 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
     @Override
     public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
         super.renderMetaTileEntity(renderState, translation, pipeline);
+    }
+
+    @Override
+    protected void addDisplayText(List<ITextComponent> textList) {
+        super.addDisplayText(textList);
+        MultiblockDisplayText.builder(textList, this.isStructureFormed()).setWorkingStatus(true, isActive).addEnergyUsageLine(this.energyContainer).addEnergyTierLine(GTUtility.getTierByVoltage(this.energyContainer.getInputVoltage())).addWorkingStatusLine().addProgressLine(this.getProgressPercent());
+
+    }
+
+    private double getProgressPercent() {
+        return progress / (double) maxProgress;
+    }
+
+    public int getProgress() {
+        return this.progress;
+    }
+
+    public int getMaxProgress() {
+        return this.maxProgress;
+    }
+
+    @Override
+    public boolean isActive() {
+        return isActive;
+    }
+
+    @Override
+    public boolean isWorkingEnabled() {
+        return true;
+    }
+
+    @Override
+    public void setWorkingEnabled(boolean b) {
+        // They cannot stop it.
     }
 }
