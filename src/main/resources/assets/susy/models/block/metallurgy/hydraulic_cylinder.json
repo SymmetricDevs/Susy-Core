@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "gregtech:blocks/casings/metallurgy/hydraulic_cylinder/top",
+    "down": "gregtech:blocks/casings/metallurgy/hydraulic_cylinder/bottom",
+    "up": "gregtech:blocks/casings/metallurgy/hydraulic_cylinder/top",
+    "north": "gregtech:blocks/casings/metallurgy/hydraulic_cylinder/side",
+    "east": "gregtech:blocks/casings/metallurgy/hydraulic_cylinder/side",
+    "south": "gregtech:blocks/casings/metallurgy/hydraulic_cylinder/side",
+    "west": "gregtech:blocks/casings/metallurgy/hydraulic_cylinder/side"
+  }
+}

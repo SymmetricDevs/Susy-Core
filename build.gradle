@@ -353,6 +353,7 @@ minecraft {
 
     // JVM arguments
     extraRunJvmArguments.add("-ea:${modGroup}")
+    extraRunJvmArguments.add("-Dforge.verboseMissingModelLoggingCount=1000")
     if (usesMixins.toBoolean()) {
         extraRunJvmArguments.addAll([
             '-Dmixin.hotSwap=true',

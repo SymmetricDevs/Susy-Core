@@ -16,13 +16,13 @@ import gregtech.api.unification.material.properties.PropertyKey;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
+import gregtech.common.blocks.BlockTurbineCasing;
+import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.blocks.VariantAxialRotatableBlock;
-import supersymmetry.api.blocks.VariantDirectionalRotatableBlock;
 import supersymmetry.api.capability.Strand;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
 import supersymmetry.client.renderer.textures.SusyTextures;
@@ -63,10 +63,10 @@ public class MetaTileEntityTurningZone extends MetaTileEntityStrandShaper {
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start(RelativeDirection.RIGHT, RelativeDirection.FRONT, RelativeDirection.UP)
-                .aisle("ABBBC",
-                        "ABBBC",
-                        "ABBBC",
-                        "ABBBC",
+                .aisle("ABBBA",
+                        "ABBBA",
+                        "ABBBA",
+                        "ABBBA",
                         "     ",
                         "     ",
                         "     ",
@@ -76,74 +76,69 @@ public class MetaTileEntityTurningZone extends MetaTileEntityStrandShaper {
                         "     ",
                         "     ",
                         "     ",
-                        "ABBBC",
-                        "ABBBC",
+                        "ABBBA",
+                        "ABBBA",
                         "     ",
                         "     ",
                         "F S F")
-                .aisle("ABBBC",
-                        "ABBBC",
-                        "ABBBC",
+                .aisle("ABBBA",
+                        "ABBBA",
+                        "ABBBA",
                         "     ",
                         "     ",
                         "     ",
-                        "ABBBC",
+                        "ABBBA",
                         "     ",
                         "F F F")
                 .aisle("     ",
                         "     ",
                         "     ",
-                        "ABBBC",
-                        "ABBBC",
+                        "ABBBA",
+                        "ABBBA",
                         "     ",
                         "     ",
-                        "ABBBC",
-                        "F F F")
-                .aisle("     ",
-                        "     ",
-                        "     ",
-                        "     ",
-                        "     ",
-                        "ABBBC",
-                        "     ",
-                        "ABBBC",
+                        "ABBBA",
                         "F F F")
                 .aisle("     ",
                         "     ",
                         "     ",
                         "     ",
                         "     ",
-                        "ABBBC",
+                        "ABBBA",
+                        "     ",
+                        "ABBBA",
+                        "F F F")
+                .aisle("     ",
                         "     ",
                         "     ",
-                        "ABBBC")
+                        "     ",
+                        "     ",
+                        "ABBBA",
+                        "     ",
+                        "     ",
+                        "ABBBA")
                 .aisle("     ",
                         "     ",
                         "     ",
                         "     ",
                         "     ",
                         "     ",
-                        "ABBBC",
+                        "ABBBA",
                         "     ",
-                        "ABBBC")
+                        "ABBBA")
                 .aisle("     ",
                         "     ",
                         "     ",
                         "     ",
                         "     ",
                         "     ",
-                        "ABBBC",
+                        "ABBBA",
                         "  I  ",
-                        "ABBBC")
+                        "ABBBA")
                 .where('B', states(SuSyBlocks.METALLURGY_ROLL.getState(BlockMetallurgyRoll.BlockMetallurgyRollType.ROLL)
                         .withProperty(VariantAxialRotatableBlock.AXIS,
                                 getRelativeFacing(RelativeDirection.RIGHT).getAxis())))
-                .where('A', states(SuSyBlocks.METALLURGY.getState(BlockMetallurgy.BlockMetallurgyType.ROLL_MOTOR)
-                        .withProperty(VariantDirectionalRotatableBlock.FACING,
-                                getRelativeFacing(RelativeDirection.LEFT))))
-                .where('C', states(SuSyBlocks.METALLURGY.getState(BlockMetallurgy.BlockMetallurgyType.ROLL_MOTOR)
-                        .withProperty(VariantDirectionalRotatableBlock.FACING,
-                                RelativeDirection.LEFT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), isFlipped()))))
+                .where('A', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('I', abilities(MultiblockAbility.IMPORT_FLUIDS))
                 .where('O', abilities(SuSyMultiblockAbilities.STRAND_EXPORT))
                 .where('S', selfPredicate())

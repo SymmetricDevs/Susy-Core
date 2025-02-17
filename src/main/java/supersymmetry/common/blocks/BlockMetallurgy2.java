@@ -17,7 +17,6 @@ public class BlockMetallurgy2 extends VariantDirectionalRotatableBlock<BlockMeta
     }
 
     public enum BlockMetallurgy2Type implements IStringSerializable {
-        HYDRAULIC_PLUNGER("hydraulic_plunger"),
         STEEL_GAS_JET("steel_gas_jet");
         private String name;
 

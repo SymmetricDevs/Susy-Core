@@ -1,18 +1,11 @@
 {
   "forge_marker" : 1,
   "variants" : {
-    "facing=north,variant=roll_motor": { "model": "susy:casings/metallurgy/roll_motor" },
-    "facing=south,variant=roll_motor": { "model": "susy:casings/metallurgy/roll_motor", "y": 180 },
-    "facing=west,variant=roll_motor": { "model": "susy:casings/metallurgy/roll_motor", "y": 270 },
-    "facing=east,variant=roll_motor": { "model": "susy:casings/metallurgy/roll_motor", "y": 90 },
-    "facing=up,variant=roll_motor": { "model": "susy:casings/metallurgy/roll_motor", "x": 270 },
-    "facing=down,variant=roll_motor": { "model": "susy:casings/metallurgy/roll_motor", "x": 90 },
-
-    "facing=north,variant=hydraulic_press": { "model": "susy:casings/metallurgy/hydraulic_press" },
-    "facing=south,variant=hydraulic_press": { "model": "susy:casings/metallurgy/hydraulic_press", "y": 180 },
-    "facing=west,variant=hydraulic_press": { "model": "susy:casings/metallurgy/hydraulic_press", "y": 270 },
-    "facing=east,variant=hydraulic_press": { "model": "susy:casings/metallurgy/hydraulic_press", "y": 90 },
-    "facing=up,variant=hydraulic_press": { "model": "susy:casings/metallurgy/hydraulic_press", "x": 270 },
-    "facing=down,variant=hydraulic_press": { "model": "susy:casings/metallurgy/hydraulic_press", "x": 90 }
+    "facing=north,variant=hydraulic_cylinder": { "model": "susy:metallurgy/hydraulic_cylinder", "x": 90 },
+    "facing=south,variant=hydraulic_cylinder": { "model": "susy:metallurgy/hydraulic_cylinder", "x": 90, "y": 180 },
+    "facing=west,variant=hydraulic_cylinder": { "model": "susy:metallurgy/hydraulic_cylinder", "x": 90, "y": 270 },
+    "facing=east,variant=hydraulic_cylinder": { "model": "susy:metallurgy/hydraulic_cylinder", "x": 90, "y": 90 },
+    "facing=up,variant=hydraulic_cylinder": { "model": "susy:metallurgy/hydraulic_cylinder" },
+    "facing=down,variant=hydraulic_cylinder": { "model": "susy:metallurgy/hydraulic_cylinder", "x": 180 }
   }
 }

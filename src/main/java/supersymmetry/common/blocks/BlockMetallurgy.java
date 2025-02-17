@@ -14,12 +14,11 @@ public class BlockMetallurgy extends VariantDirectionalRotatableBlock<BlockMetal
         setResistance(10.0f);
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 2);
-        setDefaultState(getState(BlockMetallurgyType.ROLL_MOTOR));
+        setDefaultState(getState(BlockMetallurgyType.HYDRAULIC_CYLINDER));
     }
 
     public enum BlockMetallurgyType implements IStringSerializable {
-        ROLL_MOTOR("roll_motor"),
-        HYDRAULIC_PRESS("hydraulic_press");
+        HYDRAULIC_CYLINDER("hydraulic_cylinder");
         private String name;
 
         BlockMetallurgyType(String name) {
