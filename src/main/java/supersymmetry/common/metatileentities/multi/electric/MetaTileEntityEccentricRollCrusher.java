@@ -1,7 +1,5 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import gregicality.multiblocks.common.block.GCYMMetaBlocks;
-import gregicality.multiblocks.common.block.blocks.BlockUniqueCasing;
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -24,20 +22,42 @@ import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.blocks.BlockEccentricRoll;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.eccentricRolls;
 import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.metalSheets;
 
 public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockController {
 
-    protected byte metalSheet = -1;
+    /**
+     * Identifier used for input hatch base textures
+     * -1 for None, 0~15 for normal metal sheets and 16~31 for large ones.
+     * This is getting on server-side and sync to client side later.
+     */
+    protected byte metalSheetIdentifier = -1;
+
+    /**
+     * List of animatable blocks
+     * Much like {@link #variantActiveBlocks} in vanilla CEu
+     */
+    protected List<BlockPos> animatables;
 
     public MetaTileEntityEccentricRollCrusher(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap) {
         super(metaTileEntityId, recipeMap);
+    }
+
+    @Override
+    public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
+        return new MetaTileEntityEccentricRollCrusher(metaTileEntityId, recipeMap);
     }
 
     private static IBlockState getCasingState() { // TODO: unique casing...?
@@ -52,10 +72,6 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
         return MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE);
     }
 
-    private static IBlockState getRollState() { // TODO: unique casing!!!
-        return GCYMMetaBlocks.UNIQUE_CASING.getState(BlockUniqueCasing.UniqueCasingType.CRUSHING_WHEELS);
-    }
-
     private static IBlockState getJewState() { // TODO: unique casing.
         return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.PTFE_INERT_CASING);
     }
@@ -65,18 +81,12 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
     }
 
     @Override
-    public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
-        return new MetaTileEntityEccentricRollCrusher(metaTileEntityId, recipeMap);
-    }
-
-    @Override
     protected @NotNull BlockPattern createStructurePattern() {
 
-        TraceabilityPredicate casings = states(getCasingState()).setMinGlobalLimited(24); // TODO
+        TraceabilityPredicate casings = states(getCasingState()).setMinGlobalLimited(24);
         TraceabilityPredicate metalSheets = metalSheets();
 
         return FactoryBlockPattern.start()
-                //      12345678    12345678    12345678    12345678    12345678
                 .aisle("  CCDC  ", "  CCGC  ", "  CCMX  ", "    MMX ", "     MMX")
                 .aisle("CCCJ#CD ", "CGJ#R#C ", "  J##M  ", "   J##M ", "     ##N")
                 .aisle("  PJ#CD ", " PJ#R#C ", " HJ##M  ", " H J##M ", "     ##N")
@@ -84,12 +94,13 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
                 .aisle("  CCDC  ", "  CSGC  ", "  CCMX  ", "    MMX ", "     MMX")
                 .where(' ', any())
                 .where('#', air())
-                .where('C', casings.or(autoAbilities(true, true, false, true, true, true, false)))
+                .where('C', casings.or(autoAbilities(true, true,
+                        false, false, true, true, false)))
                 .where('D', casings.or(abilities(MultiblockAbility.EXPORT_ITEMS)))
                 .where('G', states(getGearBoxState()))
                 .where('P', states(getPipeCasingState()))
                 .where('J', states(getJewState()))
-                .where('R', states(getRollState()))
+                .where('R', eccentricRolls(getFrontFacing()))
                 .where('H', states(getMechanicalCasingState()))
                 .where('X', frames(Materials.Steel))
                 .where('S', selfPredicate())
@@ -99,29 +110,57 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
     }
 
     protected void formStructure(PatternMatchContext context) {
+        this.metalSheetIdentifier = context.get("MetalSheet");
+        /// This has to be called before [MultiblockWithDisplayBase#formStructure(PatternMatchContext)] calls
+        /// where [#replaceVariantBlocksActive(boolean)] is called
+        /// @see [#setAnimatablesActive(boolean)]
+        this.animatables = context.getOrDefault("Animatable", new LinkedList<>());
         super.formStructure(context);
-        this.metalSheet = context.get("MetalSheet");
         World world = getWorld();
         if (world != null && !world.isRemote) {
-            writeCustomData(GregtechDataCodes.UPDATE_COLOR, buf -> buf.writeByte(metalSheet));
+            writeCustomData(GregtechDataCodes.UPDATE_COLOR,
+                    buf -> buf.writeByte(metalSheetIdentifier));
         }
     }
 
     @Override
     public void invalidateStructure() {
         super.invalidateStructure();
-        this.metalSheet = -1;
+        this.metalSheetIdentifier = -1;
         World world = getWorld();
         if (world != null && !world.isRemote) {
-            writeCustomData(GregtechDataCodes.UPDATE_COLOR, buf -> buf.writeByte(metalSheet));
+            writeCustomData(GregtechDataCodes.UPDATE_COLOR,
+                    buf -> buf.writeByte(metalSheetIdentifier));
+        }
+    }
+
+    @Override
+    protected void replaceVariantBlocksActive(boolean isActive) {
+        super.replaceVariantBlocksActive(isActive);
+        setAnimatablesActive(isActive);
+    }
+
+    /**
+     * Set animatable blocks active or inactive
+     *
+     * @param isActive whether the multi is active
+     */
+    protected void setAnimatablesActive(boolean isActive) {
+        if (animatables != null && !animatables.isEmpty()) {
+            World world = getWorld();
+            for (BlockPos pos : animatables) {
+                IBlockState state = world.getBlockState(pos);
+                world.setBlockState(pos, state.withProperty(BlockEccentricRoll.ACTIVE, isActive));
+            }
         }
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public ICubeRenderer getBaseTexture(IMultiblockPart part) {
-        if (metalSheet >= 0 && part instanceof IMultiblockAbilityPart<?> abilityPart && abilityPart.getAbility() == MultiblockAbility.IMPORT_ITEMS) {
-            return SusyTextures.METAL_SHEETS[metalSheet];
+        if (metalSheetIdentifier >= 0 && part instanceof IMultiblockAbilityPart<?> abilityPart
+                && abilityPart.getAbility() == MultiblockAbility.IMPORT_ITEMS) {
+            return SusyTextures.METAL_SHEETS[metalSheetIdentifier];
         }
         return Textures.SOLID_STEEL_CASING;
     }
@@ -129,7 +168,7 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
     @Override
     public void receiveCustomData(int dataId, PacketBuffer buf) {
         if (dataId == GregtechDataCodes.UPDATE_COLOR) {
-            this.metalSheet = buf.readByte();
+            this.metalSheetIdentifier = buf.readByte();
         } else {
             super.receiveCustomData(dataId, buf);
         }
@@ -138,13 +177,13 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
     @Override
     public void writeInitialSyncData(PacketBuffer buf) {
         super.writeInitialSyncData(buf);
-        buf.writeByte(metalSheet);
+        buf.writeByte(metalSheetIdentifier);
     }
 
     @Override
     public void receiveInitialSyncData(PacketBuffer buf) {
         super.receiveInitialSyncData(buf);
-        this.metalSheet = buf.readByte();
+        this.metalSheetIdentifier = buf.readByte();
     }
 
     @Override

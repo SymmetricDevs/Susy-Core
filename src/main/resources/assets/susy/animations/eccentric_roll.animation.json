@@ -1,0 +1,25 @@
+{
+  "format_version" : "1.8.0",
+  "animations" : {
+    "eccentric_roll.anim.rotate" : {
+      "loop" : true,
+      "animation_length" : 2,
+      "bones" : {
+        "root" : {
+          "rotation" : {
+            "0.0" : [
+              0,
+              0,
+              0
+            ],
+            "2.0" : [
+              -360,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,6 +1,7 @@
 package supersymmetry.api.metatileentity.multiblock;
 
 import cam72cam.immersiverailroading.IRBlocks;
+import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 import gregtech.api.GregTechAPI;
 import gregtech.api.block.IHeatingCoilBlockStats;
 import gregtech.api.pattern.PatternStringError;
@@ -10,14 +11,19 @@ import gregtech.common.blocks.BlockColored;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.api.util.RelativeDirection;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.EnumDyeColor;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Loader;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.SuSyValues;
 import supersymmetry.common.blocks.BlockConveyor;
 import supersymmetry.common.blocks.BlockCoolingCoil;
+import supersymmetry.common.blocks.BlockEccentricRoll;
 import supersymmetry.common.blocks.BlockSinteringBrick;
 import supersymmetry.common.blocks.SuSyBlocks;
 
@@ -169,6 +175,37 @@ public class SuSyPredicates {
             .toArray(BlockInfo[]::new)
     );
 
+    /**
+     * Supplies predicates for each facing direction
+     * This autocorrects the facing of the eccentric roll
+     * and adds the position of the eccentric roll to the match context
+     */
+    private static final Map<EnumFacing, TraceabilityPredicate> ECCENTRIC_ROLL_PREDICATES = Arrays.stream(EnumFacing.values())
+            .collect(Collectors.toMap(facing -> facing,
+                    facing -> new TraceabilityPredicate(blockWorldState -> {
+                        IBlockState state = blockWorldState.getBlockState();
+                        if (state.getBlock() instanceof BlockEccentricRoll) {
+
+                            // Corrects the direction of the eccentric roll, while ignoring the in/active state
+                            if (state.getValue(BlockDirectional.FACING) != facing) {
+                                World world = blockWorldState.getWorld();
+                                BlockPos pos = blockWorldState.getPos();
+                                world.setBlockState(pos, state.withProperty(BlockDirectional.FACING, facing));
+                            }
+
+                            /// Adds the position of the eccentric roll to the match context
+                            /// This works much like how CEu deals with VAActiveBlocks (e.g. coils)
+                            /// @see MultiblockControllerBase#states(IBlockState...)
+                            blockWorldState.getMatchContext().getOrPut("Animatable", new LinkedList<>()).add(blockWorldState.getPos());
+                            return true;
+                        }
+                        return false;
+                        // Supplies a eccentric roll with the correct direction
+                    }, () -> new BlockInfo[]{new BlockInfo(SuSyBlocks.ECCENTRIC_ROLL.getDefaultState()
+                            .withProperty(BlockDirectional.FACING, facing))})
+            ));
+
+
     @NotNull
     public static TraceabilityPredicate coolingCoils() {
         return COOLING_COILS.get();
@@ -197,5 +234,13 @@ public class SuSyPredicates {
     @NotNull
     public static TraceabilityPredicate metalSheets() {
         return METAL_SHEETS.get().or(LARGE_METAL_SHEETS.get());
+    }
+
+    /**
+     * @param facing the axis direction of the eccentric roll (rotates CCW)
+     */
+    @NotNull
+    public static TraceabilityPredicate eccentricRolls(EnumFacing facing) {
+        return ECCENTRIC_ROLL_PREDICATES.get(facing);
     }
 }
