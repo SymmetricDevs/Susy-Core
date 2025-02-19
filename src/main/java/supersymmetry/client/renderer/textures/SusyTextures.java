@@ -71,7 +71,7 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer LARGE_STEAM_TURBINE_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/large_steam_turbine");
     public static final OrientedOverlayRenderer LARGE_WEAPONS_FACTORY_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/large_weapons_factory");
     public static final OrientedOverlayRenderer MINING_DRILL_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/mining_drill");
-    public static final OrientedOverlayRenderer OCEANIC_DRILL_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/oceanic_drill");
+    public static final OrientedOverlayRenderer LARGE_FLUID_PUMP_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/large_fluid_pump");
     public static final OrientedOverlayRenderer ORE_SORTER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/ore_sorter");
     public static final OrientedOverlayRenderer PRESSURE_SWING_ABSORBER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/pressure_swing_absorber");
     public static final OrientedOverlayRenderer QUENCHER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/quencher");
