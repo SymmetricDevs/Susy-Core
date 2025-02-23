@@ -68,25 +68,27 @@ public class SusyMaterials {
         removeProperty(PropertyKey.ORE, Materials.Soapstone);
         removeProperty(PropertyKey.ORE, Materials.Quartzite);
         removeProperty(PropertyKey.ORE, Materials.Mica);
+        removeProperty(PropertyKey.ORE, Materials.Uraninite);
+        removeProperty(PropertyKey.DUST, Materials.Uraninite);
         removeProperty(PropertyKey.FLUID_PIPE, Materials.Lead);
         Materials.Lead.setProperty(PropertyKey.FLUID_PIPE, new FluidPipeProperties(1200, 8, true, true, false, false));
 
         //Add dusts and fluids for elements that do not have them
         Materials.Iodine.setProperty(PropertyKey.DUST, new DustProperty());
 
-	    Materials.Scandium.setProperty(PropertyKey.DUST, new DustProperty());
+        Materials.Scandium.setProperty(PropertyKey.DUST, new DustProperty());
 
-	    Materials.Germanium.setProperty(PropertyKey.DUST, new DustProperty());
+        Materials.Germanium.setProperty(PropertyKey.DUST, new DustProperty());
 
-	    Materials.Selenium.setProperty(PropertyKey.DUST, new DustProperty());
+        Materials.Selenium.setProperty(PropertyKey.DUST, new DustProperty());
 
-	    Materials.Bromine.setProperty(PropertyKey.FLUID, new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
+        Materials.Bromine.setProperty(PropertyKey.FLUID, new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
 
-	    Materials.Rubidium.setProperty(PropertyKey.DUST, new DustProperty());
+        Materials.Rubidium.setProperty(PropertyKey.DUST, new DustProperty());
 
-	    Materials.Strontium.setProperty(PropertyKey.DUST, new DustProperty());
+        Materials.Strontium.setProperty(PropertyKey.DUST, new DustProperty());
 
-	    Materials.Zirconium.setProperty(PropertyKey.DUST, new DustProperty());
+        Materials.Zirconium.setProperty(PropertyKey.DUST, new DustProperty());
 
         Materials.Technetium.setProperty(PropertyKey.DUST, new DustProperty());
 
