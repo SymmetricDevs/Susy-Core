@@ -232,7 +232,6 @@ gregtech.machine.railroad_engineering_station.tooltip.1=铁轨下的混凝土可
 gregtech.machine.primitive_mud_pump.name=简易泥泵
 gregtech.machine.basic_steam_turbine.name=大型蒸汽轮机
 gregtech.machine.basic_gas_turbine.name=大型燃气轮机
-gregtech.machine.ocean_pumper.name=海水泵机
 gregtech.machine.advanced_arc_furnace.name=高级电弧炉
 gregtech.machine.clarifier.name=澄清池
 gregtech.machine.evaporation_pool.name=蒸发池
@@ -677,7 +676,6 @@ recipemap.spinning.name=纺线
 recipemap.large_steam_turbine.name=大型蒸汽轮机
 
 gregtech.multiblock.primitive_mud_pump.description=简易泥泵是一台蒸汽时代的多方块机器。当它的控制器方块处于河流生物群系，且高度介于 Y = 64 与 Y = 80（含）之间时将每秒收集一次泥。它可以使用 ULV、LV 输出仓或水泵输出仓。
-gregtech.multiblock.ocean_pumper.description=海水泵机是一台电力时代的多方块机器。当它的控制器方块处于海洋生物群系，且高度介于 Y = 70 与 Y = 75（含）之间时将每秒收集 8,000 L 海水。他需要输出总线、维修仓、能源仓各一。
 
 # Energy Hatches
 
@@ -757,8 +755,6 @@ gregtech.catalyst_group.cracking_catalyst_beds.name=裂化催化剂
 metaitem.standard_catalyst_bed_cracking.name=裂化催化床
 
 # Machine Translations
-susy.ocean_pumper.full=输出仓已满！
-susy.ocean_pumper.drainrate=当前抽取速率：%s
 
 # Latex Logs
 gregtech.block_group_members.latex_logs.name=橡胶木
