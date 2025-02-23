@@ -73,7 +73,7 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
         }
         // Check if there is a resulting strand
         // Consume input strand if it exists
-        if (!getWorld().isRemote && !isActive && resultingStrand() != null ) {
+        if (!getWorld().isRemote && !isActive) {
             if (!consumeInputsAndSetupRecipe()) {
                 return;
             }

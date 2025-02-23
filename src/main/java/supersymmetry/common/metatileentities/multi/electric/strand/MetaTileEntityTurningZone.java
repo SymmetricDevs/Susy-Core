@@ -42,7 +42,7 @@ public class MetaTileEntityTurningZone extends MetaTileEntityStrandShaper {
     protected boolean consumeInputsAndSetupRecipe() {
         if (output.getStrand() != null) return false;
         FluidStack stack = getFirstMaterialFluid().copy();
-        stack.amount = 2304;
+        stack.amount = 2592;
         this.inputFluidInventory.drain(stack, true);
         this.maxProgress = 20;
         return true;
@@ -51,7 +51,7 @@ public class MetaTileEntityTurningZone extends MetaTileEntityStrandShaper {
     @Override
     protected Strand resultingStrand() {
         FluidStack stack = getFirstMaterialFluid();
-        if (stack == null || stack.amount < 2304) {
+        if (stack == null || stack.amount < 2592) {
             return null;
         }
         Material mat = FluidUnifier.getMaterialFromFluid(stack.getFluid());
@@ -59,7 +59,7 @@ public class MetaTileEntityTurningZone extends MetaTileEntityStrandShaper {
             return null;
         }
 
-        return new Strand(1, false, mat, stack.getFluid().getTemperature());
+        return new Strand(1, 1, false, mat, stack.getFluid().getTemperature());
     }
 
     @Override
