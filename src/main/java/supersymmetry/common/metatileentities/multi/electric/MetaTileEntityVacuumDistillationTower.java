@@ -1,6 +1,7 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
 import gregtech.api.capability.impl.DistillationTowerLogicHandler;
+import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
