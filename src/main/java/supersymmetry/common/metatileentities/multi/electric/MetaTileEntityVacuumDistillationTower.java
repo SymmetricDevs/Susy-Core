@@ -37,6 +37,7 @@ public class MetaTileEntityVacuumDistillationTower extends MetaTileEntityOrdered
 
     public MetaTileEntityVacuumDistillationTower(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.VACUUM_DISTILLATION_RECIPES);
+        this.recipeMapWorkable = new MultiblockRecipeLogic(this, true);
     }
 
     @Override
