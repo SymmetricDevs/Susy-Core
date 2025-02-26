@@ -781,7 +781,7 @@ gregtech.machine.ordered_dt.tooltip.2=§cNot putting a fluid output in the Nth l
 
 # Logistics
 gregtech.machine.delegator.tooltip.non_recursion=§6Cannot be attached to other Delegators!
-gregtech.top.delegator.delegating_face=Delegating: %s
+gregtech.top.delegator.delegating_face=Delegating face:
 
 gregtech.machine.bridge.inv.name=Inventory Bridge
 gregtech.machine.bridge.inv.tooltip=§bRelays Inventories
