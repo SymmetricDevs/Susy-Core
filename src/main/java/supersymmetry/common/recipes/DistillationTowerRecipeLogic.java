@@ -15,6 +15,10 @@ public class DistillationTowerRecipeLogic extends MultiblockRecipeLogic {
         super(tileEntity);
     }
 
+    public DistillationTowerRecipeLogic(RecipeMapMultiblockController tileEntity, boolean hasPerfectOC) {
+        super(tileEntity, hasPerfectOC);
+    }
+
     @Override
     protected void outputRecipeOutputs() {
         GTTransferUtils.addItemsToItemHandler(getOutputInventory(), false, itemOutputs);

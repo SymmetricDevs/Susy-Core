@@ -27,6 +27,7 @@ import supersymmetry.api.capability.impl.ExtendedDTLogicHandler;
 import supersymmetry.api.metatileentity.multiblock.MetaTileEntityOrderedDT;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.recipes.DistillationTowerRecipeLogic;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -38,7 +39,7 @@ public class MetaTileEntityVacuumDistillationTower extends MetaTileEntityOrdered
 
     public MetaTileEntityVacuumDistillationTower(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.VACUUM_DISTILLATION_RECIPES);
-        this.recipeMapWorkable = new MultiblockRecipeLogic(this, true);
+        this.recipeMapWorkable = new DistillationTowerRecipeLogic(this, true);
     }
 
     @Override
