@@ -2,10 +2,10 @@
 	"credit": "Made with Blockbench",
 	"parent": "block/orientable",
 	"textures": {
-		"front": "gregtech:blocks/multiblock_casing/conveyor_belt/lv/front",
-		"side": "gregtech:blocks/multiblock_casing/conveyor_belt/lv/side",
-		"top": "gregtech:blocks/multiblock_casing/conveyor_belt/lv/top",
-		"particle": "gregtech:blocks/multiblock_casing/conveyor_belt/lv/side_ctm"
+		"front": "gregtech:blocks/casings/conveyor_belt/lv/front",
+		"side": "gregtech:blocks/casings/conveyor_belt/lv/side",
+		"top": "gregtech:blocks/casings/conveyor_belt/lv/top",
+		"particle": "gregtech:blocks/casings/conveyor_belt/lv/side_ctm"
 	},
 	"elements": [
 		{
