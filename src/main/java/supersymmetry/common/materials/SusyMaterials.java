@@ -68,8 +68,6 @@ public class SusyMaterials {
         removeProperty(PropertyKey.ORE, Materials.Soapstone);
         removeProperty(PropertyKey.ORE, Materials.Quartzite);
         removeProperty(PropertyKey.ORE, Materials.Mica);
-        removeProperty(PropertyKey.ORE, Materials.Uraninite);
-        removeProperty(PropertyKey.DUST, Materials.Uraninite);
         removeProperty(PropertyKey.FLUID_PIPE, Materials.Lead);
         Materials.Lead.setProperty(PropertyKey.FLUID_PIPE, new FluidPipeProperties(1200, 8, true, true, false, false));
 
