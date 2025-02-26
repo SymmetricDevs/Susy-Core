@@ -2,7 +2,6 @@ package supersymmetry.common.blocks;
 
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -59,8 +58,6 @@ public class BlockConveyor extends VariantHorizontalRotatableBlock<BlockConveyor
     {
         if (!FACING.getAllowedValues().contains(facing))
             return false;
-        SusyLog.logger.info("rotated!");
-        SusyLog.logger.info(facing);
         IBlockState state = world.getBlockState(pos);
         world.setBlockState(pos, state.withProperty(FACING, facing));
         return true;
