@@ -42,6 +42,7 @@ public class SuSyBlocks {
     public static BlockSerpentine SERPENTINE;
     public static BlocksHardened HARDBLOCKS;
     public static BlocksCustomSheets CUSTOMSHEETS;
+    public static BlockConveyor CONVEYOR_BELT;
 
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
@@ -108,6 +109,9 @@ public class SuSyBlocks {
 
         CUSTOMSHEETS = new BlocksCustomSheets();
         CUSTOMSHEETS.setRegistryName("custom_sheets");
+
+        CONVEYOR_BELT = new BlockConveyor();
+        CONVEYOR_BELT.setRegistryName("conveyor_belt");
     }
 
     @SideOnly(Side.CLIENT)
@@ -134,6 +138,7 @@ public class SuSyBlocks {
         SERPENTINE.onModelRegister();
         registerItemModel(HARDBLOCKS);
         registerItemModel(CUSTOMSHEETS);
+        registerItemModel(CONVEYOR_BELT);
     }
 
     @SideOnly(Side.CLIENT)
