@@ -23,10 +23,14 @@ public abstract class MetaTileEntityOrderedDT extends RecipeMapMultiblockControl
 
     protected DistillationTowerLogicHandler handler;
 
-    public MetaTileEntityOrderedDT(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap) {
+    public MetaTileEntityOrderedDT(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap, boolean hasPerfectOC) {
         super(metaTileEntityId, recipeMap);
         this.handler = createHandler();
-        this.recipeMapWorkable = new DistillationTowerRecipeLogic(this);
+        this.recipeMapWorkable = new DistillationTowerRecipeLogic(this, hasPerfectOC);
+    }
+
+    public MetaTileEntityOrderedDT(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap) {
+        this(metaTileEntityId, recipeMap, false);
     }
 
     @NotNull
