@@ -50,6 +50,5 @@ public class MetaTileEntityStockFluidExchanger extends MetaTileEntityStockIntera
     @Override
     public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, boolean advanced) {
         tooltip.add(I18n.format("susy.stock_interfaces.fluid_exchanger.description"));
-        tooltip.add(I18n.format("susy.stock_interfaces.right_click_for_gui"));
     }
 }

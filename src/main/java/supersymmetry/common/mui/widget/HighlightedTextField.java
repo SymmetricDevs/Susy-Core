@@ -11,6 +11,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+// Copied from master branch of ceu
 public class HighlightedTextField extends TextFieldWidget {
 
     private final TextHighlighter highlighter;
@@ -62,6 +63,18 @@ public class HighlightedTextField extends TextFieldWidget {
 
     public HighlightedTextField onUnfocus(Runnable onUnfocus) {
         this.onUnfocus = onUnfocus;
+        return getThis();
+    }
+
+    @Override
+    public HighlightedTextField setTextColor(int textColor) {
+        super.setTextColor(textColor);
+        return getThis();
+    }
+
+    @Override
+    public HighlightedTextField size(int w, int h) {
+        super.size(w, h);
         return getThis();
     }
 

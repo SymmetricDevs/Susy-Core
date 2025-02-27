@@ -49,8 +49,7 @@ dependencies {
 
     implementation rfg.deobf("curse.maven:ctm-267602:2915363") // CTM 1.0.2.31
     api("com.cleanroommc:groovyscript:1.2.0-hotfix1") { transitive = false }
-//    api("com.cleanroommc:modularui:2.5.0-rc3") { transitive = false }
-    api(files("libs/modularui-2.5.0-rc3.jar"))
+    api("com.cleanroommc:modularui:2.5.0-rc4") { transitive = false }
 
     compileOnly rfg.deobf("curse.maven:ynet-an-xnet-fork-999559:5243319") // XNet-1.8.3-ynet
     compileOnly rfg.deobf("curse.maven:rftools-224641:2861573") // RFTools 7.73

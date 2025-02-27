@@ -70,6 +70,8 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
     // If the current bounding box should be rendered
     protected boolean renderBoundingBox = false;
 
+    public static final int TICK_RATE = 10;
+
     public MetaTileEntityStockInteractor(ResourceLocation metaTileEntityId, ICubeRenderer renderer) {
         super(metaTileEntityId);
         this.renderer = renderer;
@@ -79,7 +81,11 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
     @Override
     public void update() {
         super.update();
-        if (!getWorld().isRemote && this.isWorkingEnabled() && this.getOffsetTimer() % 20 == 0) {
+        updateStock();
+    }
+
+    public void updateStock() {
+        if (!getWorld().isRemote && this.isWorkingEnabled() && this.getOffsetTimer() % TICK_RATE == 0) {
             this.stock = StockHelperFunctions.getStockFrom(getWorld(), getInteractionBoundingBox(), stockFilter);
         }
     }

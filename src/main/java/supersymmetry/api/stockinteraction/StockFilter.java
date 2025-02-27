@@ -145,14 +145,14 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
                                         .tooltipAutoUpdate(true)
                                         .tooltip(tooltip -> tooltip.setAutoUpdate(true))))
                         .child(new HighlightedTextField()
+                                .size(44, 14)
                                 .onUnfocus(this::refreshPattern)
                                 .setHighlightRule(this::highlightRule)
                                 .setTextColor(Color.WHITE.darker(1))
-                                .value(patternString).marginBottom(4)
-                                .size(44, 18)));
+                                .value(patternString).marginBottom(4)));
     }
 
-    // TODO: fix this up
+    // TODO: better formatting?
     protected String highlightRule(String text) {
         StringBuilder builder = new StringBuilder(text);
         for (int i = 0; i < builder.length(); i++) {

@@ -49,7 +49,5 @@ public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInterac
     @Override
     public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, boolean advanced) {
         tooltip.add(I18n.format("susy.stock_interfaces.item_exchanger.description"));
-        tooltip.add(I18n.format("susy.stock_interfaces.screwdriver_cycle"));
-        tooltip.add(I18n.format("susy.stock_interfaces.wrench_toggle"));
     }
 }

@@ -174,11 +174,9 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
     }
 
     @Override
-    public void update() {
-        super.update();
-        if (!this.getWorld().isRemote && this.isWorkingEnabled() && getOffsetTimer() % 20 == 0) {
-            performControl();
-        }
+    public void updateStock() {
+        super.updateStock();
+        performControl();
     }
 
     @Override
@@ -190,7 +188,6 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
     @Override
     public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, boolean advanced) {
         tooltip.add(I18n.format("susy.stock_interfaces.locomotive_controller.description"));
-        tooltip.add(I18n.format("susy.stock_interfaces.right_click_for_gui"));
     }
 
     //#fix# does detected need to be saved or just refreshed on load? does ticks-alive need to be saved to prevent every one ticking at once?
