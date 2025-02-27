@@ -54,15 +54,6 @@ public class BlockConveyor extends VariantHorizontalRotatableBlock<BlockConveyor
         return false;
     }
 
-    public boolean setFacing(World world, BlockPos pos, EnumFacing facing)
-    {
-        if (!FACING.getAllowedValues().contains(facing))
-            return false;
-        IBlockState state = world.getBlockState(pos);
-        world.setBlockState(pos, state.withProperty(FACING, facing));
-        return true;
-    }
-
     public enum ConveyorType implements IStringSerializable  {
         LV_CONVEYOR("lv");
 

@@ -3,26 +3,22 @@ package supersymmetry.common.metatileentities.multi.electric;
 import gregtech.api.GTValues;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.metatileentity.multiblock.IMultiblockAbilityPart;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.*;
-import gregtech.api.util.BlockInfo;
+import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.ConfigHolder;
 import gregtech.common.blocks.*;
 import gregtech.common.metatileentities.MetaTileEntities;
-import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import org.apache.commons.lang3.ArrayUtils;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.common.blocks.BlockConveyor;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -31,21 +27,9 @@ import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 import javax.annotation.Nonnull;
 import java.util.*;
 
+import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.conveyorBelts;
+
 public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
-
-    public static TraceabilityPredicate conveyors(BlockConveyor.ConveyorType... variants) {
-
-        return new TraceabilityPredicate(blockWorldState -> {
-            IBlockState state = blockWorldState.getBlockState();
-            if (state.getBlock() instanceof BlockConveyor) {
-                blockWorldState.getMatchContext().getOrPut("Conveyors", new LinkedList<>()).add(blockWorldState.getPos());
-                BlockConveyor.ConveyorType property = ((BlockConveyor) state.getBlock()).getState(state);
-                return ArrayUtils.contains(variants, property);
-            }
-            return false;
-        }, () -> Arrays.stream(variants).map(m -> new BlockInfo(SuSyBlocks.CONVEYOR_BELT.getState(m), null)).toArray(BlockInfo[]::new));
-    }
-
 
     public MetaTileEntityCurtainCoater(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.CURTAIN_COATER);
@@ -58,19 +42,18 @@ public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
 
     @Override
     protected BlockPattern createStructurePattern() {
-        TraceabilityPredicate inputBus = abilities(MultiblockAbility.IMPORT_ITEMS).setMinGlobalLimited(1).setMaxGlobalLimited(1);
-        TraceabilityPredicate outputBus = abilities(MultiblockAbility.EXPORT_ITEMS).setMinGlobalLimited(1).setMaxGlobalLimited(1);
         return FactoryBlockPattern.start()
                 .aisle("  X  ", "  X  ", "  X  ")
-                .aisle("IXXXI", "BBBBB", "  X  ")
+                .aisle("IXXXO", "BBBBB", "  X  ")
                 .aisle("  S  ", "  F  ", "  G  ")
                 .where('S', selfPredicate())
-                .where('I', inputBus.or(outputBus))
+                .where('I', abilities(MultiblockAbility.IMPORT_ITEMS))
+                .where('O', abilities(MultiblockAbility.EXPORT_ITEMS))
                 .where('X', states(getCasingState()).setMinGlobalLimited(4)
                         .or(autoAbilities(true, true, false, false, false, false, false)))
                 .where('G', states(getGearBoxState()))
                 .where('F', abilities(MultiblockAbility.IMPORT_FLUIDS))
-                .where('B', conveyors(BlockConveyor.ConveyorType.LV_CONVEYOR))
+                .where('B', conveyorBelts())
                 .where(' ', any())
                 .build();
     }
@@ -86,11 +69,10 @@ public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
                 .where('F', MetaTileEntities.FLUID_IMPORT_HATCH[GTValues.LV], EnumFacing.SOUTH)
                 .where('E', MetaTileEntities.ENERGY_INPUT_HATCH[GTValues.LV], EnumFacing.NORTH)
                 .where('G', getGearBoxState())
-                .where('>', getConveyorState(BlockConveyor.ConveyorType.LV_CONVEYOR, EnumFacing.EAST))
-                .where('<', getConveyorState(BlockConveyor.ConveyorType.LV_CONVEYOR, EnumFacing.WEST))
+                .where('>', SuSyBlocks.CONVEYOR_BELT.getDefaultState().withProperty(BlockConveyor.FACING, EnumFacing.EAST))
+                .where('<', SuSyBlocks.CONVEYOR_BELT.getDefaultState().withProperty(BlockConveyor.FACING, EnumFacing.WEST))
                 .where('M',
-                        () -> ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH :
-                                getCasingState(), EnumFacing.SOUTH);
+                        () -> ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH : getCasingState(), EnumFacing.SOUTH);
         shapeInfo.add(baseBuilder.shallowCopy()
                 .aisle("  E  ", "  X  ", "  X  ")
                 .aisle("IMXXO", ">>>>>", "  X  ")
@@ -107,35 +89,17 @@ public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
     @Override
     protected void formStructure(PatternMatchContext context) {
         super.formStructure(context);
-        Set<IMultiblockPart> rawPartsSet = context.getOrCreate("MultiblockParts", HashSet::new);
-        ArrayList<IMultiblockPart> parts = new ArrayList<>(rawPartsSet);
 
-        BlockPos inputBusPos = null, outputBusPos = null;
-        for (IMultiblockPart part : parts) {
-            // these entities should be IMultiblockAbilityPart, and they should be a MTE
-            if (part instanceof IMultiblockAbilityPart<?> && part instanceof MetaTileEntityMultiblockPart) {
-                MultiblockAbility<?> ability = ((IMultiblockAbilityPart<?>) part).getAbility();
-                if (ability == MultiblockAbility.IMPORT_ITEMS)
-                    inputBusPos = ((MetaTileEntityMultiblockPart) part).getPos();
-                if (ability == MultiblockAbility.EXPORT_ITEMS)
-                    outputBusPos = ((MetaTileEntityMultiblockPart) part).getPos();
-            }
-        }
+        // RelativeDirection will take into account of the multi flipping pattern
+        EnumFacing conveyorFacing = RelativeDirection.LEFT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), isFlipped());
 
-        // Set a default facing in case some weirdness happened so the direction cannot be determined
-        EnumFacing conveyorFacing = this.getFrontFacing().rotateYCCW();
-        if (inputBusPos != null && outputBusPos != null) {
-            Vec3i direction = outputBusPos.subtract(inputBusPos);
-            conveyorFacing = EnumFacing.getFacingFromVector(direction.getX(), direction.getY(), direction.getZ());
-        }
-
-        List<BlockPos> conveyorBlocks = context.getOrDefault("Conveyors", new LinkedList<>());
+        List<BlockPos> conveyorBlocks = context.getOrDefault("ConveyorBelt", new LinkedList<>());
         if (conveyorBlocks != null && !conveyorBlocks.isEmpty()) {
             World world = getWorld();
             for (BlockPos blockPos : conveyorBlocks) {
                 Block conveyor = world.getBlockState(blockPos).getBlock();
                 if (conveyor instanceof BlockConveyor) {
-                    ((BlockConveyor) conveyor).setFacing(world, blockPos, conveyorFacing);
+                    world.setBlockState(blockPos, world.getBlockState(blockPos).withProperty(BlockConveyor.FACING, conveyorFacing));
                 }
             }
         }
@@ -170,6 +134,6 @@ public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
     }
 
     public boolean allowsFlip() {
-        return false;
+        return true;
     }
 }

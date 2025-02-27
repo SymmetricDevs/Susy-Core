@@ -9,6 +9,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraftforge.fml.common.Loader;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.SuSyValues;
+import supersymmetry.common.blocks.BlockConveyor;
 import supersymmetry.common.blocks.BlockCoolingCoil;
 import supersymmetry.common.blocks.BlockSinteringBrick;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -59,7 +60,7 @@ public class SuSyPredicates {
     );
 
     private static final Supplier<TraceabilityPredicate> RAILS = () -> new TraceabilityPredicate(blockWorldState -> {
-        if(!Loader.isModLoaded(SuSyValues.MODID_IMMERSIVERAILROADING)) return true;
+        if (!Loader.isModLoaded(SuSyValues.MODID_IMMERSIVERAILROADING)) return true;
 
         IBlockState state = blockWorldState.getBlockState();
 
@@ -67,6 +68,27 @@ public class SuSyPredicates {
 
         return block == IRBlocks.BLOCK_RAIL.internal || block == IRBlocks.BLOCK_RAIL_GAG.internal;
     });
+
+    // Allow all conveyor belts, and require them to have the same type.
+    private static final Supplier<TraceabilityPredicate> CONVEYOR_BELT =
+            () -> new TraceabilityPredicate(blockWorldState -> {
+                IBlockState state = blockWorldState.getBlockState();
+                if (state.getBlock() instanceof BlockConveyor) {
+                    BlockConveyor.ConveyorType type = ((BlockConveyor) state.getBlock()).getState(state);
+                    Object currentConveyor = blockWorldState.getMatchContext().getOrPut("CoilType", type);
+                    if (!currentConveyor.equals(type)) {
+                        blockWorldState.setError(new PatternStringError("gregtech.multiblock.pattern.error.conveyor"));
+                        return false;
+                    }
+                    // Adds the position of the conveyor to the match context
+                    blockWorldState.getMatchContext().getOrPut("ConveyorBelt", new LinkedList<>()).add(blockWorldState.getPos());
+                    return true;
+                }
+                return false;
+            }, () -> Arrays.stream(BlockConveyor.ConveyorType.values())
+                    .map(entry -> new BlockInfo(SuSyBlocks.CONVEYOR_BELT.getState(entry), null))
+                    .toArray(BlockInfo[]::new)
+            ).addTooltips("gregtech.multiblock.pattern.error.conveyor");
 
     @NotNull
     public static TraceabilityPredicate coolingCoils() {
@@ -81,5 +103,10 @@ public class SuSyPredicates {
     @NotNull
     public static TraceabilityPredicate rails() {
         return RAILS.get();
+    }
+
+    @NotNull
+    public static TraceabilityPredicate conveyorBelts() {
+        return CONVEYOR_BELT.get();
     }
 }
