@@ -38,8 +38,7 @@ import static gregtech.api.util.RelativeDirection.*;
 public class MetaTileEntityVacuumDistillationTower extends MetaTileEntityOrderedDT {
 
     public MetaTileEntityVacuumDistillationTower(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SuSyRecipeMaps.VACUUM_DISTILLATION_RECIPES);
-        this.recipeMapWorkable = new DistillationTowerRecipeLogic(this, true);
+        super(metaTileEntityId, SuSyRecipeMaps.VACUUM_DISTILLATION_RECIPES, true);
     }
 
     @Override
