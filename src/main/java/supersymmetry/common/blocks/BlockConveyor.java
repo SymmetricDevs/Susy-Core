@@ -1,7 +1,5 @@
 package supersymmetry.common.blocks;
 
-import net.minecraft.util.EnumFacing;
-import net.minecraft.world.World;
 import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;

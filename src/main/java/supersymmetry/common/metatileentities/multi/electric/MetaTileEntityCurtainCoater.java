@@ -113,10 +113,6 @@ public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
         return MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STAINLESS_STEEL_GEARBOX);
     }
 
-    protected IBlockState getConveyorState(BlockConveyor.ConveyorType type, EnumFacing facing) {
-        return SuSyBlocks.CONVEYOR_BELT.getState(type, facing);
-    }
-
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
         return Textures.CLEAN_STAINLESS_STEEL_CASING;
