@@ -1,6 +1,5 @@
 package supersymmetry.api.recipes.builders;
 
-import gregtech.api.GTValues;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.recipes.RecipeMap;

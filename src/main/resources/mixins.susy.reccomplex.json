@@ -1,0 +1,10 @@
+{
+  "package": "supersymmetry.mixins.reccomplex",
+  "refmap": "mixins.susy.refmap.json",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "StructureSpawnContextMixin"
+  ]
+}

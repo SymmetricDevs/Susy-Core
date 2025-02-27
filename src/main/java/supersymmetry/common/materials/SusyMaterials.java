@@ -2,7 +2,6 @@ package supersymmetry.common.materials;
 
 import gregtech.api.GregTechAPI;
 import gregtech.api.fluids.FluidBuilder;
-import gregtech.api.fluids.store.FluidStorageKey;
 import gregtech.api.fluids.store.FluidStorageKeys;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
@@ -75,19 +74,19 @@ public class SusyMaterials {
         //Add dusts and fluids for elements that do not have them
         Materials.Iodine.setProperty(PropertyKey.DUST, new DustProperty());
 
-	    Materials.Scandium.setProperty(PropertyKey.DUST, new DustProperty());
+        Materials.Scandium.setProperty(PropertyKey.DUST, new DustProperty());
 
-	    Materials.Germanium.setProperty(PropertyKey.DUST, new DustProperty());
+        Materials.Germanium.setProperty(PropertyKey.DUST, new DustProperty());
 
-	    Materials.Selenium.setProperty(PropertyKey.DUST, new DustProperty());
+        Materials.Selenium.setProperty(PropertyKey.DUST, new DustProperty());
 
-	    Materials.Bromine.setProperty(PropertyKey.FLUID, new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
+        Materials.Bromine.setProperty(PropertyKey.FLUID, new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
 
-	    Materials.Rubidium.setProperty(PropertyKey.DUST, new DustProperty());
+        Materials.Rubidium.setProperty(PropertyKey.DUST, new DustProperty());
 
-	    Materials.Strontium.setProperty(PropertyKey.DUST, new DustProperty());
+        Materials.Strontium.setProperty(PropertyKey.DUST, new DustProperty());
 
-	    Materials.Zirconium.setProperty(PropertyKey.DUST, new DustProperty());
+        Materials.Zirconium.setProperty(PropertyKey.DUST, new DustProperty());
 
         Materials.Technetium.setProperty(PropertyKey.DUST, new DustProperty());
 

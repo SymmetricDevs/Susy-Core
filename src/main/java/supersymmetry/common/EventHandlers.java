@@ -1,22 +1,32 @@
 package supersymmetry.common;
 
+import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.util.GTTeleporter;
 import gregtech.api.util.TeleportHandler;
 import gregtech.common.items.MetaItems;
 import gregtechfoodoption.item.GTFOMetaItem;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.management.PlayerList;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import supersymmetry.Supersymmetry;
 import supersymmetry.common.entities.EntityDropPod;
+import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.event.MobHordeWorldData;
+import supersymmetry.common.item.SuSyArmorItem;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class EventHandlers {
@@ -30,7 +40,7 @@ public class EventHandlers {
         NBTTagCompound playerData = event.player.getEntityData();
         NBTTagCompound data = playerData.hasKey(EntityPlayer.PERSISTED_NBT_TAG) ? playerData.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG) : new NBTTagCompound();
 
-        if(!event.player.getEntityWorld().isRemote && !data.getBoolean(FIRST_SPAWN)) {
+        if (!event.player.getEntityWorld().isRemote && !data.getBoolean(FIRST_SPAWN)) {
 
             data.setBoolean(FIRST_SPAWN, true);
             playerData.setTag(EntityPlayer.PERSISTED_NBT_TAG, data);
@@ -44,7 +54,7 @@ public class EventHandlers {
             event.player.getEntityWorld().spawnEntity(dropPod);
             event.player.startRiding(dropPod);
 
-            event.player.addItemStackToInventory(GTFOMetaItem.EMERGENCY_RATIONS.getStackForm(10));
+            event.player.addItemStackToInventory(GTFOMetaItem.EMERGENCY_RATIONS.getStackForm(32));
             event.player.addItemStackToInventory(MetaItems.PROSPECTOR_LV.getChargedStack(100000));
         }
 
@@ -57,7 +67,7 @@ public class EventHandlers {
     }
 
     @SubscribeEvent
-    public static void on(TickEvent.WorldTickEvent event) {
+    public static void onWorldTick(TickEvent.WorldTickEvent event) {
 
         World world = event.world;
 
@@ -78,6 +88,37 @@ public class EventHandlers {
             MobHordeWorldData mobHordeWorldData = MobHordeWorldData.get(world);
             list.getPlayers().forEach(p -> mobHordeWorldData.getPlayerData(p.getPersistentID()).update(p));
             mobHordeWorldData.markDirty();
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if (event.player.world.getTotalWorldTime() % 20 == 0 && event.phase == TickEvent.Phase.START) {
+            DimensionBreathabilityHandler.tickPlayer(event.player);
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.NORMAL)
+    public static void onEntityLivingFallEventStart(LivingFallEvent event) {
+        Entity armor = event.getEntity();
+        if (armor instanceof EntityPlayer player) {
+            ItemStack boots = player.getItemStackFromSlot(EntityEquipmentSlot.FEET);
+            if (!boots.isEmpty() && boots.getItem() instanceof SuSyArmorItem) {
+                if (player.fallDistance > 3.2F) {
+                    player.fallDistance = 0;
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void onEntityLivingFallEvent(LivingFallEvent event) {
+        Entity armor = event.getEntity();
+        if (armor instanceof EntityPlayer player) {
+            ItemStack boots = player.getItemStackFromSlot(EntityEquipmentSlot.FEET);
+            if (!boots.isEmpty() && boots.getItem() instanceof SuSyArmorItem) {
+                player.fallDistance = event.getDistance();
+            }
         }
     }
 }

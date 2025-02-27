@@ -11,11 +11,13 @@ import gregtech.api.unification.ore.OrePrefix;
 import gregtech.common.items.behaviors.TooltipBehavior;
 import net.minecraft.client.resources.I18n;
 import supersymmetry.SuSyValues;
+
 import supersymmetry.common.item.armor.SuSyMetaArmor;
 
 public class SuSyMetaItems {
 
     private static StandardMetaItem metaItem;
+    public static SuSyArmorItem armorItem;
     public static MetaOreDictItem oreDictItem;
     public static MetaValueItem CATALYST_BED_SUPPORT_GRID;
     public static MetaValueItem CONVEYOR_STEAM;
@@ -23,6 +25,24 @@ public class SuSyMetaItems {
     public static MetaValueItem AIR_VENT;
     public static MetaValueItem RESTRICTIVE_FILTER;
     public static MetaValueItem TRACK_SEGMENT;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem SIMPLE_GAS_MASK;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_MASK;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_TANK;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem ASBESTOS_MASK;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem ASBESTOS_CHESTPLATE;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem ASBESTOS_LEGGINGS;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem ASBESTOS_BOOTS;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem REBREATHER_TANK;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem REFLECTIVE_MASK;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem REFLECTIVE_CHESTPLATE;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem REFLECTIVE_LEGGINGS;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem REFLECTIVE_BOOTS;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem FILTERED_TANK;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem NOMEX_MASK;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem NOMEX_CHESTPLATE;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem NOMEX_LEGGINGS;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem NOMEX_BOOTS;
+
     public static ArmorMetaItem<?>.ArmorMetaValueItem JET_WINGPACK;
 
     public static void initMetaItems() {
@@ -30,8 +50,8 @@ public class SuSyMetaItems {
         metaItem.setRegistryName("meta_item");
         oreDictItem = new MetaOreDictItem((short) 0);
         oreDictItem.setRegistryName("susy_oredict_item");
-        SuSyMetaArmor armor = new SuSyMetaArmor();
-        armor.setRegistryName("susy_armor");
+        armorItem = new SuSyMetaArmor();
+        armorItem.setRegistryName("susy_armor");
         CatalystItems.init();
 
     }
@@ -63,7 +83,7 @@ public class SuSyMetaItems {
         RESTRICTIVE_FILTER = metaItem.addItem(6, "restrictive_filter");
     }
 
-    private static void addTieredOredictItem (OreDictValueItem[] items, int id, int RGB, OrePrefix prefix) {
+    private static void addTieredOredictItem(OreDictValueItem[] items, int id, int RGB, OrePrefix prefix) {
 
         for (int i = 0; i < items.length; i++) {
             items[i] = oreDictItem.addOreDictItem(id + i, SuSyValues.TierMaterials[i + 1].toString(), RGB, MaterialIconSet.DULL, prefix, I18n.format("gregtech.universal.catalysts.tooltip.tier", GTValues.V[i], GTValues.VN[i]));

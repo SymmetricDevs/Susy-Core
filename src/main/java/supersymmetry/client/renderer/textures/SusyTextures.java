@@ -44,6 +44,7 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer PHASE_SEPARATOR_OVERLAY = new OrientedOverlayRenderer("machines/phase_separator");
     public static final OrientedOverlayRenderer BATH_CONDENSER_OVERLAY = new OrientedOverlayRenderer("machines/bath_condenser");
     public static final OrientedOverlayRenderer CATALYTIC_REFORMER_OVERLAY = new OrientedOverlayRenderer("multiblock/catalytic_reformer");
+    public static final OrientedOverlayRenderer INCINERATOR_OVERLAY = new OrientedOverlayRenderer("machines/incinerator");
 
     public static final OrientedOverlayRenderer FLUID_COMPRESSOR_OVERLAY = new OrientedOverlayRenderer("machines/fluid_compressor");
     public static final OrientedOverlayRenderer FLUID_DECOMPRESSOR_OVERLAY = new OrientedOverlayRenderer("machines/fluid_decompressor");
@@ -68,7 +69,7 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer LARGE_STEAM_TURBINE_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/large_steam_turbine");
     public static final OrientedOverlayRenderer LARGE_WEAPONS_FACTORY_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/large_weapons_factory");
     public static final OrientedOverlayRenderer MINING_DRILL_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/mining_drill");
-    public static final OrientedOverlayRenderer OCEANIC_DRILL_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/oceanic_drill");
+    public static final OrientedOverlayRenderer LARGE_FLUID_PUMP_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/large_fluid_pump");
     public static final OrientedOverlayRenderer ORE_SORTER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/ore_sorter");
     public static final OrientedOverlayRenderer PRESSURE_SWING_ABSORBER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/pressure_swing_absorber");
     public static final OrientedOverlayRenderer QUENCHER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/quencher");

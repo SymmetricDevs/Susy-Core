@@ -10,7 +10,6 @@ import gregtech.api.unification.material.Materials;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import gregtech.common.blocks.BlockBoilerCasing.BoilerCasingType;

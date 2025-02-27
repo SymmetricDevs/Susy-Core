@@ -1,6 +1,5 @@
 package supersymmetry.asm;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -9,9 +8,6 @@ import org.objectweb.asm.tree.*;
 import supersymmetry.api.SusyLog;
 import supersymmetry.asm.visitors.DefinitionManagerVisitor;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Collections;
 
 public class SusyTransformer implements IClassTransformer, Opcodes {

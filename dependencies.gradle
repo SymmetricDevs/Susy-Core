@@ -51,6 +51,8 @@ dependencies {
     api("com.cleanroommc:groovyscript:1.2.0-hotfix1") { transitive = false }
     api("com.cleanroommc:modularui:2.5.0-rc4") { transitive = false }
 
+    runtimeOnly rfg.deobf("curse.maven:the-beneath-254629:3425551")
+
     compileOnly rfg.deobf("curse.maven:ynet-an-xnet-fork-999559:5243319") // XNet-1.8.3-ynet
     compileOnly rfg.deobf("curse.maven:rftools-224641:2861573") // RFTools 7.73
     compileOnly rfg.deobf("curse.maven:mcjtylib-233105:2745846")
@@ -66,6 +68,10 @@ dependencies {
     implementation rfg.deobf("curse.maven:pyrotech-306676:5351359")
     implementation rfg.deobf("curse.maven:athenaeum-284350:4633750")
     implementation rfg.deobf("curse.maven:dropt-284973:5405050")
+
+    implementation rfg.deobf("curse.maven:recurrent-complex-223150:5615733")
+    implementation rfg.deobf("curse.maven:ivtoolkit-224535:2443253")
+    implementation rfg.deobf("curse.maven:fluidlogged-api-485654:4564413")
 
     compileOnly rfg.deobf("curse.maven:yungs-better-mineshafts-forge-389665:3247154")
 
