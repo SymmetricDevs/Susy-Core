@@ -16,7 +16,7 @@ import javax.annotation.Nonnull;
 public class BlockDrillBit extends VariantBlock<BlockDrillBit.DrillBitType> {
     public BlockDrillBit(){
         super(net.minecraft.block.material.Material.IRON);
-        setTranslationKey("drill_head");
+        setTranslationKey("drill_bit");
         setHardness(5.0f);
         setResistance(10.0f);
         setSoundType(SoundType.METAL);

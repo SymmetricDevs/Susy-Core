@@ -3,13 +3,13 @@ package supersymmetry.common.metatileentities.multi.electric;
 import gregtech.api.GTValues;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.api.metatileentity.multiblock.IMultiblockAbilityPart;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
+import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.MultiblockShapeInfo;
-import gregtech.api.pattern.TraceabilityPredicate;
-import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.ConfigHolder;
@@ -18,11 +18,9 @@ import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.MetaTileEntities;
-import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec3i;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
@@ -30,7 +28,6 @@ import supersymmetry.common.blocks.BlockDrillBit;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,16 +42,20 @@ public class MetaTileEntityPreciseMillingMachine extends RecipeMapMultiblockCont
 
     @NotNull
     protected BlockPattern createStructurePattern() {
-        // autoAbilities() creates new predicate each time, so don't do that
-        TraceabilityPredicate autoAbilitiesPredicate = autoAbilities();
         return FactoryBlockPattern.start()
                 .aisle("BBBBBB", "CCCCCC", "CGGGGC", "CCCCCC")
                 .aisle("BBBBBB", "C    C", "CDDDDC", "CCCCCC")
                 .aisle("BBBBBB", "C    C", "C    C", "CCCCCC")
                 .aisle("BBBBBB", "CWWWWS", "CWWWWC", "CCCCCC")
                 .where('S', selfPredicate())
-                .where('B', states(getBaseCasingState()).setMinGlobalLimited(18).or(autoAbilitiesPredicate))
-                .where('C', states(getUpperCasingState()).setMinGlobalLimited(35).or(autoAbilitiesPredicate))
+                .where('B', states(getBaseCasingState()).setMinGlobalLimited(18)
+                        .or(abilities(MultiblockAbility.INPUT_ENERGY).addTooltip("gregtech.multiblock.pattern.error.milling.lower"))
+                        .or(abilities(MultiblockAbility.MAINTENANCE_HATCH).addTooltip("gregtech.multiblock.pattern.error.milling.lower"))
+                )
+                .where('C', states(getUpperCasingState()).setMinGlobalLimited(35)
+                        .or(abilities(MultiblockAbility.IMPORT_ITEMS).addTooltip("gregtech.multiblock.pattern.error.milling.upper"))
+                        .or(abilities(MultiblockAbility.EXPORT_ITEMS).addTooltip("gregtech.multiblock.pattern.error.milling.upper"))
+                )
                 .where('D', states(getDrillBitState()))
                 .where('G', states(getGearBoxState()))
                 .where('W', states(getGlassState()))
@@ -88,18 +89,13 @@ public class MetaTileEntityPreciseMillingMachine extends RecipeMapMultiblockCont
     }
 
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
-        if (sourcePart instanceof MetaTileEntityMultiblockPart) {
-            Vec3i facingVec = RelativeDirection.UP.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), isFlipped()).getDirectionVec();
-            Vec3i positionalVec = ((MetaTileEntityMultiblockPart) sourcePart).getPos().subtract(getPos());
-            // For the only non-zero component, the vector sign should be the same (or zero, which means it is on the controller's level
-            // No need to worry about overflow: |facingVec| = 1
-            if (facingVec.getX() * positionalVec.getX() >= 0 &&
-                    facingVec.getY() * positionalVec.getY() >= 0 &&
-                    facingVec.getZ() * positionalVec.getZ() >= 0) {
-                return Textures.CLEAN_STAINLESS_STEEL_CASING;
+        if (sourcePart instanceof IMultiblockAbilityPart<?>) {
+            MultiblockAbility<?> ability = ((IMultiblockAbilityPart<?>) sourcePart).getAbility();
+            if (ability.equals(MultiblockAbility.MAINTENANCE_HATCH) || ability.equals(MultiblockAbility.INPUT_ENERGY)) {
+                return Textures.SOLID_STEEL_CASING;
             }
-            return Textures.SOLID_STEEL_CASING;
         }
+        // for IO Buses and other unrecognized parts
         return Textures.CLEAN_STAINLESS_STEEL_CASING;
     }
 
@@ -123,7 +119,12 @@ public class MetaTileEntityPreciseMillingMachine extends RecipeMapMultiblockCont
         return MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STAINLESS_STEEL_GEARBOX);
     }
 
-    @Nonnull
+    @Override
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
+
+    @NotNull
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.MILLING_OVERLAY;
