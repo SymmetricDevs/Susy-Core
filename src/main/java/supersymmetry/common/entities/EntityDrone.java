@@ -185,7 +185,7 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
 
                 this.motionY += 0.125;
 
-                if(age >= 90 && this.isCollidingWithBlocks()) {
+                if (this.isCollidingWithBlocks()) {
                     this.explode();
                 }
 
@@ -223,8 +223,8 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
     }
 
     public boolean isCollidingWithBlocks() {
-        return this.world.getBlockState(mutableBlockPos.setPos(this.posX, this.posY + 1, this.posZ)) != Blocks.AIR.getDefaultState()
-                || this.world.getBlockState(mutableBlockPos.setPos(this.posX, this.posY - 1, this.posZ)) != Blocks.AIR.getDefaultState();
+        return !(this.world.getBlockState(mutableBlockPos.setPos(this.posX, this.posY + 1, this.posZ)).getBlock().isPassable(world, mutableBlockPos)
+                 && this.world.getBlockState(mutableBlockPos.setPos(this.posX, this.posY - 1, this.posZ)).getBlock().isPassable(world, mutableBlockPos));
     }
 
     public boolean reachedSky() {
