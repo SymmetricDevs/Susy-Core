@@ -31,6 +31,8 @@ import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.conveyo
 
 public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
 
+    private final List<BlockPos> conveyorBlocks = new ArrayList<>();
+
     public MetaTileEntityCurtainCoater(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.CURTAIN_COATER);
     }
@@ -53,7 +55,7 @@ public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
                         .or(autoAbilities(true, true, false, false, false, false, false)))
                 .where('G', states(getGearBoxState()))
                 .where('F', abilities(MultiblockAbility.IMPORT_FLUIDS))
-                .where('B', conveyorBelts())
+                .where('B', conveyorBelts(getFrontFacing().rotateYCCW()))
                 .where(' ', any())
                 .build();
     }
@@ -90,20 +92,29 @@ public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
     protected void formStructure(PatternMatchContext context) {
         super.formStructure(context);
 
+        conveyorBlocks.addAll(context.getOrDefault("ConveyorBelt", new LinkedList<>()));
+    }
+
+    public void invalidateStructure() {
+        super.invalidateStructure();
+        this.conveyorBlocks.clear();
+    }
+
+    protected void updateFormedValid() {
+        super.updateFormedValid();
+
         // RelativeDirection will take into account of the multi flipping pattern
         EnumFacing conveyorFacing = RelativeDirection.LEFT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), isFlipped());
-
-        List<BlockPos> conveyorBlocks = context.getOrDefault("ConveyorBelt", new LinkedList<>());
-        if (conveyorBlocks != null && !conveyorBlocks.isEmpty()) {
-            World world = getWorld();
-            for (BlockPos blockPos : conveyorBlocks) {
-                Block conveyor = world.getBlockState(blockPos).getBlock();
-                if (conveyor instanceof BlockConveyor) {
-                    world.setBlockState(blockPos, world.getBlockState(blockPos).withProperty(BlockConveyor.FACING, conveyorFacing));
-                }
+        World world = getWorld();
+        for (BlockPos blockPos : conveyorBlocks) {
+            IBlockState blockState = world.getBlockState(blockPos);
+            Block conveyor = blockState.getBlock();
+            if (conveyor instanceof BlockConveyor && blockState.getValue(BlockConveyor.FACING) != conveyorFacing) {
+                world.setBlockState(blockPos, blockState.withProperty(BlockConveyor.FACING, conveyorFacing));
             }
         }
     }
+
 
     protected IBlockState getCasingState() {
         return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STAINLESS_CLEAN);

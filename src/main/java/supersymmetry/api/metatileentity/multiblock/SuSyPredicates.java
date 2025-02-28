@@ -6,6 +6,7 @@ import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.util.BlockInfo;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.common.Loader;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.SuSyValues;
@@ -16,7 +17,9 @@ import supersymmetry.common.blocks.SuSyBlocks;
 
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * Class containing global predicates
@@ -70,25 +73,26 @@ public class SuSyPredicates {
     });
 
     // Allow all conveyor belts, and require them to have the same type.
-    private static final Supplier<TraceabilityPredicate> CONVEYOR_BELT =
-            () -> new TraceabilityPredicate(blockWorldState -> {
-                IBlockState state = blockWorldState.getBlockState();
-                if (state.getBlock() instanceof BlockConveyor) {
-                    BlockConveyor.ConveyorType type = ((BlockConveyor) state.getBlock()).getState(state);
-                    Object currentConveyor = blockWorldState.getMatchContext().getOrPut("CoilType", type);
-                    if (!currentConveyor.equals(type)) {
-                        blockWorldState.setError(new PatternStringError("gregtech.multiblock.pattern.error.conveyor"));
+    private static final Map<EnumFacing, Supplier<TraceabilityPredicate>> CONVEYOR_BELT =
+            Arrays.stream(EnumFacing.values()).collect(Collectors.toMap(facing -> facing,
+                    facing -> () -> new TraceabilityPredicate(blockWorldState -> {
+                        IBlockState state = blockWorldState.getBlockState();
+                        if (state.getBlock() instanceof BlockConveyor) {
+                            BlockConveyor.ConveyorType type = ((BlockConveyor) state.getBlock()).getState(state);
+                            Object currentConveyor = blockWorldState.getMatchContext().getOrPut("ConveyorType", type);
+                            if (!currentConveyor.equals(type)) {
+                                blockWorldState.setError(new PatternStringError("gregtech.multiblock.pattern.error.conveyor"));
+                                return false;
+                            }
+                            // Adds the position of the conveyor to the match context
+                            blockWorldState.getMatchContext().getOrPut("ConveyorBelt", new LinkedList<>()).add(blockWorldState.getPos());
+                            return true;
+                        }
                         return false;
-                    }
-                    // Adds the position of the conveyor to the match context
-                    blockWorldState.getMatchContext().getOrPut("ConveyorBelt", new LinkedList<>()).add(blockWorldState.getPos());
-                    return true;
-                }
-                return false;
-            }, () -> Arrays.stream(BlockConveyor.ConveyorType.values())
-                    .map(entry -> new BlockInfo(SuSyBlocks.CONVEYOR_BELT.getState(entry), null))
-                    .toArray(BlockInfo[]::new)
-            ).addTooltips("gregtech.multiblock.pattern.error.conveyor");
+                    }, () -> Arrays.stream(BlockConveyor.ConveyorType.values())
+                            .map(entry -> new BlockInfo(SuSyBlocks.CONVEYOR_BELT.getState(entry), null))
+                            .toArray(BlockInfo[]::new)
+                    ).addTooltips("gregtech.multiblock.pattern.error.conveyor")));
 
     @NotNull
     public static TraceabilityPredicate coolingCoils() {
@@ -106,7 +110,7 @@ public class SuSyPredicates {
     }
 
     @NotNull
-    public static TraceabilityPredicate conveyorBelts() {
-        return CONVEYOR_BELT.get();
+    public static TraceabilityPredicate conveyorBelts(EnumFacing facing) {
+        return CONVEYOR_BELT.get(facing).get();
     }
 }
