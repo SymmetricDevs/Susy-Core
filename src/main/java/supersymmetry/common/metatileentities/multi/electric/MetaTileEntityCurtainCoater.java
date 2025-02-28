@@ -19,6 +19,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.tuple.Pair;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.common.blocks.BlockConveyor;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -31,7 +32,7 @@ import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.conveyo
 
 public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
 
-    private final List<BlockPos> conveyorBlocks = new ArrayList<>();
+    private final List<Pair<BlockPos, RelativeDirection>> conveyorBlocks = new ArrayList<>();
 
     public MetaTileEntityCurtainCoater(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.CURTAIN_COATER);
@@ -55,7 +56,7 @@ public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
                         .or(autoAbilities(true, true, false, false, false, false, false)))
                 .where('G', states(getGearBoxState()))
                 .where('F', abilities(MultiblockAbility.IMPORT_FLUIDS))
-                .where('B', conveyorBelts(getFrontFacing().rotateYCCW()))
+                .where('B', conveyorBelts(RelativeDirection.LEFT))
                 .where(' ', any())
                 .build();
     }
@@ -103,10 +104,12 @@ public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
     protected void updateFormedValid() {
         super.updateFormedValid();
 
-        // RelativeDirection will take into account of the multi flipping pattern
-        EnumFacing conveyorFacing = RelativeDirection.LEFT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), isFlipped());
         World world = getWorld();
-        for (BlockPos blockPos : conveyorBlocks) {
+        for (Pair<BlockPos, RelativeDirection> posDirPair : conveyorBlocks) {
+            // RelativeDirection will take into account of the multi flipping pattern
+            EnumFacing conveyorFacing = posDirPair.getRight().getRelativeFacing(getFrontFacing(), getUpwardsFacing(), isFlipped());
+
+            BlockPos blockPos = posDirPair.getLeft();
             IBlockState blockState = world.getBlockState(blockPos);
             Block conveyor = blockState.getBlock();
             if (conveyor instanceof BlockConveyor && blockState.getValue(BlockConveyor.FACING) != conveyorFacing) {

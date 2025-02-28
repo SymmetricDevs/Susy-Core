@@ -4,10 +4,11 @@ import cam72cam.immersiverailroading.IRBlocks;
 import gregtech.api.pattern.PatternStringError;
 import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.util.BlockInfo;
+import gregtech.api.util.RelativeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.common.Loader;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.SuSyValues;
 import supersymmetry.common.blocks.BlockConveyor;
@@ -73,19 +74,22 @@ public class SuSyPredicates {
     });
 
     // Allow all conveyor belts, and require them to have the same type.
-    private static final Map<EnumFacing, Supplier<TraceabilityPredicate>> CONVEYOR_BELT =
-            Arrays.stream(EnumFacing.values()).collect(Collectors.toMap(facing -> facing,
+    // This will create a list of Pair<BlockPos, RelativeDirection> allowing the multiblock to reorient the facing.
+    private static final Map<RelativeDirection, Supplier<TraceabilityPredicate>> CONVEYOR_BELT =
+            Arrays.stream(RelativeDirection.values()).collect(Collectors.toMap(facing -> facing,
                     facing -> () -> new TraceabilityPredicate(blockWorldState -> {
                         IBlockState state = blockWorldState.getBlockState();
                         if (state.getBlock() instanceof BlockConveyor) {
+                            // Check conveyor type
                             BlockConveyor.ConveyorType type = ((BlockConveyor) state.getBlock()).getState(state);
                             Object currentConveyor = blockWorldState.getMatchContext().getOrPut("ConveyorType", type);
                             if (!currentConveyor.equals(type)) {
                                 blockWorldState.setError(new PatternStringError("gregtech.multiblock.pattern.error.conveyor"));
                                 return false;
                             }
-                            // Adds the position of the conveyor to the match context
-                            blockWorldState.getMatchContext().getOrPut("ConveyorBelt", new LinkedList<>()).add(blockWorldState.getPos());
+                            // Adds the position of the conveyor (and target facing) to the match context
+                            blockWorldState.getMatchContext().getOrPut("ConveyorBelt", new LinkedList<>())
+                                    .add(Pair.of(blockWorldState.getPos(), facing));
                             return true;
                         }
                         return false;
@@ -110,7 +114,7 @@ public class SuSyPredicates {
     }
 
     @NotNull
-    public static TraceabilityPredicate conveyorBelts(EnumFacing facing) {
+    public static TraceabilityPredicate conveyorBelts(RelativeDirection facing) {
         return CONVEYOR_BELT.get(facing).get();
     }
 }
