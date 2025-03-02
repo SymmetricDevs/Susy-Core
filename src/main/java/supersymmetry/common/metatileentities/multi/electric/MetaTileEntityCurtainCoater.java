@@ -1,5 +1,6 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+
 import gregtech.api.GTValues;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -46,17 +47,18 @@ public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
     @Override
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle("  X  ", "  X  ", "  X  ")
-                .aisle("IXXXO", "BBBBB", "  X  ")
-                .aisle("  S  ", "  F  ", "  G  ")
+                .aisle("CCCCC", "CWGWC", "  G  ")
+                .aisle("CCCCC", "I>>>O", "CCGCC")
+                .aisle("CCSCC", "CWHWC", "  G  ")
                 .where('S', selfPredicate())
                 .where('I', abilities(MultiblockAbility.IMPORT_ITEMS))
                 .where('O', abilities(MultiblockAbility.EXPORT_ITEMS))
-                .where('X', states(getCasingState()).setMinGlobalLimited(4)
+                .where('H', abilities(MultiblockAbility.IMPORT_FLUIDS))
+                .where('C', states(getCasingState()).setMinGlobalLimited(18)
                         .or(autoAbilities(true, true, false, false, false, false, false)))
                 .where('G', states(getGearBoxState()))
-                .where('F', abilities(MultiblockAbility.IMPORT_FLUIDS))
-                .where('B', conveyorBelts(RelativeDirection.LEFT))
+                .where('W', states(getGlassState()))
+                .where('>', conveyorBelts(RelativeDirection.LEFT))
                 .where(' ', any())
                 .build();
     }
@@ -66,25 +68,26 @@ public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
         ArrayList<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
         MultiblockShapeInfo.Builder baseBuilder = MultiblockShapeInfo.builder()
                 .where('S', SuSyMetaTileEntities.CURTAIN_COATER, EnumFacing.SOUTH)
-                .where('X', getCasingState())
+                .where('C', getCasingState())
                 .where('I', MetaTileEntities.ITEM_IMPORT_BUS[GTValues.LV], EnumFacing.SOUTH)
                 .where('O', MetaTileEntities.ITEM_EXPORT_BUS[GTValues.LV], EnumFacing.SOUTH)
-                .where('F', MetaTileEntities.FLUID_IMPORT_HATCH[GTValues.LV], EnumFacing.SOUTH)
+                .where('H', MetaTileEntities.FLUID_IMPORT_HATCH[GTValues.LV], EnumFacing.SOUTH)
                 .where('E', MetaTileEntities.ENERGY_INPUT_HATCH[GTValues.LV], EnumFacing.NORTH)
                 .where('G', getGearBoxState())
+                .where('W', getGlassState())
                 .where('>', SuSyBlocks.CONVEYOR_BELT.getDefaultState().withProperty(BlockConveyor.FACING, EnumFacing.EAST))
                 .where('<', SuSyBlocks.CONVEYOR_BELT.getDefaultState().withProperty(BlockConveyor.FACING, EnumFacing.WEST))
                 .where('M',
                         () -> ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH : getCasingState(), EnumFacing.SOUTH);
         shapeInfo.add(baseBuilder.shallowCopy()
-                .aisle("  E  ", "  X  ", "  X  ")
-                .aisle("IMXXO", ">>>>>", "  X  ")
-                .aisle("  S  ", "  F  ", "  G  ")
+                .aisle("CCCCC", "CWGWC", "  G  ")
+                .aisle("CCCCC", "I>>>O", "CCGCC")
+                .aisle("CESMC", "CWHWC", "  G  ")
                 .build());
         shapeInfo.add(baseBuilder.shallowCopy()
-                .aisle("  E  ", "  X  ", "  X  ")
-                .aisle("OMXXI", "<<<<<", "  X  ")
-                .aisle("  S  ", "  F  ", "  G  ")
+                .aisle("CCCCC", "CWGWC", "  G  ")
+                .aisle("CCCCC", "O<<<I", "CCGCC")
+                .aisle("CESMC", "CWHWC", "  G  ")
                 .build());
         return shapeInfo;
     }
@@ -92,7 +95,6 @@ public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
     @Override
     protected void formStructure(PatternMatchContext context) {
         super.formStructure(context);
-
         conveyorBlocks.addAll(context.getOrDefault("ConveyorBelt", new LinkedList<>()));
     }
 
@@ -127,11 +129,15 @@ public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
         return MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STAINLESS_STEEL_GEARBOX);
     }
 
+    protected static IBlockState getGlassState() {
+        return MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.TEMPERED_GLASS);
+    }
+
+
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
         return Textures.CLEAN_STAINLESS_STEEL_CASING;
     }
-
     @Nonnull
     @Override
     protected ICubeRenderer getFrontOverlay() {
