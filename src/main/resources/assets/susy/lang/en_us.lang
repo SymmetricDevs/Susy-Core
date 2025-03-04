@@ -620,7 +620,9 @@ gregtech.machine.phase_separator.name=Phase Separator
 
 # RTG
 gregtech.machine.rtg.lv.name=Basic RTG
-
+gregtech.machine.rtg.tooltip.info=Power for your pacemaker.
+gregtech.machine.rtg.tooltip.description=Generates a small but steady amount of electricity using the decay of radioactive isotopes.
+gregtech.machine.rtg.voltage_produced=§aVoltage PRODUCED: §f%,d EU/t (%s§f)
 
 # Electrostatic Separator
 gregtech.machine.electrostatic_separator.lv.name=Basic Electrostatic Separator
