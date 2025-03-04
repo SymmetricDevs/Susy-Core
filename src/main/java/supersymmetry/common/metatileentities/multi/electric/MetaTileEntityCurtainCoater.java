@@ -69,8 +69,10 @@ public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
         MultiblockShapeInfo.Builder baseBuilder = MultiblockShapeInfo.builder()
                 .where('S', SuSyMetaTileEntities.CURTAIN_COATER, EnumFacing.SOUTH)
                 .where('C', getCasingState())
-                .where('I', MetaTileEntities.ITEM_IMPORT_BUS[GTValues.LV], EnumFacing.SOUTH)
-                .where('O', MetaTileEntities.ITEM_EXPORT_BUS[GTValues.LV], EnumFacing.SOUTH)
+                .where('I', MetaTileEntities.ITEM_IMPORT_BUS[GTValues.LV], EnumFacing.WEST)
+                .where('i', MetaTileEntities.ITEM_IMPORT_BUS[GTValues.LV], EnumFacing.EAST)
+                .where('O', MetaTileEntities.ITEM_EXPORT_BUS[GTValues.LV], EnumFacing.WEST)
+                .where('o', MetaTileEntities.ITEM_EXPORT_BUS[GTValues.LV], EnumFacing.EAST)
                 .where('H', MetaTileEntities.FLUID_IMPORT_HATCH[GTValues.LV], EnumFacing.SOUTH)
                 .where('E', MetaTileEntities.ENERGY_INPUT_HATCH[GTValues.LV], EnumFacing.NORTH)
                 .where('G', getGearBoxState())
@@ -81,12 +83,12 @@ public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
                         () -> ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH : getCasingState(), EnumFacing.SOUTH);
         shapeInfo.add(baseBuilder.shallowCopy()
                 .aisle("CCCCC", "CWGWC", "  G  ")
-                .aisle("CCCCC", "I>>>O", "CCGCC")
+                .aisle("CCCCC", "I>>>o", "CCGCC")
                 .aisle("CESMC", "CWHWC", "  G  ")
                 .build());
         shapeInfo.add(baseBuilder.shallowCopy()
                 .aisle("CCCCC", "CWGWC", "  G  ")
-                .aisle("CCCCC", "O<<<I", "CCGCC")
+                .aisle("CCCCC", "O<<<i", "CCGCC")
                 .aisle("CESMC", "CWHWC", "  G  ")
                 .build());
         return shapeInfo;
