@@ -9,6 +9,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,8 +20,9 @@ import supersymmetry.client.renderer.textures.SusyTextures;
 import javax.annotation.Nullable;
 import java.util.List;
 
-//#fix# can hold plasma acid gas and lava, maybe change that
 public class MetaTileEntityStockFluidExchanger extends MetaTileEntityStockInteractor {
+
+    private IFluidHandler dummyHandler = new FluidTank(0);
 
     public MetaTileEntityStockFluidExchanger(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SusyTextures.STOCK_FLUID_EXCHANGER);
@@ -36,7 +38,9 @@ public class MetaTileEntityStockFluidExchanger extends MetaTileEntityStockIntera
     protected <T> T getStockCapability(Capability<T> capability, EnumFacing side) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
             IFluidHandler fluidHandler = null;
-            if (this.stock instanceof FreightTank tankStock) {
+            if (this.stock == null || this.stock.isDead()) {
+                fluidHandler = dummyHandler;
+            } else if (this.stock instanceof FreightTank tankStock) {
                 fluidHandler = tankStock.theTank.internal;
             } // TODO: add more if-else arguments if there's more kinds of stocks. Or maybe a utility method
             if (fluidHandler != null && fluidHandler.getTankProperties().length > 0) {

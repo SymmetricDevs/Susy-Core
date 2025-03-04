@@ -113,12 +113,13 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
         if (capability == GregtechTileCapabilities.CAPABILITY_CONTROLLABLE) {
             return GregtechTileCapabilities.CAPABILITY_CONTROLLABLE.cast(this);
         }
-        if (stock != null && !stock.isDead()) {
-            T stockCapability = getStockCapability(capability, side);
-            if (stockCapability != null) {
-                return stockCapability;
-            }
+
+        T stockCapability = getStockCapability(capability, side);
+        if (stockCapability != null) {
+            return stockCapability;
         }
+
+
         return super.getCapability(capability, side);
     }
 
