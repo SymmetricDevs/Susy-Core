@@ -29,6 +29,7 @@ public class SuSyBlocks {
     public static BlockTurbineRotor TURBINE_ROTOR;
     public static BlockSeparatorRotor SEPARATOR_ROTOR;
     public static BlockDrillHead DRILL_HEAD;
+    public static BlockDrillBit DRILL_BIT;
     public static BlockStructural STRUCTURAL_BLOCK;
     public static BlockStructural1 STRUCTURAL_BLOCK_1;
     public static BlockDeposit DEPOSIT_BLOCK;
@@ -42,6 +43,7 @@ public class SuSyBlocks {
     public static BlockSerpentine SERPENTINE;
     public static BlocksHardened HARDBLOCKS;
     public static BlocksCustomSheets CUSTOMSHEETS;
+    public static BlockConveyor CONVEYOR_BELT;
 
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
@@ -52,6 +54,9 @@ public class SuSyBlocks {
 
         DRILL_HEAD = new BlockDrillHead();
         DRILL_HEAD.setRegistryName("drill_head");
+
+        DRILL_BIT = new BlockDrillBit();
+        DRILL_BIT.setRegistryName("drill_bit");
 
         COAGULATION_TANK_WALL = new BlockCoagulationTankWall();
         COAGULATION_TANK_WALL.setRegistryName("coagulation_tank_wall");
@@ -108,6 +113,9 @@ public class SuSyBlocks {
 
         CUSTOMSHEETS = new BlocksCustomSheets();
         CUSTOMSHEETS.setRegistryName("custom_sheets");
+
+        CONVEYOR_BELT = new BlockConveyor();
+        CONVEYOR_BELT.setRegistryName("conveyor_belt");
     }
 
     @SideOnly(Side.CLIENT)
@@ -119,6 +127,7 @@ public class SuSyBlocks {
             registerItemModel(block);
         registerItemModel(ALTERNATOR_COIL);
         registerItemModel(DRILL_HEAD);
+        registerItemModel(DRILL_BIT);
         registerItemModel(TURBINE_ROTOR);
         registerItemModel(SEPARATOR_ROTOR);
         registerItemModel(STRUCTURAL_BLOCK);
@@ -134,6 +143,7 @@ public class SuSyBlocks {
         SERPENTINE.onModelRegister();
         registerItemModel(HARDBLOCKS);
         registerItemModel(CUSTOMSHEETS);
+        registerItemModel(CONVEYOR_BELT);
     }
 
     @SideOnly(Side.CLIENT)
