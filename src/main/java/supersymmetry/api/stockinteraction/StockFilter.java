@@ -5,13 +5,16 @@ import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.screen.RichTooltip;
+import com.cleanroommc.modularui.utils.Alignment;
 import com.cleanroommc.modularui.utils.Color;
+import com.cleanroommc.modularui.value.sync.BooleanSyncValue;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
 import com.cleanroommc.modularui.value.sync.StringSyncValue;
 import com.cleanroommc.modularui.value.sync.SyncHandlers;
 import com.cleanroommc.modularui.widget.Widget;
 import com.cleanroommc.modularui.widgets.ItemSlot;
 import com.cleanroommc.modularui.widgets.SlotGroupWidget;
+import com.cleanroommc.modularui.widgets.ToggleButton;
 import com.cleanroommc.modularui.widgets.layout.Flow;
 import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 import net.minecraft.item.ItemStack;
@@ -39,6 +42,7 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
     protected String patternString;
     protected Pattern pattern;
     protected boolean errored = false;
+    protected boolean enabled;
 
     public StockFilter(int size) {
         this.size = size;
@@ -50,7 +54,7 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
     @Override
     public boolean test(EntityRollingStock entityRollingStock) {
         String name = entityRollingStock.getDefinition().name();
-        return definitions.containsValue(name) && matchesName(entityRollingStock.tag);
+        return definitions.containsValue(name) && matchesName(entityRollingStock.tag) || !enabled;
     }
 
     protected boolean matchesName(String tag) {
@@ -99,7 +103,7 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
     @SuppressWarnings("deprecation")
     @NotNull
     public ModularPanel createPopupPanel(PanelSyncManager syncManager) { // TODO: loc
-        return Mui2MetaTileEntity.createPopupPanel("simple_stock_filter", 86, 101).padding(4)
+        return Mui2MetaTileEntity.createPopupPanel("simple_stock_filter", 86, 121).padding(4)
                 .child(IKey.lang("susy.gui.stock_interactor.title.stock_filter").asWidget().pos(5, 5))
                 .child(createWidgets(syncManager).top(22));
     }
@@ -111,8 +115,21 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
         syncManager.registerSlotGroup(filterInventory);
 
         StringSyncValue patternString = new StringSyncValue(this::getPatternString, this::setPatternString);
+        BooleanSyncValue enabledValue = new BooleanSyncValue(() -> enabled, val -> enabled = val);
 
         return Flow.column().coverChildrenHeight()
+                .child(Flow.row()
+                        .coverChildrenHeight()
+                        .marginBottom(2)
+                        .widthRel(1f)
+                        .child(new ToggleButton()
+                                .overlay(SusyGuiTextures.BUTTON_STOCK_FILTER.asIcon().size(16))
+                                .addTooltipLine(IKey.lang("susy.gui.stock_interactor.stock_filter.enabled.tooltip"))
+                                .value(enabledValue))
+                        .child(IKey.lang("susy.gui.stock_interactor.stock_filter.enabled.title").asWidget()
+                                .align(Alignment.Center)
+                                .height(18))
+                )
                 .child(SlotGroupWidget.builder()
                         .matrix("XXX",
                                 "XXX",

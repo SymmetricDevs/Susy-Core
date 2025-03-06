@@ -6,11 +6,13 @@ import cam72cam.mod.entity.ModdedEntity;
 import cam72cam.mod.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.util.vector.Vector3f;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -35,7 +37,7 @@ public class StockHelperFunctions {
     }
 
     @Nullable
-    public static EntityRollingStock getStockFrom(World world, AxisAlignedBB box, Predicate<EntityRollingStock> filter) {
+    public static EntityRollingStock getStockFrom(World world, AxisAlignedBB box, Predicate<EntityRollingStock> filter, BlockPos pos) {
         //get entities in box and stockFilter for only wanted ones
         return world.getEntitiesWithinAABB(ModdedEntity.class, box)
                 .stream()
@@ -43,7 +45,8 @@ public class StockHelperFunctions {
                 .filter(EntityRollingStock.class::isInstance)
                 .map(EntityRollingStock.class::cast)
                 .filter(filter)
-                .findFirst().orElse(null);
+                .min(Comparator.comparing(entity -> pos.distanceSq(entity.getBlockPosition().internal())))
+                .orElse(null);
     }
 
     public static AxisAlignedBB getBox(Vec3i pos, EnumFacing facing, double width, double depth) {

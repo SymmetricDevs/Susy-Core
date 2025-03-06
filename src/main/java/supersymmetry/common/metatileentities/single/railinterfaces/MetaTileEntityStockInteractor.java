@@ -1,6 +1,8 @@
 package supersymmetry.common.metatileentities.single.railinterfaces;
 
 import cam72cam.immersiverailroading.entity.EntityRollingStock;
+import cam72cam.mod.entity.boundingbox.IBoundingBox;
+import cam72cam.mod.math.Vec3d;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
@@ -63,14 +65,16 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
 
     @Nullable
     protected EntityRollingStock stock;
-
     protected boolean workingEnabled = true;
     // Rendering
     protected final ICubeRenderer renderer;
     // If the current bounding box should be rendered
     protected boolean renderBoundingBox = false;
+    protected boolean highlightSelectedStock = false;
 
     public static final int TICK_RATE = 10;
+    private static final int SYNC_STOCK = 1377;
+    private static final int SYNC_STOCK_LEAVE = 1378;
 
     public MetaTileEntityStockInteractor(ResourceLocation metaTileEntityId, ICubeRenderer renderer) {
         super(metaTileEntityId);
@@ -86,7 +90,15 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
 
     public void updateStock() {
         if (!getWorld().isRemote && this.isWorkingEnabled() && this.getOffsetTimer() % TICK_RATE == 0) {
-            this.stock = StockHelperFunctions.getStockFrom(getWorld(), getInteractionBoundingBox(), stockFilter);
+            EntityRollingStock newStock = StockHelperFunctions.getStockFrom(getWorld(), getInteractionBoundingBox(), stockFilter, this.getPos());
+            if (newStock != this.stock) {
+                this.stock = newStock;
+                if (newStock != null) {
+                    this.writeCustomData(SYNC_STOCK, (buf) -> buf.writeInt(newStock.getId()));
+                } else {
+                    this.writeCustomData(SYNC_STOCK_LEAVE, (buf) -> buf.writeBoolean(true));
+                }
+            }
         }
     }
 
@@ -95,9 +107,7 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
         this.workingEnabled = workingEnabled;
         World world = this.getWorld();
         if (world != null && !world.isRemote) {
-            this.writeCustomData(GregtechDataCodes.WORKING_ENABLED, (buf) -> {
-                buf.writeBoolean(workingEnabled);
-            });
+            this.writeCustomData(GregtechDataCodes.WORKING_ENABLED, (buf) -> buf.writeBoolean(workingEnabled));
         }
     }
 
@@ -138,6 +148,7 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
 
         BooleanSyncValue workingStateValue = new BooleanSyncValue(() -> workingEnabled, val -> workingEnabled = val);
         BooleanSyncValue renderBoundingBoxValue = new BooleanSyncValue(() -> renderBoundingBox, val -> renderBoundingBox = val);
+        BooleanSyncValue highlightSelectedStockValue = new BooleanSyncValue(() -> highlightSelectedStock, val -> highlightSelectedStock = val);
 
         return defaultPanel(this)
                 .child(IKey.lang(getMetaFullName()).asWidget()
@@ -178,6 +189,18 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
                                 .coverChildrenHeight()
                                 .marginBottom(2)
                                 .widthRel(1f)
+                                .child(new ToggleButton()
+                                        .overlay(SusyGuiTextures.BUTTON_RENDER_AREA.asIcon().size(16))
+                                        .addTooltipLine(IKey.lang("susy.gui.stock_interactor.button.highlight_selected_stock.tooltip"))
+                                        .value(highlightSelectedStockValue))
+                                .child(IKey.lang("susy.gui.stock_interactor.title.highlight_selected_stock").asWidget()
+                                        .align(Alignment.CenterRight)
+                                        .height(18))
+                        )
+                        .child(Flow.row()
+                                .coverChildrenHeight()
+                                .marginBottom(2)
+                                .widthRel(1f)
                                 .child(new ButtonWidget<>()
                                         .overlay(SusyGuiTextures.BUTTON_STOCK_FILTER.asIcon().size(16))
                                         .addTooltipLine(IKey.lang("susy.gui.stock_interactor.button.stock_filter.tooltip"))
@@ -202,15 +225,15 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
         if(this.shouldRenderBoundingBox()) {
             GlStateManager.pushMatrix();
 
-            RenderUtil.moveToFace(x,y,z,getFrontFacing());
-            GlStateManager.translate(0, -.5, 0);
-            RenderUtil.rotateToFace(getFrontFacing(), null);
-
             GlStateManager.enableBlend();
             GlStateManager.disableLighting();
             GlStateManager.disableTexture2D();
             GlStateManager.blendFunc(770, 771);
             GlStateManager.glLineWidth(15);
+
+            RenderUtil.moveToFace(x,y,z,getFrontFacing());
+            GlStateManager.translate(0, -.5, 0);
+            RenderUtil.rotateToFace(getFrontFacing(), null);
 
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder buffer = tessellator.getBuffer();
@@ -222,10 +245,36 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
             GlStateManager.disableBlend();
             GlStateManager.enableLighting();
             GlStateManager.enableTexture2D();
-            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
             GlStateManager.popMatrix();
+        }
+        if(this.shouldHighlightSelectedStock()) {
+            GlStateManager.pushMatrix();
 
+            GlStateManager.enableBlend();
+            GlStateManager.disableLighting();
+            GlStateManager.disableTexture2D();
+            GlStateManager.blendFunc(770, 771);
+            GlStateManager.glLineWidth(10);
+
+            IBoundingBox bounds = this.stock.getBounds().offset(new Vec3d(-this.getPos().getX(), -this.getPos().getY(), -this.getPos().getZ()));
+
+
+            RenderUtil.moveToFace(x,y,z,EnumFacing.DOWN);
+            GlStateManager.translate(-.5,  0, -.5);
+
+            Tessellator tessellator = Tessellator.getInstance();
+            BufferBuilder buffer = tessellator.getBuffer();
+            buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+
+            RenderBufferHelper.renderCubeFrame(buffer, bounds.min().x, bounds.min().y-.65, bounds.min().z, bounds.max().x,  bounds.max().y, bounds.max().z, 0, 1, 0, 0.6F);
+            tessellator.draw();
+
+            GlStateManager.disableBlend();
+            GlStateManager.enableLighting();
+            GlStateManager.enableTexture2D();
+
+            GlStateManager.popMatrix();
         }
     }
 
@@ -253,6 +302,7 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
         data.setDouble("interactionWidth", this.interactionWidth);
         data.setDouble("interactionDepth", this.interactionDepth);
         data.setBoolean("renderBoundingBox", this.renderBoundingBox);
+        data.setBoolean("highlightSelectedStock", this.highlightSelectedStock);
         data.setBoolean("workingEnabled", this.workingEnabled);
         return data;
     }
@@ -264,6 +314,7 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
         this.setInteractionWidth(data.getDouble("interactionWidth"));
         this.setInteractionDepth(data.getDouble("interactionDepth"));
         this.renderBoundingBox = data.getBoolean("renderBoundingBox");
+        this.highlightSelectedStock = data.getBoolean("highlightSelectedStock");
         this.workingEnabled = data.getBoolean("workingEnabled");
     }
 
@@ -274,6 +325,7 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
         buf.writeDouble(this.getInteractionWidth());
         buf.writeDouble(this.getInteractionDepth());
         buf.writeBoolean(this.renderBoundingBox);
+        buf.writeBoolean(this.highlightSelectedStock);
         buf.writeBoolean(this.workingEnabled);
     }
 
@@ -290,6 +342,7 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
         this.setInteractionWidth(buf.readDouble());
         this.setInteractionDepth(buf.readDouble());
         this.renderBoundingBox = buf.readBoolean();
+        this.highlightSelectedStock = buf.readBoolean();
         this.workingEnabled = buf.readBoolean();
     }
 
@@ -302,13 +355,23 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
         }
 
         // Front facing changed
-        if(dataId == -2) {
+        if(dataId == GregtechDataCodes.UPDATE_FRONT_FACING) {
             this.recalculateBoundingBox();
         }
 
         if(dataId == GregtechDataCodes.WORKING_ENABLED) {
             this.workingEnabled = buf.readBoolean();
         }
+
+        if(dataId == SYNC_STOCK) {
+            int entityId = buf.readInt();
+            this.stock = cam72cam.mod.world.World.get(getWorld()).getEntity(entityId, EntityRollingStock.class);
+        }
+
+        if(dataId == SYNC_STOCK_LEAVE) {
+            this.stock = null;
+        }
+
         this.scheduleRenderUpdate();
 
     }
@@ -344,13 +407,7 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
         return this.renderBoundingBox;
     }
 
-    public void setRenderBoundingBox(boolean renderBoundingBox) {
-        if(this.renderBoundingBox != renderBoundingBox) {
-            this.renderBoundingBox = renderBoundingBox;
-            if (!this.getWorld().isRemote) {
-                this.writeCustomData(6500, (buf -> buf.writeBoolean(this.renderBoundingBox)));
-                this.markDirty();
-            }
-        }
+    public boolean shouldHighlightSelectedStock() {
+        return this.highlightSelectedStock && this.stock != null && !this.stock.isDead();
     }
 }
