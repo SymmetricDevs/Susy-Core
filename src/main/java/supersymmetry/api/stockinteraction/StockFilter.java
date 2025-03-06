@@ -67,6 +67,7 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setString("patternString", patternString);
         nbt.setBoolean("errored", errored);
+        nbt.setBoolean("enabled", enabled);
         NBTTagCompound handlerNbt = handler.serializeNBT();
         nbt.setTag("handler", handlerNbt);
         return nbt;
@@ -76,6 +77,7 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
     public void deserializeNBT(NBTTagCompound nbt) {
         patternString = nbt.getString("patternString");
         errored = nbt.getBoolean("errored");
+        enabled = nbt.getBoolean("enabled");
         handler.deserializeNBT(nbt.getCompoundTag("handler"));
         refreshAllDefinitions();
         refreshPattern();

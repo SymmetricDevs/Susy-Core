@@ -146,7 +146,7 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
                 (panelSyncManager, syncHandler) -> stockFilter.createPopupPanel(panelSyncManager),
                 true);
 
-        BooleanSyncValue workingStateValue = new BooleanSyncValue(() -> workingEnabled, val -> workingEnabled = val);
+        BooleanSyncValue workingStateValue = new BooleanSyncValue(() -> workingEnabled, val -> setWorkingEnabled(val));
         BooleanSyncValue renderBoundingBoxValue = new BooleanSyncValue(() -> renderBoundingBox, val -> renderBoundingBox = val);
         BooleanSyncValue highlightSelectedStockValue = new BooleanSyncValue(() -> highlightSelectedStock, val -> highlightSelectedStock = val);
 
