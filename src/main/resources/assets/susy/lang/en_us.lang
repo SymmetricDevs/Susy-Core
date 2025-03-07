@@ -100,6 +100,10 @@ tile.home_block.home_renewal_brutalist.tooltip=Renewal Brutalist
 tile.home_block.home_scifi.name=Home Block
 tile.home_block.home_scifi.tooltip=Sci-Fi
 
+tile.conveyor_belt.lv.name=Conveyor Belt
+
+tile.drill_bit.steel.name=Steel Drill Bit Block
+
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
 tile.susy_stone_smooth.gneiss.name=Gneiss
@@ -303,6 +307,13 @@ gregtech.machine.single_column_cryogenic_distillation_plant.name=Single Column C
 gregtech.machine.reverberatory_furnace.name=Reverberatory Furnace
 gregtech.machine.blender.name=Blender
 gregtech.machine.sieve_distillation_tower.name=Sieve Distillation Tower
+
+gregtech.machine.curtain_coater.name=Curtain Coater
+gregtech.multiblock.pattern.error.conveyor=§cAll conveyor belts must be the same§r
+
+gregtech.machine.milling.name=Precise Milling Machine
+gregtech.multiblock.pattern.error.milling.upper=§cOnly allowed on the upper part of the machine§r
+gregtech.multiblock.pattern.error.milling.lower=§cOnly allowed on the lower part of the machine§r
 
 gregtech.machine.drone_pad.name=Drone Pad
 gregtech.machine.primitive_smelter.name=Primitive Smelter
@@ -742,6 +753,8 @@ recipemap.primitive_smelter.name=Primitive Smelting
 recipemap.large_fluid_pump.name=Large Fluid Pump
 recipemap.sieve_distillation.name=Fractional Distillation
 recipemap.jet_wingpack_fuels.name=Jet Wingpack Fuels
+recipemap.curtain_coater.name=Curtain Coater
+recipemap.milling.name=Precise Milling Machine
 
 gregtech.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 
