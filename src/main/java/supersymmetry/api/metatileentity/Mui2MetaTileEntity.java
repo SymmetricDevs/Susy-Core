@@ -41,7 +41,7 @@ public abstract class Mui2MetaTileEntity extends MetaTileEntity implements IGuiH
     }
 
     public static ModularPanel defaultPanel(MetaTileEntity mte) {
-        return createPanel(mte, 176, 166);
+        return createPanel(mte, 176, 186);
     }
 
     public static ModularPanel createPopupPanel(String name, int width, int height) {

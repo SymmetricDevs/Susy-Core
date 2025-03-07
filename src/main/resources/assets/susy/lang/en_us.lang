@@ -631,7 +631,9 @@ gregtech.machine.phase_separator.name=Phase Separator
 
 # RTG
 gregtech.machine.rtg.lv.name=Basic RTG
-
+gregtech.machine.rtg.tooltip.info=Power for your pacemaker.
+gregtech.machine.rtg.tooltip.description=Generates a small but steady amount of electricity using the decay of radioactive isotopes.
+gregtech.machine.rtg.voltage_produced=§aVoltage PRODUCED: §f%,d EU/t (%s§f)
 
 # Electrostatic Separator
 gregtech.machine.electrostatic_separator.lv.name=Basic Electrostatic Separator
@@ -917,11 +919,15 @@ susy.stock_interfaces.stock_reader.description=Outputs redstone signal based on 
 susy.gui.stock_interactor.button.stock_filter.tooltip=Click to open stock filter GUI
 susy.gui.stock_interactor.button.controller_setting.tooltip=Click to open controller settings GUI
 susy.gui.stock_interactor.button.render_bounding_box.tooltip=Click to toggle rendering of interaction area
+susy.gui.stock_interactor.button.highlight_selected_stock.tooltip=Click to toggle highlighting of selected stock
 
+susy.gui.stock_interactor.title.highlight_selected_stock=Highlight selected stock
 susy.gui.stock_interactor.title.render_bounding_box=Render Interaction Area
 susy.gui.stock_interactor.title.stock_filter=Stock Filter
 susy.gui.stock_interactor.title.controller_setting=Settings
 
+susy.gui.stock_interactor.stock_filter.enabled.tooltip=Toggle filter
+susy.gui.stock_interactor.stock_filter.enabled.title=Toggle
 susy.gui.stock_interactor.stock_filter.regex.tooltip.info=§bAccepts regex expressions, case sensitive\n§6^§r for start of string\n§6$§r for end of string\n§6*§r for wildcard (i.e. 0 or more characters)\n§6a*§r for zero or more consecutive `a` characters\n§6?§r for any 1 character\n§6()§r for matching empty entry\n§bYou can learn more about regex at regex101.com§r
 susy.gui.stock_interactor.stock_filter.regex.tooltip.error=§4Error compiling regex pattern!§r\nName filter will not get applied!
 susy.gui.stock_interactor.stock_filter.regex.tooltip.waiting=No regex pattern set\nName filter will not get applied!
