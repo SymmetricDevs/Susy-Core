@@ -141,7 +141,7 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
     @Nonnull
     @Override
     protected ICubeRenderer getFrontOverlay() {
-        return SusyTextures.OCEANIC_DRILL_OVERLAY;
+        return SusyTextures.LARGE_FLUID_PUMP_OVERLAY;
     }
 
     /**

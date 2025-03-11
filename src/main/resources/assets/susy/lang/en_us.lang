@@ -271,8 +271,6 @@ gregtech.machine.basic_gas_turbine.name=Large Gas Turbine
 gregtech.machine.large_fluid_pump.name=Large Fluid Pump
 gregtech.machine.large_fluid_pump.tooltip.1=This would definitely affect the local trout population.
 gregtech.machine.large_fluid_pump.tooltip.2=Only works when the controller is at Y=64 and the bottom Steel Pipe Casing is located in the right biome.
-gregtech.machine.ocean_pumper.name=Ocean Pumper
-gregtech.machine.ocean_pumper.tooltip=Works only in Ocean biomes between Y=70 and Y=75
 gregtech.machine.advanced_arc_furnace.name=Advanced Arc Furnace
 gregtech.machine.clarifier.name=Clarifier
 gregtech.machine.dumper.name=Dumper
@@ -744,7 +742,6 @@ recipemap.sieve_distillation.name=Fractional Distillation
 recipemap.jet_wingpack_fuels.name=Jet Wingpack Fuels
 
 gregtech.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
-gregtech.multiblock.ocean_pumper.description=The Ocean Pumper is an electrically powered multiblock that collects a base amount of 8,000 L Seawater per second (at MV), but only if it is in an ocean biome, and when the controller is between Y = 70 and Y = 75 (Inclusive). It needs an output hatch, a maintenance hatch, and an energy input hatch.
 
 # Energy Hatches
 
@@ -784,7 +781,7 @@ gregtech.machine.ordered_dt.tooltip.2=§cNot putting a fluid output in the Nth l
 
 # Logistics
 gregtech.machine.delegator.tooltip.non_recursion=§6Cannot be attached to other Delegators!
-gregtech.top.delegator.delegating_face=Delegating: %s
+gregtech.top.delegator.delegating_face=Delegating face:
 
 gregtech.machine.bridge.inv.name=Inventory Bridge
 gregtech.machine.bridge.inv.tooltip=§bRelays Inventories
@@ -879,8 +876,6 @@ metaarmor.jet_wingpack.engine_active=Jet Wingpack: Engine Activated
 metaarmor.jet_wingpack.engine_inactive=Jet Wingpack: Engine Deactivated
 
 # Machine Translations
-susy.ocean_pumper.full=Tanks are Full!
-susy.ocean_pumper.drainrate=Current Pumping Rate: %s
 susy.wrongbiome=Machine can not work in this biome!
 susy.weather_resistance=§2Will not explode from water, lava, fire or rain.
 susy.large_fluid_pump.y_level=Current Controller Y level: Y=%s
