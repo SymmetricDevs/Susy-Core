@@ -185,7 +185,7 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
 
                 this.motionY += 0.125;
 
-                if (this.isCollidingWithBlocks()) {
+                if (age >= 63 && this.isCollidingWithBlocks()) {
                     this.explode();
                 }
 
