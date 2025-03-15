@@ -44,6 +44,7 @@ public class SuSyBlocks {
     public static BlocksHardened HARDBLOCKS;
     public static BlocksCustomSheets CUSTOMSHEETS;
     public static BlockConveyor CONVEYOR_BELT;
+    public static BlockEUVLithographerComponent EUV_LITHOGRAPHER_COMPONENT;
 
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
@@ -116,6 +117,9 @@ public class SuSyBlocks {
 
         CONVEYOR_BELT = new BlockConveyor();
         CONVEYOR_BELT.setRegistryName("conveyor_belt");
+
+        EUV_LITHOGRAPHER_COMPONENT = new BlockEUVLithographerComponent();
+        EUV_LITHOGRAPHER_COMPONENT.setRegistryName("euv_lithographer_component");
     }
 
     @SideOnly(Side.CLIENT)
@@ -144,6 +148,7 @@ public class SuSyBlocks {
         registerItemModel(HARDBLOCKS);
         registerItemModel(CUSTOMSHEETS);
         registerItemModel(CONVEYOR_BELT);
+        registerItemModel(EUV_LITHOGRAPHER_COMPONENT);
     }
 
     @SideOnly(Side.CLIENT)

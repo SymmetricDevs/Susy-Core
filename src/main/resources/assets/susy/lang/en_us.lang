@@ -22,6 +22,7 @@ tile.susy_multiblock_casing.sieve_tray.name=Sieve Tray
 tile.susy_multiblock_casing.structural_packing.name=Structural Packing
 tile.susy_multiblock_casing.ulv_structural_casing.name=Basic Structural Casing
 tile.susy_multiblock_casing.drone_pad.name=Drone Pad
+tile.susy_multiblock_casing.euv_safe_casing.name=Extreme-Ultraviolet-Safe Lithographer Casing
 
 tile.serpentine.basic.name=Copper Tubing Serpentine Block
 
@@ -103,6 +104,12 @@ tile.home_block.home_scifi.tooltip=Sci-Fi
 tile.conveyor_belt.lv.name=Conveyor Belt
 
 tile.drill_bit.steel.name=Steel Drill Bit Block
+
+tile.euv_lithographer_component.laser.name=Carbon Dioxide Laser Generator
+tile.euv_lithographer_component.mirror.name=Silicon-Molybdenum EUV Mirror
+tile.euv_lithographer_component.reticle.name=Silicon-Molybdenum EUV Reticle
+tile.euv_lithographer_component.tray.name=Wafer Chuck Component
+tile.euv_lithographer_component.handler.name=Wafer Transfer End Effector
 
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
@@ -314,6 +321,8 @@ gregtech.multiblock.pattern.error.conveyor=§cAll conveyor belts must be the sam
 gregtech.machine.milling.name=Precise Milling Machine
 gregtech.multiblock.pattern.error.milling.upper=§cOnly allowed on the upper part of the machine§r
 gregtech.multiblock.pattern.error.milling.lower=§cOnly allowed on the lower part of the machine§r
+
+gregtech.machine.euv_lithographer.name=Extreme Ultraviolet Lithographer
 
 gregtech.machine.drone_pad.name=Drone Pad
 gregtech.machine.primitive_smelter.name=Primitive Smelter
