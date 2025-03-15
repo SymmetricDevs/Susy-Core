@@ -200,6 +200,8 @@ public class SuSyMetaTileEntities {
     //public static MetaTileEntityStockReader STOCK_CONTENT_READER;
     public static MetaTileEntityLocomotiveController STOCK_CONTROLLER;
 
+    public static MetaTileEntityEUVLithographer EUV_LITHOGRAPHER;
+
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
         COAGULATION_TANK = registerMetaTileEntity(14501, new MetaTileEntityCoagulationTank(susyId("coagulation_tank")));
@@ -283,6 +285,8 @@ public class SuSyMetaTileEntities {
         CURTAIN_COATER = registerMetaTileEntity(14513, new MetaTileEntityCurtainCoater(susyId("curtain_coater")));
         MILLING = registerMetaTileEntity(14514, new MetaTileEntityPreciseMillingMachine(susyId("milling")));
 
+        EUV_LITHOGRAPHER = registerMetaTileEntity(14741, new MetaTileEntityEUVLithographer(susyId("euv_lithographer")));
+// 14742, 14743, 14744
         ArrayList<Integer> ids = new ArrayList<>();
         for (int id = 14500; id < 15000; id++) {
             if (GregTechAPI.MTE_REGISTRY.getObjectById(id) == null) ids.add(id);

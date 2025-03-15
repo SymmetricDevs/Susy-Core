@@ -272,7 +272,7 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> IN_SITU_LEACHER = new RecipeMap<>("in_situ_leacher", 2, 2, 2, 2, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.COMPRESSOR);
 
-    public static final RecipeMap<SimpleRecipeBuilder> EUV_LITHOGRAPHY = new RecipeMap<>("euv_lithography", 3, 3, 3, 3, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<SimpleRecipeBuilder> EUV_LITHOGRAPHY = new RecipeMap<>("euv_lithography", 3, 3, 0, 0, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.ELECTROLYZER);
 
     public static final RecipeMap<SimpleRecipeBuilder> ROTARY_KILN = new RecipeMap<>("rotary_kiln", 3, 2, 3, 2, new SimpleRecipeBuilder(), false)
