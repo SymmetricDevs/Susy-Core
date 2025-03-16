@@ -112,7 +112,7 @@ public class SuSyMetaTileEntities {
     public static SimpleMachineMetaTileEntity[] ION_IMPLANTER;
     public static SimpleMachineMetaTileEntity[] CVD;
     public static SimpleMachineMetaTileEntity[] SPIN_COATER;
-    public static SimpleMachineMetaTileEntity[] SPUTTER_DEPOSITION; // atomic layer depositor
+    public static SimpleMachineMetaTileEntity[] SPUTTER_DEPOSITION;
 
     public static SimpleMachineMetaTileEntity[] WEAPONS_FACTORY;
 
