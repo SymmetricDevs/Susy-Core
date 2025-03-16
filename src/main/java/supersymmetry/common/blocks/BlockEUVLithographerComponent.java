@@ -16,11 +16,11 @@ import javax.annotation.Nonnull;
 public class BlockEUVLithographerComponent extends VariantBlock<BlockEUVLithographerComponent.EUVComponentType> {
 
     public BlockEUVLithographerComponent() {
-        super(Material.GLASS);
+        super(Material.IRON);
         setTranslationKey("euv_lithographer_component");
         setHardness(5.0f);
         setResistance(5.0f);
-        setSoundType(SoundType.GLASS);
+        setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 1);
         setDefaultState(getState(EUVComponentType.LASER));
     }
