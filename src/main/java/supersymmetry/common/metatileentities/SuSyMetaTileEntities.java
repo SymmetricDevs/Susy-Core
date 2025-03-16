@@ -200,6 +200,8 @@ public class SuSyMetaTileEntities {
     //public static MetaTileEntityStockReader STOCK_CONTENT_READER;
     public static MetaTileEntityLocomotiveController STOCK_CONTROLLER;
 
+    public static MetaTileEntityAerospaceFlightSimulator AEROSPACE_FLIGHT_SIMULATOR;
+
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
         COAGULATION_TANK = registerMetaTileEntity(14501, new MetaTileEntityCoagulationTank(susyId("coagulation_tank")));
@@ -381,6 +383,8 @@ public class SuSyMetaTileEntities {
         STOCK_ITEM_EXCHANGER = registerMetaTileEntity(18002, new MetaTileEntityStockItemExchanger(susyId("stock_item_exchanger")));
         //STOCK_CONTENT_READER = registerMetaTileEntity(18003, new MetaTileEntityStockReader(susyId("stock_content_reader")));
         STOCK_CONTROLLER = registerMetaTileEntity(18004, new MetaTileEntityLocomotiveController(susyId("stock_controller")));
+
+        AEROSPACE_FLIGHT_SIMULATOR = registerMetaTileEntity(18005, new MetaTileEntityAerospaceFlightSimulator(susyId("aerospace_flight_simulator")));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name, RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator, ICubeRenderer texture, boolean isBricked) {
