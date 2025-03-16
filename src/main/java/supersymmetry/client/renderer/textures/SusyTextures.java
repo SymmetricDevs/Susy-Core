@@ -41,6 +41,8 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer UV_LIGHT_BOX_OVERLAY = new OrientedOverlayRenderer("machines/uv_light_box");
     public static final OrientedOverlayRenderer CVD_OVERLAY = new OrientedOverlayRenderer("machines/cvd");
     public static final OrientedOverlayRenderer ION_IMPLANTER_OVERLAY = new OrientedOverlayRenderer("machines/ion_implanter");
+    public static final OrientedOverlayRenderer SPIN_COATER_OVERLAY = new OrientedOverlayRenderer("machines/spin_coater");
+    public static final OrientedOverlayRenderer SPUTTER_DEPOSITION_OVERLAY = new OrientedOverlayRenderer("machines/sputter_deposition");
     public static final OrientedOverlayRenderer PHASE_SEPARATOR_OVERLAY = new OrientedOverlayRenderer("machines/phase_separator");
     public static final OrientedOverlayRenderer BATH_CONDENSER_OVERLAY = new OrientedOverlayRenderer("machines/bath_condenser");
     public static final OrientedOverlayRenderer CATALYTIC_REFORMER_OVERLAY = new OrientedOverlayRenderer("multiblock/catalytic_reformer");

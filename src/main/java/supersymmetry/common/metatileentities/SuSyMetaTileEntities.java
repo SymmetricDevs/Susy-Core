@@ -111,6 +111,8 @@ public class SuSyMetaTileEntities {
 
     public static SimpleMachineMetaTileEntity[] ION_IMPLANTER;
     public static SimpleMachineMetaTileEntity[] CVD;
+    public static SimpleMachineMetaTileEntity[] SPIN_COATER;
+    public static SimpleMachineMetaTileEntity[] SPUTTER_DEPOSITION; // atomic layer depositor
 
     public static SimpleMachineMetaTileEntity[] WEAPONS_FACTORY;
 
@@ -286,7 +288,9 @@ public class SuSyMetaTileEntities {
         MILLING = registerMetaTileEntity(14514, new MetaTileEntityPreciseMillingMachine(susyId("milling")));
 
         EUV_LITHOGRAPHER = registerMetaTileEntity(14741, new MetaTileEntityEUVLithographer(susyId("euv_lithographer")));
-// 14742, 14743, 14744
+        registerSimpleMTE(SPIN_COATER, 12, 14742, "spin_coater", SuSyRecipeMaps.SPIN_COATING_RECIPE, SusyTextures.SPIN_COATER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+        registerSimpleMTE(SPUTTER_DEPOSITION, 12, 14755, "sputter_deposition", SuSyRecipeMaps.SPUTTER_DEPOSITION_RECIPES, SusyTextures.SPUTTER_DEPOSITION_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+
         ArrayList<Integer> ids = new ArrayList<>();
         for (int id = 14500; id < 15000; id++) {
             if (GregTechAPI.MTE_REGISTRY.getObjectById(id) == null) ids.add(id);
@@ -455,6 +459,8 @@ public class SuSyMetaTileEntities {
         UV_LIGHT_BOX = new SimpleMachineMetaTileEntity[GTValues.OpV];
         CVD = new SimpleMachineMetaTileEntity[GTValues.OpV];
         ION_IMPLANTER = new SimpleMachineMetaTileEntity[GTValues.OpV];
+        SPIN_COATER = new SimpleMachineMetaTileEntity[GTValues.OpV];
+        SPUTTER_DEPOSITION = new SimpleMachineMetaTileEntity[GTValues.OpV];
 
         FLUID_COMPRESSOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
         FLUID_DECOMPRESSOR = new SimpleMachineMetaTileEntity[GTValues.OpV];

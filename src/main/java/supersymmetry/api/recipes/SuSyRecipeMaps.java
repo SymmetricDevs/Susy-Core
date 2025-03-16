@@ -169,6 +169,12 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> CVD_RECIPES = new RecipeMap<>("cvd", 3, 1, 2, 2, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.ARC);
 
+    public static final RecipeMap<SimpleRecipeBuilder> SPIN_COATING_RECIPE = new RecipeMap<>("spin_coating", 2, 1, 1, 0, new SimpleRecipeBuilder(), false)
+            .setSound(GTSoundEvents.CENTRIFUGE);
+
+    public static final RecipeMap<SimpleRecipeBuilder> SPUTTER_DEPOSITION_RECIPES = new RecipeMap<>("sputter_deposition", 3, 1, 2, 2, new SimpleRecipeBuilder(), false)
+            .setSound(GTSoundEvents.ELECTROLYZER);
+
     public static final RecipeMap<SimpleRecipeBuilder> ORE_SORTER_RECIPES = new RecipeMap<>("ore_sorter", 2, 20, 1, 1, new SimpleRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_EXTRACT, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.MACERATOR);
@@ -274,6 +280,9 @@ public class SuSyRecipeMaps {
 
     public static final RecipeMap<SimpleRecipeBuilder> EUV_LITHOGRAPHY = new RecipeMap<>("euv_lithography", 3, 3, 0, 0, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.ELECTROLYZER);
+
+    public static final RecipeMap<SimpleRecipeBuilder> SPIN_COATER = new RecipeMap<>("spin_coater", 2, 1, 1, 0, new SimpleRecipeBuilder(), false)
+            .setSound(GTSoundEvents.BATH);
 
     public static final RecipeMap<SimpleRecipeBuilder> ROTARY_KILN = new RecipeMap<>("rotary_kiln", 3, 2, 3, 2, new SimpleRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
