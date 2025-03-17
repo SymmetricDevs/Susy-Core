@@ -111,7 +111,6 @@ public class SuSyMetaTileEntities {
 
     public static SimpleMachineMetaTileEntity[] ION_IMPLANTER;
     public static SimpleMachineMetaTileEntity[] CVD;
-    public static SimpleMachineMetaTileEntity[] SPIN_COATER;
     public static SimpleMachineMetaTileEntity[] SPUTTER_DEPOSITION;
 
     public static SimpleMachineMetaTileEntity[] WEAPONS_FACTORY;
@@ -166,7 +165,7 @@ public class SuSyMetaTileEntities {
     public static SimpleMachineMetaTileEntity[] BATH_CONDENSER;
     public static SimpleMachineMetaTileEntity[] ELECTROSTATIC_SEPARATOR;
     public static SimpleMachineMetaTileEntity[] TEXTILE_SPINNER;
-    public static SimpleMachineMetaTileEntity[] POLISHING_MACHINE;
+    public static SimpleMachineMetaTileEntity[] WAFER_SPINNER;
 
     public static MetaTileEntityPrimitiveSmelter PRIMITIVE_SMELTER;
     public static MetaTileEntityPrimitiveItemBus PRIMITIVE_ITEM_IMPORT;
@@ -288,8 +287,7 @@ public class SuSyMetaTileEntities {
         MILLING = registerMetaTileEntity(14514, new MetaTileEntityPreciseMillingMachine(susyId("milling")));
 
         EUV_LITHOGRAPHER = registerMetaTileEntity(14741, new MetaTileEntityEUVLithographer(susyId("euv_lithographer")));
-        registerSimpleMTE(SPIN_COATER, 12, 14742, "spin_coater", SuSyRecipeMaps.SPIN_COATING_RECIPE, SusyTextures.SPIN_COATER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
-        registerSimpleMTE(SPUTTER_DEPOSITION, 12, 14755, "sputter_deposition", SuSyRecipeMaps.SPUTTER_DEPOSITION_RECIPES, SusyTextures.SPUTTER_DEPOSITION_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+        registerSimpleMTE(SPUTTER_DEPOSITION, 12, 14742, "sputter_deposition", SuSyRecipeMaps.SPUTTER_DEPOSITION_RECIPES, SusyTextures.SPUTTER_DEPOSITION_OVERLAY, true, GTUtility.defaultTankSizeFunction);
 
         ArrayList<Integer> ids = new ArrayList<>();
         for (int id = 14500; id < 15000; id++) {
@@ -381,7 +379,7 @@ public class SuSyMetaTileEntities {
         }
 
         registerSimpleMTE(ELECTROSTATIC_SEPARATOR, 12, 17035, "electrostatic_separator", SuSyRecipeMaps.ELECTROSTATIC_SEPARATOR, SusyTextures.ELECTROSTATIC_SEPARATOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
-        registerSimpleMTE(POLISHING_MACHINE, 12, 17048, "polishing_machine", SuSyRecipeMaps.POLISHING_MACHINE, SusyTextures.POLISHING_MACHINE_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+        registerSimpleMTE(WAFER_SPINNER, 12, 17048, "wafer_spinner", SuSyRecipeMaps.WAFER_SPINNER, SusyTextures.WAFER_SPINNER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         registerSimpleMTE(TEXTILE_SPINNER, 12, 17061, "textile_spinner", SuSyRecipeMaps.SPINNING_RECIPES, SusyTextures.TEXTILE_SPINNER_OVERLAY, true);
 
         //STOCK_DETECTOR = registerMetaTileEntity(18000, new MetaTileEntityStockDetector(susyId("stock_detector")));
@@ -459,7 +457,6 @@ public class SuSyMetaTileEntities {
         UV_LIGHT_BOX = new SimpleMachineMetaTileEntity[GTValues.OpV];
         CVD = new SimpleMachineMetaTileEntity[GTValues.OpV];
         ION_IMPLANTER = new SimpleMachineMetaTileEntity[GTValues.OpV];
-        SPIN_COATER = new SimpleMachineMetaTileEntity[GTValues.OpV];
         SPUTTER_DEPOSITION = new SimpleMachineMetaTileEntity[GTValues.OpV];
 
         FLUID_COMPRESSOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
@@ -468,7 +465,7 @@ public class SuSyMetaTileEntities {
 
         ELECTROSTATIC_SEPARATOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
         TEXTILE_SPINNER = new SimpleMachineMetaTileEntity[GTValues.OpV];
-        POLISHING_MACHINE = new SimpleMachineMetaTileEntity[GTValues.OpV];
+        WAFER_SPINNER = new SimpleMachineMetaTileEntity[GTValues.OpV];
 
         PHASE_SEPARATOR = new SimpleMachineMetaTileEntity[1];
         BATH_CONDENSER = new SimpleMachineMetaTileEntity[1];

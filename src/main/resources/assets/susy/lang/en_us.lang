@@ -674,20 +674,20 @@ gregtech.machine.textile_spinner.uiv.name=Epic Textile Spinner III
 gregtech.machine.textile_spinner.uxv.name=Epic Textile Spinner IV
 gregtech.machine.textile_spinner.opv.name=Legendary Textile Spinner
 
-# Polishing Machine
-gregtech.machine.polishing_machine.lv.name=Basic Polishing Machine
-gregtech.machine.polishing_machine.mv.name=Advanced Polishing Machine
-gregtech.machine.polishing_machine.hv.name=Advanced Polishing Machine II
-gregtech.machine.polishing_machine.ev.name=Advanced Polishing Machine III
-gregtech.machine.polishing_machine.iv.name=Elite Polishing Machine
-gregtech.machine.polishing_machine.luv.name=Elite Polishing Machine II
-gregtech.machine.polishing_machine.zpm.name=Elite Polishing Machine III
-gregtech.machine.polishing_machine.uv.name=Ultimate Polishing Machine
-gregtech.machine.polishing_machine.uhv.name=Epic Polishing Machine
-gregtech.machine.polishing_machine.uev.name=Epic Polishing Machine II
-gregtech.machine.polishing_machine.uiv.name=Epic Polishing Machine III
-gregtech.machine.polishing_machine.uxv.name=Epic Polishing Machine IV
-gregtech.machine.polishing_machine.opv.name=Legendary Polishing Machine
+# Wafer Spinner
+gregtech.machine.wafer_spinner.lv.name=Basic Wafer Spinner
+gregtech.machine.wafer_spinner.mv.name=Advanced Wafer Spinner
+gregtech.machine.wafer_spinner.hv.name=Advanced Wafer Spinner II
+gregtech.machine.wafer_spinner.ev.name=Advanced Wafer Spinner III
+gregtech.machine.wafer_spinner.iv.name=Elite Wafer Spinner
+gregtech.machine.wafer_spinner.luv.name=Elite Wafer Spinner II
+gregtech.machine.wafer_spinner.zpm.name=Elite Wafer Spinner III
+gregtech.machine.wafer_spinner.uv.name=Ultimate Wafer Spinner
+gregtech.machine.wafer_spinner.uhv.name=Epic Wafer Spinner
+gregtech.machine.wafer_spinner.uev.name=Epic Wafer Spinner II
+gregtech.machine.wafer_spinner.uiv.name=Epic Wafer Spinner III
+gregtech.machine.wafer_spinner.uxv.name=Epic Wafer Spinner IV
+gregtech.machine.wafer_spinner.opv.name=Legendary Wafer Spinner
 
 gregtech.machine.bath_condenser.name=Bath Condenser
 gregtech.machine.bath_condenser.tooltip=Only works inside a Cryogenic Distillation Tower
@@ -754,7 +754,7 @@ recipemap.blender.name=Blender
 recipemap.phase_separator.name=Phase Separation
 recipemap.bath_condenser.name=Bath Condenser
 recipemap.drone_pad.name=Drone Pad
-recipemap.polishing_machine.name=Polishing
+recipemap.wafer_spinner.name=Wafer Spinning
 recipemap.gravity_separator=Gravity Separation
 recipemap.spinning.name=Textile Spinning
 recipemap.large_steam_turbine.name=Large Steam Turbine
