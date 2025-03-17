@@ -371,9 +371,9 @@ susy.machine.metallurgical_converter.name=Metallurgical Converter
 susy.machine.injection_molder.name=Injection Molder
 
 susy.machine.primitive_item_import.name=Primitive Item Import Bus
-susy.machine.primitive_item_import.tooltip=Not a substitute for ULV 
+susy.machine.primitive_item_import.tooltip=Not a substitute for ULV
 susy.machine.primitive_item_export.name=Primitive Item Export Bus
-susy.machine.primitive_item_export.tooltip=Not a substitute for ULV 
+susy.machine.primitive_item_export.tooltip=Not a substitute for ULV
 susy.machine.mixer_settler.name=Mixer Settler
 susy.machine.mixer_settler.tooltip=First it mixes, then it settles... - Sun Tzu, The Art of SuSy
 susy.machine.mixer_settler.tooltip.1=The initial structure contains 2 cells, each expansion adds 2 more
@@ -786,6 +786,21 @@ susy.machine.fuel_cell.ev.name=Low Temperature Fuel Cell
 susy.machine.fuel_cell.iv.name=High Temperature Fuel Cell
 susy.machine.fuel_cell.tooltip=Temperature requirements for operation: %s°C
 
+# Sputtering Machine
+gregtech.machine.sputter_deposition.lv.name=Basic Sputtering Machine
+gregtech.machine.sputter_deposition.mv.name=Advanced Sputtering Machine
+gregtech.machine.sputter_deposition.hv.name=Advanced Sputtering Machine II
+gregtech.machine.sputter_deposition.ev.name=Advanced Sputtering Machine III
+gregtech.machine.sputter_deposition.iv.name=Elite Sputtering Machine
+gregtech.machine.sputter_deposition.luv.name=Elite Sputtering Machine II
+gregtech.machine.sputter_deposition.zpm.name=Elite Sputtering Machine III
+gregtech.machine.sputter_deposition.uv.name=Ultimate Sputtering Machine
+gregtech.machine.sputter_deposition.uhv.name=Epic Sputtering Machine
+gregtech.machine.sputter_deposition.uev.name=Epic Sputtering Machine II
+gregtech.machine.sputter_deposition.uiv.name=Epic Sputtering Machine III
+gregtech.machine.sputter_deposition.uxv.name=Epic Sputtering Machine IV
+gregtech.machine.sputter_deposition.opv.name=Legendary Sputtering Machine
+
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
 recipemap.latex_collector.name=Arboreal Collector
@@ -859,6 +874,7 @@ recipemap.injection_molder=Injection Molding
 recipemap.boiler.name=Solid Boiler Fuels
 recipemap.fuel_cell.name=Solid Oxide Fuel Cell (SOFC)
 recipemap.induction_furnace.name=Induction Furnace
+recipemap.sputter_deposition=Sputter Deposition
 
 susy.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 
