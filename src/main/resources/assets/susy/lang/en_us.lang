@@ -702,6 +702,21 @@ gregtech.machine.incinerator.tooltip.3=§8Don't worry about where the heavy meta
 gregtech.multiblock.incinerator.clogged=§4Clogged! (Is the top blocked?)
 gregtech.multiblock.incinerator.working=§2Clog-free
 
+# Sputtering Machine
+gregtech.machine.sputter_deposition.lv.name=Basic Sputtering Machine
+gregtech.machine.sputter_deposition.mv.name=Advanced Sputtering Machine
+gregtech.machine.sputter_deposition.hv.name=Advanced Sputtering Machine II
+gregtech.machine.sputter_deposition.ev.name=Advanced Sputtering Machine III
+gregtech.machine.sputter_deposition.iv.name=Elite Sputtering Machine
+gregtech.machine.sputter_deposition.luv.name=Elite Sputtering Machine II
+gregtech.machine.sputter_deposition.zpm.name=Elite Sputtering Machine III
+gregtech.machine.sputter_deposition.uv.name=Ultimate Sputtering Machine
+gregtech.machine.sputter_deposition.uhv.name=Epic Sputtering Machine
+gregtech.machine.sputter_deposition.uev.name=Epic Sputtering Machine II
+gregtech.machine.sputter_deposition.uiv.name=Epic Sputtering Machine III
+gregtech.machine.sputter_deposition.uxv.name=Epic Sputtering Machine IV
+gregtech.machine.sputter_deposition.opv.name=Legendary Sputtering Machine
+
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
 recipemap.latex_collector.name=Arboreal Collector
@@ -762,8 +777,9 @@ recipemap.primitive_smelter.name=Primitive Smelting
 recipemap.large_fluid_pump.name=Large Fluid Pump
 recipemap.sieve_distillation.name=Fractional Distillation
 recipemap.jet_wingpack_fuels.name=Jet Wingpack Fuels
-recipemap.curtain_coater.name=Curtain Coater
-recipemap.milling.name=Precise Milling Machine
+recipemap.curtain_coater.name=Curtain Coating
+recipemap.milling.name=Precise Milling
+recipemap.sputter_deposition=Sputter Deposition
 
 gregtech.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 
