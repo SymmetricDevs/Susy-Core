@@ -3,6 +3,7 @@ package supersymmetry.common.metatileentities.multi.electric;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
+import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
@@ -35,7 +36,8 @@ public class MetaTileEntityCondenser extends RecipeMapMultiblockController {
                 .aisle("CCC", "CSC", "CCC", "CCC")
                 .where('S', selfPredicate())
                 .where('C', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.ALUMINIUM_FROSTPROOF)).setMinGlobalLimited(27)
-                        .or(autoAbilities(true, true, false, false, true, true, false)))
+                        .or(autoAbilities(false, true, false, false, true, true, false))
+                        .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(0).setMaxGlobalLimited(2)))
                 .where(' ', air())
                 .build();
     }

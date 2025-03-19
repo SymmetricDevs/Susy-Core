@@ -673,7 +673,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         // setCoilActivity(false); // solves world issue reload where coils would be active even if multi was not running
         if (structurePattern.getError() != null) return; //dont do processing for unformed multis
 
-        //ensure timer is non-negative by ending sign bit with 0
+        //ensure timer is non-negative by anding sign bit with 0
         tickTimer = tickTimer & 0b01111111111111111111111111111111;
         checkCoilActivity(); // make coils active if they should be
         rollingAverage[tickTimer % 20] = 0; // reset rolling average for this tick index
