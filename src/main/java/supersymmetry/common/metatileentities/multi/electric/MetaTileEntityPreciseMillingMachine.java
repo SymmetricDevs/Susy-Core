@@ -50,7 +50,7 @@ public class MetaTileEntityPreciseMillingMachine extends RecipeMapMultiblockCont
                 .where('S', selfPredicate())
                 .where('B', states(getBaseCasingState()).setMinGlobalLimited(18)
                         .or(abilities(MultiblockAbility.INPUT_ENERGY)
-                                .setMinGlobalLimited(1).setMaxGlobalLimited(3)
+                                .setMinGlobalLimited(1).setMaxGlobalLimited(2)
                                 .addTooltip("gregtech.multiblock.pattern.error.milling.lower"))
                         .or(abilities(MultiblockAbility.MAINTENANCE_HATCH)
                                 .setExactLimit(1)
