@@ -4,6 +4,7 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTException;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -66,8 +67,12 @@ public class CommandHordeStart extends CommandBase {
                     }
                 }
 
-                if (!event.run(player, playerData::addEntity)) {
-                    throw new CommandException("susy.command.horde.start.error_executing_horde");
+                try {
+                    if (!event.run(player, playerData::addEntity)) {
+                        throw new CommandException("susy.command.horde.start.error_executing_horde");
+                    }
+                } catch (NBTException e) {
+                    throw new RuntimeException(e);
                 }
 
                 playerData.setCurrentInvasion(event);

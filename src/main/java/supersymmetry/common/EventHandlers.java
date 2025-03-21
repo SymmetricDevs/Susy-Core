@@ -10,6 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.management.PlayerList;
 import net.minecraft.util.DamageSource;
@@ -86,7 +87,13 @@ public class EventHandlers {
         if (world instanceof WorldServer server) {
             PlayerList list = server.getMinecraftServer().getPlayerList();
             MobHordeWorldData mobHordeWorldData = MobHordeWorldData.get(world);
-            list.getPlayers().forEach(p -> mobHordeWorldData.getPlayerData(p.getPersistentID()).update(p));
+            list.getPlayers().forEach(p -> {
+                try {
+                    mobHordeWorldData.getPlayerData(p.getPersistentID()).update(p);
+                } catch (NBTException e) {
+                    throw new RuntimeException(e);
+                }
+            });
             mobHordeWorldData.markDirty();
         }
     }

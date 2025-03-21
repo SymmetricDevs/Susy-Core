@@ -386,7 +386,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     }
 
     @Override
-    public void addPassenger(Entity passenger) {
+    protected void addPassenger(Entity passenger) {
         if (this.getPassengers().isEmpty()) {
             super.addPassenger(passenger);
             if (passenger instanceof EntityLiving living) {

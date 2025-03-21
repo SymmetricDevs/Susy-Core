@@ -2,6 +2,7 @@ package supersymmetry.common.event;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
@@ -65,7 +66,7 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
         }
     }
 
-    public void update(EntityPlayerMP player) {
+    public void update(EntityPlayerMP player) throws NBTException {
         if (hasActiveInvasion) {
             ++ticksActive;
             if (this.ticksActive > this.timeoutPeriod) {

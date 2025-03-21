@@ -5,15 +5,16 @@ import gregtech.api.util.TeleportHandler;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.JsonToNBT;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -44,6 +45,7 @@ public class MobHordeEvent {
     private int maximumDistanceUnderground = -1;
     private boolean canUsePods = true;
     public String KEY;
+    private String NBTdata = "";
 
     public static final Map<String, MobHordeEvent> EVENTS = new HashMap<>();
 
@@ -75,12 +77,17 @@ public class MobHordeEvent {
         return this;
     }
 
-    public boolean run(EntityPlayer player) {
+    public MobHordeEvent setPassengerTags(String NBTdata){
+        this.NBTdata = NBTdata;
+        return this;
+    }
+
+    public boolean run(EntityPlayer player) throws NBTException {
         MobHordeWorldData worldData = MobHordeWorldData.get(player.world);
         MobHordePlayerData playerData = worldData.getPlayerData(player.getPersistentID());
         return run(player, playerData::addEntity);
     }
-    public boolean run(EntityPlayer player, Consumer<UUID> uuidConsumer) {
+    public boolean run(EntityPlayer player, Consumer<UUID> uuidConsumer) throws NBTException {
         int quantity = (int) (Math.random() * (quantityMax - quantityMin) + quantityMin);
         boolean didSpawn = false;
         if (hasToBeUnderground(player) || !canUsePods) {
@@ -112,9 +119,58 @@ public class MobHordeEvent {
         return advManager.getAdvancement(location);
     }
 
-    public boolean spawnMobWithPod(EntityPlayer player, Consumer<UUID> uuidConsumer) {
+    public boolean spawnMobWithPod(EntityPlayer player, Consumer<UUID> uuidConsumer) throws NBTException {
         EntityDropPod pod = new EntityDropPod(player.world);
         pod.rotationYaw = (float) Math.random() * 360;
+
+        if (this.NBTdata != ""){
+            Entity mob = entitySupplier.apply(player); //there is probably a way to do this without copy-pasting stuff
+
+            if (!Block.REGISTRY.containsKey(new ResourceLocation("reccomplex:spawn_script"))) {
+                System.out.println("Error: reccomplex:spawn_script is not a valid block.");
+            }
+
+            if (mob == null) {
+                System.out.println("Failed to create entity, entitySupplier returned null.");
+                return false;
+            }
+            else {
+                System.out.println("THE MOB IS REAL");
+            }
+
+
+
+            NBTTagCompound NBTtags = (NBTTagCompound) JsonToNBT.getTagFromJson(this.NBTdata);
+
+            Entity block = null;
+
+            block = entitySupplier.apply(player);
+            NBTTagCompound passenger = NBTtags.getCompoundTag("Passengers");
+            block.readFromNBT(passenger);
+            NBTtags.removeTag("Passengers");
+
+
+            mob.readFromNBT(NBTtags);
+
+            double x = player.posX + Math.random() * 60;
+            double y = 350 + Math.random() * 200;
+            double z = player.posZ + Math.random() * 60;
+
+            GTTeleporter teleporter = new GTTeleporter((WorldServer) player.world, x, y, z);
+            assert block != null;
+            TeleportHandler.teleport(block, player.dimension, teleporter, x, y + 1, z);
+            TeleportHandler.teleport(mob, player.dimension, teleporter, x, y, z);
+
+            pod.setPosition(x, y, z);
+            player.world.spawnEntity(pod);
+            player.world.spawnEntity(mob);
+
+            block.startRiding(mob, true);
+            mob.startRiding(pod, true);
+            uuidConsumer.accept(mob.getUniqueID());
+            return true;
+        }
+
         EntityLiving mob = entitySupplier.apply(player);
 
         double x = player.posX + Math.random() * 60;
@@ -123,6 +179,7 @@ public class MobHordeEvent {
 
         GTTeleporter teleporter = new GTTeleporter((WorldServer) player.world, x, y, z);
         TeleportHandler.teleport(mob, player.dimension, teleporter, x, y, z);
+
 
         pod.setPosition(x, y, z);
         player.world.spawnEntity(pod);
@@ -196,69 +253,6 @@ public class MobHordeEvent {
 
     protected boolean hasToBeUnderground(EntityPlayer player) {
         return (maximumDistanceUnderground != -1 && !player.world.canBlockSeeSky(new BlockPos(player).up(maximumDistanceUnderground)));
-    }
-
-    //oliwier509 schizo-method
-    public MobHordeEvent setPassengerNBT(String attributes) {
-        if (!canUsePods) {
-            throw new IllegalStateException("setPassengerNBT can only be used if the raid is a drop pod.");
-        }
-
-        NBTTagCompound nbtData;
-        try {
-            nbtData = JsonToNBT.getTagFromJson(attributes); // Convert String to NBTTagCompound
-        } catch (NBTException e) {
-            throw new IllegalArgumentException("Invalid NBT data format", e);
-        }
-
-        return new MobHordeEvent(entitySupplier, quantityMin, quantityMax, KEY) {
-            @Override
-            public boolean spawnMobWithPod(EntityPlayer player, Consumer<UUID> uuidConsumer) {
-                EntityDropPod pod = new EntityDropPod(player.world);
-                pod.rotationYaw = (float) Math.random() * 360;
-
-                double x = player.posX + Math.random() * 60;
-                double y = 350 + Math.random() * 200;
-                double z = player.posZ + Math.random() * 60;
-                pod.setPosition(x, y, z);
-
-                // Ensure the passenger is set correctly
-                if (nbtData.hasKey("Passengers", 9)) {
-                    NBTTagList passengersList = nbtData.getTagList("Passengers", 10);
-
-                    if (passengersList.tagCount() > 0) { // We only want the FIRST passenger in the list
-                        NBTTagCompound passengerData = passengersList.getCompoundTagAt(0);
-                        Entity passenger = EntityList.createEntityFromNBT(passengerData, player.world);
-
-                        if (passenger != null) {
-                            passenger.startRiding(pod, true); // Mount the passenger inside the drop pod
-
-                            // Handle nested passengers (passengers of the passenger)
-                            if (passengerData.hasKey("Passengers", 9)) {
-                                NBTTagList nestedPassengers = passengerData.getTagList("Passengers", 10);
-
-                                for (int i = 0; i < nestedPassengers.tagCount(); i++) {
-                                    NBTTagCompound nestedData = nestedPassengers.getCompoundTagAt(i);
-                                    Entity nestedPassenger = EntityList.createEntityFromNBT(nestedData, player.world);
-                                    System.err.println("[MobHordeEvent] Adding the Passenger");
-                                    if (nestedPassenger != null) {
-                                        System.err.println("[MobHordeEvent] adding nested Passenger");
-                                        nestedPassenger.startRiding(passenger, true); // Attach to the passenger, not the pod
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    System.err.println("[MobHordeEvent] WARNING: No Passengers found in NBT.");
-                }
-
-                System.out.println("[MobHordeEvent] Spawning Drop Pod: " + pod);
-                player.world.spawnEntity(pod);
-
-                return true;
-            }
-        };
     }
 
 }
