@@ -12,7 +12,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
@@ -45,7 +44,7 @@ public class MobHordeEvent {
     private int maximumDistanceUnderground = -1;
     private boolean canUsePods = true;
     public String KEY;
-    private String NBTdata = "";
+    private String ScriptNBTdata = "";
 
     public static final Map<String, MobHordeEvent> EVENTS = new HashMap<>();
 
@@ -77,8 +76,8 @@ public class MobHordeEvent {
         return this;
     }
 
-    public MobHordeEvent setPassengerTags(String NBTdata){
-        this.NBTdata = NBTdata;
+    public MobHordeEvent beScriptBlock(String NBTdata){
+        this.ScriptNBTdata = NBTdata;
         return this;
     }
 
@@ -123,7 +122,7 @@ public class MobHordeEvent {
         EntityDropPod pod = new EntityDropPod(player.world);
         pod.rotationYaw = (float) Math.random() * 360;
 
-        if (this.NBTdata != ""){
+        if (this.ScriptNBTdata != ""){
             Entity mob = entitySupplier.apply(player); //there is probably a way to do this without copy-pasting stuff
 
             if (!Block.REGISTRY.containsKey(new ResourceLocation("reccomplex:spawn_script"))) {
@@ -140,16 +139,13 @@ public class MobHordeEvent {
 
 
 
-            NBTTagCompound NBTtags = (NBTTagCompound) JsonToNBT.getTagFromJson(this.NBTdata);
-
-            Entity block = null;
-
-            block = entitySupplier.apply(player);
-            NBTTagCompound passenger = NBTtags.getCompoundTag("Passengers");
-            block.readFromNBT(passenger);
-            NBTtags.removeTag("Passengers");
 
 
+            IBlockState blockState = Blocks.REDSTONE_BLOCK.getDefaultState();
+            EntityFallingBlock block = new EntityFallingBlock(player.world, 0,0,0, blockState);
+            block.fallTime = 1;
+
+            NBTTagCompound NBTtags = (NBTTagCompound) JsonToNBT.getTagFromJson(this.ScriptNBTdata);
             mob.readFromNBT(NBTtags);
 
             double x = player.posX + Math.random() * 60;
@@ -157,13 +153,13 @@ public class MobHordeEvent {
             double z = player.posZ + Math.random() * 60;
 
             GTTeleporter teleporter = new GTTeleporter((WorldServer) player.world, x, y, z);
-            assert block != null;
             TeleportHandler.teleport(block, player.dimension, teleporter, x, y + 1, z);
             TeleportHandler.teleport(mob, player.dimension, teleporter, x, y, z);
 
             pod.setPosition(x, y, z);
             player.world.spawnEntity(pod);
             player.world.spawnEntity(mob);
+            player.world.spawnEntity(block);
 
             block.startRiding(mob, true);
             mob.startRiding(pod, true);
