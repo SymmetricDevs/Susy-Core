@@ -40,6 +40,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     private static final DataParameter<Integer> TIME_SINCE_SPAWN = EntityDataManager.<Integer>createKey(EntityDropPod.class, DataSerializers.VARINT);
 
     private AnimationFactory factory = new AnimationFactory(this);
+    private boolean explosive = true;
 
     @SideOnly(Side.CLIENT)
     private MovingSoundDropPod soundDropPod;
@@ -193,12 +194,18 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
         this.explode();
     }
 
+    public void CanExplode(boolean explosive){
+        this.explosive = explosive;
+    }
+
     private void explode() {
-        int explosionStrength = 1;
-        if (getRidingEntity() != null && getRidingEntity() instanceof EntityPlayer) {
-            explosionStrength = 6;
+        if (this.explosive == true) {
+            int explosionStrength = 1;
+            if (getRidingEntity() != null && getRidingEntity() instanceof EntityPlayer) {
+                explosionStrength = 6;
+            }
+            this.world.newExplosion(this, this.posX, this.posY, this.posZ, explosionStrength, false, false);
         }
-        this.world.newExplosion(this, this.posX, this.posY, this.posZ, explosionStrength, false, false);
         this.setDead();
     }
 

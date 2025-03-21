@@ -129,11 +129,9 @@ public class MobHordeEvent {
             EntityFallingBlock block = new EntityFallingBlock(player.world, 0, 0, 0, blockState);
             EntityFallingBlock block2 = new EntityFallingBlock(player.world, 0, 0, 0, blockState);
 
+            //System.out.println("THE FALLING BLOCK IS REAL");
 
-
-            System.out.println("THE FALLING BLOCK IS REAL");
-
-
+            pod.CanExplode(false); //disable explosion so if things land close together they don't end up pushing the falling blocks
             block.fallTime = 1;
             block.shouldDropItem = false;
             block2.fallTime = 1;
@@ -145,11 +143,11 @@ public class MobHordeEvent {
             mob.shouldDropItem = false;
 
 
-
-            double x = player.posX + Math.random() * 60;
-            double y = 256;
+            int R = 30;
+            double x = (int) Math.floor(player.posX + Math.random() * R) + 0.5;
+            int y = 256;
             //double y = 350 + Math.random() * 200;
-            double z = player.posZ + Math.random() * 60;
+            double z = (int) Math.floor(player.posZ + Math.random() * R) + 0.5;
 
             //has to be under 256 for now, otherwise this causes problems, and idk how to get rid of it :pain:
             //if someone wants to undertake this sisyphean task, figure out a way to override onUpdate() in EntityFallingBlock
