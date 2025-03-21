@@ -4,13 +4,16 @@ import gregtech.api.util.GTTeleporter;
 import gregtech.api.util.TeleportHandler;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementManager;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,6 +28,7 @@ import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.event.MobHordePlayerData;
 import supersymmetry.common.event.MobHordeWorldData;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -123,44 +127,50 @@ public class MobHordeEvent {
         pod.rotationYaw = (float) Math.random() * 360;
 
         if (this.ScriptNBTdata != ""){
-            Entity mob = entitySupplier.apply(player); //there is probably a way to do this without copy-pasting stuff
 
-            if (!Block.REGISTRY.containsKey(new ResourceLocation("reccomplex:spawn_script"))) {
-                System.out.println("Error: reccomplex:spawn_script is not a valid block.");
-            }
-
-            if (mob == null) {
-                System.out.println("Failed to create entity, entitySupplier returned null.");
-                return false;
-            }
-            else {
-                System.out.println("THE MOB IS REAL");
-            }
-
-
-
-
-
+            //there is probably a way to do this without copy-pasting stuff
             IBlockState blockState = Blocks.REDSTONE_BLOCK.getDefaultState();
-            EntityFallingBlock block = new EntityFallingBlock(player.world, 0,0,0, blockState);
+            EntityFallingBlock mob = new EntityFallingBlock(player.world, 0,0,0, blockState);
+            EntityFallingBlock block = new EntityFallingBlock(player.world, 0, 0, 0, blockState);
+            EntityFallingBlock block2 = new EntityFallingBlock(player.world, 0, 0, 0, blockState);
+
+
+
+            System.out.println("THE FALLING BLOCK IS REAL");
+
+
             block.fallTime = 1;
+            block.shouldDropItem = false;
+            block2.fallTime = 1;
+            block2.shouldDropItem = false;
+
 
             NBTTagCompound NBTtags = (NBTTagCompound) JsonToNBT.getTagFromJson(this.ScriptNBTdata);
             mob.readFromNBT(NBTtags);
+            mob.shouldDropItem = false;
+
+
 
             double x = player.posX + Math.random() * 60;
-            double y = 350 + Math.random() * 200;
+            //double y = 350 + Math.random() * 200;
             double z = player.posZ + Math.random() * 60;
 
+
+            //double x = player.posX;
+            double y = 200;
+            //double z = player.posZ;
+
             GTTeleporter teleporter = new GTTeleporter((WorldServer) player.world, x, y, z);
-            TeleportHandler.teleport(block, player.dimension, teleporter, x, y + 1, z);
+            TeleportHandler.teleport(block, player.dimension, teleporter, x, y, z);
+            TeleportHandler.teleport(block2, player.dimension, teleporter, x, y, z);
             TeleportHandler.teleport(mob, player.dimension, teleporter, x, y, z);
 
             pod.setPosition(x, y, z);
             player.world.spawnEntity(pod);
             player.world.spawnEntity(mob);
             player.world.spawnEntity(block);
-
+            player.world.spawnEntity(block2);
+            block2.startRiding(block, true);
             block.startRiding(mob, true);
             mob.startRiding(pod, true);
             uuidConsumer.accept(mob.getUniqueID());
