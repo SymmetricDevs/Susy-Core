@@ -4,16 +4,12 @@ import gregtech.api.util.GTTeleporter;
 import gregtech.api.util.TeleportHandler;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementManager;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,7 +24,6 @@ import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.event.MobHordePlayerData;
 import supersymmetry.common.event.MobHordeWorldData;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -152,13 +147,27 @@ public class MobHordeEvent {
 
 
             double x = player.posX + Math.random() * 60;
+            double y = 256;
             //double y = 350 + Math.random() * 200;
             double z = player.posZ + Math.random() * 60;
 
+            //has to be under 256 for now, otherwise this causes problems, and idk how to get rid of it :pain:
+            //if someone wants to undertake this sisyphean task, figure out a way to override onUpdate() in EntityFallingBlock
+            //and remove blockpos1.getY() > 256
+            /*
+                            if (!this.onGround && !flag1)
+                {
+                    if (this.fallTime > 100 && !this.world.isRemote && (blockpos1.getY() < 1 || blockpos1.getY() > 256) || this.fallTime > 600)
+                    {
+                        if (this.shouldDropItem && this.world.getGameRules().getBoolean("doEntityDrops"))
+                        {
+                            this.entityDropItem(new ItemStack(block, 1, block.damageDropped(this.fallTile)), 0.0F);
+                        }
 
-            //double x = player.posX;
-            double y = 200;
-            //double z = player.posZ;
+                        this.setDead();
+                    }
+                }
+             */
 
             GTTeleporter teleporter = new GTTeleporter((WorldServer) player.world, x, y, z);
             TeleportHandler.teleport(block, player.dimension, teleporter, x, y, z);
