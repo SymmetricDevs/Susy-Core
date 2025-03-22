@@ -24,9 +24,7 @@ import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.event.MobHordePlayerData;
 import supersymmetry.common.event.MobHordeWorldData;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -44,6 +42,13 @@ public class MobHordeEvent {
     private boolean canUsePods = true;
     public String KEY;
     private String ScriptNBTdata = "";
+    private String ScriptNBTdataOuter = "";
+    private static int dropPodCount = 0;
+    private String pattern = "";
+    private static double centerx = 0;
+    private static double centerz = 0;
+    private static Set<String> occupiedCoordinates = new HashSet<>();
+    private double ratio = 0.2;
 
     public static final Map<String, MobHordeEvent> EVENTS = new HashMap<>();
 
@@ -79,13 +84,33 @@ public class MobHordeEvent {
         this.ScriptNBTdata = NBTdata;
         return this;
     }
+    public MobHordeEvent multiScriptBlockPlacement(String NBTdata,String NBTdata2){
+        this.ScriptNBTdata = NBTdata;
+        this.ScriptNBTdataOuter = NBTdata2;
+        return this;
+    }
+
+    public MobHordeEvent organisedSpawn(String pattern){
+        this.pattern = pattern;
+        return this;
+    }
+
+    public MobHordeEvent setRatio(double ratio){
+        this.ratio = ratio;
+        return this;
+    }
+
 
     public boolean run(EntityPlayer player) throws NBTException {
         MobHordeWorldData worldData = MobHordeWorldData.get(player.world);
         MobHordePlayerData playerData = worldData.getPlayerData(player.getPersistentID());
+        dropPodCount = 0;
+        occupiedCoordinates.clear();
         return run(player, playerData::addEntity);
     }
     public boolean run(EntityPlayer player, Consumer<UUID> uuidConsumer) throws NBTException {
+        dropPodCount = 0;
+        occupiedCoordinates.clear();
         int quantity = (int) (Math.random() * (quantityMax - quantityMin) + quantityMin);
         boolean didSpawn = false;
         if (hasToBeUnderground(player) || !canUsePods) {
@@ -129,26 +154,103 @@ public class MobHordeEvent {
             EntityFallingBlock block = new EntityFallingBlock(player.world, 0, 0, 0, blockState);
             EntityFallingBlock block2 = new EntityFallingBlock(player.world, 0, 0, 0, blockState);
 
-            //System.out.println("THE FALLING BLOCK IS REAL");
 
             pod.CanExplode(false); //disable explosion so if things land close together they don't end up pushing the falling blocks
             block.fallTime = 1;
             block.shouldDropItem = false;
             block2.fallTime = 1;
             block2.shouldDropItem = false;
+            NBTTagCompound NBTtags;
 
 
-            NBTTagCompound NBTtags = (NBTTagCompound) JsonToNBT.getTagFromJson(this.ScriptNBTdata);
+            int R = 60;
+            double x = (int)(Math.floor(player.posX + Math.random() * R)); //default
+            double z = (int)(Math.floor(player.posZ + Math.random() * R)); //default
+
+
+            if (this.ScriptNBTdataOuter != "") {
+                if (dropPodCount < this.quantityMax * ratio){
+                    NBTtags = (NBTTagCompound) JsonToNBT.getTagFromJson(this.ScriptNBTdata);
+                }
+                else{
+                    NBTtags = (NBTTagCompound) JsonToNBT.getTagFromJson(this.ScriptNBTdataOuter);
+                }
+
+            }
+            else{
+                NBTtags = (NBTTagCompound) JsonToNBT.getTagFromJson(this.ScriptNBTdata);
+            }
             mob.readFromNBT(NBTtags);
             mob.shouldDropItem = false;
 
+            if (dropPodCount == 0 && this.pattern != ""){
+                centerx = (int)(Math.floor(player.posX + 30 + Math.random() * R/2));
+                centerz = (int)(Math.floor(player.posZ + 30 + Math.random() * R/2));
+            }
+            dropPodCount++; //useless without pattern
 
-            int R = 30;
-            double x = (int) Math.floor(player.posX + Math.random() * R) + 0.5;
+            if (this.pattern != ""){
+
+                switch(this.pattern){
+                    case "square":
+                        R = 50;
+                        if (dropPodCount <= this.quantityMax * ratio) {
+                            double innerHalf = R / 6;
+                            boolean placed = false;
+
+                            while (!placed) {
+                                x = centerx + (int) Math.floor((Math.random() * (2 * innerHalf)) - innerHalf);
+                                z = centerz + (int) Math.floor((Math.random() * (2 * innerHalf)) - innerHalf);
+
+                                boolean tooClose = false;
+                                for (String coord : occupiedCoordinates) {
+                                    String[] parts = coord.split(",");
+                                    int existingX = Integer.parseInt(parts[0]);
+                                    int existingZ = Integer.parseInt(parts[1]);
+
+                                    if (Math.abs(existingX - x) < 5 && Math.abs(existingZ - z) < 5) { //size of mortar is 5x5, therefore
+                                        tooClose = true;
+                                        break;
+                                    }
+                                }
+
+                                if (!tooClose) {
+                                    occupiedCoordinates.add((int) x + "," + (int) z);
+                                    placed = true;
+                                }
+                            }
+                        } else {
+                            boolean placed = false;
+                            while (!placed) {
+                                x = (Math.random() < 0.5)
+                                        ? (int) (Math.floor(Math.random() * -R / 3) - R / 6)
+                                        : (int) (Math.floor(Math.random() * R / 3 + 1) + R / 6);
+
+                                z = (Math.random() < 0.5)
+                                        ? (int) (Math.floor(Math.random() * -R / 3) - R / 6)
+                                        : (int) (Math.floor(Math.random() * R / 3 + 1) + R / 6);
+
+                                x += centerx;
+                                z += centerz;
+
+                                if (!occupiedCoordinates.contains(x + "," + z)) {
+                                    occupiedCoordinates.add((int) x + "," + (int) z);
+                                    placed = true;
+                                }
+                            }
+                        }
+
+                        break;
+                    default:
+                        System.out.println("UNRECOGNISED PATTERN, SCRAMBLING");
+                        break;
+                }
+            }
+
+            x = x + 0.5;
+            z = z + 0.5;
             int y = 256;
             //double y = 350 + Math.random() * 200;
-            double z = (int) Math.floor(player.posZ + Math.random() * R) + 0.5;
-
             //has to be under 256 for now, otherwise this causes problems, and idk how to get rid of it :pain:
             //if someone wants to undertake this sisyphean task, figure out a way to override onUpdate() in EntityFallingBlock
             //and remove blockpos1.getY() > 256
