@@ -193,7 +193,7 @@ item.material.oreprefix.sheetedFrame=%s板框箱
 item.material.oreprefix.fiber=%s纤维
 item.material.oreprefix.fiberWet=湿%s纤维
 item.material.oreprefix.thread=%s纱线
-item.material.oreprefix.dustWet=Wet %s Dust
+item.material.oreprefix.dustWet=湿%s粉
 
 susy.fluid.supercritical=超临界%s
 susy.fluid.impure_slurry=含杂%s浆液
@@ -685,7 +685,7 @@ gregtech.machine.incinerator.lv.name=基础焚化炉
 gregtech.machine.incinerator.mv.name=进阶焚化炉
 gregtech.machine.incinerator.hv.name=进阶焚化炉 II
 gregtech.machine.incinerator.ev.name=进阶焚化炉 III
-gregtech.machine.incinerator.tooltip.1=每%s tick(s)§6焚烧§r%s个物品
+gregtech.machine.incinerator.tooltip.1=§r每%2$s tick(s)§6焚烧§r%1$s个物品
 gregtech.machine.incinerator.tooltip.2=§c需要上方八格方块为空气以排放废气
 gregtech.machine.incinerator.tooltip.3=§8你别管那些重金属去了哪里。
 gregtech.multiblock.incinerator.clogged=§4堵塞了！（上方的排气道被挡住了？）
@@ -1008,7 +1008,7 @@ metaitem.nomex_boots.tooltip=无限期地待在地幔层！
 supersymmetry.oxygen=剩余空气：§b%s/%s秒§r
 supersymmetry.unlimited_oxygen=剩余空气：§b无限§r
 supersymmetry.seconds_left=剩余时间：§2%s秒§r
-supersymmetry.unlimited=剩余时间：§无限§r
+supersymmetry.unlimited=剩余时间：§b无限§r
 
 #Hardened blocks
 tile.hardened_blocks.lair7.name=硬化Lair 7
