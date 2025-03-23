@@ -169,7 +169,7 @@ public class MobHordeEvent {
 
 
             if (this.ScriptNBTdataOuter != "") {
-                if (dropPodCount < this.quantityMax * ratio){
+                if (dropPodCount < this.quantityMax * this.ratio){
                     NBTtags = (NBTTagCompound) JsonToNBT.getTagFromJson(this.ScriptNBTdata);
                 }
                 else{
@@ -194,7 +194,7 @@ public class MobHordeEvent {
                 switch(this.pattern){
                     case "square":
                         R = 50;
-                        if (dropPodCount <= this.quantityMax * ratio) {
+                        if (dropPodCount <= this.quantityMax * this.ratio) {
                             double innerHalf = R / 6;
                             boolean placed = false;
 
