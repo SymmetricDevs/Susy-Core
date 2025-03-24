@@ -21,6 +21,7 @@ import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -51,6 +52,8 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
      */
     protected List<BlockPos> animatables;
 
+    protected EnumFacing rollOrientation = EnumFacing.NORTH;
+
     public MetaTileEntityEccentricRollCrusher(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap) {
         super(metaTileEntityId, recipeMap);
     }
@@ -72,7 +75,7 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
         return MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE);
     }
 
-    private static IBlockState getJewState() { // TODO: unique casing.
+    private static IBlockState getJawState() { // TODO: unique casing.
         return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.PTFE_INERT_CASING);
     }
 
@@ -82,6 +85,7 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
+        if (getWorld() != null) updateRollOrientation();
 
         TraceabilityPredicate casings = states(getCasingState()).setMinGlobalLimited(24);
         TraceabilityPredicate metalSheets = metalSheets();
@@ -99,8 +103,8 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
                 .where('D', casings.or(abilities(MultiblockAbility.EXPORT_ITEMS)))
                 .where('G', states(getGearBoxState()))
                 .where('P', states(getPipeCasingState()))
-                .where('J', states(getJewState()))
-                .where('R', eccentricRolls(getFrontFacing()))
+                .where('J', states(getJawState()))
+                .where('R', eccentricRolls(rollOrientation))
                 .where('H', states(getMechanicalCasingState()))
                 .where('X', frames(Materials.Steel))
                 .where('S', selfPredicate())
@@ -109,8 +113,19 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
                 .build();
     }
 
+    public void updateRollOrientation() {
+        World world = getWorld();
+        EnumFacing front = getFrontFacing();
+        EnumFacing back = front.getOpposite();
+        EnumFacing left = front.rotateYCCW();
+
+        IBlockState state = world.getBlockState(getPos().offset(left));
+        this.rollOrientation = state == getGearBoxState() ? front : back;
+    }
+
     protected void formStructure(PatternMatchContext context) {
         this.metalSheetIdentifier = context.get("MetalSheet");
+
         /// This has to be called before [MultiblockWithDisplayBase#formStructure(PatternMatchContext)] calls
         /// where [#replaceVariantBlocksActive(boolean)] is called
         /// @see [#setAnimatablesActive(boolean)]
@@ -120,6 +135,18 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
         if (world != null && !world.isRemote) {
             writeCustomData(GregtechDataCodes.UPDATE_COLOR,
                     buf -> buf.writeByte(metalSheetIdentifier));
+        }
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
+    @Override
+    protected void setFlipped(boolean isFlipped) {
+        if (this.isFlipped != isFlipped) {
+            this.isFlipped = isFlipped;
+            reinitializeStructurePattern();
+            this.notifyBlockUpdate();
+            this.markDirty();
+            this.writeCustomData(GregtechDataCodes.UPDATE_FLIP, (buf) -> buf.writeBoolean(isFlipped));
         }
     }
 
