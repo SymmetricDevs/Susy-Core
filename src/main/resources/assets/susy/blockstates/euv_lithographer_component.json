@@ -1,0 +1,43 @@
+{
+  "forge_marker" : 1,
+  "defaults": {
+    "model" : "minecraft:cube_all",
+    "textures" : {
+      "all" : "gregtech:blocks/casings/euv_component/carbon_dioxide_laser"
+    }
+  },
+  "variants" : {
+    "variant=laser" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/casings/euv_component/carbon_dioxide_laser"
+      }
+    },
+    "variant=mirror" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/casings/euv_component/euv_laser_mirror"
+      }
+    },
+    "variant=reticle" : {
+      "model" : "minecraft:cube_bottom_top",
+      "textures" : {
+        "bottom": "gregtech:blocks/casings/euv_component/euv_laser_reticle",
+        "top": "gregtech:blocks/casings/solid/machine_casing_robust_tungstensteel",
+        "side": "gregtech:blocks/casings/euv_component/euv_laser_reticle_side"
+      }
+    },
+    "variant=tray" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/casings/euv_component/euv_wafer_stage"
+      }
+    },
+    "variant=handler" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/casings/euv_component/euv_wafer_robot_arm"
+      }
+    }
+  }
+}
