@@ -55,7 +55,6 @@ public class BlockEccentricRoll extends VariantBlock<BlockEccentricRoll.RollType
     @Nullable
     @Override
     public TileEntity createNewTileEntity(@NotNull World worldIn, int meta) {
-//        return meta < 6 ? null : new TileEntityEccentricRoll();
         return new TileEntityEccentricRoll();
     }
 
