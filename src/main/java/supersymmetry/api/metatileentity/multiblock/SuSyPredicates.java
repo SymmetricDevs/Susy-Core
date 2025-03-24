@@ -30,9 +30,7 @@ import supersymmetry.common.blocks.SuSyBlocks;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 /**
  * Class containing global predicates
@@ -175,37 +173,6 @@ public class SuSyPredicates {
             .toArray(BlockInfo[]::new)
     );
 
-    /**
-     * Supplies predicates for each facing direction
-     * This autocorrects the facing of the eccentric roll
-     * and adds the position of the eccentric roll to the match context
-     */
-    private static final Map<EnumFacing, TraceabilityPredicate> ECCENTRIC_ROLL_PREDICATES = Arrays.stream(EnumFacing.values())
-            .collect(Collectors.toMap(facing -> facing,
-                    facing -> new TraceabilityPredicate(blockWorldState -> {
-                        IBlockState state = blockWorldState.getBlockState();
-                        if (state.getBlock() instanceof BlockEccentricRoll) {
-
-                            // Corrects the direction of the eccentric roll, while ignoring the in/active state
-                            if (state.getValue(BlockDirectional.FACING) != facing) {
-                                World world = blockWorldState.getWorld();
-                                BlockPos pos = blockWorldState.getPos();
-                                world.setBlockState(pos, state.withProperty(BlockDirectional.FACING, facing));
-                            }
-
-                            /// Adds the position of the eccentric roll to the match context
-                            /// This works much like how CEu deals with VAActiveBlocks (e.g. coils)
-                            /// @see MultiblockControllerBase#states(IBlockState...)
-                            blockWorldState.getMatchContext().getOrPut("Animatable", new LinkedList<>()).add(blockWorldState.getPos());
-                            return true;
-                        }
-                        return false;
-                        // Supplies a eccentric roll with the correct direction
-                    }, () -> new BlockInfo[]{new BlockInfo(SuSyBlocks.ECCENTRIC_ROLL.getDefaultState()
-                            .withProperty(BlockDirectional.FACING, facing))})
-            ));
-
-
     @NotNull
     public static TraceabilityPredicate coolingCoils() {
         return COOLING_COILS.get();
@@ -238,9 +205,35 @@ public class SuSyPredicates {
 
     /**
      * @param facing the axis direction of the eccentric roll (rotates CCW)
+     * <p>
+     * Supplies predicates for each facing direction
+     * This autocorrects the facing of the eccentric roll
+     * and adds the position of the eccentric roll to the match context
      */
     @NotNull
     public static TraceabilityPredicate eccentricRolls(EnumFacing facing) {
-        return ECCENTRIC_ROLL_PREDICATES.get(facing);
+
+        return new TraceabilityPredicate(bws -> {
+            IBlockState state = bws.getBlockState();
+            if (state.getBlock() instanceof BlockEccentricRoll) {
+
+                // Corrects the direction of the eccentric roll, while ignoring the in/active state
+                if (state.getValue(BlockDirectional.FACING) != facing) {
+                    World world = bws.getWorld();
+                    BlockPos pos = bws.getPos();
+                    world.setBlockState(pos, state.withProperty(BlockDirectional.FACING, facing));
+                }
+
+                /// Adds the position of the eccentric roll to the match context
+                /// This works much like how CEu deals with VAActiveBlocks (e.g. coils)
+                /// @see MultiblockControllerBase#states(IBlockState...)
+                bws.getMatchContext().getOrPut("Animatable", new LinkedList<>()).add(bws.getPos());
+                return true;
+            }
+            return false;
+            // Supplies an eccentric roll with the correct direction
+        }, () -> new BlockInfo[]{new BlockInfo(SuSyBlocks.ECCENTRIC_ROLL.getDefaultState()
+                .withProperty(BlockDirectional.FACING, facing))}
+        );
     }
 }
