@@ -28,6 +28,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockEccentricRoll;
 
@@ -52,7 +53,12 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
      */
     protected List<BlockPos> animatables;
 
-    protected EnumFacing rollOrientation = EnumFacing.NORTH;
+    /**
+     * The axis direction of the eccentric roll (rotates CCW)
+     * Only gets updated on the server-side
+     * @see #updateRollOrientation()
+     */
+    protected EnumFacing rollOrientation = EnumFacing.DOWN;
 
     public MetaTileEntityEccentricRollCrusher(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap) {
         super(metaTileEntityId, recipeMap);
@@ -113,8 +119,13 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
                 .build();
     }
 
+    /**
+     * Gets the correct axis direction of the roll
+     * @see SuSyPredicates#eccentricRolls(EnumFacing)
+     */
     public void updateRollOrientation() {
         World world = getWorld();
+
         EnumFacing front = getFrontFacing();
         EnumFacing back = front.getOpposite();
         EnumFacing left = front.rotateYCCW();
@@ -138,22 +149,11 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
         }
     }
 
-    @SuppressWarnings("UnstableApiUsage")
-    @Override
-    protected void setFlipped(boolean isFlipped) {
-        if (this.isFlipped != isFlipped) {
-            this.isFlipped = isFlipped;
-            reinitializeStructurePattern();
-            this.notifyBlockUpdate();
-            this.markDirty();
-            this.writeCustomData(GregtechDataCodes.UPDATE_FLIP, (buf) -> buf.writeBoolean(isFlipped));
-        }
-    }
-
     @Override
     public void invalidateStructure() {
         super.invalidateStructure();
         this.metalSheetIdentifier = -1;
+        this.rollOrientation = EnumFacing.DOWN;
         World world = getWorld();
         if (world != null && !world.isRemote) {
             writeCustomData(GregtechDataCodes.UPDATE_COLOR,
