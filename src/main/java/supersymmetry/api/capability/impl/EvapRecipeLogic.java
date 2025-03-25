@@ -10,8 +10,6 @@ import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityEvapor
 
 import javax.annotation.Nonnull;
 
-import static supersymmetry.api.util.SuSyUtility.JOULES_PER_EU;
-
 public class EvapRecipeLogic extends MultiblockRecipeLogic {
     private final MetaTileEntityEvaporationPool pool;
 
@@ -43,65 +41,66 @@ public class EvapRecipeLogic extends MultiblockRecipeLogic {
 
     @Override
     protected void updateRecipeProgress() {
-        //if null then no heating can be done, otherwise add joules according to coil values and energy available
-        boolean coilHeated = false;
-        if (pool.coilStats != null && pool.isHeated()) {
-            // attempt to input energy from coil dependent on its heat and the number of coils for the given size pool
-            int coilHeat = pool.coilStats.getCoilTemperature();
-            int electricEnergy = coilHeat * (((pool.getColumnCount() / 2 + 1) * pool.getRowCount()) + pool.getColumnCount() / 2) / JOULES_PER_EU; // converted to EU to save on divisions
-            if (electricEnergy > pool.getEnergyContainer().getEnergyStored()) electricEnergy = (int) pool.getEnergyContainer().getEnergyStored();
-            boolean couldInput = pool.inputEnergy(electricEnergy * JOULES_PER_EU); // if room is available in thermal energy storage
-            if (couldInput) {
-                pool.getEnergyContainer().removeEnergy((electricEnergy) / pool.coilStats.getEnergyDiscount()); //energy should always be available as heatingJoules is either itself or energy*JpEU
-                coilHeated = electricEnergy > 0;
-            }
-        }
-
-        pool.areCoilsHeating = coilHeated;
-        int Jt = getJt();
-        if (Jt <= 0) {
-            this.invalidate();
-            this.setActive(false);
-            pool.areCoilsHeating = false;
-            return;
-        }
-
-        int maxSteps = pool.calcMaxSteps(Jt);
-
-        //if the recipe can progress and at least one step can be taken
-        if (maxSteps > 0) {
-            hasNotEnoughEnergy = false;
-            pool.isRecipeStalled = false;
-
-            // occasionally actualSteps would be 0 for some reason, which is why one should be minimum
-            int actualSteps = Math.min(Math.max((this.maxProgressTime >>> 2), 1), maxSteps);
-
-            int kJFloor = getJt() * actualSteps / 1000;
-            int joulesNeeded;
-
-            //if kJ store is insufficient to cover full cost, joulesNeeded is whatever remains after kJ covers cost
-            if (pool.getKiloJoules() <= kJFloor) {
-                joulesNeeded = getJt() * actualSteps - pool.getKiloJoules() * 1000; // because actualSteps is <= max steps with energy available, pool should always be able to cover it
-            } else {
-                joulesNeeded = getJt() * actualSteps - kJFloor * 1000; //difference in joules betweeen kJ losslessly required and J actually required (4kJ covers 3kJ out of 3600J, but 600J are needed to avoid wasting kJ)
-            }
-
-            //if buffer cant cover draw entirely from kiloJoules
-            if (pool.getJoulesBuffer() < joulesNeeded) {
-                ++kJFloor;
-                joulesNeeded = 0;
-            }
-
-            //drain appropriately
-            pool.setKiloJoules(pool.getKiloJoules() - kJFloor);
-            pool.setJoulesBuffer(pool.getJoulesBuffer() - joulesNeeded);
-
-            progressTime += actualSteps; //actualSteps <= maxSteps, meaning it can always be progressed this amount
-            if (this.progressTime >= this.maxProgressTime) completeRecipe();
-        } else {
-            this.hasNotEnoughEnergy = true;
-            pool.isRecipeStalled = true;
-        }
+//        //if null then no heating can be done, otherwise add joules according to coil values and energy available
+//        boolean coilHeated = false;
+//        if (pool.coilStats != null && pool.isHeated()) {
+//            // attempt to input energy from coil dependent on its heat and the number of coils for the given size pool
+//            int coilHeat = pool.coilStats.getCoilTemperature();
+//            int electricEnergy = coilHeat * (((pool.getColumnCount() / 2 + 1) * pool.getRowCount()) + pool.getColumnCount() / 2) / JOULES_PER_EU; // converted to EU to save on divisions
+//            if (electricEnergy > pool.getEnergyContainer().getEnergyStored()) electricEnergy = (int) pool.getEnergyContainer().getEnergyStored();
+//            boolean couldInput = pool.inputEnergy(electricEnergy * JOULES_PER_EU); // if room is available in thermal energy storage
+//            if (couldInput) {
+//                pool.getEnergyContainer().removeEnergy((electricEnergy) / pool.coilStats.getEnergyDiscount()); //energy should always be available as heatingJoules is either itself or energy*JpEU
+//                coilHeated = electricEnergy > 0;
+//            }
+//        }
+//
+//        pool.areCoilsHeating = coilHeated;
+//        int Jt = getJt();
+//        if (Jt <= 0) {
+//            this.invalidate();
+//            this.setActive(false);
+//            pool.areCoilsHeating = false;
+//            return;
+//        }
+//
+//        int maxSteps = pool.calcMaxSteps(Jt);
+//
+//        //if the recipe can progress and at least one step can be taken
+//        if (maxSteps > 0) {
+//            hasNotEnoughEnergy = false;
+//            pool.isRecipeStalled = false;
+//
+//            // occasionally actualSteps would be 0 for some reason, which is why one should be minimum
+//            int actualSteps = Math.min(Math.max((this.maxProgressTime >>> 2), 1), maxSteps);
+//
+//            int kJFloor = getJt() * actualSteps / 1000;
+//            int joulesNeeded;
+//
+//            //if kJ store is insufficient to cover full cost, joulesNeeded is whatever remains after kJ covers cost
+//            if (pool.getKiloJoules() <= kJFloor) {
+//                joulesNeeded = getJt() * actualSteps - pool.getKiloJoules() * 1000; // because actualSteps is <= max steps with energy available, pool should always be able to cover it
+//            } else {
+//                joulesNeeded = getJt() * actualSteps - kJFloor * 1000; //difference in joules betweeen kJ losslessly required and J actually required (4kJ covers 3kJ out of 3600J, but 600J are needed to avoid wasting kJ)
+//            }
+//
+//            //if buffer cant cover draw entirely from kiloJoules
+//            if (pool.getJoulesBuffer() < joulesNeeded) {
+//                ++kJFloor;
+//                joulesNeeded = 0;
+//            }
+//
+//            //drain appropriately
+//            pool.setKiloJoules(pool.getKiloJoules() - kJFloor);
+//            pool.setJoulesBuffer(pool.getJoulesBuffer() - joulesNeeded);
+//
+//            progressTime += actualSteps; //actualSteps <= maxSteps, meaning it can always be progressed this amount
+//            if (this.progressTime >= this.maxProgressTime) completeRecipe();
+//        } else {
+//            this.hasNotEnoughEnergy = true;
+//            pool.isRecipeStalled = true;
+//        }
+        super.updateRecipeProgress();
     }
 
     //copied from NoEnergyMultiblockRecipeLogic and modified to allow energy and no energy
