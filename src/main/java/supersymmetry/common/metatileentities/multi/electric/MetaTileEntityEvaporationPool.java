@@ -4,14 +4,15 @@ import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
 import gregtech.api.block.IHeatingCoilBlockStats;
 import gregtech.api.capability.GregtechDataCodes;
+import gregtech.api.capability.IEnergyContainer;
+import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
+import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
-import gregtech.api.pattern.BlockPattern;
-import gregtech.api.pattern.FactoryBlockPattern;
-import gregtech.api.pattern.MultiblockShapeInfo;
-import gregtech.api.pattern.PatternMatchContext;
+import gregtech.api.pattern.*;
+import gregtech.api.recipes.Recipe;
 import gregtech.api.util.GTUtility;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
@@ -31,8 +32,9 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import supersymmetry.api.capability.impl.EvapRecipeLogic;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.api.recipes.properties.EvaporationEnergyProperty;
+import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
@@ -61,8 +63,9 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     private int bDist = 0;
 
     /// The base temperature of the coils in the structure
-    /// Does not need to be serialized since it's set during [#formStructure(PatternMatchContext context)]
+    /// Does not need to be serialized since it's set during [#formStructure(PatternMatchContext)]
     int coilTemp = 0;
+    int coilCount = 0;
 
     /// Concurrently updating the exposed block count, reducing the load on the main thread
     private static final AtomicInteger THREAD_CNTR = new AtomicInteger(0);
@@ -74,6 +77,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     @Nullable
     private ScheduledFuture<?> counterTask; /// Stored here to cancel the task when the structure is invalidated
     private int exposedBlocks = 0; /// Does not need to be serialized since it's updated (hopefully) once every second
+    private static final int JT_PER_BLOCK = 100; // TODO: dynamic heat absorption based on day time?
 
 
     public MetaTileEntityEvaporationPool(ResourceLocation metaTileEntityId) {
@@ -100,6 +104,8 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         Object type = context.get("CoilType");
         if (type instanceof IHeatingCoilBlockStats coilStats) {
             this.coilTemp = coilStats.getCoilTemperature();
+            /// This might be calculated from the evaporation pool's dimension, but I'm lazy so
+            this.coilCount = variantActiveBlocks.size();
         }
         this.counterTask = SCHEDULED_EXECUTOR.scheduleWithFixedDelay(new ExposureCountTask(this),
                 TASK_DELAY, TASK_DELAY, TimeUnit.MILLISECONDS);
@@ -109,6 +115,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     public void invalidateStructure() {
         super.invalidateStructure();
         this.coilTemp = 0;
+        this.coilCount = 0;
         this.exposedBlocks = 0;
         if (this.counterTask != null) {
             this.counterTask.cancel(true);
@@ -245,14 +252,58 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         return shapeInfo;
     }
 
+    @Override
+    public TraceabilityPredicate autoAbilities(boolean checkEnergyIn,
+                                               boolean checkMaintenance,
+                                               boolean checkItemIn,
+                                               boolean checkItemOut,
+                                               boolean checkFluidIn,
+                                               boolean checkFluidOut,
+                                               boolean checkMuffler) {
+        TraceabilityPredicate predicate = new TraceabilityPredicate();
+
+        if (checkEnergyIn) {
+            predicate = predicate.or(abilities(MultiblockAbility.INPUT_ENERGY)
+                    .setMinGlobalLimited(0)
+                    .setMaxGlobalLimited(2));
+        }
+        if (checkItemIn) {
+            predicate = predicate.or(abilities(MultiblockAbility.IMPORT_ITEMS)
+                    .setMaxGlobalLimited(2));
+        }
+        if (checkItemOut) {
+            predicate = predicate.or(abilities(MultiblockAbility.EXPORT_ITEMS)
+                    .setMaxGlobalLimited(2));
+        }
+        if (checkFluidIn) {
+            predicate = predicate.or(abilities(MultiblockAbility.IMPORT_FLUIDS)
+                    .setMaxGlobalLimited(2));
+        }
+        if (checkFluidOut) {
+            predicate = predicate.or(abilities(MultiblockAbility.EXPORT_FLUIDS)
+                    .setMaxGlobalLimited(2));
+        }
+        return predicate;
+    }
+
     public void updateExposedBlocks(int exposedBlocks) {
         this.exposedBlocks = exposedBlocks;
+    }
+
+    protected boolean isHeating() {
+        return ((EvapRecipeLogic) recipeMapWorkable).isHeating;
+    }
+
+    @Override
+    public boolean isActive() {
+        return this.isStructureFormed() && isHeating() && this.recipeMapWorkable.isWorkingEnabled();
     }
 
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
         textList.add(new TextComponentString(String.format("lDist: %s; rDist: %s; bDist: %s", lDist, rDist, bDist)));
         textList.add(new TextComponentString(String.format("Exposed Blocks: %s", exposedBlocks)));
+        textList.add(new TextComponentString(String.format("Coil Count: %s", coilCount)));
         textList.add(new TextComponentString(String.format("Coil Temp: %s", coilTemp)));
         textList.add(new TextComponentString(line(Slice.B_ALL) + " " + line(Slice.T_NONE)));
         textList.add(new TextComponentString(line(Slice.B_ALL) + " " + line(Slice.T_SIDES)));
@@ -283,7 +334,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         reinitializeStructurePattern();
     }
 
-    //order matters for these
     @Override
     public void writeInitialSyncData(PacketBuffer buf) {
         super.writeInitialSyncData(buf);
@@ -346,7 +396,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     /// assuming lDist = 3 and rDist = 6 (the length doesn't really matter here)
     ///
     /// The bottom layer:
-    /// 0123456789AB
+    ///   0123456789AB
     /// B CCCCCCCCCCCC    B_ALL
     /// A CCCCCCCCCCCC    B_ALL
     /// 9 CCHBHHHBHHCC    B_END
@@ -360,7 +410,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     /// As you can see the heating coils are placed in a zigzag pattern, with the first one starting on the left side of the controller
     ///
     /// The top layer:
-    /// 0123456789AB
+    ///   0123456789AB
     /// B                 T_NONE (empty)
     /// A  CCCCCCCCCC     T_SIDES
     /// 9  C########C     T_MIDDLE
@@ -427,6 +477,101 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                 if (GTUtility.canSeeSunClearly(world, pos)) exposedBlocks += 1;
             }
             pool.updateExposedBlocks(exposedBlocks);
+        }
+    }
+
+    public class EvapRecipeLogic extends MultiblockRecipeLogic {
+
+        private int recipeJt;
+        private int heatBuffer = 0;
+        private boolean isHeating = false;
+
+        public EvapRecipeLogic(RecipeMapMultiblockController tileEntity) {
+            super(tileEntity);
+        }
+
+        @Override
+        public boolean checkRecipe(@NotNull Recipe recipe) {
+            return super.checkRecipe(recipe) && recipe.hasProperty(EvaporationEnergyProperty.getInstance());
+        }
+
+        @Override
+        protected void setupRecipe(Recipe recipe) {
+            super.setupRecipe(recipe);
+            this.recipeJt = recipe.getProperty(EvaporationEnergyProperty.getInstance(), 0); // TODO: is this correct?
+            this.heatBuffer = 0;
+        }
+
+        @Override
+        protected boolean hasEnoughPower(int @NotNull [] resultOverclock) {
+            return true;
+        }
+
+        @Override
+        protected void updateRecipeProgress() {
+            if (this.canRecipeProgress) {
+                int baseHeat = getHeatFromSunlight() + heatBuffer;
+                int coilHeat = 0;
+                int maxEnergy2Draw = (int) Math.min(Math.min(getEnergyStored(), getMaxEnergyInput()),
+                        getMaxHeatFromCoils() / SuSyUtility.JOULES_PER_EU);
+                if (drawEnergy(maxEnergy2Draw, true)) {
+                    drawEnergy(maxEnergy2Draw, false);
+                    coilHeat = maxEnergy2Draw * SuSyUtility.JOULES_PER_EU;
+                }
+
+                this.isHeating = coilHeat > 0;
+
+                int remainingHeat = (baseHeat + coilHeat) % recipeJt;
+                this.progressTime += (baseHeat + coilHeat) / recipeJt;
+                this.heatBuffer = remainingHeat;
+                if (this.progressTime > this.maxProgressTime) {
+                    this.completeRecipe();
+                }
+            }
+        }
+
+        protected int getHeatFromSunlight() {
+            return exposedBlocks * JT_PER_BLOCK;
+        }
+
+        // TODO: this could be static?
+        protected int getMaxHeatFromCoils() {
+            return coilCount * coilTemp;
+        }
+
+        // TODO: this could be static?
+        protected long getMaxEnergyInput() {
+            IEnergyContainer energyContainer = getEnergyContainer();
+            return energyContainer.getInputVoltage() * energyContainer.getInputAmperage(); // TODO: is this correct?
+        }
+
+        @Override
+        protected void completeRecipe() {
+            super.completeRecipe();
+            this.recipeJt = 0;
+            this.heatBuffer = 0;
+        }
+
+        public int getRecipeJt() {
+            return recipeJt;
+        }
+
+        @NotNull
+        @Override
+        public NBTTagCompound serializeNBT() {
+            NBTTagCompound compound = super.serializeNBT();
+            if (this.progressTime > 0) {
+                compound.setInteger("RecipeJt", recipeJt);
+            }
+            return compound;
+        }
+
+        @Override
+        public void deserializeNBT(@NotNull NBTTagCompound compound) {
+            super.deserializeNBT(compound);
+            if (this.progressTime > 0) {
+                recipeJt = compound.getInteger("RecipeJt");
+            }
         }
     }
 }
