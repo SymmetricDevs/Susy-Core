@@ -10,6 +10,7 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
+import gregtech.api.metatileentity.multiblock.MultiblockWithDisplayBase;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.*;
 import gregtech.api.recipes.Recipe;
@@ -25,11 +26,14 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
@@ -79,7 +83,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     private int exposedBlocks = 0; /// Does not need to be serialized since it's updated (hopefully) once every second
     private static final int JT_PER_BLOCK = 100; // TODO: dynamic heat absorption based on day time?
 
-
     public MetaTileEntityEvaporationPool(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.EVAPORATION_POOL);
         this.recipeMapWorkable = new EvapRecipeLogic(this);
@@ -88,6 +91,14 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
         return new MetaTileEntityEvaporationPool(this.metaTileEntityId);
+    }
+
+    @Override
+    public void update() {
+        super.update();
+        if (getWorld().isRemote && isRunning() && !isHalted()) {
+            evaporationEffect();
+        }
     }
 
     @Override
@@ -129,7 +140,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         World world = getWorld();
         EnumFacing front = getFrontFacing();
         EnumFacing back = front.getOpposite();
-        EnumFacing right = front.rotateYCCW(); // right as if you were looking at it, not controller's left
+        EnumFacing right = front.rotateYCCW(); /// right as if you were looking at it, not controller's left
         EnumFacing left = right.getOpposite();
 
         BlockPos.MutableBlockPos lPos = new BlockPos.MutableBlockPos(getPos().offset(back, 2));
@@ -183,7 +194,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     }
 
     protected String line(Slice slice) {
-        return this.isFlipped() ? slice.gen(rDist, lDist) : slice.gen(lDist, rDist);
+        return slice.gen(lDist, rDist);
     }
 
     /// 'S' = controller
@@ -286,17 +297,56 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         return predicate;
     }
 
+    /// @see ExposureCountTask#run()
     public void updateExposedBlocks(int exposedBlocks) {
         this.exposedBlocks = exposedBlocks;
     }
 
+    /// @see EvapRecipeLogic#isHeating
     protected boolean isHeating() {
         return ((EvapRecipeLogic) recipeMapWorkable).isHeating;
     }
 
+    /// @see EvapRecipeLogic#isHalted
+    protected boolean isHalted() {
+        return ((EvapRecipeLogic) recipeMapWorkable).isHalted;
+    }
+
+    /// This works the same as [RecipeMapMultiblockController#isActive()]
+    public boolean isRunning() {
+        return this.isStructureFormed() && this.recipeMapWorkable.isActive() && this.recipeMapWorkable.isWorkingEnabled();
+    }
+
+    /// Overriding this to make sure that coils are emissive only when the multiblock is powered.
+    /// @see MultiblockWithDisplayBase#update()
     @Override
     public boolean isActive() {
         return this.isStructureFormed() && isHeating() && this.recipeMapWorkable.isWorkingEnabled();
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void evaporationEffect() {
+        World world = getWorld();
+
+        EnumFacing front = getFrontFacing();
+        EnumFacing back = front.getOpposite();
+        EnumFacing right = front.rotateYCCW(); /// right as if you were looking at it, not controller's left
+
+        /// Randomly select a position to emit the particle.
+        /// Sadly I can't call [Random#nextInt(int, int)] here... (it doesn't exist in java 8)
+        int i = GTValues.RNG.nextInt(rDist + lDist - 1) - lDist + 1;
+        int j = GTValues.RNG.nextInt(bDist) + 2;
+
+        BlockPos pos = getPos().offset(EnumFacing.UP).offset(right, i).offset(back, j);
+
+        float x = pos.getX() + GTValues.RNG.nextFloat();
+        float y = pos.getY() + 0.75F;
+        float z = pos.getZ() + GTValues.RNG.nextFloat();
+        float v_x = 0.02F * GTValues.RNG.nextFloat() - 0.01F;
+        float v_y = 0.10F * GTValues.RNG.nextFloat() + 0.05F;
+        float v_z = 0.02F * GTValues.RNG.nextFloat() - 0.01F;
+
+        world.spawnParticle(EnumParticleTypes.CLOUD,x, y, z, v_x, v_y, v_z);
     }
 
     @Override
@@ -362,12 +412,12 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
-        return Textures.SOLID_STEEL_CASING;
+        return Textures.SOLID_STEEL_CASING; // TODO: change this to concrete?
     }
 
     @Nonnull
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.BLAST_FURNACE_OVERLAY;
+        return Textures.BLAST_FURNACE_OVERLAY; // TODO: a custom one?
     }
 
     @Override
@@ -483,8 +533,13 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     public class EvapRecipeLogic extends MultiblockRecipeLogic {
 
         private int recipeJt;
+        /// Buffers the heat that doesn't meet the minimum requirement for 1 step of the recipe progress
+        /// So, it's just a matter of time for the recipe to complete no matter how insufficient the heat/power supply is.
         private int heatBuffer = 0;
+        /// Whether the evaporation pool is heated by coils
         private boolean isHeating = false;
+        /// Whether the evaporation pool is no longer working (recipe doesn't progress due to no heat supply)
+        private boolean isHalted;
 
         public EvapRecipeLogic(RecipeMapMultiblockController tileEntity) {
             super(tileEntity);
@@ -519,10 +574,18 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                     coilHeat = maxEnergy2Draw * SuSyUtility.JOULES_PER_EU;
                 }
 
+                int remainingHeat = (baseHeat + coilHeat) % recipeJt;
+                int maxProgress = (baseHeat + coilHeat) / recipeJt;
+
+                boolean halted = maxProgress == 0;
+                if (this.isHalted != halted) {
+                    this.isHalted = halted;
+                    /// Yeah, using a data code for steam machine is kinda cursed here. I just don't really want to create a new one. This one won't conflict, at least.
+                    writeCustomData(GregtechDataCodes.NEEDS_VENTING, buf -> buf.writeBoolean(halted));
+                }
                 this.isHeating = coilHeat > 0;
 
-                int remainingHeat = (baseHeat + coilHeat) % recipeJt;
-                this.progressTime += (baseHeat + coilHeat) / recipeJt;
+                this.progressTime += maxProgress;
                 this.heatBuffer = remainingHeat;
                 if (this.progressTime > this.maxProgressTime) {
                     this.completeRecipe();
@@ -556,6 +619,27 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             return recipeJt;
         }
 
+        @Override
+        public void receiveCustomData(int dataId, @NotNull PacketBuffer buf) {
+            super.receiveCustomData(dataId, buf);
+            if (dataId == GregtechDataCodes.NEEDS_VENTING) {
+                this.isHalted = buf.readBoolean();
+            }
+        }
+
+        @Override
+        public void writeInitialSyncData(@NotNull PacketBuffer buf) {
+            super.writeInitialSyncData(buf);
+            buf.writeBoolean(this.isHalted);
+        }
+
+        @Override
+        public void receiveInitialSyncData(@NotNull PacketBuffer buf) {
+            super.receiveInitialSyncData(buf);
+            this.isHalted = buf.readBoolean();
+        }
+
+
         @NotNull
         @Override
         public NBTTagCompound serializeNBT() {
@@ -563,6 +647,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             if (this.progressTime > 0) {
                 compound.setInteger("RecipeJt", recipeJt);
             }
+            compound.setBoolean("IsHalted", this.isHalted);
             return compound;
         }
 
@@ -572,6 +657,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             if (this.progressTime > 0) {
                 recipeJt = compound.getInteger("RecipeJt");
             }
+            this.isHalted = compound.getBoolean("IsHalted");
         }
     }
 }
