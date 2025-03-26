@@ -8,21 +8,23 @@ import gregtech.api.capability.IEnergyContainer;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.metatileentity.multiblock.IMultiblockPart;
-import gregtech.api.metatileentity.multiblock.MultiblockAbility;
-import gregtech.api.metatileentity.multiblock.MultiblockWithDisplayBase;
-import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
+import gregtech.api.metatileentity.multiblock.*;
 import gregtech.api.pattern.*;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.util.GTUtility;
+import gregtech.api.util.TextComponentUtil;
+import gregtech.api.util.TextFormattingUtil;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
+import gregtech.client.utils.TooltipHelper;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
 import gregtech.common.metatileentities.MetaTileEntities;
 import gregtech.common.metatileentities.multi.electric.MetaTileEntityCleanroom;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
@@ -30,7 +32,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -41,9 +43,11 @@ import supersymmetry.api.recipes.properties.EvaporationEnergyProperty;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
+import supersymmetry.integration.theoneprobe.provider.EvaporationPoolInfoProvider;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
@@ -52,6 +56,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static gregtech.api.metatileentity.MetaTileEntityHolder.TRACKED_TICKS;
 import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.coilsOrBeds;
 
 public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController {
@@ -82,6 +87,9 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     private ScheduledFuture<?> counterTask; /// Stored here to cancel the task when the structure is invalidated
     private int exposedBlocks = 0; /// Does not need to be serialized since it's updated (hopefully) once every second
     private static final int JT_PER_BLOCK = 100; // TODO: dynamic heat absorption based on day time?
+
+    private final int[] recipeSpeedStats = new int[TRACKED_TICKS]; /// The same duration (1s) as [MetaTileEntity#timeStatistics]
+    private int statsIndex = 0;
 
     public MetaTileEntityEvaporationPool(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.EVAPORATION_POOL);
@@ -115,8 +123,8 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         Object type = context.get("CoilType");
         if (type instanceof IHeatingCoilBlockStats coilStats) {
             this.coilTemp = coilStats.getCoilTemperature();
-            /// This might be calculated from the evaporation pool's dimension, but I'm lazy so
-            this.coilCount = variantActiveBlocks.size();
+            int width = lDist + rDist - 1, length = bDist;
+            this.coilCount = length * ((width + 1) / 2) + width / 2;
         }
         this.counterTask = SCHEDULED_EXECUTOR.scheduleWithFixedDelay(new ExposureCountTask(this),
                 TASK_DELAY, TASK_DELAY, TimeUnit.MILLISECONDS);
@@ -303,12 +311,12 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     }
 
     /// @see EvapRecipeLogic#isHeating
-    protected boolean isHeating() {
+    public boolean isHeating() {
         return ((EvapRecipeLogic) recipeMapWorkable).isHeating;
     }
 
     /// @see EvapRecipeLogic#isHalted
-    protected boolean isHalted() {
+    public boolean isHalted() {
         return ((EvapRecipeLogic) recipeMapWorkable).isHalted;
     }
 
@@ -322,6 +330,21 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     @Override
     public boolean isActive() {
         return this.isStructureFormed() && isHeating() && this.recipeMapWorkable.isWorkingEnabled();
+    }
+
+    /// For TOP integration
+    /// @see EvaporationPoolInfoProvider
+    public int getExposedBlocks() {
+        return this.exposedBlocks;
+    }
+
+    private void updateSpeedStats(int progress) {
+        recipeSpeedStats[statsIndex] = progress;
+        statsIndex = (statsIndex + 1) % TRACKED_TICKS;
+    }
+
+    public float getAverageSpeed() {
+        return ((float) Arrays.stream(recipeSpeedStats).sum()) / TRACKED_TICKS;
     }
 
     @SideOnly(Side.CLIENT)
@@ -351,19 +374,85 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
-        textList.add(new TextComponentString(String.format("lDist: %s; rDist: %s; bDist: %s", lDist, rDist, bDist)));
-        textList.add(new TextComponentString(String.format("Exposed Blocks: %s", exposedBlocks)));
-        textList.add(new TextComponentString(String.format("Coil Count: %s", coilCount)));
-        textList.add(new TextComponentString(String.format("Coil Temp: %s", coilTemp)));
-        textList.add(new TextComponentString(line(Slice.B_ALL) + " " + line(Slice.T_NONE)));
-        textList.add(new TextComponentString(line(Slice.B_ALL) + " " + line(Slice.T_SIDES)));
-        textList.add(new TextComponentString(line(Slice.B_END) + " " + line(Slice.T_MIDDLE)));
-        for (int i = 0; i < bDist - 2; i++) {
-            textList.add(new TextComponentString(line(Slice.B_MIDDLE) + " " + line(Slice.T_MIDDLE)));
+        MultiblockDisplayText.builder(textList, isStructureFormed())
+                .setWorkingStatus(recipeMapWorkable.isWorkingEnabled(), recipeMapWorkable.isActive())
+                .addEnergyUsageLine(getEnergyContainer())
+                .addEnergyTierLine(GTUtility.getTierByVoltage(recipeMapWorkable.getMaxVoltage()))
+                .addCustom(tl -> {
+                    /// Coil heat capacity line
+                    if (isStructureFormed()) {
+                        ITextComponent heatString = TextComponentUtil.stringWithColor(
+                                TextFormatting.RED,
+                                TextFormattingUtil.formatNumbers(coilTemp) + "K");
+
+                        tl.add(TextComponentUtil.translationWithColor(
+                                TextFormatting.GRAY,
+                                "gregtech.multiblock.blast_furnace.max_temperature",
+                                heatString));
+                    }
+
+                    /// IsHeating line
+                    if (isStructureFormed()) {
+                        ITextComponent isHeatingString = isHeating() ?
+                                TextComponentUtil.translationWithColor(
+                                        TextFormatting.GREEN,
+                                        "gregtech.multiblock.evaporation_pool.is_heating") :
+                                TextComponentUtil.translationWithColor(
+                                        TextFormatting.RED,
+                                        "gregtech.multiblock.evaporation_pool.is_not_heating");
+                        tl.add(TextComponentUtil.translationWithColor(
+                                TextFormatting.GRAY,
+                                "gregtech.multiblock.evaporation_pool_heated_preface",
+                                isHeatingString));
+                    }
+
+                    /// Exposed Blocks line
+                    if (isStructureFormed()) {
+                        ITextComponent exposedBlocksString = TextComponentUtil.stringWithColor(
+                                TextFormatting.YELLOW,
+                                TextFormattingUtil.formatNumbers(exposedBlocks));
+                        tl.add(TextComponentUtil.translationWithColor(
+                                TextFormatting.GRAY,
+                                "gregtech.multiblock.evaporation_pool.exposed_blocks",
+                                exposedBlocksString));
+                    }
+
+                    /// Average Recipe Speed line
+                    if (isStructureFormed()) {
+                        ITextComponent averageSpeedString = TextComponentUtil.stringWithColor(
+                                TextFormatting.AQUA,
+                                String.format("%.2f", getAverageSpeed()));
+                        tl.add(TextComponentUtil.translationWithColor(
+                                TextFormatting.GRAY,
+                                "gregtech.multiblock.evaporation_pool.average_speed",
+                                averageSpeedString));
+                    }
+                })
+                .addProgressLine(recipeMapWorkable.getProgressPercent());
+
+//  Debug stuff, might be useful for testing. Should get removed before merging
+//        textList.add(new TextComponentString(String.format("lDist: %s; rDist: %s; bDist: %s", lDist, rDist, bDist)));
+//        textList.add(new TextComponentString(String.format("Exposed Blocks: %s", exposedBlocks)));
+//        textList.add(new TextComponentString(String.format("Coil Count: %s", coilCount)));
+//        textList.add(new TextComponentString(String.format("Coil Temp: %s", coilTemp)));
+//        textList.add(new TextComponentString(line(Slice.B_ALL) + " " + line(Slice.T_NONE)));
+//        textList.add(new TextComponentString(line(Slice.B_ALL) + " " + line(Slice.T_SIDES)));
+//        textList.add(new TextComponentString(line(Slice.B_END) + " " + line(Slice.T_MIDDLE)));
+//        for (int i = 0; i < bDist - 2; i++) {
+//            textList.add(new TextComponentString(line(Slice.B_MIDDLE) + " " + line(Slice.T_MIDDLE)));
+//        }
+//        textList.add(new TextComponentString(line(Slice.B_START) + " " + line(Slice.T_MIDDLE)));
+//        textList.add(new TextComponentString(line(Slice.B_ALL) + " " + line(Slice.T_SIDES)));
+//        textList.add(new TextComponentString(line(Slice.B_SELF) + " " + line(Slice.T_NONE)));
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, World player, @NotNull List<String> tooltip, boolean advanced) {
+        super.addInformation(stack, player, tooltip, advanced);
+        tooltip.add(I18n.format("gregtech.machine.evaporation_pool.tooltip.info", MAX_DIAMETER, MIN_DIAMETER));
+        if (TooltipHelper.isShiftDown()) {
+            tooltip.add(I18n.format("gregtech.machine.evaporation_pool.tooltip.structure_info", MAX_DIAMETER, MIN_DIAMETER));
         }
-        textList.add(new TextComponentString(line(Slice.B_START) + " " + line(Slice.T_MIDDLE)));
-        textList.add(new TextComponentString(line(Slice.B_ALL) + " " + line(Slice.T_SIDES)));
-        textList.add(new TextComponentString(line(Slice.B_SELF) + " " + line(Slice.T_NONE)));
     }
 
     @Override
@@ -574,8 +663,11 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                     coilHeat = maxEnergy2Draw * SuSyUtility.JOULES_PER_EU;
                 }
 
-                int remainingHeat = (baseHeat + coilHeat) % recipeJt;
-                int maxProgress = (baseHeat + coilHeat) / recipeJt;
+                int totalHeat = (baseHeat + coilHeat);
+                int remainingHeat = totalHeat % recipeJt;
+                int maxProgress = totalHeat / recipeJt;
+
+                updateSpeedStats(maxProgress);
 
                 boolean halted = maxProgress == 0;
                 if (this.isHalted != halted) {
