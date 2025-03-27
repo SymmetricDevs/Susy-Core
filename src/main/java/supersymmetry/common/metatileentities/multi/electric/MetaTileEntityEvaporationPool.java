@@ -719,7 +719,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         @Override
         public void receiveCustomData(int dataId, @NotNull PacketBuffer buf) {
             super.receiveCustomData(dataId, buf);
-            if (dataId == GregtechDataCodes.NEEDS_VENTING) {
+            if (dataId == SuSyDataCodes.UPDATE_WORK_HALTED) {
                 this.isHalted = buf.readBoolean();
             }
         }
