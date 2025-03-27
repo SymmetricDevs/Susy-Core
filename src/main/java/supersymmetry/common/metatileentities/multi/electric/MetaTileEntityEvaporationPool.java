@@ -38,6 +38,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.properties.EvaporationEnergyProperty;
 import supersymmetry.api.util.SuSyUtility;
@@ -74,7 +75,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     /// The base temperature of the coils in the structure
     /// Does not need to be serialized since it's set during [#formStructure(PatternMatchContext)]
     int coilTemp = 0;
-    int coilCount = 0;
+    int coilHeat = 0; /// = coilTemp * coilCount
 
     /// Concurrently updating the exposed block count, reducing the load on the main thread
     private static final AtomicInteger THREAD_CNTR = new AtomicInteger(0);
@@ -124,7 +125,8 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         if (type instanceof IHeatingCoilBlockStats coilStats) {
             this.coilTemp = coilStats.getCoilTemperature();
             int width = lDist + rDist - 1, length = bDist;
-            this.coilCount = length * ((width + 1) / 2) + width / 2;
+            int coilCount = length * ((width + 1) / 2) + width / 2;
+            this.coilHeat = coilCount * coilTemp;
         }
         this.counterTask = SCHEDULED_EXECUTOR.scheduleWithFixedDelay(new ExposureCountTask(this),
                 TASK_DELAY, TASK_DELAY, TimeUnit.MILLISECONDS);
@@ -134,7 +136,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     public void invalidateStructure() {
         super.invalidateStructure();
         this.coilTemp = 0;
-        this.coilCount = 0;
+        this.coilHeat = 0;
         this.exposedBlocks = 0;
         if (this.counterTask != null) {
             this.counterTask.cancel(true);
@@ -345,6 +347,10 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         return this.exposedBlocks;
     }
 
+    protected int getMaxHeatFromCoils() {
+        return coilHeat;
+    }
+
     private void updateSpeedStats(int progress) {
         recipeSpeedStats[statsIndex] = progress;
         statsIndex = (statsIndex + 1) % TRACKED_TICKS;
@@ -440,7 +446,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 //  Debug stuff, might be useful for testing. Should get removed before merging
 //        textList.add(new TextComponentString(String.format("lDist: %s; rDist: %s; bDist: %s", lDist, rDist, bDist)));
 //        textList.add(new TextComponentString(String.format("Exposed Blocks: %s", exposedBlocks)));
-//        textList.add(new TextComponentString(String.format("Coil Count: %s", coilCount)));
+//        textList.add(new TextComponentString(String.format("Coil Count: %s", coilHeat / coilTemp)));
 //        textList.add(new TextComponentString(String.format("Coil Temp: %s", coilTemp)));
 //        textList.add(new TextComponentString(line(Slice.B_ALL) + " " + line(Slice.T_NONE)));
 //        textList.add(new TextComponentString(line(Slice.B_ALL) + " " + line(Slice.T_SIDES)));
@@ -679,8 +685,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                 boolean halted = maxProgress == 0;
                 if (this.isHalted != halted) {
                     this.isHalted = halted;
-                    /// Yeah, using a data code for steam machine is kinda cursed here. I just don't really want to create a new one. This one won't conflict, at least.
-                    writeCustomData(GregtechDataCodes.NEEDS_VENTING, buf -> buf.writeBoolean(halted));
+                    writeCustomData(SuSyDataCodes.UPDATE_WORK_HALTED, buf -> buf.writeBoolean(halted));
                 }
                 this.isHeating = coilHeat > 0;
 
@@ -692,19 +697,16 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             }
         }
 
+        /// This could potentially be cached in the mte, but ig it doesn't matter that much
         protected int getHeatFromSunlight() {
             return exposedBlocks * JT_PER_BLOCK;
         }
 
-        // TODO: this could be static?
-        protected int getMaxHeatFromCoils() {
-            return coilCount * coilTemp;
-        }
-
-        // TODO: this could be static?
+        /// This could potentially be cached in the mte, but ig it doesn't matter that much
         protected long getMaxEnergyInput() {
             IEnergyContainer energyContainer = getEnergyContainer();
-            return energyContainer.getInputVoltage() * energyContainer.getInputAmperage(); // TODO: is this correct?
+            /// This seems to be correct as far as I've tested
+            return energyContainer.getInputVoltage() * energyContainer.getInputAmperage();
         }
 
         @Override
@@ -712,10 +714,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             super.completeRecipe();
             this.recipeJt = 0;
             this.heatBuffer = 0;
-        }
-
-        public int getRecipeJt() {
-            return recipeJt;
         }
 
         @Override
