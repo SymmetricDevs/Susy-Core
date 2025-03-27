@@ -218,9 +218,16 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     @NotNull
     @Override
     protected BlockPattern createStructurePattern() {
-        /// return the default structure, even if there is no valid size found
-        /// this means auto-build will still work, and prevents terminal crashes.
+        /// Return the default structure, even if there is no valid size found
+        /// This means auto-build will still work, and prevents terminal crashes.
         if (getWorld() != null) updateStructureDimensions();
+
+        /// Makes auto-build work
+        if (bDist < MIN_DIAMETER - 4) this.bDist = MIN_DIAMETER - 4;
+        if (lDist + rDist < MIN_DIAMETER - 3) {
+            this.rDist = MIN_DIAMETER / 2 - 1;
+            this.lDist = MIN_DIAMETER / 2 - 1;
+        };
 
         return FactoryBlockPattern.start()
                 .aisle(line(Slice.B_ALL), line(Slice.T_NONE))
