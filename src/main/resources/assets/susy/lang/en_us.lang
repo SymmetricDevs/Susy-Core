@@ -254,19 +254,19 @@ gregtech.machine.railroad_engineering_station.name=Railroad Engineering Station
 gregtech.machine.railroad_engineering_station.tooltip=Place Immersive Railroading Tracks in the middle to form the multiblock
 gregtech.machine.railroad_engineering_station.tooltip.1=The concrete below the tracks can be substituted with any block, including pipes or air
 
-gregtech.machine.evaporation_pool.name=Evaporation Pool
-gregtech.machine.evaporation_pool.tooltip.info=Max internal square of %dx%d, minimum 1x1. Read info tab and tool info for more details.
-gregtech.machine.evaporation_pool.tooltip.structure_info=Evaporation Pools can be formed with any internal dimensions ranging from a 1x1 to a %dx%d, even if it is non-square. To form a valid heated evaporation pool, coils should be placed following the pattern shown in the preview. For a more detailed explanation, view the info tab in JEI.
-gregtech.top.evaporation_pool_heated_preface=Coil Pattern:
-gregtech.top.evaporation_pool_is_heated=VALID; May be heated.
-gregtech.top.evaporation_pool_not_heated=INVALID; Will not heat.
-gregtech.top.evaporation_pool.energy_transferred=Thermal Energy:
-gregtech.multiblock.evaporation_pool.rolling_average=Average Energy In:
-gregtech.multiblock.evaporation_pool.joules_per_tick=J/t
-gregtech.top.evaporation_pool.kilojoules=kJ
-gregtech.multiblock.evaporation_pool.description=The Evaporation Pool has interior dimensions specified in its description and a concrete exterior for IO/controller placement, with at most two of each IO type. The controller may be placed anywhere along the protruding bottom row "in front" of the interior.            The Evaporation Pool can run recipes both unpowered and powered. In order to power recipes, the multiblock will need to be formed with a "snaking" coil pattern of uniform type, as shown in the preview. Unpowered Evaporation Pools do not require any coils.        The speed of any recipe depends on the heat provided to the multi, which is based off of the number of interior blocks exposed to sunlight, the energy provided, and the tier of coil. [1EU = 10J, currently].                                                                                 Each exposed block (takes time to check) produces 1kJ/s, with heat provided by coils varying based on coil temperature * amount. The maximum recipe speed is 1/4th of duration per tick (5 recipes/s).                                                                                                   The pool will attempt to complete as many recipe progress ticks as it can with available energy, below the aforementioned maximum progression.
-gregtech.multiblock.evaporation_pool.average_speed=Avg Speed:
-gregtech.multiblock.evaporation_pool.exposed_blocks=Number of Exposed Blocks:
+gregtech.machine.evaporation_pool.name=Evaporation Pool:
+gregtech.machine.evaporation_pool.tooltip.info=Max square of %1$sx%1$s, minimum %2$sx%2$s. Read info tab and tool info for more details.
+gregtech.machine.evaporation_pool.tooltip.structure_info=Evaporation Pools can be formed with any dimensions ranging from a %2$sx%2$s to a %1$sx%1$s, even if it is non-square. To form a valid heated evaporation pool, coils should be placed following the pattern shown in the preview. For a more detailed explanation, view the info tab in JEI.
+gregtech.top.evaporation_pool_heated_preface=Heating Coil:
+gregtech.top.evaporation_pool.exposed_blocks=Exposed Blocks:
+gregtech.top.evaporation_pool.average_speed=Avg Speed:
+gregtech.multiblock.evaporation_pool.description=The Evaporation Pool has interior dimensions specified in its description and a concrete exterior for IO/controller placement, with at most two of each IO type. The controller may be placed anywhere along the protruding bottom row "in front" of the interior.            The Evaporation Pool can run recipes both unpowered and powered. In order to power recipes, the multiblock will need to be formed with a "snaking" coil pattern of uniform type, as shown in the preview. Unpowered Evaporation Pools do not require any coils.        The speed of any recipe depends on the heat provided to the multi, which is based off of the number of interior blocks exposed to sunlight, the energy provided, and the tier of coil. [1EU = 10J, currently].                                                                                 Each exposed block (takes time to check) produces 1kJ/s, with heat provided by coils varying based on coil temperature * amount.
+gregtech.multiblock.evaporation_pool_heated_preface=Heating Coil: %s
+gregtech.multiblock.evaporation_pool.is_heating=On
+gregtech.multiblock.evaporation_pool.is_not_heating=Off/Missing
+gregtech.multiblock.evaporation_pool.exposed_blocks=Exposed Blocks: %s
+gregtech.multiblock.evaporation_pool.average_speed=Avg Speed: %sx
+susy.multiblock.pattern.error.coils_or_bed=§cAll heating coils or evaporation beds must be the same§r
 
 gregtech.machine.primitive_mud_pump.name=Primitive Mud Pump
 gregtech.machine.primitive_mud_pump.tooltip=Works only in River biomes between Y=64 and Y=80
