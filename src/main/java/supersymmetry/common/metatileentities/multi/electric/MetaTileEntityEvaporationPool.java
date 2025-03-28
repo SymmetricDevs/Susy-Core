@@ -87,7 +87,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     @Nullable
     private ScheduledFuture<?> counterTask; /// Stored here to cancel the task when the structure is invalidated
     private int exposedBlocks = 0; /// Does not need to be serialized since it's updated (hopefully) once every second
-    private static final int JT_PER_BLOCK = 100; // TODO: dynamic heat absorption based on day time?
+    private static final int JT_PER_BLOCK = 50; // TODO: dynamic heat absorption based on day time?
 
     private final int[] recipeSpeedStats = new int[TRACKED_TICKS]; /// The same duration (1s) as [MetaTileEntity#timeStatistics]
     private int statsIndex = 0;
