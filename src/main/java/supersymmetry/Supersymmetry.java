@@ -53,10 +53,6 @@ public class Supersymmetry {
     @Mod.EventHandler
     public void onPreInit(@NotNull FMLPreInitializationEvent event) {
 
-        if (FMLLaunchHandler.side() == Side.CLIENT) {
-            OBJLoader.INSTANCE.addDomain(MODID);
-        }
-
         proxy.preLoad();
 
         SuSyMetaBlocks.init();
