@@ -27,7 +27,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.SuSyValues;
 import supersymmetry.Supersymmetry;
-import supersymmetry.api.integration.theoneprobe.TheOneProbeCompatibility;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
 import supersymmetry.common.CommonProxy;
@@ -35,6 +34,7 @@ import supersymmetry.common.SusyMetaEntities;
 import supersymmetry.common.blocks.SheetedFrameItemBlock;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SuSyMetaBlocks;
+import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.loaders.SuSyFluidTooltipLoader;
 import supersymmetry.loaders.SuSyIRLoader;
 
@@ -58,7 +58,6 @@ public class ClientProxy extends CommonProxy {
         super.load();
         SuSyMetaBlocks.registerColors();
         SuSyFluidTooltipLoader.registerTooltips();
-        TheOneProbeCompatibility.registerCompatibility();
     }
 
     @SubscribeEvent
@@ -135,5 +134,7 @@ public class ClientProxy extends CommonProxy {
     public static void stitchTexture(TextureStitchEvent.Pre event) {
         TextureMap map = event.getMap();
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "entities/soyuz"));
+        map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "armor/jet_wingpack"));
+        SuSyMetaItems.armorItem.registerIngameModels(map);
     }
 }

@@ -20,7 +20,9 @@ public class BlockResource1 extends VariantBlock<BlockResource1.ResourceBlockTyp
     }
 
     public enum ResourceBlockType implements IStringSerializable {
-        NATIVE_COPPER("native_copper", 1);
+        NATIVE_COPPER("native_copper", 1),
+        ANTHRACITE("anthracite", 0),
+        LIGNITE("lignite", 0);
 
         private final String name;
         private final int harvestLevel;

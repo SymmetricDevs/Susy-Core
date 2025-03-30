@@ -44,7 +44,7 @@ public class MetaTileEntityFluidizedBedReactor extends RecipeMapMultiblockContro
                 .where('S', this.selfPredicate())
                 .where('F', frames(Materials.Steel))
                 .where('P', states(this.getPipeCasingState()))
-                .where('X', states(this.getCasingState()).setMinGlobalLimited(18)
+                .where('X', states(this.getCasingState()).setMinGlobalLimited(17)
                         .or(this.autoAbilities(true, true, true, true, true, true, false)))
                 .build();
     }

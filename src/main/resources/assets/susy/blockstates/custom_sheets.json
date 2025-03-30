@@ -1,0 +1,25 @@
+{
+  "forge_marker" : 1,
+  "defaults": {
+    "model": "minecraft:cube_bottom_top",
+    "textures": {
+      "bottom": "gregtech:blocks/custom_sheets/darker_white_metal_sheet",
+      "top": "gregtech:blocks/custom_sheets/darker_white_metal_sheet",
+      "side": "gregtech:blocks/custom_sheets/darker_white_metal_sheet"
+    }
+  },
+  "variants" : {
+    "variant=darkwhitemetalsheet" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/custom_sheets/darker_white_metal_sheet"
+      }
+    },
+    "variant=lightergraymetalsheet" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/custom_sheets/lighter_gray_metal_sheet"
+      }
+    }
+  }
+}

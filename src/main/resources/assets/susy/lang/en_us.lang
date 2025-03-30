@@ -76,6 +76,8 @@ tile.resource_block.potash.name=Potash Deposit
 tile.resource_block.sulfur.name=Sulfur Deposit
 tile.resource_block.coal.name=Coal Deposit
 tile.resource_block_1.native_copper.name=Native Copper Deposit
+tile.resource_block_1.anthracite.name=Anthracite Deposit
+tile.resource_block_1.lignite.name=Lignite Deposit
 
 
 tile.multiblock_tank.clarifier.name=Clarifier Vat
@@ -98,6 +100,10 @@ tile.home_block.home_renewal_brutalist.tooltip=Renewal Brutalist
 tile.home_block.home_scifi.name=Home Block
 tile.home_block.home_scifi.tooltip=Sci-Fi
 
+tile.conveyor_belt.lv.name=Conveyor Belt
+
+tile.drill_bit.steel.name=Steel Drill Bit Block
+
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
 tile.susy_stone_smooth.gneiss.name=Gneiss
@@ -110,6 +116,7 @@ tile.susy_stone_smooth.shale.name=Shale
 tile.susy_stone_smooth.slate.name=Slate
 tile.susy_stone_smooth.soapstone.name=Soapstone
 tile.susy_stone_smooth.kimberlite.name=Kimberlite
+tile.susy_stone_smooth.industrial_concrete.name=Industrial Concrete
 tile.susy_stone_cobble.gabbro.name=Gabbro Cobblestone
 tile.susy_stone_cobble.gneiss.name=Gneiss Cobblestone
 tile.susy_stone_cobble.graphite.name=Graphite Cobblestone
@@ -121,6 +128,7 @@ tile.susy_stone_cobble.shale.name=Shale Cobblestone
 tile.susy_stone_cobble.slate.name=Slate Cobblestone
 tile.susy_stone_cobble.soapstone.name=Soapstone Cobblestone
 tile.susy_stone_cobble.kimberlite.name=Kimberlite Cobblestone
+tile.susy_stone_cobble.industrial_concrete.name=Industrial Concrete Cobblestone
 tile.susy_stone_bricks.gabbro.name=Gabbro Bricks
 tile.susy_stone_bricks.gneiss.name=Gneiss Bricks
 tile.susy_stone_bricks.graphite.name=Graphite Bricks
@@ -132,6 +140,7 @@ tile.susy_stone_bricks.shale.name=Shale Bricks
 tile.susy_stone_bricks.slate.name=Slate Bricks
 tile.susy_stone_bricks.soapstone.name=Soapstone Bricks
 tile.susy_stone_bricks.kimberlite.name=Kimberlite Bricks
+tile.susy_stone_bricks.industrial_concrete.name=Industrial Concrete Bricks
 
 # Materials
 susy.material.manganese_iron_arsenic_phosphide=Manganese Iron Arsenic Phosphide
@@ -184,6 +193,7 @@ item.material.oreprefix.sheetedFrame=%s Sheeted Frame Box
 item.material.oreprefix.fiber=%s Fiber
 item.material.oreprefix.fiberWet=Wet %s Fiber
 item.material.oreprefix.thread=%s Thread
+item.material.oreprefix.dustWet=Wet %s Dust
 
 susy.fluid.supercritical=Supercritical %s
 susy.fluid.impure_slurry=Impure %s Slurry
@@ -206,6 +216,12 @@ gregtech.machine.coagulation_tank.tooltip=Can't be used to stop bleeding.
 gregtech.machine.coagulation_tank.tooltip.1=Gains one parallel per block longer
 gregtech.machine.drum.lead.name=Lead Drum
 gregtech.machine.drum.brass.name=Brass Drum
+gregtech.machine.drum.pe.name=Polyethylene (PE) Can
+gregtech.machine.drum.pp.name=Polypropylene (PP) Can
+gregtech.machine.drum.ptfe.name=Polytetrafluoroethylene (PTFE) Can
+gregtech.machine.drum.uhmwpe.name=Ultra High Molecular Weight Polyethylene (UHMWPE) Can
+
+gregtech.machine.crate.pe.name=Hermetically Sealed Crate
 
 gregtech.machine.polymerization_tank.name=Polymerization Tank
 gregtech.machine.fluidized_bed_reactor.name=Fluidized Bed Reactor
@@ -238,30 +254,29 @@ gregtech.machine.railroad_engineering_station.name=Railroad Engineering Station
 gregtech.machine.railroad_engineering_station.tooltip=Place Immersive Railroading Tracks in the middle to form the multiblock
 gregtech.machine.railroad_engineering_station.tooltip.1=The concrete below the tracks can be substituted with any block, including pipes or air
 
-gregtech.machine.evaporation_pool.name=Evaporation Pool
-gregtech.machine.evaporation_pool.tooltip.info=Max internal square of %dx%d, minimum 1x1. Read info tab and tool info for more details.
-gregtech.machine.evaporation_pool.tooltip.structure_info=Evaporation Pools can be formed with any internal dimensions ranging from a 1x1 to a %dx%d, even if it is non-square. To form a valid heated evaporation pool, coils should be placed following the pattern shown in the preview. For a more detailed explanation, view the info tab in JEI.
-gregtech.top.evaporation_pool_heated_preface=Coil Pattern:
-gregtech.top.evaporation_pool_is_heated=VALID; May be heated.
-gregtech.top.evaporation_pool_not_heated=INVALID; Will not heat.
-gregtech.top.evaporation_pool.energy_transferred=Thermal Energy:
-gregtech.mutliblock.evaporation_pool.rolling_average=Average Energy In:
-gregtech.multiblock.evaporation_pool.joules_per_tick=J/t
-gregtech.top.evaporation_pool.kilojoules=kJ
-gregtech.multiblock.evaporation_pool.description=The Evaporation Pool has interior dimensions specified in its description and a concrete exterior for IO/controller placement, with at most two of each IO type. The controller may be placed anywhere along the protruding bottom row "in front" of the interior.            The Evaporation Pool can run recipes both unpowered and powered. In order to power recipes, the multiblock will need to be formed with a "snaking" coil pattern of uniform type, as shown in the preview. Unpowered Evaporation Pools do not require any coils.        The speed of any recipe depends on the heat provided to the multi, which is based off of the number of interior blocks exposed to sunlight, the energy provided, and the tier of coil. [1EU = 10J, currently].                                                                                 Each exposed block (takes time to check) produces 1kJ/s, with heat provided by coils varying based on coil temperature * amount. The maximum recipe speed is 1/4th of duration per tick (5 recipes/s).                                                                                                   The pool will attempt to complete as many recipe progress ticks as it can with available energy, below the aforementioned maximum progression.
-gregtech.multiblock.evaporation_pool.average_speed=Avg Speed:
-gregtech.multiblock.evaporation_pool.exposed_blocks=Number of Exposed Blocks:
+gregtech.machine.evaporation_pool.name=Evaporation Pool:
+gregtech.machine.evaporation_pool.tooltip.info=Max square of %1$sx%1$s, minimum %2$sx%2$s. Read info tab and tool info for more details.
+gregtech.machine.evaporation_pool.tooltip.structure_info=Evaporation Pools can be formed with any dimensions ranging from a %2$sx%2$s to a %1$sx%1$s, even if it is non-square. To form a valid heated evaporation pool, coils should be placed following the pattern shown in the preview. For a more detailed explanation, view the info tab in JEI.
+gregtech.top.evaporation_pool_heated_preface=Heating Coil:
+gregtech.top.evaporation_pool.exposed_blocks=Exposed Blocks:
+gregtech.top.evaporation_pool.average_speed=Avg Speed:
+gregtech.multiblock.evaporation_pool.description=The Evaporation Pool has interior dimensions specified in its description and a concrete exterior for IO/controller placement, with at most two of each IO type. The controller may be placed anywhere along the protruding bottom row "in front" of the interior.            The Evaporation Pool can run recipes both unpowered and powered. In order to power recipes, the multiblock will need to be formed with a "snaking" coil pattern of uniform type, as shown in the preview. Unpowered Evaporation Pools do not require any coils.        The speed of any recipe depends on the heat provided to the multi, which is based off of the number of interior blocks exposed to sunlight, the energy provided, and the tier of coil. [1EU = 10J, currently].                                                                                 Each exposed block (takes time to check) produces 1kJ/s, with heat provided by coils varying based on coil temperature * amount.
+gregtech.multiblock.evaporation_pool_heated_preface=Heating Coil: %s
+gregtech.multiblock.evaporation_pool.is_heating=On
+gregtech.multiblock.evaporation_pool.is_not_heating=Off/Missing
+gregtech.multiblock.evaporation_pool.exposed_blocks=Exposed Blocks: %s
+gregtech.multiblock.evaporation_pool.average_speed=Avg Speed: %sx
+susy.multiblock.pattern.error.coils_or_bed=§cAll heating coils or evaporation beds must be the same§r
 
 gregtech.machine.primitive_mud_pump.name=Primitive Mud Pump
 gregtech.machine.primitive_mud_pump.tooltip=Works only in River biomes between Y=64 and Y=80
 gregtech.machine.basic_steam_turbine.name=Large Steam Turbine
 gregtech.machine.basic_gas_turbine.name=Large Gas Turbine
-gregtech.machine.ocean_pumper.name=Ocean Pumper
-gregtech.machine.ocean_pumper.tooltip=Works only in Ocean biomes between Y=70 and Y=75
+gregtech.machine.large_fluid_pump.name=Large Fluid Pump
+gregtech.machine.large_fluid_pump.tooltip.1=This would definitely affect the local trout population.
+gregtech.machine.large_fluid_pump.tooltip.2=Only works when the controller is at Y=64 and the bottom Steel Pipe Casing is located in the right biome.
 gregtech.machine.advanced_arc_furnace.name=Advanced Arc Furnace
 gregtech.machine.clarifier.name=Clarifier
-gregtech.machine.dumper.name=Dumper
-gregtech.machine.evaporation_pool.name=Evaporation Pool
 gregtech.machine.flare_stack.name=Flare Stack
 gregtech.machine.flare_stack.height=Stack Height: %s §9blocks
 gregtech.machine.flare_stack.rate=Flaring Rate: %s
@@ -289,6 +304,14 @@ gregtech.machine.high_pressure_cryogenic_distillation_plant.name=High Pressure C
 gregtech.machine.single_column_cryogenic_distillation_plant.name=Single Column Cryogenic Distillation Plant
 gregtech.machine.reverberatory_furnace.name=Reverberatory Furnace
 gregtech.machine.blender.name=Blender
+gregtech.machine.sieve_distillation_tower.name=Sieve Distillation Tower
+
+gregtech.machine.curtain_coater.name=Curtain Coater
+gregtech.multiblock.pattern.error.conveyor=§cAll conveyor belts must be the same§r
+
+gregtech.machine.milling.name=Precise Milling Machine
+gregtech.multiblock.pattern.error.milling.upper=§cOnly allowed on the upper part of the machine§r
+gregtech.multiblock.pattern.error.milling.lower=§cOnly allowed on the lower part of the machine§r
 
 gregtech.machine.drone_pad.name=Drone Pad
 gregtech.machine.primitive_smelter.name=Primitive Smelter
@@ -604,6 +627,12 @@ gregtech.machine.weapons_factory.opv.name=Legendary Weapons Factory
 # Phase Separator
 gregtech.machine.phase_separator.name=Phase Separator
 
+# RTG
+gregtech.machine.rtg.lv.name=Basic RTG
+gregtech.machine.rtg.tooltip.info=Power for your pacemaker.
+gregtech.machine.rtg.tooltip.description=Generates a small but steady amount of electricity using the decay of radioactive isotopes.
+gregtech.machine.rtg.voltage_produced=§aVoltage PRODUCED: §f%,d EU/t (%s§f)
+
 # Electrostatic Separator
 gregtech.machine.electrostatic_separator.lv.name=Basic Electrostatic Separator
 gregtech.machine.electrostatic_separator.mv.name=Advanced Electrostatic Separator
@@ -651,6 +680,16 @@ gregtech.machine.polishing_machine.opv.name=Legendary Polishing Machine
 
 gregtech.machine.bath_condenser.name=Bath Condenser
 gregtech.machine.bath_condenser.tooltip=Only works inside a Cryogenic Distillation Tower
+
+gregtech.machine.incinerator.lv.name=Basic Incinerator
+gregtech.machine.incinerator.mv.name=Advanced Incinerator
+gregtech.machine.incinerator.hv.name=Advanced Incinerator II
+gregtech.machine.incinerator.ev.name=Advanced Incinerator III
+gregtech.machine.incinerator.tooltip.1=§6Incinerates§r %s item(s) per %s tick(s)
+gregtech.machine.incinerator.tooltip.2=§cNeeds eight blocks of air to release gasses into
+gregtech.machine.incinerator.tooltip.3=§8Don't worry about where the heavy metals are going.
+gregtech.multiblock.incinerator.clogged=§4Clogged! (Is the top blocked?)
+gregtech.multiblock.incinerator.working=§2Clog-free
 
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
@@ -709,9 +748,13 @@ recipemap.gravity_separator=Gravity Separation
 recipemap.spinning.name=Textile Spinning
 recipemap.large_steam_turbine.name=Large Steam Turbine
 recipemap.primitive_smelter.name=Primitive Smelting
+recipemap.large_fluid_pump.name=Large Fluid Pump
+recipemap.sieve_distillation.name=Fractional Distillation
+recipemap.jet_wingpack_fuels.name=Jet Wingpack Fuels
+recipemap.curtain_coater.name=Curtain Coater
+recipemap.milling.name=Precise Milling Machine
 
 gregtech.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
-gregtech.multiblock.ocean_pumper.description=The Ocean Pumper is an electrically powered multiblock that collects a base amount of 8,000 L Seawater per second (at MV), but only if it is in an ocean biome, and when the controller is between Y = 70 and Y = 75 (Inclusive). It needs an output hatch, a maintenance hatch, and an energy input hatch.
 
 # Energy Hatches
 
@@ -723,10 +766,53 @@ gregtech.machine.energy_hatch.output_4a.hv.name=HV 4A Dynamo Hatch
 gregtech.machine.energy_hatch.output_16a.hv.name=HV 16A Dynamo Hatch
 gregtech.machine.energy_hatch.output_16a.ev.name=EV 16A Dynamo Hatch
 
-# Other multiblock parts
+# Quadruple & Nonuple Fluid Hatches
 
+gregtech.machine.fluid_hatch.import_4x.lv.name=LV Quadruple Input Hatch
+gregtech.machine.fluid_hatch.import_4x.mv.name=MV Quadruple Input Hatch
+gregtech.machine.fluid_hatch.import_4x.hv.name=HV Quadruple Input Hatch
+
+gregtech.machine.fluid_hatch.import_9x.lv.name=LV Nonuple Input Hatch
+gregtech.machine.fluid_hatch.import_9x.mv.name=MV Nonuple Input Hatch
+gregtech.machine.fluid_hatch.import_9x.hv.name=HV Nonuple Input Hatch
+
+gregtech.machine.fluid_hatch.export_4x.lv.name=LV Quadruple Output Hatch
+gregtech.machine.fluid_hatch.export_4x.mv.name=MV Quadruple Output Hatch
+gregtech.machine.fluid_hatch.export_4x.hv.name=HV Quadruple Output Hatch
+
+gregtech.machine.fluid_hatch.export_9x.lv.name=LV Nonuple Output Hatch
+gregtech.machine.fluid_hatch.export_9x.mv.name=MV Nonuple Output Hatch
+gregtech.machine.fluid_hatch.export_9x.hv.name=HV Nonuple Output Hatch
+
+# Other multiblock parts
 gregtech.machine.dumping_hatch=Dumping Hatch
 gregtech.machine.dumping_hatch.lv.name=Dumping Hatch
+
+# Distillation tower explanations
+gregtech.machine.ordered_dt.tooltip.1=Fluid input and output hatches are on the same layers
+gregtech.machine.ordered_dt.tooltip.2=§cNot putting a fluid output in the Nth layer from the bottom voids the Nth output§7
+
+# Logistics
+gregtech.machine.delegator.tooltip.non_recursion=§6Cannot be attached to other Delegators!
+gregtech.top.delegator.delegating_face=Delegating face:
+
+gregtech.machine.bridge.inv.name=Inventory Bridge
+gregtech.machine.bridge.inv.tooltip=§bRelays Inventories
+gregtech.machine.bridge.tank.name=Tank Bridge
+gregtech.machine.bridge.tank.tooltip=§bRelays Tanks
+gregtech.machine.bridge.inv_tank.name=Inventory and Tank Bridge
+gregtech.machine.bridge.inv_tank.tooltip=§bRelays Inventories and Tanks
+gregtech.machine.bridge.universal.name=Universal Bridge
+gregtech.machine.bridge.universal.tooltip=§bRelays Everything
+
+gregtech.machine.extender.inv.name=Inventory Extender
+gregtech.machine.extender.inv.tooltip=§bRelays Inventories
+gregtech.machine.extender.tank.name=Tank Extender
+gregtech.machine.extender.tank.tooltip=§bRelays Tanks
+gregtech.machine.extender.inv_tank.name=Inventory and Tank Extender
+gregtech.machine.extender.inv_tank.tooltip=§bRelays Inventories and Tanks
+gregtech.machine.extender.universal.name=Universal Extender
+gregtech.machine.extender.universal.tooltip=§bRelays Everything
 
 # Metaitems
 metaitem.catalyst_bed_support_grid.name=Catalyst Bed Support Grid
@@ -735,6 +821,8 @@ cover.conveyor.steam.title=Steam Conveyor Module
 metaitem.pump.steam.name=Steam Pump
 cover.pump.steam.title=Steam Pump
 metaitem.air_vent.name=Air Vent
+metaitem.restrictive_filter.name=Restrictive Item Filter
+metaitem.restrictive_filter.tooltip=Allows only §6one stack§7 of any type of item inside. Can replace robot arms. /n§oHere you may come, but no further.§r §7Job 38:11
 metaitem.air_vent.tooltip=Passively collects a Dimension's Air for your Machines when facing Air
 metaitem.track_segment.name=Monorail Track Segment
 metaitem.track_segment.tooltip=For use in the §8tunnelbore.
@@ -793,20 +881,72 @@ gregtech.catalyst_group.standard_catalysts.name=Standard Catalyst
 gregtech.catalyst_group.cracking_catalyst_beds.name=Cracking Catalyst
 metaitem.standard_catalyst_bed_cracking.name=Cracking Catalyst Bed
 
+# Armors
+metaitem.jet_wingpack.name=Jet Wingpack
+metaitem.jet_wingpack.tooltip=Hold shift to brake when engine activated
+metaarmor.hud.engine_status=Engine: %s
+metaarmor.jet_wingpack.engine_active=Jet Wingpack: Engine Activated
+metaarmor.jet_wingpack.engine_inactive=Jet Wingpack: Engine Deactivated
+
 # Machine Translations
-susy.ocean_pumper.full=Tanks are Full!
-susy.ocean_pumper.drainrate=Current Pumping Rate: %s
 susy.wrongbiome=Machine can not work in this biome!
 susy.weather_resistance=§2Will not explode from water, lava, fire or rain.
+susy.large_fluid_pump.y_level=Current Controller Y level: Y=%s
+susy.large_fluid_pump.biome=Current bottom Pipe Casing biome: %s
 
 # Latex Logs
 gregtech.block_group_members.latex_logs.name=Rubber Log
 
+
+# Stock Interfaces
+gregtech.machine.stock_controller.name=Locomotive Controller
+susy.stock_interfaces.locomotive_controller.description=Controls nearby locomotives thrust and break depending on redstone input
+
+gregtech.machine.stock_detector.name=Stock Detector
+susy.stock_interfaces.stock_detector.description=Detects nearby stock and outputs redstone signal
+
+gregtech.machine.stock_fluid_exchanger.name=Fluid Exchanger
+susy.stock_interfaces.fluid_exchanger.description=Transfers fluid in and out of nearby stock
+
+gregtech.machine.stock_item_exchanger.name=Item Exchanger
+susy.stock_interfaces.item_exchanger.description=Transfers items in and out of nearby stock
+
+gregtech.machine.stock_content_reader.name=Stock Reader
+susy.stock_interfaces.stock_reader.description=Outputs redstone signal based on the inventory/tank of the stock in front of it
+
+susy.gui.stock_interactor.button.stock_filter.tooltip=Click to open stock filter GUI
+susy.gui.stock_interactor.button.controller_setting.tooltip=Click to open controller settings GUI
+susy.gui.stock_interactor.button.render_bounding_box.tooltip=Click to toggle rendering of interaction area
+susy.gui.stock_interactor.button.highlight_selected_stock.tooltip=Click to toggle highlighting of selected stock
+
+susy.gui.stock_interactor.title.highlight_selected_stock=Highlight selected stock
+susy.gui.stock_interactor.title.render_bounding_box=Render Interaction Area
+susy.gui.stock_interactor.title.stock_filter=Stock Filter
+susy.gui.stock_interactor.title.controller_setting=Settings
+
+susy.gui.stock_interactor.stock_filter.enabled.tooltip=Toggle filter
+susy.gui.stock_interactor.stock_filter.enabled.title=Toggle
+susy.gui.stock_interactor.stock_filter.regex.tooltip.info=§bAccepts regex expressions, case sensitive\n§6^§r for start of string\n§6$§r for end of string\n§6*§r for wildcard (i.e. 0 or more characters)\n§6a*§r for zero or more consecutive `a` characters\n§6?§r for any 1 character\n§6()§r for matching empty entry\n§bYou can learn more about regex at regex101.com§r
+susy.gui.stock_interactor.stock_filter.regex.tooltip.error=§4Error compiling regex pattern!§r\nName filter will not get applied!
+susy.gui.stock_interactor.stock_filter.regex.tooltip.waiting=No regex pattern set\nName filter will not get applied!
+susy.gui.stock_interactor.stock_filter.regex.tooltip.success=§aRegex compiled successfully!§r\nName filter will get applied!
+
+susy.gui.stock_interactor.controller_setting.button.control_active.tooltip=Click to toggle whether to control locomotives when the controller is powered by redstone
+susy.gui.stock_interactor.controller_setting.button.control_inactive.tooltip=Click to toggle whether to control locomotives when the controller is not powered by redstone
+
+susy.gui.stock_interactor.controller_setting.active_brake.tooltip=Brake (Powered)
+susy.gui.stock_interactor.controller_setting.active_throttle.tooltip=Throttle (Powered)
+susy.gui.stock_interactor.controller_setting.inactive_brake.tooltip=Brake (Unpowered)
+susy.gui.stock_interactor.controller_setting.inactive_throttle.tooltip=Throttle (Unpowered)
+
 # Extra recipe info
 susy.recipe.dimensions=Dimensions: %s
+susy.recipe.biomes=Biomes: %s
+susy.recipe.biomes_blocked=Blocked Biomes: %s
+susy.recipe.biomeTypes=BiomeTypes: %s
+susy.recipe.biomeTypes_blocked=Blocked BiomeTypes: %s
 
 # Commands
-
 susy.command.horde.usage=/mobHorde <start/stop/status>
 susy.command.horde.start.usage=/mobHorde start <name>
 susy.command.horde.start.argument_required=Use /mobHorde start <name>.
@@ -826,3 +966,57 @@ susy.command.horde.status.no_active_invasion=Player %s has no active invasion.
 susy.fluid.voiding.liquid=Voidable with Dumper
 susy.fluid.voiding.gas=Voidable with Smoke Stack
 susy.fluid.voiding.flammable=Voidable with Flare Stack
+
+death.attack.toxic_atmo=%s's lungs were shredded
+death.attack.suffocation=%s couldn't breathe
+
+metaitem.simple_gas_mask.name=Primitive Gas Mask
+metaitem.simple_gas_mask.tooltip=Survive in oxygenless environments
+metaitem.gas_mask.name=Gas Mask
+metaitem.gas_mask.tooltip=Survive in oxygenless environments for longer
+metaitem.gas_tank.name=Gas Tank
+metaitem.gas_tank.tooltip=Survive in oxygenless environments for longer
+metaitem.asbestos_mask.name=Asbestos Gas Mask
+metaitem.asbestos_mask.tooltip=Survive in hot environments
+metaitem.asbestos_chestplate.name=Asbestos Tank
+metaitem.asbestos_chestplate.tooltip=Survive in hot environments
+metaitem.asbestos_leggings.name=Asbestos Leggings
+metaitem.asbestos_leggings.tooltip=Survive in hot environments
+metaitem.asbestos_boots.name=Asbestos Boots
+metaitem.asbestos_boots.tooltip=Survive in hot environments
+metaitem.rebreather_tank.name=Rebreather Tank
+metaitem.rebreather_tank.tooltip=Holds oxygen for longer
+metaitem.reflective_mask.name=Reflective Gas Mask
+metaitem.reflective_mask.tooltip=Reduce heating damage
+metaitem.reflective_chestplate.name=Reflective Tank
+metaitem.reflective_chestplate.tooltip=Reduce heating damage
+metaitem.reflective_leggings.name=Reflective Leggings
+metaitem.reflective_leggings.tooltip=Reduce heating damage
+metaitem.reflective_boots.name=Reflective Boots
+metaitem.reflective_boots.tooltip=Reduce heating damage
+metaitem.filtered_tank.name=Filtered Tank
+metaitem.filtered_tank.tooltip=Holds oxygen for very long
+metaitem.nomex_mask.name=Nomex Gas Mask
+metaitem.nomex_mask.tooltip=Stay indefinitely in the mantle!
+metaitem.nomex_chestplate.name=Nomex Tank
+metaitem.nomex_chestplate.tooltip=Stay indefinitely in the mantle!
+metaitem.nomex_leggings.name=Nomex Leggings
+metaitem.nomex_leggings.tooltip=Stay indefinitely in the mantle!
+metaitem.nomex_boots.name=Nomex Boots
+metaitem.nomex_boots.tooltip=Stay indefinitely in the mantle!
+
+supersymmetry.oxygen=Remaining air: §b%s seconds§r (out of %s)
+supersymmetry.unlimited_oxygen=Remaining air: §bUnlimited§r
+supersymmetry.seconds_left=Remaining life: §2%s seconds§r
+supersymmetry.unlimited=Remaining life: §bUnlimited§r
+
+#Hardened blocks
+tile.hardened_blocks.lair7.name=Hardened Lair 7
+tile.hardened_blocks.lair10.name=Hardened Lair 10
+tile.hardened_blocks.lair11.name=Hardened Lair 11
+tile.hardened_blocks.kryp7.name=Hardened Kryp 7
+tile.hardened_blocks.kryp8.name=Hardened Kryp 8
+
+#Custom Sheets
+tile.custom_sheets.darkwhitemetalsheet.name=Darker White Metal Sheet
+tile.custom_sheets.lightergraymetalsheet.name=Lighter Gray Metal Sheet
