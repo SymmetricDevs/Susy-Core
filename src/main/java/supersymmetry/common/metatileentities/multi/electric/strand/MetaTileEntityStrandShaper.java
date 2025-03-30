@@ -15,18 +15,24 @@ import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.MultiblockDisplayText;
 import gregtech.api.metatileentity.multiblock.MultiblockWithDisplayBase;
 import gregtech.api.pattern.PatternMatchContext;
+import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.unification.FluidUnifier;
 import gregtech.api.unification.material.Material;
 import gregtech.api.util.GTUtility;
+import gregtech.api.util.RelativeDirection;
+import gregtech.client.renderer.ICubeRenderer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.capability.IStrandProvider;
 import supersymmetry.api.capability.Strand;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
+import supersymmetry.client.renderer.textures.SusyTextures;
 
 import java.util.List;
 
@@ -74,10 +80,11 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
         // Check if there is a resulting strand
         // Consume input strand if it exists
         if (!getWorld().isRemote && !isActive) {
+            Strand possibleStrand = resultingStrand();
             if (!consumeInputsAndSetupRecipe()) {
                 return;
             }
-            strand = resultingStrand();
+            strand = possibleStrand;
             isActive = true;
             this.markDirty();
         }
@@ -169,11 +176,6 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
     }
 
     @Override
-    public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
-        super.renderMetaTileEntity(renderState, translation, pipeline);
-    }
-
-    @Override
     protected void addDisplayText(List<ITextComponent> textList) {
         super.addDisplayText(textList);
         MultiblockDisplayText.builder(textList, this.isStructureFormed()).setWorkingStatus(true, isActive).addEnergyUsageLine(this.energyContainer).addEnergyTierLine(GTUtility.getTierByVoltage(this.energyContainer.getInputVoltage())).addWorkingStatusLine().addProgressLine(this.getProgressPercent());
@@ -205,5 +207,28 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
     @Override
     public void setWorkingEnabled(boolean b) {
         // They cannot stop it.
+    }
+
+    protected EnumFacing getRelativeFacing(RelativeDirection dir) {
+        return dir.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), isFlipped());
+    }
+
+    public TraceabilityPredicate autoAbilities(boolean checkEnergyIn, boolean checkMaintenance, boolean checkMuffler) {
+        TraceabilityPredicate predicate = super.autoAbilities(checkMaintenance, checkMuffler);
+        if (checkEnergyIn) {
+            predicate = predicate.or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2).setPreviewCount(1));
+        }
+        return predicate;
+    }
+
+    public TraceabilityPredicate autoAbilities() {
+        return autoAbilities(true, true, false);
+    }
+
+    @Override
+    public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
+        super.renderMetaTileEntity(renderState, translation, pipeline);
+        this.getFrontOverlay().renderOrientedState(renderState, translation, pipeline, getFrontFacing(),
+                isActive, true);
     }
 }

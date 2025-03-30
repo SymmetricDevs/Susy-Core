@@ -9,15 +9,18 @@ import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.unification.FluidUnifier;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.properties.PropertyKey;
+import gregtech.api.util.BlockInfo;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
@@ -27,6 +30,8 @@ import supersymmetry.api.capability.Strand;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.*;
+
+import java.util.function.Supplier;
 
 public class MetaTileEntityTurningZone extends MetaTileEntityStrandShaper {
     public MetaTileEntityTurningZone(ResourceLocation metaTileEntityId) {
@@ -41,7 +46,9 @@ public class MetaTileEntityTurningZone extends MetaTileEntityStrandShaper {
     @Override
     protected boolean consumeInputsAndSetupRecipe() {
         if (output.getStrand() != null) return false;
-        FluidStack stack = getFirstMaterialFluid().copy();
+        FluidStack stack = getFirstMaterialFluid();
+        if (stack == null || stack.amount < 2592) return false;
+        stack = stack.copy();
         stack.amount = 2592;
         this.inputFluidInventory.drain(stack, true);
         this.maxProgress = 20;
@@ -64,7 +71,7 @@ public class MetaTileEntityTurningZone extends MetaTileEntityStrandShaper {
 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start(RelativeDirection.RIGHT, RelativeDirection.FRONT, RelativeDirection.UP)
+        return FactoryBlockPattern.start(RelativeDirection.RIGHT, RelativeDirection.BACK, RelativeDirection.UP)
                 .aisle("ABBBA",
                         "ABBBA",
                         "ABBBA",
@@ -137,9 +144,7 @@ public class MetaTileEntityTurningZone extends MetaTileEntityStrandShaper {
                         "ABBBA",
                         "  I  ",
                         "ABBBA")
-                .where('B', states(SuSyBlocks.METALLURGY_ROLL.getState(BlockMetallurgyRoll.BlockMetallurgyRollType.ROLL)
-                        .withProperty(VariantAxialRotatableBlock.AXIS,
-                                getRelativeFacing(RelativeDirection.RIGHT).getAxis())))
+                .where('B', rollOrientation())
                 .where('A', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('I', abilities(MultiblockAbility.IMPORT_FLUIDS))
                 .where('O', abilities(SuSyMultiblockAbilities.STRAND_EXPORT))
@@ -162,20 +167,30 @@ public class MetaTileEntityTurningZone extends MetaTileEntityStrandShaper {
         return SusyTextures.TURNING_ZONE_OVERLAY;
     }
 
-    protected EnumFacing getRelativeFacing(RelativeDirection dir) {
-        return dir.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), isFlipped());
-    }
-
-
-    @Override
-    public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
-        super.renderMetaTileEntity(renderState, translation, pipeline);
-        this.getFrontOverlay().renderOrientedState(renderState, translation, pipeline, getFrontFacing(),
-                isActive, true);
-    }
 
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
         return new MetaTileEntityTurningZone(this.metaTileEntityId);
+    }
+
+    protected TraceabilityPredicate rollOrientation() {
+        //makes sure rotor's front faces the left side (relative to the player) of controller front
+        EnumFacing.Axis axialFacing = getRelativeFacing(RelativeDirection.RIGHT).getAxis();
+
+        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(rollState().withProperty(BlockMetallurgyRoll.AXIS, axialFacing))};
+        return new TraceabilityPredicate(blockWorldState -> {
+            IBlockState state = blockWorldState.getBlockState();
+            if (!(state.getBlock() instanceof BlockMetallurgyRoll)) return false;
+
+            // auto-correct rotor orientation
+            if (state != rollState().withProperty(BlockMetallurgyRoll.AXIS, axialFacing)) {
+                getWorld().setBlockState(blockWorldState.getPos(), rollState().withProperty(BlockMetallurgyRoll.AXIS, axialFacing));
+            }
+            return true;
+        }, supplier);
+    }
+
+    private IBlockState rollState() {
+        return SuSyBlocks.METALLURGY_ROLL.getState(BlockMetallurgyRoll.BlockMetallurgyRollType.ROLL);
     }
 }

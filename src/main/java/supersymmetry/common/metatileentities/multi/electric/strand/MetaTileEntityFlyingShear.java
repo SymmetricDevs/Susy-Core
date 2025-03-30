@@ -5,6 +5,7 @@ import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.client.renderer.ICubeRenderer;
+import gregtech.client.renderer.texture.Textures;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.capability.Strand;
@@ -21,12 +22,18 @@ public class MetaTileEntityFlyingShear extends MetaTileEntityStrandShaper {
 
     @Override
     protected boolean consumeInputsAndSetupRecipe() {
-        return false;
+        Strand orig = this.input.take();
+        if (orig == null) return false;
+        this.progress = 10;
+        return true;
     }
 
     @Override
     protected Strand resultingStrand() {
-        return null;
+        if (this.input.getStrand() == null) return null;
+        Strand str = new Strand(this.input.getStrand());
+        str.isCut = true;
+        return str;
     }
 
     @Override
@@ -36,7 +43,7 @@ public class MetaTileEntityFlyingShear extends MetaTileEntityStrandShaper {
 
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
-        return null;
+        return Textures.HEAT_PROOF_CASING;
     }
 
     @Override

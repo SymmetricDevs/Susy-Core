@@ -33,6 +33,9 @@ import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.metatileentities.logistics.MetaTileEntityBridge;
 import supersymmetry.common.metatileentities.logistics.MetaTileEntityExtender;
 import supersymmetry.common.metatileentities.multi.electric.*;
+import supersymmetry.common.metatileentities.multi.electric.strand.MetaTileEntityClusterMill;
+import supersymmetry.common.metatileentities.multi.electric.strand.MetaTileEntityRollingMill;
+import supersymmetry.common.metatileentities.multi.electric.strand.MetaTileEntityStrandCooler;
 import supersymmetry.common.metatileentities.multi.electric.strand.MetaTileEntityTurningZone;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCoagulationTank;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimitiveMudPump;
@@ -194,6 +197,9 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityStrandBus EXPORT_STRAND;
 
     public static MetaTileEntityTurningZone TURNING_ZONE;
+    public static MetaTileEntityStrandCooler STRAND_COOLER;
+    public static MetaTileEntityRollingMill ROLLING_MILL;
+    public static MetaTileEntityClusterMill CLUSTER_MILL;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -330,7 +336,11 @@ public class SuSyMetaTileEntities {
         IMPORT_STRAND = registerMetaTileEntity(16600, new MetaTileEntityStrandBus(susyId("strand_bus.import"), false));
         EXPORT_STRAND = registerMetaTileEntity(16601, new MetaTileEntityStrandBus(susyId("strand_bus.export"), true));
         TURNING_ZONE = registerMetaTileEntity(16602, new MetaTileEntityTurningZone(susyId("turning_zone")));
+        STRAND_COOLER = registerMetaTileEntity(16603, new MetaTileEntityStrandCooler(susyId("strand_cooler")));
+        ROLLING_MILL = registerMetaTileEntity(16604, new MetaTileEntityRollingMill(susyId("rolling_mill")));
+        CLUSTER_MILL = registerMetaTileEntity(16605, new MetaTileEntityClusterMill(susyId("cluster_mill")));
 
+        // Turbines: 17000-17010
         BASIC_STEAM_TURBINE = registerMetaTileEntity(17000, new MetaTileEntitySUSYLargeTurbine(susyId("basic_steam_turbine"), SuSyRecipeMaps.LARGE_STEAM_TURBINE, 1, MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING), Textures.SOLID_STEEL_CASING, SusyTextures.LARGE_STEAM_TURBINE_OVERLAY));
         BASIC_GAS_TURBINE = registerMetaTileEntity(17001, new MetaTileEntitySUSYLargeTurbine(susyId("basic_gas_turbine"), RecipeMaps.GAS_TURBINE_FUELS, 2, MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING), Textures.SOLID_STEEL_CASING, SusyTextures.LARGE_GAS_TURBINE_OVERLAY));
 

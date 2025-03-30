@@ -12,6 +12,7 @@ import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.client.renderer.ICubeRenderer;
+import gregtech.client.renderer.texture.Textures;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
@@ -74,7 +75,7 @@ public class MetaTileEntityStrandCooler extends MetaTileEntityStrandShaper {
 
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
-        return null;
+        return Textures.SOLID_STEEL_CASING;
     }
 
     @Override
