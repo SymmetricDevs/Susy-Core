@@ -78,4 +78,7 @@ dependencies {
     api("CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.700")
 
     runtimeOnly 'com.cleanroommc:osxnarratorblocker:1.0'
+
+    compileOnly rfg.deobf("curse.maven:littletiles-257818:5180387")
+    compileOnly rfg.deobf("curse.maven:creativecore-257814:4722163")
 }

@@ -9,7 +9,17 @@ import java.util.stream.Collectors;
 
 public class SuSyLateMixinLoader implements ILateMixinLoader {
 
-    public static final List<String> modMixins = ImmutableList.of("bdsandm", "gregtech", "mcjtylib_ng", "xnet", "travelersbackpack", "yungs", "reccomplex", "fluidlogged_api");
+    public static final List<String> modMixins = ImmutableList.of(
+            "bdsandm",
+            "gregtech",
+            "mcjtylib_ng",
+            "xnet",
+            "travelersbackpack",
+            "yungs",
+            "reccomplex",
+            "fluidlogged_api",
+            "littletiles"
+    );
 
     @Override
     public List<String> getMixinConfigs() {
