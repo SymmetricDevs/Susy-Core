@@ -18,6 +18,12 @@
       "textures" : {
         "all" : "gregtech:blocks/rocket_assembler_casing/reinforced_foundation"
       }
+    },
+    "variant=rails" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/rocket_assembler_casing/rails"
+      }
     }
   }
 }
