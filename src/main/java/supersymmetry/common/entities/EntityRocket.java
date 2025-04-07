@@ -162,6 +162,7 @@ public class EntityRocket extends Entity {
         compound.setFloat("StartPos", this.getStartPos());
     }
 
+    @SideOnly(Side.CLIENT)
     protected void spawnFlightParticles(){
         // Main engine
         SusyParticleFlameLarge flame_0 = new SusyParticleFlameLarge(this.world, this.posX, this.posY, this.posZ, 1.5*(rnd.nextFloat()-0.5)*0.08, -1.5, 1.5*(rnd.nextFloat()-0.5)*0.08);
@@ -194,6 +195,7 @@ public class EntityRocket extends Entity {
         Minecraft.getMinecraft().effectRenderer.addEffect(flame_4);
     }
 
+    @SideOnly(Side.CLIENT)
     protected void spawnLaunchParticles(double v){
         float startPos = this.getStartPos();
         float randFloat = rnd.nextFloat();
@@ -235,7 +237,7 @@ public class EntityRocket extends Entity {
             this.setPosition(this.posX, startPos + jerk * Math.pow(flightTime, 3) / 6, this.posZ);
             this.setFlightTime(flightTime + 1);
 
-            if(flightTime % 2 == 0) {
+            if(flightTime % 2 == 0 && getEntityWorld().isRemote) {
                 this.spawnFlightParticles();
             }
 
