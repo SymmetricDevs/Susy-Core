@@ -30,6 +30,7 @@ import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicators;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.metatileentities.multi.MetaTileEntityLandingPad;
 import supersymmetry.common.metatileentities.logistics.MetaTileEntityBridge;
 import supersymmetry.common.metatileentities.logistics.MetaTileEntityExtender;
 import supersymmetry.common.metatileentities.multi.electric.*;
@@ -170,6 +171,11 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityPrimitiveItemBus PRIMITIVE_ITEM_IMPORT;
     public static MetaTileEntityPrimitiveItemBus PRIMITIVE_ITEM_EXPORT;
 
+    //Space Multis
+    public static MetaTileEntityLandingPad LANDING_PAD;
+    public static MetaTileEntityScrapRecycler SCRAP_RECYCLER;
+    public static MetaTileEntityRocketAssembler ROCKET_ASSEMBLER;
+    public static MetaTileEntityRocketProgrammer ROCKET_PROGRAMMER;
     public static MetaTileEntitySieveDistillationTower SIEVE_DISTILLATION_TOWER;
 
     public static MetaTileEntityCurtainCoater CURTAIN_COATER;
@@ -381,6 +387,12 @@ public class SuSyMetaTileEntities {
         STOCK_ITEM_EXCHANGER = registerMetaTileEntity(18002, new MetaTileEntityStockItemExchanger(susyId("stock_item_exchanger")));
         //STOCK_CONTENT_READER = registerMetaTileEntity(18003, new MetaTileEntityStockReader(susyId("stock_content_reader")));
         STOCK_CONTROLLER = registerMetaTileEntity(18004, new MetaTileEntityLocomotiveController(susyId("stock_controller")));
+      
+        //Space machines
+        LANDING_PAD = registerMetaTileEntity(18005, new MetaTileEntityLandingPad(susyId("landing_pad")));
+        SCRAP_RECYCLER = registerMetaTileEntity(18006, new MetaTileEntityScrapRecycler(susyId("scrap_recycler")));
+        ROCKET_ASSEMBLER = registerMetaTileEntity(18007, new MetaTileEntityRocketAssembler(susyId("rocket_assembler")));
+        ROCKET_PROGRAMMER = registerMetaTileEntity(18008, new MetaTileEntityRocketProgrammer(susyId("rocket_programmer")));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name, RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator, ICubeRenderer texture, boolean isBricked) {

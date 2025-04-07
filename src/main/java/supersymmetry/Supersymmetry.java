@@ -52,6 +52,7 @@ public class Supersymmetry {
 
     @Mod.EventHandler
     public void onPreInit(@NotNull FMLPreInitializationEvent event) {
+
         proxy.preLoad();
 
         SuSyMetaBlocks.init();

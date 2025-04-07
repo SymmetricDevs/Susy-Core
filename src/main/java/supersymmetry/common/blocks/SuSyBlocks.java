@@ -44,6 +44,7 @@ public class SuSyBlocks {
     public static BlocksHardened HARDBLOCKS;
     public static BlocksCustomSheets CUSTOMSHEETS;
     public static BlockConveyor CONVEYOR_BELT;
+    public static BlockRocketAssemblerCasing ROCKET_ASSEMBLER_CASING;
 
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
@@ -116,6 +117,9 @@ public class SuSyBlocks {
 
         CONVEYOR_BELT = new BlockConveyor();
         CONVEYOR_BELT.setRegistryName("conveyor_belt");
+      
+        ROCKET_ASSEMBLER_CASING = new BlockRocketAssemblerCasing();
+        ROCKET_ASSEMBLER_CASING.setRegistryName("rocket_assembler_casing");
     }
 
     @SideOnly(Side.CLIENT)
@@ -144,6 +148,7 @@ public class SuSyBlocks {
         registerItemModel(HARDBLOCKS);
         registerItemModel(CUSTOMSHEETS);
         registerItemModel(CONVEYOR_BELT);
+        registerItemModel(ROCKET_ASSEMBLER_CASING);
     }
 
     @SideOnly(Side.CLIENT)

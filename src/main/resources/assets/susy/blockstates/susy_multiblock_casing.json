@@ -38,6 +38,12 @@
       "textures" : {
         "all" : "gregtech:blocks/multiblock_casing/drone_pad"
       }
+    },
+    "variant=heavy_duty_pad" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/multiblock_casing/heavy_duty_pad"
+      }
     }
   }
 }
