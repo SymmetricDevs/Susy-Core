@@ -2,7 +2,6 @@ package supersymmetry.common.blocks;
 
 import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantActiveBlock;
-import gregtech.api.block.VariantBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -14,8 +13,6 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
-/// This should actually be a [VariantBlock]. But changing it would void evaporation beds in existing saves.
-/// Also, it will need me to do extra code for exposure block counting, so I'll just leave it here untouched.
 public class BlockEvaporationBed extends VariantActiveBlock<BlockEvaporationBed.EvaporationBedType> {
 
     public BlockEvaporationBed() {
