@@ -14,12 +14,15 @@ import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.blocks.VariantAxialRotatableBlock;
 import supersymmetry.api.blocks.VariantDirectionalRotatableBlock;
 import supersymmetry.api.capability.Strand;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
 import supersymmetry.common.blocks.*;
+
+import java.util.List;
 
 public class MetaTileEntityClusterMill extends MetaTileEntityRollingMill {
     public MetaTileEntityClusterMill(ResourceLocation metaTileEntityId) {
@@ -47,10 +50,10 @@ public class MetaTileEntityClusterMill extends MetaTileEntityRollingMill {
 
     @Override
     protected Strand resultingStrand() {
-        if (this.input.getStrand() == null) return null;
+        if (this.input.getStrand() == null || this.input.getStrand().isCut) return null;
         Strand str = new Strand(this.input.getStrand());
         // t / (2 - e^(-8t)) is a pretty good function for balancing
-        double scaling = 2 - Math.pow(Math.E, -8 * this.progress);
+        double scaling = 2 - Math.pow(Math.E, -8 * str.thickness);
         str.thickness /= scaling;
         str.width *= scaling;
         return str;
@@ -64,7 +67,7 @@ public class MetaTileEntityClusterMill extends MetaTileEntityRollingMill {
                 .aisle("  P P  ", "  h h  ", "  R R  ", "RRRRRRR", "I  A  O", "   R   ", "  R R  ",  "  H H  ", "  P P  ")
                 .aisle("  P P  ", "  h h  ", "  R R  ", "RRRRRRR", "F  A  F", "   R   ", "  R R  ",  "  H H  ", "  P P  ")
                 .aisle("  P P  ", "  P P  ", "  P P  ", "CCGSGCC", "F P P F", "  P P  ", "  P P  ",  "  P P  ", "  P P  ")
-                .where('R', rollOrientation())
+                .where('R', rollOrientation(RelativeDirection.FRONT))
                 .where('H', hydraulicOrientation(RelativeDirection.UP))
                 .where('h', hydraulicOrientation(RelativeDirection.DOWN))
                 .where('F', frames(Materials.Steel))
@@ -79,7 +82,10 @@ public class MetaTileEntityClusterMill extends MetaTileEntityRollingMill {
                 .build();
     }
 
-
+    @Override
+    protected void addDisplayText(List<ITextComponent> textList) {
+        super.addDisplayText(textList);
+    }
 
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {

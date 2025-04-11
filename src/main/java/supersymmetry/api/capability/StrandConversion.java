@@ -6,6 +6,8 @@ import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import java.util.Set;
 
 public class StrandConversion {
+    public static Set<StrandConversion> CONVERSIONS = new ObjectArraySet<>();
+
     static {
         new StrandConversion(32, 40, 1. / 40, 1. / 32, OrePrefix.foil, 72);
         new StrandConversion(8, 10, 1. / 10, 1. / 8, OrePrefix.plate, 18);
@@ -20,7 +22,6 @@ public class StrandConversion {
     public OrePrefix prefix;
     public int amount;
 
-    public static Set<StrandConversion> CONVERSIONS = new ObjectArraySet<>();
 
     public StrandConversion(double minWidth, double maxWidth, double minThickness, double maxThickness, OrePrefix prefix, int amount) {
         this.minWidth = minWidth;

@@ -264,6 +264,9 @@ gregtech.multiblock.evaporation_pool.description=The Evaporation Pool has interi
 gregtech.multiblock.evaporation_pool.average_speed=Avg Speed:
 gregtech.multiblock.evaporation_pool.exposed_blocks=Number of Exposed Blocks:
 
+gregtech.multiblock.strand_casting.thickness=Thickness: %s
+gregtech.multiblock.strand_casting.no_strand=Thickness: N/A
+
 gregtech.machine.primitive_mud_pump.name=Primitive Mud Pump
 gregtech.machine.primitive_mud_pump.tooltip=Works only in River biomes between Y=64 and Y=80
 gregtech.machine.basic_steam_turbine.name=Large Steam Turbine

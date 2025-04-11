@@ -6,6 +6,12 @@
     "facing=west,variant=hydraulic_cylinder": { "model": "susy:metallurgy/hydraulic_cylinder", "x": 90, "y": 270 },
     "facing=east,variant=hydraulic_cylinder": { "model": "susy:metallurgy/hydraulic_cylinder", "x": 90, "y": 90 },
     "facing=up,variant=hydraulic_cylinder": { "model": "susy:metallurgy/hydraulic_cylinder" },
-    "facing=down,variant=hydraulic_cylinder": { "model": "susy:metallurgy/hydraulic_cylinder", "x": 180 }
+    "facing=down,variant=hydraulic_cylinder": { "model": "susy:metallurgy/hydraulic_cylinder", "x": 180 },
+    "facing=north,variant=steel_gas_jet": { "model": "susy:casings/metallurgy/steel_gas_jet" },
+    "facing=south,variant=steel_gas_jet": { "model": "susy:casings/metallurgy/steel_gas_jet", "y": 180 },
+    "facing=west,variant=steel_gas_jet": { "model": "susy:casings/metallurgy/steel_gas_jet", "y": 270 },
+    "facing=east,variant=steel_gas_jet": { "model": "susy:casings/metallurgy/steel_gas_jet", "y": 90 },
+    "facing=up,variant=steel_gas_jet": { "model": "susy:casings/metallurgy/steel_gas_jet", "x": 270 },
+    "facing=down,variant=steel_gas_jet": { "model": "susy:casings/metallurgy/steel_gas_jet", "x": 90 }
   }
 }

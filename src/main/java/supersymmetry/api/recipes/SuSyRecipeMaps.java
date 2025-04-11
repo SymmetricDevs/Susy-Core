@@ -338,8 +338,10 @@ public class SuSyRecipeMaps {
             .setSound(GTSoundEvents.TURBINE)
             .allowEmptyOutput();
 
-    public static final RecipeMap<SimpleRecipeBuilder> STRAND_CASTER = new RecipeMap<>("strand_caster", 6, 0, 6, 1, new SimpleRecipeBuilder(), false)
-            .setSound(GTSoundEvents.ARC);
+    public static final RecipeMap<SimpleRecipeBuilder> HOT_ISOSTATIC_PRESS = new RecipeMap<>("hot_isostatic_press", 3, 1, 1, 0, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_COMPRESS, ProgressWidget.MoveType.VERTICAL)
+            .setSound(GTSoundEvents.COMPRESSOR);
+
 
     public static void init(){
         RecipeMaps.SIFTER_RECIPES.setMaxFluidInputs(1);

@@ -18,7 +18,8 @@ public class BlockMetallurgy extends VariantDirectionalRotatableBlock<BlockMetal
     }
 
     public enum BlockMetallurgyType implements IStringSerializable {
-        HYDRAULIC_CYLINDER("hydraulic_cylinder");
+        HYDRAULIC_CYLINDER("hydraulic_cylinder"),
+        STEEL_GAS_JET("steel_gas_jet");
         private String name;
 
         BlockMetallurgyType(String name) {
