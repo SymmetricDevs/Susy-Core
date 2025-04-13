@@ -174,7 +174,6 @@ public class SuSyBlocks {
 
         SPACE_INSTRUMENT = new BlockSpacecraftInstrument();
         SPACE_INSTRUMENT.setRegistryName("spacecraft_instrument");
-
     }
 
     @SideOnly(Side.CLIENT)
