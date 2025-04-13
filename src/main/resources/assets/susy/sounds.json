@@ -34,5 +34,23 @@
         "stream" : true
       }
     ]
+  },
+  "entity.service_tower_elevator" : {
+    "category" : "player",
+    "sounds" : [
+      {
+        "name" : "susy:elevator",
+        "stream" : true
+      }
+    ]
+  },
+  "entity.service_tower" : {
+    "category" : "player",
+    "sounds" : [
+      {
+        "name" : "susy:service_tower",
+        "stream" : true
+      }
+    ]
   }
 }

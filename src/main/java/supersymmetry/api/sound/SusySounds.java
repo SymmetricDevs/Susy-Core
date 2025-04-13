@@ -11,12 +11,16 @@ public class SusySounds {
     public static SoundEvent DRONE_TAKEOFF;
     public static SoundEvent ROCKET_LAUNCH;
     public static SoundEvent JET_ENGINE_LOOP;
+    public static SoundEvent SERVICE_TOWER_ELEVATOR;
+    public static SoundEvent SERVICE_TOWER;
 
     public static void registerSounds() {
         ROCKET_LOOP = registerSound("entity.rocket_loop");
         DRONE_TAKEOFF = registerSound("entity.drone_takeoff");
         ROCKET_LAUNCH = registerSound("entity.rocket_launch");
         JET_ENGINE_LOOP = registerSound("item.jet_wingpack_engine_active");
+        SERVICE_TOWER_ELEVATOR = registerSound("entity.service_tower_elevator");
+        SERVICE_TOWER = registerSound("entity.service_tower");
     }
 
     private static SoundEvent registerSound(String soundNameIn) {
