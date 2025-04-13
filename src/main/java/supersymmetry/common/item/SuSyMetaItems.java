@@ -1,7 +1,6 @@
 package supersymmetry.common.item;
 
 import gregtech.api.GTValues;
-import gregtech.api.items.metaitem.MetaItem;
 import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.items.metaitem.MetaItem.MetaValueItem;
 import gregtech.api.items.metaitem.MetaOreDictItem;
@@ -13,10 +12,6 @@ import gregtech.common.items.behaviors.TooltipBehavior;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import supersymmetry.SuSyValues;
-
-import supersymmetry.common.item.armor.SuSyMetaArmor;
-
-import java.util.Objects;
 
 public class SuSyMetaItems {
 
@@ -31,8 +26,6 @@ public class SuSyMetaItems {
     public static MetaValueItem RESTRICTIVE_FILTER;
     public static MetaValueItem TRACK_SEGMENT;
     public static MetaValueItem EARTH_ORBITAL_SCRAP;
-    public static MetaValueItem DATA_CARD;
-    public static MetaValueItem DATA_CARD_ACTIVE;
     public static ArmorMetaItem<?>.ArmorMetaValueItem SIMPLE_GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_TANK;
@@ -52,6 +45,8 @@ public class SuSyMetaItems {
     public static ArmorMetaItem<?>.ArmorMetaValueItem NOMEX_BOOTS;
 
     public static ArmorMetaItem<?>.ArmorMetaValueItem JET_WINGPACK;
+    public static MetaValueItem DATA_CARD;
+    public static MetaValueItem DATA_CARD_ACTIVE;
 
     public static void initMetaItems() {
         metaItem = new StandardMetaItem();
@@ -97,8 +92,8 @@ public class SuSyMetaItems {
         DATA_CARD_ACTIVE = metaItem.addItem(8,"data_card.active").setMaxStackSize(1).addComponents(new TooltipBehavior((lines) -> {
             lines.add(I18n.format("metaitem.data_card.active.tooltip.1"));
         }));
-        RESTRICTIVE_FILTER = metaItem.addItem(6, "restrictive_filter");
-      EARTH_ORBITAL_SCRAP = metaItem.addItem(7, "orbital.scrap.earth").setMaxStackSize(8);
+        RESTRICTIVE_FILTER = metaItem.addItem(9, "restrictive_filter");
+        EARTH_ORBITAL_SCRAP = metaItem.addItem(10, "orbital.scrap.earth").setMaxStackSize(8);
     }
 
     private static void addTieredOredictItem(OreDictValueItem[] items, int id, int RGB, OrePrefix prefix) {
