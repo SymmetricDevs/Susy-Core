@@ -1,4 +1,4 @@
-package supersymmetry.common.metatileentities.multi.electric;
+package supersymmetry.common.metatileentities.multi.rocket;
 
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;

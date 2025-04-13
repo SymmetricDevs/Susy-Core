@@ -1,4 +1,4 @@
-package supersymmetry.common.metatileentities.multi.electric;
+package supersymmetry.common.metatileentities.multi.rocket;
 
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;

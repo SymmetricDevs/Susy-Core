@@ -1,4 +1,4 @@
-package supersymmetry.common.metatileentities.multi.electric;
+package supersymmetry.common.metatileentities.multi.rocket;
 
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -11,7 +11,6 @@ import gregtech.client.renderer.texture.Textures;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
-import supersymmetry.common.metatileentities.multi.rocket.MetaTileEntityLandingPad;
 
 public class MetaTileEntityLaunchPad extends RecipeMapMultiblockController {
     public MetaTileEntityLaunchPad(ResourceLocation metaTileEntityId) {
