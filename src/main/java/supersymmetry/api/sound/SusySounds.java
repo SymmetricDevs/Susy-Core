@@ -13,6 +13,7 @@ public class SusySounds {
     public static SoundEvent JET_ENGINE_LOOP;
     public static SoundEvent SERVICE_TOWER_ELEVATOR;
     public static SoundEvent SERVICE_TOWER;
+    public static SoundEvent HYDRAULICS;
 
     public static void registerSounds() {
         ROCKET_LOOP = registerSound("entity.rocket_loop");
@@ -21,6 +22,7 @@ public class SusySounds {
         JET_ENGINE_LOOP = registerSound("item.jet_wingpack_engine_active");
         SERVICE_TOWER_ELEVATOR = registerSound("entity.service_tower_elevator");
         SERVICE_TOWER = registerSound("entity.service_tower");
+        HYDRAULICS = registerSound("entity.hydraulics");
     }
 
     private static SoundEvent registerSound(String soundNameIn) {

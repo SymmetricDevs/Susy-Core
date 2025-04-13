@@ -52,5 +52,14 @@
         "stream" : true
       }
     ]
+  },
+  "entity.hydraulics" : {
+    "category" : "player",
+    "sounds" : [
+      {
+        "name" : "susy:hydraulics",
+        "stream" : true
+      }
+    ]
   }
 }
