@@ -12,16 +12,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.common.blocks.rocketry.*;
 
-import java.util.Comparator;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static gregtech.common.blocks.MetaBlocks.ASPHALT;
 
 public class SuSyBlocks {
 
+    public static BlockSpacecraftInstrument SPACE_INSTRUMENT;
     public static BlockCoolingCoil COOLING_COIL;
     public static BlockSinteringBrick SINTERING_BRICK;
     public static BlockCoagulationTankWall COAGULATION_TANK_WALL;
@@ -163,58 +161,43 @@ public class SuSyBlocks {
         ROCKET_ASSEMBLER_CASING.setRegistryName("rocket_assembler_casing");
 
         LIFE_SUPPORT = new BlockLifeSupport();
-        LIFE_SUPPORT.setRegistryName("life_support");
+        LIFE_SUPPORT.setRegistryName("spacecraft_life_support");
 
         SPACECRAFT_HULL = new BlockSpacecraftHull();
         SPACECRAFT_HULL.setRegistryName("spacecraft_hull");
 
         FAIRING_CONNECTOR = new BlockFairingConnector();
-        FAIRING_CONNECTOR.setRegistryName("fairing_connector");
+        FAIRING_CONNECTOR.setRegistryName("rocket_fairing_connector");
 
         ROOM_PADDING = new BlockRoomPadding();
-        ROOM_PADDING.setRegistryName("room_padding");
+        ROOM_PADDING.setRegistryName("spacecraft_room_padding");
+
+        SPACE_INSTRUMENT = new BlockSpacecraftInstrument();
+        SPACE_INSTRUMENT.setRegistryName("spacecraft_instrument");
 
     }
 
     @SideOnly(Side.CLIENT)
     public static void registerItemModels() {
-        COOLING_COIL.onModelRegister();
-        SINTERING_BRICK.onModelRegister();
-        registerItemModel(COAGULATION_TANK_WALL);
         for (SusyStoneVariantBlock block : SUSY_STONE_BLOCKS.values())
             registerItemModel(block);
-        registerItemModel(ALTERNATOR_COIL);
-        registerItemModel(DRILL_HEAD);
-        registerItemModel(DRILL_BIT);
-        registerItemModel(TURBINE_ROTOR);
-        registerItemModel(SEPARATOR_ROTOR);
-        registerItemModel(STRUCTURAL_BLOCK);
-        registerItemModel(STRUCTURAL_BLOCK_1);
-        registerItemModel(DEPOSIT_BLOCK);
-        registerItemModel(RESOURCE_BLOCK);
-        registerItemModel(RESOURCE_BLOCK_1);
-        registerItemModel(HOME);
-        registerItemModel(INTERSTAGE);
-        registerItemModel(TANK_SHELL);
-        registerItemModel(OUTER_HATCH);
-        registerItemModel(FAIRING_HULL);
-        registerItemModel(ROCKET_CONTROL);
-        registerItemModel(ROCKET_NOZZLE);
-        registerItemModel(COMBUSTION_CHAMBER);
-        registerItemModel(TURBOPUMP);
-        registerItemModel(ROOM_PADDING);
-        registerItemModel(FAIRING_CONNECTOR);
-        registerItemModel(LIFE_SUPPORT);
-        registerItemModel(SPACECRAFT_HULL);
+        Block[] toBeRegistered = {
+                ALTERNATOR_COIL, COAGULATION_TANK_WALL, DRILL_HEAD, DRILL_BIT,
+                TURBINE_ROTOR, SEPARATOR_ROTOR, STRUCTURAL_BLOCK, STRUCTURAL_BLOCK_1,
+                DEPOSIT_BLOCK, RESOURCE_BLOCK, RESOURCE_BLOCK_1, HOME,
+                INTERSTAGE, TANK_SHELL, OUTER_HATCH, FAIRING_HULL, ROCKET_CONTROL,
+                ROCKET_NOZZLE, COMBUSTION_CHAMBER, TURBOPUMP, ROOM_PADDING,
+                FAIRING_CONNECTOR, LIFE_SUPPORT, SPACECRAFT_HULL, HARDBLOCKS,
+                CUSTOMSHEETS, CONVEYOR_BELT, ROCKET_ASSEMBLER_CASING, MULTIBLOCK_CASING
+        };
+        Arrays.stream(toBeRegistered).forEach(SuSyBlocks::registerItemModel);
+
         EVAPORATION_BED.onModelRegister();
         MULTIBLOCK_TANK.onModelRegister();
         ELECTRODE_ASSEMBLY.onModelRegister();
-        registerItemModel(MULTIBLOCK_CASING);
         SERPENTINE.onModelRegister();
-        registerItemModel(HARDBLOCKS);
-        registerItemModel(CUSTOMSHEETS);
-        registerItemModel(CONVEYOR_BELT);
-        registerItemModel(ROCKET_ASSEMBLER_CASING);
+        COOLING_COIL.onModelRegister();
+        SINTERING_BRICK.onModelRegister();
     }
 
     @SideOnly(Side.CLIENT)

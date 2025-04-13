@@ -14,11 +14,11 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
 import supersymmetry.SuSyValues;
+import java.util.Collections;
 
 import java.util.Objects;
 
 public class SuSyMetaItems {
-
     private static int itemIndex = 0;
 
     private static StandardMetaItem metaItem;
@@ -71,36 +71,42 @@ public class SuSyMetaItems {
 
     private static void initMetaItem() {
         // initialize metaitems here
+        if (itemIndex != 0) {
+            return;
+        }
         CATALYST_BED_SUPPORT_GRID = initOneItem("catalyst_bed_support_grid");
-        CONVEYOR_STEAM = initOneItem("conveyor.steam").addComponents(new TooltipBehavior((lines) -> {
-            lines.add(I18n.format("metaitem.conveyor.module.tooltip"));
-            lines.add(I18n.format("gregtech.universal.tooltip.item_transfer_rate", new Object[]{4}));
-        }));
-        PUMP_STEAM = initOneItem("pump.steam").addComponents(new TooltipBehavior((lines) -> {
-            lines.add(I18n.format("metaitem.electric.pump.tooltip"));
-            lines.add(I18n.format("gregtech.universal.tooltip.fluid_transfer_rate", new Object[]{32}));
-        }));
-        AIR_VENT = initOneItem("air_vent").addComponents(new TooltipBehavior((lines) -> {
-            lines.add(I18n.format("metaitem.air_vent.tooltip.1", 100));
-        }));
+        CONVEYOR_STEAM = initOneItem("conveyor.steam").addComponents(new TooltipBehavior(lines ->
+            Collections.addAll(lines,
+                    I18n.format("metaitem.conveyor.module.tooltip"),
+                    I18n.format("gregtech.universal.tooltip.item_transfer_rate", 4))
+        ));
+        PUMP_STEAM = initOneItem("pump.steam").addComponents(new TooltipBehavior(lines ->
+            Collections.addAll(lines,
+                    I18n.format("metaitem.electric.pump.tooltip"),
+                    I18n.format("gregtech.universal.tooltip.fluid_transfer_rate", 32))
+        ));
+        AIR_VENT = initOneItem("air_vent").addComponents(new TooltipBehavior(lines ->
+            lines.add(I18n.format("metaitem.air_vent.tooltip.1", 100))
+        ));
 
-        TRACK_SEGMENT = initOneItem("track_segment").addComponents(new TooltipBehavior((lines) -> {
-            lines.add(I18n.format("metaitem.track_segment.length_info"));
-        }));
+        TRACK_SEGMENT = initOneItem("track_segment").addComponents(new TooltipBehavior(lines ->
+            lines.add(I18n.format("metaitem.track_segment.length_info"))
+        ));
 
         EARTH_ORBITAL_SCRAP = initOneItem("orbital.scrap.earth").setMaxStackSize(8);
 
-        DATA_CARD = initOneItem("data_card").setMaxStackSize(1).addComponents(new TooltipBehavior((lines) -> {
-            lines.add(I18n.format("metaitem.data_card.tooltip.1"));
-        }));
+        DATA_CARD = initOneItem("data_card").setMaxStackSize(1).addComponents(new TooltipBehavior(lines ->
+            lines.add(I18n.format("metaitem.data_card.tooltip.1"))
+        ));
 
-        DATA_CARD_ACTIVE = initOneItem("data_card.active").setMaxStackSize(1).addComponents(new TooltipBehavior((lines) -> {
-            lines.add(I18n.format("metaitem.data_card.active.tooltip.1"));
-        }));
+        DATA_CARD_ACTIVE = initOneItem("data_card.active").setMaxStackSize(1).addComponents(new TooltipBehavior(lines ->
+            lines.add(I18n.format("metaitem.data_card.active.tooltip.1"))
+        ));
         RESTRICTIVE_FILTER = initOneItem("restrictive_filter");
         EARTH_ORBITAL_SCRAP = initOneItem("orbital.scrap.earth").setMaxStackSize(8);
     }
 
+    // Ensures ID stability when merging
     private static MetaItem<?>.MetaValueItem initOneItem(String unlocalizedName) {
         MetaItem<?>.MetaValueItem ret = metaItem.addItem(itemIndex, unlocalizedName);
         itemIndex++;
@@ -108,11 +114,9 @@ public class SuSyMetaItems {
     }
 
     private static void addTieredOredictItem(OreDictValueItem[] items, int id, int RGB, OrePrefix prefix) {
-
         for (int i = 0; i < items.length; i++) {
             items[i] = oreDictItem.addOreDictItem(id + i, SuSyValues.TierMaterials[i + 1].toString(), RGB, MaterialIconSet.DULL, prefix, I18n.format("gregtech.universal.catalysts.tooltip.tier", GTValues.V[i], GTValues.VN[i]));
         }
-
     }
 
     public static int isMetaItem(ItemStack i) {

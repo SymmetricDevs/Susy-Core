@@ -25,30 +25,35 @@ import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
 public class StructAnalysis {
     public BuildStat status = BuildStat.SUCCESS;
     public enum BuildStat {
-        SUCCESS("susy.msg.rocket_component.build_success"),
-        SCANNING("susy.msg.rocket_component.scanning"),
-        UNSCANNED("susy.msg.rocket_component.unscanned"),
-        DISCONNECTED("susy.msg.rocket_component.blocks_unconnected"),
-        EMPTY("susy.msg.rocket_component.no_blocks"),
-        HULL_WEAK("susy.msg.rocket_component.hull_weak"),
-        HULL_FULL("susy.msg.rocket_component.hull_full"),
-        NO_NOZZLE("susy.msg.rocket_component.no_nozzle"),
-        NOZZLE_MALFORMED("susy.msg.rocket_component.nozzle_invalid"),
-        ERROR("susy.msg.rocket_component.unknown_error"),
-        WRONG_NUM_C_CHAMBERS("susy.msg.rocket_component.wrong_num_c_chambers"),
-        WRONG_NUM_PUMPS("susy.msg.rocket_component.wrong_num_pumps"),
-        WEIRD_PUMP("susy.msg.rocket_component.weird_pump"),
-        C_CHAMBER_INSIDE("susy.msg.rocket_component.chamber_wrong_place"),
-        INVALID_AIRLIKE("susy.msg.rocket_component.invalid_transparent"),
-        EXTRANEOUS_BLOCKS("susy.msg.rocket_component.extraneous_blocks"),
-        UNCLEAN("susy.msg.rocket_component.cleanroom_not_clean"), NOT_LAVAL("susy.msg.rocket_component.nozzle_not_laval"),
-        MISSING_TILE("susy.msg.rocket_component.tile_missing"),
-        INTERSTAGE_NOT_CYLINDRICAL("susy.msg.rocket_component.interstage_not_cylindrical"),
-        FAIRING_CONN_WEIRD("susy.msg.rocket_component.fairing_conn_weird"); // if the connectors do not form a loop
+        SUCCESS("build_success"),
+        SCANNING("scanning"),
+        UNSCANNED("unscanned"),
+        DISCONNECTED("blocks_disconnected"),
+        EMPTY("no_blocks"),
+        HULL_WEAK("hull_weak"),
+        HULL_FULL("hull_full"),
+        NO_NOZZLE("no_nozzle"),
+        NOZZLE_MALFORMED("nozzle_invalid"),
+        ERROR("unknown_error"),
+        WRONG_NUM_C_CHAMBERS("wrong_num_c_chambers"),
+        WRONG_NUM_PUMPS("wrong_num_pumps"),
+        WEIRD_PUMP("weird_pump"),
+        C_CHAMBER_INSIDE("chamber_wrong_place"),
+        INVALID_AIRLIKE("invalid_transparent"),
+        EXTRANEOUS_BLOCKS("extraneous_blocks"),
+        UNCLEAN("cleanroom_not_clean"),
+        NOT_LAVAL("nozzle_not_laval"),
+        MISSING_TILE("tile_missing"),
+        INTERSTAGE_NOT_CYLINDRICAL("interstage_not_cylindrical"),
+        WEIRD_FAIRING("fairing_weird"),
+        NO_CARD("no_card"),
+        UNRECOGNIZED("part_unrecognized"),
+        SPACECRAFT_HOLLOW("spacecraft_hollow"),
+        WEIRD_PADDING("weird_padding"); // if the connectors do not form a loop
 
         String code;
         BuildStat(String code) {
-            this.code = code;
+            this.code = "susy.msg.rocket_component." + code;
         }
         public String getCode() {
             return code;
@@ -76,7 +81,7 @@ public class StructAnalysis {
             new Vec3i(-1,1,1),new Vec3i(1,-1,-1),
             new Vec3i(1,-1,1),new Vec3i(-1,1,-1)
     };
-    private static AxisAlignedBB MAX_BB = new AxisAlignedBB(-3.0E7,-3.0E7,0,3.0E7,3.0E7,255);
+    private static AxisAlignedBB MAX_BB = new AxisAlignedBB(-3.0E7,0,-3.0E7,3.0E7,255,3.0E7);
     public ArrayList<BlockPos> getBlocks(World world, AxisAlignedBB faaBB, boolean checkAir) {
         AxisAlignedBB aaBB = new AxisAlignedBB(Math.round(faaBB.minX),Math.round(faaBB.minY),
                 Math.round(faaBB.minZ),Math.round(faaBB.maxX),
@@ -200,7 +205,33 @@ public class StructAnalysis {
         return ret;
     }
 
-    public Set<BlockPos> getLayerAir(World world, AxisAlignedBB section, int y) {
+    public List<HashSet<BlockPos>> getPartitions(AxisAlignedBB sect) {
+        Predicate<BlockPos> isNotObstacle = ((Predicate<BlockPos>)world::isAirBlock).or(bp -> !blockCont(sect,bp));
+        Set<BlockPos> blocks = getBlocks(sect).stream().filter(isNotObstacle).collect(Collectors.toSet()); // the one-argument getBlocks doesn't care about air blocks
+        List<HashSet<BlockPos>> partitions = new ArrayList<>();
+        Set<BlockPos> consumed = new HashSet<>();
+        for (BlockPos block: blocks) {
+            if (consumed.contains(block)) {
+                continue;
+            }
+            consumed.add(block);
+            ArrayDeque<BlockPos> remaining = new ArrayDeque<>();
+            HashSet<BlockPos> bPart = new HashSet<>();
+            remaining.add(block);
+            while (!remaining.isEmpty()) {
+                BlockPos bp = remaining.pop();
+                bPart.add(bp);
+                Stream<BlockPos> stream = getBlockNeighbors(bp, sect, orthVecs).stream().filter(((Predicate<BlockPos>)bPart::contains).negate().and(isNotObstacle));
+                remaining.addAll(getBlockNeighbors(bp, sect, orthVecs).stream().filter(((Predicate<BlockPos>)bPart::contains).negate().and(isNotObstacle)).
+                        collect(Collectors.toList()));
+                stream.forEach(consumed::add);
+            }
+            partitions.add(bPart);
+        }
+        return partitions;
+    }
+
+    public Set<BlockPos> getLayerAir(AxisAlignedBB section, int y) {
         AxisAlignedBB sect = new AxisAlignedBB(section.minX-1,y,section.minZ-1,section.maxX+1,y+1,section.maxZ+1);
         Predicate<BlockPos> isNotObstacle = ((Predicate<BlockPos>)world::isAirBlock).or(bp -> !blockCont(section,bp));
         Set<BlockPos> blocks = getBlocks(sect).stream().filter(isNotObstacle).collect(Collectors.toSet()); // the one-argument getBlocks doesn't care about air blocks
@@ -240,7 +271,7 @@ public class StructAnalysis {
         return null;
     }
 
-    //
+    // Gets all blocks bordering a region
     public Set<BlockPos> getPerimeter(Collection<BlockPos> blocks, Vec3i vecs[]) {
         Set<BlockPos> ret = new HashSet<>();
         for (BlockPos block: blocks) {
@@ -284,11 +315,27 @@ public class StructAnalysis {
 
     // Used to analyze fairing connectors
     public boolean isFacingOutwards(BlockPos bp) {
-        if (world.getBlockState(bp).getPropertyKeys().contains(FACING)) {
+        if (!world.getBlockState(bp).getPropertyKeys().contains(FACING)) {
             return false;
         }
         EnumFacing facing = world.getBlockState(bp).getValue(FACING);
         return !world.isAirBlock(bp.add(facing.getOpposite().getDirectionVec())) && world.isAirBlock(bp.add(facing.getDirectionVec()));
+    }
+
+    public Set<BlockPos> getClosest(BlockPos bp, Set<BlockPos> candidates) {
+        double closestDist = candidates.iterator().next().getDistance(bp.getX(),bp.getY(),bp.getZ());
+        Set<BlockPos> closestNeighbors = new HashSet<BlockPos>();
+        for (BlockPos neighbor: candidates) {
+            double neighborDistance = neighbor.getDistance(bp.getX(),bp.getY(),bp.getZ());
+            if (neighborDistance < closestDist) {
+                closestNeighbors.clear();
+                closestNeighbors.add(neighbor);
+                closestDist = neighborDistance;
+            } else if (neighborDistance == closestDist) {
+                closestNeighbors.add(neighbor);
+            }
+        }
+        return closestNeighbors;
     }
 
     public Stream<BlockPos> getOfBlockType(Collection<BlockPos> bp, Block block) {

@@ -1,5 +1,6 @@
 package supersymmetry.api.util;
 
+import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.impl.NotifiableItemStackHandler;
 import gregtech.api.metatileentity.MetaTileEntity;
 import net.minecraft.item.Item;
@@ -10,15 +11,20 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class DataStorageLoader extends NotifiableItemStackHandler implements IItemHandlerModifiable {
     private ItemStack dataStorage = ItemStack.EMPTY;
     private boolean locked = false;
     private final Predicate<ItemStack> acceptableTypes;
+    protected MetaTileEntity mte; // If GTItemStackHandler ever makes its mte's accessible, remove this
 
     public DataStorageLoader(MetaTileEntity mte, Predicate<ItemStack> predicate) {
         super(mte,1,mte,false);
+        this.mte = mte;
         acceptableTypes = predicate;
     }
 
@@ -71,7 +77,14 @@ public class DataStorageLoader extends NotifiableItemStackHandler implements IIt
     }
 
     public void setLocked(boolean locked) {
-        this.locked = locked;
+        if (this.locked != locked) {
+            this.locked = locked;
+
+            mte.markDirty();
+            if (mte.getWorld() != null && !mte.getWorld().isRemote) {
+                mte.writeCustomData(GregtechDataCodes.LOCK_OBJECT_HOLDER, buf -> buf.writeBoolean(locked));
+            }
+        }
     }
 
     public boolean isLocked() {
@@ -82,6 +95,10 @@ public class DataStorageLoader extends NotifiableItemStackHandler implements IIt
         if (dataStorage.hasTagCompound()) {
             dataStorage.setTagCompound(new NBTTagCompound());
         }
+    }
+
+    public void addToCompound(Function<NBTTagCompound, NBTTagCompound> consumer) {
+        dataStorage.setTagCompound(consumer.apply(dataStorage.getTagCompound()));
     }
 
     public void mutateItem(String key, String value) {

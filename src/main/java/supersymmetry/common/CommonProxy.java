@@ -1,5 +1,6 @@
 package supersymmetry.common;
 
+import gregtech.api.block.VariantBlock;
 import gregtech.api.block.VariantItemBlock;
 import gregtech.api.modules.ModuleContainerRegistryEvent;
 import gregtech.api.unification.material.event.MaterialEvent;
@@ -42,10 +43,13 @@ import supersymmetry.loaders.SusyOreDictionaryLoader;
 import supersymmetry.loaders.recipes.SuSyRecipeLoader;
 import supersymmetry.modules.SuSyModules;
 
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Function;
 
 import static supersymmetry.common.blocks.SuSyMetaBlocks.SHEETED_FRAMES;
+
+import static supersymmetry.common.blocks.SuSyBlocks.*;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class CommonProxy {
@@ -66,42 +70,19 @@ public class CommonProxy {
     @SubscribeEvent
     public static void registerBlocks(@NotNull RegistryEvent.Register<Block> event) {
         IForgeRegistry<Block> registry = event.getRegistry();
-
-        registry.register(SuSyBlocks.COOLING_COIL);
-        registry.register(SuSyBlocks.SINTERING_BRICK);
-        registry.register(SuSyBlocks.COAGULATION_TANK_WALL);
         for (SusyStoneVariantBlock block : SuSyBlocks.SUSY_STONE_BLOCKS.values()) registry.register(block);
-        registry.register(SuSyBlocks.ALTERNATOR_COIL);
-        registry.register(SuSyBlocks.TURBINE_ROTOR);
-        registry.register(SuSyBlocks.SEPARATOR_ROTOR);
-        registry.register(SuSyBlocks.STRUCTURAL_BLOCK);
-        registry.register(SuSyBlocks.STRUCTURAL_BLOCK_1);
-        registry.register(SuSyBlocks.DRILL_HEAD);
-        registry.register(SuSyBlocks.DRILL_BIT);
-        registry.register(SuSyBlocks.DEPOSIT_BLOCK);
-        registry.register(SuSyBlocks.RESOURCE_BLOCK);
-        registry.register(SuSyBlocks.RESOURCE_BLOCK_1);
-        registry.register(SuSyBlocks.HOME);
-        registry.register(SuSyBlocks.MULTIBLOCK_TANK);
-        registry.register(SuSyBlocks.EVAPORATION_BED);
-        registry.register(SuSyBlocks.ELECTRODE_ASSEMBLY);
-        registry.register(SuSyBlocks.MULTIBLOCK_CASING);
-        registry.register(SuSyBlocks.SERPENTINE);
-        registry.register(SuSyBlocks.FAIRING_HULL);
-        registry.register(SuSyBlocks.OUTER_HATCH);
-        registry.register(SuSyBlocks.INTERSTAGE);
-        registry.register(SuSyBlocks.ROCKET_CONTROL);
-        registry.register(SuSyBlocks.TANK_SHELL);
-        registry.register(SuSyBlocks.COMBUSTION_CHAMBER);
-        registry.register(SuSyBlocks.ROCKET_NOZZLE);
-        registry.register(SuSyBlocks.TURBOPUMP);
-        registry.register(SuSyBlocks.HARDBLOCKS);
-        registry.register(SuSyBlocks.CUSTOMSHEETS);
-        registry.register(SuSyBlocks.CONVEYOR_BELT);
-        registry.register(SuSyBlocks.ROCKET_ASSEMBLER_CASING);
-        registry.register(SuSyBlocks.ROOM_PADDING);
-        registry.register(SuSyBlocks.FAIRING_CONNECTOR);
-        registry.register(SuSyBlocks.LIFE_SUPPORT);
+        Block[] toBeRegistered = {
+                ALTERNATOR_COIL, COAGULATION_TANK_WALL, DRILL_HEAD, DRILL_BIT,
+                TURBINE_ROTOR, SEPARATOR_ROTOR, STRUCTURAL_BLOCK, STRUCTURAL_BLOCK_1,
+                DEPOSIT_BLOCK, RESOURCE_BLOCK, RESOURCE_BLOCK_1, HOME,
+                INTERSTAGE, TANK_SHELL, OUTER_HATCH, FAIRING_HULL, ROCKET_CONTROL,
+                ROCKET_NOZZLE, COMBUSTION_CHAMBER, TURBOPUMP, ROOM_PADDING,
+                FAIRING_CONNECTOR, LIFE_SUPPORT, SPACECRAFT_HULL, HARDBLOCKS,
+                CUSTOMSHEETS, CONVEYOR_BELT, ROCKET_ASSEMBLER_CASING, MULTIBLOCK_CASING,
+                MULTIBLOCK_TANK, EVAPORATION_BED, ELECTRODE_ASSEMBLY, SERPENTINE,
+                COOLING_COIL, SINTERING_BRICK
+        };
+        Arrays.stream(toBeRegistered).forEach(registry::register);
 
         SHEETED_FRAMES.values().stream().distinct().forEach(registry::register);
     }
@@ -111,46 +92,20 @@ public class CommonProxy {
         IForgeRegistry<Item> registry = event.getRegistry();
         SuSyMetaItems.initSubItems();
 
-        registry.register(createItemBlock(SuSyBlocks.COOLING_COIL, VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.SINTERING_BRICK, VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.COAGULATION_TANK_WALL, VariantItemBlock::new));
         for (SusyStoneVariantBlock block : SuSyBlocks.SUSY_STONE_BLOCKS.values())
             registry.register(createItemBlock(block, VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.ALTERNATOR_COIL, VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.DRILL_HEAD, VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.DRILL_BIT, VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.TURBINE_ROTOR, VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.SEPARATOR_ROTOR, VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.STRUCTURAL_BLOCK, VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.STRUCTURAL_BLOCK_1, VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.DEPOSIT_BLOCK, VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.RESOURCE_BLOCK, VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.RESOURCE_BLOCK_1, VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.HOME, VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.EVAPORATION_BED, VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.MULTIBLOCK_TANK, VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.ELECTRODE_ASSEMBLY, VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.MULTIBLOCK_CASING, VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.SERPENTINE, VariantItemBlock::new));
-
-
-        registry.register(createItemBlock(SuSyBlocks.HARDBLOCKS, VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.CUSTOMSHEETS, VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.CONVEYOR_BELT, VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.FAIRING_HULL,VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.OUTER_HATCH,VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.INTERSTAGE,VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.ROCKET_CONTROL,VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.TANK_SHELL,VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.COMBUSTION_CHAMBER, VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.ROCKET_NOZZLE, VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.TURBOPUMP, VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.ROCKET_ASSEMBLER_CASING, VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.SPACECRAFT_HULL, VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.ROOM_PADDING, VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.FAIRING_CONNECTOR, VariantItemBlock::new));
-        registry.register(createItemBlock(SuSyBlocks.LIFE_SUPPORT, VariantItemBlock::new));
-
+        VariantBlock[] toBeRegistered = {
+                ALTERNATOR_COIL, COAGULATION_TANK_WALL, DRILL_HEAD, DRILL_BIT,
+                TURBINE_ROTOR, SEPARATOR_ROTOR, STRUCTURAL_BLOCK, STRUCTURAL_BLOCK_1,
+                DEPOSIT_BLOCK, RESOURCE_BLOCK, RESOURCE_BLOCK_1, HOME,
+                INTERSTAGE, TANK_SHELL, OUTER_HATCH, FAIRING_HULL, ROCKET_CONTROL,
+                ROCKET_NOZZLE, COMBUSTION_CHAMBER, TURBOPUMP, ROOM_PADDING,
+                FAIRING_CONNECTOR, LIFE_SUPPORT, SPACECRAFT_HULL, HARDBLOCKS,
+                CUSTOMSHEETS, CONVEYOR_BELT, ROCKET_ASSEMBLER_CASING, MULTIBLOCK_CASING,
+                MULTIBLOCK_TANK, EVAPORATION_BED, ELECTRODE_ASSEMBLY, SERPENTINE,
+                COOLING_COIL, SINTERING_BRICK
+        };
+        Arrays.stream(toBeRegistered).distinct().forEach(vb -> registry.register(createItemBlock(vb, VariantItemBlock::new)));
         SHEETED_FRAMES.values()
                 .stream().distinct()
                 .map(block -> createItemBlock(block, SheetedFrameItemBlock::new))
