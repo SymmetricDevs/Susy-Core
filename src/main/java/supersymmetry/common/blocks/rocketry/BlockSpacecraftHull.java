@@ -13,11 +13,11 @@ public class BlockSpacecraftHull extends VariantDirectionalCoverableBlock<BlockS
         setResistance(15f);
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench",2);
-        setDefaultState(getState(HullType.HULL_TYPE));
+        setDefaultState(getState(HullType.MYLAR));
     }
 
     public enum HullType implements IStringSerializable {
-        HULL_TYPE("hull_type");
+        MYLAR("mylar");
         public String name;
 
         HullType(String name) {
