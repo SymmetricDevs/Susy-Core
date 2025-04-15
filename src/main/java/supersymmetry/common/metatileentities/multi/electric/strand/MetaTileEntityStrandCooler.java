@@ -15,6 +15,8 @@ import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.util.BlockInfo;
+import gregtech.api.util.GTTransferUtils;
+import gregtech.api.util.GTUtility;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
@@ -53,15 +55,15 @@ public class MetaTileEntityStrandCooler extends MetaTileEntityStrandShaper {
                 return false;
             }
             int amount = (int) (conversion.amount * conversion.prefix.getMaterialAmount(input.getStrand().material) / GTValues.M);
-            FluidStack drained = fluidInventory.drain(Materials.Water.getFluid(amount), false);
+            FluidStack drained = inputFluidInventory.drain(Materials.Water.getFluid(amount), false);
             if (drained == null || drained.amount != amount) {
                 return false;
             }
             current = OreDictUnifier.get(conversion.prefix, input.getStrand().material, conversion.amount);
-            if (!outputInventory.insertItem(0, current, true).isEmpty()) {
+            if (!GTTransferUtils.insertItem(outputInventory, current, true).isEmpty()) {
                 return false;
             }
-            fluidInventory.drain(Materials.Water.getFluid(amount), true);
+            inputFluidInventory.drain(Materials.Water.getFluid(amount), true);
             input.take();
             maxProgress = 1;
             progress = 0;
@@ -74,7 +76,7 @@ public class MetaTileEntityStrandCooler extends MetaTileEntityStrandShaper {
 
     @Override
     protected void output() {
-        outputInventory.insertItem(0, current, false);
+        GTTransferUtils.insertItem(outputInventory, current, false);
     }
 
     @Override
@@ -102,7 +104,8 @@ public class MetaTileEntityStrandCooler extends MetaTileEntityStrandShaper {
                 .where('O', abilities(MultiblockAbility.EXPORT_ITEMS))
                 .where('C', states(getCasingState())
                         .or(autoAbilities(true, false))
-                        .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2)))
+                        .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2))
+                        .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setMinGlobalLimited(1).setMaxGlobalLimited(2)))
                 .where('A', air())
                 .where('R', rollOrientation(RelativeDirection.RIGHT))
                 .build();
