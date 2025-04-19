@@ -1,0 +1,9 @@
+{
+  "forge_marker" : 1,
+  "variants" : {
+    "facing=north,variant=flying_shear_saw": { "model": "susy:metallurgy/flying_shear_saw" },
+    "facing=south,variant=flying_shear_saw": { "model": "susy:metallurgy/flying_shear_saw", "y": 180 },
+    "facing=west,variant=flying_shear_saw": { "model": "susy:metallurgy/flying_shear_saw", "y": 270 },
+    "facing=east,variant=flying_shear_saw": { "model": "susy:metallurgy/flying_shear_saw", "y": 90 }
+  }
+}
