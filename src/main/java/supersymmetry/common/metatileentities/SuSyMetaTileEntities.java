@@ -201,6 +201,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityFlyingShear FLYING_SHEAR;
     public static MetaTileEntityBilletMold BILLET_MOLD;
     public static MetaTileEntitySlabMold SLAB_MOLD;
+    public static MetaTileEntityGasAtomizer GAS_ATOMIZER;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -339,6 +340,7 @@ public class SuSyMetaTileEntities {
         FLYING_SHEAR = registerMetaTileEntity(16607, new MetaTileEntityFlyingShear(susyId("flying_shear")));
         SLAB_MOLD = registerMetaTileEntity(16608, new MetaTileEntitySlabMold(susyId("slab_mold")));
         BILLET_MOLD = registerMetaTileEntity(16609, new MetaTileEntityBilletMold(susyId("billet_mold")));
+        GAS_ATOMIZER = registerMetaTileEntity(16610, new MetaTileEntityGasAtomizer(susyId("gas_atomizer")));
 
         // Turbines: 17000-17010
         BASIC_STEAM_TURBINE = registerMetaTileEntity(17000, new MetaTileEntitySUSYLargeTurbine(susyId("basic_steam_turbine"), SuSyRecipeMaps.LARGE_STEAM_TURBINE, 1, MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING), Textures.SOLID_STEEL_CASING, SusyTextures.LARGE_STEAM_TURBINE_OVERLAY));

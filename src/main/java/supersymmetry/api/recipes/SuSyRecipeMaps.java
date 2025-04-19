@@ -11,6 +11,7 @@ import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.api.unification.material.Materials;
 import gregtech.core.sound.GTSoundEvents;
 import gregtechfoodoption.recipe.GTFORecipeMaps;
+import net.minecraft.client.gui.Gui;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.recipes.builders.*;
 
@@ -341,6 +342,10 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> HOT_ISOSTATIC_PRESS = new RecipeMap<>("hot_isostatic_press", 3, 1, 1, 0, new SimpleRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_COMPRESS, ProgressWidget.MoveType.VERTICAL)
             .setSound(GTSoundEvents.COMPRESSOR);
+
+    public static final RecipeMap<SimpleRecipeBuilder> GAS_ATOMIZER = new RecipeMap<>("gas_atomizer", 1, 1, 1, 0, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.FURNACE); // TODO: Replace with a sound like a pump hissing
 
 
     public static void init(){
