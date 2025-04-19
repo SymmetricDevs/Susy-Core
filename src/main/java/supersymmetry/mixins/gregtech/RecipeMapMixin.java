@@ -1,11 +1,14 @@
 package supersymmetry.mixins.gregtech;
 
-import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.recipes.RecipeMap;
-import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
+import supersymmetry.api.capability.RecipeMapExtension;
 
-@Mixin(RecipeMap.class)
-public abstract class RecipeMapMixin<R extends RecipeBuilder<R>> {
+@Mixin(value = RecipeMap.class, remap = false)
+public abstract class RecipeMapMixin implements RecipeMapExtension {
 
     @SuppressWarnings({"unused", "FieldCanBeLocal"})
     @Shadow

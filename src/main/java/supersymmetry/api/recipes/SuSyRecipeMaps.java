@@ -395,8 +395,6 @@ public class SuSyRecipeMaps {
         RecipeMaps.LARGE_CHEMICAL_RECIPES.setMaxInputs(4);
         RecipeMaps.LARGE_CHEMICAL_RECIPES.setMaxFluidInputs(6);
 
-        ((RecipeMapExtension) RecipeMaps.CHEMICAL_BATH_RECIPES).modifyMaxOutputs(3);
-
         RecipeMaps.MIXER_RECIPES.onRecipeBuild(recipeBuilder -> SuSyRecipeMaps.BLENDER_RECIPES.recipeBuilder()
             .inputs(recipeBuilder.getInputs().toArray(new GTRecipeInput[0]))
             .fluidInputs(recipeBuilder.getFluidInputs())
