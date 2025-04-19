@@ -1,0 +1,9 @@
+{
+  "forge_marker" : 1,
+  "variants" : {
+    "facing=north,variant=lv": { "model": "susy:conveyor_belt/lv" },
+    "facing=south,variant=lv": { "model": "susy:conveyor_belt/lv", "y": 180 },
+    "facing=west,variant=lv": { "model": "susy:conveyor_belt/lv", "y": 270 },
+    "facing=east,variant=lv": { "model": "susy:conveyor_belt/lv", "y": 90 }
+  }
+}

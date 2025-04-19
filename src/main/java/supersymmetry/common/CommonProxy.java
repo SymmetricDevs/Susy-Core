@@ -77,6 +77,7 @@ public class CommonProxy {
         registry.register(SuSyBlocks.STRUCTURAL_BLOCK);
         registry.register(SuSyBlocks.STRUCTURAL_BLOCK_1);
         registry.register(SuSyBlocks.DRILL_HEAD);
+        registry.register(SuSyBlocks.DRILL_BIT);
         registry.register(SuSyBlocks.DEPOSIT_BLOCK);
         registry.register(SuSyBlocks.RESOURCE_BLOCK);
         registry.register(SuSyBlocks.RESOURCE_BLOCK_1);
@@ -91,6 +92,8 @@ public class CommonProxy {
         registry.register(SuSyBlocks.METALLURGY);
         registry.register(SuSyBlocks.METALLURGY_2);
         registry.register(SuSyBlocks.METALLURGY_ROLL);
+        registry.register(SuSyBlocks.CONVEYOR_BELT);
+        registry.register(SuSyBlocks.ROCKET_ASSEMBLER_CASING);
 
         SHEETED_FRAMES.values().stream().distinct().forEach(registry::register);
     }
@@ -107,6 +110,7 @@ public class CommonProxy {
             registry.register(createItemBlock(block, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.ALTERNATOR_COIL, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.DRILL_HEAD, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.DRILL_BIT, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.TURBINE_ROTOR, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.SEPARATOR_ROTOR, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.STRUCTURAL_BLOCK, VariantItemBlock::new));
@@ -125,6 +129,8 @@ public class CommonProxy {
         registry.register(createItemBlock(SuSyBlocks.METALLURGY, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.METALLURGY_2, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.METALLURGY_ROLL, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.CONVEYOR_BELT, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.ROCKET_ASSEMBLER_CASING, VariantItemBlock::new));
 
         SHEETED_FRAMES.values()
                 .stream().distinct()

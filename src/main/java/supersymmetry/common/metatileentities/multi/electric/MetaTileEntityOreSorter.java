@@ -45,7 +45,7 @@ public class MetaTileEntityOreSorter extends RecipeMapMultiblockController {
                         .or(autoAbilities(true, true, true, true, false, false, false)))
                 .where('C', states(new IBlockState[]{MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE)})
                         .or(autoAbilities(false, false, false, false, true, true, false)))
-                .where('D', states(new IBlockState[]{MetaBlocks.FRAMES.get(Materials.Aluminium).getBlock(Materials.Aluminium)}))
+                .where('D', frames(Materials.Aluminium))
                 .where(' ', any())
                 .where('#', air())
                 .build();

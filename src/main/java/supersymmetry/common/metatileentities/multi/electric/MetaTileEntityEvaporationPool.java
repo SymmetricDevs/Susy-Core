@@ -679,7 +679,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         rollingAverage[tickTimer % 20] = 0; // reset rolling average for this tick index
 
         //should skip/cost an extra tick the first time and then anywhere from 1-9 extra when rolling over. Determines exposedblocks
-        if (tickTimer % 10 == 0 && tickTimer != 0) {
+        if (tickTimer % 4 == 0 && tickTimer != 0) {
             //no sunlight heat generated when raining or during night. May be incongruent with partial exposure to sun, but oh well
             if (getWorld().isRainingAt(getPos().offset(getFrontFacing().getOpposite(), 2)) || !getWorld().isDaytime()) {
                 exposedBlocks = 0;
@@ -688,8 +688,8 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             //checks for ow and skylight access to prevent beneath portal issues (-1 = the Nether, 0 = normal world)
             else if (getWorld().provider.getDimension() == 0) {
                 //tickTimer is always multiple of 20 at this point, so division by 20 yields proper counter. You can treat (tickTimer/20) as 'i'
-                int row = ((tickTimer / 20) / columnCount) % rowCount; //going left to right, further to closer checking skylight access.
-                int col = ((tickTimer / 20) % columnCount);
+                int row = ((tickTimer / 4) / columnCount) % rowCount; //going left to right, further to closer checking skylight access.
+                int col = ((tickTimer / 4) % columnCount);
                 //places blockpos for skycheck into correct position. Row counts from furthest to closest (kinda inconsistent but oh well)
                 BlockPos.MutableBlockPos skyCheckPos = new BlockPos.MutableBlockPos(getPos().offset(EnumFacing.UP, 2));
                 skyCheckPos.move(getFrontFacing().getOpposite(), rowCount - row + 1);
@@ -705,7 +705,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                 //Perform skylight check
                 if (!getWorld().canBlockSeeSky(skyCheckPos)) {
                     //only decrement exposedBlocks if previously exposed block is found to no longer be exposed and one full pass has occurred
-                    if (wasExposed[(row * columnCount) + col] != 0 && tickTimer / 20 > rowCount * columnCount) {
+                    if (wasExposed[(row * columnCount) + col] != 0 && tickTimer / 2 > rowCount * columnCount) {
                         exposedBlocks = Math.max(0, exposedBlocks - 1);
                         wasExposed[(row * columnCount) + col] = 0;
                     }
@@ -759,7 +759,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
                 tl.add(TextComponentUtil.translationWithColor(TextFormatting.WHITE, "gregtech.top.evaporation_pool.energy_transferred").appendText(" ").appendSibling(TextComponentUtil.stringWithColor(TextFormatting.YELLOW, TextFormattingUtil.formatNumbers(this.getKiloJoules())).appendText(".").appendSibling(TextComponentUtil.stringWithColor(TextFormatting.YELLOW, EvaporationPoolInfoProvider.constLengthToString(this.getJoulesBuffer()))).appendText(" ").appendSibling(TextComponentUtil.translationWithColor(TextFormatting.WHITE, "gregtech.top.evaporation_pool.kilojoules"))));
 
-                tl.add(TextComponentUtil.translationWithColor(TextFormatting.WHITE, "gregtech.mutliblock.evaporation_pool.rolling_average").appendText(" ").appendSibling(TextComponentUtil.stringWithColor(TextFormatting.YELLOW, TextFormattingUtil.formatNumbers(getRollingAverageJt()))).appendText(" ").appendSibling(TextComponentUtil.translationWithColor(TextFormatting.WHITE, "gregtech.multiblock.evaporation_pool.joules_per_tick")));
+                tl.add(TextComponentUtil.translationWithColor(TextFormatting.WHITE, "gregtech.multiblock.evaporation_pool.rolling_average").appendText(" ").appendSibling(TextComponentUtil.stringWithColor(TextFormatting.YELLOW, TextFormattingUtil.formatNumbers(getRollingAverageJt()))).appendText(" ").appendSibling(TextComponentUtil.translationWithColor(TextFormatting.WHITE, "gregtech.multiblock.evaporation_pool.joules_per_tick")));
 
                 tl.add(TextComponentUtil.translationWithColor(TextFormatting.WHITE, "gregtech.multiblock.evaporation_pool.average_speed").appendText(" ").appendSibling(TextComponentUtil.stringWithColor(TextFormatting.GREEN, getAverageRecipeSpeedString())).appendSibling(TextComponentUtil.stringWithColor(TextFormatting.WHITE, "x"))); // add empty space to visually separate evap pool custom stats
             }
@@ -947,13 +947,13 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
     public int getRollingAverageJt() {
         // sunlight => 1kJ/s/m^2 -> 50J/t/m^2
-        return exposedBlocks * 50 + Arrays.stream(rollingAverage).sum() / 20;
+        return Arrays.stream(rollingAverage).sum() / 20;
     }
 
     public float getAverageRecipeSpeed() {
         if (!recipeMapWorkable.isActive() || recipeMapWorkable.getPreviousRecipe() == null) return 0;
         float recipeJt = recipeMapWorkable.getPreviousRecipe().getProperty(EvaporationEnergyProperty.getInstance(), -1);
-        return (exposedBlocks * 50 + Arrays.stream(rollingAverage).sum() / 20F) / recipeJt;
+        return (Arrays.stream(rollingAverage).sum() / 20F) / recipeJt;
     }
 
     public String getAverageRecipeSpeedString() {

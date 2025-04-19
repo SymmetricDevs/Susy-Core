@@ -55,13 +55,12 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
     @Override
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle(" CCC ", "     ", "     ")
-                .aisle("CPPPC", " AAA ", " AAA ")
-                .aisle("CPPPC", " AAA ", " AAA ")
-                .aisle("CPPPC", " AAA ", " AAA ")
-                .aisle(" CSC ", "     ", "     ")
+                .aisle(" CCC ")
+                .aisle("CPPPC")
+                .aisle("CPPPC")
+                .aisle("CPPPC")
+                .aisle(" CSC ")
                 .where(' ', any())
-                .where('A', air())
                 .where('S', selfPredicate())
                 .where('C', states(getCasingState()).setMinGlobalLimited(6)
                         .or(autoAbilities(true, false, true, true, false, false, false)))

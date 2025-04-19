@@ -42,6 +42,11 @@ public class VariantHorizontalRotatableBlock<T extends Enum<T> & IStringSerializ
         return new ItemStack(this, amount, variant.ordinal() * 4);
     }
 
+    public IBlockState getState(T variant, EnumFacing facing) {
+        return getDefaultState().withProperty(VARIANT, variant).withProperty(FACING, facing);
+    }
+
+
     @Nonnull
     @Override
     public BlockStateContainer createBlockState() {
