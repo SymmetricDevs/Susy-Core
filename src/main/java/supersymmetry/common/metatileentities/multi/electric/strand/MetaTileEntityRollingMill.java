@@ -60,11 +60,6 @@ public class MetaTileEntityRollingMill extends MetaTileEntityStrandShaper {
     }
 
     @Override
-    protected boolean hasRoom() {
-        return this.output.getStrand() == null;
-    }
-
-    @Override
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
                 .aisle("   P   ", "   P   ", "CCCGCCC", "F  P  F", "   P   ", "   P   ", "   P   ")

@@ -60,22 +60,34 @@ public class MetaTileEntityStrandCooler extends MetaTileEntityStrandShaper {
                 return false;
             }
             current = OreDictUnifier.get(conversion.prefix, input.getStrand().material, conversion.amount);
-            if (!GTTransferUtils.insertItem(outputInventory, current, true).isEmpty()) {
-                return false;
-            }
             inputFluidInventory.drain(Materials.Water.getFluid(amount), true);
             input.take();
-            maxProgress = 1;
-            progress = 0;
+            maxProgress = amount * 4;
             return true;
         }
         return false;
     }
 
-
+    @Override
+    protected boolean hasRoom() {
+        if (input.getStrand() == null) {
+            return false;
+        }
+        StrandConversion conversion = StrandConversion.getConversion(input.getStrand());
+        if (conversion == null) {
+            return false;
+        }
+        if (!GTTransferUtils.insertItem(outputInventory,
+                OreDictUnifier.get(conversion.prefix, input.getStrand().material, conversion.amount),
+                true).isEmpty()) {
+            return false;
+        }
+        return true;
+    }
 
     @Override
     protected void output() {
+        if (current == null || outputInventory == null) return;
         GTTransferUtils.insertItem(outputInventory, current, false);
     }
 

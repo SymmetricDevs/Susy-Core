@@ -45,28 +45,14 @@ public class MetaTileEntityTurningZone extends MetaTileEntityStrandShaper {
 
     @Override
     protected boolean consumeInputsAndSetupRecipe() {
-        if (output.getStrand() != null) return false;
-        FluidStack stack = getFirstMaterialFluid();
-        if (stack == null || stack.amount < 2592) return false;
-        stack = stack.copy();
-        stack.amount = 2592;
-        this.inputFluidInventory.drain(stack, true);
+        this.input.take();
         this.maxProgress = 20;
         return true;
     }
 
     @Override
     protected Strand resultingStrand() {
-        FluidStack stack = getFirstMaterialFluid();
-        if (stack == null || stack.amount < 2592) {
-            return null;
-        }
-        Material mat = FluidUnifier.getMaterialFromFluid(stack.getFluid());
-        if (mat == null || !mat.hasProperty(PropertyKey.INGOT)) {
-            return null;
-        }
-
-        return new Strand(1, 1, false, mat, stack.getFluid().getTemperature());
+        return input.getStrand();
     }
 
     @Override
@@ -146,7 +132,7 @@ public class MetaTileEntityTurningZone extends MetaTileEntityStrandShaper {
                         "ABBBA")
                 .where('B', rollOrientation())
                 .where('A', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
-                .where('I', abilities(MultiblockAbility.IMPORT_FLUIDS))
+                .where('I', abilities(SuSyMultiblockAbilities.STRAND_IMPORT))
                 .where('O', abilities(SuSyMultiblockAbilities.STRAND_EXPORT))
                 .where('S', selfPredicate())
                 .where('F', states(SuSyMetaBlocks.SHEETED_FRAMES.get(Materials.Steel).getBlock(Materials.Steel)

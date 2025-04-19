@@ -199,6 +199,8 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityClusterMill CLUSTER_MILL;
     public static MetaTileEntityHotIsostaticPress HOT_ISOSTATIC_PRESS;
     public static MetaTileEntityFlyingShear FLYING_SHEAR;
+    public static MetaTileEntityBilletMold BILLET_MOLD;
+    public static MetaTileEntitySlabMold SLAB_MOLD;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -280,11 +282,6 @@ public class SuSyMetaTileEntities {
         registerSimpleMTE(CVD, 12, 14653, "cvd", SuSyRecipeMaps.CVD_RECIPES, SusyTextures.CVD_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         registerSimpleMTE(ION_IMPLANTER, 12, 14666, "ion_implanter", SuSyRecipeMaps.ION_IMPLANTATION_RECIPES, SusyTextures.ION_IMPLANTER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
 
-        ArrayList<Integer> ids = new ArrayList<>();
-        for (int id = 14500; id < 15000; id++) {
-            if (GregTechAPI.MTE_REGISTRY.getObjectById(id) == null) ids.add(id);
-        }
-        SusyLog.logger.debug("Available ID(s) are: {}", ids);
 
         //thermodynamic stuff
         registerSimpleMTE(FLUID_COMPRESSOR, 12, 15000, "fluid_compressor", SuSyRecipeMaps.FLUID_COMPRESSOR_RECIPES, SusyTextures.FLUID_COMPRESSOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
@@ -340,6 +337,8 @@ public class SuSyMetaTileEntities {
         CLUSTER_MILL = registerMetaTileEntity(16605, new MetaTileEntityClusterMill(susyId("cluster_mill")));
         HOT_ISOSTATIC_PRESS = registerMetaTileEntity(16606, new MetaTileEntityHotIsostaticPress(susyId("hot_isostatic_press")));
         FLYING_SHEAR = registerMetaTileEntity(16607, new MetaTileEntityFlyingShear(susyId("flying_shear")));
+        SLAB_MOLD = registerMetaTileEntity(16608, new MetaTileEntitySlabMold(susyId("slab_mold")));
+        BILLET_MOLD = registerMetaTileEntity(16609, new MetaTileEntityBilletMold(susyId("billet_mold")));
 
         // Turbines: 17000-17010
         BASIC_STEAM_TURBINE = registerMetaTileEntity(17000, new MetaTileEntitySUSYLargeTurbine(susyId("basic_steam_turbine"), SuSyRecipeMaps.LARGE_STEAM_TURBINE, 1, MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING), Textures.SOLID_STEEL_CASING, SusyTextures.LARGE_STEAM_TURBINE_OVERLAY));
@@ -383,6 +382,11 @@ public class SuSyMetaTileEntities {
         registerSimpleMTE(ELECTROSTATIC_SEPARATOR, 12, 17035, "electrostatic_separator", SuSyRecipeMaps.ELECTROSTATIC_SEPARATOR, SusyTextures.ELECTROSTATIC_SEPARATOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         registerSimpleMTE(POLISHING_MACHINE, 12, 17048, "polishing_machine", SuSyRecipeMaps.POLISHING_MACHINE, SusyTextures.POLISHING_MACHINE_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         registerSimpleMTE(TEXTILE_SPINNER, 12, 17061, "textile_spinner", SuSyRecipeMaps.SPINNING_RECIPES, SusyTextures.TEXTILE_SPINNER_OVERLAY, true);
+        ArrayList<Integer> ids = new ArrayList<>();
+        for (int id = 14500; id < 15000; id++) {
+            if (GregTechAPI.MTE_REGISTRY.getObjectById(id) == null) ids.add(id);
+        }
+        SusyLog.logger.debug("Available ID(s) are: {}", ids);
 
     }
 

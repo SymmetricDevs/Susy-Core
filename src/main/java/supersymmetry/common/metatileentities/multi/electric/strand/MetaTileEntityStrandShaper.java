@@ -4,8 +4,6 @@ import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
 import com.google.common.collect.Lists;
-import gregtech.api.GTValues;
-import gregtech.api.GregTechAPI;
 import gregtech.api.capability.IEnergyContainer;
 import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.IWorkable;
@@ -20,11 +18,10 @@ import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.unification.FluidUnifier;
 import gregtech.api.unification.material.Material;
+import gregtech.api.unification.material.properties.PropertyKey;
 import gregtech.api.util.BlockInfo;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.RelativeDirection;
-import gregtech.client.renderer.ICubeRenderer;
-import net.minecraft.block.BlockLog;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
@@ -32,25 +29,19 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.blocks.VariantAxialRotatableBlock;
-import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 import supersymmetry.api.capability.IStrandProvider;
 import supersymmetry.api.capability.Strand;
+import supersymmetry.api.capability.StrandConversion;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
-import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockMetallurgyRoll;
 import supersymmetry.common.blocks.SuSyBlocks;
 
 import java.util.List;
 import java.util.function.Supplier;
-
-import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
 
 public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBase implements IWorkable {
 
@@ -61,6 +52,7 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
     protected IItemHandlerModifiable inputInventory;
     protected IItemHandlerModifiable outputInventory;
     protected IMultipleTankHandler inputFluidInventory;
+    protected IMultipleTankHandler outputFluidInventory;
     protected IEnergyContainer energyContainer;
 
 
@@ -104,15 +96,17 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
                 return;
             }
             strand = possibleStrand;
+            progress = 0;
+            maxProgress /= (int) Math.pow(2, GTUtility.getTierByVoltage(getVoltage()) - 1);
+            maxProgress = Math.max(1, maxProgress);
             isActive = true;
             this.markDirty();
         }
     }
 
     protected boolean hasRoom() {
-        return true;
+        return this.output.getStrand() == null;
     }
-
     protected boolean consumeEnergy() {
         return energyContainer.changeEnergy(-getVoltage()) == -getVoltage();
     }
@@ -124,7 +118,7 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
                 continue;
             }
             Material mat = FluidUnifier.getMaterialFromFluid(stack.getFluid());
-            if (mat != null) {
+            if (mat != null && mat.hasProperty(PropertyKey.INGOT)) {
                 return stack;
             }
         }
@@ -148,6 +142,7 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
             this.output = this.getAbilities(SuSyMultiblockAbilities.STRAND_EXPORT).get(0);
         this.inputInventory = new ItemHandlerList(this.getAbilities(MultiblockAbility.IMPORT_ITEMS));
         this.inputFluidInventory = new FluidTankList(true, this.getAbilities(MultiblockAbility.IMPORT_FLUIDS));
+        this.outputFluidInventory = new FluidTankList(true, this.getAbilities(MultiblockAbility.EXPORT_FLUIDS));
         this.outputInventory = new ItemHandlerList(this.getAbilities(MultiblockAbility.EXPORT_ITEMS));
         this.energyContainer = new EnergyContainerList(this.getAbilities(MultiblockAbility.INPUT_ENERGY));
     }
@@ -171,6 +166,7 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
         this.inputInventory = new GTItemStackHandler(this, 0);
         this.inputFluidInventory = new FluidTankList(true);
         this.outputInventory = new GTItemStackHandler(this, 0);
+        this.outputFluidInventory = new FluidTankList(true);
         this.energyContainer = new EnergyContainerList(Lists.newArrayList());
 
         this.input = null;
@@ -222,6 +218,15 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
                         return;
                     }
                     comps.add(new TextComponentTranslation("gregtech.multiblock.strand_casting.thickness", String.format("%.2f", strand.thickness)));
+                    comps.add(new TextComponentTranslation("gregtech.multiblock.strand_casting.width", String.format("%.2f", strand.width)));
+
+                    StrandConversion conversion = StrandConversion.getConversion(strand);
+                    if (conversion == null) {
+                        comps.add(new TextComponentTranslation("gregtech.multiblock.strand_casting.no_conversion"));
+                        return;
+                    }
+                    comps.add(new TextComponentTranslation("gregtech.multiblock.strand_casting.ore_prefix",
+                            new TextComponentTranslation("supersymmetry.prefix." + conversion.prefix.name.toLowerCase())));
                 });
     }
 
@@ -312,4 +317,8 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
         return SuSyBlocks.METALLURGY_ROLL.getState(BlockMetallurgyRoll.BlockMetallurgyRollType.ROLL);
     }
 
+    @Override
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
 }

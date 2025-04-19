@@ -33,6 +33,12 @@
         "all" : "gregtech:blocks/multiblock_casing/monel_500_casing_pipe"
       }
     },
+    "variant=copper_casing_pipe" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/multiblock_casing/copper_casing_pipe"
+      }
+    },
     "variant=flying_shear_saw" : {
       "textures": {
         "top": "gregtech:blocks/casings/gearbox/machine_casing_gearbox_steel",

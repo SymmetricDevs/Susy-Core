@@ -265,7 +265,16 @@ gregtech.multiblock.evaporation_pool.average_speed=Avg Speed:
 gregtech.multiblock.evaporation_pool.exposed_blocks=Number of Exposed Blocks:
 
 gregtech.multiblock.strand_casting.thickness=Thickness: %s
-gregtech.multiblock.strand_casting.no_strand=Thickness: N/A
+gregtech.multiblock.strand_casting.width=Width: %s
+gregtech.multiblock.strand_casting.no_strand=No strand detected
+gregtech.multiblock.strand_casting.ore_prefix=Will output a: %s
+gregtech.multiblock.strand_casting.no_conversion=Currently not a valid item!
+supersymmetry.prefix.stick=Rod
+supersymmetry.prefix.ingot=Ingot
+supersymmetry.prefix.platedense=Dense Plate
+supersymmetry.prefix.platedouble=Double Plate
+supersymmetry.prefix.plate=Plate
+supersymmetry.prefix.foil=Foil
 
 gregtech.machine.primitive_mud_pump.name=Primitive Mud Pump
 gregtech.machine.primitive_mud_pump.tooltip=Works only in River biomes between Y=64 and Y=80

@@ -37,7 +37,8 @@ public class BlockSuSyMultiblockCasing extends VariantBlock<BlockSuSyMultiblockC
         DRONE_PAD("drone_pad"),
         MONEL_500_CASING("monel_casing"),
         MONEL_500_PIPE("monel_casing_pipe"),
-        INCOLOY_908_CASING("incoloy_nine_zero_eight_casing");
+        INCOLOY_908_CASING("incoloy_nine_zero_eight_casing"),
+        COPPER_PIPE("copper_casing_pipe");
         private final String name;
 
         CasingType(String name) {

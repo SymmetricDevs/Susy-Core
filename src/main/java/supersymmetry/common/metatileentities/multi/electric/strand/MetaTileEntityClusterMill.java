@@ -44,7 +44,7 @@ public class MetaTileEntityClusterMill extends MetaTileEntityRollingMill {
     protected boolean consumeInputsAndSetupRecipe() {
         Strand orig = this.input.take();
         if (orig == null) return false;
-        progress = (int) Math.ceil(1 / (8.0 * orig.thickness));
+        maxProgress = (int) Math.ceil(1 / (8.0 * orig.thickness));
         return true;
     }
 
