@@ -1,6 +1,7 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
 import gregtech.api.capability.impl.DistillationTowerLogicHandler;
+import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -26,6 +27,7 @@ import supersymmetry.api.capability.impl.ExtendedDTLogicHandler;
 import supersymmetry.api.metatileentity.multiblock.MetaTileEntityOrderedDT;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.recipes.DistillationTowerRecipeLogic;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -36,7 +38,7 @@ import static gregtech.api.util.RelativeDirection.*;
 public class MetaTileEntityVacuumDistillationTower extends MetaTileEntityOrderedDT {
 
     public MetaTileEntityVacuumDistillationTower(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SuSyRecipeMaps.VACUUM_DISTILLATION_RECIPES);
+        super(metaTileEntityId, SuSyRecipeMaps.VACUUM_DISTILLATION_RECIPES, true);
     }
 
     @Override
@@ -64,10 +66,11 @@ public class MetaTileEntityVacuumDistillationTower extends MetaTileEntityOrdered
                 .where('P', states(getPipeCasingState()))
                 .where('F', frames(Materials.Steel))
                 .where('C', states(getCasingState())
-                        .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(3))
+                        .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2))
                         .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setMaxGlobalLimited(2))
                         .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMaxGlobalLimited(1)))
-                .where('I', abilities(MultiblockAbility.EXPORT_ITEMS).setMaxGlobalLimited(1))
+                .where('I', states(getCasingState())
+                        .or(abilities(MultiblockAbility.EXPORT_ITEMS).setMaxGlobalLimited(1)))	
                 .where('D', states(getCasingState()))
                 .where('X', states(getCasingState())
                         .or(metaTileEntities(MultiblockAbility.REGISTRY.get(MultiblockAbility.EXPORT_FLUIDS).stream()

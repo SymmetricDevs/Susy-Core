@@ -1,9 +1,7 @@
 package supersymmetry.client.renderer.textures;
 
-import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
-import gregtech.client.renderer.texture.cube.SimpleCubeRenderer;
-import gregtech.client.renderer.texture.cube.SimpleOverlayRenderer;
-import gregtech.client.renderer.texture.cube.SimpleSidedCubeRenderer;
+import gregtech.client.renderer.texture.Textures;
+import gregtech.client.renderer.texture.cube.*;
 import gregtech.client.renderer.texture.custom.DrumRenderer;
 import supersymmetry.client.renderer.textures.custom.ExtenderRender;
 
@@ -71,7 +69,7 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer LARGE_STEAM_TURBINE_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/large_steam_turbine");
     public static final OrientedOverlayRenderer LARGE_WEAPONS_FACTORY_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/large_weapons_factory");
     public static final OrientedOverlayRenderer MINING_DRILL_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/mining_drill");
-    public static final OrientedOverlayRenderer OCEANIC_DRILL_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/oceanic_drill");
+    public static final OrientedOverlayRenderer LARGE_FLUID_PUMP_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/large_fluid_pump");
     public static final OrientedOverlayRenderer ORE_SORTER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/ore_sorter");
     public static final OrientedOverlayRenderer PRESSURE_SWING_ABSORBER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/pressure_swing_absorber");
     public static final OrientedOverlayRenderer QUENCHER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/quencher");
@@ -81,6 +79,7 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer SINTERING_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/sintering");
     public static final OrientedOverlayRenderer SMOKE_STACK_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/smoke_stack");
     public static final OrientedOverlayRenderer PRIMITIVE_SMELTER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/primitive_smelter");
+    public static final OrientedOverlayRenderer MILLING_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/milling");
 
     public static final SimpleOverlayRenderer SILICON_CARBIDE_CASING = new SimpleOverlayRenderer("multiblock_casing/silicon_carbide_casing");
     public static final SimpleOverlayRenderer ULV_STRUCTURAL_CASING = new SimpleOverlayRenderer("multiblock_casing/ulv_structural_casing");
@@ -90,4 +89,24 @@ public class SusyTextures {
     public static final SimpleCubeRenderer MASONRY_BRICK = new SimpleCubeRenderer("gregtech:blocks/multiblock_casing/masonry_brick");
 
     public static final DrumRenderer PLASTIC_CAN = new DrumRenderer("storage/drums/plastic_can");
+
+
+    // Stock stuff
+    //public static final SimpleCubeRenderer STOCK_MACHINE_CASING = new SimpleCubeRenderer("rail_interfaces/stock_machine_casing/stock_machine_casing");
+    public static final SimpleSidedCubeRenderer STOCK_MACHINE_CASING = Textures.VOLTAGE_CASINGS[1];
+
+    public static final OrientedOverlayRenderer STOCK_FLUID_EXCHANGER = new OrientedOverlayRenderer("rail_interfaces/fluid_exchanger");
+    public static final OrientedOverlayRenderer STOCK_ITEM_EXCHANGER = new OrientedOverlayRenderer("rail_interfaces/item_exchanger");
+
+    public static final SimpleOrientedCubeRenderer STOCK_DETECTOR_NEITHER = new SimpleOrientedCubeRenderer("rail_interfaces/stock_detector/stock_detector_neither");
+    public static final SimpleOrientedCubeRenderer STOCK_DETECTOR_DETECTING = new SimpleOrientedCubeRenderer("rail_interfaces/stock_detector/stock_detector_detecting");
+    public static final SimpleOrientedCubeRenderer STOCK_DETECTOR_FILTER = new SimpleOrientedCubeRenderer("rail_interfaces/stock_detector/stock_detector_filter");
+    public static final SimpleOrientedCubeRenderer STOCK_DETECTOR_BOTH = new SimpleOrientedCubeRenderer("rail_interfaces/stock_detector/stock_detector_both");
+
+    public static final SimpleOrientedCubeRenderer STOCK_READER_ITEM = new SimpleOrientedCubeRenderer("rail_interfaces/content_reader/content_reader_item");
+    public static final SimpleOrientedCubeRenderer STOCK_READER_FLUID = new SimpleOrientedCubeRenderer("rail_interfaces/content_reader/content_reader_fluid");
+
+    public static final OrientedOverlayRenderer STOCK_CONTROLLER = new OrientedOverlayRenderer("rail_interfaces/stock_controller");
+
+
 }

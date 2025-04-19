@@ -3,6 +3,8 @@ tile.cooling_coil.manganese_iron_arsenic_phosphide.name=锰铁砷磷冷却线圈
 tile.cooling_coil.praseodymium_nickel.name=镨镍合金冷却线圈
 tile.cooling_coil.gadolinium_silicon_germanium.name=钆硅锗合金冷却线圈
 tile.cooling_coil.tooltip_temperature=基础制冷：§b%,dK
+tile.wire_coil.tooltip_evaporation=§8蒸发池
+tile.wire_coil.tooltip_energy_evaporating=  §产热：§f%,d kJ/t
 
 tile.sintering_brick.sintering_block_brick.name=烧结炉砖块
 tile.sintering_brick.sintering_block_magnetoplated.name=镀磁烧结炉砖块
@@ -17,7 +19,7 @@ tile.drill_head.steel.name=钢制钻头
 tile.susy_multiblock_casing.silicon_carbide_casing.name=坚固碳化硅外壳
 
 tile.susy_multiblock_casing.sieve_tray.name=筛孔塔盘
-tile.susy_multiblock_casing.structural_packing.name=蒸馏塔塔板
+tile.susy_multiblock_casing.structural_packing.name=蒸馏塔填料
 tile.susy_multiblock_casing.ulv_structural_casing.name=基础结构外壳
 tile.susy_multiblock_casing.drone_pad.name=停机坪方块
 
@@ -72,6 +74,11 @@ tile.resource_block.platinum_placer.name=砂铂矿床
 tile.resource_block.phosphorite.name=磷块岩矿床
 tile.resource_block.potash.name=钾盐矿床
 tile.resource_block.sulfur.name=硫矿床
+tile.resource_block.coal.name=煤矿矿床
+tile.resource_block_1.native_copper.name=天然铜矿床
+tile.resource_block_1.anthracite.name=无烟煤矿床
+tile.resource_block_1.lignite.name=褐煤矿床
+
 
 tile.multiblock_tank.clarifier.name=沉淀槽体
 tile.multiblock_tank.flotation.name=浮选槽体
@@ -81,8 +88,8 @@ tile.evaporation_bed.dirt.name=砂壤土
 tile.electrode_assembly.carbon.name=碳电极部件
 
 tile.home_block.home_block_home.name="家方块（默认）"
-tile.home.allowed=已设置出生点
-tile.home.denied=无法设置出生点
+tile.home.allowed=已设置重生点
+tile.home.denied=无法设置重生点
 
 tile.home_block.home_primitive.name=家方块
 tile.home_block.home_primitive.tooltip=原始
@@ -92,6 +99,10 @@ tile.home_block.home_renewal_brutalist.name=家方块
 tile.home_block.home_renewal_brutalist.tooltip=新野兽派
 tile.home_block.home_scifi.name=家方块
 tile.home_block.home_scifi.tooltip=科幻
+
+tile.conveyor_belt.lv.name=传送带方块
+
+tile.drill_bit.steel.name=钢制铣床钻头方块
 
 # Rocks
 tile.susy_stone_smooth.gabbro.name=辉长岩
@@ -105,6 +116,7 @@ tile.susy_stone_smooth.shale.name=页岩
 tile.susy_stone_smooth.slate.name=板岩
 tile.susy_stone_smooth.soapstone.name=皂石
 tile.susy_stone_smooth.kimberlite.name=金伯利岩
+tile.susy_stone_smooth.industrial_concrete.name=工业混凝土
 tile.susy_stone_cobble.gabbro.name=辉长岩圆石
 tile.susy_stone_cobble.gneiss.name=片麻岩圆石
 tile.susy_stone_cobble.graphite.name=石墨页岩圆石
@@ -116,6 +128,7 @@ tile.susy_stone_cobble.shale.name=页岩圆石
 tile.susy_stone_cobble.slate.name=板岩圆石
 tile.susy_stone_cobble.soapstone.name=皂石圆石
 tile.susy_stone_cobble.kimberlite.name=金伯利岩圆石
+tile.susy_stone_cobble.industrial_concrete.name=工业混凝土圆石
 tile.susy_stone_bricks.gabbro.name=辉长岩砖
 tile.susy_stone_bricks.gneiss.name=片麻岩砖
 tile.susy_stone_bricks.graphite.name=石墨页岩砖
@@ -127,6 +140,7 @@ tile.susy_stone_bricks.shale.name=页岩砖
 tile.susy_stone_bricks.slate.name=板岩砖
 tile.susy_stone_bricks.soapstone.name=皂石砖
 tile.susy_stone_bricks.kimberlite.name=金伯利岩砖
+tile.susy_stone_bricks.industrial_concrete.name=工业混凝土砖
 
 # Materials
 susy.material.manganese_iron_arsenic_phosphide=锰铁砷磷合金
@@ -179,9 +193,14 @@ item.material.oreprefix.sheetedFrame=%s板框箱
 item.material.oreprefix.fiber=%s纤维
 item.material.oreprefix.fiberWet=湿%s纤维
 item.material.oreprefix.thread=%s纱线
+item.material.oreprefix.dustWet=湿%s粉
 
+susy.fluid.supercritical=超临界%s
 susy.fluid.impure_slurry=含杂%s浆液
 susy.fluid.slurry=%s浆液
+
+# Tooltip Warnings
+gregtech.machine.steam_extractor_cannot_melt_items.warning=蒸汽提取机不能熔化物品！
 
 # Machines/Multiblocks
 gregtech.machine.magnetic_refrigerator.name=磁制冷机
@@ -197,6 +216,12 @@ gregtech.machine.coagulation_tank.tooltip=不能用于止血。
 gregtech.machine.coagulation_tank.tooltip.1=每延长一格，并行数加一
 gregtech.machine.drum.lead.name=铅桶
 gregtech.machine.drum.brass.name=黄铜桶
+gregtech.machine.drum.pe.name=聚乙烯（PE）罐
+gregtech.machine.drum.pp.name=聚丙烯（PP）罐
+gregtech.machine.drum.ptfe.name=聚四氟乙烯（PTFE）罐
+gregtech.machine.drum.uhmwpe.name=超高分子量聚乙烯（UHMWPE）罐
+
+gregtech.machine.crate.pe.name=密封板条箱
 
 gregtech.machine.polymerization_tank.name=聚合缸
 gregtech.machine.fluidized_bed_reactor.name=流化床反应器
@@ -229,13 +254,30 @@ gregtech.machine.railroad_engineering_station.name=铁路工程站
 gregtech.machine.railroad_engineering_station.tooltip=在多方块结构的中心放置沉浸铁路的铁轨以使之成型
 gregtech.machine.railroad_engineering_station.tooltip.1=铁轨下的混凝土可以被包括管道和空气在内的任意方块替换
 
+gregtech.machine.evaporation_pool.name=蒸发池
+gregtech.machine.evaporation_pool.tooltip.info=最大池底面积%dx%d，最小为1x1。查看JEI信息页面或Tooltip以获取详细信息。
+gregtech.machine.evaporation_pool.tooltip.structure_info=蒸发池池底可由1x1至%dx%d的砂壤土组成——其形状可以不为正方形！若想通过线圈提供热量，其摆放方式需要与JEI预览中一致。查看JEI信息页面以获得详细解释。
+gregtech.top.evaporation_pool_heated_preface=线圈模式:
+gregtech.top.evaporation_pool_is_heated=有效；可以供热。
+gregtech.top.evaporation_pool_not_heated=无效；无法供热。
+gregtech.top.evaporation_pool.energy_transferred=热能：
+gregtech.multiblock.evaporation_pool.rolling_average=平均热能输入：
+gregtech.multiblock.evaporation_pool.joules_per_tick=J/t
+gregtech.top.evaporation_pool.kilojoules=kJ
+gregtech.multiblock.evaporation_pool.description=蒸发池由可变大小的砂壤土池底与其外部用于放置仓室的混凝土壁面组成。其控制器方块可放置于沿砂壤土外侧，与池底同一高度的任一位置。            蒸发池可以在供能无供能状态下运行：供能运行需要在池底以蛇形放置加热线圈（可参考JEI结构预览）；而无供能状态下则不需要。        蒸发池的运行速度取决于接收到热量的多少，其由阳光直晒的池底方块数，外部供能（1EU = 10J），以及用于加热的线圈等级决定。                                                                                 每个阳光直晒的方块（检查需要消耗一定时间）每秒可以提供1kJ的热量，而线圈提供的热量与则与其基础温度*数量有关。此外，蒸发池每秒最多处理五次配方。
+gregtech.multiblock.evaporation_pool.average_speed=平均速率：
+gregtech.multiblock.evaporation_pool.exposed_blocks=直晒格数：
+
 gregtech.machine.primitive_mud_pump.name=简易泥泵
+gregtech.machine.primitive_mud_pump.tooltip=仅在Y=64与Y=80之间的河流群系运行
 gregtech.machine.basic_steam_turbine.name=大型蒸汽轮机
 gregtech.machine.basic_gas_turbine.name=大型燃气轮机
-gregtech.machine.ocean_pumper.name=海水泵机
+gregtech.machine.large_fluid_pump.name=大型液泵
+gregtech.machine.large_fluid_pump.tooltip.1=这势必会对当地的鲑鱼种群造成影响。
+gregtech.machine.large_fluid_pump.tooltip.2=仅在控制器方块位于Y=64，且最下方的钢管道外壳处于正确群系时运行。
 gregtech.machine.advanced_arc_furnace.name=高级电弧炉
 gregtech.machine.clarifier.name=澄清池
-gregtech.machine.evaporation_pool.name=蒸发池
+gregtech.machine.dumper.name=废液排放机
 gregtech.machine.flare_stack.name=火炬塔
 gregtech.machine.flare_stack.height=塔高：%s§9格
 gregtech.machine.flare_stack.rate=焚烧速率：%s
@@ -250,7 +292,6 @@ gregtech.machine.smoke_stack.rate_hover=由烟囱高度决定的排放速率倍�
 gregtech.machine.smoke_stack.tooltip=给你星球的大气层加点料。
 gregtech.machine.smoke_stack.tooltip.1=§8基础排放速率：§7§f%d L 每 10 ticks
 gregtech.machine.smoke_stack.tooltip.2=在5格的基础高度之上，每增加一格，排放速率翻倍。
-gregtech.machine.dumper.name=废液排放机
 gregtech.machine.dumper.rate=排污速率：%s
 gregtech.machine.dumper.tooltip=污染你附近的整个生态系统。
 gregtech.machine.dumper.tooltip.1=§2基础排污速率：§7§f%d L 每 10 ticks
@@ -263,13 +304,28 @@ gregtech.machine.high_pressure_cryogenic_distillation_plant.name=高压低温蒸
 gregtech.machine.single_column_cryogenic_distillation_plant.name=单塔式低温蒸馏厂
 gregtech.machine.reverberatory_furnace.name=反射炉
 gregtech.machine.blender.name=搅拌器
+gregtech.machine.sieve_distillation_tower.name=筛板蒸馏塔
+
+gregtech.machine.curtain_coater.name=淋幕式涂饰机
+gregtech.multiblock.pattern.error.conveyor=§c传送带方块的朝向必须一致§r
+
+gregtech.machine.milling.name=精密铣床
+gregtech.multiblock.pattern.error.milling.upper=§c仅可放置于机器上部§r
+gregtech.multiblock.pattern.error.milling.lower=§c仅可放置于机器下部§r
 
 gregtech.machine.drone_pad.name=无人机坪
+gregtech.machine.primitive_smelter.name=简易冶炼炉
+
+gregtech.machine.primitive_item_import.name=简易输入总线
+gregtech.machine.primitive_item_import.tooltip=仅可用于简易冶炼炉
+gregtech.machine.primitive_item_export.name=简易输出总线
+gregtech.machine.primitive_item_export.tooltip=仅可用于简易冶炼炉
 
 # Properties
 gregtech.recipe.plasma_requirement=需要等离子体：%s
 gregtech.recipe.catalyst=催化剂：%s %s
 gregtech.recipe.blocks=有效方块：%s
+gregtech.recipe.evaporation=热能需求: %d J/t
 gregtech.recipe.cryogenic_environment=需要低温环境
 
 # Latex Collector
@@ -571,6 +627,12 @@ gregtech.machine.weapons_factory.opv.name=传说武器工厂
 # Phase Separator
 gregtech.machine.phase_separator.name=相分离器
 
+# RTG
+gregtech.machine.rtg.lv.name=基础放射性同位素热电式发电机（RTG）
+gregtech.machine.rtg.tooltip.info=给你的起搏器供电。
+gregtech.machine.rtg.tooltip.description=通过放射性同位素的衰变产生微小但稳定的电流。
+gregtech.machine.rtg.voltage_produced=§a产出电压：§f%,d EU/t (%s§f)
+
 # Electrostatic Separator
 gregtech.machine.electrostatic_separator.lv.name=基础静电分离器
 gregtech.machine.electrostatic_separator.mv.name=进阶静电分离器
@@ -602,7 +664,7 @@ gregtech.machine.textile_spinner.uxv.name=史诗纺线机 IV
 gregtech.machine.textile_spinner.opv.name=传说纺线机
 
 # Polishing Machine
-gregtech.machine.polishing_machine.lv.name=基础 
+gregtech.machine.polishing_machine.lv.name=基础抛光机
 gregtech.machine.polishing_machine.mv.name=进阶抛光机
 gregtech.machine.polishing_machine.hv.name=进阶抛光机 II
 gregtech.machine.polishing_machine.ev.name=进阶抛光机 III
@@ -618,6 +680,16 @@ gregtech.machine.polishing_machine.opv.name=传说抛光机
 
 gregtech.machine.bath_condenser.name=浴式冷凝器
 gregtech.machine.bath_condenser.tooltip=仅在低温蒸馏厂中工作
+
+gregtech.machine.incinerator.lv.name=基础焚化炉
+gregtech.machine.incinerator.mv.name=进阶焚化炉
+gregtech.machine.incinerator.hv.name=进阶焚化炉 II
+gregtech.machine.incinerator.ev.name=进阶焚化炉 III
+gregtech.machine.incinerator.tooltip.1=§r每%2$s tick(s)§6焚烧§r%1$s个物品
+gregtech.machine.incinerator.tooltip.2=§c需要上方八格方块为空气以排放废气
+gregtech.machine.incinerator.tooltip.3=§8你别管那些重金属去了哪里。
+gregtech.multiblock.incinerator.clogged=§4堵塞了！（上方的排气道被挡住了？）
+gregtech.multiblock.incinerator.working=§2畅通无阻！
 
 # Recipemaps
 recipemap.coagulation_tank.name=凝固
@@ -675,9 +747,14 @@ recipemap.polishing_machine.name=抛光
 recipemap.gravity_separator=重力分离
 recipemap.spinning.name=纺线
 recipemap.large_steam_turbine.name=大型蒸汽轮机
+recipemap.primitive_smelter.name=简易冶炼
+recipemap.large_fluid_pump.name=泵取液体
+recipemap.sieve_distillation.name=分馏
+recipemap.jet_wingpack_fuels.name=喷气翼包燃料
+recipemap.curtain_coater.name=淋幕涂饰
+recipemap.milling.name=精密铣销
 
 gregtech.multiblock.primitive_mud_pump.description=简易泥泵是一台蒸汽时代的多方块机器。当它的控制器方块处于河流生物群系，且高度介于 Y = 64 与 Y = 80（含）之间时将每秒收集一次泥。它可以使用 ULV、LV 输出仓或水泵输出仓。
-gregtech.multiblock.ocean_pumper.description=海水泵机是一台电力时代的多方块机器。当它的控制器方块处于海洋生物群系，且高度介于 Y = 70 与 Y = 75（含）之间时将每秒收集 8,000 L 海水。他需要输出总线、维修仓、能源仓各一。
 
 # Energy Hatches
 
@@ -689,10 +766,53 @@ gregtech.machine.energy_hatch.output_4a.hv.name=4安动力仓（HV）
 gregtech.machine.energy_hatch.output_16a.hv.name=16安动力仓（HV）
 gregtech.machine.energy_hatch.output_16a.ev.name=16安动力仓（EV）
 
-# Other multiblock parts
+# Quadruple & Nonuple Fluid Hatches
 
+gregtech.machine.fluid_hatch.import_4x.lv.name=LV四重输入仓
+gregtech.machine.fluid_hatch.import_4x.mv.name=MV四重输入仓
+gregtech.machine.fluid_hatch.import_4x.hv.name=HV四重输入仓
+
+gregtech.machine.fluid_hatch.import_9x.lv.name=LV九重输入仓
+gregtech.machine.fluid_hatch.import_9x.mv.name=MV九重输入仓
+gregtech.machine.fluid_hatch.import_9x.hv.name=HV九重输入仓
+
+gregtech.machine.fluid_hatch.export_4x.lv.name=LV四重输出仓
+gregtech.machine.fluid_hatch.export_4x.mv.name=MV四重输出仓
+gregtech.machine.fluid_hatch.export_4x.hv.name=HV四重输出仓
+
+gregtech.machine.fluid_hatch.export_9x.lv.name=LV九重输出仓
+gregtech.machine.fluid_hatch.export_9x.mv.name=MV九重输出仓
+gregtech.machine.fluid_hatch.export_9x.hv.name=HV九重输出仓
+
+# Other multiblock parts
 gregtech.machine.dumping_hatch=销毁仓
 gregtech.machine.dumping_hatch.lv.name=销毁仓
+
+# Distillation tower explanations
+gregtech.machine.ordered_dt.tooltip.1=流体输入与输出仓可位于同层
+gregtech.machine.ordered_dt.tooltip.2=§c若某一层不存在输出仓，则该层的流体输出将被销毁！§7
+
+# Logistics
+gregtech.machine.delegator.tooltip.non_recursion=§6无法连接到其他的代理器！
+gregtech.top.delegator.delegating_face=代理面:
+
+gregtech.machine.bridge.inv.name=物品桥接器
+gregtech.machine.bridge.inv.tooltip=§b转接物品
+gregtech.machine.bridge.tank.name=流体桥接器
+gregtech.machine.bridge.tank.tooltip=§b转接流体
+gregtech.machine.bridge.inv_tank.name=两用桥接器
+gregtech.machine.bridge.inv_tank.tooltip=§b转接物品与流体
+gregtech.machine.bridge.universal.name=通用桥接器
+gregtech.machine.bridge.universal.tooltip=§b转接一切
+
+gregtech.machine.extender.inv.name=物品拓展器
+gregtech.machine.extender.inv.tooltip=§b转接物品
+gregtech.machine.extender.tank.name=流体拓展器
+gregtech.machine.extender.tank.tooltip=§b转接流体
+gregtech.machine.extender.inv_tank.name=两用拓展器
+gregtech.machine.extender.inv_tank.tooltip=§b转接物品与流体
+gregtech.machine.extender.universal.name=通用拓展器
+gregtech.machine.extender.universal.tooltip=§b转接一切
 
 # Metaitems
 metaitem.catalyst_bed_support_grid.name=催化床载体网格
@@ -701,8 +821,13 @@ cover.conveyor.steam.title=蒸汽传送带
 metaitem.pump.steam.name=蒸汽泵
 cover.pump.steam.title=蒸汽泵
 metaitem.air_vent.name=进气扇
+metaitem.restrictive_filter.name=限制性物品过滤器
+metaitem.restrictive_filter.tooltip=仅允许容器内拥有不超过§6一组§7相同物品。在一些情况下可被用于代替机械臂。/n§o你只可到此，不可越过。§r §7约翰福音 38:11
 metaitem.air_vent.tooltip=当面向空气时，为机器收集所处维度的空气
-metaitem.air_vent.tooltip.1=§b收集速率: §f%,d L/s
+metaitem.track_segment.name=单轨铁道段
+metaitem.track_segment.tooltip=可用于§8盾构机
+metaitem.track_segment.length_info=相当于§610格§7的单轨铁道。
+metaitem.air_vent.tooltip.1=§b收集速率：§f%,d L/s
 
 # Catalysts
 gregtech.universal.catalysts.tooltip.tier=§e最高电压：§f%,d EU/t（%s§f）
@@ -756,26 +881,142 @@ gregtech.catalyst_group.standard_catalysts.name=标准催化剂
 gregtech.catalyst_group.cracking_catalyst_beds.name=裂化催化剂
 metaitem.standard_catalyst_bed_cracking.name=裂化催化床
 
+# Armors
+metaitem.jet_wingpack.name=喷气翼包
+metaitem.jet_wingpack.tooltip=引擎发动时可按Shift制动
+metaarmor.hud.engine_status=引擎：%s
+metaarmor.jet_wingpack.engine_active=喷气翼包：引擎发动
+metaarmor.jet_wingpack.engine_inactive=喷气翼包：引擎熄火
+
 # Machine Translations
-susy.ocean_pumper.full=输出仓已满！
-susy.ocean_pumper.drainrate=当前抽取速率：%s
+susy.wrongbiome=此机器不能在该群系运行！
+susy.weather_resistance=§2不会在接触到水、熔岩、火或者雨时爆炸。
+susy.large_fluid_pump.y_level=控制器高度：Y=%s
+susy.large_fluid_pump.biome=底部钢管道所处群系：%s
 
 # Latex Logs
 gregtech.block_group_members.latex_logs.name=橡胶木
 
+
+# Stock Interfaces
+gregtech.machine.stock_controller.name=机车控制器
+susy.stock_interfaces.locomotive_controller.description=通过红石信号控制机车的油门及刹车
+
+gregtech.machine.stock_detector.name=列车检测器
+susy.stock_interfaces.stock_detector.description=检测附近的列车并输出红石信号
+
+gregtech.machine.stock_fluid_exchanger.name=流体装卸器
+susy.stock_interfaces.fluid_exchanger.description=用于与附近的列车交互流体
+
+gregtech.machine.stock_item_exchanger.name=物品装卸器
+susy.stock_interfaces.item_exchanger.description=用于与附近的列车交互物品
+
+gregtech.machine.stock_content_reader.name=列车读取器
+susy.stock_interfaces.stock_reader.description=基于列车的物品/流体储存输出红石信号
+
+susy.gui.stock_interactor.button.stock_filter.tooltip=点击打开列车过滤器GUI
+susy.gui.stock_interactor.button.controller_setting.tooltip=点击打开控制器GUI
+susy.gui.stock_interactor.button.render_bounding_box.tooltip=点击开关交互区域渲染
+susy.gui.stock_interactor.button.highlight_selected_stock.tooltip=点击开关选中列车的高亮渲染
+
+susy.gui.stock_interactor.title.highlight_selected_stock=高亮选中的列车
+susy.gui.stock_interactor.title.render_bounding_box=渲染交互区域
+susy.gui.stock_interactor.title.stock_filter=列车过滤器
+susy.gui.stock_interactor.title.controller_setting=设置
+
+susy.gui.stock_interactor.stock_filter.enabled.tooltip=开关过滤器
+susy.gui.stock_interactor.stock_filter.enabled.title=开关
+susy.gui.stock_interactor.stock_filter.regex.tooltip.info=§b接受regex表达式，大小写敏感。\n§6^§r代表字符串起始\n§6$§r代表字符串结尾\n§6*§r代表通配符（即，0或更多个字符）\n§6a*§r0或多个连续的’a‘字符\n§6?§r代表任一字符\n§6()§r将匹配空白项\n§b可前往regex101.com以了解更多regex相关信息§r
+susy.gui.stock_interactor.stock_filter.regex.tooltip.error=§4正则表达式编译错误！§r\n名称过滤器将不会被启用！
+susy.gui.stock_interactor.stock_filter.regex.tooltip.waiting=正则表达式未设置\n名称过滤器将不会被启用！
+susy.gui.stock_interactor.stock_filter.regex.tooltip.success=§a正则表达式编译成功！§r\n名称过滤器将启用！
+
+susy.gui.stock_interactor.controller_setting.button.control_active.tooltip=点击切换控制器被红石充能时是否控制机车
+susy.gui.stock_interactor.controller_setting.button.control_inactive.tooltip=点击切换控制器未被红石充能时是否控制机车
+
+susy.gui.stock_interactor.controller_setting.active_brake.tooltip=刹车（充能时）
+susy.gui.stock_interactor.controller_setting.active_throttle.tooltip=油门（充能时）
+susy.gui.stock_interactor.controller_setting.inactive_brake.tooltip=刹车（未充能时）
+susy.gui.stock_interactor.controller_setting.inactive_throttle.tooltip=油门（未充能时）
+
 # Extra recipe info
 susy.recipe.dimensions=维度：%s
+susy.recipe.biomes=群系：%s
+susy.recipe.biomes_blocked=黑名单群系：%s
+susy.recipe.biomeTypes=群系种类：%s
+susy.recipe.biomeTypes_blocked=黑名单群系种类：%s
 
 # Commands
-
-susy.command.horde.usage=/mobHorde <start/stop>
-susy.command.horde.start.usage=/mobHorde start <名称>
-susy.command.horde.start.argument_required=用法：/mobHorde start <名称>.
-susy.command.horde.start.no_such_horde=不存在名为%s的军团
-susy.command.horde.start.unable_to_run=无法生成%s军团，这可能是由维度限制或光照等原因造成。
-susy.command.horde.start.error_executing_horde=军团生物未正确生成。
-susy.command.horde.start.has_active_invasion=已有正在进行中的%s入侵。
-susy.command.horde.start.started=%s入侵已开始。
+susy.command.horde.usage=/mobHorde <start/stop/status>
+susy.command.horde.start.usage=/mobHorde start <name>
+susy.command.horde.start.argument_required=Use /mobHorde start <name>.
+susy.command.horde.start.no_such_horde=No such horde %s exists.
+susy.command.horde.start.unable_to_run=The %s horde can't be executed. This may be due to dimensional restrictions, daylight, etc.
+susy.command.horde.start.error_executing_horde=Horde mobs were not spawned correctly.
+susy.command.horde.start.has_active_invasion=You already have an active %s invasion.
+susy.command.horde.start.started=Successfully started %s invasion.
 susy.command.horde.stop.usage=/mobHorde stop
-susy.command.horde.stop.has_active_no_invasion=没有正在进行中的入侵。
-susy.command.horde.stop.stopped=%s入侵已结束。
+susy.command.horde.stop.has_active_no_invasion=No active invasion to stop.
+susy.command.horde.stop.stopped=Successfully stopped %s invasion.
+susy.command.horde.status.usage=/mobHorde status <player>
+susy.command.horde.status.has_active_invasion=Player %s has an active %s invasion for %d ticks. It will time out in %s ticks.
+susy.command.horde.status.no_active_invasion=Player %s has no active invasion.
+
+# Fluid Tooltips
+susy.fluid.voiding.liquid=可于废液排放机中销毁
+susy.fluid.voiding.gas=可于烟囱中销毁
+susy.fluid.voiding.flammable=可于火炬塔中销毁
+
+death.attack.toxic_atmo=%s的肺变成了碎片
+death.attack.suffocation=%s无法呼吸
+
+metaitem.simple_gas_mask.name=简易防毒面具
+metaitem.simple_gas_mask.tooltip=让你在无氧环境中生存一段时间
+metaitem.gas_mask.name=防毒面具
+metaitem.gas_mask.tooltip=让你在无氧环境中生存稍长的时间
+metaitem.gas_tank.name=呼吸罐
+metaitem.gas_tank.tooltip=让你在无氧环境中生存稍长的时间
+metaitem.asbestos_mask.name=石棉防毒面具
+metaitem.asbestos_mask.tooltip=让你在酷热的环境中生存一段时间
+metaitem.asbestos_chestplate.name=石棉呼吸罐
+metaitem.asbestos_chestplate.tooltip=让你在酷热的环境中生存一段时间
+metaitem.asbestos_leggings.name=石棉护腿
+metaitem.asbestos_leggings.tooltip=让你在酷热的环境中生存一段时间
+metaitem.asbestos_boots.name=石棉靴子
+metaitem.asbestos_boots.tooltip=让你在酷热的环境中生存一段时间
+metaitem.rebreather_tank.name=循环式呼吸罐
+metaitem.rebreather_tank.tooltip=提供更久的氧气
+metaitem.reflective_mask.name=反射防毒面具
+metaitem.reflective_mask.tooltip=减少酷热环境对你的伤害
+metaitem.reflective_chestplate.name=反射呼吸罐
+metaitem.reflective_chestplate.tooltip=减少酷热环境对你的伤害
+metaitem.reflective_leggings.name=反射护腿
+metaitem.reflective_leggings.tooltip=减少酷热环境对你的伤害
+metaitem.reflective_boots.name=反射靴子
+metaitem.reflective_boots.tooltip=减少酷热环境对你的伤害
+metaitem.filtered_tank.name=过滤式呼吸罐
+metaitem.filtered_tank.tooltip=提供长时间的氧气
+metaitem.nomex_mask.name=Nomex防毒面具
+metaitem.nomex_mask.tooltip=无限期地待在地幔层！
+metaitem.nomex_chestplate.name=Nomex呼吸罐
+metaitem.nomex_chestplate.tooltip=无限期地待在地幔层！
+metaitem.nomex_leggings.name=Nomex护腿
+metaitem.nomex_leggings.tooltip=无限期地待在地幔层！
+metaitem.nomex_boots.name=Nomex靴子
+metaitem.nomex_boots.tooltip=无限期地待在地幔层！
+
+supersymmetry.oxygen=剩余空气：§b%s/%s秒§r
+supersymmetry.unlimited_oxygen=剩余空气：§b无限§r
+supersymmetry.seconds_left=剩余时间：§2%s秒§r
+supersymmetry.unlimited=剩余时间：§b无限§r
+
+#Hardened blocks
+tile.hardened_blocks.lair7.name=硬化Lair 7
+tile.hardened_blocks.lair10.name=硬化Lair 10
+tile.hardened_blocks.lair11.name=硬化Lair 11
+tile.hardened_blocks.kryp7.name=硬化Kryp 7
+tile.hardened_blocks.kryp8.name=硬化Kryp 8
+
+#Custom Sheets
+tile.custom_sheets.darkwhitemetalsheet.name=亮灰色金属板方块
+tile.custom_sheets.lightergraymetalsheet.name=银灰色金属板方块

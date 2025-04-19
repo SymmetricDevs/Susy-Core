@@ -331,12 +331,28 @@ public class SuSyRecipeMaps {
             .setSlotOverlay(true, false, GuiTextures.FURNACE_OVERLAY_2)
             .setSound(GTSoundEvents.FURNACE);
 
+    public static final RecipeMap<SimpleRecipeBuilder> SCRAP_RECYCLER = new RecipeMap<>("scrap_recycler", 1, 9, 0, 0, new SimpleRecipeBuilder(), false)
+            .setSound(GTSoundEvents.ASSEMBLER);
+
+    public static final RecipeMap<SimpleRecipeBuilder> ROCKET_ASSEMBLER = new RecipeMap<>("rocket_assembler", 25, 2, 5, 0, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.ASSEMBLER);
+    public static final RecipeMap<SimpleRecipeBuilder> ROCKET_LAUNCH_PAD = new RecipeMap<>("rocket_launch_pad", 1, 1, 3, 0, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.ASSEMBLER);
 
     public static final RecipeMap<NoEnergyRecipeBuilder> JET_WINGPACK_FUELS = new RecipeMap<>("jet_wingpack_fuels", 0, 0, 1, 0, new NoEnergyRecipeBuilder(), false)
             .setSlotOverlay(false, false, GuiTextures.DARK_CANISTER_OVERLAY)
             .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.TURBINE)
             .allowEmptyOutput();
+
+    public static final RecipeMap<SimpleRecipeBuilder> CURTAIN_COATER = new RecipeMap<>("curtain_coater", 1, 1, 1, 0, new SimpleRecipeBuilder().EUt(VA[LV]), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.BATH);
+
+    public static final RecipeMap<SimpleRecipeBuilder> MILLING_RECIPES = new RecipeMap<>("milling", 2, 1, 0, 0, new SimpleRecipeBuilder().EUt(VA[LV]), false)
+            .setSound(GTSoundEvents.CUT);
 
     public static void init(){
         RecipeMaps.SIFTER_RECIPES.setMaxFluidInputs(1);

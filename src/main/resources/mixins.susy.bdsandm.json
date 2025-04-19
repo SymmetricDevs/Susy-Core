@@ -6,8 +6,6 @@
   "compatibilityLevel" : "JAVA_8",
   "mixins" : [
     "BlockBarrelBaseMixin",
-    "ItemBarrelMixin",
-    "TileEntityBarrelMixin",
-    "TileEntityCrateMixin"
+    "ItemBarrelMixin"
   ]
 }

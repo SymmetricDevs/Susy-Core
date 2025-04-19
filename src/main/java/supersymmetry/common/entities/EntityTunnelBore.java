@@ -301,7 +301,7 @@ public class EntityTunnelBore extends Locomotive {
                 90,
                 1,
                 TrackPositionType.FIXED,
-                TrackSmoothing.BOTH,
+                TrackSmoothing.NEITHER,
                 TrackDirection.NONE,
                 ItemStack.EMPTY,
                 this.getRailBedFill(),

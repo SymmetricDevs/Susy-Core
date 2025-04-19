@@ -1,5 +1,6 @@
 package supersymmetry;
 
+import com.cleanroommc.modularui.factory.GuiManager;
 import gregtech.GTInternalTags;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.fml.common.Mod;
@@ -12,6 +13,7 @@ import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.capability.SuSyCapabilities;
+import supersymmetry.api.metatileentity.MetaTileEntityGuiFactory;
 import supersymmetry.api.sound.SusySounds;
 import supersymmetry.common.CommonProxy;
 import supersymmetry.common.SusyMetaEntities;
@@ -50,6 +52,7 @@ public class Supersymmetry {
 
     @Mod.EventHandler
     public void onPreInit(@NotNull FMLPreInitializationEvent event) {
+
         proxy.preLoad();
 
         SuSyMetaBlocks.init();
@@ -57,6 +60,8 @@ public class Supersymmetry {
         SuSyBlocks.init();
 
         SusySounds.registerSounds();
+
+        GuiManager.registerFactory(MetaTileEntityGuiFactory.INSTANCE);
 
         SuSyMetaTileEntities.init();
         SuSyCapabilities.init();
