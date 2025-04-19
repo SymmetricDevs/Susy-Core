@@ -43,28 +43,28 @@ public class SuSyRecipeLoader {
         cam72cam.mod.item.ItemStack is = new cam72cam.mod.item.ItemStack(IRItems.ITEM_ROLLING_STOCK, 1);
         is.setTagCompound(tag);
         SuSyRecipeMaps.RAILROAD_ENGINEERING_STATION_RECIPES.recipeBuilder()
-                .input(plate, Materials.Steel)
-                .input(plate, Materials.Iron)
-                .outputs(is.internal)
-                .EUt(GTValues.VA[4])
-                .duration(1000)
-                .buildAndRegister();
+            .input(plate, Materials.Steel)
+            .input(plate, Materials.Iron)
+            .outputs(is.internal)
+            .EUt(GTValues.VA[4])
+            .duration(1000)
+            .buildAndRegister();
 
         SuSyRecipeMaps.RAILROAD_ENGINEERING_STATION_RECIPES.recipeBuilder()
-                .inputNBT(IRItems.ITEM_ROLLING_STOCK.internal, NBTMatcher.EQUAL_TO, NBTCondition.create(NBTTagType.STRING, "defID", "rolling_stock/locomotives/black_mesa_tram.json"))
-                .outputs(is.internal)
-                .EUt(GTValues.VA[4])
-                .duration(4000)
-                .buildAndRegister();
+            .inputNBT(IRItems.ITEM_ROLLING_STOCK.internal, NBTMatcher.EQUAL_TO, NBTCondition.create(NBTTagType.STRING, "defID", "rolling_stock/locomotives/black_mesa_tram.json"))
+            .outputs(is.internal)
+            .EUt(GTValues.VA[4])
+            .duration(4000)
+            .buildAndRegister();
 
 
         SuSyRecipeMaps.DRONE_PAD.recipeBuilder()
-                .input(ingot, Materials.Iron)
-                .output(Items.BEEF, 16)
-                .duration(10)
-                .dimension(0)
-                .EUt(2)
-                .buildAndRegister();
+            .input(ingot, Materials.Iron)
+            .output(Items.BEEF, 16)
+            .duration(10)
+            .dimension(0)
+            .EUt(2)
+            .buildAndRegister();
         */
     }
 
@@ -73,9 +73,9 @@ public class SuSyRecipeLoader {
         for (SusyStoneVariantBlock.StoneVariant shape : SusyStoneVariantBlock.StoneVariant.values()) {
             SusyStoneVariantBlock block = SuSyBlocks.SUSY_STONE_BLOCKS.get(shape);
             susyVariantListMap.put(shape,
-                    Arrays.stream(SusyStoneVariantBlock.StoneType.values())
-                            .map(block::getItemVariant)
-                            .collect(Collectors.toList()));
+                Arrays.stream(SusyStoneVariantBlock.StoneType.values())
+                    .map(block::getItemVariant)
+                    .collect(Collectors.toList()));
         }
         List<ItemStack> susycobbles = susyVariantListMap.get(SusyStoneVariantBlock.StoneVariant.COBBLE);
         List<ItemStack> susysmooths = susyVariantListMap.get(SusyStoneVariantBlock.StoneVariant.SMOOTH);
@@ -84,9 +84,9 @@ public class SuSyRecipeLoader {
         for (StoneVariantBlock.StoneVariant shape : StoneVariantBlock.StoneVariant.values()) {
             StoneVariantBlock block = MetaBlocks.STONE_BLOCKS.get(shape);
             variantListMap.put(shape,
-                    Arrays.stream(StoneVariantBlock.StoneType.values())
-                            .map(block::getItemVariant)
-                            .collect(Collectors.toList()));
+                Arrays.stream(StoneVariantBlock.StoneType.values())
+                    .map(block::getItemVariant)
+                    .collect(Collectors.toList()));
         }
 
         List<ItemStack> cobbles = variantListMap.get(StoneVariantBlock.StoneVariant.COBBLE);
@@ -102,9 +102,9 @@ public class SuSyRecipeLoader {
     private static void registerCobbleRecipe(List<ItemStack> smoothStack, List<ItemStack> cobbleStack) {
         for (int i = 0; i < smoothStack.size(); i++) {
             FORGE_HAMMER_RECIPES.recipeBuilder()
-                    .inputs(smoothStack.get(i))
-                    .outputs(cobbleStack.get(i))
-                    .duration(12).EUt(4).buildAndRegister();
+                .inputs(smoothStack.get(i))
+                .outputs(cobbleStack.get(i))
+                .duration(12).EUt(4).buildAndRegister();
         }
     }
 
@@ -113,10 +113,10 @@ public class SuSyRecipeLoader {
             ModHandler.addSmeltingRecipe(roughStack.get(i), smoothStack.get(i), 0.1f);
 
             EXTRUDER_RECIPES.recipeBuilder()
-                    .inputs(roughStack.get(i))
-                    .notConsumable(SHAPE_EXTRUDER_BLOCK.getStackForm())
-                    .outputs(smoothStack.get(i))
-                    .duration(24).EUt(8).buildAndRegister();
+                .inputs(roughStack.get(i))
+                .notConsumable(SHAPE_EXTRUDER_BLOCK.getStackForm())
+                .outputs(smoothStack.get(i))
+                .duration(24).EUt(8).buildAndRegister();
         }
     }
 
@@ -131,13 +131,13 @@ public class SuSyRecipeLoader {
     private static void registerMacerationToStoneDustRecipe() {
         for (SusyStoneVariantBlock.StoneType stoneType : SusyStoneVariantBlock.StoneType.values()) {
             MACERATOR_RECIPES.recipeBuilder()
-                    .inputs(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH).getItemVariant(stoneType))
-                    .output(dust, stoneType.getMaterial())
-                    .buildAndRegister();
-            MACERATOR_RECIPES.recipeBuilder()
-                    .inputs(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.COBBLE).getItemVariant(stoneType))
-                    .output(dust, stoneType.getMaterial())
-                    .buildAndRegister();
+                .inputs(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH).getItemVariant(stoneType))
+                .output(dust, stoneType.getMaterial())
+                .buildAndRegister();
+        MACERATOR_RECIPES.recipeBuilder()
+                .inputs(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.COBBLE).getItemVariant(stoneType))
+                .output(dust, stoneType.getMaterial())
+                .buildAndRegister();
         }
     }
 }
