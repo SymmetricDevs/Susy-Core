@@ -22,7 +22,7 @@ public abstract class RecipeMapMixin implements RecipeMapExtension {
     public abstract String getUnlocalizedName();
 
     @Unique
-    //@Override
+    @Override
     public void modifyMaxOutputs(int maxOutputs) {
         if (modifyItemOutputs) {
             this.maxOutputs = maxOutputs;
