@@ -69,7 +69,6 @@ public class SuSyMetaBlocks {
                     Arrays.fill(materials, Materials.NULL);
                     blocksToGenerate.put(metaBlockID, materials);
                 }
-
                 (blocksToGenerate.get(metaBlockID))[subBlockID] = material;
             }
         }
@@ -81,7 +80,6 @@ public class SuSyMetaBlocks {
     public static void registerItemModels() {
         //registers blockstates with associated models properly by calling sheeted frame's model register recipes
         SHEETED_FRAMES.values().stream().distinct().forEach(BlockSheetedFrame::onModelRegister);
-
     }
 
     @SideOnly(Side.CLIENT)

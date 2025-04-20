@@ -346,7 +346,8 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
 
         modifyItem("type", "fairing");
         modifyItem("height", Integer.toString((int)fairingBB.maxY-(int)fairingBB.minY));
-        modifyItem("width", Integer.toString((int)Math.max(fairingBB.maxX-fairingBB.minX, fairingBB.maxZ-fairingBB.minZ)));
+        Double bottomRadius = struct.getApproximateRadius(struct.getLowestLayer(blocksConnected));
+        modifyItem("bottom_radius", bottomRadius.toString());
 
         struct.status = BuildStat.SUCCESS;
     }
@@ -527,7 +528,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             }
             prevAir = air;
         }
-        double radius = struct.getApproximateRadius(hullBlocks);
+        double radius = struct.getApproximateRadius(struct.getLowestLayer(hullBlocks));
         double mass = 0;
         for (BlockPos block : blocks) {
             mass += getMass(getWorld().getBlockState(block));
@@ -536,7 +537,6 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         modifyItem("radius", Double.valueOf(radius).toString());
         modifyItem("type", "interstage");
         struct.status = BuildStat.SUCCESS;
-
     }
 
     private double getMass(IBlockState state) {

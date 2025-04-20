@@ -8,7 +8,7 @@ import supersymmetry.api.blocks.VariantDirectionalCoverableBlock;
 public class BlockRoomPadding extends VariantDirectionalCoverableBlock<BlockRoomPadding.CoveringType> {
     public BlockRoomPadding() {
         super(Material.IRON);
-        setTranslationKey("room_padding");
+        setTranslationKey("spacecraft_room_padding");
         setHardness(5f);
         setResistance(15f);
         setSoundType(SoundType.CLOTH);

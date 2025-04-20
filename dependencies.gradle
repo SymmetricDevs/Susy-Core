@@ -21,6 +21,8 @@
  */
 dependencies {
 
+    implementation 'org.reflections:reflections:0.10.2'
+
     // CCL 3.2.3.358
     implementation rfg.deobf('curse.maven:codechicken-lib-1-8-242818:2779848')
     // GTCEu 2.8.10 beta

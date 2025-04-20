@@ -8,7 +8,7 @@ import net.minecraft.util.IStringSerializable;
 public class BlockLifeSupport extends VariantBlock<BlockLifeSupport.Ability> {
     public BlockLifeSupport() {
         super(net.minecraft.block.material.Material.IRON);
-        setTranslationKey("life_support");
+        setTranslationKey("spacecraft_life_support");
         setHardness(5f);
         setResistance(15f);
         setSoundType(SoundType.METAL);

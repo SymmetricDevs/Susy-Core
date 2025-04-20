@@ -313,6 +313,10 @@ public class StructAnalysis {
         return radius / blocks.size();
     }
 
+    public Set<BlockPos> getLowestLayer(Set<BlockPos> set) {
+        return set.stream().filter(bp -> bp.getY() == set.stream().map(Vec3i::getY).min(Integer::compare).get()).collect(Collectors.toSet());
+    }
+
     // Used to analyze fairing connectors
     public boolean isFacingOutwards(BlockPos bp) {
         if (!world.getBlockState(bp).getPropertyKeys().contains(FACING)) {

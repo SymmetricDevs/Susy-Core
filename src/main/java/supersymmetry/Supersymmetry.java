@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import org.jetbrains.annotations.NotNull;
+import org.reflections.Reflections;
 import supersymmetry.api.capability.SuSyCapabilities;
 import supersymmetry.api.metatileentity.MetaTileEntityGuiFactory;
 import supersymmetry.api.sound.SusySounds;
@@ -29,6 +30,8 @@ import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 import supersymmetry.loaders.SuSyIRLoader;
 
+import java.sql.Ref;
+
 @Mod(name = Supersymmetry.NAME, modid = Supersymmetry.MODID, version = Tags.VERSION, dependencies = GTInternalTags.DEP_VERSION_STRING + ";required-after:gcym;after:immersiverailroading")
 
 public class Supersymmetry {
@@ -42,6 +45,8 @@ public class Supersymmetry {
     @Mod.Instance(Supersymmetry.MODID)
     public static Supersymmetry instance;
 
+    public static Reflections reflectionHandler;
+
     @Mod.EventHandler
     public void onModConstruction(FMLConstructionEvent event) {
         //This is now a config option I think
@@ -54,6 +59,8 @@ public class Supersymmetry {
     public void onPreInit(@NotNull FMLPreInitializationEvent event) {
 
         proxy.preLoad();
+
+        reflectionHandler = new Reflections("supersymmetry");
 
         SuSyMetaBlocks.init();
         SuSyMetaItems.initMetaItems();
