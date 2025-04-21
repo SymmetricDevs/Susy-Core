@@ -25,14 +25,15 @@ import supersymmetry.api.metatileentity.CatalystMachineMetaTileEntity;
 import supersymmetry.api.metatileentity.ContinuousMachineMetaTileEntity;
 import supersymmetry.api.metatileentity.PseudoMultiMachineMetaTileEntity;
 import supersymmetry.api.metatileentity.PseudoMultiSteamMachineMetaTileEntity;
+import supersymmetry.api.metatileentity.logistics.MetaTileEntityOverflowValve;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicator;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicators;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.renderer.textures.SusyTextures;
-import supersymmetry.common.metatileentities.multi.MetaTileEntityLandingPad;
 import supersymmetry.common.metatileentities.logistics.MetaTileEntityBridge;
 import supersymmetry.common.metatileentities.logistics.MetaTileEntityExtender;
+import supersymmetry.common.metatileentities.multi.MetaTileEntityLandingPad;
 import supersymmetry.common.metatileentities.multi.electric.*;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCoagulationTank;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimitiveMudPump;
@@ -191,6 +192,9 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityExtender INV_TANK_EXTENDER;
     public static MetaTileEntityExtender UNIVERSAL_EXTENDER;
 
+    public static MetaTileEntityOverflowValve ITEM_OVERFLOW_VALVE;
+    public static MetaTileEntityOverflowValve FLUID_OVERFLOW_VALVE;
+
     public static final MetaTileEntityMultiFluidHatch[] SUSY_QUADRUPLE_IMPORT_HATCH = new MetaTileEntityMultiFluidHatch[3]; // LV-HV
     public static final MetaTileEntityMultiFluidHatch[] SUSY_NONUPLE_IMPORT_HATCH = new MetaTileEntityMultiFluidHatch[3];   // LV-HV
     public static final MetaTileEntityMultiFluidHatch[] SUSY_QUADRUPLE_EXPORT_HATCH = new MetaTileEntityMultiFluidHatch[3]; // LV-HV
@@ -273,6 +277,9 @@ public class SuSyMetaTileEntities {
         PRIMITIVE_SMELTER = registerMetaTileEntity(14800, new MetaTileEntityPrimitiveSmelter(susyId("primitive_smelter")));
         PRIMITIVE_ITEM_IMPORT = registerMetaTileEntity(14801, new MetaTileEntityPrimitiveItemBus(susyId("primitive_item_import"), false));
         PRIMITIVE_ITEM_EXPORT = registerMetaTileEntity(14802, new MetaTileEntityPrimitiveItemBus(susyId("primitive_item_export"), true));
+
+        ITEM_OVERFLOW_VALVE = registerMetaTileEntity(14803, new MetaTileEntityOverflowValve(susyId("item_overflow_valve"), false));
+        FLUID_OVERFLOW_VALVE = registerMetaTileEntity(14804, new MetaTileEntityOverflowValve(susyId("fluid_overflow_valve"), true));
 
         //oil stuff
         COKING_TOWER = registerMetaTileEntity(14635, new MetaTileEntityCokingTower(susyId("coking_tower")));

@@ -15,14 +15,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ExtenderRender implements IIconRegister {
+public class ExtenderRenderer implements IIconRegister {
 
     private final String basePath;
 
     @SideOnly(Side.CLIENT)
     private TextureAtlasSprite[] textures;
 
-    public ExtenderRender(String basePath) {
+    public ExtenderRenderer(String basePath) {
         this.basePath = basePath;
         Textures.iconRegisters.add(this);
     }
