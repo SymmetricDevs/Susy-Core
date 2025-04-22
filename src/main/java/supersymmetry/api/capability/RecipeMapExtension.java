@@ -1,8 +1,8 @@
 package supersymmetry.api.capability;
 
-import net.minecraftforge.fml.common.Mod;
-import supersymmetry.Supersymmetry;
-
 public interface RecipeMapExtension {
+    void modifyMaxInputs(int maxInputs);
     void modifyMaxOutputs(int maxOutputs);
+    void modifyMaxFluidInputs(int maxFluidInputs);
+    void modifyMaxFluidOutputs(int maxFluidOutputs);
 }
