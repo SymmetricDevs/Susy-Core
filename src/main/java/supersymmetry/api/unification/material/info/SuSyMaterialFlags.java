@@ -6,7 +6,8 @@ import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 
 public class SuSyMaterialFlags {
 
-    public static MaterialFlag GENERATE_CATALYST_PELLET = (new MaterialFlag.Builder("generate_catalyst_bed"))
+
+    public static MaterialFlag GENERATE_CATALYST_PELLET = (new MaterialFlag.Builder("generate_catalyst_pellet"))
             .requireProps(new PropertyKey[]{PropertyKey.DUST})
             .build();
 
@@ -42,6 +43,10 @@ public class SuSyMaterialFlags {
     public static MaterialFlag GENERATE_WET_DUST = (new MaterialFlag.Builder("generate_wet_dust"))
             .requireProps(new PropertyKey[]{PropertyKey.DUST})
             .build();
+
+    public static final MaterialFlag GENERATE_ELECTRODE = (new MaterialFlag.Builder("generate_electrode"))
+            .requireProps(new PropertyKey[]{PropertyKey.DUST})
+            .build();;
 
 
     public SuSyMaterialFlags() {}
