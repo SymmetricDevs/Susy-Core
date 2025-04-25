@@ -17,6 +17,15 @@
       }
     ]
   },
+  "entity.rocket_launch": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "susy:rocket_launch",
+        "stream": false
+      }
+    ]
+  },
   "item.jet_wingpack_engine_active" : {
     "category" : "player",
     "sounds" : [

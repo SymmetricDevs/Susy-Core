@@ -30,6 +30,7 @@ import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicators;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.metatileentities.multi.MetaTileEntityLandingPad;
 import supersymmetry.common.metatileentities.logistics.MetaTileEntityBridge;
 import supersymmetry.common.metatileentities.logistics.MetaTileEntityExtender;
 import supersymmetry.common.metatileentities.multi.electric.*;
@@ -42,6 +43,9 @@ import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityStrand
 import supersymmetry.common.metatileentities.multiblockpart.SusyMetaTileEntityDumpingHatch;
 import supersymmetry.common.metatileentities.multiblockpart.SusyMetaTileEntityEnergyHatch;
 import supersymmetry.common.metatileentities.single.electric.*;
+import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityLocomotiveController;
+import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityStockFluidExchanger;
+import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityStockItemExchanger;
 import supersymmetry.common.metatileentities.single.steam.MetaTileEntitySteamLatexCollector;
 import supersymmetry.common.metatileentities.single.steam.SuSySimpleSteamMetaTileEntity;
 import supersymmetry.common.metatileentities.storage.MetaTileEntityPlasticCan;
@@ -169,7 +173,15 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityPrimitiveItemBus PRIMITIVE_ITEM_IMPORT;
     public static MetaTileEntityPrimitiveItemBus PRIMITIVE_ITEM_EXPORT;
 
+    //Space Multis
+    public static MetaTileEntityLandingPad LANDING_PAD;
+    public static MetaTileEntityScrapRecycler SCRAP_RECYCLER;
+    public static MetaTileEntityRocketAssembler ROCKET_ASSEMBLER;
+    public static MetaTileEntityRocketProgrammer ROCKET_PROGRAMMER;
     public static MetaTileEntitySieveDistillationTower SIEVE_DISTILLATION_TOWER;
+
+    public static MetaTileEntityCurtainCoater CURTAIN_COATER;
+    public static MetaTileEntityPreciseMillingMachine MILLING;
 
     public static MetaTileEntityBridge INV_BRIDGE;
     public static MetaTileEntityBridge TANK_BRIDGE;
@@ -202,6 +214,11 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityBilletMold BILLET_MOLD;
     public static MetaTileEntitySlabMold SLAB_MOLD;
     public static MetaTileEntityGasAtomizer GAS_ATOMIZER;
+    //public static BlockStockDetector STOCK_DETECTOR;
+    public static MetaTileEntityStockFluidExchanger STOCK_FLUID_EXCHANGER;
+    public static MetaTileEntityStockItemExchanger STOCK_ITEM_EXCHANGER;
+    //public static MetaTileEntityStockReader STOCK_CONTENT_READER;
+    public static MetaTileEntityLocomotiveController STOCK_CONTROLLER;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -283,6 +300,8 @@ public class SuSyMetaTileEntities {
         registerSimpleMTE(CVD, 12, 14653, "cvd", SuSyRecipeMaps.CVD_RECIPES, SusyTextures.CVD_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         registerSimpleMTE(ION_IMPLANTER, 12, 14666, "ion_implanter", SuSyRecipeMaps.ION_IMPLANTATION_RECIPES, SusyTextures.ION_IMPLANTER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
 
+        CURTAIN_COATER = registerMetaTileEntity(14513, new MetaTileEntityCurtainCoater(susyId("curtain_coater")));
+        MILLING = registerMetaTileEntity(14514, new MetaTileEntityPreciseMillingMachine(susyId("milling")));
 
         //thermodynamic stuff
         registerSimpleMTE(FLUID_COMPRESSOR, 12, 15000, "fluid_compressor", SuSyRecipeMaps.FLUID_COMPRESSOR_RECIPES, SusyTextures.FLUID_COMPRESSOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
@@ -390,6 +409,17 @@ public class SuSyMetaTileEntities {
         }
         SusyLog.logger.debug("Available ID(s) are: {}", ids);
 
+        //STOCK_DETECTOR = registerMetaTileEntity(18000, new MetaTileEntityStockDetector(susyId("stock_detector")));
+        STOCK_FLUID_EXCHANGER = registerMetaTileEntity(18001, new MetaTileEntityStockFluidExchanger(susyId("stock_fluid_exchanger")));
+        STOCK_ITEM_EXCHANGER = registerMetaTileEntity(18002, new MetaTileEntityStockItemExchanger(susyId("stock_item_exchanger")));
+        //STOCK_CONTENT_READER = registerMetaTileEntity(18003, new MetaTileEntityStockReader(susyId("stock_content_reader")));
+        STOCK_CONTROLLER = registerMetaTileEntity(18004, new MetaTileEntityLocomotiveController(susyId("stock_controller")));
+      
+        //Space machines
+        LANDING_PAD = registerMetaTileEntity(18005, new MetaTileEntityLandingPad(susyId("landing_pad")));
+        SCRAP_RECYCLER = registerMetaTileEntity(18006, new MetaTileEntityScrapRecycler(susyId("scrap_recycler")));
+        ROCKET_ASSEMBLER = registerMetaTileEntity(18007, new MetaTileEntityRocketAssembler(susyId("rocket_assembler")));
+        ROCKET_PROGRAMMER = registerMetaTileEntity(18008, new MetaTileEntityRocketProgrammer(susyId("rocket_programmer")));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name, RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator, ICubeRenderer texture, boolean isBricked) {
@@ -429,7 +459,7 @@ public class SuSyMetaTileEntities {
         return new ResourceLocation(GTValues.MODID, name);
     }
 
-    static{
+    static {
         EVAPORATION_POOL_ID = 17006;
 
         STEAM_LATEX_COLLECTOR = new PseudoMultiSteamMachineMetaTileEntity[2];
