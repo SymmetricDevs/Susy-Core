@@ -359,5 +359,16 @@ public class SuSyRecipeMaps {
         /*trainvoi - this code is intentionally left behind in case we have to use it again
         RecipeMaps.CHEMICAL_BATH_RECIPES.setMaxFluidOutputs(3);
         ((RecipeMapExtension) RecipeMaps.CHEMICAL_BATH_RECIPES).modifyMaxOutputs(3);*/
+
+        RecipeMaps.MIXER_RECIPES.onRecipeBuild(recipeBuilder -> SuSyRecipeMaps.BLENDER_RECIPES.recipeBuilder()
+                .inputs(recipeBuilder.getInputs().toArray(new GTRecipeInput[0]))
+                .fluidInputs(recipeBuilder.getFluidInputs())
+                .outputs(recipeBuilder.getOutputs())
+                .chancedOutputs(recipeBuilder.getChancedOutputs())
+                .fluidOutputs(recipeBuilder.getFluidOutputs())
+                .cleanroom(recipeBuilder.getCleanroom())
+                .duration(recipeBuilder.getDuration())
+                .EUt(recipeBuilder.getEUt())
+                .buildAndRegister());
     }
 }
