@@ -102,10 +102,9 @@ public class SuSyRecipeLoader {
     private static void registerCobbleRecipe(List<ItemStack> smoothStack, List<ItemStack> cobbleStack) {
         for (int i = 0; i < smoothStack.size(); i++) {
             FORGE_HAMMER_RECIPES.recipeBuilder()
-                    .circuitMeta(2)
                     .inputs(smoothStack.get(i))
                     .outputs(cobbleStack.get(i))
-                    .duration(16).EUt(10).buildAndRegister();
+                    .duration(12).EUt(4).buildAndRegister();
         }
     }
 
