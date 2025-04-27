@@ -3,15 +3,10 @@ package supersymmetry.api.recipes;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.widgets.ProgressWidget;
 import gregtech.api.recipes.RecipeMap;
-import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.recipes.builders.FuelRecipeBuilder;
 import gregtech.api.recipes.builders.PrimitiveRecipeBuilder;
 import gregtech.api.recipes.builders.SimpleRecipeBuilder;
-import gregtech.api.recipes.ingredients.GTRecipeInput;
-import gregtech.api.unification.material.Materials;
 import gregtech.core.sound.GTSoundEvents;
-import gregtechfoodoption.recipe.GTFORecipeMaps;
-import supersymmetry.api.capability.RecipeMapExtension;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.recipes.builders.*;
 
@@ -80,7 +75,7 @@ public class SuSyRecipeMaps {
             .setSlotOverlay(true, true, true, GuiTextures.BEAKER_OVERLAY_3)
             .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
-    public static final RecipeMap<SimpleRecipeBuilder> CRYSTALLIZER_RECIPES = new RecipeMap<>("crystallizer",3, 3, 3, 3, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<SimpleRecipeBuilder> CRYSTALLIZER_RECIPES = new RecipeMap<>("crystallizer", 3, 3, 3, 3, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
     public static final RecipeMap<SimpleRecipeBuilder> DRYER_RECIPES = new RecipeMap<>("dryer", 2, 2, 2, 2, new SimpleRecipeBuilder(), false)
@@ -354,21 +349,4 @@ public class SuSyRecipeMaps {
 
     public static final RecipeMap<SimpleRecipeBuilder> MILLING_RECIPES = new RecipeMap<>("milling", 2, 1, 0, 0, new SimpleRecipeBuilder().EUt(VA[LV]), false)
             .setSound(GTSoundEvents.CUT);
-
-    public static void init(){
-        /*trainvoi - this code is intentionally left behind in case we have to use it again
-        RecipeMaps.CHEMICAL_BATH_RECIPES.setMaxFluidOutputs(3);
-        ((RecipeMapExtension) RecipeMaps.CHEMICAL_BATH_RECIPES).modifyMaxOutputs(3);*/
-
-        RecipeMaps.MIXER_RECIPES.onRecipeBuild(recipeBuilder -> SuSyRecipeMaps.BLENDER_RECIPES.recipeBuilder()
-                .inputs(recipeBuilder.getInputs().toArray(new GTRecipeInput[0]))
-                .fluidInputs(recipeBuilder.getFluidInputs())
-                .outputs(recipeBuilder.getOutputs())
-                .chancedOutputs(recipeBuilder.getChancedOutputs())
-                .fluidOutputs(recipeBuilder.getFluidOutputs())
-                .cleanroom(recipeBuilder.getCleanroom())
-                .duration(recipeBuilder.getDuration())
-                .EUt(recipeBuilder.getEUt())
-                .buildAndRegister());
-    }
 }
