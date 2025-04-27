@@ -356,53 +356,8 @@ public class SuSyRecipeMaps {
             .setSound(GTSoundEvents.CUT);
 
     public static void init(){
-        RecipeMaps.SIFTER_RECIPES.setMaxFluidInputs(1);
-        RecipeMaps.SIFTER_RECIPES.setMaxFluidOutputs(1);
-        RecipeMaps.SIFTER_RECIPES.setMaxInputs(2);
-        RecipeMaps.CENTRIFUGE_RECIPES.setMaxFluidInputs(2);
-        RecipeMaps.CENTRIFUGE_RECIPES.setSlotOverlay(false, true, false, GuiTextures.CENTRIFUGE_OVERLAY);
-        RecipeMaps.MIXER_RECIPES.setMaxFluidInputs(3);
-        RecipeMaps.MIXER_RECIPES.setMaxFluidOutputs(2);
-        RecipeMaps.ARC_FURNACE_RECIPES.setMaxInputs(4);
-        RecipeMaps.ELECTROLYZER_RECIPES.setMaxInputs(4);
-        RecipeMaps.ELECTROLYZER_RECIPES.setMaxFluidOutputs(3);
-        RecipeMaps.ELECTROLYZER_RECIPES.setMaxOutputs(3);
-        RecipeMaps.ELECTROMAGNETIC_SEPARATOR_RECIPES.setMaxFluidOutputs(2);
-        RecipeMaps.ELECTROMAGNETIC_SEPARATOR_RECIPES.setMaxFluidInputs(1);
-        GTFORecipeMaps.GREENHOUSE_RECIPES.setMaxFluidInputs(4);
-        RecipeMaps.PYROLYSE_RECIPES.setMaxFluidOutputs(3);
-        RecipeMaps.ELECTROMAGNETIC_SEPARATOR_RECIPES.setSlotOverlay(false, false, SusyGuiTextures.ELECTROMAGNETIC_SEPARATOR_ITEM_OVERLAY);
-        RecipeMaps.ELECTROMAGNETIC_SEPARATOR_RECIPES.setSlotOverlay(false, true, SusyGuiTextures.ELECTROMAGNETIC_SEPARATOR_FLUID_OVERLAY);
-        RecipeMaps.SIFTER_RECIPES.setSlotOverlay(false, true, SusyGuiTextures.SIFTER_FLUID_OVERLAY);
-        RecipeMaps.SIFTER_RECIPES.setSlotOverlay(true, true, SusyGuiTextures.SIFTER_FLUID_OVERLAY);
-        RecipeMaps.SIFTER_RECIPES.setSlotOverlay(false, false, SusyGuiTextures.SIFTER_ITEM_INPUT_OVERLAY);
-        RecipeMaps.SIFTER_RECIPES.setSlotOverlay(true, false, SusyGuiTextures.SIFTER_ITEM_OUTPUT_OVERLAY);
-        RecipeMaps.LASER_ENGRAVER_RECIPES.setMaxFluidInputs(1);
-        RecipeMaps.GAS_TURBINE_FUELS.setMaxFluidInputs(3);
-        RecipeMaps.GAS_TURBINE_FUELS.setMaxFluidOutputs(1);
-        RecipeMaps.GAS_TURBINE_FUELS.setMaxInputs(1);
-        RecipeMaps.AUTOCLAVE_RECIPES.setMaxFluidInputs(2);
-        RecipeMaps.AUTOCLAVE_RECIPES.setMaxFluidOutputs(2);
-        RecipeMaps.CHEMICAL_BATH_RECIPES.setMaxFluidInputs(3);
+        /*trainvoi - this code is intentionally left behind in case we have to use it again
         RecipeMaps.CHEMICAL_BATH_RECIPES.setMaxFluidOutputs(3);
-        ((RecipeMapExtension) RecipeMaps.CHEMICAL_BATH_RECIPES).modifyMaxOutputs(3);
-        RecipeMaps.EXTRUDER_RECIPES.setMaxOutputs(3);
-        RecipeMaps.EXTRUDER_RECIPES.setMaxFluidInputs(1);
-        RecipeMaps.CUTTER_RECIPES.setMaxOutputs(4);
-        RecipeMaps.FORGE_HAMMER_RECIPES.setMaxInputs(2);
-        RecipeMaps.MACERATOR_RECIPES.setMaxInputs(2);
-        RecipeMaps.LARGE_CHEMICAL_RECIPES.setMaxInputs(4);
-        RecipeMaps.LARGE_CHEMICAL_RECIPES.setMaxFluidInputs(6);
-
-        RecipeMaps.MIXER_RECIPES.onRecipeBuild(recipeBuilder -> SuSyRecipeMaps.BLENDER_RECIPES.recipeBuilder()
-                .inputs(recipeBuilder.getInputs().toArray(new GTRecipeInput[0]))
-                .fluidInputs(recipeBuilder.getFluidInputs())
-                .outputs(recipeBuilder.getOutputs())
-                .chancedOutputs(recipeBuilder.getChancedOutputs())
-                .fluidOutputs(recipeBuilder.getFluidOutputs())
-                .cleanroom(recipeBuilder.getCleanroom())
-                .duration(recipeBuilder.getDuration())
-                .EUt(recipeBuilder.getEUt())
-                .buildAndRegister());
+        ((RecipeMapExtension) RecipeMaps.CHEMICAL_BATH_RECIPES).modifyMaxOutputs(3);*/
     }
 }
