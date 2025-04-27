@@ -199,6 +199,7 @@ item.material.oreprefix.fiber=%s Fiber
 item.material.oreprefix.fiberWet=Wet %s Fiber
 item.material.oreprefix.thread=%s Thread
 item.material.oreprefix.dustWet=Wet %s Dust
+item.material.oreprefix.electrode=%s Electrode
 
 susy.fluid.supercritical=Supercritical %s
 susy.fluid.impure_slurry=Impure %s Slurry
@@ -712,6 +713,23 @@ gregtech.machine.incinerator.tooltip.3=§8Don't worry about where the heavy meta
 gregtech.multiblock.incinerator.clogged=§4Clogged! (Is the top blocked?)
 gregtech.multiblock.incinerator.working=§2Clog-free
 
+gregtech.machine.strand_bus.import.name=Strand Import Bus
+gregtech.machine.strand_bus.export.name=Strand Export Bus
+gregtech.machine.turning_zone.name=Turning Zone
+gregtech.machine.strand_cooler.name=Strand Cooler
+gregtech.machine.rolling_mill.name=Rolling Mill
+gregtech.machine.cluster_mill.name=Cluster Mill
+gregtech.machine.hot_isostatic_press.name=Hot Isostatic Press
+gregtech.machine.flying_shear.name=Flying Shear
+gregtech.machine.slab_mold.name=Slab Mold
+gregtech.machine.billet_mold.name=Billet Mold
+gregtech.machine.gas_atomizer.name=Gas Atomizer
+tile.susy_multiblock_casing.monel_casing.name=Cryogenic Monel 500 Casing
+tile.susy_multiblock_casing.monel_casing_pipe.name=Cryogenic Monel 500 Pipe Casing
+tile.susy_multiblock_casing.copper_casing_pipe.name=Conductive Copper Pipe Casing
+tile.metallurgy.hydraulic_cylinder.name=Hydraulic Cylinder
+tile.metallurgy_2.flying_shear_saw.name=Flying Shear Saw
+tile.metallurgy_roll.roll.name=Roll
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
 recipemap.latex_collector.name=Arboreal Collector

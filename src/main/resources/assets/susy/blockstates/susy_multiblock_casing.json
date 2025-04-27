@@ -15,12 +15,6 @@
         "all" : "gregtech:blocks/multiblock_casing/silicon_carbide_casing"
       }
     },
-    "variant=incoloy_nine_zero_eight_casing": {
-      "model" : "minecraft:cube_all",
-      "textures" : {
-        "all" : "gregtech:blocks/multiblock_casing/incoloy_908_casing"
-      }
-    },
     "variant=monel_casing" : {
       "model" : "minecraft:cube_all",
       "textures" : {

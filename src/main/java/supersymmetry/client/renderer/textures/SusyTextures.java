@@ -83,7 +83,6 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer MILLING_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/milling");
 
     public static final SimpleOverlayRenderer SILICON_CARBIDE_CASING = new SimpleOverlayRenderer("multiblock_casing/silicon_carbide_casing");
-    public static final SimpleOverlayRenderer INCOLOY_908_CASING = new SimpleOverlayRenderer("multiblock_casing/incoloy_908_casing");
     public static final SimpleOverlayRenderer MONEL_500_CASING = new SimpleOverlayRenderer("multiblock_casing/monel_500_casing");
 
     public static final SimpleOverlayRenderer ULV_STRUCTURAL_CASING = new SimpleOverlayRenderer("multiblock_casing/ulv_structural_casing");
