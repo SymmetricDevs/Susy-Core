@@ -36,6 +36,7 @@ public abstract class RecipeMapMixin implements RecipeMapExtension {
             throw new UnsupportedOperationException("Cannot change max item input amount for " + this.getUnlocalizedName());
         }
     }
+
     @Unique
     @Override
     public void modifyMaxOutputs(int maxOutputs) {
@@ -45,6 +46,7 @@ public abstract class RecipeMapMixin implements RecipeMapExtension {
             throw new UnsupportedOperationException("Cannot change max item output amount for " + this.getUnlocalizedName());
         }
     }
+
     @Unique
     @Override
     public void modifyMaxFluidInputs(int maxFluidInputs) {
@@ -54,6 +56,7 @@ public abstract class RecipeMapMixin implements RecipeMapExtension {
             throw new UnsupportedOperationException("Cannot change max fluid input amount for " + this.getUnlocalizedName());
         }
     }
+
     @Unique
     @Override
     public void modifyMaxFluidOutputs(int maxFluidOutputs) {

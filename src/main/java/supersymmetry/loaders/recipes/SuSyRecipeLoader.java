@@ -131,12 +131,10 @@ public class SuSyRecipeLoader {
     private static void registerMacerationToStoneDustRecipe() {
         for (SusyStoneVariantBlock.StoneType stoneType : SusyStoneVariantBlock.StoneType.values()) {
             MACERATOR_RECIPES.recipeBuilder()
-                    .circuitMeta(2)
                     .inputs(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH).getItemVariant(stoneType))
                     .output(dust, stoneType.getMaterial())
                     .buildAndRegister();
             MACERATOR_RECIPES.recipeBuilder()
-                    .circuitMeta(2)
                     .inputs(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.COBBLE).getItemVariant(stoneType))
                     .output(dust, stoneType.getMaterial())
                     .buildAndRegister();

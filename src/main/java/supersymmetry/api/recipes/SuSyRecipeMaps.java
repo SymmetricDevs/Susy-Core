@@ -385,7 +385,6 @@ public class SuSyRecipeMaps {
         RecipeMaps.AUTOCLAVE_RECIPES.setMaxFluidOutputs(2);
         RecipeMaps.CHEMICAL_BATH_RECIPES.setMaxFluidInputs(3);
         RecipeMaps.CHEMICAL_BATH_RECIPES.setMaxFluidOutputs(3);
-        //RecipeMaps.CHEMICAL_BATH_RECIPES.setMaxOutputs(3);
         ((RecipeMapExtension) RecipeMaps.CHEMICAL_BATH_RECIPES).modifyMaxOutputs(3);
         RecipeMaps.EXTRUDER_RECIPES.setMaxOutputs(3);
         RecipeMaps.EXTRUDER_RECIPES.setMaxFluidInputs(1);
@@ -405,11 +404,5 @@ public class SuSyRecipeMaps {
                 .duration(recipeBuilder.getDuration())
                 .EUt(recipeBuilder.getEUt())
                 .buildAndRegister());
-
-        /*SuSyRecipeMaps.EVAPORATION_POOL.recipeBuilder()
-                .fluidInputs(Materials.Water.getFluid(1000))
-                .Jt(300)
-                .duration(10)
-                .buildAndRegister();*/
     }
 }
