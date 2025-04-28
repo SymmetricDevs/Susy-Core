@@ -388,7 +388,6 @@ public class SuSyRecipeMaps {
         RecipeMaps.EXTRUDER_RECIPES.setMaxOutputs(3);
         RecipeMaps.EXTRUDER_RECIPES.setMaxFluidInputs(1);
         RecipeMaps.CUTTER_RECIPES.setMaxOutputs(4);
-        RecipeMaps.FORGE_HAMMER_RECIPES.setMaxInputs(2);
         RecipeMaps.LARGE_CHEMICAL_RECIPES.setMaxInputs(4);
         RecipeMaps.LARGE_CHEMICAL_RECIPES.setMaxFluidInputs(6);
 

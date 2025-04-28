@@ -1,25 +1,19 @@
 package supersymmetry.loaders.recipes;
 
 import gregtech.api.recipes.ModHandler;
-import gregtech.api.recipes.category.RecipeCategories;
-import gregtech.api.recipes.ingredients.GTRecipeOreInput;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
 import supersymmetry.loaders.SuSyMetaTileEntityLoader;
-import gregtech.api.recipes.GTRecipeHandler;
 
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static gregtech.api.items.OreDictNames.cobblestone;
 import static gregtech.api.recipes.RecipeMaps.*;
-import static gregtech.api.unification.material.Materials.Stone;
 import static gregtech.api.unification.ore.OrePrefix.*;
 import static gregtech.common.items.MetaItems.SHAPE_EXTRUDER_BLOCK;
 
@@ -108,25 +102,16 @@ public class SuSyRecipeLoader {
     private static void registerCobbleRecipe(List<ItemStack> smoothStack, List<ItemStack> cobbleStack) {
         for (int i = 0; i < smoothStack.size(); i++) {
             FORGE_HAMMER_RECIPES.recipeBuilder()
-                    .circuitMeta(1)
-                    .inputs(smoothStack.get(i))
-                    .outputs(new ItemStack(Blocks.COBBLESTONE, 1, 0))
-                    .EUt(16)
-                    .duration(10)
-                    .buildAndRegister();
-            FORGE_HAMMER_RECIPES.recipeBuilder()
-                    .circuitMeta(2)
                     .inputs(smoothStack.get(i))
                     .outputs(cobbleStack.get(i))
-                    .EUt(16)
-                    .duration(10)
-                    .buildAndRegister();
+                    .duration(12).EUt(4).buildAndRegister();
         }
     }
 
     private static void registerSmoothRecipe(List<ItemStack> roughStack, List<ItemStack> smoothStack) {
         for (int i = 0; i < roughStack.size(); i++) {
             ModHandler.addSmeltingRecipe(roughStack.get(i), smoothStack.get(i), 0.1f);
+
             EXTRUDER_RECIPES.recipeBuilder()
                     .inputs(roughStack.get(i))
                     .notConsumable(SHAPE_EXTRUDER_BLOCK.getStackForm())
@@ -138,6 +123,7 @@ public class SuSyRecipeLoader {
 
     private static void registerCobbleSmashingRecipe(List<ItemStack> smoothStack, List<ItemStack> cobbleStack) {
         for (int i = 0; i < smoothStack.size(); i++) {
+
             ModHandler.addShapedRecipe(smoothStack.get(i).getDisplayName() + "_hammer_smashing", cobbleStack.get(i), new Object[]{"hS", 'S', smoothStack.get(i)});
         }
     }
@@ -147,12 +133,10 @@ public class SuSyRecipeLoader {
             MACERATOR_RECIPES.recipeBuilder()
                     .inputs(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH).getItemVariant(stoneType))
                     .output(dust, stoneType.getMaterial())
-                    .category(RecipeCategories.MACERATOR_RECYCLING)
                     .buildAndRegister();
             MACERATOR_RECIPES.recipeBuilder()
                     .inputs(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.COBBLE).getItemVariant(stoneType))
                     .output(dust, stoneType.getMaterial())
-                    .category(RecipeCategories.MACERATOR_RECYCLING)
                     .buildAndRegister();
         }
     }
