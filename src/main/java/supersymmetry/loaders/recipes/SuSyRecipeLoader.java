@@ -133,10 +133,12 @@ public class SuSyRecipeLoader {
             MACERATOR_RECIPES.recipeBuilder()
                     .inputs(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH).getItemVariant(stoneType))
                     .output(dust, stoneType.getMaterial())
+                    .category(RecipeCategories.MACERATOR_RECYCLING)
                     .buildAndRegister();
             MACERATOR_RECIPES.recipeBuilder()
                     .inputs(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.COBBLE).getItemVariant(stoneType))
                     .output(dust, stoneType.getMaterial())
+                    .category(RecipeCategories.MACERATOR_RECYCLING)
                     .buildAndRegister();
         }
     }
