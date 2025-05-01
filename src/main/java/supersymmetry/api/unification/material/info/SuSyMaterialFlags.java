@@ -46,8 +46,11 @@ public class SuSyMaterialFlags {
 
     public static final MaterialFlag GENERATE_ELECTRODE = (new MaterialFlag.Builder("generate_electrode"))
             .requireProps(new PropertyKey[]{PropertyKey.DUST})
-            .build();;
+            .build();
 
+    public static final MaterialFlag CONTINUOUSLY_CAST = (new MaterialFlag.Builder("continuously_cast"))
+            .requireProps(new PropertyKey[]{PropertyKey.DUST})
+            .build();
 
     public SuSyMaterialFlags() {}
     

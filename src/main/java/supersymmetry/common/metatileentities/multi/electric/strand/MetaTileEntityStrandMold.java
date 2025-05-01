@@ -19,15 +19,21 @@ import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.capability.Strand;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
+import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.*;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 public abstract class MetaTileEntityStrandMold extends MetaTileEntityStrandShaper {
@@ -67,7 +73,7 @@ public abstract class MetaTileEntityStrandMold extends MetaTileEntityStrandShape
             return null;
         }
         Material mat = FluidUnifier.getMaterialFromFluid(stack.getFluid());
-        if (mat == null || !mat.hasProperty(PropertyKey.INGOT)) {
+        if (mat == null || !mat.hasProperty(PropertyKey.INGOT) || !mat.hasFlag(SuSyMaterialFlags.CONTINUOUSLY_CAST)) {
             return null;
         }
         if (this.inputFluidInventory.drain(COOLANT, false).amount < 1000) {
@@ -101,4 +107,9 @@ public abstract class MetaTileEntityStrandMold extends MetaTileEntityStrandShape
         return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID);
     }
 
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
+        super.addInformation(stack, world, tooltip, advanced);
+        tooltip.add(I18n.format("gregtech.multiblock.strand_mold.tooltip"));
+    }
 }

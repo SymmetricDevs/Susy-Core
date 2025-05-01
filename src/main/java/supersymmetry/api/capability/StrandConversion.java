@@ -11,10 +11,10 @@ public class StrandConversion {
     static {
         new StrandConversion(32, 40, 1. / 40, 1. / 32, OrePrefix.foil, 72);
         new StrandConversion(8, 10, 1. / 10, 1. / 8, OrePrefix.plate, 18);
-        new StrandConversion(1, 2, 1, 1. / 2., OrePrefix.plateDense, 2);
-        new StrandConversion(3, 5, 1 / 5., 1 / 3., OrePrefix.plateDouble, 9);
-        new StrandConversion(2 / 5., 3 / 5., 1 / 5., 2 / 5., OrePrefix.ingot, 18);
-        new StrandConversion(2 / 5., 3 / 5., 1 / 5., 2 / 5., OrePrefix.stick, 36);
+        new StrandConversion(1, 2, 1. / 2, 1, OrePrefix.plateDense, 2);
+        new StrandConversion(3, 5, 1. / 5, 1 / 3., OrePrefix.plateDouble, 9);
+        new StrandConversion(4 / 9., 5 / 9., 1 / 5., 1 / 4., OrePrefix.ingot, 18);
+        new StrandConversion(2 / 7., 2 / 5., 5 / 18., 7 / 18., OrePrefix.stick, 36);
 
     }
 
