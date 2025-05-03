@@ -16,7 +16,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import supersymmetry.client.audio.MovingSoundRocket;
 import supersymmetry.client.renderer.particles.SusyParticleFlameLarge;
 import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
-
 import java.util.List;
 import java.util.Random;
 
@@ -42,14 +41,12 @@ public class EntityRocket extends Entity {
         this.setSize(3F, 31F);
         rideCooldown = -1;
         ignoreFrustumCheck = true;
+        isImmuneToFire = true;
     }
 
     public EntityRocket(World worldIn, double x, double y, double z) {
-        super(worldIn);
+        this(worldIn);
         this.setLocationAndAngles(x, y, z, this.rotationYaw, 180.0F);
-        this.setSize(11F, 46F);
-        rideCooldown = -1;
-        ignoreFrustumCheck = true;
         this.setEntityBoundingBox(new AxisAlignedBB(x - 5, y + 0.1, z - 5, x + 5, y + 46, z + 5));
     }
 
@@ -279,8 +276,12 @@ public class EntityRocket extends Entity {
         }
     }
     @Override
-    public boolean canBePushed()
-    {
+    public boolean canBePushed() {
+        return false;
+    }
+
+    @Override
+    public boolean canBeCollidedWith() {
         return false;
     }
 
