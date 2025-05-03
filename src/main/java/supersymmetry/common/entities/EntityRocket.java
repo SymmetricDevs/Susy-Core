@@ -212,9 +212,9 @@ public class EntityRocket extends Entity {
     @Override
     public void onUpdate() {
 
-        // if(this.firstUpdate){
-        //     this.startCountdown();
-        // }
+        if(this.firstUpdate){
+            this.startCountdown();
+        }
 
         super.onUpdate();
 
