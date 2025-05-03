@@ -1,5 +1,6 @@
 package supersymmetry.common.entities;
 
+import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -210,9 +211,9 @@ public class EntityRocket extends Entity {
     @Override
     public void onUpdate() {
 
-        if(this.firstUpdate){
-            this.startCountdown();
-        }
+        // if(this.firstUpdate){
+        //     this.startCountdown();
+        // }
 
         super.onUpdate();
 
@@ -282,7 +283,12 @@ public class EntityRocket extends Entity {
 
     @Override
     public boolean canBeCollidedWith() {
-        return false;
+        return false; //note that this prevents it from being seen on theoneprobe, and /gs looking
+    }
+
+    @Override
+    public EnumPushReaction getPushReaction() {
+        return EnumPushReaction.IGNORE; //for pistons
     }
 
     @SideOnly(Side.CLIENT)
