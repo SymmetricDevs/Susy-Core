@@ -278,6 +278,11 @@ public class EntityRocket extends Entity {
             setupRocketSound();
         }
     }
+    @Override
+    public boolean canBePushed()
+    {
+        return false;
+    }
 
     @SideOnly(Side.CLIENT)
     public void setupRocketSound() {
