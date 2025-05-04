@@ -1,5 +1,6 @@
 package supersymmetry.common.entities;
 
+import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -42,14 +43,12 @@ public class EntityRocket extends Entity {
         this.setSize(3F, 31F);
         rideCooldown = -1;
         ignoreFrustumCheck = true;
+        isImmuneToFire = true;
     }
 
     public EntityRocket(World worldIn, double x, double y, double z) {
-        super(worldIn);
+        this(worldIn);
         this.setLocationAndAngles(x, y, z, this.rotationYaw, 180.0F);
-        this.setSize(11F, 46F);
-        rideCooldown = -1;
-        ignoreFrustumCheck = true;
         this.setEntityBoundingBox(new AxisAlignedBB(x - 5, y + 0.1, z - 5, x + 5, y + 46, z + 5));
     }
 
@@ -277,6 +276,20 @@ public class EntityRocket extends Entity {
         if (this.world.isRemote) {
             setupRocketSound();
         }
+    }
+    @Override
+    public boolean canBePushed() {
+        return false;
+    }
+
+    @Override
+    public boolean canBeCollidedWith() {
+        return false; //note that this prevents it from being seen on theoneprobe, and /gs looking
+    }
+
+    @Override
+    public EnumPushReaction getPushReaction() {
+        return EnumPushReaction.IGNORE; //for pistons
     }
 
     @SideOnly(Side.CLIENT)
