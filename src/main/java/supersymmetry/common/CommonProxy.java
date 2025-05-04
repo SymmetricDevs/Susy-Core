@@ -28,7 +28,6 @@ import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.event.MobHordeEvent;
-import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.api.unification.ore.SusyStoneTypes;
 import supersymmetry.common.blocks.SheetedFrameItemBlock;
@@ -53,7 +52,6 @@ public class CommonProxy {
     public void preLoad() {
         GeckoLib.initialize();
         SusyStoneTypes.init();
-        SuSyRecipeMaps.init();
     }
 
     public void load() {
