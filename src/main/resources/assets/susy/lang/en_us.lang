@@ -294,6 +294,7 @@ gregtech.machine.large_fluid_pump.name=Large Fluid Pump
 gregtech.machine.large_fluid_pump.tooltip.1=This would definitely affect the local trout population.
 gregtech.machine.large_fluid_pump.tooltip.2=Only works when the controller is at Y=64 and the bottom Steel Pipe Casing is located in the right biome.
 gregtech.machine.advanced_arc_furnace.name=Advanced Arc Furnace
+gregtech.machine.industrial_arc_furnace.name=Industrial Arc Furnace
 gregtech.machine.clarifier.name=Clarifier
 gregtech.machine.flare_stack.name=Flare Stack
 gregtech.machine.flare_stack.height=Stack Height: %s §9blocks
