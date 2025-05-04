@@ -1,5 +1,8 @@
 package supersymmetry.common.metatileentities.multi.electric.strand;
 
+import gregicality.multiblocks.api.fluids.GCYMFluidStorageKeys;
+import gregtech.api.fluids.store.FluidStorageKey;
+import gregtech.api.fluids.store.FluidStorageKeys;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -75,6 +78,15 @@ public abstract class MetaTileEntityStrandMold extends MetaTileEntityStrandShape
         Material mat = FluidUnifier.getMaterialFromFluid(stack.getFluid());
         if (mat == null || !mat.hasProperty(PropertyKey.INGOT) || !mat.hasFlag(SuSyMaterialFlags.CONTINUOUSLY_CAST)) {
             return null;
+        }
+        if (mat.getFluid(GCYMFluidStorageKeys.MOLTEN) != null) {
+            if (stack.getFluid() != mat.getFluid(GCYMFluidStorageKeys.MOLTEN)) {
+                return null;
+            }
+        } else if (mat.getFluid(FluidStorageKeys.LIQUID) != null) {
+            if (stack.getFluid() != mat.getFluid(FluidStorageKeys.LIQUID)) {
+                return null;
+            }
         }
         if (this.inputFluidInventory.drain(COOLANT, false).amount < 1000) {
             return null;
