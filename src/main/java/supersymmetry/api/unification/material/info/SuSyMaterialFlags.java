@@ -1,6 +1,7 @@
 package supersymmetry.api.unification.material.info;
 
 import gregtech.api.unification.material.info.MaterialFlag;
+import gregtech.api.unification.material.info.MaterialFlags;
 import gregtech.api.unification.material.properties.PropertyKey;
 import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 
@@ -45,7 +46,8 @@ public class SuSyMaterialFlags {
             .build();
 
     public static final MaterialFlag GENERATE_ELECTRODE = (new MaterialFlag.Builder("generate_electrode"))
-            .requireProps(new PropertyKey[]{PropertyKey.DUST})
+            .requireProps(PropertyKey.DUST)
+            .requireFlags(MaterialFlags.NO_WORKING, MaterialFlags.NO_SMELTING)
             .build();
 
     public static final MaterialFlag CONTINUOUSLY_CAST = (new MaterialFlag.Builder("continuously_cast"))

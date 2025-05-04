@@ -1,5 +1,9 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import gregicality.multiblocks.api.render.GCYMTextures;
+import gregicality.multiblocks.common.block.GCYMMetaBlocks;
+import gregicality.multiblocks.common.block.blocks.BlockLargeMultiblockCasing;
+import gregicality.multiblocks.common.block.blocks.BlockUniqueCasing;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -52,12 +56,11 @@ public class MetaTileEntityIndustrialArcFurnace extends MetaTileEntityAdvancedAr
                 .aisle("AAAAAAA", "AAAAAAA", "AABBBAA", "A#####A", "E#CCC#E", "E#CCC#E", " ACCCA ", "  CCC  ", "  CCC  ", "  CCC  ")
                 .aisle(" AAAAA ", " AAAAA ", " AAAAA ", " AASAA ", " EEEEE ", " EEEEE ", "       ", "       ", "       ", "       ")
                 .where('S', selfPredicate())
-                .where('A', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)).setMinGlobalLimited(28)
+                .where('A', states(GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING.getState(BlockLargeMultiblockCasing.CasingType.STRESS_PROOF_CASING)).setMinGlobalLimited(56)
                         .or(autoAbilities()))
                 .where('B', SuSyPredicates.sinteringBricks())
                 .where('C', states(SuSyBlocks.ELECTRODE_ASSEMBLY.getState(BlockElectrodeAssembly.ElectrodeAssemblyType.CARBON)))
-                .where('D', states(MetaBlocks.BOILER_CASING.getState((BoilerCasingType.STEEL_PIPE))))
-                .where('E', states(MetaBlocks.BOILER_FIREBOX_CASING.getState(BlockFireboxCasing.FireboxCasingType.STEEL_FIREBOX)))
+                .where('E', states(GCYMMetaBlocks.UNIQUE_CASING.getState(BlockUniqueCasing.UniqueCasingType.HEAT_VENT)))
                 .where('F', frames(Materials.Steel))
                 .where(' ', any())
                 .where('#', air())
@@ -65,7 +68,7 @@ public class MetaTileEntityIndustrialArcFurnace extends MetaTileEntityAdvancedAr
     }
 
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
-        return Textures.SOLID_STEEL_CASING;
+        return GCYMTextures.STRESS_PROOF_CASING;
     }
 
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
