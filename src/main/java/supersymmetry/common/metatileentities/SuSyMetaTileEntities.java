@@ -166,6 +166,8 @@ public class SuSyMetaTileEntities {
     public static SimpleMachineMetaTileEntity[] TEXTILE_SPINNER;
     public static SimpleMachineMetaTileEntity[] POLISHING_MACHINE;
 
+    public static MetaTileEntityInjectionMolder INJECTION_MOLDER;
+
     public static MetaTileEntityPrimitiveSmelter PRIMITIVE_SMELTER;
     public static MetaTileEntityPrimitiveItemBus PRIMITIVE_ITEM_IMPORT;
     public static MetaTileEntityPrimitiveItemBus PRIMITIVE_ITEM_EXPORT;
@@ -258,6 +260,8 @@ public class SuSyMetaTileEntities {
         POLYMERIZATION_TANK = registerMetaTileEntity(14620, new MetaTileEntityPolmyerizationTank(susyId("polymerization_tank")));
         ELECTROLYTIC_CELL = registerMetaTileEntity(14634, new MetaTileEntityElectrolyticCell(susyId("electrolytic_cell")));
         GRAVITY_SEPARATOR = registerMetaTileEntity(15052, new MetaTileEntityGravitySeparator(susyId("gravity_separator")));
+        INJECTION_MOLDER = registerMetaTileEntity(15053, new MetaTileEntityInjectionMolder(susyId("injection_molder")));
+
 
         INV_BRIDGE = registerMetaTileEntity(14733, new MetaTileEntityBridge(susyId("bridge.inv"), cap -> cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, SusyTextures.INV_BRIDGE, Materials.Steel));
         TANK_BRIDGE = registerMetaTileEntity(14734, new MetaTileEntityBridge(susyId("bridge.tank"), cap -> cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, SusyTextures.TANK_BRIDGE, Materials.Steel));
