@@ -22,36 +22,35 @@ import java.util.*;
 /// where the [ValueGraph] no longer inherits from [Graph].
 @SuppressWarnings("UnstableApiUsage")
 public final class TopologicalSort {
-    /**
-     * A breath-first-search based topological sort.
-     *
-     * <p>Compared to the depth-first-search version, it does not reverse the graph
-     * and supports custom secondary ordering specified by a comparator. It also utilizes the
-     * recently introduced Guava Graph API, which is more straightforward than the old directed
-     * graph.
-     *
-     * <p>The graph to sort must be directed, must not allow self loops, and must not contain
-     * cycles. {@link IllegalArgumentException} will be thrown otherwise.
-     *
-     * <p>When {@code null} is used for the comparator and multiple nodes have no
-     * prerequisites, the order depends on the iteration order of the set returned by the
-     * {@link ValueGraph#successors(Object)} call, which is random by default.
-     *
-     * <p>Given the number of edges {@code E} and the number of vertexes {@code V},
-     * the time complexity of a sort without a secondary comparator is {@code O(E + V)}.
-     * With a secondary comparator of time complexity {@code O(T)}, the overall time
-     * complexity would be {@code O(E + TV log(V))}. As a result, the comparator should
-     * be as efficient as possible.
-     *
-     * <p>Examples of topological sort usage can be found in Forge test code.
-     *
-     * @param graph      the graph to sort
-     * @param comparator the secondary comparator, may be null
-     * @param <T>        the node type of the graph
-     * @return the ordered nodes from the graph
-     * @throws IllegalArgumentException if the graph is undirected or allows self loops
-     * @throws CyclePresentException    if the graph contains cycles
-     */
+
+    /// A breath-first-search based topological sort.
+    ///
+    /// Compared to the depth-first-search version, it does not reverse the graph
+    /// and supports custom secondary ordering specified by a comparator. It also utilizes the
+    /// recently introduced Guava Graph API, which is more straightforward than the old directed
+    /// graph.
+    ///
+    /// The graph to sort must be directed, must not allow self loops, and must not contain
+    /// cycles. [IllegalArgumentException] will be thrown otherwise.
+    ///
+    /// When `null` is used for the comparator and multiple nodes have no
+    /// prerequisites, the order depends on the iteration order of the set returned by the
+    /// [#successors(Object)] call, which is random by default.
+    ///
+    /// Given the number of edges `E` and the number of vertexes `V`,
+    /// the time complexity of a sort without a secondary comparator is `O(E + V)`.
+    /// With a secondary comparator of time complexity `O(T)`, the overall time
+    /// complexity would be `O(E + TV log(V))`. As a result, the comparator should
+    /// be as efficient as possible.
+    ///
+    /// Examples of topological sort usage can be found in Forge test code.
+    ///
+    /// @param graph      the graph to sort
+    /// @param comparator the secondary comparator, may be null
+    /// @param <T>        the node type of the graph
+    /// @return the ordered nodes from the graph
+    /// @throws IllegalArgumentException if the graph is undirected or allows self loops
+    /// @throws CyclePresentException    if the graph contains cycles
     public static <T> List<T> topologicalSort(ValueGraph<T, ?> graph, @Nullable Comparator<? super T> comparator) throws IllegalArgumentException {
         Preconditions.checkArgument(graph.isDirected(), "Cannot topologically sort an undirected graph!");
         Preconditions.checkArgument(!graph.allowsSelfLoops(), "Cannot topologically sort a graph with self loops!");
@@ -90,7 +89,7 @@ public final class TopologicalSort {
         return results;
     }
 
-    @SuppressWarnings("unchecked") // for unchecked annotation
+    @SuppressWarnings("unchecked") /// for unchecked annotation
     private static <T> void throwCyclePresentException(Set<Set<T>> components) {
         throw new CyclePresentException((Set<Set<?>>) (Set<?>) components);
     }
