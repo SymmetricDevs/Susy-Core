@@ -349,4 +349,6 @@ public class SuSyRecipeMaps {
 
     public static final RecipeMap<SimpleRecipeBuilder> MILLING_RECIPES = new RecipeMap<>("milling", 2, 1, 0, 0, new SimpleRecipeBuilder().EUt(VA[LV]), false)
             .setSound(GTSoundEvents.CUT);
+
+    public static final RecipeMap<?> INJECTION_MOLDER = new RecipeMap<>("injection_molder", 2, 1, 0, 0, new SimpleRecipeBuilder(), false);
 }
