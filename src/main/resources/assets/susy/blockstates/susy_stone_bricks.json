@@ -60,6 +60,11 @@
           "all" : "gregtech:blocks/susy_stones/kimberlite_bricks"
         }
       },
+      "anorthosite" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/anorthosite_bricks"
+        }
+      },
       "industrial_concrete" : {
         "textures" : {
           "all" : "gregtech:blocks/susy_stones/industrial_concrete_bricks"
