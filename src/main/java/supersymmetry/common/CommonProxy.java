@@ -8,6 +8,7 @@ import gregtech.client.utils.TooltipHelper;
 import gregtech.common.blocks.BlockWireCoil;
 import gregtech.common.items.MetaItems;
 import gregtech.modules.ModuleManager;
+import gregtechfoodoption.Tags;
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.monster.EntityZombie;
@@ -16,6 +17,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.launchwrapper.Launch;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -27,6 +29,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.Supersymmetry;
+import supersymmetry.api.blocks.VariantItemBlockFalling;
 import supersymmetry.api.event.MobHordeEvent;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.api.unification.ore.SusyStoneTypes;
@@ -36,6 +39,8 @@ import supersymmetry.common.blocks.SuSyMetaBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.materials.SusyMaterials;
+import supersymmetry.common.world.BiomeLunarHighlands;
+import supersymmetry.common.world.SuSyBiomes;
 import supersymmetry.loaders.SuSyWorldLoader;
 import supersymmetry.loaders.SusyOreDictionaryLoader;
 import supersymmetry.loaders.recipes.SuSyRecipeLoader;
@@ -89,6 +94,7 @@ public class CommonProxy {
         registry.register(SuSyBlocks.CUSTOMSHEETS);
         registry.register(SuSyBlocks.CONVEYOR_BELT);
         registry.register(SuSyBlocks.ROCKET_ASSEMBLER_CASING);
+        registry.register(SuSyBlocks.REGOLITH);
 
         SHEETED_FRAMES.values().stream().distinct().forEach(registry::register);
     }
@@ -123,6 +129,7 @@ public class CommonProxy {
         registry.register(createItemBlock(SuSyBlocks.CUSTOMSHEETS, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.CONVEYOR_BELT, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.ROCKET_ASSEMBLER_CASING, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.REGOLITH, VariantItemBlockFalling::new));
 
         SHEETED_FRAMES.values()
                 .stream().distinct()
@@ -195,5 +202,16 @@ public class CommonProxy {
         ItemBlock itemBlock = producer.apply(block);
         itemBlock.setRegistryName(Objects.requireNonNull(block.getRegistryName()));
         return itemBlock;
+    }
+
+    @SubscribeEvent
+    public void register(RegistryEvent.Register<Biome> evt) {
+        SuSyBiomes.LUNAR_HIGHLANDS = new BiomeLunarHighlands(new Biome.BiomeProperties("Lunar Highlands").setRainDisabled().setBaseHeight(1f).setHeightVariation(0.2f).setRainfall(0).setTemperature(0.3f));
+        SuSyBiomes.LUNAR_HIGHLANDS.setRegistryName(Tags.MODID, "moon");
+        evt.getRegistry().register(SuSyBiomes.LUNAR_HIGHLANDS);
+
+        SuSyBiomes.LUNAR_MARIA = new BiomeLunarHighlands(new Biome.BiomeProperties("Lunar Maria").setRainDisabled().setBaseHeight(0f).setHeightVariation(0.2f).setRainfall(0).setTemperature(0.3f));
+        SuSyBiomes.LUNAR_MARIA.setRegistryName(Tags.MODID, "maria");
+        evt.getRegistry().register(SuSyBiomes.LUNAR_MARIA);
     }
 }
