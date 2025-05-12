@@ -17,6 +17,6 @@ public class EnergyRoutePathMixin {
      */
     @Overwrite(remap = false)
     public long getMaxLoss() {
-        return maxLoss / 2;
+        return maxLoss / 10;
     }
 }

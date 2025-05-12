@@ -1032,4 +1032,4 @@ tile.custom_sheets.darkwhitemetalsheet.name=Darker White Metal Sheet
 tile.custom_sheets.lightergraymetalsheet.name=Lighter Gray Metal Sheet
 
 # Overrides
-gregtech.cable.loss_per_block=§cLoss/Meter/Ampere: §f%,d§f EU-Volt §cper §c2 meters
+gregtech.cable.loss_per_block=§cLoss/Meter/Ampere: §f%,d§f EU-Volt §cper §c10 meters
