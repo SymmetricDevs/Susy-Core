@@ -207,11 +207,11 @@ public class CommonProxy {
     @SubscribeEvent
     public void register(RegistryEvent.Register<Biome> evt) {
         SuSyBiomes.LUNAR_HIGHLANDS = new BiomeLunarHighlands(new Biome.BiomeProperties("Lunar Highlands").setRainDisabled().setBaseHeight(1f).setHeightVariation(0.2f).setRainfall(0).setTemperature(0.3f));
-        SuSyBiomes.LUNAR_HIGHLANDS.setRegistryName(Tags.MODID, "moon");
+        SuSyBiomes.LUNAR_HIGHLANDS.setRegistryName(Supersymmetry.MODID, "moon");
         evt.getRegistry().register(SuSyBiomes.LUNAR_HIGHLANDS);
 
         SuSyBiomes.LUNAR_MARIA = new BiomeLunarHighlands(new Biome.BiomeProperties("Lunar Maria").setRainDisabled().setBaseHeight(0f).setHeightVariation(0.2f).setRainfall(0).setTemperature(0.3f));
-        SuSyBiomes.LUNAR_MARIA.setRegistryName(Tags.MODID, "maria");
+        SuSyBiomes.LUNAR_MARIA.setRegistryName(Supersymmetry.MODID, "maria");
         evt.getRegistry().register(SuSyBiomes.LUNAR_MARIA);
     }
 }

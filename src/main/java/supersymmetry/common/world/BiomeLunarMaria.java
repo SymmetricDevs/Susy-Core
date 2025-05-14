@@ -1,7 +1,10 @@
 package supersymmetry.common.world;
 
+import gregtech.common.blocks.MetaBlocks;
+import gregtech.common.blocks.StoneVariantBlock;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.world.biome.Biome;
+import supersymmetry.common.blocks.BlockRegolith;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
 
@@ -17,9 +20,8 @@ public class BiomeLunarMaria extends Biome {
         this.decorator.grassPerChunk = 0;
         this.decorator.treesPerChunk = 0;
         this.decorator.mushroomsPerChunk = 0;
-        this.topBlock = SuSyBlocks.REGOLITH.getDefaultState();
-        this.fillerBlock = SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH)
-                .getState(SusyStoneVariantBlock.StoneType.ANORTHOSITE);
+        this.topBlock = SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.LOWLAND);
+        this.fillerBlock = MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.BASALT);
     }
 
     @Override
