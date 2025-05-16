@@ -73,8 +73,12 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         return new MetaTileEntityComponentScanner(this.metaTileEntityId);
     }
 
+    public DataStorageLoader getInventory() {
+        return (DataStorageLoader)importItems;
+    }
+
     public void scanPart() {
-        ((DataStorageLoader)importItems).clearNBT();
+        getInventory().clearNBT();
         struct = new StructAnalysis(getWorld());
         if (linkedCleanroom == null || !linkedCleanroom.isClean()) {
             struct.status = BuildStat.UNCLEAN;
@@ -146,6 +150,8 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             analyzeFairing(blocksConnected, exterior.getFirst());
         } else if (blockList.stream().anyMatch(interstageDetect)) {
             analyzeInterstage(blocksConnected, exterior.getFirst());
+        } else if (blockList.stream().anyMatch(spacecraftDetect)) {
+            analyzeSpacecraft(blocksConnected, exterior.getSecond(), exterior.getFirst());
         } else {
             struct.status = BuildStat.UNRECOGNIZED;
         }
@@ -195,15 +201,40 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         Predicate<BlockPos> lifeSupportCheck = bp -> getWorld().getBlockState(bp).getBlock().equals(SuSyBlocks.LIFE_SUPPORT);
         Set<BlockPos> lifeSupports = blocksConnected.stream().filter(lifeSupportCheck).collect(Collectors.toSet());
 
-        lifeSupports.forEach(bp -> {((DataStorageLoader)importItems).addToCompound(nbtTagCompound -> {
+        lifeSupports.forEach(bp -> getInventory().addToCompound(nbtTagCompound -> {
             Block block = getWorld().getBlockState(bp).getBlock();
             NBTTagCompound list = nbtTagCompound.getCompoundTag("parts");
             String part = ((VariantBlock<?>)block).getState(getWorld().getBlockState(bp)).toString();
-            int num = list.getInteger(part);
+            int num = list.getInteger(part); // default behavior is 0
             list.setInteger(part, num+1);
             nbtTagCompound.setTag("parts", list);
             return nbtTagCompound;
-        });});
+        }));
+
+        for (BlockPos bp: exterior) {
+            if (getWorld().getBlockState(bp).getBlock().equals(SuSyBlocks.SPACECRAFT_HULL)) {
+                TileEntityCoverable te = (TileEntityCoverable)getWorld().getTileEntity(bp);
+                for (EnumFacing side: EnumFacing.VALUES) {
+                    // either it must be facing the outside without a cover or it must have
+                    if (te.isCovered(side) ^ exterior.contains(bp.add(side.getDirectionVec()))) {
+                        struct.status = BuildStat.HULL_WEAK;
+                        return;
+                    }
+                }
+            } else if (getWorld().getBlockState(bp).getBlock().equals(SuSyBlocks.SPACE_INSTRUMENT)) {
+                getInventory().addToCompound(nbtTagCompound -> {
+                        Block block = getWorld().getBlockState(bp).getBlock();
+                        NBTTagCompound list = nbtTagCompound.getCompoundTag("instruments");
+                        String part = ((VariantBlock<?>) block).getState(getWorld().getBlockState(bp)).toString();
+                        int num = list.getInteger(part); // default behavior is 0
+                        list.setInteger(part, num + 1);
+                        nbtTagCompound.setTag("parts", list);
+                        return nbtTagCompound;
+                });
+            } else {
+                struct.status = BuildStat.HULL_WEAK;
+            }
+        }
 
         if (lifeSupports.isEmpty()) {
             // no airspace necessary
@@ -211,27 +242,8 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                 struct.status = BuildStat.SPACECRAFT_HOLLOW;
                 return;
             }
-            for (BlockPos bp: exterior) {
-                if (getWorld().getBlockState(bp).getBlock().equals(SuSyBlocks.SPACECRAFT_HULL)) {
-
-                } else if (getWorld().getBlockState(bp).getBlock().equals(SuSyBlocks.SPACE_INSTRUMENT)) {
-
-                } else {
-                    struct.status = BuildStat.HULL_WEAK;
-                }
-            }
+            getInventory().addToCompound(tc ->  {tc.setBoolean("hasAir", false); return tc;});
         } else {
-            for (BlockPos bp: exterior) {
-                if (getWorld().getBlockState(bp).getBlock().equals(SuSyBlocks.SPACECRAFT_HULL)) {
-
-                } else if (getWorld().getBlockState(bp).getBlock().equals(SuSyBlocks.OUTER_HATCH)) {
-
-                } else if (getWorld().getBlockState(bp).getBlock().equals(SuSyBlocks.SPACE_INSTRUMENT)) {
-
-                } else {
-                    struct.status = BuildStat.HULL_WEAK;
-                }
-            }
             int volume = interior.size();
             modifyItem("volume", Integer.toString(volume));
             Set<BlockPos> container = struct.getPerimeter(interior, StructAnalysis.orthVecs);
@@ -253,6 +265,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                     }
                 }
             }
+            getInventory().addToCompound(tc ->  {tc.setBoolean("hasAir", true); return tc;});
         }
         double radius = struct.getApproximateRadius(blocksConnected);
 
@@ -570,7 +583,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
     }
 
     protected void modifyItem(String key, String value) {
-        ((DataStorageLoader)importItems).mutateItem(key,value);
+        getInventory().mutateItem(key,value);
     }
 
     @Override
@@ -590,11 +603,11 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             scannerLogic.setWorkingEnabled(true);
             scannerLogic.setActive(true);
 
-            ((DataStorageLoader) importItems).setLocked(true);
+            getInventory().setLocked(true);
             struct.status = BuildStat.SCANNING;
             scanPart();
             if (struct.status != BuildStat.SUCCESS) {
-                ((DataStorageLoader) importItems).clearNBT();
+                getInventory().clearNBT();
             }
         }
     }
@@ -727,7 +740,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
     public void receiveCustomData(int dataId, PacketBuffer buf) {
         super.receiveCustomData(dataId, buf);
         if (dataId == GregtechDataCodes.LOCK_OBJECT_HOLDER) {
-            ((DataStorageLoader) importItems).setLocked(buf.readBoolean());
+            getInventory().setLocked(buf.readBoolean());
         }
 
     }
@@ -758,9 +771,9 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
 
     public void finishScan() {
         if (struct.status == BuildStat.SUCCESS) {
-            ((DataStorageLoader)importItems).setImageType(8); // is this cursed? yes
+            getInventory().setImageType(8); // is this cursed? yes
         }
-        ((DataStorageLoader) importItems).setLocked(false);
+        getInventory().setLocked(false);
         shownStatus = struct.status;
     }
 

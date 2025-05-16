@@ -124,7 +124,7 @@ public class StructAnalysis {
     /**
      * Returns as a tuple:
      * - The blocks comprising the exterior
-     * - The air within */
+     * - The air exposed to the rest */
     public Tuple<Set<BlockPos>,Set<BlockPos>> checkHull(AxisAlignedBB aaBB, Set<BlockPos> actualBlocks, boolean testStrength) {
         AxisAlignedBB floodBB = aaBB.grow(1);// initializes flood fill box
         BlockPos bottom = new BlockPos(floodBB.minX, floodBB.minY, floodBB.minZ); // initializes flood fill start

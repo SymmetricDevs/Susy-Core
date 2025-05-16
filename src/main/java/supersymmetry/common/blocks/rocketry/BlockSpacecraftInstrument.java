@@ -17,12 +17,13 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
     }
 
     public enum Type implements IStringSerializable {
+        SENSOR_ARRAY("sensors"),
+        COLLECTOR("collector"),
         CAMERA("position"),
         FLIGHT_COMPUTER("computer"),
         ENGINE("engine"),
-        COLLECTOR("collector"),
         SOLAR_PANEL("solar_panel"),
-        RAD_SHIELD("radiation_shield");
+        ARM("arm"); // will have variable purposes
         public String name;
         Type(String name) {
             this.name = name;
