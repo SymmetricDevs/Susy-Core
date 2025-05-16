@@ -2,7 +2,6 @@ package supersymmetry.loaders.recipes;
 
 import gregtech.api.unification.material.properties.PropertyKey;
 import gregtech.common.ConfigHolder;
-import gregtech.loaders.recipe.BatteryRecipes;
 import gregtech.loaders.recipe.handlers.OreRecipeHandler;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 

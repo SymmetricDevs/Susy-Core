@@ -1,6 +1,5 @@
 package supersymmetry.api.recipes.builders.logic;
 
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
 
 import javax.annotation.Nonnull;

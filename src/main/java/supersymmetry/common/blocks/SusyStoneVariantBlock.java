@@ -39,14 +39,14 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
     @Nonnull
     protected BlockStateContainer createBlockState() {
         this.VARIANT = PROPERTY;
-        this.VALUES = SusyStoneVariantBlock.StoneType.values();
+        this.VALUES = StoneType.values();
         return new BlockStateContainer(this, this.VARIANT);
     }
 
     @Override
     @SuppressWarnings("deprecation")
     protected boolean canSilkHarvest() {
-        return this.stoneVariant == SusyStoneVariantBlock.StoneVariant.SMOOTH;
+        return this.stoneVariant == StoneVariant.SMOOTH;
     }
 
     @NotNull
@@ -56,10 +56,14 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
                 SuSyBlocks.SUSY_STONE_BLOCKS.get(StoneVariant.COBBLE) : this);
     }
 
+    public double getWalkingSpeed() {
+        return this.stoneVariant.walkingSpeed;
+    }
+
     public enum StoneVariant {
         SMOOTH("susy_stone_smooth"),
         COBBLE("susy_stone_cobble", 2.0F, 10.0F),
-        BRICKS("susy_stone_bricks");
+        BRICKS("susy_stone_bricks", 0.25);
 //      TODO
 //        COBBLE_MOSSY("stone_cobble_mossy", 2.0F, 10.0F),
 //        POLISHED("stone_polished"),
@@ -77,24 +81,31 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
         public final String translationKey;
         public final float hardness;
         public final float resistance;
+        public final double walkingSpeed;
 
         StoneVariant(@Nonnull String id) {
             this(id, id);
         }
 
+        StoneVariant(@Nonnull String id, double walkingSpeed) {
+            this(id, id, 1.5F, 10.0F, walkingSpeed);
+        }
+
+
         StoneVariant(@Nonnull String id, @Nonnull String translationKey) {
-            this(id, translationKey, 1.5F, 10.0F);
+            this(id, translationKey, 1.5F, 10.0F, 0);
         }
 
         StoneVariant(@Nonnull String id, float hardness, float resistance) {
-            this(id, id, hardness, resistance);
+            this(id, id, hardness, resistance, 0);
         }
 
-        StoneVariant(@Nonnull String id, @Nonnull String translationKey, float hardness, float resistance) {
+        StoneVariant(@Nonnull String id, @Nonnull String translationKey, float hardness, float resistance, double walkingSpeed) {
             this.id = id;
             this.translationKey = translationKey;
             this.hardness = hardness;
             this.resistance = resistance;
+            this.walkingSpeed = walkingSpeed;
         }
     }
 
@@ -107,7 +118,8 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
         SHALE("shale", MapColor.RED_STAINED_HARDENED_CLAY),
         SLATE("slate", MapColor.RED_STAINED_HARDENED_CLAY),
         SOAPSTONE("soapstone", MapColor.GRAY_STAINED_HARDENED_CLAY),
-        KIMBERLITE("kimberlite", MapColor.GRAY);
+        KIMBERLITE("kimberlite", MapColor.GRAY),
+        INDUSTRIAL_CONCRETE("industrial_concrete", MapColor.YELLOW_STAINED_HARDENED_CLAY);
 
         private final String name;
         public final MapColor mapColor;
@@ -126,6 +138,7 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
             return switch (this) {
                 case GABBRO, GNEISS, LIMESTONE, PHYLLITE, QUARTZITE, SHALE, SLATE, SOAPSTONE, KIMBERLITE ->
                         OrePrefix.stone;
+                case INDUSTRIAL_CONCRETE -> OrePrefix.block;
             };
         }
 
@@ -140,6 +153,7 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
                 case SLATE -> SusyMaterials.Slate;
                 case SOAPSTONE -> Materials.Soapstone;
                 case KIMBERLITE -> SusyMaterials.Kimberlite;
+                case INDUSTRIAL_CONCRETE -> Materials.Concrete;
             };
         }
     }

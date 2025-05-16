@@ -5,7 +5,6 @@ import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.properties.PropertyKey;
-import gregtech.api.unification.material.registry.MaterialRegistry;
 import gregtech.api.unification.stack.ItemMaterialInfo;
 import gregtech.api.unification.stack.MaterialStack;
 import net.minecraft.block.Block;
@@ -146,7 +145,7 @@ public class SuSyMetaBlocks {
                 .sorted(Comparator.comparing(c -> c.getKey().getName()))
                 .collect(Collectors.toList());
 
-        for (Map.Entry<IProperty<?>, Comparable<?>> entry : entries) {
+        for (Entry<IProperty<?>, Comparable<?>> entry : entries) {
             if (stringbuilder.length() != 0) {
                 stringbuilder.append(",");
             }

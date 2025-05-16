@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static gregtech.common.blocks.MetaBlocks.ASPHALT;
+
 public class SuSyBlocks {
 
     public static BlockCoolingCoil COOLING_COIL;
@@ -27,6 +29,7 @@ public class SuSyBlocks {
     public static BlockTurbineRotor TURBINE_ROTOR;
     public static BlockSeparatorRotor SEPARATOR_ROTOR;
     public static BlockDrillHead DRILL_HEAD;
+    public static BlockDrillBit DRILL_BIT;
     public static BlockStructural STRUCTURAL_BLOCK;
     public static BlockStructural1 STRUCTURAL_BLOCK_1;
     public static BlockDeposit DEPOSIT_BLOCK;
@@ -38,6 +41,10 @@ public class SuSyBlocks {
     public static BlockElectrodeAssembly ELECTRODE_ASSEMBLY;
     public static BlockSuSyMultiblockCasing MULTIBLOCK_CASING;
     public static BlockSerpentine SERPENTINE;
+    public static BlocksHardened HARDBLOCKS;
+    public static BlocksCustomSheets CUSTOMSHEETS;
+    public static BlockConveyor CONVEYOR_BELT;
+    public static BlockRocketAssemblerCasing ROCKET_ASSEMBLER_CASING;
 
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
@@ -48,6 +55,9 @@ public class SuSyBlocks {
 
         DRILL_HEAD = new BlockDrillHead();
         DRILL_HEAD.setRegistryName("drill_head");
+
+        DRILL_BIT = new BlockDrillBit();
+        DRILL_BIT.setRegistryName("drill_bit");
 
         COAGULATION_TANK_WALL = new BlockCoagulationTankWall();
         COAGULATION_TANK_WALL.setRegistryName("coagulation_tank_wall");
@@ -99,6 +109,17 @@ public class SuSyBlocks {
         SERPENTINE = new BlockSerpentine();
         SERPENTINE.setRegistryName("serpentine");
 
+        HARDBLOCKS = new BlocksHardened();
+        HARDBLOCKS.setRegistryName("hardened_blocks");
+
+        CUSTOMSHEETS = new BlocksCustomSheets();
+        CUSTOMSHEETS.setRegistryName("custom_sheets");
+
+        CONVEYOR_BELT = new BlockConveyor();
+        CONVEYOR_BELT.setRegistryName("conveyor_belt");
+      
+        ROCKET_ASSEMBLER_CASING = new BlockRocketAssemblerCasing();
+        ROCKET_ASSEMBLER_CASING.setRegistryName("rocket_assembler_casing");
     }
 
     @SideOnly(Side.CLIENT)
@@ -110,6 +131,7 @@ public class SuSyBlocks {
             registerItemModel(block);
         registerItemModel(ALTERNATOR_COIL);
         registerItemModel(DRILL_HEAD);
+        registerItemModel(DRILL_BIT);
         registerItemModel(TURBINE_ROTOR);
         registerItemModel(SEPARATOR_ROTOR);
         registerItemModel(STRUCTURAL_BLOCK);
@@ -123,6 +145,10 @@ public class SuSyBlocks {
         ELECTRODE_ASSEMBLY.onModelRegister();
         registerItemModel(MULTIBLOCK_CASING);
         SERPENTINE.onModelRegister();
+        registerItemModel(HARDBLOCKS);
+        registerItemModel(CUSTOMSHEETS);
+        registerItemModel(CONVEYOR_BELT);
+        registerItemModel(ROCKET_ASSEMBLER_CASING);
     }
 
     @SideOnly(Side.CLIENT)
@@ -162,9 +188,13 @@ public class SuSyBlocks {
 
     public static void registerWalkingSpeedBonus() {
         for (SusyStoneVariantBlock block : SUSY_STONE_BLOCKS.values()) {
-            for (IBlockState state : block.getBlockState().getValidStates()) {
-                BlockUtility.setWalkingSpeedBonus(state, BlockUtility.ASPHALT_WALKING_SPEED_BONUS);
-            }
+            if (block.getWalkingSpeed() == 0)
+                continue;
+            for (IBlockState state : block.getBlockState().getValidStates())
+                BlockUtility.setWalkingSpeedBonus(state, block.getWalkingSpeed());
+        }
+        for (IBlockState state : ASPHALT.getBlockState().getValidStates()) {
+            BlockUtility.setWalkingSpeedBonus(state, 1); // Buff from 0.6F
         }
     }
 
