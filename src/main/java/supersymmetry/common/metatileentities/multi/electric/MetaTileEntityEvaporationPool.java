@@ -442,21 +442,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                     }
                 })
                 .addProgressLine(recipeMapWorkable.getProgressPercent());
-
-//  Debug stuff, might be useful for testing. Should get removed before merging
-//        textList.add(new TextComponentString(String.format("lDist: %s; rDist: %s; bDist: %s", lDist, rDist, bDist)));
-//        textList.add(new TextComponentString(String.format("Exposed Blocks: %s", exposedBlocks)));
-//        textList.add(new TextComponentString(String.format("Coil Count: %s", coilHeat / coilTemp)));
-//        textList.add(new TextComponentString(String.format("Coil Temp: %s", coilTemp)));
-//        textList.add(new TextComponentString(line(Slice.B_ALL) + " " + line(Slice.T_NONE)));
-//        textList.add(new TextComponentString(line(Slice.B_ALL) + " " + line(Slice.T_SIDES)));
-//        textList.add(new TextComponentString(line(Slice.B_END) + " " + line(Slice.T_MIDDLE)));
-//        for (int i = 0; i < bDist - 2; i++) {
-//            textList.add(new TextComponentString(line(Slice.B_MIDDLE) + " " + line(Slice.T_MIDDLE)));
-//        }
-//        textList.add(new TextComponentString(line(Slice.B_START) + " " + line(Slice.T_MIDDLE)));
-//        textList.add(new TextComponentString(line(Slice.B_ALL) + " " + line(Slice.T_SIDES)));
-//        textList.add(new TextComponentString(line(Slice.B_SELF) + " " + line(Slice.T_NONE)));
     }
 
     @Override
@@ -657,6 +642,12 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             super.setupRecipe(recipe);
             this.recipeJt = recipe.getProperty(EvaporationEnergyProperty.getInstance(), 0); // TODO: is this correct?
             this.heatBuffer = 0;
+        }
+
+        /// Do not overclock
+        @Override
+        protected int @NotNull [] calculateOverclock(@NotNull Recipe recipe) {
+            return new int[]{recipe.getEUt(), recipe.getDuration()};
         }
 
         @Override
