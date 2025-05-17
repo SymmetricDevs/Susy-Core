@@ -10,7 +10,7 @@ import supersymmetry.api.SusyLog;
 import supersymmetry.api.recipes.properties.EvaporationEnergyProperty;
 import supersymmetry.api.util.SuSyUtility;
 
-public class EvaporationPoolRecipeBuilder  extends RecipeBuilder<EvaporationPoolRecipeBuilder> {
+public class EvaporationPoolRecipeBuilder extends RecipeBuilder<EvaporationPoolRecipeBuilder> {
     int eutStorage = -1; //according to mtbo what is done with eut will change at some point, so I am just grabbing it when the method is called instead of trusting its later availability
 
     public EvaporationPoolRecipeBuilder() {
@@ -28,7 +28,7 @@ public class EvaporationPoolRecipeBuilder  extends RecipeBuilder<EvaporationPool
     }
 
     public EvaporationPoolRecipeBuilder Jt(int Jt) {
-        if(Jt <= 0) {
+        if (Jt <= 0) {
             SusyLog.logger.error("Evaporation Pool required energy cannot be less then or equal to one."
                     , new IllegalArgumentException());
             recipeStatus = EnumValidationResult.INVALID;
