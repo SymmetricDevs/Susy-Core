@@ -677,8 +677,8 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                 }
 
                 int totalHeat = (baseHeat + coilHeat);
-                int remainingHeat = totalHeat % recipeJt;
-                int maxProgress = totalHeat / recipeJt;
+                int remainingHeat = totalHeat % getRecipeJt();
+                int maxProgress = totalHeat / getRecipeJt();
 
                 updateSpeedStats(maxProgress);
 
@@ -695,6 +695,13 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                     this.completeRecipe();
                 }
             }
+        }
+
+        /// Workaround for backwards compat
+        /// Random fallback number IDK
+        @Deprecated
+        protected int getRecipeJt() {
+            return recipeJt != 0 ? recipeJt : 500;
         }
 
         /// This could potentially be cached in the mte, but ig it doesn't matter that much
