@@ -51,7 +51,7 @@ public class MetaTileEntityHotIsostaticPress extends RecipeMapMultiblockControll
                 .where('S', states(SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.SILICON_CARBIDE_CASING)).setMinGlobalLimited(27).or(autoAbilities()))
                 .where('I', states(SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.SILICON_CARBIDE_CASING)))
                 .where('P', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE)))
-                .where('C', states(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.CUPRONICKEL)))
+                .where('C', states(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.NICHROME)))
                 .where('X', air())
                 .where('H', hydraulicOrientation(RelativeDirection.UP))
                 .where('h', hydraulicOrientation(RelativeDirection.DOWN))

@@ -51,7 +51,7 @@ public class SuSyMaterialFlags {
             .build();
 
     public static final MaterialFlag CONTINUOUSLY_CAST = (new MaterialFlag.Builder("continuously_cast"))
-            .requireProps(new PropertyKey[]{PropertyKey.DUST})
+            .requireProps(new PropertyKey[]{PropertyKey.DUST, PropertyKey.FLUID})
             .build();
 
     public SuSyMaterialFlags() {}
