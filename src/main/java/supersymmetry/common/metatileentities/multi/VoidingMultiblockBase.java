@@ -14,6 +14,7 @@ import gregtech.api.metatileentity.multiblock.MultiblockWithDisplayBase;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.info.MaterialFlags;
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -21,6 +22,8 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
+
+import static gregtech.api.capability.GregtechDataCodes.WORKING_ENABLED;
 
 public abstract class VoidingMultiblockBase extends MultiblockWithDisplayBase implements IControllable {
     // Update this value based on your needs
@@ -105,19 +108,25 @@ public abstract class VoidingMultiblockBase extends MultiblockWithDisplayBase im
         super.receiveCustomData(dataId, buf);
         if(dataId == GregtechDataCodes.IS_WORKING) {
             this.active = this.lastActive;
+        } else if (dataId == WORKING_ENABLED) {
+            this.workingEnabled = buf.readBoolean();
+            scheduleRenderUpdate();
         }
+
     }
 
     @Override
     public void writeInitialSyncData(PacketBuffer buf) {
         super.writeInitialSyncData(buf);
         buf.writeBoolean(active);
+        buf.writeBoolean(workingEnabled);
     }
 
     @Override
     public void receiveInitialSyncData(PacketBuffer buf) {
         super.receiveInitialSyncData(buf);
         this.active = buf.readBoolean();
+        this.workingEnabled = buf.readBoolean();
     }
 
     @Override
@@ -125,6 +134,19 @@ public abstract class VoidingMultiblockBase extends MultiblockWithDisplayBase im
         super.invalidateStructure();
         this.active = false;
         this.writeCustomData(GregtechDataCodes.IS_WORKING, (buf -> buf.writeBoolean(false)));
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        data.setBoolean("workingEnabled", this.workingEnabled);
+        return super.writeToNBT(data);
+    }
+
+
+    @Override
+    public void readFromNBT(NBTTagCompound data) {
+        super.readFromNBT(data);
+        this.workingEnabled = data.getBoolean("workingEnabled");
     }
 
     @Override
@@ -145,7 +167,12 @@ public abstract class VoidingMultiblockBase extends MultiblockWithDisplayBase im
     @Override
     public void setWorkingEnabled(boolean enabled) {
         this.workingEnabled = enabled;
+        this.writeCustomData(WORKING_ENABLED, buf -> buf.writeBoolean(enabled));
+
     }
+
+
+
 
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing side) {
