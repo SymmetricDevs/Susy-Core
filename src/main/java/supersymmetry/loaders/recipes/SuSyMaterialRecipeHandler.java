@@ -54,7 +54,8 @@ public class SuSyMaterialRecipeHandler {
         SusyOrePrefix.thread.addProcessingHandler(SuSyPropertyKey.FIBER, SuSyMaterialRecipeHandler::processThreadWeaving);
         SusyOrePrefix.fiber.addProcessingHandler(PropertyKey.DUST, RecyclingRecipeHandler::processCrushing);
         SusyOrePrefix.thread.addProcessingHandler(PropertyKey.DUST, RecyclingRecipeHandler::processCrushing);
-        addProcessingHandler(PropertyKey.DUST, SusyOrePrefix.electrode, SuSyMaterialFlags.GENERATE_ELECTRODE, SuSyMaterialRecipeHandler::processElectrode);
+        SusyOrePrefix.electrode.addProcessingHandler(PropertyKey.DUST, SuSyMaterialRecipeHandler::processElectrode);
+        addProcessingHandler(PropertyKey.DUST, OrePrefix.dust, SuSyMaterialFlags.HIP_PRESSED, SuSyMaterialRecipeHandler::processHIPPressing);
     }
 
 
@@ -66,19 +67,7 @@ public class SuSyMaterialRecipeHandler {
         });
     }
 
-    public static void processElectrode(OrePrefix orePrefix, Material material, DustProperty dustProperty) {
-        SuSyRecipeMaps.GAS_ATOMIZER.recipeBuilder()
-                .input(orePrefix, material, 1)
-                .fluidInputs(Nitrogen.getFluid(100))
-                .outputs(OreDictUnifier.get(dust, material, 1))
-                .EUt(VA[MV]).duration(80)
-                .buildAndRegister();
-        SuSyRecipeMaps.GAS_ATOMIZER.recipeBuilder()
-                .input(orePrefix, material, 1)
-                .fluidInputs(Argon.getFluid(50))
-                .outputs(OreDictUnifier.get(dust, material, 1))
-                .EUt(VA[MV]).duration(40)
-                .buildAndRegister();
+    public static void processHIPPressing(OrePrefix orePrefix, Material material, DustProperty dustProperty) {
         mapMolds.put(OrePrefix.plate, MetaItems.SHAPE_MOLD_PLATE.getStackForm());
         mapMolds.put(OrePrefix.block, MetaItems.SHAPE_MOLD_BLOCK.getStackForm());
         mapMolds.put(OrePrefix.rotor, MetaItems.SHAPE_MOLD_ROTOR.getStackForm());
@@ -140,7 +129,22 @@ public class SuSyMaterialRecipeHandler {
             }
         }
 
+    }
 
+    public static void processElectrode(OrePrefix orePrefix, Material material, DustProperty dustProperty) {
+        // Some custom electrode recipe in the arc furnace would have to be added for each.
+        SuSyRecipeMaps.GAS_ATOMIZER.recipeBuilder()
+                .input(orePrefix, material, 1)
+                .fluidInputs(Nitrogen.getFluid(100))
+                .outputs(OreDictUnifier.get(dust, material, 1))
+                .EUt(VA[MV]).duration(80)
+                .buildAndRegister();
+        SuSyRecipeMaps.GAS_ATOMIZER.recipeBuilder()
+                .input(orePrefix, material, 1)
+                .fluidInputs(Argon.getFluid(50))
+                .outputs(OreDictUnifier.get(dust, material, 1))
+                .EUt(VA[MV]).duration(40)
+                .buildAndRegister();
     }
 
     private static int getVoltageMultiplier(Material material) {
