@@ -1,17 +1,20 @@
 package supersymmetry.api.unification.material.info;
 
+import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.info.MaterialFlag;
+import gregtech.api.unification.material.info.MaterialFlags;
 import gregtech.api.unification.material.properties.PropertyKey;
 import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 
 public class SuSyMaterialFlags {
 
-    public static MaterialFlag GENERATE_CATALYST_PELLET = (new MaterialFlag.Builder("generate_catalyst_bed"))
+
+    public static MaterialFlag GENERATE_CATALYST_PELLET = (new MaterialFlag.Builder("generate_catalyst_pellet"))
             .requireProps(new PropertyKey[]{PropertyKey.DUST})
             .build();
 
     public static MaterialFlag GENERATE_CATALYST_BED = (new MaterialFlag.Builder("generate_catalyst_bed"))
-            .requireProps(new PropertyKey[]{PropertyKey.DUST})
+            .requireProps(PropertyKey.DUST)
             .requireFlags(GENERATE_CATALYST_PELLET)
             .build();
 
@@ -43,6 +46,20 @@ public class SuSyMaterialFlags {
             .requireProps(new PropertyKey[]{PropertyKey.DUST})
             .build();
 
+    public static final MaterialFlag HIP_PRESSED = (new MaterialFlag.Builder("hip_pressed"))
+            .requireProps(PropertyKey.DUST)
+            .requireFlags(MaterialFlags.NO_WORKING, MaterialFlags.NO_SMELTING)
+            .build();
+
+    public static final MaterialFlag GENERATE_ELECTRODE = (new MaterialFlag.Builder("generate_electrode"))
+            .requireProps(PropertyKey.DUST)
+            .requireFlags(HIP_PRESSED)
+            .build();
+
+
+    public static final MaterialFlag CONTINUOUSLY_CAST = (new MaterialFlag.Builder("continuously_cast"))
+            .requireProps(new PropertyKey[]{PropertyKey.DUST, PropertyKey.FLUID})
+            .build();
 
     public SuSyMaterialFlags() {}
     
