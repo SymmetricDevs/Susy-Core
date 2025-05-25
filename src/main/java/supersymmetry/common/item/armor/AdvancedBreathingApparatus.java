@@ -163,6 +163,11 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IT
         if (source == DamageSources.getHeatDamage()) {
             return new ISpecialArmor.ArmorProperties(0, 0.25, 5);
         }
+        if (source == DamageSources.getFrostDamage()) {
+            return new ISpecialArmor.ArmorProperties(0,0.20,2); 
+            // id guess that its worse at handling cryogenics since
+            // it wasnt meant for that? 
+        }
         prop.Armor = getAbsorption(armor) * relativeAbsorption * 20;
         return prop;
     }
