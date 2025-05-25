@@ -15,6 +15,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import gregtech.api.damagesources.DamageSources;
 import supersymmetry.client.renderer.handler.BreathingApparatusModel;
 import supersymmetry.client.renderer.handler.ITextureRegistrar;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
@@ -158,6 +160,9 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IT
                                                        double damage, EntityEquipmentSlot equipmentSlot) {
         ISpecialArmor.ArmorProperties prop = new ISpecialArmor.ArmorProperties(0, 0.0, 0);
         if (source.isUnblockable()) return prop;
+        if (source == DamageSources.getHeatDamage()) {
+            return new ISpecialArmor.ArmorProperties(0, 0.25, 5);
+        }
         prop.Armor = getAbsorption(armor) * relativeAbsorption * 20;
         return prop;
     }
