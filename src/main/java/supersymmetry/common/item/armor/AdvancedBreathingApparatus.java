@@ -18,7 +18,6 @@ import org.jetbrains.annotations.Nullable;
 
 import gregtech.api.damagesources.DamageSources;
 import supersymmetry.client.renderer.handler.BreathingApparatusModel;
-import supersymmetry.client.renderer.handler.ITextureRegistrar;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.item.SuSyArmorItem;
 
@@ -29,7 +28,7 @@ import static net.minecraft.inventory.EntityEquipmentSlot.*;
 import static supersymmetry.api.util.SuSyUtility.susyId;
 import static supersymmetry.common.event.DimensionBreathabilityHandler.ABSORB_ALL;
 
-public class AdvancedBreathingApparatus extends BreathingApparatus implements ITextureRegistrar {
+public class AdvancedBreathingApparatus extends BreathingApparatus {
     private final double hoursOfLife;
     private final String name;
     private final int tier;
@@ -156,18 +155,24 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IT
     }
 
     @Override
-    public ISpecialArmor.ArmorProperties getProperties(EntityLivingBase player, @NotNull ItemStack armor, DamageSource source,
-                                                       double damage, EntityEquipmentSlot equipmentSlot) {
+    public ISpecialArmor.ArmorProperties getProperties(EntityLivingBase player, @NotNull ItemStack armor,
+            DamageSource source,
+            double damage, EntityEquipmentSlot equipmentSlot) {
         ISpecialArmor.ArmorProperties prop = new ISpecialArmor.ArmorProperties(0, 0.0, 0);
-        if (source.isUnblockable()) return prop;
-        if (source == DamageSources.getHeatDamage()) {
+        if (source.isUnblockable())
+            return prop;
+
+        if (source == DamageSources.getHeatDamage())
             return new ISpecialArmor.ArmorProperties(0, 0.25, 5);
-        }
-        if (source == DamageSources.getFrostDamage()) {
-            return new ISpecialArmor.ArmorProperties(0,0.20,2); 
-            // id guess that its worse at handling cryogenics since
-            // it wasnt meant for that? 
-        }
+        if (source == DamageSources.getFrostDamage())
+            return new ISpecialArmor.ArmorProperties(0, 0.20, 2);
+        if (source == DamageSource.IN_FIRE)
+            return new ISpecialArmor.ArmorProperties(0, 0.10, 2);
+        if (source == DamageSource.ON_FIRE)
+            return new ISpecialArmor.ArmorProperties(0, 0.0750, 2);
+        if (source == DamageSource.LAVA)
+            return new ISpecialArmor.ArmorProperties(0, 0.0375, 2);
+
         prop.Armor = getAbsorption(armor) * relativeAbsorption * 20;
         return prop;
     }
