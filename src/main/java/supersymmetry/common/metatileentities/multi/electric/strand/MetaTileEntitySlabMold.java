@@ -32,19 +32,20 @@ public class MetaTileEntitySlabMold extends MetaTileEntityStrandMold {
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle("CCCCC", "CCCCC", "CCCCC", "CCCCC", "CCCCC")
-                .aisle("COOOC", "CPPPC", "CPPPC", "CPPPC", "CIIIC")
-                .aisle("COMOC", "CP PC", "CP PC", "CP PC", "CIIIC")
-                .aisle("COOOC", "CPPPC", "CPPPC", "CPPPC", "CIIIC")
-                .aisle("CCCCC", "CCCCC", "CCSCC", "CCCCC", "CCCCC")
+                .aisle("CCCCCCC", "CCCCCCC", "CCCCCCC", "CCCCCCC", "CCCCCCC")
+                .aisle("COOOOOC", "CPPPPPC", "CPPPPPC", "CPPPPPC", "CCIIICC")
+                .aisle("CO M OC", "CP   PC", "CP   PC", "CP   PC", "CCIIICC")
+                .aisle("COOOOOC", "CPPPPPC", "CPPPPPC", "CPPPPPC", "CCIIICC")
+                .aisle("CCCCCCC", "CCCCCCC", "CCCSCCC", "CCCCCCC", "CCCCCCC")
                 .where('C', states(getCasingState()).or(autoAbilities()))
                 .where('P', states(getPipeCasingState()))
                 .where('M', abilities(SuSyMultiblockAbilities.STRAND_EXPORT))
-                .where('I', abilities(MultiblockAbility.IMPORT_FLUIDS).or(states(getPipeCasingState())))
-                .where('O', abilities(MultiblockAbility.EXPORT_FLUIDS).or(states(getPipeCasingState())))
+                .where('I', abilities(MultiblockAbility.IMPORT_FLUIDS).setPreviewCount(2).or(states(getPipeCasingState())))
+                .where('O', abilities(MultiblockAbility.EXPORT_FLUIDS).setPreviewCount(1).or(states(getPipeCasingState())))
                 .where('S', selfPredicate())
                 .where(' ', air())
                 .build();
+
     }
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {

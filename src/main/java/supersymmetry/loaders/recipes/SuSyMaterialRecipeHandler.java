@@ -25,6 +25,7 @@ import gregtech.loaders.recipe.handlers.MaterialRecipeHandler;
 import gregtech.loaders.recipe.handlers.RecipeHandlerList;
 import gregtech.loaders.recipe.handlers.RecyclingRecipeHandler;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
@@ -56,12 +57,13 @@ public class SuSyMaterialRecipeHandler {
         SusyOrePrefix.thread.addProcessingHandler(PropertyKey.DUST, RecyclingRecipeHandler::processCrushing);
         SusyOrePrefix.electrode.addProcessingHandler(PropertyKey.DUST, SuSyMaterialRecipeHandler::processElectrode);
         addProcessingHandler(PropertyKey.DUST, OrePrefix.dust, SuSyMaterialFlags.HIP_PRESSED, SuSyMaterialRecipeHandler::processHIPPressing);
+        addProcessingHandler(PropertyKey.DUST, OrePrefix.dust, SuSyMaterialFlags.CONTINUOUSLY_CAST, SuSyMaterialRecipeHandler::processContinuouslyCast);
     }
 
 
     public static <T extends IMaterialProperty> void addProcessingHandler(PropertyKey<T> propertyKey, OrePrefix prefix, MaterialFlag condition, TriConsumer<OrePrefix, Material, T> handler) {
         prefix.addProcessingHandler((orePrefix, material) -> {
-            if (material.hasProperty(propertyKey) && !material.hasFlag(condition)) {
+            if (material.hasProperty(propertyKey) && material.hasFlag(condition)) {
                 handler.accept(orePrefix, material, material.getProperty(propertyKey));
             }
         });
@@ -101,9 +103,10 @@ public class SuSyMaterialRecipeHandler {
         ItemStack ingotStack = OreDictUnifier.get(ingot, material);
 
         List<ItemStack> inputItems = new ArrayList<>();
+        List<FluidStack> fluidInputs = new ArrayList<>();
         inputItems.add(ingotStack);
         inputItems.add(IntCircuitIngredient.getIntegratedCircuit(1));
-        Recipe r = WIREMILL_RECIPES.findRecipe(8, inputItems, null, false);
+        Recipe r = WIREMILL_RECIPES.findRecipe(8, inputItems, fluidInputs, false);
         if (r != null) {
             WIREMILL_RECIPES.removeRecipe(r);
         }
@@ -116,7 +119,7 @@ public class SuSyMaterialRecipeHandler {
                 .EUt(getVoltageMultiplier(material))
                 .buildAndRegister();
 
-        r = BENDER_RECIPES.findRecipe(8, inputItems, null, false);
+        r = BENDER_RECIPES.findRecipe(8, inputItems, fluidInputs, false);
         if (r != null) {
             BENDER_RECIPES.removeRecipe(r);
         }
@@ -144,6 +147,16 @@ public class SuSyMaterialRecipeHandler {
                 .fluidInputs(Argon.getFluid(50))
                 .outputs(OreDictUnifier.get(dust, material, 1))
                 .EUt(VA[MV]).duration(40)
+                .buildAndRegister();
+    }
+
+    public static void processContinuouslyCast(OrePrefix orePrefix, Material material, DustProperty dustProperty) {
+        WIREMILL_RECIPES.recipeBuilder()
+                .input(stick, material)
+                .circuitMeta(1)
+                .output(wireGtSingle, material, 1)
+                .duration((int) material.getMass() / 4)
+                .EUt(getVoltageMultiplier(material))
                 .buildAndRegister();
     }
 
