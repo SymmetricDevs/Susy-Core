@@ -33,9 +33,9 @@ public class MetaTileEntitySlabMold extends MetaTileEntityStrandMold {
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
                 .aisle("CCCCCCC", "CCCCCCC", "CCCCCCC", "CCCCCCC", "CCCCCCC")
-                .aisle("COOOOOC", "CPPPPPC", "CPPPPPC", "CPPPPPC", "CCIIICC")
-                .aisle("CO M OC", "CP   PC", "CP   PC", "CP   PC", "CCIIICC")
-                .aisle("COOOOOC", "CPPPPPC", "CPPPPPC", "CPPPPPC", "CCIIICC")
+                .aisle("COOOOOC", "CPPPPPC", "CPPPPPC", "CPPPPPC", "CIIIIIC")
+                .aisle("CO M OC", "CP   PC", "CP   PC", "CP   PC", "CIIIIIC")
+                .aisle("COOOOOC", "CPPPPPC", "CPPPPPC", "CPPPPPC", "CIIIIIC")
                 .aisle("CCCCCCC", "CCCCCCC", "CCCSCCC", "CCCCCCC", "CCCCCCC")
                 .where('C', states(getCasingState()).or(autoAbilities()))
                 .where('P', states(getPipeCasingState()))

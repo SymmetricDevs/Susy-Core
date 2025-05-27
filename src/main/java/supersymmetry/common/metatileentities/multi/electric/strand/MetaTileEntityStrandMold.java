@@ -44,12 +44,12 @@ public abstract class MetaTileEntityStrandMold extends MetaTileEntityStrandShape
 
     @Override
     protected boolean consumeInputsAndSetupRecipe() {
-        if (output.getStrand() != null) return false;
         FluidStack stack = getFirstMaterialFluid();
         if (stack == null || stack.amount < getRequiredMetal()) return false;
         stack = stack.copy();
         stack.amount = getRequiredMetal();
         this.inputFluidInventory.drain(stack, true);
+        this.inputFluidInventory.drain(COOLANT, true);
         this.maxProgress = 40;
         return true;
     }
@@ -74,7 +74,7 @@ public abstract class MetaTileEntityStrandMold extends MetaTileEntityStrandShape
                 return null;
             }
         }
-        if (this.inputFluidInventory.drain(COOLANT, false).amount < 1000) {
+        if (this.inputFluidInventory.drain(COOLANT, false).amount < 50) {
             return null;
         }
         return new Strand(getOutputThickness(), getOutputWidth(), false, mat, stack.getFluid().getTemperature());

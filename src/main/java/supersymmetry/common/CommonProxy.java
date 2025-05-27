@@ -28,6 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.event.MobHordeEvent;
+import supersymmetry.api.fluids.SusyGeneratedFluidHandler;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.api.unification.ore.SusyStoneTypes;
 import supersymmetry.common.blocks.SheetedFrameItemBlock;
@@ -152,6 +153,8 @@ public class CommonProxy {
         MetaItems.addOrePrefix(SusyOrePrefix.wetFiber);
         MetaItems.addOrePrefix(SusyOrePrefix.thread);
         MetaItems.addOrePrefix(SusyOrePrefix.dustWet);
+
+        SusyGeneratedFluidHandler.init();
 
         //SusyMaterials.removeFlags();
     }
