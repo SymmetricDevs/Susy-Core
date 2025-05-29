@@ -59,6 +59,7 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
     protected int progress;
     protected int maxProgress;
     protected boolean isActive;
+    protected boolean hasNotEnoughEnergy;
 
     public MetaTileEntityStrandShaper(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
@@ -71,9 +72,11 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
             if (progress <= maxProgress) {
                 if (consumeEnergy()) {
                     progress++;
+                    hasNotEnoughEnergy = false;
                 } else {
                     if (progress > 0)
                         progress--;
+                    hasNotEnoughEnergy = true;
                 }
             } else if (!getWorld().isRemote) {
                 // Output
@@ -212,6 +215,7 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
                 .addEnergyUsageLine(this.energyContainer)
                 .addEnergyTierLine(GTUtility.getTierByVoltage(this.energyContainer.getInputVoltage()))
                 .addWorkingStatusLine().addProgressLine(this.getProgressPercent())
+                .addLowPowerLine(hasNotEnoughEnergy)
                 .addCustom((comps) -> {
                     if (strand == null) {
                         comps.add(new TextComponentTranslation("gregtech.multiblock.strand_casting.no_strand"));
@@ -244,7 +248,7 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
 
     @Override
     public boolean isActive() {
-        return isActive;
+        return isActive && this.isStructureFormed();
     }
 
     @Override

@@ -2,6 +2,7 @@ package supersymmetry.common;
 
 import gregtech.api.block.VariantItemBlock;
 import gregtech.api.modules.ModuleContainerRegistryEvent;
+import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.event.MaterialEvent;
 import gregtech.api.unification.material.event.PostMaterialEvent;
 import gregtech.client.utils.TooltipHelper;
@@ -154,6 +155,7 @@ public class CommonProxy {
         MetaItems.addOrePrefix(SusyOrePrefix.thread);
         MetaItems.addOrePrefix(SusyOrePrefix.dustWet);
 
+        Materials.Aluminium.addFlags("continuously_cast");
         SusyGeneratedFluidHandler.init();
 
         //SusyMaterials.removeFlags();

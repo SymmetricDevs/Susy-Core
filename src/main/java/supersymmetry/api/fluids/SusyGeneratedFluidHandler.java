@@ -18,7 +18,6 @@ public class SusyGeneratedFluidHandler {
     }
 
     public static void createMoltenFluid(@NotNull Material material) {
-        // ignore materials set not to be alloy blast handled
         FluidProperty fluidProperty = material.getProperty(PropertyKey.FLUID);
         if (fluidProperty == null) return;
 
@@ -26,7 +25,5 @@ public class SusyGeneratedFluidHandler {
             fluidProperty.enqueueRegistration(GCYMFluidStorageKeys.MOLTEN, new FluidBuilder()
                     .temperature(material.getBlastTemperature() + 1000));
         }
-        // if it is not hot enough to produce molten fluid, ABS Producer grabs normal liquid,
-        // thus we don't need to do anything.
     }
 }
