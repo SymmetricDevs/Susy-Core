@@ -1,7 +1,6 @@
 package supersymmetry.loaders.recipes;
 
 import gregtech.api.GTValues;
-import gregtech.api.items.metaitem.MetaItem;
 import gregtech.api.recipes.ModHandler;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMaps;
@@ -9,7 +8,6 @@ import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.api.recipes.ingredients.IntCircuitIngredient;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.material.Material;
-import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.info.MaterialFlag;
 import gregtech.api.unification.material.info.MaterialFlags;
 import gregtech.api.unification.material.properties.DustProperty;
@@ -17,13 +15,11 @@ import gregtech.api.unification.material.properties.IMaterialProperty;
 import gregtech.api.unification.material.properties.PropertyKey;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.unification.stack.UnificationEntry;
-import gregtech.api.util.GTUtility;
 import gregtech.api.util.function.TriConsumer;
 import gregtech.common.items.MetaItems;
 import gregtech.common.items.ToolItems;
-import gregtech.loaders.recipe.handlers.MaterialRecipeHandler;
-import gregtech.loaders.recipe.handlers.RecipeHandlerList;
 import gregtech.loaders.recipe.handlers.RecyclingRecipeHandler;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
@@ -76,6 +72,38 @@ public class SuSyMaterialRecipeHandler {
         mapMolds.put(OrePrefix.gear, MetaItems.SHAPE_MOLD_GEAR.getStackForm());
         mapMolds.put(OrePrefix.gearSmall, MetaItems.SHAPE_MOLD_GEAR_SMALL.getStackForm());
         mapMolds.put(OrePrefix.ingot, MetaItems.SHAPE_MOLD_INGOT.getStackForm());
+        Item susyMetaItem = Item.getByNameOrId("gregtech:meta_item_2");
+        if (susyMetaItem != null) {
+            mapMolds.put(OrePrefix.stickLong, new ItemStack(susyMetaItem, 1, 111));
+            SuSyRecipeMaps.HOT_ISOSTATIC_PRESS.recipeBuilder()
+                    .input(dust, material)
+                    .notConsumable(new ItemStack(susyMetaItem, 1, 112))
+                    .fluidInputs(Argon.getFluid(100))
+                    .output(ring, material, 4)
+                    .EUt(VA[HV]).duration((int) material.getMass())
+                    .buildAndRegister();
+            SuSyRecipeMaps.HOT_ISOSTATIC_PRESS.recipeBuilder()
+                    .input(dust, material)
+                    .notConsumable(new ItemStack(susyMetaItem, 1, 112))
+                    .fluidInputs(Nitrogen.getFluid(200))
+                    .output(ring, material, 4)
+                    .EUt(VA[HV]).duration((int) material.getMass() * 2)
+                    .buildAndRegister();
+            SuSyRecipeMaps.HOT_ISOSTATIC_PRESS.recipeBuilder()
+                    .input(dust, material)
+                    .notConsumable(new ItemStack(susyMetaItem, 1, 106))
+                    .fluidInputs(Argon.getFluid(100))
+                    .output(stick, material, 2)
+                    .EUt(VA[HV]).duration((int) material.getMass())
+                    .buildAndRegister();
+            SuSyRecipeMaps.HOT_ISOSTATIC_PRESS.recipeBuilder()
+                    .input(dust, material)
+                    .notConsumable(new ItemStack(susyMetaItem, 1, 106))
+                    .fluidInputs(Nitrogen.getFluid(200))
+                    .output(stick, material, 2)
+                    .EUt(VA[HV]).duration((int) material.getMass() * 2)
+                    .buildAndRegister();
+        }
         for (Map.Entry<OrePrefix, ItemStack> entry : mapMolds.entrySet()) {
             if (OreDictUnifier.get(entry.getKey(), material, 1).isEmpty()) {
                 continue;
@@ -110,6 +138,13 @@ public class SuSyMaterialRecipeHandler {
                 .output(nugget, material, 9)
                 .EUt(VA[HV]).duration((int) material.getMass() * 2)
                 .buildAndRegister();
+        // The warning doesn't actually apply
+        if (Item.getItemById(5300) != null) {
+
+
+        }
+
+
         ItemStack ingotStack = OreDictUnifier.get(ingot, material);
 
         List<ItemStack> inputItems = new ArrayList<>();
