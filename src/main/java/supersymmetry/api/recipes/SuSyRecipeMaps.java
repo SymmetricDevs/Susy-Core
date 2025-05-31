@@ -245,7 +245,7 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_FUSION, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.ARC);
 
-    public static final RecipeMap<SimpleRecipeBuilder> ADVANCED_ARC_FURNACE = new RecipeMap<>("advanced_arc_furnace", 4, 2, 3, 1, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<SimpleRecipeBuilder> ADVANCED_ARC_FURNACE = new RecipeMap<>("advanced_arc_furnace", 9, 2, 3, 1, new SimpleRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.ARC);
 
@@ -348,7 +348,7 @@ public class SuSyRecipeMaps {
             .allowEmptyOutput();
 
     public static final RecipeMap<SimpleRecipeBuilder> HOT_ISOSTATIC_PRESS = new RecipeMap<>("hot_isostatic_press", 3, 1, 1, 0, new SimpleRecipeBuilder(), false)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_COMPRESS, ProgressWidget.MoveType.VERTICAL)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_COMPRESS, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.COMPRESSOR);
 
     public static final RecipeMap<SimpleRecipeBuilder> GAS_ATOMIZER = new RecipeMap<>("gas_atomizer", 1, 1, 1, 0, new SimpleRecipeBuilder(), false)

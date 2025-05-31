@@ -77,6 +77,9 @@ public class SuSyMaterialRecipeHandler {
         mapMolds.put(OrePrefix.gearSmall, MetaItems.SHAPE_MOLD_GEAR_SMALL.getStackForm());
         mapMolds.put(OrePrefix.ingot, MetaItems.SHAPE_MOLD_INGOT.getStackForm());
         for (Map.Entry<OrePrefix, ItemStack> entry : mapMolds.entrySet()) {
+            if (OreDictUnifier.get(entry.getKey(), material, 1).isEmpty()) {
+                continue;
+            }
             int amount = (int) (entry.getKey().getMaterialAmount(material) / GTValues.M);
             SuSyRecipeMaps.HOT_ISOSTATIC_PRESS.recipeBuilder()
                     .input(dust, material, amount)
@@ -100,6 +103,13 @@ public class SuSyMaterialRecipeHandler {
                 .output(nugget, material, 9)
                 .EUt(VA[HV]).duration((int) material.getMass())
                 .buildAndRegister();
+        SuSyRecipeMaps.HOT_ISOSTATIC_PRESS.recipeBuilder()
+                .input(dust, material)
+                .notConsumable(MetaItems.SHAPE_MOLD_NUGGET.getStackForm())
+                .fluidInputs(Nitrogen.getFluid(200))
+                .output(nugget, material, 9)
+                .EUt(VA[HV]).duration((int) material.getMass() * 2)
+                .buildAndRegister();
         ItemStack ingotStack = OreDictUnifier.get(ingot, material);
 
         List<ItemStack> inputItems = new ArrayList<>();
@@ -109,15 +119,15 @@ public class SuSyMaterialRecipeHandler {
         Recipe r = WIREMILL_RECIPES.findRecipe(8, inputItems, fluidInputs, false);
         if (r != null) {
             WIREMILL_RECIPES.removeRecipe(r);
+            WIREMILL_RECIPES.recipeBuilder()
+                    .input(stick, material)
+                    .circuitMeta(1)
+                    .output(wireGtSingle, material, 1)
+                    .duration((int) material.getMass() / 4)
+                    .EUt(getVoltageMultiplier(material))
+                    .buildAndRegister();
         }
 
-        WIREMILL_RECIPES.recipeBuilder()
-                .input(stick, material)
-                .circuitMeta(1)
-                .output(wireGtSingle, material, 1)
-                .duration((int) material.getMass() / 4)
-                .EUt(getVoltageMultiplier(material))
-                .buildAndRegister();
 
         r = BENDER_RECIPES.findRecipe(8, inputItems, fluidInputs, false);
         if (r != null) {

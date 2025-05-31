@@ -804,6 +804,8 @@ recipemap.sieve_distillation.name=Fractional Distillation
 recipemap.jet_wingpack_fuels.name=Jet Wingpack Fuels
 recipemap.curtain_coater.name=Curtain Coater
 recipemap.milling.name=Precise Milling Machine
+recipemap.hot_isostatic_press.name=Hot Isostatic Press
+recipemap.gas_atomizer.name=Gas Atomizer
 
 gregtech.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 
