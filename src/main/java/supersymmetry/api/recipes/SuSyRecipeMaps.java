@@ -1,11 +1,13 @@
 package supersymmetry.api.recipes;
 
+import gregicality.multiblocks.api.recipes.GCYMRecipeMaps;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.widgets.ProgressWidget;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.builders.FuelRecipeBuilder;
 import gregtech.api.recipes.builders.PrimitiveRecipeBuilder;
 import gregtech.api.recipes.builders.SimpleRecipeBuilder;
+import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.core.sound.GTSoundEvents;
 import gregtechfoodoption.recipe.GTFORecipeMaps;
 import net.minecraft.client.gui.Gui;
@@ -359,4 +361,19 @@ public class SuSyRecipeMaps {
 
     public static final RecipeMap<SimpleRecipeBuilder> MILLING_RECIPES = new RecipeMap<>("milling", 2, 1, 0, 0, new SimpleRecipeBuilder().EUt(VA[LV]), false)
             .setSound(GTSoundEvents.CUT);
+
+    static {
+        GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()
+                .inputs(recipeBuilder.getInputs().toArray(new GTRecipeInput[0]))
+                .fluidInputs(recipeBuilder.getFluidInputs())
+                .outputs(recipeBuilder.getOutputs())
+                .chancedOutputs(recipeBuilder.getChancedOutputs())
+                .fluidOutputs(recipeBuilder.getFluidOutputs())
+                .chancedFluidOutputs(recipeBuilder.getChancedFluidOutputs())
+                .cleanroom(recipeBuilder.getCleanroom())
+                .duration(recipeBuilder.getDuration())
+                .EUt(recipeBuilder.getEUt())
+                .buildAndRegister()
+        );
+    }
 }
