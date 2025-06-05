@@ -87,7 +87,9 @@ public class MetaTileEntityIncinerator extends TieredMetaTileEntity implements I
             if (this.getWorld().isRemote) {
                 this.incineratingParticles();
             } else {
-                getWorld().playSound(null, getPos(), SoundEvents.ENTITY_GENERIC_BURN, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                if (!this.isMuffled()) {
+                    getWorld().playSound(null, getPos(), SoundEvents.ENTITY_GENERIC_BURN, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                }
             }
         }
         if (!this.getWorld().isRemote && this.getOffsetTimer() % 40 == 0) {
