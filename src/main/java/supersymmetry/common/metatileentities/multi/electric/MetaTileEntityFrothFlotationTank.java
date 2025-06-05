@@ -29,10 +29,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.client.renderer.particles.SusyParticleFrothBubble;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockMultiblockTank;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -40,15 +42,18 @@ import supersymmetry.common.blocks.SuSyBlocks;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Random;
+import java.util.function.Consumer;
 
 public class MetaTileEntityFrothFlotationTank extends RecipeMapMultiblockController {
 
     private Recipe previousRecipe;
     private TextureAtlasSprite fluidTexture;
     private int fluidColor;
+    private boolean hasFluidSelected = false;
     private static final ThreadLocal<BlockRenderer.BlockFace> blockFaces = ThreadLocal
             .withInitial(BlockRenderer.BlockFace::new);
-    private static final Cuboid6 FLUID_RENDER_CUBOID = new Cuboid6(0,0,0,1,1/16F,1);
+    private static final Cuboid6 FLUID_RENDER_CUBOID = new Cuboid6(0,0,0,1,3/16F,1);
 
     public MetaTileEntityFrothFlotationTank(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.FROTH_FLOTATION);
@@ -87,40 +92,56 @@ public class MetaTileEntityFrothFlotationTank extends RecipeMapMultiblockControl
 
     @Override
     public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
-        if(this.isActive()) {
-            if (this.fluidTexture == null)
-                return;
-            EnumFacing facing = this.getFrontFacing().getOpposite();
-            //I'm not sure if hardcoding this pattern is the best approach, but it is surely the easiest.
-            for (int x = -1; x < 2; x++) {
-                for (int y = 2; y < 5; y++) {
-                    if(x == 0 && y == 3) continue; //center block doesn't have fluid in it.
-                    int xPos = y*facing.getXOffset() + x*facing.getZOffset();
-                    int zPos = x*facing.getXOffset() + y*facing.getZOffset();
-                    renderFluid(new Vec3i(xPos, 2, zPos),renderState);
-                }
-            }
-
-        }
         super.renderMetaTileEntity(renderState, translation, pipeline);
+        if(this.isActive() && this.fluidTexture != null)
+            atEachTank(pos -> renderFluid(pos,renderState));
+
     }
 
 
     @Override
     public void update() {
         super.update();
-        if(this.isActive() && !getWorld().isRemote) {
-            //Updates fluid texture and color when recipe is changed
-            if(getRecipeMapWorkable().getPreviousRecipe() != previousRecipe && getRecipeMapWorkable().getPreviousRecipe() != null) {
-                //filters the input fluids for the consumed input fluid (not flotation agents)
-                getRecipeMapWorkable().getPreviousRecipe().getFluidInputs().stream().filter(fluidInput -> !fluidInput.isNonConsumable()).findFirst().ifPresent(fluidInput -> {
-                    Fluid fluid = fluidInput.getInputFluidStack().getFluid();
-                    this.writeCustomData(0x4646, buf -> {
-                        buf.writeInt(fluid.getColor());
-                        buf.writeResourceLocation(fluid.getStill());
+        if(this.isActive()) {
+            if (!getWorld().isRemote){
+                //Updates fluid texture and color when recipe is changed
+                Recipe currentRecipe = getRecipeMapWorkable().getPreviousRecipe();
+                if((currentRecipe != previousRecipe || getWorld().getWorldTime() % 100 == 0) && currentRecipe != null) { //update on recipe change and every 5 seconds
+                    //filters the input fluids for the consumed input fluid (not flotation agents)
+                    currentRecipe.getFluidInputs().stream().filter(fluidInput -> !fluidInput.isNonConsumable()).findFirst().ifPresent(fluidInput -> {
+                        System.out.println("AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH I HAVE PARTICLE AIDS");
+                        Fluid fluid = fluidInput.getInputFluidStack().getFluid();
+                        this.writeCustomData(0x4646, buf -> {
+                            buf.writeInt(fluid.getColor());
+                            buf.writeResourceLocation(fluid.getStill());
+                        });
+                        previousRecipe = currentRecipe;
                     });
-                    previousRecipe = getRecipeMapWorkable().getPreviousRecipe();
-                });
+                }
+            } else if(this.fluidTexture != null) {
+                Random rand = getWorld().rand;
+
+                atEachTank(pos -> Minecraft.getMinecraft().effectRenderer.addEffect(new SusyParticleFrothBubble(getWorld(),pos.getX() + rand.nextDouble(), pos.getY() + 2.5F/16, pos.getZ() + rand.nextDouble(), 0, .005, 0, fluidColor)));
+            }
+        }
+    }
+
+    private final static String[] fluidPattern = {"FFF","F F","FFF"};
+    
+    //the coordinates where the pattern is relative to the multi controller
+    private final static int patternXOffset = -1;
+    private final static int patternYOffset = 2;
+
+    private void atEachTank(Consumer<BlockPos> consumer) {
+        EnumFacing facing = this.getFrontFacing().getOpposite();
+        for (int y = 0; y < fluidPattern.length; y++) {
+            for (int x = 0; x < fluidPattern[y].length(); x++) {
+                if(fluidPattern[y].charAt(x) == ' ') continue;
+                consumer.accept(getPos().add(
+                        (y+patternYOffset)*facing.getXOffset() + (x+patternXOffset)*facing.getZOffset(),
+                        2,
+                        (x+patternXOffset)*facing.getXOffset() + (y+patternYOffset)*facing.getZOffset()
+                ));
             }
         }
     }
@@ -136,14 +157,14 @@ public class MetaTileEntityFrothFlotationTank extends RecipeMapMultiblockControl
 
 
     private void renderFluid(Vec3i pos, CCRenderState renderState){
-        IVertexOperation[] A_pipeline = {
-                new Translation(this.getPos().add(pos)),
+        IVertexOperation[] fluid_render_pipeline = {
+                new Translation(pos),
                 new IconTransformation(fluidTexture),
                 new ColourMultiplier(fluidColor)
         };
         BlockRenderer.BlockFace blockFace = blockFaces.get();
         blockFace.loadCuboidFace(FLUID_RENDER_CUBOID, EnumFacing.UP.getIndex());
-        renderState.setPipeline(blockFace, 0, blockFace.verts.length, A_pipeline);
+        renderState.setPipeline(blockFace, 0, blockFace.verts.length, fluid_render_pipeline);
         renderState.render();
     }
 
