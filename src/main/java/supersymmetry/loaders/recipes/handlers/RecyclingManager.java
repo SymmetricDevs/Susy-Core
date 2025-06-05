@@ -4,8 +4,7 @@ import com.google.common.graph.ElementOrder;
 import com.google.common.graph.MutableValueGraph;
 import com.google.common.graph.ValueGraphBuilder;
 import gregtech.api.items.toolitem.ToolHelper;
-import gregtech.api.recipes.FluidCellInput;
-import gregtech.api.recipes.RecyclingHandler;
+import gregtech.api.recipes.*;
 import gregtech.api.recipes.ingredients.GTRecipeFluidInput;
 import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.api.unification.OreDictUnifier;
@@ -15,10 +14,11 @@ import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.unification.stack.ItemAndMetadata;
 import gregtech.api.unification.stack.ItemMaterialInfo;
 import gregtech.api.unification.stack.MaterialStack;
-import gregtech.common.metatileentities.MetaTileEntities;
+import gregtech.api.util.EnumValidationResult;
+import gregtech.api.util.ValidationResult;
+import gregtech.loaders.recipe.RecyclingRecipes;
 import it.unimi.dsi.fastutil.chars.Char2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.*;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.math.Fraction;
 import org.jetbrains.annotations.NotNull;
@@ -26,6 +26,8 @@ import supersymmetry.api.recycling.MaterialRecyclable;
 import supersymmetry.api.recycling.Recyclable;
 import supersymmetry.api.recycling.toposort.TopologicalSort;
 import supersymmetry.mixins.gregtech.OreDictUnifierAccessor;
+import supersymmetry.mixins.gregtech.RecipeBuilderAccessor;
+import supersymmetry.mixins.gregtech.RecyclingRecipesMixin;
 
 import java.util.Comparator;
 import java.util.List;
@@ -36,6 +38,7 @@ import java.util.stream.Collectors;
 // TODO: GrS Ingredient compat
 // TODO: An event system for registering recycling info before / after the unification data
 // TODO: Partial recursive recycling data reload
+// TODO: Store part of the node geometry so that they can be restored when reloaded via GrS
 public class RecyclingManager {
 
     private static final MutableValueGraph<Recyclable, Fraction> graphStorage = ValueGraphBuilder.directed()
@@ -43,6 +46,10 @@ public class RecyclingManager {
             .nodeOrder(ElementOrder.unordered())
             .expectedNodeCount(8192)
             .build();
+
+    public static final Object2ObjectOpenHashMap<Recyclable, Recipe> arcRecipes = new Object2ObjectOpenHashMap<>();
+
+    public static final Object2ObjectOpenHashMap<Recyclable, Recipe> maceratorRecipes = new Object2ObjectOpenHashMap<>();
 
     /// Copied lots of CEu codes here to parse a recipe properly
     ///
@@ -125,9 +132,7 @@ public class RecyclingManager {
 
     private static void addRecyclingInternal(ItemStack output, Object2IntMap<Recyclable> ingredients, int outputCount) {
         Recyclable out = Recyclable.from(output);
-        if (output.isItemEqual(MetaTileEntities.WORKBENCH.getStackForm())) {
-            System.out.println("haha you're caught");
-        }
+
         ingredients.forEach((ing, count) -> graphStorage.putEdgeValue(
                 ing, out, Fraction.getFraction(count, outputCount)
         ));
@@ -141,51 +146,41 @@ public class RecyclingManager {
     }
 
     private static void registerOreInternal(ItemStack itemStack, ItemMaterialInfo materialInfo) {
-        if (itemStack.isItemEqual(new ItemStack(Blocks.CHEST))) {
-            System.out.println("haha you're caught");
-        }
         if (itemStack.isEmpty()) return;
         OreDictUnifierAccessor.getUnificationInfo().put(new ItemAndMetadata(itemStack), materialInfo);
     }
 
     public static void init() {
 
-        /// For testing
-//        addRecycling(new ItemStack(Items.SADDLE), 1, "XXX", "XYX",
-//                "XXX", 'X', new ItemStack(Items.CAKE), 'Y',
-//                new UnificationEntry(OrePrefix.plate, Materials.Olivine));
-//
-//        addRecycling(new ItemStack(Items.CAKE), 1, "XXX", "XYX",
-//                "XXX", 'X', new UnificationEntry(OrePrefix.foil, Materials.Zinc), 'Y',
-//                new UnificationEntry(OrePrefix.plate, Materials.Olivine));
-
         /// Register all unification data
-        TopologicalSort.topologicalSort(graphStorage, null).forEach(output -> {
+        TopologicalSort.topologicalSort(graphStorage, null).forEach(RecyclingManager::registerRecyclingData);
+    }
 
-            if (output instanceof MaterialRecyclable) return; /// Skip materials
+    private static void registerRecyclingData(Recyclable output) {
+        if (output instanceof MaterialRecyclable) return; /// Skip materials
 
-            ItemStack outputStack = output.asStack();
-            OrePrefix prefix = OreDictUnifier.getPrefix(outputStack);
-            if (prefix != null && prefix.getMaterialAmount(null) > 0)
-                return; /// MetaPrefixItems are handled by ceu itself
+        ItemStack outputStack = output.asStack();
+        OrePrefix prefix = OreDictUnifier.getPrefix(outputStack);
+        if (prefix != null && prefix.getMaterialAmount(null) > 0) {
+            return; /// MetaPrefixItems are handled by ceu itself
+        }
 
-            Object2ObjectOpenHashMap<Material, Fraction> mStacks = new Object2ObjectOpenHashMap<>();
+        Object2ObjectOpenHashMap<Material, Fraction> mStacks = new Object2ObjectOpenHashMap<>();
 
-            graphStorage.predecessors(output).forEach(
-                    /// Theoretically no default value is needed. However, it has to be here is for CrL compat
-                    /// since [MutableValueGraph#edgeValue] returns [Optional] in newer guava versions
-                    ing -> ing.addToMStack(mStacks, graphStorage.edgeValueOrDefault(ing, output, Fraction.ZERO))
-            );
+        graphStorage.predecessors(output).forEach(
+                /// Theoretically no default value is needed. However, it has to be here is for CrL compat
+                /// since [MutableValueGraph#edgeValue] returns [Optional] in newer guava versions
+                ing -> ing.addToMStack(mStacks, graphStorage.edgeValueOrDefault(ing, output, Fraction.ZERO))
+        );
 
-            if (mStacks.isEmpty()) return;
+        if (mStacks.isEmpty()) return;
 
-            registerOreInternal(outputStack,
-                    new ItemMaterialInfo(mStacks.entrySet().stream()
-                            .map(e -> new MaterialStack(e.getKey(), e.getValue().intValue()))
-                            .sorted(Comparator.comparingLong(m -> -m.amount))
-                            .collect(Collectors.toList())
-                    ));
-        });
+        registerOreInternal(outputStack,
+                new ItemMaterialInfo(mStacks.entrySet().stream()
+                        .map(e -> new MaterialStack(e.getKey(), e.getValue().intValue()))
+                        .sorted(Comparator.comparingLong(m -> -m.amount))
+                        .collect(Collectors.toList())
+                ));
     }
 
     /// Copied and modified from VEu
@@ -231,5 +226,77 @@ public class RecyclingManager {
                                          @NotNull Fraction amount, @NotNull MaterialStack ms) {
         Fraction oldAmount = receiver.getOrDefault(ms.material, Fraction.ZERO);
         receiver.put(ms.material, oldAmount.add(amount.multiplyBy(Fraction.getFraction((int) ms.amount, 1))));
+    }
+
+    /// Steps for resetting:
+    /// ┌─ 1. remove related recipes from [arcRecipes], [maceratorRecipes], and related recipe maps.
+    /// │  2. remove edges connecting old ingredients to the output from [graphStorage].
+    /// │  3. connect new edges according to the new ingredients.
+    /// │  4. calculate & override old unification data in [OreDictUnifier].
+    /// │  5. registering new recycling recipes and put them in [arcRecipes] & [maceratorRecipes].
+    /// └─ 6. call the same method recursively for all downstream ingredients.
+    ///
+    /// For refreshing, only steps 1, 4, 5, and 6 are performed, since the geometry of the node is not changed.
+    private static void resetRecyclingRecursivelyInternal(ItemStack outputStack, Object2IntMap<Recyclable> ingredients, int outputCount, boolean refreshOnly) {
+        Recyclable out = Recyclable.from(outputStack);
+
+        removeByRecyclable(out);    /// Step 1
+
+        if (!refreshOnly) {
+            graphStorage.predecessors(out).forEach(ing -> graphStorage.removeEdge(ing, out));   /// Step 2
+            addRecyclingInternal(outputStack, ingredients, outputCount); /// Step 3
+        }
+
+        registerRecyclingData(out); /// Step 4
+
+        ItemMaterialInfo info = OreDictUnifier.getMaterialInfo(outputStack);
+        if (info == null) return;
+        RecyclingRecipes.registerRecyclingRecipes(outputStack, info.getMaterials(), false, null);   /// Step 5
+
+        graphStorage.successors(out).forEach(ing -> resetRecyclingRecursivelyInternal(ing.asStack(), ingredients, outputCount, true));  /// Step 6
+    }
+
+    /// Only removes recipes from [RecipeMaps#MACERATOR_RECIPES] and [RecipeMaps#ARC_FURNACE_RECIPES]
+    ///
+    /// @implNote as long as [RecipeMap#removeRecipe(Recipe)] is called in a groovy script it will be considered as a GrS recipe
+    public static void removeByRecyclable(Recyclable recyclable) {
+        Recipe recipe = arcRecipes.remove(recyclable);
+        if (recipe != null) {
+            RecipeMaps.ARC_FURNACE_RECIPES.removeRecipe(recipe);
+        }
+
+        recipe = maceratorRecipes.remove(recyclable);
+        if (recipe != null) {
+            RecipeMaps.MACERATOR_RECIPES.removeRecipe(recipe);
+        }
+    }
+
+    /// Mixin Hook, with lots of code copied from CEu
+    ///
+    /// @see RecyclingRecipesMixin
+    /// @see RecipeBuilder#buildAndRegister()
+    public static void buildAndRegister(RecipeBuilder<?> recipeBuilder, ItemStack output) {
+        var accessor = (RecipeBuilderAccessor) recipeBuilder;
+
+        var buildAction = accessor.getOnBuildAction();
+        if (buildAction != null) {
+            buildAction.accept(recipeBuilder);
+        }
+
+        ValidationResult<Recipe> validationResult = recipeBuilder.build();
+        RecipeMap<?> recipeMap = accessor.getRecipeMap();
+        recipeMap.addRecipe(validationResult);
+
+        /// Extra code to register recycling recipes
+        if (validationResult.getType() == EnumValidationResult.VALID) {
+            Recipe recipe = validationResult.getResult();
+            Recyclable recyclable = Recyclable.from(output);
+
+            if (recipeMap == RecipeMaps.ARC_FURNACE_RECIPES) {
+                arcRecipes.put(recyclable, recipe);
+            } else if (recipeMap == RecipeMaps.MACERATOR_RECIPES) {
+                maceratorRecipes.put(recyclable, recipe);
+            }
+        }
     }
 }
