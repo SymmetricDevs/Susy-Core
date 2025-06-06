@@ -7,7 +7,9 @@ import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Matrix4;
 import codechicken.lib.vec.Vector3;
 import codechicken.lib.vec.uv.IconTransformation;
-import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
+import gregtech.api.capability.GregtechDataCodes;
+import gregtech.api.capability.impl.MultiblockRecipeLogic;
+import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.ingredients.GTRecipeInput;
@@ -21,9 +23,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Optional;
-import java.util.function.Consumer;
 
 
 /** This class is used to render a non-consumable input fluid according to given pattern.
@@ -31,56 +34,58 @@ import java.util.function.Consumer;
  * Expects a recipemap with a fluid input and at least one consumable fluid input in every recipe.
  * @author h3tR / RMI
  */
-public abstract class FluidRenderRecipeMapMultiBlock extends RecipeMapMultiblockController {
+public abstract class FluidRenderRecipeMapMultiBlock extends CachedPatternRecipeMapMultiblock {
 
     private static final Cuboid6 FLUID_RENDER_CUBOID = new Cuboid6(0,0,0,1,3/16F,1);
-    private static final int FLUID_RENDERER_DISCRIMINATOR = 0x4652;  //Spells out FR in hex (for fluid renderer)
-    private static final int FLUID_RENDER_STATUS_DISCRIMINATOR = FLUID_RENDERER_DISCRIMINATOR + 1;
 
-    private Recipe previousRecipe;
+    public static final int UPDATE_FLUID_INFO = GregtechDataCodes.assignId();
+    public static final int CHANGE_FLUID_RENDER_STATUS = GregtechDataCodes.assignId();
+
+    @SideOnly(Side.CLIENT)
     protected TextureAtlasSprite fluidTexture;
+    @SideOnly(Side.CLIENT)
     protected int fluidColor;
+    @SideOnly(Side.CLIENT)
     protected boolean renderFluid = false;
 
-    private final String[] fluidPattern;
-    private final Vec3i patternOffset;
 
-    public FluidRenderRecipeMapMultiBlock(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap, String[] fluidPattern, Vec3i patternOffset) {
+
+    public FluidRenderRecipeMapMultiBlock(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap, boolean perfectOC) {
         super(metaTileEntityId, recipeMap);
-        this.patternOffset = patternOffset;
-        this.fluidPattern = fluidPattern;
+        this.recipeMapWorkable = new MultiblockRecipeLogic(this, perfectOC){
+            @Override
+            protected void setupRecipe(Recipe recipe) {
+                super.setupRecipe(recipe);
+                updateRenderInfo(recipe);
+            }
+        };
     }
 
     @Override
-    public void update() {
-        super.update();
-        if(this.isActive() && !getWorld().isRemote){
-                //Updates fluid texture and color when recipe is changed
-            Recipe currentRecipe = getRecipeMapWorkable().getPreviousRecipe();
-            if((currentRecipe != previousRecipe || getWorld().getMinecraftServer().getTickCounter() % 100 == 0) && currentRecipe != null) { //update on recipe change and every 5 seconds
-                Optional<Fluid> fluid = getFluidToRender(currentRecipe);
-                fluid.ifPresent(fluidToRender -> {
-                    this.writeCustomData(FLUID_RENDERER_DISCRIMINATOR, buf -> {
-                        buf.writeInt(fluidToRender.getColor());
-                        buf.writeResourceLocation(fluidToRender.getStill());
-                    });
-                    this.writeCustomData(FLUID_RENDER_STATUS_DISCRIMINATOR, buf -> {
-                        buf.writeBoolean(true);
-                    });
-                    previousRecipe = currentRecipe;
-                });
-                //ifPresentOrElse doesn't exist in this java version. Absolutely deplorable
-                if(!fluid.isPresent())
-                    this.writeCustomData(FLUID_RENDER_STATUS_DISCRIMINATOR, buf -> {
-                        buf.writeBoolean(false);
-                    });
-            }
-        }
+    protected void formStructure(PatternMatchContext context) {
+        super.formStructure(context);
+        updateRenderInfo(recipeMapWorkable.getPreviousRecipe());
     }
 
-    protected Optional<Fluid> getFluidToRender(Recipe currentRecipe){
+    public void updateRenderInfo(Recipe recipe){
+        if(recipe == null) return;
+        Optional<Fluid> fluid = getFluidToRender(recipe);
+        fluid.ifPresent(fluidToRender -> {
+            this.writeCustomData(UPDATE_FLUID_INFO, buf -> {
+                buf.writeInt(fluidToRender.getColor());
+                buf.writeResourceLocation(fluidToRender.getStill());
+            });
+            this.writeCustomData(CHANGE_FLUID_RENDER_STATUS, buf -> buf.writeBoolean(true));
+        });
+        //ifPresentOrElse doesn't exist in this java version. Absolutely deplorable
+        if(!fluid.isPresent())
+            this.writeCustomData(CHANGE_FLUID_RENDER_STATUS, buf -> buf.writeBoolean(false));
+    }
+
+
+    protected Optional<Fluid> getFluidToRender(Recipe recipe){
         //filters the input fluids for a consumed input fluid (ignores fluid flotation agents in case of froth flotation)
-        return currentRecipe.getFluidInputs().stream().filter(fluidInput -> !fluidInput.isNonConsumable()).findFirst().map(GTRecipeInput::getInputFluidStack).map(FluidStack::getFluid);
+        return recipe.getFluidInputs().stream().filter(fluidInput -> !fluidInput.isNonConsumable()).findFirst().map(GTRecipeInput::getInputFluidStack).map(FluidStack::getFluid);
     }
 
 
@@ -88,44 +93,20 @@ public abstract class FluidRenderRecipeMapMultiBlock extends RecipeMapMultiblock
     public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
         super.renderMetaTileEntity(renderState, translation, pipeline);
         if(this.isActive() && renderFluid)
-            atEachFluidPos(pos -> renderFluid(pos, renderState, translation));
-    }
+            for(Vec3i pos: cachedPattern)
+                renderFluid(pos, renderState, translation);
 
-    protected void atEachFluidPos(Consumer<Vec3i> consumer) {
-        EnumFacing facing = this.getFrontFacing().getOpposite();
-        for (int z = 0; z < fluidPattern.length; z++) {
-            for (int x = 0; x < fluidPattern[z].length(); x++) {
-                if(fluidPattern[z].charAt(x) == ' ') continue;
-
-                int patternXOffset = x + patternOffset.getX();
-                int patternZOffset = z + patternOffset.getZ();
-
-                if(this.isFlipped ^ (facing == EnumFacing.NORTH || facing == EnumFacing.SOUTH) ){
-                    patternXOffset = -patternXOffset;
-                }
-
-                consumer.accept(new Vec3i(
-                        patternZOffset*facing.getXOffset() + patternXOffset*facing.getZOffset(),
-                            patternOffset.getY(),
-                        patternXOffset*facing.getXOffset() + patternZOffset*facing.getZOffset()
-                ));
-            }
-        }
     }
 
     @Override
-    public void receiveCustomData(int discriminator, PacketBuffer buf) {
-        super.receiveCustomData(discriminator, buf);
-        switch (discriminator) {
-            case FLUID_RENDERER_DISCRIMINATOR: {
-                this.fluidColor = buf.readInt();
-                this.fluidTexture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(buf.readResourceLocation().toString());
-                break;
-            }
-            case FLUID_RENDER_STATUS_DISCRIMINATOR: {
-                this.renderFluid = buf.readBoolean();
-                break;
-            }
+    public void receiveCustomData(int dataId, PacketBuffer buf) {
+        super.receiveCustomData(dataId, buf);
+        //Can't use a switch statment here as the dataIds aren't constants.
+        if(dataId == UPDATE_FLUID_INFO) {
+            this.fluidColor = buf.readInt();
+            this.fluidTexture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(buf.readResourceLocation().toString());
+        }else if(dataId == CHANGE_FLUID_RENDER_STATUS) {
+            this.renderFluid = buf.readBoolean();
         }
     }
 
@@ -137,10 +118,4 @@ public abstract class FluidRenderRecipeMapMultiBlock extends RecipeMapMultiblock
         Textures.renderFace(renderState, translation.copy().translate(Vector3.fromVec3i(offset)), fluid_render_pipeline, EnumFacing.UP, FLUID_RENDER_CUBOID, fluidTexture, BlockRenderLayer.CUTOUT_MIPPED);
     }
 
-
-    //This should never be overwritten as it is not supported
-    @Override
-    public boolean allowsExtendedFacing() {
-        return false;
-    }
 }

@@ -1,6 +1,5 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -20,6 +19,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import supersymmetry.api.metatileentity.multiblock.FluidRenderRecipeMapMultiBlock;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
@@ -32,28 +33,8 @@ import java.util.List;
 
 public class MetaTileEntityClarifier extends FluidRenderRecipeMapMultiBlock {
 
-
-    private final static String[] FLUID_PATTERN = {
-            "     DDDD     ",
-            "   DDDDDDDD   ",
-            "  DDDDDDDDDD  ",
-            " DDDDDDDDDDDD ",
-            " DDDDDDDDDDDD ",
-            "DDDDDDDDDDDDDD",
-            "DDDDDD  DDDDDD",
-            "DDDDDD  DDDDDD",
-            "DDDDDDDDDDDDDD",
-            " DDDDDDDDDDDD ",
-            " DDDDDDDDDDDD ",
-            "  DDDDDDDDDD  ",
-            "   DDDDDDDD   ",
-            "     DDDD     "
-    };
-
-
     public MetaTileEntityClarifier(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SuSyRecipeMaps.CLARIFIER, FLUID_PATTERN, new Vec3i(-11, 1, 1));
-        this.recipeMapWorkable = new MultiblockRecipeLogic(this, true);
+        super(metaTileEntityId, SuSyRecipeMaps.CLARIFIER, true);
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
@@ -112,5 +93,35 @@ public class MetaTileEntityClarifier extends FluidRenderRecipeMapMultiBlock {
     @Override
     public boolean getIsWeatherOrTerrainResistant() {
         return true;
+    }
+
+    private final static String[][] FLUID_PATTERN = {{
+            "     DDDD",
+            "   DDDDDDDD",
+            "  DDDDDDDDDD",
+            " DDDDDDDDDDDD",
+            " DDDDDDDDDDDD",
+            "DDDDDDDDDDDDDD",
+            "DDDDDD  DDDDDD",
+            "DDDDDD  DDDDDD",
+            "DDDDDDDDDDDDDD",
+            " DDDDDDDDDDDD",
+            " DDDDDDDDDDDD",
+            "  DDDDDDDDDD",
+            "   DDDDDDDD",
+            "     DDDD"
+    }};
+    private static final Vec3i PATTERN_OFFSET = new Vec3i(-11, 1, 1);
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    protected String[][] getPattern() {
+        return FLUID_PATTERN;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    protected Vec3i getPatternOffset() {
+        return PATTERN_OFFSET;
     }
 }

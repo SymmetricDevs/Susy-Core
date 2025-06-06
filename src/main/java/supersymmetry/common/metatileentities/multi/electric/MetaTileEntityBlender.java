@@ -1,6 +1,5 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -38,11 +37,11 @@ import java.util.Optional;
 
 public class MetaTileEntityBlender extends FluidRenderRecipeMapMultiBlock {
 
-    private final static String[] FLUID_PATTERN = {"FFF","FFF","FFF"};
+    private final static String[][] FLUID_PATTERN = {{"FFF","FFF","FFF"}};
+    private final static Vec3i PATTERN_OFFSET = new Vec3i(-1, 1, 1);
 
     public MetaTileEntityBlender(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SuSyRecipeMaps.BLENDER_RECIPES, FLUID_PATTERN, new Vec3i(-1, 1, 1));
-        this.recipeMapWorkable = new MultiblockRecipeLogic(this, true);
+        super(metaTileEntityId, SuSyRecipeMaps.BLENDER_RECIPES, true);
     }
 
     @Override
@@ -103,7 +102,18 @@ public class MetaTileEntityBlender extends FluidRenderRecipeMapMultiBlock {
     }
 
     @Override
-    protected Optional<Fluid> getFluidToRender(Recipe currentRecipe) {
-        return currentRecipe.getAllFluidOutputs().stream().findFirst().map(FluidStack::getFluid);
+    protected Optional<Fluid> getFluidToRender(Recipe recipe) {
+        //render output fluid instead
+        return recipe.getAllFluidOutputs().stream().findFirst().map(FluidStack::getFluid);
+    }
+
+    @Override
+    protected String[][] getPattern() {
+        return FLUID_PATTERN;
+    }
+
+    @Override
+    protected Vec3i getPatternOffset() {
+        return PATTERN_OFFSET;
     }
 }

@@ -33,10 +33,11 @@ import java.util.Random;
 
 public class MetaTileEntityFrothFlotationTank extends FluidRenderRecipeMapMultiBlock {
 
-    private final static String[] FLUID_PATTERN = {"FFF","F F","FFF"};
+    private final static String[][] FLUID_PATTERN = {{"FFF","F F","FFF"}};
+    private final static Vec3i PATTERN_OFFSET = new Vec3i(-1, 2, 2);
 
     public MetaTileEntityFrothFlotationTank(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SuSyRecipeMaps.FROTH_FLOTATION, FLUID_PATTERN, new Vec3i(-1, 2, 2));
+        super(metaTileEntityId, SuSyRecipeMaps.FROTH_FLOTATION, true);
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
@@ -75,10 +76,10 @@ public class MetaTileEntityFrothFlotationTank extends FluidRenderRecipeMapMultiB
         super.update();
         if(this.isActive() && getWorld().isRemote && this.renderFluid){
             Random rand = getWorld().rand;
-            atEachFluidPos(offset -> {
+            for(Vec3i offset: cachedPattern){
                 BlockPos pos = this.getPos().add(offset);
                 Minecraft.getMinecraft().effectRenderer.addEffect(new SusyParticleFrothBubble(getWorld(),pos.getX() + rand.nextDouble(), pos.getY() + 2.5F/16, pos.getZ() + rand.nextDouble(), 0, .005, 0, fluidColor));
-            });
+            }
         }
     }
 
@@ -86,5 +87,15 @@ public class MetaTileEntityFrothFlotationTank extends FluidRenderRecipeMapMultiB
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.FROTH_FLOTATION_OVERLAY;
+    }
+
+    @Override
+    protected String[][] getPattern() {
+        return FLUID_PATTERN;
+    }
+
+    @Override
+    protected Vec3i getPatternOffset() {
+        return PATTERN_OFFSET;
     }
 }
