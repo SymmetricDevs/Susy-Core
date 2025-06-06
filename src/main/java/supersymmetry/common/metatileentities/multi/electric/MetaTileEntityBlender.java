@@ -4,10 +4,10 @@ import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
-import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.TraceabilityPredicate;
+import gregtech.api.recipes.Recipe;
 import gregtech.api.unification.material.Materials;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
@@ -22,19 +22,26 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import supersymmetry.api.metatileentity.multiblock.FluidRenderRecipeMapMultiBlock;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Optional;
 
-public class MetaTileEntityBlender extends RecipeMapMultiblockController {
+public class MetaTileEntityBlender extends FluidRenderRecipeMapMultiBlock {
+
+    private final static String[] FLUID_PATTERN = {"FFF","FFF","FFF"};
 
     public MetaTileEntityBlender(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SuSyRecipeMaps.BLENDER_RECIPES);
+        super(metaTileEntityId, SuSyRecipeMaps.BLENDER_RECIPES, FLUID_PATTERN, new Vec3i(-1, 1, 1));
         this.recipeMapWorkable = new MultiblockRecipeLogic(this, true);
     }
 
@@ -95,4 +102,8 @@ public class MetaTileEntityBlender extends RecipeMapMultiblockController {
         return Textures.LARGE_CHEMICAL_REACTOR_OVERLAY;
     }
 
+    @Override
+    protected Optional<Fluid> getFluidToRender(Recipe currentRecipe) {
+        return currentRecipe.getAllFluidOutputs().stream().findFirst().map(FluidStack::getFluid);
+    }
 }

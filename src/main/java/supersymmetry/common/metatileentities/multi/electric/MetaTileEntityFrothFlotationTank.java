@@ -73,9 +73,9 @@ public class MetaTileEntityFrothFlotationTank extends FluidRenderRecipeMapMultiB
     @Override
     public void update() {
         super.update();
-        if(this.isActive() && getWorld().isRemote && this.fluidTexture != null){
+        if(this.isActive() && getWorld().isRemote && this.renderFluid){
             Random rand = getWorld().rand;
-            atEachTank(offset -> {
+            atEachFluidPos(offset -> {
                 BlockPos pos = this.getPos().add(offset);
                 Minecraft.getMinecraft().effectRenderer.addEffect(new SusyParticleFrothBubble(getWorld(),pos.getX() + rand.nextDouble(), pos.getY() + 2.5F/16, pos.getZ() + rand.nextDouble(), 0, .005, 0, fluidColor));
             });
