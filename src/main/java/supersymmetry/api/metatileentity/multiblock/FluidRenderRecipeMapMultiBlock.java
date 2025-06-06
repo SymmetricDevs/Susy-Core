@@ -24,12 +24,14 @@ import java.util.function.Consumer;
 
 
 /** This class is used to render a non-consumable input fluid according to given pattern.
- * It was designed for use in {@link supersymmetry.common.metatileentities.multi.electric.MetaTileEntityClarifier} and {@link supersymmetry.common.metatileentities.multi.electric.MetaTileEntityFrothFlotationTank}
+ * It was designed for use in {@link supersymmetry.common.metatileentities.multi.electric.MetaTileEntityClarifier} and {@link supersymmetry.common.metatileentities.multi.electric.MetaTileEntityFrothFlotationTank}.
+ * Expects a recipemap with a fluid input and at least one consumable fluid input in every recipe.
  * @author h3tR / RMI
  */
 public abstract class FluidRenderRecipeMapMultiBlock extends RecipeMapMultiblockController {
 
     private static final Cuboid6 FLUID_RENDER_CUBOID = new Cuboid6(0,0,0,1,3/16F,1);
+    private static final int FLUID_RENDERER_DISCRIMINATOR = 0x4652;  //Spells out FR in hex (for fluid renderer)
 
     private Recipe previousRecipe;
     protected TextureAtlasSprite fluidTexture;
@@ -49,13 +51,12 @@ public abstract class FluidRenderRecipeMapMultiBlock extends RecipeMapMultiblock
         super.update();
         if(this.isActive() && !getWorld().isRemote){
                 //Updates fluid texture and color when recipe is changed
-                Recipe currentRecipe = getRecipeMapWorkable().getPreviousRecipe();
-                if((currentRecipe != previousRecipe || getWorld().getWorldTime() % 100 == 0) && currentRecipe != null) { //update on recipe change and every 5 seconds
-                    //filters the input fluids for the consumed input fluid (not flotation agents)
+            Recipe currentRecipe = getRecipeMapWorkable().getPreviousRecipe();
+            if((currentRecipe != previousRecipe || getWorld().getMinecraftServer().getTickCounter() % 100 == 0) && currentRecipe != null) { //update on recipe change and every 5 seconds
+                    //filters the input fluids for a consumed input fluid (ignores fluid flotation agents in case of froth flotation)
                     currentRecipe.getFluidInputs().stream().filter(fluidInput -> !fluidInput.isNonConsumable()).findFirst().ifPresent(fluidInput -> {
-                        System.out.println("AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH I HAVE PARTICLE AIDS");
                         Fluid fluid = fluidInput.getInputFluidStack().getFluid();
-                        this.writeCustomData(0x4646, buf -> {
+                        this.writeCustomData(FLUID_RENDERER_DISCRIMINATOR, buf -> {
                             buf.writeInt(fluid.getColor());
                             buf.writeResourceLocation(fluid.getStill());
                         });
@@ -78,10 +79,18 @@ public abstract class FluidRenderRecipeMapMultiBlock extends RecipeMapMultiblock
         for (int z = 0; z < fluidPattern.length; z++) {
             for (int x = 0; x < fluidPattern[z].length(); x++) {
                 if(fluidPattern[z].charAt(x) == ' ') continue;
+
+                int patternXOffset = x + patternOffset.getX();
+                int patternZOffset = z + patternOffset.getZ();
+
+                if(this.isFlipped ^ (facing == EnumFacing.NORTH || facing == EnumFacing.SOUTH) ){
+                    patternXOffset = -patternXOffset;
+                }
+
                 consumer.accept(new Vec3i(
-                        (z+patternOffset.getZ())*facing.getXOffset() + (x+patternOffset.getX())*facing.getZOffset(),
+                        patternZOffset*facing.getXOffset() + patternXOffset*facing.getZOffset(),
                             patternOffset.getY(),
-                        (x+patternOffset.getX())*facing.getXOffset() + (z+patternOffset.getZ())*facing.getZOffset()
+                        patternXOffset*facing.getXOffset() + patternZOffset*facing.getZOffset()
                 ));
             }
         }
@@ -90,7 +99,7 @@ public abstract class FluidRenderRecipeMapMultiBlock extends RecipeMapMultiblock
     @Override
     public void receiveCustomData(int discriminator, PacketBuffer buf) {
         super.receiveCustomData(discriminator, buf);
-        if (discriminator == 0x4652) { //Spells out FR in hex (for fluid renderer)
+        if (discriminator == FLUID_RENDERER_DISCRIMINATOR) {
             this.fluidColor = buf.readInt();
             this.fluidTexture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(buf.readResourceLocation().toString());
         }
@@ -104,4 +113,10 @@ public abstract class FluidRenderRecipeMapMultiBlock extends RecipeMapMultiblock
         Textures.renderFace(renderState, translation.copy().translate(Vector3.fromVec3i(offset)), fluid_render_pipeline, EnumFacing.UP, FLUID_RENDER_CUBOID, fluidTexture, BlockRenderLayer.CUTOUT_MIPPED);
     }
 
+
+    //This should never be overwritten as it is not supported
+    @Override
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
 }

@@ -33,7 +33,7 @@ import java.util.List;
 public class MetaTileEntityClarifier extends FluidRenderRecipeMapMultiBlock {
 
 
-    private final static String[] fluidPattern = {
+    private final static String[] FLUID_PATTERN = {
             "     DDDD     ",
             "   DDDDDDDD   ",
             "  DDDDDDDDDD  ",
@@ -52,7 +52,7 @@ public class MetaTileEntityClarifier extends FluidRenderRecipeMapMultiBlock {
 
 
     public MetaTileEntityClarifier(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SuSyRecipeMaps.CLARIFIER, fluidPattern, new Vec3i(-11, 1, 1));
+        super(metaTileEntityId, SuSyRecipeMaps.CLARIFIER, FLUID_PATTERN, new Vec3i(-11, 1, 1));
         this.recipeMapWorkable = new MultiblockRecipeLogic(this, true);
     }
 
@@ -113,10 +113,4 @@ public class MetaTileEntityClarifier extends FluidRenderRecipeMapMultiBlock {
     public boolean getIsWeatherOrTerrainResistant() {
         return true;
     }
-
-    @Override
-    public boolean allowsExtendedFacing() {
-        return false;
-    }
-
 }

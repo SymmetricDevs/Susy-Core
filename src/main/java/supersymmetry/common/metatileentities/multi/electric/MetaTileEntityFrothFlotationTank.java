@@ -33,11 +33,10 @@ import java.util.Random;
 
 public class MetaTileEntityFrothFlotationTank extends FluidRenderRecipeMapMultiBlock {
 
-    private final static String[] fluidPattern = {"FFF","F F","FFF"};
-
+    private final static String[] FLUID_PATTERN = {"FFF","F F","FFF"};
 
     public MetaTileEntityFrothFlotationTank(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SuSyRecipeMaps.FROTH_FLOTATION,fluidPattern, new Vec3i(-1, 2, 2));
+        super(metaTileEntityId, SuSyRecipeMaps.FROTH_FLOTATION, FLUID_PATTERN, new Vec3i(-1, 2, 2));
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
@@ -74,14 +73,12 @@ public class MetaTileEntityFrothFlotationTank extends FluidRenderRecipeMapMultiB
     @Override
     public void update() {
         super.update();
-        if(this.isActive()) {
-            if (getWorld().isRemote && this.fluidTexture != null){
-                Random rand = getWorld().rand;
-                atEachTank(offset -> {
-                    BlockPos pos = this.getPos().add(offset);
-                    Minecraft.getMinecraft().effectRenderer.addEffect(new SusyParticleFrothBubble(getWorld(),pos.getX() + rand.nextDouble(), pos.getY() + 2.5F/16, pos.getZ() + rand.nextDouble(), 0, .005, 0, fluidColor));
-                });
-            }
+        if(this.isActive() && getWorld().isRemote && this.fluidTexture != null){
+            Random rand = getWorld().rand;
+            atEachTank(offset -> {
+                BlockPos pos = this.getPos().add(offset);
+                Minecraft.getMinecraft().effectRenderer.addEffect(new SusyParticleFrothBubble(getWorld(),pos.getX() + rand.nextDouble(), pos.getY() + 2.5F/16, pos.getZ() + rand.nextDouble(), 0, .005, 0, fluidColor));
+            });
         }
     }
 
@@ -89,10 +86,5 @@ public class MetaTileEntityFrothFlotationTank extends FluidRenderRecipeMapMultiB
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.FROTH_FLOTATION_OVERLAY;
-    }
-
-    @Override
-    public boolean allowsExtendedFacing() {
-        return false;
     }
 }
