@@ -1,13 +1,18 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
+import gregtech.api.items.materialitem.MetaPrefixItem;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
-import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.pattern.TraceabilityPredicate;
+import gregtech.api.recipes.Recipe;
+import gregtech.api.recipes.ingredients.GTRecipeInput;
+import gregtech.api.unification.material.Material;
 import gregtech.api.util.BlockInfo;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
@@ -15,23 +20,86 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.metatileentity.multiblock.CachedPatternRecipeMapMultiblock;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.client.renderer.particles.SusyParticleDust;
 import supersymmetry.common.blocks.BlockSeparatorRotor;
 import supersymmetry.common.blocks.SuSyBlocks;
 
 import javax.annotation.Nonnull;
+import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import static gregtech.api.util.RelativeDirection.*;
 import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
 
-public class MetaTileEntityGravitySeparator extends RecipeMapMultiblockController {
+public class MetaTileEntityGravitySeparator extends CachedPatternRecipeMapMultiblock {
+
+    private static final int UPDATE_MATERIAL_COLOR = GregtechDataCodes.assignId();
+
+    private static final String[][] ROTOR_PATTERN = {
+            {"", "RRR", "", ""},
+            {"", "", "", "", "RRR"}
+    };
+    private static final Vec3i PATTERN_OFFSET = new Vec3i(-1, 2, 1);
+
+    private int[] particleColors;
+    private EnumFacing facing;
+
     public MetaTileEntityGravitySeparator(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.GRAVITY_SEPARATOR_RECIPES);
-        this.recipeMapWorkable = new MultiblockRecipeLogic(this);
+        this.recipeMapWorkable = new MultiblockRecipeLogic(this){
+            @Override
+            protected void setupRecipe(Recipe recipe) {
+                super.setupRecipe(recipe);
+                updateRenderInfo(recipe);
+            }
+        };
+    }
+
+    @Override
+    protected void formStructure(PatternMatchContext context) {
+        super.formStructure(context);
+        updateRenderInfo(recipeMapWorkable.getPreviousRecipe());
+    }
+
+    public void updateRenderInfo(Recipe recipe){
+        if(recipe == null) return;
+        Stream<ItemStack> flattenedInputs = recipe.getInputs().stream()
+                .map(GTRecipeInput::getInputStacks)
+                .map(Arrays::asList).flatMap(List::stream).filter(stack -> MetaPrefixItem.tryGetMaterial(stack) != null);
+        Stream<ItemStack> flattenedOutputs = recipe.getOutputs().stream();
+
+        int[] materialColors = Stream.concat(flattenedInputs, flattenedOutputs)
+                .map(stack -> Objects.requireNonNull(MetaPrefixItem.tryGetMaterial(stack)))
+                .map(Material::getMaterialRGB).mapToInt(Integer::intValue).toArray();
+
+        if (materialColors.length == 0) {
+            this.writeCustomData(UPDATE_MATERIAL_COLOR, buf -> buf.writeVarIntArray(new int[]{0xFFFFFF}));
+            return;
+        }
+        this.writeCustomData(UPDATE_MATERIAL_COLOR, buf -> buf.writeVarIntArray(materialColors));
+
+    }
+
+
+    @Override
+    protected String[][] getPattern() {
+        return ROTOR_PATTERN;
+    }
+
+    @Override
+    protected Vec3i getPatternOffset() {
+        return PATTERN_OFFSET;
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
@@ -106,9 +174,9 @@ public class MetaTileEntityGravitySeparator extends RecipeMapMultiblockControlle
             if (!(state.getBlock() instanceof BlockSeparatorRotor)) return false;
 
             // auto-correct rotor orientation
-            if (state != steelRotorState().withProperty(FACING, axialFacing)) {
+            if (state != steelRotorState().withProperty(FACING, axialFacing))
                 getWorld().setBlockState(blockWorldState.getPos(), steelRotorState().withProperty(FACING, axialFacing));
-            }
+
             return true;
         }, supplier);
     }
@@ -130,8 +198,39 @@ public class MetaTileEntityGravitySeparator extends RecipeMapMultiblockControlle
         return Textures.BLAST_FURNACE_OVERLAY;
     }
 
+    private static final float PARTICLE_SPEED = .05F;
+
     @Override
-    public boolean allowsExtendedFacing() {
-        return false;
+    public void update() {
+        super.update();
+        if(this.isActive() && getWorld().isRemote){
+            Random rand = getWorld().rand;
+            for(Vec3i offset: cachedPattern) {
+                BlockPos pos = this.getPos().add(offset);
+                //Lots of particles, not sure how performant this is
+                Minecraft.getMinecraft().effectRenderer.addEffect(
+                        new SusyParticleDust(getWorld(),pos.getX() + rand.nextDouble(), pos.getY() + .5F / 16, pos.getZ() + rand.nextDouble(),
+                                -PARTICLE_SPEED * facing.getXOffset(), 0, -PARTICLE_SPEED * facing.getZOffset(), 1,3F, particleColors[Math.abs(rand.nextInt() % particleColors.length)]));
+            }
+        }
     }
+
+    @Override
+    public void receiveCustomData(int dataId, PacketBuffer buf) {
+        if(dataId == UPDATE_MATERIAL_COLOR)
+            this.particleColors = buf.readVarIntArray();
+        else if(dataId == CachedPatternRecipeMapMultiblock.REFRESH_CACHED_PATTERN){
+            EnumFacing facing = buf.readEnumValue(EnumFacing.class);
+            boolean isFlipped = buf.readBoolean();
+            this.facing = facing;
+            //Only generate the cachedFluidPattern on the client as it isn't used anywhere on the server
+            this.cachedPattern = generateCachedPattern(getPattern(), getPatternOffset(), facing, isFlipped);
+            return; //not entirely sure if skipping the super method is safe here.
+        }
+        super.receiveCustomData(dataId, buf);
+    }
+
+
+
+
 }
