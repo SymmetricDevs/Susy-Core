@@ -1,12 +1,19 @@
 package supersymmetry.common.blocks.rocketry;
 
+import com.cleanroommc.groovyscript.compat.vanilla.OreDict;
+import com.cleanroommc.groovyscript.compat.vanilla.OreDictEntry;
 import gregtech.api.unification.OreDictUnifier;
+import gregtech.api.unification.material.registry.MaterialRegistry;
 import gregtech.api.unification.ore.OrePrefix;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
+import net.minecraftforge.oredict.OreDictionary;
 import supersymmetry.api.blocks.VariantDirectionalCoverableBlock;
+import supersymmetry.common.materials.SusyMaterials;
+
+import static supersymmetry.common.materials.SusyMaterials.MetallizedBoPET;
 
 public class BlockSpacecraftHull extends VariantDirectionalCoverableBlock<BlockSpacecraftHull.HullType> {
     public BlockSpacecraftHull() {
@@ -17,7 +24,7 @@ public class BlockSpacecraftHull extends VariantDirectionalCoverableBlock<BlockS
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench",2);
         setDefaultState(getState(HullType.MYLAR));
-        validCover = (ItemStack i) -> OreDictUnifier.get(OrePrefix.foil, )
+        validCover = (ItemStack i) -> i.isItemEqualIgnoreDurability(OreDictUnifier.get(OrePrefix.foil, MetallizedBoPET));
     }
 
     public enum HullType implements IStringSerializable {

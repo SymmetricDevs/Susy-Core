@@ -88,7 +88,7 @@ public class SuSyBlocks {
                     VariantBlock<?> newBlock = (VariantBlock<?>) field.getType().getDeclaredConstructor().newInstance();
                     // the 5 is used because getTranslationKey leaves ".file" at the start
                     newBlock.setRegistryName(newBlock.getTranslationKey().substring(5));
-
+                    field.set(null,newBlock);
                     susyBlocks.add(newBlock);
                 } catch (Exception e) {
                     System.out.println("Field " + field.getName() + " of type " + field.getType() + " is a variant block in SuSyBlocks and yet is not valid");

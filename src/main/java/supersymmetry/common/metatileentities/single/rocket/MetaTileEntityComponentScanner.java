@@ -22,6 +22,7 @@ import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMulti
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
@@ -65,6 +66,9 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         struct = new StructAnalysis(getWorld());
         importItems = new DataStorageLoader(this,is -> {int metaV = SuSyMetaItems.isMetaItem(is);
             return metaV == SuSyMetaItems.DATA_CARD.metaValue || metaV == SuSyMetaItems.DATA_CARD_ACTIVE.metaValue;});
+        if (importItems.getStackInSlot(0).isItemEqual(ItemStack.EMPTY)) {
+            shownStatus = BuildStat.NO_CARD;
+        }
         scannerLogic = new ScannerLogic(this);
     }
 
@@ -771,7 +775,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
 
     public void finishScan() {
         if (struct.status == BuildStat.SUCCESS) {
-            getInventory().setImageType(8); // is this cursed? yes
+            getInventory().setImageType(SuSyMetaItems.DATA_CARD_ACTIVE.metaValue); // is this cursed? yes
         }
         getInventory().setLocked(false);
         shownStatus = struct.status;

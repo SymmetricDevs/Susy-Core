@@ -30,6 +30,7 @@ public class SusyMaterials {
     public static Material Latex;
     public static Material Mud;
     public static Material Seawater;
+    public static Material MetallizedBoPET;
 
     //Minerals
     public static Material Anorthite;

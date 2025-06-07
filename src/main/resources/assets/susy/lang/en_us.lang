@@ -62,6 +62,12 @@ tile.rocket_nozzle.bell_basic.name=Bell Rocket Nozzle Shell
 tile.rocket_combustion_chamber.monopropellant.name=Monopropellant Combustion Chamber
 tile.rocket_combustion_chamber.bipropellant.name=Bipropellant Combustion Chamber
 tile.rocket_combustion_chamber.oxidiser.name=Oxidiser Combustion Chamber
+tile.spacecraft_life_support.oxygen_regen.name=Life Support for Oxygen Regen
+tile.spacecraft_instrument.sensors.name=Spacecraft Sensor Array
+tile.spacecraft_hull.mylar.name=Mylar Spacecraft Shell
+tile.rocket_nozzle.plug.name=Rocket Nozzle Plug
+tile.rocket_nozzle.expanding.name=Expanding Rocket Nozzle Shell
+tile.rocket_fairing_connector.al_7075.name=Al-7075 Fairing Connector
 
 tile.deposit_block.orthomagmatic.name=Orthomagmatic Deposit Block
 tile.deposit_block.metamorphic.name=Metamorphic Deposit Block
@@ -160,6 +166,7 @@ susy.material.gadolinium_silicon_germanium=Gadolinium Silicon Germanium
 susy.material.latex=Latex
 susy.material.mud=Mud
 susy.material.sea_water=Sea Water
+susy.material.metallized_bopet=Metallized BoPET
 
 # Rock/Mineral Materials
 susy.material.fluorite=Fluorite
@@ -1066,3 +1073,6 @@ susy.msg.rocket_component.chamber_extraneous_blocks=An unneeded block was found 
 susy.msg.rocket_component.cleanroom_not_clean=The Cleanroom is not clean yet (or you haven't hooked up to one)!
 susy.msg.rocket_component.nozzle_not_laval=The rocket nozzle does not resemble a de Laval nozzle!
 susy.msg.rocket_component.tile_missing=There is a tile missing on the hull tank!
+susy.msg.rocket_component.no_card=Please insert an Empty Structure Card.
+susy.msg.rocket_component.part_unrecognized=The part was not recognized.
+susy.msg.rocket_component.spacecraft_hollow=The spacecraft is empty but has no life support.
