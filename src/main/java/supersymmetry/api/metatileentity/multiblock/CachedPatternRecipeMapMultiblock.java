@@ -14,6 +14,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 
+/** This class is used to do something client side at each block in a given pattern, this accounts for the direction of the multi.
+ * @author h3tR / RMI
+ */
 public abstract class CachedPatternRecipeMapMultiblock extends RecipeMapMultiblockController  {
 
     public static final int REFRESH_CACHED_PATTERN = GregtechDataCodes.assignId();
@@ -29,7 +32,7 @@ public abstract class CachedPatternRecipeMapMultiblock extends RecipeMapMultiblo
     protected void formStructure(PatternMatchContext context) {
         super.formStructure(context);
         //TODO: getWorld() != null might be redundant here
-        if(getWorld() != null && !getWorld().isRemote)
+        if(!getWorld().isRemote)
             writeCustomData(REFRESH_CACHED_PATTERN, buf ->{
                 buf.writeEnumValue(this.frontFacing.getOpposite());
                 buf.writeBoolean(this.isFlipped);

@@ -2,6 +2,8 @@ package supersymmetry.client.renderer.particles;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Froth bubble particle mostly copied from the standard minecraft bubble particle.
@@ -9,15 +11,18 @@ import net.minecraft.world.World;
  * @author h3tR
  */
 
-
+@SideOnly(Side.CLIENT)
 public class SusyParticleFrothBubble extends Particle {
 
     public SusyParticleFrothBubble(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn, int color)
     {
         super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
+        /*TODO: allow tinting color -> look into GTParticle cause this don't work with custom textures for some reason
         this.particleRed = ((color >> 16) & 0xFF) / 255f;
         this.particleGreen = ((color >> 8) & 0xFF) / 255f;
         this.particleBlue = (color & 0xFF) / 255f;
+         */
+
         this.setParticleTextureIndex(32); //Bubble texture
         this.setSize(0.02F, 0.02F);
         this.particleScale *= this.rand.nextFloat() * 0.6F + 0.2F;
