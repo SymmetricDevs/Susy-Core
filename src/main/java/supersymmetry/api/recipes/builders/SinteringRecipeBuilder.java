@@ -3,6 +3,7 @@ package supersymmetry.api.recipes.builders;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.recipes.RecipeMap;
+import gregtech.api.recipes.recipeproperties.PrimitiveProperty;
 import gregtech.api.util.ValidationResult;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.properties.SinterProperty;
@@ -50,6 +51,10 @@ public class SinteringRecipeBuilder extends RecipeBuilder<SinteringRecipeBuilder
         if (this.recipePropertyStorage == null || !this.recipePropertyStorage.hasRecipeProperty(SinterProperty.getInstance())) {
             this.usePlasma(false);
         }
+        //Same as NoEnergyRecipeBuilder
+        this.EUt(1);
+        this.applyProperty(PrimitiveProperty.getInstance(), true);
+
         return super.build();
     }
 
