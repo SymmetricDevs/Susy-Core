@@ -1,23 +1,26 @@
 package supersymmetry.common.world;
 
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraftforge.client.IRenderHandler;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class WorldProviderPlanet extends WorldProvider {
     @Override
-    public DimensionType getDimensionType() {
+    public @NotNull DimensionType getDimensionType() {
         return SuSyDimensions.planetType;
     }
 
     @Override
     protected void init() {
         biomeProvider = new PlanetBiomeProvider(world);
-
     }
 
     @Override
-    public IChunkGenerator createChunkGenerator() {
+    public @NotNull IChunkGenerator createChunkGenerator() {
         return new PlanetChunkGenerator(world, world.getSeed());
     }
 
@@ -34,5 +37,20 @@ public class WorldProviderPlanet extends WorldProvider {
     public boolean canCoordinateBeSpawn(int x, int z)
     {
         return false;
+    }
+
+    @Override
+    public boolean isSkyColored() {
+        return false;
+    }
+
+    @Override
+    public @Nullable IRenderHandler getSkyRenderer() {
+        return SuSyDimensions.PLANETS.get(getDimension()).skyRenderer;
+    }
+
+    @Override
+    public @NotNull Vec3d getFogColor(float p_76562_1_, float p_76562_2_) {
+        return new Vec3d(0.0D, 0.0D, 0.0D);
     }
 }

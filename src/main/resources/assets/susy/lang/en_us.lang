@@ -1035,3 +1035,6 @@ tile.hardened_blocks.kryp8.name=Hardened Kryp 8
 #Custom Sheets
 tile.custom_sheets.darkwhitemetalsheet.name=Darker White Metal Sheet
 tile.custom_sheets.lightergraymetalsheet.name=Lighter Gray Metal Sheet
+
+tile.regolith.highland.name=Anorthositic Regolith
+tile.regolith.lowland.name=Basaltic Regolith

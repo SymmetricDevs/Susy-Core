@@ -1,6 +1,7 @@
 package supersymmetry.common.world;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeChunkManager;
@@ -23,6 +24,8 @@ public class Planet {
     public List<BiomeManager.BiomeEntry> biomeList;
     public IBlockState stone;
     public IBlockState bedrock;
+    public IRenderHandler skyRenderer;
+    public double gravity;
 
 
     // Atmosphere
@@ -142,5 +145,15 @@ public class Planet {
     public String toString() {
         return "Planet Name: " + this.getPlanetName() + " Planet Id: " + this.getId() + " Planet DIM ID: " +
                 this.getDimID();
+    }
+
+    public Planet setSkyRenderer(IRenderHandler skyRenderer) {
+        this.skyRenderer = skyRenderer;
+        return this;
+    }
+
+    public Planet setGravity(double gravity) {
+        this.gravity = gravity;
+        return this;
     }
 }
