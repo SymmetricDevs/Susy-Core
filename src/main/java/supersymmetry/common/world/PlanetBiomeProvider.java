@@ -11,30 +11,32 @@ import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.GenLayerVoronoiZoom;
 import net.minecraft.world.gen.layer.GenLayerZoom;
 import net.minecraft.world.gen.layer.IntCache;
-import supersymmetry.common.world.layer.PlanetGenLayer;
+import net.minecraftforge.common.BiomeManager;
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.common.world.layer.PlanetGenLayerBiomes;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PlanetBiomeProvider extends BiomeProvider {
     private GenLayer biomeToUse;
     private GenLayer biomeIndex;
+    private List<BiomeManager.BiomeEntry> biomeList;
     private List<Biome> biomesToSpawnIn;
     private BiomeCache cache;
 
-    public PlanetBiomeProvider(World world, List<Biome> biomes) {
+    public PlanetBiomeProvider(World world) {
         super(world.getWorldInfo());
 
-        allowedBiomes = biomes;
-        biomesToSpawnIn = biomes;
+        biomeList = SuSyDimensions.PLANETS.get(world.provider.getDimension()).biomeList;
+        biomesToSpawnIn = biomeList.stream().map(entry -> entry.biome).collect(Collectors.toList());
         cache = new BiomeCache(this);
     }
 
     @Override
     public GenLayer[] getModdedBiomeGenerators(WorldType worldType, long seed, GenLayer[] original) {
-        GenLayer biomes = new PlanetGenLayer(allowedBiomes.toArray(new Biome[0]), seed);
+        GenLayer biomes = new PlanetGenLayerBiomes(seed, null).setBiomeList(biomeList);
 
-        biomes = new PlanetGenLayerBiomes(allowedBiomes.toArray(new Biome[0]), seed, biomes);
         biomes = new GenLayerZoom(1000, biomes);
         biomes = new GenLayerZoom(1001, biomes);
         biomes = new GenLayerZoom(1002, biomes);
@@ -54,12 +56,7 @@ public class PlanetBiomeProvider extends BiomeProvider {
     }
 
     @Override
-    public List<Biome> getBiomesToSpawnIn() {
-        return biomesToSpawnIn;
-    }
-
-    @Override
-    public Biome getBiome(BlockPos pos) {
+    public @NotNull Biome getBiome(@NotNull BlockPos pos) {
         return this.getBiome(pos, null);
     }
 
@@ -70,7 +67,7 @@ public class PlanetBiomeProvider extends BiomeProvider {
         if (biome != null) {
             return biome;
         }
-        return Biomes.TAIGA;
+        return Biomes.DEFAULT;
     }
 
     @Override
@@ -84,7 +81,7 @@ public class PlanetBiomeProvider extends BiomeProvider {
             if (aint[i] >= 0 && aint[i] <= Biome.REGISTRY.getKeys().size())
                 biomes[i] = Biome.getBiome(aint[i]);
             else
-                biomes[i] = Biomes.TAIGA;
+                biomes[i] = Biomes.DEFAULT;
 
         return biomes;
     }

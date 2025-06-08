@@ -58,7 +58,7 @@ public class PlanetChunkGenerator implements IChunkGenerator {
     private final IBlockState stone;
     private final IBlockState bedrock;
 
-    public PlanetChunkGenerator(World worldIn, long seed, IBlockState stone, IBlockState bedrock) {
+    public PlanetChunkGenerator(World worldIn, long seed) {
         world = worldIn;
         mapFeaturesEnabled = true;
         terrainType = worldIn.getWorldInfo().getTerrainType();
@@ -72,8 +72,10 @@ public class PlanetChunkGenerator implements IChunkGenerator {
         heightMap = new double[825];
         biomeWeights = new float[25];
 
-        this.stone = stone;
-        this.bedrock = bedrock;
+        Planet planet = SuSyDimensions.PLANETS.get(world.provider.getDimension());
+        this.stone = planet.getStone();
+        this.bedrock = planet.getBedrock();
+
         for (int i = -2; i <= 2; ++i) {
             for (int j = -2; j <= 2; ++j) {
                 float f = 10.0F / MathHelper.sqrt((float) (i * i + j * j) + 0.2F);

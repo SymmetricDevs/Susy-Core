@@ -39,6 +39,7 @@ import supersymmetry.common.blocks.SuSyMetaBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.materials.SusyMaterials;
+import supersymmetry.common.world.BiomeLunarMaria;
 import supersymmetry.common.world.SuSyDimensions;
 import supersymmetry.common.world.BiomeLunarHighlands;
 import supersymmetry.common.world.SuSyBiomes;
@@ -212,8 +213,10 @@ public class CommonProxy {
         SuSyBiomes.LUNAR_HIGHLANDS.setRegistryName(Supersymmetry.MODID, "moon");
         evt.getRegistry().register(SuSyBiomes.LUNAR_HIGHLANDS);
 
-        SuSyBiomes.LUNAR_MARIA = new BiomeLunarHighlands(new Biome.BiomeProperties("Lunar Maria").setRainDisabled().setBaseHeight(0f).setHeightVariation(0.2f).setRainfall(0).setTemperature(0.3f));
+        SuSyBiomes.LUNAR_MARIA = new BiomeLunarMaria(new Biome.BiomeProperties("Lunar Maria").setRainDisabled().setBaseHeight(0f).setHeightVariation(0.2f).setRainfall(0).setTemperature(0.3f));
         SuSyBiomes.LUNAR_MARIA.setRegistryName(Supersymmetry.MODID, "maria");
         evt.getRegistry().register(SuSyBiomes.LUNAR_MARIA);
+
+        SuSyDimensions.init();
     }
 }

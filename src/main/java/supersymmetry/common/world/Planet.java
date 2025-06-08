@@ -1,12 +1,12 @@
 package supersymmetry.common.world;
 
-import net.minecraft.world.WorldType;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.block.state.IBlockState;
+import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeChunkManager;
+import supersymmetry.api.SusyLog;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,7 +19,11 @@ public class Planet {
 
     private boolean isLoaded;
 
-    private WorldGenDetails worldGenDetails;
+    public int averageGroundLevel;
+    public List<BiomeManager.BiomeEntry> biomeList;
+    public IBlockState stone;
+    public IBlockState bedrock;
+
 
     // Atmosphere
 
@@ -43,21 +47,10 @@ public class Planet {
             isLoaded = true;
             // TODO: add check if dim already exists, if it does load it/or idk
             if (this.dimID != 0) {
-                PlanetBiomeInfo[] pbiomes = worldGenDetails.getBiomeList();
-                List<Biome> biomes = new ArrayList<Biome>();
-                Arrays.stream(pbiomes).forEach((biome) -> {
-                    biome.initiateBiome();
-                    biomes.add(biome.getBiome());
-                });
-
-                GCSBDimensionManager.addDetailsTolist(dimID, worldGenDetails);
+                SuSyDimensions.PLANETS.put(dimID, this);
 
                 if (!DimensionManager.isDimensionRegistered(this.dimID)) {
-                    DimensionManager.registerDimension(this.dimID, ModDimension.planetType);
-                    WorldType worldType = new DummyWorldType(worldGenDetails.getName(), biomes,
-                            StringUtil.getBlockfromString(getWorldGenDetails().getStone()),
-                            StringUtil.getBlockfromString(getWorldGenDetails().getBedrock()));
-                    ModDimension.WORLD_TYPES.add(worldType);
+                    DimensionManager.registerDimension(this.dimID, SuSyDimensions.planetType);
                 }
                 if (DimensionManager.getWorld(this.dimID) == null) {
                     File chunkDir = new File(DimensionManager.getCurrentSaveRootDirectory(),
@@ -67,14 +60,14 @@ public class Planet {
                     }
                 }
             }
-            GCSBLog.LOGGER.info("Loaded Planet with ID " + this.getId() + " and name " + this.getPlanetName());
+            SusyLog.logger.info("Loaded Planet with ID " + this.getId() + " and name " + this.getPlanetName());
         }
     }
 
     public void unload() {
         if (isLoaded) {
             isLoaded = false;
-            GCSBLog.LOGGER.info("Unloaded Planet with ID " + this.getId() + " and name " + this.getPlanetName());
+            SusyLog.logger.info("Unloaded Planet with ID " + this.getId() + " and name " + this.getPlanetName());
         }
     }
 
@@ -98,17 +91,50 @@ public class Planet {
         return planetName;
     }
 
-    public void setPlanetName(String planetName) {
+    public Planet setPlanetName(String planetName) {
         this.planetName = planetName;
+        return this;
     }
 
-    public WorldGenDetails getWorldGenDetails() {
-        return worldGenDetails;
+    public int getAverageGroundLevel() {
+        return averageGroundLevel;
     }
 
-    public void setWorldGenDetails(WorldGenDetails worldGenDetails) {
-        this.worldGenDetails = worldGenDetails;
+    public void setAverageGroundLevel(int averageGroundLevel) {
+        this.averageGroundLevel = averageGroundLevel;
     }
+
+    public List<BiomeManager.BiomeEntry> getBiomeList() {
+        return this.biomeList;
+    }
+
+    public Planet setBiomeList(List<BiomeManager.BiomeEntry> biomeList) {
+        this.biomeList = biomeList;
+        return this;
+    }
+
+    public Planet setBiomeList(BiomeManager.BiomeEntry... biomeList) {
+        // List.of() does not exist in 1.8
+        this.biomeList = Arrays.asList(biomeList);
+        return this;
+    }
+
+    public IBlockState getStone() {
+        return this.stone;
+    }
+
+    public void setStone(IBlockState stone) {
+        this.stone = stone;
+    }
+
+    public IBlockState getBedrock() {
+        return this.bedrock;
+    }
+
+    public void setBedrock(IBlockState bedrock) {
+        this.bedrock = bedrock;
+    }
+
 
     @Override
     public String toString() {
