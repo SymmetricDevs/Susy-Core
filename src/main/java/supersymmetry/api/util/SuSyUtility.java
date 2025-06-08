@@ -1,6 +1,7 @@
 package supersymmetry.api.util;
 
 import gregtech.api.GTValues;
+import gregtech.api.unification.material.Material;
 import net.minecraft.util.ResourceLocation;
 import supersymmetry.Supersymmetry;
 
@@ -57,4 +58,7 @@ public class SuSyUtility {
         return new ResourceLocation(Supersymmetry.MODID, path);
     }
 
+    public static String getRLPrefix(Material material) {
+        return material.getModid().equals(GTValues.MODID) ? "" : material.getModid() + ":";
+    }
 }
