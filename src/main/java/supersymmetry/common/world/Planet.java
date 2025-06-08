@@ -123,16 +123,18 @@ public class Planet {
         return this.stone;
     }
 
-    public void setStone(IBlockState stone) {
+    public Planet setStone(IBlockState stone) {
         this.stone = stone;
+        return this;
     }
 
     public IBlockState getBedrock() {
         return this.bedrock;
     }
 
-    public void setBedrock(IBlockState bedrock) {
+    public Planet setBedrock(IBlockState bedrock) {
         this.bedrock = bedrock;
+        return this;
     }
 
 

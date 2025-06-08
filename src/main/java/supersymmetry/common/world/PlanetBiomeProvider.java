@@ -15,6 +15,7 @@ import net.minecraftforge.common.BiomeManager;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.common.world.layer.PlanetGenLayerBiomes;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,13 +29,20 @@ public class PlanetBiomeProvider extends BiomeProvider {
     public PlanetBiomeProvider(World world) {
         super(world.getWorldInfo());
 
-        biomeList = SuSyDimensions.PLANETS.get(world.provider.getDimension()).biomeList;
+        // Biome list is actually initialized in getModdedBiomeGenerators, and so we need to keep the reference the same
+        biomeList.addAll(SuSyDimensions.PLANETS.get(world.provider.getDimension()).biomeList);
         biomesToSpawnIn = biomeList.stream().map(entry -> entry.biome).collect(Collectors.toList());
         cache = new BiomeCache(this);
     }
 
     @Override
+    public List<Biome> getBiomesToSpawnIn() {
+        return biomesToSpawnIn;
+    }
+
+    @Override
     public GenLayer[] getModdedBiomeGenerators(WorldType worldType, long seed, GenLayer[] original) {
+        biomeList = new ArrayList<>();
         GenLayer biomes = new PlanetGenLayerBiomes(seed, null).setBiomeList(biomeList);
 
         biomes = new GenLayerZoom(1000, biomes);

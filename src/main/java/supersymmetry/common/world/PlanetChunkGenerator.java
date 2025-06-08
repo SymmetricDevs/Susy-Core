@@ -153,14 +153,14 @@ public class PlanetChunkGenerator implements IChunkGenerator {
                         for (int jX = 0; jX < 4; ++jX) {
                             double d14 = 0.25D;
                             double d16 = (d11 - d10) * 0.25D;
-                            double finalNoise = d10 - d16;
+                            double zVariation = d10 - d16;
 
                             // Loop through z axis
                             for (int jZ = 0; jZ < 4; ++jZ) {
                                 // If the noiseLevel is above 0, set block to stone.
                                 if (height < 2) {
                                     primer.setBlockState(iX * 4 + jX, iY * 8 + jY, iZ * 4 + jZ, bedrock);
-                                } else if ((finalNoise += d16) > 0.0D) {
+                                } else if ((zVariation += d16) > 0.0D) {
                                     primer.setBlockState(iX * 4 + jX, iY * 8 + jY, iZ * 4 + jZ, stone);
                                 }
 
@@ -234,8 +234,8 @@ public class PlanetChunkGenerator implements IChunkGenerator {
                 yOffset, zOffset, 5, 33, 5, coordF, heightF, coordF);
         this.maxLimitRegion = this.maxLimitPerlinNoise.generateNoiseOctaves(this.maxLimitRegion, xOffset,
                 yOffset, zOffset, 5, 33, 5, coordF, heightF, coordF);
-        int i = 0;
-        int j = 0;
+        int heightMapPosition = 0;
+        int depthRegionPosition = 0;
 
         for (int k = 0; k < 5; ++k) {
             for (int l = 0; l < 5; ++l) {
@@ -272,7 +272,8 @@ public class PlanetChunkGenerator implements IChunkGenerator {
                 baseHeight = baseHeight / totalEffect;
                 heightVariation = heightVariation * 0.9F + 0.1F;
                 baseHeight = (baseHeight * 4.0F - 1.0F) / 8.0F;
-                double localDepthNoise = this.depthRegion[j] / 8000.0D;
+                double localDepthNoise = this.depthRegion[depthRegionPosition] / 8000.0D;
+                ++depthRegionPosition;
 
                 // Lots of renormalization
                 if (localDepthNoise < 0.0D) {
@@ -297,7 +298,6 @@ public class PlanetChunkGenerator implements IChunkGenerator {
                     localDepthNoise /= 8.0D;
                 }
 
-                ++j;
                 double localHeight = baseHeight;
                 double localHeightVariation = heightVariation;
                 localHeight = localHeight + localDepthNoise * 0.2D;
@@ -311,18 +311,18 @@ public class PlanetChunkGenerator implements IChunkGenerator {
                         d1 *= 4.0D;
                     }
 
-                    double d2 = this.minLimitRegion[i] / this.lowerLimitScale;
-                    double d3 = this.maxLimitRegion[i] / this.upperLimitScale;
-                    double d4 = (this.mainNoiseRegion[i] / 10.0D + 1.0D) / 2.0D;
-                    double height = MathHelper.clampedLerp(d2, d3, d4) - d1;
+                    double min = this.minLimitRegion[heightMapPosition] / this.lowerLimitScale;
+                    double max = this.maxLimitRegion[heightMapPosition] / this.upperLimitScale;
+                    double ratio = (this.mainNoiseRegion[heightMapPosition] / 10.0D + 1.0D) / 2.0D;
+                    double height = MathHelper.clampedLerp(min, max, ratio) - d1;
 
                     if (l1 > 29) {
                         double d6 = (float) (l1 - 29) / 3.0F;
                         height = height * (1.0D - d6) + -10.0D * d6;
                     }
 
-                    this.heightMap[i] = height;
-                    ++i;
+                    this.heightMap[heightMapPosition] = height;
+                    ++heightMapPosition;
                 }
             }
         }

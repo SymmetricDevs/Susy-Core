@@ -5,6 +5,8 @@ import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeManager.BiomeEntry;
 import supersymmetry.api.SusyLog;
+import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.blocks.SusyStoneVariantBlock;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +38,11 @@ public class SuSyDimensions {
 
         // Actually registers dimension layout.
 
-        new Planet(0, 800, "Moon").setBiomeList(new BiomeEntry(SuSyBiomes.LUNAR_HIGHLANDS, 100),
-                        new BiomeEntry(SuSyBiomes.LUNAR_MARIA, 100)
-        ).load();
+        new Planet(0, 800, "Moon").setBiomeList(
+                new BiomeEntry(SuSyBiomes.LUNAR_HIGHLANDS, 100),
+                new BiomeEntry(SuSyBiomes.LUNAR_MARIA, 100))
+                .setStone(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH)
+                        .getState(SusyStoneVariantBlock.StoneType.ANORTHOSITE)).load();
     }
 
 }
