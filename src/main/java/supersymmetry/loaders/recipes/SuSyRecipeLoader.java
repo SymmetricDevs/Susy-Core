@@ -93,19 +93,9 @@ public class SuSyRecipeLoader {
         List<ItemStack> smooths = variantListMap.get(StoneVariantBlock.StoneVariant.SMOOTH);
 
         registerSmoothRecipe(susycobbles, susysmooths);
-        registerCobbleRecipe(susysmooths, susycobbles);
         registerCobbleSmashingRecipe(susysmooths, susycobbles);
         registerCobbleSmashingRecipe(smooths, cobbles);
         registerMacerationToStoneDustRecipe();
-    }
-
-    private static void registerCobbleRecipe(List<ItemStack> smoothStack, List<ItemStack> cobbleStack) {
-        for (int i = 0; i < smoothStack.size(); i++) {
-            FORGE_HAMMER_RECIPES.recipeBuilder()
-                    .inputs(smoothStack.get(i))
-                    .outputs(cobbleStack.get(i))
-                    .duration(12).EUt(4).buildAndRegister();
-        }
     }
 
     private static void registerSmoothRecipe(List<ItemStack> roughStack, List<ItemStack> smoothStack) {
@@ -133,10 +123,12 @@ public class SuSyRecipeLoader {
             MACERATOR_RECIPES.recipeBuilder()
                     .inputs(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH).getItemVariant(stoneType))
                     .output(dust, stoneType.getMaterial())
+                    .category(RecipeCategories.MACERATOR_RECYCLING)
                     .buildAndRegister();
             MACERATOR_RECIPES.recipeBuilder()
                     .inputs(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.COBBLE).getItemVariant(stoneType))
                     .output(dust, stoneType.getMaterial())
+                    .category(RecipeCategories.MACERATOR_RECYCLING)
                     .buildAndRegister();
         }
     }
