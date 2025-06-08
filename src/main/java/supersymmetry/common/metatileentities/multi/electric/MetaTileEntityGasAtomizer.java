@@ -9,6 +9,7 @@ import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.recipes.RecipeMap;
+import gregtech.api.unification.material.Materials;
 import gregtech.api.util.BlockInfo;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
@@ -38,12 +39,13 @@ public class MetaTileEntityGasAtomizer extends RecipeMapMultiblockController {
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle("  P  ", "  P  ", "  M  ", "     ", "     ", " EIE ", "     ")
-                .aisle("CCPCC", "CCCCC", " HHH ", " HHH ", " HHH ", " HXH ", "CHHHC")
-                .aisle("CCPCC", "CHHHC", "HHHHH", "HXXXH", "HXXXH", "HXXXH", "HHHHH")
-                .aisle("CCOCC", "CHXHC", "HHXHH", "HXXXH", "HXXXH", "HXXXH", "HHFHH")
-                .aisle("CCCCC", "CHHHC", "HHHHH", "HXXXH", "HXXXH", "HXXXH", "HHHHH")
-                .aisle("CCCCC", "CCSCC", " HHH ", " HHH ", " HHH ", " HHH ", "CCCCC")
+                .aisle("  O  ", "  P  ", "  P  ", "  M  ", "     ", "     ", " EIE ", "     ")
+                .aisle("     ", "  P  ", "     ", "     ", "     ", " HHH ", " EXE ", " HHH ")
+                .aisle("R   R", "R P R", "CCCCC", " HHH ", " HHH ", " HHH ", " HXH ", "CHHHC")
+                .aisle(" CCC ", " CPC ", "CHHHC", "HHHHH", "HXXXH", "HXXXH", "HXXXH", "HHHHH")
+                .aisle(" CCC ", " CXC ", "CHXHC", "HHXHH", "HXXXH", "HXXXH", "HXXXH", "HHFHH")
+                .aisle(" CCC ", " CCC ", "CHHHC", "HHHHH", "HXXXH", "HXXXH", "HXXXH", "HHHHH")
+                .aisle("R   R", "R   R", "CCSCC", " HHH ", " HHH ", " HHH ", " HHH ", "CCCCC")
                 .where('P', states(getPipeCasingState()))
                 .where('H', states(getHighTempCasingState()))
                 .where('C', states(getCasingState()).or(autoAbilities(true, true, false, false, false, false, false)))
@@ -53,6 +55,7 @@ public class MetaTileEntityGasAtomizer extends RecipeMapMultiblockController {
                 .where('F', abilities(MultiblockAbility.IMPORT_FLUIDS))
                 .where('I', abilities(MultiblockAbility.IMPORT_ITEMS))
                 .where('E', states(getElectrodeCasingState()))
+                .where('R', frames(Materials.Steel))
                 .where('X', air())
                 .where(' ', any())
                 .build();

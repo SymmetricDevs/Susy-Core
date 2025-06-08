@@ -41,8 +41,6 @@ public class MetaTileEntityStrandBus extends MetaTileEntityMultiblockPart implem
         return new MetaTileEntityStrandBus(metaTileEntityId, isExport);
     }
 
-
-
     @Override
     protected ModularUI createUI(EntityPlayer entityPlayer) {
         return null;
@@ -136,9 +134,11 @@ public class MetaTileEntityStrandBus extends MetaTileEntityMultiblockPart implem
     public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
         super.renderMetaTileEntity(renderState, translation, pipeline);
         if (this.shouldRenderOverlay()) {
-            SimpleOverlayRenderer renderer = this.isExport ? Textures.PIPE_OUT_OVERLAY : Textures.PIPE_IN_OVERLAY;
-            renderer.renderSided(this.getFrontFacing(), renderState, translation, pipeline);
             SusyTextures.STRAND_BUS_OVERLAY.renderSided(this.getFrontFacing(), renderState, translation, pipeline);
+            SimpleOverlayRenderer overlay = this.isExport ? Textures.ITEM_HATCH_OUTPUT_OVERLAY :
+                    Textures.ITEM_HATCH_INPUT_OVERLAY;
+            overlay.renderSided(this.getFrontFacing(), renderState, translation, pipeline);
+
         }
 
     }
