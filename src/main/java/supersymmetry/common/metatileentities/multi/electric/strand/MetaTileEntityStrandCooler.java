@@ -1,28 +1,19 @@
 package supersymmetry.common.metatileentities.multi.electric.strand;
 
 import gregtech.api.GTValues;
-import gregtech.api.GregTechAPI;
-import gregtech.api.items.materialitem.MetaPrefixItem;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
-import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.unification.OreDictUnifier;
-import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
-import gregtech.api.unification.ore.OrePrefix;
-import gregtech.api.util.BlockInfo;
 import gregtech.api.util.GTTransferUtils;
-import gregtech.api.util.GTUtility;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
-import gregtech.client.renderer.texture.Textures;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
@@ -30,11 +21,8 @@ import supersymmetry.api.capability.Strand;
 import supersymmetry.api.capability.StrandConversion;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
 import supersymmetry.client.renderer.textures.SusyTextures;
-import supersymmetry.common.blocks.BlockMetallurgyRoll;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
-
-import java.util.function.Supplier;
 
 public class MetaTileEntityStrandCooler extends MetaTileEntityStrandShaper {
     private ItemStack current;
@@ -139,5 +127,10 @@ public class MetaTileEntityStrandCooler extends MetaTileEntityStrandShaper {
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
         return new MetaTileEntityStrandCooler(metaTileEntityId);
+    }
+
+    @Override
+    protected @NotNull ICubeRenderer getFrontOverlay() {
+        return SusyTextures.STRAND_COOLER_OVERLAY;
     }
 }

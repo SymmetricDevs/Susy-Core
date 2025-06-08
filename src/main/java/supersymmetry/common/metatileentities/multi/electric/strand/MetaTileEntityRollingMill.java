@@ -5,10 +5,8 @@ import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
-import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.unification.material.Materials;
-import gregtech.api.util.BlockInfo;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
@@ -17,16 +15,12 @@ import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.blocks.VariantDirectionalRotatableBlock;
 import supersymmetry.api.capability.Strand;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
+import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.*;
-
-import java.util.List;
-import java.util.function.Supplier;
 
 import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
 
@@ -90,15 +84,18 @@ public class MetaTileEntityRollingMill extends MetaTileEntityStrandShaper {
         return orientation(hydraulicState(), direction, FACING);
     }
 
-
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
         return Textures.SOLID_STEEL_CASING;
     }
 
-
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
         return new MetaTileEntityRollingMill(metaTileEntityId);
+    }
+
+    @Override
+    protected @NotNull ICubeRenderer getFrontOverlay() {
+        return SusyTextures.ROLLING_MILL_OVERLAY;
     }
 }

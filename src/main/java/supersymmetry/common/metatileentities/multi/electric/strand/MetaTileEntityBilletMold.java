@@ -5,14 +5,11 @@ import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
-import gregtech.common.blocks.BlockMetalCasing;
-import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.block.state.IBlockState;
+import gregtech.client.renderer.ICubeRenderer;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
-import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
-import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.client.renderer.textures.SusyTextures;
 
 public class MetaTileEntityBilletMold extends MetaTileEntityStrandMold {
     public MetaTileEntityBilletMold(ResourceLocation metaTileEntityId) {
@@ -55,5 +52,10 @@ public class MetaTileEntityBilletMold extends MetaTileEntityStrandMold {
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
         return new MetaTileEntityBilletMold(metaTileEntityId);
+    }
+
+    @Override
+    protected @NotNull ICubeRenderer getFrontOverlay() {
+        return SusyTextures.BILLET_MOLD_OVERLAY;
     }
 }

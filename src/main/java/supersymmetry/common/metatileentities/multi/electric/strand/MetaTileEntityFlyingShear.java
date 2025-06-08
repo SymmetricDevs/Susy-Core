@@ -18,8 +18,8 @@ import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 import supersymmetry.api.capability.Strand;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
+import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockMetallurgy2;
-import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 
 public class MetaTileEntityFlyingShear extends MetaTileEntityStrandShaper {
@@ -91,5 +91,10 @@ public class MetaTileEntityFlyingShear extends MetaTileEntityStrandShaper {
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
         return new MetaTileEntityFlyingShear(metaTileEntityId);
+    }
+
+    @Override
+    protected @NotNull ICubeRenderer getFrontOverlay() {
+        return SusyTextures.FLYING_SHEAR_OVERLAY;
     }
 }

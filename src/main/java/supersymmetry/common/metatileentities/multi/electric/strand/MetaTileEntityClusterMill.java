@@ -16,11 +16,9 @@ import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.blocks.VariantAxialRotatableBlock;
-import supersymmetry.api.blocks.VariantDirectionalRotatableBlock;
 import supersymmetry.api.capability.Strand;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
-import supersymmetry.common.blocks.*;
+import supersymmetry.client.renderer.textures.SusyTextures;
 
 import java.util.List;
 
@@ -92,4 +90,8 @@ public class MetaTileEntityClusterMill extends MetaTileEntityRollingMill {
         return Textures.SOLID_STEEL_CASING;
     }
 
+    @Override
+    protected @NotNull ICubeRenderer getFrontOverlay() {
+        return SusyTextures.CLUSTER_MILL_OVERLAY;
+    }
 }

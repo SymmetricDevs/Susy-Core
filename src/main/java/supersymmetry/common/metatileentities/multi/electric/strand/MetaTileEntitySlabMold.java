@@ -5,9 +5,11 @@ import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.client.renderer.ICubeRenderer;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
+import supersymmetry.client.renderer.textures.SusyTextures;
 
 public class MetaTileEntitySlabMold extends MetaTileEntityStrandMold {
     public MetaTileEntitySlabMold(ResourceLocation metaTileEntityId) {
@@ -50,5 +52,10 @@ public class MetaTileEntitySlabMold extends MetaTileEntityStrandMold {
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
         return new MetaTileEntitySlabMold(metaTileEntityId);
+    }
+
+    @Override
+    protected @NotNull ICubeRenderer getFrontOverlay() {
+        return SusyTextures.SLAB_MOLD_OVERLAY;
     }
 }

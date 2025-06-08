@@ -81,6 +81,15 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer PRIMITIVE_SMELTER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/primitive_smelter");
     public static final OrientedOverlayRenderer TURNING_ZONE_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/turning_zone");
     public static final OrientedOverlayRenderer MILLING_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/milling");
+    public static final OrientedOverlayRenderer CLUSTER_MILL_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/cluster_mill");
+    public static final OrientedOverlayRenderer ROLLING_MILL_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/rolling_mill");
+    public static final OrientedOverlayRenderer FLYING_SHEAR_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/flying_shear");
+    public static final OrientedOverlayRenderer BILLET_MOLD_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/billet_mold");
+    public static final OrientedOverlayRenderer SLAB_MOLD_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/slab_mold");
+    public static final OrientedOverlayRenderer STRAND_COOLER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/strand_cooler");
+    public static final OrientedOverlayRenderer GAS_ATOMIZER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/gas_atomizer");
+
+
 
     public static final SimpleOverlayRenderer SILICON_CARBIDE_CASING = new SimpleOverlayRenderer("multiblock_casing/silicon_carbide_casing");
     public static final SimpleOverlayRenderer MONEL_500_CASING = new SimpleOverlayRenderer("multiblock_casing/monel_500_casing");

@@ -23,6 +23,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockElectrodeAssembly;
 import supersymmetry.common.blocks.BlockMetallurgy;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
@@ -95,7 +96,6 @@ public class MetaTileEntityGasAtomizer extends RecipeMapMultiblockController {
         return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID);
     }
 
-
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
         return Textures.SOLID_STEEL_CASING;
@@ -104,5 +104,10 @@ public class MetaTileEntityGasAtomizer extends RecipeMapMultiblockController {
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
         return new MetaTileEntityGasAtomizer(metaTileEntityId);
+    }
+
+    @Override
+    protected @NotNull ICubeRenderer getFrontOverlay() {
+        return SusyTextures.GAS_ATOMIZER_OVERLAY;
     }
 }
