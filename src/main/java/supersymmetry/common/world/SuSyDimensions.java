@@ -24,15 +24,15 @@ public class SuSyDimensions {
 
 
     public static void init() {
-        // Registers dimension type.
-        int id = 2;
+        // Registers dimension type. Uses a negative ID so that fire blocks have less logic.
+        int id = -2;
 
         for (DimensionType type : DimensionType.values()) {
-            if (type.getId() > id) {
+            if (type.getId() < id) {
                 id = type.getId();
             }
         }
-        id++;
+        id--;
 
         SusyLog.logger.info("Registering planet dimension type at id " + id);
         planetType = DimensionType.register("susy_planet", "_susy", id, WorldProviderPlanet.class, false);

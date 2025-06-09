@@ -17,4 +17,5 @@ public abstract class EntityPlayerMixin extends EntityLivingBase {
     public boolean isElytraFlying() {
         return super.isElytraFlying() || ElytraFlyingUtils.isElytraFlying(this);
     }
+
 }

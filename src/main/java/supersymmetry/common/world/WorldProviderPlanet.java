@@ -1,5 +1,6 @@
 package supersymmetry.common.world;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
@@ -45,6 +46,11 @@ public class WorldProviderPlanet extends WorldProvider {
     }
 
     @Override
+    public Vec3d getSkyColor(Entity cameraEntity, float partialTicks) {
+        return super.getSkyColor(cameraEntity, partialTicks);
+    }
+
+    @Override
     public @Nullable IRenderHandler getSkyRenderer() {
         return SuSyDimensions.PLANETS.get(getDimension()).skyRenderer;
     }
@@ -52,5 +58,14 @@ public class WorldProviderPlanet extends WorldProvider {
     @Override
     public @NotNull Vec3d getFogColor(float p_76562_1_, float p_76562_2_) {
         return new Vec3d(0.0D, 0.0D, 0.0D);
+    }
+
+    @Override
+    public @Nullable float[] calcSunriseSunsetColors(float celestialAngle, float partialTicks) {
+        return new float[]{0.0F, 0.0F, 0.0F, 0.0F};
+    }
+
+    public Planet getPlanet() {
+        return SuSyDimensions.PLANETS.get(getDimension());
     }
 }

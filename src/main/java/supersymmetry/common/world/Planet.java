@@ -26,6 +26,7 @@ public class Planet {
     public IBlockState bedrock;
     public IRenderHandler skyRenderer;
     public double gravity;
+    public boolean supportsFire;
 
 
     // Atmosphere
@@ -154,6 +155,11 @@ public class Planet {
 
     public Planet setGravity(double gravity) {
         this.gravity = gravity;
+        return this;
+    }
+
+    public Planet setSupportsFire(boolean supportsFire) {
+        this.supportsFire = supportsFire;
         return this;
     }
 }

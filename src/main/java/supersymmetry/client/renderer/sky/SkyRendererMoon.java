@@ -14,13 +14,10 @@ import java.util.Random;
 
 public class SkyRendererMoon extends IRenderHandler {
 
-    public static ResourceLocation EARTH_TEXTURE = new ResourceLocation(Supersymmetry.MODID, "textures/sky/earth.png");
+    public static ResourceLocation EARTH_TEXTURE = new ResourceLocation(Supersymmetry.MODID, "textures/environment/earth_phases.png");
     private static final ResourceLocation SUN_TEXTURES = new ResourceLocation("textures/environment/sun.png");
 
-    private final Random rand = new Random(45654);
     private final int earthSize = 50;
-    private final int starHeight = 100;
-    private final float starSize = 0.25F;
 
     private final int starGLCallList;
 
@@ -44,15 +41,23 @@ public class SkyRendererMoon extends IRenderHandler {
         BufferBuilder bb = Tessellator.getInstance().getBuffer();
 
         GlStateManager.enableTexture2D();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 
         mc.getTextureManager().bindTexture(EARTH_TEXTURE);
         // GlStateManager.rotate(world.getCelestialAngle(partialTicks) * 360, 1, 0, 0);
         bb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        int distEarth = mc.gameSettings.renderDistanceChunks * 16;
-        bb.pos(0, distEarth, 0).tex(0, 0).endVertex();
-        bb.pos(earthSize / 2, distEarth, 0).tex(1, 0).endVertex();
-        bb.pos(earthSize / 2, distEarth, earthSize / 2).tex(1, 1).endVertex();
-        bb.pos(0, distEarth, earthSize / 2).tex(0, 1).endVertex();
+        int distEarth = 100;
+        int phase = world.getMoonPhase();
+        int phaseX = phase % 4;
+        int phaseY = phase / 4 % 2;
+        float phaseXL = (float)(phaseX) / 4.0F;
+        float phaseYU = (float)(phaseY) / 2.0F;
+        float phaseXR = (float)(phaseX + 1) / 4.0F;
+        float phaseYD = (float)(phaseY + 1) / 2.0F;
+        bb.pos(-earthSize, distEarth, -earthSize).tex(phaseXR, phaseYU).endVertex();
+        bb.pos(earthSize, distEarth, -earthSize).tex(phaseXL, phaseYU).endVertex();
+        bb.pos(earthSize, distEarth, earthSize).tex(phaseXL, phaseYD).endVertex();
+        bb.pos(-earthSize, distEarth, earthSize).tex(phaseXR, phaseYD).endVertex();
         Tessellator.getInstance().draw();
 
         // Sun render
@@ -61,8 +66,7 @@ public class SkyRendererMoon extends IRenderHandler {
         GlStateManager.rotate(-90.0F, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(world.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
         float sunSize = 30.0F;
-        double distSun = mc.gameSettings.renderDistanceChunks * 32;
-        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        double distSun = distEarth * 2;
 
         mc.getTextureManager().bindTexture(SUN_TEXTURES);
         bb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
