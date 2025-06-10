@@ -19,49 +19,48 @@ import supersymmetry.api.SusyLog;
 @Mixin(TileEntityPipeBase.class)
 public abstract class TileEntityPipeBaseMixin<
         PipeType extends Enum<PipeType> & IPipeType<NodeDataType>, NodeDataType>
-    extends NeighborCacheTileEntityBase implements IPipeTile<PipeType, NodeDataType> {
+    extends NeighborCacheTileEntityBase implements IPipeTile<PipeType, NodeDataType> {  
+  private static final Field PIPE_TYPE_FIELD;
+  private static final Field PAINTING_COLOR_FIELD;
+  private static final Field CONNECTIONS_FIELD;
+  private static final Field COVERABLE_IMPL_FIELD;
+
+  static {
+    try {
+      PIPE_TYPE_FIELD = TileEntityPipeBase.class.getDeclaredField("pipeType");
+      PAINTING_COLOR_FIELD = TileEntityPipeBase.class.getDeclaredField("paintingColor");
+      CONNECTIONS_FIELD = TileEntityPipeBase.class.getDeclaredField("connections");
+      COVERABLE_IMPL_FIELD = TileEntityPipeBase.class.getDeclaredField("coverableImplementation");
+
+      PIPE_TYPE_FIELD.setAccessible(true);
+      PAINTING_COLOR_FIELD.setAccessible(true);
+      CONNECTIONS_FIELD.setAccessible(true);
+      COVERABLE_IMPL_FIELD.setAccessible(true);
+    } catch (Exception e) {
+      throw new ExceptionInInitializerError(e);
+    }
+  }
 
   @Inject(method = "transferDataFrom", at = @At("HEAD"), cancellable = true, remap = false)
   private void transferDataFrom(IPipeTile<PipeType, NodeDataType> tileEntity, CallbackInfo ci) {
-
-    // "this"
-    TileEntityPipeBase<PipeType, NodeDataType> self =
-        (TileEntityPipeBase<PipeType, NodeDataType>) (Object) this;
+    TileEntityPipeBase<PipeType, NodeDataType> self = (TileEntityPipeBase<PipeType, NodeDataType>) (Object) this;
     try {
-      // self.pipeType = tileEntity.getPipeType();
-      Field pipeTypeField = TileEntityPipeBase.class.getDeclaredField("pipeType");
-      pipeTypeField.setAccessible(true);
-      PipeType pipeType = tileEntity.getPipeType();
-      pipeTypeField.set(self, pipeType);
-      // self.paintingColor = tileEntity.getPaintingColor();
-      Field paintingColorField = TileEntityPipeBase.class.getDeclaredField("paintingColor");
-      paintingColorField.setAccessible(true);
-      int paintingColor = tileEntity.getPaintingColor();
-      paintingColorField.set(self, paintingColor);
-      // self.connections = tileEntity.getConnections();
-      Field connectionsField = TileEntityPipeBase.class.getDeclaredField("connections");
-      connectionsField.setAccessible(true);
-      int connections = tileEntity.getConnections();
-      connectionsField.set(self, connections);
-      // coverableImplementation
-      Field coverableImplementationField =
-          TileEntityPipeBase.class.getDeclaredField("coverableImplementation");
+      PIPE_TYPE_FIELD.set(self, tileEntity.getPipeType());
+      PAINTING_COLOR_FIELD.set(self, tileEntity.getPaintingColor());
+      CONNECTIONS_FIELD.set(self, tileEntity.getConnections());
 
-      coverableImplementationField.setAccessible(true);
-      PipeCoverableImplementation coverableImplementation =
-          (PipeCoverableImplementation) coverableImplementationField.get(self);
-
+      PipeCoverableImplementation coverImpl = (PipeCoverableImplementation) COVERABLE_IMPL_FIELD.get(self);
       if (tileEntity instanceof SyncedTileEntityBase pipeBase) {
-        addPacketsFrom(pipeBase);
+        self.addPacketsFrom(pipeBase);
       }
-
-      tileEntity.getCoverableImplementation().transferDataTo(coverableImplementation);
+      tileEntity.getCoverableImplementation().transferDataTo(coverImpl);
       self.setFrameMaterial(tileEntity.getFrameMaterial());
 
-    } catch (NoSuchFieldException | IllegalAccessException e) {
+    } catch (IllegalAccessException e) {
       SusyLog.logger.error("something blew up in the TileEntityPipeBaseMixin");
       e.printStackTrace();
     }
     ci.cancel();
   }
 }
+
