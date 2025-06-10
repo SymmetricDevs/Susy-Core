@@ -20,9 +20,6 @@ import java.util.List;
  * @author h3tR / RMI
  */
 public abstract class CachedPatternRecipeMapMultiblock extends RecipeMapMultiblockController {
-
-    public static final int REFRESH_CACHED_PATTERN = GregtechDataCodes.assignId();
-
     @SideOnly(Side.CLIENT)
     protected Vec3i[] cachedPattern = new Vec3i[0];
 
@@ -31,24 +28,11 @@ public abstract class CachedPatternRecipeMapMultiblock extends RecipeMapMultiblo
     }
 
     @Override
-    protected void formStructure(PatternMatchContext context) {
-        super.formStructure(context);
-        //TODO: getWorld() != null might be redundant here
-        if (!getWorld().isRemote)
-            writeCustomData(REFRESH_CACHED_PATTERN, buf -> {
-                buf.writeEnumValue(this.frontFacing.getOpposite());
-                buf.writeBoolean(this.isFlipped);
-            });
-    }
-
-    @Override
     public void receiveCustomData(int dataId, PacketBuffer buf) {
         super.receiveCustomData(dataId, buf);
-        if (dataId == REFRESH_CACHED_PATTERN) {
-            EnumFacing facing = buf.readEnumValue(EnumFacing.class);
-            boolean isFlipped = buf.readBoolean();
+        if (dataId == GregtechDataCodes.STRUCTURE_FORMED && this.isStructureFormed()) {
             //Only generate the cachedFluidPattern on the client as it isn't used anywhere on the server
-            this.cachedPattern = generateCachedPattern(getPattern(), getPatternOffset(), facing, isFlipped);
+            this.cachedPattern = generateCachedPattern(getPattern(), getPatternOffset(), this.frontFacing, this.isFlipped());
         }
     }
 
@@ -61,7 +45,7 @@ public abstract class CachedPatternRecipeMapMultiblock extends RecipeMapMultiblo
 
     //This should never be overwritten as it is not supported
     @Override
-    public boolean allowsExtendedFacing() {
+    public final boolean allowsExtendedFacing() {
         return false;
     }
 
@@ -78,9 +62,11 @@ public abstract class CachedPatternRecipeMapMultiblock extends RecipeMapMultiblo
      */
 
     @SideOnly(Side.CLIENT)
-    public static Vec3i[] generateCachedPattern(String[][] pattern, Vec3i patternOffset, EnumFacing facing, boolean isFlipped) {
+    public Vec3i[] generateCachedPattern(String[][] pattern, Vec3i patternOffset, EnumFacing facing, boolean isFlipped) {
         if (facing == EnumFacing.UP || facing == EnumFacing.DOWN)
             throw new IllegalArgumentException("Vertical facing not allowed: " + facing);
+
+        facing = facing.getOpposite(); // At least, this is the way it currently works.
 
         List<Vec3i> cachedPattern = new ArrayList<>();
         for (int y = 0; y < pattern.length; y++) {
@@ -93,7 +79,6 @@ public abstract class CachedPatternRecipeMapMultiblock extends RecipeMapMultiblo
 
                     if (isFlipped ^ (facing == EnumFacing.NORTH || facing == EnumFacing.SOUTH))
                         patternXOffset = -patternXOffset;
-
 
                     cachedPattern.add(new Vec3i(
                             patternZOffset * facing.getXOffset() + patternXOffset * facing.getZOffset(),

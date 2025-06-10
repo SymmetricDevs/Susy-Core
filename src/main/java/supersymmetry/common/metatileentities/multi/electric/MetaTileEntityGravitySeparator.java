@@ -28,6 +28,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.metatileentity.multiblock.CachedPatternRecipeMapMultiblock;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.particles.SusyParticleDust;
@@ -51,7 +52,6 @@ public class MetaTileEntityGravitySeparator extends CachedPatternRecipeMapMultib
     private static final Vec3i PATTERN_OFFSET = new Vec3i(-1, 2, 1);
 
     private int[] particleColors;
-    private EnumFacing facing;
 
     public MetaTileEntityGravitySeparator(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.GRAVITY_SEPARATOR_RECIPES);
@@ -173,29 +173,30 @@ public class MetaTileEntityGravitySeparator extends CachedPatternRecipeMapMultib
     @Override
     public void update() {
         super.update();
-        if (this.isActive() && getWorld().isRemote) {
+        if (this.isActive() && getWorld().isRemote && this.particleColors != null) {
             Random rand = getWorld().rand;
+            if (cachedPattern == null || cachedPattern.length == 0) generateCachedPattern(getPattern(), getPatternOffset(), this.frontFacing, isFlipped());
             for (Vec3i offset : cachedPattern) {
                 BlockPos pos = this.getPos().add(offset);
+
                 //Lots of particles, not sure how performant this is
-                Minecraft.getMinecraft().effectRenderer.addEffect(new SusyParticleDust(getWorld(), pos.getX() + rand.nextDouble(), pos.getY() + .5F / 16, pos.getZ() + rand.nextDouble(), -PARTICLE_SPEED * facing.getXOffset(), 0, -PARTICLE_SPEED * facing.getZOffset(), 1, 3F, particleColors[Math.abs(rand.nextInt() % particleColors.length)]));
+                Minecraft.getMinecraft().effectRenderer.addEffect(new SusyParticleDust(getWorld(),
+                        pos.getX() + rand.nextDouble(),
+                        pos.getY() + .5F / 16,
+                        pos.getZ() + rand.nextDouble(),
+                        PARTICLE_SPEED * this.getFrontFacing().getXOffset(), 0,
+                        PARTICLE_SPEED * this.getFrontFacing().getZOffset(), 1,
+                        3F, particleColors[Math.abs(rand.nextInt() % particleColors.length)]));
             }
         }
     }
 
     @Override
     public void receiveCustomData(int dataId, PacketBuffer buf) {
-        if (dataId == UPDATE_MATERIAL_COLOR) this.particleColors = buf.readVarIntArray();
-        else if (dataId == CachedPatternRecipeMapMultiblock.REFRESH_CACHED_PATTERN) {
-            EnumFacing facing = buf.readEnumValue(EnumFacing.class);
-            boolean isFlipped = buf.readBoolean();
-            this.facing = facing;
-            //Only generate the cachedFluidPattern on the client as it isn't used anywhere on the server
-            this.cachedPattern = generateCachedPattern(getPattern(), getPatternOffset(), facing, isFlipped);
-            return; //not entirely sure if skipping the super method is safe here.
+        if (dataId == UPDATE_MATERIAL_COLOR) {
+            this.particleColors = buf.readVarIntArray();
         }
         super.receiveCustomData(dataId, buf);
     }
-
 
 }
