@@ -27,7 +27,6 @@ import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.event.MobHordeWorldData;
 import supersymmetry.common.item.SuSyArmorItem;
-import supersymmetry.common.event.DisableElytraRocketHandler;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class EventHandlers {
