@@ -611,7 +611,9 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             World world = pool.getWorld();
             int exposedBlocks = 0;
             for (BlockPos pos : pool.variantActiveBlocks) {
-                if (GTUtility.canSeeSunClearly(world, pos)) exposedBlocks += 1;
+                if (world.isBlockLoaded(pos) && GTUtility.canSeeSunClearly(world, pos)) {
+                    exposedBlocks += 1;
+                }
             }
             pool.updateExposedBlocks(exposedBlocks);
         }
