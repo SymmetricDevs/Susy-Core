@@ -14,10 +14,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 
-/** This class is used to do something client side at each block in a given pattern, this accounts for the direction of the multi.
+/**
+ * This class is used to do something client side at each block in a given pattern, this accounts for the direction of the multi.
+ *
  * @author h3tR / RMI
  */
-public abstract class CachedPatternRecipeMapMultiblock extends RecipeMapMultiblockController  {
+public abstract class CachedPatternRecipeMapMultiblock extends RecipeMapMultiblockController {
 
     public static final int REFRESH_CACHED_PATTERN = GregtechDataCodes.assignId();
 
@@ -32,8 +34,8 @@ public abstract class CachedPatternRecipeMapMultiblock extends RecipeMapMultiblo
     protected void formStructure(PatternMatchContext context) {
         super.formStructure(context);
         //TODO: getWorld() != null might be redundant here
-        if(!getWorld().isRemote)
-            writeCustomData(REFRESH_CACHED_PATTERN, buf ->{
+        if (!getWorld().isRemote)
+            writeCustomData(REFRESH_CACHED_PATTERN, buf -> {
                 buf.writeEnumValue(this.frontFacing.getOpposite());
                 buf.writeBoolean(this.isFlipped);
             });
@@ -42,8 +44,8 @@ public abstract class CachedPatternRecipeMapMultiblock extends RecipeMapMultiblo
     @Override
     public void receiveCustomData(int dataId, PacketBuffer buf) {
         super.receiveCustomData(dataId, buf);
-        if(dataId == REFRESH_CACHED_PATTERN) {
-            EnumFacing facing =  buf.readEnumValue(EnumFacing.class);
+        if (dataId == REFRESH_CACHED_PATTERN) {
+            EnumFacing facing = buf.readEnumValue(EnumFacing.class);
             boolean isFlipped = buf.readBoolean();
             //Only generate the cachedFluidPattern on the client as it isn't used anywhere on the server
             this.cachedPattern = generateCachedPattern(getPattern(), getPatternOffset(), facing, isFlipped);
@@ -65,15 +67,13 @@ public abstract class CachedPatternRecipeMapMultiblock extends RecipeMapMultiblo
 
 
     /**
-     * @param pattern The pattern it should cache positions for, this is similar to {@link gregtech.api.pattern.FactoryBlockPattern} aisles but the layers are horizontal rather than vertical.<br>
-     *                It will count a space as empty and anything else as valid (rows don't require trailing spaces, they can be cut off or left empty for empty rows). <br>
-     *                Example: see usage in {@link supersymmetry.common.metatileentities.multi.electric.MetaTileEntityClarifier} or {@link supersymmetry.common.metatileentities.multi.electric.MetaTileEntityGravitySeparator}
+     * @param pattern       The pattern it should cache positions for, this is similar to {@link gregtech.api.pattern.FactoryBlockPattern} aisles but the layers are horizontal rather than vertical.<br>
+     *                      It will count a space as empty and anything else as valid (rows don't require trailing spaces, they can be cut off or left empty for empty rows). <br>
+     *                      Example: see usage in {@link supersymmetry.common.metatileentities.multi.electric.MetaTileEntityClarifier} or {@link supersymmetry.common.metatileentities.multi.electric.MetaTileEntityGravitySeparator}
      * @param patternOffset The offset the pattern is generated in.
-     * @param facing which direction the pattern should be generated in (Only Horizontal directions are allowed)
-     * @param isFlipped Works the same as {@link gregtech.api.metatileentity.multiblock.MultiblockControllerBase#isFlipped()}
-     *
+     * @param facing        which direction the pattern should be generated in (Only Horizontal directions are allowed)
+     * @param isFlipped     Works the same as {@link gregtech.api.metatileentity.multiblock.MultiblockControllerBase#isFlipped()}
      * @return An array of positions that correspond with the pattern at given offset and direction/facing
-     *
      * @throws IllegalArgumentException when Vertical facing directions are used
      */
 
@@ -86,12 +86,12 @@ public abstract class CachedPatternRecipeMapMultiblock extends RecipeMapMultiblo
         for (int y = 0; y < pattern.length; y++) {
             for (int z = 0; z < pattern[y].length; z++) {
                 for (int x = 0; x < pattern[y][z].length(); x++) {
-                    if(pattern[y][z].charAt(x) == ' ') continue;
+                    if (pattern[y][z].charAt(x) == ' ') continue;
 
                     int patternXOffset = x + patternOffset.getX();
                     int patternZOffset = z + patternOffset.getZ();
 
-                    if(isFlipped ^ (facing == EnumFacing.NORTH || facing == EnumFacing.SOUTH))
+                    if (isFlipped ^ (facing == EnumFacing.NORTH || facing == EnumFacing.SOUTH))
                         patternXOffset = -patternXOffset;
 
 

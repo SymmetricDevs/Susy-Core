@@ -37,7 +37,7 @@ import java.util.Optional;
 
 public class MetaTileEntityBlender extends FluidRenderRecipeMapMultiBlock {
 
-    private final static String[][] FLUID_PATTERN = {{"FFF","FFF","FFF"}};
+    private final static String[][] FLUID_PATTERN = {{"FFF", "FFF", "FFF"}};
     private final static Vec3i PATTERN_OFFSET = new Vec3i(-1, 1, 1);
 
     public MetaTileEntityBlender(ResourceLocation metaTileEntityId) {
@@ -62,7 +62,7 @@ public class MetaTileEntityBlender extends FluidRenderRecipeMapMultiBlock {
                 .where('S', selfPredicate())
                 .where('X', casing.or(abilities))
                 .where('P', states(getPipeCasingState()))
-                .where('D', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STAINLESS_CLEAN))) 
+                .where('D', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STAINLESS_CLEAN)))
                 .where('E', frames(Materials.StainlessSteel))
                 .where('C', states(MetaBlocks.TURBINE_CASING.getState(TurbineCasingType.STAINLESS_STEEL_GEARBOX)))
                 .where(' ', any())

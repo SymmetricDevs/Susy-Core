@@ -70,6 +70,7 @@ public class MetaTileEntityClarifier extends FluidRenderRecipeMapMultiBlock {
                 .where(' ', any())
                 .build();
     }
+
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
         return Textures.SOLID_STEEL_CASING;
     }
