@@ -27,8 +27,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.metatileentity.multiblock.CachedPatternRecipeMapMultiblock;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.particles.SusyParticleDust;
@@ -174,20 +175,25 @@ public class MetaTileEntityGravitySeparator extends CachedPatternRecipeMapMultib
     public void update() {
         super.update();
         if (this.isActive() && getWorld().isRemote && this.particleColors != null) {
-            Random rand = getWorld().rand;
-            if (cachedPattern == null || cachedPattern.length == 0) generateCachedPattern(getPattern(), getPatternOffset(), this.frontFacing, isFlipped());
-            for (Vec3i offset : cachedPattern) {
-                BlockPos pos = this.getPos().add(offset);
+            createParticles();
+        }
+    }
 
-                //Lots of particles, not sure how performant this is
-                Minecraft.getMinecraft().effectRenderer.addEffect(new SusyParticleDust(getWorld(),
-                        pos.getX() + rand.nextDouble(),
-                        pos.getY() + .5F / 16,
-                        pos.getZ() + rand.nextDouble(),
-                        PARTICLE_SPEED * this.getFrontFacing().getXOffset(), 0,
-                        PARTICLE_SPEED * this.getFrontFacing().getZOffset(), 1,
-                        3F, particleColors[Math.abs(rand.nextInt() % particleColors.length)]));
-            }
+    @SideOnly(Side.CLIENT)
+    private void createParticles() {
+        Random rand = getWorld().rand;
+        if (cachedPattern == null || cachedPattern.length == 0) generateCachedPattern(getPattern(), getPatternOffset(), this.frontFacing, isFlipped());
+        for (Vec3i offset : cachedPattern) {
+            BlockPos pos = this.getPos().add(offset);
+
+            //Lots of particles, not sure how performant this is
+            Minecraft.getMinecraft().effectRenderer.addEffect(new SusyParticleDust(getWorld(),
+                    pos.getX() + rand.nextDouble(),
+                    pos.getY() + .5F / 16,
+                    pos.getZ() + rand.nextDouble(),
+                    PARTICLE_SPEED * this.getFrontFacing().getXOffset(), 0,
+                    PARTICLE_SPEED * this.getFrontFacing().getZOffset(), 1,
+                    3F, particleColors[Math.abs(rand.nextInt() % particleColors.length)]));
         }
     }
 

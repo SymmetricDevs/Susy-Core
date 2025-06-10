@@ -46,9 +46,7 @@ public abstract class FluidRenderRecipeMapMultiBlock extends CachedPatternRecipe
 
     @SideOnly(Side.CLIENT)
     protected TextureAtlasSprite fluidTexture;
-    @SideOnly(Side.CLIENT)
     protected int fluidColor;
-    @SideOnly(Side.CLIENT)
     protected boolean renderFluid = false;
 
 
