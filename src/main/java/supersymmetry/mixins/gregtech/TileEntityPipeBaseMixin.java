@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import supersymmetry.api.SusyLog;
 
 @Deprecated
 @ScheduledForRemoval(inVersion = "Next CEu update")
@@ -58,7 +59,7 @@ public abstract class TileEntityPipeBaseMixin<
       self.setFrameMaterial(tileEntity.getFrameMaterial());
 
     } catch (NoSuchFieldException | IllegalAccessException e) {
-      // log here prolly
+      SusyLog.logger.error("something blew up in the TileEntityPipeBaseMixin");
       e.printStackTrace();
     }
     ci.cancel();
