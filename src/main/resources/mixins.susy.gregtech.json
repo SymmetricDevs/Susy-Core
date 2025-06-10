@@ -1,16 +1,23 @@
 {
-  "package": "supersymmetry.mixins.gregtech",
-  "refmap": "mixins.susy.refmap.json",
-  "target": "@env(DEFAULT)",
-  "minVersion": "0.8",
-  "compatibilityLevel": "JAVA_8",
-  "mixins": [
+  "package" : "supersymmetry.mixins.gregtech",
+  "refmap" : "mixins.susy.refmap.json",
+  "target" : "@env(DEFAULT)",
+  "minVersion" : "0.8",
+  "compatibilityLevel" : "JAVA_8",
+  "mixins" : [
     "BlockMachineMixin",
     "MetaTileEntityDrumAccessor",
     "MetaTileEntityFluidDrillMixin",
     "MetaTileEntityLargeMinerMixin",
     "MetaTileEntityMinerMixin",
     "MultiblockControllerBaseMixin",
-    "CommonProxyMixin"
+    "CommonProxyMixin",
+    "ModHandlerMixin",
+    "MultiblockControllerBaseMixin",
+    "OreDictUnifierAccessor",
+    "OreDictUnifierMixin",
+    "RecipeBuilderAccessor",
+    "RecipeMapsMixin",
+    "RecyclingRecipesMixin"
   ]
 }
