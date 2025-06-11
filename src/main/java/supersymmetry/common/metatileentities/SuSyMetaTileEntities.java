@@ -132,6 +132,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityGravitySeparator GRAVITY_SEPARATOR;
     public static MetaTileEntityQuencher QUENCHER;
     public static MetaTileEntityRailroadEngineeringStation RAILROAD_ENGINEERING_STATION;
+    public static MetaTileEntityMixerSettler MIXER_SETTLER;
 
     public static MetaTileEntityEnergyHatch[] NEW_ENERGY_OUTPUT_HATCH_4A = new MetaTileEntityEnergyHatch[3];
     public static MetaTileEntityEnergyHatch[] NEW_ENERGY_OUTPUT_HATCH_16A = new MetaTileEntityEnergyHatch[4];
@@ -380,6 +381,8 @@ public class SuSyMetaTileEntities {
         registerSimpleMTE(ELECTROSTATIC_SEPARATOR, 12, 17035, "electrostatic_separator", SuSyRecipeMaps.ELECTROSTATIC_SEPARATOR, SusyTextures.ELECTROSTATIC_SEPARATOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         registerSimpleMTE(POLISHING_MACHINE, 12, 17048, "polishing_machine", SuSyRecipeMaps.POLISHING_MACHINE, SusyTextures.POLISHING_MACHINE_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         registerSimpleMTE(TEXTILE_SPINNER, 12, 17061, "textile_spinner", SuSyRecipeMaps.SPINNING_RECIPES, SusyTextures.TEXTILE_SPINNER_OVERLAY, true);
+
+        MIXER_SETTLER = registerMetaTileEntity(17100, new MetaTileEntityMixerSettler(susyId("mixer_settler")));
 
         //STOCK_DETECTOR = registerMetaTileEntity(18000, new MetaTileEntityStockDetector(susyId("stock_detector")));
         STOCK_FLUID_EXCHANGER = registerMetaTileEntity(18001, new MetaTileEntityStockFluidExchanger(susyId("stock_fluid_exchanger")));
