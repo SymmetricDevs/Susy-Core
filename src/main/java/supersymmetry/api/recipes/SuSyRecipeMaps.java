@@ -349,4 +349,7 @@ public class SuSyRecipeMaps {
 
     public static final RecipeMap<SimpleRecipeBuilder> MILLING_RECIPES = new RecipeMap<>("milling", 2, 1, 0, 0, new SimpleRecipeBuilder().EUt(VA[LV]), false)
             .setSound(GTSoundEvents.CUT);
+
+    public static final RecipeMap<SimpleRecipeBuilder> QUARRY_RECIPES = new RecipeMap<>("quarry", 1, 1, 0, 2, new SimpleRecipeBuilder(), false)
+            .setSound(GTSoundEvents.MINER);
 }
