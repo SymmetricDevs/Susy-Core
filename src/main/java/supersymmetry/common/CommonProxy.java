@@ -60,14 +60,13 @@ public class CommonProxy {
     public void preLoad() {
         GeckoLib.initialize();
         SusyStoneTypes.init();
-        checkCanaryFile();
     }
 
     /**
      * Checks for a canary file in the config directory and deletes it if found.
      * Also cleans up the Groovy cache folder to prevent update issues.
      */
-    private void checkCanaryFile() {
+    public void checkCanaryFile() {
         try {
             // Handle canary file in config/susy/
             File configDir = new File(Loader.instance().getConfigDir(), "susy");
