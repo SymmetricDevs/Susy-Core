@@ -1,47 +1,47 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
-import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
-import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.pattern.TraceabilityPredicate;
+import gregtech.api.recipes.Recipe;
 import gregtech.api.unification.material.Materials;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.utils.TooltipHelper;
-import gregtech.common.ConfigHolder;
 import gregtech.common.blocks.BlockBoilerCasing;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.BlockTurbineCasing.TurbineCasingType;
-import gregtech.common.metatileentities.MetaTileEntities;
 import gregtech.core.sound.GTSoundEvents;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import supersymmetry.api.metatileentity.multiblock.FluidRenderRecipeMapMultiBlock;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
-import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class MetaTileEntityBlender extends RecipeMapMultiblockController {
+public class MetaTileEntityBlender extends FluidRenderRecipeMapMultiBlock {
+
+    private final static String[][] FLUID_PATTERN = {{"FFF", "FFF", "FFF"}};
+    private final static Vec3i PATTERN_OFFSET = new Vec3i(-1, 1, 1);
 
     public MetaTileEntityBlender(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SuSyRecipeMaps.BLENDER_RECIPES);
-        this.recipeMapWorkable = new MultiblockRecipeLogic(this, true);
+        super(metaTileEntityId, SuSyRecipeMaps.BLENDER_RECIPES, true);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class MetaTileEntityBlender extends RecipeMapMultiblockController {
                 .where('S', selfPredicate())
                 .where('X', casing.or(abilities))
                 .where('P', states(getPipeCasingState()))
-                .where('D', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STAINLESS_CLEAN))) 
+                .where('D', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STAINLESS_CLEAN)))
                 .where('E', frames(Materials.StainlessSteel))
                 .where('C', states(MetaBlocks.TURBINE_CASING.getState(TurbineCasingType.STAINLESS_STEEL_GEARBOX)))
                 .where(' ', any())
@@ -101,4 +101,19 @@ public class MetaTileEntityBlender extends RecipeMapMultiblockController {
         return Textures.LARGE_CHEMICAL_REACTOR_OVERLAY;
     }
 
+    @Override
+    protected Optional<Fluid> getFluidToRender(Recipe recipe) {
+        //render output fluid instead
+        return recipe.getAllFluidOutputs().stream().findFirst().map(FluidStack::getFluid);
+    }
+
+    @Override
+    protected String[][] getPattern() {
+        return FLUID_PATTERN;
+    }
+
+    @Override
+    protected Vec3i getPatternOffset() {
+        return PATTERN_OFFSET;
+    }
 }

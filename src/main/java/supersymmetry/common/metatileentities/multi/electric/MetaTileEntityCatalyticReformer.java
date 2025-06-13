@@ -15,7 +15,6 @@ import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.util.ResourceLocation;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
-import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nonnull;
 
@@ -37,11 +36,13 @@ public class MetaTileEntityCatalyticReformer extends RecipeMapMultiblockControll
                 .aisle("     ", "XXXPX", "X###M", "XXXPX")
                 .aisle("F   F", "XXXPX", "XSXPX", "XXXPX")
                 .where('S', selfPredicate())
-                .where('X', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.TITANIUM_STABLE))
+                .where('X', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STAINLESS_CLEAN),
+                        MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.TITANIUM_STABLE))
                         .setMinGlobalLimited(24)
                         .or(autoAbilities(true, true, true, true, true, true, false)))
-                .where('P', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.TITANIUM_PIPE)))
-                .where('F', frames(Materials.Titanium))
+                .where('P', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE),
+                        MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.TITANIUM_PIPE)))
+                .where('F', frames(Materials.StainlessSteel, Materials.Titanium))
                 .where('M', abilities(MultiblockAbility.MUFFLER_HATCH))
                 .where(' ', any())
                 .where('#', air())
@@ -50,7 +51,7 @@ public class MetaTileEntityCatalyticReformer extends RecipeMapMultiblockControll
 
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
-        return Textures.STABLE_TITANIUM_CASING;
+        return Textures.CLEAN_STAINLESS_STEEL_CASING;
     }
 
     @Nonnull

@@ -1,0 +1,35 @@
+{
+  "forge_marker" : 1,
+  "defaults": {
+    "model": "minecraft:cube_all",
+    "textures": {
+      "all": "gregtech:blocks/rocket_assembler_casing/foundation"
+    }
+  },
+  "variants" : {
+    "variant=foundation" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/rocket_assembler_casing/foundation"
+      }
+    },
+    "variant=reinforced_foundation" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/rocket_assembler_casing/reinforced_foundation"
+      }
+    },
+    "variant=rails" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/rocket_assembler_casing/rails"
+      }
+    },
+    "variant=structural_frame" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/rocket_assembler_casing/structural_frame"
+      }
+    }
+  }
+}

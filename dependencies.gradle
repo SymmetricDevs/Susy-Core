@@ -33,11 +33,11 @@ dependencies {
     //GeckoLib
     implementation rfg.deobf('curse.maven:geckolib-388172:4020277')
 
-    implementation rfg.deobf('curse.maven:realistic-terrain-generation-unofficial-648514:4404814')
+    compileOnly rfg.deobf('curse.maven:realistic-terrain-generation-unofficial-648514:4404814')
 
     compileOnly rfg.deobf('curse.maven:biomes-o-plenty-220318:2842510')
 
-    implementation rfg.deobf('curse.maven:gregtech-food-option-477021:5500516') // GT-FO 1.11.3
+    implementation rfg.deobf("curse.maven:gregtech-food-option-477021:6147619") // GT-FO 1.12.4
 
     implementation rfg.deobf('curse.maven:applecore-224472:2969118')
 
@@ -48,8 +48,10 @@ dependencies {
     implementation rfg.deobf("curse.maven:immersive-railroading-277736:4970105") // Immersive-Railroading v1.10.0
 
     implementation rfg.deobf("curse.maven:ctm-267602:2915363") // CTM 1.0.2.31
-    implementation rfg.deobf("curse.maven:groovyscript-687577:5507936") // GRS 1.1.1
-    implementation rfg.deobf("curse.maven:modularui-624243:5153413")
+    api("com.cleanroommc:groovyscript:1.2.0-hotfix1") { transitive = false }
+    api("com.cleanroommc:modularui:2.5.0-rc4") { transitive = false }
+
+    runtimeOnly rfg.deobf("curse.maven:the-beneath-254629:3425551")
 
     compileOnly rfg.deobf("curse.maven:ynet-an-xnet-fork-999559:5243319") // XNet-1.8.3-ynet
     compileOnly rfg.deobf("curse.maven:rftools-224641:2861573") // RFTools 7.73
@@ -67,5 +69,13 @@ dependencies {
     implementation rfg.deobf("curse.maven:athenaeum-284350:4633750")
     implementation rfg.deobf("curse.maven:dropt-284973:5405050")
 
+    implementation rfg.deobf("curse.maven:recurrent-complex-223150:5615733")
+    implementation rfg.deobf("curse.maven:ivtoolkit-224535:2443253")
+    implementation rfg.deobf("curse.maven:fluidlogged-api-485654:4564413")
+
+    compileOnly rfg.deobf("curse.maven:yungs-better-mineshafts-forge-389665:3247154")
+
     api("CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.700")
+
+    runtimeOnly 'com.cleanroommc:osxnarratorblocker:1.0'
 }

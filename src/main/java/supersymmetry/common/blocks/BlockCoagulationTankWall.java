@@ -20,7 +20,7 @@ public class BlockCoagulationTankWall extends VariantBlock<BlockCoagulationTankW
         setResistance(10.0f);
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 2);
-        setDefaultState(getState(BlockCoagulationTankWall.CoagulationTankWallType.WOODEN_COAGULATION_TANK_WALL));
+        setDefaultState(getState(CoagulationTankWallType.WOODEN_COAGULATION_TANK_WALL));
     }
 
     @Override

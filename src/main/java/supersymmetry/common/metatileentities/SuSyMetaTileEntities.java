@@ -13,8 +13,12 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityEnergyHatch;
+import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiFluidHatch;
+import gregtech.common.metatileentities.storage.MetaTileEntityCrate;
 import gregtech.common.metatileentities.storage.MetaTileEntityDrum;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.items.CapabilityItemHandler;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.metatileentity.CatalystMachineMetaTileEntity;
@@ -26,6 +30,9 @@ import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicators;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.metatileentities.multi.MetaTileEntityLandingPad;
+import supersymmetry.common.metatileentities.logistics.MetaTileEntityBridge;
+import supersymmetry.common.metatileentities.logistics.MetaTileEntityExtender;
 import supersymmetry.common.metatileentities.multi.electric.*;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCoagulationTank;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimitiveMudPump;
@@ -33,14 +40,18 @@ import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimi
 import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityPrimitiveItemBus;
 import supersymmetry.common.metatileentities.multiblockpart.SusyMetaTileEntityDumpingHatch;
 import supersymmetry.common.metatileentities.multiblockpart.SusyMetaTileEntityEnergyHatch;
-import supersymmetry.common.metatileentities.single.electric.MetaTileEntityBathCondenser;
-import supersymmetry.common.metatileentities.single.electric.MetaTileEntityLatexCollector;
-import supersymmetry.common.metatileentities.single.electric.MetaTileEntityPhaseSeparator;
+import supersymmetry.common.metatileentities.single.electric.*;
+import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityLocomotiveController;
+import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityStockFluidExchanger;
+import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityStockItemExchanger;
 import supersymmetry.common.metatileentities.single.steam.MetaTileEntitySteamLatexCollector;
 import supersymmetry.common.metatileentities.single.steam.SuSySimpleSteamMetaTileEntity;
+import supersymmetry.common.metatileentities.storage.MetaTileEntityPlasticCan;
 
+import java.util.ArrayList;
 import java.util.function.Function;
 
+import static gregtech.api.util.GTUtility.gregtechId;
 import static gregtech.common.metatileentities.MetaTileEntities.registerMetaTileEntity;
 
 public class SuSyMetaTileEntities {
@@ -67,6 +78,12 @@ public class SuSyMetaTileEntities {
 
     public static MetaTileEntityDrum LEAD_DRUM;
     public static MetaTileEntityDrum BRASS_DRUM;
+    public static MetaTileEntityPlasticCan PE_CAN;
+    public static MetaTileEntityPlasticCan PP_CAN;
+    public static MetaTileEntityPlasticCan PTFE_CAN;
+    public static MetaTileEntityPlasticCan UHMWPE_CAN;
+
+    public static MetaTileEntityCrate HERMETICALLY_SEALED_CRATE;
 
     //Machines for chem overhaul
     public static ContinuousMachineMetaTileEntity[] CONTINUOUS_STIRRED_TANK_REACTOR;
@@ -131,13 +148,11 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityClarifier CLARIFIER;
     public static MetaTileEntityDumper DUMPER;
     public static MetaTileEntityEvaporationPool EVAPORATION_POOL;
-    public static int EVAPORATION_POOL_ID;
     public static MetaTileEntityFlareStack FLARE_STACK;
     public static MetaTileEntityFrothFlotationTank FROTH_FLOTATION_TANK;
     public static MetaTileEntityMultiStageFlashDistiller MULTI_STAGE_FLASH_DISTILLER;
 
     public static MetaTileEntityLargeFluidPump LARGE_FLUID_PUMP;
-    public static MetaTileEntityOceanPumper OCEAN_PUMPER;
     public static MetaTileEntityHighTemperatureDistillationTower HIGH_TEMPERATURE_DISTILLATION_TOWER;
     public static MetaTileEntityRotaryKiln ROTARY_KILN;
     public static MetaTileEntityHighPressureCryogenicDistillationPlant HIGH_PRESSURE_CRYOGENIC_DISTILLATION_PLANT;
@@ -155,7 +170,40 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityPrimitiveItemBus PRIMITIVE_ITEM_IMPORT;
     public static MetaTileEntityPrimitiveItemBus PRIMITIVE_ITEM_EXPORT;
 
+    //Space Multis
+    public static MetaTileEntityLandingPad LANDING_PAD;
+    public static MetaTileEntityScrapRecycler SCRAP_RECYCLER;
+    public static MetaTileEntityRocketAssembler ROCKET_ASSEMBLER;
+    public static MetaTileEntityRocketProgrammer ROCKET_PROGRAMMER;
     public static MetaTileEntitySieveDistillationTower SIEVE_DISTILLATION_TOWER;
+
+    public static MetaTileEntityCurtainCoater CURTAIN_COATER;
+    public static MetaTileEntityPreciseMillingMachine MILLING;
+
+    public static MetaTileEntityBridge INV_BRIDGE;
+    public static MetaTileEntityBridge TANK_BRIDGE;
+    public static MetaTileEntityBridge INV_TANK_BRIDGE;
+    public static MetaTileEntityBridge UNIVERSAL_BRIDGE;
+
+    public static MetaTileEntityExtender INV_EXTENDER;
+    public static MetaTileEntityExtender TANK_EXTENDER;
+    public static MetaTileEntityExtender INV_TANK_EXTENDER;
+    public static MetaTileEntityExtender UNIVERSAL_EXTENDER;
+
+    public static final MetaTileEntityMultiFluidHatch[] SUSY_QUADRUPLE_IMPORT_HATCH = new MetaTileEntityMultiFluidHatch[3]; // LV-HV
+    public static final MetaTileEntityMultiFluidHatch[] SUSY_NONUPLE_IMPORT_HATCH = new MetaTileEntityMultiFluidHatch[3];   // LV-HV
+    public static final MetaTileEntityMultiFluidHatch[] SUSY_QUADRUPLE_EXPORT_HATCH = new MetaTileEntityMultiFluidHatch[3]; // LV-HV
+    public static final MetaTileEntityMultiFluidHatch[] SUSY_NONUPLE_EXPORT_HATCH = new MetaTileEntityMultiFluidHatch[3];   // LV-HV
+
+    public static MetaTileEntityIncinerator[] INCINERATOR = new MetaTileEntityIncinerator[4];
+
+    public static MetaTileEntityRTG[] RTG = new MetaTileEntityRTG[8];
+
+    //public static BlockStockDetector STOCK_DETECTOR;
+    public static MetaTileEntityStockFluidExchanger STOCK_FLUID_EXCHANGER;
+    public static MetaTileEntityStockItemExchanger STOCK_ITEM_EXCHANGER;
+    //public static MetaTileEntityStockReader STOCK_CONTENT_READER;
+    public static MetaTileEntityLocomotiveController STOCK_CONTROLLER;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -167,10 +215,18 @@ public class SuSyMetaTileEntities {
         LATEX_COLLECTOR[3] = registerMetaTileEntity(14505, new MetaTileEntityLatexCollector(susyId("latex_collector.ev"), 4));
         SIEVE_DISTILLATION_TOWER = registerMetaTileEntity(14506, new MetaTileEntitySieveDistillationTower(susyId("sieve_distillation_tower")));
 
+        PE_CAN = registerMetaTileEntity(14507, new MetaTileEntityPlasticCan(susyId("drum.pe"), Materials.Polyethylene, 64_000));
+        PP_CAN = registerMetaTileEntity(14508, new MetaTileEntityPlasticCan(susyId("drum.pp"), new PropertyFluidFilter(444, true, true, false, false), 0xdfe39a, 128_000));
+        PTFE_CAN = registerMetaTileEntity(14509, new MetaTileEntityPlasticCan(susyId("drum.ptfe"), Materials.Polytetrafluoroethylene, 512_000));
+
         STEAM_LATEX_COLLECTOR[0] = registerMetaTileEntity(14510, new MetaTileEntitySteamLatexCollector(susyId("latex_collector.bronze"), false));
         STEAM_LATEX_COLLECTOR[1] = registerMetaTileEntity(14511, new MetaTileEntitySteamLatexCollector(susyId("latex_collector.steel"), true));
 
+        UHMWPE_CAN = registerMetaTileEntity(14512, new MetaTileEntityPlasticCan(susyId("drum.uhmwpe"), new PropertyFluidFilter(425, true, true, true, false), 0xc5e3de, 512_000)); // sadly I have to put it here
+
         SINTERING_OVEN = registerMetaTileEntity(14521, new MetaTileEntitySinteringOven(susyId("sintering_oven")));
+
+        HERMETICALLY_SEALED_CRATE = registerMetaTileEntity(14522, new MetaTileEntityCrate(susyId("crate.pe"), Materials.Polyethylene, 54));
 
         registerSimpleSteamMTE(STEAM_VULCANIZING_PRESS, 14515, "vulcanizing_press", SuSyRecipeMaps.VULCANIZATION_RECIPES, SuSySteamProgressIndicators.COMPRESS, SusyTextures.VULCANIZING_PRESS_OVERLAY, true);
         registerCatalystMTE(VULCANIZING_PRESS, 3, 14517, "vulcanizing_press", SuSyRecipeMaps.VULCANIZATION_RECIPES, SusyTextures.VULCANIZING_PRESS_OVERLAY, true);
@@ -203,6 +259,16 @@ public class SuSyMetaTileEntities {
         ELECTROLYTIC_CELL = registerMetaTileEntity(14634, new MetaTileEntityElectrolyticCell(susyId("electrolytic_cell")));
         GRAVITY_SEPARATOR = registerMetaTileEntity(15052, new MetaTileEntityGravitySeparator(susyId("gravity_separator")));
 
+        INV_BRIDGE = registerMetaTileEntity(14733, new MetaTileEntityBridge(susyId("bridge.inv"), cap -> cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, SusyTextures.INV_BRIDGE, Materials.Steel));
+        TANK_BRIDGE = registerMetaTileEntity(14734, new MetaTileEntityBridge(susyId("bridge.tank"), cap -> cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, SusyTextures.TANK_BRIDGE, Materials.Steel));
+        INV_TANK_BRIDGE = registerMetaTileEntity(14735, new MetaTileEntityBridge(susyId("bridge.inv_tank"), cap -> cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, SusyTextures.INV_TANK_BRIDGE, Materials.Steel));
+        UNIVERSAL_BRIDGE = registerMetaTileEntity(14736, new MetaTileEntityBridge(susyId("bridge.universal"), cap -> true, SusyTextures.UNIVERSAL_BRIDGE, Materials.Aluminium));
+
+        INV_EXTENDER = registerMetaTileEntity(14737, new MetaTileEntityExtender(susyId("extender.inv"), cap -> cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, SusyTextures.INV_EXTENDER, Materials.Steel));
+        TANK_EXTENDER = registerMetaTileEntity(14738, new MetaTileEntityExtender(susyId("extender.tank"), cap -> cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, SusyTextures.TANK_EXTENDER, Materials.Steel));
+        INV_TANK_EXTENDER = registerMetaTileEntity(14739, new MetaTileEntityExtender(susyId("extender.inv_tank"), cap -> cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, SusyTextures.INV_TANK_EXTENDER, Materials.Steel));
+        UNIVERSAL_EXTENDER = registerMetaTileEntity(14740, new MetaTileEntityExtender(susyId("extender.universal"), cap -> true, SusyTextures.UNIVERSAL_EXTENDER, Materials.Aluminium));
+
         PRIMITIVE_SMELTER = registerMetaTileEntity(14800, new MetaTileEntityPrimitiveSmelter(susyId("primitive_smelter")));
         PRIMITIVE_ITEM_IMPORT = registerMetaTileEntity(14801, new MetaTileEntityPrimitiveItemBus(susyId("primitive_item_import"), false));
         PRIMITIVE_ITEM_EXPORT = registerMetaTileEntity(14802, new MetaTileEntityPrimitiveItemBus(susyId("primitive_item_export"), true));
@@ -219,9 +285,14 @@ public class SuSyMetaTileEntities {
         registerSimpleMTE(CVD, 12, 14653, "cvd", SuSyRecipeMaps.CVD_RECIPES, SusyTextures.CVD_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         registerSimpleMTE(ION_IMPLANTER, 12, 14666, "ion_implanter", SuSyRecipeMaps.ION_IMPLANTATION_RECIPES, SusyTextures.ION_IMPLANTER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
 
-        int i = 14500;
-        while (GregTechAPI.MTE_REGISTRY.getObjectById(i) != null) i++;
-        SusyLog.logger.debug("The next available ID is: " + i);
+        CURTAIN_COATER = registerMetaTileEntity(14513, new MetaTileEntityCurtainCoater(susyId("curtain_coater")));
+        MILLING = registerMetaTileEntity(14514, new MetaTileEntityPreciseMillingMachine(susyId("milling")));
+
+        ArrayList<Integer> ids = new ArrayList<>();
+        for (int id = 14500; id < 15000; id++) {
+            if (GregTechAPI.MTE_REGISTRY.getObjectById(id) == null) ids.add(id);
+        }
+        SusyLog.logger.debug("Available ID(s) are: {}", ids);
 
         //thermodynamic stuff
         registerSimpleMTE(FLUID_COMPRESSOR, 12, 15000, "fluid_compressor", SuSyRecipeMaps.FLUID_COMPRESSOR_RECIPES, SusyTextures.FLUID_COMPRESSOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
@@ -260,18 +331,26 @@ public class SuSyMetaTileEntities {
         NEW_ENERGY_OUTPUT_HATCH_16A[2] = registerMetaTileEntity(16005, new SusyMetaTileEntityEnergyHatch(susyId("energy_hatch.output_16a.hv"), 3, 16, true));
         NEW_ENERGY_OUTPUT_HATCH_16A[3] = registerMetaTileEntity(16006, new SusyMetaTileEntityEnergyHatch(susyId("energy_hatch.output_16a.ev"), 4, 16, true));
 
+        INCINERATOR[0] = registerMetaTileEntity(16500, new MetaTileEntityIncinerator(susyId("incinerator.lv"), 1, 20, 10));
+        INCINERATOR[1] = registerMetaTileEntity(16501, new MetaTileEntityIncinerator(susyId("incinerator.mv"), 2, 20, 20));
+        INCINERATOR[2] = registerMetaTileEntity(16502, new MetaTileEntityIncinerator(susyId("incinerator.hv"), 3, 20, 40));
+        INCINERATOR[3] = registerMetaTileEntity(16503, new MetaTileEntityIncinerator(susyId("incinerator.ev"), 4, 10, 40));
+
+        // RTGs: 16504-16511
+        RTG[0] = registerMetaTileEntity(16504, new MetaTileEntityRTG(susyId("rtg.lv"), 1));
+
         BASIC_STEAM_TURBINE = registerMetaTileEntity(17000, new MetaTileEntitySUSYLargeTurbine(susyId("basic_steam_turbine"), SuSyRecipeMaps.LARGE_STEAM_TURBINE, 1, MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING), Textures.SOLID_STEEL_CASING, SusyTextures.LARGE_STEAM_TURBINE_OVERLAY));
         BASIC_GAS_TURBINE = registerMetaTileEntity(17001, new MetaTileEntitySUSYLargeTurbine(susyId("basic_gas_turbine"), RecipeMaps.GAS_TURBINE_FUELS, 2, MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING), Textures.SOLID_STEEL_CASING, SusyTextures.LARGE_GAS_TURBINE_OVERLAY));
 
         ADVANCED_ARC_FURNACE = registerMetaTileEntity(17003, new MetaTileEntityAdvancedArcFurnace(susyId("advanced_arc_furnace")));
         CLARIFIER = registerMetaTileEntity(17004, new MetaTileEntityClarifier(susyId("clarifier")));
         DUMPER = registerMetaTileEntity(17005, new MetaTileEntityDumper(susyId("dumper")));
-        EVAPORATION_POOL = registerMetaTileEntity(EVAPORATION_POOL_ID, new MetaTileEntityEvaporationPool(susyId("evaporation_pool")));
+        EVAPORATION_POOL = registerMetaTileEntity(17006, new MetaTileEntityEvaporationPool(susyId("evaporation_pool")));
         FLARE_STACK = registerMetaTileEntity(17007, new MetaTileEntityFlareStack(susyId("flare_stack")));
         FROTH_FLOTATION_TANK = registerMetaTileEntity(17008, new MetaTileEntityFrothFlotationTank(susyId("froth_flotation_tank")));
         MULTI_STAGE_FLASH_DISTILLER = registerMetaTileEntity(17009, new MetaTileEntityMultiStageFlashDistiller(susyId("multi_stage_flash_distiller")));
 
-        OCEAN_PUMPER = registerMetaTileEntity(17011, new MetaTileEntityOceanPumper(susyId("ocean_pumper")));
+        //FREE ID: 17011
         HIGH_TEMPERATURE_DISTILLATION_TOWER = registerMetaTileEntity(17012, new MetaTileEntityHighTemperatureDistillationTower(susyId("high_temperature_distillation_tower")));
         ROTARY_KILN = registerMetaTileEntity(17013, new MetaTileEntityRotaryKiln(susyId("rotary_kiln")));
         HIGH_PRESSURE_CRYOGENIC_DISTILLATION_PLANT = registerMetaTileEntity(17014, new MetaTileEntityHighPressureCryogenicDistillationPlant(susyId("high_pressure_cryogenic_distillation_plant")));
@@ -285,9 +364,34 @@ public class SuSyMetaTileEntities {
 
         LARGE_FLUID_PUMP = registerMetaTileEntity(17021, new MetaTileEntityLargeFluidPump(susyId("large_fluid_pump")));
 
+        for (int i = GTValues.LV; i <= GTValues.HV; i++) { // Quadruple/Nonuple hatches: 17022-17033
+            int index = i - GTValues.LV;
+            String tierName = GTValues.VN[i].toLowerCase();
+            SUSY_QUADRUPLE_IMPORT_HATCH[index] = registerMetaTileEntity(17022 + index,
+                    new MetaTileEntityMultiFluidHatch(gregtechId("fluid_hatch.import_4x." + tierName), i, 4, false));
+            SUSY_NONUPLE_IMPORT_HATCH[index] = registerMetaTileEntity(17025 + index,
+                    new MetaTileEntityMultiFluidHatch(gregtechId("fluid_hatch.import_9x." + tierName), i, 9, false));
+            SUSY_QUADRUPLE_EXPORT_HATCH[index] = registerMetaTileEntity(17028 + index,
+                    new MetaTileEntityMultiFluidHatch(gregtechId("fluid_hatch.export_4x." + tierName), i, 4, true));
+            SUSY_NONUPLE_EXPORT_HATCH[index] = registerMetaTileEntity(17031 + index,
+                    new MetaTileEntityMultiFluidHatch(gregtechId("fluid_hatch.export_9x." + tierName), i, 9, true));
+        }
+
         registerSimpleMTE(ELECTROSTATIC_SEPARATOR, 12, 17035, "electrostatic_separator", SuSyRecipeMaps.ELECTROSTATIC_SEPARATOR, SusyTextures.ELECTROSTATIC_SEPARATOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         registerSimpleMTE(POLISHING_MACHINE, 12, 17048, "polishing_machine", SuSyRecipeMaps.POLISHING_MACHINE, SusyTextures.POLISHING_MACHINE_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         registerSimpleMTE(TEXTILE_SPINNER, 12, 17061, "textile_spinner", SuSyRecipeMaps.SPINNING_RECIPES, SusyTextures.TEXTILE_SPINNER_OVERLAY, true);
+
+        //STOCK_DETECTOR = registerMetaTileEntity(18000, new MetaTileEntityStockDetector(susyId("stock_detector")));
+        STOCK_FLUID_EXCHANGER = registerMetaTileEntity(18001, new MetaTileEntityStockFluidExchanger(susyId("stock_fluid_exchanger")));
+        STOCK_ITEM_EXCHANGER = registerMetaTileEntity(18002, new MetaTileEntityStockItemExchanger(susyId("stock_item_exchanger")));
+        //STOCK_CONTENT_READER = registerMetaTileEntity(18003, new MetaTileEntityStockReader(susyId("stock_content_reader")));
+        STOCK_CONTROLLER = registerMetaTileEntity(18004, new MetaTileEntityLocomotiveController(susyId("stock_controller")));
+      
+        //Space machines
+        LANDING_PAD = registerMetaTileEntity(18005, new MetaTileEntityLandingPad(susyId("landing_pad")));
+        SCRAP_RECYCLER = registerMetaTileEntity(18006, new MetaTileEntityScrapRecycler(susyId("scrap_recycler")));
+        ROCKET_ASSEMBLER = registerMetaTileEntity(18007, new MetaTileEntityRocketAssembler(susyId("rocket_assembler")));
+        ROCKET_PROGRAMMER = registerMetaTileEntity(18008, new MetaTileEntityRocketProgrammer(susyId("rocket_programmer")));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name, RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator, ICubeRenderer texture, boolean isBricked) {
@@ -327,8 +431,7 @@ public class SuSyMetaTileEntities {
         return new ResourceLocation(GTValues.MODID, name);
     }
 
-    static{
-        EVAPORATION_POOL_ID = 17006;
+    static {
 
         STEAM_LATEX_COLLECTOR = new PseudoMultiSteamMachineMetaTileEntity[2];
         STEAM_VULCANIZING_PRESS = new SuSySimpleSteamMetaTileEntity[2];

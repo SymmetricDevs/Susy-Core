@@ -2,45 +2,40 @@ package supersymmetry.api.metatileentity.multiblock;
 
 import gregtech.api.capability.IDistillationTower;
 import gregtech.api.capability.impl.DistillationTowerLogicHandler;
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
-import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.recipes.RecipeMap;
-import gregtech.client.renderer.ICubeRenderer;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import supersymmetry.common.recipes.DistillationTowerRecipeLogic;
 
+import java.util.List;
 import java.util.function.Function;
 
 import static gregtech.api.util.RelativeDirection.UP;
 
-public class MetaTileEntityOrderedDT extends RecipeMapMultiblockController implements IDistillationTower {
+public abstract class MetaTileEntityOrderedDT extends RecipeMapMultiblockController implements IDistillationTower {
+
     protected DistillationTowerLogicHandler handler;
 
-    public MetaTileEntityOrderedDT(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap) {
+    public MetaTileEntityOrderedDT(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap, boolean hasPerfectOC) {
         super(metaTileEntityId, recipeMap);
-        this.handler = new DistillationTowerLogicHandler(this);
-        this.recipeMapWorkable = new DistillationTowerRecipeLogic(this);
+        this.handler = createHandler();
+        this.recipeMapWorkable = new DistillationTowerRecipeLogic(this, hasPerfectOC);
     }
 
-    @Override
-    protected @NotNull BlockPattern createStructurePattern() {
-        return null;
+    public MetaTileEntityOrderedDT(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap) {
+        this(metaTileEntityId, recipeMap, false);
     }
 
-    @Override
-    public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
-        return null;
-    }
-
-    @Override
-    public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
-        return null;
+    @NotNull
+    public DistillationTowerLogicHandler createHandler() {
+        return new DistillationTowerLogicHandler(this);
     }
 
     @Override
@@ -51,7 +46,6 @@ public class MetaTileEntityOrderedDT extends RecipeMapMultiblockController imple
     public DistillationTowerLogicHandler getHandler() {
         return handler;
     }
-
 
     /**
      * Used if MultiblockPart Abilities need to be sorted a certain way, like
@@ -90,5 +84,12 @@ public class MetaTileEntityOrderedDT extends RecipeMapMultiblockController imple
     @Override
     public boolean allowsExtendedFacing() {
         return false;
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
+        super.addInformation(stack, world, tooltip, advanced);
+        tooltip.add(I18n.format("gregtech.machine.ordered_dt.tooltip.1"));
+        tooltip.add(I18n.format("gregtech.machine.ordered_dt.tooltip.2"));
     }
 }

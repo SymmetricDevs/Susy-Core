@@ -56,4 +56,5 @@ public class SuSyUtility {
     public static ResourceLocation susyId(String path) {
         return new ResourceLocation(Supersymmetry.MODID, path);
     }
+
 }

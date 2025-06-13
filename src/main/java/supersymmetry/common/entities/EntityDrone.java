@@ -185,7 +185,7 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
 
                 this.motionY += 0.125;
 
-                if(age >= 90 && this.isCollidingWithBlocks()) {
+                if (age >= 63 && this.isCollidingWithBlocks()) {
                     this.explode();
                 }
 
@@ -223,8 +223,8 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
     }
 
     public boolean isCollidingWithBlocks() {
-        return this.world.getBlockState(mutableBlockPos.setPos(this.posX, this.posY + 1, this.posZ)) != Blocks.AIR.getDefaultState()
-                || this.world.getBlockState(mutableBlockPos.setPos(this.posX, this.posY - 1, this.posZ)) != Blocks.AIR.getDefaultState();
+        return !(this.world.getBlockState(mutableBlockPos.setPos(this.posX, this.posY + 1, this.posZ)).getBlock().isPassable(world, mutableBlockPos)
+                 && this.world.getBlockState(mutableBlockPos.setPos(this.posX, this.posY - 1, this.posZ)).getBlock().isPassable(world, mutableBlockPos));
     }
 
     public boolean reachedSky() {
@@ -273,7 +273,7 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.drone.landing", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
         }
 
-        return software.bernie.geckolib3.core.PlayState.CONTINUE;
+        return PlayState.CONTINUE;
     }
 
     @Override

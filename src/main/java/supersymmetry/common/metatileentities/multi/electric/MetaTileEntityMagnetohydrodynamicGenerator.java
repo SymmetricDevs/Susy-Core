@@ -12,7 +12,6 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockFusionCasing;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 

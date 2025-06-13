@@ -10,8 +10,13 @@ import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.metatileentity.multiblock.MetaTileEntityOrderedDT;
 
 public class DistillationTowerRecipeLogic extends MultiblockRecipeLogic {
+
     public DistillationTowerRecipeLogic(RecipeMapMultiblockController tileEntity) {
         super(tileEntity);
+    }
+
+    public DistillationTowerRecipeLogic(RecipeMapMultiblockController tileEntity, boolean hasPerfectOC) {
+        super(tileEntity, hasPerfectOC);
     }
 
     @Override

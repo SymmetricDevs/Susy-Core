@@ -1,13 +1,11 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import gregtech.api.capability.IDistillationTower;
 import gregtech.api.capability.impl.DistillationTowerLogicHandler;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
-import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.unification.material.Materials;
@@ -24,9 +22,12 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.capability.impl.ExtendedDTLogicHandler;
 import supersymmetry.api.metatileentity.multiblock.MetaTileEntityOrderedDT;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.recipes.DistillationTowerRecipeLogic;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -37,13 +38,22 @@ import static gregtech.api.util.RelativeDirection.*;
 public class MetaTileEntityVacuumDistillationTower extends MetaTileEntityOrderedDT {
 
     public MetaTileEntityVacuumDistillationTower(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SuSyRecipeMaps.VACUUM_DISTILLATION_RECIPES);
+        super(metaTileEntityId, SuSyRecipeMaps.VACUUM_DISTILLATION_RECIPES, true);
     }
 
+    @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
         return new MetaTileEntityVacuumDistillationTower(this.metaTileEntityId);
     }
 
+    @Override
+    @NotNull
+    public DistillationTowerLogicHandler createHandler() {
+        return new ExtendedDTLogicHandler(this, 3, ignored -> 3);
+    }
+
+    @Override
+    @NotNull
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start(RIGHT, FRONT, UP)
                 .aisle(" CSC  ", "CCCCCC", "CCCCCC", "CCCCCC", " CCC  ")
@@ -51,28 +61,25 @@ public class MetaTileEntityVacuumDistillationTower extends MetaTileEntityOrdered
                 .aisle(" CCC  ", "C#F#CC", "CFFFCC", "C#F#CC", " CCC  ")
                 .aisle(" XXX  ", "X#F#D ", "XFFFD ", "X#F#D ", " XXX  ").setRepeatable(1, 12)
                 .aisle(" DDD  ", "DDDDD ", "DDDDD ", "DDDDD ", " DDD  ")
-                .where('S', this.selfPredicate())
-                .where('G', states(this.getGlassState()))
-                .where('P', states(this.getPipeCasingState()))
+                .where('S', selfPredicate())
+                .where('G', states(getGlassState()))
+                .where('P', states(getPipeCasingState()))
                 .where('F', frames(Materials.Steel))
-                .where('C', states(this.getCasingState())
-                        .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(3))
+                .where('C', states(getCasingState())
+                        .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2))
                         .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setMaxGlobalLimited(2))
                         .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMaxGlobalLimited(1)))
-                .where('I', abilities(MultiblockAbility.EXPORT_ITEMS).setMaxGlobalLimited(1))
-                .where('D', states(this.getCasingState()))
+                .where('I', states(getCasingState())
+                        .or(abilities(MultiblockAbility.EXPORT_ITEMS).setMaxGlobalLimited(1)))	
+                .where('D', states(getCasingState()))
                 .where('X', states(getCasingState())
                         .or(metaTileEntities(MultiblockAbility.REGISTRY.get(MultiblockAbility.EXPORT_FLUIDS).stream()
-                        .filter(mte -> !(mte instanceof MetaTileEntityMultiFluidHatch))
-                        .toArray(MetaTileEntity[]::new))
-                        .setMaxLayerLimited(1))
-                )
+                                .filter(mte -> !(mte instanceof MetaTileEntityMultiFluidHatch))
+                                .toArray(MetaTileEntity[]::new))
+                                .setMaxLayerLimited(1))
+                        .or(autoAbilities(true, false)))
                 .where('#', air())
                 .build();
-    }
-
-    public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
-        return Textures.SOLID_STEEL_CASING;
     }
 
     protected static IBlockState getGlassState() {
@@ -87,7 +94,13 @@ public class MetaTileEntityVacuumDistillationTower extends MetaTileEntityOrdered
         return MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE);
     }
 
-    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
+    @Override
+    public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
+        return Textures.SOLID_STEEL_CASING;
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
         tooltip.add(TooltipHelper.RAINBOW_SLOW + I18n.format("gregtech.machine.perfect_oc", new Object[0]));
     }
