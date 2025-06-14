@@ -16,11 +16,10 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import supersymmetry.api.SusyLog;
 
 @Mixin(value = RFToolsJeiPlugin.class, remap = false)
-public class RFToolsMessagesMixin {
-  @Inject(method = "transferRecipe", at = @At("HEAD"),cancellable = true)
+public class RFToolsJeiPluginMixin {
+  @Inject(method = "transferRecipe", at = @At("HEAD"), cancellable = true)
   private static void transferRecipe(
       Map<Integer, ? extends IGuiIngredient<ItemStack>> guiIngredients,
       BlockPos pos,
@@ -34,15 +33,14 @@ public class RFToolsMessagesMixin {
       if (!allIngredients.isEmpty()) {
         // items.set(recipeSlot, allIngredients.get(0));  // what was used originally
         // https://github.com/McJtyMods/RFTools/blob/030a495c8530183bdfe47475ed41d45386e56f6c/src/main/java/mcjty/rftools/compat/jei/RFToolsJeiPlugin.java#L27
-        // SusyLog.logger.warn("{} {}", recipeSlot, getPreferredItem(allIngredients));
         items.set(recipeSlot, getPreferredItem(allIngredients));
       }
     }
-    SusyLog.logger.warn("shitfuckshitfuck sendToServer {}", items);
     RFToolsMessages.INSTANCE.sendToServer(new PacketSendRecipe(items, pos));
     ci.cancel();
   }
 
+  // could've been better, but oh well, that function isnt called that often anyways
   private static final Map<String, Integer> PRIORITY = new HashMap<>();
 
   static {
