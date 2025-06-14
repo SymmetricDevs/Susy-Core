@@ -21,7 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -118,12 +118,13 @@ public class MetaTileEntityDumper extends VoidingMultiblockBase {
 
     @SideOnly(Side.CLIENT)
     private void dumpingParticles() {
-        BlockPos pos = this.getPos();
         EnumFacing facing = this.getFrontFacing().getOpposite();
-        float xPos = pos.getX() + (1.5F * facing.getXOffset()) + (3F * -facing.getZOffset());
-        float yPos = pos.getY();
-        float zPos = pos.getZ() + (3F * facing.getXOffset()) + (1.5F * facing.getZOffset());
+        Vec3d pos = new Vec3d(this.getPos()).add(0.5, 0.5, 0.5);
 
+        float xPos = (float) (pos.x + (1F * facing.getXOffset()) + (2.5F * -facing.getZOffset()));
+        float yPos = (float) pos.y;
+
+        float zPos = (float) (pos.z + (2.5F * facing.getXOffset()) + (1F * facing.getZOffset()));
         float ySpd = 0F;
         float xSpd = facing.getZOffset() * 1F;
         float zSpd = -facing.getXOffset() * 1F;
