@@ -51,10 +51,13 @@ dependencies {
     api("com.cleanroommc:groovyscript:1.2.0-hotfix1") { transitive = false }
     api("com.cleanroommc:modularui:2.5.0-rc4") { transitive = false }
 
+    implementation rfg.deobf("curse.maven:rftools-224641:2861573") // RFTools 7.73
+    api ("curse.maven:mcjtylib-233105:2745846") //dependency for rftools 
+    implementation rfg.deobf("curse.maven:techguns-244201:2958103")
+
     runtimeOnly rfg.deobf("curse.maven:the-beneath-254629:3425551")
 
     compileOnly rfg.deobf("curse.maven:ynet-an-xnet-fork-999559:5243319") // XNet-1.8.3-ynet
-    compileOnly rfg.deobf("curse.maven:rftools-224641:2861573") // RFTools 7.73
     compileOnly rfg.deobf("curse.maven:mcjtylib-233105:2745846")
     compileOnly rfg.deobf("curse.maven:redstone-flux-270789:2920436")
     compileOnly rfg.deobf("curse.maven:tesla-244651:2487959")
