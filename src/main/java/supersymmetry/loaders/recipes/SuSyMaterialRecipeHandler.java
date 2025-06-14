@@ -1,17 +1,27 @@
 package supersymmetry.loaders.recipes;
 
+import gregtech.api.GTValues;
 import gregtech.api.recipes.ModHandler;
+import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMaps;
+import gregtech.api.recipes.ingredients.GTRecipeInput;
+import gregtech.api.recipes.ingredients.IntCircuitIngredient;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.material.Material;
+import gregtech.api.unification.material.info.MaterialFlag;
 import gregtech.api.unification.material.info.MaterialFlags;
 import gregtech.api.unification.material.properties.DustProperty;
+import gregtech.api.unification.material.properties.IMaterialProperty;
 import gregtech.api.unification.material.properties.PropertyKey;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.unification.stack.UnificationEntry;
+import gregtech.api.util.function.TriConsumer;
 import gregtech.common.items.MetaItems;
 import gregtech.common.items.ToolItems;
 import gregtech.loaders.recipe.handlers.RecyclingRecipeHandler;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
@@ -20,11 +30,16 @@ import supersymmetry.api.unification.material.properties.FiberProperty;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.item.SuSyMetaItems;
 
+import java.util.*;
+
 import static gregtech.api.GTValues.*;
-import static gregtech.api.unification.ore.OrePrefix.dust;
+import static gregtech.api.recipes.RecipeMaps.*;
 import static gregtech.api.unification.material.Materials.*;
+import static gregtech.api.unification.ore.OrePrefix.*;
 
 public class SuSyMaterialRecipeHandler {
+    // For SUSY molds to be put into
+    public static final Map<OrePrefix, ItemStack> mapMolds = new HashMap<>();
 
     public static void init() {
         SusyOrePrefix.catalystBed.addProcessingHandler(PropertyKey.DUST, SuSyMaterialRecipeHandler::processCatalystBed);
@@ -36,13 +51,169 @@ public class SuSyMaterialRecipeHandler {
         SusyOrePrefix.thread.addProcessingHandler(SuSyPropertyKey.FIBER, SuSyMaterialRecipeHandler::processThreadWeaving);
         SusyOrePrefix.fiber.addProcessingHandler(PropertyKey.DUST, RecyclingRecipeHandler::processCrushing);
         SusyOrePrefix.thread.addProcessingHandler(PropertyKey.DUST, RecyclingRecipeHandler::processCrushing);
+        SusyOrePrefix.electrode.addProcessingHandler(PropertyKey.DUST, SuSyMaterialRecipeHandler::processElectrode);
+        addProcessingHandler(PropertyKey.DUST, OrePrefix.dust, SuSyMaterialFlags.HIP_PRESSED, SuSyMaterialRecipeHandler::processHIPPressing);
+        addProcessingHandler(PropertyKey.DUST, OrePrefix.dust, SuSyMaterialFlags.CONTINUOUSLY_CAST, SuSyMaterialRecipeHandler::processContinuouslyCast);
+    }
+
+
+    public static <T extends IMaterialProperty> void addProcessingHandler(PropertyKey<T> propertyKey, OrePrefix prefix, MaterialFlag condition, TriConsumer<OrePrefix, Material, T> handler) {
+        prefix.addProcessingHandler((orePrefix, material) -> {
+            if (material.hasProperty(propertyKey) && material.hasFlag(condition)) {
+                handler.accept(orePrefix, material, material.getProperty(propertyKey));
+            }
+        });
+    }
+
+    public static void processHIPPressing(OrePrefix orePrefix, Material material, DustProperty dustProperty) {
+        mapMolds.put(OrePrefix.plate, MetaItems.SHAPE_MOLD_PLATE.getStackForm());
+        mapMolds.put(OrePrefix.block, MetaItems.SHAPE_MOLD_BLOCK.getStackForm());
+        mapMolds.put(OrePrefix.rotor, MetaItems.SHAPE_MOLD_ROTOR.getStackForm());
+        mapMolds.put(OrePrefix.gear, MetaItems.SHAPE_MOLD_GEAR.getStackForm());
+        mapMolds.put(OrePrefix.gearSmall, MetaItems.SHAPE_MOLD_GEAR_SMALL.getStackForm());
+        mapMolds.put(OrePrefix.ingot, MetaItems.SHAPE_MOLD_INGOT.getStackForm());
+        Item susyMetaItem = Item.getByNameOrId("gregtech:meta_item_2");
+        if (susyMetaItem != null) {
+            mapMolds.put(OrePrefix.stickLong, new ItemStack(susyMetaItem, 1, 111));
+            SuSyRecipeMaps.HOT_ISOSTATIC_PRESS.recipeBuilder()
+                    .input(dust, material)
+                    .notConsumable(new ItemStack(susyMetaItem, 1, 112))
+                    .fluidInputs(Argon.getFluid(100))
+                    .output(ring, material, 4)
+                    .EUt(VA[HV]).duration((int) material.getMass())
+                    .buildAndRegister();
+            SuSyRecipeMaps.HOT_ISOSTATIC_PRESS.recipeBuilder()
+                    .input(dust, material)
+                    .notConsumable(new ItemStack(susyMetaItem, 1, 112))
+                    .fluidInputs(Nitrogen.getFluid(200))
+                    .output(ring, material, 4)
+                    .EUt(VA[HV]).duration((int) material.getMass() * 2)
+                    .buildAndRegister();
+            SuSyRecipeMaps.HOT_ISOSTATIC_PRESS.recipeBuilder()
+                    .input(dust, material)
+                    .notConsumable(new ItemStack(susyMetaItem, 1, 106))
+                    .fluidInputs(Argon.getFluid(100))
+                    .output(stick, material, 2)
+                    .EUt(VA[HV]).duration((int) material.getMass())
+                    .buildAndRegister();
+            SuSyRecipeMaps.HOT_ISOSTATIC_PRESS.recipeBuilder()
+                    .input(dust, material)
+                    .notConsumable(new ItemStack(susyMetaItem, 1, 106))
+                    .fluidInputs(Nitrogen.getFluid(200))
+                    .output(stick, material, 2)
+                    .EUt(VA[HV]).duration((int) material.getMass() * 2)
+                    .buildAndRegister();
+        }
+        for (Map.Entry<OrePrefix, ItemStack> entry : mapMolds.entrySet()) {
+            if (OreDictUnifier.get(entry.getKey(), material, 1).isEmpty()) {
+                continue;
+            }
+            int amount = (int) (entry.getKey().getMaterialAmount(material) / GTValues.M);
+            SuSyRecipeMaps.HOT_ISOSTATIC_PRESS.recipeBuilder()
+                    .input(dust, material, amount)
+                    .notConsumable(entry.getValue())
+                    .fluidInputs(Argon.getFluid(100))
+                    .output(entry.getKey(), material)
+                    .EUt(VA[HV]).duration((int) material.getMass() * amount)
+                    .buildAndRegister();
+            SuSyRecipeMaps.HOT_ISOSTATIC_PRESS.recipeBuilder()
+                    .input(dust, material, amount)
+                    .notConsumable(entry.getValue())
+                    .fluidInputs(Nitrogen.getFluid(200))
+                    .output(entry.getKey(), material)
+                    .EUt(VA[HV]).duration((int) material.getMass() * amount * 2)
+                    .buildAndRegister();
+        }
+        SuSyRecipeMaps.HOT_ISOSTATIC_PRESS.recipeBuilder()
+                .input(dust, material)
+                .notConsumable(MetaItems.SHAPE_MOLD_NUGGET.getStackForm())
+                .fluidInputs(Argon.getFluid(100))
+                .output(nugget, material, 9)
+                .EUt(VA[HV]).duration((int) material.getMass())
+                .buildAndRegister();
+        SuSyRecipeMaps.HOT_ISOSTATIC_PRESS.recipeBuilder()
+                .input(dust, material)
+                .notConsumable(MetaItems.SHAPE_MOLD_NUGGET.getStackForm())
+                .fluidInputs(Nitrogen.getFluid(200))
+                .output(nugget, material, 9)
+                .EUt(VA[HV]).duration((int) material.getMass() * 2)
+                .buildAndRegister();
+        // The warning doesn't actually apply
+        if (Item.getItemById(5300) != null) {
+
+
+        }
+
+
+        ItemStack ingotStack = OreDictUnifier.get(ingot, material);
+
+        List<ItemStack> inputItems = new ArrayList<>();
+        List<FluidStack> fluidInputs = new ArrayList<>();
+        inputItems.add(ingotStack);
+        inputItems.add(IntCircuitIngredient.getIntegratedCircuit(1));
+        Recipe r = WIREMILL_RECIPES.findRecipe(8, inputItems, fluidInputs, false);
+        if (r != null) {
+            WIREMILL_RECIPES.removeRecipe(r);
+            WIREMILL_RECIPES.recipeBuilder()
+                    .input(stick, material)
+                    .circuitMeta(1)
+                    .output(wireGtSingle, material, 1)
+                    .duration((int) material.getMass() / 4)
+                    .EUt(getVoltageMultiplier(material))
+                    .buildAndRegister();
+        }
+
+
+        r = BENDER_RECIPES.findRecipe(8, inputItems, fluidInputs, false);
+        if (r != null) {
+            BENDER_RECIPES.removeRecipe(r);
+        }
+        Collection<Recipe> recipes = EXTRUDER_RECIPES.getRecipeList();
+        for (Recipe recipe : recipes) {
+            for (GTRecipeInput input : recipe.getInputs()) {
+                if (input.getInputStacks()[0].isItemEqual(ingotStack)) {
+                    EXTRUDER_RECIPES.removeRecipe(recipe);
+                }
+            }
+        }
+
+    }
+
+    public static void processElectrode(OrePrefix orePrefix, Material material, DustProperty dustProperty) {
+        // Some custom electrode recipe in the arc furnace would have to be added for each.
+        SuSyRecipeMaps.GAS_ATOMIZER.recipeBuilder()
+                .input(orePrefix, material, 1)
+                .fluidInputs(Nitrogen.getFluid(100))
+                .outputs(OreDictUnifier.get(dust, material, 1))
+                .EUt(VA[MV]).duration(80)
+                .buildAndRegister();
+        SuSyRecipeMaps.GAS_ATOMIZER.recipeBuilder()
+                .input(orePrefix, material, 1)
+                .fluidInputs(Argon.getFluid(50))
+                .outputs(OreDictUnifier.get(dust, material, 1))
+                .EUt(VA[MV]).duration(40)
+                .buildAndRegister();
+    }
+
+    public static void processContinuouslyCast(OrePrefix orePrefix, Material material, DustProperty dustProperty) {
+        WIREMILL_RECIPES.recipeBuilder()
+                .input(stick, material)
+                .circuitMeta(1)
+                .output(wireGtSingle, material, 1)
+                .duration((int) material.getMass() / 4)
+                .EUt(getVoltageMultiplier(material))
+                .buildAndRegister();
+    }
+
+    private static int getVoltageMultiplier(Material material) {
+        return material.getBlastTemperature() >= 2800 ? VA[LV] : VA[ULV];
     }
 
     public static void processCatalystBed(OrePrefix catalystBedPrefix, Material mat, DustProperty property) {
         if (mat.hasFlag(SuSyMaterialFlags.GENERATE_CATALYST_BED)) {
             ModHandler.addShapedRecipe(String.format("catalyst_bed_%s", mat),
                     OreDictUnifier.get(catalystBedPrefix, mat, 1),
-                    " S ", "SCS",  " S ",
+                    " S ", "SCS", " S ",
                     'S', new UnificationEntry(SusyOrePrefix.catalystPellet, mat),
                     'C', SuSyMetaItems.CATALYST_BED_SUPPORT_GRID);
 
@@ -69,11 +240,11 @@ public class SuSyMaterialRecipeHandler {
     public static void processFiber(OrePrefix fiberPrefix, Material mat, @NotNull FiberProperty property) {
         if (property.solutionSpun) {
             SuSyRecipeMaps.DRYER_RECIPES.recipeBuilder()
-                .inputs(OreDictUnifier.get(SusyOrePrefix.wetFiber, mat, 8))
-                .outputs(OreDictUnifier.get(fiberPrefix, mat, 8))
-                .duration(20)
-                .EUt(VA[HV])
-                .buildAndRegister();
+                    .inputs(OreDictUnifier.get(SusyOrePrefix.wetFiber, mat, 8))
+                    .outputs(OreDictUnifier.get(fiberPrefix, mat, 8))
+                    .duration(20)
+                    .EUt(VA[HV])
+                    .buildAndRegister();
         }
     }
 
@@ -90,12 +261,12 @@ public class SuSyMaterialRecipeHandler {
     public static void processThreadWeaving(OrePrefix threadPrefix, Material mat, @NotNull FiberProperty property) {
         if (mat.hasFlag(MaterialFlags.GENERATE_PLATE)) {
             RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
-                .circuitMeta(1)
-                .inputs(OreDictUnifier.get(threadPrefix, mat, 8))
-                .outputs(OreDictUnifier.get(OrePrefix.plate, mat, 1))
-                .duration(20)
-                .EUt(VA[LV])
-                .buildAndRegister();
+                    .circuitMeta(1)
+                    .inputs(OreDictUnifier.get(threadPrefix, mat, 8))
+                    .outputs(OreDictUnifier.get(OrePrefix.plate, mat, 1))
+                    .duration(20)
+                    .EUt(VA[LV])
+                    .buildAndRegister();
         }
     }
 

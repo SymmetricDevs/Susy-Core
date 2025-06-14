@@ -43,6 +43,9 @@ public class SuSyBlocks {
     public static BlockSerpentine SERPENTINE;
     public static BlocksHardened HARDBLOCKS;
     public static BlocksCustomSheets CUSTOMSHEETS;
+    public static BlockMetallurgy METALLURGY;
+    public static BlockMetallurgy2 METALLURGY_2;
+    public static BlockMetallurgyRoll METALLURGY_ROLL;
     public static BlockConveyor CONVEYOR_BELT;
     public static BlockRocketAssemblerCasing ROCKET_ASSEMBLER_CASING;
 
@@ -115,6 +118,15 @@ public class SuSyBlocks {
         CUSTOMSHEETS = new BlocksCustomSheets();
         CUSTOMSHEETS.setRegistryName("custom_sheets");
 
+        METALLURGY = new BlockMetallurgy();
+        METALLURGY.setRegistryName("metallurgy");
+
+        METALLURGY_2 = new BlockMetallurgy2();
+        METALLURGY_2.setRegistryName("metallurgy_2");
+
+        METALLURGY_ROLL = new BlockMetallurgyRoll();
+        METALLURGY_ROLL.setRegistryName("metallurgy_roll");
+
         CONVEYOR_BELT = new BlockConveyor();
         CONVEYOR_BELT.setRegistryName("conveyor_belt");
       
@@ -147,6 +159,9 @@ public class SuSyBlocks {
         SERPENTINE.onModelRegister();
         registerItemModel(HARDBLOCKS);
         registerItemModel(CUSTOMSHEETS);
+        registerItemModel(METALLURGY);
+        registerItemModel(METALLURGY_2);
+        registerItemModel(METALLURGY_ROLL);
         registerItemModel(CONVEYOR_BELT);
         registerItemModel(ROCKET_ASSEMBLER_CASING);
     }
