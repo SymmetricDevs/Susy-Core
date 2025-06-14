@@ -14,8 +14,6 @@ import gregtech.api.recipes.RecipeMap;
 import gregtech.api.util.BlockInfo;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
-import gregtech.common.blocks.BlockTurbineCasing;
-import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -25,7 +23,6 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.capability.impl.SuSyTurbineRecipeLogic;
 import supersymmetry.common.blocks.BlockAlternatorCoil;
-import supersymmetry.common.blocks.BlockTurbineRotor;
 import supersymmetry.common.blocks.SuSyBlocks;
 
 import javax.annotation.Nonnull;
@@ -39,13 +36,15 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
     public final int tier;
 
     public final IBlockState casingState;
+    public final IBlockState rotorState;
     public final ICubeRenderer casingRenderer;
     public final ICubeRenderer frontOverlay;
 
 
-    public MetaTileEntitySUSYLargeTurbine(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap, int tier, IBlockState casingState, ICubeRenderer casingRenderer, ICubeRenderer frontOverlay) {
+    public MetaTileEntitySUSYLargeTurbine(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap, int tier, IBlockState casingState, IBlockState rotorState, ICubeRenderer casingRenderer, ICubeRenderer frontOverlay) {
         super(metaTileEntityId, recipeMap, tier);
         this.casingState = casingState;
+        this.rotorState = rotorState;
         this.casingRenderer = casingRenderer;
         this.frontOverlay = frontOverlay;
         this.tier = tier;
@@ -55,7 +54,7 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
 
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
-        return new MetaTileEntitySUSYLargeTurbine(metaTileEntityId, recipeMap, tier, casingState, casingRenderer, frontOverlay);
+        return new MetaTileEntitySUSYLargeTurbine(metaTileEntityId, recipeMap, tier, casingState, rotorState, casingRenderer, frontOverlay);
     }
 
     @Override
@@ -73,7 +72,7 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         // Different characters use common constraints. Copied from GCyM
-        TraceabilityPredicate casingPredicate = states(getCasingState()).setMinGlobalLimited(52)
+        TraceabilityPredicate casingPredicate = states(this.casingState).setMinGlobalLimited(52)
                 .or(abilities(MultiblockAbility.IMPORT_ITEMS).setPreviewCount(1));
         TraceabilityPredicate maintenance = abilities(MultiblockAbility.MAINTENANCE_HATCH).setMaxGlobalLimited(1);
 
@@ -98,10 +97,6 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
                 .build();
     }
 
-    protected static IBlockState getCasingState() {
-        return MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING);
-    }
-
     protected TraceabilityPredicate rotorOrientation() {
         //makes sure rotor's front faces the left side (relative to the player) of controller front
         EnumFacing leftFacing = RelativeDirection.RIGHT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), isFlipped());
@@ -110,15 +105,15 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
         // this is needed for the following update which converts this rotatable block from horizontal directional into axial directional.
         EnumFacing axialFacing = leftFacing.getIndex() < 4 ? EnumFacing.SOUTH : EnumFacing.WEST;
 
-        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(steelRotorState().withProperty(FACING, axialFacing))};
+        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(this.rotorState.withProperty(FACING, axialFacing))};
         return new TraceabilityPredicate(blockWorldState -> {
             IBlockState state = blockWorldState.getBlockState();
-            if (!(state.getBlock() instanceof BlockTurbineRotor)) return false;
+            if (state.getBlock() != this.rotorState.getBlock()) return false;
 
             // auto-correct rotor orientation
-            if (state != steelRotorState().withProperty(FACING, axialFacing)) {
-                getWorld().setBlockState(blockWorldState.getPos(), steelRotorState().withProperty(FACING, axialFacing));
-            }
+            if (state != this.rotorState.withProperty(FACING, axialFacing))
+                getWorld().setBlockState(blockWorldState.getPos(), this.rotorState.withProperty(FACING, axialFacing));
+
             return true;
         }, supplier);
     }
@@ -142,10 +137,6 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
             }
             return true;
         }, supplier);
-    }
-
-    protected IBlockState steelRotorState() {
-        return SuSyBlocks.TURBINE_ROTOR.getState(BlockTurbineRotor.BlockTurbineRotorType.STEEL);
     }
 
     protected IBlockState copperCoilState() {

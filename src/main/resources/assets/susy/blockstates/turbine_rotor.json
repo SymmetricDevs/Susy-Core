@@ -4,6 +4,16 @@
     "facing=north,variant=steel": { "model": "susy:turbine_rotor/steel" },
     "facing=south,variant=steel": { "model": "susy:turbine_rotor/steel", "y": 180 },
     "facing=west,variant=steel": { "model": "susy:turbine_rotor/steel", "y": 270 },
-    "facing=east,variant=steel": { "model": "susy:turbine_rotor/steel", "y": 90 }
+    "facing=east,variant=steel": { "model": "susy:turbine_rotor/steel", "y": 90 },
+
+    "facing=north,variant=low_pressure": { "model": "susy:turbine_rotor/low_pressure" },
+    "facing=south,variant=low_pressure": { "model": "susy:turbine_rotor/low_pressure", "y": 180 },
+    "facing=west,variant=low_pressure": { "model": "susy:turbine_rotor/low_pressure", "y": 270 },
+    "facing=east,variant=low_pressure": { "model": "susy:turbine_rotor/low_pressure", "y": 90 },
+
+    "facing=north,variant=high_pressure": { "model": "susy:turbine_rotor/high_pressure" },
+    "facing=south,variant=high_pressure": { "model": "susy:turbine_rotor/high_pressure", "y": 180 },
+    "facing=west,variant=high_pressure": { "model": "susy:turbine_rotor/high_pressure", "y": 270 },
+    "facing=east,variant=high_pressure": { "model": "susy:turbine_rotor/high_pressure", "y": 90 }
   }
 }

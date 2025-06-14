@@ -29,7 +29,9 @@ public class BlockTurbineRotor extends VariantHorizontalRotatableBlock<BlockTurb
     }
 
     public enum BlockTurbineRotorType implements IStringSerializable, IStateHarvestLevel {
-        STEEL("steel", 1);
+        STEEL("steel", 1),
+        LOW_PRESSURE("low_pressure", 1),
+        HIGH_PRESSURE("high_pressure", 1);
 
         private final String name;
         private final int harvestLevel;
