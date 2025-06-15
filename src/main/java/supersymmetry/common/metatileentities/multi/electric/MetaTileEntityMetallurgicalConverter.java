@@ -1,8 +1,10 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
+import gregtech.api.metatileentity.multiblock.ParallelLogicType;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
@@ -23,6 +25,7 @@ public class MetaTileEntityMetallurgicalConverter extends RecipeMapMultiblockCon
 
     public MetaTileEntityMetallurgicalConverter(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.METALLURIGICAL_CONVERTER);
+        this.recipeMapWorkable = new MetallurgicalConverterLogic(this);
     }
 
     @Override
@@ -72,5 +75,31 @@ public class MetaTileEntityMetallurgicalConverter extends RecipeMapMultiblockCon
     @Override
     protected @NotNull ICubeRenderer getFrontOverlay() {
         return SusyTextures.METALLURGICAL_CONVERTER_OVERLAY;
+    }
+
+    private class MetallurgicalConverterLogic extends MultiblockRecipeLogic {
+        public MetallurgicalConverterLogic(RecipeMapMultiblockController tileEntity) {
+            super(tileEntity);
+        }
+
+        @Override
+        public int getParallelLimit() {
+            return 256;
+        }
+
+        @Override
+        protected long getMaxParallelVoltage() {
+            return 2147432767L;
+        }
+
+        @Override
+        public boolean consumesEnergy() {
+            return false;
+        }
+
+        @Override
+        public @NotNull ParallelLogicType getParallelLogicType() {
+            return ParallelLogicType.APPEND_ITEMS;
+        }
     }
 }
