@@ -214,6 +214,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntitySlabMold SLAB_MOLD;
     public static MetaTileEntityGasAtomizer GAS_ATOMIZER;
     public static MetaTileEntityArcFurnaceComplex ARC_FURNACE_COMPLEX;
+    public static MetaTileEntityMetallurgicalConverter METALLURGICAL_CONVERTER;
 
     //public static BlockStockDetector STOCK_DETECTOR;
     public static MetaTileEntityStockFluidExchanger STOCK_FLUID_EXCHANGER;
@@ -362,6 +363,7 @@ public class SuSyMetaTileEntities {
         BILLET_MOLD = registerMetaTileEntity(16609, new MetaTileEntityBilletMold(susyId("billet_mold")));
         GAS_ATOMIZER = registerMetaTileEntity(16610, new MetaTileEntityGasAtomizer(susyId("gas_atomizer")));
         ARC_FURNACE_COMPLEX = registerMetaTileEntity(16611, new MetaTileEntityArcFurnaceComplex(susyId("arc_furnace_complex")));
+        METALLURGICAL_CONVERTER = registerMetaTileEntity(16612, new MetaTileEntityMetallurgicalConverter(susyId("metallurgical_converter")));
 
         // Turbines: 17000-17010
         BASIC_STEAM_TURBINE = registerMetaTileEntity(17000, new MetaTileEntitySUSYLargeTurbine(susyId("basic_steam_turbine"), SuSyRecipeMaps.LARGE_STEAM_TURBINE, 1, MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING), Textures.SOLID_STEEL_CASING, SusyTextures.LARGE_STEAM_TURBINE_OVERLAY));

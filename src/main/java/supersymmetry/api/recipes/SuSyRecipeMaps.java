@@ -363,6 +363,10 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> MILLING_RECIPES = new RecipeMap<>("milling", 2, 1, 0, 0, new SimpleRecipeBuilder().EUt(VA[LV]), false)
             .setSound(GTSoundEvents.CUT);
 
+    public static final RecipeMap<SimpleRecipeBuilder> METALLURIGICAL_CONVERTER = new RecipeMap<>("metallurgical_converter", 2, 0, 2, 2, new SimpleRecipeBuilder().EUt(VA[LV]), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.FURNACE);
+
     static {
         GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()
                 .inputs(recipeBuilder.getInputs().toArray(new GTRecipeInput[0]))
