@@ -1,6 +1,7 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
 import gregtech.api.capability.GregtechDataCodes;
+import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -8,6 +9,7 @@ import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.recipes.recipeproperties.IRecipePropertyStorage;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
@@ -22,6 +24,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.api.recipes.properties.MixerSettlerCellsProperty;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 
@@ -33,6 +36,7 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
 
     public MetaTileEntityMixerSettler(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.MIXER_SETTLER_RECIPES);
+        this.recipeMapWorkable = new MixerSettlerRecipeLogic(this);
     }
 
     protected boolean updateStructureDimensions() {
@@ -290,4 +294,18 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
     }
 
 
+    private class MixerSettlerRecipeLogic extends MultiblockRecipeLogic {
+        public MixerSettlerRecipeLogic(MetaTileEntityMixerSettler metaTileEntityMixerSettler) {
+            super(metaTileEntityMixerSettler);
+        }
+
+        @Override
+        protected void modifyOverclockPost(int[] overclockResults, @NotNull IRecipePropertyStorage storage) {
+            int cellsOff = storage.getRecipePropertyValue(MixerSettlerCellsProperty.getInstance(), 2) - (sDist / 2);
+            // Divides the duration by an increasing factor that approaches 2 as the number of cells approaches infinity.
+            overclockResults[1] = (int) ((double) overclockResults[1] / (Math.atan(cellsOff + 1) * 4 / Math.PI));
+
+            super.modifyOverclockPost(overclockResults, storage);
+        }
+    }
 }

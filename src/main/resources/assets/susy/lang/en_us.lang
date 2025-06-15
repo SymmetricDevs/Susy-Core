@@ -336,6 +336,7 @@ gregtech.recipe.catalyst=Catalyst: %s %s
 gregtech.recipe.blocks=Blocks: %s
 gregtech.recipe.evaporation=Required Energy: %d J/t
 gregtech.recipe.cryogenic_environment=Requires Cryogenic Environment
+gregtech.recipe.mixer_settler_cells=Required mixer settler cells: %s
 
 # Latex Collector
 gregtech.machine.latex_collector.steam=Needs Steam!
