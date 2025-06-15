@@ -352,6 +352,9 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> MILLING_RECIPES = new RecipeMap<>("milling", 2, 1, 0, 0, new SimpleRecipeBuilder().EUt(VA[LV]), false)
             .setSound(GTSoundEvents.CUT);
 
+    public static final RecipeMap<SimpleRecipeBuilder> MIXER_SETTLER_RECIPES = new RecipeMap<>("mixer_settler", 1, 1, 2, 2, new SimpleRecipeBuilder().EUt(VA[LV]), false)
+            .setSound(GTSoundEvents.MIXER);
+
     static {
         MIXER_RECIPES.onRecipeBuild(recipeBuilder -> {
             SuSyRecipeMaps.BLENDER_RECIPES.recipeBuilder()
