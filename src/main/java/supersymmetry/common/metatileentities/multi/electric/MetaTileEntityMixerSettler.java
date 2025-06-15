@@ -26,16 +26,16 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
+
         return FactoryBlockPattern.start()
-                .aisle("CCCCCCCCC", "GGGGGGGGG", "GGGGGGGGG", "GGGGGGGGG", "CCCCCCCCC")
-                .aisle("CCCCCCCCC", "G P G P G", "GFG GFG G", "IFG PFG O", "CMCCCMCCC")
-                .aisle("CCCCCCCCC", "G GTG GTG", "G GTG GTG", "G GTG GTG", "CCCCCCCCC")
-                .aisle("CCCCCCCCC", "GDG GDG G", "GDG GDG G", "G G G G G", "CCCCCCCCC")
-                .aisle("CCCCCCCCC", "G G G G G", "G G G G G", "G G G G G", "CCCCCCCCC").setRepeatable(0, 8)
-                .aisle("CCCCCCCCC", "G GDG GDG", "G GDG GDG", "G G G G G", "CCCCCCCCC")
-                .aisle("CCCCCCCCC", "GTG GTG G", "GTG GTG G", "GTG GTG G", "CCCCCCCCC")
-                .aisle("CCCCCCCCC", "O G P G I", "G GFG GFG", "G PFG PFG", "CCCMCCCMC")
-                .aisle("CCCCSCCCC", "GGGGGGGGG", "GGGGSGGGG", "GGGGGGGGG", "CCCCSCCCC")
+                .aisle("ECCCCCCCE", "GGGGGGGGG", "GGGGGGGGG", "GGGGGGGGG", "ECCCCCCCE")
+                .aisle("ECCCCCCCE", "G P G P G", "GFG GFG G", "IFG PFG O", "EMCCCMCCE")
+                .aisle("ECCCCCCCE", "G GTG GTG", "G GTG GTG", "G GTG GTG", "ECCCCCCCE")
+                .aisle("ECCCCCCCE", "GDG GDG G", "GDG GDG G", "G G G G G", "ECCCCCCCE")
+                .aisle("ECCCCCCCE", "G GDG GDG", "G GDG GDG", "G G G G G", "ECCCCCCCE")
+                .aisle("ECCCCCCCE", "GTG GTG G", "GTG GTG G", "GTG GTG G", "ECCCCCCCE")
+                .aisle("ECCCCCCCE", "O G P G I", "G GFG GFG", "G PFG PFG", "ECCMCCCME")
+                .aisle("ECCCSCCCE", "GGGGGGGGG", "GGGGSGGGG", "GGGGGGGGG", "ECCCSCCCE")
                 .where('S', selfPredicate())
                 .where('I', states(getGlassState()).or(abilities(MultiblockAbility.IMPORT_FLUIDS)))
                 .where('O', states(getGlassState()).or(abilities(MultiblockAbility.EXPORT_FLUIDS)))
