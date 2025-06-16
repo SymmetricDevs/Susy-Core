@@ -34,11 +34,11 @@ public class MetaTileEntityBilletMold extends MetaTileEntityStrandMold {
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle(" CCC ", " CCC ", " CCC ", " CCC ", " CCC ")
+                .aisle("#CCC#", "#CCC#", "#CCC#", "#CCC#", "#CCC#")
                 .aisle("COOOC", "CPPPC", "CPPPC", "CPPPC", "CIIIC")
                 .aisle("COMOC", "CP PC", "CP PC", "CP PC", "CIIIC")
                 .aisle("COOOC", "CPPPC", "CPPPC", "CPPPC", "CIIIC")
-                .aisle(" CCC ", " CCC ", " CSC ", " CCC ", " CCC ")
+                .aisle("#CCC#", "#CCC#", "#CCC#", "#CCC#", "#CCC#")
                 .where('C', states(getCasingState()).or(autoAbilities()))
                 .where('P', states(getPipeCasingState()))
                 .where('M', abilities(SuSyMultiblockAbilities.STRAND_EXPORT))
