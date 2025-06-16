@@ -34,11 +34,11 @@ public class MetaTileEntitySlabMold extends MetaTileEntityStrandMold {
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle("CCCCCCC", "CCCCCCC", "CCCCCCC", "CCCCCCC", "CCCCCCC")
+                .aisle("#CCCCC#", "#CCCCC#", "#CCCCC#", "#CCCCC#", "#CCCCC#")
                 .aisle("COOOOOC", "CPPPPPC", "CPPPPPC", "CPPPPPC", "CIIIIIC")
                 .aisle("CO M OC", "CP   PC", "CP   PC", "CP   PC", "CIIIIIC")
                 .aisle("COOOOOC", "CPPPPPC", "CPPPPPC", "CPPPPPC", "CIIIIIC")
-                .aisle("CCCCCCC", "CCCCCCC", "CCCSCCC", "CCCCCCC", "CCCCCCC")
+                .aisle("#CCCCC#", "#CCCCC#", "#CCCCC#", "#CCCCC#", "#CCCCC#")
                 .where('C', states(getCasingState()).or(autoAbilities()))
                 .where('P', states(getPipeCasingState()))
                 .where('M', abilities(SuSyMultiblockAbilities.STRAND_EXPORT))
@@ -46,6 +46,7 @@ public class MetaTileEntitySlabMold extends MetaTileEntityStrandMold {
                 .where('O', abilities(MultiblockAbility.EXPORT_FLUIDS).setPreviewCount(1).or(states(getPipeCasingState())))
                 .where('S', selfPredicate())
                 .where(' ', air())
+                .where('#', any())
                 .build();
 
     }

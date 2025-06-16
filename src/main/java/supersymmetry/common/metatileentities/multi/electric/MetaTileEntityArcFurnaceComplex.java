@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockElectrodeAssembly;
+import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 
 import javax.annotation.Nonnull;
@@ -46,9 +47,9 @@ public class MetaTileEntityArcFurnaceComplex extends MetaTileEntityAdvancedArcFu
                 .aisle(" AAAAA   AAAAA ", "AABBBAA AABBBAA", "AB###BA AB###BA", "EB###BE EB###BE", "A#####A A#####A", "E#####E E#####E", "A#####A A#####A", " AAAAA   AAAAA ", "               ", "               ", " AAAAA   AAAAA ", "               ")
                 .aisle(" AAAAA   AAAAA ", "AABBBAA AABBBAA", "AB###BA AB###BA", "EB###BE EB###BE", "A##C##A A##C##A", "E##C##E E##C##E", "A##C##A A##C##A", " AACAA   AACAA ", "   C       C   ", "   C       C   ", "  ACA     ACA  ", "   C       C   ")
                 .aisle("  AAA     AAA  ", " AAAAA   AAAAA ", " ABBBA   ABBBA ", " EBBBE   EBBBE ", " ABBBA   ABBBA ", " E###E   E###E ", " A###A   A###A ", "  AAA     AAA  ", "               ", "               ", "  A A     A A  ", "               ")
-                .aisle("      HHH      ", "  AAA FHF AAA  ", "  AAA  F  AAA  ", "  EEE     EEE  ", "  AAA     AAA  ", "  EEE     EEE  ", "  AAA     AAA  ", "  FFF     FFF  ", "  FFF     FFF  ", "  FFF     FFF  ", "  DDD     DDD  ", "              ")
-                .aisle("      HHH      ", "      SHH      ", "      FFF      ", "       F       ", "       F       ", "       F       ", "       F       ", "  FFFFFFFFFFF  ", "               ", "               ", "               ", "               ")
                 .aisle("      HHH      ", "  AAA FHF AAA  ", "  AAA  F  AAA  ", "  EEE     EEE  ", "  AAA     AAA  ", "  EEE     EEE  ", "  AAA     AAA  ", "  FFF     FFF  ", "  FFF     FFF  ", "  FFF     FFF  ", "  DDD     DDD  ", "               ")
+                .aisle("      HHH      ", "      HHH      ", "      FFF      ", "       F       ", "       F       ", "       F       ", "       F       ", "  FFFFFFFFFFF  ", "               ", "               ", "               ", "               ")
+                .aisle("      HHH      ", "  AAA FSF AAA  ", "  AAA  F  AAA  ", "  EEE     EEE  ", "  AAA     AAA  ", "  EEE     EEE  ", "  AAA     AAA  ", "  FFF     FFF  ", "  FFF     FFF  ", "  FFF     FFF  ", "  DDD     DDD  ", "               ")
                 .aisle("  AAA     AAA  ", " AAAAA   AAAAA ", " ABBBA   ABBBA ", " EBBBE   EBBBE ", " A###A   A###A ", " E###E   E###E ", " A###A   A###A ", "  AAA     AAA  ", "               ", "               ", "  A A     A A  ", "               ")
                 .aisle(" AAAAA   AAAAA ", "AABBBAA AABBBAA", "AB###BA AB###BA", "EB###BE EB###BE", "A#C#C#A A#C#C#A", "E##C##E E##C##E", "A##C##A A##C##A", " AACAA   AACAA ", "   C       C   ", "   C       C   ", " AACAA   AACAA ", "   C       C   ")
                 .aisle(" AAAAA   AAAAA ", "AABBBAA AABBBAA", "AB###BA AB###BA", "EB###BE EB###BE", "A#####A A#####A", "E#####E E#####E", "A#####A A#####A", " AAAAA   AAAAA ", "               ", "               ", " AAAAA   AAAAA ", "               ")
@@ -57,12 +58,12 @@ public class MetaTileEntityArcFurnaceComplex extends MetaTileEntityAdvancedArcFu
                 .aisle("               ", "  AAA     AAA  ", "  AAA     AAA  ", "  EEE     EEE  ", "  AAA     AAA  ", "  EEE     EEE  ", "  AAA     AAA  ", "               ", "               ", "               ", "               ", "               ")
                 .where('S', selfPredicate())
                 .where('A', states(GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING.getState(BlockLargeMultiblockCasing.CasingType.STRESS_PROOF_CASING)))
-                .where('B', SuSyPredicates.sinteringBricks())
+                .where('B', states(SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.ADVANCED_REFRACTORY_LINING)))
                 .where('C', states(SuSyBlocks.ELECTRODE_ASSEMBLY.getState(BlockElectrodeAssembly.ElectrodeAssemblyType.CARBON)))
                 .where('D', states(GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING.getState(BlockLargeMultiblockCasing.CasingType.STRESS_PROOF_CASING)).setMinGlobalLimited(8).or(autoAbilities(true, false, false, false, false, false, false)))
                 .where('E', states(GCYMMetaBlocks.UNIQUE_CASING.getState(BlockUniqueCasing.UniqueCasingType.HEAT_VENT)))
                 .where('F', frames(Materials.Steel))
-                .where('H', states(GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING.getState(BlockLargeMultiblockCasing.CasingType.STRESS_PROOF_CASING))).setMinGlobalLimited(6).or(autoAbilities(false, true, true, true, true, true, false))
+                .where('H', states(GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING.getState(BlockLargeMultiblockCasing.CasingType.STRESS_PROOF_CASING)).setMinGlobalLimited(6).or(autoAbilities(false, true, true, true, true, true, false)))
                 .where(' ', any())
                 .where('#', air())
                 .build();
@@ -75,7 +76,6 @@ public class MetaTileEntityArcFurnaceComplex extends MetaTileEntityAdvancedArcFu
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
         tooltip.add(I18n.format("gregtech.machine.parallel_limit", 256));
-
     }
 
     @Nonnull

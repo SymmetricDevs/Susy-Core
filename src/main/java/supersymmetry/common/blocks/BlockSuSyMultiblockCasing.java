@@ -38,7 +38,8 @@ public class BlockSuSyMultiblockCasing extends VariantBlock<BlockSuSyMultiblockC
         MONEL_500_CASING("monel_casing"),
         MONEL_500_PIPE("monel_casing_pipe"),
         COPPER_PIPE("copper_casing_pipe"),
-        HEAVY_DUTY_PAD("heavy_duty_pad");
+        HEAVY_DUTY_PAD("heavy_duty_pad"),
+        ADVANCED_REFRACTORY_LINING("advanced_refractory_lining");
 
         private final String name;
 

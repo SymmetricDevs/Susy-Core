@@ -1,9 +1,13 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import gregicality.multiblocks.common.block.GCYMMetaBlocks;
+import gregicality.multiblocks.common.block.blocks.BlockLargeMultiblockCasing;
+import gregicality.multiblocks.common.block.blocks.BlockUniqueCasing;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
+import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.ParallelLogicType;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
@@ -23,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockRocketAssemblerCasing;
+import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 
 public class MetaTileEntityMetallurgicalConverter extends RecipeMapMultiblockController {
@@ -34,7 +39,7 @@ public class MetaTileEntityMetallurgicalConverter extends RecipeMapMultiblockCon
 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
+        return FactoryBlockPattern.start(RelativeDirection.BACK, RelativeDirection.UP, RelativeDirection.RIGHT)
                 .aisle(" F   F ", " F   F ", " F   F ", " F   F ", " FF FF ", "  FAF  ", "  AGA  ", "   F   ", "       ", "       ")
                 .aisle("HHHHHH ", "HFFFFF ", "H ###  ", "  ###  ", "  BBB  ", "  VVV  ", "  BBB  ", "  VVV  ", "  BBB  ", "       ")
                 .aisle(" HHHHHH", "HF###H ", " ##### ", " #BBB# ", " BRRRB ", " VRRRV ", " BRRRB ", " VRRRV ", " BRRRB ", "  BBB  ")
@@ -45,15 +50,16 @@ public class MetaTileEntityMetallurgicalConverter extends RecipeMapMultiblockCon
                 .where('#', air())
                 .where('S', selfPredicate())
                 .where('R', states(getRefractoryState()))
-                .where('H', states(getCasingState()).or(autoAbilities(true, true, true, true, true, true, false))).setMinGlobalLimited(31)
+                .where('H', states(getCasingState()).setMinGlobalLimited(31).or(autoAbilities(true, true, true, true, true, true, false)))
                 .where('A', states(getCasingState()))
                 .where('B', states(GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING.getState(BlockLargeMultiblockCasing.CasingType.STRESS_PROOF_CASING)))
                 .where('F', frames(Materials.Steel))
                 .where('V', states(GCYMMetaBlocks.UNIQUE_CASING.getState(BlockUniqueCasing.UniqueCasingType.HEAT_VENT)))
-                .where('G', states(MetaBlocks.TURBINE_CASING.getState(TurbineCasingType.STEEL_GEARBOX)))
+                .where('G', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('P', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE)))
                 .where('M', abilities(MultiblockAbility.MUFFLER_HATCH))
-                .where(" ", any())
+                .where(' ', any())
+                .build();
     }
 
     protected EnumFacing getRelativeFacing(RelativeDirection dir) {
@@ -69,10 +75,8 @@ public class MetaTileEntityMetallurgicalConverter extends RecipeMapMultiblockCon
         return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID);
     }
 
-    private IBlockState get
-
     private IBlockState getRefractoryState() {
-        return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.PRIMITIVE_BRICKS);
+        return SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.ADVANCED_REFRACTORY_LINING);
     }
 
     @Override

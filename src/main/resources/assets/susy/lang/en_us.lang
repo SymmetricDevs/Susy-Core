@@ -23,6 +23,7 @@ tile.susy_multiblock_casing.structural_packing.name=Structural Packing
 tile.susy_multiblock_casing.ulv_structural_casing.name=Basic Structural Casing
 tile.susy_multiblock_casing.drone_pad.name=Drone Pad
 tile.susy_multiblock_casing.heavy_duty_pad.name=Heavy Duty Pad
+tile.susy_multiblock_casing.advanced_refractory_lining.name=Advanced Refractory Lining
 tile.rocket_assembler_casing.reinforced_foundation.name=Reinforced Foundation
 tile.rocket_assembler_casing.foundation.name=Rocket Assembler Foundation
 tile.rocket_assembler_casing.rails.name=Rocket Assembler Rails
