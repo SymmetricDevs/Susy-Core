@@ -45,7 +45,7 @@ public class MetaTileEntityMetallurgicalConverter extends RecipeMapMultiblockCon
                 .where('#', air())
                 .where('S', selfPredicate())
                 .where('R', states(getRefractoryState()))
-                .where('H', states(getCasingState()).or(autoAbilities(true, true, true, false, true, false, false))).setMinGlobalLimited(32)
+                .where('H', states(getCasingState()).or(autoAbilities(true, true, true, true, true, true, false))).setMinGlobalLimited(31)
                 .where('A', states(getCasingState()))
                 .where('B', states(GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING.getState(BlockLargeMultiblockCasing.CasingType.STRESS_PROOF_CASING)))
                 .where('F', frames(Materials.Steel))
