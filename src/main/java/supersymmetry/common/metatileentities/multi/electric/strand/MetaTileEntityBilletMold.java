@@ -46,6 +46,7 @@ public class MetaTileEntityBilletMold extends MetaTileEntityStrandMold {
                 .where('O', abilities(MultiblockAbility.EXPORT_FLUIDS).setPreviewCount(1).or(states(getPipeCasingState())))
                 .where('S', selfPredicate())
                 .where(' ', air())
+                .where('#', any())
                 .build();
     }
 
