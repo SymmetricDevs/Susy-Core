@@ -1,5 +1,11 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.ColourMultiplier;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Matrix4;
+import codechicken.lib.vec.Vector3;
+import codechicken.lib.vec.uv.IconTransformation;
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -9,30 +15,48 @@ import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.recipes.recipeproperties.IRecipePropertyStorage;
 import gregtech.api.unification.material.Materials;
+import gregtech.api.util.GTUtility;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.*;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.metatileentity.multiblock.FluidRenderRecipeMapMultiBlock;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.properties.MixerSettlerCellsProperty;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static supersymmetry.api.metatileentity.multiblock.FluidRenderRecipeMapMultiBlock.CHANGE_FLUID_RENDER_STATUS;
+import static supersymmetry.api.metatileentity.multiblock.FluidRenderRecipeMapMultiBlock.UPDATE_FLUID_INFO;
 
 public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
     public static final int MIN_RADIUS = 4;
+    public static final int MAX_RADIUS = 20;
     private int sDist;
+    protected boolean renderFluid;
+    protected boolean fluidTexture1;
+    protected boolean fluidTexture2;
+    protected int fluidColor1;
+    protected int fluidColor2;
 
     public MetaTileEntityMixerSettler(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.MIXER_SETTLER_RECIPES);
@@ -50,7 +74,7 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
         // find the distances from the controller to the secondary casing
         int sDist = 0;
 
-        for (int i = 1; i < 9; i++) { // start at 1 for an off-by-one error
+        for (int i = 1; i <= MAX_RADIUS; i++) { // start at 1 for an off-by-one error
             if (isBlockEdge(world, lPos, left) & isBlockEdge(world, rPos, right)) {
                 sDist = i; // The & is absolutely *essential* here.
                 break;
@@ -235,9 +259,12 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         if (getWorld() != null) updateStructureDimensions();
-        if (sDist < MIN_RADIUS) sDist = MIN_RADIUS; // Set up JEI correctly
-        String[] strings = buildVoxelStrings(sDist);
+        if (sDist < MIN_RADIUS) sDist = MIN_RADIUS;
+        return createStructurePattern(sDist);
+    }
 
+    protected @NotNull BlockPattern createStructurePattern(int sDist) {
+        String[] strings = buildVoxelStrings(sDist);
         return FactoryBlockPattern.start()
                 .aisle(strings[0], strings[1], strings[2], strings[3], strings[4])
                 .aisle(strings[5], strings[6], strings[7], strings[8], strings[9])
@@ -266,6 +293,7 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
     }
 
 
+
     protected static IBlockState getGlassState() {
         return MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.TEMPERED_GLASS);
     }
@@ -282,7 +310,6 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
         return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID);
     }
 
-
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
         return Textures.CLEAN_STAINLESS_STEEL_CASING;
@@ -293,6 +320,51 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
         return new MetaTileEntityMixerSettler(metaTileEntityId);
     }
 
+    @Override
+    public List<MultiblockShapeInfo> getMatchingShapes() {
+        if (this.structurePattern == null) {
+            this.reinitializeStructurePattern();
+            if (this.structurePattern == null) {
+                return Collections.emptyList();
+            }
+        }
+
+        List<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
+        int radius = MIN_RADIUS;
+        while (radius <= MAX_RADIUS) {
+            shapeInfo.add(new MultiblockShapeInfo(createStructurePattern(radius).getPreview(new int[]{1,1,1,1,1})));
+            radius += 2;
+        }
+        return shapeInfo;
+    }
+
+    @Override
+    public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
+        super.renderMetaTileEntity(renderState, translation, pipeline);
+        if (this.isActive() && renderFluid)
+            for (Vec3i pos : cachedPattern)
+                renderFluid(pos, renderState, translation);
+    }
+
+    private void renderFluid(Vec3i offset, CCRenderState renderState, Matrix4 translation) {
+        IVertexOperation[] fluid_render_pipeline = {
+                new IconTransformation(fluidTexture),
+                new ColourMultiplier(GTUtility.convertRGBtoOpaqueRGBA_CL(fluidColor))
+        };
+        Textures.renderFace(renderState, translation.copy().translate(Vector3.fromVec3i(offset)), fluid_render_pipeline, EnumFacing.UP, FLUID_RENDER_CUBOID, fluidTexture, BlockRenderLayer.CUTOUT_MIPPED);
+    }
+
+    @Override
+    public void receiveCustomData(int dataId, PacketBuffer buf) {
+        super.receiveCustomData(dataId, buf);
+        //Can't use a switch statment here as the dataIds aren't constants.
+        if (dataId == UPDATE_FLUID_INFO) {
+            this.fluidColor = buf.readInt();
+            this.fluidTexture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(buf.readResourceLocation().toString());
+        } else if (dataId == CHANGE_FLUID_RENDER_STATUS) {
+            this.renderFluid = buf.readBoolean();
+        }
+    }
 
     private class MixerSettlerRecipeLogic extends MultiblockRecipeLogic {
         public MixerSettlerRecipeLogic(MetaTileEntityMixerSettler metaTileEntityMixerSettler) {
