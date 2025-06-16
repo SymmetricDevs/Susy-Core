@@ -35,34 +35,25 @@ public class MetaTileEntityMetallurgicalConverter extends RecipeMapMultiblockCon
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle("  GGG       ", "  GGG       ", "  GGG       ", "  GGG       ", "            ", "            ", "            ", "            ", "            ", "            ", "            ", "            ")
-                .aisle(" GGCGG      ", " GGCGG      ", " GGCGG      ", " GGBGG      ", "            ", "            ", "            ", "            ", "            ", "            ", "            ", "            ")
-                .aisle("  GGG       ", "  GGG       ", "  GGG       ", "  GHG       ", "            ", "            ", "            ", "            ", "            ", "            ", "            ", "            ")
-                .aisle("            ", "            ", "            ", "   H        ", "            ", "            ", "            ", "            ", "            ", "            ", "            ", "            ")
-                .aisle("            ", "            ", "   C        ", " CCCCC      ", " CCCCC      ", "  CCC       ", "  CCC       ", "            ", "            ", "            ", "            ", "            ")
-                .aisle("            ", "  CCC       ", " CCCCC      ", "CRRRRRC     ", "CRRRRRC     ", " CRRRC      ", " CRRRC      ", "  CCC       ", "            ", "            ", "            ", "            ")
-                .aisle("         RRR", " CCCCC   RFR", " CRRRC   RRR", "CR###RC     ", "CR###RC     ", "CRR#RRC     ", "CRR#RRC     ", " CRRRC      ", "            ", "            ", "  AAA       ", "  AAA       ")
-                .aisle("         RRR", " CCCCC   F#F", "CCRRRCC  R#R", "CR###RC####L", "CR###RC####L", "CR###RC####L", "CR###RC####L", " CRPRC     L", "   P       L", "   P LLLLLLL", "  APA       ", "  AAA       ")
-                .aisle("         RRR", " CCCCC   RFR", " CRRRC   RRR", "CR###RC     ", "CR###RC     ", "CRR#RRC     ", "CRR#RRC     ", " CRRRC      ", "            ", "     L      ", "  ASA       ", "  AAA       ")
-                .aisle("            ", "  CCC       ", " CCCCC      ", "CRRRRRC     ", "CRRRRRC     ", " CRRRC      ", " CRRRC      ", "  CCC       ", "            ", "   LLL      ", "            ", "            ")
-                .aisle("            ", "            ", "   C        ", " CCCCC      ", " CCCCC      ", "  CCC       ", "  CCC       ", "            ", "            ", "            ", "            ", "            ")
-                .aisle("            ", "            ", "            ", "   H        ", "            ", "            ", "            ", "            ", "            ", "            ", "            ", "            ")
-                .aisle("  GGG       ", "  GGG       ", "  GGG       ", "  GHG       ", "            ", "            ", "            ", "            ", "            ", "            ", "            ", "            ")
-                .aisle(" GGCGG      ", " GGCGG      ", " GGCGG      ", " GGBGG      ", "            ", "            ", "            ", "            ", "            ", "            ", "            ", "            ")
-                .aisle("  GGG       ", "  GGG       ", "  GGG       ", "  GGG       ", "            ", "            ", "            ", "            ", "            ", "            ", "            ", "            ")
+                .aisle(" F   F ", " F   F ", " F   F ", " F   F ", " FF FF ", "  FAF  ", "  AGA  ", "   F   ", "       ", "       ")
+                .aisle("HHHHHH ", "HFFFFF ", "H ###  ", "  ###  ", "  BBB  ", "  VVV  ", "  BBB  ", "  VVV  ", "  BBB  ", "       ")
+                .aisle(" HHHHHH", "HF###H ", " ##### ", " #BBB# ", " BRRRB ", " VRRRV ", " BRRRB ", " VRRRV ", " BRRRB ", "  BBB  ")
+                .aisle("  HHHHH", "  #P#FS", " ##P## ", " #BBB# ", " BR#RB ", " VR#RV ", " BR#RB ", " VR#RV ", " BR#RB ", "  BMB  ")
+                .aisle(" HHHHHH", "HF###H ", " ##### ", " #BBB# ", " BRRRB ", " VRRRV ", " BRRRB ", " VRRRV ", " BRRRB ", "  BBB  ")
+                .aisle("HHHHHH ", "HFFFFF ", "H ###  ", "  ###  ", "  BBB  ", "  VVV  ", "  BBB  ", "  VVV  ", "  BBB  ", "       ")
+                .aisle(" F   F ", " F   F ", " F   F ", " F   F ", " FF FF ", "  FAF  ", "  AGA  ", "   F   ", "       ", "       ")
                 .where('#', air())
                 .where('S', selfPredicate())
                 .where('R', states(getRefractoryState()))
-                .where('A', states(getCasingState()).or(autoAbilities(true, true, true, false, true, false, false)))
-                .where('F', states(getRefractoryState()).or(autoAbilities(false, false, false, true, false, true, false)))
-                .where('H', states(MetaBlocks.COMPRESSED.get(Materials.Steel).getBlock(Materials.Steel)))
-                .where('G', states(SuSyBlocks.ROCKET_ASSEMBLER_CASING.getState(BlockRocketAssemblerCasing.RocketAssemblerCasingType.REINFORCED_FOUNDATION)))
-                .where('C', states(getCasingState()))
+                .where('H', states(getCasingState()).or(autoAbilities(true, true, true, false, true, false, false))).setMinGlobalLimited(32)
+                .where('A', states(getCasingState()))
+                .where('B', states(GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING.getState(BlockLargeMultiblockCasing.CasingType.STRESS_PROOF_CASING)))
+                .where('F', frames(Materials.Steel))
+                .where('V', states(GCYMMetaBlocks.UNIQUE_CASING.getState(BlockUniqueCasing.UniqueCasingType.HEAT_VENT)))
+                .where('G', states(MetaBlocks.TURBINE_CASING.getState(TurbineCasingType.STEEL_GEARBOX)))
                 .where('P', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE)))
-                .where('B', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
-                .where('L', frames(Materials.Steel))
-                .where(' ', any())
-                .build();
+                .where('M', abilities(MultiblockAbility.MUFFLER_HATCH))
+                .where(" ", any())
     }
 
     protected EnumFacing getRelativeFacing(RelativeDirection dir) {
@@ -77,6 +68,8 @@ public class MetaTileEntityMetallurgicalConverter extends RecipeMapMultiblockCon
     private IBlockState getCasingState() {
         return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID);
     }
+
+    private IBlockState get
 
     private IBlockState getRefractoryState() {
         return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.PRIMITIVE_BRICKS);
