@@ -44,6 +44,12 @@
       "textures" : {
         "all" : "gregtech:blocks/multiblock_casing/heavy_duty_pad"
       }
+    },
+    "variant=coalescence_plate" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/multiblock_casing/coalescence_plate"
+      }
     }
   }
 }

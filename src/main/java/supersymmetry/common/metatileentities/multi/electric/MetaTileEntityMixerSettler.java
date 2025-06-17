@@ -301,7 +301,7 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
                 .where('S', selfPredicate())
                 .where('I', abilities(MultiblockAbility.IMPORT_FLUIDS))
                 .where('O', abilities(MultiblockAbility.EXPORT_FLUIDS))
-                .where('T', states(SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.SIEVE_TRAY)))
+                .where('T', states(SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.COALESCENCE_PLATE)))
                 .where('P', states(getPipeCasingState()))
                 //.where('B', abilities(MultiblockAbility.IMPORT_ITEMS, MultiblockAbility.EXPORT_ITEMS))
                 .where('D', states(getCasingState()))
