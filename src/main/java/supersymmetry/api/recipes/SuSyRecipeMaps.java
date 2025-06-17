@@ -12,6 +12,8 @@ import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.core.sound.GTSoundEvents;
 import gregtechfoodoption.recipe.GTFORecipeMaps;
 import net.minecraft.client.gui.Gui;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.recipes.builders.*;
 
@@ -380,19 +382,26 @@ public class SuSyRecipeMaps {
                 .EUt(recipeBuilder.getEUt())
                 .buildAndRegister()
         );
-        
-        MIXER_RECIPES.onRecipeBuild(recipeBuilder -> {
-            SuSyRecipeMaps.BLENDER_RECIPES.recipeBuilder()
-                    .inputs(recipeBuilder.getInputs().toArray(new GTRecipeInput[0]))
-                    .fluidInputs(recipeBuilder.getFluidInputs())
-                    .outputs(recipeBuilder.getOutputs())
-                    .chancedOutputs(recipeBuilder.getChancedOutputs())
-                    .fluidOutputs(recipeBuilder.getFluidOutputs())
-                    .chancedFluidOutputs(recipeBuilder.getChancedFluidOutputs())
-                    .cleanroom(recipeBuilder.getCleanroom())
-                    .duration(recipeBuilder.getDuration())
-                    .EUt(recipeBuilder.getEUt())
-                    .buildAndRegister();
-        });
+
+        SuSyRecipeMaps.ADVANCED_ARC_FURNACE.onRecipeBuild(recipeBuilder ->
+                recipeBuilder.fluidInputs(new FluidStack(FluidRegistry.getFluid("refractory_gunning_mixture"), 50))
+        );
+
+        SuSyRecipeMaps.METALLURIGICAL_CONVERTER.onRecipeBuild(recipeBuilder ->
+                recipeBuilder.fluidInputs(new FluidStack(FluidRegistry.getFluid("refractory_gunning_mixture"), 50))
+        );
+
+
+        MIXER_RECIPES.onRecipeBuild(recipeBuilder -> SuSyRecipeMaps.BLENDER_RECIPES.recipeBuilder()
+                .inputs(recipeBuilder.getInputs().toArray(new GTRecipeInput[0]))
+                .fluidInputs(recipeBuilder.getFluidInputs())
+                .outputs(recipeBuilder.getOutputs())
+                .chancedOutputs(recipeBuilder.getChancedOutputs())
+                .fluidOutputs(recipeBuilder.getFluidOutputs())
+                .chancedFluidOutputs(recipeBuilder.getChancedFluidOutputs())
+                .cleanroom(recipeBuilder.getCleanroom())
+                .duration(recipeBuilder.getDuration())
+                .EUt(recipeBuilder.getEUt())
+                .buildAndRegister());
     }
 }
