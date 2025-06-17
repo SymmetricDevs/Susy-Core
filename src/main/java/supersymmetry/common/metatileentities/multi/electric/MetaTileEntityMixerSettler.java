@@ -52,11 +52,7 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
     public static final int MIN_RADIUS = 4;
     public static final int MAX_RADIUS = 20;
     private int sDist;
-    protected boolean renderFluid;
-    protected boolean fluidTexture1;
-    protected boolean fluidTexture2;
-    protected int fluidColor1;
-    protected int fluidColor2;
+    private boolean isFake;
 
     public MetaTileEntityMixerSettler(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.MIXER_SETTLER_RECIPES);
@@ -110,6 +106,15 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
     }
 
     @Override
+    public void checkStructurePattern() {
+        if (isFake) {
+            reinitializeStructurePattern();
+            isFake = false;
+        }
+        super.checkStructurePattern();
+    }
+
+    @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         data.setInteger("sDist", this.sDist);
         return super.writeToNBT(data);
@@ -154,33 +159,44 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
         switch (aisle) {
             case 0: // First aisle
                 switch (layer) {
-                    case 0: case 4: // "ECCCCCCCE"
-                        return buildRepeatingString('E', 'E', "CCCC", sDist);
-                    case 1: case 2: case 3: // "GGGGGGGGG"
-                        return buildRepeatingString('G', 'G', "GGGG", sDist);
+                    case 0:
+                    case 4: // "ECCCCCCCE"
+                        return buildRepeatingString('#', '#', "####", sDist);
+                    case 1:
+                    case 3: // "GGGGGGGGG"
+
+                        return buildRepeatingString('#', '#', "GGGG", sDist);
+                    case 2:
+
+                        return buildRepeatingString('E', 'E', "GGGG", sDist);
                 }
                 break;
 
             case 1: // Second aisle
                 switch (layer) {
                     case 0: // "ECCCCCCCE"
-                        return buildRepeatingString('E', 'E', "CCCC", sDist);
+                        return buildRepeatingString('#', '#', "CCCC", sDist);
                     case 1: // "G P G P G"
                         return buildRepeatingString('G', 'G', " P G", sDist);
                     case 2: // "GFG GFG G"
-                        return buildRepeatingString('G', 'G', "FG G", sDist);
+                        return buildRepeatingString('E', 'E', "FG G", sDist);
                     case 3: // "IFG PFG O"
                         return buildRepeatingString('I', 'O', "FG P", sDist);
                     case 4: // "EMCCCMCCE"
-                        return buildRepeatingString('E', 'E', "MCCC", sDist);
+                        return buildRepeatingString('#', '#', "MCCC", sDist);
                 }
                 break;
 
             case 2: // Third aisle
                 switch (layer) {
-                    case 0: case 4: // "ECCCCCCCE"
-                        return buildRepeatingString('E', 'E', "CCCC", sDist);
-                    case 1: case 2: case 3: // "GDGDGDGDG" or "GTGTGTGTG"
+                    case 0:
+                    case 4: // "ECCCCCCCE"
+                        return buildRepeatingString('#', '#', "CCCC", sDist);
+                    case 2:
+                        return buildRepeatingString('E', 'E', "DGDG", sDist);
+
+                    case 1:
+                    case 3: // "GDGDGDGDG" or "GTGTGTGTG"
                         char repeatChar = (layer == 3) ? 'T' : 'D';
                         return buildRepeatingString('G', 'G', repeatChar + "G" + repeatChar + "G", sDist);
                 }
@@ -189,26 +205,28 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
             case 3: // Fourth aisle
                 switch (layer) {
                     case 0: // "ECCCCCCCE"
-                        return buildRepeatingString('E', 'E', "CCCC", sDist);
+                        return buildRepeatingString('#', '#', "CCCC", sDist);
                     case 1: // "O G P G I"
                         return buildRepeatingString('O', 'I', " G P", sDist);
                     case 2: // "G GFG GFG"
-                        return buildRepeatingString('G', 'G', " GFG", sDist);
+                        return buildRepeatingString('E', 'E', " GFG", sDist);
                     case 3: // "G PFG PFG"
                         return buildRepeatingString('G', 'G', " PFG", sDist);
                     case 4: // "ECCMCCCME"
-                        return buildRepeatingString('E', 'E', "CCMC", sDist);
+                        return buildRepeatingString('#', '#', "CCMC", sDist);
                 }
                 break;
 
             case 4: // Fifth aisle
                 switch (layer) {
-                    case 0: // "ECCCSCCCE" - special case
+                    case 2:  // "ECCCSCCCE" - special case
                         return buildSpecialCenterString(sDist);
-                    case 1: case 2: case 3: // "GGGGGGGGG"
-                        return buildRepeatingString('G', 'G', "GGGG", sDist);
-                    case 4: // "ECCCCCCCE"
-                        return buildRepeatingString('E', 'E', "CCCC", sDist);
+                    case 1:
+                    case 3: // "GGGGGGGGG"
+                        return buildRepeatingString('#', '#', "GGGG", sDist);
+                    case 0:
+                    case 4: // empty
+                        return buildRepeatingString('#', '#', "####", sDist);
                 }
                 break;
         }
@@ -258,7 +276,11 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
-        if (getWorld() != null) updateStructureDimensions();
+        if (getWorld() != null) {
+            updateStructureDimensions();
+        } else {
+            isFake = true;
+        }
         if (sDist < MIN_RADIUS) sDist = MIN_RADIUS;
         return createStructurePattern(sDist);
     }
@@ -283,19 +305,14 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
                 .where('P', states(getPipeCasingState()))
                 //.where('B', abilities(MultiblockAbility.IMPORT_ITEMS, MultiblockAbility.EXPORT_ITEMS))
                 .where('D', states(getCasingState()))
-                .where('C', states(getCasingState()).setMinGlobalLimited(50).or(autoAbilities(true, true, true, true, false, false, false)))
-                .where('G', states(getGlassState()))
+                .where('C', states(getCasingState()).setMinGlobalLimited(40).or(autoAbilities(true, true, true, true, false, false, false)))
+                .where('G', states(getCasingState()))
                 .where('M', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STAINLESS_STEEL_GEARBOX)))
                 .where('F', frames(Materials.StainlessSteel))
                 .where('E', states(getSecondaryCasingState()))
                 .where(' ', air())
+                .where('#', any())
                 .build();
-    }
-
-
-
-    protected static IBlockState getGlassState() {
-        return MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.TEMPERED_GLASS);
     }
 
     protected static IBlockState getPipeCasingState() {
@@ -332,39 +349,12 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
         List<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
         int radius = MIN_RADIUS;
         while (radius <= MAX_RADIUS) {
-            shapeInfo.add(new MultiblockShapeInfo(createStructurePattern(radius).getPreview(new int[]{1,1,1,1,1})));
+            shapeInfo.add(new MultiblockShapeInfo(createStructurePattern(radius).getPreview(new int[]{1, 1, 1, 1, 1})));
             radius += 2;
         }
         return shapeInfo;
     }
 
-    @Override
-    public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
-        super.renderMetaTileEntity(renderState, translation, pipeline);
-        if (this.isActive() && renderFluid)
-            for (Vec3i pos : cachedPattern)
-                renderFluid(pos, renderState, translation);
-    }
-
-    private void renderFluid(Vec3i offset, CCRenderState renderState, Matrix4 translation) {
-        IVertexOperation[] fluid_render_pipeline = {
-                new IconTransformation(fluidTexture),
-                new ColourMultiplier(GTUtility.convertRGBtoOpaqueRGBA_CL(fluidColor))
-        };
-        Textures.renderFace(renderState, translation.copy().translate(Vector3.fromVec3i(offset)), fluid_render_pipeline, EnumFacing.UP, FLUID_RENDER_CUBOID, fluidTexture, BlockRenderLayer.CUTOUT_MIPPED);
-    }
-
-    @Override
-    public void receiveCustomData(int dataId, PacketBuffer buf) {
-        super.receiveCustomData(dataId, buf);
-        //Can't use a switch statment here as the dataIds aren't constants.
-        if (dataId == UPDATE_FLUID_INFO) {
-            this.fluidColor = buf.readInt();
-            this.fluidTexture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(buf.readResourceLocation().toString());
-        } else if (dataId == CHANGE_FLUID_RENDER_STATUS) {
-            this.renderFluid = buf.readBoolean();
-        }
-    }
 
     private class MixerSettlerRecipeLogic extends MultiblockRecipeLogic {
         public MixerSettlerRecipeLogic(MetaTileEntityMixerSettler metaTileEntityMixerSettler) {
