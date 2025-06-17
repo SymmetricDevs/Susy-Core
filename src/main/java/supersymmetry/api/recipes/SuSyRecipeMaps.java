@@ -248,7 +248,7 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_FUSION, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.ARC);
 
-    public static final RecipeMap<SimpleRecipeBuilder> ADVANCED_ARC_FURNACE = new RecipeMap<>("advanced_arc_furnace", 9, 2, 3, 1, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<SimpleRecipeBuilder> ADVANCED_ARC_FURNACE = new RecipeMap<>("advanced_arc_furnace", 9, 2, 4, 1, new SimpleRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.ARC);
 
