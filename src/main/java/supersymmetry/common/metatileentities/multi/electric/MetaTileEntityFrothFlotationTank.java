@@ -98,11 +98,6 @@ public class MetaTileEntityFrothFlotationTank extends FluidRenderRecipeMapMultiB
     }
 
     @Override
-    public boolean allowsExtendedFacing() {
-        return false;
-    }
-
-    @Override
     protected String[][] getPattern() {
         return FLUID_PATTERN;
     }

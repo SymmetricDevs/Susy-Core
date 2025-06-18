@@ -111,7 +111,7 @@ public class MetaTileEntityMetallurgicalConverter extends RecipeMapMultiblockCon
 
         @Override
         public boolean consumesEnergy() {
-            return false;
+            return true;
         }
 
         @Override
