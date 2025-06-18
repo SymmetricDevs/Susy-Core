@@ -59,4 +59,9 @@ public class MetaTileEntityBilletMold extends MetaTileEntityStrandMold {
     protected @NotNull ICubeRenderer getFrontOverlay() {
         return SusyTextures.BILLET_MOLD_OVERLAY;
     }
+
+    @Override
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
 }

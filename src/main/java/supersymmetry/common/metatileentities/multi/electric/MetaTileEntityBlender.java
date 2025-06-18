@@ -102,6 +102,11 @@ public class MetaTileEntityBlender extends FluidRenderRecipeMapMultiBlock {
     }
 
     @Override
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
+
+    @Override
     protected Optional<Fluid> getFluidToRender(Recipe recipe) {
         //render output fluid instead
         return recipe.getAllFluidOutputs().stream().findFirst().map(FluidStack::getFluid);

@@ -87,6 +87,11 @@ public class MetaTileEntityClarifier extends FluidRenderRecipeMapMultiBlock {
     }
 
     @Override
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
+
+    @Override
     public boolean isMultiblockPartWeatherResistant(@Nonnull IMultiblockPart part) {
         return true;
     }

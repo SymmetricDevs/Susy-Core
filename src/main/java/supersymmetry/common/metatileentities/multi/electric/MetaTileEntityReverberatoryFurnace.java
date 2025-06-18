@@ -62,6 +62,11 @@ public class MetaTileEntityReverberatoryFurnace extends RecipeMapMultiblockContr
     }
 
     @Override
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
+
+    @Override
     public boolean hasMaintenanceMechanics() {
         return false;
     }

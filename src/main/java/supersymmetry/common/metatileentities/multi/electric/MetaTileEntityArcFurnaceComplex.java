@@ -84,6 +84,11 @@ public class MetaTileEntityArcFurnaceComplex extends MetaTileEntityAdvancedArcFu
         return SusyTextures.ARC_FURNACE_OVERLAY;
     }
 
+    @Override
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
+
     private class ArcFurnaceComplexLogic extends MultiblockRecipeLogic {
         public ArcFurnaceComplexLogic(RecipeMapMultiblockController tileEntity) {
             super(tileEntity);

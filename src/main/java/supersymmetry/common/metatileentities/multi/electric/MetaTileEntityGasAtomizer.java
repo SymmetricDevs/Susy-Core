@@ -110,4 +110,9 @@ public class MetaTileEntityGasAtomizer extends RecipeMapMultiblockController {
     protected @NotNull ICubeRenderer getFrontOverlay() {
         return SusyTextures.GAS_ATOMIZER_OVERLAY;
     }
+
+    @Override
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
 }

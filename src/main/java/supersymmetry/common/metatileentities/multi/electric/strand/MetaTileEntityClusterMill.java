@@ -94,4 +94,9 @@ public class MetaTileEntityClusterMill extends MetaTileEntityRollingMill {
     protected @NotNull ICubeRenderer getFrontOverlay() {
         return SusyTextures.CLUSTER_MILL_OVERLAY;
     }
+
+        @Override
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
 }

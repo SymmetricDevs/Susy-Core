@@ -98,4 +98,9 @@ public class MetaTileEntityRollingMill extends MetaTileEntityStrandShaper {
     protected @NotNull ICubeRenderer getFrontOverlay() {
         return SusyTextures.ROLLING_MILL_OVERLAY;
     }
+
+    @Override
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
 }

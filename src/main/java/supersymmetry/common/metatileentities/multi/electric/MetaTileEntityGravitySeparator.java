@@ -168,6 +168,11 @@ public class MetaTileEntityGravitySeparator extends CachedPatternRecipeMapMultib
         return Textures.BLAST_FURNACE_OVERLAY;
     }
 
+    @Override
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
+
     private static final float PARTICLE_SPEED = .05F;
 
     @Override

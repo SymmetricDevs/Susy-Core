@@ -153,6 +153,11 @@ public class MetaTileEntityTurningZone extends MetaTileEntityStrandShaper {
         return SusyTextures.TURNING_ZONE_OVERLAY;
     }
 
+    @Override
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
+
 
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {

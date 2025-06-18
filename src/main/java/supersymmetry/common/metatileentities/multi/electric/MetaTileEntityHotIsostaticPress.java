@@ -100,6 +100,11 @@ public class MetaTileEntityHotIsostaticPress extends RecipeMapMultiblockControll
     }
 
     @Override
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
+
+    @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
         return new MetaTileEntityHotIsostaticPress(metaTileEntityId);
     }

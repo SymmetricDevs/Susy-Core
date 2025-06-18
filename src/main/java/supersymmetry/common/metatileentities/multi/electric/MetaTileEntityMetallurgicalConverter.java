@@ -89,6 +89,11 @@ public class MetaTileEntityMetallurgicalConverter extends RecipeMapMultiblockCon
         return SusyTextures.METALLURGICAL_CONVERTER_OVERLAY;
     }
 
+    @Override
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
+
     private class MetallurgicalConverterLogic extends MultiblockRecipeLogic {
         public MetallurgicalConverterLogic(RecipeMapMultiblockController tileEntity) {
             super(tileEntity);
