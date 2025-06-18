@@ -151,12 +151,11 @@ public class SuSyBlocks {
         registerItemModel(DEPOSIT_BLOCK);
         registerItemModel(RESOURCE_BLOCK);
         registerItemModel(RESOURCE_BLOCK_1);
-        registerItemModel(RESOURCE_BLOCK_1);
         registerItemModel(HOME);
         EVAPORATION_BED.onModelRegister();
+        MULTIBLOCK_TANK.onModelRegister();
         ELECTRODE_ASSEMBLY.onModelRegister();
         registerItemModel(MULTIBLOCK_CASING);
-        registerItemModel(MULTIBLOCK_TANK);
         SERPENTINE.onModelRegister();
         registerItemModel(HARDBLOCKS);
         registerItemModel(CUSTOMSHEETS);

@@ -23,13 +23,13 @@ import supersymmetry.api.SusyLog;
 public abstract class TileEntityPipeBaseMixin<
         PipeType extends Enum<PipeType> & IPipeType<NodeDataType>, NodeDataType>
         extends NeighborCacheTileEntityBase implements IPipeTile<PipeType, NodeDataType> {
-    @Shadow
+    @Shadow(remap = false)
     private PipeType pipeType;
-    @Shadow
+    @Shadow(remap = false)
     private int paintingColor;
-    @Shadow
+    @Shadow(remap = false)
     private int connections;
-    @Shadow
+    @Shadow(remap = false)
     private PipeCoverableImplementation coverableImplementation;
 
 

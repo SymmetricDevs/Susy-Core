@@ -25,9 +25,17 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.fml.common.Loader;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.Supersymmetry;
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.event.MobHordeEvent;
 import supersymmetry.api.fluids.SusyGeneratedFluidHandler;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
@@ -54,6 +62,56 @@ public class CommonProxy {
     public void preLoad() {
         GeckoLib.initialize();
         SusyStoneTypes.init();
+    }
+
+    /**
+     * Checks for a canary file in the config directory and deletes it if found.
+     * Also cleans up the Groovy cache folder to prevent update issues.
+     */
+    public void checkCanaryFile() {
+        try {
+            // Handle canary file in config/susy/
+            File configDir = new File(Loader.instance().getConfigDir(), "susy");
+            if (configDir.exists() || configDir.mkdirs()) {
+                File canaryFile = new File(configDir, "susy_canary");
+                if (canaryFile.exists()) {
+                    SusyLog.logger.info("Found canary file for update - performing cleanup actions");
+                    if (!canaryFile.delete()) {
+                        SusyLog.logger.warn("Failed to delete canary file: {}", canaryFile.getAbsolutePath());
+                    }
+                }
+            } else {
+                SusyLog.logger.warn("Failed to access or create susy config directory");
+            }
+
+            // Clean up Groovy cache
+            File gameDir = Loader.instance().getConfigDir().getParentFile();
+            File groovyCacheDir = new File(gameDir, "cache/groovy");
+            if (groovyCacheDir.exists() && groovyCacheDir.isDirectory()) {
+                SusyLog.logger.info("Cleaning up Groovy cache at: {}", groovyCacheDir.getAbsolutePath());
+                deleteDirectory(groovyCacheDir);
+            }
+        } catch (Exception e) {
+            SusyLog.logger.error("Error during cleanup operations", e);
+        }
+    }
+
+    /**
+     * Recursively deletes a directory and all its contents.
+     *
+     * @param directory the directory to delete
+     * @return true if the directory was successfully deleted, false otherwise
+     */
+    private boolean deleteDirectory(File directory) {
+        if (directory.isDirectory()) {
+            File[] files = directory.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    deleteDirectory(file);
+                }
+            }
+        }
+        return directory.delete();
     }
 
     public void load() {

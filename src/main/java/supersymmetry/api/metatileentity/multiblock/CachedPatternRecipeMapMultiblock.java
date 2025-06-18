@@ -20,7 +20,6 @@ import java.util.List;
  * @author h3tR / RMI
  */
 public abstract class CachedPatternRecipeMapMultiblock extends RecipeMapMultiblockController {
-    @SideOnly(Side.CLIENT)
     protected Vec3i[] cachedPattern = new Vec3i[0];
 
     public CachedPatternRecipeMapMultiblock(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap) {
