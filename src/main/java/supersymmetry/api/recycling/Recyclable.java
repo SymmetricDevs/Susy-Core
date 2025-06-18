@@ -1,5 +1,6 @@
 package supersymmetry.api.recycling;
 
+import com.cleanroommc.groovyscript.api.IIngredient;
 import gregtech.api.items.metaitem.MetaItem;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.material.Material;
@@ -33,6 +34,8 @@ public interface Recyclable {
             return new ItemLikeRecyclable(OreDictUnifier.get(oreDict));
         } else if (obj instanceof MaterialStack ms) {
             return new MaterialRecyclable(ms);
+        } else if (obj instanceof IIngredient) {
+            return new ItemLikeRecyclable(((IIngredient) obj).getMatchingStacks()[0]);
         }
 
         // TODO: damn it

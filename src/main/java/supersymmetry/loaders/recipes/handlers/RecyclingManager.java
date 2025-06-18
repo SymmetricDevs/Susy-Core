@@ -20,6 +20,8 @@ import gregtech.loaders.recipe.RecyclingRecipes;
 import it.unimi.dsi.fastutil.chars.Char2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.*;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import org.apache.commons.lang3.math.Fraction;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recycling.MaterialRecyclable;
@@ -35,8 +37,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @SuppressWarnings({"UnstableApiUsage", "JavadocReference"})
-// TODO: GrS Ingredient compat
-// TODO: An event system for registering recycling info before / after the unification data
 // TODO: Partial recursive recycling data reload
 // TODO: Store part of the node geometry so that they can be restored when reloaded via GrS
 public class RecyclingManager {
@@ -79,10 +79,10 @@ public class RecyclingManager {
                 continue;
             }
 
+            if (lastChar == ' ') return;
             /// Should never happen if recipe is formatted correctly
             /// In the case that it isn't, this error should be handled
             /// by an earlier method call parsing the recipe.
-            if (lastChar == ' ') return;
 
             Recyclable ing = Recyclable.from(ingredient);
 
@@ -151,6 +151,7 @@ public class RecyclingManager {
     }
 
     public static void init() {
+        MinecraftForge.EVENT_BUS.post(new PreRecyclingEvent());
 
         /// Register all unification data
         TopologicalSort.topologicalSort(graphStorage, null).forEach(RecyclingManager::registerRecyclingData);
@@ -298,5 +299,8 @@ public class RecyclingManager {
                 maceratorRecipes.put(recyclable, recipe);
             }
         }
+    }
+
+    public static class PreRecyclingEvent extends Event {
     }
 }
