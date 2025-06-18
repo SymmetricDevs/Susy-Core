@@ -3,9 +3,11 @@ package supersymmetry.api.recipes;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.widgets.ProgressWidget;
 import gregtech.api.recipes.RecipeMap;
+import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.recipes.builders.FuelRecipeBuilder;
 import gregtech.api.recipes.builders.PrimitiveRecipeBuilder;
 import gregtech.api.recipes.builders.SimpleRecipeBuilder;
+import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.core.sound.GTSoundEvents;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.recipes.builders.*;
@@ -81,7 +83,7 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> DRYER_RECIPES = new RecipeMap<>("dryer", 2, 2, 2, 2, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.COOLING);
 
-    public static final RecipeMap<SimpleRecipeBuilder> ION_EXCHANGE_COLUMN_RECIPES = new RecipeMap<>("ion_exchange_column", 1, 1, 2, 2, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<SimpleRecipeBuilder> ION_EXCHANGE_COLUMN_RECIPES = new RecipeMap<>("ion_exchange_column", 2, 1, 2, 2, new SimpleRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_SIFT, ProgressWidget.MoveType.VERTICAL)
             .setSlotOverlay(false, false, true, SusyGuiTextures.CUBIC_LATTICE_OVERLAY)
             .setSlotOverlay(false, true, true, GuiTextures.MOLECULAR_OVERLAY_4)
@@ -349,4 +351,20 @@ public class SuSyRecipeMaps {
 
     public static final RecipeMap<SimpleRecipeBuilder> MILLING_RECIPES = new RecipeMap<>("milling", 2, 1, 0, 0, new SimpleRecipeBuilder().EUt(VA[LV]), false)
             .setSound(GTSoundEvents.CUT);
+
+    static {
+        MIXER_RECIPES.onRecipeBuild(recipeBuilder -> {
+            SuSyRecipeMaps.BLENDER_RECIPES.recipeBuilder()
+                    .inputs(recipeBuilder.getInputs().toArray(new GTRecipeInput[0]))
+                    .fluidInputs(recipeBuilder.getFluidInputs())
+                    .outputs(recipeBuilder.getOutputs())
+                    .chancedOutputs(recipeBuilder.getChancedOutputs())
+                    .fluidOutputs(recipeBuilder.getFluidOutputs())
+                    .chancedFluidOutputs(recipeBuilder.getChancedFluidOutputs())
+                    .cleanroom(recipeBuilder.getCleanroom())
+                    .duration(recipeBuilder.getDuration())
+                    .EUt(recipeBuilder.getEUt())
+                    .buildAndRegister();
+        });
+    }
 }
