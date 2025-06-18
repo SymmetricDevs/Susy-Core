@@ -40,13 +40,13 @@ public class MetaTileEntityMetallurgicalConverter extends RecipeMapMultiblockCon
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start(RelativeDirection.BACK, RelativeDirection.UP, RelativeDirection.RIGHT)
-                .aisle(" F   F ", " F   F ", " F   F ", " F   F ", " FF FF ", "  FAF  ", "  AGA  ", "   F   ", "       ", "       ")
+                .aisle(" F   F ", " F   F ", " F   F ", " F   F ", " FF FF ", "  FAF  ", "  AGA  ", "   A   ", "       ", "       ")
                 .aisle("HHHHHH ", "HFFFFF ", "H ###  ", "  ###  ", "  BBB  ", "  VVV  ", "  BBB  ", "  VVV  ", "  BBB  ", "       ")
-                .aisle(" HHHHHH", "HF###H ", " ##### ", " #BBB# ", " BRRRB ", " VRRRV ", " BRRRB ", " VRRRV ", " BRRRB ", "  BBB  ")
-                .aisle("  HHHHH", "  #P#FS", " ##P## ", " #BBB# ", " BR#RB ", " VR#RV ", " BR#RB ", " VR#RV ", " BR#RB ", "  BMB  ")
-                .aisle(" HHHHHH", "HF###H ", " ##### ", " #BBB# ", " BRRRB ", " VRRRV ", " BRRRB ", " VRRRV ", " BRRRB ", "  BBB  ")
+                .aisle(" HHHHHH", " H###FH", " ##### ", " #BBB# ", " BRRRB ", " VRRRV ", " BRRRB ", " VRRRV ", " BRRRB ", "  BBB  ")
+                .aisle("  HHHHH", "  #P#FS", " ##P## ", " #BBB# ", " BRRRB ", " VR#RV ", " BR#RB ", " VR#RV ", " BR#RB ", "  BMB  ")
+                .aisle(" HHHHHH", " H###FH", " ##### ", " #BBB# ", " BRRRB ", " VRRRV ", " BRRRB ", " VRRRV ", " BRRRB ", "  BBB  ")
                 .aisle("HHHHHH ", "HFFFFF ", "H ###  ", "  ###  ", "  BBB  ", "  VVV  ", "  BBB  ", "  VVV  ", "  BBB  ", "       ")
-                .aisle(" F   F ", " F   F ", " F   F ", " F   F ", " FF FF ", "  FAF  ", "  AGA  ", "   F   ", "       ", "       ")
+                .aisle(" F   F ", " F   F ", " F   F ", " F   F ", " FF FF ", "  FAF  ", "  AGA  ", "   A   ", "       ", "       ")
                 .where('#', air())
                 .where('S', selfPredicate())
                 .where('R', states(getRefractoryState()))

@@ -155,6 +155,7 @@ susy.material.gadolinium_silicon_germanium=Gadolinium Silicon Germanium
 susy.material.latex=Latex
 susy.material.mud=Mud
 susy.material.sea_water=Sea Water
+susy.material.refractory_gunning_mixture=Refractory Gunning Mixture
 
 # Rock/Mineral Materials
 susy.material.fluorite=Fluorite
