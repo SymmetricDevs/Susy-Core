@@ -50,6 +50,7 @@ public class QuarryLogic {
         if(world.isAirBlock(nextPos)){
             updateNextPos();
             doQuarryOperation();
+            return;
         }
         */
 
@@ -65,6 +66,7 @@ public class QuarryLogic {
 
     private void updateNextPos(){
         lineProgress++;
+        nextPos = nextPos.add(lineProgressDirection);
         if(lineProgress >= layerMaxLineProgress){
             lineProgress = 0;
             lineProgressDirection = lineProgressDirection.crossProduct(new Vec3i(0, 1, 0)); //rotate 90° around Y axis
@@ -80,7 +82,6 @@ public class QuarryLogic {
             }
 
         }
-        nextPos = nextPos.add(lineProgressDirection);
     }
 
 }
