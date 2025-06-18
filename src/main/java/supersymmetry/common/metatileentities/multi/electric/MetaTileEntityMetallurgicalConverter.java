@@ -3,6 +3,7 @@ package supersymmetry.common.metatileentities.multi.electric;
 import gregicality.multiblocks.common.block.GCYMMetaBlocks;
 import gregicality.multiblocks.common.block.blocks.BlockLargeMultiblockCasing;
 import gregicality.multiblocks.common.block.blocks.BlockUniqueCasing;
+import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -12,6 +13,8 @@ import gregtech.api.metatileentity.multiblock.ParallelLogicType;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.recipes.Recipe;
+import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
@@ -23,17 +26,18 @@ import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.api.recipes.logic.SuSyParallelLogic;
 import supersymmetry.client.renderer.textures.SusyTextures;
-import supersymmetry.common.blocks.BlockRocketAssemblerCasing;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 
 public class MetaTileEntityMetallurgicalConverter extends RecipeMapMultiblockController {
 
     public MetaTileEntityMetallurgicalConverter(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SuSyRecipeMaps.METALLURIGICAL_CONVERTER);
+        super(metaTileEntityId, SuSyRecipeMaps.METALLURGICAL_CONVERTER);
         this.recipeMapWorkable = new MetallurgicalConverterLogic(this);
     }
 
@@ -110,13 +114,26 @@ public class MetaTileEntityMetallurgicalConverter extends RecipeMapMultiblockCon
         }
 
         @Override
-        public boolean consumesEnergy() {
-            return true;
+        public Recipe findParallelRecipe(@NotNull Recipe currentRecipe, @NotNull IItemHandlerModifiable inputs, @NotNull IMultipleTankHandler fluidInputs, @NotNull IItemHandlerModifiable outputs, @NotNull IMultipleTankHandler fluidOutputs, long maxVoltage, int parallelLimit) {
+            if (parallelLimit > 1 && this.getRecipeMap() != null) {
+                RecipeBuilder<?> parallelBuilder;
+                parallelBuilder = SuSyParallelLogic.pureParallelRecipe(currentRecipe, this.getRecipeMap(), inputs, fluidInputs, outputs, fluidOutputs, parallelLimit, maxVoltage, this.getMetaTileEntity());
+
+                if (parallelBuilder == null) {
+                    this.invalidateInputs();
+                    return null;
+                } else if (parallelBuilder.getParallel() == 0) {
+                    this.invalidateOutputs();
+                    return null;
+                } else {
+                    this.setParallelRecipesPerformed(parallelBuilder.getParallel());
+                    this.applyParallelBonus(parallelBuilder);
+                    return parallelBuilder.build().getResult();
+                }
+            } else {
+                return currentRecipe;
+            }
         }
 
-        @Override
-        public @NotNull ParallelLogicType getParallelLogicType() {
-            return ParallelLogicType.APPEND_ITEMS;
-        }
     }
 }

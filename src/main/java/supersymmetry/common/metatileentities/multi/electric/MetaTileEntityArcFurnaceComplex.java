@@ -4,6 +4,7 @@ import gregicality.multiblocks.api.render.GCYMTextures;
 import gregicality.multiblocks.common.block.GCYMMetaBlocks;
 import gregicality.multiblocks.common.block.blocks.BlockLargeMultiblockCasing;
 import gregicality.multiblocks.common.block.blocks.BlockUniqueCasing;
+import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -12,14 +13,18 @@ import gregtech.api.metatileentity.multiblock.ParallelLogicType;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.recipes.Recipe;
+import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.unification.material.Materials;
 import gregtech.client.renderer.ICubeRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
+import supersymmetry.api.recipes.logic.SuSyParallelLogic;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockElectrodeAssembly;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
@@ -105,13 +110,25 @@ public class MetaTileEntityArcFurnaceComplex extends MetaTileEntityAdvancedArcFu
         }
 
         @Override
-        public boolean consumesEnergy() {
-            return false;
-        }
+        public Recipe findParallelRecipe(@NotNull Recipe currentRecipe, @NotNull IItemHandlerModifiable inputs, @NotNull IMultipleTankHandler fluidInputs, @NotNull IItemHandlerModifiable outputs, @NotNull IMultipleTankHandler fluidOutputs, long maxVoltage, int parallelLimit) {
+            if (parallelLimit > 1 && this.getRecipeMap() != null) {
+                RecipeBuilder<?> parallelBuilder;
+                parallelBuilder = SuSyParallelLogic.pureParallelRecipe(currentRecipe, this.getRecipeMap(), inputs, fluidInputs, outputs, fluidOutputs, parallelLimit, maxVoltage, this.getMetaTileEntity());
 
-        @Override
-        public @NotNull ParallelLogicType getParallelLogicType() {
-            return ParallelLogicType.APPEND_ITEMS;
+                if (parallelBuilder == null) {
+                    this.invalidateInputs();
+                    return null;
+                } else if (parallelBuilder.getParallel() == 0) {
+                    this.invalidateOutputs();
+                    return null;
+                } else {
+                    this.setParallelRecipesPerformed(parallelBuilder.getParallel());
+                    this.applyParallelBonus(parallelBuilder);
+                    return parallelBuilder.build().getResult();
+                }
+            } else {
+                return currentRecipe;
+            }
         }
     }
 }

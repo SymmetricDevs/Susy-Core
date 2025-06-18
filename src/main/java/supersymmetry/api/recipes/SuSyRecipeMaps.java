@@ -4,16 +4,11 @@ import gregicality.multiblocks.api.recipes.GCYMRecipeMaps;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.widgets.ProgressWidget;
 import gregtech.api.recipes.RecipeMap;
-import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.recipes.builders.FuelRecipeBuilder;
 import gregtech.api.recipes.builders.PrimitiveRecipeBuilder;
 import gregtech.api.recipes.builders.SimpleRecipeBuilder;
 import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.core.sound.GTSoundEvents;
-import gregtechfoodoption.recipe.GTFORecipeMaps;
-import net.minecraft.client.gui.Gui;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.recipes.builders.*;
 import supersymmetry.common.materials.SusyMaterials;
@@ -366,7 +361,7 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> MILLING_RECIPES = new RecipeMap<>("milling", 2, 1, 0, 0, new SimpleRecipeBuilder().EUt(VA[LV]), false)
             .setSound(GTSoundEvents.CUT);
 
-    public static final RecipeMap<SimpleRecipeBuilder> METALLURIGICAL_CONVERTER = new RecipeMap<>("metallurgical_converter", 3, 2, 3, 2, new SimpleRecipeBuilder().EUt(VA[LV]), false)
+    public static final RecipeMap<SimpleRecipeBuilder> METALLURGICAL_CONVERTER = new RecipeMap<>("metallurgical_converter", 3, 2, 3, 2, new SimpleRecipeBuilder().EUt(VA[LV]), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.FURNACE);
 
@@ -388,7 +383,7 @@ public class SuSyRecipeMaps {
                 recipeBuilder.fluidInputs(SusyMaterials.RefractoryGunningMixture.getFluid(50))
         );
 
-        SuSyRecipeMaps.METALLURIGICAL_CONVERTER.onRecipeBuild(recipeBuilder ->
+        SuSyRecipeMaps.METALLURGICAL_CONVERTER.onRecipeBuild(recipeBuilder ->
                 recipeBuilder.fluidInputs(SusyMaterials.RefractoryGunningMixture.getFluid(50))
         );
 
