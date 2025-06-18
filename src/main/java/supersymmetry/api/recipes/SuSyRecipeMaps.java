@@ -4,7 +4,6 @@ import gregicality.multiblocks.api.recipes.GCYMRecipeMaps;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.widgets.ProgressWidget;
 import gregtech.api.recipes.RecipeMap;
-import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.recipes.builders.FuelRecipeBuilder;
 import gregtech.api.recipes.builders.PrimitiveRecipeBuilder;
 import gregtech.api.recipes.builders.SimpleRecipeBuilder;
@@ -325,6 +324,18 @@ public class SuSyRecipeMaps {
             .setSmallRecipeMap(MIXER_RECIPES);
 
     public static final RecipeMap<FuelRecipeBuilder> LARGE_STEAM_TURBINE = new RecipeMap<>("large_steam_turbine", 1, 0, 2, 1, new FuelRecipeBuilder(), false)
+            .setSlotOverlay(false, true, GuiTextures.CENTRIFUGE_OVERLAY)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.TURBINE)
+            .allowEmptyOutput();
+
+    public static final RecipeMap<FuelRecipeBuilder> LOW_PRESSURE_ADVANCED_STEAM_TURBINE = new RecipeMap<>("low_pressure_advanced_steam_turbine", 1, 0, 2, 1, new FuelRecipeBuilder(), false)
+            .setSlotOverlay(false, true, GuiTextures.CENTRIFUGE_OVERLAY)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.TURBINE)
+            .allowEmptyOutput();
+
+    public static final RecipeMap<FuelRecipeBuilder> HIGH_PRESSURE_ADVANCED_STEAM_TURBINE = new RecipeMap<>("high_pressure_advanced_steam_turbine", 1, 0, 2, 1, new FuelRecipeBuilder(), false)
             .setSlotOverlay(false, true, GuiTextures.CENTRIFUGE_OVERLAY)
             .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.TURBINE)
