@@ -24,8 +24,11 @@ import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
@@ -33,6 +36,9 @@ import supersymmetry.api.recipes.logic.SuSyParallelLogic;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class MetaTileEntityMetallurgicalConverter extends RecipeMapMultiblockController {
 
@@ -98,6 +104,11 @@ public class MetaTileEntityMetallurgicalConverter extends RecipeMapMultiblockCon
         return false;
     }
 
+    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
+        super.addInformation(stack, player, tooltip, advanced);
+        tooltip.add(I18n.format("gregtech.machine.parallel_pure", 64));
+    }
+
     private class MetallurgicalConverterLogic extends MultiblockRecipeLogic {
         public MetallurgicalConverterLogic(RecipeMapMultiblockController tileEntity) {
             super(tileEntity);
@@ -105,7 +116,7 @@ public class MetaTileEntityMetallurgicalConverter extends RecipeMapMultiblockCon
 
         @Override
         public int getParallelLimit() {
-            return 256;
+            return 64;
         }
 
         @Override

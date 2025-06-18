@@ -352,6 +352,8 @@ gregtech.machine.primitive_item_import.tooltip=Only for use with the Primitive S
 gregtech.machine.primitive_item_export.name=Primitive Item Export Bus
 gregtech.machine.primitive_item_export.tooltip=Only for use with the Primitive Smelter
 
+gregtech.machine.parallel_pure=Can parallel to output up to §b%d§r§7 items at once
+
 # Properties
 gregtech.recipe.plasma_requirement=Requires plasma: %s
 gregtech.recipe.catalyst=Catalyst: %s %s
