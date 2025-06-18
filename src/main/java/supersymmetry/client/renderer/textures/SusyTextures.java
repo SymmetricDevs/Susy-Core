@@ -67,6 +67,9 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer HEAT_EXCHANGER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/heat_exchanger");
     public static final OrientedOverlayRenderer LARGE_GAS_TURBINE_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/large_gas_turbine");
     public static final OrientedOverlayRenderer LARGE_STEAM_TURBINE_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/large_steam_turbine");
+    public static final OrientedOverlayRenderer LOW_PRESSURE_ADVANCED_STEAM_TURBINE_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/low_pressure_advanced_steam_turbine");
+    public static final OrientedOverlayRenderer HIGH_PRESSURE_ADVANCED_STEAM_TURBINE_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/high_pressure_advanced_steam_turbine");
+
     public static final OrientedOverlayRenderer LARGE_WEAPONS_FACTORY_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/large_weapons_factory");
     public static final OrientedOverlayRenderer MINING_DRILL_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/mining_drill");
     public static final OrientedOverlayRenderer LARGE_FLUID_PUMP_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/large_fluid_pump");
