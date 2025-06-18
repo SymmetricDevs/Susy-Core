@@ -16,6 +16,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.recipes.builders.*;
+import supersymmetry.common.materials.SusyMaterials;
 
 import static gregtech.api.GTValues.LV;
 import static gregtech.api.GTValues.VA;
@@ -384,11 +385,11 @@ public class SuSyRecipeMaps {
         );
 
         SuSyRecipeMaps.ADVANCED_ARC_FURNACE.onRecipeBuild(recipeBuilder ->
-                recipeBuilder.fluidInputs(new FluidStack(FluidRegistry.getFluid("refractory_gunning_mixture"), 50))
+                recipeBuilder.fluidInputs(SusyMaterials.RefractoryGunningMixture.getFluid(50))
         );
 
         SuSyRecipeMaps.METALLURIGICAL_CONVERTER.onRecipeBuild(recipeBuilder ->
-                recipeBuilder.fluidInputs(new FluidStack(FluidRegistry.getFluid("refractory_gunning_mixture"), 50))
+                recipeBuilder.fluidInputs(SusyMaterials.RefractoryGunningMixture.getFluid(50))
         );
 
 

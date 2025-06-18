@@ -38,7 +38,7 @@ public class MetaTileEntitySlabMold extends MetaTileEntityStrandMold {
                 .aisle("COOOOOC", "CPPPPPC", "CPPPPPC", "CPPPPPC", "CIIIIIC")
                 .aisle("CO M OC", "CP   PC", "CP   PC", "CP   PC", "CIIIIIC")
                 .aisle("COOOOOC", "CPPPPPC", "CPPPPPC", "CPPPPPC", "CIIIIIC")
-                .aisle("#CCCCC#", "#CCCCC#", "#CCCCC#", "#CCCCC#", "#CCCCC#")
+                .aisle("#CCCCC#", "#CCCCC#", "#CCSCC#", "#CCCCC#", "#CCCCC#")
                 .where('C', states(getCasingState()).or(autoAbilities()))
                 .where('P', states(getPipeCasingState()))
                 .where('M', abilities(SuSyMultiblockAbilities.STRAND_EXPORT))
