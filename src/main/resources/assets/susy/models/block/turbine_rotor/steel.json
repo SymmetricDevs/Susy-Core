@@ -4,6 +4,6 @@
     "top": "gregtech:blocks/casings/turbine_rotor/top",
     "front": "gregtech:blocks/casings/turbine_rotor/steel/front",
     "side": "gregtech:blocks/casings/turbine_rotor/side",
-    "south": "gregtech:blocks/casings/turbine_rotor/back"
+    "south": "gregtech:blocks/casings/turbine_rotor/steel/back"
   }
 }
