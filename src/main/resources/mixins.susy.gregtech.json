@@ -18,7 +18,7 @@
     "OreDictUnifierMixin",
     "RecipeBuilderAccessor",
     "RecipeMapsMixin",
-    "RecyclingRecipesMixin"
+    "RecyclingRecipesMixin",
     "CommonProxyMixin",
     "TileEntityPipeBaseMixin"
   ]

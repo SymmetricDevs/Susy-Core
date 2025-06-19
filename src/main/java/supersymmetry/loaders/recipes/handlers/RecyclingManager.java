@@ -16,6 +16,7 @@ import gregtech.api.unification.stack.ItemMaterialInfo;
 import gregtech.api.unification.stack.MaterialStack;
 import gregtech.api.util.EnumValidationResult;
 import gregtech.api.util.ValidationResult;
+import gregtech.integration.groovy.GroovyScriptModule;
 import gregtech.loaders.recipe.RecyclingRecipes;
 import it.unimi.dsi.fastutil.chars.Char2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.*;
@@ -151,6 +152,7 @@ public class RecyclingManager {
     }
 
     public static void init() {
+        GroovyScriptModule.loadMetaItemBracketHandler();
         MinecraftForge.EVENT_BUS.post(new PreRecyclingEvent());
 
         /// Register all unification data
