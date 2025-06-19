@@ -95,7 +95,7 @@ public class MetaTileEntityClusterMill extends MetaTileEntityRollingMill {
         return SusyTextures.CLUSTER_MILL_OVERLAY;
     }
 
-        @Override
+    @Override
     public boolean allowsExtendedFacing() {
         return false;
     }
