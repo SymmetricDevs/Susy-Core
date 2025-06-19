@@ -57,6 +57,11 @@ public class MetaTileEntityStrandCooler extends MetaTileEntityStrandShaper {
     }
 
     @Override
+    protected boolean outputsStrand() {
+        return false;
+    }
+
+    @Override
     protected boolean hasRoom() {
         if (input.getStrand() == null) {
             return false;

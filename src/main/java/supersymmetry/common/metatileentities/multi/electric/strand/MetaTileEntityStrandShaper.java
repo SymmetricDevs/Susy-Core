@@ -97,7 +97,7 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
                 return;
             }
             Strand possibleStrand = resultingStrand();
-            if (!consumeInputsAndSetupRecipe()) {
+            if ((possibleStrand == null && outputsStrand()) || !consumeInputsAndSetupRecipe()) {
                 return;
             }
             strand = possibleStrand;
@@ -107,6 +107,10 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
             isActive = true;
             this.markDirty();
         }
+    }
+
+    protected boolean outputsStrand() {
+        return true;
     }
 
     protected boolean hasRoom() {
