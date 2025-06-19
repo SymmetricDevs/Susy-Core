@@ -1,5 +1,6 @@
 package supersymmetry.loaders.recipes.handlers;
 
+import com.cleanroommc.groovyscript.api.IIngredient;
 import com.google.common.graph.ElementOrder;
 import com.google.common.graph.MutableValueGraph;
 import com.google.common.graph.ValueGraphBuilder;
@@ -97,6 +98,38 @@ public class RecyclingManager {
         addRecyclingInternal(output, ingredients, outputCount);
     }
 
+    public static void addRecyclingGroovy(ItemStack output, int outputCount, List<IIngredient> inputs) {
+        addRecycling(output, outputCount, inputs.stream()
+                .filter(ing -> ing != null)
+                .map(ing -> (Object) ing.getMatchingStacks()[0])
+                .collect(Collectors.toList()));
+
+        Object2IntMap<Recyclable> ingredients = new Object2IntOpenHashMap<>();
+
+        for (IIngredient input : inputs) {
+
+            Recyclable ing;
+            int count;
+
+            if (input == null) continue;
+
+            // TODO: ugly code
+            ItemStack[] inputStacks = input.getMatchingStacks();
+            if (inputStacks == null || inputStacks.length == 0) continue;
+
+            ItemStack inputStack = inputStacks[0];
+
+            ing = Recyclable.from(inputStack);
+
+            if (ing.isEmpty()) continue;
+
+            count = input.getAmount() * ing.value(inputStack);
+
+            ingredients.put(ing, ingredients.getOrDefault(ing, 0) + count);
+        }
+        addRecyclingInternal(output, ingredients, outputCount);
+    }
+
     /// Copied lots of CEu codes here to convert [GTRecipeInput]s properly
     ///
     /// @see RecyclingHandler#getRecyclingIngredients(List, int)
@@ -133,7 +166,7 @@ public class RecyclingManager {
 
     private static void addRecyclingInternal(ItemStack output, Object2IntMap<Recyclable> ingredients, int outputCount) {
         Recyclable out = Recyclable.from(output);
-
+        graphStorage.predecessors(out).forEach((ing) -> graphStorage.removeEdge(ing, out));
         ingredients.forEach((ing, count) -> graphStorage.putEdgeValue(
                 ing, out, Fraction.getFraction(count, outputCount)
         ));
@@ -148,7 +181,7 @@ public class RecyclingManager {
 
     private static void registerOreInternal(ItemStack itemStack, ItemMaterialInfo materialInfo) {
         if (itemStack.isEmpty()) return;
-        OreDictUnifierAccessor.getUnificationInfo().put(new ItemAndMetadata(itemStack), materialInfo);
+        OreDictUnifier.registerOre(itemStack, materialInfo);
     }
 
     public static void init() {
