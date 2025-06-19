@@ -1,5 +1,7 @@
 package supersymmetry.api.unification.material.info;
 
+import gregicality.multiblocks.api.unification.GCYMMaterialFlags;
+import gregicality.multiblocks.api.unification.properties.GCYMPropertyKey;
 import gregtech.api.unification.material.info.MaterialFlag;
 import gregtech.api.unification.material.info.MaterialFlags;
 import gregtech.api.unification.material.properties.PropertyKey;
@@ -56,7 +58,8 @@ public class SuSyMaterialFlags {
             .build();
 
     public static final MaterialFlag CONTINUOUSLY_CAST = (new MaterialFlag.Builder("continuously_cast"))
-            .requireProps(new PropertyKey[]{PropertyKey.DUST, PropertyKey.FLUID})
+            .requireProps(new PropertyKey[]{PropertyKey.DUST, PropertyKey.FLUID, GCYMPropertyKey.ALLOY_BLAST})
+            .requireFlags(GCYMMaterialFlags.NO_ALLOY_BLAST_RECIPES)
             .build();
 
     public SuSyMaterialFlags() {}
