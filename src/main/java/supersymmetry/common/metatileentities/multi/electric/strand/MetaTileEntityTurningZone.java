@@ -45,6 +45,9 @@ public class MetaTileEntityTurningZone extends MetaTileEntityStrandShaper {
 
     @Override
     protected boolean consumeInputsAndSetupRecipe() {
+        if (this.input.getStrand() == null) {
+            return false;
+        }
         this.input.take();
         this.maxProgress = 20;
         return true;
