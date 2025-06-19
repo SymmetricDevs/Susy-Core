@@ -166,7 +166,9 @@ public class RecyclingManager {
 
     private static void addRecyclingInternal(ItemStack output, Object2IntMap<Recyclable> ingredients, int outputCount) {
         Recyclable out = Recyclable.from(output);
-        graphStorage.predecessors(out).forEach((ing) -> graphStorage.removeEdge(ing, out));
+        if (graphStorage.nodes().contains(out)) {
+            graphStorage.predecessors(out).forEach((ing) -> graphStorage.removeEdge(ing, out));
+        }
         ingredients.forEach((ing, count) -> graphStorage.putEdgeValue(
                 ing, out, Fraction.getFraction(count, outputCount)
         ));
