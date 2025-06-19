@@ -170,6 +170,8 @@ public class SusyMaterials {
         Materials.Electrum.setProperty(PropertyKey.ORE, new OreProperty());
 
         Materials.Hydrogen.addFlags(MaterialFlags.FLAMMABLE);
+
+        Materials.Copper.addFlags(SuSyMaterialFlags.CONTINUOUSLY_CAST);
     }
 
     private static void removeProperty(PropertyKey<?> key, Material material) {

@@ -1,6 +1,8 @@
 package supersymmetry.api.capability;
 
+import gregtech.api.GregTechAPI;
 import gregtech.api.unification.material.Material;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class Strand {
     public double thickness;
@@ -23,5 +25,24 @@ public class Strand {
         this.isCut = strand.isCut;
         this.material = strand.material;
         this.temperature = strand.temperature;
+    }
+
+    public static NBTTagCompound serialize(NBTTagCompound nbt, Strand strand) {
+        if (strand == null) {
+            return nbt;
+        }
+        nbt.setDouble("Thickness", strand.thickness);
+        nbt.setDouble("Width", strand.width);
+        nbt.setBoolean("IsCut", strand.isCut);
+        nbt.setString("Material", strand.material.toString());
+        nbt.setInteger("Temperature", strand.temperature);
+        return nbt;
+    }
+
+    public static Strand deserialize(NBTTagCompound nbt) {
+        if (nbt == null || nbt.isEmpty()) {
+            return null;
+        }
+        return new Strand(nbt.getDouble("Thickness"), nbt.getDouble("Width"), nbt.getBoolean("IsCut"), GregTechAPI.materialManager.getMaterial(nbt.getString("Material")), nbt.getInteger("Temperature"));
     }
 }

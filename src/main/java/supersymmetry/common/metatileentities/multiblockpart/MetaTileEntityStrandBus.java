@@ -8,22 +8,23 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockAbilityPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
-import gregtech.api.util.GTTransferUtils;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.renderer.texture.cube.SimpleOverlayRenderer;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.items.CapabilityItemHandler;
 import supersymmetry.api.capability.IStrandProvider;
 import supersymmetry.api.capability.Strand;
 import supersymmetry.api.capability.SuSyCapabilities;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
 import supersymmetry.client.renderer.textures.SusyTextures;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.function.BiConsumer;
 
@@ -138,9 +139,34 @@ public class MetaTileEntityStrandBus extends MetaTileEntityMultiblockPart implem
             SimpleOverlayRenderer overlay = this.isExport ? Textures.ITEM_HATCH_OUTPUT_OVERLAY :
                     Textures.ITEM_HATCH_INPUT_OVERLAY;
             overlay.renderSided(this.getFrontFacing(), renderState, translation, pipeline);
-
         }
-
     }
 
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        data.setTag("Strand", Strand.serialize(new NBTTagCompound(), this.strand));
+        return super.writeToNBT(data);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound data) {
+        super.readFromNBT(data);
+        this.strand = Strand.deserialize(data.getCompoundTag("Strand"));
+    }
+
+    @Override
+    public void receiveInitialSyncData(PacketBuffer buf) {
+        super.receiveInitialSyncData(buf);
+        try {
+            this.strand = Strand.deserialize(buf.readCompoundTag());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void writeInitialSyncData(PacketBuffer buf) {
+        super.writeInitialSyncData(buf);
+        buf.writeCompoundTag(Strand.serialize(new NBTTagCompound(), strand));
+    }
 }

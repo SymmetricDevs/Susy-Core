@@ -40,6 +40,7 @@ import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
 import supersymmetry.common.blocks.BlockMetallurgyRoll;
 import supersymmetry.common.blocks.SuSyBlocks;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -81,6 +82,7 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
             } else if (!getWorld().isRemote) {
                 // Output
                 output();
+                this.strand = null;
                 this.progress = 0;
                 this.isActive = false;
             }
@@ -182,6 +184,7 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
         buf.writeInt(this.progress);
         buf.writeInt(this.maxProgress);
         buf.writeBoolean(this.isActive);
+        buf.writeCompoundTag(Strand.serialize(new NBTTagCompound(), strand));
     }
 
     @Override
@@ -190,6 +193,11 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
         this.progress = buf.readInt();
         this.maxProgress = buf.readInt();
         this.isActive = buf.readBoolean();
+        try {
+            this.strand = Strand.deserialize(buf.readCompoundTag());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -197,6 +205,7 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
         data.setInteger("Progress", this.progress);
         data.setInteger("MaxProgress", this.maxProgress);
         data.setBoolean("IsActive", this.isActive);
+        data.setTag("Strand", Strand.serialize(new NBTTagCompound(), this.strand));
         return super.writeToNBT(data);
     }
 
@@ -206,6 +215,7 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
         this.progress = data.getInteger("Progress");
         this.maxProgress = data.getInteger("MaxProgress");
         this.isActive = data.getBoolean("IsActive");
+        this.strand = Strand.deserialize(data.getCompoundTag("Strand"));
     }
 
     @Override
@@ -217,14 +227,19 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
                 .addWorkingStatusLine().addProgressLine(this.getProgressPercent())
                 .addLowPowerLine(hasNotEnoughEnergy)
                 .addCustom((comps) -> {
+                    Strand displayStrand = strand;
                     if (strand == null) {
-                        comps.add(new TextComponentTranslation("gregtech.multiblock.strand_casting.no_strand"));
-                        return;
+                        if (output.getStrand() == null) {
+                            comps.add(new TextComponentTranslation("gregtech.multiblock.strand_casting.no_strand"));
+                            return;
+                        }
+                        comps.add(new TextComponentTranslation("gregtech.multiblock.strand_casting.output_detected"));
+                        displayStrand = output.getStrand();
                     }
-                    comps.add(new TextComponentTranslation("gregtech.multiblock.strand_casting.thickness", String.format("%.2f", strand.thickness)));
-                    comps.add(new TextComponentTranslation("gregtech.multiblock.strand_casting.width", String.format("%.2f", strand.width)));
+                    comps.add(new TextComponentTranslation("gregtech.multiblock.strand_casting.thickness", String.format("%.2f", displayStrand.thickness)));
+                    comps.add(new TextComponentTranslation("gregtech.multiblock.strand_casting.width", String.format("%.2f", displayStrand.width)));
 
-                    StrandConversion conversion = StrandConversion.getConversion(strand);
+                    StrandConversion conversion = StrandConversion.getConversion(displayStrand);
                     if (conversion == null) {
                         comps.add(new TextComponentTranslation("gregtech.multiblock.strand_casting.no_conversion"));
                         return;
@@ -325,4 +340,6 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
     public boolean allowsExtendedFacing() {
         return false;
     }
+
+
 }

@@ -282,6 +282,7 @@ susy.multiblock.pattern.error.coils_or_bed=§cAll heating coils or evaporation b
 gregtech.multiblock.strand_casting.thickness=Thickness: %s
 gregtech.multiblock.strand_casting.width=Width: %s
 gregtech.multiblock.strand_casting.no_strand=No strand detected
+gregtech.multiblock.strand_casting.output_detected=Strand found only in the output slot
 gregtech.multiblock.strand_casting.ore_prefix=Will output a: %s
 gregtech.multiblock.strand_casting.no_conversion=Currently not a valid item!
 supersymmetry.prefix.stick=Rod

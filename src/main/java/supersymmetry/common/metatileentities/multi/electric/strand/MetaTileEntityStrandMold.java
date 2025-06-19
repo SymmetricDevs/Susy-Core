@@ -54,7 +54,6 @@ public abstract class MetaTileEntityStrandMold extends MetaTileEntityStrandShape
         return true;
     }
 
-
     @Override
     protected Strand resultingStrand() {
         FluidStack stack = getFirstMaterialFluid();
@@ -74,7 +73,8 @@ public abstract class MetaTileEntityStrandMold extends MetaTileEntityStrandShape
                 return null;
             }
         }
-        if (this.inputFluidInventory.drain(COOLANT, false).amount < 50) {
+        FluidStack fluidStack = this.inputFluidInventory.drain(COOLANT, false);
+        if (fluidStack == null || fluidStack.amount < 50) {
             return null;
         }
         return new Strand(getOutputThickness(), getOutputWidth(), false, mat, stack.getFluid().getTemperature());
@@ -99,7 +99,6 @@ public abstract class MetaTileEntityStrandMold extends MetaTileEntityStrandShape
     protected IBlockState getPipeCasingState() {
         return SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.COPPER_PIPE);
     }
-
 
     protected IBlockState getCasingState() {
         return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID);
