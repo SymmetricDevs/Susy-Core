@@ -47,12 +47,6 @@ public class RecyclingManager {
             .expectedNodeCount(8192)
             .build();
 
-    private static final MutableValueGraph<Recyclable, Fraction> backupGraphStorage = ValueGraphBuilder.directed()
-            .allowsSelfLoops(false)
-            .nodeOrder(ElementOrder.unordered())
-            .expectedNodeCount(8192)
-            .build();
-
     public static final Object2ObjectOpenHashMap<Recyclable, Recipe> arcRecipes = new Object2ObjectOpenHashMap<>();
 
     public static final Object2ObjectOpenHashMap<Recyclable, Recipe> maceratorRecipes = new Object2ObjectOpenHashMap<>();
@@ -99,15 +93,10 @@ public class RecyclingManager {
             ingredients.put(ing, ingredients.getOrDefault(ing, 0) + ingCount);
         }
 
-        addRecyclingInternal(output, convertIntegerMap(ingredients, outputCount), false, false);
+        addRecyclingInternal(output, convertIntegerMap(ingredients, outputCount), false);
     }
 
     public static void addRecyclingGroovy(ItemStack output, int outputCount, List<IIngredient> inputs) {
-        addRecycling(output, outputCount, inputs.stream()
-                .filter(ing -> ing != null)
-                .map(ing -> (Object) ing.getMatchingStacks()[0])
-                .collect(Collectors.toList()));
-
         Object2IntMap<Recyclable> ingredients = new Object2IntOpenHashMap<>();
 
         for (IIngredient input : inputs) {
@@ -131,7 +120,7 @@ public class RecyclingManager {
 
             ingredients.put(ing, ingredients.getOrDefault(ing, 0) + count);
         }
-        addRecyclingInternal(output, convertIntegerMap(ingredients, outputCount), true, true);
+        addRecyclingInternal(output, convertIntegerMap(ingredients, outputCount), true);
     }
 
     /// Copied lots of CEu codes here to convert [GTRecipeInput]s properly
@@ -165,26 +154,26 @@ public class RecyclingManager {
 
             ingredients.put(ing, ingredients.getOrDefault(ing, 0) + count);
         }
-        addRecyclingInternal(output, convertIntegerMap(ingredients, outputCount), false, false);
+        addRecyclingInternal(output, convertIntegerMap(ingredients, outputCount), false);
     }
 
-    private static Object2ObjectMap<Recyclable, Fraction> convertIntegerMap(Object2IntMap<Recyclable> ingredients, int outputCount) {
+    private static Object2ObjectMap<Recyclable, Fraction> convertIntegerMap(Map<Recyclable, Integer> ingredients, int outputCount) {
         Object2ObjectMap<Recyclable, Fraction> converted = new Object2ObjectOpenHashMap<>();
         for (Recyclable ing : ingredients.keySet()) {
-            converted.put(ing, Fraction.getFraction(ingredients.getInt(ing), outputCount));
+            converted.put(ing, Fraction.getFraction(ingredients.get(ing), outputCount));
         }
         return converted;
     }
 
-    private static void addRecyclingInternal(ItemStack output, Object2ObjectMap<Recyclable, Fraction> ingredients, boolean force, boolean scripted) {
-        addRecyclingInternal(Recyclable.from(output), ingredients, force, scripted);
+    private static void addRecyclingInternal(ItemStack output, Object2ObjectMap<Recyclable, Fraction> ingredients, boolean force) {
+        addRecyclingInternal(Recyclable.from(output), ingredients, force);
     }
-    private static void addRecyclingInternal(Recyclable out, Object2ObjectMap<Recyclable, Fraction> ingredients, boolean force, boolean scripted) {
+    private static void addRecyclingInternal(Recyclable out, Object2ObjectMap<Recyclable, Fraction> ingredients, boolean force) {
         if (graphStorage.nodes().contains(out)) { // There's already recycling data.
             Set<Recyclable> predecessors = new ObjectArraySet<>(graphStorage.predecessors(out)); // No CMEs today!
             if (force) { // The original recipe is going to get removed, so it's fine to directly replace the data.
                 for (Recyclable ing : predecessors) {
-                    removeRecyclingRelationInternal(ing, out, scripted);
+                    graphStorage.removeEdge(ing, out);
                 }
             } else { // We now need to take the minimum of the two; we don't know which recipe players will use!
                 // First, find the intersection of the two sets of ingredients
@@ -197,12 +186,9 @@ public class RecyclingManager {
                         Fraction fraction = graphStorage.edgeValue(ing, out);
                         Fraction newFraction = ingredients.get(ing);
                         graphStorage.putEdgeValue(ing, out, fraction.compareTo(newFraction) < 0 ? fraction : newFraction);
-                        if (scripted) {
-                            backupGraphStorage.putEdgeValue(ing, out, fraction);
-                        }
                     } else {
                         // We're deleting the edge.
-                        removeRecyclingRelationInternal(ing, out, scripted);
+                        graphStorage.removeEdge(ing, out);
                     }
                 }
                 return;
@@ -215,21 +201,13 @@ public class RecyclingManager {
     }
 
 
-        private static void removeRecyclingRelationInternal(Recyclable ing, Recyclable out, boolean scripted) {
-        if (scripted) {
-            backupGraphStorage.putEdgeValue(ing, out, graphStorage.edgeValue(ing, out));
-        } else {
-            graphStorage.removeEdge(ing, out);
-        }
-    }
-
     public static void registerRecycling(ItemStack output, Map<Object, Integer> ingredients, int outputCount, boolean force, boolean scripted) {
         // Convert map into Object2IntMap<Recyclable>
         Object2IntMap<Recyclable> recyclables = new Object2IntOpenHashMap<>();
         for (Map.Entry<Object, Integer> entry : ingredients.entrySet()) {
             recyclables.put(Recyclable.from(entry.getKey()), entry.getValue());
         }
-        addRecyclingInternal(output, convertIntegerMap(recyclables, outputCount), force, scripted);
+        addRecyclingInternal(output, convertIntegerMap(recyclables, outputCount), force);
     }
 
     // Intended for GroovyScript users
@@ -332,36 +310,7 @@ public class RecyclingManager {
         Fraction oldAmount = receiver.getOrDefault(ms.material, Fraction.ZERO);
         receiver.put(ms.material, oldAmount.add(amount.multiplyBy(Fraction.getFraction((int) ms.amount, 1))));
     }
-
-    /// Steps for resetting:
-    /// ┌─ 1. remove related recipes from [arcRecipes], [maceratorRecipes], and related recipe maps.
-    /// │  2. remove edges connecting old ingredients to the output from [graphStorage].
-    /// │  3. connect new edges according to the new ingredients.
-    /// │  4. calculate & override old unification data in [OreDictUnifier].
-    /// │  5. registering new recycling recipes and put them in [arcRecipes] & [maceratorRecipes].
-    /// └─ 6. call the same method recursively for all downstream ingredients.
-    ///
-    /// For refreshing, only steps 1, 4, 5, and 6 are performed, since the geometry of the node is not changed.
-    private static void resetRecyclingRecursivelyInternal(Recyclable out, boolean refreshOnly) {
-        removeByRecyclable(out);    /// Step 1
-
-        if (!refreshOnly) {
-            Object2ObjectMap<Recyclable, Fraction> ingredients = new Object2ObjectOpenHashMap<>();
-            for (Recyclable ing : graphStorage.predecessors(out)) {
-                ingredients.put(ing, graphStorage.edgeValueOrDefault(ing, out, Fraction.ZERO));
-            }
-            addRecyclingInternal(out, ingredients, true, true); /// Step 2 & Step 3
-        }
-
-        registerRecyclingData(out); /// Step 4
-
-        ItemMaterialInfo info = OreDictUnifier.getMaterialInfo(out.asStack());
-        if (info == null) return;
-        RecyclingRecipes.registerRecyclingRecipes(out.asStack(), info.getMaterials(), false, null);   /// Step 5
-
-        graphStorage.successors(out).forEach(ing -> resetRecyclingRecursivelyInternal(ing, true));  /// Step 6
-    }
-
+    
     /// Only removes recipes from [RecipeMaps#MACERATOR_RECIPES] and [RecipeMaps#ARC_FURNACE_RECIPES]
     ///
     /// @implNote as long as [RecipeMap#removeRecipe(Recipe)] is called in a groovy script it will be considered as a GrS recipe
@@ -403,29 +352,6 @@ public class RecyclingManager {
             } else if (recipeMap == RecipeMaps.MACERATOR_RECIPES) {
                 maceratorRecipes.put(recyclable, recipe);
             }
-        }
-    }
-
-    public static void reload() {
-        // For each node in backup, reset the node in the primary graph.
-        for (Recyclable out : backupGraphStorage.nodes()) {
-            Set<Recyclable> currentPredecessors = new ObjectArraySet<>(graphStorage.predecessors(out)); // No CMEs today!
-            for (Recyclable ing : currentPredecessors) {
-                graphStorage.removeEdge(ing, out);
-            }
-            Set<Recyclable> backupPredecessors = new ObjectArraySet<>(backupGraphStorage.predecessors(out)); // No CMEs today!
-            for (Recyclable ing : backupPredecessors) {
-                graphStorage.putEdgeValue(ing, out, backupGraphStorage.edgeValue(ing, out));
-            }
-        }
-
-        backupGraphStorage.nodes().clear();
-        backupGraphStorage.edges().clear();
-        MinecraftForge.EVENT_BUS.post(new PreRecyclingEvent());
-
-        // Now, the backup graph should be filled up again with the same unused unscripted data, while the real graph storage has scripted but reloaded data.
-        for (Recyclable out : backupGraphStorage.nodes()) {
-            resetRecyclingRecursivelyInternal(out, false);
         }
     }
 

@@ -123,9 +123,4 @@ public class EventHandlers {
             }
         }
     }
-
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void onGroovyReload(GroovyReloadEvent event) {
-        RecyclingManager.reload();
-    }
 }
