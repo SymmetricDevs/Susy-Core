@@ -96,7 +96,7 @@ public class RecyclingManager {
         addRecyclingInternal(output, convertIntegerMap(ingredients, outputCount), false);
     }
 
-    public static void addRecyclingGroovy(ItemStack output, int outputCount, List<IIngredient> inputs) {
+    public static void addRecyclingGroovy(ItemStack output, List<IIngredient> inputs) {
         Object2IntMap<Recyclable> ingredients = new Object2IntOpenHashMap<>();
 
         for (IIngredient input : inputs) {
@@ -120,7 +120,7 @@ public class RecyclingManager {
 
             ingredients.put(ing, ingredients.getOrDefault(ing, 0) + count);
         }
-        addRecyclingInternal(output, convertIntegerMap(ingredients, outputCount), true);
+        addRecyclingInternal(output, convertIntegerMap(ingredients, output.getCount()), true);
     }
 
     /// Copied lots of CEu codes here to convert [GTRecipeInput]s properly
@@ -310,7 +310,7 @@ public class RecyclingManager {
         Fraction oldAmount = receiver.getOrDefault(ms.material, Fraction.ZERO);
         receiver.put(ms.material, oldAmount.add(amount.multiplyBy(Fraction.getFraction((int) ms.amount, 1))));
     }
-    
+
     /// Only removes recipes from [RecipeMaps#MACERATOR_RECIPES] and [RecipeMaps#ARC_FURNACE_RECIPES]
     ///
     /// @implNote as long as [RecipeMap#removeRecipe(Recipe)] is called in a groovy script it will be considered as a GrS recipe
