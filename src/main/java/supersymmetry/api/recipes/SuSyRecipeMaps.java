@@ -386,7 +386,7 @@ public class SuSyRecipeMaps {
                 .fluidOutputs(recipeBuilder.getFluidOutputs())
                 .chancedFluidOutputs(recipeBuilder.getChancedFluidOutputs())
                 .cleanroom(recipeBuilder.getCleanroom())
-                .duration(recipeBuilder.getDuration())
+                .duration(recipeBuilder.getDuration() / 4)
                 .EUt(recipeBuilder.getEUt())
                 .buildAndRegister()
         );
