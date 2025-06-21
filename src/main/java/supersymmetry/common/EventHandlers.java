@@ -1,5 +1,6 @@
 package supersymmetry.common;
 
+import com.cleanroommc.groovyscript.event.GroovyReloadEvent;
 import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.util.GTTeleporter;
 import gregtech.api.util.TeleportHandler;
@@ -27,6 +28,7 @@ import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.event.MobHordeWorldData;
 import supersymmetry.common.item.SuSyArmorItem;
+import supersymmetry.loaders.recipes.handlers.RecyclingManager;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class EventHandlers {
