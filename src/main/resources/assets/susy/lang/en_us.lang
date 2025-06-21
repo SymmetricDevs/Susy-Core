@@ -22,6 +22,7 @@ tile.drill_head.steel.name=Steel Drill Head
 tile.susy_multiblock_casing.silicon_carbide_casing.name=Tough Silicon Carbide Casing
 
 tile.susy_multiblock_casing.sieve_tray.name=Sieve Tray
+tile.susy_multiblock_casing.coalescence_plate.name=Coalescence Plate
 tile.susy_multiblock_casing.structural_packing.name=Structural Packing
 tile.susy_multiblock_casing.ulv_structural_casing.name=Basic Structural Casing
 tile.susy_multiblock_casing.drone_pad.name=Drone Pad
@@ -330,6 +331,9 @@ gregtech.machine.scrap_recycler.name=Scrap Recycler
 gregtech.machine.rocket_assembler.name=Rocket Assembler
 gregtech.machine.rocket_programmer.name=Rocket Programmer
 
+gregtech.machine.mixer_settler.name=Mixer Settler
+gregtech.machine.mixer_settler.tooltip=Can work up to 2x faster with more cells
+
 gregtech.machine.primitive_item_import.name=Primitive Item Import Bus
 gregtech.machine.primitive_item_import.tooltip=Only for use with the Primitive Smelter
 gregtech.machine.primitive_item_export.name=Primitive Item Export Bus
@@ -341,6 +345,7 @@ gregtech.recipe.catalyst=Catalyst: %s %s
 gregtech.recipe.blocks=Blocks: %s
 gregtech.recipe.evaporation=Required Energy: %d J/t
 gregtech.recipe.cryogenic_environment=Requires Cryogenic Environment
+gregtech.recipe.mixer_settler_cells=Required mixer settler cells: %s
 
 # Latex Collector
 gregtech.machine.latex_collector.steam=Needs Steam!
@@ -767,6 +772,7 @@ recipemap.sieve_distillation.name=Fractional Distillation
 recipemap.jet_wingpack_fuels.name=Jet Wingpack Fuels
 recipemap.curtain_coater.name=Curtain Coater
 recipemap.milling.name=Precise Milling Machine
+recipemap.mixer_settler.name=Mixer Settler
 
 gregtech.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 

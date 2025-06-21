@@ -35,7 +35,8 @@ public class BlockSuSyMultiblockCasing extends VariantBlock<BlockSuSyMultiblockC
         STRUCTURAL_PACKING("structural_packing"),
         ULV_STRUCTURAL_CASING("ulv_structural_casing"),
         DRONE_PAD("drone_pad"),
-        HEAVY_DUTY_PAD("heavy_duty_pad");
+        HEAVY_DUTY_PAD("heavy_duty_pad"),
+        COALESCENCE_PLATE("coalescence_plate");
 
         private final String name;
 
