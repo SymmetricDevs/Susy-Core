@@ -258,6 +258,7 @@ gregtech.machine.quencher.name=Quencher
 gregtech.machine.railroad_engineering_station.name=Railroad Engineering Station
 gregtech.machine.railroad_engineering_station.tooltip=Place Immersive Railroading Tracks in the middle to form the multiblock
 gregtech.machine.railroad_engineering_station.tooltip.1=The concrete below the tracks can be substituted with any block, including pipes or air
+gregtech.machine.quarry.name=Quarry
 
 gregtech.machine.evaporation_pool.name=Evaporation Pool:
 gregtech.machine.evaporation_pool.tooltip.info=Max square of %1$sx%1$s, minimum %2$sx%2$s. Read info tab and tool info for more details.
@@ -729,6 +730,7 @@ recipemap.heat_exchanger.name=Heat Exchanging
 recipemap.condenser.name=Condensing
 recipemap.radiator.name=Heat Radiator
 recipemap.quencher.name=Quenching
+recipemap.quarry.name=Excavation
 recipemap.weapons_factory.name=Weapons Factory
 recipemap.large_weapons_factory.name=Large Weapons Factory
 recipemap.railroad_engineering_station.name=Railroad Engineering Station

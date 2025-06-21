@@ -3,12 +3,10 @@ package supersymmetry.common.metatileentities.multi.electric;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
-import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.PatternMatchContext;
-import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.unification.material.Materials;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
@@ -20,7 +18,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
-import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nonnull;
 
@@ -62,8 +59,7 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
                 .aisle("CCCCCFAAAFCCCCC", " CC   AMA   CC ", "               ", "               ", "               ")
                 .where('M', selfPredicate())
                 .where('A', states(getCasingState())
-                        .or(autoAbilities(true, true, false, true, false, false, false))
-                        )
+                        .or(autoAbilities(true, true, true, true, false, false, false)))
                 .where('S', states(getCasingState()))
                 .where('G', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID)))
                 .where('C', states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)))
@@ -85,28 +81,12 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
     @Nonnull
     @Override
     protected ICubeRenderer getFrontOverlay() {
-        return SusyTextures.DUMPER_OVERLAY; //TODO: custom texture
+        return Textures.CHUNK_MINER_OVERLAY; //TODO: custom texture
     }
 
     @Override
     public boolean isMultiblockPartWeatherResistant(@Nonnull IMultiblockPart part) {
         return true;
-    }
-
-
-    @Override
-    public TraceabilityPredicate autoAbilities(boolean checkEnergyIn, boolean checkMaintenance, boolean checkItemIn, boolean checkItemOut, boolean checkFluidIn, boolean checkFluidOut, boolean checkMuffler) {
-        TraceabilityPredicate predicate = super.autoAbilities(checkMaintenance, checkMuffler);
-        if (checkEnergyIn)
-            predicate = predicate.or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2).setPreviewCount(1));
-
-        if (checkItemOut && this.recipeMap.getMaxOutputs() > 0)
-            predicate = predicate.or(abilities(MultiblockAbility.EXPORT_ITEMS).setMaxGlobalLimited(2).setPreviewCount(1));
-
-        if(checkMaintenance)
-            predicate = predicate.or(abilities(MultiblockAbility.MAINTENANCE_HATCH).setMaxGlobalLimited(1));
-
-        return predicate;
     }
 
     @Override

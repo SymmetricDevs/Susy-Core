@@ -3,7 +3,6 @@ package supersymmetry.api.recipes;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.widgets.ProgressWidget;
 import gregtech.api.recipes.RecipeMap;
-import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.recipes.builders.FuelRecipeBuilder;
 import gregtech.api.recipes.builders.PrimitiveRecipeBuilder;
 import gregtech.api.recipes.builders.SimpleRecipeBuilder;
@@ -352,7 +351,7 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> MILLING_RECIPES = new RecipeMap<>("milling", 2, 1, 0, 0, new SimpleRecipeBuilder().EUt(VA[LV]), false)
             .setSound(GTSoundEvents.CUT);
 
-    public static final RecipeMap<SimpleRecipeBuilder> QUARRY_RECIPES = new RecipeMap<>("quarry", 1, 1, 0, 2, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<SimpleRecipeBuilder> QUARRY_RECIPES = new RecipeMap<>("quarry", 1, 9, 0, 0, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.MINER);
 
     static {
