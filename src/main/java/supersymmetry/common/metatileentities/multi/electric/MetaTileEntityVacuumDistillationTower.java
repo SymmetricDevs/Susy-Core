@@ -110,4 +110,9 @@ public class MetaTileEntityVacuumDistillationTower extends MetaTileEntityOrdered
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.VDT_OVERLAY;
     }
+
+    @Override
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
 }

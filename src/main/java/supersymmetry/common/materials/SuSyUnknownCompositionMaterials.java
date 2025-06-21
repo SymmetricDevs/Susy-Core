@@ -25,6 +25,11 @@ public class SuSyUnknownCompositionMaterials {
                 .liquid()
                 .color(0x3c5bc2)
                 .build();
+
+        RefractoryGunningMixture = new Material.Builder(27053, SuSyUtility.susyId("refractory_gunning_mixture"))
+                .liquid()
+                .color(0x9c775c)
+                .build();
     }
 
 }

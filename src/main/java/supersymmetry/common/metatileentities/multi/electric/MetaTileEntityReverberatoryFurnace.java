@@ -16,6 +16,7 @@ import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
 
@@ -44,7 +45,9 @@ public class MetaTileEntityReverberatoryFurnace extends RecipeMapMultiblockContr
                 .aisle("XXX", "XSX", "XXX", "YYY")
                 .where('Y', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.PRIMITIVE_BRICKS)))
                 .where('X', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.PRIMITIVE_BRICKS))
-                        .or(autoAbilities(false, false, true, true, true, true, false)))
+                        .or(autoAbilities(false, false, true, true, true, true, false))
+                        .or(abilities(SuSyMultiblockAbilities.PRIMITIVE_IMPORT_ITEMS).setPreviewCount(0))
+                        .or(abilities(SuSyMultiblockAbilities.PRIMITIVE_EXPORT_ITEMS).setPreviewCount(0)))
                 .where('#', air())
                 .where('S', selfPredicate())
                 .build();
@@ -59,6 +62,11 @@ public class MetaTileEntityReverberatoryFurnace extends RecipeMapMultiblockContr
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return Textures.PRIMITIVE_BLAST_FURNACE_OVERLAY;
+    }
+
+    @Override
+    public boolean allowsExtendedFacing() {
+        return false;
     }
 
     @Override

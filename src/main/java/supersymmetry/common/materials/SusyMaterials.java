@@ -31,6 +31,8 @@ public class SusyMaterials {
     public static Material Mud;
     public static Material Seawater;
 
+    public static Material RefractoryGunningMixture;
+
     //Minerals
     public static Material Anorthite;
     public static Material Albite;
@@ -168,6 +170,8 @@ public class SusyMaterials {
         Materials.Electrum.setProperty(PropertyKey.ORE, new OreProperty());
 
         Materials.Hydrogen.addFlags(MaterialFlags.FLAMMABLE);
+
+        Materials.Copper.addFlags(SuSyMaterialFlags.CONTINUOUSLY_CAST);
     }
 
     private static void removeProperty(PropertyKey<?> key, Material material) {

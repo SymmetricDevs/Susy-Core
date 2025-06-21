@@ -1,0 +1,8 @@
+{
+  "forge_marker" : 1,
+  "variants" : {
+    "axis=x,variant=roll": { "model": "susy:metallurgy/roll", "x": 90, "y": 90 },
+    "axis=y,variant=roll": { "model": "susy:metallurgy/roll" },
+    "axis=z,variant=roll": { "model": "susy:metallurgy/roll", "x": 90 }
+  }
+}

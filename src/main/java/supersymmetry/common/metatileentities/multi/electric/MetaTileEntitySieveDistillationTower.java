@@ -109,4 +109,8 @@ public class MetaTileEntitySieveDistillationTower extends MetaTileEntityOrderedD
         return Textures.DISTILLATION_TOWER_OVERLAY;
     }
 
+    @Override
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
 }
