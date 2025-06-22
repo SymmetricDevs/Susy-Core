@@ -29,9 +29,6 @@ import javax.annotation.Nonnull;
 
 public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
 
-
-
-
     public MetaTileEntityQuarry(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.QUARRY_RECIPES);
     }
@@ -106,4 +103,9 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
         return false;
     }
 
+    @Override
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
 }
+
