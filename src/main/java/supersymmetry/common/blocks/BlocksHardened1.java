@@ -8,11 +8,15 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import java.util.Random;
+import java.util.function.Supplier;
 
 public class BlocksHardened1 extends VariantBlock<BlocksHardened1.HardenedBlockType> {
 
@@ -30,25 +34,29 @@ public class BlocksHardened1 extends VariantBlock<BlocksHardened1.HardenedBlockT
     }
 
     @Override
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        SusyStoneVariantBlock bricksBlock = SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.BRICKS);
-        return Item.getItemFromBlock(bricksBlock);
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+        Random rand = world instanceof World ? ((World)world).rand : RANDOM;
+
+        HardenedBlockType type = getState(state);
+        int count = quantityDropped(state, fortune, rand);
+        for (int i = 0; i < count; i++)
+        {
+            drops.add(type.droppedItem.get()); // Damage dropped is hardcoded here since `damageDropped` is used elsewhere
+        }
     }
 
-    @Override
-    public int damageDropped(IBlockState state) {
-        return 9;
-    }
-
-    public static enum HardenedBlockType implements IStringSerializable, IStateHarvestLevel {
-        INDUSTRIAL_CONCRETE_HARDENED("industrial_concrete_hardened", 4);
+    public enum HardenedBlockType implements IStringSerializable, IStateHarvestLevel {
+        INDUSTRIAL_CONCRETE_HARDENED("industrial_concrete_hardened", 4,
+                () -> new ItemStack(Item.getItemFromBlock(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.BRICKS)), 1, 9));
 
         private final String name;
         private final int harvestLevel;
+        private final Supplier<ItemStack> droppedItem;
 
-        private HardenedBlockType(String name, int harvestLevel) {
+        HardenedBlockType(String name, int harvestLevel, Supplier<ItemStack> droppedItem) {
             this.name = name;
             this.harvestLevel = harvestLevel;
+            this.droppedItem = droppedItem;
         }
 
         @Override
