@@ -41,7 +41,7 @@ public class BlocksHardened1 extends VariantBlock<BlocksHardened1.HardenedBlockT
     }
 
     public static enum HardenedBlockType implements IStringSerializable, IStateHarvestLevel {
-        INDUSTRIAL_CONCRETE_HARDENED("industrial_concrete_hardened", 5);
+        INDUSTRIAL_CONCRETE_HARDENED("industrial_concrete_hardened", 4);
 
         private final String name;
         private final int harvestLevel;
