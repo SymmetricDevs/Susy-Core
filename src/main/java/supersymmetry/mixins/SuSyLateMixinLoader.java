@@ -16,7 +16,6 @@ public class SuSyLateMixinLoader implements ILateMixinLoader {
             "mcjtylib_ng",
             "xnet",
             "travelersbackpack",
-            "yungs",
             "reccomplex",
             "fluidlogged_api"
     );
