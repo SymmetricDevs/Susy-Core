@@ -73,8 +73,6 @@ dependencies {
     implementation rfg.deobf("curse.maven:ivtoolkit-224535:2443253")
     implementation rfg.deobf("curse.maven:fluidlogged-api-485654:4564413")
 
-    compileOnly rfg.deobf("curse.maven:yungs-better-mineshafts-forge-389665:3247154")
-
     api("CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.700")
 
     runtimeOnly 'com.cleanroommc:osxnarratorblocker:1.0'

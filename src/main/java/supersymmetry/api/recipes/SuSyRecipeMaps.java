@@ -323,6 +323,18 @@ public class SuSyRecipeMaps {
             .setSound(GTSoundEvents.TURBINE)
             .allowEmptyOutput();
 
+    public static final RecipeMap<FuelRecipeBuilder> LOW_PRESSURE_ADVANCED_STEAM_TURBINE = new RecipeMap<>("low_pressure_advanced_steam_turbine", 1, 0, 2, 1, new FuelRecipeBuilder(), false)
+            .setSlotOverlay(false, true, GuiTextures.CENTRIFUGE_OVERLAY)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.TURBINE)
+            .allowEmptyOutput();
+
+    public static final RecipeMap<FuelRecipeBuilder> HIGH_PRESSURE_ADVANCED_STEAM_TURBINE = new RecipeMap<>("high_pressure_advanced_steam_turbine", 1, 0, 2, 1, new FuelRecipeBuilder(), false)
+            .setSlotOverlay(false, true, GuiTextures.CENTRIFUGE_OVERLAY)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.TURBINE)
+            .allowEmptyOutput();
+
     public static final RecipeMap<PrimitiveRecipeBuilder> PRIMITIVE_SMELTER = new RecipeMap<>("primitive_smelter", 4, 2, 0, 0, new PrimitiveRecipeBuilder(), false)
             .setSlotOverlay(false, false, GuiTextures.FURNACE_OVERLAY_1)
             .setSlotOverlay(true, false, GuiTextures.FURNACE_OVERLAY_2)

@@ -14,6 +14,9 @@ tile.separator_rotor.steel.name=Steel Gravity Separator Rotor
 
 tile.alternator_coil.copper.name=Copper Alternator Coil
 tile.turbine_rotor.steel.name=Steel Turbine Block
+tile.turbine_rotor.low_pressure.name=Low Pressure Turbine Block
+tile.turbine_rotor.high_pressure.name=High Pressure Turbine Block
+
 tile.drill_head.steel.name=Steel Drill Head
 
 tile.susy_multiblock_casing.silicon_carbide_casing.name=Tough Silicon Carbide Casing
@@ -277,6 +280,8 @@ susy.multiblock.pattern.error.coils_or_bed=§cAll heating coils or evaporation b
 gregtech.machine.primitive_mud_pump.name=Primitive Mud Pump
 gregtech.machine.primitive_mud_pump.tooltip=Works only in River biomes between Y=64 and Y=80
 gregtech.machine.basic_steam_turbine.name=Large Steam Turbine
+gregtech.machine.low_pressure_advanced_steam_turbine.name=Low Pressure Advanced Steam Turbine
+gregtech.machine.high_pressure_advanced_steam_turbine.name=High Pressure Advanced Steam Turbine
 gregtech.machine.basic_gas_turbine.name=Large Gas Turbine
 gregtech.machine.large_fluid_pump.name=Large Fluid Pump
 gregtech.machine.large_fluid_pump.tooltip.1=This would definitely affect the local trout population.
