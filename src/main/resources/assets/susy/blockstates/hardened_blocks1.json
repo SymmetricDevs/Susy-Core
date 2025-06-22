@@ -14,6 +14,18 @@
       "textures" : {
         "all" : "gregtech:blocks/susy_stones/industrial_concrete_bricks"
       }
+    },
+    "variant=military_concrete_hardened" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/susy_stones/military_concrete"
+      }
+    },
+    "variant=military_concrete_cobblestone_hardened" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/susy_stones/military_concrete_cobble"
+      }
     }
   }
 }

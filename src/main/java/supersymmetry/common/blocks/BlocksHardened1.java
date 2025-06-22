@@ -22,7 +22,7 @@ public class BlocksHardened1 extends VariantBlock<BlocksHardened1.HardenedBlockT
 
     public BlocksHardened1() {
         super(Material.ROCK);
-        this.setHardness(50.0F);
+        this.setHardness(75.0F);
         this.setResistance(25.0F);
         this.setSoundType(SoundType.STONE);
         this.setTranslationKey("hardened_blocks1");
@@ -47,7 +47,12 @@ public class BlocksHardened1 extends VariantBlock<BlocksHardened1.HardenedBlockT
 
     public enum HardenedBlockType implements IStringSerializable, IStateHarvestLevel {
         INDUSTRIAL_CONCRETE_HARDENED("industrial_concrete_hardened", 4,
-                () -> new ItemStack(Item.getItemFromBlock(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.BRICKS)), 1, 9));
+                () -> new ItemStack(Item.getItemFromBlock(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.BRICKS)), 1, 9)),
+        MILITARY_CONCRETE_COBBLESTONE_HARDENED("military_concrete_cobblestone_hardened", 4,
+                () -> new ItemStack(Item.getItemFromBlock(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.COBBLE)), 1, 10)),
+        MILITARY_CONCRETE_HARDENED("military_concrete_hardened", 4,
+                                             () -> new ItemStack(Item.getItemFromBlock(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.BRICKS)), 1, 10));
+
 
         private final String name;
         private final int harvestLevel;
