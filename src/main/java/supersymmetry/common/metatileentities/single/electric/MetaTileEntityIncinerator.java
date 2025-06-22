@@ -87,7 +87,9 @@ public class MetaTileEntityIncinerator extends TieredMetaTileEntity implements I
             if (this.getWorld().isRemote) {
                 this.incineratingParticles();
             } else {
-                getWorld().playSound(null, getPos(), SoundEvents.ENTITY_GENERIC_BURN, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                if (!this.isMuffled()) {
+                    getWorld().playSound(null, getPos(), SoundEvents.ENTITY_GENERIC_BURN, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                }
             }
         }
         if (!this.getWorld().isRemote && this.getOffsetTimer() % 40 == 0) {
@@ -106,7 +108,13 @@ public class MetaTileEntityIncinerator extends TieredMetaTileEntity implements I
                     setCanProgress(true);
                 progress++;
                 if (progress >= maxProgress) {
-                    this.importItems.extractItem(startSlot, itemsPerRun, false);
+                    int remainingVoids = itemsPerRun;
+                    while (remainingVoids > 0) {
+                        remainingVoids -= this.importItems.extractItem(startSlot, remainingVoids, false).getCount();
+                        startSlot = GTFOUtils.getFirstUnemptyItemSlot(this.importItems, 0);
+                        if (startSlot == -1)
+                            break;
+                    }
                     progress = 0;
                 }
             } else {

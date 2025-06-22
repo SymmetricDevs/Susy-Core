@@ -1,10 +1,8 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
-import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.unification.material.Materials;
@@ -19,7 +17,11 @@ import gregtech.common.blocks.StoneVariantBlock;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import supersymmetry.api.metatileentity.multiblock.FluidRenderRecipeMapMultiBlock;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockMultiblockTank;
@@ -29,10 +31,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class MetaTileEntityClarifier extends RecipeMapMultiblockController {
+public class MetaTileEntityClarifier extends FluidRenderRecipeMapMultiBlock {
+
     public MetaTileEntityClarifier(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SuSyRecipeMaps.CLARIFIER);
-        this.recipeMapWorkable = new MultiblockRecipeLogic(this, true);
+        super(metaTileEntityId, SuSyRecipeMaps.CLARIFIER, true);
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
@@ -68,6 +70,7 @@ public class MetaTileEntityClarifier extends RecipeMapMultiblockController {
                 .where(' ', any())
                 .build();
     }
+
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
         return Textures.SOLID_STEEL_CASING;
     }
@@ -93,8 +96,33 @@ public class MetaTileEntityClarifier extends RecipeMapMultiblockController {
         return true;
     }
 
+    private final static String[][] FLUID_PATTERN = {{
+            "     DDDD",
+            "   DDDDDDDD",
+            "  DDDDDDDDDD",
+            " DDDDDDDDDDDD",
+            " DDDDDDDDDDDD",
+            "DDDDDDDDDDDDDD",
+            "DDDDDD  DDDDDD",
+            "DDDDDD  DDDDDD",
+            "DDDDDDDDDDDDDD",
+            " DDDDDDDDDDDD",
+            " DDDDDDDDDDDD",
+            "  DDDDDDDDDD",
+            "   DDDDDDDD",
+            "     DDDD"
+    }};
+    private static final Vec3i PATTERN_OFFSET = new Vec3i(-11, 1, 1);
+
     @Override
-    public boolean allowsExtendedFacing() {
-        return false;
+    @SideOnly(Side.CLIENT)
+    protected String[][] getPattern() {
+        return FLUID_PATTERN;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    protected Vec3i getPatternOffset() {
+        return PATTERN_OFFSET;
     }
 }

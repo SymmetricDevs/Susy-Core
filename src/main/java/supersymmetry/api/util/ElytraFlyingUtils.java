@@ -1,5 +1,6 @@
 package supersymmetry.api.util;
 
+import gregtech.modules.ModuleManager;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -12,12 +13,25 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.capability.SuSyCapabilities;
+import supersymmetry.integration.baubles.BaublesModule;
+import supersymmetry.modules.SuSyModules;
 
 public class ElytraFlyingUtils {
 
     @SuppressWarnings("DataFlowIssue")
     public static boolean isElytraFlying(@NotNull EntityLivingBase entity) {
         ItemStack itemstack = entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+        if (isFlying(entity, itemstack)) {
+            return true;
+        }
+        if (ModuleManager.getInstance().isModuleEnabled(SuSyModules.MODULE_BAUBLES)) {
+            itemstack = BaublesModule.getElytraBauble(entity);
+            return isFlying(entity, itemstack);
+        }
+        return false;
+    }
+
+    public static boolean isFlying(@NotNull EntityLivingBase entity, ItemStack itemstack) {
         if (itemstack.hasCapability(SuSyCapabilities.ELYTRA_FLYING_PROVIDER, null)) {
             return itemstack.getCapability(SuSyCapabilities.ELYTRA_FLYING_PROVIDER, null).isElytraFlying(
                     entity, itemstack,

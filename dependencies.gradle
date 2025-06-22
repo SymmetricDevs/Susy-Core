@@ -37,7 +37,7 @@ dependencies {
 
     compileOnly rfg.deobf('curse.maven:biomes-o-plenty-220318:2842510')
 
-    implementation rfg.deobf('curse.maven:gregtech-food-option-477021:5500516') // GT-FO 1.11.3
+    implementation rfg.deobf("curse.maven:gregtech-food-option-477021:6147619") // GT-FO 1.12.4
 
     implementation rfg.deobf('curse.maven:applecore-224472:2969118')
 

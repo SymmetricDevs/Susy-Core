@@ -22,6 +22,9 @@ public class SuSyFluidTooltipLoader {
         Supplier<List<String>> gasVoidableTooltip = () -> Lists.newArrayList(TextFormatting.YELLOW + I18n.format("susy.fluid.voiding.gas"));
         Supplier<List<String>> flammableVoidableTooltip = () -> Lists.newArrayList(TextFormatting.YELLOW + I18n.format("susy.fluid.voiding.flammable"));
     
+        FluidTooltipUtil.registerTooltip(FluidRegistry.WATER, liquidVoidableTooltip);  
+        FluidTooltipUtil.registerTooltip(FluidRegistry.LAVA, liquidVoidableTooltip);   
+
         for (Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
             if (fluid instanceof AttributedFluid aFluid) {
                 FluidState state = aFluid.getState();

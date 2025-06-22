@@ -1,8 +1,14 @@
 package supersymmetry.common.item.armor;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
+import static net.minecraft.inventory.EntityEquipmentSlot.CHEST;
+import static supersymmetry.common.event.DimensionBreathabilityHandler.isInHazardousEnvironment;
 
 import java.util.List;
 
@@ -47,5 +53,17 @@ public class AdvancedBreathingTank extends AdvancedBreathingApparatus {
         return this.maxOxygen;
     }
 
+    @Override
+    public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
+        if (player.isInsideOfMaterial(Material.WATER)) {
+            if (getOxygen(player.getItemStackFromSlot(CHEST)) > 0) {
+                player.setAir(300);
+                if (!isInHazardousEnvironment(player)) {
+                    changeOxygen(player.getItemStackFromSlot(CHEST), (-1f) / 20);
+                    // assuming that if its hazardous the player is already breathing with the suit
+                }
+            }
+        }
+    }
 
 }

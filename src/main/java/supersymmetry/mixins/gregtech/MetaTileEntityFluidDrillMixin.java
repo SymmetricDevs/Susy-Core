@@ -6,6 +6,8 @@ import gregtech.common.metatileentities.multi.electric.MetaTileEntityFluidDrill;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+
 @Mixin(value = MetaTileEntityFluidDrill.class, remap = false)
 public abstract class MetaTileEntityFluidDrillMixin extends MultiblockWithDisplayBase {
 
@@ -22,6 +25,7 @@ public abstract class MetaTileEntityFluidDrillMixin extends MultiblockWithDispla
         super(metaTileEntityId);
     }
 
+    @SideOnly(Side.CLIENT)
     @Inject(method = "addInformation", at = @At("TAIL"))
     public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, boolean advanced, CallbackInfo ci) {
         super.addInformation(stack, player, tooltip, advanced);
