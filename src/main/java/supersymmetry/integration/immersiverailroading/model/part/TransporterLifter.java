@@ -9,24 +9,22 @@ import util.Matrix4;
 
 import java.util.function.Function;
 
+public class TransporterLifter {
 
-public class Rocket {
+    public static final String LIFTER_COMPONENT_REGEX = ".*LIFTER*.";
 
-    public static final String ROCKET_COMPONENT_REGEX = ".*ROCKET*.";
-    protected final ModelComponent rocket;
+    protected final ModelComponent lifter;
 
-    public Rocket(ComponentProvider provider, ModelState state, Function<EntityTransporterErector, Boolean> renderRocket, Function<EntityTransporterErector, Float> lifterAngle) {
-        this.rocket = ModelHelper.parseCustomComponent(provider, ROCKET_COMPONENT_REGEX);
-        state.push(settings -> settings.add((ModelState.GroupVisibility) (stock, string) ->
-                rocket.modelIDs.contains(string) ?
-                        stock instanceof EntityTransporterErector transporterErector && renderRocket.apply(transporterErector)
-                        : null).add((ModelState.Animator) (stock, partialTicks) ->
+    public TransporterLifter(ComponentProvider provider, ModelState state, Function<EntityTransporterErector, Float> lifterAngle) {
+        this.lifter = ModelHelper.parseCustomComponent(provider, LIFTER_COMPONENT_REGEX);
+        state.push(settings -> settings.add((ModelState.Animator) (stock, partialTicks) ->
                 new Matrix4()
                         .translate(-7, 1.1, 0)
                         .rotate(stock instanceof EntityTransporterErector transporterErector ?
                                         lifterAngle.apply(transporterErector) : 0,
                                 0, 0, 1)
                         .translate(+7, -1.1, 0))
-        ).include(rocket);
+        ).include(lifter);
     }
+
 }
