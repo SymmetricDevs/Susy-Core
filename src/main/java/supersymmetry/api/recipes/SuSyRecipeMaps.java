@@ -304,7 +304,7 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.MINER);
 
-    public static final RecipeMap<DronePadRecipeBuilder> DRONE_PAD = new RecipeMap<>("drone_pad", 4, 9, 0, 0, new DronePadRecipeBuilder(), false);
+    public static final RecipeMap<DimensionRecipeBuilder> DRONE_PAD = new RecipeMap<>("drone_pad", 4, 9, 0, 0, new DimensionRecipeBuilder(), false);
 
     public static final RecipeMap<SimpleRecipeBuilder> BLENDER_RECIPES = new RecipeMap<>("blender", 9, 1, 6, 2, new SimpleRecipeBuilder().EUt(VA[LV]), false)
             .setSlotOverlay(false, false, false, GuiTextures.MOLECULAR_OVERLAY_1)
@@ -351,7 +351,7 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> MILLING_RECIPES = new RecipeMap<>("milling", 2, 1, 0, 0, new SimpleRecipeBuilder().EUt(VA[LV]), false)
             .setSound(GTSoundEvents.CUT);
 
-    public static final RecipeMap<SimpleRecipeBuilder> QUARRY_RECIPES = new RecipeMap<>("quarry", 1, 9, 0, 0, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<DimensionRecipeBuilder> QUARRY_RECIPES = new RecipeMap<>("quarry", 1, 9, 0, 0, new DimensionRecipeBuilder(), false)
             .setSound(GTSoundEvents.MINER);
 
     static {
