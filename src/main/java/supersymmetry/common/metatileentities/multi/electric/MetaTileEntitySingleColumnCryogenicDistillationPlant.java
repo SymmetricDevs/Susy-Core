@@ -101,6 +101,11 @@ public class MetaTileEntitySingleColumnCryogenicDistillationPlant extends MetaTi
     protected ICubeRenderer getFrontOverlay() {
         return Textures.BLAST_FURNACE_OVERLAY;
     }
+    
+    @Override
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
 
     @Override
     public void setReceiver(@NotNull ICryogenicReceiver receiver) {
