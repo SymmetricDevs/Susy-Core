@@ -1,6 +1,7 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
 import gregtech.common.blocks.StoneVariantBlock;
+import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -15,16 +16,36 @@ import gregtech.common.blocks.BlockBoilerCasing.BoilerCasingType;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.metatileentity.multiblock.CachedPatternRecipeMapMultiblock;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.client.renderer.particles.SusyParticleDust;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 
+import java.util.Random;
+
 public class MetaTileEntityNaturalDraftCoolingTower extends CachedPatternRecipeMapMultiblock {
+
+    private static final String[][] VAPOR_PATTERN = {{
+            "  VVV",
+            " VVVVV",
+            "VVVVVVV",
+            "VVVVVVV",
+            "VVVVVVV",
+            " VVVVV",
+            "  VVV"
+    }};
+
+    private static final Vec3i PATTERN_OFFSET = new Vec3i(-8, 14, 4);
+
 
     public MetaTileEntityNaturalDraftCoolingTower(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.NATURAL_DRAFT_COOLING_TOWER);
@@ -87,13 +108,34 @@ public class MetaTileEntityNaturalDraftCoolingTower extends CachedPatternRecipeM
 
     @Override
     protected String[][] getPattern() {
-        //TODO
-        return new String[0][];
+        return VAPOR_PATTERN;
     }
 
     @Override
     protected Vec3i getPatternOffset() {
-        //TODO
-        return new Vec3i(0, 0, 0);
+        return PATTERN_OFFSET;
+    }
+
+    @Override
+    public void update() {
+        super.update();
+        if (this.isActive() && getWorld().isRemote)
+            createParticles();
+
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void createParticles() {
+        Random rand = getWorld().rand;
+        if (cachedPattern == null || cachedPattern.length == 0) generateCachedPattern(getPattern(), getPatternOffset(), this.frontFacing, isFlipped());
+        for (Vec3i offset : cachedPattern) {
+
+            BlockPos pos = this.getPos().add(offset);
+
+            this.getWorld().spawnParticle(EnumParticleTypes.CLOUD,
+                    pos.getX() + rand.nextDouble(),
+                    pos.getY() + .5F,
+                    pos.getZ() + rand.nextDouble(), .1F, .3F, .1F);
+        }
     }
 }
