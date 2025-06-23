@@ -1,4 +1,4 @@
-package supersymmetry.common.metatileentities.single.rocket;
+package supersymmetry.common.metatileentities.multiblockpart;
 
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
@@ -571,6 +571,8 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         } else if (block.equals(SuSyBlocks.TANK_SHELL)) {
             return 25 + 50 * switch ((BlockTankShell.TankCoverType)variant) {
                 case TANK_SHELL -> 5;
+                case STEEL_SHELL -> 8;
+                case CARBON_COMPOSITE -> 4.5;
             };
         } else if (block.equals(SuSyBlocks.ROCKET_NOZZLE)) {
             return 500 + 100*switch ((BlockRocketNozzle.NozzleShapeType)variant) {

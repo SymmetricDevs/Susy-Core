@@ -26,7 +26,9 @@ public class BlockTankShell extends VariantDirectionalCoverableBlock<BlockTankSh
 
 
     public enum TankCoverType implements IStringSerializable, IStateHarvestLevel {
-        TANK_SHELL("al_2219",2);
+        TANK_SHELL("al_2219",2),
+        STEEL_SHELL("steel", 3),
+        CARBON_COMPOSITE("carb_composite", 4);
 
         private String name;
         private int harvestLevel;

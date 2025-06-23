@@ -29,7 +29,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
-import supersymmetry.common.metatileentities.single.rocket.MetaTileEntityComponentScanner;
+import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityComponentScanner;
 
 import java.util.ArrayList;
 import java.util.Arrays;

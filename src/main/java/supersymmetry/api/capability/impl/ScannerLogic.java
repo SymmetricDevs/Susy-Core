@@ -1,15 +1,13 @@
 package supersymmetry.api.capability.impl;
 
 import gregtech.api.capability.GregtechDataCodes;
-import gregtech.api.capability.impl.AbstractRecipeLogic;
-import gregtech.api.capability.impl.RecipeLogicEnergy;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.common.ConfigHolder;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.common.metatileentities.single.rocket.MetaTileEntityComponentScanner;
+import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityComponentScanner;
 
 public class ScannerLogic {
     private int progressTime = 0;
