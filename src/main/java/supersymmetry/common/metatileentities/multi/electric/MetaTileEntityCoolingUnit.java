@@ -1,5 +1,7 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import net.minecraft.init.Blocks;
+
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -18,6 +20,7 @@ import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.blocks.SuSyBlocks;
 
 public class MetaTileEntityCoolingUnit extends RecipeMapMultiblockController {
 
@@ -38,23 +41,31 @@ public class MetaTileEntityCoolingUnit extends RecipeMapMultiblockController {
     @Override
     protected BlockPattern createStructurePattern() {
         // Different characters use common constraints. Copied from GCyM
-        TraceabilityPredicate casingPredicate = states(getCasingState()).setMinGlobalLimited(270);
 
         return FactoryBlockPattern.start()
-                .aisle("AAAAAAA", "AAAAAAA", "AAAAAAA", "AAAAAAA", "AADDDAA", "AAAAAAA", "AAAAAAA", "AAAAAAA", "AAAAAAA", "       ", "  EEE  ")
-                .aisle("AAAAAAA", "A#####A", "A#####A", "A#####A", "A#####A", "A#####A", "A#####A", "A#####A", "AAAAAAA", " EEEEE ", " EEEEE ")
-                .aisle("AAAAAAA", "A##B##A", "A##B##A", "A##B##A", "D##B##D", "A##B##A", "A##B##A", "A##B##A", "AAAAAAA", " E   E ", "EE C EE")
-                .aisle("AAAAAAA", "A#BDB#A", "A#BDB#A", "A#BDB#A", "D#BDB#D", "A#BDB#A", "A#BDB#A", "A#BDB#A", "AAAAAAA", " E C E ", "EECCCEE")
-                .aisle("AAAAAAA", "A##B##A", "A##B##A", "A##B##A", "D##B##D", "A##B##A", "A##B##A", "A##B##A", "AAAAAAA", " E   E ", "EE C EE")
-                .aisle("AAAAAAA", "A#####A", "A#####A", "A#####A", "A#####A", "A#####A", "A#####A", "A#####A", "AAAAAAA", " EEEEE ", " EEEEE ")
-                .aisle("AAASAAA", "AAAAAAA", "AAAAAAA", "AAAAAAA", "AADDDAA", "AAAAAAA", "AAAAAAA", "AAAAAAA", "AAAAAAA", "       ", "  EEE  ")
+                .aisle("     CCCCC     ", "     CCCCC     ", , "     CCCCC     ", "               ", "               ", "                ", "                ", "                ", "                ", "                ", "                ", "                ", "                ", "                ", "                ", "                ")
+                .aisle("   CCCCCCCCC   ", "   CCWWWWWCC   ", , "   CCCCCCCCC   ", "     FFFFF     ", "               ", "                ", "                ", "                ", "                ", "                ", "                ", "                ", "                ", "                ", "                ", "                ")
+                .aisle("  CCCCCCCCCCC  ", "  CWWWWWWWWWC  ", , "  CC#######CC  ", "   FF#####FF   ", "     CCCCC     ", "      CCICC     ", "       CCC      ", "                ", "                ", "                ", "                ", "                ", "                ", "                ", "                ", "                ")
+                .aisle(" CCCCCCCCCCCCC ", " CWWWWWWWWWWWC ", , " CC#########CC ", "  F#########F  ", "   CCAAAAACC   ", "     C#P#P#C    ", "      C###C     ", "      CCCCC     ", "       CCC      ", "                ", "                ", "                ", "                ", "       CCC      ", "      CCCCC     ", "      CCCCC     ")
+                .aisle(" CCCCCCCCCCCCC ", " CWWWWWWWWWWWC ", , " CC#########CC ", "  F#########F  ", "   CAAAAAAAC   ", "    CPPPPPPPC   ", "     C#####C    ", "     CCCCCCC    ", "      CCCCC     ", "       CCC      ", "       CCC      ", "       CCC      ", "      CCCCC     ", "      CCCCC     ", "     CC###CC    ", "     CC###CC    ")
+                .aisle("CCCCCCCCCCCCCCC", "CWWWWWWWWWWWWWC", , "CC###########CC", " F###########F ", "  CAAAAAAAAAC  ", "   C#P#P#P#P#C  ", "    C#######C   ", "    CCFFFFFCC   ", "     CC###CC    ", "      C###C     ", "      C###C     ", "      C###C     ", "     CC###CC    ", "     CC###CC    ", "    CC#####CC   ", "    CC#####CC   ")
+                .aisle("CCCCCCCCCCCCCCC", "CWWWWWWWWWWWWWC", , "CC###########CC", " F###########F ", "  CAAAAAAAAAC  ", "   CPPPPPPPPPC  ", "   C#########C  ", "    CCFFFFFCC   ", "    CC#####CC   ", "     C#####C    ", "     C#####C    ", "     C#####C    ", "     C#####C    ", "    CC#####CC   ", "    C#######C   ", "    C#######C   ")
+                .aisle("CCCCCCCCCCCCCCC", "CWWWWWWWWWWWWWC", , "CC###########CC", " F###########F ", "  CAAAAAAAAAC  ", "   I#P#P#P#P#I  ", "   C#########C  ", "    CCFFFFFCC   ", "    CC#####CC   ", "     C#####C    ", "     C#####C    ", "     C#####C    ", "     C#####C    ", "    CC#####CC   ", "    C#######C   ", "    C#######C   ")
+                .aisle("CCCCCCCCCCCCCCC", "CWWWWWWWWWWWWWC", , "CC###########CC", " F###########F ", "  CAAAAAAAAAC  ", "   CPPPPPPPPPC  ", "   C#########C  ", "    CCFFFFFCC   ", "    CC#####CC   ", "     C#####C    ", "     C#####C    ", "     C#####C    ", "     C#####C    ", "    CC#####CC   ", "    C#######C   ", "    C#######C   ")
+                .aisle("CCCCCCCCCCCCCCC", "CWWWWWWWWWWWWWC", , "CC###########CC", " F###########F ", "  CAAAAAAAAAC  ", "   C#P#P#P#P#C  ", "    C#######C   ", "    CCFFFFFCC   ", "     CC###CC    ", "      C###C     ", "      C###C     ", "      C###C     ", "     CC###CC    ", "     CC###CC    ", "    CC#####CC   ", "    CC#####CC   ")
+                .aisle(" CCCCCCCCCCCCC ", " CWWWWWWWWWWWC ", , " CC#########CC ", "  F#########F  ", "   CAAAAAAAC   ", "    CPPPPPPPC   ", "     C#####C    ", "     CCCCCCC    ", "      CCCCC     ", "       CCC      ", "       CCC      ", "       CCC      ", "      CCCCC     ", "      CCCCC     ", "     CC###CC    ", "     CC###CC    ")
+                .aisle(" CCCCCCCCCCCCC ", " CWWWWWWWWWWWC ", , " CC#########CC ", "  F#########F  ", "   CCAAAAACC   ", "     C#P#P#C    ", "      C###C     ", "      CCCCC     ", "       CCC      ", "                ", "                ", "                ", "                ", "       CCC      ", "       CCC      ", "       CCC      ")
+                .aisle("  CCCCCCCCCCP  ", "  CWWWWWWWWWC  ", , "  CC#######CC  ", "   FF#####FF   ", "     CCCCC     ", "      CCICC     ", "       CCC      ", "                ", "                ", "                ", "                ", "                ", "                ", "                ", "                ", "                ")
+                .aisle("   CCCCCCCCCP ", "    CCWWWWWCC   ", , "   CCCCCCCCC   ", "     FFFFF     ", "               ", "                ", "                ", "                ", "                ", "                ", "                ", "                ", "                ", "                ", "                ", "                ")
+                .aisle("     CCCCC OOO ", "     CCCCC OSO ", , "     CCCCC     ", "               ", "               ", "                ", "                ", "                ", "                ", "                ", "                ", "                ", "                ", "                ", "                ", "                ")
                 .where('S', selfPredicate())
-                .where('A', casingPredicate
-                        .or(autoAbilities(true, true, true, true, true, true, false)))
-                .where('B', frames(Materials.Steel))
-                .where('C', frames(Materials.StainlessSteel))
-                .where('D', states(MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE)))
-                .where('E', casingPredicate)
+                .where('O', getCasingState().or(autoAbilities(true, true, false, false, false, true, false)))
+                .where('I', getCasingState().or(autoAbilities(false, false, false, false, true, false, false)))
+                .where('C', states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)))
+                .where('W', blocks(Blocks.WATER))
+                .where('F', frames(Materials.Steel))
+                .where('A', states(SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.STRUCTURAL_PACKING)))
+                .where('P', states(MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE)))
                 .where(' ', any())
                 .where('#', air())
                 .build();
