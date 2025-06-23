@@ -1,7 +1,6 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
 import gregtech.api.GTValues;
-import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.Widget;
 import gregtech.api.gui.widgets.ImageCycleButtonWidget;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -29,6 +28,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.capability.impl.QuarryLogic;
+import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.properties.DimensionProperty;
 
@@ -37,7 +37,8 @@ import java.util.List;
 
 import static gregtech.api.capability.GregtechDataCodes.assignId;
 
-/**
+/** The quarry multiblock is a regular {@link RecipeMapMultiblockController}, with an additional mode similar to {@link gregtech.common.metatileentities.multi.electric.MetaTileEntityLargeMiner} that allows from breaking block in game.
+ * For this it uses {@link QuarryLogic}
  * @author h3tR / RMI
  */
 
@@ -46,7 +47,6 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
     private static final int BASE_TICKS_PER_EXCAVATION = 10;
 
     private static final int QUARRY_EXCAVATION_ACTIVE = assignId();
-    private static final int QUARRY_MODE = assignId();
 
     private boolean isInitialized = false;
 
@@ -135,15 +135,13 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
 
     @Override
     protected @NotNull Widget getFlexButton(int x, int y, int width, int height) {
-        //TODO: custom icons
-        return new ImageCycleButtonWidget(x, y, width, height, GuiTextures.BUTTON_MINER_MODES, 2, () -> this.excavationMode ? 1 : 0,
+        return new ImageCycleButtonWidget(x, y, width, height, SusyGuiTextures.BUTTON_QUARRY_MODES, 2, () -> this.excavationMode ? 1 : 0,
                 this::setExcavationMode)
-                .setTooltipHoverString(this.excavationMode ? "susy.multiblock.quarry.excavation_mode" : "susy.multiblock.quarry.recipe_mode");
+                .setTooltipHoverString(mode -> mode == 1 ? "susy.multiblock.quarry.excavation_mode" : "susy.multiblock.quarry.recipe_mode");
     }
 
     private void setExcavationMode(int mode) {
         this.excavationMode = mode == 1;
-        writeCustomData(QUARRY_MODE, buf -> buf.writeBoolean(this.excavationMode));
         if(this.excavationMode)
             this.quarryLogic.init(); //reset quarrylogic
     }
@@ -189,8 +187,7 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
     }
 
     public int getTicksPerExcavation(){
-        //TODO energy scaling
-        return BASE_TICKS_PER_EXCAVATION;
+        return (int) (BASE_TICKS_PER_EXCAVATION / Math.pow(2,getEnergyTier() - 1));
     }
 
     //cap to EV tier
@@ -233,8 +230,6 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
     public void receiveCustomData(int dataId, PacketBuffer buf) {
         if (dataId == QUARRY_EXCAVATION_ACTIVE)
             excavationActive = buf.readBoolean();
-        if(dataId == QUARRY_MODE)
-            excavationMode = buf.readBoolean();
         super.receiveCustomData(dataId, buf);
     }
 
