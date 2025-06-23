@@ -4,10 +4,10 @@ import gregtech.api.GTValues;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.Widget;
 import gregtech.api.gui.widgets.ImageCycleButtonWidget;
-import gregtech.api.metatileentity.MTETrait;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
+import gregtech.api.metatileentity.multiblock.MultiblockDisplayText;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
@@ -24,13 +24,18 @@ import gregtech.common.blocks.StoneVariantBlock;
 import it.unimi.dsi.fastutil.ints.IntLists;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.capability.impl.QuarryLogic;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.properties.DimensionProperty;
 
 import javax.annotation.Nonnull;
+import java.util.List;
+
+import static gregtech.api.capability.GregtechDataCodes.assignId;
 
 /**
  * @author h3tR / RMI
@@ -40,9 +45,13 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
 
     private static final int BASE_TICKS_PER_EXCAVATION = 10;
 
+    private static final int QUARRY_EXCAVATION_ACTIVE = assignId();
+    private static final int QUARRY_MODE = assignId();
+
     private boolean isInitialized = false;
 
     private boolean excavationMode = false;
+    private boolean excavationActive = false;
     private int excavationProgress = 0;
     private final QuarryLogic quarryLogic;
 
@@ -128,36 +137,56 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
     protected @NotNull Widget getFlexButton(int x, int y, int width, int height) {
         //TODO: custom icons
         return new ImageCycleButtonWidget(x, y, width, height, GuiTextures.BUTTON_MINER_MODES, 2, () -> this.excavationMode ? 1 : 0,
-                this::setExcavationMode);
+                this::setExcavationMode)
+                .setTooltipHoverString(this.excavationMode ? "susy.multiblock.quarry.excavation_mode" : "susy.multiblock.quarry.recipe_mode");
     }
 
     private void setExcavationMode(int mode) {
         this.excavationMode = mode == 1;
+        writeCustomData(QUARRY_MODE, buf -> buf.writeBoolean(this.excavationMode));
         if(this.excavationMode)
             this.quarryLogic.init(); //reset quarrylogic
     }
 
-
     @Override
-    protected boolean shouldUpdate(MTETrait trait) {
-        //Ignore recipe if set inactive
-        //this might be kinda hacky, but it works
-        if(trait == this.recipeMapWorkable)
-            return !this.excavationMode;
-        return super.shouldUpdate(trait);
-    }
+    protected void updateFormedValid() {
+        if(getWorld().isRemote || !this.recipeMapWorkable.isWorkingEnabled()) return;
 
-    @Override
-    public void update() {
-        super.update();
-        if (!this.getWorld().isRemote && this.excavationMode && !this.quarryLogic.finished && this.drainEnergy(true) && this.recipeMapWorkable.isWorkingEnabled()){
+        if (this.excavationMode && !this.quarryLogic.finished && this.drainEnergy(true) && this.getNumMaintenanceProblems() <= 5){
             this.drainEnergy(false);
             excavationProgress++;
+            if(!excavationActive) toggleExcavationActive();
+
             if (excavationProgress % getTicksPerExcavation() == 0)
                 this.quarryLogic.doQuarryOperation();
+        } else{
+            if(excavationActive) toggleExcavationActive();
+
+            this.recipeMapWorkable.updateWorkable();
         }
     }
 
+    private void toggleExcavationActive(){
+        excavationActive = !excavationActive;
+        writeCustomData(QUARRY_EXCAVATION_ACTIVE, buf -> buf.writeBoolean(excavationActive));
+    }
+
+    @Override
+    protected void addDisplayText(List<ITextComponent> textList) {
+        if(excavationMode)
+            MultiblockDisplayText.builder(textList, isStructureFormed())
+                    .setWorkingStatus(recipeMapWorkable.isWorkingEnabled(), excavationActive)
+                    .addEnergyUsageLine(recipeMapWorkable.getEnergyContainer())
+                    .addWorkingStatusLine();
+        else
+            MultiblockDisplayText.builder(textList, isStructureFormed())
+                .setWorkingStatus(recipeMapWorkable.isWorkingEnabled(), recipeMapWorkable.isActive())
+                .addEnergyUsageLine(recipeMapWorkable.getEnergyContainer())
+                .addEnergyTierLine(GTUtility.getTierByVoltage(recipeMapWorkable.getMaxVoltage()))
+                .addParallelsLine(recipeMapWorkable.getParallelLimit())
+                .addWorkingStatusLine()
+                .addProgressLine(recipeMapWorkable.getProgressPercent());
+    }
 
     public int getTicksPerExcavation(){
         //TODO energy scaling
@@ -187,6 +216,7 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
         this.quarryLogic.readFromNBT(data.getCompoundTag("quarryLogic"));
         this.excavationMode = data.getBoolean("excavationMode");
         this.excavationProgress = data.getInteger("excavationProgress");
+        this.excavationActive = data.getBoolean("excavationActive");
         this.isInitialized = true;
     }
 
@@ -195,6 +225,35 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
         data.setTag("quarryLogic", this.quarryLogic.writeToNBT());
         data.setBoolean("excavationMode", this.excavationMode);
         data.setInteger("excavationProgress", this.excavationProgress);
+        data.setBoolean("excavationActive", this.excavationActive);
         return super.writeToNBT(data);
+    }
+
+    @Override
+    public void receiveCustomData(int dataId, PacketBuffer buf) {
+        if (dataId == QUARRY_EXCAVATION_ACTIVE)
+            excavationActive = buf.readBoolean();
+        if(dataId == QUARRY_MODE)
+            excavationMode = buf.readBoolean();
+        super.receiveCustomData(dataId, buf);
+    }
+
+    @Override
+    public void writeInitialSyncData(PacketBuffer buf) {
+        buf.writeBoolean(excavationActive);
+        buf.writeBoolean(excavationMode);
+        super.writeInitialSyncData(buf);
+    }
+
+    @Override
+    public void receiveInitialSyncData(PacketBuffer buf) {
+        excavationActive = buf.readBoolean();
+        excavationMode = buf.readBoolean();
+        super.receiveInitialSyncData(buf);
+    }
+
+    @Override
+    public boolean isActive() {
+        return (super.isActive() && !excavationMode) || excavationActive;
     }
 }

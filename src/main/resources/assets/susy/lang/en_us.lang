@@ -984,6 +984,10 @@ susy.fluid.voiding.liquid=Voidable with Dumper
 susy.fluid.voiding.gas=Voidable with Smoke Stack
 susy.fluid.voiding.flammable=Voidable with Flare Stack
 
+# Quarry Modes
+susy.multiblock.quarry.excavation_mode=Excavation Mode
+susy.multiblock.quarry.recipe_mode=Recipe Mode
+
 death.attack.toxic_atmo=%s's lungs were shredded
 death.attack.suffocation=%s couldn't breathe
 
