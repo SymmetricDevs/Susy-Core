@@ -24,15 +24,15 @@ import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 
-public class MetaTileEntityCoolingUnit extends CachedPatternRecipeMapMultiblock {
+public class MetaTileEntityNaturalDraftCoolingTower extends CachedPatternRecipeMapMultiblock {
 
-    public MetaTileEntityCoolingUnit(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SuSyRecipeMaps.COOLING_UNIT_RECIPES);
+    public MetaTileEntityNaturalDraftCoolingTower(ResourceLocation metaTileEntityId) {
+        super(metaTileEntityId, SuSyRecipeMaps.NATURAL_DRAFT_COOLING_TOWER);
     }
 
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
-        return new MetaTileEntityCoolingUnit(metaTileEntityId);
+        return new MetaTileEntityNaturalDraftCoolingTower(metaTileEntityId);
     }
 
     protected static IBlockState getCasingState() {
@@ -81,7 +81,7 @@ public class MetaTileEntityCoolingUnit extends CachedPatternRecipeMapMultiblock 
     @NotNull
     @Override
     protected ICubeRenderer getFrontOverlay() {
-        return SusyTextures.COOLING_UNIT_OVERLAY;
+        return SusyTextures.NATURAL_DRAFT_COOLING_TOWER_OVERLAY;
     }
 
 

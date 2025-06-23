@@ -170,11 +170,7 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_EXTRACT, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.MACERATOR);
 
-    public static final RecipeMap<SimpleRecipeBuilder> COOLING_TOWER_RECIPES = new RecipeMap<>("cooling_tower", 0, 0, 2, 2, new SimpleRecipeBuilder(), false)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressWidget.MoveType.HORIZONTAL)
-            .setSound(GTSoundEvents.COOLING);
-
-    public static final RecipeMap<SimpleRecipeBuilder> COOLING_UNIT_RECIPES = new RecipeMap<>("cooling_unit", 0, 0, 1, 1, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<SimpleRecipeBuilder> NATURAL_DRAFT_COOLING_TOWER = new RecipeMap<>("natural_draft_cooling_tower", 0, 0, 1, 1, new SimpleRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.COOLING);
 
