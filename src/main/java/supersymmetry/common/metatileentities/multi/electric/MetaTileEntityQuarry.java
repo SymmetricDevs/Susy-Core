@@ -249,6 +249,6 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
 
     @Override
     public boolean isActive() {
-        return (super.isActive() && !excavationMode) || excavationActive;
+        return (super.isActive() && !excavationMode) || (excavationActive && this.isStructureFormed() && this.recipeMapWorkable.isWorkingEnabled());
     }
 }
