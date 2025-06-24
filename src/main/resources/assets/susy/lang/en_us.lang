@@ -126,6 +126,8 @@ tile.susy_stone_smooth.slate.name=Slate
 tile.susy_stone_smooth.soapstone.name=Soapstone
 tile.susy_stone_smooth.kimberlite.name=Kimberlite
 tile.susy_stone_smooth.industrial_concrete.name=Industrial Concrete
+tile.susy_stone_smooth.minitary_concrete.name=Military Concrete
+
 tile.susy_stone_cobble.gabbro.name=Gabbro Cobblestone
 tile.susy_stone_cobble.gneiss.name=Gneiss Cobblestone
 tile.susy_stone_cobble.graphite.name=Graphite Cobblestone
@@ -138,6 +140,8 @@ tile.susy_stone_cobble.slate.name=Slate Cobblestone
 tile.susy_stone_cobble.soapstone.name=Soapstone Cobblestone
 tile.susy_stone_cobble.kimberlite.name=Kimberlite Cobblestone
 tile.susy_stone_cobble.industrial_concrete.name=Industrial Concrete Cobblestone
+tile.susy_stone_cobble.minitary_concrete.name=Military Concrete Cobblestone
+
 tile.susy_stone_bricks.gabbro.name=Gabbro Bricks
 tile.susy_stone_bricks.gneiss.name=Gneiss Bricks
 tile.susy_stone_bricks.graphite.name=Graphite Bricks
@@ -150,6 +154,7 @@ tile.susy_stone_bricks.slate.name=Slate Bricks
 tile.susy_stone_bricks.soapstone.name=Soapstone Bricks
 tile.susy_stone_bricks.kimberlite.name=Kimberlite Bricks
 tile.susy_stone_bricks.industrial_concrete.name=Industrial Concrete Bricks
+tile.susy_stone_bricks.minitary_concrete.name=Military Concrete Bricks
 
 # Materials
 susy.material.manganese_iron_arsenic_phosphide=Manganese Iron Arsenic Phosphide
@@ -249,7 +254,7 @@ gregtech.machine.fermentation_vat.name=Fermentation Vat
 gregtech.machine.ore_sorter.name=Ore Sorter
 gregtech.machine.gravity_separator.name=Gravity Separator
 gregtech.machine.condenser.name=Condenser
-gregtech.machine.cooling_unit.name=Cooling Unit
+gregtech.machine.natural_draft_cooling_tower.name=Natural Draft Cooling Tower
 gregtech.machine.gas_turbine.name=Gas Turbine
 gregtech.machine.heat_exchanger.name=Heat Exchanger
 gregtech.machine.heat_radiator.name=Heat Radiator
@@ -286,6 +291,10 @@ gregtech.multiblock.strand_casting.no_strand=No strand detected
 gregtech.multiblock.strand_casting.output_detected=Strand found only in the output slot
 gregtech.multiblock.strand_casting.ore_prefix=Will output a: %s
 gregtech.multiblock.strand_casting.no_conversion=Currently not a valid item!
+
+susy.multiblock.natural_draft_cooling_tower.obstructed=The cold water basin is not filled!
+susy.multiblock.natural_draft_cooling_tower.obstructed.desc=The cold water basin must be filled with water for the Cooling Tower to operate.
+
 supersymmetry.prefix.stick=Rod
 supersymmetry.prefix.ingot=Ingot
 supersymmetry.prefix.platedense=Dense Plate
@@ -776,7 +785,7 @@ recipemap.ion_implantation.name=Ion Implantation
 recipemap.cvd.name=Chemical Vapor Deposition
 recipemap.ore_sorter.name=Ore Sorting
 recipemap.cooling_tower.name=Cooling Tower
-recipemap.cooling_unit.name=Cooling Unit
+recipemap.natural_draft_cooling_tower.name=Natural Draft Cooling Tower
 recipemap.fluid_decompressor.name=Fluid Decompressing
 recipemap.fluid_compressor.name=Fluid Compressing
 recipemap.heat_exchanger.name=Heat Exchanging
@@ -1090,6 +1099,9 @@ tile.hardened_blocks.lair10.name=Hardened Lair 10
 tile.hardened_blocks.lair11.name=Hardened Lair 11
 tile.hardened_blocks.kryp7.name=Hardened Kryp 7
 tile.hardened_blocks.kryp8.name=Hardened Kryp 8
+tile.hardened_blocks1.industrial_concrete_hardened.name=Federation Grade Industrial Concrete
+tile.hardened_blocks1.military_concrete_hardened.name=Federation Grade Military Concrete
+tile.hardened_blocks1.military_concrete_cobblestone_hardened.name=Federation Grade Military Concrete Cobblestone
 
 #Custom Sheets
 tile.custom_sheets.darkwhitemetalsheet.name=Darker White Metal Sheet

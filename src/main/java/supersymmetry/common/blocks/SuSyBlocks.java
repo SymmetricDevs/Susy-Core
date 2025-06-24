@@ -42,6 +42,7 @@ public class SuSyBlocks {
     public static BlockSuSyMultiblockCasing MULTIBLOCK_CASING;
     public static BlockSerpentine SERPENTINE;
     public static BlocksHardened HARDBLOCKS;
+    public static BlocksHardened1 HARDBLOCKS1;
     public static BlocksCustomSheets CUSTOMSHEETS;
     public static BlockMetallurgy METALLURGY;
     public static BlockMetallurgy2 METALLURGY_2;
@@ -115,6 +116,9 @@ public class SuSyBlocks {
         HARDBLOCKS = new BlocksHardened();
         HARDBLOCKS.setRegistryName("hardened_blocks");
 
+        HARDBLOCKS1 = new BlocksHardened1();
+        HARDBLOCKS1.setRegistryName("hardened_blocks1");
+
         CUSTOMSHEETS = new BlocksCustomSheets();
         CUSTOMSHEETS.setRegistryName("custom_sheets");
 
@@ -158,6 +162,7 @@ public class SuSyBlocks {
         registerItemModel(MULTIBLOCK_CASING);
         SERPENTINE.onModelRegister();
         registerItemModel(HARDBLOCKS);
+        registerItemModel(HARDBLOCKS1);
         registerItemModel(CUSTOMSHEETS);
         registerItemModel(METALLURGY);
         registerItemModel(METALLURGY_2);

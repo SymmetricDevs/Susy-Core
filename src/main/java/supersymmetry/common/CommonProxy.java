@@ -146,6 +146,7 @@ public class CommonProxy {
         registry.register(SuSyBlocks.MULTIBLOCK_CASING);
         registry.register(SuSyBlocks.SERPENTINE);
         registry.register(SuSyBlocks.HARDBLOCKS);
+        registry.register(SuSyBlocks.HARDBLOCKS1);
         registry.register(SuSyBlocks.CUSTOMSHEETS);
         registry.register(SuSyBlocks.METALLURGY);
         registry.register(SuSyBlocks.METALLURGY_2);
@@ -183,6 +184,7 @@ public class CommonProxy {
         registry.register(createItemBlock(SuSyBlocks.MULTIBLOCK_CASING, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.SERPENTINE, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.HARDBLOCKS, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.HARDBLOCKS1, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.CUSTOMSHEETS, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.METALLURGY, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.METALLURGY_2, VariantItemBlock::new));

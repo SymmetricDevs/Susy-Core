@@ -14,8 +14,11 @@ import supersymmetry.loaders.recipes.handlers.RecyclingManager;
 @Mixin(value = OreDictUnifier.class, remap = false)
 public abstract class OreDictUnifierMixin {
 
-    /// @author Tian_mi
-    /// @reason Replace with our own implementation.
+
+    /**
+     * @author Tian_mi
+     * @reason Replace it with our own implementation.
+     */
     @Overwrite
     public static void registerOre(ItemStack itemStack, ItemMaterialInfo materialInfo) {
         RecyclingManager.registerOre(itemStack, materialInfo);

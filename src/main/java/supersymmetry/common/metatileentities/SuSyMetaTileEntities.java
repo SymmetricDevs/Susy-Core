@@ -125,7 +125,7 @@ public class SuSyMetaTileEntities {
 
     public static MetaTileEntityOreSorter ORE_SORTER;
     public static MetaTileEntityCondenser CONDENSER;
-    public static MetaTileEntityCoolingUnit COOLING_UNIT;
+    public static MetaTileEntityNaturalDraftCoolingTower NATURAL_DRAFT_COOLING_TOWER;
     public static MetaTileEntitySUSYLargeTurbine BASIC_GAS_TURBINE;
     public static MetaTileEntitySUSYLargeTurbine BASIC_STEAM_TURBINE;
     public static MetaTileEntitySUSYLargeTurbine LOW_PRESSURE_ADVANCED_STEAM_TURBINE;
@@ -321,7 +321,7 @@ public class SuSyMetaTileEntities {
         //mbd stuff
         ORE_SORTER = registerMetaTileEntity(15040, new MetaTileEntityOreSorter(susyId("ore_sorter")));
         CONDENSER = registerMetaTileEntity(15041, new MetaTileEntityCondenser(susyId("condenser")));
-        COOLING_UNIT = registerMetaTileEntity(15042, new MetaTileEntityCoolingUnit(susyId("cooling_unit")));
+        NATURAL_DRAFT_COOLING_TOWER = registerMetaTileEntity(15042, new MetaTileEntityNaturalDraftCoolingTower(susyId("natural_draft_cooling_tower")));
         HEAT_EXCHANGER = registerMetaTileEntity(15044, new MetaTileEntityHeatExchanger(susyId("heat_exchanger")));
         HEAT_RADIATOR = registerMetaTileEntity(15045, new MetaTileEntityHeatRadiator(susyId("heat_radiator")));
         LARGE_WEAPONS_FACTORY = registerMetaTileEntity(15046, new MetaTileEntityLargeWeaponsFactory(susyId("large_weapons_factory")));
