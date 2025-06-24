@@ -126,6 +126,8 @@ tile.susy_stone_smooth.slate.name=Slate
 tile.susy_stone_smooth.soapstone.name=Soapstone
 tile.susy_stone_smooth.kimberlite.name=Kimberlite
 tile.susy_stone_smooth.industrial_concrete.name=Industrial Concrete
+tile.susy_stone_smooth.minitary_concrete.name=Military Concrete
+
 tile.susy_stone_cobble.gabbro.name=Gabbro Cobblestone
 tile.susy_stone_cobble.gneiss.name=Gneiss Cobblestone
 tile.susy_stone_cobble.graphite.name=Graphite Cobblestone
@@ -138,6 +140,8 @@ tile.susy_stone_cobble.slate.name=Slate Cobblestone
 tile.susy_stone_cobble.soapstone.name=Soapstone Cobblestone
 tile.susy_stone_cobble.kimberlite.name=Kimberlite Cobblestone
 tile.susy_stone_cobble.industrial_concrete.name=Industrial Concrete Cobblestone
+tile.susy_stone_cobble.minitary_concrete.name=Military Concrete Cobblestone
+
 tile.susy_stone_bricks.gabbro.name=Gabbro Bricks
 tile.susy_stone_bricks.gneiss.name=Gneiss Bricks
 tile.susy_stone_bricks.graphite.name=Graphite Bricks
@@ -150,6 +154,7 @@ tile.susy_stone_bricks.slate.name=Slate Bricks
 tile.susy_stone_bricks.soapstone.name=Soapstone Bricks
 tile.susy_stone_bricks.kimberlite.name=Kimberlite Bricks
 tile.susy_stone_bricks.industrial_concrete.name=Industrial Concrete Bricks
+tile.susy_stone_bricks.minitary_concrete.name=Military Concrete Bricks
 
 # Materials
 susy.material.manganese_iron_arsenic_phosphide=Manganese Iron Arsenic Phosphide
@@ -1088,6 +1093,9 @@ tile.hardened_blocks.lair10.name=Hardened Lair 10
 tile.hardened_blocks.lair11.name=Hardened Lair 11
 tile.hardened_blocks.kryp7.name=Hardened Kryp 7
 tile.hardened_blocks.kryp8.name=Hardened Kryp 8
+tile.hardened_blocks1.industrial_concrete_hardened.name=Federation Grade Industrial Concrete
+tile.hardened_blocks1.military_concrete_hardened.name=Federation Grade Military Concrete
+tile.hardened_blocks1.military_concrete_cobblestone_hardened.name=Federation Grade Military Concrete Cobblestone
 
 #Custom Sheets
 tile.custom_sheets.darkwhitemetalsheet.name=Darker White Metal Sheet
