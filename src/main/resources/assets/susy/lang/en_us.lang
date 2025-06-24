@@ -26,6 +26,7 @@ tile.susy_multiblock_casing.structural_packing.name=Structural Packing
 tile.susy_multiblock_casing.ulv_structural_casing.name=Basic Structural Casing
 tile.susy_multiblock_casing.drone_pad.name=Drone Pad
 tile.susy_multiblock_casing.heavy_duty_pad.name=Heavy Duty Pad
+tile.susy_multiblock_casing.advanced_refractory_lining.name=Advanced Refractory Lining
 tile.rocket_assembler_casing.reinforced_foundation.name=Reinforced Foundation
 tile.rocket_assembler_casing.foundation.name=Rocket Assembler Foundation
 tile.rocket_assembler_casing.rails.name=Rocket Assembler Rails
@@ -157,6 +158,7 @@ susy.material.gadolinium_silicon_germanium=Gadolinium Silicon Germanium
 susy.material.latex=Latex
 susy.material.mud=Mud
 susy.material.sea_water=Sea Water
+susy.material.refractory_gunning_mixture=Refractory Gunning Mixture
 
 # Rock/Mineral Materials
 susy.material.fluorite=Fluorite
@@ -202,6 +204,7 @@ item.material.oreprefix.fiber=%s Fiber
 item.material.oreprefix.fiberWet=Wet %s Fiber
 item.material.oreprefix.thread=%s Thread
 item.material.oreprefix.dustWet=Wet %s Dust
+item.material.oreprefix.electrode=%s Electrode
 
 susy.fluid.supercritical=Supercritical %s
 susy.fluid.impure_slurry=Impure %s Slurry
@@ -277,6 +280,19 @@ gregtech.multiblock.evaporation_pool.exposed_blocks=Exposed Blocks: %s
 gregtech.multiblock.evaporation_pool.average_speed=Avg Speed: %sx
 susy.multiblock.pattern.error.coils_or_bed=§cAll heating coils or evaporation beds must be the same§r
 
+gregtech.multiblock.strand_casting.thickness=Thickness: %s
+gregtech.multiblock.strand_casting.width=Width: %s
+gregtech.multiblock.strand_casting.no_strand=No strand detected
+gregtech.multiblock.strand_casting.output_detected=Strand found only in the output slot
+gregtech.multiblock.strand_casting.ore_prefix=Will output a: %s
+gregtech.multiblock.strand_casting.no_conversion=Currently not a valid item!
+supersymmetry.prefix.stick=Rod
+supersymmetry.prefix.ingot=Ingot
+supersymmetry.prefix.platedense=Dense Plate
+supersymmetry.prefix.platedouble=Double Plate
+supersymmetry.prefix.plate=Plate
+supersymmetry.prefix.foil=Foil
+
 gregtech.machine.primitive_mud_pump.name=Primitive Mud Pump
 gregtech.machine.primitive_mud_pump.tooltip=Works only in River biomes between Y=64 and Y=80
 gregtech.machine.basic_steam_turbine.name=Large Steam Turbine
@@ -286,7 +302,8 @@ gregtech.machine.basic_gas_turbine.name=Large Gas Turbine
 gregtech.machine.large_fluid_pump.name=Large Fluid Pump
 gregtech.machine.large_fluid_pump.tooltip.1=This would definitely affect the local trout population.
 gregtech.machine.large_fluid_pump.tooltip.2=Only works when the controller is at Y=64 and the bottom Steel Pipe Casing is located in the right biome.
-gregtech.machine.advanced_arc_furnace.name=Advanced Arc Furnace
+gregtech.machine.advanced_arc_furnace.name=Industrial Arc Furnace
+gregtech.machine.arc_furnace_complex.name=Arc Furnace Complex
 gregtech.machine.clarifier.name=Clarifier
 gregtech.machine.flare_stack.name=Flare Stack
 gregtech.machine.flare_stack.height=Stack Height: %s §9blocks
@@ -330,11 +347,14 @@ gregtech.machine.landing_pad.name=Landing Pad
 gregtech.machine.scrap_recycler.name=Scrap Recycler
 gregtech.machine.rocket_assembler.name=Rocket Assembler
 gregtech.machine.rocket_programmer.name=Rocket Programmer
+gregtech.machine.metallurgical_converter.name=Metallurgical Converter
 
 gregtech.machine.primitive_item_import.name=Primitive Item Import Bus
 gregtech.machine.primitive_item_import.tooltip=Only for use with the Primitive Smelter
 gregtech.machine.primitive_item_export.name=Primitive Item Export Bus
 gregtech.machine.primitive_item_export.tooltip=Only for use with the Primitive Smelter
+
+gregtech.machine.parallel_pure=Can parallel to output up to §b%d§r§7 items at once
 
 # Properties
 gregtech.recipe.plasma_requirement=Requires plasma: %s
@@ -706,6 +726,34 @@ gregtech.machine.incinerator.tooltip.3=§8Don't worry about where the heavy meta
 gregtech.multiblock.incinerator.clogged=§4Clogged! (Is the top blocked?)
 gregtech.multiblock.incinerator.working=§2Clog-free
 
+gregtech.machine.strand_bus.import.name=Strand Import Bus
+gregtech.machine.strand_bus.export.name=Strand Export Bus
+gregtech.machine.turning_zone.name=Turning Zone
+gregtech.machine.turning_zone.tooltip=Heart of a Continuous Casting System
+gregtech.machine.turning_zone.description=Curves a strand of partially molten metal towards the horizontal. This is required for all continuous casting systems, as other machines are otherwise unable to be rotated.
+gregtech.machine.strand_cooler.name=Strand Cooler
+gregtech.machine.strand_cooler.tooltip=Cools cut strands of metal into finished products using water
+gregtech.machine.rolling_mill.name=Rolling Mill
+gregtech.machine.rolling_mill.tooltip=Flattens a strand of metal, decreasing thickness and increasing width
+gregtech.machine.cluster_mill.name=Cluster Mill
+gregtech.machine.cluster_mill.tooltip=Flattens a strand of metal more, at the cost of lower throughput
+gregtech.machine.hot_isostatic_press.name=Hot Isostatic Press
+gregtech.machine.flying_shear.name=Flying Shear
+gregtech.machine.flying_shear.tooltip=Required to cut a strand of metal into separate pieces for cooling
+gregtech.machine.slab_mold.name=Slab Mold
+gregtech.machine.slab_mold.tooltip=Useful for making all types of plates and foils
+gregtech.machine.billet_mold.name=Billet Mold
+gregtech.machine.billet_mold.tooltip=Useful for making ingots and rods
+gregtech.multiblock.strand_mold.tooltip=Takes in 2592L of molten metal per operation and 50L of water (outputting voidable steam)
+gregtech.multiblock.slab_mold.description=Creates a slab 2 meters wide and 0.5 meters thick from various compatible types of molten metal, including steel, aluminium, and copper. After the slab has been created, it must be turned using a turning zone. Then, it may be rolled into these material types: Dense Plate (0.5-1 m thick), Double Plate (0.2-0.33 m thick), Plate (0.1-0.125 m thick), Foil (0.025-0.031 m thick). A dense plate technically does not require any rolling to produce. Finally, use a flying shear saw and a strand cooler to collect the finished products.
+gregtech.multiblock.billet_mold.description=Creates a slab one third of a meter wide and thick from various compatible types of molten metal, including steel, aluminium, and copper. After the billet has been created, it must be turned using a turning zone. Then, it may be rolled into these material types: Ingot (0.2-0.25 m thick), Rod (0.28-0.37 m thick). A rod technically does not require any rolling to produce. Finally, use a flying shear saw and a strand cooler to collect the finished products.
+gregtech.machine.gas_atomizer.name=Gas Atomizer
+tile.susy_multiblock_casing.monel_casing.name=Cryogenic Monel 500 Casing
+tile.susy_multiblock_casing.monel_casing_pipe.name=Cryogenic Monel 500 Pipe Casing
+tile.susy_multiblock_casing.copper_casing_pipe.name=Conductive Copper Pipe Casing
+tile.metallurgy.hydraulic_cylinder.name=Hydraulic Cylinder
+tile.metallurgy_2.flying_shear_saw.name=Flying Shear Saw
+tile.metallurgy_roll.roll.name=Roll
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
 recipemap.latex_collector.name=Arboreal Collector
@@ -746,7 +794,7 @@ recipemap.pressure_swing_adsorption.name=Pressure Swing Adsorption
 recipemap.high_temperature_distillation.name=High Temperature Distillation
 recipemap.in_situ_leacher.name=In-Situ Leaching
 recipemap.euv_lithography.name=Extreme UV Lithography
-recipemap.advanced_arc_furnace.name=Advanced Arc Furnace
+recipemap.advanced_arc_furnace.name=Industrial Arc Furnace
 recipemap.evaporation_pool.name=Evaporation Pool
 recipemap.clarifier.name=Clarifier
 recipemap.multi_stage_flash_distillation.name=Multi Stage Flash Distillation
@@ -769,6 +817,11 @@ recipemap.sieve_distillation.name=Fractional Distillation
 recipemap.jet_wingpack_fuels.name=Jet Wingpack Fuels
 recipemap.curtain_coater.name=Curtain Coater
 recipemap.milling.name=Precise Milling Machine
+recipemap.hot_isostatic_press.name=Hot Isostatic Press
+recipemap.gas_atomizer.name=Gas Atomizer
+recipemap.metallurgical_converter.name=Metallurgical Converter
+recipemap.low_pressure_advanced_steam_turbine.name=Low Pressure Advanced Steam Turbine
+recipemap.high_pressure_advanced_steam_turbine.name=High Pressure Advanced Steam Turbine
 
 gregtech.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 
@@ -1041,3 +1094,11 @@ tile.hardened_blocks.kryp8.name=Hardened Kryp 8
 #Custom Sheets
 tile.custom_sheets.darkwhitemetalsheet.name=Darker White Metal Sheet
 tile.custom_sheets.lightergraymetalsheet.name=Lighter Gray Metal Sheet
+
+# Titles
+supersymmetry.title.1=§3SUPERSYMMETRY
+supersymmetry.subtitle.1=A modpack by SymmetricDevs
+supersymmetry.title.2=WELCOME TO EARTH
+supersymmetry.subtitle.2=Vitals: stable. Pod fuel: 46%.
+supersymmetry.title.3=APR 1, 2423
+supersymmetry.subtitle.3=§4Survive.
