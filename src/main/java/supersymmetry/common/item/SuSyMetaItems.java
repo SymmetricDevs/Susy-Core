@@ -71,7 +71,7 @@ public class SuSyMetaItems {
 
     private static void initMetaItem() {
         // initialize metaitems here
-        if (itemIndex != 0) {
+        if (itemIndex != 0) { // but only once
             return;
         }
         CATALYST_BED_SUPPORT_GRID = initOneItem("catalyst_bed_support_grid");
