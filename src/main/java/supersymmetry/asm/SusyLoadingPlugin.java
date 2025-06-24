@@ -47,7 +47,8 @@ public class SusyLoadingPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
     @Override
     public List<String> getMixinConfigs() {
         String[] configs = {
-                "mixins.susy.early.json"
+                "mixins.susy.early.json",
+                "mixins.susy.fluidlogged_api.early.json"
         };
         return Arrays.asList(configs);
     }
