@@ -123,8 +123,10 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                 .equals(SuSyBlocks.COMBUSTION_CHAMBER);
         Predicate<BlockPos> controlPodDetect = bp -> getWorld().getBlockState(bp).getBlock()
                 .equals(SuSyBlocks.ROCKET_CONTROL);
-        fuelTankDetect = bp ->
-                Set.of(TANK_SHELL, TANK_SHELL1).contains(getWorld().getBlockState(bp).getBlock());
+        fuelTankDetect = bp -> {
+            Block blockAt = getWorld().getBlockState(bp).getBlock();
+            return blockAt.equals(TANK_SHELL) || blockAt.equals(TANK_SHELL1);
+        };
         Predicate<BlockPos> fairingDetect = bp -> getWorld().getBlockState(bp).getBlock()
                 .equals(SuSyBlocks.FAIRING_HULL);
         Predicate<BlockPos> interstageDetect = bp -> getWorld().getBlockState(bp).getBlock()
