@@ -6,7 +6,8 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "EntityPlayerMixin",
-    "EntityElytraMixin"
+    "EntityElytraMixin",
+    "PluginBlockFluidBaseMixin"
   ],
   "client": [],
   "server": []
