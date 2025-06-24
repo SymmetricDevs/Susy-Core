@@ -2,6 +2,7 @@ package supersymmetry.common;
 
 import gregtech.api.block.VariantItemBlock;
 import gregtech.api.modules.ModuleContainerRegistryEvent;
+import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.event.MaterialEvent;
 import gregtech.api.unification.material.event.PostMaterialEvent;
 import gregtech.client.utils.TooltipHelper;
@@ -36,6 +37,7 @@ import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.event.MobHordeEvent;
+import supersymmetry.api.fluids.SusyGeneratedFluidHandler;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.api.unification.ore.SusyStoneTypes;
 import supersymmetry.common.blocks.SheetedFrameItemBlock;
@@ -145,6 +147,9 @@ public class CommonProxy {
         registry.register(SuSyBlocks.SERPENTINE);
         registry.register(SuSyBlocks.HARDBLOCKS);
         registry.register(SuSyBlocks.CUSTOMSHEETS);
+        registry.register(SuSyBlocks.METALLURGY);
+        registry.register(SuSyBlocks.METALLURGY_2);
+        registry.register(SuSyBlocks.METALLURGY_ROLL);
         registry.register(SuSyBlocks.CONVEYOR_BELT);
         registry.register(SuSyBlocks.ROCKET_ASSEMBLER_CASING);
 
@@ -179,6 +184,9 @@ public class CommonProxy {
         registry.register(createItemBlock(SuSyBlocks.SERPENTINE, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.HARDBLOCKS, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.CUSTOMSHEETS, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.METALLURGY, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.METALLURGY_2, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.METALLURGY_ROLL, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.CONVEYOR_BELT, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.ROCKET_ASSEMBLER_CASING, VariantItemBlock::new));
 
@@ -204,6 +212,10 @@ public class CommonProxy {
         MetaItems.addOrePrefix(SusyOrePrefix.wetFiber);
         MetaItems.addOrePrefix(SusyOrePrefix.thread);
         MetaItems.addOrePrefix(SusyOrePrefix.dustWet);
+        MetaItems.addOrePrefix(SusyOrePrefix.electrode);
+
+        Materials.Aluminium.addFlags("continuously_cast");
+        SusyGeneratedFluidHandler.init();
 
         //SusyMaterials.removeFlags();
     }

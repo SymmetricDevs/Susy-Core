@@ -71,6 +71,11 @@ public class MetaTileEntityHighTemperatureDistillationTower extends MetaTileEnti
     }
 
     @Override
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
+
+    @Override
     public int getFluidOutputLimit() {
         return getOutputFluidInventory().getTanks();
     }

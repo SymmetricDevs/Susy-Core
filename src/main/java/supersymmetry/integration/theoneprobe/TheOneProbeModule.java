@@ -9,6 +9,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import supersymmetry.Supersymmetry;
 import supersymmetry.integration.theoneprobe.provider.DelegatorInfoProvider;
 import supersymmetry.integration.theoneprobe.provider.EvaporationPoolInfoProvider;
+import supersymmetry.integration.theoneprobe.provider.StrandShaperInfoProvider;
 import supersymmetry.modules.SuSyModules;
 
 @GregTechModule(
@@ -25,5 +26,6 @@ public class TheOneProbeModule extends IntegrationSubmodule {
         ITheOneProbe oneProbe = TheOneProbe.theOneProbeImp;
         oneProbe.registerProvider(new EvaporationPoolInfoProvider());
         oneProbe.registerProvider(new DelegatorInfoProvider());
+        oneProbe.registerProvider(new StrandShaperInfoProvider());
     }
 }

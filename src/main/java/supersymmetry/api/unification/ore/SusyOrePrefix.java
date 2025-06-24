@@ -54,4 +54,7 @@ public class SusyOrePrefix {
 
     // Wet dust
     public static final OrePrefix dustWet = new OrePrefix("dustWet", -1, null, SuSyMaterialIconType.dustWet, OrePrefix.Flags.ENABLE_UNIFICATION, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_WET_DUST));
+
+    // Electrode
+    public static final OrePrefix electrode = new OrePrefix("electrode", GTValues.M, null, SuSyMaterialIconType.electrode, OrePrefix.Flags.ENABLE_UNIFICATION, mat -> mat.hasFlag(SuSyMaterialFlags.SUPERALLOY));
 }

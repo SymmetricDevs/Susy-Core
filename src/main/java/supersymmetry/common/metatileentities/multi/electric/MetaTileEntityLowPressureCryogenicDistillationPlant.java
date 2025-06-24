@@ -106,6 +106,11 @@ public class MetaTileEntityLowPressureCryogenicDistillationPlant extends MetaTil
     }
 
     @Override
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
+
+    @Override
     public void setReceiver(@NotNull ICryogenicReceiver receiver) {
         this.receiver = receiver;
     }
