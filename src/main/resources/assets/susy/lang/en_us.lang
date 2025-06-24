@@ -285,6 +285,10 @@ gregtech.multiblock.strand_casting.no_strand=No strand detected
 gregtech.multiblock.strand_casting.output_detected=Strand found only in the output slot
 gregtech.multiblock.strand_casting.ore_prefix=Will output a: %s
 gregtech.multiblock.strand_casting.no_conversion=Currently not a valid item!
+
+susy.multiblock.natural_draft_cooling_tower.obstructed=The cold water basin is not filled!
+susy.multiblock.natural_draft_cooling_tower.obstructed.desc=The cold water basin must be filled with water for the Cooling Tower to operate./nFill the input hatch with water to automatically fill the basin.
+
 supersymmetry.prefix.stick=Rod
 supersymmetry.prefix.ingot=Ingot
 supersymmetry.prefix.platedense=Dense Plate

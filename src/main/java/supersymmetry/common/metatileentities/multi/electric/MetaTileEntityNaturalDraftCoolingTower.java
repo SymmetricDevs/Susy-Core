@@ -1,36 +1,41 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import gregtech.common.blocks.StoneVariantBlock;
-import net.minecraft.client.Minecraft;
-import net.minecraft.init.Blocks;
-
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.unification.material.Materials;
+import gregtech.api.util.TextComponentUtil;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockBoilerCasing.BoilerCasingType;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
+import gregtech.common.blocks.StoneVariantBlock;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.metatileentity.multiblock.CachedPatternRecipeMapMultiblock;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
-import supersymmetry.client.renderer.particles.SusyParticleDust;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+
+import static supercritical.api.pattern.SCPredicates.*;
 
 public class MetaTileEntityNaturalDraftCoolingTower extends CachedPatternRecipeMapMultiblock {
 
@@ -46,6 +51,8 @@ public class MetaTileEntityNaturalDraftCoolingTower extends CachedPatternRecipeM
 
     private static final Vec3i PATTERN_OFFSET = new Vec3i(-8, 14, 4);
 
+    private boolean waterFilled;
+    private List<BlockPos> waterPositions;
 
     public MetaTileEntityNaturalDraftCoolingTower(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.NATURAL_DRAFT_COOLING_TOWER);
@@ -60,10 +67,40 @@ public class MetaTileEntityNaturalDraftCoolingTower extends CachedPatternRecipeM
         return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID);
     }
 
+    @Override
+    protected void formStructure(PatternMatchContext context) {
+        super.formStructure(context);
+
+        this.waterPositions = context.getOrDefault(FLUID_BLOCKS_KEY, new ArrayList<>());
+        this.waterFilled = waterPositions.isEmpty();
+    }
+
+    @Override
+    public void invalidateStructure() {
+        super.invalidateStructure();
+        this.waterPositions = null; // Clear water fill data when the structure is invalidated
+        this.waterFilled = false;
+    }
+
+    @Override
+    protected void updateFormedValid() {
+        super.updateFormedValid();
+        if (!waterFilled && getOffsetTimer() % 5 == 0) {
+            fillFluid(this, this.waterPositions, FluidRegistry.WATER);
+            if (this.waterPositions.isEmpty()) {
+                this.waterFilled = true;
+            }
+        }
+    }
+
+    @Override
+    public boolean isStructureObstructed() {
+        return super.isStructureObstructed() || !waterFilled;
+    }
+
     @NotNull
     @Override
     protected BlockPattern createStructurePattern() {
-        // Different characters use common constraints. Copied from GCyM
 
         return FactoryBlockPattern.start()
                 .aisle("     CCCCC     ", "     CCCCC     ", "     CCCCC     ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ")
@@ -85,13 +122,24 @@ public class MetaTileEntityNaturalDraftCoolingTower extends CachedPatternRecipeM
                 .where('O', states(getCasingState()).or(autoAbilities(true, true, false, false, false, true, false)))
                 .where('I', states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)).or(autoAbilities(false, false, false, false, true, false, false)))
                 .where('C', states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)))
-                .where('W', blocks(Blocks.WATER))
+                .where('W', fluid(FluidRegistry.WATER))
                 .where('F', frames(Materials.Steel))
                 .where('A', states(SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.STRUCTURAL_PACKING)))
                 .where('P', states(MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE)))
                 .where(' ', any())
                 .where('#', air())
                 .build();
+    }
+
+    @Override
+    protected void addErrorText(List<ITextComponent> textList) {
+        super.addErrorText(textList);
+        if (isStructureFormed() && !waterFilled) {
+            textList.add(TextComponentUtil.translationWithColor(TextFormatting.RED,
+                    "susy.multiblock.natural_draft_cooling_tower.obstructed"));
+            textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                    "susy.multiblock.natural_draft_cooling_tower.obstructed.desc"));
+        }
     }
 
     @Override
@@ -137,5 +185,15 @@ public class MetaTileEntityNaturalDraftCoolingTower extends CachedPatternRecipeM
                     pos.getY() + .5F,
                     pos.getZ() + rand.nextDouble(), .1F, .3F, .1F);
         }
+    }
+
+    @Override
+    public boolean isMultiblockPartWeatherResistant(@NotNull IMultiblockPart part) {
+        return true;
+    }
+
+    @Override
+    public boolean getIsWeatherOrTerrainResistant() {
+        return true;
     }
 }
