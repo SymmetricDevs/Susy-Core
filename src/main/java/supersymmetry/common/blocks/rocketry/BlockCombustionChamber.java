@@ -15,7 +15,6 @@ public class BlockCombustionChamber extends VariantBlock<BlockCombustionChamber.
         setHardness(5f);
         setResistance(15f);
         setSoundType(SoundType.METAL);
-        setHarvestLevel("wrench", 2);
         setDefaultState(getState(CombustionType.BIPROPELLANT));
     }
 

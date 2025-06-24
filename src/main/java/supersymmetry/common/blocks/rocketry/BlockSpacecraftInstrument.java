@@ -1,8 +1,10 @@
 package supersymmetry.common.blocks.rocketry;
 
+import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.IStringSerializable;
 
 public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstrument.Type> {
@@ -12,25 +14,37 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
         setHardness(5f);
         setResistance(15f);
         setSoundType(SoundType.METAL);
-        setHarvestLevel("wrench",2);
         setDefaultState(getState(Type.FLIGHT_COMPUTER));
     }
 
-    public enum Type implements IStringSerializable {
-        SENSOR_ARRAY("sensors"),
-        COLLECTOR("collector"),
-        CAMERA("position"),
-        FLIGHT_COMPUTER("computer"),
-        ENGINE("engine"),
-        SOLAR_PANEL("solar_panel"),
-        ARM("arm"); // will have variable purposes
+    public enum Type implements IStringSerializable, IStateHarvestLevel {
+        SENSOR_ARRAY("sensors", 1),
+        COLLECTOR("collector", 2),
+        CAMERA("position", 2),
+        FLIGHT_COMPUTER("computer", 3),
+        ENGINE("engine", 3),
+        SOLAR_PANEL("solar_panel", 2),
+        BATTERY("battery", 2),
+        ARM("arm", 2); // will have variable purposes
         public String name;
-        Type(String name) {
+        public int h;
+        Type(String name, int h) {
             this.name = name;
+            this.h = h;
         }
         @Override
         public String getName() {
             return this.name;
+        }
+
+        @Override
+        public int getHarvestLevel(IBlockState iBlockState) {
+            return h;
+        }
+
+        @Override
+        public String getHarvestTool(IBlockState state) {
+            return "wrench";
         }
     }
 }

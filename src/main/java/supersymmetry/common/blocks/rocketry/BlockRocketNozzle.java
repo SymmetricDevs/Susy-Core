@@ -15,7 +15,6 @@ public class BlockRocketNozzle extends VariantBlock<BlockRocketNozzle.NozzleShap
         setHardness(7f);
         setResistance(25f);
         setSoundType(SoundType.METAL);
-        setHarvestLevel("wrench",2);
         setDefaultState(getState(NozzleShapeType.BELL_NOZZLE));
     }
 

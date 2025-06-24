@@ -19,7 +19,6 @@ public class BlockOuterHatch extends VariantHorizontalRotatableBlock<BlockOuterH
         setHardness(5f);
         setResistance(15f);
         setSoundType(SoundType.METAL);
-        setHarvestLevel("wrench",2);
         setDefaultState(getState(OuterHatchType.OUTER_HATCH));
     }
 

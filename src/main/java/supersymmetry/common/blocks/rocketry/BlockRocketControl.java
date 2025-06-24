@@ -15,7 +15,6 @@ public class BlockRocketControl extends VariantHorizontalRotatableBlock<BlockRoc
         setHardness(5f);
         setResistance(15f);
         setSoundType(SoundType.METAL);
-        setHarvestLevel("wrench",2);
         setDefaultState(getState(RocketControlType.ROCKET_CONTROL));
     }
 
@@ -36,7 +35,7 @@ public class BlockRocketControl extends VariantHorizontalRotatableBlock<BlockRoc
 
         @Override
         public String getHarvestTool(IBlockState state) {
-            return IStateHarvestLevel.super.getHarvestTool(state);
+            return "wrench";
         }
 
         @Override

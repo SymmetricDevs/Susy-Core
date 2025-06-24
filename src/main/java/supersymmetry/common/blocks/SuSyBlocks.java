@@ -3,7 +3,6 @@ package supersymmetry.common.blocks;
 import gregtech.api.block.VariantActiveBlock;
 import gregtech.api.block.VariantBlock;
 import gregtech.api.util.BlockUtility;
-import gregtech.api.util.GTLog;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -13,16 +12,8 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
-import org.reflections.Reflections;
-import rtg.api.util.Logger;
-import scala.annotation.meta.field;
 import supersymmetry.common.blocks.rocketry.*;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -62,6 +53,7 @@ public class SuSyBlocks {
     public static BlockFairingHull FAIRING_HULL;
     public static BlockRocketControl ROCKET_CONTROL;
     public static BlockTankShell TANK_SHELL;
+    public static BlockTankShell1 TANK_SHELL1;
     public static BlockTurboPump TURBOPUMP;
     public static BlockRocketNozzle ROCKET_NOZZLE;
     public static BlockCombustionChamber COMBUSTION_CHAMBER;
@@ -92,6 +84,7 @@ public class SuSyBlocks {
                     susyBlocks.add(newBlock);
                 } catch (Exception e) {
                     System.out.println("Field " + field.getName() + " of type " + field.getType() + " is a variant block in SuSyBlocks and yet is not valid");
+                    e.printStackTrace();
                     throw new RuntimeException(e);
                 }
             }

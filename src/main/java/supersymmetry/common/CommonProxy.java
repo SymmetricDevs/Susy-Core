@@ -28,6 +28,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.Supersymmetry;
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.event.MobHordeEvent;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
@@ -46,6 +47,7 @@ import supersymmetry.modules.SuSyModules;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.logging.Level;
 
 import static supersymmetry.common.blocks.SuSyMetaBlocks.SHEETED_FRAMES;
 
@@ -72,7 +74,13 @@ public class CommonProxy {
         IForgeRegistry<Block> registry = event.getRegistry();
         for (SusyStoneVariantBlock block : SuSyBlocks.SUSY_STONE_BLOCKS.values()) registry.register(block);
 
-        susyBlocks.forEach(registry::register);
+        for (Block b: susyBlocks) {
+            if (b.equals(TANK_SHELL))
+            {
+                SusyLog.logger.log(SusyLog.logger.getLevel(), "tank");
+            }
+            registry.register(b);
+        }
 
         SHEETED_FRAMES.values().stream().distinct().forEach(registry::register);
     }
