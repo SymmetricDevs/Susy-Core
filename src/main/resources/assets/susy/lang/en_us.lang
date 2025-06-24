@@ -1086,3 +1086,11 @@ tile.hardened_blocks.kryp8.name=Hardened Kryp 8
 #Custom Sheets
 tile.custom_sheets.darkwhitemetalsheet.name=Darker White Metal Sheet
 tile.custom_sheets.lightergraymetalsheet.name=Lighter Gray Metal Sheet
+
+# Titles
+supersymmetry.title.1=§3SUPERSYMMETRY
+supersymmetry.subtitle.1=A modpack by SymmetricDevs
+supersymmetry.title.2=WELCOME TO EARTH
+supersymmetry.subtitle.2=Vitals: stable. Pod fuel: 46%.
+supersymmetry.title.3=APR 1, 2423
+supersymmetry.subtitle.3=§4Survive.
