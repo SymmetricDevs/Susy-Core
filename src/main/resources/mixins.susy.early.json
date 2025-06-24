@@ -5,9 +5,7 @@
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "EntityPlayerMixin",
-    "EntityElytraMixin"
-  ],
-  "client": [],
-  "server": []
+    "EntityElytraMixin",
+    "EntityPlayerMixin"
+  ]
 }
