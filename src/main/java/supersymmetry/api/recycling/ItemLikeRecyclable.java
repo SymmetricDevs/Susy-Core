@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 public record ItemLikeRecyclable(ItemAndMetadata itemAndMetadata) implements Recyclable {
 
     public ItemLikeRecyclable(ItemStack itemStack) {
-        this(new ItemAndMetadata(itemStack));
+        this(new ItemAndMetadata(itemStack.copy()));
     }
 
     public ItemLikeRecyclable(Item item, int damage) {

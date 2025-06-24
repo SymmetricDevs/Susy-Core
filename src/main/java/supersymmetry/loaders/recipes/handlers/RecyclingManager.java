@@ -119,6 +119,10 @@ public class RecyclingManager {
             count = input.getAmount() * ing.value(inputStack);
 
             ingredients.put(ing, ingredients.getOrDefault(ing, 0) + count);
+
+            // Reset the amount, since Groovyscript is weird
+            input.setAmount(1);
+            input.getMatchingStacks(); // This has side effects!
         }
         addRecyclingInternal(output, convertIntegerMap(ingredients, output.getCount()), true);
     }

@@ -9,19 +9,19 @@ import net.minecraft.client.resources.I18n;
 
 import java.util.Map;
 
-public class DroneDimensionProperty extends RecipeProperty<IntList> {
+public class DimensionProperty extends RecipeProperty<IntList> {
 
     public static final String KEY = "dimension";
 
-    private static DroneDimensionProperty INSTANCE;
+    private static DimensionProperty INSTANCE;
 
-    private DroneDimensionProperty() {
+    private DimensionProperty() {
         super(KEY, IntList.class);
     }
 
-    public static DroneDimensionProperty getInstance() {
+    public static DimensionProperty getInstance() {
         if (INSTANCE == null)
-            INSTANCE = new DroneDimensionProperty();
+            INSTANCE = new DimensionProperty();
         return INSTANCE;
     }
 
