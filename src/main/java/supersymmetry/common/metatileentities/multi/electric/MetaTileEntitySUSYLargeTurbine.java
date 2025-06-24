@@ -12,6 +12,7 @@ import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.util.BlockInfo;
+import gregtech.api.util.GTUtility;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import net.minecraft.block.state.IBlockState;
@@ -61,10 +62,12 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
     protected void addDisplayText(List<ITextComponent> textList) {
         if (isStructureFormed()) {
             FluidStack fuelStack = ((SuSyTurbineRecipeLogic) recipeMapWorkable).getInputFluidStack();
-            int fuelAmount = fuelStack == null ? 0 : fuelStack.amount;
+            if (fuelStack != null || fuelStack.amount > 0) {
+                int fuelAmount = fuelStack.amount;
 
-            ITextComponent fuelName = new TextComponentTranslation(fuelAmount == 0 ? "gregtech.fluid.empty" : fuelStack.getUnlocalizedName());
-            textList.add(new TextComponentTranslation("gregtech.multiblock.turbine.fuel_amount", fuelAmount, fuelName));
+                ITextComponent fuelName = GTUtility.getFluidTranslation(fuelStack.getFluid());
+                textList.add(new TextComponentTranslation("gregtech.multiblock.turbine.fuel_amount", fuelAmount, fuelName));
+            }
         }
         super.addDisplayText(textList);
     }
