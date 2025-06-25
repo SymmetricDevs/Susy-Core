@@ -24,6 +24,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.capability.Strand;
+import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
 import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
@@ -95,9 +96,13 @@ public abstract class MetaTileEntityStrandMold extends MetaTileEntityStrandShape
     @SideOnly(Side.CLIENT)
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart part) {
-        if (part instanceof IMultiblockAbilityPart<?> abilityPart
-                && abilityPart.getAbility() == MultiblockAbility.IMPORT_FLUIDS) {
-            return SusyTextures.CONDUCTIVE_COPPER_PIPE;
+        if (part instanceof IMultiblockAbilityPart<?> abilityPart) {
+            MultiblockAbility<?> ability = abilityPart.getAbility();
+            if (ability == MultiblockAbility.IMPORT_FLUIDS
+                    || ability == MultiblockAbility.EXPORT_FLUIDS
+                    || ability == SuSyMultiblockAbilities.STRAND_EXPORT) {
+                return SusyTextures.CONDUCTIVE_COPPER_PIPE;
+            }
         }
         return Textures.SOLID_STEEL_CASING;
     }
