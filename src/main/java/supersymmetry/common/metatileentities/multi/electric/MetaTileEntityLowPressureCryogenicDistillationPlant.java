@@ -60,7 +60,7 @@ public class MetaTileEntityLowPressureCryogenicDistillationPlant extends MetaTil
                 .aisle("DDD", "DDD", "DDD")
                 .where('S', this.selfPredicate())
                 .where('C', states(getCasingState())
-                        .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(3))
+                        .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2))
                         .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMaxGlobalLimited(1))
                         .or(autoAbilities(true, false).setExactLimit(1)))
                 .where('F', states(SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.STRUCTURAL_PACKING)))
@@ -103,6 +103,11 @@ public class MetaTileEntityLowPressureCryogenicDistillationPlant extends MetaTil
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.LPCDT_OVERLAY;
+    }
+
+    @Override
+    public boolean allowsExtendedFacing() {
+        return false;
     }
 
     @Override

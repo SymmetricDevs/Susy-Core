@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
-import supersymmetry.api.recipes.properties.DroneDimensionProperty;
+import supersymmetry.api.recipes.properties.DimensionProperty;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.entities.EntityDrone;
@@ -180,7 +180,7 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
     }
 
     public boolean checkRecipe(@NotNull Recipe recipe) {
-        for (int dimension : recipe.getProperty(DroneDimensionProperty.getInstance(), IntLists.EMPTY_LIST)) {
+        for (int dimension : recipe.getProperty(DimensionProperty.getInstance(), IntLists.EMPTY_LIST)) {
             if (dimension == this.getWorld().provider.getDimension()) {
                 return true;
             }

@@ -42,7 +42,7 @@ public class MetaTileEntityHighTemperatureDistillationTower extends MetaTileEnti
                 .where('S', selfPredicate())
                 .where('Y', states(getCasingState())
                         .or(abilities(MultiblockAbility.EXPORT_ITEMS).setMaxGlobalLimited(1))
-                        .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(3))
+                        .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2))
                         .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1))
                         .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMaxGlobalLimited(1)))
                 .where('X', states(getCasingState())
@@ -68,6 +68,11 @@ public class MetaTileEntityHighTemperatureDistillationTower extends MetaTileEnti
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.HTDT_OVERLAY;
+    }
+
+    @Override
+    public boolean allowsExtendedFacing() {
+        return false;
     }
 
     @Override

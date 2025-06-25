@@ -48,10 +48,16 @@ public class Supersymmetry {
         //GTValues.HT = true;
         SuSyIRLoader.initDefinitions();
         SuSyIRLoader.initEntities();
+
+        // Groovyscript starts immediately!
+        proxy.checkCanaryFile();
     }
+
+
 
     @Mod.EventHandler
     public void onPreInit(@NotNull FMLPreInitializationEvent event) {
+
         proxy.preLoad();
 
         SuSyMetaBlocks.init();

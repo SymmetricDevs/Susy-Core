@@ -14,6 +14,9 @@ tile.separator_rotor.steel.name=Steel Gravity Separator Rotor
 
 tile.alternator_coil.copper.name=Copper Alternator Coil
 tile.turbine_rotor.steel.name=Steel Turbine Block
+tile.turbine_rotor.low_pressure.name=Low Pressure Turbine Block
+tile.turbine_rotor.high_pressure.name=High Pressure Turbine Block
+
 tile.drill_head.steel.name=Steel Drill Head
 
 tile.susy_multiblock_casing.silicon_carbide_casing.name=Tough Silicon Carbide Casing
@@ -22,6 +25,12 @@ tile.susy_multiblock_casing.sieve_tray.name=Sieve Tray
 tile.susy_multiblock_casing.structural_packing.name=Structural Packing
 tile.susy_multiblock_casing.ulv_structural_casing.name=Basic Structural Casing
 tile.susy_multiblock_casing.drone_pad.name=Drone Pad
+tile.susy_multiblock_casing.heavy_duty_pad.name=Heavy Duty Pad
+tile.susy_multiblock_casing.advanced_refractory_lining.name=Advanced Refractory Lining
+tile.rocket_assembler_casing.reinforced_foundation.name=Reinforced Foundation
+tile.rocket_assembler_casing.foundation.name=Rocket Assembler Foundation
+tile.rocket_assembler_casing.rails.name=Rocket Assembler Rails
+tile.rocket_assembler_casing.structural_frame.name=Rocket Assembler Structural Frame
 tile.susy_multiblock_casing.euv_safe_casing.name=Extreme-Ultraviolet-Safe Lithographer Casing
 
 tile.serpentine.basic.name=Copper Tubing Serpentine Block
@@ -124,6 +133,8 @@ tile.susy_stone_smooth.slate.name=Slate
 tile.susy_stone_smooth.soapstone.name=Soapstone
 tile.susy_stone_smooth.kimberlite.name=Kimberlite
 tile.susy_stone_smooth.industrial_concrete.name=Industrial Concrete
+tile.susy_stone_smooth.minitary_concrete.name=Military Concrete
+
 tile.susy_stone_cobble.gabbro.name=Gabbro Cobblestone
 tile.susy_stone_cobble.gneiss.name=Gneiss Cobblestone
 tile.susy_stone_cobble.graphite.name=Graphite Cobblestone
@@ -136,6 +147,8 @@ tile.susy_stone_cobble.slate.name=Slate Cobblestone
 tile.susy_stone_cobble.soapstone.name=Soapstone Cobblestone
 tile.susy_stone_cobble.kimberlite.name=Kimberlite Cobblestone
 tile.susy_stone_cobble.industrial_concrete.name=Industrial Concrete Cobblestone
+tile.susy_stone_cobble.minitary_concrete.name=Military Concrete Cobblestone
+
 tile.susy_stone_bricks.gabbro.name=Gabbro Bricks
 tile.susy_stone_bricks.gneiss.name=Gneiss Bricks
 tile.susy_stone_bricks.graphite.name=Graphite Bricks
@@ -148,6 +161,7 @@ tile.susy_stone_bricks.slate.name=Slate Bricks
 tile.susy_stone_bricks.soapstone.name=Soapstone Bricks
 tile.susy_stone_bricks.kimberlite.name=Kimberlite Bricks
 tile.susy_stone_bricks.industrial_concrete.name=Industrial Concrete Bricks
+tile.susy_stone_bricks.minitary_concrete.name=Military Concrete Bricks
 
 # Materials
 susy.material.manganese_iron_arsenic_phosphide=Manganese Iron Arsenic Phosphide
@@ -156,6 +170,7 @@ susy.material.gadolinium_silicon_germanium=Gadolinium Silicon Germanium
 susy.material.latex=Latex
 susy.material.mud=Mud
 susy.material.sea_water=Sea Water
+susy.material.refractory_gunning_mixture=Refractory Gunning Mixture
 
 # Rock/Mineral Materials
 susy.material.fluorite=Fluorite
@@ -201,6 +216,7 @@ item.material.oreprefix.fiber=%s Fiber
 item.material.oreprefix.fiberWet=Wet %s Fiber
 item.material.oreprefix.thread=%s Thread
 item.material.oreprefix.dustWet=Wet %s Dust
+item.material.oreprefix.electrode=%s Electrode
 
 susy.fluid.supercritical=Supercritical %s
 susy.fluid.impure_slurry=Impure %s Slurry
@@ -245,7 +261,7 @@ gregtech.machine.fermentation_vat.name=Fermentation Vat
 gregtech.machine.ore_sorter.name=Ore Sorter
 gregtech.machine.gravity_separator.name=Gravity Separator
 gregtech.machine.condenser.name=Condenser
-gregtech.machine.cooling_unit.name=Cooling Unit
+gregtech.machine.natural_draft_cooling_tower.name=Natural Draft Cooling Tower
 gregtech.machine.gas_turbine.name=Gas Turbine
 gregtech.machine.heat_exchanger.name=Heat Exchanger
 gregtech.machine.heat_radiator.name=Heat Radiator
@@ -260,32 +276,51 @@ gregtech.machine.quencher.name=Quencher
 gregtech.machine.railroad_engineering_station.name=Railroad Engineering Station
 gregtech.machine.railroad_engineering_station.tooltip=Place Immersive Railroading Tracks in the middle to form the multiblock
 gregtech.machine.railroad_engineering_station.tooltip.1=The concrete below the tracks can be substituted with any block, including pipes or air
+gregtech.machine.quarry.name=Quarry
 
-gregtech.machine.evaporation_pool.name=Evaporation Pool
-gregtech.machine.evaporation_pool.tooltip.info=Max internal square of %dx%d, minimum 1x1. Read info tab and tool info for more details.
-gregtech.machine.evaporation_pool.tooltip.structure_info=Evaporation Pools can be formed with any internal dimensions ranging from a 1x1 to a %dx%d, even if it is non-square. To form a valid heated evaporation pool, coils should be placed following the pattern shown in the preview. For a more detailed explanation, view the info tab in JEI.
-gregtech.top.evaporation_pool_heated_preface=Coil Pattern:
-gregtech.top.evaporation_pool_is_heated=VALID; May be heated.
-gregtech.top.evaporation_pool_not_heated=INVALID; Will not heat.
-gregtech.top.evaporation_pool.energy_transferred=Thermal Energy:
-gregtech.mutliblock.evaporation_pool.rolling_average=Average Energy In:
-gregtech.multiblock.evaporation_pool.joules_per_tick=J/t
-gregtech.top.evaporation_pool.kilojoules=kJ
-gregtech.multiblock.evaporation_pool.description=The Evaporation Pool has interior dimensions specified in its description and a concrete exterior for IO/controller placement, with at most two of each IO type. The controller may be placed anywhere along the protruding bottom row "in front" of the interior.            The Evaporation Pool can run recipes both unpowered and powered. In order to power recipes, the multiblock will need to be formed with a "snaking" coil pattern of uniform type, as shown in the preview. Unpowered Evaporation Pools do not require any coils.        The speed of any recipe depends on the heat provided to the multi, which is based off of the number of interior blocks exposed to sunlight, the energy provided, and the tier of coil. [1EU = 10J, currently].                                                                                 Each exposed block (takes time to check) produces 1kJ/s, with heat provided by coils varying based on coil temperature * amount. The maximum recipe speed is 1/4th of duration per tick (5 recipes/s).                                                                                                   The pool will attempt to complete as many recipe progress ticks as it can with available energy, below the aforementioned maximum progression.
-gregtech.multiblock.evaporation_pool.average_speed=Avg Speed:
-gregtech.multiblock.evaporation_pool.exposed_blocks=Number of Exposed Blocks:
+gregtech.machine.evaporation_pool.name=Evaporation Pool:
+gregtech.machine.evaporation_pool.tooltip.info=Max square of %1$sx%1$s, minimum %2$sx%2$s. Read info tab and tool info for more details.
+gregtech.machine.evaporation_pool.tooltip.structure_info=Evaporation Pools can be formed with any dimensions ranging from a %2$sx%2$s to a %1$sx%1$s, even if it is non-square. To form a valid heated evaporation pool, coils should be placed following the pattern shown in the preview. For a more detailed explanation, view the info tab in JEI.
+gregtech.top.evaporation_pool_heated_preface=Heating Coil:
+gregtech.top.evaporation_pool.exposed_blocks=Exposed Blocks:
+gregtech.top.evaporation_pool.average_speed=Avg Speed:
+gregtech.multiblock.evaporation_pool.description=The Evaporation Pool has interior dimensions specified in its description and a concrete exterior for IO/controller placement, with at most two of each IO type. The controller may be placed anywhere along the protruding bottom row "in front" of the interior.            The Evaporation Pool can run recipes both unpowered and powered. In order to power recipes, the multiblock will need to be formed with a "snaking" coil pattern of uniform type, as shown in the preview. Unpowered Evaporation Pools do not require any coils.        The speed of any recipe depends on the heat provided to the multi, which is based off of the number of interior blocks exposed to sunlight, the energy provided, and the tier of coil. [1EU = 10J, currently].                                                                                 Each exposed block (takes time to check) produces 1kJ/s, with heat provided by coils varying based on coil temperature * amount.
+gregtech.multiblock.evaporation_pool_heated_preface=Heating Coil: %s
+gregtech.multiblock.evaporation_pool.is_heating=On
+gregtech.multiblock.evaporation_pool.is_not_heating=Off/Missing
+gregtech.multiblock.evaporation_pool.exposed_blocks=Exposed Blocks: %s
+gregtech.multiblock.evaporation_pool.average_speed=Avg Speed: %sx
+susy.multiblock.pattern.error.coils_or_bed=§cAll heating coils or evaporation beds must be the same§r
+
+gregtech.multiblock.strand_casting.thickness=Thickness: %s
+gregtech.multiblock.strand_casting.width=Width: %s
+gregtech.multiblock.strand_casting.no_strand=No strand detected
+gregtech.multiblock.strand_casting.output_detected=Strand found only in the output slot
+gregtech.multiblock.strand_casting.ore_prefix=Will output a: %s
+gregtech.multiblock.strand_casting.no_conversion=Currently not a valid item!
+
+susy.multiblock.natural_draft_cooling_tower.obstructed=The cold water basin is not filled!
+susy.multiblock.natural_draft_cooling_tower.obstructed.desc=The cold water basin must be filled with water for the Cooling Tower to operate.
+
+supersymmetry.prefix.stick=Rod
+supersymmetry.prefix.ingot=Ingot
+supersymmetry.prefix.platedense=Dense Plate
+supersymmetry.prefix.platedouble=Double Plate
+supersymmetry.prefix.plate=Plate
+supersymmetry.prefix.foil=Foil
 
 gregtech.machine.primitive_mud_pump.name=Primitive Mud Pump
 gregtech.machine.primitive_mud_pump.tooltip=Works only in River biomes between Y=64 and Y=80
 gregtech.machine.basic_steam_turbine.name=Large Steam Turbine
+gregtech.machine.low_pressure_advanced_steam_turbine.name=Low Pressure Advanced Steam Turbine
+gregtech.machine.high_pressure_advanced_steam_turbine.name=High Pressure Advanced Steam Turbine
 gregtech.machine.basic_gas_turbine.name=Large Gas Turbine
 gregtech.machine.large_fluid_pump.name=Large Fluid Pump
 gregtech.machine.large_fluid_pump.tooltip.1=This would definitely affect the local trout population.
 gregtech.machine.large_fluid_pump.tooltip.2=Only works when the controller is at Y=64 and the bottom Steel Pipe Casing is located in the right biome.
-gregtech.machine.advanced_arc_furnace.name=Advanced Arc Furnace
+gregtech.machine.advanced_arc_furnace.name=Industrial Arc Furnace
+gregtech.machine.arc_furnace_complex.name=Arc Furnace Complex
 gregtech.machine.clarifier.name=Clarifier
-gregtech.machine.dumper.name=Dumper
-gregtech.machine.evaporation_pool.name=Evaporation Pool
 gregtech.machine.flare_stack.name=Flare Stack
 gregtech.machine.flare_stack.height=Stack Height: %s §9blocks
 gregtech.machine.flare_stack.rate=Flaring Rate: %s
@@ -326,11 +361,18 @@ gregtech.machine.euv_lithographer.name=Extreme Ultraviolet Lithographer
 
 gregtech.machine.drone_pad.name=Drone Pad
 gregtech.machine.primitive_smelter.name=Primitive Smelter
+gregtech.machine.landing_pad.name=Landing Pad
+gregtech.machine.scrap_recycler.name=Scrap Recycler
+gregtech.machine.rocket_assembler.name=Rocket Assembler
+gregtech.machine.rocket_programmer.name=Rocket Programmer
+gregtech.machine.metallurgical_converter.name=Metallurgical Converter
 
 gregtech.machine.primitive_item_import.name=Primitive Item Import Bus
 gregtech.machine.primitive_item_import.tooltip=Only for use with the Primitive Smelter
 gregtech.machine.primitive_item_export.name=Primitive Item Export Bus
 gregtech.machine.primitive_item_export.tooltip=Only for use with the Primitive Smelter
+
+gregtech.machine.parallel_pure=Can parallel to output up to §b%d§r§7 items at once
 
 # Properties
 gregtech.recipe.plasma_requirement=Requires plasma: %s
@@ -702,6 +744,35 @@ gregtech.machine.incinerator.tooltip.3=§8Don't worry about where the heavy meta
 gregtech.multiblock.incinerator.clogged=§4Clogged! (Is the top blocked?)
 gregtech.multiblock.incinerator.working=§2Clog-free
 
+gregtech.machine.strand_bus.import.name=Strand Import Bus
+gregtech.machine.strand_bus.export.name=Strand Export Bus
+gregtech.machine.turning_zone.name=Turning Zone
+gregtech.machine.turning_zone.tooltip=Heart of a Continuous Casting System
+gregtech.machine.turning_zone.description=Curves a strand of partially molten metal towards the horizontal. This is required for all continuous casting systems, as other machines are otherwise unable to be rotated.
+gregtech.machine.strand_cooler.name=Strand Cooler
+gregtech.machine.strand_cooler.tooltip=Cools cut strands of metal into finished products using water
+gregtech.machine.rolling_mill.name=Rolling Mill
+gregtech.machine.rolling_mill.tooltip=Flattens a strand of metal, decreasing thickness and increasing width
+gregtech.machine.cluster_mill.name=Cluster Mill
+gregtech.machine.cluster_mill.tooltip=Flattens a strand of metal more, at the cost of lower throughput
+gregtech.machine.hot_isostatic_press.name=Hot Isostatic Press
+gregtech.machine.flying_shear.name=Flying Shear
+gregtech.machine.flying_shear.tooltip=Required to cut a strand of metal into separate pieces for cooling
+gregtech.machine.slab_mold.name=Slab Mold
+gregtech.machine.slab_mold.tooltip=Useful for making all types of plates and foils
+gregtech.machine.billet_mold.name=Billet Mold
+gregtech.machine.billet_mold.tooltip=Useful for making ingots and rods
+gregtech.multiblock.strand_mold.tooltip=Takes in 2592L of molten metal per operation and 50L of water (outputting voidable steam)
+gregtech.multiblock.slab_mold.description=Creates a slab 2 meters wide and 0.5 meters thick from various compatible types of molten metal, including steel, aluminium, and copper. After the slab has been created, it must be turned using a turning zone. Then, it may be rolled into these material types: Dense Plate (0.5-1 m thick), Double Plate (0.2-0.33 m thick), Plate (0.1-0.125 m thick), Foil (0.025-0.031 m thick). A dense plate technically does not require any rolling to produce. Finally, use a flying shear saw and a strand cooler to collect the finished products.
+gregtech.multiblock.billet_mold.description=Creates a slab one third of a meter wide and thick from various compatible types of molten metal, including steel, aluminium, and copper. After the billet has been created, it must be turned using a turning zone. Then, it may be rolled into these material types: Ingot (0.2-0.25 m thick), Rod (0.28-0.37 m thick). A rod technically does not require any rolling to produce. Finally, use a flying shear saw and a strand cooler to collect the finished products.
+gregtech.machine.gas_atomizer.name=Gas Atomizer
+tile.susy_multiblock_casing.monel_casing.name=Cryogenic Monel 500 Casing
+tile.susy_multiblock_casing.monel_casing_pipe.name=Cryogenic Monel 500 Pipe Casing
+tile.susy_multiblock_casing.copper_casing_pipe.name=Conductive Copper Pipe Casing
+tile.metallurgy.hydraulic_cylinder.name=Hydraulic Cylinder
+tile.metallurgy_2.flying_shear_saw.name=Flying Shear Saw
+tile.metallurgy_roll.roll.name=Roll
+
 # Sputtering Machine
 gregtech.machine.sputter_deposition.lv.name=Basic Sputtering Machine
 gregtech.machine.sputter_deposition.mv.name=Advanced Sputtering Machine
@@ -739,13 +810,14 @@ recipemap.ion_implantation.name=Ion Implantation
 recipemap.cvd.name=Chemical Vapor Deposition
 recipemap.ore_sorter.name=Ore Sorting
 recipemap.cooling_tower.name=Cooling Tower
-recipemap.cooling_unit.name=Cooling Unit
+recipemap.natural_draft_cooling_tower.name=Natural Draft Cooling Tower
 recipemap.fluid_decompressor.name=Fluid Decompressing
 recipemap.fluid_compressor.name=Fluid Compressing
 recipemap.heat_exchanger.name=Heat Exchanging
 recipemap.condenser.name=Condensing
 recipemap.radiator.name=Heat Radiator
 recipemap.quencher.name=Quenching
+recipemap.quarry.name=Excavation
 recipemap.weapons_factory.name=Weapons Factory
 recipemap.large_weapons_factory.name=Large Weapons Factory
 recipemap.railroad_engineering_station.name=Railroad Engineering Station
@@ -756,7 +828,7 @@ recipemap.pressure_swing_adsorption.name=Pressure Swing Adsorption
 recipemap.high_temperature_distillation.name=High Temperature Distillation
 recipemap.in_situ_leacher.name=In-Situ Leaching
 recipemap.euv_lithography.name=Extreme UV Lithography
-recipemap.advanced_arc_furnace.name=Advanced Arc Furnace
+recipemap.advanced_arc_furnace.name=Industrial Arc Furnace
 recipemap.evaporation_pool.name=Evaporation Pool
 recipemap.clarifier.name=Clarifier
 recipemap.multi_stage_flash_distillation.name=Multi Stage Flash Distillation
@@ -779,6 +851,11 @@ recipemap.sieve_distillation.name=Fractional Distillation
 recipemap.jet_wingpack_fuels.name=Jet Wingpack Fuels
 recipemap.curtain_coater.name=Curtain Coating
 recipemap.milling.name=Precise Milling
+recipemap.hot_isostatic_press.name=Hot Isostatic Press
+recipemap.gas_atomizer.name=Gas Atomizer
+recipemap.metallurgical_converter.name=Metallurgical Converter
+recipemap.low_pressure_advanced_steam_turbine.name=Low Pressure Advanced Steam Turbine
+recipemap.high_pressure_advanced_steam_turbine.name=High Pressure Advanced Steam Turbine
 recipemap.sputter_deposition=Sputter Deposition
 
 gregtech.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
@@ -849,12 +926,13 @@ metaitem.pump.steam.name=Steam Pump
 cover.pump.steam.title=Steam Pump
 metaitem.air_vent.name=Air Vent
 metaitem.restrictive_filter.name=Restrictive Item Filter
-metaitem.restrictive_filter.tooltip=Allows only §6one stack§7 of any type of item inside. Can replace robot arms. %n§oHere you may come, but no further.§r §7Job 38:11
+metaitem.restrictive_filter.tooltip=Allows only §6one stack§7 of any type of item inside. Can replace robot arms. /n§oHere you may come, but no further.§r §7Job 38:11
 metaitem.air_vent.tooltip=Passively collects a Dimension's Air for your Machines when facing Air
 metaitem.track_segment.name=Monorail Track Segment
 metaitem.track_segment.tooltip=For use in the §8tunnelbore.
 metaitem.track_segment.length_info=§610 blocks §7worth of monorail track.
 metaitem.air_vent.tooltip.1=§bCollecting Rate: §f%,d L/s
+metaitem.orbital.scrap.earth.name=Earth Orbital Scrap
 
 # Catalysts
 gregtech.universal.catalysts.tooltip.tier=§eMax Voltage: §f%,d EU/T (%s§f)
@@ -974,7 +1052,6 @@ susy.recipe.biomeTypes=BiomeTypes: %s
 susy.recipe.biomeTypes_blocked=Blocked BiomeTypes: %s
 
 # Commands
-
 susy.command.horde.usage=/mobHorde <start/stop/status>
 susy.command.horde.start.usage=/mobHorde start <name>
 susy.command.horde.start.argument_required=Use /mobHorde start <name>.
@@ -994,6 +1071,10 @@ susy.command.horde.status.no_active_invasion=Player %s has no active invasion.
 susy.fluid.voiding.liquid=Voidable with Dumper
 susy.fluid.voiding.gas=Voidable with Smoke Stack
 susy.fluid.voiding.flammable=Voidable with Flare Stack
+
+# Quarry Modes
+susy.multiblock.quarry.excavation_mode=Excavation Mode
+susy.multiblock.quarry.recipe_mode=Recipe Mode
 
 death.attack.toxic_atmo=%s's lungs were shredded
 death.attack.suffocation=%s couldn't breathe
@@ -1038,52 +1119,24 @@ supersymmetry.unlimited_oxygen=Remaining air: §bUnlimited§r
 supersymmetry.seconds_left=Remaining life: §2%s seconds§r
 supersymmetry.unlimited=Remaining life: §bUnlimited§r
 
-
-death.attack.toxic_atmo=%s's lungs were shredded
-death.attack.suffocation=%s couldn't breathe
-
-metaitem.simple_gas_mask.name=Primitive Gas Mask
-metaitem.simple_gas_mask.tooltip=Survive in oxygenless environments
-metaitem.gas_mask.name=Gas Mask
-metaitem.gas_mask.tooltip=Survive in oxygenless environments for longer
-metaitem.gas_tank.name=Gas Tank
-metaitem.gas_tank.tooltip=Survive in oxygenless environments for longer
-metaitem.asbestos_mask.name=Asbestos Gas Mask
-metaitem.asbestos_mask.tooltip=Survive in hot environments
-metaitem.asbestos_chestplate.name=Asbestos Tank
-metaitem.asbestos_chestplate.tooltip=Survive in hot environments
-metaitem.asbestos_leggings.name=Asbestos Leggings
-metaitem.asbestos_leggings.tooltip=Survive in hot environments
-metaitem.asbestos_boots.name=Asbestos Boots
-metaitem.asbestos_boots.tooltip=Survive in hot environments
-metaitem.rebreather_tank.name=Rebreather Tank
-metaitem.rebreather_tank.tooltip=Holds oxygen for longer
-metaitem.reflective_mask.name=Reflective Gas Mask
-metaitem.reflective_mask.tooltip=Reduce heating damage
-metaitem.reflective_chestplate.name=Reflective Tank
-metaitem.reflective_chestplate.tooltip=Reduce heating damage
-metaitem.reflective_leggings.name=Reflective Leggings
-metaitem.reflective_leggings.tooltip=Reduce heating damage
-metaitem.reflective_boots.name=Reflective Boots
-metaitem.reflective_boots.tooltip=Reduce heating damage
-metaitem.filtered_tank.name=Filtered Tank
-metaitem.filtered_tank.tooltip=Holds oxygen for very long
-metaitem.nomex_mask.name=Nomex Gas Mask
-metaitem.nomex_mask.tooltip=Stay indefinitely in the mantle!
-metaitem.nomex_chestplate.name=Nomex Tank
-metaitem.nomex_chestplate.tooltip=Stay indefinitely in the mantle!
-metaitem.nomex_leggings.name=Nomex Leggings
-metaitem.nomex_leggings.tooltip=Stay indefinitely in the mantle!
-metaitem.nomex_boots.name=Nomex Boots
-metaitem.nomex_boots.tooltip=Stay indefinitely in the mantle!
-
 #Hardened blocks
 tile.hardened_blocks.lair7.name=Hardened Lair 7
 tile.hardened_blocks.lair10.name=Hardened Lair 10
 tile.hardened_blocks.lair11.name=Hardened Lair 11
 tile.hardened_blocks.kryp7.name=Hardened Kryp 7
 tile.hardened_blocks.kryp8.name=Hardened Kryp 8
+tile.hardened_blocks1.industrial_concrete_hardened.name=Federation Grade Industrial Concrete
+tile.hardened_blocks1.military_concrete_hardened.name=Federation Grade Military Concrete
+tile.hardened_blocks1.military_concrete_cobblestone_hardened.name=Federation Grade Military Concrete Cobblestone
 
 #Custom Sheets
 tile.custom_sheets.darkwhitemetalsheet.name=Darker White Metal Sheet
 tile.custom_sheets.lightergraymetalsheet.name=Lighter Gray Metal Sheet
+
+# Titles
+supersymmetry.title.1=§3SUPERSYMMETRY
+supersymmetry.subtitle.1=A modpack by SymmetricDevs
+supersymmetry.title.2=WELCOME TO EARTH
+supersymmetry.subtitle.2=Vitals: stable. Pod fuel: 46%.
+supersymmetry.title.3=APR 1, 2423
+supersymmetry.subtitle.3=§4Survive.

@@ -37,7 +37,7 @@ dependencies {
 
     compileOnly rfg.deobf('curse.maven:biomes-o-plenty-220318:2842510')
 
-    implementation rfg.deobf('curse.maven:gregtech-food-option-477021:5500516') // GT-FO 1.11.3
+    implementation rfg.deobf("curse.maven:gregtech-food-option-477021:6147619") // GT-FO 1.12.4
 
     implementation rfg.deobf('curse.maven:applecore-224472:2969118')
 
@@ -69,11 +69,11 @@ dependencies {
     implementation rfg.deobf("curse.maven:athenaeum-284350:4633750")
     implementation rfg.deobf("curse.maven:dropt-284973:5405050")
 
-    implementation rfg.deobf("curse.maven:recurrent-complex-223150:5615733")
-    implementation rfg.deobf("curse.maven:ivtoolkit-224535:2443253")
-    implementation rfg.deobf("curse.maven:fluidlogged-api-485654:4564413")
+    compileOnly rfg.deobf("curse.maven:recurrent-complex-223150:5615733")
+    compileOnly rfg.deobf("curse.maven:ivtoolkit-224535:2443253")
+    compileOnly rfg.deobf("curse.maven:fluidlogged-api-485654:4564413")
 
-    compileOnly rfg.deobf("curse.maven:yungs-better-mineshafts-forge-389665:3247154")
+    implementation rfg.deobf("curse.maven:supercritical-1185871:6691235")
 
     api("CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.700")
 

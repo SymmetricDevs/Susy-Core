@@ -42,8 +42,13 @@ public class SuSyBlocks {
     public static BlockSuSyMultiblockCasing MULTIBLOCK_CASING;
     public static BlockSerpentine SERPENTINE;
     public static BlocksHardened HARDBLOCKS;
+    public static BlocksHardened1 HARDBLOCKS1;
     public static BlocksCustomSheets CUSTOMSHEETS;
+    public static BlockMetallurgy METALLURGY;
+    public static BlockMetallurgy2 METALLURGY_2;
+    public static BlockMetallurgyRoll METALLURGY_ROLL;
     public static BlockConveyor CONVEYOR_BELT;
+    public static BlockRocketAssemblerCasing ROCKET_ASSEMBLER_CASING;
     public static BlockEUVLithographerComponent EUV_LITHOGRAPHER_COMPONENT;
 
     public static void init() {
@@ -112,11 +117,26 @@ public class SuSyBlocks {
         HARDBLOCKS = new BlocksHardened();
         HARDBLOCKS.setRegistryName("hardened_blocks");
 
+        HARDBLOCKS1 = new BlocksHardened1();
+        HARDBLOCKS1.setRegistryName("hardened_blocks1");
+
         CUSTOMSHEETS = new BlocksCustomSheets();
         CUSTOMSHEETS.setRegistryName("custom_sheets");
 
+        METALLURGY = new BlockMetallurgy();
+        METALLURGY.setRegistryName("metallurgy");
+
+        METALLURGY_2 = new BlockMetallurgy2();
+        METALLURGY_2.setRegistryName("metallurgy_2");
+
+        METALLURGY_ROLL = new BlockMetallurgyRoll();
+        METALLURGY_ROLL.setRegistryName("metallurgy_roll");
+
         CONVEYOR_BELT = new BlockConveyor();
         CONVEYOR_BELT.setRegistryName("conveyor_belt");
+
+        ROCKET_ASSEMBLER_CASING = new BlockRocketAssemblerCasing();
+        ROCKET_ASSEMBLER_CASING.setRegistryName("rocket_assembler_casing");
 
         EUV_LITHOGRAPHER_COMPONENT = new BlockEUVLithographerComponent();
         EUV_LITHOGRAPHER_COMPONENT.setRegistryName("euv_lithographer_component");
@@ -146,8 +166,13 @@ public class SuSyBlocks {
         registerItemModel(MULTIBLOCK_CASING);
         SERPENTINE.onModelRegister();
         registerItemModel(HARDBLOCKS);
+        registerItemModel(HARDBLOCKS1);
         registerItemModel(CUSTOMSHEETS);
+        registerItemModel(METALLURGY);
+        registerItemModel(METALLURGY_2);
+        registerItemModel(METALLURGY_ROLL);
         registerItemModel(CONVEYOR_BELT);
+        registerItemModel(ROCKET_ASSEMBLER_CASING);
         registerItemModel(EUV_LITHOGRAPHER_COMPONENT);
     }
 
