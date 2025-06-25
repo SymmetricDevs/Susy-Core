@@ -33,11 +33,6 @@ public abstract class MetaTileEntityStrandMold extends MetaTileEntityStrandShape
         super(metaTileEntityId);
     }
 
-    @Override
-    public long getVoltage() {
-        return energyContainer.getInputVoltage();
-    }
-
     protected abstract int getRequiredMetal();
     protected abstract double getOutputThickness();
     protected abstract double getOutputWidth();
