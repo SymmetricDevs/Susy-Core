@@ -55,7 +55,7 @@ import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
 import static supersymmetry.common.blocks.SuSyBlocks.TANK_SHELL;
 import static supersymmetry.common.blocks.SuSyBlocks.TANK_SHELL1;
 
-public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart implements ICleanroomReceiver, IControllable, IWorkable {
+public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart implements ICleanroomReceiver, IWorkable {
     private final ScannerLogic scannerLogic;
     private float scanDuration = 0;
     private MetaTileEntityBuildingCleanroom linkedCleanroom;

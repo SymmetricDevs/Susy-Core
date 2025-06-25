@@ -19,7 +19,9 @@ import gregtech.common.metatileentities.MetaTileEntities;
 import gregtech.common.metatileentities.multi.electric.MetaTileEntityCleanroom;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -28,6 +30,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityComponentScanner;
 
@@ -349,5 +353,10 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
         } catch (IllegalAccessException e) {
             return null;
         }
+    }
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
+        tooltip.add(I18n.format("susy.machine.building_cleanroom.tooltip.1"));
+        tooltip.add(I18n.format("susy.machine.building_cleanroom.tooltip.2"));
     }
 }
