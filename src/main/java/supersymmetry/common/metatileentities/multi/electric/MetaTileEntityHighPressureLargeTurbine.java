@@ -59,9 +59,9 @@ public class MetaTileEntityHighPressureLargeTurbine extends MetaTileEntitySUSYLa
         TraceabilityPredicate maintenance = abilities(MultiblockAbility.MAINTENANCE_HATCH).setMaxGlobalLimited(1);
 
         return FactoryBlockPattern.start()
-                .aisle("GAAAAAAAAAAAO", "GAAAAAAAAAAAO", "G    AA     O")
-                .aisle("GAAAAAAAAAAAO", "GHHHALLLLCCCF", "GAAAAAAAAAAAO")
-                .aisle("GAAAAAAAAAAAO", "GSAAAAAAAAAAO", "G    AA     O")
+                .aisle("GAAAAAAAAAAAO", "GAAAAAAAAAAAO", "G   A   A   O")
+                .aisle("GAAAAAAAAAAAO", "GHHHPLLLLCCCF", "GAAAAAAAAAAAO")
+                .aisle("GAAAAAAAAAAAO", "GSAAAAAAAAAAO", "G   A   A   O")
                 .where('S', selfPredicate())
                 .where('A', casingPredicate
                        .or(autoAbilities(false, false, false, false, false, false, false))
@@ -76,6 +76,7 @@ public class MetaTileEntityHighPressureLargeTurbine extends MetaTileEntitySUSYLa
                 .where('G', casingPredicate
                         .or(autoAbilities(false, false, false, false, true, false, false))
                         .or(maintenance))
+                .where('P', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.TITANIUM_PIPE)))
                 .where(' ', any())
                 .build();
     }
