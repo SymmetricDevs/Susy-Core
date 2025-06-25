@@ -37,18 +37,9 @@ public class BlockFluidBaseHookMixin {
             float all,
             CallbackInfoReturnable<IBlockState> cir
     ) {
-        if (blockAccess instanceof World || blockAccess instanceof ChunkCache) {
+        if (!(blockAccess instanceof World || blockAccess instanceof ChunkCache)) {
             cir.setReturnValue(oldState);
         }
     }
-
-    @Inject(method = "git/jbredwards/fluidlogged_api/mod/asm/plugins/forge/PluginBlockFluidBase$Hooks.isWithinFluid (Lnet/minecraft/block/Block;Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/Vec3d;Lnet/minecraftforge/common/property/IExtendedBlockState;)Z", at = @At("HEAD"), cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD)
-    private static void coriumCheck(Block block, IBlockAccess world, BlockPos pos, Vec3d entityVec, IExtendedBlockState state, CallbackInfoReturnable<Boolean> cir) {
-        if (state.getValue(BlockFluidBase.LEVEL_CORNERS[0]) == null) {
-            cir.setReturnValue(isWithinFluid(block, pos, entityVec.y, 1));
-        }
-    }
-
-
 
 }
