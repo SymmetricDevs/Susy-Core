@@ -249,8 +249,6 @@ public class SuSyMetaTileEntities {
 
         UHMWPE_CAN = registerMetaTileEntity(14512, new MetaTileEntityPlasticCan(susyId("drum.uhmwpe"), new PropertyFluidFilter(425, true, true, true, false), 0xc5e3de, 512_000)); // sadly I have to put it here
 
-        ECCENTRIC_ROLL_CRUSHER = registerMetaTileEntity(14513, new MetaTileEntityEccentricRollCrusher(susyId("eccentric_roll_crusher"), RecipeMaps.MACERATOR_RECIPES));
-
         SINTERING_OVEN = registerMetaTileEntity(14521, new MetaTileEntitySinteringOven(susyId("sintering_oven")));
 
         HERMETICALLY_SEALED_CRATE = registerMetaTileEntity(14522, new MetaTileEntityCrate(susyId("crate.pe"), Materials.Polyethylene, 54));
@@ -295,6 +293,8 @@ public class SuSyMetaTileEntities {
         TANK_EXTENDER = registerMetaTileEntity(14738, new MetaTileEntityExtender(susyId("extender.tank"), cap -> cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, SusyTextures.TANK_EXTENDER, Materials.Steel));
         INV_TANK_EXTENDER = registerMetaTileEntity(14739, new MetaTileEntityExtender(susyId("extender.inv_tank"), cap -> cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, SusyTextures.INV_TANK_EXTENDER, Materials.Steel));
         UNIVERSAL_EXTENDER = registerMetaTileEntity(14740, new MetaTileEntityExtender(susyId("extender.universal"), cap -> true, SusyTextures.UNIVERSAL_EXTENDER, Materials.Aluminium));
+
+        ECCENTRIC_ROLL_CRUSHER = registerMetaTileEntity(14741, new MetaTileEntityEccentricRollCrusher(susyId("eccentric_roll_crusher"), RecipeMaps.MACERATOR_RECIPES));
 
         // 14800 Pyrotech Integration: Primitive Smelter
         PRIMITIVE_ITEM_IMPORT = registerMetaTileEntity(14801, new MetaTileEntityPrimitiveItemBus(susyId("primitive_item_import"), false));

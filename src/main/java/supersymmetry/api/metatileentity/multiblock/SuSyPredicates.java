@@ -1,15 +1,15 @@
 package supersymmetry.api.metatileentity.multiblock;
 
 import cam72cam.immersiverailroading.IRBlocks;
-import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 import gregtech.api.GregTechAPI;
 import gregtech.api.block.IHeatingCoilBlockStats;
+import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 import gregtech.api.pattern.PatternStringError;
 import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.util.BlockInfo;
+import gregtech.api.util.RelativeDirection;
 import gregtech.common.blocks.BlockColored;
 import gregtech.common.blocks.MetaBlocks;
-import gregtech.api.util.RelativeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.state.IBlockState;
@@ -21,16 +21,14 @@ import net.minecraftforge.fml.common.Loader;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.SuSyValues;
-import supersymmetry.common.blocks.BlockConveyor;
-import supersymmetry.common.blocks.BlockCoolingCoil;
-import supersymmetry.common.blocks.BlockEccentricRoll;
-import supersymmetry.common.blocks.BlockSinteringBrick;
-import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.blocks.*;
 
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * Class containing global predicates

@@ -58,7 +58,6 @@ public class Supersymmetry {
     }
 
 
-
     @Mod.EventHandler
     public void onPreInit(@NotNull FMLPreInitializationEvent event) {
 
