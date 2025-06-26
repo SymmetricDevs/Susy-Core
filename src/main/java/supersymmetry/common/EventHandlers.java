@@ -1,6 +1,7 @@
 package supersymmetry.common;
 
 import com.cleanroommc.groovyscript.event.GroovyReloadEvent;
+import gregtech.api.GregTechAPI;
 import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.util.GTTeleporter;
 import gregtech.api.util.TeleportHandler;
@@ -31,6 +32,8 @@ import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.event.MobHordeWorldData;
 import supersymmetry.common.item.SuSyArmorItem;
+import supersymmetry.common.network.SPacketFirstJoin;
+import supersymmetry.common.network.SPacketRemoveFluidState;
 import supersymmetry.loaders.recipes.handlers.RecyclingManager;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
@@ -50,6 +53,8 @@ public class EventHandlers {
             data.setBoolean(FIRST_SPAWN, true);
             playerData.setTag(EntityPlayer.PERSISTED_NBT_TAG, data);
             if (event.player.isCreative()) return;
+
+            GregTechAPI.networkHandler.sendTo(new SPacketFirstJoin(), (EntityPlayerMP) event.player);
 
             EntityDropPod dropPod = new EntityDropPod(event.player.getEntityWorld(), event.player.posX, event.player.posY + 256, event.player.posZ);
 

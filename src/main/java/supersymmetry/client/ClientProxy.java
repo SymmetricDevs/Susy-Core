@@ -5,7 +5,11 @@ import gregtech.api.items.metaitem.MetaOreDictItem;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.stack.UnificationEntry;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiIngame;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -52,12 +56,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
+import static org.lwjgl.opengl.GL11.*;
 import static supersymmetry.common.EventHandlers.FIRST_SPAWN;
 
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID, value = Side.CLIENT)
 public class ClientProxy extends CommonProxy {
-    private static double titleRenderTimer = -1;
+    public static int titleRenderTimer = -1;
+    private static final int TITLE_RENDER_LENGTH = 150;
 
     public void preLoad() {
         super.preLoad();
@@ -108,7 +114,7 @@ public class ClientProxy extends CommonProxy {
             CatalystInfo catalystInfo = group.getCatalystInfos().get(is);
             if (catalystInfo != null) {
                 tooltips.add(TextFormatting.UNDERLINE + (TextFormatting.BLUE + I18n.format("gregtech.catalyst_group." + group.getName() + ".name")));
-                if(catalystInfo.getTier() == CatalystInfo.NO_TIER){
+                if (catalystInfo.getTier() == CatalystInfo.NO_TIER) {
                     tooltips.add(TextFormatting.RED + "Disclaimer: Catalyst bonuses for non-tiered catalysts have not yet been implemented.");
                     tooltips.add(I18n.format("gregtech.universal.catalysts.tooltip.yield", catalystInfo.getYieldEfficiency()));
                     tooltips.add(I18n.format("gregtech.universal.catalysts.tooltip.energy", catalystInfo.getEnergyEfficiency()));
@@ -159,8 +165,12 @@ public class ClientProxy extends CommonProxy {
         if (titleRenderTimer >= 0) {
             GuiIngame gui = Minecraft.getMinecraft().ingameGUI;
             titleRenderTimer++;
-            if (titleRenderTimer % 150 == 0) {
-                int i = (int) titleRenderTimer / 150; // 0 doesn't happen
+            if (titleRenderTimer % TITLE_RENDER_LENGTH == 0) {
+                int i = titleRenderTimer / TITLE_RENDER_LENGTH; // 0 doesn't happen
+                if (i == 4) { // Three messages
+                    titleRenderTimer = -1;
+                    return;
+                }
                 // This is literally how you have to use this method. I'm sorry.
                 gui.displayTitle(null,
                         null, 20, 100, 30);
@@ -168,23 +178,52 @@ public class ClientProxy extends CommonProxy {
                         I18n.format("supersymmetry.subtitle." + i), 20, 100, 30);
                 gui.displayTitle(I18n.format("supersymmetry.title." + i),
                         null, 20, 100, 30);
-                if (i == 3) { // Three messages
-                    titleRenderTimer = -1;
-                }
             }
         }
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onPlayerLoggedIn(EntityJoinWorldEvent event) {
-        if (!(event.getEntity() instanceof EntityPlayer player)) {
-            return;
-        }
-        NBTTagCompound playerData = player.getEntityData();
-        NBTTagCompound data = playerData.hasKey(EntityPlayer.PERSISTED_NBT_TAG) ? playerData.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG) : new NBTTagCompound();
-        if (!data.getBoolean(FIRST_SPAWN)) {
-            // Set up title cards
-            titleRenderTimer = 0;
+    public static void afterRenderSubtitles(RenderGameOverlayEvent.Pre event) {
+        // Subtitles are the last thing to render before the titles, and it seems bad to not let the subtitles render,
+        // so this is the best place.
+
+        if (event.getType() == RenderGameOverlayEvent.ElementType.SUBTITLES && titleRenderTimer >= 0) {
+            // Render a black foreground. The alpha should stay at 255 until the first title, at which it starts fading.
+            // This is taken from Gui.java, with some cleanup.
+            double left = 0, top = 0, right = event.getResolution().getScaledWidth(), bottom = event.getResolution().getScaledHeight();
+            double zLevel = 0; // Render above the hotbar items
+
+            int topColor = 255;
+            // Fade out the top color:
+            if (titleRenderTimer > TITLE_RENDER_LENGTH * 5 / 2) {
+                topColor -= (titleRenderTimer - TITLE_RENDER_LENGTH * 5 / 2) * 255 / TITLE_RENDER_LENGTH;
+                if (topColor < 0) topColor = 0;
+            }
+            int bottomColor = 255;
+            // Fade out the bottom color:
+            if (titleRenderTimer > TITLE_RENDER_LENGTH * 2) {
+                bottomColor -= (titleRenderTimer - TITLE_RENDER_LENGTH * 2) * 255 / TITLE_RENDER_LENGTH;
+                if (bottomColor < 0) bottomColor = 0;
+            }
+            GlStateManager.disableTexture2D();
+            GlStateManager.enableBlend();
+            GlStateManager.disableAlpha();
+            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+            GlStateManager.shadeModel(GL_SMOOTH);
+            GlStateManager.disableDepth();
+            Tessellator tessellator = Tessellator.getInstance();
+            BufferBuilder bufferbuilder = tessellator.getBuffer();
+            bufferbuilder.begin(GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+            bufferbuilder.pos(right, top, zLevel).color(0, 0, 0, topColor).endVertex();
+            bufferbuilder.pos(left, top, zLevel).color(0, 0, 0, topColor).endVertex();
+            bufferbuilder.pos(left, bottom, zLevel).color(0, 0, 0, bottomColor).endVertex();
+            bufferbuilder.pos(right, bottom, zLevel).color(0, 0, 0, bottomColor).endVertex();
+            tessellator.draw();
+            GlStateManager.shadeModel(GL_FLAT);
+            GlStateManager.disableBlend();
+            GlStateManager.enableAlpha();
+            GlStateManager.enableTexture2D();
+            GlStateManager.enableDepth();
         }
     }
 }
