@@ -87,7 +87,7 @@ public class TileEntityCoverable extends TickableTileEntityBase {
 
     public EnumFacing[] getSides() {
         ArrayList<EnumFacing> ret = new ArrayList<>(6);
-        for (EnumFacing val : EnumFacing.values()) {
+        for (EnumFacing val : EnumFacing.VALUES) {
             if (isCovered(val)) {
                 ret.add(val);
             }
@@ -97,6 +97,16 @@ public class TileEntityCoverable extends TickableTileEntityBase {
 
     public ItemStack getCoverType() {
         return coverType;
+    }
+
+    public int getCoverCount() {
+        int ret = 0;
+        for (EnumFacing side : EnumFacing.VALUES) {
+            if (isCovered(side)) {
+                ret++;
+            }
+        }
+        return ret;
     }
 
     public ItemStack placeCover(EnumFacing enumFacing, ItemStack inp, EntityPlayer player) {
