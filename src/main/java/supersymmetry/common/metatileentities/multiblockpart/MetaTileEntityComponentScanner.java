@@ -22,9 +22,12 @@ import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMulti
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
@@ -35,8 +38,11 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import org.jetbrains.annotations.Nullable;
+
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.capability.impl.ScannerLogic;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.api.util.StructAnalysis;
@@ -54,6 +60,7 @@ import java.util.stream.Collectors;
 import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
 import static supersymmetry.common.blocks.SuSyBlocks.TANK_SHELL;
 import static supersymmetry.common.blocks.SuSyBlocks.TANK_SHELL1;
+import static supersymmetry.common.blocks.SuSyBlocks.susyBlocks;
 
 public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart implements ICleanroomReceiver, IWorkable {
     private final ScannerLogic scannerLogic;
@@ -135,7 +142,8 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
 
         boolean hasAir = struct.status != BuildStat.HULL_FULL;
         struct.status = BuildStat.SCANNING;
-
+        writeBlocksToNBT(blockList.stream().collect(Collectors.toSet()), this.getWorld());
+        //i dont like this
         if (blockList.stream().anyMatch(engineDetect)) {
             analyzeEngine(blocksConnected);
         } else if (blockList.stream().anyMatch(controlPodDetect) && hasAir) {
@@ -202,6 +210,46 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                 - Guidance computer (not a tile entity)
                 - Seat
         */
+    }
+
+    public void writeBlocksToNBT(Set<BlockPos> blocks,World world) {
+        Map<String,Integer> counts = new HashMap<String,Integer>();
+        List<NBTTagCompound> special = new ArrayList<>();
+        for (BlockPos blockpos : blocks) {
+        IBlockState state = world.getBlockState(blockpos);
+            Block block = state.getBlock();
+            int meta = block.getMetaFromState(state);
+            TileEntity te = world.getTileEntity(blockpos);
+            if (te != null) {
+                if (te instanceof TileEntityCoverable)
+                {
+                    special.add(((TileEntityCoverable)te).writeToNBT(new NBTTagCompound()));
+                }
+            }
+
+                String key = block.getRegistryName().toString() + "#" + meta;
+                counts.put(key, counts.getOrDefault(key, 0) + 1);
+                SusyLog.logger.info("this is something. {} {}",key,counts.get(key));
+            
+        }
+        NBTTagCompound root = new NBTTagCompound();
+        NBTTagList list = new NBTTagList();
+        for (Map.Entry<String, Integer> e : counts.entrySet()) {
+            String[] p = e.getKey().split("#", 2);
+            NBTTagCompound c = new NBTTagCompound();
+            c.setString("registryName", p[0]);
+            c.setInteger("meta", Integer.parseInt(p[1]));
+            c.setInteger("count", e.getValue());
+            list.appendTag(c);
+        }
+        NBTTagList mteExtras = new NBTTagList();
+        for (NBTTagCompound teEntry : special) {
+            mteExtras.appendTag(teEntry);
+        }
+        root.setTag("blockCounts", list);
+        root.setTag("mteData", mteExtras);
+        SusyLog.logger.info("tag: {}",root);
+        getInventory().addToCompound(tag -> {tag.setTag("structuralData", root); return tag;});
     }
 
     // Analyzes whether or not the spacecraft is hollow
