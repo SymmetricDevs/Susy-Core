@@ -7,6 +7,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -23,6 +24,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.blocks.IAnimatablePart;
+import supersymmetry.api.util.SuSyDamageSources;
 import supersymmetry.common.tileentities.AnimatablePartTileEntity;
 
 import javax.annotation.Nonnull;
@@ -133,6 +135,14 @@ public class BlockEccentricRoll extends VariantBlock<BlockEccentricRoll.RollType
     @SuppressWarnings("deprecation")
     public boolean isFullCube(@NotNull IBlockState state) {
         return false;
+    }
+
+    @Override
+    public void onEntityCollision(@NotNull World worldIn, @NotNull BlockPos pos,
+                                  @NotNull IBlockState state, @NotNull Entity entityIn) {
+        if (state.getValue(ACTIVE)) {
+            entityIn.attackEntityFrom(SuSyDamageSources.getCrusherDamage(), 2.0F);
+        }
     }
 
     public enum RollType implements IStringSerializable, IStateHarvestLevel {
