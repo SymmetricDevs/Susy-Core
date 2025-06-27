@@ -3,9 +3,7 @@ package supersymmetry.common.blocks;
 import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantBlock;
 import gregtech.common.items.tool.rotation.CustomBlockRotations;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -24,16 +22,15 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import supersymmetry.common.tileentities.TileEntityEccentricRoll;
+import supersymmetry.api.blocks.IAnimatablePart;
+import supersymmetry.common.tileentities.AnimatablePartTileEntity;
 
 import javax.annotation.Nonnull;
 
 import static gregtech.common.items.tool.rotation.CustomBlockRotations.BLOCK_DIRECTIONAL_BEHAVIOR;
 import static net.minecraft.block.BlockDirectional.FACING;
 
-public class BlockEccentricRoll extends VariantBlock<BlockEccentricRoll.RollType> implements ITileEntityProvider {
-
-    public static final PropertyBool ACTIVE = PropertyBool.create("active");
+public class BlockEccentricRoll extends VariantBlock<BlockEccentricRoll.RollType> implements IAnimatablePart<BlockEccentricRoll> {
 
     public BlockEccentricRoll() {
         super(net.minecraft.block.material.Material.IRON);
@@ -55,7 +52,7 @@ public class BlockEccentricRoll extends VariantBlock<BlockEccentricRoll.RollType
     @Nullable
     @Override
     public TileEntity createNewTileEntity(@NotNull World worldIn, int meta) {
-        return new TileEntityEccentricRoll();
+        return new AnimatablePartTileEntity();
     }
 
     @Override

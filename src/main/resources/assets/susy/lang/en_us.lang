@@ -113,6 +113,10 @@ tile.conveyor_belt.lv.name=Conveyor Belt
 
 tile.drill_bit.steel.name=Steel Drill Bit Block
 
+tile.eccentric_roll.steel.name=Eccentric Crushing Wheel
+tile.grinder_casing.abrasion_resistant_casing.name=Abrasion Resistant Casing
+tile.grinder_casing.hydraulic_mechanical_gearbox.name=Hydraulic Mechanical Gearbox
+
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
 tile.susy_stone_smooth.gneiss.name=Gneiss
@@ -270,6 +274,8 @@ gregtech.machine.railroad_engineering_station.name=Railroad Engineering Station
 gregtech.machine.railroad_engineering_station.tooltip=Place Immersive Railroading Tracks in the middle to form the multiblock
 gregtech.machine.railroad_engineering_station.tooltip.1=The concrete below the tracks can be substituted with any block, including pipes or air
 gregtech.machine.quarry.name=Quarry
+gregtech.machine.eccentric_roll_crusher.name=Eccentric Roll Crusher
+gregtech.machine.eccentric_roll_crusher.tooltip=Eccentricity does not mean low efficiency.
 
 gregtech.machine.evaporation_pool.name=Evaporation Pool:
 gregtech.machine.evaporation_pool.tooltip.info=Max square of %1$sx%1$s, minimum %2$sx%2$s. Read info tab and tool info for more details.

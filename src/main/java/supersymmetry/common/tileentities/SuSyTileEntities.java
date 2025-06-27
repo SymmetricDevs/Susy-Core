@@ -1,18 +1,21 @@
 package supersymmetry.common.tileentities;
 
-import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import org.jetbrains.annotations.NotNull;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import supersymmetry.client.renderer.handler.AnimatablePartRenderer;
 
 import static supersymmetry.api.util.SuSyUtility.susyId;
 
 public class SuSyTileEntities {
 
     public static void register() {
-        registerTileEntity(TileEntityEccentricRoll.class, "eccentric_roll");
+        GameRegistry.registerTileEntity(AnimatablePartTileEntity.class, susyId("animatable_part"));
     }
 
-    private static void registerTileEntity(@NotNull Class<? extends TileEntity> teClazz, @NotNull String name) {
-        GameRegistry.registerTileEntity(teClazz, susyId(name));
+    @SideOnly(Side.CLIENT)
+    public static void registerRenderers() {
+        ClientRegistry.bindTileEntitySpecialRenderer(AnimatablePartTileEntity.class, new AnimatablePartRenderer());
     }
 }
