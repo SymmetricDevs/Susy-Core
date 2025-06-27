@@ -9,7 +9,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.IStringSerializable;
 import supersymmetry.api.blocks.VariantDirectionalCoverableBlock;
-import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
 public class BlockInterStage extends VariantDirectionalCoverableBlock<BlockInterStage.InterStageType> {
     public BlockInterStage() {

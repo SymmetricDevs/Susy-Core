@@ -67,7 +67,7 @@ public class TileEntityCoverable extends TickableTileEntityBase {
 
     public TileEntityCoverable() {
         super();
-        coverSpots=0;
+        coverSpots = 0;
         coverType = ItemStack.EMPTY;
         if (getWorld() != null && !getWorld().isRemote)
             setSourceModel();
@@ -79,8 +79,8 @@ public class TileEntityCoverable extends TickableTileEntityBase {
 
     private void setCovered(EnumFacing enumFacing, boolean cov) {
         coverSpots = cov ? (byte) (coverSpots | (1 << enumFacing.ordinal())) : (byte) (coverSpots & ~(1 << enumFacing.ordinal()));
-        if (coverSpots==0) {
-            coverType=ItemStack.EMPTY;
+        if (coverSpots == 0) {
+            coverType = ItemStack.EMPTY;
         }
         this.markDirty();
     }
@@ -130,17 +130,17 @@ public class TileEntityCoverable extends TickableTileEntityBase {
                 ItemStack dropped = coverType.copy();
                 dropped.setCount(getSides().length);
                 player.dropItem(dropped, false, true);
-                coverSpots=0;
-                coverType=inp.copy();
+                coverSpots = 0;
+                coverType = inp.copy();
                 coverType.setCount(1);
                 setCovered(enumFacing, true);
-                ret.setCount(inp.getCount()-1);
+                ret.setCount(inp.getCount() - 1);
             }
         } else {
             if (inp.isEmpty()) {
                 ret = ItemStack.EMPTY;
             } else if (inp.isItemEqual(coverType) || coverType.isEmpty()) {
-                ret.setCount(inp.getCount()-1);
+                ret.setCount(inp.getCount() - 1);
                 setCovered(enumFacing, true);
                 if (coverType.isEmpty()) {
                     coverType = inp.copy();
@@ -156,7 +156,7 @@ public class TileEntityCoverable extends TickableTileEntityBase {
                 coverType = inp.copy();
                 coverType.setCount(1);
                 setCovered(enumFacing, true);
-                ret.setCount(inp.getCount()-1);
+                ret.setCount(inp.getCount() - 1);
             }
         }
         if (!world.isRemote) {
@@ -187,15 +187,15 @@ public class TileEntityCoverable extends TickableTileEntityBase {
     @Override
     public void readFromNBT(@NotNull NBTTagCompound compound) {
         super.readFromNBT(compound);
-        coverType.deserializeNBT(compound.getCompoundTag("coverType"));
+        coverType = new ItemStack(compound.getCompoundTag("cover_type"));
         coverSpots = compound.getByte("spots");
     }
 
     @Override
     public @NotNull NBTTagCompound writeToNBT(@NotNull NBTTagCompound compound) {
         super.writeToNBT(compound);
-        compound.setTag("cover_type",coverType.writeToNBT(new NBTTagCompound()));
-        compound.setByte("spots",coverSpots);
+        compound.setTag("cover_type", coverType.writeToNBT(new NBTTagCompound()));
+        compound.setByte("spots", coverSpots);
         return compound;
     }
 
@@ -259,7 +259,7 @@ public class TileEntityCoverable extends TickableTileEntityBase {
         if (sourceModel == null) {
             return null;
         }
-        return Pair.of( sourceModel.getParticleTexture(), 0xFFFFFF);
+        return Pair.of(sourceModel.getParticleTexture(), 0xFFFFFF);
     }
 
     @SideOnly(Side.CLIENT)
