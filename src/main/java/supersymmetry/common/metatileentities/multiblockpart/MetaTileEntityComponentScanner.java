@@ -22,6 +22,7 @@ import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMulti
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -214,7 +215,6 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
 
     public void writeBlocksToNBT(Set<BlockPos> blocks,World world) {
         Map<String,Integer> counts = new HashMap<String,Integer>();
-        List<NBTTagCompound> special = new ArrayList<>();
         for (BlockPos blockpos : blocks) {
         IBlockState state = world.getBlockState(blockpos);
             Block block = state.getBlock();
@@ -223,33 +223,32 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             if (te != null) {
                 if (te instanceof TileEntityCoverable)
                 {
-                    special.add(((TileEntityCoverable)te).writeToNBT(new NBTTagCompound()));
-                }
+                    TileEntityCoverable teCoverable = (TileEntityCoverable)te;
+                    if (teCoverable!=null && teCoverable.getCoverType().getItem().getRegistryName()!=Items.AIR.getRegistryName())  // this if case is horrible too
+{                        String key = teCoverable.getCoverType().getItem().getRegistryName().toString() + "#" + teCoverable.getCoverType().getMetadata() + "#cover";//i am sorry for this
+                        counts.put(key, counts.getOrDefault(key, 0) + 1); 
+                }}
             }
-
-                String key = block.getRegistryName().toString() + "#" + meta;
+                String key = block.getRegistryName().toString() + "#" + meta + "#block";//i am sorry for this
                 counts.put(key, counts.getOrDefault(key, 0) + 1);
-                SusyLog.logger.info("this is something. {} {}",key,counts.get(key));
             
         }
+
         NBTTagCompound root = new NBTTagCompound();
         NBTTagList list = new NBTTagList();
         for (Map.Entry<String, Integer> e : counts.entrySet()) {
-            String[] p = e.getKey().split("#", 2);
+            String[] p = e.getKey().split("#", 3);
             NBTTagCompound c = new NBTTagCompound();
             c.setString("registryName", p[0]);
             c.setInteger("meta", Integer.parseInt(p[1]));
+            c.setString("type", p[2]);
             c.setInteger("count", e.getValue());
             list.appendTag(c);
         }
-        NBTTagList mteExtras = new NBTTagList();
-        for (NBTTagCompound teEntry : special) {
-            mteExtras.appendTag(teEntry);
-        }
+
         root.setTag("blockCounts", list);
-        root.setTag("mteData", mteExtras);
         SusyLog.logger.info("tag: {}",root);
-        getInventory().addToCompound(tag -> {tag.setTag("structuralData", root); return tag;});
+        getInventory().addToCompound(tc -> {tc.setTag("structureInfo", root); return tc;});
     }
 
     // Analyzes whether or not the spacecraft is hollow
