@@ -167,7 +167,7 @@ public class ClientProxy extends CommonProxy {
             titleRenderTimer++;
             if (titleRenderTimer % TITLE_RENDER_LENGTH == 0) {
                 int i = titleRenderTimer / TITLE_RENDER_LENGTH; // 0 doesn't happen
-                if (i == 4) { // Three messages
+                if (i == 3) { // Two messages
                     titleRenderTimer = -1;
                     return;
                 }
