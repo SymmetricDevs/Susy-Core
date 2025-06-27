@@ -294,7 +294,7 @@ public class SuSyMetaTileEntities {
         INV_TANK_EXTENDER = registerMetaTileEntity(14739, new MetaTileEntityExtender(susyId("extender.inv_tank"), cap -> cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, SusyTextures.INV_TANK_EXTENDER, Materials.Steel));
         UNIVERSAL_EXTENDER = registerMetaTileEntity(14740, new MetaTileEntityExtender(susyId("extender.universal"), cap -> true, SusyTextures.UNIVERSAL_EXTENDER, Materials.Aluminium));
 
-        ECCENTRIC_ROLL_CRUSHER = registerMetaTileEntity(14741, new MetaTileEntityEccentricRollCrusher(susyId("eccentric_roll_crusher"), RecipeMaps.MACERATOR_RECIPES));
+        ECCENTRIC_ROLL_CRUSHER = registerMetaTileEntity(14741, new MetaTileEntityEccentricRollCrusher(susyId("eccentric_roll_crusher"), SuSyRecipeMaps.ECCENTRIC_ROLL_CRUSHER));
 
         // 14800 Pyrotech Integration: Primitive Smelter
         PRIMITIVE_ITEM_IMPORT = registerMetaTileEntity(14801, new MetaTileEntityPrimitiveItemBus(susyId("primitive_item_import"), false));

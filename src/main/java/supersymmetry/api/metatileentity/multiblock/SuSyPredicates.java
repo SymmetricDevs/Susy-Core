@@ -225,7 +225,7 @@ public class SuSyPredicates {
                 /// Adds the position of the eccentric roll to the match context
                 /// This works much like how CEu deals with VAActiveBlocks (e.g. coils)
                 /// @see MultiblockControllerBase#states(IBlockState...)
-                bws.getMatchContext().getOrPut("Animatable", new LinkedList<>()).add(bws.getPos());
+                bws.getMatchContext().getOrPut("ERC_Rolls", new LinkedList<>()).add(bws.getPos());
                 return true;
             }
             return false;

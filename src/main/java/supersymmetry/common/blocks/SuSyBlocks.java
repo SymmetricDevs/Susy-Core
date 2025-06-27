@@ -52,6 +52,7 @@ public class SuSyBlocks {
     public static BlockRocketAssemblerCasing ROCKET_ASSEMBLER_CASING;
     public static BlockRegolith REGOLITH;
     public static BlockEccentricRoll ECCENTRIC_ROLL;
+    public static BlockGrinderCasing GRINDER_CASING;
 
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
@@ -146,6 +147,9 @@ public class SuSyBlocks {
         ECCENTRIC_ROLL = new BlockEccentricRoll();
         ECCENTRIC_ROLL.setRegistryName("eccentric_roll");
 
+        GRINDER_CASING = new BlockGrinderCasing();
+        GRINDER_CASING.setRegistryName("grinder_casing");
+
         SuSyTileEntities.register();
     }
 
@@ -182,6 +186,7 @@ public class SuSyBlocks {
         registerItemModel(ROCKET_ASSEMBLER_CASING);
         registerItemModel(REGOLITH);
         registerItemModel(ECCENTRIC_ROLL);
+        registerItemModel(GRINDER_CASING);
     }
 
     @SideOnly(Side.CLIENT)

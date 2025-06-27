@@ -3,7 +3,6 @@ package supersymmetry;
 import com.cleanroommc.modularui.factory.GuiManager;
 import gregtech.GTInternalTags;
 import net.minecraftforge.client.model.obj.OBJLoader;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
@@ -17,7 +16,6 @@ import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.capability.SuSyCapabilities;
 import supersymmetry.api.metatileentity.MetaTileEntityGuiFactory;
 import supersymmetry.api.sound.SusySounds;
-import supersymmetry.client.renderer.handler.EccentricRollRenderer;
 import supersymmetry.common.CommonProxy;
 import supersymmetry.common.SusyMetaEntities;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -30,7 +28,7 @@ import supersymmetry.common.covers.SuSyCoverBehaviors;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
-import supersymmetry.common.tileentities.TileEntityEccentricRoll;
+import supersymmetry.common.tileentities.SuSyTileEntities;
 import supersymmetry.loaders.SuSyIRLoader;
 
 @Mod(name = Supersymmetry.NAME, modid = Supersymmetry.MODID, version = Tags.VERSION, dependencies = GTInternalTags.DEP_VERSION_STRING + ";required-after:gcym;after:immersiverailroading")
@@ -102,6 +100,6 @@ public class Supersymmetry {
     @SideOnly(Side.CLIENT)
     @Mod.EventHandler
     public void registerRenderers(FMLPreInitializationEvent event) {
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEccentricRoll.class, new EccentricRollRenderer());
+        SuSyTileEntities.registerRenderers();
     }
 }
