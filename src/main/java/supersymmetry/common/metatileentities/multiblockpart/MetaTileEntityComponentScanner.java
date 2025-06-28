@@ -222,7 +222,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                 if (te instanceof TileEntityCoverable)
                 {
                     TileEntityCoverable teCoverable = (TileEntityCoverable)te;
-                    if (teCoverable!=null && teCoverable.getCoverType().getItem().getRegistryName()!=Items.AIR.getRegistryName())  // this if case is horrible through-holes
+                    if (teCoverable!=null && teCoverable.getCoverType().getItem().getRegistryName()!=Items.AIR.getRegistryName()) 
                     {                        
                         String key = teCoverable.getCoverType().getItem().getRegistryName().toString() + "#" + teCoverable.getCoverType().getMetadata() + "#cover";//i am sorry for this
                         counts.put(key, counts.getOrDefault(key, 0) + 1); 
