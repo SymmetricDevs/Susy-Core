@@ -30,11 +30,6 @@ public class MetaTileEntityRollingMill extends MetaTileEntityStrandShaper {
     }
 
     @Override
-    public long getVoltage() {
-        return 64;
-    }
-
-    @Override
     protected boolean consumeInputsAndSetupRecipe() {
         Strand orig = this.input.take();
         if (orig == null) return false;

@@ -59,9 +59,4 @@ public class MetaTileEntitySlabMold extends MetaTileEntityStrandMold {
     protected @NotNull ICubeRenderer getFrontOverlay() {
         return SusyTextures.SLAB_MOLD_OVERLAY;
     }
-
-    @Override
-    public boolean allowsExtendedFacing() {
-        return false;
-    }
 }

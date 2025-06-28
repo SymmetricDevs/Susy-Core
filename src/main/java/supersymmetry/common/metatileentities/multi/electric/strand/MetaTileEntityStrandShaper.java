@@ -90,6 +90,7 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
                 this.markDirty();
             }
         }
+
         // Check if there is a resulting strand
         // Consume input strand if it exists
         if (!getWorld().isRemote && !isActive) {
@@ -97,7 +98,7 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
                 return;
             }
             Strand possibleStrand = resultingStrand();
-            if ((possibleStrand == null && outputsStrand()) || !consumeInputsAndSetupRecipe()) {
+            if (getVoltage() == 0 ||(possibleStrand == null && outputsStrand()) || !consumeInputsAndSetupRecipe()) {
                 return;
             }
             strand = possibleStrand;
@@ -116,6 +117,7 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
     protected boolean hasRoom() {
         return this.output.getStrand() == null;
     }
+
     protected boolean consumeEnergy() {
         return energyContainer.changeEnergy(-getVoltage()) == -getVoltage();
     }
@@ -134,7 +136,9 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
         return null;
     }
 
-    public abstract long getVoltage();
+    public long getVoltage() {
+        return this.energyContainer.getInputVoltage();
+    };
 
     protected abstract boolean consumeInputsAndSetupRecipe();
 

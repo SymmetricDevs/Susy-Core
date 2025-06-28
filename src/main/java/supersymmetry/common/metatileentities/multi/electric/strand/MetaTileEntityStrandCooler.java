@@ -31,11 +31,6 @@ public class MetaTileEntityStrandCooler extends MetaTileEntityStrandShaper {
     }
 
     @Override
-    public long getVoltage() {
-        return 8;
-    }
-
-    @Override
     protected boolean consumeInputsAndSetupRecipe() {
         if (input.getStrand() != null) {
             StrandConversion conversion = StrandConversion.getConversion(input.getStrand());
