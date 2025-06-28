@@ -123,10 +123,8 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                 .equals(SuSyBlocks.COMBUSTION_CHAMBER);
         Predicate<BlockPos> controlPodDetect = bp -> getWorld().getBlockState(bp).getBlock()
                 .equals(SuSyBlocks.ROCKET_CONTROL);
-        fuelTankDetect = bp -> {
-            Block blockAt = getWorld().getBlockState(bp).getBlock();
-            return blockAt.equals(TANK_SHELL) || blockAt.equals(TANK_SHELL1);
-        };
+        fuelTankDetect = bp -> getWorld().getBlockState(bp).getBlock()
+                .equals(TANK_SHELL) || getWorld().getBlockState(bp).getBlock().equals(TANK_SHELL1);
         Predicate<BlockPos> fairingDetect = bp -> getWorld().getBlockState(bp).getBlock()
                 .equals(SuSyBlocks.FAIRING_HULL);
         Predicate<BlockPos> interstageDetect = bp -> getWorld().getBlockState(bp).getBlock()
@@ -583,6 +581,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                 case MONOPROPELLANT -> 150.0;
                 case OXIDISER -> 200.00;
             };
+
         } else if (block.equals(TANK_SHELL)) {
             return 25 + 50 * switch ((BlockTankShell.TankCoverType) variant) {
                 case TANK_SHELL -> 5;
