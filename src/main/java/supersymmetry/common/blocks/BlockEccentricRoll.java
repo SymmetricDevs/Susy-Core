@@ -25,7 +25,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.blocks.IAnimatablePart;
 import supersymmetry.api.util.SuSyDamageSources;
-import supersymmetry.common.tileentities.AnimatablePartTileEntity;
 
 import javax.annotation.Nonnull;
 
@@ -49,12 +48,6 @@ public class BlockEccentricRoll extends VariantBlock<BlockEccentricRoll.RollType
     @Override
     public TileEntity createTileEntity(@NotNull World world, @NotNull IBlockState state) {
         return hasTileEntity(state) ? createNewTileEntity(world, getMetaFromState(state)) : null;
-    }
-
-    @Nullable
-    @Override
-    public TileEntity createNewTileEntity(@NotNull World worldIn, int meta) {
-        return new AnimatablePartTileEntity();
     }
 
     @Override
