@@ -32,11 +32,6 @@ public class MetaTileEntityClusterMill extends MetaTileEntityRollingMill {
         return new MetaTileEntityClusterMill(metaTileEntityId);
     }
 
-    @Override
-    public long getVoltage() {
-        return 96;
-    }
-
 
     @Override
     protected boolean consumeInputsAndSetupRecipe() {

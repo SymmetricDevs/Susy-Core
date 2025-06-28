@@ -39,11 +39,6 @@ public class MetaTileEntityTurningZone extends MetaTileEntityStrandShaper {
     }
 
     @Override
-    public long getVoltage() {
-        return energyContainer.getInputVoltage();
-    }
-
-    @Override
     protected boolean consumeInputsAndSetupRecipe() {
         if (this.input.getStrand() == null) {
             return false;
