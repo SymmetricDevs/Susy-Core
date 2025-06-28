@@ -224,10 +224,11 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                 if (te instanceof TileEntityCoverable)
                 {
                     TileEntityCoverable teCoverable = (TileEntityCoverable)te;
-                    if (teCoverable!=null && teCoverable.getCoverType().getItem().getRegistryName()!=Items.AIR.getRegistryName())  // this if case is horrible too
-{                        String key = teCoverable.getCoverType().getItem().getRegistryName().toString() + "#" + teCoverable.getCoverType().getMetadata() + "#cover";//i am sorry for this
+                    if (teCoverable!=null && teCoverable.getCoverType().getItem().getRegistryName()!=Items.AIR.getRegistryName())  // this if case is horrible through-holes
+                    {                        String key = teCoverable.getCoverType().getItem().getRegistryName().toString() + "#" + teCoverable.getCoverType().getMetadata() + "#cover";//i am sorry for this
                         counts.put(key, counts.getOrDefault(key, 0) + 1); 
-                }}
+                    }
+                }
             }
                 String key = block.getRegistryName().toString() + "#" + meta + "#block";//i am sorry for this
                 counts.put(key, counts.getOrDefault(key, 0) + 1);
@@ -236,7 +237,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
 
         NBTTagCompound root = new NBTTagCompound();
         NBTTagList list = new NBTTagList();
-        for (Map.Entry<String, Integer> e : counts.entrySet()) {
+        for (Map.Entry<String, Integer> e : counts.entrySet()) { //this is bad, i hope a smart person will fix it later
             String[] p = e.getKey().split("#", 3);
             NBTTagCompound c = new NBTTagCompound();
             c.setString("registryName", p[0]);
