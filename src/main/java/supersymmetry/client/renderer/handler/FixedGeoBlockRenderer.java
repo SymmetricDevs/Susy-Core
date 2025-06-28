@@ -84,24 +84,14 @@ public abstract class FixedGeoBlockRenderer<T extends TileEntity & IAnimatable> 
 
     protected void rotateBlock(EnumFacing facing) {
         switch (facing) {
-            case SOUTH:
-                GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
-                break;
-            case WEST:
-                GlStateManager.rotate(90.0F, 0.0F, 1.0F, 0.0F);
-            case NORTH:
-                //noinspection DefaultNotLastCaseInSwitch
-            default:
-                break;
-            case EAST:
-                GlStateManager.rotate(270.0F, 0.0F, 1.0F, 0.0F);
-                break;
-            case UP:
-                GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
-                break;
-            case DOWN:
-                GlStateManager.rotate(90.0F, -1.0F, 0.0F, 0.0F);
+            case SOUTH -> GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
+            case WEST -> GlStateManager.rotate(90.0F, 0.0F, 1.0F, 0.0F);
+            case EAST -> GlStateManager.rotate(270.0F, 0.0F, 1.0F, 0.0F);
+            case UP -> GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
+            case DOWN -> GlStateManager.rotate(90.0F, -1.0F, 0.0F, 0.0F);
+            default -> {
+                // No rotation needed for north
+            }
         }
-
     }
 }
