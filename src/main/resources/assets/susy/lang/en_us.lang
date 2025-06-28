@@ -1055,7 +1055,7 @@ tile.custom_sheets.darkwhitemetalsheet.name=Darker White Metal Sheet
 tile.custom_sheets.lightergraymetalsheet.name=Lighter Gray Metal Sheet
 
 susy.machine.building_cleanroom.tooltip.1=allows for creation of §fStructure Cards§7 with rocket components encoded within
-susy.machine.cleanroom.tooltip.2=also works as a regular cleanroom
+susy.machine.building_cleanroom.tooltip.2=also works as a regular cleanroom
 # Error Messages
 susy.msg.rocket_component.build_success=Component successfully analyzed.
 susy.msg.rocket_component.unscanned=Component not scanned.
