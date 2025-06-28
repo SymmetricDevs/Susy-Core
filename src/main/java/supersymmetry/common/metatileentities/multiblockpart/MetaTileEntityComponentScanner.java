@@ -143,8 +143,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
 
         boolean hasAir = struct.status != BuildStat.HULL_FULL;
         struct.status = BuildStat.SCANNING;
-        writeBlocksToNBT(blockList.stream().collect(Collectors.toSet()), this.getWorld());
-        //i dont like this
+        writeBlocksToNBT(blockList.stream().collect(Collectors.toSet()), this.getWorld()); //im sorry
         if (blockList.stream().anyMatch(engineDetect)) {
             analyzeEngine(blocksConnected);
         } else if (blockList.stream().anyMatch(controlPodDetect) && hasAir) {
@@ -154,7 +153,6 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                 struct.status = BuildStat.HULL_FULL;
                 return;
             }
-            Set<BlockPos> allBlocks = struct.getBlocks(interior);
 
             // Check if all blocks are facing the correct direction and are of the right type
             // Save the fuel capacity & type
@@ -225,7 +223,8 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                 {
                     TileEntityCoverable teCoverable = (TileEntityCoverable)te;
                     if (teCoverable!=null && teCoverable.getCoverType().getItem().getRegistryName()!=Items.AIR.getRegistryName())  // this if case is horrible through-holes
-                    {                        String key = teCoverable.getCoverType().getItem().getRegistryName().toString() + "#" + teCoverable.getCoverType().getMetadata() + "#cover";//i am sorry for this
+                    {                        
+                        String key = teCoverable.getCoverType().getItem().getRegistryName().toString() + "#" + teCoverable.getCoverType().getMetadata() + "#cover";//i am sorry for this
                         counts.put(key, counts.getOrDefault(key, 0) + 1); 
                     }
                 }
@@ -248,7 +247,6 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         }
 
         root.setTag("blockCounts", list);
-        SusyLog.logger.info("tag: {}",root);
         getInventory().addToCompound(tc -> {tc.setTag("structureInfo", root); return tc;});
     }
 
