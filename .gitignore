@@ -81,4 +81,5 @@ local.properties
 run/
 
 logs/
+/modpack/
 src/main/resources/mixins.susy.json

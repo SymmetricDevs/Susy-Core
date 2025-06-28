@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "variant=monopropellant": { "model": "susy:rocket_struct/rocket_combustion_chamber" },
+    "variant=oxidiser": { "model": "susy:rocket_struct/rocket_combustion_chamber" },
+    "variant=bipropellant": { "model": "susy:rocket_struct/rocket_combustion_chamber" }
+  }
+}

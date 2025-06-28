@@ -52,6 +52,23 @@ tile.structural_block_1.structural_block_pipocalypse.name=Structural Block Dense
 tile.structural_block_1.structural_block_vent.name=Structural Block Vent
 tile.structural_block_1.structural_block_vent_broken.name=Structural Block Vent (Broken)
 
+tile.rocket_turbopump.basic.name=Basic Rocket Turbopump
+tile.rocket_control.basic.name=Basic Rocket Control System
+tile.rocket_outer_hatch.al_2219.name=Al-2219 Rocket Hatch
+tile.rocket_tank_shell.al_2219.name=Al-2219 Tank Shell
+tile.rocket_interstage.al_7075.name=Al-7075 Rocket Interstage
+tile.rocket_fairing.al_7075.name=Al-7075 Payload Fairing Panel
+tile.rocket_nozzle.bell_basic.name=Bell Rocket Nozzle Shell
+tile.rocket_combustion_chamber.monopropellant.name=Monopropellant Combustion Chamber
+tile.rocket_combustion_chamber.bipropellant.name=Bipropellant Combustion Chamber
+tile.rocket_combustion_chamber.oxidiser.name=Oxidiser Combustion Chamber
+tile.spacecraft_life_support.oxygen_regen.name=Life Support for Oxygen Regen
+tile.spacecraft_instrument.sensors.name=Spacecraft Sensor Array
+tile.spacecraft_hull.mylar.name=Mylar Spacecraft Shell
+tile.rocket_nozzle.plug.name=Rocket Nozzle Plug
+tile.rocket_nozzle.expanding.name=Expanding Rocket Nozzle Shell
+tile.rocket_fairing_connector.al_7075.name=Al-7075 Fairing Connector
+
 tile.deposit_block.orthomagmatic.name=Orthomagmatic Deposit Block
 tile.deposit_block.metamorphic.name=Metamorphic Deposit Block
 tile.deposit_block.sedimentary.name=Sedimentary Deposit Block
@@ -149,6 +166,7 @@ susy.material.gadolinium_silicon_germanium=Gadolinium Silicon Germanium
 susy.material.latex=Latex
 susy.material.mud=Mud
 susy.material.sea_water=Sea Water
+susy.material.metallized_bopet=Metallized BoPET
 
 # Rock/Mineral Materials
 susy.material.fluorite=Fluorite
@@ -254,19 +272,19 @@ gregtech.machine.railroad_engineering_station.name=Railroad Engineering Station
 gregtech.machine.railroad_engineering_station.tooltip=Place Immersive Railroading Tracks in the middle to form the multiblock
 gregtech.machine.railroad_engineering_station.tooltip.1=The concrete below the tracks can be substituted with any block, including pipes or air
 
-gregtech.machine.evaporation_pool.name=Evaporation Pool
-gregtech.machine.evaporation_pool.tooltip.info=Max internal square of %dx%d, minimum 1x1. Read info tab and tool info for more details.
-gregtech.machine.evaporation_pool.tooltip.structure_info=Evaporation Pools can be formed with any internal dimensions ranging from a 1x1 to a %dx%d, even if it is non-square. To form a valid heated evaporation pool, coils should be placed following the pattern shown in the preview. For a more detailed explanation, view the info tab in JEI.
-gregtech.top.evaporation_pool_heated_preface=Coil Pattern:
-gregtech.top.evaporation_pool_is_heated=VALID; May be heated.
-gregtech.top.evaporation_pool_not_heated=INVALID; Will not heat.
-gregtech.top.evaporation_pool.energy_transferred=Thermal Energy:
-gregtech.mutliblock.evaporation_pool.rolling_average=Average Energy In:
-gregtech.multiblock.evaporation_pool.joules_per_tick=J/t
-gregtech.top.evaporation_pool.kilojoules=kJ
-gregtech.multiblock.evaporation_pool.description=The Evaporation Pool has interior dimensions specified in its description and a concrete exterior for IO/controller placement, with at most two of each IO type. The controller may be placed anywhere along the protruding bottom row "in front" of the interior.            The Evaporation Pool can run recipes both unpowered and powered. In order to power recipes, the multiblock will need to be formed with a "snaking" coil pattern of uniform type, as shown in the preview. Unpowered Evaporation Pools do not require any coils.        The speed of any recipe depends on the heat provided to the multi, which is based off of the number of interior blocks exposed to sunlight, the energy provided, and the tier of coil. [1EU = 10J, currently].                                                                                 Each exposed block (takes time to check) produces 1kJ/s, with heat provided by coils varying based on coil temperature * amount. The maximum recipe speed is 1/4th of duration per tick (5 recipes/s).                                                                                                   The pool will attempt to complete as many recipe progress ticks as it can with available energy, below the aforementioned maximum progression.
-gregtech.multiblock.evaporation_pool.average_speed=Avg Speed:
-gregtech.multiblock.evaporation_pool.exposed_blocks=Number of Exposed Blocks:
+gregtech.machine.evaporation_pool.name=Evaporation Pool:
+gregtech.machine.evaporation_pool.tooltip.info=Max square of %1$sx%1$s, minimum %2$sx%2$s. Read info tab and tool info for more details.
+gregtech.machine.evaporation_pool.tooltip.structure_info=Evaporation Pools can be formed with any dimensions ranging from a %2$sx%2$s to a %1$sx%1$s, even if it is non-square. To form a valid heated evaporation pool, coils should be placed following the pattern shown in the preview. For a more detailed explanation, view the info tab in JEI.
+gregtech.top.evaporation_pool_heated_preface=Heating Coil:
+gregtech.top.evaporation_pool.exposed_blocks=Exposed Blocks:
+gregtech.top.evaporation_pool.average_speed=Avg Speed:
+gregtech.multiblock.evaporation_pool.description=The Evaporation Pool has interior dimensions specified in its description and a concrete exterior for IO/controller placement, with at most two of each IO type. The controller may be placed anywhere along the protruding bottom row "in front" of the interior.            The Evaporation Pool can run recipes both unpowered and powered. In order to power recipes, the multiblock will need to be formed with a "snaking" coil pattern of uniform type, as shown in the preview. Unpowered Evaporation Pools do not require any coils.        The speed of any recipe depends on the heat provided to the multi, which is based off of the number of interior blocks exposed to sunlight, the energy provided, and the tier of coil. [1EU = 10J, currently].                                                                                 Each exposed block (takes time to check) produces 1kJ/s, with heat provided by coils varying based on coil temperature * amount.
+gregtech.multiblock.evaporation_pool_heated_preface=Heating Coil: %s
+gregtech.multiblock.evaporation_pool.is_heating=On
+gregtech.multiblock.evaporation_pool.is_not_heating=Off/Missing
+gregtech.multiblock.evaporation_pool.exposed_blocks=Exposed Blocks: %s
+gregtech.multiblock.evaporation_pool.average_speed=Avg Speed: %sx
+susy.multiblock.pattern.error.coils_or_bed=§cAll heating coils or evaporation beds must be the same§r
 
 gregtech.machine.primitive_mud_pump.name=Primitive Mud Pump
 gregtech.machine.primitive_mud_pump.tooltip=Works only in River biomes between Y=64 and Y=80
@@ -277,8 +295,6 @@ gregtech.machine.large_fluid_pump.tooltip.1=This would definitely affect the loc
 gregtech.machine.large_fluid_pump.tooltip.2=Only works when the controller is at Y=64 and the bottom Steel Pipe Casing is located in the right biome.
 gregtech.machine.advanced_arc_furnace.name=Advanced Arc Furnace
 gregtech.machine.clarifier.name=Clarifier
-gregtech.machine.dumper.name=Dumper
-gregtech.machine.evaporation_pool.name=Evaporation Pool
 gregtech.machine.flare_stack.name=Flare Stack
 gregtech.machine.flare_stack.height=Stack Height: %s §9blocks
 gregtech.machine.flare_stack.rate=Flaring Rate: %s
@@ -683,6 +699,15 @@ gregtech.machine.polishing_machine.opv.name=Legendary Polishing Machine
 gregtech.machine.bath_condenser.name=Bath Condenser
 gregtech.machine.bath_condenser.tooltip=Only works inside a Cryogenic Distillation Tower
 
+gregtech.machine.component_scanner.name=Spacecraft Component Scanner
+gregtech.machine.component_scanner.scan_button=Scan Part
+gregtech.machine.component_scanner.unscanned=Component unscanned.
+gregtech.machine.component_scanner.failure=Scan failed.
+gregtech.machine.component_scanner.success=Component successfully analyzed.
+gregtech.machine.component_scanner.scanning=Scanning...
+
+gregtech.machine.building_cleanroom.name=Spacecraft Component Cleanroom
+
 gregtech.machine.incinerator.lv.name=Basic Incinerator
 gregtech.machine.incinerator.mv.name=Advanced Incinerator
 gregtech.machine.incinerator.hv.name=Advanced Incinerator II
@@ -824,7 +849,7 @@ metaitem.pump.steam.name=Steam Pump
 cover.pump.steam.title=Steam Pump
 metaitem.air_vent.name=Air Vent
 metaitem.restrictive_filter.name=Restrictive Item Filter
-metaitem.restrictive_filter.tooltip=Allows only §6one stack§7 of any type of item inside. Can replace robot arms. %n§oHere you may come, but no further.§r §7Job 38:11
+metaitem.restrictive_filter.tooltip=Allows only §6one stack§7 of any type of item inside. Can replace robot arms. /n§oHere you may come, but no further.§r §7Job 38:11
 metaitem.air_vent.tooltip=Passively collects a Dimension's Air for your Machines when facing Air
 metaitem.track_segment.name=Monorail Track Segment
 metaitem.track_segment.tooltip=For use in the §8tunnelbore.
@@ -890,6 +915,12 @@ metaarmor.hud.engine_status=Engine: %s
 metaarmor.jet_wingpack.engine_active=Jet Wingpack: Engine Activated
 metaarmor.jet_wingpack.engine_inactive=Jet Wingpack: Engine Deactivated
 
+# Structure Data Cards
+metaitem.data_card.name=Empty Structure Card
+metaitem.data_card.tooltip.1=Insert into a Component Scanner to store the part representation.
+metaitem.data_card.active.name=Loaded Structure Card
+metaitem.data_card.active.tooltip.1=Load this into a Rocket Assembler to build the component.
+
 # Machine Translations
 susy.wrongbiome=Machine can not work in this biome!
 susy.weather_resistance=§2Will not explode from water, lava, fire or rain.
@@ -949,7 +980,6 @@ susy.recipe.biomeTypes=BiomeTypes: %s
 susy.recipe.biomeTypes_blocked=Blocked BiomeTypes: %s
 
 # Commands
-
 susy.command.horde.usage=/mobHorde <start/stop/status>
 susy.command.horde.start.usage=/mobHorde start <name>
 susy.command.horde.start.argument_required=Use /mobHorde start <name>.
@@ -1013,45 +1043,6 @@ supersymmetry.unlimited_oxygen=Remaining air: §bUnlimited§r
 supersymmetry.seconds_left=Remaining life: §2%s seconds§r
 supersymmetry.unlimited=Remaining life: §bUnlimited§r
 
-
-death.attack.toxic_atmo=%s's lungs were shredded
-death.attack.suffocation=%s couldn't breathe
-
-metaitem.simple_gas_mask.name=Primitive Gas Mask
-metaitem.simple_gas_mask.tooltip=Survive in oxygenless environments
-metaitem.gas_mask.name=Gas Mask
-metaitem.gas_mask.tooltip=Survive in oxygenless environments for longer
-metaitem.gas_tank.name=Gas Tank
-metaitem.gas_tank.tooltip=Survive in oxygenless environments for longer
-metaitem.asbestos_mask.name=Asbestos Gas Mask
-metaitem.asbestos_mask.tooltip=Survive in hot environments
-metaitem.asbestos_chestplate.name=Asbestos Tank
-metaitem.asbestos_chestplate.tooltip=Survive in hot environments
-metaitem.asbestos_leggings.name=Asbestos Leggings
-metaitem.asbestos_leggings.tooltip=Survive in hot environments
-metaitem.asbestos_boots.name=Asbestos Boots
-metaitem.asbestos_boots.tooltip=Survive in hot environments
-metaitem.rebreather_tank.name=Rebreather Tank
-metaitem.rebreather_tank.tooltip=Holds oxygen for longer
-metaitem.reflective_mask.name=Reflective Gas Mask
-metaitem.reflective_mask.tooltip=Reduce heating damage
-metaitem.reflective_chestplate.name=Reflective Tank
-metaitem.reflective_chestplate.tooltip=Reduce heating damage
-metaitem.reflective_leggings.name=Reflective Leggings
-metaitem.reflective_leggings.tooltip=Reduce heating damage
-metaitem.reflective_boots.name=Reflective Boots
-metaitem.reflective_boots.tooltip=Reduce heating damage
-metaitem.filtered_tank.name=Filtered Tank
-metaitem.filtered_tank.tooltip=Holds oxygen for very long
-metaitem.nomex_mask.name=Nomex Gas Mask
-metaitem.nomex_mask.tooltip=Stay indefinitely in the mantle!
-metaitem.nomex_chestplate.name=Nomex Tank
-metaitem.nomex_chestplate.tooltip=Stay indefinitely in the mantle!
-metaitem.nomex_leggings.name=Nomex Leggings
-metaitem.nomex_leggings.tooltip=Stay indefinitely in the mantle!
-metaitem.nomex_boots.name=Nomex Boots
-metaitem.nomex_boots.tooltip=Stay indefinitely in the mantle!
-
 #Hardened blocks
 tile.hardened_blocks.lair7.name=Hardened Lair 7
 tile.hardened_blocks.lair10.name=Hardened Lair 10
@@ -1062,3 +1053,26 @@ tile.hardened_blocks.kryp8.name=Hardened Kryp 8
 #Custom Sheets
 tile.custom_sheets.darkwhitemetalsheet.name=Darker White Metal Sheet
 tile.custom_sheets.lightergraymetalsheet.name=Lighter Gray Metal Sheet
+
+# Error Messages
+susy.msg.rocket_component.build_success=Component successfully analyzed.
+susy.msg.rocket_component.unscanned=Component not scanned.
+susy.msg.rocket_component.blocks_unconnected=Some blocks are not connected to rest of the structure.
+susy.msg.rocket_component.no_blocks=No blocks were found in scanning zone.
+susy.msg.rocket_component.hull_weak=A hull block was found unsuitable for flight.
+susy.msg.rocket_component.hull_full=The component is lacking interior space (at least 2 blocks).
+susy.msg.rocket_component.no_nozzle=Nozzle blocks are missing.
+susy.msg.rocket_component.nozzle_invalid=The nozzle shape is incorrect.
+susy.msg.rocket_component.unknown_error=An unknown error occurred.
+susy.msg.rocket_component.wrong_num_c_chambers=There are too many or not enough combustion chambers.
+susy.msg.rocket_component.wrong_num_pumps=There are extraneous unused turbopumps.
+susy.msg.rocket_component.weird_pump=For some reason, a pump is facing upwards. Why?
+susy.msg.rocket_component.chamber_wrong_place=A combustion chamber is inside the rocket nozzle. That's strange...
+susy.msg.rocket_component.invalid_transparent=A transparent block is in this component!
+susy.msg.rocket_component.chamber_extraneous_blocks=An unneeded block was found in the component!
+susy.msg.rocket_component.cleanroom_not_clean=The Cleanroom is not clean yet (or you haven't hooked up to one)!
+susy.msg.rocket_component.nozzle_not_laval=The rocket nozzle does not resemble a de Laval nozzle!
+susy.msg.rocket_component.tile_missing=There is a tile missing on the hull tank!
+susy.msg.rocket_component.no_card=Please insert an Empty Structure Card.
+susy.msg.rocket_component.part_unrecognized=The part was not recognized.
+susy.msg.rocket_component.spacecraft_hollow=The spacecraft is empty but has no life support.

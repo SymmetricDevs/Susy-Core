@@ -9,6 +9,7 @@ import gregtech.api.metatileentity.SimpleMachineMetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.recipeproperties.IRecipePropertyStorage;
+import gregtech.api.util.GTUtility;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -26,7 +27,7 @@ import static gregtech.api.recipes.logic.OverclockingLogic.standardOverclockingL
 public class MetaTileEntityPhaseSeparator extends SimpleMachineMetaTileEntity {
 
     public MetaTileEntityPhaseSeparator(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SuSyRecipeMaps.PHASE_SEPARATOR, SusyTextures.PHASE_SEPARATOR_OVERLAY, 1, true);
+        super(metaTileEntityId, SuSyRecipeMaps.PHASE_SEPARATOR, SusyTextures.PHASE_SEPARATOR_OVERLAY, 1, true, GTUtility.largeTankSizeFunction);
     }
 
     @Override
