@@ -1,6 +1,7 @@
 package supersymmetry.loaders.recipes;
 
 import gregtech.api.recipes.ModHandler;
+import gregtech.api.recipes.category.RecipeCategories;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
 import net.minecraft.item.ItemStack;
@@ -101,7 +102,7 @@ public class SuSyRecipeLoader {
 
     private static void registerCobbleRecipe(List<ItemStack> smoothStack, List<ItemStack> cobbleStack) {
         for (int i = 0; i < smoothStack.size(); i++) {
-            FORGE_HAMMER_RECIPES.recipeBuilder()
+            FORMING_PRESS_RECIPES.recipeBuilder()
                     .inputs(smoothStack.get(i))
                     .outputs(cobbleStack.get(i))
                     .duration(12).EUt(4).buildAndRegister();
@@ -133,10 +134,12 @@ public class SuSyRecipeLoader {
             MACERATOR_RECIPES.recipeBuilder()
                     .inputs(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH).getItemVariant(stoneType))
                     .output(dust, stoneType.getMaterial())
+                    .category(RecipeCategories.MACERATOR_RECYCLING)
                     .buildAndRegister();
             MACERATOR_RECIPES.recipeBuilder()
                     .inputs(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.COBBLE).getItemVariant(stoneType))
                     .output(dust, stoneType.getMaterial())
+                    .category(RecipeCategories.MACERATOR_RECYCLING)
                     .buildAndRegister();
         }
     }
