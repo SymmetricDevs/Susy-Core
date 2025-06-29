@@ -1,13 +1,11 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import gregtech.api.GTValues;
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.*;
-import gregtech.api.pattern.BlockPattern;
-import gregtech.api.pattern.FactoryBlockPattern;
-import gregtech.api.pattern.PatternMatchContext;
-import gregtech.api.pattern.TraceabilityPredicate;
+import gregtech.api.pattern.*;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.unification.material.Materials;
 import gregtech.client.renderer.ICubeRenderer;
@@ -16,8 +14,11 @@ import gregtech.common.blocks.BlockBoilerCasing;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
+import gregtech.common.metatileentities.MetaTileEntities;
 import gregtech.common.metatileentities.multi.electric.MetaTileEntityFusionReactor;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -31,10 +32,13 @@ import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockGrinderCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import static net.minecraft.block.BlockDirectional.FACING;
 import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.eccentricRolls;
 import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.metalSheets;
 
@@ -97,7 +101,7 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
     protected @NotNull BlockPattern createStructurePattern() {
         if (getWorld() != null) updateRollOrientation();
 
-        TraceabilityPredicate casings = states(getCasingState()).setMinGlobalLimited(24);
+        TraceabilityPredicate casings = states(getCasingState()).setMinGlobalLimited(22);
         TraceabilityPredicate metalSheets = metalSheets();
 
         return FactoryBlockPattern.start()
@@ -122,6 +126,40 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
                 .where('M', metalSheets)
                 .where('N', metalSheets.or(abilities(MultiblockAbility.IMPORT_ITEMS)))
                 .build();
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    @Override
+    public List<MultiblockShapeInfo> getMatchingShapes() {
+        ArrayList<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
+
+        MultiblockShapeInfo.Builder builder = MultiblockShapeInfo.builder()
+                .aisle("  CCCC  ", "  CCGC  ", "  CCMX  ", "    MMX ", "     MMX")
+                .aisle("JJJJ CC ", "JHJ R C ", "  J  M  ", "   J  M ", "       M")
+                .aisle("  BJ CO ", " BJ R C ", " PJ  M  ", " P J  M ", "       I")
+                .aisle("JJJJ CC ", "JHJ R C ", "  J  M  ", "   J  M ", "       M")
+                .aisle("  CECK  ", "  CSGC  ", "  CCMX  ", "    MMX ", "     MMX")
+                .where(' ', Blocks.AIR.getDefaultState())
+                .where('B', getPipeCasingState())
+                .where('C', getCasingState())
+                .where('G', getGearBoxState())
+                .where('H', getHydraulicGearboxState())
+                .where('J', getJawCasingState())
+                .where('R', SuSyBlocks.ECCENTRIC_ROLL.getDefaultState()
+                        .withProperty(FACING, EnumFacing.SOUTH))
+                .where('P', getPistonState())
+                .where('X', MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel))
+                .where('S', SuSyMetaTileEntities.ECCENTRIC_ROLL_CRUSHER, EnumFacing.SOUTH)
+                .where('K', MetaTileEntities.MAINTENANCE_HATCH, EnumFacing.SOUTH)
+                .where('E', MetaTileEntities.ENERGY_INPUT_HATCH[GTValues.LV], EnumFacing.SOUTH)
+                .where('I', MetaTileEntities.ITEM_IMPORT_BUS[GTValues.LV], EnumFacing.EAST)
+                .where('O', MetaTileEntities.ITEM_EXPORT_BUS[GTValues.LV], EnumFacing.EAST);
+
+        for (EnumDyeColor color : EnumDyeColor.values()) {
+            shapeInfo.add(builder.where('M', MetaBlocks.LARGE_METAL_SHEET.getState(color)).build());
+            shapeInfo.add(builder.where('M', MetaBlocks.METAL_SHEET.getState(color)).build());
+        }
+        return shapeInfo;
     }
 
     /**
