@@ -174,9 +174,9 @@ public class MetaTileEntityGravitySeparator extends CachedPatternRecipeMapMultib
     @Override
     public void update() {
         super.update();
-        if (this.isActive() && getWorld().isRemote && this.particleColors != null) {
+        if (this.isActive() && getWorld().isRemote && this.particleColors != null)
             createParticles();
-        }
+
     }
 
     @SideOnly(Side.CLIENT)

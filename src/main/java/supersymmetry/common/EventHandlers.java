@@ -1,10 +1,13 @@
 package supersymmetry.common;
 
+import com.cleanroommc.groovyscript.event.GroovyReloadEvent;
 import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.util.GTTeleporter;
 import gregtech.api.util.TeleportHandler;
 import gregtech.common.items.MetaItems;
 import gregtechfoodoption.item.GTFOMetaItem;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -15,6 +18,7 @@ import net.minecraft.server.management.PlayerList;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -27,11 +31,12 @@ import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.event.MobHordeWorldData;
 import supersymmetry.common.item.SuSyArmorItem;
+import supersymmetry.loaders.recipes.handlers.RecyclingManager;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class EventHandlers {
 
-    private static final String FIRST_SPAWN = Supersymmetry.MODID + ".first_spawn";
+    public static final String FIRST_SPAWN = Supersymmetry.MODID + ".first_spawn";
     private static boolean cancelFillBucket = false;
 
     @SubscribeEvent
@@ -57,8 +62,6 @@ public class EventHandlers {
             event.player.addItemStackToInventory(GTFOMetaItem.EMERGENCY_RATIONS.getStackForm(32));
             event.player.addItemStackToInventory(MetaItems.PROSPECTOR_LV.getChargedStack(100000));
         }
-
-
     }
 
     @SubscribeEvent
