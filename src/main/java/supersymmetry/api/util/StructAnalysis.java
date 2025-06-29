@@ -348,17 +348,6 @@ public class StructAnalysis {
         return closestNeighbors;
     }
 
-    public int getCoordRelevantToDirection(BlockPos bp) {
-        if (world.getBlockState(bp).getPropertyKeys().contains(FACING)) {
-            EnumFacing dir = this.world.getBlockState(bp).getValue(FACING);
-            if (dir.equals(EnumFacing.UP) || dir.equals(EnumFacing.DOWN)) {
-
-            }
-        } else {
-            return 0;
-        }
-    }
-
     public Stream<BlockPos> getOfBlockType(Collection<BlockPos> bp, Block block) {
         return bp.stream()
                 .filter(p -> world.getBlockState(p).getBlock().equals(block));
