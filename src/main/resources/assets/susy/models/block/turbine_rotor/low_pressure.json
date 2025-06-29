@@ -1,0 +1,9 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "top": "gregtech:blocks/casings/turbine_rotor/top",
+    "front": "gregtech:blocks/casings/turbine_rotor/low_pressure/front",
+    "side": "gregtech:blocks/casings/turbine_rotor/side",
+    "south": "gregtech:blocks/casings/turbine_rotor/low_pressure/back"
+  }
+}
