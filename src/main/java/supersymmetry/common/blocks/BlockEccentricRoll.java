@@ -16,8 +16,10 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -32,6 +34,9 @@ import static gregtech.common.items.tool.rotation.CustomBlockRotations.BLOCK_DIR
 import static net.minecraft.block.BlockDirectional.FACING;
 
 public class BlockEccentricRoll extends VariantBlock<BlockEccentricRoll.RollType> implements IAnimatablePart<BlockEccentricRoll> {
+
+    /// So that [#onEntityCollision(World, BlockPos, IBlockState, Entity)] works properly
+    public static final AxisAlignedBB COLLISION_BOX = new AxisAlignedBB(0.05, 0.05, 0.05, 0.95, 0.95, 0.95);
 
     public BlockEccentricRoll() {
         super(net.minecraft.block.material.Material.IRON);
@@ -133,9 +138,19 @@ public class BlockEccentricRoll extends VariantBlock<BlockEccentricRoll.RollType
     @Override
     public void onEntityCollision(@NotNull World worldIn, @NotNull BlockPos pos,
                                   @NotNull IBlockState state, @NotNull Entity entityIn) {
+        super.onEntityCollision(worldIn, pos, state, entityIn);
+
         if (state.getValue(ACTIVE)) {
             entityIn.attackEntityFrom(SuSyDamageSources.getCrusherDamage(), 2.0F);
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    @Nullable
+    public AxisAlignedBB getCollisionBoundingBox(@NotNull IBlockState blockState,
+                                                 @NotNull IBlockAccess worldIn,
+                                                 @NotNull BlockPos pos) {
+        return COLLISION_BOX;
     }
 
     public enum RollType implements IStringSerializable, IStateHarvestLevel {
