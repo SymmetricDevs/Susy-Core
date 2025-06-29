@@ -31,6 +31,7 @@ public class SusyMaterials {
     public static Material Mud;
     public static Material Seawater;
     public static Material MetallizedBoPET;
+    public static Material Aluminium7075;
 
     //Minerals
     public static Material Anorthite;

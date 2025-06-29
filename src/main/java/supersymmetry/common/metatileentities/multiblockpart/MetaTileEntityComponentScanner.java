@@ -52,8 +52,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
-import static supersymmetry.common.blocks.SuSyBlocks.TANK_SHELL;
-import static supersymmetry.common.blocks.SuSyBlocks.TANK_SHELL1;
+import static supersymmetry.common.blocks.SuSyBlocks.*;
 
 public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart implements ICleanroomReceiver, IControllable, IWorkable {
     private final ScannerLogic scannerLogic;
@@ -292,6 +291,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
 
     // A fairing must have a line of connectors (so it can separate after launch!)
     // It must also be wider in the bottom.
+    // The way we've done it, it's a half-shell design.
     public void analyzeFairing(Set<BlockPos> blocksConnected, Set<BlockPos> first) {
         AxisAlignedBB fairingBB = struct.getBB(blocksConnected);
         AxisAlignedBB interiorBB = linkedCleanroom.getInteriorBB();
@@ -315,16 +315,40 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             return;
         }
 
+        // Step 2: Verify that all other blocks are connected by checking the partition
+        // If there are more than 2 partitions of air in the bounding box, then there's an abnormality with the hull shape.
+        // If there's only one partition, then the hull has a hole in it.
+        // We know already that the exterior loop is touching the edge of the bounding box.
+        // So, if there are 2 partitions, then the fairing hull is of the desired shape.
+
+        List<HashSet<BlockPos>> partitions = struct.getPartitions(fairingBB);
+        if (partitions.size() != 2) {
+            struct.status = BuildStat.WEIRD_FAIRING;
+            return;
+        }
+
+        // Objective: We don't really want tiles on the inside of the fairing - that wouldn't make any sense!
+        // So, we're going to obtain the fairing with a ceiling (if it didn't have one, it wouldn't have )
+        // Note that
+        Set<BlockPos> interiorPartition;
+        if (struct.getBB(partitions.get(0)).maxY > struct.getBB(partitions.get(1)).maxY) {
+            interiorPartition = partitions.get(1);
+        } else {
+            interiorPartition = partitions.get(0);
+        }
+
         while (!collectedConnectors.containsAll(connectorBlocks)) {
             Set<BlockPos> neighbors = struct.getBlockNeighbors(next).stream().filter(connCheck.and(o -> !collectedConnectors.contains(o))).collect(Collectors.toSet());
             Set<BlockPos> closestNeighbors = struct.getClosest(next, neighbors);
             if (closestNeighbors.size() == 1) { // only one neighbor has not been checked yet
-                next = neighbors.iterator().next();
+                next = closestNeighbors.iterator().next();
                 collectedConnectors.add(next);
-                // get the partner of this block
+                // get direction of block
                 EnumFacing facing = getWorld().getBlockState(next).getValue(FACING);
-                // The only problem is if
-                if (StructAnalysis.blockCont(fairingBB,next.add(facing.getDirectionVec()))) {
+                // The fairing connector should have its connector face pointing out
+                BlockPos pointingTo = next.add(facing.getDirectionVec());
+                if (StructAnalysis.blockCont(fairingBB,pointingTo) || partitions.get(0).contains(pointingTo)
+                    || partitions.get(1).contains(pointingTo)) {
                     struct.status = BuildStat.WEIRD_FAIRING;
                     return;
                 }
@@ -340,18 +364,6 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             }
         }
 
-        // Step 2: Verify that all other blocks are connected by checking the partition
-        // If there are more than 2 partitions of air in the bounding box, then there's an abnormality with the hull shape.
-        // If there's only one partition, then the hull has a hole in it.
-        // We know already that the exterior loop is touching the edge of the bounding box.
-        // So, if there are 2 partitions, then the fairing hull is of the desired shape.
-
-        List<HashSet<BlockPos>> partitions = struct.getPartitions(fairingBB);
-        if (partitions.size() != 2) {
-            struct.status = BuildStat.WEIRD_FAIRING;
-            return;
-        }
-
         //Step 3: Verify that all exposed block faces are covered (except for the connector-connector ones)
         for (BlockPos bp: blocksConnected) {
             Block b = getWorld().getBlockState(bp).getBlock();
@@ -360,7 +372,9 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                 return;
             }
             TileEntityCoverable te = (TileEntityCoverable) getWorld().getTileEntity(bp);
-            List<BlockPos> neighbors = struct.getBlockNeighbors(bp,interiorBB,StructAnalysis.orthVecs).stream().filter(pos -> !getWorld().isAirBlock(pos)).collect(Collectors.toList());
+            List<BlockPos> airNeighbors = struct.getBlockNeighbors(bp,interiorBB,StructAnalysis.orthVecs).stream()
+                    .filter(pos -> !getWorld().isAirBlock(pos)).collect(Collectors.toList());
+            List<BlockPos> neighbors = airNeighbors.stream().filter(interiorPartition::contains).collect(Collectors.toList());
             if (b.equals(SuSyBlocks.FAIRING_HULL)) {
                 if (te.getSides().length != (6 - neighbors.size())) {
                     struct.status=BuildStat.MISSING_TILE;
@@ -409,23 +423,29 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                 struct.status = BuildStat.NOZZLE_MALFORMED;
                 return;
             }
-            areas.add(airLayer.size());
+            areas.add(airLayer.size() + airPerimeter.size() / 2);
         }
 
         // For all rocket nozzles, the air layer list should be increasing. 3 blocks should be a minimum length under that assumption.
-        if (areas.size() < 3 || areas.get(0) > 1) {
+        if (areas.size() < 3 || areas.get(0) > 5) {
             struct.status = BuildStat.NOZZLE_MALFORMED;
             return;
         }
 
-        int area_ratio = 1;
+        int initial = areas.get(0);
+        int fin = initial;
+
         for (int a: areas) {
-            if (area_ratio < a) {
-                area_ratio = a;
+            if (fin <= a) {
+                fin = a;
             } else {
                 struct.status = BuildStat.NOT_LAVAL;
                 return;
             }
+        }
+        float area_ratio = ((float) fin) / initial;
+        if (area_ratio < 1.5) {
+            struct.status = BuildStat.NOT_LAVAL;
         }
 
         // One combustion chamber is, I think, reasonable
@@ -450,7 +470,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         IBlockState chamberState = getWorld().getBlockState(cChamber);
         int pumpNum = ((BlockCombustionChamber.CombustionType)
                 (((VariantBlock<?>)chamberState.getBlock()).getState(chamberState))).getMinPumps();
-        if (pumps.size() != pumpNum) {
+        if (pumps.size() < pumpNum) {
             struct.status = BuildStat.WRONG_NUM_PUMPS;
             return;
         }
@@ -471,6 +491,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             return;
         }
         struct.status = BuildStat.SUCCESS;
+        // currently a double
         modifyItem("area_ratio", String.valueOf(area_ratio));
         modifyItem("type","engine");
         double mass = 0;
@@ -519,6 +540,10 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         }
 
         double radius = struct.getApproximateRadius(blocks);
+        int height = (int)(struct.getBB(blocks).maxZ-struct.getBB(blocks).minZ);
+        if (height > radius * 2) {
+            struct.status = BuildStat.TOO_SHORT;
+        }
 
         // The scan is successful by this point
         struct.status = BuildStat.SUCCESS;

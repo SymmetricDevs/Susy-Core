@@ -17,12 +17,12 @@ public class BlockSpacecraftHull extends VariantDirectionalCoverableBlock<BlockS
         setResistance(15f);
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench",2);
-        setDefaultState(getState(HullType.MYLAR));
+        setDefaultState(getState(HullType.AL_LI));
         validCover = (ItemStack i) -> i.isItemEqualIgnoreDurability(OreDictUnifier.get(OrePrefix.foil, MetallizedBoPET));
     }
 
     public enum HullType implements IStringSerializable {
-        MYLAR("mylar");
+        AL_LI("al_li");
         public String name;
 
         HullType(String name) {

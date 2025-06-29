@@ -10,6 +10,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.IStringSerializable;
 import supersymmetry.api.blocks.VariantDirectionalCoverableBlock;
 import supersymmetry.api.blocks.VariantDirectionalRotatableBlock;
+import supersymmetry.common.materials.SusyMaterials;
 
 public class BlockFairingHull extends VariantDirectionalCoverableBlock<BlockFairingHull.FairingType> {
     public BlockFairingHull() {
@@ -19,7 +20,7 @@ public class BlockFairingHull extends VariantDirectionalCoverableBlock<BlockFair
         setResistance(15f);
         setSoundType(SoundType.METAL);
         setDefaultState(getState(FairingType.ALUMINIUM_FAIRING));
-        validCover = itemStack -> OreDictUnifier.get(OrePrefix.plate, Materials.SiliconDioxide).isItemEqual(itemStack);
+        validCover = itemStack -> OreDictUnifier.get(OrePrefix.plate, SusyMaterials.Aluminium7075).isItemEqual(itemStack);
     }
 
     public enum FairingType implements IStringSerializable, IStateHarvestLevel {

@@ -1,5 +1,6 @@
 package supersymmetry.api.util;
 
+import cam72cam.mod.util.Facing;
 import com.google.common.collect.Sets;
 import gregtech.api.pattern.BlockWorldState;
 import gregtech.api.pattern.PatternMatchContext;
@@ -11,8 +12,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import supersymmetry.SuSyValues;
+import supersymmetry.api.blocks.VariantDirectionalRotatableBlock;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -49,7 +52,7 @@ public class StructAnalysis {
         NO_CARD("no_card"),
         UNRECOGNIZED("part_unrecognized"),
         SPACECRAFT_HOLLOW("spacecraft_hollow"),
-        WEIRD_PADDING("weird_padding"); // if the connectors do not form a loop
+        WEIRD_PADDING("weird_padding"), TOO_SHORT("too_short"); // if the connectors do not form a loop
 
         String code;
         BuildStat(String code) {
@@ -305,12 +308,15 @@ public class StructAnalysis {
         avgZ /= blocks.size();
 
         double radius = 0;
+        double X = avgX, Z = avgZ; // apparently maps don't like possibly mutated variables
 
-        for (BlockPos block : blocks) {
-            radius += block.distanceSq(avgX,block.getY(),avgZ);
-        }
-
-        return radius / blocks.size();
+        List<Double> dists = blocks.stream().map(blockPos -> blockPos.distanceSq(X, blockPos.getY(), Z)).collect(Collectors.toList());
+        // calculate the median
+        dists.sort(Double::compare);
+        if (dists.size() % 2 == 0)
+            return (dists.get(dists.size()/2 - 1) + dists.get(dists.size()/2)) / 2;
+        else
+            return dists.get(dists.size()/2);
     }
 
     public Set<BlockPos> getLowestLayer(Set<BlockPos> set) {
@@ -340,6 +346,17 @@ public class StructAnalysis {
             }
         }
         return closestNeighbors;
+    }
+
+    public int getCoordRelevantToDirection(BlockPos bp) {
+        if (world.getBlockState(bp).getPropertyKeys().contains(FACING)) {
+            EnumFacing dir = this.world.getBlockState(bp).getValue(FACING);
+            if (dir.equals(EnumFacing.UP) || dir.equals(EnumFacing.DOWN)) {
+
+            }
+        } else {
+            return 0;
+        }
     }
 
     public Stream<BlockPos> getOfBlockType(Collection<BlockPos> bp, Block block) {

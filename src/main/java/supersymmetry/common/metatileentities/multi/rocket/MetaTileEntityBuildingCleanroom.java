@@ -102,7 +102,7 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
 
         // find the left, right, back, and front distances for the structure pattern
         // maximum size is 15x15x15 including walls, so check 7 block radius around the controller for blocks
-        for (int i = 1; i < 8; i++) {
+        for (int i = 1; i < 16; i++) { // trying for 31x31
             if (lDist == 0 && isBlockEdge(world, lPos, left)) lDist = i;
             if (rDist == 0 && isBlockEdge(world, rPos, right)) rDist = i;
             if (bDist == 0 && isBlockEdge(world, bPos, back)) bDist = i;
