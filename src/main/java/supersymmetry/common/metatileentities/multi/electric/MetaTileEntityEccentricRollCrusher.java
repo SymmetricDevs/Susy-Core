@@ -68,6 +68,12 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
         super(metaTileEntityId, recipeMap);
     }
 
+    @SideOnly(Side.CLIENT)
+    @Override
+    protected @NotNull ICubeRenderer getFrontOverlay() {
+        return SusyTextures.ECCENTRIC_ROLL_CRUSHER_OVERLAY;
+    }
+
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
         return new MetaTileEntityEccentricRollCrusher(metaTileEntityId, recipeMap);
