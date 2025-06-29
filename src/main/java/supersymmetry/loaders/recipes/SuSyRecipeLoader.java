@@ -1,6 +1,7 @@
 package supersymmetry.loaders.recipes;
 
 import gregtech.api.recipes.ModHandler;
+import gregtech.api.recipes.category.RecipeCategories;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
 import net.minecraft.item.ItemStack;
