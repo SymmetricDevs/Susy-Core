@@ -39,7 +39,6 @@ public interface IAnimatablePart<T extends Block & ITileEntityProvider> extends 
         return susyId("animations/" + getGeoName() + ".animation.json");
     }
 
-
     @Nullable
     @Override
     default TileEntity createNewTileEntity(@NotNull World worldIn, int meta) {

@@ -51,7 +51,7 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
      * List of animatable blocks
      * Much like {@link #variantActiveBlocks} in vanilla CEu
      */
-    protected List<BlockPos> erc_rolls;
+    protected List<BlockPos> ercRolls;
 
     /**
      * The axis direction of the eccentric roll (rotates CCW)
@@ -145,7 +145,7 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
         /// This has to be called before [MultiblockWithDisplayBase#formStructure(PatternMatchContext)] calls
         /// where [#replaceVariantBlocksActive(boolean)] is called
         /// @see [#setAnimatablesActive(boolean)]
-        this.erc_rolls = context.getOrDefault("ERC_Rolls", new LinkedList<>());
+        this.ercRolls = context.getOrDefault("ERC_Rolls", new LinkedList<>());
         super.formStructure(context);
         World world = getWorld();
         if (world != null && !world.isRemote) {
@@ -188,9 +188,9 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
      * @param isActive whether the multi is active
      */
     protected void setAnimatablesActive(boolean isActive) {
-        if (erc_rolls != null && !erc_rolls.isEmpty()) {
+        if (ercRolls != null && !ercRolls.isEmpty()) {
             World world = getWorld();
-            for (BlockPos pos : erc_rolls) {
+            for (BlockPos pos : ercRolls) {
                 IBlockState state = world.getBlockState(pos);
                 world.setBlockState(pos, state.withProperty(IAnimatablePart.ACTIVE, isActive));
             }
