@@ -52,6 +52,7 @@ public class SuSyMetaItems {
     public static ArmorMetaItem<?>.ArmorMetaValueItem JET_WINGPACK;
     public static MetaValueItem DATA_CARD;
     public static MetaValueItem DATA_CARD_ACTIVE;
+    public static MetaValueItem DATA_CARD_MASTER_BLUEPRINT;
 
     public static void initMetaItems() {
         metaItem = new StandardMetaItem();
@@ -102,6 +103,7 @@ public class SuSyMetaItems {
         DATA_CARD_ACTIVE = initOneItem("data_card.active").setMaxStackSize(1).addComponents(new TooltipBehavior(lines ->
             lines.add(I18n.format("metaitem.data_card.active.tooltip.1"))
         ));
+        DATA_CARD_MASTER_BLUEPRINT=initOneItem("datacard.master").setMaxStackSize(1).addComponents(new TooltipBehavior(lines -> lines.add("test")));
         RESTRICTIVE_FILTER = initOneItem("restrictive_filter");
         EARTH_ORBITAL_SCRAP = initOneItem("orbital.scrap.earth").setMaxStackSize(8);
     }
