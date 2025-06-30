@@ -62,7 +62,7 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
     protected void addDisplayText(List<ITextComponent> textList) {
         if (isStructureFormed()) {
             FluidStack fuelStack = ((SuSyTurbineRecipeLogic) recipeMapWorkable).getInputFluidStack();
-            if (fuelStack != null || fuelStack.amount > 0) {
+            if (fuelStack != null && fuelStack.amount > 0) {
                 int fuelAmount = fuelStack.amount;
 
                 ITextComponent fuelName = GTUtility.getFluidTranslation(fuelStack.getFluid());
