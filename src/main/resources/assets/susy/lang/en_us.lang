@@ -762,9 +762,6 @@ recipemap.sieve_distillation.name=Fractional Distillation
 recipemap.jet_wingpack_fuels.name=Jet Wingpack Fuels
 recipemap.curtain_coater.name=Curtain Coater
 recipemap.milling.name=Precise Milling Machine
-recipemap.scrap_recycler.name=Scrap Recycler
-recipemap.rocket_assembler.name=Rocket Assembler
-recipemap.rocket_launch_pad=Rocket Launch Pad
 
 gregtech.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 
@@ -1033,18 +1030,3 @@ tile.hardened_blocks.kryp8.name=Hardened Kryp 8
 #Custom Sheets
 tile.custom_sheets.darkwhitemetalsheet.name=Darker White Metal Sheet
 tile.custom_sheets.lightergraymetalsheet.name=Lighter Gray Metal Sheet
-
-#Orbital Scrap
-metaitem.orbital.scrap.earth.name=Earth Orbital Scrap
-
-#Space Machines
-gregtech.machine.landing_pad.name=Landing Pad
-gregtech.machine.scrap_recycler.name=Scrap Recycler
-gregtech.machine.rocket_assembler.name=Rocket Assembler
-gregtech.machine.rocket_programmer.name=Rocket Programmer
-
-#Rocket Assembler Casings
-tile.rocket_assembler_casing.reinforced_foundation.name=Reinforced Foundation
-tile.rocket_assembler_casing.foundation.name=Foundation
-tile.rocket_assembler_casing.rails.name=Rails
-tile.rocket_assembler_casing.structural_frame.name=Structural Frame
