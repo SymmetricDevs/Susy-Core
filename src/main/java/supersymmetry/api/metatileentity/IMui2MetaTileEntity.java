@@ -1,6 +1,5 @@
 package supersymmetry.api.metatileentity;
 
-import codechicken.lib.raytracer.CuboidRayTraceResult;
 import com.cleanroommc.modularui.api.IGuiHolder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.cleanroommc.modularui.factory.PosGuiData;
@@ -9,75 +8,47 @@ import com.cleanroommc.modularui.utils.Alignment;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
 import com.cleanroommc.modularui.widgets.ButtonWidget;
 import gregtech.api.GTValues;
-import gregtech.api.gui.ModularUI;
 import gregtech.api.metatileentity.MetaTileEntity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.gui.SusyGuiTextures;
 
 @Deprecated
 @ApiStatus.ScheduledForRemoval(inVersion = "Next CEu update")
-public abstract class Mui2MetaTileEntity extends MetaTileEntity implements IGuiHolder<PosGuiData> {
-
-    public Mui2MetaTileEntity(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId);
-    }
+public interface IMui2MetaTileEntity extends IGuiHolder<PosGuiData> {
 
     @NotNull
-    public static UITexture getLogo() {
+    static UITexture getLogo() {
         return GTValues.XMAS.get() ? SusyGuiTextures.GREGTECH_LOGO_XMAS : SusyGuiTextures.GREGTECH_LOGO;
     }
 
-    public static ModularPanel createPanel(String name, int width, int height) {
+    static ModularPanel createPanel(String name, int width, int height) {
         return ModularPanel.defaultPanel(name, width, height);
     }
 
-    public static ModularPanel createPanel(MetaTileEntity mte, int width, int height) {
+    static ModularPanel createPanel(MetaTileEntity mte, int width, int height) {
         return createPanel(mte.metaTileEntityId.getPath(), width, height);
     }
 
-    public static ModularPanel defaultPanel(MetaTileEntity mte) {
+    static ModularPanel defaultPanel(MetaTileEntity mte) {
         return createPanel(mte, 176, 186);
     }
 
-    public static ModularPanel createPopupPanel(String name, int width, int height) {
+    static ModularPanel createPopupPanel(String name, int width, int height) {
         return createPopupPanel(name, width, height, false, false);
     }
 
-    public static ModularPanel createPopupPanel(String name, int width, int height, boolean disableBelow,
-                                                boolean closeOnOutsideClick) {
+    static ModularPanel createPopupPanel(String name, int width, int height, boolean disableBelow,
+                                         boolean closeOnOutsideClick) {
         return new PopupPanel(name, width, height, disableBelow, closeOnOutsideClick);
     }
 
-    protected ModularUI createUI(EntityPlayer player) {
-        return null;
-    }
-
     @Override
-    public abstract ModularPanel buildUI(PosGuiData guiData, PanelSyncManager syncManager);
+    ModularPanel buildUI(PosGuiData guiData, PanelSyncManager syncManager);
 
-    public boolean useMui() {
-        return true;
-    }
+    boolean useMui2();
 
-    @Override
-    public boolean onRightClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing,
-                                CuboidRayTraceResult hitResult) {
-        if (useMui() && !playerIn.isSneaking() && openGUIOnRightClick()) {
-            if (getWorld() != null && !getWorld().isRemote) {
-                MetaTileEntityGuiFactory.open(playerIn, this);
-            }
-            return true;
-        } else {
-            return super.onRightClick(playerIn, hand, facing, hitResult);
-        }
-    }
-
-    private static class PopupPanel extends ModularPanel {
+    class PopupPanel extends ModularPanel {
 
         private final boolean disableBelow;
         private final boolean closeOnOutsideClick;

@@ -22,7 +22,9 @@ import com.cleanroommc.modularui.widgets.layout.Flow;
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.GregtechTileCapabilities;
 import gregtech.api.capability.IControllable;
+import gregtech.api.gui.ModularUI;
 import gregtech.api.metatileentity.IFastRenderMetaTileEntity;
+import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.utils.RenderBufferHelper;
 import gregtech.client.utils.RenderUtil;
@@ -31,6 +33,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
@@ -46,7 +49,7 @@ import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.gui.SusyGuiTextures;
-import supersymmetry.api.metatileentity.Mui2MetaTileEntity;
+import supersymmetry.api.metatileentity.IMui2MetaTileEntity;
 import supersymmetry.api.stockinteraction.IStockInteractor;
 import supersymmetry.api.stockinteraction.StockFilter;
 import supersymmetry.api.stockinteraction.StockHelperFunctions;
@@ -54,7 +57,8 @@ import supersymmetry.client.renderer.textures.SusyTextures;
 
 import java.io.IOException;
 
-public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity implements IStockInteractor, IFastRenderMetaTileEntity, IControllable {
+@SuppressWarnings("deprecation")
+public abstract class MetaTileEntityStockInteractor extends MetaTileEntity implements IMui2MetaTileEntity, IStockInteractor, IFastRenderMetaTileEntity, IControllable {
 
     AxisAlignedBB interactionBoundingBox;
     private double interactionWidth = 11.;
@@ -138,6 +142,16 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
         return true;
     }
 
+    @Override
+    protected ModularUI createUI(EntityPlayer entityPlayer) {
+        return null;
+    }
+
+    @Override
+    public boolean useMui2() {
+        return true;
+    }
+
     // UI
     @Override
     public ModularPanel buildUI(PosGuiData guiData, PanelSyncManager syncManager) {
@@ -146,17 +160,17 @@ public abstract class MetaTileEntityStockInteractor extends Mui2MetaTileEntity i
                 (panelSyncManager, syncHandler) -> stockFilter.createPopupPanel(panelSyncManager),
                 true);
 
-        BooleanSyncValue workingStateValue = new BooleanSyncValue(() -> workingEnabled, val -> setWorkingEnabled(val));
+        BooleanSyncValue workingStateValue = new BooleanSyncValue(() -> workingEnabled, this::setWorkingEnabled);
         BooleanSyncValue renderBoundingBoxValue = new BooleanSyncValue(() -> renderBoundingBox, val -> renderBoundingBox = val);
         BooleanSyncValue highlightSelectedStockValue = new BooleanSyncValue(() -> highlightSelectedStock, val -> highlightSelectedStock = val);
 
-        return defaultPanel(this)
+        return IMui2MetaTileEntity.defaultPanel(this)
                 .child(IKey.lang(getMetaFullName()).asWidget()
                         .pos(5, 5))
                 .child(SlotGroupWidget.playerInventory()
                         .left(7)
                         .bottom(7))
-                .child(getLogo().asWidget()
+                .child(IMui2MetaTileEntity.getLogo().asWidget()
                         .size(17)
                         .right(7)
                         .bottom(88))
