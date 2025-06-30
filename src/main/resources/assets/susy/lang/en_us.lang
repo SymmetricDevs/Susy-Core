@@ -22,6 +22,11 @@ tile.susy_multiblock_casing.sieve_tray.name=Sieve Tray
 tile.susy_multiblock_casing.structural_packing.name=Structural Packing
 tile.susy_multiblock_casing.ulv_structural_casing.name=Basic Structural Casing
 tile.susy_multiblock_casing.drone_pad.name=Drone Pad
+tile.susy_multiblock_casing.heavy_duty_pad.name=Heavy Duty Pad
+tile.rocket_assembler_casing.reinforced_foundation.name=Reinforced Foundation
+tile.rocket_assembler_casing.foundation.name=Rocket Assembler Foundation
+tile.rocket_assembler_casing.rails.name=Rocket Assembler Rails
+tile.rocket_assembler_casing.structural_frame.name=Rocket Assembler Structural Frame
 
 tile.serpentine.basic.name=Copper Tubing Serpentine Block
 
@@ -315,6 +320,10 @@ gregtech.multiblock.pattern.error.milling.lower=§cOnly allowed on the lower par
 
 gregtech.machine.drone_pad.name=Drone Pad
 gregtech.machine.primitive_smelter.name=Primitive Smelter
+gregtech.machine.landing_pad.name=Landing Pad
+gregtech.machine.scrap_recycler.name=Scrap Recycler
+gregtech.machine.rocket_assembler.name=Rocket Assembler
+gregtech.machine.rocket_programmer.name=Rocket Programmer
 
 gregtech.machine.primitive_item_import.name=Primitive Item Import Bus
 gregtech.machine.primitive_item_import.tooltip=Only for use with the Primitive Smelter
@@ -753,9 +762,6 @@ recipemap.sieve_distillation.name=Fractional Distillation
 recipemap.jet_wingpack_fuels.name=Jet Wingpack Fuels
 recipemap.curtain_coater.name=Curtain Coater
 recipemap.milling.name=Precise Milling Machine
-recipemap.scrap_recycler.name=Scrap Recycler
-recipemap.rocket_assembler.name=Rocket Assembler
-recipemap.rocket_launch_pad=Rocket Launch Pad
 
 gregtech.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 
@@ -831,6 +837,7 @@ metaitem.track_segment.name=Monorail Track Segment
 metaitem.track_segment.tooltip=For use in the §8tunnelbore.
 metaitem.track_segment.length_info=§610 blocks §7worth of monorail track.
 metaitem.air_vent.tooltip.1=§bCollecting Rate: §f%,d L/s
+metaitem.orbital.scrap.earth.name=Earth Orbital Scrap
 
 # Catalysts
 gregtech.universal.catalysts.tooltip.tier=§eMax Voltage: §f%,d EU/T (%s§f)
@@ -1023,18 +1030,3 @@ tile.hardened_blocks.kryp8.name=Hardened Kryp 8
 #Custom Sheets
 tile.custom_sheets.darkwhitemetalsheet.name=Darker White Metal Sheet
 tile.custom_sheets.lightergraymetalsheet.name=Lighter Gray Metal Sheet
-
-#Orbital Scrap
-metaitem.orbital.scrap.earth.name=Earth Orbital Scrap
-
-#Space Machines
-gregtech.machine.landing_pad.name=Landing Pad
-gregtech.machine.scrap_recycler.name=Scrap Recycler
-gregtech.machine.rocket_assembler.name=Rocket Assembler
-gregtech.machine.rocket_programmer.name=Rocket Programmer
-
-#Rocket Assembler Casings
-tile.rocket_assembler_casing.reinforced_foundation.name=Reinforced Foundation
-tile.rocket_assembler_casing.foundation.name=Foundation
-tile.rocket_assembler_casing.rails.name=Rails
-tile.rocket_assembler_casing.structural_frame.name=Structural Frame

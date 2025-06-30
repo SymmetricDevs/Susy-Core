@@ -60,4 +60,9 @@ public class MetaTileEntityRTG extends TieredMetaTileEntity {
         tooltip.add(I18n.format("gregtech.universal.tooltip.max_voltage_out", new Object[]{this.energyContainer.getOutputVoltage(), GTValues.VNF[this.getTier()]}));
         tooltip.add(I18n.format("gregtech.universal.tooltip.energy_storage_capacity", new Object[]{this.energyContainer.getEnergyCapacity()}));
     }
+
+    @Override
+    public boolean getIsWeatherOrTerrainResistant() {
+        return true;
+    }
 }
