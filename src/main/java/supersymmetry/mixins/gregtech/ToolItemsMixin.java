@@ -13,6 +13,11 @@ public abstract class ToolItemsMixin {
 
     @ModifyReceiver(method = "init", at = @At(value = "INVOKE", target = "Lgregtech/api/items/toolitem/ToolBuilder;toolClasses([Ljava/lang/String;)Lgregtech/api/items/toolitem/ToolBuilder;"))
     private static ToolBuilder<ItemGTTool> addPipeNetWalkerBehavior(ToolBuilder<ItemGTTool> toolBuilder, String[] tools) {
-        return toolBuilder.toolStats(b -> ToolBehaviorExtender.enqueueBehaviors(b, tools));
+        var backup = ((ToolBuilderAccessor) toolBuilder).getToolStats().getBehaviors();
+        return toolBuilder.toolStats(b -> {
+            ToolBehaviorExtender.addFirst(b, tools);
+            backup.forEach(b::behaviors);
+            return b;
+        });
     }
 }

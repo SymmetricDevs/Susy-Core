@@ -6,7 +6,7 @@ import supersymmetry.common.item.behavior.PipeNetWalkerBehavior;
 
 public class ToolBehaviorExtender {
 
-    public static ToolDefinitionBuilder enqueueBehaviors(ToolDefinitionBuilder b, String... toolClasses) {
+    public static void addFirst(ToolDefinitionBuilder b, String... toolClasses) {
         for (String toolClass : toolClasses) {
             switch (toolClass) {
                 case ToolClasses.WRENCH, ToolClasses.WIRE_CUTTER -> b.behaviors(PipeNetWalkerBehavior.INSTANCE);
@@ -14,6 +14,5 @@ public class ToolBehaviorExtender {
                 }
             }
         }
-        return b;
     }
 }
