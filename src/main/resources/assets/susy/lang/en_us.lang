@@ -1107,6 +1107,10 @@ tile.hardened_blocks1.military_concrete_cobblestone_hardened.name=Federation Gra
 tile.custom_sheets.darkwhitemetalsheet.name=Darker White Metal Sheet
 tile.custom_sheets.lightergraymetalsheet.name=Lighter Gray Metal Sheet
 
+# ToolBehaviors
+item.susy.tool.behavior.pipeliner=§6Pipeliner: §fOperate all adjacent pipes
+item.susy.tool.tooltip.pipeliner=§fPress §6[%s]§f to activate Pipeliner mode
+
 # Titles
 supersymmetry.title.1=§3SUPERSYMMETRY
 supersymmetry.subtitle.1=A modpack by SymmetricDevs

@@ -6,12 +6,12 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "BlockMachineMixin",
+    "BlockPipeAccessor",
+    "CommonProxyMixin",
     "MetaTileEntityDrumAccessor",
     "MetaTileEntityFluidDrillMixin",
     "MetaTileEntityLargeMinerMixin",
     "MetaTileEntityMinerMixin",
-    "MultiblockControllerBaseMixin",
-    "CommonProxyMixin",
     "ModHandlerMixin",
     "MultiblockControllerBaseMixin",
     "OreDictUnifierAccessor",
@@ -19,7 +19,7 @@
     "RecipeBuilderAccessor",
     "RecipeMapsMixin",
     "RecyclingRecipesMixin",
-    "CommonProxyMixin",
-    "TileEntityPipeBaseMixin"
+    "TileEntityPipeBaseMixin",
+    "ToolItemsMixin"
   ]
 }
