@@ -1109,7 +1109,7 @@ tile.custom_sheets.lightergraymetalsheet.name=Lighter Gray Metal Sheet
 
 # ToolBehaviors
 item.susy.tool.behavior.pipeliner=§6Pipeliner: §fOperates all adjacent pipes
-item.susy.tool.tooltip.pipeliner=§7Press §f[%s]§7 to activate §6Pipeliner§7 mode
+item.susy.tool.tooltip.pipeliner=§7Hold §f[%s]§7 to activate §6Pipeliner§7 mode
 
 # Titles
 supersymmetry.title.1=§3SUPERSYMMETRY
