@@ -231,7 +231,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                     }
                 }
             }
-                String key = block.getRegistryName().toString() + "#" + meta + "#block";//i am sorry for this
+                String key = block.getRegistryName().toString() + "#" + meta + "#block";//i am sorry for this, but it kinda works
                 counts.put(key, counts.getOrDefault(key, 0) + 1);
 
         }

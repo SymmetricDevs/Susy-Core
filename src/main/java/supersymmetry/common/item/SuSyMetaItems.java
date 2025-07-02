@@ -13,9 +13,12 @@ import gregtech.common.items.behaviors.TooltipBehavior;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
+import supersymmetry.common.item.behavior.dataCardBehavior;
 import supersymmetry.SuSyValues;
-import java.util.Collections;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 public class SuSyMetaItems {
@@ -100,10 +103,9 @@ public class SuSyMetaItems {
             lines.add(I18n.format("metaitem.data_card.tooltip.1"))
         ));
 
-        DATA_CARD_ACTIVE = initOneItem("data_card.active").setMaxStackSize(1).addComponents(new TooltipBehavior(lines ->
-            lines.add(I18n.format("metaitem.data_card.active.tooltip.1"))
-        ));
-        DATA_CARD_MASTER_BLUEPRINT=initOneItem("datacard.master").setMaxStackSize(1).addComponents(new TooltipBehavior(lines -> lines.add("test")));
+        DATA_CARD_ACTIVE = initOneItem("data_card.active").setMaxStackSize(1).addComponents(new dataCardBehavior(lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1")),Arrays.asList("type")));
+     
+        DATA_CARD_MASTER_BLUEPRINT=initOneItem("datacard.master_blueprint").setMaxStackSize(1).addComponents(new dataCardBehavior(lines -> lines.add(I18n.format("metaitem.datacard.master_blueprint.tooltip.1")),Arrays.asList("rocket")));
         RESTRICTIVE_FILTER = initOneItem("restrictive_filter");
         EARTH_ORBITAL_SCRAP = initOneItem("orbital.scrap.earth").setMaxStackSize(8);
     }

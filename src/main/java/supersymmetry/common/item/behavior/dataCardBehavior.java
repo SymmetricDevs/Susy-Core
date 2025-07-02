@@ -2,19 +2,31 @@ package supersymmetry.common.item.behavior;
 
 import gregtech.api.items.metaitem.stats.IItemBehaviour;
 import java.util.List;
+import java.util.function.Consumer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.Constants;
+import org.jetbrains.annotations.NotNull;
 
 public class dataCardBehavior implements IItemBehaviour {
+  private final Consumer<List<String>> lines;
+  private final List<String> keys;
+
+  public dataCardBehavior(@NotNull Consumer<List<String>> lines, List<String> keys) {
+    this.lines = lines;
+    this.keys = keys;
+  }
+
   @Override
   public void addInformation(ItemStack itemStack, List<String> lines) {
-        lines.add(I18n.format("metaitem.data_card.tooltip.1"));
+    this.lines.accept(lines);
     if (itemStack.hasTagCompound()) {
       NBTTagCompound tag = itemStack.getTagCompound();
-      String type = tag.getString("type");
-      if (type != null) {
-        lines.add(I18n.format("metaitem.data_card.type." + type));
+      for (String key : this.keys) {
+        if (tag.hasKey(key, Constants.NBT.TAG_STRING)) {
+          lines.add(I18n.format(itemStack.getTranslationKey() + ".tag." + tag.getString(key)));
+        }
       }
     }
   }

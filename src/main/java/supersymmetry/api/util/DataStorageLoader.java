@@ -40,6 +40,9 @@ public class DataStorageLoader extends NotifiableItemStackHandler implements IIt
         }
         return dataStorage;
     }
+    public boolean isEmpty() {
+        return dataStorage ==ItemStack.EMPTY;
+    }
 
     @Override
     public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
