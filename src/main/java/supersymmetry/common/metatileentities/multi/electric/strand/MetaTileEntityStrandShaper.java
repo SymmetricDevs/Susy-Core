@@ -138,7 +138,11 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
 
     public long getVoltage() {
         return this.energyContainer.getInputVoltage();
-    };
+    }
+
+    public IEnergyContainer getEnergyContainer() {
+        return energyContainer;
+    }
 
     protected abstract boolean consumeInputsAndSetupRecipe();
 
