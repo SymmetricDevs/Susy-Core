@@ -3,6 +3,9 @@ package supersymmetry.common.metatileentities.multiblockpart;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
 import gregtech.api.block.VariantBlock;
 import gregtech.api.capability.*;
 import gregtech.api.gui.GuiTextures;
@@ -15,6 +18,7 @@ import gregtech.api.metatileentity.multiblock.ICleanroomProvider;
 import gregtech.api.metatileentity.multiblock.ICleanroomReceiver;
 import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 import gregtech.api.metatileentity.multiblock.MultiblockDisplayText;
+import gregtech.api.recipes.Recipe;
 import gregtech.api.util.TextComponentUtil;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
@@ -102,7 +106,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             return;
         }
 
-        scanDuration = (blockList.size()+3)/2;
+        scanDuration = (int)(blockList.size()/(1.5*(linkedCleanroom.getEnergyTier()-3)))+3; // 4 being the minimum value
         scannerLogic.setGoalTime(scanDuration);
 
         Set<BlockPos> blocksConnected = struct.getBlockConn(interior, blockList.get(0));
@@ -639,6 +643,9 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         return this.createGUITemplate(entityPlayer).build(this.getHolder(), entityPlayer);
     }
     public void handleScan(Widget.ClickData click) {
+        if (this.isActive()) {
+            return;
+        }
         if (linkedCleanroom==null || !linkedCleanroom.isClean()) {
             struct.status= BuildStat.UNCLEAN;
         }
@@ -691,7 +698,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             builder.widget(new ImageWidget(173, 201, 18, 6, GuiTextures.BUTTON_POWER_DETAIL));
         }
         //Scan Button
-        builder.widget(new ClickButtonWidget(68,56,54,18,new TextComponentTranslation("gregtech.machine.component_scanner.scan_button").getUnformattedComponentText(),this::handleScan))
+        builder.widget(new ClickButtonWidget(75,70,54,18,new TextComponentTranslation("gregtech.machine.component_scanner.scan_button").getUnformattedComponentText(),this::handleScan))
                 .slot(importItems,0,90,95,GuiTextures.SLOT);
 
 

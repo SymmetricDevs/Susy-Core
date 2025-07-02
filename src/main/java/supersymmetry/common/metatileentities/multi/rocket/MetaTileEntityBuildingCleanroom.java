@@ -39,19 +39,22 @@ import java.util.List;
 
 public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
     // Unfortunately, this class has to be cursed.
-    protected Field lDist_f;
-    protected Field rDist_f;
-    protected Field bDist_f;
-    protected Field fDist_f;
-    protected Field hDist_f;
-    protected Field energy_cont_f;
-    protected Field receivers_f;
+    protected static Field lDist_f;
+    protected static Field rDist_f;
+    protected static Field bDist_f;
+    protected static Field fDist_f;
+    protected static Field hDist_f;
+    protected static Field energy_cont_f;
+    protected static Field receivers_f;
 
     public MetaTileEntityComponentScanner scanner;
     public MetaTileEntityBuildingCleanroom(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
         try {
             hDist_f = MetaTileEntityCleanroom.class.getDeclaredField("hDist");
+            if (hDist_f.isAccessible()) {
+                return;
+            }
             hDist_f.setAccessible(true);
             rDist_f = MetaTileEntityCleanroom.class.getDeclaredField("rDist");
             rDist_f.setAccessible(true);
@@ -66,7 +69,7 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
             energy_cont_f = MetaTileEntityCleanroom.class.getDeclaredField("energyContainer");
             energy_cont_f.setAccessible(true);
         } catch (Exception e) { // this shouldn't happen UNLESS there is a bug
-            return;
+            throw new RuntimeException(e);
         }
     }
 
@@ -81,6 +84,9 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
     @Override
     public boolean updateStructureDimensions() {
         World world = getWorld();
+        if (world.isRemote) {
+            return true;
+        }
         EnumFacing front = getFrontFacing();
         EnumFacing back = front.getOpposite();
         EnumFacing left = front.rotateYCCW();
@@ -102,7 +108,7 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
 
         // find the left, right, back, and front distances for the structure pattern
         // maximum size is 15x15x15 including walls, so check 7 block radius around the controller for blocks
-        for (int i = 1; i < 16; i++) { // trying for 31x31
+        for (int i = 1; i < 8; i++) { // trying for 31x31
             if (lDist == 0 && isBlockEdge(world, lPos, left)) lDist = i;
             if (rDist == 0 && isBlockEdge(world, rPos, right)) rDist = i;
             if (bDist == 0 && isBlockEdge(world, bPos, back)) bDist = i;
@@ -312,6 +318,7 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
         return shapeInfo;
     }
     public AxisAlignedBB getInteriorBB() {
+        updateStructureDimensions();
         EnumFacing front = this.getFrontFacing();
         EnumFacing back = front.getOpposite();
         EnumFacing left = front.rotateYCCW();
