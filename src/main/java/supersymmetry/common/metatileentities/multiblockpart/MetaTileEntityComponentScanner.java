@@ -26,9 +26,13 @@ import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMulti
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
@@ -39,8 +43,11 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import org.jetbrains.annotations.Nullable;
+
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.capability.impl.ScannerLogic;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.api.util.StructAnalysis;
@@ -106,7 +113,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             return;
         }
 
-        scanDuration = (int)(blockList.size()/(1.5*(linkedCleanroom.getEnergyTier()-3)))+3; // 4 being the minimum value
+        scanDuration = (int)(blockList.size()/(1.8*(linkedCleanroom.getEnergyTier()-3)))+3; // 4 being the minimum value
         scannerLogic.setGoalTime(scanDuration);
 
         Set<BlockPos> blocksConnected = struct.getBlockConn(interior, blockList.get(0));
@@ -138,7 +145,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
 
         boolean hasAir = struct.status != BuildStat.HULL_FULL;
         struct.status = BuildStat.SCANNING;
-
+        writeBlocksToNBT(blockList.stream().collect(Collectors.toSet()), this.getWorld()); //im sorry
         if (blockList.stream().anyMatch(engineDetect)) {
             analyzeEngine(blocksConnected);
         } else if (blockList.stream().anyMatch(controlPodDetect) && hasAir) {
@@ -148,7 +155,6 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                 struct.status = BuildStat.HULL_FULL;
                 return;
             }
-            Set<BlockPos> allBlocks = struct.getBlocks(interior);
 
             // Check if all blocks are facing the correct direction and are of the right type
             // Save the fuel capacity & type
@@ -205,6 +211,45 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                 - Guidance computer (not a tile entity)
                 - Seat
         */
+    }
+
+    public void writeBlocksToNBT(Set<BlockPos> blocks,World world) {
+        Map<String,Integer> counts = new HashMap<String,Integer>();
+        for (BlockPos blockpos : blocks) {
+        IBlockState state = world.getBlockState(blockpos);
+            Block block = state.getBlock();
+            int meta = block.getMetaFromState(state);
+            TileEntity te = world.getTileEntity(blockpos);
+            if (te != null) {
+                if (te instanceof TileEntityCoverable)
+                {
+                    TileEntityCoverable teCoverable = (TileEntityCoverable)te;
+                    if (teCoverable!=null && teCoverable.getCoverType().getItem().getRegistryName()!=Items.AIR.getRegistryName())
+                    {
+                        String key = teCoverable.getCoverType().getItem().getRegistryName().toString() + "#" + teCoverable.getCoverType().getMetadata() + "#cover";//i am sorry for this
+                        counts.put(key, counts.getOrDefault(key, 0) + 1);
+                    }
+                }
+            }
+                String key = block.getRegistryName().toString() + "#" + meta + "#block";//i am sorry for this
+                counts.put(key, counts.getOrDefault(key, 0) + 1);
+
+        }
+
+        NBTTagCompound root = new NBTTagCompound();
+        NBTTagList list = new NBTTagList();
+        for (Map.Entry<String, Integer> e : counts.entrySet()) { //this is bad, i hope a smart person will fix it later
+            String[] p = e.getKey().split("#", 3);
+            NBTTagCompound c = new NBTTagCompound();
+            c.setString("registryName", p[0]);
+            c.setInteger("meta", Integer.parseInt(p[1]));
+            c.setString("type", p[2]);
+            c.setInteger("count", e.getValue());
+            list.appendTag(c);
+        }
+
+        root.setTag("blockCounts", list);
+        getInventory().addToCompound(tc -> {tc.setTag("structureInfo", root); return tc;});
     }
 
     // Analyzes whether or not the spacecraft is hollow
