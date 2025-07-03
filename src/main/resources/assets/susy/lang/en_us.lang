@@ -1060,7 +1060,7 @@ susy.machine.building_cleanroom.tooltip.2=also works as a regular cleanroom
 # Error Messages
 susy.msg.rocket_component.build_success=Component successfully analyzed.
 susy.msg.rocket_component.unscanned=Component not scanned.
-susy.msg.rocket_component.blocks_unconnected=Some blocks are not connected to rest of the structure.
+susy.msg.rocket_component.blocks_disconnected=The structure is in two or more parts!
 susy.msg.rocket_component.no_blocks=No blocks were found in scanning zone.
 susy.msg.rocket_component.hull_weak=A hull block was found unsuitable for flight.
 susy.msg.rocket_component.hull_full=The component is lacking interior space (at least 2 blocks).
