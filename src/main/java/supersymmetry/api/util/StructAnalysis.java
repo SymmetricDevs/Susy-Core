@@ -52,7 +52,11 @@ public class StructAnalysis {
         NO_CARD("no_card"),
         UNRECOGNIZED("part_unrecognized"),
         SPACECRAFT_HOLLOW("spacecraft_hollow"),
-        WEIRD_PADDING("weird_padding"), TOO_SHORT("too_short"); // if the connectors do not form a loop
+        WEIRD_PADDING("weird_padding"),
+        TOO_SHORT("too_short"),
+        CONN_UNALIGNED("conn_unaligned"),
+        CONN_WRONG_DIR("conn_wrong_dir"),
+        WRONG_TILE("wrong_tile");
 
         String code;
         BuildStat(String code) {
@@ -312,11 +316,7 @@ public class StructAnalysis {
 
         List<Double> dists = blocks.stream().map(blockPos -> blockPos.distanceSq(X, blockPos.getY(), Z)).collect(Collectors.toList());
         // calculate the median
-        dists.sort(Double::compare);
-        if (dists.size() % 2 == 0)
-            return (dists.get(dists.size()/2 - 1) + dists.get(dists.size()/2)) / 2;
-        else
-            return dists.get(dists.size()/2);
+        return dists.stream().mapToDouble(dist -> dist).average().getAsDouble();
     }
 
     public Set<BlockPos> getLowestLayer(Set<BlockPos> set) {
@@ -329,7 +329,7 @@ public class StructAnalysis {
             return false;
         }
         EnumFacing facing = world.getBlockState(bp).getValue(FACING);
-        return !world.isAirBlock(bp.add(facing.getOpposite().getDirectionVec())) && world.isAirBlock(bp.add(facing.getDirectionVec()));
+        return world.isAirBlock(bp.add(facing.getDirectionVec()));
     }
 
     public Set<BlockPos> getClosest(BlockPos bp, Set<BlockPos> candidates) {
@@ -351,6 +351,19 @@ public class StructAnalysis {
     public Stream<BlockPos> getOfBlockType(Collection<BlockPos> bp, Block block) {
         return bp.stream()
                 .filter(p -> world.getBlockState(p).getBlock().equals(block));
+    }
+
+    public int getCoordOfAxis(BlockPos bp) {
+        if (!world.getBlockState(bp).getPropertyKeys().contains(FACING)) {
+            return 0;
+        }
+        EnumFacing facing = world.getBlockState(bp).getValue(FACING);
+        EnumFacing.Axis axis = facing.getAxis();
+        return switch (axis) {
+            case X -> bp.getX();
+            case Y -> bp.getY();
+            case Z -> bp.getZ();
+        };
     }
 
     public Vec3i multiply(int mult, Vec3i inp) {

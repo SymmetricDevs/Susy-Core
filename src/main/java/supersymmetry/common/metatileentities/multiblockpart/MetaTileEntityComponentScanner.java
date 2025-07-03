@@ -346,25 +346,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         AxisAlignedBB interiorBB = linkedCleanroom.getInteriorBB();
         Predicate<BlockPos> connCheck = bp -> getWorld().getBlockState(bp).getBlock().equals(SuSyBlocks.FAIRING_CONNECTOR);
         Set<BlockPos> connectorBlocks = blocksConnected.stream().filter(connCheck).collect(Collectors.toSet());
-        // These connector blocks should form a ring, with their primary directions not facing any other block
-        // Each connector should neighbor two other connectors, and we pick one to start the check
-        BlockPos next = connectorBlocks.iterator().next();
-        BlockPos start = next;
 
-        // This will keep track of what we've covered
-        Set<BlockPos> collectedConnectors = new HashSet<>(Collections.singleton(next));
-
-        Set<BlockPos> neighbors1 = struct.getBlockNeighbors(next).stream().filter(connCheck).collect(Collectors.toSet());
-        Set<BlockPos> initialClosest = struct.getClosest(next,neighbors1);
-        if (initialClosest.size() <= 2 && !initialClosest.isEmpty() && struct.isFacingOutwards(next)) {
-            next = initialClosest.iterator().next(); // This may be random, but it doesn't matter
-            collectedConnectors.add(next);
-        } else {
-            struct.status = BuildStat.WEIRD_FAIRING;
-            return;
-        }
-
-        // Step 2: Verify that all other blocks are connected by checking the partition
         // If there are more than 2 partitions of air in the bounding box, then there's an abnormality with the hull shape.
         // If there's only one partition, then the hull has a hole in it.
         // We know already that the exterior loop is touching the edge of the bounding box.
@@ -375,45 +357,68 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             struct.status = BuildStat.WEIRD_FAIRING;
             return;
         }
-
         // Objective: We don't really want tiles on the inside of the fairing - that wouldn't make any sense!
         // So, we're going to obtain the fairing with a ceiling (if it didn't have one, it wouldn't have )
         // Note that
-        Set<BlockPos> interiorPartition;
+        Set<BlockPos> intPartition;
+        Set<BlockPos> extPartition;
         if (struct.getBB(partitions.get(0)).maxY > struct.getBB(partitions.get(1)).maxY) {
-            interiorPartition = partitions.get(1);
+            intPartition = partitions.get(1);
+            extPartition = partitions.get(0);
         } else {
-            interiorPartition = partitions.get(0);
+            intPartition = partitions.get(0);
+            extPartition = partitions.get(1);
         }
 
-        while (!collectedConnectors.containsAll(connectorBlocks)) {
-            Set<BlockPos> neighbors = struct.getBlockNeighbors(next).stream().filter(connCheck.and(o -> !collectedConnectors.contains(o))).collect(Collectors.toSet());
-            Set<BlockPos> closestNeighbors = struct.getClosest(next, neighbors);
-            if (closestNeighbors.size() == 1) { // only one neighbor has not been checked yet
-                next = closestNeighbors.iterator().next();
-                collectedConnectors.add(next);
-                // get direction of block
-                EnumFacing facing = getWorld().getBlockState(next).getValue(FACING);
-                // The fairing connector should have its connector face pointing out
-                BlockPos pointingTo = next.add(facing.getDirectionVec());
-                if (StructAnalysis.blockCont(fairingBB,pointingTo) || partitions.get(0).contains(pointingTo)
-                    || partitions.get(1).contains(pointingTo)) {
-                    struct.status = BuildStat.WEIRD_FAIRING;
-                    return;
-                }
-            } else if (closestNeighbors.isEmpty()) {
-                if (!collectedConnectors.contains(connectorBlocks) || !struct.getBlockNeighbors(next).contains(start)) {
-                    struct.status = BuildStat.WEIRD_FAIRING;
-                    return;
-                }
-                break;
-            } else {
-                struct.status = BuildStat.WEIRD_FAIRING;
+        // Checks if all connectors are facing the same plane
+        BlockPos next = connectorBlocks.iterator().next();
+        BlockPos start = next;
+        EnumFacing dir = getWorld().getBlockState(next).getValue(FACING);
+        int axisPos = struct.getCoordOfAxis(start);
+        for (BlockPos blockFace: connectorBlocks) {
+            EnumFacing dir_general = getWorld().getBlockState(blockFace).getValue(FACING);
+            if (struct.getCoordOfAxis(blockFace) != axisPos || dir_general != dir) {
+                struct.status = BuildStat.CONN_UNALIGNED;
                 return;
+            } else {
+                BlockPos pointingTo = blockFace.add(dir_general.getDirectionVec());
+                if (intPartition.contains(pointingTo) || extPartition.contains(pointingTo) ||
+                    intPartition.contains(blockFace.add(dir_general.getOpposite().getDirectionVec()))) {
+                    struct.status = BuildStat.CONN_WRONG_DIR;
+                }
             }
         }
 
-        //Step 3: Verify that all exposed block faces are covered (except for the connector-connector ones)
+        // These connector blocks should form a line
+        // Each connector should neighbor one/two
+
+        // This will keep track of what we've covered
+        Set<BlockPos> collectedConnectors = new HashSet<>(Collections.singleton(next));
+        collectedConnectors.add(start);
+        Set<BlockPos> toConnect = new HashSet<>();
+        while (!collectedConnectors.containsAll(connectorBlocks)) {
+            if (toConnect.isEmpty()) { // either there's one connector, or the connector set is disconnected
+                struct.status = BuildStat.WEIRD_FAIRING;
+                return;
+            }
+            Set<BlockPos> newNeighbors = new HashSet<>();
+            for (BlockPos initiate: toConnect) {
+                Set<BlockPos> blockNeighbors = struct.getBlockNeighbors(initiate, fairingBB, StructAnalysis.neighborVecs)
+                        .stream().filter(connectorBlocks::contains).collect(Collectors.toSet());
+                // Ensures that there's one line of connectors (no branching)
+                if (blockNeighbors.size() > 2) {
+                    struct.status = BuildStat.WEIRD_FAIRING;
+                    return;
+                }
+                newNeighbors.addAll(blockNeighbors.stream().filter(Predicate.not(collectedConnectors::contains)).collect(Collectors.toSet()));
+            }
+            collectedConnectors.addAll(toConnect);
+            toConnect.clear();
+            toConnect.addAll(newNeighbors);
+        }
+
+
+        //Step 3: Verify that all block faces exposed to the top partition are covered
         for (BlockPos bp: blocksConnected) {
             Block b = getWorld().getBlockState(bp).getBlock();
             if (!(getWorld().getTileEntity(bp) instanceof TileEntityCoverable)) {
@@ -421,28 +426,39 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                 return;
             }
             TileEntityCoverable te = (TileEntityCoverable) getWorld().getTileEntity(bp);
-            List<BlockPos> airNeighbors = struct.getBlockNeighbors(bp,interiorBB,StructAnalysis.orthVecs).stream()
+
+            // Takes all orth neighbors which are blocks or are interior neighbors
+            List<BlockPos> solidNeighbors = struct.getBlockNeighbors(bp,interiorBB,StructAnalysis.orthVecs).stream()
                     .filter(pos -> !getWorld().isAirBlock(pos)).collect(Collectors.toList());
-            List<BlockPos> neighbors = airNeighbors.stream().filter(interiorPartition::contains).collect(Collectors.toList());
-            if (b.equals(SuSyBlocks.FAIRING_HULL)) {
-                if (te.getSides().length != (6 - neighbors.size())) {
-                    struct.status=BuildStat.MISSING_TILE;
-                    return;
+            List<BlockPos> intAirNeighbors = struct.getBlockNeighbors(bp,interiorBB,StructAnalysis.orthVecs).stream()
+                    .filter(intPartition::contains).collect(Collectors.toList());
+            for (EnumFacing facing: EnumFacing.VALUES) {
+                boolean expectation = true;
+                BlockPos pointingTo = bp.add(facing.getDirectionVec());
+                if (solidNeighbors.contains(pointingTo) || intAirNeighbors.contains(pointingTo)) {
+                    expectation = false;
                 }
-            } else if (b.equals(SuSyBlocks.FAIRING_CONNECTOR)) {
-                // we know that the connector facing is valid from Step 1 so we reuse the information
-                // that's why there's a 5
-                if (te.getSides().length != (5 - neighbors.size()) || te.isCovered(getWorld().getBlockState(bp).getValue(FACING))) {
-                    struct.status = BuildStat.WEIRD_FAIRING;
-                    return;
+                if (getWorld().getBlockState(bp).getValue(FACING).equals(facing) && b instanceof BlockFairingConnector) {
+                    expectation = false;
+                }
+                if (expectation ^ te.isCovered(facing)) { // xor: one is true, one is false
+                    struct.status = BuildStat.WRONG_TILE;
                 }
             }
         }
 
         modifyItem("type", "fairing");
         modifyItem("height", Integer.toString((int)fairingBB.maxY-(int)fairingBB.minY));
-        Double bottomRadius = struct.getApproximateRadius(struct.getLowestLayer(blocksConnected));
-        modifyItem("bottom_radius", bottomRadius.toString());
+        modifyItem("num_conns", Integer.toString(connectorBlocks.size()));
+        modifyItem("volume", Integer.toString(intPartition.size()));
+        modifyItem("mass", Double.toString(blocksConnected.stream()
+                .mapToDouble(bp -> getMass(getWorld().getBlockState(bp)))
+                .sum()
+        ));
+        Double bottomSemiRadius = struct.getApproximateRadius(struct.getLowestLayer(blocksConnected));
+        // as it turns out, the integral of distances from the centroid of a semicircle to its path is pi/4 * the radius
+        double bottomRadius = bottomSemiRadius * 4 / Math.PI;
+        modifyItem("bottom_radius", String.valueOf(bottomRadius));
 
         struct.status = BuildStat.SUCCESS;
     }
