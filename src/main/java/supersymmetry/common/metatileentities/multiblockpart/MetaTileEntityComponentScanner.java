@@ -396,6 +396,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         Set<BlockPos> collectedConnectors = new HashSet<>(Collections.singleton(next));
         collectedConnectors.add(start);
         Set<BlockPos> toConnect = new HashSet<>();
+        toConnect.add(start);
         while (!collectedConnectors.containsAll(connectorBlocks)) {
             if (toConnect.isEmpty()) { // either there's one connector, or the connector set is disconnected
                 struct.status = BuildStat.WEIRD_FAIRING;
@@ -410,7 +411,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                     struct.status = BuildStat.WEIRD_FAIRING;
                     return;
                 }
-                newNeighbors.addAll(blockNeighbors.stream().filter(Predicate.not(collectedConnectors::contains)).collect(Collectors.toSet()));
+                newNeighbors.addAll(blockNeighbors.stream().filter(p->!collectedConnectors.contains(p)).collect(Collectors.toSet()));
             }
             collectedConnectors.addAll(toConnect);
             toConnect.clear();
@@ -435,6 +436,9 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             for (EnumFacing facing: EnumFacing.VALUES) {
                 boolean expectation = true;
                 BlockPos pointingTo = bp.add(facing.getDirectionVec());
+                if (pointingTo.getY() < fairingBB.minY) {
+                    expectation = false;
+                }
                 if (solidNeighbors.contains(pointingTo) || intAirNeighbors.contains(pointingTo)) {
                     expectation = false;
                 }

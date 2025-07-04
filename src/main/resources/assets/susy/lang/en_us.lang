@@ -1070,6 +1070,7 @@ susy.msg.rocket_component.unknown_error=An unknown error occurred.
 susy.msg.rocket_component.wrong_num_c_chambers=There are too many or not enough combustion chambers.
 susy.msg.rocket_component.wrong_num_pumps=There are extraneous unused turbopumps.
 susy.msg.rocket_component.weird_pump=For some reason, a pump is facing upwards. Why?
+susy.msg.rocket_component.weird_fairing=Something about this fairing is weird.
 susy.msg.rocket_component.chamber_wrong_place=A combustion chamber is inside the rocket nozzle. That's strange...
 susy.msg.rocket_component.invalid_transparent=A transparent block is in this component!
 susy.msg.rocket_component.chamber_extraneous_blocks=An unneeded block was found in the component!
