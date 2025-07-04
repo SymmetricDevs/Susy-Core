@@ -11,6 +11,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -46,15 +47,20 @@ public class EntityRocket extends Entity {
         isImmuneToFire = true;
     }
 
-    public EntityRocket(World worldIn, double x, double y, double z) {
+    public EntityRocket(World worldIn, double x, double y, double z, float rotationYaw) {
         this(worldIn);
-        this.setLocationAndAngles(x, y, z, this.rotationYaw, 180.0F);
+        this.setLocationAndAngles(x, y, z, rotationYaw, 180.0F);
         this.setEntityBoundingBox(new AxisAlignedBB(x - 5, y + 0.1, z - 5, x + 5, y + 46, z + 5));
     }
 
-    public EntityRocket(World worldIn, BlockPos pos) {
-        this(worldIn, (float)pos.getX() + 0.5F, pos.getY(), (float)pos.getZ() + 0.5F);
+    public EntityRocket(World worldIn, BlockPos pos, float rotationYaw) {
+        this(worldIn, (float)pos.getX() + 0.5F, pos.getY(), (float)pos.getZ() + 0.5F, rotationYaw);
     }
+
+    public EntityRocket(World worldIn, Vec3d pos, float rotationYaw) {
+        this(worldIn, pos.x, pos.y, pos.z, rotationYaw);
+    }
+
 
     protected void entityInit(){
         this.dataManager.register(LAUNCHED, false);
