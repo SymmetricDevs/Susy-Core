@@ -103,19 +103,14 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
   public enum guiState {
     rocket_blueprint_assebler,
     rocket_stats,
-    not_formed
+    not_formed // not even used yet :<
   }
 
   private ModularUI.Builder createGUITemplate(EntityPlayer entityPlayer) {
     int width = 300;
     int height = 200;
     ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, width, height);
-    if (master_blueprint.getStackInSlot(0).getCount() != 1) {
-      builder.label(
-          width / 2, height / 2 - 20, "susy.machine.rocket_simulator.master_blueprint.missing");
-    } else {
-      builder.label(width / 2, height / 2 - 20, "susy.machine.rocket_simulator.master_blueprint");
-    }
+    builder.label(width / 2, height / 2 - 20, "susy.machine.rocket_simulator.master_blueprint");
     builder.widget(
         new IndicatorImageWidget(width, height, 17, 17, GuiTextures.GREGTECH_LOGO_DARK)
             .setWarningStatus(GuiTextures.GREGTECH_LOGO_BLINKING_YELLOW, this::addWarningText)
@@ -177,7 +172,8 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
           // position will get changed in the .addSlotList thing later anyways
           list.addWidget(new SlotWidget(slot, 0, 1, 1).setBackgroundTexture(GuiTextures.SLOT_DARK));
         }
-        container.addSlotList(new LabelWidget(0, 0, text, 0xFFFFFF), list);
+        container.addSlotList(
+            new LabelWidget(0, 0, "susy.machine.rocket_simulator.component." + text, 0xFFFFFF), list);
       }
     }
   }
@@ -247,5 +243,4 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
   public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
     return new MetaTileEntityAerospaceFlightSimulator(metaTileEntityId);
   }
-    
 }
