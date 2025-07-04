@@ -654,20 +654,20 @@ gregtech.machine.textile_spinner.uiv.name=Идеальный текстильн�
 gregtech.machine.textile_spinner.uxv.name=Идеальный текстильный прядильщик IV
 gregtech.machine.textile_spinner.opv.name=Совершенный текстильный прядильщик
 
-# Polishing Machine
-gregtech.machine.polishing_machine.lv.name=Обычная полировальная машина
-gregtech.machine.polishing_machine.mv.name=Улучшеная полировальная машина
-gregtech.machine.polishing_machine.hv.name=Улучшеная полировальная машина II
-gregtech.machine.polishing_machine.ev.name=Улучшеная полировальная машина III
-gregtech.machine.polishing_machine.iv.name=Превосходная полировальная машина
-gregtech.machine.polishing_machine.luv.name=Превосходная полировальная машина II
-gregtech.machine.polishing_machine.zpm.name=Превосходная полировальная машина III
-gregtech.machine.polishing_machine.uv.name=Безупречная полировальная машина
-gregtech.machine.polishing_machine.uhv.name=Идеальная полировальная машина
-gregtech.machine.polishing_machine.uev.name=Идеальная полировальная машина II
-gregtech.machine.polishing_machine.uiv.name=Идеальная полировальная машина III
-gregtech.machine.polishing_machine.uxv.name=Идеальная полировальная машина IV
-gregtech.machine.polishing_machine.opv.name=Совершенная полировальная машина
+# Wafer Spinner
+gregtech.machine.wafer_spinner.lv.name=Обычная полировальная машина
+gregtech.machine.wafer_spinner.mv.name=Улучшеная полировальная машина
+gregtech.machine.wafer_spinner.hv.name=Улучшеная полировальная машина II
+gregtech.machine.wafer_spinner.ev.name=Улучшеная полировальная машина III
+gregtech.machine.wafer_spinner.iv.name=Превосходная полировальная машина
+gregtech.machine.wafer_spinner.luv.name=Превосходная полировальная машина II
+gregtech.machine.wafer_spinner.zpm.name=Превосходная полировальная машина III
+gregtech.machine.wafer_spinner.uv.name=Безупречная полировальная машина
+gregtech.machine.wafer_spinner.uhv.name=Идеальная полировальная машина
+gregtech.machine.wafer_spinner.uev.name=Идеальная полировальная машина II
+gregtech.machine.wafer_spinner.uiv.name=Идеальная полировальная машина III
+gregtech.machine.wafer_spinner.uxv.name=Идеальная полировальная машина IV
+gregtech.machine.wafer_spinner.opv.name=Совершенная полировальная машина
 
 gregtech.machine.bath_condenser.name=Конденсатор для ванны
 gregtech.machine.bath_condenser.tooltip=Работает только внутри криогенной дистилляционной башни.
@@ -734,7 +734,7 @@ recipemap.blender.name=Блендер
 recipemap.phase_separator.name=Разделение фаз
 recipemap.bath_condenser.name=Конденсатор для ванны
 recipemap.drone_pad.name=Площадка для дронов
-recipemap.polishing_machine.name=Полировка
+recipemap.wafer_spinner.name=Полировка
 recipemap.gravity_separator=Гравитационное разделение
 recipemap.spinning.name=Текстильное прядение
 recipemap.large_steam_turbine.name=Большая паровая турбина
