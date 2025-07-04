@@ -28,6 +28,9 @@ public class StrandShaperInfoProvider implements IProbeInfoProvider {
 
             MetaTileEntity metaTileEntity = ((IGregTechTileEntity) tileEntity).getMetaTileEntity();
             if (metaTileEntity instanceof MetaTileEntityStrandShaper shaper) {
+                if (shaper.getEnergyContainer() == null) {
+                    return;
+                }
                 long EUt = shaper.getVoltage();
                 String text = TextFormatting.RED + TextFormattingUtil.formatNumbers(EUt) + TextStyleClass.INFO +
                         " EU/t" + TextFormatting.GREEN +
