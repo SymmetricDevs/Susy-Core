@@ -19,4 +19,5 @@ public abstract class EntityPlayerMixin extends EntityLivingBase {
         this.setFlag(7, isElytraFlying);
         return isElytraFlying;
     }
+
 }
