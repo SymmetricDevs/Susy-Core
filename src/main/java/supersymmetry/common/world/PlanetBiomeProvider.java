@@ -20,18 +20,24 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PlanetBiomeProvider extends BiomeProvider {
-    private GenLayer biomeToUse;
-    private GenLayer biomeIndex;
     private List<BiomeManager.BiomeEntry> biomeList;
     private List<Biome> biomesToSpawnIn;
     private BiomeCache cache;
+    private int biomeSize;
 
     public PlanetBiomeProvider(World world) {
         super(world.getWorldInfo());
 
         // Biome list is actually initialized in getModdedBiomeGenerators, and so we need to keep the reference the same
-        biomeList.addAll(SuSyDimensions.PLANETS.get(world.provider.getDimension()).biomeList);
+        Planet planet = SuSyDimensions.PLANETS.get(world.provider.getDimension());
+
+        biomeList.addAll(planet.biomeList);
+        biomeSize = planet.getBiomeSize();
         biomesToSpawnIn = biomeList.stream().map(entry -> entry.biome).collect(Collectors.toList());
+
+        // We need to modify the generators to use the biome list due to the annoying superclass
+        modifyGenerators(world.getSeed());
+
         cache = new BiomeCache(this);
     }
 
@@ -45,22 +51,18 @@ public class PlanetBiomeProvider extends BiomeProvider {
         biomeList = new ArrayList<>();
         GenLayer biomes = new PlanetGenLayerBiomes(seed, null).setBiomeList(biomeList);
 
-        biomes = new GenLayerZoom(1000, biomes);
-        biomes = new GenLayerZoom(1001, biomes);
-        biomes = new GenLayerZoom(1002, biomes);
-        biomes = new GenLayerZoom(1003, biomes);
-        biomes = new GenLayerZoom(1004, biomes);
-
-        GenLayer biomeIndexLayer = new GenLayerVoronoiZoom(10L, biomes);
-        biomeIndexLayer.initWorldGenSeed(seed);
-
-        biomeToUse = biomes;
-        biomeIndex = biomeIndexLayer;
-
         return new GenLayer[] {
                 biomes,
-                biomeIndexLayer
+                null
         };
+    }
+
+    private void modifyGenerators(long seed) {
+        this.genBiomes = GenLayerZoom.magnify(seed, this.genBiomes, biomeSize);
+
+        GenLayer biomeIndexLayer = new GenLayerVoronoiZoom(10L, this.genBiomes);
+        biomeIndexLayer.initWorldGenSeed(seed);
+        this.biomeIndexLayer = biomeIndexLayer;
     }
 
     @Override
@@ -83,7 +85,7 @@ public class PlanetBiomeProvider extends BiomeProvider {
         if (biomes == null || biomes.length < par4 * par5)
             biomes = new Biome[par4 * par5];
 
-        int[] aint = biomeToUse.getInts(par2, par3, par4, par5);
+        int[] aint = genBiomes.getInts(par2, par3, par4, par5);
 
         for (int i = 0; i < par4 * par5; ++i)
             if (aint[i] >= 0 && aint[i] <= Biome.REGISTRY.getKeys().size())
@@ -106,7 +108,7 @@ public class PlanetBiomeProvider extends BiomeProvider {
             System.arraycopy(aBiome1, 0, biomes, 0, width * length);
             return biomes;
         } else {
-            int[] aint = biomeIndex.getInts(x, y, width, length);
+            int[] aint = biomeIndexLayer.getInts(x, y, width, length);
 
             for (int i = 0; i < width * length; ++i)
                 if (aint[i] >= 0 && aint[i] <= Biome.REGISTRY.getKeys().size())

@@ -213,7 +213,7 @@ public class CommonProxy {
         evt.getRegistry().register(SuSyBiomes.LUNAR_HIGHLANDS);
         BiomeDictionary.addTypes(SuSyBiomes.LUNAR_HIGHLANDS, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.VOID);
 
-        SuSyBiomes.LUNAR_MARIA = new BiomeLunarMaria(new Biome.BiomeProperties("Lunar Maria").setRainDisabled().setBaseHeight(0f).setHeightVariation(0.2f).setRainfall(0).setTemperature(0.3f));
+        SuSyBiomes.LUNAR_MARIA = new BiomeLunarMaria(new Biome.BiomeProperties("Lunar Maria").setRainDisabled().setBaseHeight(0f).setHeightVariation(0.1f).setRainfall(0).setTemperature(0.3f));
         SuSyBiomes.LUNAR_MARIA.setRegistryName(Supersymmetry.MODID, "maria");
         evt.getRegistry().register(SuSyBiomes.LUNAR_MARIA);
         BiomeDictionary.addTypes(SuSyBiomes.LUNAR_MARIA, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.VOID);

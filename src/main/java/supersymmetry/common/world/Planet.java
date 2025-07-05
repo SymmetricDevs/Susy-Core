@@ -18,6 +18,8 @@ public class Planet {
     private int id;
     private int dimID;
 
+    private int biomeSize = 5;
+
     private boolean isLoaded;
 
     public int averageGroundLevel;
@@ -123,6 +125,11 @@ public class Planet {
         return this;
     }
 
+    public Planet setBiomeSize(int biomeSize) {
+        this.biomeSize = biomeSize;
+        return this;
+    }
+
     public IBlockState getStone() {
         return this.stone;
     }
@@ -161,5 +168,9 @@ public class Planet {
     public Planet setSupportsFire(boolean supportsFire) {
         this.supportsFire = supportsFire;
         return this;
+    }
+
+    public int getBiomeSize() {
+        return this.biomeSize;
     }
 }

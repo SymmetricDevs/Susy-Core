@@ -45,7 +45,7 @@ public class SuSyDimensions {
                 .setStone(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH)
                         .getState(SusyStoneVariantBlock.StoneType.ANORTHOSITE))
                 .setSkyRenderer(new SkyRendererMoon())
-                .setGravity(0.166f).load();
+                .setGravity(0.166f).setBiomeSize(7).load();
     }
 
 }

@@ -17,6 +17,7 @@ public class WorldProviderPlanet extends WorldProvider {
 
     @Override
     protected void init() {
+        this.hasSkyLight = true;
         biomeProvider = new PlanetBiomeProvider(world);
     }
 
@@ -43,11 +44,6 @@ public class WorldProviderPlanet extends WorldProvider {
     @Override
     public boolean isSkyColored() {
         return false;
-    }
-
-    @Override
-    public Vec3d getSkyColor(Entity cameraEntity, float partialTicks) {
-        return super.getSkyColor(cameraEntity, partialTicks);
     }
 
     @Override
