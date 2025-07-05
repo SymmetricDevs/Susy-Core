@@ -2,6 +2,7 @@ package supersymmetry.common;
 
 import gregtech.api.block.VariantItemBlock;
 import gregtech.api.modules.ModuleContainerRegistryEvent;
+import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.event.MaterialEvent;
 import gregtech.api.unification.material.event.PostMaterialEvent;
 import gregtech.client.utils.TooltipHelper;
@@ -26,11 +27,20 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.fml.common.Loader;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.blocks.VariantItemBlockFalling;
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.event.MobHordeEvent;
+import supersymmetry.api.fluids.SusyGeneratedFluidHandler;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.api.unification.ore.SusyStoneTypes;
 import supersymmetry.common.blocks.SheetedFrameItemBlock;
@@ -59,6 +69,56 @@ public class CommonProxy {
     public void preLoad() {
         GeckoLib.initialize();
         SusyStoneTypes.init();
+    }
+
+    /**
+     * Checks for a canary file in the config directory and deletes it if found.
+     * Also cleans up the Groovy cache folder to prevent update issues.
+     */
+    public void checkCanaryFile() {
+        try {
+            // Handle canary file in config/susy/
+            File configDir = new File(Loader.instance().getConfigDir(), "susy");
+            if (configDir.exists() || configDir.mkdirs()) {
+                File canaryFile = new File(configDir, "susy_canary");
+                if (canaryFile.exists()) {
+                    SusyLog.logger.info("Found canary file for update - performing cleanup actions");
+                    if (!canaryFile.delete()) {
+                        SusyLog.logger.warn("Failed to delete canary file: {}", canaryFile.getAbsolutePath());
+                    }
+                }
+            } else {
+                SusyLog.logger.warn("Failed to access or create susy config directory");
+            }
+
+            // Clean up Groovy cache
+            File gameDir = Loader.instance().getConfigDir().getParentFile();
+            File groovyCacheDir = new File(gameDir, "cache/groovy");
+            if (groovyCacheDir.exists() && groovyCacheDir.isDirectory()) {
+                SusyLog.logger.info("Cleaning up Groovy cache at: {}", groovyCacheDir.getAbsolutePath());
+                deleteDirectory(groovyCacheDir);
+            }
+        } catch (Exception e) {
+            SusyLog.logger.error("Error during cleanup operations", e);
+        }
+    }
+
+    /**
+     * Recursively deletes a directory and all its contents.
+     *
+     * @param directory the directory to delete
+     * @return true if the directory was successfully deleted, false otherwise
+     */
+    private boolean deleteDirectory(File directory) {
+        if (directory.isDirectory()) {
+            File[] files = directory.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    deleteDirectory(file);
+                }
+            }
+        }
+        return directory.delete();
     }
 
     public void load() {
@@ -93,7 +153,11 @@ public class CommonProxy {
         registry.register(SuSyBlocks.MULTIBLOCK_CASING);
         registry.register(SuSyBlocks.SERPENTINE);
         registry.register(SuSyBlocks.HARDBLOCKS);
+        registry.register(SuSyBlocks.HARDBLOCKS1);
         registry.register(SuSyBlocks.CUSTOMSHEETS);
+        registry.register(SuSyBlocks.METALLURGY);
+        registry.register(SuSyBlocks.METALLURGY_2);
+        registry.register(SuSyBlocks.METALLURGY_ROLL);
         registry.register(SuSyBlocks.CONVEYOR_BELT);
         registry.register(SuSyBlocks.ROCKET_ASSEMBLER_CASING);
         registry.register(SuSyBlocks.REGOLITH);
@@ -128,7 +192,11 @@ public class CommonProxy {
         registry.register(createItemBlock(SuSyBlocks.MULTIBLOCK_CASING, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.SERPENTINE, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.HARDBLOCKS, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.HARDBLOCKS1, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.CUSTOMSHEETS, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.METALLURGY, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.METALLURGY_2, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.METALLURGY_ROLL, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.CONVEYOR_BELT, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.ROCKET_ASSEMBLER_CASING, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.REGOLITH, VariantItemBlockFalling::new));
@@ -155,6 +223,10 @@ public class CommonProxy {
         MetaItems.addOrePrefix(SusyOrePrefix.wetFiber);
         MetaItems.addOrePrefix(SusyOrePrefix.thread);
         MetaItems.addOrePrefix(SusyOrePrefix.dustWet);
+        MetaItems.addOrePrefix(SusyOrePrefix.electrode);
+
+        Materials.Aluminium.addFlags("continuously_cast");
+        SusyGeneratedFluidHandler.init();
 
         //SusyMaterials.removeFlags();
     }

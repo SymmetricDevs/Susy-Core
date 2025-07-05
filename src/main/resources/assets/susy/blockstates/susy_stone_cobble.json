@@ -69,6 +69,11 @@
         "textures" : {
           "all" : "gregtech:blocks/susy_stones/industrial_concrete_cobble"
         }
+      },
+      "minitary_concrete" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/military_concrete_cobble"
+        }
       }
     }
   }

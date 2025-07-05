@@ -4,24 +4,32 @@ import gregtech.api.GTValues;
 import gregtech.api.items.metaitem.MetaOreDictItem;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.stack.UnificationEntry;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.IRegistry;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
@@ -43,9 +51,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
+import static supersymmetry.common.EventHandlers.FIRST_SPAWN;
+
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID, value = Side.CLIENT)
 public class ClientProxy extends CommonProxy {
+    private static double titleRenderTimer = -1;
 
     public void preLoad() {
         super.preLoad();
@@ -136,5 +147,40 @@ public class ClientProxy extends CommonProxy {
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "entities/soyuz"));
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "armor/jet_wingpack"));
         SuSyMetaItems.armorItem.registerIngameModels(map);
+    }
+
+
+    @SubscribeEvent
+    public static void onRenderGameOverlay(TickEvent.ClientTickEvent event) {
+        if (event.phase != TickEvent.Phase.START) {
+            return;
+        }
+        if (titleRenderTimer >= 0) {
+            GuiIngame gui = Minecraft.getMinecraft().ingameGUI;
+            titleRenderTimer++;
+            if (titleRenderTimer % 150 == 0) {
+                int i = (int) titleRenderTimer / 150; // 0 doesn't happen
+                // This is literally how you have to use this method. I'm sorry.
+                gui.displayTitle(null,
+                        null, 20, 100, 30);
+                gui.displayTitle(null,
+                        I18n.format("supersymmetry.subtitle." + i), 20, 100, 30);
+                gui.displayTitle(I18n.format("supersymmetry.title." + i),
+                        null, 20, 100, 30);
+                if (i == 3) { // Three messages
+                    titleRenderTimer = -1;
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        NBTTagCompound playerData = event.player.getEntityData();
+        NBTTagCompound data = playerData.hasKey(EntityPlayer.PERSISTED_NBT_TAG) ? playerData.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG) : new NBTTagCompound();
+        if (!data.getBoolean(FIRST_SPAWN)) {
+            // Set up title cards
+            titleRenderTimer = 0;
+        }
     }
 }

@@ -11,6 +11,15 @@
     "MetaTileEntityLargeMinerMixin",
     "MetaTileEntityMinerMixin",
     "MultiblockControllerBaseMixin",
-    "CommonProxyMixin"
+    "CommonProxyMixin",
+    "ModHandlerMixin",
+    "MultiblockControllerBaseMixin",
+    "OreDictUnifierAccessor",
+    "OreDictUnifierMixin",
+    "RecipeBuilderAccessor",
+    "RecipeMapsMixin",
+    "RecyclingRecipesMixin",
+    "CommonProxyMixin",
+    "TileEntityPipeBaseMixin"
   ]
 }

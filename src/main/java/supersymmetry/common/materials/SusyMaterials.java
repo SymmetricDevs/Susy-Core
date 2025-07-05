@@ -32,6 +32,8 @@ public class SusyMaterials {
     public static Material Mud;
     public static Material Seawater;
 
+    public static Material RefractoryGunningMixture;
+
     //Minerals
     public static Material Anorthite;
     public static Material Albite;

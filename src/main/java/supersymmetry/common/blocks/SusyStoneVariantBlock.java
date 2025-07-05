@@ -120,6 +120,7 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
         SOAPSTONE("soapstone", MapColor.GRAY_STAINED_HARDENED_CLAY),
         KIMBERLITE("kimberlite", MapColor.GRAY),
         INDUSTRIAL_CONCRETE("industrial_concrete", MapColor.YELLOW_STAINED_HARDENED_CLAY),
+        MILITARY_CONCRETE("minitary_concrete", MapColor.BLACK),
         ANORTHOSITE("anorthosite", MapColor.GRAY);
 
         private final String name;
@@ -139,7 +140,8 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
             return switch (this) {
                 case GABBRO, GNEISS, LIMESTONE, PHYLLITE, QUARTZITE, SHALE, SLATE, SOAPSTONE, KIMBERLITE, ANORTHOSITE ->
                         OrePrefix.stone;
-                case INDUSTRIAL_CONCRETE -> OrePrefix.block;
+                case INDUSTRIAL_CONCRETE, MILITARY_CONCRETE ->
+                        OrePrefix.block;
             };
         }
 
@@ -155,7 +157,7 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
                 case SOAPSTONE -> Materials.Soapstone;
                 case KIMBERLITE -> SusyMaterials.Kimberlite;
                 case ANORTHOSITE -> SusyMaterials.Anorthosite;
-                case INDUSTRIAL_CONCRETE -> Materials.Concrete;
+                case INDUSTRIAL_CONCRETE, MILITARY_CONCRETE -> Materials.Concrete;
             };
         }
     }
