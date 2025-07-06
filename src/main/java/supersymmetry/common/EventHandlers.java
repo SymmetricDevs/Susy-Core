@@ -1,15 +1,11 @@
 package supersymmetry.common;
 
-import com.cleanroommc.groovyscript.event.GroovyReloadEvent;
-import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.util.GTTeleporter;
 import gregtech.api.util.TeleportHandler;
 import gregtech.common.items.MetaItems;
 import gregtechfoodoption.item.GTFOMetaItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -18,7 +14,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.management.PlayerList;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -32,13 +27,11 @@ import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.event.MobHordeWorldData;
 import supersymmetry.common.item.SuSyArmorItem;
 import supersymmetry.common.world.WorldProviderPlanet;
-import supersymmetry.loaders.recipes.handlers.RecyclingManager;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class EventHandlers {
 
     public static final String FIRST_SPAWN = Supersymmetry.MODID + ".first_spawn";
-    private static boolean cancelFillBucket = false;
 
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
