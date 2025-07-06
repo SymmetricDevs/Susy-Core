@@ -55,7 +55,7 @@ public class MixerSettlerRecipeBuilder extends RecipeBuilder<MixerSettlerRecipeB
 
     @Override
     public ValidationResult<Recipe> build() {
-        if (this.recipePropertyStorage == null || !this.recipePropertyStorage.hasRecipeProperty(SinterProperty.getInstance())) {
+        if (this.recipePropertyStorage == null || !this.recipePropertyStorage.hasRecipeProperty(MixerSettlerCellsProperty.getInstance())) {
             this.requiredCells(2);
         }
         return super.build();

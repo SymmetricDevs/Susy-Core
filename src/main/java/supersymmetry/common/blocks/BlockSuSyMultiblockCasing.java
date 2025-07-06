@@ -40,7 +40,6 @@ public class BlockSuSyMultiblockCasing extends VariantBlock<BlockSuSyMultiblockC
         COPPER_PIPE("copper_casing_pipe"),
         HEAVY_DUTY_PAD("heavy_duty_pad"),
         ADVANCED_REFRACTORY_LINING("advanced_refractory_lining"),
-        HEAVY_DUTY_PAD("heavy_duty_pad"),
         COALESCENCE_PLATE("coalescence_plate");
 
         private final String name;
