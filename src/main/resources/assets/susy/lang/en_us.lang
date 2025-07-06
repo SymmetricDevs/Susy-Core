@@ -1111,6 +1111,8 @@ tile.hardened_blocks1.military_concrete_cobblestone_hardened.name=Federation Gra
 #Custom Sheets
 tile.custom_sheets.darkwhitemetalsheet.name=Darker White Metal Sheet
 tile.custom_sheets.lightergraymetalsheet.name=Lighter Gray Metal Sheet
+tile.custom_sheets.decorativecopper.name=Space Grade Decorative Copper
+tile.custom_sheets.decorativecopperbricks.name=Space Grade Decorative Copper Bricks
 
 tile.regolith.highland.name=Anorthositic Regolith
 tile.regolith.lowland.name=Basaltic Regolith
