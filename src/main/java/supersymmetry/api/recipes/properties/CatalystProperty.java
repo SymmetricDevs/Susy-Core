@@ -28,11 +28,11 @@ public class CatalystProperty extends RecipeProperty<CatalystPropertyValue> {
     public void drawInfo(@NotNull Minecraft minecraft, int x, int y, int color, Object value) {
         CatalystPropertyValue propertyValue = castValue(value);
         int tier = propertyValue.getTier();
-        String localisedCatalystGroupName = I18n.format("gregtech.catalyst_group." + propertyValue.getCatalystGroup().getName() + ".name");
+        String localisedCatalystGroupName = I18n.format("susy.catalyst_group." + propertyValue.getCatalystGroup().getName() + ".name");
         if(tier == CatalystInfo.NO_TIER) {
-            minecraft.fontRenderer.drawString(I18n.format("gregtech.recipe.catalyst", localisedCatalystGroupName, ""), x, y, color);
+            minecraft.fontRenderer.drawString(I18n.format("susy.recipe.catalyst", localisedCatalystGroupName, ""), x, y, color);
         } else {
-            minecraft.fontRenderer.drawString(I18n.format("gregtech.recipe.catalyst", GTValues.VN[tier], localisedCatalystGroupName), x, y, color);
+            minecraft.fontRenderer.drawString(I18n.format("susy.recipe.catalyst", GTValues.VN[tier], localisedCatalystGroupName), x, y, color);
         }
     }
 }

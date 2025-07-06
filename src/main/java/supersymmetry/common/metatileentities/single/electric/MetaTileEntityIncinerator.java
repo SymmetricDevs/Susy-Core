@@ -215,7 +215,7 @@ public class MetaTileEntityIncinerator extends TieredMetaTileEntity implements I
     }
 
     public void getDisplayText(List<ITextComponent> list) {
-        list.add(new TextComponentTranslation(isClogged ? "gregtech.multiblock.incinerator.clogged" : "gregtech.multiblock.incinerator.working"));
+        list.add(new TextComponentTranslation(isClogged ? "susy.multiblock.incinerator.clogged" : "susy.multiblock.incinerator.working"));
     }
 
     @Override
@@ -282,8 +282,8 @@ public class MetaTileEntityIncinerator extends TieredMetaTileEntity implements I
         tooltip.add(I18n.format("gregtech.universal.tooltip.max_voltage_in", energyContainer.getInputVoltage(), GTValues.VNF[getTier()]));
         tooltip.add(I18n.format("gregtech.universal.tooltip.energy_storage_capacity", energyContainer.getEnergyCapacity()));
         tooltip.add(I18n.format("gregtech.universal.tooltip.item_storage_capacity", getInventorySize()));
-        tooltip.add(I18n.format("gregtech.machine.incinerator.tooltip.1", itemsPerRun, maxProgress));
-        tooltip.add(I18n.format("gregtech.machine.incinerator.tooltip.2"));
+        tooltip.add(I18n.format("susy.machine.incinerator.tooltip.1", itemsPerRun, maxProgress));
+        tooltip.add(I18n.format("susy.machine.incinerator.tooltip.2"));
         tooltip.add(I18n.format("gregtech.machine.incinerator.tooltip.3"));
     }
 }

@@ -159,7 +159,7 @@ public class MetaTileEntityPrimitiveMudPump extends MultiblockControllerBase imp
     @Override
     public String[] getDescription() {
         return Stream.of(
-                new String[]{I18n.format("gregtech.multiblock.primitive_mud_pump.description")}).flatMap(Stream::of).toArray(String[]::new);
+                new String[]{I18n.format("susy.multiblock.primitive_mud_pump.description")}).flatMap(Stream::of).toArray(String[]::new);
     }
 
     @Override
