@@ -1117,6 +1117,10 @@ tile.custom_sheets.decorativecopperbricks.name=Space Grade Decorative Copper Bri
 tile.regolith.highland.name=Anorthositic Regolith
 tile.regolith.lowland.name=Basaltic Regolith
 
+# ToolBehaviors
+item.susy.tool.behavior.pipeliner=§6Pipeliner: §fOperates all adjacent pipes
+item.susy.tool.tooltip.pipeliner=§7Hold §f[%s]§7 to activate §6Pipeliner§7 mode
+
 # Titles
 supersymmetry.title.1=§3SUPERSYMMETRY
 supersymmetry.subtitle.1=A modpack by SymmetricDevs
