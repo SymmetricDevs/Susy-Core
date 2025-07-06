@@ -10,7 +10,6 @@ import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityPrimit
 import supersymmetry.modules.SuSyModules;
 
 import static gregtech.common.metatileentities.MetaTileEntities.registerMetaTileEntity;
-import static supersymmetry.api.util.SuSyUtility.susyId;
 import static supersymmetry.common.metatileentities.SuSyMetaTileEntities.*;
 
 @GregTechModule(

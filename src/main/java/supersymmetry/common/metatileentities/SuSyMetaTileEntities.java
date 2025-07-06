@@ -469,7 +469,8 @@ public class SuSyMetaTileEntities {
         registerCatalystMTE(machines, maxTier, startId, name, map, texture, hasFrontFacing, GTUtility.defaultTankSizeFunction);
     }
 
-    private static @NotNull ResourceLocation susyId(@NotNull String name) {
+    /// WTF
+    public static @NotNull ResourceLocation susyId(@NotNull String name) {
         return new ResourceLocation(GTValues.MODID, name);
     }
 
