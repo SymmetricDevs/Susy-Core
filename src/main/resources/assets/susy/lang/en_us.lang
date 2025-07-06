@@ -67,6 +67,7 @@ tile.deposit_block.sedimentary.name=Sedimentary Deposit Block
 tile.deposit_block.hydrothermal.name=Hydrothermal Deposit Block
 tile.deposit_block.alluvial.name=Alluvial Deposit Block
 tile.deposit_block.magmatic_hydrothermal.name=Magmatic Hydrothermal Deposit Block
+tile.deposit_block.ice_cap.name=Ice Cap Deposit Block
 
 tile.resource_block.bauxite.name=Bauxite Ore
 tile.resource_block.caliche.name=Caliche
@@ -125,6 +126,7 @@ tile.susy_stone_smooth.shale.name=Shale
 tile.susy_stone_smooth.slate.name=Slate
 tile.susy_stone_smooth.soapstone.name=Soapstone
 tile.susy_stone_smooth.kimberlite.name=Kimberlite
+tile.susy_stone_smooth.anorthosite.name=Anorthosite
 tile.susy_stone_smooth.industrial_concrete.name=Industrial Concrete
 tile.susy_stone_smooth.minitary_concrete.name=Military Concrete
 
@@ -139,6 +141,7 @@ tile.susy_stone_cobble.shale.name=Shale Cobblestone
 tile.susy_stone_cobble.slate.name=Slate Cobblestone
 tile.susy_stone_cobble.soapstone.name=Soapstone Cobblestone
 tile.susy_stone_cobble.kimberlite.name=Kimberlite Cobblestone
+tile.susy_stone_cobble.anorthosite.name=Anorthosite Cobblestone
 tile.susy_stone_cobble.industrial_concrete.name=Industrial Concrete Cobblestone
 tile.susy_stone_cobble.minitary_concrete.name=Military Concrete Cobblestone
 
@@ -153,6 +156,7 @@ tile.susy_stone_bricks.shale.name=Shale Bricks
 tile.susy_stone_bricks.slate.name=Slate Bricks
 tile.susy_stone_bricks.soapstone.name=Soapstone Bricks
 tile.susy_stone_bricks.kimberlite.name=Kimberlite Bricks
+tile.susy_stone_bricks.anorthosite.name=Anorthosite Bricks
 tile.susy_stone_bricks.industrial_concrete.name=Industrial Concrete Bricks
 tile.susy_stone_bricks.minitary_concrete.name=Military Concrete Bricks
 
@@ -174,6 +178,7 @@ susy.material.phyllite=Phyllite
 susy.material.limestone=Limestone
 susy.material.gneiss=Gneiss
 susy.material.kimberlite=Kimberlite
+susy.material.anorthosite=Anorthosite
 susy.material.muscovite=Muscovite
 susy.material.dolomite=Dolomite
 susy.material.augite=Augite
@@ -1106,6 +1111,15 @@ tile.hardened_blocks1.military_concrete_cobblestone_hardened.name=Federation Gra
 #Custom Sheets
 tile.custom_sheets.darkwhitemetalsheet.name=Darker White Metal Sheet
 tile.custom_sheets.lightergraymetalsheet.name=Lighter Gray Metal Sheet
+tile.custom_sheets.decorativecopper.name=Space Grade Decorative Copper
+tile.custom_sheets.decorativecopperbricks.name=Space Grade Decorative Copper Bricks
+
+tile.regolith.highland.name=Anorthositic Regolith
+tile.regolith.lowland.name=Basaltic Regolith
+
+# ToolBehaviors
+item.susy.tool.behavior.pipeliner=§6Pipeliner: §fOperates all adjacent pipes
+item.susy.tool.tooltip.pipeliner=§7Hold §f[%s]§7 to activate §6Pipeliner§7 mode
 
 # Titles
 supersymmetry.title.1=§3SUPERSYMMETRY
