@@ -10,6 +10,7 @@
     "CommonProxyMixin",
     "MetaTileEntityDrumAccessor",
     "MetaTileEntityFluidDrillMixin",
+    "MetaTileEntityHolderMixin",
     "MetaTileEntityLargeMinerMixin",
     "MetaTileEntityMinerMixin",
     "MetaTileEntityMixin",
