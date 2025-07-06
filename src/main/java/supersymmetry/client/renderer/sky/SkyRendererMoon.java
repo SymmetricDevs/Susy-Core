@@ -19,22 +19,28 @@ public class SkyRendererMoon extends IRenderHandler {
 
     private final int earthSize = 50;
 
-    private final int starGLCallList;
+    private int starGLCallList;
+    private boolean isInitialized = false;
 
 
     public SkyRendererMoon() {
-        this.starGLCallList = GLAllocation.generateDisplayLists(3);
-        GL11.glPushMatrix();
-        GL11.glNewList(this.starGLCallList, GL11.GL_COMPILE);
-        BufferBuilder buffer = Tessellator.getInstance().getBuffer();
-        this.renderStars(buffer);
-        Tessellator.getInstance().draw();
-        GL11.glEndList();
-        GL11.glPopMatrix();
+
     }
 
     @Override
     public void render(float partialTicks, WorldClient world, Minecraft mc) {
+        if (!isInitialized) {
+            this.starGLCallList = GLAllocation.generateDisplayLists(3);
+            GL11.glPushMatrix();
+            GL11.glNewList(this.starGLCallList, GL11.GL_COMPILE);
+            BufferBuilder buffer = Tessellator.getInstance().getBuffer();
+            this.renderStars(buffer);
+            Tessellator.getInstance().draw();
+            GL11.glEndList();
+            GL11.glPopMatrix();
+            isInitialized = true;
+        }
+
         GlStateManager.pushMatrix();
         GlStateManager.disableFog();
         GlStateManager.enableBlend();
