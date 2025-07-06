@@ -24,7 +24,7 @@ import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.gui.SusyGuiTextures;
-import supersymmetry.api.metatileentity.Mui2MetaTileEntity;
+import supersymmetry.api.metatileentity.IMui2MetaTileEntity;
 import supersymmetry.common.mui.widget.HighlightedTextField;
 
 import javax.annotation.Nonnull;
@@ -105,7 +105,7 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
     @SuppressWarnings("deprecation")
     @NotNull
     public ModularPanel createPopupPanel(PanelSyncManager syncManager) { // TODO: loc
-        return Mui2MetaTileEntity.createPopupPanel("simple_stock_filter", 86, 121).padding(4)
+        return IMui2MetaTileEntity.createPopupPanel("simple_stock_filter", 86, 121).padding(4)
                 .child(IKey.lang("susy.gui.stock_interactor.title.stock_filter").asWidget().pos(5, 5))
                 .child(createWidgets(syncManager).top(22));
     }
