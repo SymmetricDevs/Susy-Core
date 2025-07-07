@@ -2,8 +2,10 @@ package supersymmetry.client;
 
 import gregtech.api.GTValues;
 import gregtech.api.items.metaitem.MetaOreDictItem;
+import gregtech.api.items.toolitem.IGTTool;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.stack.UnificationEntry;
+import gregtech.api.util.input.KeyBind;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiIngame;
@@ -15,6 +17,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,7 +26,6 @@ import net.minecraft.util.registry.IRegistry;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
@@ -48,12 +50,14 @@ import supersymmetry.common.blocks.SheetedFrameItemBlock;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SuSyMetaBlocks;
 import supersymmetry.common.item.SuSyMetaItems;
+import supersymmetry.common.item.behavior.PipeNetWalkerBehavior;
 import supersymmetry.loaders.SuSyFluidTooltipLoader;
 import supersymmetry.loaders.SuSyIRLoader;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -91,6 +95,18 @@ public class ClientProxy extends CommonProxy {
             if (unificationEntry.material.getChemicalFormula() != null && !unificationEntry.material.getChemicalFormula().isEmpty())
                 //pretty YELLOW is being auto-converted to a string
                 event.getToolTip().add(TextFormatting.YELLOW + unificationEntry.material.getChemicalFormula());
+        }
+    }
+
+    @SubscribeEvent
+    public static void addPipelinerTooltip(@Nonnull ItemTooltipEvent event) {
+        ItemStack stack = event.getItemStack();
+        List<String> tooltips = event.getToolTip();
+
+        if (stack.getItem() instanceof IGTTool tool
+                && tool.getToolStats().getBehaviors().contains(PipeNetWalkerBehavior.INSTANCE)) {
+            tooltips.add(I18n.format("item.susy.tool.tooltip.pipeliner",
+                    GameSettings.getKeyDisplayString(KeyBind.TOOL_AOE_CHANGE.toMinecraft().getKeyCode())));
         }
     }
 

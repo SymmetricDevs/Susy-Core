@@ -31,7 +31,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.gui.SusyGuiTextures;
-import supersymmetry.api.metatileentity.Mui2MetaTileEntity;
+import supersymmetry.api.metatileentity.IMui2MetaTileEntity;
 import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nullable;
@@ -88,6 +88,7 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
         return mainPanel;
     }
 
+    @SuppressWarnings("deprecation")
     public ModularPanel createPopupPanel(PanelSyncManager syncManager) {
 
         BooleanSyncValue controlActive = new BooleanSyncValue(() -> this.controlActive, x -> this.controlActive = x);
@@ -98,7 +99,7 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
         DoubleSyncValue inactiveBrake = new DoubleSyncValue(() -> this.inactiveBrake, x -> this.inactiveBrake = (float) x);
         DoubleSyncValue inactiveThrottle = new DoubleSyncValue(() -> this.inactiveThrottle, x -> this.inactiveThrottle = (float) x);
 
-        return Mui2MetaTileEntity.createPopupPanel("controller_settings", 81, 150)
+        return IMui2MetaTileEntity.createPopupPanel("controller_settings", 81, 150)
                 .padding(4)
                 .child(IKey.lang("susy.gui.stock_interactor.title.controller_setting").asWidget()
                         .pos(5, 5))

@@ -22,6 +22,7 @@ tile.drill_head.steel.name=Steel Drill Head
 tile.susy_multiblock_casing.silicon_carbide_casing.name=Tough Silicon Carbide Casing
 
 tile.susy_multiblock_casing.sieve_tray.name=Sieve Tray
+tile.susy_multiblock_casing.coalescence_plate.name=Coalescence Plate
 tile.susy_multiblock_casing.structural_packing.name=Structural Packing
 tile.susy_multiblock_casing.ulv_structural_casing.name=Basic Structural Casing
 tile.susy_multiblock_casing.drone_pad.name=Drone Pad
@@ -67,6 +68,7 @@ tile.deposit_block.sedimentary.name=Sedimentary Deposit Block
 tile.deposit_block.hydrothermal.name=Hydrothermal Deposit Block
 tile.deposit_block.alluvial.name=Alluvial Deposit Block
 tile.deposit_block.magmatic_hydrothermal.name=Magmatic Hydrothermal Deposit Block
+tile.deposit_block.ice_cap.name=Ice Cap Deposit Block
 
 tile.resource_block.bauxite.name=Bauxite Ore
 tile.resource_block.caliche.name=Caliche
@@ -125,6 +127,7 @@ tile.susy_stone_smooth.shale.name=Shale
 tile.susy_stone_smooth.slate.name=Slate
 tile.susy_stone_smooth.soapstone.name=Soapstone
 tile.susy_stone_smooth.kimberlite.name=Kimberlite
+tile.susy_stone_smooth.anorthosite.name=Anorthosite
 tile.susy_stone_smooth.industrial_concrete.name=Industrial Concrete
 tile.susy_stone_smooth.minitary_concrete.name=Military Concrete
 
@@ -139,6 +142,7 @@ tile.susy_stone_cobble.shale.name=Shale Cobblestone
 tile.susy_stone_cobble.slate.name=Slate Cobblestone
 tile.susy_stone_cobble.soapstone.name=Soapstone Cobblestone
 tile.susy_stone_cobble.kimberlite.name=Kimberlite Cobblestone
+tile.susy_stone_cobble.anorthosite.name=Anorthosite Cobblestone
 tile.susy_stone_cobble.industrial_concrete.name=Industrial Concrete Cobblestone
 tile.susy_stone_cobble.minitary_concrete.name=Military Concrete Cobblestone
 
@@ -153,6 +157,7 @@ tile.susy_stone_bricks.shale.name=Shale Bricks
 tile.susy_stone_bricks.slate.name=Slate Bricks
 tile.susy_stone_bricks.soapstone.name=Soapstone Bricks
 tile.susy_stone_bricks.kimberlite.name=Kimberlite Bricks
+tile.susy_stone_bricks.anorthosite.name=Anorthosite Bricks
 tile.susy_stone_bricks.industrial_concrete.name=Industrial Concrete Bricks
 tile.susy_stone_bricks.minitary_concrete.name=Military Concrete Bricks
 
@@ -174,6 +179,7 @@ susy.material.phyllite=Phyllite
 susy.material.limestone=Limestone
 susy.material.gneiss=Gneiss
 susy.material.kimberlite=Kimberlite
+susy.material.anorthosite=Anorthosite
 susy.material.muscovite=Muscovite
 susy.material.dolomite=Dolomite
 susy.material.augite=Augite
@@ -358,6 +364,9 @@ gregtech.machine.rocket_assembler.name=Rocket Assembler
 gregtech.machine.rocket_programmer.name=Rocket Programmer
 gregtech.machine.metallurgical_converter.name=Metallurgical Converter
 
+gregtech.machine.mixer_settler.name=Mixer Settler
+gregtech.machine.mixer_settler.tooltip=Can work up to 2x faster with more cells
+
 gregtech.machine.primitive_item_import.name=Primitive Item Import Bus
 gregtech.machine.primitive_item_import.tooltip=Only for use with the Primitive Smelter
 gregtech.machine.primitive_item_export.name=Primitive Item Export Bus
@@ -371,6 +380,7 @@ gregtech.recipe.catalyst=Catalyst: %s %s
 gregtech.recipe.blocks=Blocks: %s
 gregtech.recipe.evaporation=Required Energy: %d J/t
 gregtech.recipe.cryogenic_environment=Requires Cryogenic Environment
+gregtech.recipe.mixer_settler_cells=Required mixer settler cells: %s
 
 # Latex Collector
 gregtech.machine.latex_collector.steam=Needs Steam!
@@ -831,6 +841,7 @@ recipemap.gas_atomizer.name=Gas Atomizer
 recipemap.metallurgical_converter.name=Metallurgical Converter
 recipemap.low_pressure_advanced_steam_turbine.name=Low Pressure Advanced Steam Turbine
 recipemap.high_pressure_advanced_steam_turbine.name=High Pressure Advanced Steam Turbine
+recipemap.mixer_settler.name=Mixer-Settler
 
 gregtech.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 
@@ -1106,6 +1117,15 @@ tile.hardened_blocks1.military_concrete_cobblestone_hardened.name=Federation Gra
 #Custom Sheets
 tile.custom_sheets.darkwhitemetalsheet.name=Darker White Metal Sheet
 tile.custom_sheets.lightergraymetalsheet.name=Lighter Gray Metal Sheet
+tile.custom_sheets.decorativecopper.name=Space Grade Decorative Copper
+tile.custom_sheets.decorativecopperbricks.name=Space Grade Decorative Copper Bricks
+
+tile.regolith.highland.name=Anorthositic Regolith
+tile.regolith.lowland.name=Basaltic Regolith
+
+# ToolBehaviors
+item.susy.tool.behavior.pipeliner=§6Pipeliner: §fOperates all adjacent pipes
+item.susy.tool.tooltip.pipeliner=§7Hold §f[%s]§7 to activate §6Pipeliner§7 mode
 
 # Titles
 supersymmetry.title.1=§3SUPERSYMMETRY

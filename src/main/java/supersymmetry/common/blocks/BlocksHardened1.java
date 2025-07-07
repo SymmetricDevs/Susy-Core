@@ -5,8 +5,6 @@ import gregtech.api.block.VariantBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
@@ -14,6 +12,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.block.material.EnumPushReaction;
 
 import java.util.Random;
 import java.util.function.Supplier;
@@ -22,10 +21,15 @@ public class BlocksHardened1 extends VariantBlock<BlocksHardened1.HardenedBlockT
 
     public BlocksHardened1() {
         super(Material.ROCK);
-        this.setHardness(75.0F);
-        this.setResistance(25.0F);
+        this.setHardness(200.0F);
+        this.setResistance(150.0F);
         this.setSoundType(SoundType.STONE);
         this.setTranslationKey("hardened_blocks1");
+    }
+
+    @Override
+    public EnumPushReaction getPushReaction(IBlockState state) {
+        return EnumPushReaction.BLOCK;
     }
 
     public int quantityDropped(Random random)
@@ -45,13 +49,15 @@ public class BlocksHardened1 extends VariantBlock<BlocksHardened1.HardenedBlockT
         }
     }
 
+
+
     public enum HardenedBlockType implements IStringSerializable, IStateHarvestLevel {
         INDUSTRIAL_CONCRETE_HARDENED("industrial_concrete_hardened", 4,
                 () -> new ItemStack(Item.getItemFromBlock(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.BRICKS)), 1, 9)),
         MILITARY_CONCRETE_COBBLESTONE_HARDENED("military_concrete_cobblestone_hardened", 4,
                 () -> new ItemStack(Item.getItemFromBlock(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.COBBLE)), 1, 10)),
         MILITARY_CONCRETE_HARDENED("military_concrete_hardened", 4,
-                                             () -> new ItemStack(Item.getItemFromBlock(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH)), 1, 10));
+                () -> new ItemStack(Item.getItemFromBlock(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH)), 1, 10));
 
 
         private final String name;

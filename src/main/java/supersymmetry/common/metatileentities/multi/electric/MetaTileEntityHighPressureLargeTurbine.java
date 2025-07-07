@@ -1,38 +1,26 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import gregtech.api.GTValues;
-import gregtech.api.metatileentity.ITieredMetaTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.metatileentity.multiblock.FuelMultiblockController;
-import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.TraceabilityPredicate;
-import gregtech.api.recipes.RecipeMap;
 import gregtech.api.util.BlockInfo;
 import gregtech.api.util.RelativeDirection;
-import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
+import gregtech.common.blocks.BlockBoilerCasing;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.capability.impl.SuSyTurbineRecipeLogic;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
-import supersymmetry.common.blocks.BlockAlternatorCoil;
 import supersymmetry.common.blocks.BlockTurbineRotor;
 import supersymmetry.common.blocks.SuSyBlocks;
 
-import javax.annotation.Nonnull;
-import java.util.List;
 import java.util.function.Supplier;
 
 import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
@@ -59,9 +47,9 @@ public class MetaTileEntityHighPressureLargeTurbine extends MetaTileEntitySUSYLa
         TraceabilityPredicate maintenance = abilities(MultiblockAbility.MAINTENANCE_HATCH).setMaxGlobalLimited(1);
 
         return FactoryBlockPattern.start()
-                .aisle("GAAAAAAAAAAAO", "GAAAAAAAAAAAO", "G    AA     O")
-                .aisle("GAAAAAAAAAAAO", "GHHHALLLLCCCF", "GAAAAAAAAAAAO")
-                .aisle("GAAAAAAAAAAAO", "GSAAAAAAAAAAO", "G    AA     O")
+                .aisle("GAAAAAAAAAAAO", "GAAAAAAAAAAAO", "G   A   A   O")
+                .aisle("GAAAAAAAAAAAO", "GHHHPLLLLCCCF", "GAAAAAAAAAAAO")
+                .aisle("GAAAAAAAAAAAO", "GSAAAAAAAAAAO", "G   A   A   O")
                 .where('S', selfPredicate())
                 .where('A', casingPredicate
                        .or(autoAbilities(false, false, false, false, false, false, false))
@@ -76,6 +64,7 @@ public class MetaTileEntityHighPressureLargeTurbine extends MetaTileEntitySUSYLa
                 .where('G', casingPredicate
                         .or(autoAbilities(false, false, false, false, true, false, false))
                         .or(maintenance))
+                .where('P', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.TITANIUM_PIPE)))
                 .where(' ', any())
                 .build();
     }

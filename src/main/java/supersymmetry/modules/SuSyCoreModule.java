@@ -14,7 +14,7 @@ import supersymmetry.common.network.SPacketRemoveFluidState;
         moduleID = SuSyModules.MODULE_CORE,
         containerID = Supersymmetry.MODID,
         name = "SuSy Core",
-        description = "Core module of SuSy Core, so this should call SuSy Core Core ngl.",
+        description = "Core module of SuSy Core, so this should be called SuSy Core Core ngl.",
         coreModule = true)
 public class SuSyCoreModule implements IGregTechModule {
 

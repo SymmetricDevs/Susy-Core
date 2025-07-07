@@ -46,7 +46,8 @@ public class BlockDeposit extends VariantBlock<BlockDeposit.DepositBlockType> {
         SEDIMENTARY("sedimentary", 10),
         HYDROTHERMAL("hydrothermal", 10),
         ALLUVIAL("alluvial", 10),
-        MAGMATIC_HYDROTHERMAL("magmatic_hydrothermal", 10);
+        MAGMATIC_HYDROTHERMAL("magmatic_hydrothermal", 10),
+        ICE_CAP("ice_cap", 10);
 
         private final String name;
         private final int harvestLevel;

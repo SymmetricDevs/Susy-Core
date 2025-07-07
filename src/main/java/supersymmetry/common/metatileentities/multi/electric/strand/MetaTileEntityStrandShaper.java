@@ -138,7 +138,11 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
 
     public long getVoltage() {
         return this.energyContainer.getInputVoltage();
-    };
+    }
+
+    public IEnergyContainer getEnergyContainer() {
+        return energyContainer;
+    }
 
     protected abstract boolean consumeInputsAndSetupRecipe();
 
@@ -235,9 +239,12 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
                 .addWorkingStatusLine().addProgressLine(this.getProgressPercent())
                 .addLowPowerLine(hasNotEnoughEnergy)
                 .addCustom((comps) -> {
+                    if (this.isStructureFormed()) {
+                        return;
+                    }
                     Strand displayStrand = strand;
                     if (strand == null) {
-                        if (output.getStrand() == null) {
+                        if (output == null || output.getStrand() == null) {
                             comps.add(new TextComponentTranslation("gregtech.multiblock.strand_casting.no_strand"));
                             return;
                         }

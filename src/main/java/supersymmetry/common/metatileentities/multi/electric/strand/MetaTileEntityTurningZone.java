@@ -136,7 +136,7 @@ public class MetaTileEntityTurningZone extends MetaTileEntityStrandShaper {
                 .where('F', states(SuSyMetaBlocks.SHEETED_FRAMES.get(Materials.Steel).getBlock(Materials.Steel)
                         .withProperty(BlockSheetedFrame.SHEETED_FRAME_AXIS, BlockSheetedFrame.FrameEnumAxis
                                 .fromFacingAxis(getRelativeFacing(RelativeDirection.UP).getAxis())))
-                        .or(abilities(MultiblockAbility.MAINTENANCE_HATCH, MultiblockAbility.INPUT_ENERGY).setMaxGlobalLimited(3)))
+                        .or(autoAbilities(true, true, false)))
                 .where(' ', any())
                 .build();
     }
