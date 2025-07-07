@@ -22,6 +22,7 @@ tile.drill_head.steel.name=Steel Drill Head
 tile.susy_multiblock_casing.silicon_carbide_casing.name=Tough Silicon Carbide Casing
 
 tile.susy_multiblock_casing.sieve_tray.name=Sieve Tray
+tile.susy_multiblock_casing.coalescence_plate.name=Coalescence Plate
 tile.susy_multiblock_casing.structural_packing.name=Structural Packing
 tile.susy_multiblock_casing.ulv_structural_casing.name=Basic Structural Casing
 tile.susy_multiblock_casing.drone_pad.name=Drone Pad
@@ -367,6 +368,8 @@ susy.machine.primitive_item_import.name=Primitive Item Import Bus
 susy.machine.primitive_item_import.tooltip=Only for use with the Primitive Smelter
 susy.machine.primitive_item_export.name=Primitive Item Export Bus
 susy.machine.primitive_item_export.tooltip=Only for use with the Primitive Smelter
+susy.machine.mixer_settler.name=Mixer Settler
+susy.machine.mixer_settler.tooltip=Can work up to 2x faster with more cells
 
 susy.machine.parallel_pure=Can parallel to output up to §b%d§r§7 items at once
 
@@ -376,6 +379,7 @@ susy.recipe.catalyst=Catalyst: %s %s
 susy.recipe.blocks=Blocks: %s
 susy.recipe.evaporation=Required Energy: %d J/t
 susy.recipe.cryogenic_environment=Requires Cryogenic Environment
+susy.recipe.mixer_settler_cells=Required mixer settler cells: %s
 
 # Latex Collector
 susy.machine.latex_collector.steam=Needs Steam!
@@ -836,6 +840,7 @@ recipemap.gas_atomizer.name=Gas Atomizer
 recipemap.metallurgical_converter.name=Metallurgical Converter
 recipemap.low_pressure_advanced_steam_turbine.name=Low Pressure Advanced Steam Turbine
 recipemap.high_pressure_advanced_steam_turbine.name=High Pressure Advanced Steam Turbine
+recipemap.mixer_settler.name=Mixer-Settler
 
 susy.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 
