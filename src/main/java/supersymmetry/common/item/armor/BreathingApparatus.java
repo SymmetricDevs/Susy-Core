@@ -16,9 +16,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
 
-import com.cleanroommc.groovyscript.helper.ingredient.NbtHelper;
-
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.items.IBreathingArmorLogic;
 import supersymmetry.client.renderer.handler.ITextureRegistrar;
 import supersymmetry.client.renderer.handler.SimpleBreathingApparatusModel;
