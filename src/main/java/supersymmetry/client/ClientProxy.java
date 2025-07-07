@@ -122,17 +122,17 @@ public class ClientProxy extends CommonProxy {
             is.setCount(1);
             CatalystInfo catalystInfo = group.getCatalystInfos().get(is);
             if (catalystInfo != null) {
-                tooltips.add(TextFormatting.UNDERLINE + (TextFormatting.BLUE + I18n.format("gregtech.catalyst_group." + group.getName() + ".name")));
+                tooltips.add(TextFormatting.UNDERLINE + (TextFormatting.BLUE + I18n.format("susy.catalyst_group." + group.getName() + ".name")));
                 if(catalystInfo.getTier() == CatalystInfo.NO_TIER){
                     tooltips.add(TextFormatting.RED + "Disclaimer: Catalyst bonuses for non-tiered catalysts have not yet been implemented.");
-                    tooltips.add(I18n.format("gregtech.universal.catalysts.tooltip.yield", catalystInfo.getYieldEfficiency()));
-                    tooltips.add(I18n.format("gregtech.universal.catalysts.tooltip.energy", catalystInfo.getEnergyEfficiency()));
-                    tooltips.add(I18n.format("gregtech.universal.catalysts.tooltip.speed", catalystInfo.getSpeedEfficiency()));
+                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.yield", catalystInfo.getYieldEfficiency()));
+                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.energy", catalystInfo.getEnergyEfficiency()));
+                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.speed", catalystInfo.getSpeedEfficiency()));
                 } else {
-                    tooltips.add(I18n.format("gregtech.universal.catalysts.tooltip.tier", GTValues.V[catalystInfo.getTier()], GTValues.VNF[catalystInfo.getTier()]));
-                    tooltips.add(I18n.format("gregtech.universal.catalysts.tooltip.yield.tiered", catalystInfo.getYieldEfficiency()));
-                    tooltips.add(I18n.format("gregtech.universal.catalysts.tooltip.energy.tiered", catalystInfo.getEnergyEfficiency()));
-                    tooltips.add(I18n.format("gregtech.universal.catalysts.tooltip.speed.tiered", catalystInfo.getSpeedEfficiency()));
+                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.tier", GTValues.V[catalystInfo.getTier()], GTValues.VNF[catalystInfo.getTier()]));
+                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.yield.tiered", catalystInfo.getYieldEfficiency()));
+                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.energy.tiered", catalystInfo.getEnergyEfficiency()));
+                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.speed.tiered", catalystInfo.getSpeedEfficiency()));
                 }
             }
         }
