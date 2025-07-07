@@ -1,6 +1,7 @@
 package supersymmetry.common.item.armor;
 
 import gregtech.api.items.metaitem.stats.IItemDurabilityManager;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
@@ -10,6 +11,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
@@ -130,6 +132,19 @@ public class BreathingApparatus implements IBreathingArmorLogic, IItemDurability
         NBTTagCompound compound = stack.getTagCompound();
         compound.setDouble("oxygen", getOxygen(stack) + oxygenChange);
         stack.setTagCompound(compound);
+    }
+    
+    @Override
+    public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
+        if (player.isInsideOfMaterial(Material.WATER)) {
+            if (mayBreatheWith(itemStack, player)) {
+                player.setAir(300);
+                if (DimensionBreathabilityHandler.isInHazardousEnvironment(player)) {
+                    changeOxygen(player.getItemStackFromSlot(CHEST), (-1f) / 20);
+                    // assuming that if its hazardous the player is already breathing with the suit
+                }
+            }
+        }
     }
 
     @Override
