@@ -222,6 +222,8 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityArcFurnaceComplex ARC_FURNACE_COMPLEX;
     public static MetaTileEntityMetallurgicalConverter METALLURGICAL_CONVERTER;
 
+    public static MetaTileEntityInjectionMolder INJECTION_MOLDER;
+
     //public static BlockStockDetector STOCK_DETECTOR;
     public static MetaTileEntityStockFluidExchanger STOCK_FLUID_EXCHANGER;
     public static MetaTileEntityStockItemExchanger STOCK_ITEM_EXCHANGER;
@@ -434,6 +436,8 @@ public class SuSyMetaTileEntities {
         //Advanced Steam Turbines
         LOW_PRESSURE_ADVANCED_STEAM_TURBINE = registerMetaTileEntity(18100, new MetaTileEntitySUSYLargeTurbine(susyId("low_pressure_advanced_steam_turbine"), SuSyRecipeMaps.LOW_PRESSURE_ADVANCED_STEAM_TURBINE, 4, MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.TITANIUM_TURBINE_CASING), SuSyBlocks.TURBINE_ROTOR.getState(BlockTurbineRotor.BlockTurbineRotorType.LOW_PRESSURE), Textures.STABLE_TITANIUM_CASING, SusyTextures.LOW_PRESSURE_ADVANCED_STEAM_TURBINE_OVERLAY));
         HIGH_PRESSURE_ADVANCED_STEAM_TURBINE = registerMetaTileEntity(18101, new MetaTileEntityHighPressureLargeTurbine(susyId("high_pressure_advanced_steam_turbine")));
+
+        INJECTION_MOLDER = registerMetaTileEntity(18110, new MetaTileEntityInjectionMolder(susyId("injection_molder")));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name, RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator, ICubeRenderer texture, boolean isBricked) {

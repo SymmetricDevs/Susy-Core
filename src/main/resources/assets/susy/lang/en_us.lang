@@ -362,6 +362,7 @@ gregtech.machine.scrap_recycler.name=Scrap Recycler
 gregtech.machine.rocket_assembler.name=Rocket Assembler
 gregtech.machine.rocket_programmer.name=Rocket Programmer
 gregtech.machine.metallurgical_converter.name=Metallurgical Converter
+gregtech.machine.injection_molder.name=Injection Molder
 
 gregtech.machine.primitive_item_import.name=Primitive Item Import Bus
 gregtech.machine.primitive_item_import.tooltip=Only for use with the Primitive Smelter
