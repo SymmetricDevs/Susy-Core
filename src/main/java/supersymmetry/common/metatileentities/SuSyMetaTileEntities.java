@@ -357,6 +357,7 @@ public class SuSyMetaTileEntities {
 
         // RTGs: 16504-16511
         RTG[0] = registerMetaTileEntity(16504, new MetaTileEntityRTG(susyId("rtg.lv"), 1));
+        RTG[1] = registerMetaTileEntity(16505, new MetaTileEntityRTG(susyId("rtg.mv"), 2));
 
         // Strand casting: 16600-16610
         IMPORT_STRAND = registerMetaTileEntity(16600, new MetaTileEntityStrandBus(susyId("strand_bus.import"), false));
