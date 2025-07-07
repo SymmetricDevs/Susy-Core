@@ -140,6 +140,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityGravitySeparator GRAVITY_SEPARATOR;
     public static MetaTileEntityQuencher QUENCHER;
     public static MetaTileEntityRailroadEngineeringStation RAILROAD_ENGINEERING_STATION;
+    public static MetaTileEntityMixerSettler MIXER_SETTLER;
 
     public static MetaTileEntityEnergyHatch[] NEW_ENERGY_OUTPUT_HATCH_4A = new MetaTileEntityEnergyHatch[3];
     public static MetaTileEntityEnergyHatch[] NEW_ENERGY_OUTPUT_HATCH_16A = new MetaTileEntityEnergyHatch[4];
@@ -418,6 +419,8 @@ public class SuSyMetaTileEntities {
             if (GregTechAPI.MTE_REGISTRY.getObjectById(id) == null) ids.add(id);
         }
         SusyLog.logger.debug("Available ID(s) are: {}", ids);
+
+        MIXER_SETTLER = registerMetaTileEntity(17100, new MetaTileEntityMixerSettler(susyId("mixer_settler")));
 
         //STOCK_DETECTOR = registerMetaTileEntity(18000, new MetaTileEntityStockDetector(susyId("stock_detector")));
         STOCK_FLUID_EXCHANGER = registerMetaTileEntity(18001, new MetaTileEntityStockFluidExchanger(susyId("stock_fluid_exchanger")));
