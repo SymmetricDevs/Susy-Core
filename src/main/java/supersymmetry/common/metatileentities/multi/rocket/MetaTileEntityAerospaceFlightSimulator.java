@@ -137,6 +137,12 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 height / 2,
                 () -> {
                   drawComponentTree(10, 25, master_blueprint.getStackInSlot(0), mainWindow);
+                  master_blueprint.setLocked(
+                      components.values().stream()
+                          .flatMap(List::stream)
+                          .anyMatch(ds -> !ds.isEmpty())); // lock the main blueprint if
+                  // component data cards are inserted so that they dont get voided
+
                 })
             .setBackgroundTexture(GuiTextures.SLOT_DARK));
 
@@ -156,13 +162,8 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     //                          ---------------#slider#--------------
     // comp name but longer      | #slot# #slot# #slot# #slot# #slot# | #slot# #slot#
     //                          =============visible part============
-    container.RemoveSlotLists();
-    master_blueprint.setLocked(
-        components.values().stream()
-            .flatMap(List::stream)
-            .anyMatch(ds -> !ds.isEmpty())); // lock the main blueprint if
-    // component data cards are inserted so that they dont get voided
 
+    container.RemoveSlotLists();
     if (generateComponentTree(blueprintStack)) {
       for (Map.Entry<String, List<DataStorageLoader>> entry : this.components.entrySet()) {
         String text = entry.getKey();
@@ -173,7 +174,8 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
           list.addWidget(new SlotWidget(slot, 0, 1, 1).setBackgroundTexture(GuiTextures.SLOT_DARK));
         }
         container.addSlotList(
-            new LabelWidget(0, 0, "susy.machine.rocket_simulator.component." + text, 0xFFFFFF), list);
+            new LabelWidget(0, 0, "susy.machine.rocket_simulator.component." + text, 0xFFFFFF),
+            list);
       }
     }
   }
@@ -219,6 +221,30 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     return false;
   }
 
+  private boolean verifyDatacardArrangementAndMergeToMaster() {
+    // assumes that it has all of the nbt's since i dont wanna do that entire thing again
+
+    NBTTagList componentsList =
+        master_blueprint
+            .getStackInSlot(0)
+            .getTagCompound()
+            .getTagList("components", Constants.NBT.TAG_LIST);
+    for (int i = 0; i < componentsList.tagCount(); i++) {
+      NBTTagCompound comp = componentsList.getCompoundTagAt(i);
+      List<DataStorageLoader> cardSlots = this.components.get(comp.getString("type"));
+      int count = (int)cardSlots.stream().map(x -> !x.isEmpty()).count();
+      if (Arrays.asList(comp.getIntArray("allowedCounts")).contains(count))
+        ;
+    }
+    // for (Map.Entry<String,List<DataStorageLoader>> entry : this.components.entrySet()) {
+    //
+    //     }
+
+    return false;
+  }
+
+  // TODO: remove the button, if i forget to do this you can call me an idiot for the rest of the
+  // year
   public void SetDefaultBlueprint(Widget.ClickData data) {
     this.markDirty();
     master_blueprint.clearNBT();
