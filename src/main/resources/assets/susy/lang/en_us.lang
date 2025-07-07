@@ -682,6 +682,7 @@ susy.machine.phase_separator.name=Phase Separator
 
 # RTG
 susy.machine.rtg.lv.name=Basic RTG
+susy.machine.rtg.mv.name=Advanced RTG
 susy.machine.rtg.tooltip.info=Power for your pacemaker.
 susy.machine.rtg.tooltip.description=Generates a small but steady amount of electricity using the decay of radioactive isotopes.
 susy.machine.rtg.voltage_produced=§aVoltage PRODUCED: §f%,d EU/t (%s§f)
