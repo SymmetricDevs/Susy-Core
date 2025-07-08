@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 @Mixin(RCPosTransformer.class)
 public class RCPosTransformerMixin {
     // Adds NBT to spawned TileEntities that prevents them from being cheesed with RefinedTools storage scanners
-    @Inject(method = "transformAdditionalData", at = @At("HEAD"), locals = LocalCapture.PRINT)
+    @Inject(method = "transformAdditionalData", at = @At("HEAD"), locals = LocalCapture.CAPTURE_FAILHARD, remap = false)
     public static void transformAdditionalData(TileEntity tileEntity, AxisAlignedTransform2D transform, int[] size, CallbackInfoReturnable<Void> ci) {
         tileEntity.getTileData().setBoolean("StorageScannerBlacklisted", true);
     }
