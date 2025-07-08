@@ -75,7 +75,7 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
                 .aisle(rowPattern(rowType.TOP, sDist))
                 .where('S', selfPredicate())
                 .where('A', states(getCasingState())
-                        .or(autoAbilities(false, true, false, false, false, false, false)))
+                        .or(autoAbilities(false, true, true, false, false, false, false)))
                 .where('B', states(getRadiatorElementState()))
                 .where('C', states(getCasingState())
                         .or(autoAbilities(false, false, false, false, true, false, false).setExactLimit(1))
