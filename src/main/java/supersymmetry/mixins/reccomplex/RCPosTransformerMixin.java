@@ -16,7 +16,7 @@ public class RCPosTransformerMixin {
     // Adds NBT to spawned TileEntities that prevents them from being cheesed with RefinedTools storage scanners
     @Inject(method = "transformAdditionalData", at = @At("HEAD"), locals = LocalCapture.PRINT)
     public static void transformAdditionalData(TileEntity tileEntity, AxisAlignedTransform2D transform, int[] size, CallbackInfoReturnable<Void> ci) {
-        tileEntity.getTileData().setBoolean("PlacedByRC", true);
+        tileEntity.getTileData().setBoolean("StorageScannerBlacklisted", true);
     }
 
 }
