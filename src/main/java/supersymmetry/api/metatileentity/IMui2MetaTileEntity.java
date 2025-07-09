@@ -4,6 +4,7 @@ import com.cleanroommc.modularui.api.IGuiHolder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.cleanroommc.modularui.factory.PosGuiData;
 import com.cleanroommc.modularui.screen.ModularPanel;
+import com.cleanroommc.modularui.screen.UISettings;
 import com.cleanroommc.modularui.utils.Alignment;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
 import com.cleanroommc.modularui.widgets.ButtonWidget;
@@ -44,7 +45,7 @@ public interface IMui2MetaTileEntity extends IGuiHolder<PosGuiData> {
     }
 
     @Override
-    ModularPanel buildUI(PosGuiData guiData, PanelSyncManager syncManager);
+    ModularPanel buildUI(PosGuiData guiData, PanelSyncManager syncManager, UISettings settings);
 
     boolean useMui2();
 

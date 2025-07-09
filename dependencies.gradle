@@ -45,7 +45,7 @@ dependencies {
     api 'com.cleanroommc:groovyscript:1.2.4' transitive false
 
     // # Lib Mods we are using
-    api 'com.cleanroommc:modularui:2.5.0-rc4' transitive false
+    api 'com.cleanroommc:modularui:2.5.0-rc5' transitive false
     api rfg.deobf('curse.maven:geckolib-388172:4020277')
 
     // # Immersive Railroading dependencies
@@ -62,9 +62,9 @@ dependencies {
     compileOnly rfg.deobf('curse.maven:fluidlogged-api-485654:4564413')
 
     // # Pyrotech dependencies
-    implementation rfg.deobf('curse.maven:pyrotech-306676:5351359')
-    implementation rfg.deobf('curse.maven:athenaeum-284350:4633750')
-    implementation rfg.deobf('curse.maven:dropt-284973:5405050')
+    compileOnly rfg.deobf('curse.maven:pyrotech-306676:5351359')
+    compileOnly rfg.deobf('curse.maven:athenaeum-284350:4633750')
+    compileOnly rfg.deobf('curse.maven:dropt-284973:5405050')
 
     // # Other dependencies
     compileOnly rfg.deobf('curse.maven:biomes-o-plenty-220318:2842510')

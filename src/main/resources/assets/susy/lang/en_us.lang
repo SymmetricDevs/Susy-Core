@@ -291,7 +291,6 @@ susy.multiblock.evaporation_pool.exposed_blocks=Exposed Blocks: %s
 susy.multiblock.evaporation_pool.average_speed=Avg Speed: %sx
 susy.multiblock.pattern.error.coils_or_bed=§cAll heating coils or evaporation beds must be the same§r
 
-susy.top.energy_consumption=Energy Consumption:
 susy.multiblock.strand_casting.thickness=Thickness: %s
 susy.multiblock.strand_casting.width=Width: %s
 susy.multiblock.strand_casting.no_strand=No strand detected
