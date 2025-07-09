@@ -6,10 +6,10 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
-import gregtech.api.metatileentity.multiblock.ParallelLogicType;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.util.RelativeDirection;
@@ -39,18 +39,30 @@ public class MetaTileEntityInjectionMolder extends RecipeMapMultiblockController
     }
 
     @Override
+    public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
+        return new MetaTileEntityInjectionMolder(metaTileEntityId);
+    }
+
+
+    @Override
     protected @NotNull BlockPattern createStructurePattern() {
+
+        TraceabilityPredicate casingPredicate = states(getCasingState()).setMinGlobalLimited(35);
+
         return FactoryBlockPattern.start()
-                .aisle("CCCCCC", "CSCCCC", "III   ")
+                .aisle("CCCCCC", "CCCCCC", "III   ")
                 .aisle("CCCCCC", "IPPKGO", "I#ICCC")
                 .aisle("CCCCCC", "CSCCCC", "III   ")
+                /*.aisle("CCC", "CKC", " C ")
+                .aisle("CCC", "CGC", " C ")
+                .aisle("CCC", "COC", " C ") */
                 .where('S', selfPredicate())
-                .where('C', states(getCasingState()).setMinGlobalLimited(35).or(autoAbilities(true, true, false, false, false, false, false)))
+                .where('C', casingPredicate.or(autoAbilities(true, true, false, false, false, false, false)))
                 .where('K', states(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.CUPRONICKEL)))
                 .where('G', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('P', states(getPipeCasingState()))
-                .where('I', states(getCasingState()).or(abilities(MultiblockAbility.IMPORT_ITEMS).setMaxGlobalLimited(2)))
-                .where('O', states(getCasingState()).or(abilities(MultiblockAbility.EXPORT_ITEMS).setMaxGlobalLimited(1)))
+                .where('I', casingPredicate.or(autoAbilities(false, false, true,false, false, false, false)))
+                .where('O', casingPredicate.or(autoAbilities(false, false, false,true, false, false, false)))
                 .where(' ', any())
                 .where('#', air())
                 .build();
@@ -71,11 +83,6 @@ public class MetaTileEntityInjectionMolder extends RecipeMapMultiblockController
 
     private IBlockState getPipeCasingState() {
         return MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE);
-    }
-
-    @Override
-    public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
-        return new MetaTileEntityInjectionMolder(metaTileEntityId);
     }
 
     @Override
