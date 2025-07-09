@@ -284,6 +284,6 @@ public class MetaTileEntityIncinerator extends TieredMetaTileEntity implements I
         tooltip.add(I18n.format("gregtech.universal.tooltip.item_storage_capacity", getInventorySize()));
         tooltip.add(I18n.format("susy.machine.incinerator.tooltip.1", itemsPerRun, maxProgress));
         tooltip.add(I18n.format("susy.machine.incinerator.tooltip.2"));
-        tooltip.add(I18n.format("gregtech.machine.incinerator.tooltip.3"));
+        tooltip.add(I18n.format("susy.machine.incinerator.tooltip.3"));
     }
 }
