@@ -62,9 +62,9 @@ dependencies {
     compileOnly rfg.deobf('curse.maven:fluidlogged-api-485654:4564413')
 
     // # Pyrotech dependencies
-    implementation rfg.deobf('curse.maven:pyrotech-306676:5351359')
-    implementation rfg.deobf('curse.maven:athenaeum-284350:4633750')
-    implementation rfg.deobf('curse.maven:dropt-284973:5405050')
+    compileOnly rfg.deobf('curse.maven:pyrotech-306676:5351359')
+    compileOnly rfg.deobf('curse.maven:athenaeum-284350:4633750')
+    compileOnly rfg.deobf('curse.maven:dropt-284973:5405050')
 
     // # Other dependencies
     compileOnly rfg.deobf('curse.maven:biomes-o-plenty-220318:2842510')
