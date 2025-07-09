@@ -104,6 +104,6 @@ public class MetaTileEntitySteamLatexCollector extends PseudoMultiSteamMachineMe
     @Override
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
-        tooltip.add(I18n.format("gregtech.machine.latex_collector.tooltip", this.latexCollectionAmount));
+        tooltip.add(I18n.format("susy.machine.latex_collector.tooltip", this.latexCollectionAmount));
     }
 }

@@ -49,6 +49,7 @@ public class SuSyBlocks {
     public static BlockMetallurgyRoll METALLURGY_ROLL;
     public static BlockConveyor CONVEYOR_BELT;
     public static BlockRocketAssemblerCasing ROCKET_ASSEMBLER_CASING;
+    public static BlockRegolith REGOLITH;
     public static BlockEUVLithographerComponent EUV_LITHOGRAPHER_COMPONENT;
 
     public static void init() {
@@ -138,6 +139,9 @@ public class SuSyBlocks {
         ROCKET_ASSEMBLER_CASING = new BlockRocketAssemblerCasing();
         ROCKET_ASSEMBLER_CASING.setRegistryName("rocket_assembler_casing");
 
+        REGOLITH = new BlockRegolith();
+        REGOLITH.setRegistryName("regolith");
+
         EUV_LITHOGRAPHER_COMPONENT = new BlockEUVLithographerComponent();
         EUV_LITHOGRAPHER_COMPONENT.setRegistryName("euv_lithographer_component");
     }
@@ -173,6 +177,7 @@ public class SuSyBlocks {
         registerItemModel(METALLURGY_ROLL);
         registerItemModel(CONVEYOR_BELT);
         registerItemModel(ROCKET_ASSEMBLER_CASING);
+        registerItemModel(REGOLITH);
         registerItemModel(EUV_LITHOGRAPHER_COMPONENT);
     }
 

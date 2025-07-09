@@ -76,6 +76,12 @@
         "all" : "gregtech:blocks/multiblock_casing/advanced_refractory_lining"
       }
     },
+    "variant=coalescence_plate" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/multiblock_casing/coalescence_plate"
+      }
+    },
     "variant=euv_safe_casing" : {
       "model" : "minecraft:cube_all",
       "textures" : {

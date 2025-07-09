@@ -170,14 +170,14 @@ public class MetaTileEntitySmokeStack extends VoidingMultiblockBase {
             ITextComponent componentRateBonus = TextComponentUtil.stringWithColor(TextFormatting.DARK_PURPLE,
                     this.rateBonus + "x");
             ITextComponent componentRateBase = TextComponentUtil.translationWithColor(TextFormatting.GRAY,
-                    "gregtech.machine.smoke_stack.rate",
+                    "susy.machine.smoke_stack.rate",
                     componentRateBonus);
             ITextComponent componentRateHover = TextComponentUtil.translationWithColor(TextFormatting.GRAY,
-                    "gregtech.machine.smoke_stack.rate_hover");
+                    "susy.machine.smoke_stack.rate_hover");
 
             textList.add(TextComponentUtil.translationWithColor(
                     TextFormatting.GRAY,
-                    "gregtech.machine.smoke_stack.height",
+                    "susy.machine.smoke_stack.height",
                     componentHeight));
             textList.add(TextComponentUtil.setHover(componentRateBase, componentRateHover));
         }
@@ -185,8 +185,8 @@ public class MetaTileEntitySmokeStack extends VoidingMultiblockBase {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
-        tooltip.add(I18n.format("gregtech.machine.smoke_stack.tooltip.1", getBaseVoidingRate()));
-        tooltip.add(I18n.format("gregtech.machine.smoke_stack.tooltip.2"));
+        tooltip.add(I18n.format("susy.machine.smoke_stack.tooltip.1", getBaseVoidingRate()));
+        tooltip.add(I18n.format("susy.machine.smoke_stack.tooltip.2"));
         super.addInformation(stack, world, tooltip, advanced);
     }
 

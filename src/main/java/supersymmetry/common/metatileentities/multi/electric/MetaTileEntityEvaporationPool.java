@@ -409,13 +409,13 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                         ITextComponent isHeatingString = isHeating() ?
                                 TextComponentUtil.translationWithColor(
                                         TextFormatting.GREEN,
-                                        "gregtech.multiblock.evaporation_pool.is_heating") :
+                                        "susy.multiblock.evaporation_pool.is_heating") :
                                 TextComponentUtil.translationWithColor(
                                         TextFormatting.RED,
-                                        "gregtech.multiblock.evaporation_pool.is_not_heating");
+                                        "susy.multiblock.evaporation_pool.is_not_heating");
                         tl.add(TextComponentUtil.translationWithColor(
                                 TextFormatting.GRAY,
-                                "gregtech.multiblock.evaporation_pool_heated_preface",
+                                "susy.multiblock.evaporation_pool_heated_preface",
                                 isHeatingString));
                     }
 
@@ -426,7 +426,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                                 TextFormattingUtil.formatNumbers(exposedBlocks));
                         tl.add(TextComponentUtil.translationWithColor(
                                 TextFormatting.GRAY,
-                                "gregtech.multiblock.evaporation_pool.exposed_blocks",
+                                "susy.multiblock.evaporation_pool.exposed_blocks",
                                 exposedBlocksString));
                     }
 
@@ -437,7 +437,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                                 String.format("%.2f", getAverageSpeed()));
                         tl.add(TextComponentUtil.translationWithColor(
                                 TextFormatting.GRAY,
-                                "gregtech.multiblock.evaporation_pool.average_speed",
+                                "susy.multiblock.evaporation_pool.average_speed",
                                 averageSpeedString));
                     }
                 })
@@ -447,9 +447,9 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     @Override
     public void addInformation(ItemStack stack, World player, @NotNull List<String> tooltip, boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
-        tooltip.add(I18n.format("gregtech.machine.evaporation_pool.tooltip.info", MAX_DIAMETER, MIN_DIAMETER));
+        tooltip.add(I18n.format("susy.machine.evaporation_pool.tooltip.info", MAX_DIAMETER, MIN_DIAMETER));
         if (TooltipHelper.isShiftDown()) {
-            tooltip.add(I18n.format("gregtech.machine.evaporation_pool.tooltip.structure_info", MAX_DIAMETER, MIN_DIAMETER));
+            tooltip.add(I18n.format("susy.machine.evaporation_pool.tooltip.structure_info", MAX_DIAMETER, MIN_DIAMETER));
         }
     }
 

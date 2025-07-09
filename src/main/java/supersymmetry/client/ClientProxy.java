@@ -2,8 +2,10 @@ package supersymmetry.client;
 
 import gregtech.api.GTValues;
 import gregtech.api.items.metaitem.MetaOreDictItem;
+import gregtech.api.items.toolitem.IGTTool;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.stack.UnificationEntry;
+import gregtech.api.util.input.KeyBind;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -11,6 +13,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,7 +22,6 @@ import net.minecraft.util.registry.IRegistry;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
@@ -43,12 +45,14 @@ import supersymmetry.common.blocks.SheetedFrameItemBlock;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SuSyMetaBlocks;
 import supersymmetry.common.item.SuSyMetaItems;
+import supersymmetry.common.item.behavior.PipeNetWalkerBehavior;
 import supersymmetry.loaders.SuSyFluidTooltipLoader;
 import supersymmetry.loaders.SuSyIRLoader;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import static supersymmetry.common.EventHandlers.FIRST_SPAWN;
@@ -88,6 +92,18 @@ public class ClientProxy extends CommonProxy {
     }
 
     @SubscribeEvent
+    public static void addPipelinerTooltip(@Nonnull ItemTooltipEvent event) {
+        ItemStack stack = event.getItemStack();
+        List<String> tooltips = event.getToolTip();
+
+        if (stack.getItem() instanceof IGTTool tool
+                && tool.getToolStats().getBehaviors().contains(PipeNetWalkerBehavior.INSTANCE)) {
+            tooltips.add(I18n.format("item.susy.tool.tooltip.pipeliner",
+                    GameSettings.getKeyDisplayString(KeyBind.TOOL_AOE_CHANGE.toMinecraft().getKeyCode())));
+        }
+    }
+
+    @SubscribeEvent
     public static void addCatalystTooltipHandler(@Nonnull ItemTooltipEvent event) {
         ItemStack itemStack = event.getItemStack();
         // Handles Item tooltips
@@ -106,17 +122,17 @@ public class ClientProxy extends CommonProxy {
             is.setCount(1);
             CatalystInfo catalystInfo = group.getCatalystInfos().get(is);
             if (catalystInfo != null) {
-                tooltips.add(TextFormatting.UNDERLINE + (TextFormatting.BLUE + I18n.format("gregtech.catalyst_group." + group.getName() + ".name")));
+                tooltips.add(TextFormatting.UNDERLINE + (TextFormatting.BLUE + I18n.format("susy.catalyst_group." + group.getName() + ".name")));
                 if(catalystInfo.getTier() == CatalystInfo.NO_TIER){
                     tooltips.add(TextFormatting.RED + "Disclaimer: Catalyst bonuses for non-tiered catalysts have not yet been implemented.");
-                    tooltips.add(I18n.format("gregtech.universal.catalysts.tooltip.yield", catalystInfo.getYieldEfficiency()));
-                    tooltips.add(I18n.format("gregtech.universal.catalysts.tooltip.energy", catalystInfo.getEnergyEfficiency()));
-                    tooltips.add(I18n.format("gregtech.universal.catalysts.tooltip.speed", catalystInfo.getSpeedEfficiency()));
+                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.yield", catalystInfo.getYieldEfficiency()));
+                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.energy", catalystInfo.getEnergyEfficiency()));
+                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.speed", catalystInfo.getSpeedEfficiency()));
                 } else {
-                    tooltips.add(I18n.format("gregtech.universal.catalysts.tooltip.tier", GTValues.V[catalystInfo.getTier()], GTValues.VNF[catalystInfo.getTier()]));
-                    tooltips.add(I18n.format("gregtech.universal.catalysts.tooltip.yield.tiered", catalystInfo.getYieldEfficiency()));
-                    tooltips.add(I18n.format("gregtech.universal.catalysts.tooltip.energy.tiered", catalystInfo.getEnergyEfficiency()));
-                    tooltips.add(I18n.format("gregtech.universal.catalysts.tooltip.speed.tiered", catalystInfo.getSpeedEfficiency()));
+                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.tier", GTValues.V[catalystInfo.getTier()], GTValues.VNF[catalystInfo.getTier()]));
+                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.yield.tiered", catalystInfo.getYieldEfficiency()));
+                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.energy.tiered", catalystInfo.getEnergyEfficiency()));
+                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.speed.tiered", catalystInfo.getSpeedEfficiency()));
                 }
             }
         }

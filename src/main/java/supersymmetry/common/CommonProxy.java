@@ -17,6 +17,8 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.launchwrapper.Launch;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -35,6 +37,7 @@ import java.nio.file.Path;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.Supersymmetry;
+import supersymmetry.api.blocks.VariantItemBlockFalling;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.event.MobHordeEvent;
 import supersymmetry.api.fluids.SusyGeneratedFluidHandler;
@@ -46,6 +49,10 @@ import supersymmetry.common.blocks.SuSyMetaBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.materials.SusyMaterials;
+import supersymmetry.common.world.biome.BiomeLunarMaria;
+import supersymmetry.common.world.SuSyDimensions;
+import supersymmetry.common.world.biome.BiomeLunarHighlands;
+import supersymmetry.common.world.SuSyBiomes;
 import supersymmetry.loaders.SuSyWorldLoader;
 import supersymmetry.loaders.SusyOreDictionaryLoader;
 import supersymmetry.loaders.recipes.SuSyRecipeLoader;
@@ -153,6 +160,7 @@ public class CommonProxy {
         registry.register(SuSyBlocks.METALLURGY_ROLL);
         registry.register(SuSyBlocks.CONVEYOR_BELT);
         registry.register(SuSyBlocks.ROCKET_ASSEMBLER_CASING);
+        registry.register(SuSyBlocks.REGOLITH);
         registry.register(SuSyBlocks.EUV_LITHOGRAPHER_COMPONENT);
 
         SHEETED_FRAMES.values().stream().distinct().forEach(registry::register);
@@ -192,6 +200,7 @@ public class CommonProxy {
         registry.register(createItemBlock(SuSyBlocks.METALLURGY_ROLL, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.CONVEYOR_BELT, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.ROCKET_ASSEMBLER_CASING, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.REGOLITH, VariantItemBlockFalling::new));
         registry.register(createItemBlock(SuSyBlocks.EUV_LITHOGRAPHER_COMPONENT, VariantItemBlock::new));
 
         SHEETED_FRAMES.values()
@@ -228,7 +237,7 @@ public class CommonProxy {
     @SideOnly(Side.CLIENT)
     public static void itemToolTip(ItemTooltipEvent event) {
         handleCoilTooltips(event);
-        addTooltip(event, "gregtech.machine.steam_extractor", TooltipHelper.BLINKING_ORANGE + I18n.format("gregtech.machine.steam_extractor_cannot_melt_items.warning"), 2);
+        addTooltip(event, "susy.machine.steam_extractor", TooltipHelper.BLINKING_ORANGE + I18n.format("susy.machine.steam_extractor_cannot_melt_items.warning"), 2);
     }
 
     private static void handleCoilTooltips(ItemTooltipEvent event) {
@@ -269,5 +278,20 @@ public class CommonProxy {
         ItemBlock itemBlock = producer.apply(block);
         itemBlock.setRegistryName(Objects.requireNonNull(block.getRegistryName()));
         return itemBlock;
+    }
+
+    @SubscribeEvent
+    public static void register(RegistryEvent.Register<Biome> evt) {
+        SuSyBiomes.LUNAR_HIGHLANDS = new BiomeLunarHighlands(new Biome.BiomeProperties("Lunar Highlands").setRainDisabled().setBaseHeight(1f).setHeightVariation(0.2f).setRainfall(0).setTemperature(0.3f));
+        SuSyBiomes.LUNAR_HIGHLANDS.setRegistryName(Supersymmetry.MODID, "moon");
+        evt.getRegistry().register(SuSyBiomes.LUNAR_HIGHLANDS);
+        BiomeDictionary.addTypes(SuSyBiomes.LUNAR_HIGHLANDS, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.VOID);
+
+        SuSyBiomes.LUNAR_MARIA = new BiomeLunarMaria(new Biome.BiomeProperties("Lunar Maria").setRainDisabled().setBaseHeight(0f).setHeightVariation(0.1f).setRainfall(0).setTemperature(0.3f));
+        SuSyBiomes.LUNAR_MARIA.setRegistryName(Supersymmetry.MODID, "maria");
+        evt.getRegistry().register(SuSyBiomes.LUNAR_MARIA);
+        BiomeDictionary.addTypes(SuSyBiomes.LUNAR_MARIA, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.VOID);
+
+        SuSyDimensions.init();
     }
 }
