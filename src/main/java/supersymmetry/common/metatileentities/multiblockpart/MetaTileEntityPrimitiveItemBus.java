@@ -5,7 +5,9 @@ import gregtech.api.items.itemhandlers.GTItemStackHandler;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
+import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 import gregtech.client.renderer.ICubeRenderer;
+import gregtech.client.renderer.texture.Textures;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityItemBus;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -23,7 +25,17 @@ public class MetaTileEntityPrimitiveItemBus extends MetaTileEntityItemBus {
 
     @Override
     public ICubeRenderer getBaseTexture() {
-        return SusyTextures.MASONRY_BRICK;
+        MultiblockControllerBase controller = getController();
+        if (controller != null) {
+            return this.hatchTexture = controller.getBaseTexture(this);
+        } else if (this.hatchTexture != null) {
+            if (hatchTexture != Textures.getInactiveTexture(hatchTexture)) {
+                return this.hatchTexture = Textures.getInactiveTexture(hatchTexture);
+            }
+            return this.hatchTexture;
+        } else {
+            return SusyTextures.MASONRY_BRICK;
+        }
     }
 
     @Override

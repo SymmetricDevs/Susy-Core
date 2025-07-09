@@ -103,7 +103,7 @@ public class MetaTileEntityLatexCollector extends PseudoMultiMachineMetaTileEnti
     @Override
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
-        tooltip.set(1, I18n.format("gregtech.machine.latex_collector.tooltip"));
+        tooltip.set(1, I18n.format("susy.machine.latex_collector.tooltip"));
     }
 
     @Override

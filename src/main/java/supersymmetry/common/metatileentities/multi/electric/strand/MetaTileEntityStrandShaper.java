@@ -245,7 +245,7 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
                     Strand displayStrand = strand;
                     if (strand == null) {
                         if (output == null || output.getStrand() == null) {
-                            comps.add(new TextComponentTranslation("gregtech.multiblock.strand_casting.no_strand"));
+                            comps.add(new TextComponentTranslation("susy.multiblock.strand_casting.no_strand"));
                             return;
                         }
                         comps.add(new TextComponentTranslation("gregtech.multiblock.strand_casting.output_detected"));

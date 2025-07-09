@@ -54,7 +54,7 @@ public class SuSyPredicates {
             BlockSinteringBrick.SinteringBrickType type = SuSyBlocks.SINTERING_BRICK.getState(state);
             Object currentBrick = blockWorldState.getMatchContext().getOrPut("SinteringBrickType", type);
             if (!currentBrick.equals(type)) {
-                blockWorldState.setError(new PatternStringError("gregtech.multiblock.pattern.error.sintering_bricks"));
+                blockWorldState.setError(new PatternStringError("susy.multiblock.pattern.error.sintering_bricks"));
                 return false;
             }
             blockWorldState.getMatchContext().getOrPut("VABlock", new LinkedList<>()).add(blockWorldState.getPos());
@@ -87,7 +87,7 @@ public class SuSyPredicates {
                             BlockConveyor.ConveyorType type = ((BlockConveyor) state.getBlock()).getState(state);
                             Object currentConveyor = blockWorldState.getMatchContext().getOrPut("ConveyorType", type);
                             if (!currentConveyor.equals(type)) {
-                                blockWorldState.setError(new PatternStringError("gregtech.multiblock.pattern.error.conveyor"));
+                                blockWorldState.setError(new PatternStringError("susy.multiblock.pattern.error.conveyor"));
                                 return false;
                             }
                             // Adds the position of the conveyor (and target facing) to the match context
@@ -99,7 +99,7 @@ public class SuSyPredicates {
                     }, () -> Arrays.stream(BlockConveyor.ConveyorType.values())
                             .map(entry -> new BlockInfo(SuSyBlocks.CONVEYOR_BELT.getState(entry), null))
                             .toArray(BlockInfo[]::new)
-                    ).addTooltips("gregtech.multiblock.pattern.error.conveyor")));
+                    ).addTooltips("susy.multiblock.pattern.error.conveyor")));
 
     public static Supplier<TraceabilityPredicate> COILS_OR_BED = () -> new TraceabilityPredicate(blockWorldState -> {
         IBlockState blockState = blockWorldState.getBlockState();

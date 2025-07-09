@@ -82,3 +82,5 @@ run/
 
 logs/
 src/main/resources/mixins.susy.json
+
+!run/config/supercritical.cfg

@@ -192,7 +192,7 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.COOLING);
 
-    public static final RecipeMap<NoEnergyRecipeBuilder> HEAT_RADIATOR_RECIPES = new RecipeMap<>("radiator", 0, 0, 1, 1, new NoEnergyRecipeBuilder(), false)
+    public static final RecipeMap<NoEnergyRecipeBuilder> HEAT_RADIATOR_RECIPES = new RecipeMap<>("radiator", 1, 0, 1, 1, new NoEnergyRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_COMPRESS, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.COOLING);
 

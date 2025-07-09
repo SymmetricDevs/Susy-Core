@@ -118,6 +118,6 @@ public abstract class MetaTileEntityStrandMold extends MetaTileEntityStrandShape
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
         super.addInformation(stack, world, tooltip, advanced);
-        tooltip.add(I18n.format("gregtech.multiblock.strand_mold.tooltip"));
+        tooltip.add(I18n.format("susy.multiblock.strand_mold.tooltip"));
     }
 }

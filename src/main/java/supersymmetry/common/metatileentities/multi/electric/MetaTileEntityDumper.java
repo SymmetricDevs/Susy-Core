@@ -92,14 +92,14 @@ public class MetaTileEntityDumper extends VoidingMultiblockBase {
 
             textList.add(TextComponentUtil.translationWithColor(
                     TextFormatting.GRAY,
-                    "gregtech.machine.dumper.rate",
+                    "susy.machine.dumper.rate",
                     componentRate));
         }
     }
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
-        tooltip.add(I18n.format("gregtech.machine.dumper.tooltip.1", getBaseVoidingRate()));
+        tooltip.add(I18n.format("susy.machine.dumper.tooltip.1", getBaseVoidingRate()));
         super.addInformation(stack, world, tooltip, advanced);
     }
 

@@ -35,7 +35,7 @@ public class StrandShaperInfoProvider implements IProbeInfoProvider {
                 String text = TextFormatting.RED + TextFormattingUtil.formatNumbers(EUt) + TextStyleClass.INFO +
                         " EU/t" + TextFormatting.GREEN +
                         " (" + GTValues.VN[GTUtility.getTierByVoltage(EUt)] + TextFormatting.GREEN + ")";
-                probeInfo.text(TextStyleClass.INFO + "{*gregtech.top.energy_consumption*} " + text);
+                probeInfo.text(TextStyleClass.INFO + "{*susy.top.energy_consumption*} " + text);
             }
         }
     }

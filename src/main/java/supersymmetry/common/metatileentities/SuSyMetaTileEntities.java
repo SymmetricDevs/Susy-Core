@@ -57,6 +57,7 @@ import java.util.function.Function;
 
 import static gregtech.api.util.GTUtility.gregtechId;
 import static gregtech.common.metatileentities.MetaTileEntities.registerMetaTileEntity;
+import static supersymmetry.api.util.SuSyUtility.susyId;
 
 public class SuSyMetaTileEntities {
 
@@ -356,6 +357,7 @@ public class SuSyMetaTileEntities {
 
         // RTGs: 16504-16511
         RTG[0] = registerMetaTileEntity(16504, new MetaTileEntityRTG(susyId("rtg.lv"), 1));
+        RTG[1] = registerMetaTileEntity(16505, new MetaTileEntityRTG(susyId("rtg.mv"), 2));
 
         // Strand casting: 16600-16610
         IMPORT_STRAND = registerMetaTileEntity(16600, new MetaTileEntityStrandBus(susyId("strand_bus.import"), false));
@@ -470,11 +472,6 @@ public class SuSyMetaTileEntities {
 
     private static void registerCatalystMTE(CatalystMachineMetaTileEntity[] machines, int maxTier, int startId, String name, RecipeMap<?> map, ICubeRenderer texture, boolean hasFrontFacing) {
         registerCatalystMTE(machines, maxTier, startId, name, map, texture, hasFrontFacing, GTUtility.defaultTankSizeFunction);
-    }
-
-    /// WTF
-    public static @NotNull ResourceLocation susyId(@NotNull String name) {
-        return new ResourceLocation(GTValues.MODID, name);
     }
 
     static {

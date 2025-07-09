@@ -200,496 +200,496 @@ susy.fluid.impure_slurry=含杂%s浆液
 susy.fluid.slurry=%s浆液
 
 # Tooltip Warnings
-gregtech.machine.steam_extractor_cannot_melt_items.warning=蒸汽提取机不能熔化物品！
+susy.machine.steam_extractor_cannot_melt_items.warning=蒸汽提取机不能熔化物品！
 
 # Machines/Multiblocks
-gregtech.machine.magnetic_refrigerator.name=磁制冷机
-gregtech.multiblock.magnetic_refrigerator.min_temperature=§b最低温度：%s
+susy.machine.magnetic_refrigerator.name=磁制冷机
+susy.multiblock.magnetic_refrigerator.min_temperature=§b最低温度：%s
 
-gregtech.machine.sintering_oven.name=烧结炉
-gregtech.multiblock.sintering_oven.can_use_plasma=使用等离子体：%s
-gregtech.multiblocks.sintering_oven.use_plasma.affirmative=是
-gregtech.multiblocks.sintering_oven.use_plasma.negative=否
+susy.machine.sintering_oven.name=烧结炉
+susy.multiblock.sintering_oven.can_use_plasma=使用等离子体：%s
+susy.multiblocks.sintering_oven.use_plasma.affirmative=是
+susy.multiblocks.sintering_oven.use_plasma.negative=否
 
-gregtech.machine.coagulation_tank.name=凝固缸
-gregtech.machine.coagulation_tank.tooltip=不能用于止血。
-gregtech.machine.coagulation_tank.tooltip.1=每延长一格，并行数加一
-gregtech.machine.drum.lead.name=铅桶
-gregtech.machine.drum.brass.name=黄铜桶
-gregtech.machine.drum.pe.name=聚乙烯（PE）罐
-gregtech.machine.drum.pp.name=聚丙烯（PP）罐
-gregtech.machine.drum.ptfe.name=聚四氟乙烯（PTFE）罐
-gregtech.machine.drum.uhmwpe.name=超高分子量聚乙烯（UHMWPE）罐
+susy.machine.coagulation_tank.name=凝固缸
+susy.machine.coagulation_tank.tooltip=不能用于止血。
+susy.machine.coagulation_tank.tooltip.1=每延长一格，并行数加一
+susy.machine.drum.lead.name=铅桶
+susy.machine.drum.brass.name=黄铜桶
+susy.machine.drum.pe.name=聚乙烯（PE）罐
+susy.machine.drum.pp.name=聚丙烯（PP）罐
+susy.machine.drum.ptfe.name=聚四氟乙烯（PTFE）罐
+susy.machine.drum.uhmwpe.name=超高分子量聚乙烯（UHMWPE）罐
 
-gregtech.machine.crate.pe.name=密封板条箱
+susy.machine.crate.pe.name=密封板条箱
 
-gregtech.machine.polymerization_tank.name=聚合缸
-gregtech.machine.fluidized_bed_reactor.name=流化床反应器
+susy.machine.polymerization_tank.name=聚合缸
+susy.machine.fluidized_bed_reactor.name=流化床反应器
 
-gregtech.machine.electrolytic_cell.name=电解池
+susy.machine.electrolytic_cell.name=电解池
 
-gregtech.machine.coking_tower.name=焦化塔
-gregtech.machine.vacuum_distillation_tower.name=真空蒸馏塔
-gregtech.machine.catalytic_reformer.name=催化重整器
-gregtech.machine.pressure_swing_adsorber.name=变压吸附器
-gregtech.machine.reaction_furnace.name=反应炉
+susy.machine.coking_tower.name=焦化塔
+susy.machine.vacuum_distillation_tower.name=真空蒸馏塔
+susy.machine.catalytic_reformer.name=催化重整器
+susy.machine.pressure_swing_adsorber.name=变压吸附器
+susy.machine.reaction_furnace.name=反应炉
 
-gregtech.machine.fermentation_vat.name=发酵罐
-gregtech.machine.ore_sorter.name=矿石拣选机
-gregtech.machine.gravity_separator.name=重力分离器
-gregtech.machine.condenser.name=冷凝器
-gregtech.machine.natural_draft_cooling_tower.name=冷却装置
-gregtech.machine.gas_turbine.name=燃气轮机
-gregtech.machine.heat_exchanger.name=热交换器
-gregtech.machine.heat_radiator.name=散热器
-gregtech.multiblock.heat_radiator.tooltip.1=散热效率与面积成正比
-gregtech.multiblock.heat_radiator.tooltip.2=§b尺寸：§f3x3至11x16
-gregtech.machine.heat_radiator.parallel=最大并行：%s
-gregtech.machine.heat_radiator.parallel_hover=并行数由铜管方块的数量决定。
-gregtech.machine.large_weapons_factory.name=大型武器工厂
-gregtech.machine.magnetohydrodynamic_generator.name=磁流体动力学（MHD）发电机
-gregtech.machine.mining_drill.name=采矿钻机
-gregtech.machine.quencher.name=淬火槽
-gregtech.machine.railroad_engineering_station.name=铁路工程站
-gregtech.machine.railroad_engineering_station.tooltip=在多方块结构的中心放置沉浸铁路的铁轨以使之成型
-gregtech.machine.railroad_engineering_station.tooltip.1=铁轨下的混凝土可以被包括管道和空气在内的任意方块替换
+susy.machine.fermentation_vat.name=发酵罐
+susy.machine.ore_sorter.name=矿石拣选机
+susy.machine.gravity_separator.name=重力分离器
+susy.machine.condenser.name=冷凝器
+susy.machine.natural_draft_cooling_tower.name=冷却装置
+susy.machine.gas_turbine.name=燃气轮机
+susy.machine.heat_exchanger.name=热交换器
+susy.machine.heat_radiator.name=散热器
+susy.multiblock.heat_radiator.tooltip.1=散热效率与面积成正比
+susy.multiblock.heat_radiator.tooltip.2=§b尺寸：§f3x3至11x16
+susy.machine.heat_radiator.parallel=最大并行：%s
+susy.machine.heat_radiator.parallel_hover=并行数由铜管方块的数量决定。
+susy.machine.large_weapons_factory.name=大型武器工厂
+susy.machine.magnetohydrodynamic_generator.name=磁流体动力学（MHD）发电机
+susy.machine.mining_drill.name=采矿钻机
+susy.machine.quencher.name=淬火槽
+susy.machine.railroad_engineering_station.name=铁路工程站
+susy.machine.railroad_engineering_station.tooltip=在多方块结构的中心放置沉浸铁路的铁轨以使之成型
+susy.machine.railroad_engineering_station.tooltip.1=铁轨下的混凝土可以被包括管道和空气在内的任意方块替换
 
-gregtech.machine.evaporation_pool.name=蒸发池：
-gregtech.machine.evaporation_pool.tooltip.info=最大池底面积%1$sx%1$s，最小为%2$sx%2$s。查看JEI信息页面或Tooltip以获取详细信息。
-gregtech.machine.evaporation_pool.tooltip.structure_info=蒸发池池底可由%2$sx%2$s至%1$sx%1$s的砂壤土组成——其形状可以不为正方形！若想通过线圈提供热量，其摆放方式需要与JEI预览中一致。查看JEI信息页面以获得详细解释。
-gregtech.top.evaporation_pool_heated_preface=线圈加热：
-gregtech.top.evaporation_pool.exposed_blocks=直晒格数
-gregtech.top.evaporation_pool.average_speed=平均速率：：Blocks:
-gregtech.multiblock.evaporation_pool.description=蒸发池由可变大小的砂壤土池底与其外部用于放置仓室的混凝土壁面组成。其控制器方块可放置于沿砂壤土外侧，与池底同一高度的任一位置。蒸发池可以在供能无供能状态下运行：供能运行需要在池底以蛇形放置加热线圈（可参考JEI结构预览）；而无供能状态下则不需要。蒸发池的运行速度取决于接收到热量的多少，其由阳光直晒的池底方块数，外部供能（1EU = 10J），以及用于加热的线圈等级决定。每个阳光直晒的方块（检查需要消耗一定时间）每秒可以提供1kJ的热量，而线圈提供的热量与则与其基础温度*数量有关。
-gregtech.multiblock.evaporation_pool_heated_preface=线圈加热：%s
-gregtech.multiblock.evaporation_pool.is_heating=开
-gregtech.multiblock.evaporation_pool.is_not_heating=关（或无线圈）
-gregtech.multiblock.evaporation_pool.exposed_blocks=直晒格数：%s
-gregtech.multiblock.evaporation_pool.average_speed=平均速率：%sx
+susy.machine.evaporation_pool.name=蒸发池：
+susy.machine.evaporation_pool.tooltip.info=最大池底面积%1$sx%1$s，最小为%2$sx%2$s。查看JEI信息页面或Tooltip以获取详细信息。
+susy.machine.evaporation_pool.tooltip.structure_info=蒸发池池底可由%2$sx%2$s至%1$sx%1$s的砂壤土组成——其形状可以不为正方形！若想通过线圈提供热量，其摆放方式需要与JEI预览中一致。查看JEI信息页面以获得详细解释。
+susy.top.evaporation_pool_heated_preface=线圈加热：
+susy.top.evaporation_pool.exposed_blocks=直晒格数
+susy.top.evaporation_pool.average_speed=平均速率：：Blocks:
+susy.multiblock.evaporation_pool.description=蒸发池由可变大小的砂壤土池底与其外部用于放置仓室的混凝土壁面组成。其控制器方块可放置于沿砂壤土外侧，与池底同一高度的任一位置。蒸发池可以在供能无供能状态下运行：供能运行需要在池底以蛇形放置加热线圈（可参考JEI结构预览）；而无供能状态下则不需要。蒸发池的运行速度取决于接收到热量的多少，其由阳光直晒的池底方块数，外部供能（1EU = 10J），以及用于加热的线圈等级决定。每个阳光直晒的方块（检查需要消耗一定时间）每秒可以提供1kJ的热量，而线圈提供的热量与则与其基础温度*数量有关。
+susy.multiblock.evaporation_pool_heated_preface=线圈加热：%s
+susy.multiblock.evaporation_pool.is_heating=开
+susy.multiblock.evaporation_pool.is_not_heating=关（或无线圈）
+susy.multiblock.evaporation_pool.exposed_blocks=直晒格数：%s
+susy.multiblock.evaporation_pool.average_speed=平均速率：%sx
 susy.multiblock.pattern.error.coils_or_bed=§c必须使用同种线圈方块或砂壤土§r
 
-gregtech.machine.primitive_mud_pump.name=简易泥泵
-gregtech.machine.primitive_mud_pump.tooltip=仅在Y=64与Y=80之间的河流群系运行
-gregtech.machine.basic_steam_turbine.name=大型蒸汽轮机
-gregtech.machine.basic_gas_turbine.name=大型燃气轮机
-gregtech.machine.large_fluid_pump.name=大型液泵
-gregtech.machine.large_fluid_pump.tooltip.1=这势必会对当地的鲑鱼种群造成影响。
-gregtech.machine.large_fluid_pump.tooltip.2=仅在控制器方块位于Y=64，且最下方的钢管道外壳处于正确群系时运行。
-gregtech.machine.advanced_arc_furnace.name=高级电弧炉
-gregtech.machine.clarifier.name=澄清池
-gregtech.machine.dumper.name=废液排放机
-gregtech.machine.flare_stack.name=火炬塔
-gregtech.machine.flare_stack.height=塔高：%s§9格
-gregtech.machine.flare_stack.rate=焚烧速率：%s
-gregtech.machine.flare_stack.rate_hover=由火炬塔高度决定的焚烧速率倍数。
-gregtech.machine.flare_stack.tooltip=工业肺癌传播者。
-gregtech.machine.flare_stack.tooltip.1=§6基础焚烧速率：§7§f%d L 每 10 ticks
-gregtech.machine.flare_stack.tooltip.2=在5格的基础高度之上，每增加一格，焚烧速率翻倍。
-gregtech.machine.smoke_stack.name=烟囱
-gregtech.machine.smoke_stack.height=塔高：%s§9格
-gregtech.machine.smoke_stack.rate=排放速率：%s
-gregtech.machine.smoke_stack.rate_hover=由烟囱高度决定的排放速率倍数。
-gregtech.machine.smoke_stack.tooltip=给你星球的大气层加点料。
-gregtech.machine.smoke_stack.tooltip.1=§8基础排放速率：§7§f%d L 每 10 ticks
-gregtech.machine.smoke_stack.tooltip.2=在5格的基础高度之上，每增加一格，排放速率翻倍。
-gregtech.machine.dumper.rate=排污速率：%s
-gregtech.machine.dumper.tooltip=污染你附近的整个生态系统。
-gregtech.machine.dumper.tooltip.1=§2基础排污速率：§7§f%d L 每 10 ticks
-gregtech.machine.froth_flotation_tank.name=泡沫浮选机
-gregtech.machine.multi_stage_flash_distiller.name=多级闪蒸室
-gregtech.machine.high_temperature_distillation_tower.name=高温蒸馏塔
-gregtech.machine.rotary_kiln.name=回转炉
-gregtech.machine.low_pressure_cryogenic_distillation_plant.name=低压低温蒸馏厂
-gregtech.machine.high_pressure_cryogenic_distillation_plant.name=高压低温蒸馏厂
-gregtech.machine.single_column_cryogenic_distillation_plant.name=单塔式低温蒸馏厂
-gregtech.machine.reverberatory_furnace.name=反射炉
-gregtech.machine.blender.name=搅拌器
-gregtech.machine.sieve_distillation_tower.name=筛板蒸馏塔
+susy.machine.primitive_mud_pump.name=简易泥泵
+susy.machine.primitive_mud_pump.tooltip=仅在Y=64与Y=80之间的河流群系运行
+susy.machine.basic_steam_turbine.name=大型蒸汽轮机
+susy.machine.basic_gas_turbine.name=大型燃气轮机
+susy.machine.large_fluid_pump.name=大型液泵
+susy.machine.large_fluid_pump.tooltip.1=这势必会对当地的鲑鱼种群造成影响。
+susy.machine.large_fluid_pump.tooltip.2=仅在控制器方块位于Y=64，且最下方的钢管道外壳处于正确群系时运行。
+susy.machine.advanced_arc_furnace.name=高级电弧炉
+susy.machine.clarifier.name=澄清池
+susy.machine.dumper.name=废液排放机
+susy.machine.flare_stack.name=火炬塔
+susy.machine.flare_stack.height=塔高：%s§9格
+susy.machine.flare_stack.rate=焚烧速率：%s
+susy.machine.flare_stack.rate_hover=由火炬塔高度决定的焚烧速率倍数。
+susy.machine.flare_stack.tooltip=工业肺癌传播者。
+susy.machine.flare_stack.tooltip.1=§6基础焚烧速率：§7§f%d L 每 10 ticks
+susy.machine.flare_stack.tooltip.2=在5格的基础高度之上，每增加一格，焚烧速率翻倍。
+susy.machine.smoke_stack.name=烟囱
+susy.machine.smoke_stack.height=塔高：%s§9格
+susy.machine.smoke_stack.rate=排放速率：%s
+susy.machine.smoke_stack.rate_hover=由烟囱高度决定的排放速率倍数。
+susy.machine.smoke_stack.tooltip=给你星球的大气层加点料。
+susy.machine.smoke_stack.tooltip.1=§8基础排放速率：§7§f%d L 每 10 ticks
+susy.machine.smoke_stack.tooltip.2=在5格的基础高度之上，每增加一格，排放速率翻倍。
+susy.machine.dumper.rate=排污速率：%s
+susy.machine.dumper.tooltip=污染你附近的整个生态系统。
+susy.machine.dumper.tooltip.1=§2基础排污速率：§7§f%d L 每 10 ticks
+susy.machine.froth_flotation_tank.name=泡沫浮选机
+susy.machine.multi_stage_flash_distiller.name=多级闪蒸室
+susy.machine.high_temperature_distillation_tower.name=高温蒸馏塔
+susy.machine.rotary_kiln.name=回转炉
+susy.machine.low_pressure_cryogenic_distillation_plant.name=低压低温蒸馏厂
+susy.machine.high_pressure_cryogenic_distillation_plant.name=高压低温蒸馏厂
+susy.machine.single_column_cryogenic_distillation_plant.name=单塔式低温蒸馏厂
+susy.machine.reverberatory_furnace.name=反射炉
+susy.machine.blender.name=搅拌器
+susy.machine.sieve_distillation_tower.name=筛板蒸馏塔
 
-gregtech.machine.curtain_coater.name=淋幕式涂饰机
-gregtech.multiblock.pattern.error.conveyor=§c传送带方块的朝向必须一致§r
+susy.machine.curtain_coater.name=淋幕式涂饰机
+susy.multiblock.pattern.error.conveyor=§c传送带方块的朝向必须一致§r
 
-gregtech.machine.milling.name=精密铣床
-gregtech.multiblock.pattern.error.milling.upper=§c仅可放置于机器上部§r
-gregtech.multiblock.pattern.error.milling.lower=§c仅可放置于机器下部§r
+susy.machine.milling.name=精密铣床
+susy.multiblock.pattern.error.milling.upper=§c仅可放置于机器上部§r
+susy.multiblock.pattern.error.milling.lower=§c仅可放置于机器下部§r
 
-gregtech.machine.drone_pad.name=无人机坪
-gregtech.machine.primitive_smelter.name=简易冶炼炉
+susy.machine.drone_pad.name=无人机坪
+susy.machine.primitive_smelter.name=简易冶炼炉
 
-gregtech.machine.primitive_item_import.name=简易输入总线
-gregtech.machine.primitive_item_import.tooltip=仅可用于简易冶炼炉
-gregtech.machine.primitive_item_export.name=简易输出总线
-gregtech.machine.primitive_item_export.tooltip=仅可用于简易冶炼炉
+susy.machine.primitive_item_import.name=简易输入总线
+susy.machine.primitive_item_import.tooltip=仅可用于简易冶炼炉
+susy.machine.primitive_item_export.name=简易输出总线
+susy.machine.primitive_item_export.tooltip=仅可用于简易冶炼炉
 
 # Properties
-gregtech.recipe.plasma_requirement=需要等离子体：%s
-gregtech.recipe.catalyst=催化剂：%s %s
-gregtech.recipe.blocks=有效方块：%s
-gregtech.recipe.evaporation=热能需求: %d J/t
-gregtech.recipe.cryogenic_environment=需要低温环境
+susy.recipe.plasma_requirement=需要等离子体：%s
+susy.recipe.catalyst=催化剂：%s %s
+susy.recipe.blocks=有效方块：%s
+susy.recipe.evaporation=热能需求: %d J/t
+susy.recipe.cryogenic_environment=需要低温环境
 
 # Latex Collector
-gregtech.machine.latex_collector.steam=需要蒸汽！
-gregtech.machine.latex_collector.tooltip=从相邻的原木中提取液体。
-gregtech.machine.latex_collector.bronze.name=蒸汽胶乳收集器
-gregtech.machine.latex_collector.steel.name=高压蒸汽胶乳收集器
-gregtech.machine.latex_collector.lv.name=基础胶乳收集器
-gregtech.machine.latex_collector.mv.name=进阶胶乳收集器
-gregtech.machine.latex_collector.hv.name=进阶胶乳收集器 II
-gregtech.machine.latex_collector.ev.name=进阶胶乳收集器 III
+susy.machine.latex_collector.steam=需要蒸汽！
+susy.machine.latex_collector.tooltip=从相邻的原木中提取液体。
+susy.machine.latex_collector.bronze.name=蒸汽胶乳收集器
+susy.machine.latex_collector.steel.name=高压蒸汽胶乳收集器
+susy.machine.latex_collector.lv.name=基础胶乳收集器
+susy.machine.latex_collector.mv.name=进阶胶乳收集器
+susy.machine.latex_collector.hv.name=进阶胶乳收集器 II
+susy.machine.latex_collector.ev.name=进阶胶乳收集器 III
 
 # Vulcanizing Press
-gregtech.machine.vulcanizing_press.bronze.name=蒸汽硫化机
-gregtech.machine.vulcanizing_press.steel.name=高压蒸汽硫化机
-gregtech.machine.vulcanizing_press.lv.name=基础硫化机
-gregtech.machine.vulcanizing_press.mv.name=进阶硫化机
-gregtech.machine.vulcanizing_press.hv.name=进阶硫化机 II
-gregtech.machine.vulcanizing_press.ev.name=进阶硫化机 III
+susy.machine.vulcanizing_press.bronze.name=蒸汽硫化机
+susy.machine.vulcanizing_press.steel.name=高压蒸汽硫化机
+susy.machine.vulcanizing_press.lv.name=基础硫化机
+susy.machine.vulcanizing_press.mv.name=进阶硫化机
+susy.machine.vulcanizing_press.hv.name=进阶硫化机 II
+susy.machine.vulcanizing_press.ev.name=进阶硫化机 III
 
 # Steam Mixer
-gregtech.machine.mixer.bronze.name=蒸汽搅拌机
-gregtech.machine.mixer.steel.name=高压蒸汽搅拌机
+susy.machine.mixer.bronze.name=蒸汽搅拌机
+susy.machine.mixer.steel.name=高压蒸汽搅拌机
 
 # Roaster
-gregtech.machine.roaster.bronze.name=蒸汽焙烧炉
-gregtech.machine.roaster.steel.name=高压蒸汽焙烧炉
-gregtech.machine.roaster.lv.name=基础焙烧炉
-gregtech.machine.roaster.mv.name=进阶焙烧炉
-gregtech.machine.roaster.hv.name=进阶焙烧炉 II
-gregtech.machine.roaster.ev.name=进阶焙烧炉 III
-gregtech.machine.roaster.iv.name=精英焙烧炉
-gregtech.machine.roaster.luv.name=精英焙烧炉 II
-gregtech.machine.roaster.zpm.name=精英焙烧炉 III
-gregtech.machine.roaster.uv.name=终极焙烧炉
-gregtech.machine.roaster.uhv.name=史诗焙烧炉
-gregtech.machine.roaster.uev.name=史诗焙烧炉 II
-gregtech.machine.roaster.uiv.name=史诗焙烧炉 III
-gregtech.machine.roaster.uxv.name=史诗焙烧炉 IV
-gregtech.machine.roaster.opv.name=传说焙烧炉
+susy.machine.roaster.bronze.name=蒸汽焙烧炉
+susy.machine.roaster.steel.name=高压蒸汽焙烧炉
+susy.machine.roaster.lv.name=基础焙烧炉
+susy.machine.roaster.mv.name=进阶焙烧炉
+susy.machine.roaster.hv.name=进阶焙烧炉 II
+susy.machine.roaster.ev.name=进阶焙烧炉 III
+susy.machine.roaster.iv.name=精英焙烧炉
+susy.machine.roaster.luv.name=精英焙烧炉 II
+susy.machine.roaster.zpm.name=精英焙烧炉 III
+susy.machine.roaster.uv.name=终极焙烧炉
+susy.machine.roaster.uhv.name=史诗焙烧炉
+susy.machine.roaster.uev.name=史诗焙烧炉 II
+susy.machine.roaster.uiv.name=史诗焙烧炉 III
+susy.machine.roaster.uxv.name=史诗焙烧炉 IV
+susy.machine.roaster.opv.name=传说焙烧炉
 
 # Vacuum Chamber
-gregtech.machine.vacuum_chamber.bronze.name=蒸汽真空室
-gregtech.machine.vacuum_chamber.steel.name=高压蒸汽真空室
-gregtech.machine.vacuum_chamber.lv.name=基础真空室
-gregtech.machine.vacuum_chamber.mv.name=进阶真空室
-gregtech.machine.vacuum_chamber.hv.name=进阶真空室 II
-gregtech.machine.vacuum_chamber.ev.name=进阶真空室 III
-gregtech.machine.vacuum_chamber.iv.name=精英真空室
-gregtech.machine.vacuum_chamber.luv.name=精英真空室 II
-gregtech.machine.vacuum_chamber.zpm.name=精英真空室 III
-gregtech.machine.vacuum_chamber.uv.name=终极真空室
-gregtech.machine.vacuum_chamber.uhv.name=史诗真空室
-gregtech.machine.vacuum_chamber.uev.name=史诗真空室 II
-gregtech.machine.vacuum_chamber.uiv.name=史诗真空室 III
-gregtech.machine.vacuum_chamber.uxv.name=史诗真空室 IV
-gregtech.machine.vacuum_chamber.opv.name=传说真空室
+susy.machine.vacuum_chamber.bronze.name=蒸汽真空室
+susy.machine.vacuum_chamber.steel.name=高压蒸汽真空室
+susy.machine.vacuum_chamber.lv.name=基础真空室
+susy.machine.vacuum_chamber.mv.name=进阶真空室
+susy.machine.vacuum_chamber.hv.name=进阶真空室 II
+susy.machine.vacuum_chamber.ev.name=进阶真空室 III
+susy.machine.vacuum_chamber.iv.name=精英真空室
+susy.machine.vacuum_chamber.luv.name=精英真空室 II
+susy.machine.vacuum_chamber.zpm.name=精英真空室 III
+susy.machine.vacuum_chamber.uv.name=终极真空室
+susy.machine.vacuum_chamber.uhv.name=史诗真空室
+susy.machine.vacuum_chamber.uev.name=史诗真空室 II
+susy.machine.vacuum_chamber.uiv.name=史诗真空室 III
+susy.machine.vacuum_chamber.uxv.name=史诗真空室 IV
+susy.machine.vacuum_chamber.opv.name=传说真空室
 
 # CSTR
-gregtech.machine.continuous_stirred_tank_reactor.lv.name=基础连续搅拌釜式反应器（CSTR）
-gregtech.machine.continuous_stirred_tank_reactor.mv.name=进阶连续搅拌釜式反应器（CSTR）
-gregtech.machine.continuous_stirred_tank_reactor.hv.name=进阶连续搅拌釜式反应器（CSTR）II
-gregtech.machine.continuous_stirred_tank_reactor.ev.name=进阶连续搅拌釜式反应器（CSTR）III
-gregtech.machine.continuous_stirred_tank_reactor.iv.name=精英连续搅拌釜式反应器（CSTR）
-gregtech.machine.continuous_stirred_tank_reactor.luv.name=精英连续搅拌釜式反应器（CSTR）II
-gregtech.machine.continuous_stirred_tank_reactor.zpm.name=精英连续搅拌釜式反应器（CSTR）III
-gregtech.machine.continuous_stirred_tank_reactor.uv.name=终极连续搅拌釜式反应器（CSTR）
-gregtech.machine.continuous_stirred_tank_reactor.uhv.name=史诗连续搅拌釜式反应器（CSTR）
-gregtech.machine.continuous_stirred_tank_reactor.uev.name=史诗连续搅拌釜式反应器（CSTR）II
-gregtech.machine.continuous_stirred_tank_reactor.uiv.name=史诗连续搅拌釜式反应器（CSTR）III
-gregtech.machine.continuous_stirred_tank_reactor.uxv.name=史诗连续搅拌釜式反应器（CSTR）IV
-gregtech.machine.continuous_stirred_tank_reactor.opv.name=传说连续搅拌釜式反应器（CSTR）
+susy.machine.continuous_stirred_tank_reactor.lv.name=基础连续搅拌釜式反应器（CSTR）
+susy.machine.continuous_stirred_tank_reactor.mv.name=进阶连续搅拌釜式反应器（CSTR）
+susy.machine.continuous_stirred_tank_reactor.hv.name=进阶连续搅拌釜式反应器（CSTR）II
+susy.machine.continuous_stirred_tank_reactor.ev.name=进阶连续搅拌釜式反应器（CSTR）III
+susy.machine.continuous_stirred_tank_reactor.iv.name=精英连续搅拌釜式反应器（CSTR）
+susy.machine.continuous_stirred_tank_reactor.luv.name=精英连续搅拌釜式反应器（CSTR）II
+susy.machine.continuous_stirred_tank_reactor.zpm.name=精英连续搅拌釜式反应器（CSTR）III
+susy.machine.continuous_stirred_tank_reactor.uv.name=终极连续搅拌釜式反应器（CSTR）
+susy.machine.continuous_stirred_tank_reactor.uhv.name=史诗连续搅拌釜式反应器（CSTR）
+susy.machine.continuous_stirred_tank_reactor.uev.name=史诗连续搅拌釜式反应器（CSTR）II
+susy.machine.continuous_stirred_tank_reactor.uiv.name=史诗连续搅拌釜式反应器（CSTR）III
+susy.machine.continuous_stirred_tank_reactor.uxv.name=史诗连续搅拌釜式反应器（CSTR）IV
+susy.machine.continuous_stirred_tank_reactor.opv.name=传说连续搅拌釜式反应器（CSTR）
 
 # Fixed Bed Reactor
-gregtech.machine.fixed_bed_reactor.lv.name=基础固定床反应器
-gregtech.machine.fixed_bed_reactor.mv.name=进阶固定床反应器
-gregtech.machine.fixed_bed_reactor.hv.name=进阶固定床反应器 II
-gregtech.machine.fixed_bed_reactor.ev.name=进阶固定床反应器 III
-gregtech.machine.fixed_bed_reactor.iv.name=精英固定床反应器
-gregtech.machine.fixed_bed_reactor.luv.name=精英固定床反应器 II
-gregtech.machine.fixed_bed_reactor.zpm.name=精英固定床反应器 III
-gregtech.machine.fixed_bed_reactor.uv.name=终极固定床反应器
-gregtech.machine.fixed_bed_reactor.uhv.name=史诗固定床反应器
-gregtech.machine.fixed_bed_reactor.uev.name=史诗固定床反应器 II
-gregtech.machine.fixed_bed_reactor.uiv.name=史诗固定床反应器 III
-gregtech.machine.fixed_bed_reactor.uxv.name=史诗固定床反应器 IV
-gregtech.machine.fixed_bed_reactor.opv.name=传说固定床反应器
+susy.machine.fixed_bed_reactor.lv.name=基础固定床反应器
+susy.machine.fixed_bed_reactor.mv.name=进阶固定床反应器
+susy.machine.fixed_bed_reactor.hv.name=进阶固定床反应器 II
+susy.machine.fixed_bed_reactor.ev.name=进阶固定床反应器 III
+susy.machine.fixed_bed_reactor.iv.name=精英固定床反应器
+susy.machine.fixed_bed_reactor.luv.name=精英固定床反应器 II
+susy.machine.fixed_bed_reactor.zpm.name=精英固定床反应器 III
+susy.machine.fixed_bed_reactor.uv.name=终极固定床反应器
+susy.machine.fixed_bed_reactor.uhv.name=史诗固定床反应器
+susy.machine.fixed_bed_reactor.uev.name=史诗固定床反应器 II
+susy.machine.fixed_bed_reactor.uiv.name=史诗固定床反应器 III
+susy.machine.fixed_bed_reactor.uxv.name=史诗固定床反应器 IV
+susy.machine.fixed_bed_reactor.opv.name=传说固定床反应器
 
 # Trickle Bed Reactor
-gregtech.machine.trickle_bed_reactor.lv.name=基础涓流床反应器
-gregtech.machine.trickle_bed_reactor.mv.name=进阶涓流床反应器
-gregtech.machine.trickle_bed_reactor.hv.name=进阶涓流床反应器 II
-gregtech.machine.trickle_bed_reactor.ev.name=进阶涓流床反应器 III
-gregtech.machine.trickle_bed_reactor.iv.name=精英涓流床反应器
-gregtech.machine.trickle_bed_reactor.luv.name=精英涓流床反应器 II
-gregtech.machine.trickle_bed_reactor.zpm.name=精英涓流床反应器 III
-gregtech.machine.trickle_bed_reactor.uv.name=终极涓流床反应器
-gregtech.machine.trickle_bed_reactor.uhv.name=史诗涓流床反应器
-gregtech.machine.trickle_bed_reactor.uev.name=史诗涓流床反应器 II
-gregtech.machine.trickle_bed_reactor.uiv.name=史诗涓流床反应器 III
-gregtech.machine.trickle_bed_reactor.uxv.name=史诗涓流床反应器 IV
-gregtech.machine.trickle_bed_reactor.opv.name=传说涓流床反应器
+susy.machine.trickle_bed_reactor.lv.name=基础涓流床反应器
+susy.machine.trickle_bed_reactor.mv.name=进阶涓流床反应器
+susy.machine.trickle_bed_reactor.hv.name=进阶涓流床反应器 II
+susy.machine.trickle_bed_reactor.ev.name=进阶涓流床反应器 III
+susy.machine.trickle_bed_reactor.iv.name=精英涓流床反应器
+susy.machine.trickle_bed_reactor.luv.name=精英涓流床反应器 II
+susy.machine.trickle_bed_reactor.zpm.name=精英涓流床反应器 III
+susy.machine.trickle_bed_reactor.uv.name=终极涓流床反应器
+susy.machine.trickle_bed_reactor.uhv.name=史诗涓流床反应器
+susy.machine.trickle_bed_reactor.uev.name=史诗涓流床反应器 II
+susy.machine.trickle_bed_reactor.uiv.name=史诗涓流床反应器 III
+susy.machine.trickle_bed_reactor.uxv.name=史诗涓流床反应器 IV
+susy.machine.trickle_bed_reactor.opv.name=传说涓流床反应器
 
 # Bubble Column Reactor
-gregtech.machine.bubble_column_reactor.lv.name=基础鼓泡反应器
-gregtech.machine.bubble_column_reactor.mv.name=进阶鼓泡反应器
-gregtech.machine.bubble_column_reactor.hv.name=进阶鼓泡反应器 II
-gregtech.machine.bubble_column_reactor.ev.name=进阶鼓泡反应器 III
-gregtech.machine.bubble_column_reactor.iv.name=精英鼓泡反应器
-gregtech.machine.bubble_column_reactor.luv.name=精英鼓泡反应器 II
-gregtech.machine.bubble_column_reactor.zpm.name=精英鼓泡反应器 III
-gregtech.machine.bubble_column_reactor.uv.name=终极鼓泡反应器
-gregtech.machine.bubble_column_reactor.uhv.name=史诗鼓泡反应器
-gregtech.machine.bubble_column_reactor.uev.name=史诗鼓泡反应器 II
-gregtech.machine.bubble_column_reactor.uiv.name=史诗鼓泡反应器 III
-gregtech.machine.bubble_column_reactor.uxv.name=史诗鼓泡反应器 IV
-gregtech.machine.bubble_column_reactor.opv.name=传说鼓泡反应器
+susy.machine.bubble_column_reactor.lv.name=基础鼓泡反应器
+susy.machine.bubble_column_reactor.mv.name=进阶鼓泡反应器
+susy.machine.bubble_column_reactor.hv.name=进阶鼓泡反应器 II
+susy.machine.bubble_column_reactor.ev.name=进阶鼓泡反应器 III
+susy.machine.bubble_column_reactor.iv.name=精英鼓泡反应器
+susy.machine.bubble_column_reactor.luv.name=精英鼓泡反应器 II
+susy.machine.bubble_column_reactor.zpm.name=精英鼓泡反应器 III
+susy.machine.bubble_column_reactor.uv.name=终极鼓泡反应器
+susy.machine.bubble_column_reactor.uhv.name=史诗鼓泡反应器
+susy.machine.bubble_column_reactor.uev.name=史诗鼓泡反应器 II
+susy.machine.bubble_column_reactor.uiv.name=史诗鼓泡反应器 III
+susy.machine.bubble_column_reactor.uxv.name=史诗鼓泡反应器 IV
+susy.machine.bubble_column_reactor.opv.name=传说鼓泡反应器
 
 # Batch Reactor
-gregtech.machine.batch_reactor.lv.name=基础间歇式反应釜
-gregtech.machine.batch_reactor.mv.name=进阶间歇式反应釜
-gregtech.machine.batch_reactor.hv.name=进阶间歇式反应釜 II
-gregtech.machine.batch_reactor.ev.name=进阶间歇式反应釜 III
-gregtech.machine.batch_reactor.iv.name=精英间歇式反应釜
-gregtech.machine.batch_reactor.luv.name=精英间歇式反应釜 II
-gregtech.machine.batch_reactor.zpm.name=精英间歇式反应釜 III
-gregtech.machine.batch_reactor.uv.name=终极间歇式反应釜
-gregtech.machine.batch_reactor.uhv.name=史诗间歇式反应釜
-gregtech.machine.batch_reactor.uev.name=史诗间歇式反应釜 II
-gregtech.machine.batch_reactor.uiv.name=史诗间歇式反应釜 III
-gregtech.machine.batch_reactor.uxv.name=史诗间歇式反应釜 IV
-gregtech.machine.batch_reactor.opv.name=传说间歇式反应釜
+susy.machine.batch_reactor.lv.name=基础间歇式反应釜
+susy.machine.batch_reactor.mv.name=进阶间歇式反应釜
+susy.machine.batch_reactor.hv.name=进阶间歇式反应釜 II
+susy.machine.batch_reactor.ev.name=进阶间歇式反应釜 III
+susy.machine.batch_reactor.iv.name=精英间歇式反应釜
+susy.machine.batch_reactor.luv.name=精英间歇式反应釜 II
+susy.machine.batch_reactor.zpm.name=精英间歇式反应釜 III
+susy.machine.batch_reactor.uv.name=终极间歇式反应釜
+susy.machine.batch_reactor.uhv.name=史诗间歇式反应釜
+susy.machine.batch_reactor.uev.name=史诗间歇式反应釜 II
+susy.machine.batch_reactor.uiv.name=史诗间歇式反应釜 III
+susy.machine.batch_reactor.uxv.name=史诗间歇式反应釜 IV
+susy.machine.batch_reactor.opv.name=传说间歇式反应釜
 
 # Crystallizer
-gregtech.machine.crystallizer.lv.name=基础结晶器
-gregtech.machine.crystallizer.mv.name=进阶结晶器
-gregtech.machine.crystallizer.hv.name=进阶结晶器 II
-gregtech.machine.crystallizer.ev.name=进阶结晶器 III
-gregtech.machine.crystallizer.iv.name=精英结晶器
-gregtech.machine.crystallizer.luv.name=精英结晶器 II
-gregtech.machine.crystallizer.zpm.name=精英结晶器 III
-gregtech.machine.crystallizer.uv.name=终极结晶器
-gregtech.machine.crystallizer.uhv.name=史诗结晶器
-gregtech.machine.crystallizer.uev.name=史诗结晶器 II
-gregtech.machine.crystallizer.uiv.name=史诗结晶器 III
-gregtech.machine.crystallizer.uxv.name=史诗结晶器 IV
-gregtech.machine.crystallizer.opv.name=传说结晶器
+susy.machine.crystallizer.lv.name=基础结晶器
+susy.machine.crystallizer.mv.name=进阶结晶器
+susy.machine.crystallizer.hv.name=进阶结晶器 II
+susy.machine.crystallizer.ev.name=进阶结晶器 III
+susy.machine.crystallizer.iv.name=精英结晶器
+susy.machine.crystallizer.luv.name=精英结晶器 II
+susy.machine.crystallizer.zpm.name=精英结晶器 III
+susy.machine.crystallizer.uv.name=终极结晶器
+susy.machine.crystallizer.uhv.name=史诗结晶器
+susy.machine.crystallizer.uev.name=史诗结晶器 II
+susy.machine.crystallizer.uiv.name=史诗结晶器 III
+susy.machine.crystallizer.uxv.name=史诗结晶器 IV
+susy.machine.crystallizer.opv.name=传说结晶器
 
 # Dryer
-gregtech.machine.dryer.lv.name=基础干燥器
-gregtech.machine.dryer.mv.name=进阶干燥器
-gregtech.machine.dryer.hv.name=进阶干燥器 II
-gregtech.machine.dryer.ev.name=进阶干燥器 III
-gregtech.machine.dryer.iv.name=精英干燥器
-gregtech.machine.dryer.luv.name=精英干燥器 II
-gregtech.machine.dryer.zpm.name=精英干燥器 III
-gregtech.machine.dryer.uv.name=终极干燥器
-gregtech.machine.dryer.uhv.name=史诗干燥器
-gregtech.machine.dryer.uev.name=史诗干燥器 II
-gregtech.machine.dryer.uiv.name=史诗干燥器 III
-gregtech.machine.dryer.uxv.name=史诗干燥器 IV
-gregtech.machine.dryer.opv.name=传说干燥器
+susy.machine.dryer.lv.name=基础干燥器
+susy.machine.dryer.mv.name=进阶干燥器
+susy.machine.dryer.hv.name=进阶干燥器 II
+susy.machine.dryer.ev.name=进阶干燥器 III
+susy.machine.dryer.iv.name=精英干燥器
+susy.machine.dryer.luv.name=精英干燥器 II
+susy.machine.dryer.zpm.name=精英干燥器 III
+susy.machine.dryer.uv.name=终极干燥器
+susy.machine.dryer.uhv.name=史诗干燥器
+susy.machine.dryer.uev.name=史诗干燥器 II
+susy.machine.dryer.uiv.name=史诗干燥器 III
+susy.machine.dryer.uxv.name=史诗干燥器 IV
+susy.machine.dryer.opv.name=传说干燥器
 
 # Ion Exchange Column
-gregtech.machine.ion_exchange_column.lv.name=基础离子交换柱
-gregtech.machine.ion_exchange_column.mv.name=进阶离子交换柱
-gregtech.machine.ion_exchange_column.hv.name=进阶离子交换柱 II
-gregtech.machine.ion_exchange_column.ev.name=进阶离子交换柱 III
-gregtech.machine.ion_exchange_column.iv.name=精英离子交换柱
-gregtech.machine.ion_exchange_column.luv.name=精英离子交换柱 II
-gregtech.machine.ion_exchange_column.zpm.name=精英离子交换柱 III
-gregtech.machine.ion_exchange_column.uv.name=终极离子交换柱
-gregtech.machine.ion_exchange_column.uhv.name=史诗离子交换柱
-gregtech.machine.ion_exchange_column.uev.name=史诗离子交换柱 II
-gregtech.machine.ion_exchange_column.uiv.name=史诗离子交换柱 III
-gregtech.machine.ion_exchange_column.uxv.name=史诗离子交换柱 IV
-gregtech.machine.ion_exchange_column.opv.name=传说离子交换柱
+susy.machine.ion_exchange_column.lv.name=基础离子交换柱
+susy.machine.ion_exchange_column.mv.name=进阶离子交换柱
+susy.machine.ion_exchange_column.hv.name=进阶离子交换柱 II
+susy.machine.ion_exchange_column.ev.name=进阶离子交换柱 III
+susy.machine.ion_exchange_column.iv.name=精英离子交换柱
+susy.machine.ion_exchange_column.luv.name=精英离子交换柱 II
+susy.machine.ion_exchange_column.zpm.name=精英离子交换柱 III
+susy.machine.ion_exchange_column.uv.name=终极离子交换柱
+susy.machine.ion_exchange_column.uhv.name=史诗离子交换柱
+susy.machine.ion_exchange_column.uev.name=史诗离子交换柱 II
+susy.machine.ion_exchange_column.uiv.name=史诗离子交换柱 III
+susy.machine.ion_exchange_column.uxv.name=史诗离子交换柱 IV
+susy.machine.ion_exchange_column.opv.name=传说离子交换柱
 
 # Zone Refiner
-gregtech.machine.zone_refiner.lv.name=基础区域熔炼炉
-gregtech.machine.zone_refiner.mv.name=进阶区域熔炼炉
-gregtech.machine.zone_refiner.hv.name=进阶区域熔炼炉 II
-gregtech.machine.zone_refiner.ev.name=进阶区域熔炼炉 III
-gregtech.machine.zone_refiner.iv.name=精英区域熔炼炉
-gregtech.machine.zone_refiner.luv.name=精英区域熔炼炉 II
-gregtech.machine.zone_refiner.zpm.name=精英区域熔炼炉 III
-gregtech.machine.zone_refiner.uv.name=终极区域熔炼炉
-gregtech.machine.zone_refiner.uhv.name=史诗区域熔炼炉
-gregtech.machine.zone_refiner.uev.name=史诗区域熔炼炉 II
-gregtech.machine.zone_refiner.uiv.name=史诗区域熔炼炉 III
-gregtech.machine.zone_refiner.uxv.name=史诗区域熔炼炉 IV
-gregtech.machine.zone_refiner.opv.name=传说区域熔炼炉
+susy.machine.zone_refiner.lv.name=基础区域熔炼炉
+susy.machine.zone_refiner.mv.name=进阶区域熔炼炉
+susy.machine.zone_refiner.hv.name=进阶区域熔炼炉 II
+susy.machine.zone_refiner.ev.name=进阶区域熔炼炉 III
+susy.machine.zone_refiner.iv.name=精英区域熔炼炉
+susy.machine.zone_refiner.luv.name=精英区域熔炼炉 II
+susy.machine.zone_refiner.zpm.name=精英区域熔炼炉 III
+susy.machine.zone_refiner.uv.name=终极区域熔炼炉
+susy.machine.zone_refiner.uhv.name=史诗区域熔炼炉
+susy.machine.zone_refiner.uev.name=史诗区域熔炼炉 II
+susy.machine.zone_refiner.uiv.name=史诗区域熔炼炉 III
+susy.machine.zone_refiner.uxv.name=史诗区域熔炼炉 IV
+susy.machine.zone_refiner.opv.name=传说区域熔炼炉
 
 # Tube Furnace
-gregtech.machine.tube_furnace.lv.name=基础管式炉
-gregtech.machine.tube_furnace.mv.name=进阶管式炉
-gregtech.machine.tube_furnace.hv.name=进阶管式炉 II
-gregtech.machine.tube_furnace.ev.name=进阶管式炉 III
-gregtech.machine.tube_furnace.iv.name=精英管式炉
-gregtech.machine.tube_furnace.luv.name=精英管式炉 II
-gregtech.machine.tube_furnace.zpm.name=精英管式炉 III
-gregtech.machine.tube_furnace.uv.name=终极管式炉
-gregtech.machine.tube_furnace.uhv.name=史诗管式炉
-gregtech.machine.tube_furnace.uev.name=史诗管式炉 II
-gregtech.machine.tube_furnace.uiv.name=史诗管式炉 III
-gregtech.machine.tube_furnace.uxv.name=史诗管式炉 IV
-gregtech.machine.tube_furnace.opv.name=传说管式炉
+susy.machine.tube_furnace.lv.name=基础管式炉
+susy.machine.tube_furnace.mv.name=进阶管式炉
+susy.machine.tube_furnace.hv.name=进阶管式炉 II
+susy.machine.tube_furnace.ev.name=进阶管式炉 III
+susy.machine.tube_furnace.iv.name=精英管式炉
+susy.machine.tube_furnace.luv.name=精英管式炉 II
+susy.machine.tube_furnace.zpm.name=精英管式炉 III
+susy.machine.tube_furnace.uv.name=终极管式炉
+susy.machine.tube_furnace.uhv.name=史诗管式炉
+susy.machine.tube_furnace.uev.name=史诗管式炉 II
+susy.machine.tube_furnace.uiv.name=史诗管式炉 III
+susy.machine.tube_furnace.uxv.name=史诗管式炉 IV
+susy.machine.tube_furnace.opv.name=传说管式炉
 
 # UV Light Box
-gregtech.machine.uv_light_box.lv.name=基础紫外灯箱
-gregtech.machine.uv_light_box.mv.name=进阶紫外灯箱
-gregtech.machine.uv_light_box.hv.name=进阶紫外灯箱 II
-gregtech.machine.uv_light_box.ev.name=进阶紫外灯箱 III
-gregtech.machine.uv_light_box.iv.name=精英紫外灯箱
-gregtech.machine.uv_light_box.luv.name=精英紫外灯箱 II
-gregtech.machine.uv_light_box.zpm.name=精英紫外灯箱 III
-gregtech.machine.uv_light_box.uv.name=终极紫外灯箱
-gregtech.machine.uv_light_box.uhv.name=史诗紫外灯箱
-gregtech.machine.uv_light_box.uev.name=史诗紫外灯箱 II
-gregtech.machine.uv_light_box.uiv.name=史诗紫外灯箱 III
-gregtech.machine.uv_light_box.uxv.name=史诗紫外灯箱 IV
-gregtech.machine.uv_light_box.opv.name=传说紫外灯箱
+susy.machine.uv_light_box.lv.name=基础紫外灯箱
+susy.machine.uv_light_box.mv.name=进阶紫外灯箱
+susy.machine.uv_light_box.hv.name=进阶紫外灯箱 II
+susy.machine.uv_light_box.ev.name=进阶紫外灯箱 III
+susy.machine.uv_light_box.iv.name=精英紫外灯箱
+susy.machine.uv_light_box.luv.name=精英紫外灯箱 II
+susy.machine.uv_light_box.zpm.name=精英紫外灯箱 III
+susy.machine.uv_light_box.uv.name=终极紫外灯箱
+susy.machine.uv_light_box.uhv.name=史诗紫外灯箱
+susy.machine.uv_light_box.uev.name=史诗紫外灯箱 II
+susy.machine.uv_light_box.uiv.name=史诗紫外灯箱 III
+susy.machine.uv_light_box.uxv.name=史诗紫外灯箱 IV
+susy.machine.uv_light_box.opv.name=传说紫外灯箱
 
 # CVD
-gregtech.machine.cvd.lv.name=基础化学气相沉积（CVD）装置
-gregtech.machine.cvd.mv.name=进阶化学气相沉积（CVD）装置
-gregtech.machine.cvd.hv.name=进阶化学气相沉积（CVD）装置 II
-gregtech.machine.cvd.ev.name=进阶化学气相沉积（CVD）装置 III
-gregtech.machine.cvd.iv.name=精英化学气相沉积（CVD）装置
-gregtech.machine.cvd.luv.name=精英化学气相沉积（CVD）装置 II
-gregtech.machine.cvd.zpm.name=精英化学气相沉积（CVD）装置 III
-gregtech.machine.cvd.uv.name=终极化学气相沉积（CVD）装置
-gregtech.machine.cvd.uhv.name=史诗化学气相沉积（CVD）装置
-gregtech.machine.cvd.uev.name=史诗化学气相沉积（CVD）装置 II
-gregtech.machine.cvd.uiv.name=史诗化学气相沉积（CVD）装置 III
-gregtech.machine.cvd.uxv.name=史诗化学气相沉积（CVD）装置 IV
-gregtech.machine.cvd.opv.name=传说化学气相沉积（CVD）装置
+susy.machine.cvd.lv.name=基础化学气相沉积（CVD）装置
+susy.machine.cvd.mv.name=进阶化学气相沉积（CVD）装置
+susy.machine.cvd.hv.name=进阶化学气相沉积（CVD）装置 II
+susy.machine.cvd.ev.name=进阶化学气相沉积（CVD）装置 III
+susy.machine.cvd.iv.name=精英化学气相沉积（CVD）装置
+susy.machine.cvd.luv.name=精英化学气相沉积（CVD）装置 II
+susy.machine.cvd.zpm.name=精英化学气相沉积（CVD）装置 III
+susy.machine.cvd.uv.name=终极化学气相沉积（CVD）装置
+susy.machine.cvd.uhv.name=史诗化学气相沉积（CVD）装置
+susy.machine.cvd.uev.name=史诗化学气相沉积（CVD）装置 II
+susy.machine.cvd.uiv.name=史诗化学气相沉积（CVD）装置 III
+susy.machine.cvd.uxv.name=史诗化学气相沉积（CVD）装置 IV
+susy.machine.cvd.opv.name=传说化学气相沉积（CVD）装置
 
 # Ion Implanter
-gregtech.machine.ion_implanter.lv.name=基础离子注入机
-gregtech.machine.ion_implanter.mv.name=进阶离子注入机
-gregtech.machine.ion_implanter.hv.name=进阶离子注入机 II
-gregtech.machine.ion_implanter.ev.name=进阶离子注入机 III
-gregtech.machine.ion_implanter.iv.name=精英离子注入机
-gregtech.machine.ion_implanter.luv.name=精英离子注入机 II
-gregtech.machine.ion_implanter.zpm.name=精英离子注入机 III
-gregtech.machine.ion_implanter.uv.name=终极离子注入机
-gregtech.machine.ion_implanter.uhv.name=史诗离子注入机
-gregtech.machine.ion_implanter.uev.name=史诗离子注入机 II
-gregtech.machine.ion_implanter.uiv.name=史诗离子注入机 III
-gregtech.machine.ion_implanter.uxv.name=史诗离子注入机 IV
-gregtech.machine.ion_implanter.opv.name=传说离子注入机
+susy.machine.ion_implanter.lv.name=基础离子注入机
+susy.machine.ion_implanter.mv.name=进阶离子注入机
+susy.machine.ion_implanter.hv.name=进阶离子注入机 II
+susy.machine.ion_implanter.ev.name=进阶离子注入机 III
+susy.machine.ion_implanter.iv.name=精英离子注入机
+susy.machine.ion_implanter.luv.name=精英离子注入机 II
+susy.machine.ion_implanter.zpm.name=精英离子注入机 III
+susy.machine.ion_implanter.uv.name=终极离子注入机
+susy.machine.ion_implanter.uhv.name=史诗离子注入机
+susy.machine.ion_implanter.uev.name=史诗离子注入机 II
+susy.machine.ion_implanter.uiv.name=史诗离子注入机 III
+susy.machine.ion_implanter.uxv.name=史诗离子注入机 IV
+susy.machine.ion_implanter.opv.name=传说离子注入机
 
 # Fluid Compressor
-gregtech.machine.fluid_compressor.lv.name=基础流体加压机
-gregtech.machine.fluid_compressor.mv.name=进阶流体加压机
-gregtech.machine.fluid_compressor.hv.name=进阶流体加压机 II
-gregtech.machine.fluid_compressor.ev.name=进阶流体加压机 III
-gregtech.machine.fluid_compressor.iv.name=精英流体加压机
-gregtech.machine.fluid_compressor.luv.name=精英流体加压机 II
-gregtech.machine.fluid_compressor.zpm.name=精英流体加压机 III
-gregtech.machine.fluid_compressor.uv.name=终极流体加压机
-gregtech.machine.fluid_compressor.uhv.name=史诗流体加压机
-gregtech.machine.fluid_compressor.uev.name=史诗流体加压机 II
-gregtech.machine.fluid_compressor.uiv.name=史诗流体加压机 III
-gregtech.machine.fluid_compressor.uxv.name=史诗流体加压机 IV
-gregtech.machine.fluid_compressor.opv.name=传说流体加压机
+susy.machine.fluid_compressor.lv.name=基础流体加压机
+susy.machine.fluid_compressor.mv.name=进阶流体加压机
+susy.machine.fluid_compressor.hv.name=进阶流体加压机 II
+susy.machine.fluid_compressor.ev.name=进阶流体加压机 III
+susy.machine.fluid_compressor.iv.name=精英流体加压机
+susy.machine.fluid_compressor.luv.name=精英流体加压机 II
+susy.machine.fluid_compressor.zpm.name=精英流体加压机 III
+susy.machine.fluid_compressor.uv.name=终极流体加压机
+susy.machine.fluid_compressor.uhv.name=史诗流体加压机
+susy.machine.fluid_compressor.uev.name=史诗流体加压机 II
+susy.machine.fluid_compressor.uiv.name=史诗流体加压机 III
+susy.machine.fluid_compressor.uxv.name=史诗流体加压机 IV
+susy.machine.fluid_compressor.opv.name=传说流体加压机
 
 # Fluid Decompressor
-gregtech.machine.fluid_decompressor.lv.name=基础流体降压机
-gregtech.machine.fluid_decompressor.mv.name=进阶流体降压机
-gregtech.machine.fluid_decompressor.hv.name=进阶流体降压机 II
-gregtech.machine.fluid_decompressor.ev.name=进阶流体降压机 III
-gregtech.machine.fluid_decompressor.iv.name=精英流体降压机
-gregtech.machine.fluid_decompressor.luv.name=精英流体降压机 II
-gregtech.machine.fluid_decompressor.zpm.name=精英流体降压机 III
-gregtech.machine.fluid_decompressor.uv.name=终极流体降压机
-gregtech.machine.fluid_decompressor.uhv.name=史诗流体降压机
-gregtech.machine.fluid_decompressor.uev.name=史诗流体降压机 II
-gregtech.machine.fluid_decompressor.uiv.name=史诗流体降压机 III
-gregtech.machine.fluid_decompressor.uxv.name=史诗流体降压机 IV
-gregtech.machine.fluid_decompressor.opv.name=传说流体降压机
+susy.machine.fluid_decompressor.lv.name=基础流体降压机
+susy.machine.fluid_decompressor.mv.name=进阶流体降压机
+susy.machine.fluid_decompressor.hv.name=进阶流体降压机 II
+susy.machine.fluid_decompressor.ev.name=进阶流体降压机 III
+susy.machine.fluid_decompressor.iv.name=精英流体降压机
+susy.machine.fluid_decompressor.luv.name=精英流体降压机 II
+susy.machine.fluid_decompressor.zpm.name=精英流体降压机 III
+susy.machine.fluid_decompressor.uv.name=终极流体降压机
+susy.machine.fluid_decompressor.uhv.name=史诗流体降压机
+susy.machine.fluid_decompressor.uev.name=史诗流体降压机 II
+susy.machine.fluid_decompressor.uiv.name=史诗流体降压机 III
+susy.machine.fluid_decompressor.uxv.name=史诗流体降压机 IV
+susy.machine.fluid_decompressor.opv.name=传说流体降压机
 
 # Weapons Factory
-gregtech.machine.weapons_factory.lv.name=基础武器工厂
-gregtech.machine.weapons_factory.mv.name=进阶武器工厂
-gregtech.machine.weapons_factory.hv.name=进阶武器工厂 II
-gregtech.machine.weapons_factory.ev.name=进阶武器工厂 III
-gregtech.machine.weapons_factory.iv.name=精英武器工厂
-gregtech.machine.weapons_factory.luv.name=精英武器工厂 II
-gregtech.machine.weapons_factory.zpm.name=精英武器工厂 III
-gregtech.machine.weapons_factory.uv.name=终极武器工厂
-gregtech.machine.weapons_factory.uhv.name=史诗武器工厂
-gregtech.machine.weapons_factory.uev.name=史诗武器工厂 II
-gregtech.machine.weapons_factory.uiv.name=史诗武器工厂 III
-gregtech.machine.weapons_factory.uxv.name=史诗武器工厂 IV
-gregtech.machine.weapons_factory.opv.name=传说武器工厂
+susy.machine.weapons_factory.lv.name=基础武器工厂
+susy.machine.weapons_factory.mv.name=进阶武器工厂
+susy.machine.weapons_factory.hv.name=进阶武器工厂 II
+susy.machine.weapons_factory.ev.name=进阶武器工厂 III
+susy.machine.weapons_factory.iv.name=精英武器工厂
+susy.machine.weapons_factory.luv.name=精英武器工厂 II
+susy.machine.weapons_factory.zpm.name=精英武器工厂 III
+susy.machine.weapons_factory.uv.name=终极武器工厂
+susy.machine.weapons_factory.uhv.name=史诗武器工厂
+susy.machine.weapons_factory.uev.name=史诗武器工厂 II
+susy.machine.weapons_factory.uiv.name=史诗武器工厂 III
+susy.machine.weapons_factory.uxv.name=史诗武器工厂 IV
+susy.machine.weapons_factory.opv.name=传说武器工厂
 
 # Phase Separator
-gregtech.machine.phase_separator.name=相分离器
+susy.machine.phase_separator.name=相分离器
 
 # RTG
-gregtech.machine.rtg.lv.name=基础放射性同位素热电式发电机（RTG）
-gregtech.machine.rtg.tooltip.info=给你的起搏器供电。
-gregtech.machine.rtg.tooltip.description=通过放射性同位素的衰变产生微小但稳定的电流。
-gregtech.machine.rtg.voltage_produced=§a产出电压：§f%,d EU/t (%s§f)
+susy.machine.rtg.lv.name=基础放射性同位素热电式发电机（RTG）
+susy.machine.rtg.tooltip.info=给你的起搏器供电。
+susy.machine.rtg.tooltip.description=通过放射性同位素的衰变产生微小但稳定的电流。
+susy.machine.rtg.voltage_produced=§a产出电压：§f%,d EU/t (%s§f)
 
 # Electrostatic Separator
-gregtech.machine.electrostatic_separator.lv.name=基础静电分离器
-gregtech.machine.electrostatic_separator.mv.name=进阶静电分离器
-gregtech.machine.electrostatic_separator.hv.name=进阶静电分离器 II
-gregtech.machine.electrostatic_separator.ev.name=进阶静电分离器 III
-gregtech.machine.electrostatic_separator.iv.name=精英静电分离器
-gregtech.machine.electrostatic_separator.luv.name=精英静电分离器 II
-gregtech.machine.electrostatic_separator.zpm.name=精英静电分离器 III
-gregtech.machine.electrostatic_separator.uv.name=终极静电分离器
-gregtech.machine.electrostatic_separator.uhv.name=史诗静电分离器
-gregtech.machine.electrostatic_separator.uev.name=史诗静电分离器 II
-gregtech.machine.electrostatic_separator.uiv.name=史诗静电分离器 III
-gregtech.machine.electrostatic_separator.uxv.name=史诗静电分离器 IV
-gregtech.machine.electrostatic_separator.opv.name=传说静电分离器
+susy.machine.electrostatic_separator.lv.name=基础静电分离器
+susy.machine.electrostatic_separator.mv.name=进阶静电分离器
+susy.machine.electrostatic_separator.hv.name=进阶静电分离器 II
+susy.machine.electrostatic_separator.ev.name=进阶静电分离器 III
+susy.machine.electrostatic_separator.iv.name=精英静电分离器
+susy.machine.electrostatic_separator.luv.name=精英静电分离器 II
+susy.machine.electrostatic_separator.zpm.name=精英静电分离器 III
+susy.machine.electrostatic_separator.uv.name=终极静电分离器
+susy.machine.electrostatic_separator.uhv.name=史诗静电分离器
+susy.machine.electrostatic_separator.uev.name=史诗静电分离器 II
+susy.machine.electrostatic_separator.uiv.name=史诗静电分离器 III
+susy.machine.electrostatic_separator.uxv.name=史诗静电分离器 IV
+susy.machine.electrostatic_separator.opv.name=传说静电分离器
 
 # Textile Spinner
-gregtech.machine.textile_spinner.lv.name=基础纺线机
-gregtech.machine.textile_spinner.mv.name=进阶纺线机
-gregtech.machine.textile_spinner.hv.name=进阶纺线机 II
-gregtech.machine.textile_spinner.ev.name=进阶纺线机 III
-gregtech.machine.textile_spinner.iv.name=精英纺线机
-gregtech.machine.textile_spinner.luv.name=精英纺线机 II
-gregtech.machine.textile_spinner.zpm.name=精英纺线机 III
-gregtech.machine.textile_spinner.uv.name=终极纺线机
-gregtech.machine.textile_spinner.uhv.name=史诗纺线机
-gregtech.machine.textile_spinner.uev.name=史诗纺线机 II
-gregtech.machine.textile_spinner.uiv.name=史诗纺线机 III
-gregtech.machine.textile_spinner.uxv.name=史诗纺线机 IV
-gregtech.machine.textile_spinner.opv.name=传说纺线机
+susy.machine.textile_spinner.lv.name=基础纺线机
+susy.machine.textile_spinner.mv.name=进阶纺线机
+susy.machine.textile_spinner.hv.name=进阶纺线机 II
+susy.machine.textile_spinner.ev.name=进阶纺线机 III
+susy.machine.textile_spinner.iv.name=精英纺线机
+susy.machine.textile_spinner.luv.name=精英纺线机 II
+susy.machine.textile_spinner.zpm.name=精英纺线机 III
+susy.machine.textile_spinner.uv.name=终极纺线机
+susy.machine.textile_spinner.uhv.name=史诗纺线机
+susy.machine.textile_spinner.uev.name=史诗纺线机 II
+susy.machine.textile_spinner.uiv.name=史诗纺线机 III
+susy.machine.textile_spinner.uxv.name=史诗纺线机 IV
+susy.machine.textile_spinner.opv.name=传说纺线机
 
 # Polishing Machine
-gregtech.machine.polishing_machine.lv.name=基础抛光机
-gregtech.machine.polishing_machine.mv.name=进阶抛光机
-gregtech.machine.polishing_machine.hv.name=进阶抛光机 II
-gregtech.machine.polishing_machine.ev.name=进阶抛光机 III
-gregtech.machine.polishing_machine.iv.name=精英抛光机
-gregtech.machine.polishing_machine.luv.name=精英抛光机 II
-gregtech.machine.polishing_machine.zpm.name=精英抛光机 III
-gregtech.machine.polishing_machine.uv.name=终极抛光机
-gregtech.machine.polishing_machine.uhv.name=史诗抛光机
-gregtech.machine.polishing_machine.uev.name=史诗抛光机 II
-gregtech.machine.polishing_machine.uiv.name=史诗抛光机 III
-gregtech.machine.polishing_machine.uxv.name=史诗抛光机 IV
-gregtech.machine.polishing_machine.opv.name=传说抛光机
+susy.machine.polishing_machine.lv.name=基础抛光机
+susy.machine.polishing_machine.mv.name=进阶抛光机
+susy.machine.polishing_machine.hv.name=进阶抛光机 II
+susy.machine.polishing_machine.ev.name=进阶抛光机 III
+susy.machine.polishing_machine.iv.name=精英抛光机
+susy.machine.polishing_machine.luv.name=精英抛光机 II
+susy.machine.polishing_machine.zpm.name=精英抛光机 III
+susy.machine.polishing_machine.uv.name=终极抛光机
+susy.machine.polishing_machine.uhv.name=史诗抛光机
+susy.machine.polishing_machine.uev.name=史诗抛光机 II
+susy.machine.polishing_machine.uiv.name=史诗抛光机 III
+susy.machine.polishing_machine.uxv.name=史诗抛光机 IV
+susy.machine.polishing_machine.opv.name=传说抛光机
 
-gregtech.machine.bath_condenser.name=浴式冷凝器
-gregtech.machine.bath_condenser.tooltip=仅在低温蒸馏厂中工作
+susy.machine.bath_condenser.name=浴式冷凝器
+susy.machine.bath_condenser.tooltip=仅在低温蒸馏厂中工作
 
-gregtech.machine.incinerator.lv.name=基础焚化炉
-gregtech.machine.incinerator.mv.name=进阶焚化炉
-gregtech.machine.incinerator.hv.name=进阶焚化炉 II
-gregtech.machine.incinerator.ev.name=进阶焚化炉 III
-gregtech.machine.incinerator.tooltip.1=§r每%2$s tick(s)§6焚烧§r%1$s个物品
-gregtech.machine.incinerator.tooltip.2=§c需要上方八格方块为空气以排放废气
-gregtech.machine.incinerator.tooltip.3=§8你别管那些重金属去了哪里。
-gregtech.multiblock.incinerator.clogged=§4堵塞了！（上方的排气道被挡住了？）
-gregtech.multiblock.incinerator.working=§2畅通无阻！
+susy.machine.incinerator.lv.name=基础焚化炉
+susy.machine.incinerator.mv.name=进阶焚化炉
+susy.machine.incinerator.hv.name=进阶焚化炉 II
+susy.machine.incinerator.ev.name=进阶焚化炉 III
+susy.machine.incinerator.tooltip.1=§r每%2$s tick(s)§6焚烧§r%1$s个物品
+susy.machine.incinerator.tooltip.2=§c需要上方八格方块为空气以排放废气
+susy.machine.incinerator.tooltip.3=§8你别管那些重金属去了哪里。
+susy.multiblock.incinerator.clogged=§4堵塞了！（上方的排气道被挡住了？）
+susy.multiblock.incinerator.working=§2畅通无阻！
 
 # Recipemaps
 recipemap.coagulation_tank.name=凝固
@@ -754,17 +754,17 @@ recipemap.jet_wingpack_fuels.name=喷气翼包燃料
 recipemap.curtain_coater.name=淋幕涂饰
 recipemap.milling.name=精密铣销
 
-gregtech.multiblock.primitive_mud_pump.description=简易泥泵是一台蒸汽时代的多方块机器。当它的控制器方块处于河流生物群系，且高度介于 Y = 64 与 Y = 80（含）之间时将每秒收集一次泥。它可以使用 ULV、LV 输出仓或水泵输出仓。
+susy.multiblock.primitive_mud_pump.description=简易泥泵是一台蒸汽时代的多方块机器。当它的控制器方块处于河流生物群系，且高度介于 Y = 64 与 Y = 80（含）之间时将每秒收集一次泥。它可以使用 ULV、LV 输出仓或水泵输出仓。
 
 # Energy Hatches
 
-gregtech.machine.energy_hatch.output_4a.lv.name=4安动力仓（LV）
-gregtech.machine.energy_hatch.output_16a.lv.name=16安动力仓（LV）
-gregtech.machine.energy_hatch.output_4a.mv.name=4安动力仓（MV）
-gregtech.machine.energy_hatch.output_16a.mv.name=16安动力仓（MV）
-gregtech.machine.energy_hatch.output_4a.hv.name=4安动力仓（HV）
-gregtech.machine.energy_hatch.output_16a.hv.name=16安动力仓（HV）
-gregtech.machine.energy_hatch.output_16a.ev.name=16安动力仓（EV）
+susy.machine.energy_hatch.output_4a.lv.name=4安动力仓（LV）
+susy.machine.energy_hatch.output_16a.lv.name=16安动力仓（LV）
+susy.machine.energy_hatch.output_4a.mv.name=4安动力仓（MV）
+susy.machine.energy_hatch.output_16a.mv.name=16安动力仓（MV）
+susy.machine.energy_hatch.output_4a.hv.name=4安动力仓（HV）
+susy.machine.energy_hatch.output_16a.hv.name=16安动力仓（HV）
+susy.machine.energy_hatch.output_16a.ev.name=16安动力仓（EV）
 
 # Quadruple & Nonuple Fluid Hatches
 
@@ -785,34 +785,34 @@ gregtech.machine.fluid_hatch.export_9x.mv.name=MV九重输出仓
 gregtech.machine.fluid_hatch.export_9x.hv.name=HV九重输出仓
 
 # Other multiblock parts
-gregtech.machine.dumping_hatch=销毁仓
-gregtech.machine.dumping_hatch.lv.name=销毁仓
+susy.machine.dumping_hatch=销毁仓
+susy.machine.dumping_hatch.lv.name=销毁仓
 
 # Distillation tower explanations
-gregtech.machine.ordered_dt.tooltip.1=流体输入与输出仓可位于同层
-gregtech.machine.ordered_dt.tooltip.2=§c若某一层不存在输出仓，则该层的流体输出将被销毁！§7
+susy.machine.ordered_dt.tooltip.1=流体输入与输出仓可位于同层
+susy.machine.ordered_dt.tooltip.2=§c若某一层不存在输出仓，则该层的流体输出将被销毁！§7
 
 # Logistics
-gregtech.machine.delegator.tooltip.non_recursion=§6无法连接到其他的代理器！
-gregtech.top.delegator.delegating_face=代理面:
+susy.machine.delegator.tooltip.non_recursion=§6无法连接到其他的代理器！
+susy.top.delegator.delegating_face=代理面:
 
-gregtech.machine.bridge.inv.name=物品桥接器
-gregtech.machine.bridge.inv.tooltip=§b转接物品
-gregtech.machine.bridge.tank.name=流体桥接器
-gregtech.machine.bridge.tank.tooltip=§b转接流体
-gregtech.machine.bridge.inv_tank.name=两用桥接器
-gregtech.machine.bridge.inv_tank.tooltip=§b转接物品与流体
-gregtech.machine.bridge.universal.name=通用桥接器
-gregtech.machine.bridge.universal.tooltip=§b转接一切
+susy.machine.bridge.inv.name=物品桥接器
+susy.machine.bridge.inv.tooltip=§b转接物品
+susy.machine.bridge.tank.name=流体桥接器
+susy.machine.bridge.tank.tooltip=§b转接流体
+susy.machine.bridge.inv_tank.name=两用桥接器
+susy.machine.bridge.inv_tank.tooltip=§b转接物品与流体
+susy.machine.bridge.universal.name=通用桥接器
+susy.machine.bridge.universal.tooltip=§b转接一切
 
-gregtech.machine.extender.inv.name=物品拓展器
-gregtech.machine.extender.inv.tooltip=§b转接物品
-gregtech.machine.extender.tank.name=流体拓展器
-gregtech.machine.extender.tank.tooltip=§b转接流体
-gregtech.machine.extender.inv_tank.name=两用拓展器
-gregtech.machine.extender.inv_tank.tooltip=§b转接物品与流体
-gregtech.machine.extender.universal.name=通用拓展器
-gregtech.machine.extender.universal.tooltip=§b转接一切
+susy.machine.extender.inv.name=物品拓展器
+susy.machine.extender.inv.tooltip=§b转接物品
+susy.machine.extender.tank.name=流体拓展器
+susy.machine.extender.tank.tooltip=§b转接流体
+susy.machine.extender.inv_tank.name=两用拓展器
+susy.machine.extender.inv_tank.tooltip=§b转接物品与流体
+susy.machine.extender.universal.name=通用拓展器
+susy.machine.extender.universal.tooltip=§b转接一切
 
 # Metaitems
 metaitem.catalyst_bed_support_grid.name=催化床载体网格
@@ -830,18 +830,18 @@ metaitem.track_segment.length_info=相当于§610格§7的单轨铁道。
 metaitem.air_vent.tooltip.1=§b收集速率：§f%,d L/s
 
 # Catalysts
-gregtech.universal.catalysts.tooltip.tier=§e最高电压：§f%,d EU/t（%s§f）
-gregtech.universal.catalysts.tooltip.non_tiered=§e非分级催化剂§
-gregtech.universal.catalysts.tooltip.yield.tiered=§a产率加成：§fx%d/电压等级§f
-gregtech.universal.catalysts.tooltip.energy.tiered=§a耗能功率：§fx%d/电压等级§f
-gregtech.universal.catalysts.tooltip.speed.tiered=§a速度加成：§fx%d/电压等级§f
-gregtech.universal.catalysts.tooltip.yield=§a产率加成：§fx%d
-gregtech.universal.catalysts.tooltip.energy=§a耗能功率：§fx%d
-gregtech.universal.catalysts.tooltip.speed=§a速度加成：§fx%d
-gregtech.universal.catalysts.tooltip.title=%s
+susy.universal.catalysts.tooltip.tier=§e最高电压：§f%,d EU/t（%s§f）
+susy.universal.catalysts.tooltip.non_tiered=§e非分级催化剂§
+susy.universal.catalysts.tooltip.yield.tiered=§a产率加成：§fx%d/电压等级§f
+susy.universal.catalysts.tooltip.energy.tiered=§a耗能功率：§fx%d/电压等级§f
+susy.universal.catalysts.tooltip.speed.tiered=§a速度加成：§fx%d/电压等级§f
+susy.universal.catalysts.tooltip.yield=§a产率加成：§fx%d
+susy.universal.catalysts.tooltip.energy=§a耗能功率：§fx%d
+susy.universal.catalysts.tooltip.speed=§a速度加成：§fx%d
+susy.universal.catalysts.tooltip.title=%s
 
 # Oxidation Catalyst Bed
-gregtech.catalyst_group.oxidation_catalyst_beds.name=氧化催化剂
+susy.catalyst_group.oxidation_catalyst_beds.name=氧化催化剂
 metaitem.ulv_catalyst_bed_oxidation.name=ULV氧化催化床
 metaitem.lv_catalyst_bed_oxidation.name=LV氧化催化床
 metaitem.mv_catalyst_bed_oxidation.name=MV氧化催化床
@@ -858,7 +858,7 @@ metaitem.uxv_catalyst_bed_oxidation.name=UXV氧化催化床
 metaitem.opv_catalyst_bed_oxidation.name=OpV氧化催化床
 
 # Reduction Catalyst Bed
-gregtech.catalyst_group.reduction_catalyst_beds.name=还原催化剂
+susy.catalyst_group.reduction_catalyst_beds.name=还原催化剂
 metaitem.ulv_catalyst_bed_reduction.name=ULV还原催化床
 metaitem.lv_catalyst_bed_reduction.name=LV还原催化床
 metaitem.mv_catalyst_bed_reduction.name=MV还原催化床
@@ -875,10 +875,10 @@ metaitem.uxv_catalyst_bed_reduction.name=UXV还原催化床
 metaitem.opv_catalyst_bed_reduction.name=OpV还原催化床
 
 # Standard Catalyst
-gregtech.catalyst_group.standard_catalysts.name=标准催化剂
+susy.catalyst_group.standard_catalysts.name=标准催化剂
 
 # Cracking Catalyst
-gregtech.catalyst_group.cracking_catalyst_beds.name=裂化催化剂
+susy.catalyst_group.cracking_catalyst_beds.name=裂化催化剂
 metaitem.standard_catalyst_bed_cracking.name=裂化催化床
 
 # Armors
@@ -895,23 +895,23 @@ susy.large_fluid_pump.y_level=控制器高度：Y=%s
 susy.large_fluid_pump.biome=底部钢管道所处群系：%s
 
 # Latex Logs
-gregtech.block_group_members.latex_logs.name=橡胶木
+susy.block_group_members.latex_logs.name=橡胶木
 
 
 # Stock Interfaces
-gregtech.machine.stock_controller.name=机车控制器
+susy.machine.stock_controller.name=机车控制器
 susy.stock_interfaces.locomotive_controller.description=通过红石信号控制机车的油门及刹车
 
-gregtech.machine.stock_detector.name=列车检测器
+susy.machine.stock_detector.name=列车检测器
 susy.stock_interfaces.stock_detector.description=检测附近的列车并输出红石信号
 
-gregtech.machine.stock_fluid_exchanger.name=流体装卸器
+susy.machine.stock_fluid_exchanger.name=流体装卸器
 susy.stock_interfaces.fluid_exchanger.description=用于与附近的列车交互流体
 
-gregtech.machine.stock_item_exchanger.name=物品装卸器
+susy.machine.stock_item_exchanger.name=物品装卸器
 susy.stock_interfaces.item_exchanger.description=用于与附近的列车交互物品
 
-gregtech.machine.stock_content_reader.name=列车读取器
+susy.machine.stock_content_reader.name=列车读取器
 susy.stock_interfaces.stock_reader.description=基于列车的物品/流体储存输出红石信号
 
 susy.gui.stock_interactor.button.stock_filter.tooltip=点击打开列车过滤器GUI
