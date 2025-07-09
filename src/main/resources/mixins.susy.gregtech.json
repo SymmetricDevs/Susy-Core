@@ -22,7 +22,6 @@
     "RecipeMapsMixin",
     "RecyclingRecipesMixin",
     "TileEntityPipeBaseMixin",
-    "ToolBuilderAccessor",
     "ToolItemsMixin"
   ]
 }
