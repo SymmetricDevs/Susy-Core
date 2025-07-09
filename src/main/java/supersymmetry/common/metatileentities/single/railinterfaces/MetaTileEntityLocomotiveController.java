@@ -8,6 +8,7 @@ import com.cleanroommc.modularui.drawable.Rectangle;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.cleanroommc.modularui.factory.PosGuiData;
 import com.cleanroommc.modularui.screen.ModularPanel;
+import com.cleanroommc.modularui.screen.UISettings;
 import com.cleanroommc.modularui.utils.Alignment;
 import com.cleanroommc.modularui.value.sync.BooleanSyncValue;
 import com.cleanroommc.modularui.value.sync.DoubleSyncValue;
@@ -57,13 +58,13 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
     }
 
     @Override
-    public ModularPanel buildUI(PosGuiData guiData, PanelSyncManager syncManager) {
+    public ModularPanel buildUI(PosGuiData guiData, PanelSyncManager syncManager, UISettings settings) {
 
         PanelSyncHandler panel = (PanelSyncHandler) syncManager.panel("controller_panel",
                 (panelSyncManager, syncHandler) -> createPopupPanel(panelSyncManager),
                 true);
 
-        ModularPanel mainPanel = super.buildUI(guiData, syncManager);
+        ModularPanel mainPanel = super.buildUI(guiData, syncManager, settings);
         mainPanel.height(186);
         Flow flow = (Flow) mainPanel.getChildren().get(4);
         flow.child(Flow.row()
