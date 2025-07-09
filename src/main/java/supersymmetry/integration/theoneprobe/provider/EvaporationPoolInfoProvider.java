@@ -23,8 +23,8 @@ public class EvaporationPoolInfoProvider implements IProbeInfoProvider {
                              @Nonnull World world, @Nonnull IBlockState blockState, @Nonnull IProbeHitData data) {
         if (GTUtility.getMetaTileEntity(world, data.getPos()) instanceof MetaTileEntityEvaporationPool evapPool) {
             probeInfo.text(TextStyleClass.INFO + "{*susy.top.evaporation_pool_heated_preface*}" + " " + (evapPool.isHeating() ?
-                    (TextFormatting.GREEN + "{*gregtech.multiblock.evaporation_pool.is_heating*}") :
-                    (TextFormatting.RED + "{*gregtech.multiblock.evaporation_pool.is_not_heating*}")));
+                    (TextFormatting.GREEN + "{*susy.multiblock.evaporation_pool.is_heating*}") :
+                    (TextFormatting.RED + "{*susy.multiblock.evaporation_pool.is_not_heating*}")));
             probeInfo.text(TextStyleClass.INFO + "{*susy.top.evaporation_pool.exposed_blocks*}" + " "
                     + (TextFormatting.YELLOW + String.valueOf(evapPool.getExposedBlocks())));
             probeInfo.text(TextStyleClass.INFO + "{*susy.top.evaporation_pool.average_speed*}" + " "

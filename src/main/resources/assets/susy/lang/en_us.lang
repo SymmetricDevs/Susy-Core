@@ -277,7 +277,7 @@ susy.machine.railroad_engineering_station.tooltip=Place Immersive Railroading Tr
 susy.machine.railroad_engineering_station.tooltip.1=The concrete below the tracks can be substituted with any block, including pipes or air
 susy.machine.quarry.name=Quarry
 
-susy.machine.evaporation_pool.name=Evaporation Pool:
+susy.machine.evaporation_pool.name=Evaporation Poolt
 susy.machine.evaporation_pool.tooltip.info=Max square of %1$sx%1$s, minimum %2$sx%2$s. Read info tab and tool info for more details.
 susy.machine.evaporation_pool.tooltip.structure_info=Evaporation Pools can be formed with any dimensions ranging from a %2$sx%2$s to a %1$sx%1$s, even if it is non-square. To form a valid heated evaporation pool, coils should be placed following the pattern shown in the preview. For a more detailed explanation, view the info tab in JEI.
 susy.top.evaporation_pool_heated_preface=Heating Coil:
