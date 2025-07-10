@@ -17,18 +17,18 @@ import supersymmetry.api.SusyLog;
 
 @Deprecated
 @ApiStatus.ScheduledForRemoval(inVersion = "Next CEu update")
-@Mixin(value = MetaTileEntityHolder.class, remap = false)
+@Mixin(value = MetaTileEntityHolder.class)
 public abstract class MetaTileEntityHolderMixin {
 
-    @Shadow
+    @Shadow(remap = false)
     MetaTileEntity metaTileEntity;
 
-    @Shadow
+    @Shadow (remap = false)
     protected abstract void setRawMetaTileEntity(MetaTileEntity metaTileEntity);
 
-    @Inject(
-            method = "readFromNBT",
-            at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;error(Ljava/lang/String;)V"))
+    @Inject(method = "readFromNBT",
+            remap = true,
+            at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;error(Ljava/lang/String;)V", remap = false))
     private void checkSuSy(
             NBTTagCompound compound,
             CallbackInfo ci,
