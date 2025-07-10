@@ -83,3 +83,6 @@ run/
 logs/
 
 !run/config/supercritical.cfg
+
+# OptiFine libs
+libs/optifine/
