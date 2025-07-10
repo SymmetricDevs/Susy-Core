@@ -20,8 +20,9 @@ public class TargetBlockAccessMixin implements IChunkProvider {
     @Final
     private IBlockAccess delegate;
 
+    @Nullable
     @Override
-    public @Nullable Chunk getChunkFromBlockCoords(@NotNull BlockPos blockPos) {
+    public Chunk getChunkFromBlockCoords(@NotNull BlockPos blockPos) {
         /// [delegate] can only be instances of [DummyWorld]
         /// According to the source code
         return ((DummyWorld) delegate).getChunk(blockPos);
