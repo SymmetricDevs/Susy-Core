@@ -1,7 +1,6 @@
 package supersymmetry.common;
 
 import gregtech.api.GregTechAPI;
-import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.util.GTTeleporter;
 import gregtech.api.util.TeleportHandler;
 import gregtech.common.items.MetaItems;
@@ -10,6 +9,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,8 +29,6 @@ import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.event.MobHordeWorldData;
 import supersymmetry.common.item.SuSyArmorItem;
 import supersymmetry.common.network.SPacketFirstJoin;
-import supersymmetry.common.network.SPacketRemoveFluidState;
-import supersymmetry.loaders.recipes.handlers.RecyclingManager;
 import supersymmetry.common.world.WorldProviderPlanet;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
@@ -131,7 +129,7 @@ public class EventHandlers {
     }
 
     @SubscribeEvent
-    public static void onBlockPlaceEvent(BlockEvent.PlaceEvent event) {
+    public static void onBlockPlaceEvent(BlockEvent.EntityPlaceEvent event) {
         if (event.getWorld().provider instanceof WorldProviderPlanet provider && !provider.getPlanet().supportsFire) {
             Block block = event.getPlacedBlock().getBlock();
             if (block instanceof BlockTorch) {

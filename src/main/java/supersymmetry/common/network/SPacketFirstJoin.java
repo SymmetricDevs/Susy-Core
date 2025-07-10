@@ -2,11 +2,8 @@ package supersymmetry.common.network;
 
 import gregtech.api.network.IClientExecutor;
 import gregtech.api.network.IPacket;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import supersymmetry.client.ClientProxy;
