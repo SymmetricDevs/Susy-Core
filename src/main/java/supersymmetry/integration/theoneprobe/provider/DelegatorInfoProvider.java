@@ -25,7 +25,7 @@ public class DelegatorInfoProvider implements IProbeInfoProvider {
             if (te instanceof IGregTechTileEntity igtte) {
                 MetaTileEntity mte = igtte.getMetaTileEntity();
                 if (mte instanceof IDelegator delegator) {
-                    probeInfo.text(TextStyleClass.INFO + "{*gregtech.top.delegator.delegating_face*}" +
+                    probeInfo.text(TextStyleClass.INFO + "{*susy.top.delegator.delegating_face*}" +
                             delegator.getDelegatingFacing(data.getSideHit()));
                 }
             }

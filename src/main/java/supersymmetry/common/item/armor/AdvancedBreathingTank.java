@@ -46,6 +46,4 @@ public class AdvancedBreathingTank extends AdvancedBreathingApparatus {
     double getMaxOxygen(ItemStack stack) {
         return this.maxOxygen;
     }
-
-
 }

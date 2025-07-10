@@ -15,6 +15,31 @@
         "all" : "gregtech:blocks/multiblock_casing/silicon_carbide_casing"
       }
     },
+    "variant=monel_casing" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/multiblock_casing/monel_500_casing"
+      }
+    },
+    "variant=monel_casing_pipe" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/multiblock_casing/monel_500_casing_pipe"
+      }
+    },
+    "variant=copper_casing_pipe" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/multiblock_casing/copper_casing_pipe"
+      }
+    },
+    "variant=flying_shear_saw" : {
+      "textures": {
+        "top": "gregtech:blocks/casings/gearbox/machine_casing_gearbox_steel",
+        "side": "#top",
+        "bottom": "gregtech:blocks/multiblock_casing/flying_shear_saw"
+      }
+    },
     "variant=sieve_tray" : {
       "model" : "minecraft:cube_all",
       "textures" : {
@@ -43,6 +68,18 @@
       "model" : "minecraft:cube_all",
       "textures" : {
         "all" : "gregtech:blocks/multiblock_casing/heavy_duty_pad"
+      }
+    },
+    "variant=advanced_refractory_lining" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/multiblock_casing/advanced_refractory_lining"
+      }
+    },
+    "variant=coalescence_plate" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/multiblock_casing/coalescence_plate"
       }
     }
   }

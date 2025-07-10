@@ -1,18 +1,17 @@
 package supersymmetry.common;
 
-import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.util.GTTeleporter;
 import gregtech.api.util.TeleportHandler;
 import gregtech.common.items.MetaItems;
 import gregtechfoodoption.item.GTFOMetaItem;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockTorch;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.management.PlayerList;
-import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
@@ -27,12 +26,12 @@ import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.event.MobHordeWorldData;
 import supersymmetry.common.item.SuSyArmorItem;
+import supersymmetry.common.world.WorldProviderPlanet;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class EventHandlers {
 
-    private static final String FIRST_SPAWN = Supersymmetry.MODID + ".first_spawn";
-    private static boolean cancelFillBucket = false;
+    public static final String FIRST_SPAWN = Supersymmetry.MODID + ".first_spawn";
 
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
@@ -57,8 +56,6 @@ public class EventHandlers {
             event.player.addItemStackToInventory(GTFOMetaItem.EMERGENCY_RATIONS.getStackForm(32));
             event.player.addItemStackToInventory(MetaItems.PROSPECTOR_LV.getChargedStack(100000));
         }
-
-
     }
 
     @SubscribeEvent
@@ -113,11 +110,25 @@ public class EventHandlers {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onEntityLivingFallEvent(LivingFallEvent event) {
+        if (event.getEntity().world.provider instanceof WorldProviderPlanet provider) {
+            event.setDistance((float) (event.getDistance() * provider.getPlanet().gravity));
+        }
+
         Entity armor = event.getEntity();
         if (armor instanceof EntityPlayer player) {
             ItemStack boots = player.getItemStackFromSlot(EntityEquipmentSlot.FEET);
             if (!boots.isEmpty() && boots.getItem() instanceof SuSyArmorItem) {
                 player.fallDistance = event.getDistance();
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onBlockPlaceEvent(BlockEvent.PlaceEvent event) {
+        if (event.getWorld().provider instanceof WorldProviderPlanet provider && !provider.getPlanet().supportsFire) {
+            Block block = event.getPlacedBlock().getBlock();
+            if (block instanceof BlockTorch) {
+                event.setCanceled(true);
             }
         }
     }

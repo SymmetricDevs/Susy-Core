@@ -160,7 +160,7 @@ public class BlockSheetedFrame extends Block {
     }
 
     public int damageDropped(@Nonnull IBlockState state) {
-        return this.getMetaFromState(state);
+        return (this.getMetaFromState(state) & 0b0011) + 4;
     }
 
     @Nonnull
