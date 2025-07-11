@@ -282,6 +282,8 @@ susy.machine.railroad_engineering_station.tooltip.1=The concrete below the track
 susy.machine.quarry.name=Quarry
 susy.machine.eccentric_roll_crusher.name=Eccentric Roll Crusher
 susy.machine.eccentric_roll_crusher.tooltip=Eccentricity does not mean low efficiency.
+susy.machine.ball_mill.name=Ball Mill
+susy.machine.ball_mill.tooltip=Rolling now!
 
 susy.machine.evaporation_pool.name=Evaporation Pool
 susy.machine.evaporation_pool.tooltip.info=Max square of %1$sx%1$s, minimum %2$sx%2$s. Read info tab and tool info for more details.
