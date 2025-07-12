@@ -94,71 +94,21 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle(
-                        "XXXXXXXXXXXX",
-                        "            ",
-                        "            ",
-                        " G          ",
-                        " G          ",
-                        " G          ",
-                        "            ",
-                        "            ")
-                .aisle(
-                        "X          X",
-                        "            ",
-                        " G          ",
-                        " LHHLHHLHHL ",
-                        " LHHLHHLHHL ",
-                        " LHHLHHLHHL ",
-                        " G          ",
-                        "            ")
-                .aisle(
-                        "X          X",
-                        "PG         X",
-                        "PLHHLHHLHHLX",
-                        "PH########HX",
-                        "PH########HX",
-                        "PH########H ",
-                        " LHHLHHLHHL ",
-                        " G          ")
-                .aisle(
-                        "X          X",
-                        " G          ",
-                        " LHHLHHLHHL ",
-                        "PH########H ",
-                        "I##########I",
-                        "PH########H ",
-                        " LHHLHHLHHL ",
-                        " G          ")
-                .aisle(
-                        "X          X",
-                        "PG         X",
-                        "PLHHLHHLHHLX",
-                        "PH########HX",
-                        "PH########HX",
-                        "PH########H ",
-                        " LHHLHHLHHL ",
-                        " G          ")
-                .aisle(
-                        "X          X",
-                        "            ",
-                        " G          ",
-                        " LHHLHHLHHL ",
-                        " LHHLHHLHHL ",
-                        " LHHLHHLHHL ",
-                        " G          ",
-                        "            ")
-                .aisle(
-                        "XMMMXXXXXXXX",
-                        " NSM        ",
-                        "            ",
-                        " G          ",
-                        " G          ",
-                        " G          ",
-                        "            ",
-                        "            ")
-                .where('M', states(getCasingState()).or(autoAbilities(true, true, false, false, false, false, false)))
-                .where('I', states(getCasingState()).or(autoAbilities(false, false, true, true, false, false, false)))
+                .aisle("XXXXXXXXXXXX", "            ", "            ", " G          ", " G          ", " G          ", "            ", "            ")
+                .aisle("X          X", "            ", " G          ", " LHHLHHLHHL ", " LHHLHHLHHL ", " LHHLHHLHHL ", " G          ", "            ")
+                .aisle("X          X", "PG         X", "PLHHLHHLHHLX", "PH########HX", "PH########HX", "PH########H ", " LHHLHHLHHL ", " G          ")
+                .aisle("X          X", " G          ", " LHHLHHLHHL ", "PH########H ", "I##########I", "PH########H ", " LHHLHHLHHL ", " G          ")
+                .aisle("X          X", "PG         X", "PLHHLHHLHHLX", "PH########HX", "PH########HX", "PH########H ", " LHHLHHLHHL ", " G          ")
+                .aisle("X          X", "            ", " G          ", " LHHLHHLHHL ", " LHHLHHLHHL ", " LHHLHHLHHL ", " G          ", "            ")
+                .aisle("XMMMXXXXXXXX", " NSM        ", "            ", " G          ", " G          ", " G          ", "            ", "            ")
+                .where('M', states(getCasingState()).or(autoAbilities(
+                        true, true, false,
+                        false, false, false, false
+                )))
+                .where('I', states(getCasingState()).or(autoAbilities(
+                        false, false, true,
+                        true, false, false, false
+                )))
                 .where('H', states(getShellCasingState()))
                 .where('L', states(getShellLineState()))
                 .where('P', states(getEngineCasingState()))
