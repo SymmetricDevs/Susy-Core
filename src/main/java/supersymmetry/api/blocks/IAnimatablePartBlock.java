@@ -5,6 +5,8 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.common.tileentities.AnimatablePartTileEntity;
@@ -14,13 +16,12 @@ import javax.annotation.Nullable;
 import static gregtech.api.util.GTUtility.gregtechId;
 import static supersymmetry.api.util.SuSyUtility.susyId;
 
-public interface IAnimatablePart<T extends Block & ITileEntityProvider> extends ITileEntityProvider {
+public interface IAnimatablePartBlock extends ITileEntityProvider {
 
     PropertyBool ACTIVE = PropertyBool.create("active");
 
-    @SuppressWarnings("unchecked")
-    default T thisObject() {
-        return (T) this;
+    default Block thisObject() {
+        return (Block) this;
     }
 
     default String getGeoName() {
@@ -43,5 +44,9 @@ public interface IAnimatablePart<T extends Block & ITileEntityProvider> extends 
     @Override
     default TileEntity createNewTileEntity(@NotNull World worldIn, int meta) {
         return new AnimatablePartTileEntity();
+    }
+
+    default AxisAlignedBB getRenderBoundingBox(World world, BlockPos pos, int meta) {
+        return new AxisAlignedBB(pos);
     }
 }

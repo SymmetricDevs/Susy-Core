@@ -17,17 +17,17 @@ public class AnimatablePartRenderer extends FixedGeoBlockRenderer<AnimatablePart
 
         @Override
         public ResourceLocation getModelLocation(AnimatablePartTileEntity animatablePart) {
-            return animatablePart.getAnimatablePart().modelRL();
+            return animatablePart.getPartBlock().modelRL();
         }
 
         @Override
         public ResourceLocation getTextureLocation(AnimatablePartTileEntity animatablePart) {
-            return animatablePart.getAnimatablePart().textureRL();
+            return animatablePart.getPartBlock().textureRL();
         }
 
         @Override
         public ResourceLocation getAnimationFileLocation(AnimatablePartTileEntity animatablePart) {
-            return animatablePart.getAnimatablePart().animationRL();
+            return animatablePart.getPartBlock().animationRL();
         }
     }
 }

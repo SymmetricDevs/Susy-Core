@@ -32,29 +32,6 @@ public abstract class FixedGeoBlockRenderer<T extends TileEntity & IAnimatable> 
         this.render(te, x, y, z, partialTicks, destroyStage);
     }
 
-    public void render(T tile, double x, double y, double z, float partialTicks, int destroyStage) {
-        GeoModel model = this.modelProvider.getModel(this.modelProvider.getModelLocation(tile));
-        this.modelProvider.setLivingAnimations(tile, this.getUniqueID(tile));
-        int light = tile.getWorld().getCombinedLight(tile.getPos(), 0);
-        int lx = light % 65536;
-        int ly = light / 65536;
-        GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-        OpenGlHelper.setLightmapTextureCoords(3553, (float) lx, (float) ly);
-        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(x, y, z);
-        GlStateManager.translate(0.5, 0.5, 0.5);
-        this.rotateBlock(this.getFacing(tile));
-        Minecraft.getMinecraft().renderEngine.bindTexture(this.getTextureLocation(tile));
-        Color renderColor = this.getRenderColor(tile, partialTicks);
-        this.render(model, tile, partialTicks, (float) renderColor.getRed() / 255.0F, (float) renderColor.getGreen() / 255.0F, (float) renderColor.getBlue() / 255.0F, (float) renderColor.getAlpha() / 255.0F);
-        GlStateManager.popMatrix();
-    }
-
-    public AnimatedGeoModel<T> getGeoModelProvider() {
-        return this.modelProvider;
-    }
-
     static {
         AnimationController.addModelFetcher(object -> {
             if (object instanceof TileEntity tile) {
@@ -69,20 +46,15 @@ public abstract class FixedGeoBlockRenderer<T extends TileEntity & IAnimatable> 
         });
     }
 
-    private EnumFacing getFacing(T tile) {
-        IBlockState blockState = tile.getWorld().getBlockState(tile.getPos());
-        if (blockState.getPropertyKeys().contains(BlockHorizontal.FACING)) {
-            return blockState.getValue(BlockHorizontal.FACING);
-        } else {
-            return blockState.getPropertyKeys().contains(BlockDirectional.FACING) ? blockState.getValue(BlockDirectional.FACING) : EnumFacing.NORTH;
-        }
+    public static void setupLight(int light) {
+        int lx = light % 65536;
+        int ly = light / 65536;
+        GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+        OpenGlHelper.setLightmapTextureCoords(3553, (float) lx, (float) ly);
+        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
     }
 
-    public ResourceLocation getTextureLocation(T instance) {
-        return this.modelProvider.getTextureLocation(instance);
-    }
-
-    protected void rotateBlock(EnumFacing facing) {
+    public static void rotateBlock(EnumFacing facing) {
         switch (facing) {
             case SOUTH -> GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
             case WEST -> GlStateManager.rotate(90.0F, 0.0F, 1.0F, 0.0F);
@@ -93,5 +65,49 @@ public abstract class FixedGeoBlockRenderer<T extends TileEntity & IAnimatable> 
                 // No rotation needed for north
             }
         }
+    }
+
+    private EnumFacing getFacing(T tile) {
+        IBlockState blockState = tile.getWorld().getBlockState(tile.getPos());
+        if (blockState.getPropertyKeys().contains(BlockHorizontal.FACING)) {
+            return blockState.getValue(BlockHorizontal.FACING);
+        } else {
+            return blockState.getPropertyKeys().contains(BlockDirectional.FACING)
+                    ? blockState.getValue(BlockDirectional.FACING)
+                    : EnumFacing.NORTH;
+        }
+    }
+
+    @SuppressWarnings("DuplicatedCode")
+    public void render(T tile, double x, double y, double z, float partialTicks, int destroyStage) {
+        GeoModel model = this.modelProvider.getModel(this.modelProvider.getModelLocation(tile));
+        this.modelProvider.setLivingAnimations(tile, this.getUniqueID(tile));
+        setupLight(tile.getWorld().getCombinedLight(tile.getPos(), 0));
+        GlStateManager.pushMatrix();
+        {
+            GlStateManager.translate(x + 0.5, y + 0.5, z + 0.5);
+            rotateBlock(this.getFacing(tile));
+            Minecraft.getMinecraft().getTextureManager().bindTexture(this.getTextureLocation(tile));
+            Color renderColor = this.getRenderColor(tile, partialTicks);
+            this.render(
+                    model,
+                    tile,
+                    partialTicks,
+                    (float) renderColor.getRed() / 255.0F,
+                    (float) renderColor.getGreen() / 255.0F,
+                    (float) renderColor.getBlue() / 255.0F,
+                    (float) renderColor.getAlpha() / 255.0F);
+        }
+        GlStateManager.popMatrix();
+    }
+
+    @Override
+    public AnimatedGeoModel<T> getGeoModelProvider() {
+        return this.modelProvider;
+    }
+
+    @Override
+    public ResourceLocation getTextureLocation(T instance) {
+        return this.modelProvider.getTextureLocation(instance);
     }
 }

@@ -1,6 +1,10 @@
 package supersymmetry.common.tileentities;
 
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -9,7 +13,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
-import supersymmetry.api.blocks.IAnimatablePart;
+import supersymmetry.api.blocks.IAnimatablePartBlock;
 
 public class AnimatablePartTileEntity extends TileEntity implements IAnimatable {
 
@@ -37,10 +41,16 @@ public class AnimatablePartTileEntity extends TileEntity implements IAnimatable 
         return this.factory;
     }
 
-    public IAnimatablePart<?> getAnimatablePart() {
-        if (getBlockType() instanceof IAnimatablePart<?>) {
-            return (IAnimatablePart<?>) getBlockType();
+    public IAnimatablePartBlock getPartBlock() {
+        if (getBlockType() instanceof IAnimatablePartBlock) {
+            return (IAnimatablePartBlock) getBlockType();
         }
         throw new IllegalStateException("Block should implement IAnimatablePart!");
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public @NotNull AxisAlignedBB getRenderBoundingBox() {
+        return getPartBlock().getRenderBoundingBox(getWorld(), getPos(), getBlockMetadata());
     }
 }

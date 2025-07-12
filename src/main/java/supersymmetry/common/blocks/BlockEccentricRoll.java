@@ -25,7 +25,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import supersymmetry.api.blocks.IAnimatablePart;
+import supersymmetry.api.blocks.IAnimatablePartBlock;
 import supersymmetry.api.util.SuSyDamageSources;
 
 import javax.annotation.Nonnull;
@@ -33,7 +33,7 @@ import javax.annotation.Nonnull;
 import static gregtech.common.items.tool.rotation.CustomBlockRotations.BLOCK_DIRECTIONAL_BEHAVIOR;
 import static net.minecraft.block.BlockDirectional.FACING;
 
-public class BlockEccentricRoll extends VariantBlock<BlockEccentricRoll.RollType> implements IAnimatablePart<BlockEccentricRoll> {
+public class BlockEccentricRoll extends VariantBlock<BlockEccentricRoll.RollType> implements IAnimatablePartBlock {
 
     /// So that [#onEntityCollision(World, BlockPos, IBlockState, Entity)] works properly
     public static final AxisAlignedBB COLLISION_BOX = new AxisAlignedBB(0.05, 0.05, 0.05, 0.95, 0.95, 0.95);

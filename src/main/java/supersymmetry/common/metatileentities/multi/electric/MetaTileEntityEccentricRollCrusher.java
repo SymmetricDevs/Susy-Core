@@ -27,7 +27,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.blocks.IAnimatablePart;
+import supersymmetry.api.blocks.IAnimatablePartBlock;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockGrinderCasing;
@@ -236,7 +236,7 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
             World world = getWorld();
             for (BlockPos pos : ercRolls) {
                 IBlockState state = world.getBlockState(pos);
-                world.setBlockState(pos, state.withProperty(IAnimatablePart.ACTIVE, isActive));
+                world.setBlockState(pos, state.withProperty(IAnimatablePartBlock.ACTIVE, isActive));
             }
         }
     }
