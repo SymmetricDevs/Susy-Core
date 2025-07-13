@@ -200,14 +200,6 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
     }
 
     @Override
-    public void checkStructurePattern() {
-        if (!this.isStructureFormed()) {
-            reinitializeStructurePattern();
-        }
-        super.checkStructurePattern();
-    }
-
-    @Override
     public void invalidateStructure() {
         super.invalidateStructure();
         this.metalSheetIdentifier = -1;
@@ -215,7 +207,7 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
         World world = getWorld();
         if (world != null && !world.isRemote) {
             /// [GregtechDataCodes#UPDATE_COLOR] is only used for [MetaTileEntityFusionReactor]
-            /// At the moment, so this should be fine.
+            /// at the moment, so this should be fine.
             writeCustomData(GregtechDataCodes.UPDATE_COLOR,
                     buf -> buf.writeByte(metalSheetIdentifier));
         }
