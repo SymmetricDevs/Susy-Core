@@ -34,6 +34,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -361,8 +362,9 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip,
             boolean advanced) {
+        tooltip.add(TextFormatting.AQUA + I18n.format(this.getMetaName()+".tooltip.1"));
+        tooltip.add(I18n.format(this.getMetaName()+".tooltip.2"));
         super.addInformation(stack, world, tooltip, advanced);
-        tooltip.add(I18n.format(this.getMetaName()+".tooltip.1"));
     }
 
 
