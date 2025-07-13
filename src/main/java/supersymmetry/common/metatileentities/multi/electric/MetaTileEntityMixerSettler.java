@@ -362,8 +362,8 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip,
             boolean advanced) {
-        tooltip.add(TextFormatting.AQUA + I18n.format(this.getMetaName()+".tooltip.1"));
-        tooltip.add(I18n.format(this.getMetaName()+".tooltip.2"));
+        tooltip.add(I18n.format(this.getMetaName()+".tooltip.1"));
+        tooltip.add(TextFormatting.AQUA + I18n.format(this.getMetaName()+".tooltip.2"));
         super.addInformation(stack, world, tooltip, advanced);
     }
 
