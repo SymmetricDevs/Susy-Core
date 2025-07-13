@@ -18,12 +18,12 @@ public class BlockRenderManager {
     public static Set<BlockPos> modelDisabled = new ObjectOpenHashSet<>();
     public static Map<BlockPos, Collection<BlockPos>> multiDisabled = new HashMap<>();
 
-    public static void removeDisableModel(BlockPos controllerPos) {
+    public static void removeDisableModel(BlockPos controllerPos, boolean updateRendering) {
         Collection<BlockPos> poses = multiDisabled.remove(controllerPos);
         if (poses == null) return;
         modelDisabled.clear();
         multiDisabled.values().forEach(modelDisabled::addAll);
-        updateRenderChunk(poses);
+        if (updateRendering) updateRenderChunk(poses);
     }
 
     private static void updateRenderChunk(Collection<BlockPos> poses) {
@@ -43,10 +43,10 @@ public class BlockRenderManager {
         Minecraft.getMinecraft().world.markBlockRangeForRenderUpdate(new BlockPos(minX, minY, minZ), new BlockPos(maxX, maxY, maxZ));
     }
 
-    public static void addDisableModel(BlockPos controllerPos, Collection<BlockPos> poses) {
+    public static void addDisableModel(BlockPos controllerPos, Collection<BlockPos> poses, boolean updateRendering) {
         multiDisabled.put(controllerPos, poses);
         modelDisabled.addAll(poses);
-        updateRenderChunk(poses);
+        if (updateRendering) updateRenderChunk(poses);
     }
 
     public static boolean isModelDisabled(BlockPos pos) {
@@ -54,5 +54,10 @@ public class BlockRenderManager {
             return modelDisabled.contains(pos);
         }
         return false;
+    }
+
+    public static void clearDisabled() {
+        modelDisabled.clear();
+        multiDisabled.clear();
     }
 }

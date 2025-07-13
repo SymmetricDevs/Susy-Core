@@ -46,6 +46,8 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
     @SideOnly(Side.CLIENT)
     private AnimationFactory factory;
 
+    private List<BlockPos> hiddenBlocks;
+
     public MetaTileEntityBallMill(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap) {
         super(metaTileEntityId, recipeMap);
     }
@@ -134,13 +136,24 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
     @Override
     protected void formStructure(PatternMatchContext context) {
         super.formStructure(context);
+        this.hiddenBlocks = context.getOrDefault("Hidden", new ArrayList<>());
         World world = getWorld();
         if (world != null && !world.isRemote) {
-            List<BlockPos> hiddenBlocks = context.getOrDefault("Hidden", new ArrayList<>());
-            writeCustomData(SuSyDataCodes.DISABLE_RENDERING, buf -> {
-                buf.writeVarInt(hiddenBlocks.size());
-                for (BlockPos pos : hiddenBlocks) {
-                    buf.writeVarLong(pos.toLong());
+            disableBlockRendering(true);
+        }
+    }
+
+    protected void disableBlockRendering(boolean disable) {
+        if (hiddenBlocks != null && !hiddenBlocks.isEmpty()) {
+            int id = getWorld().provider.getDimension();
+
+            writeCustomData(SuSyDataCodes.UPDATE_BLOCK_RENDERING, buf -> {
+                buf.writeInt(id);
+                buf.writeBoolean(disable);
+                // Only write blockPoses into the packet when we're disabling the rendering
+                if (disable) {
+                    buf.writeInt(hiddenBlocks.size());
+                    hiddenBlocks.forEach(buf::writeBlockPos);
                 }
             });
         }
@@ -151,22 +164,31 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
         super.invalidateStructure();
         World world = getWorld();
         if (world != null && !world.isRemote) {
-            writeCustomData(SuSyDataCodes.REMOVE_DISABLE_RENDERING, buf -> { /* Do nothing */ });
+            disableBlockRendering(false);
         }
     }
 
+    @Override
+    public void writeInitialSyncData(PacketBuffer buf) {
+        super.writeInitialSyncData(buf);
+        disableBlockRendering(isStructureFormed()); // This is a bit ugly tho...
+    }
 
     @Override
     public void receiveCustomData(int dataId, PacketBuffer buf) {
-        if (dataId == SuSyDataCodes.DISABLE_RENDERING) {
-            List<BlockPos> hiddenBlocks = new ArrayList<>();
-            int size = buf.readVarInt();
-            for (int i = 0; i < size; i++) {
-                hiddenBlocks.add(BlockPos.fromLong(buf.readVarLong()));
+        if (dataId == SuSyDataCodes.UPDATE_BLOCK_RENDERING) {
+            boolean updateRendering = getWorld().provider.getDimension() == buf.readInt();
+            boolean disable = buf.readBoolean();
+            if (disable) {
+                List<BlockPos> hiddenBlocks = new ArrayList<>();
+                int size = buf.readInt();
+                for (int i = 0; i < size; i++) {
+                    hiddenBlocks.add(buf.readBlockPos());
+                }
+                BlockRenderManager.addDisableModel(getPos(), hiddenBlocks, updateRendering);
+            } else {
+                BlockRenderManager.removeDisableModel(getPos(), updateRendering);
             }
-            BlockRenderManager.addDisableModel(getPos(), hiddenBlocks);
-        } else if (dataId == SuSyDataCodes.REMOVE_DISABLE_RENDERING) {
-            BlockRenderManager.removeDisableModel(getPos());
         } else {
             super.receiveCustomData(dataId, buf);
         }
