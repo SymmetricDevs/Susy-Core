@@ -17,8 +17,7 @@ public class WorldSceneRendererMixin {
 
     @WrapOperation(method = "lambda$drawWorld$0",
             at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/block/Block;canRenderInLayer(Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/util/BlockRenderLayer;)Z",
-                    remap = true))
+                    target = "Lnet/minecraft/block/Block;canRenderInLayer(Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/util/BlockRenderLayer;)Z"))
     public boolean ignoreBlocked(Block block, IBlockState state, BlockRenderLayer layer, Operation<Boolean> method, @Local(name = "pos") BlockPos pos) {
         if (BlockRenderManager.modelDisabled.contains(pos)) {
             return false;
