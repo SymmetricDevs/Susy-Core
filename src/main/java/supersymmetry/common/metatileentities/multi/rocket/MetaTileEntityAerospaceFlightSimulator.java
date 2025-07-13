@@ -159,9 +159,9 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
 
     // meant to do like
     // comp name                #slot# #slot# #slot#
-    //                          ---------------#slider#--------------
-    // comp name but longer      | #slot# #slot# #slot# #slot# #slot# | #slot# #slot#
-    //                          =============visible part============
+    //                          ----------#slider#---------------------
+    // comp name but longer     |  #slot# #slot# #slot# #slot# #slot# | #slot# #slot#
+    //                          =============visible part==============
 
     container.RemoveSlotLists();
     if (generateComponentTree(blueprintStack)) {
@@ -232,13 +232,14 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     for (int i = 0; i < componentsList.tagCount(); i++) {
       NBTTagCompound comp = componentsList.getCompoundTagAt(i);
       List<DataStorageLoader> cardSlots = this.components.get(comp.getString("type"));
-      int count = (int)cardSlots.stream().map(x -> !x.isEmpty()).count();
-      if (Arrays.asList(comp.getIntArray("allowedCounts")).contains(count))
-        ;
+      int count = (int) cardSlots.stream().map(x -> !x.isEmpty()).count();
+      if (!Arrays.asList(comp.getIntArray("allowedCounts")).contains(count)) {
+        return false;
+      } // not sure how to make the warnings shut up, likely just did it incorrectly
     }
-    // for (Map.Entry<String,List<DataStorageLoader>> entry : this.components.entrySet()) {
-    //
-    //     }
+    for (Map.Entry<String,List<DataStorageLoader>> entry : this.components.entrySet()) {
+
+        }
 
     return false;
   }
