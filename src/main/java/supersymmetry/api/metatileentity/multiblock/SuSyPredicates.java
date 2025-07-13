@@ -18,6 +18,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Loader;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.SuSyValues;
@@ -233,5 +234,14 @@ public class SuSyPredicates {
         }, () -> new BlockInfo[]{new BlockInfo(SuSyBlocks.ECCENTRIC_ROLL.getDefaultState()
                 .withProperty(BlockDirectional.FACING, facing))}
         );
+    }
+
+    @NotNull
+    public static TraceabilityPredicate hideStates(IBlockState... allowedStates) {
+            return new TraceabilityPredicate(bws -> {
+                IBlockState state = bws.getBlockState();
+                bws.getMatchContext().getOrPut("Hidden", new LinkedList<>()).add(bws.getPos());
+                return ArrayUtils.contains(allowedStates, state);
+            }, () -> Arrays.stream(allowedStates).map(state -> new BlockInfo(state, null)).toArray(BlockInfo[]::new));
     }
 }

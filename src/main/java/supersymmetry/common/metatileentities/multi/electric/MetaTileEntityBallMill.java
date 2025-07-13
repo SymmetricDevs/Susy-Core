@@ -6,6 +6,7 @@ import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.util.RelativeDirection;
@@ -13,11 +14,13 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.*;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
@@ -28,8 +31,15 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.api.metatileentity.IAnimatableMTE;
+import supersymmetry.api.util.BlockRenderManager;
 import supersymmetry.client.renderer.textures.SusyTextures;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.hideStates;
 
 public class MetaTileEntityBallMill extends RecipeMapMultiblockController implements IAnimatableMTE {
 
@@ -109,16 +119,57 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
                         false, false, true,
                         true, false, false, false
                 )))
-                .where('H', states(getShellCasingState()))
-                .where('L', states(getShellLineState()))
+                .where('H', hideStates(getShellCasingState()))
+                .where('L', hideStates(getShellLineState()))
+                .where('G', hideStates(getGearState()))
                 .where('P', states(getEngineCasingState()))
                 .where('N', states(getGearBoxState()))
-                .where('G', states(getGearState()))
                 .where('X', frames(Materials.Steel))
                 .where('S', selfPredicate())
                 .where('#', air())
                 .where(' ', any())
                 .build();
+    }
+
+    @Override
+    protected void formStructure(PatternMatchContext context) {
+        super.formStructure(context);
+        World world = getWorld();
+        if (world != null && !world.isRemote) {
+            List<BlockPos> hiddenBlocks = context.getOrDefault("Hidden", new ArrayList<>());
+            writeCustomData(SuSyDataCodes.DISABLE_RENDERING, buf -> {
+                buf.writeVarInt(hiddenBlocks.size());
+                for (BlockPos pos : hiddenBlocks) {
+                    buf.writeVarLong(pos.toLong());
+                }
+            });
+        }
+    }
+
+    @Override
+    public void invalidateStructure() {
+        super.invalidateStructure();
+        World world = getWorld();
+        if (world != null && !world.isRemote) {
+            writeCustomData(SuSyDataCodes.REMOVE_DISABLE_RENDERING, buf -> { /* Do nothing */ });
+        }
+    }
+
+
+    @Override
+    public void receiveCustomData(int dataId, PacketBuffer buf) {
+        if (dataId == SuSyDataCodes.DISABLE_RENDERING) {
+            List<BlockPos> hiddenBlocks = new ArrayList<>();
+            int size = buf.readVarInt();
+            for (int i = 0; i < size; i++) {
+                hiddenBlocks.add(BlockPos.fromLong(buf.readVarLong()));
+            }
+            BlockRenderManager.addDisableModel(getPos(), hiddenBlocks);
+        } else if (dataId == SuSyDataCodes.REMOVE_DISABLE_RENDERING) {
+            BlockRenderManager.removeDisableModel(getPos());
+        } else {
+            super.receiveCustomData(dataId, buf);
+        }
     }
 
     @Override

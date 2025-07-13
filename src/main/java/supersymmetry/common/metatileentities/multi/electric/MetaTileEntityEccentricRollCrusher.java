@@ -183,6 +183,7 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
         this.rollOrientation = state == getGearBoxState() ? front : back;
     }
 
+    @Override
     protected void formStructure(PatternMatchContext context) {
         this.metalSheetIdentifier = context.get("MetalSheet");
 
