@@ -25,6 +25,8 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.BlockRenderLayer;
@@ -34,6 +36,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import supersymmetry.api.metatileentity.multiblock.FluidRenderRecipeMapMultiBlock;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.properties.MixerSettlerCellsProperty;
@@ -353,6 +357,12 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
             radius += 2;
         }
         return shapeInfo;
+    }
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip,
+            boolean advanced) {
+        super.addInformation(stack, world, tooltip, advanced);
+        tooltip.add(I18n.format(this.getMetaName()+".tooltip"));
     }
 
 
