@@ -25,10 +25,18 @@ public class TrackUtil {
         return null;
     }
 
-    public static TileRailBase nextRail(TileRail rail, boolean back) {
+    public static TileRail nextRail(TileRail rail, boolean back) {
         PosStep railEnd = getRailEnd(rail, back);
         Vec3i pos = new Vec3i(railEnd.add(VecUtil.fromYaw(1.0, railEnd.yaw)));
-        TileRailBase railBase = rail.getWorld().getBlockEntity(pos, TileRailBase.class);
+        //TileRailBase railBase = rail.getWorld().getBlockEntity(pos, TileRailBase.class);
+        TileRailBase railBase = rail.getWorld().getBlockEntity(new Vec3i(railEnd), TileRailBase.class);
+        return railBase == null ? null : railBase.getParentTile();
+    }
+
+    public static TileRail nextRail(TileRail rail, PosStep railEnd) {
+        Vec3i pos = new Vec3i(railEnd.add(VecUtil.fromYaw(1.0, railEnd.yaw)));
+        //TileRailBase railBase = rail.getWorld().getBlockEntity(pos, TileRailBase.class);
+        TileRailBase railBase = rail.getWorld().getBlockEntity(new Vec3i(railEnd), TileRailBase.class);
         return railBase == null ? null : railBase.getParentTile();
     }
 }

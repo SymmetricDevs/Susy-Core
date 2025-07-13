@@ -1,11 +1,9 @@
 package supersymmetry.integration.immersiverailroading.tracknet;
 
-import cam72cam.immersiverailroading.library.TrackItems;
 import cam72cam.immersiverailroading.tile.TileRail;
-import cam72cam.immersiverailroading.tile.TileRailBase;
-import cam72cam.mod.math.Vec3i;
 import gregtech.api.util.world.DummyWorld;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.WorldSavedData;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +20,9 @@ public class WorldTrackNet extends WorldSavedData {
 
     private static final String DATA_ID_BASE = "susy.track_net";
 
-    private Map<Vec3i, TrackSection> trackSectionByRailPos = new HashMap<>();
+    private Map<Vec3d, TrackNode> nodes = new HashMap<>();
+    private Map<TileRail, TrackSection> tileRailToTrackSection = new HashMap<>();
+
 
     public WorldTrackNet(String name) {
         super(name);
@@ -50,55 +50,75 @@ public class WorldTrackNet extends WorldSavedData {
 
     public void handleNewTrack(TileRail rail) {
 
-        // Is a switch
-        if (rail.findSwitchParent() != null) {
-            // When a switch is built,
-            if (rail.info.settings.type.equals(TrackItems.TURN)) {
-                return;
+        Vec3d frontPos = TrackUtil.getRailEnd(rail, false).internal();
+        Vec3d backPos = TrackUtil.getRailEnd(rail, true).internal();
+
+        TrackNode frontNode = nodes.get(frontPos);
+        TrackNode backNode = nodes.get(backPos);
+
+
+
+        if (frontNode != null && backNode != null && frontNode.mergeable() && backNode.mergeable()) {
+            TrackSection frontSection = frontNode.trackSections.get(0);
+            TrackSection backSection = backNode.trackSections.get(0);
+
+            TrackNode start = frontSection.oppositeNode(frontNode);
+            TrackNode end = backSection.oppositeNode(backNode);
+
+            TrackSection merged = new TrackSection(start, end);
+            merged.rails.addAll(frontSection.rails);
+            merged.rails.add(rail);
+            merged.rails.addAll(backSection.rails);
+
+            nodes.remove(frontPos);
+            nodes.remove(backPos);
+            start.trackSections.remove(frontSection);
+            end.trackSections.remove(backSection);
+            for (TileRail r :
+                    merged.rails) {
+                tileRailToTrackSection.put(r, merged);
             }
 
-            return;
+            start.trackSections.add(merged);
+            end.trackSections.add(merged);
+        } else if (frontNode != null && frontNode.mergeable()) {
+            TrackSection section = frontNode.trackSections.get(0);
+            section.rails.add(rail);
+            tileRailToTrackSection.put(rail, section);
+
+            frontNode.setPosition(backPos);
+            nodes.remove(frontPos);
+            nodes.put(backPos, frontNode);
+        } else if (backNode != null && backNode.mergeable()) {
+            TrackSection section = backNode.trackSections.get(0);
+            section.rails.add(rail);
+            tileRailToTrackSection.put(rail, section);
+
+            backNode.setPosition(frontPos);
+            nodes.remove(backPos);
+            nodes.put(frontPos, backNode);
+        } else if(backNode == null && frontNode == null) {
+            frontNode = new TrackNode(frontPos);
+            backNode = new TrackNode(backPos);
+
+            TrackSection newSection = new TrackSection(frontNode, backNode);
+            frontNode.trackSections.add(newSection);
+            backNode.trackSections.add(newSection);
+
+            nodes.put(frontPos, frontNode);
+            nodes.put(backPos, backNode);
+
+            tileRailToTrackSection.put(rail, newSection);
+            newSection.rails.add(rail);
+
         }
 
-        TileRailBase frontRail = TrackUtil.nextRail(rail, false);
-        TileRailBase backRail = TrackUtil.nextRail(rail, true);
-
-
-        if(frontRail == null && backRail == null) {
-            TrackSection newSection = new TrackSection(rail);
-            trackSectionByRailPos.put(rail.getPos(), newSection);
-            return;
-        }
-
-        TrackSection frontSection = null;
-
-        if (frontRail != null) {
-            frontSection = trackSectionByRailPos.get(frontRail.getPos());
-        }
-
-        if (backRail != null) {
-            TrackSection backSection = trackSectionByRailPos.get(backRail.getPos());
-            if (frontSection != null) {
-                frontSection.merge(backSection, rail);
-                trackSectionByRailPos.put(rail.getPos(), frontSection);
-                replaceSection(backSection, frontSection);
-            } else {
-                trackSectionByRailPos.put(rail.getPos(), backSection);
-            }
-        } else {
-            trackSectionByRailPos.put(rail.getPos(), frontSection);
-        }
 
     }
 
     public void handleTrackRemoved(TileRail rail) {
 
     }
-
-    public void replaceSection(TrackSection oldSection, TrackSection newSection) {
-        trackSectionByRailPos.replaceAll((pos, section) -> section == oldSection ? newSection : section);
-    }
-
     public static WorldTrackNet getWorldTrackNet(World world) {
         String DATA_ID = getDataID(DATA_ID_BASE, world);
         if (world instanceof DummyWorld) return null;
