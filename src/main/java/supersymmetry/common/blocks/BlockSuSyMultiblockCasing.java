@@ -5,9 +5,13 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
@@ -26,6 +30,24 @@ public class BlockSuSyMultiblockCasing extends VariantBlock<BlockSuSyMultiblockC
     @Override
     public boolean canCreatureSpawn(@Nonnull IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull EntityLiving.SpawnPlacementType type) {
         return false;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean canRenderInLayer(@NotNull IBlockState state, @NotNull BlockRenderLayer layer) {
+        if (state.getValue(VARIANT) == CasingType.COALESCENCE_PLATE) {
+            return layer == BlockRenderLayer.CUTOUT;
+        }
+        return super.canRenderInLayer(state, layer);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean isOpaqueCube(@NotNull IBlockState state) {
+        if (state.getValue(VARIANT) == CasingType.COALESCENCE_PLATE) {
+            return false;
+        }
+        return super.isOpaqueCube(state);
     }
 
     public enum CasingType implements IStringSerializable {
