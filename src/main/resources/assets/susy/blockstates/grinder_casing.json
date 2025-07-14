@@ -19,6 +19,24 @@
         "textures" : {
           "all" : "gregtech:blocks/casings/grinder_casing/hydraulic_mechanical_gearbox"
         }
+      },
+      "wear_resistant_lined_mill_shell" : {
+        "model" : "minecraft:cube_all",
+        "textures" : {
+          "all" : "gregtech:blocks/casings/grinder_casing/wear_resistant_lined_mill_shell"
+        }
+      },
+      "wear_resistant_lined_shell_head" : {
+        "model" : "minecraft:cube_all",
+        "textures" : {
+          "all" : "gregtech:blocks/casings/grinder_casing/wear_resistant_lined_shell_head"
+        }
+      },
+      "intermediate_diaphragm" : {
+        "model" : "minecraft:cube_all",
+        "textures" : {
+          "all" : "gregtech:blocks/casings/grinder_casing/intermediate_diaphragm"
+        }
       }
     }
   }

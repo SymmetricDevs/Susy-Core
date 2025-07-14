@@ -109,6 +109,8 @@ public class SusyTextures {
             "logistics/overlay_strand_bus");
 
     public static final SimpleCubeRenderer MASONRY_BRICK = new SimpleCubeRenderer("gregtech:blocks/multiblock_casing/masonry_brick");
+    public static final SimpleCubeRenderer BALL_MILL_SHELL =
+            new SimpleCubeRenderer("gregtech:blocks/casings/grinder_casing/wear_resistant_lined_mill_shell");
 
     public static final DrumRenderer PLASTIC_CAN = new DrumRenderer("storage/drums/plastic_can");
 

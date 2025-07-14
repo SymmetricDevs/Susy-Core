@@ -53,6 +53,7 @@ public class SuSyBlocks {
     public static BlockRegolith REGOLITH;
     public static BlockEccentricRoll ECCENTRIC_ROLL;
     public static BlockGrinderCasing GRINDER_CASING;
+    public static BlockGirthGearTooth GIRTH_GEAR_TOOTH;
 
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
@@ -150,6 +151,9 @@ public class SuSyBlocks {
         GRINDER_CASING = new BlockGrinderCasing();
         GRINDER_CASING.setRegistryName("grinder_casing");
 
+        GIRTH_GEAR_TOOTH = new BlockGirthGearTooth();
+        GIRTH_GEAR_TOOTH.setRegistryName("girth_gear_tooth");
+
         SuSyTileEntities.register();
     }
 
@@ -187,6 +191,7 @@ public class SuSyBlocks {
         registerItemModel(REGOLITH);
         registerItemModel(ECCENTRIC_ROLL);
         registerItemModel(GRINDER_CASING);
+        registerItemModel(GIRTH_GEAR_TOOTH);
     }
 
     @SideOnly(Side.CLIENT)

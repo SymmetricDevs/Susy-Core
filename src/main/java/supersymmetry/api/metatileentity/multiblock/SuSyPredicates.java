@@ -22,6 +22,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.SuSyValues;
+import supersymmetry.api.blocks.VariantAxialRotatableBlock;
 import supersymmetry.common.blocks.*;
 
 import java.util.Arrays;
@@ -237,11 +238,34 @@ public class SuSyPredicates {
     }
 
     @NotNull
-    public static TraceabilityPredicate hideStates(IBlockState... allowedStates) {
+    public static TraceabilityPredicate hiddenStates(IBlockState... allowedStates) {
             return new TraceabilityPredicate(bws -> {
                 IBlockState state = bws.getBlockState();
                 bws.getMatchContext().getOrPut("Hidden", new LinkedList<>()).add(bws.getPos());
                 return ArrayUtils.contains(allowedStates, state);
             }, () -> Arrays.stream(allowedStates).map(state -> new BlockInfo(state, null)).toArray(BlockInfo[]::new));
+    }
+
+    @NotNull
+    public static TraceabilityPredicate hiddenGearTooth(EnumFacing.Axis axis) {
+
+        return new TraceabilityPredicate(bws -> {
+            IBlockState state = bws.getBlockState();
+            if (state.getBlock() instanceof BlockGirthGearTooth) {
+
+                if (state.getValue(VariantAxialRotatableBlock.AXIS) != axis) {
+                    World world = bws.getWorld();
+                    BlockPos pos = bws.getPos();
+                    world.setBlockState(pos, state.withProperty(VariantAxialRotatableBlock.AXIS, axis));
+                }
+
+                bws.getMatchContext().getOrPut("Hidden", new LinkedList<>()).add(bws.getPos());
+                return true;
+            }
+            return false;
+            // Supplies an eccentric roll with the correct direction
+        }, () -> new BlockInfo[]{new BlockInfo(SuSyBlocks.GIRTH_GEAR_TOOTH.getDefaultState()
+                .withProperty(VariantAxialRotatableBlock.AXIS, axis))}
+        );
     }
 }

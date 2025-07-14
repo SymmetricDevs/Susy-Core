@@ -31,8 +31,8 @@ import net.minecraftforge.registries.IForgeRegistry;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.Supersymmetry;
-import supersymmetry.api.blocks.VariantItemBlockFalling;
 import supersymmetry.api.SusyLog;
+import supersymmetry.api.blocks.VariantItemBlockFalling;
 import supersymmetry.api.event.MobHordeEvent;
 import supersymmetry.api.fluids.SusyGeneratedFluidHandler;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
@@ -43,10 +43,10 @@ import supersymmetry.common.blocks.SuSyMetaBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.materials.SusyMaterials;
-import supersymmetry.common.world.biome.BiomeLunarMaria;
+import supersymmetry.common.world.SuSyBiomes;
 import supersymmetry.common.world.SuSyDimensions;
 import supersymmetry.common.world.biome.BiomeLunarHighlands;
-import supersymmetry.common.world.SuSyBiomes;
+import supersymmetry.common.world.biome.BiomeLunarMaria;
 import supersymmetry.loaders.SuSyWorldLoader;
 import supersymmetry.loaders.SusyOreDictionaryLoader;
 import supersymmetry.loaders.recipes.SuSyRecipeLoader;
@@ -158,6 +158,7 @@ public class CommonProxy {
         registry.register(SuSyBlocks.REGOLITH);
         registry.register(SuSyBlocks.ECCENTRIC_ROLL);
         registry.register(SuSyBlocks.GRINDER_CASING);
+        registry.register(SuSyBlocks.GIRTH_GEAR_TOOTH);
 
         SHEETED_FRAMES.values().stream().distinct().forEach(registry::register);
     }
@@ -199,6 +200,7 @@ public class CommonProxy {
         registry.register(createItemBlock(SuSyBlocks.REGOLITH, VariantItemBlockFalling::new));
         registry.register(createItemBlock(SuSyBlocks.ECCENTRIC_ROLL, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.GRINDER_CASING, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.GIRTH_GEAR_TOOTH, VariantItemBlock::new));
 
         SHEETED_FRAMES.values()
                 .stream().distinct()

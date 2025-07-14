@@ -2,7 +2,9 @@ package supersymmetry.common.metatileentities.multi.electric;
 
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.api.metatileentity.multiblock.IMultiblockAbilityPart;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
+import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
@@ -12,7 +14,9 @@ import gregtech.api.unification.material.Materials;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
-import gregtech.common.blocks.*;
+import gregtech.common.blocks.BlockMetalCasing;
+import gregtech.common.blocks.BlockTurbineCasing;
+import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
@@ -35,11 +39,14 @@ import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.api.metatileentity.IAnimatableMTE;
 import supersymmetry.api.util.BlockRenderManager;
 import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.blocks.BlockGrinderCasing;
+import supersymmetry.common.blocks.SuSyBlocks;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.hideStates;
+import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.hiddenGearTooth;
+import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.hiddenStates;
 
 public class MetaTileEntityBallMill extends RecipeMapMultiblockController implements IAnimatableMTE {
 
@@ -60,31 +67,16 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
         return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID);
     }
 
-    // Placeholder
-    private static IBlockState getGearState() {
-        return MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.POLYTETRAFLUOROETHYLENE_PIPE);
-    }
-
-    // Placeholder
     private static IBlockState getShellCasingState() {
-        return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID);
+        return SuSyBlocks.GRINDER_CASING.getState(BlockGrinderCasing.Type.WEAR_RESISTANT_LINED_MILL_SHELL);
     }
 
-    // Placeholder
-    // How should I call this???
-    private static IBlockState getShellLineState() {
-        return MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE);
+    private static IBlockState getShellHeadState() {
+        return SuSyBlocks.GRINDER_CASING.getState(BlockGrinderCasing.Type.WEAR_RESISTANT_LINED_SHELL_HEAD);
     }
 
-    // Placeholder
-    // How should I call this???
-    private static IBlockState getShellEndState() {
-        return MetaBlocks.BOILER_FIREBOX_CASING.getState(BlockFireboxCasing.FireboxCasingType.STEEL_FIREBOX);
-    }
-
-    // Placeholder
-    private static IBlockState getEngineCasingState() {
-        return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.PTFE_INERT_CASING);
+    private static IBlockState getDiaphragmState() {
+        return SuSyBlocks.GRINDER_CASING.getState(BlockGrinderCasing.Type.INTERMEDIATE_DIAPHRAGM);
     }
 
     @Override
@@ -99,32 +91,42 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
     }
 
     @Override
-    public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
+    @SideOnly(Side.CLIENT)
+    public ICubeRenderer getBaseTexture(IMultiblockPart part) {
+        if (part instanceof IMultiblockAbilityPart<?> abilityPart) {
+            var ability = abilityPart.getAbility();
+            if (ability != MultiblockAbility.MAINTENANCE_HATCH && ability != MultiblockAbility.INPUT_ENERGY) {
+                return SusyTextures.BALL_MILL_SHELL;
+            }
+        }
         return Textures.SOLID_STEEL_CASING;
     }
 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
+        var shell = states(getShellCasingState());
+
         return FactoryBlockPattern.start()
-                .aisle("XXXXXXXXXXXX", "            ", "            ", " G          ", " G          ", " G          ", "            ", "            ")
-                .aisle("X          X", "            ", " G          ", " LHHLHHLHHL ", " LHHLHHLHHL ", " LHHLHHLHHL ", " G          ", "            ")
-                .aisle("X          X", "PG         X", "PLHHLHHLHHLX", "PH########HX", "PH########HX", "PH########H ", " LHHLHHLHHL ", " G          ")
-                .aisle("X          X", " G          ", " LHHLHHLHHL ", "PH########H ", "I##########I", "PH########H ", " LHHLHHLHHL ", " G          ")
-                .aisle("X          X", "PG         X", "PLHHLHHLHHLX", "PH########HX", "PH########HX", "PH########H ", " LHHLHHLHHL ", " G          ")
-                .aisle("X          X", "            ", " G          ", " LHHLHHLHHL ", " LHHLHHLHHL ", " LHHLHHLHHL ", " G          ", "            ")
-                .aisle("XMMMXXXXXXXX", " NSM        ", "            ", " G          ", " G          ", " G          ", "            ", "            ")
+                .aisle(" XMMMXXXXXXXX", "  NMM        ", "             ", "  G          ", "  G          ", "  G          ", "             ", "             ")
+                .aisle(" X          X", "             ", "  G          ", "  HCCCCCCCCH ", "  HCCCCCCCCH ", "  HCCCCCCCCH ", "  G          ", "             ")
+                .aisle(" X          X", " XG         X", " XHCCCCCCCCHX", " XH#####D##HX", " XH#####D##HX", " XH#####D##H ", "  HCCCCCCCCH ", "  G          ")
+                .aisle(" X          X", "  G          ", "  HCCCCCCCCH ", "OXH#####D##H ", "AA######D###Y", "ZXH#####D##HI", "  HCCCCCCCCH ", "  G          ")
+                .aisle(" X          X", " XG         X", " XHCCCCCCCCHX", " XH#####D##HX", " XH#####D##HX", " XH#####D##H ", "  HCCCCCCCCH ", "  G          ")
+                .aisle(" X          X", "             ", "  G          ", "  HCCCCCCCCH ", "  HCCCCCCCCH ", "  HCCCCCCCCH ", "  G          ", "             ")
+                .aisle(" XMMMXXXXXXXX", "  NSM        ", "             ", "  G          ", "  G          ", "  G          ", "             ", "             ")
                 .where('M', states(getCasingState()).or(autoAbilities(
                         true, true, false,
                         false, false, false, false
                 )))
-                .where('I', states(getCasingState()).or(autoAbilities(
-                        false, false, true,
-                        true, false, false, false
-                )))
-                .where('H', hideStates(getShellCasingState()))
-                .where('L', hideStates(getShellLineState()))
-                .where('G', hideStates(getGearState()))
-                .where('P', states(getEngineCasingState()))
+                .where('Y', abilities(MultiblockAbility.IMPORT_ITEMS).or(shell))
+                .where('Z', abilities(MultiblockAbility.EXPORT_FLUIDS).or(shell))
+                .where('I', abilities(MultiblockAbility.IMPORT_ITEMS).or(shell))
+                .where('O', abilities(MultiblockAbility.EXPORT_ITEMS).or(shell))
+                .where('A', states(getShellCasingState()))
+                .where('C', hiddenStates(getShellCasingState()))
+                .where('H', hiddenStates(getShellHeadState()))
+                .where('D', hiddenStates(getDiaphragmState()))
+                .where('G', hiddenGearTooth(getFrontFacing().rotateYCCW().getAxis()))
                 .where('N', states(getGearBoxState()))
                 .where('X', frames(Materials.Steel))
                 .where('S', selfPredicate())
@@ -214,6 +216,7 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
         return new AxisAlignedBB(v1, v2);
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public Vec3i getTransformation() {
         EnumFacing front = getFrontFacing();
@@ -250,6 +253,7 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
         return this.factory;
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void renderMetaTileEntity(double x, double y, double z, float partialTicks) {
         if (isStructureFormed()) {
