@@ -370,7 +370,8 @@ susy.machine.primitive_item_export.name=Primitive Item Export Bus
 susy.machine.primitive_item_export.tooltip=Only for use with the Primitive Smelter
 susy.machine.mixer_settler.name=Mixer Settler
 susy.machine.mixer_settler.tooltip=First it mixes, then it settles... - Sun Tzu, The Art of SuSy
-susy.machine.mixer_settler.tooltip.1=Can work up to 2x faster with more cells
+susy.machine.mixer_settler.tooltip.1=The initial structure contains 2 cells, each expansion adds 2 more
+susy.machine.mixer_settler.tooltip.2=Can work up to 2x faster with more cells
 
 
 susy.machine.parallel_pure=Can parallel to output up to §b%d§r§7 items at once
