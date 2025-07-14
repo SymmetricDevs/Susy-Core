@@ -134,7 +134,6 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
                 .build();
     }
 
-    @SuppressWarnings("DataFlowIssue")
     @Override
     public List<MultiblockShapeInfo> getMatchingShapes() {
         ArrayList<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
