@@ -1,11 +1,5 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.pipeline.ColourMultiplier;
-import codechicken.lib.render.pipeline.IVertexOperation;
-import codechicken.lib.vec.Matrix4;
-import codechicken.lib.vec.Vector3;
-import codechicken.lib.vec.uv.IconTransformation;
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -18,23 +12,25 @@ import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.recipes.recipeproperties.IRecipePropertyStorage;
 import gregtech.api.unification.material.Materials;
-import gregtech.api.util.GTUtility;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
-import gregtech.common.blocks.*;
+import gregtech.common.blocks.BlockBoilerCasing;
+import gregtech.common.blocks.BlockMetalCasing;
+import gregtech.common.blocks.BlockTurbineCasing;
+import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.metatileentity.multiblock.FluidRenderRecipeMapMultiBlock;
+import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.properties.MixerSettlerCellsProperty;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
@@ -44,9 +40,6 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import static supersymmetry.api.metatileentity.multiblock.FluidRenderRecipeMapMultiBlock.CHANGE_FLUID_RENDER_STATUS;
-import static supersymmetry.api.metatileentity.multiblock.FluidRenderRecipeMapMultiBlock.UPDATE_FLUID_INFO;
 
 public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
     public static final int MIN_RADIUS = 4;
@@ -353,6 +346,13 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
             radius += 2;
         }
         return shapeInfo;
+    }
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip,
+            boolean advanced) {
+        super.addInformation(stack, world, tooltip, advanced);
+        tooltip.add(TextFormatting.AQUA + I18n.format("susy.machine.mixer_settler.tooltip.1"));
+        tooltip.add(TextFormatting.AQUA + I18n.format("susy.machine.mixer_settler.tooltip.2"));
     }
 
 
