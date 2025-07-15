@@ -77,7 +77,7 @@
       }
     },
     "variant=coalescence_plate" : {
-      "model" : "minecraft:cube_all",
+      "model" : "susy:cube_with_inner",
       "textures" : {
         "all" : "gregtech:blocks/multiblock_casing/coalescence_plate"
       }

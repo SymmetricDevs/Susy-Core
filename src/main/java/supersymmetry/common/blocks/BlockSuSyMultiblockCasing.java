@@ -50,6 +50,16 @@ public class BlockSuSyMultiblockCasing extends VariantBlock<BlockSuSyMultiblockC
         return super.isOpaqueCube(state);
     }
 
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public int getLightOpacity(@NotNull IBlockState state) {
+        if (state.getValue(VARIANT) == CasingType.COALESCENCE_PLATE) {
+            return 3; // Some random number IDK
+        }
+        return super.getLightOpacity(state);
+    }
+
     public enum CasingType implements IStringSerializable {
 
         SILICON_CARBIDE_CASING("silicon_carbide_casing"),
