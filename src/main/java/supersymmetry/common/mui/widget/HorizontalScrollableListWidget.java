@@ -7,7 +7,6 @@ import gregtech.api.gui.widgets.AbstractWidgetGroup;
 import gregtech.api.util.Position;
 import gregtech.api.util.Size;
 import gregtech.client.utils.RenderUtil;
-import java.awt.*;
 import net.minecraft.util.math.MathHelper;
 
 /** basically ScrollableListWidget but horizontal, mostly a copy */
@@ -50,7 +49,8 @@ public class HorizontalScrollableListWidget extends AbstractWidgetGroup {
   private boolean isOnScrollPane(int mouseX, int mouseY) {
     Position pos = getPosition();
     Size size = getSize();
-    return isMouseOver(pos.x, pos.y - scrollPaneWidth, size.width, scrollPaneWidth, mouseX, mouseY);
+    return isMouseOver(pos.x, pos.y - scrollPaneWidth, size.width, scrollPaneWidth, mouseX, mouseY)
+        && this.sliderActive;
   }
 
   @Override
@@ -105,7 +105,7 @@ public class HorizontalScrollableListWidget extends AbstractWidgetGroup {
               : scrollOffset / (maxScrollOffset * 1.0f); // whoever made this uhhh,
       // i dont think maxScrollOffset is ever gonna be == 0 ? or maybe im just oopid (most likely)
       int scrollSliderX = Math.round(position.x + size.width * scrollPercent);
-      GuiTextures.SLIDER_ICON.draw(scrollSliderX, scrollSliderY+1, paneSize - 4, paneSize - 2);
+      GuiTextures.SLIDER_ICON.draw(scrollSliderX, scrollSliderY + 1, paneSize - 4, paneSize - 2);
     } else {
       paneSize = 0;
     }

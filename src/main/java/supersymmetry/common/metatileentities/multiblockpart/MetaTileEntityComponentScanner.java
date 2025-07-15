@@ -23,7 +23,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -43,7 +42,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import org.jetbrains.annotations.Nullable;
 
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.capability.impl.ScannerLogic;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.api.util.StructAnalysis;
@@ -61,8 +59,6 @@ import java.util.stream.Collectors;
 import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
 import static supersymmetry.common.blocks.SuSyBlocks.TANK_SHELL;
 import static supersymmetry.common.blocks.SuSyBlocks.TANK_SHELL1;
-import static supersymmetry.common.blocks.SuSyBlocks.susyBlocks;
-import static supersymmetry.common.blocks.SuSyBlocks.*;
 
 public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart implements ICleanroomReceiver, IWorkable {
     private final ScannerLogic scannerLogic;
@@ -833,6 +829,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         }
     }
 
+    @Override
     public void receiveCustomData(int dataId, PacketBuffer buf) {
         super.receiveCustomData(dataId, buf);
         if (dataId == GregtechDataCodes.LOCK_OBJECT_HOLDER) {

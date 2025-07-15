@@ -1,5 +1,6 @@
 package supersymmetry.common.metatileentities.multi.rocket;
 
+import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.Widget;
@@ -29,6 +30,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.util.Constants;
@@ -38,7 +40,7 @@ import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.mui.widget.HorizontalScrollableListWidget;
 import supersymmetry.common.mui.widget.RocketSimulatorComponentContainerWidget;
-import supersymmetry.common.mui.widget.SlotWidgetAdvanced;
+import supersymmetry.common.mui.widget.SlotWidgetBlueprintContainer;
 
 public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDisplayBase {
   public DataStorageLoader master_blueprint = null;
@@ -130,13 +132,17 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
 
     builder.widget(mainWindow);
     builder.widget(
-        new SlotWidgetAdvanced(
+        new SlotWidgetBlueprintContainer(
                 master_blueprint,
                 0,
                 width / 2,
                 height / 2,
+                // this is called on SlotChanged
                 () -> {
-                  drawComponentTree(10, 25, master_blueprint.getStackInSlot(0), mainWindow);
+                  drawComponentTree(0, 0, master_blueprint.getStackInSlot(0), mainWindow);
+                },
+                // this is called on detectAndSendChanges
+                () -> {
                   master_blueprint.setLocked(
                       components.values().stream()
                           .flatMap(List::stream)
@@ -146,8 +152,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 })
             .setBackgroundTexture(GuiTextures.SLOT_DARK));
 
-    SusyLog.logger.info("gui drawn");
-
     return builder;
   }
 
@@ -156,6 +160,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
       int startY,
       ItemStack blueprintStack,
       RocketSimulatorComponentContainerWidget container) {
+        SusyLog.logger.info("received container with pos {}",container.getPosition());
 
     // meant to do like
     // comp name                #slot# #slot# #slot#
@@ -167,15 +172,19 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     if (generateComponentTree(blueprintStack)) {
       for (Map.Entry<String, List<DataStorageLoader>> entry : this.components.entrySet()) {
         String text = entry.getKey();
-        var list = new HorizontalScrollableListWidget(startX, startY, 18 * 5 + 5, 20);
-        list.setSliderActive(entry.getValue().size() > 5);
+        var slotContainer = new HorizontalScrollableListWidget(startX, startY, 18 * 5 + 5, 20); //this is the thing that
+                //has the slider, and contains the slots. 
+        slotContainer.setSliderActive(entry.getValue().size() > 5);
         for (DataStorageLoader slot : entry.getValue()) {
-          // position will get changed in the .addSlotList thing later anyways
-          list.addWidget(new SlotWidget(slot, 0, 1, 1).setBackgroundTexture(GuiTextures.SLOT_DARK));
+          // position will get changed in the .addSlotList lotContainer later anyways
+          slotContainer.addWidget(new SlotWidget(slot, 0, 1, 1).setBackgroundTexture(GuiTextures.SLOT_DARK));
         }
+                SusyLog.logger.info("position before... {}",container.getPosition());
         container.addSlotList(
             new LabelWidget(0, 0, "susy.machine.rocket_simulator.component." + text, 0xFFFFFF),
-            list);
+            slotContainer);
+
+        SusyLog.logger.info("position after... {}", slotContainer.getPosition());
       }
     }
   }
@@ -237,9 +246,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         return false;
       } // not sure how to make the warnings shut up, likely just did it incorrectly
     }
-    for (Map.Entry<String,List<DataStorageLoader>> entry : this.components.entrySet()) {
-
-        }
+    for (Map.Entry<String, List<DataStorageLoader>> entry : this.components.entrySet()) {}
 
     return false;
   }
@@ -264,6 +271,14 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
           x.setTag("components", components);
           return x;
         });
+  }
+
+  @Override
+  public void receiveCustomData(int dataId, PacketBuffer buf) {
+    super.receiveCustomData(dataId, buf);
+    if (dataId == GregtechDataCodes.LOCK_OBJECT_HOLDER) {
+      master_blueprint.setLocked(buf.readBoolean());
+    }
   }
 
   @Override
