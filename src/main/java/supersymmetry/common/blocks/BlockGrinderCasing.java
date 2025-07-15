@@ -52,6 +52,15 @@ public class BlockGrinderCasing extends VariantBlock<BlockGrinderCasing.Type> {
         return super.isOpaqueCube(state);
     }
 
+    @Override
+    @SuppressWarnings("deprecation")
+    public int getLightOpacity(@NotNull IBlockState state) {
+        if (state.getValue(VARIANT) == Type.INTERMEDIATE_DIAPHRAGM) {
+            return 3; // Some random number IDK
+        }
+        return super.getLightOpacity(state);
+    }
+
     public enum Type implements IStringSerializable {
 
         ABRASION_RESISTANT_CASING("abrasion_resistant_casing"),

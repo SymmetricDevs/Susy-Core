@@ -33,7 +33,7 @@
         }
       },
       "intermediate_diaphragm" : {
-        "model" : "minecraft:cube_all",
+        "model" : "susy:cube_with_inner",
         "textures" : {
           "all" : "gregtech:blocks/casings/grinder_casing/intermediate_diaphragm"
         }
