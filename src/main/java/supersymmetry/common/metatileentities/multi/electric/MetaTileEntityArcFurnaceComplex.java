@@ -51,7 +51,7 @@ public class MetaTileEntityArcFurnaceComplex extends MetaTileEntityAdvancedArcFu
                 .aisle(" AAAAA   AAAAA ", "AABBBAA AABBBAA", "AB###BA AB###BA", "EB###BE EB###BE", "A#C#C#A A#C#C#A", "E#C#C#E E#C#C#E", "A#C#C#A A#C#C#A", " ACACA   ACACA ", "  C C     C C  ", "  C C     C C  ", " ACACA   ACACA ", "  C C     C C  ")
                 .aisle(" AAAAA   AAAAA ", "AABBBAA AABBBAA", "AB###BA AB###BA", "EB###BE EB###BE", "A#####A A#####A", "E#####E E#####E", "A#####A A#####A", " AAAAA   AAAAA ", "               ", "               ", " AAAAA   AAAAA ", "               ")
                 .aisle(" AAAAA   AAAAA ", "AABBBAA AABBBAA", "AB###BA AB###BA", "EB###BE EB###BE", "A##C##A A##C##A", "E##C##E E##C##E", "A##C##A A##C##A", " AACAA   AACAA ", "   C       C   ", "   C       C   ", "  ACA     ACA  ", "   C       C   ")
-                .aisle("  AAA     AAA  ", " AAAAA   AAAAA ", " ABBBA   ABBBA ", " EBBBE   EBBBE ", " ABBBA   ABBBA ", " E###E   E###E ", " A###A   A###A ", "  AAA     AAA  ", "               ", "               ", "  A A     A A  ", "               ")
+                .aisle("  AAA     AAA  ", " AAAAA   AAAAA ", " ABBBA   ABBBA ", " EBBBE   EBBBE ", " A###A   A###A ", " E###E   E###E ", " A###A   A###A ", "  AAA     AAA  ", "               ", "               ", "  A A     A A  ", "               ")
                 .aisle("      HHH      ", "  AAA FHF AAA  ", "  AAA  F  AAA  ", "  EEE     EEE  ", "  AAA     AAA  ", "  EEE     EEE  ", "  AAA     AAA  ", "  FFF     FFF  ", "  FFF     FFF  ", "  FFF     FFF  ", "  DDD     DDD  ", "               ")
                 .aisle("      HHH      ", "      HHH      ", "      FFF      ", "       F       ", "       F       ", "       F       ", "       F       ", "  FFFFFFFFFFF  ", "               ", "               ", "               ", "               ")
                 .aisle("      HHH      ", "  AAA FSF AAA  ", "  AAA  F  AAA  ", "  EEE     EEE  ", "  AAA     AAA  ", "  EEE     EEE  ", "  AAA     AAA  ", "  FFF     FFF  ", "  FFF     FFF  ", "  FFF     FFF  ", "  DDD     DDD  ", "               ")
@@ -59,7 +59,7 @@ public class MetaTileEntityArcFurnaceComplex extends MetaTileEntityAdvancedArcFu
                 .aisle(" AAAAA   AAAAA ", "AABBBAA AABBBAA", "AB###BA AB###BA", "EB###BE EB###BE", "A##C##A A##C##A", "E##C##E E##C##E", "A##C##A A##C##A", " AACAA   AACAA ", "   C       C   ", "   C       C   ", " AACAA   AACAA ", "   C       C   ")
                 .aisle(" AAAAA   AAAAA ", "AABBBAA AABBBAA", "AB###BA AB###BA", "EB###BE EB###BE", "A#####A A#####A", "E#####E E#####E", "A#####A A#####A", " AAAAA   AAAAA ", "               ", "               ", " AAAAA   AAAAA ", "               ")
                 .aisle(" AAAAA   AAAAA ", "AABBBAA AABBBAA", "AB###BA AB###BA", "EB###BE EB###BE", "A#C#C#A A#C#C#A", "E#C#C#E E#C#C#E", "A#C#C#A A#C#C#A", " ACACA   ACACA ", "  C C     C C  ", "  C C     C C  ", " ACACA   ACACA ", "  C C     C C  ")
-                .aisle("  AAA     AAA  ", " AAAAA   AAAAA ", " ABBBA   ABBBA ", " EBBBE   EBBBE ", " ABBBA   ABBBA ", " E###E   E###E ", " A###A   A###A ", "  AAA     AAA  ", "               ", "               ", "  AAA     AAA  ", "               ")
+                .aisle("  AAA     AAA  ", " AAAAA   AAAAA ", " ABBBA   ABBBA ", " EBBBE   EBBBE ", " A###A   A###A ", " E###E   E###E ", " A###A   A###A ", "  AAA     AAA  ", "               ", "               ", "  AAA     AAA  ", "               ")
                 .aisle("               ", "  AAA     AAA  ", "  AAA     AAA  ", "  EEE     EEE  ", "  AAA     AAA  ", "  EEE     EEE  ", "  AAA     AAA  ", "               ", "               ", "               ", "               ", "               ")
                 .where('S', selfPredicate())
                 .where('A', states(GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING.getState(BlockLargeMultiblockCasing.CasingType.STRESS_PROOF_CASING)))
@@ -80,7 +80,7 @@ public class MetaTileEntityArcFurnaceComplex extends MetaTileEntityAdvancedArcFu
 
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
-        tooltip.add(I18n.format("gregtech.machine.parallel_pure", 256));
+        tooltip.add(I18n.format("susy.machine.parallel_pure", 256));
     }
 
     @Nonnull

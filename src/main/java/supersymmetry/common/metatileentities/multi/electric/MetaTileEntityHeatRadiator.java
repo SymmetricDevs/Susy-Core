@@ -75,7 +75,7 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
                 .aisle(rowPattern(rowType.TOP, sDist))
                 .where('S', selfPredicate())
                 .where('A', states(getCasingState())
-                        .or(autoAbilities(false, true, false, false, false, false, false)))
+                        .or(autoAbilities(false, true, true, false, false, false, false)))
                 .where('B', states(getRadiatorElementState()))
                 .where('C', states(getCasingState())
                         .or(autoAbilities(false, false, false, false, true, false, false).setExactLimit(1))
@@ -288,10 +288,10 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
             ITextComponent componentParallelAmount = TextComponentUtil.stringWithColor(TextFormatting.DARK_PURPLE,
                     String.valueOf(this.area));
             ITextComponent componentParallelAmountBase = TextComponentUtil.translationWithColor(TextFormatting.GRAY,
-                    "gregtech.machine.heat_radiator.parallel",
+                    "susy.machine.heat_radiator.parallel",
                     componentParallelAmount);
             ITextComponent componentParallelAmountHover = TextComponentUtil.translationWithColor(TextFormatting.GRAY,
-                    "gregtech.machine.heat_radiator.parallel_hover");
+                    "susy.machine.heat_radiator.parallel_hover");
 
             textList.add(TextComponentUtil.setHover(componentParallelAmountBase, componentParallelAmountHover));
         }
@@ -300,8 +300,8 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
     @Override
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
-        tooltip.add(I18n.format("gregtech.multiblock.heat_radiator.tooltip.1"));
-        tooltip.add(I18n.format("gregtech.multiblock.heat_radiator.tooltip.2"));
+        tooltip.add(I18n.format("susy.multiblock.heat_radiator.tooltip.1"));
+        tooltip.add(I18n.format("susy.multiblock.heat_radiator.tooltip.2"));
     }
 
     public boolean isBlockEdge(@Nonnull World world, @Nonnull BlockPos.MutableBlockPos pos, @Nonnull EnumFacing direction) {

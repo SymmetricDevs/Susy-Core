@@ -5,11 +5,13 @@
   "minVersion" : "0.8",
   "compatibilityLevel" : "JAVA_8",
   "mixins" : [
+    "AnonToolDefinitionAccessor",
     "BlockMachineMixin",
     "BlockPipeAccessor",
     "CommonProxyMixin",
     "MetaTileEntityDrumAccessor",
     "MetaTileEntityFluidDrillMixin",
+    "MetaTileEntityHolderMixin",
     "MetaTileEntityLargeMinerMixin",
     "MetaTileEntityMinerMixin",
     "MetaTileEntityMixin",
@@ -23,5 +25,8 @@
     "TileEntityPipeBaseMixin",
     "ToolBuilderAccessor",
     "ToolItemsMixin"
+  ],
+  "client" : [
+    "TargetBlockAccessMixin"
   ]
 }

@@ -10,6 +10,7 @@ import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.drawable.GuiTextures;
 import com.cleanroommc.modularui.factory.PosGuiData;
 import com.cleanroommc.modularui.screen.ModularPanel;
+import com.cleanroommc.modularui.screen.UISettings;
 import com.cleanroommc.modularui.utils.Alignment;
 import com.cleanroommc.modularui.value.sync.BooleanSyncValue;
 import com.cleanroommc.modularui.value.sync.PanelSyncHandler;
@@ -154,7 +155,7 @@ public abstract class MetaTileEntityStockInteractor extends MetaTileEntity imple
 
     // UI
     @Override
-    public ModularPanel buildUI(PosGuiData guiData, PanelSyncManager syncManager) {
+    public ModularPanel buildUI(PosGuiData guiData, PanelSyncManager syncManager, UISettings settings) {
 
         PanelSyncHandler panel = (PanelSyncHandler) syncManager.panel("filter_panel",
                 (panelSyncManager, syncHandler) -> stockFilter.createPopupPanel(panelSyncManager),
@@ -167,7 +168,7 @@ public abstract class MetaTileEntityStockInteractor extends MetaTileEntity imple
         return IMui2MetaTileEntity.defaultPanel(this)
                 .child(IKey.lang(getMetaFullName()).asWidget()
                         .pos(5, 5))
-                .child(SlotGroupWidget.playerInventory()
+                .child(SlotGroupWidget.playerInventory(true)
                         .left(7)
                         .bottom(7))
                 .child(IMui2MetaTileEntity.getLogo().asWidget()

@@ -245,21 +245,21 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
                     Strand displayStrand = strand;
                     if (strand == null) {
                         if (output == null || output.getStrand() == null) {
-                            comps.add(new TextComponentTranslation("gregtech.multiblock.strand_casting.no_strand"));
+                            comps.add(new TextComponentTranslation("susy.multiblock.strand_casting.no_strand"));
                             return;
                         }
-                        comps.add(new TextComponentTranslation("gregtech.multiblock.strand_casting.output_detected"));
+                        comps.add(new TextComponentTranslation("susy.multiblock.strand_casting.output_detected"));
                         displayStrand = output.getStrand();
                     }
-                    comps.add(new TextComponentTranslation("gregtech.multiblock.strand_casting.thickness", String.format("%.2f", displayStrand.thickness)));
-                    comps.add(new TextComponentTranslation("gregtech.multiblock.strand_casting.width", String.format("%.2f", displayStrand.width)));
+                    comps.add(new TextComponentTranslation("susy.multiblock.strand_casting.thickness", String.format("%.2f", displayStrand.thickness)));
+                    comps.add(new TextComponentTranslation("susy.multiblock.strand_casting.width", String.format("%.2f", displayStrand.width)));
 
                     StrandConversion conversion = StrandConversion.getConversion(displayStrand);
                     if (conversion == null) {
-                        comps.add(new TextComponentTranslation("gregtech.multiblock.strand_casting.no_conversion"));
+                        comps.add(new TextComponentTranslation("susy.multiblock.strand_casting.no_conversion"));
                         return;
                     }
-                    comps.add(new TextComponentTranslation("gregtech.multiblock.strand_casting.ore_prefix",
+                    comps.add(new TextComponentTranslation("susy.multiblock.strand_casting.ore_prefix",
                             new TextComponentTranslation("supersymmetry.prefix." + conversion.prefix.name.toLowerCase())));
                 });
     }

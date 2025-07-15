@@ -23,8 +23,8 @@ public class PseudoMultiProperty extends RecipeProperty<PseudoMultiPropertyValue
     @Override
     public void drawInfo(@NotNull Minecraft minecraft, int x, int y, int color, Object value) {
         PseudoMultiPropertyValues propertyValue = castValue(value);
-        String localisedBlockGroupMembers = I18n.format("gregtech.block_group_members." + propertyValue.getBlockGroupName() + ".name");
-        minecraft.fontRenderer.drawString(I18n.format("gregtech.recipe.blocks", localisedBlockGroupMembers), x, y, color);
+        String localisedBlockGroupMembers = I18n.format("susy.block_group_members." + propertyValue.getBlockGroupName() + ".name");
+        minecraft.fontRenderer.drawString(I18n.format("susy.recipe.blocks", localisedBlockGroupMembers), x, y, color);
     }
 
 }

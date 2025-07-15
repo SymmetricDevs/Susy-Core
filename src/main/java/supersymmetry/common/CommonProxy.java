@@ -235,7 +235,7 @@ public class CommonProxy {
     @SideOnly(Side.CLIENT)
     public static void itemToolTip(ItemTooltipEvent event) {
         handleCoilTooltips(event);
-        addTooltip(event, "gregtech.machine.steam_extractor", TooltipHelper.BLINKING_ORANGE + I18n.format("gregtech.machine.steam_extractor_cannot_melt_items.warning"), 2);
+        addTooltip(event, "susy.machine.steam_extractor", TooltipHelper.BLINKING_ORANGE + I18n.format("susy.machine.steam_extractor_cannot_melt_items.warning"), 2);
     }
 
     private static void handleCoilTooltips(ItemTooltipEvent event) {

@@ -4,24 +4,24 @@ import gregtech.api.recipes.recipeproperties.RecipeProperty;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 
-public class EvaporationEnergyProperty extends RecipeProperty<Integer> {
-    public static final String KEY = "evaporation_energy";
+public class MixerSettlerCellsProperty extends RecipeProperty<Integer> {
+    public static final String KEY = "mixer_settler_cells";
 
-    private static EvaporationEnergyProperty INSTANCE;
+    private static MixerSettlerCellsProperty INSTANCE;
 
-    private EvaporationEnergyProperty() {
+    private MixerSettlerCellsProperty() {
         super(KEY, Integer.class);
     }
 
     @Override
     public void drawInfo(Minecraft minecraft, int x, int y, int color, Object value) {
-        minecraft.fontRenderer.drawString(I18n.format("susy.recipe.evaporation",
+        minecraft.fontRenderer.drawString(I18n.format("susy.recipe.mixer_settler_cells",
                 castValue(value)), x, y, color);
     }
 
-    public static EvaporationEnergyProperty getInstance() {
+    public static MixerSettlerCellsProperty getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new EvaporationEnergyProperty();
+            INSTANCE = new MixerSettlerCellsProperty();
         }
         return INSTANCE;
     }

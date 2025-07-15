@@ -45,7 +45,7 @@ dependencies {
     api 'com.cleanroommc:groovyscript:1.2.4' transitive false
 
     // # Lib Mods we are using
-    api 'com.cleanroommc:modularui:2.5.0-rc4' transitive false
+    api 'com.cleanroommc:modularui:2.5.0-rc5' transitive false
     api rfg.deobf('curse.maven:geckolib-388172:4020277')
 
     // # Immersive Railroading dependencies
@@ -80,4 +80,18 @@ dependencies {
     // # Optional dependencies. Uncomment the ones you need
 //    runtimeOnlyNonPublishable rfg.deobf('curse.maven:the-beneath-254629:3425551')
 //    runtimeOnlyNonPublishable rfg.deobf('curse.maven:realistic-terrain-generation-unofficial-648514:4404814')
+
+    // # OptiFine
+//    // Copied from GTCEu, originally used to download latest Vintagium from GitHub
+//    // Using Gradle's Ant integration seems to be the least hacky way to download an arbitrary file without a plugin
+//    file('libs/optifine').mkdirs()
+//    ant.get(src: 'https://github.com/OpenCubicChunks/OptiFineDevTweaker/releases/download/2.6.15/aa_do_not_rename_OptiFineDevTweaker-2.6.15-all.jar',
+//            dest: 'libs/optifine/',
+//            skipexisting: 'true')
+//    // Download OptiFine from some random GitHub repo I found by just searching
+//    // Since I failed to get the jar from https://optifine.net/home
+//    ant.get(src: 'https://github.com/SynArchive/OptiFine-Archive/raw/refs/heads/main/1.12.2/preview_OptiFine_1.12.2_HD_U_G6_pre1.jar',
+//            dest: 'libs/optifine/',
+//            skipexisting: 'true')
+//    runtimeOnly files('libs/optifine/*')
 }

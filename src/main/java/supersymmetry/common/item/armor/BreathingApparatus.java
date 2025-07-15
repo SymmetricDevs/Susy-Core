@@ -1,6 +1,7 @@
 package supersymmetry.common.item.armor;
 
 import gregtech.api.items.metaitem.stats.IItemDurabilityManager;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
@@ -10,9 +11,11 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
+
 import supersymmetry.api.items.IBreathingArmorLogic;
 import supersymmetry.client.renderer.handler.ITextureRegistrar;
 import supersymmetry.client.renderer.handler.SimpleBreathingApparatusModel;
@@ -23,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static net.minecraft.inventory.EntityEquipmentSlot.CHEST;
+import static net.minecraft.inventory.EntityEquipmentSlot.HEAD;
 import static supersymmetry.api.util.SuSyUtility.susyId;
 import static supersymmetry.common.event.DimensionBreathabilityHandler.ABSORB_ALL;
 
@@ -108,7 +112,7 @@ public class BreathingApparatus implements IBreathingArmorLogic, IItemDurability
 
     double getOxygen(ItemStack stack) {
         if (stack.getTagCompound() == null) {
-            stack.setTagCompound(new NBTTagCompound());
+            return 1; //only nomex doesnt have it, everything else should be fine ish..
         }
         if (!stack.getTagCompound().hasKey("oxygen")) {
             stack.getTagCompound().setDouble("oxygen", getMaxOxygen(stack));
@@ -127,10 +131,33 @@ public class BreathingApparatus implements IBreathingArmorLogic, IItemDurability
     }
 
     void changeOxygen(ItemStack stack, double oxygenChange) {
+        if (!stack.hasTagCompound()) {return;} //only nomex doesnt have it
         NBTTagCompound compound = stack.getTagCompound();
         compound.setDouble("oxygen", getOxygen(stack) + oxygenChange);
         stack.setTagCompound(compound);
     }
+    
+    @Override
+    public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
+        if (player.getItemStackFromSlot(HEAD) != itemStack) return; // doing that because it would tick all 4 pieces and
+        // subtract 4s/s otherwise, no goog
+        if (player.isInsideOfMaterial(Material.WATER)) {
+            var chest = player.getItemStackFromSlot(CHEST);
+            if (chest.getItem() instanceof SuSyArmorItem item) {
+                if (item.getItem(chest).getArmorLogic() instanceof BreathingApparatus tank)  {
+                    if (tank.getOxygen(chest) > 0) {
+                        player.setAir(300);
+                        if (!DimensionBreathabilityHandler.isInHazardousEnvironment(player)) {
+                            changeOxygen(player.getItemStackFromSlot(CHEST), (-1f) / 20);
+                            // assuming that if its hazardous the player is already breathing with the suit, so no extra air is
+                            // needed 
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
     @Override
     public List<ResourceLocation> getTextureLocations() {
