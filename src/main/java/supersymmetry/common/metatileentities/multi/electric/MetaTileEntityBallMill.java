@@ -210,8 +210,9 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
 
         BlockPos pos = getPos();
 
-        var v1 = pos.offset(left.getOpposite(), 4).offset(EnumFacing.DOWN, 4).offset(front, 5);
-        var v2 = pos.offset(left, 4).offset(EnumFacing.UP, 4).offset(front.getOpposite(), 6);
+        // Oddly, the left appears to be switched.
+        var v1 = pos.offset(left.getOpposite(), 3).offset(EnumFacing.DOWN, 1).offset(front, 0);
+        var v2 = pos.offset(left, 10).offset(EnumFacing.UP, 8).offset(front.getOpposite(), 6);
 
         return new AxisAlignedBB(v1, v2);
     }
