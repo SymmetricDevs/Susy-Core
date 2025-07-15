@@ -7,7 +7,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3i;
 import software.bernie.geckolib3.core.IAnimatableModel;
 import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.util.Color;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.GeoModelProvider;
@@ -18,6 +17,16 @@ public enum GeoMTERenderer implements IGeoRenderer<IAnimatableMTE> {
     INSTANCE;
 
     public final AnimatedGeoModel<IAnimatableMTE> MODEL_DISPATCHER = new ModelDispatcher();
+
+    static {
+        AnimationController.addModelFetcher(object -> {
+            if (object instanceof IAnimatableMTE) {
+                //noinspection rawtypes,unchecked
+                return (IAnimatableModel) INSTANCE.getGeoModelProvider();
+            }
+            return null;
+        });
+    }
 
     @Override
     public GeoModelProvider<IAnimatableMTE> getGeoModelProvider() {
@@ -33,41 +42,27 @@ public enum GeoMTERenderer implements IGeoRenderer<IAnimatableMTE> {
     public <T extends MetaTileEntity & IAnimatableMTE> void render(T mte, double x, double y, double z, float partialTicks) {
         GeoModel model = MODEL_DISPATCHER.getModel(MODEL_DISPATCHER.getModelLocation(mte));
         Vec3i vec3i = mte.getTransformation();
-        MODEL_DISPATCHER.setLivingAnimations(mte, this.getUniqueID(mte));
-
-        FixedGeoBlockRenderer.setupLight(mte.getWorld().getCombinedLight(mte.getPos().add(vec3i), 0));
+        MODEL_DISPATCHER.setLivingAnimations(mte, getUniqueID(mte));
 
         GlStateManager.pushMatrix();
         {
+            int light = mte.getWorld().getCombinedLight(mte.getLightPos(), 0);
+
+            FixedGeoBlockRenderer.setupLight(light);
+
             GlStateManager.translate(x + 0.5, y + 0.5, z + 0.5);
             GlStateManager.translate(vec3i.getX(), vec3i.getY(), vec3i.getZ());
 
-            /// TODO: use [gregtech.api.util.RelativeDirection] to handle flipped multiblocks
+            // TODO: use [RelativeDirection] to handle flipped multiblocks
             FixedGeoBlockRenderer.rotateBlock(mte.getFrontFacing());
 
-            Minecraft.getMinecraft().getTextureManager().bindTexture(this.getTextureLocation(mte));
-
-            Color renderColor = this.getRenderColor(mte, partialTicks);
-            this.render(model, mte, partialTicks,
-                    (float) renderColor.getRed() / 255.0F,
-                    (float) renderColor.getGreen() / 255.0F,
-                    (float) renderColor.getBlue() / 255.0F,
-                    (float) renderColor.getAlpha() / 255.0F);
+            Minecraft.getMinecraft().getTextureManager().bindTexture(getTextureLocation(mte));
+            render(model, mte, partialTicks, 1, 1, 1, 1);
         }
         GlStateManager.popMatrix();
     }
 
     private static class ModelDispatcher extends AnimatedGeoModel<IAnimatableMTE> {
-
-        static {
-            AnimationController.addModelFetcher(object -> {
-                if (object instanceof IAnimatableMTE) {
-                    //noinspection rawtypes,unchecked
-                    return (IAnimatableModel) INSTANCE.getGeoModelProvider();
-                }
-                return null;
-            });
-        }
 
         @Override
         public ResourceLocation getModelLocation(IAnimatableMTE mte) {

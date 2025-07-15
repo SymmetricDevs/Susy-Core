@@ -230,6 +230,16 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
         return new Vec3i(xOff, 3, zOff);
     }
 
+    @Override
+    public BlockPos getLightPos() {
+        EnumFacing front = getFrontFacing();
+        EnumFacing back = front.getOpposite();
+        EnumFacing up = getUpwardsFacing();
+        EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(front, up, isFlipped());
+
+        return getPos().offset(up, 6).offset(back, 3).offset(left, 4); // TODO
+    }
+
     @SideOnly(Side.CLIENT)
     private <T extends MetaTileEntity & IAnimatableMTE> PlayState predicate(AnimationEvent<T> event) {
         //        event.getController().transitionLengthTicks = 0.0;
