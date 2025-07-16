@@ -80,6 +80,10 @@ dependencies {
     // # Optional dependencies. Uncomment the ones you need
 //    runtimeOnlyNonPublishable rfg.deobf('curse.maven:the-beneath-254629:3425551')
 //    runtimeOnlyNonPublishable rfg.deobf('curse.maven:realistic-terrain-generation-unofficial-648514:4404814')
+//    runtimeOnlyNonPublishable rfg.deobf("curse.maven:worldedit-225608:2941712")
+//    runtimeOnlyNonPublishable rfg.deobf("curse.maven:worldeditcui-forge-edition-3-380401:3191629")
+//    runtimeOnlyNonPublishable 'com.cleanroommc:configanytime:3.0'
+//    runtimeOnlyNonPublishable rfg.deobf("curse.maven:flare-692142:6598523")
 
     // # OptiFine
 //    // Copied from GTCEu, originally used to download latest Vintagium from GitHub
