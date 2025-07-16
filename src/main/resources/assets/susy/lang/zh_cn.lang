@@ -22,16 +22,16 @@ tile.drill_head.steel.name=钢制钻头
 tile.susy_multiblock_casing.silicon_carbide_casing.name=坚固碳化硅外壳
 
 tile.susy_multiblock_casing.sieve_tray.name=筛孔塔盘
-tile.susy_multiblock_casing.coalescence_plate.name=Coalescence Plate
+tile.susy_multiblock_casing.coalescence_plate.name=聚结滤板
 tile.susy_multiblock_casing.structural_packing.name=蒸馏塔填料
 tile.susy_multiblock_casing.ulv_structural_casing.name=基础结构外壳
 tile.susy_multiblock_casing.drone_pad.name=停机坪方块
-tile.susy_multiblock_casing.heavy_duty_pad.name=重型坪
+tile.susy_multiblock_casing.heavy_duty_pad.name=重型支撑坪方块
 tile.susy_multiblock_casing.advanced_refractory_lining.name=高级耐火内衬
-tile.rocket_assembler_casing.reinforced_foundation.name=强化地基
-tile.rocket_assembler_casing.foundation.name=火箭装配台基
-tile.rocket_assembler_casing.rails.name=火箭装配台轨
-tile.rocket_assembler_casing.structural_frame.name=火箭装配台结构框架
+tile.rocket_assembler_casing.reinforced_foundation.name=强化地基方块
+tile.rocket_assembler_casing.foundation.name=火箭装配站地基方块
+tile.rocket_assembler_casing.rails.name=火箭装配站导轨
+tile.rocket_assembler_casing.structural_frame.name=火箭装配站结构框架
 
 tile.serpentine.basic.name=蛇形铜管方块
 
@@ -68,7 +68,7 @@ tile.deposit_block.sedimentary.name=沉积岩矿床方块
 tile.deposit_block.hydrothermal.name=热液岩矿床方块
 tile.deposit_block.alluvial.name=冲积岩矿床方块
 tile.deposit_block.magmatic_hydrothermal.name=岩浆热液岩矿床方块
-tile.deposit_block.ice_cap.name=冰盖沉积岩矿床方块
+tile.deposit_block.ice_cap.name=月球冰盖矿床方块
 
 tile.resource_block.bauxite.name=铝土矿
 tile.resource_block.caliche.name=钙质岩
@@ -168,7 +168,7 @@ susy.material.gadolinium_silicon_germanium=钆硅锗合金
 susy.material.latex=胶乳
 susy.material.mud=泥
 susy.material.sea_water=海水
-susy.material.refractory_gunning_mixture=耐火喷补混合物
+susy.material.refractory_gunning_mixture=耐火喷补料
 
 # Rock/Mineral Materials
 susy.material.fluorite=氟石
@@ -215,7 +215,7 @@ item.material.oreprefix.fiber=%s纤维
 item.material.oreprefix.fiberWet=湿%s纤维
 item.material.oreprefix.thread=%s纱线
 item.material.oreprefix.dustWet=湿%s粉
-item.material.oreprefix.electrode=%s 电极
+item.material.oreprefix.electrode=%s电极
 
 susy.fluid.supercritical=超临界%s
 susy.fluid.impure_slurry=含杂%s浆液
@@ -281,8 +281,8 @@ susy.machine.evaporation_pool.name=蒸发池：
 susy.machine.evaporation_pool.tooltip.info=最大池底面积%1$sx%1$s，最小为%2$sx%2$s。查看JEI信息页面或Tooltip以获取详细信息。
 susy.machine.evaporation_pool.tooltip.structure_info=蒸发池池底可由%2$sx%2$s至%1$sx%1$s的砂壤土组成——其形状可以不为正方形！若想通过线圈提供热量，其摆放方式需要与JEI预览中一致。查看JEI信息页面以获得详细解释。
 susy.top.evaporation_pool_heated_preface=线圈加热：
-susy.top.evaporation_pool.exposed_blocks=直晒格数
-susy.top.evaporation_pool.average_speed=平均速率：：Blocks:
+susy.top.evaporation_pool.exposed_blocks=直晒格数：
+susy.top.evaporation_pool.average_speed=平均速率：
 susy.multiblock.evaporation_pool.description=蒸发池由可变大小的砂壤土池底与其外部用于放置仓室的混凝土壁面组成。其控制器方块可放置于沿砂壤土外侧，与池底同一高度的任一位置。蒸发池可以在供能无供能状态下运行：供能运行需要在池底以蛇形放置加热线圈（可参考JEI结构预览）；而无供能状态下则不需要。蒸发池的运行速度取决于接收到热量的多少，其由阳光直晒的池底方块数，外部供能（1EU = 10J），以及用于加热的线圈等级决定。每个阳光直晒的方块（检查需要消耗一定时间）每秒可以提供1kJ的热量，而线圈提供的热量与则与其基础温度*数量有关。
 susy.multiblock.evaporation_pool_heated_preface=线圈加热：%s
 susy.multiblock.evaporation_pool.is_heating=开
@@ -291,15 +291,15 @@ susy.multiblock.evaporation_pool.exposed_blocks=直晒格数：%s
 susy.multiblock.evaporation_pool.average_speed=平均速率：%sx
 susy.multiblock.pattern.error.coils_or_bed=§c必须使用同种线圈方块或砂壤土§r
 
-susy.multiblock.strand_casting.thickness=厚: %s
-susy.multiblock.strand_casting.width=宽: %s
-susy.multiblock.strand_casting.no_strand=No strand detected
-susy.multiblock.strand_casting.output_detected=Strand found only in the output slot
-susy.multiblock.strand_casting.ore_prefix=预计产出: %s
-susy.multiblock.strand_casting.no_conversion=Currently not a valid item!
+susy.multiblock.strand_casting.thickness=厚：%s
+susy.multiblock.strand_casting.width=宽：%s
+susy.multiblock.strand_casting.no_strand=未发现铸流
+susy.multiblock.strand_casting.output_detected=仅在输出总线中找到铸流
+susy.multiblock.strand_casting.ore_prefix=预计产出：%s
+susy.multiblock.strand_casting.no_conversion=未设定有效物品！
 
-susy.multiblock.natural_draft_cooling_tower.obstructed=The cold water basin is not filled!
-susy.multiblock.natural_draft_cooling_tower.obstructed.desc=The cold water basin must be filled with water for the Cooling Tower to operate.
+susy.multiblock.natural_draft_cooling_tower.obstructed=冷却水池未充满！
+susy.multiblock.natural_draft_cooling_tower.obstructed.desc=冷却水池必须充满水才能使冷却塔正常运行。
 
 supersymmetry.prefix.stick=杆
 supersymmetry.prefix.ingot=锭
@@ -318,7 +318,7 @@ susy.machine.large_fluid_pump.name=大型液泵
 susy.machine.large_fluid_pump.tooltip.1=这势必会对当地的鲑鱼种群造成影响。
 susy.machine.large_fluid_pump.tooltip.2=仅在控制器方块位于Y=64，且最下方的钢管道外壳处于正确群系时运行。
 susy.machine.advanced_arc_furnace.name=工业电弧炉
-susy.machine.arc_furnace_complex.name=电弧炉群
+susy.machine.arc_furnace_complex.name=电弧炉复合体
 susy.machine.clarifier.name=澄清池
 susy.machine.dumper.name=废液排放机
 susy.machine.flare_stack.name=火炬塔
@@ -358,28 +358,30 @@ susy.multiblock.pattern.error.milling.lower=§c仅可放置于机器下部§r
 
 susy.machine.drone_pad.name=无人机坪
 susy.machine.primitive_smelter.name=简易冶炼炉
-susy.machine.landing_pad.name=降落坪
+susy.machine.landing_pad.name=着陆平台
 susy.machine.scrap_recycler.name=废料回收器
-susy.machine.rocket_assembler.name=火箭组装台
-susy.machine.rocket_programmer.name=火箭编程室
-susy.machine.metallurgical_converter.name=冶金转换器
+susy.machine.rocket_assembler.name=火箭装配站
+susy.machine.rocket_programmer.name=火箭编程器
+susy.machine.metallurgical_converter.name=转炉
 
 susy.machine.primitive_item_import.name=简易输入总线
 susy.machine.primitive_item_import.tooltip=仅可用于简易冶炼炉
 susy.machine.primitive_item_export.name=简易输出总线
 susy.machine.primitive_item_export.tooltip=仅可用于简易冶炼炉
-susy.machine.mixer_settler.name=Mixer Settler
-susy.machine.mixer_settler.tooltip=Can work up to 2x faster with more cells
+susy.machine.mixer_settler.name=混合沉降器
+susy.machine.mixer_settler.tooltip=§o凡善澄者，必先杂而后清§r ——孙子，《苏西兵法》
+susy.machine.mixer_settler.tooltip.1=基础结构包含2个沉降单元；每此拓展增加2个单元
+susy.machine.mixer_settler.tooltip.2=可以通过增加沉降器单元获得最高2倍的速率提升
 
-susy.machine.parallel_pure=Can parallel to output up to §b%d§r§7 items at once
+susy.machine.parallel_pure=可并行输出至多§b%d§7个物品。
 
 # Properties
 susy.recipe.plasma_requirement=需要等离子体：%s
 susy.recipe.catalyst=催化剂：%s %s
 susy.recipe.blocks=有效方块：%s
-susy.recipe.evaporation=热能需求: %d J/t
+susy.recipe.evaporation=热能需求：%d J/t
 susy.recipe.cryogenic_environment=需要低温环境
-susy.recipe.mixer_settler_cells=Required mixer settler cells: %s
+susy.recipe.mixer_settler_cells=需要沉降单元数：%s
 
 # Latex Collector
 susy.machine.latex_collector.steam=需要蒸汽！
@@ -685,7 +687,7 @@ susy.machine.rtg.lv.name=基础放射性同位素热电式发电机（RTG）
 susy.machine.rtg.mv.name=高级放射性同位素热电式发电机（RTG）
 susy.machine.rtg.tooltip.info=给你的起搏器供电。
 susy.machine.rtg.tooltip.description=通过放射性同位素的衰变产生微小但稳定的电流。
-susy.machine.rtg.voltage_produced=§a产出电压：§f%,d EU/t (%s§f)
+susy.machine.rtg.voltage_produced=§a产出电压：§f%,d EU/t（%s§f）
 
 # Electrostatic Separator
 susy.machine.electrostatic_separator.lv.name=基础静电分离器
@@ -747,32 +749,32 @@ susy.multiblock.incinerator.working=§2畅通无阻！
 
 susy.machine.strand_bus.import.name=连铸输入总线
 susy.machine.strand_bus.export.name=连铸输出总线
-susy.machine.turning_zone.name=Turning Zone
-susy.machine.turning_zone.tooltip=Heart of a Continuous Casting System
-susy.machine.turning_zone.description=Curves a strand of partially molten metal towards the horizontal. This is required for all continuous casting systems, as other machines are otherwise unable to be rotated.
+susy.machine.turning_zone.name=出坯转弯区
+susy.machine.turning_zone.tooltip=连续铸造系统的核心
+susy.machine.turning_zone.description=将部分熔化的铸流向水平方向弯曲。这对于所有连铸系统都是必要的，因为其他机器往往无法转向。
 susy.machine.strand_cooler.name=连铸冷却器
-susy.machine.strand_cooler.tooltip=Cools cut strands of metal into finished products using water
+susy.machine.strand_cooler.tooltip=将切割后的铸流用水冷却为金属成品
 susy.machine.rolling_mill.name=轧机
-susy.machine.rolling_mill.tooltip=Flattens a strand of metal, decreasing thickness and increasing width
+susy.machine.rolling_mill.tooltip=将铸流辊平，降低厚度并延展宽度
 susy.machine.cluster_mill.name=多辊式轧机
-susy.machine.cluster_mill.tooltip=Flattens a strand of metal more, at the cost of lower throughput
+susy.machine.cluster_mill.tooltip=以低吞吐量为代价，将铸流辊得更平
 susy.machine.hot_isostatic_press.name=热等静压装置
-susy.machine.flying_shear.name=Flying Shear
-susy.machine.flying_shear.tooltip=Required to cut a strand of metal into separate pieces for cooling
-susy.machine.slab_mold.name=台阶铸型
-susy.machine.slab_mold.tooltip=Useful for making all types of plates and foils
-susy.machine.billet_mold.name=Billet Mold
-susy.machine.billet_mold.tooltip=Useful for making ingots and rods
-susy.multiblock.strand_mold.tooltip=Takes in 2592L of molten metal per operation and 50L of water (outputting voidable steam)
-susy.multiblock.slab_mold.description=Creates a slab 2 meters wide and 0.5 meters thick from various compatible types of molten metal, including steel, aluminium, and copper. After the slab has been created, it must be turned using a turning zone. Then, it may be rolled into these material types: Dense Plate (0.5-1 m thick), Double Plate (0.2-0.33 m thick), Plate (0.1-0.125 m thick), Foil (0.025-0.031 m thick). A dense plate technically does not require any rolling to produce. Finally, use a flying shear saw and a strand cooler to collect the finished products.
-susy.multiblock.billet_mold.description=Creates a slab one third of a meter wide and thick from various compatible types of molten metal, including steel, aluminium, and copper. After the billet has been created, it must be turned using a turning zone. Then, it may be rolled into these material types: Ingot (0.2-0.25 m thick), Rod (0.28-0.37 m thick). A rod technically does not require any rolling to produce. Finally, use a flying shear saw and a strand cooler to collect the finished products.
-susy.machine.gas_atomizer.name=Gas Atomizer
-tile.susy_multiblock_casing.monel_casing.name=Cryogenic Monel 500 Casing
-tile.susy_multiblock_casing.monel_casing_pipe.name=Cryogenic Monel 500 Pipe Casing
-tile.susy_multiblock_casing.copper_casing_pipe.name=Conductive Copper Pipe Casing
-tile.metallurgy.hydraulic_cylinder.name=Hydraulic Cylinder
-tile.metallurgy_2.flying_shear_saw.name=Flying Shear Saw
-tile.metallurgy_roll.roll.name=Roll
+susy.machine.flying_shear.name=飞剪
+susy.machine.flying_shear.tooltip=将铸流切开以供后续冷却
+susy.machine.slab_mold.name=阶形中间包
+susy.machine.slab_mold.tooltip=用于铸造板或箔
+susy.machine.billet_mold.name=方坯中间包
+susy.machine.billet_mold.tooltip=用于铸造锭或杆
+susy.multiblock.strand_mold.tooltip=每次运行消耗2592L熔融金属与50L水，并输出（可销毁）蒸汽
+susy.multiblock.slab_mold.description=将可铸造的熔融金属（包括钢、铝和铜）中铸造成2米宽、0.5米厚的阶形坯。铸造出的金属坯通过转弯区后，可以被轧制为：致密板（厚0.5 ~ 1米），双层板（厚0.2 ~ 0.33米），板（厚0.1 ~ 0.125米），箔（厚0.025 ~ 0.031米）。其中致密板事实上不需要经过任何轧制。最后，将铸流依次通过飞剪和连铸冷却器来得到成品。
+susy.multiblock.billet_mold.description=将可铸造的熔融金属（包括钢、铝和铜）中铸造成1米宽的方形坯。铸造出的金属坯通过转弯区后，可以被轧制为：锭（厚0.2 ~ 0.25米），杆（厚0.28 ~ 0.37米），板（厚0.1 ~ 0.125 m），箔（厚0.025 ~ 0.031 m）。其中杆事实上不需要经过任何轧制。最后，将铸流依次通过飞剪和连铸冷却器来得到成品。
+susy.machine.gas_atomizer.name=气雾化制粉机
+tile.susy_multiblock_casing.monel_casing.name=耐冷蒙乃尔合金 500外壳
+tile.susy_multiblock_casing.monel_casing_pipe.name=耐冷蒙乃尔合金 500管道外壳
+tile.susy_multiblock_casing.copper_casing_pipe.name=导热铜管道外壳
+tile.metallurgy.hydraulic_cylinder.name=液压缸
+tile.metallurgy_2.flying_shear_saw.name=飞剪锯
+tile.metallurgy_roll.roll.name=导辊
 # Recipemaps
 recipemap.coagulation_tank.name=凝固
 recipemap.latex_collector.name=树汁提取
@@ -836,9 +838,9 @@ recipemap.sieve_distillation.name=分馏
 recipemap.jet_wingpack_fuels.name=喷气翼包燃料
 recipemap.curtain_coater.name=淋幕涂饰
 recipemap.milling.name=精密铣销
-recipemap.hot_isostatic_press.name=热等静压
-recipemap.gas_atomizer.name=气体雾化
-recipemap.metallurgical_converter.name=冶金转换
+recipemap.hot_isostatic_press.name=热等静压烧结
+recipemap.gas_atomizer.name=气雾化制粉
+recipemap.metallurgical_converter.name=转炉冶炼
 recipemap.low_pressure_advanced_steam_turbine.name=低压高级蒸汽轮机
 recipemap.high_pressure_advanced_steam_turbine.name=高压高级蒸汽轮机
 recipemap.mixer_settler.name=Mixer-Settler
@@ -917,7 +919,7 @@ metaitem.track_segment.name=单轨铁道段
 metaitem.track_segment.tooltip=可用于§8盾构机
 metaitem.track_segment.length_info=相当于§610格§7的单轨铁道。
 metaitem.air_vent.tooltip.1=§b收集速率：§f%,d L/s
-metaitem.orbital.scrap.earth.name=地球轨道废料
+metaitem.orbital.scrap.earth.name=地球轨道太空垃圾
 
 # Catalysts
 susy.universal.catalysts.tooltip.tier=§e最高电压：§f%,d EU/t（%s§f）
@@ -1110,27 +1112,27 @@ tile.hardened_blocks.lair10.name=硬化Lair 10
 tile.hardened_blocks.lair11.name=硬化Lair 11
 tile.hardened_blocks.kryp7.name=硬化Kryp 7
 tile.hardened_blocks.kryp8.name=硬化Kryp 8
-tile.hardened_blocks1.industrial_concrete_hardened.name=Federation Grade Industrial Concrete
-tile.hardened_blocks1.military_concrete_hardened.name=Federation Grade Military Concrete
-tile.hardened_blocks1.military_concrete_cobblestone_hardened.name=Federation Grade Military Concrete Cobblestone
+tile.hardened_blocks1.industrial_concrete_hardened.name=联邦级工业混凝土
+tile.hardened_blocks1.military_concrete_hardened.name=联邦级军用混凝土
+tile.hardened_blocks1.military_concrete_cobblestone_hardened.name=联邦级军用混凝土圆石
 
 #Custom Sheets
 tile.custom_sheets.darkwhitemetalsheet.name=亮灰色金属板方块
 tile.custom_sheets.lightergraymetalsheet.name=银灰色金属板方块
-tile.custom_sheets.decorativecopper.name=Space Grade Decorative Copper
-tile.custom_sheets.decorativecopperbricks.name=Space Grade Decorative Copper Bricks
+tile.custom_sheets.decorativecopper.name=航天级装饰铜块
+tile.custom_sheets.decorativecopperbricks.name=航天级装饰铜砖块
 
-tile.regolith.highland.name=Anorthositic Regolith
-tile.regolith.lowland.name=Basaltic Regolith
+tile.regolith.highland.name=斜长岩月壤
+tile.regolith.lowland.name=玄武质月壤
 
 # ToolBehaviors
-item.susy.tool.behavior.pipeliner=§6Pipeliner: §fOperates all adjacent pipes
-item.susy.tool.tooltip.pipeliner=§7Hold §f[%s]§7 to activate §6Pipeliner§7 mode
+item.susy.tool.behavior.pipeliner=§6管线工人：§f递归操作相邻的管道
+item.susy.tool.tooltip.pipeliner=§7按住§f[%s]§7以激活§6管线工人§7模式
 
 # Titles
 supersymmetry.title.1=§3SUPERSYMMETRY
-supersymmetry.subtitle.1=由 SymmetricDevs 开发的整合包
+supersymmetry.subtitle.1=由SymmetricDevs开发的整合包
 supersymmetry.title.2=欢迎来到地球
-supersymmetry.subtitle.2=Vitals: stable. Pod fuel: 46%%.
-supersymmetry.title.3=APR 1, 2423
-supersymmetry.subtitle.3=§4Survive.
+supersymmetry.subtitle.2=维生系统：稳定。着陆舱燃料：46%%。
+supersymmetry.title.3=2423年4月1日
+supersymmetry.subtitle.3=§4活下去。
