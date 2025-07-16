@@ -82,6 +82,7 @@ dependencies {
 //    runtimeOnlyNonPublishable rfg.deobf('curse.maven:realistic-terrain-generation-unofficial-648514:4404814')
 //    runtimeOnlyNonPublishable rfg.deobf("curse.maven:worldedit-225608:2941712")
 //    runtimeOnlyNonPublishable rfg.deobf("curse.maven:worldeditcui-forge-edition-3-380401:3191629")
+//    runtimeOnlyNonPublishable 'com.cleanroommc:configanytime:3.0'
 //    runtimeOnlyNonPublishable rfg.deobf("curse.maven:flare-692142:6598523")
 
     // # OptiFine
