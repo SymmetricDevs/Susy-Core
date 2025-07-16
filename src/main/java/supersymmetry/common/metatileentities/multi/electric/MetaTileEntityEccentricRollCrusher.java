@@ -183,6 +183,14 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
     }
 
     @Override
+    public void checkStructurePattern() {
+        if (!this.isStructureFormed()) {
+            reinitializeStructurePattern();
+        }
+        super.checkStructurePattern();
+    }
+
+    @Override
     protected void formStructure(PatternMatchContext context) {
         this.metalSheetIdentifier = context.get("MetalSheet");
 
