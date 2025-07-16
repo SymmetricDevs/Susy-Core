@@ -42,6 +42,12 @@ public interface IAnimatableMTE extends IFastRenderMetaTileEntity, IAnimatable {
         return thisObject().getPos();
     }
 
+    // If this returns true, the TESR will keep rendering even when the chunk is culled.
+    @Override
+    default boolean isGlobalRenderer() {
+        return true;
+    }
+
     @Override
     default void renderMetaTileEntity(double x, double y, double z, float partialTicks) {
         if (thisObject().getWorld() == Minecraft.getMinecraft().world) {
