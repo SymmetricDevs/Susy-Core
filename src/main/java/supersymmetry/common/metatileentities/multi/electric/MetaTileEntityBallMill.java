@@ -231,6 +231,7 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
         return new Vec3i(xOff, 3, zOff);
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public BlockPos getLightPos() {
         EnumFacing front = getFrontFacing();

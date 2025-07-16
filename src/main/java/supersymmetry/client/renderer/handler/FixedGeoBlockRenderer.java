@@ -46,8 +46,8 @@ public abstract class FixedGeoBlockRenderer<T extends TileEntity & IAnimatable> 
     }
 
     public static void setupLight(int light) {
-        int lx = light % 0xFFFF;
-        int ly = light / 0xFFFF;
+        int lx = light % 0x10000;
+        int ly = light / 0x10000;
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lx, ly);
     }
 
