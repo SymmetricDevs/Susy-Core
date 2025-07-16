@@ -4,13 +4,13 @@ import cam72cam.immersiverailroading.entity.EntityRollingStock;
 import cam72cam.immersiverailroading.items.ItemRollingStock;
 import cam72cam.mod.entity.ModdedEntity;
 import cam72cam.mod.item.ItemStack;
+import com.cleanroommc.modularui.utils.Vector3f;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.util.vector.Vector3f;
 
 import java.util.Comparator;
 import java.util.List;
