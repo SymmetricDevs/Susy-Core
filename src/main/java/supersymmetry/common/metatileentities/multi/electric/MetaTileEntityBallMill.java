@@ -171,6 +171,14 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
     }
 
     @Override
+    public void onRemoval() {
+        super.onRemoval();
+        if (this.getWorld() != null && !this.getWorld().isRemote) {
+            BlockRenderManager.removeDisableModel(getPos(), true);
+        }
+    }
+
+    @Override
     public void writeInitialSyncData(PacketBuffer buf) {
         super.writeInitialSyncData(buf);
         disableBlockRendering(isStructureFormed()); // This is a bit ugly tho...
