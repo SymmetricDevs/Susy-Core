@@ -113,7 +113,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             return;
         }
 
-        scanDuration = (int)(blockList.size()/(1.8*(linkedCleanroom.getEnergyTier()-3)))+3; // 4 being the minimum value
+        scanDuration = (int)(blockList.size()/(Math.pow(2,linkedCleanroom.getEnergyTier()-3)))+4; // 5 being the minimum value
         scannerLogic.setGoalTime(scanDuration);
 
         Set<BlockPos> blocksConnected = struct.getBlockConn(interior, blockList.get(0));
@@ -466,6 +466,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
 
         struct.status = BuildStat.SUCCESS;
     }
+
 
     // An engine is made of a combustion chamber, a nozzle, and some turbopumps.
     // The turbopumps face the combustion chamber and are not below it.

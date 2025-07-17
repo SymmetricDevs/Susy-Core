@@ -13,6 +13,15 @@ import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 
 public class MetaTileEntityLaunchPad extends RecipeMapMultiblockController {
+    protected enum LaunchPadStateMachine {
+        EMPTY,
+        HOLDING,
+        LAUNCHING;
+        protected float since;
+
+    }
+
+    protected LaunchPadStateMachine myState;
     public MetaTileEntityLaunchPad(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.ROCKET_LAUNCH_PAD);
     }
