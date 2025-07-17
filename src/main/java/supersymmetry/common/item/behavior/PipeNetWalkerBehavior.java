@@ -24,7 +24,7 @@ import supersymmetry.mixins.gregtech.BlockPipeAccessor;
 
 import java.util.List;
 
-import static supersymmetry.common.item.behavior.TraverseOption.*;
+import static supersymmetry.common.item.behavior.TraverseOptions.*;
 
 public enum PipeNetWalkerBehavior implements IToolBehavior {
     INSTANCE;
@@ -65,7 +65,7 @@ public enum PipeNetWalkerBehavior implements IToolBehavior {
 
                 if (gridSide == null) return EnumActionResult.FAIL;
 
-                TraverseOption option = null;
+                TraverseOptions option = null;
                 if (pipe.isConnected(gridSide)) {
                     if (player.isSneaking()) {
                         option = pipe.isFaceBlocked(gridSide) ? UNBLOCKING : BLOCKING;
