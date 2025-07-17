@@ -5,8 +5,8 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 
 /** honestly shouldnt exist */
 public class SlotWidgetBlueprintContainer extends SlotWidget {
-  Runnable onSlotChanged;
-  Runnable onDetectChanges;
+  public Runnable onSlotChanged;
+  public Runnable onDetectChanges;
 
   public SlotWidgetBlueprintContainer(
       IItemHandlerModifiable handler,

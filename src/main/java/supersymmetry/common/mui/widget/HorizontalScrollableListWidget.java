@@ -25,6 +25,10 @@ public class HorizontalScrollableListWidget extends AbstractWidgetGroup {
     super(new Position(xPosition, yPosition), new Size(width, height));
   }
 
+  public void setSliderOffset(float percent) {
+    scrollOffset = (int) (getMaxScrollOffset() * percent);
+  }
+
   public void setSliderActive(boolean state) {
     sliderActive = state;
   }
@@ -81,6 +85,10 @@ public class HorizontalScrollableListWidget extends AbstractWidgetGroup {
     super.drawInForeground(mouseX, mouseY);
   }
 
+  private int getMaxScrollOffset() {
+    return totalListWidth - getSize().width;
+  }
+
   @Override
   public void drawInBackground(int mouseX, int mouseY, float partialTicks, IRenderContext context) {
     if (!isPositionInsideScissor(mouseX, mouseY)) {
@@ -98,12 +106,8 @@ public class HorizontalScrollableListWidget extends AbstractWidgetGroup {
           position.x, position.y - paneSize, size.width, paneSize);
       int scrollSliderY = position.y - paneSize;
 
-      int maxScrollOffset = totalListWidth - getSize().width + 2;
-      float scrollPercent =
-          maxScrollOffset == 0
-              ? 0
-              : scrollOffset / (maxScrollOffset * 1.0f); // whoever made this uhhh,
-      // i dont think maxScrollOffset is ever gonna be == 0 ? or maybe im just oopid (most likely)
+      int maxScrollOffset = getMaxScrollOffset();
+      float scrollPercent = maxScrollOffset == 0 ? 0 : scrollOffset / (maxScrollOffset * 1.0f);
       int scrollSliderX = Math.round(position.x + size.width * scrollPercent);
       GuiTextures.SLIDER_ICON.draw(scrollSliderX, scrollSliderY + 1, paneSize - 4, paneSize - 2);
     } else {

@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -35,7 +36,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.util.Constants;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.mui.widget.HorizontalScrollableListWidget;
@@ -110,47 +110,72 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
 
   private ModularUI.Builder createGUITemplate(EntityPlayer entityPlayer) {
     int width = 300;
-    int height = 200;
+    int height = 280;
+
     ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, width, height);
-    builder.label(width / 2, height / 2 - 20, "susy.machine.rocket_simulator.master_blueprint");
+    // black display thing in the background
+    builder.image(4, 4, width - 8, height - 8, GuiTextures.DISPLAY);
+
+    builder.dynamicLabel(
+        width / 2,
+        height / 2,
+        () -> {
+          return master_blueprint.isEmpty() ? "insert a rocket blueprint" : "";
+        },
+        0x404040);
     builder.widget(
-        new IndicatorImageWidget(width, height, 17, 17, GuiTextures.GREGTECH_LOGO_DARK)
+        new IndicatorImageWidget(width - 23, height - 23, 17, 17, GuiTextures.GREGTECH_LOGO_DARK)
             .setWarningStatus(GuiTextures.GREGTECH_LOGO_BLINKING_YELLOW, this::addWarningText)
             .setErrorStatus(GuiTextures.GREGTECH_LOGO_BLINKING_RED, this::addErrorText));
     builder.widget(
         new ClickButtonWidget(
             width - 40,
-            height - 30,
+            height - 130,
             40,
             30,
             new TextComponentTranslation("debug").getUnformattedComponentText(),
             this::SetDefaultBlueprint));
     builder.label(9, 9, getMetaFullName(), 0xFFFFFF);
-    builder.bindPlayerInventory(entityPlayer.inventory, height);
+    builder.bindPlayerInventory(entityPlayer.inventory, height - 80);
+    // this is the thing that displays slots for components
     RocketSimulatorComponentContainerWidget mainWindow =
-        new RocketSimulatorComponentContainerWidget(new Position(9, 9), new Size(200, 200));
+        new RocketSimulatorComponentContainerWidget(new Position(9, 9), new Size(width, 28 * 6),entityPlayer);
 
     builder.widget(mainWindow);
-    builder.widget(
+    SlotWidgetBlueprintContainer blueprintContainer =
         new SlotWidgetBlueprintContainer(
-                master_blueprint,
-                0,
-                width / 2,
-                height / 2,
-                // this is called on SlotChanged
-                () -> {
-                  drawComponentTree(0, 0, master_blueprint.getStackInSlot(0), mainWindow);
-                },
-                // this is called on detectAndSendChanges
-                () -> {
-                  master_blueprint.setLocked(
-                      components.values().stream()
-                          .flatMap(List::stream)
-                          .anyMatch(ds -> !ds.isEmpty())); // lock the main blueprint if
-                  // component data cards are inserted so that they dont get voided
+            master_blueprint,
+            0,
+            width / 2,
+            height / 2,
+            // this is called on SlotChanged
+            () -> {}, // moved it a bit further down because it wont let me do stupid things unless
+            // i edit it after
+            // the constructor is done
+            //
+            // this is called on detectAndSendChanges
+            () -> {
+              master_blueprint.setLocked(
+                  components.values().stream()
+                      .flatMap(List::stream)
+                      .anyMatch(ds -> !ds.isEmpty())); // lock the main blueprint if
+              // component data cards are inserted so that they dont get voided
 
-                })
-            .setBackgroundTexture(GuiTextures.SLOT_DARK));
+            });
+    // this wont work if you try to put it into the constructor
+    blueprintContainer.onSlotChanged =
+        () -> {
+          drawComponentTree(0, 0, master_blueprint.getStackInSlot(0), mainWindow);
+          blueprintContainer.setSelfPosition(
+              master_blueprint.isEmpty()
+                  ? new Position(width / 2, width / 2)
+                  : new Position(width - 40, height - 40));
+          // SusyLog.logger.info("set the possition to {} because the slot is empty? ({}) and the
+          // itemstack is equal to empty? ({}) and the stack itself is
+          // {}",blueprintContainer.getSelfPosition(),master_blueprint.isEmpty(),master_blueprint.getStackInSlot(0) == ItemStack.EMPTY, master_blueprint.getStackInSlot(0).getDisplayName());
+        };
+
+    builder.widget(blueprintContainer.setBackgroundTexture(GuiTextures.SLOT_DARK));
 
     return builder;
   }
@@ -160,7 +185,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
       int startY,
       ItemStack blueprintStack,
       RocketSimulatorComponentContainerWidget container) {
-        SusyLog.logger.info("received container with pos {}",container.getPosition());
 
     // meant to do like
     // comp name                #slot# #slot# #slot#
@@ -172,19 +196,19 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     if (generateComponentTree(blueprintStack)) {
       for (Map.Entry<String, List<DataStorageLoader>> entry : this.components.entrySet()) {
         String text = entry.getKey();
-        var slotContainer = new HorizontalScrollableListWidget(startX, startY, 18 * 5 + 5, 20); //this is the thing that
-                //has the slider, and contains the slots. 
+        var slotContainer =
+            new HorizontalScrollableListWidget(
+                startX, startY, 18 * 5 + 5, 20); // this is the thing that
+        // has the slider, and contains the slots.
         slotContainer.setSliderActive(entry.getValue().size() > 5);
         for (DataStorageLoader slot : entry.getValue()) {
           // position will get changed in the .addSlotList lotContainer later anyways
-          slotContainer.addWidget(new SlotWidget(slot, 0, 1, 1).setBackgroundTexture(GuiTextures.SLOT_DARK));
+          slotContainer.addWidget(
+              new SlotWidget(slot, 0, 1, 1).setBackgroundTexture(GuiTextures.SLOT_DARK));
         }
-                SusyLog.logger.info("position before... {}",container.getPosition());
         container.addSlotList(
             new LabelWidget(0, 0, "susy.machine.rocket_simulator.component." + text, 0xFFFFFF),
             slotContainer);
-
-        SusyLog.logger.info("position after... {}", slotContainer.getPosition());
       }
     }
   }
@@ -242,10 +266,11 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
       NBTTagCompound comp = componentsList.getCompoundTagAt(i);
       List<DataStorageLoader> cardSlots = this.components.get(comp.getString("type"));
       int count = (int) cardSlots.stream().map(x -> !x.isEmpty()).count();
-      if (!Arrays.asList(comp.getIntArray("allowedCounts")).contains(count)) {
+      if (IntStream.of(comp.getIntArray("allowedCounts")).noneMatch(x -> x == count)) {
         return false;
-      } // not sure how to make the warnings shut up, likely just did it incorrectly
+      }
     }
+
     for (Map.Entry<String, List<DataStorageLoader>> entry : this.components.entrySet()) {}
 
     return false;
@@ -256,7 +281,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
   public void SetDefaultBlueprint(Widget.ClickData data) {
     this.markDirty();
     master_blueprint.clearNBT();
-    master_blueprint.mutateItem("rocket", "soyuz");
+    master_blueprint.mutateItem("rocketType", "soyuz");
     NBTTagList components = new NBTTagList();
     NBTTagCompound fuel_tank = new NBTTagCompound();
     fuel_tank.setString("type", "tank");
@@ -285,4 +310,8 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
   public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
     return new MetaTileEntityAerospaceFlightSimulator(metaTileEntityId);
   }
+    private class ComponentListEntry {
+
+public ComponentListEntry() {}
+    }
 }
