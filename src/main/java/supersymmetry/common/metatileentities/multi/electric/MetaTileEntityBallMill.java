@@ -174,7 +174,7 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
     public void onRemoval() {
         super.onRemoval();
         if (this.getWorld() != null && !this.getWorld().isRemote) {
-            BlockRenderManager.removeDisableModel(getPos(), true);
+            disableBlockRendering(false);
         }
     }
 
