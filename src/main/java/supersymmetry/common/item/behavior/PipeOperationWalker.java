@@ -37,7 +37,7 @@ public class PipeOperationWalker<T extends IPipeTile<?, ?>> {
     private boolean failed = false;
     /// Function to run on every pipe
     /// TODO: make this return boolean. If false is returned, then halt the walker
-    private TraverseOption option;
+    private ITraverseOption option;
     /// Only exists for the root walker
     @Nullable
     private EnumFacing direction;
@@ -52,7 +52,7 @@ public class PipeOperationWalker<T extends IPipeTile<?, ?>> {
 
     @SuppressWarnings("unchecked")
     public static <T extends IPipeTile<?, ?>> int collectPipeNet(World world, BlockPos sourcePipe, T pipe,
-                                                                 EnumFacing direction, TraverseOption option, int maxWalks) {
+                                                                 EnumFacing direction, ITraverseOption option, int maxWalks) {
         var walker = new PipeOperationWalker<>(world, sourcePipe, 0, (Class<T>) pipe.getClass());
         {
             walker.currentPipe = pipe;
@@ -152,12 +152,7 @@ public class PipeOperationWalker<T extends IPipeTile<?, ?>> {
 
         this.root.walked.add(pipeTile);
 
-        List<EnumFacing> facings = new ArrayList<>();
-        var next = root.option.findNext(from != null ? from : direction, pipeTile);
-
-        if (next != null) {
-            facings.add(next);
-        }
+        List<EnumFacing> facings = root.option.findNext(from != null ? from : direction, pipeTile);
 
         if (walkedBlocks == 0) {
             facings.add(direction); // Special case for the root node
