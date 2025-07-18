@@ -6,7 +6,6 @@ import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.Widget;
 import gregtech.api.gui.widgets.ClickButtonWidget;
 import gregtech.api.gui.widgets.IndicatorImageWidget;
-import gregtech.api.gui.widgets.LabelWidget;
 import gregtech.api.gui.widgets.SlotWidget;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -44,7 +43,7 @@ import supersymmetry.common.mui.widget.SlotWidgetBlueprintContainer;
 
 public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDisplayBase {
   public DataStorageLoader master_blueprint = null;
-  public Map<String, List<DataStorageLoader>> components = new HashMap<>();
+  public Map<String, ComponentListEntry> components = new HashMap<>();
   private ItemStack lastUsedBlueprint;
 
   public MetaTileEntityAerospaceFlightSimulator(ResourceLocation metaTileEntityId) {
@@ -139,9 +138,12 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     builder.bindPlayerInventory(entityPlayer.inventory, height - 80);
     // this is the thing that displays slots for components
     RocketSimulatorComponentContainerWidget mainWindow =
-        new RocketSimulatorComponentContainerWidget(new Position(9, 9), new Size(width, 28 * 6),entityPlayer);
+        new RocketSimulatorComponentContainerWidget(
+            new Position(9, 9), new Size(width, 28 * 6), entityPlayer);
 
     builder.widget(mainWindow);
+
+    //TODO: make this sync to the server so it doesnt shit itself via a consumer<>
     SlotWidgetBlueprintContainer blueprintContainer =
         new SlotWidgetBlueprintContainer(
             master_blueprint,
@@ -157,14 +159,17 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             () -> {
               master_blueprint.setLocked(
                   components.values().stream()
+                      .map(entry -> entry.cards)
                       .flatMap(List::stream)
                       .anyMatch(ds -> !ds.isEmpty())); // lock the main blueprint if
               // component data cards are inserted so that they dont get voided
-
+             
             });
     // this wont work if you try to put it into the constructor
     blueprintContainer.onSlotChanged =
         () -> {
+            blueprintContainer.detectAndSendChanges();
+
           drawComponentTree(0, 0, master_blueprint.getStackInSlot(0), mainWindow);
           blueprintContainer.setSelfPosition(
               master_blueprint.isEmpty()
@@ -194,21 +199,22 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
 
     container.RemoveSlotLists();
     if (generateComponentTree(blueprintStack)) {
-      for (Map.Entry<String, List<DataStorageLoader>> entry : this.components.entrySet()) {
+      for (Map.Entry<String, ComponentListEntry> entry : this.components.entrySet()) {
         String text = entry.getKey();
         var slotContainer =
             new HorizontalScrollableListWidget(
                 startX, startY, 18 * 5 + 5, 20); // this is the thing that
         // has the slider, and contains the slots.
-        slotContainer.setSliderActive(entry.getValue().size() > 5);
-        for (DataStorageLoader slot : entry.getValue()) {
+        slotContainer.setSliderActive(entry.getValue().cards.size() > 5);
+        for (DataStorageLoader slot : entry.getValue().cards) {
           // position will get changed in the .addSlotList lotContainer later anyways
           slotContainer.addWidget(
               new SlotWidget(slot, 0, 1, 1).setBackgroundTexture(GuiTextures.SLOT_DARK));
         }
         container.addSlotList(
-            new LabelWidget(0, 0, "susy.machine.rocket_simulator.component." + text, 0xFFFFFF),
-            slotContainer);
+            "susy.machine.rocket_simulator.component." + text,
+            slotContainer,
+            entry.getValue().validCounts);
       }
     }
   }
@@ -243,7 +249,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                           }
                           return false;
                         }));
-                this.components.put(type, slots);
+                this.components.put(type, new ComponentListEntry(slots, counts));
               }
             }
           }
@@ -264,14 +270,14 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             .getTagList("components", Constants.NBT.TAG_LIST);
     for (int i = 0; i < componentsList.tagCount(); i++) {
       NBTTagCompound comp = componentsList.getCompoundTagAt(i);
-      List<DataStorageLoader> cardSlots = this.components.get(comp.getString("type"));
+      List<DataStorageLoader> cardSlots = this.components.get(comp.getString("type")).cards;
       int count = (int) cardSlots.stream().map(x -> !x.isEmpty()).count();
       if (IntStream.of(comp.getIntArray("allowedCounts")).noneMatch(x -> x == count)) {
         return false;
       }
     }
 
-    for (Map.Entry<String, List<DataStorageLoader>> entry : this.components.entrySet()) {}
+    // for (Map.Entry<String, List<DataStorageLoader>> entry : this.components.entrySet()) {}
 
     return false;
   }
@@ -310,8 +316,15 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
   public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
     return new MetaTileEntityAerospaceFlightSimulator(metaTileEntityId);
   }
-    private class ComponentListEntry {
 
-public ComponentListEntry() {}
+  // all of this because java hates fun and doesnt have touples
+  private class ComponentListEntry {
+    public List<DataStorageLoader> cards;
+    public int[] validCounts;
+
+    public ComponentListEntry(List<DataStorageLoader> cards, int[] validCounts) {
+      this.cards = cards;
+      this.validCounts = validCounts;
     }
+  }
 }
