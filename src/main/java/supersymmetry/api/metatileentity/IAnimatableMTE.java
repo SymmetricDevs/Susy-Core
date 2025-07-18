@@ -1,5 +1,6 @@
 package supersymmetry.api.metatileentity;
 
+import gregtech.api.GregTechAPI;
 import gregtech.api.metatileentity.IFastRenderMetaTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import net.minecraft.client.Minecraft;
@@ -8,10 +9,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import software.bernie.geckolib3.core.IAnimatable;
 import supersymmetry.client.renderer.handler.GeoMTERenderer;
+import supersymmetry.common.network.SPacketUpdateBlockRendering;
+
+import java.util.Collection;
 
 import static supersymmetry.api.util.SuSyUtility.susyId;
 
 public interface IAnimatableMTE extends IFastRenderMetaTileEntity, IAnimatable {
+
+    Collection<BlockPos> getHiddenBlocks();
 
     @SuppressWarnings("unchecked")
     default <T extends MetaTileEntity> T thisObject() {
@@ -40,6 +46,14 @@ public interface IAnimatableMTE extends IFastRenderMetaTileEntity, IAnimatable {
 
     default BlockPos getLightPos() {
         return thisObject().getPos();
+    }
+
+    // Should only be called on server side
+    default void disableBlockRendering(boolean disable) {
+        BlockPos pos = thisObject().getPos();
+        int dimId = thisObject().getWorld().provider.getDimension();
+        var packet = new SPacketUpdateBlockRendering(pos, disable ? getHiddenBlocks() : null, dimId);
+        GregTechAPI.networkHandler.sendToDimension(packet, dimId);
     }
 
     // If this returns true, the TESR will keep rendering even when the chunk is culled.

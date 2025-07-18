@@ -28,6 +28,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.builder.ILoopType;
@@ -35,9 +36,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
-import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.api.metatileentity.IAnimatableMTE;
-import supersymmetry.api.util.BlockRenderManager;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockGrinderCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -53,6 +52,7 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
     @SideOnly(Side.CLIENT)
     private AnimationFactory factory;
 
+    @Nullable
     private List<BlockPos> hiddenBlocks;
 
     public MetaTileEntityBallMill(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap) {
@@ -136,28 +136,18 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
     }
 
     @Override
+    @Nullable
+    public List<BlockPos> getHiddenBlocks() {
+        return hiddenBlocks;
+    }
+
+    @Override
     protected void formStructure(PatternMatchContext context) {
         super.formStructure(context);
         this.hiddenBlocks = context.getOrDefault("Hidden", new ArrayList<>());
         World world = getWorld();
         if (world != null && !world.isRemote) {
             disableBlockRendering(true);
-        }
-    }
-
-    protected void disableBlockRendering(boolean disable) {
-        if (hiddenBlocks != null && !hiddenBlocks.isEmpty()) {
-            int id = getWorld().provider.getDimension();
-
-            writeCustomData(SuSyDataCodes.UPDATE_BLOCK_RENDERING, buf -> {
-                buf.writeInt(id);
-                buf.writeBoolean(disable);
-                // Only write blockPoses into the packet when we're disabling the rendering
-                if (disable) {
-                    buf.writeInt(hiddenBlocks.size());
-                    hiddenBlocks.forEach(buf::writeBlockPos);
-                }
-            });
         }
     }
 
@@ -171,37 +161,9 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
     }
 
     @Override
-    public void onRemoval() {
-        super.onRemoval();
-        if (this.getWorld() != null && !this.getWorld().isRemote) {
-            disableBlockRendering(false);
-        }
-    }
-
-    @Override
     public void writeInitialSyncData(PacketBuffer buf) {
         super.writeInitialSyncData(buf);
         disableBlockRendering(isStructureFormed()); // This is a bit ugly tho...
-    }
-
-    @Override
-    public void receiveCustomData(int dataId, PacketBuffer buf) {
-        if (dataId == SuSyDataCodes.UPDATE_BLOCK_RENDERING) {
-            boolean updateRendering = getWorld().provider.getDimension() == buf.readInt();
-            boolean disable = buf.readBoolean();
-            if (disable) {
-                List<BlockPos> hiddenBlocks = new ArrayList<>();
-                int size = buf.readInt();
-                for (int i = 0; i < size; i++) {
-                    hiddenBlocks.add(buf.readBlockPos());
-                }
-                BlockRenderManager.addDisableModel(getPos(), hiddenBlocks, updateRendering);
-            } else {
-                BlockRenderManager.removeDisableModel(getPos(), updateRendering);
-            }
-        } else {
-            super.receiveCustomData(dataId, buf);
-        }
     }
 
     @Override
