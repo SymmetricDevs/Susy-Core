@@ -986,10 +986,6 @@ susy.weather_resistance=§2Will not explode from water, lava, fire or rain.
 susy.large_fluid_pump.y_level=Current Controller Y level: Y=%s
 susy.large_fluid_pump.biome=Current bottom Pipe Casing biome: %s
 
-# Latex Logs
-susy.block_group_members.latex_logs.name=Rubber Log
-
-
 # Stock Interfaces
 susy.machine.stock_controller.name=Locomotive Controller
 susy.stock_interfaces.locomotive_controller.description=Controls nearby locomotives thrust and break depending on redstone input
