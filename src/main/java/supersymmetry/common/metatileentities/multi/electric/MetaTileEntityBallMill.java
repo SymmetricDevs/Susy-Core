@@ -36,6 +36,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.api.metatileentity.IAnimatableMTE;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockGrinderCasing;
@@ -48,6 +49,13 @@ import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.hiddenG
 import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.hiddenStates;
 
 public class MetaTileEntityBallMill extends RecipeMapMultiblockController implements IAnimatableMTE {
+
+    @SideOnly(Side.CLIENT)
+    private BlockPos lightPos;
+    @SideOnly(Side.CLIENT)
+    private Vec3i transformation;
+    @SideOnly(Side.CLIENT)
+    private AxisAlignedBB renderBounding;
 
     @SideOnly(Side.CLIENT)
     private AnimationFactory factory;
@@ -146,6 +154,9 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
         super.formStructure(context);
         this.hiddenBlocks = context.getOrDefault("Hidden", new ArrayList<>());
         World world = getWorld();
+
+        // This will only be called on a server side world
+        // so actually no need to check !world.isRemote
         if (world != null && !world.isRemote) {
             disableBlockRendering(true);
         }
@@ -156,6 +167,9 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
         super.invalidateStructure();
         World world = getWorld();
         if (world != null && !world.isRemote) {
+            writeCustomData(SuSyDataCodes.RESET_RENDER_FIELDS, buf -> {
+                /* Do nothing */
+            });
             disableBlockRendering(false);
         }
     }
@@ -167,6 +181,17 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
     }
 
     @Override
+    public void receiveCustomData(int dataId, PacketBuffer buf) {
+        if (dataId == SuSyDataCodes.RESET_RENDER_FIELDS) {
+            this.lightPos = null;
+            this.renderBounding = null;
+            this.transformation = null;
+        } else {
+            super.receiveCustomData(dataId, buf);
+        }
+    }
+
+    @Override
     public boolean allowsExtendedFacing() {
         return false;
     }
@@ -174,56 +199,50 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
     @SideOnly(Side.CLIENT)
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
-        EnumFacing front = getFrontFacing();
-        EnumFacing up = getUpwardsFacing();
-        EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(front, up, isFlipped());
+        if (this.renderBounding == null) {
+            EnumFacing front = getFrontFacing();
+            EnumFacing up = getUpwardsFacing();
+            // The left side of the controller, not from the player's perspective
+            EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(front, up, isFlipped());
 
-        BlockPos pos = getPos();
+            BlockPos pos = getPos();
 
-        // Oddly, the left appears to be switched.
-        var v1 = pos.offset(left.getOpposite(), 3).offset(EnumFacing.DOWN, 1).offset(front, 0);
-        var v2 = pos.offset(left, 10).offset(EnumFacing.UP, 8).offset(front.getOpposite(), 6);
-
-        return new AxisAlignedBB(v1, v2);
+            var v1 = pos.offset(left.getOpposite(), 3).offset(EnumFacing.DOWN, 1).offset(front, 0);
+            var v2 = pos.offset(left, 10).offset(EnumFacing.UP, 8).offset(front.getOpposite(), 6);
+            this.renderBounding = new AxisAlignedBB(v1, v2);
+        }
+        return renderBounding;
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public Vec3i getTransformation() {
-        EnumFacing front = getFrontFacing();
-        EnumFacing back = front.getOpposite();
-        EnumFacing up = getUpwardsFacing();
-        EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(front, up, isFlipped());
+        if (this.transformation == null) {
+            EnumFacing front = getFrontFacing();
+            EnumFacing back = front.getOpposite();
+            EnumFacing up = getUpwardsFacing();
+            EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(front, up, isFlipped());
 
-        int xOff = back.getXOffset() * 3 + left.getXOffset() * 4;
-        int zOff = back.getZOffset() * 3 + left.getZOffset() * 4;
+            int xOff = back.getXOffset() * 3 + left.getXOffset() * 4;
+            int zOff = back.getZOffset() * 3 + left.getZOffset() * 4;
 
-        return new Vec3i(xOff, 3, zOff);
+            this.transformation = new Vec3i(xOff, 3, zOff);
+        }
+        return transformation;
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public BlockPos getLightPos() {
-        EnumFacing front = getFrontFacing();
-        EnumFacing back = front.getOpposite();
-        EnumFacing up = getUpwardsFacing();
-        EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(front, up, isFlipped());
+        if (this.lightPos == null) {
+            EnumFacing front = getFrontFacing();
+            EnumFacing back = front.getOpposite();
+            EnumFacing up = getUpwardsFacing();
+            EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(front, up, isFlipped());
 
-        return getPos().offset(up, 6).offset(back, 3).offset(left, 4); // TODO
-    }
-
-    @SideOnly(Side.CLIENT)
-    private <T extends MetaTileEntity & IAnimatableMTE> PlayState predicate(AnimationEvent<T> event) {
-        //        event.getController().transitionLengthTicks = 0.0;
-        event.getController()
-                .setAnimation((new AnimationBuilder()).addAnimation("default_loop", ILoopType.EDefaultLoopTypes.LOOP));
-        return isActive() ? PlayState.CONTINUE : PlayState.STOP;
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, "controller", 0.0F, this::predicate));
+            this.lightPos = getPos().offset(up, 6).offset(back, 3).offset(left, 4); // TODO
+        }
+        return lightPos;
     }
 
     @SideOnly(Side.CLIENT)
@@ -233,6 +252,19 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
             this.factory = new AnimationFactory(this);
         }
         return this.factory;
+    }
+
+    @SideOnly(Side.CLIENT)
+    private <T extends MetaTileEntity & IAnimatableMTE> PlayState predicate(AnimationEvent<T> event) {
+        event.getController().setAnimation(new AnimationBuilder()
+                .addAnimation("default_loop", ILoopType.EDefaultLoopTypes.LOOP));
+        return isActive() ? PlayState.CONTINUE : PlayState.STOP;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void registerControllers(AnimationData data) {
+        data.addAnimationController(new AnimationController<>(this, "controller", 0.0F, this::predicate));
     }
 
     @SideOnly(Side.CLIENT)
