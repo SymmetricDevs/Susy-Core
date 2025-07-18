@@ -27,6 +27,7 @@ public class HorizontalScrollableListWidget extends AbstractWidgetGroup {
 
   public void setSliderOffset(float percent) {
     scrollOffset = (int) (getMaxScrollOffset() * percent);
+    updateElementPositions();
   }
 
   public void setSliderActive(boolean state) {

@@ -57,7 +57,7 @@ public class RocketSimulatorComponentContainerWidget extends AbstractWidgetGroup
             0));
 
     intSelector selector =
-        new intSelector(validValues, new Position(this.getSize().width - 50, 0), new Size(60, 18));
+        new intSelector(validValues, new Position(this.getSize().width - 80, 0), new Size(60, 18));
     selector.setActive(false); // turn it off by default, only show when the button is clicked
     selector.setVisible(false);
     listEntry entry =
@@ -79,7 +79,6 @@ public class RocketSimulatorComponentContainerWidget extends AbstractWidgetGroup
               return entry.shortView;
             },
             (bool) -> {
-              SusyLog.logger.info("setShortView call");
               entry.setShortView(bool);
             });
 
@@ -117,8 +116,6 @@ public class RocketSimulatorComponentContainerWidget extends AbstractWidgetGroup
         HorizontalScrollableListWidget itemList,
         intSelector selector) {
       super(pos, size);
-      SusyLog.logger.info(
-          "pos {} size {} checkmark {} button {} list {}", pos, size, checkmark, button, itemList);
       this.checkmark = button;
       this.itemList = itemList;
       this.selector = selector;
@@ -137,14 +134,6 @@ public class RocketSimulatorComponentContainerWidget extends AbstractWidgetGroup
       if (checkboxBackground != null) {
         this.addWidget(checkboxBackground);
       }
-      SusyLog.logger.info(
-          "weird shit, itemlist count: {}, dimensions of the itemlist pos {} size {}, dimensions of"
-              + " the thing: pos {} size {}",
-          itemList.widgets.size(),
-          itemList.getPosition(),
-          itemList.getSize(),
-          this.getPosition(),
-          this.getSize());
     }
 
     public void setWidgetIndex(Widget widget) {
@@ -200,6 +189,7 @@ public class RocketSimulatorComponentContainerWidget extends AbstractWidgetGroup
     public intSelector(int[] validValues, Position position, Size size) {
       super(position, size);
       this.validValues = validValues;
+      SusyLog.logger.info("selector init with values {} {} {}", validValues, position, size);
       decreaseButton =
           new ClickButtonWidget(
                   0,
@@ -226,15 +216,21 @@ public class RocketSimulatorComponentContainerWidget extends AbstractWidgetGroup
               .setButtonTexture(GuiTextures.BUTTON_RIGHT);
       amountTextField =
           new TextFieldWidget2(
-              size.width / 5,
+              (int) ((size.width / 5) * 2.5),
               0,
               (size.width / 5) * 3,
               size.height,
               () -> {
-                SusyLog.logger.info("text field value requested");
                 return Integer.toString(this.getValue());
               },
               (something) -> {});
+      this.addWidget(amountTextField);
+      this.addWidget(increaseButton);
+      increaseButton.setVisible(validValues.length > 1);
+      increaseButton.setActive(validValues.length > 1);
+      this.addWidget(decreaseButton);
+      decreaseButton.setVisible(validValues.length > 1);
+      decreaseButton.setActive(validValues.length > 1);
     }
 
     public int getValue() {

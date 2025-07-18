@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.stream.IntStream;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -143,7 +144,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
 
     builder.widget(mainWindow);
 
-    //TODO: make this sync to the server so it doesnt shit itself via a consumer<>
+    // TODO: make this sync to the server so it doesnt shit itself via a consumer<>
     SlotWidgetBlueprintContainer blueprintContainer =
         new SlotWidgetBlueprintContainer(
             master_blueprint,
@@ -161,14 +162,16 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                   components.values().stream()
                       .map(entry -> entry.cards)
                       .flatMap(List::stream)
-                      .anyMatch(ds -> !ds.isEmpty())); // lock the main blueprint if
-              // component data cards are inserted so that they dont get voided
-             
+                      .anyMatch(ds -> !ds.isEmpty()));
+
+              // lock the main blueprint if component data cards are inserted so that they dont get
+              // voided (hopefully)
+
             });
     // this wont work if you try to put it into the constructor
     blueprintContainer.onSlotChanged =
         () -> {
-            blueprintContainer.detectAndSendChanges();
+          blueprintContainer.detectAndSendChanges();
 
           drawComponentTree(0, 0, master_blueprint.getStackInSlot(0), mainWindow);
           blueprintContainer.setSelfPosition(
@@ -190,6 +193,11 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
       int startY,
       ItemStack blueprintStack,
       RocketSimulatorComponentContainerWidget container) {
+    container.RemoveSlotLists();
+
+    if (blueprintStack.getMetadata() != SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.getMetaValue()) {
+      return;
+    }
 
     // meant to do like
     // comp name                #slot# #slot# #slot#
@@ -197,7 +205,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     // comp name but longer     |  #slot# #slot# #slot# #slot# #slot# | #slot# #slot#
     //                          =============visible part==============
 
-    container.RemoveSlotLists();
     if (generateComponentTree(blueprintStack)) {
       for (Map.Entry<String, ComponentListEntry> entry : this.components.entrySet()) {
         String text = entry.getKey();
@@ -208,9 +215,11 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         slotContainer.setSliderActive(entry.getValue().cards.size() > 5);
         for (DataStorageLoader slot : entry.getValue().cards) {
           // position will get changed in the .addSlotList lotContainer later anyways
+
           slotContainer.addWidget(
               new SlotWidget(slot, 0, 1, 1).setBackgroundTexture(GuiTextures.SLOT_DARK));
         }
+
         container.addSlotList(
             "susy.machine.rocket_simulator.component." + text,
             slotContainer,
@@ -219,12 +228,14 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     }
   }
 
+  // TODO: remove my debugging shit :c
+
   private boolean generateComponentTree(ItemStack stack) {
-    if (stack == lastUsedBlueprint)
-      return true; // i wasnt sure if it would lag too much if i regenerated the thing on every
-    // frame so here its meant to do it only when the item changes i guess
+    if (stack == lastUsedBlueprint && stack.getItem() != Items.AIR) return true;
+
     lastUsedBlueprint = stack;
     this.components.clear();
+
     if (stack.hasTagCompound()) {
       NBTTagCompound tag = stack.getTagCompound();
       if (tag.hasKey("components", Constants.NBT.TAG_LIST)) {
@@ -249,11 +260,13 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                           }
                           return false;
                         }));
+
                 this.components.put(type, new ComponentListEntry(slots, counts));
               }
             }
           }
         }
+
         return true;
       }
     }
