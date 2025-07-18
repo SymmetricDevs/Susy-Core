@@ -42,7 +42,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
-    public static final int MIN_RADIUS = 4;
+    public static final int MIN_RADIUS = 2;
     public static final int MAX_RADIUS = 20;
     private int sDist;
     private boolean isFake;
@@ -160,7 +160,6 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
 
                         return buildRepeatingString('#', '#', "GGGG", sDist);
                     case 2:
-
                         return buildRepeatingString('E', 'E', "GGGG", sDist);
                 }
                 break;
@@ -298,7 +297,7 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
                 .where('P', states(getPipeCasingState()))
                 //.where('B', abilities(MultiblockAbility.IMPORT_ITEMS, MultiblockAbility.EXPORT_ITEMS))
                 .where('D', states(getCasingState()))
-                .where('C', states(getCasingState()).setMinGlobalLimited(40).or(autoAbilities(true, true, true, true, false, false, false)))
+                .where('C', states(getCasingState()).setMinGlobalLimited(10).or(autoAbilities(true, true, true, true, false, false, false)))
                 .where('G', states(getCasingState()))
                 .where('M', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STAINLESS_STEEL_GEARBOX)))
                 .where('F', frames(Materials.StainlessSteel))
