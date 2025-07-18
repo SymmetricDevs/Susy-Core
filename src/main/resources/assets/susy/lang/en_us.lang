@@ -363,6 +363,7 @@ susy.machine.scrap_recycler.name=Scrap Recycler
 susy.machine.rocket_assembler.name=Rocket Assembler
 susy.machine.rocket_programmer.name=Rocket Programmer
 susy.machine.metallurgical_converter.name=Metallurgical Converter
+susy.machine.injection_molder.name=Injection Molder
 
 susy.machine.primitive_item_import.name=Primitive Item Import Bus
 susy.machine.primitive_item_import.tooltip=Only for use with the Primitive Smelter
@@ -844,6 +845,7 @@ recipemap.metallurgical_converter.name=Metallurgical Converter
 recipemap.low_pressure_advanced_steam_turbine.name=Low Pressure Advanced Steam Turbine
 recipemap.high_pressure_advanced_steam_turbine.name=High Pressure Advanced Steam Turbine
 recipemap.mixer_settler.name=Mixer-Settler
+recipemap.injection_molder=Injection Molding
 
 susy.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 
