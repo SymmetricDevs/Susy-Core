@@ -115,6 +115,7 @@ public class SuSyMetaTileEntities {
 
     public static SimpleMachineMetaTileEntity[] ION_IMPLANTER;
     public static SimpleMachineMetaTileEntity[] CVD;
+    public static SimpleMachineMetaTileEntity[] SPUTTER_DEPOSITION;
 
     public static SimpleMachineMetaTileEntity[] WEAPONS_FACTORY;
 
@@ -172,7 +173,7 @@ public class SuSyMetaTileEntities {
     public static SimpleMachineMetaTileEntity[] BATH_CONDENSER;
     public static SimpleMachineMetaTileEntity[] ELECTROSTATIC_SEPARATOR;
     public static SimpleMachineMetaTileEntity[] TEXTILE_SPINNER;
-    public static SimpleMachineMetaTileEntity[] POLISHING_MACHINE;
+    public static SimpleMachineMetaTileEntity[] WAFER_SPINNER;
 
     public static MetaTileEntityPrimitiveSmelter PRIMITIVE_SMELTER;
     public static MetaTileEntityPrimitiveItemBus PRIMITIVE_ITEM_IMPORT;
@@ -227,6 +228,8 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityStockItemExchanger STOCK_ITEM_EXCHANGER;
     //public static MetaTileEntityStockReader STOCK_CONTENT_READER;
     public static MetaTileEntityLocomotiveController STOCK_CONTROLLER;
+
+    public static MetaTileEntityEUVLithographer EUV_LITHOGRAPHER;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -310,6 +313,9 @@ public class SuSyMetaTileEntities {
 
         CURTAIN_COATER = registerMetaTileEntity(14513, new MetaTileEntityCurtainCoater(susyId("curtain_coater")));
         MILLING = registerMetaTileEntity(14514, new MetaTileEntityPreciseMillingMachine(susyId("milling")));
+
+        EUV_LITHOGRAPHER = registerMetaTileEntity(14741, new MetaTileEntityEUVLithographer(susyId("euv_lithographer")));
+        registerSimpleMTE(SPUTTER_DEPOSITION, 12, 14742, "sputter_deposition", SuSyRecipeMaps.SPUTTER_DEPOSITION_RECIPES, SusyTextures.SPUTTER_DEPOSITION_OVERLAY, true, GTUtility.defaultTankSizeFunction);
 
         //thermodynamic stuff
         registerSimpleMTE(FLUID_COMPRESSOR, 12, 15000, "fluid_compressor", SuSyRecipeMaps.FLUID_COMPRESSOR_RECIPES, SusyTextures.FLUID_COMPRESSOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
@@ -414,7 +420,7 @@ public class SuSyMetaTileEntities {
         }
 
         registerSimpleMTE(ELECTROSTATIC_SEPARATOR, 12, 17035, "electrostatic_separator", SuSyRecipeMaps.ELECTROSTATIC_SEPARATOR, SusyTextures.ELECTROSTATIC_SEPARATOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
-        registerSimpleMTE(POLISHING_MACHINE, 12, 17048, "polishing_machine", SuSyRecipeMaps.POLISHING_MACHINE, SusyTextures.POLISHING_MACHINE_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+        registerSimpleMTE(WAFER_SPINNER, 12, 17048, "wafer_spinner", SuSyRecipeMaps.WAFER_SPINNER, SusyTextures.WAFER_SPINNER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         registerSimpleMTE(TEXTILE_SPINNER, 12, 17061, "textile_spinner", SuSyRecipeMaps.SPINNING_RECIPES, SusyTextures.TEXTILE_SPINNER_OVERLAY, true);
         ArrayList<Integer> ids = new ArrayList<>();
         for (int id = 14500; id < 15000; id++) {
@@ -429,7 +435,7 @@ public class SuSyMetaTileEntities {
         STOCK_ITEM_EXCHANGER = registerMetaTileEntity(18002, new MetaTileEntityStockItemExchanger(susyId("stock_item_exchanger")));
         //STOCK_CONTENT_READER = registerMetaTileEntity(18003, new MetaTileEntityStockReader(susyId("stock_content_reader")));
         STOCK_CONTROLLER = registerMetaTileEntity(18004, new MetaTileEntityLocomotiveController(susyId("stock_controller")));
-      
+
         //Space machines
         LANDING_PAD = registerMetaTileEntity(18005, new MetaTileEntityLandingPad(susyId("landing_pad")));
         SCRAP_RECYCLER = registerMetaTileEntity(18006, new MetaTileEntityScrapRecycler(susyId("scrap_recycler")));
@@ -504,6 +510,7 @@ public class SuSyMetaTileEntities {
         UV_LIGHT_BOX = new SimpleMachineMetaTileEntity[GTValues.OpV];
         CVD = new SimpleMachineMetaTileEntity[GTValues.OpV];
         ION_IMPLANTER = new SimpleMachineMetaTileEntity[GTValues.OpV];
+        SPUTTER_DEPOSITION = new SimpleMachineMetaTileEntity[GTValues.OpV];
 
         FLUID_COMPRESSOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
         FLUID_DECOMPRESSOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
@@ -511,7 +518,7 @@ public class SuSyMetaTileEntities {
 
         ELECTROSTATIC_SEPARATOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
         TEXTILE_SPINNER = new SimpleMachineMetaTileEntity[GTValues.OpV];
-        POLISHING_MACHINE = new SimpleMachineMetaTileEntity[GTValues.OpV];
+        WAFER_SPINNER = new SimpleMachineMetaTileEntity[GTValues.OpV];
 
         PHASE_SEPARATOR = new SimpleMachineMetaTileEntity[1];
         BATH_CONDENSER = new SimpleMachineMetaTileEntity[1];
