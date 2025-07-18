@@ -1,6 +1,7 @@
 package supersymmetry.client.renderer.handler;
 
 import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
@@ -38,6 +39,13 @@ public enum GeoMTERenderer implements IGeoRenderer<IAnimatableMTE> {
         return MODEL_DISPATCHER.getTextureLocation(mte);
     }
 
+    private static boolean isFlipped(MetaTileEntity mte) {
+        if (mte instanceof MultiblockControllerBase controller) {
+            return controller.isFlipped();
+        }
+        return false;
+    }
+
     @SuppressWarnings("DuplicatedCode")
     public <T extends MetaTileEntity & IAnimatableMTE> void render(T mte, double x, double y, double z, float partialTicks) {
         GeoModel model = MODEL_DISPATCHER.getModel(MODEL_DISPATCHER.getModelLocation(mte));
@@ -54,7 +62,7 @@ public enum GeoMTERenderer implements IGeoRenderer<IAnimatableMTE> {
             GlStateManager.translate(vec3i.getX(), vec3i.getY(), vec3i.getZ());
 
             // TODO: use [RelativeDirection] to handle flipped multiblocks
-            FixedGeoBlockRenderer.rotateBlock(mte.getFrontFacing());
+            FixedGeoBlockRenderer.rotateBlock(mte.getFrontFacing(), isFlipped(mte));
 
             Minecraft.getMinecraft().getTextureManager().bindTexture(getTextureLocation(mte));
             render(model, mte, partialTicks, 1, 1, 1, 1);

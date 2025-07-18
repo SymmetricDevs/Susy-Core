@@ -51,7 +51,7 @@ public abstract class FixedGeoBlockRenderer<T extends TileEntity & IAnimatable> 
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lx, ly);
     }
 
-    public static void rotateBlock(EnumFacing facing) {
+    public static void rotateBlock(EnumFacing facing, boolean flip) {
         switch (facing) {
             case SOUTH -> GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
             case WEST -> GlStateManager.rotate(90.0F, 0.0F, 1.0F, 0.0F);
@@ -59,7 +59,15 @@ public abstract class FixedGeoBlockRenderer<T extends TileEntity & IAnimatable> 
             case UP -> GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
             case DOWN -> GlStateManager.rotate(90.0F, -1.0F, 0.0F, 0.0F);
             default -> {
-                // No rotation needed for north
+                /* No rotation needed for north */
+            }
+        }
+
+        if (flip) {
+            switch (facing) {
+                case NORTH, SOUTH -> GlStateManager.scale(1, 1, -1);
+                case EAST, WEST -> GlStateManager.scale(-1, 1, 1);
+                case UP, DOWN -> GlStateManager.scale(1, -1, 1);
             }
         }
     }
@@ -84,7 +92,7 @@ public abstract class FixedGeoBlockRenderer<T extends TileEntity & IAnimatable> 
         GlStateManager.pushMatrix();
         {
             GlStateManager.translate(x + 0.5, y + 0.5, z + 0.5);
-            rotateBlock(getFacing(tile));
+            rotateBlock(getFacing(tile), false);
             Minecraft.getMinecraft().getTextureManager().bindTexture(getTextureLocation(tile));
             render(model, tile, partialTicks, 1, 1, 1, 1);
         }
