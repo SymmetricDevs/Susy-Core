@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import supersymmetry.client.renderer.handler.GeoMTERenderer;
 import supersymmetry.common.network.SPacketUpdateBlockRendering;
@@ -48,12 +49,18 @@ public interface IAnimatableMTE extends IFastRenderMetaTileEntity, IAnimatable {
         return thisObject().getPos();
     }
 
-    // Should only be called on server side
+    // Should only be called on the server side
     default void disableBlockRendering(boolean disable) {
-        BlockPos pos = thisObject().getPos();
-        int dimId = thisObject().getWorld().provider.getDimension();
-        var packet = new SPacketUpdateBlockRendering(pos, disable ? getHiddenBlocks() : null, dimId);
-        GregTechAPI.networkHandler.sendToDimension(packet, dimId);
+        World world = thisObject().getWorld();
+        // Special case for server worlds that exists on client side
+        // E.g., TrackedDummyWorld
+        // This should at least cover the ones in CEu & MUI2
+        if (!world.getWorldInfo().getWorldName().contains("Dummy")) {
+            BlockPos pos = thisObject().getPos();
+            int dimId = world.provider.getDimension();
+            var packet = new SPacketUpdateBlockRendering(pos, disable ? getHiddenBlocks() : null, dimId);
+            GregTechAPI.networkHandler.sendToDimension(packet, dimId);
+        }
     }
 
     // If this returns true, the TESR will keep rendering even when the chunk is culled.
