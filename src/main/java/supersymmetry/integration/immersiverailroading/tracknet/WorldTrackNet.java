@@ -1,6 +1,8 @@
 package supersymmetry.integration.immersiverailroading.tracknet;
 
 import cam72cam.immersiverailroading.tile.TileRail;
+import cam72cam.immersiverailroading.track.PosStep;
+import cam72cam.immersiverailroading.util.VecUtil;
 import gregtech.api.util.world.DummyWorld;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.Vec3d;
@@ -50,13 +52,22 @@ public class WorldTrackNet extends WorldSavedData {
 
     public void handleNewTrack(TileRail rail) {
 
+        boolean isSwitch = rail.findSwitchParent() != null;
+
+        if(isSwitch) {
+            handleSwitch(rail);
+        } else {
+            handleNonSwitch(rail);
+        }
+
+    }
+
+    private void handleNonSwitch(TileRail rail) {
+
         Vec3d frontPos = TrackUtil.getRailEnd(rail, false).internal();
         Vec3d backPos = TrackUtil.getRailEnd(rail, true).internal();
-
         TrackNode frontNode = nodes.get(frontPos);
         TrackNode backNode = nodes.get(backPos);
-
-
 
         if (frontNode != null && backNode != null && frontNode.mergeable() && backNode.mergeable()) {
             TrackSection frontSection = frontNode.trackSections.get(0);
@@ -81,39 +92,55 @@ public class WorldTrackNet extends WorldSavedData {
 
             start.trackSections.add(merged);
             end.trackSections.add(merged);
-        } else if (frontNode != null && frontNode.mergeable()) {
-            TrackSection section = frontNode.trackSections.get(0);
-            section.rails.add(rail);
-            tileRailToTrackSection.put(rail, section);
-
-            frontNode.setPosition(backPos);
-            nodes.remove(frontPos);
-            nodes.put(backPos, frontNode);
+        } else if (frontNode != null && backNode.mergeable()) {
+            this.extendSection(rail, frontNode, backPos);
         } else if (backNode != null && backNode.mergeable()) {
-            TrackSection section = backNode.trackSections.get(0);
-            section.rails.add(rail);
-            tileRailToTrackSection.put(rail, section);
+            this.extendSection(rail, backNode, frontPos);
+        } else {
+            if (frontNode == null) {
+                frontNode = new TrackNode(frontPos);
 
-            backNode.setPosition(frontPos);
-            nodes.remove(backPos);
-            nodes.put(frontPos, backNode);
-        } else if(backNode == null && frontNode == null) {
-            frontNode = new TrackNode(frontPos);
-            backNode = new TrackNode(backPos);
+                nodes.put(frontPos, frontNode);
+            }
+
+            if (backNode == null) {
+                backNode = new TrackNode(backPos);
+                nodes.put(backPos, backNode);
+            }
 
             TrackSection newSection = new TrackSection(frontNode, backNode);
             frontNode.trackSections.add(newSection);
             backNode.trackSections.add(newSection);
 
-            nodes.put(frontPos, frontNode);
-            nodes.put(backPos, backNode);
-
             tileRailToTrackSection.put(rail, newSection);
             newSection.rails.add(rail);
-
         }
 
+    }
 
+    private void handleSwitch(TileRail rail) {
+        TileRail straight = rail.findSwitchParent();
+        if (rail == straight) return;
+
+        PosStep switchPosStep = TrackUtil.getRailEnd(rail, true);
+        Vec3d switchPos = switchPosStep.internal();
+        Vec3d turnPos = TrackUtil.getRailEnd(rail, false).internal();
+        Vec3d straightPos = VecUtil.fromYaw(-3.0, switchPosStep.yaw).add(straight.getPos()).internal();
+
+        TrackNode switchNode = nodes.get(switchPos);
+
+        
+
+    }
+
+    private void extendSection(TileRail rail, TrackNode node, Vec3d pos) {
+        TrackSection section = node.trackSections.get(0);
+        section.rails.add(rail);
+        tileRailToTrackSection.put(rail, section);
+
+        nodes.remove(node.getPosition());
+        node.setPosition(pos);
+        nodes.put(pos, node);
     }
 
     public void handleTrackRemoved(TileRail rail) {

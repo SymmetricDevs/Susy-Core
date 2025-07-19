@@ -2,12 +2,12 @@ package supersymmetry.integration.immersiverailroading.util;
 
 import cam72cam.immersiverailroading.tile.TileRail;
 import cam72cam.immersiverailroading.tile.TileRailBase;
-import cam72cam.immersiverailroading.track.BuilderBase;
-import cam72cam.immersiverailroading.track.BuilderCubicCurve;
-import cam72cam.immersiverailroading.track.CubicCurve;
-import cam72cam.immersiverailroading.track.PosStep;
+import cam72cam.immersiverailroading.track.*;
 import cam72cam.immersiverailroading.util.VecUtil;
 import cam72cam.mod.math.Vec3i;
+import supersymmetry.api.SusyLog;
+
+import java.lang.reflect.Field;
 
 public class TrackUtil {
 
@@ -24,6 +24,43 @@ public class TrackUtil {
 
         return null;
     }
+
+    // TODO: Make better :trolley:
+    public static PosStep[] getSwitchRailEnd(TileRail rail) {
+        BuilderBase builderBase = rail.info.getBuilder(rail.getWorld());
+        if (builderBase == null) {
+            return null;
+        }
+        if (builderBase instanceof BuilderSwitch builderSwitch) {
+            BuilderStraight straightBuilder = null;
+            BuilderCubicCurve turnBuilder = null;
+            try {
+                Field straightBuilderField = BuilderSwitch.class.getDeclaredField("straightBuilderBuilder");
+                Field turnBuilderField = BuilderSwitch.class.getDeclaredField("turnBuilder");
+                straightBuilderField.setAccessible(true);
+                turnBuilderField.setAccessible(true);
+
+                straightBuilder = (BuilderStraight) straightBuilderField.get(builderSwitch);
+                turnBuilder = (BuilderCubicCurve) turnBuilderField.get(builderSwitch);
+
+            } catch (NoSuchFieldException e) {
+                SusyLog.logger.error("Failed to reflect SwitchBuilder turn and straight builders", e);
+            } catch (IllegalAccessException e) {
+                SusyLog.logger.error("Something went wrong with SwitchBuilder reflection", e);
+            }
+
+
+            CubicCurve straightCurve = straightBuilder.getCurve();
+            CubicCurve turnCurve = turnBuilder.getCurve();
+            Vec3i pos = new Vec3i(rail.info.placementInfo.placementPosition.add(rail.getPos()));
+
+            return new PosStep[] {new PosStep(straightCurve.p1.add(pos), straightCurve.angleStart() - 180, 0),
+                    new PosStep(straightCurve.p2.add(pos), straightCurve.angleStop(), 0),
+                    new PosStep(turnCurve.p2.add(pos), turnCurve.angleStop(), 0)};
+        }
+        return null;
+    }
+
 
     public static TileRail nextRail(TileRail rail, boolean back) {
         PosStep railEnd = getRailEnd(rail, back);

@@ -27,20 +27,19 @@ public class TrackNode {
         this.position = position;
     }
 
-    public void connectSection(TrackSection section) {
-        this.trackSections.add(section);
-    }
-
     public boolean mergeable() {
         return this.type.equals(NodeType.END);
     }
 
-
+    public Vec3d getPosition() {
+        return this.position;
+    }
 
     public enum NodeType {
         END,
         SIGNAL,
         SWITCH,
+        MERGE,
         STATION
     }
 }
