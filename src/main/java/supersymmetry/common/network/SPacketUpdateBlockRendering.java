@@ -31,9 +31,9 @@ public class SPacketUpdateBlockRendering implements IPacket, IClientExecutor {
 
     public SPacketUpdateBlockRendering(BlockPos controllerPos, @Nullable Collection<BlockPos> poses, int dimId) {
         this.disable = poses != null;
+        this.dimId = dimId;
         this.controllerPos = controllerPos;
         this.poses = poses;
-        this.dimId = dimId;
     }
 
     @SideOnly(Side.CLIENT)

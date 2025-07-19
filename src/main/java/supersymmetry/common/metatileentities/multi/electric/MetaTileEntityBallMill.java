@@ -43,7 +43,7 @@ import supersymmetry.common.blocks.BlockGrinderCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.hiddenGearTooth;
 import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.hiddenStates;
@@ -61,7 +61,7 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
     private AnimationFactory factory;
 
     @Nullable
-    private List<BlockPos> hiddenBlocks;
+    private Collection<BlockPos> hiddenBlocks;
 
     public MetaTileEntityBallMill(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap) {
         super(metaTileEntityId, recipeMap);
@@ -134,7 +134,10 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
                 .where('C', hiddenStates(getShellCasingState()))
                 .where('H', hiddenStates(getShellHeadState()))
                 .where('D', hiddenStates(getDiaphragmState()))
-                .where('G', hiddenGearTooth(getFrontFacing().rotateYCCW().getAxis()))
+                .where('G', hiddenGearTooth(
+                        // Since isFlipped() isn't reliable at this stage, and we just care about the Axis here anyway...
+                        RelativeDirection.LEFT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), false).getAxis()
+                ))
                 .where('N', states(getGearBoxState()))
                 .where('X', frames(Materials.Steel))
                 .where('S', selfPredicate())
@@ -145,7 +148,7 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
 
     @Override
     @Nullable
-    public List<BlockPos> getHiddenBlocks() {
+    public Collection<BlockPos> getHiddenBlocks() {
         return hiddenBlocks;
     }
 
@@ -177,7 +180,10 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
     @Override
     public void writeInitialSyncData(PacketBuffer buf) {
         super.writeInitialSyncData(buf);
-        disableBlockRendering(isStructureFormed()); // This is a bit ugly tho...
+        World world = getWorld();
+        if (world != null && !world.isRemote) {
+            disableBlockRendering(isStructureFormed()); // This is a bit ugly tho...
+        }
     }
 
     @Override
@@ -201,14 +207,14 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
     public AxisAlignedBB getRenderBoundingBox() {
         if (this.renderBounding == null) {
             EnumFacing front = getFrontFacing();
-            EnumFacing up = getUpwardsFacing();
             // The left side of the controller, not from the player's perspective
-            EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(front, up, isFlipped());
+            EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(front, getUpwardsFacing(), isFlipped());
+            EnumFacing up = RelativeDirection.UP.getRelativeFacing(front, getUpwardsFacing(), isFlipped());
 
             BlockPos pos = getPos();
 
-            var v1 = pos.offset(left.getOpposite(), 3).offset(EnumFacing.DOWN, 1).offset(front, 0);
-            var v2 = pos.offset(left, 10).offset(EnumFacing.UP, 8).offset(front.getOpposite(), 6);
+            var v1 = pos.offset(left.getOpposite(), 3).offset(up.getOpposite());
+            var v2 = pos.offset(left, 10).offset(up, 8).offset(front.getOpposite(), 6);
             this.renderBounding = new AxisAlignedBB(v1, v2);
         }
         return renderBounding;
@@ -220,13 +226,14 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
         if (this.transformation == null) {
             EnumFacing front = getFrontFacing();
             EnumFacing back = front.getOpposite();
-            EnumFacing up = getUpwardsFacing();
-            EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(front, up, isFlipped());
+            EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(front, getUpwardsFacing(), isFlipped());
+            EnumFacing up = RelativeDirection.UP.getRelativeFacing(front, getUpwardsFacing(), isFlipped());
 
-            int xOff = back.getXOffset() * 3 + left.getXOffset() * 4;
-            int zOff = back.getZOffset() * 3 + left.getZOffset() * 4;
+            int xOff = back.getXOffset() * 3 + left.getXOffset() * 4 + up.getXOffset() * 3;
+            int yOff = back.getYOffset() * 3 + left.getYOffset() * 4 + up.getYOffset() * 3;
+            int zOff = back.getZOffset() * 3 + left.getZOffset() * 4 + up.getZOffset() * 3;
 
-            this.transformation = new Vec3i(xOff, 3, zOff);
+            this.transformation = new Vec3i(xOff, yOff, zOff);
         }
         return transformation;
     }
@@ -237,8 +244,8 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
         if (this.lightPos == null) {
             EnumFacing front = getFrontFacing();
             EnumFacing back = front.getOpposite();
-            EnumFacing up = getUpwardsFacing();
-            EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(front, up, isFlipped());
+            EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(front, getUpwardsFacing(), isFlipped());
+            EnumFacing up = RelativeDirection.UP.getRelativeFacing(front, getUpwardsFacing(), isFlipped());
 
             this.lightPos = getPos().offset(up, 6).offset(back, 3).offset(left, 4); // TODO
         }
