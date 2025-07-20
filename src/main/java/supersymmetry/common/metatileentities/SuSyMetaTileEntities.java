@@ -100,7 +100,7 @@ public class SuSyMetaTileEntities {
     public static SimpleMachineMetaTileEntity[] ZONE_REFINER;
     public static SimpleMachineMetaTileEntity[] TUBE_FURNACE;
     public static MetaTileEntityFluidizedBedReactor FLUIDIZED_BED_REACTOR;
-    public static MetaTileEntityPolmyerizationTank POLYMERIZATION_TANK;
+    public static MetaTileEntityPolymerizationTank POLYMERIZATION_TANK;
     public static MetaTileEntityElectrolyticCell ELECTROLYTIC_CELL;
 
     // Machines for Oil Overhaul
@@ -278,7 +278,7 @@ public class SuSyMetaTileEntities {
         registerSimpleMTE(TUBE_FURNACE, 12, 14720, "tube_furnace", SuSyRecipeMaps.TUBE_FURNACE_RECIPES, SusyTextures.TUBE_FURNACE_OVERLAY, true, GTUtility.defaultTankSizeFunction);
 
         FLUIDIZED_BED_REACTOR = registerMetaTileEntity(14619, new MetaTileEntityFluidizedBedReactor(susyId("fluidized_bed_reactor")));
-        POLYMERIZATION_TANK = registerMetaTileEntity(14620, new MetaTileEntityPolmyerizationTank(susyId("polymerization_tank")));
+        POLYMERIZATION_TANK = registerMetaTileEntity(14620, new MetaTileEntityPolymerizationTank(susyId("polymerization_tank")));
         ELECTROLYTIC_CELL = registerMetaTileEntity(14634, new MetaTileEntityElectrolyticCell(susyId("electrolytic_cell")));
         GRAVITY_SEPARATOR = registerMetaTileEntity(15052, new MetaTileEntityGravitySeparator(susyId("gravity_separator")));
 
