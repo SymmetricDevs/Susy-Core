@@ -379,7 +379,7 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.FURNACE);
 
-    public static final RecipeMap<SimpleRecipeBuilder> INJECTION_MOLDER = new RecipeMap<>("injection_molder", 2, 4, 0, 0, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<SimpleRecipeBuilder> INJECTION_MOLDER = new RecipeMap<>("injection_molder", 2, 1, 0, 0, new SimpleRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.MIXER);
   
