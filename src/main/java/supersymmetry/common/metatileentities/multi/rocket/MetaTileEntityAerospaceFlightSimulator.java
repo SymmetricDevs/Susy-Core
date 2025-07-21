@@ -228,22 +228,21 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     }
   }
 
-  // TODO: remove my debugging shit :c
+  private boolean generateComponentTree(ItemStack blueprintStack) {
+    if (blueprintStack == lastUsedBlueprint && blueprintStack.getItem() != Items.AIR) return true;
 
-  private boolean generateComponentTree(ItemStack stack) {
-    if (stack == lastUsedBlueprint && stack.getItem() != Items.AIR) return true;
-
-    lastUsedBlueprint = stack;
+    lastUsedBlueprint = blueprintStack;
     this.components.clear();
 
-    if (stack.hasTagCompound()) {
-      NBTTagCompound tag = stack.getTagCompound();
+    if (blueprintStack.hasTagCompound()) {
+      NBTTagCompound tag = blueprintStack.getTagCompound();
       if (tag.hasKey("components", Constants.NBT.TAG_LIST)) {
         NBTTagList components = tag.getTagList("components", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < components.tagCount(); i++) {
           NBTTagCompound comp = components.getCompoundTagAt(i);
           if (comp.hasKey("allowedCounts", Constants.NBT.TAG_INT_ARRAY)) {
             if (comp.hasKey("type", Constants.NBT.TAG_STRING)) {
+
               String type = comp.getString("type");
               int[] counts = comp.getIntArray("allowedCounts");
               int max = Arrays.stream(counts).max().orElse(0);
@@ -330,7 +329,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     return new MetaTileEntityAerospaceFlightSimulator(metaTileEntityId);
   }
 
-  // all of this because java hates fun and doesnt have touples
   private class ComponentListEntry {
     public List<DataStorageLoader> cards;
     public int[] validCounts;

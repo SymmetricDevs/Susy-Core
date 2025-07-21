@@ -118,10 +118,6 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             return;
         }
 
-        // Block-by-block analysis
-        for (BlockPos bp: blockList) {
-            IBlockState state = getWorld().getBlockState(bp);
-        }
 
         Tuple<Set<BlockPos>, Set<BlockPos>> exterior = struct.checkHull(interior, blocksConnected, false);
         Predicate<BlockPos> engineDetect = bp -> getWorld().getBlockState(bp).getBlock()
@@ -140,7 +136,10 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
 
         boolean hasAir = struct.status != BuildStat.HULL_FULL;
         struct.status = BuildStat.SCANNING;
+    
         writeBlocksToNBT(blockList.stream().collect(Collectors.toSet()), this.getWorld()); //im sorry
+        //TODO: comment this^^ out this cringe once the component classes are implemented, writeBlocksToNBT should be called from
+        //AbstractComponent in the analyze function
         if (blockList.stream().anyMatch(engineDetect)) {
             analyzeEngine(blocksConnected);
         } else if (blockList.stream().anyMatch(controlPodDetect) && hasAir) {
@@ -158,7 +157,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             if (!exterior.getSecond().isEmpty() ) {
                 struct.status = BuildStat.WEIRD_FAIRING;
             }
-            analyzeFairing(blocksConnected, exterior.getFirst());
+            analyzeFairing(blocksConnected);
         } else if (blockList.stream().anyMatch(interstageDetect)) {
             analyzeInterstage(blocksConnected, exterior.getFirst());
         } else if (blockList.stream().anyMatch(spacecraftDetect)) {
@@ -233,7 +232,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
 
         NBTTagCompound root = new NBTTagCompound();
         NBTTagList list = new NBTTagList();
-        for (Map.Entry<String, Integer> e : counts.entrySet()) { //this is bad, i hope a smart person will fix it later
+        for (Map.Entry<String, Integer> e : counts.entrySet()) {        
             String[] p = e.getKey().split("#", 3);
             NBTTagCompound c = new NBTTagCompound();
             c.setString("registryName", p[0]);
@@ -336,7 +335,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
     // A fairing must have a line of connectors (so it can separate after launch!)
     // It must also be wider in the bottom.
     // The way we've done it, it's a half-shell design.
-    public void analyzeFairing(Set<BlockPos> blocksConnected, Set<BlockPos> first) {
+    public void analyzeFairing(Set<BlockPos> blocksConnected) {
         AxisAlignedBB fairingBB = struct.getBB(blocksConnected);
         AxisAlignedBB interiorBB = linkedCleanroom.getInteriorBB();
         Predicate<BlockPos> connCheck = bp -> getWorld().getBlockState(bp).getBlock().equals(SuSyBlocks.FAIRING_CONNECTOR);
@@ -638,7 +637,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         struct.status = BuildStat.SUCCESS;
     }
 
-    private double getMass(IBlockState state) {
+    public double getMass(IBlockState state) {
         Block block = state.getBlock();
         if (!(block instanceof VariantBlock<?>)) {
             return 50.0;
