@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 
 /// Ported from [CEu#2823](https://github.com/GregTechCEu/GregTech/pull/2823)
 /// and [CEu#2839](https://github.com/GregTechCEu/GregTech/pull/2839)
