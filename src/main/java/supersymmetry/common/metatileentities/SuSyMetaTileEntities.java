@@ -16,6 +16,7 @@ import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityEnerg
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiFluidHatch;
 import gregtech.common.metatileentities.storage.MetaTileEntityCrate;
 import gregtech.common.metatileentities.storage.MetaTileEntityDrum;
+import gregtech.common.metatileentities.storage.MetaTileEntityLockedSafe;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import supersymmetry.api.SusyLog;
@@ -48,6 +49,7 @@ import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntit
 import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityStockItemExchanger;
 import supersymmetry.common.metatileentities.single.steam.MetaTileEntitySteamLatexCollector;
 import supersymmetry.common.metatileentities.single.steam.SuSySimpleSteamMetaTileEntity;
+import supersymmetry.common.metatileentities.storage.MetaTileEntityLockedCrate;
 import supersymmetry.common.metatileentities.storage.MetaTileEntityPlasticCan;
 
 import java.util.ArrayList;
@@ -100,7 +102,7 @@ public class SuSyMetaTileEntities {
     public static SimpleMachineMetaTileEntity[] ZONE_REFINER;
     public static SimpleMachineMetaTileEntity[] TUBE_FURNACE;
     public static MetaTileEntityFluidizedBedReactor FLUIDIZED_BED_REACTOR;
-    public static MetaTileEntityPolmyerizationTank POLYMERIZATION_TANK;
+    public static MetaTileEntityPolymerizationTank POLYMERIZATION_TANK;
     public static MetaTileEntityElectrolyticCell ELECTROLYTIC_CELL;
 
     // Machines for Oil Overhaul
@@ -230,6 +232,17 @@ public class SuSyMetaTileEntities {
     //public static MetaTileEntityStockReader STOCK_CONTENT_READER;
     public static MetaTileEntityLocomotiveController STOCK_CONTROLLER;
 
+    //locked crates for loot
+    public static MetaTileEntityLockedCrate LOCKED_HERMETICALLY_SEALED_CRATE;
+    public static MetaTileEntityLockedCrate LOCKED_WOODEN_CRATE;
+    public static MetaTileEntityLockedCrate LOCKED_BRONZE_CRATE;
+    public static MetaTileEntityLockedCrate LOCKED_STEEL_CRATE;
+    public static MetaTileEntityLockedCrate LOCKED_ALUMINIUM_CRATE;
+    public static MetaTileEntityLockedCrate LOCKED_STAINLESS_STEEL_CRATE;
+    public static MetaTileEntityLockedCrate LOCKED_TITANIUM_CRATE;
+    public static MetaTileEntityLockedCrate LOCKED_TUNGSTENSTEEL_CRATE;
+
+
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
         COAGULATION_TANK = registerMetaTileEntity(14501, new MetaTileEntityCoagulationTank(susyId("coagulation_tank")));
@@ -280,7 +293,7 @@ public class SuSyMetaTileEntities {
         registerSimpleMTE(TUBE_FURNACE, 12, 14720, "tube_furnace", SuSyRecipeMaps.TUBE_FURNACE_RECIPES, SusyTextures.TUBE_FURNACE_OVERLAY, true, GTUtility.defaultTankSizeFunction);
 
         FLUIDIZED_BED_REACTOR = registerMetaTileEntity(14619, new MetaTileEntityFluidizedBedReactor(susyId("fluidized_bed_reactor")));
-        POLYMERIZATION_TANK = registerMetaTileEntity(14620, new MetaTileEntityPolmyerizationTank(susyId("polymerization_tank")));
+        POLYMERIZATION_TANK = registerMetaTileEntity(14620, new MetaTileEntityPolymerizationTank(susyId("polymerization_tank")));
         ELECTROLYTIC_CELL = registerMetaTileEntity(14634, new MetaTileEntityElectrolyticCell(susyId("electrolytic_cell")));
         GRAVITY_SEPARATOR = registerMetaTileEntity(15052, new MetaTileEntityGravitySeparator(susyId("gravity_separator")));
 
@@ -443,6 +456,16 @@ public class SuSyMetaTileEntities {
         HIGH_PRESSURE_ADVANCED_STEAM_TURBINE = registerMetaTileEntity(18101, new MetaTileEntityHighPressureLargeTurbine(susyId("high_pressure_advanced_steam_turbine")));
 
         INJECTION_MOLDER = registerMetaTileEntity(18110, new MetaTileEntityInjectionMolder(susyId("injection_molder")));
+      
+        //Locked Loot Crates
+        LOCKED_HERMETICALLY_SEALED_CRATE = registerMetaTileEntity(18200, new MetaTileEntityLockedCrate(susyId("locked_crate.pe"), Materials.Polyethylene, 54));
+        LOCKED_WOODEN_CRATE = registerMetaTileEntity(18201, new MetaTileEntityLockedCrate(susyId("locked_crate.wood"), Materials.Wood, 27));
+        LOCKED_BRONZE_CRATE = registerMetaTileEntity(18202, new MetaTileEntityLockedCrate(susyId("locked_crate.bronze"), Materials.Bronze, 54));
+        LOCKED_STEEL_CRATE = registerMetaTileEntity(18203, new MetaTileEntityLockedCrate(susyId("locked_crate.steel"), Materials.Steel, 72));
+        LOCKED_ALUMINIUM_CRATE = registerMetaTileEntity(18204, new MetaTileEntityLockedCrate(susyId("locked_crate.aluminium"), Materials.Aluminium, 90));
+        LOCKED_STAINLESS_STEEL_CRATE = registerMetaTileEntity(18205, new MetaTileEntityLockedCrate(susyId("locked_crate.stainless_steel"), Materials.StainlessSteel, 108));
+        LOCKED_TITANIUM_CRATE = registerMetaTileEntity(18206, new MetaTileEntityLockedCrate(susyId("locked_crate.titanium"), Materials.Titanium, 126));
+        LOCKED_TUNGSTENSTEEL_CRATE = registerMetaTileEntity(18207, new MetaTileEntityLockedCrate(susyId("locked_crate.tungstensteel"), Materials.TungstenSteel, 144));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name, RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator, ICubeRenderer texture, boolean isBricked) {

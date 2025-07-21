@@ -988,10 +988,6 @@ susy.weather_resistance=§2Will not explode from water, lava, fire or rain.
 susy.large_fluid_pump.y_level=Current Controller Y level: Y=%s
 susy.large_fluid_pump.biome=Current bottom Pipe Casing biome: %s
 
-# Latex Logs
-susy.block_group_members.latex_logs.name=Rubber Log
-
-
 # Stock Interfaces
 susy.machine.stock_controller.name=Locomotive Controller
 susy.stock_interfaces.locomotive_controller.description=Controls nearby locomotives thrust and break depending on redstone input
@@ -1138,3 +1134,14 @@ supersymmetry.title.2=WELCOME TO EARTH
 supersymmetry.subtitle.2=Vitals: stable. Pod fuel: 46%%.
 supersymmetry.title.3=APR 1, 2423
 supersymmetry.subtitle.3=§4Survive.
+
+# Locked Crates
+chat.susy.crate.requires_code_breacher=This crate requires a code breacher!
+susy.machine.locked_crate.pe.name=Hermetically Sealed Crate
+susy.machine.locked_crate.wood.name=Wooden Crate
+susy.machine.locked_crate.bronze.name=Bronze Crate
+susy.machine.locked_crate.steel.name=Steel Crate
+susy.machine.locked_crate.aluminium.name=Aluminium Crate
+susy.machine.locked_crate.stainless_steel.name=Stainless Steel Crate
+susy.machine.locked_crate.titanium.name=Titanium Crate
+susy.machine.locked_crate.tungstensteel.name=Tungstensteel Crate
