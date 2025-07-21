@@ -1,0 +1,43 @@
+{
+  "forge_marker" : 1,
+  "defaults" : {
+    "model" : "minecraft:cube_all",
+    "textures" : {
+      "all" : "gregtech:blocks/rendering_error"
+    }
+  },
+  "variants" : {
+    "variant" : {
+      "abrasion_resistant_casing" : {
+        "model" : "minecraft:cube_all",
+        "textures" : {
+          "all" : "gregtech:blocks/casings/grinder_casing/abrasion_resistant_casing"
+        }
+      },
+      "hydraulic_mechanical_gearbox" : {
+        "model" : "minecraft:cube_all",
+        "textures" : {
+          "all" : "gregtech:blocks/casings/grinder_casing/hydraulic_mechanical_gearbox"
+        }
+      },
+      "wear_resistant_lined_mill_shell" : {
+        "model" : "minecraft:cube_all",
+        "textures" : {
+          "all" : "gregtech:blocks/casings/grinder_casing/wear_resistant_lined_mill_shell"
+        }
+      },
+      "wear_resistant_lined_shell_head" : {
+        "model" : "minecraft:cube_all",
+        "textures" : {
+          "all" : "gregtech:blocks/casings/grinder_casing/wear_resistant_lined_shell_head"
+        }
+      },
+      "intermediate_diaphragm" : {
+        "model" : "susy:cube_with_inner",
+        "textures" : {
+          "all" : "gregtech:blocks/casings/grinder_casing/intermediate_diaphragm"
+        }
+      }
+    }
+  }
+}
