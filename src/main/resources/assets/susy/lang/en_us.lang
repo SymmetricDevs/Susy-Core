@@ -1130,10 +1130,8 @@ item.susy.tool.tooltip.pipeliner=§7Hold §f[%s]§7 to activate §6Pipeliner§7 
 # Titles
 supersymmetry.title.1=§3SUPERSYMMETRY
 supersymmetry.subtitle.1=A modpack by SymmetricDevs
-supersymmetry.title.2=WELCOME TO EARTH
-supersymmetry.subtitle.2=Vitals: stable. Pod fuel: 46%%.
-supersymmetry.title.3=APR 1, 2423
-supersymmetry.subtitle.3=§4Survive.
+supersymmetry.title.2=WELCOME TO §2EARTH
+supersymmetry.subtitle.2=Vitals: §astable§r. Pod fuel: §e46%%§r.
 
 # Locked Crates
 chat.susy.crate.requires_code_breacher=This crate requires a code breacher!
