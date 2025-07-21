@@ -27,6 +27,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 import codechicken.lib.colour.ColourRGBA;
@@ -207,5 +208,13 @@ public class MetaTileEntityLockedCrate extends MetaTileEntity {
     public void addToolUsages(ItemStack stack, @Nullable World world, List<String> tooltip, boolean advanced) {
         tooltip.add(I18n.format("gregtech.tool_action.screwdriver.access_covers"));
         super.addToolUsages(stack, world, tooltip, advanced);
+    }
+
+    @Override
+    public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable EnumFacing facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return null;
+        }
+        return super.getCapability(capability, facing);
     }
 }
