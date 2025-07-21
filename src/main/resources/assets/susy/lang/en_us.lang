@@ -32,6 +32,7 @@ tile.rocket_assembler_casing.reinforced_foundation.name=Reinforced Foundation
 tile.rocket_assembler_casing.foundation.name=Rocket Assembler Foundation
 tile.rocket_assembler_casing.rails.name=Rocket Assembler Rails
 tile.rocket_assembler_casing.structural_frame.name=Rocket Assembler Structural Frame
+tile.susy_multiblock_casing.euv_safe_casing.name=Extreme-Ultraviolet-Safe Lithographer Casing
 
 tile.serpentine.basic.name=Copper Tubing Serpentine Block
 
@@ -114,6 +115,12 @@ tile.home_block.home_scifi.tooltip=Sci-Fi
 tile.conveyor_belt.lv.name=Conveyor Belt
 
 tile.drill_bit.steel.name=Steel Drill Bit Block
+
+tile.euv_lithographer_component.laser.name=Carbon Dioxide Laser Generator
+tile.euv_lithographer_component.mirror.name=Silicon-Molybdenum EUV Mirror
+tile.euv_lithographer_component.reticle.name=Silicon-Molybdenum EUV Reticle
+tile.euv_lithographer_component.tray.name=Wafer Chuck Component
+tile.euv_lithographer_component.handler.name=Wafer Transfer End Effector
 
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
@@ -363,6 +370,7 @@ susy.machine.scrap_recycler.name=Scrap Recycler
 susy.machine.rocket_assembler.name=Rocket Assembler
 susy.machine.rocket_programmer.name=Rocket Programmer
 susy.machine.metallurgical_converter.name=Metallurgical Converter
+susy.machine.euv_lithographer.name=Extreme Ultraviolet Lithographer
 
 susy.machine.primitive_item_import.name=Primitive Item Import Bus
 susy.machine.primitive_item_import.tooltip=Only for use with the Primitive Smelter
@@ -719,20 +727,20 @@ susy.machine.textile_spinner.uiv.name=Epic Textile Spinner III
 susy.machine.textile_spinner.uxv.name=Epic Textile Spinner IV
 susy.machine.textile_spinner.opv.name=Legendary Textile Spinner
 
-# Polishing Machine
-susy.machine.polishing_machine.lv.name=Basic Polishing Machine
-susy.machine.polishing_machine.mv.name=Advanced Polishing Machine
-susy.machine.polishing_machine.hv.name=Advanced Polishing Machine II
-susy.machine.polishing_machine.ev.name=Advanced Polishing Machine III
-susy.machine.polishing_machine.iv.name=Elite Polishing Machine
-susy.machine.polishing_machine.luv.name=Elite Polishing Machine II
-susy.machine.polishing_machine.zpm.name=Elite Polishing Machine III
-susy.machine.polishing_machine.uv.name=Ultimate Polishing Machine
-susy.machine.polishing_machine.uhv.name=Epic Polishing Machine
-susy.machine.polishing_machine.uev.name=Epic Polishing Machine II
-susy.machine.polishing_machine.uiv.name=Epic Polishing Machine III
-susy.machine.polishing_machine.uxv.name=Epic Polishing Machine IV
-susy.machine.polishing_machine.opv.name=Legendary Polishing Machine
+# Wafer Spinner
+susy.machine.wafer_spinner.lv.name=Basic Wafer Spinner
+susy.machine.wafer_spinner.mv.name=Advanced Wafer Spinner
+susy.machine.wafer_spinner.hv.name=Advanced Wafer Spinner II
+susy.machine.wafer_spinner.ev.name=Advanced Wafer Spinner III
+susy.machine.wafer_spinner.iv.name=Elite Wafer Spinner
+susy.machine.wafer_spinner.luv.name=Elite Wafer Spinner II
+susy.machine.wafer_spinner.zpm.name=Elite Wafer Spinner III
+susy.machine.wafer_spinner.uv.name=Ultimate Wafer Spinner
+susy.machine.wafer_spinner.uhv.name=Epic Wafer Spinner
+susy.machine.wafer_spinner.uev.name=Epic Wafer Spinner II
+susy.machine.wafer_spinner.uiv.name=Epic Wafer Spinner III
+susy.machine.wafer_spinner.uxv.name=Epic Wafer Spinner IV
+susy.machine.wafer_spinner.opv.name=Legendary Wafer Spinner
 
 susy.machine.bath_condenser.name=Bath Condenser
 susy.machine.bath_condenser.tooltip=Only works inside a Cryogenic Distillation Tower
@@ -775,6 +783,22 @@ tile.susy_multiblock_casing.copper_casing_pipe.name=Conductive Copper Pipe Casin
 tile.metallurgy.hydraulic_cylinder.name=Hydraulic Cylinder
 tile.metallurgy_2.flying_shear_saw.name=Flying Shear Saw
 tile.metallurgy_roll.roll.name=Roll
+
+# Sputtering Machine
+susy.machine.sputter_deposition.lv.name=Basic Sputtering Machine
+susy.machine.sputter_deposition.mv.name=Advanced Sputtering Machine
+susy.machine.sputter_deposition.hv.name=Advanced Sputtering Machine II
+susy.machine.sputter_deposition.ev.name=Advanced Sputtering Machine III
+susy.machine.sputter_deposition.iv.name=Elite Sputtering Machine
+susy.machine.sputter_deposition.luv.name=Elite Sputtering Machine II
+susy.machine.sputter_deposition.zpm.name=Elite Sputtering Machine III
+susy.machine.sputter_deposition.uv.name=Ultimate Sputtering Machine
+susy.machine.sputter_deposition.uhv.name=Epic Sputtering Machine
+susy.machine.sputter_deposition.uev.name=Epic Sputtering Machine II
+susy.machine.sputter_deposition.uiv.name=Epic Sputtering Machine III
+susy.machine.sputter_deposition.uxv.name=Epic Sputtering Machine IV
+susy.machine.sputter_deposition.opv.name=Legendary Sputtering Machine
+
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
 recipemap.latex_collector.name=Arboreal Collector
@@ -828,7 +852,7 @@ recipemap.blender.name=Blender
 recipemap.phase_separator.name=Phase Separation
 recipemap.bath_condenser.name=Bath Condenser
 recipemap.drone_pad.name=Drone Pad
-recipemap.polishing_machine.name=Polishing
+recipemap.wafer_spinner.name=Wafer Spinning
 recipemap.gravity_separator=Gravity Separation
 recipemap.spinning.name=Textile Spinning
 recipemap.large_steam_turbine.name=Large Steam Turbine
@@ -836,14 +860,15 @@ recipemap.primitive_smelter.name=Primitive Smelting
 recipemap.large_fluid_pump.name=Large Fluid Pump
 recipemap.sieve_distillation.name=Fractional Distillation
 recipemap.jet_wingpack_fuels.name=Jet Wingpack Fuels
-recipemap.curtain_coater.name=Curtain Coater
-recipemap.milling.name=Precise Milling Machine
+recipemap.curtain_coater.name=Curtain Coating
+recipemap.milling.name=Precise Milling
 recipemap.hot_isostatic_press.name=Hot Isostatic Press
 recipemap.gas_atomizer.name=Gas Atomizer
 recipemap.metallurgical_converter.name=Metallurgical Converter
 recipemap.low_pressure_advanced_steam_turbine.name=Low Pressure Advanced Steam Turbine
 recipemap.high_pressure_advanced_steam_turbine.name=High Pressure Advanced Steam Turbine
 recipemap.mixer_settler.name=Mixer-Settler
+recipemap.sputter_deposition.name=Sputter Deposition
 
 susy.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 

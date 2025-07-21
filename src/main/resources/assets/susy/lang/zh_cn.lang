@@ -719,20 +719,20 @@ susy.machine.textile_spinner.uiv.name=史诗纺线机 III
 susy.machine.textile_spinner.uxv.name=史诗纺线机 IV
 susy.machine.textile_spinner.opv.name=传说纺线机
 
-# Polishing Machine
-susy.machine.polishing_machine.lv.name=基础抛光机
-susy.machine.polishing_machine.mv.name=进阶抛光机
-susy.machine.polishing_machine.hv.name=进阶抛光机 II
-susy.machine.polishing_machine.ev.name=进阶抛光机 III
-susy.machine.polishing_machine.iv.name=精英抛光机
-susy.machine.polishing_machine.luv.name=精英抛光机 II
-susy.machine.polishing_machine.zpm.name=精英抛光机 III
-susy.machine.polishing_machine.uv.name=终极抛光机
-susy.machine.polishing_machine.uhv.name=史诗抛光机
-susy.machine.polishing_machine.uev.name=史诗抛光机 II
-susy.machine.polishing_machine.uiv.name=史诗抛光机 III
-susy.machine.polishing_machine.uxv.name=史诗抛光机 IV
-susy.machine.polishing_machine.opv.name=传说抛光机
+# Wafer Spinner
+susy.machine.wafer_spinner.lv.name=基础晶圆旋涂机
+susy.machine.wafer_spinner.mv.name=进阶晶圆旋涂机
+susy.machine.wafer_spinner.hv.name=进阶晶圆旋涂机 II
+susy.machine.wafer_spinner.ev.name=进阶晶圆旋涂机 III
+susy.machine.wafer_spinner.iv.name=精英晶圆旋涂机
+susy.machine.wafer_spinner.luv.name=精英晶圆旋涂机 II
+susy.machine.wafer_spinner.zpm.name=精英晶圆旋涂机 III
+susy.machine.wafer_spinner.uv.name=终极晶圆旋涂机
+susy.machine.wafer_spinner.uhv.name=史诗晶圆旋涂机
+susy.machine.wafer_spinner.uev.name=史诗晶圆旋涂机 II
+susy.machine.wafer_spinner.uiv.name=史诗晶圆旋涂机 III
+susy.machine.wafer_spinner.uxv.name=史诗晶圆旋涂机 IV
+susy.machine.wafer_spinner.opv.name=传说晶圆旋涂机
 
 susy.machine.bath_condenser.name=浴式冷凝器
 susy.machine.bath_condenser.tooltip=仅在低温蒸馏厂中工作
@@ -828,7 +828,7 @@ recipemap.blender.name=混合搅拌
 recipemap.phase_separator.name=相分离
 recipemap.bath_condenser.name=浴式冷凝
 recipemap.drone_pad.name=无人机坪
-recipemap.polishing_machine.name=抛光
+recipemap.wafer_spinner.name=晶圆旋涂
 recipemap.gravity_separator=重力分离
 recipemap.spinning.name=纺线
 recipemap.large_steam_turbine.name=大型蒸汽轮机

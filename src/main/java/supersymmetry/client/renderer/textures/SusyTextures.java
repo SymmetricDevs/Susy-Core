@@ -41,6 +41,7 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer UV_LIGHT_BOX_OVERLAY = new OrientedOverlayRenderer("machines/uv_light_box");
     public static final OrientedOverlayRenderer CVD_OVERLAY = new OrientedOverlayRenderer("machines/cvd");
     public static final OrientedOverlayRenderer ION_IMPLANTER_OVERLAY = new OrientedOverlayRenderer("machines/ion_implanter");
+    public static final OrientedOverlayRenderer SPUTTER_DEPOSITION_OVERLAY = new OrientedOverlayRenderer("machines/sputter_deposition");
     public static final OrientedOverlayRenderer PHASE_SEPARATOR_OVERLAY = new OrientedOverlayRenderer("machines/phase_separator");
     public static final OrientedOverlayRenderer BATH_CONDENSER_OVERLAY = new OrientedOverlayRenderer("machines/bath_condenser");
     public static final OrientedOverlayRenderer CATALYTIC_REFORMER_OVERLAY = new OrientedOverlayRenderer("multiblock/catalytic_reformer");
@@ -50,7 +51,7 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer FLUID_DECOMPRESSOR_OVERLAY = new OrientedOverlayRenderer("machines/fluid_decompressor");
     public static final OrientedOverlayRenderer ELECTROSTATIC_SEPARATOR_OVERLAY = new OrientedOverlayRenderer("machines/electrostatic_separator");
     public static final OrientedOverlayRenderer TEXTILE_SPINNER_OVERLAY = new OrientedOverlayRenderer("machines/textile_spinner");
-    public static final OrientedOverlayRenderer POLISHING_MACHINE_OVERLAY = new OrientedOverlayRenderer("machines/polishing_machine");
+    public static final OrientedOverlayRenderer WAFER_SPINNER_OVERLAY = new OrientedOverlayRenderer("machines/wafer_spinner");
     public static final OrientedOverlayRenderer ARC_FURNACE_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/arc_furnace");
     public static final OrientedOverlayRenderer CLARIFIER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/clarifier");
     public static final OrientedOverlayRenderer CONDENSER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/condenser");
@@ -103,6 +104,7 @@ public class SusyTextures {
     public static final SimpleOverlayRenderer RESTRICTIVE_FILTER_FILTER_OVERLAY = new SimpleOverlayRenderer("cover/overlay_restrictive_filter");
     public static final SimpleOverlayRenderer STRAND_BUS_OVERLAY = new SimpleOverlayRenderer(
             "logistics/overlay_strand_bus");
+    public static final SimpleOverlayRenderer EUV_SAFE_CASING = new SimpleOverlayRenderer("multiblock_casing/euv_safe_casing");
 
     public static final SimpleCubeRenderer MASONRY_BRICK = new SimpleCubeRenderer("gregtech:blocks/multiblock_casing/masonry_brick");
 

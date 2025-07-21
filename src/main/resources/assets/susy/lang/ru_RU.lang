@@ -386,7 +386,7 @@ susy.machine.continuous_stirred_tank_reactor.iv.name=Превосходный Р
 susy.machine.continuous_stirred_tank_reactor.luv.name=Превосходный Р.Н.П. реактор II
 susy.machine.continuous_stirred_tank_reactor.zpm.name=Превосходный Р.Н.П. реактор III
 susy.machine.continuous_stirred_tank_reactor.uv.name=Безупречный Р.Н.П. реактор
-susy.machine.continuous_stirred_tank_reactor.uhv.name=Идеальный Р.Н.П. реактор 
+susy.machine.continuous_stirred_tank_reactor.uhv.name=Идеальный Р.Н.П. реактор
 susy.machine.continuous_stirred_tank_reactor.uev.name=Идеальный Р.Н.П. реактор II
 susy.machine.continuous_stirred_tank_reactor.uiv.name=Идеальный Р.Н.П. реактор III
 susy.machine.continuous_stirred_tank_reactor.uxv.name=Идеальный Р.Н.П. реактор IV
@@ -438,7 +438,7 @@ susy.machine.bubble_column_reactor.uxv.name=Идеальный Р.Б.К реак
 susy.machine.bubble_column_reactor.opv.name=Совершенный Р.Б.К реактор
 
 # реактор периодического действия (Р.П.Д) (Batch Reactor)
-susy.machine.batch_reactor.lv.name=Обычный Р.П.Д реактор 
+susy.machine.batch_reactor.lv.name=Обычный Р.П.Д реактор
 susy.machine.batch_reactor.mv.name=Улучшеный Р.П.Д реактор
 susy.machine.batch_reactor.hv.name=Улучшеный Р.П.Д реактор II
 susy.machine.batch_reactor.ev.name=Улучшеный Р.П.Д реактор III
@@ -654,20 +654,20 @@ susy.machine.textile_spinner.uiv.name=Идеальный текстильный 
 susy.machine.textile_spinner.uxv.name=Идеальный текстильный прядильщик IV
 susy.machine.textile_spinner.opv.name=Совершенный текстильный прядильщик
 
-# Polishing Machine
-susy.machine.polishing_machine.lv.name=Обычная полировальная машина
-susy.machine.polishing_machine.mv.name=Улучшеная полировальная машина
-susy.machine.polishing_machine.hv.name=Улучшеная полировальная машина II
-susy.machine.polishing_machine.ev.name=Улучшеная полировальная машина III
-susy.machine.polishing_machine.iv.name=Превосходная полировальная машина
-susy.machine.polishing_machine.luv.name=Превосходная полировальная машина II
-susy.machine.polishing_machine.zpm.name=Превосходная полировальная машина III
-susy.machine.polishing_machine.uv.name=Безупречная полировальная машина
-susy.machine.polishing_machine.uhv.name=Идеальная полировальная машина
-susy.machine.polishing_machine.uev.name=Идеальная полировальная машина II
-susy.machine.polishing_machine.uiv.name=Идеальная полировальная машина III
-susy.machine.polishing_machine.uxv.name=Идеальная полировальная машина IV
-susy.machine.polishing_machine.opv.name=Совершенная полировальная машина
+# Wafer Spinner
+susy.machine.wafer_spinner.lv.name=Обычная полировальная машина
+susy.machine.wafer_spinner.mv.name=Улучшеная полировальная машина
+susy.machine.wafer_spinner.hv.name=Улучшеная полировальная машина II
+susy.machine.wafer_spinner.ev.name=Улучшеная полировальная машина III
+susy.machine.wafer_spinner.iv.name=Превосходная полировальная машина
+susy.machine.wafer_spinner.luv.name=Превосходная полировальная машина II
+susy.machine.wafer_spinner.zpm.name=Превосходная полировальная машина III
+susy.machine.wafer_spinner.uv.name=Безупречная полировальная машина
+susy.machine.wafer_spinner.uhv.name=Идеальная полировальная машина
+susy.machine.wafer_spinner.uev.name=Идеальная полировальная машина II
+susy.machine.wafer_spinner.uiv.name=Идеальная полировальная машина III
+susy.machine.wafer_spinner.uxv.name=Идеальная полировальная машина IV
+susy.machine.wafer_spinner.opv.name=Совершенная полировальная машина
 
 susy.machine.bath_condenser.name=Конденсатор для ванны
 susy.machine.bath_condenser.tooltip=Работает только внутри криогенной дистилляционной башни.
@@ -734,7 +734,7 @@ recipemap.blender.name=Блендер
 recipemap.phase_separator.name=Разделение фаз
 recipemap.bath_condenser.name=Конденсатор для ванны
 recipemap.drone_pad.name=Площадка для дронов
-recipemap.polishing_machine.name=Полировка
+recipemap.wafer_spinner.name=Полировка
 recipemap.gravity_separator=Гравитационное разделение
 recipemap.spinning.name=Текстильное прядение
 recipemap.large_steam_turbine.name=Большая паровая турбина
