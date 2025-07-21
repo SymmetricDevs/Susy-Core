@@ -1,11 +1,5 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.pipeline.ColourMultiplier;
-import codechicken.lib.render.pipeline.IVertexOperation;
-import codechicken.lib.vec.Matrix4;
-import codechicken.lib.vec.Vector3;
-import codechicken.lib.vec.uv.IconTransformation;
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -16,25 +10,28 @@ import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.MultiblockShapeInfo;
+import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.recipes.recipeproperties.IRecipePropertyStorage;
 import gregtech.api.unification.material.Materials;
-import gregtech.api.util.GTUtility;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
-import gregtech.common.blocks.*;
+import gregtech.common.blocks.BlockBoilerCasing;
+import gregtech.common.blocks.BlockMetalCasing;
+import gregtech.common.blocks.BlockTurbineCasing;
+import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.metatileentity.multiblock.FluidRenderRecipeMapMultiBlock;
+import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.properties.MixerSettlerCellsProperty;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
@@ -45,11 +42,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static supersymmetry.api.metatileentity.multiblock.FluidRenderRecipeMapMultiBlock.CHANGE_FLUID_RENDER_STATUS;
-import static supersymmetry.api.metatileentity.multiblock.FluidRenderRecipeMapMultiBlock.UPDATE_FLUID_INFO;
-
 public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
-    public static final int MIN_RADIUS = 4;
+    public static final int MIN_RADIUS = 2;
     public static final int MAX_RADIUS = 20;
     private int sDist;
     private boolean isFake;
@@ -167,7 +161,6 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
 
                         return buildRepeatingString('#', '#', "GGGG", sDist);
                     case 2:
-
                         return buildRepeatingString('E', 'E', "GGGG", sDist);
                 }
                 break;
@@ -305,7 +298,7 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
                 .where('P', states(getPipeCasingState()))
                 //.where('B', abilities(MultiblockAbility.IMPORT_ITEMS, MultiblockAbility.EXPORT_ITEMS))
                 .where('D', states(getCasingState()))
-                .where('C', states(getCasingState()).setMinGlobalLimited(40).or(autoAbilities(true, true, true, true, false, false, false)))
+                .where('C', states(getCasingState()).or(autoAbilities()))
                 .where('G', states(getCasingState()))
                 .where('M', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STAINLESS_STEEL_GEARBOX)))
                 .where('F', frames(Materials.StainlessSteel))
@@ -314,6 +307,13 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
                 .where('#', any())
                 .build();
     }
+
+    public TraceabilityPredicate autoAbilities() {
+        return super.autoAbilities(true, false).or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1)
+                .setMaxGlobalLimited(2)
+                .setPreviewCount(1)).or(abilities(MultiblockAbility.IMPORT_ITEMS).setPreviewCount(1).setMaxGlobalLimited(1));
+    }
+
 
     protected static IBlockState getPipeCasingState() {
         return MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.POLYTETRAFLUOROETHYLENE_PIPE);
@@ -353,6 +353,14 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
             radius += 2;
         }
         return shapeInfo;
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip,
+                               boolean advanced) {
+        super.addInformation(stack, world, tooltip, advanced);
+        tooltip.add(TextFormatting.AQUA + I18n.format("susy.machine.mixer_settler.tooltip.1"));
+        tooltip.add(TextFormatting.AQUA + I18n.format("susy.machine.mixer_settler.tooltip.2"));
     }
 
 

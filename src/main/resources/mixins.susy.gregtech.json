@@ -22,6 +22,7 @@
     "RecipeBuilderAccessor",
     "RecipeMapsMixin",
     "RecyclingRecipesMixin",
+    "SyncedTileEntityBaseMixin",
     "TileEntityPipeBaseMixin",
     "ToolBuilderAccessor",
     "ToolItemsMixin"

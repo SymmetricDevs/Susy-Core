@@ -19,22 +19,25 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class MetaTileEntityPolmyerizationTank extends RecipeMapMultiblockController {
-    public MetaTileEntityPolmyerizationTank(ResourceLocation metaTileEntityId) {
+public class MetaTileEntityPolymerizationTank extends RecipeMapMultiblockController {
+    public MetaTileEntityPolymerizationTank(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.POLYMERIZATION_RECIPES);
         this.recipeMapWorkable = new MultiblockRecipeLogic(this, true);
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
-        return new MetaTileEntityPolmyerizationTank(this.metaTileEntityId);
+        return new MetaTileEntityPolymerizationTank(this.metaTileEntityId);
     }
 
+    @NotNull
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
                 .aisle("F F", "XXX", "XXX", "XXX", "XXX")
@@ -42,8 +45,8 @@ public class MetaTileEntityPolmyerizationTank extends RecipeMapMultiblockControl
                 .aisle("F F", "XSX", "XXX", "XXX", "XXX")
                 .where('S', this.selfPredicate())
                 .where('F', frames(Materials.Steel))
-                .where('P', states(this.getPipeCasingState()))
-                .where('X', states(this.getCasingState()).setMinGlobalLimited(18)
+                .where('P', states(getPipeCasingState()))
+                .where('X', states(getCasingState()).setMinGlobalLimited(18)
                         .or(this.autoAbilities(true, true, true, true, true, true, false)))
                 .build();
     }
@@ -59,13 +62,13 @@ public class MetaTileEntityPolmyerizationTank extends RecipeMapMultiblockControl
         return MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE);
     }
 
-    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
         tooltip.add(TooltipHelper.RAINBOW_SLOW + I18n.format("gregtech.machine.perfect_oc", new Object[0]));
     }
 
     @Nonnull
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.LARGE_CHEMICAL_REACTOR_OVERLAY;
+        return SusyTextures.POLYMERIZATION_TANK_OVERLAY;
     }
 }

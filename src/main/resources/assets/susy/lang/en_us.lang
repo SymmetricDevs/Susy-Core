@@ -363,13 +363,16 @@ susy.machine.scrap_recycler.name=Scrap Recycler
 susy.machine.rocket_assembler.name=Rocket Assembler
 susy.machine.rocket_programmer.name=Rocket Programmer
 susy.machine.metallurgical_converter.name=Metallurgical Converter
+susy.machine.injection_molder.name=Injection Molder
 
 susy.machine.primitive_item_import.name=Primitive Item Import Bus
 susy.machine.primitive_item_import.tooltip=Only for use with the Primitive Smelter
 susy.machine.primitive_item_export.name=Primitive Item Export Bus
 susy.machine.primitive_item_export.tooltip=Only for use with the Primitive Smelter
 susy.machine.mixer_settler.name=Mixer Settler
-susy.machine.mixer_settler.tooltip=Can work up to 2x faster with more cells
+susy.machine.mixer_settler.tooltip=First it mixes, then it settles... - Sun Tzu, The Art of SuSy
+susy.machine.mixer_settler.tooltip.1=The initial structure contains 2 cells, each expansion adds 2 more
+susy.machine.mixer_settler.tooltip.2=Can work up to 2x faster with more cells
 
 susy.machine.parallel_pure=Can parallel to output up to §b%d§r§7 items at once
 
@@ -842,6 +845,7 @@ recipemap.metallurgical_converter.name=Metallurgical Converter
 recipemap.low_pressure_advanced_steam_turbine.name=Low Pressure Advanced Steam Turbine
 recipemap.high_pressure_advanced_steam_turbine.name=High Pressure Advanced Steam Turbine
 recipemap.mixer_settler.name=Mixer-Settler
+recipemap.injection_molder=Injection Molding
 
 susy.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 
@@ -983,10 +987,6 @@ susy.wrongbiome=Machine can not work in this biome!
 susy.weather_resistance=§2Will not explode from water, lava, fire or rain.
 susy.large_fluid_pump.y_level=Current Controller Y level: Y=%s
 susy.large_fluid_pump.biome=Current bottom Pipe Casing biome: %s
-
-# Latex Logs
-susy.block_group_members.latex_logs.name=Rubber Log
-
 
 # Stock Interfaces
 susy.machine.stock_controller.name=Locomotive Controller
@@ -1132,3 +1132,14 @@ supersymmetry.title.1=§3SUPERSYMMETRY
 supersymmetry.subtitle.1=A modpack by SymmetricDevs
 supersymmetry.title.2=WELCOME TO §2EARTH
 supersymmetry.subtitle.2=Vitals: §astable§r. Pod fuel: §e46%%§r.
+
+# Locked Crates
+chat.susy.crate.requires_code_breacher=This crate requires a code breacher!
+susy.machine.locked_crate.pe.name=Hermetically Sealed Crate
+susy.machine.locked_crate.wood.name=Wooden Crate
+susy.machine.locked_crate.bronze.name=Bronze Crate
+susy.machine.locked_crate.steel.name=Steel Crate
+susy.machine.locked_crate.aluminium.name=Aluminium Crate
+susy.machine.locked_crate.stainless_steel.name=Stainless Steel Crate
+susy.machine.locked_crate.titanium.name=Titanium Crate
+susy.machine.locked_crate.tungstensteel.name=Tungstensteel Crate

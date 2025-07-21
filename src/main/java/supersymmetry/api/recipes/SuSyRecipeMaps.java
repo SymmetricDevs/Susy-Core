@@ -369,7 +369,7 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> MILLING_RECIPES = new RecipeMap<>("milling", 2, 1, 0, 0, new SimpleRecipeBuilder().EUt(VA[LV]), false)
             .setSound(GTSoundEvents.CUT);
 
-    public static final RecipeMap<MixerSettlerRecipeBuilder> MIXER_SETTLER_RECIPES = new RecipeMap<>("mixer_settler", 1, 1, 3, 3, new MixerSettlerRecipeBuilder().EUt(VA[LV]), false)
+    public static final RecipeMap<MixerSettlerRecipeBuilder> MIXER_SETTLER_RECIPES = new RecipeMap<>("mixer_settler", 2, 2, 3, 3, new MixerSettlerRecipeBuilder().EUt(VA[LV]), false)
             .setSound(GTSoundEvents.MIXER);
 
     public static final RecipeMap<DimensionRecipeBuilder> QUARRY_RECIPES = new RecipeMap<>("quarry", 1, 9, 0, 0, new DimensionRecipeBuilder(), false)
@@ -378,6 +378,10 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> METALLURGICAL_CONVERTER = new RecipeMap<>("metallurgical_converter", 3, 2, 3, 2, new SimpleRecipeBuilder().EUt(VA[LV]), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.FURNACE);
+
+    public static final RecipeMap<SimpleRecipeBuilder> INJECTION_MOLDER = new RecipeMap<>("injection_molder", 2, 1, 0, 0, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.MIXER);
   
     static {
         GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()
