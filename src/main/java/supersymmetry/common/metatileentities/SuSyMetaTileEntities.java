@@ -224,6 +224,8 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityArcFurnaceComplex ARC_FURNACE_COMPLEX;
     public static MetaTileEntityMetallurgicalConverter METALLURGICAL_CONVERTER;
 
+    public static MetaTileEntityInjectionMolder INJECTION_MOLDER;
+
     //public static BlockStockDetector STOCK_DETECTOR;
     public static MetaTileEntityStockFluidExchanger STOCK_FLUID_EXCHANGER;
     public static MetaTileEntityStockItemExchanger STOCK_ITEM_EXCHANGER;
@@ -453,6 +455,8 @@ public class SuSyMetaTileEntities {
         LOW_PRESSURE_ADVANCED_STEAM_TURBINE = registerMetaTileEntity(18100, new MetaTileEntitySUSYLargeTurbine(susyId("low_pressure_advanced_steam_turbine"), SuSyRecipeMaps.LOW_PRESSURE_ADVANCED_STEAM_TURBINE, 4, MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.TITANIUM_TURBINE_CASING), SuSyBlocks.TURBINE_ROTOR.getState(BlockTurbineRotor.BlockTurbineRotorType.LOW_PRESSURE), Textures.STABLE_TITANIUM_CASING, SusyTextures.LOW_PRESSURE_ADVANCED_STEAM_TURBINE_OVERLAY));
         HIGH_PRESSURE_ADVANCED_STEAM_TURBINE = registerMetaTileEntity(18101, new MetaTileEntityHighPressureLargeTurbine(susyId("high_pressure_advanced_steam_turbine")));
 
+        INJECTION_MOLDER = registerMetaTileEntity(18110, new MetaTileEntityInjectionMolder(susyId("injection_molder")));
+      
         //Locked Loot Crates
         LOCKED_HERMETICALLY_SEALED_CRATE = registerMetaTileEntity(18200, new MetaTileEntityLockedCrate(susyId("locked_crate.pe"), Materials.Polyethylene, 54));
         LOCKED_WOODEN_CRATE = registerMetaTileEntity(18201, new MetaTileEntityLockedCrate(susyId("locked_crate.wood"), Materials.Wood, 27));
@@ -462,8 +466,6 @@ public class SuSyMetaTileEntities {
         LOCKED_STAINLESS_STEEL_CRATE = registerMetaTileEntity(18205, new MetaTileEntityLockedCrate(susyId("locked_crate.stainless_steel"), Materials.StainlessSteel, 108));
         LOCKED_TITANIUM_CRATE = registerMetaTileEntity(18206, new MetaTileEntityLockedCrate(susyId("locked_crate.titanium"), Materials.Titanium, 126));
         LOCKED_TUNGSTENSTEEL_CRATE = registerMetaTileEntity(18207, new MetaTileEntityLockedCrate(susyId("locked_crate.tungstensteel"), Materials.TungstenSteel, 144));
-
-
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name, RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator, ICubeRenderer texture, boolean isBricked) {

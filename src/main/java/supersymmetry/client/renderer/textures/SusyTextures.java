@@ -92,6 +92,7 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer STRAND_COOLER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/strand_cooler");
     public static final OrientedOverlayRenderer GAS_ATOMIZER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/gas_atomizer");
     public static final OrientedOverlayRenderer METALLURGICAL_CONVERTER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/metallurgical_converter");
+    public static final OrientedOverlayRenderer INJECTION_MOLDER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/injection_molder");
     public static final OrientedOverlayRenderer POLYMERIZATION_TANK_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/polymerization_tank");
 
     public static final SimpleOverlayRenderer SILICON_CARBIDE_CASING = new SimpleOverlayRenderer("multiblock_casing/silicon_carbide_casing");

@@ -378,6 +378,10 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> METALLURGICAL_CONVERTER = new RecipeMap<>("metallurgical_converter", 3, 2, 3, 2, new SimpleRecipeBuilder().EUt(VA[LV]), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.FURNACE);
+
+    public static final RecipeMap<SimpleRecipeBuilder> INJECTION_MOLDER = new RecipeMap<>("injection_molder", 2, 1, 0, 0, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.MIXER);
   
     static {
         GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()
