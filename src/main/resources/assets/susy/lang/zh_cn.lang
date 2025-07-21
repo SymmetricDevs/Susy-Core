@@ -986,10 +986,6 @@ susy.weather_resistance=§2不会在接触到水、熔岩、火或者雨时爆�
 susy.large_fluid_pump.y_level=控制器高度：Y=%s
 susy.large_fluid_pump.biome=底部钢管道所处群系：%s
 
-# Latex Logs
-susy.block_group_members.latex_logs.name=橡胶木
-
-
 # Stock Interfaces
 susy.machine.stock_controller.name=机车控制器
 susy.stock_interfaces.locomotive_controller.description=通过红石信号控制机车的油门及刹车
