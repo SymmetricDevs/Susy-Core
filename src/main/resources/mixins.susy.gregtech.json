@@ -27,8 +27,5 @@
     "TileEntityPipeBaseMixin",
     "ToolBuilderAccessor",
     "ToolItemsMixin"
-  ],
-  "client" : [
-    "TargetBlockAccessMixin"
   ]
 }

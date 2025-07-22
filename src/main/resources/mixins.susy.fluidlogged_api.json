@@ -6,5 +6,8 @@
   "compatibilityLevel" : "JAVA_8",
   "mixins" : [
     "FluidloggedUtilsMixin"
+  ],
+  "client" : [
+    "TargetBlockAccessMixin"
   ]
 }
