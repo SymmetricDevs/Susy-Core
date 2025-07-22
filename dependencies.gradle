@@ -85,6 +85,8 @@ dependencies {
 //    runtimeOnlyNonPublishable rfg.deobf("curse.maven:worldeditcui-forge-edition-3-380401:3191629")
 //    runtimeOnlyNonPublishable 'com.cleanroommc:configanytime:3.0'
 //    runtimeOnlyNonPublishable rfg.deobf("curse.maven:flare-692142:6598523")
+//    runtimeOnlyNonPublishable rfg.deobf("curse.maven:alfheim-lighting-engine-910715:6687458")
+//    runtimeOnlyNonPublishable rfg.deobf("curse.maven:red-core-873867:6230904")
 
     // # OptiFine
 //    // Copied from GTCEu, originally used to download latest Vintagium from GitHub
