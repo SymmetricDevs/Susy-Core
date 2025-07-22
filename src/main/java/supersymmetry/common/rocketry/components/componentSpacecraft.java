@@ -1,8 +1,6 @@
 package supersymmetry.common.rocketry.components;
 
 import gregtech.api.block.VariantBlock;
-import gregtech.api.capability.*;
-import gregtech.api.gui.widgets.*;
 import java.util.*;
 import java.util.Optional;
 import java.util.Set;
@@ -19,11 +17,7 @@ import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.common.blocks.rocketry.*;
 import supersymmetry.common.tile.TileEntityCoverable;
-
-//        Predicate<BlockPos> spacecraftDetect = bp -> getWorld().getBlockState(bp).getBlock()
-//                .equals(SuSyBlocks.SPACECRAFT_HULL);
 
 public class componentSpacecraft extends AbstractComponent<componentSpacecraft> {
   public double radius;
@@ -95,7 +89,7 @@ public class componentSpacecraft extends AbstractComponent<componentSpacecraft> 
         analysis.checkHull(aabb, blocksConnected, false);
     Set<BlockPos> exterior = hullCheck.getFirst();
     Set<BlockPos> interior = hullCheck.getSecond();
-    return spacecraftPattern(blocksConnected, interior, exterior, analysis);
+    return spacecraftPattern(blocksConnected, exterior,/*<-  these 2 goobers are changed in this class  ->*/ interior, analysis);
   }
 
   public Optional<NBTTagCompound> spacecraftPattern(

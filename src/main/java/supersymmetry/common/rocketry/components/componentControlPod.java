@@ -1,8 +1,6 @@
 package supersymmetry.common.rocketry.components;
 
 import gregtech.api.block.VariantBlock;
-import gregtech.api.capability.*;
-import gregtech.api.gui.widgets.*;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -17,12 +15,9 @@ import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.common.blocks.rocketry.*;
 import supersymmetry.common.tile.TileEntityCoverable;
 
 public class componentControlPod extends AbstractComponent<componentControlPod> {
-  // } else if (blockList.stream().anyMatch(controlPodDetect) && hasAir) {
-  //            analyzeSpacecraft(blocksConnected, exterior.getFirst(), exterior.getSecond());
   public double radius;
   public double mass;
   public Map<String, Integer> parts = new HashMap<>();
