@@ -16,16 +16,20 @@ import gregtech.common.metatileentities.storage.MetaTileEntityCrate;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.capability.impl.InaccessibleHandlerDelegate;
+import supersymmetry.api.sound.SusySounds;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.mixins.gregtech.MetaTileEntityCrateAccessor;
@@ -90,8 +94,19 @@ public class MetaTileEntityLockedCrate extends MetaTileEntityCrate {
                 return true;
             } else {
                 if (getWorld() != null && !getWorld().isRemote) {
-                    // Only sending the message on the server side to avoid text overlapping
+                    // Send status message
                     playerIn.sendStatusMessage(new TextComponentTranslation("chat.susy.crate.requires_code_breacher"), true);
+
+                    // Play failure sound effect
+                    BlockPos pos = getPos();
+                    getWorld().playSound(
+                            null,
+                            pos,
+                            SusySounds.LOCKED_CRATE,
+                            SoundCategory.BLOCKS,
+                            0.5F,
+                            1.0F
+                    );
                 }
             }
         }
