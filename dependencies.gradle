@@ -57,9 +57,9 @@ dependencies {
     implementation rfg.deobf('curse.maven:immersive-railroading-277736:4970105')
 
     // # Recurrent Complex dependencies
-    implementation rfg.deobf('curse.maven:recurrent-complex-223150:5615733')
-    implementation rfg.deobf('curse.maven:ivtoolkit-224535:2443253')
-    implementation rfg.deobf('curse.maven:fluidlogged-api-485654:4564413')
+    compileOnly rfg.deobf('curse.maven:recurrent-complex-223150:5615733')
+    compileOnly rfg.deobf('curse.maven:ivtoolkit-224535:2443253')
+    compileOnly rfg.deobf('curse.maven:fluidlogged-api-485654:4564413')
 
     // # Pyrotech dependencies
     compileOnly rfg.deobf('curse.maven:pyrotech-306676:5351359')
