@@ -4,9 +4,6 @@ import gregtech.api.block.VariantBlock;
 import gregtech.api.capability.*;
 import gregtech.api.gui.widgets.*;
 import java.util.*;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import net.minecraft.block.Block;
@@ -15,7 +12,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.Constants.NBT;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
@@ -28,11 +25,15 @@ public class componentControlPod extends AbstractComponent<componentControlPod> 
   //            analyzeSpacecraft(blocksConnected, exterior.getFirst(), exterior.getSecond());
   public double radius;
   public double mass;
+  public Map<String, Integer> parts = new HashMap<>();
+  public Map<String, Integer> instruments = new HashMap<>();
+  public boolean hasAir;
+  public double volume;
 
   public componentControlPod() {
     super(
-        "spacecraft",
-        "spacecraft",
+        "spacecraft_control_pod",
+        "spacecraft_control_pod",
         thing -> {
           return false;
         });
@@ -76,8 +77,8 @@ public class componentControlPod extends AbstractComponent<componentControlPod> 
         analysis.checkHull(aabb, blocksConnected, false);
     Set<BlockPos> exterior = hullCheck.getFirst();
     Set<BlockPos> interior = hullCheck.getSecond();
-    return this.spacecraftPattern(blocksConnected, interior, exterior, analysis);
-  } /*because it used the same thing with swapped inputs in the original code ;c */
+    return spacecraftPattern(blocksConnected, interior, exterior, analysis);
+  }
 
   public Optional<NBTTagCompound> spacecraftPattern(
       Set<BlockPos> blocksConnected,
@@ -99,6 +100,7 @@ public class componentControlPod extends AbstractComponent<componentControlPod> 
               ((VariantBlock<?>) block).getState(analysis.world.getBlockState(bp)).toString();
           int num = list.getInteger(part); // default behavior is 0
           list.setInteger(part, num + 1);
+          this.parts.put(part, num + 1);
           tag.setTag("parts", list);
         });
 
@@ -120,6 +122,7 @@ public class componentControlPod extends AbstractComponent<componentControlPod> 
               ((VariantBlock<?>) block).getState(analysis.world.getBlockState(bp)).toString();
           int num = list.getInteger(part); // default behavior is 0
           list.setInteger(part, num + 1);
+          this.instruments.put(part, num + 1);
           tag.setTag("parts", list);
         }
       } else {
@@ -134,6 +137,7 @@ public class componentControlPod extends AbstractComponent<componentControlPod> 
         return Optional.empty();
       }
       tag.setBoolean("hasAir", false);
+      this.hasAir = false; // goog..?
     } else {
       int volume = interior.size();
       tag.setInteger("volume", volume);
@@ -157,38 +161,61 @@ public class componentControlPod extends AbstractComponent<componentControlPod> 
         }
       }
       tag.setBoolean("hasAir", true);
+      this.hasAir = true;
     }
     double radius = analysis.getApproximateRadius(blocksConnected);
 
     // The scan is successful by this point
     analysis.status = BuildStat.SUCCESS;
-    tag.setString("type", this.type);
-    tag.setString("name", this.name);
+    tag.setString("type", type);
+    tag.setString("name", name);
     tag.setDouble("radius", (radius));
+    this.radius = radius;
     double mass = 0;
     for (BlockPos block : blocksConnected) {
       mass += getMass(analysis.world.getBlockState(block));
     }
     tag.setDouble("mass", mass);
-
+    this.mass = mass;
     writeBlocksToNBT(blocksConnected, analysis.world, tag);
     return Optional.of(tag);
   }
 
   @Override
   public Optional<componentControlPod> readFromNBT(NBTTagCompound compound) {
-    if (compound.getString("type") != this.type) return Optional.empty();
     componentControlPod controlpod = new componentControlPod();
-    if (compound.hasKey("mass", Constants.NBT.TAG_DOUBLE)) {
-      controlpod.mass = compound.getDouble("mass");
-    } else {
-      return Optional.empty();
+    if (compound.getString("name") == controlpod.name
+        && compound.getString("type") == controlpod.type) {
+      if (compound.hasKey("radius", NBT.TAG_DOUBLE)) {
+        if (compound.hasKey("mass", NBT.TAG_DOUBLE)) {
+          if (compound.hasKey("hasAir")) {
+            if (compound.hasKey("volume", NBT.TAG_DOUBLE)) {
+              if (compound.hasKey("parts", NBT.TAG_COMPOUND)) {
+                if (compound.hasKey("instruments", NBT.TAG_COMPOUND)) {
+                  controlpod.radius = compound.getDouble("radius");
+                  controlpod.mass = compound.getDouble("mass");
+                  controlpod.volume = compound.getDouble("volume");
+                  controlpod.hasAir = compound.getBoolean("hasAir");
+                  NBTTagCompound instrumentsList =
+                      compound.getCompoundTag("instruments"); // not cheking all of that
+                  for (String key : instrumentsList.getKeySet()) {
+                    controlpod.instruments.put(key, compound.getInteger(key));
+                  }
+
+                  NBTTagCompound partsList =
+                      compound.getCompoundTag("parts"); // not cheking all of that
+                  for (String key : partsList.getKeySet()) {
+                    controlpod.instruments.put(key, compound.getInteger(key));
+                  }
+                  return Optional.of(controlpod);
+                }
+              }
+            }
+          }
+        }
+      }
     }
-    if (compound.hasKey("radius", Constants.NBT.TAG_DOUBLE)) {
-      controlpod.radius = compound.getDouble("radius");
-    } else {
-      return Optional.empty();
-    }
-    return Optional.of(controlpod);
+
+    return Optional.empty();
   }
 }

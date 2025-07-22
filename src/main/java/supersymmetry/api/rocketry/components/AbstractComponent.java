@@ -53,6 +53,18 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
     }
   }
 
+  public String getName() {
+    return this.name;
+  }
+
+  public String getType() {
+    return this.type;
+  }
+
+  public static Map<String, AbstractComponent<?>> getNameRegistry() {
+    return Map.copyOf(nameToComponentRegistry);
+  }
+
   public static void lockRegistry() {
     registrylock = true;
   }
@@ -74,7 +86,7 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
 
   public abstract Optional<T> readFromNBT(NBTTagCompound compound);
 
-  public void writeBlocksToNBT(
+  public static void writeBlocksToNBT(
       Set<BlockPos> blocks, World world, NBTTagCompound mutableTagCompound) {
     Map<String, Integer> counts = new HashMap<String, Integer>();
     for (BlockPos blockpos : blocks) {
@@ -121,7 +133,7 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
     mutableTagCompound.setTag("structureInfo", root);
   }
 
-  public double getMass(IBlockState state) {
+  public static double getMass(IBlockState state) {
     Block block = state.getBlock();
     if (!(block instanceof VariantBlock<?>)) {
       return 50.0;

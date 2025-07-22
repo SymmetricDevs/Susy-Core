@@ -1,12 +1,201 @@
 package supersymmetry.common.rocketry.components;
 
+import gregtech.api.block.VariantBlock;
+import gregtech.api.capability.*;
+import gregtech.api.gui.widgets.*;
+import java.util.*;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Tuple;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.util.Constants.NBT;
 import supersymmetry.api.rocketry.components.AbstractComponent;
+import supersymmetry.api.util.StructAnalysis;
+import supersymmetry.api.util.StructAnalysis.BuildStat;
+import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.blocks.rocketry.*;
+import supersymmetry.common.tile.TileEntityCoverable;
 
 //        Predicate<BlockPos> spacecraftDetect = bp -> getWorld().getBlockState(bp).getBlock()
 //                .equals(SuSyBlocks.SPACECRAFT_HULL);
 
 public class componentSpacecraft extends AbstractComponent<componentSpacecraft> {
-    public componentSpacecraft() {
-        super("spacecraft", "spacecraft", (blocks) -> {    });
+  public double radius;
+  public double mass;
+  public Map<String, Integer> parts = new HashMap<>();
+  public Map<String, Integer> instruments = new HashMap<>();
+  public boolean hasAir;
+  public double volume;
+
+  public componentSpacecraft() {
+    super(
+        "spacecraft_hull",
+        "spacecraft_hull",
+        (tupl) -> {
+          return tupl.getSecond().stream()
+              .anyMatch(
+                  x ->
+                      tupl.getFirst()
+                          .world
+                          .getBlockState(x)
+                          .getBlock()
+                          .equals(SuSyBlocks.SPACECRAFT_HULL));
+        });
+  }
+
+  @Override
+  public Optional<componentSpacecraft> readFromNBT(NBTTagCompound compound) {
+    componentSpacecraft controlpod = new componentSpacecraft();
+    if (compound.getString("name") == controlpod.getName()
+        && compound.getString("type") == controlpod.getName()) {
+      if (compound.hasKey("radius", NBT.TAG_DOUBLE)) {
+        if (compound.hasKey("mass", NBT.TAG_DOUBLE)) {
+          if (compound.hasKey("hasAir")) {
+            if (compound.hasKey("volume", NBT.TAG_DOUBLE)) {
+              if (compound.hasKey("parts", NBT.TAG_COMPOUND)) {
+                if (compound.hasKey("instruments", NBT.TAG_COMPOUND)) {
+                  controlpod.radius = compound.getDouble("radius");
+                  controlpod.mass = compound.getDouble("mass");
+                  controlpod.volume = compound.getDouble("volume");
+                  controlpod.hasAir = compound.getBoolean("hasAir");
+                  NBTTagCompound instrumentsList =
+                      compound.getCompoundTag("instruments"); // not cheking all of that
+                  for (String key : instrumentsList.getKeySet()) {
+                    controlpod.instruments.put(key, compound.getInteger(key));
+                  }
+
+                  NBTTagCompound partsList =
+                      compound.getCompoundTag("parts"); // not cheking all of that
+                  for (String key : partsList.getKeySet()) {
+                    controlpod.instruments.put(key, compound.getInteger(key));
+                  }
+                  return Optional.of(controlpod);
+                }
+              }
+            }
+          }
+        }
+      }
     }
+
+    return Optional.empty();
+  }
+
+  @Override
+  public Optional<NBTTagCompound> analyzePattern(StructAnalysis analysis, AxisAlignedBB aabb) {
+    Set<BlockPos> blocksConnected =
+        analysis.getBlockConn(aabb, analysis.getBlocks(analysis.world, aabb, true).get(0));
+    Tuple<Set<BlockPos>, Set<BlockPos>> hullCheck =
+        analysis.checkHull(aabb, blocksConnected, false);
+    Set<BlockPos> exterior = hullCheck.getFirst();
+    Set<BlockPos> interior = hullCheck.getSecond();
+    return spacecraftPattern(blocksConnected, interior, exterior, analysis);
+  }
+
+  public Optional<NBTTagCompound> spacecraftPattern(
+      Set<BlockPos> blocksConnected,
+      Set<BlockPos> interior,
+      Set<BlockPos> exterior,
+      StructAnalysis analysis) {
+
+    Predicate<BlockPos> lifeSupportCheck =
+        bp -> analysis.world.getBlockState(bp).getBlock().equals(SuSyBlocks.LIFE_SUPPORT);
+    Set<BlockPos> lifeSupports =
+        blocksConnected.stream().filter(lifeSupportCheck).collect(Collectors.toSet());
+    NBTTagCompound tag = new NBTTagCompound();
+
+    lifeSupports.forEach(
+        bp -> {
+          Block block = analysis.world.getBlockState(bp).getBlock();
+          NBTTagCompound list = tag.getCompoundTag("parts");
+          String part =
+              ((VariantBlock<?>) block).getState(analysis.world.getBlockState(bp)).toString();
+          int num = list.getInteger(part); // default behavior is 0
+          list.setInteger(part, num + 1);
+          this.parts.put(part, num + 1);
+          tag.setTag("parts", list);
+        });
+
+    for (BlockPos bp : exterior) {
+      if (analysis.world.getBlockState(bp).getBlock().equals(SuSyBlocks.SPACECRAFT_HULL)) {
+        TileEntityCoverable te = (TileEntityCoverable) analysis.world.getTileEntity(bp);
+        for (EnumFacing side : EnumFacing.VALUES) {
+          // either it must be facing the outside without a cover or it must have
+          if (te.isCovered(side) ^ exterior.contains(bp.add(side.getDirectionVec()))) {
+            analysis.status = BuildStat.HULL_WEAK;
+            return Optional.empty();
+          }
+        }
+      } else if (analysis.world.getBlockState(bp).getBlock().equals(SuSyBlocks.SPACE_INSTRUMENT)) {
+        {
+          Block block = analysis.world.getBlockState(bp).getBlock();
+          NBTTagCompound list = tag.getCompoundTag("instruments");
+          String part =
+              ((VariantBlock<?>) block).getState(analysis.world.getBlockState(bp)).toString();
+          int num = list.getInteger(part); // default behavior is 0
+          list.setInteger(part, num + 1);
+          this.instruments.put(part, num + 1);
+          tag.setTag("parts", list);
+        }
+      } else {
+        analysis.status = BuildStat.HULL_WEAK;
+      }
+    }
+
+    if (lifeSupports.isEmpty()) {
+      // no airspace necessary
+      if (!interior.isEmpty()) {
+        analysis.status = BuildStat.SPACECRAFT_HOLLOW;
+        return Optional.empty();
+      }
+      tag.setBoolean("hasAir", false);
+      this.hasAir = false; // goog..?
+    } else {
+      int volume = interior.size();
+      tag.setInteger("volume", volume);
+      Set<BlockPos> container = analysis.getPerimeter(interior, StructAnalysis.orthVecs);
+      for (BlockPos bp : container) {
+        Block block = analysis.world.getBlockState(bp).getBlock();
+        if (block.equals(SuSyBlocks.LIFE_SUPPORT)) {
+          continue; // we did the math on this earlier
+        } else if (analysis.world.getTileEntity(bp) != null) {
+          if (analysis.world.getTileEntity(bp) instanceof TileEntityCoverable) {
+            TileEntityCoverable te = (TileEntityCoverable) analysis.world.getTileEntity(bp);
+            if (block.equals(SuSyBlocks.ROOM_PADDING)) {
+              for (EnumFacing side : EnumFacing.VALUES) {
+                if (te.isCovered(side) ^ interior.contains(bp.add(side.getDirectionVec()))) {
+                  analysis.status = BuildStat.WEIRD_PADDING;
+                  return Optional.empty();
+                }
+              }
+            }
+          }
+        }
+      }
+      tag.setBoolean("hasAir", true);
+      this.hasAir = true;
+    }
+    double radius = analysis.getApproximateRadius(blocksConnected);
+
+    // The scan is successful by this point
+    analysis.status = BuildStat.SUCCESS;
+    tag.setString("type", type);
+    tag.setString("name", name);
+    tag.setDouble("radius", (radius));
+    this.radius = radius;
+    double mass = 0;
+    for (BlockPos block : blocksConnected) {
+      mass += getMass(analysis.world.getBlockState(block));
+    }
+    tag.setDouble("mass", mass);
+    this.mass = mass;
+    writeBlocksToNBT(blocksConnected, analysis.world, tag);
+    return Optional.of(tag);
+  }
 }
