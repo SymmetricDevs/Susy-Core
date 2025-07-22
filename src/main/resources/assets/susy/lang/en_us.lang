@@ -922,6 +922,7 @@ metaitem.track_segment.tooltip=For use in the §8tunnelbore.
 metaitem.track_segment.length_info=§610 blocks §7worth of monorail track.
 metaitem.air_vent.tooltip.1=§bCollecting Rate: §f%,d L/s
 metaitem.orbital.scrap.earth.name=Earth Orbital Scrap
+metaitem.code_breacher.name=Code Breacher
 
 # Catalysts
 susy.universal.catalysts.tooltip.tier=§eMax Voltage: §f%,d EU/T (%s§f)

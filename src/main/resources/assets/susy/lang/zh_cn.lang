@@ -920,6 +920,7 @@ metaitem.track_segment.tooltip=可用于§8盾构机
 metaitem.track_segment.length_info=相当于§610格§7的单轨铁道。
 metaitem.air_vent.tooltip.1=§b收集速率：§f%,d L/s
 metaitem.orbital.scrap.earth.name=地球轨道太空垃圾
+metaitem.code_breacher.name=密码破译器
 
 # Catalysts
 susy.universal.catalysts.tooltip.tier=§e最高电压：§f%,d EU/t（%s§f）

@@ -9,6 +9,7 @@
     "BlockMachineMixin",
     "BlockPipeAccessor",
     "CommonProxyMixin",
+    "MetaTileEntityCrateAccessor",
     "MetaTileEntityDrumAccessor",
     "MetaTileEntityFluidDrillMixin",
     "MetaTileEntityHolderMixin",
