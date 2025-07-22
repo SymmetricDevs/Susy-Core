@@ -76,7 +76,6 @@ dependencies {
     compileOnly rfg.deobf('curse.maven:travelers-backpack-321117:3150850')
     compileOnly rfg.deobf('curse.maven:bubbles-a-baubles-fork-995393:5719448')
     compileOnly rfg.deobf('curse.maven:barrels-drums-storage-more-319404:2708193')
-    compileOnly rfg.deobf("curse.maven:vintagefix-871198:6609247")
 
     // # Optional dependencies. Uncomment the ones you need
 //    runtimeOnlyNonPublishable rfg.deobf('curse.maven:the-beneath-254629:3425551')
@@ -85,6 +84,7 @@ dependencies {
 //    runtimeOnlyNonPublishable rfg.deobf("curse.maven:worldeditcui-forge-edition-3-380401:3191629")
 //    runtimeOnlyNonPublishable 'com.cleanroommc:configanytime:3.0'
 //    runtimeOnlyNonPublishable rfg.deobf("curse.maven:flare-692142:6598523")
+//    runtimeOnlyNonPublishable rfg.deobf("curse.maven:vintagefix-871198:6609247")
 //    runtimeOnlyNonPublishable rfg.deobf("curse.maven:alfheim-lighting-engine-910715:6687458")
 //    runtimeOnlyNonPublishable rfg.deobf("curse.maven:red-core-873867:6230904")
 
