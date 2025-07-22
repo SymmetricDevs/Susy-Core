@@ -1,7 +1,6 @@
 package supersymmetry.mixins.gregtech;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
 import gregtech.client.renderer.scene.WorldSceneRenderer;
 import net.minecraft.block.Block;
@@ -15,13 +14,10 @@ import supersymmetry.api.util.BlockRenderManager;
 @Mixin(value = WorldSceneRenderer.class, remap = false)
 public class WorldSceneRendererMixin {
 
-    @WrapOperation(method = "lambda$drawWorld$0",
+    @WrapWithCondition(method = "lambda$drawWorld$0",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/block/Block;canRenderInLayer(Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/util/BlockRenderLayer;)Z"))
-    public boolean ignoreBlocked(Block block, IBlockState state, BlockRenderLayer layer, Operation<Boolean> method, @Local(name = "pos") BlockPos pos) {
-        if (BlockRenderManager.modelDisabled.contains(pos)) {
-            return false;
-        }
-        return method.call(block, state, layer);
+    public boolean ignoreBlocked(Block block, IBlockState state, BlockRenderLayer layer, @Local(name = "pos") BlockPos pos) {
+        return !BlockRenderManager.modelDisabled.contains(pos);
     }
 }

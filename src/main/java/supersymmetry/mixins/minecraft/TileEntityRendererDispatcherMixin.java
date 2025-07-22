@@ -16,8 +16,8 @@ public class TileEntityRendererDispatcherMixin {
     @Inject(method = "getRenderer(Lnet/minecraft/tileentity/TileEntity;)Lnet/minecraft/client/renderer/tileentity/TileEntitySpecialRenderer;",
             at = @At(value = "HEAD"),
             cancellable = true)
-    private <T extends TileEntity> void ignoreBlocked(
-            TileEntity tileEntityIn, CallbackInfoReturnable<TileEntitySpecialRenderer<T>> cir) {
+    private <T extends TileEntity> void ignoreBlocked(TileEntity tileEntityIn,
+                                                      CallbackInfoReturnable<TileEntitySpecialRenderer<T>> cir) {
         if (tileEntityIn != null) {
             if (tileEntityIn.getWorld() == Minecraft.getMinecraft().world
                     && BlockRenderManager.modelDisabled.contains(tileEntityIn.getPos())) {
