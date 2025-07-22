@@ -1,17 +1,24 @@
 package supersymmetry.common.item;
 
+import com.google.common.base.CaseFormat;
 import gregtech.api.GTValues;
+import gregtech.api.GregTechAPI;
 import gregtech.api.items.armor.ArmorMetaItem;
+import gregtech.api.items.materialitem.MetaPrefixItem;
 import gregtech.api.items.metaitem.MetaItem.MetaValueItem;
 import gregtech.api.items.metaitem.MetaOreDictItem;
 import gregtech.api.items.metaitem.MetaOreDictItem.OreDictValueItem;
 import gregtech.api.items.metaitem.StandardMetaItem;
+import gregtech.api.items.metaitem.stats.IItemDurabilityManager;
+import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.info.MaterialIconSet;
+import gregtech.api.unification.material.registry.MaterialRegistry;
 import gregtech.api.unification.ore.OrePrefix;
+import gregtech.api.unification.stack.UnificationEntry;
 import gregtech.common.items.behaviors.TooltipBehavior;
 import net.minecraft.client.resources.I18n;
 import supersymmetry.SuSyValues;
-
+import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
 
 public class SuSyMetaItems {
@@ -55,6 +62,24 @@ public class SuSyMetaItems {
         armorItem.setRegistryName("susy_armor");
         CatalystItems.init();
 
+        for (MaterialRegistry registry : GregTechAPI.materialManager.getRegistries()) {
+            String regName = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, SusyOrePrefix.millBall.name());
+            MetaPrefixItem metaOrePrefix = new MetaPrefixItem(registry, SusyOrePrefix.millBall) {
+
+                @Override
+                public void registerSubItems() {
+                    for (Material material : registry) {
+                        short i = (short) registry.getIDForObject(material);
+                        if (canGenerate(SusyOrePrefix.millBall, material)) {
+                            var metaItem = addItem(i, new UnificationEntry(SusyOrePrefix.millBall, material).toString());
+                            metaItem.addComponents((IItemDurabilityManager) stack -> 0.5);
+                            metaItem.setMaxStackSize(1);
+                        }
+                    }
+                }
+            };
+            metaOrePrefix.setRegistryName(registry.getModid(), String.format("meta_%s", regName));
+        }
     }
 
     public static void initSubItems() {
@@ -67,11 +92,11 @@ public class SuSyMetaItems {
         CATALYST_BED_SUPPORT_GRID = metaItem.addItem(1, "catalyst_bed_support_grid");
         CONVEYOR_STEAM = metaItem.addItem(2, "conveyor.steam").addComponents(new TooltipBehavior((lines) -> {
             lines.add(I18n.format("metaitem.conveyor.module.tooltip"));
-            lines.add(I18n.format("gregtech.universal.tooltip.item_transfer_rate", new Object[]{4}));
+            lines.add(I18n.format("gregtech.universal.tooltip.item_transfer_rate", 4));
         }));
         PUMP_STEAM = metaItem.addItem(3, "pump.steam").addComponents(new TooltipBehavior((lines) -> {
             lines.add(I18n.format("metaitem.electric.pump.tooltip"));
-            lines.add(I18n.format("gregtech.universal.tooltip.fluid_transfer_rate", new Object[]{32}));
+            lines.add(I18n.format("gregtech.universal.tooltip.fluid_transfer_rate", 32));
         }));
         AIR_VENT = metaItem.addItem(4, "air_vent").addComponents(new TooltipBehavior((lines) -> {
             lines.add(I18n.format("metaitem.air_vent.tooltip.1", 100));

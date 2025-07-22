@@ -224,6 +224,7 @@ item.material.oreprefix.fiberWet=Wet %s Fiber
 item.material.oreprefix.thread=%s Thread
 item.material.oreprefix.dustWet=Wet %s Dust
 item.material.oreprefix.electrode=%s Electrode
+item.material.oreprefix.millBall=%s Mill Ball
 
 susy.fluid.supercritical=Supercritical %s
 susy.fluid.impure_slurry=Impure %s Slurry
