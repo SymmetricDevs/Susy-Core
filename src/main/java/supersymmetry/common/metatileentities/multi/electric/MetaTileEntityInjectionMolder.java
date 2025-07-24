@@ -92,7 +92,7 @@ public class MetaTileEntityInjectionMolder extends RecipeMapMultiblockController
 
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
-        tooltip.add(I18n.format("gregtech.machine.parallel_pure", 16));
+        tooltip.add(I18n.format("susy.machine.parallel_pure", 16));
     }
 
     private class InjectionMolderLogic extends MultiblockRecipeLogic {
