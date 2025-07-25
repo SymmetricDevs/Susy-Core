@@ -34,7 +34,8 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
   protected Predicate<Tuple<StructAnalysis, List<BlockPos>>> detectionPredicate;
   private static final Set<AbstractComponent<?>> registry = new HashSet<>();
   private static boolean registrylock = false;
-  private static final Map<String, AbstractComponent<?>> nameToComponentRegistry = new HashMap<>();
+  private static final Map<String, Class<? extends AbstractComponent<?>>> nameToComponentRegistry =
+      new HashMap<>();
   protected String name;
   // ex name="laval_engine", type="engine" so that you can do some silly things with engine types
   protected String type;
@@ -47,10 +48,10 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
     this.detectionPredicate = detectionPredicate;
     this.name = name;
     this.type = type;
-    if (!registrylock) {
-      registry.add(this);
-      nameToComponentRegistry.put(name, this);
-    }
+    // if (!registrylock) {
+    //   registry.add(this);
+    //   nameToComponentRegistry.put(name, this.getClass());
+    // }
   }
 
   public String getName() {
@@ -61,8 +62,24 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
     return this.type;
   }
 
-  public static Map<String, AbstractComponent<?>> getNameRegistry() {
+  public static Map<String, Class<? extends AbstractComponent<?>>> getNameRegistry() {
     return Map.copyOf(nameToComponentRegistry);
+  }
+
+  @SuppressWarnings("unchecked")
+  // probably fine because if you manage to put in an AbstractComponent<?> and it doesnt
+  // extend from AbstractComponent<?> you deserved to get a crash
+  public static void registerComponent(AbstractComponent<?> component) {
+    if (getRegistryLock()) {
+      nameToComponentRegistry.put(
+          component.getName(), (Class<? extends AbstractComponent<?>>) component.getClass());
+      if (registry.stream().noneMatch(x -> x.getName() == component.getName())) {
+        registry.add(component);
+      }
+    } else {
+      throw new IllegalStateException(
+          "tried to register a component after the registry was closed. dumbass.");
+    }
   }
 
   public static void lockRegistry() {

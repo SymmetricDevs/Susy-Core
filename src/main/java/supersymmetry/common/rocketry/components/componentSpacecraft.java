@@ -65,7 +65,7 @@ public class componentSpacecraft extends AbstractComponent<componentSpacecraft> 
                   }
 
                   NBTTagCompound partsList =
-                      compound.getCompoundTag("parts"); // not cheking all of that
+                      compound.getCompoundTag("parts"); // not cheking all of that either
                   for (String key : partsList.getKeySet()) {
                     controlpod.instruments.put(key, compound.getInteger(key));
                   }
@@ -89,9 +89,15 @@ public class componentSpacecraft extends AbstractComponent<componentSpacecraft> 
         analysis.checkHull(aabb, blocksConnected, false);
     Set<BlockPos> exterior = hullCheck.getFirst();
     Set<BlockPos> interior = hullCheck.getSecond();
-    return spacecraftPattern(blocksConnected, exterior,/*<-  these 2 goobers are changed in this class  ->*/ interior, analysis);
+    return spacecraftPattern(
+        blocksConnected,
+        exterior, /*<-  these 2 goobers are changed in this class  ->*/
+        interior,
+        analysis);
   }
 
+  // copied from componentControlPod because i didnt figure out how to put it into a single function
+  // without it complaining
   public Optional<NBTTagCompound> spacecraftPattern(
       Set<BlockPos> blocksConnected,
       Set<BlockPos> interior,
