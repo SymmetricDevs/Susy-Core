@@ -46,7 +46,6 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
     public static final int MIN_RADIUS = 2;
     public static final int MAX_RADIUS = 20;
     private int sDist;
-    private boolean isFake;
 
     public MetaTileEntityMixerSettler(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.MIXER_SETTLER_RECIPES);
@@ -101,9 +100,8 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
 
     @Override
     public void checkStructurePattern() {
-        if (isFake) {
+        if (updateStructureDimensions()) {
             reinitializeStructurePattern();
-            isFake = false;
         }
         super.checkStructurePattern();
     }
@@ -271,8 +269,6 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
     protected @NotNull BlockPattern createStructurePattern() {
         if (getWorld() != null) {
             updateStructureDimensions();
-        } else {
-            isFake = true;
         }
         if (sDist < MIN_RADIUS) sDist = MIN_RADIUS;
         return createStructurePattern(sDist);
