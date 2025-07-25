@@ -83,6 +83,7 @@ dependencies {
 //    runtimeOnlyNonPublishable rfg.deobf("curse.maven:worldedit-225608:2941712")
 //    runtimeOnlyNonPublishable rfg.deobf("curse.maven:worldeditcui-forge-edition-3-380401:3191629")
 //    runtimeOnlyNonPublishable 'com.cleanroommc:configanytime:3.0'
+//    runtimeOnlyNonPublishable rfg.deobf("curse.maven:lolasm-460609:6333774")
 //    runtimeOnlyNonPublishable rfg.deobf("curse.maven:flare-692142:6598523")
 //    runtimeOnlyNonPublishable rfg.deobf("curse.maven:vintagefix-871198:6609247")
 //    runtimeOnlyNonPublishable rfg.deobf("curse.maven:alfheim-lighting-engine-910715:6687458")

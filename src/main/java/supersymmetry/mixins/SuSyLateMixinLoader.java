@@ -19,7 +19,8 @@ public class SuSyLateMixinLoader implements ILateMixinLoader {
             "reccomplex",
             "fluidlogged_api",
             "vintagefix",
-            "alfheim"
+            "alfheim",
+            "loliasm"
     );
 
     @Override
