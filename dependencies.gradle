@@ -77,6 +77,9 @@ dependencies {
     compileOnly rfg.deobf('curse.maven:bubbles-a-baubles-fork-995393:5719448')
     compileOnly rfg.deobf('curse.maven:barrels-drums-storage-more-319404:2708193')
     compileOnly rfg.deobf("curse.maven:vintagefix-871198:6609247")
+    // LittleTiles
+    compileOnly rfg.deobf("curse.maven:creativecore-257814:4722163")
+    compileOnly rfg.deobf("curse.maven:littletiles-257818:5180387")
 
     // # Optional dependencies. Uncomment the ones you need
 //    runtimeOnlyNonPublishable rfg.deobf('curse.maven:the-beneath-254629:3425551')
