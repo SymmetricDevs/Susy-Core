@@ -36,26 +36,28 @@ public class componentLiquidFuelTank extends AbstractComponent<componentLiquidFu
         });
   }
 
+  // but the Lord laughs at the wicked,
+  // for he knows their day is coming.
   @Override
   public Optional<componentLiquidFuelTank> readFromNBT(NBTTagCompound compound) {
     if (compound.getString("type") != this.type) return Optional.empty();
-    componentLiquidFuelTank engine = new componentLiquidFuelTank();
+    componentLiquidFuelTank tank = new componentLiquidFuelTank();
     if (compound.hasKey("mass", Constants.NBT.TAG_DOUBLE)) {
-      engine.mass = compound.getDouble("mass");
+      tank.mass = compound.getDouble("mass");
     } else {
       return Optional.empty();
     }
     if (compound.hasKey("radius", Constants.NBT.TAG_DOUBLE)) {
-      engine.radius = compound.getDouble("radius");
+      tank.radius = compound.getDouble("radius");
     } else {
       return Optional.empty();
     }
     if (compound.hasKey("area_ratio", Constants.NBT.TAG_DOUBLE)) {
-      engine.volume = compound.getInteger("volume");
+      tank.volume = compound.getInteger("volume");
     } else {
       return Optional.empty();
     }
-    return Optional.of(engine);
+    return Optional.of(tank);
   }
 
   @Override

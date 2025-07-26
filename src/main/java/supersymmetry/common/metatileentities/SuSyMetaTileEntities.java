@@ -28,6 +28,7 @@ import supersymmetry.api.metatileentity.PseudoMultiSteamMachineMetaTileEntity;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicator;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicators;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.metatileentities.multi.rocket.*;
@@ -51,6 +52,11 @@ import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntit
 import supersymmetry.common.metatileentities.single.steam.MetaTileEntitySteamLatexCollector;
 import supersymmetry.common.metatileentities.single.steam.SuSySimpleSteamMetaTileEntity;
 import supersymmetry.common.metatileentities.storage.MetaTileEntityPlasticCan;
+import supersymmetry.common.rocketry.components.componentControlPod;
+import supersymmetry.common.rocketry.components.componentFairing;
+import supersymmetry.common.rocketry.components.componentInterstage;
+import supersymmetry.common.rocketry.components.componentLavalEngine;
+import supersymmetry.common.rocketry.components.componentSpacecraft;
 
 import java.util.ArrayList;
 import java.util.function.Function;
@@ -395,6 +401,16 @@ public class SuSyMetaTileEntities {
         LANDING_PAD = registerMetaTileEntity(18000, new MetaTileEntityLandingPad(susyId("landing_pad")));
         SCRAP_RECYCLER = registerMetaTileEntity(18001, new MetaTileEntityScrapRecycler(susyId("scrap_recycler")));
         BUILDING_CLEANROOM = registerMetaTileEntity(18002, new MetaTileEntityBuildingCleanroom(susyId("building_cleanroom")));
+
+        //components to be used in the scanner and stuff, not sure if there is a better place to register those
+        AbstractComponent.registerComponent(new componentFairing());
+        AbstractComponent.registerComponent(new componentControlPod());
+        AbstractComponent.registerComponent(new componentLavalEngine()); 
+        AbstractComponent.registerComponent(new componentFairing());
+        AbstractComponent.registerComponent(new componentInterstage());
+        AbstractComponent.registerComponent(new componentSpacecraft());
+        AbstractComponent.lockRegistry();
+
         COMPONENT_SCANNER = registerMetaTileEntity(18003, new MetaTileEntityComponentScanner((susyId("component_scanner"))));
         ROCKET_ASSEMBLER = registerMetaTileEntity(18004, new MetaTileEntityRocketAssembler(susyId("rocket_assembler")));
         ROCKET_PROGRAMMER = registerMetaTileEntity(18005, new MetaTileEntityRocketProgrammer(susyId("rocket_programmer")));

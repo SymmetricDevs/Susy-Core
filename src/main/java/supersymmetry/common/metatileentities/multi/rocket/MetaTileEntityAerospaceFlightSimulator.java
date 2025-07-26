@@ -178,9 +178,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
               master_blueprint.isEmpty()
                   ? new Position(width / 2, width / 2)
                   : new Position(width - 40, height - 40));
-          // SusyLog.logger.info("set the possition to {} because the slot is empty? ({}) and the
-          // itemstack is equal to empty? ({}) and the stack itself is
-          // {}",blueprintContainer.getSelfPosition(),master_blueprint.isEmpty(),master_blueprint.getStackInSlot(0) == ItemStack.EMPTY, master_blueprint.getStackInSlot(0).getDisplayName());
         };
 
     builder.widget(blueprintContainer.setBackgroundTexture(GuiTextures.SLOT_DARK));
@@ -272,7 +269,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     return false;
   }
 
-  private boolean verifyDatacardArrangementAndMergeToMaster() {
+  private boolean verifyDatacardArrangement() {
     // assumes that it has all of the nbt's since i dont wanna do that entire thing again
 
     NBTTagList componentsList =

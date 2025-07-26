@@ -38,7 +38,6 @@ public class SlotWidgetBlueprintContainer extends SlotWidget {
 
   @Override
   public void handleClientAction(int id, PacketBuffer buffer) {
-    // TODO Auto-generated method stub
     super.handleClientAction(id, buffer);
     if (id == 1) {
       this.onSlotChanged.run();

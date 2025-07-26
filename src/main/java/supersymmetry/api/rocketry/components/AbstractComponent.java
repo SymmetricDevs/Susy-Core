@@ -20,6 +20,7 @@ import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -48,10 +49,6 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
     this.detectionPredicate = detectionPredicate;
     this.name = name;
     this.type = type;
-    // if (!registrylock) {
-    //   registry.add(this);
-    //   nameToComponentRegistry.put(name, this.getClass());
-    // }
   }
 
   public String getName() {
@@ -63,14 +60,31 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
   }
 
   public static Map<String, Class<? extends AbstractComponent<?>>> getNameRegistry() {
-    return Map.copyOf(nameToComponentRegistry);
+    return new HashMap<>(nameToComponentRegistry);
+  }
+
+  public static AbstractComponent<?> getComponentFromName(String name) {
+    if (nameToComponentRegistry.containsKey(name)) {
+      try {
+        return nameToComponentRegistry.get(name).getDeclaredConstructor().newInstance();
+      } catch (Exception e) {
+        SusyLog.logger.error(
+            "something horrible happened during component instantiation. {} {}",
+            e.getMessage(),
+            e.getStackTrace());
+      }
+    } else {
+      throw new IllegalStateException("tried to get a non existing component");
+    }
+
+    return null;
   }
 
   @SuppressWarnings("unchecked")
   // probably fine because if you manage to put in an AbstractComponent<?> and it doesnt
   // extend from AbstractComponent<?> you deserved to get a crash
   public static void registerComponent(AbstractComponent<?> component) {
-    if (getRegistryLock()) {
+    if (!getRegistryLock()) {
       nameToComponentRegistry.put(
           component.getName(), (Class<? extends AbstractComponent<?>>) component.getClass());
       if (registry.stream().noneMatch(x -> x.getName() == component.getName())) {
@@ -90,8 +104,12 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
     return registrylock;
   }
 
-  public static List<AbstractComponent<?>> getRegistry() {
-    return List.copyOf(registry);
+  public static Set<AbstractComponent<?>> getRegistry() {
+    return new HashSet<>(registry);
+  }
+
+  public Predicate<Tuple<StructAnalysis, List<BlockPos>>> getDetectionPredicate() {
+    return this.detectionPredicate;
   }
 
   public void setDetectionPredicate(Predicate<Tuple<StructAnalysis, List<BlockPos>>> predicate) {
