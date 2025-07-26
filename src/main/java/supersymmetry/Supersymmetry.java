@@ -84,6 +84,7 @@ public class Supersymmetry {
     public void onInit(@NotNull FMLInitializationEvent event) {
         proxy.load();
         SuSyCoverBehaviors.init();
+
     }
 
     @Mod.EventHandler
