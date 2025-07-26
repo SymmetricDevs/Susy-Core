@@ -32,7 +32,15 @@ public class componentLiquidFuelTank extends AbstractComponent<componentLiquidFu
         "fluid_tank",
         "tank",
         thing -> {
-          return false;
+          return thing.getSecond().stream()
+              .anyMatch(
+                  bp ->
+                      thing
+                          .getFirst()
+                          .world
+                          .getBlockState(bp)
+                          .getBlock()
+                          .equals(SuSyBlocks.TANK_SHELL));
         });
   }
 
@@ -84,7 +92,7 @@ public class componentLiquidFuelTank extends AbstractComponent<componentLiquidFu
         return Optional.empty();
       }
       EnumFacing dir = analysis.world.getBlockState(block).getValue(FACING);
-      ArrayList<BlockPos> neighbors = analysis.getBlockNeighbors(block, StructAnalysis.orthVecs);
+      // ArrayList<BlockPos> neighbors = analysis.getBlockNeighbors(block, StructAnalysis.orthVecs);
       for (EnumFacing facing : EnumFacing.values()) {
         BlockPos neighbor = block.add(facing.getDirectionVec());
         if (interiorAir.contains(neighbor)) {
@@ -126,7 +134,7 @@ public class componentLiquidFuelTank extends AbstractComponent<componentLiquidFu
     }
     tag.setDouble("mass", Double.valueOf(mass));
     this.mass = mass;
-    this.writeBlocksToNBT(blocks, analysis.world, tag);
+    writeBlocksToNBT(blocks, analysis.world, tag);
     return Optional.of(tag);
   }
 }
