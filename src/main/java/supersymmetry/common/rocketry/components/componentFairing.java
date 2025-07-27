@@ -14,11 +14,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import scala.tools.cmd.Opt;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.blocks.rocketry.BlockFairingConnector;
 import supersymmetry.common.tile.TileEntityCoverable;
 
 /** componentFairing */
@@ -183,122 +186,133 @@ public class componentFairing extends AbstractComponent<componentFairing> {
   //   return Optional.of(tag);
   // }
   @Override
-  public Optional<NBTTagCompound> analyzePattern(StructAnalysis analysis, AxisAlignedBB aabb) {
+  public Optional<NBTTagCompound> analyzePattern(StructAnalysis analysis, AxisAlignedBB interiorBB) {
     Set<BlockPos> blocksConnected =
-        analysis.getBlockConn(aabb, analysis.getBlocks(analysis.world, aabb, true).get(0));
+        analysis.getBlockConn(interiorBB, analysis.getBlocks(analysis.world, interiorBB, true).get(0));
 
-    AxisAlignedBB fairingBB = analysis.getBB(blocksConnected);
-    AxisAlignedBB interiorBB = aabb;
-    Predicate<BlockPos> connCheck =
-        bp -> analysis.world.getBlockState(bp).getBlock().equals(SuSyBlocks.FAIRING_CONNECTOR);
-    Set<BlockPos> connectorBlocks =
-        blocksConnected.stream().filter(connCheck).collect(Collectors.toSet());
+      World world = analysis.world;
+      AxisAlignedBB fairingBB = analysis.getBB(blocksConnected);
+      Predicate<BlockPos> connCheck = bp -> world.getBlockState(bp).getBlock().equals(SuSyBlocks.FAIRING_CONNECTOR);
+      Set<BlockPos> connectorBlocks = blocksConnected.stream().filter(connCheck).collect(Collectors.toSet());
 
-    BlockPos next = connectorBlocks.iterator().next();
-    BlockPos start = next;
+      // If there are more than 2 partitions of air in the bounding box, then there's an abnormality with the hull shape.
+      // If there's only one partition, then the hull has a hole in it.
+      // We know already that the exterior loop is touching the edge of the bounding box.
+      // So, if there are 2 partitions, then the fairing hull is of the desired shape.
 
-    Set<BlockPos> collectedConnectors = new HashSet<>(Collections.singleton(next));
-
-    Set<BlockPos> neighbors1 =
-        analysis.getBlockNeighbors(next).stream().filter(connCheck).collect(Collectors.toSet());
-    Set<BlockPos> initialClosest = analysis.getClosest(next, neighbors1);
-    if (initialClosest.size() <= 2
-        && !initialClosest.isEmpty()
-        && analysis.isFacingOutwards(next)) {
-      next = initialClosest.iterator().next(); // This may be random, but it doesn't matter
-      collectedConnectors.add(next);
-    } else {
-      analysis.status = BuildStat.WEIRD_FAIRING;
-      return Optional.empty();
-    }
-
-    List<HashSet<BlockPos>> partitions = analysis.getPartitions(fairingBB);
-    if (partitions.size() != 2) {
-      analysis.status = BuildStat.WEIRD_FAIRING;
-      return Optional.empty();
-    }
-
-    Set<BlockPos> interiorPartition;
-    if (analysis.getBB(partitions.get(0)).maxY > analysis.getBB(partitions.get(1)).maxY) {
-      interiorPartition = partitions.get(1);
-    } else {
-      interiorPartition = partitions.get(0);
-    }
-
-    while (!collectedConnectors.containsAll(connectorBlocks)) {
-      Set<BlockPos> neighbors =
-          analysis.getBlockNeighbors(next).stream()
-              .filter(connCheck.and(o -> !collectedConnectors.contains(o)))
-              .collect(Collectors.toSet());
-      if (neighbors.size() <= 0) {
-        analysis.status = BuildStat.WEIRD_FAIRING;
-        // will crash if its empty
-        return Optional.empty();
+      List<HashSet<BlockPos>> partitions = analysis.getPartitions(fairingBB);
+      if (partitions.size() != 2) {
+          analysis.status = BuildStat.WEIRD_FAIRING;
+          return Optional.empty();
       }
-      Set<BlockPos> closestNeighbors = analysis.getClosest(next, neighbors);
-      if (closestNeighbors.size() == 1) { // only one neighbor has not been checked yet
-        next = closestNeighbors.iterator().next();
-        collectedConnectors.add(next);
-        // get direction of block
-        EnumFacing facing = analysis.world.getBlockState(next).getValue(FACING);
-        // The fairing connector should have its connector face pointing out
-        BlockPos pointingTo = next.add(facing.getDirectionVec());
-        if (StructAnalysis.blockCont(fairingBB, pointingTo)
-            || partitions.get(0).contains(pointingTo)
-            || partitions.get(1).contains(pointingTo)) {
-          analysis.status = BuildStat.WEIRD_FAIRING;
-          return Optional.empty();
-        }
-      } else if (closestNeighbors.isEmpty()) {
-        if (!collectedConnectors.contains(connectorBlocks)
-            || !analysis.getBlockNeighbors(next).contains(start)) {
-          analysis.status = BuildStat.WEIRD_FAIRING;
-          return Optional.empty();
-        }
-        break;
+      // Objective: We don't really want tiles on the inside of the fairing - that wouldn't make any sense!
+      // So, we're going to obtain the fairing with a ceiling (if it didn't have one, it wouldn't have )
+      // Note that
+      Set<BlockPos> intPartition;
+      Set<BlockPos> extPartition;
+      if (analysis.getBB(partitions.get(0)).maxY > analysis.getBB(partitions.get(1)).maxY) {
+          intPartition = partitions.get(1);
+          extPartition = partitions.get(0);
       } else {
-        analysis.status = BuildStat.WEIRD_FAIRING;
-        return Optional.empty();
+          intPartition = partitions.get(0);
+          extPartition = partitions.get(1);
       }
-    }
 
-    // Step 3: Verify that all exposed block faces are covered (except for the
-    //  connector-connector ones)
-    for (BlockPos bp : blocksConnected) {
-      Block b = analysis.world.getBlockState(bp).getBlock();
-      if (!(analysis.world.getTileEntity(bp) instanceof TileEntityCoverable)) {
-        analysis.status = BuildStat.WEIRD_FAIRING;
-        return Optional.empty();
+      // Checks if all connectors are facing the same plane
+      BlockPos next = connectorBlocks.iterator().next();
+      BlockPos start = next;
+      EnumFacing dir = world.getBlockState(next).getValue(FACING);
+      int axisPos = analysis.getCoordOfAxis(start);
+      for (BlockPos blockFace: connectorBlocks) {
+          EnumFacing dir_general = world.getBlockState(blockFace).getValue(FACING);
+          if (analysis.getCoordOfAxis(blockFace) != axisPos || dir_general != dir) {
+              analysis.status = BuildStat.CONN_UNALIGNED;
+              return Optional.empty();
+          } else {
+              BlockPos pointingTo = blockFace.add(dir_general.getDirectionVec());
+              if (intPartition.contains(pointingTo) || extPartition.contains(pointingTo) ||
+                      intPartition.contains(blockFace.add(dir_general.getOpposite().getDirectionVec()))) {
+                  analysis.status = BuildStat.CONN_WRONG_DIR;
+                  return Optional.empty();
+              }
+          }
       }
-      TileEntityCoverable te = (TileEntityCoverable) analysis.world.getTileEntity(bp);
-      List<BlockPos> airNeighbors =
-          analysis.getBlockNeighbors(bp, interiorBB, StructAnalysis.orthVecs).stream()
-              .filter(pos -> !analysis.world.isAirBlock(pos))
-              .collect(Collectors.toList());
-      List<BlockPos> neighbors =
-          airNeighbors.stream().filter(interiorPartition::contains).collect(Collectors.toList());
-      if (b.equals(SuSyBlocks.FAIRING_HULL)) {
-        if (te.getSides().length != (6 - neighbors.size())) {
-          analysis.status = BuildStat.MISSING_TILE;
-          return Optional.empty();
-        }
-      } else if (b.equals(SuSyBlocks.FAIRING_CONNECTOR)) {
-        // we know that the connector facing is valid from Step 1 so we reuse the
-        // information
-        // that's why there's a 5
-        if (te.getSides().length != (5 - neighbors.size())
-            || te.isCovered(analysis.world.getBlockState(bp).getValue(FACING))) {
-          analysis.status = BuildStat.WEIRD_FAIRING;
-          return Optional.empty();
-        }
+
+      // These connector blocks should form a line
+      // Each connector should neighbor one/two
+
+      // This will keep track of what we've covered
+      Set<BlockPos> collectedConnectors = new HashSet<>(Collections.singleton(next));
+      collectedConnectors.add(start);
+      Set<BlockPos> toConnect = new HashSet<>();
+      toConnect.add(start);
+      while (!collectedConnectors.containsAll(connectorBlocks)) {
+          if (toConnect.isEmpty()) { // either there's one connector, or the connector set is disconnected
+              analysis.status = BuildStat.WEIRD_FAIRING;
+              return Optional.empty();
+          }
+          Set<BlockPos> newNeighbors = new HashSet<>();
+          for (BlockPos initiate: toConnect) {
+              Set<BlockPos> blockNeighbors = analysis.getBlockNeighbors(initiate, fairingBB, StructAnalysis.neighborVecs)
+                      .stream().filter(connectorBlocks::contains).collect(Collectors.toSet());
+              // Ensures that there's one line of connectors (no branching)
+              if (blockNeighbors.size() > 2) {
+                  analysis.status = BuildStat.WEIRD_FAIRING;
+                  return Optional.empty();
+              }
+              newNeighbors.addAll(blockNeighbors.stream().filter(p->!collectedConnectors.contains(p)).collect(Collectors.toSet()));
+          }
+          collectedConnectors.addAll(toConnect);
+          toConnect.clear();
+          toConnect.addAll(newNeighbors);
       }
-    }
-    NBTTagCompound tag = new NBTTagCompound();
-    tag.setInteger("height", (int) fairingBB.maxY - (int) fairingBB.minY);
-    this.height = (int) fairingBB.maxY - (int) fairingBB.minY;
-    Double bottomRadius = analysis.getApproximateRadius(analysis.getLowestLayer(blocksConnected));
-    tag.setDouble("bottom_radius", bottomRadius);
-    this.bottom_radius = bottomRadius;
+
+
+      //Step 3: Verify that all block faces exposed to the top partition are covered
+      for (BlockPos bp: blocksConnected) {
+          Block b = world.getBlockState(bp).getBlock();
+          if (!(world.getTileEntity(bp) instanceof TileEntityCoverable)) {
+              analysis.status = BuildStat.WEIRD_FAIRING;
+              return Optional.empty();
+          }
+          TileEntityCoverable te = (TileEntityCoverable) world.getTileEntity(bp);
+
+          // Takes all orth neighbors which are blocks or are interior neighbors
+          List<BlockPos> solidNeighbors = analysis.getBlockNeighbors(bp,interiorBB,StructAnalysis.orthVecs).stream()
+                  .filter(pos -> !world.isAirBlock(pos)).collect(Collectors.toList());
+          List<BlockPos> intAirNeighbors = analysis.getBlockNeighbors(bp,interiorBB,StructAnalysis.orthVecs).stream()
+                  .filter(intPartition::contains).collect(Collectors.toList());
+          for (EnumFacing facing: EnumFacing.VALUES) {
+              boolean expectation = true;
+              BlockPos pointingTo = bp.add(facing.getDirectionVec());
+              if (pointingTo.getY() < fairingBB.minY) {
+                  expectation = false;
+              }
+              if (solidNeighbors.contains(pointingTo) || intAirNeighbors.contains(pointingTo)) {
+                  expectation = false;
+              }
+              if (world.getBlockState(bp).getValue(FACING).equals(facing) && b instanceof BlockFairingConnector) {
+                  expectation = false;
+              }
+              if (expectation ^ te.isCovered(facing)) { // xor: one is true, one is false, therefore the expectation is wrong
+                  analysis.status = BuildStat.WRONG_TILE;
+                  return Optional.empty();
+              }
+          }
+      }
+      NBTTagCompound tag = new NBTTagCompound();
+      tag.setString("type", "fairing");
+      tag.setInteger("height", (int)fairingBB.maxY-(int)fairingBB.minY);
+      tag.setInteger("num_conns", connectorBlocks.size());
+      tag.setInteger("volume", intPartition.size());
+      tag.setDouble("mass", blocksConnected.stream()
+              .mapToDouble(bp -> getMass(world.getBlockState(bp)))
+              .sum()
+      );
+      Double bottomSemiRadius = analysis.getApproximateRadius(analysis.getLowestLayer(blocksConnected));
+      // as it turns out, the integral of distances from the centroid of a semicircle to its path is pi/4 * the radius
+      double bottomRadius = bottomSemiRadius * 4 / Math.PI;
+      tag.setDouble("bottom_radius", bottomRadius);
 
     analysis.status = BuildStat.SUCCESS;
     writeBlocksToNBT(blocksConnected, analysis.world, tag);

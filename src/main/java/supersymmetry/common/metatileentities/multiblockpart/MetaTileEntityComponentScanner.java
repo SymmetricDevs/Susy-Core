@@ -139,7 +139,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                 
             }
         }
-        if (struct.status == BuildStat.SUCCESS) {struct.status = BuildStat.ERROR; /*if it wasnt changed after scanning, nothing matched*/ }
+        //if (struct.status == BuildStat.SUCCESS) {struct.status = BuildStat.ERROR; /*if it wasnt changed after scanning, nothing matched*/ }
 
         /* Plan from here on out:
         1. Gather block statistics

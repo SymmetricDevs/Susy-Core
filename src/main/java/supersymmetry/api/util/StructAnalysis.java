@@ -52,7 +52,11 @@ public class StructAnalysis {
         NO_CARD("no_card"),
         UNRECOGNIZED("part_unrecognized"),
         SPACECRAFT_HOLLOW("spacecraft_hollow"),
-        WEIRD_PADDING("weird_padding"), TOO_SHORT("too_short"); // if the connectors do not form a loop
+        WEIRD_PADDING("weird_padding"),
+        TOO_SHORT("too_short"),
+        CONN_UNALIGNED("conn_unaligned"),
+        CONN_WRONG_DIR("conn_wrong_dir"),
+        WRONG_TILE("wrong_tile");
 
         String code;
         BuildStat(String code) {
