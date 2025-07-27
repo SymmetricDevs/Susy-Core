@@ -80,6 +80,6 @@ public class PipeNetPainterBehavior extends AbstractUsableBehaviour {
 
     @Override
     public void addInformation(ItemStack itemStack, List<String> lines) {
-        lines.add(I18n.format("item.susy.tool.behavior.pipeliner"));
+        lines.add(I18n.format("item.susy.tool.tooltip.pipeliner"));
     }
 }
