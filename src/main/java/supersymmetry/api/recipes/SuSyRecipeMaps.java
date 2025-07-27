@@ -382,6 +382,12 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> INJECTION_MOLDER = new RecipeMap<>("injection_molder", 2, 1, 0, 0, new SimpleRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.MIXER);
+
+    public static final RecipeMap<FuelRecipeBuilder> BOILER_RECIPES = new RecipeMap<>("boiler", 1, 0, 0, 0, new FuelRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressWidget.MoveType.HORIZONTAL)
+            .setSlotOverlay(false, false, GuiTextures.FURNACE_OVERLAY_1)
+            .setSound(GTSoundEvents.BOILER)
+            .allowEmptyOutput();
   
     static {
         GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()

@@ -846,6 +846,7 @@ recipemap.low_pressure_advanced_steam_turbine.name=Low Pressure Advanced Steam T
 recipemap.high_pressure_advanced_steam_turbine.name=High Pressure Advanced Steam Turbine
 recipemap.mixer_settler.name=Mixer-Settler
 recipemap.injection_molder=Injection Molding
+recipemap.boiler.name=Solid Boiler Fuels
 
 susy.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 
@@ -1144,3 +1145,8 @@ susy.machine.locked_crate.aluminium.name=Aluminium Crate
 susy.machine.locked_crate.stainless_steel.name=Stainless Steel Crate
 susy.machine.locked_crate.titanium.name=Titanium Crate
 susy.machine.locked_crate.tungstensteel.name=Tungstensteel Crate
+
+# Boilers
+susy.machine.large_boiler.bronze=Large Bronze Boiler
+susy.machine.large_boiler.steel=Large Steel Boiler
+
