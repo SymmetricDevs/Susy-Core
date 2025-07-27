@@ -92,7 +92,8 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer STRAND_COOLER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/strand_cooler");
     public static final OrientedOverlayRenderer GAS_ATOMIZER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/gas_atomizer");
     public static final OrientedOverlayRenderer METALLURGICAL_CONVERTER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/metallurgical_converter");
-
+    public static final OrientedOverlayRenderer INJECTION_MOLDER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/injection_molder");
+    public static final OrientedOverlayRenderer POLYMERIZATION_TANK_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/polymerization_tank");
 
     public static final SimpleOverlayRenderer SILICON_CARBIDE_CASING = new SimpleOverlayRenderer("multiblock_casing/silicon_carbide_casing");
     public static final SimpleOverlayRenderer MONEL_500_CASING = new SimpleOverlayRenderer("multiblock_casing/monel_500_casing");
@@ -101,8 +102,11 @@ public class SusyTextures {
     public static final SimpleOverlayRenderer ULV_STRUCTURAL_CASING = new SimpleOverlayRenderer("multiblock_casing/ulv_structural_casing");
     public static final SimpleOverlayRenderer SLAG_HOT = new SimpleOverlayRenderer("resource/slag_hot");
     public static final SimpleOverlayRenderer RESTRICTIVE_FILTER_FILTER_OVERLAY = new SimpleOverlayRenderer("cover/overlay_restrictive_filter");
-    public static final SimpleOverlayRenderer STRAND_BUS_OVERLAY = new SimpleOverlayRenderer(
-            "logistics/overlay_strand_bus");
+    public static final SimpleOverlayRenderer STRAND_BUS_OVERLAY =
+            new SimpleOverlayRenderer("logistics/overlay_strand_bus");
+
+    public static final SimpleOverlayRenderer CODE_BREACHER_OVERLAY =
+            new SimpleOverlayRenderer("storage/crates/code_breacher");
 
     public static final SimpleCubeRenderer MASONRY_BRICK = new SimpleCubeRenderer("gregtech:blocks/multiblock_casing/masonry_brick");
 

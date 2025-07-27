@@ -886,9 +886,6 @@ susy.weather_resistance=§2Не взрывается от воды, лавы, о
 susy.large_fluid_pump.y_level=Текущий уровень контроллера Y: Y=%s
 susy.large_fluid_pump.biome=Текущий биом нижней обсадной трубы: %s
 
-# Latex Logs
-susy.block_group_members.latex_logs.name=Резиновый журнал
-
 # Extra recipe info
 susy.recipe.dimensions=Размеры: %s
 susy.recipe.biomes=Биомы: %s

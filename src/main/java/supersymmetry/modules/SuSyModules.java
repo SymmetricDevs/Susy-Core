@@ -13,6 +13,7 @@ public class SuSyModules implements IModuleContainer {
     public static final String MODULE_TOP = "susy_top_integration";
     public static final String MODULE_JEI = "susy_jei_integration";
     public static final String MODULE_PYROTECH = "susy_pyrotech_integration";
+    public static final String MODULE_VINTAGEFIX = "susy_vintagefix_integration";
 
     @Override
     public String getID() {

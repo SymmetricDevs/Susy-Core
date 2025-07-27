@@ -30,6 +30,7 @@ public class SuSyMetaItems {
     public static MetaValueItem RESTRICTIVE_FILTER;
     public static MetaValueItem TRACK_SEGMENT;
     public static MetaValueItem EARTH_ORBITAL_SCRAP;
+    public static MetaValueItem CODE_BREACHER;
     public static ArmorMetaItem<?>.ArmorMetaValueItem SIMPLE_GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_TANK;
@@ -89,6 +90,7 @@ public class SuSyMetaItems {
 
         RESTRICTIVE_FILTER = metaItem.addItem(6, "restrictive_filter");
         EARTH_ORBITAL_SCRAP = metaItem.addItem(7, "orbital.scrap.earth").setMaxStackSize(8);
+        CODE_BREACHER = metaItem.addItem(8, "code_breacher").setMaxStackSize(1);
     }
 
     private static void addExtraBehaviours() {

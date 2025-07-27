@@ -34,5 +34,14 @@
         "stream" : true
       }
     ]
+  },
+  "block.locked_crate" : {
+    "category" : "block",
+    "sounds" : [
+      {
+        "name" : "susy:locked_crate",
+        "stream" : true
+      }
+    ]
   }
 }

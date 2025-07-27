@@ -10,6 +10,7 @@ import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.MultiblockShapeInfo;
+import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.recipes.recipeproperties.IRecipePropertyStorage;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.util.RelativeDirection;
@@ -42,10 +43,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
-    public static final int MIN_RADIUS = 4;
+    public static final int MIN_RADIUS = 2;
     public static final int MAX_RADIUS = 20;
     private int sDist;
-    private boolean isFake;
 
     public MetaTileEntityMixerSettler(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.MIXER_SETTLER_RECIPES);
@@ -100,9 +100,8 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
 
     @Override
     public void checkStructurePattern() {
-        if (isFake) {
+        if (updateStructureDimensions()) {
             reinitializeStructurePattern();
-            isFake = false;
         }
         super.checkStructurePattern();
     }
@@ -160,7 +159,6 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
 
                         return buildRepeatingString('#', '#', "GGGG", sDist);
                     case 2:
-
                         return buildRepeatingString('E', 'E', "GGGG", sDist);
                 }
                 break;
@@ -271,8 +269,6 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
     protected @NotNull BlockPattern createStructurePattern() {
         if (getWorld() != null) {
             updateStructureDimensions();
-        } else {
-            isFake = true;
         }
         if (sDist < MIN_RADIUS) sDist = MIN_RADIUS;
         return createStructurePattern(sDist);
@@ -298,7 +294,7 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
                 .where('P', states(getPipeCasingState()))
                 //.where('B', abilities(MultiblockAbility.IMPORT_ITEMS, MultiblockAbility.EXPORT_ITEMS))
                 .where('D', states(getCasingState()))
-                .where('C', states(getCasingState()).setMinGlobalLimited(40).or(autoAbilities(true, true, true, true, false, false, false)))
+                .where('C', states(getCasingState()).or(autoAbilities()))
                 .where('G', states(getCasingState()))
                 .where('M', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STAINLESS_STEEL_GEARBOX)))
                 .where('F', frames(Materials.StainlessSteel))
@@ -307,6 +303,13 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
                 .where('#', any())
                 .build();
     }
+
+    public TraceabilityPredicate autoAbilities() {
+        return super.autoAbilities(true, false).or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1)
+                .setMaxGlobalLimited(2)
+                .setPreviewCount(1)).or(abilities(MultiblockAbility.IMPORT_ITEMS).setPreviewCount(1).setMaxGlobalLimited(1));
+    }
+
 
     protected static IBlockState getPipeCasingState() {
         return MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.POLYTETRAFLUOROETHYLENE_PIPE);
@@ -347,9 +350,10 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
         }
         return shapeInfo;
     }
+
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip,
-            boolean advanced) {
+                               boolean advanced) {
         super.addInformation(stack, world, tooltip, advanced);
         tooltip.add(TextFormatting.AQUA + I18n.format("susy.machine.mixer_settler.tooltip.1"));
         tooltip.add(TextFormatting.AQUA + I18n.format("susy.machine.mixer_settler.tooltip.2"));
