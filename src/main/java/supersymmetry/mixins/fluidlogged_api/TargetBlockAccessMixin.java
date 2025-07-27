@@ -1,4 +1,4 @@
-package supersymmetry.mixins.gregtech;
+package supersymmetry.mixins.fluidlogged_api;
 
 import git.jbredwards.fluidlogged_api.api.asm.impl.IChunkProvider;
 import gregtech.api.util.world.DummyWorld;
@@ -22,6 +22,7 @@ public class TargetBlockAccessMixin implements IChunkProvider {
 
     @Nullable
     @Override
+    @Optional.Method(modid = "fluidlogged_api")
     public Chunk getChunkFromBlockCoords(@NotNull BlockPos blockPos) {
         /// [delegate] can only be instances of [DummyWorld]
         /// According to the source code
