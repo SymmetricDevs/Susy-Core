@@ -24,9 +24,9 @@ public enum TraverseOptions implements ITraverseOption {
     static {
         /// -1 for default color
         for (int i = -1; i <= EnumDyeColor.values().length; i++) {
-            final int color = i;
+            final int index = i;
 
-            COLORING.put(color, new ITraverseOption() {
+            COLORING.put(i, new ITraverseOption() {
 
                 @Override
                 public List<EnumFacing> findNext(EnumFacing from, IPipeTile<?, ?> pipe) {
@@ -35,7 +35,12 @@ public enum TraverseOptions implements ITraverseOption {
 
                 @Override
                 public void operate(EnumFacing from, IPipeTile<?, ?> self, IPipeTile<?, ?> other, boolean reverse) {
-                    self.setPaintingColor(color);
+                    // This is a bit messy but yeah anyway...
+                    int colorValue = index == -1 ? self.getDefaultPaintingColor() : EnumDyeColor.values()[index].colorValue;
+                    if (self.getPaintingColor() != colorValue) {
+                        self.setPaintingColor(colorValue);
+                    }
+                    other.setPaintingColor(colorValue);
                 }
             });
         }
