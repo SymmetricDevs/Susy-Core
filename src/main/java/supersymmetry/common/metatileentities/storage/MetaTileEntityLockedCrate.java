@@ -134,6 +134,6 @@ public class MetaTileEntityLockedCrate extends MetaTileEntityCrate {
     @Override
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
         tooltip.add(I18n.format("gregtech.universal.tooltip.item_storage_capacity", ((MetaTileEntityCrateAccessor) this).getInventorySize()));
-        // Skipping the Typed information (It's a lie)
+        // Skipping the Taped information (It's a lie)
     }
 }
