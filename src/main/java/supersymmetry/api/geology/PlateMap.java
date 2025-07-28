@@ -51,12 +51,11 @@ public class PlateMap {
         }
 
         return possiblePlates.stream().min(Comparator.comparingDouble(
-                plate -> plate.distanceSquared(x, z)
+                plate -> plate.center.distanceSquared(x, z)
         )).get();
     }
 
     public Plate getNeighboringPlate(double x, double z) {
-
         List<PlateRegion> surroundingRegions = getSurroundingRegions((int) x / REGION_SIZE, (int) z / REGION_SIZE);
         List<Plate> possiblePlates = new ArrayList<>();
         for (PlateRegion region :
@@ -65,12 +64,12 @@ public class PlateMap {
         }
 
         Plate currentPlate = possiblePlates.stream().min(Comparator.comparingDouble(
-                plate -> plate.distanceSquared(x, z)
+                plate -> plate.center.distanceSquared(x, z)
         )).get();
         possiblePlates.remove(currentPlate);
 
         Plate neighbour = possiblePlates.stream().min(Comparator.comparingDouble(
-                plate -> plate.distanceSquared(x, z)
+                plate -> plate.center.distanceSquared(x, z)
         )).get();
 
 
@@ -95,9 +94,10 @@ public class PlateMap {
 
         PlateBoundary boundary = a.getOrCreateBoundary(b);
 
-        if (!boundary.isNearBoundary(x,z, BOUNDARY_THRESHOLD)) {
-            // Inside a single plate
-            if (a.type == Plate.Type.CONTINENTAL) return TectonicZone.CRATON;
+        Plate closest = boundary.closerPlate(x, z, BOUNDARY_THRESHOLD);
+
+        if (closest != null) {
+            if (closest.type == Plate.Type.CONTINENTAL) return TectonicZone.CRATON;
             return TectonicZone.ABYSSAL_PLAIN;
             //return TectonicZone.CRATON;
         }

@@ -10,11 +10,11 @@ import javax.annotation.Nullable;
 public class TectonicZone {
     public static TectonicZone CRATON = new TectonicZone("shield");
     public static TectonicZone SEDIMENTARY_BASIN = new TectonicZone("prairie");
-    public static TectonicZone RIFT_ZONE = new TectonicZone("volcanic_plains");
+    public static TectonicZone RIFT_ZONE = new TectonicZone("volcanic_island");
     public static TectonicZone VOLCANIC_ARC = new TectonicZone("rainforest");
     public static TectonicZone OROGENIC_BELT = new TectonicZone("alps");
-    public static TectonicZone SHEAR_ZONE = new TectonicZone("canyon");
-    public static TectonicZone ABYSSAL_PLAIN = new TectonicZone("deep_ocean");
+    public static TectonicZone SHEAR_ZONE = new TectonicZone("crag");
+    public static TectonicZone ABYSSAL_PLAIN = new TectonicZone("kelp_forest");
 
     public int biomeId;
 

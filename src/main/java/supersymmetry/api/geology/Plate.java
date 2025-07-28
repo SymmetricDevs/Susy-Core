@@ -8,18 +8,16 @@ import java.util.Map;
 
 public class Plate {
 
-    public double cx;
-    public double cz;
+    public Vec2d center;
     public Type type;
-    public Vec3d motion;
+    public Vec2d motion;
     public Map<Plate, PlateBoundary> boundaries = new HashMap<>();
 
 
     public Plate(double cx, double cz, boolean isContinental, Vec3d motion) {
-        this.cx = cx;
-        this.cz = cz;
+        this.center = new Vec2d(cx, cz);
         this.type = isContinental ? Type.CONTINENTAL : Type.OCEANIC;
-        this.motion = motion;
+        this.motion = new Vec2d(motion.x, motion.z);
     }
 
     public PlateBoundary getOrCreateBoundary(Plate other) {
@@ -42,9 +40,4 @@ public class Plate {
         CONTINENTAL,
         OCEANIC;
     }
-
-    public double distanceSquared(double x, double z) {
-        return Math.pow(this.cx - x, 2) + Math.pow(this.cz - z, 2);
-    }
-
 }

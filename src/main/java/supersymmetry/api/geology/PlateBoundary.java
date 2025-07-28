@@ -1,161 +1,135 @@
 package supersymmetry.api.geology;
 
-import net.minecraft.util.math.Vec3d;
-
 public class PlateBoundary {
 
     public Plate a;
     public Plate b;
     // This means that plateA is subduing under plateB
     public boolean subduing;
-    public Vec3d boundaryDirection;
+    // Unit vector pointing in direction of boundary, clockwise from a to b
+    public Vec2d boundaryDirection;
     public double relativeMotion;
     public Type type;
+    // Pointing from a to b
 
-    public Vec3d d;
+    public Vec2d d;
 
-    public double cornerAx;
-    public double cornerAz;
-    public double cornerBx;
-    public double cornerBz;
+    public Vec2d cornerA;
+    public Vec2d cornerB;
     public double length;
 
+    public double noiseOffset;
 
     public PlateBoundary(Plate a, Plate b) {
         this.a = a;
         this.b = b;
 
-        Vec3d dirA = a.motion;
-        Vec3d dirB = b.motion;
+        Vec2d dirA = a.motion;
+        Vec2d dirB = b.motion;
 
-        this.d = new Vec3d(b.cx - a.cx, 0, b.cz- a.cz);
+        this.d = b.center.sub(a.center);
 
-        this.boundaryDirection = new Vec3d(-d.z, 0, d.x).normalize();
+        this.boundaryDirection = this.d.perp().normalize();
 
-        this.relativeMotion = dirB.subtract(dirA).dotProduct(new Vec3d(a.cx - b.cx, 0, a.cz - b.cz));
+        this.relativeMotion = dirB.sub(dirA).dot(this.d.normalize());
 
         this.type = Type.CONVERGING;
 
         this.setNeighbours(PlateMap.MIN_PLATE_DISTANCE / 2);
 
-        this.length = Math.sqrt((this.cornerAx - this.cornerBx) * (this.cornerAx - this.cornerBx) + (this.cornerAz - this.cornerBz) * (this.cornerAz - this.cornerBz));
+        this.length = cornerA.distance(cornerB);
+        this.noiseOffset = PlateMap.instance.noise.noise2d(cornerA.x, cornerA.y);
     }
 
-    public double distanceSquaredToBoundary(int x, int z) {
-        double mx = (a.cx + b.cx) / 2.0;
-        double mz = (a.cz + b.cz) / 2.0;
+    public double distanceSquaredToBoundary(Vec2d P) {
+        Vec2d m = this.a.center.add(this.b.center).scale( 1/2);
 
-        double px = x - mx;
-        double pz = z - mz;
+        Vec2d p = P.sub(m);
 
-        // Projection scalar
-        double t = px * this.boundaryDirection.x + pz * this.boundaryDirection.z;
+        Vec2d closest = this.boundaryDirection.project(p);
 
-        Vec3d closest = new Vec3d(mx + t * this.boundaryDirection.x,0 , mz + t * this.boundaryDirection.z);
+        double angle = closest.distance(cornerA) / this.length * Math.PI * 2;
 
-        double angle = Math.sqrt(closest.squareDistanceTo(cornerAx, 0,cornerAz)) / this.length * Math.PI * 2;
+        double noiseX = Math.cos(angle) + cornerA.x;
+        double noiseZ = Math.sin(angle) + cornerB.y;
 
-        float noiseX = (float) Math.cos(angle);
-        float noiseZ = (float) Math.sin(angle);
-
-        Vec3d normal = this.d.normalize();
+        Vec2d normal = this.d.normalize();
 
         // Apply perpendicular noise displacement
-        float n = PlateMap.instance.noise.noise2f(noiseX, noiseZ);
-        float offset = n * 100.0f;
+        double n = PlateMap.instance.noise.noise2d(noiseX, noiseZ) - this.noiseOffset;
+        double offset = n * 100.0f;
 
         normal = normal.scale(offset);
 
-        Vec3d perturbed = normal.add(closest);
+        Vec2d perturbed = normal.add(closest);
 
-        return perturbed.squareDistanceTo(new Vec3d(x, 0 ,z));
+        return perturbed.distanceSquared(P);
     }
 
-    public boolean isNearBoundary(int x, int z, double threshold) {
-        return distanceSquaredToBoundary(x,z) <= threshold * threshold;
+    /**
+     * @param x
+     * @param y
+     * @return Which plate the point is closest to after noise is applied. Null if on boundary.
+     */
+    public Plate closerPlate(double x, double y, double threshold) {
+        Vec2d P = new Vec2d(x,y);
+        Vec2d m = this.a.center.add(this.b.center).scale( 0.5);
+
+        Vec2d p = P.sub(m);
+
+        Vec2d closest = this.boundaryDirection.project(p).add(m);
+
+        double angle = closest.distance(cornerA) / this.length * Math.PI * 2;
+
+        double noiseX = Math.cos(angle) * this.length / 1000. + cornerA.x;
+        double noiseZ = Math.sin(angle) * this.length / 1000. + cornerB.y;
+
+        Vec2d normal = this.d.normalize();
+
+        // Apply perpendicular noise displacement
+        double n = PlateMap.instance.noise.noise2d(noiseX, noiseZ) - this.noiseOffset;
+        double offset = n * 256;
+
+        normal = normal.scale(offset);
+
+        Vec2d perturbed = normal.add(closest);
+
+        if(perturbed.distanceSquared(new Vec2d(x,y)) <= threshold * threshold) {
+            return null;
+        }
+
+        perturbed = normal.add(P);
+
+        return perturbed.distanceSquared(a.center) < perturbed.distanceSquared(b.center) ? a : b;
     }
 
     public void setNeighbours(int step) {
-        double x = d.x / 2 + a.cx;
-        double z = d.x / 2 + a.cz;
+        Vec2d center = this.a.center.add(this.b.center).scale( 0.5d);
+        Vec2d offset = this.boundaryDirection.scale(step);
 
-        Vec3d pos = new Vec3d(x,0, z);
-        Vec3d offset = this.boundaryDirection.scale(step);
-
-        pos = pos.add(offset);
+        Vec2d pos = center.add(offset);
 
         Plate currentPlate = null;
 
         do {
-            currentPlate = PlateMap.instance.getPlateAt(pos.x, pos.z);
+            currentPlate = PlateMap.instance.getPlateAt(pos.x, pos.y);
             pos = pos.add(offset);
         } while (currentPlate == a || currentPlate == b);
 
-        double[] center = findCenter(a, b, currentPlate);
+        this.cornerA = Vec2d.circumcenter(a.center, b.center, currentPlate.center);
 
-        this.cornerAx = center[0];
-        this.cornerAz = center[1];
-
-        pos = new Vec3d(x,0, z);
         offset = this.boundaryDirection.scale(-step);
 
-        pos = pos.add(offset);
+        pos = center.add(offset);
 
         currentPlate = null;
 
-
         do {
-            currentPlate = PlateMap.instance.getPlateAt(pos.x, pos.z);
+            currentPlate = PlateMap.instance.getPlateAt(pos.x, pos.y);
             pos = pos.add(offset);
         } while (currentPlate == a || currentPlate == b);
 
-        center = findCenter(a, b, currentPlate);
-
-        this.cornerBx = center[0];
-        this.cornerBz = center[1];
-
-    }
-
-    public double[] findCenter(Plate M, Plate N, Plate L) {
-        // Extract coordinates
-        double x1 = M.cx, z1 = M.cz;
-        double x2 = N.cx, z2 = N.cz;
-        double x3 = L.cx, z3 = L.cz;
-
-        double midMNx = (x1 + x2) / 2;
-        double midMNz = (z1 + z2) / 2;
-        double midNLx = (x2 + x3) / 2;
-        double midNLz = (z2 + z3) / 2;
-
-        Double slopeMN = (x2 - x1) == 0 ? null : (z2 - z1) / (x2 - x1);
-        Double slopeNL = (x3 - x2) == 0 ? null : (z3 - z2) / (x3 - x2);
-
-        // Perpendicular slopes
-        Double perpSlopeMN = (slopeMN == null) ? 0.0 :
-                (slopeMN == 0) ? null : -1 / slopeMN;
-
-        Double perpSlopeNL = (slopeNL == null) ? 0.0 :
-                (slopeNL == 0) ? null : -1 / slopeNL;
-
-        double centerX, centerZ;
-
-        if (perpSlopeMN == null) {
-            centerX = midMNx;
-            centerZ = perpSlopeNL * centerX + (midNLz - perpSlopeNL * midNLx);
-        } else if (perpSlopeNL == null) {
-            centerX = midNLx;
-            centerZ = perpSlopeMN * centerX + (midMNz - perpSlopeMN * midMNx);
-        } else if (perpSlopeMN.equals(perpSlopeNL)) {
-            throw new IllegalArgumentException("Points are collinear.");
-        } else {
-            double c1 = midMNz - perpSlopeMN * midMNx;
-            double c2 = midNLz - perpSlopeNL * midNLx;
-
-            centerX = (c2 - c1) / (perpSlopeMN - perpSlopeNL);
-            centerZ = perpSlopeMN * centerX + c1;
-        }
-
-        return new double[] { centerX, centerZ };
+        this.cornerB = Vec2d.circumcenter(a.center, b.center, currentPlate.center);
     }
 
     enum Type{

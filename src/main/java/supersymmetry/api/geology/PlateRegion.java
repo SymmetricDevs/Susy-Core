@@ -30,6 +30,6 @@ public class PlateRegion {
     }
 
     private double closest(double newX, double newZ) {
-        return this.plates.isEmpty() ? 0 : this.plates.stream().mapToDouble(plate -> plate.distanceSquared(newX, newZ)).min().getAsDouble();
+        return this.plates.isEmpty() ? 0 : this.plates.stream().mapToDouble(plate -> plate.center.distanceSquared(newX, newZ)).min().getAsDouble();
     }
 }
