@@ -18,7 +18,6 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.ConfigHolder;
 import gregtech.common.blocks.BlockMetalCasing;
-import gregtech.common.blocks.BlockWireCoil;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.MetaTileEntities;
 import net.minecraft.block.state.IBlockState;
@@ -30,8 +29,6 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import supersymmetry.api.metatileentity.IConnectable;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.properties.CoilingCoilTemperatureProperty;
@@ -44,7 +41,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-public class MetaTileEntityMagneticRefrigerator extends RecipeMapMultiblockController implements IConnectable {
+public class MetaTileEntityMagneticRefrigerator extends RecipeMapMultiblockController {
 
     private int temperature;
 
@@ -104,7 +101,7 @@ public class MetaTileEntityMagneticRefrigerator extends RecipeMapMultiblockContr
     }
 
     @Override
-    protected @NotNull BlockPattern createStructurePattern() {
+    protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
                 .aisle("XXX", "CCC", "CCC", "XXX")
                 .aisle("XXX", "C#C", "C#C", "XXX")
@@ -160,10 +157,5 @@ public class MetaTileEntityMagneticRefrigerator extends RecipeMapMultiblockContr
                 new TextComponentTranslation(TextFormattingUtil.formatNumbers(temperature) + "K")
                         .setStyle(new Style().setColor(TextFormatting.BLUE))));
         return list;
-    }
-
-    @Override
-    public IBlockState getBaseState(@Nullable IMultiblockPart part) {
-        return MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.CUPRONICKEL);
     }
 }
