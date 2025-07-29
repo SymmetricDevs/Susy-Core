@@ -23,7 +23,6 @@ import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.MetaTileEntities;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -166,10 +165,5 @@ public class MetaTileEntityMagneticRefrigerator extends RecipeMapMultiblockContr
     @Override
     public IBlockState getBaseState(@Nullable IMultiblockPart part) {
         return MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.CUPRONICKEL);
-    }
-
-    @Override
-    public boolean shouldRenderInLayerExtra(@NotNull BlockRenderLayer layer) {
-        return layer == BlockRenderLayer.SOLID;
     }
 }
