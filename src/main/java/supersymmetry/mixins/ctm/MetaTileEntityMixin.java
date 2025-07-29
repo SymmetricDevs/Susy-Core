@@ -14,6 +14,6 @@ public abstract class MetaTileEntityMixin {
     @ModifyReturnValue(method = "canRenderInLayer", at = @At("TAIL"))
     private boolean injectConnectableLogic(boolean original, @Local(argsOnly = true) BlockRenderLayer renderLayer) {
         // Putting the extra checks after || to decrease call frequency
-        return original || (this instanceof IConnectable connectable && connectable.shouldRenderInLayerExtra(renderLayer));
+        return original || (this instanceof IConnectable connectable && connectable.shouldRenderInLayer(renderLayer));
     }
 }

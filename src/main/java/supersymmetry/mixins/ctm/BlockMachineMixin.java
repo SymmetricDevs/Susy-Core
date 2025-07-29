@@ -16,7 +16,7 @@ public abstract class BlockMachineMixin {
             at = @At("TAIL"))
     private IBlockState injectConnectableLogic(IBlockState original, @Local(name = "metaTileEntity") MetaTileEntity mte) {
         if (mte instanceof IConnectable connectable) {
-            IBlockState visualState = connectable.getBaseState(null);
+            IBlockState visualState = connectable.getVisualState(null);
             if (visualState != null) {
                 return visualState;
             }

@@ -38,7 +38,7 @@ public interface IConnectable {
     ///
     /// @see supersymmetry.mixins.ctm.BlockMachineMixin
     @Nullable
-    default IBlockState getBaseState(@Nullable IMultiblockPart part) {
+    default IBlockState getVisualState(@Nullable IMultiblockPart part) {
         ResourceLocation mteId = ((MetaTileEntity) this).metaTileEntityId;
 
         return registry.getOrDefault(mteId, DUMMY).apply(part);
@@ -47,8 +47,8 @@ public interface IConnectable {
     /// Supplies the extra [BlockRenderLayer]s the MTE can be rendered in.
     ///
     /// @see supersymmetry.mixins.ctm.MetaTileEntityMixin
-    default boolean shouldRenderInLayerExtra(@NotNull BlockRenderLayer layer) {
-        IBlockState visualState = getBaseState(null);
+    default boolean shouldRenderInLayer(@NotNull BlockRenderLayer layer) {
+        IBlockState visualState = getVisualState(null);
         if (visualState == null) return false;
         return visualState.getBlock().canRenderInLayer(visualState, layer);
     }

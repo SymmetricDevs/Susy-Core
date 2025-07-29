@@ -31,7 +31,7 @@ public abstract class MultiblockControllerBaseMixin extends MetaTileEntity imple
                                        @Share("callOriginal") LocalBooleanRef callOriginal) {
 
         if (getWorld() != null) {
-            MTERendererExtension.renderBaseBlock(renderState, translation, this, getBaseState(null));
+            MTERendererExtension.renderBaseBlock(renderState, translation, this, getVisualState(null));
             callOriginal.set(false);
         } else {
             callOriginal.set(true);

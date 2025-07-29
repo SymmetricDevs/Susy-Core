@@ -37,17 +37,17 @@ public abstract class MetaTileEntityMultiblockPartMixin extends MetaTileEntity i
 
     @Override
     @SuppressWarnings("AddedMixinMembersNamePattern")
-    public IBlockState getBaseState(@Nullable IMultiblockPart part) {
+    public IBlockState getVisualState(@Nullable IMultiblockPart part) {
         if (getController() instanceof IConnectable connectable) {
-            return connectable.getBaseState(this);
+            return connectable.getVisualState(this);
         }
         return null;
     }
 
     @Override
     @SuppressWarnings("AddedMixinMembersNamePattern")
-    public boolean shouldRenderInLayerExtra(@NotNull BlockRenderLayer renderLayer) {
-        return (getController() instanceof IConnectable connectable && connectable.shouldRenderInLayerExtra(renderLayer));
+    public boolean shouldRenderInLayer(@NotNull BlockRenderLayer renderLayer) {
+        return (getController() instanceof IConnectable connectable && connectable.shouldRenderInLayer(renderLayer));
     }
 
     @Inject(method = "renderMetaTileEntity", at = @At("HEAD"))
@@ -56,7 +56,7 @@ public abstract class MetaTileEntityMultiblockPartMixin extends MetaTileEntity i
                                         @Share("callOriginal") LocalBooleanRef callOriginal) {
 
         if (getController() instanceof IConnectable connectable) {
-            MTERendererExtension.renderBaseBlock(renderState, translation, this, connectable.getBaseState(this));
+            MTERendererExtension.renderBaseBlock(renderState, translation, this, connectable.getVisualState(this));
             callOriginal.set(false);
         } else {
             callOriginal.set(true);
