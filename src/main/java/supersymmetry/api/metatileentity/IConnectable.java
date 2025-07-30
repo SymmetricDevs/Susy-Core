@@ -23,7 +23,7 @@ public interface IConnectable {
 
     // Should ONLY be used for gregtech multis.
     // Just extend this interface and override what you need for SuSy multis.
-    Object2ObjectMap<ResourceLocation, Function<@Nullable IMultiblockPart, IBlockState>> registry = new Object2ObjectOpenHashMap<>() {{
+    Object2ObjectMap<ResourceLocation, Function<@Nullable IMultiblockPart, @Nullable IBlockState>> registry = new Object2ObjectOpenHashMap<>() {{
 
         put(gregtechId("electric_blast_furnace"), part -> MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.INVAR_HEATPROOF));
 

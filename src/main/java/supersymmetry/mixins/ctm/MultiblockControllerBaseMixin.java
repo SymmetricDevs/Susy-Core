@@ -9,6 +9,7 @@ import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 import gregtech.client.renderer.ICubeRenderer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -31,11 +32,14 @@ public abstract class MultiblockControllerBaseMixin extends MetaTileEntity imple
                                        @Share("callOriginal") LocalBooleanRef callOriginal) {
 
         if (getWorld() != null) {
-            MTERendererExtension.renderBaseBlock(renderState, translation, this, getVisualState(null));
-            callOriginal.set(false);
-        } else {
-            callOriginal.set(true);
+            IBlockState visualState = getVisualState(null);
+            if (visualState != null) {
+                MTERendererExtension.renderBaseBlock(renderState, translation, this, visualState);
+                callOriginal.set(false);
+                return;
+            }
         }
+        callOriginal.set(true);
     }
 
     @WrapWithCondition(method = "renderMetaTileEntity",

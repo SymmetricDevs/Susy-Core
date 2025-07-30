@@ -33,8 +33,6 @@ public class MTERendererExtension {
     public static void renderBaseBlock(CCRenderState ccrs, Matrix4 translation,
                                        MetaTileEntity mte, IBlockState visualState) {
 
-        if (visualState == null) return;
-
         World world = mte.getWorld();
         BlockPos pos = mte.getPos();
         BlockRenderLayer layer = MinecraftForgeClient.getRenderLayer();

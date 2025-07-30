@@ -56,11 +56,14 @@ public abstract class MetaTileEntityMultiblockPartMixin extends MetaTileEntity i
                                         @Share("callOriginal") LocalBooleanRef callOriginal) {
 
         if (getController() instanceof IConnectable connectable) {
-            MTERendererExtension.renderBaseBlock(renderState, translation, this, connectable.getVisualState(this));
-            callOriginal.set(false);
-        } else {
-            callOriginal.set(true);
+            IBlockState visualState = connectable.getVisualState(this);
+            if (visualState != null) {
+                MTERendererExtension.renderBaseBlock(renderState, translation, this, visualState);
+                callOriginal.set(false);
+                return;
+            }
         }
+        callOriginal.set(true);
     }
 
     @WrapWithCondition(method = "renderMetaTileEntity",
