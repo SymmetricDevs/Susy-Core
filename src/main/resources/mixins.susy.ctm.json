@@ -6,9 +6,9 @@
   "compatibilityLevel" : "JAVA_8",
   "client" : [
     "BlockMachineMixin",
-    "MetaTileEntityMixin",
     "MetaTileEntityMultiblockPartMixin",
     "MultiblockControllerBaseMixin",
+    "MultiblockMTEMixins",
     "SimpleOverlayRendererMixin"
   ]
 }

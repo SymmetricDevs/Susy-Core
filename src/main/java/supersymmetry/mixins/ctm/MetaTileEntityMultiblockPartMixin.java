@@ -11,7 +11,6 @@ import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import supersymmetry.api.metatileentity.IConnectable;
-import supersymmetry.client.renderer.handler.MTERendererExtension;
+import supersymmetry.client.renderer.textures.custom.VisualStateRenderer;
 
 @Mixin(value = MetaTileEntityMultiblockPart.class, remap = false)
 public abstract class MetaTileEntityMultiblockPartMixin extends MetaTileEntity implements IMultiblockPart, IConnectable {
@@ -35,33 +34,40 @@ public abstract class MetaTileEntityMultiblockPartMixin extends MetaTileEntity i
     @Shadow
     public abstract MultiblockControllerBase getController();
 
+    @Nullable
     @Override
     @SuppressWarnings("AddedMixinMembersNamePattern")
-    public IBlockState getVisualState(@Nullable IMultiblockPart part) {
-        if (getController() instanceof IConnectable connectable) {
-            return connectable.getVisualState(this);
+    public VisualStateRenderer getVisualRenderer(@Nullable IMultiblockPart part) {
+        var controller = getController();
+        if (controller != null) {
+            return ((IConnectable) controller).getVisualRenderer(this);
         }
         return null;
     }
 
     @Override
-    @SuppressWarnings("AddedMixinMembersNamePattern")
-    public boolean shouldRenderInLayer(@NotNull BlockRenderLayer renderLayer) {
-        return (getController() instanceof IConnectable connectable && connectable.shouldRenderInLayer(renderLayer));
+    public boolean canRenderInLayer(@NotNull BlockRenderLayer layer) {
+        if (super.canRenderInLayer(layer)) {
+            return true;
+        } else {
+            var stateRenderer = getVisualRenderer(null);
+            if (stateRenderer != null) {
+                return stateRenderer.canRenderInLayer(layer);
+            }
+        }
+        return false;
     }
 
     @Inject(method = "renderMetaTileEntity", at = @At("HEAD"))
     private void injectConnectableLogic(CCRenderState renderState, Matrix4 translation,
                                         IVertexOperation[] pipeline, CallbackInfo ci,
                                         @Share("callOriginal") LocalBooleanRef callOriginal) {
-
-        if (getController() instanceof IConnectable connectable) {
-            IBlockState visualState = connectable.getVisualState(this);
-            if (visualState != null) {
-                MTERendererExtension.renderBaseBlock(renderState, translation, this, visualState);
-                callOriginal.set(false);
-                return;
-            }
+        var stateRenderer = getVisualRenderer(null);
+        if (stateRenderer != null) {
+            stateRenderer.renderVisualState(renderState, getWorld(), getPos(),
+                    isPainted() ? getPaintingColor() : null);
+            callOriginal.set(false);
+            return;
         }
         callOriginal.set(true);
     }

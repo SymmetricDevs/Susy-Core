@@ -3,7 +3,10 @@ package supersymmetry.client.renderer.textures;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.renderer.texture.cube.*;
 import gregtech.client.renderer.texture.custom.DrumRenderer;
+import gregtech.common.blocks.BlockMetalCasing;
+import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.client.renderer.textures.custom.ExtenderRender;
+import supersymmetry.client.renderer.textures.custom.VisualStateRenderer;
 
 public class SusyTextures {
 
@@ -130,5 +133,5 @@ public class SusyTextures {
 
     public static final OrientedOverlayRenderer STOCK_CONTROLLER = new OrientedOverlayRenderer("rail_interfaces/stock_controller");
 
-
+    public static final VisualStateRenderer HEATPROOF_INVAR_CASING = new VisualStateRenderer(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.INVAR_HEATPROOF));
 }
