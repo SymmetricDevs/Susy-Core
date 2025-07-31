@@ -50,7 +50,7 @@ public abstract class MetaTileEntityCleaningMaintenanceHatchMixin extends MetaTi
 
         var controller = getController();
         if (controller != null) {
-            ICubeRenderer renderer = SusyTextures.RenderPlacements.get(controller.metaTileEntityId, null);
+            ICubeRenderer renderer = SusyTextures.Replacements.get(controller.metaTileEntityId, null);
             if (renderer != null) {
                 return renderer;
             }

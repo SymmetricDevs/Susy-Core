@@ -44,7 +44,7 @@ public abstract class MetaTileEntityMultiblockPartMixin extends MetaTileEntity i
         if (controller != null) {
             if (getBaseTexture() instanceof VisualStateRenderer stateRenderer) {
                 return stateRenderer.getVisualState();
-            } else if (SusyTextures.RenderPlacements.get(controller.metaTileEntityId, null)
+            } else if (SusyTextures.Replacements.get(controller.metaTileEntityId, null)
                     instanceof VisualStateRenderer stateRenderer) {
                 return stateRenderer.getVisualState();
             }
@@ -61,7 +61,7 @@ public abstract class MetaTileEntityMultiblockPartMixin extends MetaTileEntity i
             if (controller != null) {
                 if (getBaseTexture() instanceof VisualStateRenderer stateRenderer) {
                     return stateRenderer.canRenderInLayer(layer);
-                } else if (SusyTextures.RenderPlacements.get(controller.metaTileEntityId, null)
+                } else if (SusyTextures.Replacements.get(controller.metaTileEntityId, null)
                         instanceof VisualStateRenderer stateRenderer) {
                     return stateRenderer.canRenderInLayer(layer);
                 }
@@ -93,7 +93,7 @@ public abstract class MetaTileEntityMultiblockPartMixin extends MetaTileEntity i
     private ICubeRenderer injectReplaceLogic(MetaTileEntityMultiblockPart self, Operation<ICubeRenderer> method) {
         var controller = getController();
         if (controller != null) {
-            ICubeRenderer renderer = SusyTextures.RenderPlacements.get(controller.metaTileEntityId, null);
+            ICubeRenderer renderer = SusyTextures.Replacements.get(controller.metaTileEntityId, null);
             if (renderer != null) {
                 return renderer;
             }

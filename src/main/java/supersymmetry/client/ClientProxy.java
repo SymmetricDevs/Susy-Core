@@ -80,7 +80,7 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void postLoad() {
-        SusyTextures.RenderPlacements.init();
+        SusyTextures.Replacements.init();
     }
 
     @SubscribeEvent

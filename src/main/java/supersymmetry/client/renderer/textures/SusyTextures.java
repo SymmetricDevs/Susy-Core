@@ -167,7 +167,7 @@ public class SusyTextures {
     public static final VisualStateRenderer TITANIUM_TURBINE_CASING_CTM = new VisualStateRenderer(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.TITANIUM_TURBINE_CASING), SusyTextures.TITANIUM_TURBINE_CASING);
     public static final VisualStateRenderer TUNGSTENSTEEL_TURBINE_CASING_CTM = new VisualStateRenderer(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.TUNGSTENSTEEL_TURBINE_CASING), SusyTextures.TUNGSTENSTEEL_TURBINE_CASING);
 
-    public static class RenderPlacements {
+    public static class Replacements {
 
         @Nullable
         public static ICubeRenderer get(@NotNull ResourceLocation id, @Nullable IMultiblockPart part) {

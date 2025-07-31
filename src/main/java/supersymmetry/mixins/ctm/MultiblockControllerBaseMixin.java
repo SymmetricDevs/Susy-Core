@@ -41,7 +41,7 @@ public abstract class MultiblockControllerBaseMixin extends MetaTileEntity imple
         if (isStructureFormed()) {
             if (getBaseTexture(null) instanceof VisualStateRenderer stateRenderer) {
                 return stateRenderer.getVisualState();
-            } else if (SusyTextures.RenderPlacements.get(metaTileEntityId, null)
+            } else if (SusyTextures.Replacements.get(metaTileEntityId, null)
                     instanceof VisualStateRenderer stateRenderer) {
                 return stateRenderer.getVisualState();
             }
@@ -56,7 +56,7 @@ public abstract class MultiblockControllerBaseMixin extends MetaTileEntity imple
         } else if (isStructureFormed()) {
             if (getBaseTexture(null) instanceof VisualStateRenderer stateRenderer) {
                 return stateRenderer.canRenderInLayer(layer);
-            } else if (SusyTextures.RenderPlacements.get(metaTileEntityId, null)
+            } else if (SusyTextures.Replacements.get(metaTileEntityId, null)
                     instanceof VisualStateRenderer stateRenderer) {
                 return stateRenderer.canRenderInLayer(layer);
             }
@@ -87,7 +87,7 @@ public abstract class MultiblockControllerBaseMixin extends MetaTileEntity imple
     private ICubeRenderer injectReplaceLogic(MultiblockControllerBase self, IMultiblockPart part,
                                              Operation<ICubeRenderer> method) {
 
-        ICubeRenderer renderer = SusyTextures.RenderPlacements.get(metaTileEntityId, part);
+        ICubeRenderer renderer = SusyTextures.Replacements.get(metaTileEntityId, part);
         if (renderer != null) {
             return renderer;
         }
