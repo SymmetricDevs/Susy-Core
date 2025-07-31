@@ -35,39 +35,38 @@ public class ConnectedTextures {
 
     public static final Map<ResourceLocation, Function<@Nullable IMultiblockPart, @Nullable ICubeRenderer>> replacements = new Object2ObjectArrayMap<>();
 
-    public static final VisualStateRenderer
-            PRIMITIVE_BRICKS_CTM = from(METAL_CASING.getState(PRIMITIVE_BRICKS), Textures.PRIMITIVE_BRICKS),
-            HEAT_PROOF_CASING_CTM = from(METAL_CASING.getState(INVAR_HEATPROOF), Textures.HEAT_PROOF_CASING),
-            FROST_PROOF_CASING_CTM = from(METAL_CASING.getState(ALUMINIUM_FROSTPROOF), Textures.FROST_PROOF_CASING),
-            SOLID_STEEL_CASING_CTM = from(METAL_CASING.getState(STEEL_SOLID), Textures.SOLID_STEEL_CASING),
-            VOLTAGE_CASING_ULV_CTM = from(MACHINE_CASING.getState(ULV), Textures.VOLTAGE_CASINGS[0]),
-            CLEAN_STAINLESS_STEEL_CASING_CTM = from(METAL_CASING.getState(STAINLESS_CLEAN), Textures.CLEAN_STAINLESS_STEEL_CASING),
-            STABLE_TITANIUM_CASING_CTM = from(METAL_CASING.getState(TITANIUM_STABLE), Textures.STABLE_TITANIUM_CASING),
-            ROBUST_TUNGSTENSTEEL_CASING_CTM = from(METAL_CASING.getState(TUNGSTENSTEEL_ROBUST), Textures.ROBUST_TUNGSTENSTEEL_CASING),
-            STEEL_TURBINE_CASING_CTM = from(TURBINE_CASING.getState(STEEL_TURBINE_CASING), SusyTextures.STEEL_TURBINE_CASING),
-            STAINLESS_TURBINE_CASING_CTM = from(TURBINE_CASING.getState(STAINLESS_TURBINE_CASING), SusyTextures.STAINLESS_TURBINE_CASING),
-            TITANIUM_TURBINE_CASING_CTM = from(TURBINE_CASING.getState(TITANIUM_TURBINE_CASING), SusyTextures.TITANIUM_TURBINE_CASING), // Unused for now
-            TUNGSTENSTEEL_TURBINE_CASING_CTM = from(TURBINE_CASING.getState(TUNGSTENSTEEL_TURBINE_CASING), SusyTextures.TUNGSTENSTEEL_TURBINE_CASING),
-            BRONZE_PLATED_BRICKS_CTM = from(METAL_CASING.getState(BRONZE_BRICKS), Textures.BRONZE_PLATED_BRICKS),
-            BRONZE_FIREBOX_CTM = from(BOILER_FIREBOX_CASING.getState(BRONZE_FIREBOX), Textures.BRONZE_FIREBOX),
-            BRONZE_FIREBOX_ACTIVE_CTM = from(BOILER_FIREBOX_CASING.getState(BRONZE_FIREBOX), Textures.BRONZE_FIREBOX_ACTIVE, true),
-            STEEL_FIREBOX_CTM = from(BOILER_FIREBOX_CASING.getState(STEEL_FIREBOX), Textures.STEEL_FIREBOX),
-            STEEL_FIREBOX_ACTIVE_CTM = from(BOILER_FIREBOX_CASING.getState(STEEL_FIREBOX), Textures.STEEL_FIREBOX_ACTIVE, true),
-            TITANIUM_FIREBOX_CTM = from(BOILER_FIREBOX_CASING.getState(TITANIUM_FIREBOX), Textures.TITANIUM_FIREBOX),
-            TITANIUM_FIREBOX_ACTIVE_CTM = from(BOILER_FIREBOX_CASING.getState(TITANIUM_FIREBOX), Textures.TITANIUM_FIREBOX_ACTIVE, true),
-            TUNGSTENSTEEL_FIREBOX_CTM = from(BOILER_FIREBOX_CASING.getState(TUNGSTENSTEEL_FIREBOX), Textures.TUNGSTENSTEEL_FIREBOX),
-            TUNGSTENSTEEL_FIREBOX_ACTIVE_CTM = from(BOILER_FIREBOX_CASING.getState(TUNGSTENSTEEL_FIREBOX), Textures.TUNGSTENSTEEL_FIREBOX_ACTIVE, true),
-            COKE_BRICKS_CTM = from(METAL_CASING.getState(COKE_BRICKS), Textures.COKE_BRICKS),
-            GRATE_CASING_STEEL_FRONT_CTM = from(MULTIBLOCK_CASING.getState(GRATE_CASING), Textures.GRATE_CASING_STEEL_FRONT),
-            INERT_PTFE_CASING_CTM = from(METAL_CASING.getState(PTFE_INERT_CASING), Textures.INERT_PTFE_CASING),
-            STURDY_HSSE_CASING_CTM = from(METAL_CASING.getState(HSSE_STURDY), Textures.STURDY_HSSE_CASING),
-            PLASCRETE_CTM = from(CLEANROOM_CASING.getState(PLASCRETE), Textures.PLASCRETE),
-            COMPUTER_CASING_CTM = from(COMPUTER_CASING.getState(BlockComputerCasing.CasingType.COMPUTER_CASING), Textures.COMPUTER_CASING),
-            HIGH_POWER_CASING_CTM = from(COMPUTER_CASING.getState(BlockComputerCasing.CasingType.HIGH_POWER_CASING), Textures.HIGH_POWER_CASING),
-            ADVANCED_COMPUTER_CASING_CTM = from(COMPUTER_CASING.getState(BlockComputerCasing.CasingType.ADVANCED_COMPUTER_CASING), Textures.ADVANCED_COMPUTER_CASING),
-            PALLADIUM_SUBSTATION_CASING_CTM = from(METAL_CASING.getState(PALLADIUM_SUBSTATION), Textures.PALLADIUM_SUBSTATION_CASING),
-            WOOD_WALL_CTM = from(STEAM_CASING.getState(BlockSteamCasing.SteamCasingType.WOOD_WALL), Textures.WOOD_WALL),
-            PRIMITIVE_PUMP_CTM = from(STEAM_CASING.getState(BlockSteamCasing.SteamCasingType.PUMP_DECK), Textures.PRIMITIVE_PUMP);
+    public static final VisualStateRenderer PRIMITIVE_BRICKS_CTM = from(METAL_CASING.getState(PRIMITIVE_BRICKS), Textures.PRIMITIVE_BRICKS);
+    public static final VisualStateRenderer HEAT_PROOF_CASING_CTM = from(METAL_CASING.getState(INVAR_HEATPROOF), Textures.HEAT_PROOF_CASING);
+    public static final VisualStateRenderer FROST_PROOF_CASING_CTM = from(METAL_CASING.getState(ALUMINIUM_FROSTPROOF), Textures.FROST_PROOF_CASING);
+    public static final VisualStateRenderer SOLID_STEEL_CASING_CTM = from(METAL_CASING.getState(STEEL_SOLID), Textures.SOLID_STEEL_CASING);
+    public static final VisualStateRenderer VOLTAGE_CASING_ULV_CTM = from(MACHINE_CASING.getState(ULV), Textures.VOLTAGE_CASINGS[0]);
+    public static final VisualStateRenderer CLEAN_STAINLESS_STEEL_CASING_CTM = from(METAL_CASING.getState(STAINLESS_CLEAN), Textures.CLEAN_STAINLESS_STEEL_CASING);
+    public static final VisualStateRenderer STABLE_TITANIUM_CASING_CTM = from(METAL_CASING.getState(TITANIUM_STABLE), Textures.STABLE_TITANIUM_CASING);
+    public static final VisualStateRenderer ROBUST_TUNGSTENSTEEL_CASING_CTM = from(METAL_CASING.getState(TUNGSTENSTEEL_ROBUST), Textures.ROBUST_TUNGSTENSTEEL_CASING);
+    public static final VisualStateRenderer STEEL_TURBINE_CASING_CTM = from(TURBINE_CASING.getState(STEEL_TURBINE_CASING), SusyTextures.STEEL_TURBINE_CASING);
+    public static final VisualStateRenderer STAINLESS_TURBINE_CASING_CTM = from(TURBINE_CASING.getState(STAINLESS_TURBINE_CASING), SusyTextures.STAINLESS_TURBINE_CASING);
+    public static final VisualStateRenderer TITANIUM_TURBINE_CASING_CTM = from(TURBINE_CASING.getState(TITANIUM_TURBINE_CASING), SusyTextures.TITANIUM_TURBINE_CASING); // Unused for now
+    public static final VisualStateRenderer TUNGSTENSTEEL_TURBINE_CASING_CTM = from(TURBINE_CASING.getState(TUNGSTENSTEEL_TURBINE_CASING), SusyTextures.TUNGSTENSTEEL_TURBINE_CASING);
+    public static final VisualStateRenderer BRONZE_PLATED_BRICKS_CTM = from(METAL_CASING.getState(BRONZE_BRICKS), Textures.BRONZE_PLATED_BRICKS);
+    public static final VisualStateRenderer BRONZE_FIREBOX_CTM = from(BOILER_FIREBOX_CASING.getState(BRONZE_FIREBOX), Textures.BRONZE_FIREBOX);
+    public static final VisualStateRenderer BRONZE_FIREBOX_ACTIVE_CTM = from(BOILER_FIREBOX_CASING.getState(BRONZE_FIREBOX), Textures.BRONZE_FIREBOX_ACTIVE, true);
+    public static final VisualStateRenderer STEEL_FIREBOX_CTM = from(BOILER_FIREBOX_CASING.getState(STEEL_FIREBOX), Textures.STEEL_FIREBOX);
+    public static final VisualStateRenderer STEEL_FIREBOX_ACTIVE_CTM = from(BOILER_FIREBOX_CASING.getState(STEEL_FIREBOX), Textures.STEEL_FIREBOX_ACTIVE, true);
+    public static final VisualStateRenderer TITANIUM_FIREBOX_CTM = from(BOILER_FIREBOX_CASING.getState(TITANIUM_FIREBOX), Textures.TITANIUM_FIREBOX);
+    public static final VisualStateRenderer TITANIUM_FIREBOX_ACTIVE_CTM = from(BOILER_FIREBOX_CASING.getState(TITANIUM_FIREBOX), Textures.TITANIUM_FIREBOX_ACTIVE, true);
+    public static final VisualStateRenderer TUNGSTENSTEEL_FIREBOX_CTM = from(BOILER_FIREBOX_CASING.getState(TUNGSTENSTEEL_FIREBOX), Textures.TUNGSTENSTEEL_FIREBOX);
+    public static final VisualStateRenderer TUNGSTENSTEEL_FIREBOX_ACTIVE_CTM = from(BOILER_FIREBOX_CASING.getState(TUNGSTENSTEEL_FIREBOX), Textures.TUNGSTENSTEEL_FIREBOX_ACTIVE, true);
+    public static final VisualStateRenderer COKE_BRICKS_CTM = from(METAL_CASING.getState(COKE_BRICKS), Textures.COKE_BRICKS);
+    public static final VisualStateRenderer GRATE_CASING_STEEL_FRONT_CTM = from(MULTIBLOCK_CASING.getState(GRATE_CASING), Textures.GRATE_CASING_STEEL_FRONT);
+    public static final VisualStateRenderer INERT_PTFE_CASING_CTM = from(METAL_CASING.getState(PTFE_INERT_CASING), Textures.INERT_PTFE_CASING);
+    public static final VisualStateRenderer STURDY_HSSE_CASING_CTM = from(METAL_CASING.getState(HSSE_STURDY), Textures.STURDY_HSSE_CASING);
+    public static final VisualStateRenderer PLASCRETE_CTM = from(CLEANROOM_CASING.getState(PLASCRETE), Textures.PLASCRETE);
+    public static final VisualStateRenderer COMPUTER_CASING_CTM = from(COMPUTER_CASING.getState(BlockComputerCasing.CasingType.COMPUTER_CASING), Textures.COMPUTER_CASING);
+    public static final VisualStateRenderer HIGH_POWER_CASING_CTM = from(COMPUTER_CASING.getState(BlockComputerCasing.CasingType.HIGH_POWER_CASING), Textures.HIGH_POWER_CASING);
+    public static final VisualStateRenderer ADVANCED_COMPUTER_CASING_CTM = from(COMPUTER_CASING.getState(BlockComputerCasing.CasingType.ADVANCED_COMPUTER_CASING), Textures.ADVANCED_COMPUTER_CASING);
+    public static final VisualStateRenderer PALLADIUM_SUBSTATION_CASING_CTM = from(METAL_CASING.getState(PALLADIUM_SUBSTATION), Textures.PALLADIUM_SUBSTATION_CASING);
+    public static final VisualStateRenderer WOOD_WALL_CTM = from(STEAM_CASING.getState(BlockSteamCasing.SteamCasingType.WOOD_WALL), Textures.WOOD_WALL);
+    public static final VisualStateRenderer PRIMITIVE_PUMP_CTM = from(STEAM_CASING.getState(BlockSteamCasing.SteamCasingType.PUMP_DECK), Textures.PRIMITIVE_PUMP);
 
     @Nullable
     public static ICubeRenderer get(ResourceLocation id, @Nullable IMultiblockPart part) {
