@@ -178,9 +178,9 @@ public class SusyTextures {
 
         public static void init() {
             // GTCEu
-            SusyTextures.PRIMITIVE_BRICKS_CTM.replace(gregtechId("primitive_blast_furnace.bronze"),
+            SusyTextures.PRIMITIVE_BRICKS_CTM.replace(gregtechId("primitive_blast_furnace.bronze"));
+            SusyTextures.HEAT_PROOF_CASING_CTM.replace(gregtechId("electric_blast_furnace"),
                     gregtechId("multi_furnace"));
-            SusyTextures.HEAT_PROOF_CASING_CTM.replace(gregtechId("electric_blast_furnace"));
             SusyTextures.FROST_PROOF_CASING_CTM.replace(gregtechId("vacuum_freezer"));
             SusyTextures.SOLID_STEEL_CASING_CTM.replace(gregtechId("implosion_compressor"));
             SusyTextures.VOLTAGE_CASING_ULV_CTM.replace(gregtechId("pyrolyse_oven")); // Who would give connected textures for this :clueless:
