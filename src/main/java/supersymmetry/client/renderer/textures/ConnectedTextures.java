@@ -1,5 +1,8 @@
 package supersymmetry.client.renderer.textures;
 
+import gregicality.multiblocks.api.render.GCYMTextures;
+import gregicality.multiblocks.common.block.blocks.BlockLargeMultiblockCasing;
+import gregicality.multiblocks.common.metatileentities.GCYMMetaTileEntities;
 import gregtech.api.capability.IDataAccessHatch;
 import gregtech.api.capability.IObjectHolder;
 import gregtech.api.metatileentity.multiblock.IMultiblockAbilityPart;
@@ -20,6 +23,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
 import java.util.function.Function;
 
+import static gregicality.multiblocks.api.utils.GCYMUtil.gcymId;
+import static gregicality.multiblocks.common.block.GCYMMetaBlocks.*;
 import static gregtech.api.util.GTUtility.gregtechId;
 import static gregtech.common.blocks.BlockCleanroomCasing.CasingType.PLASCRETE;
 import static gregtech.common.blocks.BlockFireboxCasing.FireboxCasingType.*;
@@ -35,6 +40,7 @@ public class ConnectedTextures {
 
     public static final Map<ResourceLocation, Function<@Nullable IMultiblockPart, @Nullable ICubeRenderer>> replacements = new Object2ObjectArrayMap<>();
 
+    // GTCEu
     public static final VisualStateRenderer PRIMITIVE_BRICKS_CTM = from(METAL_CASING.getState(PRIMITIVE_BRICKS), Textures.PRIMITIVE_BRICKS);
     public static final VisualStateRenderer HEAT_PROOF_CASING_CTM = from(METAL_CASING.getState(INVAR_HEATPROOF), Textures.HEAT_PROOF_CASING);
     public static final VisualStateRenderer FROST_PROOF_CASING_CTM = from(METAL_CASING.getState(ALUMINIUM_FROSTPROOF), Textures.FROST_PROOF_CASING);
@@ -67,6 +73,10 @@ public class ConnectedTextures {
     public static final VisualStateRenderer PALLADIUM_SUBSTATION_CASING_CTM = from(METAL_CASING.getState(PALLADIUM_SUBSTATION), Textures.PALLADIUM_SUBSTATION_CASING);
     public static final VisualStateRenderer WOOD_WALL_CTM = from(STEAM_CASING.getState(BlockSteamCasing.SteamCasingType.WOOD_WALL), Textures.WOOD_WALL);
     public static final VisualStateRenderer PRIMITIVE_PUMP_CTM = from(STEAM_CASING.getState(BlockSteamCasing.SteamCasingType.PUMP_DECK), Textures.PRIMITIVE_PUMP);
+
+    // GCyM
+    public static final VisualStateRenderer MACERATOR_CASING_CTM = from(LARGE_MULTIBLOCK_CASING.getState(BlockLargeMultiblockCasing.CasingType.MACERATOR_CASING), GCYMTextures.MACERATOR_CASING);
+    public static final VisualStateRenderer BLAST_CASING_CTM = from(LARGE_MULTIBLOCK_CASING.getState(BlockLargeMultiblockCasing.CasingType.HIGH_TEMPERATURE_CASING), GCYMTextures.BLAST_CASING);
 
     @Nullable
     public static ICubeRenderer get(ResourceLocation id, @Nullable IMultiblockPart part) {
@@ -155,7 +165,7 @@ public class ConnectedTextures {
             return useSteel ? SOLID_STEEL_CASING_CTM : BRONZE_PLATED_BRICKS_CTM;
         });
 
-        register(gregtechId("steam_grinder"), part -> useSteel ? SOLID_STEEL_CASING_CTM : BRONZE_FIREBOX_CTM);
+        register(gregtechId("steam_grinder"), part -> useSteel ? SOLID_STEEL_CASING_CTM : BRONZE_PLATED_BRICKS_CTM);
 
         STURDY_HSSE_CASING_CTM.replace(gregtechId("advanced_processing_array"));
         PLASCRETE_CTM.replace(gregtechId("cleanroom"));
@@ -175,5 +185,10 @@ public class ConnectedTextures {
         HIGH_POWER_CASING_CTM.replace(gregtechId("active_transformer"));
         WOOD_WALL_CTM.replace(gregtechId("tank.wood"));
         PRIMITIVE_PUMP_CTM.replace(gregtechId("primitive_water_pump"));
+
+        // GCyM
+        MACERATOR_CASING_CTM.replace(gcymId("large_macerator"));
+        BLAST_CASING_CTM.replace(gcymId("alloy_blast_smelter"),
+                gcymId("alloy_blast_smelter"));
     }
 }

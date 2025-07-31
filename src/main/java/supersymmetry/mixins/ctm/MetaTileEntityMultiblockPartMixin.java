@@ -71,8 +71,8 @@ public abstract class MetaTileEntityMultiblockPartMixin extends MetaTileEntity i
     }
 
     @WrapOperation(method = "renderMetaTileEntity",
-            at = @At(value = "INVOKE",
-                    target = "Lgregtech/client/renderer/ICubeRenderer;render(Lcodechicken/lib/render/CCRenderState;Lcodechicken/lib/vec/Matrix4;[Lcodechicken/lib/render/pipeline/IVertexOperation;)V"))
+                   at = @At(value = "INVOKE",
+                            target = "Lgregtech/client/renderer/ICubeRenderer;render(Lcodechicken/lib/render/CCRenderState;Lcodechicken/lib/vec/Matrix4;[Lcodechicken/lib/render/pipeline/IVertexOperation;)V"))
     private void injectConnectableLogic(ICubeRenderer renderer,
                                         CCRenderState renderState,
                                         Matrix4 translation,
@@ -88,8 +88,8 @@ public abstract class MetaTileEntityMultiblockPartMixin extends MetaTileEntity i
     }
 
     @WrapOperation(method = "renderMetaTileEntity",
-            at = @At(value = "INVOKE",
-                    target = "Lgregtech/common/metatileentities/multi/multiblockpart/MetaTileEntityMultiblockPart;getBaseTexture()Lgregtech/client/renderer/ICubeRenderer;"))
+                   at = @At(value = "INVOKE",
+                            target = "Lgregtech/common/metatileentities/multi/multiblockpart/MetaTileEntityMultiblockPart;getBaseTexture()Lgregtech/client/renderer/ICubeRenderer;"))
     private ICubeRenderer injectReplaceLogic(MetaTileEntityMultiblockPart self, Operation<ICubeRenderer> method) {
         var controller = getController();
         if (controller != null) {

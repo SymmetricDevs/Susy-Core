@@ -1,6 +1,5 @@
 package supersymmetry.mixins.ctm;
 
-
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
@@ -18,15 +17,14 @@ import supersymmetry.client.renderer.textures.custom.VisualStateRenderer;
 @Mixin(value = MetaTileEntityCleaningMaintenanceHatch.class, remap = false)
 public abstract class MetaTileEntityCleaningMaintenanceHatchMixin extends MetaTileEntityMultiblockPart {
 
-
     // Dummy
     MetaTileEntityCleaningMaintenanceHatchMixin() {
         super(null, 0);
     }
 
     @WrapOperation(method = "renderMetaTileEntity",
-            at = @At(value = "INVOKE",
-                    target = "Lgregtech/client/renderer/ICubeRenderer;render(Lcodechicken/lib/render/CCRenderState;Lcodechicken/lib/vec/Matrix4;[Lcodechicken/lib/render/pipeline/IVertexOperation;)V"))
+                   at = @At(value = "INVOKE",
+                            target = "Lgregtech/client/renderer/ICubeRenderer;render(Lcodechicken/lib/render/CCRenderState;Lcodechicken/lib/vec/Matrix4;[Lcodechicken/lib/render/pipeline/IVertexOperation;)V"))
     private void injectConnectableLogic(ICubeRenderer renderer,
                                         CCRenderState renderState,
                                         Matrix4 translation,
@@ -41,10 +39,9 @@ public abstract class MetaTileEntityCleaningMaintenanceHatchMixin extends MetaTi
         }
     }
 
-
     @WrapOperation(method = "renderMetaTileEntity",
-            at = @At(value = "INVOKE",
-                    target = "Lgregtech/common/metatileentities/multi/multiblockpart/MetaTileEntityCleaningMaintenanceHatch;getBaseTexture()Lgregtech/client/renderer/ICubeRenderer;"))
+                   at = @At(value = "INVOKE",
+                            target = "Lgregtech/common/metatileentities/multi/multiblockpart/MetaTileEntityCleaningMaintenanceHatch;getBaseTexture()Lgregtech/client/renderer/ICubeRenderer;"))
     private ICubeRenderer injectReplaceLogic(MetaTileEntityCleaningMaintenanceHatch self,
                                              Operation<ICubeRenderer> method) {
 
