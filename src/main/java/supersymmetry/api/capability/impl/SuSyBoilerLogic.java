@@ -1,43 +1,61 @@
 package supersymmetry.api.capability.impl;
 
 import gregtech.api.GTValues;
+import gregtech.api.capability.IFilter;
 import gregtech.api.capability.IMultiblockController;
 import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.impl.AbstractRecipeLogic;
 import gregtech.api.capability.impl.CommonFluidFilters;
 import gregtech.api.recipes.Recipe;
-import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.RecipeMaps;
-import gregtech.api.recipes.RecyclingHandler;
 import gregtech.api.unification.OreDictUnifier;
-import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.unification.stack.MaterialStack;
 import gregtech.api.util.GTLog;
 import gregtech.common.ConfigHolder;
-import gregtech.common.metatileentities.multi.MetaTileEntityLargeBoiler;
+import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.common.metatileentities.multi.steam.MetaTileEntitySuSyLargeBoiler;
-import supersymmetry.common.metatileentities.multi.steam.SuSyBoilerType;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import static gregtech.api.capability.GregtechDataCodes.BOILER_HEAT;
 import static gregtech.api.capability.GregtechDataCodes.BOILER_LAST_TICK_STEAM;
+import static gregtech.api.capability.impl.CommonFluidFilters.matchesFluid;
 
 public class SuSyBoilerLogic extends AbstractRecipeLogic {
+
+    public static final IFilter<FluidStack> BOILER_FLUID = new IFilter<>() {
+
+        @Override
+        public boolean test(@NotNull FluidStack fluid) {
+            FluidStack largeFluidStack = fluid.copy();
+            largeFluidStack.amount = 1000;
+            Recipe fluidFuelRecipe = RecipeMaps.SEMI_FLUID_GENERATOR_FUELS.findRecipe(
+                    GTValues.V[GTValues.MAX], NonNullList.create(), Collections.singletonList(largeFluidStack));
+            return fluidFuelRecipe != null;
+        }
+
+        @Override
+        public int getPriority() {
+            return IFilter.whitelistLikePriority();
+        }
+    };
 
     private static final long STEAM_PER_WATER = 160;
 
@@ -83,17 +101,17 @@ public class SuSyBoilerLogic extends AbstractRecipeLogic {
 
         for (IFluidTank fluidTank : importFluids.getFluidTanks()) {
             FluidStack fuelStack = fluidTank.drain(Integer.MAX_VALUE, false);
-            if (fuelStack == null || CommonFluidFilters.BOILER_FLUID.test(fuelStack)) continue;
+            if (fuelStack == null || BOILER_FLUID.test(fuelStack)) continue;
 
             Recipe fluidFuelRecipe = RecipeMaps.SEMI_FLUID_GENERATOR_FUELS.findRecipe(
                     GTValues.V[GTValues.MAX], dummyList, Collections.singletonList(fuelStack));
             // run only if it can apply a certain amount of "parallel", this is to mitigate int division
-            if (fluidFuelRecipe != null &&
-                    fuelStack.amount >= 1000) {
-                fluidTank.drain(1000, true);
+            if (fluidFuelRecipe != null) {
+                int consumption = fluidFuelRecipe.getFluidInputs().get(0).getInputFluidStack().amount;
+                fluidTank.drain(consumption, true);
                 int fuelBurnTime = (fluidFuelRecipe.getDuration() * 96 / boiler.boilerType.steamPerTick());
                 setMaxProgress(adjustBurnTimeForThrottle(
-                        Math.max(1, boiler.boilerType.runtimeBoost(fuelBurnTime))));
+                        Math.max(1, fuelBurnTime)));
                 didStartRecipe = true;
                 break;
             }
@@ -105,16 +123,13 @@ public class SuSyBoilerLogic extends AbstractRecipeLogic {
                 ItemStack stack = importItems.getStackInSlot(i);
                 OrePrefix prefix = OreDictUnifier.getPrefix(stack);
                 if (!isSupportedOrePrefix(prefix)) continue;
-                MaterialStack material = OreDictUnifier.getMaterial(stack);
-                ItemStack dummyStack = OreDictUnifier.get(OrePrefix.dust, material.material);
 
                 Recipe solidFuelRecipe = SuSyRecipeMaps.BOILER_RECIPES.findRecipe(GTValues.V[GTValues.MAX],
-                        Collections.singletonList(dummyStack), NonNullList.create());
+                        Collections.singletonList(stack), NonNullList.create());
                 if (solidFuelRecipe == null) continue;
-                int fuelBurnTime = (int) (solidFuelRecipe.getDuration() * 96 / boiler.boilerType.steamPerTick()
-                        * material.amount / GTValues.M);
+                int fuelBurnTime = solidFuelRecipe.getDuration() * 96 / boiler.boilerType.steamPerTick();
                 if (fuelBurnTime > 0) { // try to ensure this fuel can burn for at least 1 tick
-                    setMaxProgress(adjustBurnTimeForThrottle(boiler.boilerType.runtimeBoost(fuelBurnTime)));
+                    setMaxProgress(adjustBurnTimeForThrottle(fuelBurnTime));
                     stack.shrink(1);
                     didStartRecipe = true;
                     break;
@@ -134,18 +149,26 @@ public class SuSyBoilerLogic extends AbstractRecipeLogic {
         metaTileEntity.getNotifiedFluidInputList().clear();
     }
 
-    protected boolean isSupportedOrePrefix(OrePrefix prefix) {
-        return prefix == OrePrefix.gem ||
-                prefix == OrePrefix.gemChipped ||
-                prefix == OrePrefix.gemFlawed ||
-                prefix == OrePrefix.gemFlawless ||
-                prefix == OrePrefix.gemExquisite ||
-                prefix == OrePrefix.block ||
-                prefix == OrePrefix.dust ||
-                prefix == OrePrefix.dustSmall ||
-                prefix == OrePrefix.dustTiny ||
-                prefix == OrePrefix.plank ||
-                prefix == OrePrefix.log;
+
+    public static boolean isSupportedOrePrefix(OrePrefix prefix) {
+        return SUPPORTED_ORE_PREFIXES.contains(prefix);
+    }
+
+    public static final Set<OrePrefix> SUPPORTED_ORE_PREFIXES = new ObjectArraySet<>();
+    static {
+        SUPPORTED_ORE_PREFIXES.add(OrePrefix.gem);
+        SUPPORTED_ORE_PREFIXES.add(OrePrefix.gemChipped);
+        SUPPORTED_ORE_PREFIXES.add(OrePrefix.gemFlawed);
+        SUPPORTED_ORE_PREFIXES.add(OrePrefix.gemFlawless);
+        SUPPORTED_ORE_PREFIXES.add(OrePrefix.gemExquisite);
+        SUPPORTED_ORE_PREFIXES.add(OrePrefix.block);
+        SUPPORTED_ORE_PREFIXES.add(OrePrefix.dust);
+        SUPPORTED_ORE_PREFIXES.add(OrePrefix.dustSmall);
+        SUPPORTED_ORE_PREFIXES.add(OrePrefix.dustTiny);
+        SUPPORTED_ORE_PREFIXES.add(OrePrefix.plank);
+        SUPPORTED_ORE_PREFIXES.add(OrePrefix.log);
+        SUPPORTED_ORE_PREFIXES.add(OrePrefix.stick);
+        SUPPORTED_ORE_PREFIXES.add(OrePrefix.stickLong);
     }
 
     @Override

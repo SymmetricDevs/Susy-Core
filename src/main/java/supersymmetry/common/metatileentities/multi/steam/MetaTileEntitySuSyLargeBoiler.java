@@ -23,8 +23,6 @@ import gregtech.api.util.TextComponentUtil;
 import gregtech.api.util.TextFormattingUtil;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.utils.TooltipHelper;
-import gregtech.common.metatileentities.multi.BoilerType;
-import gregtech.common.metatileentities.multi.MetaTileEntityLargeBoiler;
 import gregtech.core.sound.GTSoundEvents;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -212,11 +210,10 @@ public class MetaTileEntitySuSyLargeBoiler extends MultiblockWithDisplayBase imp
                                boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
         tooltip.add(I18n.format("gregtech.multiblock.large_boiler.rate_tooltip",
-                (int) (boilerType.steamPerTick() * 20 * boilerType.runtimeBoost(20) / 20.0)));
+                boilerType.steamPerTick() * 20));
         tooltip.add(
                 I18n.format("gregtech.multiblock.large_boiler.heat_time_tooltip", boilerType.getTicksToBoiling() / 20));
         tooltip.add(I18n.format("gregtech.universal.tooltip.base_production_fluid", boilerType.steamPerTick()));
-        tooltip.add(I18n.format("gregtech.multiblock.large_boiler.efficiency", (boilerType.getEfficiency() * 100) + "%"));
         tooltip.add(TooltipHelper.BLINKING_RED + I18n.format("gregtech.multiblock.large_boiler.explosion_tooltip"));
     }
 
@@ -361,7 +358,7 @@ public class MetaTileEntitySuSyLargeBoiler extends MultiblockWithDisplayBase imp
         int filled = 0, capacity = 0;
         for (IFluidTank tank : tanks) {
             if (tank == null || tank.getFluid() == null) continue;
-            if (CommonFluidFilters.BOILER_FLUID.test(tank.getFluid())) {
+            if (SuSyBoilerLogic.BOILER_FLUID.test(tank.getFluid())) {
                 filled += tank.getFluidAmount();
                 capacity += tank.getCapacity();
             }

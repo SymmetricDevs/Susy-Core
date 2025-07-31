@@ -81,8 +81,4 @@ public enum SuSyBoilerType {
         return (int) (efficiency * ticks);
     }
 
-    public double getEfficiency() {
-        return efficiency;
-    }
-
 }
