@@ -13,7 +13,7 @@ import supersymmetry.api.metatileentity.IConnectable;
 public abstract class BlockMachineMixin {
 
     @ModifyReturnValue(method = "getFacade(Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/EnumFacing;)Lnet/minecraft/block/state/IBlockState;",
-            at = @At("TAIL"))
+                       at = @At("TAIL"))
     private IBlockState injectConnectableLogic(IBlockState original, @Local(name = "metaTileEntity") MetaTileEntity mte) {
         if (mte instanceof IConnectable connectable) {
             IBlockState visualState = connectable.getVisualState(null);

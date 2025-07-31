@@ -11,7 +11,7 @@ import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityClean
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.client.renderer.textures.ConnectedTextures;
 import supersymmetry.client.renderer.textures.custom.VisualStateRenderer;
 
 // I hate special cases...
@@ -34,8 +34,8 @@ public abstract class MetaTileEntityCleaningMaintenanceHatchMixin extends MetaTi
                                         Operation<Void> method) {
 
         if (getController() != null && renderer instanceof VisualStateRenderer stateRenderer) {
-            stateRenderer.renderVisualState(renderState, getWorld(), getPos(),
-                    isPainted() ? getPaintingColor() : null);
+            stateRenderer.renderVisualState(
+                    renderState, getWorld(), getPos(), isPainted() ? getPaintingColorForRendering() : -1);
         } else {
             method.call(renderer, renderState, translation, pipeline);
         }
@@ -50,7 +50,7 @@ public abstract class MetaTileEntityCleaningMaintenanceHatchMixin extends MetaTi
 
         var controller = getController();
         if (controller != null) {
-            ICubeRenderer renderer = SusyTextures.Replacements.get(controller.metaTileEntityId, null);
+            ICubeRenderer renderer = ConnectedTextures.get(controller.metaTileEntityId, this);
             if (renderer != null) {
                 return renderer;
             }

@@ -15,9 +15,9 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 public abstract class SimpleOverlayRendererMixin {
 
     @ModifyArg(method = "renderOrientedState",
-            at = @At(value = "INVOKE",
-                    target = "Lgregtech/client/renderer/texture/Textures;renderFace(Lcodechicken/lib/render/CCRenderState;Lcodechicken/lib/vec/Matrix4;[Lcodechicken/lib/render/pipeline/IVertexOperation;Lnet/minecraft/util/EnumFacing;Lcodechicken/lib/vec/Cuboid6;Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;Lnet/minecraft/util/BlockRenderLayer;)V"),
-            require = 3)
+               at = @At(value = "INVOKE",
+                        target = "Lgregtech/client/renderer/texture/Textures;renderFace(Lcodechicken/lib/render/CCRenderState;Lcodechicken/lib/vec/Matrix4;[Lcodechicken/lib/render/pipeline/IVertexOperation;Lnet/minecraft/util/EnumFacing;Lcodechicken/lib/vec/Cuboid6;Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;Lnet/minecraft/util/BlockRenderLayer;)V"),
+               require = 3)
     private Matrix4 fixZFighting(Matrix4 original, @Local(argsOnly = true) EnumFacing facing,
                                  @Share("renderTranslation") LocalRef<Matrix4> renderTranslation) {
 

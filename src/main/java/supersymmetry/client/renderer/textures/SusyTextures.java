@@ -1,30 +1,10 @@
 package supersymmetry.client.renderer.textures;
 
-import gregtech.api.metatileentity.multiblock.IMultiblockPart;
-import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.renderer.texture.cube.*;
 import gregtech.client.renderer.texture.custom.DrumRenderer;
-import gregtech.common.blocks.BlockMachineCasing;
-import gregtech.common.blocks.BlockMetalCasing;
-import gregtech.common.blocks.BlockTurbineCasing;
-import gregtech.common.blocks.MetaBlocks;
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
-import net.minecraft.util.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import supersymmetry.client.renderer.textures.custom.ExtenderRender;
-import supersymmetry.client.renderer.textures.custom.VisualStateRenderer;
-
-import java.util.Map;
-import java.util.function.Function;
-
-import static gregtech.api.util.GTUtility.gregtechId;
-
 public class SusyTextures {
-
-    public static final Map<ResourceLocation, Function<@Nullable IMultiblockPart, @Nullable ICubeRenderer>> replacements = new Object2ObjectArrayMap<>();
-
 
     public SusyTextures(){
     }
@@ -130,7 +110,8 @@ public class SusyTextures {
     public static final SimpleOverlayRenderer STEEL_TURBINE_CASING = new SimpleOverlayRenderer("casings/mechanic/machine_casing_turbine_steel");
     public static final SimpleOverlayRenderer STAINLESS_TURBINE_CASING = new SimpleOverlayRenderer("casings/mechanic/machine_casing_turbine_stainless_steel");
     public static final SimpleOverlayRenderer TITANIUM_TURBINE_CASING = new SimpleOverlayRenderer("casings/mechanic/machine_casing_turbine_titanium");
-    public static final SimpleOverlayRenderer TUNGSTENSTEEL_TURBINE_CASING = new SimpleOverlayRenderer("casings/mechanic/machine_casing_tungstensteel");
+    public static final SimpleOverlayRenderer TUNGSTENSTEEL_TURBINE_CASING =
+            new SimpleOverlayRenderer("casings/mechanic/machine_casing_turbine_tungstensteel");
 
     public static final SimpleCubeRenderer MASONRY_BRICK = new SimpleCubeRenderer("gregtech:blocks/multiblock_casing/masonry_brick");
 
@@ -154,44 +135,4 @@ public class SusyTextures {
 
     public static final OrientedOverlayRenderer STOCK_CONTROLLER = new OrientedOverlayRenderer("rail_interfaces/stock_controller");
 
-    public static final VisualStateRenderer PRIMITIVE_BRICKS_CTM = new VisualStateRenderer(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.PRIMITIVE_BRICKS), Textures.PRIMITIVE_BRICKS);
-    public static final VisualStateRenderer HEAT_PROOF_CASING_CTM = new VisualStateRenderer(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.INVAR_HEATPROOF), Textures.HEAT_PROOF_CASING);
-    public static final VisualStateRenderer FROST_PROOF_CASING_CTM = new VisualStateRenderer(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.ALUMINIUM_FROSTPROOF), Textures.FROST_PROOF_CASING);
-    public static final VisualStateRenderer SOLID_STEEL_CASING_CTM = new VisualStateRenderer(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID), Textures.SOLID_STEEL_CASING);
-    public static final VisualStateRenderer VOLTAGE_CASING_ULV_CTM = new VisualStateRenderer(MetaBlocks.MACHINE_CASING.getState(BlockMachineCasing.MachineCasingType.ULV), Textures.VOLTAGE_CASINGS[0]);
-    public static final VisualStateRenderer CLEAN_STAINLESS_STEEL_CASING_CTM = new VisualStateRenderer(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STAINLESS_CLEAN), Textures.CLEAN_STAINLESS_STEEL_CASING);
-    public static final VisualStateRenderer STABLE_TITANIUM_CASING_CTM = new VisualStateRenderer(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.TITANIUM_STABLE), Textures.STABLE_TITANIUM_CASING);
-    public static final VisualStateRenderer ROBUST_TUNGSTENSTEEL_CASING_CTM = new VisualStateRenderer(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.TUNGSTENSTEEL_ROBUST), Textures.ROBUST_TUNGSTENSTEEL_CASING);
-    public static final VisualStateRenderer STEEL_TURBINE_CASING_CTM = new VisualStateRenderer(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING), SusyTextures.STEEL_TURBINE_CASING);
-    public static final VisualStateRenderer STAINLESS_TURBINE_CASING_CTM = new VisualStateRenderer(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STAINLESS_TURBINE_CASING), SusyTextures.STAINLESS_TURBINE_CASING);
-    public static final VisualStateRenderer TITANIUM_TURBINE_CASING_CTM = new VisualStateRenderer(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.TITANIUM_TURBINE_CASING), SusyTextures.TITANIUM_TURBINE_CASING);
-    public static final VisualStateRenderer TUNGSTENSTEEL_TURBINE_CASING_CTM = new VisualStateRenderer(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.TUNGSTENSTEEL_TURBINE_CASING), SusyTextures.TUNGSTENSTEEL_TURBINE_CASING);
-
-    public static class Replacements {
-
-        @Nullable
-        public static ICubeRenderer get(@NotNull ResourceLocation id, @Nullable IMultiblockPart part) {
-            var function = replacements.get(id);
-            if (function == null) return null;
-            return function.apply(part);
-        }
-
-        public static void init() {
-            // GTCEu
-            SusyTextures.PRIMITIVE_BRICKS_CTM.replace(gregtechId("primitive_blast_furnace.bronze"));
-            SusyTextures.HEAT_PROOF_CASING_CTM.replace(gregtechId("electric_blast_furnace"),
-                    gregtechId("multi_furnace"));
-            SusyTextures.FROST_PROOF_CASING_CTM.replace(gregtechId("vacuum_freezer"));
-            SusyTextures.SOLID_STEEL_CASING_CTM.replace(gregtechId("implosion_compressor"));
-            SusyTextures.VOLTAGE_CASING_ULV_CTM.replace(gregtechId("pyrolyse_oven")); // Who would give connected textures for this :clueless:
-            SusyTextures.CLEAN_STAINLESS_STEEL_CASING_CTM.replace(gregtechId("distillation_tower"),
-                    gregtechId("cracker"));
-            SusyTextures.STABLE_TITANIUM_CASING_CTM.replace(gregtechId("large_combustion_engine"));
-            SusyTextures.ROBUST_TUNGSTENSTEEL_CASING_CTM.replace(gregtechId("extreme_combustion_engine"));
-            SusyTextures.STEEL_TURBINE_CASING_CTM.replace(gregtechId("large_turbine.steam"));
-            SusyTextures.STAINLESS_TURBINE_CASING_CTM.replace(gregtechId("large_turbine.gas"));
-            SusyTextures.TUNGSTENSTEEL_TURBINE_CASING_CTM.replace(gregtechId("large_turbine.plasma"));
-
-        }
-    }
 }

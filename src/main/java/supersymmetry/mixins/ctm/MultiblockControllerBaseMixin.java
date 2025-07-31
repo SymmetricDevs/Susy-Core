@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import supersymmetry.api.metatileentity.IConnectable;
-import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.client.renderer.textures.ConnectedTextures;
 import supersymmetry.client.renderer.textures.custom.VisualStateRenderer;
 
 @Mixin(value = MultiblockControllerBase.class, remap = false)
@@ -41,8 +41,7 @@ public abstract class MultiblockControllerBaseMixin extends MetaTileEntity imple
         if (isStructureFormed()) {
             if (getBaseTexture(null) instanceof VisualStateRenderer stateRenderer) {
                 return stateRenderer.getVisualState();
-            } else if (SusyTextures.Replacements.get(metaTileEntityId, null)
-                    instanceof VisualStateRenderer stateRenderer) {
+            } else if (ConnectedTextures.get(metaTileEntityId, null) instanceof VisualStateRenderer stateRenderer) {
                 return stateRenderer.getVisualState();
             }
         }
@@ -56,8 +55,7 @@ public abstract class MultiblockControllerBaseMixin extends MetaTileEntity imple
         } else if (isStructureFormed()) {
             if (getBaseTexture(null) instanceof VisualStateRenderer stateRenderer) {
                 return stateRenderer.canRenderInLayer(layer);
-            } else if (SusyTextures.Replacements.get(metaTileEntityId, null)
-                    instanceof VisualStateRenderer stateRenderer) {
+            } else if (ConnectedTextures.get(metaTileEntityId, null) instanceof VisualStateRenderer stateRenderer) {
                 return stateRenderer.canRenderInLayer(layer);
             }
         }
@@ -74,8 +72,8 @@ public abstract class MultiblockControllerBaseMixin extends MetaTileEntity imple
                                         Operation<Void> method) {
 
         if (isStructureFormed() && renderer instanceof VisualStateRenderer stateRenderer) {
-            stateRenderer.renderVisualState(renderState, getWorld(), getPos(),
-                    isPainted() ? getPaintingColor() : null);
+            stateRenderer.renderVisualState(
+                    renderState, getWorld(), getPos(), isPainted() ? getPaintingColorForRendering() : -1);
         } else {
             method.call(renderer, renderState, translation, pipeline);
         }
@@ -87,7 +85,7 @@ public abstract class MultiblockControllerBaseMixin extends MetaTileEntity imple
     private ICubeRenderer injectReplaceLogic(MultiblockControllerBase self, IMultiblockPart part,
                                              Operation<ICubeRenderer> method) {
 
-        ICubeRenderer renderer = SusyTextures.Replacements.get(metaTileEntityId, part);
+        ICubeRenderer renderer = ConnectedTextures.get(metaTileEntityId, part);
         if (renderer != null) {
             return renderer;
         }

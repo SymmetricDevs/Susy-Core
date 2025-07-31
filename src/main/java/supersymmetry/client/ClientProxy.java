@@ -40,7 +40,7 @@ import supersymmetry.SuSyValues;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
-import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.client.renderer.textures.ConnectedTextures;
 import supersymmetry.common.CommonProxy;
 import supersymmetry.common.SusyMetaEntities;
 import supersymmetry.common.blocks.SheetedFrameItemBlock;
@@ -80,7 +80,7 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void postLoad() {
-        SusyTextures.Replacements.init();
+        ConnectedTextures.init();
     }
 
     @SubscribeEvent
