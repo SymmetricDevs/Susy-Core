@@ -25,7 +25,6 @@ public class SuSyRecipeLoader {
         FridgeRecipes.init();
         CoagulationRecipes.init();
         VulcanizationRecipes.init();
-        BoilerRecipes.init();
         SusyOreRecipeHandler.init();
         SuSyMaterialRecipeHandler.init();
         registerStoneRecipes();
