@@ -40,6 +40,7 @@ import supersymmetry.SuSyValues;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
+import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.CommonProxy;
 import supersymmetry.common.SusyMetaEntities;
 import supersymmetry.common.blocks.SheetedFrameItemBlock;
@@ -75,6 +76,11 @@ public class ClientProxy extends CommonProxy {
         super.load();
         SuSyMetaBlocks.registerColors();
         SuSyFluidTooltipLoader.registerTooltips();
+    }
+
+    @Override
+    public void postLoad() {
+        SusyTextures.RenderPlacements.init();
     }
 
     @SubscribeEvent

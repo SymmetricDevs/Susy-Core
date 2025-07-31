@@ -3,44 +3,51 @@ package supersymmetry.mixins.ctm;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
-import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
-import com.llamalad7.mixinextras.sugar.Share;
-import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import supersymmetry.api.metatileentity.IConnectable;
+import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.client.renderer.textures.custom.VisualStateRenderer;
 
 @Mixin(value = MetaTileEntityMultiblockPart.class, remap = false)
 public abstract class MetaTileEntityMultiblockPartMixin extends MetaTileEntity implements IMultiblockPart, IConnectable {
 
     // Dummy
-    public MetaTileEntityMultiblockPartMixin() {
+    MetaTileEntityMultiblockPartMixin() {
         super(null);
     }
 
     @Shadow
     public abstract MultiblockControllerBase getController();
 
+
+    @Shadow
+    public abstract ICubeRenderer getBaseTexture();
+
     @Nullable
     @Override
     @SuppressWarnings("AddedMixinMembersNamePattern")
-    public VisualStateRenderer getVisualRenderer(@Nullable IMultiblockPart part) {
+    public IBlockState getVisualState(@Nullable IMultiblockPart part) {
         var controller = getController();
         if (controller != null) {
-            return ((IConnectable) controller).getVisualRenderer(this);
+            if (getBaseTexture() instanceof VisualStateRenderer stateRenderer) {
+                return stateRenderer.getVisualState();
+            } else if (SusyTextures.RenderPlacements.get(controller.metaTileEntityId, null)
+                    instanceof VisualStateRenderer stateRenderer) {
+                return stateRenderer.getVisualState();
+            }
         }
         return null;
     }
@@ -50,45 +57,47 @@ public abstract class MetaTileEntityMultiblockPartMixin extends MetaTileEntity i
         if (super.canRenderInLayer(layer)) {
             return true;
         } else {
-            var stateRenderer = getVisualRenderer(null);
-            if (stateRenderer != null) {
-                return stateRenderer.canRenderInLayer(layer);
+            var controller = getController();
+            if (controller != null) {
+                if (getBaseTexture() instanceof VisualStateRenderer stateRenderer) {
+                    return stateRenderer.canRenderInLayer(layer);
+                } else if (SusyTextures.RenderPlacements.get(controller.metaTileEntityId, null)
+                        instanceof VisualStateRenderer stateRenderer) {
+                    return stateRenderer.canRenderInLayer(layer);
+                }
             }
         }
         return false;
     }
 
-    @Inject(method = "renderMetaTileEntity", at = @At("HEAD"))
-    private void injectConnectableLogic(CCRenderState renderState, Matrix4 translation,
-                                        IVertexOperation[] pipeline, CallbackInfo ci,
-                                        @Share("callOriginal") LocalBooleanRef callOriginal) {
-        var stateRenderer = getVisualRenderer(null);
-        if (stateRenderer != null) {
-            stateRenderer.renderVisualState(renderState, getWorld(), getPos(),
-                    isPainted() ? getPaintingColor() : null);
-            callOriginal.set(false);
-            return;
-        }
-        callOriginal.set(true);
-    }
-
-    @WrapWithCondition(method = "renderMetaTileEntity",
-            at = @At(value = "INVOKE",
-                    target = "Lgregtech/client/renderer/ICubeRenderer;renderOriented(Lcodechicken/lib/render/CCRenderState;Lcodechicken/lib/vec/Matrix4;[Lcodechicken/lib/render/pipeline/IVertexOperation;Lnet/minecraft/util/EnumFacing;)V"))
-    private boolean checkIfSkip(ICubeRenderer i, CCRenderState simply,
-                                Matrix4 dont, IVertexOperation[] care, EnumFacing either,
-                                @Share("callOriginal") LocalBooleanRef callOriginal) {
-
-        return callOriginal.get();
-    }
-
-    @WrapWithCondition(method = "renderMetaTileEntity",
+    @WrapOperation(method = "renderMetaTileEntity",
             at = @At(value = "INVOKE",
                     target = "Lgregtech/client/renderer/ICubeRenderer;render(Lcodechicken/lib/render/CCRenderState;Lcodechicken/lib/vec/Matrix4;[Lcodechicken/lib/render/pipeline/IVertexOperation;)V"))
-    private boolean checkIfSkip(ICubeRenderer i, CCRenderState simply,
-                                Matrix4 dont, IVertexOperation[] care,
-                                @Share("callOriginal") LocalBooleanRef callOriginal) {
+    private void injectConnectableLogic(ICubeRenderer renderer,
+                                        CCRenderState renderState,
+                                        Matrix4 translation,
+                                        IVertexOperation[] pipeline,
+                                        Operation<Void> method) {
 
-        return callOriginal.get();
+        if (getController() != null && renderer instanceof VisualStateRenderer stateRenderer) {
+            stateRenderer.renderVisualState(renderState, getWorld(), getPos(),
+                    isPainted() ? getPaintingColor() : null);
+        } else {
+            method.call(renderer, renderState, translation, pipeline);
+        }
+    }
+
+    @WrapOperation(method = "renderMetaTileEntity",
+            at = @At(value = "INVOKE",
+                    target = "Lgregtech/common/metatileentities/multi/multiblockpart/MetaTileEntityMultiblockPart;getBaseTexture()Lgregtech/client/renderer/ICubeRenderer;"))
+    private ICubeRenderer injectReplaceLogic(MetaTileEntityMultiblockPart self, Operation<ICubeRenderer> method) {
+        var controller = getController();
+        if (controller != null) {
+            ICubeRenderer renderer = SusyTextures.RenderPlacements.get(controller.metaTileEntityId, null);
+            if (renderer != null) {
+                return renderer;
+            }
+        }
+        return method.call(self);
     }
 }

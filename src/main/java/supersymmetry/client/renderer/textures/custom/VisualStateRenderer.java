@@ -7,47 +7,34 @@ import codechicken.lib.vec.Matrix4;
 import com.github.bsideup.jabel.Desugar;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import supersymmetry.client.renderer.textures.SusyTextures;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
 
 @ParametersAreNonnullByDefault
 public class VisualStateRenderer implements ICubeRenderer {
 
     protected final IBlockState visualState;
 
-    @SideOnly(Side.CLIENT)
-    protected TextureAtlasSprite particleSprite;
+    protected final ICubeRenderer delegate;
 
-    @SideOnly(Side.CLIENT)
-    protected Map<EnumFacing, TextureAtlasSprite> sprites;
-
-    public VisualStateRenderer(IBlockState visualState) {
+    public VisualStateRenderer(IBlockState visualState, ICubeRenderer delegate) {
         this.visualState = visualState;
-    }
-
-    public VisualStateRenderer(Block block) {
-        this(block.getDefaultState());
+        this.delegate = delegate;
     }
 
     public IBlockState getVisualState() {
@@ -56,7 +43,7 @@ public class VisualStateRenderer implements ICubeRenderer {
 
     @Override
     public TextureAtlasSprite getParticleSprite() {
-        return this.particleSprite;
+        return delegate.getParticleSprite();
     }
 
     @Override
@@ -68,33 +55,23 @@ public class VisualStateRenderer implements ICubeRenderer {
                                     boolean isActive,
                                     boolean isWorkingEnabled) {
 
-        for (var facing : EnumFacing.values()) {
-            Textures.renderFace(renderState, translation, pipeline, facing, bounds,
-                    sprites.get(facing), BlockRenderLayer.CUTOUT_MIPPED);
-        }
+        delegate.renderOrientedState(renderState, translation, pipeline,
+                bounds, frontFacing, isActive, isWorkingEnabled);
     }
 
     @Override
     public void registerIcons(TextureMap textureMap) {
-        var dispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
-        IBakedModel model = dispatcher.getModelForState(visualState);
-
-        this.particleSprite = model.getParticleTexture();
-        this.sprites = new EnumMap<>(EnumFacing.class);
-
-        for (int i = 0; i < EnumFacing.values().length; i++) {
-            EnumFacing facing = EnumFacing.byIndex(i);
-            List<BakedQuad> quads = model.getQuads(visualState, facing, 0);
-            if (quads.isEmpty()) {
-                sprites.put(facing, textureMap.getMissingSprite());
-                continue;
-            }
-            sprites.put(facing, quads.get(0).getSprite());
-        }
+        /* Do Nothing */
     }
 
     public boolean canRenderInLayer(@NotNull BlockRenderLayer layer) {
         return visualState.getBlock().canRenderInLayer(visualState, layer);
+    }
+
+    public void replace(ResourceLocation... mteIds) {
+        for (var mteId : mteIds) {
+            SusyTextures.replacements.put(mteId, any -> this);
+        }
     }
 
     // TODO: coloring
