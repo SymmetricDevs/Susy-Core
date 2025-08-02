@@ -4,26 +4,22 @@ import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Matrix4;
-import com.github.bsideup.jabel.Desugar;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.WorldType;
-import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import supersymmetry.client.renderer.textures.ConnectedTextures;
 import team.chisel.ctm.client.state.CTMExtendedState;
 
@@ -101,69 +97,19 @@ public class VisualStateRenderer implements ICubeRenderer {
                                   BlockPos pos, int color) {
 
         BlockRenderLayer layer = Textures.RENDER_STATE.get().layer;
-        IBlockState state = visualState;
         if (layer != null && !canRenderInLayer(layer)) return;
-
-        IBlockAccess visualAccess = new VisualBlockAccess(world, pos, state);
+        IBlockState state = visualState;
 
         BlockRendererDispatcher dispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
+        BufferBuilder buffer = renderState.getBuffer();
+
         if (isActive) {
             // Workaround for VABlocks
             IBakedModel model = dispatcher.getModelForState(state);
-            state = new CTMExtendedState(((IExtendedBlockState) state).withProperty(ACTIVE, true), visualAccess, pos);
-            dispatcher.getBlockModelRenderer().renderModel(visualAccess, model, state, pos, renderState.getBuffer(), true);
+            state = new CTMExtendedState(((IExtendedBlockState) state).withProperty(ACTIVE, true), world, pos);
+            dispatcher.getBlockModelRenderer().renderModel(world, model, state, pos, buffer, true);
         } else {
-            dispatcher.renderBlock(state, pos, visualAccess, renderState.getBuffer());
-        }
-    }
-
-    @Desugar
-    private record VisualBlockAccess(IBlockAccess delegate,
-                                     BlockPos origin,
-                                     IBlockState visualState) implements IBlockAccess {
-
-        @Nullable
-        @Override
-        public TileEntity getTileEntity(BlockPos pos) {
-            return pos == origin ? null : delegate.getTileEntity(pos);
-        }
-
-        @Override
-        public int getCombinedLight(BlockPos pos, int lightValue) {
-            return delegate.getCombinedLight(pos, lightValue);
-        }
-
-        @NotNull
-        @Override
-        public IBlockState getBlockState(BlockPos pos) {
-            return pos == origin ? visualState : delegate.getBlockState(pos);
-        }
-
-        @Override
-        public boolean isAirBlock(BlockPos pos) {
-            return delegate.isAirBlock(pos);
-        }
-
-        @NotNull
-        @Override
-        public Biome getBiome(BlockPos pos) {
-            return delegate.getBiome(pos);
-        }
-
-        @Override
-        public int getStrongPower(BlockPos pos, EnumFacing direction) {
-            return delegate.getStrongPower(pos, direction);
-        }
-
-        @NotNull
-        @Override
-        public WorldType getWorldType() {
-            return delegate.getWorldType();
-        }
-
-        @Override
-        public boolean isSideSolid(BlockPos pos, EnumFacing side, boolean _default) {
-            return pos == origin ? visualState.isSideSolid(this, origin, side) : delegate.isSideSolid(pos, side, _default);
+            dispatcher.renderBlock(state, pos, world, buffer);
         }
     }
 }

@@ -5,6 +5,7 @@ import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import gregtech.api.util.GTUtility;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityCleaningMaintenanceHatch;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
@@ -32,8 +33,8 @@ public abstract class MetaTileEntityCleaningMaintenanceHatchMixin extends MetaTi
                                         Operation<Void> method) {
 
         if (getController() != null && renderer instanceof VisualStateRenderer stateRenderer) {
-            stateRenderer.renderVisualState(
-                    renderState, getWorld(), getPos(), isPainted() ? getPaintingColorForRendering() : -1);
+            stateRenderer.renderVisualState(renderState, getWorld(), getPos(), isPainted() ?
+                    GTUtility.convertRGBtoOpaqueRGBA_MC(getPaintingColorForRendering()) : -1);
         } else {
             method.call(renderer, renderState, translation, pipeline);
         }

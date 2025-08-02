@@ -8,6 +8,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
+import gregtech.api.util.GTUtility;
 import gregtech.client.renderer.ICubeRenderer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockRenderLayer;
@@ -72,8 +73,8 @@ public abstract class MultiblockControllerBaseMixin extends MetaTileEntity imple
                                         Operation<Void> method) {
 
         if (isStructureFormed() && renderer instanceof VisualStateRenderer stateRenderer) {
-            stateRenderer.renderVisualState(
-                    renderState, getWorld(), getPos(), isPainted() ? getPaintingColorForRendering() : -1);
+            stateRenderer.renderVisualState(renderState, getWorld(), getPos(), isPainted() ?
+                    GTUtility.convertRGBtoOpaqueRGBA_MC(getPaintingColorForRendering()) : -1);
         } else {
             method.call(renderer, renderState, translation, pipeline);
         }

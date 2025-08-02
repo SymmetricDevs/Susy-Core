@@ -8,6 +8,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
+import gregtech.api.util.GTUtility;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
 import net.minecraft.block.state.IBlockState;
@@ -78,10 +79,9 @@ public abstract class MetaTileEntityMultiblockPartMixin extends MetaTileEntity i
                                         Matrix4 translation,
                                         IVertexOperation[] pipeline,
                                         Operation<Void> method) {
-
         if (getController() != null && renderer instanceof VisualStateRenderer stateRenderer) {
-            stateRenderer.renderVisualState(
-                    renderState, getWorld(), getPos(), isPainted() ? getPaintingColorForRendering() : -1);
+            stateRenderer.renderVisualState(renderState, getWorld(), getPos(), isPainted() ?
+                    GTUtility.convertRGBtoOpaqueRGBA_MC(getPaintingColorForRendering()) : -1);
         } else {
             method.call(renderer, renderState, translation, pipeline);
         }
