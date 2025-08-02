@@ -25,8 +25,6 @@ import team.chisel.ctm.client.state.CTMExtendedState;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static gregtech.api.block.VariantActiveBlock.ACTIVE;
-
 @ParametersAreNonnullByDefault
 public class VisualStateRenderer implements ICubeRenderer {
 
@@ -41,6 +39,9 @@ public class VisualStateRenderer implements ICubeRenderer {
     }
 
     public VisualStateRenderer(IBlockState visualState, ICubeRenderer delegate, boolean isActive) {
+        if (visualState instanceof IExtendedBlockState extendedState) {
+            visualState = extendedState.getClean();
+        }
         this.visualState = visualState;
         this.delegate = delegate;
         this.isActive = isActive;
@@ -87,7 +88,7 @@ public class VisualStateRenderer implements ICubeRenderer {
 
     public void replace(ResourceLocation... mteIds) {
         for (var mteId : mteIds) {
-            ConnectedTextures.replacements.put(mteId, any -> this);
+            ConnectedTextures.REPLACEMENTS.put(mteId, any -> this);
         }
     }
 
@@ -103,13 +104,14 @@ public class VisualStateRenderer implements ICubeRenderer {
         BlockRendererDispatcher dispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
         BufferBuilder buffer = renderState.getBuffer();
 
-        if (isActive) {
+//        if (isActive) {
             // Workaround for VABlocks
             IBakedModel model = dispatcher.getModelForState(state);
-            state = new CTMExtendedState(((IExtendedBlockState) state).withProperty(ACTIVE, true), world, pos);
+//            state = new CTMExtendedState(((IExtendedBlockState) state).withProperty(ACTIVE, true), world, pos);
+            state = new CTMExtendedState(state, world, pos);
             dispatcher.getBlockModelRenderer().renderModel(world, model, state, pos, buffer, true);
-        } else {
-            dispatcher.renderBlock(state, pos, world, buffer);
-        }
+//        } else {
+//            dispatcher.renderBlock(state, pos, world, buffer);
+//        }
     }
 }

@@ -8,6 +8,7 @@
     "BlockMachineMixin",
     "MetaTileEntityCleaningMaintenanceHatchMixin",
     "MetaTileEntityMultiblockPartMixin",
-    "MultiblockControllerBaseMixin"
+    "MultiblockControllerBaseMixin",
+    "SimpleOverlayRendererMixin"
   ]
 }
