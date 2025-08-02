@@ -21,7 +21,7 @@ public abstract class SimpleOverlayRendererMixin implements ICubeRenderer {
     private Matrix4 fixZFighting(Matrix4 renderTranslation, @Local(argsOnly = true) EnumFacing facing) {
 
         if (ConnectedTextures.shouldOffset(this)) {
-            renderTranslation = RenderUtil.adjustTrans(renderTranslation, facing, 1);
+            renderTranslation = RenderUtil.adjustTrans(renderTranslation, facing, 4);
         }
         return renderTranslation;
     }

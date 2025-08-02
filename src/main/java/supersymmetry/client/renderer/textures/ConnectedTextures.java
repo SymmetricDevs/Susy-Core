@@ -208,7 +208,7 @@ public class ConnectedTextures {
 
         STURDY_HSSE_CASING_CTM.replace(gregtechId("advanced_processing_array"));
         PLASCRETE_CTM.replace(gregtechId("cleanroom"));
-        BRONZE_PLATED_BRICKS_CTM.replace(gregtechId("charcoal_pile"));  // Why would one use this...
+        BRONZE_PLATED_BRICKS_CTM.replace(gregtechId("charcoal_pile"));  // Why would one use this...?
 
         register(gregtechId("data_bank"), part ->
                 part instanceof IDataAccessHatch ? COMPUTER_CASING_CTM : HIGH_POWER_CASING_CTM);

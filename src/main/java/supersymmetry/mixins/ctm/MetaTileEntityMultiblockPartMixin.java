@@ -1,14 +1,10 @@
 package supersymmetry.mixins.ctm;
 
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.pipeline.IVertexOperation;
-import codechicken.lib.vec.Matrix4;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
-import gregtech.api.util.GTUtility;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
 import net.minecraft.block.state.IBlockState;
@@ -42,13 +38,12 @@ public abstract class MetaTileEntityMultiblockPartMixin extends MetaTileEntity i
     @SuppressWarnings("AddedMixinMembersNamePattern")
     public IBlockState getVisualState(@Nullable IMultiblockPart part) {
         var controller = getController();
-        if (controller != null) {
-            if (getBaseTexture() instanceof VisualStateRenderer stateRenderer) {
-                return stateRenderer.getVisualState();
-            } else if (ConnectedTextures.get(controller.metaTileEntityId, this)
-                    instanceof VisualStateRenderer stateRenderer) {
-                return stateRenderer.getVisualState();
-            }
+        if (getBaseTexture() instanceof VisualStateRenderer stateRenderer) {
+            return stateRenderer.getVisualState();
+        } else if (controller != null
+                && ConnectedTextures.get(controller.metaTileEntityId, this)
+                        instanceof VisualStateRenderer stateRenderer) {
+            return stateRenderer.getVisualState();
         }
         return null;
     }
@@ -57,34 +52,17 @@ public abstract class MetaTileEntityMultiblockPartMixin extends MetaTileEntity i
     public boolean canRenderInLayer(@NotNull BlockRenderLayer layer) {
         if (super.canRenderInLayer(layer)) {
             return true;
+        } else if (getBaseTexture() instanceof VisualStateRenderer stateRenderer) {
+            return stateRenderer.canRenderInLayer(layer);
         } else {
             var controller = getController();
-            if (controller != null) {
-                if (getBaseTexture() instanceof VisualStateRenderer stateRenderer) {
-                    return stateRenderer.canRenderInLayer(layer);
-                } else if (ConnectedTextures.get(controller.metaTileEntityId, this)
-                        instanceof VisualStateRenderer stateRenderer) {
-                    return stateRenderer.canRenderInLayer(layer);
-                }
+            if (controller != null
+                    && ConnectedTextures.get(controller.metaTileEntityId, this)
+                            instanceof VisualStateRenderer stateRenderer) {
+                return stateRenderer.canRenderInLayer(layer);
             }
         }
         return false;
-    }
-
-    @WrapOperation(method = "renderMetaTileEntity",
-                   at = @At(value = "INVOKE",
-                            target = "Lgregtech/client/renderer/ICubeRenderer;render(Lcodechicken/lib/render/CCRenderState;Lcodechicken/lib/vec/Matrix4;[Lcodechicken/lib/render/pipeline/IVertexOperation;)V"))
-    private void injectConnectableLogic(ICubeRenderer renderer,
-                                        CCRenderState renderState,
-                                        Matrix4 translation,
-                                        IVertexOperation[] pipeline,
-                                        Operation<Void> method) {
-        if (getController() != null && renderer instanceof VisualStateRenderer stateRenderer) {
-            stateRenderer.renderVisualState(renderState, getWorld(), getPos(), isPainted() ?
-                    GTUtility.convertRGBtoOpaqueRGBA_MC(getPaintingColorForRendering()) : -1);
-        } else {
-            method.call(renderer, renderState, translation, pipeline);
-        }
     }
 
     @WrapOperation(method = "renderMetaTileEntity",

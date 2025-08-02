@@ -1,13 +1,15 @@
 {
-  "package": "supersymmetry.mixins.ctm",
-  "refmap": "mixins.susy.refmap.json",
-  "target": "@env(DEFAULT)",
-  "minVersion": "0.8",
-  "compatibilityLevel": "JAVA_8",
-  "client": [
+  "package" : "supersymmetry.mixins.ctm",
+  "refmap" : "mixins.susy.refmap.json",
+  "target" : "@env(DEFAULT)",
+  "minVersion" : "0.8",
+  "compatibilityLevel" : "JAVA_8",
+  "client" : [
     "BlockMachineMixin",
+    "CubeRendererStateMixin",
     "MetaTileEntityCleaningMaintenanceHatchMixin",
     "MetaTileEntityMultiblockPartMixin",
+    "MetaTileEntityRendererMixin",
     "MultiblockControllerBaseMixin",
     "SimpleOverlayRendererMixin"
   ]
