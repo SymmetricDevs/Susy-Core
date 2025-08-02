@@ -12,6 +12,7 @@ public class SuSyLateMixinLoader implements ILateMixinLoader {
 
     public static final List<String> modMixins = ImmutableList.of(
             "bdsandm",
+            "ctm",
             "gregtech",
             "xnet",
             "travelersbackpack",

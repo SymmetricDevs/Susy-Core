@@ -21,24 +21,18 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.fml.common.Loader;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.Supersymmetry;
-import supersymmetry.api.blocks.VariantItemBlockFalling;
 import supersymmetry.api.SusyLog;
+import supersymmetry.api.blocks.VariantItemBlockFalling;
 import supersymmetry.api.event.MobHordeEvent;
 import supersymmetry.api.fluids.SusyGeneratedFluidHandler;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
@@ -49,15 +43,16 @@ import supersymmetry.common.blocks.SuSyMetaBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.materials.SusyMaterials;
-import supersymmetry.common.world.biome.BiomeLunarMaria;
+import supersymmetry.common.world.SuSyBiomes;
 import supersymmetry.common.world.SuSyDimensions;
 import supersymmetry.common.world.biome.BiomeLunarHighlands;
-import supersymmetry.common.world.SuSyBiomes;
+import supersymmetry.common.world.biome.BiomeLunarMaria;
 import supersymmetry.loaders.SuSyWorldLoader;
 import supersymmetry.loaders.SusyOreDictionaryLoader;
 import supersymmetry.loaders.recipes.SuSyRecipeLoader;
 import supersymmetry.modules.SuSyModules;
 
+import java.io.File;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -126,6 +121,9 @@ public class CommonProxy {
         if ((boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment")) {
             new MobHordeEvent((p) -> new EntityZombie(p.world), 4, 8, "zombies").setMaximumDistanceUnderground(10).setNightOnly(true);
         }
+    }
+
+    public void postLoad() {
     }
 
     @SubscribeEvent

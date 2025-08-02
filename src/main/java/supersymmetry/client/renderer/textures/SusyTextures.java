@@ -4,7 +4,6 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.client.renderer.texture.cube.*;
 import gregtech.client.renderer.texture.custom.DrumRenderer;
 import supersymmetry.client.renderer.textures.custom.ExtenderRender;
-
 public class SusyTextures {
 
     public SusyTextures(){
@@ -108,6 +107,12 @@ public class SusyTextures {
     public static final SimpleOverlayRenderer CODE_BREACHER_OVERLAY =
             new SimpleOverlayRenderer("storage/crates/code_breacher");
 
+    public static final SimpleOverlayRenderer STEEL_TURBINE_CASING = new SimpleOverlayRenderer("casings/mechanic/machine_casing_turbine_steel");
+    public static final SimpleOverlayRenderer STAINLESS_TURBINE_CASING = new SimpleOverlayRenderer("casings/mechanic/machine_casing_turbine_stainless_steel");
+    public static final SimpleOverlayRenderer TITANIUM_TURBINE_CASING = new SimpleOverlayRenderer("casings/mechanic/machine_casing_turbine_titanium");
+    public static final SimpleOverlayRenderer TUNGSTENSTEEL_TURBINE_CASING =
+            new SimpleOverlayRenderer("casings/mechanic/machine_casing_turbine_tungstensteel");
+
     public static final SimpleCubeRenderer MASONRY_BRICK = new SimpleCubeRenderer("gregtech:blocks/multiblock_casing/masonry_brick");
 
     public static final DrumRenderer PLASTIC_CAN = new DrumRenderer("storage/drums/plastic_can");
@@ -129,6 +134,5 @@ public class SusyTextures {
     public static final SimpleOrientedCubeRenderer STOCK_READER_FLUID = new SimpleOrientedCubeRenderer("rail_interfaces/content_reader/content_reader_fluid");
 
     public static final OrientedOverlayRenderer STOCK_CONTROLLER = new OrientedOverlayRenderer("rail_interfaces/stock_controller");
-
 
 }
