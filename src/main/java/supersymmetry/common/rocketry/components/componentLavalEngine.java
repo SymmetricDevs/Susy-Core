@@ -24,7 +24,6 @@ import supersymmetry.common.blocks.rocketry.BlockCombustionChamber;
 
 public class componentLavalEngine extends AbstractComponent<componentLavalEngine> {
 
-  public double mass;
   public double radius;
   public double area_ratio;
 
@@ -45,24 +44,24 @@ public class componentLavalEngine extends AbstractComponent<componentLavalEngine
   }
 
   @Override
+  public void writeToNBT(NBTTagCompound tag) {
+    tag.setString("name", this.name);
+    tag.setString("type", this.type);
+    tag.setDouble("radius", this.radius);
+    tag.setDouble("area_ratio", this.area_ratio);
+  }
+
+  @Override
   public Optional<componentLavalEngine> readFromNBT(NBTTagCompound compound) {
-    if (compound.getString("type") != this.type) return Optional.empty();
+    if (compound.getString("type") != this.type || compound.getString("name") != this.name)
+      Optional.empty();
     componentLavalEngine engine = new componentLavalEngine();
-    if (compound.hasKey("mass", Constants.NBT.TAG_DOUBLE)) {
-      engine.mass = compound.getDouble("mass");
-    } else {
-      return Optional.empty();
-    }
-    if (compound.hasKey("radius", Constants.NBT.TAG_DOUBLE)) {
-      engine.radius = compound.getDouble("radius");
-    } else {
-      return Optional.empty();
-    }
-    if (compound.hasKey("area_ratio", Constants.NBT.TAG_DOUBLE)) {
-      engine.area_ratio = compound.getDouble("area_ratio");
-    } else {
-      return Optional.empty();
-    }
+    if (!compound.hasKey("mass", Constants.NBT.TAG_DOUBLE)) return Optional.empty();
+    if (!compound.hasKey("radius", Constants.NBT.TAG_DOUBLE)) return Optional.empty();
+    if (!compound.hasKey("area_ratio", Constants.NBT.TAG_DOUBLE)) return Optional.empty();
+    engine.area_ratio = compound.getDouble("area_ratio");
+    engine.radius = compound.getDouble("radius");
+    engine.mass = compound.getDouble("mass");
     return Optional.of(engine);
   }
 

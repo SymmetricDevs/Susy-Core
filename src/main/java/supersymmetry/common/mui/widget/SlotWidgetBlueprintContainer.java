@@ -24,7 +24,6 @@ public class SlotWidgetBlueprintContainer extends SlotWidget {
 
   @Override
   public void onSlotChanged() {
-    SusyLog.logger.info("onSlotChanged internal");
     super.onSlotChanged();
     this.onSlotChanged.run();
     this.writeClientAction(1, (buf) -> {});

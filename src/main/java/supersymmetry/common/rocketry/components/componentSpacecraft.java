@@ -1,7 +1,8 @@
 package supersymmetry.common.rocketry.components;
 
 import gregtech.api.block.VariantBlock;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -21,7 +22,6 @@ import supersymmetry.common.tile.TileEntityCoverable;
 
 public class componentSpacecraft extends AbstractComponent<componentSpacecraft> {
   public double radius;
-  public double mass;
   public Map<String, Integer> parts = new HashMap<>();
   public Map<String, Integer> instruments = new HashMap<>();
   public boolean hasAir;
@@ -44,41 +44,53 @@ public class componentSpacecraft extends AbstractComponent<componentSpacecraft> 
   }
 
   @Override
-  public Optional<componentSpacecraft> readFromNBT(NBTTagCompound compound) {
-    componentSpacecraft controlpod = new componentSpacecraft();
-    if (compound.getString("name") == controlpod.getName()
-        && compound.getString("type") == controlpod.getName()) {
-      if (compound.hasKey("radius", NBT.TAG_DOUBLE)) {
-        if (compound.hasKey("mass", NBT.TAG_DOUBLE)) {
-          if (compound.hasKey("hasAir")) {
-            if (compound.hasKey("volume", NBT.TAG_DOUBLE)) {
-              if (compound.hasKey("parts", NBT.TAG_COMPOUND)) {
-                if (compound.hasKey("instruments", NBT.TAG_COMPOUND)) {
-                  controlpod.radius = compound.getDouble("radius");
-                  controlpod.mass = compound.getDouble("mass");
-                  controlpod.volume = compound.getDouble("volume");
-                  controlpod.hasAir = compound.getBoolean("hasAir");
-                  NBTTagCompound instrumentsList =
-                      compound.getCompoundTag("instruments"); // not cheking all of that
-                  for (String key : instrumentsList.getKeySet()) {
-                    controlpod.instruments.put(key, compound.getInteger(key));
-                  }
+  public void writeToNBT(NBTTagCompound tag) {
+    tag.setString("name", this.name);
+    tag.setString("type", this.type);
+    tag.setDouble("radius", this.radius);
+    tag.setDouble("volume", this.volume);
+    tag.setBoolean("hasAir", this.hasAir);
+    NBTTagCompound instruments = new NBTTagCompound();
+    NBTTagCompound parts = new NBTTagCompound();
+    for (var part : this.parts.entrySet()) {
+      parts.setInteger(part.getKey(), part.getValue());
+    }
+    for (var instrument : this.instruments.entrySet()) {
+      instruments.setInteger(instrument.getKey(), instrument.getValue());
+    }
+    tag.setTag("instruments", instruments);
+    tag.setTag("tools", parts);
+  }
 
-                  NBTTagCompound partsList =
-                      compound.getCompoundTag("parts"); // not cheking all of that either
-                  for (String key : partsList.getKeySet()) {
-                    controlpod.instruments.put(key, compound.getInteger(key));
-                  }
-                  return Optional.of(controlpod);
-                }
-              }
-            }
-          }
-        }
-      }
+  @Override
+  public Optional<componentSpacecraft> readFromNBT(NBTTagCompound compound) {
+    componentSpacecraft spacecraft = new componentSpacecraft();
+
+    if (!compound.getString("name").equals(spacecraft.name)) return Optional.empty();
+    if (!compound.getString("type").equals(spacecraft.type)) return Optional.empty();
+    if (!compound.hasKey("radius", NBT.TAG_DOUBLE)) return Optional.empty();
+    if (!compound.hasKey("mass", NBT.TAG_DOUBLE)) return Optional.empty();
+    if (!compound.hasKey("hasAir")) return Optional.empty();
+    if (!compound.hasKey("volume", NBT.TAG_DOUBLE)) return Optional.empty();
+    if (!compound.hasKey("parts", NBT.TAG_COMPOUND)) return Optional.empty();
+    if (!compound.hasKey("instruments", NBT.TAG_COMPOUND)) return Optional.empty();
+
+    spacecraft.radius = compound.getDouble("radius");
+    spacecraft.mass = compound.getDouble("mass");
+    spacecraft.volume = compound.getDouble("volume");
+    spacecraft.hasAir = compound.getBoolean("hasAir");
+
+    NBTTagCompound instrumentsList = compound.getCompoundTag("instruments");
+    for (String key : instrumentsList.getKeySet()) {
+      spacecraft.instruments.put(key, compound.getInteger(key));
     }
 
-    return Optional.empty();
+    NBTTagCompound partsList = compound.getCompoundTag("parts");
+    for (String key : partsList.getKeySet()) {
+      spacecraft.parts.put(key, compound.getInteger(key));
+    }
+
+    return Optional.of(spacecraft);
   }
 
   @Override

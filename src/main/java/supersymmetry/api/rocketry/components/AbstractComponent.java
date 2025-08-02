@@ -37,10 +37,18 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
   private static boolean registrylock = false;
   private static final Map<String, Class<? extends AbstractComponent<?>>> nameToComponentRegistry =
       new HashMap<>();
+  // meant to verify the compatability between the component and the entire rocket stage so that you
+  // dont end up with a liquid fuel engine on a solid fuel tank, return true if everything is fine
+  protected Predicate<Map<String, AbstractComponent<?>>> compatabilityValidationPredicate =
+      t -> {
+        return true;
+      };
+
   protected String name;
   // ex name="laval_engine", type="engine" so that you can do some silly things with engine types
   protected String type;
   protected BuildStat status = BuildStat.ERROR;
+  protected double mass = 100;//kg?
 
   public AbstractComponent(
       String name,
@@ -59,8 +67,26 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
     return this.type;
   }
 
+  public Predicate<Map<String, AbstractComponent<?>>> getCompatabilityValidationPredicate() {
+    return compatabilityValidationPredicate;
+  }
+
+  public void setCompatabilityValidationPredicate(
+      Predicate<Map<String, AbstractComponent<?>>> compatabilityValidationPredicate) {
+    this.compatabilityValidationPredicate = compatabilityValidationPredicate;
+  }
+
   public static Map<String, Class<? extends AbstractComponent<?>>> getNameRegistry() {
     return new HashMap<>(nameToComponentRegistry);
+  }
+
+  public static boolean nameRegistered(String name) {
+    return nameToComponentRegistry.containsKey(name)
+        && registry.stream().anyMatch(x -> x.getName() == name);
+  }
+
+  public double getMass() {
+    return this.mass;
   }
 
   public static AbstractComponent<?> getComponentFromName(String name) {
@@ -119,6 +145,8 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
   public abstract Optional<NBTTagCompound> analyzePattern(
       StructAnalysis analysis, AxisAlignedBB aabb);
 
+  public abstract void writeToNBT(NBTTagCompound tag);
+
   public abstract Optional<T> readFromNBT(NBTTagCompound compound);
 
   public static void writeBlocksToNBT(
@@ -144,11 +172,7 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
           }
         }
       }
-      String key =
-          block.getRegistryName().toString()
-              + "#"
-              + meta
-              + "#block"; // i am sorry for this, but it kinda works
+      String key = block.getRegistryName().toString() + "#" + meta + "#block";
       counts.put(key, counts.getOrDefault(key, 0) + 1);
     }
 

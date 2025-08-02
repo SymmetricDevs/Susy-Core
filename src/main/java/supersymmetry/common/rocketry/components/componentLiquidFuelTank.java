@@ -25,7 +25,6 @@ import supersymmetry.common.tile.TileEntityCoverable;
 public class componentLiquidFuelTank extends AbstractComponent<componentLiquidFuelTank> {
   public int volume;
   public double radius;
-  public double mass;
 
   public componentLiquidFuelTank() {
     super(
@@ -44,27 +43,29 @@ public class componentLiquidFuelTank extends AbstractComponent<componentLiquidFu
         });
   }
 
+  @Override
+  public void writeToNBT(NBTTagCompound tag) {
+    tag.setString("name", this.name);
+    tag.setString("type", this.type);
+    tag.setDouble("radius", this.radius);
+    tag.setDouble("mass", this.mass);
+    tag.setInteger("volume", this.volume);
+  }
+
   // but the Lord laughs at the wicked,
   // for he knows their day is coming.
   @Override
   public Optional<componentLiquidFuelTank> readFromNBT(NBTTagCompound compound) {
-    if (compound.getString("type") != this.type) return Optional.empty();
+    if (compound.getString("type") != this.type || compound.getString("name") != this.name)
+      Optional.empty();
     componentLiquidFuelTank tank = new componentLiquidFuelTank();
-    if (compound.hasKey("mass", Constants.NBT.TAG_DOUBLE)) {
-      tank.mass = compound.getDouble("mass");
-    } else {
-      return Optional.empty();
-    }
-    if (compound.hasKey("radius", Constants.NBT.TAG_DOUBLE)) {
-      tank.radius = compound.getDouble("radius");
-    } else {
-      return Optional.empty();
-    }
-    if (compound.hasKey("area_ratio", Constants.NBT.TAG_DOUBLE)) {
-      tank.volume = compound.getInteger("volume");
-    } else {
-      return Optional.empty();
-    }
+    if (!compound.hasKey("mass", Constants.NBT.TAG_DOUBLE)) Optional.empty();
+    if (!compound.hasKey("radius", Constants.NBT.TAG_DOUBLE)) Optional.empty();
+    if (!compound.hasKey("area_ratio", Constants.NBT.TAG_DOUBLE)) Optional.empty();
+    tank.volume = compound.getInteger("volume");
+    tank.radius = compound.getDouble("radius");
+    tank.mass = compound.getDouble("mass");
+
     return Optional.of(tank);
   }
 

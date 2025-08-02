@@ -13,6 +13,7 @@ import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
 
 public class componentInterstage extends AbstractComponent<componentInterstage> {
+ public double radius;
 
   public componentInterstage() {
     super(
@@ -31,22 +32,24 @@ public class componentInterstage extends AbstractComponent<componentInterstage> 
         });
   }
 
-  public double mass;
-  public double radius;
+  @Override
+  public void writeToNBT(NBTTagCompound tag) {
+    tag.setString("name", this.name);
+    tag.setString("type", this.type);
+    tag.setDouble("mass", this.mass);
+    tag.setDouble("radius", this.radius);
+  }
 
   @Override
   public Optional<componentInterstage> readFromNBT(NBTTagCompound compound) {
     componentInterstage interstage = new componentInterstage();
-    if (compound.getString("type") == this.type && compound.getString("name") == this.name) {
-      if (compound.hasKey("mass", NBT.TAG_DOUBLE)) {
-        if (compound.hasKey("radius", NBT.TAG_DOUBLE)) {
-          interstage.radius = compound.getDouble("radius");
-          interstage.mass = compound.getDouble("mass");
-          return Optional.of(interstage);
-        }
-      }
-    }
-    return Optional.empty();
+    if (compound.getString("type") != this.type || compound.getString("name") != this.name)
+      Optional.empty();
+    if (!compound.hasKey("mass", NBT.TAG_DOUBLE)) Optional.empty();
+    if (!compound.hasKey("radius", NBT.TAG_DOUBLE)) Optional.empty();
+    interstage.radius = compound.getDouble("radius");
+    interstage.mass= compound.getDouble("mass");
+    return Optional.of(interstage);
   }
 
   @Override

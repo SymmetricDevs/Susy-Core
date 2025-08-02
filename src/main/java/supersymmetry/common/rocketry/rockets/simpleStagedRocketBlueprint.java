@@ -1,0 +1,104 @@
+package supersymmetry.common.rocketry.rockets;
+
+import java.util.List;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagIntArray;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.util.Constants.NBT;
+import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
+import supersymmetry.api.rocketry.rockets.rocketStage;
+
+public class simpleStagedRocketBlueprint extends AbstractRocketBlueprint {
+  public simpleStagedRocketBlueprint(String name, ResourceLocation entity) {
+    super(name, entity);
+  }
+
+  @Override
+  public NBTTagCompound writeToNBT() {
+    NBTTagCompound tag = new NBTTagCompound();
+    NBTTagList stageList = new NBTTagList();
+    NBTTagList ignitionOrder = new NBTTagList();
+    this.getStages().stream().forEach(x -> stageList.appendTag(x.writeToNBT()));
+    this.getIgnitionStages().stream().forEach(x -> ignitionOrder.appendTag(new NBTTagIntArray(x)));
+
+    tag.setTag("stages", stageList);
+    tag.setTag("ignitionOrder", ignitionOrder);
+    tag.setString("name", this.getName());
+    tag.setBoolean("buildstat", this.isFullBlueprint());
+
+    return tag;
+  }
+
+  @Override
+  public boolean readFromNBT(NBTTagCompound tag) {
+    if (!tag.hasKey("stages", NBT.TAG_LIST)) return false;
+    if (!tag.hasKey("ignitionOrder", NBT.TAG_LIST)) return false;
+    if (!tag.hasKey("name", NBT.TAG_STRING)) return false;
+    if (!tag.hasKey("buildstat")) return false;
+    var stagesCompounds =
+        tag.getTagList("stages", NBT.TAG_COMPOUND).tagList.stream()
+            .map(x -> (NBTTagCompound) x)
+            .toList();
+    for (var comp : stagesCompounds) {
+      var stage = new rocketStage();
+      if (stage.readfromNBT(comp)) {
+        this.stages.add(stage);
+
+      } else {
+        return false;
+      }
+    }
+    tag.getTagList("ignitionOrder", NBT.TAG_INT_ARRAY).tagList.stream()
+        .map(x -> (NBTTagIntArray) x)
+        .forEach(t -> this.ignitionStages.add(t.getIntArray()));
+
+    this.setName(tag.getString("name"));
+
+    return true;
+  }
+
+  public class Builder {
+    String name;
+    ResourceLocation location;
+    int stageCount = 0;
+    public List<rocketStage> stages;
+    public List<int[]> ignitionSequence;
+
+    public Builder(String name) {
+      this.name = name;
+    }
+
+    public Builder entityResourceLocation(ResourceLocation rocket) {
+      this.location = rocket;
+
+      return this;
+    }
+
+    public Builder stage(rocketStage stage) {
+      this.stages.add(stage);
+      ignitionSequence.add(new int[] {stageCount});
+      stageCount++;
+
+      return this;
+    }
+
+    public Builder ignitesWith(rocketStage stage) {
+      this.stages.add(stage);
+
+      int[] ignitions = ignitionSequence.get(ignitionSequence.size() - 1 /*last one added*/);
+      ignitions[ignitions.length] = stageCount;
+      stageCount++;
+      return this;
+    }
+
+    public simpleStagedRocketBlueprint build() {
+      simpleStagedRocketBlueprint blueprint = new simpleStagedRocketBlueprint(name, location);
+      blueprint.setStages(stages);
+      blueprint.setIgnitionStages(ignitionSequence);
+      assert !blueprint.isFullBlueprint()
+          : "full blueprint produced by the builder, thats not meant to happen";
+      return blueprint;
+    }
+  }
+}

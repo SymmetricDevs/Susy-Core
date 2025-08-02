@@ -19,7 +19,6 @@ import supersymmetry.common.tile.TileEntityCoverable;
 
 public class componentControlPod extends AbstractComponent<componentControlPod> {
   public double radius;
-  public double mass;
   public Map<String, Integer> parts = new HashMap<>();
   public Map<String, Integer> instruments = new HashMap<>();
   public boolean hasAir;
@@ -177,40 +176,52 @@ public class componentControlPod extends AbstractComponent<componentControlPod> 
   }
 
   @Override
+  public void writeToNBT(NBTTagCompound tag) {
+    tag.setString("name", this.name);
+    tag.setString("type", this.type);
+    tag.setDouble("radius", this.radius);
+    tag.setDouble("volume", this.volume);
+    tag.setBoolean("hasAir", this.hasAir);
+    NBTTagCompound instruments = new NBTTagCompound();
+    NBTTagCompound parts = new NBTTagCompound();
+    for (var part : this.parts.entrySet()) {
+      parts.setInteger(part.getKey(), part.getValue());
+    }
+    for (var instrument : this.instruments.entrySet()) {
+      instruments.setInteger(instrument.getKey(), instrument.getValue());
+    }
+    tag.setTag("instruments", instruments);
+    tag.setTag("tools", parts);
+  }
+
+  @Override
   public Optional<componentControlPod> readFromNBT(NBTTagCompound compound) {
     componentControlPod controlpod = new componentControlPod();
-    if (compound.getString("name") == controlpod.name
-        && compound.getString("type") == controlpod.type) {
-      if (compound.hasKey("radius", NBT.TAG_DOUBLE)) {
-        if (compound.hasKey("mass", NBT.TAG_DOUBLE)) {
-          if (compound.hasKey("hasAir")) {
-            if (compound.hasKey("volume", NBT.TAG_DOUBLE)) {
-              if (compound.hasKey("parts", NBT.TAG_COMPOUND)) {
-                if (compound.hasKey("instruments", NBT.TAG_COMPOUND)) {
-                  controlpod.radius = compound.getDouble("radius");
-                  controlpod.mass = compound.getDouble("mass");
-                  controlpod.volume = compound.getDouble("volume");
-                  controlpod.hasAir = compound.getBoolean("hasAir");
-                  NBTTagCompound instrumentsList =
-                      compound.getCompoundTag("instruments"); // not cheking all of that
-                  for (String key : instrumentsList.getKeySet()) {
-                    controlpod.instruments.put(key, compound.getInteger(key));
-                  }
 
-                  NBTTagCompound partsList =
-                      compound.getCompoundTag("parts"); // not cheking all of that
-                  for (String key : partsList.getKeySet()) {
-                    controlpod.instruments.put(key, compound.getInteger(key));
-                  }
-                  return Optional.of(controlpod);
-                }
-              }
-            }
-          }
-        }
-      }
+    if (!compound.getString("name").equals(controlpod.name)) return Optional.empty();
+    if (!compound.getString("type").equals(controlpod.type)) return Optional.empty();
+    if (!compound.hasKey("radius", NBT.TAG_DOUBLE)) return Optional.empty();
+    if (!compound.hasKey("mass", NBT.TAG_DOUBLE)) return Optional.empty();
+    if (!compound.hasKey("hasAir")) return Optional.empty();
+    if (!compound.hasKey("volume", NBT.TAG_DOUBLE)) return Optional.empty();
+    if (!compound.hasKey("parts", NBT.TAG_COMPOUND)) return Optional.empty();
+    if (!compound.hasKey("instruments", NBT.TAG_COMPOUND)) return Optional.empty();
+
+    controlpod.radius = compound.getDouble("radius");
+    controlpod.mass = compound.getDouble("mass");
+    controlpod.volume = compound.getDouble("volume");
+    controlpod.hasAir = compound.getBoolean("hasAir");
+
+    NBTTagCompound instrumentsList = compound.getCompoundTag("instruments");
+    for (String key : instrumentsList.getKeySet()) {
+      controlpod.instruments.put(key, compound.getInteger(key));
     }
 
-    return Optional.empty();
+    NBTTagCompound partsList = compound.getCompoundTag("parts");
+    for (String key : partsList.getKeySet()) {
+      controlpod.parts.put(key, compound.getInteger(key));
+    }
+
+    return Optional.of(controlpod);
   }
 }

@@ -12,6 +12,7 @@ import gregtech.api.util.Position;
 import gregtech.api.util.Size;
 import java.util.HashMap;
 import java.util.Map;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import supersymmetry.api.SusyLog;
 
@@ -19,7 +20,7 @@ public class RocketSimulatorComponentContainerWidget extends AbstractWidgetGroup
   public int rowSkip; // to keep track of the distance between widgets
   public static int rowSeparation = 18; // mc slot size hopefully
   public Map<String, listEntry> linkedWidgets = new HashMap<>();
-  private EntityPlayer activePlayer;
+  private EntityPlayer activePlayer;//maybe use later to drop items into?
 
   public RocketSimulatorComponentContainerWidget(
       Position position, Size size, EntityPlayer player) {
@@ -30,9 +31,9 @@ public class RocketSimulatorComponentContainerWidget extends AbstractWidgetGroup
     this.activePlayer = player;
   }
 
+  // note that you need the unlocalized text here
   public void addSlotList(
       String text, HorizontalScrollableListWidget scrollableListWidget, int[] validValues) {
-    SusyLog.logger.info("addslot event, will break if it doesnt run on a server");
     int scrollbarPadding =
         scrollableListWidget.sliderActive ? HorizontalScrollableListWidget.scrollPaneWidth : 0;
 
@@ -40,7 +41,7 @@ public class RocketSimulatorComponentContainerWidget extends AbstractWidgetGroup
         new LabelWidget(
             0,
             0,
-            text,
+            I18n.format("susy.machine.rocket_simulator.component_text_widget." + text),
             () -> {
               return 0x404040;
             });
@@ -87,6 +88,7 @@ public class RocketSimulatorComponentContainerWidget extends AbstractWidgetGroup
     entry.selector = selector;
     entry.setWidgetIndex(selector);
     entry.resetBackgroundWidget();
+    this.linkedWidgets.put(text, entry);
     this.addWidget(entry);
     // this is rather bad, but im not sure how to do it better :c
 

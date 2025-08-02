@@ -134,7 +134,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
 
                     break;
                 } else {
-                    SusyLog.logger.info("scan failed, reason: {}",struct.status); struct.status = BuildStat.EMPTY; break;
+                    SusyLog.logger.info("scan failed, reason: {}",struct.status); break;
                 }
                 
             }

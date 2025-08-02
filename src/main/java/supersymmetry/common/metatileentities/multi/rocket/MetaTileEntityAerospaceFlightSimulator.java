@@ -25,7 +25,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
+
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -36,6 +38,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.util.Constants;
 import org.jetbrains.annotations.NotNull;
+
+import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.mui.widget.HorizontalScrollableListWidget;
@@ -269,7 +273,37 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     return false;
   }
 
-  private boolean verifyDatacardArrangement() {
+  enum componentCheckResult {
+    LACKING_CARDS("lacking_cards"),
+    MISSING_CARD("missing_card_in_first_slot"),
+    SUCCESS("success"),
+    INCORRECT_COUNT("incorrect_card_count");
+    String key;
+
+    private componentCheckResult(String key) {
+      this.key = key;
+    }
+
+    public String getKey() {
+      return "susy.machine.rocket_simulator.encoding_error." + this.key;
+    }
+    
+    //another victim of the lsp formatting
+    public String getFullError(
+        String component /*the component name that it failed at */, int[] validCounts) {
+      String error =
+          I18n.format(this.getKey())
+              + " "
+              + I18n.format("susy.machine.rocket_simulator.component_name." + component);
+      String expected =
+          I18n.format("susy.machine.rocket_simulator.expectation")
+              + " "
+              + Arrays.toString(validCounts);
+      return error + "\n" + expected;
+    }
+  }
+
+  private boolean verifyDatacardArrangement(RocketSimulatorComponentContainerWidget container) {
     // assumes that it has all of the nbt's since i dont wanna do that entire thing again
 
     NBTTagList componentsList =
@@ -277,11 +311,13 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             .getStackInSlot(0)
             .getTagCompound()
             .getTagList("components", Constants.NBT.TAG_LIST);
+    List<AbstractComponent<?>> components = new ArrayList<>(); 
     for (int i = 0; i < componentsList.tagCount(); i++) {
       NBTTagCompound comp = componentsList.getCompoundTagAt(i);
       List<DataStorageLoader> cardSlots = this.components.get(comp.getString("type")).cards;
       int count = (int) cardSlots.stream().map(x -> !x.isEmpty()).count();
       if (IntStream.of(comp.getIntArray("allowedCounts")).noneMatch(x -> x == count)) {
+           
         return false;
       }
     }
@@ -296,7 +332,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
   public void SetDefaultBlueprint(Widget.ClickData data) {
     this.markDirty();
     master_blueprint.clearNBT();
-    master_blueprint.mutateItem("rocketType", "soyuz");
+    master_blueprint.mutateItem("name", "soyuz");
     NBTTagList components = new NBTTagList();
     NBTTagCompound fuel_tank = new NBTTagCompound();
     fuel_tank.setString("type", "tank");
@@ -327,6 +363,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
   }
 
   private class ComponentListEntry {
+
     public List<DataStorageLoader> cards;
     public int[] validCounts;
 
