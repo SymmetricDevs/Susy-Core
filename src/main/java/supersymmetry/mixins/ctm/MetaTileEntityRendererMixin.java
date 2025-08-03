@@ -16,9 +16,10 @@ public class MetaTileEntityRendererMixin {
     @ModifyExpressionValue(method = "renderBlock",
                            at = @At(value = "NEW",
                                     target = "gregtech/client/renderer/CubeRendererState"))
-    private CubeRendererState replaceWorld(CubeRendererState original,
-                                           @Local(argsOnly = true) BlockPos pos,
-                                           @Local(name = "metaTileEntity") MetaTileEntity mte) {
+    private CubeRendererState writeBlockPos(
+            CubeRendererState original,
+            @Local(argsOnly = true) BlockPos pos,
+            @Local(name = "metaTileEntity") MetaTileEntity mte) {
 
         return CRSExtension.cast(original).susy$withPos(pos);
     }

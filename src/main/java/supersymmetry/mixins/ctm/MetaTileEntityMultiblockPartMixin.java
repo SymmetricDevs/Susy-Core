@@ -68,7 +68,7 @@ public abstract class MetaTileEntityMultiblockPartMixin extends MetaTileEntity i
     @WrapOperation(method = "renderMetaTileEntity",
                    at = @At(value = "INVOKE",
                             target = "Lgregtech/common/metatileentities/multi/multiblockpart/MetaTileEntityMultiblockPart;getBaseTexture()Lgregtech/client/renderer/ICubeRenderer;"))
-    private ICubeRenderer injectReplaceLogic(MetaTileEntityMultiblockPart self, Operation<ICubeRenderer> method) {
+    private ICubeRenderer overridesBaseTexture(MetaTileEntityMultiblockPart self, Operation<ICubeRenderer> method) {
         var controller = getController();
         if (controller != null) {
             ICubeRenderer renderer = ConnectedTextures.get(controller.metaTileEntityId, this);

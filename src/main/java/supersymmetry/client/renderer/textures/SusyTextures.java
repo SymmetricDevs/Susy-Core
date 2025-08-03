@@ -103,20 +103,12 @@ public class SusyTextures {
     public static final SimpleOverlayRenderer RESTRICTIVE_FILTER_FILTER_OVERLAY = new SimpleOverlayRenderer("cover/overlay_restrictive_filter");
     public static final SimpleOverlayRenderer STRAND_BUS_OVERLAY =
             new SimpleOverlayRenderer("logistics/overlay_strand_bus");
-
     public static final SimpleOverlayRenderer CODE_BREACHER_OVERLAY =
             new SimpleOverlayRenderer("storage/crates/code_breacher");
-
-    public static final SimpleOverlayRenderer STEEL_TURBINE_CASING = new SimpleOverlayRenderer("casings/mechanic/machine_casing_turbine_steel");
-    public static final SimpleOverlayRenderer STAINLESS_TURBINE_CASING = new SimpleOverlayRenderer("casings/mechanic/machine_casing_turbine_stainless_steel");
-    public static final SimpleOverlayRenderer TITANIUM_TURBINE_CASING = new SimpleOverlayRenderer("casings/mechanic/machine_casing_turbine_titanium");
-    public static final SimpleOverlayRenderer TUNGSTENSTEEL_TURBINE_CASING =
-            new SimpleOverlayRenderer("casings/mechanic/machine_casing_turbine_tungstensteel");
 
     public static final SimpleCubeRenderer MASONRY_BRICK = new SimpleCubeRenderer("gregtech:blocks/multiblock_casing/masonry_brick");
 
     public static final DrumRenderer PLASTIC_CAN = new DrumRenderer("storage/drums/plastic_can");
-
 
     // Stock stuff
     //public static final SimpleCubeRenderer STOCK_MACHINE_CASING = new SimpleCubeRenderer("rail_interfaces/stock_machine_casing/stock_machine_casing");
