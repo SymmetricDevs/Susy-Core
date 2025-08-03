@@ -18,15 +18,11 @@ public abstract class MetaTileEntityCleaningMaintenanceHatchMixin extends MetaTi
         super(null, 0);
     }
 
-    @WrapOperation(
-            method = "renderMetaTileEntity",
-            at =
-                    @At(
-                            value = "INVOKE",
-                            target =
-                                    "Lgregtech/common/metatileentities/multi/multiblockpart/MetaTileEntityCleaningMaintenanceHatch;getBaseTexture()Lgregtech/client/renderer/ICubeRenderer;"))
-    private ICubeRenderer injectReplaceLogic(
-            MetaTileEntityCleaningMaintenanceHatch self, Operation<ICubeRenderer> method) {
+    @WrapOperation(method = "renderMetaTileEntity",
+                   at = @At(value = "INVOKE",
+                            target = "Lgregtech/common/metatileentities/multi/multiblockpart/MetaTileEntityCleaningMaintenanceHatch;getBaseTexture()Lgregtech/client/renderer/ICubeRenderer;"))
+    private ICubeRenderer injectReplaceLogic(MetaTileEntityCleaningMaintenanceHatch self,
+                                             Operation<ICubeRenderer> method) {
 
         var controller = getController();
         if (controller != null) {

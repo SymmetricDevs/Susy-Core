@@ -60,8 +60,8 @@ public abstract class MultiblockControllerBaseMixin extends MetaTileEntity imple
     @WrapOperation(method = "renderMetaTileEntity",
                    at = @At(value = "INVOKE",
                             target = "Lgregtech/api/metatileentity/multiblock/MultiblockControllerBase;getBaseTexture(Lgregtech/api/metatileentity/multiblock/IMultiblockPart;)Lgregtech/client/renderer/ICubeRenderer;"))
-    private ICubeRenderer injectReplaceLogic(
-            MultiblockControllerBase self, IMultiblockPart part, Operation<ICubeRenderer> method) {
+    private ICubeRenderer injectReplaceLogic(MultiblockControllerBase self, IMultiblockPart part,
+                                             Operation<ICubeRenderer> method) {
 
         ICubeRenderer renderer = ConnectedTextures.get(metaTileEntityId, part);
         if (renderer != null) {
