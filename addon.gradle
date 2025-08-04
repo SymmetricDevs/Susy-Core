@@ -1,0 +1,2 @@
+// enable JLine Terminal since idea_rt.jar is no longer added to the classpath
+minecraft.extraRunJvmArguments.add('-Dterminal.jline=true')
