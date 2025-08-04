@@ -6,9 +6,7 @@
   "compatibilityLevel" : "JAVA_8",
   "mixins" : [
     "AnonToolDefinitionAccessor",
-    "BlockMachineMixin",
     "BlockPipeAccessor",
-    "CommonProxyMixin",
     "MetaTileEntityCrateAccessor",
     "MetaTileEntityDrumAccessor",
     "MetaTileEntityFluidDrillMixin",
@@ -23,12 +21,7 @@
     "RecipeBuilderAccessor",
     "RecipeMapsMixin",
     "RecyclingRecipesMixin",
-    "SyncedTileEntityBaseMixin",
-    "TileEntityPipeBaseMixin",
     "ToolBuilderAccessor",
     "ToolItemsMixin"
-  ],
-  "client" : [
-    "TargetBlockAccessMixin"
   ]
 }
