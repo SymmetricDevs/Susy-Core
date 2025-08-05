@@ -358,7 +358,7 @@ public class MetaTileEntitySuSyLargeBoiler extends MultiblockWithDisplayBase imp
         int filled = 0, capacity = 0;
         for (IFluidTank tank : tanks) {
             if (tank == null || tank.getFluid() == null) continue;
-            if (SuSyBoilerLogic.BOILER_FLUID.test(tank.getFluid())) {
+            if (CommonFluidFilters.BOILER_FLUID.test(tank.getFluid())) {
                 filled += tank.getFluidAmount();
                 capacity += tank.getCapacity();
             }

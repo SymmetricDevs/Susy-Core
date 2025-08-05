@@ -2,7 +2,6 @@ package supersymmetry.common.metatileentities.single.steam;
 
 import gregtech.api.GTValues;
 import gregtech.api.capability.IFilter;
-import gregtech.api.capability.impl.CommonFluidFilters;
 import gregtech.api.capability.impl.FilteredFluidHandler;
 import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.gui.GuiTextures;
@@ -12,13 +11,11 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMaps;
-import gregtech.api.unification.material.Materials;
 import gregtech.client.particle.VanillaParticleEffects;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.ConfigHolder;
 import gregtech.common.metatileentities.steam.boiler.SteamBoiler;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.Object2IntMaps;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -35,7 +32,6 @@ import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.capability.impl.SuSyBoilerLogic;
 
 import java.util.Collections;
-import java.util.Objects;
 
 public class SuSyLiquidBoiler extends SteamBoiler {
 
@@ -46,7 +42,7 @@ public class SuSyLiquidBoiler extends SteamBoiler {
 
         @Override
         public boolean test(@NotNull FluidStack fluidStack) {
-            return !fluidStack.getFluid().isGaseous() && SuSyBoilerLogic.BOILER_FLUID.test(fluidStack);
+            return !fluidStack.getFluid().isGaseous() && SuSyBoilerLogic.BOILER_FUEL.test(fluidStack);
         }
 
         @Override
