@@ -107,6 +107,10 @@ public class SusyTextures {
     public static final SimpleCubeRenderer MONEL_500_CASING = new SimpleCubeRenderer("gregtech:blocks/multiblock_casing/monel_500_casing");
     public static final SimpleCubeRenderer CONDUCTIVE_COPPER_PIPE = new SimpleCubeRenderer("gregtech:blocks/multiblock_casing/copper_casing_pipe");
     public static final SimpleCubeRenderer ULV_STRUCTURAL_CASING = new SimpleCubeRenderer("gregtech:blocks/multiblock_casing/ulv_structural_casing");
+    public static final SimpleCubeRenderer STEEL_TURBINE_CASING =
+            new SimpleCubeRenderer("gregtech:blocks/casings/mechanic/machine_casing_turbine_steel");
+    public static final SimpleCubeRenderer TITANIUM_TURBINE_CASING =
+            new SimpleCubeRenderer("gregtech:blocks/casings/mechanic/machine_casing_turbine_titanium");
 
     public static final DrumRenderer PLASTIC_CAN = new DrumRenderer("storage/drums/plastic_can");
 
