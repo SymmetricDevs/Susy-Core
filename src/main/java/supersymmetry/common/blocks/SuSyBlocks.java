@@ -50,6 +50,7 @@ public class SuSyBlocks {
     public static BlockConveyor CONVEYOR_BELT;
     public static BlockRocketAssemblerCasing ROCKET_ASSEMBLER_CASING;
     public static BlockRegolith REGOLITH;
+    public static BlocksFakeWool FAKEWOOL;
 
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
@@ -140,6 +141,9 @@ public class SuSyBlocks {
 
         REGOLITH = new BlockRegolith();
         REGOLITH.setRegistryName("regolith");
+
+        FAKEWOOL = new BlocksFakeWool();
+        FAKEWOOL.setRegistryName("fake_wool");
     }
 
     @SideOnly(Side.CLIENT)
@@ -174,6 +178,7 @@ public class SuSyBlocks {
         registerItemModel(CONVEYOR_BELT);
         registerItemModel(ROCKET_ASSEMBLER_CASING);
         registerItemModel(REGOLITH);
+        registerItemModel(FAKEWOOL);
     }
 
     @SideOnly(Side.CLIENT)
