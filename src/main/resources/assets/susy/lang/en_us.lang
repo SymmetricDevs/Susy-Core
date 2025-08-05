@@ -1158,3 +1158,21 @@ susy.machine.steam_boiler_liquid.bronze.name=Small Steam Liquid Boiler
 susy.machine.steam_boiler_liquid.bronze.tooltip=A Boiler running off Liquids
 susy.machine.steam_boiler_liquid.steel.name=High Pressure Steam Liquid Boiler
 susy.machine.steam_boiler_liquid.steel.tooltip=Faster than Small Steam Liquid Boiler
+
+#Fake Wool
+tile.fake_wool.whitefakewool.name=White Asbestos Fiber
+tile.fake_wool.orangefakewool.name=Orange Asbestos Fiber
+tile.fake_wool.magentafakewool.name=Magenta Asbestos Fiber
+tile.fake_wool.lightbluefakewool.name=Light Blue Asbestos Fiber
+tile.fake_wool.yellowfakewool.name=Yellow Asbestos Fiber
+tile.fake_wool.limefakewool.name=Lime Asbestos Fiber
+tile.fake_wool.pinkfakewool.name=Pink Asbestos Fiber
+tile.fake_wool.grayfakewool.name=Gray Asbestos Fiber
+tile.fake_wool.lightgrayfakewool.name=Light Gray Asbestos Fiber
+tile.fake_wool.cyanfakewool.name=Cyan Asbestos Fiber
+tile.fake_wool.purplefakewool.name=Purple Asbestos Fiber
+tile.fake_wool.bluefakewool.name=Blue Asbestos Fiber
+tile.fake_wool.brownfakewool.name=Brown Asbestos Fiber
+tile.fake_wool.greenfakewool.name=Green Asbestos Fiber
+tile.fake_wool.redfakewool.name=Red Asbestos Fiber
+tile.fake_wool.blackfakewool.name=Black Asbestos Fiber
