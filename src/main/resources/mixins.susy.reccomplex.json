@@ -5,9 +5,9 @@
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "RCAccessorEntityMixin",
     "RCPosTransformerMixin",
     "SpawnCommandLogicMixin",
-    "StructureSpawnContextMixin",
-    "GenericStructureMixin"
+    "StructureSpawnContextMixin"
   ]
 }
