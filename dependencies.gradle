@@ -59,6 +59,7 @@ dependencies {
     // # Recurrent Complex dependencies
     compileOnly rfg.deobf('curse.maven:recurrent-complex-223150:5615733')
     compileOnly rfg.deobf('curse.maven:ivtoolkit-224535:2443253')
+
     compileOnly rfg.deobf('curse.maven:fluidlogged-api-485654:4564413')
 
     // # Pyrotech dependencies
