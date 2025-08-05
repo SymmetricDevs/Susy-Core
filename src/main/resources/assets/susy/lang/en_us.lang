@@ -846,6 +846,7 @@ recipemap.low_pressure_advanced_steam_turbine.name=Low Pressure Advanced Steam T
 recipemap.high_pressure_advanced_steam_turbine.name=High Pressure Advanced Steam Turbine
 recipemap.mixer_settler.name=Mixer-Settler
 recipemap.injection_molder=Injection Molding
+recipemap.boiler.name=Solid Boiler Fuels
 
 susy.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 
@@ -1144,6 +1145,19 @@ susy.machine.locked_crate.aluminium.name=Aluminium Crate
 susy.machine.locked_crate.stainless_steel.name=Stainless Steel Crate
 susy.machine.locked_crate.titanium.name=Titanium Crate
 susy.machine.locked_crate.tungstensteel.name=Tungstensteel Crate
+
+# Boilers
+susy.machine.large_boiler.bronze.name=Large Bronze Boiler
+susy.machine.large_boiler.steel.name=Large Steel Boiler
+
+susy.machine.steam_boiler_coal.bronze.name=Small Steam Solid Fuel Boiler
+susy.machine.steam_boiler_coal.bronze.tooltip=An early way to get Steam Power
+susy.machine.steam_boiler_coal.steel.name=High Pressure Steam Solid Fuel Boiler
+susy.machine.steam_boiler_coal.steel.tooltip=Faster than the Small Steam Solid Fuel Boiler
+susy.machine.steam_boiler_liquid.bronze.name=Small Steam Liquid Boiler
+susy.machine.steam_boiler_liquid.bronze.tooltip=A Boiler running off Liquids
+susy.machine.steam_boiler_liquid.steel.name=High Pressure Steam Liquid Boiler
+susy.machine.steam_boiler_liquid.steel.tooltip=Faster than Small Steam Liquid Boiler
 
 #Fake Wool
 tile.fake_wool.whitefakewool.name=White Asbestos Fiber

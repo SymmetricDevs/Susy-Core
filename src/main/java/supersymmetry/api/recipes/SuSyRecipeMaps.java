@@ -1,6 +1,7 @@
 package supersymmetry.api.recipes;
 
 import gregicality.multiblocks.api.recipes.GCYMRecipeMaps;
+import gregtech.api.GTValues;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.widgets.ProgressWidget;
 import gregtech.api.recipes.RecipeMap;
@@ -8,13 +9,18 @@ import gregtech.api.recipes.builders.FuelRecipeBuilder;
 import gregtech.api.recipes.builders.PrimitiveRecipeBuilder;
 import gregtech.api.recipes.builders.SimpleRecipeBuilder;
 import gregtech.api.recipes.ingredients.GTRecipeInput;
+import gregtech.api.unification.OreDictUnifier;
+import gregtech.api.unification.material.Material;
+import gregtech.api.unification.ore.OrePrefix;
+import gregtech.api.unification.stack.MaterialStack;
 import gregtech.core.sound.GTSoundEvents;
+import net.minecraft.item.ItemStack;
+import supersymmetry.api.capability.impl.SuSyBoilerLogic;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.recipes.builders.*;
 import supersymmetry.common.materials.SusyMaterials;
 
-import static gregtech.api.GTValues.LV;
-import static gregtech.api.GTValues.VA;
+import static gregtech.api.GTValues.*;
 import static gregtech.api.recipes.RecipeMaps.MIXER_RECIPES;
 
 public class SuSyRecipeMaps {
@@ -382,6 +388,12 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> INJECTION_MOLDER = new RecipeMap<>("injection_molder", 2, 1, 0, 0, new SimpleRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.MIXER);
+
+    public static final RecipeMap<FuelRecipeBuilder> BOILER_RECIPES = new RecipeMap<>("boiler", 1, 0, 0, 0, new FuelRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressWidget.MoveType.HORIZONTAL)
+            .setSlotOverlay(false, false, GuiTextures.FURNACE_OVERLAY_1)
+            .setSound(GTSoundEvents.BOILER)
+            .allowEmptyOutput();
   
     static {
         GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()
@@ -417,5 +429,40 @@ public class SuSyRecipeMaps {
                 .duration(recipeBuilder.getDuration())
                 .EUt(recipeBuilder.getEUt())
                 .buildAndRegister());
+
+        BOILER_RECIPES.onRecipeBuild(recipeBuilder -> {
+            ItemStack input = recipeBuilder.getInputs().get(0).getInputStacks()[0];
+            if (OreDictUnifier.getPrefix(input) != OrePrefix.dust) {
+                return;
+            }
+            MaterialStack matStack = OreDictUnifier.getMaterial(input);
+            if (matStack == null) return;
+            Material mat = matStack.material;
+            for (OrePrefix prefix : SuSyBoilerLogic.SUPPORTED_ORE_PREFIXES) {
+                if (prefix == OrePrefix.dust) {
+                    continue;
+                }
+                ItemStack otherInput = OreDictUnifier.get(prefix, mat);
+                if (!otherInput.isEmpty()) {
+                    int duration = (int) (recipeBuilder.getDuration() * prefix.getMaterialAmount(mat) / GTValues.M);
+                    if (duration == 0) { // special cases where material amount is -1 (not set)s
+                        if (prefix == OrePrefix.log) {
+                            duration = recipeBuilder.getDuration() * 4;
+                        }
+                        if (prefix == OrePrefix.plank) {
+                            duration = recipeBuilder.getDuration();
+                        }
+                    }
+                    if (duration > 0) {
+                        BOILER_RECIPES.recipeBuilder()
+                                .inputs(otherInput)
+                                .duration(duration)
+                                .EUt((int) V[LV])
+                                .buildAndRegister();
+                    }
+                }
+            }
+        });
+
     }
 }
