@@ -101,7 +101,7 @@ public class SuSyBoilerLogic extends AbstractRecipeLogic {
 
         for (IFluidTank fluidTank : importFluids.getFluidTanks()) {
             FluidStack fuelStack = fluidTank.drain(Integer.MAX_VALUE, false);
-            if (fuelStack == null || BOILER_FLUID.test(fuelStack)) continue;
+            if (fuelStack == null || !BOILER_FLUID.test(fuelStack)) continue;
 
             Recipe fluidFuelRecipe = RecipeMaps.SEMI_FLUID_GENERATOR_FUELS.findRecipe(
                     GTValues.V[GTValues.MAX], dummyList, Collections.singletonList(fuelStack));
