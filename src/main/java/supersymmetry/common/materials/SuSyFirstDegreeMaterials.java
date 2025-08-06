@@ -160,7 +160,7 @@ public class SuSyFirstDegreeMaterials {
         // Thermodynamic materials
 
         PreheatedAir = new Material.Builder(27150, SuSyUtility.susyId("preheated_air"))
-                .gas(new FluidBuilder().temperature(1100))
+                .gas(new FluidBuilder().temperature(1000))
                 .color(0xA9D0F5)
                 .flags(DISABLE_DECOMPOSITION)
                 .components(Nitrogen, 78, Oxygen, 21, Argon, 9)
