@@ -46,6 +46,8 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer CATALYTIC_REFORMER_OVERLAY = new OrientedOverlayRenderer("multiblock/catalytic_reformer");
     public static final OrientedOverlayRenderer INCINERATOR_OVERLAY = new OrientedOverlayRenderer("machines/incinerator");
 
+    public static final OrientedOverlayRenderer FUEL_CELL_OVERLAY = new OrientedOverlayRenderer("machines/fuel_cell");
+
     public static final OrientedOverlayRenderer FLUID_COMPRESSOR_OVERLAY = new OrientedOverlayRenderer("machines/fluid_compressor");
     public static final OrientedOverlayRenderer FLUID_DECOMPRESSOR_OVERLAY = new OrientedOverlayRenderer("machines/fluid_decompressor");
     public static final OrientedOverlayRenderer ELECTROSTATIC_SEPARATOR_OVERLAY = new OrientedOverlayRenderer("machines/electrostatic_separator");
