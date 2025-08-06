@@ -62,11 +62,6 @@ import supersymmetry.common.metatileentities.single.steam.SuSyLiquidBoiler;
 import supersymmetry.common.metatileentities.single.steam.SuSySimpleSteamMetaTileEntity;
 import supersymmetry.common.metatileentities.storage.MetaTileEntityLockedCrate;
 import supersymmetry.common.metatileentities.storage.MetaTileEntityPlasticCan;
-import supersymmetry.common.rocketry.components.componentControlPod;
-import supersymmetry.common.rocketry.components.componentFairing;
-import supersymmetry.common.rocketry.components.componentInterstage;
-import supersymmetry.common.rocketry.components.componentLavalEngine;
-import supersymmetry.common.rocketry.components.componentSpacecraft;
 
 import java.util.ArrayList;
 import java.util.function.Function;

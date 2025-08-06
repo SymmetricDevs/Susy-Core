@@ -17,7 +17,7 @@ public class SusyRocketComponents {
     AbstractComponent.registerComponent(new ComponentInterstage());
     AbstractComponent.registerComponent(new ComponentSpacecraft());
     AbstractComponent.lockRegistry();
-    // TODO add the emergency escape system later
+    // TODO add the emergency escape system
     ROCKET_SOYUZ_BLUEPRINT_DEFAULT =
         new SimpleStagedRocketBlueprint.Builder("soyuz")
             .stage(
