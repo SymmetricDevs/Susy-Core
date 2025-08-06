@@ -5,13 +5,11 @@ import gregtech.api.capability.IFilter;
 import gregtech.api.capability.IMultiblockController;
 import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.impl.AbstractRecipeLogic;
-import gregtech.api.capability.impl.CommonFluidFilters;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
-import gregtech.api.unification.stack.MaterialStack;
 import gregtech.api.util.GTLog;
 import gregtech.common.ConfigHolder;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
@@ -36,11 +34,10 @@ import java.util.Set;
 
 import static gregtech.api.capability.GregtechDataCodes.BOILER_HEAT;
 import static gregtech.api.capability.GregtechDataCodes.BOILER_LAST_TICK_STEAM;
-import static gregtech.api.capability.impl.CommonFluidFilters.matchesFluid;
 
 public class SuSyBoilerLogic extends AbstractRecipeLogic {
 
-    public static final IFilter<FluidStack> BOILER_FLUID = new IFilter<>() {
+    public static final IFilter<FluidStack> BOILER_FUEL = new IFilter<>() {
 
         @Override
         public boolean test(@NotNull FluidStack fluid) {
@@ -101,7 +98,7 @@ public class SuSyBoilerLogic extends AbstractRecipeLogic {
 
         for (IFluidTank fluidTank : importFluids.getFluidTanks()) {
             FluidStack fuelStack = fluidTank.drain(Integer.MAX_VALUE, false);
-            if (fuelStack == null || !BOILER_FLUID.test(fuelStack)) continue;
+            if (fuelStack == null || !BOILER_FUEL.test(fuelStack)) continue;
 
             Recipe fluidFuelRecipe = RecipeMaps.SEMI_FLUID_GENERATOR_FUELS.findRecipe(
                     GTValues.V[GTValues.MAX], dummyList, Collections.singletonList(fuelStack));
