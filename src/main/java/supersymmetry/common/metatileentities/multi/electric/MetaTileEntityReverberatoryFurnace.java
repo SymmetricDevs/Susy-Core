@@ -63,12 +63,12 @@ public class MetaTileEntityReverberatoryFurnace extends RecipeMapMultiblockContr
         List<IItemHandlerModifiable> imports = new ArrayList<>();
         imports.addAll(getAbilities(SuSyMultiblockAbilities.PRIMITIVE_IMPORT_ITEMS));
         imports.addAll(getAbilities(MultiblockAbility.IMPORT_ITEMS));
-        this.importItems = new ItemHandlerList(imports);
+        this.inputInventory = new ItemHandlerList(imports); // Please remember to use inputInventory for all things to do with recipe logic.
 
         List<IItemHandlerModifiable> exports = new ArrayList<>();
         exports.addAll(getAbilities(SuSyMultiblockAbilities.PRIMITIVE_EXPORT_ITEMS));
         exports.addAll(getAbilities(MultiblockAbility.EXPORT_ITEMS));
-        this.exportItems = new ItemHandlerList(exports);
+        this.outputInventory = new ItemHandlerList(exports);
     }
 
     @Override
