@@ -2,7 +2,10 @@ package supersymmetry.common.metatileentities.single.electric;
 
 import gregtech.api.GTValues;
 import gregtech.api.capability.IEnergyContainer;
-import gregtech.api.capability.impl.*;
+import gregtech.api.capability.impl.FluidTankList;
+import gregtech.api.capability.impl.FuelRecipeLogic;
+import gregtech.api.capability.impl.NotifiableFilteredFluidHandler;
+import gregtech.api.capability.impl.NotifiableFluidTank;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.widgets.ImageWidget;
@@ -15,21 +18,18 @@ import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.client.renderer.ICubeRenderer;
-
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.capability.impl.SuSyFluidFilters;
-
-import net.minecraft.util.ResourceLocation;
 import supersymmetry.api.gui.SusyGuiTextures;
 
 import java.util.List;
@@ -59,7 +59,7 @@ public class MetaTileEntityFuelCell extends SimpleGeneratorMetaTileEntity {
     // MetaTileEntity creation
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
         return new MetaTileEntityFuelCell(metaTileEntityId, workable.getRecipeMap(), renderer, getTier(),
-            getTankScalingFunction(), maxTemperature, thresholdTemperature);
+                getTankScalingFunction(), maxTemperature, thresholdTemperature);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class MetaTileEntityFuelCell extends SimpleGeneratorMetaTileEntity {
         fluidImports[fluidImports.length - 1] = hotGasTank;
 
         this.displayedTankList = new FluidTankList(false, displayedTanks);
-        return new FluidTankList(false, fluidImports);  
+        return new FluidTankList(false, fluidImports);
     }
 
     @Override
@@ -128,19 +128,17 @@ public class MetaTileEntityFuelCell extends SimpleGeneratorMetaTileEntity {
                     hotGasTank.drain(5, true);
                     currentTemperature += 2;
                 } else {
-                    if (currentTemperature > 25) {
-                        currentTemperature -= 1;
-                    }
+                    currentTemperature -= 1;
                 }
             } else {
                 if (workable.isWorking()) {
                     currentTemperature += 2;
                 } else {
-                    if (currentTemperature > 25) {
-                        currentTemperature -= 1;
-                    }
+                    currentTemperature -= 1;
                 }
             }
+            currentTemperature = Math.min(currentTemperature, maxTemperature);
+            currentTemperature = Math.max(currentTemperature, 25);
         }
     }
 
