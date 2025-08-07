@@ -1,5 +1,6 @@
 package supersymmetry.common.metatileentities.single.electric;
 
+import gregtech.api.GTValues;
 import gregtech.api.capability.IEnergyContainer;
 import gregtech.api.capability.impl.*;
 import gregtech.api.gui.GuiTextures;
@@ -33,6 +34,7 @@ import supersymmetry.api.gui.SusyGuiTextures;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class MetaTileEntityFuelCell extends SimpleGeneratorMetaTileEntity {
 
@@ -41,6 +43,7 @@ public class MetaTileEntityFuelCell extends SimpleGeneratorMetaTileEntity {
     private int maxTemperature;
 
     private FluidTank hotGasTank;
+    private FluidTankList displayedTankList;
 
     // Initialization
     public MetaTileEntityFuelCell(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap,
@@ -64,22 +67,25 @@ public class MetaTileEntityFuelCell extends SimpleGeneratorMetaTileEntity {
     protected FluidTankList createImportFluidHandler() {
         if (workable == null) return new FluidTankList(false);
         FluidTank[] fluidImports = new FluidTank[workable.getRecipeMap().getMaxFluidInputs() + 1];
+        FluidTank[] displayedTanks = new FluidTank[workable.getRecipeMap().getMaxFluidInputs()];
         for (int i = 0; i < fluidImports.length - 1; i++) {
             NotifiableFluidTank filteredFluidHandler = new NotifiableFluidTank(
                     this.getTankScalingFunction().apply(this.getTier()), this, false);
             fluidImports[i] = filteredFluidHandler;
+            displayedTanks[i] = filteredFluidHandler;
         }
 
         this.hotGasTank = new NotifiableFilteredFluidHandler(100, this, false).setFilter(SuSyFluidFilters.HOT_GAS);
         fluidImports[fluidImports.length - 1] = hotGasTank;
 
+        this.displayedTankList = new FluidTankList(false, displayedTanks);
         return new FluidTankList(false, fluidImports);  
     }
 
     @Override
     // Override recipe logic
     protected FuelCellRecipeLogic createWorkable(RecipeMap<?> recipeMap) {
-        return new FuelCellRecipeLogic(this, recipeMap, energyContainer);
+        return new FuelCellRecipeLogic(this, recipeMap, () -> this.energyContainer);
     }
 
     @Override
@@ -110,12 +116,6 @@ public class MetaTileEntityFuelCell extends SimpleGeneratorMetaTileEntity {
         super.update();
         if (!getWorld().isRemote) {
             updateTemperature();
-            if (getOffsetTimer() % 20 == 0 ) {
-                if (currentTemperature >= thresholdTemperature)
-                    if (!workable.isActive()) workable.setWorkingEnabled(true);
-                if (currentTemperature <= thresholdTemperature)
-                    workable.setWorkingEnabled(false);
-            }
         }
     }
 
@@ -153,18 +153,21 @@ public class MetaTileEntityFuelCell extends SimpleGeneratorMetaTileEntity {
 
         ModularUI.Builder builder;
         builder = workableRecipeMap.createUITemplateNoOutputs(workable::getProgressPercent, importItems,
-                exportItems, importFluids, exportFluids, yOffset);
+                exportItems, displayedTankList, exportFluids, yOffset);
         builder.widget(new LabelWidget(6, 6, getMetaFullName()))
                 .bindPlayerInventory(player.inventory, GuiTextures.SLOT, yOffset);
         builder.widget(new ProgressWidget(this::getTemperaturePercent, 124, 21, 10, 54)
                 .setProgressBar(GuiTextures.PROGRESS_BAR_BOILER_EMPTY.get(true),
                         GuiTextures.PROGRESS_BAR_BOILER_HEAT,
                         ProgressWidget.MoveType.VERTICAL)
-                .setHoverTextConsumer(list -> list.add(new TextComponentTranslation(I18n.format("susy.gui.temperature_celcius", currentTemperature, maxTemperature))))
+                .setHoverTextConsumer(list -> list.add(new TextComponentTranslation(I18n.format("susy.gui.temperature_celsius", currentTemperature, maxTemperature))))
         );
         builder.widget(new ImageWidget(134, thresholdYOffset, 6, 5, SusyGuiTextures.ARROW));
         builder.widget(new TankWidget(hotGasTank, 110, 21, 10, 54)
                 .setBackgroundTexture(GuiTextures.PROGRESS_BAR_BOILER_EMPTY.get(true)));
+        builder.widget(new ImageWidget(152, 63 + yOffset, 17, 17,
+                GTValues.XMAS.get() ? GuiTextures.GREGTECH_LOGO_XMAS : GuiTextures.GREGTECH_LOGO)
+                .setIgnoreColor(true));
 
         return builder;
     }
@@ -177,15 +180,20 @@ public class MetaTileEntityFuelCell extends SimpleGeneratorMetaTileEntity {
         return (currentTemperature - 25) / ((maxTemperature - 25) * 1.0);
     }
 
-    private class FuelCellRecipeLogic extends RecipeLogicEnergy {
+    private class FuelCellRecipeLogic extends FuelRecipeLogic {
 
-        public FuelCellRecipeLogic(MetaTileEntityFuelCell metaTileEntity, RecipeMap<?> recipeMap, IEnergyContainer energyContainer) {
-            super(metaTileEntity, recipeMap, () -> energyContainer);
+        public FuelCellRecipeLogic(MetaTileEntityFuelCell metaTileEntity, RecipeMap<?> recipeMap, Supplier<IEnergyContainer> energyContainer) {
+            super(metaTileEntity, recipeMap, energyContainer);
         }
 
         @Override
         public boolean checkRecipe(@NotNull Recipe recipe) {
             return currentTemperature >= thresholdTemperature;
+        }
+
+        @Override
+        public boolean isWorking() {
+            return currentTemperature >= thresholdTemperature && super.isWorking();
         }
     }
 }
