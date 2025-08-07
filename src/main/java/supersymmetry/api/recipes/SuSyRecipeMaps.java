@@ -394,6 +394,11 @@ public class SuSyRecipeMaps {
             .setSlotOverlay(false, false, GuiTextures.FURNACE_OVERLAY_1)
             .setSound(GTSoundEvents.BOILER)
             .allowEmptyOutput();
+
+    public static final RecipeMap<FuelRecipeBuilder> FUEL_CELL_RECIPES = new RecipeMap<>("fuel_cell", 0, 0, 2, 0, new FuelRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_HAMMER, ProgressWidget.MoveType.VERTICAL)
+            .setSound(GTSoundEvents.ELECTROLYZER)
+            .allowEmptyOutput();
   
     static {
         GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()
