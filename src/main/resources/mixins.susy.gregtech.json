@@ -13,7 +13,6 @@
     "MetaTileEntityHolderMixin",
     "MetaTileEntityLargeMinerMixin",
     "MetaTileEntityMinerMixin",
-    "MetaTileEntityMixin",
     "ModHandlerMixin",
     "MultiblockControllerBaseMixin",
     "OreDictUnifierAccessor",
