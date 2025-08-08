@@ -55,7 +55,7 @@ public interface IAnimatableMTE extends IFastRenderMetaTileEntity, IAnimatable {
         // Special case for server worlds that exists on client side
         // E.g., TrackedDummyWorld
         // This should at least cover the ones in CEu & MUI2
-        if (!world.getWorldInfo().getWorldName().contains("Dummy")) {
+        if (world.getMinecraftServer() != null) {
             BlockPos pos = thisObject().getPos();
             int dimId = world.provider.getDimension();
             var packet = new SPacketUpdateBlockRendering(pos, disable ? getHiddenBlocks() : null, dimId);
