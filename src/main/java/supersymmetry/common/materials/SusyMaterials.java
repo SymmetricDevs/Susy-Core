@@ -34,7 +34,7 @@ public class SusyMaterials {
 
     public static Material RefractoryGunningMixture;
 
-    //Minerals
+    // Minerals
     public static Material Anorthite;
     public static Material Albite;
     public static Material Oligoclase;
@@ -48,6 +48,9 @@ public class SusyMaterials {
     public static Material Forsterite;
     public static Material Lizardite;
     public static Material Fluorite;
+
+    // Thermodynamic materials
+    public static Material PreheatedAir;
 
     public static void init() {
         SuSyElementMaterials.init();

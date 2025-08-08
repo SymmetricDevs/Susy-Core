@@ -169,6 +169,7 @@ susy.material.latex=Latex
 susy.material.mud=Mud
 susy.material.sea_water=Sea Water
 susy.material.refractory_gunning_mixture=Refractory Gunning Mixture
+susy.material.preheated_air=Preheated Air
 
 # Rock/Mineral Materials
 susy.material.fluorite=Fluorite
@@ -776,6 +777,11 @@ tile.susy_multiblock_casing.copper_casing_pipe.name=Conductive Copper Pipe Casin
 tile.metallurgy.hydraulic_cylinder.name=Hydraulic Cylinder
 tile.metallurgy_2.flying_shear_saw.name=Flying Shear Saw
 tile.metallurgy_roll.roll.name=Roll
+
+susy.machine.fuel_cell.ev.name=Low Temperature Fuel Cell
+susy.machine.fuel_cell.iv.name=High Temperature Fuel Cell
+susy.machine.fuel_cell.tooltip=Temperature requirements for operation: %s°C
+
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
 recipemap.latex_collector.name=Arboreal Collector
@@ -846,6 +852,7 @@ recipemap.low_pressure_advanced_steam_turbine.name=Low Pressure Advanced Steam T
 recipemap.high_pressure_advanced_steam_turbine.name=High Pressure Advanced Steam Turbine
 recipemap.mixer_settler.name=Mixer-Settler
 recipemap.injection_molder=Injection Molding
+recipemap.boiler.name=Solid Boiler Fuels
 
 susy.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 
@@ -1030,6 +1037,8 @@ susy.gui.stock_interactor.controller_setting.active_throttle.tooltip=Throttle (P
 susy.gui.stock_interactor.controller_setting.inactive_brake.tooltip=Brake (Unpowered)
 susy.gui.stock_interactor.controller_setting.inactive_throttle.tooltip=Throttle (Unpowered)
 
+susy.gui.temperature_celcius=Temperature: %s / %s°C
+
 # Extra recipe info
 susy.recipe.dimensions=Dimensions: %s
 susy.recipe.biomes=Biomes: %s
@@ -1144,3 +1153,34 @@ susy.machine.locked_crate.aluminium.name=Aluminium Crate
 susy.machine.locked_crate.stainless_steel.name=Stainless Steel Crate
 susy.machine.locked_crate.titanium.name=Titanium Crate
 susy.machine.locked_crate.tungstensteel.name=Tungstensteel Crate
+
+# Boilers
+susy.machine.large_boiler.bronze.name=Large Bronze Boiler
+susy.machine.large_boiler.steel.name=Large Steel Boiler
+
+susy.machine.steam_boiler_coal.bronze.name=Small Steam Solid Fuel Boiler
+susy.machine.steam_boiler_coal.bronze.tooltip=An early way to get Steam Power
+susy.machine.steam_boiler_coal.steel.name=High Pressure Steam Solid Fuel Boiler
+susy.machine.steam_boiler_coal.steel.tooltip=Faster than the Small Steam Solid Fuel Boiler
+susy.machine.steam_boiler_liquid.bronze.name=Small Steam Liquid Boiler
+susy.machine.steam_boiler_liquid.bronze.tooltip=A Boiler running off Liquids
+susy.machine.steam_boiler_liquid.steel.name=High Pressure Steam Liquid Boiler
+susy.machine.steam_boiler_liquid.steel.tooltip=Faster than Small Steam Liquid Boiler
+
+#Fake Wool
+tile.fake_wool.whitefakewool.name=White Asbestos Fiber
+tile.fake_wool.orangefakewool.name=Orange Asbestos Fiber
+tile.fake_wool.magentafakewool.name=Magenta Asbestos Fiber
+tile.fake_wool.lightbluefakewool.name=Light Blue Asbestos Fiber
+tile.fake_wool.yellowfakewool.name=Yellow Asbestos Fiber
+tile.fake_wool.limefakewool.name=Lime Asbestos Fiber
+tile.fake_wool.pinkfakewool.name=Pink Asbestos Fiber
+tile.fake_wool.grayfakewool.name=Gray Asbestos Fiber
+tile.fake_wool.lightgrayfakewool.name=Light Gray Asbestos Fiber
+tile.fake_wool.cyanfakewool.name=Cyan Asbestos Fiber
+tile.fake_wool.purplefakewool.name=Purple Asbestos Fiber
+tile.fake_wool.bluefakewool.name=Blue Asbestos Fiber
+tile.fake_wool.brownfakewool.name=Brown Asbestos Fiber
+tile.fake_wool.greenfakewool.name=Green Asbestos Fiber
+tile.fake_wool.redfakewool.name=Red Asbestos Fiber
+tile.fake_wool.blackfakewool.name=Black Asbestos Fiber
