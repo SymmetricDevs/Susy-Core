@@ -150,11 +150,6 @@ public abstract class MetaTileEntityStockInteractor extends MetaTileEntity
         return null;
     }
 
-    @Override
-    public boolean useMui2() {
-        return true;
-    }
-
     // UI
     @Override
     public ModularPanel buildUI(PosGuiData guiData, PanelSyncManager syncManager, UISettings settings) {
