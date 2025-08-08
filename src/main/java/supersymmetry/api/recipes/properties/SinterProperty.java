@@ -17,7 +17,7 @@ public class SinterProperty extends RecipeProperty<Boolean> {
     @Override
     public void drawInfo(@NotNull Minecraft minecraft, int x, int y, int color, Object value) {
         if (castValue(value)) {
-            minecraft.fontRenderer.drawString(I18n.format("gregtech.recipe.plasma_requirement", castValue(value)), x, y, color);
+            minecraft.fontRenderer.drawString(I18n.format("susy.recipe.plasma_requirement", castValue(value)), x, y, color);
         }
     }
 

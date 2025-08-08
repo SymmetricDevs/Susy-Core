@@ -2,26 +2,37 @@ package supersymmetry.client;
 
 import gregtech.api.GTValues;
 import gregtech.api.items.metaitem.MetaOreDictItem;
+import gregtech.api.items.toolitem.IGTTool;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.stack.UnificationEntry;
+import gregtech.api.util.input.KeyBind;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiIngame;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.IRegistry;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
@@ -36,17 +47,23 @@ import supersymmetry.common.blocks.SheetedFrameItemBlock;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SuSyMetaBlocks;
 import supersymmetry.common.item.SuSyMetaItems;
+import supersymmetry.common.item.behavior.PipeNetWalkerBehavior;
 import supersymmetry.loaders.SuSyFluidTooltipLoader;
 import supersymmetry.loaders.SuSyIRLoader;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+
+import static org.lwjgl.opengl.GL11.*;
 
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID, value = Side.CLIENT)
 public class ClientProxy extends CommonProxy {
+    public static int titleRenderTimer = -1;
+    private static final int TITLE_RENDER_LENGTH = 150;
 
     public void preLoad() {
         super.preLoad();
@@ -79,6 +96,18 @@ public class ClientProxy extends CommonProxy {
     }
 
     @SubscribeEvent
+    public static void addPipelinerTooltip(@Nonnull ItemTooltipEvent event) {
+        ItemStack stack = event.getItemStack();
+        List<String> tooltips = event.getToolTip();
+
+        if (stack.getItem() instanceof IGTTool tool
+                && tool.getToolStats().getBehaviors().contains(PipeNetWalkerBehavior.INSTANCE)) {
+            tooltips.add(I18n.format("item.susy.tool.tooltip.pipeliner",
+                    GameSettings.getKeyDisplayString(KeyBind.TOOL_AOE_CHANGE.toMinecraft().getKeyCode())));
+        }
+    }
+
+    @SubscribeEvent
     public static void addCatalystTooltipHandler(@Nonnull ItemTooltipEvent event) {
         ItemStack itemStack = event.getItemStack();
         // Handles Item tooltips
@@ -97,17 +126,17 @@ public class ClientProxy extends CommonProxy {
             is.setCount(1);
             CatalystInfo catalystInfo = group.getCatalystInfos().get(is);
             if (catalystInfo != null) {
-                tooltips.add(TextFormatting.UNDERLINE + (TextFormatting.BLUE + I18n.format("gregtech.catalyst_group." + group.getName() + ".name")));
+                tooltips.add(TextFormatting.UNDERLINE + (TextFormatting.BLUE + I18n.format("susy.catalyst_group." + group.getName() + ".name")));
                 if(catalystInfo.getTier() == CatalystInfo.NO_TIER){
                     tooltips.add(TextFormatting.RED + "Disclaimer: Catalyst bonuses for non-tiered catalysts have not yet been implemented.");
-                    tooltips.add(I18n.format("gregtech.universal.catalysts.tooltip.yield", catalystInfo.getYieldEfficiency()));
-                    tooltips.add(I18n.format("gregtech.universal.catalysts.tooltip.energy", catalystInfo.getEnergyEfficiency()));
-                    tooltips.add(I18n.format("gregtech.universal.catalysts.tooltip.speed", catalystInfo.getSpeedEfficiency()));
+                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.yield", catalystInfo.getYieldEfficiency()));
+                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.energy", catalystInfo.getEnergyEfficiency()));
+                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.speed", catalystInfo.getSpeedEfficiency()));
                 } else {
-                    tooltips.add(I18n.format("gregtech.universal.catalysts.tooltip.tier", GTValues.V[catalystInfo.getTier()], GTValues.VNF[catalystInfo.getTier()]));
-                    tooltips.add(I18n.format("gregtech.universal.catalysts.tooltip.yield.tiered", catalystInfo.getYieldEfficiency()));
-                    tooltips.add(I18n.format("gregtech.universal.catalysts.tooltip.energy.tiered", catalystInfo.getEnergyEfficiency()));
-                    tooltips.add(I18n.format("gregtech.universal.catalysts.tooltip.speed.tiered", catalystInfo.getSpeedEfficiency()));
+                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.tier", GTValues.V[catalystInfo.getTier()], GTValues.VNF[catalystInfo.getTier()]));
+                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.yield.tiered", catalystInfo.getYieldEfficiency()));
+                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.energy.tiered", catalystInfo.getEnergyEfficiency()));
+                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.speed.tiered", catalystInfo.getSpeedEfficiency()));
                 }
             }
         }
@@ -138,5 +167,77 @@ public class ClientProxy extends CommonProxy {
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "entities/soyuz"));
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "armor/jet_wingpack"));
         SuSyMetaItems.armorItem.registerIngameModels(map);
+    }
+
+
+    @SuppressWarnings("DataFlowIssue")
+    @SubscribeEvent
+    public static void onRenderGameOverlay(TickEvent.ClientTickEvent event) {
+        if (event.phase != TickEvent.Phase.START) {
+            return;
+        }
+        if (titleRenderTimer >= 0) {
+            GuiIngame gui = Minecraft.getMinecraft().ingameGUI;
+            titleRenderTimer++;
+            if (titleRenderTimer % TITLE_RENDER_LENGTH == 0) {
+                int i = titleRenderTimer / TITLE_RENDER_LENGTH; // 0 doesn't happen
+                if (i == 3) { // Two messages
+                    titleRenderTimer = -1;
+                    return;
+                }
+                // This is literally how you have to use this method. I'm sorry.
+                gui.displayTitle(null, null,
+                        20, 100, 30);
+                gui.displayTitle(null, I18n.format("supersymmetry.subtitle." + i),
+                        20, 100, 30);
+                gui.displayTitle(I18n.format("supersymmetry.title." + i), null,
+                        20, 100, 30);
+            }
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void afterRenderSubtitles(RenderGameOverlayEvent.Pre event) {
+        // Subtitles are the last thing to render before the titles, and it seems bad to not let the subtitles render,
+        // so this is the best place.
+
+        if (event.getType() == RenderGameOverlayEvent.ElementType.SUBTITLES && titleRenderTimer >= 0) {
+            // Render a black foreground. The alpha should stay at 255 until the first title, at which it starts fading.
+            // This is taken from Gui.java, with some cleanup.
+            double left = 0, top = 0, right = event.getResolution().getScaledWidth(), bottom = event.getResolution().getScaledHeight();
+            double zLevel = 0; // Render above the hotbar items
+
+            int topColor = 255;
+            // Fade out the top color:
+            if (titleRenderTimer > TITLE_RENDER_LENGTH * 5 / 2) {
+                topColor -= (titleRenderTimer - TITLE_RENDER_LENGTH * 5 / 2) * 255 / TITLE_RENDER_LENGTH;
+                if (topColor < 0) topColor = 0;
+            }
+            int bottomColor = 255;
+            // Fade out the bottom color:
+            if (titleRenderTimer > TITLE_RENDER_LENGTH * 2) {
+                bottomColor -= (titleRenderTimer - TITLE_RENDER_LENGTH * 2) * 255 / TITLE_RENDER_LENGTH;
+                if (bottomColor < 0) bottomColor = 0;
+            }
+            GlStateManager.disableTexture2D();
+            GlStateManager.enableBlend();
+            GlStateManager.disableAlpha();
+            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+            GlStateManager.shadeModel(GL_SMOOTH);
+            GlStateManager.disableDepth();
+            Tessellator tessellator = Tessellator.getInstance();
+            BufferBuilder bufferbuilder = tessellator.getBuffer();
+            bufferbuilder.begin(GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+            bufferbuilder.pos(right, top, zLevel).color(0, 0, 0, topColor).endVertex();
+            bufferbuilder.pos(left, top, zLevel).color(0, 0, 0, topColor).endVertex();
+            bufferbuilder.pos(left, bottom, zLevel).color(0, 0, 0, bottomColor).endVertex();
+            bufferbuilder.pos(right, bottom, zLevel).color(0, 0, 0, bottomColor).endVertex();
+            tessellator.draw();
+            GlStateManager.shadeModel(GL_FLAT);
+            GlStateManager.disableBlend();
+            GlStateManager.enableAlpha();
+            GlStateManager.enableTexture2D();
+            GlStateManager.enableDepth();
+        }
     }
 }

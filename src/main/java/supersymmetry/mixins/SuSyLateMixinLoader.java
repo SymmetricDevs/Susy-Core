@@ -7,9 +7,18 @@ import zone.rong.mixinbooter.ILateMixinLoader;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("unused")
 public class SuSyLateMixinLoader implements ILateMixinLoader {
 
-    public static final List<String> modMixins = ImmutableList.of("bdsandm", "gregtech", "mcjtylib_ng", "xnet", "travelersbackpack", "yungs", "reccomplex", "fluidlogged_api");
+    public static final List<String> modMixins = ImmutableList.of(
+            "bdsandm",
+            "gregtech",
+            "xnet",
+            "travelersbackpack",
+            "reccomplex",
+            "fluidlogged_api",
+            "vintagefix"
+    );
 
     @Override
     public List<String> getMixinConfigs() {

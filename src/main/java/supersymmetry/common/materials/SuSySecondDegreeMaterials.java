@@ -61,5 +61,12 @@ public class SuSySecondDegreeMaterials {
                 .components(Forsterite, 3, Augite, 3, Andradite, 2, Lizardite, 1)
                 .build();
 
+        Anorthosite = new Material.Builder(27207, SuSyUtility.susyId("anorthosite"))
+                .dust()
+                .color(0xcecece).iconSet(ROUGH)
+                .flags(NO_SMASHING, DISABLE_DECOMPOSITION)
+                .components(Anorthite, 4, Albite, 2)
+                .build();
+
     }
 }

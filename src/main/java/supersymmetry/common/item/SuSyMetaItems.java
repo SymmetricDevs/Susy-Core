@@ -9,8 +9,10 @@ import gregtech.api.items.metaitem.MetaOreDictItem.OreDictValueItem;
 import gregtech.api.items.metaitem.StandardMetaItem;
 import gregtech.api.unification.material.info.MaterialIconSet;
 import gregtech.api.unification.ore.OrePrefix;
+import gregtech.common.items.MetaItems;
 import gregtech.common.items.behaviors.TooltipBehavior;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
 import supersymmetry.common.item.behavior.dataCardBehavior;
@@ -20,6 +22,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import supersymmetry.common.item.behavior.PipeNetPainterBehavior;
+
+import static gregtech.common.items.MetaItems.SPRAY_EMPTY;
 
 public class SuSyMetaItems {
     private static int itemIndex = 0;
@@ -34,6 +39,7 @@ public class SuSyMetaItems {
     public static MetaValueItem RESTRICTIVE_FILTER;
     public static MetaValueItem TRACK_SEGMENT;
     public static MetaValueItem EARTH_ORBITAL_SCRAP;
+    public static MetaValueItem CODE_BREACHER;
     public static ArmorMetaItem<?>.ArmorMetaValueItem SIMPLE_GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_TANK;
@@ -74,6 +80,8 @@ public class SuSyMetaItems {
     }
 
     private static void initMetaItem() {
+        addExtraBehaviours();
+
         // initialize metaitems here
         if (itemIndex != 0) { // but only once
             return;
@@ -96,18 +104,19 @@ public class SuSyMetaItems {
         TRACK_SEGMENT = initOneItem("track_segment").addComponents(new TooltipBehavior(lines ->
             lines.add(I18n.format("metaitem.track_segment.length_info"))
         ));
-
+        RESTRICTIVE_FILTER = initOneItem("restrictive_filter");
         EARTH_ORBITAL_SCRAP = initOneItem("orbital.scrap.earth").setMaxStackSize(8);
+
+        CODE_BREACHER = initOneItem("code_breacher").setMaxStackSize(1);
 
         DATA_CARD = initOneItem("data_card").setMaxStackSize(1).addComponents(new TooltipBehavior(lines ->
             lines.add(I18n.format("metaitem.data_card.tooltip.1"))
         ));
 
         DATA_CARD_ACTIVE = initOneItem("data_card.active").setMaxStackSize(1).addComponents(new dataCardBehavior(lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1")),Arrays.asList("type")));
-     
+
         DATA_CARD_MASTER_BLUEPRINT=initOneItem("datacard.master_blueprint").setMaxStackSize(1).addComponents(new dataCardBehavior(lines -> lines.add(I18n.format("metaitem.datacard.master_blueprint.tooltip.1")),Arrays.asList("rocketType")));
-        RESTRICTIVE_FILTER = initOneItem("restrictive_filter");
-        EARTH_ORBITAL_SCRAP = initOneItem("orbital.scrap.earth").setMaxStackSize(8);
+
     }
 
     // Ensures ID stability when merging
@@ -117,9 +126,16 @@ public class SuSyMetaItems {
         return ret;
     }
 
+    private static void addExtraBehaviours() {
+        MetaItems.SPRAY_SOLVENT.addComponents(new PipeNetPainterBehavior(1024, SPRAY_EMPTY.getStackForm(), -1));
+        for (int i = 0; i < EnumDyeColor.values().length; i++) {
+            MetaItems.SPRAY_CAN_DYES[i].addComponents(new PipeNetPainterBehavior(512, SPRAY_EMPTY.getStackForm(), i));
+        }
+    }
+
     private static void addTieredOredictItem(OreDictValueItem[] items, int id, int RGB, OrePrefix prefix) {
         for (int i = 0; i < items.length; i++) {
-            items[i] = oreDictItem.addOreDictItem(id + i, SuSyValues.TierMaterials[i + 1].toString(), RGB, MaterialIconSet.DULL, prefix, I18n.format("gregtech.universal.catalysts.tooltip.tier", GTValues.V[i], GTValues.VN[i]));
+            items[i] = oreDictItem.addOreDictItem(id + i, SuSyValues.TierMaterials[i + 1].toString(), RGB, MaterialIconSet.DULL, prefix, I18n.format("susy.universal.catalysts.tooltip.tier", GTValues.V[i], GTValues.VN[i]));
         }
     }
 

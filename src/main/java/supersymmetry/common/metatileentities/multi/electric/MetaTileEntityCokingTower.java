@@ -78,4 +78,9 @@ public class MetaTileEntityCokingTower extends RecipeMapMultiblockController {
     protected ICubeRenderer getFrontOverlay() {
         return Textures.BLAST_FURNACE_OVERLAY;
     }
+
+    @Override
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
 }

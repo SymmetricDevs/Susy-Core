@@ -44,9 +44,15 @@ public class SuSyBlocks {
     public static BlockSuSyMultiblockCasing MULTIBLOCK_CASING;
     public static BlockSerpentine SERPENTINE;
     public static BlocksHardened HARDBLOCKS;
+    public static BlocksHardened1 HARDBLOCKS1;
     public static BlocksCustomSheets CUSTOMSHEETS;
+    public static BlockMetallurgy METALLURGY;
+    public static BlockMetallurgy2 METALLURGY_2;
+    public static BlockMetallurgyRoll METALLURGY_ROLL;
     public static BlockConveyor CONVEYOR_BELT;
     public static BlockRocketAssemblerCasing ROCKET_ASSEMBLER_CASING;
+    public static BlockRegolith REGOLITH;
+    public static BlocksFakeWool FAKEWOOL;
 
     public static BlockOuterHatch OUTER_HATCH;
     public static BlockInterStage INTERSTAGE;
@@ -65,7 +71,6 @@ public class SuSyBlocks {
     public static ArrayList<VariantBlock<?>> susyBlocks;
 
     public static void init() {
-        // Initialize extra stone variants
         for (SusyStoneVariantBlock.StoneVariant shape : SusyStoneVariantBlock.StoneVariant.values()) {
             SUSY_STONE_BLOCKS.put(shape, new SusyStoneVariantBlock(shape));
         }

@@ -111,8 +111,8 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, boolean advanced) {
-        tooltip.add(I18n.format("gregtech.machine.large_fluid_pump.tooltip.1"));
-        tooltip.add(I18n.format("gregtech.machine.large_fluid_pump.tooltip.2"));
+        tooltip.add(I18n.format("susy.machine.large_fluid_pump.tooltip.1"));
+        tooltip.add(I18n.format("susy.machine.large_fluid_pump.tooltip.2"));
         super.addInformation(stack, player, tooltip, advanced);
         tooltip.add(TooltipHelper.RAINBOW_SLOW + I18n.format("gregtech.machine.perfect_oc", new Object[0]));
     }

@@ -27,13 +27,16 @@ public class SusyMaterials {
     public static Material Shale;
     public static Material Slate;
     public static Material Kimberlite;
+    public static Material Anorthosite;
     public static Material Latex;
     public static Material Mud;
     public static Material Seawater;
     public static Material MetallizedBoPET;
     public static Material Aluminium7075;
 
-    //Minerals
+    public static Material RefractoryGunningMixture;
+
+    // Minerals
     public static Material Anorthite;
     public static Material Albite;
     public static Material Oligoclase;
@@ -47,6 +50,9 @@ public class SusyMaterials {
     public static Material Forsterite;
     public static Material Lizardite;
     public static Material Fluorite;
+
+    // Thermodynamic materials
+    public static Material PreheatedAir;
 
     public static void init() {
         SuSyElementMaterials.init();
