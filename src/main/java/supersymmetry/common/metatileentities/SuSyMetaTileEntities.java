@@ -192,6 +192,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityRocketAssembler ROCKET_ASSEMBLER;
     public static MetaTileEntityRocketProgrammer ROCKET_PROGRAMMER;
     public static MetaTileEntitySieveDistillationTower SIEVE_DISTILLATION_TOWER;
+    public static MetaTileEntityLaunchPad LAUNCH_PAD;
 
     public static MetaTileEntityCurtainCoater CURTAIN_COATER;
     public static MetaTileEntityPreciseMillingMachine MILLING;
@@ -469,6 +470,7 @@ public class SuSyMetaTileEntities {
         SCRAP_RECYCLER = registerMetaTileEntity(18006, new MetaTileEntityScrapRecycler(susyId("scrap_recycler")));
         ROCKET_ASSEMBLER = registerMetaTileEntity(18007, new MetaTileEntityRocketAssembler(susyId("rocket_assembler")));
         ROCKET_PROGRAMMER = registerMetaTileEntity(18008, new MetaTileEntityRocketProgrammer(susyId("rocket_programmer")));
+        LAUNCH_PAD = registerMetaTileEntity(18009, new MetaTileEntityLaunchPad(susyId("launch_pad")));
 
         //Advanced Steam Turbines
         LOW_PRESSURE_ADVANCED_STEAM_TURBINE = registerMetaTileEntity(18100, new MetaTileEntitySUSYLargeTurbine(susyId("low_pressure_advanced_steam_turbine"), SuSyRecipeMaps.LOW_PRESSURE_ADVANCED_STEAM_TURBINE, 4, MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.TITANIUM_TURBINE_CASING), SuSyBlocks.TURBINE_ROTOR.getState(BlockTurbineRotor.BlockTurbineRotorType.LOW_PRESSURE), Textures.STABLE_TITANIUM_CASING, SusyTextures.LOW_PRESSURE_ADVANCED_STEAM_TURBINE_OVERLAY));
