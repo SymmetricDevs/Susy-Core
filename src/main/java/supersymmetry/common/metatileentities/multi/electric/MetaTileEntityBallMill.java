@@ -115,13 +115,13 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
         var shell = states(getShellCasingState());
 
         return FactoryBlockPattern.start()
-                .aisle(" XMMMXXXXXXXX", "  NMM        ", "             ", "  G          ", "  G          ", "  G          ", "             ", "             ")
+                .aisle(" XMMMXXXXXXXX", "   NMM       ", "             ", "  G          ", "  G          ", "  G          ", "             ", "             ")
                 .aisle(" X          X", "             ", "  G          ", "  HCCCCCCCCH ", "  HCCCCCCCCH ", "  HCCCCCCCCH ", "  G          ", "             ")
                 .aisle(" X          X", " XG         X", " XHCCCCCCCCHX", " XH#####D##HX", " XH#####D##HX", " XH#####D##H ", "  HCCCCCCCCH ", "  G          ")
                 .aisle(" X          X", "  G          ", "  HCCCCCCCCH ", "OXH#####D##H ", "AA######D###Y", "ZXH#####D##HI", "  HCCCCCCCCH ", "  G          ")
                 .aisle(" X          X", " XG         X", " XHCCCCCCCCHX", " XH#####D##HX", " XH#####D##HX", " XH#####D##H ", "  HCCCCCCCCH ", "  G          ")
                 .aisle(" X          X", "             ", "  G          ", "  HCCCCCCCCH ", "  HCCCCCCCCH ", "  HCCCCCCCCH ", "  G          ", "             ")
-                .aisle(" XMMMXXXXXXXX", "  NSM        ", "             ", "  G          ", "  G          ", "  G          ", "             ", "             ")
+                .aisle(" XMMMXXXXXXXX", "   NSM       ", "             ", "  G          ", "  G          ", "  G          ", "             ", "             ")
                 .where('M', states(getCasingState()).or(autoAbilities(
                         true, true, false,
                         false, false, false, false
