@@ -258,6 +258,9 @@ public class SuSyMetaTileEntities {
     public static SuSyLiquidBoiler STEAM_BOILER_LIQUID_BRONZE;
     public static SuSyLiquidBoiler STEAM_BOILER_LIQUID_STEEL;
 
+    // Generators
+    public static MetaTileEntityFuelCell[] FUEL_CELL = new MetaTileEntityFuelCell[2];
+
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -473,7 +476,7 @@ public class SuSyMetaTileEntities {
 
         INJECTION_MOLDER = registerMetaTileEntity(18110, new MetaTileEntityInjectionMolder(susyId("injection_molder")));
       
-        //Locked Loot Crates
+        // Locked Loot Crates
         LOCKED_HERMETICALLY_SEALED_CRATE = registerMetaTileEntity(18200, new MetaTileEntityLockedCrate(susyId("locked_crate.pe"), Materials.Polyethylene, 54));
         LOCKED_WOODEN_CRATE = registerMetaTileEntity(18201, new MetaTileEntityLockedCrate(susyId("locked_crate.wood"), Materials.Wood, 27));
         LOCKED_BRONZE_CRATE = registerMetaTileEntity(18202, new MetaTileEntityLockedCrate(susyId("locked_crate.bronze"), Materials.Bronze, 54));
@@ -490,6 +493,10 @@ public class SuSyMetaTileEntities {
         STEAM_BOILER_COAL_STEEL = registerMetaTileEntity(18303, new SuSyCoalBoiler(susyId("steam_boiler_coal.steel"), true));
         STEAM_BOILER_LIQUID_BRONZE = registerMetaTileEntity(18304, new SuSyLiquidBoiler(susyId("steam_boiler_liquid.bronze"), false));
         STEAM_BOILER_LIQUID_STEEL = registerMetaTileEntity(18305, new SuSyLiquidBoiler(susyId("steam_boiler_liquid.steel"), true));
+
+        // Fuel Cells
+        FUEL_CELL[0] = registerMetaTileEntity(18400, new MetaTileEntityFuelCell(susyId("fuel_cell.ev"), SuSyRecipeMaps.FUEL_CELL_RECIPES, SusyTextures.FUEL_CELL_OVERLAY, 4, GTUtility.defaultTankSizeFunction, 800, 500));
+        FUEL_CELL[1] = registerMetaTileEntity(18401, new MetaTileEntityFuelCell(susyId("fuel_cell.iv"), SuSyRecipeMaps.FUEL_CELL_RECIPES, SusyTextures.FUEL_CELL_OVERLAY, 5, GTUtility.defaultTankSizeFunction, 1000, 800));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name, RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator, ICubeRenderer texture, boolean isBricked) {

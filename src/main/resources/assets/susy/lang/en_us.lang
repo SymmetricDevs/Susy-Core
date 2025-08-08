@@ -169,6 +169,7 @@ susy.material.latex=Latex
 susy.material.mud=Mud
 susy.material.sea_water=Sea Water
 susy.material.refractory_gunning_mixture=Refractory Gunning Mixture
+susy.material.preheated_air=Preheated Air
 
 # Rock/Mineral Materials
 susy.material.fluorite=Fluorite
@@ -776,6 +777,11 @@ tile.susy_multiblock_casing.copper_casing_pipe.name=Conductive Copper Pipe Casin
 tile.metallurgy.hydraulic_cylinder.name=Hydraulic Cylinder
 tile.metallurgy_2.flying_shear_saw.name=Flying Shear Saw
 tile.metallurgy_roll.roll.name=Roll
+
+susy.machine.fuel_cell.ev.name=Low Temperature Fuel Cell
+susy.machine.fuel_cell.iv.name=High Temperature Fuel Cell
+susy.machine.fuel_cell.tooltip=Temperature requirements for operation: %s°C
+
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
 recipemap.latex_collector.name=Arboreal Collector
@@ -1030,6 +1036,8 @@ susy.gui.stock_interactor.controller_setting.active_brake.tooltip=Brake (Powered
 susy.gui.stock_interactor.controller_setting.active_throttle.tooltip=Throttle (Powered)
 susy.gui.stock_interactor.controller_setting.inactive_brake.tooltip=Brake (Unpowered)
 susy.gui.stock_interactor.controller_setting.inactive_throttle.tooltip=Throttle (Unpowered)
+
+susy.gui.temperature_celcius=Temperature: %s / %s°C
 
 # Extra recipe info
 susy.recipe.dimensions=Dimensions: %s

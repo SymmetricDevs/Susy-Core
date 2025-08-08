@@ -14,10 +14,12 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.management.PlayerList;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -30,6 +32,7 @@ import supersymmetry.common.event.MobHordeWorldData;
 import supersymmetry.common.item.SuSyArmorItem;
 import supersymmetry.common.network.SPacketFirstJoin;
 import supersymmetry.common.world.WorldProviderPlanet;
+import supersymmetry.loaders.SuSyWorldLoader;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class EventHandlers {
@@ -64,24 +67,32 @@ public class EventHandlers {
     }
 
     @SubscribeEvent
+    public static void onWorldLoad(WorldEvent.Load event) {
+        GameRules gameRules = event.getWorld().getGameRules();
+        if (!gameRules.hasRule("doInvasions")) {
+            gameRules.addGameRule("doInvasions", "true", GameRules.ValueType.BOOLEAN_VALUE);
+        }
+    }
+
+    @SubscribeEvent
     public static void onTrySpawnPortal(BlockEvent.PortalSpawnEvent event) {
         event.setCanceled(true);
     }
 
     @SubscribeEvent
     public static void onWorldTick(TickEvent.WorldTickEvent event) {
-
         World world = event.world;
 
         if (world.isRemote) {
             return;
         }
-
         if (event.phase != TickEvent.Phase.END) {
             return;
         }
-
         if (world.provider.getDimension() != 0) {
+            return;
+        }
+        if (!world.getGameRules().getBoolean("doInvasions")) {
             return;
         }
 
