@@ -14,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimatableModel;
 import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.core.util.Color;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
@@ -22,10 +21,8 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.GeoModelProvider;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import software.bernie.geckolib3.util.GeoUtils;
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.items.IGeoMetaArmor;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 // I'm just lazy
@@ -94,12 +91,8 @@ public class GeoMetaArmorRenderer extends ModelBiped implements IGeoRenderer<IGe
     }
 
     public void renderGeo(@NotNull Entity entityIn, float limbSwing, float limbSwingAmount, float partialTicks, float netHeadYaw, float headPitch, float scale) {
-
         GeoModel model = modelDispatcher.getModel(modelDispatcher.getModelLocation(currentMetaArmor));
-
-        AnimationEvent<IGeoMetaArmor> itemEvent = new AnimationEvent<>(this.currentMetaArmor, limbSwing, limbSwingAmount, partialTicks, false,
-                Arrays.asList(this.itemStack, this.entityLiving, this.armorSlot));
-        modelDispatcher.setLivingAnimations(currentMetaArmor, this.getUniqueID(this.currentMetaArmor), itemEvent);
+        modelDispatcher.setLivingAnimations(currentMetaArmor, getUniqueID(currentMetaArmor), null);
 
         this.defaultArmor.setModelAttributes(this);
         this.defaultArmor.setRotationAngles(limbSwing, limbSwingAmount, partialTicks, netHeadYaw, headPitch, scale, entityIn);
@@ -114,7 +107,6 @@ public class GeoMetaArmorRenderer extends ModelBiped implements IGeoRenderer<IGe
         IBone leftLegBone = this.modelDispatcher.getBone(BONE_LEG_LEFT);
         IBone rightBootBone = this.modelDispatcher.getBone(BONE_BOOT_RIGHT);
         IBone leftBootBone = this.modelDispatcher.getBone(BONE_BOOT_LEFT);
-
         // These are all magic numbers from simply trying
         if (this.isChild) {
             translate(0.0F, -12.0F, 0.0F,
