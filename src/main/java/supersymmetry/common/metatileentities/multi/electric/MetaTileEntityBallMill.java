@@ -213,8 +213,8 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
 
             BlockPos pos = getPos();
 
-            var v1 = pos.offset(left.getOpposite(), 3).offset(up.getOpposite());
-            var v2 = pos.offset(left, 10).offset(up, 8).offset(front.getOpposite(), 6);
+            var v1 = pos.offset(left.getOpposite(), 4).offset(up.getOpposite());
+            var v2 = pos.offset(left, 9).offset(up, 8).offset(front.getOpposite(), 6);
             this.renderBounding = new AxisAlignedBB(v1, v2);
         }
         return renderBounding;
@@ -229,9 +229,9 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
             EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(front, getUpwardsFacing(), isFlipped());
             EnumFacing up = RelativeDirection.UP.getRelativeFacing(front, getUpwardsFacing(), isFlipped());
 
-            int xOff = back.getXOffset() * 3 + left.getXOffset() * 4 + up.getXOffset() * 3;
-            int yOff = back.getYOffset() * 3 + left.getYOffset() * 4 + up.getYOffset() * 3;
-            int zOff = back.getZOffset() * 3 + left.getZOffset() * 4 + up.getZOffset() * 3;
+            int xOff = back.getXOffset() * 3 + left.getXOffset() * 3 + up.getXOffset() * 3;
+            int yOff = back.getYOffset() * 3 + left.getYOffset() * 3 + up.getYOffset() * 3;
+            int zOff = back.getZOffset() * 3 + left.getZOffset() * 3 + up.getZOffset() * 3;
 
             this.transformation = new Vec3i(xOff, yOff, zOff);
         }
@@ -247,7 +247,7 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
             EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(front, getUpwardsFacing(), isFlipped());
             EnumFacing up = RelativeDirection.UP.getRelativeFacing(front, getUpwardsFacing(), isFlipped());
 
-            this.lightPos = getPos().offset(up, 6).offset(back, 3).offset(left, 4); // TODO
+            this.lightPos = getPos().offset(up, 6).offset(back, 3).offset(left, 3); // TODO
         }
         return lightPos;
     }
