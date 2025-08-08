@@ -22,7 +22,7 @@ import java.util.List;
 
 public class MetaTileEntityStockFluidExchanger extends MetaTileEntityStockInteractor {
 
-    private IFluidHandler dummyHandler = new FluidTank(0);
+    private static final IFluidHandler dummyHandler = new FluidTank(0);
 
     public MetaTileEntityStockFluidExchanger(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SusyTextures.STOCK_FLUID_EXCHANGER);

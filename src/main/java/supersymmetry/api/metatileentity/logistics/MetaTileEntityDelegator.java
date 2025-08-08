@@ -89,7 +89,7 @@ public abstract class MetaTileEntityDelegator extends MetaTileEntity implements 
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
         super.addInformation(stack, world, tooltip, advanced);
-        tooltip.add(I18n.format("gregtech.machine.delegator.tooltip.non_recursion"));
+        tooltip.add(I18n.format("susy.machine.delegator.tooltip.non_recursion"));
     }
 
     @SideOnly(Side.CLIENT)

@@ -47,9 +47,9 @@ public class EntityRocket extends Entity {
         isImmuneToFire = true;
     }
 
-    public EntityRocket(World worldIn, double x, double y, double z, float rotationYaw) {
+    public EntityRocket(World worldIn, double x, double y, double z) {
         this(worldIn);
-        this.setLocationAndAngles(x, y, z, rotationYaw, 180.0F);
+        this.setLocationAndAngles(x, y, z, this.rotationYaw, 180.0F);
         this.setEntityBoundingBox(new AxisAlignedBB(x - 5, y + 0.1, z - 5, x + 5, y + 46, z + 5));
     }
 

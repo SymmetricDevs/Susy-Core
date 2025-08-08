@@ -18,7 +18,7 @@ import supersymmetry.modules.SuSyModules;
         containerID = Supersymmetry.MODID,
         modDependencies = "bdsandm",
         name = "SuSy BDSAndM Integration",
-        description = "BDSAndM Integration Module")
+        description = "SuSy BDSAndM Integration Module")
 public class BDSAndMModule extends IntegrationSubmodule {
 
     public static final ICustomRotationBehavior BDSAndM_BARREL_BEHAVIOR = (state, world, pos, hitResult) -> {

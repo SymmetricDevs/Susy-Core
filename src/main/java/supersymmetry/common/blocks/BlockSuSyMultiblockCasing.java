@@ -5,9 +5,13 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
@@ -28,6 +32,34 @@ public class BlockSuSyMultiblockCasing extends VariantBlock<BlockSuSyMultiblockC
         return false;
     }
 
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean canRenderInLayer(@NotNull IBlockState state, @NotNull BlockRenderLayer layer) {
+        if (state.getValue(VARIANT) == CasingType.COALESCENCE_PLATE) {
+            return layer == BlockRenderLayer.CUTOUT;
+        }
+        return super.canRenderInLayer(state, layer);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean isOpaqueCube(@NotNull IBlockState state) {
+        if (state.getValue(VARIANT) == CasingType.COALESCENCE_PLATE) {
+            return false;
+        }
+        return super.isOpaqueCube(state);
+    }
+
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public int getLightOpacity(@NotNull IBlockState state) {
+        if (state.getValue(VARIANT) == CasingType.COALESCENCE_PLATE) {
+            return 3; // Some random number IDK
+        }
+        return super.getLightOpacity(state);
+    }
+
     public enum CasingType implements IStringSerializable {
 
         SILICON_CARBIDE_CASING("silicon_carbide_casing"),
@@ -35,7 +67,12 @@ public class BlockSuSyMultiblockCasing extends VariantBlock<BlockSuSyMultiblockC
         STRUCTURAL_PACKING("structural_packing"),
         ULV_STRUCTURAL_CASING("ulv_structural_casing"),
         DRONE_PAD("drone_pad"),
-        HEAVY_DUTY_PAD("heavy_duty_pad");
+        MONEL_500_CASING("monel_casing"),
+        MONEL_500_PIPE("monel_casing_pipe"),
+        COPPER_PIPE("copper_casing_pipe"),
+        HEAVY_DUTY_PAD("heavy_duty_pad"),
+        ADVANCED_REFRACTORY_LINING("advanced_refractory_lining"),
+        COALESCENCE_PLATE("coalescence_plate");
 
         private final String name;
 

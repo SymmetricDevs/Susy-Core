@@ -1,52 +1,31 @@
 package supersymmetry.mixins.gregtech;
 
-import gregtech.api.metatileentity.NeighborCacheTileEntityBase;
-import gregtech.api.metatileentity.SyncedTileEntityBase;
-import gregtech.api.pipenet.block.IPipeType;
-import gregtech.api.pipenet.tile.IPipeTile;
 import gregtech.api.pipenet.tile.PipeCoverableImplementation;
 import gregtech.api.pipenet.tile.TileEntityPipeBase;
-
-import java.lang.reflect.Field;
-
+import net.minecraft.util.EnumFacing;
 import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import supersymmetry.api.SusyLog;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Deprecated
 @ScheduledForRemoval(inVersion = "Next CEu update")
-@Mixin(TileEntityPipeBase.class)
-public abstract class TileEntityPipeBaseMixin<
-        PipeType extends Enum<PipeType> & IPipeType<NodeDataType>, NodeDataType>
-        extends NeighborCacheTileEntityBase implements IPipeTile<PipeType, NodeDataType> {
-    @Shadow(remap = false)
-    private PipeType pipeType;
-    @Shadow(remap = false)
-    private int paintingColor;
-    @Shadow(remap = false)
-    private int connections;
-    @Shadow(remap = false)
-    private PipeCoverableImplementation coverableImplementation;
+@Mixin(value = TileEntityPipeBase.class, remap = false)
+public abstract class TileEntityPipeBaseMixin {
 
+    @Redirect(method = "transferDataFrom",
+            at = @At(value = "INVOKE",
+                    target = "Lgregtech/api/pipenet/tile/PipeCoverableImplementation;transferDataTo(Lgregtech/api/pipenet/tile/PipeCoverableImplementation;)V"))
+    private void reverseTransferTarget(PipeCoverableImplementation self, PipeCoverableImplementation other) {
+        other.transferDataTo(self);
+    }
 
-    @Inject(method = "transferDataFrom", at = @At("HEAD"), cancellable = true, remap = false)
-    private void transferDataFrom(IPipeTile<PipeType, NodeDataType> tileEntity, CallbackInfo ci) {
-        // "this"
-        TileEntityPipeBase<PipeType, NodeDataType> self =
-                (TileEntityPipeBase<PipeType, NodeDataType>) (Object) this;
-        this.pipeType = tileEntity.getPipeType();
-        this.paintingColor = tileEntity.getPaintingColor();
-        this.connections = tileEntity.getConnections();
-        if (tileEntity instanceof SyncedTileEntityBase pipeBase) {
-            addPacketsFrom(pipeBase);
-        }
-        tileEntity.getCoverableImplementation().transferDataTo(this.coverableImplementation);
-        self.setFrameMaterial(tileEntity.getFrameMaterial());
-
-        ci.cancel();
+    @Inject(method = "isFaceBlocked(Lnet/minecraft/util/EnumFacing;)Z",
+            at = @At(value = "HEAD"),
+            cancellable = true)
+    private void checkNotNull(EnumFacing side, CallbackInfoReturnable<Boolean> cir) {
+        if (side == null) cir.setReturnValue(false);
     }
 }

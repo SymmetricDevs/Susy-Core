@@ -35,6 +35,11 @@ public class MetaTileEntityElectrolyticCell extends RecipeMapMultiblockControlle
         return new MetaTileEntityElectrolyticCell(this.metaTileEntityId);
     }
 
+    @Override
+    public boolean canBeDistinct() {
+        return true;
+    }
+
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
                 .aisle("CCCCC", "CCCCC", "CCCCC")

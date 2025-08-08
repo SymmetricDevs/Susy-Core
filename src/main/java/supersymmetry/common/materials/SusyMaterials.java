@@ -27,9 +27,12 @@ public class SusyMaterials {
     public static Material Shale;
     public static Material Slate;
     public static Material Kimberlite;
+    public static Material Anorthosite;
     public static Material Latex;
     public static Material Mud;
     public static Material Seawater;
+
+    public static Material RefractoryGunningMixture;
 
     //Minerals
     public static Material Anorthite;
