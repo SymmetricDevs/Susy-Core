@@ -8,20 +8,22 @@ import gregtech.api.unification.stack.UnificationEntry;
 import gregtech.api.util.input.KeyBind;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.GameSettings;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.IRegistry;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
@@ -31,7 +33,6 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -57,12 +58,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import static supersymmetry.common.EventHandlers.FIRST_SPAWN;
+import static org.lwjgl.opengl.GL11.*;
 
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID, value = Side.CLIENT)
 public class ClientProxy extends CommonProxy {
-    private static double titleRenderTimer = -1;
+    public static int titleRenderTimer = -1;
+    private static final int TITLE_RENDER_LENGTH = 150;
 
     public void preLoad() {
         super.preLoad();
@@ -168,6 +170,7 @@ public class ClientProxy extends CommonProxy {
     }
 
 
+    @SuppressWarnings("DataFlowIssue")
     @SubscribeEvent
     public static void onRenderGameOverlay(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.START) {
@@ -176,29 +179,65 @@ public class ClientProxy extends CommonProxy {
         if (titleRenderTimer >= 0) {
             GuiIngame gui = Minecraft.getMinecraft().ingameGUI;
             titleRenderTimer++;
-            if (titleRenderTimer % 150 == 0) {
-                int i = (int) titleRenderTimer / 150; // 0 doesn't happen
-                // This is literally how you have to use this method. I'm sorry.
-                gui.displayTitle(null,
-                        null, 20, 100, 30);
-                gui.displayTitle(null,
-                        I18n.format("supersymmetry.subtitle." + i), 20, 100, 30);
-                gui.displayTitle(I18n.format("supersymmetry.title." + i),
-                        null, 20, 100, 30);
-                if (i == 3) { // Three messages
+            if (titleRenderTimer % TITLE_RENDER_LENGTH == 0) {
+                int i = titleRenderTimer / TITLE_RENDER_LENGTH; // 0 doesn't happen
+                if (i == 3) { // Two messages
                     titleRenderTimer = -1;
+                    return;
                 }
+                // This is literally how you have to use this method. I'm sorry.
+                gui.displayTitle(null, null,
+                        20, 100, 30);
+                gui.displayTitle(null, I18n.format("supersymmetry.subtitle." + i),
+                        20, 100, 30);
+                gui.displayTitle(I18n.format("supersymmetry.title." + i), null,
+                        20, 100, 30);
             }
         }
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-        NBTTagCompound playerData = event.player.getEntityData();
-        NBTTagCompound data = playerData.hasKey(EntityPlayer.PERSISTED_NBT_TAG) ? playerData.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG) : new NBTTagCompound();
-        if (!data.getBoolean(FIRST_SPAWN)) {
-            // Set up title cards
-            titleRenderTimer = 0;
+    public static void afterRenderSubtitles(RenderGameOverlayEvent.Pre event) {
+        // Subtitles are the last thing to render before the titles, and it seems bad to not let the subtitles render,
+        // so this is the best place.
+
+        if (event.getType() == RenderGameOverlayEvent.ElementType.SUBTITLES && titleRenderTimer >= 0) {
+            // Render a black foreground. The alpha should stay at 255 until the first title, at which it starts fading.
+            // This is taken from Gui.java, with some cleanup.
+            double left = 0, top = 0, right = event.getResolution().getScaledWidth(), bottom = event.getResolution().getScaledHeight();
+            double zLevel = 0; // Render above the hotbar items
+
+            int topColor = 255;
+            // Fade out the top color:
+            if (titleRenderTimer > TITLE_RENDER_LENGTH * 5 / 2) {
+                topColor -= (titleRenderTimer - TITLE_RENDER_LENGTH * 5 / 2) * 255 / TITLE_RENDER_LENGTH;
+                if (topColor < 0) topColor = 0;
+            }
+            int bottomColor = 255;
+            // Fade out the bottom color:
+            if (titleRenderTimer > TITLE_RENDER_LENGTH * 2) {
+                bottomColor -= (titleRenderTimer - TITLE_RENDER_LENGTH * 2) * 255 / TITLE_RENDER_LENGTH;
+                if (bottomColor < 0) bottomColor = 0;
+            }
+            GlStateManager.disableTexture2D();
+            GlStateManager.enableBlend();
+            GlStateManager.disableAlpha();
+            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+            GlStateManager.shadeModel(GL_SMOOTH);
+            GlStateManager.disableDepth();
+            Tessellator tessellator = Tessellator.getInstance();
+            BufferBuilder bufferbuilder = tessellator.getBuffer();
+            bufferbuilder.begin(GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+            bufferbuilder.pos(right, top, zLevel).color(0, 0, 0, topColor).endVertex();
+            bufferbuilder.pos(left, top, zLevel).color(0, 0, 0, topColor).endVertex();
+            bufferbuilder.pos(left, bottom, zLevel).color(0, 0, 0, bottomColor).endVertex();
+            bufferbuilder.pos(right, bottom, zLevel).color(0, 0, 0, bottomColor).endVertex();
+            tessellator.draw();
+            GlStateManager.shadeModel(GL_FLAT);
+            GlStateManager.disableBlend();
+            GlStateManager.enableAlpha();
+            GlStateManager.enableTexture2D();
+            GlStateManager.enableDepth();
         }
     }
 

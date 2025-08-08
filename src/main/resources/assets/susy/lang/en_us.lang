@@ -177,6 +177,7 @@ susy.material.latex=Latex
 susy.material.mud=Mud
 susy.material.sea_water=Sea Water
 susy.material.refractory_gunning_mixture=Refractory Gunning Mixture
+susy.material.preheated_air=Preheated Air
 
 # Rock/Mineral Materials
 susy.material.fluorite=Fluorite
@@ -376,6 +377,7 @@ susy.machine.scrap_recycler.name=Scrap Recycler
 susy.machine.rocket_assembler.name=Rocket Assembler
 susy.machine.rocket_programmer.name=Rocket Programmer
 susy.machine.metallurgical_converter.name=Metallurgical Converter
+susy.machine.injection_molder.name=Injection Molder
 
 susy.machine.primitive_item_import.name=Primitive Item Import Bus
 susy.machine.primitive_item_import.tooltip=Only for use with the Primitive Smelter
@@ -788,6 +790,11 @@ tile.susy_multiblock_casing.copper_casing_pipe.name=Conductive Copper Pipe Casin
 tile.metallurgy.hydraulic_cylinder.name=Hydraulic Cylinder
 tile.metallurgy_2.flying_shear_saw.name=Flying Shear Saw
 tile.metallurgy_roll.roll.name=Roll
+
+susy.machine.fuel_cell.ev.name=Low Temperature Fuel Cell
+susy.machine.fuel_cell.iv.name=High Temperature Fuel Cell
+susy.machine.fuel_cell.tooltip=Temperature requirements for operation: %s°C
+
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
 recipemap.latex_collector.name=Arboreal Collector
@@ -857,6 +864,8 @@ recipemap.metallurgical_converter.name=Metallurgical Converter
 recipemap.low_pressure_advanced_steam_turbine.name=Low Pressure Advanced Steam Turbine
 recipemap.high_pressure_advanced_steam_turbine.name=High Pressure Advanced Steam Turbine
 recipemap.mixer_settler.name=Mixer-Settler
+recipemap.injection_molder=Injection Molding
+recipemap.boiler.name=Solid Boiler Fuels
 recipemap.eccentric_roll_crusher.name=Eccentric Roll Crushing
 
 susy.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
@@ -934,6 +943,7 @@ metaitem.track_segment.tooltip=For use in the §8tunnelbore.
 metaitem.track_segment.length_info=§610 blocks §7worth of monorail track.
 metaitem.air_vent.tooltip.1=§bCollecting Rate: §f%,d L/s
 metaitem.orbital.scrap.earth.name=Earth Orbital Scrap
+metaitem.code_breacher.name=Code Breacher
 
 # Catalysts
 susy.universal.catalysts.tooltip.tier=§eMax Voltage: §f%,d EU/T (%s§f)
@@ -1000,10 +1010,6 @@ susy.weather_resistance=§2Will not explode from water, lava, fire or rain.
 susy.large_fluid_pump.y_level=Current Controller Y level: Y=%s
 susy.large_fluid_pump.biome=Current bottom Pipe Casing biome: %s
 
-# Latex Logs
-susy.block_group_members.latex_logs.name=Rubber Log
-
-
 # Stock Interfaces
 susy.machine.stock_controller.name=Locomotive Controller
 susy.stock_interfaces.locomotive_controller.description=Controls nearby locomotives thrust and break depending on redstone input
@@ -1044,6 +1050,8 @@ susy.gui.stock_interactor.controller_setting.active_brake.tooltip=Brake (Powered
 susy.gui.stock_interactor.controller_setting.active_throttle.tooltip=Throttle (Powered)
 susy.gui.stock_interactor.controller_setting.inactive_brake.tooltip=Brake (Unpowered)
 susy.gui.stock_interactor.controller_setting.inactive_throttle.tooltip=Throttle (Unpowered)
+
+susy.gui.temperature_celcius=Temperature: %s / %s°C
 
 # Extra recipe info
 susy.recipe.dimensions=Dimensions: %s
@@ -1147,7 +1155,47 @@ item.susy.tool.tooltip.pipeliner=§7Hold §f[%s]§7 to activate §6Pipeliner§7 
 # Titles
 supersymmetry.title.1=§3SUPERSYMMETRY
 supersymmetry.subtitle.1=A modpack by SymmetricDevs
-supersymmetry.title.2=WELCOME TO EARTH
-supersymmetry.subtitle.2=Vitals: stable. Pod fuel: 46%%.
-supersymmetry.title.3=APR 1, 2423
-supersymmetry.subtitle.3=§4Survive.
+supersymmetry.title.2=WELCOME TO §2EARTH
+supersymmetry.subtitle.2=Vitals: §astable§r. Pod fuel: §e46%%§r.
+
+# Locked Crates
+chat.susy.crate.requires_code_breacher=This crate requires a code breacher!
+susy.machine.locked_crate.pe.name=Hermetically Sealed Crate
+susy.machine.locked_crate.wood.name=Wooden Crate
+susy.machine.locked_crate.bronze.name=Bronze Crate
+susy.machine.locked_crate.steel.name=Steel Crate
+susy.machine.locked_crate.aluminium.name=Aluminium Crate
+susy.machine.locked_crate.stainless_steel.name=Stainless Steel Crate
+susy.machine.locked_crate.titanium.name=Titanium Crate
+susy.machine.locked_crate.tungstensteel.name=Tungstensteel Crate
+
+# Boilers
+susy.machine.large_boiler.bronze.name=Large Bronze Boiler
+susy.machine.large_boiler.steel.name=Large Steel Boiler
+
+susy.machine.steam_boiler_coal.bronze.name=Small Steam Solid Fuel Boiler
+susy.machine.steam_boiler_coal.bronze.tooltip=An early way to get Steam Power
+susy.machine.steam_boiler_coal.steel.name=High Pressure Steam Solid Fuel Boiler
+susy.machine.steam_boiler_coal.steel.tooltip=Faster than the Small Steam Solid Fuel Boiler
+susy.machine.steam_boiler_liquid.bronze.name=Small Steam Liquid Boiler
+susy.machine.steam_boiler_liquid.bronze.tooltip=A Boiler running off Liquids
+susy.machine.steam_boiler_liquid.steel.name=High Pressure Steam Liquid Boiler
+susy.machine.steam_boiler_liquid.steel.tooltip=Faster than Small Steam Liquid Boiler
+
+#Fake Wool
+tile.fake_wool.whitefakewool.name=White Asbestos Fiber
+tile.fake_wool.orangefakewool.name=Orange Asbestos Fiber
+tile.fake_wool.magentafakewool.name=Magenta Asbestos Fiber
+tile.fake_wool.lightbluefakewool.name=Light Blue Asbestos Fiber
+tile.fake_wool.yellowfakewool.name=Yellow Asbestos Fiber
+tile.fake_wool.limefakewool.name=Lime Asbestos Fiber
+tile.fake_wool.pinkfakewool.name=Pink Asbestos Fiber
+tile.fake_wool.grayfakewool.name=Gray Asbestos Fiber
+tile.fake_wool.lightgrayfakewool.name=Light Gray Asbestos Fiber
+tile.fake_wool.cyanfakewool.name=Cyan Asbestos Fiber
+tile.fake_wool.purplefakewool.name=Purple Asbestos Fiber
+tile.fake_wool.bluefakewool.name=Blue Asbestos Fiber
+tile.fake_wool.brownfakewool.name=Brown Asbestos Fiber
+tile.fake_wool.greenfakewool.name=Green Asbestos Fiber
+tile.fake_wool.redfakewool.name=Red Asbestos Fiber
+tile.fake_wool.blackfakewool.name=Black Asbestos Fiber

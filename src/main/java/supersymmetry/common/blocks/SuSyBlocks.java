@@ -51,6 +51,7 @@ public class SuSyBlocks {
     public static BlockConveyor CONVEYOR_BELT;
     public static BlockRocketAssemblerCasing ROCKET_ASSEMBLER_CASING;
     public static BlockRegolith REGOLITH;
+    public static BlocksFakeWool FAKEWOOL;
     public static BlockEccentricRoll ECCENTRIC_ROLL;
     public static BlockGrinderCasing GRINDER_CASING;
     public static BlockGirthGearTooth GIRTH_GEAR_TOOTH;
@@ -145,6 +146,9 @@ public class SuSyBlocks {
         REGOLITH = new BlockRegolith();
         REGOLITH.setRegistryName("regolith");
 
+        FAKEWOOL = new BlocksFakeWool();
+        FAKEWOOL.setRegistryName("fake_wool");
+
         ECCENTRIC_ROLL = new BlockEccentricRoll();
         ECCENTRIC_ROLL.setRegistryName("eccentric_roll");
 
@@ -189,6 +193,7 @@ public class SuSyBlocks {
         registerItemModel(CONVEYOR_BELT);
         registerItemModel(ROCKET_ASSEMBLER_CASING);
         registerItemModel(REGOLITH);
+        registerItemModel(FAKEWOOL);
         registerItemModel(ECCENTRIC_ROLL);
         registerItemModel(GRINDER_CASING);
         registerItemModel(GIRTH_GEAR_TOOTH);

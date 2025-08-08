@@ -59,6 +59,7 @@ dependencies {
     // # Recurrent Complex dependencies
     compileOnly rfg.deobf('curse.maven:recurrent-complex-223150:5615733')
     compileOnly rfg.deobf('curse.maven:ivtoolkit-224535:2443253')
+
     compileOnly rfg.deobf('curse.maven:fluidlogged-api-485654:4564413')
 
     // # Pyrotech dependencies
@@ -70,12 +71,16 @@ dependencies {
     compileOnly rfg.deobf('curse.maven:biomes-o-plenty-220318:2842510')
     // XNet-1.8.3-ynet
     compileOnly rfg.deobf('curse.maven:ynet-an-xnet-fork-999559:5243319')
-    // RFTools 7.73
-    compileOnly rfg.deobf('curse.maven:rftools-224641:2861573')
-    compileOnly rfg.deobf('curse.maven:mcjtylib-233105:2745846')
+    // ReFinedTools 7.77
+    compileOnly rfg.deobf('curse.maven:refinedtools-1085014:6743085')
+    compileOnly rfg.deobf('curse.maven:mcjtylib-refilmed-1086841:5643297')
     compileOnly rfg.deobf('curse.maven:travelers-backpack-321117:3150850')
     compileOnly rfg.deobf('curse.maven:bubbles-a-baubles-fork-995393:5719448')
     compileOnly rfg.deobf('curse.maven:barrels-drums-storage-more-319404:2708193')
+    compileOnly rfg.deobf("curse.maven:vintagefix-871198:6609247")
+    // LittleTiles
+    compileOnly rfg.deobf("curse.maven:creativecore-257814:4722163")
+    compileOnly rfg.deobf("curse.maven:littletiles-257818:5180387")
 
     // # Optional dependencies. Uncomment the ones you need
 //    runtimeOnlyNonPublishable rfg.deobf('curse.maven:the-beneath-254629:3425551')

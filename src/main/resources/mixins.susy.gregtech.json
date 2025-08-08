@@ -9,6 +9,7 @@
     "BlockMachineMixin",
     "BlockPipeAccessor",
     "CommonProxyMixin",
+    "MetaTileEntityCrateAccessor",
     "MetaTileEntityDrumAccessor",
     "MetaTileEntityFluidDrillMixin",
     "MetaTileEntityHolderMixin",
@@ -22,6 +23,7 @@
     "RecipeBuilderAccessor",
     "RecipeMapsMixin",
     "RecyclingRecipesMixin",
+    "SyncedTileEntityBaseMixin",
     "TileEntityPipeBaseMixin",
     "ToolBuilderAccessor",
     "ToolItemsMixin"

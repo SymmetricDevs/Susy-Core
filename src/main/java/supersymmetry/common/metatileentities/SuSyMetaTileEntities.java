@@ -12,10 +12,13 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
+import gregtech.common.metatileentities.multi.MetaTileEntityLargeBoiler;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityEnergyHatch;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiFluidHatch;
+import gregtech.common.metatileentities.steam.boiler.SteamCoalBoiler;
 import gregtech.common.metatileentities.storage.MetaTileEntityCrate;
 import gregtech.common.metatileentities.storage.MetaTileEntityDrum;
+import gregtech.common.metatileentities.storage.MetaTileEntityLockedSafe;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import supersymmetry.api.SusyLog;
@@ -38,6 +41,8 @@ import supersymmetry.common.metatileentities.multi.electric.strand.*;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCoagulationTank;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimitiveMudPump;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimitiveSmelter;
+import supersymmetry.common.metatileentities.multi.steam.MetaTileEntitySuSyLargeBoiler;
+import supersymmetry.common.metatileentities.multi.steam.SuSyBoilerType;
 import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityPrimitiveItemBus;
 import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityStrandBus;
 import supersymmetry.common.metatileentities.multiblockpart.SusyMetaTileEntityDumpingHatch;
@@ -47,7 +52,10 @@ import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntit
 import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityStockFluidExchanger;
 import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityStockItemExchanger;
 import supersymmetry.common.metatileentities.single.steam.MetaTileEntitySteamLatexCollector;
+import supersymmetry.common.metatileentities.single.steam.SuSyCoalBoiler;
+import supersymmetry.common.metatileentities.single.steam.SuSyLiquidBoiler;
 import supersymmetry.common.metatileentities.single.steam.SuSySimpleSteamMetaTileEntity;
+import supersymmetry.common.metatileentities.storage.MetaTileEntityLockedCrate;
 import supersymmetry.common.metatileentities.storage.MetaTileEntityPlasticCan;
 
 import java.util.ArrayList;
@@ -222,11 +230,37 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityArcFurnaceComplex ARC_FURNACE_COMPLEX;
     public static MetaTileEntityMetallurgicalConverter METALLURGICAL_CONVERTER;
 
+    public static MetaTileEntityInjectionMolder INJECTION_MOLDER;
+
     //public static BlockStockDetector STOCK_DETECTOR;
     public static MetaTileEntityStockFluidExchanger STOCK_FLUID_EXCHANGER;
     public static MetaTileEntityStockItemExchanger STOCK_ITEM_EXCHANGER;
     //public static MetaTileEntityStockReader STOCK_CONTENT_READER;
     public static MetaTileEntityLocomotiveController STOCK_CONTROLLER;
+
+    //locked crates for loot
+    public static MetaTileEntityLockedCrate LOCKED_HERMETICALLY_SEALED_CRATE;
+    public static MetaTileEntityLockedCrate LOCKED_WOODEN_CRATE;
+    public static MetaTileEntityLockedCrate LOCKED_BRONZE_CRATE;
+    public static MetaTileEntityLockedCrate LOCKED_STEEL_CRATE;
+    public static MetaTileEntityLockedCrate LOCKED_ALUMINIUM_CRATE;
+    public static MetaTileEntityLockedCrate LOCKED_STAINLESS_STEEL_CRATE;
+    public static MetaTileEntityLockedCrate LOCKED_TITANIUM_CRATE;
+    public static MetaTileEntityLockedCrate LOCKED_TUNGSTENSTEEL_CRATE;
+
+    // SUSY's large boilers
+    public static MetaTileEntitySuSyLargeBoiler LARGE_BRONZE_BOILER;
+    public static MetaTileEntitySuSyLargeBoiler LARGE_STEEL_BOILER;
+
+    // SUSY's small boilers
+    public static SuSyCoalBoiler STEAM_BOILER_COAL_BRONZE;
+    public static SuSyCoalBoiler STEAM_BOILER_COAL_STEEL;
+    public static SuSyLiquidBoiler STEAM_BOILER_LIQUID_BRONZE;
+    public static SuSyLiquidBoiler STEAM_BOILER_LIQUID_STEEL;
+
+    // Generators
+    public static MetaTileEntityFuelCell[] FUEL_CELL = new MetaTileEntityFuelCell[2];
+
 
     public static MetaTileEntityEccentricRollCrusher ECCENTRIC_ROLL_CRUSHER;
     public static MetaTileEntityBallMill BALL_MILL;
@@ -445,6 +479,30 @@ public class SuSyMetaTileEntities {
         //Advanced Steam Turbines
         LOW_PRESSURE_ADVANCED_STEAM_TURBINE = registerMetaTileEntity(18100, new MetaTileEntitySUSYLargeTurbine(susyId("low_pressure_advanced_steam_turbine"), SuSyRecipeMaps.LOW_PRESSURE_ADVANCED_STEAM_TURBINE, 4, MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.TITANIUM_TURBINE_CASING), SuSyBlocks.TURBINE_ROTOR.getState(BlockTurbineRotor.BlockTurbineRotorType.LOW_PRESSURE), Textures.STABLE_TITANIUM_CASING, SusyTextures.LOW_PRESSURE_ADVANCED_STEAM_TURBINE_OVERLAY));
         HIGH_PRESSURE_ADVANCED_STEAM_TURBINE = registerMetaTileEntity(18101, new MetaTileEntityHighPressureLargeTurbine(susyId("high_pressure_advanced_steam_turbine")));
+
+        INJECTION_MOLDER = registerMetaTileEntity(18110, new MetaTileEntityInjectionMolder(susyId("injection_molder")));
+
+        // Locked Loot Crates
+        LOCKED_HERMETICALLY_SEALED_CRATE = registerMetaTileEntity(18200, new MetaTileEntityLockedCrate(susyId("locked_crate.pe"), Materials.Polyethylene, 54));
+        LOCKED_WOODEN_CRATE = registerMetaTileEntity(18201, new MetaTileEntityLockedCrate(susyId("locked_crate.wood"), Materials.Wood, 27));
+        LOCKED_BRONZE_CRATE = registerMetaTileEntity(18202, new MetaTileEntityLockedCrate(susyId("locked_crate.bronze"), Materials.Bronze, 54));
+        LOCKED_STEEL_CRATE = registerMetaTileEntity(18203, new MetaTileEntityLockedCrate(susyId("locked_crate.steel"), Materials.Steel, 72));
+        LOCKED_ALUMINIUM_CRATE = registerMetaTileEntity(18204, new MetaTileEntityLockedCrate(susyId("locked_crate.aluminium"), Materials.Aluminium, 90));
+        LOCKED_STAINLESS_STEEL_CRATE = registerMetaTileEntity(18205, new MetaTileEntityLockedCrate(susyId("locked_crate.stainless_steel"), Materials.StainlessSteel, 108));
+        LOCKED_TITANIUM_CRATE = registerMetaTileEntity(18206, new MetaTileEntityLockedCrate(susyId("locked_crate.titanium"), Materials.Titanium, 126));
+        LOCKED_TUNGSTENSTEEL_CRATE = registerMetaTileEntity(18207, new MetaTileEntityLockedCrate(susyId("locked_crate.tungstensteel"), Materials.TungstenSteel, 144));
+
+        // Boilers
+        LARGE_BRONZE_BOILER = registerMetaTileEntity(18300, new MetaTileEntitySuSyLargeBoiler(susyId("large_boiler.bronze"), SuSyBoilerType.BRONZE));
+        LARGE_STEEL_BOILER = registerMetaTileEntity(18301, new MetaTileEntitySuSyLargeBoiler(susyId("large_boiler.steel"), SuSyBoilerType.STEEL));
+        STEAM_BOILER_COAL_BRONZE = registerMetaTileEntity(18302, new SuSyCoalBoiler(susyId("steam_boiler_coal.bronze"), false));
+        STEAM_BOILER_COAL_STEEL = registerMetaTileEntity(18303, new SuSyCoalBoiler(susyId("steam_boiler_coal.steel"), true));
+        STEAM_BOILER_LIQUID_BRONZE = registerMetaTileEntity(18304, new SuSyLiquidBoiler(susyId("steam_boiler_liquid.bronze"), false));
+        STEAM_BOILER_LIQUID_STEEL = registerMetaTileEntity(18305, new SuSyLiquidBoiler(susyId("steam_boiler_liquid.steel"), true));
+
+        // Fuel Cells
+        FUEL_CELL[0] = registerMetaTileEntity(18400, new MetaTileEntityFuelCell(susyId("fuel_cell.ev"), SuSyRecipeMaps.FUEL_CELL_RECIPES, SusyTextures.FUEL_CELL_OVERLAY, 4, GTUtility.defaultTankSizeFunction, 800, 500));
+        FUEL_CELL[1] = registerMetaTileEntity(18401, new MetaTileEntityFuelCell(susyId("fuel_cell.iv"), SuSyRecipeMaps.FUEL_CELL_RECIPES, SusyTextures.FUEL_CELL_OVERLAY, 5, GTUtility.defaultTankSizeFunction, 1000, 800));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name, RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator, ICubeRenderer texture, boolean isBricked) {

@@ -13,11 +13,11 @@ public class SuSyLateMixinLoader implements ILateMixinLoader {
     public static final List<String> modMixins = ImmutableList.of(
             "bdsandm",
             "gregtech",
-            "mcjtylib_ng",
             "xnet",
             "travelersbackpack",
             "reccomplex",
-            "fluidlogged_api"
+            "fluidlogged_api",
+            "vintagefix"
     );
 
     @Override

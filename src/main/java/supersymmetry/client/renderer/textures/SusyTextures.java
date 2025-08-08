@@ -48,6 +48,8 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer CATALYTIC_REFORMER_OVERLAY = new OrientedOverlayRenderer("multiblock/catalytic_reformer");
     public static final OrientedOverlayRenderer INCINERATOR_OVERLAY = new OrientedOverlayRenderer("machines/incinerator");
 
+    public static final OrientedOverlayRenderer FUEL_CELL_OVERLAY = new OrientedOverlayRenderer("machines/fuel_cell");
+
     public static final OrientedOverlayRenderer FLUID_COMPRESSOR_OVERLAY = new OrientedOverlayRenderer("machines/fluid_compressor");
     public static final OrientedOverlayRenderer FLUID_DECOMPRESSOR_OVERLAY = new OrientedOverlayRenderer("machines/fluid_decompressor");
     public static final OrientedOverlayRenderer ELECTROSTATIC_SEPARATOR_OVERLAY = new OrientedOverlayRenderer("machines/electrostatic_separator");
@@ -94,6 +96,7 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer STRAND_COOLER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/strand_cooler");
     public static final OrientedOverlayRenderer GAS_ATOMIZER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/gas_atomizer");
     public static final OrientedOverlayRenderer METALLURGICAL_CONVERTER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/metallurgical_converter");
+    public static final OrientedOverlayRenderer INJECTION_MOLDER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/injection_molder");
     public static final OrientedOverlayRenderer POLYMERIZATION_TANK_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/polymerization_tank");
     public static final OrientedOverlayRenderer ECCENTRIC_ROLL_CRUSHER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/eccentric_roll_crusher");
     public static final OrientedOverlayRenderer BALL_MILL_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/ball_mill");
@@ -106,8 +109,11 @@ public class SusyTextures {
     public static final SimpleOverlayRenderer ULV_STRUCTURAL_CASING = new SimpleOverlayRenderer("multiblock_casing/ulv_structural_casing");
     public static final SimpleOverlayRenderer SLAG_HOT = new SimpleOverlayRenderer("resource/slag_hot");
     public static final SimpleOverlayRenderer RESTRICTIVE_FILTER_FILTER_OVERLAY = new SimpleOverlayRenderer("cover/overlay_restrictive_filter");
-    public static final SimpleOverlayRenderer STRAND_BUS_OVERLAY = new SimpleOverlayRenderer(
-            "logistics/overlay_strand_bus");
+    public static final SimpleOverlayRenderer STRAND_BUS_OVERLAY =
+            new SimpleOverlayRenderer("logistics/overlay_strand_bus");
+
+    public static final SimpleOverlayRenderer CODE_BREACHER_OVERLAY =
+            new SimpleOverlayRenderer("storage/crates/code_breacher");
 
     public static final SimpleCubeRenderer MASONRY_BRICK = new SimpleCubeRenderer("gregtech:blocks/multiblock_casing/masonry_brick");
     public static final SimpleCubeRenderer BALL_MILL_SHELL =
