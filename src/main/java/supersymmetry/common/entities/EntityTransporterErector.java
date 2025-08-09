@@ -105,7 +105,7 @@ public class EntityTransporterErector extends Freight {
     public void tryReleaseRocket() {
         if (this.isRocketLoaded()) {
             Vec3d offset = new Vec3d(0,-5.5, 11.8);
-            offset = offset.rotateYaw((float) (this.getRotationYaw() / 180. * Math.PI));
+            offset = offset.rotateYaw((float) -(this.getRotationYaw() / 180. * Math.PI));
             Vec3d position = this.getPosition().internal().add(offset);
             EntityRocket rocket = new EntityRocket(this.getWorld().internal, position, this.getRotationYaw() + 45);
             this.getWorld().internal.spawnEntity(rocket);
