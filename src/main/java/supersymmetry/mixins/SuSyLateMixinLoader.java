@@ -16,8 +16,7 @@ public class SuSyLateMixinLoader implements ILateMixinLoader {
             "xnet",
             "travelersbackpack",
             "reccomplex",
-            "fluidlogged_api",
-            "vintagefix"
+            "fluidlogged_api"
     );
 
     @Override

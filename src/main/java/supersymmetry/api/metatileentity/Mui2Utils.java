@@ -1,12 +1,8 @@
 package supersymmetry.api.metatileentity;
 
-import com.cleanroommc.modularui.api.IGuiHolder;
 import com.cleanroommc.modularui.drawable.UITexture;
-import com.cleanroommc.modularui.factory.PosGuiData;
 import com.cleanroommc.modularui.screen.ModularPanel;
-import com.cleanroommc.modularui.screen.UISettings;
 import com.cleanroommc.modularui.utils.Alignment;
-import com.cleanroommc.modularui.value.sync.PanelSyncManager;
 import com.cleanroommc.modularui.widgets.ButtonWidget;
 import gregtech.api.GTValues;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -16,40 +12,37 @@ import supersymmetry.api.gui.SusyGuiTextures;
 
 @Deprecated
 @ApiStatus.ScheduledForRemoval(inVersion = "Next CEu update")
-public interface IMui2MetaTileEntity extends IGuiHolder<PosGuiData> {
+public class Mui2Utils {
 
     @NotNull
-    static UITexture getLogo() {
+    public static UITexture getLogo() {
         return GTValues.XMAS.get() ? SusyGuiTextures.GREGTECH_LOGO_XMAS : SusyGuiTextures.GREGTECH_LOGO;
     }
 
-    static ModularPanel createPanel(String name, int width, int height) {
+    public static ModularPanel createPanel(String name, int width, int height) {
         return ModularPanel.defaultPanel(name, width, height);
     }
 
-    static ModularPanel createPanel(MetaTileEntity mte, int width, int height) {
+    public static ModularPanel createPanel(MetaTileEntity mte, int width, int height) {
         return createPanel(mte.metaTileEntityId.getPath(), width, height);
     }
 
-    static ModularPanel defaultPanel(MetaTileEntity mte) {
+    public static ModularPanel defaultPanel(MetaTileEntity mte) {
         return createPanel(mte, 176, 186);
     }
 
-    static ModularPanel createPopupPanel(String name, int width, int height) {
+    public static ModularPanel createPopupPanel(String name, int width, int height) {
         return createPopupPanel(name, width, height, false, false);
     }
 
-    static ModularPanel createPopupPanel(String name, int width, int height, boolean disableBelow,
-                                         boolean closeOnOutsideClick) {
+    public static ModularPanel createPopupPanel(
+            String name, int width, int height, boolean disableBelow, boolean closeOnOutsideClick) {
         return new PopupPanel(name, width, height, disableBelow, closeOnOutsideClick);
     }
 
-    @Override
-    ModularPanel buildUI(PosGuiData guiData, PanelSyncManager syncManager, UISettings settings);
-
-    boolean useMui2();
-
-    class PopupPanel extends ModularPanel {
+    @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "Next CEu update")
+    public static class PopupPanel extends ModularPanel {
 
         private final boolean disableBelow;
         private final boolean closeOnOutsideClick;

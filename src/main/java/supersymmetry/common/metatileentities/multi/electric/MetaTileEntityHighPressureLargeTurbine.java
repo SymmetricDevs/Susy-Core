@@ -8,7 +8,6 @@ import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.util.BlockInfo;
 import gregtech.api.util.RelativeDirection;
-import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockBoilerCasing;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
@@ -31,7 +30,7 @@ public class MetaTileEntityHighPressureLargeTurbine extends MetaTileEntitySUSYLa
         super(metaTileEntityId, SuSyRecipeMaps.HIGH_PRESSURE_ADVANCED_STEAM_TURBINE, 4,
                 MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.TITANIUM_TURBINE_CASING),
                 SuSyBlocks.TURBINE_ROTOR.getState(BlockTurbineRotor.BlockTurbineRotorType.LOW_PRESSURE),
-                Textures.STABLE_TITANIUM_CASING, SusyTextures.HIGH_PRESSURE_ADVANCED_STEAM_TURBINE_OVERLAY);
+                SusyTextures.TITANIUM_TURBINE_CASING, SusyTextures.HIGH_PRESSURE_ADVANCED_STEAM_TURBINE_OVERLAY);
     }
 
     @Override

@@ -83,6 +83,7 @@ run/
 logs/
 
 !run/config/supercritical.cfg
+!run/config/sussypatches.cfg
 
 # OptiFine libs
 libs/optifine/

@@ -123,6 +123,9 @@ public class CommonProxy {
         }
     }
 
+    public void postLoad() {
+    }
+
     @SubscribeEvent
     public static void registerBlocks(@NotNull RegistryEvent.Register<Block> event) {
         IForgeRegistry<Block> registry = event.getRegistry();
