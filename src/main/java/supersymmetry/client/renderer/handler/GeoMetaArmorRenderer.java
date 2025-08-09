@@ -107,6 +107,7 @@ public class GeoMetaArmorRenderer extends ModelBiped implements IGeoRenderer<IGe
         IBone leftLegBone = this.modelDispatcher.getBone(BONE_LEG_LEFT);
         IBone rightBootBone = this.modelDispatcher.getBone(BONE_BOOT_RIGHT);
         IBone leftBootBone = this.modelDispatcher.getBone(BONE_BOOT_LEFT);
+
         // These are all magic numbers from simply trying
         if (this.isChild) {
             translate(0.0F, -12.0F, 0.0F,
@@ -127,17 +128,17 @@ public class GeoMetaArmorRenderer extends ModelBiped implements IGeoRenderer<IGe
                     rightLegBone, leftLegBone,
                     rightBootBone, leftBootBone);
         } else if (this.isSneak) {
-            translate(0.0F, -4.0F, 0.0F,
+            translate(0.0F, -3.0F, 0.0F,
                     headBone);
             translate(0.0F, -3.0F, 0.0F,
                     bodyBone,
                     rightArmBone, leftArmBone);
-            translate(0.0F, 0.0F, 4.0F,
-                    rightLegBone, leftLegBone,
-                    rightBootBone, leftBootBone);
             translate(0.0F, -0.2F, 0.0F,
                     headBone, bodyBone,
                     rightArmBone, leftArmBone,
+                    rightLegBone, leftLegBone,
+                    rightBootBone, leftBootBone);
+            translate(0.0F, -3.0F, 0.0F,
                     rightLegBone, leftLegBone,
                     rightBootBone, leftBootBone);
         }
@@ -184,6 +185,33 @@ public class GeoMetaArmorRenderer extends ModelBiped implements IGeoRenderer<IGe
                 GeoUtils.copyRotations(defaultArmor.bipedLeftLeg, leftLegBone);
                 GeoUtils.copyRotations(defaultArmor.bipedRightLeg, rightBootBone);
                 GeoUtils.copyRotations(defaultArmor.bipedLeftLeg, leftBootBone);
+
+                headBone.setPositionX(defaultArmor.bipedHead.rotationPointX);
+                headBone.setPositionY(-defaultArmor.bipedHead.rotationPointY);
+                headBone.setPositionZ(defaultArmor.bipedHead.rotationPointZ);
+                bodyBone.setPositionX(defaultArmor.bipedBody.rotationPointX);
+                bodyBone.setPositionY(-defaultArmor.bipedBody.rotationPointY);
+                bodyBone.setPositionZ(defaultArmor.bipedBody.rotationPointZ);
+
+                rightArmBone.setPositionX(defaultArmor.bipedRightArm.rotationPointX + 5);
+                rightArmBone.setPositionY(2 - defaultArmor.bipedRightArm.rotationPointY);
+                rightArmBone.setPositionZ(defaultArmor.bipedRightArm.rotationPointZ);
+                leftArmBone.setPositionX(defaultArmor.bipedLeftArm.rotationPointX - 5);
+                leftArmBone.setPositionY(2 - defaultArmor.bipedLeftArm.rotationPointY);
+                leftArmBone.setPositionZ(defaultArmor.bipedLeftArm.rotationPointZ);
+
+                rightLegBone.setPositionX(defaultArmor.bipedRightLeg.rotationPointX + 2);
+                rightLegBone.setPositionY(12 - defaultArmor.bipedRightLeg.rotationPointY);
+                rightLegBone.setPositionZ(defaultArmor.bipedRightLeg.rotationPointZ);
+                leftLegBone.setPositionX(defaultArmor.bipedLeftLeg.rotationPointX - 2);
+                leftLegBone.setPositionY(12 - defaultArmor.bipedLeftLeg.rotationPointY);
+                leftLegBone.setPositionZ(defaultArmor.bipedLeftLeg.rotationPointZ);
+                rightBootBone.setPositionX(defaultArmor.bipedRightLeg.rotationPointX + 2);
+                rightBootBone.setPositionY(12 - defaultArmor.bipedRightLeg.rotationPointY);
+                rightBootBone.setPositionZ(defaultArmor.bipedRightLeg.rotationPointZ);
+                leftBootBone.setPositionX(defaultArmor.bipedLeftLeg.rotationPointX - 2);
+                leftBootBone.setPositionY(12 - defaultArmor.bipedLeftLeg.rotationPointY);
+                leftBootBone.setPositionZ(defaultArmor.bipedLeftLeg.rotationPointZ);
             } catch (Exception e) {
                 throw new RuntimeException("Could not find an armor bone.", e);
             }

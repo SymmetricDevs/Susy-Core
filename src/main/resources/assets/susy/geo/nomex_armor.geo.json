@@ -33,12 +33,7 @@
 				},
 				{
 					"name": "leftArm",
-					"pivot": [5, 22, 0]
-				},
-				{
-					"name": "armorRightArm",
-					"parent": "leftArm",
-					"pivot": [-5, 22, 0],
+					"pivot": [5, 22, 0],
 					"cubes": [
 						{"origin": [4, 12, -2], "size": [4, 12, 4], "inflate": 0.3, "uv": [40, 112]},
 						{"origin": [4, 12, -2], "size": [4, 12, 4], "inflate": 0.5, "uv": [112, 62]}
