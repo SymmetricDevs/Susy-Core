@@ -29,13 +29,14 @@ import supersymmetry.api.metatileentity.PseudoMultiSteamMachineMetaTileEntity;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicator;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicators;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockTurbineRotor;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.metatileentities.multi.rocket.*;
 import supersymmetry.common.metatileentities.logistics.MetaTileEntityBridge;
 import supersymmetry.common.metatileentities.logistics.MetaTileEntityExtender;
-import supersymmetry.common.metatileentities.multi.MetaTileEntityLandingPad;
 import supersymmetry.common.metatileentities.multi.electric.*;
 import supersymmetry.common.metatileentities.multi.electric.strand.*;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCoagulationTank;
@@ -47,6 +48,10 @@ import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityPrimit
 import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityStrandBus;
 import supersymmetry.common.metatileentities.multiblockpart.SusyMetaTileEntityDumpingHatch;
 import supersymmetry.common.metatileentities.multiblockpart.SusyMetaTileEntityEnergyHatch;
+import supersymmetry.common.metatileentities.single.electric.MetaTileEntityBathCondenser;
+import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityComponentScanner;
+import supersymmetry.common.metatileentities.single.electric.MetaTileEntityLatexCollector;
+import supersymmetry.common.metatileentities.single.electric.MetaTileEntityPhaseSeparator;
 import supersymmetry.common.metatileentities.single.electric.*;
 import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityLocomotiveController;
 import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityStockFluidExchanger;
@@ -57,6 +62,11 @@ import supersymmetry.common.metatileentities.single.steam.SuSyLiquidBoiler;
 import supersymmetry.common.metatileentities.single.steam.SuSySimpleSteamMetaTileEntity;
 import supersymmetry.common.metatileentities.storage.MetaTileEntityLockedCrate;
 import supersymmetry.common.metatileentities.storage.MetaTileEntityPlasticCan;
+import supersymmetry.common.rocketry.components.componentControlPod;
+import supersymmetry.common.rocketry.components.componentFairing;
+import supersymmetry.common.rocketry.components.componentInterstage;
+import supersymmetry.common.rocketry.components.componentLavalEngine;
+import supersymmetry.common.rocketry.components.componentSpacecraft;
 
 import java.util.ArrayList;
 import java.util.function.Function;
@@ -186,9 +196,13 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityPrimitiveItemBus PRIMITIVE_ITEM_IMPORT;
     public static MetaTileEntityPrimitiveItemBus PRIMITIVE_ITEM_EXPORT;
 
-    //Space Multis
+    //Space multis
     public static MetaTileEntityLandingPad LANDING_PAD;
     public static MetaTileEntityScrapRecycler SCRAP_RECYCLER;
+    public static MetaTileEntityBuildingCleanroom BUILDING_CLEANROOM;
+
+    //Space singulars
+    public static MetaTileEntityComponentScanner COMPONENT_SCANNER;
     public static MetaTileEntityRocketAssembler ROCKET_ASSEMBLER;
     public static MetaTileEntityRocketProgrammer ROCKET_PROGRAMMER;
     public static MetaTileEntitySieveDistillationTower SIEVE_DISTILLATION_TOWER;
@@ -262,6 +276,8 @@ public class SuSyMetaTileEntities {
     // Generators
     public static MetaTileEntityFuelCell[] FUEL_CELL = new MetaTileEntityFuelCell[2];
 
+
+    public static MetaTileEntityAerospaceFlightSimulator AEROSPACE_FLIGHT_SIMULATOR;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -459,25 +475,27 @@ public class SuSyMetaTileEntities {
 
         MIXER_SETTLER = registerMetaTileEntity(17100, new MetaTileEntityMixerSettler(susyId("mixer_settler")));
 
-        //STOCK_DETECTOR = registerMetaTileEntity(18000, new MetaTileEntityStockDetector(susyId("stock_detector")));
-        STOCK_FLUID_EXCHANGER = registerMetaTileEntity(18001, new MetaTileEntityStockFluidExchanger(susyId("stock_fluid_exchanger")));
-        STOCK_ITEM_EXCHANGER = registerMetaTileEntity(18002, new MetaTileEntityStockItemExchanger(susyId("stock_item_exchanger")));
-        //STOCK_CONTENT_READER = registerMetaTileEntity(18003, new MetaTileEntityStockReader(susyId("stock_content_reader")));
-        STOCK_CONTROLLER = registerMetaTileEntity(18004, new MetaTileEntityLocomotiveController(susyId("stock_controller")));
-      
         //Space machines
-        LANDING_PAD = registerMetaTileEntity(18005, new MetaTileEntityLandingPad(susyId("landing_pad")));
+        LANDING_PAD = registerMetaTileEntity(18000, new MetaTileEntityLandingPad(susyId("landing_pad")));
+        SCRAP_RECYCLER = registerMetaTileEntity(18001, new MetaTileEntityScrapRecycler(susyId("scrap_recycler")));
+        BUILDING_CLEANROOM = registerMetaTileEntity(18002, new MetaTileEntityBuildingCleanroom(susyId("building_cleanroom")));
+
+        COMPONENT_SCANNER = registerMetaTileEntity(18003, new MetaTileEntityComponentScanner((susyId("component_scanner"))));
+        ROCKET_ASSEMBLER = registerMetaTileEntity(18004, new MetaTileEntityRocketAssembler(susyId("rocket_assembler")));
+        ROCKET_PROGRAMMER = registerMetaTileEntity(18005, new MetaTileEntityRocketProgrammer(susyId("rocket_programmer")));
+
         SCRAP_RECYCLER = registerMetaTileEntity(18006, new MetaTileEntityScrapRecycler(susyId("scrap_recycler")));
         ROCKET_ASSEMBLER = registerMetaTileEntity(18007, new MetaTileEntityRocketAssembler(susyId("rocket_assembler")));
         ROCKET_PROGRAMMER = registerMetaTileEntity(18008, new MetaTileEntityRocketProgrammer(susyId("rocket_programmer")));
         LAUNCH_PAD = registerMetaTileEntity(18009, new MetaTileEntityLaunchPad(susyId("launch_pad")));
+        AEROSPACE_FLIGHT_SIMULATOR = registerMetaTileEntity(18010, new MetaTileEntityAerospaceFlightSimulator(susyId("aerospace_flight_simulator")));
 
         //Advanced Steam Turbines
         LOW_PRESSURE_ADVANCED_STEAM_TURBINE = registerMetaTileEntity(18100, new MetaTileEntitySUSYLargeTurbine(susyId("low_pressure_advanced_steam_turbine"), SuSyRecipeMaps.LOW_PRESSURE_ADVANCED_STEAM_TURBINE, 4, MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.TITANIUM_TURBINE_CASING), SuSyBlocks.TURBINE_ROTOR.getState(BlockTurbineRotor.BlockTurbineRotorType.LOW_PRESSURE), Textures.STABLE_TITANIUM_CASING, SusyTextures.LOW_PRESSURE_ADVANCED_STEAM_TURBINE_OVERLAY));
         HIGH_PRESSURE_ADVANCED_STEAM_TURBINE = registerMetaTileEntity(18101, new MetaTileEntityHighPressureLargeTurbine(susyId("high_pressure_advanced_steam_turbine")));
 
         INJECTION_MOLDER = registerMetaTileEntity(18110, new MetaTileEntityInjectionMolder(susyId("injection_molder")));
-      
+
         // Locked Loot Crates
         LOCKED_HERMETICALLY_SEALED_CRATE = registerMetaTileEntity(18200, new MetaTileEntityLockedCrate(susyId("locked_crate.pe"), Materials.Polyethylene, 54));
         LOCKED_WOODEN_CRATE = registerMetaTileEntity(18201, new MetaTileEntityLockedCrate(susyId("locked_crate.wood"), Materials.Wood, 27));

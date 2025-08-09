@@ -31,6 +31,8 @@ public class SusyMaterials {
     public static Material Latex;
     public static Material Mud;
     public static Material Seawater;
+    public static Material MetallizedBoPET;
+    public static Material Aluminium7075;
 
     public static Material RefractoryGunningMixture;
 
