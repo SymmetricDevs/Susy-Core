@@ -16,8 +16,8 @@ import supersymmetry.api.util.BlockRenderManager;
 public abstract class RenderChunkMixin {
 
     @WrapOperation(method = "rebuildChunk",
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/client/renderer/BlockRendererDispatcher;renderBlock(Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/client/renderer/BufferBuilder;)Z"))
+                   at = @At(value = "INVOKE",
+                            target = "Lnet/minecraft/client/renderer/BlockRendererDispatcher;renderBlock(Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/client/renderer/BufferBuilder;)Z"))
     public boolean lockBuilding(BlockRendererDispatcher dispatcher,
                                 IBlockState state,
                                 BlockPos pos,

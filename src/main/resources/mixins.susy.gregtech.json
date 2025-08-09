@@ -24,7 +24,6 @@
     "ToolItemsMixin"
   ],
   "client" : [
-    "TargetBlockAccessMixin",
     "WorldSceneRendererMixin"
   ]
 }

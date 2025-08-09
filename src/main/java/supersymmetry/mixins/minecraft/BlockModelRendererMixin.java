@@ -14,9 +14,9 @@ import supersymmetry.api.util.BlockRenderManager;
 @Mixin(BlockModelRenderer.class)
 public abstract class BlockModelRendererMixin {
 
-    @WrapOperation(method = {"renderModelFlat", "renderModelSmooth"},
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/block/state/IBlockState;shouldSideBeRendered(Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/EnumFacing;)Z"))
+    @WrapOperation(method = { "renderModelFlat", "renderModelSmooth" },
+                   at = @At(value = "INVOKE",
+                            target = "Lnet/minecraft/block/state/IBlockState;shouldSideBeRendered(Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/EnumFacing;)Z"))
     public boolean ignoreBlocked(IBlockState state, IBlockAccess blockAccess,
                                  BlockPos pos, EnumFacing facing, Operation<Boolean> method) {
         return BlockRenderManager.isModelDisabled(pos.offset(facing)) || method.call(state, blockAccess, pos, facing);
