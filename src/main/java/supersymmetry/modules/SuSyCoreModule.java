@@ -9,6 +9,7 @@ import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
 import supersymmetry.common.network.SPacketFirstJoin;
 import supersymmetry.common.network.SPacketRemoveFluidState;
+import supersymmetry.common.network.SPacketUpdateBlockRendering;
 
 @GregTechModule(
         moduleID = SuSyModules.MODULE_CORE,
@@ -27,5 +28,6 @@ public class SuSyCoreModule implements IGregTechModule {
     public void registerPackets() {
         GregTechAPI.networkHandler.registerPacket(SPacketRemoveFluidState.class);
         GregTechAPI.networkHandler.registerPacket(SPacketFirstJoin.class);
+        GregTechAPI.networkHandler.registerPacket(SPacketUpdateBlockRendering.class);
     }
 }

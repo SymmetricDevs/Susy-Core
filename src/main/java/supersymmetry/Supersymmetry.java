@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.capability.SuSyCapabilities;
 import supersymmetry.api.sound.SusySounds;
@@ -22,6 +23,7 @@ import supersymmetry.common.covers.SuSyCoverBehaviors;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
+import supersymmetry.common.tileentities.SuSyTileEntities;
 import supersymmetry.loaders.SuSyIRLoader;
 
 @Mod(name = Supersymmetry.NAME, modid = Supersymmetry.MODID, version = Tags.VERSION, dependencies = GTInternalTags.DEP_VERSION_STRING + ";required-after:gcym;after:immersiverailroading")
@@ -47,7 +49,6 @@ public class Supersymmetry {
         // Groovyscript starts immediately!
         proxy.checkCanaryFile();
     }
-
 
 
     @Mod.EventHandler
@@ -92,5 +93,11 @@ public class Supersymmetry {
         hordeCommand.addSubcommand(new CommandHordeStart());
         hordeCommand.addSubcommand(new CommandHordeStop());
         hordeCommand.addSubcommand(new CommandHordeStatus());
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Mod.EventHandler
+    public void registerRenderers(FMLPreInitializationEvent event) {
+        SuSyTileEntities.registerRenderers();
     }
 }
