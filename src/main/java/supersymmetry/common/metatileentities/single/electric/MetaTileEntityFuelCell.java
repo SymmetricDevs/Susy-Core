@@ -75,7 +75,7 @@ public class MetaTileEntityFuelCell extends SimpleGeneratorMetaTileEntity {
             displayedTanks[i] = filteredFluidHandler;
         }
 
-        this.hotGasTank = new NotifiableFilteredFluidHandler(100, this, false).setFilter(SuSyFluidFilters.HOT_GAS);
+        this.hotGasTank = new NotifiableFilteredFluidHandler(16000, this, false).setFilter(SuSyFluidFilters.HOT_GAS);
         fluidImports[fluidImports.length - 1] = hotGasTank;
 
         this.displayedTankList = new FluidTankList(false, displayedTanks);
