@@ -395,7 +395,7 @@ public class SuSyRecipeMaps {
             .setSound(GTSoundEvents.BOILER)
             .allowEmptyOutput();
 
-    public static final RecipeMap<FuelRecipeBuilder> FUEL_CELL_RECIPES = new RecipeMap<>("fuel_cell", 0, 0, 1, 0, new FuelRecipeBuilder(), false)
+    public static final RecipeMap<FuelRecipeBuilder> FUEL_CELL_RECIPES = new RecipeMap<>("fuel_cell", 0, 0, 2, 0, new FuelRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_HAMMER, ProgressWidget.MoveType.VERTICAL)
             .setSound(GTSoundEvents.ELECTROLYZER)
             .allowEmptyOutput();
