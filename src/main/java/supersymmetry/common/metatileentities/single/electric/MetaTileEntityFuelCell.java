@@ -66,8 +66,9 @@ public class MetaTileEntityFuelCell extends SimpleGeneratorMetaTileEntity {
     // Handle fluid imports
     protected FluidTankList createImportFluidHandler() {
         if (workable == null) return new FluidTankList(false);
-        FluidTank[] fluidImports = new FluidTank[workable.getRecipeMap().getMaxFluidInputs() + 1];
-        FluidTank[] displayedTanks = new FluidTank[workable.getRecipeMap().getMaxFluidInputs()];
+        FluidTank[] fluidImports = new FluidTank[workable.getRecipeMap().getMaxFluidInputs()];
+        FluidTank[] displayedTanks = new FluidTank[workable.getRecipeMap().getMaxFluidInputs() - 1];
+        // Maybe in the future, this could just be simplified, if maxFluidInputs is always 2
         for (int i = 0; i < fluidImports.length - 1; i++) {
             NotifiableFluidTank filteredFluidHandler = new NotifiableFluidTank(
                     this.getTankScalingFunction().apply(this.getTier()), this, false);
