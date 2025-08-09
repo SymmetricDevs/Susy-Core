@@ -12,6 +12,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.blocks.VariantBlockFalling;
 import supersymmetry.common.blocks.rocketry.*;
 
 import java.lang.reflect.Field;
@@ -76,7 +77,6 @@ public class SuSyBlocks {
         }
         registerWalkingSpeedBonus();
         susyBlocks = new ArrayList<>();
-
         // Test all fields
         for (Field field: SuSyBlocks.class.getDeclaredFields()) {
             if (VariantBlock.class.isAssignableFrom(field.getType())) {
@@ -94,6 +94,10 @@ public class SuSyBlocks {
                 }
             }
         }
+
+        REGOLITH = new BlockRegolith();
+        REGOLITH.setRegistryName("regolith");
+
     }
 
     @SideOnly(Side.CLIENT)
@@ -104,6 +108,7 @@ public class SuSyBlocks {
             if (b instanceof VariantActiveBlock) ((VariantActiveBlock<?>) b).onModelRegister();
             else registerItemModel(b);
         });
+        registerItemModel(REGOLITH);
     }
 
     @SideOnly(Side.CLIENT)

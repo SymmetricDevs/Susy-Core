@@ -14,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.common.blocks.BlockRocketAssemblerCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.common.metatileentities.multi.MetaTileEntityLandingPad;
 
 public class MetaTileEntityLaunchPad extends RecipeMapMultiblockController {
     public MetaTileEntityLaunchPad(ResourceLocation metaTileEntityId) {
@@ -23,7 +22,7 @@ public class MetaTileEntityLaunchPad extends RecipeMapMultiblockController {
 
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
-        return new MetaTileEntityLandingPad(metaTileEntityId);
+        return new MetaTileEntityLaunchPad(metaTileEntityId);
     }
 
     @Override

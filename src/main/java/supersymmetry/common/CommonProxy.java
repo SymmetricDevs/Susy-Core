@@ -142,6 +142,7 @@ public class CommonProxy {
         for (Block b: susyBlocks) {
             registry.register(b);
         }
+        registry.register(REGOLITH);
 
         SHEETED_FRAMES.values().stream().distinct().forEach(registry::register);
     }
@@ -154,6 +155,7 @@ public class CommonProxy {
         for (SusyStoneVariantBlock block : SuSyBlocks.SUSY_STONE_BLOCKS.values())
             registry.register(createItemBlock(block, VariantItemBlock::new));
         susyBlocks.stream().distinct().forEach(vb -> registry.register(createItemBlock(vb, VariantItemBlock::new)));
+        registry.register(createItemBlock(REGOLITH, VariantItemBlockFalling::new));
         SHEETED_FRAMES.values()
                 .stream().distinct()
                 .map(block -> createItemBlock(block, SheetedFrameItemBlock::new))
