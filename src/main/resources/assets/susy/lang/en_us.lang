@@ -1070,6 +1070,8 @@ susy.fluid.voiding.flammable=Voidable with Flare Stack
 # Quarry Modes
 susy.multiblock.quarry.excavation_mode=Excavation Mode
 susy.multiblock.quarry.recipe_mode=Recipe Mode
+susy.machine.quarry.tooltip.info=Max square of %1$sx%1$s, minimum %2$sx%2$s. Hold shift for more details.
+susy.machine.quarry.tooltip.structure_info=Quarries can be formed with any odd dimensions ranging from %2$sx%2$s to %1$sx%1$s, even if it is non-square. Extend the bottom layer of concrete blocks on the corners, so a 23-wide quarry will have 9 concrete per side, and 5 inside blocks.
 
 death.attack.toxic_atmo=%s's lungs were shredded
 death.attack.suffocation=%s couldn't breathe
