@@ -1,5 +1,8 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Matrix4;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockAbilityPart;
@@ -207,9 +210,11 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
     public AxisAlignedBB getRenderBoundingBox() {
         if (this.renderBounding == null) {
             EnumFacing front = getFrontFacing();
+            EnumFacing upwards = getUpwardsFacing();
+            boolean flipped = isFlipped();
             // The left side of the controller, not from the player's perspective
-            EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(front, getUpwardsFacing(), isFlipped());
-            EnumFacing up = RelativeDirection.UP.getRelativeFacing(front, getUpwardsFacing(), isFlipped());
+            EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(front, upwards, flipped);
+            EnumFacing up = RelativeDirection.UP.getRelativeFacing(front, upwards, flipped);
 
             BlockPos pos = getPos();
 
@@ -225,9 +230,11 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
     public Vec3i getTransformation() {
         if (this.transformation == null) {
             EnumFacing front = getFrontFacing();
+            EnumFacing upwards = getUpwardsFacing();
+            boolean flipped = isFlipped();
             EnumFacing back = front.getOpposite();
-            EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(front, getUpwardsFacing(), isFlipped());
-            EnumFacing up = RelativeDirection.UP.getRelativeFacing(front, getUpwardsFacing(), isFlipped());
+            EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(front, upwards, flipped);
+            EnumFacing up = RelativeDirection.UP.getRelativeFacing(front, upwards, flipped);
 
             int xOff = back.getXOffset() * 3 + left.getXOffset() * 3 + up.getXOffset() * 3;
             int yOff = back.getYOffset() * 3 + left.getYOffset() * 3 + up.getYOffset() * 3;
@@ -243,9 +250,11 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
     public BlockPos getLightPos() {
         if (this.lightPos == null) {
             EnumFacing front = getFrontFacing();
+            EnumFacing upwards = getUpwardsFacing();
+            boolean flipped = isFlipped();
             EnumFacing back = front.getOpposite();
-            EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(front, getUpwardsFacing(), isFlipped());
-            EnumFacing up = RelativeDirection.UP.getRelativeFacing(front, getUpwardsFacing(), isFlipped());
+            EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(front, upwards, flipped);
+            EnumFacing up = RelativeDirection.UP.getRelativeFacing(front, upwards, flipped);
 
             this.lightPos = getPos().offset(up, 6).offset(back, 3).offset(left, 3); // TODO
         }
