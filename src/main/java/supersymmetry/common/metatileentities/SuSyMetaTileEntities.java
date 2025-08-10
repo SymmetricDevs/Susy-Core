@@ -475,20 +475,26 @@ public class SuSyMetaTileEntities {
 
         MIXER_SETTLER = registerMetaTileEntity(17100, new MetaTileEntityMixerSettler(susyId("mixer_settler")));
 
+        //STOCK_DETECTOR = registerMetaTileEntity(18000, new MetaTileEntityStockDetector(susyId("stock_detector")));
+        STOCK_FLUID_EXCHANGER = registerMetaTileEntity(18001, new MetaTileEntityStockFluidExchanger(susyId("stock_fluid_exchanger")));
+        STOCK_ITEM_EXCHANGER = registerMetaTileEntity(18002, new MetaTileEntityStockItemExchanger(susyId("stock_item_exchanger")));
+        //STOCK_CONTENT_READER = registerMetaTileEntity(18003, new MetaTileEntityStockReader(susyId("stock_content_reader")));
+        STOCK_CONTROLLER = registerMetaTileEntity(18004, new MetaTileEntityLocomotiveController(susyId("stock_controller")));
+
         //Space machines
-        LANDING_PAD = registerMetaTileEntity(18000, new MetaTileEntityLandingPad(susyId("landing_pad")));
-        SCRAP_RECYCLER = registerMetaTileEntity(18001, new MetaTileEntityScrapRecycler(susyId("scrap_recycler")));
-        BUILDING_CLEANROOM = registerMetaTileEntity(18002, new MetaTileEntityBuildingCleanroom(susyId("building_cleanroom")));
+        LANDING_PAD = registerMetaTileEntity(18050, new MetaTileEntityLandingPad(susyId("landing_pad")));
+        SCRAP_RECYCLER = registerMetaTileEntity(18051, new MetaTileEntityScrapRecycler(susyId("scrap_recycler")));
+        BUILDING_CLEANROOM = registerMetaTileEntity(18052, new MetaTileEntityBuildingCleanroom(susyId("building_cleanroom")));
 
-        COMPONENT_SCANNER = registerMetaTileEntity(18003, new MetaTileEntityComponentScanner((susyId("component_scanner"))));
-        ROCKET_ASSEMBLER = registerMetaTileEntity(18004, new MetaTileEntityRocketAssembler(susyId("rocket_assembler")));
-        ROCKET_PROGRAMMER = registerMetaTileEntity(18005, new MetaTileEntityRocketProgrammer(susyId("rocket_programmer")));
+        COMPONENT_SCANNER = registerMetaTileEntity(18053, new MetaTileEntityComponentScanner((susyId("component_scanner"))));
+        ROCKET_ASSEMBLER = registerMetaTileEntity(18054, new MetaTileEntityRocketAssembler(susyId("rocket_assembler")));
+        ROCKET_PROGRAMMER = registerMetaTileEntity(18055, new MetaTileEntityRocketProgrammer(susyId("rocket_programmer")));
 
-        SCRAP_RECYCLER = registerMetaTileEntity(18006, new MetaTileEntityScrapRecycler(susyId("scrap_recycler")));
-        ROCKET_ASSEMBLER = registerMetaTileEntity(18007, new MetaTileEntityRocketAssembler(susyId("rocket_assembler")));
-        ROCKET_PROGRAMMER = registerMetaTileEntity(18008, new MetaTileEntityRocketProgrammer(susyId("rocket_programmer")));
-        LAUNCH_PAD = registerMetaTileEntity(18009, new MetaTileEntityLaunchPad(susyId("launch_pad")));
-        AEROSPACE_FLIGHT_SIMULATOR = registerMetaTileEntity(18010, new MetaTileEntityAerospaceFlightSimulator(susyId("aerospace_flight_simulator")));
+        SCRAP_RECYCLER = registerMetaTileEntity(18056, new MetaTileEntityScrapRecycler(susyId("scrap_recycler")));
+        ROCKET_ASSEMBLER = registerMetaTileEntity(18057, new MetaTileEntityRocketAssembler(susyId("rocket_assembler")));
+        ROCKET_PROGRAMMER = registerMetaTileEntity(18058, new MetaTileEntityRocketProgrammer(susyId("rocket_programmer")));
+        LAUNCH_PAD = registerMetaTileEntity(18059, new MetaTileEntityLaunchPad(susyId("launch_pad")));
+        AEROSPACE_FLIGHT_SIMULATOR = registerMetaTileEntity(18060, new MetaTileEntityAerospaceFlightSimulator(susyId("aerospace_flight_simulator")));
 
         //Advanced Steam Turbines
         LOW_PRESSURE_ADVANCED_STEAM_TURBINE = registerMetaTileEntity(18100, new MetaTileEntitySUSYLargeTurbine(susyId("low_pressure_advanced_steam_turbine"), SuSyRecipeMaps.LOW_PRESSURE_ADVANCED_STEAM_TURBINE, 4, MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.TITANIUM_TURBINE_CASING), SuSyBlocks.TURBINE_ROTOR.getState(BlockTurbineRotor.BlockTurbineRotorType.LOW_PRESSURE), Textures.STABLE_TITANIUM_CASING, SusyTextures.LOW_PRESSURE_ADVANCED_STEAM_TURBINE_OVERLAY));

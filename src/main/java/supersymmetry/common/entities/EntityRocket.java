@@ -125,9 +125,10 @@ public class EntityRocket extends Entity {
         this.setStartPos((float) this.posY);
     }
 
-    public void LaunchRocket() {
+    public void launchRocket() {
         this.setLaunched(true);
         if (world.isRemote) {
+            setupRocketSound();
             soundRocket.startPlaying();
         }
         this.isAirBorne = true;
@@ -218,11 +219,6 @@ public class EntityRocket extends Entity {
 
     @Override
     public void onUpdate() {
-
-        if (this.firstUpdate) {
-            this.startCountdown();
-        }
-
         super.onUpdate();
 
         boolean launched = this.isLaunched();
@@ -230,7 +226,7 @@ public class EntityRocket extends Entity {
         int launchTime = this.getLaunchTime();
 
         if (this.isCountDownStarted() && !launched && age >= launchTime) {
-            this.LaunchRocket();
+            this.launchRocket();
         }
 
         if (launched) {
@@ -280,9 +276,7 @@ public class EntityRocket extends Entity {
     @Override
     public void onAddedToWorld() {
         super.onAddedToWorld();
-        if (this.world.isRemote) {
-            setupRocketSound();
-        }
+
     }
 
     @Override
