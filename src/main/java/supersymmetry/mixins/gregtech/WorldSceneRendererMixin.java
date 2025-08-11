@@ -15,6 +15,6 @@ public class WorldSceneRendererMixin {
                            at = @At(value = "INVOKE",
                                     target = "Lnet/minecraft/block/Block;canRenderInLayer(Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/util/BlockRenderLayer;)Z"))
     public boolean ignoreBlocked(boolean original, @Local(name = "pos") BlockPos pos) {
-        return original && !RenderMaskManager.modelDisabled.contains(pos);
+        return original && !RenderMaskManager.isModelDisabledRaw(pos);
     }
 }

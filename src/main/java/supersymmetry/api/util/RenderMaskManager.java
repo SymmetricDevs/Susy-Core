@@ -3,6 +3,7 @@ package supersymmetry.api.util;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -15,8 +16,8 @@ import java.util.Set;
 public class RenderMaskManager {
 
     public final static ThreadLocal<Boolean> isBuildingChunk = ThreadLocal.withInitial(()-> Boolean.FALSE);
-    public static Set<BlockPos> modelDisabled = new ObjectOpenHashSet<>();
-    public static Map<BlockPos, Collection<BlockPos>> multiDisabled = new HashMap<>();
+    protected static Set<BlockPos> modelDisabled = new ObjectOpenHashSet<>();
+    protected static Map<BlockPos, Collection<BlockPos>> multiDisabled = new HashMap<>();
 
     public static void removeDisableModel(BlockPos controllerPos, boolean updateRendering) {
         Collection<BlockPos> poses = multiDisabled.remove(controllerPos);
@@ -51,9 +52,21 @@ public class RenderMaskManager {
 
     public static boolean isModelDisabled(BlockPos pos) {
         if (isBuildingChunk.get()) {
-            return modelDisabled.contains(pos);
+            return isModelDisabledRaw(pos);
         }
         return false;
+    }
+
+    public static boolean isModelDisabledRaw(BlockPos pos) {
+        return modelDisabled.contains(pos);
+    }
+
+    public static boolean isModelDisabled(MutableBlockPos pos) {
+        return isModelDisabled(pos.toImmutable());
+    }
+
+    public static boolean isModelDisabledRaw(MutableBlockPos pos) {
+        return isModelDisabledRaw(pos.toImmutable());
     }
 
     public static void clearDisabled() {

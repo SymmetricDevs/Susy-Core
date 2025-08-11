@@ -20,7 +20,7 @@ public class TileEntityRendererDispatcherMixin {
                                                       CallbackInfoReturnable<TileEntitySpecialRenderer<T>> cir) {
         if (tileEntityIn != null) {
             if (tileEntityIn.getWorld() == Minecraft.getMinecraft().world
-                    && RenderMaskManager.modelDisabled.contains(tileEntityIn.getPos())) {
+                    && RenderMaskManager.isModelDisabledRaw(tileEntityIn.getPos())) {
                 cir.setReturnValue(null);
             }
         }
