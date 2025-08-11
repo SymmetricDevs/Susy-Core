@@ -10,7 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import supersymmetry.api.util.BlockRenderManager;
+import supersymmetry.api.util.RenderMaskManager;
 
 @Mixin(RenderChunk.class)
 public abstract class RenderChunkMixin {
@@ -24,13 +24,13 @@ public abstract class RenderChunkMixin {
                                 IBlockAccess blockAccess,
                                 BufferBuilder bufferBuilder,
                                 Operation<Boolean> method) {
-        BlockRenderManager.isBuildingChunk.set(true);
-        if (BlockRenderManager.isModelDisabled(pos)) {
-            BlockRenderManager.isBuildingChunk.set(false);
+        RenderMaskManager.isBuildingChunk.set(true);
+        if (RenderMaskManager.isModelDisabled(pos)) {
+            RenderMaskManager.isBuildingChunk.set(false);
             return false;
         }
         boolean rst = method.call(dispatcher, state, pos, blockAccess, bufferBuilder);
-        BlockRenderManager.isBuildingChunk.set(false);
+        RenderMaskManager.isBuildingChunk.set(false);
         return rst;
     }
 }

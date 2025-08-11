@@ -10,7 +10,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import supersymmetry.client.renderer.handler.GeoMTERenderer;
-import supersymmetry.common.network.SPacketUpdateBlockRendering;
+import supersymmetry.common.network.SPacketUpdateRenderMask;
 
 import java.util.Collection;
 
@@ -58,7 +58,7 @@ public interface IAnimatableMTE extends IFastRenderMetaTileEntity, IAnimatable {
         if (world.getMinecraftServer() != null) {
             BlockPos pos = thisObject().getPos();
             int dimId = world.provider.getDimension();
-            var packet = new SPacketUpdateBlockRendering(pos, disable ? getHiddenBlocks() : null, dimId);
+            var packet = new SPacketUpdateRenderMask(pos, disable ? getHiddenBlocks() : null, dimId);
             GregTechAPI.networkHandler.sendToDimension(packet, dimId);
         }
     }

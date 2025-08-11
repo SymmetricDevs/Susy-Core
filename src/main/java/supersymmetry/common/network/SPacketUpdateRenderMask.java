@@ -9,14 +9,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
-import supersymmetry.api.util.BlockRenderManager;
+import supersymmetry.api.util.RenderMaskManager;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.Collection;
 
 @ParametersAreNonnullByDefault
-public class SPacketUpdateBlockRendering implements IPacket, IClientExecutor {
+public class SPacketUpdateRenderMask implements IPacket, IClientExecutor {
 
     private boolean disable;
     private int dimId;
@@ -25,11 +25,11 @@ public class SPacketUpdateBlockRendering implements IPacket, IClientExecutor {
     private Collection<BlockPos> poses;
 
     @SuppressWarnings("unused")
-    public SPacketUpdateBlockRendering() {
+    public SPacketUpdateRenderMask() {
         /* Needed for client side */
     }
 
-    public SPacketUpdateBlockRendering(BlockPos controllerPos, @Nullable Collection<BlockPos> poses, int dimId) {
+    public SPacketUpdateRenderMask(BlockPos controllerPos, @Nullable Collection<BlockPos> poses, int dimId) {
         this.disable = poses != null;
         this.dimId = dimId;
         this.controllerPos = controllerPos;
@@ -41,9 +41,9 @@ public class SPacketUpdateBlockRendering implements IPacket, IClientExecutor {
     public void executeClient(NetHandlerPlayClient handler) {
         boolean updateRendering = Minecraft.getMinecraft().world.provider.getDimension() == dimId;
         if (disable) {
-            BlockRenderManager.addDisableModel(controllerPos, poses, updateRendering);
+            RenderMaskManager.addDisableModel(controllerPos, poses, updateRendering);
         } else {
-            BlockRenderManager.removeDisableModel(controllerPos, updateRendering);
+            RenderMaskManager.removeDisableModel(controllerPos, updateRendering);
         }
     }
 

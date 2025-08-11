@@ -9,7 +9,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import supersymmetry.api.util.BlockRenderManager;
+import supersymmetry.api.util.RenderMaskManager;
 
 @Mixin(BlockModelRenderer.class)
 public abstract class BlockModelRendererMixin {
@@ -19,6 +19,6 @@ public abstract class BlockModelRendererMixin {
                             target = "Lnet/minecraft/block/state/IBlockState;shouldSideBeRendered(Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/EnumFacing;)Z"))
     public boolean ignoreBlocked(IBlockState state, IBlockAccess blockAccess,
                                  BlockPos pos, EnumFacing facing, Operation<Boolean> method) {
-        return BlockRenderManager.isModelDisabled(pos.offset(facing)) || method.call(state, blockAccess, pos, facing);
+        return RenderMaskManager.isModelDisabled(pos.offset(facing)) || method.call(state, blockAccess, pos, facing);
     }
 }

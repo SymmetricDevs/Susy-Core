@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 @SideOnly(Side.CLIENT)
-public class BlockRenderManager {
+public class RenderMaskManager {
 
     public final static ThreadLocal<Boolean> isBuildingChunk = ThreadLocal.withInitial(()-> Boolean.FALSE);
     public static Set<BlockPos> modelDisabled = new ObjectOpenHashSet<>();

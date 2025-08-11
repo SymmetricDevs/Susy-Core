@@ -6,7 +6,7 @@ import gregtech.client.renderer.scene.WorldSceneRenderer;
 import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import supersymmetry.api.util.BlockRenderManager;
+import supersymmetry.api.util.RenderMaskManager;
 
 @Mixin(value = WorldSceneRenderer.class, remap = false)
 public class WorldSceneRendererMixin {
@@ -15,6 +15,6 @@ public class WorldSceneRendererMixin {
                            at = @At(value = "INVOKE",
                                     target = "Lnet/minecraft/block/Block;canRenderInLayer(Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/util/BlockRenderLayer;)Z"))
     public boolean ignoreBlocked(boolean original, @Local(name = "pos") BlockPos pos) {
-        return original && !BlockRenderManager.modelDisabled.contains(pos);
+        return original && !RenderMaskManager.modelDisabled.contains(pos);
     }
 }
