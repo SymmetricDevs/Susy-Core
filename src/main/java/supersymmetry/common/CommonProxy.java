@@ -29,7 +29,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.jetbrains.annotations.NotNull;
-import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.blocks.VariantItemBlockFalling;
@@ -62,7 +61,6 @@ import static supersymmetry.common.blocks.SuSyMetaBlocks.SHEETED_FRAMES;
 public class CommonProxy {
 
     public void preLoad() {
-        GeckoLib.initialize();
         SusyStoneTypes.init();
     }
 

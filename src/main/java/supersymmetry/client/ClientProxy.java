@@ -40,6 +40,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
+import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.SuSyValues;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
@@ -73,6 +74,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void preLoad() {
         super.preLoad();
+        GeckoLib.initialize();
         SusyMetaEntities.initRenderers();
         SuSyIRLoader.initEntityRenderers();
     }
