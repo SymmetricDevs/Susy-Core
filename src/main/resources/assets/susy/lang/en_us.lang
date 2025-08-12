@@ -132,6 +132,14 @@ tile.conveyor_belt.lv.name=Conveyor Belt
 
 tile.drill_bit.steel.name=Steel Drill Bit Block
 
+tile.eccentric_roll.steel.name=Eccentric Crushing Wheel
+tile.grinder_casing.abrasion_resistant_casing.name=Abrasion Resistant Casing
+tile.grinder_casing.hydraulic_mechanical_gearbox.name=Hydraulic Mechanical Gearbox
+tile.grinder_casing.wear_resistant_lined_mill_shell.name=Wear Resistant Lined Mill Shell
+tile.grinder_casing.wear_resistant_lined_shell_head.name=Wear Resistant Lined Shell Head
+tile.grinder_casing.intermediate_diaphragm.name=Intermediate Diaphragm
+tile.girth_gear_tooth.steel.name=Steel Girth Gear Tooth
+
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
 tile.susy_stone_smooth.gneiss.name=Gneiss
@@ -187,8 +195,6 @@ susy.material.latex=Latex
 susy.material.mud=Mud
 susy.material.sea_water=Sea Water
 susy.material.refractory_gunning_mixture=Refractory Gunning Mixture
-susy.material.preheated_air=Preheated Air
-susy.material.metallized_bopet=Metallized BoPET
 
 # Rock/Mineral Materials
 susy.material.fluorite=Fluorite
@@ -236,6 +242,7 @@ item.material.oreprefix.fiberWet=Wet %s Fiber
 item.material.oreprefix.thread=%s Thread
 item.material.oreprefix.dustWet=Wet %s Dust
 item.material.oreprefix.electrode=%s Electrode
+item.material.oreprefix.millBall=%s Mill Ball
 
 susy.fluid.supercritical=Supercritical %s
 susy.fluid.impure_slurry=Impure %s Slurry
@@ -296,6 +303,10 @@ susy.machine.railroad_engineering_station.name=Railroad Engineering Station
 susy.machine.railroad_engineering_station.tooltip=Place Immersive Railroading Tracks in the middle to form the multiblock
 susy.machine.railroad_engineering_station.tooltip.1=The concrete below the tracks can be substituted with any block, including pipes or air
 susy.machine.quarry.name=Quarry
+susy.machine.eccentric_roll_crusher.name=Eccentric Roll Crusher
+susy.machine.eccentric_roll_crusher.tooltip=Eccentricity does not mean low efficiency.
+susy.machine.ball_mill.name=Ball Mill
+susy.machine.ball_mill.tooltip=Rolling now!
 
 susy.machine.evaporation_pool.name=Evaporation Pool
 susy.machine.evaporation_pool.tooltip.info=Max square of %1$sx%1$s, minimum %2$sx%2$s. Read info tab and tool info for more details.
@@ -879,6 +890,7 @@ recipemap.metallurgical_converter.name=Metallurgical Converter
 recipemap.low_pressure_advanced_steam_turbine.name=Low Pressure Advanced Steam Turbine
 recipemap.high_pressure_advanced_steam_turbine.name=High Pressure Advanced Steam Turbine
 recipemap.mixer_settler.name=Mixer-Settler
+recipemap.eccentric_roll_crusher.name=Eccentric Roll Crushing
 recipemap.injection_molder=Injection Molding
 recipemap.boiler.name=Solid Boiler Fuels
 
@@ -1071,7 +1083,7 @@ susy.gui.stock_interactor.controller_setting.active_throttle.tooltip=Throttle (P
 susy.gui.stock_interactor.controller_setting.inactive_brake.tooltip=Brake (Unpowered)
 susy.gui.stock_interactor.controller_setting.inactive_throttle.tooltip=Throttle (Unpowered)
 
-susy.gui.temperature_celcius=Temperature: %s / %s°C
+susy.gui.temperature_celsius=Temperature: %s / %s°C
 
 # Extra recipe info
 susy.recipe.dimensions=Dimensions: %s
@@ -1107,6 +1119,7 @@ susy.multiblock.quarry.recipe_mode=Recipe Mode
 
 death.attack.toxic_atmo=%s's lungs were shredded
 death.attack.suffocation=%s couldn't breathe
+death.attack.crusher=%s was ground into a pulp
 
 metaitem.simple_gas_mask.name=Primitive Gas Mask
 metaitem.simple_gas_mask.tooltip=Survive in oxygenless environments

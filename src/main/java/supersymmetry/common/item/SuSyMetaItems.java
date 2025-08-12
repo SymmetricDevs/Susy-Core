@@ -1,19 +1,28 @@
 package supersymmetry.common.item;
 
+import com.google.common.base.CaseFormat;
 import gregtech.api.GTValues;
+import gregtech.api.GregTechAPI;
 import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.items.metaitem.MetaItem;
+import gregtech.api.items.materialitem.MetaPrefixItem;
 import gregtech.api.items.metaitem.MetaItem.MetaValueItem;
 import gregtech.api.items.metaitem.MetaOreDictItem;
 import gregtech.api.items.metaitem.MetaOreDictItem.OreDictValueItem;
 import gregtech.api.items.metaitem.StandardMetaItem;
+import gregtech.api.items.metaitem.stats.IItemDurabilityManager;
+import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.info.MaterialIconSet;
+import gregtech.api.unification.material.registry.MaterialRegistry;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.common.items.MetaItems;
+import gregtech.api.unification.stack.UnificationEntry;
 import gregtech.common.items.behaviors.TooltipBehavior;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import supersymmetry.SuSyValues;
+import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
 import supersymmetry.common.item.behavior.dataCardBehavior;
 import supersymmetry.SuSyValues;
@@ -72,6 +81,24 @@ public class SuSyMetaItems {
         armorItem.setRegistryName("susy_armor");
         CatalystItems.init();
 
+        for (MaterialRegistry registry : GregTechAPI.materialManager.getRegistries()) {
+            String regName = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, SusyOrePrefix.millBall.name());
+            MetaPrefixItem metaOrePrefix = new MetaPrefixItem(registry, SusyOrePrefix.millBall) {
+
+                @Override
+                public void registerSubItems() {
+                    for (Material material : registry) {
+                        short i = (short) registry.getIDForObject(material);
+                        if (canGenerate(SusyOrePrefix.millBall, material)) {
+                            var metaItem = addItem(i, new UnificationEntry(SusyOrePrefix.millBall, material).toString());
+                            metaItem.addComponents((IItemDurabilityManager) stack -> 0.5);
+                            metaItem.setMaxStackSize(1);
+                        }
+                    }
+                }
+            };
+            metaOrePrefix.setRegistryName(registry.getModid(), String.format("meta_%s", regName));
+        }
     }
 
     public static void initSubItems() {

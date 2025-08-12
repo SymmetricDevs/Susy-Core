@@ -10,6 +10,8 @@ import gregtech.api.unification.material.info.MaterialFlags;
 import gregtech.api.unification.material.properties.*;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
+import supersymmetry.api.unification.material.properties.MillBallProperty;
+import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 
 import java.lang.reflect.Field;
 import java.util.HashSet;
@@ -176,6 +178,9 @@ public class SusyMaterials {
         Materials.Electrum.setProperty(PropertyKey.ORE, new OreProperty());
 
         Materials.Hydrogen.addFlags(MaterialFlags.FLAMMABLE);
+
+        // Debug only
+        Materials.Steel.setProperty(SuSyPropertyKey.MILL_BALL, new MillBallProperty(23123));
     }
 
     private static void removeProperty(PropertyKey<?> key, Material material) {

@@ -22,25 +22,18 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.fml.common.Loader;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.blocks.VariantItemBlockFalling;
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.event.MobHordeEvent;
 import supersymmetry.api.fluids.SusyGeneratedFluidHandler;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
@@ -51,19 +44,18 @@ import supersymmetry.common.blocks.SuSyMetaBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.materials.SusyMaterials;
-import supersymmetry.common.world.biome.BiomeLunarMaria;
+import supersymmetry.common.world.SuSyBiomes;
 import supersymmetry.common.world.SuSyDimensions;
 import supersymmetry.common.world.biome.BiomeLunarHighlands;
-import supersymmetry.common.world.SuSyBiomes;
+import supersymmetry.common.world.biome.BiomeLunarMaria;
 import supersymmetry.loaders.SuSyWorldLoader;
 import supersymmetry.loaders.SusyOreDictionaryLoader;
 import supersymmetry.loaders.recipes.SuSyRecipeLoader;
 import supersymmetry.modules.SuSyModules;
 
-import java.util.Arrays;
+import java.io.File;
 import java.util.Objects;
 import java.util.function.Function;
-import java.util.logging.Level;
 
 import static supersymmetry.common.blocks.SuSyMetaBlocks.SHEETED_FRAMES;
 
@@ -195,21 +187,20 @@ public class CommonProxy {
 
     private static void handleCoilTooltips(ItemTooltipEvent event) {
         Block block = Block.getBlockFromItem(event.getItemStack().getItem());
-        if(block instanceof BlockWireCoil && TooltipHelper.isShiftDown()) {
+        if (block instanceof BlockWireCoil wireCoilBlock && TooltipHelper.isShiftDown()) {
             ItemStack itemStack = event.getItemStack();
             Item item = itemStack.getItem();
-            BlockWireCoil wireCoilBlock = (BlockWireCoil)block;
-            VariantItemBlock itemBlock = (VariantItemBlock)item;
-            BlockWireCoil.CoilType coilType = (BlockWireCoil.CoilType)wireCoilBlock.getState(itemBlock.getBlockState(itemStack));
-            event.getToolTip().add(I18n.format("tile.wire_coil.tooltip_evaporation", new Object[0]));
-            event.getToolTip().add(I18n.format("tile.wire_coil.tooltip_energy_evaporating", new Object[]{coilType.getCoilTemperature()/1000}));
+            VariantItemBlock itemBlock = (VariantItemBlock) item;
+            BlockWireCoil.CoilType coilType = wireCoilBlock.getState(itemBlock.getBlockState(itemStack));
+            event.getToolTip().add(I18n.format("tile.wire_coil.tooltip_evaporation"));
+            event.getToolTip().add(I18n.format("tile.wire_coil.tooltip_energy_evaporating", coilType.getCoilTemperature() / 1000));
         }
     }
 
     // Since this function checks if the key is in the translation key, you can sometimes add tooltips to multiple items
     //   with a single call of the function. Useful for hitting both basic and high pressure steam machines, for example.
     private static void addTooltip(ItemTooltipEvent event, String key, String toolTip, int index) {
-        if(event.getItemStack().getTranslationKey().contains(key)) {
+        if (event.getItemStack().getTranslationKey().contains(key)) {
             event.getToolTip().add(index, toolTip);
         }
     }

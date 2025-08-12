@@ -14,6 +14,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.blocks.VariantBlockFalling;
 import supersymmetry.common.blocks.rocketry.*;
+import supersymmetry.common.tileentities.SuSyTileEntities;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -68,6 +69,9 @@ public class SuSyBlocks {
     public static BlockRoomPadding ROOM_PADDING;
     public static BlockFairingConnector FAIRING_CONNECTOR;
     public static BlockSpacecraftHull SPACECRAFT_HULL;
+    public static BlockEccentricRoll ECCENTRIC_ROLL;
+    public static BlockGrinderCasing GRINDER_CASING;
+    public static BlockGirthGearTooth GIRTH_GEAR_TOOTH;
 
     public static ArrayList<VariantBlock<?>> susyBlocks;
 
@@ -98,10 +102,14 @@ public class SuSyBlocks {
         REGOLITH = new BlockRegolith();
         REGOLITH.setRegistryName("regolith");
 
+        SuSyTileEntities.register();
     }
 
     @SideOnly(Side.CLIENT)
     public static void registerItemModels() {
+        COOLING_COIL.onModelRegister();
+        SINTERING_BRICK.onModelRegister();
+        registerItemModel(COAGULATION_TANK_WALL);
         for (SusyStoneVariantBlock block : SUSY_STONE_BLOCKS.values())
             registerItemModel(block);
         susyBlocks.forEach(b -> {
