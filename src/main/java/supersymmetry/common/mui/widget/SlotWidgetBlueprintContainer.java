@@ -3,7 +3,6 @@ package supersymmetry.common.mui.widget;
 import gregtech.api.gui.widgets.SlotWidget;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import supersymmetry.api.SusyLog;
 
 /** honestly shouldnt exist, im just bad at it :c */
 public class SlotWidgetBlueprintContainer extends SlotWidget {

@@ -1,5 +1,8 @@
 package supersymmetry.common.rocketry.rockets;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
@@ -8,11 +11,9 @@ import net.minecraftforge.common.util.Constants.NBT;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.rocketStage;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
-public class simpleStagedRocketBlueprint extends AbstractRocketBlueprint {
-    public simpleStagedRocketBlueprint(String name, ResourceLocation entity) {
+public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint {
+    public SimpleStagedRocketBlueprint(String name, ResourceLocation entity) {
         super(name, entity);
     }
 
@@ -94,8 +95,8 @@ public class simpleStagedRocketBlueprint extends AbstractRocketBlueprint {
             return this;
         }
 
-        public simpleStagedRocketBlueprint build() {
-            simpleStagedRocketBlueprint blueprint = new simpleStagedRocketBlueprint(name, location);
+        public SimpleStagedRocketBlueprint build() {
+            SimpleStagedRocketBlueprint blueprint = new SimpleStagedRocketBlueprint(name, location);
             blueprint.setStages(stages);
             blueprint.setIgnitionStages(ignitionSequence);
             assert !blueprint.isFullBlueprint()
@@ -103,4 +104,5 @@ public class simpleStagedRocketBlueprint extends AbstractRocketBlueprint {
             return blueprint;
         }
     }
+
 }

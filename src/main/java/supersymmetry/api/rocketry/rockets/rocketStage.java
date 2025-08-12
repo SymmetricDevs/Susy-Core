@@ -5,34 +5,74 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.common.util.Constants.NBT;
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 
 public class rocketStage {
+  public static class Builder {
+    public Builder(String stagename) {
+      this.name = stagename;
+    }
+
+    String lastComponentName = "";
+    String name;
+    Map<String, List<Integer>> compLimit = new HashMap<>();
+
+    public Builder type(String name) {
+      lastComponentName = name;
+      compLimit.put(lastComponentName, new ArrayList<>());
+      return this;
+    }
+
+    public Builder limit(int limit) {
+      compLimit.get(lastComponentName).add(limit);
+      return this;
+    }
+
+    public Builder stageName(String name) {
+      this.name = name;
+      return this;
+    }
+
+    public rocketStage build() {
+      return new rocketStage(
+          compLimit.entrySet().stream()
+              .collect(
+                  Collectors.toMap(
+                      Map.Entry::getKey,
+                      e -> e.getValue().stream().mapToInt(Integer::intValue).toArray())),
+          name);
+    }
+  }
+
   public Map<String, List<AbstractComponent<?>>> components = new HashMap<>();
 
   // allows you to make it so it needs different types of engines for example, but it should
   // probably return true for most things
   // TODO: make this return some additional context to why it failed when a rocket uses this thing
-  public Predicate<Tuple<String, List<AbstractComponent<?>>>> componentValidationPredicate;
+  public Predicate<Tuple<String, List<AbstractComponent<?>>>> componentValidationPredicate =
+      x -> {
+        return true;
+        // this is done after the type checks in the gui anyways, no need to double check ithink
+      };
   // limits on how many of each component it can have
   public Map<String, int[]> componentLimits = new HashMap<>();
   public String
       name; // ex "boosters" or "lander", localized with susy.rocketry.stages.name.<name string>
 
+  public rocketStage(final Map<String, int[]> limits, String name) {
+    this.componentLimits = limits;
+    this.setName(name);
+  }
+
   public rocketStage(final Map<String, int[]> limits) {
     this.componentLimits = limits;
-    setValidationPredicate(
-        x -> {
-          return true;
-          // this is done after the type checks in the gui anyways, no need to double check ithink
-        });
   }
 
   public rocketStage() {
@@ -40,7 +80,7 @@ public class rocketStage {
   }
 
   public boolean isPopulated() {
-    return components.values().stream().noneMatch(x -> x.isEmpty());
+    return components.values().stream().noneMatch(x -> x.isEmpty()) && !components.isEmpty();
   }
 
   public double getMass() {
@@ -150,7 +190,7 @@ public class rocketStage {
                 .readFromNBT((NBTTagCompound) x)
                 .ifPresent(
                     l -> {
-                      //SusyLog.logger.info("successfully read {} from nbt", l.getName());
+                      // SusyLog.logger.info("successfully read {} from nbt", l.getName());
                       realComponents.add(l);
                     });
           });

@@ -22,11 +22,11 @@ import supersymmetry.common.blocks.rocketry.*;
 import supersymmetry.common.tile.TileEntityCoverable;
 
 /** componentLiquidFuelTank */
-public class componentLiquidFuelTank extends AbstractComponent<componentLiquidFuelTank> {
+public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFuelTank> {
   public int volume;
   public double radius;
 
-  public componentLiquidFuelTank() {
+  public ComponentLiquidFuelTank() {
     super(
         "fluid_tank",
         "tank",
@@ -55,10 +55,10 @@ public class componentLiquidFuelTank extends AbstractComponent<componentLiquidFu
   // but the Lord laughs at the wicked,
   // for he knows their day is coming.
   @Override
-  public Optional<componentLiquidFuelTank> readFromNBT(NBTTagCompound compound) {
+  public Optional<ComponentLiquidFuelTank> readFromNBT(NBTTagCompound compound) {
     if (compound.getString("type") != this.type || compound.getString("name") != this.name)
       Optional.empty();
-    componentLiquidFuelTank tank = new componentLiquidFuelTank();
+    ComponentLiquidFuelTank tank = new ComponentLiquidFuelTank();
     if (!compound.hasKey("mass", Constants.NBT.TAG_DOUBLE)) Optional.empty();
     if (!compound.hasKey("radius", Constants.NBT.TAG_DOUBLE)) Optional.empty();
     if (!compound.hasKey("area_ratio", Constants.NBT.TAG_DOUBLE)) Optional.empty();

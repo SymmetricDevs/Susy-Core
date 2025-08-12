@@ -12,10 +12,10 @@ import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
 
-public class componentInterstage extends AbstractComponent<componentInterstage> {
+public class ComponentInterstage extends AbstractComponent<ComponentInterstage> {
  public double radius;
 
-  public componentInterstage() {
+  public ComponentInterstage() {
     super(
         "interstage",
         "interstage",
@@ -39,10 +39,11 @@ public class componentInterstage extends AbstractComponent<componentInterstage> 
     tag.setDouble("mass", this.mass);
     tag.setDouble("radius", this.radius);
   }
+  
 
   @Override
-  public Optional<componentInterstage> readFromNBT(NBTTagCompound compound) {
-    componentInterstage interstage = new componentInterstage();
+  public Optional<ComponentInterstage> readFromNBT(NBTTagCompound compound) {
+    ComponentInterstage interstage = new ComponentInterstage();
     if (compound.getString("type") != this.type || compound.getString("name") != this.name)
       Optional.empty();
     if (!compound.hasKey("mass", NBT.TAG_DOUBLE)) Optional.empty();

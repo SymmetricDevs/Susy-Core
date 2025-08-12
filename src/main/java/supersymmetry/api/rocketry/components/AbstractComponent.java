@@ -32,49 +32,10 @@ import supersymmetry.common.blocks.rocketry.BlockTurboPump;
 import supersymmetry.common.tile.TileEntityCoverable;
 
 public abstract class AbstractComponent<T extends AbstractComponent<T>> {
-  protected Predicate<Tuple<StructAnalysis, List<BlockPos>>> detectionPredicate;
   private static final Set<AbstractComponent<?>> registry = new HashSet<>();
   private static boolean registrylock = false;
   private static final Map<String, Class<? extends AbstractComponent<?>>> nameToComponentRegistry =
       new HashMap<>();
-  // meant to verify the compatability between the component and the entire rocket stage so that you
-  // dont end up with a liquid fuel engine on a solid fuel tank, return true if everything is fine
-  protected Predicate<Map<String, AbstractComponent<?>>> compatabilityValidationPredicate =
-      t -> {
-        return true;
-      };
-
-  protected String name;
-  // ex name="laval_engine", type="engine" so that you can do some silly things with engine types
-  protected String type;
-  protected BuildStat status = BuildStat.ERROR;
-  protected double mass = 100;//kg?
-
-  public AbstractComponent(
-      String name,
-      String type,
-      Predicate<Tuple<StructAnalysis, List<BlockPos>>> detectionPredicate) {
-    this.detectionPredicate = detectionPredicate;
-    this.name = name;
-    this.type = type;
-  }
-
-  public String getName() {
-    return this.name;
-  }
-
-  public String getType() {
-    return this.type;
-  }
-
-  public Predicate<Map<String, AbstractComponent<?>>> getCompatabilityValidationPredicate() {
-    return compatabilityValidationPredicate;
-  }
-
-  public void setCompatabilityValidationPredicate(
-      Predicate<Map<String, AbstractComponent<?>>> compatabilityValidationPredicate) {
-    this.compatabilityValidationPredicate = compatabilityValidationPredicate;
-  }
 
   public static Map<String, Class<? extends AbstractComponent<?>>> getNameRegistry() {
     return new HashMap<>(nameToComponentRegistry);
@@ -83,10 +44,6 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
   public static boolean nameRegistered(String name) {
     return nameToComponentRegistry.containsKey(name)
         && registry.stream().anyMatch(x -> x.getName() == name);
-  }
-
-  public double getMass() {
-    return this.mass;
   }
 
   public static AbstractComponent<?> getComponentFromName(String name) {
@@ -134,21 +91,7 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
     return new HashSet<>(registry);
   }
 
-  public Predicate<Tuple<StructAnalysis, List<BlockPos>>> getDetectionPredicate() {
-    return this.detectionPredicate;
-  }
-
-  public void setDetectionPredicate(Predicate<Tuple<StructAnalysis, List<BlockPos>>> predicate) {
-    this.detectionPredicate = predicate;
-  }
-
-  public abstract Optional<NBTTagCompound> analyzePattern(
-      StructAnalysis analysis, AxisAlignedBB aabb);
-
-  public abstract void writeToNBT(NBTTagCompound tag);
-
-  public abstract Optional<T> readFromNBT(NBTTagCompound compound);
-
+  // TODO replace with something smarter....
   public static void writeBlocksToNBT(
       Set<BlockPos> blocks, World world, NBTTagCompound mutableTagCompound) {
     Map<String, Integer> counts = new HashMap<String, Integer>();
@@ -237,4 +180,78 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
     }
     return 50.0;
   }
+
+  protected Predicate<Tuple<StructAnalysis, List<BlockPos>>> detectionPredicate;
+
+  // meant to verify the compatability between the component and the entire rocket stage so that you
+  // dont end up with a liquid fuel engine on a solid fuel tank, return true if everything is fine
+  protected Predicate<Map<String, AbstractComponent<?>>> compatabilityValidationPredicate =
+      t -> {
+        return true;
+      };
+
+  protected Predicate<String> componentSlotValidator =
+      name -> name.equals(this.getType()) || name.equals(this.getName());
+
+  protected String name;
+
+  // ex name="laval_engine", type="engine" so that you can do some silly things with engine types
+  protected String type;
+
+  protected BuildStat status = BuildStat.ERROR;
+
+  protected double mass;
+
+  public AbstractComponent(
+      String name,
+      String type,
+      Predicate<Tuple<StructAnalysis, List<BlockPos>>> detectionPredicate) {
+    this.detectionPredicate = detectionPredicate;
+    this.name = name;
+    this.type = type;
+  }
+
+  public Predicate<String> getComponentSlotValidator() {
+    return componentSlotValidator;
+  }
+
+  public void setComponentSlotValidator(Predicate<String> componentSlotValidator) {
+    this.componentSlotValidator = componentSlotValidator;
+  }
+
+  public double getMass() {
+    return this.mass;
+  }
+
+  public String getName() {
+    return this.name;
+  }
+
+  public String getType() {
+    return this.type;
+  }
+
+  public Predicate<Map<String, AbstractComponent<?>>> getCompatabilityValidationPredicate() {
+    return compatabilityValidationPredicate;
+  }
+
+  public void setCompatabilityValidationPredicate(
+      Predicate<Map<String, AbstractComponent<?>>> compatabilityValidationPredicate) {
+    this.compatabilityValidationPredicate = compatabilityValidationPredicate;
+  }
+
+  public Predicate<Tuple<StructAnalysis, List<BlockPos>>> getDetectionPredicate() {
+    return this.detectionPredicate;
+  }
+
+  public void setDetectionPredicate(Predicate<Tuple<StructAnalysis, List<BlockPos>>> predicate) {
+    this.detectionPredicate = predicate;
+  }
+
+  public abstract Optional<NBTTagCompound> analyzePattern(
+      StructAnalysis analysis, AxisAlignedBB aabb);
+
+  public abstract void writeToNBT(NBTTagCompound tag);
+
+  public abstract Optional<T> readFromNBT(NBTTagCompound compound);
 }
