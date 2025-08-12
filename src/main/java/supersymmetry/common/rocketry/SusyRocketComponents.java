@@ -3,6 +3,7 @@ package supersymmetry.common.rocketry;
 import net.minecraft.util.ResourceLocation;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.rocketry.components.AbstractComponent;
+import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.common.rocketry.components.*;
 import supersymmetry.common.rocketry.rockets.SimpleStagedRocketBlueprint;
@@ -51,5 +52,7 @@ public class SusyRocketComponents {
                     .build())
             .entityResourceLocation(new ResourceLocation(Supersymmetry.MODID, "rocket_basic"))
             .build();
+    AbstractRocketBlueprint.registerBlueprint(ROCKET_SOYUZ_BLUEPRINT_DEFAULT);
+    AbstractRocketBlueprint.setRegistryLock(true);
   }
 }

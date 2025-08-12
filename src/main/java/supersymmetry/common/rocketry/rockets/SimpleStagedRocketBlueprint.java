@@ -16,8 +16,8 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint {
     String name;
     ResourceLocation location;
     int stageCount = 0;
-    public List<RocketStage> stages;
-    public List<List<Integer>> ignitionSequence;
+    public List<RocketStage> stages = new ArrayList<>();
+    public List<List<Integer>> ignitionSequence = new ArrayList<>();
 
     public Builder(String name) {
       this.name = name;
@@ -25,7 +25,6 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint {
 
     public Builder entityResourceLocation(ResourceLocation rocket) {
       this.location = rocket;
-
       return this;
     }
 
@@ -86,15 +85,17 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint {
     if (!tag.hasKey("ignitionOrder", NBT.TAG_LIST)) return false;
     if (!tag.hasKey("name", NBT.TAG_STRING)) return false;
     if (!tag.hasKey("buildstat")) return false;
-    var stagesCompounds =
+    this.stages.clear();
+    this.ignitionStages.clear();
+
+    List<NBTTagCompound> stagesCompounds =
         tag.getTagList("stages", NBT.TAG_COMPOUND).tagList.stream()
             .map(x -> (NBTTagCompound) x)
-            .toList();
+            .collect(Collectors.toList());
     for (var comp : stagesCompounds) {
-      var stage = new RocketStage();
-      if (stage.readfromNBT(comp)) {
-        this.stages.add(stage);
-
+      var stageRead = new RocketStage();
+      if (stageRead.readfromNBT(comp)) {
+        this.stages.add(stageRead);
       } else {
         return false;
       }
@@ -102,9 +103,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint {
     tag.getTagList("ignitionOrder", NBT.TAG_INT_ARRAY).tagList.stream()
         .map(x -> (NBTTagIntArray) x)
         .forEach(t -> this.ignitionStages.add(t.getIntArray()));
-
     this.setName(tag.getString("name"));
-
     return true;
   }
 }

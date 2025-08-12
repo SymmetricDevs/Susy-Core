@@ -1,7 +1,5 @@
 package supersymmetry.common.mui.widget;
 
-import gregtech.api.gui.GuiTextures;
-import gregtech.api.gui.Widget;
 import gregtech.api.gui.widgets.AbstractWidgetGroup;
 import gregtech.api.gui.widgets.ClickButtonWidget;
 import gregtech.api.gui.widgets.ImageCycleButtonWidget;
@@ -9,7 +7,6 @@ import gregtech.api.gui.widgets.ImageWidget;
 import gregtech.api.gui.widgets.TextFieldWidget2;
 import gregtech.api.util.Position;
 import gregtech.api.util.Size;
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.gui.SusyGuiTextures;
 
 public class RocketComponentEntryWidget extends AbstractWidgetGroup {
@@ -77,11 +74,47 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
   public WidgetIntSelector selector;
   public boolean shortView = false;
   public HorizontalScrollableListWidget itemList;
-  public ImageCycleButtonWidget checkmark;
-  public ImageWidget checkboxBackground;
 
-  Size previousStateSize = new Size(18 * 5 + 2, 28);
-  boolean previousStateSlider = false;
+  public ImageCycleButtonWidget checkmark;
+  public ImageWidget buttonBackground;
+  private Size previousStateSize = new Size(18 * 5 + 2, 28);
+
+  private boolean previousStateSlider = false;
+
+  public RocketComponentEntryWidget(
+      Position pos, Size size, HorizontalScrollableListWidget itemList, int[] validValues) {
+    super(pos, size);
+    ImageCycleButtonWidget button =
+        new ImageCycleButtonWidget(
+            itemList.getPosition().x + itemList.getSize().width + 10,
+            0,
+            18,
+            18,
+            SusyGuiTextures.SPACEFLIGHT_SIMULATOR_BUTTON_LEFT,
+            () -> {
+              return !this.shortView;
+            },
+            (bool) -> {
+              this.setShortView(!bool);
+              this.resetBackgroundWidget();
+            });
+    WidgetIntSelector selector =
+        new WidgetIntSelector(
+            validValues,
+            new Position(itemList.getPosition().x + 20, 0),
+            new Size((int) (itemList.getSize().width / 2 - 10), 18));
+    this.checkmark = button;
+    this.selector = selector;
+    this.itemList = itemList;
+    this.selector.setVisible(false);
+    this.selector.setActive(false);
+
+    this.resetBackgroundWidget();
+    this.addWidget(buttonBackground);
+    this.addWidget(button);
+    this.addWidget(selector);
+    this.addWidget(itemList);
+  }
 
   public RocketComponentEntryWidget(
       Position pos,
@@ -93,34 +126,49 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
     this.checkmark = button;
     this.itemList = itemList;
     this.selector = selector;
-    if (itemList != null) this.addWidget(itemList);
-    if (button != null) this.addWidget(button);
+    itemList.setSelfPosition(
+        Position.ORIGIN); // the item list should be at the very beginning of the entry
+    this.addWidget(itemList);
+    if (button != null) {
+      button.setSelfPosition(
+          new Position(itemList.getPosition().x + itemList.getSize().width + 15, 0));
+      this.addWidget(button);
+
+      this.resetBackgroundWidget();
+    }
+    if (selector != null) {
+      selector.setActive(false);
+      selector.setVisible(false);
+      // off by default since shortView is false by default
+      selector.setSelfPosition(
+          new Position(
+              itemList.getPosition().x + itemList.getSize().width - selector.getSize().width - 5,
+              /*should be hidden behind the item list by default*/
+              0));
+
+      this.addWidget(selector);
+    }
+
     this.resetBackgroundWidget();
-    if (selector != null) this.addWidget(selector);
-    if (checkboxBackground != null) this.addWidget(checkboxBackground);
   }
 
-  public void setWidgetIndex(Widget widget) {
-    if (!this.widgets.contains(widget)) {
-      this.addWidget(widget);
-    }
+  public boolean isShortView() {
+    return shortView;
   }
 
   public void resetBackgroundWidget() {
-    checkboxBackground =
+    buttonBackground =
         new ImageWidget(
             checkmark.getSelfPosition().x - 1,
             checkmark.getSelfPosition().y - 1,
-            checkmark.getSize().width + 2,
-            checkmark.getSize().height + 2,
-            GuiTextures.BUTTON_POWER_DETAIL);
-    setWidgetIndex(checkboxBackground);
+            checkmark.getSize().width + 1,
+            checkmark.getSize().height + 1,
+            SusyGuiTextures.SPACEFLIGHT_SIMULATOR_SLIDER_BACKGROUND);
   }
 
   // true == shortened version is to be displayed, with only 1 slot visible
   public void setShortView(boolean state) {
     if (this.shortView == state) return;
-    SusyLog.logger.info("shortview set to {}", state);
     this.selector.setActive(state);
     this.selector.setVisible(state);
 
@@ -130,14 +178,9 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
       this.itemList.setSize(new Size(18, 18));
       this.itemList.setSliderActive(false);
       this.itemList.setSliderOffset(0f);
-      // SusyLog.logger.info("turned off the itemlist behaviours");
     } else {
       this.itemList.setSize(this.previousStateSize);
       this.itemList.setSliderActive(this.previousStateSlider);
-      // SusyLog.logger.info(
-      //     "enabled back the item list. size:{} slider:{}",
-      //     this.previousStateSize,
-      //     this.previousStateSlider);
     }
     shortView = state;
   }

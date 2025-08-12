@@ -109,9 +109,9 @@ public class HorizontalScrollableListWidget extends AbstractWidgetGroup {
 
       int maxScrollOffset = getMaxScrollOffset();
       float scrollPercent = maxScrollOffset == 0 ? 0 : scrollOffset / (maxScrollOffset * 1.0f);
-      int scrollSliderX = Math.round(position.x + size.width * scrollPercent);
+      int scrollSliderX = Math.round(position.x + (size.width - paneSize) * scrollPercent);
       SusyGuiTextures.SPACEFLIGHT_SIMULATOR_SLIDER.draw(
-          scrollSliderX, scrollSliderY + 1, paneSize - 4, paneSize - 2);
+          scrollSliderX, scrollSliderY + 1, paneSize, paneSize - 2);
     } else {
       paneSize = 0;
     }

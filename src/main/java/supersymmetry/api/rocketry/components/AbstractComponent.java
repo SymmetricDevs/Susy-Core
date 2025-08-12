@@ -63,6 +63,10 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
     return null;
   }
 
+  public String getLocalizationKey() {
+    return "susy.rocketry.components.name." + this.getName();
+  }
+
   @SuppressWarnings("unchecked")
   // probably fine because if you manage to put in an AbstractComponent<?> and it doesnt
   // extend from AbstractComponent<?> you deserved to get a crash

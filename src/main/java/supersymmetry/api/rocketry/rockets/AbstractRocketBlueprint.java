@@ -1,7 +1,9 @@
 package supersymmetry.api.rocketry.rockets;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import supersymmetry.Supersymmetry;
@@ -9,6 +11,39 @@ import supersymmetry.Supersymmetry;
 public abstract class AbstractRocketBlueprint {
 
   public String name;
+  private static Map<String, AbstractRocketBlueprint> blueprintsRegistry = new HashMap<>();
+
+  // default blueprints for stuff.
+
+  public static Map<String, AbstractRocketBlueprint> getBlueprintsRegistry() {
+    return new HashMap<>(blueprintsRegistry);
+  }
+
+  public static AbstractRocketBlueprint getCopyOf(String name) {
+    try {
+      return (AbstractRocketBlueprint)
+          AbstractRocketBlueprint.getBlueprintsRegistry().get(name).clone();
+    } catch (Exception e) {
+      return null;
+    }
+  }
+
+  public static void registerBlueprint(AbstractRocketBlueprint bp) {
+    if (!getRegistryLock()) {
+      blueprintsRegistry.put(bp.getName(), bp);
+    }
+  }
+
+  public static boolean registryLock = false;
+
+  public static boolean getRegistryLock() {
+    return registryLock;
+  }
+
+  public static void setRegistryLock(boolean registryLock) {
+    AbstractRocketBlueprint.registryLock = registryLock;
+  }
+
   public ResourceLocation relatedEntity = new ResourceLocation(Supersymmetry.MODID, "rocket_basic");
   public List<int[]> ignitionStages =
       new ArrayList<>(); // allows for multiple stages to be ignited at once, ex.

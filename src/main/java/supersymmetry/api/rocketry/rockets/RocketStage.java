@@ -1,6 +1,7 @@
 package supersymmetry.api.rocketry.rockets;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.common.util.Constants.NBT;
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 
 public class RocketStage {
@@ -67,16 +69,16 @@ public class RocketStage {
           };
   // limits on how many of each component it can have
   public Map<String, int[]> componentLimits = new HashMap<>();
-  public String
-      name; // ex "boosters" or "lander", localized with susy.rocketry.stages.name.<name string>
+  // ex "boosters" or "lander", localized with susy.rocketry.stages.name.<name string>
+  public String name;
 
   public RocketStage(final Map<String, int[]> limits, String name) {
-    this.componentLimits = limits;
+    this.setComponentLimits(limits);
     this.setName(name);
   }
 
   public RocketStage(final Map<String, int[]> limits) {
-    this.componentLimits = limits;
+    this.setComponentLimits(limits);
   }
 
   public RocketStage() {
@@ -101,6 +103,9 @@ public class RocketStage {
   }
 
   public void setComponentLimits(Map<String, int[]> componentLimits) {
+
+    if (!componentLimits.values().stream().noneMatch(arr -> arr.length == 0))
+      throw new IllegalStateException("empty limit array provided");
     this.componentLimits = componentLimits;
   }
 
@@ -117,6 +122,10 @@ public class RocketStage {
     //     new Tuple<String, List<AbstractComponent<?>>>(name, componentList))) return false;
     components.put(name, componentList);
     return true;
+  }
+
+  public int maxComponentsOf(String cname) {
+    return Arrays.stream(this.getComponentLimits().get(cname)).max().getAsInt();
   }
 
   public Map<String, List<AbstractComponent<?>>> getComponents() {
@@ -185,7 +194,6 @@ public class RocketStage {
                 .readFromNBT((NBTTagCompound) x)
                 .ifPresent(
                     l -> {
-                      // SusyLog.logger.info("successfully read {} from nbt", l.getName());
                       realComponents.add(l);
                     });
           });
