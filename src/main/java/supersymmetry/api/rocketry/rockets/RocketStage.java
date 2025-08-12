@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import net.minecraft.nbt.NBTTagCompound;
@@ -14,7 +14,11 @@ import net.minecraft.util.Tuple;
 import net.minecraftforge.common.util.Constants.NBT;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 
-public class rocketStage {
+public class RocketStage {
+  public enum ComponentValidationResult {
+    goog
+  }
+
   public static class Builder {
     public Builder(String stagename) {
       this.name = stagename;
@@ -40,8 +44,8 @@ public class rocketStage {
       return this;
     }
 
-    public rocketStage build() {
-      return new rocketStage(
+    public RocketStage build() {
+      return new RocketStage(
           compLimit.entrySet().stream()
               .collect(
                   Collectors.toMap(
@@ -53,29 +57,29 @@ public class rocketStage {
 
   public Map<String, List<AbstractComponent<?>>> components = new HashMap<>();
 
-  // allows you to make it so it needs different types of engines for example, but it should
-  // probably return true for most things
-  // TODO: make this return some additional context to why it failed when a rocket uses this thing
-  public Predicate<Tuple<String, List<AbstractComponent<?>>>> componentValidationPredicate =
-      x -> {
-        return true;
-        // this is done after the type checks in the gui anyways, no need to double check ithink
-      };
+  // allows you to make it so it needs different types of engines for example. ensures compatability
+  // between components of the same type
+  public Function<Tuple<String, List<AbstractComponent<?>>>, ComponentValidationResult>
+      componentValidationFunction =
+          x -> {
+            return ComponentValidationResult.goog;
+            // this is done after the type checks in the gui anyways, no need to double check ithink
+          };
   // limits on how many of each component it can have
   public Map<String, int[]> componentLimits = new HashMap<>();
   public String
       name; // ex "boosters" or "lander", localized with susy.rocketry.stages.name.<name string>
 
-  public rocketStage(final Map<String, int[]> limits, String name) {
+  public RocketStage(final Map<String, int[]> limits, String name) {
     this.componentLimits = limits;
     this.setName(name);
   }
 
-  public rocketStage(final Map<String, int[]> limits) {
+  public RocketStage(final Map<String, int[]> limits) {
     this.componentLimits = limits;
   }
 
-  public rocketStage() {
+  public RocketStage() {
     this.name = "unprocessed"; // meant to be read from nbt later
   }
 
@@ -90,9 +94,10 @@ public class rocketStage {
         .sum();
   }
 
-  public void setComponentValidationPredicate(
-      Predicate<Tuple<String, List<AbstractComponent<?>>>> componentValidationPredicate) {
-    this.componentValidationPredicate = componentValidationPredicate;
+  public void setComponentValidationFunction(
+      Function<Tuple<String, List<AbstractComponent<?>>>, ComponentValidationResult>
+          componentValidationPredicate) {
+    this.componentValidationFunction = componentValidationPredicate;
   }
 
   public void setComponentLimits(Map<String, int[]> componentLimits) {
@@ -103,29 +108,19 @@ public class rocketStage {
     this.name = name;
   }
 
-  public void setValidationPredicate(
-      final Predicate<Tuple<String, List<AbstractComponent<?>>>> predicate) {
-    this.componentValidationPredicate = predicate;
-  }
-
-  // doesnt actually run the component validation predicate to avoid issues with its order
   public boolean setComponentListEntry(
       final String name, final List<AbstractComponent<?>> componentList) {
     if (IntStream.of(this.componentLimits.get(name)).noneMatch(x -> x == componentList.size())) {
       return false; // fail if you cant put that amount of components is invalid
     }
-    if (!componentValidationPredicate.test(
-        new Tuple<String, List<AbstractComponent<?>>>(name, componentList))) return false;
+    // if (!componentValidationFunction.apply(
+    //     new Tuple<String, List<AbstractComponent<?>>>(name, componentList))) return false;
     components.put(name, componentList);
     return true;
   }
 
   public Map<String, List<AbstractComponent<?>>> getComponents() {
     return components;
-  }
-
-  public Predicate<Tuple<String, List<AbstractComponent<?>>>> getComponentValidationPredicate() {
-    return componentValidationPredicate;
   }
 
   public Map<String, int[]> getComponentLimits() {

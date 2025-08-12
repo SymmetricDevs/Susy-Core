@@ -16,7 +16,7 @@ public abstract class AbstractRocketBlueprint {
   // boosters together with the main stage, or the second stage together with the EES which im
   // definitely not adding
   // meant to contain the INDEX of the stages in the list bellow
-  public List<rocketStage> stages = new ArrayList<>();
+  public List<RocketStage> stages = new ArrayList<>();
 
   public AbstractRocketBlueprint(String name, ResourceLocation relatedEntity) {
     setName(name);
@@ -31,7 +31,7 @@ public abstract class AbstractRocketBlueprint {
     this.ignitionStages = ignitionStages;
   }
 
-  public List<rocketStage> getStages() {
+  public List<RocketStage> getStages() {
     return this.stages;
   }
 
@@ -48,7 +48,7 @@ public abstract class AbstractRocketBlueprint {
   }
 
   public double getMass() {
-    return this.getStages().stream().mapToDouble(rocketStage::getMass).sum();
+    return this.getStages().stream().mapToDouble(RocketStage::getMass).sum();
   }
 
   public void setName(String name) {
@@ -63,7 +63,7 @@ public abstract class AbstractRocketBlueprint {
     this.relatedEntity = relatedEntity;
   }
 
-  public void setStages(List<rocketStage> stages) {
+  public void setStages(List<RocketStage> stages) {
     this.stages = stages;
   }
 }

@@ -1,7 +1,9 @@
 package supersymmetry.common.rocketry;
 
+import net.minecraft.util.ResourceLocation;
+import supersymmetry.Supersymmetry;
 import supersymmetry.api.rocketry.components.AbstractComponent;
-import supersymmetry.api.rocketry.rockets.rocketStage;
+import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.common.rocketry.components.*;
 import supersymmetry.common.rocketry.rockets.SimpleStagedRocketBlueprint;
 
@@ -21,7 +23,7 @@ public class SusyRocketComponents {
     ROCKET_SOYUZ_BLUEPRINT_DEFAULT =
         new SimpleStagedRocketBlueprint.Builder("soyuz")
             .stage(
-                new rocketStage.Builder("boosters")
+                new RocketStage.Builder("boosters")
                     .type("engine")
                     .limit(16)
                     .type("tank")
@@ -30,7 +32,7 @@ public class SusyRocketComponents {
                     .limit(8)
                     .build())
             .ignitesWith(
-                new rocketStage.Builder("block A")
+                new RocketStage.Builder("block A")
                     .type("engine")
                     .limit(4)
                     .type("vernier_engine")
@@ -39,7 +41,7 @@ public class SusyRocketComponents {
                     .limit(2)
                     .build())
             .stage(
-                new rocketStage.Builder("block F")
+                new RocketStage.Builder("block F")
                     .type("engine")
                     .limit(4)
                     .type("vernier_engine")
@@ -47,6 +49,7 @@ public class SusyRocketComponents {
                     .type("tank")
                     .limit(2)
                     .build())
+            .entityResourceLocation(new ResourceLocation(Supersymmetry.MODID, "rocket_basic"))
             .build();
   }
 }

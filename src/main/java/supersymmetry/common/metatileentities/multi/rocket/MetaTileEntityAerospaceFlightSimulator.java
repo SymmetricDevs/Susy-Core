@@ -6,7 +6,6 @@ import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.Widget;
 import gregtech.api.gui.widgets.ClickButtonWidget;
 import gregtech.api.gui.widgets.IndicatorImageWidget;
-import gregtech.api.gui.widgets.SlotWidget;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -19,47 +18,37 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.IntStream;
-
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.common.util.Constants;
 import org.jetbrains.annotations.NotNull;
 
-import supersymmetry.api.rocketry.components.AbstractComponent;
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.common.item.SuSyMetaItems;
-import supersymmetry.common.mui.widget.HorizontalScrollableListWidget;
 import supersymmetry.common.mui.widget.RocketSimulatorComponentContainerWidget;
 import supersymmetry.common.mui.widget.SlotWidgetBlueprintContainer;
+import supersymmetry.common.rocketry.SusyRocketComponents;
 
 public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDisplayBase {
-  public DataStorageLoader master_blueprint = null;
-  public Map<String, ComponentListEntry> components = new HashMap<>();
-  private ItemStack lastUsedBlueprint;
+  // live widemann reaction
+  // https://discord.com/channels/881234100504109166/881234101103890454/1402784628603097270
+  public Map<String, List<Map<String, DataStorageLoader>>> slots = new HashMap<>();
+  public DataStorageLoader master_blueprint =
+      new DataStorageLoader(
+          this,
+          item -> {
+            return SuSyMetaItems.isMetaItem(item)
+                == SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.metaValue;
+          });
 
   public MetaTileEntityAerospaceFlightSimulator(ResourceLocation metaTileEntityId) {
     super(metaTileEntityId);
-    master_blueprint =
-        new DataStorageLoader(
-            this,
-            item -> {
-              int meta = SuSyMetaItems.isMetaItem(item);
-              return meta == SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.metaValue;
-            });
   }
 
   @Override
@@ -106,12 +95,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     return null; // createGUITemplate(entityPlayer).build(this.getHolder(), entityPlayer);
   }
 
-  public enum guiState {
-    rocket_blueprint_assebler,
-    rocket_stats,
-    not_formed // not even used yet :<
-  }
-
   private ModularUI.Builder createGUITemplate(EntityPlayer entityPlayer) {
     int width = 300;
     int height = 280;
@@ -124,7 +107,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         width / 2,
         height / 2,
         () -> {
-          return master_blueprint.isEmpty() ? "insert a rocket blueprint" : "";
+          return master_blueprint.isEmpty() ? "insert a rocket blueprint first!" : "";
         },
         0x404040);
     builder.widget(
@@ -143,12 +126,10 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     builder.bindPlayerInventory(entityPlayer.inventory, height - 80);
     // this is the thing that displays slots for components
     RocketSimulatorComponentContainerWidget mainWindow =
-        new RocketSimulatorComponentContainerWidget(
-            new Position(9, 9), new Size(width, 28 * 6), entityPlayer);
+        new RocketSimulatorComponentContainerWidget(new Position(9, 9), new Size(width, 28 * 6));
 
     builder.widget(mainWindow);
 
-    // TODO: make this sync to the server so it doesnt shit itself via a consumer<>
     SlotWidgetBlueprintContainer blueprintContainer =
         new SlotWidgetBlueprintContainer(
             master_blueprint,
@@ -156,18 +137,18 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             width / 2,
             height / 2,
             // this is called on SlotChanged
-            () -> {}, // moved it a bit further down because it wont let me do stupid things unless
-            // i edit it after
-            // the constructor is done
+            () -> {}, 
+            // moved it a bit further down because it wont let me do stupid things unless
+            // i edit it after the constructor is done
             //
             // this is called on detectAndSendChanges
             () -> {
-              master_blueprint.setLocked(
-                  components.values().stream()
-                      .map(entry -> entry.cards)
-                      .flatMap(List::stream)
-                      .anyMatch(ds -> !ds.isEmpty()));
-
+              // master_blueprint.setLocked(
+              //     components.values().stream()
+              //         .map(entry -> entry.cards)
+              //         .flatMap(List::stream)
+              //         .anyMatch(ds -> !ds.isEmpty()));
+              //
               // lock the main blueprint if component data cards are inserted so that they dont get
               // voided (hopefully)
 
@@ -177,7 +158,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         () -> {
           blueprintContainer.detectAndSendChanges();
 
-          drawComponentTree(0, 0, master_blueprint.getStackInSlot(0), mainWindow);
           blueprintContainer.setSelfPosition(
               master_blueprint.isEmpty()
                   ? new Position(width / 2, width / 2)
@@ -189,164 +169,159 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     return builder;
   }
 
-  private void drawComponentTree(
-      int startX,
-      int startY,
-      ItemStack blueprintStack,
-      RocketSimulatorComponentContainerWidget container) {
-    container.RemoveSlotLists();
-
-    if (blueprintStack.getMetadata() != SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.getMetaValue()) {
-      return;
-    }
-
-    // meant to do like
-    // comp name                #slot# #slot# #slot#
-    //                          ----------#slider#---------------------
-    // comp name but longer     |  #slot# #slot# #slot# #slot# #slot# | #slot# #slot#
-    //                          =============visible part==============
-
-    if (generateComponentTree(blueprintStack)) {
-      for (Map.Entry<String, ComponentListEntry> entry : this.components.entrySet()) {
-        String text = entry.getKey();
-        var slotContainer =
-            new HorizontalScrollableListWidget(
-                startX, startY, 18 * 5 + 5, 20); // this is the thing that
-        // has the slider, and contains the slots.
-        slotContainer.setSliderActive(entry.getValue().cards.size() > 5);
-        for (DataStorageLoader slot : entry.getValue().cards) {
-          // position will get changed in the .addSlotList lotContainer later anyways
-
-          slotContainer.addWidget(
-              new SlotWidget(slot, 0, 1, 1).setBackgroundTexture(GuiTextures.SLOT_DARK));
-        }
-
-        container.addSlotList(
-            "susy.machine.rocket_simulator.component." + text,
-            slotContainer,
-            entry.getValue().validCounts);
-      }
-    }
-  }
-
-  private boolean generateComponentTree(ItemStack blueprintStack) {
-    if (blueprintStack == lastUsedBlueprint && blueprintStack.getItem() != Items.AIR) return true;
-
-    lastUsedBlueprint = blueprintStack;
-    this.components.clear();
-
-    if (blueprintStack.hasTagCompound()) {
-      NBTTagCompound tag = blueprintStack.getTagCompound();
-      if (tag.hasKey("components", Constants.NBT.TAG_LIST)) {
-        NBTTagList components = tag.getTagList("components", Constants.NBT.TAG_COMPOUND);
-        for (int i = 0; i < components.tagCount(); i++) {
-          NBTTagCompound comp = components.getCompoundTagAt(i);
-          if (comp.hasKey("allowedCounts", Constants.NBT.TAG_INT_ARRAY)) {
-            if (comp.hasKey("type", Constants.NBT.TAG_STRING)) {
-
-              String type = comp.getString("type");
-              int[] counts = comp.getIntArray("allowedCounts");
-              int max = Arrays.stream(counts).max().orElse(0);
-              List<DataStorageLoader> slots = new ArrayList<>();
-              for (int j = 0; j < max; j++) {
-                slots.add(
-                    new DataStorageLoader(
-                        this,
-                        x -> {
-                          if (x.hasTagCompound()) {
-                            if (x.getTagCompound().hasKey("type")) {
-                              return x.getTagCompound().getString("type") == type;
-                            }
-                          }
-                          return false;
-                        }));
-
-                this.components.put(type, new ComponentListEntry(slots, counts));
-              }
-            }
-          }
-        }
-
-        return true;
-      }
-    }
-    return false;
-  }
-
-  enum componentCheckResult {
-    LACKING_CARDS("lacking_cards"),
-    MISSING_CARD("missing_card_in_first_slot"),
-    SUCCESS("success"),
-    INCORRECT_COUNT("incorrect_card_count");
-    String key;
-
-    private componentCheckResult(String key) {
-      this.key = key;
-    }
-
-    public String getKey() {
-      return "susy.machine.rocket_simulator.encoding_error." + this.key;
-    }
-    
-    //another victim of the lsp formatting
-    public String getFullError(
-        String component /*the component name that it failed at */, int[] validCounts) {
-      String error =
-          I18n.format(this.getKey())
-              + " "
-              + I18n.format("susy.machine.rocket_simulator.component_name." + component);
-      String expected =
-          I18n.format("susy.machine.rocket_simulator.expectation")
-              + " "
-              + Arrays.toString(validCounts);
-      return error + "\n" + expected;
-    }
-  }
-
-  private boolean verifyDatacardArrangement(RocketSimulatorComponentContainerWidget container) {
-    // assumes that it has all of the nbt's since i dont wanna do that entire thing again
-
-    NBTTagList componentsList =
-        master_blueprint
-            .getStackInSlot(0)
-            .getTagCompound()
-            .getTagList("components", Constants.NBT.TAG_LIST);
-    List<AbstractComponent<?>> components = new ArrayList<>(); 
-    for (int i = 0; i < componentsList.tagCount(); i++) {
-      NBTTagCompound comp = componentsList.getCompoundTagAt(i);
-      List<DataStorageLoader> cardSlots = this.components.get(comp.getString("type")).cards;
-      int count = (int) cardSlots.stream().map(x -> !x.isEmpty()).count();
-      if (IntStream.of(comp.getIntArray("allowedCounts")).noneMatch(x -> x == count)) {
-           
-        return false;
-      }
-    }
-
-    // for (Map.Entry<String, List<DataStorageLoader>> entry : this.components.entrySet()) {}
-
-    return false;
-  }
-
+  //
+  // private void drawComponentTree(
+  //     int startX,
+  //     int startY,
+  //     ItemStack blueprintStack,
+  //     RocketSimulatorComponentContainerWidget container) {
+  //   container.RemoveSlotLists();
+  //
+  //   if (blueprintStack.getMetadata() != SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.getMetaValue())
+  // {
+  //     return;
+  //   }
+  //
+  //   // meant to do like
+  //   // comp name                #slot# #slot# #slot#
+  //   //                          ----------#slider#---------------------
+  //   // comp name but longer     |  #slot# #slot# #slot# #slot# #slot# | #slot# #slot#
+  //   //                          =============visible part==============
+  //
+  //   if (generateComponentTree(blueprintStack)) {
+  //     for (Map.Entry<String, ComponentListEntry> entry : this.components.entrySet()) {
+  //       String text = entry.getKey();
+  //       var slotContainer =
+  //           new HorizontalScrollableListWidget(
+  //               startX, startY, 18 * 5 + 5, 20); // this is the thing that
+  //       // has the slider, and contains the slots.
+  //       slotContainer.setSliderActive(entry.getValue().cards.size() > 5);
+  //       for (DataStorageLoader slot : entry.getValue().cards) {
+  //         // position will get changed in the .addSlotList lotContainer later anyways
+  //
+  //         slotContainer.addWidget(
+  //             new SlotWidget(slot, 0, 1, 1).setBackgroundTexture(GuiTextures.SLOT_DARK));
+  //       }
+  //
+  //       container.addSlotList(
+  //           "susy.machine.rocket_simulator.component." + text,
+  //           slotContainer,
+  //           entry.getValue().validCounts);
+  //     }
+  //   }
+  // }
+  //
+  // private boolean generateComponentTree(ItemStack blueprintStack) {
+  //   if (blueprintStack == lastUsedBlueprint && blueprintStack.getItem() != Items.AIR) return
+  // true;
+  //
+  //   lastUsedBlueprint = blueprintStack;
+  //   this.components.clear();
+  //
+  //   if (blueprintStack.hasTagCompound()) {
+  //     NBTTagCompound tag = blueprintStack.getTagCompound();
+  //     if (tag.hasKey("components", Constants.NBT.TAG_LIST)) {
+  //       NBTTagList components = tag.getTagList("components", Constants.NBT.TAG_COMPOUND);
+  //       for (int i = 0; i < components.tagCount(); i++) {
+  //         NBTTagCompound comp = components.getCompoundTagAt(i);
+  //         if (comp.hasKey("allowedCounts", Constants.NBT.TAG_INT_ARRAY)) {
+  //           if (comp.hasKey("type", Constants.NBT.TAG_STRING)) {
+  //
+  //             String type = comp.getString("type");
+  //             int[] counts = comp.getIntArray("allowedCounts");
+  //             int max = Arrays.stream(counts).max().orElse(0);
+  //             List<DataStorageLoader> slots = new ArrayList<>();
+  //             for (int j = 0; j < max; j++) {
+  //               slots.add(
+  //                   new DataStorageLoader(
+  //                       this,
+  //                       x -> {
+  //                         if (x.hasTagCompound()) {
+  //                           if (x.getTagCompound().hasKey("type")) {
+  //                             return x.getTagCompound().getString("type") == type;
+  //                           }
+  //                         }
+  //                         return false;
+  //                       }));
+  //
+  //               this.components.put(type, new ComponentListEntry(slots, counts));
+  //             }
+  //           }
+  //         }
+  //       }
+  //
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
+  //
+  // enum componentCheckResult {
+  //   LACKING_CARDS("lacking_cards"),
+  //   MISSING_CARD("missing_card_in_first_slot"),
+  //   SUCCESS("success"),
+  //   INCORRECT_COUNT("incorrect_card_count");
+  //   String key;
+  //
+  //   private componentCheckResult(String key) {
+  //     this.key = key;
+  //   }
+  //
+  //   public String getKey() {
+  //     return "susy.machine.rocket_simulator.encoding_error." + this.key;
+  //   }
+  //
+  //   // another victim of the lsp formatting
+  //   public String getFullError(
+  //       String component /*the component name that it failed at */, int[] validCounts) {
+  //     String error =
+  //         I18n.format(this.getKey())
+  //             + " "
+  //             + I18n.format("susy.machine.rocket_simulator.component_name." + component);
+  //     String expected =
+  //         I18n.format("susy.machine.rocket_simulator.expectation")
+  //             + " "
+  //             + Arrays.toString(validCounts);
+  //     return error + "\n" + expected;
+  //   }
+  // }
+  //
+  // // private boolean verifyDatacardArrangement(RocketSimulatorComponentContainerWidget container)
+  // {
+  // //   // assumes that it has all of the nbt's since i dont wanna do that entire thing again
+  // //
+  // //   NBTTagList componentsList =
+  // //       master_blueprint
+  // //           .getStackInSlot(0)
+  // //           .getTagCompound()
+  // //           .getTagList("components", Constants.NBT.TAG_LIST);
+  // //   List<AbstractComponent<?>> components = new ArrayList<>();
+  // //   for (int i = 0; i < componentsList.tagCount(); i++) {
+  // //     NBTTagCompound comp = componentsList.getCompoundTagAt(i);
+  // //     List<DataStorageLoader> cardSlots = this.components.get(comp.getString("type")).cards;
+  // //     int count = (int) cardSlots.stream().map(x -> !x.isEmpty()).count();
+  // //     if (IntStream.of(comp.getIntArray("allowedCounts")).noneMatch(x -> x == count)) {
+  // //
+  // //       return false;
+  // //     }
+  // //   }
+  // //
+  // //   // for (Map.Entry<String, List<DataStorageLoader>> entry : this.components.entrySet()) {}
+  // //
+  // //   return false;
+  // // }
+  //
   // TODO: remove the button, if i forget to do this you can call me an idiot for the rest of the
   // year
   public void SetDefaultBlueprint(Widget.ClickData data) {
     this.markDirty();
     master_blueprint.clearNBT();
-    master_blueprint.mutateItem("name", "soyuz");
-    NBTTagList components = new NBTTagList();
-    NBTTagCompound fuel_tank = new NBTTagCompound();
-    fuel_tank.setString("type", "tank");
-    fuel_tank.setIntArray("allowedCounts", new int[] {2, 3, 4, 5});
-    components.appendTag(fuel_tank);
-    NBTTagCompound nozzle = new NBTTagCompound();
-    nozzle.setString("type", "nozzle");
-    nozzle.setIntArray("allowedCounts", new int[] {5, 10, 20});
-    components.appendTag(nozzle);
+
     master_blueprint.addToCompound(
-        x -> {
-          x.setTag("components", components);
-          return x;
+        compound -> {
+          return SusyRocketComponents.ROCKET_SOYUZ_BLUEPRINT_DEFAULT.writeToNBT();
         });
+    SusyLog.logger.info("set the nbt to {}",SusyRocketComponents.ROCKET_SOYUZ_BLUEPRINT_DEFAULT.writeToNBT());
   }
 
   @Override
@@ -360,16 +335,5 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
   @Override
   public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
     return new MetaTileEntityAerospaceFlightSimulator(metaTileEntityId);
-  }
-
-  private class ComponentListEntry {
-
-    public List<DataStorageLoader> cards;
-    public int[] validCounts;
-
-    public ComponentListEntry(List<DataStorageLoader> cards, int[] validCounts) {
-      this.cards = cards;
-      this.validCounts = validCounts;
-    }
   }
 }

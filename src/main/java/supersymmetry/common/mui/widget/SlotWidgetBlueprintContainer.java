@@ -21,17 +21,23 @@ public class SlotWidgetBlueprintContainer extends SlotWidget {
     this.onDetectChanges = onDetectChanges;
   }
 
+  public SlotWidgetBlueprintContainer(
+      IItemHandlerModifiable handler, int slotIndex, int xpos, int ypos, Runnable onSlotChanged) {
+    super(handler, slotIndex, xpos, ypos);
+    this.onSlotChanged = onSlotChanged;
+  }
+
   @Override
   public void onSlotChanged() {
     super.onSlotChanged();
-    this.onSlotChanged.run();
+    if (this.onSlotChanged != null) this.onSlotChanged.run();
     this.writeClientAction(1, (buf) -> {});
   }
 
   @Override
   public void detectAndSendChanges() {
     super.detectAndSendChanges();
-    onDetectChanges.run();
+    if (this.onDetectChanges != null) onDetectChanges.run();
   }
 
   @Override

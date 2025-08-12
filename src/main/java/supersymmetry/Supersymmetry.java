@@ -30,6 +30,7 @@ import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 import supersymmetry.common.tileentities.SuSyTileEntities;
+import supersymmetry.common.rocketry.SusyRocketComponents;
 import supersymmetry.loaders.SuSyIRLoader;
 
 import java.sql.Ref;
@@ -78,6 +79,7 @@ public class Supersymmetry {
 
         SuSyMetaTileEntities.init();
         SuSyCapabilities.init();
+        SusyRocketComponents.init();
 
         SusyMetaEntities.init();
 

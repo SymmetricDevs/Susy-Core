@@ -1,6 +1,5 @@
 package supersymmetry.common.mui.widget;
 
-import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.IRenderContext;
 import gregtech.api.gui.Widget;
 import gregtech.api.gui.widgets.AbstractWidgetGroup;
@@ -8,6 +7,7 @@ import gregtech.api.util.Position;
 import gregtech.api.util.Size;
 import gregtech.client.utils.RenderUtil;
 import net.minecraft.util.math.MathHelper;
+import supersymmetry.api.gui.SusyGuiTextures;
 
 /** basically ScrollableListWidget but horizontal, mostly a copy */
 public class HorizontalScrollableListWidget extends AbstractWidgetGroup {
@@ -103,14 +103,15 @@ public class HorizontalScrollableListWidget extends AbstractWidgetGroup {
     int paneSize =
         scrollPaneWidth; //  ---##------- <- that slidey bit width, along with the bar itself
     if (sliderActive) {
-      GuiTextures.SLIDER_BACKGROUND_VERTICAL.draw(
+      SusyGuiTextures.SPACEFLIGHT_SIMULATOR_SLIDER_BACKGROUND.draw(
           position.x, position.y - paneSize, size.width, paneSize);
       int scrollSliderY = position.y - paneSize;
 
       int maxScrollOffset = getMaxScrollOffset();
       float scrollPercent = maxScrollOffset == 0 ? 0 : scrollOffset / (maxScrollOffset * 1.0f);
       int scrollSliderX = Math.round(position.x + size.width * scrollPercent);
-      GuiTextures.SLIDER_ICON.draw(scrollSliderX, scrollSliderY + 1, paneSize - 4, paneSize - 2);
+      SusyGuiTextures.SPACEFLIGHT_SIMULATOR_SLIDER.draw(
+          scrollSliderX, scrollSliderY + 1, paneSize - 4, paneSize - 2);
     } else {
       paneSize = 0;
     }
