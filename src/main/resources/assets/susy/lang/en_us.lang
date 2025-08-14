@@ -1261,3 +1261,5 @@ susy.msg.rocket_component.too_short=The component is too short!
 susy.msg.rocket_component.conn_unaligned=The fairing connectors are not in planar alignment.
 susy.msg.rocket_component.conn_wrong_dir=A fairing connector is facing a block.
 susy.msg.rocket_component.wrong_tile=A tile was used incorrectly.
+
+entity.Rocket.name=Soyuz FG Rocket

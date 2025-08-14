@@ -1,14 +1,20 @@
 package supersymmetry.common.entities;
 
+import gregtech.api.GregTechAPI;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -16,13 +22,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import supersymmetry.client.audio.MovingSoundRocket;
+import supersymmetry.client.renderer.handler.IAlwaysRender;
 import supersymmetry.client.renderer.particles.SusyParticleFlameLarge;
 import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
+import supersymmetry.common.network.CPacketRocketInteract;
 
 import java.util.List;
 import java.util.Random;
 
-public class EntityRocket extends Entity {
+public class EntityRocket extends Entity implements IAlwaysRender {
 
     private static final Random rnd = new Random();
     protected static final float jerk = 0.0001F;
@@ -41,7 +49,7 @@ public class EntityRocket extends Entity {
 
     public EntityRocket(World worldIn) {
         super(worldIn);
-        this.setSize(3F, 31F);
+        this.setSize(3F, 46F);
         rideCooldown = -1;
         ignoreFrustumCheck = true;
         isImmuneToFire = true;
@@ -60,7 +68,6 @@ public class EntityRocket extends Entity {
     public EntityRocket(World worldIn, Vec3d pos, float rotationYaw) {
         this(worldIn, pos.x, pos.y, pos.z, rotationYaw);
     }
-
 
     protected void entityInit() {
         this.dataManager.register(LAUNCHED, false);
@@ -274,19 +281,8 @@ public class EntityRocket extends Entity {
     }
 
     @Override
-    public void onAddedToWorld() {
-        super.onAddedToWorld();
-
-    }
-
-    @Override
-    public boolean canBePushed() {
-        return false;
-    }
-
-    @Override
     public boolean canBeCollidedWith() {
-        return false; //note that this prevents it from being seen on theoneprobe, and /gs looking
+        return true; //note that this prevents it from being seen on theoneprobe, and /gs looking
     }
 
     @Override
@@ -300,4 +296,24 @@ public class EntityRocket extends Entity {
         Minecraft.getMinecraft().getSoundHandler().playSound(this.soundRocket);
     }
 
+    @Override
+    public boolean shouldRenderInPass(int pass) {
+        return pass == RENDER_PASS_ALWAYS;
+    }
+
+    @Override // The override is about leashing the rocket, which makes it alright to completely ignore
+    public EnumActionResult applyPlayerInteraction(EntityPlayer player, Vec3d hitVec, EnumHand hand) {
+        if (player.isRidingSameEntity(this) || hitVec.y < 37 || hitVec.y > 40) return EnumActionResult.PASS;
+        if (!this.world.isRemote) {
+            player.startRiding(this);
+        } else {
+            GregTechAPI.networkHandler.sendToServer(new CPacketRocketInteract(this, hand, hitVec));
+        }
+        return EnumActionResult.SUCCESS;
+    }
+
+    @Override
+    public double getMountedYOffset() {
+        return 38D;
+    }
 }
