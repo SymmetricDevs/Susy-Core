@@ -29,7 +29,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.jetbrains.annotations.NotNull;
-import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.blocks.VariantItemBlockFalling;
@@ -62,7 +61,6 @@ import static supersymmetry.common.blocks.SuSyMetaBlocks.SHEETED_FRAMES;
 public class CommonProxy {
 
     public void preLoad() {
-        GeckoLib.initialize();
         SusyStoneTypes.init();
     }
 
@@ -160,6 +158,9 @@ public class CommonProxy {
         registry.register(SuSyBlocks.ROCKET_ASSEMBLER_CASING);
         registry.register(SuSyBlocks.REGOLITH);
         registry.register(SuSyBlocks.FAKEWOOL);
+        registry.register(SuSyBlocks.ECCENTRIC_ROLL);
+        registry.register(SuSyBlocks.GRINDER_CASING);
+        registry.register(SuSyBlocks.GIRTH_GEAR_TOOTH);
 
         SHEETED_FRAMES.values().stream().distinct().forEach(registry::register);
     }
@@ -200,6 +201,9 @@ public class CommonProxy {
         registry.register(createItemBlock(SuSyBlocks.ROCKET_ASSEMBLER_CASING, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.REGOLITH, VariantItemBlockFalling::new));
         registry.register(createItemBlock(SuSyBlocks.FAKEWOOL, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.ECCENTRIC_ROLL, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.GRINDER_CASING, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.GIRTH_GEAR_TOOTH, VariantItemBlock::new));
 
         SHEETED_FRAMES.values()
                 .stream().distinct()
@@ -240,21 +244,20 @@ public class CommonProxy {
 
     private static void handleCoilTooltips(ItemTooltipEvent event) {
         Block block = Block.getBlockFromItem(event.getItemStack().getItem());
-        if(block instanceof BlockWireCoil && TooltipHelper.isShiftDown()) {
+        if (block instanceof BlockWireCoil wireCoilBlock && TooltipHelper.isShiftDown()) {
             ItemStack itemStack = event.getItemStack();
             Item item = itemStack.getItem();
-            BlockWireCoil wireCoilBlock = (BlockWireCoil)block;
-            VariantItemBlock itemBlock = (VariantItemBlock)item;
-            BlockWireCoil.CoilType coilType = (BlockWireCoil.CoilType)wireCoilBlock.getState(itemBlock.getBlockState(itemStack));
-            event.getToolTip().add(I18n.format("tile.wire_coil.tooltip_evaporation", new Object[0]));
-            event.getToolTip().add(I18n.format("tile.wire_coil.tooltip_energy_evaporating", new Object[]{coilType.getCoilTemperature()/1000}));
+            VariantItemBlock itemBlock = (VariantItemBlock) item;
+            BlockWireCoil.CoilType coilType = wireCoilBlock.getState(itemBlock.getBlockState(itemStack));
+            event.getToolTip().add(I18n.format("tile.wire_coil.tooltip_evaporation"));
+            event.getToolTip().add(I18n.format("tile.wire_coil.tooltip_energy_evaporating", coilType.getCoilTemperature() / 1000));
         }
     }
 
     // Since this function checks if the key is in the translation key, you can sometimes add tooltips to multiple items
     //   with a single call of the function. Useful for hitting both basic and high pressure steam machines, for example.
     private static void addTooltip(ItemTooltipEvent event, String key, String toolTip, int index) {
-        if(event.getItemStack().getTranslationKey().contains(key)) {
+        if (event.getItemStack().getTranslationKey().contains(key)) {
             event.getToolTip().add(index, toolTip);
         }
     }

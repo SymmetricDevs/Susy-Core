@@ -1,0 +1,51 @@
+{
+  "forge_marker" : 1,
+  "variants" : {
+    "active=false,facing=north,variant=steel" : {
+      "model" : "susy:eccentric_roll/steel"
+    },
+    "active=false,facing=south,variant=steel" : {
+      "model" : "susy:eccentric_roll/steel",
+      "y" : 180
+    },
+    "active=false,facing=west,variant=steel" : {
+      "model" : "susy:eccentric_roll/steel",
+      "y" : 270
+    },
+    "active=false,facing=east,variant=steel" : {
+      "model" : "susy:eccentric_roll/steel",
+      "y" : 90
+    },
+    "active=false,facing=up,variant=steel" : {
+      "model" : "susy:eccentric_roll/steel",
+      "x" : 270
+    },
+    "active=false,facing=down,variant=steel" : {
+      "model" : "susy:eccentric_roll/steel",
+      "x" : 90
+    },
+    "active=true,facing=north,variant=steel" : {
+      "model" : "susy:eccentric_roll/steel"
+    },
+    "active=true,facing=south,variant=steel" : {
+      "model" : "susy:eccentric_roll/steel",
+      "y" : 180
+    },
+    "active=true,facing=west,variant=steel" : {
+      "model" : "susy:eccentric_roll/steel",
+      "y" : 270
+    },
+    "active=true,facing=east,variant=steel" : {
+      "model" : "susy:eccentric_roll/steel",
+      "y" : 90
+    },
+    "active=true,facing=up,variant=steel" : {
+      "model" : "susy:eccentric_roll/steel",
+      "z" : 270
+    },
+    "active=true,facing=down,variant=steel" : {
+      "model" : "susy:eccentric_roll/steel",
+      "z" : 90
+    }
+  }
+}

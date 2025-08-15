@@ -261,6 +261,9 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityFuelCell[] FUEL_CELL = new MetaTileEntityFuelCell[2];
 
 
+    public static MetaTileEntityEccentricRollCrusher ECCENTRIC_ROLL_CRUSHER;
+    public static MetaTileEntityBallMill BALL_MILL;
+
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
         COAGULATION_TANK = registerMetaTileEntity(14501, new MetaTileEntityCoagulationTank(susyId("coagulation_tank")));
@@ -324,6 +327,9 @@ public class SuSyMetaTileEntities {
         TANK_EXTENDER = registerMetaTileEntity(14738, new MetaTileEntityExtender(susyId("extender.tank"), cap -> cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, SusyTextures.TANK_EXTENDER, Materials.Steel));
         INV_TANK_EXTENDER = registerMetaTileEntity(14739, new MetaTileEntityExtender(susyId("extender.inv_tank"), cap -> cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, SusyTextures.INV_TANK_EXTENDER, Materials.Steel));
         UNIVERSAL_EXTENDER = registerMetaTileEntity(14740, new MetaTileEntityExtender(susyId("extender.universal"), cap -> true, SusyTextures.UNIVERSAL_EXTENDER, Materials.Aluminium));
+
+        ECCENTRIC_ROLL_CRUSHER = registerMetaTileEntity(14741, new MetaTileEntityEccentricRollCrusher(susyId("eccentric_roll_crusher"), SuSyRecipeMaps.ECCENTRIC_ROLL_CRUSHER));
+        BALL_MILL = registerMetaTileEntity(14742, new MetaTileEntityBallMill(susyId("ball_mill"), RecipeMaps.MACERATOR_RECIPES));
 
         // 14800 Pyrotech Integration: Primitive Smelter
         PRIMITIVE_ITEM_IMPORT = registerMetaTileEntity(14801, new MetaTileEntityPrimitiveItemBus(susyId("primitive_item_import"), false));
@@ -462,7 +468,7 @@ public class SuSyMetaTileEntities {
         STOCK_ITEM_EXCHANGER = registerMetaTileEntity(18002, new MetaTileEntityStockItemExchanger(susyId("stock_item_exchanger")));
         //STOCK_CONTENT_READER = registerMetaTileEntity(18003, new MetaTileEntityStockReader(susyId("stock_content_reader")));
         STOCK_CONTROLLER = registerMetaTileEntity(18004, new MetaTileEntityLocomotiveController(susyId("stock_controller")));
-      
+
         //Space machines
         LANDING_PAD = registerMetaTileEntity(18005, new MetaTileEntityLandingPad(susyId("landing_pad")));
         SCRAP_RECYCLER = registerMetaTileEntity(18006, new MetaTileEntityScrapRecycler(susyId("scrap_recycler")));
@@ -474,7 +480,7 @@ public class SuSyMetaTileEntities {
         HIGH_PRESSURE_ADVANCED_STEAM_TURBINE = registerMetaTileEntity(18101, new MetaTileEntityHighPressureLargeTurbine(susyId("high_pressure_advanced_steam_turbine")));
 
         INJECTION_MOLDER = registerMetaTileEntity(18110, new MetaTileEntityInjectionMolder(susyId("injection_molder")));
-      
+
         // Locked Loot Crates
         LOCKED_HERMETICALLY_SEALED_CRATE = registerMetaTileEntity(18200, new MetaTileEntityLockedCrate(susyId("locked_crate.pe"), Materials.Polyethylene, 54));
         LOCKED_WOODEN_CRATE = registerMetaTileEntity(18201, new MetaTileEntityLockedCrate(susyId("locked_crate.wood"), Materials.Wood, 27));
