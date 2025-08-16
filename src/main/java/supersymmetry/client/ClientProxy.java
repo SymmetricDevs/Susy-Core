@@ -29,6 +29,7 @@ import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -40,6 +41,8 @@ import supersymmetry.SuSyValues;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
+import supersymmetry.api.util.BlockRenderManager;
+import supersymmetry.client.renderer.handler.VariantCoverableBlockRenderer;
 import supersymmetry.common.CommonProxy;
 import supersymmetry.common.SusyMetaEntities;
 import supersymmetry.common.blocks.SheetedFrameItemBlock;
@@ -68,6 +71,7 @@ public class ClientProxy extends CommonProxy {
         super.preLoad();
         SusyMetaEntities.initRenderers();
         SuSyIRLoader.initEntityRenderers();
+        VariantCoverableBlockRenderer.preInit();
     }
 
     @Override
@@ -236,6 +240,13 @@ public class ClientProxy extends CommonProxy {
             GlStateManager.enableAlpha();
             GlStateManager.enableTexture2D();
             GlStateManager.enableDepth();
+        }
+    }
+
+    @SubscribeEvent
+    public static void onWorldUnload(WorldEvent.Unload event) {
+        if (Minecraft.getMinecraft().world == event.getWorld()) {
+            BlockRenderManager.clearDisabled();
         }
     }
 }

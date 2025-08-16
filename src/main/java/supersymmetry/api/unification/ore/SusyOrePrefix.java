@@ -6,6 +6,7 @@ import gregtech.api.unification.material.info.MaterialIconType;
 import gregtech.api.unification.ore.OrePrefix;
 import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
 import supersymmetry.api.unification.material.info.SuSyMaterialIconType;
+import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 
 import static gregtech.api.unification.ore.OrePrefix.Flags.ENABLE_UNIFICATION;
 
@@ -60,4 +61,7 @@ public class SusyOrePrefix {
 
     // Electrode
     public static final OrePrefix electrode = new OrePrefix("electrode", GTValues.M, null, SuSyMaterialIconType.electrode, OrePrefix.Flags.ENABLE_UNIFICATION, mat -> mat.hasFlag(SuSyMaterialFlags.SUPERALLOY));
+
+    // Mill ball
+    public static final OrePrefix millBall = new OrePrefix("millBall", GTValues.M, null, SuSyMaterialIconType.millBall, OrePrefix.Flags.ENABLE_UNIFICATION, mat -> mat.hasProperty(SuSyPropertyKey.MILL_BALL));
 }

@@ -3,6 +3,8 @@ package supersymmetry.client.renderer.textures;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.renderer.texture.cube.*;
 import gregtech.client.renderer.texture.custom.DrumRenderer;
+import net.minecraft.item.EnumDyeColor;
+import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.renderer.textures.custom.ExtenderRender;
 
 public class SusyTextures {
@@ -96,6 +98,9 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer METALLURGICAL_CONVERTER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/metallurgical_converter");
     public static final OrientedOverlayRenderer INJECTION_MOLDER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/injection_molder");
     public static final OrientedOverlayRenderer POLYMERIZATION_TANK_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/polymerization_tank");
+    public static final OrientedOverlayRenderer ECCENTRIC_ROLL_CRUSHER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/eccentric_roll_crusher");
+    public static final OrientedOverlayRenderer BALL_MILL_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/ball_mill");
+
 
     public static final SimpleOverlayRenderer SILICON_CARBIDE_CASING = new SimpleOverlayRenderer("multiblock_casing/silicon_carbide_casing");
     public static final SimpleOverlayRenderer MONEL_500_CASING = new SimpleOverlayRenderer("multiblock_casing/monel_500_casing");
@@ -111,6 +116,8 @@ public class SusyTextures {
             new SimpleOverlayRenderer("storage/crates/code_breacher");
 
     public static final SimpleCubeRenderer MASONRY_BRICK = new SimpleCubeRenderer("gregtech:blocks/multiblock_casing/masonry_brick");
+    public static final SimpleCubeRenderer BALL_MILL_SHELL =
+            new SimpleCubeRenderer("gregtech:blocks/casings/grinder_casing/wear_resistant_lined_mill_shell");
 
     public static final DrumRenderer PLASTIC_CAN = new DrumRenderer("storage/drums/plastic_can");
 
@@ -133,4 +140,13 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer STOCK_CONTROLLER = new OrientedOverlayRenderer("rail_interfaces/stock_controller");
 
 
+
+    public static final SimpleCubeRenderer[] METAL_SHEETS = new SimpleCubeRenderer[32];
+
+    static {
+        for (EnumDyeColor color : EnumDyeColor.values()) {
+            METAL_SHEETS[color.getMetadata()] = new SimpleCubeRenderer("gregtech:blocks/decoration/metalsheet_" + SuSyUtility.getNameForColor(color));
+            METAL_SHEETS[color.getMetadata() + 16] = new SimpleCubeRenderer("gregtech:blocks/decoration/large_metalsheet_" + SuSyUtility.getNameForColor(color));
+        }
+    }
 }
