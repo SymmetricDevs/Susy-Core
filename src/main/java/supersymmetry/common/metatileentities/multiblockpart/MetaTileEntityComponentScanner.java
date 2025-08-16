@@ -385,6 +385,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                 if (intPartition.contains(pointingTo) || extPartition.contains(pointingTo) ||
                     intPartition.contains(blockFace.add(dir_general.getOpposite().getDirectionVec()))) {
                     struct.status = BuildStat.CONN_WRONG_DIR;
+                    return;
                 }
             }
         }
@@ -445,7 +446,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                 if (getWorld().getBlockState(bp).getValue(FACING).equals(facing) && b instanceof BlockFairingConnector) {
                     expectation = false;
                 }
-                if (expectation ^ te.isCovered(facing)) { // xor: one is true, one is false
+                if (expectation ^ te.isCovered(facing)) { // xor: one is true, one is false, therefore the expectation is wrong
                     struct.status = BuildStat.WRONG_TILE;
                 }
             }

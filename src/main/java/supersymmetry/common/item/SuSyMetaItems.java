@@ -31,6 +31,7 @@ public class SuSyMetaItems {
     public static MetaValueItem RESTRICTIVE_FILTER;
     public static MetaValueItem TRACK_SEGMENT;
     public static MetaValueItem EARTH_ORBITAL_SCRAP;
+    public static MetaValueItem TUNGSTEN_ELECTRODE;
     public static ArmorMetaItem<?>.ArmorMetaValueItem SIMPLE_GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_TANK;
@@ -102,8 +103,11 @@ public class SuSyMetaItems {
         DATA_CARD_ACTIVE = initOneItem("data_card.active").setMaxStackSize(1).addComponents(new TooltipBehavior(lines ->
             lines.add(I18n.format("metaitem.data_card.active.tooltip.1"))
         ));
+
         RESTRICTIVE_FILTER = initOneItem("restrictive_filter");
         EARTH_ORBITAL_SCRAP = initOneItem("orbital.scrap.earth").setMaxStackSize(8);
+
+        TUNGSTEN_ELECTRODE = initOneItem("tungsten_electrode");
     }
 
     // Ensures ID stability when merging
