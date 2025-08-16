@@ -3,6 +3,7 @@ package supersymmetry.common;
 import gregtech.api.block.VariantBlock;
 import gregtech.api.block.VariantItemBlock;
 import gregtech.api.modules.ModuleContainerRegistryEvent;
+import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.event.MaterialEvent;
 import gregtech.api.unification.material.event.PostMaterialEvent;
 import gregtech.client.utils.TooltipHelper;
@@ -17,8 +18,11 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.launchwrapper.Launch;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -29,8 +33,9 @@ import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
+import supersymmetry.api.blocks.VariantItemBlockFalling;
 import supersymmetry.api.event.MobHordeEvent;
-import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.api.fluids.SusyGeneratedFluidHandler;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.api.unification.ore.SusyStoneTypes;
 import supersymmetry.common.blocks.SheetedFrameItemBlock;
@@ -39,15 +44,18 @@ import supersymmetry.common.blocks.SuSyMetaBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.materials.SusyMaterials;
+import supersymmetry.common.world.SuSyBiomes;
+import supersymmetry.common.world.SuSyDimensions;
+import supersymmetry.common.world.biome.BiomeLunarHighlands;
+import supersymmetry.common.world.biome.BiomeLunarMaria;
 import supersymmetry.loaders.SuSyWorldLoader;
 import supersymmetry.loaders.SusyOreDictionaryLoader;
 import supersymmetry.loaders.recipes.SuSyRecipeLoader;
 import supersymmetry.modules.SuSyModules;
 
-import java.util.Arrays;
+import java.io.File;
 import java.util.Objects;
 import java.util.function.Function;
-import java.util.logging.Level;
 
 import static supersymmetry.common.blocks.SuSyMetaBlocks.SHEETED_FRAMES;
 
@@ -59,7 +67,56 @@ public class CommonProxy {
     public void preLoad() {
         GeckoLib.initialize();
         SusyStoneTypes.init();
-        SuSyRecipeMaps.init();
+    }
+
+    /**
+     * Checks for a canary file in the config directory and deletes it if found.
+     * Also cleans up the Groovy cache folder to prevent update issues.
+     */
+    public void checkCanaryFile() {
+        try {
+            // Handle canary file in config/susy/
+            File configDir = new File(Loader.instance().getConfigDir(), "susy");
+            if (configDir.exists() || configDir.mkdirs()) {
+                File canaryFile = new File(configDir, "susy_canary");
+                if (canaryFile.exists()) {
+                    SusyLog.logger.info("Found canary file for update - performing cleanup actions");
+                    if (!canaryFile.delete()) {
+                        SusyLog.logger.warn("Failed to delete canary file: {}", canaryFile.getAbsolutePath());
+                    }
+                }
+            } else {
+                SusyLog.logger.warn("Failed to access or create susy config directory");
+            }
+
+            // Clean up Groovy cache
+            File gameDir = Loader.instance().getConfigDir().getParentFile();
+            File groovyCacheDir = new File(gameDir, "cache/groovy");
+            if (groovyCacheDir.exists() && groovyCacheDir.isDirectory()) {
+                SusyLog.logger.info("Cleaning up Groovy cache at: {}", groovyCacheDir.getAbsolutePath());
+                deleteDirectory(groovyCacheDir);
+            }
+        } catch (Exception e) {
+            SusyLog.logger.error("Error during cleanup operations", e);
+        }
+    }
+
+    /**
+     * Recursively deletes a directory and all its contents.
+     *
+     * @param directory the directory to delete
+     * @return true if the directory was successfully deleted, false otherwise
+     */
+    private boolean deleteDirectory(File directory) {
+        if (directory.isDirectory()) {
+            File[] files = directory.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    deleteDirectory(file);
+                }
+            }
+        }
+        return directory.delete();
     }
 
     public void load() {
@@ -75,12 +132,9 @@ public class CommonProxy {
         for (SusyStoneVariantBlock block : SuSyBlocks.SUSY_STONE_BLOCKS.values()) registry.register(block);
 
         for (Block b: susyBlocks) {
-            if (b.equals(TANK_SHELL))
-            {
-                SusyLog.logger.log(SusyLog.logger.getLevel(), "tank");
-            }
             registry.register(b);
         }
+        registry.register(REGOLITH);
 
         SHEETED_FRAMES.values().stream().distinct().forEach(registry::register);
     }
@@ -93,6 +147,7 @@ public class CommonProxy {
         for (SusyStoneVariantBlock block : SuSyBlocks.SUSY_STONE_BLOCKS.values())
             registry.register(createItemBlock(block, VariantItemBlock::new));
         susyBlocks.stream().distinct().forEach(vb -> registry.register(createItemBlock(vb, VariantItemBlock::new)));
+        registry.register(createItemBlock(REGOLITH, VariantItemBlockFalling::new));
         SHEETED_FRAMES.values()
                 .stream().distinct()
                 .map(block -> createItemBlock(block, SheetedFrameItemBlock::new))
@@ -115,6 +170,10 @@ public class CommonProxy {
         MetaItems.addOrePrefix(SusyOrePrefix.wetFiber);
         MetaItems.addOrePrefix(SusyOrePrefix.thread);
         MetaItems.addOrePrefix(SusyOrePrefix.dustWet);
+        MetaItems.addOrePrefix(SusyOrePrefix.electrode);
+
+        Materials.Aluminium.addFlags("continuously_cast");
+        SusyGeneratedFluidHandler.init();
 
         //SusyMaterials.removeFlags();
     }
@@ -123,26 +182,25 @@ public class CommonProxy {
     @SideOnly(Side.CLIENT)
     public static void itemToolTip(ItemTooltipEvent event) {
         handleCoilTooltips(event);
-        addTooltip(event, "gregtech.machine.steam_extractor", TooltipHelper.BLINKING_ORANGE + I18n.format("gregtech.machine.steam_extractor_cannot_melt_items.warning"), 2);
+        addTooltip(event, "susy.machine.steam_extractor", TooltipHelper.BLINKING_ORANGE + I18n.format("susy.machine.steam_extractor_cannot_melt_items.warning"), 2);
     }
 
     private static void handleCoilTooltips(ItemTooltipEvent event) {
         Block block = Block.getBlockFromItem(event.getItemStack().getItem());
-        if(block instanceof BlockWireCoil && TooltipHelper.isShiftDown()) {
+        if (block instanceof BlockWireCoil wireCoilBlock && TooltipHelper.isShiftDown()) {
             ItemStack itemStack = event.getItemStack();
             Item item = itemStack.getItem();
-            BlockWireCoil wireCoilBlock = (BlockWireCoil)block;
-            VariantItemBlock itemBlock = (VariantItemBlock)item;
-            BlockWireCoil.CoilType coilType = (BlockWireCoil.CoilType)wireCoilBlock.getState(itemBlock.getBlockState(itemStack));
-            event.getToolTip().add(I18n.format("tile.wire_coil.tooltip_evaporation", new Object[0]));
-            event.getToolTip().add(I18n.format("tile.wire_coil.tooltip_energy_evaporating", new Object[]{coilType.getCoilTemperature()/1000}));
+            VariantItemBlock itemBlock = (VariantItemBlock) item;
+            BlockWireCoil.CoilType coilType = wireCoilBlock.getState(itemBlock.getBlockState(itemStack));
+            event.getToolTip().add(I18n.format("tile.wire_coil.tooltip_evaporation"));
+            event.getToolTip().add(I18n.format("tile.wire_coil.tooltip_energy_evaporating", coilType.getCoilTemperature() / 1000));
         }
     }
 
     // Since this function checks if the key is in the translation key, you can sometimes add tooltips to multiple items
     //   with a single call of the function. Useful for hitting both basic and high pressure steam machines, for example.
     private static void addTooltip(ItemTooltipEvent event, String key, String toolTip, int index) {
-        if(event.getItemStack().getTranslationKey().contains(key)) {
+        if (event.getItemStack().getTranslationKey().contains(key)) {
             event.getToolTip().add(index, toolTip);
         }
     }
@@ -164,5 +222,20 @@ public class CommonProxy {
         ItemBlock itemBlock = producer.apply(block);
         itemBlock.setRegistryName(Objects.requireNonNull(block.getRegistryName()));
         return itemBlock;
+    }
+
+    @SubscribeEvent
+    public static void register(RegistryEvent.Register<Biome> evt) {
+        SuSyBiomes.LUNAR_HIGHLANDS = new BiomeLunarHighlands(new Biome.BiomeProperties("Lunar Highlands").setRainDisabled().setBaseHeight(1f).setHeightVariation(0.2f).setRainfall(0).setTemperature(0.3f));
+        SuSyBiomes.LUNAR_HIGHLANDS.setRegistryName(Supersymmetry.MODID, "moon");
+        evt.getRegistry().register(SuSyBiomes.LUNAR_HIGHLANDS);
+        BiomeDictionary.addTypes(SuSyBiomes.LUNAR_HIGHLANDS, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.VOID);
+
+        SuSyBiomes.LUNAR_MARIA = new BiomeLunarMaria(new Biome.BiomeProperties("Lunar Maria").setRainDisabled().setBaseHeight(0f).setHeightVariation(0.1f).setRainfall(0).setTemperature(0.3f));
+        SuSyBiomes.LUNAR_MARIA.setRegistryName(Supersymmetry.MODID, "maria");
+        evt.getRegistry().register(SuSyBiomes.LUNAR_MARIA);
+        BiomeDictionary.addTypes(SuSyBiomes.LUNAR_MARIA, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.VOID);
+
+        SuSyDimensions.init();
     }
 }

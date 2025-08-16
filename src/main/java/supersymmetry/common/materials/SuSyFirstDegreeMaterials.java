@@ -1,6 +1,7 @@
 package supersymmetry.common.materials;
 
 import gregtech.api.GTValues;
+import gregtech.api.fluids.FluidBuilder;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.info.MaterialIconSet;
 import gregtech.api.unification.material.properties.BlastProperty;
@@ -164,5 +165,14 @@ public class SuSyFirstDegreeMaterials {
                 .components(Magnesium, 3, Silicon, 2, Oxygen, 9, Hydrogen, 4)
                 .build()
                 .setFormula("Mg3Si2O5(OH)4",true);
+
+        // Thermodynamic materials
+
+        PreheatedAir = new Material.Builder(27150, SuSyUtility.susyId("preheated_air"))
+                .gas(new FluidBuilder().temperature(1000))
+                .color(0xA9D0F5)
+                .flags(DISABLE_DECOMPOSITION)
+                .components(Nitrogen, 78, Oxygen, 21, Argon, 9)
+                .build();
     }
 }

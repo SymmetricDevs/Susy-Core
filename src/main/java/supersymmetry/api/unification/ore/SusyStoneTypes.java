@@ -25,6 +25,8 @@ public class SusyStoneTypes {
     public static StoneType SOAPSTONE;
     public static StoneType KIMBERLITE;
 
+    public static StoneType ANORTHOSITE;
+
     public SusyStoneTypes(){
     }
 
@@ -56,6 +58,9 @@ public class SusyStoneTypes {
         KIMBERLITE = new StoneType(20, "kimberlite", SoundType.STONE, SusyOrePrefix.oreKimberlite, SusyMaterials.Kimberlite,
                 () -> gtStoneState(SusyStoneVariantBlock.StoneType.KIMBERLITE),
                 state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.KIMBERLITE), false);
+        ANORTHOSITE = new StoneType(21, "anorthosite", SoundType.STONE, SusyOrePrefix.oreAnorthosite, SusyMaterials.Anorthosite,
+                () -> gtStoneState(SusyStoneVariantBlock.StoneType.ANORTHOSITE),
+                state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.ANORTHOSITE), false);
 
         if (ConfigHolder.worldgen.allUniqueStoneTypes) {
             addSecondary(SusyOrePrefix.oreGabbro, SusyMaterials.Gabbro);
@@ -67,6 +72,7 @@ public class SusyStoneTypes {
             addSecondary(SusyOrePrefix.oreSlate, SusyMaterials.Slate);
             addSecondary(SusyOrePrefix.oreSoapstone, Materials.Soapstone);
             addSecondary(SusyOrePrefix.oreKimberlite, SusyMaterials.Kimberlite);
+            addSecondary(SusyOrePrefix.oreAnorthosite, SusyMaterials.Anorthosite);
         }
     }
 

@@ -20,64 +20,88 @@
  * For more details, see https://docs.gradle.org/8.0.1/userguide/java_library_plugin.html#sec:java_library_configurations_graph
  */
 dependencies {
-
     implementation 'org.reflections:reflections:0.10.2'
 
-    // CCL 3.2.3.358
-    implementation rfg.deobf('curse.maven:codechicken-lib-1-8-242818:2779848')
-    // GTCEu 2.8.10 beta
-    implementation rfg.deobf("curse.maven:gregtech-ce-unofficial-557242:5519022")
-    // GCYM 1.2.10
-    implementation rfg.deobf('curse.maven:gregicality-multiblocks-564858:5508050')
-    // AE2UEL 0.55.6 (transitive gt dep)
-    compileOnly rfg.deobf("curse.maven:ae2-extended-life-570458:4402048")
-
-    //GeckoLib
-    implementation rfg.deobf('curse.maven:geckolib-388172:4020277')
-
-    compileOnly rfg.deobf('curse.maven:realistic-terrain-generation-unofficial-648514:4404814')
-
-    compileOnly rfg.deobf('curse.maven:biomes-o-plenty-220318:2842510')
-
-    implementation rfg.deobf('curse.maven:gregtech-food-option-477021:5500516') // GT-FO 1.11.3
-
-    implementation rfg.deobf('curse.maven:applecore-224472:2969118')
-
-
-    implementation rfg.deobf("curse.maven:universal-mod-core-371784:4975229") // Universal-Mod-Care v1.2.1
-    implementation rfg.deobf("curse.maven:track-api-282613:2825260") // Track-API v1.2.0
-
-    implementation rfg.deobf("curse.maven:immersive-railroading-277736:4970105") // Immersive-Railroading v1.10.0
-
-    implementation rfg.deobf("curse.maven:ctm-267602:2915363") // CTM 1.0.2.31
-    api("com.cleanroommc:groovyscript:1.2.0-hotfix1") { transitive = false }
-    api("com.cleanroommc:modularui:2.5.0-rc4") { transitive = false }
-
-    runtimeOnly rfg.deobf("curse.maven:the-beneath-254629:3425551")
-
-    compileOnly rfg.deobf("curse.maven:ynet-an-xnet-fork-999559:5243319") // XNet-1.8.3-ynet
-    compileOnly rfg.deobf("curse.maven:rftools-224641:2861573") // RFTools 7.73
-    compileOnly rfg.deobf("curse.maven:mcjtylib-233105:2745846")
-    compileOnly rfg.deobf("curse.maven:redstone-flux-270789:2920436")
-    compileOnly rfg.deobf("curse.maven:tesla-244651:2487959")
-    compileOnly rfg.deobf("curse.maven:hwyla-253449:2568751")
-    compileOnly rfg.deobf("curse.maven:travelers-backpack-321117:3150850")
-
-    compileOnly rfg.deobf("curse.maven:bubbles-a-baubles-fork-995393:5719448")
-
-    compileOnly rfg.deobf("curse.maven:barrels-drums-storage-more-319404:2708193")
-
-    implementation rfg.deobf("curse.maven:pyrotech-306676:5351359")
-    implementation rfg.deobf("curse.maven:athenaeum-284350:4633750")
-    implementation rfg.deobf("curse.maven:dropt-284973:5405050")
-
-    implementation rfg.deobf("curse.maven:recurrent-complex-223150:5615733")
-    implementation rfg.deobf("curse.maven:ivtoolkit-224535:2443253")
-    implementation rfg.deobf("curse.maven:fluidlogged-api-485654:4564413")
-
-    compileOnly rfg.deobf("curse.maven:yungs-better-mineshafts-forge-389665:3247154")
-
-    api("CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.700")
-
+    // # Fix crashes on macOS with Narrator
     runtimeOnly 'com.cleanroommc:osxnarratorblocker:1.0'
+
+    // # GregTech dependencies
+    implementation 'codechicken:codechickenlib:3.2.3.358' transitive false
+    implementation 'gregtech:gregtech:2.8.10-beta' transitive false
+    implementation 'gregicality:GregicalityMultiblocks:1.2.11' transitive false
+
+    // # Transitive GregTech dependencies
+    // CTM 1.0.2.31
+    api 'CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.700'
+    api 'appeng:ae2-uel:v0.56.7' transitive false
+    api rfg.deobf('curse.maven:ctm-267602:2915363')
+
+    // # GregTech Addons
+    // Supercritical 0.1.2
+    implementation rfg.deobf('curse.maven:supercritical-1185871:6694408')
+    // GT-FO 1.12.4
+    implementation rfg.deobf('curse.maven:gregtech-food-option-477021:6147619')
+
+    // # GroovyScript
+    api 'com.cleanroommc:groovyscript:1.2.4' transitive false
+
+    // # Lib Mods we are using
+    api 'com.cleanroommc:modularui:2.5.0-rc5' transitive false
+    api rfg.deobf('curse.maven:geckolib-388172:4020277')
+
+    // # Immersive Railroading dependencies
+    // Universal Mod Care 1.2.1
+    implementation rfg.deobf('curse.maven:universal-mod-core-371784:4975229')
+    // Track API 1.2.0
+    implementation rfg.deobf('curse.maven:track-api-282613:2825260')
+    // Immersive Railroading 1.10.0
+    implementation rfg.deobf('curse.maven:immersive-railroading-277736:4970105')
+
+    // # Recurrent Complex dependencies
+    compileOnly rfg.deobf('curse.maven:recurrent-complex-223150:5615733')
+    compileOnly rfg.deobf('curse.maven:ivtoolkit-224535:2443253')
+
+    compileOnly rfg.deobf('curse.maven:fluidlogged-api-485654:4564413')
+
+    // # Pyrotech dependencies
+    compileOnly rfg.deobf('curse.maven:pyrotech-306676:5351359')
+    compileOnly rfg.deobf('curse.maven:athenaeum-284350:4633750')
+    compileOnly rfg.deobf('curse.maven:dropt-284973:5405050')
+
+    // # Other dependencies
+    compileOnly rfg.deobf('curse.maven:biomes-o-plenty-220318:2842510')
+    // XNet-1.8.3-ynet
+    compileOnly rfg.deobf('curse.maven:ynet-an-xnet-fork-999559:5243319')
+    // ReFinedTools 7.77
+    compileOnly rfg.deobf('curse.maven:refinedtools-1085014:6743085')
+    compileOnly rfg.deobf('curse.maven:mcjtylib-refilmed-1086841:5643297')
+    compileOnly rfg.deobf('curse.maven:travelers-backpack-321117:3150850')
+    compileOnly rfg.deobf('curse.maven:bubbles-a-baubles-fork-995393:5719448')
+    compileOnly rfg.deobf('curse.maven:barrels-drums-storage-more-319404:2708193')
+    compileOnly rfg.deobf("curse.maven:vintagefix-871198:6609247")
+    // LittleTiles
+    compileOnly rfg.deobf("curse.maven:creativecore-257814:4722163")
+    compileOnly rfg.deobf("curse.maven:littletiles-257818:5180387")
+
+    // # Optional dependencies. Uncomment the ones you need
+//    runtimeOnlyNonPublishable rfg.deobf('curse.maven:the-beneath-254629:3425551')
+//    runtimeOnlyNonPublishable rfg.deobf('curse.maven:realistic-terrain-generation-unofficial-648514:4404814')
+//    runtimeOnlyNonPublishable rfg.deobf("curse.maven:worldedit-225608:2941712")
+//    runtimeOnlyNonPublishable rfg.deobf("curse.maven:worldeditcui-forge-edition-3-380401:3191629")
+//    runtimeOnlyNonPublishable 'com.cleanroommc:configanytime:3.0'
+//    runtimeOnlyNonPublishable rfg.deobf("curse.maven:flare-692142:6598523")
+
+    // # OptiFine
+//    // Copied from GTCEu, originally used to download latest Vintagium from GitHub
+//    // Using Gradle's Ant integration seems to be the least hacky way to download an arbitrary file without a plugin
+//    file('libs/optifine').mkdirs()
+//    ant.get(src: 'https://github.com/OpenCubicChunks/OptiFineDevTweaker/releases/download/2.6.15/aa_do_not_rename_OptiFineDevTweaker-2.6.15-all.jar',
+//            dest: 'libs/optifine/',
+//            skipexisting: 'true')
+//    // Download OptiFine from some random GitHub repo I found by just searching
+//    // Since I failed to get the jar from https://optifine.net/home
+//    ant.get(src: 'https://github.com/SynArchive/OptiFine-Archive/raw/refs/heads/main/1.12.2/preview_OptiFine_1.12.2_HD_U_G6_pre1.jar',
+//            dest: 'libs/optifine/',
+//            skipexisting: 'true')
+//    runtimeOnly files('libs/optifine/*')
 }

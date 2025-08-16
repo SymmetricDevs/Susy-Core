@@ -409,13 +409,13 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                         ITextComponent isHeatingString = isHeating() ?
                                 TextComponentUtil.translationWithColor(
                                         TextFormatting.GREEN,
-                                        "gregtech.multiblock.evaporation_pool.is_heating") :
+                                        "susy.multiblock.evaporation_pool.is_heating") :
                                 TextComponentUtil.translationWithColor(
                                         TextFormatting.RED,
-                                        "gregtech.multiblock.evaporation_pool.is_not_heating");
+                                        "susy.multiblock.evaporation_pool.is_not_heating");
                         tl.add(TextComponentUtil.translationWithColor(
                                 TextFormatting.GRAY,
-                                "gregtech.multiblock.evaporation_pool_heated_preface",
+                                "susy.multiblock.evaporation_pool_heated_preface",
                                 isHeatingString));
                     }
 
@@ -426,7 +426,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                                 TextFormattingUtil.formatNumbers(exposedBlocks));
                         tl.add(TextComponentUtil.translationWithColor(
                                 TextFormatting.GRAY,
-                                "gregtech.multiblock.evaporation_pool.exposed_blocks",
+                                "susy.multiblock.evaporation_pool.exposed_blocks",
                                 exposedBlocksString));
                     }
 
@@ -437,34 +437,19 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                                 String.format("%.2f", getAverageSpeed()));
                         tl.add(TextComponentUtil.translationWithColor(
                                 TextFormatting.GRAY,
-                                "gregtech.multiblock.evaporation_pool.average_speed",
+                                "susy.multiblock.evaporation_pool.average_speed",
                                 averageSpeedString));
                     }
                 })
                 .addProgressLine(recipeMapWorkable.getProgressPercent());
-
-//  Debug stuff, might be useful for testing. Should get removed before merging
-//        textList.add(new TextComponentString(String.format("lDist: %s; rDist: %s; bDist: %s", lDist, rDist, bDist)));
-//        textList.add(new TextComponentString(String.format("Exposed Blocks: %s", exposedBlocks)));
-//        textList.add(new TextComponentString(String.format("Coil Count: %s", coilHeat / coilTemp)));
-//        textList.add(new TextComponentString(String.format("Coil Temp: %s", coilTemp)));
-//        textList.add(new TextComponentString(line(Slice.B_ALL) + " " + line(Slice.T_NONE)));
-//        textList.add(new TextComponentString(line(Slice.B_ALL) + " " + line(Slice.T_SIDES)));
-//        textList.add(new TextComponentString(line(Slice.B_END) + " " + line(Slice.T_MIDDLE)));
-//        for (int i = 0; i < bDist - 2; i++) {
-//            textList.add(new TextComponentString(line(Slice.B_MIDDLE) + " " + line(Slice.T_MIDDLE)));
-//        }
-//        textList.add(new TextComponentString(line(Slice.B_START) + " " + line(Slice.T_MIDDLE)));
-//        textList.add(new TextComponentString(line(Slice.B_ALL) + " " + line(Slice.T_SIDES)));
-//        textList.add(new TextComponentString(line(Slice.B_SELF) + " " + line(Slice.T_NONE)));
     }
 
     @Override
     public void addInformation(ItemStack stack, World player, @NotNull List<String> tooltip, boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
-        tooltip.add(I18n.format("gregtech.machine.evaporation_pool.tooltip.info", MAX_DIAMETER, MIN_DIAMETER));
+        tooltip.add(I18n.format("susy.machine.evaporation_pool.tooltip.info", MAX_DIAMETER, MIN_DIAMETER));
         if (TooltipHelper.isShiftDown()) {
-            tooltip.add(I18n.format("gregtech.machine.evaporation_pool.tooltip.structure_info", MAX_DIAMETER, MIN_DIAMETER));
+            tooltip.add(I18n.format("susy.machine.evaporation_pool.tooltip.structure_info", MAX_DIAMETER, MIN_DIAMETER));
         }
     }
 
@@ -626,7 +611,9 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             World world = pool.getWorld();
             int exposedBlocks = 0;
             for (BlockPos pos : pool.variantActiveBlocks) {
-                if (GTUtility.canSeeSunClearly(world, pos)) exposedBlocks += 1;
+                if (world.isBlockLoaded(pos) && GTUtility.canSeeSunClearly(world, pos)) {
+                    exposedBlocks += 1;
+                }
             }
             pool.updateExposedBlocks(exposedBlocks);
         }
@@ -659,6 +646,12 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             this.heatBuffer = 0;
         }
 
+        /// Do not overclock
+        @Override
+        protected int @NotNull [] calculateOverclock(@NotNull Recipe recipe) {
+            return new int[]{recipe.getEUt(), recipe.getDuration()};
+        }
+
         @Override
         protected boolean hasEnoughPower(int @NotNull [] resultOverclock) {
             return true;
@@ -677,8 +670,8 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                 }
 
                 int totalHeat = (baseHeat + coilHeat);
-                int remainingHeat = totalHeat % recipeJt;
-                int maxProgress = totalHeat / recipeJt;
+                int remainingHeat = totalHeat % getRecipeJt();
+                int maxProgress = totalHeat / getRecipeJt();
 
                 updateSpeedStats(maxProgress);
 
@@ -695,6 +688,13 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                     this.completeRecipe();
                 }
             }
+        }
+
+        /// Workaround for backwards compat
+        /// Random fallback number IDK
+        @Deprecated
+        protected int getRecipeJt() {
+            return recipeJt != 0 ? recipeJt : 500;
         }
 
         /// This could potentially be cached in the mte, but ig it doesn't matter that much

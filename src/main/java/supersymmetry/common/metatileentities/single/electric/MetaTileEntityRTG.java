@@ -54,10 +54,15 @@ public class MetaTileEntityRTG extends TieredMetaTileEntity {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, boolean advanced) {
-        tooltip.add(I18n.format("gregtech.machine.rtg.tooltip.info"));
-        tooltip.add(I18n.format("gregtech.machine.rtg.tooltip.description"));
-        tooltip.add(I18n.format("gregtech.machine.rtg.voltage_produced", new Object[]{GTValues.VH[getTier() - 1], GTValues.VNF[this.getTier()-1]}));
+        tooltip.add(I18n.format("susy.machine.rtg.tooltip.info"));
+        tooltip.add(I18n.format("susy.machine.rtg.tooltip.description"));
+        tooltip.add(I18n.format("susy.machine.rtg.voltage_produced", new Object[]{GTValues.VH[getTier() - 1], GTValues.VNF[this.getTier()-1]}));
         tooltip.add(I18n.format("gregtech.universal.tooltip.max_voltage_out", new Object[]{this.energyContainer.getOutputVoltage(), GTValues.VNF[this.getTier()]}));
         tooltip.add(I18n.format("gregtech.universal.tooltip.energy_storage_capacity", new Object[]{this.energyContainer.getEnergyCapacity()}));
+    }
+
+    @Override
+    public boolean getIsWeatherOrTerrainResistant() {
+        return true;
     }
 }

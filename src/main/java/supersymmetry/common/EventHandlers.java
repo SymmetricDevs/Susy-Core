@@ -1,10 +1,12 @@
 package supersymmetry.common;
 
-import gregtech.api.items.armor.ArmorMetaItem;
+import gregtech.api.GregTechAPI;
 import gregtech.api.util.GTTeleporter;
 import gregtech.api.util.TeleportHandler;
 import gregtech.common.items.MetaItems;
 import gregtechfoodoption.item.GTFOMetaItem;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockTorch;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -12,11 +14,12 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.management.PlayerList;
-import net.minecraft.util.DamageSource;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -27,12 +30,14 @@ import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.event.MobHordeWorldData;
 import supersymmetry.common.item.SuSyArmorItem;
+import supersymmetry.common.network.SPacketFirstJoin;
+import supersymmetry.common.world.WorldProviderPlanet;
+import supersymmetry.loaders.SuSyWorldLoader;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class EventHandlers {
 
-    private static final String FIRST_SPAWN = Supersymmetry.MODID + ".first_spawn";
-    private static boolean cancelFillBucket = false;
+    public static final String FIRST_SPAWN = Supersymmetry.MODID + ".first_spawn";
 
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
@@ -46,6 +51,8 @@ public class EventHandlers {
             playerData.setTag(EntityPlayer.PERSISTED_NBT_TAG, data);
             if (event.player.isCreative()) return;
 
+            GregTechAPI.networkHandler.sendTo(new SPacketFirstJoin(), (EntityPlayerMP) event.player);
+
             EntityDropPod dropPod = new EntityDropPod(event.player.getEntityWorld(), event.player.posX, event.player.posY + 256, event.player.posZ);
 
             GTTeleporter teleporter = new GTTeleporter((WorldServer) event.player.world, event.player.posX, event.player.posY + 256, event.player.posZ);
@@ -57,8 +64,14 @@ public class EventHandlers {
             event.player.addItemStackToInventory(GTFOMetaItem.EMERGENCY_RATIONS.getStackForm(32));
             event.player.addItemStackToInventory(MetaItems.PROSPECTOR_LV.getChargedStack(100000));
         }
+    }
 
-
+    @SubscribeEvent
+    public static void onWorldLoad(WorldEvent.Load event) {
+        GameRules gameRules = event.getWorld().getGameRules();
+        if (!gameRules.hasRule("doInvasions")) {
+            gameRules.addGameRule("doInvasions", "true", GameRules.ValueType.BOOLEAN_VALUE);
+        }
     }
 
     @SubscribeEvent
@@ -68,18 +81,18 @@ public class EventHandlers {
 
     @SubscribeEvent
     public static void onWorldTick(TickEvent.WorldTickEvent event) {
-
         World world = event.world;
 
         if (world.isRemote) {
             return;
         }
-
         if (event.phase != TickEvent.Phase.END) {
             return;
         }
-
         if (world.provider.getDimension() != 0) {
+            return;
+        }
+        if (!world.getGameRules().getBoolean("doInvasions")) {
             return;
         }
 
@@ -113,11 +126,25 @@ public class EventHandlers {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onEntityLivingFallEvent(LivingFallEvent event) {
+        if (event.getEntity().world.provider instanceof WorldProviderPlanet provider) {
+            event.setDistance((float) (event.getDistance() * provider.getPlanet().gravity));
+        }
+
         Entity armor = event.getEntity();
         if (armor instanceof EntityPlayer player) {
             ItemStack boots = player.getItemStackFromSlot(EntityEquipmentSlot.FEET);
             if (!boots.isEmpty() && boots.getItem() instanceof SuSyArmorItem) {
                 player.fallDistance = event.getDistance();
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onBlockPlaceEvent(BlockEvent.EntityPlaceEvent event) {
+        if (event.getWorld().provider instanceof WorldProviderPlanet provider && !provider.getPlanet().supportsFire) {
+            Block block = event.getPlacedBlock().getBlock();
+            if (block instanceof BlockTorch) {
+                event.setCanceled(true);
             }
         }
     }

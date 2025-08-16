@@ -3,6 +3,7 @@ package supersymmetry.api.util;
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.impl.NotifiableItemStackHandler;
 import gregtech.api.metatileentity.MetaTileEntity;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -39,6 +40,11 @@ public class DataStorageLoader extends NotifiableItemStackHandler implements IIt
             return ItemStack.EMPTY;
         }
         return dataStorage;
+    }
+    public boolean isEmpty() {
+        return dataStorage == ItemStack.EMPTY || dataStorage.getItem() == Items.AIR; 
+        //gets set to air a lot for some
+        //reason :shrug:
     }
 
     @Override

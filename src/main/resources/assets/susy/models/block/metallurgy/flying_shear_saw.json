@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "gregtech:blocks/multiblock_casing/flying_shear_saw_bottom",
+    "up": "gregtech:blocks/casings/solid/machine_casing_solid_steel",
+    "north": "gregtech:blocks/casings/solid/machine_casing_solid_steel",
+    "east": "gregtech:blocks/casings/solid/machine_casing_solid_steel",
+    "south": "gregtech:blocks/casings/solid/machine_casing_solid_steel",
+    "west": "gregtech:blocks/casings/solid/machine_casing_solid_steel",
+    "particle": "gregtech:blocks/casings/solid/machine_casing_solid_steel"
+  }
+}

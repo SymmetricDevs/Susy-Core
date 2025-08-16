@@ -10,6 +10,8 @@ import gregtech.api.unification.material.info.MaterialFlags;
 import gregtech.api.unification.material.properties.*;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
+import supersymmetry.api.unification.material.properties.MillBallProperty;
+import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 
 import java.lang.reflect.Field;
 import java.util.HashSet;
@@ -27,13 +29,16 @@ public class SusyMaterials {
     public static Material Shale;
     public static Material Slate;
     public static Material Kimberlite;
+    public static Material Anorthosite;
     public static Material Latex;
     public static Material Mud;
     public static Material Seawater;
     public static Material MetallizedBoPET;
     public static Material Aluminium7075;
 
-    //Minerals
+    public static Material RefractoryGunningMixture;
+
+    // Minerals
     public static Material Anorthite;
     public static Material Albite;
     public static Material Oligoclase;
@@ -47,6 +52,9 @@ public class SusyMaterials {
     public static Material Forsterite;
     public static Material Lizardite;
     public static Material Fluorite;
+
+    // Thermodynamic materials
+    public static Material PreheatedAir;
 
     public static void init() {
         SuSyElementMaterials.init();
@@ -170,6 +178,9 @@ public class SusyMaterials {
         Materials.Electrum.setProperty(PropertyKey.ORE, new OreProperty());
 
         Materials.Hydrogen.addFlags(MaterialFlags.FLAMMABLE);
+
+        // Debug only
+        Materials.Steel.setProperty(SuSyPropertyKey.MILL_BALL, new MillBallProperty(23123));
     }
 
     private static void removeProperty(PropertyKey<?> key, Material material) {

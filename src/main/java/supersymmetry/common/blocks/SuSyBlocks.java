@@ -12,7 +12,9 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.blocks.VariantBlockFalling;
 import supersymmetry.common.blocks.rocketry.*;
+import supersymmetry.common.tileentities.SuSyTileEntities;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -44,9 +46,16 @@ public class SuSyBlocks {
     public static BlockSuSyMultiblockCasing MULTIBLOCK_CASING;
     public static BlockSerpentine SERPENTINE;
     public static BlocksHardened HARDBLOCKS;
+    public static BlocksHardened1 HARDBLOCKS1;
     public static BlocksCustomSheets CUSTOMSHEETS;
+    public static BlockMetallurgy METALLURGY;
+    public static BlockMetallurgy2 METALLURGY_2;
+    public static BlockMetallurgyRoll METALLURGY_ROLL;
     public static BlockConveyor CONVEYOR_BELT;
     public static BlockRocketAssemblerCasing ROCKET_ASSEMBLER_CASING;
+    public static BlockRegolith REGOLITH;
+    public static BlocksFakeWool FAKEWOOL;
+    public static BlockSupport SUPPORT;
 
     public static BlockOuterHatch OUTER_HATCH;
     public static BlockInterStage INTERSTAGE;
@@ -61,17 +70,18 @@ public class SuSyBlocks {
     public static BlockRoomPadding ROOM_PADDING;
     public static BlockFairingConnector FAIRING_CONNECTOR;
     public static BlockSpacecraftHull SPACECRAFT_HULL;
+    public static BlockEccentricRoll ECCENTRIC_ROLL;
+    public static BlockGrinderCasing GRINDER_CASING;
+    public static BlockGirthGearTooth GIRTH_GEAR_TOOTH;
 
     public static ArrayList<VariantBlock<?>> susyBlocks;
 
     public static void init() {
-        // Initialize extra stone variants
         for (SusyStoneVariantBlock.StoneVariant shape : SusyStoneVariantBlock.StoneVariant.values()) {
             SUSY_STONE_BLOCKS.put(shape, new SusyStoneVariantBlock(shape));
         }
         registerWalkingSpeedBonus();
         susyBlocks = new ArrayList<>();
-
         // Test all fields
         for (Field field: SuSyBlocks.class.getDeclaredFields()) {
             if (VariantBlock.class.isAssignableFrom(field.getType())) {
@@ -89,16 +99,25 @@ public class SuSyBlocks {
                 }
             }
         }
+
+        REGOLITH = new BlockRegolith();
+        REGOLITH.setRegistryName("regolith");
+
+        SuSyTileEntities.register();
     }
 
     @SideOnly(Side.CLIENT)
     public static void registerItemModels() {
+        COOLING_COIL.onModelRegister();
+        SINTERING_BRICK.onModelRegister();
+        registerItemModel(COAGULATION_TANK_WALL);
         for (SusyStoneVariantBlock block : SUSY_STONE_BLOCKS.values())
             registerItemModel(block);
         susyBlocks.forEach(b -> {
             if (b instanceof VariantActiveBlock) ((VariantActiveBlock<?>) b).onModelRegister();
             else registerItemModel(b);
         });
+        registerItemModel(REGOLITH);
     }
 
     @SideOnly(Side.CLIENT)

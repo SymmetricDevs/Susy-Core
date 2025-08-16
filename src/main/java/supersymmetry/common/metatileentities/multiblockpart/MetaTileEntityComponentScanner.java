@@ -3,9 +3,6 @@ package supersymmetry.common.metatileentities.multiblockpart;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.Multiset;
 import gregtech.api.block.VariantBlock;
 import gregtech.api.capability.*;
 import gregtech.api.gui.GuiTextures;
@@ -18,7 +15,6 @@ import gregtech.api.metatileentity.multiblock.ICleanroomProvider;
 import gregtech.api.metatileentity.multiblock.ICleanroomReceiver;
 import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 import gregtech.api.metatileentity.multiblock.MultiblockDisplayText;
-import gregtech.api.recipes.Recipe;
 import gregtech.api.util.TextComponentUtil;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
@@ -27,7 +23,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -49,6 +44,7 @@ import org.jetbrains.annotations.Nullable;
 
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.capability.impl.ScannerLogic;
+import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
@@ -63,9 +59,10 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
-import static supersymmetry.common.blocks.SuSyBlocks.*;
+import static supersymmetry.common.blocks.SuSyBlocks.TANK_SHELL;
+import static supersymmetry.common.blocks.SuSyBlocks.TANK_SHELL1;
 
-public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart implements ICleanroomReceiver, IControllable, IWorkable {
+public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart implements ICleanroomReceiver, IWorkable {
     private final ScannerLogic scannerLogic;
     private float scanDuration = 0;
     private MetaTileEntityBuildingCleanroom linkedCleanroom;
@@ -122,61 +119,27 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             this.struct.status = BuildStat.DISCONNECTED;
             return;
         }
-
-        // Block-by-block analysis
-        for (BlockPos bp: blockList) {
-            IBlockState state = getWorld().getBlockState(bp);
-        }
-
-        Tuple<Set<BlockPos>, Set<BlockPos>> exterior = struct.checkHull(interior, blocksConnected, false);
-        Predicate<BlockPos> engineDetect = bp -> getWorld().getBlockState(bp).getBlock()
-                .equals(SuSyBlocks.COMBUSTION_CHAMBER);
-        Predicate<BlockPos> controlPodDetect = bp -> getWorld().getBlockState(bp).getBlock()
-                .equals(SuSyBlocks.ROCKET_CONTROL);
-        fuelTankDetect = bp -> getWorld().getBlockState(bp).getBlock()
-                .equals(TANK_SHELL) || getWorld().getBlockState(bp).getBlock().equals(TANK_SHELL1);
-        Predicate<BlockPos> fairingDetect = bp -> getWorld().getBlockState(bp).getBlock()
-                .equals(SuSyBlocks.FAIRING_HULL);
-        Predicate<BlockPos> interstageDetect = bp -> getWorld().getBlockState(bp).getBlock()
-                .equals(SuSyBlocks.INTERSTAGE);
-        Predicate<BlockPos> spacecraftDetect = bp -> getWorld().getBlockState(bp).getBlock()
-                .equals(SuSyBlocks.SPACECRAFT_HULL);
-
-
-        boolean hasAir = struct.status != BuildStat.HULL_FULL;
         struct.status = BuildStat.SCANNING;
-        writeBlocksToNBT(blockList.stream().collect(Collectors.toSet()), this.getWorld()); //im sorry
-        if (blockList.stream().anyMatch(engineDetect)) {
-            analyzeEngine(blocksConnected);
-        } else if (blockList.stream().anyMatch(controlPodDetect) && hasAir) {
-            analyzeSpacecraft(blocksConnected, exterior.getFirst(), exterior.getSecond());
-        } else if (blockList.stream().anyMatch(fuelTankDetect) && exterior != null) {
-            if (!hasAir) {
-                struct.status = BuildStat.HULL_FULL;
-                return;
-            }
 
-            // Check if all blocks are facing the correct direction and are of the right type
-            // Save the fuel capacity & type
-            analyzeFuelTank(blocksConnected, exterior);
-        } else if (blockList.stream().anyMatch(fairingDetect)) {
-            if (!exterior.getSecond().isEmpty() ) {
-                struct.status = BuildStat.WEIRD_FAIRING;
+        for (AbstractComponent<?> component : AbstractComponent.getRegistry())
+        {
+            SusyLog.logger.info("checking component {}",component.getName());
+            if (component.getDetectionPredicate().test(new Tuple<StructAnalysis,List<BlockPos>>(struct, blockList))) {
+                SusyLog.logger.info("component {} passed", component.getName());
+                Optional<NBTTagCompound> scanResult = component.analyzePattern(struct, linkedCleanroom.getInteriorBB());
+                if (scanResult.isPresent()) {
+                    SusyLog.logger.info("scan successful, nbt popped out: {}",scanResult.get());
+
+                    getInventory().addToCompound(tag -> {return scanResult.get(); /*just replace it*/});
+
+                    break;
+                } else {
+                    SusyLog.logger.info("scan failed, reason: {}",struct.status); break;
+                }
+
             }
-            analyzeFairing(blocksConnected, exterior.getFirst());
-        } else if (blockList.stream().anyMatch(interstageDetect)) {
-            analyzeInterstage(blocksConnected, exterior.getFirst());
-        } else if (blockList.stream().anyMatch(spacecraftDetect)) {
-            analyzeSpacecraft(blocksConnected, exterior.getSecond(), exterior.getFirst());
-        } else {
-            struct.status = BuildStat.UNRECOGNIZED;
         }
-
-
-
-        // Identify component type: Fluid port -> tank, hatch -> pf
-
-        // Component analysis
+        //if (struct.status == BuildStat.SUCCESS) {struct.status = BuildStat.ERROR; /*if it wasnt changed after scanning, nothing matched*/ }
 
         /* Plan from here on out:
         1. Gather block statistics
@@ -213,494 +176,6 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         */
     }
 
-    public void writeBlocksToNBT(Set<BlockPos> blocks,World world) {
-        Map<String,Integer> counts = new HashMap<String,Integer>();
-        for (BlockPos blockpos : blocks) {
-        IBlockState state = world.getBlockState(blockpos);
-            Block block = state.getBlock();
-            int meta = block.getMetaFromState(state);
-            TileEntity te = world.getTileEntity(blockpos);
-            if (te != null) {
-                if (te instanceof TileEntityCoverable)
-                {
-                    TileEntityCoverable teCoverable = (TileEntityCoverable)te;
-                    if (teCoverable!=null && teCoverable.getCoverType().getItem().getRegistryName()!=Items.AIR.getRegistryName())
-                    {
-                        String key = teCoverable.getCoverType().getItem().getRegistryName().toString() + "#" + teCoverable.getCoverType().getMetadata() + "#cover";//i am sorry for this
-                        counts.put(key, counts.getOrDefault(key, 0) + 1);
-                    }
-                }
-            }
-                String key = block.getRegistryName().toString() + "#" + meta + "#block";//i am sorry for this
-                counts.put(key, counts.getOrDefault(key, 0) + 1);
-
-        }
-
-        NBTTagCompound root = new NBTTagCompound();
-        NBTTagList list = new NBTTagList();
-        for (Map.Entry<String, Integer> e : counts.entrySet()) { //this is bad, i hope a smart person will fix it later
-            String[] p = e.getKey().split("#", 3);
-            NBTTagCompound c = new NBTTagCompound();
-            c.setString("registryName", p[0]);
-            c.setInteger("meta", Integer.parseInt(p[1]));
-            c.setString("type", p[2]);
-            c.setInteger("count", e.getValue());
-            list.appendTag(c);
-        }
-
-        root.setTag("blockCounts", list);
-        getInventory().addToCompound(tc -> {tc.setTag("structureInfo", root); return tc;});
-    }
-
-    // Analyzes whether or not the spacecraft is hollow
-    // Determines available instruments
-    // If it is hollow, it must have life support as well (it tracks this too)
-    public void analyzeSpacecraft(Set<BlockPos> blocksConnected, Set<BlockPos> exterior, Set<BlockPos> interior) {
-        Predicate<BlockPos> lifeSupportCheck = bp -> getWorld().getBlockState(bp).getBlock().equals(SuSyBlocks.LIFE_SUPPORT);
-        Set<BlockPos> lifeSupports = blocksConnected.stream().filter(lifeSupportCheck).collect(Collectors.toSet());
-
-        lifeSupports.forEach(bp -> getInventory().addToCompound(nbtTagCompound -> {
-            Block block = getWorld().getBlockState(bp).getBlock();
-            NBTTagCompound list = nbtTagCompound.getCompoundTag("parts");
-            String part = ((VariantBlock<?>)block).getState(getWorld().getBlockState(bp)).toString();
-            int num = list.getInteger(part); // default behavior is 0
-            list.setInteger(part, num+1);
-            nbtTagCompound.setTag("parts", list);
-            return nbtTagCompound;
-        }));
-
-        for (BlockPos bp: exterior) {
-            if (getWorld().getBlockState(bp).getBlock().equals(SuSyBlocks.SPACECRAFT_HULL)) {
-                TileEntityCoverable te = (TileEntityCoverable)getWorld().getTileEntity(bp);
-                for (EnumFacing side: EnumFacing.VALUES) {
-                    // either it must be facing the outside without a cover or it must have
-                    if (te.isCovered(side) ^ exterior.contains(bp.add(side.getDirectionVec()))) {
-                        struct.status = BuildStat.HULL_WEAK;
-                        return;
-                    }
-                }
-            } else if (getWorld().getBlockState(bp).getBlock().equals(SuSyBlocks.SPACE_INSTRUMENT)) {
-                getInventory().addToCompound(nbtTagCompound -> {
-                        Block block = getWorld().getBlockState(bp).getBlock();
-                        NBTTagCompound list = nbtTagCompound.getCompoundTag("instruments");
-                        String part = ((VariantBlock<?>) block).getState(getWorld().getBlockState(bp)).toString();
-                        int num = list.getInteger(part); // default behavior is 0
-                        list.setInteger(part, num + 1);
-                        nbtTagCompound.setTag("parts", list);
-                        return nbtTagCompound;
-                });
-            } else {
-                struct.status = BuildStat.HULL_WEAK;
-            }
-        }
-
-        if (lifeSupports.isEmpty()) {
-            // no airspace necessary
-            if (!interior.isEmpty()) {
-                struct.status = BuildStat.SPACECRAFT_HOLLOW;
-                return;
-            }
-            getInventory().addToCompound(tc ->  {tc.setBoolean("hasAir", false); return tc;});
-        } else {
-            int volume = interior.size();
-            modifyItem("volume", Integer.toString(volume));
-            Set<BlockPos> container = struct.getPerimeter(interior, StructAnalysis.orthVecs);
-            for (BlockPos bp: container) {
-                Block block = getWorld().getBlockState(bp).getBlock();
-                if (block.equals(SuSyBlocks.LIFE_SUPPORT)) {
-                    continue; // we did the math on this earlier
-                } else if (getWorld().getTileEntity(bp) != null) {
-                    if (getWorld().getTileEntity(bp) instanceof TileEntityCoverable) {
-                        TileEntityCoverable te = (TileEntityCoverable)getWorld().getTileEntity(bp);
-                        if (block.equals(SuSyBlocks.ROOM_PADDING)) {
-                            for (EnumFacing side: EnumFacing.VALUES) {
-                                if (te.isCovered(side) ^ interior.contains(bp.add(side.getDirectionVec()))) {
-                                    struct.status = BuildStat.WEIRD_PADDING;
-                                    return;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            getInventory().addToCompound(tc ->  {tc.setBoolean("hasAir", true); return tc;});
-        }
-        double radius = struct.getApproximateRadius(blocksConnected);
-
-        // The scan is successful by this point
-        struct.status = BuildStat.SUCCESS;
-        modifyItem("type","spacecraft");
-        modifyItem("radius", Double.valueOf(radius).toString());
-        double mass = 0;
-        for (BlockPos block : blocksConnected) {
-            mass += getMass(getWorld().getBlockState(block));
-        }
-        modifyItem("mass", Double.valueOf(mass).toString());
-    }
-
-    // A fairing must have a line of connectors (so it can separate after launch!)
-    // It must also be wider in the bottom.
-    // The way we've done it, it's a half-shell design.
-    public void analyzeFairing(Set<BlockPos> blocksConnected, Set<BlockPos> first) {
-        AxisAlignedBB fairingBB = struct.getBB(blocksConnected);
-        AxisAlignedBB interiorBB = linkedCleanroom.getInteriorBB();
-        Predicate<BlockPos> connCheck = bp -> getWorld().getBlockState(bp).getBlock().equals(SuSyBlocks.FAIRING_CONNECTOR);
-        Set<BlockPos> connectorBlocks = blocksConnected.stream().filter(connCheck).collect(Collectors.toSet());
-
-        // If there are more than 2 partitions of air in the bounding box, then there's an abnormality with the hull shape.
-        // If there's only one partition, then the hull has a hole in it.
-        // We know already that the exterior loop is touching the edge of the bounding box.
-        // So, if there are 2 partitions, then the fairing hull is of the desired shape.
-
-        List<HashSet<BlockPos>> partitions = struct.getPartitions(fairingBB);
-        if (partitions.size() != 2) {
-            struct.status = BuildStat.WEIRD_FAIRING;
-            return;
-        }
-        // Objective: We don't really want tiles on the inside of the fairing - that wouldn't make any sense!
-        // So, we're going to obtain the fairing with a ceiling (if it didn't have one, it wouldn't have )
-        // Note that
-        Set<BlockPos> intPartition;
-        Set<BlockPos> extPartition;
-        if (struct.getBB(partitions.get(0)).maxY > struct.getBB(partitions.get(1)).maxY) {
-            intPartition = partitions.get(1);
-            extPartition = partitions.get(0);
-        } else {
-            intPartition = partitions.get(0);
-            extPartition = partitions.get(1);
-        }
-
-        // Checks if all connectors are facing the same plane
-        BlockPos next = connectorBlocks.iterator().next();
-        BlockPos start = next;
-        EnumFacing dir = getWorld().getBlockState(next).getValue(FACING);
-        int axisPos = struct.getCoordOfAxis(start);
-        for (BlockPos blockFace: connectorBlocks) {
-            EnumFacing dir_general = getWorld().getBlockState(blockFace).getValue(FACING);
-            if (struct.getCoordOfAxis(blockFace) != axisPos || dir_general != dir) {
-                struct.status = BuildStat.CONN_UNALIGNED;
-                return;
-            } else {
-                BlockPos pointingTo = blockFace.add(dir_general.getDirectionVec());
-                if (intPartition.contains(pointingTo) || extPartition.contains(pointingTo) ||
-                    intPartition.contains(blockFace.add(dir_general.getOpposite().getDirectionVec()))) {
-                    struct.status = BuildStat.CONN_WRONG_DIR;
-                    return;
-                }
-            }
-        }
-
-        // These connector blocks should form a line
-        // Each connector should neighbor one/two
-
-        // This will keep track of what we've covered
-        Set<BlockPos> collectedConnectors = new HashSet<>(Collections.singleton(next));
-        collectedConnectors.add(start);
-        Set<BlockPos> toConnect = new HashSet<>();
-        toConnect.add(start);
-        while (!collectedConnectors.containsAll(connectorBlocks)) {
-            if (toConnect.isEmpty()) { // either there's one connector, or the connector set is disconnected
-                struct.status = BuildStat.WEIRD_FAIRING;
-                return;
-            }
-            Set<BlockPos> newNeighbors = new HashSet<>();
-            for (BlockPos initiate: toConnect) {
-                Set<BlockPos> blockNeighbors = struct.getBlockNeighbors(initiate, fairingBB, StructAnalysis.neighborVecs)
-                        .stream().filter(connectorBlocks::contains).collect(Collectors.toSet());
-                // Ensures that there's one line of connectors (no branching)
-                if (blockNeighbors.size() > 2) {
-                    struct.status = BuildStat.WEIRD_FAIRING;
-                    return;
-                }
-                newNeighbors.addAll(blockNeighbors.stream().filter(p->!collectedConnectors.contains(p)).collect(Collectors.toSet()));
-            }
-            collectedConnectors.addAll(toConnect);
-            toConnect.clear();
-            toConnect.addAll(newNeighbors);
-        }
-
-
-        //Step 3: Verify that all block faces exposed to the top partition are covered
-        for (BlockPos bp: blocksConnected) {
-            Block b = getWorld().getBlockState(bp).getBlock();
-            if (!(getWorld().getTileEntity(bp) instanceof TileEntityCoverable)) {
-                struct.status = BuildStat.WEIRD_FAIRING;
-                return;
-            }
-            TileEntityCoverable te = (TileEntityCoverable) getWorld().getTileEntity(bp);
-
-            // Takes all orth neighbors which are blocks or are interior neighbors
-            List<BlockPos> solidNeighbors = struct.getBlockNeighbors(bp,interiorBB,StructAnalysis.orthVecs).stream()
-                    .filter(pos -> !getWorld().isAirBlock(pos)).collect(Collectors.toList());
-            List<BlockPos> intAirNeighbors = struct.getBlockNeighbors(bp,interiorBB,StructAnalysis.orthVecs).stream()
-                    .filter(intPartition::contains).collect(Collectors.toList());
-            for (EnumFacing facing: EnumFacing.VALUES) {
-                boolean expectation = true;
-                BlockPos pointingTo = bp.add(facing.getDirectionVec());
-                if (pointingTo.getY() < fairingBB.minY) {
-                    expectation = false;
-                }
-                if (solidNeighbors.contains(pointingTo) || intAirNeighbors.contains(pointingTo)) {
-                    expectation = false;
-                }
-                if (getWorld().getBlockState(bp).getValue(FACING).equals(facing) && b instanceof BlockFairingConnector) {
-                    expectation = false;
-                }
-                if (expectation ^ te.isCovered(facing)) { // xor: one is true, one is false, therefore the expectation is wrong
-                    struct.status = BuildStat.WRONG_TILE;
-                }
-            }
-        }
-
-        modifyItem("type", "fairing");
-        modifyItem("height", Integer.toString((int)fairingBB.maxY-(int)fairingBB.minY));
-        modifyItem("num_conns", Integer.toString(connectorBlocks.size()));
-        modifyItem("volume", Integer.toString(intPartition.size()));
-        modifyItem("mass", Double.toString(blocksConnected.stream()
-                .mapToDouble(bp -> getMass(getWorld().getBlockState(bp)))
-                .sum()
-        ));
-        Double bottomSemiRadius = struct.getApproximateRadius(struct.getLowestLayer(blocksConnected));
-        // as it turns out, the integral of distances from the centroid of a semicircle to its path is pi/4 * the radius
-        double bottomRadius = bottomSemiRadius * 4 / Math.PI;
-        modifyItem("bottom_radius", String.valueOf(bottomRadius));
-
-        struct.status = BuildStat.SUCCESS;
-    }
-
-
-    // An engine is made of a combustion chamber, a nozzle, and some turbopumps.
-    // The turbopumps face the combustion chamber and are not below it.
-    // The nozzle's upper opening is below the combustion chamber.
-    // The nozzle's radius expands as one reviews lower layers.
-    // The nozzle isn't a totally silly shape.
-    public void analyzeEngine(Set<BlockPos> blocks) {
-        Set<BlockPos> nozzle = struct.getOfBlockType(blocks,SuSyBlocks.ROCKET_NOZZLE)
-                .collect(Collectors.toSet());
-        if (nozzle.isEmpty()) {
-            struct.status = BuildStat.NO_NOZZLE;
-            return;
-        }
-        ArrayList<Integer> areas = new ArrayList<>();
-        AxisAlignedBB nozzleBB = struct.getBB(nozzle);
-        for (int i = (int)nozzleBB.maxY-1; i >= (int)nozzleBB.minY; i--) {
-            Set<BlockPos> airLayer = struct.getLayerAir(nozzleBB, i);
-            if (airLayer == null) { // there should be an error here
-                struct.status = BuildStat.NOZZLE_MALFORMED;
-                return;
-            }
-            Set<BlockPos> airPerimeter = struct.getPerimeter(airLayer,StructAnalysis.layerVecs);
-            if ((double)airPerimeter.size() < 3 * Math.sqrt((double)airLayer.size())) { // Establishes a roughly circular pattern
-                struct.status = BuildStat.NOZZLE_MALFORMED;
-                return;
-            }
-            areas.add(airLayer.size() + airPerimeter.size() / 2);
-        }
-
-        // For all rocket nozzles, the air layer list should be increasing. 3 blocks should be a minimum length under that assumption.
-        if (areas.size() < 3 || areas.get(0) > 5) {
-            struct.status = BuildStat.NOZZLE_MALFORMED;
-            return;
-        }
-
-        int initial = areas.get(0);
-        int fin = initial;
-
-        for (int a: areas) {
-            if (fin <= a) {
-                fin = a;
-            } else {
-                struct.status = BuildStat.NOT_LAVAL;
-                return;
-            }
-        }
-        float area_ratio = ((float) fin) / initial;
-        if (area_ratio < 1.5) {
-            struct.status = BuildStat.NOT_LAVAL;
-        }
-
-        // One combustion chamber is, I think, reasonable
-        List<BlockPos> cChambers = struct.getOfBlockType(blocks,SuSyBlocks.COMBUSTION_CHAMBER)
-                .collect(Collectors.toList());
-        if (cChambers.size() != 1) {
-            struct.status = BuildStat.WRONG_NUM_C_CHAMBERS;
-            return;
-        }
-        // Below the chamber: Open space
-        BlockPos cChamber = cChambers.get(0);
-        Set<BlockPos> pumps = struct.getOfBlockType(struct.getBlockNeighbors(cChamber, StructAnalysis.orthVecs),SuSyBlocks.TURBOPUMP).collect(Collectors.toSet());
-        if (nozzleBB.contains(new Vec3d(cChamber))) {
-            struct.status = BuildStat.C_CHAMBER_INSIDE;
-            return;
-        }
-        if (!getWorld().isAirBlock(cChamber.add(0,-1,0))) {
-            struct.status = BuildStat.NOZZLE_MALFORMED;
-            return;
-        }
-        // Analyze turbopumps
-        IBlockState chamberState = getWorld().getBlockState(cChamber);
-        int pumpNum = ((BlockCombustionChamber.CombustionType)
-                (((VariantBlock<?>)chamberState.getBlock()).getState(chamberState))).getMinPumps();
-        if (pumps.size() < pumpNum) {
-            struct.status = BuildStat.WRONG_NUM_PUMPS;
-            return;
-        }
-        for (BlockPos pumpPos : pumps) {
-            EnumFacing dir = getWorld().getBlockState(pumpPos).getValue(FACING);
-            if (!dir.equals(EnumFacing.DOWN)&&!pumpPos.add(dir.getOpposite().getDirectionVec()).equals(cChamber)) {
-                struct.status = BuildStat.WEIRD_PUMP;
-                return;
-            }
-        }
-        // Creates engine
-        Set<BlockPos> engineBlocks = new HashSet<>(nozzle);
-        engineBlocks.addAll(pumps);
-        engineBlocks.add(cChamber);
-        engineBlocks.addAll(struct.getOfBlockType(blocks,SuSyBlocks.INTERSTAGE).collect(Collectors.toSet()));
-        if (engineBlocks.size() < blocks.size()) {
-            struct.status = BuildStat.EXTRANEOUS_BLOCKS;
-            return;
-        }
-        struct.status = BuildStat.SUCCESS;
-        // currently a double
-        modifyItem("area_ratio", String.valueOf(area_ratio));
-        modifyItem("type","engine");
-        double mass = 0;
-        for (BlockPos block : blocks) {
-            mass += getMass(getWorld().getBlockState(block));
-        }
-        double innerRadius = struct.getApproximateRadius(blocks.stream().filter(bp->bp.getY() == nozzleBB.maxY).collect(Collectors.toSet()));
-        modifyItem("radius", Double.valueOf(innerRadius).toString());
-        modifyItem("mass", Double.valueOf(mass).toString());
-    }
-
-    // A fuel tank must be made of tank blocks with an airspace inside and covers on the exterior.
-    // Its approximate radius, height, and mass are calculated.
-    public void analyzeFuelTank(Set<BlockPos> blocks, Tuple<Set<BlockPos>, Set<BlockPos>> hullData) {
-        Set<BlockPos> hullBlocks = hullData.getFirst();
-        Set<BlockPos> interiorAir = hullData.getSecond();
-
-        for (BlockPos block : hullBlocks) {
-            if (!fuelTankDetect.test(block)) {
-                struct.status = BuildStat.HULL_WEAK;
-                return;
-            }
-            TileEntityCoverable blockTiles = (TileEntityCoverable) getWorld().getTileEntity(block);
-            if (blockTiles == null) {
-                struct.status = BuildStat.ERROR;
-                return;
-            }
-            EnumFacing dir = getWorld().getBlockState(block).getValue(FACING);
-            ArrayList<BlockPos> neighbors = struct.getBlockNeighbors(block,StructAnalysis.orthVecs);
-            for (EnumFacing facing: EnumFacing.values()) {
-                BlockPos neighbor = block.add(facing.getDirectionVec());
-                if (interiorAir.contains(neighbor)) {
-                    Vec3i diff = struct.diff(neighbor,block);
-                    if (!diff.equals(dir.getOpposite().getDirectionVec())) { // incorrect with honeycombs
-                        struct.status = BuildStat.HULL_WEAK;
-                        return;
-                    }
-                } else if (!interiorAir.contains(neighbor) &&
-                        (getWorld().isAirBlock(neighbor) || !StructAnalysis.blockCont(linkedCleanroom.getInteriorBB(), neighbor))) { // this means it should be exterior air
-                    if (!blockTiles.isCovered(facing)) {
-                        struct.status = BuildStat.MISSING_TILE;
-                        return;
-                    }
-                }
-            }
-        }
-
-        double radius = struct.getApproximateRadius(blocks);
-        int height = (int)(struct.getBB(blocks).maxZ-struct.getBB(blocks).minZ);
-        if (height > radius * 2) {
-            struct.status = BuildStat.TOO_SHORT;
-        }
-
-        // The scan is successful by this point
-        struct.status = BuildStat.SUCCESS;
-        modifyItem("volume", ((Integer)interiorAir.size()).toString());
-        modifyItem("type","tank");
-        modifyItem("radius", Double.valueOf(radius).toString());
-        double mass = 0;
-        for (BlockPos block : blocks) {
-            mass += getMass(getWorld().getBlockState(block));
-        }
-        modifyItem("mass", Double.valueOf(mass).toString());
-    }
-
-
-    // Nothing inside the hull (it's just meant to be empty)
-    // Any non-empty block below an empty block is invalid
-    public void analyzeInterstage(Set<BlockPos> blocks, Set<BlockPos> hullBlocks) {
-        Set<BlockPos> prevAir = null;
-        if (!hullBlocks.containsAll(blocks)) {
-            struct.status = BuildStat.INTERSTAGE_NOT_CYLINDRICAL;
-            return;
-        }
-        AxisAlignedBB bb = struct.getBB(blocks);
-        for (int i = (int)bb.minY; i < (int)bb.maxY; i++) {
-            Set<BlockPos> air = struct.getLayerAir(bb, i);
-            if (prevAir != null) {
-                for (BlockPos b : air) {
-                    if (!prevAir.contains(b.add(0, -1, 0))) {
-                        struct.status = BuildStat.INTERSTAGE_NOT_CYLINDRICAL;
-                        return;
-                    }
-                }
-            }
-            if (struct.getPerimeter(air, StructAnalysis.layerVecs).size() >= Math.sqrt(air.size())*4) {
-                struct.status = BuildStat.INTERSTAGE_NOT_CYLINDRICAL;
-                return;
-            }
-            prevAir = air;
-        }
-        double radius = struct.getApproximateRadius(struct.getLowestLayer(hullBlocks));
-        double mass = 0;
-        for (BlockPos block : blocks) {
-            mass += getMass(getWorld().getBlockState(block));
-        }
-        modifyItem("mass", Double.valueOf(mass).toString());
-        modifyItem("radius", Double.valueOf(radius).toString());
-        modifyItem("type", "interstage");
-        struct.status = BuildStat.SUCCESS;
-    }
-
-    private double getMass(IBlockState state) {
-        Block block = state.getBlock();
-        if (!(block instanceof VariantBlock<?>)) {
-            return 50.0;
-        }
-        Enum<?> variant = ((VariantBlock<?>) block).getState(state);
-        if (block.equals(SuSyBlocks.COMBUSTION_CHAMBER)) {
-            return 800 + 100 * switch ((BlockCombustionChamber.CombustionType)variant) {
-                case BIPROPELLANT -> 200.0;
-                case MONOPROPELLANT -> 150.0;
-                case OXIDISER -> 200.00;
-            };
-
-        } else if (block.equals(TANK_SHELL)) {
-            return 25 + 50 * switch ((BlockTankShell.TankCoverType) variant) {
-                case TANK_SHELL -> 5;
-                case STEEL_SHELL -> 8;
-            };
-        } else if (block.equals(SuSyBlocks.TANK_SHELL1)){
-            return 25 + 50 * switch ((BlockTankShell1.TankCoverType) variant) {
-                case CARBON_COMPOSITE -> 3;
-            };
-        } else if (block.equals(SuSyBlocks.ROCKET_NOZZLE)) {
-            return 500 + 100*switch ((BlockRocketNozzle.NozzleShapeType)variant) {
-                case BELL_NOZZLE -> 60.0;
-                case PLUG_NOZZLE -> 65.0;
-                case EXPANDING_NOZZLE -> 80.0;
-            };
-        } else if (block.equals(SuSyBlocks.TURBOPUMP)) {
-            return 1000+100*switch((BlockTurboPump.HPPType)variant) {
-                case BASIC -> 150.0;
-            };
-        }
-        return 50.0;
-    }
-
     protected void modifyItem(String key, String value) {
         getInventory().mutateItem(key,value);
     }
@@ -710,9 +185,6 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         return this.createGUITemplate(entityPlayer).build(this.getHolder(), entityPlayer);
     }
     public void handleScan(Widget.ClickData click) {
-        if (this.isActive()) {
-            return;
-        }
         if (linkedCleanroom==null || !linkedCleanroom.isClean()) {
             struct.status= BuildStat.UNCLEAN;
         }
@@ -765,7 +237,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             builder.widget(new ImageWidget(173, 201, 18, 6, GuiTextures.BUTTON_POWER_DETAIL));
         }
         //Scan Button
-        builder.widget(new ClickButtonWidget(75,70,54,18,new TextComponentTranslation("gregtech.machine.component_scanner.scan_button").getUnformattedComponentText(),this::handleScan))
+        builder.widget(new ClickButtonWidget(68,56,54,18,new TextComponentTranslation("gregtech.machine.component_scanner.scan_button").getUnformattedComponentText(),this::handleScan))
                 .slot(importItems,0,90,95,GuiTextures.SLOT);
 
 
@@ -859,6 +331,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         }
     }
 
+    @Override
     public void receiveCustomData(int dataId, PacketBuffer buf) {
         super.receiveCustomData(dataId, buf);
         if (dataId == GregtechDataCodes.LOCK_OBJECT_HOLDER) {
