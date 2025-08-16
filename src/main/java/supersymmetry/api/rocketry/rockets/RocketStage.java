@@ -13,22 +13,41 @@ import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.common.util.Constants.NBT;
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 
 public class RocketStage {
   public enum ComponentValidationResult {
-    goog
+    SUCCESS("goog"),
+    INVALID_CARD("invalid_card"),
+    VALIDATION_FAILURE("validation_failure"),
+    INVALID_AMOUNT("invalid_amount"),
+    INCOMPATIBLE_CARD("incompatible_card"),
+    UNKNOWN("unknown");
+
+    private String name;
+
+    ComponentValidationResult(String name) {
+      this.name = name;
+    }
+
+    public String getName() {
+      return this.name;
+    }
+
+    public String getTranslationkey() {
+      return "susy.rocketry.components.validation_codes." + this.name;
+    }
   }
 
   public static class Builder {
+    String lastComponentName = "";
+
+    String name;
+    Map<String, List<Integer>> compLimit = new HashMap<>();
+
     public Builder(String stagename) {
       this.name = stagename;
     }
-
-    String lastComponentName = "";
-    String name;
-    Map<String, List<Integer>> compLimit = new HashMap<>();
 
     public Builder type(String name) {
       lastComponentName = name;
@@ -64,11 +83,13 @@ public class RocketStage {
   public Function<Tuple<String, List<AbstractComponent<?>>>, ComponentValidationResult>
       componentValidationFunction =
           x -> {
-            return ComponentValidationResult.goog;
+            return ComponentValidationResult.SUCCESS;
             // this is done after the type checks in the gui anyways, no need to double check ithink
           };
+
   // limits on how many of each component it can have
   public Map<String, int[]> componentLimits = new HashMap<>();
+
   // ex "boosters" or "lander", localized with susy.rocketry.stages.name.<name string>
   public String name;
 
@@ -83,6 +104,11 @@ public class RocketStage {
 
   public RocketStage() {
     this.name = "unprocessed"; // meant to be read from nbt later
+  }
+
+  public Function<Tuple<String, List<AbstractComponent<?>>>, ComponentValidationResult>
+      getComponentValidationFunction() {
+    return componentValidationFunction;
   }
 
   public boolean isPopulated() {

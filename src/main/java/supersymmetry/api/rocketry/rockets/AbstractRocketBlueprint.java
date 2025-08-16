@@ -47,10 +47,11 @@ public abstract class AbstractRocketBlueprint {
   public ResourceLocation relatedEntity = new ResourceLocation(Supersymmetry.MODID, "rocket_basic");
   public List<int[]> ignitionStages =
       new ArrayList<>(); // allows for multiple stages to be ignited at once, ex.
-
   // boosters together with the main stage, or the second stage together with the EES which im
   // definitely not adding
+
   // meant to contain the INDEX of the stages in the list bellow
+  // actually i dont remember why i added this
   public List<RocketStage> stages = new ArrayList<>();
 
   public AbstractRocketBlueprint(String name, ResourceLocation relatedEntity) {

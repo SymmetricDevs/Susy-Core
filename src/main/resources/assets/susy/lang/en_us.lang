@@ -252,6 +252,11 @@ susy.fluid.slurry=%s Slurry
 susy.machine.steam_extractor_cannot_melt_items.warning=Steam Extractors cannot melt items!
 
 # Machines/Multiblocks
+susy.machine.aerospace_flight_simulator.name=aerospace flight simulator
+susy.rocketry.components.engine.name=engine(s)
+susy.rocketry.components.vernier_engine.name=vernier engine(s)
+susy.rocketry.components.tank.name=tank(s)
+
 susy.machine.magnetic_refrigerator.name=Magnetic Refrigerator
 susy.multiblock.magnetic_refrigerator.min_temperature=§bTemperature Limit: %s
 

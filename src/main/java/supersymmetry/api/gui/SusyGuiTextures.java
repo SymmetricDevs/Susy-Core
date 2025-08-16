@@ -38,6 +38,7 @@ public class SusyGuiTextures {
     public static final TextureArea SPACEFLIGHT_SIMULATOR_SLIDER = TextureArea.fullImage("textures/gui/widget/slider_dark.png");
     public static final TextureArea SPACEFLIGHT_SIMULATOR_BUTTON_LEFT = TextureArea.fullImage("textures/gui/widget/button_left_dark.png");
     public static final TextureArea SPACEFLIGHT_SIMULATOR_BUTTON_RIGHT = TextureArea.fullImage("textures/gui/widget/button_right_dark.png");
+    public static final TextureArea SPACEFLIGHT_SIMULATOR_BUTTON_SHORTVIEW = TextureArea.fullImage("textures/gui/widget/circle_geen.png");
 
     public static final UITexture BACKGROUND_POPUP = UITexture.builder()
             .location(GTValues.MODID, "textures/gui/base/background_popup.png")

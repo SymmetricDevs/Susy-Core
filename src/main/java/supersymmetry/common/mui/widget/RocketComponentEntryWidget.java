@@ -4,10 +4,16 @@ import gregtech.api.gui.widgets.AbstractWidgetGroup;
 import gregtech.api.gui.widgets.ClickButtonWidget;
 import gregtech.api.gui.widgets.ImageCycleButtonWidget;
 import gregtech.api.gui.widgets.ImageWidget;
+import gregtech.api.gui.widgets.SlotWidget;
 import gregtech.api.gui.widgets.TextFieldWidget2;
 import gregtech.api.util.Position;
 import gregtech.api.util.Size;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import net.minecraft.util.Tuple;
 import supersymmetry.api.gui.SusyGuiTextures;
+import supersymmetry.api.util.DataStorageLoader;
 
 public class RocketComponentEntryWidget extends AbstractWidgetGroup {
   private class WidgetIntSelector extends AbstractWidgetGroup {
@@ -47,11 +53,11 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
       amountTextField =
           new TextFieldWidget2(
               (int) ((size.width / 5) * 2.5),
-              0,
+              -2,
               (size.width / 5) * 3,
               size.height,
               () -> {
-                return Integer.toString(this.getValue());
+                return Integer.toString(this.getSelectedValue()) + "x";
               },
               (something) -> {});
 
@@ -65,7 +71,7 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
       decreaseButton.setActive(validValues.length > 1);
     }
 
-    public int getValue() {
+    public int getSelectedValue() {
       return validValues[
           ((selectedIndex % validValues.length) + validValues.length) % validValues.length];
     }
@@ -73,6 +79,7 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
 
   public WidgetIntSelector selector;
   public boolean shortView = false;
+  // public Consumer<Tuple<Boolean, Integer>> shortViewCB;
   public HorizontalScrollableListWidget itemList;
 
   public ImageCycleButtonWidget checkmark;
@@ -86,18 +93,19 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
     super(pos, size);
     ImageCycleButtonWidget button =
         new ImageCycleButtonWidget(
-            itemList.getPosition().x + itemList.getSize().width + 10,
-            0,
-            18,
-            18,
-            SusyGuiTextures.SPACEFLIGHT_SIMULATOR_BUTTON_LEFT,
-            () -> {
-              return !this.shortView;
-            },
-            (bool) -> {
-              this.setShortView(!bool);
-              this.resetBackgroundWidget();
-            });
+                itemList.getPosition().x + itemList.getSize().width + 10,
+                0,
+                12,
+                12,
+                SusyGuiTextures.SPACEFLIGHT_SIMULATOR_BUTTON_SHORTVIEW,
+                () -> {
+                  return !this.shortView;
+                },
+                (bool) -> {
+                  this.setShortView(!bool);
+                  this.resetBackgroundWidget();
+                })
+            .singleTexture();
     WidgetIntSelector selector =
         new WidgetIntSelector(
             validValues,
@@ -106,6 +114,7 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
     this.checkmark = button;
     this.selector = selector;
     this.itemList = itemList;
+    // this.shortViewCB = callback;
     this.selector.setVisible(false);
     this.selector.setActive(false);
 
@@ -121,7 +130,8 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
       Size size,
       ImageCycleButtonWidget button,
       HorizontalScrollableListWidget itemList,
-      WidgetIntSelector selector) {
+      WidgetIntSelector selector,
+      Consumer<Tuple<Boolean, Integer>> callback) {
     super(pos, size);
     this.checkmark = button;
     this.itemList = itemList;
@@ -152,6 +162,19 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
     this.resetBackgroundWidget();
   }
 
+  public List<DataStorageLoader> getSlots() {
+    // with a prayer
+    return this.itemList.widgets.stream()
+        .map(x -> (SlotWidget) x)
+        .map(x -> (SlotWidget.WidgetSlotItemHandler) x.getHandle())
+        .map(x -> (DataStorageLoader) x.getItemHandler())
+        .collect(Collectors.toList());
+  }
+
+  public int getAmount() {
+    return this.selector.getSelectedValue();
+  }
+
   public boolean isShortView() {
     return shortView;
   }
@@ -159,10 +182,10 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
   public void resetBackgroundWidget() {
     buttonBackground =
         new ImageWidget(
-            checkmark.getSelfPosition().x - 1,
-            checkmark.getSelfPosition().y - 1,
-            checkmark.getSize().width + 1,
-            checkmark.getSize().height + 1,
+            checkmark.getSelfPosition().x - 2,
+            checkmark.getSelfPosition().y - 2,
+            checkmark.getSize().width + 4,
+            checkmark.getSize().height + 4,
             SusyGuiTextures.SPACEFLIGHT_SIMULATOR_SLIDER_BACKGROUND);
   }
 

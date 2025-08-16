@@ -51,6 +51,7 @@ public class RocketSimulatorComponentContainerWidget extends AbstractWidgetGroup
 
     entry.setSize(new Size(100, 28));
     this.addWidget(entry);
+    this.components.put(entryName, entry);
 
     rowSkip += rowSeparation + scrollbarPadding;
   }

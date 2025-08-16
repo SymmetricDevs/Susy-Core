@@ -1,9 +1,12 @@
 package supersymmetry.common.metatileentities.multi.rocket;
 
+import static com.cleanroommc.modularui.drawable.UITexture.builder;
+
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.Widget;
+import gregtech.api.gui.Widget.ClickData;
 import gregtech.api.gui.widgets.ClickButtonWidget;
 import gregtech.api.gui.widgets.IndicatorImageWidget;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -22,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
@@ -115,7 +119,9 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         width / 2,
         height / 2,
         () -> {
-          return rocketBlueprintSlot.isEmpty() ? "insert a rocket blueprint first!" : "";
+          return rocketBlueprintSlot.isEmpty()
+              ? I18n.format(this.getMetaName() + ".blueprint_request")
+              : "";
         },
         0x404040);
     builder.widget(
@@ -130,12 +136,13 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             30,
             new TextComponentTranslation("debug").getUnformattedComponentText(),
             this::SetDefaultBlueprint));
+
     builder.label(9, 9, getMetaFullName(), 0xFFFFFF);
     builder.bindPlayerInventory(entityPlayer.inventory, height - 80);
     // this is the thing that displays slots for components
     RocketStageDisplayWidget mainWindow =
         new RocketStageDisplayWidget(
-            new Position(9, 10),
+            new Position(9, 20),
             new Size(width - 20, 28 * 4),
             (stage, name) -> {
               if (!slots.containsKey(stage.getName())) {
@@ -166,6 +173,33 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
               // voided (hopefully)
 
             });
+    ClickButtonWidget buildButton =
+        new ClickButtonWidget(
+            0,
+            height - 130,
+            40,
+            30,
+            new TextComponentTranslation("build").getUnformattedComponentText(),
+            (c) -> {
+              if (!rocketBlueprintSlot.isEmpty()
+                  && rocketBlueprintSlot.getStackInSlot(0).hasTagCompound()) {
+                NBTTagCompound tag = rocketBlueprintSlot.getStackInSlot(0).getTagCompound();
+                AbstractRocketBlueprint bp =
+                    AbstractRocketBlueprint.getBlueprintsRegistry().get(tag.getString("name"));
+                if (mainWindow.blueprintBuildAttempt(bp)) {
+                  // rewrite the old data if its actually goog
+                  rocketBlueprintSlot.getStackInSlot(0).setTagCompound(bp.writeToNBT());
+                }
+              }
+            });
+    builder.dynamicLabel(
+        width / 5,
+        height / 5,
+        () -> {
+          return mainWindow.getStatusText();
+        },
+        0x505050);
+
     // this wont work if you try to put it into the constructor
     blueprintContainer.onSlotChanged =
         () -> {
@@ -198,8 +232,18 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
 
     builder.widget(mainWindow);
     builder.widget(blueprintContainer.setBackgroundTexture(GuiTextures.SLOT_DARK));
+    builder.widget(buildButton);
 
     return builder;
+  }
+
+  public void buildBlueprint(ClickData clickdata, RocketStageDisplayWidget mainwindow) {
+    if (!rocketBlueprintSlot.isEmpty() && rocketBlueprintSlot.getStackInSlot(0).hasTagCompound()) {
+      NBTTagCompound tag = rocketBlueprintSlot.getStackInSlot(0).getTagCompound();
+      AbstractRocketBlueprint bp =
+          AbstractRocketBlueprint.getBlueprintsRegistry().get(tag.getString("name"));
+      if (mainwindow.blueprintBuildAttempt(bp)) {}
+    }
   }
 
   // TODO: remove ts
