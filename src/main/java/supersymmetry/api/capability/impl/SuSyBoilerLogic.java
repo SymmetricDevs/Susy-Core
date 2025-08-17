@@ -108,7 +108,7 @@ public class SuSyBoilerLogic extends AbstractRecipeLogic {
                 fluidTank.drain(consumption, true);
                 int fuelBurnTime = (fluidFuelRecipe.getDuration() * 96 / boiler.boilerType.steamPerTick());
                 setMaxProgress(adjustBurnTimeForThrottle(
-                        Math.max(1, fuelBurnTime)));
+                        Math.max(1, boiler.boilerType.runtimeBoost(fuelBurnTime))));
                 didStartRecipe = true;
                 break;
             }
@@ -126,7 +126,7 @@ public class SuSyBoilerLogic extends AbstractRecipeLogic {
                 if (solidFuelRecipe == null) continue;
                 int fuelBurnTime = solidFuelRecipe.getDuration() * 96 / boiler.boilerType.steamPerTick();
                 if (fuelBurnTime > 0) { // try to ensure this fuel can burn for at least 1 tick
-                    setMaxProgress(adjustBurnTimeForThrottle(fuelBurnTime));
+                    setMaxProgress(adjustBurnTimeForThrottle(boiler.boilerType.runtimeBoost(fuelBurnTime)));
                     stack.shrink(1);
                     didStartRecipe = true;
                     break;

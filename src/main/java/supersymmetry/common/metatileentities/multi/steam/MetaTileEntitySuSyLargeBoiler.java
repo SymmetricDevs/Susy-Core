@@ -3,7 +3,6 @@ package supersymmetry.common.metatileentities.multi.steam;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
-import gregtech.api.capability.impl.BoilerRecipeLogic;
 import gregtech.api.capability.impl.CommonFluidFilters;
 import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.capability.impl.ItemHandlerList;
@@ -304,7 +303,7 @@ public class MetaTileEntitySuSyLargeBoiler extends MultiblockWithDisplayBase imp
 
     @Override
     protected boolean shouldUpdate(MTETrait trait) {
-        return !(trait instanceof BoilerRecipeLogic);
+        return !(trait instanceof SuSyBoilerLogic);
     }
 
     @Override
