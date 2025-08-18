@@ -14,6 +14,7 @@ import java.util.List;
 
 public class DimensionRecipeBuilder extends RecipeBuilder<DimensionRecipeBuilder> {
 
+    private int minimumDuration = 0;
 
     public DimensionRecipeBuilder() {
     }
@@ -63,7 +64,12 @@ public class DimensionRecipeBuilder extends RecipeBuilder<DimensionRecipeBuilder
 
     @Override
     public DimensionRecipeBuilder duration(int duration) {
-        return super.duration(Math.max(duration, 800));
+        return super.duration(Math.max(duration, this.minimumDuration));
+    }
+
+    public DimensionRecipeBuilder minimumDuration(int minimumDuration) {
+        this.minimumDuration = minimumDuration;
+        return this;
     }
 
     public IntList getDimensionIDs() {
