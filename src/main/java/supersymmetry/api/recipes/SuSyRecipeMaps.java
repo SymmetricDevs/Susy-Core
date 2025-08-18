@@ -104,7 +104,7 @@ public class SuSyRecipeMaps {
             .setSlotOverlay(true, false, true, GuiTextures.CRYSTAL_OVERLAY)
             .setSound(GTSoundEvents.FURNACE);
 
-    public static final RecipeMap<SimpleRecipeBuilder> TUBE_FURNACE_RECIPES = new RecipeMap<>("tube_furnace", 5, 1, 1, 1, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<SimpleRecipeBuilder> TUBE_FURNACE_RECIPES = new RecipeMap<>("tube_furnace", 6, 1, 1, 1, new SimpleRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
             .setSlotOverlay(false, false, false, GuiTextures.FURNACE_OVERLAY_1)
             .setSlotOverlay(false, false, true, GuiTextures.FURNACE_OVERLAY_1)
