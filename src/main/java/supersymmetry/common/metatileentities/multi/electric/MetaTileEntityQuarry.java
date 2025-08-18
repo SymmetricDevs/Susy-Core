@@ -49,6 +49,7 @@ import static gregtech.api.capability.GregtechDataCodes.assignId;
  * similar to {@link gregtech.common.metatileentities.multi.electric.MetaTileEntityLargeMiner} that allows
  * from breaking block in game.
  * For this it uses {@link QuarryLogic}
+ *
  * @author h3tR / RMI / Crindigo
  */
 
@@ -111,14 +112,14 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
         // Go behind the controller until it sees a frame to find the depth. Only support odd dimensions.
         int depth = 0;
         for (int i = MIN_DIAMETER; i <= MAX_DIAMETER; i += 2) {
-            if ( world.getBlockState(pos) == getSteelFrameState() ) {
+            if (world.getBlockState(pos) == getSteelFrameState()) {
                 depth = i;
                 break;
             }
             pos.move(back, 2);
         }
 
-        if ( depth < MIN_DIAMETER ) {
+        if (depth < MIN_DIAMETER) {
             invalidateStructure();
             return false;
         }
@@ -132,14 +133,14 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
         pos.move(left, minRadius - 1); // earliest possible position
 
         int width = 0;
-        for (int i = minRadius - 1; i <= maxRadius - 1; i++ ) {
-            if ( world.getBlockState(pos) == getGearboxState() ) {
+        for (int i = minRadius - 1; i <= maxRadius - 1; i++) {
+            if (world.getBlockState(pos) == getGearboxState()) {
                 width = 3 + (i * 2);
             }
             pos.move(left);
         }
 
-        if ( width < MIN_DIAMETER ) {
+        if (width < MIN_DIAMETER) {
             invalidateStructure();
             return false;
         }
@@ -312,7 +313,7 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
     @Override
     protected void formStructure(PatternMatchContext context) {
         super.formStructure(context);
-        if(!this.isInitialized)
+        if (!this.isInitialized)
             quarryLogic.init();
         this.isInitialized = true;
     }
@@ -335,52 +336,52 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
 
     private void setExcavationMode(int mode) {
         this.excavationMode = mode == 1;
-        if(this.excavationMode)
+        if (this.excavationMode)
             this.quarryLogic.init(); //reset quarrylogic
     }
 
     @Override
     protected void updateFormedValid() {
-        if(getWorld().isRemote || !this.recipeMapWorkable.isWorkingEnabled()) return;
+        if (getWorld().isRemote || !this.recipeMapWorkable.isWorkingEnabled()) return;
 
-        if (this.excavationMode && !this.quarryLogic.finished && this.drainEnergy(true) && this.getNumMaintenanceProblems() <= 5){
+        if (this.excavationMode && !this.quarryLogic.finished && this.drainEnergy(true) && this.getNumMaintenanceProblems() <= 5) {
             this.drainEnergy(false);
             excavationProgress++;
-            if(!excavationActive) toggleExcavationActive();
+            if (!excavationActive) toggleExcavationActive();
 
             if (excavationProgress % getTicksPerExcavation() == 0)
                 this.quarryLogic.doQuarryOperation();
-        } else{
-            if(excavationActive) toggleExcavationActive();
+        } else {
+            if (excavationActive) toggleExcavationActive();
 
             this.recipeMapWorkable.updateWorkable();
         }
     }
 
-    private void toggleExcavationActive(){
+    private void toggleExcavationActive() {
         excavationActive = !excavationActive;
         writeCustomData(QUARRY_EXCAVATION_ACTIVE, buf -> buf.writeBoolean(excavationActive));
     }
 
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
-        if(excavationMode)
+        if (excavationMode)
             MultiblockDisplayText.builder(textList, isStructureFormed())
                     .setWorkingStatus(recipeMapWorkable.isWorkingEnabled(), excavationActive)
                     .addEnergyUsageLine(recipeMapWorkable.getEnergyContainer())
                     .addWorkingStatusLine();
         else
             MultiblockDisplayText.builder(textList, isStructureFormed())
-                .setWorkingStatus(recipeMapWorkable.isWorkingEnabled(), recipeMapWorkable.isActive())
-                .addEnergyUsageLine(recipeMapWorkable.getEnergyContainer())
-                .addEnergyTierLine(GTUtility.getTierByVoltage(recipeMapWorkable.getMaxVoltage()))
-                .addParallelsLine(recipeMapWorkable.getParallelLimit())
-                .addWorkingStatusLine()
-                .addProgressLine(recipeMapWorkable.getProgressPercent());
+                    .setWorkingStatus(recipeMapWorkable.isWorkingEnabled(), recipeMapWorkable.isActive())
+                    .addEnergyUsageLine(recipeMapWorkable.getEnergyContainer())
+                    .addEnergyTierLine(GTUtility.getTierByVoltage(recipeMapWorkable.getMaxVoltage()))
+                    .addParallelsLine(recipeMapWorkable.getParallelLimit())
+                    .addWorkingStatusLine()
+                    .addProgressLine(recipeMapWorkable.getProgressPercent());
     }
 
-    public int getTicksPerExcavation(){
-        return (int) (BASE_TICKS_PER_EXCAVATION / Math.pow(2,getEnergyTier() - 1));
+    public int getTicksPerExcavation() {
+        return (int) (BASE_TICKS_PER_EXCAVATION / Math.pow(2, getEnergyTier() - 1));
     }
 
     //cap to EV tier
