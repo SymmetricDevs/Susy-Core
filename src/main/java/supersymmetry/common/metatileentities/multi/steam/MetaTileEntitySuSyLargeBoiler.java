@@ -3,7 +3,6 @@ package supersymmetry.common.metatileentities.multi.steam;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
-import gregtech.api.capability.impl.BoilerRecipeLogic;
 import gregtech.api.capability.impl.CommonFluidFilters;
 import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.capability.impl.ItemHandlerList;
@@ -209,8 +208,6 @@ public class MetaTileEntitySuSyLargeBoiler extends MultiblockWithDisplayBase imp
     public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip,
                                boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
-        tooltip.add(I18n.format("gregtech.multiblock.large_boiler.rate_tooltip",
-                boilerType.steamPerTick() * 20));
         tooltip.add(
                 I18n.format("gregtech.multiblock.large_boiler.heat_time_tooltip", boilerType.getTicksToBoiling() / 20));
         tooltip.add(I18n.format("gregtech.universal.tooltip.base_production_fluid", boilerType.steamPerTick()));
@@ -304,7 +301,7 @@ public class MetaTileEntitySuSyLargeBoiler extends MultiblockWithDisplayBase imp
 
     @Override
     protected boolean shouldUpdate(MTETrait trait) {
-        return !(trait instanceof BoilerRecipeLogic);
+        return !(trait instanceof SuSyBoilerLogic);
     }
 
     @Override
