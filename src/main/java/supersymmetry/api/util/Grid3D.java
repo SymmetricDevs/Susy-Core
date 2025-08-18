@@ -2,12 +2,11 @@ package supersymmetry.api.util;
 
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.util.RelativeDirection;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Represents a 3D grid for drawing a multiblock pattern. The origin point (0, 0, 0) is
@@ -233,5 +232,34 @@ public class Grid3D {
         this.symbolMap.forEach(pattern::where);
 
         return pattern.build();
+    }
+
+    /**
+     * Makes a shallow copy of the given builder, applies the grid shape to it, and returns the built
+     * shape info. It does not set the keys and block states, those are expected to have been
+     * previously configured.
+     *
+     * @param builder Base builder object with keys configured.
+     * @return The built shape.
+     */
+    public MultiblockShapeInfo buildShape(MultiblockShapeInfo.Builder builder) {
+        // this needs to build as right, up, back.
+        // Each character in a string goes from x=0 to width
+        // Each string in an aisle call goes from y=0 to height
+        // Each aisle call goes from z=depth to 0
+        var copy = builder.shallowCopy();
+        for (int z = depth - 1; z >= 0; z--) {
+            String[] xyPlane = new String[height];
+            for (int y = 0; y < height; y++) {
+                var line = new StringBuilder(width);
+                for (int x = 0; x < width; x++) {
+                    line.append(grid[x][y][z]);
+                }
+                xyPlane[y] = line.toString();
+            }
+
+            copy.aisle(xyPlane);
+        }
+        return copy.build();
     }
 }
