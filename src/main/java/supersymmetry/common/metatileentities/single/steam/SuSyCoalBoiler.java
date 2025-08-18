@@ -62,14 +62,6 @@ public class SuSyCoalBoiler extends SteamCoalBoiler {
         // actual recipe duration.
         burnTime /= highPressure ? 6 : 12;
 
-        // Now apply the 50% or 75% efficiency multiplier for low or high singleblock boilers
-        // from the powergen spreadsheet.
-        if ( highPressure ) {
-            burnTime = (int) (burnTime * 0.75);
-        } else {
-            burnTime /= 2;
-        }
-
         // Another fun fact! The temperature only increases when the burn time is even.
         // So for a high pressure boiler, since it decrements by 2, an odd number means it
         // *never warms up*. We will throw players a bone and give them 1 more tick if it's odd.
