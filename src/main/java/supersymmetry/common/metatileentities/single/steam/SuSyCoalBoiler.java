@@ -66,7 +66,7 @@ public class SuSyCoalBoiler extends SteamCoalBoiler {
         // So for a high pressure boiler, since it decrements by 2, an odd number means it
         // *never warms up*. We will throw players a bone and give them 1 more tick if it's odd.
         // It also never stops working if it's odd because it does a == 0 check and not a <= 0.
-        if ( highPressure && burnTime % 2 == 1 ) {
+        if (highPressure && burnTime % 2 == 1) {
             burnTime++;
         }
         return burnTime;
