@@ -412,18 +412,27 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        this.quarryLogic.readFromNBT(data.getCompoundTag("quarryLogic"));
         this.excavationMode = data.getBoolean("excavationMode");
         this.excavationProgress = data.getInteger("excavationProgress");
         this.excavationActive = data.getBoolean("excavationActive");
         this.width = data.hasKey("width") ? data.getInteger("width") : this.width;
         this.depth = data.hasKey("depth") ? data.getInteger("depth") : this.depth;
-        this.isInitialized = true;
+
+        // If we didn't write the logic, then it wasn't initialized yet.
+        if (data.hasKey("quarryLogic")) {
+            this.quarryLogic.readFromNBT(data.getCompoundTag("quarryLogic"));
+            this.isInitialized = true;
+        } else {
+            this.isInitialized = false;
+        }
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
-        data.setTag("quarryLogic", this.quarryLogic.writeToNBT());
+        // don't write logic before it's initialized since it will NPE
+        if (isInitialized) {
+            data.setTag("quarryLogic", this.quarryLogic.writeToNBT());
+        }
         data.setBoolean("excavationMode", this.excavationMode);
         data.setInteger("excavationProgress", this.excavationProgress);
         data.setBoolean("excavationActive", this.excavationActive);
