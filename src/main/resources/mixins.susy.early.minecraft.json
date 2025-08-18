@@ -5,12 +5,17 @@
   "minVersion" : "0.8",
   "compatibilityLevel" : "JAVA_8",
   "mixins" : [
+    "BlockFireMixin",
     "EntityElytraMixin",
-    "EntityPlayerMixin",
-    "EntityMixin",
     "EntityFallingBlockMixin",
     "EntityMinecartMixin",
-    "EntityTNTPrimedMixin",
-    "BlockFireMixin"
+    "EntityMixin",
+    "EntityPlayerMixin",
+    "EntityTNTPrimedMixin"
+  ],
+  "client" : [
+    "BlockModelRendererMixin",
+    "RenderChunkMixin",
+    "TileEntityRendererDispatcherMixin"
   ]
 }
