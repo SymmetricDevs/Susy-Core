@@ -30,7 +30,9 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint {
 
     public Builder stage(RocketStage stage) {
       this.stages.add(stage);
-      ignitionSequence.add(new ArrayList<>(stageCount));
+      List<Integer> l = new ArrayList<>();
+      l.add(stageCount);
+      ignitionSequence.add(l);
       stageCount++;
 
       return this;
@@ -40,7 +42,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint {
       this.stages.add(stage);
 
       List<Integer> ignitions =
-          ignitionSequence.get(ignitionSequence.size() - 1 /*last one added*/);
+          ignitionSequence.get(ignitionSequence.size() - 1 /*last one added i guess*/);
       ignitions.add(stageCount);
       stageCount++;
       return this;
@@ -54,7 +56,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint {
               .map(inner -> inner.stream().mapToInt(Integer::intValue).toArray())
               .collect(Collectors.toList()));
       assert blueprint.isFullBlueprint()
-          : "full blueprint produced by the builder, thats not meant to happen";
+          : "full blueprint produced by the builder, thats not meant to happen :C";
       return blueprint;
     }
   }

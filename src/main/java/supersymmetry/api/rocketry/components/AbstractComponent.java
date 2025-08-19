@@ -32,6 +32,33 @@ import supersymmetry.common.blocks.rocketry.BlockTurboPump;
 import supersymmetry.common.tile.TileEntityCoverable;
 
 public abstract class AbstractComponent<T extends AbstractComponent<T>> {
+  public class MaterialCost {
+    String resource;
+    String type;
+    int meta;
+    int count;
+
+    public MaterialCost(String resource, String type, int meta, int count) {
+      this.resource = resource;
+      this.type = type;
+      this.meta = meta;
+      this.count = count;
+    }
+
+    public NBTTagCompound toNBT() {
+      NBTTagCompound tag = new NBTTagCompound();
+      tag.setString("resource", this.resource);
+      tag.setString("type", this.type);
+      tag.setInteger("meta", this.meta);
+      tag.setInteger("count", this.count);
+      return tag;
+    }
+
+    public static MaterialCost fromNBT() {
+      return null;
+    }
+  }
+
   private static final Set<AbstractComponent<?>> registry = new HashSet<>();
   private static boolean registrylock = false;
   private static final Map<String, Class<? extends AbstractComponent<?>>> nameToComponentRegistry =
