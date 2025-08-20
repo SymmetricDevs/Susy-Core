@@ -81,20 +81,25 @@ public class PlateBoundary {
 
         double angle = closest.distance(cornerA) / this.length * Math.PI * 2;
 
-        double noiseX = Math.cos(angle) * this.length / 1000. + cornerA.x;
-        double noiseZ = Math.sin(angle) * this.length / 1000. + cornerB.y;
-
         Vec2d normal = this.d.normalize();
 
+        double noiseX = Math.cos(angle) + cornerA.x;
+        double noiseZ = Math.sin(angle) + cornerB.y;
+
+        double primary = PlateMap.instance.noise.noise2d(noiseX, noiseZ) - this.noiseOffset;
+
+        //noiseX = Math.cos(angle) * this.length / 500. + cornerA.x;
+        //noiseZ = Math.sin(angle) * this.length / 500. + cornerB.y;
+
+        //double secondary = PlateMap.instance.noise.noise2d(noiseX, noiseZ) - this.noiseOffset;
         // Apply perpendicular noise displacement
-        double n = PlateMap.instance.noise.noise2d(noiseX, noiseZ) - this.noiseOffset;
-        double offset = n * 256;
+        double offset = primary * 256;
 
         normal = normal.scale(offset);
 
         Vec2d perturbed = normal.add(closest);
 
-        if(perturbed.distanceSquared(new Vec2d(x,y)) <= threshold * threshold) {
+        if(perturbed.distanceSquared(P) <= threshold * threshold) {
             return null;
         }
 

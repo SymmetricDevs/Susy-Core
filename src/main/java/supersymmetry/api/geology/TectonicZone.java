@@ -1,5 +1,6 @@
 package supersymmetry.api.geology;
 
+import net.minecraft.init.Biomes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -9,6 +10,8 @@ import javax.annotation.Nullable;
 
 public class TectonicZone {
     public static TectonicZone CRATON = new TectonicZone("shield");
+    public static TectonicZone DESERT = new TectonicZone(Biomes.DESERT);
+    public static TectonicZone PLAINS = new TectonicZone(Biomes.PLAINS);
     public static TectonicZone SEDIMENTARY_BASIN = new TectonicZone("prairie");
     public static TectonicZone RIFT_ZONE = new TectonicZone("volcanic_island");
     public static TectonicZone VOLCANIC_ARC = new TectonicZone("rainforest");

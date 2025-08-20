@@ -16,7 +16,7 @@ public class PlateMap {
     public static int MAX_PLATES = 10;
     public static int MIN_PLATE_DISTANCE = 1000;
     private long worldSeed;
-    private static double BOUNDARY_THRESHOLD = 64;
+    private static double BOUNDARY_THRESHOLD = 128;
     public OpenSimplexNoise noise;
 
     public PlateMap(long worldSeed) {
@@ -97,12 +97,14 @@ public class PlateMap {
         Plate closest = boundary.closerPlate(x, z, BOUNDARY_THRESHOLD);
 
         if (closest != null) {
-            if (closest.type == Plate.Type.CONTINENTAL) return TectonicZone.CRATON;
+            if (closest.type == Plate.Type.CONTINENTAL) return TectonicZone.DESERT;
             return TectonicZone.ABYSSAL_PLAIN;
             //return TectonicZone.CRATON;
         }
 
-        if (boundary.relativeMotion > 0.5f) {
+        return TectonicZone.PLAINS;
+
+        /*if (boundary.relativeMotion > 0.5f) {
             // Converging
             if (a.type == Plate.Type.CONTINENTAL && b.type == Plate.Type.CONTINENTAL) return TectonicZone.OROGENIC_BELT;
             if (a.type == Plate.Type.OCEANIC || b.type == Plate.Type.OCEANIC) return TectonicZone.VOLCANIC_ARC;
@@ -114,7 +116,7 @@ public class PlateMap {
             return TectonicZone.SHEAR_ZONE;
         }
 
-        return TectonicZone.SEDIMENTARY_BASIN; // fallback
+        return TectonicZone.SEDIMENTARY_BASIN; // fallback*/
     }
 
 }
