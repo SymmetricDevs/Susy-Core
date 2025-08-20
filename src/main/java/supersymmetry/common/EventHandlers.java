@@ -17,6 +17,7 @@ import net.minecraft.server.management.PlayerList;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -32,7 +33,6 @@ import supersymmetry.common.event.MobHordeWorldData;
 import supersymmetry.common.item.SuSyArmorItem;
 import supersymmetry.common.network.SPacketFirstJoin;
 import supersymmetry.common.world.WorldProviderPlanet;
-import supersymmetry.loaders.SuSyWorldLoader;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class EventHandlers {
@@ -147,5 +147,17 @@ public class EventHandlers {
                 event.setCanceled(true);
             }
         }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerCloneEvent(net.minecraftforge.event.entity.player.PlayerEvent.Clone event) {
+        event.getEntityPlayer().experience = event.getOriginal().experience;
+        event.getEntityPlayer().experienceLevel = event.getOriginal().experienceLevel;
+        event.getEntityPlayer().experienceTotal = event.getOriginal().experienceTotal;
+    }
+
+    @SubscribeEvent
+    public static void onLivingExperienceDropEvent(LivingExperienceDropEvent event) {
+        event.setDroppedExperience(0);
     }
 }
