@@ -47,7 +47,8 @@ public class MetaTileEntityPolymerizationTank extends RecipeMapMultiblockControl
                 .where('F', frames(Materials.Steel))
                 .where('P', states(getPipeCasingState()))
                 .where('X', states(getCasingState()).setMinGlobalLimited(18)
-                        .or(this.autoAbilities(true, true, true, true, true, true, false)))
+                        .or(this.autoAbilities(true, true, true, true, false, false, false)))
+                        .or(this.autoAbilities(false, false, false, false, true, true, false).setMaxGlobalLimited(3))) /* limits fluid hatch to 3 */
                 .build();
     }
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
