@@ -46,6 +46,7 @@ import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityPrimit
 import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityStrandBus;
 import supersymmetry.common.metatileentities.multiblockpart.SusyMetaTileEntityDumpingHatch;
 import supersymmetry.common.metatileentities.multiblockpart.SusyMetaTileEntityEnergyHatch;
+import supersymmetry.common.metatileentities.single.creative.MetaTileEntityRecipeCreator;
 import supersymmetry.common.metatileentities.single.electric.*;
 import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityLocomotiveController;
 import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityStockFluidExchanger;
@@ -260,6 +261,8 @@ public class SuSyMetaTileEntities {
     // Generators
     public static MetaTileEntityFuelCell[] FUEL_CELL = new MetaTileEntityFuelCell[2];
 
+    public static MetaTileEntityRecipeCreator RECIPE_CREATOR;
+
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -456,7 +459,7 @@ public class SuSyMetaTileEntities {
         SusyLog.logger.debug("Available ID(s) are: {}", ids);
 
         MIXER_SETTLER = registerMetaTileEntity(17100, new MetaTileEntityMixerSettler(susyId("mixer_settler")));
-
+        RECIPE_CREATOR = registerMetaTileEntity(17120, new MetaTileEntityRecipeCreator(susyId("recipe_creator")));
         //STOCK_DETECTOR = registerMetaTileEntity(18000, new MetaTileEntityStockDetector(susyId("stock_detector")));
         STOCK_FLUID_EXCHANGER = registerMetaTileEntity(18001, new MetaTileEntityStockFluidExchanger(susyId("stock_fluid_exchanger")));
         STOCK_ITEM_EXCHANGER = registerMetaTileEntity(18002, new MetaTileEntityStockItemExchanger(susyId("stock_item_exchanger")));
