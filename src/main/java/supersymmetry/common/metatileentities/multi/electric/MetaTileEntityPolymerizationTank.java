@@ -46,7 +46,7 @@ public class MetaTileEntityPolymerizationTank extends RecipeMapMultiblockControl
                 .where('S', this.selfPredicate())
                 .where('F', frames(Materials.Steel))
                 .where('P', states(getPipeCasingState()))
-                .where('X', states(getCasingState()).setMinGlobalLimited(18)
+                .where('X', states(getCasingState()).setMinGlobalLimited(21)
                         .or(this.autoAbilities(true, true, true, true, false, false, false)))
                         .or(this.autoAbilities(false, false, false, false, true, true, false).setMaxGlobalLimited(3))) /* limits fluid hatch to 3 */
                 .build();
