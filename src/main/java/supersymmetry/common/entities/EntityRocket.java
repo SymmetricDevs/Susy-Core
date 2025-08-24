@@ -25,6 +25,7 @@ import supersymmetry.client.audio.MovingSoundRocket;
 import supersymmetry.client.renderer.handler.IAlwaysRender;
 import supersymmetry.client.renderer.particles.SusyParticleFlameLarge;
 import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
+import supersymmetry.common.entities.teleporters.DropPodTeleporter;
 import supersymmetry.common.network.CPacketRocketInteract;
 
 import java.util.List;
@@ -250,7 +251,8 @@ public class EntityRocket extends Entity implements IAlwaysRender {
                 this.spawnFlightParticles();
             }
 
-            if (this.posY > 600 || flightTime > 2400) {
+            if (this.posY > 600) {
+                act();
                 this.setDead();
             }
 
@@ -310,6 +312,15 @@ public class EntityRocket extends Entity implements IAlwaysRender {
             GregTechAPI.networkHandler.sendToServer(new CPacketRocketInteract(this, hand, hitVec));
         }
         return EnumActionResult.SUCCESS;
+    }
+
+    protected void act() {
+        if (this.getPassengers().isEmpty()) {
+            return;
+        }
+        for (Entity passenger : this.getPassengers()) {
+            passenger.changeDimension(800, new DropPodTeleporter());
+        }
     }
 
     @Override
