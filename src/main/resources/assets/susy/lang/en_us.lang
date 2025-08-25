@@ -1187,3 +1187,15 @@ tile.fake_wool.brownfakewool.name=Brown Asbestos Fiber
 tile.fake_wool.greenfakewool.name=Green Asbestos Fiber
 tile.fake_wool.redfakewool.name=Red Asbestos Fiber
 tile.fake_wool.blackfakewool.name=Black Asbestos Fiber
+
+susy.gui.recipe_creator.import_items=Import Items
+susy.gui.recipe_creator.import_fluids=Import Fluids
+susy.gui.recipe_creator.export_items=Export Items
+susy.gui.recipe_creator.export_fluids=Export Fluids
+susy.gui.recipe_creator.eut=EUt
+susy.gui.recipe_creator.duration=Duration
+susy.gui.recipe_creator.copy_script=To Groovy
+susy.gui.recipe_creator.selected_recipe_map=Selected Recipe Map
+susy.gui.recipe_creator.set_map=Available Recipe Maps
+susy.gui.recipe_creator.unselected=Select a Recipe Map
+susy.machine.recipe_creator.name=Recipe Creator
