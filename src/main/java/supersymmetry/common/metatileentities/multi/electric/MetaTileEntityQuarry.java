@@ -324,7 +324,8 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
 
         ArrayList<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
         // add min, rectangular, max size
-        shapeInfo.add(createShapeGrid(15, 15).buildShape(builder));
+        // add current size first for multiblock preview
+        shapeInfo.add(createShapeGrid(Math.max(width, MIN_DIAMETER), Math.max(depth, MIN_DIAMETER)).buildShape(builder));
         shapeInfo.add(createShapeGrid(23, 15).buildShape(builder));
         shapeInfo.add(createShapeGrid(31, 31).buildShape(builder));
         return shapeInfo;

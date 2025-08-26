@@ -343,7 +343,7 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
         }
 
         List<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
-        int radius = MIN_RADIUS;
+        int radius = Math.max(sDist, MIN_RADIUS);
         while (radius <= MAX_RADIUS) {
             shapeInfo.add(new MultiblockShapeInfo(createStructurePattern(radius).getPreview(new int[]{1, 1, 1, 1, 1})));
             radius += 2;
