@@ -2,8 +2,6 @@ package supersymmetry.common.rocketry.components;
 
 import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
 
-import gregtech.api.capability.*;
-import gregtech.api.gui.widgets.*;
 import java.util.*;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -15,10 +13,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.common.util.Constants;
 import supersymmetry.api.rocketry.components.AbstractComponent;
+import supersymmetry.api.rocketry.components.MaterialCost;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.common.blocks.rocketry.*;
 import supersymmetry.common.tile.TileEntityCoverable;
 
 /** componentLiquidFuelTank */
@@ -45,8 +43,7 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
 
   @Override
   public void writeToNBT(NBTTagCompound tag) {
-    tag.setString("name", this.name);
-    tag.setString("type", this.type);
+    super.writeToNBT(tag);
     tag.setDouble("radius", this.radius);
     tag.setDouble("mass", this.mass);
     tag.setInteger("volume", this.volume);
@@ -62,6 +59,10 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
     if (!compound.hasKey("mass", Constants.NBT.TAG_DOUBLE)) Optional.empty();
     if (!compound.hasKey("radius", Constants.NBT.TAG_DOUBLE)) Optional.empty();
     if (!compound.hasKey("area_ratio", Constants.NBT.TAG_DOUBLE)) Optional.empty();
+    if (!compound.hasKey("materials", Constants.NBT.TAG_LIST)) return Optional.empty();
+    compound
+        .getTagList("materials", Constants.NBT.TAG_COMPOUND)
+        .forEach(x -> tank.materials.add(MaterialCost.fromNBT((NBTTagCompound) x)));
     tank.volume = compound.getInteger("volume");
     tank.radius = compound.getDouble("radius");
     tank.mass = compound.getDouble("mass");

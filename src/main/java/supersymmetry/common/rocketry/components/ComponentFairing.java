@@ -16,7 +16,9 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.Constants.NBT;
 import supersymmetry.api.rocketry.components.AbstractComponent;
+import supersymmetry.api.rocketry.components.MaterialCost;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -46,8 +48,7 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
 
   @Override
   public void writeToNBT(NBTTagCompound tag) {
-    tag.setString("name", this.name);
-    tag.setString("type", this.type);
+    super.writeToNBT(tag);
     tag.setDouble("bottom_radius", this.bottom_radius);
     tag.setInteger("height", this.height);
   }
@@ -57,9 +58,12 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
     ComponentFairing fairing = new ComponentFairing();
     if (compound.getString("type") != this.type || compound.getString("name") != this.name)
       return Optional.empty();
-    if (compound.getString("type") != this.type) return Optional.empty();
     if (!compound.hasKey("height", Constants.NBT.TAG_INT)) return Optional.empty();
     if (!compound.hasKey("bottom_radius", Constants.NBT.TAG_DOUBLE)) return Optional.empty();
+    if (!compound.hasKey("materials", NBT.TAG_LIST)) return Optional.empty();
+    compound
+        .getTagList("materials", NBT.TAG_COMPOUND)
+        .forEach(x -> fairing.materials.add(MaterialCost.fromNBT((NBTTagCompound) x)));
     fairing.bottom_radius = compound.getDouble("bottom_radius");
     fairing.height = compound.getInteger("height");
     return Optional.of(fairing);

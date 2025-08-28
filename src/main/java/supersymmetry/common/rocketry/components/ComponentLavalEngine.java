@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.util.Constants;
 import supersymmetry.api.rocketry.components.AbstractComponent;
+import supersymmetry.api.rocketry.components.MaterialCost;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -51,8 +52,7 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
 
   @Override
   public void writeToNBT(NBTTagCompound tag) {
-    tag.setString("name", this.name);
-    tag.setString("type", this.type);
+    super.writeToNBT(tag);
     tag.setDouble("radius", this.radius);
     tag.setDouble("area_ratio", this.area_ratio);
   }
@@ -65,6 +65,11 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
     if (!compound.hasKey("mass", Constants.NBT.TAG_DOUBLE)) return Optional.empty();
     if (!compound.hasKey("radius", Constants.NBT.TAG_DOUBLE)) return Optional.empty();
     if (!compound.hasKey("area_ratio", Constants.NBT.TAG_DOUBLE)) return Optional.empty();
+    if (!compound.hasKey("materials", Constants.NBT.TAG_LIST)) return Optional.empty();
+    compound
+        .getTagList("materials", Constants.NBT.TAG_COMPOUND)
+        .forEach(x -> engine.materials.add(MaterialCost.fromNBT((NBTTagCompound) x)));
+
     engine.area_ratio = compound.getDouble("area_ratio");
     engine.radius = compound.getDouble("radius");
     engine.mass = compound.getDouble("mass");
