@@ -170,6 +170,12 @@ susy.material.mud=Mud
 susy.material.sea_water=Sea Water
 susy.material.refractory_gunning_mixture=Refractory Gunning Mixture
 susy.material.preheated_air=Preheated Air
+susy.material.midgrade_lubricant=Midgrade Lubricant
+susy.material.premium_lubricant=Premium Lubricant
+susy.material.supreme_lubricant=Supreme Lubricant
+susy.material.coolant=Coolant
+susy.material.advanced_coolant=Advanced Coolant
+susy.material.lubricating_oil=Lubricating Oil
 
 # Rock/Mineral Materials
 susy.material.fluorite=Fluorite
@@ -781,6 +787,10 @@ tile.metallurgy_roll.roll.name=Roll
 susy.machine.fuel_cell.ev.name=Low Temperature Fuel Cell
 susy.machine.fuel_cell.iv.name=High Temperature Fuel Cell
 susy.machine.fuel_cell.tooltip=Temperature requirements for operation: %s°C
+
+susy.machine.susy_combustion_generator.lv.name=Basic Combustion Generator
+susy.machine.susy_combustion_generator.mv.name=Advanced Combustion Generator
+susy.machine.susy_combustion_generator.hv.name=Advanced Combustion Generator II
 
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation

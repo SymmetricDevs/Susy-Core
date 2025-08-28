@@ -259,7 +259,7 @@ public class SuSyMetaTileEntities {
 
     // Generators
     public static MetaTileEntityFuelCell[] FUEL_CELL = new MetaTileEntityFuelCell[2];
-
+    public static SuSyMetaTileEntitySingleCombustion[] COMBUSTION_GENERATOR = new SuSyMetaTileEntitySingleCombustion[3];
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500, new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -496,6 +496,11 @@ public class SuSyMetaTileEntities {
         // Fuel Cells
         FUEL_CELL[0] = registerMetaTileEntity(18400, new MetaTileEntityFuelCell(susyId("fuel_cell.ev"), SuSyRecipeMaps.FUEL_CELL_RECIPES, SusyTextures.FUEL_CELL_OVERLAY, 4, GTUtility.defaultTankSizeFunction, 800, 500));
         FUEL_CELL[1] = registerMetaTileEntity(18401, new MetaTileEntityFuelCell(susyId("fuel_cell.iv"), SuSyRecipeMaps.FUEL_CELL_RECIPES, SusyTextures.FUEL_CELL_OVERLAY, 5, GTUtility.defaultTankSizeFunction, 1000, 800));
+
+        // Combustion Generators
+        COMBUSTION_GENERATOR[0] = registerMetaTileEntity(18402, new SuSyMetaTileEntitySingleCombustion(susyId("combustion_generator.lv"), RecipeMaps.COMBUSTION_GENERATOR_FUELS, Textures.COMBUSTION_GENERATOR_OVERLAY, 1, GTUtility.defaultTankSizeFunction));
+        COMBUSTION_GENERATOR[1] = registerMetaTileEntity(18403, new SuSyMetaTileEntitySingleCombustion(susyId("combustion_generator.mv"), RecipeMaps.COMBUSTION_GENERATOR_FUELS, Textures.COMBUSTION_GENERATOR_OVERLAY, 2, GTUtility.defaultTankSizeFunction));
+        COMBUSTION_GENERATOR[2] = registerMetaTileEntity(18404, new SuSyMetaTileEntitySingleCombustion(susyId("combustion_generator.hv"), RecipeMaps.COMBUSTION_GENERATOR_FUELS, Textures.COMBUSTION_GENERATOR_OVERLAY, 3, GTUtility.defaultTankSizeFunction));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name, RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator, ICubeRenderer texture, boolean isBricked) {

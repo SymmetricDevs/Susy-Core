@@ -1,6 +1,7 @@
 package supersymmetry.api.capability.impl;
 
 import gregtech.api.capability.IFilter;
+import gregtech.api.unification.material.Materials;
 import supersymmetry.common.materials.SusyMaterials;
 
 import net.minecraftforge.fluids.FluidStack;
@@ -21,5 +22,33 @@ public enum SuSyFluidFilters implements IFilter<FluidStack> {
         public int getPriority() {
             return IFilter.whitelistPriority(1);
         }
-    };
+    },
+
+    LUBRICANT {
+        @Override
+        public boolean test(@NotNull FluidStack fluid) {
+            return
+                matchesFluid(fluid, Materials.Lubricant) ||
+                matchesFluid(fluid, SusyMaterials.MidgradeLubricant) ||
+                matchesFluid(fluid, SusyMaterials.PremiumLubricant) ||
+                matchesFluid(fluid, SusyMaterials.SupremeLubricant);
+        }
+
+        @Override
+        public int getPriority() { return IFilter.whitelistPriority(1); }
+    },
+
+    COOLANT {
+        @Override
+        public boolean test(@NotNull FluidStack fluid) {
+            return
+                matchesFluid(fluid, Materials.Water) ||
+                matchesFluid(fluid, Materials.DistilledWater) ||
+                matchesFluid(fluid, SusyMaterials.Coolant) ||
+                matchesFluid(fluid, SusyMaterials.AdvancedCoolant);
+        }
+
+        @Override
+        public int getPriority() { return IFilter.whitelistPriority(1); }
+    }
 }

@@ -165,5 +165,36 @@ public class SuSyFirstDegreeMaterials {
                 .flags(DISABLE_DECOMPOSITION)
                 .components(Nitrogen, 78, Oxygen, 21, Argon, 9)
                 .build();
+
+        MidgradeLubricant = new Material.Builder(27151, SuSyUtility.susyId("midgrade_lubricant"))
+                .liquid()
+                .color(0xc7aa2a)
+                .build();
+
+        PremiumLubricant = new Material.Builder(27152, SuSyUtility.susyId("premium_lubricant"))
+                .liquid()
+                .color(0xba831c)
+                .build();
+
+        SupremeLubricant = new Material.Builder(27153, SuSyUtility.susyId("supreme_lubricant"))
+                .liquid()
+                .color(0xad5f10)
+                .build();
+
+        Coolant = new Material.Builder(27154, SuSyUtility.susyId("coolant"))
+                .liquid()
+                .color(0x46dde8)
+                .build();
+
+        AdvancedCoolant = new Material.Builder(27155, SuSyUtility.susyId("advanced_coolant"))
+                .liquid()
+                .color(0x33f5ee)
+                .build();
+
+        LubricatingOil = new Material.Builder(27156, SuSyUtility.susyId("lubricating_oil"))
+                .liquid()
+                .color(0x858146)
+                .flags(FLAMMABLE)
+                .build();
     }
 }
