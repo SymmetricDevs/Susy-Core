@@ -248,7 +248,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                 .build();
     }
 
-    @SuppressWarnings("DataFlowIssue")
     @Override
     public List<MultiblockShapeInfo> getMatchingShapes() {
         ArrayList<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
