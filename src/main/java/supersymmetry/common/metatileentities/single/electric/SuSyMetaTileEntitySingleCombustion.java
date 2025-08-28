@@ -27,6 +27,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.capability.impl.SuSyFluidFilters;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.util.SuSyUtility;
@@ -35,6 +36,8 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleCombustion {
+
+    private int workCounter;
 
     private SuSyUtility.Lubricant lubricant;
     private SuSyUtility.Coolant coolant;
@@ -85,6 +88,15 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
         super.update();
         if (!getWorld().isRemote) {
             updateSufficientFluids();
+
+            if (workable.isWorking()) workCounter += 1;
+            if (workCounter == 20) {
+                workCounter = 0;
+
+                lubricantTank.drain(lubricant.amount_required * (4 ^ (getTier() - 1)), true);
+                coolantTank.drain(coolant.amount_required * (4 ^ (getTier() - 1)), true);
+                SusyLog.logger.info((4 ^ (getTier() - 1)));
+            }
         }
     }
 
