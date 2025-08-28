@@ -21,6 +21,7 @@ import gregtech.common.metatileentities.electric.MetaTileEntitySingleCombustion;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fluids.Fluid;
@@ -28,6 +29,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.SusyLog;
+import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.api.capability.impl.SuSyFluidFilters;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.util.SuSyUtility;
@@ -38,6 +40,7 @@ import java.util.function.Supplier;
 public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleCombustion {
 
     private int workCounter;
+    private boolean isFull;
 
     private SuSyUtility.Lubricant lubricant;
     private SuSyUtility.Coolant coolant;
@@ -88,14 +91,14 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
         super.update();
         if (!getWorld().isRemote) {
             updateSufficientFluids();
+            isFull = energyContainer.getEnergyStored() - energyContainer.getEnergyCapacity() == 0;
 
-            if (workable.isWorking()) workCounter += 1;
+            if (workable.isWorking() && !isFull) workCounter += 1;
             if (workCounter == 20) {
                 workCounter = 0;
 
-                lubricantTank.drain(lubricant.amount_required * (4 ^ (getTier() - 1)), true);
-                coolantTank.drain(coolant.amount_required * (4 ^ (getTier() - 1)), true);
-                SusyLog.logger.info((4 ^ (getTier() - 1)));
+                lubricantTank.drain((int) (lubricant.amount_required * Math.pow(4, getTier() - 1)), true);
+                coolantTank.drain((int) (coolant.amount_required * Math.pow(4, getTier() - 1)), true);
             }
         }
     }
