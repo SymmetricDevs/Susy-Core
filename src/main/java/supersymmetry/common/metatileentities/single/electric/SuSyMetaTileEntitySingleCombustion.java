@@ -53,6 +53,11 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
     }
 
     @Override
+    public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
+        return new SuSyMetaTileEntitySingleCombustion(metaTileEntityId, recipeMap, renderer, this.getTier(), this.getTankScalingFunction());
+    }
+
+    @Override
     // Handle fluid imports
     protected FluidTankList createImportFluidHandler() {
         if (workable == null) return new FluidTankList(false);
