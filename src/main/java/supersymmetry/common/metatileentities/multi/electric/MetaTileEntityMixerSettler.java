@@ -367,7 +367,7 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
 
         @Override
         protected void modifyOverclockPost(int[] overclockResults, @NotNull IRecipePropertyStorage storage) {
-            int cellsOff = (sDist / 2) - storage.getRecipePropertyValue(MixerSettlerCellsProperty.getInstance(), 2);
+            int cellsOff = (sDist - storage.getRecipePropertyValue(MixerSettlerCellsProperty.getInstance(), 2)) / 2;
             // Divides the duration by an increasing factor that approaches 2 as the number of cells approaches infinity.
             overclockResults[1] = (int) ((double) overclockResults[1] / (Math.atan(cellsOff + 1) * 4 / Math.PI));
 
