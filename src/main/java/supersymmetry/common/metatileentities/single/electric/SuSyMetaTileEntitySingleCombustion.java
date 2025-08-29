@@ -10,7 +10,6 @@ import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.widgets.ImageWidget;
 import gregtech.api.gui.widgets.LabelWidget;
-import gregtech.api.gui.widgets.ProgressWidget;
 import gregtech.api.gui.widgets.TankWidget;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -19,19 +18,12 @@ import gregtech.api.recipes.RecipeMap;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.common.metatileentities.electric.MetaTileEntitySingleCombustion;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.SusyLog;
-import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.api.capability.impl.SuSyFluidFilters;
-import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.util.SuSyUtility;
 
 import java.util.function.Function;
@@ -87,6 +79,12 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
     }
 
     @Override
+    // Override recipe logic
+    protected CombustionRecipeLogic createWorkable(RecipeMap<?> recipeMap) {
+        return new CombustionRecipeLogic(this, recipeMap, () -> this.energyContainer);
+    }
+
+    @Override
     public void update() {
         super.update();
         if (!getWorld().isRemote) {
@@ -119,6 +117,8 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
         sufficientFluids = lubricantStack.amount >= lubricant.amount_required && coolantStack.amount >= coolant.amount_required;
     }
 
+
+
     @Override
     // Create GUI template for the combustion generator
     protected ModularUI.Builder createGuiTemplate(EntityPlayer player) {
@@ -143,7 +143,7 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
 
     private class CombustionRecipeLogic extends FuelRecipeLogic {
 
-        public CombustionRecipeLogic(MetaTileEntityFuelCell metaTileEntity, RecipeMap<?> recipeMap, Supplier<IEnergyContainer> energyContainer) {
+        public CombustionRecipeLogic(SuSyMetaTileEntitySingleCombustion metaTileEntity, RecipeMap<?> recipeMap, Supplier<IEnergyContainer> energyContainer) {
             super(metaTileEntity, recipeMap, energyContainer);
         }
 
@@ -155,6 +155,17 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
         @Override
         public boolean isWorking() {
             return sufficientFluids && super.isWorking();
+        }
+
+        @Override
+        public int getMaxProgress() {
+            int baseDuration = super.getMaxProgress();
+
+            if (lubricant != null) {
+                return (int) (baseDuration * lubricant.boost);
+            }
+
+            return baseDuration;
         }
     }
 }
