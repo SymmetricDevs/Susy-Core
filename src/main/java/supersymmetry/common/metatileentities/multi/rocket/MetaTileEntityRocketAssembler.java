@@ -1,9 +1,9 @@
 package supersymmetry.common.metatileentities.multi.rocket;
 
 import gregtech.api.capability.*;
-import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
+import gregtech.api.gui.Widget;
 import gregtech.api.gui.widgets.AdvancedTextWidget;
 import gregtech.api.gui.widgets.ImageCycleButtonWidget;
 import gregtech.api.gui.widgets.ImageWidget;
@@ -13,6 +13,7 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.IProgressBarMultiblock;
+import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.MultiblockWithDisplayBase;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
@@ -25,10 +26,15 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+
+import com.cleanroommc.modularui.widgets.ButtonWidget;
+
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.api.recipes.logic.RocketAssemblerLogic;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.util.DataStorageLoader;
@@ -38,7 +44,7 @@ import supersymmetry.common.blocks.SuSyBlocks;
 public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController {
   public MetaTileEntityRocketAssembler(ResourceLocation metaTileEntityId) {
     super(metaTileEntityId, SuSyRecipeMaps.ROCKET_ASSEMBLER);
-    this.recipeMapWorkable = new MultiblockRecipeLogic(this);
+    this.recipeMapWorkable = new RocketAssemblerLogic(this);
   }
 
   public DataStorageLoader blueprintSlot =
@@ -48,7 +54,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
             if (x.hasTagCompound()) {
               NBTTagCompound tag = x.getTagCompound();
               var bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
-              return bp.readFromNBT(tag);
+              return bp.readFromNBT(tag) && bp.isFullBlueprint();
             }
             return false;
           });
@@ -69,6 +75,11 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     this.componentIndex = 0;
     this.componentList.clear();
     this.recipeMapWorkable.invalidate();
+  }
+
+  public void finishAssembly() {
+    // TODO: actually spawn the rocket entity?
+    abortAssembly();
   }
 
   public void startAssembly(AbstractRocketBlueprint bp) {
@@ -95,6 +106,11 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
   }
 
   @Override
+  protected boolean shouldShowVoidingModeButton() {
+    return false;
+  }
+
+  @Override
   protected @NotNull BlockPattern createStructurePattern() {
     return FactoryBlockPattern.start()
         .aisle(
@@ -118,7 +134,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
             "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
             "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
             "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
-            "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-CCCCC",
+            "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
             "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
             " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
             " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
@@ -363,8 +379,14 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         .where(
             'C',
             states(
-                SuSyBlocks.ROCKET_ASSEMBLER_CASING.getState(
-                    BlockRocketAssemblerCasing.RocketAssemblerCasingType.FOUNDATION)))
+                    SuSyBlocks.ROCKET_ASSEMBLER_CASING.getState(
+                        BlockRocketAssemblerCasing.RocketAssemblerCasingType.FOUNDATION))
+                .or(autoAbilities(false, false, true, false, true, false, false))
+                .or(
+                    abilities(MultiblockAbility.INPUT_ENERGY) // nukler reactor please
+                        .setMinGlobalLimited(8)
+                        .setMaxGlobalLimited(8)
+                        .setPreviewCount(8)))
         .where('R', SuSyPredicates.rails())
         .where(
             'P',
@@ -377,6 +399,14 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                 SuSyBlocks.ROCKET_ASSEMBLER_CASING.getState(
                     BlockRocketAssemblerCasing.RocketAssemblerCasingType.RAILS)))
         .build();
+  }
+
+  @Override
+  public void receiveCustomData(int dataId, PacketBuffer buf) {
+    super.receiveCustomData(dataId, buf);
+    if (dataId == GregtechDataCodes.LOCK_OBJECT_HOLDER) {
+      this.blueprintSlot.setLocked(buf.readBoolean());
+    }
   }
 
   @Override
@@ -497,7 +527,6 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
             .setClickHandler(this::handleDisplayClick));
 
     // Power Button
-    // todo in the future, refactor so that this class is instanceof IControllable.
     IControllable controllable =
         getCapability(GregtechTileCapabilities.CAPABILITY_CONTROLLABLE, null);
     if (controllable != null) {
@@ -547,10 +576,16 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     // Flex Button
     // TODO: make it abort the construction process
     builder.widget(getFlexButton(173, 125, 18, 18));
-    builder.label(100, 50, this.getMetaFullName() + ".blueprint_slot.name");
-    builder.slot(this.blueprintSlot, 0, 60, 100, GuiTextures.SLOT_DARK);
+    builder.label(100, 60, this.getMetaFullName() + ".blueprint_slot.name");
+    builder.slot(this.blueprintSlot, 0, 100, 78, GuiTextures.SLOT_DARK);
     builder.bindPlayerInventory(entityPlayer.inventory, 125);
     return builder;
+  }
+
+  @Override
+  protected @NotNull Widget getFlexButton(int x, int y, int width, int height) {
+
+    return null;
   }
 
   @Override

@@ -35,8 +35,8 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
         .recipeMap
         .recipeBuilder()
         .inputIngredients(collapse(input))
-        .EUt(4 << 8)
-        .duration((int) Math.ceil(assembler.getCurrentCraftTarget().getAssemblyDuration()))
+        .EUt(2 << 15) // LuV amp. this means that you need 8 4A EV energy hatches :goog:
+        .duration((int) Math.ceil(assembler.getCurrentCraftTarget().getAssemblyDuration() * 20))
         .build()
         .getResult(); // .collect(Collectors.toList());
   }
