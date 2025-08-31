@@ -93,7 +93,7 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
     return new HashSet<>(registry);
   }
 
-  // TODO replace with something smarter....
+  // sort of works
   public static void writeBlocksToNBT(
       Set<BlockPos> blocks, World world, NBTTagCompound mutableTagCompound) {
     Map<String, Integer> counts = new HashMap<String, Integer>();
@@ -113,7 +113,7 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
                     + "#"
                     + teCoverable.getCoverType().getMetadata()
                     + "#cover"; // i am sorry for this
-            counts.put(key, counts.getOrDefault(key, 0) + 1);
+            counts.put(key, counts.getOrDefault(key, 0) + teCoverable.getCoverCount());
           }
         }
       }
@@ -207,6 +207,10 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
 
   public List<MaterialCost> getMaterials() {
     return materials;
+  }
+
+  public double getAssemblyDuration() {
+    return 10f;
   }
 
   public void setMaterials(List<MaterialCost> materials) {

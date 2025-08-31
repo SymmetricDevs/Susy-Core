@@ -128,6 +128,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         new IndicatorImageWidget(width - 23, height - 23, 17, 17, GuiTextures.GREGTECH_LOGO_DARK)
             .setWarningStatus(GuiTextures.GREGTECH_LOGO_BLINKING_YELLOW, this::addWarningText)
             .setErrorStatus(GuiTextures.GREGTECH_LOGO_BLINKING_RED, this::addErrorText));
+
     builder.widget(
         new ClickButtonWidget(
             width - 40,
@@ -246,7 +247,9 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
       NBTTagCompound tag = rocketBlueprintSlot.getStackInSlot(0).getTagCompound();
       AbstractRocketBlueprint bp =
           AbstractRocketBlueprint.getBlueprintsRegistry().get(tag.getString("name"));
-      if (mainwindow.blueprintBuildAttempt(bp)) {}
+      if (mainwindow.blueprintBuildAttempt(bp)) {
+        // shit pant? the status is polled by the status text thing
+      }
     }
   }
 

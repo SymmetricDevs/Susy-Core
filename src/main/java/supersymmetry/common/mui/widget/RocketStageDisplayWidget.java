@@ -287,7 +287,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
     return I18n.format(this.error.getTranslationkey())
         + I18n.format("susy.machine.aerospace_flight_simulator.error_message")
         + "\n"
-        + I18n.format("susy.rocketry.stages." + this.errorStage + "name")
+        + I18n.format("susy.rocketry.stages." + this.errorStage + ".name")
         + "\n"
         + I18n.format("susy.rocketry.components." + this.errorComponentType + ".name");
   }
