@@ -398,7 +398,11 @@ susy.machine.drone_pad.name=Drone Pad
 susy.machine.primitive_smelter.name=Primitive Smelter
 susy.machine.landing_pad.name=Landing Pad
 susy.machine.scrap_recycler.name=Scrap Recycler
+
 susy.machine.rocket_assembler.name=Rocket Assembler
+susy.machine.rocket_assembler.gui.stop=Stop and reset assembly
+susy.machine.rocket_assembler.blueprint_stop.name=Blueprint Slot
+
 susy.machine.rocket_programmer.name=Rocket Programmer
 susy.machine.metallurgical_converter.name=Metallurgical Converter
 susy.machine.injection_molder.name=Injection Molder

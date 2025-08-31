@@ -4,11 +4,7 @@ import gregtech.api.capability.*;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.Widget;
-import gregtech.api.gui.widgets.AdvancedTextWidget;
-import gregtech.api.gui.widgets.ImageCycleButtonWidget;
-import gregtech.api.gui.widgets.ImageWidget;
-import gregtech.api.gui.widgets.IndicatorImageWidget;
-import gregtech.api.gui.widgets.ProgressWidget;
+import gregtech.api.gui.widgets.*;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -381,7 +377,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
             states(
                     SuSyBlocks.ROCKET_ASSEMBLER_CASING.getState(
                         BlockRocketAssemblerCasing.RocketAssemblerCasingType.FOUNDATION))
-                .or(autoAbilities(false, false, true, false, true, false, false))
+                .or(abilities(MultiblockAbility.IMPORT_ITEMS).setPreviewCount(1).setMinGlobalLimited(1).setMaxGlobalLimited(2))
                 .or(
                     abilities(MultiblockAbility.INPUT_ENERGY) // nukler reactor please
                         .setMinGlobalLimited(8)
@@ -576,16 +572,16 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     // Flex Button
     // TODO: make it abort the construction process
     builder.widget(getFlexButton(173, 125, 18, 18));
-    builder.label(100, 60, this.getMetaFullName() + ".blueprint_slot.name");
+    builder.label(100, 60, this.getMetaName() + ".blueprint_slot.name");
     builder.slot(this.blueprintSlot, 0, 100, 78, GuiTextures.SLOT_DARK);
     builder.bindPlayerInventory(entityPlayer.inventory, 125);
     return builder;
   }
 
-  @Override
-  protected @NotNull Widget getFlexButton(int x, int y, int width, int height) {
 
-    return null;
+  protected @NotNull Widget getStopButton(int x, int y, int width, int height) {
+     //TODO
+     return new ClickButtonWidget(x, y, width, height, "susy.machine.rocket_assembler.gui.stop", (clickData -> {this.abortAssembly();}));
   }
 
   @Override
