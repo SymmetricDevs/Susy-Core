@@ -123,20 +123,13 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
 
         for (AbstractComponent<?> component : AbstractComponent.getRegistry())
         {
-            SusyLog.logger.info("checking component {}",component.getName());
             if (component.getDetectionPredicate().test(new Tuple<StructAnalysis,List<BlockPos>>(struct, blockList))) {
-                SusyLog.logger.info("component {} passed", component.getName());
                 Optional<NBTTagCompound> scanResult = component.analyzePattern(struct, linkedCleanroom.getInteriorBB());
                 if (scanResult.isPresent()) {
-                    SusyLog.logger.info("scan successful, nbt popped out: {}",scanResult.get());
-
-                    getInventory().addToCompound(tag -> {return scanResult.get(); /*just replace it*/});
+                    getInventory().addToCompound(tag -> {NBTTagCompound t = scanResult.get(); component.writeToNBT(t);  return t ;/*just replace it*/});
 
                     break;
-                } else {
-                    SusyLog.logger.info("scan failed, reason: {}",struct.status); break;
                 }
-
             }
         }
         //if (struct.status == BuildStat.SUCCESS) {struct.status = BuildStat.ERROR; /*if it wasnt changed after scanning, nothing matched*/ }

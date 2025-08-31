@@ -15,6 +15,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants.NBT;
 import supersymmetry.api.rocketry.components.AbstractComponent;
+import supersymmetry.api.rocketry.components.MaterialCost;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -45,8 +46,7 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
 
   @Override
   public void writeToNBT(NBTTagCompound tag) {
-    tag.setString("name", this.name);
-    tag.setString("type", this.type);
+    super.writeToNBT(tag);
     tag.setDouble("radius", this.radius);
     tag.setDouble("volume", this.volume);
     tag.setBoolean("hasAir", this.hasAir);
@@ -74,6 +74,10 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
     if (!compound.hasKey("volume", NBT.TAG_DOUBLE)) return Optional.empty();
     if (!compound.hasKey("parts", NBT.TAG_COMPOUND)) return Optional.empty();
     if (!compound.hasKey("instruments", NBT.TAG_COMPOUND)) return Optional.empty();
+    if (!compound.hasKey("materials", NBT.TAG_LIST)) return Optional.empty();
+    compound
+        .getTagList("materials", NBT.TAG_COMPOUND)
+        .forEach(x -> spacecraft.materials.add(MaterialCost.fromNBT((NBTTagCompound) x)));
 
     spacecraft.radius = compound.getDouble("radius");
     spacecraft.mass = compound.getDouble("mass");

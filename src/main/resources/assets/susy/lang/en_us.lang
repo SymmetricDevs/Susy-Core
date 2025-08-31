@@ -253,6 +253,8 @@ susy.machine.steam_extractor_cannot_melt_items.warning=Steam Extractors cannot m
 
 # Machines/Multiblocks
 susy.machine.aerospace_flight_simulator.name=aerospace flight simulator
+susy.machine.aerospace_flight_simulator.build_button_label=build
+susy.machine.aerospace_flight_simulator.blueprint_request=insert a blueprint here
 susy.rocketry.components.engine.name=engine(s)
 susy.rocketry.components.vernier_engine.name=vernier engine(s)
 susy.rocketry.components.tank.name=tank(s)

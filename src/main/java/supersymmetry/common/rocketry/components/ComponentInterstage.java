@@ -8,12 +8,13 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants.NBT;
 import supersymmetry.api.rocketry.components.AbstractComponent;
+import supersymmetry.api.rocketry.components.MaterialCost;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
 
 public class ComponentInterstage extends AbstractComponent<ComponentInterstage> {
- public double radius;
+  public double radius;
 
   public ComponentInterstage() {
     super(
@@ -34,12 +35,10 @@ public class ComponentInterstage extends AbstractComponent<ComponentInterstage> 
 
   @Override
   public void writeToNBT(NBTTagCompound tag) {
-    tag.setString("name", this.name);
-    tag.setString("type", this.type);
+    super.writeToNBT(tag);
     tag.setDouble("mass", this.mass);
     tag.setDouble("radius", this.radius);
   }
-  
 
   @Override
   public Optional<ComponentInterstage> readFromNBT(NBTTagCompound compound) {
@@ -48,8 +47,13 @@ public class ComponentInterstage extends AbstractComponent<ComponentInterstage> 
       Optional.empty();
     if (!compound.hasKey("mass", NBT.TAG_DOUBLE)) Optional.empty();
     if (!compound.hasKey("radius", NBT.TAG_DOUBLE)) Optional.empty();
+    if (!compound.hasKey("materials", NBT.TAG_LIST)) return Optional.empty();
+    compound
+        .getTagList("materials", NBT.TAG_COMPOUND)
+        .forEach(x -> interstage.materials.add(MaterialCost.fromNBT((NBTTagCompound) x)));
+
     interstage.radius = compound.getDouble("radius");
-    interstage.mass= compound.getDouble("mass");
+    interstage.mass = compound.getDouble("mass");
     return Optional.of(interstage);
   }
 

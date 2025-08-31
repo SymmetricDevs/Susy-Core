@@ -3,6 +3,7 @@ package supersymmetry.api.rocketry.components;
 import static supersymmetry.common.blocks.SuSyBlocks.TANK_SHELL;
 
 import gregtech.api.block.VariantBlock;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -32,6 +33,7 @@ import supersymmetry.common.blocks.rocketry.BlockTurboPump;
 import supersymmetry.common.tile.TileEntityCoverable;
 
 public abstract class AbstractComponent<T extends AbstractComponent<T>> {
+
   private static final Set<AbstractComponent<?>> registry = new HashSet<>();
   private static boolean registrylock = false;
   private static final Map<String, Class<? extends AbstractComponent<?>>> nameToComponentRegistry =
@@ -63,10 +65,6 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
     return null;
   }
 
-  public String getLocalizationKey() {
-    return "susy.rocketry.components.name." + this.getName();
-  }
-
   @SuppressWarnings("unchecked")
   // probably fine because if you manage to put in an AbstractComponent<?> and it doesnt
   // extend from AbstractComponent<?> you deserved to get a crash
@@ -95,7 +93,7 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
     return new HashSet<>(registry);
   }
 
-  // TODO replace with something smarter....
+  // sort of works
   public static void writeBlocksToNBT(
       Set<BlockPos> blocks, World world, NBTTagCompound mutableTagCompound) {
     Map<String, Integer> counts = new HashMap<String, Integer>();
@@ -115,7 +113,7 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
                     + "#"
                     + teCoverable.getCoverType().getMetadata()
                     + "#cover"; // i am sorry for this
-            counts.put(key, counts.getOrDefault(key, 0) + 1);
+            counts.put(key, counts.getOrDefault(key, 0) + teCoverable.getCoverCount());
           }
         }
       }
@@ -123,20 +121,19 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
       counts.put(key, counts.getOrDefault(key, 0) + 1);
     }
 
-    NBTTagCompound root = new NBTTagCompound();
     NBTTagList list = new NBTTagList();
     for (Map.Entry<String, Integer> e : counts.entrySet()) {
       String[] p = e.getKey().split("#", 3);
-      NBTTagCompound c = new NBTTagCompound();
-      c.setString("registryName", p[0]);
-      c.setInteger("meta", Integer.parseInt(p[1]));
-      c.setString("type", p[2]);
-      c.setInteger("count", e.getValue());
-      list.appendTag(c);
+      // NBTTagCompound c = new NBTTagCompound();
+      // c.setString("registryName", p[0]);
+      // c.setInteger("meta", Integer.parseInt(p[1]));
+      // c.setString("type", p[2]);
+      // c.setInteger("count", e.getValue());
+      MaterialCost mat = new MaterialCost(p[0], p[2], Integer.parseInt(p[1]), e.getValue());
+      list.appendTag(mat.toNBT());
     }
 
-    root.setTag("blockCounts", list);
-    mutableTagCompound.setTag("structureInfo", root);
+    mutableTagCompound.setTag("materialCost", list);
   }
 
   public static double getMass(IBlockState state) {
@@ -206,6 +203,20 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
 
   protected double mass;
 
+  public List<MaterialCost> materials = new ArrayList<>();
+
+  public List<MaterialCost> getMaterials() {
+    return materials;
+  }
+
+  public double getAssemblyDuration() {
+    return 10f;
+  }
+
+  public void setMaterials(List<MaterialCost> materials) {
+    this.materials = materials;
+  }
+
   public AbstractComponent(
       String name,
       String type,
@@ -213,6 +224,10 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
     this.detectionPredicate = detectionPredicate;
     this.name = name;
     this.type = type;
+  }
+
+  public String getLocalizationKey() {
+    return "susy.rocketry.components.name." + this.getName();
   }
 
   public Predicate<String> getComponentSlotValidator() {
@@ -255,7 +270,15 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
   public abstract Optional<NBTTagCompound> analyzePattern(
       StructAnalysis analysis, AxisAlignedBB aabb);
 
-  public abstract void writeToNBT(NBTTagCompound tag);
+  public void writeToNBT(NBTTagCompound tag) {
+    tag.setString("name", this.getName());
+    tag.setString("type", this.getType());
+    NBTTagList list = new NBTTagList();
+    for (MaterialCost material : this.getMaterials()) {
+      list.appendTag(material.toNBT());
+    }
+    tag.setTag("materials", list);
+  }
 
   public abstract Optional<T> readFromNBT(NBTTagCompound compound);
 }
