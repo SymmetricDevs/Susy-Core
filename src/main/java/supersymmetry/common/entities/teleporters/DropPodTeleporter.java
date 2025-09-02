@@ -11,8 +11,9 @@ import supersymmetry.common.entities.EntityDropPod;
 public class DropPodTeleporter implements ITeleporter {
     @Override
     public void placeEntity(World world, Entity entity, float yaw) {
-        EntityDropPod dropPod = new EntityDropPod(entity.getEntityWorld(), entity.posX, entity.posY + 256, entity.posZ);
-        entity.getEntityWorld().spawnEntity(dropPod);
+        EntityDropPod dropPod = new EntityDropPod(world, entity.posX, entity.posY + 256, entity.posZ);
+        world.spawnEntity(dropPod);
         entity.startRiding(dropPod);
+        entity.motionY = -10;
     }
 }

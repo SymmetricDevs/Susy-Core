@@ -212,8 +212,6 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         return false;
     }
 
-
-
     @Override
     protected void updateFormedValid() {
         switch (this.state) {
@@ -332,6 +330,8 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     @Override
     public void writeInitialSyncData(PacketBuffer buf) {
         super.writeInitialSyncData(buf);
+        findRocket();
+        updateSelectedErector();
         buf.writeEnumValue(this.state);
     }
 

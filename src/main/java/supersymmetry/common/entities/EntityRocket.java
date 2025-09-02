@@ -262,10 +262,9 @@ public class EntityRocket extends Entity implements IAlwaysRender {
 
             List<Entity> collidingEntities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox());
 
-            if (!collidingEntities.isEmpty()) {
-                for (Entity entity : collidingEntities) {
+            for (Entity entity : collidingEntities) {
+                if (!entity.isRidingSameEntity(this))
                     entity.attackEntityFrom(DamageSource.FLY_INTO_WALL, (float) this.motionY * 10.f);
-                }
             }
         }
 /*

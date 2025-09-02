@@ -50,8 +50,6 @@ public class GravityHandler {
                 else if (entity instanceof EntityLivingBase && entity.isInWater() || entity.isInLava()) {
                     entity.motionY -= (gravMult * FLUID_LIVING_OFFSET - FLUID_LIVING_OFFSET);
                 } else if (entity instanceof EntityLivingBase)
-
-
                     entity.motionY -= (gravMult * LIVING_OFFSET - LIVING_OFFSET);
 
             }
