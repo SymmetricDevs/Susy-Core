@@ -235,7 +235,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
         }
 
         if (!world.isRemote) {
-            if (!this.onGround && this.motionY < 0.0D) {
+            if (!this.onGround && this.motionY < 0.0D && this.posY < 256) {
                 this.motionY *= 0.9D;
             }
 

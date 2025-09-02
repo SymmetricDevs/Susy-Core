@@ -2,27 +2,38 @@ package supersymmetry.common.entities;
 
 import cam72cam.immersiverailroading.entity.Freight;
 import cam72cam.mod.entity.Entity;
+import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.entity.sync.TagSync;
 import cam72cam.mod.serialization.TagField;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.Vec3d;
+import supersymmetry.client.renderer.handler.IAlwaysRender;
 import supersymmetry.integration.immersiverailroading.registry.TransporterErectorDefinition;
 
-public class EntityTransporterErector extends Freight {
-    @TagField("borerAngle")
+public class EntityTransporterErector extends Freight implements IAlwaysRender {
+    @TagField("isRocketLoaded")
     @TagSync
     private boolean isRocketLoaded;
     @TagField("lifterAngle")
     @TagSync
-    private float lifterAngle = (float) Math.PI/4;
+    private float lifterAngle = (float) 0;
     @TagField("liftingMode")
     @TagSync
     private LiftingMode liftingMode = LiftingMode.STOP;
+    @TagField("rocketNBT")
+    @TagSync
+    private NBTTagCompound rocketNBT;
 
     // In radians per tick
-    private double liftingSpeed = 0.087/20;
+    private double liftingSpeed = 0.087 / 20;
 
     public EntityTransporterErector() {
         this.setRocketLoaded(true);
+    }
+
+    @Override
+    public IBoundingBox getBounds() {
+        return super.getBounds();
     }
 
     @Override
@@ -60,6 +71,10 @@ public class EntityTransporterErector extends Freight {
         return false;
     }
 
+    public NBTTagCompound getRocketNBT() {
+        return rocketNBT;
+    }
+
     public float getLifterAngle() {
         return lifterAngle;
     }
@@ -68,19 +83,19 @@ public class EntityTransporterErector extends Freight {
     public void onTick() {
         super.onTick();
 
-        if(this.getCurrentSpeed().isZero()) {
+        if (this.getCurrentSpeed().isZero()) {
             switch (this.liftingMode) {
                 case UP:
-                    if (this.lifterAngle + liftingSpeed < Math.PI / 2){
+                    if (this.lifterAngle + liftingSpeed < Math.PI / 2) {
                         this.lifterAngle += liftingSpeed;
                     } else {
-                        this.lifterAngle = (float) Math.PI/2;
+                        this.lifterAngle = (float) Math.PI / 2;
                         this.setLiftingMode(LiftingMode.STOP);
-                        if(!this.getWorld().internal.isRemote) this.tryReleaseRocket();
+                        // if (!this.getWorld().internal.isRemote) this.tryReleaseRocket();
                     }
                     break;
                 case DOWN:
-                    if (this.lifterAngle - liftingSpeed >= 0){
+                    if (this.lifterAngle - liftingSpeed >= 0) {
                         this.lifterAngle -= liftingSpeed;
                     } else {
                         this.lifterAngle = (float) 0;
@@ -90,32 +105,14 @@ public class EntityTransporterErector extends Freight {
                 case STOP:
                     break;
             }
-
-        }
-
-        if (this.isRocketLoaded && this.internal.ticksExisted >= 0) {
-            this.setLiftingMode(LiftingMode.UP);
-        }
-
-        if (!this.isRocketLoaded && this.internal.ticksExisted >= 1000) {
-            this.setLiftingMode(LiftingMode.DOWN);
         }
     }
 
-    public void tryReleaseRocket() {
-        if (this.isRocketLoaded()) {
-            Vec3d offset = new Vec3d(0,-5.5, 11.8);
-            offset = offset.rotateYaw((float) (this.getRotationYaw() / 180. * Math.PI));
-            Vec3d position = this.getPosition().internal().add(offset);
-            EntityRocket rocket = new EntityRocket(this.getWorld().internal, position, this.getRotationYaw() + 45);
-            this.getWorld().internal.spawnEntity(rocket);
-            this.setRocketLoaded(false);
-        }
-    }
-
-    public enum LiftingMode{
+    public enum LiftingMode {
         UP,
         DOWN,
         STOP;
     }
+
+
 }

@@ -11,7 +11,9 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
+import org.reflections.Reflections;
 import supersymmetry.api.capability.SuSyCapabilities;
 import supersymmetry.api.metatileentity.MetaTileEntityGuiFactory;
 import supersymmetry.api.sound.SusySounds;
@@ -27,7 +29,11 @@ import supersymmetry.common.covers.SuSyCoverBehaviors;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
+import supersymmetry.common.tileentities.SuSyTileEntities;
+import supersymmetry.common.rocketry.SusyRocketComponents;
 import supersymmetry.loaders.SuSyIRLoader;
+
+import java.sql.Ref;
 
 @Mod(name = Supersymmetry.NAME, modid = Supersymmetry.MODID, version = Tags.VERSION, dependencies = GTInternalTags.DEP_VERSION_STRING + ";required-after:gcym;after:immersiverailroading")
 
@@ -42,6 +48,8 @@ public class Supersymmetry {
     @Mod.Instance(Supersymmetry.MODID)
     public static Supersymmetry instance;
 
+    public static Reflections reflectionHandler;
+
     @Mod.EventHandler
     public void onModConstruction(FMLConstructionEvent event) {
         //This is now a config option I think
@@ -54,11 +62,12 @@ public class Supersymmetry {
     }
 
 
-
     @Mod.EventHandler
     public void onPreInit(@NotNull FMLPreInitializationEvent event) {
 
         proxy.preLoad();
+
+        reflectionHandler = new Reflections("supersymmetry");
 
         SuSyMetaBlocks.init();
         SuSyMetaItems.initMetaItems();
@@ -70,6 +79,7 @@ public class Supersymmetry {
 
         SuSyMetaTileEntities.init();
         SuSyCapabilities.init();
+        SusyRocketComponents.init();
 
         SusyMetaEntities.init();
 
@@ -94,5 +104,11 @@ public class Supersymmetry {
         hordeCommand.addSubcommand(new CommandHordeStart());
         hordeCommand.addSubcommand(new CommandHordeStop());
         hordeCommand.addSubcommand(new CommandHordeStatus());
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Mod.EventHandler
+    public void registerRenderers(FMLPreInitializationEvent event) {
+        SuSyTileEntities.registerRenderers();
     }
 }
