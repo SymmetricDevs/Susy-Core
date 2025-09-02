@@ -110,7 +110,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             return;
         }
 
-        scanDuration = (blockList.size()+3)/2;
+        scanDuration = (int)(blockList.size()/(Math.pow(2,linkedCleanroom.getEnergyTier()-3)))+4; // 5 being the minimum value
         scannerLogic.setGoalTime(scanDuration);
 
         Set<BlockPos> blocksConnected = struct.getBlockConn(interior, blockList.get(0));
@@ -121,22 +121,15 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         }
         struct.status = BuildStat.SCANNING;
 
-        for (AbstractComponent<?> component : AbstractComponent.getRegistry()) 
+        for (AbstractComponent<?> component : AbstractComponent.getRegistry())
         {
-            SusyLog.logger.info("checking component {}",component.getName());
             if (component.getDetectionPredicate().test(new Tuple<StructAnalysis,List<BlockPos>>(struct, blockList))) {
-                SusyLog.logger.info("component {} passed", component.getName());
                 Optional<NBTTagCompound> scanResult = component.analyzePattern(struct, linkedCleanroom.getInteriorBB());
                 if (scanResult.isPresent()) {
-                    SusyLog.logger.info("scan successful, nbt popped out: {}",scanResult.get());
-
-                    getInventory().addToCompound(tag -> {return scanResult.get(); /*just replace it*/});
+                    getInventory().addToCompound(tag -> {NBTTagCompound t = scanResult.get(); component.writeToNBT(t);  return t ;/*just replace it*/});
 
                     break;
-                } else {
-                    SusyLog.logger.info("scan failed, reason: {}",struct.status); break;
                 }
-                
             }
         }
         //if (struct.status == BuildStat.SUCCESS) {struct.status = BuildStat.ERROR; /*if it wasnt changed after scanning, nothing matched*/ }

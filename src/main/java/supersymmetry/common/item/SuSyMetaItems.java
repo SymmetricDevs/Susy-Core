@@ -48,6 +48,7 @@ public class SuSyMetaItems {
     public static MetaValueItem RESTRICTIVE_FILTER;
     public static MetaValueItem TRACK_SEGMENT;
     public static MetaValueItem EARTH_ORBITAL_SCRAP;
+    public static MetaValueItem TUNGSTEN_ELECTRODE;
     public static MetaValueItem CODE_BREACHER;
     public static ArmorMetaItem<?>.ArmorMetaValueItem SIMPLE_GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_MASK;
@@ -144,6 +145,7 @@ public class SuSyMetaItems {
 
         DATA_CARD_MASTER_BLUEPRINT=initOneItem("datacard.master_blueprint").setMaxStackSize(1).addComponents(new dataCardBehavior(lines -> lines.add(I18n.format("metaitem.datacard.master_blueprint.tooltip.1")),Arrays.asList("rocketType")));
 
+        TUNGSTEN_ELECTRODE = initOneItem("tungsten_electrode");
     }
 
     // Ensures ID stability when merging

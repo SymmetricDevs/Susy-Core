@@ -18,6 +18,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Loader;
+import scala.reflect.internal.Trees.Return;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
@@ -74,6 +76,7 @@ public class SuSyPredicates {
     );
 
     private static final Supplier<TraceabilityPredicate> RAILS = () -> new TraceabilityPredicate(blockWorldState -> {
+        //TODO remove this, i just dont like rails
         if (!Loader.isModLoaded(SuSyValues.MODID_IMMERSIVERAILROADING)) return true;
 
         IBlockState state = blockWorldState.getBlockState();
