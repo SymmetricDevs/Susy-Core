@@ -46,8 +46,11 @@ public class MetaTileEntityPolymerizationTank extends RecipeMapMultiblockControl
                 .where('S', this.selfPredicate())
                 .where('F', frames(Materials.Steel))
                 .where('P', states(getPipeCasingState()))
-                .where('X', states(getCasingState()).setMinGlobalLimited(18)
-                        .or(this.autoAbilities(true, true, true, true, true, true, false)))
+                .where('X', states(getCasingState()).setMinGlobalLimited(20)
+                        .or(this.autoAbilities(true, true, false, false, false, false, false))
+                        .or(this.autoAbilities(false, false, false, false, true, false, false).setMaxGlobalLimited(3))
+                        .or(this.autoAbilities(false, false, false, false, false, true, false).setMaxGlobalLimited(2))
+                        .or(this.autoAbilities(false, false, true, true, false, false, false).setMaxGlobalLimited(1)))
                 .build();
     }
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
