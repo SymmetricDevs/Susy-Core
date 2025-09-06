@@ -1,6 +1,7 @@
 package supersymmetry.api.space;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 
 public class CelestialObject {
 
@@ -12,6 +13,8 @@ public class CelestialObject {
 
     private CelestialObject parentBody;
     private CelestialBodyType celestialBodyType;
+
+    private ArrayList<CelestialObject> childBodies;
 
     public CelestialObject(double mass, double posT, double posX, double posY, double posZ, @Nullable CelestialObject parentBody, CelestialBodyType celestialBodyType) {
         this.mass = mass;
@@ -51,4 +54,13 @@ public class CelestialObject {
     public CelestialBodyType getCelestialBodyType() {
         return celestialBodyType;
     }
+
+    public void addChildBody(CelestialObject body) {
+        childBodies.add(body);
+    }
+
+    public ArrayList<CelestialObject> getChildBodies() {
+        return childBodies;
+    }
+
 }
