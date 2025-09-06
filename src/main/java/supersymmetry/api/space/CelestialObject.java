@@ -24,6 +24,10 @@ public class CelestialObject {
         this.posZ = posZ;
         this.parentBody = parentBody;
         this.celestialBodyType = celestialBodyType;
+
+        if (parentBody != null) {
+            parentBody.addChildBody(this);
+        }
     }
 
     double getMass() {
