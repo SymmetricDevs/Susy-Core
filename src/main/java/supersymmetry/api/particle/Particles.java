@@ -17,7 +17,7 @@ public class Particles {
 
     public static Particle positron;
 
-    public void init() {
+    public static void init() {
 
         electron = new Particle("electron", 0.511, -1, 0.5, 0., false, true, susyId("particles/electron.png"));
 

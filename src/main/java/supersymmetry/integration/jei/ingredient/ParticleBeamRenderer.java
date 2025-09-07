@@ -89,7 +89,7 @@ public class ParticleBeamRenderer implements IIngredientRenderer<ParticleBeam> {
         bufferBuilder.pos(posX, posY + width, zLevel).tex(uMin, vMax).endVertex();
         bufferBuilder.pos(posX + width, posY + width, zLevel).tex(uMax, vMax).endVertex();
         bufferBuilder.pos(posX + width, posY, zLevel).tex(uMax, vMin).endVertex();
-        bufferBuilder.pos(posX, posY + width, zLevel).tex(uMin, vMin).endVertex();
+        bufferBuilder.pos(posX, posY, zLevel).tex(uMin, vMin).endVertex();
         tessellator.draw();
     }
 
