@@ -1193,6 +1193,9 @@ susy.particlebeam.energy=Energy
 susy.particlebeam.bunch.spacing=Bunch Spacing
 susy.particlebeam.bunch.length=Bunch Length
 susy.particlebeam.nbunches=Total Bunches
+susy.particlebeam.nparticles=Particles per bunch
+susy.particlebeam.emittance=Beam Emittance
+susy.particlebeam.beamsize=Beam Section
 
 #Particles
 susy.particle.electron.name=Electron

@@ -103,6 +103,9 @@ public class ParticleBeamRenderer implements IIngredientRenderer<ParticleBeam> {
         list.add(TextFormatting.BLUE + I18n.format("susy.particlebeam.bunch.spacing") + TextFormatting.WHITE + ": " + ParticlePhysicsUtils.getSIFormat(ingredient.getBunchSpacing(), -9, "s"));
         list.add(TextFormatting.GREEN + I18n.format("susy.particlebeam.bunch.length") + TextFormatting.WHITE + ": " + ParticlePhysicsUtils.getSIFormat(ingredient.getBunchLength(), -2, "m"));
         list.add(TextFormatting.YELLOW + I18n.format("susy.particlebeam.nbunches") + TextFormatting.WHITE + ": " + String.valueOf(ingredient.getNBunches()));
+        list.add(TextFormatting.LIGHT_PURPLE + I18n.format("susy.particlebeam.nparticles") + TextFormatting.WHITE + ": " + String.valueOf(ingredient.getNParticlesPerBunch()));
+        list.add(TextFormatting.AQUA + I18n.format("susy.particlebeam.emittance") + TextFormatting.WHITE + ": " + String.valueOf(ingredient.getEmittance()) + " um rad");
+        list.add(TextFormatting.GOLD + I18n.format("susy.particlebeam.beamsize") + TextFormatting.WHITE + ": " + String.valueOf(ingredient.getBeamSize()) + " um");
         return list;
     }
 }

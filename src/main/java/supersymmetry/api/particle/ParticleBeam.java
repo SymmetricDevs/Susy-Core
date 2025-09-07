@@ -21,7 +21,7 @@ public class ParticleBeam {
      * @param nBunches Number of bunches in the beam
      * @param nParticlesPerBunch Number of particles in each bunch
      * @param emittance Emittance of the beam
-     * @param beamSize Transversal cross-section of the beam
+     * @param beamSize Transversal cross-section of the beam in micrometers
      */
     public ParticleBeam(Particle particle, double energy, double bunchSpacing, double bunchLength, int nBunches, int nParticlesPerBunch, double emittance, double beamSize) {
         this.particle = particle;
