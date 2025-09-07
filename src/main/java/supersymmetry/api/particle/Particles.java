@@ -2,7 +2,6 @@ package supersymmetry.api.particle;
 
 import net.minecraft.util.ResourceLocation;
 import supersymmetry.api.SusyLog;
-import supersymmetry.api.util.SuSyUtility;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
