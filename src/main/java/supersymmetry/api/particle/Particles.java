@@ -1,9 +1,13 @@
 package supersymmetry.api.particle;
 
+import net.minecraft.util.ResourceLocation;
 import supersymmetry.api.SusyLog;
+import supersymmetry.api.util.SuSyUtility;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static supersymmetry.api.util.SuSyUtility.susyId;
 
 public class Particles {
 
@@ -15,9 +19,9 @@ public class Particles {
 
     public void init() {
 
-        electron = new Particle("electron", 0.511, -1, 0.5, 0., false, true);
+        electron = new Particle("electron", 0.511, -1, 0.5, 0., false, true, susyId("particles/electron.png"));
 
-        positron = new Particle("positron", 0.511, 1, 0.5, 0., false, true);
+        positron = new Particle("positron", 0.511, 1, 0.5, 0., false, true, susyId("particles/positron.png"));
 
         electron.setAntiParticle(positron);
 

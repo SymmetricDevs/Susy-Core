@@ -24,6 +24,10 @@ public class ParticleBeam {
         this.beamSize = beamSize;
     }
 
+    public ParticleBeam copy() {
+        return new ParticleBeam(particle, energy, bunchSpacing, bunchLength, nBunches, nParticlesPerBunch, emittance, beamSize);
+    }
+
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         if (particle != null) {
             data.setString("particle", particle.getName());

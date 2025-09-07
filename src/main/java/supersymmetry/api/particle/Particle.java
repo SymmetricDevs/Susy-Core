@@ -1,5 +1,8 @@
 package supersymmetry.api.particle;
 
+import net.minecraft.util.ResourceLocation;
+import supersymmetry.Supersymmetry;
+
 import java.util.HashMap;
 
 public class Particle {
@@ -13,7 +16,8 @@ public class Particle {
     private final boolean weakInt; //Thou shall be saved from having to learn weak hypercharge and weak isospin, for I am merciful
     private Particle antiParticle = this;
     private HashMap<Particle, Integer> components = new HashMap<Particle, Integer>();
-    public Particle(String name, double mass, double charge, double spin, double width, boolean coloured, boolean weakInt) {
+    private final ResourceLocation texture;
+    public Particle(String name, double mass, double charge, double spin, double width, boolean coloured, boolean weakInt, ResourceLocation texture) {
         this.name = name;
         this.mass = mass;
         this.charge = charge;
@@ -21,6 +25,7 @@ public class Particle {
         this.width = width;
         this.coloured = coloured;
         this.weakInt = weakInt;
+        this.texture = texture;
     }
 
     public String getName() {
@@ -93,6 +98,14 @@ public class Particle {
 
     public  HashMap<Particle, Integer> getComponents() {
         return components;
+    }
+
+    public String getUnlocalizedName() {
+        return Supersymmetry.MODID + ".particle." + name + ".name";
+    }
+
+    public ResourceLocation getTexture() {
+        return texture;
     }
 
 }
