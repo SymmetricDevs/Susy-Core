@@ -3,6 +3,7 @@ package supersymmetry.api.particle;
 public interface IParticleBeamProvider {
 
     ParticleBeam getParticleBeam();
-    ParticleBeam takeParticleBeam();
+
+    ParticleBeam insertBeam(ParticleBeam beam);
 
 }
