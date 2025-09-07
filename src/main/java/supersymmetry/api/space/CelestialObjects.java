@@ -3,20 +3,20 @@ package supersymmetry.api.space;
 public class CelestialObjects {
 
     //Galaxies
-    public Galaxy MILKY_WAY;
+    public static Galaxy MILKY_WAY;
 
     //Star clusters
 
 
     //Star systems
-    public StarSystem SOLAR_SYSTEM;
+    public static StarSystem SOLAR_SYSTEM;
 
     //Stars
-    public Star SUN;
+    public static Star SUN;
 
     //Planetoids
-    public Planetoid EARTH;
-    public Planetoid MOON;
+    public static Planetoid EARTH;
+    public static Planetoid MOON;
 
     public void init() {
 
