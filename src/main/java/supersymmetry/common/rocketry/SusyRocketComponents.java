@@ -1,6 +1,7 @@
 package supersymmetry.common.rocketry;
 
 import net.minecraft.util.ResourceLocation;
+import software.bernie.shadowed.eliotlash.mclib.math.functions.classic.Abs;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
@@ -16,9 +17,9 @@ public class SusyRocketComponents {
     AbstractComponent.registerComponent(new ComponentFairing());
     AbstractComponent.registerComponent(new ComponentControlPod());
     AbstractComponent.registerComponent(new ComponentLavalEngine());
-    AbstractComponent.registerComponent(new ComponentFairing());
     AbstractComponent.registerComponent(new ComponentInterstage());
     AbstractComponent.registerComponent(new ComponentSpacecraft());
+    AbstractComponent.registerComponent(new ComponentLiquidFuelTank());
     AbstractComponent.lockRegistry();
     // TODO add the emergency escape system
     ROCKET_SOYUZ_BLUEPRINT_DEFAULT =

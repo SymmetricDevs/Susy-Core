@@ -5,6 +5,8 @@ import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
 import java.util.*;
 import java.util.Optional;
 import java.util.function.Predicate;
+
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Tuple;
@@ -79,12 +81,15 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
 
     Set<BlockPos> hullBlocks = hullData.getFirst();
     Set<BlockPos> interiorAir = hullData.getSecond();
-    Predicate<BlockPos> fuelTankDetect =
-        bp -> analysis.world.getBlockState(bp).getBlock().equals(SuSyBlocks.COMBUSTION_CHAMBER);
-    ;
+
+    Predicate<BlockPos> fuelPredicate = (block) ->
+    {
+            Block b = analysis.world.getBlockState(block).getBlock();
+            return b.equals(SuSyBlocks.TANK_SHELL) || b.equals(SuSyBlocks.TANK_SHELL1);
+      };
 
     for (BlockPos block : hullBlocks) {
-      if (!fuelTankDetect.test(block)) {
+      if (!fuelPredicate.test(block)) {
         analysis.status = BuildStat.HULL_WEAK;
         return Optional.empty();
       }
