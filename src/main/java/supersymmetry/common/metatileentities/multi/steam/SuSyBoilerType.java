@@ -22,7 +22,7 @@ public enum SuSyBoilerType {
             Textures.BRONZE_FIREBOX_ACTIVE,
             Textures.LARGE_BRONZE_BOILER),
 
-    STEEL(3072, 1800, 1.5,
+    STEEL(3072, 1800, 1,
             METAL_CASING.getState(STEEL_SOLID),
             BOILER_FIREBOX_CASING.getState(STEEL_FIREBOX),
             BOILER_CASING.getState(STEEL_PIPE),

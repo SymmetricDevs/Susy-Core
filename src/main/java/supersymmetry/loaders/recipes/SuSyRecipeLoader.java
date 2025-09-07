@@ -1,10 +1,14 @@
 package supersymmetry.loaders.recipes;
 
 import gregtech.api.recipes.ModHandler;
+import gregtech.api.recipes.Recipe;
+import gregtech.api.recipes.RecipeMap;
+import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.recipes.category.RecipeCategories;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
 import net.minecraft.item.ItemStack;
+import supersymmetry.SusyConfig;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
 import supersymmetry.loaders.SuSyMetaTileEntityLoader;
@@ -16,7 +20,9 @@ import java.util.stream.Collectors;
 
 import static gregtech.api.recipes.RecipeMaps.*;
 import static gregtech.api.unification.ore.OrePrefix.*;
+import static gregtech.common.blocks.MetaBlocks.LD_ITEM_PIPE;
 import static gregtech.common.items.MetaItems.SHAPE_EXTRUDER_BLOCK;
+import static gregtech.common.metatileentities.MetaTileEntities.LONG_DIST_ITEM_ENDPOINT;
 
 public class SuSyRecipeLoader {
 
@@ -28,6 +34,7 @@ public class SuSyRecipeLoader {
         SusyOreRecipeHandler.init();
         SuSyMaterialRecipeHandler.init();
         registerStoneRecipes();
+        removeLongDistanceItemPipeRecipes();
 
         //GTRecipeHandler.removeAllRecipes(ELECTROLYZER_RECIPES);
 
@@ -67,6 +74,20 @@ public class SuSyRecipeLoader {
                 .EUt(2)
                 .buildAndRegister();
         */
+    }
+
+    private static void removeLongDistanceItemPipeRecipes() {
+        if (SusyConfig.disableLdItemPipes) {
+            ItemStack ldItemPipe = new ItemStack(LD_ITEM_PIPE);
+            ItemStack ldItemEndpoint = LONG_DIST_ITEM_ENDPOINT.getStackForm();
+            for (Recipe recipe : ASSEMBLER_RECIPES.getRecipeList()) {
+                ItemStack output = recipe.getOutputs().get(0);
+                if (output.isItemEqual(ldItemPipe) ||
+                        output.isItemEqual(ldItemEndpoint)) {
+                    ASSEMBLER_RECIPES.removeRecipe(recipe);
+                }
+            }
+        }
     }
 
     private static void registerStoneRecipes(){

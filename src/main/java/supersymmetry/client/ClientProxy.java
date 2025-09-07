@@ -1,10 +1,12 @@
 package supersymmetry.client;
 
+import dev.tianmi.sussypatches.common.SusConfig;
 import gregtech.api.GTValues;
 import gregtech.api.items.metaitem.MetaOreDictItem;
 import gregtech.api.items.toolitem.IGTTool;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.stack.UnificationEntry;
+import gregtech.api.util.Mods;
 import gregtech.api.util.input.KeyBind;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
@@ -30,6 +32,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -41,6 +44,7 @@ import supersymmetry.SuSyValues;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
+import supersymmetry.client.renderer.textures.SuSyConnectedTextures;
 import supersymmetry.api.util.BlockRenderManager;
 import supersymmetry.client.renderer.handler.VariantCoverableBlockRenderer;
 import supersymmetry.common.CommonProxy;
@@ -67,6 +71,7 @@ public class ClientProxy extends CommonProxy {
     public static int titleRenderTimer = -1;
     private static final int TITLE_RENDER_LENGTH = 150;
 
+    @Override
     public void preLoad() {
         super.preLoad();
         SusyMetaEntities.initRenderers();
@@ -79,6 +84,16 @@ public class ClientProxy extends CommonProxy {
         super.load();
         SuSyMetaBlocks.registerColors();
         SuSyFluidTooltipLoader.registerTooltips();
+    }
+
+    @Override
+    public void postLoad() {
+        super.postLoad();
+        if (Loader.isModLoaded("sussypatches")
+                && Mods.CTM.isModLoaded()
+                && SusConfig.FEAT.multiCTM) {
+            SuSyConnectedTextures.init();
+        }
     }
 
     @SubscribeEvent

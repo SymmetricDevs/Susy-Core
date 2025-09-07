@@ -1,21 +1,16 @@
 package supersymmetry;
 
-import com.cleanroommc.modularui.factory.GuiManager;
 import gregtech.GTInternalTags;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLConstructionEvent;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
 import supersymmetry.api.capability.SuSyCapabilities;
-import supersymmetry.api.metatileentity.MetaTileEntityGuiFactory;
 import supersymmetry.api.sound.SusySounds;
 import supersymmetry.common.CommonProxy;
 import supersymmetry.common.SusyMetaEntities;
@@ -75,8 +70,6 @@ public class Supersymmetry {
 
         SusySounds.registerSounds();
 
-        GuiManager.registerFactory(MetaTileEntityGuiFactory.INSTANCE);
-
         SuSyMetaTileEntities.init();
         SuSyCapabilities.init();
         SusyRocketComponents.init();
@@ -94,6 +87,11 @@ public class Supersymmetry {
     public void onInit(@NotNull FMLInitializationEvent event) {
         proxy.load();
         SuSyCoverBehaviors.init();
+    }
+
+    @Mod.EventHandler
+    public void onPostInit(@NotNull FMLPostInitializationEvent event) {
+        proxy.postLoad();
     }
 
     @Mod.EventHandler

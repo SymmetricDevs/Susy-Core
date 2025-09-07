@@ -102,22 +102,22 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer BALL_MILL_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/ball_mill");
 
 
-    public static final SimpleOverlayRenderer SILICON_CARBIDE_CASING = new SimpleOverlayRenderer("multiblock_casing/silicon_carbide_casing");
-    public static final SimpleOverlayRenderer MONEL_500_CASING = new SimpleOverlayRenderer("multiblock_casing/monel_500_casing");
-    public static final SimpleOverlayRenderer CONDUCTIVE_COPPER_PIPE = new SimpleOverlayRenderer("multiblock_casing/copper_casing_pipe");
-
-    public static final SimpleOverlayRenderer ULV_STRUCTURAL_CASING = new SimpleOverlayRenderer("multiblock_casing/ulv_structural_casing");
     public static final SimpleOverlayRenderer SLAG_HOT = new SimpleOverlayRenderer("resource/slag_hot");
     public static final SimpleOverlayRenderer RESTRICTIVE_FILTER_FILTER_OVERLAY = new SimpleOverlayRenderer("cover/overlay_restrictive_filter");
-    public static final SimpleOverlayRenderer STRAND_BUS_OVERLAY =
-            new SimpleOverlayRenderer("logistics/overlay_strand_bus");
-
-    public static final SimpleOverlayRenderer CODE_BREACHER_OVERLAY =
-            new SimpleOverlayRenderer("storage/crates/code_breacher");
+    public static final SimpleOverlayRenderer STRAND_BUS_OVERLAY = new SimpleOverlayRenderer("logistics/overlay_strand_bus");
+    public static final SimpleOverlayRenderer CODE_BREACHER_OVERLAY = new SimpleOverlayRenderer("storage/crates/code_breacher");
 
     public static final SimpleCubeRenderer MASONRY_BRICK = new SimpleCubeRenderer("gregtech:blocks/multiblock_casing/masonry_brick");
     public static final SimpleCubeRenderer BALL_MILL_SHELL =
             new SimpleCubeRenderer("gregtech:blocks/casings/grinder_casing/wear_resistant_lined_mill_shell");
+    public static final SimpleCubeRenderer SILICON_CARBIDE_CASING = new SimpleCubeRenderer("gregtech:blocks/multiblock_casing/silicon_carbide_casing");
+    public static final SimpleCubeRenderer MONEL_500_CASING = new SimpleCubeRenderer("gregtech:blocks/multiblock_casing/monel_500_casing");
+    public static final SimpleCubeRenderer CONDUCTIVE_COPPER_PIPE = new SimpleCubeRenderer("gregtech:blocks/multiblock_casing/copper_casing_pipe");
+    public static final SimpleCubeRenderer ULV_STRUCTURAL_CASING = new SimpleCubeRenderer("gregtech:blocks/multiblock_casing/ulv_structural_casing");
+    public static final SimpleCubeRenderer STEEL_TURBINE_CASING =
+            new SimpleCubeRenderer("gregtech:blocks/casings/mechanic/machine_casing_turbine_steel");
+    public static final SimpleCubeRenderer TITANIUM_TURBINE_CASING =
+            new SimpleCubeRenderer("gregtech:blocks/casings/mechanic/machine_casing_turbine_titanium");
 
     public static final DrumRenderer PLASTIC_CAN = new DrumRenderer("storage/drums/plastic_can");
 

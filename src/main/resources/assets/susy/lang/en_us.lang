@@ -91,7 +91,7 @@ tile.resource_block.bauxite.name=Bauxite Ore
 tile.resource_block.caliche.name=Caliche
 tile.resource_block.non_marine_evaporite.name=Non Marine Evaporite Deposit
 tile.resource_block.halide_evaporite.name=Halide Evaporite Deposit
-tile.resource_block.sulfate_evaporite.name=Sulfate Evaporite
+tile.resource_block.sulfate_evaporite.name=Sulfate Evaporite Deposit
 tile.resource_block.carbonate_evaporite.name=Carbonate Evaporite Deposit
 tile.resource_block.monazite_alluvial.name=Alluvial Monazite Deposit
 tile.resource_block.bastnasite_alluvial.name=Alluvial Bastnasite Deposit
@@ -195,6 +195,7 @@ susy.material.latex=Latex
 susy.material.mud=Mud
 susy.material.sea_water=Sea Water
 susy.material.refractory_gunning_mixture=Refractory Gunning Mixture
+susy.material.preheated_air=Preheated Air
 
 # Rock/Mineral Materials
 susy.material.fluorite=Fluorite
@@ -408,9 +409,9 @@ susy.machine.metallurgical_converter.name=Metallurgical Converter
 susy.machine.injection_molder.name=Injection Molder
 
 susy.machine.primitive_item_import.name=Primitive Item Import Bus
-susy.machine.primitive_item_import.tooltip=Only for use with the Primitive Smelter
+susy.machine.primitive_item_import.tooltip=Not a substitute for ULV
 susy.machine.primitive_item_export.name=Primitive Item Export Bus
-susy.machine.primitive_item_export.tooltip=Only for use with the Primitive Smelter
+susy.machine.primitive_item_export.tooltip=Not a substitute for ULV
 susy.machine.mixer_settler.name=Mixer Settler
 susy.machine.mixer_settler.tooltip=First it mixes, then it settles... - Sun Tzu, The Art of SuSy
 susy.machine.mixer_settler.tooltip.1=The initial structure contains 2 cells, each expansion adds 2 more
@@ -904,6 +905,7 @@ recipemap.mixer_settler.name=Mixer-Settler
 recipemap.eccentric_roll_crusher.name=Eccentric Roll Crushing
 recipemap.injection_molder=Injection Molding
 recipemap.boiler.name=Solid Boiler Fuels
+recipemap.fuel_cell.name=Solid Oxide Fuel Cell (SOFC)
 
 susy.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 
@@ -1127,9 +1129,24 @@ susy.fluid.voiding.flammable=Voidable with Flare Stack
 # Quarry Modes
 susy.multiblock.quarry.excavation_mode=Excavation Mode
 susy.multiblock.quarry.recipe_mode=Recipe Mode
+susy.machine.quarry.tooltip.info=Max square of %1$sx%1$s, minimum %2$sx%2$s. Hold shift for more details.
+susy.machine.quarry.tooltip.structure_info=Quarries can be formed with any odd dimensions ranging from %2$sx%2$s to %1$sx%1$s, even if it is non-square. Extend the bottom layer of concrete blocks on the corners, so a 23-wide quarry will have 9 concrete per side, and 5 inside blocks.
 
 death.attack.toxic_atmo=%s's lungs were shredded
 death.attack.suffocation=%s couldn't breathe
+death.attack.pressure=%s got squeezed
+death.attack.depressurization=%s died from an embolism
+death.attack.impact=%s experienced terminal deceleration
+death.attack.vaporization=%s stopped being biology and started being physics
+death.attack.alpha_radiation=%s ingested something too spicy
+death.attack.beta_radiation=%s had their chromosomes shredded
+death.attack.neutron_radiation=%s was spiced up by neutrons
+death.attack.uv_radiation=%s forgot to apply sunscreen
+death.attack.x_radiation=%s got a non-consensual radiography
+death.attack.gamma_radiation=%s died from internal sunburns
+death.attack.spaghettification=%s was spaghettified
+death.attack.age=%s died of old age
+death.attack.chronoerasure=%s never existed
 death.attack.crusher=%s was ground into a pulp
 
 metaitem.simple_gas_mask.name=Primitive Gas Mask
