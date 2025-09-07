@@ -68,6 +68,11 @@ public class Particles {
         return antiParticle;
     }
 
+    /**
+     * @param particle The particle you want the antiparticle of, must be a composite particle, fundamental antiparticles must be generated manually
+     * @param location Texture location
+     * @return The desired antiparticle
+     */
     @Nullable
     public static Particle makeAntiParticle(Particle particle, ResourceLocation location) {
         return makeAntiParticle(particle, "anti" + particle.getName(), location);
