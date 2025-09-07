@@ -13,6 +13,16 @@ public class ParticleBeam {
     private double emittance;
     private double beamSize;
 
+    /**
+     * @param particle Particles in the beam
+     * @param energy The mean energy of the beam in MeV
+     * @param bunchSpacing Distance in nanoseconds between particle bunches
+     * @param bunchLength The length of a particle bunch in the lab frame
+     * @param nBunches Number of bunches in the beam
+     * @param nParticlesPerBunch Number of particles in each bunch
+     * @param emittance Emittance of the beam
+     * @param beamSize Transversal cross-section of the beam
+     */
     public ParticleBeam(Particle particle, double energy, double bunchSpacing, double bunchLength, int nBunches, int nParticlesPerBunch, double emittance, double beamSize) {
         this.particle = particle;
         this.energy = energy;

@@ -17,6 +17,17 @@ public class Particle {
     private Particle antiParticle = this;
     private HashMap<Particle, Integer> components = new HashMap<Particle, Integer>();
     private final ResourceLocation texture;
+
+    /**
+     * @param name Name of the particle
+     * @param mass Mass of the particle in MeV/c^2
+     * @param charge Electric charge of the particle as multiples of the charge of the proton
+     * @param spin Spin of the particle in units of hbar, for more information on what spin is please complete a undergrad quantum mechanics course
+     * @param width Mass width of the particle, this controls the mean lifetime, stable particles have a width of zero
+     * @param coloured Whether the particle has colour charge or not
+     * @param weakInt Whether the particle will have weak interactions or not
+     * @param texture Texture location
+     */
     public Particle(String name, double mass, double charge, double spin, double width, boolean coloured, boolean weakInt, ResourceLocation texture) {
         this.name = name;
         this.mass = mass;
@@ -70,6 +81,10 @@ public class Particle {
     public void setAntiParticle(Particle particle) {
         this.antiParticle = particle;
         particle.antiParticle = this;
+    }
+
+    public Particle getAntiParticle() {
+        return antiParticle;
     }
 
     public boolean isFundamental() {
