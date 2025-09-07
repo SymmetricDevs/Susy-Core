@@ -1187,3 +1187,13 @@ tile.fake_wool.brownfakewool.name=Brown Asbestos Fiber
 tile.fake_wool.greenfakewool.name=Green Asbestos Fiber
 tile.fake_wool.redfakewool.name=Red Asbestos Fiber
 tile.fake_wool.blackfakewool.name=Black Asbestos Fiber
+
+#Particle physics stuff
+susy.particlebeam.energy=Energy
+susy.particlebeam.bunch.spacing=Bunch Spacing
+susy.particlebeam.bunch.length=Bunch Length
+susy.particlebeam.nbunches=Total Bunches
+
+#Particles
+susy.particle.electron.name=Electron
+susy.particle.positron.name=Positron
