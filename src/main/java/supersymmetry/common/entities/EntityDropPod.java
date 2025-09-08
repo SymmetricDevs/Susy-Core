@@ -236,7 +236,8 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
 
         if (!world.isRemote) {
             if (!this.onGround && this.motionY < 0.0D && this.posY < 256) {
-                this.motionY *= 0.9D;
+                // Lerp between motionY and 0.5 at 10%
+                this.motionY = MathHelper.clampedLerp(this.motionY, -0.5F, 0.1D);
             }
 
             if (!this.hasLanded()) {

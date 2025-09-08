@@ -44,6 +44,7 @@ public class EntityRocket extends Entity implements IAlwaysRender {
     private static final DataParameter<Integer> FLIGHT_TIME = EntityDataManager.<Integer>createKey(EntityRocket.class, DataSerializers.VARINT);
 
     private static final DataParameter<Float> START_POS = EntityDataManager.<Float>createKey(EntityRocket.class, DataSerializers.FLOAT);
+    private static final DataParameter<Boolean> ACTED = EntityDataManager.<Boolean>createKey(EntityRocket.class, DataSerializers.BOOLEAN);
 
     @SideOnly(Side.CLIENT)
     private MovingSoundRocket soundRocket;
@@ -77,6 +78,7 @@ public class EntityRocket extends Entity implements IAlwaysRender {
         this.dataManager.register(LAUNCH_TIME, 0);
         this.dataManager.register(FLIGHT_TIME, 0);
         this.dataManager.register(START_POS, 0.F);
+        this.dataManager.register(ACTED, false);
     }
 
     public boolean isLaunched() {
@@ -101,6 +103,14 @@ public class EntityRocket extends Entity implements IAlwaysRender {
 
     public void setAge(Integer age) {
         this.dataManager.set(AGE, age);
+    }
+
+    public boolean hasActed() {
+        return this.dataManager.get(ACTED);
+    }
+
+    public void setActed(boolean acted) {
+        this.dataManager.set(ACTED, acted);
     }
 
     public int getFlightTime() {
@@ -135,6 +145,7 @@ public class EntityRocket extends Entity implements IAlwaysRender {
 
     public void launchRocket() {
         this.setLaunched(true);
+        this.setActed(false);
         if (world.isRemote) {
             setupRocketSound();
             soundRocket.startPlaying();
@@ -162,6 +173,7 @@ public class EntityRocket extends Entity implements IAlwaysRender {
         this.setLaunched(compound.getBoolean("Launched"));
         this.setCountdownStarted(compound.getBoolean("CountdownStarted"));
         this.setAge(compound.getInteger("Age"));
+        this.setActed(compound.getBoolean("Acted"));
         this.setLaunchTime(compound.getInteger("LaunchTime"));
         this.setFlightTime(compound.getInteger("FlightTime"));
         this.setStartPos(compound.getFloat("StartPos"));
@@ -172,6 +184,7 @@ public class EntityRocket extends Entity implements IAlwaysRender {
         compound.setBoolean("Launched", this.isLaunched());
         compound.setBoolean("CountdownStarted", this.isCountDownStarted());
         compound.setInteger("Age", this.getAge());
+        compound.setBoolean("Acted", this.hasActed());
         compound.setInteger("LaunchTime", this.getLaunchTime());
         compound.setInteger("FlightTime", this.getFlightTime());
         compound.setFloat("StartPos", this.getStartPos());
@@ -252,8 +265,12 @@ public class EntityRocket extends Entity implements IAlwaysRender {
             }
 
             if (this.posY > 600) {
-                act();
-                this.setDead();
+                if (this.hasActed()) {
+                    this.setDead();
+                } else {
+                    act();
+                    this.setActed(true);
+                }
             }
 
             if (this.world.collidesWithAnyBlock(this.getEntityBoundingBox())) {
