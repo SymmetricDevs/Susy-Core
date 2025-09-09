@@ -5,6 +5,7 @@ import gregtech.api.util.GTTeleporter;
 import gregtech.api.util.TeleportHandler;
 import gregtech.common.items.MetaItems;
 import gregtechfoodoption.item.GTFOMetaItem;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.entity.Entity;
@@ -25,19 +26,26 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.Supersymmetry;
 import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
+import supersymmetry.common.event.DimensionRidingSwapData;
 import supersymmetry.common.event.MobHordeWorldData;
 import supersymmetry.common.item.SuSyArmorItem;
 import supersymmetry.common.network.SPacketFirstJoin;
 import supersymmetry.common.world.WorldProviderPlanet;
-import supersymmetry.loaders.SuSyWorldLoader;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class EventHandlers {
 
     public static final String FIRST_SPAWN = Supersymmetry.MODID + ".first_spawn";
+    public static List<DimensionRidingSwapData> travellingPassengers = new ArrayList<>();
+
 
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
@@ -83,8 +91,11 @@ public class EventHandlers {
     public static void onWorldTick(TickEvent.WorldTickEvent event) {
         World world = event.world;
 
-        if (world.isRemote) {
+        if (world.isRemote || !(world instanceof WorldServer server)) {
             return;
+        }
+        if (!travellingPassengers.isEmpty()) {
+            handleEntityTransfer();
         }
         if (event.phase != TickEvent.Phase.END) {
             return;
@@ -96,11 +107,37 @@ public class EventHandlers {
             return;
         }
 
-        if (world instanceof WorldServer server) {
-            PlayerList list = server.getMinecraftServer().getPlayerList();
-            MobHordeWorldData mobHordeWorldData = MobHordeWorldData.get(world);
-            list.getPlayers().forEach(p -> mobHordeWorldData.getPlayerData(p.getPersistentID()).update(p));
-            mobHordeWorldData.markDirty();
+        PlayerList list = server.getMinecraftServer().getPlayerList();
+        MobHordeWorldData mobHordeWorldData = MobHordeWorldData.get(world);
+        list.getPlayers().forEach(p -> mobHordeWorldData.getPlayerData(p.getPersistentID()).update(p));
+        mobHordeWorldData.markDirty();
+    }
+
+    private static @NotNull void handleEntityTransfer() {
+        List<Entity> toRemove = new ArrayList<>();
+        for (DimensionRidingSwapData data : travellingPassengers) {
+            Entity mount = data.mount;
+            Entity passenger = data.passenger;
+            if (mount.dimension != passenger.dimension && passenger.getServer() != null && mount.world.getTotalWorldTime() - data.time > 2) {
+                WorldServer newWorld = passenger.getServer().getWorld(mount.dimension);
+
+                passenger.setLocationAndAngles(mount.getPosition().getX(),
+                        mount.getPosition().getY(),
+                        mount.getPosition().getZ(),
+                        mount.rotationYaw,
+                        mount.rotationPitch);
+                passenger.getServer().getPlayerList().transferPlayerToDimension((EntityPlayerMP) passenger, mount.dimension,
+                        new GTTeleporter(newWorld, mount.getPosition().getX(), mount.getPosition().getY(), mount.getPosition().getZ()));
+                Entity realMount = newWorld.getEntityFromUuid(mount.getPersistentID());
+                if (realMount != null) {
+                    passenger.startRiding(realMount);
+                }
+                toRemove.add(mount);
+            }
+
+        }
+        for (Entity rocket : toRemove) {
+            travellingPassengers.remove(rocket);
         }
     }
 

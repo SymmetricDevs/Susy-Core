@@ -25,6 +25,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -424,6 +426,12 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
             this.factory = new AnimationFactory(this);
         }
         return this.factory;
+    }
+
+    @Override
+    protected void addDisplayText(List<ITextComponent> textList) {
+        super.addDisplayText(textList);
+        textList.add(new TextComponentTranslation("susy.launch_pad." + this.state.name().toLowerCase()));
     }
 
     public enum LaunchPadState {

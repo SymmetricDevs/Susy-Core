@@ -1,6 +1,7 @@
 package supersymmetry.common.entities;
 
 import gregtech.api.GregTechAPI;
+import gregtech.api.util.TeleportHandler;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -25,7 +26,9 @@ import supersymmetry.client.audio.MovingSoundRocket;
 import supersymmetry.client.renderer.handler.IAlwaysRender;
 import supersymmetry.client.renderer.particles.SusyParticleFlameLarge;
 import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
+import supersymmetry.common.EventHandlers;
 import supersymmetry.common.entities.teleporters.DropPodTeleporter;
+import supersymmetry.common.event.DimensionRidingSwapData;
 import supersymmetry.common.network.CPacketRocketInteract;
 
 import java.util.List;
@@ -335,7 +338,11 @@ public class EntityRocket extends Entity implements IAlwaysRender {
             return;
         }
         for (Entity passenger : this.getPassengers()) {
-            passenger.changeDimension(800, new DropPodTeleporter());
+
+            EntityDropPod dropPod = new EntityDropPod(world, passenger.posX, passenger.posY, passenger.posZ);
+            TeleportHandler.teleport(dropPod, 800, new DropPodTeleporter(), this.posX, this.posY, this.posZ);
+
+            EventHandlers.travellingPassengers.add(new DimensionRidingSwapData(dropPod, passenger));
         }
     }
 
