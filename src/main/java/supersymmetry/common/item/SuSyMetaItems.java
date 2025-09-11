@@ -46,6 +46,8 @@ public class SuSyMetaItems {
 
     public static ArmorMetaItem<?>.ArmorMetaValueItem JET_WINGPACK;
 
+    public static ArmorMetaItem<?>.ArmorMetaValueItem STEEL_HELMET;
+
     public static void initMetaItems() {
         metaItem = new StandardMetaItem();
         metaItem.setRegistryName("meta_item");

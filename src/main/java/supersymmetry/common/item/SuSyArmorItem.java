@@ -7,6 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import supersymmetry.api.items.IBreathingArmorLogic;
+import supersymmetry.api.items.IStandardArmorLogic;
 import supersymmetry.api.items.IBreathingItem;
 import supersymmetry.client.renderer.handler.ITextureRegistrar;
 
@@ -26,6 +27,7 @@ public class SuSyArmorItem extends ArmorMetaItem<SuSyArmorItem.SuSyArmorMetaValu
 
     public class SuSyArmorMetaValueItem extends ArmorMetaItem<SuSyArmorMetaValueItem>.ArmorMetaValueItem {
         private IBreathingArmorLogic armorLogic = null;
+        private IStandardArmorLogic standardArmorLogic = null;
         protected SuSyArmorMetaValueItem(int metaValue, String unlocalizedName) {
             super(metaValue, unlocalizedName);
             this.setMaxStackSize(1);
@@ -36,6 +38,14 @@ public class SuSyArmorItem extends ArmorMetaItem<SuSyArmorItem.SuSyArmorMetaValu
             this.armorLogic = armorLogic;
             if (armorLogic instanceof IItemComponent)
                 this.addComponents((IItemComponent) armorLogic);
+            return this;
+        }
+
+        public SuSyArmorMetaValueItem setArmorLogic(IStandardArmorLogic standardArmorLogic) {
+            super.setArmorLogic(standardArmorLogic);
+            this.standardArmorLogic = standardArmorLogic;
+            if (standardArmorLogic instanceof IItemComponent)
+                this.addComponents((IItemComponent) standardArmorLogic);
             return this;
         }
 
