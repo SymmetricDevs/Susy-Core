@@ -335,7 +335,6 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
     @Override
     public boolean checkRecipe(@NotNull Recipe recipe, boolean consumeIfSuccess) {
         IntList dimensionIDs = recipe.getProperty(DimensionProperty.getInstance(), IntLists.EMPTY_LIST);
-        System.out.println("[HeatRadiator] recipe=" + recipe + " dims=" + dimensionIDs + " worldDim=" + this.getWorld().provider.getDimension());
         if (dimensionIDs.isEmpty() || dimensionIDs.contains(this.getWorld().provider.getDimension())) {
             return super.checkRecipe(recipe, consumeIfSuccess);
         }   
