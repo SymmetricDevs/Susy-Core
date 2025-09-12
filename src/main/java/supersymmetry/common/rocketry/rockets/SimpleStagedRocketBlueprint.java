@@ -96,7 +96,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint {
             .collect(Collectors.toList());
     for (var comp : stagesCompounds) {
       var stageRead = new RocketStage();
-      if (stageRead.readfromNBT(comp)) {
+      if (stageRead.readFromNBT(comp)) {
         this.stages.add(stageRead);
       } else {
         return false;

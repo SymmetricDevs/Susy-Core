@@ -166,7 +166,7 @@ public class RocketStage {
     return name;
   }
 
-  public String getNameLocalzationkey() {
+  public String getLocalizationKey() {
     return "susy.rocketry.stages.name." + this.name;
   }
 
@@ -198,7 +198,7 @@ public class RocketStage {
     return tag;
   }
 
-  public boolean readfromNBT(NBTTagCompound tag) {
+  public boolean readFromNBT(NBTTagCompound tag) {
     if (!tag.hasKey("name", NBT.TAG_STRING)) return false;
     if (!tag.hasKey("components", NBT.TAG_COMPOUND)) return false;
     if (!tag.hasKey("allowedCounts", NBT.TAG_COMPOUND)) return false;

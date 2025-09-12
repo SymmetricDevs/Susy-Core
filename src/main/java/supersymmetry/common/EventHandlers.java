@@ -114,7 +114,7 @@ public class EventHandlers {
     }
 
     private static @NotNull void handleEntityTransfer() {
-        List<Entity> toRemove = new ArrayList<>();
+        List<DimensionRidingSwapData> toRemove = new ArrayList<>();
         for (DimensionRidingSwapData data : travellingPassengers) {
             Entity mount = data.mount;
             Entity passenger = data.passenger;
@@ -132,12 +132,12 @@ public class EventHandlers {
                 if (realMount != null) {
                     passenger.startRiding(realMount);
                 }
-                toRemove.add(mount);
+                toRemove.add(data);
             }
 
         }
-        for (Entity rocket : toRemove) {
-            travellingPassengers.remove(rocket);
+        for (DimensionRidingSwapData data : toRemove) {
+            travellingPassengers.remove(data);
         }
     }
 

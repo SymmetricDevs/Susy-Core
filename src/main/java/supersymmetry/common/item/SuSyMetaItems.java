@@ -69,6 +69,12 @@ public class SuSyMetaItems {
     public static ArmorMetaItem<?>.ArmorMetaValueItem NOMEX_BOOTS;
 
     public static ArmorMetaItem<?>.ArmorMetaValueItem JET_WINGPACK;
+
+    public static ArmorMetaItem<?>.ArmorMetaValueItem ASTRONAUT_HELMET;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem ASTRONAUT_CHESTPLATE;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem ASTRONAUT_LEGGINGS;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem ASTRONAUT_BOOTS;
+
     public static MetaValueItem DATA_CARD;
     public static MetaValueItem DATA_CARD_ACTIVE;
     public static MetaValueItem DATA_CARD_MASTER_BLUEPRINT;

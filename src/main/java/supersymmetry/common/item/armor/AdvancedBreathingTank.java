@@ -17,8 +17,8 @@ public class AdvancedBreathingTank extends AdvancedBreathingApparatus {
     public final double maxOxygen;
 
 
-    public AdvancedBreathingTank(double hoursOfLife, String name, int tier, double relativeAbsorption, double maxOxygen) {
-        super(EntityEquipmentSlot.CHEST, hoursOfLife, name, tier, relativeAbsorption);
+    public AdvancedBreathingTank(int maxDurability, double hoursOfLife, String name, int tier, double relativeAbsorption, double maxOxygen) {
+        super(EntityEquipmentSlot.CHEST, maxDurability, hoursOfLife, name, tier, relativeAbsorption);
         this.maxOxygen = maxOxygen;
     }
 

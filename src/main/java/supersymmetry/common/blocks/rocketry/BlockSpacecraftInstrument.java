@@ -5,12 +5,10 @@ import gregtech.api.block.VariantBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import supersymmetry.api.rocketry.components.Instrument;
+import supersymmetry.common.entities.EntityRocket;
+import supersymmetry.common.rocketry.instruments.InstrumentLander;
 
 public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstrument.Type> {
     public BlockSpacecraftInstrument() {
@@ -30,13 +28,22 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
         ENGINE("engine", 3),
         SOLAR_PANEL("solar_panel", 2),
         BATTERY("battery", 2),
-        ARM("arm", 2); // will have variable purposes
+        ARM("arm", 2),
+        LANDER("lander", 2, new InstrumentLander()); // will have variable purposes
         public String name;
         public int h;
+        public Instrument instrument;
+
         Type(String name, int h) {
+            this(name, h, null);
+        }
+
+        Type(String name, int h, Instrument instrument) {
             this.name = name;
             this.h = h;
+            this.instrument = instrument;
         }
+
         @Override
         public String getName() {
             return this.name;
@@ -50,6 +57,10 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
         @Override
         public String getHarvestTool(IBlockState state) {
             return "wrench";
+        }
+
+        public void act(int count, EntityRocket rocket) {
+            if (instrument != null) instrument.act(count, rocket);
         }
     }
 }

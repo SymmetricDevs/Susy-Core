@@ -27,6 +27,7 @@ import supersymmetry.client.renderer.handler.IAlwaysRender;
 import supersymmetry.client.renderer.particles.SusyParticleFlameLarge;
 import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
 import supersymmetry.common.EventHandlers;
+import supersymmetry.common.blocks.rocketry.BlockSpacecraftInstrument;
 import supersymmetry.common.entities.teleporters.DropPodTeleporter;
 import supersymmetry.common.event.DimensionRidingSwapData;
 import supersymmetry.common.network.CPacketRocketInteract;
@@ -268,7 +269,7 @@ public class EntityRocket extends Entity implements IAlwaysRender {
             }
 
             if (this.posY > 600) {
-                if (this.hasActed()) {
+                if (this.hasActed() && this.getPassengers().isEmpty()) {
                     this.setDead();
                 } else {
                     act();
@@ -334,15 +335,11 @@ public class EntityRocket extends Entity implements IAlwaysRender {
     }
 
     protected void act() {
-        if (this.getPassengers().isEmpty()) {
-            return;
-        }
-        for (Entity passenger : this.getPassengers()) {
-
-            EntityDropPod dropPod = new EntityDropPod(world, passenger.posX, passenger.posY, passenger.posZ);
-            TeleportHandler.teleport(dropPod, 800, new DropPodTeleporter(), this.posX, this.posY, this.posZ);
-
-            EventHandlers.travellingPassengers.add(new DimensionRidingSwapData(dropPod, passenger));
+        NBTTagCompound instruments = this.getEntityData().getCompoundTag("rocket").getCompoundTag("instruments");
+        for (String key : instruments.getKeySet()) {
+            BlockSpacecraftInstrument.Type instrument = BlockSpacecraftInstrument.Type.valueOf(key);
+            int count = instruments.getInteger(key);
+            instrument.act(count, this);
         }
     }
 

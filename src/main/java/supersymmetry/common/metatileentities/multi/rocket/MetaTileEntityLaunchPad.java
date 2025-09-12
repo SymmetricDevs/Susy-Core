@@ -314,6 +314,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     public void spawnRocket() {
         Vec3d position = this.getLaunchPosition();
         this.selectedRocket = new EntityRocket(this.getWorld(), position, this.getFrontFacing().getHorizontalAngle());
+        this.selectedRocket.getEntityData().setTag("rocket", this.selectedErector.getRocketNBT());
         this.getWorld().spawnEntity(this.selectedRocket);
     }
 
