@@ -28,9 +28,9 @@ public class SuSyMetaArmor extends SuSyArmorItem {
         NOMEX_CHESTPLATE = addItem(15, "nomex_chestplate").setArmorLogic(new AdvancedBreathingTank(1000, 0, "nomex", 1, 0.6, AdvancedBreathingTank.INFINITE_OXYGEN));
         NOMEX_LEGGINGS = addItem(16, "nomex_leggings").setArmorLogic(new AdvancedBreathingApparatus(LEGS, 900, 0, "nomex", 1, 0.6));
         NOMEX_BOOTS = addItem(17, "nomex_boots").setArmorLogic(new AdvancedBreathingApparatus(FEET, 850, 0, "nomex", 1, 0.6));
-        ASTRONAUT_HELMET = addItem(18, "astronaut_helmet").setArmorLogic(new AdvancedBreathingApparatus(HEAD, 100, 0, "astronaut", 1, 0.6));
-        ASTRONAUT_CHESTPLATE = addItem(19, "astronaut_chestplate").setArmorLogic(new AdvancedBreathingTank(200, 0, "astronaut", 1, 0.6, AdvancedBreathingTank.INFINITE_OXYGEN));
-        ASTRONAUT_LEGGINGS = addItem(20, "astronaut_leggings").setArmorLogic(new AdvancedBreathingApparatus(LEGS, 175, 0, "astronaut", 1, 0.6));
-        ASTRONAUT_BOOTS = addItem(21, "astronaut_boots").setArmorLogic(new AdvancedBreathingApparatus(FEET, 150, 0, "astronaut", 1, 0.6));
+        ASTRONAUT_HELMET = addItem(18, "astronaut_helmet").setArmorLogic(new SpaceSuit(HEAD, 100, 0, "astronaut", 1, 0.6));
+        ASTRONAUT_CHESTPLATE = addItem(19, "astronaut_chestplate").setArmorLogic(new SpaceSuitTank(200, 0, "astronaut", 1, 0.6, AdvancedBreathingTank.INFINITE_OXYGEN));
+        ASTRONAUT_LEGGINGS = addItem(20, "astronaut_leggings").setArmorLogic(new SpaceSuit(LEGS, 175, 0, "astronaut", 1, 0.6));
+        ASTRONAUT_BOOTS = addItem(21, "astronaut_boots").setArmorLogic(new SpaceSuit(FEET, 150, 0, "astronaut", 1, 0.6));
     }
 }
