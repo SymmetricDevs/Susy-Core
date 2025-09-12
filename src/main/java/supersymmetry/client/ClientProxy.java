@@ -40,10 +40,12 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
+import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.SuSyValues;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
+import supersymmetry.api.util.RenderMaskManager;
 import supersymmetry.client.renderer.textures.SuSyConnectedTextures;
 import supersymmetry.api.util.BlockRenderManager;
 import supersymmetry.client.renderer.handler.VariantCoverableBlockRenderer;
@@ -74,6 +76,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void preLoad() {
         super.preLoad();
+        GeckoLib.initialize();
         SusyMetaEntities.initRenderers();
         SuSyIRLoader.initEntityRenderers();
         VariantCoverableBlockRenderer.preInit();
@@ -261,7 +264,7 @@ public class ClientProxy extends CommonProxy {
     @SubscribeEvent
     public static void onWorldUnload(WorldEvent.Unload event) {
         if (Minecraft.getMinecraft().world == event.getWorld()) {
-            BlockRenderManager.clearDisabled();
+            RenderMaskManager.clearDisabled();
         }
     }
 }

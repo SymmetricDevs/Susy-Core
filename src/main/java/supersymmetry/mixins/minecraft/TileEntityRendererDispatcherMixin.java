@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import supersymmetry.api.util.BlockRenderManager;
+import supersymmetry.api.util.RenderMaskManager;
 
 @Mixin(TileEntityRendererDispatcher.class)
 public class TileEntityRendererDispatcherMixin {
@@ -20,7 +20,7 @@ public class TileEntityRendererDispatcherMixin {
                                                       CallbackInfoReturnable<TileEntitySpecialRenderer<T>> cir) {
         if (tileEntityIn != null) {
             if (tileEntityIn.getWorld() == Minecraft.getMinecraft().world
-                    && BlockRenderManager.modelDisabled.contains(tileEntityIn.getPos())) {
+                    && RenderMaskManager.isModelDisabledRaw(tileEntityIn.getPos())) {
                 cir.setReturnValue(null);
             }
         }

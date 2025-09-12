@@ -9,7 +9,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.model.pipeline.ForgeBlockModelRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import supersymmetry.api.util.BlockRenderManager;
+import supersymmetry.api.util.RenderMaskManager;
 
 @Mixin(value = ForgeBlockModelRenderer.class, remap = false)
 public abstract class ForgeBlockModelRendererMixin {
@@ -20,6 +20,6 @@ public abstract class ForgeBlockModelRendererMixin {
                     remap = true))
     private static boolean ignoreBlocked(
             IBlockState state, IBlockAccess blockAccess, BlockPos pos, EnumFacing facing, Operation<Boolean> method) {
-        return BlockRenderManager.isModelDisabled(pos.offset(facing)) || method.call(state, blockAccess, pos, facing);
+        return RenderMaskManager.isModelDisabled(pos.offset(facing)) || method.call(state, blockAccess, pos, facing);
     }
 }

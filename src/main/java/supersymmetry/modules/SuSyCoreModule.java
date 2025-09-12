@@ -11,6 +11,7 @@ import supersymmetry.common.network.CPacketRocketInteract;
 import supersymmetry.common.network.SPacketFirstJoin;
 import supersymmetry.common.network.SPacketRemoveFluidState;
 import supersymmetry.common.network.SPacketUpdateBlockRendering;
+import supersymmetry.common.network.SPacketUpdateRenderMask;
 
 @GregTechModule(
         moduleID = SuSyModules.MODULE_CORE,
@@ -31,5 +32,6 @@ public class SuSyCoreModule implements IGregTechModule {
         GregTechAPI.networkHandler.registerPacket(SPacketFirstJoin.class);
         GregTechAPI.networkHandler.registerPacket(SPacketUpdateBlockRendering.class);
         GregTechAPI.networkHandler.registerPacket(CPacketRocketInteract.class);
+        GregTechAPI.networkHandler.registerPacket(SPacketUpdateRenderMask.class);
     }
 }
