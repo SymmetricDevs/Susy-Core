@@ -92,7 +92,7 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
             isFull = energyContainer.getEnergyStored() - energyContainer.getEnergyCapacity() == 0;
 
             if (workable.isWorking() && !isFull) workCounter += 1;
-            if (workCounter == 20) {
+            if (workCounter == 600) {
                 workCounter = 0;
 
                 lubricantTank.drain((int) (lubricant.amount_required * Math.pow(4, getTier() - 1)), true);
@@ -103,8 +103,8 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
 
     protected void updateSufficientFluids() {
         // Check coolant & lubricant levels, activity
-        FluidStack lubricantStack = lubricantTank.drain(1000, false);
-        FluidStack coolantStack = coolantTank.drain(1000, false);
+        FluidStack lubricantStack = lubricantTank.drain(Integer.MAX_VALUE, false);
+        FluidStack coolantStack = coolantTank.drain(Integer.MAX_VALUE, false);
 
         lubricant = lubricantStack == null ? null : SuSyUtility.lubricants.get(lubricantStack.getFluid().getName());
         coolant = coolantStack == null ? null : SuSyUtility.coolants.get(coolantStack.getFluid().getName());
@@ -116,8 +116,6 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
 
         sufficientFluids = lubricantStack.amount >= lubricant.amount_required && coolantStack.amount >= coolant.amount_required;
     }
-
-
 
     @Override
     // Create GUI template for the combustion generator

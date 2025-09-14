@@ -16,13 +16,17 @@ import gregtech.api.util.GTUtility;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.capability.impl.SuSyTurbineRecipeLogic;
+import org.jetbrains.annotations.Nullable;
 import supersymmetry.common.blocks.BlockAlternatorCoil;
 import supersymmetry.common.blocks.SuSyBlocks;
 
@@ -32,7 +36,7 @@ import java.util.function.Supplier;
 
 import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
 
-public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController implements ITieredMetaTileEntity {
+public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController implements ITieredMetaTileEntity {
 
     public final int tier;
 
@@ -41,9 +45,8 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
     public final ICubeRenderer casingRenderer;
     public final ICubeRenderer frontOverlay;
 
-
-    public MetaTileEntitySUSYLargeTurbine(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap, int tier, IBlockState casingState, IBlockState rotorState, ICubeRenderer casingRenderer, ICubeRenderer frontOverlay) {
-        super(metaTileEntityId, recipeMap, tier);
+    public MetaTileEntitySUSYLargeTurbine(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap, int tier, int maxSpeed, int accel, int decel, IBlockState casingState, IBlockState rotorState, ICubeRenderer casingRenderer, ICubeRenderer frontOverlay) {
+        super(metaTileEntityId, recipeMap, tier, maxSpeed, accel, decel);
         this.casingState = casingState;
         this.rotorState = rotorState;
         this.casingRenderer = casingRenderer;
@@ -55,7 +58,7 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
 
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
-        return new MetaTileEntitySUSYLargeTurbine(metaTileEntityId, recipeMap, tier, casingState, rotorState, casingRenderer, frontOverlay);
+        return new MetaTileEntitySUSYLargeTurbine(metaTileEntityId, recipeMap, tier, maxSpeed, accel, decel, casingState, rotorState, casingRenderer, frontOverlay);
     }
 
     @Override
@@ -64,9 +67,12 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
             FluidStack fuelStack = ((SuSyTurbineRecipeLogic) recipeMapWorkable).getInputFluidStack();
             if (fuelStack != null && fuelStack.amount > 0) {
                 int fuelAmount = fuelStack.amount;
+                int lubricantAmount = lubricantStack.amount;
 
                 ITextComponent fuelName = GTUtility.getFluidTranslation(fuelStack.getFluid());
+                ITextComponent lubricantName = GTUtility.getFluidTranslation((lubricantStack.getFluid()));
                 textList.add(new TextComponentTranslation("gregtech.multiblock.turbine.fuel_amount", fuelAmount, fuelName));
+                textList.add(new TextComponentTranslation("gregtech.multiblock.large_combustion_engine.lubricant_amount", lubricantAmount, lubricantName));
             }
         }
         super.addDisplayText(textList);

@@ -27,7 +27,7 @@ import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
 public class MetaTileEntityHighPressureLargeTurbine extends MetaTileEntitySUSYLargeTurbine {
 
     public MetaTileEntityHighPressureLargeTurbine(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SuSyRecipeMaps.HIGH_PRESSURE_ADVANCED_STEAM_TURBINE, 4,
+        super(metaTileEntityId, SuSyRecipeMaps.HIGH_PRESSURE_ADVANCED_STEAM_TURBINE, 4, 3600, 2, 2,
                 MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.TITANIUM_TURBINE_CASING),
                 SuSyBlocks.TURBINE_ROTOR.getState(BlockTurbineRotor.BlockTurbineRotorType.LOW_PRESSURE),
                 SusyTextures.TITANIUM_TURBINE_CASING, SusyTextures.HIGH_PRESSURE_ADVANCED_STEAM_TURBINE_OVERLAY);
