@@ -47,6 +47,9 @@ public class SuSyMetaItems {
     public static ArmorMetaItem<?>.ArmorMetaValueItem JET_WINGPACK;
 
     public static ArmorMetaItem<?>.ArmorMetaValueItem STEEL_HELMET;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem STEEL_CHESTPLATE;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem COTTON_PANTS;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem TRENCH_BOOTS;
 
     public static void initMetaItems() {
         metaItem = new StandardMetaItem();

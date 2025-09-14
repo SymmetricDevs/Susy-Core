@@ -28,6 +28,9 @@ public class SuSyMetaArmor extends SuSyArmorItem {
         NOMEX_CHESTPLATE = addItem(15, "nomex_chestplate").setArmorLogic(new AdvancedBreathingTank(0, "nomex", 1, 0.6, AdvancedBreathingTank.INFINITE_OXYGEN));
         NOMEX_LEGGINGS = addItem(16, "nomex_leggings").setArmorLogic(new AdvancedBreathingApparatus(LEGS, 0, "nomex", 1, 0.6));
         NOMEX_BOOTS = addItem(17, "nomex_boots").setArmorLogic(new AdvancedBreathingApparatus(FEET, 0, "nomex", 1, 0.6));
-        STEEL_HELMET = addItem(18, "steel_helmet").setArmorLogic(new StandardArmor(HEAD, "steel_helmet", 1));
+        STEEL_HELMET = addItem(18, "steel_helmet").setArmorLogic(new StandardArmor(HEAD, "steel", 1));
+        STEEL_CHESTPLATE = addItem(19, "steel_chestplate").setArmorLogic(new StandardArmor(CHEST, "steel", 1));
+        COTTON_PANTS = addItem(20, "cotton_pants").setArmorLogic(new StandardArmor(LEGS, "cotton", 1));
+        TRENCH_BOOTS = addItem(21, "trench_boots").setArmorLogic(new StandardArmor(FEET, "trench", 1));
     }
 }
