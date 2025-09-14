@@ -13,12 +13,16 @@ import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.util.TextComponentUtil;
+import gregtech.api.recipes.Recipe;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.ConfigHolder;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.MetaTileEntities;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.ints.IntLists;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -32,6 +36,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
+import supersymmetry.api.recipes.properties.DimensionProperty;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockSerpentine;
@@ -75,7 +80,7 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
                 .aisle(rowPattern(rowType.TOP, sDist))
                 .where('S', selfPredicate())
                 .where('A', states(getCasingState())
-                        .or(autoAbilities(false, true, false, false, false, false, false)))
+                        .or(autoAbilities(false, true, true, false, false, false, false)))
                 .where('B', states(getRadiatorElementState()))
                 .where('C', states(getCasingState())
                         .or(autoAbilities(false, false, false, false, true, false, false).setExactLimit(1))
@@ -288,10 +293,10 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
             ITextComponent componentParallelAmount = TextComponentUtil.stringWithColor(TextFormatting.DARK_PURPLE,
                     String.valueOf(this.area));
             ITextComponent componentParallelAmountBase = TextComponentUtil.translationWithColor(TextFormatting.GRAY,
-                    "gregtech.machine.heat_radiator.parallel",
+                    "susy.machine.heat_radiator.parallel",
                     componentParallelAmount);
             ITextComponent componentParallelAmountHover = TextComponentUtil.translationWithColor(TextFormatting.GRAY,
-                    "gregtech.machine.heat_radiator.parallel_hover");
+                    "susy.machine.heat_radiator.parallel_hover");
 
             textList.add(TextComponentUtil.setHover(componentParallelAmountBase, componentParallelAmountHover));
         }
@@ -300,8 +305,8 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
     @Override
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
-        tooltip.add(I18n.format("gregtech.multiblock.heat_radiator.tooltip.1"));
-        tooltip.add(I18n.format("gregtech.multiblock.heat_radiator.tooltip.2"));
+        tooltip.add(I18n.format("susy.multiblock.heat_radiator.tooltip.1"));
+        tooltip.add(I18n.format("susy.multiblock.heat_radiator.tooltip.2"));
     }
 
     public boolean isBlockEdge(@Nonnull World world, @Nonnull BlockPos.MutableBlockPos pos, @Nonnull EnumFacing direction) {
@@ -325,6 +330,15 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.RADIATOR_OVERLAY;
+    }
+
+    @Override
+    public boolean checkRecipe(@NotNull Recipe recipe, boolean consumeIfSuccess) {
+        IntList dimensionIDs = recipe.getProperty(DimensionProperty.getInstance(), IntLists.EMPTY_LIST);
+        if (dimensionIDs.isEmpty() || dimensionIDs.contains(this.getWorld().provider.getDimension())) {
+            return super.checkRecipe(recipe, consumeIfSuccess);
+        }   
+        return false;
     }
 
     private class ParallelableNoEnergyMultiblockRecipeLogic extends NoEnergyMultiblockRecipeLogic {

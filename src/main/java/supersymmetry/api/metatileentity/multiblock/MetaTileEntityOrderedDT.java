@@ -89,7 +89,7 @@ public abstract class MetaTileEntityOrderedDT extends RecipeMapMultiblockControl
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
         super.addInformation(stack, world, tooltip, advanced);
-        tooltip.add(I18n.format("gregtech.machine.ordered_dt.tooltip.1"));
-        tooltip.add(I18n.format("gregtech.machine.ordered_dt.tooltip.2"));
+        tooltip.add(I18n.format("susy.machine.ordered_dt.tooltip.1"));
+        tooltip.add(I18n.format("susy.machine.ordered_dt.tooltip.2"));
     }
 }

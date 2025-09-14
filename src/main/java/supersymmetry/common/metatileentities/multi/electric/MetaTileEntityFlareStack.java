@@ -189,14 +189,14 @@ public class MetaTileEntityFlareStack extends VoidingMultiblockBase {
             ITextComponent componentRateBonus = TextComponentUtil.stringWithColor(TextFormatting.DARK_PURPLE,
                     this.rateBonus + "x");
             ITextComponent componentRateBase = TextComponentUtil.translationWithColor(TextFormatting.GRAY,
-                    "gregtech.machine.flare_stack.rate",
+                    "susy.machine.flare_stack.rate",
                     componentRateBonus);
             ITextComponent componentRateHover = TextComponentUtil.translationWithColor(TextFormatting.GRAY,
-                    "gregtech.machine.flare_stack.rate_hover");
+                    "susy.machine.flare_stack.rate_hover");
 
             textList.add(TextComponentUtil.translationWithColor(
                     TextFormatting.GRAY,
-                    "gregtech.machine.flare_stack.height",
+                    "susy.machine.flare_stack.height",
                     componentHeight));
             textList.add(TextComponentUtil.setHover(componentRateBase, componentRateHover));
         }
@@ -204,8 +204,8 @@ public class MetaTileEntityFlareStack extends VoidingMultiblockBase {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
-        tooltip.add(I18n.format("gregtech.machine.flare_stack.tooltip.1", getBaseVoidingRate()));
-        tooltip.add(I18n.format("gregtech.machine.flare_stack.tooltip.2"));
+        tooltip.add(I18n.format("susy.machine.flare_stack.tooltip.1", getBaseVoidingRate()));
+        tooltip.add(I18n.format("susy.machine.flare_stack.tooltip.2"));
         super.addInformation(stack, world, tooltip, advanced);
     }
 
