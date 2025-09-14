@@ -22,7 +22,7 @@ import java.util.List;
 
 public class MetaTileEntityStockItemExchanger extends MetaTileEntityStockInteractor {
 
-    private ItemStackHandler dummyHandler = new ItemStackHandler(0);
+    private static final ItemStackHandler dummyHandler = new ItemStackHandler(0);
 
     public MetaTileEntityStockItemExchanger(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SusyTextures.STOCK_ITEM_EXCHANGER);

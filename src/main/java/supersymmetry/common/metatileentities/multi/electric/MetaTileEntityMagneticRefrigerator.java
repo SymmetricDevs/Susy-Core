@@ -153,7 +153,7 @@ public class MetaTileEntityMagneticRefrigerator extends RecipeMapMultiblockContr
     @Override
     public List<ITextComponent> getDataInfo() {
         List<ITextComponent> list = super.getDataInfo();
-        list.add(new TextComponentTranslation("gregtech.multiblock.magnetic_refrigerator.min_temperature",
+        list.add(new TextComponentTranslation("susy.multiblock.magnetic_refrigerator.min_temperature",
                 new TextComponentTranslation(TextFormattingUtil.formatNumbers(temperature) + "K")
                         .setStyle(new Style().setColor(TextFormatting.BLUE))));
         return list;

@@ -15,7 +15,7 @@ public class EvaporationEnergyProperty extends RecipeProperty<Integer> {
 
     @Override
     public void drawInfo(Minecraft minecraft, int x, int y, int color, Object value) {
-        minecraft.fontRenderer.drawString(I18n.format("gregtech.recipe.evaporation",
+        minecraft.fontRenderer.drawString(I18n.format("susy.recipe.evaporation",
                 castValue(value)), x, y, color);
     }
 

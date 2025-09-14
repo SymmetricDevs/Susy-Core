@@ -47,8 +47,8 @@ public class MetaTileEntitySinteringOven extends RecipeMapMultiblockController {
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
         if (isStructureFormed()) {
-            textList.add(new TextComponentTranslation("gregtech.multiblock.sintering_oven.can_use_plasma",
-                    new TextComponentTranslation(canUsePlasma ? "gregtech.multiblocks.sintering_oven.use_plasma.affirmative" : "gregtech.multiblocks.sintering_oven.use_plasma.negative")
+            textList.add(new TextComponentTranslation("susy.multiblock.sintering_oven.can_use_plasma",
+                    new TextComponentTranslation(canUsePlasma ? "susy.multiblocks.sintering_oven.use_plasma.affirmative" : "susy.multiblocks.sintering_oven.use_plasma.negative")
                             .setStyle(new Style().setColor(TextFormatting.LIGHT_PURPLE))));
         }
         super.addDisplayText(textList);

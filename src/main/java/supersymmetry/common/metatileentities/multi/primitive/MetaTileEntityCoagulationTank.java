@@ -102,7 +102,7 @@ public class MetaTileEntityCoagulationTank extends RecipeMapPrimitiveMultiblockC
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
         super.addInformation(stack, world, tooltip, advanced);
-        tooltip.add(I18n.format("gregtech.machine.coagulation_tank.tooltip.1"));
+        tooltip.add(I18n.format("susy.machine.coagulation_tank.tooltip.1"));
     }
 
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
