@@ -3,10 +3,12 @@ package supersymmetry.common.metatileentities.multi.steam;
 import gregtech.api.capability.impl.SteamMultiWorkable;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.metatileentity.multiblock.*;
+import gregtech.api.metatileentity.multiblock.IMultiblockPart;
+import gregtech.api.metatileentity.multiblock.RecipeMapSteamMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.recipes.RecipeMap;
+import gregtech.api.unification.material.Materials;
 import gregtech.client.particle.VanillaParticleEffects;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
@@ -46,14 +48,14 @@ public class MetaTileEntitySuSyLargeHammer extends RecipeMapSteamMultiblockContr
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
                 .aisle("XXXXX", "X   X", "     ", "     ", "     ", "     ", "     ")
-                .aisle("XXAXX", "X###X", "X#H#X", "XPSPX", " PYP ", "  Y  ", "  Y  ")
+                .aisle("XYAYX", "X###X", "X#H#X", "XPSPX", " PYP ", "  Y  ", "  Y  ")
                 .aisle("XXXXX", "X   X", "     ", "     ", "     ", "     ", "     ")
                 .where('S', this.selfPredicate())
                 .where('A', blocks(Blocks.ANVIL))
-                .where('H', blocks(MetaBlocks.COMPRESSED_BLOCKS.get(20))) // FIXME: should be a steel block
-                .where('Y', states(this.getCasingState()))
-                .where('X', states(this.getCasingState()).or(autoAbilities()))
-                .where('P', states(this.getPipeCasingState()))
+                .where('H', states(MetaBlocks.COMPRESSED.get(Materials.Steel).getBlock(Materials.Steel)))
+                .where('Y', states(getCasingState()))
+                .where('X', states(getCasingState()).setMinGlobalLimited(19).or(autoAbilities()))
+                .where('P', states(getPipeCasingState()))
                 .where('#', air())
                 .where(' ', any())
                 .build();
@@ -105,6 +107,4 @@ public class MetaTileEntitySuSyLargeHammer extends RecipeMapSteamMultiblockContr
             VanillaParticleEffects.RANDOM_SPARKS.runEffect(this);
         }
     }
-
-    // TODO: add jei info tab
 }
