@@ -4,6 +4,7 @@ import gregicality.multiblocks.api.recipes.GCYMRecipeMaps;
 import gregtech.api.GTValues;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.widgets.ProgressWidget;
+import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.builders.FuelRecipeBuilder;
 import gregtech.api.recipes.builders.PrimitiveRecipeBuilder;
@@ -402,6 +403,10 @@ public class SuSyRecipeMaps {
             .setSlotOverlay(true, false, GuiTextures.CRUSHED_ORE_OVERLAY)
             .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.MACERATOR);
+
+    public static final RecipeMap<SimpleRecipeBuilder> SALVAGING_RECIPES = new RecipeMap<>("salvaging", 0, 1, 0, 0, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_RECYCLER, ProgressWidget.MoveType.HORIZONTAL)
+            .setSlotOverlay(true, false, GuiTextures.BOXED_OVERLAY);
 
     static {
         GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()

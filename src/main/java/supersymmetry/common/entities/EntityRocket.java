@@ -336,10 +336,15 @@ public class EntityRocket extends Entity implements IAlwaysRender {
 
     protected void act() {
         NBTTagCompound instruments = this.getEntityData().getCompoundTag("rocket").getCompoundTag("instruments");
-        for (String key : instruments.getKeySet()) {
+/*        for (String key : instruments.getKeySet()) {
             BlockSpacecraftInstrument.Type instrument = BlockSpacecraftInstrument.Type.valueOf(key);
             int count = instruments.getInteger(key);
             instrument.act(count, this);
+        }*/
+        for (Entity passenger : this.getPassengers()) {
+            EntityDropPod dropPod = new EntityDropPod(world, passenger.posX, passenger.posY, passenger.posZ);
+            TeleportHandler.teleport(dropPod, 800, new DropPodTeleporter(), this.posX, this.posY, this.posZ);
+            EventHandlers.travellingPassengers.add(new DimensionRidingSwapData(dropPod, passenger));
         }
     }
 

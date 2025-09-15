@@ -11,19 +11,26 @@ import gregtech.api.metatileentity.multiblock.MultiblockWithDisplayBase;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.TraceabilityPredicate;
+import gregtech.api.recipes.Recipe;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 
 import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.Queue;
 
 public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
+
+    private Queue<LandingData> incoming;
 
     public MetaTileEntityLandingPad(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
@@ -36,7 +43,10 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
 
     @Override
     protected void updateFormedValid() {
-        if (this.getWorld().isRemote) return;
+        if (this.incoming.peek())
+        if (this.getWorld().isRemote) {
+
+        }
     }
 
     protected static IBlockState getCasingState() {
@@ -53,9 +63,9 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
 
     public TraceabilityPredicate getAbilityPredicate() {
         TraceabilityPredicate predicate = super.autoAbilities(true, false);
-        predicate.or(abilities(new MultiblockAbility[]{MultiblockAbility.INPUT_ENERGY}).setMinGlobalLimited(1).setMaxGlobalLimited(2).setPreviewCount(1));
-        predicate.or(abilities(new MultiblockAbility[]{MultiblockAbility.EXPORT_ITEMS}).setPreviewCount(1));
-        predicate.or(abilities(new MultiblockAbility[]{MultiblockAbility.EXPORT_FLUIDS}).setPreviewCount(1));
+        predicate.or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2).setPreviewCount(1));
+        predicate.or(abilities(MultiblockAbility.EXPORT_ITEMS).setPreviewCount(1));
+        predicate.or(abilities(MultiblockAbility.EXPORT_FLUIDS).setPreviewCount(1));
         return predicate;
     }
 
@@ -114,4 +124,19 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
         return Textures.ASSEMBLER_OVERLAY;
     }
 
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        for (LandingData satellite : incoming) {
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setInteger("scheduledTotalWorldTime", satellite.scheduledTotalWorldTime);
+            for (ItemStack)
+        }
+        return super.writeToNBT(data);
+
+    }
+
+    private static class LandingData {
+        private List<ItemStack> recipe;
+        private int scheduledTotalWorldTime;
+    }
 }
