@@ -22,11 +22,13 @@ import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.rocketry.BlockCombustionChamber;
+import supersymmetry.common.blocks.rocketry.BlockTurboPump;
 
 public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine> {
 
   public double radius;
   public double area_ratio;
+  public double fuel_throughput;
 
   public ComponentLavalEngine() {
     super(
@@ -55,6 +57,7 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
     super.writeToNBT(tag);
     tag.setDouble("radius", this.radius);
     tag.setDouble("area_ratio", this.area_ratio);
+    tag.setDouble("throughput", this.fuel_throughput);
   }
 
   @Override
@@ -166,6 +169,7 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
         analysis.status = BuildStat.WEIRD_PUMP;
         return Optional.empty();
       }
+
     }
     // Creates engine
     Set<BlockPos> engineBlocks = new HashSet<>(nozzle);
@@ -195,6 +199,18 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
     this.radius = innerRadius;
     tag.setDouble("mass", Double.valueOf(mass));
     this.mass = mass;
+
+    double throughput = 0;
+
+    for (BlockPos pumpPos : pumps) {
+      IBlockState pump = analysis.world.getBlockState(pumpPos);
+      throughput += ((BlockTurboPump.HPPType)
+              (((VariantBlock<?>)pump)).getState(pump)).getThroughput();
+    }
+
+    this.fuel_throughput = throughput;
+    tag.setDouble("throughput", fuel_throughput);
+
     writeBlocksToNBT(blocks, analysis.world, tag);
     return Optional.of(tag);
   }

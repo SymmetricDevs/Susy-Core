@@ -13,7 +13,11 @@ import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.common.util.Constants.NBT;
+import net.minecraftforge.fluids.Fluid;
 import supersymmetry.api.rocketry.components.AbstractComponent;
+import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
+import supersymmetry.common.rocketry.components.ComponentLavalEngine;
+import supersymmetry.common.rocketry.components.ComponentLiquidFuelTank;
 
 public class RocketStage {
   public enum ComponentValidationResult {
@@ -34,7 +38,7 @@ public class RocketStage {
       return this.name;
     }
 
-    public String getTranslationkey() {
+    public String getTranslationKey() {
       return "susy.rocketry.components.validation_codes." + this.name;
     }
   }
@@ -78,7 +82,7 @@ public class RocketStage {
 
   public Map<String, List<AbstractComponent<?>>> components = new HashMap<>();
 
-  // allows you to make it so it needs different types of engines for example. ensures compatability
+  // allows you to make it so it needs different types of engines for example. ensures compatibility
   // between components of the same type
   public Function<Tuple<String, List<AbstractComponent<?>>>, ComponentValidationResult>
       componentValidationFunction =
@@ -120,6 +124,30 @@ public class RocketStage {
         .flatMap(List::stream)
         .mapToDouble(AbstractComponent::getMass)
         .sum();
+  }
+
+  public double getFuelCapacity() {
+    return components.values().stream()
+            .flatMap(List::stream)
+            .filter(c -> c.getType().equals("tank"))
+            .mapToInt( tank -> ((ComponentLiquidFuelTank) tank).volume)
+            .sum() * 1000; // 1000 L per m^3 by definition
+  }
+
+  // In kg/s
+  public double getFuelThroughput() {
+    return components.values().stream()
+            .flatMap(List::stream)
+            .filter(c -> c.getType().equals("engine"))
+            .mapToDouble(engine -> ((ComponentLavalEngine) engine).fuel_throughput)
+            .sum();
+  }
+
+  public double getThrust(RocketFuelEntry rocketFuelEntry, double gravity) {
+    double power = getFuelThroughput() * rocketFuelEntry.getHeatOfUse(); // kg/s * J/kg
+    double specific_heat_ratio = 1.25; // TODO: make this dependent on output
+    //double massVelocity =
+    return 0;
   }
 
   public void setComponentValidationFunction(

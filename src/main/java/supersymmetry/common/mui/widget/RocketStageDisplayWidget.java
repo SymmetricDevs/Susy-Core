@@ -78,7 +78,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
             (int) ((size.width / 5) * 2.5),
             -1,
             () -> {
-              return Integer.toString(this.getSelectedIndex()) + "/" + this.stages.size();
+              return Integer.toString(this.getSelectedIndex() + 1) + "/" + this.stages.size();
             });
 
     this.addWidget(amountTextField);
@@ -278,13 +278,13 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
 
   public String getStatusText() {
     if (this.error == ComponentValidationResult.SUCCESS) {
-      return I18n.format(ComponentValidationResult.SUCCESS.getTranslationkey());
+      return I18n.format(ComponentValidationResult.SUCCESS.getTranslationKey());
     } else {
       if (this.errorComponentType == ""
           || this.errorStage == ""
           || this.error == ComponentValidationResult.UNKNOWN) return "";
     }
-    return I18n.format(this.error.getTranslationkey())
+    return I18n.format(this.error.getTranslationKey())
         + I18n.format("susy.machine.aerospace_flight_simulator.error_message")
         + "\n"
         + I18n.format("susy.rocketry.stages." + this.errorStage + ".name")

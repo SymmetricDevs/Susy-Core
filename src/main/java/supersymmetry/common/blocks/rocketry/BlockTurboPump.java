@@ -22,15 +22,18 @@ public class BlockTurboPump extends VariantDirectionalRotatableBlock<BlockTurboP
         return false;
     }
     public enum HPPType implements IStringSerializable, IStateHarvestLevel {
-        BASIC("basic",3);
+        BASIC("basic",3, 2000);
 
         private String name;
         private int harvestLevel;
+        private double throughput; // kg/s
 
-        HPPType(String name, int harvestLevel) {
+        HPPType(String name, int harvestLevel, double throughput) {
             this.name = name;
             this.harvestLevel = harvestLevel;
+            this.throughput = throughput;
         }
+
         @Override
         public int getHarvestLevel(IBlockState iBlockState) {
             return harvestLevel;
@@ -44,6 +47,10 @@ public class BlockTurboPump extends VariantDirectionalRotatableBlock<BlockTurboP
         @Override
         public String getName() {
             return this.name;
+        }
+
+        public double getThroughput() {
+            return this.throughput;
         }
     }
 }
