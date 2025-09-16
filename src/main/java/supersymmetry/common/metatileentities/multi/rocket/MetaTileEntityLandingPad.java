@@ -25,12 +25,14 @@ import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayDeque;
 import java.util.List;
 import java.util.Queue;
 
 public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
 
     private Queue<LandingData> incoming;
+    private LandingData current;
 
     public MetaTileEntityLandingPad(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
@@ -43,7 +45,9 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
 
     @Override
     protected void updateFormedValid() {
-        if (this.incoming.peek())
+        if (this.incoming.peek().scheduledTotalWorldTime > this.getWorld().getTotalWorldTime()) {
+
+        }
         if (this.getWorld().isRemote) {
 
         }
@@ -126,13 +130,37 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        int i = 0;
         for (LandingData satellite : incoming) {
             NBTTagCompound tag = new NBTTagCompound();
             tag.setInteger("scheduledTotalWorldTime", satellite.scheduledTotalWorldTime);
-            for (ItemStack)
+            int j = 0;
+            for (ItemStack stack : satellite.recipe) {
+                tag.setInteger("item" + j, stack.getCount());
+                j++;
+            }
+            data.setTag("incoming" + i, tag);
         }
         return super.writeToNBT(data);
+    }
 
+    @Override
+    public void readFromNBT(NBTTagCompound data) {
+        super.readFromNBT(data);
+        incoming = new ArrayDeque<>();
+        int i = 0;
+        while (data.hasKey("incoming" + i, 10)) {
+            NBTTagCompound tag = data.getCompoundTag("incoming" + i);
+            LandingData landingData = new LandingData();
+            landingData.scheduledTotalWorldTime = tag.getInteger("scheduledTotalWorldTime");
+            int j = 0;
+            for (ItemStack stack : landingData.recipe) {
+                stack.setCount(tag.getInteger("item" + j));
+                j++;
+            }
+            incoming.add(landingData);
+            i++;
+        }
     }
 
     private static class LandingData {

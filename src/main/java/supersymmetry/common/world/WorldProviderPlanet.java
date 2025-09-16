@@ -57,6 +57,11 @@ public class WorldProviderPlanet extends WorldProvider {
     }
 
     @Override
+    public Vec3d getSkyColor(Entity cameraEntity, float partialTicks) {
+        return new Vec3d(0.0D, 0.0D, 0.0D);
+    }
+
+    @Override
     public @Nullable float[] calcSunriseSunsetColors(float celestialAngle, float partialTicks) {
         return new float[]{0.0F, 0.0F, 0.0F, 0.0F};
     }
