@@ -9,6 +9,7 @@ import gregtech.api.recipes.RecipeMap;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.util.TextComponentUtil;
+import gregtech.common.metatileentities.multi.electric.generator.LargeTurbineWorkableHandler;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -23,10 +24,13 @@ import java.util.List;
 
 public abstract class RotationGeneratorController extends FuelMultiblockController implements IRotationSpeedHandler {
 
+    private int workCounter = 0;
     private int speed = 0;
+
     protected int maxSpeed;
     protected int accel;
     protected int decel;
+
     private boolean sufficientFluids;
     protected FluidStack lubricantStack;
     private SuSyUtility.Lubricant lubricantInfo;
@@ -70,14 +74,19 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
             updateSufficientFluids();
 
             if (recipeMapWorkable.isWorking()) {
-                tanks.drain(new FluidStack(lubricantStack.getFluid(), lubricantInfo.amount_required), true);
                 speed += getRotationAcceleration();
+                workCounter += 1;
             } else {
                 speed -= getRotationDeceleration();
             }
 
             speed = Math.min(speed, maxSpeed);
             speed = Math.max(speed, 0);
+
+            if (workCounter == 600) {
+                workCounter = 0;
+                tanks.drain(new FluidStack(lubricantStack.getFluid(), lubricantInfo.amount_required), true);
+            }
         }
     }
 
@@ -90,6 +99,21 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
 
         lubricantInfo = lubricantStack == null ? null : SuSyUtility.lubricants.get(lubricantStack.getFluid().getName());
         sufficientFluids = lubricantStack.amount >= lubricantInfo.amount_required;
+    }
+
+    protected long boostProduction(long production) {
+        return (lubricantInfo == null) ? production : (long) (production * lubricantInfo.boost * speed / maxSpeed);
+    }
+
+    @Override
+    protected long getMaxVoltage() {
+        long maxProduction = recipeMapWorkable.getMaxVoltage();
+        long currentProduction = boostProduction(maxProduction);
+        if (isActive() && currentProduction <= maxProduction) {
+            return recipeMapWorkable.getMaxVoltage();
+        } else {
+            return 0L;
+        }
     }
 
     private static final Material[] POSSIBLE_LUBRICANTS = {
