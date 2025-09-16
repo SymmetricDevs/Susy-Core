@@ -41,6 +41,7 @@ import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCoagu
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimitiveMudPump;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimitiveSmelter;
 import supersymmetry.common.metatileentities.multi.steam.MetaTileEntitySuSyLargeBoiler;
+import supersymmetry.common.metatileentities.multi.steam.MetaTileEntitySuSyLargeHammer;
 import supersymmetry.common.metatileentities.multi.steam.SuSyBoilerType;
 import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityPrimitiveItemBus;
 import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityStrandBus;
@@ -250,6 +251,9 @@ public class SuSyMetaTileEntities {
     // SUSY's large boilers
     public static MetaTileEntitySuSyLargeBoiler LARGE_BRONZE_BOILER;
     public static MetaTileEntitySuSyLargeBoiler LARGE_STEEL_BOILER;
+
+    // SUSY's large hammer
+    public static MetaTileEntitySuSyLargeHammer LARGE_STEAM_HAMMER;
 
     // SUSY's small boilers
     public static SuSyCoalBoiler STEAM_BOILER_COAL_BRONZE;
@@ -492,6 +496,9 @@ public class SuSyMetaTileEntities {
         STEAM_BOILER_COAL_STEEL = registerMetaTileEntity(18303, new SuSyCoalBoiler(susyId("steam_boiler_coal.steel"), true));
         STEAM_BOILER_LIQUID_BRONZE = registerMetaTileEntity(18304, new SuSyLiquidBoiler(susyId("steam_boiler_liquid.bronze"), false));
         STEAM_BOILER_LIQUID_STEEL = registerMetaTileEntity(18305, new SuSyLiquidBoiler(susyId("steam_boiler_liquid.steel"), true));
+
+        // Large Steam Machines
+        LARGE_STEAM_HAMMER = registerMetaTileEntity(18320, new MetaTileEntitySuSyLargeHammer(susyId("large_steam_hammer")));
 
         // Fuel Cells
         FUEL_CELL[0] = registerMetaTileEntity(18400, new MetaTileEntityFuelCell(susyId("fuel_cell.ev"), SuSyRecipeMaps.FUEL_CELL_RECIPES, SusyTextures.FUEL_CELL_OVERLAY, 4, GTUtility.defaultTankSizeFunction, 800, 500));
