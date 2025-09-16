@@ -792,6 +792,10 @@ susy.machine.combustion_generator.lv.name=Basic Combustion Generator
 susy.machine.combustion_generator.mv.name=Advanced Combustion Generator
 susy.machine.combustion_generator.hv.name=Advanced Combustion Generator II
 
+susy.machine.large_turbine.fuel_amount=Fuel: %sL %s
+susy.machine.large_turbine.lubricant_amount=Lubricant: %sL %s
+susy.machine.large_turbine.rotation_speed=Rotation Speed: %s RPM
+
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
 recipemap.latex_collector.name=Arboreal Collector

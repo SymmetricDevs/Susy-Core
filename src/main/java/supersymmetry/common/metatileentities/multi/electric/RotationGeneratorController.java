@@ -102,15 +102,15 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
     }
 
     protected long boostProduction(long production) {
-        return (lubricantInfo == null) ? production : (long) (production * lubricantInfo.boost * speed / maxSpeed);
+        return (long) (production * speed / (double) maxSpeed);
     }
 
     @Override
     protected long getMaxVoltage() {
         long maxProduction = recipeMapWorkable.getMaxVoltage();
         long currentProduction = boostProduction(maxProduction);
-        if (isActive() && currentProduction <= maxProduction) {
-            return recipeMapWorkable.getMaxVoltage();
+        if (isActive()) {
+            return Math.min(currentProduction, maxProduction);
         } else {
             return 0L;
         }

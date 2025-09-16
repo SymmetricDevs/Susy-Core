@@ -71,8 +71,10 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
 
                 ITextComponent fuelName = GTUtility.getFluidTranslation(fuelStack.getFluid());
                 ITextComponent lubricantName = GTUtility.getFluidTranslation((lubricantStack.getFluid()));
-                textList.add(new TextComponentTranslation("gregtech.multiblock.turbine.fuel_amount", fuelAmount, fuelName));
-                textList.add(new TextComponentTranslation("gregtech.multiblock.large_combustion_engine.lubricant_amount", lubricantAmount, lubricantName));
+                textList.add(new TextComponentTranslation("susy.machine.large_turbine.fuel_amount", fuelAmount, fuelName));
+                textList.add(new TextComponentTranslation("susy.machine.large_turbine.lubricant_amount", lubricantAmount, lubricantName));
+                textList.add(new TextComponentTranslation("susy.machine.large_turbine.rotation_speed", getRotationSpeed()));
+                textList.add(new TextComponentTranslation("susy.machine.large_turbine.rotation_speed", getMaxVoltage()));
             }
         }
         super.addDisplayText(textList);
