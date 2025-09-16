@@ -162,6 +162,12 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         }
     }
 
+    @Override
+    protected boolean drawEnergy(int recipeEUt, boolean simulate) {
+        // Turbine voids excess fuel to keep spinning.
+        return true;
+    }
+
     public class SuSyTurbineRecipeLogic extends MultiblockFuelRecipeLogic {
 
         public SuSyTurbineRecipeLogic(MetaTileEntitySUSYLargeTurbine tileEntity) {
