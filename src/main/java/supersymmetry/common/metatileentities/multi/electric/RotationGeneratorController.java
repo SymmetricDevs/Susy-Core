@@ -110,7 +110,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         long maxProduction = recipeMapWorkable.getMaxVoltage();
         long currentProduction = boostProduction(maxProduction);
         if (isActive()) {
-            return Math.min(currentProduction, maxProduction);
+            return (Math.min(Math.max(currentProduction, recipeMapWorkable.getRecipeEUt()), maxProduction);
         } else {
             return 0L;
         }
