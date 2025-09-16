@@ -84,7 +84,9 @@ public class SuSyLiquidBoiler extends SteamBoiler {
         if (consumption > 0 && fuelFluidTank.getFluidAmount() >= consumption) {
             fuelFluidTank.drain(consumption, true);
             // 1920 = 96L/t (1A LV, default for recipes) * 20t/s
-            setFuelMaxBurnTime(fluidFuelRecipe.getDuration() * 1920 / this.getBaseSteamOutput());
+            int burnTime = fluidFuelRecipe.getDuration() * 1920 / this.getBaseSteamOutput();
+            burnTime = SuSyCoalBoiler.modifyBurnTime(burnTime, isHighPressure);
+            setFuelMaxBurnTime(burnTime);
         }
     }
 

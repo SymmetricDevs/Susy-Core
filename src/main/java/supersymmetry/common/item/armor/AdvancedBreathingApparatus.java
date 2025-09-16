@@ -36,8 +36,8 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
 
     private static final double DEFAULT_ABSORPTION = 0;
 
-    public AdvancedBreathingApparatus(EntityEquipmentSlot slot, double hoursOfLife, String name, int tier, double relativeAbsorption) {
-        super(slot);
+    public AdvancedBreathingApparatus(EntityEquipmentSlot slot, int maxDurability, double hoursOfLife, String name, int tier, double relativeAbsorption) {
+        super(slot, maxDurability);
         this.hoursOfLife = hoursOfLife;
         this.name = name;
         this.tier = tier;

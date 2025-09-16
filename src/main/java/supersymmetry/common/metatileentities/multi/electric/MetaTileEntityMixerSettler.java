@@ -343,7 +343,7 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
         }
 
         List<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
-        int radius = MIN_RADIUS;
+        int radius = Math.max(sDist, MIN_RADIUS);
         while (radius <= MAX_RADIUS) {
             shapeInfo.add(new MultiblockShapeInfo(createStructurePattern(radius).getPreview(new int[]{1, 1, 1, 1, 1})));
             radius += 2;
@@ -367,7 +367,7 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
 
         @Override
         protected void modifyOverclockPost(int[] overclockResults, @NotNull IRecipePropertyStorage storage) {
-            int cellsOff = storage.getRecipePropertyValue(MixerSettlerCellsProperty.getInstance(), 2) - (sDist / 2);
+            int cellsOff = (sDist - storage.getRecipePropertyValue(MixerSettlerCellsProperty.getInstance(), 2)) / 2;
             // Divides the duration by an increasing factor that approaches 2 as the number of cells approaches infinity.
             overclockResults[1] = (int) ((double) overclockResults[1] / (Math.atan(cellsOff + 1) * 4 / Math.PI));
 
