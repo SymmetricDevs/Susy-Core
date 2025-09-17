@@ -15,23 +15,18 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public interface  IBreathingArmorLogic extends ISpecialArmorLogic {
-
-    boolean mayBreatheWith(ItemStack stack, EntityPlayer player);
-
-
-    double getDamageAbsorbed(ItemStack stack, EntityPlayer player);
+public interface IStandardArmorLogic extends ISpecialArmorLogic {
 
     default ISpecialArmor.ArmorProperties getProperties(EntityLivingBase player, @NotNull ItemStack armor, DamageSource source, double damage,
                                                         EntityEquipmentSlot equipmentSlot) {
         return new ISpecialArmor.ArmorProperties(0, 0, (int) player.getMaxHealth());
     }
 
+    void addInformation(ItemStack stack, List<String> tooltips);
+
     default int getArmorDisplay(EntityPlayer player, @NotNull ItemStack armor, int slot) {
         return 0;
     }
-
-    void addInformation(ItemStack stack, List<String> tooltips);
 
     @Override
     default void addToolComponents(ArmorMetaItem.ArmorMetaValueItem metaValueItem) {
@@ -39,7 +34,7 @@ public interface  IBreathingArmorLogic extends ISpecialArmorLogic {
         }) {
             @Override
             public void addInformation(ItemStack itemStack, @NotNull List<String> lines) {
-                IBreathingArmorLogic.this.addInformation(itemStack, lines);
+                IStandardArmorLogic.this.addInformation(itemStack, lines);
             }
         }, new IItemBehaviour() {
 
