@@ -32,6 +32,8 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
     protected int decel;
 
     private boolean sufficientFluids;
+    private boolean isFull;
+
     protected FluidStack lubricantStack;
     private SuSyUtility.Lubricant lubricantInfo;
 
@@ -72,6 +74,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         if (!getWorld().isRemote) {
             setLubricantStack(tanks);
             updateSufficientFluids();
+            isFull = energyContainer.getEnergyStored() - energyContainer.getEnergyCapacity() == 0;
 
             if (recipeMapWorkable.isWorking()) {
                 speed += getRotationAcceleration();
@@ -99,21 +102,6 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
 
         lubricantInfo = lubricantStack == null ? null : SuSyUtility.lubricants.get(lubricantStack.getFluid().getName());
         sufficientFluids = lubricantStack.amount >= lubricantInfo.amount_required;
-    }
-
-    protected long boostProduction(long production) {
-        return (long) (production * speed / (double) maxSpeed);
-    }
-
-    @Override
-    protected long getMaxVoltage() {
-        long maxProduction = recipeMapWorkable.getMaxVoltage();
-        long currentProduction = boostProduction(maxProduction);
-        if (isActive()) {
-            return (Math.min(Math.max(currentProduction, recipeMapWorkable.getRecipeEUt()), maxProduction);
-        } else {
-            return 0L;
-        }
     }
 
     private static final Material[] POSSIBLE_LUBRICANTS = {
@@ -163,15 +151,21 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
     }
 
     @Override
-    protected boolean drawEnergy(int recipeEUt, boolean simulate) {
-        // Turbine voids excess fuel to keep spinning.
-        return true;
+    protected long getMaxVoltage() {
+        if (isActive() && !isFull) {
+            return recipeMapWorkable.getMaxVoltage();
+        } else {
+            return 0L;
+        }
     }
 
     public class SuSyTurbineRecipeLogic extends MultiblockFuelRecipeLogic {
 
+        private MetaTileEntitySUSYLargeTurbine tileEntity;
+
         public SuSyTurbineRecipeLogic(MetaTileEntitySUSYLargeTurbine tileEntity) {
             super(tileEntity);
+            this.tileEntity = tileEntity;
         }
 
         public FluidStack getInputFluidStack() {
@@ -196,6 +190,12 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         }
 
         @Override
+        protected boolean drawEnergy(int recipeEUt, boolean simulate) {
+            // Turbine voids excess fuel to keep spinning.
+            return true;
+        }
+
+        @Override
         public int getMaxProgress() {
             int baseDuration = super.getMaxProgress();
 
@@ -204,6 +204,15 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
             }
 
             return baseDuration;
+        }
+
+        protected long scaleProduction(long production) {
+            return (long) (production * speed / (double) maxSpeed);
+        }
+
+        @Override
+        public long getMaxVoltage() {
+            return Math.max(Math.min(scaleProduction(tileEntity.recipeMapWorkable.getEnergyContainer().getOutputVoltage()), GTValues.V[tileEntity.tier]), recipeEUt);
         }
     }
 }
