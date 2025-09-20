@@ -54,6 +54,13 @@ public class Particles {
     public static Particle antiTop;
 
 
+    //Composite particles start here
+    public static Particle proton;
+    public static Particle antiProton;
+    public static Particle neutron;
+    public static Particle antiNeutron;
+
+
     public static void init() {
 
         //Leptons
@@ -92,7 +99,7 @@ public class Particles {
         gluon   = new Particle("gluon",     0.0,     0, 1.0, 0.0, true,  false, susyId("particles/gluon.png"));
         photon  = new Particle("photon",    0.0,     0, 1.0, 0.0, false, false, susyId("particles/photon.png"));
         WPlus   = new Particle("W+ boson",  80379.0,+1, 1.0, 2085.0, false, true, susyId("particles/WPlus.png"));
-        WMinus  = new Particle("W+ boson",  80379.0,+1, 1.0, 2085.0, false, true, susyId("particles/WMinus.png"));
+        WMinus  = new Particle("W- boson",  80379.0,-1, 1.0, 2085.0, false, true, susyId("particles/WMinus.png"));
         Z       = new Particle("Z boson",   91187.6, 0, 1.0, 2495.0, false, true, susyId("particles/Z_boson.png"));
         higgs   = new Particle("Higgs boson", 125100.0, 0, 0.0, 4300.0, false, false, susyId("particles/higgs.png"));
 
@@ -112,6 +119,20 @@ public class Particles {
 
         WPlus.setAntiParticle(WMinus);
 
+        //Composite particles
+        proton = new Particle("proton", 938.272, +1, 0.5, 0, false, true, susyId("particles/proton"));
+        proton.addComponent(up, 2);
+        proton.addComponent(down, 1);
+        proton.addComponent(gluon, 0);
+        antiProton = makeAntiParticle(proton, susyId("particles/antiproton"));
+        proton.setAntiParticle(antiProton);
+
+        neutron = new Particle("neutron", 939.565, 0, 0.5, 0, false, true, susyId("particles/neutron"));
+        neutron.addComponent(up, 1);
+        neutron.addComponent(down, 2);
+        neutron.addComponent(gluon, 0);
+        antiNeutron = makeAntiParticle(neutron, susyId("particles/antineutron"));
+        neutron.setAntiParticle(antiNeutron);
     }
 
     public static void register() {
@@ -151,6 +172,11 @@ public class Particles {
         registerParticle(Z);
         registerParticle(higgs);
 
+        //Composite particles
+        registerParticle(proton);
+        registerParticle(antiProton);
+        registerParticle(neutron);
+        registerParticle(antiNeutron);
     }
 
     public static void registerParticle(Particle particle) {
@@ -180,7 +206,7 @@ public class Particles {
      */
     @Nullable
     public static Particle makeAntiParticle(Particle particle, String name, ResourceLocation location) {
-        if (particle.isFundamental() || particle.getAntiParticle() == particle) return null;
+        if (particle.isFundamental()) return null;
         Particle antiParticle = new Particle(name, particle.getMass(), -particle.getCharge(), particle.getSpin(), particle.getWidth(), particle.isColoured(), particle.isWeakInt(), location);
         for (Map.Entry<Particle, Integer> component : particle.getComponents().entrySet()) {
             antiParticle.setComponent(component.getKey().getAntiParticle(), component.getValue());
