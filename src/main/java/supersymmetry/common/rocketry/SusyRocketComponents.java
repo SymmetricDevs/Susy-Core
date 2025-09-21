@@ -1,7 +1,6 @@
 package supersymmetry.common.rocketry;
 
 import net.minecraft.util.ResourceLocation;
-import software.bernie.shadowed.eliotlash.mclib.math.functions.classic.Abs;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
@@ -12,6 +11,7 @@ import supersymmetry.common.rocketry.rockets.SimpleStagedRocketBlueprint;
 public class SusyRocketComponents {
 
   public static SimpleStagedRocketBlueprint ROCKET_SOYUZ_BLUEPRINT_DEFAULT;
+  public static SimpleStagedRocketBlueprint ROCKET_V1_BLUEPRINT_DEFAULT;
 
   public static void init() {
     AbstractComponent.registerComponent(new ComponentFairing());
@@ -53,6 +53,25 @@ public class SusyRocketComponents {
                     .build())
             .entityResourceLocation(new ResourceLocation(Supersymmetry.MODID, "rocket_basic"))
             .build();
+
+    // this was added for testing so that i dont have to fill out all components every time
+    ROCKET_V1_BLUEPRINT_DEFAULT =
+        new SimpleStagedRocketBlueprint.Builder("V1")
+            .stage(
+                new RocketStage.Builder("main")
+                    .type("engine")
+                    .limit(1)
+                    .type("tank")
+                    .limit(2)
+                    // .type("chemical_bomb")
+                    // .limit(1)
+                    // .limit(2)
+                    // .limit(3)
+                    .build())
+            .entityResourceLocation(new ResourceLocation(Supersymmetry.MODID, "rocket_basic"))
+            .build();
+
+    AbstractRocketBlueprint.registerBlueprint(ROCKET_V1_BLUEPRINT_DEFAULT);
     AbstractRocketBlueprint.registerBlueprint(ROCKET_SOYUZ_BLUEPRINT_DEFAULT);
     AbstractRocketBlueprint.setRegistryLock(true);
   }

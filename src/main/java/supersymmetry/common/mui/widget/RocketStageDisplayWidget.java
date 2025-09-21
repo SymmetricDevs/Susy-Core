@@ -12,10 +12,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Tuple;
-import net.minecraftforge.common.util.Constants.NBT;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
@@ -36,9 +37,11 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
   protected ClickButtonWidget nextButton;
   protected DynamicLabelWidget amountTextField;
   protected slotProvider provider;
-  protected String errorStage="";
-  protected String errorComponentType="";
-  protected RocketStage.ComponentValidationResult error=ComponentValidationResult.UNKNOWN;
+  protected String errorStage = "";
+  protected String errorComponentType = "";
+  public Consumer<RocketStageDisplayWidget> removalAction;
+  public Consumer<RocketStageDisplayWidget> insertionAction;
+  public RocketStage.ComponentValidationResult error = ComponentValidationResult.UNKNOWN;
   public int selectedStageIndex = 0;
   protected Map<String, RocketSimulatorComponentContainerWidget> stageContainers = new HashMap<>();
 
@@ -62,7 +65,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
             .setButtonTexture(SusyGuiTextures.SPACEFLIGHT_SIMULATOR_BUTTON_LEFT);
     nextButton =
         new ClickButtonWidget(
-                (size.width / 5) * 4,
+                (size.width - 20),
                 0,
                 10,
                 10,
@@ -86,6 +89,22 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
     this.addWidget(previousButton);
   }
 
+  @Override
+  public void setVisible(boolean visible) {
+    super.setVisible(visible);
+    this.amountTextField.setVisible(visible);
+    this.nextButton.setVisible(visible);
+    this.previousButton.setVisible(visible);
+  }
+
+  @Override
+  public void setActive(boolean active) {
+    super.setActive(active);
+    this.amountTextField.setActive(active);
+    this.nextButton.setActive(active);
+    this.previousButton.setActive(active);
+  }
+
   public int getSelectedIndex() {
     return this.stages.isEmpty() ? 0 : selectedStageIndex % this.stages.size();
   }
@@ -99,6 +118,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
         .values()
         .forEach(
             x -> {
+              // i have no clue how but this causes a ConcurrentModificationException
               x.setActive(false);
               x.setVisible(false);
             });
@@ -148,7 +168,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
     Map<String, Map<String, List<DataStorageLoader>>> map = new HashMap<>();
     for (RocketStage stage : bp.stages) {
       Map<String, List<DataStorageLoader>> stageComponents = new HashMap<>();
-      for (String componentname : stage.componentLimits.keySet()) {
+      for (String componentname : new ArrayList<>(stage.componentLimits.keySet())) {
         List<DataStorageLoader> slots = new ArrayList<>();
         for (int i = 0; i < stage.maxComponentsOf(componentname); i++) {
           slots.add(
@@ -189,7 +209,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
 
   // this thing is an absolute mess
   // takes in a blueprint, adds the component entries into it with all of the AbstractComponent<?>
-  // stuff. taken from the gui slots.
+  // stuff. taken from the gui slots. this is here because of the shortview buttons
   public boolean blueprintBuildAttempt(AbstractRocketBlueprint blueprint) {
     this.errorStage = "";
     this.errorComponentType = "";
@@ -202,7 +222,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
               .findFirst()
               .get();
 
-      this.errorStage = stageEntry.getKey();
+      this.errorStage = stageFrombp.getName();
       List<AbstractComponent<?>> components = new ArrayList<>();
       // go through every component type within that stage component
       for (var entryWidgets : stageEntry.getValue().components.entrySet()) {
@@ -217,10 +237,6 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
               return false;
             }
             NBTTagCompound tag = cardStack.getTagCompound();
-            if (!tag.hasKey("name", NBT.TAG_STRING)) {
-              this.error = ComponentValidationResult.INVALID_CARD;
-              return false;
-            }
             var component =
                 AbstractComponent.getComponentFromName(tag.getString("name")).readFromNBT(tag);
             if (!component.isPresent()) {
@@ -239,10 +255,6 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
             return false;
           }
           NBTTagCompound tag = cardStack.getTagCompound();
-          if (!tag.hasKey("name", NBT.TAG_STRING)) {
-            this.error = ComponentValidationResult.INVALID_CARD;
-            return false;
-          }
           var component =
               AbstractComponent.getComponentFromName(tag.getString("name")).readFromNBT(tag);
           if (!component.isPresent()) {
@@ -274,6 +286,27 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
     }
     this.error = ComponentValidationResult.SUCCESS;
     return true;
+  }
+
+  // a very bad way to just call a function when the server needs it
+  @Override
+  public void readUpdateInfo(int id, PacketBuffer buffer) {
+    super.readUpdateInfo(id, buffer);
+    if (id == 100) {
+      this.insertionAction.accept(this);
+    } else if (id == 101) {
+      this.removalAction.accept(this);
+    }
+  }
+
+  public void onBlueprintRemoved() {
+    this.writeUpdateInfo(101, (buf) -> {});
+    this.removalAction.accept(this);
+  }
+
+  public void onBlueprintInserted() {
+    this.writeUpdateInfo(100, (buf) -> {});
+    this.insertionAction.accept(this);
   }
 
   public String getStatusText() {

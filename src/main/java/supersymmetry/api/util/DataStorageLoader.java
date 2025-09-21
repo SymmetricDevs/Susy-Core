@@ -43,8 +43,7 @@ public class DataStorageLoader extends NotifiableItemStackHandler implements IIt
     }
     public boolean isEmpty() {
         return dataStorage == ItemStack.EMPTY || dataStorage.getItem() == Items.AIR; 
-        //gets set to air a lot for some
-        //reason :shrug:
+        //gets set to air on the client for no good reason while remaining EMPTY / null on the server because uhh
     }
 
     @Override

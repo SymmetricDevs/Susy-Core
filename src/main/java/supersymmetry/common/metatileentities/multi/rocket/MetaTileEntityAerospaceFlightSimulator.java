@@ -1,7 +1,5 @@
 package supersymmetry.common.metatileentities.multi.rocket;
 
-import static com.cleanroommc.modularui.drawable.UITexture.builder;
-
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
@@ -31,9 +29,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
+import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.mui.widget.RocketStageDisplayWidget;
@@ -117,7 +118,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
 
     builder.dynamicLabel(
         width / 2,
-        height / 2,
+        height / 2 - 16,
         () -> {
           return rocketBlueprintSlot.isEmpty()
               ? I18n.format(this.getMetaName() + ".blueprint_request")
@@ -154,7 +155,16 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
               }
               return this.slots.get(stage.getName()).get(name);
             });
-
+    mainWindow.insertionAction =
+        (window) -> {
+          this.onBlueprintInserted(window);
+        };
+    mainWindow.removalAction =
+        (window) -> {
+          this.onBlueprintRemoved(window);
+        };
+    mainWindow.setVisible(false);
+    mainWindow.setActive(false);
     SlotWidgetBlueprintContainer blueprintContainer =
         new SlotWidgetBlueprintContainer(
             rocketBlueprintSlot,
@@ -172,8 +182,9 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
               // lock the main blueprint if component data cards are
               // inserted so that they dont get
               // voided (hopefully)
-
+              if (this.rocketBlueprintSlot.isEmpty()) {}
             });
+
     ClickButtonWidget buildButton =
         new ClickButtonWidget(
             0,
@@ -201,39 +212,49 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
           return mainWindow.getStatusText();
         },
         0x505050);
-
-    // this wont work if you try to put it into the constructor
-    blueprintContainer.onSlotChanged =
+    // this ChangeListener thing is a mess, it gets called mostly correctly server side (although it
+    // still gets called when you just click on the slot with nothing happenning), but on the client
+    // it gets called on initialization, and every single time the server syncs anything in the ui
+    // to the client
+    // for that reason i've decided to stop trying to make this random number generator work
+    // correctly on both sides and just used updateInfo :goog:?
+    blueprintContainer.setChangeListener(
         () -> {
-          if (slotsEmpty()) { // dont disable this thing so that you can take out cards without the
-            // blueprint inside
-            mainWindow.setVisible(false);
-            mainWindow.setActive(false);
-          }
-          blueprintContainer.detectAndSendChanges();
           blueprintContainer.setSelfPosition(
               rocketBlueprintSlot.isEmpty()
-                  ? new Position(width / 2, width / 2)
+                  ? new Position(width / 2, height / 2)
                   : new Position(width - 40, height - 40));
 
-          if (!rocketBlueprintSlot.isEmpty()
-              && rocketBlueprintSlot.getStackInSlot(0).hasTagCompound()) {
-            NBTTagCompound tag = rocketBlueprintSlot.getStackInSlot(0).getTagCompound();
-            AbstractRocketBlueprint bp =
-                AbstractRocketBlueprint.getBlueprintsRegistry().get(tag.getString("name"));
-            if (bp.readFromNBT(tag)) {
-              if (slots != mainWindow.generateSlotsFromBlueprint(bp, this) && slotsEmpty()) {
-                this.slots = mainWindow.generateSlotsFromBlueprint(bp, this);
-              }
+          // the part that actually matters should be server side
+          if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+            SusyLog.logger.info("blueprint item: {}", blueprintContainer.getHandle().getStack());
+            if (this.rocketBlueprintSlot.isEmpty()) {
+              // this.onBlueprintRemoved(mainWindow);
+              mainWindow.onBlueprintRemoved();
 
-              mainWindow.generateFromBlueprint(bp);
-              mainWindow.setActive(true);
-              mainWindow.setVisible(true);
             } else {
-              SusyLog.logger.error("failed to read a blueprint from nbt");
+              if (this.rocketBlueprintSlot.getStackInSlot(0).getMetadata()
+                  == SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.metaValue) {
+                // this.onBlueprintInserted(mainWindow);
+                mainWindow.onBlueprintInserted();
+              }
             }
           }
-        };
+        });
+    // initialize the thing in case the blueprint was already in the machine
+    if (!this.rocketBlueprintSlot.isEmpty()) {
+
+      NBTTagCompound tag = rocketBlueprintSlot.getStackInSlot(0).getTagCompound();
+      AbstractRocketBlueprint bp =
+          AbstractRocketBlueprint.getBlueprintsRegistry().get(tag.getString("name"));
+      if (bp.readFromNBT(tag)) {
+        mainWindow.generateFromBlueprint(bp);
+        mainWindow.setActive(true);
+        mainWindow.setVisible(true);
+      } else {
+        SusyLog.logger.error("invalid blueprint");
+      }
+    }
 
     builder.widget(mainWindow);
     builder.widget(blueprintContainer.setBackgroundTexture(GuiTextures.SLOT_DARK));
@@ -242,28 +263,57 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     return builder;
   }
 
+  public void onBlueprintRemoved(RocketStageDisplayWidget mainwindow) {
+    // if (this.slots.isEmpty() )
+    this.slots.clear();
+
+    mainwindow.selectedStageIndex = 0;
+    mainwindow.error = RocketStage.ComponentValidationResult.UNKNOWN;
+    mainwindow.setVisible(false);
+    mainwindow.setActive(false);
+  }
+
+  // this should only be ran when a new blueprint item is inserted, as doing this will void items
+  public void onBlueprintInserted(RocketStageDisplayWidget mainwindow) {
+    mainwindow.setActive(true);
+    mainwindow.setVisible(true);
+    if (!rocketBlueprintSlot.isEmpty() && rocketBlueprintSlot.getStackInSlot(0).hasTagCompound()) {
+      NBTTagCompound tag = rocketBlueprintSlot.getStackInSlot(0).getTagCompound();
+      AbstractRocketBlueprint bp =
+          AbstractRocketBlueprint.getBlueprintsRegistry().get(tag.getString("name"));
+      if (bp.readFromNBT(tag)) {
+        this.slots = mainwindow.generateSlotsFromBlueprint(bp, this);
+        mainwindow.generateFromBlueprint(bp);
+      } else {
+        SusyLog.logger.error("invalid blueprint");
+      }
+    }
+  }
+
   public void buildBlueprint(ClickData clickdata, RocketStageDisplayWidget mainwindow) {
     if (!rocketBlueprintSlot.isEmpty() && rocketBlueprintSlot.getStackInSlot(0).hasTagCompound()) {
       NBTTagCompound tag = rocketBlueprintSlot.getStackInSlot(0).getTagCompound();
       AbstractRocketBlueprint bp =
           AbstractRocketBlueprint.getBlueprintsRegistry().get(tag.getString("name"));
       if (mainwindow.blueprintBuildAttempt(bp)) {
-        // shit pant? the status is polled by the status text thing
+        SusyLog.logger.info("build success, component writeout: {}", bp.writeToNBT());
+        this.rocketBlueprintSlot.addToCompound(
+            x -> {
+              return bp.writeToNBT();
+            });
       }
     }
   }
 
   // TODO: remove ts
   public void SetDefaultBlueprint(Widget.ClickData data) {
-    this.markDirty();
     rocketBlueprintSlot.clearNBT();
-
+    var tag = SusyRocketComponents.ROCKET_V1_BLUEPRINT_DEFAULT.writeToNBT();
     rocketBlueprintSlot.addToCompound(
         compound -> {
-          return SusyRocketComponents.ROCKET_SOYUZ_BLUEPRINT_DEFAULT.writeToNBT();
+          return tag;
         });
-    SusyLog.logger.info(
-        "set the nbt to {}", SusyRocketComponents.ROCKET_SOYUZ_BLUEPRINT_DEFAULT.writeToNBT());
+    SusyLog.logger.info("set the nbt to {}", tag);
   }
 
   @Override

@@ -32,7 +32,7 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
                   0,
                   size.width / 5,
                   size.height,
-                  "<",
+                  "",
                   (clickdata) -> {
                     this.selectedIndex--;
                   })
@@ -44,7 +44,7 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
                   0,
                   size.width / 5,
                   size.height,
-                  ">",
+                  "",
                   (clickdata) -> {
                     this.selectedIndex++;
                   })
@@ -52,14 +52,14 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
               .setButtonTexture(SusyGuiTextures.SPACEFLIGHT_SIMULATOR_BUTTON_RIGHT);
       amountTextField =
           new TextFieldWidget2(
-              (int) ((size.width / 5) * 2.5),
-              -2,
+              (int) ((size.width / 5) * 2.5) - 5,
+              3,
               (size.width / 5) * 3,
               size.height,
               () -> {
                 return Integer.toString(this.getSelectedValue()) + "x";
               },
-              (something) -> {});
+              this::trySelectValue);
 
       this.addWidget(amountTextField);
 
@@ -69,6 +69,22 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
       this.addWidget(decreaseButton);
       decreaseButton.setVisible(validValues.length > 1);
       decreaseButton.setActive(validValues.length > 1);
+    }
+
+    public void trySelectValue(String value) {
+
+      int val = 5;
+      String cleaned = value.endsWith("x") ? value.substring(0, value.length() - 1) : value;
+      try {
+        val = Integer.parseInt(cleaned);
+      } catch (NumberFormatException e) {
+        return;
+      }
+      for (int i = 0; i < validValues.length; i++) {
+        if (validValues[i] == val) {
+          this.selectedIndex = i;
+        }
+      }
     }
 
     public int getSelectedValue() {

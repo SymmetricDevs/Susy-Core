@@ -190,7 +190,7 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
       t -> {
         return true;
       };
-
+  // when in the aerospace flight simulator ui, this defines if a component can be put into a row
   protected Predicate<String> componentSlotValidator =
       name -> name.equals(this.getType()) || name.equals(this.getName());
 
