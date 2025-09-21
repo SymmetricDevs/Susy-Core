@@ -187,6 +187,12 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
         .collect(Collectors.toList());
   }
 
+  @Override
+  public void setActive(boolean active) {
+    super.setActive(active);
+    this.itemList.widgets.forEach(x -> x.setActive(active));
+  }
+
   public int getAmount() {
     return this.selector.getSelectedValue();
   }
@@ -207,10 +213,9 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
 
   // true == shortened version is to be displayed, with only 1 slot visible
   public void setShortView(boolean state) {
-    if (this.shortView == state) return;
     this.selector.setActive(state);
     this.selector.setVisible(state);
-
+    if (this.shortView == state) return;
     if (state) {
       this.previousStateSize = this.itemList.getSize();
       this.previousStateSlider = this.itemList.sliderActive;

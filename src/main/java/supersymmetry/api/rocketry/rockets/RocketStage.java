@@ -167,15 +167,18 @@ public class RocketStage {
     this.name = name;
   }
 
-  public boolean setComponentListEntry(
-      final String name, final List<AbstractComponent<?>> componentList) {
+  public RocketStage.ComponentValidationResult setComponentListEntry(
+      String name, List<AbstractComponent<?>> componentList) {
     if (IntStream.of(this.componentLimits.get(name)).noneMatch(x -> x == componentList.size())) {
-      return false; // fail if you cant put that amount of components is invalid
+      return ComponentValidationResult
+          .INVALID_AMOUNT; // fail if you cant put that amount of components is invalid
     }
-    // if (!componentValidationFunction.apply(
-    //     new Tuple<String, List<AbstractComponent<?>>>(name, componentList))) return false;
+    var validation_result =
+        componentValidationFunction.apply(
+            new Tuple<String, List<AbstractComponent<?>>>(name, componentList));
+    if (validation_result != ComponentValidationResult.SUCCESS) return validation_result;
     components.put(name, componentList);
-    return true;
+    return ComponentValidationResult.SUCCESS;
   }
 
   public int maxComponentsOf(String cname) {

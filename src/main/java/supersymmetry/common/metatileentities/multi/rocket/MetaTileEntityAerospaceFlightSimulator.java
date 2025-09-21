@@ -182,7 +182,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
               // lock the main blueprint if component data cards are
               // inserted so that they dont get
               // voided (hopefully)
-              if (this.rocketBlueprintSlot.isEmpty()) {}
             });
 
     ClickButtonWidget buildButton =
@@ -194,16 +193,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             new TextComponentTranslation(this.getMetaName() + ".build_button_label")
                 .getFormattedText(),
             (c) -> {
-              if (!rocketBlueprintSlot.isEmpty()
-                  && rocketBlueprintSlot.getStackInSlot(0).hasTagCompound()) {
-                NBTTagCompound tag = rocketBlueprintSlot.getStackInSlot(0).getTagCompound();
-                AbstractRocketBlueprint bp =
-                    AbstractRocketBlueprint.getBlueprintsRegistry().get(tag.getString("name"));
-                if (mainWindow.blueprintBuildAttempt(bp)) {
-                  // rewrite the old data if its actually goog
-                  rocketBlueprintSlot.getStackInSlot(0).setTagCompound(bp.writeToNBT());
-                }
-              }
+              this.buildBlueprint(c, mainWindow);
             });
     builder.dynamicLabel(
         width / 5,
@@ -256,6 +246,8 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
       }
     }
 
+    builder.dynamicLabel(width / 2, (int) (height * 0.66), mainWindow::getStatusText, 0x505050);
+
     builder.widget(mainWindow);
     builder.widget(blueprintContainer.setBackgroundTexture(GuiTextures.SLOT_DARK));
     builder.widget(buildButton);
@@ -301,6 +293,12 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             x -> {
               return bp.writeToNBT();
             });
+      } else {
+        SusyLog.logger.info(
+            "status: {}\nerror stage: {}\nerror component: {}",
+            mainwindow.error.getTranslationkey(),
+            mainwindow.errorStage,
+            mainwindow.errorComponentType);
       }
     }
   }
@@ -308,7 +306,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
   // TODO: remove ts
   public void SetDefaultBlueprint(Widget.ClickData data) {
     rocketBlueprintSlot.clearNBT();
-    var tag = SusyRocketComponents.ROCKET_V1_BLUEPRINT_DEFAULT.writeToNBT();
+    var tag = SusyRocketComponents.ROCKET_SOYUZ_BLUEPRINT_DEFAULT.writeToNBT();
     rocketBlueprintSlot.addToCompound(
         compound -> {
           return tag;

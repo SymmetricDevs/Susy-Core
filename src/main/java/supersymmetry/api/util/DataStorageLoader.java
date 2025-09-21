@@ -11,6 +11,8 @@ import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.IStringSerializable;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
+import supersymmetry.api.SusyLog;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;

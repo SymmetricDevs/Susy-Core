@@ -10,6 +10,7 @@ import gregtech.api.util.Position;
 import gregtech.api.util.Size;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -37,12 +38,14 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
   protected ClickButtonWidget nextButton;
   protected DynamicLabelWidget amountTextField;
   protected slotProvider provider;
-  protected String errorStage = "";
-  protected String errorComponentType = "";
+  public String errorStage = "";
+  public String errorComponentType = "";
   public Consumer<RocketStageDisplayWidget> removalAction;
   public Consumer<RocketStageDisplayWidget> insertionAction;
   public RocketStage.ComponentValidationResult error = ComponentValidationResult.UNKNOWN;
   public int selectedStageIndex = 0;
+  // a hashmap of ui elements, this is a bad idea, but its either that or a hashmap of hashmaps of
+  // booleans for the button
   protected Map<String, RocketSimulatorComponentContainerWidget> stageContainers = new HashMap<>();
 
   public RocketStageDisplayWidget(Position pos, Size size, slotProvider slotProvider) {
@@ -119,16 +122,14 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
         .forEach(
             x -> {
               // i have no clue how but this causes a ConcurrentModificationException
-              x.setActive(false);
-              x.setVisible(false);
+              x.setPrimary(false);
             });
 
     if (!this.stageContainers.containsKey(this.getSelectedStage().getName())) {
       // this would happen if the key was RocketStage and not a String and im not sure why
       return;
     }
-    this.stageContainers.get(this.getSelectedStage().getName()).setActive(true);
-    this.stageContainers.get(this.getSelectedStage().getName()).setVisible(true);
+    this.stageContainers.get(this.getSelectedStage().getName()).setPrimary(true);
   }
 
   public void generateSelectedStageView(RocketStage stage) {
@@ -166,11 +167,16 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
   public Map<String, Map<String, List<DataStorageLoader>>> generateSlotsFromBlueprint(
       AbstractRocketBlueprint bp, MetaTileEntity mte) {
     Map<String, Map<String, List<DataStorageLoader>>> map = new HashMap<>();
-    for (RocketStage stage : bp.stages) {
+    // copy the array because it explodes if you dont
+    for (RocketStage stage : new ArrayList<>(bp.stages)) {
+
       Map<String, List<DataStorageLoader>> stageComponents = new HashMap<>();
-      for (String componentname : new ArrayList<>(stage.componentLimits.keySet())) {
+      for (String componentname : new HashSet<>(stage.componentLimits.keySet())) {
         List<DataStorageLoader> slots = new ArrayList<>();
         for (int i = 0; i < stage.maxComponentsOf(componentname); i++) {
+          // final int indx = i;
+          // final String compname = componentname;
+          // final String stagename = stage.getName();
           slots.add(
               new DataStorageLoader(
                   mte,
@@ -181,6 +187,8 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                             AbstractComponent.getComponentFromName(
                                 x.getTagCompound().getString("name"));
                         if (c.getComponentSlotValidator().test(componentname)) {
+                          // SusyLog.logger.info(
+                          //     "slot {} stage {} component array {}", indx, stagename, compname);
                           return true;
                         }
                       }
@@ -223,25 +231,27 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
               .get();
 
       this.errorStage = stageFrombp.getName();
-      List<AbstractComponent<?>> components = new ArrayList<>();
       // go through every component type within that stage component
       for (var entryWidgets : stageEntry.getValue().components.entrySet()) {
+        List<AbstractComponent<?>> components = new ArrayList<>();
         this.errorComponentType = entryWidgets.getKey();
 
-        // go through each slot and add each component separately
         if (!entryWidgets.getValue().isShortView()) {
+          // go through each slot and add each component separately
           for (DataStorageLoader componentContainer : entryWidgets.getValue().getSlots()) {
             var cardStack = componentContainer.getStackInSlot(0);
             if (!cardStack.hasTagCompound()) {
-              this.error = ComponentValidationResult.INVALID_CARD;
-              return false;
+              // this.error = ComponentValidationResult.INVALID_CARD;
+              // return false;
+              continue;
             }
             NBTTagCompound tag = cardStack.getTagCompound();
             var component =
                 AbstractComponent.getComponentFromName(tag.getString("name")).readFromNBT(tag);
             if (!component.isPresent()) {
-              this.error = ComponentValidationResult.INVALID_CARD;
-              return false;
+              // this.error = ComponentValidationResult.INVALID_CARD;
+              // return false;
+              continue;
             }
             components.add(component.get());
           }
@@ -266,8 +276,10 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
           }
         }
         // actually set the component type lists with the generated AbstractComponents
-        if (!stageFrombp.setComponentListEntry(entryWidgets.getKey(), components)) {
-          this.error = ComponentValidationResult.INVALID_AMOUNT;
+        ComponentValidationResult res =
+            stageFrombp.setComponentListEntry(entryWidgets.getKey(), components);
+        if (res != ComponentValidationResult.SUCCESS) {
+          this.error = res;
           return false;
         }
       }
