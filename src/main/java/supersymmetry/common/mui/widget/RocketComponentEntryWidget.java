@@ -98,7 +98,7 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
   // public Consumer<Tuple<Boolean, Integer>> shortViewCB;
   public HorizontalScrollableListWidget itemList;
 
-  public ImageCycleButtonWidget checkmark;
+  public ImageCycleButtonWidget sbutton;
   public ImageWidget buttonBackground;
   private Size previousStateSize = new Size(18 * 5 + 2, 28);
 
@@ -127,7 +127,7 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
             validValues,
             new Position(itemList.getPosition().x + 20, 0),
             new Size((int) (itemList.getSize().width / 2 - 10), 18));
-    this.checkmark = button;
+    this.sbutton = button;
     this.selector = selector;
     this.itemList = itemList;
     // this.shortViewCB = callback;
@@ -149,7 +149,7 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
       WidgetIntSelector selector,
       Consumer<Tuple<Boolean, Integer>> callback) {
     super(pos, size);
-    this.checkmark = button;
+    this.sbutton = button;
     this.itemList = itemList;
     this.selector = selector;
     itemList.setSelfPosition(
@@ -204,10 +204,10 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
   public void resetBackgroundWidget() {
     buttonBackground =
         new ImageWidget(
-            checkmark.getSelfPosition().x - 2,
-            checkmark.getSelfPosition().y - 2,
-            checkmark.getSize().width + 4,
-            checkmark.getSize().height + 4,
+            sbutton.getSelfPosition().x - 2,
+            sbutton.getSelfPosition().y - 2,
+            sbutton.getSize().width + 4,
+            sbutton.getSize().height + 4,
             SusyGuiTextures.SPACEFLIGHT_SIMULATOR_SLIDER_BACKGROUND);
   }
 

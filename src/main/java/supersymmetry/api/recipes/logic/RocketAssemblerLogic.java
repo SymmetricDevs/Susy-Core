@@ -38,7 +38,7 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
         .EUt(2 << 15) // LuV amp. this means that you need 8 4A EV energy hatches :goog:
         .duration((int) Math.ceil(assembler.getCurrentCraftTarget().getAssemblyDuration() * 20))
         .build()
-        .getResult(); // .collect(Collectors.toList());
+        .getResult();
   }
 
   private List<GTRecipeInput> collapse(List<GTRecipeInput> in) {

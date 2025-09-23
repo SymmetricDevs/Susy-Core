@@ -33,7 +33,7 @@ public class RocketSimulatorComponentContainerWidget extends AbstractWidgetGroup
             0,
             I18n.format(localizationKey),
             () -> {
-              return 0x404040;
+              return 0xffffff;
             });
 
     textWidget.setSelfPosition(new Position(0, rowSkip + rowSeparation + scrollbarPadding));

@@ -133,7 +133,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             }
         }
 
-        if (struct.status == BuildStat.SCANNING) {struct.status = BuildStat.ERROR; /*if it wasnt changed after scanning, nothing matched*/ }
+        if (struct.status == BuildStat.SCANNING) {struct.status = BuildStat.UNRECOGNIZED; /*if it wasnt changed after scanning, nothing matched*/ }
 
         /* Plan from here on out:
         1. Gather block statistics
@@ -231,7 +231,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             builder.widget(new ImageWidget(173, 201, 18, 6, GuiTextures.BUTTON_POWER_DETAIL));
         }
         //Scan Button
-        builder.widget(new ClickButtonWidget(68,56,54,18,new TextComponentTranslation("gregtech.machine.component_scanner.scan_button").getUnformattedComponentText(),this::handleScan))
+        builder.widget(new ClickButtonWidget(68,56,54,18,new TextComponentTranslation("susy.machine.component_scanner.scan_button").getUnformattedComponentText(),this::handleScan))
                 .slot(importItems,0,90,95,GuiTextures.SLOT);
 
 
@@ -265,14 +265,14 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             if (linkedCleanroom!=null) {
                 TextComponentTranslation cleanState;
                 if (scannerLogic.isActive() || struct.status == BuildStat.SCANNING) {
-                    tl.add(TextComponentUtil.translationWithColor(TextFormatting.YELLOW, "gregtech.machine.component_scanner.scanning"));
+                    tl.add(TextComponentUtil.translationWithColor(TextFormatting.YELLOW, "susy.machine.component_scanner.scanning"));
                 } else if (shownStatus== BuildStat.SUCCESS) {
-                    tl.add(TextComponentUtil.translationWithColor(TextFormatting.GREEN, "gregtech.machine.component_scanner.success"));
+                    tl.add(TextComponentUtil.translationWithColor(TextFormatting.GREEN, "susy.machine.component_scanner.success"));
 
                 } else if (shownStatus == BuildStat.UNSCANNED) {
-                    tl.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY, "gregtech.machine.component_scanner.unscanned"));
+                    tl.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY, "susy.machine.component_scanner.unscanned"));
                 } else {
-                    tl.add(TextComponentUtil.translationWithColor(TextFormatting.DARK_RED, "gregtech.machine.component_scanner.failure"));
+                    tl.add(TextComponentUtil.translationWithColor(TextFormatting.DARK_RED, "susy.machine.component_scanner.failure"));
                     tl.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY, shownStatus.getCode()));
                 }
             }

@@ -34,7 +34,7 @@ public class SusyRocketComponents {
                     .limit(8)
                     .build())
             .ignitesWith(
-                new RocketStage.Builder("block A")
+                new RocketStage.Builder("block_A")
                     .type("engine")
                     .limit(4)
                     .type("engine_small")
@@ -43,7 +43,7 @@ public class SusyRocketComponents {
                     .limit(2)
                     .build())
             .stage(
-                new RocketStage.Builder("block F")
+                new RocketStage.Builder("block_F")
                     .type("engine")
                     .limit(4)
                     .type("engine_small")

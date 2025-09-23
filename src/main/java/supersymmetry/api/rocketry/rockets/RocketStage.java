@@ -13,7 +13,6 @@ import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.common.util.Constants.NBT;
-import net.minecraftforge.fluids.Fluid;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.common.rocketry.components.ComponentLavalEngine;
@@ -21,7 +20,7 @@ import supersymmetry.common.rocketry.components.ComponentLiquidFuelTank;
 
 public class RocketStage {
   public enum ComponentValidationResult {
-    SUCCESS("goog"),
+    SUCCESS("success"),
     INVALID_CARD("invalid_card"),
     VALIDATION_FAILURE("validation_failure"),
     INVALID_AMOUNT("invalid_amount"),
@@ -130,23 +129,24 @@ public class RocketStage {
     return components.values().stream()
             .flatMap(List::stream)
             .filter(c -> c.getType().equals("tank"))
-            .mapToInt( tank -> ((ComponentLiquidFuelTank) tank).volume)
-            .sum() * 1000; // 1000 L per m^3 by definition
+            .mapToInt(tank -> ((ComponentLiquidFuelTank) tank).volume)
+            .sum()
+        * 1000; // 1000 L per m^3 by definition
   }
 
   // In kg/s
   public double getFuelThroughput() {
     return components.values().stream()
-            .flatMap(List::stream)
-            .filter(c -> c.getType().equals("engine"))
-            .mapToDouble(engine -> ((ComponentLavalEngine) engine).fuel_throughput)
-            .sum();
+        .flatMap(List::stream)
+        .filter(c -> c.getType().equals("engine"))
+        .mapToDouble(engine -> ((ComponentLavalEngine) engine).fuel_throughput)
+        .sum();
   }
 
   public double getThrust(RocketFuelEntry rocketFuelEntry, double gravity) {
     double power = getFuelThroughput() * rocketFuelEntry.getHeatOfUse(); // kg/s * J/kg
     double specific_heat_ratio = 1.25; // TODO: make this dependent on output
-    //double massVelocity =
+    // double massVelocity =
     return 0;
   }
 
@@ -198,7 +198,7 @@ public class RocketStage {
   }
 
   public String getLocalizationKey() {
-    return "susy.rocketry.stages.name." + this.name;
+    return "susy.rocketry.stages." + this.name + ".name";
   }
 
   public NBTTagCompound writeToNBT() {

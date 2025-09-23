@@ -37,6 +37,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
   protected ClickButtonWidget previousButton;
   protected ClickButtonWidget nextButton;
   protected DynamicLabelWidget amountTextField;
+  protected DynamicLabelWidget stageName;
   protected slotProvider provider;
   public String errorStage = "";
   public String errorComponentType = "";
@@ -86,10 +87,22 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
             () -> {
               return Integer.toString(this.getSelectedIndex() + 1) + "/" + this.stages.size();
             });
+    stageName =
+        new DynamicLabelWidget(
+            2,
+            12,
+            () -> {
+              if (this.stages.isEmpty()) return "";
+              return I18n.format(
+                  "susy.machine.aerospace_flight_simulator.stagename",
+                  I18n.format(this.getSelectedStage().getLocalizationKey()));
+            },
+            0xffffff);
 
     this.addWidget(amountTextField);
     this.addWidget(nextButton);
     this.addWidget(previousButton);
+    this.addWidget(stageName);
   }
 
   @Override
@@ -219,16 +232,18 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
   // takes in a blueprint, adds the component entries into it with all of the AbstractComponent<?>
   // stuff. taken from the gui slots. this is here because of the shortview buttons
   public boolean blueprintBuildAttempt(AbstractRocketBlueprint blueprint) {
-    this.errorStage = "";
-    this.errorComponentType = "";
     this.error = ComponentValidationResult.UNKNOWN;
     // go through every stage widget
     for (var stageEntry : this.stageContainers.entrySet()) {
-      RocketStage stageFrombp =
+      RocketStage stageFrombp;
+      var st =
           blueprint.getStages().stream()
               .filter(x -> x.getName() == stageEntry.getKey())
-              .findFirst()
-              .get();
+              .findFirst();
+      if (!st.isPresent()) {
+        throw new RuntimeException("failed to match a stage to the provided blueprint");
+      }
+      stageFrombp = st.get();
 
       this.errorStage = stageFrombp.getName();
       // go through every component type within that stage component
@@ -325,15 +340,14 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
     if (this.error == ComponentValidationResult.SUCCESS) {
       return I18n.format(ComponentValidationResult.SUCCESS.getTranslationKey());
     } else {
-      if (this.errorComponentType == ""
-          || this.errorStage == ""
-          || this.error == ComponentValidationResult.UNKNOWN) return "";
+      if (this.errorComponentType == "" || this.errorStage == ""
+      // || this.error == ComponentValidationResult.UNKNOWN
+      ) return "";
     }
-    return I18n.format(this.error.getTranslationKey())
-        + I18n.format("susy.machine.aerospace_flight_simulator.error_message")
-        + "\n"
-        + I18n.format("susy.rocketry.stages." + this.errorStage + ".name")
-        + "\n"
-        + I18n.format("susy.rocketry.components." + this.errorComponentType + ".name");
+    return I18n.format(
+        "susy.machine.aerospace_flight_simulator.error_format",
+        I18n.format(this.error.getTranslationKey()),
+        I18n.format("susy.rocketry.stages." + this.errorStage + ".name"),
+        I18n.format("susy.rocketry.components." + this.errorComponentType + ".name"));
   }
 }

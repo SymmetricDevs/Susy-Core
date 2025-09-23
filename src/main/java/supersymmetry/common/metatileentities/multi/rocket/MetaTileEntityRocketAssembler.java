@@ -40,7 +40,7 @@ import supersymmetry.common.blocks.SuSyBlocks;
 public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController {
   public MetaTileEntityRocketAssembler(ResourceLocation metaTileEntityId) {
     super(metaTileEntityId, SuSyRecipeMaps.ROCKET_ASSEMBLER);
-    this.recipeMapWorkable = new RocketAssemblerLogic(this);
+    this.recipeMapWorkable = new RocketAssemblerLogic(this); // <-- recipes are generated here
   }
 
   public DataStorageLoader blueprintSlot =

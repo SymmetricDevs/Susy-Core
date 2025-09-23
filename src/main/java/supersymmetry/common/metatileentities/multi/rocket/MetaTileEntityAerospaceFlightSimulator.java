@@ -38,13 +38,15 @@ import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.mui.widget.RocketStageDisplayWidget;
-import supersymmetry.common.mui.widget.SlotWidgetBlueprintContainer;
+import supersymmetry.common.mui.widget.SlotWidgetMentallyStable;
 import supersymmetry.common.rocketry.SusyRocketComponents;
 
 public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDisplayBase {
   // live widemann reaction
   // https://discord.com/channels/881234100504109166/881234101103890454/1402784628603097270
   public Map<String, Map<String, List<DataStorageLoader>>> slots = new HashMap<>();
+  // TODO: make this only accept incomplete blueprints, it somehow breaks when they are already
+  // built :c
   public DataStorageLoader rocketBlueprintSlot =
       new DataStorageLoader(
           this,
@@ -165,24 +167,8 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         };
     mainWindow.setVisible(false);
     mainWindow.setActive(false);
-    SlotWidgetBlueprintContainer blueprintContainer =
-        new SlotWidgetBlueprintContainer(
-            rocketBlueprintSlot,
-            0,
-            width / 2,
-            height / 2,
-            // this is called on SlotChanged
-            () -> {},
-            // moved it a bit further down because it wont let me do stupid things unless
-            // i edit it after the constructor is done
-            //
-            // this is called on detectAndSendChanges
-            () -> {
-              rocketBlueprintSlot.setLocked(!slotsEmpty());
-              // lock the main blueprint if component data cards are
-              // inserted so that they dont get
-              // voided (hopefully)
-            });
+    SlotWidgetMentallyStable blueprintContainer =
+        new SlotWidgetMentallyStable(rocketBlueprintSlot, 0, width / 2, height / 2);
 
     ClickButtonWidget buildButton =
         new ClickButtonWidget(
@@ -202,6 +188,9 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
           return mainWindow.getStatusText();
         },
         0x505050);
+    // doesnt get ran sometimes so you have to check in the main too
+    rocketBlueprintSlot.setLocked(!slotsEmpty());
+
     // this ChangeListener thing is a mess, it gets called mostly correctly server side (although it
     // still gets called when you just click on the slot with nothing happenning), but on the client
     // it gets called on initialization, and every single time the server syncs anything in the ui
@@ -217,7 +206,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
 
           // the part that actually matters should be server side
           if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-            SusyLog.logger.info("blueprint item: {}", blueprintContainer.getHandle().getStack());
             if (this.rocketBlueprintSlot.isEmpty()) {
               // this.onBlueprintRemoved(mainWindow);
               mainWindow.onBlueprintRemoved();
@@ -235,8 +223,8 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     if (!this.rocketBlueprintSlot.isEmpty()) {
 
       NBTTagCompound tag = rocketBlueprintSlot.getStackInSlot(0).getTagCompound();
-      AbstractRocketBlueprint bp =
-          AbstractRocketBlueprint.getBlueprintsRegistry().get(tag.getString("name"));
+      AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
+
       if (bp.readFromNBT(tag)) {
         mainWindow.generateFromBlueprint(bp);
         mainWindow.setActive(true);
@@ -246,13 +234,27 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
       }
     }
 
-    builder.dynamicLabel(width / 2, (int) (height * 0.66), mainWindow::getStatusText, 0x505050);
+    builder.dynamicLabel(
+        width,
+        height,
+        () -> {
+          return mainWindow.getStatusText();
+        },
+        0xffffff);
 
     builder.widget(mainWindow);
     builder.widget(blueprintContainer.setBackgroundTexture(GuiTextures.SLOT_DARK));
     builder.widget(buildButton);
 
     return builder;
+  }
+
+  @Override
+  public void update() {
+    super.update();
+    if (!this.getWorld().isRemote) {
+      this.rocketBlueprintSlot.setLocked(!this.slotsEmpty());
+    }
   }
 
   public void onBlueprintRemoved(RocketStageDisplayWidget mainwindow) {
@@ -271,8 +273,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     mainwindow.setVisible(true);
     if (!rocketBlueprintSlot.isEmpty() && rocketBlueprintSlot.getStackInSlot(0).hasTagCompound()) {
       NBTTagCompound tag = rocketBlueprintSlot.getStackInSlot(0).getTagCompound();
-      AbstractRocketBlueprint bp =
-          AbstractRocketBlueprint.getBlueprintsRegistry().get(tag.getString("name"));
+      AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
       if (bp.readFromNBT(tag)) {
         this.slots = mainwindow.generateSlotsFromBlueprint(bp, this);
         mainwindow.generateFromBlueprint(bp);
@@ -285,8 +286,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
   public void buildBlueprint(ClickData clickdata, RocketStageDisplayWidget mainwindow) {
     if (!rocketBlueprintSlot.isEmpty() && rocketBlueprintSlot.getStackInSlot(0).hasTagCompound()) {
       NBTTagCompound tag = rocketBlueprintSlot.getStackInSlot(0).getTagCompound();
-      AbstractRocketBlueprint bp =
-          AbstractRocketBlueprint.getBlueprintsRegistry().get(tag.getString("name"));
+      AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
       if (mainwindow.blueprintBuildAttempt(bp)) {
         SusyLog.logger.info("build success, component writeout: {}", bp.writeToNBT());
         this.rocketBlueprintSlot.addToCompound(
@@ -296,7 +296,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
       } else {
         SusyLog.logger.info(
             "status: {}\nerror stage: {}\nerror component: {}",
-            mainwindow.error.getTranslationkey(),
+            mainwindow.error.getTranslationKey(),
             mainwindow.errorStage,
             mainwindow.errorComponentType);
       }

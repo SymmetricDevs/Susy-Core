@@ -14,17 +14,25 @@ public abstract class AbstractRocketBlueprint {
   private static Map<String, AbstractRocketBlueprint> blueprintsRegistry = new HashMap<>();
 
   // default blueprints for stuff.
-
   public static Map<String, AbstractRocketBlueprint> getBlueprintsRegistry() {
     return new HashMap<>(blueprintsRegistry);
   }
 
   public static AbstractRocketBlueprint getCopyOf(String name) {
     try {
-      return (AbstractRocketBlueprint)
-          AbstractRocketBlueprint.getBlueprintsRegistry().get(name).clone();
+
+      AbstractRocketBlueprint bp = AbstractRocketBlueprint.getBlueprintsRegistry().get(name);
+      AbstractRocketBlueprint newbp =
+          (AbstractRocketBlueprint)
+              bp.getClass()
+                  .getDeclaredConstructors()[0]
+                  .newInstance(bp.getName(), bp.getRelatedEntity());
+
+      newbp.readFromNBT(bp.writeToNBT());
+      return newbp;
     } catch (Exception e) {
-      return null;
+      e.printStackTrace();
+      throw new RuntimeException("failed to create a blueprint copy");
     }
   }
 
