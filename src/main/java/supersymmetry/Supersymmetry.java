@@ -56,8 +56,7 @@ public class Supersymmetry {
         System
                 .out
                 .println(
-                        "Ha" +
-                                "ha"
+                        "Ha" + "ha"
                 );
     }
 
