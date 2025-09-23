@@ -1,0 +1,37 @@
+name: Spotless Auto-Commit
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  spotless-apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Run spotlessApply
+        run: ./gradlew spotlessApply
+
+      - name: Commit & Push changes (if needed)
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git diff --cached --exit-code || (git commit -m "chore: spotless auto-format [bot]" && git push origin main)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
