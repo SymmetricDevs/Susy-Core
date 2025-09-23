@@ -103,5 +103,5 @@ dependencies {
 //    ant.get(src: 'https://github.com/SynArchive/OptiFine-Archive/raw/refs/heads/main/1.12.2/preview_OptiFine_1.12.2_HD_U_G6_pre1.jar',
 //            dest: 'libs/optifine/',
 //            skipexisting: 'true')
-//    runtimeOnly files('libs/optifine/*')
+//    runtimeOnly fileTree('libs/optifine/*')
 }
