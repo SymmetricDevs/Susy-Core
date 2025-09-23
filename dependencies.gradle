@@ -42,13 +42,13 @@ dependencies {
     implementation rfg.deobf('curse.maven:gregtech-food-option-477021:6147619')
 
     // # GroovyScript
-    api 'com.cleanroommc:groovyscript:1.2.4' transitive false
+    api 'com.cleanroommc:groovyscript:1.2.5' transitive false
 
     // # Lib Mods we are using
     api 'com.cleanroommc:modularui:2.5.0-rc6' transitive false
     api rfg.deobf('curse.maven:geckolib-388172:4020277')
     // SussyPatches 0.4.0
-    api 'maven.modrinth:sussypatches:0.7.2'
+    api 'maven.modrinth:sussypatches:1.5.0'
 
     // # Immersive Railroading dependencies
     // Universal Mod Care 1.2.1
@@ -79,7 +79,6 @@ dependencies {
     compileOnly rfg.deobf('curse.maven:travelers-backpack-321117:3150850')
     compileOnly rfg.deobf('curse.maven:bubbles-a-baubles-fork-995393:5719448')
     compileOnly rfg.deobf('curse.maven:barrels-drums-storage-more-319404:2708193')
-    compileOnly rfg.deobf("curse.maven:vintagefix-871198:6609247")
     // LittleTiles
     compileOnly rfg.deobf("curse.maven:creativecore-257814:4722163")
     compileOnly rfg.deobf("curse.maven:littletiles-257818:5180387")
@@ -104,5 +103,5 @@ dependencies {
 //    ant.get(src: 'https://github.com/SynArchive/OptiFine-Archive/raw/refs/heads/main/1.12.2/preview_OptiFine_1.12.2_HD_U_G6_pre1.jar',
 //            dest: 'libs/optifine/',
 //            skipexisting: 'true')
-//    runtimeOnly files('libs/optifine/*')
+//    runtimeOnly fileTree('libs/optifine/*')
 }
