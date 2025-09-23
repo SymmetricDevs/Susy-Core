@@ -1,11 +1,13 @@
 package supersymmetry.mixins.reccomplex;
 
-import ivorius.reccomplex.utils.accessor.RCAccessorEntity;
+import java.util.UUID;
+
 import net.minecraft.entity.Entity;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
-import java.util.UUID;
+import ivorius.reccomplex.utils.accessor.RCAccessorEntity;
 
 @Mixin(value = RCAccessorEntity.class, remap = false)
 public class RCAccessorEntityMixin {

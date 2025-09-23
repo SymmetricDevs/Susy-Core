@@ -1,21 +1,21 @@
 package supersymmetry.api.recipes.builders;
 
+import java.util.Map;
+
+import net.minecraft.item.ItemStack;
+
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.ingredients.GTRecipeItemInput;
-import net.minecraft.item.ItemStack;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
 import supersymmetry.api.recipes.properties.CatalystProperty;
 import supersymmetry.api.recipes.properties.CatalystPropertyValue;
 
-import java.util.Map;
-
 public class CatalystRecipeBuilder extends RecipeBuilder<CatalystRecipeBuilder> {
 
-    public CatalystRecipeBuilder() {
-    }
+    public CatalystRecipeBuilder() {}
 
     @SuppressWarnings("unused")
     public CatalystRecipeBuilder(Recipe recipe, RecipeMap<CatalystRecipeBuilder> recipeMap) {
@@ -52,5 +52,4 @@ public class CatalystRecipeBuilder extends RecipeBuilder<CatalystRecipeBuilder> 
 
         return this.notConsumable(GTRecipeItemInput.getOrCreate(inputStacks));
     }
-
 }

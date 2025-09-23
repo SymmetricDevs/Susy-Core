@@ -1,21 +1,23 @@
 package supersymmetry.common.event;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+import java.util.function.Function;
+
+import javax.annotation.Nonnull;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.common.util.Constants;
+
 import supersymmetry.Supersymmetry;
 
-import javax.annotation.Nonnull;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-import java.util.function.Function;
-
 public class MobHordeWorldData extends WorldSavedData
-        implements Function<UUID, MobHordePlayerData> {
+                               implements Function<UUID, MobHordePlayerData> {
 
     private static final String DATA_NAME = Supersymmetry.MODID + "_InvasionData";
     private final Map<UUID, MobHordePlayerData> playerDataMap;
@@ -36,8 +38,7 @@ public class MobHordeWorldData extends WorldSavedData
             throw new RuntimeException("Null world storage");
         }
 
-        MobHordeWorldData instance =
-                (MobHordeWorldData) storage.getOrLoadData(MobHordeWorldData.class, DATA_NAME);
+        MobHordeWorldData instance = (MobHordeWorldData) storage.getOrLoadData(MobHordeWorldData.class, DATA_NAME);
 
         if (instance == null) {
             instance = new MobHordeWorldData();

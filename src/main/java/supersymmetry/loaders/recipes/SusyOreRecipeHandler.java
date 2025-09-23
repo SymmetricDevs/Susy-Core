@@ -1,5 +1,7 @@
 package supersymmetry.loaders.recipes;
 
+import net.minecraft.item.ItemStack;
+
 import gregtech.api.recipes.ModHandler;
 import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.recipes.RecipeMaps;
@@ -14,12 +16,11 @@ import gregtech.api.unification.stack.UnificationEntry;
 import gregtech.api.util.GTUtility;
 import gregtech.common.ConfigHolder;
 import gregtech.loaders.recipe.handlers.OreRecipeHandler;
-import net.minecraft.item.ItemStack;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 
 public class SusyOreRecipeHandler {
 
-    public static void init(){
+    public static void init() {
         if (ConfigHolder.worldgen.allUniqueStoneTypes) {
             SusyOrePrefix.oreGabbro.addProcessingHandler(PropertyKey.ORE, OreRecipeHandler::processOre);
             SusyOrePrefix.oreGneiss.addProcessingHandler(PropertyKey.ORE, OreRecipeHandler::processOre);
@@ -42,8 +43,9 @@ public class SusyOreRecipeHandler {
         }
 
         ItemStack crushedStack = OreDictUnifier.get(OrePrefix.crushed, material);
-        Material smeltingMaterial = property.getDirectSmeltResult() == null ? material : property.getDirectSmeltResult();
-        double amountOfCrushedOre = (double)property.getOreMultiplier();
+        Material smeltingMaterial = property.getDirectSmeltResult() == null ? material :
+                property.getDirectSmeltResult();
+        double amountOfCrushedOre = (double) property.getOreMultiplier();
         ItemStack ingotStack;
         if (smeltingMaterial.hasProperty(PropertyKey.INGOT)) {
             ingotStack = OreDictUnifier.get(OrePrefix.ingot, smeltingMaterial);
@@ -57,17 +59,25 @@ public class SusyOreRecipeHandler {
         ingotStack.setCount(ingotStack.getCount() * property.getOreMultiplier() * oreTypeMultiplier);
         crushedStack.setCount(crushedStack.getCount() * property.getOreMultiplier());
         if (!crushedStack.isEmpty()) {
-            RecipeBuilder<?> builder = ((SimpleRecipeBuilder)((SimpleRecipeBuilder)((SimpleRecipeBuilder) RecipeMaps.FORGE_HAMMER_RECIPES.recipeBuilder()).input(orePrefix, material)).duration(10)).EUt(16);
+            RecipeBuilder<?> builder = ((SimpleRecipeBuilder) ((SimpleRecipeBuilder) ((SimpleRecipeBuilder) RecipeMaps.FORGE_HAMMER_RECIPES
+                    .recipeBuilder()).input(orePrefix, material)).duration(10)).EUt(16);
             if (material.hasProperty(PropertyKey.GEM) && !OreDictUnifier.get(OrePrefix.gem, material).isEmpty()) {
-                builder.outputs(new ItemStack[]{GTUtility.copy((int)Math.ceil(amountOfCrushedOre) * oreTypeMultiplier, OreDictUnifier.get(OrePrefix.gem, material, crushedStack.getCount()))});
+                builder.outputs(
+                        new ItemStack[] { GTUtility.copy((int) Math.ceil(amountOfCrushedOre) * oreTypeMultiplier,
+                                OreDictUnifier.get(OrePrefix.gem, material, crushedStack.getCount())) });
             } else {
-                builder.outputs(new ItemStack[]{GTUtility.copy((int)Math.ceil(amountOfCrushedOre) * oreTypeMultiplier, crushedStack)});
+                builder.outputs(new ItemStack[] {
+                        GTUtility.copy((int) Math.ceil(amountOfCrushedOre) * oreTypeMultiplier, crushedStack) });
             }
 
             builder.buildAndRegister();
-            builder = ((SimpleRecipeBuilder)((SimpleRecipeBuilder)((SimpleRecipeBuilder)((SimpleRecipeBuilder)RecipeMaps.MACERATOR_RECIPES.recipeBuilder()).input(orePrefix, material)).outputs(new ItemStack[]{GTUtility.copy((int)Math.round(amountOfCrushedOre) * 2 * oreTypeMultiplier, crushedStack)})).chancedOutput(byproductStack, 1400, 850)).duration(400);
+            builder = ((SimpleRecipeBuilder) ((SimpleRecipeBuilder) ((SimpleRecipeBuilder) ((SimpleRecipeBuilder) RecipeMaps.MACERATOR_RECIPES
+                    .recipeBuilder()).input(orePrefix, material))
+                            .outputs(new ItemStack[] { GTUtility.copy(
+                                    (int) Math.round(amountOfCrushedOre) * 2 * oreTypeMultiplier, crushedStack) }))
+                                            .chancedOutput(byproductStack, 1400, 850)).duration(400);
 
-            for(MaterialStack secondaryMaterial : orePrefix.secondaryMaterials) {
+            for (MaterialStack secondaryMaterial : orePrefix.secondaryMaterials) {
                 if (secondaryMaterial.material.hasProperty(PropertyKey.DUST)) {
                     ItemStack dustStack = OreDictUnifier.getGem(secondaryMaterial);
                     builder.chancedOutput(dustStack, 6700, 800);
@@ -80,11 +90,9 @@ public class SusyOreRecipeHandler {
         if (!ingotStack.isEmpty() && doesMaterialUseNormalFurnace(smeltingMaterial)) {
             ModHandler.addSmeltingRecipe(new UnificationEntry(orePrefix, material), ingotStack, 0.5F);
         }
-
     }
 
     private static boolean doesMaterialUseNormalFurnace(Material material) {
         return !material.hasProperty(PropertyKey.BLAST);
     }
-
 }

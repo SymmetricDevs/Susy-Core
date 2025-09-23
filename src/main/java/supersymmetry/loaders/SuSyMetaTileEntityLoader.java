@@ -2,7 +2,5 @@ package supersymmetry.loaders;
 
 public class SuSyMetaTileEntityLoader {
 
-    public static void init() {
-
-    }
+    public static void init() {}
 }

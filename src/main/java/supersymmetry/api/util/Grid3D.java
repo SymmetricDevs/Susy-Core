@@ -1,18 +1,19 @@
 package supersymmetry.api.util;
 
+import java.util.*;
+
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.util.RelativeDirection;
 
-import java.util.*;
-
 /**
  * Represents a 3D grid for drawing a multiblock pattern. The origin point (0, 0, 0) is
  * at the left, bottom, front corner.
  */
 public class Grid3D {
+
     private final char[][][] grid;
     final int width;
     final int height;

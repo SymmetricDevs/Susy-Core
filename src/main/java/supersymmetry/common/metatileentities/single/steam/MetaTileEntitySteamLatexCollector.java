@@ -1,13 +1,9 @@
 package supersymmetry.common.metatileentities.single.steam;
 
-import codechicken.lib.raytracer.CuboidRayTraceResult;
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.pipeline.IVertexOperation;
-import codechicken.lib.vec.Matrix4;
-import gregtech.api.capability.impl.FluidTankList;
-import gregtech.api.capability.impl.NotifiableItemStackHandler;
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -19,13 +15,19 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandlerModifiable;
+
+import codechicken.lib.raytracer.CuboidRayTraceResult;
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Matrix4;
+import gregtech.api.capability.impl.FluidTankList;
+import gregtech.api.capability.impl.NotifiableItemStackHandler;
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import supersymmetry.api.metatileentity.PseudoMultiSteamMachineMetaTileEntity;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicators;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class MetaTileEntitySteamLatexCollector extends PseudoMultiSteamMachineMetaTileEntity {
 
@@ -33,7 +35,8 @@ public class MetaTileEntitySteamLatexCollector extends PseudoMultiSteamMachineMe
     private final long latexCollectionAmount;
 
     public MetaTileEntitySteamLatexCollector(ResourceLocation metaTileEntityId, boolean isHighPressure) {
-        super(metaTileEntityId, SuSyRecipeMaps.LATEX_COLLECTOR_RECIPES, SuSySteamProgressIndicators.EXTRACTION_STEAM, SusyTextures.LATEX_COLLECTOR_OVERLAY, false, isHighPressure);
+        super(metaTileEntityId, SuSyRecipeMaps.LATEX_COLLECTOR_RECIPES, SuSySteamProgressIndicators.EXTRACTION_STEAM,
+                SusyTextures.LATEX_COLLECTOR_OVERLAY, false, isHighPressure);
         latexCollectionAmount = isHighPressure ? 6L : 3L;
     }
 
@@ -61,7 +64,8 @@ public class MetaTileEntitySteamLatexCollector extends PseudoMultiSteamMachineMe
     @Override
     public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
         super.renderMetaTileEntity(renderState, translation, pipeline);
-        SusyTextures.LATEX_COLLECTOR_OVERLAY.renderOrientedState(renderState, translation, pipeline, this.getFrontFacing(), this.isActive(), true);
+        SusyTextures.LATEX_COLLECTOR_OVERLAY.renderOrientedState(renderState, translation, pipeline,
+                this.getFrontFacing(), this.isActive(), true);
     }
 
     @Override
@@ -72,30 +76,34 @@ public class MetaTileEntitySteamLatexCollector extends PseudoMultiSteamMachineMe
 
     @Override
     public boolean isValidFrontFacing(EnumFacing facing) {
-        return super.isValidFrontFacing(facing) && facing != workableHandler.getVentingSide() && facing != workableHandler.getVentingSide().getOpposite();
+        return super.isValidFrontFacing(facing) && facing != workableHandler.getVentingSide() &&
+                facing != workableHandler.getVentingSide().getOpposite();
     }
 
     @Override
     public void setFrontFacing(EnumFacing frontFacing) {
         super.setFrontFacing(frontFacing);
-        if (workableHandler.getVentingSide() == frontFacing || workableHandler.getVentingSide() == frontFacing.getOpposite()) {
+        if (workableHandler.getVentingSide() == frontFacing ||
+                workableHandler.getVentingSide() == frontFacing.getOpposite()) {
             workableHandler.setVentingSide(frontFacing.rotateY());
         }
     }
 
     @Override
-    public boolean onWrenchClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing, CuboidRayTraceResult hitResult) {
+    public boolean onWrenchClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing,
+                                 CuboidRayTraceResult hitResult) {
         if (!playerIn.isSneaking()) {
             if (workableHandler.getVentingSide() == facing) {
                 return false;
-            } else if (this.hasFrontFacing() && facing == this.getFrontFacing() || facing == this.getFrontFacing().getOpposite()) {
-                return false;
-            } else {
-                if (!this.getWorld().isRemote) {
-                    workableHandler.setVentingSide(facing);
-                }
-                return true;
-            }
+            } else if (this.hasFrontFacing() && facing == this.getFrontFacing() ||
+                    facing == this.getFrontFacing().getOpposite()) {
+                        return false;
+                    } else {
+                        if (!this.getWorld().isRemote) {
+                            workableHandler.setVentingSide(facing);
+                        }
+                        return true;
+                    }
         } else {
             return super.onWrenchClick(playerIn, hand, facing, hitResult);
         }

@@ -1,5 +1,25 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
@@ -16,27 +36,11 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.metatileentities.multi.VoidingMultiblockBase;
 
-import javax.annotation.Nonnull;
-import java.util.List;
-
 public class MetaTileEntityDumper extends VoidingMultiblockBase {
+
     public MetaTileEntityDumper(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
         // Hardcode these annoyances for now
@@ -86,7 +90,7 @@ public class MetaTileEntityDumper extends VoidingMultiblockBase {
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
         super.addDisplayText(textList);
-        if(isStructureFormed()) {
+        if (isStructureFormed()) {
             ITextComponent componentRate = TextComponentUtil.stringWithColor(TextFormatting.DARK_PURPLE,
                     this.getBaseVoidingRate() + " L/10t");
 
@@ -98,7 +102,8 @@ public class MetaTileEntityDumper extends VoidingMultiblockBase {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip,
+                               boolean advanced) {
         tooltip.add(I18n.format("susy.machine.dumper.tooltip.1", getBaseVoidingRate()));
         super.addInformation(stack, world, tooltip, advanced);
     }
@@ -114,7 +119,6 @@ public class MetaTileEntityDumper extends VoidingMultiblockBase {
         this.getFrontOverlay().renderOrientedState(renderState, translation, pipeline, getFrontFacing(),
                 this.isActive(), true);
     }
-
 
     @SideOnly(Side.CLIENT)
     private void dumpingParticles() {

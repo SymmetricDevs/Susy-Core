@@ -1,5 +1,18 @@
 package supersymmetry.loaders.recipes;
 
+import static gregtech.api.GTValues.*;
+import static gregtech.api.recipes.RecipeMaps.*;
+import static gregtech.api.unification.material.Materials.*;
+import static gregtech.api.unification.ore.OrePrefix.*;
+
+import java.util.*;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.GTValues;
 import gregtech.api.recipes.ModHandler;
 import gregtech.api.recipes.Recipe;
@@ -19,45 +32,41 @@ import gregtech.api.util.function.TriConsumer;
 import gregtech.common.items.MetaItems;
 import gregtech.common.items.ToolItems;
 import gregtech.loaders.recipe.handlers.RecyclingRecipeHandler;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
-import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 import supersymmetry.api.unification.material.properties.FiberProperty;
+import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.item.SuSyMetaItems;
 
-import java.util.*;
-
-import static gregtech.api.GTValues.*;
-import static gregtech.api.recipes.RecipeMaps.*;
-import static gregtech.api.unification.material.Materials.*;
-import static gregtech.api.unification.ore.OrePrefix.*;
-
 public class SuSyMaterialRecipeHandler {
+
     // For SUSY molds to be put into
     public static final Map<OrePrefix, ItemStack> mapMolds = new HashMap<>();
 
     public static void init() {
         SusyOrePrefix.catalystBed.addProcessingHandler(PropertyKey.DUST, SuSyMaterialRecipeHandler::processCatalystBed);
-        SusyOrePrefix.catalystPellet.addProcessingHandler(PropertyKey.DUST, SuSyMaterialRecipeHandler::processCatalystPellet);
-        SusyOrePrefix.sheetedFrame.addProcessingHandler(PropertyKey.DUST, SuSyMaterialRecipeHandler::processSheetedFrame);
+        SusyOrePrefix.catalystPellet.addProcessingHandler(PropertyKey.DUST,
+                SuSyMaterialRecipeHandler::processCatalystPellet);
+        SusyOrePrefix.sheetedFrame.addProcessingHandler(PropertyKey.DUST,
+                SuSyMaterialRecipeHandler::processSheetedFrame);
         SusyOrePrefix.sheetedFrame.addProcessingHandler(PropertyKey.DUST, RecyclingRecipeHandler::processCrushing);
         SusyOrePrefix.fiber.addProcessingHandler(SuSyPropertyKey.FIBER, SuSyMaterialRecipeHandler::processFiber);
         SusyOrePrefix.thread.addProcessingHandler(SuSyPropertyKey.FIBER, SuSyMaterialRecipeHandler::processThread);
-        SusyOrePrefix.thread.addProcessingHandler(SuSyPropertyKey.FIBER, SuSyMaterialRecipeHandler::processThreadWeaving);
+        SusyOrePrefix.thread.addProcessingHandler(SuSyPropertyKey.FIBER,
+                SuSyMaterialRecipeHandler::processThreadWeaving);
         SusyOrePrefix.fiber.addProcessingHandler(PropertyKey.DUST, RecyclingRecipeHandler::processCrushing);
         SusyOrePrefix.thread.addProcessingHandler(PropertyKey.DUST, RecyclingRecipeHandler::processCrushing);
         SusyOrePrefix.electrode.addProcessingHandler(PropertyKey.DUST, SuSyMaterialRecipeHandler::processElectrode);
-        addProcessingHandler(PropertyKey.DUST, OrePrefix.dust, SuSyMaterialFlags.HIP_PRESSED, SuSyMaterialRecipeHandler::processHIPPressing);
-        addProcessingHandler(PropertyKey.DUST, OrePrefix.dust, SuSyMaterialFlags.CONTINUOUSLY_CAST, SuSyMaterialRecipeHandler::processContinuouslyCast);
+        addProcessingHandler(PropertyKey.DUST, OrePrefix.dust, SuSyMaterialFlags.HIP_PRESSED,
+                SuSyMaterialRecipeHandler::processHIPPressing);
+        addProcessingHandler(PropertyKey.DUST, OrePrefix.dust, SuSyMaterialFlags.CONTINUOUSLY_CAST,
+                SuSyMaterialRecipeHandler::processContinuouslyCast);
     }
 
-
-    public static <T extends IMaterialProperty> void addProcessingHandler(PropertyKey<T> propertyKey, OrePrefix prefix, MaterialFlag condition, TriConsumer<OrePrefix, Material, T> handler) {
+    public static <T extends IMaterialProperty> void addProcessingHandler(PropertyKey<T> propertyKey, OrePrefix prefix,
+                                                                          MaterialFlag condition,
+                                                                          TriConsumer<OrePrefix, Material, T> handler) {
         prefix.addProcessingHandler((orePrefix, material) -> {
             if (material.hasProperty(propertyKey) && material.hasFlag(condition)) {
                 handler.accept(orePrefix, material, material.getProperty(propertyKey));
@@ -141,9 +150,7 @@ public class SuSyMaterialRecipeHandler {
         // The warning doesn't actually apply
         if (Item.getItemById(5300) != null) {
 
-
         }
-
 
         ItemStack ingotStack = OreDictUnifier.get(ingot, material);
 
@@ -163,7 +170,6 @@ public class SuSyMaterialRecipeHandler {
                     .buildAndRegister();
         }
 
-
         r = BENDER_RECIPES.findRecipe(8, inputItems, fluidInputs, false);
         if (r != null) {
             BENDER_RECIPES.removeRecipe(r);
@@ -176,7 +182,6 @@ public class SuSyMaterialRecipeHandler {
                 }
             }
         }
-
     }
 
     public static void processElectrode(OrePrefix orePrefix, Material material, DustProperty dustProperty) {
@@ -287,71 +292,73 @@ public class SuSyMaterialRecipeHandler {
                 .input(OrePrefix.frameGt, mat, 1)
                 .output(SusyOrePrefix.sheetedFrame, mat, 6)
                 .EUt(7)
-                .duration(225) //18.75t/craft = 1 stack/min
-                .circuitMeta(10) //prevent conflict with casings and other frame + plate recipes
+                .duration(225) // 18.75t/craft = 1 stack/min
+                .circuitMeta(10) // prevent conflict with casings and other frame + plate recipes
                 .buildAndRegister();
 
-        /* Manual implementation of recycling before use of autogenerated recipes
-        int voltageMultiplier;
-
-        //BEGIN CLONED MULTIPLIER CODE SECTION
-        //CEU COMMENT Gather the highest blast temperature of any material in the list
-        int highestTemp = 0;
-        if (mat.hasProperty(PropertyKey.BLAST)) {
-            BlastProperty prop = mat.getProperty(PropertyKey.BLAST);
-            if (prop.getBlastTemperature() > highestTemp) {
-                highestTemp = prop.getBlastTemperature();
-            }
-        }
-        else if(mat.hasFlag(IS_MAGNETIC) && mat.hasProperty(PropertyKey.INGOT) && mat.getProperty(PropertyKey.INGOT).getSmeltingInto().hasProperty(PropertyKey.BLAST)) {
-            BlastProperty prop = mat.getProperty(PropertyKey.INGOT).getSmeltingInto().getProperty(PropertyKey.BLAST);
-            if (prop.getBlastTemperature() > highestTemp) {
-                highestTemp = prop.getBlastTemperature();
-            }
-        }
-
-        //CEU COMMMENT: No blast temperature in the list means no multiplier
-        if (highestTemp == 0) voltageMultiplier = 1;
-
-        //CEU COMMENT: If less then 2000K, multiplier of 4
-        else if (highestTemp < 2000) voltageMultiplier = 4; // CEU COMMENT: todo make this a better value?
-
-        //CEU COMMENT: If above 2000K, multiplier of 16
-        else voltageMultiplier = 16;
-
-        //END CLONED MULTIPLIER CODE SECTION
-
-        //constant int -> output amount int ingots/ multiples of M
-        int matRecycleTime = 5 * (int) mat.getMass();
-
-        if (mat.hasProperty(PropertyKey.DUST)) {
-            RecipeMaps.MACERATOR_RECIPES.recipeBuilder()
-                    .input(SusyOrePrefix.sheetedFrame, mat, 6)
-                    .output(dust, mat, 5)
-                    .EUt(2 * voltageMultiplier)
-                    .duration(matRecycleTime)
-                    .buildAndRegister();
-        }
-
-        if (mat.hasProperty(PropertyKey.INGOT)) {
-            RecipeMaps.ARC_FURNACE_RECIPES.recipeBuilder()
-                    .input(SusyOrePrefix.sheetedFrame, mat, 6)
-                    .output(OrePrefix.ingot, mat, 5)
-                    .EUt(VA[LV])
-                    .duration(matRecycleTime)
-                    .buildAndRegister();
-        }
-
-        if (mat.hasFluid()) {
-            //L = 144L aka 1 ingot. Considered using M, but I'm pretty sure that isn't meant to be used anywhere other than oredict
-            RecipeMaps.EXTRACTOR_RECIPES.recipeBuilder()
-                    .input(SusyOrePrefix.sheetedFrame, mat, 1)
-                    .fluidOutputs(mat.getFluid(120)) // L *5/6
-                    .EUt(VA[LV] * voltageMultiplier) //should prevent getting any fluids before you should and fits standard
-                    .duration((matRecycleTime /6))
-                    .buildAndRegister();
-        }
-        */
-
+        /*
+         * Manual implementation of recycling before use of autogenerated recipes
+         * int voltageMultiplier;
+         * 
+         * //BEGIN CLONED MULTIPLIER CODE SECTION
+         * //CEU COMMENT Gather the highest blast temperature of any material in the list
+         * int highestTemp = 0;
+         * if (mat.hasProperty(PropertyKey.BLAST)) {
+         * BlastProperty prop = mat.getProperty(PropertyKey.BLAST);
+         * if (prop.getBlastTemperature() > highestTemp) {
+         * highestTemp = prop.getBlastTemperature();
+         * }
+         * }
+         * else if(mat.hasFlag(IS_MAGNETIC) && mat.hasProperty(PropertyKey.INGOT) &&
+         * mat.getProperty(PropertyKey.INGOT).getSmeltingInto().hasProperty(PropertyKey.BLAST)) {
+         * BlastProperty prop = mat.getProperty(PropertyKey.INGOT).getSmeltingInto().getProperty(PropertyKey.BLAST);
+         * if (prop.getBlastTemperature() > highestTemp) {
+         * highestTemp = prop.getBlastTemperature();
+         * }
+         * }
+         * 
+         * //CEU COMMMENT: No blast temperature in the list means no multiplier
+         * if (highestTemp == 0) voltageMultiplier = 1;
+         * 
+         * //CEU COMMENT: If less then 2000K, multiplier of 4
+         * else if (highestTemp < 2000) voltageMultiplier = 4; // CEU COMMENT: todo make this a better value?
+         * 
+         * //CEU COMMENT: If above 2000K, multiplier of 16
+         * else voltageMultiplier = 16;
+         * 
+         * //END CLONED MULTIPLIER CODE SECTION
+         * 
+         * //constant int -> output amount int ingots/ multiples of M
+         * int matRecycleTime = 5 * (int) mat.getMass();
+         * 
+         * if (mat.hasProperty(PropertyKey.DUST)) {
+         * RecipeMaps.MACERATOR_RECIPES.recipeBuilder()
+         * .input(SusyOrePrefix.sheetedFrame, mat, 6)
+         * .output(dust, mat, 5)
+         * .EUt(2 * voltageMultiplier)
+         * .duration(matRecycleTime)
+         * .buildAndRegister();
+         * }
+         * 
+         * if (mat.hasProperty(PropertyKey.INGOT)) {
+         * RecipeMaps.ARC_FURNACE_RECIPES.recipeBuilder()
+         * .input(SusyOrePrefix.sheetedFrame, mat, 6)
+         * .output(OrePrefix.ingot, mat, 5)
+         * .EUt(VA[LV])
+         * .duration(matRecycleTime)
+         * .buildAndRegister();
+         * }
+         * 
+         * if (mat.hasFluid()) {
+         * //L = 144L aka 1 ingot. Considered using M, but I'm pretty sure that isn't meant to be used anywhere other
+         * than oredict
+         * RecipeMaps.EXTRACTOR_RECIPES.recipeBuilder()
+         * .input(SusyOrePrefix.sheetedFrame, mat, 1)
+         * .fluidOutputs(mat.getFluid(120)) // L *5/6
+         * .EUt(VA[LV] * voltageMultiplier) //should prevent getting any fluids before you should and fits standard
+         * .duration((matRecycleTime /6))
+         * .buildAndRegister();
+         * }
+         */
     }
 }

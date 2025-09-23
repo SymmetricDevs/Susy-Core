@@ -1,6 +1,21 @@
 package supersymmetry.api.stockinteraction;
 
-import cam72cam.immersiverailroading.entity.EntityRollingStock;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.items.ItemStackHandler;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.cleanroommc.modularui.screen.ModularPanel;
@@ -17,22 +32,11 @@ import com.cleanroommc.modularui.widgets.ToggleButton;
 import com.cleanroommc.modularui.widgets.layout.Flow;
 import com.cleanroommc.modularui.widgets.slot.PhantomItemSlot;
 import com.cleanroommc.modularui.widgets.slot.SlotGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.items.ItemStackHandler;
-import org.jetbrains.annotations.NotNull;
+
+import cam72cam.immersiverailroading.entity.EntityRollingStock;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.metatileentity.Mui2Utils;
 import supersymmetry.common.mui.widget.HighlightedTextField;
-
-import javax.annotation.Nonnull;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Predicate;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<EntityRollingStock> {
 
@@ -58,8 +62,7 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
     }
 
     protected boolean matchesName(String tag) {
-        return errored || patternString.isEmpty() || pattern == null
-                || pattern.asPredicate().test(tag);
+        return errored || patternString.isEmpty() || pattern == null || pattern.asPredicate().test(tag);
     }
 
     @Override
@@ -115,7 +118,6 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
 
     @NotNull
     public Widget<?> createWidgets(PanelSyncManager syncManager) {
-
         SlotGroup filterInventory = new SlotGroup("filter_inv", 3, 1000, true);
         syncManager.registerSlotGroup(filterInventory);
 
@@ -147,8 +149,8 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
                                 })
                                 .slot(SyncHandlers.itemSlot(this.handler, index)
                                         .slotGroup(filterInventory)
-                                        .filter(stack ->
-                                                StockHelperFunctions.getDefinitionNameFromStack(stack) != null)))
+                                        .filter(stack -> StockHelperFunctions.getDefinitionNameFromStack(stack) !=
+                                                null)))
                         .build()
                         .marginRight(4))
                 .child(Flow.row()
@@ -250,7 +252,6 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
     }
 
     protected void createStatusTooltip(RichTooltip tooltip) {
-
         if (!this.patternString.isEmpty()) {
             if (errored) {
                 tooltip.add(IKey.lang("susy.gui.stock_interactor.stock_filter.regex.tooltip.error"));

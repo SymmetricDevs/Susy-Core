@@ -8,8 +8,8 @@ import org.apache.logging.log4j.Logger;
  * One edit to this class and you're not alive anymore
  */
 public class SusyLog {
+
     public static Logger logger = LogManager.getLogger("Supersymmetry");
 
-    private SusyLog() {
-    }
+    private SusyLog() {}
 }
