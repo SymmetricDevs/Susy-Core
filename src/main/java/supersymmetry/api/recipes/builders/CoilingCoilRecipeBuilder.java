@@ -1,19 +1,18 @@
 package supersymmetry.api.recipes.builders;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.util.EnumValidationResult;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.recipes.properties.CoilingCoilTemperatureProperty;
 
 public class CoilingCoilRecipeBuilder extends RecipeBuilder<CoilingCoilRecipeBuilder> {
 
-    public CoilingCoilRecipeBuilder() {
-
-    }
+    public CoilingCoilRecipeBuilder() {}
 
     @SuppressWarnings("unused")
     public CoilingCoilRecipeBuilder(Recipe recipe, RecipeMap<CoilingCoilRecipeBuilder> recipeMap) {

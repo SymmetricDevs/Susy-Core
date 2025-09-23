@@ -1,12 +1,14 @@
 package supersymmetry.common.recipes;
 
+import net.minecraftforge.items.IItemHandlerModifiable;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.util.GTTransferUtils;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.metatileentity.multiblock.MetaTileEntityOrderedDT;
 
 public class DistillationTowerRecipeLogic extends MultiblockRecipeLogic {
@@ -71,5 +73,4 @@ public class DistillationTowerRecipeLogic extends MultiblockRecipeLogic {
             return tower.getHandler().getFluidTanks();
         return super.getOutputTank();
     }
-
 }

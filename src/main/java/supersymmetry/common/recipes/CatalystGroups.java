@@ -11,6 +11,5 @@ public final class CatalystGroups {
     // Keeping it in for now though
     public static final CatalystGroup STANDARD_CATALYSTS = new CatalystGroup("standard_catalysts");
 
-    private CatalystGroups() {
-    }
+    private CatalystGroups() {}
 }
