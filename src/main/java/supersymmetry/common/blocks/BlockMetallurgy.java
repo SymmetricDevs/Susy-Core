@@ -7,11 +7,13 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+
 import org.jetbrains.annotations.NotNull;
+
 import supersymmetry.api.blocks.VariantDirectionalRotatableBlock;
-import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
 public class BlockMetallurgy extends VariantDirectionalRotatableBlock<BlockMetallurgy.BlockMetallurgyType> {
+
     public BlockMetallurgy() {
         super(Material.IRON);
         setTranslationKey("metallurgy");
@@ -29,7 +31,9 @@ public class BlockMetallurgy extends VariantDirectionalRotatableBlock<BlockMetal
     }
 
     public enum BlockMetallurgyType implements IStringSerializable {
+
         HYDRAULIC_CYLINDER("hydraulic_cylinder");
+
         private String name;
 
         BlockMetallurgyType(String name) {

@@ -1,23 +1,25 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.cover.CoverRayTracer;
-import gregtech.common.items.tool.rotation.CustomBlockRotations;
-import gregtech.common.items.tool.rotation.ICustomRotationBehavior;
+import static net.minecraft.block.material.Material.IRON;
+
 import net.minecraft.block.BlockHorizontal;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.World;
-import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+
 import org.jetbrains.annotations.NotNull;
 
-import static net.minecraft.block.material.Material.IRON;
+import gregtech.api.cover.CoverRayTracer;
+import gregtech.common.items.tool.rotation.CustomBlockRotations;
+import gregtech.common.items.tool.rotation.ICustomRotationBehavior;
+import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
 public class BlockConveyor extends VariantHorizontalRotatableBlock<BlockConveyor.ConveyorType> {
 
@@ -69,8 +71,7 @@ public class BlockConveyor extends VariantHorizontalRotatableBlock<BlockConveyor
     @Override
     @NotNull
     @SuppressWarnings("deprecation")
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
-    {
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         return AABB_BOTTOM_HALF;
     }
 
@@ -86,7 +87,8 @@ public class BlockConveyor extends VariantHorizontalRotatableBlock<BlockConveyor
         return false;
     }
 
-    public enum ConveyorType implements IStringSerializable  {
+    public enum ConveyorType implements IStringSerializable {
+
         LV_CONVEYOR("lv");
 
         public final String name;

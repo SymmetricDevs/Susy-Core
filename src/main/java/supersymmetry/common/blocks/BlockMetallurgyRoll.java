@@ -7,10 +7,13 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+
 import org.jetbrains.annotations.NotNull;
+
 import supersymmetry.api.blocks.VariantAxialRotatableBlock;
 
 public class BlockMetallurgyRoll extends VariantAxialRotatableBlock<BlockMetallurgyRoll.BlockMetallurgyRollType> {
+
     public BlockMetallurgyRoll() {
         super(Material.IRON);
         setTranslationKey("metallurgy_roll");
@@ -30,6 +33,7 @@ public class BlockMetallurgyRoll extends VariantAxialRotatableBlock<BlockMetallu
     public enum BlockMetallurgyRollType implements IStringSerializable {
 
         ROLL("roll");
+
         private String name;
 
         BlockMetallurgyRollType(String name) {

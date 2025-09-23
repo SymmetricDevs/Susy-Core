@@ -1,5 +1,25 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import static gregtech.api.capability.GregtechDataCodes.assignId;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.World;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.GTValues;
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.gui.Widget;
@@ -25,29 +45,12 @@ import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
 import gregtech.common.metatileentities.MetaTileEntities;
 import it.unimi.dsi.fastutil.ints.IntLists;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.capability.impl.QuarryLogic;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.properties.DimensionProperty;
 import supersymmetry.api.util.Grid3D;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
-
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
-
-import static gregtech.api.capability.GregtechDataCodes.assignId;
 
 /**
  * The quarry multiblock is a regular {@link RecipeMapMultiblockController}, with an additional mode
@@ -104,7 +107,6 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
 
     @SuppressWarnings("UnusedReturnValue")
     public boolean updateStructureDimensions() {
-
         World world = getWorld();
         EnumFacing front = getFrontFacing();
         EnumFacing back = front.getOpposite();
@@ -186,31 +188,35 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
         return createGrid(width, depth).build();
 
         // Original pattern below for reference:
-        /*return FactoryBlockPattern.start()
-                .aisle("CCCCCFFFFFCCCCC", " CC    F    CC ", "       F       ", "       F       ", "       F       ")
-                .aisle("CFS         SFC", "CFS         SFC", " FS         SF ", " FS         SF ", " FSFFFFFFFFFSF ")
-                .aisle("CS           SC", "CS           SC", " S           S ", " S           S ", " S           S ")
-                .aisle("C             C", "               ", "               ", "               ", " F           F ")
-                .aisle("C             C", "               ", "               ", "               ", " F           F ")
-                .aisle("F             F", "               ", "               ", "               ", " F           F ")
-                .aisle("AG           GA", "SS           SS", "               ", "               ", " F           F ")
-                .aisle("FG           GG", " G           G ", " F           F ", " F           F ", " F           F ")
-                .aisle("AG           GA", "SS           SS", "               ", "               ", " F           F ")
-                .aisle("F             F", "               ", "               ", "               ", " F           F ")
-                .aisle("C             C", "               ", "               ", "               ", " F           F ")
-                .aisle("C             C", "               ", "               ", "               ", " F           F ")
-                .aisle("CS           SC", "CS           SC", " S           S ", " S           S ", " S           S ")
-                .aisle("CFS         SFC", "CFS         SFC", " FS         SF ", " FS         SF ", " FSFFFFFFFFFSF ")
-                .aisle("CCCCCFAAAFCCCCC", " CC   AMA   CC ", "               ", "               ", "               ")
-                .where('M', selfPredicate())
-                .where('A', states(getCasingState())
-                        .or(autoAbilities(true, true, true, true, false, false, false)))
-                .where('S', states(getCasingState()))
-                .where('G', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID)))
-                .where('C', states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)))
-                .where('F', frames(Materials.Steel))
-                .where('G', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
-                .build();*/
+        /*
+         * return FactoryBlockPattern.start()
+         * .aisle("CCCCCFFFFFCCCCC", " CC    F    CC ", "       F       ", "       F       ", "       F       ")
+         * .aisle("CFS         SFC", "CFS         SFC", " FS         SF ", " FS         SF ", " FSFFFFFFFFFSF ")
+         * .aisle("CS           SC", "CS           SC", " S           S ", " S           S ", " S           S ")
+         * .aisle("C             C", "               ", "               ", "               ", " F           F ")
+         * .aisle("C             C", "               ", "               ", "               ", " F           F ")
+         * .aisle("F             F", "               ", "               ", "               ", " F           F ")
+         * .aisle("AG           GA", "SS           SS", "               ", "               ", " F           F ")
+         * .aisle("FG           GG", " G           G ", " F           F ", " F           F ", " F           F ")
+         * .aisle("AG           GA", "SS           SS", "               ", "               ", " F           F ")
+         * .aisle("F             F", "               ", "               ", "               ", " F           F ")
+         * .aisle("C             C", "               ", "               ", "               ", " F           F ")
+         * .aisle("C             C", "               ", "               ", "               ", " F           F ")
+         * .aisle("CS           SC", "CS           SC", " S           S ", " S           S ", " S           S ")
+         * .aisle("CFS         SFC", "CFS         SFC", " FS         SF ", " FS         SF ", " FSFFFFFFFFFSF ")
+         * .aisle("CCCCCFAAAFCCCCC", " CC   AMA   CC ", "               ", "               ", "               ")
+         * .where('M', selfPredicate())
+         * .where('A', states(getCasingState())
+         * .or(autoAbilities(true, true, true, true, false, false, false)))
+         * .where('S', states(getCasingState()))
+         * .where('G', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID)))
+         * .where('C',
+         * states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.
+         * StoneType.CONCRETE_LIGHT)))
+         * .where('F', frames(Materials.Steel))
+         * .where('G', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
+         * .build();
+         */
     }
 
     private Grid3D createGrid(int quarryWidth, int quarryDepth) {
@@ -237,14 +243,14 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
 
         // This code extends the quarry with steel frames by painting between 5 and -6 on each side.
         // I think concrete looks better on the bottom, but if we want frames, we can swap this out.
-//        grid.lineX(5, 0, -1, -6, 'F'); // back
-//        grid.lineX(5, 0, 0, -6, 'F'); // front
-//        grid.lineZ(0, 0, 5, -6, 'F'); // left
-//        grid.lineZ(-1, 0, 5, -6, 'F'); // right
-//
-//        grid.lineX(width / 2 - 1, 0, 0, "AAA"); // front
-//        grid.lineZ(0, 0, depth / 2 - 1, "AFA"); // left
-//        grid.lineZ(-1, 0, depth / 2 - 1, "AGA"); // right
+        // grid.lineX(5, 0, -1, -6, 'F'); // back
+        // grid.lineX(5, 0, 0, -6, 'F'); // front
+        // grid.lineZ(0, 0, 5, -6, 'F'); // left
+        // grid.lineZ(-1, 0, 5, -6, 'F'); // right
+        //
+        // grid.lineX(width / 2 - 1, 0, 0, "AAA"); // front
+        // grid.lineZ(0, 0, depth / 2 - 1, "AFA"); // left
+        // grid.lineZ(-1, 0, depth / 2 - 1, "AGA"); // right
 
         // inset gearboxes
         grid.lineZ(1, 0, quarryDepth / 2 - 1, "GGG"); // left + 1
@@ -320,12 +326,14 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
                 .where('E', MetaTileEntities.ENERGY_INPUT_HATCH[GTValues.LV], EnumFacing.SOUTH)
                 .where('T',
                         () -> ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH :
-                                getCasingState(), EnumFacing.SOUTH);
+                                getCasingState(),
+                        EnumFacing.SOUTH);
 
         ArrayList<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
         // add min, rectangular, max size
         // add current size first for multiblock preview
-        shapeInfo.add(createShapeGrid(Math.max(width, MIN_DIAMETER), Math.max(depth, MIN_DIAMETER)).buildShape(builder));
+        shapeInfo
+                .add(createShapeGrid(Math.max(width, MIN_DIAMETER), Math.max(depth, MIN_DIAMETER)).buildShape(builder));
         shapeInfo.add(createShapeGrid(23, 15).buildShape(builder));
         shapeInfo.add(createShapeGrid(31, 31).buildShape(builder));
         return shapeInfo;
@@ -348,7 +356,7 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
     @Nonnull
     @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.CHUNK_MINER_OVERLAY; //TODO: custom texture?
+        return Textures.CHUNK_MINER_OVERLAY; // TODO: custom texture?
     }
 
     @Override
@@ -364,7 +372,6 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
         this.isInitialized = true;
     }
 
-
     @Override
     public boolean checkRecipe(@NotNull Recipe recipe, boolean consumeIfSuccess) {
         for (int dimension : recipe.getProperty(DimensionProperty.getInstance(), IntLists.EMPTY_LIST))
@@ -375,22 +382,25 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
 
     @Override
     protected @NotNull Widget getFlexButton(int x, int y, int width, int height) {
-        return new ImageCycleButtonWidget(x, y, width, height, SusyGuiTextures.BUTTON_QUARRY_MODES, 2, () -> this.excavationMode ? 1 : 0,
+        return new ImageCycleButtonWidget(x, y, width, height, SusyGuiTextures.BUTTON_QUARRY_MODES, 2,
+                () -> this.excavationMode ? 1 : 0,
                 this::setExcavationMode)
-                .setTooltipHoverString(mode -> mode == 1 ? "susy.multiblock.quarry.excavation_mode" : "susy.multiblock.quarry.recipe_mode");
+                        .setTooltipHoverString(mode -> mode == 1 ? "susy.multiblock.quarry.excavation_mode" :
+                                "susy.multiblock.quarry.recipe_mode");
     }
 
     private void setExcavationMode(int mode) {
         this.excavationMode = mode == 1;
         if (this.excavationMode)
-            this.quarryLogic.init(); //reset quarrylogic
+            this.quarryLogic.init(); // reset quarrylogic
     }
 
     @Override
     protected void updateFormedValid() {
         if (getWorld().isRemote || !this.recipeMapWorkable.isWorkingEnabled()) return;
 
-        if (this.excavationMode && !this.quarryLogic.finished && this.drainEnergy(true) && this.getNumMaintenanceProblems() <= 5) {
+        if (this.excavationMode && !this.quarryLogic.finished && this.drainEnergy(true) &&
+                this.getNumMaintenanceProblems() <= 5) {
             this.drainEnergy(false);
             excavationProgress++;
             if (!excavationActive) toggleExcavationActive();
@@ -430,7 +440,7 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
         return (int) (BASE_TICKS_PER_EXCAVATION / Math.pow(2, getEnergyTier() - 1));
     }
 
-    //cap to EV tier
+    // cap to EV tier
     public int getEnergyTier() {
         return Math.min(GTUtility.getFloorTierByVoltage(energyContainer.getInputVoltage()), GTValues.EV);
     }
@@ -519,6 +529,7 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
 
     @Override
     public boolean isActive() {
-        return (super.isActive() && !excavationMode) || (excavationActive && this.isStructureFormed() && this.recipeMapWorkable.isWorkingEnabled());
+        return (super.isActive() && !excavationMode) ||
+                (excavationActive && this.isStructureFormed() && this.recipeMapWorkable.isWorkingEnabled());
     }
 }

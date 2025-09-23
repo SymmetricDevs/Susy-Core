@@ -3,6 +3,7 @@ package supersymmetry.client.audio;
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
+
 import supersymmetry.api.sound.SusySounds;
 import supersymmetry.common.entities.EntityDropPod;
 
@@ -39,5 +40,4 @@ public class MovingSoundDropPod extends MovingSound {
             this.distance = MathHelper.clamp(this.distance + 0.0025F, 0.0F, 1.0F);
         }
     }
-
 }

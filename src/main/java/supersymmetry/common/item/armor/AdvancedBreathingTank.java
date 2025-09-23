@@ -1,17 +1,18 @@
 package supersymmetry.common.item.armor;
 
+import java.util.List;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 
-import java.util.List;
-
 public class AdvancedBreathingTank extends AdvancedBreathingApparatus {
+
     public final static double INFINITE_OXYGEN = -1;
     public final double maxOxygen;
 
-
-    public AdvancedBreathingTank(double hoursOfLife, String name, int tier, double relativeAbsorption, double maxOxygen) {
+    public AdvancedBreathingTank(double hoursOfLife, String name, int tier, double relativeAbsorption,
+                                 double maxOxygen) {
         super(EntityEquipmentSlot.CHEST, hoursOfLife, name, tier, relativeAbsorption);
         this.maxOxygen = maxOxygen;
     }

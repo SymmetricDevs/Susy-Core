@@ -1,5 +1,12 @@
 package supersymmetry.common.metatileentities.multi;
 
+import javax.annotation.Nonnull;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.ResourceLocation;
+
+import org.jetbrains.annotations.NotNull;
+
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
@@ -15,13 +22,8 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
-
-import javax.annotation.Nonnull;
 
 public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
 
@@ -53,9 +55,10 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
 
     public TraceabilityPredicate getAbilityPredicate() {
         TraceabilityPredicate predicate = super.autoAbilities(true, false);
-        predicate.or(abilities(new MultiblockAbility[]{MultiblockAbility.INPUT_ENERGY}).setMinGlobalLimited(1).setMaxGlobalLimited(2).setPreviewCount(1));
-        predicate.or(abilities(new MultiblockAbility[]{MultiblockAbility.EXPORT_ITEMS}).setPreviewCount(1));
-        predicate.or(abilities(new MultiblockAbility[]{MultiblockAbility.EXPORT_FLUIDS}).setPreviewCount(1));
+        predicate.or(abilities(new MultiblockAbility[] { MultiblockAbility.INPUT_ENERGY }).setMinGlobalLimited(1)
+                .setMaxGlobalLimited(2).setPreviewCount(1));
+        predicate.or(abilities(new MultiblockAbility[] { MultiblockAbility.EXPORT_ITEMS }).setPreviewCount(1));
+        predicate.or(abilities(new MultiblockAbility[] { MultiblockAbility.EXPORT_FLUIDS }).setPreviewCount(1));
         return predicate;
     }
 
@@ -113,5 +116,4 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
     protected ICubeRenderer getFrontOverlay() {
         return Textures.ASSEMBLER_OVERLAY;
     }
-
 }

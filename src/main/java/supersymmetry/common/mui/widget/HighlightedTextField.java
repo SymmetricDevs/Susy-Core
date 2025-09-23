@@ -1,15 +1,16 @@
 package supersymmetry.common.mui.widget;
 
+import java.util.Map;
+import java.util.function.Function;
+
 import com.cleanroommc.modularui.api.value.IStringValue;
 import com.cleanroommc.modularui.screen.viewport.ModularGuiContext;
 import com.cleanroommc.modularui.value.sync.StringSyncValue;
 import com.cleanroommc.modularui.widgets.textfield.TextFieldHandler;
 import com.cleanroommc.modularui.widgets.textfield.TextFieldRenderer;
 import com.cleanroommc.modularui.widgets.textfield.TextFieldWidget;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
-import java.util.Map;
-import java.util.function.Function;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 // Copied from master branch of ceu
 public class HighlightedTextField extends TextFieldWidget {
