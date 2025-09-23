@@ -1,19 +1,21 @@
 package supersymmetry.api.recipes.properties;
 
-import gregtech.api.gui.resources.TextureArea;
-import gregtech.api.recipes.recipeproperties.RecipeProperty;
-import gregtech.api.util.Position;
-import gregtech.api.util.Size;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import java.util.List;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import gregtech.api.gui.resources.TextureArea;
+import gregtech.api.recipes.recipeproperties.RecipeProperty;
+import gregtech.api.util.Position;
+import gregtech.api.util.Size;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 public class BiomeProperty extends RecipeProperty<BiomeProperty.BiomePropertyList> {
 

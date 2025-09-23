@@ -1,5 +1,15 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
+
+import java.util.function.Supplier;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.GregTechAPI;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -17,21 +27,14 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockBoilerCasing;
 import gregtech.common.blocks.BlockWireCoil;
 import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockMetallurgy;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 
-import java.util.function.Supplier;
-
-import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
-
 public class MetaTileEntityHotIsostaticPress extends RecipeMapMultiblockController {
+
     public MetaTileEntityHotIsostaticPress(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.HOT_ISOSTATIC_PRESS);
     }
@@ -48,8 +51,13 @@ public class MetaTileEntityHotIsostaticPress extends RecipeMapMultiblockControll
                 .aisle("  SPS  ", "  SOS  ", "  SPS  ", "  SPS  ", "  SPS  ", "  SPS  ", "  SPS  ")
                 .where(' ', any())
                 .where('O', selfPredicate())
-                .where('S', states(SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.SILICON_CARBIDE_CASING)).setMinGlobalLimited(27).or(autoAbilities()))
-                .where('I', states(SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.SILICON_CARBIDE_CASING)))
+                .where('S',
+                        states(SuSyBlocks.MULTIBLOCK_CASING
+                                .getState(BlockSuSyMultiblockCasing.CasingType.SILICON_CARBIDE_CASING))
+                                        .setMinGlobalLimited(27).or(autoAbilities()))
+                .where('I',
+                        states(SuSyBlocks.MULTIBLOCK_CASING
+                                .getState(BlockSuSyMultiblockCasing.CasingType.SILICON_CARBIDE_CASING)))
                 .where('P', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE)))
                 .where('C', states(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.NICHROME)))
                 .where('X', air())
@@ -62,7 +70,8 @@ public class MetaTileEntityHotIsostaticPress extends RecipeMapMultiblockControll
     protected TraceabilityPredicate hydraulicOrientation(RelativeDirection direction) {
         EnumFacing facing = getRelativeFacing(direction);
 
-        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(hydraulicState().withProperty(FACING, facing))};
+        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[] {
+                new BlockInfo(hydraulicState().withProperty(FACING, facing)) };
         return new TraceabilityPredicate(blockWorldState -> {
             IBlockState state = blockWorldState.getBlockState();
             if (!(state.getBlock() instanceof BlockMetallurgy)) return false;

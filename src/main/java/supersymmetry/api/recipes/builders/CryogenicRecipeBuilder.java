@@ -1,13 +1,13 @@
 package supersymmetry.api.recipes.builders;
 
-import gregtech.api.recipes.RecipeBuilder;
 import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.recipes.RecipeBuilder;
 import supersymmetry.api.recipes.properties.CryogenicEnvironmentProperty;
 
 public class CryogenicRecipeBuilder<R extends RecipeBuilder<R>> extends RecipeBuilder<R> {
 
-    public CryogenicRecipeBuilder() {
-    }
+    public CryogenicRecipeBuilder() {}
 
     public CryogenicRecipeBuilder(CryogenicRecipeBuilder<R> recipeBuilder) {
         super(recipeBuilder);

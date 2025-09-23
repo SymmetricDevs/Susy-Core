@@ -14,7 +14,8 @@ public class DefinitionManagerVisitor extends ClassNode implements Opcodes {
 
     @Override
     public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
-        if (name.equals("stockLoaders")) signature = "Ljava/util/Map<Ljava/lang/String;Lsupersymmetry/loaders/SuSyIRLoader$StockLoader;>;";
+        if (name.equals("stockLoaders"))
+            signature = "Ljava/util/Map<Ljava/lang/String;Lsupersymmetry/loaders/SuSyIRLoader$StockLoader;>;";
         return super.visitField(access, name, desc, signature, value);
     }
 
@@ -36,13 +37,15 @@ public class DefinitionManagerVisitor extends ClassNode implements Opcodes {
 
         @Override
         public void visitTypeInsn(int opcode, String type) {
-            if (type.equals("cam72cam/immersiverailroading/registry/DefinitionManager$StockLoader")) type = "supersymmetry/loaders/SuSyIRLoader$StockLoader";
+            if (type.equals("cam72cam/immersiverailroading/registry/DefinitionManager$StockLoader"))
+                type = "supersymmetry/loaders/SuSyIRLoader$StockLoader";
             super.visitTypeInsn(opcode, type);
         }
 
         @Override
         public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
-            if (owner.equals("cam72cam/immersiverailroading/registry/DefinitionManager$StockLoader")) owner = "supersymmetry/loaders/SuSyIRLoader$StockLoader";
+            if (owner.equals("cam72cam/immersiverailroading/registry/DefinitionManager$StockLoader"))
+                owner = "supersymmetry/loaders/SuSyIRLoader$StockLoader";
             super.visitMethodInsn(opcode, owner, name, desc, itf);
         }
     }

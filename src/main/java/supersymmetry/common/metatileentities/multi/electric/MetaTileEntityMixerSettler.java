@@ -1,5 +1,25 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -20,29 +40,13 @@ import gregtech.common.blocks.BlockBoilerCasing;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.properties.MixerSettlerCellsProperty;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
+
     public static final int MIN_RADIUS = 2;
     public static final int MAX_RADIUS = 20;
     private int sDist;
@@ -70,7 +74,6 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
             }
         }
 
-
         if (sDist < MIN_RADIUS) {
             invalidateStructure();
             return false;
@@ -86,7 +89,8 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
         return true;
     }
 
-    public boolean isBlockEdge(@Nonnull World world, @Nonnull BlockPos.MutableBlockPos pos, @Nonnull EnumFacing direction) {
+    public boolean isBlockEdge(@Nonnull World world, @Nonnull BlockPos.MutableBlockPos pos,
+                               @Nonnull EnumFacing direction) {
         return world.getBlockState(pos.move(direction)) == getSecondaryCasingState();
     }
 
@@ -282,21 +286,27 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
                 .aisle(strings[10], strings[11], strings[12], strings[13], strings[14])
                 .aisle(strings[15], strings[16], strings[17], strings[18], strings[19])
                 .aisle(strings[20], strings[21], strings[22], strings[23], strings[24])
-                /*.aisle("ECCCCCCCE", "GGGGGGGGG", "GGGGGGGGG", "GGGGGGGGG", "ECCCCCCCE")
-                .aisle("ECCCCCCCE", "G P G P G", "GFG GFG G", "IFG PFG O", "EMCCCMCCE")
-                .aisle("ECCCCCCCE", "GDGDGDGDG", "GDGDGDGDG", "GTGTGTGTG", "ECCCCCCCE")
-                .aisle("ECCCCCCCE", "O G P G I", "G GFG GFG", "G PFG PFG", "ECCMCCCME")
-                .aisle("ECCCSCCCE", "GGGGGGGGG", "GGGGGGGGG", "GGGGGGGGG", "ECCCCCCCE")*/
+                /*
+                 * .aisle("ECCCCCCCE", "GGGGGGGGG", "GGGGGGGGG", "GGGGGGGGG", "ECCCCCCCE")
+                 * .aisle("ECCCCCCCE", "G P G P G", "GFG GFG G", "IFG PFG O", "EMCCCMCCE")
+                 * .aisle("ECCCCCCCE", "GDGDGDGDG", "GDGDGDGDG", "GTGTGTGTG", "ECCCCCCCE")
+                 * .aisle("ECCCCCCCE", "O G P G I", "G GFG GFG", "G PFG PFG", "ECCMCCCME")
+                 * .aisle("ECCCSCCCE", "GGGGGGGGG", "GGGGGGGGG", "GGGGGGGGG", "ECCCCCCCE")
+                 */
                 .where('S', selfPredicate())
                 .where('I', abilities(MultiblockAbility.IMPORT_FLUIDS))
                 .where('O', abilities(MultiblockAbility.EXPORT_FLUIDS))
-                .where('T', states(SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.COALESCENCE_PLATE)))
+                .where('T',
+                        states(SuSyBlocks.MULTIBLOCK_CASING
+                                .getState(BlockSuSyMultiblockCasing.CasingType.COALESCENCE_PLATE)))
                 .where('P', states(getPipeCasingState()))
-                //.where('B', abilities(MultiblockAbility.IMPORT_ITEMS, MultiblockAbility.EXPORT_ITEMS))
+                // .where('B', abilities(MultiblockAbility.IMPORT_ITEMS, MultiblockAbility.EXPORT_ITEMS))
                 .where('D', states(getCasingState()))
                 .where('C', states(getCasingState()).or(autoAbilities()))
                 .where('G', states(getCasingState()))
-                .where('M', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STAINLESS_STEEL_GEARBOX)))
+                .where('M',
+                        states(MetaBlocks.TURBINE_CASING
+                                .getState(BlockTurbineCasing.TurbineCasingType.STAINLESS_STEEL_GEARBOX)))
                 .where('F', frames(Materials.StainlessSteel))
                 .where('E', states(getSecondaryCasingState()))
                 .where(' ', air())
@@ -307,9 +317,9 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
     public TraceabilityPredicate autoAbilities() {
         return super.autoAbilities(true, false).or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1)
                 .setMaxGlobalLimited(2)
-                .setPreviewCount(1)).or(abilities(MultiblockAbility.IMPORT_ITEMS).setPreviewCount(1).setMaxGlobalLimited(1));
+                .setPreviewCount(1))
+                .or(abilities(MultiblockAbility.IMPORT_ITEMS).setPreviewCount(1).setMaxGlobalLimited(1));
     }
-
 
     protected static IBlockState getPipeCasingState() {
         return MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.POLYTETRAFLUOROETHYLENE_PIPE);
@@ -345,7 +355,8 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
         List<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
         int radius = Math.max(sDist, MIN_RADIUS);
         while (radius <= MAX_RADIUS) {
-            shapeInfo.add(new MultiblockShapeInfo(createStructurePattern(radius).getPreview(new int[]{1, 1, 1, 1, 1})));
+            shapeInfo.add(
+                    new MultiblockShapeInfo(createStructurePattern(radius).getPreview(new int[] { 1, 1, 1, 1, 1 })));
             radius += 2;
         }
         return shapeInfo;
@@ -359,8 +370,8 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
         tooltip.add(TextFormatting.AQUA + I18n.format("susy.machine.mixer_settler.tooltip.2"));
     }
 
-
     private class MixerSettlerRecipeLogic extends MultiblockRecipeLogic {
+
         public MixerSettlerRecipeLogic(MetaTileEntityMixerSettler metaTileEntityMixerSettler) {
             super(metaTileEntityMixerSettler);
         }
@@ -368,7 +379,8 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
         @Override
         protected void modifyOverclockPost(int[] overclockResults, @NotNull IRecipePropertyStorage storage) {
             int cellsOff = (sDist - storage.getRecipePropertyValue(MixerSettlerCellsProperty.getInstance(), 2)) / 2;
-            // Divides the duration by an increasing factor that approaches 2 as the number of cells approaches infinity.
+            // Divides the duration by an increasing factor that approaches 2 as the number of cells approaches
+            // infinity.
             overclockResults[1] = (int) ((double) overclockResults[1] / (Math.atan(cellsOff + 1) * 4 / Math.PI));
 
             super.modifyOverclockPost(overclockResults, storage);

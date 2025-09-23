@@ -1,10 +1,10 @@
 package supersymmetry.common.item;
 
+import java.util.List;
+
 import gregtech.api.items.toolitem.ToolClasses;
 import gregtech.api.items.toolitem.behavior.IToolBehavior;
 import supersymmetry.common.item.behavior.PipeNetWalkerBehavior;
-
-import java.util.List;
 
 public class ToolBehaviorExtender {
 

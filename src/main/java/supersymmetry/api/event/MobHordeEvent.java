@@ -1,31 +1,33 @@
 package supersymmetry.api.event;
 
-import gregtech.api.util.GTTeleporter;
-import gregtech.api.util.TeleportHandler;
-import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementManager;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-import supersymmetry.common.entities.EntityDropPod;
-import supersymmetry.common.event.MobHordePlayerData;
-import supersymmetry.common.event.MobHordeWorldData;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementManager;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+
+import gregtech.api.util.GTTeleporter;
+import gregtech.api.util.TeleportHandler;
+import supersymmetry.common.entities.EntityDropPod;
+import supersymmetry.common.event.MobHordePlayerData;
+import supersymmetry.common.event.MobHordeWorldData;
+
 public class MobHordeEvent {
+
     private Function<EntityPlayer, EntityLiving> entitySupplier;
     private int quantityMin;
     private int quantityMax;
@@ -41,11 +43,13 @@ public class MobHordeEvent {
 
     public static final Map<String, MobHordeEvent> EVENTS = new HashMap<>();
 
-    public MobHordeEvent(Function<EntityPlayer, EntityLiving> entitySupplier, int quantityMin, int quantityMax, String name) {
+    public MobHordeEvent(Function<EntityPlayer, EntityLiving> entitySupplier, int quantityMin, int quantityMax,
+                         String name) {
         this(entitySupplier, quantityMin, quantityMax, name, 18000);
     }
 
-    public MobHordeEvent(Function<EntityPlayer, EntityLiving> entitySupplier, int quantityMin, int quantityMax, String name, int timeoutPeriod) {
+    public MobHordeEvent(Function<EntityPlayer, EntityLiving> entitySupplier, int quantityMin, int quantityMax,
+                         String name, int timeoutPeriod) {
         this.entitySupplier = entitySupplier;
         this.quantityMin = quantityMin;
         this.quantityMax = quantityMax;
@@ -74,6 +78,7 @@ public class MobHordeEvent {
         MobHordePlayerData playerData = worldData.getPlayerData(player.getPersistentID());
         return run(player, playerData::addEntity);
     }
+
     public boolean run(EntityPlayer player, Consumer<UUID> uuidConsumer) {
         int quantity = (int) (Math.random() * (quantityMax - quantityMin) + quantityMin);
         boolean didSpawn = false;
@@ -102,7 +107,8 @@ public class MobHordeEvent {
     }
 
     private static Advancement resourceLocationToAdvancement(ResourceLocation location, World world) {
-        AdvancementManager advManager = ObfuscationReflectionHelper.getPrivateValue(World.class, world, "field_191951_C");
+        AdvancementManager advManager = ObfuscationReflectionHelper.getPrivateValue(World.class, world,
+                "field_191951_C");
         return advManager.getAdvancement(location);
     }
 
@@ -145,8 +151,8 @@ public class MobHordeEvent {
             Block block = blockstate.getBlock();
 
             mob.setPosition(x, y, z);
-            while ((!mob.getCanSpawnHere() || !mob.isNotColliding() || block.isAir(blockstate, player.world, pos))
-                    && (Math.abs(mob.posY - player.posY) < 8)) {
+            while ((!mob.getCanSpawnHere() || !mob.isNotColliding() || block.isAir(blockstate, player.world, pos)) &&
+                    (Math.abs(mob.posY - player.posY) < 8)) {
                 mob.setPosition(x, mob.posY - 1, z);
                 pos = new BlockPos(x, mob.posY - 1, z);
                 blockstate = player.world.getBlockState(pos);
@@ -189,6 +195,7 @@ public class MobHordeEvent {
     }
 
     protected boolean hasToBeUnderground(EntityPlayer player) {
-        return (maximumDistanceUnderground != -1 && !player.world.canBlockSeeSky(new BlockPos(player).up(maximumDistanceUnderground)));
+        return (maximumDistanceUnderground != -1 &&
+                !player.world.canBlockSeeSky(new BlockPos(player).up(maximumDistanceUnderground)));
     }
 }

@@ -1,5 +1,7 @@
 package supersymmetry.common.blocks;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -13,10 +15,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+
+import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
 public class BlockHome extends VariantHorizontalRotatableBlock<BlockHome.HomeType> {
 
@@ -36,13 +38,16 @@ public class BlockHome extends VariantHorizontalRotatableBlock<BlockHome.HomeTyp
     }
 
     @Override
-    public boolean isBed(@NotNull IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos, @Nullable Entity player) {
+    public boolean isBed(@NotNull IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos,
+                         @Nullable Entity player) {
         return true;
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state, @NotNull EntityPlayer playerIn,
-                                    @NotNull EnumHand hand, @NotNull EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state,
+                                    @NotNull EntityPlayer playerIn,
+                                    @NotNull EnumHand hand, @NotNull EnumFacing facing, float hitX, float hitY,
+                                    float hitZ) {
         if (worldIn.isRemote) return true;
         if ((worldIn.provider.canRespawnHere() && worldIn.getBiome(pos) != net.minecraft.init.Biomes.HELL)) {
             net.minecraftforge.event.ForgeEventFactory.onPlayerSpawnSet(playerIn, pos, true);

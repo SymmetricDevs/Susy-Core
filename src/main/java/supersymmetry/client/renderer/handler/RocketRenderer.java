@@ -1,5 +1,10 @@
 package supersymmetry.client.renderer.handler;
 
+import java.lang.reflect.Field;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -7,7 +12,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelManager;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -16,16 +20,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import supersymmetry.SuSyValues;
-import supersymmetry.Supersymmetry;
-import supersymmetry.common.entities.EntityRocket;
 
-import javax.annotation.Nullable;
-import java.lang.reflect.Field;
-import java.util.List;
+import supersymmetry.SuSyValues;
+import supersymmetry.common.entities.EntityRocket;
 
 @SideOnly(Side.CLIENT)
 public class RocketRenderer<T extends EntityRocket> extends Render<T> {
+
     private ModelManager manager = null;
 
     public RocketRenderer(RenderManager renderManager) {
@@ -43,8 +44,7 @@ public class RocketRenderer<T extends EntityRocket> extends Render<T> {
             try {
                 Field mm_f = ObfuscationReflectionHelper.findField(Minecraft.class, "field_175617_aL");
                 this.manager = (ModelManager) mm_f.get(Minecraft.getMinecraft());
-            }
-            catch (IllegalAccessException e) {
+            } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -58,7 +58,9 @@ public class RocketRenderer<T extends EntityRocket> extends Render<T> {
         GlStateManager.pushMatrix(); // pushMatrix because we'll translate and rotate stuff
         GlStateManager.disableCull();
         GlStateManager.color(1F, 1F, 1F, 1F);
-        GlStateManager.translate((float) x, (float) y, (float) z); // You shouldn't forget to translate to x, y, z before rendering. Other specific are made so Rubik's cube renders at the middle.
+        GlStateManager.translate((float) x, (float) y, (float) z); // You shouldn't forget to translate to x, y, z
+                                                                   // before rendering. Other specific are made so
+                                                                   // Rubik's cube renders at the middle.
         GlStateManager.scale(1F, 1F, 1F); // Yep models are too ginormous for buffer builder.
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
@@ -69,12 +71,16 @@ public class RocketRenderer<T extends EntityRocket> extends Render<T> {
         }
 
         model = this.manager.getModel(SuSyValues.modelRocket); // Get the model
-        this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE); // Bind the blocks texture. See Test#stitchTexture(TextureStitchEvent.Pre) for more information.
+        this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE); // Bind the blocks texture. See
+                                                              // Test#stitchTexture(TextureStitchEvent.Pre) for more
+                                                              // information.
 
-        bufferbuilder.begin(7, DefaultVertexFormats.ITEM); // I guess DefaultVertexFormats#ITEM would work too. Needs some test.
+        bufferbuilder.begin(7, DefaultVertexFormats.ITEM); // I guess DefaultVertexFormats#ITEM would work too. Needs
+                                                           // some test.
 
         // Gets model quads for rendering
-        // State can be null. Because it checks if state is an instance of IExtendedState which it uses it to get unlisted properties for some data. We don't use it and need it.
+        // State can be null. Because it checks if state is an instance of IExtendedState which it uses it to get
+        // unlisted properties for some data. We don't use it and need it.
         // Side needs to be null. Obj models don't care about sides.
         // Rand doesn't get used in Obj models.
         List<BakedQuad> quads = model.getQuads(null, null, 0L);
