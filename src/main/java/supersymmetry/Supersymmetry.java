@@ -53,11 +53,9 @@ public class Supersymmetry {
 
         // Groovyscript starts immediately!
         proxy.checkCanaryFile();
-        System
-                .out
+        System.out
                 .println(
-                        "Ha" + "ha"
-                );
+                        "Ha" + "ha");
     }
 
     @Mod.EventHandler
