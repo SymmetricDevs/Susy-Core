@@ -6,14 +6,11 @@ import static supersymmetry.common.event.DimensionBreathabilityHandler.isInHazar
 import java.util.List;
 
 import net.minecraft.block.material.Material;
-import java.util.List;
-
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
 
 public class AdvancedBreathingTank extends AdvancedBreathingApparatus {
 

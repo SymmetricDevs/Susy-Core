@@ -3,9 +3,6 @@ package supersymmetry.common.metatileentities.multi.rocket;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.ResourceLocation;
-
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;

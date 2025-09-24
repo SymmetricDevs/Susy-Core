@@ -12,11 +12,6 @@ import net.minecraft.item.ItemStack;
 
 import com.google.common.base.CaseFormat;
 
-import static gregtech.common.items.MetaItems.SPRAY_EMPTY;
-
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.EnumDyeColor;
-
 import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
 import gregtech.api.items.armor.ArmorMetaItem;
@@ -38,7 +33,6 @@ import supersymmetry.SuSyValues;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
 import supersymmetry.common.item.behavior.PipeNetPainterBehavior;
-
 import supersymmetry.common.item.behavior.dataCardBehavior;
 
 public class SuSyMetaItems {
@@ -132,10 +126,10 @@ public class SuSyMetaItems {
         CONVEYOR_STEAM = initOneItem("conveyor.steam")
                 .addComponents(new TooltipBehavior(lines -> Collections.addAll(lines,
                         I18n.format("metaitem.conveyor.module.tooltip"),
-                        I18n.format("gregtech.universal.tooltip.item_transfer_rate",  4 ))));
+                        I18n.format("gregtech.universal.tooltip.item_transfer_rate", 4))));
         PUMP_STEAM = initOneItem("pump.steam").addComponents(new TooltipBehavior(lines -> Collections.addAll(lines,
                 I18n.format("metaitem.electric.pump.tooltip"),
-                I18n.format("gregtech.universal.tooltip.fluid_transfer_rate",  32 ))));
+                I18n.format("gregtech.universal.tooltip.fluid_transfer_rate", 32))));
         AIR_VENT = initOneItem("air_vent").addComponents(
                 new TooltipBehavior(lines -> lines.add(I18n.format("metaitem.air_vent.tooltip.1", 100))));
 

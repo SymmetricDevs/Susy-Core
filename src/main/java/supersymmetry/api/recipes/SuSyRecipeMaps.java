@@ -418,7 +418,7 @@ public class SuSyRecipeMaps {
                     .setSound(GTSoundEvents.ASSEMBLER);
 
     public static final RecipeMap<SimpleRecipeBuilder> ROCKET_ASSEMBLER = new RecipeMap<>("rocket_assembler", 25, 2, 5,
-                    0, new SimpleRecipeBuilder(), false)
+            0, new SimpleRecipeBuilder(), false)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressWidget.MoveType.HORIZONTAL)
                     .setSound(GTSoundEvents.ASSEMBLER);
 

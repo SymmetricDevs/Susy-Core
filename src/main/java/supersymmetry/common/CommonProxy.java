@@ -7,12 +7,6 @@ import java.io.File;
 import java.util.Objects;
 import java.util.function.Function;
 
-import static supersymmetry.common.blocks.SuSyMetaBlocks.SHEETED_FRAMES;
-
-import java.io.File;
-import java.util.Objects;
-import java.util.function.Function;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.monster.EntityZombie;
@@ -44,17 +38,6 @@ import gregtech.client.utils.TooltipHelper;
 import gregtech.common.blocks.BlockWireCoil;
 import gregtech.common.items.MetaItems;
 import gregtech.modules.ModuleManager;
-
-import gregtech.api.block.VariantItemBlock;
-import gregtech.api.modules.ModuleContainerRegistryEvent;
-import gregtech.api.unification.material.Materials;
-import gregtech.api.unification.material.event.MaterialEvent;
-import gregtech.api.unification.material.event.PostMaterialEvent;
-import gregtech.client.utils.TooltipHelper;
-import gregtech.common.blocks.BlockWireCoil;
-import gregtech.common.items.MetaItems;
-import gregtech.modules.ModuleManager;
-import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.blocks.VariantItemBlockFalling;
