@@ -1,6 +1,5 @@
 package supersymmetry.integration.immersiverailroading.control;
 
-
 public class TunnelBoreControl {
 
     private int distanceLeft;
@@ -13,8 +12,5 @@ public class TunnelBoreControl {
         this(-1);
     }
 
-    public void onTick() {
-
-    }
-
+    public void onTick() {}
 }

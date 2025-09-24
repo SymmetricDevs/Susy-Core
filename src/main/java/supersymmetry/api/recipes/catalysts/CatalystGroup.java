@@ -1,11 +1,11 @@
 package supersymmetry.api.recipes.catalysts;
 
-import net.minecraft.item.ItemStack;
-
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
+import net.minecraft.item.ItemStack;
 
 public class CatalystGroup {
 

@@ -1,11 +1,9 @@
 package supersymmetry.integration.littletiles;
 
-import com.creativemd.littletiles.common.structure.LittleStructure;
-import com.creativemd.littletiles.common.structure.type.LittleStorage;
-import com.creativemd.littletiles.common.tileentity.TileEntityLittleTiles;
-import gregtech.api.capability.impl.ItemHandlerList;
-import gregtech.api.modules.GregTechModule;
-import gregtech.integration.IntegrationSubmodule;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -15,23 +13,28 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import com.creativemd.littletiles.common.structure.LittleStructure;
+import com.creativemd.littletiles.common.structure.type.LittleStorage;
+import com.creativemd.littletiles.common.tileentity.TileEntityLittleTiles;
+
+import gregtech.api.capability.impl.ItemHandlerList;
+import gregtech.api.modules.GregTechModule;
+import gregtech.integration.IntegrationSubmodule;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.capability.impl.InaccessibleHandlerDelegate;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.modules.SuSyModules;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 @GregTechModule(
-        moduleID = SuSyModules.MODULE_LITTLETILES,
-        containerID = Supersymmetry.MODID,
-        modDependencies = "littletiles",
-        name = "SuSy LittleTiles Integration",
-        description = "SuSy LittleTiles Integration Module")
+                moduleID = SuSyModules.MODULE_LITTLETILES,
+                containerID = Supersymmetry.MODID,
+                modDependencies = "littletiles",
+                name = "SuSy LittleTiles Integration",
+                description = "SuSy LittleTiles Integration Module")
 public class LittleTilesModule extends IntegrationSubmodule {
 
     @SubscribeEvent

@@ -1,5 +1,23 @@
 package supersymmetry.common.metatileentities.storage;
 
+import java.util.List;
+
+import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.World;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import codechicken.lib.colour.ColourRGBA;
 import codechicken.lib.raytracer.CuboidRayTraceResult;
 import codechicken.lib.render.CCRenderState;
@@ -13,28 +31,11 @@ import gregtech.api.unification.material.Material;
 import gregtech.api.util.GTUtility;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.metatileentities.storage.MetaTileEntityCrate;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.capability.impl.InaccessibleHandlerDelegate;
 import supersymmetry.api.sound.SusySounds;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.mixins.gregtech.MetaTileEntityCrateAccessor;
-
-import java.util.List;
 
 public class MetaTileEntityLockedCrate extends MetaTileEntityCrate {
 
@@ -69,12 +70,14 @@ public class MetaTileEntityLockedCrate extends MetaTileEntityCrate {
             Textures.WOODEN_CRATE.render(renderState, translation,
                     GTUtility.convertRGBtoOpaqueRGBA_CL(getPaintingColorForRendering()), pipeline);
         } else {
-            int baseColor = ColourRGBA.multiply(GTUtility.convertRGBtoOpaqueRGBA_CL(self.getMaterial().getMaterialRGB()),
+            int baseColor = ColourRGBA.multiply(
+                    GTUtility.convertRGBtoOpaqueRGBA_CL(self.getMaterial().getMaterialRGB()),
                     GTUtility.convertRGBtoOpaqueRGBA_CL(getPaintingColorForRendering()));
             Textures.METAL_CRATE.render(renderState, translation, baseColor, pipeline);
         }
         // Always render the overlay texture on the TOP face only
-        SusyTextures.CODE_BREACHER_OVERLAY.renderOrientedState(renderState, translation, pipeline, Cuboid6.full, EnumFacing.UP, false, false);
+        SusyTextures.CODE_BREACHER_OVERLAY.renderOrientedState(renderState, translation, pipeline, Cuboid6.full,
+                EnumFacing.UP, false, false);
     }
 
     @Override
@@ -95,7 +98,8 @@ public class MetaTileEntityLockedCrate extends MetaTileEntityCrate {
             } else {
                 if (getWorld() != null && !getWorld().isRemote) {
                     // Send status message
-                    playerIn.sendStatusMessage(new TextComponentTranslation("chat.susy.crate.requires_code_breacher"), true);
+                    playerIn.sendStatusMessage(new TextComponentTranslation("chat.susy.crate.requires_code_breacher"),
+                            true);
 
                     // Play failure sound effect
                     BlockPos pos = getPos();
@@ -105,8 +109,7 @@ public class MetaTileEntityLockedCrate extends MetaTileEntityCrate {
                             SusySounds.LOCKED_CRATE,
                             SoundCategory.BLOCKS,
                             0.5F,
-                            1.0F
-                    );
+                            1.0F);
                 }
             }
         }
@@ -133,7 +136,8 @@ public class MetaTileEntityLockedCrate extends MetaTileEntityCrate {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
-        tooltip.add(I18n.format("gregtech.universal.tooltip.item_storage_capacity", ((MetaTileEntityCrateAccessor) this).getInventorySize()));
+        tooltip.add(I18n.format("gregtech.universal.tooltip.item_storage_capacity",
+                ((MetaTileEntityCrateAccessor) this).getInventorySize()));
         // Skipping the Taped information (It's a lie)
     }
 }

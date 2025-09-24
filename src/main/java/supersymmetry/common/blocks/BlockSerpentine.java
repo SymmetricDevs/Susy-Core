@@ -1,6 +1,7 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.block.VariantActiveBlock;
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -9,9 +10,10 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
+import gregtech.api.block.VariantActiveBlock;
 
 public class BlockSerpentine extends VariantActiveBlock<BlockSerpentine.SerpentineType> {
 
@@ -37,6 +39,7 @@ public class BlockSerpentine extends VariantActiveBlock<BlockSerpentine.Serpenti
     }
 
     public enum SerpentineType implements IStringSerializable {
+
         BASIC("basic");
 
         public final String name;

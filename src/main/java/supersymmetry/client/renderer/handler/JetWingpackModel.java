@@ -1,8 +1,8 @@
 package supersymmetry.client.renderer.handler;
 
-import net.minecraft.client.model.ModelBiped;
-
 import static supersymmetry.api.util.SuSyUtility.susyId;
+
+import net.minecraft.client.model.ModelBiped;
 
 public class JetWingpackModel extends ModelBiped {
 

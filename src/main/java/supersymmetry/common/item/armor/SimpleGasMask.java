@@ -1,21 +1,24 @@
 package supersymmetry.common.item.armor;
 
-import gregtech.api.items.metaitem.stats.IItemDurabilityManager;
+import static supersymmetry.common.event.DimensionBreathabilityHandler.ABSORB_ALL;
+
+import java.util.List;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
+import gregtech.api.items.metaitem.stats.IItemDurabilityManager;
 import supersymmetry.api.items.IBreathingArmorLogic;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 
-import java.util.List;
-
-import static supersymmetry.common.event.DimensionBreathabilityHandler.ABSORB_ALL;
-
 public class SimpleGasMask implements IBreathingArmorLogic, IItemDurabilityManager {
+
     public static final double LIFETIME = 600;
+
     @Override
     public EntityEquipmentSlot getEquipmentSlot(ItemStack itemStack) {
         return EntityEquipmentSlot.HEAD;

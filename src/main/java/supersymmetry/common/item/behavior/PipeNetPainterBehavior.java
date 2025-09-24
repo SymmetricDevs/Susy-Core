@@ -1,10 +1,7 @@
 package supersymmetry.common.item.behavior;
 
-import codechicken.lib.raytracer.CuboidRayTraceResult;
-import gregtech.api.cover.CoverRayTracer;
-import gregtech.api.pipenet.tile.IPipeTile;
-import gregtech.api.util.input.KeyBind;
-import gregtech.common.items.behaviors.AbstractUsableBehaviour;
+import java.util.List;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,9 +14,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import codechicken.lib.raytracer.CuboidRayTraceResult;
+import gregtech.api.cover.CoverRayTracer;
+import gregtech.api.pipenet.tile.IPipeTile;
+import gregtech.api.util.input.KeyBind;
+import gregtech.common.items.behaviors.AbstractUsableBehaviour;
 
 public class PipeNetPainterBehavior extends AbstractUsableBehaviour {
 
@@ -31,7 +33,6 @@ public class PipeNetPainterBehavior extends AbstractUsableBehaviour {
         this.empty = empty;
         this.color = color;
     }
-
 
     private void onActionDone(ItemStack stack, EntityPlayer player, EnumHand hand, int walked) {
         int usesLeft = getUsesLeft(stack);
@@ -55,7 +56,7 @@ public class PipeNetPainterBehavior extends AbstractUsableBehaviour {
                                            @NotNull EnumHand hand) {
         if (KeyBind.TOOL_AOE_CHANGE.isKeyDown(player)) {
             TileEntity te = world.getTileEntity(pos);
-            if (te instanceof IPipeTile<?, ?> pipe) {
+            if (te instanceof IPipeTile<?, ?>pipe) {
 
                 var block = pipe.getPipeBlock();
                 ItemStack toolStack = player.getHeldItem(hand);
@@ -71,7 +72,8 @@ public class PipeNetPainterBehavior extends AbstractUsableBehaviour {
                 int maxWalks = getUsesLeft(toolStack);
                 if (maxWalks <= 0) return EnumActionResult.FAIL;
 
-                int walkedBlocks = PipeOperationWalker.collectPipeNet(world, pos, pipe, gridSide, TraverseOptions.COLORING.get(color), maxWalks);
+                int walkedBlocks = PipeOperationWalker.collectPipeNet(world, pos, pipe, gridSide,
+                        TraverseOptions.COLORING.get(color), maxWalks);
 
                 onActionDone(toolStack, player, hand, walkedBlocks);
 

@@ -1,5 +1,12 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import javax.annotation.Nonnull;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.ResourceLocation;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -13,13 +20,8 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
-
-import javax.annotation.Nonnull;
 
 public class MetaTileEntityLargeWeaponsFactory extends RecipeMapMultiblockController {
 
@@ -47,7 +49,8 @@ public class MetaTileEntityLargeWeaponsFactory extends RecipeMapMultiblockContro
                 .aisle("DDD", "DSD")
                 .where('S', selfPredicate())
                 .where('A', casingPredicate)
-                .where('B', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
+                .where('B',
+                        states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('C', frames(Materials.Steel)
                         .or(autoAbilities(false, true, false, false, false, false, false).setExactLimit(1)))
                 .where('D', casingPredicate

@@ -1,10 +1,11 @@
 package supersymmetry.mixins.gregtech;
 
-import gregtech.api.unification.material.Material;
-import gregtech.common.metatileentities.storage.MetaTileEntityCrate;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
+
+import gregtech.api.unification.material.Material;
+import gregtech.common.metatileentities.storage.MetaTileEntityCrate;
 
 @Mixin(value = MetaTileEntityCrate.class, remap = false)
 public interface MetaTileEntityCrateAccessor {

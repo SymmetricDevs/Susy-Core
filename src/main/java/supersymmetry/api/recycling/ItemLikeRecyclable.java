@@ -1,10 +1,12 @@
 package supersymmetry.api.recycling;
 
-import com.github.bsideup.jabel.Desugar;
-import gregtech.api.unification.stack.ItemAndMetadata;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import com.github.bsideup.jabel.Desugar;
+
+import gregtech.api.unification.stack.ItemAndMetadata;
 
 // TODO: wildcard support?
 @Desugar

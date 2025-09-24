@@ -1,12 +1,13 @@
 package supersymmetry.integration.theoneprobe.provider;
 
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import mcjty.theoneprobe.api.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import mcjty.theoneprobe.api.*;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.metatileentity.logistics.IDelegator;
 

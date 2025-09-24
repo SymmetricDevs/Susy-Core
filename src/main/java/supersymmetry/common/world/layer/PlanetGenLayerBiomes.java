@@ -1,15 +1,14 @@
 package supersymmetry.common.world.layer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.init.Biomes;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
-import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.common.BiomeManager.BiomeEntry;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class PlanetGenLayerBiomes extends GenLayer {
 
@@ -29,7 +28,8 @@ public class PlanetGenLayerBiomes extends GenLayer {
     @Override
     public int[] getInts(int x, int z, int width, int depth) {
         if (allowedBiomes == null || allowedBiomes.isEmpty()) {
-            throw new RuntimeException("PlanetGenLayerBiomes has no biomes! I guess something called this before it was initialized?");
+            throw new RuntimeException(
+                    "PlanetGenLayerBiomes has no biomes! I guess something called this before it was initialized?");
         }
 
         int[] dest = IntCache.getIntCache(width * depth);

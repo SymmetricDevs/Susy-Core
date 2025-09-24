@@ -1,15 +1,18 @@
 package supersymmetry.common.command;
 
-import com.google.common.collect.Lists;
+import java.util.List;
+
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.server.command.CommandTreeBase;
+
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import com.google.common.collect.Lists;
 
 public class CommandHordeBase extends CommandTreeBase {
+
     @NotNull
     @Override
     public String getName() {

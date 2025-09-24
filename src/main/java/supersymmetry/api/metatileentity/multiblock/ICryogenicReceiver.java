@@ -10,7 +10,8 @@ public interface ICryogenicReceiver {
     /**
      * @return the cryogenic provider for this receiver
      */
-    @Nullable ICryogenicProvider getCryogenicProvider();
+    @Nullable
+    ICryogenicProvider getCryogenicProvider();
 
     /**
      * @param cryogenicProvider the cryogenic provider to associate with this

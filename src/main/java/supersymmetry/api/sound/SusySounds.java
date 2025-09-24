@@ -3,6 +3,7 @@ package supersymmetry.api.sound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+
 import supersymmetry.Supersymmetry;
 
 public class SusySounds {
@@ -28,5 +29,4 @@ public class SusySounds {
         ForgeRegistries.SOUND_EVENTS.register(event);
         return event;
     }
-
 }

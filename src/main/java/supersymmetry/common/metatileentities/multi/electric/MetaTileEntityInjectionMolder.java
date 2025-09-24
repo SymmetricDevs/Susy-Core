@@ -1,11 +1,24 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.minecraftforge.items.IItemHandlerModifiable;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
-import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
@@ -16,20 +29,9 @@ import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.*;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.logic.SuSyParallelLogic;
 import supersymmetry.client.renderer.textures.SusyTextures;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class MetaTileEntityInjectionMolder extends RecipeMapMultiblockController {
 
@@ -43,26 +45,27 @@ public class MetaTileEntityInjectionMolder extends RecipeMapMultiblockController
         return new MetaTileEntityInjectionMolder(metaTileEntityId);
     }
 
-
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
-
         TraceabilityPredicate casingPredicate = states(getCasingState()).setMinGlobalLimited(35);
 
         return FactoryBlockPattern.start()
                 .aisle("CCCCCC", "CCCCCC", "III   ")
                 .aisle("CCCCCC", "IPPKGO", "I#ICCC")
                 .aisle("CCCCCC", "CSCCCC", "III   ")
-                /*.aisle("CCC", "CKC", " C ")
-                .aisle("CCC", "CGC", " C ")
-                .aisle("CCC", "COC", " C ") */
+                /*
+                 * .aisle("CCC", "CKC", " C ")
+                 * .aisle("CCC", "CGC", " C ")
+                 * .aisle("CCC", "COC", " C ")
+                 */
                 .where('S', selfPredicate())
                 .where('C', casingPredicate.or(autoAbilities(true, true, false, false, false, false, false)))
                 .where('K', states(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.CUPRONICKEL)))
-                .where('G', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
+                .where('G',
+                        states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('P', states(getPipeCasingState()))
-                .where('I', casingPredicate.or(autoAbilities(false, false, true,false, false, false, false)))
-                .where('O', casingPredicate.or(autoAbilities(false, false, false,true, false, false, false)))
+                .where('I', casingPredicate.or(autoAbilities(false, false, true, false, false, false, false)))
+                .where('O', casingPredicate.or(autoAbilities(false, false, false, true, false, false, false)))
                 .where(' ', any())
                 .where('#', air())
                 .build();
@@ -96,6 +99,7 @@ public class MetaTileEntityInjectionMolder extends RecipeMapMultiblockController
     }
 
     private class InjectionMolderLogic extends MultiblockRecipeLogic {
+
         public InjectionMolderLogic(RecipeMapMultiblockController tileEntity) {
             super(tileEntity);
         }
@@ -111,10 +115,15 @@ public class MetaTileEntityInjectionMolder extends RecipeMapMultiblockController
         }
 
         @Override
-        public Recipe findParallelRecipe(@NotNull Recipe currentRecipe, @NotNull IItemHandlerModifiable inputs, @NotNull IMultipleTankHandler fluidInputs, @NotNull IItemHandlerModifiable outputs, @NotNull IMultipleTankHandler fluidOutputs, long maxVoltage, int parallelLimit) {
+        public Recipe findParallelRecipe(@NotNull Recipe currentRecipe, @NotNull IItemHandlerModifiable inputs,
+                                         @NotNull IMultipleTankHandler fluidInputs,
+                                         @NotNull IItemHandlerModifiable outputs,
+                                         @NotNull IMultipleTankHandler fluidOutputs, long maxVoltage,
+                                         int parallelLimit) {
             if (parallelLimit > 1 && this.getRecipeMap() != null) {
                 RecipeBuilder<?> parallelBuilder;
-                parallelBuilder = SuSyParallelLogic.pureParallelRecipe(currentRecipe, this.getRecipeMap(), inputs, fluidInputs, outputs, fluidOutputs, parallelLimit, maxVoltage, this.getMetaTileEntity());
+                parallelBuilder = SuSyParallelLogic.pureParallelRecipe(currentRecipe, this.getRecipeMap(), inputs,
+                        fluidInputs, outputs, fluidOutputs, parallelLimit, maxVoltage, this.getMetaTileEntity());
 
                 if (parallelBuilder == null) {
                     this.invalidateInputs();
@@ -131,6 +140,5 @@ public class MetaTileEntityInjectionMolder extends RecipeMapMultiblockController
                 return currentRecipe;
             }
         }
-
     }
 }

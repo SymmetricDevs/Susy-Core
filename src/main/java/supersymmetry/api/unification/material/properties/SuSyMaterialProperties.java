@@ -1,12 +1,11 @@
 package supersymmetry.api.unification.material.properties;
 
-import gregtech.api.unification.material.properties.PropertyKey;
-import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
-
 import java.util.*;
 
+import gregtech.api.unification.material.properties.PropertyKey;
+
 public class SuSyMaterialProperties {
+
     private static final Set<PropertyKey<?>> baseTypes = new HashSet<>(Arrays.asList(
-            SuSyPropertyKey.FIBER
-    ));
+            SuSyPropertyKey.FIBER));
 }

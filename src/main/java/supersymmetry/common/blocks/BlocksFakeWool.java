@@ -1,11 +1,12 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.block.IStateHarvestLevel;
-import gregtech.api.block.VariantBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.IStringSerializable;
+
+import gregtech.api.block.IStateHarvestLevel;
+import gregtech.api.block.VariantBlock;
 
 public class BlocksFakeWool extends VariantBlock<BlocksFakeWool.FakeWoolBlockType> {
 
@@ -17,9 +18,11 @@ public class BlocksFakeWool extends VariantBlock<BlocksFakeWool.FakeWoolBlockTyp
         this.setTranslationKey("fake_wool");
     }
 
-    //probably a better way to do this, but not gonna lie not going to expend energy on that since this works well enough
-    //loading time issues? what? :clueless:
+    // probably a better way to do this, but not gonna lie not going to expend energy on that since this works well
+    // enough
+    // loading time issues? what? :clueless:
     public static enum FakeWoolBlockType implements IStringSerializable, IStateHarvestLevel {
+
         WHITEFAKEWOOL("whitefakewool", 0),
         ORANGEFAKEWOOL("orangefakewool", 0),
         MAGENTAFAKEWOOL("magentafakewool", 0),
@@ -36,6 +39,7 @@ public class BlocksFakeWool extends VariantBlock<BlocksFakeWool.FakeWoolBlockTyp
         GREENFAKEWOOL("greenfakewool", 0),
         REDFAKEWOOL("redfakewool", 0),
         BLACKFAKEWOOL("blackfakewool", 0);
+
         private final String name;
         private final int harvestLevel;
 
@@ -55,4 +59,3 @@ public class BlocksFakeWool extends VariantBlock<BlocksFakeWool.FakeWoolBlockTyp
         }
     }
 }
-

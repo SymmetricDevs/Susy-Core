@@ -2,6 +2,7 @@ package supersymmetry.api.util;
 
 import gregtech.api.GTValues;
 import gregtech.api.unification.material.Material;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.ResourceLocation;
 import supersymmetry.Supersymmetry;
 
@@ -10,11 +11,13 @@ import java.util.function.Function;
 public class SuSyUtility {
 
     /*
-        if we assume a solar boiler to have an approximately 1m^2 "collecting" surface, and take the hp to be less inefficient,
-        one can approximate the J to EU conversion via 18L/t -> 9EU/t -> 180EU/s -> 1000J/180EU ~= 6J in one EU.
-        Assuming solar actually gets slightly less sunlight than 1m^2 conversion may be ~= 5, but potential inefficiencies
-        make it unclear the specific amount. Just going to round to one sig fig and leave it at 10J -> 1EU
-    */
+     * if we assume a solar boiler to have an approximately 1m^2 "collecting" surface, and take the hp to be less
+     * inefficient,
+     * one can approximate the J to EU conversion via 18L/t -> 9EU/t -> 180EU/s -> 1000J/180EU ~= 6J in one EU.
+     * Assuming solar actually gets slightly less sunlight than 1m^2 conversion may be ~= 5, but potential
+     * inefficiencies
+     * make it unclear the specific amount. Just going to round to one sig fig and leave it at 10J -> 1EU
+     */
     public static final int JOULES_PER_EU = 10;
 
     public static final Function<Integer, Integer> reactorTankSizeFunction = tier -> {
@@ -60,5 +63,10 @@ public class SuSyUtility {
 
     public static String getRLPrefix(Material material) {
         return material.getModid().equals(GTValues.MODID) ? "" : material.getModid() + ":";
+    }
+
+    /// I hate this...
+    public static String getNameForColor(EnumDyeColor color) {
+        return color == EnumDyeColor.SILVER ? "light_gray" : color.getName();
     }
 }

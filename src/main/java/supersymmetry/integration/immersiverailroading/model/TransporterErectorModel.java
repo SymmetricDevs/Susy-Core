@@ -19,8 +19,8 @@ public class TransporterErectorModel extends StockModel<EntityTransporterErector
     @Override
     protected void parseComponents(ComponentProvider provider, TransporterErectorDefinition def) {
         super.parseComponents(provider, def);
-        this.rocket = new Rocket(provider, this.base, (stock) -> stock.isRocketLoaded(), (stock) -> stock.getLifterAngle());
+        this.rocket = new Rocket(provider, this.base, (stock) -> stock.isRocketLoaded(),
+                (stock) -> stock.getLifterAngle());
         this.lifter = new TransporterLifter(provider, this.base, (stock) -> stock.getLifterAngle());
     }
-
 }

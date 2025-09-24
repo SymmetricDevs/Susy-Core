@@ -1,18 +1,18 @@
 package supersymmetry.integration.immersiverailroading.control;
 
+import static cam72cam.immersiverailroading.IRItems.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import cam72cam.immersiverailroading.items.nbt.RailSettings;
 import cam72cam.immersiverailroading.library.TrackDirection;
 import cam72cam.immersiverailroading.util.PlacementInfo;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static cam72cam.immersiverailroading.IRItems.*;
-
 /*
-    Helper for manipulating and placing track segments.
+ * Helper for manipulating and placing track segments.
  */
 
 public class TrackSegment {
@@ -32,7 +32,8 @@ public class TrackSegment {
         this.settings = settings;
     }
 
-    public TrackSegment(RailSettings settings, Vec3d placementPosition, TrackDirection direction, float yaw, Vec3d control) {
+    public TrackSegment(RailSettings settings, Vec3d placementPosition, TrackDirection direction, float yaw,
+                        Vec3d control) {
         this.settings = settings;
         this.info = new PlacementInfo(placementPosition, direction, yaw, control);
     }
@@ -43,7 +44,7 @@ public class TrackSegment {
     }
 
     public List<TrackSegment> split(int segmentLength) {
-        if(segmentLength >= settings.length) {
+        if (segmentLength >= settings.length) {
             return null;
         }
 
@@ -59,12 +60,13 @@ public class TrackSegment {
         RailSettings.Mutable mutable = this.settings.mutable();
         List<TrackSegment> trackSegments = new ArrayList<>();
         TrackSegment prevSegment = null;
-        for(int lengthToGo = this.settings.length; lengthToGo > 0; lengthToGo = Math.max(0, lengthToGo-segmentLength)) {
+        for (int lengthToGo = this.settings.length; lengthToGo >
+                0; lengthToGo = Math.max(0, lengthToGo - segmentLength)) {
             int length = Math.min(segmentLength, lengthToGo);
             mutable.length = length;
             RailSettings segmentSettings = mutable.immutable();
             PlacementInfo segmentInfo = this.info;
-            if(prevSegment != null) {
+            if (prevSegment != null) {
                 segmentInfo = new PlacementInfo(this.nextPos(), this.info.direction, this.info.yaw, null);
             }
             prevSegment = new TrackSegment(segmentSettings, segmentInfo);
@@ -72,13 +74,14 @@ public class TrackSegment {
         }
         return null;
     }
+
     public Vec3d nextPos() {
         switch (this.settings.type) {
             case STRAIGHT:
-                return this.info.placementPosition.add(new Vec3d(0, 0, this.settings.length + 1).rotateYaw(this.info.yaw));
+                return this.info.placementPosition
+                        .add(new Vec3d(0, 0, this.settings.length + 1).rotateYaw(this.info.yaw));
             default:
                 return this.info.placementPosition;
         }
     }
-
 }

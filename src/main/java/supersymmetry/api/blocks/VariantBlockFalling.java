@@ -1,8 +1,10 @@
 package supersymmetry.api.blocks;
 
-import gregtech.api.GregTechAPI;
-import gregtech.api.block.IStateHarvestLevel;
-import gregtech.api.util.LocalizationUtils;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Collections;
+import java.util.List;
+
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -18,25 +20,27 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.Collections;
-import java.util.List;
+import gregtech.api.GregTechAPI;
+import gregtech.api.block.IStateHarvestLevel;
+import gregtech.api.util.LocalizationUtils;
 
 public class VariantBlockFalling<T extends Enum<T> & IStringSerializable> extends BlockFalling {
+
     protected PropertyEnum<T> VARIANT;
     protected T[] VALUES;
 
     public VariantBlockFalling(Material materialIn) {
         super(materialIn);
         if (this.VALUES.length > 0 && this.VALUES[0] instanceof IStateHarvestLevel) {
-            for(T t : this.VALUES) {
-                IStateHarvestLevel stateHarvestLevel = (IStateHarvestLevel)t;
+            for (T t : this.VALUES) {
+                IStateHarvestLevel stateHarvestLevel = (IStateHarvestLevel) t;
                 IBlockState state = this.getState(t);
-                this.setHarvestLevel(stateHarvestLevel.getHarvestTool(state), stateHarvestLevel.getHarvestLevel(state), state);
+                this.setHarvestLevel(stateHarvestLevel.getHarvestTool(state), stateHarvestLevel.getHarvestLevel(state),
+                        state);
             }
         }
 
@@ -45,10 +49,9 @@ public class VariantBlockFalling<T extends Enum<T> & IStringSerializable> extend
     }
 
     public void getSubBlocks(@NotNull CreativeTabs tab, @NotNull NonNullList<ItemStack> list) {
-        for(T variant : this.VALUES) {
+        for (T variant : this.VALUES) {
             list.add(this.getItemVariant(variant));
         }
-
     }
 
     public IBlockState getState(T variant) {
@@ -56,11 +59,11 @@ public class VariantBlockFalling<T extends Enum<T> & IStringSerializable> extend
     }
 
     public T getState(IBlockState blockState) {
-        return (T)(blockState.getValue(this.VARIANT));
+        return (T) (blockState.getValue(this.VARIANT));
     }
 
     public T getState(ItemStack stack) {
-        return (T)this.getState(this.getStateFromMeta(stack.getItemDamage()));
+        return (T) this.getState(this.getStateFromMeta(stack.getItemDamage()));
     }
 
     public ItemStack getItemVariant(T variant) {
@@ -74,12 +77,13 @@ public class VariantBlockFalling<T extends Enum<T> & IStringSerializable> extend
     protected @NotNull BlockStateContainer createBlockState() {
         Class<T> enumClass = getActualTypeParameter(this.getClass(), VariantBlockFalling.class);
         this.VARIANT = PropertyEnum.create("variant", enumClass);
-        this.VALUES = (T[])(enumClass.getEnumConstants());
-        return new BlockStateContainer(this, new IProperty[]{this.VARIANT});
+        this.VALUES = (T[]) (enumClass.getEnumConstants());
+        return new BlockStateContainer(this, new IProperty[] { this.VARIANT });
     }
 
     @SideOnly(Side.CLIENT)
-    public void addInformation(@NotNull ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, @NotNull ITooltipFlag advanced) {
+    public void addInformation(@NotNull ItemStack stack, @Nullable World player, @NotNull List<String> tooltip,
+                               @NotNull ITooltipFlag advanced) {
         String unlocalizedVariantTooltip = this.getTranslationKey() + ".tooltip";
         if (I18n.hasKey(unlocalizedVariantTooltip)) {
             Collections.addAll(tooltip, LocalizationUtils.formatLines(unlocalizedVariantTooltip, new Object[0]));
@@ -89,7 +93,6 @@ public class VariantBlockFalling<T extends Enum<T> & IStringSerializable> extend
         if (I18n.hasKey(unlocalizedTooltip)) {
             Collections.addAll(tooltip, LocalizationUtils.formatLines(unlocalizedTooltip, new Object[0]));
         }
-
     }
 
     public int damageDropped(@NotNull IBlockState state) {
@@ -101,20 +104,20 @@ public class VariantBlockFalling<T extends Enum<T> & IStringSerializable> extend
     }
 
     public int getMetaFromState(IBlockState state) {
-        return ((Enum)state.getValue(this.VARIANT)).ordinal();
+        return ((Enum) state.getValue(this.VARIANT)).ordinal();
     }
 
     protected static <T, R> Class<T> getActualTypeParameter(Class<? extends R> thisClass, Class<R> declaringClass) {
         Type type = thisClass.getGenericSuperclass();
 
-        while(!(type instanceof ParameterizedType) || ((ParameterizedType)type).getRawType() != declaringClass) {
+        while (!(type instanceof ParameterizedType) || ((ParameterizedType) type).getRawType() != declaringClass) {
             if (type instanceof ParameterizedType) {
-                type = ((Class)((ParameterizedType)type).getRawType()).getGenericSuperclass();
+                type = ((Class) ((ParameterizedType) type).getRawType()).getGenericSuperclass();
             } else {
-                type = ((Class)type).getGenericSuperclass();
+                type = ((Class) type).getGenericSuperclass();
             }
         }
 
-        return (Class)((ParameterizedType)type).getActualTypeArguments()[0];
+        return (Class) ((ParameterizedType) type).getActualTypeArguments()[0];
     }
 }

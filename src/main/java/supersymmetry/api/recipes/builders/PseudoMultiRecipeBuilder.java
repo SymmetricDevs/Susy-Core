@@ -1,18 +1,19 @@
 package supersymmetry.api.recipes.builders;
 
+import java.util.ArrayList;
+
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
+
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.recipes.RecipeMap;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
 import supersymmetry.api.recipes.properties.PseudoMultiProperty;
 import supersymmetry.api.recipes.properties.PseudoMultiPropertyValues;
 
-import java.util.ArrayList;
+public class PseudoMultiRecipeBuilder extends RecipeBuilder<PseudoMultiRecipeBuilder> {
 
-public class PseudoMultiRecipeBuilder extends RecipeBuilder<PseudoMultiRecipeBuilder>{
-    public PseudoMultiRecipeBuilder() {
-    }
+    public PseudoMultiRecipeBuilder() {}
 
     @SuppressWarnings("unused")
     public PseudoMultiRecipeBuilder(Recipe recipe, RecipeMap<PseudoMultiRecipeBuilder> recipeMap) {
@@ -28,8 +29,9 @@ public class PseudoMultiRecipeBuilder extends RecipeBuilder<PseudoMultiRecipeBui
     }
 
     public PseudoMultiRecipeBuilder blockStates(String blockGroupName, IBlockState... blockStates) {
-        //apply property with acceptable blocks to recipe and return builder
-        this.applyProperty(PseudoMultiProperty.getInstance(), new PseudoMultiPropertyValues(blockGroupName, blockStates));
+        // apply property with acceptable blocks to recipe and return builder
+        this.applyProperty(PseudoMultiProperty.getInstance(),
+                new PseudoMultiPropertyValues(blockGroupName, blockStates));
         return this;
     }
 
@@ -40,10 +42,8 @@ public class PseudoMultiRecipeBuilder extends RecipeBuilder<PseudoMultiRecipeBui
             blockStatesArrayList.addAll(blockStateContainer.getValidStates());
         }
 
-        this.applyProperty(PseudoMultiProperty.getInstance(), new PseudoMultiPropertyValues(blockGroupName, blockStatesArrayList));
+        this.applyProperty(PseudoMultiProperty.getInstance(),
+                new PseudoMultiPropertyValues(blockGroupName, blockStatesArrayList));
         return this;
     }
-
-
-
 }

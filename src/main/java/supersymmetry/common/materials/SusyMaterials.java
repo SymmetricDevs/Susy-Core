@@ -1,5 +1,9 @@
 package supersymmetry.common.materials;
 
+import java.lang.reflect.Field;
+import java.util.HashSet;
+import java.util.Map;
+
 import gregtech.api.GregTechAPI;
 import gregtech.api.fluids.FluidBuilder;
 import gregtech.api.fluids.store.FluidStorageKeys;
@@ -10,10 +14,8 @@ import gregtech.api.unification.material.info.MaterialFlags;
 import gregtech.api.unification.material.properties.*;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
-
-import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.Map;
+import supersymmetry.api.unification.material.properties.MillBallProperty;
+import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 
 public class SusyMaterials {
 
@@ -31,6 +33,8 @@ public class SusyMaterials {
     public static Material Latex;
     public static Material Mud;
     public static Material Seawater;
+    public static Material MetallizedBoPET;
+    public static Material Aluminium7075;
 
     public static Material RefractoryGunningMixture;
 
@@ -64,12 +68,13 @@ public class SusyMaterials {
 
     public static void removeFlags() {
         for (Material material : GregTechAPI.materialManager.getRegisteredMaterials()) {
-            if (material.hasFlag(MaterialFlags.DECOMPOSITION_BY_ELECTROLYZING)) removeFlag(MaterialFlags.DECOMPOSITION_BY_ELECTROLYZING, material);
+            if (material.hasFlag(MaterialFlags.DECOMPOSITION_BY_ELECTROLYZING))
+                removeFlag(MaterialFlags.DECOMPOSITION_BY_ELECTROLYZING, material);
         }
     }
 
     private static void changeProperties() {
-        //removeProperty(PropertyKey.ORE, Materials.Graphite);
+        // removeProperty(PropertyKey.ORE, Materials.Graphite);
 
         removeProperty(PropertyKey.ORE, Materials.Soapstone);
         removeProperty(PropertyKey.ORE, Materials.Quartzite);
@@ -77,7 +82,7 @@ public class SusyMaterials {
         removeProperty(PropertyKey.FLUID_PIPE, Materials.Lead);
         Materials.Lead.setProperty(PropertyKey.FLUID_PIPE, new FluidPipeProperties(1200, 8, true, true, false, false));
 
-        //Add dusts and fluids for elements that do not have them
+        // Add dusts and fluids for elements that do not have them
         Materials.Iodine.setProperty(PropertyKey.DUST, new DustProperty());
 
         Materials.Scandium.setProperty(PropertyKey.DUST, new DustProperty());
@@ -86,7 +91,8 @@ public class SusyMaterials {
 
         Materials.Selenium.setProperty(PropertyKey.DUST, new DustProperty());
 
-        Materials.Bromine.setProperty(PropertyKey.FLUID, new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
+        Materials.Bromine.setProperty(PropertyKey.FLUID,
+                new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
 
         Materials.Rubidium.setProperty(PropertyKey.DUST, new DustProperty());
 
@@ -122,20 +128,25 @@ public class SusyMaterials {
 
         Materials.Thallium.setProperty(PropertyKey.DUST, new DustProperty());
 
-        Materials.CalciumChloride.setProperty(PropertyKey.FLUID, new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
+        Materials.CalciumChloride.setProperty(PropertyKey.FLUID,
+                new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
 
-        Materials.MagnesiumChloride.setProperty(PropertyKey.FLUID, new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
+        Materials.MagnesiumChloride.setProperty(PropertyKey.FLUID,
+                new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
 
-        Materials.RockSalt.setProperty(PropertyKey.FLUID, new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
+        Materials.RockSalt.setProperty(PropertyKey.FLUID,
+                new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
 
         Materials.Salt.setProperty(PropertyKey.FLUID, new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
 
-        Materials.SodiumHydroxide.setProperty(PropertyKey.FLUID, new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
+        Materials.SodiumHydroxide.setProperty(PropertyKey.FLUID,
+                new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
 
         Materials.Sodium.setProperty(PropertyKey.FLUID, new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
 
         Materials.Phosphorus.setProperty(PropertyKey.INGOT, new IngotProperty());
-        Materials.Phosphorus.setProperty(PropertyKey.FLUID, new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder().temperature(317)));
+        Materials.Phosphorus.setProperty(PropertyKey.FLUID,
+                new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder().temperature(317)));
         Materials.Phosphorus.setMaterialRGB(0xfffed6);
 
         Materials.HydrochloricAcid.setFormula("(H2O)(HCl)", true);
@@ -143,7 +154,8 @@ public class SusyMaterials {
         Materials.HydrofluoricAcid.setFormula("(H2O)(HF)", true);
 
         removeProperty(PropertyKey.FLUID, Materials.Dimethyldichlorosilane);
-        Materials.Dimethyldichlorosilane.setProperty(PropertyKey.FLUID, new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
+        Materials.Dimethyldichlorosilane.setProperty(PropertyKey.FLUID,
+                new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
 
         Materials.Iron3Chloride.setProperty(PropertyKey.DUST, new DustProperty());
 
@@ -174,6 +186,9 @@ public class SusyMaterials {
         Materials.Electrum.setProperty(PropertyKey.ORE, new OreProperty());
 
         Materials.Hydrogen.addFlags(MaterialFlags.FLAMMABLE);
+
+        // Debug only
+        Materials.Steel.setProperty(SuSyPropertyKey.MILL_BALL, new MillBallProperty(23123));
     }
 
     private static void removeProperty(PropertyKey<?> key, Material material) {
@@ -181,7 +196,7 @@ public class SusyMaterials {
         try {
             Field field = MaterialProperties.class.getDeclaredField("propertyMap");
             field.setAccessible(true);
-            //noinspection unchecked
+            // noinspection unchecked
             map = (Map<PropertyKey<?>, IMaterialProperty>) field.get(material.getProperties());
         } catch (NoSuchFieldException | IllegalAccessException e) {
             SusyLog.logger.error("Failed to reflect material property map", e);
@@ -199,7 +214,7 @@ public class SusyMaterials {
 
             Field field2 = Material.class.getDeclaredField("flags");
             field2.setAccessible(true);
-            //noinspection unchecked
+            // noinspection unchecked
             set = (HashSet<MaterialFlag>) field.get(field2.get(material));
         } catch (NoSuchFieldException | IllegalAccessException e) {
             SusyLog.logger.error("Failed to reflect material flag hashset", e);

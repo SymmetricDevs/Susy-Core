@@ -1,5 +1,22 @@
 package supersymmetry.common.metatileentities.single.electric;
 
+import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import gregtech.api.GTValues;
 import gregtech.api.capability.IEnergyContainer;
 import gregtech.api.capability.impl.FluidTankList;
@@ -18,23 +35,8 @@ import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.client.renderer.ICubeRenderer;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.capability.impl.SuSyFluidFilters;
 import supersymmetry.api.gui.SusyGuiTextures;
-
-import java.util.List;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class MetaTileEntityFuelCell extends SimpleGeneratorMetaTileEntity {
 
@@ -66,8 +68,9 @@ public class MetaTileEntityFuelCell extends SimpleGeneratorMetaTileEntity {
     // Handle fluid imports
     protected FluidTankList createImportFluidHandler() {
         if (workable == null) return new FluidTankList(false);
-        FluidTank[] fluidImports = new FluidTank[workable.getRecipeMap().getMaxFluidInputs() + 1];
-        FluidTank[] displayedTanks = new FluidTank[workable.getRecipeMap().getMaxFluidInputs()];
+        FluidTank[] fluidImports = new FluidTank[workable.getRecipeMap().getMaxFluidInputs()];
+        FluidTank[] displayedTanks = new FluidTank[workable.getRecipeMap().getMaxFluidInputs() - 1];
+        // Maybe in the future, this could just be simplified, if maxFluidInputs is always 2
         for (int i = 0; i < fluidImports.length - 1; i++) {
             NotifiableFluidTank filteredFluidHandler = new NotifiableFluidTank(
                     this.getTankScalingFunction().apply(this.getTier()), this, false);
@@ -75,7 +78,7 @@ public class MetaTileEntityFuelCell extends SimpleGeneratorMetaTileEntity {
             displayedTanks[i] = filteredFluidHandler;
         }
 
-        this.hotGasTank = new NotifiableFilteredFluidHandler(100, this, false).setFilter(SuSyFluidFilters.HOT_GAS);
+        this.hotGasTank = new NotifiableFilteredFluidHandler(16000, this, false).setFilter(SuSyFluidFilters.HOT_GAS);
         fluidImports[fluidImports.length - 1] = hotGasTank;
 
         this.displayedTankList = new FluidTankList(false, displayedTanks);
@@ -105,7 +108,8 @@ public class MetaTileEntityFuelCell extends SimpleGeneratorMetaTileEntity {
 
     @Override
     // Add operating temperature information to tooltip
-    public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip,
+                               boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
         tooltip.add(I18n.format("susy.machine.fuel_cell.tooltip", thresholdTemperature));
     }
@@ -158,14 +162,14 @@ public class MetaTileEntityFuelCell extends SimpleGeneratorMetaTileEntity {
                 .setProgressBar(GuiTextures.PROGRESS_BAR_BOILER_EMPTY.get(true),
                         GuiTextures.PROGRESS_BAR_BOILER_HEAT,
                         ProgressWidget.MoveType.VERTICAL)
-                .setHoverTextConsumer(list -> list.add(new TextComponentTranslation(I18n.format("susy.gui.temperature_celsius", currentTemperature, maxTemperature))))
-        );
+                .setHoverTextConsumer(list -> list.add(new TextComponentTranslation(
+                        I18n.format("susy.gui.temperature_celsius", currentTemperature, maxTemperature)))));
         builder.widget(new ImageWidget(134, thresholdYOffset, 6, 5, SusyGuiTextures.ARROW));
         builder.widget(new TankWidget(hotGasTank, 110, 21, 10, 54)
                 .setBackgroundTexture(GuiTextures.PROGRESS_BAR_BOILER_EMPTY.get(true)));
         builder.widget(new ImageWidget(152, 63 + yOffset, 17, 17,
                 GTValues.XMAS.get() ? GuiTextures.GREGTECH_LOGO_XMAS : GuiTextures.GREGTECH_LOGO)
-                .setIgnoreColor(true));
+                        .setIgnoreColor(true));
 
         return builder;
     }
@@ -180,7 +184,8 @@ public class MetaTileEntityFuelCell extends SimpleGeneratorMetaTileEntity {
 
     private class FuelCellRecipeLogic extends FuelRecipeLogic {
 
-        public FuelCellRecipeLogic(MetaTileEntityFuelCell metaTileEntity, RecipeMap<?> recipeMap, Supplier<IEnergyContainer> energyContainer) {
+        public FuelCellRecipeLogic(MetaTileEntityFuelCell metaTileEntity, RecipeMap<?> recipeMap,
+                                   Supplier<IEnergyContainer> energyContainer) {
             super(metaTileEntity, recipeMap, energyContainer);
         }
 

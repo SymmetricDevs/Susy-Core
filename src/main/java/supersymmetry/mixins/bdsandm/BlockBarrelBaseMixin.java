@@ -1,9 +1,10 @@
 package supersymmetry.mixins.bdsandm;
 
-import funwayguy.bdsandm.blocks.BlockBarrelBase;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+
+import funwayguy.bdsandm.blocks.BlockBarrelBase;
 
 @Mixin(value = BlockBarrelBase.class, remap = false)
 public class BlockBarrelBaseMixin {

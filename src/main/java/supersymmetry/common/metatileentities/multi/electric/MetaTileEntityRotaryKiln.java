@@ -1,5 +1,12 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import javax.annotation.Nonnull;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.ResourceLocation;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -15,15 +22,11 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
 
-import javax.annotation.Nonnull;
-
 public class MetaTileEntityRotaryKiln extends RecipeMapMultiblockController {
+
     public MetaTileEntityRotaryKiln(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.ROTARY_KILN);
         this.recipeMapWorkable = new MultiblockRecipeLogic(this);
@@ -51,7 +54,9 @@ public class MetaTileEntityRotaryKiln extends RecipeMapMultiblockController {
                 .aisle("A    A    A", "A    A    A", "L    A    R", "LCCCCSCCCCR", "L    A    R")
                 .where('S', selfPredicate())
                 .where('A', frames(Materials.Steel))
-                .where('C', states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)))
+                .where('C',
+                        states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH)
+                                .getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)))
                 .where('L', casingPredicate
                         .or(autoAbilities(false, false, true, false, false, true, false))
                         .or(autoAbilities(true, false, false, false, false, false, false).setMinGlobalLimited(0))

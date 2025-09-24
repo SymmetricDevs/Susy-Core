@@ -1,10 +1,8 @@
 package supersymmetry.common;
 
-import gregtech.api.GregTechAPI;
-import gregtech.api.util.GTTeleporter;
-import gregtech.api.util.TeleportHandler;
-import gregtech.common.items.MetaItems;
-import gregtechfoodoption.item.GTFOMetaItem;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.entity.Entity;
@@ -25,25 +23,34 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+
+import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.GregTechAPI;
+import gregtech.api.util.GTTeleporter;
+import gregtech.api.util.TeleportHandler;
+import gregtech.common.items.MetaItems;
+import gregtechfoodoption.item.GTFOMetaItem;
 import supersymmetry.Supersymmetry;
 import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
+import supersymmetry.common.event.DimensionRidingSwapData;
 import supersymmetry.common.event.MobHordeWorldData;
 import supersymmetry.common.item.SuSyArmorItem;
 import supersymmetry.common.network.SPacketFirstJoin;
 import supersymmetry.common.world.WorldProviderPlanet;
-import supersymmetry.loaders.SuSyWorldLoader;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class EventHandlers {
 
     public static final String FIRST_SPAWN = Supersymmetry.MODID + ".first_spawn";
+    public static List<DimensionRidingSwapData> travellingPassengers = new ArrayList<>();
 
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-
         NBTTagCompound playerData = event.player.getEntityData();
-        NBTTagCompound data = playerData.hasKey(EntityPlayer.PERSISTED_NBT_TAG) ? playerData.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG) : new NBTTagCompound();
+        NBTTagCompound data = playerData.hasKey(EntityPlayer.PERSISTED_NBT_TAG) ?
+                playerData.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG) : new NBTTagCompound();
 
         if (!event.player.getEntityWorld().isRemote && !data.getBoolean(FIRST_SPAWN)) {
 
@@ -53,10 +60,13 @@ public class EventHandlers {
 
             GregTechAPI.networkHandler.sendTo(new SPacketFirstJoin(), (EntityPlayerMP) event.player);
 
-            EntityDropPod dropPod = new EntityDropPod(event.player.getEntityWorld(), event.player.posX, event.player.posY + 256, event.player.posZ);
+            EntityDropPod dropPod = new EntityDropPod(event.player.getEntityWorld(), event.player.posX,
+                    event.player.posY + 256, event.player.posZ);
 
-            GTTeleporter teleporter = new GTTeleporter((WorldServer) event.player.world, event.player.posX, event.player.posY + 256, event.player.posZ);
-            TeleportHandler.teleport(event.player, event.player.dimension, teleporter, event.player.posX, event.player.posY + 256, event.player.posZ);
+            GTTeleporter teleporter = new GTTeleporter((WorldServer) event.player.world, event.player.posX,
+                    event.player.posY + 256, event.player.posZ);
+            TeleportHandler.teleport(event.player, event.player.dimension, teleporter, event.player.posX,
+                    event.player.posY + 256, event.player.posZ);
 
             event.player.getEntityWorld().spawnEntity(dropPod);
             event.player.startRiding(dropPod);
@@ -83,8 +93,11 @@ public class EventHandlers {
     public static void onWorldTick(TickEvent.WorldTickEvent event) {
         World world = event.world;
 
-        if (world.isRemote) {
+        if (world.isRemote || !(world instanceof WorldServer server)) {
             return;
+        }
+        if (!travellingPassengers.isEmpty()) {
+            handleEntityTransfer();
         }
         if (event.phase != TickEvent.Phase.END) {
             return;
@@ -96,11 +109,40 @@ public class EventHandlers {
             return;
         }
 
-        if (world instanceof WorldServer server) {
-            PlayerList list = server.getMinecraftServer().getPlayerList();
-            MobHordeWorldData mobHordeWorldData = MobHordeWorldData.get(world);
-            list.getPlayers().forEach(p -> mobHordeWorldData.getPlayerData(p.getPersistentID()).update(p));
-            mobHordeWorldData.markDirty();
+        PlayerList list = server.getMinecraftServer().getPlayerList();
+        MobHordeWorldData mobHordeWorldData = MobHordeWorldData.get(world);
+        list.getPlayers().forEach(p -> mobHordeWorldData.getPlayerData(p.getPersistentID()).update(p));
+        mobHordeWorldData.markDirty();
+    }
+
+    private static @NotNull void handleEntityTransfer() {
+        List<DimensionRidingSwapData> toRemove = new ArrayList<>();
+        for (DimensionRidingSwapData data : travellingPassengers) {
+            Entity mount = data.mount;
+            Entity passenger = data.passenger;
+            if (mount.dimension != passenger.dimension && passenger.getServer() != null &&
+                    mount.world.getTotalWorldTime() - data.time > 2) {
+                WorldServer newWorld = passenger.getServer().getWorld(mount.dimension);
+
+                passenger.setLocationAndAngles(mount.getPosition().getX(),
+                        mount.getPosition().getY(),
+                        mount.getPosition().getZ(),
+                        mount.rotationYaw,
+                        mount.rotationPitch);
+                passenger.getServer().getPlayerList().transferPlayerToDimension((EntityPlayerMP) passenger,
+                        mount.dimension,
+                        new GTTeleporter(newWorld, mount.getPosition().getX(), mount.getPosition().getY(),
+                                mount.getPosition().getZ()));
+                Entity realMount = newWorld.getEntityFromUuid(mount.getPersistentID());
+                if (realMount != null) {
+                    passenger.startRiding(realMount);
+                }
+                toRemove.add(data);
+            }
+
+        }
+        for (DimensionRidingSwapData data : toRemove) {
+            travellingPassengers.remove(data);
         }
     }
 

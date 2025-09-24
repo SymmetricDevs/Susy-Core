@@ -1,29 +1,34 @@
 package supersymmetry.loaders;
 
+import java.util.List;
+import java.util.function.Supplier;
+
+import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+
 import com.google.common.collect.Lists;
-import gregtech.api.fluids.attribute.AttributedFluid;
+
 import gregtech.api.fluids.FluidState;
 import gregtech.api.fluids.GTFluid;
+import gregtech.api.fluids.attribute.AttributedFluid;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.info.MaterialFlags;
 import gregtech.api.util.FluidTooltipUtil;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.TextFormatting;
-
-import java.util.List;
-import java.util.function.Supplier;
 
 public class SuSyFluidTooltipLoader {
 
     public static void registerTooltips() {
-        Supplier<List<String>> liquidVoidableTooltip = () -> Lists.newArrayList(TextFormatting.YELLOW + I18n.format("susy.fluid.voiding.liquid"));
-        Supplier<List<String>> gasVoidableTooltip = () -> Lists.newArrayList(TextFormatting.YELLOW + I18n.format("susy.fluid.voiding.gas"));
-        Supplier<List<String>> flammableVoidableTooltip = () -> Lists.newArrayList(TextFormatting.YELLOW + I18n.format("susy.fluid.voiding.flammable"));
-    
-        FluidTooltipUtil.registerTooltip(FluidRegistry.WATER, liquidVoidableTooltip);  
-        FluidTooltipUtil.registerTooltip(FluidRegistry.LAVA, liquidVoidableTooltip);   
+        Supplier<List<String>> liquidVoidableTooltip = () -> Lists
+                .newArrayList(TextFormatting.YELLOW + I18n.format("susy.fluid.voiding.liquid"));
+        Supplier<List<String>> gasVoidableTooltip = () -> Lists
+                .newArrayList(TextFormatting.YELLOW + I18n.format("susy.fluid.voiding.gas"));
+        Supplier<List<String>> flammableVoidableTooltip = () -> Lists
+                .newArrayList(TextFormatting.YELLOW + I18n.format("susy.fluid.voiding.flammable"));
+
+        FluidTooltipUtil.registerTooltip(FluidRegistry.WATER, liquidVoidableTooltip);
+        FluidTooltipUtil.registerTooltip(FluidRegistry.LAVA, liquidVoidableTooltip);
 
         for (Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
             if (fluid instanceof AttributedFluid aFluid) {

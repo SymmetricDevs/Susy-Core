@@ -2,13 +2,13 @@
  * Copyright (c) Forge Development LLC and contributors
  * SPDX-License-Identifier: LGPL-2.1-only
  */
-
 package supersymmetry.api.recycling.toposort;
 
 import java.util.Set;
 
 /// An exception thrown for graphs with cycles as an argument for topological sort.
 public final class CyclePresentException extends IllegalArgumentException {
+
     private final Set<Set<?>> cycles;
 
     /// Creates the exception.

@@ -1,17 +1,17 @@
 package supersymmetry.common.network;
 
-import gregtech.api.network.IClientExecutor;
-import gregtech.api.network.IPacket;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import gregtech.api.network.IClientExecutor;
+import gregtech.api.network.IPacket;
 import supersymmetry.client.ClientProxy;
 
 public class SPacketFirstJoin implements IPacket, IClientExecutor {
 
-    public SPacketFirstJoin() {
-    }
+    public SPacketFirstJoin() {}
 
     @Override
     @SideOnly(Side.CLIENT)
@@ -20,10 +20,8 @@ public class SPacketFirstJoin implements IPacket, IClientExecutor {
     }
 
     @Override
-    public void encode(PacketBuffer packetBuffer) {
-    }
+    public void encode(PacketBuffer packetBuffer) {}
 
     @Override
-    public void decode(PacketBuffer packetBuffer) {
-    }
+    public void decode(PacketBuffer packetBuffer) {}
 }

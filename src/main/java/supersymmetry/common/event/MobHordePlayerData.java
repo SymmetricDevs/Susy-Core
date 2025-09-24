@@ -1,5 +1,8 @@
 package supersymmetry.common.event;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -10,12 +13,11 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
 import supersymmetry.api.event.MobHordeEvent;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
+
     // Player cooldown for all events.
     public int ticksUntilCanSpawn;
     public int gracePeriod;
@@ -38,7 +40,7 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
         result.setInteger("ticksUntilCanSpawn", ticksUntilCanSpawn);
         result.setIntArray("invasionTimers", invasionTimers);
         result.setBoolean("hasActiveInvasion", hasActiveInvasion);
-        if(this.hasActiveInvasion && !this.invasionEntitiesUUIDs.isEmpty()) {
+        if (this.hasActiveInvasion && !this.invasionEntitiesUUIDs.isEmpty()) {
             result.setString("currentInvasion", currentInvasion);
             result.setInteger("timeoutPeriod", this.timeoutPeriod);
             result.setInteger("ticksActive", this.ticksActive);
@@ -137,7 +139,7 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
     }
 
     public void stopInvasion(EntityPlayerMP player) {
-        if(this.hasActiveInvasion) {
+        if (this.hasActiveInvasion) {
             WorldServer world = player.getServerWorld();
             this.invasionEntitiesUUIDs.stream()
                     .map(uuid -> world.getEntityFromUuid(uuid))

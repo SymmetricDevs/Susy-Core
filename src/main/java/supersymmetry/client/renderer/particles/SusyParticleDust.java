@@ -8,7 +8,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class SusyParticleDust extends ParticleSmokeNormal {
 
-    public SusyParticleDust(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double p_i46348_8_, double p_i46348_10_, double p_i46348_12_, float scale, float maxAge, int color) {
+    public SusyParticleDust(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double p_i46348_8_,
+                            double p_i46348_10_, double p_i46348_12_, float scale, float maxAge, int color) {
         super(worldIn, xCoordIn, yCoordIn, zCoordIn, p_i46348_8_, p_i46348_10_, p_i46348_12_, maxAge);
         this.particleRed = ((color >> 16) & 0xFF) / 255f;
         this.particleGreen = ((color >> 8) & 0xFF) / 255f;
@@ -35,6 +36,5 @@ public class SusyParticleDust extends ParticleSmokeNormal {
 
         this.move(this.motionX, this.motionY, this.motionZ);
         this.motionY *= 0.9800000190734863D;
-
     }
 }

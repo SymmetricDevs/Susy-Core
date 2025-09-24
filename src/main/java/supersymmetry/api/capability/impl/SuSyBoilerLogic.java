@@ -1,5 +1,26 @@
 package supersymmetry.api.capability.impl;
 
+import static gregtech.api.capability.GregtechDataCodes.BOILER_HEAT;
+import static gregtech.api.capability.GregtechDataCodes.BOILER_LAST_TICK_STEAM;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidTank;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import gregtech.api.GTValues;
 import gregtech.api.capability.IFilter;
 import gregtech.api.capability.IMultiblockController;
@@ -13,27 +34,8 @@ import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.util.GTLog;
 import gregtech.common.ConfigHolder;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.NonNullList;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidTank;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.common.metatileentities.multi.steam.MetaTileEntitySuSyLargeBoiler;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-
-import static gregtech.api.capability.GregtechDataCodes.BOILER_HEAT;
-import static gregtech.api.capability.GregtechDataCodes.BOILER_LAST_TICK_STEAM;
 
 public class SuSyBoilerLogic extends AbstractRecipeLogic {
 
@@ -108,7 +110,7 @@ public class SuSyBoilerLogic extends AbstractRecipeLogic {
                 fluidTank.drain(consumption, true);
                 int fuelBurnTime = (fluidFuelRecipe.getDuration() * 96 / boiler.boilerType.steamPerTick());
                 setMaxProgress(adjustBurnTimeForThrottle(
-                        Math.max(1, fuelBurnTime)));
+                        Math.max(1, boiler.boilerType.runtimeBoost(fuelBurnTime))));
                 didStartRecipe = true;
                 break;
             }
@@ -126,7 +128,7 @@ public class SuSyBoilerLogic extends AbstractRecipeLogic {
                 if (solidFuelRecipe == null) continue;
                 int fuelBurnTime = solidFuelRecipe.getDuration() * 96 / boiler.boilerType.steamPerTick();
                 if (fuelBurnTime > 0) { // try to ensure this fuel can burn for at least 1 tick
-                    setMaxProgress(adjustBurnTimeForThrottle(fuelBurnTime));
+                    setMaxProgress(adjustBurnTimeForThrottle(boiler.boilerType.runtimeBoost(fuelBurnTime)));
                     stack.shrink(1);
                     didStartRecipe = true;
                     break;
@@ -145,7 +147,6 @@ public class SuSyBoilerLogic extends AbstractRecipeLogic {
         metaTileEntity.getNotifiedItemInputList().clear();
         metaTileEntity.getNotifiedFluidInputList().clear();
     }
-
 
     public static boolean isSupportedOrePrefix(OrePrefix prefix) {
         return SUPPORTED_ORE_PREFIXES.contains(prefix);

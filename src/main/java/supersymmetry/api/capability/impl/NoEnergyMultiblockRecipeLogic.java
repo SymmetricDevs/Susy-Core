@@ -1,12 +1,13 @@
 package supersymmetry.api.capability.impl;
 
+import static gregtech.api.recipes.logic.OverclockingLogic.standardOverclockingLogic;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.GTValues;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.recipes.recipeproperties.IRecipePropertyStorage;
-import org.jetbrains.annotations.NotNull;
-
-import static gregtech.api.recipes.logic.OverclockingLogic.standardOverclockingLogic;
 
 public class NoEnergyMultiblockRecipeLogic extends MultiblockRecipeLogic {
 

@@ -1,5 +1,21 @@
 package supersymmetry.common.metatileentities.single.steam;
 
+import java.util.Collections;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.GTValues;
 import gregtech.api.capability.IFilter;
 import gregtech.api.capability.impl.FilteredFluidHandler;
@@ -17,21 +33,7 @@ import gregtech.common.ConfigHolder;
 import gregtech.common.metatileentities.steam.boiler.SteamBoiler;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.capability.impl.SuSyBoilerLogic;
-
-import java.util.Collections;
 
 public class SuSyLiquidBoiler extends SteamBoiler {
 
@@ -84,7 +86,9 @@ public class SuSyLiquidBoiler extends SteamBoiler {
         if (consumption > 0 && fuelFluidTank.getFluidAmount() >= consumption) {
             fuelFluidTank.drain(consumption, true);
             // 1920 = 96L/t (1A LV, default for recipes) * 20t/s
-            setFuelMaxBurnTime(fluidFuelRecipe.getDuration() * 1920 / this.getBaseSteamOutput());
+            int burnTime = fluidFuelRecipe.getDuration() * 1920 / this.getBaseSteamOutput();
+            burnTime = SuSyCoalBoiler.modifyBurnTime(burnTime, isHighPressure);
+            setFuelMaxBurnTime(burnTime);
         }
     }
 

@@ -1,18 +1,17 @@
 /*
-    DISCLAIMER:
-    Full credit goes to tictim for most of the code here.
-    I simply copied over and Frankensteined the code from his fork with other things that are private or
-        non-existent currently.
+ * DISCLAIMER:
+ * Full credit goes to tictim for most of the code here.
+ * I simply copied over and Frankensteined the code from his fork with other things that are private or
+ * non-existent currently.
  */
-
 package supersymmetry.api.util;
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Table;
-import gregtech.api.GTValues;
-import gregtech.api.unification.material.info.MaterialIconSet;
-import gregtech.api.unification.material.info.MaterialIconType;
-import gregtech.api.util.GTLog;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+
+import java.util.Map;
+import java.util.Objects;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -29,16 +28,22 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
-import supersymmetry.Supersymmetry;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Map;
-import java.util.Objects;
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
+
+import gregtech.api.GTValues;
+import gregtech.api.unification.material.info.MaterialIconSet;
+import gregtech.api.unification.material.info.MaterialIconType;
+import gregtech.api.util.GTLog;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import supersymmetry.Supersymmetry;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID, value = Side.CLIENT)
 public class MaterialBlockModelLoader {
-    private static final Table<MaterialIconType, MaterialIconSet, ResourceLocation> BLOCKSTATES_CACHE = HashBasedTable.create();
+
+    private static final Table<MaterialIconType, MaterialIconSet, ResourceLocation> BLOCKSTATES_CACHE = HashBasedTable
+            .create();
 
     private static final Object2ObjectOpenHashMap<Entry, ModelResourceLocation> ENTRIES = new Object2ObjectOpenHashMap<>();
 
@@ -148,7 +153,8 @@ public class MaterialBlockModelLoader {
 
         public ResourceLocation getModelLocation() {
             if (this.variant != null) {
-                return new ModelResourceLocation(iconType.recurseIconsetPath(iconSet, BLOCKSTATES_CACHE, "blockstates/material_sets/%s/%s.json", "material_sets/%s/%s"), variant);
+                return new ModelResourceLocation(iconType.recurseIconsetPath(iconSet, BLOCKSTATES_CACHE,
+                        "blockstates/material_sets/%s/%s.json", "material_sets/%s/%s"), variant);
             } else {
                 ResourceLocation itemModelPath = iconType.getItemModelPath(iconSet);
                 return new ResourceLocation(itemModelPath.getNamespace(), "item/" + itemModelPath.getPath());
@@ -160,7 +166,8 @@ public class MaterialBlockModelLoader {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Entry entry = (Entry) o;
-            return Objects.equals(variant, entry.variant) && iconType.equals(entry.iconType) && iconSet.equals(entry.iconSet);
+            return Objects.equals(variant, entry.variant) && iconType.equals(entry.iconType) &&
+                    iconSet.equals(entry.iconSet);
         }
 
         @Override

@@ -1,8 +1,7 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.block.IStateHarvestLevel;
-import gregtech.api.block.VariantActiveBlock;
-import gregtech.api.block.VariantBlock;
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -10,9 +9,11 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
+import gregtech.api.block.IStateHarvestLevel;
+import gregtech.api.block.VariantActiveBlock;
 
 /// This should actually be a [VariantBlock]. But changing it would void evaporation beds in existing saves.
 /// Also, it will need me to do extra code for exposure block counting, so I'll just leave it here untouched.
@@ -41,6 +42,7 @@ public class BlockEvaporationBed extends VariantActiveBlock<BlockEvaporationBed.
     }
 
     public enum EvaporationBedType implements IStringSerializable, IStateHarvestLevel {
+
         DIRT("dirt", 0);
 
         private final String name;

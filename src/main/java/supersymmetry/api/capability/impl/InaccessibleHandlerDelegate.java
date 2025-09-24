@@ -2,8 +2,8 @@ package supersymmetry.api.capability.impl;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
+
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.common.metatileentities.storage.MetaTileEntityLockedCrate;
 
 /// A custom item handler delegate that prevents any insertion or extraction,
 /// but remains modifiable.

@@ -1,15 +1,16 @@
 package supersymmetry.common.item.behavior;
 
-import gregtech.api.pipenet.tile.IPipeTile;
-import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import static supersymmetry.common.item.behavior.TraverseOptions.Lambdas.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static supersymmetry.common.item.behavior.TraverseOptions.Lambdas.*;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+
+import gregtech.api.pipenet.tile.IPipeTile;
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 
 public enum TraverseOptions implements ITraverseOption {
 
@@ -19,7 +20,8 @@ public enum TraverseOptions implements ITraverseOption {
     UNBLOCKING(FIND_CONNECTED, UNBLOCKER),
     ;
 
-    public static final Int2ObjectArrayMap<ITraverseOption> COLORING = new Int2ObjectArrayMap<>(1 + EnumDyeColor.values().length);
+    public static final Int2ObjectArrayMap<ITraverseOption> COLORING = new Int2ObjectArrayMap<>(
+            1 + EnumDyeColor.values().length);
 
     static {
         /// -1 for default color
@@ -36,7 +38,8 @@ public enum TraverseOptions implements ITraverseOption {
                 @Override
                 public void operate(EnumFacing from, IPipeTile<?, ?> self, IPipeTile<?, ?> other, boolean reverse) {
                     // This is a bit messy but yeah anyway...
-                    int colorValue = index == -1 ? self.getDefaultPaintingColor() : EnumDyeColor.values()[index].colorValue;
+                    int colorValue = index == -1 ? self.getDefaultPaintingColor() :
+                            EnumDyeColor.values()[index].colorValue;
                     if (self.getPaintingColor() != colorValue) {
                         self.setPaintingColor(colorValue);
                     }
@@ -66,28 +69,30 @@ public enum TraverseOptions implements ITraverseOption {
 
     @FunctionalInterface
     private interface PathFinder {
+
         List<EnumFacing> findNext(EnumFacing from, IPipeTile<?, ?> pipe);
     }
 
     @FunctionalInterface
     private interface PipeOperator {
+
         void operate(EnumFacing facingToOther, IPipeTile<?, ?> self, IPipeTile<?, ?> other, boolean reverse);
     }
 
     static class Lambdas {
+
         /// Returns the other facing this pipe has a neighbouring pipe to connect to, for CONNECTING operation type
         /// Returns null if:
-        ///   1) The pipe is cannot find any pipe to connect
-        ///   2) The pipe is connected to more than 1 side alr
+        /// 1) The pipe is cannot find any pipe to connect
+        /// 2) The pipe is connected to more than 1 side alr
         static final PathFinder FIND_TO_CONNECT = (from, pipe) -> {
             List<EnumFacing> ret = new ArrayList<>(1);
 
             for (EnumFacing facing : EnumFacing.values()) {
                 if (facing == from) continue;
                 TileEntity other = pipe.getNeighbor(facing);
-                if (other instanceof IPipeTile<?, ?> otherPipe
-                        && pipe.getClass().isAssignableFrom(other.getClass())
-                        && otherPipe.getConnections() == 0) {
+                if (other instanceof IPipeTile<?, ?>otherPipe && pipe.getClass().isAssignableFrom(other.getClass()) &&
+                        otherPipe.getConnections() == 0) {
                     if (ret.isEmpty()) {
                         /// Adding the first candidate
                         ret.add(facing);
@@ -104,8 +109,8 @@ public enum TraverseOptions implements ITraverseOption {
 
         /// Returns the other facing this pipe is connected to, for DISCONNECTING operation type
         /// Returns null if:
-        ///   1) The pipe is not connected to any other side
-        ///   2) The pipe is connected to more than 1 side among other sides
+        /// 1) The pipe is not connected to any other side
+        /// 2) The pipe is connected to more than 1 side among other sides
         static final PathFinder FIND_CONNECTED = (from, pipe) -> {
             List<EnumFacing> ret = new ArrayList<>(1);
 
@@ -138,12 +143,13 @@ public enum TraverseOptions implements ITraverseOption {
             return ret;
         };
 
-
         /// Connects this pipe with the other
-        static final PipeOperator CONNECTOR = (facingToOther, self, other, reverse) -> self.setConnection(facingToOther, true, false);
+        static final PipeOperator CONNECTOR = (facingToOther, self, other, reverse) -> self.setConnection(facingToOther,
+                true, false);
 
         /// Disconnects this pipe with the other
-        static final PipeOperator DISCONNECTOR = (facingToOther, self, other, reverse) -> self.setConnection(facingToOther, false, false);
+        static final PipeOperator DISCONNECTOR = (facingToOther, self, other, reverse) -> self
+                .setConnection(facingToOther, false, false);
 
         /// Blocks this pipe with the other
         static final PipeOperator BLOCKER = (facingToOther, self, other, reverse) -> {

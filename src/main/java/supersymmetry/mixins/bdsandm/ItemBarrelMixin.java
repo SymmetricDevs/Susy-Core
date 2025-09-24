@@ -1,16 +1,19 @@
 package supersymmetry.mixins.bdsandm;
 
-import com.llamalad7.mixinextras.sugar.Local;
-import funwayguy.bdsandm.inventory.capability.CapabilityBarrel;
-import funwayguy.bdsandm.items.ItemBarrel;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import com.llamalad7.mixinextras.sugar.Local;
+
+import funwayguy.bdsandm.inventory.capability.CapabilityBarrel;
+import funwayguy.bdsandm.items.ItemBarrel;
 
 @Mixin(value = ItemBarrel.class, remap = false)
 public class ItemBarrelMixin extends ItemBlock {
@@ -32,7 +35,8 @@ public class ItemBarrelMixin extends ItemBlock {
             at = @At(value = "INVOKE",
                      target = "Lfunwayguy/bdsandm/inventory/capability/CapabilityBarrel;serializeNBT()Lnet/minecraft/nbt/NBTTagCompound;"),
             cancellable = true)
-    public void returnIfNull(ItemStack stack, CallbackInfoReturnable<NBTTagCompound> cir, @Local CapabilityBarrel barrel) {
+    public void returnIfNull(ItemStack stack, CallbackInfoReturnable<NBTTagCompound> cir,
+                             @Local CapabilityBarrel barrel) {
         if (barrel == null) {
             cir.setReturnValue(super.getNBTShareTag(stack));
         }

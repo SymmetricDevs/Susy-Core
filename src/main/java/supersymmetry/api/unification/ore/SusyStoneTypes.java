@@ -1,18 +1,20 @@
 package supersymmetry.api.unification.ore;
 
+import net.minecraft.block.SoundType;
+import net.minecraft.block.state.IBlockState;
+
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.unification.ore.StoneType;
 import gregtech.api.unification.stack.MaterialStack;
 import gregtech.common.ConfigHolder;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.state.IBlockState;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
 import supersymmetry.common.materials.SusyMaterials;
 
 public class SusyStoneTypes {
+
     public static StoneType GABBRO;
     public static StoneType GNEISS;
     public static StoneType GRAPHITE;
@@ -27,10 +29,9 @@ public class SusyStoneTypes {
 
     public static StoneType ANORTHOSITE;
 
-    public SusyStoneTypes(){
-    }
+    public SusyStoneTypes() {}
 
-    public static void init(){
+    public static void init() {
         GABBRO = new StoneType(12, "gabbro", SoundType.STONE, SusyOrePrefix.oreGabbro, SusyMaterials.Gabbro,
                 () -> gtStoneState(SusyStoneVariantBlock.StoneType.GABBRO),
                 state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.GABBRO), false);
@@ -55,10 +56,12 @@ public class SusyStoneTypes {
         SOAPSTONE = new StoneType(19, "soapstone", SoundType.STONE, SusyOrePrefix.oreSoapstone, Materials.Soapstone,
                 () -> gtStoneState(SusyStoneVariantBlock.StoneType.SOAPSTONE),
                 state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.SOAPSTONE), false);
-        KIMBERLITE = new StoneType(20, "kimberlite", SoundType.STONE, SusyOrePrefix.oreKimberlite, SusyMaterials.Kimberlite,
+        KIMBERLITE = new StoneType(20, "kimberlite", SoundType.STONE, SusyOrePrefix.oreKimberlite,
+                SusyMaterials.Kimberlite,
                 () -> gtStoneState(SusyStoneVariantBlock.StoneType.KIMBERLITE),
                 state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.KIMBERLITE), false);
-        ANORTHOSITE = new StoneType(21, "anorthosite", SoundType.STONE, SusyOrePrefix.oreAnorthosite, SusyMaterials.Anorthosite,
+        ANORTHOSITE = new StoneType(21, "anorthosite", SoundType.STONE, SusyOrePrefix.oreAnorthosite,
+                SusyMaterials.Anorthosite,
                 () -> gtStoneState(SusyStoneVariantBlock.StoneType.ANORTHOSITE),
                 state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.ANORTHOSITE), false);
 
