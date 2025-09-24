@@ -3,8 +3,8 @@ package supersymmetry.client.audio;
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
+
 import supersymmetry.api.sound.SusySounds;
-import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.entities.EntityRocket;
 
 public class MovingSoundRocket extends MovingSound {
@@ -41,5 +41,4 @@ public class MovingSoundRocket extends MovingSound {
             this.distance = MathHelper.clamp(this.distance + 0.0025F, 0.0F, 1.0F);
         }
     }
-
 }

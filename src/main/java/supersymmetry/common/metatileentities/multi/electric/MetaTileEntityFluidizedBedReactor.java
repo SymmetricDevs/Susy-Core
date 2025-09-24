@@ -1,5 +1,16 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -10,23 +21,15 @@ import gregtech.api.unification.material.Materials;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.utils.TooltipHelper;
-import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.BlockBoilerCasing.BoilerCasingType;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
-import java.util.List;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.capability.impl.ContinuousMultiblockRecipeLogic;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
 
 public class MetaTileEntityFluidizedBedReactor extends RecipeMapMultiblockController {
+
     public MetaTileEntityFluidizedBedReactor(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.FLUIDIZED_BED_REACTOR_RECIPES);
         this.recipeMapWorkable = new ContinuousMultiblockRecipeLogic(this, true);
@@ -48,6 +51,7 @@ public class MetaTileEntityFluidizedBedReactor extends RecipeMapMultiblockContro
                         .or(this.autoAbilities(true, true, true, true, true, true, false)))
                 .build();
     }
+
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
         return Textures.INERT_PTFE_CASING;
     }

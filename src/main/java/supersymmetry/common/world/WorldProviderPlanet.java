@@ -1,15 +1,16 @@
 package supersymmetry.common.world;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.client.IRenderHandler;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class WorldProviderPlanet extends WorldProvider {
+
     @Override
     public @NotNull DimensionType getDimensionType() {
         return SuSyDimensions.planetType;
@@ -27,8 +28,7 @@ public class WorldProviderPlanet extends WorldProvider {
     }
 
     @Override
-    public boolean isSurfaceWorld()
-    {
+    public boolean isSurfaceWorld() {
         return false;
     }
 
@@ -36,8 +36,7 @@ public class WorldProviderPlanet extends WorldProvider {
      * Will check if the x, z position specified is alright to be set as the map spawn point
      */
     @Override
-    public boolean canCoordinateBeSpawn(int x, int z)
-    {
+    public boolean canCoordinateBeSpawn(int x, int z) {
         return false;
     }
 
@@ -58,7 +57,7 @@ public class WorldProviderPlanet extends WorldProvider {
 
     @Override
     public @Nullable float[] calcSunriseSunsetColors(float celestialAngle, float partialTicks) {
-        return new float[]{0.0F, 0.0F, 0.0F, 0.0F};
+        return new float[] { 0.0F, 0.0F, 0.0F, 0.0F };
     }
 
     public Planet getPlanet() {

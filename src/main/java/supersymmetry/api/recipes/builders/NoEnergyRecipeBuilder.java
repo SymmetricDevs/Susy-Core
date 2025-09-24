@@ -1,24 +1,22 @@
 package supersymmetry.api.recipes.builders;
 
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.recipeproperties.PrimitiveProperty;
 import gregtech.api.util.ValidationResult;
-
-import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.ints.IntLists;
-import javax.annotation.Nonnull;
-
-import java.util.List;
 import supersymmetry.api.recipes.properties.DimensionProperty;
 
 public class NoEnergyRecipeBuilder extends RecipeBuilder<NoEnergyRecipeBuilder> {
 
-    public NoEnergyRecipeBuilder() {
-
-    }
+    public NoEnergyRecipeBuilder() {}
 
     @SuppressWarnings("unused")
     public NoEnergyRecipeBuilder(Recipe recipe, RecipeMap<NoEnergyRecipeBuilder> recipeMap) {
@@ -44,16 +42,17 @@ public class NoEnergyRecipeBuilder extends RecipeBuilder<NoEnergyRecipeBuilder> 
         if (key.equals(DimensionProperty.KEY)) {
             if (value instanceof Integer) {
                 this.dimension((Integer) value);
-            } else if (value instanceof List && !((List<?>) value).isEmpty() && ((List<?>) value).get(0) instanceof Integer) {
-                IntList dimensionIDs = getDimensionIDs();
-                if (dimensionIDs == IntLists.EMPTY_LIST) {
-                    dimensionIDs = new IntArrayList();
-                    this.applyProperty(DimensionProperty.getInstance(), dimensionIDs);
-                }
-                dimensionIDs.addAll((List<Integer>) value);
-            } else {
-                throw new IllegalArgumentException("Invalid Dimension Property Type!");
-            }
+            } else if (value instanceof List && !((List<?>) value).isEmpty() &&
+                    ((List<?>) value).get(0) instanceof Integer) {
+                        IntList dimensionIDs = getDimensionIDs();
+                        if (dimensionIDs == IntLists.EMPTY_LIST) {
+                            dimensionIDs = new IntArrayList();
+                            this.applyProperty(DimensionProperty.getInstance(), dimensionIDs);
+                        }
+                        dimensionIDs.addAll((List<Integer>) value);
+                    } else {
+                        throw new IllegalArgumentException("Invalid Dimension Property Type!");
+                    }
             return true;
         }
         return super.applyProperty(key, value);

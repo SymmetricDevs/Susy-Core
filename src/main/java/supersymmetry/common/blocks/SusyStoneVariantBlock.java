@@ -1,9 +1,9 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.GregTechAPI;
-import gregtech.api.block.VariantBlock;
-import gregtech.api.unification.material.Materials;
-import gregtech.api.unification.ore.OrePrefix;
+import java.util.Random;
+
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -12,11 +12,14 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.util.IStringSerializable;
-import org.jetbrains.annotations.NotNull;
-import supersymmetry.common.materials.SusyMaterials;
 
-import javax.annotation.Nonnull;
-import java.util.Random;
+import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.GregTechAPI;
+import gregtech.api.block.VariantBlock;
+import gregtech.api.unification.material.Materials;
+import gregtech.api.unification.ore.OrePrefix;
+import supersymmetry.common.materials.SusyMaterials;
 
 public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.StoneType> {
 
@@ -61,21 +64,22 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
     }
 
     public enum StoneVariant {
+
         SMOOTH("susy_stone_smooth"),
         COBBLE("susy_stone_cobble", 2.0F, 10.0F),
         BRICKS("susy_stone_bricks", 0.25);
-//      TODO
-//        COBBLE_MOSSY("stone_cobble_mossy", 2.0F, 10.0F),
-//        POLISHED("stone_polished"),
-//        BRICKS_CRACKED("stone_bricks_cracked"),
-//        BRICKS_MOSSY("stone_bricks_mossy"),
-//        CHISELED("stone_chiseled"),
-//        TILED("stone_tiled"),
-//        TILED_SMALL("stone_tiled_small"),
-//        BRICKS_SMALL("stone_bricks_small"),
-//        WINDMILL_A("stone_windmill_a", "stone_bricks_windmill_a"),
-//        WINDMILL_B("stone_windmill_b", "stone_bricks_windmill_b"),
-//        BRICKS_SQUARE("stone_bricks_square");
+        // TODO
+        // COBBLE_MOSSY("stone_cobble_mossy", 2.0F, 10.0F),
+        // POLISHED("stone_polished"),
+        // BRICKS_CRACKED("stone_bricks_cracked"),
+        // BRICKS_MOSSY("stone_bricks_mossy"),
+        // CHISELED("stone_chiseled"),
+        // TILED("stone_tiled"),
+        // TILED_SMALL("stone_tiled_small"),
+        // BRICKS_SMALL("stone_bricks_small"),
+        // WINDMILL_A("stone_windmill_a", "stone_bricks_windmill_a"),
+        // WINDMILL_B("stone_windmill_b", "stone_bricks_windmill_b"),
+        // BRICKS_SQUARE("stone_bricks_square");
 
         public final String id;
         public final String translationKey;
@@ -91,7 +95,6 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
             this(id, id, 1.5F, 10.0F, walkingSpeed);
         }
 
-
         StoneVariant(@Nonnull String id, @Nonnull String translationKey) {
             this(id, translationKey, 1.5F, 10.0F, 0);
         }
@@ -100,7 +103,8 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
             this(id, id, hardness, resistance, 0);
         }
 
-        StoneVariant(@Nonnull String id, @Nonnull String translationKey, float hardness, float resistance, double walkingSpeed) {
+        StoneVariant(@Nonnull String id, @Nonnull String translationKey, float hardness, float resistance,
+                     double walkingSpeed) {
             this.id = id;
             this.translationKey = translationKey;
             this.hardness = hardness;
@@ -110,6 +114,7 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
     }
 
     public enum StoneType implements IStringSerializable {
+
         GABBRO("gabbro", MapColor.GRAY),
         GNEISS("gneiss", MapColor.RED_STAINED_HARDENED_CLAY),
         LIMESTONE("limestone", MapColor.GRAY_STAINED_HARDENED_CLAY),
@@ -138,10 +143,8 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
 
         public OrePrefix getOrePrefix() {
             return switch (this) {
-                case GABBRO, GNEISS, LIMESTONE, PHYLLITE, QUARTZITE, SHALE, SLATE, SOAPSTONE, KIMBERLITE, ANORTHOSITE ->
-                        OrePrefix.stone;
-                case INDUSTRIAL_CONCRETE, MILITARY_CONCRETE ->
-                        OrePrefix.block;
+                case GABBRO, GNEISS, LIMESTONE, PHYLLITE, QUARTZITE, SHALE, SLATE, SOAPSTONE, KIMBERLITE, ANORTHOSITE -> OrePrefix.stone;
+                case INDUSTRIAL_CONCRETE, MILITARY_CONCRETE -> OrePrefix.block;
             };
         }
 

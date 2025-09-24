@@ -1,5 +1,28 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import static gregtech.api.util.RelativeDirection.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.GTValues;
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -12,46 +35,26 @@ import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.MultiblockShapeInfo;
-import gregtech.api.util.TextComponentUtil;
 import gregtech.api.recipes.Recipe;
+import gregtech.api.util.TextComponentUtil;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.ConfigHolder;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.MetaTileEntities;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.ints.IntLists;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
-import supersymmetry.api.recipes.properties.DimensionProperty;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.api.recipes.properties.DimensionProperty;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockSerpentine;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import static gregtech.api.util.RelativeDirection.*;
-
 public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
+
     public static final int MIN_RADIUS = 1;
     public static final int MIN_HEIGHT = 1;
     private int sDist = 0;
@@ -89,30 +92,46 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
     }
 
     private enum rowType {
-        BOTTOM, MIDDLE, TOP, MIDDLE_PREVIEW, BOTTOM_PREVIEW
+        BOTTOM,
+        MIDDLE,
+        TOP,
+        MIDDLE_PREVIEW,
+        BOTTOM_PREVIEW
     }
 
-    private String rowPattern(rowType rowType,int radius) {
+    private String rowPattern(rowType rowType, int radius) {
         char center, left, right, other;
 
         // A: Metal Casing; S: Radiator; C: Metal Casing or Hatches; B: Tube Block
         switch (rowType) {
             case BOTTOM:
-                center = 'S'; left = right = 'A'; other = 'A';
+                center = 'S';
+                left = right = 'A';
+                other = 'A';
                 break;
             case MIDDLE:
-                center = 'B'; left = right = 'C'; other = 'B';
+                center = 'B';
+                left = right = 'C';
+                other = 'B';
                 break;
             case TOP:
-                center = 'A'; left = right = 'A'; other = 'A';
+                center = 'A';
+                left = right = 'A';
+                other = 'A';
                 break;
 
-        // These are only for JEI preview. I: Input Hatch; O: Output Hatch; M: Maintenance Hatch
+            // These are only for JEI preview. I: Input Hatch; O: Output Hatch; M: Maintenance Hatch
             case BOTTOM_PREVIEW:
-                center = 'S'; left = 'M'; right = 'A'; other = 'A';
+                center = 'S';
+                left = 'M';
+                right = 'A';
+                other = 'A';
                 break;
             case MIDDLE_PREVIEW:
-                center = 'B'; left = 'I'; right = 'O'; other = 'B';
+                center = 'B';
+                left = 'I';
+                right = 'O';
+                other = 'B';
                 break;
             default:
                 throw new IllegalArgumentException("Invalid rowType: " + rowType);
@@ -134,12 +153,17 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
         return rowBuilder.toString();
     }
 
-
     protected boolean updateStructureDimensions() {
-
         World world = getWorld();
         EnumFacing front = getFrontFacing();
-        EnumFacing up = UP.getRelativeFacing(this.getFrontFacing(), this.getUpwardsFacing(), this.isFlipped()); // From the flare stack, I hate free rotation.
+        EnumFacing up = UP.getRelativeFacing(this.getFrontFacing(), this.getUpwardsFacing(), this.isFlipped()); // From
+                                                                                                                // the
+                                                                                                                // flare
+                                                                                                                // stack,
+                                                                                                                // I
+                                                                                                                // hate
+                                                                                                                // free
+                                                                                                                // rotation.
         EnumFacing left = front.rotateAround(up.getAxis());
         EnumFacing right = left.getOpposite();
 
@@ -152,7 +176,7 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
 
         // find the left, right, and upper distances for the structure pattern
         // maximum size is 11x16 including walls
-        for(int i = 0; i < 16; ++i) {
+        for (int i = 0; i < 16; ++i) {
             if (isBlockEdge(world, uPos, up)) {
                 bDist = i;
                 break;
@@ -165,7 +189,6 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
                 break;
             }
         }
-
 
         if (sDist < MIN_RADIUS || bDist < MIN_HEIGHT) {
             invalidateStructure();
@@ -203,7 +226,8 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
         ArrayList<MultiblockShapeInfo.Builder> builders = new ArrayList<>();
         for (int i = 1; i < 6; i++) {
             MultiblockShapeInfo.Builder builder = MultiblockShapeInfo.builder()
-                    .aisle(rowPattern(rowType.BOTTOM_PREVIEW, i), rowPattern(rowType.MIDDLE_PREVIEW, i), rowPattern(rowType.TOP, i));
+                    .aisle(rowPattern(rowType.BOTTOM_PREVIEW, i), rowPattern(rowType.MIDDLE_PREVIEW, i),
+                            rowPattern(rowType.TOP, i));
             builders.add(builder);
         }
         for (int j = 2; j < 15; j++) {
@@ -220,17 +244,17 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
             builders.add(builder);
         }
         builders.forEach(builder -> shapeInfo.add(builder
-                        .where('S', SuSyMetaTileEntities.HEAT_RADIATOR, EnumFacing.SOUTH)
-                        .where('I', MetaTileEntities.FLUID_IMPORT_HATCH[GTValues.LV], EnumFacing.SOUTH)
-                        .where('O', MetaTileEntities.FLUID_EXPORT_HATCH[GTValues.LV], EnumFacing.SOUTH)
-                        .where('M',
-                                () -> ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH :
-                                        getCasingState(),EnumFacing.SOUTH)  // From Cleanroom
-                        .where('A', getCasingState())
-                        .where('C', getCasingState())
-                        .where('B', getRadiatorElementState())
-                        .build()
-                ));
+                .where('S', SuSyMetaTileEntities.HEAT_RADIATOR, EnumFacing.SOUTH)
+                .where('I', MetaTileEntities.FLUID_IMPORT_HATCH[GTValues.LV], EnumFacing.SOUTH)
+                .where('O', MetaTileEntities.FLUID_EXPORT_HATCH[GTValues.LV], EnumFacing.SOUTH)
+                .where('M',
+                        () -> ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH :
+                                getCasingState(),
+                        EnumFacing.SOUTH)  // From Cleanroom
+                .where('A', getCasingState())
+                .where('C', getCasingState())
+                .where('B', getRadiatorElementState())
+                .build()));
         return shapeInfo;
     }
 
@@ -284,12 +308,12 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
 
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
-        //Override to remove parallel display from superclass
+        // Override to remove parallel display from superclass
         MultiblockDisplayText.builder(textList, isStructureFormed())
                 .setWorkingStatus(recipeMapWorkable.isWorkingEnabled(), recipeMapWorkable.isActive())
                 .addWorkingStatusLine()
                 .addProgressLine(recipeMapWorkable.getProgressPercent());
-        if(isStructureFormed()) {
+        if (isStructureFormed()) {
             ITextComponent componentParallelAmount = TextComponentUtil.stringWithColor(TextFormatting.DARK_PURPLE,
                     String.valueOf(this.area));
             ITextComponent componentParallelAmountBase = TextComponentUtil.translationWithColor(TextFormatting.GRAY,
@@ -309,8 +333,10 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
         tooltip.add(I18n.format("susy.multiblock.heat_radiator.tooltip.2"));
     }
 
-    public boolean isBlockEdge(@Nonnull World world, @Nonnull BlockPos.MutableBlockPos pos, @Nonnull EnumFacing direction) {
-        return world.getBlockState(pos.move(direction)) == getCasingState() || world.getTileEntity(pos) instanceof MetaTileEntityHolder;
+    public boolean isBlockEdge(@Nonnull World world, @Nonnull BlockPos.MutableBlockPos pos,
+                               @Nonnull EnumFacing direction) {
+        return world.getBlockState(pos.move(direction)) == getCasingState() ||
+                world.getTileEntity(pos) instanceof MetaTileEntityHolder;
     }
 
     public IBlockState getRadiatorElementState() {
@@ -337,11 +363,12 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
         IntList dimensionIDs = recipe.getProperty(DimensionProperty.getInstance(), IntLists.EMPTY_LIST);
         if (dimensionIDs.isEmpty() || dimensionIDs.contains(this.getWorld().provider.getDimension())) {
             return super.checkRecipe(recipe, consumeIfSuccess);
-        }   
+        }
         return false;
     }
 
     private class ParallelableNoEnergyMultiblockRecipeLogic extends NoEnergyMultiblockRecipeLogic {
+
         public ParallelableNoEnergyMultiblockRecipeLogic(RecipeMapMultiblockController tileEntity) {
             super(tileEntity);
         }

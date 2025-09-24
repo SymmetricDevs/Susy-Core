@@ -1,22 +1,23 @@
 package supersymmetry.client.renderer.textures;
 
-import dev.tianmi.sussypatches.client.renderer.textures.cube.VisualStateRenderer;
-import gregtech.api.metatileentity.multiblock.IMultiblockAbilityPart;
-import gregtech.api.metatileentity.multiblock.IMultiblockPart;
-import gregtech.api.metatileentity.multiblock.MultiblockAbility;
-import gregtech.client.renderer.ICubeRenderer;
-import gregtech.client.renderer.texture.Textures;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
-import supersymmetry.common.blocks.SuSyBlocks;
-
 import static dev.tianmi.sussypatches.client.renderer.textures.ConnectedTextures.*;
 import static dev.tianmi.sussypatches.client.renderer.textures.GCyMConnectedTextures.STRESS_PROOF_CTM;
 import static dev.tianmi.sussypatches.client.renderer.textures.cube.VisualStateRenderer.from;
 import static supersymmetry.api.util.SuSyUtility.susyId;
 import static supersymmetry.common.blocks.BlockCoagulationTankWall.CoagulationTankWallType.WOODEN_COAGULATION_TANK_WALL;
 import static supersymmetry.common.blocks.BlockSuSyMultiblockCasing.CasingType.*;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import dev.tianmi.sussypatches.client.renderer.textures.cube.VisualStateRenderer;
+import gregtech.api.metatileentity.multiblock.IMultiblockAbilityPart;
+import gregtech.api.metatileentity.multiblock.IMultiblockPart;
+import gregtech.api.metatileentity.multiblock.MultiblockAbility;
+import gregtech.client.renderer.ICubeRenderer;
+import gregtech.client.renderer.texture.Textures;
+import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
+import supersymmetry.common.blocks.SuSyBlocks;
 
 public class SuSyConnectedTextures {
 
@@ -28,7 +29,8 @@ public class SuSyConnectedTextures {
     public static final VisualStateRenderer ULV_STRUCTURAL_CASING_CTM;
 
     static {
-        WOODEN_COAGULATION_TANK_WALL_CTM = from(SuSyBlocks.COAGULATION_TANK_WALL.getState(WOODEN_COAGULATION_TANK_WALL));
+        WOODEN_COAGULATION_TANK_WALL_CTM = from(
+                SuSyBlocks.COAGULATION_TANK_WALL.getState(WOODEN_COAGULATION_TANK_WALL));
         SILICON_CARBIDE_CASING_CTM = from(SuSyBlocks.MULTIBLOCK_CASING.getState(SILICON_CARBIDE_CASING));
         MONEL_500_CASING_CTM = from(SuSyBlocks.MULTIBLOCK_CASING.getState(MONEL_500_CASING));
         CONDUCTIVE_COPPER_PIPE_CTM = from(SuSyBlocks.MULTIBLOCK_CASING.getState(COPPER_PIPE));
@@ -110,7 +112,7 @@ public class SuSyConnectedTextures {
 
     @NotNull
     private static ICubeRenderer msfdHandler(@Nullable IMultiblockPart part) {
-        if (part instanceof IMultiblockAbilityPart<?> abilityPart) {
+        if (part instanceof IMultiblockAbilityPart<?>abilityPart) {
             var ability = abilityPart.getAbility();
             if (ability == MultiblockAbility.MAINTENANCE_HATCH || ability == MultiblockAbility.INPUT_ENERGY) {
                 return Textures.CLEAN_STAINLESS_STEEL_CASING;
@@ -121,7 +123,7 @@ public class SuSyConnectedTextures {
 
     @NotNull
     private static ICubeRenderer millingHandler(@Nullable IMultiblockPart part) {
-        if (part instanceof IMultiblockAbilityPart<?> abilityPart) {
+        if (part instanceof IMultiblockAbilityPart<?>abilityPart) {
             var ability = abilityPart.getAbility();
             if (ability == MultiblockAbility.MAINTENANCE_HATCH || ability == MultiblockAbility.INPUT_ENERGY) {
                 return SOLID_STEEL_CASING_CTM;
@@ -132,11 +134,10 @@ public class SuSyConnectedTextures {
 
     @NotNull
     private static ICubeRenderer strandMoldHandler(@Nullable IMultiblockPart part) {
-        if (part instanceof IMultiblockAbilityPart<?> abilityPart) {
+        if (part instanceof IMultiblockAbilityPart<?>abilityPart) {
             MultiblockAbility<?> ability = abilityPart.getAbility();
-            if (ability == MultiblockAbility.IMPORT_FLUIDS
-                    || ability == MultiblockAbility.EXPORT_FLUIDS
-                    || ability == SuSyMultiblockAbilities.STRAND_EXPORT) {
+            if (ability == MultiblockAbility.IMPORT_FLUIDS || ability == MultiblockAbility.EXPORT_FLUIDS ||
+                    ability == SuSyMultiblockAbilities.STRAND_EXPORT) {
                 return CONDUCTIVE_COPPER_PIPE_CTM;
             }
         }

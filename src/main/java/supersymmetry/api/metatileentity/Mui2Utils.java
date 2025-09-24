@@ -1,13 +1,15 @@
 package supersymmetry.api.metatileentity;
 
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
+
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.utils.Alignment;
 import com.cleanroommc.modularui.widgets.ButtonWidget;
+
 import gregtech.api.GTValues;
 import gregtech.api.metatileentity.MetaTileEntity;
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.gui.SusyGuiTextures;
 
 @Deprecated
@@ -36,7 +38,8 @@ public class Mui2Utils {
     }
 
     public static ModularPanel createPopupPanel(
-            String name, int width, int height, boolean disableBelow, boolean closeOnOutsideClick) {
+                                                String name, int width, int height, boolean disableBelow,
+                                                boolean closeOnOutsideClick) {
         return new PopupPanel(name, width, height, disableBelow, closeOnOutsideClick);
     }
 

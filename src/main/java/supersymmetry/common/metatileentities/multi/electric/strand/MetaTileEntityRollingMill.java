@@ -1,5 +1,12 @@
 package supersymmetry.common.metatileentities.multi.electric.strand;
 
+import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.ResourceLocation;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -14,17 +21,13 @@ import gregtech.common.blocks.BlockBoilerCasing;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.capability.Strand;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.*;
 
-import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
-
 public class MetaTileEntityRollingMill extends MetaTileEntityStrandShaper {
+
     public MetaTileEntityRollingMill(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
     }
@@ -63,8 +66,11 @@ public class MetaTileEntityRollingMill extends MetaTileEntityStrandShaper {
                 .where('S', selfPredicate())
                 .where('I', abilities(SuSyMultiblockAbilities.STRAND_IMPORT))
                 .where('O', abilities(SuSyMultiblockAbilities.STRAND_EXPORT))
-                .where('C', autoAbilities().or(states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID))))
-                .where('G', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
+                .where('C',
+                        autoAbilities().or(
+                                states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID))))
+                .where('G',
+                        states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('P', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE)))
                 .where(' ', any())
                 .where('A', air())

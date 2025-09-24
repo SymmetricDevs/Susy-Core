@@ -1,5 +1,11 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import javax.annotation.Nonnull;
+
+import net.minecraft.util.ResourceLocation;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -9,14 +15,10 @@ import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
-import net.minecraft.util.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.common.blocks.BlockRocketAssemblerCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
-
-import javax.annotation.Nonnull;
 
 public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController {
 
@@ -28,28 +30,261 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ")
-                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ", " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ", " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ", " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ", " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ", " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ", " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ", " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ", " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ", " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ", " PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP ")
-                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", " P           P   P           P   P           P   P           P ")
-                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", " P           P   P           P   P           P   P           P ")
-                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", " P           P   P           P   P           P   P           P ")
-                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB", " P           P   P           P   P           P   P           P ")
-                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", " P           P   P           P   P           P   P           P ")
-                .aisle("                                                               ", "                                                               ", "                                                               ", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", " P           P   P           P   P           P   P           P ")
-                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", " P           P   P           P   P           P   P           P ")
-                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB", " P           P   P           P   P           P   P           P ")
-                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", " P           P   P           P   P           P   P           P ")
-                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", " P           P   P           P   P           P   P           P ")
-                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", " P           P   P           P   P           P   P           P ")
-                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ", " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ", " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ", " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ", " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ", " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ", " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ", " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ", " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ", " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ", " PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP ")
-                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCSCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ")
+                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ")
+                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP ")
+                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        " P           P   P           P   P           P   P           P ")
+                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        " P           P   P           P   P           P   P           P ")
+                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        " P           P   P           P   P           P   P           P ")
+                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                        " P           P   P           P   P           P   P           P ")
+                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        " P           P   P           P   P           P   P           P ")
+                .aisle("                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        " P           P   P           P   P           P   P           P ")
+                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        " P           P   P           P   P           P   P           P ")
+                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                        " P           P   P           P   P           P   P           P ")
+                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        " P           P   P           P   P           P   P           P ")
+                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        " P           P   P           P   P           P   P           P ")
+                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        " P           P   P           P   P           P   P           P ")
+                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP ")
+                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCSCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ")
                 .where(' ', any())
                 .where('S', selfPredicate())
-                .where('F', states(SuSyBlocks.ROCKET_ASSEMBLER_CASING.getState(BlockRocketAssemblerCasing.RocketAssemblerCasingType.REINFORCED_FOUNDATION)))
-                .where('C', states(SuSyBlocks.ROCKET_ASSEMBLER_CASING.getState(BlockRocketAssemblerCasing.RocketAssemblerCasingType.FOUNDATION)))
+                .where('F',
+                        states(SuSyBlocks.ROCKET_ASSEMBLER_CASING
+                                .getState(BlockRocketAssemblerCasing.RocketAssemblerCasingType.REINFORCED_FOUNDATION)))
+                .where('C',
+                        states(SuSyBlocks.ROCKET_ASSEMBLER_CASING
+                                .getState(BlockRocketAssemblerCasing.RocketAssemblerCasingType.FOUNDATION)))
                 .where('R', SuSyPredicates.rails())
-                .where('P', states(SuSyBlocks.ROCKET_ASSEMBLER_CASING.getState(BlockRocketAssemblerCasing.RocketAssemblerCasingType.STRUCTURAL_FRAME)))
-                .where('B', states(SuSyBlocks.ROCKET_ASSEMBLER_CASING.getState(BlockRocketAssemblerCasing.RocketAssemblerCasingType.RAILS)))
+                .where('P',
+                        states(SuSyBlocks.ROCKET_ASSEMBLER_CASING
+                                .getState(BlockRocketAssemblerCasing.RocketAssemblerCasingType.STRUCTURAL_FRAME)))
+                .where('B',
+                        states(SuSyBlocks.ROCKET_ASSEMBLER_CASING
+                                .getState(BlockRocketAssemblerCasing.RocketAssemblerCasingType.RAILS)))
                 .build();
     }
 

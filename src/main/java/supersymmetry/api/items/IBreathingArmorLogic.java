@@ -1,9 +1,7 @@
 package supersymmetry.api.items;
 
-import gregtech.api.items.armor.ArmorMetaItem;
-import gregtech.api.items.armor.ISpecialArmorLogic;
-import gregtech.api.items.metaitem.stats.IItemBehaviour;
-import gregtech.common.items.behaviors.TooltipBehavior;
+import java.util.List;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -11,18 +9,22 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
+
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import gregtech.api.items.armor.ArmorMetaItem;
+import gregtech.api.items.armor.ISpecialArmorLogic;
+import gregtech.api.items.metaitem.stats.IItemBehaviour;
+import gregtech.common.items.behaviors.TooltipBehavior;
 
 public interface IBreathingArmorLogic extends ISpecialArmorLogic {
 
     boolean mayBreatheWith(ItemStack stack, EntityPlayer player);
 
-
     double getDamageAbsorbed(ItemStack stack, EntityPlayer player);
 
-    default ISpecialArmor.ArmorProperties getProperties(EntityLivingBase player, @NotNull ItemStack armor, DamageSource source, double damage,
+    default ISpecialArmor.ArmorProperties getProperties(EntityLivingBase player, @NotNull ItemStack armor,
+                                                        DamageSource source, double damage,
                                                         EntityEquipmentSlot equipmentSlot) {
         return new ISpecialArmor.ArmorProperties(0, 0, (int) player.getMaxHealth());
     }
@@ -35,8 +37,8 @@ public interface IBreathingArmorLogic extends ISpecialArmorLogic {
 
     @Override
     default void addToolComponents(ArmorMetaItem.ArmorMetaValueItem metaValueItem) {
-        metaValueItem.addComponents(new TooltipBehavior((ignored) -> {
-        }) {
+        metaValueItem.addComponents(new TooltipBehavior((ignored) -> {}) {
+
             @Override
             public void addInformation(ItemStack itemStack, @NotNull List<String> lines) {
                 IBreathingArmorLogic.this.addInformation(itemStack, lines);

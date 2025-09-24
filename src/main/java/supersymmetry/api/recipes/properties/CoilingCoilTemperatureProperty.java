@@ -1,9 +1,11 @@
 package supersymmetry.api.recipes.properties;
 
-import gregtech.api.recipes.recipeproperties.RecipeProperty;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+
 import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.recipes.recipeproperties.RecipeProperty;
 
 public class CoilingCoilTemperatureProperty extends RecipeProperty<Integer> {
 
