@@ -1,15 +1,18 @@
 package supersymmetry.api.capability.impl;
 
-import gregtech.api.capability.GregtechDataCodes;
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.common.ConfigHolder;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.World;
+
 import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.capability.GregtechDataCodes;
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.common.ConfigHolder;
 import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityComponentScanner;
 
 public class ScannerLogic {
+
     private int progressTime = 0;
     private int goalTime = 1;
     private boolean isActive;
@@ -25,7 +28,7 @@ public class ScannerLogic {
     }
 
     public void setGoalTime(float duration) {
-        this.goalTime = (int)duration*20;
+        this.goalTime = (int) duration * 20;
     }
 
     public void updateLogic() {
@@ -51,14 +54,14 @@ public class ScannerLogic {
             setActive(false);
         }
     }
+
     public boolean isWorkingEnabled() {
         return workingEnabled;
     }
+
     public double getProgressPercent() {
-        return ((double)progressTime/goalTime);
+        return ((double) progressTime / goalTime);
     }
-
-
 
     public void invalidate() {
         progressTime = 0;
@@ -82,6 +85,7 @@ public class ScannerLogic {
             }
         }
     }
+
     public void setWorkingEnabled(boolean isEnabled) {
         this.workingEnabled = isEnabled;
     }
@@ -93,7 +97,6 @@ public class ScannerLogic {
     public boolean isScanComplete() {
         return scanComplete;
     }
-
 
     /**
      * writes all needed values to NBT
@@ -178,7 +181,6 @@ public class ScannerLogic {
     public long getMaxProgress() {
         return goalTime;
     }
-
 
     public long getProgress() {
         return progressTime;

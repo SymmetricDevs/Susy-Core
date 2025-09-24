@@ -1,6 +1,7 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.block.VariantBlock;
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -12,9 +13,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
+import gregtech.api.block.VariantBlock;
 
 public class BlockSupport extends VariantBlock<BlockSupport.SupportType> {
 
@@ -24,7 +26,8 @@ public class BlockSupport extends VariantBlock<BlockSupport.SupportType> {
         setBlockUnbreakable();
     }
 
-    public void onEntityCollision(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state, Entity entityIn) {
+    public void onEntityCollision(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state,
+                                  Entity entityIn) {
         entityIn.motionX = MathHelper.clamp(entityIn.motionX, -0.15, 0.15);
         entityIn.motionZ = MathHelper.clamp(entityIn.motionZ, -0.15, 0.15);
         entityIn.fallDistance = 0.0F;
@@ -39,7 +42,6 @@ public class BlockSupport extends VariantBlock<BlockSupport.SupportType> {
         if (entityIn.collidedHorizontally) {
             entityIn.motionY = 0.3;
         }
-
     }
 
     @Nonnull
@@ -47,20 +49,22 @@ public class BlockSupport extends VariantBlock<BlockSupport.SupportType> {
         return EnumPushReaction.NORMAL;
     }
 
-
     @Override
-    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state,
+                         int fortune) {
         // Nothing
     }
-/*
-    @Override
-    @NotNull
-    @SuppressWarnings("deprecation")
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
-    {
-        return ;
-    }
-*/
+    /*
+     * @Override
+     * 
+     * @NotNull
+     * 
+     * @SuppressWarnings("deprecation")
+     * public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+     * {
+     * return ;
+     * }
+     */
 
     @Override
     @SuppressWarnings("deprecation")
@@ -75,6 +79,7 @@ public class BlockSupport extends VariantBlock<BlockSupport.SupportType> {
     }
 
     public enum SupportType implements IStringSerializable {
+
         LAUNCH_PAD_TYPE("lv");
 
         public final String name;
@@ -95,5 +100,4 @@ public class BlockSupport extends VariantBlock<BlockSupport.SupportType> {
             return getName();
         }
     }
-
 }

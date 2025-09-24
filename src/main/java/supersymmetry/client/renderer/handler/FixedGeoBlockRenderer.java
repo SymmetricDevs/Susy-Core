@@ -11,14 +11,17 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+
 import org.jetbrains.annotations.NotNull;
+
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
-public abstract class FixedGeoBlockRenderer<T extends TileEntity & IAnimatable> extends TileEntitySpecialRenderer<T> implements IGeoRenderer<T> {
+public abstract class FixedGeoBlockRenderer<T extends TileEntity & IAnimatable> extends TileEntitySpecialRenderer<T>
+                                           implements IGeoRenderer<T> {
 
     private final AnimatedGeoModel<T> modelProvider;
 
@@ -34,9 +37,10 @@ public abstract class FixedGeoBlockRenderer<T extends TileEntity & IAnimatable> 
     static {
         AnimationController.addModelFetcher(object -> {
             if (object instanceof TileEntity tile) {
-                @SuppressWarnings("rawtypes") TileEntitySpecialRenderer renderer = TileEntityRendererDispatcher.instance.getRenderer(tile);
+                @SuppressWarnings("rawtypes")
+                TileEntitySpecialRenderer renderer = TileEntityRendererDispatcher.instance.getRenderer(tile);
                 if (renderer instanceof FixedGeoBlockRenderer) {
-                    //noinspection unchecked,rawtypes
+                    // noinspection unchecked,rawtypes
                     return ((FixedGeoBlockRenderer) renderer).getGeoModelProvider();
                 }
             }
@@ -69,9 +73,8 @@ public abstract class FixedGeoBlockRenderer<T extends TileEntity & IAnimatable> 
         if (blockState.getPropertyKeys().contains(BlockHorizontal.FACING)) {
             return blockState.getValue(BlockHorizontal.FACING);
         } else {
-            return blockState.getPropertyKeys().contains(BlockDirectional.FACING)
-                    ? blockState.getValue(BlockDirectional.FACING)
-                    : EnumFacing.NORTH;
+            return blockState.getPropertyKeys().contains(BlockDirectional.FACING) ?
+                    blockState.getValue(BlockDirectional.FACING) : EnumFacing.NORTH;
         }
     }
 

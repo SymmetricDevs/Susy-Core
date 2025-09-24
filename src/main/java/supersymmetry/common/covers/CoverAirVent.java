@@ -1,5 +1,17 @@
 package supersymmetry.common.covers;
 
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Cuboid6;
@@ -11,16 +23,6 @@ import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.recipes.recipeproperties.GasCollectorDimensionProperty;
 import gregtech.client.renderer.texture.Textures;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
-import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class CoverAirVent extends CoverBase implements ITickable {
 
@@ -40,7 +42,9 @@ public class CoverAirVent extends CoverBase implements ITickable {
     }
 
     @Override
-    public void renderCover(@NotNull CCRenderState renderState, @NotNull Matrix4 translation, @NotNull IVertexOperation[] pipeline, @NotNull Cuboid6 plateBox, @NotNull BlockRenderLayer layer) {
+    public void renderCover(@NotNull CCRenderState renderState, @NotNull Matrix4 translation,
+                            @NotNull IVertexOperation[] pipeline, @NotNull Cuboid6 plateBox,
+                            @NotNull BlockRenderLayer layer) {
         Textures.AIR_VENT_OVERLAY.renderSided(getAttachedSide(), plateBox, renderState, pipeline, translation);
     }
 
@@ -55,7 +59,8 @@ public class CoverAirVent extends CoverBase implements ITickable {
         TileEntity tileEntity = getTileEntityHere();
         if (tileEntity == null) return;
 
-        IFluidHandler fluidHandler = tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, getAttachedSide());
+        IFluidHandler fluidHandler = tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY,
+                getAttachedSide());
         if (fluidHandler == null) return;
 
         if (cachedAirType == null) {

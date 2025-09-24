@@ -1,15 +1,16 @@
 package supersymmetry.common.world;
 
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeChunkManager;
-import supersymmetry.api.SusyLog;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
+import supersymmetry.api.SusyLog;
 
 public class Planet {
 
@@ -30,7 +31,6 @@ public class Planet {
     public double gravity;
     public double dragMultiplier = 0.98;
     public boolean supportsFire;
-
 
     // Atmosphere
 
@@ -148,7 +148,6 @@ public class Planet {
         this.bedrock = bedrock;
         return this;
     }
-
 
     @Override
     public String toString() {

@@ -1,7 +1,8 @@
 package supersymmetry.common.rocketry.instruments;
 
-import gregtech.api.util.TeleportHandler;
 import net.minecraft.entity.Entity;
+
+import gregtech.api.util.TeleportHandler;
 import supersymmetry.api.rocketry.components.Instrument;
 import supersymmetry.common.EventHandlers;
 import supersymmetry.common.entities.EntityDropPod;
@@ -10,6 +11,7 @@ import supersymmetry.common.entities.teleporters.DropPodTeleporter;
 import supersymmetry.common.event.DimensionRidingSwapData;
 
 public class InstrumentLander implements Instrument {
+
     public void act(int count, EntityRocket rocket) {
         int i = 0;
         for (Entity passenger : rocket.getPassengers()) {

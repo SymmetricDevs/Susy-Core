@@ -1,8 +1,9 @@
 package supersymmetry.loaders;
 
+import net.minecraftforge.fml.common.Loader;
+
 import biomesoplenty.api.biome.BOPBiomes;
 import biomesoplenty.api.biome.IExtendedBiome;
-import net.minecraftforge.fml.common.Loader;
 
 public class SuSyWorldLoader {
 

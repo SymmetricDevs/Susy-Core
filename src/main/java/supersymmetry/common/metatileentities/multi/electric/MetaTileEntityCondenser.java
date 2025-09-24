@@ -1,9 +1,12 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import javax.annotation.Nonnull;
+
+import net.minecraft.util.ResourceLocation;
+
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
-import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
@@ -11,12 +14,9 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.util.ResourceLocation;
 import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
-
-import javax.annotation.Nonnull;
 
 public class MetaTileEntityCondenser extends RecipeMapMultiblockController {
 
@@ -37,8 +37,10 @@ public class MetaTileEntityCondenser extends RecipeMapMultiblockController {
                 .aisle("CCC", "C C", "C C", "CCC")
                 .aisle("CCC", "CSC", "CCC", "CCC")
                 .where('S', selfPredicate())
-                .where('C', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.ALUMINIUM_FROSTPROOF)).setMinGlobalLimited(27)
-                        .or(autoAbilities(false, true, false, false, true, true, false)))
+                .where('C',
+                        states(MetaBlocks.METAL_CASING.getState(MetalCasingType.ALUMINIUM_FROSTPROOF))
+                                .setMinGlobalLimited(27)
+                                .or(autoAbilities(false, true, false, false, true, true, false)))
                 .where(' ', air())
                 .build();
     }

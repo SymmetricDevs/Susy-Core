@@ -3,6 +3,7 @@ package supersymmetry.common.event;
 import net.minecraft.entity.Entity;
 
 public class DimensionRidingSwapData {
+
     public Entity mount;
     public Entity passenger;
     public long time;

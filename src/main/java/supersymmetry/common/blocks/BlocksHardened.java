@@ -1,23 +1,19 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.block.IStateHarvestLevel;
-import gregtech.api.block.VariantBlock;
-import gregtech.api.items.toolitem.ItemGTTool;
+import java.util.Random;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import java.util.Random;
+import gregtech.api.block.IStateHarvestLevel;
+import gregtech.api.block.VariantBlock;
 
 public class BlocksHardened extends VariantBlock<BlocksHardened.HardenedBlockType> {
 
@@ -29,13 +25,11 @@ public class BlocksHardened extends VariantBlock<BlocksHardened.HardenedBlockTyp
         this.setTranslationKey("hardened_blocks");
     }
 
-    public int quantityDropped(Random random)
-    {
+    public int quantityDropped(Random random) {
         return 0;
     }
 
-    public Item getItemDropped(IBlockState state, Random rand, int fortune)
-    {
+    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
         return Items.AIR;
     }
 
@@ -45,6 +39,7 @@ public class BlocksHardened extends VariantBlock<BlocksHardened.HardenedBlockTyp
     }
 
     public static enum HardenedBlockType implements IStringSerializable, IStateHarvestLevel {
+
         LAIR10("lair10", 3),
         KRYP8("kryp8", 3),
         KRYP7("kryp7", 3),
@@ -70,4 +65,3 @@ public class BlocksHardened extends VariantBlock<BlocksHardened.HardenedBlockTyp
         }
     }
 }
-

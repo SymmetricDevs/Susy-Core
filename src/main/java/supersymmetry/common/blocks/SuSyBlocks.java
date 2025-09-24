@@ -1,8 +1,11 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.block.VariantActiveBlock;
-import gregtech.api.block.VariantBlock;
-import gregtech.api.util.BlockUtility;
+import static gregtech.common.blocks.MetaBlocks.ASPHALT;
+
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.stream.Collectors;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -11,15 +14,14 @@ import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.block.VariantActiveBlock;
+import gregtech.api.block.VariantBlock;
+import gregtech.api.util.BlockUtility;
 import supersymmetry.common.blocks.rocketry.*;
 import supersymmetry.common.tileentities.SuSyTileEntities;
-
-import java.lang.reflect.Field;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static gregtech.common.blocks.MetaBlocks.ASPHALT;
 
 public class SuSyBlocks {
 
@@ -27,7 +29,8 @@ public class SuSyBlocks {
     public static BlockCoolingCoil COOLING_COIL;
     public static BlockSinteringBrick SINTERING_BRICK;
     public static BlockCoagulationTankWall COAGULATION_TANK_WALL;
-    public static final EnumMap<SusyStoneVariantBlock.StoneVariant, SusyStoneVariantBlock> SUSY_STONE_BLOCKS = new EnumMap<>(SusyStoneVariantBlock.StoneVariant.class);
+    public static final EnumMap<SusyStoneVariantBlock.StoneVariant, SusyStoneVariantBlock> SUSY_STONE_BLOCKS = new EnumMap<>(
+            SusyStoneVariantBlock.StoneVariant.class);
     public static BlockAlternatorCoil ALTERNATOR_COIL;
     public static BlockTurbineRotor TURBINE_ROTOR;
     public static BlockSeparatorRotor SEPARATOR_ROTOR;
@@ -82,17 +85,18 @@ public class SuSyBlocks {
         registerWalkingSpeedBonus();
         susyBlocks = new ArrayList<>();
         // Test all fields
-        for (Field field: SuSyBlocks.class.getDeclaredFields()) {
+        for (Field field : SuSyBlocks.class.getDeclaredFields()) {
             if (VariantBlock.class.isAssignableFrom(field.getType())) {
                 // Try block is necessary in case getDeclaredConstructor does not exist (though it should)
                 try {
                     VariantBlock<?> newBlock = (VariantBlock<?>) field.getType().getDeclaredConstructor().newInstance();
                     // the 5 is used because getTranslationKey leaves ".file" at the start
                     newBlock.setRegistryName(newBlock.getTranslationKey().substring(5));
-                    field.set(null,newBlock);
+                    field.set(null, newBlock);
                     susyBlocks.add(newBlock);
                 } catch (Exception e) {
-                    System.out.println("Field " + field.getName() + " of type " + field.getType() + " is a variant block in SuSyBlocks and yet is not valid");
+                    System.out.println("Field " + field.getName() + " of type " + field.getType() +
+                            " is a variant block in SuSyBlocks and yet is not valid");
                     e.printStackTrace();
                     throw new RuntimeException(e);
                 }
@@ -167,7 +171,8 @@ public class SuSyBlocks {
     }
 
     @SuppressWarnings("unchecked")
-    private static <T extends Comparable<T>> @NotNull String getPropertyName(@NotNull IProperty<T> property, Comparable<?> value) {
+    private static <T extends Comparable<T>> @NotNull String getPropertyName(@NotNull IProperty<T> property,
+                                                                             Comparable<?> value) {
         return property.getName((T) value);
     }
 }

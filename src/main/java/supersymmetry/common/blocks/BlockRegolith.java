@@ -1,6 +1,7 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.block.IStateHarvestLevel;
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -10,11 +11,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import gregtech.api.block.IStateHarvestLevel;
 import supersymmetry.api.blocks.VariantBlockFalling;
 
-import javax.annotation.Nonnull;
-
 public class BlockRegolith extends VariantBlockFalling<BlockRegolith.BlockRegolithType> {
+
     public BlockRegolith() {
         super(Material.SAND);
         setTranslationKey("regolith");
@@ -23,18 +25,17 @@ public class BlockRegolith extends VariantBlockFalling<BlockRegolith.BlockRegoli
         setSoundType(SoundType.SAND);
     }
 
-    public MapColor getMapColor(IBlockState state, IBlockAccess worldIn, BlockPos pos)
-    {
+    public MapColor getMapColor(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         return MapColor.STONE;
     }
 
     @SideOnly(Side.CLIENT)
-    public int getDustColor(IBlockState state)
-    {
+    public int getDustColor(IBlockState state) {
         return -8356741;
     }
 
     public enum BlockRegolithType implements IStringSerializable, IStateHarvestLevel {
+
         HIGHLAND("highland", 1),
         LOWLAND("lowland", 1);
 
@@ -62,5 +63,4 @@ public class BlockRegolith extends VariantBlockFalling<BlockRegolith.BlockRegoli
             return "shovel";
         }
     }
-
 }

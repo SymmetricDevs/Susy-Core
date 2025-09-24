@@ -5,6 +5,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ITeleporter;
 
 public class DropPodTeleporter implements ITeleporter {
+
     @Override
     public void placeEntity(World world, Entity entity, float yaw) {
         world.spawnEntity(entity);

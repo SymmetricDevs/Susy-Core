@@ -1,11 +1,11 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.block.VariantActiveBlock;
-import gregtech.api.block.VariantItemBlock;
-import gregtech.api.unification.material.Material;
+import static net.minecraft.block.material.Material.IRON;
+
+import java.util.List;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
-import static net.minecraft.block.material.Material.IRON;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLiving;
@@ -17,11 +17,14 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import supersymmetry.common.materials.SusyMaterials;
 
-import java.util.List;
+import gregtech.api.block.VariantActiveBlock;
+import gregtech.api.block.VariantItemBlock;
+import gregtech.api.unification.material.Material;
+import supersymmetry.common.materials.SusyMaterials;
 
 public class BlockCoolingCoil extends VariantActiveBlock<BlockCoolingCoil.CoolingCoilType> {
 
@@ -43,7 +46,8 @@ public class BlockCoolingCoil extends VariantActiveBlock<BlockCoolingCoil.Coolin
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(@NotNull ItemStack itemStack, @Nullable World worldIn, List<String> lines, @NotNull ITooltipFlag tooltipFlag) {
+    public void addInformation(@NotNull ItemStack itemStack, @Nullable World worldIn, List<String> lines,
+                               @NotNull ITooltipFlag tooltipFlag) {
         super.addInformation(itemStack, worldIn, lines, tooltipFlag);
 
         // noinspection rawtypes, unchecked
@@ -55,13 +59,15 @@ public class BlockCoolingCoil extends VariantActiveBlock<BlockCoolingCoil.Coolin
     }
 
     @Override
-    public boolean canCreatureSpawn(@NotNull IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos, @NotNull EntityLiving.SpawnPlacementType type) {
+    public boolean canCreatureSpawn(@NotNull IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos,
+                                    @NotNull EntityLiving.SpawnPlacementType type) {
         return false;
     }
 
     public enum CoolingCoilType implements IStringSerializable {
 
-        MANGANESE_IRON_ARSENIC_PHOSPHIDE("manganese_iron_arsenic_phosphide", 160, SusyMaterials.ManganeseIronArsenicPhosphide),
+        MANGANESE_IRON_ARSENIC_PHOSPHIDE("manganese_iron_arsenic_phosphide", 160,
+                SusyMaterials.ManganeseIronArsenicPhosphide),
         PRASEODYMIUM_NICKEL("praseodymium_nickel", 50, SusyMaterials.PraseodymiumNickel),
         GADOLINIUM_SILICON_GERMANIUM("gadolinium_silicon_germanium", 1, SusyMaterials.GadoliniumSiliconGermanium);
 

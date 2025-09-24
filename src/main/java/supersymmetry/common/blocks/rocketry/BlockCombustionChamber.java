@@ -1,11 +1,12 @@
 package supersymmetry.common.blocks.rocketry;
 
-import gregtech.api.block.IStateHarvestLevel;
-import gregtech.api.block.VariantBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.IStringSerializable;
+
+import gregtech.api.block.IStateHarvestLevel;
+import gregtech.api.block.VariantBlock;
 
 public class BlockCombustionChamber extends VariantBlock<BlockCombustionChamber.CombustionType> {
 
@@ -19,9 +20,10 @@ public class BlockCombustionChamber extends VariantBlock<BlockCombustionChamber.
     }
 
     public enum CombustionType implements IStringSerializable, IStateHarvestLevel {
-        BIPROPELLANT("bipropellant",2,2),
-        MONOPROPELLANT("monopropellant",2,1),
-        OXIDISER("oxidiser",2, 2);
+
+        BIPROPELLANT("bipropellant", 2, 2),
+        MONOPROPELLANT("monopropellant", 2, 1),
+        OXIDISER("oxidiser", 2, 2);
 
         String name;
         int harvest;
@@ -32,6 +34,7 @@ public class BlockCombustionChamber extends VariantBlock<BlockCombustionChamber.
             this.harvest = harvest;
             this.pumps = pumps;
         }
+
         @Override
         public String getName() {
             return name;
@@ -47,6 +50,8 @@ public class BlockCombustionChamber extends VariantBlock<BlockCombustionChamber.
             return "wrench";
         }
 
-        public int getMinPumps() {return pumps;}
+        public int getMinPumps() {
+            return pumps;
+        }
     }
 }

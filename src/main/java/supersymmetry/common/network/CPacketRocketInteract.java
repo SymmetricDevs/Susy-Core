@@ -1,7 +1,7 @@
 package supersymmetry.common.network;
 
-import gregtech.api.network.IPacket;
-import gregtech.api.network.IServerExecutor;
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.PacketBuffer;
@@ -11,18 +11,19 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
+import gregtech.api.network.IPacket;
+import gregtech.api.network.IServerExecutor;
 
 /**
  * A variation on CPacketUseEntity for rockets which skips the distance check.
  */
 public class CPacketRocketInteract implements IPacket, IServerExecutor {
+
     private int entityId;
     private Vec3d hitVec;
     private EnumHand hand;
 
-    public CPacketRocketInteract() {
-    }
+    public CPacketRocketInteract() {}
 
     @SideOnly(Side.CLIENT)
     public CPacketRocketInteract(Entity entityIn, EnumHand handIn, Vec3d hitVecIn) {

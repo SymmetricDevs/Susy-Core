@@ -1,11 +1,11 @@
 package supersymmetry.common.materials;
 
-import gregtech.api.unification.material.Material;
-import supersymmetry.api.util.SuSyUtility;
-
 import static gregtech.api.unification.material.Materials.*;
 import static gregtech.api.unification.material.info.MaterialFlags.GENERATE_FOIL;
 import static supersymmetry.common.materials.SusyMaterials.MetallizedBoPET;
+
+import gregtech.api.unification.material.Material;
+import supersymmetry.api.util.SuSyUtility;
 
 public class SuSyHighDegreeMaterials {
 

@@ -1,16 +1,19 @@
 package supersymmetry.api.recycling;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
+import org.apache.commons.lang3.math.Fraction;
+
 import com.cleanroommc.groovyscript.api.IIngredient;
+
 import gregtech.api.items.metaitem.MetaItem;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.stack.MaterialStack;
 import gregtech.api.unification.stack.UnificationEntry;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import org.apache.commons.lang3.math.Fraction;
 import supersymmetry.loaders.recipes.handlers.RecyclingManager;
 
 public interface Recyclable {
@@ -40,7 +43,7 @@ public interface Recyclable {
 
         // TODO: damn it
 
-//        throw new AssertionError();
+        // throw new AssertionError();
         /// Fallback to empty if object is null
         return EMPTY;
     }

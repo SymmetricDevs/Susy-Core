@@ -1,5 +1,26 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import static net.minecraft.block.BlockDirectional.FACING;
+import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.eccentricRolls;
+import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.metalSheets;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.GTValues;
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -15,32 +36,12 @@ import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.MetaTileEntities;
-import gregtech.common.metatileentities.multi.electric.MetaTileEntityFusionReactor;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.blocks.IAnimatablePartBlock;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockGrinderCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
-import static net.minecraft.block.BlockDirectional.FACING;
-import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.eccentricRolls;
-import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.metalSheets;
 
 public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockController {
 
@@ -60,6 +61,7 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
     /**
      * The axis direction of the eccentric roll (rotates CCW)
      * Only gets updated on the server-side
+     * 
      * @see #updateRollOrientation()
      */
     protected EnumFacing rollOrientation = EnumFacing.DOWN;
@@ -169,6 +171,7 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
 
     /**
      * Gets the correct axis direction of the roll
+     * 
      * @see SuSyPredicates#eccentricRolls(EnumFacing)
      */
     public void updateRollOrientation() {
@@ -244,8 +247,8 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
     @Override
     @SideOnly(Side.CLIENT)
     public ICubeRenderer getBaseTexture(IMultiblockPart part) {
-        if (metalSheetIdentifier >= 0 && part instanceof IMultiblockAbilityPart<?> abilityPart
-                && abilityPart.getAbility() == MultiblockAbility.IMPORT_ITEMS) {
+        if (metalSheetIdentifier >= 0 && part instanceof IMultiblockAbilityPart<?>abilityPart &&
+                abilityPart.getAbility() == MultiblockAbility.IMPORT_ITEMS) {
             return SusyTextures.METAL_SHEETS[metalSheetIdentifier];
         }
         return Textures.SOLID_STEEL_CASING;

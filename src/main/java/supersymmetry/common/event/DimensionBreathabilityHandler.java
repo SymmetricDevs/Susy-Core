@@ -1,20 +1,21 @@
 package supersymmetry.common.event;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.DamageSource;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import supersymmetry.api.util.SuSyDamageSources;
-import supersymmetry.common.entities.EntityRocket;
-import supersymmetry.common.item.SuSyArmorItem;
+import static net.minecraft.inventory.EntityEquipmentSlot.HEAD;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import static net.minecraft.inventory.EntityEquipmentSlot.HEAD;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.DamageSource;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+
+import supersymmetry.api.util.SuSyDamageSources;
+import supersymmetry.common.entities.EntityRocket;
+import supersymmetry.common.item.SuSyArmorItem;
 
 public final class DimensionBreathabilityHandler {
 
@@ -29,7 +30,6 @@ public final class DimensionBreathabilityHandler {
     private DimensionBreathabilityHandler() {}
 
     public static void loadConfig() {
-
         dimensionBreathabilityMap.clear();
 
         // Nether
@@ -37,7 +37,6 @@ public final class DimensionBreathabilityHandler {
         // Beneath
         dimensionBreathabilityMap.put(10, new BreathabilityInfo(SuSyDamageSources.getSuffocationDamage(), 0.5));
     }
-
 
     public static boolean tickAir(EntityPlayer player, FluidStack oxyStack) {
         // don't drain if we are in creative
@@ -53,7 +52,8 @@ public final class DimensionBreathabilityHandler {
     }
 
     public static boolean isInHazardousEnvironment(EntityPlayer player) {
-        return dimensionBreathabilityMap.containsKey(player.dimension) || (player.posY > 600 && !(player.isRiding() && player.getRidingEntity() instanceof EntityRocket));
+        return dimensionBreathabilityMap.containsKey(player.dimension) ||
+                (player.posY > 600 && !(player.isRiding() && player.getRidingEntity() instanceof EntityRocket));
     }
 
     public static void tickPlayer(EntityPlayer player) {
@@ -79,6 +79,7 @@ public final class DimensionBreathabilityHandler {
     }
 
     public static final class BreathabilityInfo {
+
         public DamageSource damageType;
         public double defaultDamage;
 
@@ -90,11 +91,11 @@ public final class DimensionBreathabilityHandler {
         public void damagePlayer(EntityPlayer player) {
             player.attackEntityFrom(damageType, (float) defaultDamage);
         }
+
         public void damagePlayer(EntityPlayer player, double amountAbsorbed) {
             if (defaultDamage > amountAbsorbed) {
                 player.attackEntityFrom(damageType, (float) defaultDamage - (float) amountAbsorbed);
             }
         }
-
     }
 }

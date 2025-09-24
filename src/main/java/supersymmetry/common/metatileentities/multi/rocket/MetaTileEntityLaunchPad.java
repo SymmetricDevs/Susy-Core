@@ -1,19 +1,9 @@
 package supersymmetry.common.metatileentities.multi.rocket;
 
-import cam72cam.mod.entity.ModdedEntity;
-import gregtech.api.capability.GregtechDataCodes;
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.metatileentity.multiblock.IMultiblockPart;
-import gregtech.api.metatileentity.multiblock.MultiblockWithDisplayBase;
-import gregtech.api.pattern.BlockPattern;
-import gregtech.api.pattern.FactoryBlockPattern;
-import gregtech.api.pattern.PatternMatchContext;
-import gregtech.api.unification.material.Materials;
-import gregtech.api.util.RelativeDirection;
-import gregtech.client.renderer.ICubeRenderer;
-import gregtech.client.renderer.texture.Textures;
-import gregtech.common.blocks.MetaBlocks;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -30,8 +20,22 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import cam72cam.mod.entity.ModdedEntity;
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.api.metatileentity.multiblock.IMultiblockPart;
+import gregtech.api.metatileentity.multiblock.MultiblockWithDisplayBase;
+import gregtech.api.pattern.BlockPattern;
+import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.PatternMatchContext;
+import gregtech.api.unification.material.Materials;
+import gregtech.api.util.RelativeDirection;
+import gregtech.client.renderer.ICubeRenderer;
+import gregtech.client.renderer.texture.Textures;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.builder.ILoopType;
@@ -47,11 +51,8 @@ import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.entities.EntityRocket;
 import supersymmetry.common.entities.EntityTransporterErector;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implements IAnimatableMTE {
+
     private AxisAlignedBB trainAABB;
     private EntityTransporterErector selectedErector;
     private EntityRocket selectedRocket;
@@ -73,7 +74,6 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     private Collection<BlockPos> hiddenBlocks;
     private AxisAlignedBB renderBounding;
 
-
     public MetaTileEntityLaunchPad(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
     }
@@ -86,23 +86,40 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle("DDDDDDDDDDDDD", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ", "     RRR     ")
-                .aisle("DDDDDDDDDDDDD", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ", "     RRR     ")
-                .aisle("DDDDDDDDDDDDD", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ", "     RRR     ")
-                .aisle("DDDDDDDDDDDDD", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ", "     RRR     ")
-                .aisle("DDDDDDDDDDDDD", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ", "     RRR     ")
-                .aisle("DDDDDDDDDDDDD", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ", "     RRR     ")
-                .aisle("DDDDDDDDDDDDD", "     FFF     ", "     FFF     ", "     FFF     ", "     FFF     ", "     FFF     ", "     FFF     ", "     FFF     ", "     FFF     ")
-                .aisle("DDDCCCCCCCDDD", "             ", "             ", "             ", "             ", "             ", "             ", "             ", "             ")
-                .aisle("DDDCCCCCCCDDD", "             ", "             ", "             ", "             ", "             ", "             ", "             ", "             ")
-                .aisle("DDDCCCCCCCDDD", "             ", "             ", "             ", "             ", "             ", "             ", "             ", "             ")
-                .aisle("DDDCCCCCCCDDD", " L         L ", " L         L ", " L         L ", " L         L ", " L         L ", " L         L ", " L         L ", " L         L ")
-                .aisle("DDDCCCCCCCDDD", "             ", "             ", "             ", "             ", "             ", "             ", "             ", "             ")
-                .aisle("DDDCCCCCCCDDD", "             ", "             ", "             ", "             ", "             ", "             ", "             ", "             ")
-                .aisle("DDDCCCCCCCDDD", "             ", "             ", "             ", "             ", "             ", "             ", "             ", "             ")
-                .aisle("DDDDDDDDDDDDD", "             ", "             ", "             ", "             ", "             ", "             ", "             ", "             ")
-                .aisle("DDDDDDDDDDDDD", "     FFF     ", "     FFF     ", "     FFF     ", "     FFF     ", "     FFF     ", "     FFF     ", "     FFF     ", "     FFF     ")
-                .aisle("DDDDDDSDDDDDD", "             ", "             ", "             ", "             ", "             ", "             ", "             ", "             ")
+                .aisle("DDDDDDDDDDDDD", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ",
+                        "     CCC     ", "     CCC     ", "     CCC     ", "     RRR     ")
+                .aisle("DDDDDDDDDDDDD", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ",
+                        "     CCC     ", "     CCC     ", "     CCC     ", "     RRR     ")
+                .aisle("DDDDDDDDDDDDD", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ",
+                        "     CCC     ", "     CCC     ", "     CCC     ", "     RRR     ")
+                .aisle("DDDDDDDDDDDDD", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ",
+                        "     CCC     ", "     CCC     ", "     CCC     ", "     RRR     ")
+                .aisle("DDDDDDDDDDDDD", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ",
+                        "     CCC     ", "     CCC     ", "     CCC     ", "     RRR     ")
+                .aisle("DDDDDDDDDDDDD", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ",
+                        "     CCC     ", "     CCC     ", "     CCC     ", "     RRR     ")
+                .aisle("DDDDDDDDDDDDD", "     FFF     ", "     FFF     ", "     FFF     ", "     FFF     ",
+                        "     FFF     ", "     FFF     ", "     FFF     ", "     FFF     ")
+                .aisle("DDDCCCCCCCDDD", "             ", "             ", "             ", "             ",
+                        "             ", "             ", "             ", "             ")
+                .aisle("DDDCCCCCCCDDD", "             ", "             ", "             ", "             ",
+                        "             ", "             ", "             ", "             ")
+                .aisle("DDDCCCCCCCDDD", "             ", "             ", "             ", "             ",
+                        "             ", "             ", "             ", "             ")
+                .aisle("DDDCCCCCCCDDD", " L         L ", " L         L ", " L         L ", " L         L ",
+                        " L         L ", " L         L ", " L         L ", " L         L ")
+                .aisle("DDDCCCCCCCDDD", "             ", "             ", "             ", "             ",
+                        "             ", "             ", "             ", "             ")
+                .aisle("DDDCCCCCCCDDD", "             ", "             ", "             ", "             ",
+                        "             ", "             ", "             ", "             ")
+                .aisle("DDDCCCCCCCDDD", "             ", "             ", "             ", "             ",
+                        "             ", "             ", "             ", "             ")
+                .aisle("DDDDDDDDDDDDD", "             ", "             ", "             ", "             ",
+                        "             ", "             ", "             ", "             ")
+                .aisle("DDDDDDDDDDDDD", "     FFF     ", "     FFF     ", "     FFF     ", "     FFF     ",
+                        "     FFF     ", "     FFF     ", "     FFF     ", "     FFF     ")
+                .aisle("DDDDDDSDDDDDD", "             ", "             ", "             ", "             ",
+                        "             ", "             ", "             ", "             ")
                 .where(' ', any())
                 .where('A', air())
                 .where('S', selfPredicate())
@@ -116,11 +133,13 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     }
 
     public IBlockState getFoundationState() {
-        return SuSyBlocks.ROCKET_ASSEMBLER_CASING.getState(BlockRocketAssemblerCasing.RocketAssemblerCasingType.FOUNDATION);
+        return SuSyBlocks.ROCKET_ASSEMBLER_CASING
+                .getState(BlockRocketAssemblerCasing.RocketAssemblerCasingType.FOUNDATION);
     }
 
     public IBlockState getReinforcedFoundationState() {
-        return SuSyBlocks.ROCKET_ASSEMBLER_CASING.getState(BlockRocketAssemblerCasing.RocketAssemblerCasingType.REINFORCED_FOUNDATION);
+        return SuSyBlocks.ROCKET_ASSEMBLER_CASING
+                .getState(BlockRocketAssemblerCasing.RocketAssemblerCasingType.REINFORCED_FOUNDATION);
     }
 
     @Override
@@ -292,7 +311,8 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
             if (!trains.isEmpty()) {
                 for (ModdedEntity forgeTrainEntity : trains) {
-                    if (forgeTrainEntity.getSelf() instanceof EntityTransporterErector rollingStock && rollingStock.isRocketLoaded()) {
+                    if (forgeTrainEntity.getSelf() instanceof EntityTransporterErector rollingStock &&
+                            rollingStock.isRocketLoaded()) {
                         this.selectedErector = rollingStock;
                     }
                 }
@@ -440,7 +460,8 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         INITIALIZING, // The launch pad is going through its initial animation of the supports coming out of the ground.
         EMPTY, // No rocket transporter has been selected, nor is there any rocket in the launch pad.
         LOADING, // A rocket transporter has been selected, causing it to begin the erecting process.
-        LOADED, // A rocket has been loaded into the launch pad. Players should be able to enter through physical rocket supports and remotely launch the rocket.
+        LOADED, // A rocket has been loaded into the launch pad. Players should be able to enter through physical rocket
+                // supports and remotely launch the rocket.
         LAUNCHING // The rocket supports retract and the engines are turned on.
     }
 }

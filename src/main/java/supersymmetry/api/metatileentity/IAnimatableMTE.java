@@ -1,20 +1,21 @@
 package supersymmetry.api.metatileentity;
 
-import gregtech.api.GregTechAPI;
-import gregtech.api.metatileentity.IFastRenderMetaTileEntity;
-import gregtech.api.metatileentity.MetaTileEntity;
+import static supersymmetry.api.util.SuSyUtility.susyId;
+
+import java.util.Collection;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+
+import gregtech.api.GregTechAPI;
+import gregtech.api.metatileentity.IFastRenderMetaTileEntity;
+import gregtech.api.metatileentity.MetaTileEntity;
 import software.bernie.geckolib3.core.IAnimatable;
 import supersymmetry.client.renderer.handler.GeoMTERenderer;
 import supersymmetry.common.network.SPacketUpdateRenderMask;
-
-import java.util.Collection;
-
-import static supersymmetry.api.util.SuSyUtility.susyId;
 
 public interface IAnimatableMTE extends IFastRenderMetaTileEntity, IAnimatable {
 

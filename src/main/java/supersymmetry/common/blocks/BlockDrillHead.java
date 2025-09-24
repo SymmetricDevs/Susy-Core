@@ -1,7 +1,7 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.block.IStateHarvestLevel;
-import gregtech.api.block.VariantBlock;
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -9,12 +9,15 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
+import gregtech.api.block.IStateHarvestLevel;
+import gregtech.api.block.VariantBlock;
 
 public class BlockDrillHead extends VariantBlock<BlockDrillHead.DrillHeadType> {
-    public BlockDrillHead(){
+
+    public BlockDrillHead() {
         super(net.minecraft.block.material.Material.IRON);
         setTranslationKey("drill_head");
         setHardness(5.0f);
@@ -30,8 +33,8 @@ public class BlockDrillHead extends VariantBlock<BlockDrillHead.DrillHeadType> {
         return false;
     }
 
-    //TODO: MAKE THIS CREATE MINING PARTICLES WHEN MINING DRILL IS ACTIVE
-    //TODO: MAKE THIS PLAY A LOUD MINING NOISE, PERHAPS HAVE STATUS EFFECTS FOR PLAYERS WHO COME NEAR THE MINING
+    // TODO: MAKE THIS CREATE MINING PARTICLES WHEN MINING DRILL IS ACTIVE
+    // TODO: MAKE THIS PLAY A LOUD MINING NOISE, PERHAPS HAVE STATUS EFFECTS FOR PLAYERS WHO COME NEAR THE MINING
 
     @NotNull
     @Override
@@ -40,6 +43,7 @@ public class BlockDrillHead extends VariantBlock<BlockDrillHead.DrillHeadType> {
     }
 
     public enum DrillHeadType implements IStringSerializable, IStateHarvestLevel {
+
         STEEL("steel", 1);
 
         private final String name;

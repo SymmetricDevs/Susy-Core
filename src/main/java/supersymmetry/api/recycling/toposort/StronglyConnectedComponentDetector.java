@@ -2,12 +2,11 @@
  * Copyright (c) Forge Development LLC and contributors
  * SPDX-License-Identifier: LGPL-2.1-only
  */
-
 package supersymmetry.api.recycling.toposort;
 
-import com.google.common.graph.ValueGraph;
-
 import java.util.*;
+
+import com.google.common.graph.ValueGraph;
 
 /// An object that splits a graph into strongly connected components lazily with
 /// Tarjan's Strongly Connected Components Algorithm.
@@ -22,6 +21,7 @@ import java.util.*;
 /// where the [com.google.common.graph.ValueGraph] no longer inherits from [com.google.common.graph.Graph].
 @SuppressWarnings("UnstableApiUsage")
 public class StronglyConnectedComponentDetector<T> {
+
     private final ValueGraph<T, ?> graph;
     private Map<T, Integer> ids;
     private T[] elements;

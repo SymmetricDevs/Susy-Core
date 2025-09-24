@@ -1,5 +1,8 @@
 package supersymmetry.common.metatileentities.multi.rocket;
 
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.ResourceLocation;
+
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -12,11 +15,10 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockBoilerCasing;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.ResourceLocation;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 
 public class MetaTileEntityScrapRecycler extends RecipeMapMultiblockController {
+
     public MetaTileEntityScrapRecycler(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.SCRAP_RECYCLER);
         this.recipeMapWorkable = new MultiblockRecipeLogic(this, true);
@@ -41,15 +43,19 @@ public class MetaTileEntityScrapRecycler extends RecipeMapMultiblockController {
                 .where('S', this.selfPredicate())
                 .where('P', states(getPipeCasingState()))
                 .where('C', states(getCasingState()))
-                .where('I', states(getCasingState()).or(this.autoAbilities(false, true, true, false, false, false, false)))
-                .where('O', states(getCasingState()).or(this.autoAbilities(false, true, false, true, false, false, false)))
-                .where('D', states(getCasingState()).or(this.autoAbilities(true, true, false, false, false, false, false)))
+                .where('I',
+                        states(getCasingState()).or(this.autoAbilities(false, true, true, false, false, false, false)))
+                .where('O',
+                        states(getCasingState()).or(this.autoAbilities(false, true, false, true, false, false, false)))
+                .where('D',
+                        states(getCasingState()).or(this.autoAbilities(true, true, false, false, false, false, false)))
                 .build();
     }
 
     protected static IBlockState getCasingState() {
         return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.TITANIUM_STABLE);
     }
+
     protected static IBlockState getPipeCasingState() {
         return MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.TITANIUM_PIPE);
     }
@@ -58,5 +64,4 @@ public class MetaTileEntityScrapRecycler extends RecipeMapMultiblockController {
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
         return Textures.STABLE_TITANIUM_CASING;
     }
-
 }

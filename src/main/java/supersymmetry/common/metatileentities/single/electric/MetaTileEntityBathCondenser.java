@@ -1,5 +1,18 @@
 package supersymmetry.common.metatileentities.single.electric;
 
+import static gregtech.api.recipes.logic.OverclockingLogic.standardOverclockingLogic;
+
+import java.util.List;
+import java.util.function.Supplier;
+
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import gregtech.api.GTValues;
 import gregtech.api.capability.IEnergyContainer;
 import gregtech.api.capability.impl.EnergyContainerHandler;
@@ -10,22 +23,11 @@ import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.recipeproperties.IRecipePropertyStorage;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.metatileentity.multiblock.ICryogenicProvider;
 import supersymmetry.api.metatileentity.multiblock.ICryogenicReceiver;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.properties.CryogenicEnvironmentProperty;
 import supersymmetry.client.renderer.textures.SusyTextures;
-
-import java.util.List;
-import java.util.function.Supplier;
-
-import static gregtech.api.recipes.logic.OverclockingLogic.standardOverclockingLogic;
 
 public class MetaTileEntityBathCondenser extends SimpleMachineMetaTileEntity implements ICryogenicReceiver {
 
@@ -48,6 +50,7 @@ public class MetaTileEntityBathCondenser extends SimpleMachineMetaTileEntity imp
     @Override
     protected void reinitializeEnergyContainer() {
         this.energyContainer = new EnergyContainerHandler(this, 0, 0, 0, 0, 0) {
+
             @Override
             public boolean isOneProbeHidden() {
                 return true;
@@ -79,7 +82,8 @@ public class MetaTileEntityBathCondenser extends SimpleMachineMetaTileEntity imp
     // TODO make this extend PrimitiveRecipeLogic in GT 2.9
     private static class BathCondenserRecipeLogic extends RecipeLogicEnergy {
 
-        public BathCondenserRecipeLogic(MetaTileEntity tileEntity, RecipeMap<?> recipeMap, Supplier<IEnergyContainer> energyContainer) {
+        public BathCondenserRecipeLogic(MetaTileEntity tileEntity, RecipeMap<?> recipeMap,
+                                        Supplier<IEnergyContainer> energyContainer) {
             super(tileEntity, recipeMap, energyContainer);
         }
 
@@ -93,7 +97,8 @@ public class MetaTileEntityBathCondenser extends SimpleMachineMetaTileEntity imp
         public boolean checkRecipe(@NotNull Recipe recipe) {
             if (super.checkRecipe(recipe)) {
                 Boolean value = recipe.getProperty(CryogenicEnvironmentProperty.getInstance(), null);
-                return value == null || !value || (getMetaTileEntity().getCryogenicProvider() != null && getMetaTileEntity().getCryogenicProvider().isStructureFormed());
+                return value == null || !value || (getMetaTileEntity().getCryogenicProvider() != null &&
+                        getMetaTileEntity().getCryogenicProvider().isStructureFormed());
             }
 
             return false;
@@ -104,7 +109,8 @@ public class MetaTileEntityBathCondenser extends SimpleMachineMetaTileEntity imp
             if (super.canProgressRecipe()) {
                 if (previousRecipe == null) return true;
                 Boolean value = previousRecipe.getProperty(CryogenicEnvironmentProperty.getInstance(), null);
-                return value == null || !value || (getMetaTileEntity().getCryogenicProvider() != null && getMetaTileEntity().getCryogenicProvider().isStructureFormed());
+                return value == null || !value || (getMetaTileEntity().getCryogenicProvider() != null &&
+                        getMetaTileEntity().getCryogenicProvider().isStructureFormed());
             }
             return false;
         }

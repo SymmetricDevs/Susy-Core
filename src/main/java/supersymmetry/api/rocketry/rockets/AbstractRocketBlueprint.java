@@ -4,110 +4,109 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+
 import supersymmetry.Supersymmetry;
 
 public abstract class AbstractRocketBlueprint {
 
-  public String name;
-  private static Map<String, AbstractRocketBlueprint> blueprintsRegistry = new HashMap<>();
+    public String name;
+    private static Map<String, AbstractRocketBlueprint> blueprintsRegistry = new HashMap<>();
 
-  // default blueprints for stuff.
-  public static Map<String, AbstractRocketBlueprint> getBlueprintsRegistry() {
-    return new HashMap<>(blueprintsRegistry);
-  }
-
-  public static AbstractRocketBlueprint getCopyOf(String name) {
-    try {
-
-      AbstractRocketBlueprint bp = AbstractRocketBlueprint.getBlueprintsRegistry().get(name);
-      AbstractRocketBlueprint newbp =
-          (AbstractRocketBlueprint)
-              bp.getClass()
-                  .getDeclaredConstructors()[0]
-                  .newInstance(bp.getName(), bp.getRelatedEntity());
-
-      newbp.readFromNBT(bp.writeToNBT());
-      return newbp;
-    } catch (Exception e) {
-      e.printStackTrace();
-      throw new RuntimeException("failed to create a blueprint copy");
+    // default blueprints for stuff.
+    public static Map<String, AbstractRocketBlueprint> getBlueprintsRegistry() {
+        return new HashMap<>(blueprintsRegistry);
     }
-  }
 
-  public static void registerBlueprint(AbstractRocketBlueprint bp) {
-    if (!getRegistryLock()) {
-      blueprintsRegistry.put(bp.getName(), bp);
+    public static AbstractRocketBlueprint getCopyOf(String name) {
+        try {
+
+            AbstractRocketBlueprint bp = AbstractRocketBlueprint.getBlueprintsRegistry().get(name);
+            AbstractRocketBlueprint newbp = (AbstractRocketBlueprint) bp.getClass()
+                    .getDeclaredConstructors()[0]
+                            .newInstance(bp.getName(), bp.getRelatedEntity());
+
+            newbp.readFromNBT(bp.writeToNBT());
+            return newbp;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("failed to create a blueprint copy");
+        }
     }
-  }
 
-  public static boolean registryLock = false;
+    public static void registerBlueprint(AbstractRocketBlueprint bp) {
+        if (!getRegistryLock()) {
+            blueprintsRegistry.put(bp.getName(), bp);
+        }
+    }
 
-  public static boolean getRegistryLock() {
-    return registryLock;
-  }
+    public static boolean registryLock = false;
 
-  public static void setRegistryLock(boolean registryLock) {
-    AbstractRocketBlueprint.registryLock = registryLock;
-  }
+    public static boolean getRegistryLock() {
+        return registryLock;
+    }
 
-  public ResourceLocation relatedEntity = new ResourceLocation(Supersymmetry.MODID, "rocket_basic");
-  public List<int[]> ignitionStages =
-      new ArrayList<>(); // allows for multiple stages to be ignited at once, ex.
-  // boosters together with the main stage, or the second stage together with the EES which im
-  // definitely not adding
+    public static void setRegistryLock(boolean registryLock) {
+        AbstractRocketBlueprint.registryLock = registryLock;
+    }
 
-  // meant to contain the INDEX of the stages in the list bellow
-  // actually i dont remember why i added this
-  public List<RocketStage> stages = new ArrayList<>();
+    public ResourceLocation relatedEntity = new ResourceLocation(Supersymmetry.MODID, "rocket_basic");
+    public List<int[]> ignitionStages = new ArrayList<>(); // allows for multiple stages to be ignited at once, ex.
+    // boosters together with the main stage, or the second stage together with the EES which im
+    // definitely not adding
 
-  public AbstractRocketBlueprint(String name, ResourceLocation relatedEntity) {
-    setName(name);
-    setRelatedEntity(relatedEntity);
-  }
+    // meant to contain the INDEX of the stages in the list bellow
+    // actually i dont remember why i added this
+    public List<RocketStage> stages = new ArrayList<>();
 
-  public List<int[]> getIgnitionStages() {
-    return ignitionStages;
-  }
+    public AbstractRocketBlueprint(String name, ResourceLocation relatedEntity) {
+        setName(name);
+        setRelatedEntity(relatedEntity);
+    }
 
-  public void setIgnitionStages(List<int[]> ignitionStages) {
-    this.ignitionStages = ignitionStages;
-  }
+    public List<int[]> getIgnitionStages() {
+        return ignitionStages;
+    }
 
-  public List<RocketStage> getStages() {
-    return this.stages;
-  }
+    public void setIgnitionStages(List<int[]> ignitionStages) {
+        this.ignitionStages = ignitionStages;
+    }
 
-  public boolean isFullBlueprint() {
-    return (stages.stream().allMatch(x -> x.isPopulated()));
-  }
+    public List<RocketStage> getStages() {
+        return this.stages;
+    }
 
-  public abstract boolean readFromNBT(NBTTagCompound tag);
+    public boolean isFullBlueprint() {
+        return (stages.stream().allMatch(x -> x.isPopulated()));
+    }
 
-  public abstract NBTTagCompound writeToNBT();
+    public abstract boolean readFromNBT(NBTTagCompound tag);
 
-  public String getName() {
-    return name;
-  }
+    public abstract NBTTagCompound writeToNBT();
 
-  public double getMass() {
-    return this.getStages().stream().mapToDouble(RocketStage::getMass).sum();
-  }
+    public String getName() {
+        return name;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public double getMass() {
+        return this.getStages().stream().mapToDouble(RocketStage::getMass).sum();
+    }
 
-  public ResourceLocation getRelatedEntity() {
-    return relatedEntity;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public void setRelatedEntity(ResourceLocation relatedEntity) {
-    this.relatedEntity = relatedEntity;
-  }
+    public ResourceLocation getRelatedEntity() {
+        return relatedEntity;
+    }
 
-  public void setStages(List<RocketStage> stages) {
-    this.stages = stages;
-  }
+    public void setRelatedEntity(ResourceLocation relatedEntity) {
+        this.relatedEntity = relatedEntity;
+    }
+
+    public void setStages(List<RocketStage> stages) {
+        this.stages = stages;
+    }
 }

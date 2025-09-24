@@ -1,18 +1,19 @@
 package supersymmetry.common.blocks.rocketry;
 
-import gregtech.api.block.IStateHarvestLevel;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+
 import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.block.IStateHarvestLevel;
 import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
-import supersymmetry.common.blocks.BlockCoagulationTankWall;
 
 public class BlockOuterHatch extends VariantHorizontalRotatableBlock<BlockOuterHatch.OuterHatchType> {
+
     public BlockOuterHatch() {
         super(net.minecraft.block.material.Material.IRON);
         setTranslationKey("rocket_outer_hatch");
@@ -29,13 +30,17 @@ public class BlockOuterHatch extends VariantHorizontalRotatableBlock<BlockOuterH
     }
 
     public enum OuterHatchType implements IStringSerializable, IStateHarvestLevel {
-        OUTER_HATCH("al_2219",2);
+
+        OUTER_HATCH("al_2219", 2);
+
         private final String name;
         private final int harvestLevel;
+
         OuterHatchType(String name, int harvestLevel) {
             this.name = name;
             this.harvestLevel = harvestLevel;
         }
+
         @Override
         public int getHarvestLevel(IBlockState iBlockState) {
             return harvestLevel;

@@ -1,18 +1,17 @@
 package supersymmetry.common.entities;
 
-import gregtech.api.GregTechAPI;
-import gregtech.api.util.TeleportHandler;
+import java.util.List;
+import java.util.Random;
+
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -22,33 +21,36 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import gregtech.api.GregTechAPI;
 import supersymmetry.client.audio.MovingSoundRocket;
 import supersymmetry.client.renderer.handler.IAlwaysRender;
 import supersymmetry.client.renderer.particles.SusyParticleFlameLarge;
 import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
-import supersymmetry.common.EventHandlers;
 import supersymmetry.common.blocks.rocketry.BlockSpacecraftInstrument;
-import supersymmetry.common.entities.teleporters.DropPodTeleporter;
-import supersymmetry.common.event.DimensionRidingSwapData;
 import supersymmetry.common.network.CPacketRocketInteract;
-
-import java.util.List;
-import java.util.Random;
 
 public class EntityRocket extends Entity implements IAlwaysRender {
 
     private static final Random rnd = new Random();
     protected static final float jerk = 0.0001F;
 
-    private static final DataParameter<Boolean> LAUNCHED = EntityDataManager.<Boolean>createKey(EntityRocket.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> COUNTDOWN_STARTED = EntityDataManager.<Boolean>createKey(EntityRocket.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> LAUNCHED = EntityDataManager.<Boolean>createKey(EntityRocket.class,
+            DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> COUNTDOWN_STARTED = EntityDataManager
+            .<Boolean>createKey(EntityRocket.class, DataSerializers.BOOLEAN);
 
-    private static final DataParameter<Integer> AGE = EntityDataManager.<Integer>createKey(EntityRocket.class, DataSerializers.VARINT);
-    private static final DataParameter<Integer> LAUNCH_TIME = EntityDataManager.<Integer>createKey(EntityRocket.class, DataSerializers.VARINT);
-    private static final DataParameter<Integer> FLIGHT_TIME = EntityDataManager.<Integer>createKey(EntityRocket.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> AGE = EntityDataManager.<Integer>createKey(EntityRocket.class,
+            DataSerializers.VARINT);
+    private static final DataParameter<Integer> LAUNCH_TIME = EntityDataManager.<Integer>createKey(EntityRocket.class,
+            DataSerializers.VARINT);
+    private static final DataParameter<Integer> FLIGHT_TIME = EntityDataManager.<Integer>createKey(EntityRocket.class,
+            DataSerializers.VARINT);
 
-    private static final DataParameter<Float> START_POS = EntityDataManager.<Float>createKey(EntityRocket.class, DataSerializers.FLOAT);
-    private static final DataParameter<Boolean> ACTED = EntityDataManager.<Boolean>createKey(EntityRocket.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Float> START_POS = EntityDataManager.<Float>createKey(EntityRocket.class,
+            DataSerializers.FLOAT);
+    private static final DataParameter<Boolean> ACTED = EntityDataManager.<Boolean>createKey(EntityRocket.class,
+            DataSerializers.BOOLEAN);
 
     @SideOnly(Side.CLIENT)
     private MovingSoundRocket soundRocket;
@@ -169,8 +171,7 @@ public class EntityRocket extends Entity implements IAlwaysRender {
     }
 
     @Override
-    protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
-    }
+    protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {}
 
     @Override
     public void readEntityFromNBT(NBTTagCompound compound) {
@@ -197,32 +198,42 @@ public class EntityRocket extends Entity implements IAlwaysRender {
     @SideOnly(Side.CLIENT)
     protected void spawnFlightParticles() {
         // Main engine
-        SusyParticleFlameLarge flame_0 = new SusyParticleFlameLarge(this.world, this.posX, this.posY, this.posZ, 1.5 * (rnd.nextFloat() - 0.5) * 0.08, -1.5, 1.5 * (rnd.nextFloat() - 0.5) * 0.08);
-        SusyParticleSmokeLarge smoke_0 = new SusyParticleSmokeLarge(this.world, this.posX, this.posY, this.posZ, 1.5 * (rnd.nextFloat() - 0.5) * 0.16, -1.5, 1.5 * (rnd.nextFloat() - 0.5) * 0.16);
+        SusyParticleFlameLarge flame_0 = new SusyParticleFlameLarge(this.world, this.posX, this.posY, this.posZ,
+                1.5 * (rnd.nextFloat() - 0.5) * 0.08, -1.5, 1.5 * (rnd.nextFloat() - 0.5) * 0.08);
+        SusyParticleSmokeLarge smoke_0 = new SusyParticleSmokeLarge(this.world, this.posX, this.posY, this.posZ,
+                1.5 * (rnd.nextFloat() - 0.5) * 0.16, -1.5, 1.5 * (rnd.nextFloat() - 0.5) * 0.16);
         Minecraft.getMinecraft().effectRenderer.addEffect(smoke_0);
         Minecraft.getMinecraft().effectRenderer.addEffect(flame_0);
 
         // Main engine
-        SusyParticleFlameLarge flame_1 = new SusyParticleFlameLarge(this.world, this.posX + 3, this.posY, this.posZ, 1.5 * (rnd.nextFloat() - 0.5) * 0.08, -1.5, 1.5 * (rnd.nextFloat() - 0.5) * 0.08);
-        SusyParticleSmokeLarge smoke_1 = new SusyParticleSmokeLarge(this.world, this.posX + 3, this.posY, this.posZ, 1.5 * (rnd.nextFloat() - 0.5) * 0.16, -1.5, 1.5 * (rnd.nextFloat() - 0.5) * 0.16);
+        SusyParticleFlameLarge flame_1 = new SusyParticleFlameLarge(this.world, this.posX + 3, this.posY, this.posZ,
+                1.5 * (rnd.nextFloat() - 0.5) * 0.08, -1.5, 1.5 * (rnd.nextFloat() - 0.5) * 0.08);
+        SusyParticleSmokeLarge smoke_1 = new SusyParticleSmokeLarge(this.world, this.posX + 3, this.posY, this.posZ,
+                1.5 * (rnd.nextFloat() - 0.5) * 0.16, -1.5, 1.5 * (rnd.nextFloat() - 0.5) * 0.16);
         Minecraft.getMinecraft().effectRenderer.addEffect(smoke_1);
         Minecraft.getMinecraft().effectRenderer.addEffect(flame_1);
 
         // Main engine
-        SusyParticleFlameLarge flame_2 = new SusyParticleFlameLarge(this.world, this.posX, this.posY, this.posZ + 3, 1.5 * (rnd.nextFloat() - 0.5) * 0.08, -1.5, 1.5 * (rnd.nextFloat() - 0.5) * 0.08);
-        SusyParticleSmokeLarge smoke_2 = new SusyParticleSmokeLarge(this.world, this.posX, this.posY, this.posZ + 3, 1.5 * (rnd.nextFloat() - 0.5) * 0.16, -1.5, 1.5 * (rnd.nextFloat() - 0.5) * 0.16);
+        SusyParticleFlameLarge flame_2 = new SusyParticleFlameLarge(this.world, this.posX, this.posY, this.posZ + 3,
+                1.5 * (rnd.nextFloat() - 0.5) * 0.08, -1.5, 1.5 * (rnd.nextFloat() - 0.5) * 0.08);
+        SusyParticleSmokeLarge smoke_2 = new SusyParticleSmokeLarge(this.world, this.posX, this.posY, this.posZ + 3,
+                1.5 * (rnd.nextFloat() - 0.5) * 0.16, -1.5, 1.5 * (rnd.nextFloat() - 0.5) * 0.16);
         Minecraft.getMinecraft().effectRenderer.addEffect(smoke_2);
         Minecraft.getMinecraft().effectRenderer.addEffect(flame_2);
 
         // Main engine
-        SusyParticleFlameLarge flame_3 = new SusyParticleFlameLarge(this.world, this.posX - 3, this.posY, this.posZ, 1.5 * (rnd.nextFloat() - 0.5) * 0.08, -1.5, 1.5 * (rnd.nextFloat() - 0.5) * 0.08);
-        SusyParticleSmokeLarge smoke_3 = new SusyParticleSmokeLarge(this.world, this.posX - 3, this.posY, this.posZ, 1.5 * (rnd.nextFloat() - 0.5) * 0.16, -1.5, 1.5 * (rnd.nextFloat() - 0.5) * 0.16);
+        SusyParticleFlameLarge flame_3 = new SusyParticleFlameLarge(this.world, this.posX - 3, this.posY, this.posZ,
+                1.5 * (rnd.nextFloat() - 0.5) * 0.08, -1.5, 1.5 * (rnd.nextFloat() - 0.5) * 0.08);
+        SusyParticleSmokeLarge smoke_3 = new SusyParticleSmokeLarge(this.world, this.posX - 3, this.posY, this.posZ,
+                1.5 * (rnd.nextFloat() - 0.5) * 0.16, -1.5, 1.5 * (rnd.nextFloat() - 0.5) * 0.16);
         Minecraft.getMinecraft().effectRenderer.addEffect(smoke_3);
         Minecraft.getMinecraft().effectRenderer.addEffect(flame_3);
 
         // Main engine
-        SusyParticleFlameLarge flame_4 = new SusyParticleFlameLarge(this.world, this.posX, this.posY, this.posZ - 3, 1.5 * (rnd.nextFloat() - 0.5) * 0.08, -1.5, 1.5 * (rnd.nextFloat() - 0.5) * 0.08);
-        SusyParticleSmokeLarge smoke_4 = new SusyParticleSmokeLarge(this.world, this.posX, this.posY, this.posZ - 3, 1.5 * (rnd.nextFloat() - 0.5) * 0.16, -1.5, 1.5 * (rnd.nextFloat() - 0.5) * 0.16);
+        SusyParticleFlameLarge flame_4 = new SusyParticleFlameLarge(this.world, this.posX, this.posY, this.posZ - 3,
+                1.5 * (rnd.nextFloat() - 0.5) * 0.08, -1.5, 1.5 * (rnd.nextFloat() - 0.5) * 0.08);
+        SusyParticleSmokeLarge smoke_4 = new SusyParticleSmokeLarge(this.world, this.posX, this.posY, this.posZ - 3,
+                1.5 * (rnd.nextFloat() - 0.5) * 0.16, -1.5, 1.5 * (rnd.nextFloat() - 0.5) * 0.16);
         Minecraft.getMinecraft().effectRenderer.addEffect(smoke_4);
         Minecraft.getMinecraft().effectRenderer.addEffect(flame_4);
     }
@@ -232,10 +243,14 @@ public class EntityRocket extends Entity implements IAlwaysRender {
         float startPos = this.getStartPos();
         float randFloat = rnd.nextFloat();
         float randSpeed = rnd.nextFloat();
-        SusyParticleSmokeLarge smoke_x1 = new SusyParticleSmokeLarge(this.world, this.posX, startPos - 3, this.posZ, 0.5 + randSpeed, v * (randFloat - 0.5) * 0.16, v * (randFloat - 0.5) * 0.16);
-        SusyParticleSmokeLarge smoke_x2 = new SusyParticleSmokeLarge(this.world, this.posX, startPos - 3, this.posZ, -(0.5 + randSpeed), v * (randFloat - 0.5) * 0.16, v * (randFloat - 0.5) * 0.16);
-        SusyParticleSmokeLarge smoke_z1 = new SusyParticleSmokeLarge(this.world, this.posX, startPos - 3, this.posZ, v * (randFloat - 0.5) * 0.16, v * (randFloat - 0.5) * 0.16, 0.5 + randSpeed);
-        SusyParticleSmokeLarge smoke_z2 = new SusyParticleSmokeLarge(this.world, this.posX, startPos - 3, this.posZ, v * (randFloat - 0.5) * 0.16, v * (randFloat - 0.5) * 0.16, -(0.5 + randSpeed));
+        SusyParticleSmokeLarge smoke_x1 = new SusyParticleSmokeLarge(this.world, this.posX, startPos - 3, this.posZ,
+                0.5 + randSpeed, v * (randFloat - 0.5) * 0.16, v * (randFloat - 0.5) * 0.16);
+        SusyParticleSmokeLarge smoke_x2 = new SusyParticleSmokeLarge(this.world, this.posX, startPos - 3, this.posZ,
+                -(0.5 + randSpeed), v * (randFloat - 0.5) * 0.16, v * (randFloat - 0.5) * 0.16);
+        SusyParticleSmokeLarge smoke_z1 = new SusyParticleSmokeLarge(this.world, this.posX, startPos - 3, this.posZ,
+                v * (randFloat - 0.5) * 0.16, v * (randFloat - 0.5) * 0.16, 0.5 + randSpeed);
+        SusyParticleSmokeLarge smoke_z2 = new SusyParticleSmokeLarge(this.world, this.posX, startPos - 3, this.posZ,
+                v * (randFloat - 0.5) * 0.16, v * (randFloat - 0.5) * 0.16, -(0.5 + randSpeed));
         Minecraft.getMinecraft().effectRenderer.addEffect(smoke_x1);
         Minecraft.getMinecraft().effectRenderer.addEffect(smoke_x2);
         Minecraft.getMinecraft().effectRenderer.addEffect(smoke_z1);
@@ -281,35 +296,36 @@ public class EntityRocket extends Entity implements IAlwaysRender {
                 this.explode();
             }
 
-            List<Entity> collidingEntities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox());
+            List<Entity> collidingEntities = this.world.getEntitiesWithinAABBExcludingEntity(this,
+                    this.getEntityBoundingBox());
 
             for (Entity entity : collidingEntities) {
                 if (!entity.isRidingSameEntity(this))
                     entity.attackEntityFrom(DamageSource.FLY_INTO_WALL, (float) this.motionY * 10.f);
             }
         }
-/*
-        if(age % 2 == 0 && this.isCountDownStarted()) {
-            if(launchTime - age < 60 && launchTime - age > 0) {
-                this.spawnLaunchParticles(0.025*(age - launchTime + 60));
-            }else if(launchTime - age > -100 && launchTime - age < 0) {
-                this.spawnLaunchParticles(1.5);
-            }else if(launchTime - age > -150 && launchTime - age < -100) {
-                this.spawnLaunchParticles(-0.03*(age - launchTime + 150));
-            }
-        }
-*/
+        /*
+         * if(age % 2 == 0 && this.isCountDownStarted()) {
+         * if(launchTime - age < 60 && launchTime - age > 0) {
+         * this.spawnLaunchParticles(0.025*(age - launchTime + 60));
+         * }else if(launchTime - age > -100 && launchTime - age < 0) {
+         * this.spawnLaunchParticles(1.5);
+         * }else if(launchTime - age > -150 && launchTime - age < -100) {
+         * this.spawnLaunchParticles(-0.03*(age - launchTime + 150));
+         * }
+         * }
+         */
         this.setAge(age + 1);
     }
 
     @Override
     public boolean canBeCollidedWith() {
-        return true; //note that this prevents it from being seen on theoneprobe, and /gs looking
+        return true; // note that this prevents it from being seen on theoneprobe, and /gs looking
     }
 
     @Override
     public EnumPushReaction getPushReaction() {
-        return EnumPushReaction.IGNORE; //for pistons
+        return EnumPushReaction.IGNORE; // for pistons
     }
 
     @SideOnly(Side.CLIENT)

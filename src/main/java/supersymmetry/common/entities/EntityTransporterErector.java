@@ -1,16 +1,17 @@
 package supersymmetry.common.entities;
 
+import net.minecraft.nbt.NBTTagCompound;
+
 import cam72cam.immersiverailroading.entity.Freight;
 import cam72cam.mod.entity.Entity;
 import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.entity.sync.TagSync;
 import cam72cam.mod.serialization.TagField;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.Vec3d;
 import supersymmetry.client.renderer.handler.IAlwaysRender;
 import supersymmetry.integration.immersiverailroading.registry.TransporterErectorDefinition;
 
 public class EntityTransporterErector extends Freight implements IAlwaysRender {
+
     @TagField("isRocketLoaded")
     @TagSync
     private boolean isRocketLoaded;
@@ -113,6 +114,4 @@ public class EntityTransporterErector extends Freight implements IAlwaysRender {
         DOWN,
         STOP;
     }
-
-
 }

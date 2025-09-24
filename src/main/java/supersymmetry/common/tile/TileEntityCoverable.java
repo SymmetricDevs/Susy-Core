@@ -1,64 +1,35 @@
 package supersymmetry.common.tile;
 
-import codechicken.lib.model.loader.cube.CCModelCube;
-import codechicken.lib.model.modelbase.CCModelRenderer;
-import codechicken.lib.raytracer.IndexedCuboid6;
-import codechicken.lib.render.BlockRenderer;
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.pipeline.IVertexOperation;
-import codechicken.lib.render.pipeline.IVertexSource;
-import codechicken.lib.texture.TextureUtils;
-import codechicken.lib.vec.Cuboid6;
-import codechicken.lib.vec.Matrix4;
-import codechicken.lib.vec.Vector3;
-import codechicken.lib.vec.uv.IconTransformation;
-import gregtech.api.capability.GregtechDataCodes;
-import gregtech.api.gui.ModularUI;
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.SyncedTileEntityBase;
-import gregtech.api.metatileentity.TickableTileEntityBase;
-import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.metatileentity.interfaces.IHasWorldObjectAndCoords;
-import gregtech.api.metatileentity.interfaces.ISyncedTileEntity;
-import gregtech.client.renderer.CubeRendererState;
-import gregtech.client.renderer.texture.Textures;
-import gregtech.client.utils.RenderUtil;
-import net.minecraft.block.state.IBlockState;
+import java.io.IOException;
+import java.util.ArrayList;
+
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockModelShapes;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.statemap.BlockStateMapper;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemHangingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.ArrayUtils;
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.common.item.SuSyMetaItems;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
+import codechicken.lib.raytracer.IndexedCuboid6;
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Matrix4;
+import gregtech.api.capability.GregtechDataCodes;
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.TickableTileEntityBase;
+import gregtech.client.renderer.texture.Textures;
 
 public class TileEntityCoverable extends TickableTileEntityBase {
+
     private byte coverSpots; // 0 - 63, bits going in the order of EnumFacing
     private ItemStack coverType;
     private IBakedModel sourceModel;
@@ -78,7 +49,8 @@ public class TileEntityCoverable extends TickableTileEntityBase {
     }
 
     private void setCovered(EnumFacing enumFacing, boolean cov) {
-        coverSpots = cov ? (byte) (coverSpots | (1 << enumFacing.ordinal())) : (byte) (coverSpots & ~(1 << enumFacing.ordinal()));
+        coverSpots = cov ? (byte) (coverSpots | (1 << enumFacing.ordinal())) :
+                (byte) (coverSpots & ~(1 << enumFacing.ordinal()));
         if (coverSpots == 0) {
             coverType = ItemStack.EMPTY;
         }
@@ -239,9 +211,7 @@ public class TileEntityCoverable extends TickableTileEntityBase {
     }
 
     @Override
-    public void notifyBlockUpdate() {
-
-    }
+    public void notifyBlockUpdate() {}
 
     @Override
     public void markAsDirty() {
@@ -264,7 +234,7 @@ public class TileEntityCoverable extends TickableTileEntityBase {
 
     @SideOnly(Side.CLIENT)
     public void setSourceModel() {
-        this.sourceModel = Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(getWorld().getBlockState(pos));
+        this.sourceModel = Minecraft.getMinecraft().getBlockRendererDispatcher()
+                .getModelForState(getWorld().getBlockState(pos));
     }
-
 }

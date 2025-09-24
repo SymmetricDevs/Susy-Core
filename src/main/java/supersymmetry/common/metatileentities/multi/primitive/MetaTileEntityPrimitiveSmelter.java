@@ -1,9 +1,24 @@
 package supersymmetry.common.metatileentities.multi.primitive;
 
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.*;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.apache.commons.lang3.ArrayUtils;
+import org.jetbrains.annotations.NotNull;
+
+import com.codetaylor.mc.pyrotech.modules.core.ModuleCore;
+
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
-import com.codetaylor.mc.pyrotech.modules.core.ModuleCore;
 import gregtech.api.GTValues;
 import gregtech.api.capability.impl.ItemHandlerList;
 import gregtech.api.gui.ModularUI;
@@ -23,18 +38,6 @@ import gregtech.client.renderer.cclop.ColourOperation;
 import gregtech.client.renderer.cclop.LightMapOperation;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.ConfigHolder;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.*;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.ArrayUtils;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
@@ -116,7 +119,7 @@ public class MetaTileEntityPrimitiveSmelter extends RecipeMapPrimitiveMultiblock
         super.update();
 
         if (this.isActive() && !getWorld().isRemote) {
-                damageEntitiesAndBreakSnow();
+            damageEntitiesAndBreakSnow();
         }
     }
 
@@ -142,9 +145,10 @@ public class MetaTileEntityPrimitiveSmelter extends RecipeMapPrimitiveMultiblock
             BlockPos pos = getPos();
 
             EnumFacing facing = getFrontFacing().getOpposite();
-            float x = (float)facing.getXOffset() + (float)pos.getX() + 0.5F;
-            float y = (float)facing.getYOffset() + (float)pos.getY() + 1.2F + (float)(GTValues.RNG.nextDouble() * 2.0 / 16.0);;
-            float z = (float)facing.getZOffset() + (float)pos.getZ() + 0.5F;
+            float x = (float) facing.getXOffset() + (float) pos.getX() + 0.5F;
+            float y = (float) facing.getYOffset() + (float) pos.getY() + 1.2F +
+                    (float) (GTValues.RNG.nextDouble() * 2.0 / 16.0);;
+            float z = (float) facing.getZOffset() + (float) pos.getZ() + 0.5F;
 
             for (int i = 0; i < 4; i++) {
                 double offsetX = (GTValues.RNG.nextDouble() * 2.0 - 1.0) * 0.3;
@@ -153,7 +157,8 @@ public class MetaTileEntityPrimitiveSmelter extends RecipeMapPrimitiveMultiblock
                 getWorld().spawnParticle(EnumParticleTypes.FLAME, x + offsetX, y + offsetY, z + offsetZ, 0.0, 0.0, 0.0);
 
                 if (GTValues.RNG.nextDouble() < 0.05) {
-                    getWorld().spawnParticle(EnumParticleTypes.LAVA, x + offsetX, y + offsetY, z + offsetZ, 0.0, 0.0, 0.0);
+                    getWorld().spawnParticle(EnumParticleTypes.LAVA, x + offsetX, y + offsetY, z + offsetZ, 0.0, 0.0,
+                            0.0);
                 }
             }
 

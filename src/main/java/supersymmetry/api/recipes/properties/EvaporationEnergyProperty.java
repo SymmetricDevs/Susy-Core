@@ -1,10 +1,12 @@
 package supersymmetry.api.recipes.properties;
 
-import gregtech.api.recipes.recipeproperties.RecipeProperty;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 
+import gregtech.api.recipes.recipeproperties.RecipeProperty;
+
 public class EvaporationEnergyProperty extends RecipeProperty<Integer> {
+
     public static final String KEY = "evaporation_energy";
 
     private static EvaporationEnergyProperty INSTANCE;
@@ -25,5 +27,4 @@ public class EvaporationEnergyProperty extends RecipeProperty<Integer> {
         }
         return INSTANCE;
     }
-
 }

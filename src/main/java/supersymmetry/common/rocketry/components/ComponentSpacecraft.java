@@ -1,7 +1,5 @@
 package supersymmetry.common.rocketry.components;
 
-import gregtech.api.block.VariantBlock;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -16,6 +14,8 @@ import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants.NBT;
+
+import gregtech.api.block.VariantBlock;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.components.MaterialCost;
 import supersymmetry.api.util.StructAnalysis;
@@ -24,6 +24,7 @@ import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.tile.TileEntityCoverable;
 
 public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> {
+
     public double radius;
     public Map<String, Integer> parts = new HashMap<>();
     public Map<String, Integer> instruments = new HashMap<>();
@@ -96,15 +97,14 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
 
     @Override
     public Optional<NBTTagCompound> analyzePattern(StructAnalysis analysis, AxisAlignedBB aabb) {
-        Set<BlockPos> blocksConnected =
-                analysis.getBlockConn(aabb, analysis.getBlocks(analysis.world, aabb, true).get(0));
-        Tuple<Set<BlockPos>, Set<BlockPos>> hullCheck =
-                analysis.checkHull(aabb, blocksConnected, false);
+        Set<BlockPos> blocksConnected = analysis.getBlockConn(aabb,
+                analysis.getBlocks(analysis.world, aabb, true).get(0));
+        Tuple<Set<BlockPos>, Set<BlockPos>> hullCheck = analysis.checkHull(aabb, blocksConnected, false);
         Set<BlockPos> exterior = hullCheck.getFirst();
         Set<BlockPos> interior = hullCheck.getSecond();
         return spacecraftPattern(
                 blocksConnected,
-                exterior, /*<-  these 2 goobers are changed in this class  ->*/
+                exterior, /* <- these 2 goobers are changed in this class -> */
                 interior,
                 analysis);
     }
@@ -112,23 +112,20 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
     // copied from componentControlPod because i didnt figure out how to put it into a single function
     // without it complaining
     public Optional<NBTTagCompound> spacecraftPattern(
-            Set<BlockPos> blocksConnected,
-            Set<BlockPos> interior,
-            Set<BlockPos> exterior,
-            StructAnalysis analysis) {
-
-        Predicate<BlockPos> lifeSupportCheck =
-                bp -> analysis.world.getBlockState(bp).getBlock().equals(SuSyBlocks.LIFE_SUPPORT);
-        Set<BlockPos> lifeSupports =
-                blocksConnected.stream().filter(lifeSupportCheck).collect(Collectors.toSet());
+                                                      Set<BlockPos> blocksConnected,
+                                                      Set<BlockPos> interior,
+                                                      Set<BlockPos> exterior,
+                                                      StructAnalysis analysis) {
+        Predicate<BlockPos> lifeSupportCheck = bp -> analysis.world.getBlockState(bp).getBlock()
+                .equals(SuSyBlocks.LIFE_SUPPORT);
+        Set<BlockPos> lifeSupports = blocksConnected.stream().filter(lifeSupportCheck).collect(Collectors.toSet());
         NBTTagCompound tag = new NBTTagCompound();
 
         lifeSupports.forEach(
                 bp -> {
                     Block block = analysis.world.getBlockState(bp).getBlock();
                     NBTTagCompound list = tag.getCompoundTag("life_supports");
-                    String part =
-                            ((VariantBlock<?>) block).getState(analysis.world.getBlockState(bp)).toString();
+                    String part = ((VariantBlock<?>) block).getState(analysis.world.getBlockState(bp)).toString();
                     int num = list.getInteger(part); // default behavior is 0
                     list.setInteger(part, num + 1);
                     this.parts.put(part, num + 1);
@@ -149,8 +146,7 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                 {
                     Block block = analysis.world.getBlockState(bp).getBlock();
                     NBTTagCompound list = tag.getCompoundTag("instruments");
-                    String part =
-                            ((VariantBlock<?>) block).getState(analysis.world.getBlockState(bp)).toString();
+                    String part = ((VariantBlock<?>) block).getState(analysis.world.getBlockState(bp)).toString();
                     int num = list.getInteger(part); // default behavior is 0
                     list.setInteger(part, num + 1);
                     this.instruments.put(part, num + 1);
@@ -178,7 +174,8 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                 if (block.equals(SuSyBlocks.LIFE_SUPPORT)) {
                     continue;
                 }
-                if (analysis.world.getTileEntity(bp) == null || !(analysis.world.getTileEntity(bp) instanceof TileEntityCoverable)) {
+                if (analysis.world.getTileEntity(bp) == null ||
+                        !(analysis.world.getTileEntity(bp) instanceof TileEntityCoverable)) {
                     continue;
                 }
                 TileEntityCoverable te = (TileEntityCoverable) analysis.world.getTileEntity(bp);

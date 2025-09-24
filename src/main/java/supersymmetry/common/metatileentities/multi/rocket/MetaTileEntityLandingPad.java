@@ -1,5 +1,22 @@
 package supersymmetry.common.metatileentities.multi.rocket;
 
+import java.util.ArrayDeque;
+import java.util.List;
+import java.util.Queue;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.items.IItemHandlerModifiable;
+
+import org.jetbrains.annotations.NotNull;
+
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
@@ -13,31 +30,14 @@ import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.pattern.TraceabilityPredicate;
-import gregtech.api.recipes.Recipe;
 import gregtech.api.util.GTTransferUtils;
-import gregtech.api.util.GTUtility;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.common.entities.EntityDrone;
 import supersymmetry.common.entities.EntityDropPod;
-
-import javax.annotation.Nonnull;
-import java.util.ArrayDeque;
-import java.util.List;
-import java.util.Queue;
 
 public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
 
@@ -55,6 +55,7 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
         return new MetaTileEntityLandingPad(metaTileEntityId);
     }
+
     @Override
     protected void formStructure(PatternMatchContext context) {
         super.formStructure(context);
@@ -73,7 +74,8 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
             }
             if (this.incoming.peek().scheduledTotalWorldTime > this.getWorld().getTotalWorldTime()) {
                 this.current = this.incoming.poll();
-                this.lander = new EntityDropPod(this.getWorld(), this.getPos().offset(this.getFrontFacing(), 8).offset(EnumFacing.UP, 255));
+                this.lander = new EntityDropPod(this.getWorld(),
+                        this.getPos().offset(this.getFrontFacing(), 8).offset(EnumFacing.UP, 255));
                 this.getWorld().spawnEntity(this.lander);
             }
         } else if (this.hasLanderArrived()) {
@@ -97,7 +99,8 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
 
     public TraceabilityPredicate getAbilityPredicate() {
         TraceabilityPredicate predicate = super.autoAbilities(true, false);
-        predicate.or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2).setPreviewCount(1));
+        predicate.or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2)
+                .setPreviewCount(1));
         predicate.or(abilities(MultiblockAbility.EXPORT_ITEMS).setPreviewCount(1));
         predicate.or(abilities(MultiblockAbility.EXPORT_FLUIDS).setPreviewCount(1));
         return predicate;
@@ -199,7 +202,8 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
 
     public boolean hasLanderArrived() {
         if (getLander() != null && !getLander().isDead) {
-            for (EntityDropPod entity : this.getWorld().getEntitiesWithinAABB(EntityDropPod.class, this.landingAreaBB)) {
+            for (EntityDropPod entity : this.getWorld().getEntitiesWithinAABB(EntityDropPod.class,
+                    this.landingAreaBB)) {
                 if (entity == getLander()) {
                     return true;
                 }
@@ -214,12 +218,13 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
     }
 
     public void setStructureAABB() {
-        BlockPos spot = new BlockPos.MutableBlockPos(this.getPos()).move(this.getFrontFacing().getOpposite(), 8).move(EnumFacing.UP, 1);
+        BlockPos spot = new BlockPos.MutableBlockPos(this.getPos()).move(this.getFrontFacing().getOpposite(), 8)
+                .move(EnumFacing.UP, 1);
         this.landingAreaBB = new AxisAlignedBB(spot);
     }
 
-
     private static class LandingData {
+
         private List<ItemStack> recipe;
         private int scheduledTotalWorldTime;
     }

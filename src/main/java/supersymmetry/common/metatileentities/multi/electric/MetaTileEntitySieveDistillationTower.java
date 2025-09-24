@@ -1,5 +1,21 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import static gregtech.api.util.RelativeDirection.*;
+import static supersymmetry.api.recipes.SuSyRecipeMaps.SIEVE_DISTILLATION_RECIPES;
+
+import java.util.List;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -15,23 +31,9 @@ import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiFluidHatch;
 import gregtech.core.sound.GTSoundEvents;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.metatileentity.multiblock.MetaTileEntityOrderedDT;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
-
-import java.util.List;
-
-import static gregtech.api.util.RelativeDirection.*;
-import static supersymmetry.api.recipes.SuSyRecipeMaps.SIEVE_DISTILLATION_RECIPES;
 
 public class MetaTileEntitySieveDistillationTower extends MetaTileEntityOrderedDT {
 
@@ -77,7 +79,7 @@ public class MetaTileEntitySieveDistillationTower extends MetaTileEntityOrderedD
                         .or(metaTileEntities(MultiblockAbility.REGISTRY.get(MultiblockAbility.EXPORT_FLUIDS).stream()
                                 .filter(mte -> !(mte instanceof MetaTileEntityMultiFluidHatch))
                                 .toArray(MetaTileEntity[]::new))
-                                .setMaxLayerLimited(1))
+                                        .setMaxLayerLimited(1))
                         .or(autoAbilities(true, false)))
                 .where('#', states(getSieveState()))
                 .where('F', frames(Materials.StainlessSteel))

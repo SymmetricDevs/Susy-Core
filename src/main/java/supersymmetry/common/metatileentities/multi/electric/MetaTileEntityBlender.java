@@ -1,5 +1,23 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import java.util.List;
+import java.util.Optional;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -13,31 +31,15 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.client.utils.TooltipHelper;
 import gregtech.common.blocks.BlockBoilerCasing;
 import gregtech.common.blocks.BlockMetalCasing;
-import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.BlockTurbineCasing.TurbineCasingType;
+import gregtech.common.blocks.MetaBlocks;
 import gregtech.core.sound.GTSoundEvents;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.World;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import supersymmetry.api.metatileentity.multiblock.FluidRenderRecipeMapMultiBlock;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Optional;
-
 public class MetaTileEntityBlender extends FluidRenderRecipeMapMultiBlock {
 
-    private final static String[][] FLUID_PATTERN = {{"FFF", "FFF", "FFF"}};
+    private final static String[][] FLUID_PATTERN = { { "FFF", "FFF", "FFF" } };
     private final static Vec3i PATTERN_OFFSET = new Vec3i(-1, 1, 1);
 
     public MetaTileEntityBlender(ResourceLocation metaTileEntityId) {
@@ -103,7 +105,7 @@ public class MetaTileEntityBlender extends FluidRenderRecipeMapMultiBlock {
 
     @Override
     protected Optional<Fluid> getFluidToRender(Recipe recipe) {
-        //render output fluid instead
+        // render output fluid instead
         return recipe.getAllFluidOutputs().stream().findFirst().map(FluidStack::getFluid);
     }
 

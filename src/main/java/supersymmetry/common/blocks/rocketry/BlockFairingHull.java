@@ -1,18 +1,18 @@
 package supersymmetry.common.blocks.rocketry;
 
-import gregtech.api.block.IStateHarvestLevel;
-import gregtech.api.unification.OreDictUnifier;
-import gregtech.api.unification.material.Materials;
-import gregtech.api.unification.ore.OrePrefix;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.IStringSerializable;
+
+import gregtech.api.block.IStateHarvestLevel;
+import gregtech.api.unification.OreDictUnifier;
+import gregtech.api.unification.ore.OrePrefix;
 import supersymmetry.api.blocks.VariantDirectionalCoverableBlock;
-import supersymmetry.api.blocks.VariantDirectionalRotatableBlock;
 import supersymmetry.common.materials.SusyMaterials;
 
 public class BlockFairingHull extends VariantDirectionalCoverableBlock<BlockFairingHull.FairingType> {
+
     public BlockFairingHull() {
         super(Material.IRON);
         setTranslationKey("rocket_fairing");
@@ -20,11 +20,14 @@ public class BlockFairingHull extends VariantDirectionalCoverableBlock<BlockFair
         setResistance(15f);
         setSoundType(SoundType.METAL);
         setDefaultState(getState(FairingType.ALUMINIUM_FAIRING));
-        validCover = itemStack -> OreDictUnifier.get(OrePrefix.plate, SusyMaterials.Aluminium7075).isItemEqual(itemStack);
+        validCover = itemStack -> OreDictUnifier.get(OrePrefix.plate, SusyMaterials.Aluminium7075)
+                .isItemEqual(itemStack);
     }
 
     public enum FairingType implements IStringSerializable, IStateHarvestLevel {
-        ALUMINIUM_FAIRING("al_7075",3);
+
+        ALUMINIUM_FAIRING("al_7075", 3);
+
         String name;
         int harvest;
 
@@ -32,6 +35,7 @@ public class BlockFairingHull extends VariantDirectionalCoverableBlock<BlockFair
             this.name = name;
             this.harvest = harvest;
         }
+
         @Override
         public String getName() {
             return name;

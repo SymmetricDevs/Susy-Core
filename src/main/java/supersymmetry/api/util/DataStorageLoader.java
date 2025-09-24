@@ -1,32 +1,29 @@
 package supersymmetry.api.util;
 
-import gregtech.api.capability.GregtechDataCodes;
-import gregtech.api.capability.impl.NotifiableItemStackHandler;
-import gregtech.api.metatileentity.MetaTileEntity;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagString;
-import net.minecraft.util.IStringSerializable;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import supersymmetry.api.SusyLog;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagString;
+import net.minecraftforge.items.IItemHandlerModifiable;
+
+import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.capability.GregtechDataCodes;
+import gregtech.api.capability.impl.NotifiableItemStackHandler;
+import gregtech.api.metatileentity.MetaTileEntity;
+
 public class DataStorageLoader extends NotifiableItemStackHandler implements IItemHandlerModifiable {
+
     private ItemStack dataStorage = ItemStack.EMPTY;
     private boolean locked = false;
     private final Predicate<ItemStack> acceptableTypes;
     protected MetaTileEntity mte; // If GTItemStackHandler ever makes its mte's accessible, remove this
 
     public DataStorageLoader(MetaTileEntity mte, Predicate<ItemStack> predicate) {
-        super(mte,1,mte,false);
+        super(mte, 1, mte, false);
         this.mte = mte;
         acceptableTypes = predicate;
     }
@@ -43,9 +40,10 @@ public class DataStorageLoader extends NotifiableItemStackHandler implements IIt
         }
         return dataStorage;
     }
+
     public boolean isEmpty() {
-        return dataStorage == ItemStack.EMPTY || dataStorage.getItem() == Items.AIR; 
-        //gets set to air on the client for no good reason while remaining EMPTY / null on the server because uhh
+        return dataStorage == ItemStack.EMPTY || dataStorage.getItem() == Items.AIR;
+        // gets set to air on the client for no good reason while remaining EMPTY / null on the server because uhh
     }
 
     @Override
@@ -56,7 +54,7 @@ public class DataStorageLoader extends NotifiableItemStackHandler implements IIt
             // if empty slot, take 1
             // if no empty slot, deny
             ItemStack ret = stack.copy();
-            ret.setCount(stack.getCount()-1);
+            ret.setCount(stack.getCount() - 1);
             if (!simulate) {
                 dataStorage = stack.copy();
                 dataStorage.setCount(1);
@@ -115,7 +113,7 @@ public class DataStorageLoader extends NotifiableItemStackHandler implements IIt
         if (!dataStorage.hasTagCompound()) {
             dataStorage.setTagCompound(new NBTTagCompound());
         }
-        dataStorage.getTagCompound().setTag(key,new NBTTagString(value)); // do not worry about warning
+        dataStorage.getTagCompound().setTag(key, new NBTTagString(value)); // do not worry about warning
     }
 
     public void setImageType(int id) {

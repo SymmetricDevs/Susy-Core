@@ -1,5 +1,10 @@
 package supersymmetry.common.item.armor;
 
+import static net.minecraft.inventory.EntityEquipmentSlot.CHEST;
+import static supersymmetry.common.event.DimensionBreathabilityHandler.isInHazardousEnvironment;
+
+import java.util.List;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -7,17 +12,13 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import java.util.List;
-
-import static net.minecraft.inventory.EntityEquipmentSlot.CHEST;
-import static supersymmetry.common.event.DimensionBreathabilityHandler.isInHazardousEnvironment;
-
 public class SpaceSuitTank extends SpaceSuit {
+
     public final static double INFINITE_OXYGEN = -1;
     public final double maxOxygen;
 
-
-    public SpaceSuitTank(int maxDurability, double hoursOfLife, String name, int tier, double relativeAbsorption, double maxOxygen) {
+    public SpaceSuitTank(int maxDurability, double hoursOfLife, String name, int tier, double relativeAbsorption,
+                         double maxOxygen) {
         super(EntityEquipmentSlot.CHEST, maxDurability, hoursOfLife, name, tier, relativeAbsorption);
         this.maxOxygen = maxOxygen;
     }
@@ -65,5 +66,4 @@ public class SpaceSuitTank extends SpaceSuit {
             }
         }
     }
-
 }

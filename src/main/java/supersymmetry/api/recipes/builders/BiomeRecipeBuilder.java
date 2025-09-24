@@ -1,25 +1,26 @@
 package supersymmetry.api.recipes.builders;
 
-import gregtech.api.recipes.Recipe;
-import gregtech.api.recipes.RecipeBuilder;
-import gregtech.api.recipes.RecipeMap;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.recipes.properties.BiomeProperty;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.recipes.Recipe;
+import gregtech.api.recipes.RecipeBuilder;
+import gregtech.api.recipes.RecipeMap;
+import supersymmetry.api.recipes.properties.BiomeProperty;
 
 /**
  * A custom recipeBuilder, for allowing us to put our own recipeProperty {@link BiomeProperty} into a recipe
  */
 public class BiomeRecipeBuilder extends RecipeBuilder<BiomeRecipeBuilder> {
 
-    public BiomeRecipeBuilder() {
-    }
+    public BiomeRecipeBuilder() {}
 
     public BiomeRecipeBuilder(Recipe recipe, RecipeMap<BiomeRecipeBuilder> recipeMap) {
         super(recipe, recipeMap);

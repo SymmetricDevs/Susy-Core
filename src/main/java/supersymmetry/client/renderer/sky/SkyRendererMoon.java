@@ -1,21 +1,22 @@
 package supersymmetry.client.renderer.sky;
 
+import java.util.Random;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import net.minecraftforge.client.IRenderHandler;
-import org.lwjgl.opengl.GL11;
-import supersymmetry.Supersymmetry;
 
-import java.util.Random;
+import org.lwjgl.opengl.GL11;
+
+import supersymmetry.Supersymmetry;
 
 public class SkyRendererMoon extends IRenderHandler {
 
-    public static ResourceLocation EARTH_TEXTURE = new ResourceLocation(Supersymmetry.MODID, "textures/environment/earth_phases.png");
+    public static ResourceLocation EARTH_TEXTURE = new ResourceLocation(Supersymmetry.MODID,
+            "textures/environment/earth_phases.png");
     private static final ResourceLocation SUN_TEXTURES = new ResourceLocation("textures/environment/sun.png");
 
     private final float earthSize = 6;
@@ -23,10 +24,7 @@ public class SkyRendererMoon extends IRenderHandler {
     private int starGLCallList;
     private boolean isInitialized = false;
 
-
-    public SkyRendererMoon() {
-
-    }
+    public SkyRendererMoon() {}
 
     @Override
     public void render(float partialTicks, WorldClient world, Minecraft mc) {
@@ -48,7 +46,8 @@ public class SkyRendererMoon extends IRenderHandler {
         BufferBuilder bb = Tessellator.getInstance().getBuffer();
 
         GlStateManager.enableTexture2D();
-        //GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        // GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE,
+        // GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 
         mc.getTextureManager().bindTexture(EARTH_TEXTURE);
         bb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
@@ -56,10 +55,10 @@ public class SkyRendererMoon extends IRenderHandler {
         int phase = calculateEarthPhase(partialTicks, world);
         int phaseX = phase % 4;
         int phaseY = phase / 4 % 2;
-        float phaseXL = (float)(phaseX) / 4.0F;
-        float phaseYU = (float)(phaseY) / 2.0F;
-        float phaseXR = (float)(phaseX + 1) / 4.0F;
-        float phaseYD = (float)(phaseY + 1) / 2.0F;
+        float phaseXL = (float) (phaseX) / 4.0F;
+        float phaseYU = (float) (phaseY) / 2.0F;
+        float phaseXR = (float) (phaseX + 1) / 4.0F;
+        float phaseYD = (float) (phaseY + 1) / 2.0F;
         bb.pos(-earthSize, distEarth, -earthSize).tex(phaseXR, phaseYU).endVertex();
         bb.pos(earthSize, distEarth, -earthSize).tex(phaseXL, phaseYU).endVertex();
         bb.pos(earthSize, distEarth, earthSize).tex(phaseXL, phaseYD).endVertex();
@@ -72,7 +71,8 @@ public class SkyRendererMoon extends IRenderHandler {
         GlStateManager.rotate(-90F, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(getSunAngle(world), 0.0F, 0.0F, 1.0F);
         GlStateManager.rotate(world.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
-        float sunSize = 25F; // A little smaller than on Earth, but mostly to exaggerate the distance between the sun and Earth in the sky
+        float sunSize = 25F; // A little smaller than on Earth, but mostly to exaggerate the distance between the sun
+                             // and Earth in the sky
         double distSun = distEarth * 2;
 
         mc.getTextureManager().bindTexture(SUN_TEXTURES);
@@ -95,7 +95,6 @@ public class SkyRendererMoon extends IRenderHandler {
         GlStateManager.popMatrix();
         GlStateManager.enableFog();
         GlStateManager.enableTexture2D();
-
     }
 
     private int calculateEarthPhase(float partialTicks, WorldClient world) {
@@ -103,21 +102,18 @@ public class SkyRendererMoon extends IRenderHandler {
         return (int) ((sunRotation / 360.0F * 8.0F) + 4) % 8;
     }
 
-    private void renderStars(BufferBuilder bufferBuilderIn)
-    {
+    private void renderStars(BufferBuilder bufferBuilderIn) {
         Random random = new Random(10843L);
         bufferBuilderIn.begin(7, DefaultVertexFormats.POSITION);
 
-        for (int i = 0; i < 1500; ++i)
-        {
+        for (int i = 0; i < 1500; ++i) {
             double d0 = random.nextFloat() * 2.0F - 1.0F;
             double d1 = random.nextFloat() * 2.0F - 1.0F;
             double d2 = random.nextFloat() * 2.0F - 1.0F;
             double d3 = 0.15F + random.nextFloat() * 0.1F;
             double d4 = d0 * d0 + d1 * d1 + d2 * d2;
 
-            if (d4 < 1.0D && d4 > 0.01D)
-            {
+            if (d4 < 1.0D && d4 > 0.01D) {
                 d4 = 1.0D / Math.sqrt(d4);
                 d0 = d0 * d4;
                 d1 = d1 * d4;
@@ -135,10 +131,9 @@ public class SkyRendererMoon extends IRenderHandler {
                 double d15 = Math.sin(d14);
                 double d16 = Math.cos(d14);
 
-                for (int j = 0; j < 4; ++j)
-                {
-                    double d18 = (double)((j & 2) - 1) * d3;
-                    double d19 = (double)((j + 1 & 2) - 1) * d3;
+                for (int j = 0; j < 4; ++j) {
+                    double d18 = (double) ((j & 2) - 1) * d3;
+                    double d19 = (double) ((j + 1 & 2) - 1) * d3;
                     double d21 = d18 * d16 - d19 * d15;
                     double d22 = d19 * d16 + d18 * d15;
                     double d23 = d21 * d12 + 0.0D * d13;
@@ -152,6 +147,8 @@ public class SkyRendererMoon extends IRenderHandler {
     }
 
     private float getSunAngle(WorldClient world) {
-        return 15 * (float) Math.cos((double) world.getWorldTime() / 708000); // Approximating a 29.5-day cycle of the relative rotations of the earth and moon with respect to the sun
+        return 15 * (float) Math.cos((double) world.getWorldTime() / 708000); // Approximating a 29.5-day cycle of the
+                                                                              // relative rotations of the earth and
+                                                                              // moon with respect to the sun
     }
 }

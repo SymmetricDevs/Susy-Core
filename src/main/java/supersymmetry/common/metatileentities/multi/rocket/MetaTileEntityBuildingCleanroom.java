@@ -1,5 +1,27 @@
 package supersymmetry.common.metatileentities.multi.rocket;
 
+import java.lang.reflect.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
+import net.minecraft.block.BlockDoor;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.World;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.IEnergyContainer;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -17,31 +39,11 @@ import gregtech.common.blocks.BlockCleanroomCasing;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.MetaTileEntities;
 import gregtech.common.metatileentities.multi.electric.MetaTileEntityCleanroom;
-import net.minecraft.block.BlockDoor;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityComponentScanner;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.lang.reflect.*;
-import java.util.Collection;
-import java.util.List;
-
 public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
+
     // Unfortunately, this class has to be cursed.
     protected static Field lDist_f;
     protected static Field rDist_f;
@@ -52,6 +54,7 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
     protected static Field receivers_f;
 
     public MetaTileEntityComponentScanner scanner;
+
     public MetaTileEntityBuildingCleanroom(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
         try {
@@ -133,9 +136,9 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
         try {
             lDist_f.setInt(this, lDist);
             rDist_f.setInt(this, rDist);
-            bDist_f.setInt(this,bDist);
-            fDist_f.setInt(this,fDist);
-            hDist_f.setInt(this,hDist);
+            bDist_f.setInt(this, bDist);
+            fDist_f.setInt(this, fDist);
+            hDist_f.setInt(this, hDist);
         } catch (Exception e) {
             invalidateStructure();
             return false;
@@ -160,16 +163,16 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
             this.updateStructureDimensions();
         }
         try {
-            if (lDist_f.getInt(this) < MIN_RADIUS) lDist_f.setInt(this,MIN_RADIUS);
-            if (rDist_f.getInt(this) < MIN_RADIUS) rDist_f.setInt(this,MIN_RADIUS);
-            if (bDist_f.getInt(this) < MIN_RADIUS) bDist_f.setInt(this,MIN_RADIUS);
-            if (fDist_f.getInt(this) < MIN_RADIUS) fDist_f.setInt(this,MIN_RADIUS);
-            if (hDist_f.getInt(this) < MIN_RADIUS) hDist_f.setInt(this,MIN_RADIUS);
+            if (lDist_f.getInt(this) < MIN_RADIUS) lDist_f.setInt(this, MIN_RADIUS);
+            if (rDist_f.getInt(this) < MIN_RADIUS) rDist_f.setInt(this, MIN_RADIUS);
+            if (bDist_f.getInt(this) < MIN_RADIUS) bDist_f.setInt(this, MIN_RADIUS);
+            if (fDist_f.getInt(this) < MIN_RADIUS) fDist_f.setInt(this, MIN_RADIUS);
+            if (hDist_f.getInt(this) < MIN_RADIUS) hDist_f.setInt(this, MIN_RADIUS);
 
             if (this.frontFacing == EnumFacing.EAST || this.frontFacing == EnumFacing.WEST) {
                 int tmp = lDist_f.getInt(this);
                 lDist_f.setInt(this, rDist_f.getInt(this));
-                rDist_f.setInt(this,tmp);
+                rDist_f.setInt(this, tmp);
             }
 
             StringBuilder borderBuilder = new StringBuilder();
@@ -245,7 +248,7 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
                     .aisle(wall)
                     .aisle(slice).setRepeatable(bDist_f.getInt(this) - 1)
                     .aisle(center)
-                    .aisle(slice).setRepeatable(fDist_f.getInt(this)-1)
+                    .aisle(slice).setRepeatable(fDist_f.getInt(this) - 1)
                     .aisle(wall)
                     .where('S', this.selfPredicate())
                     .where('B', states(this.getCasingState()).or(basePredicate))
@@ -260,10 +263,12 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
             return null;
         }
     }
+
     @Override
     public int getEnergyTier() {
         try {
-            return this.energy_cont_f.get(this) == null ? 1 : Math.max(4, GTUtility.getFloorTierByVoltage(((IEnergyContainer)energy_cont_f.get(this)).getInputVoltage()));
+            return this.energy_cont_f.get(this) == null ? 1 : Math.max(4,
+                    GTUtility.getFloorTierByVoltage(((IEnergyContainer) energy_cont_f.get(this)).getInputVoltage()));
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
@@ -276,11 +281,11 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
             if (tile instanceof MetaTileEntityHolder) {
                 MetaTileEntity metaTileEntity = ((MetaTileEntityHolder) tile).getMetaTileEntity();
                 if (metaTileEntity instanceof MetaTileEntityComponentScanner) {
-                    ICleanroomReceiver cleanroomReceiver = (MetaTileEntityComponentScanner)metaTileEntity;
+                    ICleanroomReceiver cleanroomReceiver = (MetaTileEntityComponentScanner) metaTileEntity;
                     if (cleanroomReceiver.getCleanroom() != this) {
                         cleanroomReceiver.setCleanroom(this);
                         try {
-                            ((Collection<ICleanroomReceiver>)receivers_f.get(this)).add(cleanroomReceiver);
+                            ((Collection<ICleanroomReceiver>) receivers_f.get(this)).add(cleanroomReceiver);
                         } catch (Exception e) {
                             return false;
                         }
@@ -292,28 +297,36 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
             return false;
         })));
     }
+
     public List<MultiblockShapeInfo> getMatchingShapes() {
         ArrayList<MultiblockShapeInfo> shapeInfo = new ArrayList();
         MultiblockShapeInfo.Builder builder = MultiblockShapeInfo.builder()
-                .aisle(new String[]{"XXXXX", "XIHLX", "XXDXX", "XXXXX", "XXXXX"})
-                .aisle(new String[]{"XXXXX", "X   X", "G   G", "X   X", "XFFFX"})
-                .aisle(new String[]{"XXXXX", "X   X", "G   G", "X   X", "XFSFX"})
-                .aisle(new String[]{"XXXXX", "X   X", "G   G", "X   X", "XFFFX"})
-                .aisle(new String[]{"XMXEX", "XXOCX", "XXRXX", "XXXXX", "XXXXX"})
+                .aisle(new String[] { "XXXXX", "XIHLX", "XXDXX", "XXXXX", "XXXXX" })
+                .aisle(new String[] { "XXXXX", "X   X", "G   G", "X   X", "XFFFX" })
+                .aisle(new String[] { "XXXXX", "X   X", "G   G", "X   X", "XFSFX" })
+                .aisle(new String[] { "XXXXX", "X   X", "G   G", "X   X", "XFFFX" })
+                .aisle(new String[] { "XMXEX", "XXOCX", "XXRXX", "XXXXX", "XXXXX" })
 
                 .where('X', MetaBlocks.CLEANROOM_CASING.getState(BlockCleanroomCasing.CasingType.PLASCRETE))
-                .where('G', MetaBlocks.TRANSPARENT_CASING.getState(gregtech.common.blocks.BlockGlassCasing.CasingType.CLEANROOM_GLASS))
-                .where('S', SuSyMetaTileEntities.BUILDING_CLEANROOM, EnumFacing.SOUTH).where(' ', Blocks.AIR.getDefaultState())
+                .where('G',
+                        MetaBlocks.TRANSPARENT_CASING
+                                .getState(gregtech.common.blocks.BlockGlassCasing.CasingType.CLEANROOM_GLASS))
+                .where('S', SuSyMetaTileEntities.BUILDING_CLEANROOM, EnumFacing.SOUTH)
+                .where(' ', Blocks.AIR.getDefaultState())
                 .where('E', MetaTileEntities.ENERGY_INPUT_HATCH[1], EnumFacing.SOUTH)
                 .where('I', MetaTileEntities.PASSTHROUGH_HATCH_ITEM, EnumFacing.NORTH)
                 .where('L', MetaTileEntities.PASSTHROUGH_HATCH_FLUID, EnumFacing.NORTH)
-                .where('C', SuSyMetaTileEntities.COMPONENT_SCANNER,EnumFacing.NORTH)
+                .where('C', SuSyMetaTileEntities.COMPONENT_SCANNER, EnumFacing.NORTH)
                 .where('H', MetaTileEntities.HULL[3], EnumFacing.NORTH)
                 .where('D', MetaTileEntities.DIODES[3], EnumFacing.NORTH).where('M', () -> {
-                    return ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH : MetaBlocks.CLEANROOM_CASING.getState(BlockCleanroomCasing.CasingType.PLASCRETE);
+                    return ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH :
+                            MetaBlocks.CLEANROOM_CASING.getState(BlockCleanroomCasing.CasingType.PLASCRETE);
                 }, EnumFacing.SOUTH)
-                .where('O', Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.NORTH).withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.LOWER))
-                .where('R', Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.NORTH).withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER));
+                .where('O',
+                        Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.NORTH)
+                                .withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.LOWER))
+                .where('R', Blocks.IRON_DOOR.getDefaultState().withProperty(BlockDoor.FACING, EnumFacing.NORTH)
+                        .withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER));
         Arrays.stream(BlockCleanroomCasing.CasingType.values()).filter((casingType) -> {
             return !casingType.equals(BlockCleanroomCasing.CasingType.PLASCRETE);
         }).forEach((casingType) -> {
@@ -321,13 +334,14 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
         });
         return shapeInfo;
     }
+
     public AxisAlignedBB getInteriorBB() {
         updateStructureDimensions();
         EnumFacing front = this.getFrontFacing();
         EnumFacing back = front.getOpposite();
         EnumFacing left = front.rotateYCCW();
         EnumFacing right = left.getOpposite();
-        Vec3i down = new Vec3i(0,-1,0);
+        Vec3i down = new Vec3i(0, -1, 0);
         try {
             BlockPos frontleftdown = getPos().add(multiply(front.getDirectionVec(), fDist_f.getInt(this) - 1))
                     .add(multiply(left.getDirectionVec(), lDist_f.getInt(this) - 1))
@@ -335,10 +349,10 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
             BlockPos backrightup = getPos().add(multiply(back.getDirectionVec(), bDist_f.getInt(this) - 1))
                     .add(multiply(right.getDirectionVec(), rDist_f.getInt(this) - 1));
             AxisAlignedBB nearRet = new AxisAlignedBB(frontleftdown, backrightup);
-            return new AxisAlignedBB(nearRet.minX,nearRet.minY,nearRet.minZ,
-                    nearRet.maxX+1,nearRet.maxY,nearRet.maxZ+1); // here to be consistent with block analysis
+            return new AxisAlignedBB(nearRet.minX, nearRet.minY, nearRet.minZ,
+                    nearRet.maxX + 1, nearRet.maxY, nearRet.maxZ + 1); // here to be consistent with block analysis
         } catch (Exception e) {
-             return null;
+            return null;
         }
     }
 
@@ -351,7 +365,7 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
     }
 
     private Vec3i multiply(Vec3i bp, int val) {
-        return new Vec3i(bp.getX()*val, bp.getY()*val, bp.getZ()*val);
+        return new Vec3i(bp.getX() * val, bp.getY() * val, bp.getZ() * val);
     }
 
     public IEnergyContainer getEnergyContainer() {
@@ -361,6 +375,7 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
             return null;
         }
     }
+
     @Override
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
         tooltip.add(I18n.format("susy.machine.building_cleanroom.tooltip.1"));
