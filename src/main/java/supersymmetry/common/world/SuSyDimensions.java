@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.init.Biomes;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeManager.BiomeEntry;

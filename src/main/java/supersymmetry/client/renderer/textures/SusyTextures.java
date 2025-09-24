@@ -207,6 +207,8 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer STOCK_FLUID_EXCHANGER = new OrientedOverlayRenderer(
             "rail_interfaces/fluid_exchanger");
     public static final OrientedOverlayRenderer STOCK_ITEM_EXCHANGER = new OrientedOverlayRenderer(
+
+
             "rail_interfaces/item_exchanger");
 
     public static final SimpleOrientedCubeRenderer STOCK_DETECTOR_NEITHER = new SimpleOrientedCubeRenderer(
@@ -225,7 +227,6 @@ public class SusyTextures {
 
     public static final OrientedOverlayRenderer STOCK_CONTROLLER = new OrientedOverlayRenderer(
             "rail_interfaces/stock_controller");
-
     public static final SimpleCubeRenderer[] METAL_SHEETS = new SimpleCubeRenderer[32];
 
     static {

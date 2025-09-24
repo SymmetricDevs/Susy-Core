@@ -8,8 +8,11 @@ import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+
 import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
+
+import gregtech.GTInternalTags;
 
 import gregtech.GTInternalTags;
 import supersymmetry.api.capability.SuSyCapabilities;

@@ -52,6 +52,15 @@ import gregtech.api.unification.stack.UnificationEntry;
 import gregtech.api.util.Mods;
 import gregtech.api.util.input.KeyBind;
 import software.bernie.geckolib3.GeckoLib;
+
+import dev.tianmi.sussypatches.common.SusConfig;
+import gregtech.api.GTValues;
+import gregtech.api.items.metaitem.MetaOreDictItem;
+import gregtech.api.items.toolitem.IGTTool;
+import gregtech.api.unification.OreDictUnifier;
+import gregtech.api.unification.stack.UnificationEntry;
+import gregtech.api.util.Mods;
+import gregtech.api.util.input.KeyBind;
 import supersymmetry.SuSyValues;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;

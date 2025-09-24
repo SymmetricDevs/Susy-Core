@@ -35,6 +35,7 @@ import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.MultiblockShapeInfo;
+import gregtech.api.recipes.Recipe;
 import gregtech.api.util.TextComponentUtil;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
@@ -42,8 +43,11 @@ import gregtech.common.ConfigHolder;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.MetaTileEntities;
+import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.ints.IntLists;
 import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.api.recipes.properties.DimensionProperty;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockSerpentine;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -352,6 +356,15 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.RADIATOR_OVERLAY;
+    }
+
+    @Override
+    public boolean checkRecipe(@NotNull Recipe recipe, boolean consumeIfSuccess) {
+        IntList dimensionIDs = recipe.getProperty(DimensionProperty.getInstance(), IntLists.EMPTY_LIST);
+        if (dimensionIDs.isEmpty() || dimensionIDs.contains(this.getWorld().provider.getDimension())) {
+            return super.checkRecipe(recipe, consumeIfSuccess);
+        }
+        return false;
     }
 
     private class ParallelableNoEnergyMultiblockRecipeLogic extends NoEnergyMultiblockRecipeLogic {

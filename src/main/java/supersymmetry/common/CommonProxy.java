@@ -7,6 +7,12 @@ import java.io.File;
 import java.util.Objects;
 import java.util.function.Function;
 
+import static supersymmetry.common.blocks.SuSyMetaBlocks.SHEETED_FRAMES;
+
+import java.io.File;
+import java.util.Objects;
+import java.util.function.Function;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.monster.EntityZombie;
@@ -38,6 +44,17 @@ import gregtech.client.utils.TooltipHelper;
 import gregtech.common.blocks.BlockWireCoil;
 import gregtech.common.items.MetaItems;
 import gregtech.modules.ModuleManager;
+
+import gregtech.api.block.VariantItemBlock;
+import gregtech.api.modules.ModuleContainerRegistryEvent;
+import gregtech.api.unification.material.Materials;
+import gregtech.api.unification.material.event.MaterialEvent;
+import gregtech.api.unification.material.event.PostMaterialEvent;
+import gregtech.client.utils.TooltipHelper;
+import gregtech.common.blocks.BlockWireCoil;
+import gregtech.common.items.MetaItems;
+import gregtech.modules.ModuleManager;
+import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.blocks.VariantItemBlockFalling;
@@ -190,14 +207,16 @@ public class CommonProxy {
 
     private static void handleCoilTooltips(ItemTooltipEvent event) {
         Block block = Block.getBlockFromItem(event.getItemStack().getItem());
-        if (block instanceof BlockWireCoil wireCoilBlock && TooltipHelper.isShiftDown()) {
+        if (block instanceof BlockWireCoil && TooltipHelper.isShiftDown()) {
             ItemStack itemStack = event.getItemStack();
             Item item = itemStack.getItem();
+            BlockWireCoil wireCoilBlock = (BlockWireCoil) block;
             VariantItemBlock itemBlock = (VariantItemBlock) item;
-            BlockWireCoil.CoilType coilType = wireCoilBlock.getState(itemBlock.getBlockState(itemStack));
-            event.getToolTip().add(I18n.format("tile.wire_coil.tooltip_evaporation"));
-            event.getToolTip().add(
-                    I18n.format("tile.wire_coil.tooltip_energy_evaporating", coilType.getCoilTemperature() / 1000));
+            BlockWireCoil.CoilType coilType = (BlockWireCoil.CoilType) wireCoilBlock
+                    .getState(itemBlock.getBlockState(itemStack));
+            event.getToolTip().add(I18n.format("tile.wire_coil.tooltip_evaporation", new Object[0]));
+            event.getToolTip().add(I18n.format("tile.wire_coil.tooltip_energy_evaporating",
+                    new Object[] { coilType.getCoilTemperature() / 1000 }));
         }
     }
 

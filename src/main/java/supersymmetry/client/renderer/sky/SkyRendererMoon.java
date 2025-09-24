@@ -148,7 +148,6 @@ public class SkyRendererMoon extends IRenderHandler {
 
     private float getSunAngle(WorldClient world) {
         return 15 * (float) Math.cos((double) world.getWorldTime() / 708000); // Approximating a 29.5-day cycle of the
-                                                                              // relative rotations of the earth and
-                                                                              // moon with respect to the sun
+        // moon with respect to the sun
     }
 }

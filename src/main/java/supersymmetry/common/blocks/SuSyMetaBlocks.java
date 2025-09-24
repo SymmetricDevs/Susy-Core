@@ -9,6 +9,14 @@ import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static gregtech.api.unification.material.info.MaterialFlags.GENERATE_FRAME;
+
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.function.BiConsumer;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -32,6 +40,7 @@ import gregtech.api.unification.stack.ItemMaterialInfo;
 import gregtech.api.unification.stack.MaterialStack;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.tile.TileEntityCoverable;
+
 
 public class SuSyMetaBlocks {
 

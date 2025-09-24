@@ -418,7 +418,7 @@ public class SuSyRecipeMaps {
                     .setSound(GTSoundEvents.ASSEMBLER);
 
     public static final RecipeMap<SimpleRecipeBuilder> ROCKET_ASSEMBLER = new RecipeMap<>("rocket_assembler", 25, 2, 5,
-            0, new SimpleRecipeBuilder(), false)
+                    0, new SimpleRecipeBuilder(), false)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressWidget.MoveType.HORIZONTAL)
                     .setSound(GTSoundEvents.ASSEMBLER);
 
@@ -490,7 +490,6 @@ public class SuSyRecipeMaps {
             new SimpleRecipeBuilder(), false)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_RECYCLER, ProgressWidget.MoveType.HORIZONTAL)
                     .setSlotOverlay(true, false, GuiTextures.BOXED_OVERLAY);
-
     static {
         GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()
                 .inputs(recipeBuilder.getInputs().toArray(new GTRecipeInput[0]))

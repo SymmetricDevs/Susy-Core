@@ -10,6 +10,7 @@ import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
 import supersymmetry.api.unification.material.info.SuSyMaterialIconType;
 import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 
+
 public class SusyOrePrefix {
 
     public static final OrePrefix oreGabbro = new OrePrefix("oreGabbro", -1L, null, MaterialIconType.ore,

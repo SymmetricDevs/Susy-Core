@@ -6,11 +6,14 @@ import static supersymmetry.common.event.DimensionBreathabilityHandler.isInHazar
 import java.util.List;
 
 import net.minecraft.block.material.Material;
+import java.util.List;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
 
 public class AdvancedBreathingTank extends AdvancedBreathingApparatus {
 
@@ -18,7 +21,8 @@ public class AdvancedBreathingTank extends AdvancedBreathingApparatus {
     public final double maxOxygen;
 
     public AdvancedBreathingTank(int maxDurability, double hoursOfLife, String name, int tier,
-                                 double relativeAbsorption, double maxOxygen) {
+                                 double relativeAbsorption,
+                                 double maxOxygen) {
         super(EntityEquipmentSlot.CHEST, maxDurability, hoursOfLife, name, tier, relativeAbsorption);
         this.maxOxygen = maxOxygen;
     }

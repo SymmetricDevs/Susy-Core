@@ -8,15 +8,9 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Loader;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,6 +26,11 @@ import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.blocks.VariantAxialRotatableBlock;
 import supersymmetry.common.blocks.*;
+
+import supersymmetry.common.blocks.BlockConveyor;
+import supersymmetry.common.blocks.BlockCoolingCoil;
+import supersymmetry.common.blocks.BlockSinteringBrick;
+import supersymmetry.common.blocks.SuSyBlocks;
 
 /**
  * Class containing global predicates

@@ -6,6 +6,14 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static gregtech.common.blocks.MetaBlocks.ASPHALT;
+
+import java.util.Comparator;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -22,6 +30,7 @@ import gregtech.api.block.VariantBlock;
 import gregtech.api.util.BlockUtility;
 import supersymmetry.common.blocks.rocketry.*;
 import supersymmetry.common.tileentities.SuSyTileEntities;
+import gregtech.api.util.BlockUtility;
 
 public class SuSyBlocks {
 

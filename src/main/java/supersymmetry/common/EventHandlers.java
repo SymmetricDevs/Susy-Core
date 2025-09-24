@@ -31,6 +31,12 @@ import gregtech.api.util.GTTeleporter;
 import gregtech.api.util.TeleportHandler;
 import gregtech.common.items.MetaItems;
 import gregtechfoodoption.item.GTFOMetaItem;
+
+import gregtech.api.GregTechAPI;
+import gregtech.api.util.GTTeleporter;
+import gregtech.api.util.TeleportHandler;
+import gregtech.common.items.MetaItems;
+import gregtechfoodoption.item.GTFOMetaItem;
 import supersymmetry.Supersymmetry;
 import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.event.DimensionBreathabilityHandler;

@@ -6,6 +6,12 @@ import net.minecraft.util.ResourceLocation;
 
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
+
+import net.minecraft.util.ResourceLocation;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
