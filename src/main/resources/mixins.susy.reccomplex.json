@@ -8,7 +8,6 @@
     "RCAccessorEntityMixin",
     "RCPosTransformerMixin",
     "SpawnCommandLogicMixin",
-    "StructureSpawnContextMixin",
-    "GenericStructureMixin"
+    "StructureSpawnContextMixin"
   ]
 }
