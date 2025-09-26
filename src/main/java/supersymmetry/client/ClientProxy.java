@@ -1,13 +1,14 @@
 package supersymmetry.client;
 
-import dev.tianmi.sussypatches.common.SusConfig;
-import gregtech.api.GTValues;
-import gregtech.api.items.metaitem.MetaOreDictItem;
-import gregtech.api.items.toolitem.IGTTool;
-import gregtech.api.unification.OreDictUnifier;
-import gregtech.api.unification.stack.UnificationEntry;
-import gregtech.api.util.Mods;
-import gregtech.api.util.input.KeyBind;
+import static org.lwjgl.opengl.GL11.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+
+import javax.annotation.Nonnull;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -38,7 +39,17 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
+
+import dev.tianmi.sussypatches.common.SusConfig;
+import gregtech.api.GTValues;
+import gregtech.api.items.metaitem.MetaOreDictItem;
+import gregtech.api.items.toolitem.IGTTool;
+import gregtech.api.unification.OreDictUnifier;
+import gregtech.api.unification.stack.UnificationEntry;
+import gregtech.api.util.Mods;
+import gregtech.api.util.input.KeyBind;
 import supersymmetry.SuSyValues;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
@@ -54,17 +65,10 @@ import supersymmetry.common.item.behavior.PipeNetWalkerBehavior;
 import supersymmetry.loaders.SuSyFluidTooltipLoader;
 import supersymmetry.loaders.SuSyIRLoader;
 
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-
-import static org.lwjgl.opengl.GL11.*;
-
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID, value = Side.CLIENT)
 public class ClientProxy extends CommonProxy {
+
     public static int titleRenderTimer = -1;
     private static final int TITLE_RENDER_LENGTH = 150;
 
@@ -85,25 +89,24 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void postLoad() {
         super.postLoad();
-        if (Loader.isModLoaded("sussypatches")
-                && Mods.CTM.isModLoaded()
-                && SusConfig.FEAT.multiCTM) {
+        if (Loader.isModLoaded("sussypatches") && Mods.CTM.isModLoaded() && SusConfig.FEAT.multiCTM) {
             SuSyConnectedTextures.init();
         }
     }
 
     @SubscribeEvent
     public static void addMaterialFormulaHandler(@Nonnull ItemTooltipEvent event) {
-        //ensure itemstack is a sheetedframe
+        // ensure itemstack is a sheetedframe
         ItemStack itemStack = event.getItemStack();
         if (!(itemStack.getItem() instanceof SheetedFrameItemBlock)) return;
 
         UnificationEntry unificationEntry = OreDictUnifier.getUnificationEntry(itemStack);
 
-        //ensure chemical composition does exist to be added
+        // ensure chemical composition does exist to be added
         if (unificationEntry != null && unificationEntry.material != null) {
-            if (unificationEntry.material.getChemicalFormula() != null && !unificationEntry.material.getChemicalFormula().isEmpty())
-                //pretty YELLOW is being auto-converted to a string
+            if (unificationEntry.material.getChemicalFormula() != null &&
+                    !unificationEntry.material.getChemicalFormula().isEmpty())
+                // pretty YELLOW is being auto-converted to a string
                 event.getToolTip().add(TextFormatting.YELLOW + unificationEntry.material.getChemicalFormula());
         }
     }
@@ -113,8 +116,8 @@ public class ClientProxy extends CommonProxy {
         ItemStack stack = event.getItemStack();
         List<String> tooltips = event.getToolTip();
 
-        if (stack.getItem() instanceof IGTTool tool
-                && tool.getToolStats().getBehaviors().contains(PipeNetWalkerBehavior.INSTANCE)) {
+        if (stack.getItem() instanceof IGTTool tool &&
+                tool.getToolStats().getBehaviors().contains(PipeNetWalkerBehavior.INSTANCE)) {
             tooltips.add(I18n.format("item.susy.tool.tooltip.pipeliner",
                     GameSettings.getKeyDisplayString(KeyBind.TOOL_AOE_CHANGE.toMinecraft().getKeyCode())));
         }
@@ -128,28 +131,37 @@ public class ClientProxy extends CommonProxy {
 
         if (itemStack.getItem() instanceof MetaOreDictItem oreDictItem) { // Test for OreDictItems
             Optional<String> oreDictName = OreDictUnifier.getOreDictionaryNames(itemStack).stream().findFirst();
-            if (oreDictName.isPresent() && oreDictItem.OREDICT_TO_FORMULA.containsKey(oreDictName.get()) && !oreDictItem.OREDICT_TO_FORMULA.get(oreDictName.get()).isEmpty()) {
+            if (oreDictName.isPresent() && oreDictItem.OREDICT_TO_FORMULA.containsKey(oreDictName.get()) &&
+                    !oreDictItem.OREDICT_TO_FORMULA.get(oreDictName.get()).isEmpty()) {
                 tooltips.add(TextFormatting.YELLOW + oreDictItem.OREDICT_TO_FORMULA.get(oreDictName.get()));
             }
         }
 
-        for (CatalystGroup group :
-                CatalystGroup.getCatalystGroups()) {
+        for (CatalystGroup group : CatalystGroup.getCatalystGroups()) {
             ItemStack is = itemStack.copy();
             is.setCount(1);
             CatalystInfo catalystInfo = group.getCatalystInfos().get(is);
             if (catalystInfo != null) {
-                tooltips.add(TextFormatting.UNDERLINE + (TextFormatting.BLUE + I18n.format("susy.catalyst_group." + group.getName() + ".name")));
-                if(catalystInfo.getTier() == CatalystInfo.NO_TIER){
-                    tooltips.add(TextFormatting.RED + "Disclaimer: Catalyst bonuses for non-tiered catalysts have not yet been implemented.");
-                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.yield", catalystInfo.getYieldEfficiency()));
-                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.energy", catalystInfo.getEnergyEfficiency()));
-                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.speed", catalystInfo.getSpeedEfficiency()));
+                tooltips.add(TextFormatting.UNDERLINE +
+                        (TextFormatting.BLUE + I18n.format("susy.catalyst_group." + group.getName() + ".name")));
+                if (catalystInfo.getTier() == CatalystInfo.NO_TIER) {
+                    tooltips.add(TextFormatting.RED +
+                            "Disclaimer: Catalyst bonuses for non-tiered catalysts have not yet been implemented.");
+                    tooltips.add(
+                            I18n.format("susy.universal.catalysts.tooltip.yield", catalystInfo.getYieldEfficiency()));
+                    tooltips.add(
+                            I18n.format("susy.universal.catalysts.tooltip.energy", catalystInfo.getEnergyEfficiency()));
+                    tooltips.add(
+                            I18n.format("susy.universal.catalysts.tooltip.speed", catalystInfo.getSpeedEfficiency()));
                 } else {
-                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.tier", GTValues.V[catalystInfo.getTier()], GTValues.VNF[catalystInfo.getTier()]));
-                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.yield.tiered", catalystInfo.getYieldEfficiency()));
-                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.energy.tiered", catalystInfo.getEnergyEfficiency()));
-                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.speed.tiered", catalystInfo.getSpeedEfficiency()));
+                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.tier",
+                            GTValues.V[catalystInfo.getTier()], GTValues.VNF[catalystInfo.getTier()]));
+                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.yield.tiered",
+                            catalystInfo.getYieldEfficiency()));
+                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.energy.tiered",
+                            catalystInfo.getEnergyEfficiency()));
+                    tooltips.add(I18n.format("susy.universal.catalysts.tooltip.speed.tiered",
+                            catalystInfo.getSpeedEfficiency()));
                 }
             }
         }
@@ -167,8 +179,10 @@ public class ClientProxy extends CommonProxy {
     public static void bakeModel(ModelBakeEvent event) {
         IRegistry<ModelResourceLocation, IBakedModel> registry = event.getModelRegistry();
         try {
-            IModel model = OBJLoader.INSTANCE.loadModel(new ResourceLocation(Supersymmetry.MODID, "models/entity/soyuz.obj"));
-            registry.putObject(SuSyValues.modelRocket, model.bake(model.getDefaultState(), DefaultVertexFormats.ITEM, ModelLoader.defaultTextureGetter()));
+            IModel model = OBJLoader.INSTANCE
+                    .loadModel(new ResourceLocation(Supersymmetry.MODID, "models/entity/soyuz.obj"));
+            registry.putObject(SuSyValues.modelRocket,
+                    model.bake(model.getDefaultState(), DefaultVertexFormats.ITEM, ModelLoader.defaultTextureGetter()));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -181,7 +195,6 @@ public class ClientProxy extends CommonProxy {
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "armor/jet_wingpack"));
         SuSyMetaItems.armorItem.registerIngameModels(map);
     }
-
 
     @SuppressWarnings("DataFlowIssue")
     @SubscribeEvent
@@ -217,7 +230,8 @@ public class ClientProxy extends CommonProxy {
         if (event.getType() == RenderGameOverlayEvent.ElementType.SUBTITLES && titleRenderTimer >= 0) {
             // Render a black foreground. The alpha should stay at 255 until the first title, at which it starts fading.
             // This is taken from Gui.java, with some cleanup.
-            double left = 0, top = 0, right = event.getResolution().getScaledWidth(), bottom = event.getResolution().getScaledHeight();
+            double left = 0, top = 0, right = event.getResolution().getScaledWidth(),
+                    bottom = event.getResolution().getScaledHeight();
             double zLevel = 0; // Render above the hotbar items
 
             int topColor = 255;
@@ -235,7 +249,9 @@ public class ClientProxy extends CommonProxy {
             GlStateManager.disableTexture2D();
             GlStateManager.enableBlend();
             GlStateManager.disableAlpha();
-            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+                    GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
+                    GlStateManager.DestFactor.ZERO);
             GlStateManager.shadeModel(GL_SMOOTH);
             GlStateManager.disableDepth();
             Tessellator tessellator = Tessellator.getInstance();

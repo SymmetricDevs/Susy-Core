@@ -1,7 +1,9 @@
 package supersymmetry.api.blocks;
 
-import gregtech.api.block.VariantBlock;
-import gregtech.common.items.tool.rotation.CustomBlockRotations;
+import static gregtech.common.items.tool.rotation.CustomBlockRotations.BLOCK_HORIZONTAL_BEHAVIOR;
+
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
@@ -15,26 +17,31 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-
-import static gregtech.common.items.tool.rotation.CustomBlockRotations.BLOCK_HORIZONTAL_BEHAVIOR;
+import gregtech.api.block.VariantBlock;
+import gregtech.common.items.tool.rotation.CustomBlockRotations;
 
 public class VariantHorizontalRotatableBlock<T extends Enum<T> & IStringSerializable> extends VariantBlock<T> {
+
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 
     public VariantHorizontalRotatableBlock(Material materialIn) {
         super(materialIn);
-        this.setDefaultState(blockState.getBaseState().withProperty(VARIANT, VALUES[0]).withProperty(FACING, EnumFacing.NORTH));
+        this.setDefaultState(
+                blockState.getBaseState().withProperty(VARIANT, VALUES[0]).withProperty(FACING, EnumFacing.NORTH));
         CustomBlockRotations.registerCustomRotation(this, BLOCK_HORIZONTAL_BEHAVIOR);
     }
 
     @Nonnull
     @Override
     @SuppressWarnings("deprecation")
-    public IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull EnumFacing facing, float hitX, float hitY, float hitZ, int meta, @NotNull EntityLivingBase placer) {
-        return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING, placer.getHorizontalFacing().getOpposite());
+    public IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull EnumFacing facing,
+                                            float hitX, float hitY, float hitZ, int meta,
+                                            @NotNull EntityLivingBase placer) {
+        return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING,
+                placer.getHorizontalFacing().getOpposite());
     }
 
     @Override
@@ -45,7 +52,6 @@ public class VariantHorizontalRotatableBlock<T extends Enum<T> & IStringSerializ
     public IBlockState getState(T variant, EnumFacing facing) {
         return getDefaultState().withProperty(VARIANT, variant).withProperty(FACING, facing);
     }
-
 
     @Nonnull
     @Override
@@ -80,7 +86,8 @@ public class VariantHorizontalRotatableBlock<T extends Enum<T> & IStringSerializ
 
     @Nonnull
     @Override
-    public ItemStack getPickBlock(IBlockState state, @NotNull RayTraceResult target, @NotNull World world, @NotNull BlockPos pos, @NotNull EntityPlayer player) {
+    public ItemStack getPickBlock(IBlockState state, @NotNull RayTraceResult target, @NotNull World world,
+                                  @NotNull BlockPos pos, @NotNull EntityPlayer player) {
         return getItemVariant(state.getValue(VARIANT), 1);
     }
 }

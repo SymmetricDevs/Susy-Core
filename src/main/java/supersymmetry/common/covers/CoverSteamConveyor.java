@@ -1,5 +1,12 @@
 package supersymmetry.common.covers;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.MathHelper;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.cover.CoverDefinition;
 import gregtech.api.cover.CoverableView;
 import gregtech.api.gui.GuiTextures;
@@ -11,11 +18,6 @@ import gregtech.common.covers.CoverConveyor;
 import gregtech.common.covers.DistributionMode;
 import gregtech.common.covers.ManualImportExportMode;
 import gregtech.common.pipelike.itempipe.tile.TileEntityItemPipe;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.MathHelper;
-import org.jetbrains.annotations.NotNull;
 
 public class CoverSteamConveyor extends CoverConveyor {
 
@@ -55,7 +57,7 @@ public class CoverSteamConveyor extends CoverConveyor {
                 ConveyorMode.class, this::getConveyorMode, this::setConveyorMode));
         primaryGroup.addWidget(new CycleButtonWidget(7, 166, 116, 20,
                 ManualImportExportMode.class, this::getManualImportExportMode, this::setManualImportExportMode)
-                .setTooltipHoverString("cover.universal.manual_import_export.mode.description"));
+                        .setTooltipHoverString("cover.universal.manual_import_export.mode.description"));
 
         if (getTileEntityHere() instanceof TileEntityItemPipe ||
                 getNeighbor(getAttachedSide()) instanceof TileEntityItemPipe) {
@@ -63,7 +65,7 @@ public class CoverSteamConveyor extends CoverConveyor {
                     GuiTextures.DISTRIBUTION_MODE, 3,
                     () -> distributionMode.ordinal(),
                     val -> setDistributionMode(DistributionMode.values()[val]))
-                    .setTooltipHoverString(val -> DistributionMode.values()[val].getName());
+                            .setTooltipHoverString(val -> DistributionMode.values()[val].getName());
             primaryGroup.addWidget(distributionModeButton);
         }
 

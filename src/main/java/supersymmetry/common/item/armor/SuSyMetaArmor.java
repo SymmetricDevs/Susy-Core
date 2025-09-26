@@ -1,10 +1,10 @@
 package supersymmetry.common.item.armor;
 
+import static net.minecraft.inventory.EntityEquipmentSlot.*;
+import static supersymmetry.common.item.SuSyMetaItems.*;
+
 import supersymmetry.common.item.SuSyArmorItem;
 import supersymmetry.common.item.SuSyMetaItems;
-
-import static supersymmetry.common.item.SuSyMetaItems.*;
-import static net.minecraft.inventory.EntityEquipmentSlot.*;
 
 public class SuSyMetaArmor extends SuSyArmorItem {
 

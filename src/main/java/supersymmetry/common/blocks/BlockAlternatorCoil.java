@@ -1,16 +1,18 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.block.IStateHarvestLevel;
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.block.IStateHarvestLevel;
+import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
 public class BlockAlternatorCoil extends VariantHorizontalRotatableBlock<BlockAlternatorCoil.AlternatorCoilType> {
 
@@ -30,6 +32,7 @@ public class BlockAlternatorCoil extends VariantHorizontalRotatableBlock<BlockAl
     }
 
     public enum AlternatorCoilType implements IStringSerializable, IStateHarvestLevel {
+
         COPPER("copper", 1);
 
         private final String name;

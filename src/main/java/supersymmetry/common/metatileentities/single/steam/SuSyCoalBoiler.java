@@ -1,5 +1,13 @@
 package supersymmetry.common.metatileentities.single.steam;
 
+import static supersymmetry.api.capability.impl.SuSyBoilerLogic.isSupportedOrePrefix;
+
+import java.util.Collections;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+
 import gregtech.api.GTValues;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -8,16 +16,10 @@ import gregtech.api.recipes.Recipe;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.common.metatileentities.steam.boiler.SteamCoalBoiler;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 
-import java.util.Collections;
-
-import static supersymmetry.api.capability.impl.SuSyBoilerLogic.isSupportedOrePrefix;
-
 public class SuSyCoalBoiler extends SteamCoalBoiler {
+
     public SuSyCoalBoiler(ResourceLocation metaTileEntityId, boolean isHighPressure) {
         super(metaTileEntityId, isHighPressure);
     }

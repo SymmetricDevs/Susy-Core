@@ -1,25 +1,27 @@
 package supersymmetry.loaders;
 
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
+
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
 import supersymmetry.common.item.SuSyMetaItems;
 
-
 public class SusyOreDictionaryLoader {
-    public static void init(){
+
+    public static void init() {
         loadStoneOredict();
     }
 
-    public static void loadStoneOredict(){
-
+    public static void loadStoneOredict() {
         for (SusyStoneVariantBlock.StoneType type : SusyStoneVariantBlock.StoneType.values()) {
-            ItemStack smooth = SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH).getItemVariant(type);
-            ItemStack cobble = SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.COBBLE).getItemVariant(type);
+            ItemStack smooth = SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH)
+                    .getItemVariant(type);
+            ItemStack cobble = SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.COBBLE)
+                    .getItemVariant(type);
             OreDictUnifier.registerOre(smooth, type.getOrePrefix(), type.getMaterial());
         }
 
@@ -29,7 +31,8 @@ public class SusyOreDictionaryLoader {
         }
 
         // For IR railbeds
-        ItemStack concreteLightSmooth = MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getItemVariant(StoneVariantBlock.StoneType.CONCRETE_LIGHT);
+        ItemStack concreteLightSmooth = MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH)
+                .getItemVariant(StoneVariantBlock.StoneType.CONCRETE_LIGHT);
         OreDictionary.registerOre("railBed", concreteLightSmooth);
 
         // For IR tracks

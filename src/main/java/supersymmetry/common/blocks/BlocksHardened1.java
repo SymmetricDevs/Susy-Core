@@ -1,8 +1,10 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.block.IStateHarvestLevel;
-import gregtech.api.block.VariantBlock;
+import java.util.Random;
+import java.util.function.Supplier;
+
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
@@ -12,10 +14,9 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.block.material.EnumPushReaction;
 
-import java.util.Random;
-import java.util.function.Supplier;
+import gregtech.api.block.IStateHarvestLevel;
+import gregtech.api.block.VariantBlock;
 
 public class BlocksHardened1 extends VariantBlock<BlocksHardened1.HardenedBlockType> {
 
@@ -32,33 +33,34 @@ public class BlocksHardened1 extends VariantBlock<BlocksHardened1.HardenedBlockT
         return EnumPushReaction.BLOCK;
     }
 
-    public int quantityDropped(Random random)
-    {
+    public int quantityDropped(Random random) {
         return 1;
     }
 
     @Override
-    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-        Random rand = world instanceof World ? ((World)world).rand : RANDOM;
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state,
+                         int fortune) {
+        Random rand = world instanceof World ? ((World) world).rand : RANDOM;
 
         HardenedBlockType type = getState(state);
         int count = quantityDropped(state, fortune, rand);
-        for (int i = 0; i < count; i++)
-        {
-            drops.add(type.droppedItem.get()); // Damage dropped is hardcoded here since `damageDropped` is used elsewhere
+        for (int i = 0; i < count; i++) {
+            drops.add(type.droppedItem.get()); // Damage dropped is hardcoded here since `damageDropped` is used
+                                               // elsewhere
         }
     }
 
-
-
     public enum HardenedBlockType implements IStringSerializable, IStateHarvestLevel {
-        INDUSTRIAL_CONCRETE_HARDENED("industrial_concrete_hardened", 4,
-                () -> new ItemStack(Item.getItemFromBlock(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.BRICKS)), 1, 9)),
-        MILITARY_CONCRETE_COBBLESTONE_HARDENED("military_concrete_cobblestone_hardened", 4,
-                () -> new ItemStack(Item.getItemFromBlock(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.COBBLE)), 1, 10)),
-        MILITARY_CONCRETE_HARDENED("military_concrete_hardened", 4,
-                () -> new ItemStack(Item.getItemFromBlock(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH)), 1, 10));
 
+        INDUSTRIAL_CONCRETE_HARDENED("industrial_concrete_hardened", 4,
+                () -> new ItemStack(Item.getItemFromBlock(
+                        SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.BRICKS)), 1, 9)),
+        MILITARY_CONCRETE_COBBLESTONE_HARDENED("military_concrete_cobblestone_hardened", 4,
+                () -> new ItemStack(Item.getItemFromBlock(
+                        SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.COBBLE)), 1, 10)),
+        MILITARY_CONCRETE_HARDENED("military_concrete_hardened", 4,
+                () -> new ItemStack(Item.getItemFromBlock(
+                        SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH)), 1, 10));
 
         private final String name;
         private final int harvestLevel;
@@ -81,4 +83,3 @@ public class BlocksHardened1 extends VariantBlock<BlocksHardened1.HardenedBlockT
         }
     }
 }
-

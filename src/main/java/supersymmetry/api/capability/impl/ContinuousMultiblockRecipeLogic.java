@@ -1,5 +1,13 @@
 package supersymmetry.api.capability.impl;
 
+import static gregtech.api.GTValues.ULV;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Tuple;
+import net.minecraftforge.items.IItemHandlerModifiable;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.GTValues;
 import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
@@ -7,19 +15,14 @@ import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.recipeproperties.IRecipePropertyStorage;
 import gregtech.api.util.GTUtility;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Tuple;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.recipes.builders.logic.SuSyOverclockingLogic;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
 import supersymmetry.api.recipes.properties.CatalystProperty;
 import supersymmetry.api.recipes.properties.CatalystPropertyValue;
 
-import static gregtech.api.GTValues.ULV;
-
 public class ContinuousMultiblockRecipeLogic extends MultiblockRecipeLogic {
+
     private CatalystInfo catalystInfo;
     private int requiredCatalystTier;
 
@@ -30,7 +33,6 @@ public class ContinuousMultiblockRecipeLogic extends MultiblockRecipeLogic {
     public ContinuousMultiblockRecipeLogic(RecipeMapMultiblockController tileEntity, boolean hasPerfectOC) {
         super(tileEntity, hasPerfectOC);
     }
-
 
     protected void tryFindCatalystInfo(@NotNull Recipe recipe) {
         this.catalystInfo = null;
@@ -69,7 +71,8 @@ public class ContinuousMultiblockRecipeLogic extends MultiblockRecipeLogic {
 
     @Override
     public boolean prepareRecipe(Recipe recipe) {
-        recipe = Recipe.trimRecipeOutputs(recipe, this.getRecipeMap(), this.metaTileEntity.getItemOutputLimit(), this.metaTileEntity.getFluidOutputLimit());
+        recipe = Recipe.trimRecipeOutputs(recipe, this.getRecipeMap(), this.metaTileEntity.getItemOutputLimit(),
+                this.metaTileEntity.getFluidOutputLimit());
 
         calculateOverclockLimit(recipe);
         recipe = findParallelRecipe(
@@ -149,9 +152,10 @@ public class ContinuousMultiblockRecipeLogic extends MultiblockRecipeLogic {
     }
 
     @Override
-    protected int[] runOverclockingLogic(@NotNull IRecipePropertyStorage propertyStorage, int recipeEUt, long maxVoltage, int duration, int amountOC) {
+    protected int[] runOverclockingLogic(@NotNull IRecipePropertyStorage propertyStorage, int recipeEUt,
+                                         long maxVoltage, int duration, int amountOC) {
         double[] overclock = runContinuousOverclockingLogic(recipeEUt, maxVoltage, duration, amountOC);
-        return new int[] {(int) overclock[0], overclock[1] <= 1 ? 1 : (int) overclock[1]};
+        return new int[] { (int) overclock[0], overclock[1] <= 1 ? 1 : (int) overclock[1] };
     }
 
     protected double[] runContinuousOverclockingLogic(int recipeEUt, long maxVoltage, int duration, int amountOC) {
@@ -164,8 +168,7 @@ public class ContinuousMultiblockRecipeLogic extends MultiblockRecipeLogic {
                     catalystInfo,
                     requiredCatalystTier,
                     getOverclockingDurationDivisor(),
-                    getOverclockingVoltageMultiplier()
-            );
+                    getOverclockingVoltageMultiplier());
         } else {
             return SuSyOverclockingLogic.continuousOverclockingLogic(
                     recipeEUt,
@@ -173,8 +176,7 @@ public class ContinuousMultiblockRecipeLogic extends MultiblockRecipeLogic {
                     duration,
                     amountOC,
                     this.getOverclockingDurationDivisor(),
-                    this.getOverclockingVoltageMultiplier()
-            );
+                    this.getOverclockingVoltageMultiplier());
         }
     }
 
@@ -190,7 +192,8 @@ public class ContinuousMultiblockRecipeLogic extends MultiblockRecipeLogic {
         int numberOfOCs = maximumTier - recipeTier;
         if (recipeTier == ULV) numberOfOCs--; // no ULV overclocking
 
-        double parallelLimitDouble = 1 / runContinuousOverclockingLogic(recipe.getEUt(), getMaximumOverclockVoltage(), recipe.getDuration(), numberOfOCs)[1];
+        double parallelLimitDouble = 1 / runContinuousOverclockingLogic(recipe.getEUt(), getMaximumOverclockVoltage(),
+                recipe.getDuration(), numberOfOCs)[1];
 
         setParallelLimit(parallelLimitDouble <= 1 ? 1 : (int) parallelLimitDouble);
     }

@@ -1,8 +1,10 @@
 package supersymmetry.integration.jei;
 
-import mezz.jei.api.ISubtypeRegistry.ISubtypeInterpreter;
 import net.minecraft.item.ItemStack;
+
 import org.jetbrains.annotations.NotNull;
+
+import mezz.jei.api.ISubtypeRegistry.ISubtypeInterpreter;
 import supersymmetry.api.stockinteraction.StockHelperFunctions;
 
 public class RollingStockSubtypeHandler implements ISubtypeInterpreter {
