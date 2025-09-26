@@ -48,6 +48,10 @@ public class SuSyMetaItems {
     public static ArmorMetaItem<?>.ArmorMetaValueItem NOMEX_CHESTPLATE;
     public static ArmorMetaItem<?>.ArmorMetaValueItem NOMEX_LEGGINGS;
     public static ArmorMetaItem<?>.ArmorMetaValueItem NOMEX_BOOTS;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem SPACE_HELMET;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem SPACE_CHESTPLATE;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem SPACE_LEGGINGS;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem SPACE_BOOTS;
 
     public static ArmorMetaItem<?>.ArmorMetaValueItem JET_WINGPACK;
 

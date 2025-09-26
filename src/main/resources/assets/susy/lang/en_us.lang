@@ -1111,6 +1111,14 @@ metaitem.nomex_leggings.name=Nomex Leggings
 metaitem.nomex_leggings.tooltip=Stay indefinitely in the mantle!
 metaitem.nomex_boots.name=Nomex Boots
 metaitem.nomex_boots.tooltip=Stay indefinitely in the mantle!
+metaitem.space_helmet.name=Space Helmet
+metaitem.space_helmet.tooltip=Take one small step for man
+metaitem.space_chestplate.name=Space Chestplate
+metaitem.space_chestplate.tooltip=Take one small step for man
+metaitem.space_leggings.name=Space Leggings
+metaitem.space_leggings.tooltip=Take one small step for man
+metaitem.space_boots.name=Space Boots
+metaitem.space_boots.tooltip=Take one small step for man
 
 supersymmetry.oxygen=Remaining air: §b%s seconds§r (out of %s)
 supersymmetry.unlimited_oxygen=Remaining air: §bUnlimited§r
