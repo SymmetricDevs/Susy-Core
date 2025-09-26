@@ -1,5 +1,26 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import static gregtech.api.util.RelativeDirection.*;
+
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.fluids.FluidState;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -15,28 +36,11 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockBoilerCasing.BoilerCasingType;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMufflerHatch;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.metatileentities.multi.VoidingMultiblockBase;
 
-import javax.annotation.Nonnull;
-import java.util.List;
-
-import static gregtech.api.util.RelativeDirection.*;
-
 public class MetaTileEntitySmokeStack extends VoidingMultiblockBase {
+
     // Storing this, just in case it is ever needed
     private int height = 5;
 
@@ -57,7 +61,7 @@ public class MetaTileEntitySmokeStack extends VoidingMultiblockBase {
         // May want to force the input to be underneath the pipe casings
         return FactoryBlockPattern.start(FRONT, RIGHT, UP)
                 .aisle("S")
-                .aisle("P").setRepeatable(3,7)
+                .aisle("P").setRepeatable(3, 7)
                 .aisle("F")
                 .where('S', this.selfPredicate())
                 .where('P', states(this.getPipeCasingState())
@@ -92,8 +96,8 @@ public class MetaTileEntitySmokeStack extends VoidingMultiblockBase {
         EnumFacing relativeUp = UP.getRelativeFacing(this.getFrontFacing(), this.getUpwardsFacing(), this.isFlipped());
 
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(getPos().offset(relativeUp, height - 2));
-        for ( ; height < 10 ; height++ ) {
-            if(isBlockMuffler(world, pos.move(relativeUp))) break;
+        for (; height < 10; height++) {
+            if (isBlockMuffler(world, pos.move(relativeUp))) break;
         }
 
         this.height = height;
@@ -126,7 +130,7 @@ public class MetaTileEntitySmokeStack extends VoidingMultiblockBase {
     @Override
     public void receiveCustomData(int dataId, PacketBuffer buf) {
         super.receiveCustomData(dataId, buf);
-        if(dataId == GregtechDataCodes.UPDATE_STRUCTURE_SIZE) {
+        if (dataId == GregtechDataCodes.UPDATE_STRUCTURE_SIZE) {
             this.height = buf.readInt();
             this.rateBonus = buf.readInt();
         }
@@ -164,7 +168,7 @@ public class MetaTileEntitySmokeStack extends VoidingMultiblockBase {
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
         super.addDisplayText(textList);
-        if(isStructureFormed()) {
+        if (isStructureFormed()) {
             ITextComponent componentHeight = TextComponentUtil.stringWithColor(TextFormatting.BLUE,
                     String.valueOf(this.height));
             ITextComponent componentRateBonus = TextComponentUtil.stringWithColor(TextFormatting.DARK_PURPLE,
@@ -184,16 +188,17 @@ public class MetaTileEntitySmokeStack extends VoidingMultiblockBase {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip,
+                               boolean advanced) {
         tooltip.add(I18n.format("susy.machine.smoke_stack.tooltip.1", getBaseVoidingRate()));
         tooltip.add(I18n.format("susy.machine.smoke_stack.tooltip.2"));
         super.addInformation(stack, world, tooltip, advanced);
     }
 
-
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
         return Textures.SOLID_STEEL_CASING;
     }
+
     protected static IBlockState getPipeCasingState() {
         return MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE);
     }

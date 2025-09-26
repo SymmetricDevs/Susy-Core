@@ -1,5 +1,18 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import javax.annotation.Nonnull;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.chunk.storage.AnvilChunkLoader;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -14,23 +27,12 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
 import it.unimi.dsi.fastutil.ints.IntLists;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.chunk.storage.AnvilChunkLoader;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.properties.DimensionProperty;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.entities.EntityDrone;
-
-import javax.annotation.Nonnull;
 
 public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
 
@@ -107,12 +109,12 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
     }
 
     public void spawnDroneEntity(boolean descending) {
-
         NBTTagCompound nbttagcompound = new NBTTagCompound();
         nbttagcompound.setString("id", "susy:drone");
         Vec3d pos = this.getDroneSpawnPosition(descending);
 
-        EntityDrone drone = ((EntityDrone) AnvilChunkLoader.readWorldEntityPos(nbttagcompound, this.getWorld(), pos.x, pos.y, pos.z, true));
+        EntityDrone drone = ((EntityDrone) AnvilChunkLoader.readWorldEntityPos(nbttagcompound, this.getWorld(), pos.x,
+                pos.y, pos.z, true));
 
         if (drone != null) {
             setDrone(drone.withPadPos(getPos()));
@@ -130,7 +132,6 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
     }
 
     public Vec3d getDroneSpawnPosition(boolean descending) {
-
         double altitude = descending ? 296.D : this.getPos().getY() + 1.;
 
         switch (this.getFrontFacing()) {
@@ -156,7 +157,6 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
     }
 
     public void setStructureAABB() {
-
         double x = this.getPos().getX();
         double y = this.getPos().getY();
         double z = this.getPos().getZ();
@@ -176,7 +176,6 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
                 this.landingAreaBB = new AxisAlignedBB(x + 1, y + 1, z + 1, x - 1, y + 2, z + 3);
             }
         }
-
     }
 
     public boolean checkRecipe(@NotNull Recipe recipe) {
@@ -265,7 +264,8 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
         protected void updateRecipeProgress() {
             super.updateRecipeProgress();
 
-            if (!this.getMetaTileEntity().droneReachedSky && this.getMetaTileEntity().getDrone() != null && this.getMetaTileEntity().getDrone().reachedSky()) {
+            if (!this.getMetaTileEntity().droneReachedSky && this.getMetaTileEntity().getDrone() != null &&
+                    this.getMetaTileEntity().getDrone().reachedSky()) {
                 this.getMetaTileEntity().setDroneDead(true);
             }
 
@@ -287,7 +287,7 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
                 this.hasNotEnoughEnergy = false;
                 this.wasActiveAndNeedsUpdate = true;
                 this.parallelRecipesPerformed = 0;
-                this.overclockResults = new int[]{0, 0};
+                this.overclockResults = new int[] { 0, 0 };
             }
             this.getMetaTileEntity().setDroneDead(false);
         }

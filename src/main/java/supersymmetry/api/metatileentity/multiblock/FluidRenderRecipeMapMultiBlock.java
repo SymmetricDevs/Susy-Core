@@ -1,5 +1,19 @@
 package supersymmetry.api.metatileentity.multiblock;
 
+import java.util.Optional;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec3i;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.ColourMultiplier;
 import codechicken.lib.render.pipeline.IVertexOperation;
@@ -15,24 +29,11 @@ import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.api.util.GTUtility;
 import gregtech.client.renderer.texture.Textures;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec3i;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.Optional;
-
 
 /**
  * This class is used to render a non-consumable input fluid according to given pattern.
- * It was designed for use in {@link supersymmetry.common.metatileentities.multi.electric.MetaTileEntityClarifier} and {@link supersymmetry.common.metatileentities.multi.electric.MetaTileEntityFrothFlotationTank}.
+ * It was designed for use in {@link supersymmetry.common.metatileentities.multi.electric.MetaTileEntityClarifier} and
+ * {@link supersymmetry.common.metatileentities.multi.electric.MetaTileEntityFrothFlotationTank}.
  * Expects a recipemap with a fluid input and at least one consumable fluid input in every recipe.
  *
  * @author h3tR / RMI
@@ -49,10 +50,11 @@ public abstract class FluidRenderRecipeMapMultiBlock extends CachedPatternRecipe
     protected int fluidColor;
     protected boolean renderFluid = false;
 
-
-    public FluidRenderRecipeMapMultiBlock(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap, boolean perfectOC) {
+    public FluidRenderRecipeMapMultiBlock(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap,
+                                          boolean perfectOC) {
         super(metaTileEntityId, recipeMap);
         this.recipeMapWorkable = new MultiblockRecipeLogic(this, perfectOC) {
+
             @Override
             protected void setupRecipe(Recipe recipe) {
                 super.setupRecipe(recipe);
@@ -77,17 +79,17 @@ public abstract class FluidRenderRecipeMapMultiBlock extends CachedPatternRecipe
             });
             this.writeCustomData(CHANGE_FLUID_RENDER_STATUS, buf -> buf.writeBoolean(true));
         });
-        //ifPresentOrElse doesn't exist in this java version. Absolutely deplorable
+        // ifPresentOrElse doesn't exist in this java version. Absolutely deplorable
         if (!fluid.isPresent())
             this.writeCustomData(CHANGE_FLUID_RENDER_STATUS, buf -> buf.writeBoolean(false));
     }
 
-
     protected Optional<Fluid> getFluidToRender(Recipe recipe) {
-        //filters the input fluids for a consumed input fluid (ignores fluid flotation agents in case of froth flotation)
-        return recipe.getFluidInputs().stream().filter(fluidInput -> !fluidInput.isNonConsumable()).findFirst().map(GTRecipeInput::getInputFluidStack).map(FluidStack::getFluid);
+        // filters the input fluids for a consumed input fluid (ignores fluid flotation agents in case of froth
+        // flotation)
+        return recipe.getFluidInputs().stream().filter(fluidInput -> !fluidInput.isNonConsumable()).findFirst()
+                .map(GTRecipeInput::getInputFluidStack).map(FluidStack::getFluid);
     }
-
 
     @Override
     public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
@@ -100,10 +102,11 @@ public abstract class FluidRenderRecipeMapMultiBlock extends CachedPatternRecipe
     @Override
     public void receiveCustomData(int dataId, PacketBuffer buf) {
         super.receiveCustomData(dataId, buf);
-        //Can't use a switch statment here as the dataIds aren't constants.
+        // Can't use a switch statment here as the dataIds aren't constants.
         if (dataId == UPDATE_FLUID_INFO) {
             this.fluidColor = buf.readInt();
-            this.fluidTexture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(buf.readResourceLocation().toString());
+            this.fluidTexture = Minecraft.getMinecraft().getTextureMapBlocks()
+                    .getAtlasSprite(buf.readResourceLocation().toString());
         } else if (dataId == CHANGE_FLUID_RENDER_STATUS) {
             this.renderFluid = buf.readBoolean();
         }
@@ -114,7 +117,7 @@ public abstract class FluidRenderRecipeMapMultiBlock extends CachedPatternRecipe
                 new IconTransformation(fluidTexture),
                 new ColourMultiplier(GTUtility.convertRGBtoOpaqueRGBA_CL(fluidColor))
         };
-        Textures.renderFace(renderState, translation.copy().translate(Vector3.fromVec3i(offset)), fluid_render_pipeline, EnumFacing.UP, FLUID_RENDER_CUBOID, fluidTexture, BlockRenderLayer.CUTOUT_MIPPED);
+        Textures.renderFace(renderState, translation.copy().translate(Vector3.fromVec3i(offset)), fluid_render_pipeline,
+                EnumFacing.UP, FLUID_RENDER_CUBOID, fluidTexture, BlockRenderLayer.CUTOUT_MIPPED);
     }
-
 }

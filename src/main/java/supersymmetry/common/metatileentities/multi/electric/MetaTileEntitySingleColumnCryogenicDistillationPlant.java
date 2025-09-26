@@ -1,5 +1,14 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import static gregtech.api.util.RelativeDirection.*;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.ResourceLocation;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.capability.impl.DistillationTowerLogicHandler;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -12,9 +21,6 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiFluidHatch;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.capability.impl.ExtendedDTLogicHandler;
 import supersymmetry.api.metatileentity.multiblock.ICryogenicProvider;
 import supersymmetry.api.metatileentity.multiblock.ICryogenicReceiver;
@@ -23,11 +29,8 @@ import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 
-import javax.annotation.Nullable;
-
-import static gregtech.api.util.RelativeDirection.*;
-
-public class MetaTileEntitySingleColumnCryogenicDistillationPlant extends MetaTileEntityOrderedDT implements ICryogenicProvider {
+public class MetaTileEntitySingleColumnCryogenicDistillationPlant extends MetaTileEntityOrderedDT
+                                                                  implements ICryogenicProvider {
 
     private @Nullable ICryogenicReceiver receiver;
 
@@ -55,16 +58,18 @@ public class MetaTileEntitySingleColumnCryogenicDistillationPlant extends MetaTi
                         .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2))
                         .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMaxGlobalLimited(1))
                         .or(autoAbilities(false, true, false, false, false, false, false).setExactLimit(1)))
-                .where('F', states(SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.STRUCTURAL_PACKING)))
+                .where('F',
+                        states(SuSyBlocks.MULTIBLOCK_CASING
+                                .getState(BlockSuSyMultiblockCasing.CasingType.STRUCTURAL_PACKING)))
                 .where('X', states(getCasingState())
                         .or(metaTileEntities(MultiblockAbility.REGISTRY.get(MultiblockAbility.EXPORT_FLUIDS).stream()
                                 .filter(mte -> !(mte instanceof MetaTileEntityMultiFluidHatch))
                                 .toArray(MetaTileEntity[]::new))
-                                .setMaxLayerLimited(1))
+                                        .setMaxLayerLimited(1))
                         .or(metaTileEntities(MultiblockAbility.REGISTRY.get(MultiblockAbility.IMPORT_FLUIDS).stream()
                                 .filter(mte -> !(mte instanceof MetaTileEntityMultiFluidHatch))
                                 .toArray(MetaTileEntity[]::new))
-                                .setMaxLayerLimited(4)))
+                                        .setMaxLayerLimited(4)))
                 .where('D', states(getCasingState()))
                 .where('E', states(getCasingState())
                         .or(abilities(MultiblockAbility.PASSTHROUGH_HATCH)))
@@ -101,7 +106,7 @@ public class MetaTileEntitySingleColumnCryogenicDistillationPlant extends MetaTi
     protected ICubeRenderer getFrontOverlay() {
         return Textures.BLAST_FURNACE_OVERLAY;
     }
-    
+
     @Override
     public boolean allowsExtendedFacing() {
         return false;
@@ -111,5 +116,4 @@ public class MetaTileEntitySingleColumnCryogenicDistillationPlant extends MetaTi
     public void setReceiver(@NotNull ICryogenicReceiver receiver) {
         this.receiver = receiver;
     }
-
 }

@@ -1,17 +1,18 @@
 package supersymmetry.common.world;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeManager.BiomeEntry;
+
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import supersymmetry.api.SusyLog;
 import supersymmetry.client.renderer.sky.SkyRendererMoon;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class SuSyDimensions {
 
@@ -20,8 +21,6 @@ public class SuSyDimensions {
 
     public static List<Biome> BIOMES = new ArrayList<>();
     public static Map<Integer, Planet> PLANETS = new Int2ObjectArrayMap<>();
-
-
 
     public static void init() {
         // Registers dimension type. Uses a negative ID so that fire blocks have less logic.
@@ -47,5 +46,4 @@ public class SuSyDimensions {
                 .setSkyRenderer(new SkyRendererMoon())
                 .setGravity(0.166f).setBiomeSize(7).load();
     }
-
 }

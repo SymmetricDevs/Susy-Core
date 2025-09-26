@@ -6,6 +6,7 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 public class RocketModel extends ModelBase {
+
     private final ModelRenderer body;
     private final ModelRenderer cube_r1;
     private final ModelRenderer cube_r2;
