@@ -1,5 +1,14 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.GTValues;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -18,20 +27,14 @@ import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.MetaTileEntities;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockDrillBit;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MetaTileEntityPreciseMillingMachine extends RecipeMapMultiblockController {
+
     public MetaTileEntityPreciseMillingMachine(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.MILLING_RECIPES);
     }
@@ -51,19 +54,17 @@ public class MetaTileEntityPreciseMillingMachine extends RecipeMapMultiblockCont
                 .where('B', states(getBaseCasingState()).setMinGlobalLimited(18)
                         .or(abilities(MultiblockAbility.INPUT_ENERGY)
                                 .setMinGlobalLimited(1).setMaxGlobalLimited(2)
-                                .addTooltip("gregtech.multiblock.pattern.error.milling.lower"))
+                                .addTooltip("susy.multiblock.pattern.error.milling.lower"))
                         .or(abilities(MultiblockAbility.MAINTENANCE_HATCH)
                                 .setExactLimit(1)
-                                .addTooltip("gregtech.multiblock.pattern.error.milling.lower"))
-                )
+                                .addTooltip("susy.multiblock.pattern.error.milling.lower")))
                 .where('C', states(getUpperCasingState()).setMinGlobalLimited(35)
                         .or(abilities(MultiblockAbility.IMPORT_ITEMS)
                                 .setMinGlobalLimited(1)
-                                .addTooltip("gregtech.multiblock.pattern.error.milling.upper"))
+                                .addTooltip("susy.multiblock.pattern.error.milling.upper"))
                         .or(abilities(MultiblockAbility.EXPORT_ITEMS)
                                 .setMinGlobalLimited(1)
-                                .addTooltip("gregtech.multiblock.pattern.error.milling.upper"))
-                )
+                                .addTooltip("susy.multiblock.pattern.error.milling.upper")))
                 .where('D', states(getDrillBitState()))
                 .where('G', states(getGearBoxState()))
                 .where('W', states(getGlassState()))
@@ -86,7 +87,8 @@ public class MetaTileEntityPreciseMillingMachine extends RecipeMapMultiblockCont
                 .where('G', getGearBoxState())
                 .where('M',
                         () -> ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH :
-                                getBaseCasingState(), EnumFacing.SOUTH);
+                                getBaseCasingState(),
+                        EnumFacing.SOUTH);
         shapeInfo.add(baseBuilder.shallowCopy()
                 .aisle("BBBBBB", "CCCCCC", "CGGGGC", "CCCCCC")
                 .aisle("BBBBBB", "C    C", "CDDDDC", "CCCCCC")

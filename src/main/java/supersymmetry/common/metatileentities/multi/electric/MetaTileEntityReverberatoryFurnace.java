@@ -1,10 +1,21 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.init.SoundEvents;
+import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.items.IItemHandlerModifiable;
 
 import gregtech.api.GTValues;
+import gregtech.api.capability.impl.ItemHandlerList;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
+import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
@@ -13,14 +24,9 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.common.ConfigHolder;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
+import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
-import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
-
-import javax.annotation.Nonnull;
 
 public class MetaTileEntityReverberatoryFurnace extends RecipeMapMultiblockController {
 
@@ -51,6 +57,20 @@ public class MetaTileEntityReverberatoryFurnace extends RecipeMapMultiblockContr
                 .where('#', air())
                 .where('S', selfPredicate())
                 .build();
+    }
+
+    @Override
+    protected void initializeAbilities() {
+        List<IItemHandlerModifiable> imports = new ArrayList<>();
+        imports.addAll(getAbilities(SuSyMultiblockAbilities.PRIMITIVE_IMPORT_ITEMS));
+        imports.addAll(getAbilities(MultiblockAbility.IMPORT_ITEMS));
+        this.inputInventory = new ItemHandlerList(imports); // Please remember to use inputInventory for all things to
+                                                            // do with recipe logic.
+
+        List<IItemHandlerModifiable> exports = new ArrayList<>();
+        exports.addAll(getAbilities(SuSyMultiblockAbilities.PRIMITIVE_EXPORT_ITEMS));
+        exports.addAll(getAbilities(MultiblockAbility.EXPORT_ITEMS));
+        this.outputInventory = new ItemHandlerList(exports);
     }
 
     @Override
@@ -92,9 +112,7 @@ public class MetaTileEntityReverberatoryFurnace extends RecipeMapMultiblockContr
         }
     }
 
-    private void pollutionParticles() {
-
-    }
+    private void pollutionParticles() {}
 
     @Override
     public void randomDisplayTick() {
@@ -117,7 +135,8 @@ public class MetaTileEntityReverberatoryFurnace extends RecipeMapMultiblockContr
                 x += horizontalOffset;
             }
             if (ConfigHolder.machines.machineSounds && GTValues.RNG.nextDouble() < 0.1) {
-                getWorld().playSound(x, y, z, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
+                getWorld().playSound(x, y, z, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F,
+                        false);
             }
             getWorld().spawnParticle(EnumParticleTypes.SMOKE_LARGE, x, y, z, 0, 0, 0);
             getWorld().spawnParticle(EnumParticleTypes.FLAME, x, y, z, 0, 0, 0);

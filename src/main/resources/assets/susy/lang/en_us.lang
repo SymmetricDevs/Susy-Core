@@ -22,6 +22,7 @@ tile.drill_head.steel.name=Steel Drill Head
 tile.susy_multiblock_casing.silicon_carbide_casing.name=Tough Silicon Carbide Casing
 
 tile.susy_multiblock_casing.sieve_tray.name=Sieve Tray
+tile.susy_multiblock_casing.coalescence_plate.name=Coalescence Plate
 tile.susy_multiblock_casing.structural_packing.name=Structural Packing
 tile.susy_multiblock_casing.ulv_structural_casing.name=Basic Structural Casing
 tile.susy_multiblock_casing.drone_pad.name=Drone Pad
@@ -67,12 +68,13 @@ tile.deposit_block.sedimentary.name=Sedimentary Deposit Block
 tile.deposit_block.hydrothermal.name=Hydrothermal Deposit Block
 tile.deposit_block.alluvial.name=Alluvial Deposit Block
 tile.deposit_block.magmatic_hydrothermal.name=Magmatic Hydrothermal Deposit Block
+tile.deposit_block.ice_cap.name=Ice Cap Deposit Block
 
 tile.resource_block.bauxite.name=Bauxite Ore
 tile.resource_block.caliche.name=Caliche
 tile.resource_block.non_marine_evaporite.name=Non Marine Evaporite Deposit
 tile.resource_block.halide_evaporite.name=Halide Evaporite Deposit
-tile.resource_block.sulfate_evaporite.name=Sulfate Evaporite
+tile.resource_block.sulfate_evaporite.name=Sulfate Evaporite Deposit
 tile.resource_block.carbonate_evaporite.name=Carbonate Evaporite Deposit
 tile.resource_block.monazite_alluvial.name=Alluvial Monazite Deposit
 tile.resource_block.bastnasite_alluvial.name=Alluvial Bastnasite Deposit
@@ -125,6 +127,7 @@ tile.susy_stone_smooth.shale.name=Shale
 tile.susy_stone_smooth.slate.name=Slate
 tile.susy_stone_smooth.soapstone.name=Soapstone
 tile.susy_stone_smooth.kimberlite.name=Kimberlite
+tile.susy_stone_smooth.anorthosite.name=Anorthosite
 tile.susy_stone_smooth.industrial_concrete.name=Industrial Concrete
 tile.susy_stone_smooth.minitary_concrete.name=Military Concrete
 
@@ -139,6 +142,7 @@ tile.susy_stone_cobble.shale.name=Shale Cobblestone
 tile.susy_stone_cobble.slate.name=Slate Cobblestone
 tile.susy_stone_cobble.soapstone.name=Soapstone Cobblestone
 tile.susy_stone_cobble.kimberlite.name=Kimberlite Cobblestone
+tile.susy_stone_cobble.anorthosite.name=Anorthosite Cobblestone
 tile.susy_stone_cobble.industrial_concrete.name=Industrial Concrete Cobblestone
 tile.susy_stone_cobble.minitary_concrete.name=Military Concrete Cobblestone
 
@@ -153,6 +157,7 @@ tile.susy_stone_bricks.shale.name=Shale Bricks
 tile.susy_stone_bricks.slate.name=Slate Bricks
 tile.susy_stone_bricks.soapstone.name=Soapstone Bricks
 tile.susy_stone_bricks.kimberlite.name=Kimberlite Bricks
+tile.susy_stone_bricks.anorthosite.name=Anorthosite Bricks
 tile.susy_stone_bricks.industrial_concrete.name=Industrial Concrete Bricks
 tile.susy_stone_bricks.minitary_concrete.name=Military Concrete Bricks
 
@@ -166,6 +171,7 @@ susy.material.latex=Latex
 susy.material.mud=Mud
 susy.material.sea_water=Sea Water
 susy.material.refractory_gunning_mixture=Refractory Gunning Mixture
+susy.material.preheated_air=Preheated Air
 
 # Rock/Mineral Materials
 susy.material.fluorite=Fluorite
@@ -176,6 +182,7 @@ susy.material.phyllite=Phyllite
 susy.material.limestone=Limestone
 susy.material.gneiss=Gneiss
 susy.material.kimberlite=Kimberlite
+susy.material.anorthosite=Anorthosite
 susy.material.muscovite=Muscovite
 susy.material.dolomite=Dolomite
 susy.material.augite=Augite
@@ -218,81 +225,81 @@ susy.fluid.impure_slurry=Impure %s Slurry
 susy.fluid.slurry=%s Slurry
 
 # Tooltip Warnings
-gregtech.machine.steam_extractor_cannot_melt_items.warning=Steam Extractors cannot melt items!
+susy.machine.steam_extractor_cannot_melt_items.warning=Steam Extractors cannot melt items!
 
 # Machines/Multiblocks
-gregtech.machine.magnetic_refrigerator.name=Magnetic Refrigerator
-gregtech.multiblock.magnetic_refrigerator.min_temperature=§bTemperature Limit: %s
+susy.machine.magnetic_refrigerator.name=Magnetic Refrigerator
+susy.multiblock.magnetic_refrigerator.min_temperature=§bTemperature Limit: %s
 
-gregtech.machine.sintering_oven.name=Sintering Oven
-gregtech.multiblock.sintering_oven.can_use_plasma=Plasma enabled: %s
-gregtech.multiblocks.sintering_oven.use_plasma.affirmative=Yes
-gregtech.multiblocks.sintering_oven.use_plasma.negative=No
+susy.machine.sintering_oven.name=Sintering Oven
+susy.multiblock.sintering_oven.can_use_plasma=Plasma enabled: %s
+susy.multiblocks.sintering_oven.use_plasma.affirmative=Yes
+susy.multiblocks.sintering_oven.use_plasma.negative=No
 
-gregtech.machine.coagulation_tank.name=Coagulation Tank
-gregtech.machine.coagulation_tank.tooltip=Can't be used to stop bleeding.
-gregtech.machine.coagulation_tank.tooltip.1=Gains one parallel per block longer
-gregtech.machine.drum.lead.name=Lead Drum
-gregtech.machine.drum.brass.name=Brass Drum
-gregtech.machine.drum.pe.name=Polyethylene (PE) Can
-gregtech.machine.drum.pp.name=Polypropylene (PP) Can
-gregtech.machine.drum.ptfe.name=Polytetrafluoroethylene (PTFE) Can
-gregtech.machine.drum.uhmwpe.name=Ultra High Molecular Weight Polyethylene (UHMWPE) Can
+susy.machine.coagulation_tank.name=Coagulation Tank
+susy.machine.coagulation_tank.tooltip=Can't be used to stop bleeding.
+susy.machine.coagulation_tank.tooltip.1=Gains one parallel per block longer
+susy.machine.drum.lead.name=Lead Drum
+susy.machine.drum.brass.name=Brass Drum
+susy.machine.drum.pe.name=Polyethylene (PE) Can
+susy.machine.drum.pp.name=Polypropylene (PP) Can
+susy.machine.drum.ptfe.name=Polytetrafluoroethylene (PTFE) Can
+susy.machine.drum.uhmwpe.name=Ultra High Molecular Weight Polyethylene (UHMWPE) Can
 
-gregtech.machine.crate.pe.name=Hermetically Sealed Crate
+susy.machine.crate.pe.name=Hermetically Sealed Crate
 
-gregtech.machine.polymerization_tank.name=Polymerization Tank
-gregtech.machine.fluidized_bed_reactor.name=Fluidized Bed Reactor
+susy.machine.polymerization_tank.name=Polymerization Tank
+susy.machine.fluidized_bed_reactor.name=Fluidized Bed Reactor
 
-gregtech.machine.electrolytic_cell.name=Electrolytic Cell
+susy.machine.electrolytic_cell.name=Electrolytic Cell
 
-gregtech.machine.coking_tower.name=Coking Tower
-gregtech.machine.vacuum_distillation_tower.name=Vacuum Distillation Tower
-gregtech.machine.catalytic_reformer.name=Catalytic Reformer
-gregtech.machine.pressure_swing_adsorber.name=Pressure Swing Adsorber
-gregtech.machine.reaction_furnace.name=Reaction Furnace
+susy.machine.coking_tower.name=Coking Tower
+susy.machine.vacuum_distillation_tower.name=Vacuum Distillation Tower
+susy.machine.catalytic_reformer.name=Catalytic Reformer
+susy.machine.pressure_swing_adsorber.name=Pressure Swing Adsorber
+susy.machine.reaction_furnace.name=Reaction Furnace
 
-gregtech.machine.fermentation_vat.name=Fermentation Vat
-gregtech.machine.ore_sorter.name=Ore Sorter
-gregtech.machine.gravity_separator.name=Gravity Separator
-gregtech.machine.condenser.name=Condenser
-gregtech.machine.natural_draft_cooling_tower.name=Natural Draft Cooling Tower
-gregtech.machine.gas_turbine.name=Gas Turbine
-gregtech.machine.heat_exchanger.name=Heat Exchanger
-gregtech.machine.heat_radiator.name=Heat Radiator
-gregtech.multiblock.heat_radiator.tooltip.1=Efficiency is proportional to the area of dissipation.
-gregtech.multiblock.heat_radiator.tooltip.2=§bSize: §f3x3 to 11x16
-gregtech.machine.heat_radiator.parallel=Maximum Parallel: %s
-gregtech.machine.heat_radiator.parallel_hover=Parallel amount is determined by the amount of the tube block.
-gregtech.machine.large_weapons_factory.name=Large Weapons Factory
-gregtech.machine.magnetohydrodynamic_generator.name=Magnetohydrodynamic (MHD) Generator
-gregtech.machine.mining_drill.name=Mining Drill
-gregtech.machine.quencher.name=Quencher
-gregtech.machine.railroad_engineering_station.name=Railroad Engineering Station
-gregtech.machine.railroad_engineering_station.tooltip=Place Immersive Railroading Tracks in the middle to form the multiblock
-gregtech.machine.railroad_engineering_station.tooltip.1=The concrete below the tracks can be substituted with any block, including pipes or air
-gregtech.machine.quarry.name=Quarry
+susy.machine.fermentation_vat.name=Fermentation Vat
+susy.machine.ore_sorter.name=Ore Sorter
+susy.machine.gravity_separator.name=Gravity Separator
+susy.machine.condenser.name=Condenser
+susy.machine.natural_draft_cooling_tower.name=Natural Draft Cooling Tower
+susy.machine.gas_turbine.name=Gas Turbine
+susy.machine.heat_exchanger.name=Heat Exchanger
+susy.machine.heat_radiator.name=Heat Radiator
+susy.multiblock.heat_radiator.tooltip.1=Efficiency is proportional to the area of dissipation.
+susy.multiblock.heat_radiator.tooltip.2=§bSize: §f3x3 to 11x16
+susy.machine.heat_radiator.parallel=Maximum Parallel: %s
+susy.machine.heat_radiator.parallel_hover=Parallel amount is determined by the amount of the tube block.
+susy.machine.large_weapons_factory.name=Large Weapons Factory
+susy.machine.magnetohydrodynamic_generator.name=Magnetohydrodynamic (MHD) Generator
+susy.machine.mining_drill.name=Mining Drill
+susy.machine.quencher.name=Quencher
+susy.machine.railroad_engineering_station.name=Railroad Engineering Station
+susy.machine.railroad_engineering_station.tooltip=Place Immersive Railroading Tracks in the middle to form the multiblock
+susy.machine.railroad_engineering_station.tooltip.1=The concrete below the tracks can be substituted with any block, including pipes or air
+susy.machine.quarry.name=Quarry
 
-gregtech.machine.evaporation_pool.name=Evaporation Pool:
-gregtech.machine.evaporation_pool.tooltip.info=Max square of %1$sx%1$s, minimum %2$sx%2$s. Read info tab and tool info for more details.
-gregtech.machine.evaporation_pool.tooltip.structure_info=Evaporation Pools can be formed with any dimensions ranging from a %2$sx%2$s to a %1$sx%1$s, even if it is non-square. To form a valid heated evaporation pool, coils should be placed following the pattern shown in the preview. For a more detailed explanation, view the info tab in JEI.
-gregtech.top.evaporation_pool_heated_preface=Heating Coil:
-gregtech.top.evaporation_pool.exposed_blocks=Exposed Blocks:
-gregtech.top.evaporation_pool.average_speed=Avg Speed:
-gregtech.multiblock.evaporation_pool.description=The Evaporation Pool has interior dimensions specified in its description and a concrete exterior for IO/controller placement, with at most two of each IO type. The controller may be placed anywhere along the protruding bottom row "in front" of the interior.            The Evaporation Pool can run recipes both unpowered and powered. In order to power recipes, the multiblock will need to be formed with a "snaking" coil pattern of uniform type, as shown in the preview. Unpowered Evaporation Pools do not require any coils.        The speed of any recipe depends on the heat provided to the multi, which is based off of the number of interior blocks exposed to sunlight, the energy provided, and the tier of coil. [1EU = 10J, currently].                                                                                 Each exposed block (takes time to check) produces 1kJ/s, with heat provided by coils varying based on coil temperature * amount.
-gregtech.multiblock.evaporation_pool_heated_preface=Heating Coil: %s
-gregtech.multiblock.evaporation_pool.is_heating=On
-gregtech.multiblock.evaporation_pool.is_not_heating=Off/Missing
-gregtech.multiblock.evaporation_pool.exposed_blocks=Exposed Blocks: %s
-gregtech.multiblock.evaporation_pool.average_speed=Avg Speed: %sx
+susy.machine.evaporation_pool.name=Evaporation Pool
+susy.machine.evaporation_pool.tooltip.info=Max square of %1$sx%1$s, minimum %2$sx%2$s. Read info tab and tool info for more details.
+susy.machine.evaporation_pool.tooltip.structure_info=Evaporation Pools can be formed with any dimensions ranging from a %2$sx%2$s to a %1$sx%1$s, even if it is non-square. To form a valid heated evaporation pool, coils should be placed following the pattern shown in the preview. For a more detailed explanation, view the info tab in JEI.
+susy.top.evaporation_pool_heated_preface=Heating Coil:
+susy.top.evaporation_pool.exposed_blocks=Exposed Blocks:
+susy.top.evaporation_pool.average_speed=Avg Speed:
+susy.multiblock.evaporation_pool.description=The Evaporation Pool has interior dimensions specified in its description and a concrete exterior for IO/controller placement, with at most two of each IO type. The controller may be placed anywhere along the protruding bottom row "in front" of the interior.            The Evaporation Pool can run recipes both unpowered and powered. In order to power recipes, the multiblock will need to be formed with a "snaking" coil pattern of uniform type, as shown in the preview. Unpowered Evaporation Pools do not require any coils.        The speed of any recipe depends on the heat provided to the multi, which is based off of the number of interior blocks exposed to sunlight, the energy provided, and the tier of coil. [1EU = 10J, currently].                                                                                 Each exposed block (takes time to check) produces 1kJ/s, with heat provided by coils varying based on coil temperature * amount.
+susy.multiblock.evaporation_pool_heated_preface=Heating Coil: %s
+susy.multiblock.evaporation_pool.is_heating=On
+susy.multiblock.evaporation_pool.is_not_heating=Off/Missing
+susy.multiblock.evaporation_pool.exposed_blocks=Exposed Blocks: %s
+susy.multiblock.evaporation_pool.average_speed=Avg Speed: %sx
 susy.multiblock.pattern.error.coils_or_bed=§cAll heating coils or evaporation beds must be the same§r
 
-gregtech.multiblock.strand_casting.thickness=Thickness: %s
-gregtech.multiblock.strand_casting.width=Width: %s
-gregtech.multiblock.strand_casting.no_strand=No strand detected
-gregtech.multiblock.strand_casting.output_detected=Strand found only in the output slot
-gregtech.multiblock.strand_casting.ore_prefix=Will output a: %s
-gregtech.multiblock.strand_casting.no_conversion=Currently not a valid item!
+susy.multiblock.strand_casting.thickness=Thickness: %s
+susy.multiblock.strand_casting.width=Width: %s
+susy.multiblock.strand_casting.no_strand=No strand detected
+susy.multiblock.strand_casting.output_detected=Strand found only in the output slot
+susy.multiblock.strand_casting.ore_prefix=Will output a: %s
+susy.multiblock.strand_casting.no_conversion=Currently not a valid item!
 
 susy.multiblock.natural_draft_cooling_tower.obstructed=The cold water basin is not filled!
 susy.multiblock.natural_draft_cooling_tower.obstructed.desc=The cold water basin must be filled with water for the Cooling Tower to operate.
@@ -304,467 +311,480 @@ supersymmetry.prefix.platedouble=Double Plate
 supersymmetry.prefix.plate=Plate
 supersymmetry.prefix.foil=Foil
 
-gregtech.machine.primitive_mud_pump.name=Primitive Mud Pump
-gregtech.machine.primitive_mud_pump.tooltip=Works only in River biomes between Y=64 and Y=80
-gregtech.machine.basic_steam_turbine.name=Large Steam Turbine
-gregtech.machine.low_pressure_advanced_steam_turbine.name=Low Pressure Advanced Steam Turbine
-gregtech.machine.high_pressure_advanced_steam_turbine.name=High Pressure Advanced Steam Turbine
-gregtech.machine.basic_gas_turbine.name=Large Gas Turbine
-gregtech.machine.large_fluid_pump.name=Large Fluid Pump
-gregtech.machine.large_fluid_pump.tooltip.1=This would definitely affect the local trout population.
-gregtech.machine.large_fluid_pump.tooltip.2=Only works when the controller is at Y=64 and the bottom Steel Pipe Casing is located in the right biome.
-gregtech.machine.advanced_arc_furnace.name=Industrial Arc Furnace
-gregtech.machine.arc_furnace_complex.name=Arc Furnace Complex
-gregtech.machine.clarifier.name=Clarifier
-gregtech.machine.flare_stack.name=Flare Stack
-gregtech.machine.flare_stack.height=Stack Height: %s §9blocks
-gregtech.machine.flare_stack.rate=Flaring Rate: %s
-gregtech.machine.flare_stack.rate_hover=Flaring rate multiplier set by the height of the flare stack.
-gregtech.machine.flare_stack.tooltip=Industrial lung cancer propagator.
-gregtech.machine.flare_stack.tooltip.1=§6Base Flaring Rate:§7 §f%d L every 10 ticks
-gregtech.machine.flare_stack.tooltip.2=Doubles its speed for each block taller than 5
-gregtech.machine.smoke_stack.name=Smoke Stack
-gregtech.machine.smoke_stack.height=Stack Height: %s §9blocks
-gregtech.machine.smoke_stack.rate=Exhaustion Rate: %s
-gregtech.machine.smoke_stack.rate_hover=Exhaustion rate multiplier set by the height of the smoke stack.
-gregtech.machine.smoke_stack.tooltip=For enriching your planets atmosphere.
-gregtech.machine.smoke_stack.tooltip.1=§8Base Exhaustion Rate:§7 §f%d L every 10 ticks
-gregtech.machine.smoke_stack.tooltip.2=Doubles its speed for each block taller than 5
-gregtech.machine.dumper.name=Dumper
-gregtech.machine.dumper.rate=Dumping Rate: %s
-gregtech.machine.dumper.tooltip=Contaminates all your local ecosystems.
-gregtech.machine.dumper.tooltip.1=§2Base Dumping Rate:§7 §f %d L every 10 ticks
-gregtech.machine.froth_flotation_tank.name=Froth Flotation Tank
-gregtech.machine.multi_stage_flash_distiller.name=Multi Stage Flash Distiller
-gregtech.machine.high_temperature_distillation_tower.name=High Temperature Distillation Tower
-gregtech.machine.rotary_kiln.name=Rotary Kiln
-gregtech.machine.low_pressure_cryogenic_distillation_plant.name=Low Pressure Cryogenic Distillation Plant
-gregtech.machine.high_pressure_cryogenic_distillation_plant.name=High Pressure Cryogenic Distillation Plant
-gregtech.machine.single_column_cryogenic_distillation_plant.name=Single Column Cryogenic Distillation Plant
-gregtech.machine.reverberatory_furnace.name=Reverberatory Furnace
-gregtech.machine.blender.name=Blender
-gregtech.machine.sieve_distillation_tower.name=Sieve Distillation Tower
+susy.machine.primitive_mud_pump.name=Primitive Mud Pump
+susy.machine.primitive_mud_pump.tooltip=Works only in River biomes between Y=64 and Y=80
+susy.machine.basic_steam_turbine.name=Large Steam Turbine
+susy.machine.low_pressure_advanced_steam_turbine.name=Low Pressure Advanced Steam Turbine
+susy.machine.high_pressure_advanced_steam_turbine.name=High Pressure Advanced Steam Turbine
+susy.machine.basic_gas_turbine.name=Large Gas Turbine
+susy.machine.large_fluid_pump.name=Large Fluid Pump
+susy.machine.large_fluid_pump.tooltip.1=This would definitely affect the local trout population.
+susy.machine.large_fluid_pump.tooltip.2=Only works when the controller is at Y=64 and the bottom Steel Pipe Casing is located in the right biome.
+susy.machine.advanced_arc_furnace.name=Industrial Arc Furnace
+susy.machine.arc_furnace_complex.name=Arc Furnace Complex
+susy.machine.clarifier.name=Clarifier
+susy.machine.flare_stack.name=Flare Stack
+susy.machine.flare_stack.height=Stack Height: %s §9blocks
+susy.machine.flare_stack.rate=Flaring Rate: %s
+susy.machine.flare_stack.rate_hover=Flaring rate multiplier set by the height of the flare stack.
+susy.machine.flare_stack.tooltip=Industrial lung cancer propagator.
+susy.machine.flare_stack.tooltip.1=§6Base Flaring Rate:§7 §f%d L every 10 ticks
+susy.machine.flare_stack.tooltip.2=Doubles its speed for each block taller than 5
+susy.machine.smoke_stack.name=Smoke Stack
+susy.machine.smoke_stack.height=Stack Height: %s §9blocks
+susy.machine.smoke_stack.rate=Exhaustion Rate: %s
+susy.machine.smoke_stack.rate_hover=Exhaustion rate multiplier set by the height of the smoke stack.
+susy.machine.smoke_stack.tooltip=For enriching your planets atmosphere.
+susy.machine.smoke_stack.tooltip.1=§8Base Exhaustion Rate:§7 §f%d L every 10 ticks
+susy.machine.smoke_stack.tooltip.2=Doubles its speed for each block taller than 5
+susy.machine.dumper.name=Dumper
+susy.machine.dumper.rate=Dumping Rate: %s
+susy.machine.dumper.tooltip=Contaminates all your local ecosystems.
+susy.machine.dumper.tooltip.1=§2Base Dumping Rate:§7 §f %d L every 10 ticks
+susy.machine.froth_flotation_tank.name=Froth Flotation Tank
+susy.machine.multi_stage_flash_distiller.name=Multi Stage Flash Distiller
+susy.machine.high_temperature_distillation_tower.name=High Temperature Distillation Tower
+susy.machine.rotary_kiln.name=Rotary Kiln
+susy.machine.low_pressure_cryogenic_distillation_plant.name=Low Pressure Cryogenic Distillation Plant
+susy.machine.high_pressure_cryogenic_distillation_plant.name=High Pressure Cryogenic Distillation Plant
+susy.machine.single_column_cryogenic_distillation_plant.name=Single Column Cryogenic Distillation Plant
+susy.machine.reverberatory_furnace.name=Reverberatory Furnace
+susy.machine.blender.name=Blender
+susy.machine.sieve_distillation_tower.name=Sieve Distillation Tower
 
-gregtech.machine.curtain_coater.name=Curtain Coater
-gregtech.multiblock.pattern.error.conveyor=§cAll conveyor belts must be the same§r
+susy.machine.curtain_coater.name=Curtain Coater
+susy.multiblock.pattern.error.conveyor=§cAll conveyor belts must be the same§r
 
-gregtech.machine.milling.name=Precise Milling Machine
-gregtech.multiblock.pattern.error.milling.upper=§cOnly allowed on the upper part of the machine§r
-gregtech.multiblock.pattern.error.milling.lower=§cOnly allowed on the lower part of the machine§r
+susy.machine.milling.name=Precise Milling Machine
+susy.multiblock.pattern.error.milling.upper=§cOnly allowed on the upper part of the machine§r
+susy.multiblock.pattern.error.milling.lower=§cOnly allowed on the lower part of the machine§r
 
-gregtech.machine.drone_pad.name=Drone Pad
-gregtech.machine.primitive_smelter.name=Primitive Smelter
-gregtech.machine.landing_pad.name=Landing Pad
-gregtech.machine.scrap_recycler.name=Scrap Recycler
-gregtech.machine.rocket_assembler.name=Rocket Assembler
-gregtech.machine.rocket_programmer.name=Rocket Programmer
-gregtech.machine.metallurgical_converter.name=Metallurgical Converter
+susy.machine.drone_pad.name=Drone Pad
+susy.machine.primitive_smelter.name=Primitive Smelter
+susy.machine.large_steam_hammer.name=Large Steam Hammer
+susy.machine.landing_pad.name=Landing Pad
+susy.machine.scrap_recycler.name=Scrap Recycler
+susy.machine.rocket_assembler.name=Rocket Assembler
+susy.machine.rocket_programmer.name=Rocket Programmer
+susy.machine.metallurgical_converter.name=Metallurgical Converter
+susy.machine.injection_molder.name=Injection Molder
 
-gregtech.machine.primitive_item_import.name=Primitive Item Import Bus
-gregtech.machine.primitive_item_import.tooltip=Only for use with the Primitive Smelter
-gregtech.machine.primitive_item_export.name=Primitive Item Export Bus
-gregtech.machine.primitive_item_export.tooltip=Only for use with the Primitive Smelter
+susy.machine.primitive_item_import.name=Primitive Item Import Bus
+susy.machine.primitive_item_import.tooltip=Not a substitute for ULV 
+susy.machine.primitive_item_export.name=Primitive Item Export Bus
+susy.machine.primitive_item_export.tooltip=Not a substitute for ULV 
+susy.machine.mixer_settler.name=Mixer Settler
+susy.machine.mixer_settler.tooltip=First it mixes, then it settles... - Sun Tzu, The Art of SuSy
+susy.machine.mixer_settler.tooltip.1=The initial structure contains 2 cells, each expansion adds 2 more
+susy.machine.mixer_settler.tooltip.2=Can work up to 2x faster with more cells
 
-gregtech.machine.parallel_pure=Can parallel to output up to §b%d§r§7 items at once
+susy.machine.parallel_pure=Can parallel to output up to §b%d§r§7 items at once
 
 # Properties
-gregtech.recipe.plasma_requirement=Requires plasma: %s
-gregtech.recipe.catalyst=Catalyst: %s %s
-gregtech.recipe.blocks=Blocks: %s
-gregtech.recipe.evaporation=Required Energy: %d J/t
-gregtech.recipe.cryogenic_environment=Requires Cryogenic Environment
+susy.recipe.plasma_requirement=Requires plasma: %s
+susy.recipe.catalyst=Catalyst: %s %s
+susy.recipe.blocks=Blocks: %s
+susy.recipe.evaporation=Required Energy: %d J/t
+susy.recipe.cryogenic_environment=Requires Cryogenic Environment
+susy.recipe.mixer_settler_cells=Required mixer settler cells: %s
 
 # Latex Collector
-gregtech.machine.latex_collector.steam=Needs Steam!
-gregtech.machine.latex_collector.tooltip=Extracts liquids from adjacent logs.
-gregtech.machine.latex_collector.bronze.name=Steam Latex Collector
-gregtech.machine.latex_collector.steel.name=High Pressure Steam Latex Collector
-gregtech.machine.latex_collector.lv.name=Basic Latex Collector
-gregtech.machine.latex_collector.mv.name=Advanced Latex Collector
-gregtech.machine.latex_collector.hv.name=Advanced Latex Collector II
-gregtech.machine.latex_collector.ev.name=Advanced Latex Collector III
+susy.machine.latex_collector.steam=Needs Steam!
+susy.machine.latex_collector.tooltip=Extracts liquids from adjacent logs.
+susy.machine.latex_collector.bronze.name=Steam Latex Collector
+susy.machine.latex_collector.steel.name=High Pressure Steam Latex Collector
+susy.machine.latex_collector.lv.name=Basic Latex Collector
+susy.machine.latex_collector.mv.name=Advanced Latex Collector
+susy.machine.latex_collector.hv.name=Advanced Latex Collector II
+susy.machine.latex_collector.ev.name=Advanced Latex Collector III
 
 # Vulcanizing Press
-gregtech.machine.vulcanizing_press.bronze.name=Steam Vulcanizing Press
-gregtech.machine.vulcanizing_press.steel.name=High Pressure Steam Vulcanizing Press
-gregtech.machine.vulcanizing_press.lv.name=Basic Vulcanizing Press
-gregtech.machine.vulcanizing_press.mv.name=Advanced Vulcanizing Press
-gregtech.machine.vulcanizing_press.hv.name=Advanced Vulcanizing Press II
-gregtech.machine.vulcanizing_press.ev.name=Advanced Vulcanizing Press III
+susy.machine.vulcanizing_press.bronze.name=Steam Vulcanizing Press
+susy.machine.vulcanizing_press.steel.name=High Pressure Steam Vulcanizing Press
+susy.machine.vulcanizing_press.lv.name=Basic Vulcanizing Press
+susy.machine.vulcanizing_press.mv.name=Advanced Vulcanizing Press
+susy.machine.vulcanizing_press.hv.name=Advanced Vulcanizing Press II
+susy.machine.vulcanizing_press.ev.name=Advanced Vulcanizing Press III
 
 # Steam Mixer
-gregtech.machine.mixer.bronze.name=Steam Mixer
-gregtech.machine.mixer.steel.name=High Pressure Steam Mixer
+susy.machine.mixer.bronze.name=Steam Mixer
+susy.machine.mixer.steel.name=High Pressure Steam Mixer
 
 # Roaster
-gregtech.machine.roaster.bronze.name=Steam Roaster
-gregtech.machine.roaster.steel.name=High Pressure Steam Roaster
-gregtech.machine.roaster.lv.name=Basic Roaster
-gregtech.machine.roaster.mv.name=Advanced Roaster
-gregtech.machine.roaster.hv.name=Advanced Roaster II
-gregtech.machine.roaster.ev.name=Advanced Roaster III
-gregtech.machine.roaster.iv.name=Elite Roaster
-gregtech.machine.roaster.luv.name=Elite Roaster II
-gregtech.machine.roaster.zpm.name=Elite Roaster III
-gregtech.machine.roaster.uv.name=Ultimate Roaster
-gregtech.machine.roaster.uhv.name=Epic Roaster
-gregtech.machine.roaster.uev.name=Epic Roaster II
-gregtech.machine.roaster.uiv.name=Epic Roaster III
-gregtech.machine.roaster.uxv.name=Epic Roaster IV
-gregtech.machine.roaster.opv.name=Legendary Roaster
+susy.machine.roaster.bronze.name=Steam Roaster
+susy.machine.roaster.steel.name=High Pressure Steam Roaster
+susy.machine.roaster.lv.name=Basic Roaster
+susy.machine.roaster.mv.name=Advanced Roaster
+susy.machine.roaster.hv.name=Advanced Roaster II
+susy.machine.roaster.ev.name=Advanced Roaster III
+susy.machine.roaster.iv.name=Elite Roaster
+susy.machine.roaster.luv.name=Elite Roaster II
+susy.machine.roaster.zpm.name=Elite Roaster III
+susy.machine.roaster.uv.name=Ultimate Roaster
+susy.machine.roaster.uhv.name=Epic Roaster
+susy.machine.roaster.uev.name=Epic Roaster II
+susy.machine.roaster.uiv.name=Epic Roaster III
+susy.machine.roaster.uxv.name=Epic Roaster IV
+susy.machine.roaster.opv.name=Legendary Roaster
 
 # Vacuum Chamber
-gregtech.machine.vacuum_chamber.bronze.name=Steam Vacuum Chamber
-gregtech.machine.vacuum_chamber.steel.name=High Pressure Steam Vacuum Chamber
-gregtech.machine.vacuum_chamber.lv.name=Basic Vacuum Chamber
-gregtech.machine.vacuum_chamber.mv.name=Advanced Vacuum Chamber
-gregtech.machine.vacuum_chamber.hv.name=Advanced Vacuum Chamber II
-gregtech.machine.vacuum_chamber.ev.name=Advanced Vacuum Chamber III
-gregtech.machine.vacuum_chamber.iv.name=Elite Vacuum Chamber
-gregtech.machine.vacuum_chamber.luv.name=Elite Vacuum Chamber II
-gregtech.machine.vacuum_chamber.zpm.name=Elite Vacuum Chamber III
-gregtech.machine.vacuum_chamber.uv.name=Ultimate Vacuum Chamber
-gregtech.machine.vacuum_chamber.uhv.name=Epic Vacuum Chamber
-gregtech.machine.vacuum_chamber.uev.name=Epic Vacuum Chamber II
-gregtech.machine.vacuum_chamber.uiv.name=Epic Vacuum Chamber III
-gregtech.machine.vacuum_chamber.uxv.name=Epic Vacuum Chamber IV
-gregtech.machine.vacuum_chamber.opv.name=Legendary Vacuum Chamber
+susy.machine.vacuum_chamber.bronze.name=Steam Vacuum Chamber
+susy.machine.vacuum_chamber.steel.name=High Pressure Steam Vacuum Chamber
+susy.machine.vacuum_chamber.lv.name=Basic Vacuum Chamber
+susy.machine.vacuum_chamber.mv.name=Advanced Vacuum Chamber
+susy.machine.vacuum_chamber.hv.name=Advanced Vacuum Chamber II
+susy.machine.vacuum_chamber.ev.name=Advanced Vacuum Chamber III
+susy.machine.vacuum_chamber.iv.name=Elite Vacuum Chamber
+susy.machine.vacuum_chamber.luv.name=Elite Vacuum Chamber II
+susy.machine.vacuum_chamber.zpm.name=Elite Vacuum Chamber III
+susy.machine.vacuum_chamber.uv.name=Ultimate Vacuum Chamber
+susy.machine.vacuum_chamber.uhv.name=Epic Vacuum Chamber
+susy.machine.vacuum_chamber.uev.name=Epic Vacuum Chamber II
+susy.machine.vacuum_chamber.uiv.name=Epic Vacuum Chamber III
+susy.machine.vacuum_chamber.uxv.name=Epic Vacuum Chamber IV
+susy.machine.vacuum_chamber.opv.name=Legendary Vacuum Chamber
 
 # CSTR
-gregtech.machine.continuous_stirred_tank_reactor.lv.name=Basic Continuous Stirred Tank Reactor (CSTR)
-gregtech.machine.continuous_stirred_tank_reactor.mv.name=Advanced Continuous Stirred Tank Reactor (CSTR)
-gregtech.machine.continuous_stirred_tank_reactor.hv.name=Advanced Continuous Stirred Tank Reactor (CSTR) II
-gregtech.machine.continuous_stirred_tank_reactor.ev.name=Advanced Continuous Stirred Tank Reactor (CSTR) III
-gregtech.machine.continuous_stirred_tank_reactor.iv.name=Elite Continuous Stirred Tank Reactor (CSTR)
-gregtech.machine.continuous_stirred_tank_reactor.luv.name=Elite Continuous Stirred Tank Reactor (CSTR) II
-gregtech.machine.continuous_stirred_tank_reactor.zpm.name=Elite Continuous Stirred Tank Reactor (CSTR) III
-gregtech.machine.continuous_stirred_tank_reactor.uv.name=Ultimate Continuous Stirred Tank Reactor (CSTR)
-gregtech.machine.continuous_stirred_tank_reactor.uhv.name=Epic Continuous Stirred Tank Reactor (CSTR)
-gregtech.machine.continuous_stirred_tank_reactor.uev.name=Epic Continuous Stirred Tank Reactor (CSTR) II
-gregtech.machine.continuous_stirred_tank_reactor.uiv.name=Epic Continuous Stirred Tank Reactor (CSTR) III
-gregtech.machine.continuous_stirred_tank_reactor.uxv.name=Epic Continuous Stirred Tank Reactor (CSTR) IV
-gregtech.machine.continuous_stirred_tank_reactor.opv.name=Legendary Continuous Stirred Tank Reactor (CSTR)
+susy.machine.continuous_stirred_tank_reactor.lv.name=Basic Continuous Stirred Tank Reactor (CSTR)
+susy.machine.continuous_stirred_tank_reactor.mv.name=Advanced Continuous Stirred Tank Reactor (CSTR)
+susy.machine.continuous_stirred_tank_reactor.hv.name=Advanced Continuous Stirred Tank Reactor (CSTR) II
+susy.machine.continuous_stirred_tank_reactor.ev.name=Advanced Continuous Stirred Tank Reactor (CSTR) III
+susy.machine.continuous_stirred_tank_reactor.iv.name=Elite Continuous Stirred Tank Reactor (CSTR)
+susy.machine.continuous_stirred_tank_reactor.luv.name=Elite Continuous Stirred Tank Reactor (CSTR) II
+susy.machine.continuous_stirred_tank_reactor.zpm.name=Elite Continuous Stirred Tank Reactor (CSTR) III
+susy.machine.continuous_stirred_tank_reactor.uv.name=Ultimate Continuous Stirred Tank Reactor (CSTR)
+susy.machine.continuous_stirred_tank_reactor.uhv.name=Epic Continuous Stirred Tank Reactor (CSTR)
+susy.machine.continuous_stirred_tank_reactor.uev.name=Epic Continuous Stirred Tank Reactor (CSTR) II
+susy.machine.continuous_stirred_tank_reactor.uiv.name=Epic Continuous Stirred Tank Reactor (CSTR) III
+susy.machine.continuous_stirred_tank_reactor.uxv.name=Epic Continuous Stirred Tank Reactor (CSTR) IV
+susy.machine.continuous_stirred_tank_reactor.opv.name=Legendary Continuous Stirred Tank Reactor (CSTR)
 
 # Fixed Bed Reactor
-gregtech.machine.fixed_bed_reactor.lv.name=Basic Fixed Bed Reactor
-gregtech.machine.fixed_bed_reactor.mv.name=Advanced Fixed Bed Reactor
-gregtech.machine.fixed_bed_reactor.hv.name=Advanced Fixed Bed Reactor II
-gregtech.machine.fixed_bed_reactor.ev.name=Advanced Fixed Bed Reactor III
-gregtech.machine.fixed_bed_reactor.iv.name=Elite Fixed Bed Reactor
-gregtech.machine.fixed_bed_reactor.luv.name=Elite Fixed Bed Reactor II
-gregtech.machine.fixed_bed_reactor.zpm.name=Elite Fixed Bed Reactor III
-gregtech.machine.fixed_bed_reactor.uv.name=Ultimate Fixed Bed Reactor
-gregtech.machine.fixed_bed_reactor.uhv.name=Epic Fixed Bed Reactor
-gregtech.machine.fixed_bed_reactor.uev.name=Epic Fixed Bed Reactor II
-gregtech.machine.fixed_bed_reactor.uiv.name=Epic Fixed Bed Reactor III
-gregtech.machine.fixed_bed_reactor.uxv.name=Epic Fixed Bed Reactor IV
-gregtech.machine.fixed_bed_reactor.opv.name=Legendary Fixed Bed Reactor
+susy.machine.fixed_bed_reactor.lv.name=Basic Fixed Bed Reactor
+susy.machine.fixed_bed_reactor.mv.name=Advanced Fixed Bed Reactor
+susy.machine.fixed_bed_reactor.hv.name=Advanced Fixed Bed Reactor II
+susy.machine.fixed_bed_reactor.ev.name=Advanced Fixed Bed Reactor III
+susy.machine.fixed_bed_reactor.iv.name=Elite Fixed Bed Reactor
+susy.machine.fixed_bed_reactor.luv.name=Elite Fixed Bed Reactor II
+susy.machine.fixed_bed_reactor.zpm.name=Elite Fixed Bed Reactor III
+susy.machine.fixed_bed_reactor.uv.name=Ultimate Fixed Bed Reactor
+susy.machine.fixed_bed_reactor.uhv.name=Epic Fixed Bed Reactor
+susy.machine.fixed_bed_reactor.uev.name=Epic Fixed Bed Reactor II
+susy.machine.fixed_bed_reactor.uiv.name=Epic Fixed Bed Reactor III
+susy.machine.fixed_bed_reactor.uxv.name=Epic Fixed Bed Reactor IV
+susy.machine.fixed_bed_reactor.opv.name=Legendary Fixed Bed Reactor
 
 # Trickle Bed Reactor
-gregtech.machine.trickle_bed_reactor.lv.name=Basic Trickle Bed Reactor
-gregtech.machine.trickle_bed_reactor.mv.name=Advanced Trickle Bed Reactor
-gregtech.machine.trickle_bed_reactor.hv.name=Advanced Trickle Bed Reactor II
-gregtech.machine.trickle_bed_reactor.ev.name=Advanced Trickle Bed Reactor III
-gregtech.machine.trickle_bed_reactor.iv.name=Elite Trickle Bed Reactor
-gregtech.machine.trickle_bed_reactor.luv.name=Elite Trickle Bed Reactor II
-gregtech.machine.trickle_bed_reactor.zpm.name=Elite Trickle Bed Reactor III
-gregtech.machine.trickle_bed_reactor.uv.name=Ultimate Trickle Bed Reactor
-gregtech.machine.trickle_bed_reactor.uhv.name=Epic Trickle Bed Reactor
-gregtech.machine.trickle_bed_reactor.uev.name=Epic Trickle Bed Reactor II
-gregtech.machine.trickle_bed_reactor.uiv.name=Epic Trickle Bed Reactor III
-gregtech.machine.trickle_bed_reactor.uxv.name=Epic Trickle Bed Reactor IV
-gregtech.machine.trickle_bed_reactor.opv.name=Legendary Trickle Bed Reactor
+susy.machine.trickle_bed_reactor.lv.name=Basic Trickle Bed Reactor
+susy.machine.trickle_bed_reactor.mv.name=Advanced Trickle Bed Reactor
+susy.machine.trickle_bed_reactor.hv.name=Advanced Trickle Bed Reactor II
+susy.machine.trickle_bed_reactor.ev.name=Advanced Trickle Bed Reactor III
+susy.machine.trickle_bed_reactor.iv.name=Elite Trickle Bed Reactor
+susy.machine.trickle_bed_reactor.luv.name=Elite Trickle Bed Reactor II
+susy.machine.trickle_bed_reactor.zpm.name=Elite Trickle Bed Reactor III
+susy.machine.trickle_bed_reactor.uv.name=Ultimate Trickle Bed Reactor
+susy.machine.trickle_bed_reactor.uhv.name=Epic Trickle Bed Reactor
+susy.machine.trickle_bed_reactor.uev.name=Epic Trickle Bed Reactor II
+susy.machine.trickle_bed_reactor.uiv.name=Epic Trickle Bed Reactor III
+susy.machine.trickle_bed_reactor.uxv.name=Epic Trickle Bed Reactor IV
+susy.machine.trickle_bed_reactor.opv.name=Legendary Trickle Bed Reactor
 
 # Bubble Column Reactor
-gregtech.machine.bubble_column_reactor.lv.name=Basic Bubble Column Reactor
-gregtech.machine.bubble_column_reactor.mv.name=Advanced Bubble Column Reactor
-gregtech.machine.bubble_column_reactor.hv.name=Advanced Bubble Column Reactor II
-gregtech.machine.bubble_column_reactor.ev.name=Advanced Bubble Column Reactor III
-gregtech.machine.bubble_column_reactor.iv.name=Elite Bubble Column Reactor
-gregtech.machine.bubble_column_reactor.luv.name=Elite Bubble Column Reactor II
-gregtech.machine.bubble_column_reactor.zpm.name=Elite Bubble Column Reactor III
-gregtech.machine.bubble_column_reactor.uv.name=Ultimate Bubble Column Reactor
-gregtech.machine.bubble_column_reactor.uhv.name=Epic Bubble Column Reactor
-gregtech.machine.bubble_column_reactor.uev.name=Epic Bubble Column Reactor II
-gregtech.machine.bubble_column_reactor.uiv.name=Epic Bubble Column Reactor III
-gregtech.machine.bubble_column_reactor.uxv.name=Epic Bubble Column Reactor IV
-gregtech.machine.bubble_column_reactor.opv.name=Legendary Bubble Column Reactor
+susy.machine.bubble_column_reactor.lv.name=Basic Bubble Column Reactor
+susy.machine.bubble_column_reactor.mv.name=Advanced Bubble Column Reactor
+susy.machine.bubble_column_reactor.hv.name=Advanced Bubble Column Reactor II
+susy.machine.bubble_column_reactor.ev.name=Advanced Bubble Column Reactor III
+susy.machine.bubble_column_reactor.iv.name=Elite Bubble Column Reactor
+susy.machine.bubble_column_reactor.luv.name=Elite Bubble Column Reactor II
+susy.machine.bubble_column_reactor.zpm.name=Elite Bubble Column Reactor III
+susy.machine.bubble_column_reactor.uv.name=Ultimate Bubble Column Reactor
+susy.machine.bubble_column_reactor.uhv.name=Epic Bubble Column Reactor
+susy.machine.bubble_column_reactor.uev.name=Epic Bubble Column Reactor II
+susy.machine.bubble_column_reactor.uiv.name=Epic Bubble Column Reactor III
+susy.machine.bubble_column_reactor.uxv.name=Epic Bubble Column Reactor IV
+susy.machine.bubble_column_reactor.opv.name=Legendary Bubble Column Reactor
 
 # Batch Reactor
-gregtech.machine.batch_reactor.lv.name=Basic Batch Reactor
-gregtech.machine.batch_reactor.mv.name=Advanced Batch Reactor
-gregtech.machine.batch_reactor.hv.name=Advanced Batch Reactor II
-gregtech.machine.batch_reactor.ev.name=Advanced Batch Reactor III
-gregtech.machine.batch_reactor.iv.name=Elite Batch Reactor
-gregtech.machine.batch_reactor.luv.name=Elite Batch Reactor II
-gregtech.machine.batch_reactor.zpm.name=Elite Batch Reactor III
-gregtech.machine.batch_reactor.uv.name=Ultimate Batch Reactor
-gregtech.machine.batch_reactor.uhv.name=Epic Batch Reactor
-gregtech.machine.batch_reactor.uev.name=Epic Batch Reactor II
-gregtech.machine.batch_reactor.uiv.name=Epic Batch Reactor III
-gregtech.machine.batch_reactor.uxv.name=Epic Batch Reactor IV
-gregtech.machine.batch_reactor.opv.name=Legendary Batch Reactor
+susy.machine.batch_reactor.lv.name=Basic Batch Reactor
+susy.machine.batch_reactor.mv.name=Advanced Batch Reactor
+susy.machine.batch_reactor.hv.name=Advanced Batch Reactor II
+susy.machine.batch_reactor.ev.name=Advanced Batch Reactor III
+susy.machine.batch_reactor.iv.name=Elite Batch Reactor
+susy.machine.batch_reactor.luv.name=Elite Batch Reactor II
+susy.machine.batch_reactor.zpm.name=Elite Batch Reactor III
+susy.machine.batch_reactor.uv.name=Ultimate Batch Reactor
+susy.machine.batch_reactor.uhv.name=Epic Batch Reactor
+susy.machine.batch_reactor.uev.name=Epic Batch Reactor II
+susy.machine.batch_reactor.uiv.name=Epic Batch Reactor III
+susy.machine.batch_reactor.uxv.name=Epic Batch Reactor IV
+susy.machine.batch_reactor.opv.name=Legendary Batch Reactor
 
 # Crystallizer
-gregtech.machine.crystallizer.lv.name=Basic Crystallizer
-gregtech.machine.crystallizer.mv.name=Advanced Crystallizer
-gregtech.machine.crystallizer.hv.name=Advanced Crystallizer II
-gregtech.machine.crystallizer.ev.name=Advanced Crystallizer III
-gregtech.machine.crystallizer.iv.name=Elite Crystallizer
-gregtech.machine.crystallizer.luv.name=Elite Crystallizer II
-gregtech.machine.crystallizer.zpm.name=Elite Crystallizer III
-gregtech.machine.crystallizer.uv.name=Ultimate Crystallizer
-gregtech.machine.crystallizer.uhv.name=Epic Crystallizer
-gregtech.machine.crystallizer.uev.name=Epic Crystallizer II
-gregtech.machine.crystallizer.uiv.name=Epic Crystallizer III
-gregtech.machine.crystallizer.uxv.name=Epic Crystallizer IV
-gregtech.machine.crystallizer.opv.name=Legendary Crystallizer
+susy.machine.crystallizer.lv.name=Basic Crystallizer
+susy.machine.crystallizer.mv.name=Advanced Crystallizer
+susy.machine.crystallizer.hv.name=Advanced Crystallizer II
+susy.machine.crystallizer.ev.name=Advanced Crystallizer III
+susy.machine.crystallizer.iv.name=Elite Crystallizer
+susy.machine.crystallizer.luv.name=Elite Crystallizer II
+susy.machine.crystallizer.zpm.name=Elite Crystallizer III
+susy.machine.crystallizer.uv.name=Ultimate Crystallizer
+susy.machine.crystallizer.uhv.name=Epic Crystallizer
+susy.machine.crystallizer.uev.name=Epic Crystallizer II
+susy.machine.crystallizer.uiv.name=Epic Crystallizer III
+susy.machine.crystallizer.uxv.name=Epic Crystallizer IV
+susy.machine.crystallizer.opv.name=Legendary Crystallizer
 
 # Dryer
-gregtech.machine.dryer.lv.name=Basic Dryer
-gregtech.machine.dryer.mv.name=Advanced Dryer
-gregtech.machine.dryer.hv.name=Advanced Dryer II
-gregtech.machine.dryer.ev.name=Advanced Dryer III
-gregtech.machine.dryer.iv.name=Elite Dryer
-gregtech.machine.dryer.luv.name=Elite Dryer II
-gregtech.machine.dryer.zpm.name=Elite Dryer III
-gregtech.machine.dryer.uv.name=Ultimate Dryer
-gregtech.machine.dryer.uhv.name=Epic Dryer
-gregtech.machine.dryer.uev.name=Epic Dryer II
-gregtech.machine.dryer.uiv.name=Epic Dryer III
-gregtech.machine.dryer.uxv.name=Epic Dryer IV
-gregtech.machine.dryer.opv.name=Legendary Dryer
+susy.machine.dryer.lv.name=Basic Dryer
+susy.machine.dryer.mv.name=Advanced Dryer
+susy.machine.dryer.hv.name=Advanced Dryer II
+susy.machine.dryer.ev.name=Advanced Dryer III
+susy.machine.dryer.iv.name=Elite Dryer
+susy.machine.dryer.luv.name=Elite Dryer II
+susy.machine.dryer.zpm.name=Elite Dryer III
+susy.machine.dryer.uv.name=Ultimate Dryer
+susy.machine.dryer.uhv.name=Epic Dryer
+susy.machine.dryer.uev.name=Epic Dryer II
+susy.machine.dryer.uiv.name=Epic Dryer III
+susy.machine.dryer.uxv.name=Epic Dryer IV
+susy.machine.dryer.opv.name=Legendary Dryer
 
 # Ion Exchange Column
-gregtech.machine.ion_exchange_column.lv.name=Basic Ion Exchange Column
-gregtech.machine.ion_exchange_column.mv.name=Advanced Ion Exchange Column
-gregtech.machine.ion_exchange_column.hv.name=Advanced Ion Exchange Column II
-gregtech.machine.ion_exchange_column.ev.name=Advanced Ion Exchange Column III
-gregtech.machine.ion_exchange_column.iv.name=Elite Ion Exchange Column
-gregtech.machine.ion_exchange_column.luv.name=Elite Ion Exchange Column II
-gregtech.machine.ion_exchange_column.zpm.name=Elite Ion Exchange Column III
-gregtech.machine.ion_exchange_column.uv.name=Ultimate Ion Exchange Column
-gregtech.machine.ion_exchange_column.uhv.name=Epic Ion Exchange Column
-gregtech.machine.ion_exchange_column.uev.name=Epic Ion Exchange Column II
-gregtech.machine.ion_exchange_column.uiv.name=Epic Ion Exchange Column III
-gregtech.machine.ion_exchange_column.uxv.name=Epic Ion Exchange Column IV
-gregtech.machine.ion_exchange_column.opv.name=Legendary Ion Exchange Column
+susy.machine.ion_exchange_column.lv.name=Basic Ion Exchange Column
+susy.machine.ion_exchange_column.mv.name=Advanced Ion Exchange Column
+susy.machine.ion_exchange_column.hv.name=Advanced Ion Exchange Column II
+susy.machine.ion_exchange_column.ev.name=Advanced Ion Exchange Column III
+susy.machine.ion_exchange_column.iv.name=Elite Ion Exchange Column
+susy.machine.ion_exchange_column.luv.name=Elite Ion Exchange Column II
+susy.machine.ion_exchange_column.zpm.name=Elite Ion Exchange Column III
+susy.machine.ion_exchange_column.uv.name=Ultimate Ion Exchange Column
+susy.machine.ion_exchange_column.uhv.name=Epic Ion Exchange Column
+susy.machine.ion_exchange_column.uev.name=Epic Ion Exchange Column II
+susy.machine.ion_exchange_column.uiv.name=Epic Ion Exchange Column III
+susy.machine.ion_exchange_column.uxv.name=Epic Ion Exchange Column IV
+susy.machine.ion_exchange_column.opv.name=Legendary Ion Exchange Column
 
 # Zone Refiner
-gregtech.machine.zone_refiner.lv.name=Basic Zone Refiner
-gregtech.machine.zone_refiner.mv.name=Advanced Zone Refiner
-gregtech.machine.zone_refiner.hv.name=Advanced Zone Refiner II
-gregtech.machine.zone_refiner.ev.name=Advanced Zone Refiner III
-gregtech.machine.zone_refiner.iv.name=Elite Zone Refiner
-gregtech.machine.zone_refiner.luv.name=Elite Zone Refiner II
-gregtech.machine.zone_refiner.zpm.name=Elite Zone Refiner III
-gregtech.machine.zone_refiner.uv.name=Ultimate Zone Refiner
-gregtech.machine.zone_refiner.uhv.name=Epic Zone Refiner
-gregtech.machine.zone_refiner.uev.name=Epic Zone Refiner II
-gregtech.machine.zone_refiner.uiv.name=Epic Zone Refiner III
-gregtech.machine.zone_refiner.uxv.name=Epic Zone Refiner IV
-gregtech.machine.zone_refiner.opv.name=Legendary Zone Refiner
+susy.machine.zone_refiner.lv.name=Basic Zone Refiner
+susy.machine.zone_refiner.mv.name=Advanced Zone Refiner
+susy.machine.zone_refiner.hv.name=Advanced Zone Refiner II
+susy.machine.zone_refiner.ev.name=Advanced Zone Refiner III
+susy.machine.zone_refiner.iv.name=Elite Zone Refiner
+susy.machine.zone_refiner.luv.name=Elite Zone Refiner II
+susy.machine.zone_refiner.zpm.name=Elite Zone Refiner III
+susy.machine.zone_refiner.uv.name=Ultimate Zone Refiner
+susy.machine.zone_refiner.uhv.name=Epic Zone Refiner
+susy.machine.zone_refiner.uev.name=Epic Zone Refiner II
+susy.machine.zone_refiner.uiv.name=Epic Zone Refiner III
+susy.machine.zone_refiner.uxv.name=Epic Zone Refiner IV
+susy.machine.zone_refiner.opv.name=Legendary Zone Refiner
 
 # Tube Furnace
-gregtech.machine.tube_furnace.lv.name=Basic Tube Furnace
-gregtech.machine.tube_furnace.mv.name=Advanced Tube Furnace
-gregtech.machine.tube_furnace.hv.name=Advanced Tube Furnace II
-gregtech.machine.tube_furnace.ev.name=Advanced Tube Furnace III
-gregtech.machine.tube_furnace.iv.name=Elite Tube Furnace
-gregtech.machine.tube_furnace.luv.name=Elite Tube Furnace II
-gregtech.machine.tube_furnace.zpm.name=Elite Tube Furnace III
-gregtech.machine.tube_furnace.uv.name=Ultimate Tube Furnace
-gregtech.machine.tube_furnace.uhv.name=Epic Tube Furnace
-gregtech.machine.tube_furnace.uev.name=Epic Tube Furnace II
-gregtech.machine.tube_furnace.uiv.name=Epic Tube Furnace III
-gregtech.machine.tube_furnace.uxv.name=Epic Tube Furnace IV
-gregtech.machine.tube_furnace.opv.name=Legendary Tube Furnace
+susy.machine.tube_furnace.lv.name=Basic Tube Furnace
+susy.machine.tube_furnace.mv.name=Advanced Tube Furnace
+susy.machine.tube_furnace.hv.name=Advanced Tube Furnace II
+susy.machine.tube_furnace.ev.name=Advanced Tube Furnace III
+susy.machine.tube_furnace.iv.name=Elite Tube Furnace
+susy.machine.tube_furnace.luv.name=Elite Tube Furnace II
+susy.machine.tube_furnace.zpm.name=Elite Tube Furnace III
+susy.machine.tube_furnace.uv.name=Ultimate Tube Furnace
+susy.machine.tube_furnace.uhv.name=Epic Tube Furnace
+susy.machine.tube_furnace.uev.name=Epic Tube Furnace II
+susy.machine.tube_furnace.uiv.name=Epic Tube Furnace III
+susy.machine.tube_furnace.uxv.name=Epic Tube Furnace IV
+susy.machine.tube_furnace.opv.name=Legendary Tube Furnace
 
 # UV Light Box
-gregtech.machine.uv_light_box.lv.name=Basic UV Light Box
-gregtech.machine.uv_light_box.mv.name=Advanced UV Light Box
-gregtech.machine.uv_light_box.hv.name=Advanced UV Light Box II
-gregtech.machine.uv_light_box.ev.name=Advanced UV Light Box III
-gregtech.machine.uv_light_box.iv.name=Elite UV Light Box
-gregtech.machine.uv_light_box.luv.name=Elite UV Light Box II
-gregtech.machine.uv_light_box.zpm.name=Elite UV Light Box III
-gregtech.machine.uv_light_box.uv.name=Ultimate UV Light Box
-gregtech.machine.uv_light_box.uhv.name=Epic UV Light Box
-gregtech.machine.uv_light_box.uev.name=Epic UV Light Box II
-gregtech.machine.uv_light_box.uiv.name=Epic UV Light Box III
-gregtech.machine.uv_light_box.uxv.name=Epic UV Light Box IV
-gregtech.machine.uv_light_box.opv.name=Legendary UV Light Box
+susy.machine.uv_light_box.lv.name=Basic UV Light Box
+susy.machine.uv_light_box.mv.name=Advanced UV Light Box
+susy.machine.uv_light_box.hv.name=Advanced UV Light Box II
+susy.machine.uv_light_box.ev.name=Advanced UV Light Box III
+susy.machine.uv_light_box.iv.name=Elite UV Light Box
+susy.machine.uv_light_box.luv.name=Elite UV Light Box II
+susy.machine.uv_light_box.zpm.name=Elite UV Light Box III
+susy.machine.uv_light_box.uv.name=Ultimate UV Light Box
+susy.machine.uv_light_box.uhv.name=Epic UV Light Box
+susy.machine.uv_light_box.uev.name=Epic UV Light Box II
+susy.machine.uv_light_box.uiv.name=Epic UV Light Box III
+susy.machine.uv_light_box.uxv.name=Epic UV Light Box IV
+susy.machine.uv_light_box.opv.name=Legendary UV Light Box
 
 # CVD
-gregtech.machine.cvd.lv.name=Basic CVD Unit
-gregtech.machine.cvd.mv.name=Advanced CVD Unit
-gregtech.machine.cvd.hv.name=Advanced CVD Unit II
-gregtech.machine.cvd.ev.name=Advanced CVD Unit III
-gregtech.machine.cvd.iv.name=Elite CVD Unit
-gregtech.machine.cvd.luv.name=Elite CVD Unit II
-gregtech.machine.cvd.zpm.name=Elite CVD Unit III
-gregtech.machine.cvd.uv.name=Ultimate CVD Unit
-gregtech.machine.cvd.uhv.name=Epic CVD Unit
-gregtech.machine.cvd.uev.name=Epic CVD Unit II
-gregtech.machine.cvd.uiv.name=Epic CVD Unit III
-gregtech.machine.cvd.uxv.name=Epic CVD Unit IV
-gregtech.machine.cvd.opv.name=Legendary CVD Unit
+susy.machine.cvd.lv.name=Basic CVD Unit
+susy.machine.cvd.mv.name=Advanced CVD Unit
+susy.machine.cvd.hv.name=Advanced CVD Unit II
+susy.machine.cvd.ev.name=Advanced CVD Unit III
+susy.machine.cvd.iv.name=Elite CVD Unit
+susy.machine.cvd.luv.name=Elite CVD Unit II
+susy.machine.cvd.zpm.name=Elite CVD Unit III
+susy.machine.cvd.uv.name=Ultimate CVD Unit
+susy.machine.cvd.uhv.name=Epic CVD Unit
+susy.machine.cvd.uev.name=Epic CVD Unit II
+susy.machine.cvd.uiv.name=Epic CVD Unit III
+susy.machine.cvd.uxv.name=Epic CVD Unit IV
+susy.machine.cvd.opv.name=Legendary CVD Unit
 
 # Ion Implanter
-gregtech.machine.ion_implanter.lv.name=Basic Ion Implanter
-gregtech.machine.ion_implanter.mv.name=Advanced Ion Implanter
-gregtech.machine.ion_implanter.hv.name=Advanced Ion Implanter II
-gregtech.machine.ion_implanter.ev.name=Advanced Ion Implanter III
-gregtech.machine.ion_implanter.iv.name=Elite Ion Implanter
-gregtech.machine.ion_implanter.luv.name=Elite Ion Implanter II
-gregtech.machine.ion_implanter.zpm.name=Elite Ion Implanter III
-gregtech.machine.ion_implanter.uv.name=Ultimate Ion Implanter
-gregtech.machine.ion_implanter.uhv.name=Epic Ion Implanter
-gregtech.machine.ion_implanter.uev.name=Epic Ion Implanter II
-gregtech.machine.ion_implanter.uiv.name=Epic Ion Implanter III
-gregtech.machine.ion_implanter.uxv.name=Epic Ion Implanter IV
-gregtech.machine.ion_implanter.opv.name=Legendary Ion Implanter
+susy.machine.ion_implanter.lv.name=Basic Ion Implanter
+susy.machine.ion_implanter.mv.name=Advanced Ion Implanter
+susy.machine.ion_implanter.hv.name=Advanced Ion Implanter II
+susy.machine.ion_implanter.ev.name=Advanced Ion Implanter III
+susy.machine.ion_implanter.iv.name=Elite Ion Implanter
+susy.machine.ion_implanter.luv.name=Elite Ion Implanter II
+susy.machine.ion_implanter.zpm.name=Elite Ion Implanter III
+susy.machine.ion_implanter.uv.name=Ultimate Ion Implanter
+susy.machine.ion_implanter.uhv.name=Epic Ion Implanter
+susy.machine.ion_implanter.uev.name=Epic Ion Implanter II
+susy.machine.ion_implanter.uiv.name=Epic Ion Implanter III
+susy.machine.ion_implanter.uxv.name=Epic Ion Implanter IV
+susy.machine.ion_implanter.opv.name=Legendary Ion Implanter
 
 # Fluid Compressor
-gregtech.machine.fluid_compressor.lv.name=Basic Fluid Compressor
-gregtech.machine.fluid_compressor.mv.name=Advanced Fluid Compressor
-gregtech.machine.fluid_compressor.hv.name=Advanced Fluid Compressor II
-gregtech.machine.fluid_compressor.ev.name=Advanced Fluid Compressor III
-gregtech.machine.fluid_compressor.iv.name=Elite Fluid Compressor
-gregtech.machine.fluid_compressor.luv.name=Elite Fluid Compressor II
-gregtech.machine.fluid_compressor.zpm.name=Elite Fluid Compressor III
-gregtech.machine.fluid_compressor.uv.name=Ultimate Fluid Compressor
-gregtech.machine.fluid_compressor.uhv.name=Epic Fluid Compressor
-gregtech.machine.fluid_compressor.uev.name=Epic Fluid Compressor II
-gregtech.machine.fluid_compressor.uiv.name=Epic Fluid Compressor III
-gregtech.machine.fluid_compressor.uxv.name=Epic Fluid Compressor IV
-gregtech.machine.fluid_compressor.opv.name=Legendary Fluid Compressor
+susy.machine.fluid_compressor.lv.name=Basic Fluid Compressor
+susy.machine.fluid_compressor.mv.name=Advanced Fluid Compressor
+susy.machine.fluid_compressor.hv.name=Advanced Fluid Compressor II
+susy.machine.fluid_compressor.ev.name=Advanced Fluid Compressor III
+susy.machine.fluid_compressor.iv.name=Elite Fluid Compressor
+susy.machine.fluid_compressor.luv.name=Elite Fluid Compressor II
+susy.machine.fluid_compressor.zpm.name=Elite Fluid Compressor III
+susy.machine.fluid_compressor.uv.name=Ultimate Fluid Compressor
+susy.machine.fluid_compressor.uhv.name=Epic Fluid Compressor
+susy.machine.fluid_compressor.uev.name=Epic Fluid Compressor II
+susy.machine.fluid_compressor.uiv.name=Epic Fluid Compressor III
+susy.machine.fluid_compressor.uxv.name=Epic Fluid Compressor IV
+susy.machine.fluid_compressor.opv.name=Legendary Fluid Compressor
 
 # Fluid Decompressor
-gregtech.machine.fluid_decompressor.lv.name=Basic Fluid Decompressor
-gregtech.machine.fluid_decompressor.mv.name=Advanced Fluid Decompressor
-gregtech.machine.fluid_decompressor.hv.name=Advanced Fluid Decompressor II
-gregtech.machine.fluid_decompressor.ev.name=Advanced Fluid Decompressor III
-gregtech.machine.fluid_decompressor.iv.name=Elite Fluid Decompressor
-gregtech.machine.fluid_decompressor.luv.name=Elite Fluid Decompressor II
-gregtech.machine.fluid_decompressor.zpm.name=Elite Fluid Decompressor III
-gregtech.machine.fluid_decompressor.uv.name=Ultimate Fluid Decompressor
-gregtech.machine.fluid_decompressor.uhv.name=Epic Fluid Decompressor
-gregtech.machine.fluid_decompressor.uev.name=Epic Fluid Decompressor II
-gregtech.machine.fluid_decompressor.uiv.name=Epic Fluid Decompressor III
-gregtech.machine.fluid_decompressor.uxv.name=Epic Fluid Decompressor IV
-gregtech.machine.fluid_decompressor.opv.name=Legendary Fluid Decompressor
+susy.machine.fluid_decompressor.lv.name=Basic Fluid Decompressor
+susy.machine.fluid_decompressor.mv.name=Advanced Fluid Decompressor
+susy.machine.fluid_decompressor.hv.name=Advanced Fluid Decompressor II
+susy.machine.fluid_decompressor.ev.name=Advanced Fluid Decompressor III
+susy.machine.fluid_decompressor.iv.name=Elite Fluid Decompressor
+susy.machine.fluid_decompressor.luv.name=Elite Fluid Decompressor II
+susy.machine.fluid_decompressor.zpm.name=Elite Fluid Decompressor III
+susy.machine.fluid_decompressor.uv.name=Ultimate Fluid Decompressor
+susy.machine.fluid_decompressor.uhv.name=Epic Fluid Decompressor
+susy.machine.fluid_decompressor.uev.name=Epic Fluid Decompressor II
+susy.machine.fluid_decompressor.uiv.name=Epic Fluid Decompressor III
+susy.machine.fluid_decompressor.uxv.name=Epic Fluid Decompressor IV
+susy.machine.fluid_decompressor.opv.name=Legendary Fluid Decompressor
 
 # Weapons Factory
-gregtech.machine.weapons_factory.lv.name=Basic Weapons Factory
-gregtech.machine.weapons_factory.mv.name=Advanced Weapons Factory
-gregtech.machine.weapons_factory.hv.name=Advanced Weapons Factory II
-gregtech.machine.weapons_factory.ev.name=Advanced Weapons Factory III
-gregtech.machine.weapons_factory.iv.name=Elite Weapons Factory
-gregtech.machine.weapons_factory.luv.name=Elite Weapons Factory II
-gregtech.machine.weapons_factory.zpm.name=Elite Weapons Factory III
-gregtech.machine.weapons_factory.uv.name=Ultimate Weapons Factory
-gregtech.machine.weapons_factory.uhv.name=Epic Weapons Factory
-gregtech.machine.weapons_factory.uev.name=Epic Weapons Factory II
-gregtech.machine.weapons_factory.uiv.name=Epic Weapons Factory III
-gregtech.machine.weapons_factory.uxv.name=Epic Weapons Factory IV
-gregtech.machine.weapons_factory.opv.name=Legendary Weapons Factory
+susy.machine.weapons_factory.lv.name=Basic Weapons Factory
+susy.machine.weapons_factory.mv.name=Advanced Weapons Factory
+susy.machine.weapons_factory.hv.name=Advanced Weapons Factory II
+susy.machine.weapons_factory.ev.name=Advanced Weapons Factory III
+susy.machine.weapons_factory.iv.name=Elite Weapons Factory
+susy.machine.weapons_factory.luv.name=Elite Weapons Factory II
+susy.machine.weapons_factory.zpm.name=Elite Weapons Factory III
+susy.machine.weapons_factory.uv.name=Ultimate Weapons Factory
+susy.machine.weapons_factory.uhv.name=Epic Weapons Factory
+susy.machine.weapons_factory.uev.name=Epic Weapons Factory II
+susy.machine.weapons_factory.uiv.name=Epic Weapons Factory III
+susy.machine.weapons_factory.uxv.name=Epic Weapons Factory IV
+susy.machine.weapons_factory.opv.name=Legendary Weapons Factory
 
 # Phase Separator
-gregtech.machine.phase_separator.name=Phase Separator
+susy.machine.phase_separator.name=Phase Separator
 
 # RTG
-gregtech.machine.rtg.lv.name=Basic RTG
-gregtech.machine.rtg.tooltip.info=Power for your pacemaker.
-gregtech.machine.rtg.tooltip.description=Generates a small but steady amount of electricity using the decay of radioactive isotopes.
-gregtech.machine.rtg.voltage_produced=§aVoltage PRODUCED: §f%,d EU/t (%s§f)
+susy.machine.rtg.lv.name=Basic RTG
+susy.machine.rtg.mv.name=Advanced RTG
+susy.machine.rtg.tooltip.info=Power for your pacemaker.
+susy.machine.rtg.tooltip.description=Generates a small but steady amount of electricity using the decay of radioactive isotopes.
+susy.machine.rtg.voltage_produced=§aVoltage PRODUCED: §f%,d EU/t (%s§f)
 
 # Electrostatic Separator
-gregtech.machine.electrostatic_separator.lv.name=Basic Electrostatic Separator
-gregtech.machine.electrostatic_separator.mv.name=Advanced Electrostatic Separator
-gregtech.machine.electrostatic_separator.hv.name=Advanced Electrostatic Separator II
-gregtech.machine.electrostatic_separator.ev.name=Advanced Electrostatic Separator III
-gregtech.machine.electrostatic_separator.iv.name=Elite Electrostatic Separator
-gregtech.machine.electrostatic_separator.luv.name=Elite Electrostatic Separator II
-gregtech.machine.electrostatic_separator.zpm.name=Elite Electrostatic Separator III
-gregtech.machine.electrostatic_separator.uv.name=Ultimate Electrostatic Separator
-gregtech.machine.electrostatic_separator.uhv.name=Epic Electrostatic Separator
-gregtech.machine.electrostatic_separator.uev.name=Epic Electrostatic Separator II
-gregtech.machine.electrostatic_separator.uiv.name=Epic Electrostatic Separator III
-gregtech.machine.electrostatic_separator.uxv.name=Epic Electrostatic Separator IV
-gregtech.machine.electrostatic_separator.opv.name=Legendary Electrostatic Separator
+susy.machine.electrostatic_separator.lv.name=Basic Electrostatic Separator
+susy.machine.electrostatic_separator.mv.name=Advanced Electrostatic Separator
+susy.machine.electrostatic_separator.hv.name=Advanced Electrostatic Separator II
+susy.machine.electrostatic_separator.ev.name=Advanced Electrostatic Separator III
+susy.machine.electrostatic_separator.iv.name=Elite Electrostatic Separator
+susy.machine.electrostatic_separator.luv.name=Elite Electrostatic Separator II
+susy.machine.electrostatic_separator.zpm.name=Elite Electrostatic Separator III
+susy.machine.electrostatic_separator.uv.name=Ultimate Electrostatic Separator
+susy.machine.electrostatic_separator.uhv.name=Epic Electrostatic Separator
+susy.machine.electrostatic_separator.uev.name=Epic Electrostatic Separator II
+susy.machine.electrostatic_separator.uiv.name=Epic Electrostatic Separator III
+susy.machine.electrostatic_separator.uxv.name=Epic Electrostatic Separator IV
+susy.machine.electrostatic_separator.opv.name=Legendary Electrostatic Separator
 
 # Textile Spinner
-gregtech.machine.textile_spinner.lv.name=Basic Textile Spinner
-gregtech.machine.textile_spinner.mv.name=Advanced Textile Spinner
-gregtech.machine.textile_spinner.hv.name=Advanced Textile Spinner II
-gregtech.machine.textile_spinner.ev.name=Advanced Textile Spinner III
-gregtech.machine.textile_spinner.iv.name=Elite Textile Spinner
-gregtech.machine.textile_spinner.luv.name=Elite Textile Spinner II
-gregtech.machine.textile_spinner.zpm.name=Elite Textile Spinner III
-gregtech.machine.textile_spinner.uv.name=Ultimate Textile Spinner
-gregtech.machine.textile_spinner.uhv.name=Epic Textile Spinner
-gregtech.machine.textile_spinner.uev.name=Epic Textile Spinner II
-gregtech.machine.textile_spinner.uiv.name=Epic Textile Spinner III
-gregtech.machine.textile_spinner.uxv.name=Epic Textile Spinner IV
-gregtech.machine.textile_spinner.opv.name=Legendary Textile Spinner
+susy.machine.textile_spinner.lv.name=Basic Textile Spinner
+susy.machine.textile_spinner.mv.name=Advanced Textile Spinner
+susy.machine.textile_spinner.hv.name=Advanced Textile Spinner II
+susy.machine.textile_spinner.ev.name=Advanced Textile Spinner III
+susy.machine.textile_spinner.iv.name=Elite Textile Spinner
+susy.machine.textile_spinner.luv.name=Elite Textile Spinner II
+susy.machine.textile_spinner.zpm.name=Elite Textile Spinner III
+susy.machine.textile_spinner.uv.name=Ultimate Textile Spinner
+susy.machine.textile_spinner.uhv.name=Epic Textile Spinner
+susy.machine.textile_spinner.uev.name=Epic Textile Spinner II
+susy.machine.textile_spinner.uiv.name=Epic Textile Spinner III
+susy.machine.textile_spinner.uxv.name=Epic Textile Spinner IV
+susy.machine.textile_spinner.opv.name=Legendary Textile Spinner
 
 # Polishing Machine
-gregtech.machine.polishing_machine.lv.name=Basic Polishing Machine
-gregtech.machine.polishing_machine.mv.name=Advanced Polishing Machine
-gregtech.machine.polishing_machine.hv.name=Advanced Polishing Machine II
-gregtech.machine.polishing_machine.ev.name=Advanced Polishing Machine III
-gregtech.machine.polishing_machine.iv.name=Elite Polishing Machine
-gregtech.machine.polishing_machine.luv.name=Elite Polishing Machine II
-gregtech.machine.polishing_machine.zpm.name=Elite Polishing Machine III
-gregtech.machine.polishing_machine.uv.name=Ultimate Polishing Machine
-gregtech.machine.polishing_machine.uhv.name=Epic Polishing Machine
-gregtech.machine.polishing_machine.uev.name=Epic Polishing Machine II
-gregtech.machine.polishing_machine.uiv.name=Epic Polishing Machine III
-gregtech.machine.polishing_machine.uxv.name=Epic Polishing Machine IV
-gregtech.machine.polishing_machine.opv.name=Legendary Polishing Machine
+susy.machine.polishing_machine.lv.name=Basic Polishing Machine
+susy.machine.polishing_machine.mv.name=Advanced Polishing Machine
+susy.machine.polishing_machine.hv.name=Advanced Polishing Machine II
+susy.machine.polishing_machine.ev.name=Advanced Polishing Machine III
+susy.machine.polishing_machine.iv.name=Elite Polishing Machine
+susy.machine.polishing_machine.luv.name=Elite Polishing Machine II
+susy.machine.polishing_machine.zpm.name=Elite Polishing Machine III
+susy.machine.polishing_machine.uv.name=Ultimate Polishing Machine
+susy.machine.polishing_machine.uhv.name=Epic Polishing Machine
+susy.machine.polishing_machine.uev.name=Epic Polishing Machine II
+susy.machine.polishing_machine.uiv.name=Epic Polishing Machine III
+susy.machine.polishing_machine.uxv.name=Epic Polishing Machine IV
+susy.machine.polishing_machine.opv.name=Legendary Polishing Machine
 
-gregtech.machine.bath_condenser.name=Bath Condenser
-gregtech.machine.bath_condenser.tooltip=Only works inside a Cryogenic Distillation Tower
+susy.machine.bath_condenser.name=Bath Condenser
+susy.machine.bath_condenser.tooltip=Only works inside a Cryogenic Distillation Tower
 
-gregtech.machine.incinerator.lv.name=Basic Incinerator
-gregtech.machine.incinerator.mv.name=Advanced Incinerator
-gregtech.machine.incinerator.hv.name=Advanced Incinerator II
-gregtech.machine.incinerator.ev.name=Advanced Incinerator III
-gregtech.machine.incinerator.tooltip.1=§6Incinerates§r %s item(s) per %s tick(s)
-gregtech.machine.incinerator.tooltip.2=§cNeeds eight blocks of air to release gasses into
-gregtech.machine.incinerator.tooltip.3=§8Don't worry about where the heavy metals are going.
-gregtech.multiblock.incinerator.clogged=§4Clogged! (Is the top blocked?)
-gregtech.multiblock.incinerator.working=§2Clog-free
+susy.machine.incinerator.lv.name=Basic Incinerator
+susy.machine.incinerator.mv.name=Advanced Incinerator
+susy.machine.incinerator.hv.name=Advanced Incinerator II
+susy.machine.incinerator.ev.name=Advanced Incinerator III
+susy.machine.incinerator.tooltip.1=§6Incinerates§r %s item(s) per %s tick(s)
+susy.machine.incinerator.tooltip.2=§cNeeds eight blocks of air to release gasses into
+susy.machine.incinerator.tooltip.3=§8Don't worry about where the heavy metals are going.
+susy.multiblock.incinerator.clogged=§4Clogged! (Is the top blocked?)
+susy.multiblock.incinerator.working=§2Clog-free
 
-gregtech.machine.strand_bus.import.name=Strand Import Bus
-gregtech.machine.strand_bus.export.name=Strand Export Bus
-gregtech.machine.turning_zone.name=Turning Zone
-gregtech.machine.turning_zone.tooltip=Heart of a Continuous Casting System
-gregtech.machine.turning_zone.description=Curves a strand of partially molten metal towards the horizontal. This is required for all continuous casting systems, as other machines are otherwise unable to be rotated.
-gregtech.machine.strand_cooler.name=Strand Cooler
-gregtech.machine.strand_cooler.tooltip=Cools cut strands of metal into finished products using water
-gregtech.machine.rolling_mill.name=Rolling Mill
-gregtech.machine.rolling_mill.tooltip=Flattens a strand of metal, decreasing thickness and increasing width
-gregtech.machine.cluster_mill.name=Cluster Mill
-gregtech.machine.cluster_mill.tooltip=Flattens a strand of metal more, at the cost of lower throughput
-gregtech.machine.hot_isostatic_press.name=Hot Isostatic Press
-gregtech.machine.flying_shear.name=Flying Shear
-gregtech.machine.flying_shear.tooltip=Required to cut a strand of metal into separate pieces for cooling
-gregtech.machine.slab_mold.name=Slab Mold
-gregtech.machine.slab_mold.tooltip=Useful for making all types of plates and foils
-gregtech.machine.billet_mold.name=Billet Mold
-gregtech.machine.billet_mold.tooltip=Useful for making ingots and rods
-gregtech.multiblock.strand_mold.tooltip=Takes in 2592L of molten metal per operation and 50L of water (outputting voidable steam)
-gregtech.multiblock.slab_mold.description=Creates a slab 2 meters wide and 0.5 meters thick from various compatible types of molten metal, including steel, aluminium, and copper. After the slab has been created, it must be turned using a turning zone. Then, it may be rolled into these material types: Dense Plate (0.5-1 m thick), Double Plate (0.2-0.33 m thick), Plate (0.1-0.125 m thick), Foil (0.025-0.031 m thick). A dense plate technically does not require any rolling to produce. Finally, use a flying shear saw and a strand cooler to collect the finished products.
-gregtech.multiblock.billet_mold.description=Creates a slab one third of a meter wide and thick from various compatible types of molten metal, including steel, aluminium, and copper. After the billet has been created, it must be turned using a turning zone. Then, it may be rolled into these material types: Ingot (0.2-0.25 m thick), Rod (0.28-0.37 m thick). A rod technically does not require any rolling to produce. Finally, use a flying shear saw and a strand cooler to collect the finished products.
-gregtech.machine.gas_atomizer.name=Gas Atomizer
+susy.machine.strand_bus.import.name=Strand Import Bus
+susy.machine.strand_bus.export.name=Strand Export Bus
+susy.machine.turning_zone.name=Turning Zone
+susy.machine.turning_zone.tooltip=Heart of a Continuous Casting System
+susy.machine.turning_zone.description=Curves a strand of partially molten metal towards the horizontal. This is required for all continuous casting systems, as other machines are otherwise unable to be rotated.
+susy.machine.strand_cooler.name=Strand Cooler
+susy.machine.strand_cooler.tooltip=Cools cut strands of metal into finished products using water
+susy.machine.rolling_mill.name=Rolling Mill
+susy.machine.rolling_mill.tooltip=Flattens a strand of metal, decreasing thickness and increasing width
+susy.machine.cluster_mill.name=Cluster Mill
+susy.machine.cluster_mill.tooltip=Flattens a strand of metal more, at the cost of lower throughput
+susy.machine.hot_isostatic_press.name=Hot Isostatic Press
+susy.machine.flying_shear.name=Flying Shear
+susy.machine.flying_shear.tooltip=Required to cut a strand of metal into separate pieces for cooling
+susy.machine.slab_mold.name=Slab Mold
+susy.machine.slab_mold.tooltip=Useful for making all types of plates and foils
+susy.machine.billet_mold.name=Billet Mold
+susy.machine.billet_mold.tooltip=Useful for making ingots and rods
+susy.multiblock.strand_mold.tooltip=Takes in 2592L of molten metal per operation and 50L of water (outputting voidable steam)
+susy.multiblock.slab_mold.description=Creates a slab 2 meters wide and 0.5 meters thick from various compatible types of molten metal, including steel, aluminium, and copper. After the slab has been created, it must be turned using a turning zone. Then, it may be rolled into these material types: Dense Plate (0.5-1 m thick), Double Plate (0.2-0.33 m thick), Plate (0.1-0.125 m thick), Foil (0.025-0.031 m thick). A dense plate technically does not require any rolling to produce. Finally, use a flying shear saw and a strand cooler to collect the finished products.
+susy.multiblock.billet_mold.description=Creates a slab one third of a meter wide and thick from various compatible types of molten metal, including steel, aluminium, and copper. After the billet has been created, it must be turned using a turning zone. Then, it may be rolled into these material types: Ingot (0.2-0.25 m thick), Rod (0.28-0.37 m thick). A rod technically does not require any rolling to produce. Finally, use a flying shear saw and a strand cooler to collect the finished products.
+susy.machine.gas_atomizer.name=Gas Atomizer
 tile.susy_multiblock_casing.monel_casing.name=Cryogenic Monel 500 Casing
 tile.susy_multiblock_casing.monel_casing_pipe.name=Cryogenic Monel 500 Pipe Casing
 tile.susy_multiblock_casing.copper_casing_pipe.name=Conductive Copper Pipe Casing
 tile.metallurgy.hydraulic_cylinder.name=Hydraulic Cylinder
 tile.metallurgy_2.flying_shear_saw.name=Flying Shear Saw
 tile.metallurgy_roll.roll.name=Roll
+
+susy.machine.fuel_cell.ev.name=Low Temperature Fuel Cell
+susy.machine.fuel_cell.iv.name=High Temperature Fuel Cell
+susy.machine.fuel_cell.tooltip=Temperature requirements for operation: %s°C
+
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
 recipemap.latex_collector.name=Arboreal Collector
@@ -833,18 +853,22 @@ recipemap.gas_atomizer.name=Gas Atomizer
 recipemap.metallurgical_converter.name=Metallurgical Converter
 recipemap.low_pressure_advanced_steam_turbine.name=Low Pressure Advanced Steam Turbine
 recipemap.high_pressure_advanced_steam_turbine.name=High Pressure Advanced Steam Turbine
+recipemap.mixer_settler.name=Mixer-Settler
+recipemap.injection_molder=Injection Molding
+recipemap.boiler.name=Solid Boiler Fuels
+recipemap.fuel_cell.name=Solid Oxide Fuel Cell (SOFC)
 
-gregtech.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
+susy.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 
 # Energy Hatches
 
-gregtech.machine.energy_hatch.output_4a.lv.name=LV 4A Dynamo Hatch
-gregtech.machine.energy_hatch.output_16a.lv.name=LV 16A Dynamo Hatch
-gregtech.machine.energy_hatch.output_4a.mv.name=MV 4A Dynamo Hatch
-gregtech.machine.energy_hatch.output_16a.mv.name=MV 16A Dynamo Hatch
-gregtech.machine.energy_hatch.output_4a.hv.name=HV 4A Dynamo Hatch
-gregtech.machine.energy_hatch.output_16a.hv.name=HV 16A Dynamo Hatch
-gregtech.machine.energy_hatch.output_16a.ev.name=EV 16A Dynamo Hatch
+susy.machine.energy_hatch.output_4a.lv.name=LV 4A Dynamo Hatch
+susy.machine.energy_hatch.output_16a.lv.name=LV 16A Dynamo Hatch
+susy.machine.energy_hatch.output_4a.mv.name=MV 4A Dynamo Hatch
+susy.machine.energy_hatch.output_16a.mv.name=MV 16A Dynamo Hatch
+susy.machine.energy_hatch.output_4a.hv.name=HV 4A Dynamo Hatch
+susy.machine.energy_hatch.output_16a.hv.name=HV 16A Dynamo Hatch
+susy.machine.energy_hatch.output_16a.ev.name=EV 16A Dynamo Hatch
 
 # Quadruple & Nonuple Fluid Hatches
 
@@ -865,34 +889,34 @@ gregtech.machine.fluid_hatch.export_9x.mv.name=MV Nonuple Output Hatch
 gregtech.machine.fluid_hatch.export_9x.hv.name=HV Nonuple Output Hatch
 
 # Other multiblock parts
-gregtech.machine.dumping_hatch=Dumping Hatch
-gregtech.machine.dumping_hatch.lv.name=Dumping Hatch
+susy.machine.dumping_hatch=Dumping Hatch
+susy.machine.dumping_hatch.lv.name=Dumping Hatch
 
 # Distillation tower explanations
-gregtech.machine.ordered_dt.tooltip.1=Fluid input and output hatches are on the same layers
-gregtech.machine.ordered_dt.tooltip.2=§cNot putting a fluid output in the Nth layer from the bottom voids the Nth output§7
+susy.machine.ordered_dt.tooltip.1=Fluid input and output hatches are on the same layers
+susy.machine.ordered_dt.tooltip.2=§cNot putting a fluid output in the Nth layer from the bottom voids the Nth output§7
 
 # Logistics
-gregtech.machine.delegator.tooltip.non_recursion=§6Cannot be attached to other Delegators!
-gregtech.top.delegator.delegating_face=Delegating face:
+susy.machine.delegator.tooltip.non_recursion=§6Cannot be attached to other Delegators!
+susy.top.delegator.delegating_face=Delegating face:
 
-gregtech.machine.bridge.inv.name=Inventory Bridge
-gregtech.machine.bridge.inv.tooltip=§bRelays Inventories
-gregtech.machine.bridge.tank.name=Tank Bridge
-gregtech.machine.bridge.tank.tooltip=§bRelays Tanks
-gregtech.machine.bridge.inv_tank.name=Inventory and Tank Bridge
-gregtech.machine.bridge.inv_tank.tooltip=§bRelays Inventories and Tanks
-gregtech.machine.bridge.universal.name=Universal Bridge
-gregtech.machine.bridge.universal.tooltip=§bRelays Everything
+susy.machine.bridge.inv.name=Inventory Bridge
+susy.machine.bridge.inv.tooltip=§bRelays Inventories
+susy.machine.bridge.tank.name=Tank Bridge
+susy.machine.bridge.tank.tooltip=§bRelays Tanks
+susy.machine.bridge.inv_tank.name=Inventory and Tank Bridge
+susy.machine.bridge.inv_tank.tooltip=§bRelays Inventories and Tanks
+susy.machine.bridge.universal.name=Universal Bridge
+susy.machine.bridge.universal.tooltip=§bRelays Everything
 
-gregtech.machine.extender.inv.name=Inventory Extender
-gregtech.machine.extender.inv.tooltip=§bRelays Inventories
-gregtech.machine.extender.tank.name=Tank Extender
-gregtech.machine.extender.tank.tooltip=§bRelays Tanks
-gregtech.machine.extender.inv_tank.name=Inventory and Tank Extender
-gregtech.machine.extender.inv_tank.tooltip=§bRelays Inventories and Tanks
-gregtech.machine.extender.universal.name=Universal Extender
-gregtech.machine.extender.universal.tooltip=§bRelays Everything
+susy.machine.extender.inv.name=Inventory Extender
+susy.machine.extender.inv.tooltip=§bRelays Inventories
+susy.machine.extender.tank.name=Tank Extender
+susy.machine.extender.tank.tooltip=§bRelays Tanks
+susy.machine.extender.inv_tank.name=Inventory and Tank Extender
+susy.machine.extender.inv_tank.tooltip=§bRelays Inventories and Tanks
+susy.machine.extender.universal.name=Universal Extender
+susy.machine.extender.universal.tooltip=§bRelays Everything
 
 # Metaitems
 metaitem.catalyst_bed_support_grid.name=Catalyst Bed Support Grid
@@ -909,20 +933,21 @@ metaitem.track_segment.tooltip=For use in the §8tunnelbore.
 metaitem.track_segment.length_info=§610 blocks §7worth of monorail track.
 metaitem.air_vent.tooltip.1=§bCollecting Rate: §f%,d L/s
 metaitem.orbital.scrap.earth.name=Earth Orbital Scrap
+metaitem.code_breacher.name=Code Breacher
 
 # Catalysts
-gregtech.universal.catalysts.tooltip.tier=§eMax Voltage: §f%,d EU/T (%s§f)
-gregtech.universal.catalysts.tooltip.non_tiered=§eNon-Tiered Catalyst§
-gregtech.universal.catalysts.tooltip.yield.tiered=§aYield Boost: §fx%d §aper tier.§f
-gregtech.universal.catalysts.tooltip.energy.tiered=§aEnergy Usage: §fx%d §aper tier.§f
-gregtech.universal.catalysts.tooltip.speed.tiered=§aSpeed Boost: §fx%d §aper tier.§f
-gregtech.universal.catalysts.tooltip.yield=§aYield Boost: §fx%d
-gregtech.universal.catalysts.tooltip.energy=§aEnergy Usage: §fx%d
-gregtech.universal.catalysts.tooltip.speed=§aSpeed Boost: §fx%d
-gregtech.universal.catalysts.tooltip.title=%s
+susy.universal.catalysts.tooltip.tier=§eMax Voltage: §f%,d EU/T (%s§f)
+susy.universal.catalysts.tooltip.non_tiered=§eNon-Tiered Catalyst§
+susy.universal.catalysts.tooltip.yield.tiered=§aYield Boost: §fx%d §aper tier.§f
+susy.universal.catalysts.tooltip.energy.tiered=§aEnergy Usage: §fx%d §aper tier.§f
+susy.universal.catalysts.tooltip.speed.tiered=§aSpeed Boost: §fx%d §aper tier.§f
+susy.universal.catalysts.tooltip.yield=§aYield Boost: §fx%d
+susy.universal.catalysts.tooltip.energy=§aEnergy Usage: §fx%d
+susy.universal.catalysts.tooltip.speed=§aSpeed Boost: §fx%d
+susy.universal.catalysts.tooltip.title=%s
 
 # Oxidation Catalyst Bed
-gregtech.catalyst_group.oxidation_catalyst_beds.name=Oxidation Catalyst
+susy.catalyst_group.oxidation_catalyst_beds.name=Oxidation Catalyst
 metaitem.ulv_catalyst_bed_oxidation.name=ULV Oxidation Catalyst Bed
 metaitem.lv_catalyst_bed_oxidation.name=LV Oxidation Catalyst Bed
 metaitem.mv_catalyst_bed_oxidation.name=MV Oxidation Catalyst Bed
@@ -939,7 +964,7 @@ metaitem.uxv_catalyst_bed_oxidation.name=UXV Oxidation Catalyst Bed
 metaitem.opv_catalyst_bed_oxidation.name=OpV Oxidation Catalyst Bed
 
 # Reduction Catalyst Bed
-gregtech.catalyst_group.reduction_catalyst_beds.name=Reduction Catalyst
+susy.catalyst_group.reduction_catalyst_beds.name=Reduction Catalyst
 metaitem.ulv_catalyst_bed_reduction.name=ULV Reduction Catalyst Bed
 metaitem.lv_catalyst_bed_reduction.name=LV Reduction Catalyst Bed
 metaitem.mv_catalyst_bed_reduction.name=MV Reduction Catalyst Bed
@@ -956,10 +981,10 @@ metaitem.uxv_catalyst_bed_reduction.name=UXV Reduction Catalyst Bed
 metaitem.opv_catalyst_bed_reduction.name=OpV Reduction Catalyst Bed
 
 # Standard Catalyst
-gregtech.catalyst_group.standard_catalysts.name=Standard Catalyst
+susy.catalyst_group.standard_catalysts.name=Standard Catalyst
 
 # Cracking Catalyst
-gregtech.catalyst_group.cracking_catalyst_beds.name=Cracking Catalyst
+susy.catalyst_group.cracking_catalyst_beds.name=Cracking Catalyst
 metaitem.standard_catalyst_bed_cracking.name=Cracking Catalyst Bed
 
 # Armors
@@ -975,24 +1000,20 @@ susy.weather_resistance=§2Will not explode from water, lava, fire or rain.
 susy.large_fluid_pump.y_level=Current Controller Y level: Y=%s
 susy.large_fluid_pump.biome=Current bottom Pipe Casing biome: %s
 
-# Latex Logs
-gregtech.block_group_members.latex_logs.name=Rubber Log
-
-
 # Stock Interfaces
-gregtech.machine.stock_controller.name=Locomotive Controller
+susy.machine.stock_controller.name=Locomotive Controller
 susy.stock_interfaces.locomotive_controller.description=Controls nearby locomotives thrust and break depending on redstone input
 
-gregtech.machine.stock_detector.name=Stock Detector
+susy.machine.stock_detector.name=Stock Detector
 susy.stock_interfaces.stock_detector.description=Detects nearby stock and outputs redstone signal
 
-gregtech.machine.stock_fluid_exchanger.name=Fluid Exchanger
+susy.machine.stock_fluid_exchanger.name=Fluid Exchanger
 susy.stock_interfaces.fluid_exchanger.description=Transfers fluid in and out of nearby stock
 
-gregtech.machine.stock_item_exchanger.name=Item Exchanger
+susy.machine.stock_item_exchanger.name=Item Exchanger
 susy.stock_interfaces.item_exchanger.description=Transfers items in and out of nearby stock
 
-gregtech.machine.stock_content_reader.name=Stock Reader
+susy.machine.stock_content_reader.name=Stock Reader
 susy.stock_interfaces.stock_reader.description=Outputs redstone signal based on the inventory/tank of the stock in front of it
 
 susy.gui.stock_interactor.button.stock_filter.tooltip=Click to open stock filter GUI
@@ -1019,6 +1040,8 @@ susy.gui.stock_interactor.controller_setting.active_brake.tooltip=Brake (Powered
 susy.gui.stock_interactor.controller_setting.active_throttle.tooltip=Throttle (Powered)
 susy.gui.stock_interactor.controller_setting.inactive_brake.tooltip=Brake (Unpowered)
 susy.gui.stock_interactor.controller_setting.inactive_throttle.tooltip=Throttle (Unpowered)
+
+susy.gui.temperature_celsius=Temperature: %s / %s°C
 
 # Extra recipe info
 susy.recipe.dimensions=Dimensions: %s
@@ -1051,9 +1074,24 @@ susy.fluid.voiding.flammable=Voidable with Flare Stack
 # Quarry Modes
 susy.multiblock.quarry.excavation_mode=Excavation Mode
 susy.multiblock.quarry.recipe_mode=Recipe Mode
+susy.machine.quarry.tooltip.info=Max square of %1$sx%1$s, minimum %2$sx%2$s. Hold shift for more details.
+susy.machine.quarry.tooltip.structure_info=Quarries can be formed with any odd dimensions ranging from %2$sx%2$s to %1$sx%1$s, even if it is non-square. Extend the bottom layer of concrete blocks on the corners, so a 23-wide quarry will have 9 concrete per side, and 5 inside blocks.
 
 death.attack.toxic_atmo=%s's lungs were shredded
 death.attack.suffocation=%s couldn't breathe
+death.attack.pressure=%s got squeezed
+death.attack.depressurization=%s died from an embolism
+death.attack.impact=%s experienced terminal deceleration
+death.attack.vaporization=%s stopped being biology and started being physics
+death.attack.alpha_radiation=%s ingested something too spicy
+death.attack.beta_radiation=%s had their chromosomes shredded
+death.attack.neutron_radiation=%s was spiced up by neutrons
+death.attack.uv_radiation=%s forgot to apply sunscreen
+death.attack.x_radiation=%s got a non-consensual radiography
+death.attack.gamma_radiation=%s died from internal sunburns
+death.attack.spaghettification=%s was spaghettified
+death.attack.age=%s died of old age
+death.attack.chronoerasure=%s never existed
 
 metaitem.simple_gas_mask.name=Primitive Gas Mask
 metaitem.simple_gas_mask.tooltip=Survive in oxygenless environments
@@ -1108,11 +1146,60 @@ tile.hardened_blocks1.military_concrete_cobblestone_hardened.name=Federation Gra
 #Custom Sheets
 tile.custom_sheets.darkwhitemetalsheet.name=Darker White Metal Sheet
 tile.custom_sheets.lightergraymetalsheet.name=Lighter Gray Metal Sheet
+tile.custom_sheets.decorativecopper.name=Space Grade Decorative Copper
+tile.custom_sheets.decorativecopperbricks.name=Space Grade Decorative Copper Bricks
+
+tile.regolith.highland.name=Anorthositic Regolith
+tile.regolith.lowland.name=Basaltic Regolith
+
+# ToolBehaviors
+item.susy.tool.behavior.pipeliner=§6Pipeliner: §fOperates all adjacent pipes
+item.susy.tool.tooltip.pipeliner=§7Hold §f[%s]§7 to activate §6Pipeliner§7 mode
 
 # Titles
 supersymmetry.title.1=§3SUPERSYMMETRY
 supersymmetry.subtitle.1=A modpack by SymmetricDevs
-supersymmetry.title.2=WELCOME TO EARTH
-supersymmetry.subtitle.2=Vitals: stable. Pod fuel: 46%%.
-supersymmetry.title.3=APR 1, 2423
-supersymmetry.subtitle.3=§4Survive.
+supersymmetry.title.2=WELCOME TO §2EARTH
+supersymmetry.subtitle.2=Vitals: §astable§r. Pod fuel: §e46%%§r.
+
+# Locked Crates
+chat.susy.crate.requires_code_breacher=This crate requires a code breacher!
+susy.machine.locked_crate.pe.name=Hermetically Sealed Crate
+susy.machine.locked_crate.wood.name=Wooden Crate
+susy.machine.locked_crate.bronze.name=Bronze Crate
+susy.machine.locked_crate.steel.name=Steel Crate
+susy.machine.locked_crate.aluminium.name=Aluminium Crate
+susy.machine.locked_crate.stainless_steel.name=Stainless Steel Crate
+susy.machine.locked_crate.titanium.name=Titanium Crate
+susy.machine.locked_crate.tungstensteel.name=Tungstensteel Crate
+
+# Boilers
+susy.machine.large_boiler.bronze.name=Large Bronze Boiler
+susy.machine.large_boiler.steel.name=Large Steel Boiler
+
+susy.machine.steam_boiler_coal.bronze.name=Small Steam Solid Fuel Boiler
+susy.machine.steam_boiler_coal.bronze.tooltip=An early way to get Steam Power
+susy.machine.steam_boiler_coal.steel.name=High Pressure Steam Solid Fuel Boiler
+susy.machine.steam_boiler_coal.steel.tooltip=Faster than the Small Steam Solid Fuel Boiler
+susy.machine.steam_boiler_liquid.bronze.name=Small Steam Liquid Boiler
+susy.machine.steam_boiler_liquid.bronze.tooltip=A Boiler running off Liquids
+susy.machine.steam_boiler_liquid.steel.name=High Pressure Steam Liquid Boiler
+susy.machine.steam_boiler_liquid.steel.tooltip=Faster than Small Steam Liquid Boiler
+
+#Fake Wool
+tile.fake_wool.whitefakewool.name=White Asbestos Fiber
+tile.fake_wool.orangefakewool.name=Orange Asbestos Fiber
+tile.fake_wool.magentafakewool.name=Magenta Asbestos Fiber
+tile.fake_wool.lightbluefakewool.name=Light Blue Asbestos Fiber
+tile.fake_wool.yellowfakewool.name=Yellow Asbestos Fiber
+tile.fake_wool.limefakewool.name=Lime Asbestos Fiber
+tile.fake_wool.pinkfakewool.name=Pink Asbestos Fiber
+tile.fake_wool.grayfakewool.name=Gray Asbestos Fiber
+tile.fake_wool.lightgrayfakewool.name=Light Gray Asbestos Fiber
+tile.fake_wool.cyanfakewool.name=Cyan Asbestos Fiber
+tile.fake_wool.purplefakewool.name=Purple Asbestos Fiber
+tile.fake_wool.bluefakewool.name=Blue Asbestos Fiber
+tile.fake_wool.brownfakewool.name=Brown Asbestos Fiber
+tile.fake_wool.greenfakewool.name=Green Asbestos Fiber
+tile.fake_wool.redfakewool.name=Red Asbestos Fiber
+tile.fake_wool.blackfakewool.name=Black Asbestos Fiber

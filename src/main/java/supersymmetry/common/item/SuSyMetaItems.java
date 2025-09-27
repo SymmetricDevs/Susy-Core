@@ -1,5 +1,10 @@
 package supersymmetry.common.item;
 
+import static gregtech.common.items.MetaItems.SPRAY_EMPTY;
+
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.EnumDyeColor;
+
 import gregtech.api.GTValues;
 import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.items.metaitem.MetaItem.MetaValueItem;
@@ -8,11 +13,11 @@ import gregtech.api.items.metaitem.MetaOreDictItem.OreDictValueItem;
 import gregtech.api.items.metaitem.StandardMetaItem;
 import gregtech.api.unification.material.info.MaterialIconSet;
 import gregtech.api.unification.ore.OrePrefix;
+import gregtech.common.items.MetaItems;
 import gregtech.common.items.behaviors.TooltipBehavior;
-import net.minecraft.client.resources.I18n;
 import supersymmetry.SuSyValues;
-
 import supersymmetry.common.item.armor.SuSyMetaArmor;
+import supersymmetry.common.item.behavior.PipeNetPainterBehavior;
 
 public class SuSyMetaItems {
 
@@ -26,6 +31,7 @@ public class SuSyMetaItems {
     public static MetaValueItem RESTRICTIVE_FILTER;
     public static MetaValueItem TRACK_SEGMENT;
     public static MetaValueItem EARTH_ORBITAL_SCRAP;
+    public static MetaValueItem CODE_BREACHER;
     public static ArmorMetaItem<?>.ArmorMetaValueItem SIMPLE_GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_TANK;
@@ -54,7 +60,6 @@ public class SuSyMetaItems {
         armorItem = new SuSyMetaArmor();
         armorItem.setRegistryName("susy_armor");
         CatalystItems.init();
-
     }
 
     public static void initSubItems() {
@@ -63,15 +68,17 @@ public class SuSyMetaItems {
     }
 
     private static void initMetaItem() {
+        addExtraBehaviours();
+
         // initialize metaitems here
         CATALYST_BED_SUPPORT_GRID = metaItem.addItem(1, "catalyst_bed_support_grid");
         CONVEYOR_STEAM = metaItem.addItem(2, "conveyor.steam").addComponents(new TooltipBehavior((lines) -> {
             lines.add(I18n.format("metaitem.conveyor.module.tooltip"));
-            lines.add(I18n.format("gregtech.universal.tooltip.item_transfer_rate", new Object[]{4}));
+            lines.add(I18n.format("gregtech.universal.tooltip.item_transfer_rate", new Object[] { 4 }));
         }));
         PUMP_STEAM = metaItem.addItem(3, "pump.steam").addComponents(new TooltipBehavior((lines) -> {
             lines.add(I18n.format("metaitem.electric.pump.tooltip"));
-            lines.add(I18n.format("gregtech.universal.tooltip.fluid_transfer_rate", new Object[]{32}));
+            lines.add(I18n.format("gregtech.universal.tooltip.fluid_transfer_rate", new Object[] { 32 }));
         }));
         AIR_VENT = metaItem.addItem(4, "air_vent").addComponents(new TooltipBehavior((lines) -> {
             lines.add(I18n.format("metaitem.air_vent.tooltip.1", 100));
@@ -83,13 +90,21 @@ public class SuSyMetaItems {
 
         RESTRICTIVE_FILTER = metaItem.addItem(6, "restrictive_filter");
         EARTH_ORBITAL_SCRAP = metaItem.addItem(7, "orbital.scrap.earth").setMaxStackSize(8);
+        CODE_BREACHER = metaItem.addItem(8, "code_breacher").setMaxStackSize(1);
+    }
+
+    private static void addExtraBehaviours() {
+        MetaItems.SPRAY_SOLVENT.addComponents(new PipeNetPainterBehavior(1024, SPRAY_EMPTY.getStackForm(), -1));
+        for (int i = 0; i < EnumDyeColor.values().length; i++) {
+            MetaItems.SPRAY_CAN_DYES[i].addComponents(new PipeNetPainterBehavior(512, SPRAY_EMPTY.getStackForm(), i));
+        }
     }
 
     private static void addTieredOredictItem(OreDictValueItem[] items, int id, int RGB, OrePrefix prefix) {
-
         for (int i = 0; i < items.length; i++) {
-            items[i] = oreDictItem.addOreDictItem(id + i, SuSyValues.TierMaterials[i + 1].toString(), RGB, MaterialIconSet.DULL, prefix, I18n.format("gregtech.universal.catalysts.tooltip.tier", GTValues.V[i], GTValues.VN[i]));
+            items[i] = oreDictItem.addOreDictItem(id + i, SuSyValues.TierMaterials[i + 1].toString(), RGB,
+                    MaterialIconSet.DULL, prefix,
+                    I18n.format("susy.universal.catalysts.tooltip.tier", GTValues.V[i], GTValues.VN[i]));
         }
-
     }
 }

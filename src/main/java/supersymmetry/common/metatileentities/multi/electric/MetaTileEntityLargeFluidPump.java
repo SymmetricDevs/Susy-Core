@@ -1,5 +1,27 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import static gregtech.api.util.RelativeDirection.FRONT;
+import static gregtech.api.util.RelativeDirection.RIGHT;
+
+import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -19,28 +41,9 @@ import gregtech.common.blocks.BlockBoilerCasing.BoilerCasingType;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.BlockTurbineCasing.TurbineCasingType;
 import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.properties.BiomeProperty;
 import supersymmetry.client.renderer.textures.SusyTextures;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
-
-import static gregtech.api.util.RelativeDirection.FRONT;
-import static gregtech.api.util.RelativeDirection.RIGHT;
 
 public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController {
 
@@ -110,12 +113,14 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, boolean advanced) {
-        tooltip.add(I18n.format("gregtech.machine.large_fluid_pump.tooltip.1"));
-        tooltip.add(I18n.format("gregtech.machine.large_fluid_pump.tooltip.2"));
+    public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip,
+                               boolean advanced) {
+        tooltip.add(I18n.format("susy.machine.large_fluid_pump.tooltip.1"));
+        tooltip.add(I18n.format("susy.machine.large_fluid_pump.tooltip.2"));
         super.addInformation(stack, player, tooltip, advanced);
         tooltip.add(TooltipHelper.RAINBOW_SLOW + I18n.format("gregtech.machine.perfect_oc", new Object[0]));
     }
+
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
         super.addDisplayText(textList);
@@ -123,19 +128,19 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
                 .getRelativeFacing(
                         getFrontFacing(),
                         getUpwardsFacing(),
-                        isFlipped()
-                );
+                        isFlipped());
         EnumFacing backSide = RelativeDirection.BACK
                 .getRelativeFacing(
                         getFrontFacing(),
                         getUpwardsFacing(),
-                        isFlipped()
-                );
+                        isFlipped());
         BlockPos tempPos = getPos().offset(leftSide, 4).offset(backSide);
         int yLevel = getPos().getY();
         String biome = getWorld().getBiome(tempPos).biomeName;
-        textList.add(new TextComponentTranslation("susy.large_fluid_pump.y_level", yLevel).setStyle(new Style().setColor(TextFormatting.YELLOW)));
-        textList.add(new TextComponentTranslation("susy.large_fluid_pump.biome", biome).setStyle(new Style().setColor(TextFormatting.YELLOW)));
+        textList.add(new TextComponentTranslation("susy.large_fluid_pump.y_level", yLevel)
+                .setStyle(new Style().setColor(TextFormatting.YELLOW)));
+        textList.add(new TextComponentTranslation("susy.large_fluid_pump.biome", biome)
+                .setStyle(new Style().setColor(TextFormatting.YELLOW)));
     }
 
     @Nonnull
@@ -178,14 +183,12 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
                     .getRelativeFacing(
                             getMetaTileEntity().getFrontFacing(),
                             ((MultiblockControllerBase) getMetaTileEntity()).getUpwardsFacing(),
-                            ((MultiblockControllerBase) getMetaTileEntity()).isFlipped()
-                    );
+                            ((MultiblockControllerBase) getMetaTileEntity()).isFlipped());
             EnumFacing backSide = RelativeDirection.BACK
                     .getRelativeFacing(
                             getMetaTileEntity().getFrontFacing(),
                             ((MultiblockControllerBase) getMetaTileEntity()).getUpwardsFacing(),
-                            ((MultiblockControllerBase) getMetaTileEntity()).isFlipped()
-                    );
+                            ((MultiblockControllerBase) getMetaTileEntity()).isFlipped());
             BlockPos tempPos = getMetaTileEntity().getPos().offset(leftSide, 4).offset(backSide);
             return recipe.getProperty(BiomeProperty.getInstance(), BiomeProperty.BiomePropertyList.EMPTY_LIST)
                     .checkBiome(getMetaTileEntity().getWorld().getBiome(tempPos));
@@ -196,5 +199,4 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
             return 256;
         }
     }
-
 }

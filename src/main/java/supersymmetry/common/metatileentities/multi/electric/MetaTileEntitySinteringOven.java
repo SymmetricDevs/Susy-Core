@@ -1,5 +1,18 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -12,23 +25,13 @@ import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.unification.material.Materials;
 import gregtech.client.renderer.ICubeRenderer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
-import org.jetbrains.annotations.NotNull;
-import supersymmetry.client.renderer.textures.SusyTextures;
-import supersymmetry.common.blocks.BlockSinteringBrick;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.properties.SinterProperty;
+import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.blocks.BlockSinteringBrick;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
-
-import javax.annotation.Nonnull;
-import java.util.List;
 
 public class MetaTileEntitySinteringOven extends RecipeMapMultiblockController {
 
@@ -47,9 +50,11 @@ public class MetaTileEntitySinteringOven extends RecipeMapMultiblockController {
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
         if (isStructureFormed()) {
-            textList.add(new TextComponentTranslation("gregtech.multiblock.sintering_oven.can_use_plasma",
-                    new TextComponentTranslation(canUsePlasma ? "gregtech.multiblocks.sintering_oven.use_plasma.affirmative" : "gregtech.multiblocks.sintering_oven.use_plasma.negative")
-                            .setStyle(new Style().setColor(TextFormatting.LIGHT_PURPLE))));
+            textList.add(new TextComponentTranslation("susy.multiblock.sintering_oven.can_use_plasma",
+                    new TextComponentTranslation(
+                            canUsePlasma ? "susy.multiblocks.sintering_oven.use_plasma.affirmative" :
+                                    "susy.multiblocks.sintering_oven.use_plasma.negative")
+                                            .setStyle(new Style().setColor(TextFormatting.LIGHT_PURPLE))));
         }
         super.addDisplayText(textList);
     }
@@ -120,5 +125,4 @@ public class MetaTileEntitySinteringOven extends RecipeMapMultiblockController {
     public boolean checkRecipe(@NotNull Recipe recipe, boolean consumeIfSuccess) {
         return this.canUsePlasma || !(recipe.getProperty(SinterProperty.getInstance(), false));
     }
-
 }

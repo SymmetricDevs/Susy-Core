@@ -1,20 +1,11 @@
 package supersymmetry.common.metatileentities.single.electric;
 
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.pipeline.IVertexOperation;
-import codechicken.lib.vec.Matrix4;
-import gregtech.api.GTValues;
-import gregtech.api.capability.GregtechTileCapabilities;
-import gregtech.api.capability.IControllable;
-import gregtech.api.capability.impl.NotifiableItemStackHandler;
-import gregtech.api.gui.GuiTextures;
-import gregtech.api.gui.ModularUI;
-import gregtech.api.gui.widgets.AdvancedTextWidget;
-import gregtech.api.gui.widgets.SlotWidget;
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.TieredMetaTileEntity;
-import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtechfoodoption.utils.GTFOUtils;
+import static gregtech.api.GTValues.V;
+import static gregtech.api.capability.GregtechDataCodes.UPDATE_ACTIVE;
+import static gregtech.api.capability.GregtechDataCodes.WORKING_ENABLED;
+
+import java.util.List;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -34,15 +25,26 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandlerModifiable;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Matrix4;
+import gregtech.api.GTValues;
+import gregtech.api.capability.GregtechTileCapabilities;
+import gregtech.api.capability.IControllable;
+import gregtech.api.capability.impl.NotifiableItemStackHandler;
+import gregtech.api.gui.GuiTextures;
+import gregtech.api.gui.ModularUI;
+import gregtech.api.gui.widgets.AdvancedTextWidget;
+import gregtech.api.gui.widgets.SlotWidget;
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.TieredMetaTileEntity;
+import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtechfoodoption.utils.GTFOUtils;
 import supersymmetry.client.renderer.textures.SusyTextures;
-
-import java.util.List;
-
-import static gregtech.api.GTValues.V;
-import static gregtech.api.capability.GregtechDataCodes.UPDATE_ACTIVE;
-import static gregtech.api.capability.GregtechDataCodes.WORKING_ENABLED;
 
 public class MetaTileEntityIncinerator extends TieredMetaTileEntity implements IControllable {
 
@@ -65,7 +67,8 @@ public class MetaTileEntityIncinerator extends TieredMetaTileEntity implements I
     @Override
     public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
         super.renderMetaTileEntity(renderState, translation, pipeline);
-        SusyTextures.INCINERATOR_OVERLAY.renderOrientedState(renderState, translation, pipeline, getFrontFacing(), this.isActive(), true);
+        SusyTextures.INCINERATOR_OVERLAY.renderOrientedState(renderState, translation, pipeline, getFrontFacing(),
+                this.isActive(), true);
     }
 
     @Override
@@ -88,14 +91,16 @@ public class MetaTileEntityIncinerator extends TieredMetaTileEntity implements I
                 this.incineratingParticles();
             } else {
                 if (!this.isMuffled()) {
-                    getWorld().playSound(null, getPos(), SoundEvents.ENTITY_GENERIC_BURN, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    getWorld().playSound(null, getPos(), SoundEvents.ENTITY_GENERIC_BURN, SoundCategory.BLOCKS, 1.0F,
+                            1.0F);
                 }
             }
         }
         if (!this.getWorld().isRemote && this.getOffsetTimer() % 40 == 0) {
             checkClogged();
         }
-        if (!isClogged && isWorkingEnabled && !this.getWorld().isRemote && (hasItems || this.notifiedItemInputList != null)) {
+        if (!isClogged && isWorkingEnabled && !this.getWorld().isRemote &&
+                (hasItems || this.notifiedItemInputList != null)) {
             this.hasItems = true;
             int startSlot = GTFOUtils.getFirstUnemptyItemSlot(this.importItems, 0);
             if (startSlot == -1) {
@@ -181,7 +186,7 @@ public class MetaTileEntityIncinerator extends TieredMetaTileEntity implements I
 
                 builder.widget(new SlotWidget(importItems, index,
                         gridStartX + x * 18, 30 + y * 18, true, true)
-                        .setBackgroundTexture(GuiTextures.SLOT));
+                                .setBackgroundTexture(GuiTextures.SLOT));
             }
         }
 
@@ -215,7 +220,8 @@ public class MetaTileEntityIncinerator extends TieredMetaTileEntity implements I
     }
 
     public void getDisplayText(List<ITextComponent> list) {
-        list.add(new TextComponentTranslation(isClogged ? "gregtech.multiblock.incinerator.clogged" : "gregtech.multiblock.incinerator.working"));
+        list.add(new TextComponentTranslation(
+                isClogged ? "susy.multiblock.incinerator.clogged" : "susy.multiblock.incinerator.working"));
     }
 
     @Override
@@ -241,7 +247,6 @@ public class MetaTileEntityIncinerator extends TieredMetaTileEntity implements I
         data.setBoolean("canProgress", this.canProgress);
         return super.writeToNBT(data);
     }
-
 
     @Override
     public void readFromNBT(NBTTagCompound data) {
@@ -278,12 +283,15 @@ public class MetaTileEntityIncinerator extends TieredMetaTileEntity implements I
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, boolean advanced) {
-        tooltip.add(I18n.format("gregtech.universal.tooltip.max_voltage_in", energyContainer.getInputVoltage(), GTValues.VNF[getTier()]));
-        tooltip.add(I18n.format("gregtech.universal.tooltip.energy_storage_capacity", energyContainer.getEnergyCapacity()));
+    public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip,
+                               boolean advanced) {
+        tooltip.add(I18n.format("gregtech.universal.tooltip.max_voltage_in", energyContainer.getInputVoltage(),
+                GTValues.VNF[getTier()]));
+        tooltip.add(
+                I18n.format("gregtech.universal.tooltip.energy_storage_capacity", energyContainer.getEnergyCapacity()));
         tooltip.add(I18n.format("gregtech.universal.tooltip.item_storage_capacity", getInventorySize()));
-        tooltip.add(I18n.format("gregtech.machine.incinerator.tooltip.1", itemsPerRun, maxProgress));
-        tooltip.add(I18n.format("gregtech.machine.incinerator.tooltip.2"));
-        tooltip.add(I18n.format("gregtech.machine.incinerator.tooltip.3"));
+        tooltip.add(I18n.format("susy.machine.incinerator.tooltip.1", itemsPerRun, maxProgress));
+        tooltip.add(I18n.format("susy.machine.incinerator.tooltip.2"));
+        tooltip.add(I18n.format("susy.machine.incinerator.tooltip.3"));
     }
 }

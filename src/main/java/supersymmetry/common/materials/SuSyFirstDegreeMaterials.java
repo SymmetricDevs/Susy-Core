@@ -1,27 +1,28 @@
 package supersymmetry.common.materials;
 
-import gregtech.api.GTValues;
-import gregtech.api.unification.material.Material;
-import gregtech.api.unification.material.info.MaterialIconSet;
-import gregtech.api.unification.material.properties.BlastProperty;
-import supersymmetry.api.util.SuSyUtility;
-
 import static gregtech.api.unification.material.Materials.*;
 import static gregtech.api.unification.material.info.MaterialFlags.*;
 import static gregtech.api.unification.material.info.MaterialIconSet.*;
 import static supersymmetry.common.materials.SusyMaterials.*;
 
+import gregtech.api.GTValues;
+import gregtech.api.fluids.FluidBuilder;
+import gregtech.api.unification.material.Material;
+import gregtech.api.unification.material.info.MaterialIconSet;
+import gregtech.api.unification.material.properties.BlastProperty;
+import supersymmetry.api.util.SuSyUtility;
+
 public class SuSyFirstDegreeMaterials {
 
     public static void init() {
-
-        ManganeseIronArsenicPhosphide = new Material.Builder(27100, SuSyUtility.susyId("manganese_iron_arsenic_phosphide"))
-                .ingot()
-                .color(0x03FCF0).iconSet(MaterialIconSet.METALLIC)
-                .cableProperties(GTValues.V[4], 2, 4)
-                .components(Manganese, 2, Iron, 2, Arsenic, 1, Phosphorus, 1)
-                .blastTemp(2100, BlastProperty.GasTier.LOW)
-                .build();
+        ManganeseIronArsenicPhosphide = new Material.Builder(27100,
+                SuSyUtility.susyId("manganese_iron_arsenic_phosphide"))
+                        .ingot()
+                        .color(0x03FCF0).iconSet(MaterialIconSet.METALLIC)
+                        .cableProperties(GTValues.V[4], 2, 4)
+                        .components(Manganese, 2, Iron, 2, Arsenic, 1, Phosphorus, 1)
+                        .blastTemp(2100, BlastProperty.GasTier.LOW)
+                        .build();
 
         PraseodymiumNickel = new Material.Builder(27101, SuSyUtility.susyId("praseodymium_nickel"))
                 .ingot()
@@ -39,7 +40,7 @@ public class SuSyFirstDegreeMaterials {
                 .blastTemp(2100, BlastProperty.GasTier.HIGH)
                 .build();
 
-        //Minerals
+        // Minerals
 
         Anorthite = new Material.Builder(27103, SuSyUtility.susyId("anorthite"))
                 .dust()
@@ -49,7 +50,6 @@ public class SuSyFirstDegreeMaterials {
                 .components(Calcium, 1, Aluminium, 2, Silicon, 2, Oxygen, 8)
                 .build()
                 .setFormula("Ca(Al2Si2O8)", true);
-
 
         Albite = new Material.Builder(27104, SuSyUtility.susyId("albite"))
                 .dust()
@@ -113,7 +113,6 @@ public class SuSyFirstDegreeMaterials {
                 .build()
                 .setFormula("(Ca2MgFe)(MgFe)2(Si2O6)4", true);
 
-
         Dolomite = new Material.Builder(27111, SuSyUtility.susyId("dolomite"))
                 .dust()
                 .color(0xbbb8b2)
@@ -146,7 +145,7 @@ public class SuSyFirstDegreeMaterials {
                 .flags(NO_SMASHING, DECOMPOSITION_BY_ELECTROLYZING)
                 .components(Magnesium, 2, Sulfur, 1, Oxygen, 4)
                 .build()
-                .setFormula("Mg2(SiO4)",true);
+                .setFormula("Mg2(SiO4)", true);
 
         Lizardite = new Material.Builder(27115, SuSyUtility.susyId("lizardite"))
                 .dust()
@@ -154,6 +153,15 @@ public class SuSyFirstDegreeMaterials {
                 .flags(NO_SMASHING, DECOMPOSITION_BY_ELECTROLYZING)
                 .components(Magnesium, 3, Silicon, 2, Oxygen, 9, Hydrogen, 4)
                 .build()
-                .setFormula("Mg3Si2O5(OH)4",true);
+                .setFormula("Mg3Si2O5(OH)4", true);
+
+        // Thermodynamic materials
+
+        PreheatedAir = new Material.Builder(27150, SuSyUtility.susyId("preheated_air"))
+                .gas(new FluidBuilder().temperature(1000))
+                .color(0xA9D0F5)
+                .flags(DISABLE_DECOMPOSITION)
+                .components(Nitrogen, 78, Oxygen, 21, Argon, 9)
+                .build();
     }
 }

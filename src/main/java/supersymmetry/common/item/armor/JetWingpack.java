@@ -1,17 +1,12 @@
 package supersymmetry.common.item.armor;
 
-import gregtech.api.GTValues;
-import gregtech.api.capability.IFilter;
-import gregtech.api.capability.impl.GTFluidHandlerItemStack;
-import gregtech.api.items.armor.ArmorLogicSuite;
-import gregtech.api.items.armor.ArmorMetaItem;
-import gregtech.api.items.armor.ArmorUtils;
-import gregtech.api.items.metaitem.stats.*;
-import gregtech.api.recipes.Recipe;
-import gregtech.api.recipes.ingredients.GTRecipeInput;
-import gregtech.api.util.GTUtility;
-import gregtech.api.util.GradientUtil;
-import gregtech.api.util.input.KeyBind;
+import java.awt.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.resources.I18n;
@@ -37,23 +32,29 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import gregtech.api.GTValues;
+import gregtech.api.capability.IFilter;
+import gregtech.api.capability.impl.GTFluidHandlerItemStack;
+import gregtech.api.items.armor.ArmorLogicSuite;
+import gregtech.api.items.armor.ArmorMetaItem;
+import gregtech.api.items.armor.ArmorUtils;
+import gregtech.api.items.metaitem.stats.*;
+import gregtech.api.recipes.Recipe;
+import gregtech.api.recipes.ingredients.GTRecipeInput;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.GradientUtil;
+import gregtech.api.util.input.KeyBind;
 import supersymmetry.api.capability.IElytraFlyingProvider;
 import supersymmetry.api.capability.SuSyCapabilities;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.util.ElytraFlyingUtils;
 import supersymmetry.client.audio.MovingSoundJetEngine;
 import supersymmetry.client.renderer.handler.JetWingpackModel;
-
-import java.awt.*;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Function;
-
 
 public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
 
@@ -65,7 +66,8 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
     protected static final double REVERSE_THRUST = 0.05D;
     protected static final double FALLING = 0.005D;
 
-    protected static final ISpecialArmor.ArmorProperties DEFAULT_PROPERTIES = new ISpecialArmor.ArmorProperties(Integer.MIN_VALUE, -2, Integer.MAX_VALUE);
+    protected static final ISpecialArmor.ArmorProperties DEFAULT_PROPERTIES = new ISpecialArmor.ArmorProperties(
+            Integer.MIN_VALUE, -2, Integer.MAX_VALUE);
 
     protected static final Function<FluidStack, Integer> FUEL_BURN_TIME = fluidStack -> {
         Recipe recipe = SuSyRecipeMaps.JET_WINGPACK_FUELS.findRecipe(
@@ -98,11 +100,13 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
                     return;
                 }
 
-                String formated = String.format("%.1f", (float) prop[0].getContents().amount * 100.0F / (float) prop[0].getCapacity());
+                String formated = String.format("%.1f",
+                        (float) prop[0].getContents().amount * 100.0F / (float) prop[0].getCapacity());
                 this.HUD.newString(I18n.format("metaarmor.hud.fuel_lvl", formated + "%"));
                 NBTTagCompound data = item.getTagCompound();
                 if (data != null && data.hasKey("engineActive")) {
-                    String status = data.getBoolean("engineActive") ? I18n.format("metaarmor.hud.status.enabled") : I18n.format("metaarmor.hud.status.disabled");
+                    String status = data.getBoolean("engineActive") ? I18n.format("metaarmor.hud.status.enabled") :
+                            I18n.format("metaarmor.hud.status.disabled");
                     String result = I18n.format("metaarmor.hud.engine_status", status);
                     this.HUD.newString(result);
                 }
@@ -132,9 +136,11 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
             toggleTimer = 5;
             if (!world.isRemote) {
                 if (engineActive)
-                    player.sendStatusMessage(new TextComponentTranslation("metaarmor.jet_wingpack.engine_active"), true);
+                    player.sendStatusMessage(new TextComponentTranslation("metaarmor.jet_wingpack.engine_active"),
+                            true);
                 else
-                    player.sendStatusMessage(new TextComponentTranslation("metaarmor.jet_wingpack.engine_inactive"), true);
+                    player.sendStatusMessage(new TextComponentTranslation("metaarmor.jet_wingpack.engine_inactive"),
+                            true);
             }
         }
 
@@ -146,13 +152,17 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
             Vec3d lookVec = player.getLookVec();
             if (KeyBind.VANILLA_SNEAK.isKeyDown(player)) {
                 // handles braking
-                player.motionX -= REVERSE_THRUST * (player.motionX - MIN_SPEED * lookVec.x); // v(t+1) = v(t) - THRUST * (v(t) - MIN_SPEED)
-                player.motionY -= REVERSE_THRUST * player.motionY + FALLING;                 // so that you won't fly upwards when braking
+                player.motionX -= REVERSE_THRUST * (player.motionX - MIN_SPEED * lookVec.x); // v(t+1) = v(t) - THRUST *
+                                                                                             // (v(t) - MIN_SPEED)
+                player.motionY -= REVERSE_THRUST * player.motionY + FALLING;                 // so that you won't fly
+                                                                                             // upwards when braking
                 player.motionZ -= REVERSE_THRUST * (player.motionZ - MIN_SPEED * lookVec.z);
             } else {
                 // handles acceleration
-                player.motionX += THRUST * (MAX_SPEED * lookVec.x - player.motionX); // v(t+1) = v(t) + THRUST * (MAX_SPEED - v(t))
-                player.motionY += THRUST * (MAX_SPEED * lookVec.y - player.motionY); // or dv/dt = THRUST * (MAX_SPEED - v)
+                player.motionX += THRUST * (MAX_SPEED * lookVec.x - player.motionX); // v(t+1) = v(t) + THRUST *
+                                                                                     // (MAX_SPEED - v(t))
+                player.motionY += THRUST * (MAX_SPEED * lookVec.y - player.motionY); // or dv/dt = THRUST * (MAX_SPEED -
+                                                                                     // v)
                 player.motionZ += THRUST * (MAX_SPEED * lookVec.z - player.motionZ);
                 world.spawnParticle(EnumParticleTypes.CLOUD, player.posX, player.posY, player.posZ, 0.0, 0.0, 0.0);
             }
@@ -228,9 +238,11 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
     }
 
     @Override
-    public ISpecialArmor.ArmorProperties getProperties(EntityLivingBase entity, @NotNull ItemStack armor, DamageSource source, double damage, EntityEquipmentSlot slot) {
+    public ISpecialArmor.ArmorProperties getProperties(EntityLivingBase entity, @NotNull ItemStack armor,
+                                                       DamageSource source, double damage, EntityEquipmentSlot slot) {
         // triple the amount of kinetic damages :trollface:
-        return source == DamageSource.FLY_INTO_WALL ? DEFAULT_PROPERTIES : super.getProperties(entity, armor, source, damage, slot);
+        return source == DamageSource.FLY_INTO_WALL ? DEFAULT_PROPERTIES :
+                super.getProperties(entity, armor, source, damage, slot);
     }
 
     protected boolean drainFuel(@NotNull ItemStack stack, int amount, boolean simulate) {
@@ -263,10 +275,12 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
         return stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
     }
 
-    private static class ElytraFlyingProvider implements IItemComponent, IElytraFlyingProvider, ICapabilityProvider, IItemCapabilityProvider {
+    private static class ElytraFlyingProvider implements IItemComponent, IElytraFlyingProvider, ICapabilityProvider,
+                                              IItemCapabilityProvider {
 
         @Override
-        public boolean isElytraFlying(@NotNull EntityLivingBase entity, @NotNull ItemStack itemStack, boolean shouldStop) {
+        public boolean isElytraFlying(@NotNull EntityLivingBase entity, @NotNull ItemStack itemStack,
+                                      boolean shouldStop) {
             if (entity instanceof EntityPlayer) {
                 NBTTagCompound data = GTUtility.getOrCreateNbtCompound(itemStack);
                 if (shouldStop) {
@@ -285,7 +299,8 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
         @Nullable
         @Override
         public <T> T getCapability(@NotNull Capability<T> capability, @Nullable EnumFacing facing) {
-            return capability == SuSyCapabilities.ELYTRA_FLYING_PROVIDER ? SuSyCapabilities.ELYTRA_FLYING_PROVIDER.cast(this) : null;
+            return capability == SuSyCapabilities.ELYTRA_FLYING_PROVIDER ?
+                    SuSyCapabilities.ELYTRA_FLYING_PROVIDER.cast(this) : null;
         }
 
         @Override
@@ -294,7 +309,8 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
         }
     }
 
-    public class JetWingpackBehaviour implements IItemDurabilityManager, IItemCapabilityProvider, IItemBehaviour, ISubItemHandler {
+    public class JetWingpackBehaviour implements IItemDurabilityManager, IItemCapabilityProvider, IItemBehaviour,
+                                      ISubItemHandler {
 
         private static final IFilter<FluidStack> JET_WINGPACK_FUEL_FILTER = new IFilter<>() {
 
@@ -364,7 +380,8 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
         @Override
         public void getSubItems(ItemStack itemStack, CreativeTabs creativeTab, NonNullList<ItemStack> subItems) {
             ItemStack copy = itemStack.copy();
-            IFluidHandlerItem fluidHandlerItem = copy.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+            IFluidHandlerItem fluidHandlerItem = copy
+                    .getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
             if (fluidHandlerItem != null) {
                 Optional<Recipe> firstRecipe = SuSyRecipeMaps.JET_WINGPACK_FUELS.getRecipeList().stream().findFirst();
                 firstRecipe.ifPresent(recipe -> {

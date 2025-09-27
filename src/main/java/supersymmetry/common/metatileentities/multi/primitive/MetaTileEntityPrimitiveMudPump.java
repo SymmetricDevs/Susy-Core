@@ -1,5 +1,19 @@
 package supersymmetry.common.metatileentities.multi.primitive;
 
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.IFluidTank;
+
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
@@ -18,21 +32,9 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
-import gregtech.common.metatileentities.MetaTileEntities;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.IFluidTank;
-import supersymmetry.common.materials.SusyMaterials;
 import gregtech.common.blocks.wood.BlockGregPlanks;
-
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Stream;
+import gregtech.common.metatileentities.MetaTileEntities;
+import supersymmetry.common.materials.SusyMaterials;
 
 public class MetaTileEntityPrimitiveMudPump extends MultiblockControllerBase implements IPrimitivePump {
 
@@ -87,9 +89,7 @@ public class MetaTileEntityPrimitiveMudPump extends MultiblockControllerBase imp
     }
 
     @Override
-    protected void updateFormedValid() {
-
-    }
+    protected void updateFormedValid() {}
 
     @Override
     protected void formStructure(PatternMatchContext context) {
@@ -134,7 +134,9 @@ public class MetaTileEntityPrimitiveMudPump extends MultiblockControllerBase imp
                 .where('A', frames(Materials.TreatedWood))
                 .where('B', states(MetaBlocks.PLANKS.getState(BlockGregPlanks.BlockType.TREATED_PLANK)))
                 .where('C', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.BRONZE_BRICKS))
-                        .or(metaTileEntities(MetaTileEntities.FLUID_EXPORT_HATCH[0], MetaTileEntities.FLUID_EXPORT_HATCH[1], MetaTileEntities.PUMP_OUTPUT_HATCH).setExactLimit(1)))
+                        .or(metaTileEntities(MetaTileEntities.FLUID_EXPORT_HATCH[0],
+                                MetaTileEntities.FLUID_EXPORT_HATCH[1], MetaTileEntities.PUMP_OUTPUT_HATCH)
+                                        .setExactLimit(1)))
                 .where(' ', any())
                 .build();
     }
@@ -159,7 +161,8 @@ public class MetaTileEntityPrimitiveMudPump extends MultiblockControllerBase imp
     @Override
     public String[] getDescription() {
         return Stream.of(
-                new String[]{I18n.format("gregtech.multiblock.primitive_mud_pump.description")}).flatMap(Stream::of).toArray(String[]::new);
+                new String[] { I18n.format("susy.multiblock.primitive_mud_pump.description") }).flatMap(Stream::of)
+                .toArray(String[]::new);
     }
 
     @Override

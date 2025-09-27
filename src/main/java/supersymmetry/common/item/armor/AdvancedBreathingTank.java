@@ -1,23 +1,18 @@
 package supersymmetry.common.item.armor;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
-import static net.minecraft.inventory.EntityEquipmentSlot.CHEST;
-import static supersymmetry.common.event.DimensionBreathabilityHandler.isInHazardousEnvironment;
-
 import java.util.List;
 
+import net.minecraft.client.resources.I18n;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
+
 public class AdvancedBreathingTank extends AdvancedBreathingApparatus {
+
     public final static double INFINITE_OXYGEN = -1;
     public final double maxOxygen;
 
-
-    public AdvancedBreathingTank(double hoursOfLife, String name, int tier, double relativeAbsorption, double maxOxygen) {
+    public AdvancedBreathingTank(double hoursOfLife, String name, int tier, double relativeAbsorption,
+                                 double maxOxygen) {
         super(EntityEquipmentSlot.CHEST, hoursOfLife, name, tier, relativeAbsorption);
         this.maxOxygen = maxOxygen;
     }
@@ -52,18 +47,4 @@ public class AdvancedBreathingTank extends AdvancedBreathingApparatus {
     double getMaxOxygen(ItemStack stack) {
         return this.maxOxygen;
     }
-
-    @Override
-    public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
-        if (player.isInsideOfMaterial(Material.WATER)) {
-            if (getOxygen(player.getItemStackFromSlot(CHEST)) > 0) {
-                player.setAir(300);
-                if (!isInHazardousEnvironment(player)) {
-                    changeOxygen(player.getItemStackFromSlot(CHEST), (-1f) / 20);
-                    // assuming that if its hazardous the player is already breathing with the suit
-                }
-            }
-        }
-    }
-
 }

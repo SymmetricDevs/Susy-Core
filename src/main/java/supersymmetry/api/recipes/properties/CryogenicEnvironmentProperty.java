@@ -1,8 +1,9 @@
 package supersymmetry.api.recipes.properties;
 
-import gregtech.api.recipes.recipeproperties.RecipeProperty;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+
+import gregtech.api.recipes.recipeproperties.RecipeProperty;
 
 public class CryogenicEnvironmentProperty extends RecipeProperty<Boolean> {
 
@@ -25,7 +26,7 @@ public class CryogenicEnvironmentProperty extends RecipeProperty<Boolean> {
     public void drawInfo(Minecraft minecraft, int x, int y, int color, Object value) {
         Boolean casted = castValue(value);
         if (casted != null && casted) {
-            minecraft.fontRenderer.drawString(I18n.format("gregtech.recipe.cryogenic_environment"), x, y, color);
+            minecraft.fontRenderer.drawString(I18n.format("susy.recipe.cryogenic_environment"), x, y, color);
         }
     }
 

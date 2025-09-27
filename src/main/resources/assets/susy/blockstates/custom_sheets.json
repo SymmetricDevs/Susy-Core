@@ -20,6 +20,18 @@
       "textures" : {
         "all" : "gregtech:blocks/custom_sheets/lighter_gray_metal_sheet"
       }
+    },
+    "variant=decorativecopper" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/custom_sheets/space_grade_decorative_copper"
+      }
+    },
+    "variant=decorativecopperbricks" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/custom_sheets/space_grade_decorative_copper_bricks"
+      }
     }
   }
 }

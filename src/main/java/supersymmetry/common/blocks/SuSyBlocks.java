@@ -1,6 +1,13 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.util.BlockUtility;
+import static gregtech.common.blocks.MetaBlocks.ASPHALT;
+
+import java.util.Comparator;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -9,22 +16,18 @@ import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Comparator;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import static gregtech.common.blocks.MetaBlocks.ASPHALT;
+import gregtech.api.util.BlockUtility;
 
 public class SuSyBlocks {
 
     public static BlockCoolingCoil COOLING_COIL;
     public static BlockSinteringBrick SINTERING_BRICK;
     public static BlockCoagulationTankWall COAGULATION_TANK_WALL;
-    public static final EnumMap<SusyStoneVariantBlock.StoneVariant, SusyStoneVariantBlock> SUSY_STONE_BLOCKS = new EnumMap<>(SusyStoneVariantBlock.StoneVariant.class);
+    public static final EnumMap<SusyStoneVariantBlock.StoneVariant, SusyStoneVariantBlock> SUSY_STONE_BLOCKS = new EnumMap<>(
+            SusyStoneVariantBlock.StoneVariant.class);
     public static BlockAlternatorCoil ALTERNATOR_COIL;
     public static BlockTurbineRotor TURBINE_ROTOR;
     public static BlockSeparatorRotor SEPARATOR_ROTOR;
@@ -50,6 +53,8 @@ public class SuSyBlocks {
     public static BlockConveyor CONVEYOR_BELT;
     public static BlockRocketAssemblerCasing ROCKET_ASSEMBLER_CASING;
     public static BlockReinforcedConcrete REINFORCED_CONCRETE;
+    public static BlockRegolith REGOLITH;
+    public static BlocksFakeWool FAKEWOOL;
 
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
@@ -134,12 +139,18 @@ public class SuSyBlocks {
 
         CONVEYOR_BELT = new BlockConveyor();
         CONVEYOR_BELT.setRegistryName("conveyor_belt");
-      
+
         ROCKET_ASSEMBLER_CASING = new BlockRocketAssemblerCasing();
         ROCKET_ASSEMBLER_CASING.setRegistryName("rocket_assembler_casing");
 
         REINFORCED_CONCRETE = new BlockReinforcedConcrete();
         REINFORCED_CONCRETE.setRegistryName("concrete_reinforced");
+      
+        REGOLITH = new BlockRegolith();
+        REGOLITH.setRegistryName("regolith");
+
+        FAKEWOOL = new BlocksFakeWool();
+        FAKEWOOL.setRegistryName("fake_wool");
     }
 
     @SideOnly(Side.CLIENT)
@@ -174,6 +185,8 @@ public class SuSyBlocks {
         registerItemModel(CONVEYOR_BELT);
         registerItemModel(ROCKET_ASSEMBLER_CASING);
         registerItemModel(REINFORCED_CONCRETE);
+        registerItemModel(REGOLITH);
+        registerItemModel(FAKEWOOL);
     }
 
     @SideOnly(Side.CLIENT)
@@ -224,7 +237,8 @@ public class SuSyBlocks {
     }
 
     @SuppressWarnings("unchecked")
-    private static <T extends Comparable<T>> @NotNull String getPropertyName(@NotNull IProperty<T> property, Comparable<?> value) {
+    private static <T extends Comparable<T>> @NotNull String getPropertyName(@NotNull IProperty<T> property,
+                                                                             Comparable<?> value) {
         return property.getName((T) value);
     }
 }

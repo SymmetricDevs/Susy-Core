@@ -1,5 +1,39 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import static gregtech.api.metatileentity.MetaTileEntityHolder.TRACKED_TICKS;
+import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.coilsOrBeds;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
 import gregtech.api.block.IHeatingCoilBlockStats;
@@ -20,45 +54,12 @@ import gregtech.client.utils.TooltipHelper;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
 import gregtech.common.metatileentities.MetaTileEntities;
-import gregtech.common.metatileentities.multi.electric.MetaTileEntityCleanroom;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.properties.EvaporationEnergyProperty;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
-import supersymmetry.integration.theoneprobe.provider.EvaporationPoolInfoProvider;
-
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import static gregtech.api.metatileentity.MetaTileEntityHolder.TRACKED_TICKS;
-import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.coilsOrBeds;
 
 public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController {
 
@@ -89,7 +90,8 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     private int exposedBlocks = 0; /// Does not need to be serialized since it's updated (hopefully) once every second
     private static final int JT_PER_BLOCK = 50; // TODO: dynamic heat absorption based on day time?
 
-    private final int[] recipeSpeedStats = new int[TRACKED_TICKS]; /// The same duration (1s) as [MetaTileEntity#timeStatistics]
+    private final int[] recipeSpeedStats = new int[TRACKED_TICKS]; /// The same duration (1s) as
+                                                                   /// [MetaTileEntity#timeStatistics]
     private int statsIndex = 0;
 
     public MetaTileEntityEvaporationPool(ResourceLocation metaTileEntityId) {
@@ -146,7 +148,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     /// @see MetaTileEntityCleanroom#updateStructureDimensions()
     @SuppressWarnings("UnusedReturnValue")
     public boolean updateStructureDimensions() {
-
         World world = getWorld();
         EnumFacing front = getFrontFacing();
         EnumFacing back = front.getOpposite();
@@ -190,8 +191,8 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
     public boolean isBlockEdge(@NotNull World world, @NotNull BlockPos.MutableBlockPos pos,
                                @NotNull EnumFacing direction) {
-        return world.getBlockState(pos.move(direction)) == getConcreteState()
-                || GTUtility.getMetaTileEntity(world, pos) instanceof IMultiblockPart;
+        return world.getBlockState(pos.move(direction)) == getConcreteState() ||
+                GTUtility.getMetaTileEntity(world, pos) instanceof IMultiblockPart;
     }
 
     protected static IBlockState getConcreteState() {
@@ -229,7 +230,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         if (lDist + rDist < MIN_DIAMETER - 3) {
             this.rDist = MIN_DIAMETER / 2 - 1;
             this.lDist = MIN_DIAMETER / 2 - 1;
-        };
+        } ;
 
         return FactoryBlockPattern.start()
                 .aisle(line(Slice.B_ALL), line(Slice.T_NONE))
@@ -248,19 +249,30 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                 .build();
     }
 
-    @SuppressWarnings("DataFlowIssue")
     @Override
     public List<MultiblockShapeInfo> getMatchingShapes() {
         ArrayList<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
-        int l = 3, r =3;
+        // set the default to 5x5 if the shape is not valid
+        int l = 3, r = 3, depth = 5;
+        if (lDist + rDist + 3 >= MIN_DIAMETER) {
+            l = Math.max(lDist, 1);
+            r = Math.max(rDist, 1);
+        }
+
+        if (bDist + 4 >= MIN_DIAMETER) {
+            depth = bDist;
+        }
+
         MultiblockShapeInfo.Builder builder = MultiblockShapeInfo.builder()
                 .aisle(Slice.B_P_HATCHES.gen(l, r), Slice.T_NONE.gen(l, r))
                 .aisle(Slice.B_ALL.gen(l, r), Slice.T_SIDES.gen(l, r))
-                .aisle(Slice.B_END.gen(l, r), Slice.T_MIDDLE.gen(l, r))
-                .aisle(Slice.B_MIDDLE.gen(l, r), Slice.T_MIDDLE.gen(l, r))
-                .aisle(Slice.B_MIDDLE.gen(l, r), Slice.T_MIDDLE.gen(l, r))
-                .aisle(Slice.B_MIDDLE.gen(l, r), Slice.T_MIDDLE.gen(l, r))
-                .aisle(Slice.B_START.gen(l, r), Slice.T_MIDDLE.gen(l, r))
+                .aisle(Slice.B_END.gen(l, r), Slice.T_MIDDLE.gen(l, r));
+
+        for (int i = 0; i < depth - 2; i++) {
+            builder.aisle(Slice.B_MIDDLE.gen(l, r), Slice.T_MIDDLE.gen(l, r));
+        }
+
+        builder.aisle(Slice.B_START.gen(l, r), Slice.T_MIDDLE.gen(l, r))
                 .aisle(Slice.B_ALL.gen(l, r), Slice.T_SIDES.gen(l, r))
                 .aisle(Slice.B_SELF.gen(l, r), Slice.T_NONE.gen(l, r))
                 .where('S', SuSyMetaTileEntities.EVAPORATION_POOL, EnumFacing.SOUTH)
@@ -331,7 +343,8 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
     /// This works the same as [RecipeMapMultiblockController#isActive()]
     public boolean isRunning() {
-        return this.isStructureFormed() && this.recipeMapWorkable.isActive() && this.recipeMapWorkable.isWorkingEnabled();
+        return this.isStructureFormed() && this.recipeMapWorkable.isActive() &&
+                this.recipeMapWorkable.isWorkingEnabled();
     }
 
     /// Overriding this to make sure that coils are emissive only when the multiblock is powered.
@@ -382,7 +395,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         float v_y = 0.10F * GTValues.RNG.nextFloat() + 0.05F;
         float v_z = 0.02F * GTValues.RNG.nextFloat() - 0.01F;
 
-        world.spawnParticle(EnumParticleTypes.CLOUD,x, y, z, v_x, v_y, v_z);
+        world.spawnParticle(EnumParticleTypes.CLOUD, x, y, z, v_x, v_y, v_z);
     }
 
     @Override
@@ -409,13 +422,13 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                         ITextComponent isHeatingString = isHeating() ?
                                 TextComponentUtil.translationWithColor(
                                         TextFormatting.GREEN,
-                                        "gregtech.multiblock.evaporation_pool.is_heating") :
+                                        "susy.multiblock.evaporation_pool.is_heating") :
                                 TextComponentUtil.translationWithColor(
                                         TextFormatting.RED,
-                                        "gregtech.multiblock.evaporation_pool.is_not_heating");
+                                        "susy.multiblock.evaporation_pool.is_not_heating");
                         tl.add(TextComponentUtil.translationWithColor(
                                 TextFormatting.GRAY,
-                                "gregtech.multiblock.evaporation_pool_heated_preface",
+                                "susy.multiblock.evaporation_pool_heated_preface",
                                 isHeatingString));
                     }
 
@@ -426,7 +439,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                                 TextFormattingUtil.formatNumbers(exposedBlocks));
                         tl.add(TextComponentUtil.translationWithColor(
                                 TextFormatting.GRAY,
-                                "gregtech.multiblock.evaporation_pool.exposed_blocks",
+                                "susy.multiblock.evaporation_pool.exposed_blocks",
                                 exposedBlocksString));
                     }
 
@@ -437,7 +450,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
                                 String.format("%.2f", getAverageSpeed()));
                         tl.add(TextComponentUtil.translationWithColor(
                                 TextFormatting.GRAY,
-                                "gregtech.multiblock.evaporation_pool.average_speed",
+                                "susy.multiblock.evaporation_pool.average_speed",
                                 averageSpeedString));
                     }
                 })
@@ -447,9 +460,10 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     @Override
     public void addInformation(ItemStack stack, World player, @NotNull List<String> tooltip, boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
-        tooltip.add(I18n.format("gregtech.machine.evaporation_pool.tooltip.info", MAX_DIAMETER, MIN_DIAMETER));
+        tooltip.add(I18n.format("susy.machine.evaporation_pool.tooltip.info", MAX_DIAMETER, MIN_DIAMETER));
         if (TooltipHelper.isShiftDown()) {
-            tooltip.add(I18n.format("gregtech.machine.evaporation_pool.tooltip.structure_info", MAX_DIAMETER, MIN_DIAMETER));
+            tooltip.add(
+                    I18n.format("susy.machine.evaporation_pool.tooltip.structure_info", MAX_DIAMETER, MIN_DIAMETER));
         }
     }
 
@@ -533,34 +547,37 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     /// assuming lDist = 3 and rDist = 6 (the length doesn't really matter here)
     ///
     /// The bottom layer:
-    ///   0123456789AB
-    /// B CCCCCCCCCCCC    B_ALL
-    /// A CCCCCCCCCCCC    B_ALL
-    /// 9 CCHBHHHBHHCC    B_END
-    /// 8 CCHBHBHBHBCC    B_MIDDLE
+    /// 0123456789AB
+    /// B CCCCCCCCCCCC B_ALL
+    /// A CCCCCCCCCCCC B_ALL
+    /// 9 CCHBHHHBHHCC B_END
+    /// 8 CCHBHBHBHBCC B_MIDDLE
     /// : (same as row 3)
-    /// 3 CCHBHBHBHBCC    B_MIDDLE
-    /// 2 CCHHHBHHHBCC    B_START
-    /// 1 CCCCCCCCCCCC    B_ALL
-    /// 0 CCCCSCCCCCCC    B_SELF. You can see there are lDist + 1 'C's on the left side of the controller, and same for the right side
+    /// 3 CCHBHBHBHBCC B_MIDDLE
+    /// 2 CCHHHBHHHBCC B_START
+    /// 1 CCCCCCCCCCCC B_ALL
+    /// 0 CCCCSCCCCCCC B_SELF. You can see there are lDist + 1 'C's on the left side of the controller, and same for the
+    /// right side
     ///
-    /// As you can see the heating coils are placed in a zigzag pattern, with the first one starting on the left side of the controller
+    /// As you can see the heating coils are placed in a zigzag pattern, with the first one starting on the left side of
+    /// the controller
     ///
     /// The top layer:
-    ///   0123456789AB
-    /// B                 T_NONE (empty)
-    /// A  CCCCCCCCCC     T_SIDES
-    /// 9  C########C     T_MIDDLE
+    /// 0123456789AB
+    /// B T_NONE (empty)
+    /// A CCCCCCCCCC T_SIDES
+    /// 9 C########C T_MIDDLE
     /// : (same as row 2)
-    /// 2  C########C     T_MIDDLE
-    /// 1  CCCCCCCCCC     T_SIDES
-    /// 0                 T_NONE (empty)
+    /// 2 C########C T_MIDDLE
+    /// 1 CCCCCCCCCC T_SIDES
+    /// 0 T_NONE (empty)
     ///
     /// With this we can generate the structure pattern for the evaporation pool.
     ///
     /// @see #updateStructureDimensions()
     /// @see #createStructurePattern()
     protected enum Slice {
+
         /// B = bottom layer, T = top layer, P = preview only
         /// Yeah I'm def abusing the ternary operator here
         B_ALL((i, l, r) -> 'C'),
@@ -592,6 +609,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
         @FunctionalInterface
         private interface SliceConstructor {
+
             char at(int i, int lDist, int rDist);
         }
     }
@@ -623,7 +641,8 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
         private int recipeJt;
         /// Buffers the heat that doesn't meet the minimum requirement for 1 step of the recipe progress
-        /// So, it's just a matter of time for the recipe to complete no matter how insufficient the heat/power supply is.
+        /// So, it's just a matter of time for the recipe to complete no matter how insufficient the heat/power supply
+        /// is.
         private int heatBuffer = 0;
         /// Whether the evaporation pool is heated by coils
         private boolean isHeating = false;
@@ -649,7 +668,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         /// Do not overclock
         @Override
         protected int @NotNull [] calculateOverclock(@NotNull Recipe recipe) {
-            return new int[]{recipe.getEUt(), recipe.getDuration()};
+            return new int[] { recipe.getEUt(), recipe.getDuration() };
         }
 
         @Override
@@ -735,7 +754,6 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             super.receiveInitialSyncData(buf);
             this.isHalted = buf.readBoolean();
         }
-
 
         @NotNull
         @Override

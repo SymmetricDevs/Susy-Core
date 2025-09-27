@@ -1,9 +1,25 @@
 package supersymmetry.common.metatileentities.multi.electric.strand;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.function.Supplier;
+
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.items.IItemHandlerModifiable;
+
+import com.google.common.collect.Lists;
+
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
-import com.google.common.collect.Lists;
 import gregtech.api.capability.IEnergyContainer;
 import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.IWorkable;
@@ -22,16 +38,6 @@ import gregtech.api.unification.material.properties.PropertyKey;
 import gregtech.api.util.BlockInfo;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.RelativeDirection;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.items.IItemHandlerModifiable;
 import supersymmetry.api.blocks.VariantAxialRotatableBlock;
 import supersymmetry.api.capability.IStrandProvider;
 import supersymmetry.api.capability.Strand;
@@ -39,10 +45,6 @@ import supersymmetry.api.capability.StrandConversion;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
 import supersymmetry.common.blocks.BlockMetallurgyRoll;
 import supersymmetry.common.blocks.SuSyBlocks;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.function.Supplier;
 
 public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBase implements IWorkable {
 
@@ -55,7 +57,6 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
     protected IMultipleTankHandler inputFluidInventory;
     protected IMultipleTankHandler outputFluidInventory;
     protected IEnergyContainer energyContainer;
-
 
     protected int progress;
     protected int maxProgress;
@@ -98,7 +99,7 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
                 return;
             }
             Strand possibleStrand = resultingStrand();
-            if (getVoltage() == 0 ||(possibleStrand == null && outputsStrand()) || !consumeInputsAndSetupRecipe()) {
+            if (getVoltage() == 0 || (possibleStrand == null && outputsStrand()) || !consumeInputsAndSetupRecipe()) {
                 return;
             }
             strand = possibleStrand;
@@ -245,22 +246,25 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
                     Strand displayStrand = strand;
                     if (strand == null) {
                         if (output == null || output.getStrand() == null) {
-                            comps.add(new TextComponentTranslation("gregtech.multiblock.strand_casting.no_strand"));
+                            comps.add(new TextComponentTranslation("susy.multiblock.strand_casting.no_strand"));
                             return;
                         }
-                        comps.add(new TextComponentTranslation("gregtech.multiblock.strand_casting.output_detected"));
+                        comps.add(new TextComponentTranslation("susy.multiblock.strand_casting.output_detected"));
                         displayStrand = output.getStrand();
                     }
-                    comps.add(new TextComponentTranslation("gregtech.multiblock.strand_casting.thickness", String.format("%.2f", displayStrand.thickness)));
-                    comps.add(new TextComponentTranslation("gregtech.multiblock.strand_casting.width", String.format("%.2f", displayStrand.width)));
+                    comps.add(new TextComponentTranslation("susy.multiblock.strand_casting.thickness",
+                            String.format("%.2f", displayStrand.thickness)));
+                    comps.add(new TextComponentTranslation("susy.multiblock.strand_casting.width",
+                            String.format("%.2f", displayStrand.width)));
 
                     StrandConversion conversion = StrandConversion.getConversion(displayStrand);
                     if (conversion == null) {
-                        comps.add(new TextComponentTranslation("gregtech.multiblock.strand_casting.no_conversion"));
+                        comps.add(new TextComponentTranslation("susy.multiblock.strand_casting.no_conversion"));
                         return;
                     }
-                    comps.add(new TextComponentTranslation("gregtech.multiblock.strand_casting.ore_prefix",
-                            new TextComponentTranslation("supersymmetry.prefix." + conversion.prefix.name.toLowerCase())));
+                    comps.add(new TextComponentTranslation("susy.multiblock.strand_casting.ore_prefix",
+                            new TextComponentTranslation(
+                                    "supersymmetry.prefix." + conversion.prefix.name.toLowerCase())));
                 });
     }
 
@@ -298,7 +302,8 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
     public TraceabilityPredicate autoAbilities(boolean checkEnergyIn, boolean checkMaintenance, boolean checkMuffler) {
         TraceabilityPredicate predicate = super.autoAbilities(checkMaintenance, checkMuffler);
         if (checkEnergyIn) {
-            predicate = predicate.or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2).setPreviewCount(1));
+            predicate = predicate.or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1)
+                    .setMaxGlobalLimited(2).setPreviewCount(1));
         }
         return predicate;
     }
@@ -314,10 +319,12 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
                 isActive, true);
     }
 
-    protected TraceabilityPredicate orientation(IBlockState state, RelativeDirection direction, IProperty<EnumFacing> facingProperty) {
+    protected TraceabilityPredicate orientation(IBlockState state, RelativeDirection direction,
+                                                IProperty<EnumFacing> facingProperty) {
         EnumFacing facing = getRelativeFacing(direction);
 
-        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(state.withProperty(facingProperty, facing))};
+        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[] {
+                new BlockInfo(state.withProperty(facingProperty, facing)) };
         return new TraceabilityPredicate(blockWorldState -> {
             if (blockWorldState.getBlockState() != state.withProperty(facingProperty, facing)) {
                 if (blockWorldState.getBlockState().getBlock() != state.getBlock()) return false;
@@ -327,11 +334,13 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
         }, supplier);
     }
 
-    protected TraceabilityPredicate axisOrientation(IBlockState state, RelativeDirection direction, IProperty<EnumFacing.Axis> facingProperty) {
+    protected TraceabilityPredicate axisOrientation(IBlockState state, RelativeDirection direction,
+                                                    IProperty<EnumFacing.Axis> facingProperty) {
         EnumFacing facing = getRelativeFacing(direction);
         EnumFacing.Axis axis = facing.getAxis();
 
-        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(state.withProperty(facingProperty, axis))};
+        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[] {
+                new BlockInfo(state.withProperty(facingProperty, axis)) };
         return new TraceabilityPredicate(blockWorldState -> {
             if (blockWorldState.getBlockState() != state.withProperty(facingProperty, axis)) {
                 if (blockWorldState.getBlockState().getBlock() != state.getBlock()) return false;
@@ -341,9 +350,8 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
         }, supplier);
     }
 
-
     protected TraceabilityPredicate rollOrientation(RelativeDirection direction) {
-        //makes sure rotor's front faces the left side (relative to the player) of controller front
+        // makes sure rotor's front faces the left side (relative to the player) of controller front
         return axisOrientation(rollState(), direction, VariantAxialRotatableBlock.AXIS);
     }
 
@@ -355,6 +363,4 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
     public boolean allowsExtendedFacing() {
         return false;
     }
-
-
 }

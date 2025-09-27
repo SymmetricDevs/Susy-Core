@@ -1,12 +1,13 @@
 package supersymmetry.integration.theoneprobe.provider;
 
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import mcjty.theoneprobe.api.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import mcjty.theoneprobe.api.*;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.metatileentity.logistics.IDelegator;
 
@@ -25,7 +26,7 @@ public class DelegatorInfoProvider implements IProbeInfoProvider {
             if (te instanceof IGregTechTileEntity igtte) {
                 MetaTileEntity mte = igtte.getMetaTileEntity();
                 if (mte instanceof IDelegator delegator) {
-                    probeInfo.text(TextStyleClass.INFO + "{*gregtech.top.delegator.delegating_face*}" +
+                    probeInfo.text(TextStyleClass.INFO + "{*susy.top.delegator.delegating_face*}" +
                             delegator.getDelegatingFacing(data.getSideHit()));
                 }
             }
