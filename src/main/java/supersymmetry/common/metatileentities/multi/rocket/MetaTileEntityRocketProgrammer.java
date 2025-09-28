@@ -1,4 +1,4 @@
-package supersymmetry.common.metatileentities.multi.electric;
+package supersymmetry.common.metatileentities.multi.rocket;
 
 import javax.annotation.Nonnull;
 

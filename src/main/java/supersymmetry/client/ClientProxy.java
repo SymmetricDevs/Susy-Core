@@ -32,6 +32,7 @@ import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -50,10 +51,13 @@ import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.stack.UnificationEntry;
 import gregtech.api.util.Mods;
 import gregtech.api.util.input.KeyBind;
+import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.SuSyValues;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
+import supersymmetry.api.util.RenderMaskManager;
+import supersymmetry.client.renderer.handler.VariantCoverableBlockRenderer;
 import supersymmetry.client.renderer.textures.SuSyConnectedTextures;
 import supersymmetry.common.CommonProxy;
 import supersymmetry.common.SusyMetaEntities;
@@ -75,8 +79,10 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void preLoad() {
         super.preLoad();
+        GeckoLib.initialize();
         SusyMetaEntities.initRenderers();
         SuSyIRLoader.initEntityRenderers();
+        VariantCoverableBlockRenderer.preInit();
     }
 
     @Override
@@ -267,6 +273,13 @@ public class ClientProxy extends CommonProxy {
             GlStateManager.enableAlpha();
             GlStateManager.enableTexture2D();
             GlStateManager.enableDepth();
+        }
+    }
+
+    @SubscribeEvent
+    public static void onWorldUnload(WorldEvent.Unload event) {
+        if (Minecraft.getMinecraft().world == event.getWorld()) {
+            RenderMaskManager.clearDisabled();
         }
     }
 }

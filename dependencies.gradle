@@ -20,6 +20,7 @@
  * For more details, see https://docs.gradle.org/8.0.1/userguide/java_library_plugin.html#sec:java_library_configurations_graph
  */
 dependencies {
+    implementation 'org.reflections:reflections:0.10.2'
 
     // # Fix crashes on macOS with Narrator
     runtimeOnly 'com.cleanroommc:osxnarratorblocker:1.0'
@@ -46,7 +47,7 @@ dependencies {
 
     // # Lib Mods we are using
     api 'com.cleanroommc:modularui:2.5.0-rc6' transitive false
-    api rfg.deobf('curse.maven:geckolib-388172:4020277')
+    api 'software.bernie.geckolib:geckolib-forge-1.12.2:3.0.31'
     // SussyPatches 0.4.0
     api 'maven.modrinth:sussypatches:1.5.0'
 
@@ -83,6 +84,7 @@ dependencies {
     compileOnly rfg.deobf("curse.maven:creativecore-257814:4722163")
     compileOnly rfg.deobf("curse.maven:littletiles-257818:5180387")
 
+    runtimeOnly rfg.deobf("curse.maven:serverutil-282484:2503313")
     // # Optional dependencies. Uncomment the ones you need
 //    runtimeOnlyNonPublishable rfg.deobf('curse.maven:the-beneath-254629:3425551')
 //    runtimeOnlyNonPublishable rfg.deobf('curse.maven:realistic-terrain-generation-unofficial-648514:4404814')

@@ -13,4 +13,5 @@ public class SuSyMultiblockAbilities {
             "primitive_export_items");
     public static final MultiblockAbility<IStrandProvider> STRAND_IMPORT = new MultiblockAbility<>("strand_import");
     public static final MultiblockAbility<IStrandProvider> STRAND_EXPORT = new MultiblockAbility<>("strand_export");
+    public static final MultiblockAbility<IItemHandlerModifiable> SCANNER = new MultiblockAbility<>("scanner");
 }

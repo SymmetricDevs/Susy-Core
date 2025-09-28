@@ -1,4 +1,4 @@
-package supersymmetry.common.metatileentities.multi.electric;
+package supersymmetry.common.metatileentities.multi.rocket;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
