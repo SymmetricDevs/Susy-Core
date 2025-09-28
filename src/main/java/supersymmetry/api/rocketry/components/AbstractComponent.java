@@ -94,8 +94,7 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
     }
 
     // sort of works
-    public static void writeBlocksToNBT(
-                                        Set<BlockPos> blocks, World world, NBTTagCompound mutableTagCompound) {
+    public void writeBlocksToNBT(Set<BlockPos> blocks, World world) {
         Map<String, Integer> counts = new HashMap<String, Integer>();
         for (BlockPos blockpos : blocks) {
             IBlockState state = world.getBlockState(blockpos);
@@ -117,7 +116,6 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
             counts.put(key, counts.getOrDefault(key, 0) + 1);
         }
 
-        NBTTagList list = new NBTTagList();
         for (Map.Entry<String, Integer> e : counts.entrySet()) {
             String[] p = e.getKey().split("#", 3);
             // NBTTagCompound c = new NBTTagCompound();
@@ -126,10 +124,8 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
             // c.setString("type", p[2]);
             // c.setInteger("count", e.getValue());
             MaterialCost mat = new MaterialCost(p[0], p[2], Integer.parseInt(p[1]), e.getValue());
-            list.appendTag(mat.toNBT());
+            this.materials.add(mat);
         }
-
-        mutableTagCompound.setTag("materialCost", list);
     }
 
     public static double getMass(IBlockState state) {
@@ -258,6 +254,7 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
     public void writeToNBT(NBTTagCompound tag) {
         tag.setString("name", this.getName());
         tag.setString("type", this.getType());
+        tag.setDouble("mass", this.getMass());
         NBTTagList list = new NBTTagList();
         for (MaterialCost material : this.getMaterials()) {
             list.appendTag(material.toNBT());

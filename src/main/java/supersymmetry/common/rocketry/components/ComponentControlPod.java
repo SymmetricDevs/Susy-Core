@@ -166,7 +166,7 @@ public class ComponentControlPod extends AbstractComponent<ComponentControlPod> 
         }
         tag.setDouble("mass", mass);
         this.mass = mass;
-        writeBlocksToNBT(blocksConnected, analysis.world, tag);
+        writeBlocksToNBT(blocksConnected, analysis.world);
         return Optional.of(tag);
     }
 

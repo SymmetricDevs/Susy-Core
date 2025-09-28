@@ -36,10 +36,11 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                 "spacecraft_hull",
                 "spacecraft_hull",
                 (tupl) -> tupl.getSecond().stream()
-                        .anyMatch(x -> tupl.getFirst().world
-                                .getBlockState(x)
-                                .getBlock()
-                                .equals(SuSyBlocks.SPACECRAFT_HULL)));
+                        .anyMatch(
+                                x -> tupl.getFirst().world
+                                        .getBlockState(x)
+                                        .getBlock()
+                                        .equals(SuSyBlocks.SPACECRAFT_HULL)));
     }
 
     @Override
@@ -205,7 +206,7 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         }
         tag.setDouble("mass", mass);
         this.mass = mass;
-        writeBlocksToNBT(blocksConnected, analysis.world, tag);
+        writeBlocksToNBT(blocksConnected, analysis.world);
         return Optional.of(tag);
     }
 }

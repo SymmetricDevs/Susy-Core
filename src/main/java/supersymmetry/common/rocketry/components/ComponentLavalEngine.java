@@ -18,13 +18,13 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.util.Constants;
 
 import gregtech.api.block.VariantBlock;
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.components.MaterialCost;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.rocketry.BlockCombustionChamber;
-import supersymmetry.common.blocks.rocketry.BlockTurboPump;
 
 public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine> {
 
@@ -67,6 +67,7 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
         if (!compound.hasKey("radius", Constants.NBT.TAG_DOUBLE)) return Optional.empty();
         if (!compound.hasKey("area_ratio", Constants.NBT.TAG_DOUBLE)) return Optional.empty();
         if (!compound.hasKey("materials", Constants.NBT.TAG_LIST)) return Optional.empty();
+        if (!compound.hasKey("throughput", Constants.NBT.TAG_DOUBLE)) return Optional.empty();
         compound
                 .getTagList("materials", Constants.NBT.TAG_COMPOUND)
                 .forEach(x -> engine.materials.add(MaterialCost.fromNBT((NBTTagCompound) x)));
@@ -74,6 +75,11 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
         engine.area_ratio = compound.getDouble("area_ratio");
         engine.radius = compound.getDouble("radius");
         engine.mass = compound.getDouble("mass");
+        engine.fuel_throughput = compound.getDouble("throughput");
+
+        if (engine.materials.isEmpty()) {
+            SusyLog.logger.warn("shitten poopen farten no materialen from compounden {}", compound);
+        }
         return Optional.of(engine);
     }
 
@@ -95,7 +101,7 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
             }
             Set<BlockPos> airPerimeter = analysis.getPerimeter(airLayer, StructAnalysis.layerVecs);
             if ((double) airPerimeter.size() < 3 * Math.sqrt((double) airLayer.size())) { // Establishes a roughly
-                                                                                          // circular pattern
+                // circular pattern
                 analysis.status = BuildStat.NOZZLE_MALFORMED;
                 return Optional.empty();
             }
@@ -161,7 +167,6 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
                 analysis.status = BuildStat.WEIRD_PUMP;
                 return Optional.empty();
             }
-
         }
         // Creates engine
         Set<BlockPos> engineBlocks = new HashSet<>(nozzle);
@@ -192,16 +197,17 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
         this.mass = mass;
 
         double throughput = 0;
-
-        for (BlockPos pumpPos : pumps) {
-            IBlockState pump = analysis.world.getBlockState(pumpPos);
-            throughput += ((BlockTurboPump.HPPType) (((VariantBlock<?>) pump)).getState(pump)).getThroughput();
-        }
+        // this crashes :C
+        // for (BlockPos pumpPos : pumps) {
+        // IBlockState pump = analysis.world.getBlockState(pumpPos);
+        // throughput += ((BlockTurboPump.HPPType) (((VariantBlock<?>)
+        // pump)).getState(pump)).getThroughput();
+        // }
 
         this.fuel_throughput = throughput;
         tag.setDouble("throughput", fuel_throughput);
 
-        writeBlocksToNBT(blocks, analysis.world, tag);
+        writeBlocksToNBT(blocks, analysis.world);
         return Optional.of(tag);
     }
 }

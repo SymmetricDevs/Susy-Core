@@ -27,9 +27,11 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
                                           IMultipleTankHandler fluidInputs) {
         Recipe r = super.findRecipe(maxVoltage, inputs, fluidInputs);
         if (r != null) return r; // unlikely for this thing
-        var assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
+        MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
         if (!assembler.isWorking) return null; // assume that it doesnt have a blueprint inside i guess
-        var input = assembler.getCurrentCraftTarget().materials.stream()
+        var targetComponent = assembler.getCurrentCraftTarget();
+        if (targetComponent == null) return null;
+        List<GTRecipeInput> flatExpandedInput = targetComponent.materials.stream()
                 .flatMap(
                         x -> {
                             return x.expandRecipe(RecipeMaps.ASSEMBLER_RECIPES, maxVoltage).stream();
@@ -37,7 +39,7 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
                 .collect(Collectors.toList());
         return assembler.recipeMap
                 .recipeBuilder()
-                .inputIngredients(collapse(input))
+                .inputIngredients(collapse(flatExpandedInput))
                 .EUt(2 << 15) // LuV amp. this means that you need 8 4A EV energy hatches :goog:
                 .duration((int) Math.ceil(assembler.getCurrentCraftTarget().getAssemblyDuration() * 20))
                 .build()
@@ -50,7 +52,8 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
             for (int j = i; j != 0; j--) {
                 if (i != j) {
                     if (in.get(i).equalIgnoreAmount(in.get(j))) {
-                        out.add(in.get(i).copyWithAmount(in.get(i).getAmount() + in.get(j).getAmount()));
+                        out.add(in.get(i).copyWithAmount(in.get(i).getAmount() + in.get(j).getAmount())); // this can
+                                                                                                          // explode
                     }
                 }
             }
@@ -68,5 +71,12 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
                 .forEach(out::add);
 
         return out;
+    }
+
+    @Override
+    protected void completeRecipe() {
+        var assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
+        super.completeRecipe();
+        assembler.nextComponent();
     }
 }

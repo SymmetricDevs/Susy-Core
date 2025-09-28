@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,6 +21,7 @@ import gregtech.api.gui.widgets.SlotWidget;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.util.Position;
 import gregtech.api.util.Size;
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
@@ -237,6 +239,10 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                     .filter(x -> x.getName() == stageEntry.getKey())
                     .findFirst();
             if (!st.isPresent()) {
+                SusyLog.logger.error(
+                        "blueprint stages: {} actually here: {}",
+                        blueprint.getStages().stream().map(x -> x.getName()).collect(Collectors.toList()),
+                        this.stageContainers.values());
                 throw new RuntimeException("failed to match a stage to the provided blueprint");
             }
             stageFrombp = st.get();
