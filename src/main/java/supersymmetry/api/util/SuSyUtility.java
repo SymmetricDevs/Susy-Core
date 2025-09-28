@@ -1,12 +1,13 @@
 package supersymmetry.api.util;
 
-import gregtech.api.GTValues;
-import gregtech.api.unification.material.Material;
+import java.util.function.Function;
+
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.ResourceLocation;
-import supersymmetry.Supersymmetry;
 
-import java.util.function.Function;
+import gregtech.api.GTValues;
+import gregtech.api.unification.material.Material;
+import supersymmetry.Supersymmetry;
 
 public class SuSyUtility {
 

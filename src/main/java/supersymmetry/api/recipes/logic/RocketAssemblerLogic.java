@@ -3,6 +3,7 @@ package supersymmetry.api.recipes.logic;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import net.minecraftforge.items.IItemHandlerModifiable;
 
@@ -13,6 +14,8 @@ import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.recipes.ingredients.GTRecipeInput;
+import supersymmetry.api.SusyLog;
+import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.common.metatileentities.multi.rocket.MetaTileEntityRocketAssembler;
 
 public class RocketAssemblerLogic extends MultiblockRecipeLogic {
@@ -29,7 +32,7 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
         if (r != null) return r; // unlikely for this thing
         MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
         if (!assembler.isWorking) return null; // assume that it doesnt have a blueprint inside i guess
-        var targetComponent = assembler.getCurrentCraftTarget();
+        AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
         if (targetComponent == null) return null;
         List<GTRecipeInput> flatExpandedInput = targetComponent.materials.stream()
                 .flatMap(
@@ -37,23 +40,57 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
                             return x.expandRecipe(RecipeMaps.ASSEMBLER_RECIPES, maxVoltage).stream();
                         })
                 .collect(Collectors.toList());
+        Recipe recipe = assembler.recipeMap
+                .recipeBuilder()
+                .inputIngredients(collapse(flatExpandedInput))
+                .EUt(2 << 15) // LuV amp. this means that you need 8 4A EV energy hatches :goog:
+                .duration((int) Math.ceil(targetComponent.getAssemblyDuration() * 20))
+                .build()
+                .getResult();
+        for (GTRecipeInput input : recipe.getInputs()) {
+            SusyLog.logger.info(
+                    "amount {} item {}",
+                    input.getAmount(),
+                    Stream.of(input.getInputStacks())
+                            .map(x -> String.format("item:%s meta:%s", x.getDisplayName(), x.getMetadata()))
+                            .collect(Collectors.toList()));
+        }
+
+        return recipe;
+    }
+
+    public Recipe getComponentRecipe() {
+        SusyLog.logger.info("getComponentRecipe");
+        MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
+        if (!assembler.isWorking) return null; // assume that it doesnt have a blueprint inside i guess
+        AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
+        if (targetComponent == null) return null;
+        List<GTRecipeInput> flatExpandedInput = targetComponent.materials.stream()
+                .flatMap(
+                        x -> {
+                            return x.expandRecipe(RecipeMaps.ASSEMBLER_RECIPES, 2 << 15).stream();
+                        })
+                .collect(Collectors.toList());
         return assembler.recipeMap
                 .recipeBuilder()
                 .inputIngredients(collapse(flatExpandedInput))
                 .EUt(2 << 15) // LuV amp. this means that you need 8 4A EV energy hatches :goog:
-                .duration((int) Math.ceil(assembler.getCurrentCraftTarget().getAssemblyDuration() * 20))
+                .duration((int) Math.ceil(targetComponent.getAssemblyDuration() * 20))
                 .build()
                 .getResult();
     }
 
     private List<GTRecipeInput> collapse(List<GTRecipeInput> in) {
         List<GTRecipeInput> out = new ArrayList<>();
-        for (int i = in.size(); i != 0; i--) {
+        for (int i = in.size() - 1; i != 0; i--) {
             for (int j = i; j != 0; j--) {
                 if (i != j) {
                     if (in.get(i).equalIgnoreAmount(in.get(j))) {
-                        out.add(in.get(i).copyWithAmount(in.get(i).getAmount() + in.get(j).getAmount())); // this can
-                                                                                                          // explode
+                        out.add(
+                                in.get(i)
+                                        .copyWithAmount(
+                                                in.get(i).getAmount() + in.get(j).getAmount())); // this can and will
+                        // explode, ill change it later:tm:
                     }
                 }
             }
@@ -73,10 +110,14 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
         return out;
     }
 
+    // mental illness n6: this runs when a recipe with nothing in it (findrecipe returns null) is
+    // "complete" too!
     @Override
     protected void completeRecipe() {
-        var assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
+        SusyLog.logger.info(
+                "progressTime:{} maxprogresstime:{}", this.progressTime, this.maxProgressTime);
         super.completeRecipe();
+        MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
         assembler.nextComponent();
     }
 }

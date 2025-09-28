@@ -3,6 +3,7 @@ package supersymmetry.common.metatileentities.multi.rocket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
 
@@ -52,7 +53,9 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                     NBTTagCompound tag = x.getTagCompound();
                     var bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
                     if (bp.readFromNBT(tag) && bp.isFullBlueprint()) {
-                        this.startAssembly(bp);
+                        // this.startAssembly(bp); <- this will nullref if you call it before its
+                        // actually inserted, which
+                        // happens after this function returns :C
                         return true;
                     }
                 }
@@ -66,16 +69,18 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         if (bp.readFromNBT(tag)) {
             return bp;
         } else {
+            SusyLog.logger.error("failed to read a blueprint");
             return null;
             // hopefully never happens since its checked when the item is inserted
         }
     }
 
     public void abortAssembly() {
+        SusyLog.logger.info("assembly force stopped");
+        this.isWorking = false;
         this.componentIndex = 0;
         this.componentList.clear();
         this.recipeMapWorkable.invalidate();
-        this.isWorking = false;
     }
 
     public void finishAssembly() {
@@ -87,11 +92,20 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
 
     public void startAssembly(AbstractRocketBlueprint bp) {
         this.componentIndex = 0;
+
+        this.isWorking = true;
         this.componentList = bp.getStages().stream()
                 .flatMap(x -> x.getComponents().values().stream())
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
-        this.isWorking = true;
+        for (var input : ((RocketAssemblerLogic) this.recipeMapWorkable).getComponentRecipe().getInputs()) {
+            SusyLog.logger.info(
+                    "amount {} item {}",
+                    input.getAmount(),
+                    Stream.of(input.getInputStacks())
+                            .map(x -> x.getDisplayName())
+                            .collect(Collectors.toList()));
+        }
     }
 
     // list of every component that has to be constructed.
@@ -100,17 +114,23 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     public boolean isWorking = false;
 
     public AbstractComponent<?> getCurrentCraftTarget() {
+        SusyLog.logger.info(
+                "getCurrentCraftTarget() isWorking:{},componentList.size():{},componentIndex:{}",
+                isWorking,
+                componentList.size(),
+                componentIndex);
         if (isWorking && componentList.size() - 1 > componentIndex) {
-            return this.componentList.get(this.componentIndex++);
+            return this.componentList.get(this.componentIndex + 1);
         } else {
             abortAssembly();
         }
+
         return null;
     }
 
     // meant to be called after a recipe is done
     public void nextComponent() {
-        if ((this.componentList.size() - 1) > this.componentIndex) {
+        if ((this.componentList.size() - 1) >= this.componentIndex) {
             this.componentIndex++;
             SusyLog.logger.info(
                     "processing component {}/{}", this.componentIndex, this.componentList.size());
@@ -588,6 +608,19 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
 
         // Flex Button
         // TODO: make it abort the construction process
+        builder.widget(
+                new ClickButtonWidget(
+                        173,
+                        143,
+                        18,
+                        18,
+                        "susy.machine.rocket_assembler.gui.start",
+                        (clickData -> {
+                            if (!this.blueprintSlot.isEmpty()) {
+                                this.startAssembly(this.getCurrentBlueprint());
+                            }
+                        })));
+
         builder.widget(getFlexButton(173, 125, 18, 18));
         builder.label(100, 60, this.getMetaName() + ".blueprint_slot.name");
         builder.slot(this.blueprintSlot, 0, 100, 78, GuiTextures.SLOT_DARK);

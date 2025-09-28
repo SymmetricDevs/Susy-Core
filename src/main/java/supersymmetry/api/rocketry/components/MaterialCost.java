@@ -64,7 +64,7 @@ public class MaterialCost {
         Recipe selected = null;
 
         if (itemCache.containsKey(selfStack)) {
-            var recipe = itemCache.get(selfStack);
+            Recipe recipe = itemCache.get(selfStack);
             if (recipe == null) return Arrays.asList(this.toIngredient());
             selected = recipe;
             // set the recipe if it was already in cache, look into the recipemap if it wasnt
