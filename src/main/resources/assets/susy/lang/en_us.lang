@@ -1196,7 +1196,10 @@ susy.particlebeam.nbunches=Total Bunches
 susy.particlebeam.nparticles=Particles per bunch
 susy.particlebeam.emittance=Beam Emittance
 susy.particlebeam.beamsize=Beam Section
+susy.machine.beam_import_hatch.name=Beam Import Hatch
+susy.machine.beam_export_hatch.name=Beam Export Hatch
 
 #Particles
 susy.particle.electron.name=Electron
 susy.particle.positron.name=Positron
+susy.particle.photon.name=Photon
