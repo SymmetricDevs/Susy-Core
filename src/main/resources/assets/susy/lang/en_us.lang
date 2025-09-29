@@ -1207,3 +1207,19 @@ tile.random_concrete.greyindustrialconcrete.name=Grey Industrial Concrete
 tile.random_concrete.mossyindustrialconcrete.name=Mossy Industrial Concrete
 tile.random_concrete.silverindustrialconcrete.name=Silver Industrial Concrete
 tile.random_concrete.whiteindustrialconcrete.name=White Industrial Concrete
+
+tile.random_concrete.dottedpanel.name=Dotted Panel
+tile.random_concrete.dottedpanelborder.name=Dotted Panel Bordered
+tile.random_concrete.dottedpanelcomb.name=Dotted Panel Comb
+tile.random_concrete.dottedpanelgrid.name=Dotted Panel Grid
+
+tile.random_concrete.industrialcinderbricks.name=Industrial Cinder Bricks
+tile.random_concrete.industrialcinderbrickscement.name=Industrial Cement Cinder Bricks
+tile.random_concrete.industrialcinderbrickscementgray.name=Grey Industrial Cement Cinder Bricks
+tile.random_concrete.industrialcinderbricksdark.name=Dark Industrial Cinder Bricks
+tile.random_concrete.industrialcinderbricksdarkgrey.name=Dark Grey Industrial Cinder Bricks
+tile.random_concrete.industrialcinderbricksgrey.name=Grey Industrial Cinder Bricks
+
+tile.random_concrete.smoothindustrialconcrete.name=Smooth Industrial Concrete
+tile.random_concrete.smoothindustrialconcretegrey.name=Smooth Gray Industrial Concrete
+tile.random_concrete1.smoothindustrialconcretewhite.name=Smooth White Industrial Concrete

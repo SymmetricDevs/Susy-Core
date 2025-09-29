@@ -21,7 +21,22 @@ public class BlockRandomConcrete extends VariantBlock<BlockRandomConcrete.BlockR
         GREYINDUSTRIALCONCRETE("greyindustrialconcrete", 2),
         MOSSYINDUSTRIALCONCRETE("mossyindustrialconcrete", 2),
         SILVERINDUSTRIALCONCRETE("silverindustrialconcrete", 2),
-        WHITEINDUSTRIALCONCRETE("whiteindustrialconcrete", 2);
+        WHITEINDUSTRIALCONCRETE("whiteindustrialconcrete", 2),
+
+        DOTTED_PANEL("dottedpanel", 2),
+        DOTTED_PANEL_BORDER("dottedpanelborder", 2),
+        DOTTED_PANEL_COMB("dottedpanelcomb", 2),
+        DOTTED_PANEL_GRID("dottedpanelgrid", 2),
+
+        INDUSTRIAL_CINDER_BRICKS("industrialcinderbricks", 2),
+        INDUSTRIAL_CINDER_BRICKS_CEMENT("industrialcinderbrickscement", 2),
+        INDUSTRIAL_CINDER_BRICKS_CEMENT_GREY("industrialcinderbrickscementgray", 2),
+        INDUSTRIAL_CINDER_BRICKS_DARK("industrialcinderbricksdark", 2),
+
+        INDUSTRIAL_CINDER_BRICKS_DARK_GREY("industrialcinderbricksdarkgrey", 2),
+        INDUSTRIAL_CINDER_BRICKS_GREY("industrialcinderbricksgrey", 2),
+        SMOOTH_INDUSTRIAL_CONCRETE("smoothindustrialconcrete", 2),
+        SMOOTH_INDUSTRIAL_CONCRETE_GREY("smoothindustrialconcretegrey", 2);
 
         private final String name;
         private final int harvestLevel;
