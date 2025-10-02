@@ -1,0 +1,19 @@
+{
+  "forge_marker" : 1,
+  "defaults": {
+    "model": "minecraft:cube_bottom_top",
+    "textures": {
+      "bottom": "gregtech:blocks/susy_stones/industrial_concrete_grey",
+      "top": "gregtech:blocks/wool/industrial_concrete_grey",
+      "side": "gregtech:blocks/wool/industrial_concrete_grey"
+    }
+  },
+  "variants" : {
+    "variant=smoothindustrialconcretewhite" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/susy_stones/smooth_industrial_concrete_white"
+      }
+    }
+  }
+}

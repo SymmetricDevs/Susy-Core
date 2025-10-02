@@ -54,6 +54,8 @@ public class SuSyBlocks {
     public static BlockRocketAssemblerCasing ROCKET_ASSEMBLER_CASING;
     public static BlockRegolith REGOLITH;
     public static BlocksFakeWool FAKEWOOL;
+    public static BlockRandomConcrete RANDOM_CONCRETE;
+    public static BlockRandomConcrete1 RANDOM_CONCRETE1;
 
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
@@ -147,6 +149,12 @@ public class SuSyBlocks {
 
         FAKEWOOL = new BlocksFakeWool();
         FAKEWOOL.setRegistryName("fake_wool");
+
+        RANDOM_CONCRETE = new BlockRandomConcrete();
+        RANDOM_CONCRETE.setRegistryName("random_concrete");
+
+        RANDOM_CONCRETE1 = new BlockRandomConcrete1();
+        RANDOM_CONCRETE1.setRegistryName("random_concrete1");
     }
 
     @SideOnly(Side.CLIENT)
@@ -182,6 +190,8 @@ public class SuSyBlocks {
         registerItemModel(ROCKET_ASSEMBLER_CASING);
         registerItemModel(REGOLITH);
         registerItemModel(FAKEWOOL);
+        registerItemModel(RANDOM_CONCRETE);
+        registerItemModel(RANDOM_CONCRETE1);
     }
 
     @SideOnly(Side.CLIENT)
