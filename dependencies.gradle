@@ -36,8 +36,8 @@ dependencies {
     api rfg.deobf('curse.maven:ctm-267602:2915363')
 
     // # GregTech Addons
-    // Supercritical 0.1.2
-    implementation rfg.deobf('curse.maven:supercritical-1185871:6694408')
+    // Supercritical 0.2.2
+    implementation rfg.deobf('curse.maven:supercritical-1185871:7034114')
     // GT-FO 1.12.4
     implementation rfg.deobf('curse.maven:gregtech-food-option-477021:6147619')
 
