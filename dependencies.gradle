@@ -45,10 +45,10 @@ dependencies {
     api 'com.cleanroommc:groovyscript:1.2.5' transitive false
 
     // # Lib Mods we are using
-    api 'com.cleanroommc:modularui:2.5.0-rc6' transitive false
+    api 'com.cleanroommc:modularui:2.5.0' transitive false
     api rfg.deobf('curse.maven:geckolib-388172:4020277')
     // SussyPatches 0.4.0
-    api 'maven.modrinth:sussypatches:1.5.0'
+    api 'maven.modrinth:sussypatches:1.6.3'
 
     // # Immersive Railroading dependencies
     // Universal Mod Care 1.2.1
@@ -62,7 +62,7 @@ dependencies {
     compileOnly rfg.deobf('curse.maven:recurrent-complex-223150:5615733')
     compileOnly rfg.deobf('curse.maven:ivtoolkit-224535:2443253')
 
-    compileOnly rfg.deobf('curse.maven:fluidlogged-api-485654:4564413')
+    compileOnly 'maven.modrinth:fluidlogged-api:3.1.1'
 
     // # Pyrotech dependencies
     compileOnly rfg.deobf('curse.maven:pyrotech-306676:5351359')
