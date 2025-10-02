@@ -1,15 +1,8 @@
 package supersymmetry.common.metatileentities.multi.rocket;
 
-import java.util.ArrayDeque;
-import java.util.List;
-import java.util.Queue;
-
 import javax.annotation.Nonnull;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -38,7 +31,6 @@ import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.entities.EntityLander;
 
 public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
