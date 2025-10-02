@@ -7,6 +7,7 @@ import java.util.Queue;
 import javax.annotation.Nonnull;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -38,12 +39,10 @@ import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.entities.EntityDropPod;
+import supersymmetry.common.entities.EntityLander;
 
 public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
 
-    private Queue<LandingData> incoming;
-    private LandingData current;
-    private EntityDropPod lander = null;
     private AxisAlignedBB landingAreaBB;
     protected IItemHandlerModifiable outputInventory;
 
@@ -60,6 +59,7 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
     protected void formStructure(PatternMatchContext context) {
         super.formStructure(context);
         initializeAbilities();
+        setStructureAABB();
     }
 
     protected void initializeAbilities() {
@@ -68,20 +68,12 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
 
     @Override
     protected void updateFormedValid() {
-        if (current == null) {
-            if (this.incoming.peek() == null) {
-                return;
+        EntityLander lander = getLander();
+        if (lander != null && !lander.isEmpty()) {
+            GTTransferUtils.moveInventoryItems(lander.getInventory(), this.outputInventory);
+            if (this.isBlockRedstonePowered()) {
+                lander.setHasTakenOff(true);
             }
-            if (this.incoming.peek().scheduledTotalWorldTime > this.getWorld().getTotalWorldTime()) {
-                this.current = this.incoming.poll();
-                this.lander = new EntityDropPod(this.getWorld(),
-                        this.getPos().offset(this.getFrontFacing(), 8).offset(EnumFacing.UP, 255));
-                this.getWorld().spawnEntity(this.lander);
-            }
-        } else if (this.hasLanderArrived()) {
-            this.lander.setDead();
-            GTTransferUtils.addItemsToItemHandler(this.outputInventory, false, this.current.recipe);
-            this.current = null;
         }
     }
 
@@ -117,21 +109,21 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
     @Override
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle("     CCCCC     ", "      CCC      ")
-                .aisle("   CCPPPPPCC   ", "     AAAAA     ")
-                .aisle("  CPPPPPPPPPC  ", "   AAAAAAAAA   ")
-                .aisle(" CPPPPPPPPPPPC ", "  AAAAAAAAAAA  ")
-                .aisle(" CPPPPPPPPPPPC ", "  AAAAAAAAAAA  ")
-                .aisle("CPPPPPPPPPPPPPC", " AAAAAAAAAAAAA ")
-                .aisle("CPPPPPPPPPPPPPC", "CAAAAAAAAAAAAAC")
-                .aisle("CPPPPPPPPPPPPPC", "CAAAAAAAAAAAAAC")
-                .aisle("CPPPPPPPPPPPPPC", "CAAAAAAAAAAAAAC")
-                .aisle("CPPPPPPPPPPPPPC", " AAAAAAAAAAAAA ")
-                .aisle(" CPPPPPPPPPPPC ", "  AAAAAAAAAAA  ")
-                .aisle(" CPPPPPPPPPPPC ", "  AAAAAAAAAAA  ")
-                .aisle("  CPPPPPPPPPC  ", "   AAAAAAAAA   ")
-                .aisle("   CCPPPPPCC   ", "     AAAAA     ")
-                .aisle("     CCSCC     ", "      CCC      ")
+                .aisle("     CCCCC     ", "      CCC      ", "      CCC      ")
+                .aisle("   CCPPPPPCC   ", "     PPPPP     ", "     AAAAA     ")
+                .aisle("  CPPPPPPPPPC  ", "   PPPPPPPPP   ", "   AAAAAAAAA   ")
+                .aisle(" CPPPPPPPPPPPC ", "  PPPPPPPPPPP  ", "  AAAAAAAAAAA  ")
+                .aisle(" CPPPPPPPPPPPC ", "  PPPPPPPPPPP  ", "  AAAAAAAAAAA  ")
+                .aisle("CPPPPPPPPPPPPPC", " PPPPPPPPPPPPP ", " AAAAAAAAAAAAA ")
+                .aisle("CPPPPPPPPPPPPPC", "CPPPPPPPPPPPPPC", "CAAAAAAAAAAAAAC")
+                .aisle("CPPPPPPPPPPPPPC", "CPPPPPPPPPPPPPC", "CAAAAAAAAAAAAAC")
+                .aisle("CPPPPPPPPPPPPPC", "CPPPPPPPPPPPPPC", "CAAAAAAAAAAAAAC")
+                .aisle("CPPPPPPPPPPPPPC", " PPPPPPPPPPPPP ", " AAAAAAAAAAAAA ")
+                .aisle(" CPPPPPPPPPPPC ", "  PPPPPPPPPPP  ", "  AAAAAAAAAAA  ")
+                .aisle(" CPPPPPPPPPPPC ", "  PPPPPPPPPPP  ", "  AAAAAAAAAAA  ")
+                .aisle("  CPPPPPPPPPC  ", "   PPPPPPPPP   ", "   AAAAAAAAA   ")
+                .aisle("   CCPPPPPCC   ", "     PPPPP     ", "     AAAAA     ")
+                .aisle("     CCSCC     ", "      CCC      ", "      CCC      ")
                 .where(' ', any())
                 .where('A', air())
                 .where('S', selfPredicate())
@@ -161,55 +153,14 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
         return Textures.ASSEMBLER_OVERLAY;
     }
 
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
-        int i = 0;
-        for (LandingData satellite : incoming) {
-            NBTTagCompound tag = new NBTTagCompound();
-            tag.setInteger("scheduledTotalWorldTime", satellite.scheduledTotalWorldTime);
-            int j = 0;
-            for (ItemStack stack : satellite.recipe) {
-                tag.setInteger("item" + j, stack.getCount());
-                j++;
-            }
-            data.setTag("incoming" + i, tag);
-        }
-        return super.writeToNBT(data);
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound data) {
-        super.readFromNBT(data);
-        incoming = new ArrayDeque<>();
-        int i = 0;
-        while (data.hasKey("incoming" + i, 10)) {
-            NBTTagCompound tag = data.getCompoundTag("incoming" + i);
-            LandingData landingData = new LandingData();
-            landingData.scheduledTotalWorldTime = tag.getInteger("scheduledTotalWorldTime");
-            int j = 0;
-            for (ItemStack stack : landingData.recipe) {
-                stack.setCount(tag.getInteger("item" + j));
-                j++;
-            }
-            incoming.add(landingData);
-            i++;
-        }
-    }
-
-    public EntityDropPod getLander() {
-        return this.lander;
-    }
-
-    public boolean hasLanderArrived() {
-        if (getLander() != null && !getLander().isDead) {
-            for (EntityDropPod entity : this.getWorld().getEntitiesWithinAABB(EntityDropPod.class,
-                    this.landingAreaBB)) {
-                if (entity == getLander()) {
-                    return true;
-                }
+    public EntityLander getLander() {
+        for (EntityLander entity : this.getWorld().getEntitiesWithinAABB(EntityLander.class,
+                this.landingAreaBB)) {
+            if (entity.onGround) {
+                return entity;
             }
         }
-        return false;
+        return null;
     }
 
     @Override
@@ -218,14 +169,19 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
     }
 
     public void setStructureAABB() {
-        BlockPos spot = new BlockPos.MutableBlockPos(this.getPos()).move(this.getFrontFacing().getOpposite(), 8)
-                .move(EnumFacing.UP, 1);
-        this.landingAreaBB = new AxisAlignedBB(spot);
-    }
+        EnumFacing facing = this.getFrontFacing();
+        BlockPos controllerPos = this.getPos();
 
-    private static class LandingData {
+        BlockPos padCenter = controllerPos.offset(facing.getOpposite(), 7);
 
-        private List<ItemStack> recipe;
-        private int scheduledTotalWorldTime;
+        EnumFacing right = facing.rotateY();
+        EnumFacing left = facing.rotateYCCW();
+
+        // Only accept the Y layer directly on top of the landing pad
+        BlockPos corner1 = padCenter.offset(left, 7).offset(facing, 6).offset(EnumFacing.UP, 1);
+        BlockPos corner2 = padCenter.offset(right, 7).offset(facing.getOpposite(), 6).offset(EnumFacing.UP, 2);
+
+        // Create the bounding box
+        this.landingAreaBB = new AxisAlignedBB(corner1, corner2);
     }
 }

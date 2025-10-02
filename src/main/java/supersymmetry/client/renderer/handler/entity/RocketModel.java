@@ -1,4 +1,4 @@
-package supersymmetry.client.renderer.handler;
+package supersymmetry.client.renderer.handler.entity;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBox;

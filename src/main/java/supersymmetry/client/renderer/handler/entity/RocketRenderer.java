@@ -1,4 +1,4 @@
-package supersymmetry.client.renderer.handler;
+package supersymmetry.client.renderer.handler.entity;
 
 import java.lang.reflect.Field;
 import java.util.List;
