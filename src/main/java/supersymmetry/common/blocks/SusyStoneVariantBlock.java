@@ -128,7 +128,6 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
         MILITARY_CONCRETE("minitary_concrete", MapColor.BLACK),
         ANORTHOSITE("anorthosite", MapColor.GRAY);
 
-
         private final String name;
         public final MapColor mapColor;
 
