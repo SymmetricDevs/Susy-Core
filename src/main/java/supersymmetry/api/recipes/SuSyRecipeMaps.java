@@ -2,6 +2,7 @@ package supersymmetry.api.recipes;
 
 import static gregtech.api.GTValues.*;
 import static gregtech.api.recipes.RecipeMaps.MIXER_RECIPES;
+import static java.lang.Math.ceil;
 
 import net.minecraft.item.ItemStack;
 
@@ -484,9 +485,11 @@ public class SuSyRecipeMaps {
                     .allowEmptyOutput();
 
     static {
+
         GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()
                 .inputs(recipeBuilder.getInputs().toArray(new GTRecipeInput[0]))
                 .fluidInputs(recipeBuilder.getFluidInputs())
+                .fluidInputs(SusyMaterials.RefractoryGunningMixture.getFluid(50 * ((int)ceil((double)recipeBuilder.getDuration()/200)) * (int)ceil((double)recipeBuilder.getDuration()/200)  * (int)ceil((double)(recipeBuilder.getBlastFurnaceTemp()-1800)/1000)))
                 .outputs(recipeBuilder.getOutputs())
                 .chancedOutputs(recipeBuilder.getChancedOutputs())
                 .fluidOutputs(recipeBuilder.getFluidOutputs())
@@ -496,8 +499,8 @@ public class SuSyRecipeMaps {
                 .EUt(recipeBuilder.getEUt())
                 .buildAndRegister());
 
-        SuSyRecipeMaps.ADVANCED_ARC_FURNACE.onRecipeBuild(
-                recipeBuilder -> recipeBuilder.fluidInputs(SusyMaterials.RefractoryGunningMixture.getFluid(50)));
+        //SuSyRecipeMaps.ADVANCED_ARC_FURNACE.onRecipeBuild(
+        //        recipeBuilder -> recipeBuilder.fluidInputs(SusyMaterials.RefractoryGunningMixture.getFluid(50)));
 
         SuSyRecipeMaps.METALLURGICAL_CONVERTER.onRecipeBuild(
                 recipeBuilder -> recipeBuilder.fluidInputs(SusyMaterials.RefractoryGunningMixture.getFluid(50)));
