@@ -4,6 +4,8 @@ import static gregtech.api.GTValues.*;
 import static gregtech.api.recipes.RecipeMaps.MIXER_RECIPES;
 import static java.lang.Math.max;
 
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 
 import gregicality.multiblocks.api.recipes.GCYMRecipeMaps;
@@ -502,7 +504,7 @@ public class SuSyRecipeMaps {
                 .buildAndRegister());
 
         SuSyRecipeMaps.ADVANCED_ARC_FURNACE.onRecipeBuild(recipeBuilder -> {
-            var fluidInputs = recipeBuilder.getFluidInputs();
+            List<GTRecipeInput> fluidInputs = recipeBuilder.getFluidInputs();
             int i = 0;
             boolean hasRGM = false;
             while (i < fluidInputs.size() - 1) {
