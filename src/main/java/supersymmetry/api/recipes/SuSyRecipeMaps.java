@@ -2,7 +2,7 @@ package supersymmetry.api.recipes;
 
 import static gregtech.api.GTValues.*;
 import static gregtech.api.recipes.RecipeMaps.MIXER_RECIPES;
-import static java.lang.Math.ceil;
+import static java.lang.Math.max;
 
 import net.minecraft.item.ItemStack;
 
@@ -485,14 +485,13 @@ public class SuSyRecipeMaps {
                     .allowEmptyOutput();
 
     static {
-
         GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()
+                .fluidInputs(SusyMaterials.RefractoryGunningMixture
+                        .getFluid(50 *
+                                max(1, (recipeBuilder.getDuration() - 1600) / 1600) *
+                                max(1, (recipeBuilder.getBlastFurnaceTemp() - 1800) / 1800)))
                 .inputs(recipeBuilder.getInputs().toArray(new GTRecipeInput[0]))
                 .fluidInputs(recipeBuilder.getFluidInputs())
-                .fluidInputs(SusyMaterials.RefractoryGunningMixture
-                        .getFluid(50 * ((int) ceil((double) recipeBuilder.getDuration() / 200)) *
-                                (int) ceil((double) recipeBuilder.getDuration() / 200) *
-                                (int) ceil((double) (recipeBuilder.getBlastFurnaceTemp() - 1800) / 1000)))
                 .outputs(recipeBuilder.getOutputs())
                 .chancedOutputs(recipeBuilder.getChancedOutputs())
                 .fluidOutputs(recipeBuilder.getFluidOutputs())
@@ -502,8 +501,19 @@ public class SuSyRecipeMaps {
                 .EUt(recipeBuilder.getEUt())
                 .buildAndRegister());
 
-        // SuSyRecipeMaps.ADVANCED_ARC_FURNACE.onRecipeBuild(
-        // recipeBuilder -> recipeBuilder.fluidInputs(SusyMaterials.RefractoryGunningMixture.getFluid(50)));
+        SuSyRecipeMaps.ADVANCED_ARC_FURNACE.onRecipeBuild(recipeBuilder -> {
+            var fluidInputs = recipeBuilder.getFluidInputs();
+            int i = 0;
+            boolean hasRGM = false;
+            while (i < fluidInputs.size() - 1) {
+                if (fluidInputs.get(i).getInputFluidStack().getFluid() ==
+                        SusyMaterials.RefractoryGunningMixture.getFluid()) {
+                    hasRGM = true;
+                    break;
+                }
+            }
+            if (hasRGM) recipeBuilder.fluidInputs(SusyMaterials.RefractoryGunningMixture.getFluid(50));
+        });
 
         SuSyRecipeMaps.METALLURGICAL_CONVERTER.onRecipeBuild(
                 recipeBuilder -> recipeBuilder.fluidInputs(SusyMaterials.RefractoryGunningMixture.getFluid(50)));
