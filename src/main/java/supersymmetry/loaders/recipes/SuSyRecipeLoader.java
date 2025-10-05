@@ -16,11 +16,9 @@ import net.minecraft.item.ItemStack;
 import gregtech.api.recipes.ModHandler;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.category.RecipeCategories;
-import gregtech.api.unification.material.Materials;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
 import supersymmetry.SusyConfig;
-import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
 import supersymmetry.loaders.SuSyMetaTileEntityLoader;
@@ -76,12 +74,6 @@ public class SuSyRecipeLoader {
          * .EUt(2)
          * .buildAndRegister();
          */
-        SuSyRecipeMaps.ADVANCED_ARC_FURNACE.recipeBuilder()
-                .input(dust, Materials.Steel, 10)
-                .output(ingot, Materials.Steel, 10)
-                .duration(10)
-                .EUt(120)
-                .buildAndRegister();
     }
 
     private static void removeLongDistanceItemPipeRecipes() {
