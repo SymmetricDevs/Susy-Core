@@ -486,7 +486,7 @@ public class SuSyRecipeMaps {
     static {
         GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()
                 .fluidInputs(SusyMaterials.RefractoryGunningMixture.getFluid(50 *
-                        Math.max(1, (recipeBuilder.getDuration() - 1600) / 1600) *
+                        Math.max(1, (recipeBuilder.getDuration() - 800) / 400) *
                         Math.max(1, (recipeBuilder.getBlastFurnaceTemp() - 1800) / 1800)))
                 .inputs(recipeBuilder.getInputs().toArray(new GTRecipeInput[0]))
                 .fluidInputs(recipeBuilder.getFluidInputs())
