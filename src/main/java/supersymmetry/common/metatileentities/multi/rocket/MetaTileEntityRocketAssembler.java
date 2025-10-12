@@ -37,6 +37,7 @@ import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.common.blocks.BlockRocketAssemblerCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.entities.EntityRocket;
 
 public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController {
 
@@ -76,6 +77,8 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
 
     public void finishAssembly() {
         // TODO: actually spawn the rocket entity?
+        EntityRocket newRocket = new EntityRocket(this.getWorld(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 90);
+        newRocket.setAssemblerLoc(this.getPos());
         abortAssembly();
     }
 

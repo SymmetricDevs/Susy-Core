@@ -52,6 +52,9 @@ public class EntityRocket extends Entity implements IAlwaysRender {
     private static final DataParameter<Boolean> ACTED = EntityDataManager.<Boolean>createKey(EntityRocket.class,
             DataSerializers.BOOLEAN);
 
+    private static final DataParameter<BlockPos> ASSEMBLER_LOCATION = EntityDataManager.createKey(EntityRocket.class,
+            DataSerializers.BLOCK_POS);
+
     @SideOnly(Side.CLIENT)
     private MovingSoundRocket soundRocket;
 
@@ -141,6 +144,14 @@ public class EntityRocket extends Entity implements IAlwaysRender {
 
     public void setStartPos(Float startPos) {
         this.dataManager.set(START_POS, startPos);
+    }
+
+    public BlockPos getAssemblerLoc() {
+        return this.dataManager.get(ASSEMBLER_LOCATION);
+    }
+
+    public void setAssemblerLoc(BlockPos assPos) {
+        this.dataManager.set(ASSEMBLER_LOCATION, assPos);
     }
 
     public void startCountdown() {
