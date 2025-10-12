@@ -23,6 +23,7 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.items.ItemStackHandler;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -43,7 +44,6 @@ import supersymmetry.common.network.SPacketFirstJoin;
 import supersymmetry.common.rocketry.LanderSpawnEntry;
 import supersymmetry.common.rocketry.LanderSpawnQueue;
 import supersymmetry.common.world.WorldProviderPlanet;
-import net.minecraftforge.items.ItemStackHandler;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class EventHandlers {

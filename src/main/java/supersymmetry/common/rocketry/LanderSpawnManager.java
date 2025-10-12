@@ -20,12 +20,12 @@ public class LanderSpawnManager {
     /**
      * Queues a lander to spawn at the specified coordinates after a delay.
      *
-     * @param world          The world to queue the spawn in (used to access the queue)
-     * @param dimensionId    The dimension ID where the lander should spawn
-     * @param x              The X coordinate
-     * @param y              The Y coordinate
-     * @param z              The Z coordinate
-     * @param tickDelay      The number of ticks to wait before spawning
+     * @param world       The world to queue the spawn in (used to access the queue)
+     * @param dimensionId The dimension ID where the lander should spawn
+     * @param x           The X coordinate
+     * @param y           The Y coordinate
+     * @param z           The Z coordinate
+     * @param tickDelay   The number of ticks to wait before spawning
      */
     public static void queueLanderSpawn(World world, int dimensionId, double x, double y, double z, int tickDelay) {
         queueLanderSpawn(world, dimensionId, x, y, z, tickDelay, null);
@@ -34,10 +34,10 @@ public class LanderSpawnManager {
     /**
      * Queues a lander to spawn at the specified BlockPos after a delay.
      *
-     * @param world          The world to queue the spawn in (used to access the queue)
-     * @param dimensionId    The dimension ID where the lander should spawn
-     * @param pos            The position where the lander should spawn
-     * @param tickDelay      The number of ticks to wait before spawning
+     * @param world       The world to queue the spawn in (used to access the queue)
+     * @param dimensionId The dimension ID where the lander should spawn
+     * @param pos         The position where the lander should spawn
+     * @param tickDelay   The number of ticks to wait before spawning
      */
     public static void queueLanderSpawn(World world, int dimensionId, BlockPos pos, int tickDelay) {
         queueLanderSpawn(world, dimensionId, pos, tickDelay, null);
@@ -46,13 +46,13 @@ public class LanderSpawnManager {
     /**
      * Queues a lander to spawn at the specified coordinates after a delay with inventory data.
      *
-     * @param world          The world to queue the spawn in (used to access the queue)
-     * @param dimensionId    The dimension ID where the lander should spawn
-     * @param x              The X coordinate
-     * @param y              The Y coordinate
-     * @param z              The Z coordinate
-     * @param tickDelay      The number of ticks to wait before spawning
-     * @param inventoryData  Optional NBT data containing inventory contents (can be null)
+     * @param world         The world to queue the spawn in (used to access the queue)
+     * @param dimensionId   The dimension ID where the lander should spawn
+     * @param x             The X coordinate
+     * @param y             The Y coordinate
+     * @param z             The Z coordinate
+     * @param tickDelay     The number of ticks to wait before spawning
+     * @param inventoryData Optional NBT data containing inventory contents (can be null)
      */
     public static void queueLanderSpawn(World world, int dimensionId, double x, double y, double z, int tickDelay,
                                         @Nullable NBTTagCompound inventoryData) {
@@ -71,11 +71,11 @@ public class LanderSpawnManager {
     /**
      * Queues a lander to spawn at the specified BlockPos after a delay with inventory data.
      *
-     * @param world          The world to queue the spawn in (used to access the queue)
-     * @param dimensionId    The dimension ID where the lander should spawn
-     * @param pos            The position where the lander should spawn
-     * @param tickDelay      The number of ticks to wait before spawning
-     * @param inventoryData  Optional NBT data containing inventory contents (can be null)
+     * @param world         The world to queue the spawn in (used to access the queue)
+     * @param dimensionId   The dimension ID where the lander should spawn
+     * @param pos           The position where the lander should spawn
+     * @param tickDelay     The number of ticks to wait before spawning
+     * @param inventoryData Optional NBT data containing inventory contents (can be null)
      */
     public static void queueLanderSpawn(World world, int dimensionId, BlockPos pos, int tickDelay,
                                         @Nullable NBTTagCompound inventoryData) {
@@ -90,14 +90,14 @@ public class LanderSpawnManager {
      * Queues a lander to spawn with inventory contents from an IItemHandlerModifiable.
      * This is useful for asteroid harvesting missions where the lander returns with cargo.
      *
-     * @param world          The world to queue the spawn in (used to access the queue)
-     * @param dimensionId    The dimension ID where the lander should spawn
-     * @param pos            The position where the lander should spawn
-     * @param tickDelay      The number of ticks to wait before spawning
-     * @param inventory      The inventory to copy into the lander
+     * @param world       The world to queue the spawn in (used to access the queue)
+     * @param dimensionId The dimension ID where the lander should spawn
+     * @param pos         The position where the lander should spawn
+     * @param tickDelay   The number of ticks to wait before spawning
+     * @param inventory   The inventory to copy into the lander
      */
     public static void queueLanderSpawnWithInventory(World world, int dimensionId, BlockPos pos, int tickDelay,
-                                                      IItemHandlerModifiable inventory) {
+                                                     IItemHandlerModifiable inventory) {
         NBTTagCompound inventoryData = serializeInventory(inventory);
         queueLanderSpawn(world, dimensionId, pos, tickDelay, inventoryData);
     }
@@ -105,16 +105,16 @@ public class LanderSpawnManager {
     /**
      * Queues a lander to spawn with inventory contents from an IItemHandlerModifiable.
      *
-     * @param world          The world to queue the spawn in (used to access the queue)
-     * @param dimensionId    The dimension ID where the lander should spawn
-     * @param x              The X coordinate
-     * @param y              The Y coordinate
-     * @param z              The Z coordinate
-     * @param tickDelay      The number of ticks to wait before spawning
-     * @param inventory      The inventory to copy into the lander
+     * @param world       The world to queue the spawn in (used to access the queue)
+     * @param dimensionId The dimension ID where the lander should spawn
+     * @param x           The X coordinate
+     * @param y           The Y coordinate
+     * @param z           The Z coordinate
+     * @param tickDelay   The number of ticks to wait before spawning
+     * @param inventory   The inventory to copy into the lander
      */
     public static void queueLanderSpawnWithInventory(World world, int dimensionId, double x, double y, double z,
-                                                      int tickDelay, IItemHandlerModifiable inventory) {
+                                                     int tickDelay, IItemHandlerModifiable inventory) {
         NBTTagCompound inventoryData = serializeInventory(inventory);
         queueLanderSpawn(world, dimensionId, x, y, z, tickDelay, inventoryData);
     }

@@ -1,10 +1,10 @@
 package supersymmetry.api.recipes.logic;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import org.jetbrains.annotations.Nullable;
@@ -14,6 +14,7 @@ import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.recipes.ingredients.GTRecipeInput;
+import gregtech.api.recipes.ingredients.GTRecipeItemInput;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.common.metatileentities.multi.rocket.MetaTileEntityRocketAssembler;
@@ -47,20 +48,20 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
                 .duration((int) Math.ceil(targetComponent.getAssemblyDuration() * 20))
                 .build()
                 .getResult();
-        for (GTRecipeInput input : recipe.getInputs()) {
-            SusyLog.logger.info(
-                    "amount {} item {}",
-                    input.getAmount(),
-                    Stream.of(input.getInputStacks())
-                            .map(x -> String.format("item:%s meta:%s", x.getDisplayName(), x.getMetadata()))
-                            .collect(Collectors.toList()));
-        }
+        // for (GTRecipeInput input : recipe.getInputs()) {
+        // SusyLog.logger.info(
+        // "amount {} item {}",
+        // input.getAmount(),
+        // Stream.of(input.getInputStacks())
+        // .map(x -> String.format("item:%s meta:%s", x.getDisplayName(),
+        // x.getMetadata()))
+        // .collect(Collectors.toList()));
+        // }
 
         return recipe;
     }
 
     public Recipe getComponentRecipe() {
-        SusyLog.logger.info("getComponentRecipe");
         MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
         if (!assembler.isWorking) return null; // assume that it doesnt have a blueprint inside i guess
         AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
@@ -81,33 +82,51 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
     }
 
     private List<GTRecipeInput> collapse(List<GTRecipeInput> in) {
-        List<GTRecipeInput> out = new ArrayList<>();
-        for (int i = in.size() - 1; i != 0; i--) {
-            for (int j = i; j != 0; j--) {
-                if (i != j) {
-                    if (in.get(i).equalIgnoreAmount(in.get(j))) {
-                        out.add(
-                                in.get(i)
-                                        .copyWithAmount(
-                                                in.get(i).getAmount() + in.get(j).getAmount())); // this can and will
-                        // explode, ill change it later:tm:
-                    }
+        HashMap<ItemStack, Integer> counts = new HashMap<>();
+        for (GTRecipeInput input : in) {
+            for (var stack : input.getInputStacks()) {
+                if (counts.containsKey(stack)) {
+                    counts.put(stack, counts.get(stack) + stack.getCount());
+                } else {
+                    counts.put(stack, stack.getCount());
                 }
             }
         }
-        in.stream()
-                .filter(
+        return counts.entrySet().stream()
+                .map(
                         x -> {
-                            return out.stream()
-                                    .noneMatch( // check if its already in the output list to add the ones with no
-                                            // duplicates
-                                            n -> {
-                                                return n.equalIgnoreAmount(x);
-                                            });
+                            // x.getKey().setCount(x.getValue());
+                            // return x.getKey();
+                            return new GTRecipeItemInput(x.getKey(), x.getValue());
                         })
-                .forEach(out::add);
+                .collect(Collectors.toList());
 
-        return out;
+        // List<GTRecipeInput> out = new ArrayList<>();
+        // for (int i = in.size() - 1; i != 0; i--) {
+        // for (int j = i; j != 0; j--) {
+        // if (i != j) {
+        // if (in.get(i).equalIgnoreAmount(in.get(j))) {
+        // out.add(
+        // in.get(i)
+        // .copyWithAmount(
+        // in.get(i).getAmount() + in.get(j).getAmount())); // this can and will
+        // // explode, ill change it later:tm:
+        // }
+        // }
+        // }
+        // }
+        // in.stream()
+        // .filter(
+        // x -> {
+        // return out.stream()
+        // .noneMatch( // check if its already in the output list to add the ones with no
+        // // duplicates
+        // n -> {
+        // return n.equalIgnoreAmount(x);
+        // });
+        // })
+        // .forEach(out::add);
+        // return out;
     }
 
     // mental illness n6: this runs when a recipe with nothing in it (findrecipe returns null) is
@@ -116,8 +135,10 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
     protected void completeRecipe() {
         SusyLog.logger.info(
                 "progressTime:{} maxprogresstime:{}", this.progressTime, this.maxProgressTime);
+        if (!(this.progressTime == 0 || this.maxProgressTime == 0)) {
+            MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
+            assembler.nextComponent();
+        }
         super.completeRecipe();
-        MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
-        assembler.nextComponent();
     }
 }

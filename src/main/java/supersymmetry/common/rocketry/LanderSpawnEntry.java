@@ -24,12 +24,12 @@ public class LanderSpawnEntry {
     /**
      * Creates a new lander spawn entry.
      *
-     * @param dimensionId     The dimension ID where the lander should spawn
-     * @param x               The X coordinate
-     * @param y               The Y coordinate
-     * @param z               The Z coordinate
-     * @param ticksRemaining  The number of ticks to wait before spawning
-     * @param inventoryData   Optional NBT data containing inventory contents (can be null)
+     * @param dimensionId    The dimension ID where the lander should spawn
+     * @param x              The X coordinate
+     * @param y              The Y coordinate
+     * @param z              The Z coordinate
+     * @param ticksRemaining The number of ticks to wait before spawning
+     * @param inventoryData  Optional NBT data containing inventory contents (can be null)
      */
     public LanderSpawnEntry(int dimensionId, double x, double y, double z, int ticksRemaining,
                             @Nullable NBTTagCompound inventoryData) {
@@ -45,10 +45,10 @@ public class LanderSpawnEntry {
     /**
      * Creates a new lander spawn entry from a BlockPos.
      *
-     * @param dimensionId     The dimension ID where the lander should spawn
-     * @param pos             The position where the lander should spawn
-     * @param ticksRemaining  The number of ticks to wait before spawning
-     * @param inventoryData   Optional NBT data containing inventory contents (can be null)
+     * @param dimensionId    The dimension ID where the lander should spawn
+     * @param pos            The position where the lander should spawn
+     * @param ticksRemaining The number of ticks to wait before spawning
+     * @param inventoryData  Optional NBT data containing inventory contents (can be null)
      */
     public LanderSpawnEntry(int dimensionId, BlockPos pos, int ticksRemaining,
                             @Nullable NBTTagCompound inventoryData) {

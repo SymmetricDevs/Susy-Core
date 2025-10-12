@@ -1,6 +1,5 @@
 package supersymmetry.common.entities;
 
-import gregtech.api.GTValues;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -12,26 +11,27 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerChest;
-import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.Constants;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.ILockableContainer;
 import net.minecraft.world.LockCode;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
+
 import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.GTValues;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -239,12 +239,12 @@ public class EntityLander extends EntityLiving implements IAnimatable, ILockable
         compound.setBoolean("landed", this.hasLanded());
         compound.setInteger("time_since_landing", this.getTimeSinceLanding());
         compound.setBoolean("taken_off", this.hasTakenOff());
-        
+
         // Write inventory
         if (this.inventory instanceof ItemStackHandler) {
             compound.setTag("Inventory", ((ItemStackHandler) this.inventory).serializeNBT());
         }
-        
+
         // Write lock code
         if (!this.lockCode.isEmpty()) {
             this.lockCode.toNBT(compound);
@@ -257,16 +257,15 @@ public class EntityLander extends EntityLiving implements IAnimatable, ILockable
         this.setLanded(compound.getBoolean("Landed"));
         this.setTimeSinceLanding(compound.getInteger("time_since_landing"));
         this.setHasTakenOff(compound.getBoolean("taken_off"));
-        
+
         // Read inventory
         if (this.inventory instanceof ItemStackHandler && compound.hasKey("Inventory", Constants.NBT.TAG_COMPOUND)) {
             ((ItemStackHandler) this.inventory).deserializeNBT(compound.getCompoundTag("Inventory"));
         }
-        
+
         // Read lock code
         this.lockCode = LockCode.fromNBT(compound);
     }
-
 
     @Override
     public void onLivingUpdate() {
@@ -590,7 +589,7 @@ public class EntityLander extends EntityLiving implements IAnimatable, ILockable
     public String getGuiID() {
         return "supersymmetry:lander";
     }
-    
+
     /**
      * Gets the IItemHandlerModifiable for this lander.
      * This can be used for capability-based inventory access.
