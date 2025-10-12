@@ -32,13 +32,18 @@ import gregtech.api.util.TeleportHandler;
 import gregtech.common.items.MetaItems;
 import gregtechfoodoption.item.GTFOMetaItem;
 import supersymmetry.Supersymmetry;
+import supersymmetry.api.SusyLog;
 import supersymmetry.common.entities.EntityDropPod;
+import supersymmetry.common.entities.EntityLander;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.event.DimensionRidingSwapData;
 import supersymmetry.common.event.MobHordeWorldData;
 import supersymmetry.common.item.SuSyArmorItem;
 import supersymmetry.common.network.SPacketFirstJoin;
+import supersymmetry.common.rocketry.LanderSpawnEntry;
+import supersymmetry.common.rocketry.LanderSpawnQueue;
 import supersymmetry.common.world.WorldProviderPlanet;
+import net.minecraftforge.items.ItemStackHandler;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class EventHandlers {
@@ -102,6 +107,10 @@ public class EventHandlers {
         if (event.phase != TickEvent.Phase.END) {
             return;
         }
+
+        // Process lander spawn queue for all dimensions
+        processLanderSpawnQueue(server);
+
         if (world.provider.getDimension() != 0) {
             return;
         }
@@ -188,6 +197,77 @@ public class EventHandlers {
             if (block instanceof BlockTorch) {
                 event.setCanceled(true);
             }
+        }
+    }
+
+    /**
+     * Processes the lander spawn queue, decrementing timers and spawning landers when ready.
+     * This method handles cross-dimensional spawning and ensures chunks are loaded.
+     */
+    private static void processLanderSpawnQueue(WorldServer world) {
+        LanderSpawnQueue queue = LanderSpawnQueue.get(world);
+
+        if (queue.isEmpty()) {
+            return;
+        }
+
+        List<LanderSpawnEntry> toRemove = new ArrayList<>();
+
+        for (LanderSpawnEntry entry : queue.getEntries()) {
+            entry.decrementTicks();
+
+            if (entry.isReadyToSpawn()) {
+                spawnLander(world, entry);
+                toRemove.add(entry);
+            }
+        }
+
+        // Remove spawned entries from queue
+        for (LanderSpawnEntry entry : toRemove) {
+            queue.removeEntry(entry.getUuid());
+        }
+
+        if (!toRemove.isEmpty()) {
+            queue.markDirty();
+        }
+    }
+
+    /**
+     * Spawns a lander entity based on the provided spawn entry.
+     * Handles cross-dimensional spawning and inventory loading.
+     */
+    private static void spawnLander(WorldServer originWorld, LanderSpawnEntry entry) {
+        try {
+            // Get the target world (may be different dimension)
+            WorldServer targetWorld = originWorld.getMinecraftServer().getWorld(entry.getDimensionId());
+
+            if (targetWorld == null) {
+                SusyLog.logger.error("Failed to spawn lander: dimension {} does not exist", entry.getDimensionId());
+                return;
+            }
+
+            // Create the lander entity
+            EntityLander lander = new EntityLander(targetWorld, entry.getX(), entry.getY(), entry.getZ());
+
+            // Load inventory if present
+            if (entry.getInventoryData() != null) {
+                ItemStackHandler inventory = new ItemStackHandler(36);
+                inventory.deserializeNBT(entry.getInventoryData());
+
+                // Copy items to lander's inventory
+                for (int i = 0; i < Math.min(inventory.getSlots(), lander.getInventory().getSlots()); i++) {
+                    lander.getInventory().setStackInSlot(i, inventory.getStackInSlot(i));
+                }
+            }
+
+            // Spawn the lander
+            targetWorld.spawnEntity(lander);
+
+            SusyLog.logger.info("Spawned lander at ({}, {}, {}) in dimension {}",
+                    entry.getX(), entry.getY(), entry.getZ(), entry.getDimensionId());
+
+        } catch (Exception e) {
+            SusyLog.logger.error("Error spawning lander: {}", entry, e);
         }
     }
 }

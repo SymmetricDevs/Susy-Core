@@ -135,7 +135,7 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
         }
         tag.setDouble("mass", Double.valueOf(mass));
         this.mass = mass;
-        writeBlocksToNBT(blocks, analysis.world, tag);
+        writeBlocksToNBT(blocks, analysis.world);
         return Optional.of(tag);
     }
 }

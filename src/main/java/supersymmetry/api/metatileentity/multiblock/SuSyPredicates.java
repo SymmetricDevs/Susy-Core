@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import codechicken.lib.util.ArrayUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.state.IBlockState;
@@ -21,6 +20,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import cam72cam.immersiverailroading.IRBlocks;
+import codechicken.lib.util.ArrayUtils;
 import gregtech.api.GregTechAPI;
 import gregtech.api.block.IHeatingCoilBlockStats;
 import gregtech.api.pattern.PatternStringError;

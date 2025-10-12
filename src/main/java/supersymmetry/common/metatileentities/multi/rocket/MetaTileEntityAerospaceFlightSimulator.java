@@ -282,7 +282,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             NBTTagCompound tag = rocketBlueprintSlot.getStackInSlot(0).getTagCompound();
             AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
             if (mainwindow.blueprintBuildAttempt(bp)) {
-                SusyLog.logger.info("build success, component writeout: {}", bp.writeToNBT());
+                SusyLog.logger.info("build success, blueprint writeout: {}", bp.writeToNBT());
                 this.rocketBlueprintSlot.addToCompound(
                         x -> {
                             return bp.writeToNBT();

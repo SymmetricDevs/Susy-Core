@@ -212,7 +212,7 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
         tag.setDouble("bottom_radius", bottomRadius);
 
         analysis.status = BuildStat.SUCCESS;
-        writeBlocksToNBT(blocksConnected, analysis.world, tag);
+        writeBlocksToNBT(blocksConnected, analysis.world);
 
         return Optional.of(tag);
     }

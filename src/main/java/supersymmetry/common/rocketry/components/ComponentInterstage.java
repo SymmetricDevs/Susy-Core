@@ -98,7 +98,7 @@ public class ComponentInterstage extends AbstractComponent<ComponentInterstage> 
         tag.setString("type", this.type);
         tag.setString("name", this.name);
 
-        writeBlocksToNBT(blocks, analysis.world, tag);
+        writeBlocksToNBT(blocks, analysis.world);
 
         analysis.status = BuildStat.SUCCESS;
 

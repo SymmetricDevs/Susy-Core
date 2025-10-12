@@ -5,12 +5,18 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Tuple;
+
+import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.widgets.AbstractWidgetGroup;
@@ -20,6 +26,7 @@ import gregtech.api.gui.widgets.SlotWidget;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.util.Position;
 import gregtech.api.util.Size;
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
@@ -193,7 +200,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                                     x -> {
                                         if (SuSyMetaItems.isMetaItem(x) == SuSyMetaItems.DATA_CARD_ACTIVE.metaValue) {
                                             if (x.hasTagCompound()) {
-                                                var c = AbstractComponent.getComponentFromName(
+                                                AbstractComponent<?> c = AbstractComponent.getComponentFromName(
                                                         x.getTagCompound().getString("name"));
                                                 if (c.getComponentSlotValidator().test(componentname)) {
                                                     // SusyLog.logger.info(
@@ -231,33 +238,52 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
     public boolean blueprintBuildAttempt(AbstractRocketBlueprint blueprint) {
         this.error = ComponentValidationResult.UNKNOWN;
         // go through every stage widget
-        for (var stageEntry : this.stageContainers.entrySet()) {
+        for (Entry<String, RocketSimulatorComponentContainerWidget> stageEntry : this.stageContainers.entrySet()) {
             RocketStage stageFrombp;
-            var st = blueprint.getStages().stream()
+            Optional<RocketStage> st = blueprint.getStages().stream()
                     .filter(x -> x.getName() == stageEntry.getKey())
                     .findFirst();
             if (!st.isPresent()) {
-                throw new RuntimeException("failed to match a stage to the provided blueprint");
+                SusyLog.logger.error(
+                        "blueprint stages: {} actually here: {}",
+                        blueprint.getStages().stream().map(x -> x.getName()).collect(Collectors.toList()),
+                        this.stageContainers.keySet());
+                for (var stage : blueprint.getStages()) {
+                    for (var guiEntry : this.stageContainers.entrySet()) {
+                        SusyLog.logger.info(
+                                "stage name: \"{}\" guiEntry name: \"{}\" equal??? {}",
+                                stage.getName(),
+                                guiEntry.getKey(),
+                                stage.getName() == guiEntry.getKey());
+                    }
+                }
+                throw new RuntimeException(
+                        String.format(
+                                "failed to match a stage to the provided blueprint, %s not in %s",
+                                stageEntry.getKey(),
+                                blueprint.getStages().stream().map(x -> x.getName()).collect(Collectors.toList())));
             }
             stageFrombp = st.get();
 
             this.errorStage = stageFrombp.getName();
             // go through every component type within that stage component
-            for (var entryWidgets : stageEntry.getValue().components.entrySet()) {
+            for (Entry<String, RocketComponentEntryWidget> entryWidgets : stageEntry.getValue().components.entrySet()) {
                 List<AbstractComponent<?>> components = new ArrayList<>();
                 this.errorComponentType = entryWidgets.getKey();
 
                 if (!entryWidgets.getValue().isShortView()) {
                     // go through each slot and add each component separately
                     for (DataStorageLoader componentContainer : entryWidgets.getValue().getSlots()) {
-                        var cardStack = componentContainer.getStackInSlot(0);
+                        @NotNull
+                        ItemStack cardStack = componentContainer.getStackInSlot(0);
                         if (!cardStack.hasTagCompound()) {
                             // this.error = ComponentValidationResult.INVALID_CARD;
                             // return false;
                             continue;
                         }
                         NBTTagCompound tag = cardStack.getTagCompound();
-                        var component = AbstractComponent.getComponentFromName(tag.getString("name")).readFromNBT(tag);
+                        Optional<? extends AbstractComponent<?>> component = AbstractComponent
+                                .getComponentFromName(tag.getString("name")).readFromNBT(tag);
                         if (!component.isPresent()) {
                             // this.error = ComponentValidationResult.INVALID_CARD;
                             // return false;
@@ -269,13 +295,15 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                 // duplicate the component from the first slot n times since its the same stuff most of the
                 // times
                 else {
-                    var cardStack = entryWidgets.getValue().getSlots().get(0).getStackInSlot(0);
+                    @NotNull
+                    ItemStack cardStack = entryWidgets.getValue().getSlots().get(0).getStackInSlot(0);
                     if (!cardStack.hasTagCompound()) {
                         this.error = ComponentValidationResult.INVALID_CARD;
                         return false;
                     }
                     NBTTagCompound tag = cardStack.getTagCompound();
-                    var component = AbstractComponent.getComponentFromName(tag.getString("name")).readFromNBT(tag);
+                    Optional<? extends AbstractComponent<?>> component = AbstractComponent
+                            .getComponentFromName(tag.getString("name")).readFromNBT(tag);
                     if (!component.isPresent()) {
                         this.error = ComponentValidationResult.INVALID_CARD;
                         return false;
@@ -291,8 +319,8 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                     return false;
                 }
             }
-            for (var componentLists : stageFrombp.getComponents().entrySet()) {
-                var stat = stageFrombp
+            for (Entry<String, List<AbstractComponent<?>>> componentLists : stageFrombp.getComponents().entrySet()) {
+                ComponentValidationResult stat = stageFrombp
                         .getComponentValidationFunction()
                         .apply(
                                 new Tuple<String, List<AbstractComponent<?>>>(

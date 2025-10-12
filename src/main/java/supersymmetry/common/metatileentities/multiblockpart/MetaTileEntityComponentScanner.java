@@ -119,6 +119,8 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                         NBTTagCompound t = scanResult.get();
                         component.writeToNBT(t);
                         return t;
+                        // scanResult was replaced by just writing it to nbt with the function instead of doing
+                        // whatever epix was cooking
                         /* just replace it */});
 
                     break;
