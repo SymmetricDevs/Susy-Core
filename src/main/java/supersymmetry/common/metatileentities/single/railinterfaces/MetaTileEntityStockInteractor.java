@@ -44,7 +44,7 @@ import cam72cam.mod.math.Vec3d;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
-import dev.tianmi.sussypatches.api.metatileentity.mui2.IMui2Holder;
+import dev.tianmi.sussypatches.api.metatileentity.IMui2Holder;
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.GregtechTileCapabilities;
 import gregtech.api.capability.IControllable;
