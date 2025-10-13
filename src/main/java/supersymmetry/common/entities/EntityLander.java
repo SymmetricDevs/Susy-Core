@@ -16,7 +16,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
+
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -29,7 +31,8 @@ import supersymmetry.client.audio.MovingSoundLander;
 
 public class EntityLander extends EntityLiving implements IAnimatable {
 
-    private static final DataParameter<Boolean> HAS_LANDED = EntityDataManager.<Boolean>createKey(EntityLander.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> HAS_LANDED = EntityDataManager.<Boolean>createKey(EntityLander.class,
+            DataSerializers.BOOLEAN);
 
     private AnimationFactory factory = new AnimationFactory(this);
     @SideOnly(Side.CLIENT)
@@ -59,7 +62,8 @@ public class EntityLander extends EntityLiving implements IAnimatable {
     @Override
     public void writeEntityToNBT(@NotNull NBTTagCompound compound) {
         super.writeEntityToNBT(compound);
-        compound.setBoolean("landed", this.hasLanded());}
+        compound.setBoolean("landed", this.hasLanded());
+    }
 
     @Override
     public void readEntityFromNBT(@NotNull NBTTagCompound compound) {
@@ -114,7 +118,9 @@ public class EntityLander extends EntityLiving implements IAnimatable {
         super.updatePassenger(passenger);
         float xOffset = MathHelper.sin(this.renderYawOffset * 0.1F);
         float zOffset = MathHelper.cos(this.renderYawOffset * 0.1F);
-        passenger.setPosition(this.posX + (double) (0.1F * xOffset), this.posY + (double) (this.height * 0.2F) + passenger.getYOffset() + 0.0D, this.posZ - (double) (0.1F * zOffset));
+        passenger.setPosition(this.posX + (double) (0.1F * xOffset),
+                this.posY + (double) (this.height * 0.2F) + passenger.getYOffset() + 0.0D,
+                this.posZ - (double) (0.1F * zOffset));
 
         if (passenger instanceof EntityLivingBase) {
             ((EntityLivingBase) passenger).renderYawOffset = this.renderYawOffset;
@@ -132,9 +138,7 @@ public class EntityLander extends EntityLiving implements IAnimatable {
     }
 
     @Override
-    public void fall(float distance, float damageMultiplier) {
-
-    }
+    public void fall(float distance, float damageMultiplier) {}
 
     @Override
     protected boolean canDespawn() {
@@ -186,9 +190,7 @@ public class EntityLander extends EntityLiving implements IAnimatable {
     }
 
     @Override
-    public void knockBack(@NotNull Entity entityIn, float strength, double xRatio, double zRatio) {
-
-    }
+    public void knockBack(@NotNull Entity entityIn, float strength, double xRatio, double zRatio) {}
 
     @Override
     public void setAir(int air) {
@@ -197,14 +199,16 @@ public class EntityLander extends EntityLiving implements IAnimatable {
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         if (this.hasLanded()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ladder.extend", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ladder.extend",
+                    ILoopType.EDefaultLoopTypes.PLAY_ONCE));
         }
         return PlayState.CONTINUE;
     }
 
     @Override
     public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController<EntityLander>(this, "controller", 0, this::predicate));
+        animationData
+                .addAnimationController(new AnimationController<EntityLander>(this, "controller", 0, this::predicate));
     }
 
     @Override

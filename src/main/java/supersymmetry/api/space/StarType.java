@@ -9,14 +9,14 @@ public enum StarType {
     K,
     M,
     WR,
-    //Cool dwarf classes
+    // Cool dwarf classes
     L,
     T,
     Y,
-    //Carbon star classes
+    // Carbon star classes
     C,
     S,
-    //Remnants
+    // Remnants
     BLACK_HOLE,
     NEUTRON_STAR,
     PULSAR,

@@ -1,7 +1,10 @@
 package supersymmetry.integration.jei.ingredient;
 
-import mezz.jei.api.gui.IDrawable;
-import mezz.jei.api.ingredients.IIngredientRenderer;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -10,13 +13,12 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.util.text.TextFormatting;
+
+import mezz.jei.api.gui.IDrawable;
+import mezz.jei.api.ingredients.IIngredientRenderer;
 import supersymmetry.api.particle.Particle;
 import supersymmetry.api.particle.ParticleBeam;
 import supersymmetry.api.particle.ParticlePhysicsUtils;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ParticleBeamRenderer implements IIngredientRenderer<ParticleBeam> {
 
@@ -40,7 +42,9 @@ public class ParticleBeamRenderer implements IIngredientRenderer<ParticleBeam> {
         this(0, 0, 0, 0, 0, 0, 0, null, TEXT_WIDTH, TEXT_HEIGHT);
     }
 
-    public ParticleBeamRenderer(double energy, double bunchSpacing, double bunchLength, int nBunches, int nParticlesPerBunch, double emittance, double beamSize, @Nullable IDrawable overlay, int width, int height) {
+    public ParticleBeamRenderer(double energy, double bunchSpacing, double bunchLength, int nBunches,
+                                int nParticlesPerBunch, double emittance, double beamSize, @Nullable IDrawable overlay,
+                                int width, int height) {
         this.energy = energy;
         this.bunchSpacing = bunchSpacing;
         this.bunchLength = bunchLength;
@@ -73,7 +77,8 @@ public class ParticleBeamRenderer implements IIngredientRenderer<ParticleBeam> {
         GlStateManager.disableBlend();
     }
 
-    private void drawParticle(Minecraft minecraft, final int posX, final int posY, @Nullable ParticleBeam particleBeam) {
+    private void drawParticle(Minecraft minecraft, final int posX, final int posY,
+                              @Nullable ParticleBeam particleBeam) {
         if (particleBeam == null) return;
         Particle particle = particleBeam.getParticle();
         if (particle == null) return;
@@ -99,13 +104,20 @@ public class ParticleBeamRenderer implements IIngredientRenderer<ParticleBeam> {
     public List<String> getTooltip(Minecraft minecraft, ParticleBeam ingredient, ITooltipFlag tooltipFlag) {
         List<String> list = new ArrayList<>();
         list.add(I18n.format(ingredient.getParticle().getUnlocalizedName()));
-        list.add(TextFormatting.RED + I18n.format("susy.particlebeam.energy") + TextFormatting.WHITE + ": " + ParticlePhysicsUtils.getEnergyWithUnit(ingredient.getEnergy()));
-        list.add(TextFormatting.BLUE + I18n.format("susy.particlebeam.bunch.spacing") + TextFormatting.WHITE + ": " + ParticlePhysicsUtils.getSIFormat(ingredient.getBunchSpacing(), -9, "s"));
-        list.add(TextFormatting.GREEN + I18n.format("susy.particlebeam.bunch.length") + TextFormatting.WHITE + ": " + ParticlePhysicsUtils.getSIFormat(ingredient.getBunchLength(), -2, "m"));
-        list.add(TextFormatting.YELLOW + I18n.format("susy.particlebeam.nbunches") + TextFormatting.WHITE + ": " + String.valueOf(ingredient.getNBunches()));
-        list.add(TextFormatting.LIGHT_PURPLE + I18n.format("susy.particlebeam.nparticles") + TextFormatting.WHITE + ": " + String.valueOf(ingredient.getNParticlesPerBunch()));
-        list.add(TextFormatting.AQUA + I18n.format("susy.particlebeam.emittance") + TextFormatting.WHITE + ": " + String.valueOf(ingredient.getEmittance()) + " um rad");
-        list.add(TextFormatting.GOLD + I18n.format("susy.particlebeam.beamsize") + TextFormatting.WHITE + ": " + String.valueOf(ingredient.getBeamSize()) + " um");
+        list.add(TextFormatting.RED + I18n.format("susy.particlebeam.energy") + TextFormatting.WHITE + ": " +
+                ParticlePhysicsUtils.getEnergyWithUnit(ingredient.getEnergy()));
+        list.add(TextFormatting.BLUE + I18n.format("susy.particlebeam.bunch.spacing") + TextFormatting.WHITE + ": " +
+                ParticlePhysicsUtils.getSIFormat(ingredient.getBunchSpacing(), -9, "s"));
+        list.add(TextFormatting.GREEN + I18n.format("susy.particlebeam.bunch.length") + TextFormatting.WHITE + ": " +
+                ParticlePhysicsUtils.getSIFormat(ingredient.getBunchLength(), -2, "m"));
+        list.add(TextFormatting.YELLOW + I18n.format("susy.particlebeam.nbunches") + TextFormatting.WHITE + ": " +
+                String.valueOf(ingredient.getNBunches()));
+        list.add(TextFormatting.LIGHT_PURPLE + I18n.format("susy.particlebeam.nparticles") + TextFormatting.WHITE +
+                ": " + String.valueOf(ingredient.getNParticlesPerBunch()));
+        list.add(TextFormatting.AQUA + I18n.format("susy.particlebeam.emittance") + TextFormatting.WHITE + ": " +
+                String.valueOf(ingredient.getEmittance()) + " um rad");
+        list.add(TextFormatting.GOLD + I18n.format("susy.particlebeam.beamsize") + TextFormatting.WHITE + ": " +
+                String.valueOf(ingredient.getBeamSize()) + " um");
         return list;
     }
 }

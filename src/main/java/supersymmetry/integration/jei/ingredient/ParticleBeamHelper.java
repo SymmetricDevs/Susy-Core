@@ -1,18 +1,20 @@
 package supersymmetry.integration.jei.ingredient;
 
-import com.google.common.base.MoreObjects;
-import mezz.jei.api.ingredients.IIngredientHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import com.google.common.base.MoreObjects;
+
+import mezz.jei.api.ingredients.IIngredientHelper;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.particle.Particle;
 import supersymmetry.api.particle.ParticleBeam;
 
 public class ParticleBeamHelper implements IIngredientHelper<ParticleBeam> {
+
     @Nullable
     @Override
     public ParticleBeam getMatch(Iterable<ParticleBeam> ingredients, @NotNull ParticleBeam ingredientToMatch) {
-
         for (ParticleBeam particleBeam : ingredients) {
             if (particleBeam == null) continue;
             if (ingredientToMatch.getParticle() == particleBeam.getParticle()) {

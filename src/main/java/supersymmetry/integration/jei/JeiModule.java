@@ -1,5 +1,7 @@
 package supersymmetry.integration.jei;
 
+import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
 
 import cam72cam.immersiverailroading.IRItems;
@@ -13,7 +15,6 @@ import mezz.jei.api.IModRegistry;
 import mezz.jei.api.ISubtypeRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.particle.ParticleBeam;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
@@ -23,8 +24,6 @@ import supersymmetry.integration.jei.ingredient.ParticleBeamListFactory;
 import supersymmetry.integration.jei.ingredient.ParticleBeamRenderer;
 import supersymmetry.integration.jei.ingredient.ParticleType;
 import supersymmetry.modules.SuSyModules;
-
-import java.util.List;
 
 @JEIPlugin
 @GregTechModule(

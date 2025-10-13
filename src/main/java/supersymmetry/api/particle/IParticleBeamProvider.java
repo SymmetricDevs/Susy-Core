@@ -5,5 +5,4 @@ public interface IParticleBeamProvider {
     ParticleBeam getParticleBeam();
 
     ParticleBeam insertBeam(ParticleBeam beam);
-
 }

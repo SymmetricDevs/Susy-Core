@@ -6,9 +6,7 @@ import gregtech.api.recipes.RecipeMap;
 
 public class ParticleSourceRecipeBuilder extends RecipeBuilder<ParticleSourceRecipeBuilder> {
 
-    public ParticleSourceRecipeBuilder() {
-
-    }
+    public ParticleSourceRecipeBuilder() {}
 
     @SuppressWarnings("unused")
     public ParticleSourceRecipeBuilder(Recipe recipe, RecipeMap<ParticleSourceRecipeBuilder> recipeMap) {
@@ -18,5 +16,4 @@ public class ParticleSourceRecipeBuilder extends RecipeBuilder<ParticleSourceRec
     public ParticleSourceRecipeBuilder(RecipeBuilder<ParticleSourceRecipeBuilder> recipeBuilder) {
         super(recipeBuilder);
     }
-
 }

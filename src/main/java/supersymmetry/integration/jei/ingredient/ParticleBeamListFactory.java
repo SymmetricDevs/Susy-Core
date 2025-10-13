@@ -1,14 +1,15 @@
 package supersymmetry.integration.jei.ingredient;
 
-import supersymmetry.api.particle.Particle;
-import supersymmetry.api.particle.ParticleBeam;
-import supersymmetry.api.particle.Particles;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import supersymmetry.api.particle.Particle;
+import supersymmetry.api.particle.ParticleBeam;
+import supersymmetry.api.particle.Particles;
+
 public final class ParticleBeamListFactory {
+
     private ParticleBeamListFactory() {}
 
     public static List<ParticleBeam> createList() {

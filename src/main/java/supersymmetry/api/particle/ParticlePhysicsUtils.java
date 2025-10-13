@@ -4,8 +4,8 @@ import java.text.DecimalFormat;
 
 public class ParticlePhysicsUtils {
 
-    public static String getSIPrefix(double number,int power) {
-        int index =(int) Math.log10(Math.abs(number)) + power;
+    public static String getSIPrefix(double number, int power) {
+        int index = (int) Math.log10(Math.abs(number)) + power;
 
         return switch (index) {
             case -30, -29, -28 -> "q";
@@ -31,86 +31,83 @@ public class ParticlePhysicsUtils {
             case 30, 31, 32 -> "R";
             default -> "";
         };
-
     }
 
-    public static String getSIFormat(double number,int power,String unit) {
-
+    public static String getSIFormat(double number, int power, String unit) {
         String prefix = getSIPrefix(number, power);
 
         if (prefix.equals("q")) {
-            number *= Math.pow(10, 30+power);
+            number *= Math.pow(10, 30 + power);
         }
         if (prefix.equals("r")) {
-            number *= Math.pow(10, 27+power);
+            number *= Math.pow(10, 27 + power);
         }
         if (prefix.equals("y")) {
-            number *= Math.pow(10, 24+power);
+            number *= Math.pow(10, 24 + power);
         }
         if (prefix.equals("z")) {
-            number *= Math.pow(10, 21+power);
+            number *= Math.pow(10, 21 + power);
         }
         if (prefix.equals("a")) {
-            number *= Math.pow(10, 18+power);
+            number *= Math.pow(10, 18 + power);
         }
         if (prefix.equals("f")) {
-            number *= Math.pow(10, 15+power);
+            number *= Math.pow(10, 15 + power);
         }
         if (prefix.equals("p")) {
-            number *= Math.pow(10, 12+power);
+            number *= Math.pow(10, 12 + power);
         }
         if (prefix.equals("n")) {
-            number *= Math.pow(10, 9+power);
+            number *= Math.pow(10, 9 + power);
         }
         if (prefix.equals("u")) {
-            number *= Math.pow(10, 6+power);
+            number *= Math.pow(10, 6 + power);
         }
         if (prefix.equals("m")) {
-            number *= Math.pow(10, 3+power);
+            number *= Math.pow(10, 3 + power);
         }
         if (prefix.equals("")) {
-            number *= Math.pow(10, 0+power);
+            number *= Math.pow(10, 0 + power);
         }
         if (prefix.equals("k")) {
-            number *= Math.pow(10, -3+power);
+            number *= Math.pow(10, -3 + power);
         }
         if (prefix.equals("M")) {
-            number *= Math.pow(10, -6+power);
+            number *= Math.pow(10, -6 + power);
         }
         if (prefix.equals("G")) {
-            number *= Math.pow(10, -9+power);
+            number *= Math.pow(10, -9 + power);
         }
         if (prefix.equals("T")) {
-            number *= Math.pow(10, -12+power);
+            number *= Math.pow(10, -12 + power);
         }
 
         if (prefix.equals("P")) {
-            number *= Math.pow(10, -15+power);
+            number *= Math.pow(10, -15 + power);
         }
         if (prefix.equals("E")) {
-            number *= Math.pow(10, -18+power);
+            number *= Math.pow(10, -18 + power);
         }
         if (prefix.equals("Z")) {
-            number *= Math.pow(10, -21+power);
+            number *= Math.pow(10, -21 + power);
         }
         if (prefix.equals("Y")) {
-            number *= Math.pow(10, -24+power);
+            number *= Math.pow(10, -24 + power);
         }
         if (prefix.equals("R")) {
-            number *= Math.pow(10, -27+power);
+            number *= Math.pow(10, -27 + power);
         }
         if (prefix.equals("Q")) {
-            number *= Math.pow(10, -30+power);
+            number *= Math.pow(10, -30 + power);
         }
 
         DecimalFormat df = new DecimalFormat("#.###");
 
-        return df.format(number)+ " "+ prefix+unit;
+        return df.format(number) + " " + prefix + unit;
     }
 
     public static String getEnergyWithUnit(double energy) {
         if (energy == 0) return "< 1 keV";
         return getSIFormat(energy, 6, "eV");
     }
-
 }

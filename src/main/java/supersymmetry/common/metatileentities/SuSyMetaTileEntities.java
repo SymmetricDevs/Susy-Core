@@ -260,10 +260,9 @@ public class SuSyMetaTileEntities {
     // Generators
     public static MetaTileEntityFuelCell[] FUEL_CELL = new MetaTileEntityFuelCell[2];
 
-    //Particle physics stuff
+    // Particle physics stuff
     public static MetaTileEntityBeamLineHatch BEAM_IMPORT;
     public static MetaTileEntityBeamLineHatch BEAM_EXPORT;
-
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500,
@@ -649,10 +648,10 @@ public class SuSyMetaTileEntities {
         FUEL_CELL[1] = registerMetaTileEntity(18401,
                 new MetaTileEntityFuelCell(susyId("fuel_cell.iv"), SuSyRecipeMaps.FUEL_CELL_RECIPES,
                         SusyTextures.FUEL_CELL_OVERLAY, 5, GTUtility.defaultTankSizeFunction, 1000, 800));
-      
-        BEAM_IMPORT = registerMetaTileEntity(18500, new MetaTileEntityBeamLineHatch(susyId("beam_import_hatch"), false));
-        BEAM_EXPORT = registerMetaTileEntity(18501, new MetaTileEntityBeamLineHatch(susyId("beam_export_hatch"), true));
 
+        BEAM_IMPORT = registerMetaTileEntity(18500,
+                new MetaTileEntityBeamLineHatch(susyId("beam_import_hatch"), false));
+        BEAM_EXPORT = registerMetaTileEntity(18501, new MetaTileEntityBeamLineHatch(susyId("beam_export_hatch"), true));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name,
