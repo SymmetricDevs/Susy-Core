@@ -1202,6 +1202,22 @@ tile.fake_wool.greenfakewool.name=Green Asbestos Fiber
 tile.fake_wool.redfakewool.name=Red Asbestos Fiber
 tile.fake_wool.blackfakewool.name=Black Asbestos Fiber
 
+#Particle physics stuff
+susy.particlebeam.energy=Energy
+susy.particlebeam.bunch.spacing=Bunch Spacing
+susy.particlebeam.bunch.length=Bunch Length
+susy.particlebeam.nbunches=Total Bunches
+susy.particlebeam.nparticles=Particles per bunch
+susy.particlebeam.emittance=Beam Emittance
+susy.particlebeam.beamsize=Beam Section
+susy.machine.beam_import_hatch.name=Beam Import Hatch
+susy.machine.beam_export_hatch.name=Beam Export Hatch
+
+#Particles
+susy.particle.electron.name=Electron
+susy.particle.positron.name=Positron
+susy.particle.photon.name=Photon
+
 #Random Concrete
 tile.random_concrete.greyindustrialconcrete.name=Grey Industrial Concrete
 tile.random_concrete.mossyindustrialconcrete.name=Mossy Industrial Concrete
