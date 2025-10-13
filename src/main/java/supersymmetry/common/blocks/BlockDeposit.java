@@ -1,6 +1,7 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.block.VariantBlock;
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
@@ -11,11 +12,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
+import gregtech.api.block.VariantBlock;
 
 public class BlockDeposit extends VariantBlock<BlockDeposit.DepositBlockType> {
+
     public BlockDeposit() {
         super(Material.ROCK);
         setTranslationKey("deposit_block");
@@ -26,7 +29,8 @@ public class BlockDeposit extends VariantBlock<BlockDeposit.DepositBlockType> {
     }
 
     @Override
-    public boolean canSilkHarvest(@NotNull World world, @NotNull BlockPos pos, @NotNull IBlockState state, @NotNull EntityPlayer player) {
+    public boolean canSilkHarvest(@NotNull World world, @NotNull BlockPos pos, @NotNull IBlockState state,
+                                  @NotNull EntityPlayer player) {
         return false;
     }
 
@@ -39,17 +43,18 @@ public class BlockDeposit extends VariantBlock<BlockDeposit.DepositBlockType> {
     @NotNull
     @Override
     @SuppressWarnings("deprecation")
-    public EnumPushReaction getPushReaction(@NotNull IBlockState state)
-    {
+    public EnumPushReaction getPushReaction(@NotNull IBlockState state) {
         return EnumPushReaction.BLOCK;
     }
 
     @Override
-    public void dropBlockAsItemWithChance(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state, float chance, int fortune) {
+    public void dropBlockAsItemWithChance(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state,
+                                          float chance, int fortune) {
         super.dropBlockAsItemWithChance(worldIn, pos, state, 0.0F, 0);
     }
 
     public enum DepositBlockType implements IStringSerializable {
+
         ORTHOMAGMATIC("orthomagmatic"),
         METAMORPHIC("metamorphic"),
         SEDIMENTARY("sedimentary"),

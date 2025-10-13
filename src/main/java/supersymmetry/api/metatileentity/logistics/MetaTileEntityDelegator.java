@@ -1,18 +1,8 @@
 package supersymmetry.api.metatileentity.logistics;
 
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.pipeline.ColourMultiplier;
-import codechicken.lib.render.pipeline.IVertexOperation;
-import codechicken.lib.vec.Cuboid6;
-import codechicken.lib.vec.Matrix4;
-import gregtech.api.capability.GregtechCapabilities;
-import gregtech.api.capability.IEnergyContainer;
-import gregtech.api.gui.ModularUI;
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.MetaTileEntityHolder;
-import gregtech.api.util.GTUtility;
-import gregtech.client.renderer.texture.Textures;
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import java.util.List;
+import java.util.function.Predicate;
+
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,21 +20,33 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.function.Predicate;
-
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.ColourMultiplier;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Cuboid6;
+import codechicken.lib.vec.Matrix4;
+import gregtech.api.capability.GregtechCapabilities;
+import gregtech.api.capability.IEnergyContainer;
+import gregtech.api.gui.ModularUI;
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.MetaTileEntityHolder;
+import gregtech.api.util.GTUtility;
+import gregtech.client.renderer.texture.Textures;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 
 public abstract class MetaTileEntityDelegator extends MetaTileEntity implements IDelegator {
 
     protected final Predicate<Capability<?>> capFilter;
     protected final int baseColor;
 
-    public MetaTileEntityDelegator(ResourceLocation metaTileEntityId, Predicate<Capability<?>> capFilter, int baseColor) {
+    public MetaTileEntityDelegator(ResourceLocation metaTileEntityId, Predicate<Capability<?>> capFilter,
+                                   int baseColor) {
         super(metaTileEntityId);
         this.capFilter = capFilter;
         this.baseColor = baseColor;
@@ -57,7 +59,8 @@ public abstract class MetaTileEntityDelegator extends MetaTileEntity implements 
     }
 
     protected <T> T getDefaultCapability(Capability<T> capability, EnumFacing side) {
-        return side != null && capFilter.test(capability) && DefaultCapabilities.hasCapability(capability) ? DefaultCapabilities.getCapability(capability) : super.getCapability(capability, side);
+        return side != null && capFilter.test(capability) && DefaultCapabilities.hasCapability(capability) ?
+                DefaultCapabilities.getCapability(capability) : super.getCapability(capability, side);
     }
 
     protected <T> T getDelegatedCapability(Capability<T> capability, EnumFacing side) {
@@ -65,7 +68,8 @@ public abstract class MetaTileEntityDelegator extends MetaTileEntity implements 
         EnumFacing delegatingFacing = getDelegatingFacing(side);
         if (delegatingFacing == null) return null;
         TileEntity te = getWorld().getTileEntity(getPos().offset(delegatingFacing));
-        if (te == null || (te instanceof MetaTileEntityHolder holder && holder.getMetaTileEntity() instanceof IDelegator))
+        if (te == null ||
+                (te instanceof MetaTileEntityHolder holder && holder.getMetaTileEntity() instanceof IDelegator))
             return null;
         // TODO: make IDelegator a capability when Jet Wingsuit PR gets merged
         return te.getCapability(capability, delegatingFacing.getOpposite());
@@ -76,7 +80,8 @@ public abstract class MetaTileEntityDelegator extends MetaTileEntity implements 
         IVertexOperation[] colouredPipeline = ArrayUtils.add(pipeline,
                 new ColourMultiplier(GTUtility.convertRGBtoOpaqueRGBA_CL(this.getPaintingColorForRendering())));
         for (EnumFacing facing : EnumFacing.values()) {
-            Textures.renderFace(renderState, translation, colouredPipeline, facing, Cuboid6.full, this.getBaseTexture(), BlockRenderLayer.CUTOUT_MIPPED);
+            Textures.renderFace(renderState, translation, colouredPipeline, facing, Cuboid6.full, this.getBaseTexture(),
+                    BlockRenderLayer.CUTOUT_MIPPED);
         }
     }
 
@@ -87,7 +92,8 @@ public abstract class MetaTileEntityDelegator extends MetaTileEntity implements 
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip,
+                               boolean advanced) {
         super.addInformation(stack, world, tooltip, advanced);
         tooltip.add(I18n.format("susy.machine.delegator.tooltip.non_recursion"));
     }
@@ -118,38 +124,41 @@ public abstract class MetaTileEntityDelegator extends MetaTileEntity implements 
 
         static {
             // Item
-            addCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(new ItemStackHandler(1) {
+            addCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,
+                    CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(new ItemStackHandler(1) {
 
-                @NotNull
-                @Override
-                public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-                    return stack;
-                }
+                        @NotNull
+                        @Override
+                        public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+                            return stack;
+                        }
 
-                @NotNull
-                @Override
-                public ItemStack extractItem(int slot, int amount, boolean simulate) {
-                    return ItemStack.EMPTY;
-                }
-            }));
+                        @NotNull
+                        @Override
+                        public ItemStack extractItem(int slot, int amount, boolean simulate) {
+                            return ItemStack.EMPTY;
+                        }
+                    }));
 
             // Fluid
-            addCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(new FluidTank(10000) {
+            addCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY,
+                    CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(new FluidTank(10000) {
 
-                @Override
-                public int fill(FluidStack resource, boolean doFill) {
-                    return 0;
-                }
+                        @Override
+                        public int fill(FluidStack resource, boolean doFill) {
+                            return 0;
+                        }
 
-                @Override
-                @Nullable
-                public FluidStack drainInternal(int maxDrain, boolean doDrain) {
-                    return null;
-                }
-            }));
+                        @Override
+                        @Nullable
+                        public FluidStack drainInternal(int maxDrain, boolean doDrain) {
+                            return null;
+                        }
+                    }));
 
             // GTEU
-            addCapability(GregtechCapabilities.CAPABILITY_ENERGY_CONTAINER, GregtechCapabilities.CAPABILITY_ENERGY_CONTAINER.cast(IEnergyContainer.DEFAULT));
+            addCapability(GregtechCapabilities.CAPABILITY_ENERGY_CONTAINER,
+                    GregtechCapabilities.CAPABILITY_ENERGY_CONTAINER.cast(IEnergyContainer.DEFAULT));
         }
 
         public static boolean hasCapability(@NotNull Capability<?> capability) {

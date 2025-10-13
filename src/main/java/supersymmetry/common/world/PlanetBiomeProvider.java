@@ -1,5 +1,9 @@
 package supersymmetry.common.world;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import net.minecraft.init.Biomes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -12,14 +16,13 @@ import net.minecraft.world.gen.layer.GenLayerVoronoiZoom;
 import net.minecraft.world.gen.layer.GenLayerZoom;
 import net.minecraft.world.gen.layer.IntCache;
 import net.minecraftforge.common.BiomeManager;
+
 import org.jetbrains.annotations.NotNull;
+
 import supersymmetry.common.world.layer.PlanetGenLayerBiomes;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 public class PlanetBiomeProvider extends BiomeProvider {
+
     private List<BiomeManager.BiomeEntry> biomeList;
     private List<Biome> biomesToSpawnIn;
     private BiomeCache cache;
@@ -124,5 +127,4 @@ public class PlanetBiomeProvider extends BiomeProvider {
     public void cleanupCache() {
         cache.cleanupCache();
     }
-
 }

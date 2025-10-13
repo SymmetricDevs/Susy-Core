@@ -359,6 +359,7 @@ susy.multiblock.pattern.error.milling.lower=§cOnly allowed on the lower part of
 
 susy.machine.drone_pad.name=Drone Pad
 susy.machine.primitive_smelter.name=Primitive Smelter
+susy.machine.large_steam_hammer.name=Large Steam Hammer
 susy.machine.landing_pad.name=Landing Pad
 susy.machine.scrap_recycler.name=Scrap Recycler
 susy.machine.rocket_assembler.name=Rocket Assembler
@@ -1076,6 +1077,19 @@ susy.machine.quarry.tooltip.structure_info=Quarries can be formed with any odd d
 
 death.attack.toxic_atmo=%s's lungs were shredded
 death.attack.suffocation=%s couldn't breathe
+death.attack.pressure=%s got squeezed
+death.attack.depressurization=%s died from an embolism
+death.attack.impact=%s experienced terminal deceleration
+death.attack.vaporization=%s stopped being biology and started being physics
+death.attack.alpha_radiation=%s ingested something too spicy
+death.attack.beta_radiation=%s had their chromosomes shredded
+death.attack.neutron_radiation=%s was spiced up by neutrons
+death.attack.uv_radiation=%s forgot to apply sunscreen
+death.attack.x_radiation=%s got a non-consensual radiography
+death.attack.gamma_radiation=%s died from internal sunburns
+death.attack.spaghettification=%s was spaghettified
+death.attack.age=%s died of old age
+death.attack.chronoerasure=%s never existed
 
 metaitem.simple_gas_mask.name=Primitive Gas Mask
 metaitem.simple_gas_mask.tooltip=Survive in oxygenless environments
@@ -1203,3 +1217,25 @@ susy.machine.beam_export_hatch.name=Beam Export Hatch
 susy.particle.electron.name=Electron
 susy.particle.positron.name=Positron
 susy.particle.photon.name=Photon
+
+#Random Concrete
+tile.random_concrete.greyindustrialconcrete.name=Grey Industrial Concrete
+tile.random_concrete.mossyindustrialconcrete.name=Mossy Industrial Concrete
+tile.random_concrete.silverindustrialconcrete.name=Silver Industrial Concrete
+tile.random_concrete.whiteindustrialconcrete.name=White Industrial Concrete
+
+tile.random_concrete.dottedpanel.name=Dotted Panel
+tile.random_concrete.dottedpanelborder.name=Dotted Panel Bordered
+tile.random_concrete.dottedpanelcomb.name=Dotted Panel Comb
+tile.random_concrete.dottedpanelgrid.name=Dotted Panel Grid
+
+tile.random_concrete.industrialcinderbricks.name=Industrial Cinder Bricks
+tile.random_concrete.industrialcinderbrickscement.name=Industrial Cement Cinder Bricks
+tile.random_concrete.industrialcinderbrickscementgray.name=Grey Industrial Cement Cinder Bricks
+tile.random_concrete.industrialcinderbricksdark.name=Dark Industrial Cinder Bricks
+tile.random_concrete.industrialcinderbricksdarkgrey.name=Dark Grey Industrial Cinder Bricks
+tile.random_concrete.industrialcinderbricksgrey.name=Grey Industrial Cinder Bricks
+
+tile.random_concrete.smoothindustrialconcrete.name=Smooth Industrial Concrete
+tile.random_concrete.smoothindustrialconcretegrey.name=Smooth Gray Industrial Concrete
+tile.random_concrete1.smoothindustrialconcretewhite.name=Smooth White Industrial Concrete

@@ -5,6 +5,7 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import supersymmetry.Supersymmetry;
 import supersymmetry.client.renderer.handler.DroneRenderer;
 import supersymmetry.client.renderer.handler.DropPodRenderer;
@@ -31,5 +32,4 @@ public class SusyMetaEntities {
         RenderingRegistry.registerEntityRenderingHandler(EntityRocket.class, RocketRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityLander.class, LanderRenderer::new);
     }
-
 }

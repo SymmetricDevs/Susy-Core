@@ -1,9 +1,10 @@
 package supersymmetry.api.capability;
 
-import gregtech.api.capability.SimpleCapabilityManager;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.fml.common.Mod;
+
+import gregtech.api.capability.SimpleCapabilityManager;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.particle.IParticleBeamProvider;
 

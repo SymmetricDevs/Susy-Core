@@ -1,20 +1,18 @@
 package supersymmetry.api.recipes.builders;
 
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.util.EnumValidationResult;
 import gregtech.api.util.ValidationResult;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.recipes.properties.EvaporationEnergyProperty;
 import supersymmetry.api.recipes.properties.MixerSettlerCellsProperty;
-import supersymmetry.api.recipes.properties.SinterProperty;
 
 public class MixerSettlerRecipeBuilder extends RecipeBuilder<MixerSettlerRecipeBuilder> {
 
-    public MixerSettlerRecipeBuilder() {
-
-    }
+    public MixerSettlerRecipeBuilder() {}
 
     public MixerSettlerRecipeBuilder(MixerSettlerRecipeBuilder other) {
         super(other);
@@ -28,14 +26,13 @@ public class MixerSettlerRecipeBuilder extends RecipeBuilder<MixerSettlerRecipeB
     @SuppressWarnings("UnusedReturnValue")
     public MixerSettlerRecipeBuilder requiredCells(int cells) {
         if (cells <= 0) {
-            SusyLog.logger.error("Required mixer settler cell count cannot be less than or equal to one."
-                    , new IllegalArgumentException());
+            SusyLog.logger.error("Required mixer settler cell count cannot be less than or equal to one.",
+                    new IllegalArgumentException());
             recipeStatus = EnumValidationResult.INVALID;
         }
 
         if (cells % 2 != 0) {
-            SusyLog.logger.error("Required mixer settler cell count must be even."
-                    , new IllegalArgumentException());
+            SusyLog.logger.error("Required mixer settler cell count must be even.", new IllegalArgumentException());
             recipeStatus = EnumValidationResult.INVALID;
         }
         this.applyProperty(MixerSettlerCellsProperty.getInstance(), cells);
@@ -52,10 +49,10 @@ public class MixerSettlerRecipeBuilder extends RecipeBuilder<MixerSettlerRecipeB
         return super.applyProperty(key, value);
     }
 
-
     @Override
     public ValidationResult<Recipe> build() {
-        if (this.recipePropertyStorage == null || !this.recipePropertyStorage.hasRecipeProperty(MixerSettlerCellsProperty.getInstance())) {
+        if (this.recipePropertyStorage == null ||
+                !this.recipePropertyStorage.hasRecipeProperty(MixerSettlerCellsProperty.getInstance())) {
             this.requiredCells(2);
         }
         return super.build();

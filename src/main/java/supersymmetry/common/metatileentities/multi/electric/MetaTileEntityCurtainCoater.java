@@ -1,5 +1,19 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.conveyorBelts;
+
+import java.util.*;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import gregtech.api.GTValues;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -14,22 +28,10 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.common.ConfigHolder;
 import gregtech.common.blocks.*;
 import gregtech.common.metatileentities.MetaTileEntities;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import org.apache.commons.lang3.tuple.Pair;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.common.blocks.BlockConveyor;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
-
-import javax.annotation.Nonnull;
-import java.util.*;
-
-import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.conveyorBelts;
 
 public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
 
@@ -77,10 +79,14 @@ public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
                 .where('E', MetaTileEntities.ENERGY_INPUT_HATCH[GTValues.LV], EnumFacing.NORTH)
                 .where('G', getGearBoxState())
                 .where('W', getGlassState())
-                .where('>', SuSyBlocks.CONVEYOR_BELT.getDefaultState().withProperty(BlockConveyor.FACING, EnumFacing.EAST))
-                .where('<', SuSyBlocks.CONVEYOR_BELT.getDefaultState().withProperty(BlockConveyor.FACING, EnumFacing.WEST))
+                .where('>',
+                        SuSyBlocks.CONVEYOR_BELT.getDefaultState().withProperty(BlockConveyor.FACING, EnumFacing.EAST))
+                .where('<',
+                        SuSyBlocks.CONVEYOR_BELT.getDefaultState().withProperty(BlockConveyor.FACING, EnumFacing.WEST))
                 .where('M',
-                        () -> ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH : getCasingState(), EnumFacing.SOUTH);
+                        () -> ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH :
+                                getCasingState(),
+                        EnumFacing.SOUTH);
         shapeInfo.add(baseBuilder.shallowCopy()
                 .aisle("CCCCC", "CWGWC", "  G  ")
                 .aisle("CCCCC", "I>>>o", "CCGCC")
@@ -111,7 +117,8 @@ public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
         World world = getWorld();
         for (Pair<BlockPos, RelativeDirection> posDirPair : conveyorBlocks) {
             // RelativeDirection will take into account of the multi flipping pattern
-            EnumFacing conveyorFacing = posDirPair.getRight().getRelativeFacing(getFrontFacing(), getUpwardsFacing(), isFlipped());
+            EnumFacing conveyorFacing = posDirPair.getRight().getRelativeFacing(getFrontFacing(), getUpwardsFacing(),
+                    isFlipped());
 
             BlockPos blockPos = posDirPair.getLeft();
             IBlockState blockState = world.getBlockState(blockPos);
@@ -121,7 +128,6 @@ public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
             }
         }
     }
-
 
     protected IBlockState getCasingState() {
         return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STAINLESS_CLEAN);
@@ -135,11 +141,11 @@ public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
         return MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.TEMPERED_GLASS);
     }
 
-
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
         return Textures.CLEAN_STAINLESS_STEEL_CASING;
     }
+
     @Nonnull
     @Override
     protected ICubeRenderer getFrontOverlay() {
