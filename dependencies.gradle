@@ -45,10 +45,10 @@ dependencies {
     api 'com.cleanroommc:groovyscript:1.2.5' transitive false
 
     // # Lib Mods we are using
-    api 'com.cleanroommc:modularui:2.5.0' transitive false
+    api 'com.cleanroommc:modularui:3.0.2' transitive false
     api rfg.deobf('curse.maven:geckolib-388172:4020277')
     // SussyPatches 0.4.0
-    api 'maven.modrinth:sussypatches:1.6.4'
+    api 'maven.modrinth:sussypatches:1.8.0'
 
     // # Immersive Railroading dependencies
     // Universal Mod Care 1.2.1
