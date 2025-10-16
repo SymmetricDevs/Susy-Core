@@ -12,12 +12,12 @@ import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.items.metaitem.stats.IItemBehaviour;
 
-public class dataCardBehavior implements IItemBehaviour {
+public class DataCardBehavior implements IItemBehaviour {
 
     private final Consumer<List<String>> lines;
     private final List<String> keys;
 
-    public dataCardBehavior(@NotNull Consumer<List<String>> lines, List<String> keys) {
+    public DataCardBehavior(@NotNull Consumer<List<String>> lines, List<String> keys) {
         this.lines = lines;
         this.keys = keys;
     }
