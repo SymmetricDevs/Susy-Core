@@ -43,6 +43,7 @@ import supersymmetry.api.SusyLog;
 import supersymmetry.api.blocks.VariantItemBlockFalling;
 import supersymmetry.api.event.MobHordeEvent;
 import supersymmetry.api.fluids.SusyGeneratedFluidHandler;
+import supersymmetry.api.particle.Particles;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.api.unification.ore.SusyStoneTypes;
 import supersymmetry.common.blocks.SheetedFrameItemBlock;
@@ -64,7 +65,10 @@ import supersymmetry.modules.SuSyModules;
 public class CommonProxy {
 
     public void preLoad() {
+        GeckoLib.initialize();
         SusyStoneTypes.init();
+        Particles.init();
+        Particles.register();
     }
 
     /**

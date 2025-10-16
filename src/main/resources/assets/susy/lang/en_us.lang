@@ -1269,6 +1269,44 @@ tile.fake_wool.greenfakewool.name=Green Asbestos Fiber
 tile.fake_wool.redfakewool.name=Red Asbestos Fiber
 tile.fake_wool.blackfakewool.name=Black Asbestos Fiber
 
+#Particle physics stuff
+susy.particlebeam.energy=Energy
+susy.particlebeam.bunch.spacing=Bunch Spacing
+susy.particlebeam.bunch.length=Bunch Length
+susy.particlebeam.nbunches=Total Bunches
+susy.particlebeam.nparticles=Particles per bunch
+susy.particlebeam.emittance=Beam Emittance
+susy.particlebeam.beamsize=Beam Section
+susy.machine.beam_import_hatch.name=Beam Import Hatch
+susy.machine.beam_export_hatch.name=Beam Export Hatch
+
+#Particles
+susy.particle.electron.name=Electron
+susy.particle.positron.name=Positron
+susy.particle.photon.name=Photon
+
+#Random Concrete
+tile.random_concrete.greyindustrialconcrete.name=Grey Industrial Concrete
+tile.random_concrete.mossyindustrialconcrete.name=Mossy Industrial Concrete
+tile.random_concrete.silverindustrialconcrete.name=Silver Industrial Concrete
+tile.random_concrete.whiteindustrialconcrete.name=White Industrial Concrete
+
+tile.random_concrete.dottedpanel.name=Dotted Panel
+tile.random_concrete.dottedpanelborder.name=Dotted Panel Bordered
+tile.random_concrete.dottedpanelcomb.name=Dotted Panel Comb
+tile.random_concrete.dottedpanelgrid.name=Dotted Panel Grid
+
+tile.random_concrete.industrialcinderbricks.name=Industrial Cinder Bricks
+tile.random_concrete.industrialcinderbrickscement.name=Industrial Cement Cinder Bricks
+tile.random_concrete.industrialcinderbrickscementgray.name=Grey Industrial Cement Cinder Bricks
+tile.random_concrete.industrialcinderbricksdark.name=Dark Industrial Cinder Bricks
+tile.random_concrete.industrialcinderbricksdarkgrey.name=Dark Grey Industrial Cinder Bricks
+tile.random_concrete.industrialcinderbricksgrey.name=Grey Industrial Cinder Bricks
+
+tile.random_concrete.smoothindustrialconcrete.name=Smooth Industrial Concrete
+tile.random_concrete.smoothindustrialconcretegrey.name=Smooth Gray Industrial Concrete
+tile.random_concrete1.smoothindustrialconcretewhite.name=Smooth White Industrial Concrete
+
 susy.machine.building_cleanroom.tooltip.1=allows for creation of §fStructure Cards§7 with rocket components encoded within
 susy.machine.building_cleanroom.tooltip.2=also works as a regular cleanroom
 # Error Messages

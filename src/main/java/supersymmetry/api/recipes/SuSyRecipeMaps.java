@@ -492,6 +492,9 @@ public class SuSyRecipeMaps {
                     .setSlotOverlay(true, false, GuiTextures.BOXED_OVERLAY);
     static {
         GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()
+                .fluidInputs(SusyMaterials.RefractoryGunningMixture.getFluid(50 *
+                        Math.max(1, (recipeBuilder.getDuration() - 800) / 400) *
+                        Math.max(1, (recipeBuilder.getBlastFurnaceTemp() - 1800) / 1800)))
                 .inputs(recipeBuilder.getInputs().toArray(new GTRecipeInput[0]))
                 .fluidInputs(recipeBuilder.getFluidInputs())
                 .outputs(recipeBuilder.getOutputs())
@@ -503,8 +506,14 @@ public class SuSyRecipeMaps {
                 .EUt(recipeBuilder.getEUt())
                 .buildAndRegister());
 
-        SuSyRecipeMaps.ADVANCED_ARC_FURNACE.onRecipeBuild(
-                recipeBuilder -> recipeBuilder.fluidInputs(SusyMaterials.RefractoryGunningMixture.getFluid(50)));
+        SuSyRecipeMaps.ADVANCED_ARC_FURNACE.onRecipeBuild(recipeBuilder -> {
+            for (var fluidInput : recipeBuilder.getFluidInputs()) {
+                if (fluidInput.getInputFluidStack().getFluid() == SusyMaterials.RefractoryGunningMixture.getFluid()) {
+                    return;
+                }
+            }
+            recipeBuilder.fluidInputs(SusyMaterials.RefractoryGunningMixture.getFluid(50));
+        });
 
         SuSyRecipeMaps.METALLURGICAL_CONVERTER.onRecipeBuild(
                 recipeBuilder -> recipeBuilder.fluidInputs(SusyMaterials.RefractoryGunningMixture.getFluid(50)));
