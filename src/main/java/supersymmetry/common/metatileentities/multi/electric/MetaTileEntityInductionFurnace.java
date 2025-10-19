@@ -17,7 +17,7 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
-import supersymmetry.common.blocks.BlockInductionCoil;
+import supersymmetry.common.blocks.BlockInductionCoilAssembly;
 import supersymmetry.common.blocks.SuSyBlocks;
 
 public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockController {
@@ -47,8 +47,7 @@ public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockControlle
                         .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMinGlobalLimited(1))
                         .or(abilities(MultiblockAbility.EXPORT_ITEMS).setMinGlobalLimited(1)))
                 .where('C',
-                        states(SuSyBlocks.INDUCTION_COIL
-                                .getState(BlockInductionCoil.InductionCoilType.COPPER)))
+                        states(SuSyBlocks.INDUCTION_COIL_ASSEMBLY.getState(BlockInductionCoilAssembly.InductionCoilAssemblyType.COPPER)))
                 .where(' ', any())
                 .where('#', air())
                 .build();

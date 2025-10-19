@@ -115,6 +115,8 @@ tile.conveyor_belt.lv.name=Conveyor Belt
 
 tile.drill_bit.steel.name=Steel Drill Bit Block
 
+tile.induction_coil_assembly.copper.name=Induction Coil Assembly
+
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
 tile.susy_stone_smooth.gneiss.name=Gneiss
@@ -1241,3 +1243,4 @@ tile.random_concrete.industrialcinderbricksgrey.name=Grey Industrial Cinder Bric
 tile.random_concrete.smoothindustrialconcrete.name=Smooth Industrial Concrete
 tile.random_concrete.smoothindustrialconcretegrey.name=Smooth Gray Industrial Concrete
 tile.random_concrete1.smoothindustrialconcretewhite.name=Smooth White Industrial Concrete
+
