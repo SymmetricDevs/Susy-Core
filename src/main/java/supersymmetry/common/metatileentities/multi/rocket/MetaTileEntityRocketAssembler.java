@@ -639,7 +639,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                     return !blueprintSlot.isEmpty() ? "" : I18n.format(this.getMetaName() + ".blueprint_slot.name");
                 },
                 0x404040);
-        SlotWidgetMentallyStable blueprintslot = new SlotWidgetMentallyStable(this.blueprintSlot, 0, 170, 70);
+        SlotWidgetMentallyStable blueprintslot = new SlotWidgetMentallyStable(this.blueprintSlot, 0, 170, 72);
         blueprintslot.setBackgroundTexture(GuiTextures.SLOT_DARK);
         blueprintslot.setChangeListener(
                 () -> {
@@ -649,7 +649,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                 });
         builder.widget(blueprintslot);
         builder.widget(
-                new ItemCostWidget(new Size(120, 90), new Position(9, 54), this::getCurrentRecipe));
+                new ItemCostWidget(new Size(108, 90), new Position(9, 56), this::getCurrentRecipe));
         builder.bindPlayerInventory(entityPlayer.inventory, 125);
         return builder;
     }

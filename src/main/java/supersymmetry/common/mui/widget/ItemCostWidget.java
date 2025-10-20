@@ -112,10 +112,8 @@ public class ItemCostWidget extends Widget {
             GlStateManager.pushMatrix();
             RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();
 
-            GlStateManager.scale(0.5, 0.5, 0.5); // hopefully will make the texture smaller?
-            itemRender.renderItemAndEffectIntoGUI(stack, pos.x * 2, pos.y * 2 + 1);
-            // itemRender.renderItemOverlayIntoGUI(
-            // Minecraft.getMinecraft().fontRenderer, stack, itempos.x + 1, itempos.y + 1, null);
+            GlStateManager.scale(0.5, 0.5, 0.5);
+            itemRender.renderItemAndEffectIntoGUI(stack, pos.x * 2, pos.y * 2 - 4);
             GlStateManager.enableAlpha();
 
             GlStateManager.popMatrix();
