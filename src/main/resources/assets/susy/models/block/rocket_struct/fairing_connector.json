@@ -1,0 +1,24 @@
+{
+  "credit": "Made with Blockbench",
+  "model": "minecraft:orientable",
+  "parent": "block/orientable",
+  "texture_size": [64, 64],
+  "textures": {
+    "0": "gregtech:blocks/rocketry/struct/fairingconnector",
+    "particle": "gregtech:blocks/rocketry/struct/fairingconnector"
+  },
+  "elements": [
+    {
+      "from": [0, 0, 0],
+      "to": [16, 16, 16],
+      "faces": {
+        "north": {"uv": [4, 0, 8, 4], "texture": "#0"},
+        "east": {"uv": [4, 0, 8, 4], "texture": "#0"},
+        "south": {"uv": [4, 0, 8, 4], "texture": "#0"},
+        "west": {"uv": [4, 0, 8, 4], "texture": "#0"},
+        "up": {"uv": [8, 0, 12, 4], "texture": "#0"},
+        "down": {"uv": [4, 0, 8, 4], "texture": "#0"}
+      }
+    }
+  ]
+}

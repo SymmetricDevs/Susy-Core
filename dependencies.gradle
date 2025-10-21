@@ -20,6 +20,7 @@
  * For more details, see https://docs.gradle.org/8.0.1/userguide/java_library_plugin.html#sec:java_library_configurations_graph
  */
 dependencies {
+    implementation 'org.reflections:reflections:0.10.2'
 
     // # Fix crashes on macOS with Narrator
     runtimeOnly 'com.cleanroommc:osxnarratorblocker:1.0'
@@ -83,6 +84,7 @@ dependencies {
     compileOnly rfg.deobf("curse.maven:creativecore-257814:4722163")
     compileOnly rfg.deobf("curse.maven:littletiles-257818:5180387")
 
+    runtimeOnly rfg.deobf("curse.maven:serverutil-282484:2503313")
     // # Optional dependencies. Uncomment the ones you need
 //    runtimeOnlyNonPublishable rfg.deobf('curse.maven:the-beneath-254629:3425551')
 //    runtimeOnlyNonPublishable rfg.deobf('curse.maven:realistic-terrain-generation-unofficial-648514:4404814')
