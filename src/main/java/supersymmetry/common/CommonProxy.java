@@ -45,6 +45,7 @@ import supersymmetry.api.blocks.VariantItemBlockFalling;
 import supersymmetry.api.event.MobHordeEvent;
 import supersymmetry.api.fluids.SusyGeneratedFluidHandler;
 import supersymmetry.api.particle.Particles;
+import supersymmetry.api.space.CelestialObjects;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.api.unification.ore.SusyStoneTypes;
 import supersymmetry.common.blocks.SheetedFrameItemBlock;
@@ -248,6 +249,7 @@ public class CommonProxy {
         evt.getRegistry().register(SuSyBiomes.LUNAR_MARIA);
         BiomeDictionary.addTypes(SuSyBiomes.LUNAR_MARIA, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.VOID);
 
+        CelestialObjects.init();
         SuSyDimensions.init();
     }
 }

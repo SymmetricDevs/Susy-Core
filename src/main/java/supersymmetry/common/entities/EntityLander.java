@@ -412,8 +412,8 @@ public class EntityLander extends EntityLiving implements IAnimatable, ILockable
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        if (this.getTimeSinceLanding() > 0 && this.getTimeSinceLanding() < 140) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.drop_pod.complete",
+        if (this.hasLanded()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ladder.extend",
                     ILoopType.EDefaultLoopTypes.PLAY_ONCE));
         }
         return PlayState.CONTINUE;
@@ -427,7 +427,7 @@ public class EntityLander extends EntityLiving implements IAnimatable, ILockable
 
     @Override
     public AnimationFactory getFactory() {
-        return this.factory;
+        return factory;
     }
 
     @Override

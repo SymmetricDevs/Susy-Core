@@ -7,9 +7,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import supersymmetry.Supersymmetry;
+import supersymmetry.client.renderer.handler.LanderRenderer;
 import supersymmetry.client.renderer.handler.entity.DroneRenderer;
 import supersymmetry.client.renderer.handler.entity.DropPodRenderer;
-import supersymmetry.client.renderer.handler.LanderRenderer;
 import supersymmetry.client.renderer.handler.entity.RocketRenderer;
 import supersymmetry.common.entities.EntityDrone;
 import supersymmetry.common.entities.EntityDropPod;

@@ -32,8 +32,9 @@ import gregtech.common.items.behaviors.TooltipBehavior;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
-import supersymmetry.common.item.behavior.PipeNetPainterBehavior;
 import supersymmetry.common.item.behavior.DataCardBehavior;
+import supersymmetry.common.item.behavior.PipeNetPainterBehavior;
+import supersymmetry.common.item.behavior.RocketConfigBehavior;
 
 public class SuSyMetaItems {
 
@@ -51,6 +52,12 @@ public class SuSyMetaItems {
     public static MetaValueItem EARTH_ORBITAL_SCRAP;
     public static MetaValueItem TUNGSTEN_ELECTRODE;
     public static MetaValueItem CODE_BREACHER;
+
+    public static MetaValueItem DATA_CARD;
+    public static MetaValueItem DATA_CARD_ACTIVE;
+    public static MetaValueItem DATA_CARD_MASTER_BLUEPRINT;
+    public static MetaValueItem ROCKET_CONFIGURER;
+
     public static ArmorMetaItem<?>.ArmorMetaValueItem SIMPLE_GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_TANK;
@@ -76,9 +83,6 @@ public class SuSyMetaItems {
     public static ArmorMetaItem<?>.ArmorMetaValueItem ASTRONAUT_LEGGINGS;
     public static ArmorMetaItem<?>.ArmorMetaValueItem ASTRONAUT_BOOTS;
 
-    public static MetaValueItem DATA_CARD;
-    public static MetaValueItem DATA_CARD_ACTIVE;
-    public static MetaValueItem DATA_CARD_MASTER_BLUEPRINT;
 
     public static void initMetaItems() {
         metaItem = new StandardMetaItem();
@@ -152,6 +156,9 @@ public class SuSyMetaItems {
                         Arrays.asList("rocketType")));
 
         TUNGSTEN_ELECTRODE = initOneItem("tungsten_electrode");
+
+        ROCKET_CONFIGURER = initOneItem("rocket_configurer").setMaxStackSize(1)
+                .addComponents(new RocketConfigBehavior());
     }
 
     // Ensures ID stability when merging

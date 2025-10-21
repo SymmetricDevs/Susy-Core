@@ -7,6 +7,7 @@ import com.cleanroommc.modularui.drawable.UITexture;
 import gregtech.api.GTValues;
 import gregtech.api.gui.resources.SteamTexture;
 import gregtech.api.gui.resources.TextureArea;
+import org.jetbrains.annotations.ApiStatus;
 
 public class SusyGuiTextures {
 
@@ -105,4 +106,14 @@ public class SusyGuiTextures {
             "textures/gui/widget/icon_throttle_active.png");
     public static final UITexture THROTTLE_INACTIVE = fullImage(GTValues.MODID,
             "textures/gui/widget/icon_throttle_inactive.png");
+
+    @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "GTCEu 2.9")
+    public static final UITexture SLOT = new UITexture.Builder()
+            .location(GTValues.MODID, "textures/gui/base/slot.png")
+            .imageSize(18, 18)
+            .adaptable(1)
+            .name("standard_slot")
+            .canApplyTheme()
+            .build();
 }
