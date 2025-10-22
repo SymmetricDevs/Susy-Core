@@ -56,6 +56,7 @@ public class SuSyBlocks {
     public static BlocksFakeWool FAKEWOOL;
     public static BlockRandomConcrete RANDOM_CONCRETE;
     public static BlockRandomConcrete1 RANDOM_CONCRETE1;
+    public static BlockInductionCoilAssembly INDUCTION_COIL_ASSEMBLY;
 
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
@@ -155,6 +156,9 @@ public class SuSyBlocks {
 
         RANDOM_CONCRETE1 = new BlockRandomConcrete1();
         RANDOM_CONCRETE1.setRegistryName("random_concrete1");
+
+        INDUCTION_COIL_ASSEMBLY = new BlockInductionCoilAssembly();
+        INDUCTION_COIL_ASSEMBLY.setRegistryName("induction_coil_assembly");
     }
 
     @SideOnly(Side.CLIENT)
@@ -192,6 +196,7 @@ public class SuSyBlocks {
         registerItemModel(FAKEWOOL);
         registerItemModel(RANDOM_CONCRETE);
         registerItemModel(RANDOM_CONCRETE1);
+        registerItemModel(INDUCTION_COIL_ASSEMBLY);
     }
 
     @SideOnly(Side.CLIENT)
