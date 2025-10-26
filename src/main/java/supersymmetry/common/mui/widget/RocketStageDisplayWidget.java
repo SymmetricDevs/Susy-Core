@@ -248,8 +248,9 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                         "blueprint stages: {} actually here: {}",
                         blueprint.getStages().stream().map(x -> x.getName()).collect(Collectors.toList()),
                         this.stageContainers.keySet());
-                for (var stage : blueprint.getStages()) {
-                    for (var guiEntry : this.stageContainers.entrySet()) {
+                for (RocketStage stage : blueprint.getStages()) {
+                    for (Entry<String, RocketSimulatorComponentContainerWidget> guiEntry : this.stageContainers
+                            .entrySet()) {
                         SusyLog.logger.info(
                                 "stage name: \"{}\" guiEntry name: \"{}\" equal??? {}",
                                 stage.getName(),

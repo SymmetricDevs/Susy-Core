@@ -80,6 +80,7 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
     protected void completeRecipe() {
         // SusyLog.logger.info(
         // "progressTime:{} maxprogresstime:{}", this.progressTime, this.maxProgressTime);
+
         if (!(this.progressTime == 0 || this.maxProgressTime == 0)) {
             MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
             assembler.nextComponent();

@@ -184,7 +184,7 @@ public class RocketStage {
             return ComponentValidationResult.INVALID_AMOUNT; // fail if you cant put that amount of components is
             // invalid
         }
-        var validation_result = componentValidationFunction.apply(
+        ComponentValidationResult validation_result = componentValidationFunction.apply(
                 new Tuple<String, List<AbstractComponent<?>>>(name, componentList));
         if (validation_result != ComponentValidationResult.SUCCESS) return validation_result;
         components.put(name, componentList);
@@ -222,7 +222,7 @@ public class RocketStage {
             component.getValue().stream()
                     .forEach(
                             x -> {
-                                var innerTag = new NBTTagCompound();
+                                NBTTagCompound innerTag = new NBTTagCompound();
                                 x.writeToNBT(innerTag);
                                 // componentsArray.appendTag(innerTag);
                                 if (!tags.containsKey(innerTag)) {
@@ -239,7 +239,7 @@ public class RocketStage {
         }
 
         NBTTagCompound allowedCountCompound = new NBTTagCompound();
-        for (var allowedCount : this.getComponentLimits().entrySet()) {
+        for (Entry<String, int[]> allowedCount : this.getComponentLimits().entrySet()) {
             NBTTagIntArray intArrayTag = new NBTTagIntArray(allowedCount.getValue());
             allowedCountCompound.setTag(allowedCount.getKey(), intArrayTag);
         }

@@ -2,6 +2,7 @@ package supersymmetry.common.rocketry.components;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -51,10 +52,10 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         tag.setBoolean("hasAir", this.hasAir);
         NBTTagCompound instruments = new NBTTagCompound();
         NBTTagCompound parts = new NBTTagCompound();
-        for (var part : this.parts.entrySet()) {
+        for (Entry<String, Integer> part : this.parts.entrySet()) {
             parts.setInteger(part.getKey(), part.getValue());
         }
-        for (var instrument : this.instruments.entrySet()) {
+        for (Entry<String, Integer> instrument : this.instruments.entrySet()) {
             instruments.setInteger(instrument.getKey(), instrument.getValue());
         }
         tag.setTag("instruments", instruments);

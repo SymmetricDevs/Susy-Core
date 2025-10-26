@@ -52,7 +52,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
             x -> {
                 if (x.hasTagCompound()) {
                     NBTTagCompound tag = x.getTagCompound();
-                    var bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
+                    AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
                     if (bp.readFromNBT(tag) && bp.isFullBlueprint()) {
                         // this.startAssembly(bp); <- this will nullref if you call it before its
                         // actually inserted, which
@@ -98,14 +98,17 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         this.isWorking = false;
         this.componentIndex = 0;
         this.componentList.clear();
-        this.recipeMapWorkable.invalidate();
+        this.recipeMapWorkable.invalidate(); // not sure if its a good idea to disable this
     }
 
     public void finishAssembly() {
         SusyLog.logger.info("assembly finished");
-
+        this.blueprintSlot.setLocked(false);
+        this.isWorking = false;
+        this.componentIndex = 0;
+        this.componentList.clear();
         // TODO: actually spawn the rocket entity?
-        abortAssembly();
+        // abortAssembly();
     }
 
     public void startAssembly(AbstractRocketBlueprint bp) {
@@ -142,7 +145,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     // meant to be called after a recipe is done
     public void nextComponent() {
         if (!isWorking) return;
-        if (this.componentList.size() >= this.componentIndex - 1) {
+        if (this.componentList.size() - 1 > this.componentIndex) {
             this.componentIndex++;
             SusyLog.logger.info(
                     "processing component {}/{}, isWorking:{},component:{}",
@@ -177,12 +180,12 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     @Override
     public double getFillPercentage(int index) {
         if (!isStructureFormed()) return 0;
-        if (index == 1 && isWorking && this.componentList.size() != 0)
-            return this.componentIndex / this.componentList.size();
-
-        if (index == 0 && isWorking && this.recipeMapWorkable.isWorking())
-            return this.recipeMapWorkable.getProgress() / this.recipeMapWorkable.getMaxProgress();
-
+        if (index == 1 && isWorking && this.componentList.size() != 0) {
+            return (float) (this.componentIndex + 1) / (float) this.componentList.size();
+        }
+        if (index == 0 && isWorking && this.recipeMapWorkable.isWorking()) {
+            return (float) this.recipeMapWorkable.getProgress() / (float) this.recipeMapWorkable.getMaxProgress();
+        }
         return 0;
     }
 
@@ -583,7 +586,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
 
         builder.widget(getFlexButton(173, 125, 18, 18));
         builder.dynamicLabel(
-                140,
+                110,
                 52,
                 () -> {
                     return !blueprintSlot.isEmpty() ? "" : I18n.format(this.getMetaName() + ".blueprint_slot.name");

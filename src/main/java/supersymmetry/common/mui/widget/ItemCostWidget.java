@@ -37,7 +37,7 @@ public class ItemCostWidget extends Widget {
     }
 
     public static final int scrollPaneWidth = 10;
-    public static final double HEIGHT_SCALE = 0.7;
+    public static final double HEIGHT_SCALE = 0.8;
     public static final int HEIGHT_OFFSET = (int) (16 * HEIGHT_SCALE);
     public static final int TEXT_COLOR = 0xf0f0f0;
     public int totalListHeight;
@@ -165,7 +165,7 @@ public class ItemCostWidget extends Widget {
     @Override
     public void drawInBackground(int mouseX, int mouseY, float partialTicks, IRenderContext context) {
         if (this.shouldRender.getAsBoolean()) return;
-        var pos = new Position(getPosition().x, getPosition().y);
+        Position pos = new Position(getPosition().x, getPosition().y);
         // TODO: move this out of the widget and just use a text widget
         if (lastSyncedItems.size() > 0) {
             FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
@@ -218,7 +218,7 @@ public class ItemCostWidget extends Widget {
                     // this.getSize(),
                     // this.lastSyncedItems.get(i));
                     // }
-                    var startpos = new Position(this.getPosition().x, this.getPosition().y + scrollOffset - 8);
+                    Position startpos = new Position(this.getPosition().x, this.getPosition().y + scrollOffset - 8);
                     for (ItemStack itemStack : lastSyncedItems) {
                         startpos = startpos.add(new Position(0, ItemCostWidget.HEIGHT_OFFSET));
                         this.drawStack(startpos, size, itemStack);
