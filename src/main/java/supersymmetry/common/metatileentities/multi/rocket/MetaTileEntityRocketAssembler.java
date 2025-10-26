@@ -3,7 +3,6 @@ package supersymmetry.common.metatileentities.multi.rocket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
 
@@ -110,6 +109,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     }
 
     public void startAssembly(AbstractRocketBlueprint bp) {
+        ((RocketAssemblerLogic) this.recipeMapWorkable).setInputsValid();
         this.componentIndex = 0;
 
         this.isWorking = true;
@@ -117,25 +117,21 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                 .flatMap(x -> x.getComponents().values().stream())
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
-        for (var input : ((RocketAssemblerLogic) this.recipeMapWorkable).getComponentRecipe().getInputs()) {
-            SusyLog.logger.info(
-                    "amount {} item {}",
-                    input.getAmount(),
-                    Stream.of(input.getInputStacks())
-                            .map(x -> x.getDisplayName())
-                            .collect(Collectors.toList()));
-        }
+        // for (var input :
+        // ((RocketAssemblerLogic) this.recipeMapWorkable).getComponentRecipe().getInputs()) {
+        // SusyLog.logger.info(
+        // "amount {} item {}",
+        // input.getAmount(),
+        // Stream.of(input.getInputStacks())
+        // .map(x -> x.getDisplayName())
+        // .collect(Collectors.toList()));
+        // }
         this.blueprintSlot.setLocked(true);
     }
 
     public AbstractComponent<?> getCurrentCraftTarget() {
-        // SusyLog.logger.info(
-        // "getCurrentCraftTarget() isWorking:{},componentList.size():{},componentIndex:{}",
-        // isWorking,
-        // componentList.size(),
-        // componentIndex);
-        if (isWorking && componentList.size() - 1 > componentIndex) {
-            return this.componentList.get(this.componentIndex + 1);
+        if (isWorking && componentList.size() >= componentIndex + 1) {
+            return this.componentList.get(this.componentIndex);
         } else {
             abortAssembly();
         }
@@ -145,10 +141,15 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
 
     // meant to be called after a recipe is done
     public void nextComponent() {
-        if ((this.componentList.size() - 1) >= this.componentIndex) {
+        if (!isWorking) return;
+        if (this.componentList.size() >= this.componentIndex - 1) {
             this.componentIndex++;
             SusyLog.logger.info(
-                    "processing component {}/{}", this.componentIndex, this.componentList.size());
+                    "processing component {}/{}, isWorking:{},component:{}",
+                    this.componentIndex,
+                    this.componentList.size(),
+                    this.isWorking,
+                    getCurrentCraftTarget() == null ? null : getCurrentCraftTarget().getName());
 
         } else {
             finishAssembly();
@@ -508,44 +509,6 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         if (this.showProgressBar()) {
             builder.image(4, 4, 190, 109, GuiTextures.DISPLAY);
 
-            // if (this.getNumProgressBars() == 3) {
-            // // triple bar
-            // ProgressWidget progressBar =
-            // new ProgressWidget(
-            // () -> this.getFillPercentage(0),
-            // 4,
-            // 115,
-            // 62,
-            // 7,
-            // this.getProgressBarTexture(0),
-            // ProgressWidget.MoveType.HORIZONTAL)
-            // .setHoverTextConsumer(list -> this.addBarHoverText(list, 0));
-            // builder.widget(progressBar);
-            //
-            // progressBar =
-            // new ProgressWidget(
-            // () -> this.getFillPercentage(1),
-            // 68,
-            // 115,
-            // 62,
-            // 7,
-            // this.getProgressBarTexture(1),
-            // ProgressWidget.MoveType.HORIZONTAL)
-            // .setHoverTextConsumer(list -> this.addBarHoverText(list, 1));
-            // builder.widget(progressBar);
-            //
-            // progressBar =
-            // new ProgressWidget(
-            // () -> this.getFillPercentage(2),
-            // 132,
-            // 115,
-            // 62,
-            // 7,
-            // this.getProgressBarTexture(2),
-            // ProgressWidget.MoveType.HORIZONTAL)
-            // .setHoverTextConsumer(list -> this.addBarHoverText(list, 2));
-            // builder.widget(progressBar);
-            // } else
             if (this.getNumProgressBars() == 2) {
                 // double bar
                 ProgressWidget progressBar = new ProgressWidget(
@@ -570,20 +533,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                                 .setHoverTextConsumer(list -> this.addBarHoverText(list, 1));
                 builder.widget(progressBar);
             }
-            // else {
-            // // single bar
-            // ProgressWidget progressBar =
-            // new ProgressWidget(
-            // () -> this.getFillPercentage(0),
-            // 4,
-            // 115,
-            // 190,
-            // 7,
-            // this.getProgressBarTexture(0),
-            // ProgressWidget.MoveType.HORIZONTAL)
-            // .setHoverTextConsumer(list -> this.addBarHoverText(list, 0));
-            // builder.widget(progressBar);
-            // }
+
             builder.widget(
                     new IndicatorImageWidget(174, 93, 17, 17, getLogo())
                             .setWarningStatus(getWarningLogo(), this::addWarningText)
@@ -602,7 +552,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                         .setMaxWidthLimit(181)
                         .setClickHandler(this::handleDisplayClick));
 
-        // Power Button
+        // Power Butto
         IControllable controllable = getCapability(GregtechTileCapabilities.CAPABILITY_CONTROLLABLE, null);
         if (controllable != null) {
             builder.widget(
@@ -649,7 +599,11 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                 });
         builder.widget(blueprintslot);
         builder.widget(
-                new ItemCostWidget(new Size(108, 90), new Position(9, 56), this::getCurrentRecipe));
+                new ItemCostWidget(
+                        new Size(158, 70),
+                        new Position(9, 60),
+                        this::getCurrentRecipe,
+                        this.recipeMapWorkable::isWorking));
         builder.bindPlayerInventory(entityPlayer.inventory, 125);
         return builder;
     }

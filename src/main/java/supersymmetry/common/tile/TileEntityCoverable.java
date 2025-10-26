@@ -140,7 +140,7 @@ public class TileEntityCoverable extends TickableTileEntityBase {
         } else {
             scheduleRenderUpdate();
         }
-
+        if (player.isCreative()) return inp;
         return ret;
     }
 
