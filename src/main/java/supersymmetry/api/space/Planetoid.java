@@ -1,6 +1,7 @@
 package supersymmetry.api.space;
 
 import dev.tianmi.sussypatches.common.helper.DimDisplayRegistry;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,6 +34,9 @@ public class Planetoid extends CelestialObject {
     }
 
     public ItemStack getDisplayItem() {
+        if (DimDisplayRegistry.getDisplayItem(this.dimension) == ItemStack.EMPTY) {
+            return new ItemStack(Item.getItemById(this.dimension + 1));
+        }
         return DimDisplayRegistry.getDisplayItem(this.dimension);
     }
 }

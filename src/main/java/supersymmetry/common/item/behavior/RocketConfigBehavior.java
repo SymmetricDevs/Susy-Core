@@ -1,9 +1,17 @@
 package supersymmetry.common.item.behavior;
 
+import com.cleanroommc.modularui.api.value.IIntValue;
+import com.cleanroommc.modularui.api.value.sync.IIntSyncValue;
 import com.cleanroommc.modularui.drawable.ItemDrawable;
+import com.cleanroommc.modularui.screen.ModularScreen;
 import com.cleanroommc.modularui.widgets.ButtonWidget;
+import dev.tianmi.sussypatches.api.mui2.factory.MetaItemGuiFactory;
 import gregtech.api.gui.GuiTextures;
+import gregtech.api.gui.ModularUI;
+import gregtech.api.items.gui.ItemUIFactory;
+import gregtech.api.items.gui.PlayerInventoryHolder;
 import gregtech.api.recipes.ingredients.IntCircuitIngredient;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -18,11 +26,16 @@ import com.cleanroommc.modularui.widgets.layout.Flow;
 
 import dev.tianmi.sussypatches.api.item.IMui2Factory;
 import gregtech.api.items.metaitem.stats.IItemBehaviour;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.world.World;
 import supersymmetry.api.gui.SusyGuiTextures;
+import supersymmetry.api.metatileentity.Mui2Utils;
 import supersymmetry.api.space.CelestialObjects;
 import supersymmetry.api.space.Planetoid;
 
-public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory {
+public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemUIFactory {
 
     private int pageNum = 0;
 
@@ -41,34 +54,27 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory {
 
         // Set up the sync values
         syncManager.syncValue("page_num", new IntSyncValue(() -> pageNum, v -> pageNum = v));
-        syncManager.syncValue("mission_type", new EnumSyncValue<>(
+
+        EnumSyncValue missionType = new EnumSyncValue<>(
                 MissionType.class,
                 () -> getMissionType(pageNum, stack),
-                v -> setMissionType(pageNum, stack, v)));
-        syncManager.syncValue("manned", new InteractionSyncHandler()
-                .setOnMousePressed(b -> setMissionType(pageNum, stack, MissionType.Manned)));
-        syncManager.syncValue("unmanned_cargo", new InteractionSyncHandler()
-                .setOnMousePressed(b -> setMissionType(pageNum, stack, MissionType.UnmannedCargo)));
-        syncManager.syncValue("unmanned_collection", new InteractionSyncHandler()
-                .setOnMousePressed(b -> setMissionType(pageNum, stack, MissionType.UnmannedCollection)));
+                v -> setMissionType(pageNum, stack, v));
+        syncManager.syncValue("mission_type", missionType);
 
-        syncManager.syncValue("dimension", new IntSyncValue(
+
+        IntSyncValue dimension = new IntSyncValue(
                 () -> getDimension(pageNum, stack),
-                v -> setDimension(pageNum, stack, v)));
+                v -> setDimension(pageNum, stack, v));
+        syncManager.syncValue("dimension", dimension);
 
 
         Flow overallFlow = new Flow(GuiAxis.Y);
         panel.child(overallFlow);
 
         overallFlow.child(new Flow(GuiAxis.X)
-                .child(new ToggleButton().syncHandler("mission_type").value(
-                        new BoolValue(getMissionType(pageNum, stack) == MissionType.Manned)).syncHandler("manned"))
-                .child(new ToggleButton().syncHandler("mission_type").value(
-                                new BoolValue(getMissionType(pageNum, stack) == MissionType.UnmannedCargo))
-                        .syncHandler("unmanned_cargo"))
-                .child(new ToggleButton().syncHandler("mission_type").value(
-                                new BoolValue(getMissionType(pageNum, stack) == MissionType.UnmannedCollection))
-                        .syncHandler("unmanned_collection")));
+                .child(new ToggleButton().value(select(missionType, MissionType.Manned)))
+                .child(new ToggleButton().value(select(missionType, MissionType.UnmannedCargo)))
+                .child(new ToggleButton().value(select(missionType, MissionType.UnmannedCollection))));
 
 
         /*
@@ -86,18 +92,12 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory {
         // TODO: research item
         Planetoid[] planetoids = {CelestialObjects.EARTH, CelestialObjects.MOON};
         for (Planetoid planetoid : planetoids) {
-            planetoidsFlow.child(new ButtonWidget<>()
+            planetoidsFlow.child(new ToggleButton()
                     .size(18)
                     .background(SusyGuiTextures.SLOT,
                             new ItemDrawable(planetoid.getDisplayItem()).asIcon().size(16))
                     .disableHoverBackground()
-                    .onMousePressed(b -> {
-                        if (getDimension(pageNum, stack) == planetoid.getDimension()) {
-                            return false;
-                        }
-                        setDimension(pageNum, stack, planetoid.getDimension());
-                        return true;
-                    }));
+                    .value(select(dimension, planetoid.getDimension())));
         }
 
 
@@ -105,6 +105,14 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory {
         overallFlow.child(planetoidsFlow);
 
         return panel;
+    }
+
+    private BoolValue.Dynamic select(IIntSyncValue v, int selected) {
+        return new BoolValue.Dynamic(() -> v.getIntValue() == selected, (b) -> v.setIntValue(selected));
+    }
+
+    private BoolValue.Dynamic select(IIntSyncValue v, Enum selected) {
+        return select(v, selected.ordinal());
     }
 
     private MissionType getMissionType(int page, ItemStack stack) {
@@ -116,7 +124,7 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory {
         if (!pageTag.hasKey("mission_type")) {
             pageTag.setInteger("mission_type", 0);
         }
-        return MissionType.values()[tag.getInteger("mission_type")];
+        return MissionType.values()[pageTag.getInteger("mission_type")];
     }
 
     private void setMissionType(int page, ItemStack stack, MissionType type) {
@@ -139,6 +147,19 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory {
         NBTTagCompound tag = stack.getTagCompound();
         NBTTagCompound pageTag = tag.getCompoundTag("page_" + page);
         pageTag.setInteger("dimension", dimension);
+    }
+
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        if (!world.isRemote) {
+            MetaItemGuiFactory.openFromHand(player, hand);
+        }
+        return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
+    }
+
+    @Override
+    public ModularUI createUI(PlayerInventoryHolder holder, EntityPlayer entityPlayer) {
+        return null;
     }
 
     private enum MissionType {
