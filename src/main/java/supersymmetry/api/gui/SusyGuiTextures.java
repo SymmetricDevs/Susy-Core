@@ -7,6 +7,7 @@ import com.cleanroommc.modularui.drawable.UITexture;
 import gregtech.api.GTValues;
 import gregtech.api.gui.resources.SteamTexture;
 import gregtech.api.gui.resources.TextureArea;
+import org.jetbrains.annotations.ApiStatus;
 
 public class SusyGuiTextures {
 
@@ -59,6 +60,17 @@ public class SusyGuiTextures {
     public static final TextureArea BUTTON_QUARRY_MODES = TextureArea
             .fullImage("textures/gui/widget/button_quarry_modes.png");
     public static final TextureArea ARROW = TextureArea.fullImage("textures/gui/widget/icon_indicator_arrow.png");
+    public static final TextureArea SPACEFLIGHT_SIMULATOR_SLIDER_BACKGROUND = TextureArea
+            .fullImage("textures/gui/widget/slider_background_dark.png");
+    public static final TextureArea SPACEFLIGHT_SIMULATOR_SLIDER = TextureArea
+            .fullImage("textures/gui/widget/slider_dark.png");
+    public static final TextureArea SPACEFLIGHT_SIMULATOR_BUTTON_LEFT = TextureArea
+            .fullImage("textures/gui/widget/button_left_dark.png");
+    public static final TextureArea SPACEFLIGHT_SIMULATOR_BUTTON_RIGHT = TextureArea
+            .fullImage("textures/gui/widget/button_right_dark.png");
+    public static final TextureArea SPACEFLIGHT_SIMULATOR_BUTTON_SHORTVIEW = TextureArea
+            .fullImage("textures/gui/widget/circle_geen.png");
+
     public static final UITexture BACKGROUND_POPUP = UITexture.builder()
             .location(GTValues.MODID, "textures/gui/base/background_popup.png")
             .imageSize(195, 136)
@@ -94,4 +106,14 @@ public class SusyGuiTextures {
             "textures/gui/widget/icon_throttle_active.png");
     public static final UITexture THROTTLE_INACTIVE = fullImage(GTValues.MODID,
             "textures/gui/widget/icon_throttle_inactive.png");
+
+    @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "GTCEu 2.9")
+    public static final UITexture SLOT = new UITexture.Builder()
+            .location(GTValues.MODID, "textures/gui/base/slot.png")
+            .imageSize(18, 18)
+            .adaptable(1)
+            .name("standard_slot")
+            .canApplyTheme()
+            .build();
 }

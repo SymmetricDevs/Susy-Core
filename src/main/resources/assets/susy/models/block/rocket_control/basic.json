@@ -1,0 +1,10 @@
+{
+  "parent":  "block/orientable",
+  "textures": {
+    "front":"gregtech:blocks/rocketry/control/front",
+    "side": "gregtech:blocks/casings/computer/computer_casing/side",
+    "bottom": "gregtech:blocks/casings/computer/computer_casing/bottom",
+    "top":"gregtech:blocks/casings/computer/computer_casing/top",
+    "back": "gregtech:blocks/casings/computer/computer_casing/back"
+  }
+}
