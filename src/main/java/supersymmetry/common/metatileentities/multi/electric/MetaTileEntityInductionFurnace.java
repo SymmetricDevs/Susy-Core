@@ -2,13 +2,13 @@ package supersymmetry.common.metatileentities.multi.electric;
 
 import javax.annotation.Nonnull;
 
-import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import net.minecraft.util.ResourceLocation;
 
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
+import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
@@ -47,7 +47,8 @@ public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockControlle
                         .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMinGlobalLimited(1))
                         .or(abilities(MultiblockAbility.EXPORT_ITEMS).setMinGlobalLimited(1)))
                 .where('C',
-                        states(SuSyBlocks.INDUCTION_COIL_ASSEMBLY.getState(BlockInductionCoilAssembly.InductionCoilAssemblyType.COPPER)))
+                        states(SuSyBlocks.INDUCTION_COIL_ASSEMBLY
+                                .getState(BlockInductionCoilAssembly.InductionCoilAssemblyType.COPPER)))
                 .where(' ', any())
                 .where('#', air())
                 .build();

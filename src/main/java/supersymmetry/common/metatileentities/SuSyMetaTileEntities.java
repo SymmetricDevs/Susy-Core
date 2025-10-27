@@ -655,7 +655,8 @@ public class SuSyMetaTileEntities {
                 new MetaTileEntityBeamLineHatch(susyId("beam_import_hatch"), false));
         BEAM_EXPORT = registerMetaTileEntity(18501, new MetaTileEntityBeamLineHatch(susyId("beam_export_hatch"), true));
 
-        INDUCTION_FURNACE = registerMetaTileEntity(18502, new MetaTileEntityInductionFurnace(susyId("induction_furnace")));
+        INDUCTION_FURNACE = registerMetaTileEntity(18502,
+                new MetaTileEntityInductionFurnace(susyId("induction_furnace")));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name,
