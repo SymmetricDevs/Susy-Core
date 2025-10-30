@@ -10,9 +10,9 @@ public class Planetoid extends CelestialObject {
     private PlanetType planetType;
     private int dimension;
 
-    public Planetoid(double mass, double posT, double posX, double posY, double posZ,
+    public Planetoid(String translationKey, double mass, double posT, double posX, double posY, double posZ,
                      @Nullable CelestialObject parentBody, PlanetType planetType) {
-        super(mass, posT, posX, posY, posZ, parentBody, CelestialBodyType.PLANETOID);
+        super(translationKey, posT, posX, posY, posZ, mass, CelestialBodyType.PLANETOID, parentBody);
         this.planetType = planetType;
     }
 
@@ -34,7 +34,7 @@ public class Planetoid extends CelestialObject {
     }
 
     public ItemStack getDisplayItem() {
-        if (DimDisplayRegistry.getDisplayItem(this.dimension) == ItemStack.EMPTY) {
+        if (DimDisplayRegistry.getDisplayItem(this.dimension).isEmpty()) {
             return new ItemStack(Item.getItemById(this.dimension + 1));
         }
         return DimDisplayRegistry.getDisplayItem(this.dimension);

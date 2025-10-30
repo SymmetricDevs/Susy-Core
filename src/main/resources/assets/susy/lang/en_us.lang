@@ -1106,6 +1106,8 @@ susy.gui.stock_interactor.controller_setting.active_throttle.tooltip=Throttle (P
 susy.gui.stock_interactor.controller_setting.inactive_brake.tooltip=Brake (Unpowered)
 susy.gui.stock_interactor.controller_setting.inactive_throttle.tooltip=Throttle (Unpowered)
 
+susy.gui.page=Page %s
+
 susy.gui.temperature_celsius=Temperature: %s / %s°C
 
 # Extra recipe info

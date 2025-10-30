@@ -2,12 +2,12 @@ package supersymmetry.api.space;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
 public class CelestialObject {
+    private String translationKey;
 
     private double mass;
     private double posT;
@@ -20,8 +20,9 @@ public class CelestialObject {
 
     private List<CelestialObject> childBodies = new ObjectArrayList<>();
 
-    public CelestialObject(double mass, double posT, double posX, double posY, double posZ,
-                           @Nullable CelestialObject parentBody, CelestialBodyType celestialBodyType) {
+    public CelestialObject(String translationKey, double posT, double posX, double posY, double posZ, double mass,
+                           CelestialBodyType celestialBodyType, @Nullable CelestialObject parentBody) {
+        this.translationKey = translationKey;
         this.mass = mass;
         this.posT = posT;
         this.posX = posX;
@@ -70,5 +71,9 @@ public class CelestialObject {
 
     public List<CelestialObject> getChildBodies() {
         return childBodies;
+    }
+
+    public String getTranslationKey() {
+        return "susy." + translationKey;
     }
 }

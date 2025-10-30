@@ -116,4 +116,20 @@ public class SusyGuiTextures {
             .name("standard_slot")
             .canApplyTheme()
             .build();
+
+    @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "GTCEu 2.9")
+    public static final UITexture ICON_RIGHT = UITexture.builder()
+            .location(GTValues.MODID, "textures/gui/terminal/icon/right_hover.png")
+            .name("right_button")
+            .canApplyTheme()
+            .build();
+
+    @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "GTCEu 2.9")
+    public static final UITexture ICON_LEFT = UITexture.builder()
+            .location(GTValues.MODID, "textures/gui/terminal/icon/left_hover.png")
+            .name("left_button")
+            .canApplyTheme()
+            .build();
 }
