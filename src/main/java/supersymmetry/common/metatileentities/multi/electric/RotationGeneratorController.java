@@ -152,7 +152,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
 
     @Override
     protected long getMaxVoltage() {
-        if (isActive() && !isFull) {
+        if (!isFull) {
             return recipeMapWorkable.getMaxVoltage();
         } else {
             return 0L;
@@ -162,6 +162,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
     public class SuSyTurbineRecipeLogic extends MultiblockFuelRecipeLogic {
 
         private MetaTileEntitySUSYLargeTurbine tileEntity;
+        private int proposedEUt;
 
         public SuSyTurbineRecipeLogic(MetaTileEntitySUSYLargeTurbine tileEntity) {
             super(tileEntity);
@@ -181,6 +182,8 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
 
         @Override
         public boolean checkRecipe(@NotNull Recipe recipe) {
+            // Hack to get the recipeEUt early
+            proposedEUt = recipe.getEUt();
             return sufficientFluids;
         }
 
@@ -212,7 +215,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
 
         @Override
         public long getMaxVoltage() {
-            return Math.max(Math.min(scaleProduction(tileEntity.recipeMapWorkable.getEnergyContainer().getOutputVoltage()), GTValues.V[tileEntity.tier]), recipeEUt);
+            return Math.max(Math.min(scaleProduction(tileEntity.recipeMapWorkable.getEnergyContainer().getOutputVoltage()), GTValues.V[tileEntity.tier]), proposedEUt);
         }
     }
 }

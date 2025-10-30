@@ -291,6 +291,7 @@ public class SuSyMaterialRecipeHandler {
                 .circuitMeta(10) //prevent conflict with casings and other frame + plate recipes
                 .buildAndRegister();
 
+        // TODO: remove later
         SuSyRecipeMaps.LARGE_STEAM_TURBINE.recipeBuilder()
                 .fluidInputs(Steam.getFluid(1))
                 .EUt(32)

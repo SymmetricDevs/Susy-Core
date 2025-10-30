@@ -70,12 +70,15 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
                 int lubricantAmount = lubricantStack.amount;
 
                 ITextComponent fuelName = GTUtility.getFluidTranslation(fuelStack.getFluid());
-                ITextComponent lubricantName = GTUtility.getFluidTranslation((lubricantStack.getFluid()));
                 textList.add(new TextComponentTranslation("susy.machine.large_turbine.fuel_amount", fuelAmount, fuelName));
-                textList.add(new TextComponentTranslation("susy.machine.large_turbine.lubricant_amount", lubricantAmount, lubricantName));
+                if (lubricantStack != null && lubricantStack.amount > 0) {
+                    ITextComponent lubricantName = GTUtility.getFluidTranslation((lubricantStack.getFluid()));
+                    textList.add(new TextComponentTranslation("susy.machine.large_turbine.lubricant_amount", lubricantAmount, lubricantName));
+                }
                 textList.add(new TextComponentTranslation("susy.machine.large_turbine.rotation_speed", getRotationSpeed()));
                 textList.add(new TextComponentTranslation("susy.machine.large_turbine.rotation_speed", getMaxVoltage()));
             }
+
         }
         super.addDisplayText(textList);
     }
