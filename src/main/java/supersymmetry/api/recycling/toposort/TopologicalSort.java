@@ -2,15 +2,14 @@
  * Copyright (c) Forge Development LLC and contributors
  * SPDX-License-Identifier: LGPL-2.1-only
  */
-
 package supersymmetry.api.recycling.toposort;
 
-import com.google.common.base.Preconditions;
-import com.google.common.graph.Graph;
-import com.google.common.graph.ValueGraph;
+import java.util.*;
+
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import com.google.common.base.Preconditions;
+import com.google.common.graph.ValueGraph;
 
 /// Provides a topological sort algorithm.
 ///
@@ -45,13 +44,15 @@ public final class TopologicalSort {
     ///
     /// Examples of topological sort usage can be found in Forge test code.
     ///
-    /// @param graph      the graph to sort
+    /// @param graph the graph to sort
     /// @param comparator the secondary comparator, may be null
-    /// @param <T>        the node type of the graph
+    /// @param <T> the node type of the graph
     /// @return the ordered nodes from the graph
     /// @throws IllegalArgumentException if the graph is undirected or allows self loops
-    /// @throws CyclePresentException    if the graph contains cycles
-    public static <T> List<T> topologicalSort(ValueGraph<T, ?> graph, @Nullable Comparator<? super T> comparator) throws IllegalArgumentException {
+    /// @throws CyclePresentException if the graph contains cycles
+    public static <
+            T> List<T> topologicalSort(ValueGraph<T, ?> graph,
+                                       @Nullable Comparator<? super T> comparator) throws IllegalArgumentException {
         Preconditions.checkArgument(graph.isDirected(), "Cannot topologically sort an undirected graph!");
         Preconditions.checkArgument(!graph.allowsSelfLoops(), "Cannot topologically sort a graph with self loops!");
 
@@ -72,7 +73,9 @@ public final class TopologicalSort {
             final T current = queue.remove();
             results.add(current);
             for (final T successor : graph.successors(current)) {
-                final int updated = degrees.compute(successor, (node, degree) -> Objects.requireNonNull(degree, () -> "Invalid degree present for " + node) - 1);
+                final int updated = degrees.compute(successor,
+                        (node, degree) -> Objects.requireNonNull(degree, () -> "Invalid degree present for " + node) -
+                                1);
                 if (updated == 0) {
                     queue.add(successor);
                     degrees.remove(successor);

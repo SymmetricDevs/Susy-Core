@@ -1,5 +1,21 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
+
+import java.util.List;
+import java.util.function.Supplier;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.fluids.FluidStack;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.GTValues;
 import gregtech.api.metatileentity.ITieredMetaTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -96,8 +112,8 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
                 .aisle("GAAAAAAAO", "GSAAAAAAO", "G   A   O")
                 .where('S', selfPredicate())
                 .where('A', casingPredicate
-                       .or(autoAbilities(false, false, false, false, false, false, false))
-                       .or(maintenance))
+                        .or(autoAbilities(false, false, false, false, false, false, false))
+                        .or(maintenance))
                 .where('O', casingPredicate
                         .or(autoAbilities(false, false, false, false, false, true, false))
                         .or(maintenance))
@@ -112,14 +128,17 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
     }
 
     protected TraceabilityPredicate rotorOrientation() {
-        //makes sure rotor's front faces the left side (relative to the player) of controller front
-        EnumFacing leftFacing = RelativeDirection.RIGHT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), isFlipped());
+        // makes sure rotor's front faces the left side (relative to the player) of controller front
+        EnumFacing leftFacing = RelativeDirection.RIGHT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(),
+                isFlipped());
 
         // converting the left facing to positive x or z axis direction
-        // this is needed for the following update which converts this rotatable block from horizontal directional into axial directional.
+        // this is needed for the following update which converts this rotatable block from horizontal directional into
+        // axial directional.
         EnumFacing axialFacing = leftFacing.getIndex() < 4 ? EnumFacing.SOUTH : EnumFacing.WEST;
 
-        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(this.rotorState.withProperty(FACING, axialFacing))};
+        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[] {
+                new BlockInfo(this.rotorState.withProperty(FACING, axialFacing)) };
         return new TraceabilityPredicate(blockWorldState -> {
             IBlockState state = blockWorldState.getBlockState();
             if (state.getBlock() != this.rotorState.getBlock()) return false;
@@ -133,14 +152,17 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
     }
 
     protected TraceabilityPredicate coilOrientation() {
-        //makes sure rotor's front faces the left side (relative to the player) of controller front
-        EnumFacing leftFacing = RelativeDirection.RIGHT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), isFlipped());
+        // makes sure rotor's front faces the left side (relative to the player) of controller front
+        EnumFacing leftFacing = RelativeDirection.RIGHT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(),
+                isFlipped());
 
         // converting the left facing to positive x or z axis direction
-        // this is needed for the following update which converts this rotatable block from horizontal directional into axial directional.
+        // this is needed for the following update which converts this rotatable block from horizontal directional into
+        // axial directional.
         EnumFacing axialFacing = leftFacing.getIndex() < 4 ? EnumFacing.SOUTH : EnumFacing.WEST;
 
-        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(copperCoilState().withProperty(FACING, axialFacing))};
+        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[] {
+                new BlockInfo(copperCoilState().withProperty(FACING, axialFacing)) };
         return new TraceabilityPredicate(blockWorldState -> {
             IBlockState state = blockWorldState.getBlockState();
             if (!(state.getBlock() instanceof BlockAlternatorCoil)) return false;

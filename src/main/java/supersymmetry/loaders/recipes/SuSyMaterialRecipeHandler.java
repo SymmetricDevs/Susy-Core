@@ -1,5 +1,18 @@
 package supersymmetry.loaders.recipes;
 
+import static gregtech.api.GTValues.*;
+import static gregtech.api.recipes.RecipeMaps.*;
+import static gregtech.api.unification.material.Materials.*;
+import static gregtech.api.unification.ore.OrePrefix.*;
+
+import java.util.*;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.GTValues;
 import gregtech.api.recipes.ModHandler;
 import gregtech.api.recipes.Recipe;
@@ -19,45 +32,41 @@ import gregtech.api.util.function.TriConsumer;
 import gregtech.common.items.MetaItems;
 import gregtech.common.items.ToolItems;
 import gregtech.loaders.recipe.handlers.RecyclingRecipeHandler;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
-import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 import supersymmetry.api.unification.material.properties.FiberProperty;
+import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.item.SuSyMetaItems;
 
-import java.util.*;
-
-import static gregtech.api.GTValues.*;
-import static gregtech.api.recipes.RecipeMaps.*;
-import static gregtech.api.unification.material.Materials.*;
-import static gregtech.api.unification.ore.OrePrefix.*;
-
 public class SuSyMaterialRecipeHandler {
+
     // For SUSY molds to be put into
     public static final Map<OrePrefix, ItemStack> mapMolds = new HashMap<>();
 
     public static void init() {
         SusyOrePrefix.catalystBed.addProcessingHandler(PropertyKey.DUST, SuSyMaterialRecipeHandler::processCatalystBed);
-        SusyOrePrefix.catalystPellet.addProcessingHandler(PropertyKey.DUST, SuSyMaterialRecipeHandler::processCatalystPellet);
-        SusyOrePrefix.sheetedFrame.addProcessingHandler(PropertyKey.DUST, SuSyMaterialRecipeHandler::processSheetedFrame);
+        SusyOrePrefix.catalystPellet.addProcessingHandler(PropertyKey.DUST,
+                SuSyMaterialRecipeHandler::processCatalystPellet);
+        SusyOrePrefix.sheetedFrame.addProcessingHandler(PropertyKey.DUST,
+                SuSyMaterialRecipeHandler::processSheetedFrame);
         SusyOrePrefix.sheetedFrame.addProcessingHandler(PropertyKey.DUST, RecyclingRecipeHandler::processCrushing);
         SusyOrePrefix.fiber.addProcessingHandler(SuSyPropertyKey.FIBER, SuSyMaterialRecipeHandler::processFiber);
         SusyOrePrefix.thread.addProcessingHandler(SuSyPropertyKey.FIBER, SuSyMaterialRecipeHandler::processThread);
-        SusyOrePrefix.thread.addProcessingHandler(SuSyPropertyKey.FIBER, SuSyMaterialRecipeHandler::processThreadWeaving);
+        SusyOrePrefix.thread.addProcessingHandler(SuSyPropertyKey.FIBER,
+                SuSyMaterialRecipeHandler::processThreadWeaving);
         SusyOrePrefix.fiber.addProcessingHandler(PropertyKey.DUST, RecyclingRecipeHandler::processCrushing);
         SusyOrePrefix.thread.addProcessingHandler(PropertyKey.DUST, RecyclingRecipeHandler::processCrushing);
         SusyOrePrefix.electrode.addProcessingHandler(PropertyKey.DUST, SuSyMaterialRecipeHandler::processElectrode);
-        addProcessingHandler(PropertyKey.DUST, OrePrefix.dust, SuSyMaterialFlags.HIP_PRESSED, SuSyMaterialRecipeHandler::processHIPPressing);
-        addProcessingHandler(PropertyKey.DUST, OrePrefix.dust, SuSyMaterialFlags.CONTINUOUSLY_CAST, SuSyMaterialRecipeHandler::processContinuouslyCast);
+        addProcessingHandler(PropertyKey.DUST, OrePrefix.dust, SuSyMaterialFlags.HIP_PRESSED,
+                SuSyMaterialRecipeHandler::processHIPPressing);
+        addProcessingHandler(PropertyKey.DUST, OrePrefix.dust, SuSyMaterialFlags.CONTINUOUSLY_CAST,
+                SuSyMaterialRecipeHandler::processContinuouslyCast);
     }
 
-
-    public static <T extends IMaterialProperty> void addProcessingHandler(PropertyKey<T> propertyKey, OrePrefix prefix, MaterialFlag condition, TriConsumer<OrePrefix, Material, T> handler) {
+    public static <T extends IMaterialProperty> void addProcessingHandler(PropertyKey<T> propertyKey, OrePrefix prefix,
+                                                                          MaterialFlag condition,
+                                                                          TriConsumer<OrePrefix, Material, T> handler) {
         prefix.addProcessingHandler((orePrefix, material) -> {
             if (material.hasProperty(propertyKey) && material.hasFlag(condition)) {
                 handler.accept(orePrefix, material, material.getProperty(propertyKey));
@@ -141,9 +150,7 @@ public class SuSyMaterialRecipeHandler {
         // The warning doesn't actually apply
         if (Item.getItemById(5300) != null) {
 
-
         }
-
 
         ItemStack ingotStack = OreDictUnifier.get(ingot, material);
 
@@ -163,7 +170,6 @@ public class SuSyMaterialRecipeHandler {
                     .buildAndRegister();
         }
 
-
         r = BENDER_RECIPES.findRecipe(8, inputItems, fluidInputs, false);
         if (r != null) {
             BENDER_RECIPES.removeRecipe(r);
@@ -176,7 +182,6 @@ public class SuSyMaterialRecipeHandler {
                 }
             }
         }
-
     }
 
     public static void processElectrode(OrePrefix orePrefix, Material material, DustProperty dustProperty) {
@@ -287,8 +292,8 @@ public class SuSyMaterialRecipeHandler {
                 .input(OrePrefix.frameGt, mat, 1)
                 .output(SusyOrePrefix.sheetedFrame, mat, 6)
                 .EUt(7)
-                .duration(225) //18.75t/craft = 1 stack/min
-                .circuitMeta(10) //prevent conflict with casings and other frame + plate recipes
+                .duration(225) // 18.75t/craft = 1 stack/min
+                .circuitMeta(10) // prevent conflict with casings and other frame + plate recipes
                 .buildAndRegister();
 
         // TODO: remove later

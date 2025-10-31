@@ -1,5 +1,12 @@
 package supersymmetry.common.item.armor;
 
+import static net.minecraft.inventory.EntityEquipmentSlot.*;
+import static supersymmetry.api.util.SuSyUtility.susyId;
+import static supersymmetry.common.event.DimensionBreathabilityHandler.ABSORB_ALL;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
@@ -13,6 +20,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ISpecialArmor;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,14 +29,8 @@ import supersymmetry.client.renderer.handler.BreathingApparatusModel;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.item.SuSyArmorItem;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static net.minecraft.inventory.EntityEquipmentSlot.*;
-import static supersymmetry.api.util.SuSyUtility.susyId;
-import static supersymmetry.common.event.DimensionBreathabilityHandler.ABSORB_ALL;
-
 public class AdvancedBreathingApparatus extends BreathingApparatus {
+
     private final double hoursOfLife;
     private final String name;
     private final int tier;
@@ -36,7 +38,8 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
 
     private static final double DEFAULT_ABSORPTION = 0;
 
-    public AdvancedBreathingApparatus(EntityEquipmentSlot slot, double hoursOfLife, String name, int tier, double relativeAbsorption) {
+    public AdvancedBreathingApparatus(EntityEquipmentSlot slot, double hoursOfLife, String name, int tier,
+                                      double relativeAbsorption) {
         super(slot);
         this.hoursOfLife = hoursOfLife;
         this.name = name;
@@ -51,7 +54,8 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
 
     @SideOnly(Side.CLIENT)
     @Override
-    public @Nullable ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped defaultModel) {
+    public @Nullable ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack,
+                                              EntityEquipmentSlot armorSlot, ModelBiped defaultModel) {
         if (model == null)
             model = new BreathingApparatusModel(name, armorSlot);
         return model;
@@ -59,7 +63,8 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
 
     @Override
     public boolean mayBreatheWith(ItemStack stack, EntityPlayer player) {
-        return player.dimension == DimensionBreathabilityHandler.BENEATH_ID || player.dimension == DimensionBreathabilityHandler.NETHER_ID;
+        return player.dimension == DimensionBreathabilityHandler.BENEATH_ID ||
+                player.dimension == DimensionBreathabilityHandler.NETHER_ID;
     }
 
     @Override
@@ -106,7 +111,6 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
         return DEFAULT_ABSORPTION;
     }
 
-
     private double getDamage(ItemStack stack) {
         if (stack.getTagCompound() == null) {
             stack.setTagCompound(new NBTTagCompound());
@@ -122,7 +126,6 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
         compound.setDouble("damage", getDamage(stack) + damageChange);
         stack.setTagCompound(compound);
     }
-
 
     private void handleDamage(ItemStack stack, EntityPlayer player) {
         if (hoursOfLife == 0 || player.dimension == DimensionBreathabilityHandler.BENEATH_ID) {
@@ -156,8 +159,8 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
 
     @Override
     public ISpecialArmor.ArmorProperties getProperties(EntityLivingBase player, @NotNull ItemStack armor,
-            DamageSource source,
-            double damage, EntityEquipmentSlot equipmentSlot) {
+                                                       DamageSource source,
+                                                       double damage, EntityEquipmentSlot equipmentSlot) {
         ISpecialArmor.ArmorProperties prop = new ISpecialArmor.ArmorProperties(0, 0.0, 0);
         if (source.isUnblockable())
             return prop;
@@ -203,7 +206,6 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
         if (armor > 0)
             strings.add(I18n.format("attribute.modifier.plus.0", armor, I18n.format("attribute.name.generic.armor")));
     }
-
 
     @Override
     public int getArmorDisplay(EntityPlayer player, ItemStack armor, int slot) {

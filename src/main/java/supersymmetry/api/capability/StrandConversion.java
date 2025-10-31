@@ -1,11 +1,12 @@
 package supersymmetry.api.capability;
 
+import java.util.Set;
+
 import gregtech.api.unification.ore.OrePrefix;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 
-import java.util.Set;
-
 public class StrandConversion {
+
     public static Set<StrandConversion> CONVERSIONS = new ObjectArraySet<>();
 
     static {
@@ -25,8 +26,8 @@ public class StrandConversion {
     public OrePrefix prefix;
     public int amount;
 
-
-    public StrandConversion(double minWidth, double maxWidth, double minThickness, double maxThickness, OrePrefix prefix, int amount) {
+    public StrandConversion(double minWidth, double maxWidth, double minThickness, double maxThickness,
+                            OrePrefix prefix, int amount) {
         this.minWidth = minWidth;
         this.maxWidth = maxWidth;
         this.minThickness = minThickness;
@@ -39,7 +40,8 @@ public class StrandConversion {
 
     public static StrandConversion getConversion(Strand strand) {
         for (StrandConversion conversion : CONVERSIONS) {
-            if (strand.width >= conversion.minWidth && strand.width <= conversion.maxWidth && strand.thickness >= conversion.minThickness && strand.thickness <= conversion.maxThickness) {
+            if (strand.width >= conversion.minWidth && strand.width <= conversion.maxWidth &&
+                    strand.thickness >= conversion.minThickness && strand.thickness <= conversion.maxThickness) {
                 return conversion;
             }
         }

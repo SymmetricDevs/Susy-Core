@@ -1,5 +1,10 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import javax.annotation.Nonnull;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.ResourceLocation;
+
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -14,12 +19,8 @@ import gregtech.common.blocks.BlockBoilerCasing.BoilerCasingType;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.ResourceLocation;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
-
-import javax.annotation.Nonnull;
 
 public class MetaTileEntityQuencher extends RecipeMapMultiblockController {
 
@@ -46,7 +47,9 @@ public class MetaTileEntityQuencher extends RecipeMapMultiblockController {
                 .where('S', selfPredicate())
                 .where('A', casingPredicate)
                 .where('B', states(MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE)))
-                .where('C', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STAINLESS_STEEL_GEARBOX)))
+                .where('C',
+                        states(MetaBlocks.TURBINE_CASING
+                                .getState(BlockTurbineCasing.TurbineCasingType.STAINLESS_STEEL_GEARBOX)))
                 .where('D', frames(Materials.StainlessSteel))
                 .where('F', autoAbilities(false, false, false, false, false, true, false).setExactLimit(1)
                         .or(autoAbilities(false, false, false, false, true, false, false).setExactLimit(1)))

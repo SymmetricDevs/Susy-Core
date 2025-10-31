@@ -5,6 +5,7 @@ import net.minecraft.item.ItemFirework;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -16,11 +17,9 @@ public abstract class EntityElytraMixin {
     @Inject(
             method = "onItemRightClick",
             at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/entity/item/EntityFireworkRocket;<init>(Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/EntityLivingBase;)V"
-            ),
-            cancellable = true
-    )
+                     value = "INVOKE",
+                     target = "Lnet/minecraft/entity/item/EntityFireworkRocket;<init>(Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/EntityLivingBase;)V"),
+            cancellable = true)
     public void onUse(World world, EntityPlayer player, EnumHand hand, CallbackInfoReturnable<ItemStack> cir) {
         if (player.isElytraFlying()) {
             ItemStack stack = player.getHeldItem(hand);
