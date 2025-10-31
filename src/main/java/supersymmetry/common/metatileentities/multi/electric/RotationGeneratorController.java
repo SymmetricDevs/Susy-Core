@@ -153,7 +153,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
     @Override
     protected long getMaxVoltage() {
         if (!isFull) {
-            return recipeMapWorkable.getMaxVoltage();
+            return ((SuSyTurbineRecipeLogic) recipeMapWorkable).getMaxParallelVoltage();
         } else {
             return 0L;
         }
@@ -194,7 +194,12 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
 
         @Override
         protected boolean drawEnergy(int recipeEUt, boolean simulate) {
-            // Turbine voids excess fuel to keep spinning.
+            long euToDraw = scaleProduction(recipeEUt); // Will be negative
+            long resultEnergy = getEnergyStored() - euToDraw;
+            if (resultEnergy >= 0L && resultEnergy <= getEnergyCapacity()) {
+                if (!simulate) getEnergyContainer().changeEnergy(-euToDraw); // So this is positive
+            }
+            // Turbine voids excess fuel to keep spinning in any case.
             return true;
         }
 
@@ -214,8 +219,8 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         }
 
         @Override
-        public long getMaxVoltage() {
-            return Math.max(Math.min(scaleProduction(tileEntity.recipeMapWorkable.getEnergyContainer().getOutputVoltage()), GTValues.V[tileEntity.tier]), proposedEUt);
+        protected long getMaxParallelVoltage() {
+            return Math.max(scaleProduction(Math.min(tileEntity.recipeMapWorkable.getEnergyContainer().getOutputVoltage(), GTValues.V[tileEntity.tier])), proposedEUt);
         }
     }
 }
