@@ -4,15 +4,21 @@ import gregtech.api.GTValues;
 import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.impl.MultiblockFuelRecipeLogic;
 import gregtech.api.metatileentity.multiblock.FuelMultiblockController;
+import gregtech.api.metatileentity.multiblock.IProgressBarMultiblock;
+import gregtech.api.metatileentity.multiblock.MultiblockDisplayText;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
+import gregtech.api.util.GTUtility;
 import gregtech.api.util.TextComponentUtil;
+import gregtech.api.util.TextFormattingUtil;
 import gregtech.common.metatileentities.multi.electric.generator.LargeTurbineWorkableHandler;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +30,7 @@ import java.util.List;
 
 public abstract class RotationGeneratorController extends FuelMultiblockController implements IRotationSpeedHandler {
 
-    private int workCounter = 0;
+    private int lubricantCounter = 0;
     private int speed = 0;
 
     protected int maxSpeed;
@@ -35,7 +41,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
     private boolean isFull;
 
     protected FluidStack lubricantStack;
-    private SuSyUtility.Lubricant lubricantInfo;
+    protected SuSyUtility.Lubricant lubricantInfo;
 
     public RotationGeneratorController(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap, int tier, int maxSpeed, int accel, int decel) {
         super(metaTileEntityId, recipeMap, tier);
@@ -78,7 +84,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
 
             if (recipeMapWorkable.isWorking()) {
                 speed += getRotationAcceleration();
-                workCounter += 1;
+                lubricantCounter += speed;
             } else {
                 speed -= getRotationDeceleration();
             }
@@ -86,8 +92,8 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
             speed = Math.min(speed, maxSpeed);
             speed = Math.max(speed, 0);
 
-            if (workCounter == 600) {
-                workCounter = 0;
+            if (lubricantStack != null && lubricantCounter >= (600 * 3600)) {
+                lubricantCounter = 0;
                 tanks.drain(new FluidStack(lubricantStack.getFluid(), lubricantInfo.amount_required), true);
             }
         }
@@ -100,7 +106,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
             return;
         }
 
-        lubricantInfo = lubricantStack == null ? null : SuSyUtility.lubricants.get(lubricantStack.getFluid().getName());
+        lubricantInfo = SuSyUtility.lubricants.get(lubricantStack.getFluid().getName());
         sufficientFluids = lubricantStack.amount >= lubricantInfo.amount_required;
     }
 
@@ -129,6 +135,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setInteger("Speed", this.speed);
+        data.setInteger("LubricantCounter", this.lubricantCounter);
         return data;
     }
 
@@ -137,6 +144,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         this.speed = data.getInteger("Speed");
+        this.lubricantCounter = data.getInteger("LubricantCounter");
     }
 
     @Override
@@ -167,17 +175,6 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         public SuSyTurbineRecipeLogic(MetaTileEntitySUSYLargeTurbine tileEntity) {
             super(tileEntity);
             this.tileEntity = tileEntity;
-        }
-
-        public FluidStack getInputFluidStack() {
-            // Previous Recipe is always null on first world load, so try to acquire a new recipe
-            if (previousRecipe == null) {
-                Recipe recipe = findRecipe(Integer.MAX_VALUE, getInputInventory(), getInputTank());
-
-                return recipe == null ? null : getInputTank().drain(new FluidStack(recipe.getFluidInputs().get(0).getInputFluidStack().getFluid(), Integer.MAX_VALUE), false);
-            }
-            FluidStack fuelStack = previousRecipe.getFluidInputs().get(0).getInputFluidStack();
-            return getInputTank().drain(new FluidStack(fuelStack.getFluid(), Integer.MAX_VALUE), false);
         }
 
         @Override
@@ -220,7 +217,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
 
         @Override
         protected long getMaxParallelVoltage() {
-            return Math.max(scaleProduction(Math.min(tileEntity.recipeMapWorkable.getEnergyContainer().getOutputVoltage(), GTValues.V[tileEntity.tier])), proposedEUt);
+            return Math.min(Math.max(scaleProduction(tileEntity.recipeMapWorkable.getEnergyContainer().getOutputVoltage()), proposedEUt), ((GTValues.V[tileEntity.getTier()]) * 16));
         }
     }
 }

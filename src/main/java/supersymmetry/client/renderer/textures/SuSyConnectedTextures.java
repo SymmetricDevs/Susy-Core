@@ -87,8 +87,7 @@ public class SuSyConnectedTextures {
                 susyId("sieve_distillation_tower"));
         STEEL_TURBINE_CASING_CTM.override(susyId("basic_steam_turbine"),
                 susyId("basic_gas_turbine"));
-        TITANIUM_TURBINE_CASING_CTM.override(susyId("low_pressure_advanced_steam_turbine"),
-                susyId("high_pressure_advanced_steam_turbine"));
+        TITANIUM_TURBINE_CASING_CTM.override(susyId("advanced_steam_turbine"));
         INERT_PTFE_CASING_CTM.override(susyId("fluidized_bed_reactor"),
                 susyId("blender"));
         SILICON_CARBIDE_CASING_CTM.override(susyId("high_temperature_distillation_tower"),

@@ -26,18 +26,18 @@ import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockTurbineRotor;
 import supersymmetry.common.blocks.SuSyBlocks;
 
-public class MetaTileEntityHighPressureLargeTurbine extends MetaTileEntitySUSYLargeTurbine {
+public class MetaTileEntityAdvancedLargeTurbine extends MetaTileEntitySUSYLargeTurbine {
 
-    public MetaTileEntityHighPressureLargeTurbine(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SuSyRecipeMaps.HIGH_PRESSURE_ADVANCED_STEAM_TURBINE, 4, 3600, 2, 2,
+    public MetaTileEntityAdvancedLargeTurbine(ResourceLocation metaTileEntityId) {
+        super(metaTileEntityId, SuSyRecipeMaps.ADVANCED_STEAM_TURBINE, 4, 3600, 2, 2,
                 MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.TITANIUM_TURBINE_CASING),
                 SuSyBlocks.TURBINE_ROTOR.getState(BlockTurbineRotor.BlockTurbineRotorType.LOW_PRESSURE),
-                SusyTextures.TITANIUM_TURBINE_CASING, SusyTextures.HIGH_PRESSURE_ADVANCED_STEAM_TURBINE_OVERLAY);
+                SusyTextures.TITANIUM_TURBINE_CASING, SusyTextures.ADVANCED_STEAM_TURBINE_OVERLAY);
     }
 
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
-        return new MetaTileEntityHighPressureLargeTurbine(metaTileEntityId);
+        return new MetaTileEntityAdvancedLargeTurbine(metaTileEntityId);
     }
 
     @Override
