@@ -589,7 +589,7 @@ public class SuSyMetaTileEntities {
                 new MetaTileEntityRocketProgrammer(susyId("rocket_programmer")));
 
         //Advanced Steam Turbines
-        ADVANCED_STEAM_TURBINE = registerMetaTileEntity(18101, new MetaTileEntityHighPressureLargeTurbine(susyId("advanced_steam_turbine")));
+        ADVANCED_STEAM_TURBINE = registerMetaTileEntity(18101, new MetaTileEntityAdvancedLargeTurbine(susyId("advanced_steam_turbine")));
 
         INJECTION_MOLDER = registerMetaTileEntity(18110, new MetaTileEntityInjectionMolder(susyId("injection_molder")));
 

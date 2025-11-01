@@ -14,11 +14,14 @@ import gregtech.api.metatileentity.multiblock.IProgressBarMultiblock;
 import gregtech.api.metatileentity.multiblock.MultiblockDisplayText;
 import gregtech.api.util.*;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
@@ -34,6 +37,7 @@ import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.client.renderer.ICubeRenderer;
+import org.jetbrains.annotations.Nullable;
 import supersymmetry.common.blocks.BlockAlternatorCoil;
 import supersymmetry.common.blocks.SuSyBlocks;
 
@@ -298,7 +302,7 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
                     textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY, "susy.multiblock.rotation_generator.lubricant_name", lubricantName));
                 }
             }
-            textList.add(new TextComponentTranslation("susy.multiblock.rotation_generator.power", getMaxVoltage(), recipeMapWorkable.getEnergyContainer().getOutputVoltage()));
+            textList.add(new TextComponentTranslation("susy.multiblock.rotation_generator.power", getMaxVoltage(), Math.min(recipeMapWorkable.getEnergyContainer().getOutputVoltage(), GTValues.V[tier] * 16)));
         }
 
         MultiblockFuelRecipeLogic recipeLogic = (MultiblockFuelRecipeLogic) recipeMapWorkable;
@@ -307,5 +311,11 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
                 .setWorkingStatus(recipeLogic.isWorkingEnabled(), recipeLogic.isActive())
                 .addFuelNeededLine(recipeLogic.getRecipeFluidInputInfo(), recipeLogic.getPreviousRecipeDuration())
                 .addWorkingStatusLine();
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
+        super.addInformation(stack, world, tooltip, advanced);
+        tooltip.add(I18n.format("gregtech.universal.tooltip.max_voltage_out", GTValues.V[tier + 2], GTValues.VNF[tier + 2]));
     }
 }
