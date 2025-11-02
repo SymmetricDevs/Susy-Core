@@ -129,7 +129,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityOreSorter ORE_SORTER;
     public static MetaTileEntityCondenser CONDENSER;
     public static MetaTileEntityNaturalDraftCoolingTower NATURAL_DRAFT_COOLING_TOWER;
-    public static MetaTileEntitySUSYLargeTurbine BASIC_GAS_TURBINE;
+    public static MetaTileEntitySUSYLargeTurbine GAS_TURBINE;
     public static MetaTileEntitySUSYLargeTurbine BASIC_STEAM_TURBINE;
     public static MetaTileEntitySUSYLargeTurbine ADVANCED_STEAM_TURBINE;
 
@@ -508,7 +508,8 @@ public class SuSyMetaTileEntities {
 
         // Turbines: 17000-17010
         BASIC_STEAM_TURBINE = registerMetaTileEntity(17000, new MetaTileEntitySUSYLargeTurbine(susyId("basic_steam_turbine"), SuSyRecipeMaps.LARGE_STEAM_TURBINE, 1, 3600, 1, 1, MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING), SuSyBlocks.TURBINE_ROTOR.getState(BlockTurbineRotor.BlockTurbineRotorType.STEEL), SusyTextures.STEEL_TURBINE_CASING, SusyTextures.LARGE_STEAM_TURBINE_OVERLAY));
-        BASIC_GAS_TURBINE = registerMetaTileEntity(17001, new MetaTileEntitySUSYLargeTurbine(susyId("basic_gas_turbine"), RecipeMaps.GAS_TURBINE_FUELS, 4, 7200, 4, 4, MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.TITANIUM_TURBINE_CASING), SuSyBlocks.TURBINE_ROTOR.getState(BlockTurbineRotor.BlockTurbineRotorType.STEEL), SusyTextures.TITANIUM_TURBINE_CASING, SusyTextures.LARGE_GAS_TURBINE_OVERLAY));
+        GAS_TURBINE = registerMetaTileEntity(17001, new MetaTileEntityGasTurbine(susyId("gas_turbine"), RecipeMaps.GAS_TURBINE_FUELS, 4, 7200, 3, 4, MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.TITANIUM_TURBINE_CASING), SuSyBlocks.TURBINE_ROTOR.getState(BlockTurbineRotor.BlockTurbineRotorType.STEEL), SusyTextures.TITANIUM_TURBINE_CASING, SusyTextures.LARGE_GAS_TURBINE_OVERLAY));
+        ADVANCED_STEAM_TURBINE = registerMetaTileEntity(17002, new MetaTileEntityAdvancedLargeTurbine(susyId("advanced_steam_turbine")));
 
         ADVANCED_ARC_FURNACE = registerMetaTileEntity(17003,
                 new MetaTileEntityAdvancedArcFurnace(susyId("advanced_arc_furnace")));
@@ -587,9 +588,6 @@ public class SuSyMetaTileEntities {
         ROCKET_ASSEMBLER = registerMetaTileEntity(18007, new MetaTileEntityRocketAssembler(susyId("rocket_assembler")));
         ROCKET_PROGRAMMER = registerMetaTileEntity(18008,
                 new MetaTileEntityRocketProgrammer(susyId("rocket_programmer")));
-
-        //Advanced Steam Turbines
-        ADVANCED_STEAM_TURBINE = registerMetaTileEntity(18101, new MetaTileEntityAdvancedLargeTurbine(susyId("advanced_steam_turbine")));
 
         INJECTION_MOLDER = registerMetaTileEntity(18110, new MetaTileEntityInjectionMolder(susyId("injection_molder")));
 

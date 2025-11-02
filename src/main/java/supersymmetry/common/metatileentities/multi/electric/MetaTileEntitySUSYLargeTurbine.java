@@ -9,7 +9,9 @@ import javax.annotation.Nonnull;
 
 import gregtech.api.capability.impl.MultiblockFuelRecipeLogic;
 import gregtech.api.gui.GuiTextures;
+import gregtech.api.gui.Widget;
 import gregtech.api.gui.resources.TextureArea;
+import gregtech.api.gui.widgets.ToggleButtonWidget;
 import gregtech.api.metatileentity.multiblock.IProgressBarMultiblock;
 import gregtech.api.metatileentity.multiblock.MultiblockDisplayText;
 import gregtech.api.util.*;
@@ -38,6 +40,8 @@ import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.client.renderer.ICubeRenderer;
 import org.jetbrains.annotations.Nullable;
+
+import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.common.blocks.BlockAlternatorCoil;
 import supersymmetry.common.blocks.SuSyBlocks;
 
@@ -288,6 +292,14 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
         } else {
             return TextFormatting.GREEN;
         }
+    }
+
+    @Override
+    protected @NotNull Widget getFlexButton(int x, int y, int width, int height) {
+        SuSyTurbineRecipeLogic logic = (SuSyTurbineRecipeLogic) this.recipeMapWorkable;
+
+        return new ToggleButtonWidget(x, y, width, height, SusyGuiTextures.BUTTON_ENERGY_VOIDING, logic::getVoidingEnergy, logic::setVoidingEnergy)
+                .setTooltipText("susy.gui.toggle_energy_voiding");
     }
 
     @Override

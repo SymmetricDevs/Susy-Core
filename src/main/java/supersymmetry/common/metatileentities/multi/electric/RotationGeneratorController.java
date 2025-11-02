@@ -172,6 +172,8 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         private MetaTileEntitySUSYLargeTurbine tileEntity;
         private int proposedEUt;
 
+        protected boolean voidEnergy = false;
+
         public SuSyTurbineRecipeLogic(MetaTileEntitySUSYLargeTurbine tileEntity) {
             super(tileEntity);
             this.tileEntity = tileEntity;
@@ -182,6 +184,14 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
             // Hack to get the recipeEUt early
             proposedEUt = recipe.getEUt();
             return sufficientFluids;
+        }
+
+        public boolean getVoidingEnergy() {
+            return this.voidEnergy;
+        }
+
+        protected boolean setVoidingEnergy(boolean mode) {
+            this.voidEnergy = mode;
         }
 
         @Override
@@ -197,7 +207,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
                 if (!simulate) getEnergyContainer().changeEnergy(-euToDraw); // So this is positive
             }
             // Turbine voids excess fuel to keep spinning in any case.
-            return true;
+            return voidEnergy;
         }
 
         @Override
