@@ -131,8 +131,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityNaturalDraftCoolingTower NATURAL_DRAFT_COOLING_TOWER;
     public static MetaTileEntitySUSYLargeTurbine BASIC_GAS_TURBINE;
     public static MetaTileEntitySUSYLargeTurbine BASIC_STEAM_TURBINE;
-    public static MetaTileEntitySUSYLargeTurbine LOW_PRESSURE_ADVANCED_STEAM_TURBINE;
-    public static MetaTileEntitySUSYLargeTurbine HIGH_PRESSURE_ADVANCED_STEAM_TURBINE;
+    public static MetaTileEntitySUSYLargeTurbine ADVANCED_STEAM_TURBINE;
 
     public static MetaTileEntityHeatExchanger HEAT_EXCHANGER;
     public static MetaTileEntityHeatRadiator HEAT_RADIATOR;
@@ -259,6 +258,7 @@ public class SuSyMetaTileEntities {
 
     // Generators
     public static MetaTileEntityFuelCell[] FUEL_CELL = new MetaTileEntityFuelCell[2];
+    public static SuSyMetaTileEntitySingleCombustion[] COMBUSTION_GENERATOR = new SuSyMetaTileEntitySingleCombustion[3];
 
     // Particle physics stuff
     public static MetaTileEntityBeamLineHatch BEAM_IMPORT;
@@ -507,16 +507,8 @@ public class SuSyMetaTileEntities {
                 new MetaTileEntityMetallurgicalConverter(susyId("metallurgical_converter")));
 
         // Turbines: 17000-17010
-        BASIC_STEAM_TURBINE = registerMetaTileEntity(17000,
-                new MetaTileEntitySUSYLargeTurbine(susyId("basic_steam_turbine"), SuSyRecipeMaps.LARGE_STEAM_TURBINE, 1,
-                        MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING),
-                        SuSyBlocks.TURBINE_ROTOR.getState(BlockTurbineRotor.BlockTurbineRotorType.STEEL),
-                        SusyTextures.STEEL_TURBINE_CASING, SusyTextures.LARGE_STEAM_TURBINE_OVERLAY));
-        BASIC_GAS_TURBINE = registerMetaTileEntity(17001,
-                new MetaTileEntitySUSYLargeTurbine(susyId("basic_gas_turbine"), RecipeMaps.GAS_TURBINE_FUELS, 2,
-                        MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING),
-                        SuSyBlocks.TURBINE_ROTOR.getState(BlockTurbineRotor.BlockTurbineRotorType.STEEL),
-                        SusyTextures.STEEL_TURBINE_CASING, SusyTextures.LARGE_GAS_TURBINE_OVERLAY));
+        BASIC_STEAM_TURBINE = registerMetaTileEntity(17000, new MetaTileEntitySUSYLargeTurbine(susyId("basic_steam_turbine"), SuSyRecipeMaps.LARGE_STEAM_TURBINE, 1, 3600, 1, 1, MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING), SuSyBlocks.TURBINE_ROTOR.getState(BlockTurbineRotor.BlockTurbineRotorType.STEEL), SusyTextures.STEEL_TURBINE_CASING, SusyTextures.LARGE_STEAM_TURBINE_OVERLAY));
+        BASIC_GAS_TURBINE = registerMetaTileEntity(17001, new MetaTileEntitySUSYLargeTurbine(susyId("basic_gas_turbine"), RecipeMaps.GAS_TURBINE_FUELS, 4, 7200, 4, 4, MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.TITANIUM_TURBINE_CASING), SuSyBlocks.TURBINE_ROTOR.getState(BlockTurbineRotor.BlockTurbineRotorType.STEEL), SusyTextures.TITANIUM_TURBINE_CASING, SusyTextures.LARGE_GAS_TURBINE_OVERLAY));
 
         ADVANCED_ARC_FURNACE = registerMetaTileEntity(17003,
                 new MetaTileEntityAdvancedArcFurnace(susyId("advanced_arc_furnace")));
@@ -596,14 +588,8 @@ public class SuSyMetaTileEntities {
         ROCKET_PROGRAMMER = registerMetaTileEntity(18008,
                 new MetaTileEntityRocketProgrammer(susyId("rocket_programmer")));
 
-        // Advanced Steam Turbines
-        LOW_PRESSURE_ADVANCED_STEAM_TURBINE = registerMetaTileEntity(18100, new MetaTileEntitySUSYLargeTurbine(
-                susyId("low_pressure_advanced_steam_turbine"), SuSyRecipeMaps.LOW_PRESSURE_ADVANCED_STEAM_TURBINE, 4,
-                MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.TITANIUM_TURBINE_CASING),
-                SuSyBlocks.TURBINE_ROTOR.getState(BlockTurbineRotor.BlockTurbineRotorType.LOW_PRESSURE),
-                SusyTextures.TITANIUM_TURBINE_CASING, SusyTextures.LOW_PRESSURE_ADVANCED_STEAM_TURBINE_OVERLAY));
-        HIGH_PRESSURE_ADVANCED_STEAM_TURBINE = registerMetaTileEntity(18101,
-                new MetaTileEntityHighPressureLargeTurbine(susyId("high_pressure_advanced_steam_turbine")));
+        //Advanced Steam Turbines
+        ADVANCED_STEAM_TURBINE = registerMetaTileEntity(18101, new MetaTileEntityAdvancedLargeTurbine(susyId("advanced_steam_turbine")));
 
         INJECTION_MOLDER = registerMetaTileEntity(18110, new MetaTileEntityInjectionMolder(susyId("injection_molder")));
 
@@ -644,12 +630,13 @@ public class SuSyMetaTileEntities {
                 new MetaTileEntitySuSyLargeHammer(susyId("large_steam_hammer")));
 
         // Fuel Cells
-        FUEL_CELL[0] = registerMetaTileEntity(18400,
-                new MetaTileEntityFuelCell(susyId("fuel_cell.ev"), SuSyRecipeMaps.FUEL_CELL_RECIPES,
-                        SusyTextures.FUEL_CELL_OVERLAY, 4, GTUtility.defaultTankSizeFunction, 800, 500));
-        FUEL_CELL[1] = registerMetaTileEntity(18401,
-                new MetaTileEntityFuelCell(susyId("fuel_cell.iv"), SuSyRecipeMaps.FUEL_CELL_RECIPES,
-                        SusyTextures.FUEL_CELL_OVERLAY, 5, GTUtility.defaultTankSizeFunction, 1000, 800));
+        FUEL_CELL[0] = registerMetaTileEntity(18400, new MetaTileEntityFuelCell(susyId("fuel_cell.ev"), SuSyRecipeMaps.FUEL_CELL_RECIPES, SusyTextures.FUEL_CELL_OVERLAY, 4, GTUtility.defaultTankSizeFunction, 800, 500));
+        FUEL_CELL[1] = registerMetaTileEntity(18401, new MetaTileEntityFuelCell(susyId("fuel_cell.iv"), SuSyRecipeMaps.FUEL_CELL_RECIPES, SusyTextures.FUEL_CELL_OVERLAY, 5, GTUtility.defaultTankSizeFunction, 1000, 800));
+
+        // Combustion Generators
+        COMBUSTION_GENERATOR[0] = registerMetaTileEntity(18402, new SuSyMetaTileEntitySingleCombustion(susyId("combustion_generator.lv"), RecipeMaps.COMBUSTION_GENERATOR_FUELS, Textures.COMBUSTION_GENERATOR_OVERLAY, 1, GTUtility.defaultTankSizeFunction));
+        COMBUSTION_GENERATOR[1] = registerMetaTileEntity(18403, new SuSyMetaTileEntitySingleCombustion(susyId("combustion_generator.mv"), RecipeMaps.COMBUSTION_GENERATOR_FUELS, Textures.COMBUSTION_GENERATOR_OVERLAY, 2, GTUtility.defaultTankSizeFunction));
+        COMBUSTION_GENERATOR[2] = registerMetaTileEntity(18404, new SuSyMetaTileEntitySingleCombustion(susyId("combustion_generator.hv"), RecipeMaps.COMBUSTION_GENERATOR_FUELS, Textures.COMBUSTION_GENERATOR_OVERLAY, 3, GTUtility.defaultTankSizeFunction));
 
         BEAM_IMPORT = registerMetaTileEntity(18500,
                 new MetaTileEntityBeamLineHatch(susyId("beam_import_hatch"), false));
