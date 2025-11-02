@@ -71,6 +71,7 @@ public class SuSyParallelLogic {
         fluidCount += 143; // Round it up
         fluidCount /= 144;
         int totalCount = itemCount + fluidCount;
+        totalCount = Math.max(totalCount, 1);
         return Math.abs((int) (parallelAmount / (long) totalCount));
     }
 }
