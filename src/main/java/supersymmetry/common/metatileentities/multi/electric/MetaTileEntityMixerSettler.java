@@ -385,5 +385,10 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
 
             super.modifyOverclockPost(overclockResults, storage);
         }
+
+        @Override
+        public int getParallelLimit() {
+            return 16;
+        }
     }
 }
