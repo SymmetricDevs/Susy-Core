@@ -62,7 +62,7 @@ public class MetaTileEntityGasTurbine extends MetaTileEntitySUSYLargeTurbine {
                 .where('G', casingPredicate
                         .or(autoAbilities(false, false, false, false, true, false, false))
                         .or(maintenance))
-                .where('I', states(MetaBlocks.MULTIBLOCK_CASING.getState(BlockMultiblockCasing.MultiblockCasingType.EXTREME_ENGINE_INTAKE_CASING)))
+                .where('I', states(MetaBlocks.MULTIBLOCK_CASING.getState(BlockMultiblockCasing.MultiblockCasingType.ENGINE_INTAKE_CASING)))
                 .where(' ', any())
                 .build();
     }
