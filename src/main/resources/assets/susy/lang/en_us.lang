@@ -1058,7 +1058,8 @@ susy.gui.stock_interactor.controller_setting.inactive_throttle.tooltip=Throttle 
 
 susy.gui.temperature_celsius=Temperature: %s / %s°C
 
-susy.gui.toggle_energy_voiding=Toggle Energy Voiding
+susy.gui.toggle_energy_voiding.enabled=Voiding energy when full
+susy.gui.toggle_energy_voiding.disabled=Not voiding energy
 
 # Extra recipe info
 susy.recipe.dimensions=Dimensions: %s

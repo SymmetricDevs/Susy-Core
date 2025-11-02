@@ -190,7 +190,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
             return this.voidEnergy;
         }
 
-        protected boolean setVoidingEnergy(boolean mode) {
+        protected void setVoidingEnergy(boolean mode) {
             this.voidEnergy = mode;
         }
 
