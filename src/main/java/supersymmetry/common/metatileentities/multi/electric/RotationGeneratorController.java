@@ -187,6 +187,11 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         public boolean checkRecipe(@NotNull Recipe recipe) {
             // Hack to get the recipeEUt early
             proposedEUt = recipe.getEUt();
+            long maximumOutput = Math.min((GTValues.V[tileEntity.getTier()]) * 16, getMaxVoltage());
+
+            if (proposedEUt > maximumOutput) {
+                return false;
+            }
             return sufficientFluids;
         }
 
