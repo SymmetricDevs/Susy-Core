@@ -1106,7 +1106,15 @@ susy.gui.stock_interactor.controller_setting.active_throttle.tooltip=Throttle (P
 susy.gui.stock_interactor.controller_setting.inactive_brake.tooltip=Brake (Unpowered)
 susy.gui.stock_interactor.controller_setting.inactive_throttle.tooltip=Throttle (Unpowered)
 
-susy.gui.page=Page %s
+susy.gui.rocket_programmer.orbit=Orbit the destination
+susy.gui.rocket_programmer.landing=Land on the destination at specific coordinates
+
+susy.gui.rocket_programmer.mission_type=Mission type
+susy.gui.rocket_programmer.planetoid=Destination
+susy.gui.rocket_programmer.destination_type=Destination type
+susy.gui.rocket_programmer.landing_coordinates=Landing coordinates
+
+susy.gui.page=Page %s / %s
 
 susy.gui.temperature_celsius=Temperature: %s / %s°C
 
