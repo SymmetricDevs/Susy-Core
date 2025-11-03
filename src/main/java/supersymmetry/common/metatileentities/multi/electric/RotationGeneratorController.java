@@ -227,7 +227,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
 
         @Override
         protected long getMaxParallelVoltage() {
-            return Math.min(Math.max(scaleProduction(tileEntity.recipeMapWorkable.getEnergyContainer().getOutputVoltage()), proposedEUt), ((GTValues.V[tileEntity.getTier()]) * 16));
+            return Math.max(scaleProduction(((GTValues.V[tileEntity.getTier()]) * 16)), proposedEUt);
         }
     }
 }
