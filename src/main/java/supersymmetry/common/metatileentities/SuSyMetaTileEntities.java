@@ -7,6 +7,7 @@ import static supersymmetry.api.util.SuSyUtility.susyId;
 import java.util.ArrayList;
 import java.util.function.Function;
 
+import gregtech.common.blocks.BlockMetalCasing;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 
@@ -132,6 +133,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntitySUSYLargeTurbine GAS_TURBINE;
     public static MetaTileEntitySUSYLargeTurbine BASIC_STEAM_TURBINE;
     public static MetaTileEntitySUSYLargeTurbine ADVANCED_STEAM_TURBINE;
+    public static MetaTileEntityInternalCombustionEngine INTERNAL_COMBUSTION_GENERATOR;
 
     public static MetaTileEntityHeatExchanger HEAT_EXCHANGER;
     public static MetaTileEntityHeatRadiator HEAT_RADIATOR;
@@ -506,7 +508,7 @@ public class SuSyMetaTileEntities {
         METALLURGICAL_CONVERTER = registerMetaTileEntity(16612,
                 new MetaTileEntityMetallurgicalConverter(susyId("metallurgical_converter")));
 
-        // Turbines: 17000-17010
+        // Turbines: 17000-17002
         BASIC_STEAM_TURBINE = registerMetaTileEntity(17000, new MetaTileEntitySUSYLargeTurbine(susyId("basic_steam_turbine"), SuSyRecipeMaps.LARGE_STEAM_TURBINE, 1, 3600, 1, 1, MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING), SuSyBlocks.TURBINE_ROTOR.getState(BlockTurbineRotor.BlockTurbineRotorType.STEEL), SusyTextures.STEEL_TURBINE_CASING, SusyTextures.LARGE_STEAM_TURBINE_OVERLAY));
         GAS_TURBINE = registerMetaTileEntity(17001, new MetaTileEntityGasTurbine(susyId("gas_turbine"), RecipeMaps.GAS_TURBINE_FUELS, 4, 7200, 3, 4, MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.TITANIUM_TURBINE_CASING), SuSyBlocks.TURBINE_ROTOR.getState(BlockTurbineRotor.BlockTurbineRotorType.STEEL), SusyTextures.TITANIUM_TURBINE_CASING, SusyTextures.LARGE_GAS_TURBINE_OVERLAY));
         ADVANCED_STEAM_TURBINE = registerMetaTileEntity(17002, new MetaTileEntityAdvancedLargeTurbine(susyId("advanced_steam_turbine")));
@@ -522,7 +524,7 @@ public class SuSyMetaTileEntities {
         MULTI_STAGE_FLASH_DISTILLER = registerMetaTileEntity(17009,
                 new MetaTileEntityMultiStageFlashDistiller(susyId("multi_stage_flash_distiller")));
 
-        // FREE ID: 17011
+        INTERNAL_COMBUSTION_GENERATOR = registerMetaTileEntity(17011, new MetaTileEntityInternalCombustionEngine(susyId("internal_combustion_generator"), RecipeMaps.COMBUSTION_GENERATOR_FUELS, 3600, 18, 24, 2, Textures.SOLID_STEEL_CASING, SusyTextures.INTERNAL_COMBUSTION_GENERATOR_OVERLAY));
         HIGH_TEMPERATURE_DISTILLATION_TOWER = registerMetaTileEntity(17012,
                 new MetaTileEntityHighTemperatureDistillationTower(susyId("high_temperature_distillation_tower")));
         ROTARY_KILN = registerMetaTileEntity(17013, new MetaTileEntityRotaryKiln(susyId("rotary_kiln")));

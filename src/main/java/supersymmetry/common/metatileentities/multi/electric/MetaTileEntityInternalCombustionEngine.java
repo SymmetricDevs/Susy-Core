@@ -1,62 +1,60 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
-
-import java.util.List;
-import java.util.function.Supplier;
-
-import javax.annotation.Nonnull;
-
+import gregtech.api.GTValues;
 import gregtech.api.capability.impl.MultiblockFuelRecipeLogic;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.Widget;
 import gregtech.api.gui.resources.TextureArea;
 import gregtech.api.gui.widgets.ToggleButtonWidget;
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.IProgressBarMultiblock;
+import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.MultiblockDisplayText;
+import gregtech.api.pattern.BlockPattern;
+import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.TraceabilityPredicate;
+import gregtech.api.recipes.RecipeMap;
+import gregtech.api.unification.material.Materials;
 import gregtech.api.util.*;
+import gregtech.client.renderer.ICubeRenderer;
+
+import gregtech.common.blocks.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
-
 import org.jetbrains.annotations.NotNull;
-
-import gregtech.api.GTValues;
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.metatileentity.multiblock.IMultiblockPart;
-import gregtech.api.metatileentity.multiblock.MultiblockAbility;
-import gregtech.api.pattern.BlockPattern;
-import gregtech.api.pattern.FactoryBlockPattern;
-import gregtech.api.pattern.TraceabilityPredicate;
-import gregtech.api.recipes.RecipeMap;
-import gregtech.client.renderer.ICubeRenderer;
 import org.jetbrains.annotations.Nullable;
-
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.common.blocks.BlockAlternatorCoil;
+import supersymmetry.common.blocks.BlockEngineCasing;
+import supersymmetry.common.blocks.BlockSerpentine;
 import supersymmetry.common.blocks.SuSyBlocks;
 
-public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController implements IProgressBarMultiblock {
+import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.function.Supplier;
+
+import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
+
+public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorController implements IProgressBarMultiblock {
 
     public final int tier;
 
-    public final IBlockState casingState;
-    public final IBlockState rotorState;
     public final ICubeRenderer casingRenderer;
     public final ICubeRenderer frontOverlay;
 
-    public MetaTileEntitySUSYLargeTurbine(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap, int tier, int maxSpeed, int accel, int decel, IBlockState casingState, IBlockState rotorState, ICubeRenderer casingRenderer, ICubeRenderer frontOverlay) {
+    public MetaTileEntityInternalCombustionEngine(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap, int maxSpeed, int accel, int decel, int tier, ICubeRenderer casingRenderer, ICubeRenderer frontOverlay) {
         super(metaTileEntityId, recipeMap, tier, maxSpeed, accel, decel);
-        this.casingState = casingState;
-        this.rotorState = rotorState;
         this.casingRenderer = casingRenderer;
         this.frontOverlay = frontOverlay;
         this.tier = tier;
@@ -66,59 +64,37 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
 
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
-        return new MetaTileEntitySUSYLargeTurbine(metaTileEntityId, recipeMap, tier, maxSpeed, accel, decel, casingState, rotorState, casingRenderer, frontOverlay);
+        return new MetaTileEntityInternalCombustionEngine(metaTileEntityId, recipeMap, maxSpeed, accel, decel, tier, casingRenderer, frontOverlay);
     }
 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         // Different characters use common constraints. Copied from GCyM
-        TraceabilityPredicate casingPredicate = states(this.casingState).setMinGlobalLimited(52)
-                .or(abilities(MultiblockAbility.IMPORT_ITEMS).setPreviewCount(1));
-        TraceabilityPredicate maintenance = abilities(MultiblockAbility.MAINTENANCE_HATCH).setMaxGlobalLimited(1);
+        TraceabilityPredicate casingPredicate = states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID));
 
         return FactoryBlockPattern.start()
-                .aisle("GAAAAAAAO", "GAAAAAAAO", "G   A   O")
-                .aisle("GAAAAAAAO", "GDDDDCCCF", "GAAAAAAAO")
-                .aisle("GAAAAAAAO", "GSAAAAAAO", "G   A   O")
+                .aisle("C CCCCCCC  F   F ", "C          F   F ", "C          F   F ", "C                ", "C                ", "                 ")
+                .aisle("CFFFFFFFFFFFFFFF ", "R CCCCCCC CCCCCCC", "R CCCCCCC CCCCCCC", "R CCCCCCC CCCCCCC", "C  F F F         ", "   HHHHH         ")
+                .aisle("CPPPPPPPC  F   F ", "R CCCCCCC CCCCCCC", "R EXXXXXXGAAAAAAD", "R CBBBBBC CCCCCCC", "C  IPPPI         ", "   HHHHH         ")
+                .aisle("CFFFFFFFFFFFFFFF ", "R CCCCCCC CCCCCCC", "R CCCCCCC CCCCCCC", "R CCCCCCC CCCCCCC", "C  F F F         ", "   HHHHH         ")
+                .aisle("C CCCCCCC  F   F ", "C   FSF    F   F ", "C   FMF    F   F ", "C                ", "C                ", "                 ")
                 .where('S', selfPredicate())
-                .where('A', casingPredicate
-                        .or(autoAbilities(false, false, false, false, false, false, false))
-                        .or(maintenance))
-                .where('O', casingPredicate
-                        .or(autoAbilities(false, false, false, false, false, true, false))
-                        .or(maintenance))
-                .where('C', coilOrientation())
-                .where('D', rotorOrientation())
-                .where('F', abilities(MultiblockAbility.OUTPUT_ENERGY))
-                .where('G', casingPredicate
-                        .or(autoAbilities(false, false, false, false, true, false, false))
-                        .or(maintenance))
+                .where('C', casingPredicate)
+                .where('M', abilities(MultiblockAbility.MAINTENANCE_HATCH))
+                .where('E', abilities(MultiblockAbility.MUFFLER_HATCH))
+                .where('F', frames(Materials.Steel))
+                .where('H', casingPredicate
+                        .or(autoAbilities(false, false, false, false, true, false, false)))
+                .where('P', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE)))
+                .where('R', states(SuSyBlocks.SERPENTINE.getState(BlockSerpentine.SerpentineType.BASIC)))
+                .where('X', states(SuSyBlocks.ENGINE_CASING.getState(BlockEngineCasing.EngineCasingType.CRANKSHAFT)))
+                .where('G', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
+                .where('A', coilOrientation())
+                .where('D', abilities(MultiblockAbility.OUTPUT_ENERGY))
+                .where('B', states(SuSyBlocks.ENGINE_CASING.getState(BlockEngineCasing.EngineCasingType.PISTON_BLOCK)))
+                .where('I', states(SuSyBlocks.ENGINE_CASING.getState(BlockEngineCasing.EngineCasingType.BASIC_INTAKE_CASING)))
                 .where(' ', any())
                 .build();
-    }
-
-    protected TraceabilityPredicate rotorOrientation() {
-        // makes sure rotor's front faces the left side (relative to the player) of controller front
-        EnumFacing leftFacing = RelativeDirection.RIGHT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(),
-                isFlipped());
-
-        // converting the left facing to positive x or z axis direction
-        // this is needed for the following update which converts this rotatable block from horizontal directional into
-        // axial directional.
-        EnumFacing axialFacing = leftFacing.getIndex() < 4 ? EnumFacing.SOUTH : EnumFacing.WEST;
-
-        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[] {
-                new BlockInfo(this.rotorState.withProperty(FACING, axialFacing)) };
-        return new TraceabilityPredicate(blockWorldState -> {
-            IBlockState state = blockWorldState.getBlockState();
-            if (state.getBlock() != this.rotorState.getBlock()) return false;
-
-            // auto-correct rotor orientation
-            if (state != this.rotorState.withProperty(FACING, axialFacing))
-                getWorld().setBlockState(blockWorldState.getPos(), this.rotorState.withProperty(FACING, axialFacing));
-
-            return true;
-        }, supplier);
     }
 
     protected TraceabilityPredicate coilOrientation() {
@@ -162,22 +138,12 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
 
     @Override
     public boolean hasMufflerMechanics() {
-        return false;
+        return true;
     }
 
     @Override
     public int getTier() {
         return tier;
-    }
-
-    @Override
-    public boolean canVoidRecipeItemOutputs() {
-        return true;
-    }
-
-    @Override
-    public boolean canVoidRecipeFluidOutputs() {
-        return true;
     }
 
     @Override
@@ -189,6 +155,13 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
     public boolean allowsExtendedFacing() {
         return false;
     }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
+        super.addInformation(stack, world, tooltip, advanced);
+        tooltip.add(I18n.format("gregtech.universal.tooltip.max_voltage_out", GTValues.V[tier + 2], GTValues.VNF[tier + 2]));
+    }
+
 
     // GUI stuff
 
@@ -322,11 +295,5 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
                 .setWorkingStatus(recipeLogic.isWorkingEnabled(), recipeLogic.isActive())
                 .addFuelNeededLine(recipeLogic.getRecipeFluidInputInfo(), recipeLogic.getPreviousRecipeDuration())
                 .addWorkingStatusLine();
-    }
-
-    @Override
-    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
-        super.addInformation(stack, world, tooltip, advanced);
-        tooltip.add(I18n.format("gregtech.universal.tooltip.max_voltage_out", GTValues.V[tier + 2], GTValues.VNF[tier + 2]));
     }
 }

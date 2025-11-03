@@ -57,6 +57,7 @@ public class SuSyBlocks {
     public static BlockRandomConcrete RANDOM_CONCRETE;
     public static BlockRandomConcrete1 RANDOM_CONCRETE1;
     public static BlockInductionCoilAssembly INDUCTION_COIL_ASSEMBLY;
+    public static BlockEngineCasing ENGINE_CASING;
 
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
@@ -159,6 +160,9 @@ public class SuSyBlocks {
 
         INDUCTION_COIL_ASSEMBLY = new BlockInductionCoilAssembly();
         INDUCTION_COIL_ASSEMBLY.setRegistryName("induction_coil_assembly");
+
+        ENGINE_CASING = new BlockEngineCasing();
+        ENGINE_CASING.setRegistryName("engine_casing");
     }
 
     @SideOnly(Side.CLIENT)
