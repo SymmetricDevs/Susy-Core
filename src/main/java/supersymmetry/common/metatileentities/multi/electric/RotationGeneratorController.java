@@ -31,9 +31,10 @@ import java.util.List;
 
 public abstract class RotationGeneratorController extends FuelMultiblockController implements IRotationSpeedHandler, ITieredMetaTileEntity {
 
+    public final int tier;
+
     private int lubricantCounter = 0;
     private int speed = 0;
-    public final int tier;
 
     protected int maxSpeed;
     protected int accel;
@@ -47,10 +48,10 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
 
     public RotationGeneratorController(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap, int tier, int maxSpeed, int accel, int decel) {
         super(metaTileEntityId, recipeMap, tier);
+        this.tier = tier;
         this.recipeMapWorkable = new SuSyTurbineRecipeLogic(this);
         this.recipeMapWorkable.setMaximumOverclockVoltage(GTValues.V[tier]);
         this.maxSpeed = maxSpeed;
-        this.tier = tier;
         this.accel = accel;
         this.decel = decel;
     }
