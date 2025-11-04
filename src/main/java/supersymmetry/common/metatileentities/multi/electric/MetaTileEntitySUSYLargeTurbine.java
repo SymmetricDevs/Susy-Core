@@ -46,7 +46,6 @@ import supersymmetry.common.blocks.SuSyBlocks;
 
 public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController implements IProgressBarMultiblock {
 
-    public final int tier;
 
     public final IBlockState casingState;
     public final IBlockState rotorState;
@@ -59,7 +58,6 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
         this.rotorState = rotorState;
         this.casingRenderer = casingRenderer;
         this.frontOverlay = frontOverlay;
-        this.tier = tier;
         this.recipeMapWorkable = new SuSyTurbineRecipeLogic(this);
         this.recipeMapWorkable.setMaximumOverclockVoltage(GTValues.V[tier]);
     }
