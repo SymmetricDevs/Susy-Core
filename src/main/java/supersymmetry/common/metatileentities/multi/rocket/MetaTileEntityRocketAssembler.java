@@ -98,7 +98,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         this.isWorking = false;
         this.componentIndex = 0;
         this.componentList.clear();
-        this.recipeMapWorkable.invalidate(); // not sure if its a good idea to disable this
+        this.recipeMapWorkable.invalidate(); // this can break some things
     }
 
     public void finishAssembly() {

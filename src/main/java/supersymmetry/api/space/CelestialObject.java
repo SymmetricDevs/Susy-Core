@@ -1,12 +1,13 @@
 package supersymmetry.api.space;
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-
 import java.util.List;
 
 import javax.annotation.Nullable;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+
 public class CelestialObject {
+
     private String translationKey;
 
     private double mass;

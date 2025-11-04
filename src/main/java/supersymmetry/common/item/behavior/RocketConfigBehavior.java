@@ -1,37 +1,42 @@
 package supersymmetry.common.item.behavior;
 
-import com.cleanroommc.modularui.api.drawable.IKey;
-import com.cleanroommc.modularui.api.value.sync.IIntSyncValue;
-import com.cleanroommc.modularui.drawable.ItemDrawable;
-import com.cleanroommc.modularui.utils.Alignment;
-import com.cleanroommc.modularui.widgets.ButtonWidget;
-import com.cleanroommc.modularui.widgets.layout.Column;
-import com.cleanroommc.modularui.widgets.layout.Row;
-import com.cleanroommc.modularui.widgets.textfield.TextFieldWidget;
-import dev.tianmi.sussypatches.api.mui2.factory.MetaItemGuiFactory;
-import gregtech.api.gui.ModularUI;
-import gregtech.api.items.gui.ItemUIFactory;
-import gregtech.api.items.gui.PlayerInventoryHolder;
+import static net.minecraft.util.EnumFacing.Axis.*;
+import static supersymmetry.api.gui.SusyGuiTextures.ICON_LEFT;
+import static supersymmetry.api.gui.SusyGuiTextures.ICON_RIGHT;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
-import com.cleanroommc.modularui.factory.PlayerInventoryGuiData;
-import com.cleanroommc.modularui.screen.ModularPanel;
-import com.cleanroommc.modularui.screen.UISettings;
-import com.cleanroommc.modularui.value.BoolValue;
-import com.cleanroommc.modularui.value.sync.*;
-import com.cleanroommc.modularui.widgets.ToggleButton;
-import com.cleanroommc.modularui.widgets.layout.Flow;
-
-import dev.tianmi.sussypatches.api.item.IMui2Factory;
-import gregtech.api.items.metaitem.stats.IItemBehaviour;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+
+import com.cleanroommc.modularui.api.GuiAxis;
+import com.cleanroommc.modularui.api.drawable.IKey;
+import com.cleanroommc.modularui.api.value.sync.IIntSyncValue;
+import com.cleanroommc.modularui.drawable.ItemDrawable;
+import com.cleanroommc.modularui.factory.PlayerInventoryGuiData;
+import com.cleanroommc.modularui.screen.ModularPanel;
+import com.cleanroommc.modularui.screen.UISettings;
+import com.cleanroommc.modularui.utils.Alignment;
+import com.cleanroommc.modularui.value.BoolValue;
+import com.cleanroommc.modularui.value.sync.*;
+import com.cleanroommc.modularui.widgets.ButtonWidget;
+import com.cleanroommc.modularui.widgets.ToggleButton;
+import com.cleanroommc.modularui.widgets.layout.Column;
+import com.cleanroommc.modularui.widgets.layout.Flow;
+import com.cleanroommc.modularui.widgets.layout.Row;
+import com.cleanroommc.modularui.widgets.textfield.TextFieldWidget;
+
+import dev.tianmi.sussypatches.api.item.IMui2Factory;
+import dev.tianmi.sussypatches.api.mui2.factory.MetaItemGuiFactory;
+import gregtech.api.gui.ModularUI;
+import gregtech.api.items.gui.ItemUIFactory;
+import gregtech.api.items.gui.PlayerInventoryHolder;
+import gregtech.api.items.metaitem.stats.IItemBehaviour;
 import supersymmetry.api.space.CelestialObjects;
 import supersymmetry.api.space.Planetoid;
 import supersymmetry.common.rocketry.RocketConfiguration;
@@ -83,11 +88,12 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
                     pageNum--;
                     return true;
                 }).setEnabledIf((w) -> pageNum > 0).overlay(ICON_LEFT))
-                .child(IKey.lang("susy.gui.page", () -> new Object[]{pageNum + 1, MAX_PAGES}).asWidget())
+                .child(IKey.lang("susy.gui.page", () -> new Object[] { pageNum + 1, MAX_PAGES }).asWidget())
                 .child(new ButtonWidget<>().size(12).onMousePressed((w) -> {
                     pageNum++;
                     return true;
                 })).setEnabledIf((w) -> pageNum <= MAX_PAGES - 1).overlay(ICON_RIGHT));
+        Flow overallFlow = new Flow(GuiAxis.Y);
 
         Flow rowFlow = new Column().coverChildren().padding(10, 10, 30, 10)
                 .crossAxisAlignment(Alignment.CrossAxis.START)
@@ -98,10 +104,19 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
         rowFlow.child(new Row().coverChildren()
                 .child(new ToggleButton().value(select(missionType, RocketConfiguration.MissionType.Manned))
                         .tooltip((tooltip) -> tooltip.addLine(I18n.format("susy.gui.rocket_programmer.manned"))))
+<<<<<<< HEAD
                 .child(new ToggleButton().value(select(missionType, RocketConfiguration.MissionType.UnmannedCargo))
                         .tooltip((tooltip -> tooltip.addLine(I18n.format("susy.gui.rocket_programmer.unmanned_cargo")))))
                 .child(new ToggleButton().value(select(missionType, RocketConfiguration.MissionType.UnmannedCollection))
                         .tooltip((tooltip -> tooltip.addLine(I18n.format("susy.gui.rocket_programmer.unmanned_collection"))))));
+=======
+                .child(new ToggleButton().value(select(missionType, MissionType.UnmannedCargo))
+                        .tooltip(
+                                (tooltip -> tooltip.addLine(I18n.format("susy.gui.rocket_programmer.unmanned_cargo")))))
+                .child(new ToggleButton().value(select(missionType, MissionType.UnmannedCollection))
+                        .tooltip((tooltip -> tooltip
+                                .addLine(I18n.format("susy.gui.rocket_programmer.unmanned_collection"))))));
+>>>>>>> 5b99f40c (spotlessApply :goog:)
 
         /*
          * syncManager.syncValue("config", i, new InteractionSyncHandler()
@@ -117,7 +132,7 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
         Flow planetoidsFlow = new Row().coverChildren();
         rowFlow.child(IKey.lang("susy.gui.rocket_programmer.planetoid").asWidget());
         // TODO: research item
-        Planetoid[] planetoids = {CelestialObjects.EARTH, CelestialObjects.MOON};
+        Planetoid[] planetoids = { CelestialObjects.EARTH, CelestialObjects.MOON };
         for (Planetoid planetoid : planetoids) {
             planetoidsFlow.child(new ToggleButton()
                     .size(18)
@@ -128,7 +143,6 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
                     .tooltip((tooltip) -> tooltip.addLine(I18n.format(planetoid.getTranslationKey()))));
         }
         rowFlow.child(planetoidsFlow);
-
         // Select destination type
         rowFlow.child(IKey.lang("susy.gui.rocket_programmer.destination_type").asWidget());
         Flow destinationTypeFlow = new Row().coverChildren()
@@ -154,6 +168,7 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
             landingFlow.child(new TextFieldWidget().height(16).setNumbers().value(coord));
         }
         rowFlow.child(landingFlow);
+        overallFlow.child(planetoidsFlow);
 
         return panel;
     }
