@@ -201,6 +201,7 @@ public class SuSyBlocks {
         registerItemModel(RANDOM_CONCRETE);
         registerItemModel(RANDOM_CONCRETE1);
         registerItemModel(INDUCTION_COIL_ASSEMBLY);
+        registerItemModel(ENGINE_CASING);
     }
 
     @SideOnly(Side.CLIENT)

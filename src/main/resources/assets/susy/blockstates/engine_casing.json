@@ -1,0 +1,8 @@
+{
+  "forge_marker" : 1,
+  "variants" : {
+    "variant=crankshaft": { "model": "susy:engine_casing/crankshaft" },
+    "variant=piston_block": { "model": "susy:engine_casing/piston_block" },
+    "variant=basic_intake_casing": { "model": "susy:engine_casing/basic_intake_casing" }
+  }
+}

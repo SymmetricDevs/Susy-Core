@@ -117,6 +117,10 @@ tile.drill_bit.steel.name=Steel Drill Bit Block
 
 tile.induction_coil_assembly.copper.name=Induction Coil Assembly
 
+tile.engine_casing.crankshaft.name=Crankshaft
+tile.engine_casing.piston_block.name=Piston Block
+tile.engine_casing.basic_intake_casing.name=Basic Intake Casing
+
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
 tile.susy_stone_smooth.gneiss.name=Gneiss
@@ -322,6 +326,7 @@ susy.machine.primitive_mud_pump.tooltip=Works only in River biomes between Y=64 
 susy.machine.basic_steam_turbine.name=Large Steam Turbine
 susy.machine.advanced_steam_turbine.name=Advanced Steam Turbine
 susy.machine.basic_gas_turbine.name=Large Gas Turbine
+susy.machine.internal_combustion_generator=Internal Combustion Generator
 susy.machine.large_fluid_pump.name=Large Fluid Pump
 susy.machine.large_fluid_pump.tooltip.1=This would definitely affect the local trout population.
 susy.machine.large_fluid_pump.tooltip.2=Only works when the controller is at Y=64 and the bottom Steel Pipe Casing is located in the right biome.

@@ -162,7 +162,6 @@ public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorCon
         tooltip.add(I18n.format("gregtech.universal.tooltip.max_voltage_out", GTValues.V[tier + 2], GTValues.VNF[tier + 2]));
     }
 
-
     // GUI stuff
 
     @Override
