@@ -212,6 +212,7 @@ public class CommonProxy {
         registry.register(createItemBlock(SuSyBlocks.RANDOM_CONCRETE, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.RANDOM_CONCRETE1, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.INDUCTION_COIL_ASSEMBLY, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.ENGINE_CASING, VariantItemBlock::new));
 
         SHEETED_FRAMES.values()
                 .stream().distinct()
