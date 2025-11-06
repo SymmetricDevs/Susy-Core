@@ -33,6 +33,7 @@ import gregtech.api.util.Size;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import supersymmetry.api.SusyLog;
+import supersymmetry.api.metatileentity.multiblock.IRedstoneControllable;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.logic.RocketAssemblerLogic;
@@ -41,11 +42,12 @@ import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.common.blocks.BlockRocketAssemblerCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityComponentRedstoneController;
 import supersymmetry.common.mui.widget.ItemCostWidget;
 import supersymmetry.common.mui.widget.SlotWidgetMentallyStable;
 
 public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
-                                           implements IProgressBarMultiblock {
+                                           implements IProgressBarMultiblock, IRedstoneControllable {
 
     public DataStorageLoader blueprintSlot = new DataStorageLoader(
             this,
@@ -69,10 +71,39 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     public int componentIndex = 0;
 
     public boolean isWorking = false;
+    private List<String> signal_names = new ArrayList<>();
+    private List<Runnable> signal_actions = new ArrayList<>();
 
     public MetaTileEntityRocketAssembler(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.ROCKET_ASSEMBLER);
+        signal_names.add("start_assembly");
+        signal_names.add("stop_assembly");
+        signal_actions.add(
+                () -> {
+                    if (!this.blueprintSlot.isEmpty()) {
+                        this.startAssembly(this.getCurrentBlueprint());
+                    }
+                });
+        signal_actions.add(
+                () -> {
+                    this.abortAssembly();
+                });
         this.recipeMapWorkable = new RocketAssemblerLogic(this); // <-- recipes are generated here
+    }
+
+    @Override
+    public List<String> getSignals() {
+        return signal_names;
+    }
+
+    @Override
+    public String getSignalName(int sig) {
+        return this.signal_names.get(sig);
+    }
+
+    @Override
+    public void pulse(int sig) {
+        this.signal_actions.get(sig).run();
     }
 
     public AbstractRocketBlueprint getCurrentBlueprint() {
@@ -470,14 +501,14 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                         states(
                                 SuSyBlocks.ROCKET_ASSEMBLER_CASING.getState(
                                         BlockRocketAssemblerCasing.RocketAssemblerCasingType.FOUNDATION))
+                                                .or(MetaTileEntityComponentRedstoneController.controllerPredicate())
                                                 .or(
                                                         abilities(MultiblockAbility.IMPORT_ITEMS)
                                                                 .setPreviewCount(1)
                                                                 .setMinGlobalLimited(1)
                                                                 .setMaxGlobalLimited(2))
                                                 .or(
-                                                        abilities(MultiblockAbility.INPUT_ENERGY) // nukler reactor
-                                                                // please
+                                                        abilities(MultiblockAbility.INPUT_ENERGY)
                                                                 .setMinGlobalLimited(8)
                                                                 .setMaxGlobalLimited(8)
                                                                 .setPreviewCount(8)))
@@ -505,6 +536,24 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     protected ModularUI createUI(EntityPlayer entityPlayer) {
         return createUITemplate(entityPlayer).build(getHolder(), entityPlayer);
     }
+
+    // @Override
+    // public void checkStructurePattern() {
+    // SusyLog.logger.info("checkStructurePattern");
+    // PatternMatchContext context =
+    // structurePattern.checkPatternFastAt(
+    // getWorld(), getPos(), getFrontFacing().getOpposite(), getUpwardsFacing(),
+    // allowsFlip());
+    // if (context != null && !this.isStructureFormed()) {
+    // Set<IMultiblockPart> rawPartsSet = context.getOrCreate("MultiblockParts", HashSet::new);
+    // ArrayList<IMultiblockPart> parts = new ArrayList<>(rawPartsSet);
+    // for (var part : parts) {
+    // SusyLog.logger.info("part: {}\n{}", part.getClass().toString(), part);
+    // }
+    // }
+    //
+    // super.checkStructurePattern();
+    // }
 
     protected ModularUI.Builder createUITemplate(EntityPlayer entityPlayer) {
         ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, 198, 208);

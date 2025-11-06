@@ -193,6 +193,7 @@ public class SuSyMetaTileEntities {
 
     // Space singulars
     public static MetaTileEntityComponentScanner COMPONENT_SCANNER;
+    public static MetaTileEntityComponentRedstoneController REDSTONE_CONTROLLER;
     public static MetaTileEntityRocketAssembler ROCKET_ASSEMBLER;
     public static MetaTileEntityRocketProgrammer ROCKET_PROGRAMMER;
     public static MetaTileEntitySieveDistillationTower SIEVE_DISTILLATION_TOWER;
@@ -625,7 +626,8 @@ public class SuSyMetaTileEntities {
         LAUNCH_PAD = registerMetaTileEntity(18059, new MetaTileEntityLaunchPad(susyId("launch_pad")));
         AEROSPACE_FLIGHT_SIMULATOR = registerMetaTileEntity(18060,
                 new MetaTileEntityAerospaceFlightSimulator(susyId("aerospace_flight_simulator")));
-
+        REDSTONE_CONTROLLER = registerMetaTileEntity(18061,
+                new MetaTileEntityComponentRedstoneController(susyId("redstone_controller")));
         // Advanced Steam Turbines
         LOW_PRESSURE_ADVANCED_STEAM_TURBINE = registerMetaTileEntity(18100, new MetaTileEntitySUSYLargeTurbine(
                 susyId("low_pressure_advanced_steam_turbine"), SuSyRecipeMaps.LOW_PRESSURE_ADVANCED_STEAM_TURBINE, 4,

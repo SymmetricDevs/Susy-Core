@@ -321,6 +321,12 @@ susy.machine.eccentric_roll_crusher.name=Eccentric Roll Crusher
 susy.machine.eccentric_roll_crusher.tooltip=Eccentricity does not mean low efficiency.
 susy.machine.ball_mill.name=Ball Mill
 susy.machine.ball_mill.tooltip=Rolling now!
+susy.machine.redstone_controller.not_connected=No machine to control found!
+susy.machine.redstone_controller.signal_desc=selected signal: %s
+susy.machine.redstone_controller.signal_label=signal: %s/%s
+susy.machine.redstone_controller.pulled.false=Can be activated
+susy.machine.redstone_controller.pulled.true=Signal sent, needs a reset
+susy.machine.redstone_controller.name=Redstone machine controller
 
 susy.machine.evaporation_pool.name=Evaporation Pool
 susy.machine.evaporation_pool.tooltip.info=Max square of %1$sx%1$s, minimum %2$sx%2$s. Read info tab and tool info for more details.
@@ -408,6 +414,8 @@ susy.machine.landing_pad.name=Landing Pad
 susy.machine.scrap_recycler.name=Scrap Recycler
 
 susy.machine.rocket_assembler.name=Rocket Assembler
+susy.machine.rocket_assembler.signal.start_assembly=Start assembly
+susy.machine.rocket_assembler.signal.stop_assembly=Stop and discard assembly
 susy.machine.rocket_assembler.blueprint_slot.name=insert a rocket blueprint
 susy.machine.rocket_assembler.gui.required_items=Required Items:
 susy.machine.rocket_assembler.gui.stop=Stop and reset assembly

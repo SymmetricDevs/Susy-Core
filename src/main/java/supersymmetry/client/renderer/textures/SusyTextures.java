@@ -179,6 +179,8 @@ public class SusyTextures {
             "logistics/overlay_strand_bus");
     public static final SimpleOverlayRenderer CODE_BREACHER_OVERLAY = new SimpleOverlayRenderer(
             "storage/crates/code_breacher");
+    public static final SimpleOverlayRenderer REDSTONE_CONTROLLER_OVERLAY = new SimpleOverlayRenderer(
+            "machines/overlay/overlay_redstone");
 
     public static final SimpleCubeRenderer MASONRY_BRICK = new SimpleCubeRenderer(
             "gregtech:blocks/multiblock_casing/masonry_brick");
