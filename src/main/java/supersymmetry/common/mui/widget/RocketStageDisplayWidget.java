@@ -248,16 +248,17 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                         "blueprint stages: {} actually here: {}",
                         blueprint.getStages().stream().map(x -> x.getName()).collect(Collectors.toList()),
                         this.stageContainers.keySet());
-                for (RocketStage stage : blueprint.getStages()) {
-                    for (Entry<String, RocketSimulatorComponentContainerWidget> guiEntry : this.stageContainers
-                            .entrySet()) {
-                        SusyLog.logger.info(
-                                "stage name: \"{}\" guiEntry name: \"{}\" equal??? {}",
-                                stage.getName(),
-                                guiEntry.getKey(),
-                                stage.getName() == guiEntry.getKey());
-                    }
-                }
+                // for (RocketStage stage : blueprint.getStages()) {
+                // for (Entry<String, RocketSimulatorComponentContainerWidget> guiEntry :
+                // this.stageContainers
+                // .entrySet()) {
+                // SusyLog.logger.info(
+                // "stage name: \"{}\" guiEntry name: \"{}\" equal??? {}",
+                // stage.getName(),
+                // guiEntry.getKey(),
+                // stage.getName() == guiEntry.getKey());
+                // }
+                // }
                 throw new RuntimeException(
                         String.format(
                                 "failed to match a stage to the provided blueprint, %s not in %s",
@@ -365,8 +366,8 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
             // || this.error == ComponentValidationResult.UNKNOWN
             ) return "";
         }
-        return I18n.format(
-                "susy.machine.aerospace_flight_simulator.error_format",
+        return String.format(
+                "%s \n%s \n%s",
                 I18n.format(this.error.getTranslationKey()),
                 I18n.format("susy.rocketry.stages." + this.errorStage + ".name"),
                 I18n.format("susy.rocketry.components." + this.errorComponentType + ".name"));

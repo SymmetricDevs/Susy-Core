@@ -160,18 +160,6 @@ public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMul
         return this.frontFacing == side;
     }
 
-    // @Override
-    // public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation,
-    // IVertexOperation[] pipeline) {
-    // super.renderMetaTileEntity(renderState, translation, pipeline);
-    // this.getFrontOverlay().renderOrientedState(renderState, translation, pipeline,
-    // this.getFrontFacing(),
-    // this.isActive(), this.isWorkingEnabled());
-    // }
-    // public ICubeRenderer getFrontOverlay() {
-    // return Textures.RESEARCH_STATION_OVERLAY;
-    // }
-
     private ModularUI.Builder createGUITemplate(EntityPlayer entityPlayer) {
         MultiblockControllerBase controller = this.getController();
         if (controller != null && controller instanceof IRedstoneControllable receiver) {

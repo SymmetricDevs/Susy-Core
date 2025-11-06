@@ -143,14 +143,12 @@ public class ItemCostWidget extends Widget {
                 // luck reading this, im sorry :c
 
                 // .allMatch(x -> lastSyncedItems.contains(x))) {
-                //
                 .allMatch(
                         x -> lastSyncedItems.stream()
                                 .map(y -> y.toString())
                                 .collect(Collectors.toList())
                                 .contains(x.toString())) ||
                 (items.size() == 0 && lastSyncedItems.size() == 0)) {
-            SusyLog.logger.info("update sent because {}!={}", items, lastSyncedItems);
 
             this.writeUpdateInfo(
                     100,

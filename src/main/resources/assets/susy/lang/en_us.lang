@@ -257,7 +257,6 @@ susy.machine.aerospace_flight_simulator.name=aerospace flight simulator
 susy.machine.aerospace_flight_simulator.stagename=stage: %s
 susy.machine.aerospace_flight_simulator.build_button_label=build
 susy.machine.aerospace_flight_simulator.blueprint_request=insert a blueprint here
-susy.machine.aerospace_flight_simulator.error_format=%s \n %s \n %s
 
 susy.rocketry.components.engine.name=engine(s)
 susy.rocketry.components.engine_small.name=vernier engine(s)
