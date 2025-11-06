@@ -60,7 +60,7 @@ public class RocketConfiguration {
     public RocketConfiguration(NBTTagCompound tag) {
         for (int i = 0; i < 10; i++) {
             NBTTagCompound missionTag = tag.getCompoundTag("page_" + i);
-            if (!missionTag.isEmpty()) {
+            if (!missionTag.isEmpty() && missionTag.getInteger("landing_y") != 0) {
                 missions.add(new MissionConfiguration(missionTag));
             }
         }
