@@ -3,6 +3,17 @@
   "variants" : {
     "variant=crankshaft": { "model": "susy:engine_casing/crankshaft" },
     "variant=piston_block": { "model": "susy:engine_casing/piston_block" },
-    "variant=basic_intake_casing": { "model": "susy:engine_casing/basic_intake_casing" }
+    "active=false,variant=basic_intake_casing": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/casings/engine_casing/basic_intake_casing/basic_intake_casing"
+      }
+    },
+    "active=true,variant=basic_intake_casing": {
+      "model": "gregtech:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/casings/engine_casing/basic_intake_casing/basic_intake_casing_active"
+      }
+    }
   }
 }
