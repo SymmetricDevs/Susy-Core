@@ -317,7 +317,22 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
     }
 
     @Override
+    protected boolean shouldSerializeInventories() {
+        return false; // this block needs its own implementation
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        return super.writeToNBT(data);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound data) {
+        super.readFromNBT(data);
+    }
+
+    @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
-        return new MetaTileEntityAerospaceFlightSimulator(metaTileEntityId);
+        return new MetaTileEntityBlueprintAssembler(metaTileEntityId);
     }
 }
