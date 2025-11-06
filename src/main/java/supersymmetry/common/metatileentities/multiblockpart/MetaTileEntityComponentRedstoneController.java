@@ -7,6 +7,7 @@ import java.util.stream.IntStream;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -140,13 +141,17 @@ public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMul
     public void updateInputRedstoneSignals() {
         super.updateInputRedstoneSignals();
         int val = this.getInputRedstoneSignal(this.frontFacing, true);
-        if (pulled_up && val == 0) {
-            pulled_up = false;
-            writeCustomData(104, buf -> {});
+        if (pulled_up) {
+            if (val == 0) {
+                pulled_up = false;
+                writeCustomData(104, buf -> {});
+            }
         } else {
-            pulse();
-            pulled_up = true;
-            writeCustomData(103, buf -> {});
+            if (val != 0) {
+                pulse();
+                pulled_up = true;
+                writeCustomData(103, buf -> {});
+            }
         }
     }
 
@@ -228,5 +233,24 @@ public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMul
             builder.label(9, 12, this.getMetaName() + ".not_connected", 0xAE5421);
             return builder;
         }
+    }
+
+    @Override
+    protected boolean shouldSerializeInventories() {
+        return false;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound data) {
+        this.signal = data.getInteger("signal");
+        this.pulled_up = data.getBoolean("state");
+        super.readFromNBT(data);
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        data.setInteger("signal", this.signal);
+        data.setBoolean("state", this.pulled_up);
+        return super.writeToNBT(data);
     }
 }

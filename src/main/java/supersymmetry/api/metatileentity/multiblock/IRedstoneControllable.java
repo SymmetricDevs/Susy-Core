@@ -18,6 +18,7 @@ public interface IRedstoneControllable {
         return this.getSignals().size() - 1;
     }
 
+    // these are used as translation keys, but maybe one day it will be hooked up to an oc api
     public String getSignalName(int sig);
 
     public List<String> getSignals();
