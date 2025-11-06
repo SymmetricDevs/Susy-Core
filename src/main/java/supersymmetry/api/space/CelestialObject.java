@@ -76,4 +76,22 @@ public class CelestialObject {
     public String getTranslationKey() {
         return "susy." + translationKey;
     }
+
+    public Planetoid getPlanetarySystem() {
+        if (this.getParentBody() instanceof Star && this instanceof Planetoid) {
+            return (Planetoid) this;
+        } else if (this.getParentBody() != null) {
+            return this.getParentBody().getPlanetarySystem();
+        }
+        return null;
+    }
+
+    public StarSystem getStarSystem() {
+        if (this instanceof StarSystem) {
+            return (StarSystem) this;
+        } else if (this.getParentBody() != null) {
+            return this.getParentBody().getStarSystem();
+        }
+        return null;
+    }
 }

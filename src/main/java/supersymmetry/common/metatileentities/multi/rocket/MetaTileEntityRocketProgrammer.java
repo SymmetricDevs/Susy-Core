@@ -6,11 +6,14 @@ import javax.annotation.Nonnull;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -30,12 +33,15 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
+import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.common.entities.EntityTransporterErector;
+import supersymmetry.common.rocketry.RocketConfiguration;
 
 public class MetaTileEntityRocketProgrammer extends MultiblockWithDisplayBase {
 
     protected IItemHandlerModifiable circuitHolder = new ItemStackHandler(1);
     protected AxisAlignedBB structureAABB;
+    protected boolean canHandleFullConfig = true;
 
     public MetaTileEntityRocketProgrammer(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
@@ -57,7 +63,11 @@ public class MetaTileEntityRocketProgrammer extends MultiblockWithDisplayBase {
         if (this.getOffsetTimer() % 10 == 0 && this.getConfig() != null) {
             EntityTransporterErector rocket = searchRocket();
             if (rocket != null) {
-                rocket.getRocketNBT().setTag("config", this.getConfig());
+                RocketConfiguration config = new RocketConfiguration(this.getConfig());
+                // Set budget to 2
+                // TODO: Make the transporter erector hold rocket types for IV
+                setLowTierWarning(config.setBudget(this.getWorld().provider.getDimension(), 2));
+                rocket.getRocketNBT().setTag("config", config.serialize());
             }
         }
     }
@@ -159,5 +169,43 @@ public class MetaTileEntityRocketProgrammer extends MultiblockWithDisplayBase {
             this.circuitHolder.setStackInSlot(0, new ItemStack(data.getCompoundTag("config")));
         }
         reinitializeStructurePattern();
+    }
+
+    @Override
+    protected void addDisplayText(List<ITextComponent> textList) {
+        super.addDisplayText(textList);
+        if (!this.canHandleFullConfig) {
+            textList.add(new TextComponentTranslation("susy.rocket_programmer.not_enough_budget"));
+        }
+    }
+
+    @Override
+    public void writeInitialSyncData(PacketBuffer buf) {
+        super.writeInitialSyncData(buf);
+        buf.writeBoolean(this.canHandleFullConfig);
+    }
+
+    @Override
+    public void receiveInitialSyncData(PacketBuffer buf) {
+        super.receiveInitialSyncData(buf);
+        this.canHandleFullConfig = buf.readBoolean();
+    }
+
+    @Override
+    public void receiveCustomData(int dataId, PacketBuffer buf) {
+        if (dataId == SuSyDataCodes.UPDATE_CAN_HANDLE_FULL_CONFIG) {
+            this.canHandleFullConfig = buf.readBoolean();
+        } else {
+            super.receiveCustomData(dataId, buf);
+        }
+    }
+
+    public void setLowTierWarning(boolean setWarning) {
+        if (this.canHandleFullConfig != setWarning) {
+            this.canHandleFullConfig = setWarning;
+            if (!getWorld().isRemote) {
+                writeCustomData(SuSyDataCodes.UPDATE_CAN_HANDLE_FULL_CONFIG, buf -> buf.writeBoolean(setWarning));
+            }
+        }
     }
 }

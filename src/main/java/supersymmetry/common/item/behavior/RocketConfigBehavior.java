@@ -34,8 +34,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import supersymmetry.api.space.CelestialObjects;
 import supersymmetry.api.space.Planetoid;
+import supersymmetry.common.rocketry.RocketConfiguration;
 
-import static net.minecraft.util.EnumFacing.Axis.*;
 import static supersymmetry.api.gui.SusyGuiTextures.ICON_LEFT;
 import static supersymmetry.api.gui.SusyGuiTextures.ICON_RIGHT;
 
@@ -62,7 +62,7 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
         syncManager.syncValue("page_num", new IntSyncValue(() -> pageNum, v -> pageNum = v));
 
         EnumSyncValue missionType = new EnumSyncValue<>(
-                MissionType.class,
+                RocketConfiguration.MissionType.class,
                 () -> getMissionType(pageNum, stack),
                 v -> setMissionType(pageNum, stack, v));
         syncManager.syncValue("mission_type", missionType);
@@ -73,7 +73,7 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
         syncManager.syncValue("dimension", dimension);
 
         EnumSyncValue destinationType = new EnumSyncValue<>(
-                DestinationType.class,
+                RocketConfiguration.DestinationType.class,
                 () -> getDestinationType(pageNum, stack),
                 v -> setDestinationType(pageNum, stack, v));
         syncManager.syncValue("destination_type", destinationType);
@@ -96,11 +96,11 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
 
         rowFlow.child(IKey.lang("susy.gui.rocket_programmer.mission_type").asWidget());
         rowFlow.child(new Row().coverChildren()
-                .child(new ToggleButton().value(select(missionType, MissionType.Manned))
+                .child(new ToggleButton().value(select(missionType, RocketConfiguration.MissionType.Manned))
                         .tooltip((tooltip) -> tooltip.addLine(I18n.format("susy.gui.rocket_programmer.manned"))))
-                .child(new ToggleButton().value(select(missionType, MissionType.UnmannedCargo))
+                .child(new ToggleButton().value(select(missionType, RocketConfiguration.MissionType.UnmannedCargo))
                         .tooltip((tooltip -> tooltip.addLine(I18n.format("susy.gui.rocket_programmer.unmanned_cargo")))))
-                .child(new ToggleButton().value(select(missionType, MissionType.UnmannedCollection))
+                .child(new ToggleButton().value(select(missionType, RocketConfiguration.MissionType.UnmannedCollection))
                         .tooltip((tooltip -> tooltip.addLine(I18n.format("susy.gui.rocket_programmer.unmanned_collection"))))));
 
         /*
@@ -134,19 +134,19 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
         Flow destinationTypeFlow = new Row().coverChildren()
                 .child(new ToggleButton()
                         .size(18)
-                        .value(select(destinationType, DestinationType.Landing))
+                        .value(select(destinationType, RocketConfiguration.DestinationType.Landing))
                         .tooltip((tooltip) -> tooltip.addLine(I18n.format("susy.gui.rocket_programmer.landing"))))
                 .child(new ToggleButton()
                         .size(18)
-                        .value(select(destinationType, DestinationType.Orbit))
+                        .value(select(destinationType, RocketConfiguration.DestinationType.Orbit))
                         .tooltip((tooltip) -> tooltip.addLine(I18n.format("susy.gui.rocket_programmer.orbit"))));
         rowFlow.child(destinationTypeFlow);
 
         // Register landing coordinates with text fields
         rowFlow.child(IKey.lang("susy.gui.rocket_programmer.landing_coordinates").asWidget()
-                .setEnabledIf((w) -> destinationType.getIntValue() == DestinationType.Landing.ordinal()));
+                .setEnabledIf((w) -> destinationType.getIntValue() == RocketConfiguration.DestinationType.Landing.ordinal()));
         Flow landingFlow = new Row().coverChildren()
-                .setEnabledIf((w) -> destinationType.getIntValue() == DestinationType.Landing.ordinal());
+                .setEnabledIf((w) -> destinationType.getIntValue() == RocketConfiguration.DestinationType.Landing.ordinal());
         for (EnumFacing.Axis axis : EnumFacing.Axis.values()) {
             IntSyncValue coord = new IntSyncValue(
                     () -> getLandingCoord(pageNum, stack, axis),
@@ -166,7 +166,7 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
         return select(v, selected.ordinal());
     }
 
-    private MissionType getMissionType(int page, ItemStack stack) {
+    private RocketConfiguration.MissionType getMissionType(int page, ItemStack stack) {
         NBTTagCompound tag = stack.getTagCompound();
         NBTTagCompound pageTag = tag.getCompoundTag("page_" + page);
         if (pageTag.isEmpty()) {
@@ -175,10 +175,10 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
         if (!pageTag.hasKey("mission_type")) {
             pageTag.setInteger("mission_type", 0);
         }
-        return MissionType.values()[pageTag.getInteger("mission_type")];
+        return RocketConfiguration.MissionType.values()[pageTag.getInteger("mission_type")];
     }
 
-    private void setMissionType(int page, ItemStack stack, MissionType type) {
+    private void setMissionType(int page, ItemStack stack, RocketConfiguration.MissionType type) {
         NBTTagCompound tag = stack.getTagCompound();
         NBTTagCompound pageTag = tag.getCompoundTag("page_" + page);
         pageTag.setInteger("mission_type", type.ordinal());
@@ -200,17 +200,17 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
         pageTag.setInteger("dimension", dimension);
     }
 
-    private DestinationType getDestinationType(int page, ItemStack stack) {
+    private RocketConfiguration.DestinationType getDestinationType(int page, ItemStack stack) {
         NBTTagCompound tag = stack.getTagCompound();
         NBTTagCompound pageTag = tag.getCompoundTag("page_" + page);
         // We now assume that the page tag has been set.
         if (!pageTag.hasKey("destination_type")) {
             pageTag.setInteger("destination_type", 0);
         }
-        return DestinationType.values()[pageTag.getInteger("destination_type")];
+        return RocketConfiguration.DestinationType.values()[pageTag.getInteger("destination_type")];
     }
 
-    private void setDestinationType(int page, ItemStack stack, DestinationType type) {
+    private void setDestinationType(int page, ItemStack stack, RocketConfiguration.DestinationType type) {
         NBTTagCompound tag = stack.getTagCompound();
         NBTTagCompound pageTag = tag.getCompoundTag("page_" + page);
         pageTag.setInteger("destination_type", type.ordinal());
@@ -227,17 +227,6 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
     @Override
     public ModularUI createUI(PlayerInventoryHolder holder, EntityPlayer entityPlayer) {
         return null;
-    }
-
-    private enum MissionType {
-        Manned,
-        UnmannedCargo,
-        UnmannedCollection
-    }
-
-    private enum DestinationType {
-        Landing,
-        Orbit
     }
 
     private int getLandingCoord(int page, ItemStack stack, EnumFacing.Axis axis) {

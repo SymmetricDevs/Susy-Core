@@ -415,6 +415,7 @@ susy.machine.rocket_assembler.gui.start=start the assembly process
 susy.machine.rocket_assembler.blueprint_stop.name=Blueprint Slot
 
 susy.machine.rocket_programmer.name=Rocket Programmer
+susy.machine.rocket_programmer.gui.not_enough_budget=The rocket cannot perform every programmed mission.
 susy.machine.metallurgical_converter.name=Metallurgical Converter
 susy.machine.injection_molder.name=Injection Molder
 

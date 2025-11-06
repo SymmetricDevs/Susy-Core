@@ -1,6 +1,9 @@
 package supersymmetry.api.space;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import dev.tianmi.sussypatches.common.helper.DimDisplayRegistry;
+import gregtech.api.util.GTControlledRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -9,6 +12,7 @@ public class Planetoid extends CelestialObject {
 
     private PlanetType planetType;
     private int dimension;
+    public static BiMap<Planetoid, Integer> PLANETOIDS = HashBiMap.create();
 
     public Planetoid(String translationKey, double mass, double posT, double posX, double posY, double posZ,
                      @Nullable CelestialObject parentBody, PlanetType planetType) {
@@ -26,6 +30,7 @@ public class Planetoid extends CelestialObject {
 
     public Planetoid setDimension(int dimension) {
         this.dimension = dimension;
+        PLANETOIDS.put(this, dimension);
         return this;
     }
 
