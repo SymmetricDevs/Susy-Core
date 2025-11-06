@@ -186,6 +186,7 @@ public class SuSyMetaTileEntities {
     // Space Multis
     public static MetaTileEntityLandingPad LANDING_PAD;
     public static MetaTileEntityScrapRecycler SCRAP_RECYCLER;
+    public static MetaTileEntityComponentRedstoneController REDSTONE_CONTROLLER;
     public static MetaTileEntityRocketAssembler ROCKET_ASSEMBLER;
     public static MetaTileEntityRocketProgrammer ROCKET_PROGRAMMER;
     public static MetaTileEntitySieveDistillationTower SIEVE_DISTILLATION_TOWER;
@@ -608,6 +609,10 @@ public class SuSyMetaTileEntities {
         ROCKET_ASSEMBLER = registerMetaTileEntity(18007, new MetaTileEntityRocketAssembler(susyId("rocket_assembler")));
         ROCKET_PROGRAMMER = registerMetaTileEntity(18008,
                 new MetaTileEntityRocketProgrammer(susyId("rocket_programmer")));
+
+
+        REDSTONE_CONTROLLER = registerMetaTileEntity(18061,
+                new MetaTileEntityComponentRedstoneController(susyId("redstone_controller")));
 
         INJECTION_MOLDER = registerMetaTileEntity(18110, new MetaTileEntityInjectionMolder(susyId("injection_molder")));
 
