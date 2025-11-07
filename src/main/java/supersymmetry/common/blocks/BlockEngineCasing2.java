@@ -1,8 +1,7 @@
 package supersymmetry.common.blocks;
 
-import javax.annotation.Nonnull;
-
-import net.minecraft.block.Block;
+import gregtech.api.block.IStateHarvestLevel;
+import gregtech.api.block.VariantBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -10,22 +9,22 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.blocks.VariantDirectionalRotatableBlock;
+import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
-import gregtech.api.block.IStateHarvestLevel;
-import gregtech.api.block.VariantBlock;
+import javax.annotation.Nonnull;
 
-public class BlockEngineCasing extends VariantBlock<BlockEngineCasing.EngineCasingType> {
+public class BlockEngineCasing2 extends VariantDirectionalRotatableBlock<BlockEngineCasing2.EngineCasingType2> {
 
-    public BlockEngineCasing() {
+    public BlockEngineCasing2() {
         super(net.minecraft.block.material.Material.IRON);
-        setTranslationKey("engine_casing");
+        setTranslationKey("engine_casing_2");
         setHardness(5.0f);
         setResistance(10.0f);
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 2);
-        setDefaultState(getState(EngineCasingType.PISTON_BLOCK));
+        setDefaultState(getState(EngineCasingType2.CRANKSHAFT));
     }
 
     @Override
@@ -40,13 +39,13 @@ public class BlockEngineCasing extends VariantBlock<BlockEngineCasing.EngineCasi
         return BlockRenderLayer.SOLID;
     }
 
-    public enum EngineCasingType implements IStringSerializable, IStateHarvestLevel {
+    public enum EngineCasingType2 implements IStringSerializable, IStateHarvestLevel {
 
-        PISTON_BLOCK("piston_block", 3);
+        CRANKSHAFT("crankshaft", 3);
         private final String name;
         private final int harvestLevel;
 
-        EngineCasingType(String name, int harvestLevel) {
+        EngineCasingType2(String name, int harvestLevel) {
             this.name = name;
             this.harvestLevel = harvestLevel;
         }

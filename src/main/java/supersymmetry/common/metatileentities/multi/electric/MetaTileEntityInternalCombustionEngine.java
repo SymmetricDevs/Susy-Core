@@ -35,10 +35,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.gui.SusyGuiTextures;
-import supersymmetry.common.blocks.BlockAlternatorCoil;
-import supersymmetry.common.blocks.BlockEngineCasing;
-import supersymmetry.common.blocks.BlockSerpentine;
-import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.blocks.*;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -87,12 +84,12 @@ public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorCon
                         .or(autoAbilities(false, false, false, false, true, false, false)))
                 .where('P', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE)))
                 .where('R', states(SuSyBlocks.SERPENTINE.getState(BlockSerpentine.SerpentineType.BASIC)))
-                .where('X', states(SuSyBlocks.ENGINE_CASING.getState(BlockEngineCasing.EngineCasingType.CRANKSHAFT)))
+                .where('X', states(SuSyBlocks.ENGINE_CASING_2.getState(BlockEngineCasing2.EngineCasingType2.CRANKSHAFT)))
                 .where('G', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('A', coilOrientation())
                 .where('D', abilities(MultiblockAbility.OUTPUT_ENERGY))
                 .where('B', states(SuSyBlocks.ENGINE_CASING.getState(BlockEngineCasing.EngineCasingType.PISTON_BLOCK)))
-                .where('I', states(SuSyBlocks.ENGINE_CASING.getState(BlockEngineCasing.EngineCasingType.BASIC_INTAKE_CASING)))
+                .where('I', states(SuSyBlocks.ACTIVE_CASING.getState(BlocksActiveCasing.ActiveBlockType.BASIC_INTAKE_CASING)))
                 .where(' ', any())
                 .build();
     }

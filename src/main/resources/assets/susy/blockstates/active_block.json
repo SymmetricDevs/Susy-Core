@@ -1,0 +1,17 @@
+{
+  "forge_marker" : 1,
+  "variants" : {
+    "active=false,variant=basic_intake_casing": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/casings/engine_casing/basic_intake_casing/basic_intake_casing"
+      }
+    },
+    "active=true,variant=basic_intake_casing": {
+      "model": "gregtech:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/casings/engine_casing/basic_intake_casing/basic_intake_casing_active"
+      }
+    }
+  }
+}

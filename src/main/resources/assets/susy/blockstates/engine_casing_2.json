@@ -1,0 +1,10 @@
+{
+  "forge_marker" : 1,
+  "variants" : {
+    "facing=north,variant=crankshaft": { "model": "susy:engine_casing/crankshaft", "x": 90 },
+    "facing=south,variant=crankshaft": { "model": "susy:engine_casing/crankshaft", "x": 90, "y": 180 },
+    "facing=west,variant=crankshaft": { "model": "susy:engine_casing/crankshaft", "x": 90, "y": 270 },
+    "facing=east,variant=crankshaft": { "model": "susy:engine_casing/crankshaft", "x": 90, "y": 90 },
+    "facing=up,variant=crankshaft": { "model": "susy:engine_casing/crankshaft" },
+    "facing=down,variant=crankshaft": { "model": "susy:engine_casing/crankshaft", "x": 180 }}
+}
