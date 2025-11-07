@@ -4,6 +4,7 @@ import static supersymmetry.api.space.Planetoid.PLANETOIDS;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
@@ -82,7 +83,7 @@ public class RocketConfiguration {
         // Get all dimensions in a row
         List<Integer> dimensions = new ArrayList<>();
         dimensions.add(startingDim);
-        dimensions.addAll(missions.stream().map(MissionConfiguration::getDimension).toList());
+        dimensions.addAll(missions.stream().map(MissionConfiguration::getDimension).collect(Collectors.toList()));
         int budgetUsed = 0;
         for (int i = 0; i < dimensions.size() - 1; i++) {
             Planetoid p1 = PLANETOIDS.inverse().get(dimensions.get(i));
