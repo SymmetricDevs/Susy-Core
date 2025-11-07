@@ -54,7 +54,8 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
     public DataStorageLoader rocketBlueprintSlot = new DataStorageLoader(
             this,
             item -> {
-                return SuSyMetaItems.isMetaItem(item) == SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.metaValue;
+                return SuSyMetaItems.isMetaItem(item) == SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.metaValue &&
+                        item.getTagCompound() != null && item.getTagCompound().getBoolean("buildstat") == false;
             });
 
     public MetaTileEntityBlueprintAssembler(ResourceLocation metaTileEntityId) {

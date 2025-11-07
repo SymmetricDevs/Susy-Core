@@ -1,14 +1,12 @@
 package supersymmetry.api.space;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
-import dev.tianmi.sussypatches.common.helper.DimDisplayRegistry;
-import gregtech.api.util.GTControlledRegistry;
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import org.jetbrains.annotations.Nullable;
+
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 
 import dev.tianmi.sussypatches.common.helper.DimDisplayRegistry;
 

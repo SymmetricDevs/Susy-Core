@@ -40,9 +40,7 @@ import gregtech.api.items.metaitem.stats.IItemBehaviour;
 import supersymmetry.api.space.CelestialObjects;
 import supersymmetry.api.space.Planetoid;
 import supersymmetry.common.rocketry.RocketConfiguration;
-
-import static supersymmetry.api.gui.SusyGuiTextures.ICON_LEFT;
-import static supersymmetry.api.gui.SusyGuiTextures.ICON_RIGHT;
+import supersymmetry.common.rocketry.RocketConfiguration.MissionType;
 
 public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemUIFactory {
 
@@ -104,19 +102,13 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
         rowFlow.child(new Row().coverChildren()
                 .child(new ToggleButton().value(select(missionType, RocketConfiguration.MissionType.Manned))
                         .tooltip((tooltip) -> tooltip.addLine(I18n.format("susy.gui.rocket_programmer.manned"))))
-<<<<<<< HEAD
-                .child(new ToggleButton().value(select(missionType, RocketConfiguration.MissionType.UnmannedCargo))
-                        .tooltip((tooltip -> tooltip.addLine(I18n.format("susy.gui.rocket_programmer.unmanned_cargo")))))
-                .child(new ToggleButton().value(select(missionType, RocketConfiguration.MissionType.UnmannedCollection))
-                        .tooltip((tooltip -> tooltip.addLine(I18n.format("susy.gui.rocket_programmer.unmanned_collection"))))));
-=======
+
                 .child(new ToggleButton().value(select(missionType, MissionType.UnmannedCargo))
                         .tooltip(
                                 (tooltip -> tooltip.addLine(I18n.format("susy.gui.rocket_programmer.unmanned_cargo")))))
                 .child(new ToggleButton().value(select(missionType, MissionType.UnmannedCollection))
                         .tooltip((tooltip -> tooltip
                                 .addLine(I18n.format("susy.gui.rocket_programmer.unmanned_collection"))))));
->>>>>>> 5b99f40c (spotlessApply :goog:)
 
         /*
          * syncManager.syncValue("config", i, new InteractionSyncHandler()
@@ -158,9 +150,11 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
 
         // Register landing coordinates with text fields
         rowFlow.child(IKey.lang("susy.gui.rocket_programmer.landing_coordinates").asWidget()
-                .setEnabledIf((w) -> destinationType.getIntValue() == RocketConfiguration.DestinationType.Landing.ordinal()));
+                .setEnabledIf(
+                        (w) -> destinationType.getIntValue() == RocketConfiguration.DestinationType.Landing.ordinal()));
         Flow landingFlow = new Row().coverChildren()
-                .setEnabledIf((w) -> destinationType.getIntValue() == RocketConfiguration.DestinationType.Landing.ordinal());
+                .setEnabledIf(
+                        (w) -> destinationType.getIntValue() == RocketConfiguration.DestinationType.Landing.ordinal());
         for (EnumFacing.Axis axis : EnumFacing.Axis.values()) {
             IntSyncValue coord = new IntSyncValue(
                     () -> getLandingCoord(pageNum, stack, axis),

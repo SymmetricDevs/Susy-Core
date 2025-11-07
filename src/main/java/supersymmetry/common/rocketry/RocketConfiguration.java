@@ -1,16 +1,17 @@
 package supersymmetry.common.rocketry;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-import supersymmetry.api.space.Planetoid;
+import static supersymmetry.api.space.Planetoid.PLANETOIDS;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static supersymmetry.api.space.Planetoid.PLANETOIDS;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+
+import supersymmetry.api.space.Planetoid;
 
 public class RocketConfiguration {
+
     public enum MissionType {
         Manned,
         UnmannedCargo,
@@ -23,6 +24,7 @@ public class RocketConfiguration {
     }
 
     public static class MissionConfiguration {
+
         public final int dimension;
         public final BlockPos landingPos;
         public final MissionType missionType;
@@ -33,8 +35,7 @@ public class RocketConfiguration {
             this.landingPos = new BlockPos(
                     landing.getInteger("landing_x"),
                     landing.getInteger("landing_y"),
-                    landing.getInteger("landing_z")
-            );
+                    landing.getInteger("landing_z"));
             this.missionType = MissionType.values()[landing.getInteger("mission_type")];
             this.destinationType = DestinationType.values()[landing.getInteger("destination_type")];
         }

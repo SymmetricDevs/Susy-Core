@@ -275,6 +275,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityBeamLineHatch BEAM_EXPORT;
 
     public static MetaTileEntityAerospaceFlightSimulator AEROSPACE_FLIGHT_SIMULATOR;
+    public static MetaTileEntityBlueprintAssembler BLUEPRINT_ASSEMBLER;
 
     public static MetaTileEntityEccentricRollCrusher ECCENTRIC_ROLL_CRUSHER;
     public static MetaTileEntityBallMill BALL_MILL;
@@ -626,7 +627,9 @@ public class SuSyMetaTileEntities {
         LAUNCH_PAD = registerMetaTileEntity(18059, new MetaTileEntityLaunchPad(susyId("launch_pad")));
         AEROSPACE_FLIGHT_SIMULATOR = registerMetaTileEntity(18060,
                 new MetaTileEntityAerospaceFlightSimulator(susyId("aerospace_flight_simulator")));
-        REDSTONE_CONTROLLER = registerMetaTileEntity(18061,
+        BLUEPRINT_ASSEMBLER = registerMetaTileEntity(18061,
+                new MetaTileEntityBlueprintAssembler(susyId("blueprint_assembler")));
+        REDSTONE_CONTROLLER = registerMetaTileEntity(18062,
                 new MetaTileEntityComponentRedstoneController(susyId("redstone_controller")));
         // Advanced Steam Turbines
         LOW_PRESSURE_ADVANCED_STEAM_TURBINE = registerMetaTileEntity(18100, new MetaTileEntitySUSYLargeTurbine(
