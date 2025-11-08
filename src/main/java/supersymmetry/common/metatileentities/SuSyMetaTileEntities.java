@@ -177,6 +177,7 @@ public class SuSyMetaTileEntities {
     public static SimpleMachineMetaTileEntity[] ELECTROSTATIC_SEPARATOR;
     public static SimpleMachineMetaTileEntity[] TEXTILE_SPINNER;
     public static SimpleMachineMetaTileEntity[] POLISHING_MACHINE;
+    public static SimpleMachineMetaTileEntity[] RESISTANCE_FURNACE;
 
     public static MetaTileEntityPrimitiveSmelter PRIMITIVE_SMELTER;
     public static MetaTileEntityPrimitiveItemBus PRIMITIVE_ITEM_IMPORT;
@@ -657,6 +658,9 @@ public class SuSyMetaTileEntities {
 
         INDUCTION_FURNACE = registerMetaTileEntity(18502,
                 new MetaTileEntityInductionFurnace(susyId("induction_furnace")));
+
+        registerSimpleMTE(RESISTANCE_FURNACE, 12, 18503, "resistance_furnace", SuSyRecipeMaps.RESISTANCE_FURNACE,
+                Textures.ELECTRIC_FURNACE_OVERLAY, true, GTUtility.defaultTankSizeFunction);
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name,
@@ -760,5 +764,7 @@ public class SuSyMetaTileEntities {
 
         PHASE_SEPARATOR = new SimpleMachineMetaTileEntity[1];
         BATH_CONDENSER = new SimpleMachineMetaTileEntity[1];
+
+        RESISTANCE_FURNACE = new SimpleMachineMetaTileEntity[GTValues.OpV];
     }
 }
