@@ -117,9 +117,11 @@ tile.drill_bit.steel.name=Steel Drill Bit Block
 
 tile.induction_coil_assembly.copper.name=Induction Coil Assembly
 
-tile.engine_casing.crankshaft.name=Crankshaft
 tile.engine_casing.piston_block.name=Piston Block
-tile.engine_casing.basic_intake_casing.name=Basic Intake Casing
+
+tile.engine_casing_2.crankshaft.name=Crankshaft
+
+tile.active_casing.basic_intake_casing.name=Basic Intake Casing
 
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
