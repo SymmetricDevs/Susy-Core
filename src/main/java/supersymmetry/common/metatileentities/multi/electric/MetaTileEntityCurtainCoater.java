@@ -49,14 +49,15 @@ public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
     @Override
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle("CCCCC", "CWGWC", "  G  ")
+                .aisle("CCKCC", "CWGWC", "  G  ")
                 .aisle("CCCCC", "I>>>O", "CCGCC")
                 .aisle("CCSCC", "CWHWC", "  G  ")
                 .where('S', selfPredicate())
                 .where('I', abilities(MultiblockAbility.IMPORT_ITEMS))
                 .where('O', abilities(MultiblockAbility.EXPORT_ITEMS))
                 .where('H', abilities(MultiblockAbility.IMPORT_FLUIDS))
-                .where('C', states(getCasingState()).setMinGlobalLimited(18)
+                .where('K', abilities(MultiblockAbility.EXPORT_FLUIDS))
+                .where('C', states(getCasingState()).setMinGlobalLimited(17)
                         .or(autoAbilities(true, true, false, false, false, false, false)))
                 .where('G', states(getGearBoxState()))
                 .where('W', states(getGlassState()))
