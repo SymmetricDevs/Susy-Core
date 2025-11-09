@@ -20,7 +20,7 @@ import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 import supersymmetry.api.capability.Strand;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
-import supersymmetry.api.util.SuSyUtility;
+import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockMetallurgy2;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -61,7 +61,7 @@ public class MetaTileEntityFlyingShear extends MetaTileEntityStrandShaper {
                 .where('I', abilities(SuSyMultiblockAbilities.STRAND_IMPORT))
                 .where('O', abilities(SuSyMultiblockAbilities.STRAND_EXPORT))
                 .where('X',
-                        SuSyUtility.orientation(this, getSawbladeState(), RelativeDirection.RIGHT,
+                        SuSyPredicates.orientation(this, getSawbladeState(), RelativeDirection.RIGHT,
                                 VariantHorizontalRotatableBlock.FACING))
                 .where('F', frames(Materials.Steel))
                 .where('R', rollOrientation(RelativeDirection.FRONT))

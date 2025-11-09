@@ -4,7 +4,6 @@ import static gregtech.api.util.RelativeDirection.*;
 import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
 
 import java.util.*;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
@@ -13,7 +12,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
@@ -35,15 +33,14 @@ import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.api.unification.material.Material;
-import gregtech.api.util.BlockInfo;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.metatileentity.multiblock.CachedPatternRecipeMapMultiblock;
+import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
-import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.renderer.particles.SusyParticleDust;
 import supersymmetry.common.blocks.BlockSeparatorRotor;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -159,7 +156,7 @@ public class MetaTileEntityGravitySeparator extends CachedPatternRecipeMapMultib
     // makes sure block at position is properly oriented rotor
     protected TraceabilityPredicate rotorOrientation() {
         // makes sure rotor's front faces the left side (relative to the player) of controller front
-        return SuSyUtility.horizontalOrientation(this, steelRotorState(), RelativeDirection.RIGHT, FACING);
+        return SuSyPredicates.horizontalOrientation(this, steelRotorState(), RelativeDirection.RIGHT, FACING);
     }
 
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {

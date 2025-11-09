@@ -21,11 +21,9 @@ import gregtech.api.util.*;
 import gregtech.client.renderer.ICubeRenderer;
 
 import gregtech.common.blocks.*;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraft.util.text.ITextComponent;
@@ -36,12 +34,11 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.gui.SusyGuiTextures;
-import supersymmetry.api.util.SuSyUtility;
+import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.common.blocks.*;
 
 import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.function.Supplier;
 
 import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
 
@@ -86,7 +83,7 @@ public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorCon
                         .or(autoAbilities(false, false, false, false, true, false, false)))
                 .where('P', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE)))
                 .where('R', states(SuSyBlocks.SERPENTINE.getState(BlockSerpentine.SerpentineType.BASIC)))
-                .where('X', SuSyUtility.horizontalOrientation(this, SuSyBlocks.ENGINE_CASING_2.getState(BlockEngineCasing2.EngineCasingType2.CRANKSHAFT),
+                .where('X', SuSyPredicates.horizontalOrientation(this, SuSyBlocks.ENGINE_CASING_2.getState(BlockEngineCasing2.EngineCasingType2.CRANKSHAFT),
                         RelativeDirection.UP, FACING))
                 .where('G', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('A', coilOrientation())
@@ -99,7 +96,7 @@ public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorCon
 
     protected TraceabilityPredicate coilOrientation() {
         // makes sure rotor's front faces the left side (relative to the player) of controller front
-        return SuSyUtility.horizontalOrientation(this, copperCoilState(), RelativeDirection.RIGHT, FACING);
+        return SuSyPredicates.horizontalOrientation(this, copperCoilState(), RelativeDirection.RIGHT, FACING);
     }
 
 

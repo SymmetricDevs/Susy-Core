@@ -2,9 +2,7 @@ package supersymmetry.common.metatileentities.multi.electric.strand;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.function.Supplier;
 
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
@@ -35,7 +33,6 @@ import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.unification.FluidUnifier;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.properties.PropertyKey;
-import gregtech.api.util.BlockInfo;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.RelativeDirection;
 import supersymmetry.api.blocks.VariantAxialRotatableBlock;
@@ -43,7 +40,7 @@ import supersymmetry.api.capability.IStrandProvider;
 import supersymmetry.api.capability.Strand;
 import supersymmetry.api.capability.StrandConversion;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
-import supersymmetry.api.util.SuSyUtility;
+import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.common.blocks.BlockMetallurgyRoll;
 import supersymmetry.common.blocks.SuSyBlocks;
 
@@ -322,7 +319,7 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
 
     protected TraceabilityPredicate rollOrientation(RelativeDirection direction) {
         // makes sure rotor's front faces the left side (relative to the player) of controller front
-        return SuSyUtility.axisOrientation(this, rollState(), direction, VariantAxialRotatableBlock.AXIS);
+        return SuSyPredicates.axisOrientation(this, rollState(), direction, VariantAxialRotatableBlock.AXIS);
     }
 
     private IBlockState rollState() {

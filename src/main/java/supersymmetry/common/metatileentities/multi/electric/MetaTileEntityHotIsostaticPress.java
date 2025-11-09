@@ -2,8 +2,6 @@ package supersymmetry.common.metatileentities.multi.electric;
 
 import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
 
-import java.util.function.Supplier;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -20,15 +18,14 @@ import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
-import gregtech.api.util.BlockInfo;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockBoilerCasing;
 import gregtech.common.blocks.BlockWireCoil;
 import gregtech.common.blocks.MetaBlocks;
+import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
-import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockMetallurgy;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
@@ -69,7 +66,7 @@ public class MetaTileEntityHotIsostaticPress extends RecipeMapMultiblockControll
     }
 
     protected TraceabilityPredicate hydraulicOrientation(RelativeDirection direction) {
-        return SuSyUtility.orientation(this, hydraulicState(), direction, FACING);
+        return SuSyPredicates.orientation(this, hydraulicState(), direction, FACING);
     }
 
     protected EnumFacing getRelativeFacing(RelativeDirection dir) {

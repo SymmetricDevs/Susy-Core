@@ -3,7 +3,6 @@ package supersymmetry.common.metatileentities.multi.electric;
 import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
 
@@ -18,7 +17,6 @@ import gregtech.api.util.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -41,7 +39,7 @@ import gregtech.client.renderer.ICubeRenderer;
 import org.jetbrains.annotations.Nullable;
 
 import supersymmetry.api.gui.SusyGuiTextures;
-import supersymmetry.api.util.SuSyUtility;
+import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.common.blocks.BlockAlternatorCoil;
 import supersymmetry.common.blocks.SuSyBlocks;
 
@@ -98,12 +96,12 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
 
     protected TraceabilityPredicate rotorOrientation() {
         // makes sure rotor's front faces the left side (relative to the player) of controller front
-        return SuSyUtility.horizontalOrientation(this, rotorState, RelativeDirection.RIGHT, FACING);
+        return SuSyPredicates.horizontalOrientation(this, rotorState, RelativeDirection.RIGHT, FACING);
     }
 
     protected TraceabilityPredicate coilOrientation() {
         // makes sure rotor's front faces the left side (relative to the player) of controller front
-        return SuSyUtility.horizontalOrientation(this, copperCoilState(), RelativeDirection.RIGHT, FACING);
+        return SuSyPredicates.horizontalOrientation(this, copperCoilState(), RelativeDirection.RIGHT, FACING);
     }
 
 
