@@ -443,7 +443,7 @@ public class SuSyRecipeMaps {
                     .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, ProgressWidget.MoveType.HORIZONTAL)
                     .setSound(GTSoundEvents.FURNACE); // TODO: Replace with a sound like a pump hissing
 
-    public static final RecipeMap<SimpleRecipeBuilder> CURTAIN_COATER = new RecipeMap<>("curtain_coater", 1, 1, 1, 0,
+    public static final RecipeMap<SimpleRecipeBuilder> CURTAIN_COATER = new RecipeMap<>("curtain_coater", 1, 1, 1, 1,
             new SimpleRecipeBuilder().EUt(VA[LV]), false)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressWidget.MoveType.HORIZONTAL)
                     .setSound(GTSoundEvents.BATH);
