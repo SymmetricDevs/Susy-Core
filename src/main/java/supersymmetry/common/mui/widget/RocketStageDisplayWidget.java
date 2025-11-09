@@ -2,7 +2,6 @@ package supersymmetry.common.mui.widget;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -23,7 +22,6 @@ import gregtech.api.gui.widgets.AbstractWidgetGroup;
 import gregtech.api.gui.widgets.ClickButtonWidget;
 import gregtech.api.gui.widgets.DynamicLabelWidget;
 import gregtech.api.gui.widgets.SlotWidget;
-import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.util.Position;
 import gregtech.api.util.Size;
 import supersymmetry.api.SusyLog;
@@ -33,7 +31,6 @@ import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.api.rocketry.rockets.RocketStage.ComponentValidationResult;
 import supersymmetry.api.util.DataStorageLoader;
-import supersymmetry.common.item.SuSyMetaItems;
 
 public class RocketStageDisplayWidget extends AbstractWidgetGroup {
 
@@ -99,7 +96,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                 () -> {
                     if (this.stages.isEmpty()) return "";
                     return I18n.format(
-                            "susy.machine.aerospace_flight_simulator.stagename",
+                            "susy.machine.blueprint_assembler.stagename",
                             I18n.format(this.getSelectedStage().getLocalizationKey()));
                 },
                 0xffffff);
@@ -178,46 +175,6 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
             stageContainers.put(stage.getName(), stageView);
             this.addWidget(stageView);
         }
-    }
-
-    public Map<String, Map<String, List<DataStorageLoader>>> generateSlotsFromBlueprint(
-                                                                                        AbstractRocketBlueprint bp,
-                                                                                        MetaTileEntity mte) {
-        Map<String, Map<String, List<DataStorageLoader>>> map = new HashMap<>();
-        // copy the array because it explodes if you dont
-        for (RocketStage stage : new ArrayList<>(bp.stages)) {
-
-            Map<String, List<DataStorageLoader>> stageComponents = new HashMap<>();
-            for (String componentname : new HashSet<>(stage.componentLimits.keySet())) {
-                List<DataStorageLoader> slots = new ArrayList<>();
-                for (int i = 0; i < stage.maxComponentsOf(componentname); i++) {
-                    // final int indx = i;
-                    // final String compname = componentname;
-                    // final String stagename = stage.getName();
-                    slots.add(
-                            new DataStorageLoader(
-                                    mte,
-                                    x -> {
-                                        if (SuSyMetaItems.isMetaItem(x) == SuSyMetaItems.DATA_CARD_ACTIVE.metaValue) {
-                                            if (x.hasTagCompound()) {
-                                                AbstractComponent<?> c = AbstractComponent.getComponentFromName(
-                                                        x.getTagCompound().getString("name"));
-                                                if (c.getComponentSlotValidator().test(componentname)) {
-                                                    // SusyLog.logger.info(
-                                                    // "slot {} stage {} component array {}", indx, stagename,
-                                                    // compname);
-                                                    return true;
-                                                }
-                                            }
-                                        }
-                                        return false;
-                                    }));
-                }
-                stageComponents.put(componentname, slots);
-            }
-            map.put(stage.getName(), stageComponents);
-        }
-        return map;
     }
 
     public void generateFromBlueprint(AbstractRocketBlueprint blueprint) {
@@ -358,6 +315,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
         this.insertionAction.accept(this);
     }
 
+    // TODO: fix server desync
     public String getStatusText() {
         if (this.error == ComponentValidationResult.SUCCESS) {
             return I18n.format(ComponentValidationResult.SUCCESS.getTranslationKey());
@@ -367,7 +325,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
             ) return "";
         }
         return String.format(
-                "%s \n%s \n%s",
+                "test %s \n%s \n%s",
                 I18n.format(this.error.getTranslationKey()),
                 I18n.format("susy.rocketry.stages." + this.errorStage + ".name"),
                 I18n.format("susy.rocketry.components." + this.errorComponentType + ".name"));

@@ -8,6 +8,7 @@ import javax.annotation.Nonnull;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
@@ -68,12 +69,36 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
 
     // list of every component that has to be constructed.
     public List<AbstractComponent<?>> componentList = new ArrayList<>();
-
     public int componentIndex = 0;
-
     public boolean isWorking = false;
     private List<String> signalNames = new ArrayList<>();
     private List<Runnable> signalActions = new ArrayList<>();
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        data = super.writeToNBT(data);
+        data.setTag("blueprint", this.blueprintSlot.getStackInSlot(0).writeToNBT(new NBTTagCompound()));
+
+        data.setBoolean("isWorking", isWorking);
+        data.setInteger("componentIndex", componentIndex);
+
+        return data;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound data) {
+        super.readFromNBT(data);
+        NBTTagCompound stackdata = (NBTTagCompound) data.getTag("blueprint");
+        if (stackdata != null && stackdata != new NBTTagCompound()) {
+            ItemStack stack = new ItemStack(stackdata);
+            this.blueprintSlot.setStackInSlot(0, stack);
+            if (!this.blueprintSlot.isEmpty()) {
+                this.startAssembly(this.getCurrentBlueprint());
+            }
+        }
+        this.componentIndex = data.getInteger("componentIndex");
+        this.isWorking = data.getBoolean("isWorking");
+    }
 
     public MetaTileEntityRocketAssembler(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.ROCKET_ASSEMBLER);
@@ -180,13 +205,13 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         if (!isWorking) return;
         if (this.componentList.size() - 1 > this.componentIndex) {
             this.componentIndex++;
-            SusyLog.logger.info(
-                    "processing component {}/{}, isWorking:{},component:{}",
-                    this.componentIndex,
-                    this.componentList.size(),
-                    this.isWorking,
-                    getCurrentCraftTarget() == null ? null : getCurrentCraftTarget().getName());
-
+            // SusyLog.logger.info(
+            // "processing component {}/{}, isWorking:{},component:{}",
+            // this.componentIndex,
+            // this.componentList.size(),
+            // this.isWorking,
+            // getCurrentCraftTarget() == null ? null : getCurrentCraftTarget().getName());
+            //
         } else {
             finishAssembly();
         }
@@ -637,7 +662,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
 
         builder.widget(getFlexButton(173, 125, 18, 18));
         builder.dynamicLabel(
-                110,
+                80,
                 52,
                 () -> {
                     return !blueprintSlot.isEmpty() ? "" : I18n.format(this.getMetaName() + ".blueprint_slot.name");

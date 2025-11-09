@@ -275,6 +275,7 @@ susy.machine.blueprint_assembler.stagename=Stage: %s
 susy.machine.blueprint_assembler.build_button_label=Build
 susy.machine.blueprint_assembler.blueprint_request=Insert Blueprint:
 
+
 susy.rocketry.components.engine.name=engine(s)
 susy.rocketry.components.engine_small.name=vernier engine(s)
 susy.rocketry.components.tank.name=tank(s)

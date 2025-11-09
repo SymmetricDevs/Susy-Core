@@ -32,6 +32,7 @@ import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.client.renderer.texture.cube.SimpleOverlayRenderer;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.metatileentity.multiblock.IRedstoneControllable;
 import supersymmetry.client.renderer.textures.SusyTextures;
 
@@ -230,6 +231,7 @@ public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMul
 
     @Override
     public void readFromNBT(NBTTagCompound data) {
+        SusyLog.logger.info("redstone controller nbt {}", data);
         this.signal = data.getInteger("signal");
         this.pulled_up = data.getBoolean("state");
         super.readFromNBT(data);
@@ -237,8 +239,9 @@ public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMul
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        data = super.writeToNBT(data);
         data.setInteger("signal", this.signal);
         data.setBoolean("state", this.pulled_up);
-        return super.writeToNBT(data);
+        return data;
     }
 }
