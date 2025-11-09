@@ -7,9 +7,6 @@
       "gregtech:blocks/casings/engine_casing/crankshaft/bottom_ctm"
     ],
     "extra": {
-      "connect_to": [
-        { "block" : "susy:engine_casing_2" }
-      ]
       "connect_inside": true
     }
   }
