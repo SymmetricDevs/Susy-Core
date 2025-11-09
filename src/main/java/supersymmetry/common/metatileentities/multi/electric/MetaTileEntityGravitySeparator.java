@@ -43,6 +43,7 @@ import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.metatileentity.multiblock.CachedPatternRecipeMapMultiblock;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.renderer.particles.SusyParticleDust;
 import supersymmetry.common.blocks.BlockSeparatorRotor;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -158,26 +159,7 @@ public class MetaTileEntityGravitySeparator extends CachedPatternRecipeMapMultib
     // makes sure block at position is properly oriented rotor
     protected TraceabilityPredicate rotorOrientation() {
         // makes sure rotor's front faces the left side (relative to the player) of controller front
-        EnumFacing leftFacing = RelativeDirection.RIGHT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(),
-                isFlipped());
-
-        // converting the left facing to positive x or z axis direction
-        // this is needed for the following update which converts this rotatable block from horizontal directional into
-        // axial directional.
-        EnumFacing axialFacing = leftFacing.getIndex() < 4 ? EnumFacing.SOUTH : EnumFacing.WEST;
-
-        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[] {
-                new BlockInfo(steelRotorState().withProperty(FACING, axialFacing)) };
-        return new TraceabilityPredicate(blockWorldState -> {
-            IBlockState state = blockWorldState.getBlockState();
-            if (!(state.getBlock() instanceof BlockSeparatorRotor)) return false;
-
-            // auto-correct rotor orientation
-            if (state != steelRotorState().withProperty(FACING, axialFacing))
-                getWorld().setBlockState(blockWorldState.getPos(), steelRotorState().withProperty(FACING, axialFacing));
-
-            return true;
-        }, supplier);
+        return SuSyUtility.horizontalOrientation(this, steelRotorState(), RelativeDirection.RIGHT, FACING);
     }
 
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {

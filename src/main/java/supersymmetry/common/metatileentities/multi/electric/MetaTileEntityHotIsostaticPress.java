@@ -28,6 +28,7 @@ import gregtech.common.blocks.BlockBoilerCasing;
 import gregtech.common.blocks.BlockWireCoil;
 import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockMetallurgy;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
@@ -68,20 +69,7 @@ public class MetaTileEntityHotIsostaticPress extends RecipeMapMultiblockControll
     }
 
     protected TraceabilityPredicate hydraulicOrientation(RelativeDirection direction) {
-        EnumFacing facing = getRelativeFacing(direction);
-
-        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[] {
-                new BlockInfo(hydraulicState().withProperty(FACING, facing)) };
-        return new TraceabilityPredicate(blockWorldState -> {
-            IBlockState state = blockWorldState.getBlockState();
-            if (!(state.getBlock() instanceof BlockMetallurgy)) return false;
-
-            // auto-correct rotor orientation
-            if (state != hydraulicState().withProperty(FACING, facing)) {
-                getWorld().setBlockState(blockWorldState.getPos(), hydraulicState().withProperty(FACING, facing));
-            }
-            return true;
-        }, supplier);
+        return SuSyUtility.orientation(this, hydraulicState(), direction, FACING);
     }
 
     protected EnumFacing getRelativeFacing(RelativeDirection dir) {

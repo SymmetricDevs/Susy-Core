@@ -23,6 +23,7 @@ import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.capability.Strand;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
+import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.*;
 
@@ -82,7 +83,7 @@ public class MetaTileEntityRollingMill extends MetaTileEntityStrandShaper {
     }
 
     protected TraceabilityPredicate hydraulicOrientation(RelativeDirection direction) {
-        return orientation(hydraulicState(), direction, FACING);
+        return SuSyUtility.orientation(this, hydraulicState(), direction, FACING);
     }
 
     @Override

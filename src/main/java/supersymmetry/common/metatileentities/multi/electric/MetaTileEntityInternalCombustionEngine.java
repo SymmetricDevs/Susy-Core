@@ -21,6 +21,7 @@ import gregtech.api.util.*;
 import gregtech.client.renderer.ICubeRenderer;
 
 import gregtech.common.blocks.*;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -35,6 +36,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.gui.SusyGuiTextures;
+import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.common.blocks.*;
 
 import javax.annotation.Nonnull;
@@ -84,7 +86,8 @@ public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorCon
                         .or(autoAbilities(false, false, false, false, true, false, false)))
                 .where('P', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE)))
                 .where('R', states(SuSyBlocks.SERPENTINE.getState(BlockSerpentine.SerpentineType.BASIC)))
-                .where('X', states(SuSyBlocks.ENGINE_CASING_2.getState(BlockEngineCasing2.EngineCasingType2.CRANKSHAFT)))
+                .where('X', SuSyUtility.horizontalOrientation(this, SuSyBlocks.ENGINE_CASING_2.getState(BlockEngineCasing2.EngineCasingType2.CRANKSHAFT),
+                        RelativeDirection.UP, FACING))
                 .where('G', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('A', coilOrientation())
                 .where('D', abilities(MultiblockAbility.OUTPUT_ENERGY))
@@ -96,27 +99,9 @@ public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorCon
 
     protected TraceabilityPredicate coilOrientation() {
         // makes sure rotor's front faces the left side (relative to the player) of controller front
-        EnumFacing leftFacing = RelativeDirection.RIGHT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(),
-                isFlipped());
-
-        // converting the left facing to positive x or z axis direction
-        // this is needed for the following update which converts this rotatable block from horizontal directional into
-        // axial directional.
-        EnumFacing axialFacing = leftFacing.getIndex() < 4 ? EnumFacing.SOUTH : EnumFacing.WEST;
-
-        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[] {
-                new BlockInfo(copperCoilState().withProperty(FACING, axialFacing)) };
-        return new TraceabilityPredicate(blockWorldState -> {
-            IBlockState state = blockWorldState.getBlockState();
-            if (!(state.getBlock() instanceof BlockAlternatorCoil)) return false;
-
-            // auto-correct rotor orientation
-            if (state != copperCoilState().withProperty(FACING, axialFacing)) {
-                getWorld().setBlockState(blockWorldState.getPos(), copperCoilState().withProperty(FACING, axialFacing));
-            }
-            return true;
-        }, supplier);
+        return SuSyUtility.horizontalOrientation(this, copperCoilState(), RelativeDirection.RIGHT, FACING);
     }
+
 
     protected IBlockState copperCoilState() {
         return SuSyBlocks.ALTERNATOR_COIL.getState(BlockAlternatorCoil.AlternatorCoilType.COPPER);

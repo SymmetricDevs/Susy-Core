@@ -10,12 +10,13 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.blocks.VariantAxialRotatableBlock;
 import supersymmetry.api.blocks.VariantDirectionalRotatableBlock;
 import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
 import javax.annotation.Nonnull;
 
-public class BlockEngineCasing2 extends VariantDirectionalRotatableBlock<BlockEngineCasing2.EngineCasingType2> {
+public class BlockEngineCasing2 extends VariantHorizontalRotatableBlock<BlockEngineCasing2.EngineCasingType2> {
 
     public BlockEngineCasing2() {
         super(net.minecraft.block.material.Material.IRON);

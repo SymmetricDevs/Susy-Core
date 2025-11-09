@@ -41,6 +41,7 @@ import gregtech.client.renderer.ICubeRenderer;
 import org.jetbrains.annotations.Nullable;
 
 import supersymmetry.api.gui.SusyGuiTextures;
+import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.common.blocks.BlockAlternatorCoil;
 import supersymmetry.common.blocks.SuSyBlocks;
 
@@ -97,51 +98,14 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
 
     protected TraceabilityPredicate rotorOrientation() {
         // makes sure rotor's front faces the left side (relative to the player) of controller front
-        EnumFacing leftFacing = RelativeDirection.RIGHT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(),
-                isFlipped());
-
-        // converting the left facing to positive x or z axis direction
-        // this is needed for the following update which converts this rotatable block from horizontal directional into
-        // axial directional.
-        EnumFacing axialFacing = leftFacing.getIndex() < 4 ? EnumFacing.SOUTH : EnumFacing.WEST;
-
-        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[] {
-                new BlockInfo(this.rotorState.withProperty(FACING, axialFacing)) };
-        return new TraceabilityPredicate(blockWorldState -> {
-            IBlockState state = blockWorldState.getBlockState();
-            if (state.getBlock() != this.rotorState.getBlock()) return false;
-
-            // auto-correct rotor orientation
-            if (state != this.rotorState.withProperty(FACING, axialFacing))
-                getWorld().setBlockState(blockWorldState.getPos(), this.rotorState.withProperty(FACING, axialFacing));
-
-            return true;
-        }, supplier);
+        return SuSyUtility.horizontalOrientation(this, rotorState, RelativeDirection.RIGHT, FACING);
     }
 
     protected TraceabilityPredicate coilOrientation() {
         // makes sure rotor's front faces the left side (relative to the player) of controller front
-        EnumFacing leftFacing = RelativeDirection.RIGHT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(),
-                isFlipped());
-
-        // converting the left facing to positive x or z axis direction
-        // this is needed for the following update which converts this rotatable block from horizontal directional into
-        // axial directional.
-        EnumFacing axialFacing = leftFacing.getIndex() < 4 ? EnumFacing.SOUTH : EnumFacing.WEST;
-
-        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[] {
-                new BlockInfo(copperCoilState().withProperty(FACING, axialFacing)) };
-        return new TraceabilityPredicate(blockWorldState -> {
-            IBlockState state = blockWorldState.getBlockState();
-            if (!(state.getBlock() instanceof BlockAlternatorCoil)) return false;
-
-            // auto-correct rotor orientation
-            if (state != copperCoilState().withProperty(FACING, axialFacing)) {
-                getWorld().setBlockState(blockWorldState.getPos(), copperCoilState().withProperty(FACING, axialFacing));
-            }
-            return true;
-        }, supplier);
+        return SuSyUtility.horizontalOrientation(this, copperCoilState(), RelativeDirection.RIGHT, FACING);
     }
+
 
     protected IBlockState copperCoilState() {
         return SuSyBlocks.ALTERNATOR_COIL.getState(BlockAlternatorCoil.AlternatorCoilType.COPPER);

@@ -122,7 +122,7 @@ public class MetaTileEntityTurningZone extends MetaTileEntityStrandShaper {
                         "ABBBA",
                         "  I  ",
                         "ABBBA")
-                .where('B', rollOrientation())
+                .where('B', rollOrientation(RelativeDirection.RIGHT))
                 .where('A',
                         states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('I', abilities(SuSyMultiblockAbilities.STRAND_IMPORT))
@@ -154,25 +154,6 @@ public class MetaTileEntityTurningZone extends MetaTileEntityStrandShaper {
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
         return new MetaTileEntityTurningZone(this.metaTileEntityId);
-    }
-
-    protected TraceabilityPredicate rollOrientation() {
-        // makes sure rotor's front faces the left side (relative to the player) of controller front
-        EnumFacing.Axis axialFacing = getRelativeFacing(RelativeDirection.RIGHT).getAxis();
-
-        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[] {
-                new BlockInfo(rollState().withProperty(BlockMetallurgyRoll.AXIS, axialFacing)) };
-        return new TraceabilityPredicate(blockWorldState -> {
-            IBlockState state = blockWorldState.getBlockState();
-            if (!(state.getBlock() instanceof BlockMetallurgyRoll)) return false;
-
-            // auto-correct rotor orientation
-            if (state != rollState().withProperty(BlockMetallurgyRoll.AXIS, axialFacing)) {
-                getWorld().setBlockState(blockWorldState.getPos(),
-                        rollState().withProperty(BlockMetallurgyRoll.AXIS, axialFacing));
-            }
-            return true;
-        }, supplier);
     }
 
     private IBlockState rollState() {
