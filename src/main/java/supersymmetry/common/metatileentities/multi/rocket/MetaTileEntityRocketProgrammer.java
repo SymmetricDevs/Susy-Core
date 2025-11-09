@@ -37,6 +37,8 @@ import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.common.entities.EntityTransporterErector;
 import supersymmetry.common.rocketry.RocketConfiguration;
 
+import static supersymmetry.common.entities.EntityAbstractRocket.ROCKET_CONFIG_KEY;
+
 public class MetaTileEntityRocketProgrammer extends MultiblockWithDisplayBase {
 
     protected IItemHandlerModifiable circuitHolder = new ItemStackHandler(1);
@@ -67,7 +69,7 @@ public class MetaTileEntityRocketProgrammer extends MultiblockWithDisplayBase {
                 // Set budget to 2
                 // TODO: Make the transporter erector hold rocket types for IV
                 setLowTierWarning(config.setBudget(this.getWorld().provider.getDimension(), 2));
-                rocket.getRocketNBT().setTag("config", config.serialize());
+                rocket.getRocketNBT().setTag(ROCKET_CONFIG_KEY, config.serialize());
             }
         }
     }

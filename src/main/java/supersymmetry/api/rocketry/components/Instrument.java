@@ -1,8 +1,8 @@
 package supersymmetry.api.rocketry.components;
 
-import supersymmetry.common.entities.EntityRocket;
+import supersymmetry.common.entities.EntityAbstractRocket;
 
 public interface Instrument {
 
-    void act(int count, EntityRocket rocket);
+    void act(int count, EntityAbstractRocket rocket);
 }

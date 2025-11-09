@@ -108,4 +108,8 @@ public class RocketConfiguration {
         }
         return true;
     }
+
+    public MissionConfiguration popFront() {
+        return this.missions.remove(0);
+    }
 }

@@ -1,6 +1,7 @@
 package supersymmetry.client.audio;
 
 import net.minecraft.client.audio.MovingSound;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
@@ -9,10 +10,10 @@ import supersymmetry.api.sound.SusySounds;
 
 public class MovingSoundDropPod extends MovingSound {
 
-    private final EntityLiving dropPod;
+    private final Entity dropPod;
     private float distance = 0.0F;
 
-    public MovingSoundDropPod(EntityLiving dropPod) {
+    public MovingSoundDropPod(Entity dropPod) {
         super(SusySounds.ROCKET_LOOP, SoundCategory.NEUTRAL);
         this.dropPod = dropPod;
         this.repeat = true;

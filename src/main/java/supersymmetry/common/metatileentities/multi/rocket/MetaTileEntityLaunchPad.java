@@ -3,9 +3,11 @@ package supersymmetry.common.metatileentities.multi.rocket;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
@@ -48,6 +50,7 @@ import supersymmetry.api.metatileentity.IAnimatableMTE;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.common.blocks.BlockRocketAssemblerCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.entities.EntityRocket;
 import supersymmetry.common.entities.EntityTransporterErector;
 
@@ -291,7 +294,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                 }
                 this.supportAngle = Math.max(Math.PI / 4, this.supportAngle - (0.087 / 20));
                 if (this.supportAngle <= Math.PI / 4 && !this.selectedRocket.isCountDownStarted()) {
-                    this.selectedRocket.startCountdown();
+                    this.selectedRocket.startCountdown(200);
                 }
                 if (this.selectedRocket.posY > this.getLaunchPosition().y + 40) {
                     this.setLaunchPadState(LaunchPadState.EMPTY);
@@ -334,8 +337,12 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     public void spawnRocket() {
         Vec3d position = this.getLaunchPosition();
         this.selectedRocket = new EntityRocket(this.getWorld(), position, this.getFrontFacing().getHorizontalAngle());
-        if (this.selectedErector.getRocketNBT() != null)
-            this.selectedRocket.getEntityData().setTag("rocket", this.selectedErector.getRocketNBT());
+        if (this.selectedErector.getRocketNBT() != null) {
+            // Copy in all tags
+            for (Map.Entry<String, NBTBase> tag : selectedErector.getRocketNBT().tagMap.entrySet()) {
+                this.selectedRocket.getEntityData().setTag(tag.getKey(), tag.getValue());
+            }
+        }
         this.getWorld().spawnEntity(this.selectedRocket);
     }
 

@@ -5,19 +5,26 @@ import net.minecraft.entity.Entity;
 import gregtech.api.util.TeleportHandler;
 import supersymmetry.api.rocketry.components.Instrument;
 import supersymmetry.common.EventHandlers;
-import supersymmetry.common.entities.EntityDropPod;
-import supersymmetry.common.entities.EntityRocket;
+import supersymmetry.common.entities.EntityAbstractRocket;
+import supersymmetry.common.entities.EntityLander;
 import supersymmetry.common.entities.teleporters.DropPodTeleporter;
 import supersymmetry.common.event.DimensionRidingSwapData;
+import supersymmetry.common.rocketry.RocketConfiguration;
 
 public class InstrumentLander implements Instrument {
 
-    public void act(int count, EntityRocket rocket) {
+    public void act(int count, EntityAbstractRocket rocket) {
         int i = 0;
         for (Entity passenger : rocket.getPassengers()) {
             i++;
             if (i > count) break;
-            EntityDropPod dropPod = new EntityDropPod(rocket.world, passenger.posX, passenger.posY, passenger.posZ);
+            EntityLander dropPod = new EntityLander(rocket.world, passenger.posX, passenger.posY, passenger.posZ);
+
+            // Pop the next mission from the rocket configuration
+            RocketConfiguration config = rocket.getRocketConfiguration();
+            config.popFront();
+            dropPod.getEntityData().setTag(EntityAbstractRocket.ROCKET_CONFIG_KEY, config.serialize());
+
             TeleportHandler.teleport(dropPod, 800, new DropPodTeleporter(), rocket.posX, rocket.posY, rocket.posZ);
 
             EventHandlers.travellingPassengers.add(new DimensionRidingSwapData(dropPod, passenger));
