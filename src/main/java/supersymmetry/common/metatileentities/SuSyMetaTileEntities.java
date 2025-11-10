@@ -40,17 +40,21 @@ import supersymmetry.common.blocks.BlockTurbineRotor;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.metatileentities.logistics.MetaTileEntityBridge;
 import supersymmetry.common.metatileentities.logistics.MetaTileEntityExtender;
-import supersymmetry.common.metatileentities.multi.MetaTileEntityLandingPad;
 import supersymmetry.common.metatileentities.multi.electric.*;
 import supersymmetry.common.metatileentities.multi.electric.strand.*;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCoagulationTank;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimitiveMudPump;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimitiveSmelter;
+import supersymmetry.common.metatileentities.multi.rocket.*;
 import supersymmetry.common.metatileentities.multi.steam.MetaTileEntitySuSyLargeBoiler;
 import supersymmetry.common.metatileentities.multi.steam.MetaTileEntitySuSyLargeHammer;
 import supersymmetry.common.metatileentities.multi.steam.SuSyBoilerType;
 import supersymmetry.common.metatileentities.multiblockpart.*;
+import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityComponentScanner;
 import supersymmetry.common.metatileentities.single.electric.*;
+import supersymmetry.common.metatileentities.single.electric.MetaTileEntityBathCondenser;
+import supersymmetry.common.metatileentities.single.electric.MetaTileEntityLatexCollector;
+import supersymmetry.common.metatileentities.single.electric.MetaTileEntityPhaseSeparator;
 import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityLocomotiveController;
 import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityStockFluidExchanger;
 import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityStockItemExchanger;
@@ -182,12 +186,18 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityPrimitiveItemBus PRIMITIVE_ITEM_IMPORT;
     public static MetaTileEntityPrimitiveItemBus PRIMITIVE_ITEM_EXPORT;
 
-    // Space Multis
+    // Space multis
     public static MetaTileEntityLandingPad LANDING_PAD;
     public static MetaTileEntityScrapRecycler SCRAP_RECYCLER;
+    public static MetaTileEntityBuildingCleanroom BUILDING_CLEANROOM;
+
+    // Space singulars
+    public static MetaTileEntityComponentScanner COMPONENT_SCANNER;
+    public static MetaTileEntityComponentRedstoneController REDSTONE_CONTROLLER;
     public static MetaTileEntityRocketAssembler ROCKET_ASSEMBLER;
     public static MetaTileEntityRocketProgrammer ROCKET_PROGRAMMER;
     public static MetaTileEntitySieveDistillationTower SIEVE_DISTILLATION_TOWER;
+    public static MetaTileEntityLaunchPad LAUNCH_PAD;
 
     public static MetaTileEntityCurtainCoater CURTAIN_COATER;
     public static MetaTileEntityPreciseMillingMachine MILLING;
@@ -265,6 +275,11 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityBeamLineHatch BEAM_EXPORT;
 
     public static MetaTileEntityInductionFurnace INDUCTION_FURNACE;
+    public static MetaTileEntityAerospaceFlightSimulator AEROSPACE_FLIGHT_SIMULATOR;
+    public static MetaTileEntityBlueprintAssembler BLUEPRINT_ASSEMBLER;
+
+    public static MetaTileEntityEccentricRollCrusher ECCENTRIC_ROLL_CRUSHER;
+    public static MetaTileEntityBallMill BALL_MILL;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500,
@@ -390,6 +405,11 @@ public class SuSyMetaTileEntities {
                         SusyTextures.INV_TANK_EXTENDER, Materials.Steel));
         UNIVERSAL_EXTENDER = registerMetaTileEntity(14740, new MetaTileEntityExtender(susyId("extender.universal"),
                 cap -> true, SusyTextures.UNIVERSAL_EXTENDER, Materials.Aluminium));
+
+        ECCENTRIC_ROLL_CRUSHER = registerMetaTileEntity(14741, new MetaTileEntityEccentricRollCrusher(
+                susyId("eccentric_roll_crusher"), SuSyRecipeMaps.ECCENTRIC_ROLL_CRUSHER));
+        BALL_MILL = registerMetaTileEntity(14742,
+                new MetaTileEntityBallMill(susyId("ball_mill"), RecipeMaps.MACERATOR_RECIPES));
 
         // 14800 Pyrotech Integration: Primitive Smelter
         PRIMITIVE_ITEM_IMPORT = registerMetaTileEntity(14801,
@@ -590,12 +610,28 @@ public class SuSyMetaTileEntities {
                 new MetaTileEntityLocomotiveController(susyId("stock_controller")));
 
         // Space machines
-        LANDING_PAD = registerMetaTileEntity(18005, new MetaTileEntityLandingPad(susyId("landing_pad")));
-        SCRAP_RECYCLER = registerMetaTileEntity(18006, new MetaTileEntityScrapRecycler(susyId("scrap_recycler")));
-        ROCKET_ASSEMBLER = registerMetaTileEntity(18007, new MetaTileEntityRocketAssembler(susyId("rocket_assembler")));
-        ROCKET_PROGRAMMER = registerMetaTileEntity(18008,
+        LANDING_PAD = registerMetaTileEntity(18050, new MetaTileEntityLandingPad(susyId("landing_pad")));
+        SCRAP_RECYCLER = registerMetaTileEntity(18051, new MetaTileEntityScrapRecycler(susyId("scrap_recycler")));
+        BUILDING_CLEANROOM = registerMetaTileEntity(18052,
+                new MetaTileEntityBuildingCleanroom(susyId("building_cleanroom")));
+
+        COMPONENT_SCANNER = registerMetaTileEntity(18053,
+                new MetaTileEntityComponentScanner((susyId("component_scanner"))));
+        ROCKET_ASSEMBLER = registerMetaTileEntity(18054, new MetaTileEntityRocketAssembler(susyId("rocket_assembler")));
+        ROCKET_PROGRAMMER = registerMetaTileEntity(18055,
                 new MetaTileEntityRocketProgrammer(susyId("rocket_programmer")));
 
+        SCRAP_RECYCLER = registerMetaTileEntity(18056, new MetaTileEntityScrapRecycler(susyId("scrap_recycler")));
+        ROCKET_ASSEMBLER = registerMetaTileEntity(18057, new MetaTileEntityRocketAssembler(susyId("rocket_assembler")));
+        ROCKET_PROGRAMMER = registerMetaTileEntity(18058,
+                new MetaTileEntityRocketProgrammer(susyId("rocket_programmer")));
+        LAUNCH_PAD = registerMetaTileEntity(18059, new MetaTileEntityLaunchPad(susyId("launch_pad")));
+        AEROSPACE_FLIGHT_SIMULATOR = registerMetaTileEntity(18060,
+                new MetaTileEntityAerospaceFlightSimulator(susyId("aerospace_flight_simulator")));
+        BLUEPRINT_ASSEMBLER = registerMetaTileEntity(18061,
+                new MetaTileEntityBlueprintAssembler(susyId("blueprint_assembler")));
+        REDSTONE_CONTROLLER = registerMetaTileEntity(18062,
+                new MetaTileEntityComponentRedstoneController(susyId("redstone_controller")));
         // Advanced Steam Turbines
         LOW_PRESSURE_ADVANCED_STEAM_TURBINE = registerMetaTileEntity(18100, new MetaTileEntitySUSYLargeTurbine(
                 susyId("low_pressure_advanced_steam_turbine"), SuSyRecipeMaps.LOW_PRESSURE_ADVANCED_STEAM_TURBINE, 4,

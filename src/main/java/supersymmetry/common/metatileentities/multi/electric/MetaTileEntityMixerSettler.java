@@ -160,7 +160,6 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
                         return buildRepeatingString('#', '#', "####", sDist);
                     case 1:
                     case 3: // "GGGGGGGGG"
-
                         return buildRepeatingString('#', '#', "GGGG", sDist);
                     case 2:
                         return buildRepeatingString('E', 'E', "GGGG", sDist);
