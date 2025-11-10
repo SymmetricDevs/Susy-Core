@@ -788,19 +788,19 @@ susy.machine.fuel_cell.iv.name=High Temperature Fuel Cell
 susy.machine.fuel_cell.tooltip=Temperature requirements for operation: %s°C
 
 # Sputtering Machine
-gregtech.machine.sputter_deposition.lv.name=Basic Sputtering Machine
-gregtech.machine.sputter_deposition.mv.name=Advanced Sputtering Machine
-gregtech.machine.sputter_deposition.hv.name=Advanced Sputtering Machine II
-gregtech.machine.sputter_deposition.ev.name=Advanced Sputtering Machine III
-gregtech.machine.sputter_deposition.iv.name=Elite Sputtering Machine
-gregtech.machine.sputter_deposition.luv.name=Elite Sputtering Machine II
-gregtech.machine.sputter_deposition.zpm.name=Elite Sputtering Machine III
-gregtech.machine.sputter_deposition.uv.name=Ultimate Sputtering Machine
-gregtech.machine.sputter_deposition.uhv.name=Epic Sputtering Machine
-gregtech.machine.sputter_deposition.uev.name=Epic Sputtering Machine II
-gregtech.machine.sputter_deposition.uiv.name=Epic Sputtering Machine III
-gregtech.machine.sputter_deposition.uxv.name=Epic Sputtering Machine IV
-gregtech.machine.sputter_deposition.opv.name=Legendary Sputtering Machine
+susy.machine.sputter_deposition.lv.name=Basic Sputtering Machine
+susy.machine.sputter_deposition.mv.name=Advanced Sputtering Machine
+susy.machine.sputter_deposition.hv.name=Advanced Sputtering Machine II
+susy.machine.sputter_deposition.ev.name=Advanced Sputtering Machine III
+susy.machine.sputter_deposition.iv.name=Elite Sputtering Machine
+susy.machine.sputter_deposition.luv.name=Elite Sputtering Machine II
+susy.machine.sputter_deposition.zpm.name=Elite Sputtering Machine III
+susy.machine.sputter_deposition.uv.name=Ultimate Sputtering Machine
+susy.machine.sputter_deposition.uhv.name=Epic Sputtering Machine
+susy.machine.sputter_deposition.uev.name=Epic Sputtering Machine II
+susy.machine.sputter_deposition.uiv.name=Epic Sputtering Machine III
+susy.machine.sputter_deposition.uxv.name=Epic Sputtering Machine IV
+susy.machine.sputter_deposition.opv.name=Legendary Sputtering Machine
 
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation

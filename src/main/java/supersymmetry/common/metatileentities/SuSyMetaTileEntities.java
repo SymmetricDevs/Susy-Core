@@ -427,10 +427,6 @@ public class SuSyMetaTileEntities {
                 SuSyRecipeMaps.FLUID_DECOMPRESSOR_RECIPES, SusyTextures.FLUID_DECOMPRESSOR_OVERLAY, true,
                 GTUtility.defaultTankSizeFunction);
 
-        //thermodynamic stuff
-        registerSimpleMTE(FLUID_COMPRESSOR, 12, 15000, "fluid_compressor", SuSyRecipeMaps.FLUID_COMPRESSOR_RECIPES, SusyTextures.FLUID_COMPRESSOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
-        registerSimpleMTE(FLUID_DECOMPRESSOR, 12, 15013, "fluid_decompressor", SuSyRecipeMaps.FLUID_DECOMPRESSOR_RECIPES, SusyTextures.FLUID_DECOMPRESSOR_OVERLAY, true, GTUtility.defaultTankSizeFunction);
-
         // war crimes
         registerSimpleMTE(WEAPONS_FACTORY, 12, 15026, "weapons_factory", SuSyRecipeMaps.WEAPONS_FACTORY_RECIPES,
                 Textures.ASSEMBLER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
