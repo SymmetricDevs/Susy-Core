@@ -1,6 +1,5 @@
 package supersymmetry.common.entities;
 
-import gregtech.api.GTValues;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -20,7 +19,10 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.GTValues;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -35,9 +37,12 @@ import supersymmetry.client.renderer.particles.SusyParticleSmoke;
 
 public class EntityDropPod extends EntityLiving implements IAnimatable {
 
-    private static final DataParameter<Boolean> HAS_LANDED = EntityDataManager.<Boolean>createKey(EntityDropPod.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Integer> TIME_SINCE_LANDING = EntityDataManager.<Integer>createKey(EntityDropPod.class, DataSerializers.VARINT);
-    private static final DataParameter<Integer> TIME_SINCE_SPAWN = EntityDataManager.<Integer>createKey(EntityDropPod.class, DataSerializers.VARINT);
+    private static final DataParameter<Boolean> HAS_LANDED = EntityDataManager.<Boolean>createKey(EntityDropPod.class,
+            DataSerializers.BOOLEAN);
+    private static final DataParameter<Integer> TIME_SINCE_LANDING = EntityDataManager
+            .<Integer>createKey(EntityDropPod.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> TIME_SINCE_SPAWN = EntityDataManager
+            .<Integer>createKey(EntityDropPod.class, DataSerializers.VARINT);
 
     private AnimationFactory factory = new AnimationFactory(this);
 
@@ -251,11 +256,14 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
                     int posXRounded = MathHelper.floor(this.posX);
                     int posYBeneath = MathHelper.floor(this.posY - 1.20000000298023224D);
                     int posZRounded = MathHelper.floor(this.posZ);
-                    IBlockState blockBeneath = this.world.getBlockState(new BlockPos(posXRounded, posYBeneath, posZRounded));
+                    IBlockState blockBeneath = this.world
+                            .getBlockState(new BlockPos(posXRounded, posYBeneath, posZRounded));
 
                     if (blockBeneath.getMaterial() != Material.AIR) {
-                        SoundType soundType = blockBeneath.getBlock().getSoundType(blockBeneath, world, new BlockPos(posXRounded, posYBeneath, posZRounded), this);
-                        this.playSound(soundType.getBreakSound(), soundType.getVolume() * 3.0F, soundType.getPitch() * 0.2F);
+                        SoundType soundType = blockBeneath.getBlock().getSoundType(blockBeneath, world,
+                                new BlockPos(posXRounded, posYBeneath, posZRounded), this);
+                        this.playSound(soundType.getBreakSound(), soundType.getVolume() * 3.0F,
+                                soundType.getPitch() * 0.2F);
                     }
                 }
                 this.setTimeSinceLanding(this.getTimeSinceLanding() + 1);
@@ -285,7 +293,6 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
 
         this.dataManager.set(TIME_SINCE_SPAWN, this.dataManager.get(TIME_SINCE_SPAWN) + 1);
 
-
         if (world.isRemote && this.soundDropPod != null) {
             if (!this.hasLanded() || this.hasTakenOff()) {
                 soundDropPod.startPlaying();
@@ -293,7 +300,6 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
                 soundDropPod.stopPlaying();
             }
         }
-
     }
 
     @Override
@@ -311,7 +317,9 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
         super.updatePassenger(passenger);
         float xOffset = MathHelper.sin(this.renderYawOffset * 0.1F);
         float zOffset = MathHelper.cos(this.renderYawOffset * 0.1F);
-        passenger.setPosition(this.posX + (double) (0.1F * xOffset), this.posY + (double) (this.height * 0.2F) + passenger.getYOffset() + 0.0D, this.posZ - (double) (0.1F * zOffset));
+        passenger.setPosition(this.posX + (double) (0.1F * xOffset),
+                this.posY + (double) (this.height * 0.2F) + passenger.getYOffset() + 0.0D,
+                this.posZ - (double) (0.1F * zOffset));
 
         if (passenger instanceof EntityLivingBase) {
             ((EntityLivingBase) passenger).renderYawOffset = this.renderYawOffset;
@@ -329,9 +337,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     }
 
     @Override
-    public void fall(float distance, float damageMultiplier) {
-
-    }
+    public void fall(float distance, float damageMultiplier) {}
 
     @Override
     protected boolean canDespawn() {
@@ -359,9 +365,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     }
 
     @Override
-    public void knockBack(@NotNull Entity entityIn, float strength, double xRatio, double zRatio) {
-
-    }
+    public void knockBack(@NotNull Entity entityIn, float strength, double xRatio, double zRatio) {}
 
     @Override
     public void setAir(int air) {
@@ -370,14 +374,16 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         if (this.getTimeSinceLanding() > 0 && this.getTimeSinceLanding() < 140) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.drop_pod.complete", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.drop_pod.complete",
+                    ILoopType.EDefaultLoopTypes.PLAY_ONCE));
         }
         return PlayState.CONTINUE;
     }
 
     @Override
     public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController<EntityDropPod>(this, "controller", 0, this::predicate));
+        animationData
+                .addAnimationController(new AnimationController<EntityDropPod>(this, "controller", 0, this::predicate));
     }
 
     @Override
@@ -395,7 +401,6 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
         }
     }
 
-
     @Override
     public void onAddedToWorld() {
         super.onAddedToWorld();
@@ -409,6 +414,4 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
         this.soundDropPod = new MovingSoundDropPod(this);
         Minecraft.getMinecraft().getSoundHandler().playSound(this.soundDropPod);
     }
-
-
 }

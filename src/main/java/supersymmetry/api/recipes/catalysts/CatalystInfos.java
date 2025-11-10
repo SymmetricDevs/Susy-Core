@@ -1,16 +1,19 @@
 package supersymmetry.api.recipes.catalysts;
 
-import gregtech.api.util.ItemStackHashStrategy;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
-import net.minecraft.item.ItemStack;
-
-import javax.annotation.Nonnull;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import javax.annotation.Nonnull;
+
+import net.minecraft.item.ItemStack;
+
+import gregtech.api.util.ItemStackHashStrategy;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
+
 public class CatalystInfos {
 
-    private final Map<ItemStack, CatalystInfo> map = new Object2ObjectOpenCustomHashMap<>(ItemStackHashStrategy.comparingAllButCount());
+    private final Map<ItemStack, CatalystInfo> map = new Object2ObjectOpenCustomHashMap<>(
+            ItemStackHashStrategy.comparingAllButCount());
 
     public void put(@Nonnull ItemStack itemStack, @Nonnull CatalystInfo catalystInfo) {
         map.put(itemStack, catalystInfo);

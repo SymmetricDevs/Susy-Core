@@ -1,6 +1,22 @@
 package supersymmetry.common.metatileentities.single.railinterfaces;
 
-import cam72cam.immersiverailroading.entity.Locomotive;
+import java.util.List;
+
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.cleanroommc.modularui.api.GuiAxis;
 import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.drawable.GuiTextures;
@@ -19,25 +35,13 @@ import com.cleanroommc.modularui.widgets.ButtonWidget;
 import com.cleanroommc.modularui.widgets.SliderWidget;
 import com.cleanroommc.modularui.widgets.ToggleButton;
 import com.cleanroommc.modularui.widgets.layout.Flow;
+
+import cam72cam.immersiverailroading.entity.Locomotive;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.metatileentity.Mui2Utils;
 import supersymmetry.client.renderer.textures.SusyTextures;
-
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.List;
 
 public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInteractor {
 
@@ -59,7 +63,6 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
 
     @Override
     public ModularPanel buildUI(PosGuiData guiData, PanelSyncManager syncManager, UISettings settings) {
-
         PanelSyncHandler panel = (PanelSyncHandler) syncManager.panel("controller_panel",
                 (panelSyncManager, syncHandler) -> createPopupPanel(panelSyncManager),
                 true);
@@ -81,24 +84,25 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
                                 panel.closePanel();
                             }
                             return true;
-                        })
-                )
+                        }))
                 .child(IKey.lang("susy.gui.stock_interactor.title.controller_setting").asWidget()
-                        .align(Alignment.CenterRight).height(18))
-        );
+                        .align(Alignment.CenterRight).height(18)));
         return mainPanel;
     }
 
     @SuppressWarnings("deprecation")
     public ModularPanel createPopupPanel(PanelSyncManager syncManager) {
-
         BooleanSyncValue controlActive = new BooleanSyncValue(() -> this.controlActive, x -> this.controlActive = x);
-        BooleanSyncValue controlInactive = new BooleanSyncValue(() -> this.controlInactive, x -> this.controlInactive = x);
+        BooleanSyncValue controlInactive = new BooleanSyncValue(() -> this.controlInactive,
+                x -> this.controlInactive = x);
 
         DoubleSyncValue activeBrake = new DoubleSyncValue(() -> this.activeBrake, x -> this.activeBrake = (float) x);
-        DoubleSyncValue activeThrottle = new DoubleSyncValue(() -> this.activeThrottle, x -> this.activeThrottle = (float) x);
-        DoubleSyncValue inactiveBrake = new DoubleSyncValue(() -> this.inactiveBrake, x -> this.inactiveBrake = (float) x);
-        DoubleSyncValue inactiveThrottle = new DoubleSyncValue(() -> this.inactiveThrottle, x -> this.inactiveThrottle = (float) x);
+        DoubleSyncValue activeThrottle = new DoubleSyncValue(() -> this.activeThrottle,
+                x -> this.activeThrottle = (float) x);
+        DoubleSyncValue inactiveBrake = new DoubleSyncValue(() -> this.inactiveBrake,
+                x -> this.inactiveBrake = (float) x);
+        DoubleSyncValue inactiveThrottle = new DoubleSyncValue(() -> this.inactiveThrottle,
+                x -> this.inactiveThrottle = (float) x);
 
         return Mui2Utils.createPopupPanel("controller_settings", 81, 150)
                 .padding(4)
@@ -163,7 +167,8 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
 
     @SuppressWarnings("SameParameterValue")
     @ParametersAreNonnullByDefault
-    protected Widget<?> createSliderColumn(String name, UITexture texture, DoubleSyncValue value, double min, double max) {
+    protected Widget<?> createSliderColumn(String name, UITexture texture, DoubleSyncValue value, double min,
+                                           double max) {
         return Flow.column()
                 .width(16)
                 .child(texture.asWidget()
@@ -207,13 +212,15 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip,
+                               boolean advanced) {
         tooltip.add(I18n.format("susy.stock_interfaces.locomotive_controller.description"));
     }
 
-    //#fix# does detected need to be saved or just refreshed on load? does ticks-alive need to be saved to prevent every one ticking at once?
-    //update system based on chunk and global time instead of ticks alive?
-    //should detection area be changeable and saved?
+    // #fix# does detected need to be saved or just refreshed on load? does ticks-alive need to be saved to prevent
+    // every one ticking at once?
+    // update system based on chunk and global time instead of ticks alive?
+    // should detection area be changeable and saved?
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);

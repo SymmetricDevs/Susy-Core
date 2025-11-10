@@ -1,5 +1,12 @@
 package supersymmetry.common.item.armor;
 
+import static net.minecraft.inventory.EntityEquipmentSlot.*;
+import static supersymmetry.api.util.SuSyUtility.susyId;
+import static supersymmetry.common.event.DimensionBreathabilityHandler.ABSORB_ALL;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import gregtech.api.damagesources.DamageSources;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.resources.I18n;
@@ -14,6 +21,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ISpecialArmor;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.manager.AnimationData;
@@ -40,7 +48,8 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IG
     // Luckily this isn't instanced for every itemStack so we're fine here
     private AnimationFactory factory;
 
-    public AdvancedBreathingApparatus(EntityEquipmentSlot slot, double hoursOfLife, String name, int tier, double relativeAbsorption) {
+    public AdvancedBreathingApparatus(EntityEquipmentSlot slot, double hoursOfLife, String name, int tier,
+                                      double relativeAbsorption) {
         super(slot);
         this.hoursOfLife = hoursOfLife;
         this.name = name;
@@ -49,8 +58,23 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IG
     }
 
     @Override
+    public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
+        return "susy:textures/armor/" + name + "_" + slot.getName() + ".png";
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public @Nullable ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack,
+                                              EntityEquipmentSlot armorSlot, ModelBiped defaultModel) {
+        if (model == null)
+            model = new BreathingApparatusModel(name, armorSlot);
+        return model;
+    }
+
+    @Override
     public boolean mayBreatheWith(ItemStack stack, EntityPlayer player) {
-        return player.dimension == DimensionBreathabilityHandler.BENEATH_ID || player.dimension == DimensionBreathabilityHandler.NETHER_ID;
+        return player.dimension == DimensionBreathabilityHandler.BENEATH_ID ||
+                player.dimension == DimensionBreathabilityHandler.NETHER_ID;
     }
 
     @Override
@@ -145,8 +169,8 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IG
 
     @Override
     public ISpecialArmor.ArmorProperties getProperties(EntityLivingBase player, @NotNull ItemStack armor,
-            DamageSource source,
-            double damage, EntityEquipmentSlot equipmentSlot) {
+                                                       DamageSource source,
+                                                       double damage, EntityEquipmentSlot equipmentSlot) {
         ISpecialArmor.ArmorProperties prop = new ISpecialArmor.ArmorProperties(0, 0.0, 0);
         if (source.isUnblockable())
             return prop;
