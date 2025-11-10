@@ -270,7 +270,7 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
                 textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY, "susy.multiblock.rotation_generator.fuel_name", fuelName));
                 if (lubricantStack != null && lubricantStack.amount > 0) {
                     ITextComponent lubricantName = GTUtility.getFluidTranslation((lubricantStack.getFluid()));
-                    textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY, "susy.multiblock.rotation_generator.lubricant_name", lubricantName));
+                    textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY, "susy.multiblock.rotation_generator.lubricant", lubricantName, lubricantInfo.boost));
                 }
             }
             textList.add(new TextComponentTranslation("susy.multiblock.rotation_generator.power", getMaxVoltage(), Math.min(recipeMapWorkable.getEnergyContainer().getOutputVoltage(), GTValues.V[tier] * 16)));
