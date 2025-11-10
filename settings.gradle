@@ -18,7 +18,9 @@ pluginManagement {
         eachPlugin {
             // Workaround for updating dependencies w/o touching build.gradle
             switch (requested.id.id) {
-                case 'com.diffplug.spotless': useVersion '6.25.0'; break
+                case 'com.diffplug.spotless': useVersion '8.0.0'; break
+                case 'com.diffplug.blowdryer': useVersion '1.7.1'; break
+                case 'com.gtnewhorizons.retrofuturagradle': useVersion '1.4.9'; break
             }
         }
     }
