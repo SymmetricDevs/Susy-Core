@@ -10,11 +10,17 @@
     },
     "facing=west,variant=crankshaft" : {
       "model" : "susy:engine_casing/crankshaft",
-      "y" : 270
+      "y" : 270,
+      "textures" : {
+        "up": "gregtech:blocks/casings/engine_casing/crankshaft/top90"
+      }
     },
     "facing=east,variant=crankshaft" : {
       "model" : "susy:engine_casing/crankshaft",
-      "y" : 90
+      "y" : 90,
+      "textures" : {
+        "up": "gregtech:blocks/casings/engine_casing/crankshaft/top90"
+      }
     }
   }
 }
