@@ -77,9 +77,9 @@ public class SuSyUtility {
         lubricants = new HashMap<>();
         lubricants.put("lubricating_oil", new Lubricant("LubricatingOil", 16, 1.0));
         lubricants.put("lubricant", new Lubricant("Lubricant", 8, 1.0));
-        lubricants.put("midgrade_lubricant", new Lubricant("MidgradeLubricant", 4, 1.5));
-        lubricants.put("premium_lubricant", new Lubricant("PremiumLubricant", 2, 1.5));
-        lubricants.put("supreme_lubricant", new Lubricant("SupremeLubricant", 1, 2.0));
+        lubricants.put("midgrade_lubricant", new Lubricant("MidgradeLubricant", 4, 1.2));
+        lubricants.put("premium_lubricant", new Lubricant("PremiumLubricant", 2, 1.4));
+        lubricants.put("supreme_lubricant", new Lubricant("SupremeLubricant", 1, 1.6));
     }
 
     public static class Coolant {
