@@ -524,7 +524,7 @@ public class SuSyMetaTileEntities {
         MULTI_STAGE_FLASH_DISTILLER = registerMetaTileEntity(17009,
                 new MetaTileEntityMultiStageFlashDistiller(susyId("multi_stage_flash_distiller")));
 
-        INTERNAL_COMBUSTION_GENERATOR = registerMetaTileEntity(17011, new MetaTileEntityInternalCombustionEngine(susyId("internal_combustion_generator"), RecipeMaps.COMBUSTION_GENERATOR_FUELS, 3600, 18, 24, 2, Textures.SOLID_STEEL_CASING, SusyTextures.INTERNAL_COMBUSTION_GENERATOR_OVERLAY));
+        INTERNAL_COMBUSTION_GENERATOR = registerMetaTileEntity(17011, new MetaTileEntityInternalCombustionEngine(susyId("internal_combustion_generator"), RecipeMaps.COMBUSTION_GENERATOR_FUELS, 3600, 18, 24, 3, Textures.SOLID_STEEL_CASING, SusyTextures.INTERNAL_COMBUSTION_GENERATOR_OVERLAY));
         HIGH_TEMPERATURE_DISTILLATION_TOWER = registerMetaTileEntity(17012,
                 new MetaTileEntityHighTemperatureDistillationTower(susyId("high_temperature_distillation_tower")));
         ROTARY_KILN = registerMetaTileEntity(17013, new MetaTileEntityRotaryKiln(susyId("rotary_kiln")));
