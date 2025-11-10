@@ -4,10 +4,9 @@ import static net.minecraft.inventory.EntityEquipmentSlot.*;
 import static supersymmetry.api.util.SuSyUtility.susyId;
 import static supersymmetry.common.event.DimensionBreathabilityHandler.ABSORB_ALL;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import gregtech.api.damagesources.DamageSources;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
@@ -24,6 +23,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import gregtech.api.damagesources.DamageSources;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import supersymmetry.api.items.IGeoMetaArmor;
@@ -31,14 +32,8 @@ import supersymmetry.client.renderer.handler.GeoMetaArmorRenderer;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.item.SuSyArmorItem;
 
-import java.util.Collections;
-import java.util.List;
-
-import static net.minecraft.inventory.EntityEquipmentSlot.*;
-import static supersymmetry.api.util.SuSyUtility.susyId;
-import static supersymmetry.common.event.DimensionBreathabilityHandler.ABSORB_ALL;
-
 public class AdvancedBreathingApparatus extends BreathingApparatus implements IGeoMetaArmor {
+
     private static final double DEFAULT_ABSORPTION = 0;
     private final double hoursOfLife;
     protected final String name;
@@ -55,20 +50,6 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IG
         this.name = name;
         this.tier = tier;
         this.relativeAbsorption = relativeAbsorption;
-    }
-
-    @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-        return "susy:textures/armor/" + name + "_" + slot.getName() + ".png";
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public @Nullable ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack,
-                                              EntityEquipmentSlot armorSlot, ModelBiped defaultModel) {
-        if (model == null)
-            model = new BreathingApparatusModel(name, armorSlot);
-        return model;
     }
 
     @Override
@@ -227,9 +208,11 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IG
         return textureRL().toString();
     }
 
+    @Nullable
     @SideOnly(Side.CLIENT)
     @Override
-    public @Nullable ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped defaultModel) {
+    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack,
+                                    EntityEquipmentSlot armorSlot, ModelBiped defaultModel) {
         return GeoMetaArmorRenderer.INSTANCE
                 .setCurrentItem(entityLiving, itemStack, armorSlot)
                 .applyEntityStats(defaultModel)
@@ -264,5 +247,4 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IG
     public ResourceLocation animationRL() {
         return susyId("animations/dummy.animation.json");
     }
-
 }

@@ -1,6 +1,7 @@
 package supersymmetry.client.renderer.handler;
 
-import gregtech.api.items.armor.ArmorMetaItem;
+import java.util.Objects;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.GlStateManager;
@@ -10,7 +11,10 @@ import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
 import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.items.armor.ArmorMetaItem;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimatableModel;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -22,8 +26,6 @@ import software.bernie.geckolib3.model.provider.GeoModelProvider;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import software.bernie.geckolib3.util.GeoUtils;
 import supersymmetry.api.items.IGeoMetaArmor;
-
-import java.util.Objects;
 
 // I'm just lazy
 @SuppressWarnings("DuplicatedCode")
@@ -43,7 +45,7 @@ public class GeoMetaArmorRenderer extends ModelBiped implements IGeoRenderer<IGe
     static {
         AnimationController.addModelFetcher((IAnimatable object) -> {
             if (object instanceof IGeoMetaArmor) {
-                //noinspection rawtypes,unchecked
+                // noinspection rawtypes,unchecked
                 return (IAnimatableModel) INSTANCE.getGeoModelProvider();
             }
             return null;
@@ -85,17 +87,20 @@ public class GeoMetaArmorRenderer extends ModelBiped implements IGeoRenderer<IGe
     }
 
     @Override
-    public void render(@NotNull Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+    public void render(@NotNull Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks,
+                       float netHeadYaw, float headPitch, float scale) {
         this.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entityIn);
         this.renderGeo(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
     }
 
-    public void renderGeo(@NotNull Entity entityIn, float limbSwing, float limbSwingAmount, float partialTicks, float netHeadYaw, float headPitch, float scale) {
+    public void renderGeo(@NotNull Entity entityIn, float limbSwing, float limbSwingAmount, float partialTicks,
+                          float netHeadYaw, float headPitch, float scale) {
         GeoModel model = modelDispatcher.getModel(modelDispatcher.getModelLocation(currentMetaArmor));
         modelDispatcher.setLivingAnimations(currentMetaArmor, getUniqueID(currentMetaArmor), null);
 
         this.defaultArmor.setModelAttributes(this);
-        this.defaultArmor.setRotationAngles(limbSwing, limbSwingAmount, partialTicks, netHeadYaw, headPitch, scale, entityIn);
+        this.defaultArmor.setRotationAngles(limbSwing, limbSwingAmount, partialTicks, netHeadYaw, headPitch, scale,
+                entityIn);
 
         this.fitToBiped();
 
@@ -154,7 +159,6 @@ public class GeoMetaArmorRenderer extends ModelBiped implements IGeoRenderer<IGe
         {
             GlStateManager.translate(0.0F, 1.5F, 0.0F);
             GlStateManager.scale(-1.0F, -1.0F, 1.0F);
-
 
             Minecraft.getMinecraft().renderEngine.bindTexture(getTextureLocation(currentMetaArmor));
 
@@ -218,11 +222,13 @@ public class GeoMetaArmorRenderer extends ModelBiped implements IGeoRenderer<IGe
         }
     }
 
-    public GeoMetaArmorRenderer setCurrentItem(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot) {
+    public GeoMetaArmorRenderer setCurrentItem(EntityLivingBase entityLiving, ItemStack itemStack,
+                                               EntityEquipmentSlot armorSlot) {
         this.entityLiving = entityLiving;
         this.itemStack = itemStack;
         this.armorSlot = armorSlot;
-        this.currentMetaArmor = (IGeoMetaArmor) Objects.requireNonNull(((ArmorMetaItem<?>) itemStack.getItem()).getItem(itemStack)).getArmorLogic();
+        this.currentMetaArmor = (IGeoMetaArmor) Objects
+                .requireNonNull(((ArmorMetaItem<?>) itemStack.getItem()).getItem(itemStack)).getArmorLogic();
         return this;
     }
 

@@ -9,15 +9,6 @@ import java.util.Optional;
 
 import javax.annotation.Nonnull;
 
-import dev.tianmi.sussypatches.common.SusConfig;
-import gregtech.api.GTValues;
-import gregtech.api.items.armor.ArmorMetaItem;
-import gregtech.api.items.metaitem.MetaOreDictItem;
-import gregtech.api.items.toolitem.IGTTool;
-import gregtech.api.unification.OreDictUnifier;
-import gregtech.api.unification.stack.UnificationEntry;
-import gregtech.api.util.Mods;
-import gregtech.api.util.input.KeyBind;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -57,6 +48,7 @@ import org.jetbrains.annotations.NotNull;
 
 import dev.tianmi.sussypatches.common.SusConfig;
 import gregtech.api.GTValues;
+import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.items.metaitem.MetaOreDictItem;
 import gregtech.api.items.toolitem.IGTTool;
 import gregtech.api.unification.OreDictUnifier;
@@ -299,11 +291,12 @@ public class ClientProxy extends CommonProxy {
     }
 
     public static void changeSkinVisibility(ItemStack armor, EntityEquipmentSlot slot, boolean into) {
-        if (armor.getItem() instanceof ArmorMetaItem<?> metaArmor) {
+        if (armor.getItem() instanceof ArmorMetaItem<?>metaArmor) {
             var metaValueArmor = metaArmor.getItem(armor);
             // Using a Class#equals(Class) here to avoid counting in child classes
             // May be changed later
-            if (metaValueArmor != null && metaValueArmor.getArmorLogic().getClass().equals(AdvancedBreathingApparatus.class) ) {
+            if (metaValueArmor != null &&
+                    metaValueArmor.getArmorLogic().getClass().equals(AdvancedBreathingApparatus.class)) {
                 boolean visible = !into;
                 // Is it a bit too cursed to access game settings for this?
                 GameSettings settings = Minecraft.getMinecraft().gameSettings;
