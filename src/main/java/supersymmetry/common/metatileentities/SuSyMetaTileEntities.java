@@ -274,6 +274,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityBeamLineHatch BEAM_IMPORT;
     public static MetaTileEntityBeamLineHatch BEAM_EXPORT;
 
+    public static MetaTileEntityInductionFurnace INDUCTION_FURNACE;
     public static MetaTileEntityAerospaceFlightSimulator AEROSPACE_FLIGHT_SIMULATOR;
     public static MetaTileEntityBlueprintAssembler BLUEPRINT_ASSEMBLER;
 
@@ -689,6 +690,9 @@ public class SuSyMetaTileEntities {
         BEAM_IMPORT = registerMetaTileEntity(18500,
                 new MetaTileEntityBeamLineHatch(susyId("beam_import_hatch"), false));
         BEAM_EXPORT = registerMetaTileEntity(18501, new MetaTileEntityBeamLineHatch(susyId("beam_export_hatch"), true));
+
+        INDUCTION_FURNACE = registerMetaTileEntity(18502,
+                new MetaTileEntityInductionFurnace(susyId("induction_furnace")));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name,

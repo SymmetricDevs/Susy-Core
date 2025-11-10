@@ -63,6 +63,7 @@ public class SuSyBlocks {
     public static BlocksFakeWool FAKEWOOL;
     public static BlockRandomConcrete RANDOM_CONCRETE;
     public static BlockRandomConcrete1 RANDOM_CONCRETE1;
+    public static BlockInductionCoilAssembly INDUCTION_COIL_ASSEMBLY;
     public static BlockSupport SUPPORT;
 
     public static BlockOuterHatch OUTER_HATCH;

@@ -57,13 +57,13 @@ public class SuSyParallelLogic {
     // Limits parallelization by the size of the output.
     public static int limitByOutputSize(@NotNull Recipe recipe, int parallelAmount) {
         int itemCount = 0;
-        for (ItemStack output : recipe.getOutputs()) {
+        for (ItemStack output : recipe.getAllItemOutputs()) {
             if (output != null) {
                 itemCount += output.getCount();
             }
         }
         int fluidCount = 0;
-        for (FluidStack output : recipe.getFluidOutputs()) {
+        for (FluidStack output : recipe.getAllFluidOutputs()) {
             if (output != null) {
                 fluidCount += output.amount;
             }
@@ -71,6 +71,7 @@ public class SuSyParallelLogic {
         fluidCount += 143; // Round it up
         fluidCount /= 144;
         int totalCount = itemCount + fluidCount;
+        totalCount = Math.max(totalCount, 1);
         return Math.abs((int) (parallelAmount / (long) totalCount));
     }
 }
