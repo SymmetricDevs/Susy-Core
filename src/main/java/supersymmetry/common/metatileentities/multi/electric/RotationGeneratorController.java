@@ -1,35 +1,31 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import java.util.List;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fluids.FluidStack;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.GTValues;
 import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.impl.MultiblockFuelRecipeLogic;
 import gregtech.api.metatileentity.ITieredMetaTileEntity;
 import gregtech.api.metatileentity.multiblock.FuelMultiblockController;
-import gregtech.api.metatileentity.multiblock.IProgressBarMultiblock;
-import gregtech.api.metatileentity.multiblock.MultiblockDisplayText;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
-import gregtech.api.util.GTUtility;
 import gregtech.api.util.TextComponentUtil;
-import gregtech.api.util.TextFormattingUtil;
-import gregtech.common.metatileentities.multi.electric.generator.LargeTurbineWorkableHandler;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.capability.IRotationSpeedHandler;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.common.materials.SusyMaterials;
 
-import java.util.List;
-
-public abstract class RotationGeneratorController extends FuelMultiblockController implements IRotationSpeedHandler, ITieredMetaTileEntity {
+public abstract class RotationGeneratorController extends FuelMultiblockController
+                                                  implements IRotationSpeedHandler, ITieredMetaTileEntity {
 
     public final int tier;
 
@@ -46,7 +42,8 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
     protected FluidStack lubricantStack;
     protected SuSyUtility.Lubricant lubricantInfo;
 
-    public RotationGeneratorController(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap, int tier, int maxSpeed, int accel, int decel) {
+    public RotationGeneratorController(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap, int tier,
+                                       int maxSpeed, int accel, int decel) {
         super(metaTileEntityId, recipeMap, tier);
         this.tier = tier;
         this.recipeMapWorkable = new SuSyTurbineRecipeLogic(this);

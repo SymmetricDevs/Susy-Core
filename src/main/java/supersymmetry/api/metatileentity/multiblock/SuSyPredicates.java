@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -20,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import cam72cam.immersiverailroading.IRBlocks;
 import gregtech.api.GregTechAPI;
 import gregtech.api.block.IHeatingCoilBlockStats;
+import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 import gregtech.api.pattern.PatternStringError;
 import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.util.BlockInfo;
@@ -165,7 +165,8 @@ public class SuSyPredicates {
         return dir.getRelativeFacing(mte.getFrontFacing(), mte.getUpwardsFacing(), mte.isFlipped());
     }
 
-    public static TraceabilityPredicate orientation(MultiblockControllerBase mte, IBlockState state, RelativeDirection direction,
+    public static TraceabilityPredicate orientation(MultiblockControllerBase mte, IBlockState state,
+                                                    RelativeDirection direction,
                                                     IProperty<EnumFacing> facingProperty) {
         EnumFacing facing = getRelativeFacing(mte, direction);
 
@@ -180,7 +181,8 @@ public class SuSyPredicates {
         }, supplier);
     }
 
-    public static TraceabilityPredicate axisOrientation(MultiblockControllerBase mte, IBlockState state, RelativeDirection direction,
+    public static TraceabilityPredicate axisOrientation(MultiblockControllerBase mte, IBlockState state,
+                                                        RelativeDirection direction,
                                                         IProperty<EnumFacing.Axis> facingProperty) {
         EnumFacing facing = getRelativeFacing(mte, direction);
         EnumFacing.Axis axis = facing.getAxis();
@@ -196,7 +198,8 @@ public class SuSyPredicates {
         }, supplier);
     }
 
-    public static TraceabilityPredicate horizontalOrientation(MultiblockControllerBase mte, IBlockState state, RelativeDirection direction,
+    public static TraceabilityPredicate horizontalOrientation(MultiblockControllerBase mte, IBlockState state,
+                                                              RelativeDirection direction,
                                                               IProperty<EnumFacing> facingProperty) {
         EnumFacing facing = getRelativeFacing(mte, direction);
         // converting the left facing to positive x or z axis direction

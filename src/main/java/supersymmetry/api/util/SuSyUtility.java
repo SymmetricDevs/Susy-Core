@@ -1,15 +1,14 @@
 package supersymmetry.api.util;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+
 import net.minecraft.util.ResourceLocation;
 
 import gregtech.api.GTValues;
 import gregtech.api.unification.material.Material;
-
 import supersymmetry.Supersymmetry;
-
-import java.util.HashMap;
-import java.util.function.Function;
-import java.util.Map;
 
 public class SuSyUtility {
 
@@ -61,6 +60,7 @@ public class SuSyUtility {
     };
 
     public static class Lubricant {
+
         public String name;
         public int amount_required;
         public double boost;
@@ -83,6 +83,7 @@ public class SuSyUtility {
     }
 
     public static class Coolant {
+
         public String name;
         public int amount_required;
 
@@ -108,5 +109,4 @@ public class SuSyUtility {
     public static String getRLPrefix(Material material) {
         return material.getModid().equals(GTValues.MODID) ? "" : material.getModid() + ":";
     }
-
 }

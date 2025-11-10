@@ -60,7 +60,8 @@ public class SusyGuiTextures {
             .fullImage("textures/gui/widget/button_quarry_modes.png");
     public static final TextureArea ARROW = TextureArea
             .fullImage("textures/gui/widget/icon_indicator_arrow.png");
-    public static final TextureArea BUTTON_ENERGY_VOIDING = TextureArea.fullImage("textures/gui/widget/button_energy_voiding.png");
+    public static final TextureArea BUTTON_ENERGY_VOIDING = TextureArea
+            .fullImage("textures/gui/widget/button_energy_voiding.png");
     public static final UITexture BACKGROUND_POPUP = UITexture.builder()
             .location(GTValues.MODID, "textures/gui/base/background_popup.png")
             .imageSize(195, 136)

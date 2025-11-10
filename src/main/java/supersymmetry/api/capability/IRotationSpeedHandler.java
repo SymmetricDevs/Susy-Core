@@ -1,6 +1,7 @@
 package supersymmetry.api.capability;
 
 public interface IRotationSpeedHandler {
+
     /**
      * @returns the rotation speed in RPM
      */

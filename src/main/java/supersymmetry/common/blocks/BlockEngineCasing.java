@@ -2,7 +2,6 @@ package supersymmetry.common.blocks;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -43,6 +42,7 @@ public class BlockEngineCasing extends VariantBlock<BlockEngineCasing.EngineCasi
     public enum EngineCasingType implements IStringSerializable, IStateHarvestLevel {
 
         PISTON_BLOCK("piston_block", 3);
+
         private final String name;
         private final int harvestLevel;
 

@@ -1,7 +1,7 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.block.IStateHarvestLevel;
-import gregtech.api.block.VariantBlock;
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -9,12 +9,11 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.blocks.VariantAxialRotatableBlock;
-import supersymmetry.api.blocks.VariantDirectionalRotatableBlock;
-import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.block.IStateHarvestLevel;
+import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
 public class BlockEngineCasing2 extends VariantHorizontalRotatableBlock<BlockEngineCasing2.EngineCasingType2> {
 
@@ -43,6 +42,7 @@ public class BlockEngineCasing2 extends VariantHorizontalRotatableBlock<BlockEng
     public enum EngineCasingType2 implements IStringSerializable, IStateHarvestLevel {
 
         CRANKSHAFT("crankshaft", 3);
+
         private final String name;
         private final int harvestLevel;
 

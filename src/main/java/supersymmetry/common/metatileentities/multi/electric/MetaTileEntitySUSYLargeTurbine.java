@@ -6,14 +6,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import gregtech.api.capability.impl.MultiblockFuelRecipeLogic;
-import gregtech.api.gui.GuiTextures;
-import gregtech.api.gui.Widget;
-import gregtech.api.gui.resources.TextureArea;
-import gregtech.api.gui.widgets.ToggleButtonWidget;
-import gregtech.api.metatileentity.multiblock.IProgressBarMultiblock;
-import gregtech.api.metatileentity.multiblock.MultiblockDisplayText;
-import gregtech.api.util.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -25,19 +17,26 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import gregtech.api.GTValues;
+import gregtech.api.capability.impl.MultiblockFuelRecipeLogic;
+import gregtech.api.gui.GuiTextures;
+import gregtech.api.gui.Widget;
+import gregtech.api.gui.resources.TextureArea;
+import gregtech.api.gui.widgets.ToggleButtonWidget;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
+import gregtech.api.metatileentity.multiblock.IProgressBarMultiblock;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
+import gregtech.api.metatileentity.multiblock.MultiblockDisplayText;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.recipes.RecipeMap;
+import gregtech.api.util.*;
 import gregtech.client.renderer.ICubeRenderer;
-import org.jetbrains.annotations.Nullable;
-
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.common.blocks.BlockAlternatorCoil;
@@ -45,13 +44,15 @@ import supersymmetry.common.blocks.SuSyBlocks;
 
 public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController implements IProgressBarMultiblock {
 
-
     public final IBlockState casingState;
     public final IBlockState rotorState;
     public final ICubeRenderer casingRenderer;
     public final ICubeRenderer frontOverlay;
 
-    public MetaTileEntitySUSYLargeTurbine(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap, int tier, int maxSpeed, int accel, int decel, IBlockState casingState, IBlockState rotorState, ICubeRenderer casingRenderer, ICubeRenderer frontOverlay) {
+    public MetaTileEntitySUSYLargeTurbine(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap, int tier,
+                                          int maxSpeed, int accel, int decel, IBlockState casingState,
+                                          IBlockState rotorState, ICubeRenderer casingRenderer,
+                                          ICubeRenderer frontOverlay) {
         super(metaTileEntityId, recipeMap, tier, maxSpeed, accel, decel);
         this.casingState = casingState;
         this.rotorState = rotorState;
@@ -63,7 +64,8 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
 
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
-        return new MetaTileEntitySUSYLargeTurbine(metaTileEntityId, recipeMap, tier, maxSpeed, accel, decel, casingState, rotorState, casingRenderer, frontOverlay);
+        return new MetaTileEntitySUSYLargeTurbine(metaTileEntityId, recipeMap, tier, maxSpeed, accel, decel,
+                casingState, rotorState, casingRenderer, frontOverlay);
     }
 
     @Override
@@ -103,7 +105,6 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
         // makes sure rotor's front faces the left side (relative to the player) of controller front
         return SuSyPredicates.horizontalOrientation(this, copperCoilState(), RelativeDirection.RIGHT, FACING);
     }
-
 
     protected IBlockState copperCoilState() {
         return SuSyBlocks.ALTERNATOR_COIL.getState(BlockAlternatorCoil.AlternatorCoilType.COPPER);
@@ -153,7 +154,9 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
     // GUI stuff
 
     @Override
-    public int getNumProgressBars() { return 3; }
+    public int getNumProgressBars() {
+        return 3;
+    }
 
     @Override
     public double getFillPercentage(int index) {
@@ -257,8 +260,9 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
     protected @NotNull Widget getFlexButton(int x, int y, int width, int height) {
         SuSyTurbineRecipeLogic logic = (SuSyTurbineRecipeLogic) this.recipeMapWorkable;
 
-        return new ToggleButtonWidget(x, y, width, height, SusyGuiTextures.BUTTON_ENERGY_VOIDING, logic::getVoidingEnergy, logic::setVoidingEnergy)
-                .setTooltipText("susy.gui.toggle_energy_voiding");
+        return new ToggleButtonWidget(x, y, width, height, SusyGuiTextures.BUTTON_ENERGY_VOIDING,
+                logic::getVoidingEnergy, logic::setVoidingEnergy)
+                        .setTooltipText("susy.gui.toggle_energy_voiding");
     }
 
     @Override
@@ -267,13 +271,16 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
             FluidStack fuelStack = ((SuSyTurbineRecipeLogic) recipeMapWorkable).getInputFluidStack();
             if (fuelStack != null && fuelStack.amount > 0) {
                 ITextComponent fuelName = GTUtility.getFluidTranslation(fuelStack.getFluid());
-                textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY, "susy.multiblock.rotation_generator.fuel_name", fuelName));
+                textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                        "susy.multiblock.rotation_generator.fuel_name", fuelName));
                 if (lubricantStack != null && lubricantStack.amount > 0) {
                     ITextComponent lubricantName = GTUtility.getFluidTranslation((lubricantStack.getFluid()));
-                    textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY, "susy.multiblock.rotation_generator.lubricant", lubricantName, lubricantInfo.boost));
+                    textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                            "susy.multiblock.rotation_generator.lubricant", lubricantName, lubricantInfo.boost));
                 }
             }
-            textList.add(new TextComponentTranslation("susy.multiblock.rotation_generator.power", getMaxVoltage(), Math.min(recipeMapWorkable.getEnergyContainer().getOutputVoltage(), GTValues.V[tier] * 16)));
+            textList.add(new TextComponentTranslation("susy.multiblock.rotation_generator.power", getMaxVoltage(),
+                    Math.min(recipeMapWorkable.getEnergyContainer().getOutputVoltage(), GTValues.V[tier] * 16)));
         }
 
         MultiblockFuelRecipeLogic recipeLogic = (MultiblockFuelRecipeLogic) recipeMapWorkable;
@@ -285,9 +292,11 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip,
+                               boolean advanced) {
         super.addInformation(stack, world, tooltip, advanced);
-        tooltip.add(I18n.format("gregtech.universal.tooltip.max_voltage_out", GTValues.V[tier + 2], GTValues.VNF[tier + 2]));
+        tooltip.add(I18n.format("gregtech.universal.tooltip.max_voltage_out", GTValues.V[tier + 2],
+                GTValues.VNF[tier + 2]));
         tooltip.add(I18n.format("susy.multiblock.rotation_generator.tooltip", maxSpeed, accel, decel));
     }
 }

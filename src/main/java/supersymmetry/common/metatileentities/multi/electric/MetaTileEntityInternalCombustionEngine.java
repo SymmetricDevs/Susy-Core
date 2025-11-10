@@ -1,5 +1,24 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
+
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import gregtech.api.GTValues;
 import gregtech.api.capability.impl.MultiblockFuelRecipeLogic;
 import gregtech.api.gui.GuiTextures;
@@ -19,37 +38,22 @@ import gregtech.api.recipes.RecipeMap;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.util.*;
 import gregtech.client.renderer.ICubeRenderer;
-
 import gregtech.common.blocks.*;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.common.blocks.*;
 
-import javax.annotation.Nonnull;
-import java.util.List;
-
-import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
-
-public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorController implements IProgressBarMultiblock {
+public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorController
+                                                    implements IProgressBarMultiblock {
 
     public final int tier;
 
     public final ICubeRenderer casingRenderer;
     public final ICubeRenderer frontOverlay;
 
-    public MetaTileEntityInternalCombustionEngine(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap, int maxSpeed, int accel, int decel, int tier, ICubeRenderer casingRenderer, ICubeRenderer frontOverlay) {
+    public MetaTileEntityInternalCombustionEngine(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap,
+                                                  int maxSpeed, int accel, int decel, int tier,
+                                                  ICubeRenderer casingRenderer, ICubeRenderer frontOverlay) {
         super(metaTileEntityId, recipeMap, tier, maxSpeed, accel, decel);
         this.casingRenderer = casingRenderer;
         this.frontOverlay = frontOverlay;
@@ -60,20 +64,27 @@ public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorCon
 
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
-        return new MetaTileEntityInternalCombustionEngine(metaTileEntityId, recipeMap, maxSpeed, accel, decel, tier, casingRenderer, frontOverlay);
+        return new MetaTileEntityInternalCombustionEngine(metaTileEntityId, recipeMap, maxSpeed, accel, decel, tier,
+                casingRenderer, frontOverlay);
     }
 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         // Different characters use common constraints. Copied from GCyM
-        TraceabilityPredicate casingPredicate = states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID));
+        TraceabilityPredicate casingPredicate = states(
+                MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID));
 
         return FactoryBlockPattern.start()
-                .aisle("C CCCCCCC  F   F ", "C   FEF    F   F ", "C   FCF    F   F ", "C                ", "C                ", "                 ")
-                .aisle("CFFFFFFFFFFFFFFF ", "R CCCCCCC CCCCCCC", "R CCCCCCC CCCCCCC", "R CCCCCCC CCCCCCC", "C  F F F         ", "   HHHHH         ")
-                .aisle("CPPPPPPPC  F   F ", "R CCCCCCC CCCCCCC", "R CXXXXXXGAAAAAAD", "R CBBBBBC CCCCCCC", "C  IPPPI         ", "   HHHHH         ")
-                .aisle("CFFFFFFFFFFFFFFF ", "R CCCCCCC CCCCCCC", "R CCCCCCC CCCCCCC", "R CCCCCCC CCCCCCC", "C  F F F         ", "   HHHHH         ")
-                .aisle("C CCCCCCC  F   F ", "C   FSF    F   F ", "C   FMF    F   F ", "C                ", "C                ", "                 ")
+                .aisle("C CCCCCCC  F   F ", "C   FEF    F   F ", "C   FCF    F   F ", "C                ",
+                        "C                ", "                 ")
+                .aisle("CFFFFFFFFFFFFFFF ", "R CCCCCCC CCCCCCC", "R CCCCCCC CCCCCCC", "R CCCCCCC CCCCCCC",
+                        "C  F F F         ", "   HHHHH         ")
+                .aisle("CPPPPPPPC  F   F ", "R CCCCCCC CCCCCCC", "R CXXXXXXGAAAAAAD", "R CBBBBBC CCCCCCC",
+                        "C  IPPPI         ", "   HHHHH         ")
+                .aisle("CFFFFFFFFFFFFFFF ", "R CCCCCCC CCCCCCC", "R CCCCCCC CCCCCCC", "R CCCCCCC CCCCCCC",
+                        "C  F F F         ", "   HHHHH         ")
+                .aisle("C CCCCCCC  F   F ", "C   FSF    F   F ", "C   FMF    F   F ", "C                ",
+                        "C                ", "                 ")
                 .where('S', selfPredicate())
                 .where('C', casingPredicate)
                 .where('M', abilities(MultiblockAbility.MAINTENANCE_HATCH))
@@ -83,13 +94,18 @@ public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorCon
                         .or(autoAbilities(false, false, false, false, true, false, false)))
                 .where('P', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE)))
                 .where('R', states(SuSyBlocks.SERPENTINE.getState(BlockSerpentine.SerpentineType.BASIC)))
-                .where('X', SuSyPredicates.horizontalOrientation(this, SuSyBlocks.ENGINE_CASING_2.getState(BlockEngineCasing2.EngineCasingType2.CRANKSHAFT),
-                        RelativeDirection.UP, FACING))
-                .where('G', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
+                .where('X',
+                        SuSyPredicates.horizontalOrientation(this,
+                                SuSyBlocks.ENGINE_CASING_2.getState(BlockEngineCasing2.EngineCasingType2.CRANKSHAFT),
+                                RelativeDirection.UP, FACING))
+                .where('G',
+                        states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('A', coilOrientation())
                 .where('D', abilities(MultiblockAbility.OUTPUT_ENERGY))
                 .where('B', states(SuSyBlocks.ENGINE_CASING.getState(BlockEngineCasing.EngineCasingType.PISTON_BLOCK)))
-                .where('I', states(SuSyBlocks.ACTIVE_CASING.getState(BlocksActiveCasing.ActiveBlockType.BASIC_INTAKE_CASING)))
+                .where('I',
+                        states(SuSyBlocks.ACTIVE_CASING
+                                .getState(BlocksActiveCasing.ActiveBlockType.BASIC_INTAKE_CASING)))
                 .where(' ', any())
                 .build();
     }
@@ -98,7 +114,6 @@ public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorCon
         // makes sure rotor's front faces the left side (relative to the player) of controller front
         return SuSyPredicates.horizontalOrientation(this, copperCoilState(), RelativeDirection.RIGHT, FACING);
     }
-
 
     protected IBlockState copperCoilState() {
         return SuSyBlocks.ALTERNATOR_COIL.getState(BlockAlternatorCoil.AlternatorCoilType.COPPER);
@@ -136,16 +151,20 @@ public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorCon
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip,
+                               boolean advanced) {
         super.addInformation(stack, world, tooltip, advanced);
-        tooltip.add(I18n.format("gregtech.universal.tooltip.max_voltage_out", GTValues.V[tier + 2], GTValues.VNF[tier + 2]));
+        tooltip.add(I18n.format("gregtech.universal.tooltip.max_voltage_out", GTValues.V[tier + 2],
+                GTValues.VNF[tier + 2]));
         tooltip.add(I18n.format("susy.multiblock.rotation_generator.tooltip", maxSpeed, accel, decel));
     }
 
     // GUI stuff
 
     @Override
-    public int getNumProgressBars() { return 3; }
+    public int getNumProgressBars() {
+        return 3;
+    }
 
     @Override
     public double getFillPercentage(int index) {
@@ -249,8 +268,9 @@ public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorCon
     protected @NotNull Widget getFlexButton(int x, int y, int width, int height) {
         SuSyTurbineRecipeLogic logic = (SuSyTurbineRecipeLogic) this.recipeMapWorkable;
 
-        return new ToggleButtonWidget(x, y, width, height, SusyGuiTextures.BUTTON_ENERGY_VOIDING, logic::getVoidingEnergy, logic::setVoidingEnergy)
-                .setTooltipText("susy.gui.toggle_energy_voiding");
+        return new ToggleButtonWidget(x, y, width, height, SusyGuiTextures.BUTTON_ENERGY_VOIDING,
+                logic::getVoidingEnergy, logic::setVoidingEnergy)
+                        .setTooltipText("susy.gui.toggle_energy_voiding");
     }
 
     @Override
@@ -259,13 +279,16 @@ public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorCon
             FluidStack fuelStack = ((SuSyTurbineRecipeLogic) recipeMapWorkable).getInputFluidStack();
             if (fuelStack != null && fuelStack.amount > 0) {
                 ITextComponent fuelName = GTUtility.getFluidTranslation(fuelStack.getFluid());
-                textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY, "susy.multiblock.rotation_generator.fuel_name", fuelName));
+                textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                        "susy.multiblock.rotation_generator.fuel_name", fuelName));
                 if (lubricantStack != null && lubricantStack.amount > 0) {
                     ITextComponent lubricantName = GTUtility.getFluidTranslation((lubricantStack.getFluid()));
-                    textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY, "susy.multiblock.rotation_generator.lubricant", lubricantName, lubricantInfo.boost));
+                    textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                            "susy.multiblock.rotation_generator.lubricant", lubricantName, lubricantInfo.boost));
                 }
             }
-            textList.add(new TextComponentTranslation("susy.multiblock.rotation_generator.power", getMaxVoltage(), Math.min(recipeMapWorkable.getEnergyContainer().getOutputVoltage(), GTValues.V[tier] * 16)));
+            textList.add(new TextComponentTranslation("susy.multiblock.rotation_generator.power", getMaxVoltage(),
+                    Math.min(recipeMapWorkable.getEnergyContainer().getOutputVoltage(), GTValues.V[tier] * 16)));
         }
 
         MultiblockFuelRecipeLogic recipeLogic = (MultiblockFuelRecipeLogic) recipeMapWorkable;

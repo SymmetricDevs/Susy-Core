@@ -1,14 +1,12 @@
 package supersymmetry.common.materials;
 
+import static gregtech.api.unification.material.info.MaterialFlags.FLAMMABLE;
 import static supersymmetry.common.materials.SusyMaterials.*;
 
 import gregtech.api.fluids.FluidBuilder;
 import gregtech.api.fluids.store.FluidStorageKeys;
 import gregtech.api.unification.material.Material;
 import supersymmetry.api.util.SuSyUtility;
-
-import static gregtech.api.unification.material.info.MaterialFlags.FLAMMABLE;
-import static supersymmetry.common.materials.SusyMaterials.*;
 
 public class SuSyUnknownCompositionMaterials {
 

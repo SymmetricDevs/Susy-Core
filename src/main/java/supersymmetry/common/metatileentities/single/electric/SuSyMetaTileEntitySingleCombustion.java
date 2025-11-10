@@ -1,5 +1,20 @@
 package supersymmetry.common.metatileentities.single.electric;
 
+import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import gregtech.api.GTValues;
 import gregtech.api.capability.IEnergyContainer;
 import gregtech.api.capability.impl.FluidTankList;
@@ -17,22 +32,8 @@ import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.common.metatileentities.electric.MetaTileEntitySingleCombustion;
-
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.capability.impl.SuSyFluidFilters;
 import supersymmetry.api.util.SuSyUtility;
-
-import java.util.List;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleCombustion {
 
@@ -57,7 +58,8 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
 
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
-        return new SuSyMetaTileEntitySingleCombustion(metaTileEntityId, recipeMap, renderer, this.getTier(), this.getTankScalingFunction());
+        return new SuSyMetaTileEntitySingleCombustion(metaTileEntityId, recipeMap, renderer, this.getTier(),
+                this.getTankScalingFunction());
     }
 
     @Override
@@ -73,7 +75,8 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
             displayedTanks[i] = filteredFluidHandler;
         }
 
-        this.lubricantTank = new NotifiableFilteredFluidHandler(1000, this, false).setFilter(SuSyFluidFilters.LUBRICANT);
+        this.lubricantTank = new NotifiableFilteredFluidHandler(1000, this, false)
+                .setFilter(SuSyFluidFilters.LUBRICANT);
         fluidImports[fluidImports.length - 2] = lubricantTank;
 
         this.coolantTank = new NotifiableFilteredFluidHandler(1000, this, false).setFilter(SuSyFluidFilters.COOLANT);
@@ -119,7 +122,8 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
             return;
         }
 
-        sufficientFluids = lubricantStack.amount >= lubricant.amount_required && coolantStack.amount >= coolant.amount_required;
+        sufficientFluids = lubricantStack.amount >= lubricant.amount_required &&
+                coolantStack.amount >= coolant.amount_required;
     }
 
     @Override
@@ -139,20 +143,22 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
                 .setBackgroundTexture(GuiTextures.PROGRESS_BAR_BOILER_EMPTY.get(true)));
         builder.widget(new ImageWidget(152, 63 + yOffset, 17, 17,
                 GTValues.XMAS.get() ? GuiTextures.GREGTECH_LOGO_XMAS : GuiTextures.GREGTECH_LOGO)
-                .setIgnoreColor(true));
+                        .setIgnoreColor(true));
 
         return builder;
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip,
+                               boolean advanced) {
         super.addInformation(stack, world, tooltip, advanced);
         tooltip.add(I18n.format("susy.machine.combustion_generator.tooltip"));
     }
 
     private class CombustionRecipeLogic extends FuelRecipeLogic {
 
-        public CombustionRecipeLogic(SuSyMetaTileEntitySingleCombustion metaTileEntity, RecipeMap<?> recipeMap, Supplier<IEnergyContainer> energyContainer) {
+        public CombustionRecipeLogic(SuSyMetaTileEntitySingleCombustion metaTileEntity, RecipeMap<?> recipeMap,
+                                     Supplier<IEnergyContainer> energyContainer) {
             super(metaTileEntity, recipeMap, energyContainer);
         }
 
