@@ -1,17 +1,20 @@
 package supersymmetry.common.item.behavior;
 
-import gregtech.api.pipenet.tile.IPipeTile;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
-import supersymmetry.api.SusyLog;
-
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import org.jetbrains.annotations.Nullable;
+
+import gregtech.api.pipenet.tile.IPipeTile;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import supersymmetry.api.SusyLog;
 
 /// This is so horrible ngl...
 @ParametersAreNonnullByDefault
@@ -52,7 +55,8 @@ public class PipeOperationWalker<T extends IPipeTile<?, ?>> {
 
     @SuppressWarnings("unchecked")
     public static <T extends IPipeTile<?, ?>> int collectPipeNet(World world, BlockPos sourcePipe, T pipe,
-                                                                 EnumFacing direction, ITraverseOption option, int maxWalks) {
+                                                                 EnumFacing direction, ITraverseOption option,
+                                                                 int maxWalks) {
         var walker = new PipeOperationWalker<>(world, sourcePipe, 0, (Class<T>) pipe.getClass());
         {
             walker.currentPipe = pipe;
@@ -71,7 +75,7 @@ public class PipeOperationWalker<T extends IPipeTile<?, ?>> {
             this.running = true;
         }
         int i = 0;
-        //noinspection StatementWithEmptyBody
+        // noinspection StatementWithEmptyBody
         while (running && !step() && i++ < maxWalks) {
             /* Do nothing */
         }
@@ -175,7 +179,8 @@ public class PipeOperationWalker<T extends IPipeTile<?, ?>> {
         return root.walked.contains(pipe);
     }
 
-    private PipeOperationWalker<T> createSubWalker(World world, EnumFacing facingToNextPos, BlockPos nextPos, int walkedBlocks) {
+    private PipeOperationWalker<T> createSubWalker(World world, EnumFacing facingToNextPos, BlockPos nextPos,
+                                                   int walkedBlocks) {
         boolean reverse = this.direction != null ? facingToNextPos != direction : this.reverse;
         var subWalker = new PipeOperationWalker<>(world, nextPos, walkedBlocks, this.basePipeClass);
         subWalker.reverse = reverse;

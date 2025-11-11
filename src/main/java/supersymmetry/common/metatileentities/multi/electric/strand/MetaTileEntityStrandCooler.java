@@ -1,5 +1,12 @@
 package supersymmetry.common.metatileentities.multi.electric.strand;
 
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.FluidStack;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.GTValues;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -12,11 +19,6 @@ import gregtech.api.unification.material.Materials;
 import gregtech.api.util.GTTransferUtils;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.capability.Strand;
 import supersymmetry.api.capability.StrandConversion;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
@@ -25,7 +27,9 @@ import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 
 public class MetaTileEntityStrandCooler extends MetaTileEntityStrandShaper {
+
     private ItemStack current;
+
     public MetaTileEntityStrandCooler(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
     }
@@ -37,7 +41,8 @@ public class MetaTileEntityStrandCooler extends MetaTileEntityStrandShaper {
             if (conversion == null) {
                 return false;
             }
-            int amount = (int) (conversion.amount * conversion.prefix.getMaterialAmount(input.getStrand().material) / GTValues.M);
+            int amount = (int) (conversion.amount * conversion.prefix.getMaterialAmount(input.getStrand().material) /
+                    GTValues.M);
             FluidStack drained = inputFluidInventory.drain(Materials.Water.getFluid(amount), false);
             if (drained == null || drained.amount != amount) {
                 return false;

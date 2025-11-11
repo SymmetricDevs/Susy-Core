@@ -1,9 +1,10 @@
 package supersymmetry.common.item.behavior;
 
-import gregtech.api.pipenet.tile.IPipeTile;
+import java.util.List;
+
 import net.minecraft.util.EnumFacing;
 
-import java.util.List;
+import gregtech.api.pipenet.tile.IPipeTile;
 
 public interface ITraverseOption {
 

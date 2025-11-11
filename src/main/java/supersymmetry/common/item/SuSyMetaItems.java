@@ -1,5 +1,10 @@
 package supersymmetry.common.item;
 
+import static gregtech.common.items.MetaItems.SPRAY_EMPTY;
+
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.EnumDyeColor;
+
 import com.google.common.base.CaseFormat;
 import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
@@ -17,14 +22,10 @@ import gregtech.api.unification.ore.OrePrefix;
 import gregtech.common.items.MetaItems;
 import gregtech.api.unification.stack.UnificationEntry;
 import gregtech.common.items.behaviors.TooltipBehavior;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.EnumDyeColor;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
 import supersymmetry.common.item.behavior.PipeNetPainterBehavior;
-
-import static gregtech.common.items.MetaItems.SPRAY_EMPTY;
 
 public class SuSyMetaItems {
 
@@ -127,10 +128,10 @@ public class SuSyMetaItems {
     }
 
     private static void addTieredOredictItem(OreDictValueItem[] items, int id, int RGB, OrePrefix prefix) {
-
         for (int i = 0; i < items.length; i++) {
-            items[i] = oreDictItem.addOreDictItem(id + i, SuSyValues.TierMaterials[i + 1].toString(), RGB, MaterialIconSet.DULL, prefix, I18n.format("susy.universal.catalysts.tooltip.tier", GTValues.V[i], GTValues.VN[i]));
+            items[i] = oreDictItem.addOreDictItem(id + i, SuSyValues.TierMaterials[i + 1].toString(), RGB,
+                    MaterialIconSet.DULL, prefix,
+                    I18n.format("susy.universal.catalysts.tooltip.tier", GTValues.V[i], GTValues.VN[i]));
         }
-
     }
 }
