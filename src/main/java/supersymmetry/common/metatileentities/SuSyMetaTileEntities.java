@@ -415,7 +415,9 @@ public class SuSyMetaTileEntities {
         registerSimpleMTE(ION_IMPLANTER, 12, 14666, "ion_implanter", SuSyRecipeMaps.ION_IMPLANTATION_RECIPES,
                 SusyTextures.ION_IMPLANTER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
 
-        registerSimpleMTE(SPUTTER_DEPOSITION, 12, 14755, "sputter_deposition", SuSyRecipeMaps.SPUTTER_DEPOSITION_RECIPES, SusyTextures.SPUTTER_DEPOSITION_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+        registerSimpleMTE(SPUTTER_DEPOSITION, 12, 14755, "sputter_deposition",
+                SuSyRecipeMaps.SPUTTER_DEPOSITION_RECIPES, SusyTextures.SPUTTER_DEPOSITION_OVERLAY, true,
+                GTUtility.defaultTankSizeFunction);
 
         CURTAIN_COATER = registerMetaTileEntity(14513, new MetaTileEntityCurtainCoater(susyId("curtain_coater")));
         MILLING = registerMetaTileEntity(14514, new MetaTileEntityPreciseMillingMachine(susyId("milling")));
