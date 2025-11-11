@@ -38,6 +38,11 @@ public class BlocksActiveCasing extends VariantActiveBlock<BlocksActiveCasing.Ac
         return BlockRenderLayer.SOLID;
     }
 
+    @Override
+    protected boolean isBloomEnabled(ActiveBlockType value) {
+        return false;
+    }
+
     public enum ActiveBlockType implements IStringSerializable {
 
         BASIC_INTAKE_CASING("basic_intake_casing");
