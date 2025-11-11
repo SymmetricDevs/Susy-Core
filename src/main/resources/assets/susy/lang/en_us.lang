@@ -807,7 +807,7 @@ susy.machine.combustion_generator.hv.name=Advanced Combustion Generator II
 susy.machine.combustion_generator.tooltip=Requires lubricant and coolant to operate. Accepted coolants: Water, Distilled Water, Coolant, Advanced Coolant.
 
 susy.multiblock.rotation_generator.fuel_name=Fuel: %s
-susy.multiblock.rotation_generator.lubricant=Lubricant: %s\nBoost: %sx
+susy.multiblock.rotation_generator.lubricant=Lubricant: %s/nBoost: %sx
 susy.multiblock.rotation_generator.power=Power: %s / %s EU/t
 susy.multiblock.rotation_generator.lubricant_amount=Lubricant: %s | Consumption: %s
 susy.multiblock.rotation_generator.tooltip=Max Rotation Speed: %s RPM, Spin-Up: %s RPM/t, Spin-Down: %s RPM/t.
