@@ -7,7 +7,9 @@ import net.minecraft.entity.EntityLiving.SpawnPlacementType;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+
 import org.jetbrains.annotations.NotNull;
+
 import supersymmetry.api.blocks.VariantAxialRotatableBlock;
 
 public class BlockGirthGearTooth extends VariantAxialRotatableBlock<BlockGirthGearTooth.Type> {
@@ -24,14 +26,15 @@ public class BlockGirthGearTooth extends VariantAxialRotatableBlock<BlockGirthGe
 
     @Override
     public boolean canCreatureSpawn(
-            @NotNull IBlockState state,
-            @NotNull IBlockAccess world,
-            @NotNull BlockPos pos,
-            @NotNull SpawnPlacementType type) {
+                                    @NotNull IBlockState state,
+                                    @NotNull IBlockAccess world,
+                                    @NotNull BlockPos pos,
+                                    @NotNull SpawnPlacementType type) {
         return false;
     }
 
     public enum Type implements IStringSerializable {
+
         STEEL("steel"),
         ;
 

@@ -1,19 +1,22 @@
 package supersymmetry.common.network;
 
-import gregtech.api.network.IClientExecutor;
-import gregtech.api.network.IPacket;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.Nullable;
-import supersymmetry.api.util.RenderMaskManager;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
-import java.util.Collection;
+import org.jetbrains.annotations.Nullable;
+
+import gregtech.api.network.IClientExecutor;
+import gregtech.api.network.IPacket;
+import supersymmetry.api.util.RenderMaskManager;
 
 @ParametersAreNonnullByDefault
 public class SPacketUpdateRenderMask implements IPacket, IClientExecutor {

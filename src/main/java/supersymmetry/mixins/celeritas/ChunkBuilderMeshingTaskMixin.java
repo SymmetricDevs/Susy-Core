@@ -1,11 +1,14 @@
 package supersymmetry.mixins.celeritas;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.taumc.celeritas.impl.render.terrain.compile.task.ChunkBuilderMeshingTask;
+
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
+
 import supersymmetry.api.util.RenderMaskManager;
 
 @SuppressWarnings("UnresolvedMixinReference")

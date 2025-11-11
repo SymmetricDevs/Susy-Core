@@ -37,7 +37,6 @@ import gregtech.client.utils.TooltipHelper;
 import gregtech.common.blocks.BlockWireCoil;
 import gregtech.common.items.MetaItems;
 import gregtech.modules.ModuleManager;
-import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.blocks.VariantItemBlockFalling;
@@ -264,7 +263,8 @@ public class CommonProxy {
             VariantItemBlock itemBlock = (VariantItemBlock) item;
             BlockWireCoil.CoilType coilType = wireCoilBlock.getState(itemBlock.getBlockState(itemStack));
             event.getToolTip().add(I18n.format("tile.wire_coil.tooltip_evaporation"));
-            event.getToolTip().add(I18n.format("tile.wire_coil.tooltip_energy_evaporating", coilType.getCoilTemperature() / 1000));
+            event.getToolTip().add(
+                    I18n.format("tile.wire_coil.tooltip_energy_evaporating", coilType.getCoilTemperature() / 1000));
         }
     }
 

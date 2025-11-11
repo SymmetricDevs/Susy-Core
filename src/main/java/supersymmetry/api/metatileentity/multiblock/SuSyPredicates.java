@@ -8,23 +8,6 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraftforge.fml.common.Loader;
-
-import org.apache.commons.lang3.tuple.Pair;
-import org.jetbrains.annotations.NotNull;
-
-import cam72cam.immersiverailroading.IRBlocks;
-import gregtech.api.GregTechAPI;
-import gregtech.api.block.IHeatingCoilBlockStats;
-import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
-import gregtech.api.pattern.PatternStringError;
-import gregtech.api.pattern.TraceabilityPredicate;
-import gregtech.api.util.BlockInfo;
-import gregtech.api.util.RelativeDirection;
-import gregtech.common.blocks.BlockColored;
-import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.EnumDyeColor;
@@ -32,9 +15,20 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Loader;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
+
+import cam72cam.immersiverailroading.IRBlocks;
+import gregtech.api.GregTechAPI;
+import gregtech.api.block.IHeatingCoilBlockStats;
+import gregtech.api.pattern.PatternStringError;
+import gregtech.api.pattern.TraceabilityPredicate;
+import gregtech.api.util.BlockInfo;
+import gregtech.api.util.RelativeDirection;
+import gregtech.common.blocks.BlockColored;
+import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.blocks.VariantAxialRotatableBlock;
 import supersymmetry.common.blocks.*;
@@ -152,38 +146,39 @@ public class SuSyPredicates {
      *
      * @see #LARGE_METAL_SHEETS
      */
-    private static final Supplier<TraceabilityPredicate> METAL_SHEETS = () -> new TraceabilityPredicate(blockWorldState -> {
-        IBlockState state = blockWorldState.getBlockState();
-        if (state.getBlock() instanceof BlockColored colored) {
-            IBlockState defaultState = colored.getDefaultState();
-            int colorValue = colored.getState(state).getMetadata();
-            int typeValue = defaultState == MetaBlocks.METAL_SHEET.getDefaultState() ? 0 :
-                    defaultState == MetaBlocks.LARGE_METAL_SHEET.getDefaultState() ? 1 : -1;
-            if (typeValue >= 0) {
-                byte value = (byte) (typeValue << 4 | colorValue);
-                Object currentCoil = blockWorldState.getMatchContext().getOrPut("MetalSheet", value);
-                if (!currentCoil.equals(value)) {
-                    blockWorldState.setError(new PatternStringError("gregtech.multiblock.pattern.error.metal_sheets"));
-                    return false;
+    private static final Supplier<TraceabilityPredicate> METAL_SHEETS = () -> new TraceabilityPredicate(
+            blockWorldState -> {
+                IBlockState state = blockWorldState.getBlockState();
+                if (state.getBlock() instanceof BlockColored colored) {
+                    IBlockState defaultState = colored.getDefaultState();
+                    int colorValue = colored.getState(state).getMetadata();
+                    int typeValue = defaultState == MetaBlocks.METAL_SHEET.getDefaultState() ? 0 :
+                            defaultState == MetaBlocks.LARGE_METAL_SHEET.getDefaultState() ? 1 : -1;
+                    if (typeValue >= 0) {
+                        byte value = (byte) (typeValue << 4 | colorValue);
+                        Object currentCoil = blockWorldState.getMatchContext().getOrPut("MetalSheet", value);
+                        if (!currentCoil.equals(value)) {
+                            blockWorldState
+                                    .setError(new PatternStringError("gregtech.multiblock.pattern.error.metal_sheets"));
+                            return false;
+                        }
+                        return true;
+                    }
                 }
-                return true;
-            }
-        }
-        return false;
-    }, () -> Arrays.stream(EnumDyeColor.values())
-            .map(type -> new BlockInfo(MetaBlocks.METAL_SHEET.getState(type)))
-            .toArray(BlockInfo[]::new)
-    );
+                return false;
+            }, () -> Arrays.stream(EnumDyeColor.values())
+                    .map(type -> new BlockInfo(MetaBlocks.METAL_SHEET.getState(type)))
+                    .toArray(BlockInfo[]::new));
 
     /**
      * This only supplies {@link BlockInfo[]} for large metal sheet blocks.
      *
      * @see #METAL_SHEETS
      */
-    private static final Supplier<TraceabilityPredicate> LARGE_METAL_SHEETS = () -> new TraceabilityPredicate(blockWorldState -> false, () -> Arrays.stream(EnumDyeColor.values())
-            .map(type -> new BlockInfo(MetaBlocks.LARGE_METAL_SHEET.getState(type)))
-            .toArray(BlockInfo[]::new)
-    );
+    private static final Supplier<TraceabilityPredicate> LARGE_METAL_SHEETS = () -> new TraceabilityPredicate(
+            blockWorldState -> false, () -> Arrays.stream(EnumDyeColor.values())
+                    .map(type -> new BlockInfo(MetaBlocks.LARGE_METAL_SHEET.getState(type)))
+                    .toArray(BlockInfo[]::new));
 
     @NotNull
     public static TraceabilityPredicate coolingCoils() {
@@ -217,14 +212,13 @@ public class SuSyPredicates {
 
     /**
      * @param facing the axis direction of the eccentric roll (rotates CCW)
-     * <p>
-     * Supplies predicates for each facing direction
-     * This autocorrects the facing of the eccentric roll
-     * and adds the position of the eccentric roll to the match context
+     *               <p>
+     *               Supplies predicates for each facing direction
+     *               This autocorrects the facing of the eccentric roll
+     *               and adds the position of the eccentric roll to the match context
      */
     @NotNull
     public static TraceabilityPredicate eccentricRolls(EnumFacing facing) {
-
         return new TraceabilityPredicate(bws -> {
             IBlockState state = bws.getBlockState();
             if (state.getBlock() instanceof BlockEccentricRoll) {
@@ -244,23 +238,21 @@ public class SuSyPredicates {
             }
             return false;
             // Supplies an eccentric roll with the correct direction
-        }, () -> new BlockInfo[]{new BlockInfo(SuSyBlocks.ECCENTRIC_ROLL.getDefaultState()
-                .withProperty(BlockDirectional.FACING, facing))}
-        );
+        }, () -> new BlockInfo[] { new BlockInfo(SuSyBlocks.ECCENTRIC_ROLL.getDefaultState()
+                .withProperty(BlockDirectional.FACING, facing)) });
     }
 
     @NotNull
     public static TraceabilityPredicate hiddenStates(IBlockState... allowedStates) {
-            return new TraceabilityPredicate(bws -> {
-                IBlockState state = bws.getBlockState();
-                bws.getMatchContext().getOrPut("Hidden", new LinkedList<>()).add(bws.getPos());
-                return ArrayUtils.contains(allowedStates, state);
-            }, () -> Arrays.stream(allowedStates).map(state -> new BlockInfo(state, null)).toArray(BlockInfo[]::new));
+        return new TraceabilityPredicate(bws -> {
+            IBlockState state = bws.getBlockState();
+            bws.getMatchContext().getOrPut("Hidden", new LinkedList<>()).add(bws.getPos());
+            return ArrayUtils.contains(allowedStates, state);
+        }, () -> Arrays.stream(allowedStates).map(state -> new BlockInfo(state, null)).toArray(BlockInfo[]::new));
     }
 
     @NotNull
     public static TraceabilityPredicate hiddenGearTooth(EnumFacing.Axis axis) {
-
         return new TraceabilityPredicate(bws -> {
             IBlockState state = bws.getBlockState();
             if (state.getBlock() instanceof BlockGirthGearTooth) {
@@ -276,8 +268,7 @@ public class SuSyPredicates {
             }
             return false;
             // Supplies an eccentric roll with the correct direction
-        }, () -> new BlockInfo[]{new BlockInfo(SuSyBlocks.GIRTH_GEAR_TOOTH.getDefaultState()
-                .withProperty(VariantAxialRotatableBlock.AXIS, axis))}
-        );
+        }, () -> new BlockInfo[] { new BlockInfo(SuSyBlocks.GIRTH_GEAR_TOOTH.getDefaultState()
+                .withProperty(VariantAxialRotatableBlock.AXIS, axis)) });
     }
 }

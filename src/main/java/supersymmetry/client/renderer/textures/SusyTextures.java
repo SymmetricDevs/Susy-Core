@@ -1,9 +1,10 @@
 package supersymmetry.client.renderer.textures;
 
+import net.minecraft.item.EnumDyeColor;
+
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.renderer.texture.cube.*;
 import gregtech.client.renderer.texture.custom.DrumRenderer;
-import net.minecraft.item.EnumDyeColor;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.renderer.textures.custom.ExtenderRender;
 
@@ -166,8 +167,10 @@ public class SusyTextures {
             "machines/multiblocks/injection_molder");
     public static final OrientedOverlayRenderer POLYMERIZATION_TANK_OVERLAY = new OrientedOverlayRenderer(
             "machines/multiblocks/polymerization_tank");
-    public static final OrientedOverlayRenderer ECCENTRIC_ROLL_CRUSHER_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/eccentric_roll_crusher");
-    public static final OrientedOverlayRenderer BALL_MILL_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/ball_mill");
+    public static final OrientedOverlayRenderer ECCENTRIC_ROLL_CRUSHER_OVERLAY = new OrientedOverlayRenderer(
+            "machines/multiblocks/eccentric_roll_crusher");
+    public static final OrientedOverlayRenderer BALL_MILL_OVERLAY = new OrientedOverlayRenderer(
+            "machines/multiblocks/ball_mill");
 
     public static final SimpleOverlayRenderer SLAG_HOT = new SimpleOverlayRenderer("resource/slag_hot");
     public static final SimpleOverlayRenderer RESTRICTIVE_FILTER_FILTER_OVERLAY = new SimpleOverlayRenderer(
@@ -191,8 +194,8 @@ public class SusyTextures {
             "gregtech:blocks/casings/mechanic/machine_casing_turbine_steel");
     public static final SimpleCubeRenderer TITANIUM_TURBINE_CASING = new SimpleCubeRenderer(
             "gregtech:blocks/casings/mechanic/machine_casing_turbine_titanium");
-    public static final SimpleCubeRenderer BALL_MILL_SHELL =
-            new SimpleCubeRenderer("gregtech:blocks/casings/grinder_casing/wear_resistant_lined_mill_shell");
+    public static final SimpleCubeRenderer BALL_MILL_SHELL = new SimpleCubeRenderer(
+            "gregtech:blocks/casings/grinder_casing/wear_resistant_lined_mill_shell");
 
     public static final DrumRenderer PLASTIC_CAN = new DrumRenderer("storage/drums/plastic_can");
 
@@ -227,8 +230,10 @@ public class SusyTextures {
 
     static {
         for (EnumDyeColor color : EnumDyeColor.values()) {
-            METAL_SHEETS[color.getMetadata()] = new SimpleCubeRenderer("gregtech:blocks/decoration/metalsheet_" + SuSyUtility.getNameForColor(color));
-            METAL_SHEETS[color.getMetadata() + 16] = new SimpleCubeRenderer("gregtech:blocks/decoration/large_metalsheet_" + SuSyUtility.getNameForColor(color));
+            METAL_SHEETS[color.getMetadata()] = new SimpleCubeRenderer(
+                    "gregtech:blocks/decoration/metalsheet_" + SuSyUtility.getNameForColor(color));
+            METAL_SHEETS[color.getMetadata() + 16] = new SimpleCubeRenderer(
+                    "gregtech:blocks/decoration/large_metalsheet_" + SuSyUtility.getNameForColor(color));
         }
     }
 }

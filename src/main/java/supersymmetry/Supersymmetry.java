@@ -57,7 +57,6 @@ public class Supersymmetry {
         proxy.checkCanaryFile();
     }
 
-
     @Mod.EventHandler
     public void onPreInit(@NotNull FMLPreInitializationEvent event) {
         proxy.preLoad();

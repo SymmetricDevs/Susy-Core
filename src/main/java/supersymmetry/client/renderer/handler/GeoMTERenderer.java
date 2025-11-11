@@ -1,13 +1,14 @@
 package supersymmetry.client.renderer.handler;
 
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
-import gregtech.api.util.RelativeDirection;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3i;
+
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
+import gregtech.api.util.RelativeDirection;
 import software.bernie.geckolib3.core.IAnimatableModel;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
@@ -17,6 +18,7 @@ import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import supersymmetry.api.metatileentity.IAnimatableMTE;
 
 public enum GeoMTERenderer implements IGeoRenderer<IAnimatableMTE> {
+
     INSTANCE;
 
     public final AnimatedGeoModel<IAnimatableMTE> MODEL_DISPATCHER = new ModelDispatcher();
@@ -24,7 +26,7 @@ public enum GeoMTERenderer implements IGeoRenderer<IAnimatableMTE> {
     static {
         AnimationController.addModelFetcher(object -> {
             if (object instanceof IAnimatableMTE) {
-                //noinspection rawtypes,unchecked
+                // noinspection rawtypes,unchecked
                 return (IAnimatableModel) INSTANCE.getGeoModelProvider();
             }
             return null;
@@ -77,7 +79,8 @@ public enum GeoMTERenderer implements IGeoRenderer<IAnimatableMTE> {
     }
 
     @SuppressWarnings("DuplicatedCode")
-    public <T extends MetaTileEntity & IAnimatableMTE> void render(T mte, double x, double y, double z, float partialTicks) {
+    public <T extends MetaTileEntity & IAnimatableMTE> void render(T mte, double x, double y, double z,
+                                                                   float partialTicks) {
         GeoModel model = MODEL_DISPATCHER.getModel(MODEL_DISPATCHER.getModelLocation(mte));
         Vec3i vec3i = mte.getTransformation();
         MODEL_DISPATCHER.setLivingAnimations(mte, getUniqueID(mte));
@@ -94,7 +97,7 @@ public enum GeoMTERenderer implements IGeoRenderer<IAnimatableMTE> {
                 EnumFacing upwards = controller.getUpwardsFacing();
                 EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(front, upwards, controller.isFlipped());
 
-                if (/*controller.allowsFlip() &&*/ controller.isFlipped()) flip(left);
+                if (/* controller.allowsFlip() && */ controller.isFlipped()) flip(left);
                 rotateToFace(front, upwards);
             }
 

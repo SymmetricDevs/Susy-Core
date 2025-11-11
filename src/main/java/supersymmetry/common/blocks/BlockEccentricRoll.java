@@ -1,8 +1,10 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.block.IStateHarvestLevel;
-import gregtech.api.block.VariantBlock;
-import gregtech.common.items.tool.rotation.CustomBlockRotations;
+import static gregtech.common.items.tool.rotation.CustomBlockRotations.BLOCK_DIRECTIONAL_BEHAVIOR;
+import static net.minecraft.block.BlockDirectional.FACING;
+
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -23,15 +25,15 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import gregtech.api.block.IStateHarvestLevel;
+import gregtech.api.block.VariantBlock;
+import gregtech.common.items.tool.rotation.CustomBlockRotations;
 import supersymmetry.api.blocks.IAnimatablePartBlock;
 import supersymmetry.api.util.SuSyDamageSources;
-
-import javax.annotation.Nonnull;
-
-import static gregtech.common.items.tool.rotation.CustomBlockRotations.BLOCK_DIRECTIONAL_BEHAVIOR;
-import static net.minecraft.block.BlockDirectional.FACING;
 
 public class BlockEccentricRoll extends VariantBlock<BlockEccentricRoll.RollType> implements IAnimatablePartBlock {
 
@@ -77,7 +79,9 @@ public class BlockEccentricRoll extends VariantBlock<BlockEccentricRoll.RollType
     @Nonnull
     @Override
     @SuppressWarnings("deprecation")
-    public IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull EnumFacing facing, float hitX, float hitY, float hitZ, int meta, @NotNull EntityLivingBase placer) {
+    public IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull EnumFacing facing,
+                                            float hitX, float hitY, float hitZ, int meta,
+                                            @NotNull EntityLivingBase placer) {
         return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer)
                 .withProperty(FACING, EnumFacing.getDirectionFromEntityLiving(pos, placer))
                 .withProperty(ACTIVE, false);
@@ -119,7 +123,8 @@ public class BlockEccentricRoll extends VariantBlock<BlockEccentricRoll.RollType
 
     @Nonnull
     @Override
-    public ItemStack getPickBlock(IBlockState state, @NotNull RayTraceResult target, @NotNull World world, @NotNull BlockPos pos, @NotNull EntityPlayer player) {
+    public ItemStack getPickBlock(IBlockState state, @NotNull RayTraceResult target, @NotNull World world,
+                                  @NotNull BlockPos pos, @NotNull EntityPlayer player) {
         return this.getItemVariant(state.getValue(VARIANT), 1);
     }
 
@@ -154,6 +159,7 @@ public class BlockEccentricRoll extends VariantBlock<BlockEccentricRoll.RollType
     }
 
     public enum RollType implements IStringSerializable, IStateHarvestLevel {
+
         STEEL("steel", 1);
 
         private final String name;

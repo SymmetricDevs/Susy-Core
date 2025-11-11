@@ -1,8 +1,25 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.pipeline.IVertexOperation;
-import codechicken.lib.vec.Matrix4;
+import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.hiddenGearTooth;
+import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.hiddenStates;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockAbilityPart;
@@ -20,18 +37,6 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.builder.ILoopType;
@@ -44,12 +49,6 @@ import supersymmetry.api.metatileentity.IAnimatableMTE;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockGrinderCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
-
-import java.util.ArrayList;
-import java.util.Collection;
-
-import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.hiddenGearTooth;
-import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.hiddenStates;
 
 public class MetaTileEntityBallMill extends RecipeMapMultiblockController implements IAnimatableMTE {
 
@@ -104,7 +103,7 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
     @Override
     @SideOnly(Side.CLIENT)
     public ICubeRenderer getBaseTexture(IMultiblockPart part) {
-        if (part instanceof IMultiblockAbilityPart<?> abilityPart) {
+        if (part instanceof IMultiblockAbilityPart<?>abilityPart) {
             var ability = abilityPart.getAbility();
             if (ability != MultiblockAbility.MAINTENANCE_HATCH && ability != MultiblockAbility.INPUT_ENERGY) {
                 return SusyTextures.BALL_MILL_SHELL;
@@ -118,17 +117,23 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
         var shell = states(getShellCasingState());
 
         return FactoryBlockPattern.start()
-                .aisle(" XXMMMXXXXXXX", "   NMM       ", "             ", "  G          ", "  G          ", "  G          ", "             ", "             ")
-                .aisle(" X          X", "             ", "  G          ", "  HCCCCCCCCH ", "  HCCCCCCCCH ", "  HCCCCCCCCH ", "  G          ", "             ")
-                .aisle(" X          X", " XG         X", " XHCCCCCCCCHX", " XH#####D##HX", " XH#####D##HX", " XH#####D##H ", "  HCCCCCCCCH ", "  G          ")
-                .aisle(" X          X", "  G          ", "  HCCCCCCCCH ", "OXH#####D##H ", "AA######D###Y", "ZXH#####D##HI", "  HCCCCCCCCH ", "  G          ")
-                .aisle(" X          X", " XG         X", " XHCCCCCCCCHX", " XH#####D##HX", " XH#####D##HX", " XH#####D##H ", "  HCCCCCCCCH ", "  G          ")
-                .aisle(" X          X", "             ", "  G          ", "  HCCCCCCCCH ", "  HCCCCCCCCH ", "  HCCCCCCCCH ", "  G          ", "             ")
-                .aisle(" XXMMMXXXXXXX", "   NSM       ", "             ", "  G          ", "  G          ", "  G          ", "             ", "             ")
+                .aisle(" XXMMMXXXXXXX", "   NMM       ", "             ", "  G          ", "  G          ",
+                        "  G          ", "             ", "             ")
+                .aisle(" X          X", "             ", "  G          ", "  HCCCCCCCCH ", "  HCCCCCCCCH ",
+                        "  HCCCCCCCCH ", "  G          ", "             ")
+                .aisle(" X          X", " XG         X", " XHCCCCCCCCHX", " XH#####D##HX", " XH#####D##HX",
+                        " XH#####D##H ", "  HCCCCCCCCH ", "  G          ")
+                .aisle(" X          X", "  G          ", "  HCCCCCCCCH ", "OXH#####D##H ", "AA######D###Y",
+                        "ZXH#####D##HI", "  HCCCCCCCCH ", "  G          ")
+                .aisle(" X          X", " XG         X", " XHCCCCCCCCHX", " XH#####D##HX", " XH#####D##HX",
+                        " XH#####D##H ", "  HCCCCCCCCH ", "  G          ")
+                .aisle(" X          X", "             ", "  G          ", "  HCCCCCCCCH ", "  HCCCCCCCCH ",
+                        "  HCCCCCCCCH ", "  G          ", "             ")
+                .aisle(" XXMMMXXXXXXX", "   NSM       ", "             ", "  G          ", "  G          ",
+                        "  G          ", "             ", "             ")
                 .where('M', states(getCasingState()).or(autoAbilities(
                         true, true, false,
-                        false, false, false, false
-                )))
+                        false, false, false, false)))
                 .where('Y', abilities(MultiblockAbility.IMPORT_ITEMS).or(shell))
                 .where('Z', abilities(MultiblockAbility.EXPORT_FLUIDS).or(shell))
                 .where('I', abilities(MultiblockAbility.IMPORT_ITEMS).or(shell))
@@ -138,9 +143,10 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
                 .where('H', hiddenStates(getShellHeadState()))
                 .where('D', hiddenStates(getDiaphragmState()))
                 .where('G', hiddenGearTooth(
-                        // Since isFlipped() isn't reliable at this stage, and we just care about the Axis here anyway...
-                        RelativeDirection.LEFT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), false).getAxis()
-                ))
+                        // Since isFlipped() isn't reliable at this stage, and we just care about the Axis here
+                        // anyway...
+                        RelativeDirection.LEFT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), false)
+                                .getAxis()))
                 .where('N', states(getGearBoxState()))
                 .where('X', frames(Materials.Steel))
                 .where('S', selfPredicate())

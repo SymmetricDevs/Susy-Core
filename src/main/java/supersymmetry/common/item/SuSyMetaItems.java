@@ -6,6 +6,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.EnumDyeColor;
 
 import com.google.common.base.CaseFormat;
+
 import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
 import gregtech.api.items.armor.ArmorMetaItem;
@@ -19,8 +20,8 @@ import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.info.MaterialIconSet;
 import gregtech.api.unification.material.registry.MaterialRegistry;
 import gregtech.api.unification.ore.OrePrefix;
-import gregtech.common.items.MetaItems;
 import gregtech.api.unification.stack.UnificationEntry;
+import gregtech.common.items.MetaItems;
 import gregtech.common.items.behaviors.TooltipBehavior;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
@@ -78,7 +79,8 @@ public class SuSyMetaItems {
                     for (Material material : registry) {
                         short i = (short) registry.getIDForObject(material);
                         if (canGenerate(SusyOrePrefix.millBall, material)) {
-                            var metaItem = addItem(i, new UnificationEntry(SusyOrePrefix.millBall, material).toString());
+                            var metaItem = addItem(i,
+                                    new UnificationEntry(SusyOrePrefix.millBall, material).toString());
                             metaItem.addComponents((IItemDurabilityManager) stack -> 0.5);
                             metaItem.setMaxStackSize(1);
                         }

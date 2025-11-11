@@ -18,9 +18,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.common.tileentities.SuSyTileEntities;
 
 import gregtech.api.util.BlockUtility;
+import supersymmetry.common.tileentities.SuSyTileEntities;
 
 public class SuSyBlocks {
 
