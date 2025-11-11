@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import gregtech.api.recipes.Recipe;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -384,6 +385,21 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
             overclockResults[1] = (int) ((double) overclockResults[1] / (Math.atan(cellsOff + 1) * 4 / Math.PI));
 
             super.modifyOverclockPost(overclockResults, storage);
+        }
+
+        @Override
+        public int getParallelLimit() {
+            return 16;
+        }
+
+        @Override
+        public boolean checkRecipe(@NotNull Recipe recipe) {
+            int cellsOff = (sDist - recipe.getRecipePropertyStorage()
+                    .getRecipePropertyValue(MixerSettlerCellsProperty.getInstance(), 2));
+            if (cellsOff < 0) {
+                return false;
+            }
+            return super.checkRecipe(recipe);
         }
     }
 }
