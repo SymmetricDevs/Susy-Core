@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import gregtech.api.recipes.Recipe;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -32,6 +31,7 @@ import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.pattern.TraceabilityPredicate;
+import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.recipeproperties.IRecipePropertyStorage;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.util.RelativeDirection;
