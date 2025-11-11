@@ -20,6 +20,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.util.BlockUtility;
+import supersymmetry.common.tileentities.SuSyTileEntities;
 
 public class SuSyBlocks {
 
@@ -57,6 +58,9 @@ public class SuSyBlocks {
     public static BlockRandomConcrete RANDOM_CONCRETE;
     public static BlockRandomConcrete1 RANDOM_CONCRETE1;
     public static BlockInductionCoilAssembly INDUCTION_COIL_ASSEMBLY;
+    public static BlockEccentricRoll ECCENTRIC_ROLL;
+    public static BlockGrinderCasing GRINDER_CASING;
+    public static BlockGirthGearTooth GIRTH_GEAR_TOOTH;
 
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
@@ -159,6 +163,17 @@ public class SuSyBlocks {
 
         INDUCTION_COIL_ASSEMBLY = new BlockInductionCoilAssembly();
         INDUCTION_COIL_ASSEMBLY.setRegistryName("induction_coil_assembly");
+
+        ECCENTRIC_ROLL = new BlockEccentricRoll();
+        ECCENTRIC_ROLL.setRegistryName("eccentric_roll");
+
+        GRINDER_CASING = new BlockGrinderCasing();
+        GRINDER_CASING.setRegistryName("grinder_casing");
+
+        GIRTH_GEAR_TOOTH = new BlockGirthGearTooth();
+        GIRTH_GEAR_TOOTH.setRegistryName("girth_gear_tooth");
+
+        SuSyTileEntities.register();
     }
 
     @SideOnly(Side.CLIENT)
@@ -197,6 +212,9 @@ public class SuSyBlocks {
         registerItemModel(RANDOM_CONCRETE);
         registerItemModel(RANDOM_CONCRETE1);
         registerItemModel(INDUCTION_COIL_ASSEMBLY);
+        registerItemModel(ECCENTRIC_ROLL);
+        registerItemModel(GRINDER_CASING);
+        registerItemModel(GIRTH_GEAR_TOOTH);
     }
 
     @SideOnly(Side.CLIENT)

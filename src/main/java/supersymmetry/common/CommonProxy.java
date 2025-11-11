@@ -37,7 +37,6 @@ import gregtech.client.utils.TooltipHelper;
 import gregtech.common.blocks.BlockWireCoil;
 import gregtech.common.items.MetaItems;
 import gregtech.modules.ModuleManager;
-import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.blocks.VariantItemBlockFalling;
@@ -65,7 +64,6 @@ import supersymmetry.modules.SuSyModules;
 public class CommonProxy {
 
     public void preLoad() {
-        GeckoLib.initialize();
         SusyStoneTypes.init();
         Particles.init();
         Particles.register();
@@ -168,6 +166,9 @@ public class CommonProxy {
         registry.register(SuSyBlocks.RANDOM_CONCRETE);
         registry.register(SuSyBlocks.RANDOM_CONCRETE1);
         registry.register(SuSyBlocks.INDUCTION_COIL_ASSEMBLY);
+        registry.register(SuSyBlocks.ECCENTRIC_ROLL);
+        registry.register(SuSyBlocks.GRINDER_CASING);
+        registry.register(SuSyBlocks.GIRTH_GEAR_TOOTH);
 
         SHEETED_FRAMES.values().stream().distinct().forEach(registry::register);
     }
@@ -211,6 +212,9 @@ public class CommonProxy {
         registry.register(createItemBlock(SuSyBlocks.RANDOM_CONCRETE, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.RANDOM_CONCRETE1, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.INDUCTION_COIL_ASSEMBLY, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.ECCENTRIC_ROLL, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.GRINDER_CASING, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.GIRTH_GEAR_TOOTH, VariantItemBlock::new));
 
         SHEETED_FRAMES.values()
                 .stream().distinct()
@@ -253,16 +257,14 @@ public class CommonProxy {
 
     private static void handleCoilTooltips(ItemTooltipEvent event) {
         Block block = Block.getBlockFromItem(event.getItemStack().getItem());
-        if (block instanceof BlockWireCoil && TooltipHelper.isShiftDown()) {
+        if (block instanceof BlockWireCoil wireCoilBlock && TooltipHelper.isShiftDown()) {
             ItemStack itemStack = event.getItemStack();
             Item item = itemStack.getItem();
-            BlockWireCoil wireCoilBlock = (BlockWireCoil) block;
             VariantItemBlock itemBlock = (VariantItemBlock) item;
-            BlockWireCoil.CoilType coilType = (BlockWireCoil.CoilType) wireCoilBlock
-                    .getState(itemBlock.getBlockState(itemStack));
-            event.getToolTip().add(I18n.format("tile.wire_coil.tooltip_evaporation", new Object[0]));
-            event.getToolTip().add(I18n.format("tile.wire_coil.tooltip_energy_evaporating",
-                    new Object[] { coilType.getCoilTemperature() / 1000 }));
+            BlockWireCoil.CoilType coilType = wireCoilBlock.getState(itemBlock.getBlockState(itemStack));
+            event.getToolTip().add(I18n.format("tile.wire_coil.tooltip_evaporation"));
+            event.getToolTip().add(
+                    I18n.format("tile.wire_coil.tooltip_energy_evaporating", coilType.getCoilTemperature() / 1000));
         }
     }
 

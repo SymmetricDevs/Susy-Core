@@ -492,6 +492,13 @@ public class SuSyRecipeMaps {
                     .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
                     .setSound(GTSoundEvents.ARC);
 
+    public static final RecipeMap<SimpleRecipeBuilder> ECCENTRIC_ROLL_CRUSHER = new RecipeMap<>(
+            "eccentric_roll_crusher", 1, 4, 0, 0, new SimpleRecipeBuilder(), false)
+                    .setSlotOverlay(false, false, GuiTextures.DUST_OVERLAY)
+                    .setSlotOverlay(true, false, GuiTextures.CRUSHED_ORE_OVERLAY)
+                    .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, ProgressWidget.MoveType.HORIZONTAL)
+                    .setSound(GTSoundEvents.MACERATOR);
+
     static {
         GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()
                 .fluidInputs(SusyMaterials.RefractoryGunningMixture.getFluid(50 *

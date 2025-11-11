@@ -21,11 +21,17 @@ public class SuSyDamageSources {
     public static final DamageSource AGE = new DamageSource("age");
     public static final DamageSource CHRONOERASURE = new DamageSource("chronoerasure");
 
+    private static final DamageSource CRUSHER = new DamageSource("crusher");
+
     public static DamageSource getSuffocationDamage() {
         return SUFFOCATION;
     }
 
     public static DamageSource getToxicAtmoDamage() {
         return TOXIC_ATMO;
+    }
+
+    public static DamageSource getCrusherDamage() {
+        return CRUSHER;
     }
 }
