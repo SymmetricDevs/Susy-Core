@@ -30,8 +30,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v5
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          distribution: 'zulu'
+          java-version: '22'
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew

@@ -119,6 +119,7 @@ public class SuSyMetaTileEntities {
 
     public static SimpleMachineMetaTileEntity[] ION_IMPLANTER;
     public static SimpleMachineMetaTileEntity[] CVD;
+    public static SimpleMachineMetaTileEntity[] SPUTTER_DEPOSITION; // atomic layer depositor
 
     public static SimpleMachineMetaTileEntity[] WEAPONS_FACTORY;
 
@@ -414,6 +415,10 @@ public class SuSyMetaTileEntities {
                 GTUtility.defaultTankSizeFunction);
         registerSimpleMTE(ION_IMPLANTER, 12, 14666, "ion_implanter", SuSyRecipeMaps.ION_IMPLANTATION_RECIPES,
                 SusyTextures.ION_IMPLANTER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+
+        registerSimpleMTE(SPUTTER_DEPOSITION, 12, 14755, "sputter_deposition",
+                SuSyRecipeMaps.SPUTTER_DEPOSITION_RECIPES, SusyTextures.SPUTTER_DEPOSITION_OVERLAY, true,
+                GTUtility.defaultTankSizeFunction);
 
         CURTAIN_COATER = registerMetaTileEntity(14513, new MetaTileEntityCurtainCoater(susyId("curtain_coater")));
         MILLING = registerMetaTileEntity(14514, new MetaTileEntityPreciseMillingMachine(susyId("milling")));
@@ -762,6 +767,7 @@ public class SuSyMetaTileEntities {
         UV_LIGHT_BOX = new SimpleMachineMetaTileEntity[GTValues.OpV];
         CVD = new SimpleMachineMetaTileEntity[GTValues.OpV];
         ION_IMPLANTER = new SimpleMachineMetaTileEntity[GTValues.OpV];
+        SPUTTER_DEPOSITION = new SimpleMachineMetaTileEntity[GTValues.OpV];
 
         FLUID_COMPRESSOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
         FLUID_DECOMPRESSOR = new SimpleMachineMetaTileEntity[GTValues.OpV];

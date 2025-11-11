@@ -32,6 +32,7 @@ tile.rocket_assembler_casing.reinforced_foundation.name=Reinforced Foundation
 tile.rocket_assembler_casing.foundation.name=Rocket Assembler Foundation
 tile.rocket_assembler_casing.rails.name=Rocket Assembler Rails
 tile.rocket_assembler_casing.structural_frame.name=Rocket Assembler Structural Frame
+tile.susy_multiblock_casing.euv_safe_casing.name=Extreme-Ultraviolet-Safe Lithographer Casing
 
 tile.serpentine.basic.name=Copper Tubing Serpentine Block
 
@@ -383,9 +384,9 @@ susy.machine.metallurgical_converter.name=Metallurgical Converter
 susy.machine.injection_molder.name=Injection Molder
 
 susy.machine.primitive_item_import.name=Primitive Item Import Bus
-susy.machine.primitive_item_import.tooltip=Not a substitute for ULV 
+susy.machine.primitive_item_import.tooltip=Not a substitute for ULV
 susy.machine.primitive_item_export.name=Primitive Item Export Bus
-susy.machine.primitive_item_export.tooltip=Not a substitute for ULV 
+susy.machine.primitive_item_export.tooltip=Not a substitute for ULV
 susy.machine.mixer_settler.name=Mixer Settler
 susy.machine.mixer_settler.tooltip=First it mixes, then it settles... - Sun Tzu, The Art of SuSy
 susy.machine.mixer_settler.tooltip.1=The initial structure contains 2 cells, each expansion adds 2 more
@@ -798,6 +799,7 @@ susy.machine.fuel_cell.ev.name=Low Temperature Fuel Cell
 susy.machine.fuel_cell.iv.name=High Temperature Fuel Cell
 susy.machine.fuel_cell.tooltip=Temperature requirements for operation: %s°C
 
+
 susy.machine.combustion_generator.lv.name=Basic Combustion Generator
 susy.machine.combustion_generator.mv.name=Advanced Combustion Generator
 susy.machine.combustion_generator.hv.name=Advanced Combustion Generator II
@@ -808,6 +810,21 @@ susy.multiblock.rotation_generator.lubricant=Lubricant: %s\nBoost: %sx
 susy.multiblock.rotation_generator.power=Power: %s / %s EU/t
 susy.multiblock.rotation_generator.lubricant_amount=Lubricant: %s | Consumption: %s
 susy.multiblock.rotation_generator.tooltip=Max Rotation Speed: %s RPM, Spin-Up: %s RPM/t, Spin-Down: %s RPM/t.
+
+# Sputtering Machine
+susy.machine.sputter_deposition.lv.name=Basic Sputtering Machine
+susy.machine.sputter_deposition.mv.name=Advanced Sputtering Machine
+susy.machine.sputter_deposition.hv.name=Advanced Sputtering Machine II
+susy.machine.sputter_deposition.ev.name=Advanced Sputtering Machine III
+susy.machine.sputter_deposition.iv.name=Elite Sputtering Machine
+susy.machine.sputter_deposition.luv.name=Elite Sputtering Machine II
+susy.machine.sputter_deposition.zpm.name=Elite Sputtering Machine III
+susy.machine.sputter_deposition.uv.name=Ultimate Sputtering Machine
+susy.machine.sputter_deposition.uhv.name=Epic Sputtering Machine
+susy.machine.sputter_deposition.uev.name=Epic Sputtering Machine II
+susy.machine.sputter_deposition.uiv.name=Epic Sputtering Machine III
+susy.machine.sputter_deposition.uxv.name=Epic Sputtering Machine IV
+susy.machine.sputter_deposition.opv.name=Legendary Sputtering Machine
 
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
@@ -876,6 +893,9 @@ recipemap.hot_isostatic_press.name=Hot Isostatic Press
 recipemap.gas_atomizer.name=Gas Atomizer
 recipemap.metallurgical_converter.name=Metallurgical Converter
 recipemap.advanced_steam_turbine.name=Advanced Steam Turbine
+recipemap.low_pressure_advanced_steam_turbine.name=Low Pressure Advanced Steam Turbine
+recipemap.high_pressure_advanced_steam_turbine.name=High Pressure Advanced Steam Turbine
+recipemap.sputter_deposition.name=Sputter Deposition
 recipemap.mixer_settler.name=Mixer-Settler
 recipemap.injection_molder=Injection Molding
 recipemap.boiler.name=Solid Boiler Fuels
