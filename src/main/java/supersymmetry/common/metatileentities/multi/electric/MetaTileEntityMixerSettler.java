@@ -31,6 +31,7 @@ import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.pattern.TraceabilityPredicate;
+import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.recipeproperties.IRecipePropertyStorage;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.util.RelativeDirection;
@@ -384,6 +385,21 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
             overclockResults[1] = (int) ((double) overclockResults[1] / (Math.atan(cellsOff + 1) * 4 / Math.PI));
 
             super.modifyOverclockPost(overclockResults, storage);
+        }
+
+        @Override
+        public int getParallelLimit() {
+            return 16;
+        }
+
+        @Override
+        public boolean checkRecipe(@NotNull Recipe recipe) {
+            int cellsOff = (sDist - recipe.getRecipePropertyStorage()
+                    .getRecipePropertyValue(MixerSettlerCellsProperty.getInstance(), 2));
+            if (cellsOff < 0) {
+                return false;
+            }
+            return super.checkRecipe(recipe);
         }
     }
 }
