@@ -166,8 +166,6 @@ public class SusyTextures {
             "machines/multiblocks/injection_molder");
     public static final OrientedOverlayRenderer POLYMERIZATION_TANK_OVERLAY = new OrientedOverlayRenderer(
             "machines/multiblocks/polymerization_tank");
-    public static final OrientedOverlayRenderer INTERNAL_COMBUSTION_GENERATOR_OVERLAY = new OrientedOverlayRenderer(
-            "machines/multiblocks/internal_combustion_generator");
 
     public static final SimpleOverlayRenderer SLAG_HOT = new SimpleOverlayRenderer("resource/slag_hot");
     public static final SimpleOverlayRenderer RESTRICTIVE_FILTER_FILTER_OVERLAY = new SimpleOverlayRenderer(

@@ -16,6 +16,7 @@ tile.alternator_coil.copper.name=Copper Alternator Coil
 tile.turbine_rotor.steel.name=Steel Turbine Block
 tile.turbine_rotor.low_pressure.name=Low Pressure Turbine Block
 tile.turbine_rotor.high_pressure.name=High Pressure Turbine Block
+tile.turbine_rotor.combustion.name=Combustion Turbine Block
 
 tile.drill_head.steel.name=Steel Drill Head
 

@@ -523,7 +523,7 @@ public class SuSyMetaTileEntities {
                 new MetaTileEntityGasTurbine(susyId("gas_turbine"), RecipeMaps.GAS_TURBINE_FUELS, 4, 7200, 3, 4,
                         MetaBlocks.TURBINE_CASING
                                 .getState(BlockTurbineCasing.TurbineCasingType.TITANIUM_TURBINE_CASING),
-                        SuSyBlocks.TURBINE_ROTOR.getState(BlockTurbineRotor.BlockTurbineRotorType.STEEL),
+                        SuSyBlocks.TURBINE_ROTOR.getState(BlockTurbineRotor.BlockTurbineRotorType.COMBUSTION),
                         SusyTextures.TITANIUM_TURBINE_CASING, SusyTextures.LARGE_GAS_TURBINE_OVERLAY));
         ADVANCED_STEAM_TURBINE = registerMetaTileEntity(17002,
                 new MetaTileEntityAdvancedLargeTurbine(susyId("advanced_steam_turbine")));
@@ -542,7 +542,7 @@ public class SuSyMetaTileEntities {
         INTERNAL_COMBUSTION_GENERATOR = registerMetaTileEntity(17011,
                 new MetaTileEntityInternalCombustionEngine(susyId("internal_combustion_generator"),
                         RecipeMaps.COMBUSTION_GENERATOR_FUELS, 3600, 18, 24, 3, Textures.SOLID_STEEL_CASING,
-                        SusyTextures.INTERNAL_COMBUSTION_GENERATOR_OVERLAY));
+                        SusyTextures.FLUID_COMPRESSOR_OVERLAY));
         HIGH_TEMPERATURE_DISTILLATION_TOWER = registerMetaTileEntity(17012,
                 new MetaTileEntityHighTemperatureDistillationTower(susyId("high_temperature_distillation_tower")));
         ROTARY_KILN = registerMetaTileEntity(17013, new MetaTileEntityRotaryKiln(susyId("rotary_kiln")));

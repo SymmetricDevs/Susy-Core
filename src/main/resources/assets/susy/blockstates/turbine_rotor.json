@@ -14,6 +14,11 @@
     "facing=north,variant=high_pressure": { "model": "susy:turbine_rotor/high_pressure" },
     "facing=south,variant=high_pressure": { "model": "susy:turbine_rotor/high_pressure", "y": 180 },
     "facing=west,variant=high_pressure": { "model": "susy:turbine_rotor/high_pressure", "y": 270 },
-    "facing=east,variant=high_pressure": { "model": "susy:turbine_rotor/high_pressure", "y": 90 }
+    "facing=east,variant=high_pressure": { "model": "susy:turbine_rotor/high_pressure", "y": 90 },
+
+    "facing=north,variant=combustion": { "model": "susy:turbine_rotor/combustion" },
+    "facing=south,variant=combustion": { "model": "susy:turbine_rotor/combustion", "y": 180 },
+    "facing=west,variant=combustion": { "model": "susy:turbine_rotor/combustion", "y": 270 },
+    "facing=east,variant=combustion": { "model": "susy:turbine_rotor/combustion", "y": 90 }
   }
 }
