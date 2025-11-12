@@ -16,6 +16,7 @@ tile.alternator_coil.copper.name=Copper Alternator Coil
 tile.turbine_rotor.steel.name=Steel Turbine Block
 tile.turbine_rotor.low_pressure.name=Low Pressure Turbine Block
 tile.turbine_rotor.high_pressure.name=High Pressure Turbine Block
+tile.turbine_rotor.combustion.name=Combustion Turbine Block
 
 tile.drill_head.steel.name=Steel Drill Head
 
@@ -118,6 +119,12 @@ tile.drill_bit.steel.name=Steel Drill Bit Block
 
 tile.induction_coil_assembly.copper.name=Induction Coil Assembly
 
+tile.engine_casing.piston_block.name=Engine Block
+
+tile.engine_casing_2.crankshaft.name=Crankshaft Casing
+
+tile.active_casing.basic_intake_casing.name=Basic Intake Casing
+
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
 tile.susy_stone_smooth.gneiss.name=Gneiss
@@ -173,6 +180,12 @@ susy.material.mud=Mud
 susy.material.sea_water=Sea Water
 susy.material.refractory_gunning_mixture=Refractory Gunning Mixture
 susy.material.preheated_air=Preheated Air
+susy.material.midgrade_lubricant=Midgrade Lubricant
+susy.material.premium_lubricant=Premium Lubricant
+susy.material.supreme_lubricant=Supreme Lubricant
+susy.material.coolant=Coolant
+susy.material.advanced_coolant=Advanced Coolant
+susy.material.lubricating_oil=Lubricating Oil
 
 # Rock/Mineral Materials
 susy.material.fluorite=Fluorite
@@ -315,9 +328,9 @@ supersymmetry.prefix.foil=Foil
 susy.machine.primitive_mud_pump.name=Primitive Mud Pump
 susy.machine.primitive_mud_pump.tooltip=Works only in River biomes between Y=64 and Y=80
 susy.machine.basic_steam_turbine.name=Large Steam Turbine
-susy.machine.low_pressure_advanced_steam_turbine.name=Low Pressure Advanced Steam Turbine
-susy.machine.high_pressure_advanced_steam_turbine.name=High Pressure Advanced Steam Turbine
+susy.machine.advanced_steam_turbine.name=Advanced Steam Turbine
 susy.machine.basic_gas_turbine.name=Large Gas Turbine
+susy.machine.internal_combustion_generator.name=Internal Combustion Generator
 susy.machine.large_fluid_pump.name=Large Fluid Pump
 susy.machine.large_fluid_pump.tooltip.1=This would definitely affect the local trout population.
 susy.machine.large_fluid_pump.tooltip.2=Only works when the controller is at Y=64 and the bottom Steel Pipe Casing is located in the right biome.
@@ -787,6 +800,18 @@ susy.machine.fuel_cell.ev.name=Low Temperature Fuel Cell
 susy.machine.fuel_cell.iv.name=High Temperature Fuel Cell
 susy.machine.fuel_cell.tooltip=Temperature requirements for operation: %s°C
 
+
+susy.machine.combustion_generator.lv.name=Basic Combustion Generator
+susy.machine.combustion_generator.mv.name=Advanced Combustion Generator
+susy.machine.combustion_generator.hv.name=Advanced Combustion Generator II
+susy.machine.combustion_generator.tooltip=Requires lubricant and coolant to operate. Accepted coolants: Water, Distilled Water, Coolant, Advanced Coolant.
+
+susy.multiblock.rotation_generator.fuel_name=Fuel: %s
+susy.multiblock.rotation_generator.lubricant=Lubricant: %s (%sx)
+susy.multiblock.rotation_generator.power=Power: %s / %s EU/t
+susy.multiblock.rotation_generator.lubricant_amount=Lubricant: %s | Consumption: %s
+susy.multiblock.rotation_generator.tooltip=Max Rotation Speed: %s RPM, Spin-Up: %s RPM/t, Spin-Down: %s RPM/t.
+
 # Sputtering Machine
 susy.machine.sputter_deposition.lv.name=Basic Sputtering Machine
 susy.machine.sputter_deposition.mv.name=Advanced Sputtering Machine
@@ -868,6 +893,7 @@ recipemap.milling.name=Precise Milling Machine
 recipemap.hot_isostatic_press.name=Hot Isostatic Press
 recipemap.gas_atomizer.name=Gas Atomizer
 recipemap.metallurgical_converter.name=Metallurgical Converter
+recipemap.advanced_steam_turbine.name=Advanced Steam Turbine
 recipemap.low_pressure_advanced_steam_turbine.name=Low Pressure Advanced Steam Turbine
 recipemap.high_pressure_advanced_steam_turbine.name=High Pressure Advanced Steam Turbine
 recipemap.sputter_deposition.name=Sputter Deposition
@@ -1061,6 +1087,9 @@ susy.gui.stock_interactor.controller_setting.inactive_brake.tooltip=Brake (Unpow
 susy.gui.stock_interactor.controller_setting.inactive_throttle.tooltip=Throttle (Unpowered)
 
 susy.gui.temperature_celsius=Temperature: %s / %s°C
+
+susy.gui.toggle_energy_voiding.enabled=Voiding energy when full
+susy.gui.toggle_energy_voiding.disabled=Not voiding energy
 
 # Extra recipe info
 susy.recipe.dimensions=Dimensions: %s

@@ -390,22 +390,15 @@ public class SuSyRecipeMaps {
                     .setSound(GTSoundEvents.CHEMICAL_REACTOR)
                     .setSmallRecipeMap(MIXER_RECIPES);
 
-    public static final RecipeMap<FuelRecipeBuilder> LARGE_STEAM_TURBINE = new RecipeMap<>("large_steam_turbine", 1, 0,
-            2, 1, new FuelRecipeBuilder(), false)
+    public static final RecipeMap<FuelRecipeBuilder> LARGE_STEAM_TURBINE = new RecipeMap<>("large_steam_turbine", 0, 0,
+            1, 1, new FuelRecipeBuilder(), false)
                     .setSlotOverlay(false, true, GuiTextures.CENTRIFUGE_OVERLAY)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressWidget.MoveType.HORIZONTAL)
                     .setSound(GTSoundEvents.TURBINE)
                     .allowEmptyOutput();
 
-    public static final RecipeMap<FuelRecipeBuilder> LOW_PRESSURE_ADVANCED_STEAM_TURBINE = new RecipeMap<>(
-            "low_pressure_advanced_steam_turbine", 1, 0, 2, 1, new FuelRecipeBuilder(), false)
-                    .setSlotOverlay(false, true, GuiTextures.CENTRIFUGE_OVERLAY)
-                    .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressWidget.MoveType.HORIZONTAL)
-                    .setSound(GTSoundEvents.TURBINE)
-                    .allowEmptyOutput();
-
-    public static final RecipeMap<FuelRecipeBuilder> HIGH_PRESSURE_ADVANCED_STEAM_TURBINE = new RecipeMap<>(
-            "high_pressure_advanced_steam_turbine", 1, 0, 2, 1, new FuelRecipeBuilder(), false)
+    public static final RecipeMap<FuelRecipeBuilder> ADVANCED_STEAM_TURBINE = new RecipeMap<>(
+            "advanced_steam_turbine", 0, 0, 1, 1, new FuelRecipeBuilder(), false)
                     .setSlotOverlay(false, true, GuiTextures.CENTRIFUGE_OVERLAY)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressWidget.MoveType.HORIZONTAL)
                     .setSound(GTSoundEvents.TURBINE)
