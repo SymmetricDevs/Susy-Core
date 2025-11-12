@@ -162,7 +162,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
     @Override
     protected long getMaxVoltage() {
         if (!isFull && recipeMapWorkable.isActive()) {
-            return ((SuSyTurbineRecipeLogic) recipeMapWorkable).getMaxParallelVoltage();
+            return ((SuSyTurbineRecipeLogic) recipeMapWorkable).getActualVoltage();
         } else {
             return 0L;
         }
@@ -184,9 +184,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         public boolean checkRecipe(@NotNull Recipe recipe) {
             // Hack to get the recipeEUt early
             proposedEUt = recipe.getEUt();
-            long maximumOutput = Math.min((GTValues.V[tileEntity.getTier()]) * 16, getMaxVoltage());
-
-            if (proposedEUt > maximumOutput) {
+            if (proposedEUt > getMaximumAllowedVoltage()) {
                 return false;
             }
             return sufficientFluids;
@@ -207,7 +205,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
 
         @Override
         protected boolean drawEnergy(int recipeEUt, boolean simulate) {
-            long euToDraw = scaleProduction(recipeEUt); // Will be negative
+            long euToDraw = -getActualVoltage(); // Will be negative
             long resultEnergy = getEnergyStored() - euToDraw;
             if (resultEnergy >= 0L && resultEnergy <= getEnergyCapacity()) {
                 if (!simulate) getEnergyContainer().changeEnergy(-euToDraw); // So this is positive
@@ -224,7 +222,6 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         @Override
         public int getMaxProgress() {
             int baseDuration = super.getMaxProgress();
-
             if (lubricantStack != null) {
                 return (int) (baseDuration * lubricantInfo.boost);
             }
@@ -238,9 +235,17 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
 
         @Override
         protected long getMaxParallelVoltage() {
-            long maximumOutput = Math.min((GTValues.V[tileEntity.getTier()]) * 16, getMaxVoltage());
+            long maximumOutput = getMaximumAllowedVoltage();
             return Math.max(scaleProduction(maximumOutput),
                     Math.min(proposedEUt, maximumOutput));
+        }
+
+        protected long getMaximumAllowedVoltage() {
+            return Math.min((GTValues.V[tileEntity.getTier()]) * 16, getMaxVoltage());
+        }
+
+        protected long getActualVoltage() {
+            return scaleProduction(getMaximumAllowedVoltage());
         }
     }
 }
