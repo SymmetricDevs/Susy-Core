@@ -243,7 +243,7 @@
 				},
 				{
 					"name": "rightBoot",
-					"pivot": [0, 0, 0],
+					"pivot": [-2, 12, 0],
 					"cubes": [
 						{
 							"origin": [-4, 0, -2],
@@ -275,7 +275,7 @@
 				},
 				{
 					"name": "leftBoot",
-					"pivot": [2, 0, 0],
+					"pivot": [2, 12, 0],
 					"cubes": [
 						{
 							"origin": [0, 0, -2],
