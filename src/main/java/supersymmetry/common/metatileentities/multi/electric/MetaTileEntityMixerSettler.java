@@ -308,7 +308,9 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
                         states(MetaBlocks.TURBINE_CASING
                                 .getState(BlockTurbineCasing.TurbineCasingType.STAINLESS_STEEL_GEARBOX)))
                 .where('F', frames(Materials.StainlessSteel))
-                .where('E', states(getSecondaryCasingState()).or(abilities(MultiblockAbility.IMPORT_ITEMS, MultiblockAbility.EXPORT_ITEMS)))
+                .where('E',
+                        states(getSecondaryCasingState())
+                                .or(abilities(MultiblockAbility.IMPORT_ITEMS, MultiblockAbility.EXPORT_ITEMS)))
                 .where(' ', air())
                 .where('#', any())
                 .build();
