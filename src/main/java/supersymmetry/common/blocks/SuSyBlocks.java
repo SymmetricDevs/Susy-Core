@@ -57,6 +57,9 @@ public class SuSyBlocks {
     public static BlockRandomConcrete RANDOM_CONCRETE;
     public static BlockRandomConcrete1 RANDOM_CONCRETE1;
     public static BlockInductionCoilAssembly INDUCTION_COIL_ASSEMBLY;
+    public static BlockEngineCasing ENGINE_CASING;
+    public static BlockEngineCasing2 ENGINE_CASING_2;
+    public static BlocksActiveCasing ACTIVE_CASING;
 
     public static void init() {
         COOLING_COIL = new BlockCoolingCoil();
@@ -159,6 +162,15 @@ public class SuSyBlocks {
 
         INDUCTION_COIL_ASSEMBLY = new BlockInductionCoilAssembly();
         INDUCTION_COIL_ASSEMBLY.setRegistryName("induction_coil_assembly");
+
+        ENGINE_CASING = new BlockEngineCasing();
+        ENGINE_CASING.setRegistryName("engine_casing");
+
+        ENGINE_CASING_2 = new BlockEngineCasing2();
+        ENGINE_CASING_2.setRegistryName("engine_casing_2");
+
+        ACTIVE_CASING = new BlocksActiveCasing();
+        ACTIVE_CASING.setRegistryName("active_casing");
     }
 
     @SideOnly(Side.CLIENT)
@@ -197,6 +209,9 @@ public class SuSyBlocks {
         registerItemModel(RANDOM_CONCRETE);
         registerItemModel(RANDOM_CONCRETE1);
         registerItemModel(INDUCTION_COIL_ASSEMBLY);
+        registerItemModel(ENGINE_CASING);
+        registerItemModel(ENGINE_CASING_2);
+        registerItemModel(ACTIVE_CASING);
     }
 
     @SideOnly(Side.CLIENT)

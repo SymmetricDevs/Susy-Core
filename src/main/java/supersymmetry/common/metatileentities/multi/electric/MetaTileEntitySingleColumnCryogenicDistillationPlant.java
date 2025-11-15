@@ -81,7 +81,7 @@ public class MetaTileEntitySingleColumnCryogenicDistillationPlant extends MetaTi
     @Override
     @NotNull
     public DistillationTowerLogicHandler createHandler() {
-        return new ExtendedDTLogicHandler(this, 2, ignored -> 1);
+        return new ExtendedDTLogicHandler(this, 2, _ -> 1);
     }
 
     protected static IBlockState getCasingState() {

@@ -1,5 +1,7 @@
 package supersymmetry.api.util;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 import net.minecraft.util.ResourceLocation;
@@ -56,6 +58,49 @@ public class SuSyUtility {
         // IV+
         return 64000;
     };
+
+    public static class Lubricant {
+
+        public String name;
+        public int amount_required;
+        public double boost;
+
+        public Lubricant(String name, int amount_required, double boost) {
+            this.name = name;
+            this.amount_required = amount_required;
+            this.boost = boost;
+        }
+    }
+
+    public static final Map<String, Lubricant> lubricants;
+    static {
+        lubricants = new HashMap<>();
+        lubricants.put("lubricating_oil", new Lubricant("LubricatingOil", 16, 1.0));
+        lubricants.put("lubricant", new Lubricant("Lubricant", 8, 1.0));
+        lubricants.put("midgrade_lubricant", new Lubricant("MidgradeLubricant", 4, 1.2));
+        lubricants.put("premium_lubricant", new Lubricant("PremiumLubricant", 2, 1.4));
+        lubricants.put("supreme_lubricant", new Lubricant("SupremeLubricant", 1, 1.6));
+    }
+
+    public static class Coolant {
+
+        public String name;
+        public int amount_required;
+
+        public Coolant(String name, int amount_required) {
+            this.name = name;
+            this.amount_required = amount_required;
+        }
+    }
+
+    public static final Map<String, Coolant> coolants;
+    static {
+        coolants = new HashMap<>();
+        coolants.put("water", new Coolant("Water", 16));
+        coolants.put("distilled_water", new Coolant("DistilledWater", 8));
+        coolants.put("coolant", new Coolant("Coolant", 4));
+        coolants.put("advanced_coolant", new Coolant("AdvancedCoolant", 1));
+    }
 
     public static ResourceLocation susyId(String path) {
         return new ResourceLocation(Supersymmetry.MODID, path);

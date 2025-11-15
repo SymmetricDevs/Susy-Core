@@ -31,6 +31,7 @@ import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.pattern.TraceabilityPredicate;
+import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.recipeproperties.IRecipePropertyStorage;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.util.RelativeDirection;
@@ -300,7 +301,6 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
                         states(SuSyBlocks.MULTIBLOCK_CASING
                                 .getState(BlockSuSyMultiblockCasing.CasingType.COALESCENCE_PLATE)))
                 .where('P', states(getPipeCasingState()))
-                // .where('B', abilities(MultiblockAbility.IMPORT_ITEMS, MultiblockAbility.EXPORT_ITEMS))
                 .where('D', states(getCasingState()))
                 .where('C', states(getCasingState()).or(autoAbilities()))
                 .where('G', states(getCasingState()))
@@ -308,7 +308,9 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
                         states(MetaBlocks.TURBINE_CASING
                                 .getState(BlockTurbineCasing.TurbineCasingType.STAINLESS_STEEL_GEARBOX)))
                 .where('F', frames(Materials.StainlessSteel))
-                .where('E', states(getSecondaryCasingState()))
+                .where('E',
+                        states(getSecondaryCasingState())
+                                .or(abilities(MultiblockAbility.IMPORT_ITEMS, MultiblockAbility.EXPORT_ITEMS)))
                 .where(' ', air())
                 .where('#', any())
                 .build();
@@ -384,6 +386,20 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
             overclockResults[1] = (int) ((double) overclockResults[1] / (Math.atan(cellsOff + 1) * 4 / Math.PI));
 
             super.modifyOverclockPost(overclockResults, storage);
+        }
+
+        public int getParallelLimit() {
+            return 16;
+        }
+
+        @Override
+        public boolean checkRecipe(@NotNull Recipe recipe) {
+            int cellsOff = (sDist - recipe.getRecipePropertyStorage()
+                    .getRecipePropertyValue(MixerSettlerCellsProperty.getInstance(), 2));
+            if (cellsOff < 0) {
+                return false;
+            }
+            return super.checkRecipe(recipe);
         }
     }
 }
