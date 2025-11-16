@@ -2,6 +2,7 @@ package supersymmetry.api.fluids;
 
 import static supersymmetry.api.util.SuSyUtility.susyId;
 
+import gregicality.multiblocks.api.unification.material.GCYMMaterialIconTypes;
 import gregtech.api.fluids.FluidState;
 import gregtech.api.fluids.store.FluidStorageKey;
 import supersymmetry.api.unification.material.info.SuSyMaterialIconType;
@@ -25,6 +26,12 @@ public final class SusyFluidStorageKeys {
             s -> "supercritical_" + s,
             m -> "susy.fluid.supercritical",
             FluidState.GAS, -1);
+
+    public static final FluidStorageKey MOLTEN = new FluidStorageKey(susyId("molten"),
+            GCYMMaterialIconTypes.molten,
+            s -> "molten_" + s,
+            m -> "susy.fluid.molten",
+            FluidState.LIQUID, -1);
 
     private SusyFluidStorageKeys() {}
 }
