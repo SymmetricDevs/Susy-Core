@@ -28,12 +28,14 @@ tile.susy_multiblock_casing.structural_packing.name=Structural Packing
 tile.susy_multiblock_casing.ulv_structural_casing.name=Basic Structural Casing
 tile.susy_multiblock_casing.drone_pad.name=Drone Pad
 tile.susy_multiblock_casing.heavy_duty_pad.name=Heavy Duty Pad
-tile.susy_multiblock_casing.advanced_refractory_lining.name=Advanced Refractory Lining
+tile.susy_multiblock_casing.synthetic_mullite_refractory.name=Synthetic Mullite Refractory Bricks
 tile.rocket_assembler_casing.reinforced_foundation.name=Reinforced Foundation
 tile.rocket_assembler_casing.foundation.name=Rocket Assembler Foundation
 tile.rocket_assembler_casing.rails.name=Rocket Assembler Rails
 tile.rocket_assembler_casing.structural_frame.name=Rocket Assembler Structural Frame
 tile.susy_multiblock_casing.euv_safe_casing.name=Extreme-Ultraviolet-Safe Lithographer Casing
+tile.susy_multiblock_casing.tabular_alumina_refractory.name=Tabular Alumina Refractory Lining
+
 
 tile.serpentine.basic.name=Copper Tubing Serpentine Block
 
