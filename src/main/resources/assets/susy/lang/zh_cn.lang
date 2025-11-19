@@ -311,8 +311,7 @@ supersymmetry.prefix.foil=箔
 susy.machine.primitive_mud_pump.name=简易泥泵
 susy.machine.primitive_mud_pump.tooltip=仅在Y=64与Y=80之间的河流群系运行
 susy.machine.basic_steam_turbine.name=大型蒸汽轮机
-susy.machine.low_pressure_advanced_steam_turbine.name=低压高级蒸汽轮机
-susy.machine.high_pressure_advanced_steam_turbine.name=高压高级蒸汽轮机
+susy.machine.advanced_steam_turbine.name=高级蒸汽轮机
 susy.machine.basic_gas_turbine.name=大型燃气轮机
 susy.machine.large_fluid_pump.name=大型液泵
 susy.machine.large_fluid_pump.tooltip.1=这势必会对当地的鲑鱼种群造成影响。
@@ -841,8 +840,7 @@ recipemap.milling.name=精密铣销
 recipemap.hot_isostatic_press.name=热等静压烧结
 recipemap.gas_atomizer.name=气雾化制粉
 recipemap.metallurgical_converter.name=转炉冶炼
-recipemap.low_pressure_advanced_steam_turbine.name=低压高级蒸汽轮机
-recipemap.high_pressure_advanced_steam_turbine.name=高压高级蒸汽轮机
+recipemap.advanced_steam_turbine.name=高级蒸汽轮机
 recipemap.mixer_settler.name=Mixer-Settler
 
 susy.multiblock.primitive_mud_pump.description=简易泥泵是一台蒸汽时代的多方块机器。当它的控制器方块处于河流生物群系，且高度介于 Y = 64 与 Y = 80（含）之间时将每秒收集一次泥。它可以使用 ULV、LV 输出仓或水泵输出仓。

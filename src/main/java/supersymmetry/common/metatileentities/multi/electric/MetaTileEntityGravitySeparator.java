@@ -4,7 +4,6 @@ import static gregtech.api.util.RelativeDirection.*;
 import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
 
 import java.util.*;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
@@ -13,7 +12,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
@@ -35,13 +33,13 @@ import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.api.unification.material.Material;
-import gregtech.api.util.BlockInfo;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.metatileentity.multiblock.CachedPatternRecipeMapMultiblock;
+import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.particles.SusyParticleDust;
 import supersymmetry.common.blocks.BlockSeparatorRotor;
@@ -158,26 +156,7 @@ public class MetaTileEntityGravitySeparator extends CachedPatternRecipeMapMultib
     // makes sure block at position is properly oriented rotor
     protected TraceabilityPredicate rotorOrientation() {
         // makes sure rotor's front faces the left side (relative to the player) of controller front
-        EnumFacing leftFacing = RelativeDirection.RIGHT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(),
-                isFlipped());
-
-        // converting the left facing to positive x or z axis direction
-        // this is needed for the following update which converts this rotatable block from horizontal directional into
-        // axial directional.
-        EnumFacing axialFacing = leftFacing.getIndex() < 4 ? EnumFacing.SOUTH : EnumFacing.WEST;
-
-        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[] {
-                new BlockInfo(steelRotorState().withProperty(FACING, axialFacing)) };
-        return new TraceabilityPredicate(blockWorldState -> {
-            IBlockState state = blockWorldState.getBlockState();
-            if (!(state.getBlock() instanceof BlockSeparatorRotor)) return false;
-
-            // auto-correct rotor orientation
-            if (state != steelRotorState().withProperty(FACING, axialFacing))
-                getWorld().setBlockState(blockWorldState.getPos(), steelRotorState().withProperty(FACING, axialFacing));
-
-            return true;
-        }, supplier);
+        return SuSyPredicates.horizontalOrientation(this, steelRotorState(), RelativeDirection.RIGHT, FACING);
     }
 
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {

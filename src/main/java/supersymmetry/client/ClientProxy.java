@@ -20,6 +20,9 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.GameSettings;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EnumPlayerModelParts;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.IRegistry;
@@ -31,6 +34,7 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
+import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
@@ -44,6 +48,7 @@ import org.jetbrains.annotations.NotNull;
 
 import dev.tianmi.sussypatches.common.SusConfig;
 import gregtech.api.GTValues;
+import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.items.metaitem.MetaOreDictItem;
 import gregtech.api.items.toolitem.IGTTool;
 import gregtech.api.unification.OreDictUnifier;
@@ -61,6 +66,7 @@ import supersymmetry.common.blocks.SheetedFrameItemBlock;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SuSyMetaBlocks;
 import supersymmetry.common.item.SuSyMetaItems;
+import supersymmetry.common.item.armor.AdvancedBreathingApparatus;
 import supersymmetry.common.item.behavior.PipeNetWalkerBehavior;
 import supersymmetry.loaders.SuSyFluidTooltipLoader;
 import supersymmetry.loaders.SuSyIRLoader;
@@ -267,6 +273,47 @@ public class ClientProxy extends CommonProxy {
             GlStateManager.enableAlpha();
             GlStateManager.enableTexture2D();
             GlStateManager.enableDepth();
+        }
+    }
+
+    @SubscribeEvent
+    public static void onLivingEquipmentChangeEvent(LivingEquipmentChangeEvent event) {
+        var livingBase = event.getEntityLiving();
+        if (!(livingBase instanceof EntityPlayer)) return;
+
+        ItemStack from = event.getFrom(), into = event.getTo();
+
+        if (from.isItemEqual(into)) return;
+
+        EntityEquipmentSlot slot = event.getSlot();
+        changeSkinVisibility(from, slot, false);
+        changeSkinVisibility(into, slot, true);
+    }
+
+    public static void changeSkinVisibility(ItemStack armor, EntityEquipmentSlot slot, boolean into) {
+        if (armor.getItem() instanceof ArmorMetaItem<?>metaArmor) {
+            var metaValueArmor = metaArmor.getItem(armor);
+            // Using a Class#equals(Class) here to avoid counting in child classes
+            // May be changed later
+            if (metaValueArmor != null &&
+                    metaValueArmor.getArmorLogic().getClass().equals(AdvancedBreathingApparatus.class)) {
+                boolean visible = !into;
+                // Is it a bit too cursed to access game settings for this?
+                GameSettings settings = Minecraft.getMinecraft().gameSettings;
+                switch (slot) {
+                    case HEAD -> settings.setModelPartEnabled(EnumPlayerModelParts.HAT, visible);
+                    case CHEST -> {
+                        settings.setModelPartEnabled(EnumPlayerModelParts.CAPE, visible);
+                        settings.setModelPartEnabled(EnumPlayerModelParts.JACKET, visible);
+                        settings.setModelPartEnabled(EnumPlayerModelParts.LEFT_SLEEVE, visible);
+                        settings.setModelPartEnabled(EnumPlayerModelParts.RIGHT_SLEEVE, visible);
+                    }
+                    case LEGS -> {
+                        settings.setModelPartEnabled(EnumPlayerModelParts.LEFT_PANTS_LEG, visible);
+                        settings.setModelPartEnabled(EnumPlayerModelParts.RIGHT_PANTS_LEG, visible);
+                    }
+                }
+            }
         }
     }
 }

@@ -1,0 +1,26 @@
+{
+  "forge_marker" : 1,
+  "variants" : {
+    "facing=north,variant=crankshaft" : {
+      "model" : "susy:engine_casing/crankshaft"
+    },
+    "facing=south,variant=crankshaft" : {
+      "model" : "susy:engine_casing/crankshaft",
+      "y" : 180
+    },
+    "facing=west,variant=crankshaft" : {
+      "model" : "susy:engine_casing/crankshaft",
+      "y" : 270,
+      "textures" : {
+        "up": "gregtech:blocks/casings/engine_casing/crankshaft/top90"
+      }
+    },
+    "facing=east,variant=crankshaft" : {
+      "model" : "susy:engine_casing/crankshaft",
+      "y" : 90,
+      "textures" : {
+        "up": "gregtech:blocks/casings/engine_casing/crankshaft/top90"
+      }
+    }
+  }
+}

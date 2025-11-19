@@ -93,6 +93,7 @@ public class BlockSheetedFrame extends Block {
      *             fine.
      */
     @Override
+    @Deprecated
     public IBlockState withRotation(IBlockState state, Rotation rot) {
         switch (rot) {
             case COUNTERCLOCKWISE_90:
