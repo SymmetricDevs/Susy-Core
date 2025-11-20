@@ -16,7 +16,7 @@ public class BlockTurboPump extends VariantDirectionalRotatableBlock<BlockTurboP
         setHardness(5f);
         setResistance(15f);
         setSoundType(SoundType.METAL);
-        setHarvestLevel("wrench", 3);
+        setHarvestLevel("wrench", 2);
     }
 
     @Override

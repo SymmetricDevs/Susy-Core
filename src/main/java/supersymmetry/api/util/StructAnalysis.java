@@ -221,12 +221,9 @@ public class StructAnalysis {
 
     public List<HashSet<BlockPos>> getPartitions(AxisAlignedBB sect) {
         Predicate<BlockPos> isNotObstacle = ((Predicate<BlockPos>) world::isAirBlock).or(bp -> !blockCont(sect, bp));
-        Set<BlockPos> blocks = getBlocks(sect).stream().filter(isNotObstacle).collect(Collectors.toSet()); // the
-                                                                                                           // one-argument
-                                                                                                           // getBlocks
-                                                                                                           // doesn't
-                                                                                                           // care about
-                                                                                                           // air blocks
+        Set<BlockPos> blocks = getBlocks(sect).stream().filter(isNotObstacle).collect(Collectors.toSet());
+        // the one-argument getBlocks doesn't care about air blocks
+
         List<HashSet<BlockPos>> partitions = new ArrayList<>();
         Set<BlockPos> consumed = new HashSet<>();
         for (BlockPos block : blocks) {
@@ -256,12 +253,9 @@ public class StructAnalysis {
         AxisAlignedBB sect = new AxisAlignedBB(section.minX - 1, y, section.minZ - 1, section.maxX + 1, y + 1,
                 section.maxZ + 1);
         Predicate<BlockPos> isNotObstacle = ((Predicate<BlockPos>) world::isAirBlock).or(bp -> !blockCont(section, bp));
-        Set<BlockPos> blocks = getBlocks(sect).stream().filter(isNotObstacle).collect(Collectors.toSet()); // the
-                                                                                                           // one-argument
-                                                                                                           // getBlocks
-                                                                                                           // doesn't
-                                                                                                           // care about
-                                                                                                           // air blocks
+        Set<BlockPos> blocks = getBlocks(sect).stream().filter(isNotObstacle).collect(Collectors.toSet());
+        // the one-argument getBlocks doesn't care about air blocks (again)
+
         List<HashSet<BlockPos>> partitions = new ArrayList<>();
         Set<BlockPos> consumed = new HashSet<>();
         for (BlockPos block : blocks) {

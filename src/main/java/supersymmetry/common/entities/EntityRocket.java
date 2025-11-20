@@ -9,9 +9,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -27,33 +24,12 @@ import supersymmetry.client.audio.MovingSoundRocket;
 import supersymmetry.client.renderer.handler.IAlwaysRender;
 import supersymmetry.client.renderer.particles.SusyParticleFlameLarge;
 import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
-import supersymmetry.common.blocks.rocketry.BlockSpacecraftInstrument;
 import supersymmetry.common.network.CPacketRocketInteract;
 
-public class EntityRocket extends Entity implements IAlwaysRender {
+public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender {
 
     private static final Random rnd = new Random();
     protected static final float jerk = 0.0001F;
-
-    private static final DataParameter<Boolean> LAUNCHED = EntityDataManager.<Boolean>createKey(EntityRocket.class,
-            DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> COUNTDOWN_STARTED = EntityDataManager
-            .<Boolean>createKey(EntityRocket.class, DataSerializers.BOOLEAN);
-
-    private static final DataParameter<Integer> AGE = EntityDataManager.<Integer>createKey(EntityRocket.class,
-            DataSerializers.VARINT);
-    private static final DataParameter<Integer> LAUNCH_TIME = EntityDataManager.<Integer>createKey(EntityRocket.class,
-            DataSerializers.VARINT);
-    private static final DataParameter<Integer> FLIGHT_TIME = EntityDataManager.<Integer>createKey(EntityRocket.class,
-            DataSerializers.VARINT);
-
-    private static final DataParameter<Float> START_POS = EntityDataManager.<Float>createKey(EntityRocket.class,
-            DataSerializers.FLOAT);
-    private static final DataParameter<Boolean> ACTED = EntityDataManager.<Boolean>createKey(EntityRocket.class,
-            DataSerializers.BOOLEAN);
-
-    private static final DataParameter<BlockPos> ASSEMBLER_LOCATION = EntityDataManager.createKey(EntityRocket.class,
-            DataSerializers.BLOCK_POS);
 
     @SideOnly(Side.CLIENT)
     private MovingSoundRocket soundRocket;
@@ -80,94 +56,12 @@ public class EntityRocket extends Entity implements IAlwaysRender {
         this(worldIn, pos.x, pos.y, pos.z, rotationYaw);
     }
 
-    protected void entityInit() {
-        this.dataManager.register(LAUNCHED, false);
-        this.dataManager.register(COUNTDOWN_STARTED, false);
-        this.dataManager.register(AGE, 0);
-        this.dataManager.register(LAUNCH_TIME, 0);
-        this.dataManager.register(FLIGHT_TIME, 0);
-        this.dataManager.register(START_POS, 0.F);
-        this.dataManager.register(ACTED, false);
-    }
-
-    public boolean isLaunched() {
-        return this.dataManager.get(LAUNCHED);
-    }
-
-    public void setLaunched(boolean launched) {
-        this.dataManager.set(LAUNCHED, launched);
-    }
-
-    public boolean isCountDownStarted() {
-        return this.dataManager.get(COUNTDOWN_STARTED);
-    }
-
-    public void setCountdownStarted(boolean countdownStarted) {
-        this.dataManager.set(COUNTDOWN_STARTED, countdownStarted);
-    }
-
-    public int getAge() {
-        return this.dataManager.get(AGE);
-    }
-
-    public void setAge(Integer age) {
-        this.dataManager.set(AGE, age);
-    }
-
-    public boolean hasActed() {
-        return this.dataManager.get(ACTED);
-    }
-
-    public void setActed(boolean acted) {
-        this.dataManager.set(ACTED, acted);
-    }
-
-    public int getFlightTime() {
-        return this.dataManager.get(FLIGHT_TIME);
-    }
-
-    public void setFlightTime(Integer flightTime) {
-        this.dataManager.set(FLIGHT_TIME, flightTime);
-    }
-
-    public int getLaunchTime() {
-        return this.dataManager.get(LAUNCH_TIME);
-    }
-
-    public void setLaunchTime(Integer launchTime) {
-        this.dataManager.set(LAUNCH_TIME, launchTime);
-    }
-
-    public float getStartPos() {
-        return this.dataManager.get(START_POS);
-    }
-
-    public void setStartPos(Float startPos) {
-        this.dataManager.set(START_POS, startPos);
-    }
-
-    public BlockPos getAssemblerLoc() {
-        return this.dataManager.get(ASSEMBLER_LOCATION);
-    }
-
-    public void setAssemblerLoc(BlockPos assPos) {
-        this.dataManager.set(ASSEMBLER_LOCATION, assPos);
-    }
-
-    public void startCountdown() {
-        this.setCountdownStarted(true);
-        this.setLaunchTime(this.getAge() + 200);
-        this.setStartPos((float) this.posY);
-    }
-
     public void launchRocket() {
-        this.setLaunched(true);
-        this.setActed(false);
+        super.launchRocket();
         if (world.isRemote) {
             setupRocketSound();
             soundRocket.startPlaying();
         }
-        this.isAirBorne = true;
     }
 
     @Override
@@ -176,9 +70,9 @@ public class EntityRocket extends Entity implements IAlwaysRender {
         if (world.isRemote && soundRocket != null) soundRocket.stopPlaying();
     }
 
-    public void explode() {
-        this.world.newExplosion(this, this.posX, this.posY, this.posZ, 24, true, true);
-        this.setDead();
+    @Override
+    protected float getExplosionStrength() {
+        return 24;
     }
 
     @Override
@@ -294,15 +188,6 @@ public class EntityRocket extends Entity implements IAlwaysRender {
                 this.spawnFlightParticles();
             }
 
-            if (this.posY > 600) {
-                if (this.hasActed() && this.getPassengers().isEmpty()) {
-                    this.setDead();
-                } else {
-                    act();
-                    this.setActed(true);
-                }
-            }
-
             if (this.world.collidesWithAnyBlock(this.getEntityBoundingBox())) {
                 this.explode();
             }
@@ -359,15 +244,6 @@ public class EntityRocket extends Entity implements IAlwaysRender {
             GregTechAPI.networkHandler.sendToServer(new CPacketRocketInteract(this, hand, hitVec));
         }
         return EnumActionResult.SUCCESS;
-    }
-
-    protected void act() {
-        NBTTagCompound instruments = this.getEntityData().getCompoundTag("rocket").getCompoundTag("instruments");
-        for (String key : instruments.getKeySet()) {
-            BlockSpacecraftInstrument.Type instrument = BlockSpacecraftInstrument.Type.valueOf(key);
-            int count = instruments.getInteger(key);
-            instrument.act(count, this);
-        }
     }
 
     @Override

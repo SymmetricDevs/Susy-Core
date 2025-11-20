@@ -1,6 +1,5 @@
 package supersymmetry.common.entities;
 
-import gregtech.api.GTValues;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -12,26 +11,26 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerChest;
-import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.Constants;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.ILockableContainer;
 import net.minecraft.world.LockCode;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
+
 import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.GTValues;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -44,16 +43,14 @@ import supersymmetry.client.audio.MovingSoundDropPod;
 import supersymmetry.client.renderer.particles.SusyParticleFlame;
 import supersymmetry.client.renderer.particles.SusyParticleSmoke;
 
-public class EntityLander extends EntityLiving implements IAnimatable, ILockableContainer {
+public class EntityLander extends EntityAbstractRocket implements IAnimatable, ILockableContainer {
 
     private static final DataParameter<Boolean> HAS_LANDED = EntityDataManager.<Boolean>createKey(EntityLander.class,
             DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> TIME_SINCE_LANDING = EntityDataManager
             .<Integer>createKey(EntityLander.class, DataSerializers.VARINT);
-    private static final DataParameter<Integer> TIME_SINCE_SPAWN = EntityDataManager
+    private static final DataParameter<Integer> AGE = EntityDataManager
             .<Integer>createKey(EntityLander.class, DataSerializers.VARINT);
-    private static final DataParameter<Boolean> HAS_TAKEN_OFF = EntityDataManager.<Boolean>createKey(EntityLander.class,
-            DataSerializers.BOOLEAN);
 
     private AnimationFactory factory = new AnimationFactory(this);
 
@@ -64,7 +61,6 @@ public class EntityLander extends EntityLiving implements IAnimatable, ILockable
 
     public EntityLander(World worldIn) {
         super(worldIn);
-        this.deathTime = 0;
     }
 
     public EntityLander(World worldIn, double x, double y, double z) {
@@ -95,14 +91,6 @@ public class EntityLander extends EntityLiving implements IAnimatable, ILockable
 
     public void setTimeSinceLanding(int timeSinceLanding) {
         this.dataManager.set(TIME_SINCE_LANDING, timeSinceLanding);
-    }
-
-    public boolean hasTakenOff() {
-        return this.dataManager.get(HAS_TAKEN_OFF);
-    }
-
-    public void setHasTakenOff(boolean takenOff) {
-        this.dataManager.set(HAS_TAKEN_OFF, takenOff);
     }
 
     @SideOnly(Side.CLIENT)
@@ -209,42 +197,30 @@ public class EntityLander extends EntityLiving implements IAnimatable, ILockable
         handleCollidedBlocks(false);
     }
 
-    @Override
-    public void onDeath(@NotNull DamageSource source) {
-        super.onDeath(source);
-        this.explode();
-    }
-
-    private void explode() {
-        int explosionStrength = 1;
+    protected float getExplosionStrength() {
         if (getRidingEntity() != null && getRidingEntity() instanceof EntityPlayer) {
-            explosionStrength = 6;
+            return 6;
         }
-        this.world.newExplosion(this, this.posX, this.posY, this.posZ, explosionStrength, false, false);
-        this.setDead();
+        return 1;
     }
 
     @Override
     protected void entityInit() {
-        super.entityInit();
         this.dataManager.register(HAS_LANDED, false);
         this.dataManager.register(TIME_SINCE_LANDING, 0);
-        this.dataManager.register(TIME_SINCE_SPAWN, 0);
-        this.dataManager.register(HAS_TAKEN_OFF, false);
+        this.dataManager.register(AGE, 0);
     }
 
     @Override
     public void writeEntityToNBT(@NotNull NBTTagCompound compound) {
-        super.writeEntityToNBT(compound);
         compound.setBoolean("landed", this.hasLanded());
         compound.setInteger("time_since_landing", this.getTimeSinceLanding());
-        compound.setBoolean("taken_off", this.hasTakenOff());
-        
+
         // Write inventory
         if (this.inventory instanceof ItemStackHandler) {
             compound.setTag("Inventory", ((ItemStackHandler) this.inventory).serializeNBT());
         }
-        
+
         // Write lock code
         if (!this.lockCode.isEmpty()) {
             this.lockCode.toNBT(compound);
@@ -253,24 +229,20 @@ public class EntityLander extends EntityLiving implements IAnimatable, ILockable
 
     @Override
     public void readEntityFromNBT(@NotNull NBTTagCompound compound) {
-        super.readEntityFromNBT(compound);
-        this.setLanded(compound.getBoolean("Landed"));
+        this.setLanded(compound.getBoolean("landed"));
         this.setTimeSinceLanding(compound.getInteger("time_since_landing"));
-        this.setHasTakenOff(compound.getBoolean("taken_off"));
-        
         // Read inventory
         if (this.inventory instanceof ItemStackHandler && compound.hasKey("Inventory", Constants.NBT.TAG_COMPOUND)) {
             ((ItemStackHandler) this.inventory).deserializeNBT(compound.getCompoundTag("Inventory"));
         }
-        
+
         // Read lock code
         this.lockCode = LockCode.fromNBT(compound);
     }
 
-
     @Override
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
+    public void onUpdate() {
+        super.onUpdate();
 
         if (this.canPlayerDismount()) {
             for (Entity rider : this.getRecursivePassengers()) {
@@ -312,7 +284,7 @@ public class EntityLander extends EntityLiving implements IAnimatable, ILockable
                 }
             }
 
-            if (this.hasTakenOff()) {
+            if (this.isLaunched()) {
                 if (this.motionY < 10.D) {
                     if (this.motionY < 1.D) {
                         this.motionY += 0.1;
@@ -326,15 +298,15 @@ public class EntityLander extends EntityLiving implements IAnimatable, ILockable
             if (!this.hasLanded()) {
                 this.spawnFlightParticles(false);
             }
-            if (this.hasTakenOff()) {
+            if (this.isLaunched()) {
                 this.spawnFlightParticles(true);
             }
         }
 
-        this.dataManager.set(TIME_SINCE_SPAWN, this.dataManager.get(TIME_SINCE_SPAWN) + 1);
+        this.dataManager.set(AGE, this.dataManager.get(AGE) + 1);
 
         if (world.isRemote && this.soundDropPod != null) {
-            if (!this.hasLanded() || this.hasTakenOff()) {
+            if (!this.hasLanded() || this.isLaunched()) {
                 soundDropPod.startPlaying();
             } else {
                 soundDropPod.stopPlaying();
@@ -355,14 +327,14 @@ public class EntityLander extends EntityLiving implements IAnimatable, ILockable
     @Override
     public void updatePassenger(@NotNull Entity passenger) {
         super.updatePassenger(passenger);
-        float xOffset = MathHelper.sin(this.renderYawOffset * 0.1F);
-        float zOffset = MathHelper.cos(this.renderYawOffset * 0.1F);
+        float xOffset = MathHelper.sin(this.rotationYaw * 0.1F);
+        float zOffset = MathHelper.cos(this.rotationYaw * 0.1F);
         passenger.setPosition(this.posX + (double) (0.1F * xOffset),
                 this.posY + (double) (this.height * 0.2F) + passenger.getYOffset() + 0.0D,
                 this.posZ - (double) (0.1F * zOffset));
 
         if (passenger instanceof EntityLivingBase) {
-            ((EntityLivingBase) passenger).renderYawOffset = this.renderYawOffset;
+            ((EntityLivingBase) passenger).renderYawOffset = this.rotationYaw;
         }
     }
 
@@ -380,41 +352,13 @@ public class EntityLander extends EntityLiving implements IAnimatable, ILockable
     public void fall(float distance, float damageMultiplier) {}
 
     @Override
-    protected boolean canDespawn() {
-        return this.getTimeSinceLanding() > 1000;
-    }
-
-    @Override
-    public boolean canBeLeashedTo(@NotNull EntityPlayer player) {
-        return false;
-    }
-
-    @Override
-    public boolean canBePushed() {
-        return false;
-    }
-
-    @Override
-    public boolean canBeCollidedWith() {
-        return false;
-    }
-
-    @Override
-    public boolean canBeHitWithPotion() {
-        return false;
-    }
-
-    @Override
-    public void knockBack(@NotNull Entity entityIn, float strength, double xRatio, double zRatio) {}
-
-    @Override
     public void setAir(int air) {
         super.setAir(300);
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        if (this.getTimeSinceLanding() > 0 && this.getTimeSinceLanding() < 140) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.drop_pod.complete",
+        if (this.hasLanded()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ladder.extend",
                     ILoopType.EDefaultLoopTypes.PLAY_ONCE));
         }
         return PlayState.CONTINUE;
@@ -428,7 +372,7 @@ public class EntityLander extends EntityLiving implements IAnimatable, ILockable
 
     @Override
     public AnimationFactory getFactory() {
-        return this.factory;
+        return factory;
     }
 
     @Override
@@ -590,7 +534,7 @@ public class EntityLander extends EntityLiving implements IAnimatable, ILockable
     public String getGuiID() {
         return "supersymmetry:lander";
     }
-    
+
     /**
      * Gets the IItemHandlerModifiable for this lander.
      * This can be used for capability-based inventory access.

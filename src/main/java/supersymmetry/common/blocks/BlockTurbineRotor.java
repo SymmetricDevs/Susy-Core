@@ -35,7 +35,8 @@ public class BlockTurbineRotor extends VariantHorizontalRotatableBlock<BlockTurb
 
         STEEL("steel", 1),
         LOW_PRESSURE("low_pressure", 1),
-        HIGH_PRESSURE("high_pressure", 1);
+        HIGH_PRESSURE("high_pressure", 1),
+        COMBUSTION("combustion", 1);
 
         private final String name;
         private final int harvestLevel;

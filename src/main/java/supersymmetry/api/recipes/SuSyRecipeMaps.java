@@ -205,6 +205,10 @@ public class SuSyRecipeMaps {
             new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.ARC);
 
+    public static final RecipeMap<SimpleRecipeBuilder> SPUTTER_DEPOSITION_RECIPES = new RecipeMap<>(
+            "sputter_deposition", 6, 1, 2, 2, new SimpleRecipeBuilder(), false)
+                    .setSound(GTSoundEvents.ELECTROLYZER);
+
     public static final RecipeMap<SimpleRecipeBuilder> ORE_SORTER_RECIPES = new RecipeMap<>("ore_sorter", 2, 20, 1, 1,
             new SimpleRecipeBuilder(), false)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_EXTRACT, ProgressWidget.MoveType.HORIZONTAL)
@@ -386,22 +390,15 @@ public class SuSyRecipeMaps {
                     .setSound(GTSoundEvents.CHEMICAL_REACTOR)
                     .setSmallRecipeMap(MIXER_RECIPES);
 
-    public static final RecipeMap<FuelRecipeBuilder> LARGE_STEAM_TURBINE = new RecipeMap<>("large_steam_turbine", 1, 0,
-            2, 1, new FuelRecipeBuilder(), false)
+    public static final RecipeMap<FuelRecipeBuilder> LARGE_STEAM_TURBINE = new RecipeMap<>("large_steam_turbine", 0, 0,
+            1, 1, new FuelRecipeBuilder(), false)
                     .setSlotOverlay(false, true, GuiTextures.CENTRIFUGE_OVERLAY)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressWidget.MoveType.HORIZONTAL)
                     .setSound(GTSoundEvents.TURBINE)
                     .allowEmptyOutput();
 
-    public static final RecipeMap<FuelRecipeBuilder> LOW_PRESSURE_ADVANCED_STEAM_TURBINE = new RecipeMap<>(
-            "low_pressure_advanced_steam_turbine", 1, 0, 2, 1, new FuelRecipeBuilder(), false)
-                    .setSlotOverlay(false, true, GuiTextures.CENTRIFUGE_OVERLAY)
-                    .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressWidget.MoveType.HORIZONTAL)
-                    .setSound(GTSoundEvents.TURBINE)
-                    .allowEmptyOutput();
-
-    public static final RecipeMap<FuelRecipeBuilder> HIGH_PRESSURE_ADVANCED_STEAM_TURBINE = new RecipeMap<>(
-            "high_pressure_advanced_steam_turbine", 1, 0, 2, 1, new FuelRecipeBuilder(), false)
+    public static final RecipeMap<FuelRecipeBuilder> ADVANCED_STEAM_TURBINE = new RecipeMap<>(
+            "advanced_steam_turbine", 0, 0, 1, 1, new FuelRecipeBuilder(), false)
                     .setSlotOverlay(false, true, GuiTextures.CENTRIFUGE_OVERLAY)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressWidget.MoveType.HORIZONTAL)
                     .setSound(GTSoundEvents.TURBINE)
@@ -439,7 +436,7 @@ public class SuSyRecipeMaps {
                     .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, ProgressWidget.MoveType.HORIZONTAL)
                     .setSound(GTSoundEvents.FURNACE); // TODO: Replace with a sound like a pump hissing
 
-    public static final RecipeMap<SimpleRecipeBuilder> CURTAIN_COATER = new RecipeMap<>("curtain_coater", 1, 1, 1, 0,
+    public static final RecipeMap<SimpleRecipeBuilder> CURTAIN_COATER = new RecipeMap<>("curtain_coater", 1, 1, 1, 1,
             new SimpleRecipeBuilder().EUt(VA[LV]), false)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressWidget.MoveType.HORIZONTAL)
                     .setSound(GTSoundEvents.BATH);
@@ -479,6 +476,11 @@ public class SuSyRecipeMaps {
                     .setSound(GTSoundEvents.ELECTROLYZER)
                     .allowEmptyOutput();
 
+    public static final RecipeMap<SimpleRecipeBuilder> INDUCTION_FURNACE = new RecipeMap<>(
+            "induction_furnace", 6, 3, 3, 3, new SimpleRecipeBuilder(), false)
+                    .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
+                    .setSound(GTSoundEvents.ARC);
+
     public static final RecipeMap<SimpleRecipeBuilder> ECCENTRIC_ROLL_CRUSHER = new RecipeMap<>(
             "eccentric_roll_crusher", 1, 4, 0, 0, new SimpleRecipeBuilder(), false)
                     .setSlotOverlay(false, false, GuiTextures.DUST_OVERLAY)
@@ -486,12 +488,16 @@ public class SuSyRecipeMaps {
                     .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, ProgressWidget.MoveType.HORIZONTAL)
                     .setSound(GTSoundEvents.MACERATOR);
 
-    public static final RecipeMap<SimpleRecipeBuilder> SALVAGING_RECIPES = new RecipeMap<>("salvaging", 0, 1, 0, 0,
+    public static final RecipeMap<SimpleRecipeBuilder> SALVAGING_RECIPES = new RecipeMap<>("salvaging", 1, 9, 0, 0,
             new SimpleRecipeBuilder(), false)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_RECYCLER, ProgressWidget.MoveType.HORIZONTAL)
                     .setSlotOverlay(true, false, GuiTextures.BOXED_OVERLAY);
+
     static {
         GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()
+                .fluidInputs(SusyMaterials.RefractoryGunningMixture.getFluid(50 *
+                        Math.max(1, (recipeBuilder.getDuration() - 800) / 400) *
+                        Math.max(1, (recipeBuilder.getBlastFurnaceTemp() - 1800) / 1800)))
                 .inputs(recipeBuilder.getInputs().toArray(new GTRecipeInput[0]))
                 .fluidInputs(recipeBuilder.getFluidInputs())
                 .outputs(recipeBuilder.getOutputs())
@@ -503,8 +509,14 @@ public class SuSyRecipeMaps {
                 .EUt(recipeBuilder.getEUt())
                 .buildAndRegister());
 
-        SuSyRecipeMaps.ADVANCED_ARC_FURNACE.onRecipeBuild(
-                recipeBuilder -> recipeBuilder.fluidInputs(SusyMaterials.RefractoryGunningMixture.getFluid(50)));
+        SuSyRecipeMaps.ADVANCED_ARC_FURNACE.onRecipeBuild(recipeBuilder -> {
+            for (var fluidInput : recipeBuilder.getFluidInputs()) {
+                if (fluidInput.getInputFluidStack().getFluid() == SusyMaterials.RefractoryGunningMixture.getFluid()) {
+                    return;
+                }
+            }
+            recipeBuilder.fluidInputs(SusyMaterials.RefractoryGunningMixture.getFluid(50));
+        });
 
         SuSyRecipeMaps.METALLURGICAL_CONVERTER.onRecipeBuild(
                 recipeBuilder -> recipeBuilder.fluidInputs(SusyMaterials.RefractoryGunningMixture.getFluid(50)));

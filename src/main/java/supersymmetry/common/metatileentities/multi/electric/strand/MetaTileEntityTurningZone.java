@@ -1,9 +1,6 @@
 package supersymmetry.common.metatileentities.multi.electric.strand;
 
-import java.util.function.Supplier;
-
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
 import org.jetbrains.annotations.NotNull;
@@ -13,9 +10,7 @@ import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
-import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.unification.material.Materials;
-import gregtech.api.util.BlockInfo;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
@@ -122,7 +117,7 @@ public class MetaTileEntityTurningZone extends MetaTileEntityStrandShaper {
                         "ABBBA",
                         "  I  ",
                         "ABBBA")
-                .where('B', rollOrientation())
+                .where('B', rollOrientation(RelativeDirection.RIGHT))
                 .where('A',
                         states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('I', abilities(SuSyMultiblockAbilities.STRAND_IMPORT))
@@ -154,25 +149,6 @@ public class MetaTileEntityTurningZone extends MetaTileEntityStrandShaper {
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
         return new MetaTileEntityTurningZone(this.metaTileEntityId);
-    }
-
-    protected TraceabilityPredicate rollOrientation() {
-        // makes sure rotor's front faces the left side (relative to the player) of controller front
-        EnumFacing.Axis axialFacing = getRelativeFacing(RelativeDirection.RIGHT).getAxis();
-
-        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[] {
-                new BlockInfo(rollState().withProperty(BlockMetallurgyRoll.AXIS, axialFacing)) };
-        return new TraceabilityPredicate(blockWorldState -> {
-            IBlockState state = blockWorldState.getBlockState();
-            if (!(state.getBlock() instanceof BlockMetallurgyRoll)) return false;
-
-            // auto-correct rotor orientation
-            if (state != rollState().withProperty(BlockMetallurgyRoll.AXIS, axialFacing)) {
-                getWorld().setBlockState(blockWorldState.getPos(),
-                        rollState().withProperty(BlockMetallurgyRoll.AXIS, axialFacing));
-            }
-            return true;
-        }, supplier);
     }
 
     private IBlockState rollState() {

@@ -3,9 +3,11 @@ package supersymmetry.common.metatileentities.multi.rocket;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
@@ -291,7 +293,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                 }
                 this.supportAngle = Math.max(Math.PI / 4, this.supportAngle - (0.087 / 20));
                 if (this.supportAngle <= Math.PI / 4 && !this.selectedRocket.isCountDownStarted()) {
-                    this.selectedRocket.startCountdown();
+                    this.selectedRocket.startCountdown(200);
                 }
                 if (this.selectedRocket.posY > this.getLaunchPosition().y + 40) {
                     this.setLaunchPadState(LaunchPadState.EMPTY);
@@ -313,7 +315,12 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                 for (ModdedEntity forgeTrainEntity : trains) {
                     if (forgeTrainEntity.getSelf() instanceof EntityTransporterErector rollingStock &&
                             rollingStock.isRocketLoaded()) {
-                        this.selectedErector = rollingStock;
+                        // Dot product check to make sure it's facing the right way
+                        Vec3d toController = new Vec3d(getPos()).subtract(rollingStock.internal.getPositionVector());
+                        double dot = toController.dotProduct(rollingStock.internal.getLookVec());
+                        if (dot > 0) {
+                            this.selectedErector = rollingStock;
+                        }
                     }
                 }
             }
@@ -334,8 +341,12 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     public void spawnRocket() {
         Vec3d position = this.getLaunchPosition();
         this.selectedRocket = new EntityRocket(this.getWorld(), position, this.getFrontFacing().getHorizontalAngle());
-        if (this.selectedErector.getRocketNBT() != null)
-            this.selectedRocket.getEntityData().setTag("rocket", this.selectedErector.getRocketNBT());
+        if (this.selectedErector.getRocketNBT() != null) {
+            // Copy in all tags
+            for (Map.Entry<String, NBTBase> tag : selectedErector.getRocketNBT().tagMap.entrySet()) {
+                this.selectedRocket.getEntityData().setTag(tag.getKey(), tag.getValue());
+            }
+        }
         this.getWorld().spawnEntity(this.selectedRocket);
     }
 
@@ -354,8 +365,10 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     @Override
     public void writeInitialSyncData(PacketBuffer buf) {
         super.writeInitialSyncData(buf);
-        findRocket();
-        updateSelectedErector();
+        if (this.isStructureFormed()) {
+            findRocket();
+            updateSelectedErector();
+        }
         buf.writeEnumValue(this.state);
     }
 

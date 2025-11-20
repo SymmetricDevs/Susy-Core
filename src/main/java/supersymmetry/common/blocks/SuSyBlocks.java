@@ -61,6 +61,12 @@ public class SuSyBlocks {
     public static BlockRocketAssemblerCasing ROCKET_ASSEMBLER_CASING;
     public static BlockRegolith REGOLITH;
     public static BlocksFakeWool FAKEWOOL;
+    public static BlockRandomConcrete RANDOM_CONCRETE;
+    public static BlockRandomConcrete1 RANDOM_CONCRETE1;
+    public static BlockInductionCoilAssembly INDUCTION_COIL_ASSEMBLY;
+    public static BlockEngineCasing ENGINE_CASING;
+    public static BlockEngineCasing2 ENGINE_CASING_2;
+    public static BlocksActiveCasing ACTIVE_CASING;
     public static BlockSupport SUPPORT;
 
     public static BlockOuterHatch OUTER_HATCH;

@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.EnumFacing;
@@ -23,6 +24,7 @@ import cam72cam.immersiverailroading.IRBlocks;
 import codechicken.lib.util.ArrayUtils;
 import gregtech.api.GregTechAPI;
 import gregtech.api.block.IHeatingCoilBlockStats;
+import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 import gregtech.api.pattern.PatternStringError;
 import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.util.BlockInfo;
@@ -208,6 +210,63 @@ public class SuSyPredicates {
     @NotNull
     public static TraceabilityPredicate coilsOrBeds() {
         return COILS_OR_BED.get().or(EVAP_BED.get());
+    }
+
+    protected static EnumFacing getRelativeFacing(MultiblockControllerBase mte, RelativeDirection dir) {
+        return dir.getRelativeFacing(mte.getFrontFacing(), mte.getUpwardsFacing(), mte.isFlipped());
+    }
+
+    public static TraceabilityPredicate orientation(MultiblockControllerBase mte, IBlockState state,
+                                                    RelativeDirection direction,
+                                                    IProperty<EnumFacing> facingProperty) {
+        EnumFacing facing = getRelativeFacing(mte, direction);
+
+        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[] {
+                new BlockInfo(state.withProperty(facingProperty, facing)) };
+        return new TraceabilityPredicate(blockWorldState -> {
+            if (blockWorldState.getBlockState() != state.withProperty(facingProperty, facing)) {
+                if (blockWorldState.getBlockState().getBlock() != state.getBlock()) return false;
+                mte.getWorld().setBlockState(blockWorldState.getPos(), state.withProperty(facingProperty, facing));
+            }
+            return true;
+        }, supplier);
+    }
+
+    public static TraceabilityPredicate axisOrientation(MultiblockControllerBase mte, IBlockState state,
+                                                        RelativeDirection direction,
+                                                        IProperty<EnumFacing.Axis> facingProperty) {
+        EnumFacing facing = getRelativeFacing(mte, direction);
+        EnumFacing.Axis axis = facing.getAxis();
+
+        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[] {
+                new BlockInfo(state.withProperty(facingProperty, axis)) };
+        return new TraceabilityPredicate(blockWorldState -> {
+            if (blockWorldState.getBlockState() != state.withProperty(facingProperty, axis)) {
+                if (blockWorldState.getBlockState().getBlock() != state.getBlock()) return false;
+                mte.getWorld().setBlockState(blockWorldState.getPos(), state.withProperty(facingProperty, axis));
+            }
+            return true;
+        }, supplier);
+    }
+
+    public static TraceabilityPredicate horizontalOrientation(MultiblockControllerBase mte, IBlockState state,
+                                                              RelativeDirection direction,
+                                                              IProperty<EnumFacing> facingProperty) {
+        EnumFacing facing = getRelativeFacing(mte, direction);
+        // converting the left facing to positive x or z axis direction
+        // this is needed for the following update which converts this rotatable block from horizontal directional into
+        // axial directional.
+        EnumFacing axialFacing = facing.getIndex() < 4 ? EnumFacing.SOUTH : EnumFacing.WEST;
+
+        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[] {
+                new BlockInfo(state.withProperty(facingProperty, axialFacing)) };
+        return new TraceabilityPredicate(blockWorldState -> {
+            if (blockWorldState.getBlockState() != state.withProperty(facingProperty, axialFacing)) {
+                if (blockWorldState.getBlockState().getBlock() != state.getBlock()) return false;
+                mte.getWorld().setBlockState(blockWorldState.getPos(), state.withProperty(facingProperty, axialFacing));
+            }
+            return true;
+        }, supplier);
     }
 
     @NotNull

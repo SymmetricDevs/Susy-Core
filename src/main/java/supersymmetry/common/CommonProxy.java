@@ -38,11 +38,14 @@ import gregtech.client.utils.TooltipHelper;
 import gregtech.common.blocks.BlockWireCoil;
 import gregtech.common.items.MetaItems;
 import gregtech.modules.ModuleManager;
+import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.blocks.VariantItemBlockFalling;
 import supersymmetry.api.event.MobHordeEvent;
 import supersymmetry.api.fluids.SusyGeneratedFluidHandler;
+import supersymmetry.api.particle.Particles;
+import supersymmetry.api.space.CelestialObjects;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.api.unification.ore.SusyStoneTypes;
 import supersymmetry.common.blocks.SheetedFrameItemBlock;
@@ -64,7 +67,10 @@ import supersymmetry.modules.SuSyModules;
 public class CommonProxy {
 
     public void preLoad() {
+        GeckoLib.initialize();
         SusyStoneTypes.init();
+        Particles.init();
+        Particles.register();
     }
 
     /**
@@ -243,6 +249,7 @@ public class CommonProxy {
         evt.getRegistry().register(SuSyBiomes.LUNAR_MARIA);
         BiomeDictionary.addTypes(SuSyBiomes.LUNAR_MARIA, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.VOID);
 
+        CelestialObjects.init();
         SuSyDimensions.init();
     }
 }

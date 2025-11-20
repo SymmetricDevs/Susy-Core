@@ -365,6 +365,11 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
     }
 
     @Override
+    public boolean allowsExtendedFacing() {
+        return false;
+    }
+
+    @Override
     protected void formStructure(PatternMatchContext context) {
         super.formStructure(context);
         if (!this.isInitialized)

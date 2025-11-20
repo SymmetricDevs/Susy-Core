@@ -2,6 +2,8 @@ package supersymmetry.api.gui;
 
 import static com.cleanroommc.modularui.drawable.UITexture.fullImage;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import com.cleanroommc.modularui.drawable.UITexture;
 
 import gregtech.api.GTValues;
@@ -58,7 +60,10 @@ public class SusyGuiTextures {
             .fullImage("textures/gui/base/fluid_slot_primitive.png");
     public static final TextureArea BUTTON_QUARRY_MODES = TextureArea
             .fullImage("textures/gui/widget/button_quarry_modes.png");
-    public static final TextureArea ARROW = TextureArea.fullImage("textures/gui/widget/icon_indicator_arrow.png");
+    public static final TextureArea ARROW = TextureArea
+            .fullImage("textures/gui/widget/icon_indicator_arrow.png");
+    public static final TextureArea BUTTON_ENERGY_VOIDING = TextureArea
+            .fullImage("textures/gui/widget/button_energy_voiding.png");
     public static final TextureArea SPACEFLIGHT_SIMULATOR_SLIDER_BACKGROUND = TextureArea
             .fullImage("textures/gui/widget/slider_background_dark.png");
     public static final TextureArea SPACEFLIGHT_SIMULATOR_SLIDER = TextureArea
@@ -105,4 +110,30 @@ public class SusyGuiTextures {
             "textures/gui/widget/icon_throttle_active.png");
     public static final UITexture THROTTLE_INACTIVE = fullImage(GTValues.MODID,
             "textures/gui/widget/icon_throttle_inactive.png");
+
+    @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "GTCEu 2.9")
+    public static final UITexture SLOT = new UITexture.Builder()
+            .location(GTValues.MODID, "textures/gui/base/slot.png")
+            .imageSize(18, 18)
+            .adaptable(1)
+            .name("standard_slot")
+            .canApplyTheme()
+            .build();
+
+    @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "GTCEu 2.9")
+    public static final UITexture ICON_RIGHT = UITexture.builder()
+            .location(GTValues.MODID, "textures/gui/terminal/icon/right_hover.png")
+            .name("right_button")
+            .canApplyTheme()
+            .build();
+
+    @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "GTCEu 2.9")
+    public static final UITexture ICON_LEFT = UITexture.builder()
+            .location(GTValues.MODID, "textures/gui/terminal/icon/left_hover.png")
+            .name("left_button")
+            .canApplyTheme()
+            .build();
 }

@@ -23,7 +23,7 @@ public class EntityTransporterErector extends Freight implements IAlwaysRender {
     private LiftingMode liftingMode = LiftingMode.STOP;
     @TagField("rocketNBT")
     @TagSync
-    private NBTTagCompound rocketNBT;
+    private final NBTTagCompound rocketNBT = new NBTTagCompound();
 
     // In radians per tick
     private double liftingSpeed = 0.087 / 20;

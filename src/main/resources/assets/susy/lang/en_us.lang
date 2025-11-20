@@ -16,6 +16,7 @@ tile.alternator_coil.copper.name=Copper Alternator Coil
 tile.turbine_rotor.steel.name=Steel Turbine Block
 tile.turbine_rotor.low_pressure.name=Low Pressure Turbine Block
 tile.turbine_rotor.high_pressure.name=High Pressure Turbine Block
+tile.turbine_rotor.combustion.name=Combustion Turbine Block
 
 tile.drill_head.steel.name=Steel Drill Head
 
@@ -32,6 +33,7 @@ tile.rocket_assembler_casing.reinforced_foundation.name=Reinforced Foundation
 tile.rocket_assembler_casing.foundation.name=Rocket Assembler Foundation
 tile.rocket_assembler_casing.rails.name=Rocket Assembler Rails
 tile.rocket_assembler_casing.structural_frame.name=Rocket Assembler Structural Frame
+tile.susy_multiblock_casing.euv_safe_casing.name=Extreme-Ultraviolet-Safe Lithographer Casing
 
 tile.serpentine.basic.name=Copper Tubing Serpentine Block
 
@@ -132,6 +134,7 @@ tile.conveyor_belt.lv.name=Conveyor Belt
 
 tile.drill_bit.steel.name=Steel Drill Bit Block
 
+tile.induction_coil_assembly.copper.name=Induction Coil Assembly
 tile.eccentric_roll.steel.name=Eccentric Crushing Wheel
 tile.grinder_casing.abrasion_resistant_casing.name=Abrasion Resistant Casing
 tile.grinder_casing.hydraulic_mechanical_gearbox.name=Hydraulic Mechanical Gearbox
@@ -139,6 +142,12 @@ tile.grinder_casing.wear_resistant_lined_mill_shell.name=Wear Resistant Lined Mi
 tile.grinder_casing.wear_resistant_lined_shell_head.name=Wear Resistant Lined Shell Head
 tile.grinder_casing.intermediate_diaphragm.name=Intermediate Diaphragm
 tile.girth_gear_tooth.steel.name=Steel Girth Gear Tooth
+
+tile.engine_casing.piston_block.name=Engine Block
+
+tile.engine_casing_2.crankshaft.name=Crankshaft Casing
+
+tile.active_casing.basic_intake_casing.name=Basic Intake Casing
 
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
@@ -196,6 +205,12 @@ susy.material.mud=Mud
 susy.material.sea_water=Sea Water
 susy.material.refractory_gunning_mixture=Refractory Gunning Mixture
 susy.material.preheated_air=Preheated Air
+susy.material.midgrade_lubricant=Midgrade Lubricant
+susy.material.premium_lubricant=Premium Lubricant
+susy.material.supreme_lubricant=Supreme Lubricant
+susy.material.coolant=Coolant
+susy.material.advanced_coolant=Advanced Coolant
+susy.material.lubricating_oil=Lubricating Oil
 
 # Rock/Mineral Materials
 susy.material.fluorite=Fluorite
@@ -253,11 +268,12 @@ susy.fluid.slurry=%s Slurry
 susy.machine.steam_extractor_cannot_melt_items.warning=Steam Extractors cannot melt items!
 
 # Machines/Multiblocks
-susy.machine.aerospace_flight_simulator.name=aerospace flight simulator
-susy.machine.aerospace_flight_simulator.stagename=stage: %s
-susy.machine.aerospace_flight_simulator.build_button_label=build
-susy.machine.aerospace_flight_simulator.blueprint_request=insert a blueprint here
-susy.machine.aerospace_flight_simulator.error_format=%s \n %s \n %s
+susy.machine.aerospace_flight_simulator.name=Aerospace Flight Simulator
+
+susy.machine.blueprint_assembler.name=Blueprint Assembler
+susy.machine.blueprint_assembler.stagename=Stage: %s
+susy.machine.blueprint_assembler.build_button_label=Build
+susy.machine.blueprint_assembler.blueprint_request=Insert Blueprint:
 
 susy.rocketry.components.engine.name=engine(s)
 susy.rocketry.components.engine_small.name=vernier engine(s)
@@ -321,6 +337,12 @@ susy.machine.eccentric_roll_crusher.name=Eccentric Roll Crusher
 susy.machine.eccentric_roll_crusher.tooltip=Eccentricity does not mean low efficiency.
 susy.machine.ball_mill.name=Ball Mill
 susy.machine.ball_mill.tooltip=Rolling now!
+susy.machine.redstone_controller.not_connected=No machine to control found!
+susy.machine.redstone_controller.signal_desc=selected signal: %s
+susy.machine.redstone_controller.signal_label=signal: %s/%s
+susy.machine.redstone_controller.pulled.false=Can be activated
+susy.machine.redstone_controller.pulled.true=Signal sent, needs a reset
+susy.machine.redstone_controller.name=Redstone machine controller
 
 susy.machine.evaporation_pool.name=Evaporation Pool
 susy.machine.evaporation_pool.tooltip.info=Max square of %1$sx%1$s, minimum %2$sx%2$s. Read info tab and tool info for more details.
@@ -356,9 +378,9 @@ supersymmetry.prefix.foil=Foil
 susy.machine.primitive_mud_pump.name=Primitive Mud Pump
 susy.machine.primitive_mud_pump.tooltip=Works only in River biomes between Y=64 and Y=80
 susy.machine.basic_steam_turbine.name=Large Steam Turbine
-susy.machine.low_pressure_advanced_steam_turbine.name=Low Pressure Advanced Steam Turbine
-susy.machine.high_pressure_advanced_steam_turbine.name=High Pressure Advanced Steam Turbine
+susy.machine.advanced_steam_turbine.name=Advanced Steam Turbine
 susy.machine.basic_gas_turbine.name=Large Gas Turbine
+susy.machine.internal_combustion_generator.name=Internal Combustion Generator
 susy.machine.large_fluid_pump.name=Large Fluid Pump
 susy.machine.large_fluid_pump.tooltip.1=This would definitely affect the local trout population.
 susy.machine.large_fluid_pump.tooltip.2=Only works when the controller is at Y=64 and the bottom Steel Pipe Casing is located in the right biome.
@@ -393,6 +415,7 @@ susy.machine.single_column_cryogenic_distillation_plant.name=Single Column Cryog
 susy.machine.reverberatory_furnace.name=Reverberatory Furnace
 susy.machine.blender.name=Blender
 susy.machine.sieve_distillation_tower.name=Sieve Distillation Tower
+susy.machine.induction_furnace.name=Induction Furnace
 
 susy.machine.curtain_coater.name=Curtain Coater
 susy.multiblock.pattern.error.conveyor=§cAll conveyor belts must be the same§r
@@ -408,10 +431,16 @@ susy.machine.landing_pad.name=Landing Pad
 susy.machine.scrap_recycler.name=Scrap Recycler
 
 susy.machine.rocket_assembler.name=Rocket Assembler
+susy.machine.rocket_assembler.signal.start_assembly=Start assembly
+susy.machine.rocket_assembler.signal.stop_assembly=Stop and discard assembly
+susy.machine.rocket_assembler.blueprint_slot.name=insert a rocket blueprint
+susy.machine.rocket_assembler.gui.required_items=Required Items:
 susy.machine.rocket_assembler.gui.stop=Stop and reset assembly
+susy.machine.rocket_assembler.gui.start=start the assembly process
 susy.machine.rocket_assembler.blueprint_stop.name=Blueprint Slot
 
 susy.machine.rocket_programmer.name=Rocket Programmer
+susy.machine.rocket_programmer.gui.not_enough_budget=The rocket cannot perform every programmed mission.
 susy.machine.metallurgical_converter.name=Metallurgical Converter
 susy.machine.injection_molder.name=Injection Molder
 
@@ -831,6 +860,33 @@ susy.machine.fuel_cell.ev.name=Low Temperature Fuel Cell
 susy.machine.fuel_cell.iv.name=High Temperature Fuel Cell
 susy.machine.fuel_cell.tooltip=Temperature requirements for operation: %s°C
 
+
+susy.machine.combustion_generator.lv.name=Basic Combustion Generator
+susy.machine.combustion_generator.mv.name=Advanced Combustion Generator
+susy.machine.combustion_generator.hv.name=Advanced Combustion Generator II
+susy.machine.combustion_generator.tooltip=Requires lubricant and coolant to operate. Accepted coolants: Water, Distilled Water, Coolant, Advanced Coolant.
+
+susy.multiblock.rotation_generator.fuel_name=Fuel: %s
+susy.multiblock.rotation_generator.lubricant=Lubricant: %s (%sx)
+susy.multiblock.rotation_generator.power=Power: %s / %s EU/t
+susy.multiblock.rotation_generator.lubricant_amount=Lubricant: %s | Consumption: %s
+susy.multiblock.rotation_generator.tooltip=Max Rotation Speed: %s RPM, Spin-Up: %s RPM/t, Spin-Down: %s RPM/t.
+
+# Sputtering Machine
+susy.machine.sputter_deposition.lv.name=Basic Sputtering Machine
+susy.machine.sputter_deposition.mv.name=Advanced Sputtering Machine
+susy.machine.sputter_deposition.hv.name=Advanced Sputtering Machine II
+susy.machine.sputter_deposition.ev.name=Advanced Sputtering Machine III
+susy.machine.sputter_deposition.iv.name=Elite Sputtering Machine
+susy.machine.sputter_deposition.luv.name=Elite Sputtering Machine II
+susy.machine.sputter_deposition.zpm.name=Elite Sputtering Machine III
+susy.machine.sputter_deposition.uv.name=Ultimate Sputtering Machine
+susy.machine.sputter_deposition.uhv.name=Epic Sputtering Machine
+susy.machine.sputter_deposition.uev.name=Epic Sputtering Machine II
+susy.machine.sputter_deposition.uiv.name=Epic Sputtering Machine III
+susy.machine.sputter_deposition.uxv.name=Epic Sputtering Machine IV
+susy.machine.sputter_deposition.opv.name=Legendary Sputtering Machine
+
 susy.machine.component_scanner.name=Spacecraft Component Scanner
 susy.machine.component_scanner.scan_button=Scan Part
 susy.machine.component_scanner.unscanned=Component unscanned.
@@ -906,12 +962,15 @@ recipemap.milling.name=Precise Milling Machine
 recipemap.hot_isostatic_press.name=Hot Isostatic Press
 recipemap.gas_atomizer.name=Gas Atomizer
 recipemap.metallurgical_converter.name=Metallurgical Converter
+recipemap.advanced_steam_turbine.name=Advanced Steam Turbine
 recipemap.low_pressure_advanced_steam_turbine.name=Low Pressure Advanced Steam Turbine
 recipemap.high_pressure_advanced_steam_turbine.name=High Pressure Advanced Steam Turbine
+recipemap.sputter_deposition.name=Sputter Deposition
 recipemap.mixer_settler.name=Mixer-Settler
 recipemap.injection_molder=Injection Molding
 recipemap.boiler.name=Solid Boiler Fuels
 recipemap.fuel_cell.name=Solid Oxide Fuel Cell (SOFC)
+recipemap.induction_furnace.name=Induction Furnace
 recipemap.eccentric_roll_crusher.name=Eccentric Roll Crushing
 
 susy.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
@@ -1103,7 +1162,20 @@ susy.gui.stock_interactor.controller_setting.active_throttle.tooltip=Throttle (P
 susy.gui.stock_interactor.controller_setting.inactive_brake.tooltip=Brake (Unpowered)
 susy.gui.stock_interactor.controller_setting.inactive_throttle.tooltip=Throttle (Unpowered)
 
+susy.gui.rocket_programmer.orbit=Orbit the destination
+susy.gui.rocket_programmer.landing=Land on the destination at specific coordinates
+
+susy.gui.rocket_programmer.mission_type=Mission type
+susy.gui.rocket_programmer.planetoid=Destination
+susy.gui.rocket_programmer.destination_type=Destination type
+susy.gui.rocket_programmer.landing_coordinates=Landing coordinates
+
+susy.gui.page=Page %s / %s
+
 susy.gui.temperature_celsius=Temperature: %s / %s°C
+
+susy.gui.toggle_energy_voiding.enabled=Voiding energy when full
+susy.gui.toggle_energy_voiding.disabled=Not voiding energy
 
 # Extra recipe info
 susy.recipe.dimensions=Dimensions: %s
@@ -1267,8 +1339,46 @@ tile.fake_wool.greenfakewool.name=Green Asbestos Fiber
 tile.fake_wool.redfakewool.name=Red Asbestos Fiber
 tile.fake_wool.blackfakewool.name=Black Asbestos Fiber
 
-susy.machine.building_cleanroom.tooltip.1=allows for creation of §fStructure Cards§7 with rocket components encoded within
-susy.machine.building_cleanroom.tooltip.2=also works as a regular cleanroom
+#Particle physics stuff
+susy.particlebeam.energy=Energy
+susy.particlebeam.bunch.spacing=Bunch Spacing
+susy.particlebeam.bunch.length=Bunch Length
+susy.particlebeam.nbunches=Total Bunches
+susy.particlebeam.nparticles=Particles per bunch
+susy.particlebeam.emittance=Beam Emittance
+susy.particlebeam.beamsize=Beam Section
+susy.machine.beam_import_hatch.name=Beam Import Hatch
+susy.machine.beam_export_hatch.name=Beam Export Hatch
+
+#Particles
+susy.particle.electron.name=Electron
+susy.particle.positron.name=Positron
+susy.particle.photon.name=Photon
+
+#Random Concrete
+tile.random_concrete.greyindustrialconcrete.name=Grey Industrial Concrete
+tile.random_concrete.mossyindustrialconcrete.name=Mossy Industrial Concrete
+tile.random_concrete.silverindustrialconcrete.name=Silver Industrial Concrete
+tile.random_concrete.whiteindustrialconcrete.name=White Industrial Concrete
+
+tile.random_concrete.dottedpanel.name=Dotted Panel
+tile.random_concrete.dottedpanelborder.name=Dotted Panel Bordered
+tile.random_concrete.dottedpanelcomb.name=Dotted Panel Comb
+tile.random_concrete.dottedpanelgrid.name=Dotted Panel Grid
+
+tile.random_concrete.industrialcinderbricks.name=Industrial Cinder Bricks
+tile.random_concrete.industrialcinderbrickscement.name=Industrial Cement Cinder Bricks
+tile.random_concrete.industrialcinderbrickscementgray.name=Grey Industrial Cement Cinder Bricks
+tile.random_concrete.industrialcinderbricksdark.name=Dark Industrial Cinder Bricks
+tile.random_concrete.industrialcinderbricksdarkgrey.name=Dark Grey Industrial Cinder Bricks
+tile.random_concrete.industrialcinderbricksgrey.name=Grey Industrial Cinder Bricks
+
+tile.random_concrete.smoothindustrialconcrete.name=Smooth Industrial Concrete
+tile.random_concrete.smoothindustrialconcretegrey.name=Smooth Gray Industrial Concrete
+tile.random_concrete1.smoothindustrialconcretewhite.name=Smooth White Industrial Concrete
+
+susy.machine.building_cleanroom.tooltip.1=Creates §fStructure Cards§7 from the rocket components encoded within
+susy.machine.building_cleanroom.tooltip.2=Also works as a regular cleanroom, if you wish.
 # Error Messages
 susy.msg.rocket_component.build_success=Component successfully analyzed.
 susy.msg.rocket_component.unscanned=Component not scanned.
@@ -1286,7 +1396,7 @@ susy.msg.rocket_component.weird_fairing=Something about this fairing is weird.
 susy.msg.rocket_component.chamber_wrong_place=A combustion chamber is inside the rocket nozzle. That's strange...
 susy.msg.rocket_component.invalid_transparent=A transparent block is in this component!
 susy.msg.rocket_component.chamber_extraneous_blocks=An unneeded block was found in the component!
-susy.msg.rocket_component.cleanroom_not_clean=The Cleanroom is not clean yet (or you haven't hooked up to one)!
+susy.msg.rocket_component.cleanroom_not_clean=The Cleanroom is not clean yet (or nonexistent)
 susy.msg.rocket_component.nozzle_not_laval=The rocket nozzle does not resemble a de Laval nozzle!
 susy.msg.rocket_component.tile_missing=There is a tile missing on the hull tank!
 susy.msg.rocket_component.no_card=Please insert an Empty Structure Card.

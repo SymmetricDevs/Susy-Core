@@ -8,8 +8,9 @@ import net.minecraft.util.IStringSerializable;
 import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantBlock;
 import supersymmetry.api.rocketry.components.Instrument;
-import supersymmetry.common.entities.EntityRocket;
+import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.rocketry.instruments.InstrumentLander;
+import supersymmetry.common.rocketry.instruments.InstrumentRobotArm;
 
 public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstrument.Type> {
 
@@ -32,7 +33,7 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
         ENGINE("engine", 3),
         SOLAR_PANEL("solar_panel", 2),
         BATTERY("battery", 2),
-        ARM("arm", 2),
+        ARM("arm", 2, new InstrumentRobotArm()),
         LANDER("lander", 2, new InstrumentLander()); // will have variable purposes
 
         public String name;
@@ -64,7 +65,7 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
             return "wrench";
         }
 
-        public void act(int count, EntityRocket rocket) {
+        public void act(int count, EntityAbstractRocket rocket) {
             if (instrument != null) instrument.act(count, rocket);
         }
     }

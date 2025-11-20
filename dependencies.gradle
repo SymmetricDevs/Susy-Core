@@ -37,8 +37,8 @@ dependencies {
     api rfg.deobf('curse.maven:ctm-267602:2915363')
 
     // # GregTech Addons
-    // Supercritical 0.1.2
-    implementation rfg.deobf('curse.maven:supercritical-1185871:6694408')
+    // Supercritical 0.2.2
+    implementation rfg.deobf('curse.maven:supercritical-1185871:7034114')
     // GT-FO 1.12.4
     implementation rfg.deobf('curse.maven:gregtech-food-option-477021:6147619')
 
@@ -46,10 +46,10 @@ dependencies {
     api 'com.cleanroommc:groovyscript:1.2.5' transitive false
 
     // # Lib Mods we are using
-    api 'com.cleanroommc:modularui:2.5.0-rc6' transitive false
-    api 'software.bernie.geckolib:geckolib-forge-1.12.2:3.0.31'
+    api 'com.cleanroommc:modularui:3.0.2' transitive false
+    api rfg.deobf('curse.maven:geckolib-388172:4020277')
     // SussyPatches 0.4.0
-    api 'maven.modrinth:sussypatches:1.5.0'
+    api 'maven.modrinth:sussypatches:1.8.0'
 
     // # Immersive Railroading dependencies
     // Universal Mod Care 1.2.1
@@ -63,7 +63,7 @@ dependencies {
     compileOnly rfg.deobf('curse.maven:recurrent-complex-223150:5615733')
     compileOnly rfg.deobf('curse.maven:ivtoolkit-224535:2443253')
 
-    compileOnly rfg.deobf('curse.maven:fluidlogged-api-485654:4564413')
+    compileOnly 'maven.modrinth:fluidlogged-api:3.1.1'
 
     // # Pyrotech dependencies
     compileOnly rfg.deobf('curse.maven:pyrotech-306676:5351359')

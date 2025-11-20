@@ -99,7 +99,8 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
         for (BlockPos blockpos : blocks) {
             IBlockState state = world.getBlockState(blockpos);
             Block block = state.getBlock();
-            int meta = block.getMetaFromState(block.getDefaultState());
+
+            int meta = block.damageDropped(state);
             TileEntity te = world.getTileEntity(blockpos);
             if (te != null) {
                 if (te instanceof TileEntityCoverable) {

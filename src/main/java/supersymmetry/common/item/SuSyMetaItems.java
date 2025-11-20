@@ -32,8 +32,9 @@ import gregtech.common.items.behaviors.TooltipBehavior;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
+import supersymmetry.common.item.behavior.DataCardBehavior;
 import supersymmetry.common.item.behavior.PipeNetPainterBehavior;
-import supersymmetry.common.item.behavior.dataCardBehavior;
+import supersymmetry.common.item.behavior.RocketConfigBehavior;
 
 public class SuSyMetaItems {
 
@@ -51,6 +52,12 @@ public class SuSyMetaItems {
     public static MetaValueItem EARTH_ORBITAL_SCRAP;
     public static MetaValueItem TUNGSTEN_ELECTRODE;
     public static MetaValueItem CODE_BREACHER;
+
+    public static MetaValueItem DATA_CARD;
+    public static MetaValueItem DATA_CARD_ACTIVE;
+    public static MetaValueItem DATA_CARD_MASTER_BLUEPRINT;
+    public static MetaValueItem ROCKET_CONFIGURER;
+
     public static ArmorMetaItem<?>.ArmorMetaValueItem SIMPLE_GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_TANK;
@@ -75,10 +82,6 @@ public class SuSyMetaItems {
     public static ArmorMetaItem<?>.ArmorMetaValueItem ASTRONAUT_CHESTPLATE;
     public static ArmorMetaItem<?>.ArmorMetaValueItem ASTRONAUT_LEGGINGS;
     public static ArmorMetaItem<?>.ArmorMetaValueItem ASTRONAUT_BOOTS;
-
-    public static MetaValueItem DATA_CARD;
-    public static MetaValueItem DATA_CARD_ACTIVE;
-    public static MetaValueItem DATA_CARD_MASTER_BLUEPRINT;
 
     public static void initMetaItems() {
         metaItem = new StandardMetaItem();
@@ -143,15 +146,18 @@ public class SuSyMetaItems {
         DATA_CARD = initOneItem("data_card").setMaxStackSize(1)
                 .addComponents(new TooltipBehavior(lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1"))));
 
-        DATA_CARD_ACTIVE = initOneItem("data_card.active").setMaxStackSize(1).addComponents(new dataCardBehavior(
+        DATA_CARD_ACTIVE = initOneItem("data_card.active").setMaxStackSize(1).addComponents(new DataCardBehavior(
                 lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1")), Arrays.asList("type")));
 
         DATA_CARD_MASTER_BLUEPRINT = initOneItem("datacard.master_blueprint").setMaxStackSize(1)
-                .addComponents(new dataCardBehavior(
+                .addComponents(new DataCardBehavior(
                         lines -> lines.add(I18n.format("metaitem.datacard.master_blueprint.tooltip.1")),
                         Arrays.asList("rocketType")));
 
         TUNGSTEN_ELECTRODE = initOneItem("tungsten_electrode");
+
+        ROCKET_CONFIGURER = initOneItem("rocket_configurer").setMaxStackSize(1)
+                .addComponents(new RocketConfigBehavior());
     }
 
     // Ensures ID stability when merging

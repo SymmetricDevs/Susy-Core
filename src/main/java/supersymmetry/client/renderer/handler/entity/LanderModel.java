@@ -1,9 +1,9 @@
 package supersymmetry.client.renderer.handler.entity;
 
 import net.minecraft.util.ResourceLocation;
+
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import supersymmetry.Supersymmetry;
-import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.entities.EntityLander;
 
 public class LanderModel extends AnimatedGeoModel<EntityLander> {

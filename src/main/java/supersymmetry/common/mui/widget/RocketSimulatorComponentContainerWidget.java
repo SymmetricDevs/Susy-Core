@@ -57,12 +57,12 @@ public class RocketSimulatorComponentContainerWidget extends AbstractWidgetGroup
         rowSkip += rowSeparation + scrollbarPadding;
     }
 
-    // slots continue to work when the parent widget is disabled :wilted_rose:
+    // slots continue to work when the parent widget is disabled somehow
     public void setPrimary(boolean active) {
         this.setActive(active);
         this.setVisible(active);
 
-        for (var entry : this.components.values()) {
+        for (RocketComponentEntryWidget entry : this.components.values()) {
             // entry
             // .getSlots()
             // .forEach(

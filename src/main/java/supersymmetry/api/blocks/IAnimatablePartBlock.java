@@ -27,7 +27,7 @@ public interface IAnimatablePartBlock extends ITileEntityProvider {
     }
 
     default String getGeoName() {
-        return thisObject().translationKey;
+        return thisObject().getTranslationKey().substring(5); // Remove "tile." prefix
     }
 
     default ResourceLocation modelRL() {
