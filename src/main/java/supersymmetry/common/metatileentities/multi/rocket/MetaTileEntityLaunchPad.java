@@ -316,7 +316,12 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                 for (ModdedEntity forgeTrainEntity : trains) {
                     if (forgeTrainEntity.getSelf() instanceof EntityTransporterErector rollingStock &&
                             rollingStock.isRocketLoaded()) {
-                        this.selectedErector = rollingStock;
+                        // Dot product check to make sure it's facing the right way
+                        Vec3d toController = new Vec3d(getPos()).subtract(rollingStock.internal.getPositionVector());
+                        double dot = toController.dotProduct(rollingStock.internal.getLookVec());
+                        if (dot > 0) {
+                            this.selectedErector = rollingStock;
+                        }
                     }
                 }
             }
@@ -361,8 +366,10 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     @Override
     public void writeInitialSyncData(PacketBuffer buf) {
         super.writeInitialSyncData(buf);
-        findRocket();
-        updateSelectedErector();
+        if (this.isStructureFormed()) {
+            findRocket();
+            updateSelectedErector();
+        }
         buf.writeEnumValue(this.state);
     }
 

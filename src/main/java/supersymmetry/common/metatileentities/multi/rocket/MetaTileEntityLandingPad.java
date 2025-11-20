@@ -64,7 +64,7 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
         if (lander != null && !lander.isEmpty()) {
             GTTransferUtils.moveInventoryItems(lander.getInventory(), this.outputInventory);
             if (this.isBlockRedstonePowered()) {
-                lander.setHasTakenOff(true);
+                lander.setLaunched(true);
             }
         }
     }

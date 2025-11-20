@@ -1,15 +1,19 @@
 package supersymmetry.common.entities;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHandSide;
 import net.minecraft.world.World;
 import supersymmetry.common.blocks.rocketry.BlockSpacecraftInstrument;
 import supersymmetry.common.rocketry.RocketConfiguration;
 
-public abstract class EntityAbstractRocket extends Entity {
+public abstract class EntityAbstractRocket extends EntityLivingBase {
     public static final String ROCKET_CONFIG_KEY = "config";
 
     protected static final DataParameter<Boolean> LAUNCHED = EntityDataManager.<Boolean>createKey(EntityAbstractRocket.class,
@@ -34,6 +38,7 @@ public abstract class EntityAbstractRocket extends Entity {
     }
 
     protected void entityInit() {
+        super.entityInit();
         this.dataManager.register(LAUNCHED, false);
         this.dataManager.register(COUNTDOWN_STARTED, false);
         this.dataManager.register(AGE, 0);
@@ -143,5 +148,37 @@ public abstract class EntityAbstractRocket extends Entity {
 
     public RocketConfiguration getRocketConfiguration() {
         return new RocketConfiguration(this.getEntityData().getCompoundTag(ROCKET_CONFIG_KEY));
+    }
+
+    @Override
+    public Iterable<ItemStack> getArmorInventoryList() {
+        return null;
+    }
+
+    @Override
+    public ItemStack getItemStackFromSlot(EntityEquipmentSlot slotIn) {
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public void setItemStackToSlot(EntityEquipmentSlot slotIn, ItemStack stack) {
+    }
+
+    @Override
+    public EnumHandSide getPrimaryHand() {
+        return EnumHandSide.RIGHT;
+    }
+
+    @Override
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+        if (amount < 30.0F) {
+            return false;
+        }
+        return super.attackEntityFrom(source, amount);
+    }
+
+    @Override
+    public boolean canBePushed() {
+        return false;
     }
 }
