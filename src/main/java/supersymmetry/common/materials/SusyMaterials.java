@@ -56,6 +56,8 @@ public class SusyMaterials {
     // Thermodynamic materials
     public static Material PreheatedAir;
 
+    public static Material RP_1;
+
     public static void init() {
         SuSyElementMaterials.init();
         SuSyFirstDegreeMaterials.init();

@@ -20,6 +20,7 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
         setResistance(15f);
         setSoundType(SoundType.METAL);
         setDefaultState(getState(Type.FLIGHT_COMPUTER));
+        setHarvestLevel("wrench", 2);
     }
 
     public enum Type implements IStringSerializable, IStateHarvestLevel {

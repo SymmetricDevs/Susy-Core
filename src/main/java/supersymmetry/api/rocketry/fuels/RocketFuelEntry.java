@@ -1,29 +1,34 @@
 package supersymmetry.api.rocketry.fuels;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import gregtech.api.unification.material.Material;
+import org.apache.commons.lang3.tuple.Triple;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 
 public class RocketFuelEntry {
 
-    Map<Material, Double> material; // generally a mixture
+    Material material; // the main fuel
+    ArrayList<Triple<Material, Double, Double>> sides; // any extra required materials, their proportions, and their densities
     String registryName;
     double density; // kg/L
-    double heatOfUse; // J/kg (technically incorrect)
+    double sIVacuum; // kg * m / s
 
-    public RocketFuelEntry(String registryName, Map<Material, Double> material, double density, double heatOfUse) {
+    public RocketFuelEntry(String registryName, Material material, ArrayList<Triple<Material, Double, Double>> sides, double density, double sIVacuum, double sIPerPressure) {
         this.registryName = registryName;
         this.material = material;
+        this.sides = sides;
         this.density = density;
-        this.heatOfUse = heatOfUse;
+        this.sIVacuum = sIVacuum;
     }
 
     public RocketFuelEntry(RocketFuelEntry copy) {
         this.material = copy.material;
         this.density = copy.density;
-        this.heatOfUse = copy.heatOfUse;
+        this.sides = (ArrayList<Triple<Material, Double, Double>>) copy.sides.clone();
+        this.sIVacuum = copy.sIVacuum;
         this.registryName = copy.registryName;
     }
 
@@ -65,7 +70,7 @@ public class RocketFuelEntry {
         return this.registryName;
     }
 
-    public Map<Material, Double> getMixture() {
+    public Material getMaterial() {
         return this.material;
     }
 
@@ -73,7 +78,7 @@ public class RocketFuelEntry {
         return this.density;
     }
 
-    public double getHeatOfUse() {
-        return this.heatOfUse;
+    public double getSpecificImpulse() {
+        return this.sIVacuum;
     }
 }

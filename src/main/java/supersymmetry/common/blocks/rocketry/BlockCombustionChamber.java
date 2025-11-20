@@ -17,6 +17,7 @@ public class BlockCombustionChamber extends VariantBlock<BlockCombustionChamber.
         setResistance(15f);
         setSoundType(SoundType.METAL);
         setDefaultState(getState(CombustionType.BIPROPELLANT));
+        setHarvestLevel("wrench", 2);
     }
 
     public enum CombustionType implements IStringSerializable, IStateHarvestLevel {

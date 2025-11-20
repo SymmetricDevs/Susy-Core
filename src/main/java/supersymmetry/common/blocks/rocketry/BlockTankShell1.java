@@ -18,6 +18,7 @@ public class BlockTankShell1 extends VariantDirectionalCoverableBlock<BlockTankS
         setHardness(5f);
         setResistance(15f);
         setSoundType(SoundType.METAL);
+        setHarvestLevel("wrench", 2);
         setDefaultState(getState(BlockTankShell1.TankCoverType.CARBON_COMPOSITE));
         validCover = itemStack -> OreDictUnifier.get(OrePrefix.plate, Materials.Aluminium).isItemEqual(itemStack);
     }
