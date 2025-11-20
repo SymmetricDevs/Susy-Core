@@ -22,12 +22,12 @@ public class BlockFairingHull extends VariantDirectionalCoverableBlock<BlockFair
         setDefaultState(getState(FairingType.ALUMINIUM_FAIRING));
         validCover = itemStack -> OreDictUnifier.get(OrePrefix.plate, SusyMaterials.Aluminium7075)
                 .isItemEqual(itemStack);
-        setHarvestLevel("wrench", 3);
+        setHarvestLevel("wrench", 4);
     }
 
     public enum FairingType implements IStringSerializable, IStateHarvestLevel {
 
-        ALUMINIUM_FAIRING("al_7075", 3);
+        ALUMINIUM_FAIRING("al_7075", 4);
 
         String name;
         int harvest;

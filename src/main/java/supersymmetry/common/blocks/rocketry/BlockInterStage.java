@@ -20,13 +20,13 @@ public class BlockInterStage extends VariantDirectionalCoverableBlock<BlockInter
         setResistance(15f);
         setSoundType(SoundType.METAL);
         setDefaultState(getState(InterStageType.AL_7075));
-        setHarvestLevel("wrench", 2);
+        setHarvestLevel("wrench", 4);
         validCover = itemStack -> OreDictUnifier.get(OrePrefix.plate, Materials.Aluminium).isItemEqual(itemStack);
     }
 
     public enum InterStageType implements IStringSerializable, IStateHarvestLevel {
 
-        AL_7075("al_7075", 2);
+        AL_7075("al_7075", 4);
 
         String name;
         int harvest;

@@ -16,12 +16,12 @@ public class BlockLifeSupport extends VariantBlock<BlockLifeSupport.Ability> {
         setResistance(15f);
         setSoundType(SoundType.METAL);
         setDefaultState(getState(Ability.OXYGEN_REGEN));
-        setHarvestLevel("wrench", 3);
+        setHarvestLevel("wrench", 4);
     }
 
     public enum Ability implements IStringSerializable, IStateHarvestLevel {
 
-        OXYGEN_REGEN("oxygen_regen", 3);
+        OXYGEN_REGEN("oxygen_regen", 4);
 
         private String name;
         private int harvest;

@@ -21,7 +21,7 @@ public class BlockOuterHatch extends VariantHorizontalRotatableBlock<BlockOuterH
         setResistance(15f);
         setSoundType(SoundType.METAL);
         setDefaultState(getState(OuterHatchType.OUTER_HATCH));
-        setHarvestLevel("wrench", 2);
+        setHarvestLevel("wrench", 4);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class BlockOuterHatch extends VariantHorizontalRotatableBlock<BlockOuterH
 
     public enum OuterHatchType implements IStringSerializable, IStateHarvestLevel {
 
-        OUTER_HATCH("al_2219", 2);
+        OUTER_HATCH("al_2219", 4);
 
         private final String name;
         private final int harvestLevel;

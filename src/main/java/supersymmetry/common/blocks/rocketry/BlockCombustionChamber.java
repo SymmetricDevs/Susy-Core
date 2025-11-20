@@ -17,14 +17,14 @@ public class BlockCombustionChamber extends VariantBlock<BlockCombustionChamber.
         setResistance(15f);
         setSoundType(SoundType.METAL);
         setDefaultState(getState(CombustionType.BIPROPELLANT));
-        setHarvestLevel("wrench", 2);
+        setHarvestLevel("wrench", 4);
     }
 
     public enum CombustionType implements IStringSerializable, IStateHarvestLevel {
 
-        BIPROPELLANT("bipropellant", 2, 2),
-        MONOPROPELLANT("monopropellant", 2, 1),
-        OXIDISER("oxidiser", 2, 2);
+        BIPROPELLANT("bipropellant", 4, 2),
+        MONOPROPELLANT("monopropellant", 4, 1),
+        OXIDISER("oxidiser", 4, 2);
 
         String name;
         int harvest;

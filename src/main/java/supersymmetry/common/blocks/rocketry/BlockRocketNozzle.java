@@ -17,14 +17,14 @@ public class BlockRocketNozzle extends VariantBlock<BlockRocketNozzle.NozzleShap
         setResistance(25f);
         setSoundType(SoundType.METAL);
         setDefaultState(getState(NozzleShapeType.BELL_NOZZLE));
-        setHarvestLevel("wrench", 3);
+        setHarvestLevel("wrench", 4);
     }
 
     public enum NozzleShapeType implements IStringSerializable, IStateHarvestLevel {
 
-        BELL_NOZZLE("bell_basic", 3),
+        BELL_NOZZLE("bell_basic", 4),
         PLUG_NOZZLE("plug", 4), // note: these must be used with plug blocks
-        EXPANDING_NOZZLE("expanding", 3);
+        EXPANDING_NOZZLE("expanding", 4);
 
         private String name;
         private int harvestLevel;

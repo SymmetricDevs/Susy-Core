@@ -6,5 +6,6 @@ public class BlockFairingConnector extends BlockFairingHull {
         super();
         setTranslationKey("rocket_fairing_connector");
         setDefaultState(getState(FairingType.ALUMINIUM_FAIRING));
+        setHarvestLevel("wrench", 4);
     }
 }

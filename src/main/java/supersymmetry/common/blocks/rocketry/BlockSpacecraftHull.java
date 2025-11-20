@@ -18,7 +18,7 @@ public class BlockSpacecraftHull extends VariantDirectionalCoverableBlock<BlockS
         setHardness(5f);
         setResistance(15f);
         setSoundType(SoundType.METAL);
-        setHarvestLevel("wrench", 2);
+        setHarvestLevel("wrench", 4);
         setDefaultState(getState(HullType.AL_LI));
         validCover = (ItemStack i) -> i
                 .isItemEqualIgnoreDurability(OreDictUnifier.get(OrePrefix.foil, MetallizedBoPET));

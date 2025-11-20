@@ -15,7 +15,7 @@ public class BlockRoomPadding extends VariantDirectionalCoverableBlock<BlockRoom
         setResistance(15f);
         setSoundType(SoundType.CLOTH);
         setDefaultState(getState(CoveringType.PADDING));
-        setHarvestLevel("wrench", 2);
+        setHarvestLevel("wrench", 3);
     }
 
     public enum CoveringType implements IStringSerializable {

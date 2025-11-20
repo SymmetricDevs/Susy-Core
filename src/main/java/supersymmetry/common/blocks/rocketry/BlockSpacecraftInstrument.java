@@ -21,20 +21,20 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
         setResistance(15f);
         setSoundType(SoundType.METAL);
         setDefaultState(getState(Type.FLIGHT_COMPUTER));
-        setHarvestLevel("wrench", 2);
+        setHarvestLevel("wrench", 4);
     }
 
     public enum Type implements IStringSerializable, IStateHarvestLevel {
 
-        SENSOR_ARRAY("sensors", 1),
-        COLLECTOR("collector", 2),
-        CAMERA("position", 2),
-        FLIGHT_COMPUTER("computer", 3),
-        ENGINE("engine", 3),
-        SOLAR_PANEL("solar_panel", 2),
-        BATTERY("battery", 2),
-        ARM("arm", 2, new InstrumentRobotArm()),
-        LANDER("lander", 2, new InstrumentLander()); // will have variable purposes
+        SENSOR_ARRAY("sensors", 4),
+        COLLECTOR("collector", 4),
+        CAMERA("position", 4),
+        FLIGHT_COMPUTER("computer", 4),
+        ENGINE("engine", 4),
+        SOLAR_PANEL("solar_panel", 4),
+        BATTERY("battery", 4),
+        ARM("arm", 4, new InstrumentRobotArm()),
+        LANDER("lander", 4, new InstrumentLander()); // will have variable purposes
 
         public String name;
         public int h;

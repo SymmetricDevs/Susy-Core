@@ -17,12 +17,12 @@ public class BlockRocketControl extends VariantHorizontalRotatableBlock<BlockRoc
         setResistance(15f);
         setSoundType(SoundType.METAL);
         setDefaultState(getState(RocketControlType.ROCKET_CONTROL));
-        setHarvestLevel("wrench", 1);
+        setHarvestLevel("wrench", 4);
     }
 
     public enum RocketControlType implements IStringSerializable, IStateHarvestLevel {
 
-        ROCKET_CONTROL("basic", 1);
+        ROCKET_CONTROL("basic", 4);
 
         private String name;
         private int harvest;
