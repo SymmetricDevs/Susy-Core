@@ -61,6 +61,10 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer CVD_OVERLAY = new OrientedOverlayRenderer("machines/cvd");
     public static final OrientedOverlayRenderer ION_IMPLANTER_OVERLAY = new OrientedOverlayRenderer(
             "machines/ion_implanter");
+    public static final OrientedOverlayRenderer SPIN_COATER_OVERLAY = new OrientedOverlayRenderer(
+            "machines/spin_coater");
+    public static final OrientedOverlayRenderer SPUTTER_DEPOSITION_OVERLAY = new OrientedOverlayRenderer(
+            "machines/sputter_deposition");
     public static final OrientedOverlayRenderer PHASE_SEPARATOR_OVERLAY = new OrientedOverlayRenderer(
             "machines/phase_separator");
     public static final OrientedOverlayRenderer BATH_CONDENSER_OVERLAY = new OrientedOverlayRenderer(
@@ -114,10 +118,8 @@ public class SusyTextures {
             "machines/multiblocks/large_gas_turbine");
     public static final OrientedOverlayRenderer LARGE_STEAM_TURBINE_OVERLAY = new OrientedOverlayRenderer(
             "machines/multiblocks/large_steam_turbine");
-    public static final OrientedOverlayRenderer LOW_PRESSURE_ADVANCED_STEAM_TURBINE_OVERLAY = new OrientedOverlayRenderer(
-            "machines/multiblocks/low_pressure_advanced_steam_turbine");
-    public static final OrientedOverlayRenderer HIGH_PRESSURE_ADVANCED_STEAM_TURBINE_OVERLAY = new OrientedOverlayRenderer(
-            "machines/multiblocks/high_pressure_advanced_steam_turbine");
+    public static final OrientedOverlayRenderer ADVANCED_STEAM_TURBINE_OVERLAY = new OrientedOverlayRenderer(
+            "machines/multiblocks/advanced_steam_turbine");
 
     public static final OrientedOverlayRenderer LARGE_WEAPONS_FACTORY_OVERLAY = new OrientedOverlayRenderer(
             "machines/multiblocks/large_weapons_factory");

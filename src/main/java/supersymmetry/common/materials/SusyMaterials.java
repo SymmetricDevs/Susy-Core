@@ -33,6 +33,12 @@ public class SusyMaterials {
     public static Material Latex;
     public static Material Mud;
     public static Material Seawater;
+    public static Material MidgradeLubricant;
+    public static Material PremiumLubricant;
+    public static Material SupremeLubricant;
+    public static Material Coolant;
+    public static Material AdvancedCoolant;
+    public static Material LubricatingOil;
     public static Material MetallizedBoPET;
     public static Material Aluminium7075;
 

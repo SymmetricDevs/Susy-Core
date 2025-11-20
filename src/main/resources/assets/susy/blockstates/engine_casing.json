@@ -1,0 +1,6 @@
+{
+  "forge_marker" : 1,
+  "variants" : {
+    "variant=piston_block": { "model": "susy:engine_casing/piston_block" }
+  }
+}

@@ -1,5 +1,6 @@
 package supersymmetry.common.materials;
 
+import static gregtech.api.unification.material.info.MaterialFlags.FLAMMABLE;
 import static supersymmetry.common.materials.SusyMaterials.*;
 
 import gregtech.api.fluids.FluidBuilder;
@@ -28,6 +29,37 @@ public class SuSyUnknownCompositionMaterials {
         RefractoryGunningMixture = new Material.Builder(27053, SuSyUtility.susyId("refractory_gunning_mixture"))
                 .liquid()
                 .color(0x9c775c)
+                .build();
+
+        MidgradeLubricant = new Material.Builder(27054, SuSyUtility.susyId("midgrade_lubricant"))
+                .liquid()
+                .color(0xc7aa2a)
+                .build();
+
+        PremiumLubricant = new Material.Builder(27055, SuSyUtility.susyId("premium_lubricant"))
+                .liquid()
+                .color(0xba831c)
+                .build();
+
+        SupremeLubricant = new Material.Builder(27056, SuSyUtility.susyId("supreme_lubricant"))
+                .liquid()
+                .color(0xad5f10)
+                .build();
+
+        Coolant = new Material.Builder(27057, SuSyUtility.susyId("coolant"))
+                .liquid()
+                .color(0x46dde8)
+                .build();
+
+        AdvancedCoolant = new Material.Builder(27058, SuSyUtility.susyId("advanced_coolant"))
+                .liquid()
+                .color(0x33f5ee)
+                .build();
+
+        LubricatingOil = new Material.Builder(27059, SuSyUtility.susyId("lubricating_oil"))
+                .liquid()
+                .color(0x858146)
+                .flags(FLAMMABLE)
                 .build();
     }
 }

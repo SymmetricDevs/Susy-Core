@@ -1,0 +1,9 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "top": "gregtech:blocks/casings/engine_casing/piston_block/top",
+    "front": "gregtech:blocks/casings/engine_casing/piston_block/side",
+    "side": "gregtech:blocks/casings/engine_casing/piston_block/side",
+    "south": "gregtech:blocks/casings/engine_casing/piston_block/side"
+  }
+}

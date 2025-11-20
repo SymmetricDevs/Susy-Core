@@ -60,7 +60,10 @@ public class SusyGuiTextures {
             .fullImage("textures/gui/base/fluid_slot_primitive.png");
     public static final TextureArea BUTTON_QUARRY_MODES = TextureArea
             .fullImage("textures/gui/widget/button_quarry_modes.png");
-    public static final TextureArea ARROW = TextureArea.fullImage("textures/gui/widget/icon_indicator_arrow.png");
+    public static final TextureArea ARROW = TextureArea
+            .fullImage("textures/gui/widget/icon_indicator_arrow.png");
+    public static final TextureArea BUTTON_ENERGY_VOIDING = TextureArea
+            .fullImage("textures/gui/widget/button_energy_voiding.png");
     public static final TextureArea SPACEFLIGHT_SIMULATOR_SLIDER_BACKGROUND = TextureArea
             .fullImage("textures/gui/widget/slider_background_dark.png");
     public static final TextureArea SPACEFLIGHT_SIMULATOR_SLIDER = TextureArea
