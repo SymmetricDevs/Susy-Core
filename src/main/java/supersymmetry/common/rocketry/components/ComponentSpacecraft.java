@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants.NBT;
 
 import gregtech.api.block.VariantBlock;
+import scala.tools.cmd.gen.AnyValReps;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.components.MaterialCost;
 import supersymmetry.api.util.StructAnalysis;
@@ -168,6 +169,10 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
             tag.setBoolean("hasAir", false);
             this.hasAir = false; // goog..?
         } else {
+            if (interior.size() < 2) {
+                analysis.status = BuildStat.HULL_FULL;
+                return Optional.empty();
+            }
             int volume = interior.size();
             tag.setInteger("volume", volume);
             Set<BlockPos> container = analysis.getPerimeter(interior, StructAnalysis.orthVecs);
