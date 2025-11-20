@@ -116,8 +116,8 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
     // without it complaining
     public Optional<NBTTagCompound> spacecraftPattern(
                                                       Set<BlockPos> blocksConnected,
-                                                      Set<BlockPos> interior,
                                                       Set<BlockPos> exterior,
+                                                      Set<BlockPos> interior,
                                                       StructAnalysis analysis) {
         Predicate<BlockPos> lifeSupportCheck = bp -> analysis.world.getBlockState(bp).getBlock()
                 .equals(SuSyBlocks.LIFE_SUPPORT);

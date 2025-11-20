@@ -57,6 +57,7 @@ public class SuSyMetaItems {
     public static MetaValueItem DATA_CARD_ACTIVE;
     public static MetaValueItem DATA_CARD_MASTER_BLUEPRINT;
     public static MetaValueItem ROCKET_CONFIGURER;
+    public static MetaValueItem PADDING_CLOTH;
 
     public static ArmorMetaItem<?>.ArmorMetaValueItem SIMPLE_GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_MASK;
@@ -82,6 +83,7 @@ public class SuSyMetaItems {
     public static ArmorMetaItem<?>.ArmorMetaValueItem ASTRONAUT_CHESTPLATE;
     public static ArmorMetaItem<?>.ArmorMetaValueItem ASTRONAUT_LEGGINGS;
     public static ArmorMetaItem<?>.ArmorMetaValueItem ASTRONAUT_BOOTS;
+
 
     public static void initMetaItems() {
         metaItem = new StandardMetaItem();
@@ -158,6 +160,8 @@ public class SuSyMetaItems {
 
         ROCKET_CONFIGURER = initOneItem("rocket_configurer").setMaxStackSize(1)
                 .addComponents(new RocketConfigBehavior());
+
+        PADDING_CLOTH = initOneItem("padding_cloth");
     }
 
     // Ensures ID stability when merging
