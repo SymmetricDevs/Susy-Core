@@ -253,6 +253,9 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         if (dataId == GregtechDataCodes.LOCK_OBJECT_HOLDER) {
             getInventory().setLocked(buf.readBoolean());
         }
+        if (dataId == GregtechDataCodes.WORKABLE_ACTIVE) {
+            scannerLogic.setActive(buf.readBoolean());
+        }
     }
 
     @Override
@@ -407,7 +410,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                 .widget(
                         new ClickButtonWidget(
                                 68,
-                                56,
+                                62,
                                 54,
                                 18,
                                 new TextComponentTranslation("susy.machine.component_scanner.scan_button")

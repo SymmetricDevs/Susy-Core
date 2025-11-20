@@ -71,20 +71,20 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     public int componentIndex = 0;
 
     public boolean isWorking = false;
-    private List<String> signal_names = new ArrayList<>();
-    private List<Runnable> signal_actions = new ArrayList<>();
+    private List<String> signalNames = new ArrayList<>();
+    private List<Runnable> signalActions = new ArrayList<>();
 
     public MetaTileEntityRocketAssembler(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.ROCKET_ASSEMBLER);
-        signal_names.add("start_assembly");
-        signal_names.add("stop_assembly");
-        signal_actions.add(
+        signalNames.add("start_assembly");
+        signalNames.add("stop_assembly");
+        signalActions.add(
                 () -> {
                     if (!this.blueprintSlot.isEmpty()) {
                         this.startAssembly(this.getCurrentBlueprint());
                     }
                 });
-        signal_actions.add(
+        signalActions.add(
                 () -> {
                     this.abortAssembly();
                 });
@@ -93,17 +93,17 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
 
     @Override
     public List<String> getSignals() {
-        return signal_names;
+        return signalNames;
     }
 
     @Override
     public String getSignalName(int sig) {
-        return this.signal_names.get(sig);
+        return this.signalNames.get(sig);
     }
 
     @Override
     public void pulse(int sig) {
-        this.signal_actions.get(sig).run();
+        this.signalActions.get(sig).run();
     }
 
     public AbstractRocketBlueprint getCurrentBlueprint() {

@@ -254,10 +254,12 @@ susy.fluid.slurry=%s Slurry
 susy.machine.steam_extractor_cannot_melt_items.warning=Steam Extractors cannot melt items!
 
 # Machines/Multiblocks
-susy.machine.aerospace_flight_simulator.name=aerospace flight simulator
-susy.machine.aerospace_flight_simulator.stagename=stage: %s
-susy.machine.aerospace_flight_simulator.build_button_label=build
-susy.machine.aerospace_flight_simulator.blueprint_request=insert a blueprint here
+susy.machine.aerospace_flight_simulator.name=Aerospace Flight Simulator
+
+susy.machine.blueprint_assembler.name=Blueprint Assembler
+susy.machine.blueprint_assembler.stagename=Stage: %s
+susy.machine.blueprint_assembler.build_button_label=Build
+susy.machine.blueprint_assembler.blueprint_request=Insert Blueprint:
 
 susy.rocketry.components.engine.name=engine(s)
 susy.rocketry.components.engine_small.name=vernier engine(s)
@@ -1329,8 +1331,8 @@ tile.random_concrete.smoothindustrialconcrete.name=Smooth Industrial Concrete
 tile.random_concrete.smoothindustrialconcretegrey.name=Smooth Gray Industrial Concrete
 tile.random_concrete1.smoothindustrialconcretewhite.name=Smooth White Industrial Concrete
 
-susy.machine.building_cleanroom.tooltip.1=allows for creation of §fStructure Cards§7 with rocket components encoded within
-susy.machine.building_cleanroom.tooltip.2=also works as a regular cleanroom
+susy.machine.building_cleanroom.tooltip.1=Creates §fStructure Cards§7 from the rocket components encoded within
+susy.machine.building_cleanroom.tooltip.2=Also works as a regular cleanroom, if you wish.
 # Error Messages
 susy.msg.rocket_component.build_success=Component successfully analyzed.
 susy.msg.rocket_component.unscanned=Component not scanned.
@@ -1348,7 +1350,7 @@ susy.msg.rocket_component.weird_fairing=Something about this fairing is weird.
 susy.msg.rocket_component.chamber_wrong_place=A combustion chamber is inside the rocket nozzle. That's strange...
 susy.msg.rocket_component.invalid_transparent=A transparent block is in this component!
 susy.msg.rocket_component.chamber_extraneous_blocks=An unneeded block was found in the component!
-susy.msg.rocket_component.cleanroom_not_clean=The Cleanroom is not clean yet (or you haven't hooked up to one)!
+susy.msg.rocket_component.cleanroom_not_clean=The Cleanroom is not clean yet (or nonexistent)
 susy.msg.rocket_component.nozzle_not_laval=The rocket nozzle does not resemble a de Laval nozzle!
 susy.msg.rocket_component.tile_missing=There is a tile missing on the hull tank!
 susy.msg.rocket_component.no_card=Please insert an Empty Structure Card.

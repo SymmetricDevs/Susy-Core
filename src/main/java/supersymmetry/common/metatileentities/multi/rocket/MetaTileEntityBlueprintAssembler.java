@@ -53,10 +53,8 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
     // built :c
     public DataStorageLoader rocketBlueprintSlot = new DataStorageLoader(
             this,
-            item -> {
-                return SuSyMetaItems.isMetaItem(item) == SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.metaValue &&
-                        item.getTagCompound() != null && item.getTagCompound().getBoolean("buildstat") == false;
-            });
+            item -> SuSyMetaItems.isMetaItem(item) == SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.metaValue &&
+                    item.getTagCompound() != null && !item.getTagCompound().getBoolean("buildstat"));
 
     public MetaTileEntityBlueprintAssembler(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
@@ -117,15 +115,13 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
         int height = 280;
 
         ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, width, height);
-        // black display thing in the background
+        // black display screen in the background
         builder.image(4, 4, width - 8, height - 8, GuiTextures.DISPLAY);
 
         builder.dynamicLabel(
                 width / 2,
                 height / 2 - 16,
-                () -> {
-                    return rocketBlueprintSlot.isEmpty() ? I18n.format(this.getMetaName() + ".blueprint_request") : "";
-                },
+                () -> rocketBlueprintSlot.isEmpty() ? I18n.format(this.getMetaName() + ".blueprint_request") : "",
                 0x404040);
         builder.widget(
                 new IndicatorImageWidget(width - 23, height - 23, 17, 17, GuiTextures.GREGTECH_LOGO_DARK)
@@ -139,7 +135,7 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                         40,
                         30,
                         new TextComponentTranslation("debug").getUnformattedComponentText(),
-                        this::SetDefaultBlueprint));
+                        this::setDefaultBlueprint));
 
         builder.label(9, 9, getMetaFullName(), 0xFFFFFF);
         builder.bindPlayerInventory(entityPlayer.inventory, height - 80);
@@ -156,12 +152,8 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                     }
                     return this.slots.get(stage.getName()).get(name);
                 });
-        mainWindow.insertionAction = (window) -> {
-            this.onBlueprintInserted(window);
-        };
-        mainWindow.removalAction = (window) -> {
-            this.onBlueprintRemoved(window);
-        };
+        mainWindow.insertionAction = this::onBlueprintInserted;
+        mainWindow.removalAction = this::onBlueprintRemoved;
         mainWindow.setVisible(false);
         mainWindow.setActive(false);
         SlotWidgetMentallyStable blueprintContainer = new SlotWidgetMentallyStable(rocketBlueprintSlot, 0, width / 2,
@@ -299,7 +291,7 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
     }
 
     // TODO: remove ts
-    public void SetDefaultBlueprint(Widget.ClickData data) {
+    public void setDefaultBlueprint(Widget.ClickData data) {
         rocketBlueprintSlot.clearNBT();
         var tag = SusyRocketComponents.ROCKET_SOYUZ_BLUEPRINT_DEFAULT.writeToNBT();
         rocketBlueprintSlot.addToCompound(
