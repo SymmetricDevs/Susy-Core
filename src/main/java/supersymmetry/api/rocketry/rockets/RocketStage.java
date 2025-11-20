@@ -147,10 +147,7 @@ public class RocketStage {
     }
 
     public double getThrust(RocketFuelEntry rocketFuelEntry, double gravity) {
-        double power = getFuelThroughput() * rocketFuelEntry.getHeatOfUse(); // kg/s * J/kg
-        double specific_heat_ratio = 1.25; // TODO: make this dependent on output
-        // double massVelocity =
-        return 0;
+        return getFuelThroughput() * rocketFuelEntry.getSpecificImpulse() * gravity;
     }
 
     public void setComponentValidationFunction(

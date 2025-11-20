@@ -9,12 +9,12 @@ import org.apache.commons.lang3.tuple.Triple;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 
 public class RocketFuelEntry {
-
     Material material; // the main fuel
     ArrayList<Triple<Material, Double, Double>> sides; // any extra required materials, their proportions, and their densities
     String registryName;
     double density; // kg/L
     double sIVacuum; // kg * m / s
+    double sIPerPressure;
 
     public RocketFuelEntry(String registryName, Material material, ArrayList<Triple<Material, Double, Double>> sides, double density, double sIVacuum, double sIPerPressure) {
         this.registryName = registryName;
@@ -22,6 +22,7 @@ public class RocketFuelEntry {
         this.sides = sides;
         this.density = density;
         this.sIVacuum = sIVacuum;
+        this.sIPerPressure = sIPerPressure;
     }
 
     public RocketFuelEntry(RocketFuelEntry copy) {
@@ -81,4 +82,6 @@ public class RocketFuelEntry {
     public double getSpecificImpulse() {
         return this.sIVacuum;
     }
+
+    public double getSIVariation() {return this.sIPerPressure;}
 }

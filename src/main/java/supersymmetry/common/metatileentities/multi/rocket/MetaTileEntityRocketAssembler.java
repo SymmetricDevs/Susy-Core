@@ -141,7 +141,6 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         this.componentList.clear();
         // TODO: actually spawn the rocket entity?
         EntityRocket newRocket = new EntityRocket(this.getWorld(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 90);
-        newRocket.setAssemblerLoc(this.getPos());
         //abortAssembly();
     }
 
