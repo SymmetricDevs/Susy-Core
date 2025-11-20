@@ -173,7 +173,7 @@ public class SuSyFirstDegreeMaterials {
                 .components(Nitrogen, 78, Oxygen, 21, Argon, 9)
                 .build();
 
-        RP_1 = new Material.Builder(27151, SuSyUtility.susyId("RP-1"))
+        RP_1 = new Material.Builder(27151, SuSyUtility.susyId("RP_1"))
                 .fluid()
                 .color(0xb50707)
                 .flags(FLAMMABLE)

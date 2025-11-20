@@ -79,6 +79,11 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
         Set<BlockPos> hullBlocks = hullData.getFirst();
         Set<BlockPos> interiorAir = hullData.getSecond();
 
+        if (interiorAir.size() < 2) {
+            analysis.status = BuildStat.HULL_FULL;
+            return Optional.empty();
+        }
+
         Predicate<BlockPos> fuelPredicate = (block) -> {
             Block b = analysis.world.getBlockState(block).getBlock();
             return b.equals(SuSyBlocks.TANK_SHELL) || b.equals(SuSyBlocks.TANK_SHELL1);
