@@ -1,5 +1,7 @@
 package supersymmetry.common.metatileentities.multi.rocket;
 
+import static supersymmetry.common.entities.EntityAbstractRocket.ROCKET_CONFIG_KEY;
+
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -36,8 +38,6 @@ import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.common.entities.EntityTransporterErector;
 import supersymmetry.common.rocketry.RocketConfiguration;
-
-import static supersymmetry.common.entities.EntityAbstractRocket.ROCKET_CONFIG_KEY;
 
 public class MetaTileEntityRocketProgrammer extends MultiblockWithDisplayBase {
 

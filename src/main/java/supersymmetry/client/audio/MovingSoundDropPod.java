@@ -2,7 +2,6 @@ package supersymmetry.client.audio;
 
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 

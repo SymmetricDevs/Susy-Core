@@ -50,7 +50,6 @@ import supersymmetry.api.metatileentity.IAnimatableMTE;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.common.blocks.BlockRocketAssemblerCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.entities.EntityRocket;
 import supersymmetry.common.entities.EntityTransporterErector;
 

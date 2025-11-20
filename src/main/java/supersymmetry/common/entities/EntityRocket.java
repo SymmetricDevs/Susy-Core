@@ -9,9 +9,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -27,15 +24,12 @@ import supersymmetry.client.audio.MovingSoundRocket;
 import supersymmetry.client.renderer.handler.IAlwaysRender;
 import supersymmetry.client.renderer.particles.SusyParticleFlameLarge;
 import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
-import supersymmetry.common.blocks.rocketry.BlockSpacecraftInstrument;
 import supersymmetry.common.network.CPacketRocketInteract;
 
 public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender {
 
     private static final Random rnd = new Random();
     protected static final float jerk = 0.0001F;
-
-
 
     @SideOnly(Side.CLIENT)
     private MovingSoundRocket soundRocket;
@@ -251,7 +245,6 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender 
         }
         return EnumActionResult.SUCCESS;
     }
-
 
     @Override
     public double getMountedYOffset() {

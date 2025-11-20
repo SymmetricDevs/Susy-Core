@@ -1,12 +1,18 @@
 package supersymmetry.common.rocketry.instruments;
 
-import gregtech.api.recipes.Recipe;
+import static supersymmetry.common.rocketry.RocketConfiguration.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.items.ItemStackHandler;
+
+import gregtech.api.recipes.Recipe;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.rocketry.components.Instrument;
 import supersymmetry.api.space.Planetoid;
@@ -14,11 +20,6 @@ import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.rocketry.LanderSpawnEntry;
 import supersymmetry.common.rocketry.LanderSpawnQueue;
 import supersymmetry.common.rocketry.RocketConfiguration;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static supersymmetry.common.rocketry.RocketConfiguration.*;
 
 public class InstrumentRobotArm implements Instrument {
 
@@ -52,8 +53,7 @@ public class InstrumentRobotArm implements Instrument {
         NonNullList<ItemStack> nonNullList = NonNullList.from(ItemStack.EMPTY, outputs.toArray(new ItemStack[0]));
         LanderSpawnEntry entry = new LanderSpawnEntry(
                 nextMission.dimension, landingPos, salvagingRecipe.getDuration(),
-                new ItemStackHandler(nonNullList).serializeNBT()
-        );
+                new ItemStackHandler(nonNullList).serializeNBT());
         LanderSpawnQueue.get(server.getWorld(nextMission.dimension)).addEntry(entry);
     }
 }

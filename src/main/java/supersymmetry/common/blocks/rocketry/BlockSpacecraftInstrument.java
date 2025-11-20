@@ -9,7 +9,6 @@ import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantBlock;
 import supersymmetry.api.rocketry.components.Instrument;
 import supersymmetry.common.entities.EntityAbstractRocket;
-import supersymmetry.common.entities.EntityRocket;
 import supersymmetry.common.rocketry.instruments.InstrumentLander;
 import supersymmetry.common.rocketry.instruments.InstrumentRobotArm;
 

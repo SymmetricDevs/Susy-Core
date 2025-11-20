@@ -10,27 +10,34 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.world.World;
+
 import supersymmetry.common.blocks.rocketry.BlockSpacecraftInstrument;
 import supersymmetry.common.rocketry.RocketConfiguration;
 
 public abstract class EntityAbstractRocket extends EntityLivingBase {
+
     public static final String ROCKET_CONFIG_KEY = "config";
 
-    protected static final DataParameter<Boolean> LAUNCHED = EntityDataManager.<Boolean>createKey(EntityAbstractRocket.class,
+    protected static final DataParameter<Boolean> LAUNCHED = EntityDataManager.<Boolean>createKey(
+            EntityAbstractRocket.class,
             DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> COUNTDOWN_STARTED = EntityDataManager
             .<Boolean>createKey(EntityAbstractRocket.class, DataSerializers.BOOLEAN);
 
     protected static final DataParameter<Integer> AGE = EntityDataManager.<Integer>createKey(EntityAbstractRocket.class,
             DataSerializers.VARINT);
-    protected static final DataParameter<Integer> LAUNCH_TIME = EntityDataManager.<Integer>createKey(EntityAbstractRocket.class,
+    protected static final DataParameter<Integer> LAUNCH_TIME = EntityDataManager.<Integer>createKey(
+            EntityAbstractRocket.class,
             DataSerializers.VARINT);
-    protected static final DataParameter<Integer> FLIGHT_TIME = EntityDataManager.<Integer>createKey(EntityAbstractRocket.class,
+    protected static final DataParameter<Integer> FLIGHT_TIME = EntityDataManager.<Integer>createKey(
+            EntityAbstractRocket.class,
             DataSerializers.VARINT);
 
-    protected static final DataParameter<Float> START_POS = EntityDataManager.<Float>createKey(EntityAbstractRocket.class,
+    protected static final DataParameter<Float> START_POS = EntityDataManager.<Float>createKey(
+            EntityAbstractRocket.class,
             DataSerializers.FLOAT);
-    protected static final DataParameter<Boolean> ACTED = EntityDataManager.<Boolean>createKey(EntityAbstractRocket.class,
+    protected static final DataParameter<Boolean> ACTED = EntityDataManager.<Boolean>createKey(
+            EntityAbstractRocket.class,
             DataSerializers.BOOLEAN);
 
     public EntityAbstractRocket(World worldIn) {
@@ -161,8 +168,7 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
     }
 
     @Override
-    public void setItemStackToSlot(EntityEquipmentSlot slotIn, ItemStack stack) {
-    }
+    public void setItemStackToSlot(EntityEquipmentSlot slotIn, ItemStack stack) {}
 
     @Override
     public EnumHandSide getPrimaryHand() {

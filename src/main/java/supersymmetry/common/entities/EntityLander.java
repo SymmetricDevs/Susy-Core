@@ -351,7 +351,6 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
     @Override
     public void fall(float distance, float damageMultiplier) {}
 
-
     @Override
     public void setAir(int air) {
         super.setAir(300);
