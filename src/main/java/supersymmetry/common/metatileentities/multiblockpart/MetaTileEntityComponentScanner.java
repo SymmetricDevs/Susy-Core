@@ -42,7 +42,6 @@ import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
-import supersymmetry.common.blocks.rocketry.*;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.multi.rocket.MetaTileEntityBuildingCleanroom;
 
@@ -119,27 +118,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         }
         struct.status = BuildStat.SCANNING;
 
-        for (AbstractComponent<?> component : AbstractComponent.getRegistry()) {
-            if (component
-                    .getDetectionPredicate()
-                    .test(new Tuple<StructAnalysis, List<BlockPos>>(struct, blockList))) {
-                Optional<NBTTagCompound> scanResult = component.analyzePattern(struct, linkedCleanroom.getInteriorBB());
-                if (scanResult.isPresent()) {
-                    getInventory()
-                            .addToCompound(
-                                    tag -> {
-                                        NBTTagCompound t = scanResult.get();
-                                        component.writeToNBT(t);
-                                        return t;
-                                        // scanResult was replaced by just writing it to nbt with the function instead
-                                        // of doing
-                                        // whatever epix was cooking
-                                        /* just replace it */ });
-
-                    break;
-                }
-            }
-        }
+        detectComponents(blockList);
 
         if (struct.status == BuildStat.SCANNING) {
             struct.status = BuildStat.UNRECOGNIZED;
@@ -179,6 +158,26 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
          * - Guidance computer (not a tile entity)
          * - Seat
          */
+    }
+
+    public void detectComponents(ArrayList<BlockPos> blockList) {
+        for (AbstractComponent<?> component : AbstractComponent.getRegistry()) {
+            if (component
+                    .getDetectionPredicate()
+                    .test(new Tuple<>(struct, blockList))) {
+                Optional<NBTTagCompound> scanResult = component.analyzePattern(struct, linkedCleanroom.getInteriorBB());
+                if (scanResult.isPresent()) {
+                    getInventory()
+                            .addToCompound(
+                                    _ -> {
+                                        NBTTagCompound t = scanResult.get();
+                                        component.writeToNBT(t);
+                                        return t; });
+
+                    break;
+                }
+            }
+        }
     }
 
     public void handleScan(Widget.ClickData click) {

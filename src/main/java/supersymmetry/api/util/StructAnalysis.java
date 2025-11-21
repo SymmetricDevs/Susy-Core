@@ -132,12 +132,9 @@ public class StructAnalysis {
         return blocksCollected;
     }
 
-    /**
-     * Returns as a tuple:
-     * - The blocks comprising the exterior
-     * - The air exposed to the rest
-     */
-    public Tuple<Set<BlockPos>, Set<BlockPos>> checkHull(AxisAlignedBB aaBB, Set<BlockPos> actualBlocks,
+    public record HullData(Set<BlockPos> exterior, Set<BlockPos> interior) {}
+
+    public HullData checkHull(AxisAlignedBB aaBB, Set<BlockPos> actualBlocks,
                                                          boolean testStrength) {
         AxisAlignedBB floodBB = aaBB.grow(1);// initializes flood fill box
         BlockPos bottom = new BlockPos(floodBB.minX, floodBB.minY, floodBB.minZ); // initializes flood fill start
@@ -175,7 +172,7 @@ public class StructAnalysis {
             status = BuildStat.HULL_FULL;
             return null;
         }
-        return new Tuple<>(hullBlocks, air);
+        return new HullData(hullBlocks, air);
     }
 
     public ArrayList<BlockPos> getBlockNeighbors(BlockPos beg, AxisAlignedBB aaBB) {

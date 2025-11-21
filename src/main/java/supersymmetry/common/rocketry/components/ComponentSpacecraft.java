@@ -11,13 +11,11 @@ import java.util.stream.Collectors;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants.NBT;
 
 import gregtech.api.block.VariantBlock;
-import scala.tools.cmd.gen.AnyValReps;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.components.MaterialCost;
 import supersymmetry.api.util.StructAnalysis;
@@ -102,18 +100,16 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
     public Optional<NBTTagCompound> analyzePattern(StructAnalysis analysis, AxisAlignedBB aabb) {
         Set<BlockPos> blocksConnected = analysis.getBlockConn(aabb,
                 analysis.getBlocks(analysis.world, aabb, true).get(0));
-        Tuple<Set<BlockPos>, Set<BlockPos>> hullCheck = analysis.checkHull(aabb, blocksConnected, false);
-        Set<BlockPos> exterior = hullCheck.getFirst();
-        Set<BlockPos> interior = hullCheck.getSecond();
+        StructAnalysis.HullData hullCheck = analysis.checkHull(aabb, blocksConnected, false);
+        Set<BlockPos> exterior = hullCheck.exterior();
+        Set<BlockPos> interior = hullCheck.interior();
         return spacecraftPattern(
                 blocksConnected,
-                exterior, /* <- these 2 goobers are changed in this class -> */
+                exterior,
                 interior,
                 analysis);
     }
 
-    // copied from componentControlPod because i didnt figure out how to put it into a single function
-    // without it complaining
     public Optional<NBTTagCompound> spacecraftPattern(
                                                       Set<BlockPos> blocksConnected,
                                                       Set<BlockPos> exterior,
@@ -139,8 +135,9 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
             if (analysis.world.getBlockState(bp).getBlock().equals(SuSyBlocks.SPACECRAFT_HULL)) {
                 TileEntityCoverable te = (TileEntityCoverable) analysis.world.getTileEntity(bp);
                 for (EnumFacing side : EnumFacing.VALUES) {
-                    // either it must be facing the outside without a cover or it must have
-                    if (te.isCovered(side) ^ exterior.contains(bp.add(side.getDirectionVec()))) {
+                    // If it is both covered but facing another hull block
+                    // or not covered but facing air, then fail.
+                    if (te.isCovered(side) == exterior.contains(bp.add(side.getDirectionVec()))) {
                         analysis.status = BuildStat.HULL_WEAK;
                         return Optional.empty();
                     }
@@ -188,7 +185,7 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                 TileEntityCoverable te = (TileEntityCoverable) analysis.world.getTileEntity(bp);
                 if (block.equals(SuSyBlocks.ROOM_PADDING)) {
                     for (EnumFacing side : EnumFacing.VALUES) {
-                        if (te.isCovered(side) ^ interior.contains(bp.add(side.getDirectionVec()))) {
+                        if (te.isCovered(side) == interior.contains(bp.add(side.getDirectionVec()))) {
                             analysis.status = BuildStat.WEIRD_PADDING;
                             return Optional.empty();
                         }

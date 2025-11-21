@@ -61,9 +61,9 @@ public class ComponentInterstage extends AbstractComponent<ComponentInterstage> 
     @Override
     public Optional<NBTTagCompound> analyzePattern(StructAnalysis analysis, AxisAlignedBB aabb) {
         Set<BlockPos> blocks = analysis.getBlockConn(aabb, analysis.getBlocks(analysis.world, aabb, true).get(0));
-        Tuple<Set<BlockPos>, Set<BlockPos>> hullData = analysis.checkHull(aabb, blocks, false);
+        StructAnalysis.HullData hullData = analysis.checkHull(aabb, blocks, false);
 
-        Set<BlockPos> hullBlocks = hullData.getFirst();
+        Set<BlockPos> hullBlocks = hullData.exterior();
         Set<BlockPos> prevAir = null;
         if (!hullBlocks.containsAll(blocks)) {
             analysis.status = BuildStat.INTERSTAGE_NOT_CYLINDRICAL;

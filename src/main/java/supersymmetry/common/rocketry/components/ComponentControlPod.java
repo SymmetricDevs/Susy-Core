@@ -32,7 +32,7 @@ public class ComponentControlPod extends AbstractComponent<ComponentControlPod> 
         super(
                 "spacecraft_control_pod",
                 "spacecraft_control_pod",
-                thing -> {
+                _ -> {
                     return false;
                 });
         this.setDetectionPredicate(ComponentControlPod::detect);
@@ -41,18 +41,14 @@ public class ComponentControlPod extends AbstractComponent<ComponentControlPod> 
     private static boolean detect(Tuple<StructAnalysis, List<BlockPos>> input) {
         AxisAlignedBB aabb = input.getFirst().getBB(input.getSecond());
 
-        Set<BlockPos> blocks = input
-                .getFirst()
-                .getBlockConn(
+        Set<BlockPos> blocks = input.getFirst().getBlockConn(
                         aabb, input.getFirst().getBlocks(input.getFirst().world, aabb, true).get(0));
-        input
-                .getFirst()
-                .checkHull(
-                        aabb, blocks, false); // for some reason this is the thing that sets BuildStat status to
+        input.getFirst().checkHull(aabb, blocks, false);
+        // for some reason this is the thing that sets BuildStat status to
         // HULL_FULL
 
         boolean hasAir = input.getFirst().status != BuildStat.HULL_FULL;
-        boolean has_the_block = input.getSecond().stream()
+        boolean hasTheBlock = input.getSecond().stream()
                 .anyMatch(
                         bp -> input
                                 .getFirst().world
@@ -60,16 +56,16 @@ public class ComponentControlPod extends AbstractComponent<ComponentControlPod> 
                                         .getBlock()
                                         .equals(SuSyBlocks.ROCKET_CONTROL));
 
-        return hasAir && has_the_block;
+        return hasAir && hasTheBlock;
     }
 
     @Override
     public Optional<NBTTagCompound> analyzePattern(StructAnalysis analysis, AxisAlignedBB aabb) {
         Set<BlockPos> blocksConnected = analysis.getBlockConn(aabb,
                 analysis.getBlocks(analysis.world, aabb, true).get(0));
-        Tuple<Set<BlockPos>, Set<BlockPos>> hullCheck = analysis.checkHull(aabb, blocksConnected, false);
-        Set<BlockPos> exterior = hullCheck.getFirst();
-        Set<BlockPos> interior = hullCheck.getSecond();
+        StructAnalysis.HullData hullCheck = analysis.checkHull(aabb, blocksConnected, false);
+        Set<BlockPos> exterior = hullCheck.exterior();
+        Set<BlockPos> interior = hullCheck.interior();
         return spacecraftPattern(blocksConnected, interior, exterior, analysis);
     }
 

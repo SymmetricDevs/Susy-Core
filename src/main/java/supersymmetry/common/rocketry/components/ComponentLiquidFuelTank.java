@@ -74,10 +74,10 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
     @Override
     public Optional<NBTTagCompound> analyzePattern(StructAnalysis analysis, AxisAlignedBB aabb) {
         Set<BlockPos> blocks = analysis.getBlockConn(aabb, analysis.getBlocks(analysis.world, aabb, true).get(0));
-        Tuple<Set<BlockPos>, Set<BlockPos>> hullData = analysis.checkHull(aabb, blocks, false);
+        StructAnalysis.HullData hullData = analysis.checkHull(aabb, blocks, false);
 
-        Set<BlockPos> hullBlocks = hullData.getFirst();
-        Set<BlockPos> interiorAir = hullData.getSecond();
+        Set<BlockPos> hullBlocks = hullData.exterior();
+        Set<BlockPos> interiorAir = hullData.interior();
 
         if (interiorAir.size() < 2) {
             analysis.status = BuildStat.HULL_FULL;
