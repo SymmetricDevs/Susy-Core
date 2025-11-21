@@ -4,7 +4,7 @@
     "type": "CTM",
     "layer": "SOLID",
     "textures": [
-      "gregtech:blocks/casings/multiblock_tank/clarifier_ctm_on"
+      "gregtech:blocks/casings/multiblock_tank/clarifier_on_ctm"
     ],
     "extra": {
       "connect_inside": true
