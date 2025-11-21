@@ -201,7 +201,7 @@ public class SuSyRecipeMaps {
             1, 2, 0, new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.ELECTROLYZER);
 
-    public static final RecipeMap<SimpleRecipeBuilder> CVD_RECIPES = new RecipeMap<>("cvd", 3, 1, 2, 2,
+    public static final RecipeMap<SimpleRecipeBuilder> CVD_RECIPES = new RecipeMap<>("cvd", 3, 1, 3, 2,
             new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.ARC);
 
