@@ -99,7 +99,7 @@ public class MetaTileEntityArcFurnaceComplex extends MetaTileEntityAdvancedArcFu
                                 .getState(BlockLargeMultiblockCasing.CasingType.STRESS_PROOF_CASING)))
                 .where('B',
                         states(SuSyBlocks.MULTIBLOCK_CASING
-                                .getState(BlockSuSyMultiblockCasing.CasingType.ADVANCED_REFRACTORY_LINING)))
+                                .getState(BlockSuSyMultiblockCasing.CasingType.TABULAR_ALUMINA_REFRACTORY)))
                 .where('C',
                         states(SuSyBlocks.ELECTRODE_ASSEMBLY
                                 .getState(BlockElectrodeAssembly.ElectrodeAssemblyType.CARBON)))

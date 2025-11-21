@@ -70,16 +70,22 @@
         "all" : "gregtech:blocks/multiblock_casing/heavy_duty_pad"
       }
     },
-    "variant=advanced_refractory_lining" : {
+    "variant=synthetic_mullite_refractory" : {
       "model" : "minecraft:cube_all",
       "textures" : {
-        "all" : "gregtech:blocks/multiblock_casing/advanced_refractory_lining"
+        "all" : "gregtech:blocks/multiblock_casing/synthetic_mullite_refractory"
       }
     },
     "variant=coalescence_plate" : {
       "model" : "susy:cube_with_inner",
       "textures" : {
         "all" : "gregtech:blocks/multiblock_casing/coalescence_plate"
+      }
+    },
+    "variant=tabular_alumina_refractory" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/multiblock_casing/tabular_alumina_refractory"
       }
     }
   }
