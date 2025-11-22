@@ -1,25 +1,26 @@
 package supersymmetry.supersymmetry.common.metatileentities.multiblockpart;
 
-import gregtech.api.metatileentity.MetaTileEntityHolder;
-import gregtech.client.utils.TrackedDummyWorld;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import java.util.ArrayList;
+
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.hamcrest.CoreMatchers;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import gregtech.api.metatileentity.MetaTileEntityHolder;
+import gregtech.client.utils.TrackedDummyWorld;
 import supersymmetry.Bootstrap;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityComponentScanner;
 
-import java.util.ArrayList;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 public class ComponentScannerTest {
+
     protected World world;
     private ComponentScannerWrapper scanner;
 

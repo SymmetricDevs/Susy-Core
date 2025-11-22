@@ -1,15 +1,15 @@
 package supersymmetry;
 
-import gregtech.api.GTValues;
-import gregtech.api.GregTechAPI;
-import gregtech.api.fluids.GTFluidRegistration;
-import gregtech.api.unification.material.Materials;
-import gregtech.api.unification.material.registry.MarkerMaterialRegistry;
-import gregtech.api.unification.ore.OrePrefix;
-import gregtech.api.util.GTLog;
-import gregtech.common.items.MetaItems;
-import gregtech.core.unification.material.internal.MaterialRegistryManager;
-import gregtech.modules.ModuleManager;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.resources.Locale;
 import net.minecraft.network.INetHandler;
@@ -23,15 +23,16 @@ import net.minecraftforge.fml.common.eventhandler.EventBus;
 import net.minecraftforge.fml.relauncher.CoreModManager;
 import net.minecraftforge.fml.relauncher.Side;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import gregtech.api.GTValues;
+import gregtech.api.GregTechAPI;
+import gregtech.api.fluids.GTFluidRegistration;
+import gregtech.api.unification.material.Materials;
+import gregtech.api.unification.material.registry.MarkerMaterialRegistry;
+import gregtech.api.unification.ore.OrePrefix;
+import gregtech.api.util.GTLog;
+import gregtech.common.items.MetaItems;
+import gregtech.core.unification.material.internal.MaterialRegistryManager;
+import gregtech.modules.ModuleManager;
 
 public class Bootstrap {
 
@@ -81,7 +82,6 @@ public class Bootstrap {
         OrePrefix.runMaterialHandlers();
         GTFluidRegistration.INSTANCE.register();
         MetaItems.init();
-
 
         bootstrapped = true;
     }

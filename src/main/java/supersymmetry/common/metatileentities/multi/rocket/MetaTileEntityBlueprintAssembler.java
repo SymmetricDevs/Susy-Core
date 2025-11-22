@@ -53,16 +53,52 @@ import supersymmetry.common.rocketry.SusyRocketComponents;
 
 public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase {
 
+    public static Map<String, Map<String, List<DataStorageLoader>>> generateSlotsFromBlueprint(
+                                                                                               AbstractRocketBlueprint bp,
+                                                                                               MetaTileEntity mte) {
+        Map<String, Map<String, List<DataStorageLoader>>> map = new HashMap<>();
+        // copy the array because it explodes if you dont
+        for (RocketStage stage : new ArrayList<>(bp.stages)) {
+
+            Map<String, List<DataStorageLoader>> stageComponents = new HashMap<>();
+            for (String componentname : new HashSet<>(stage.componentLimits.keySet())) {
+                List<DataStorageLoader> slots = new ArrayList<>();
+                for (int i = 0; i < stage.maxComponentsOf(componentname); i++) {
+                    slots.add(
+                            new DataStorageLoader(
+                                    mte,
+                                    x -> {
+                                        if (SuSyMetaItems.isMetaItem(x) == SuSyMetaItems.DATA_CARD_ACTIVE.metaValue) {
+                                            if (x.hasTagCompound()) {
+                                                AbstractComponent<?> c = AbstractComponent.getComponentFromName(
+                                                        x.getTagCompound().getString("name"));
+                                                if (c.getComponentSlotValidator().test(componentname)) {
+                                                    return true;
+                                                }
+                                            }
+                                        }
+                                        return false;
+                                    }));
+                }
+                stageComponents.put(componentname, slots);
+            }
+            map.put(stage.getName(), stageComponents);
+        }
+        return map;
+    }
+
     // live widemann reaction
     // https://discord.com/channels/881234100504109166/881234101103890454/1402784628603097270
     public Map<String, Map<String, List<DataStorageLoader>>> slots = new HashMap<>();
+
     // TODO: make this only accept incomplete blueprints, it somehow breaks when they are already
     // built :c
     public DataStorageLoader rocketBlueprintSlot = new DataStorageLoader(
             this,
             item -> SuSyMetaItems.isMetaItem(item) == SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.metaValue &&
-                    item.getTagCompound() != null && !item.getTagCompound().getBoolean("buildstat"));
-
+                    item.getTagCompound() != null
+    // && !item.getTagCompound().getBoolean("buildstat")
+    );
 
     public MetaTileEntityBlueprintAssembler(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
@@ -80,46 +116,6 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
 
     public IBlockState getComputerState() {
         return MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID);
-    }
-
-    public static Map<String, Map<String, List<DataStorageLoader>>> generateSlotsFromBlueprint(
-                                                                                               AbstractRocketBlueprint bp,
-                                                                                               MetaTileEntity mte) {
-        Map<String, Map<String, List<DataStorageLoader>>> map = new HashMap<>();
-        // copy the array because it explodes if you dont
-        for (RocketStage stage : new ArrayList<>(bp.stages)) {
-
-            Map<String, List<DataStorageLoader>> stageComponents = new HashMap<>();
-            for (String componentname : new HashSet<>(stage.componentLimits.keySet())) {
-                List<DataStorageLoader> slots = new ArrayList<>();
-                for (int i = 0; i < stage.maxComponentsOf(componentname); i++) {
-                    // final int indx = i;
-                    // final String compname = componentname;
-                    // final String stagename = stage.getName();
-                    slots.add(
-                            new DataStorageLoader(
-                                    mte,
-                                    x -> {
-                                        if (SuSyMetaItems.isMetaItem(x) == SuSyMetaItems.DATA_CARD_ACTIVE.metaValue) {
-                                            if (x.hasTagCompound()) {
-                                                AbstractComponent<?> c = AbstractComponent.getComponentFromName(
-                                                        x.getTagCompound().getString("name"));
-                                                if (c.getComponentSlotValidator().test(componentname)) {
-                                                    // SusyLog.logger.info(
-                                                    // "slot {} stage {} component array {}", indx, stagename,
-                                                    // compname);
-                                                    return true;
-                                                }
-                                            }
-                                        }
-                                        return false;
-                                    }));
-                }
-                stageComponents.put(componentname, slots);
-            }
-            map.put(stage.getName(), stageComponents);
-        }
-        return map;
     }
 
     @Override
@@ -184,7 +180,7 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
     // TODO: remove ts
     public void SetDefaultBlueprint(Widget.ClickData data) {
         rocketBlueprintSlot.clearNBT();
-        var tag = SusyRocketComponents.ROCKET_SOYUZ_BLUEPRINT_DEFAULT.writeToNBT();
+        NBTTagCompound tag = SusyRocketComponents.ROCKET_SOYUZ_BLUEPRINT_DEFAULT.writeToNBT();
         rocketBlueprintSlot.addToCompound(
                 compound -> {
                     return tag;
@@ -220,21 +216,92 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                 "blueprint_slot",
                 this.rocketBlueprintSlot.getStackInSlot(0).writeToNBT(new NBTTagCompound()));
         tag.setTag("gui_slots", gui_slots);
-        // SusyLog.logger.info("tag writeToNBT:{}", tag);
 
         return tag;
     }
 
     @Override
+    public void writeInitialSyncData(PacketBuffer buf) {
+        NBTTagCompound gui_slots = new NBTTagCompound();
+        for (Entry<String, Map<String, List<DataStorageLoader>>> stage_entry : this.slots.entrySet()) {
+            NBTTagCompound stage = new NBTTagCompound();
+            for (Entry<String, List<DataStorageLoader>> component_entry : stage_entry.getValue().entrySet()) {
+                NBTTagList cards = new NBTTagList();
+                for (DataStorageLoader component_card : component_entry.getValue()) {
+                    NBTTagCompound item = component_card.getStackInSlot(0).writeToNBT(new NBTTagCompound());
+                    cards.appendTag(item);
+                }
+                stage.setTag(component_entry.getKey(), cards);
+            }
+            gui_slots.setTag(stage_entry.getKey(), stage);
+        }
+        NBTTagCompound tag = new NBTTagCompound();
+        tag.setTag(
+                "blueprint_slot",
+                this.rocketBlueprintSlot.getStackInSlot(0).writeToNBT(new NBTTagCompound()));
+        tag.setTag("gui_slots", gui_slots);
+        buf.writeCompoundTag(tag);
+    }
+
+    @Override
+    public void receiveInitialSyncData(PacketBuffer buf) {
+        try {
+            var data = buf.readCompoundTag();
+            NBTTagCompound empty_tag = new NBTTagCompound();
+            NBTTagList empty_tag_list = new NBTTagList();
+            NBTTagCompound blueprintTag = data.getCompoundTag("blueprint_slot");
+            if (blueprintTag != null) {
+                ItemStack blueprintStack = new ItemStack(blueprintTag);
+                this.rocketBlueprintSlot.setStackInSlot(0, blueprintStack);
+
+                if (SuSyMetaItems.isMetaItem(blueprintStack) == SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.metaValue) {
+                    if (blueprintStack.hasTagCompound()) {
+                        AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(
+                                blueprintStack.getTagCompound().getString("name"));
+                        if (bp.readFromNBT(blueprintStack.getTagCompound())) {
+                            this.slots = generateSlotsFromBlueprint(bp, this);
+                            NBTTagCompound guiSlotsTag = data.getCompoundTag("gui_slots");
+                            if (guiSlotsTag != empty_tag) {
+                                for (String stageKey : guiSlotsTag.getKeySet()) {
+                                    NBTTagCompound stageTag = guiSlotsTag.getCompoundTag(stageKey);
+                                    if (stageTag == empty_tag) {
+                                        continue;
+                                    }
+                                    for (String componentKey : stageTag.getKeySet()) {
+                                        NBTTagList component_cards = stageTag.getTagList(componentKey,
+                                                NBT.TAG_COMPOUND);
+                                        if (component_cards == empty_tag_list) {
+                                            continue;
+                                        }
+                                        for (int i = 0; i < component_cards.tagCount(); i++) {
+                                            NBTTagCompound stackTag = component_cards.getCompoundTagAt(i);
+                                            if (stackTag == empty_tag) {
+                                                continue;
+                                            }
+                                            ItemStack stack = new ItemStack(stackTag);
+                                            this.slots.get(stageKey).get(componentKey).get(i).setStackInSlot(0, stack);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                this.rocketBlueprintSlot.setStackInSlot(0, ItemStack.EMPTY);
+            }
+
+        } catch (Exception e) {}
+    }
+
+    @Override
     public void readFromNBT(NBTTagCompound data) {
-        // SusyLog.logger.info("readFromNBT");
         super.readFromNBT(data);
-        var empty_tag = new NBTTagCompound();
+        NBTTagCompound empty_tag = new NBTTagCompound();
         // assuming that new NBTTagCompound() == new NBTTagCompound() and
         // there are no funny java things going on :pray:
-        var empty_tag_list = new NBTTagList();
+        NBTTagList empty_tag_list = new NBTTagList();
         NBTTagCompound blueprintTag = data.getCompoundTag("blueprint_slot");
-        SusyLog.logger.info("blueprintTag:{}", blueprintTag);
         if (blueprintTag != null) {
             ItemStack blueprintStack = new ItemStack(blueprintTag);
             this.rocketBlueprintSlot.setStackInSlot(0, blueprintStack);
@@ -243,13 +310,10 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                 if (blueprintStack.hasTagCompound()) {
                     AbstractRocketBlueprint bp = AbstractRocketBlueprint
                             .getCopyOf(blueprintStack.getTagCompound().getString("name"));
-                    SusyLog.logger.info("bp:{}", bp);
                     if (bp.readFromNBT(blueprintStack.getTagCompound())) {
-
                         this.slots = generateSlotsFromBlueprint(bp, this);
 
                         NBTTagCompound guiSlotsTag = data.getCompoundTag("gui_slots");
-                        SusyLog.logger.info("guiSlotsTag:{}", guiSlotsTag);
                         if (guiSlotsTag != empty_tag) {
                             for (String stageKey : guiSlotsTag.getKeySet()) {
                                 NBTTagCompound stageTag = guiSlotsTag.getCompoundTag(stageKey);
@@ -271,7 +335,6 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                                         ItemStack stack = new ItemStack(stackTag);
                                         // sorry if this explodes
                                         this.slots.get(stageKey).get(componentKey).get(i).setStackInSlot(0, stack);
-                                        SusyLog.logger.info("set {}:{}[{}] to {}", stageKey, componentKey, i, stack);
                                     }
                                 }
                             }
@@ -328,7 +391,10 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
     private ModularUI.Builder createGUITemplate(EntityPlayer entityPlayer) {
         int width = 300;
         int height = 280;
-        SusyLog.logger.info("blueprint item {}", this.rocketBlueprintSlot.getStackInSlot(0));
+        SusyLog.logger.info(
+                "blueprint item {}\nslots:{}",
+                this.rocketBlueprintSlot.getStackInSlot(0),
+                this.slots.size());
 
         ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, width, height);
         // black display screen in the background
@@ -351,7 +417,9 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                         40,
                         30,
                         new TextComponentTranslation("debug").getUnformattedComponentText(),
-                        this::setDefaultBlueprint));
+                        click -> {
+                            this.SetDefaultBlueprint(click);
+                        }));
 
         builder.label(9, 9, getMetaFullName(), 0xFFFFFF);
         builder.bindPlayerInventory(entityPlayer.inventory, height - 80);
@@ -453,98 +521,5 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
         builder.widget(buildButton);
 
         return builder;
-    }
-
-    @Override
-    public void update() {
-        super.update();
-        if (!this.getWorld().isRemote) {
-            this.rocketBlueprintSlot.setLocked(!this.slotsEmpty());
-        }
-    }
-
-    public void onBlueprintRemoved(RocketStageDisplayWidget mainwindow) {
-        // if (this.slots.isEmpty() )
-        this.slots.clear();
-
-        mainwindow.selectedStageIndex = 0;
-        mainwindow.error = RocketStage.ComponentValidationResult.UNKNOWN;
-        mainwindow.setVisible(false);
-        mainwindow.setActive(false);
-    }
-
-    // this should only be ran when a new blueprint item is inserted, as doing this will void items
-    public void onBlueprintInserted(RocketStageDisplayWidget mainwindow) {
-        mainwindow.setActive(true);
-        mainwindow.setVisible(true);
-        if (!rocketBlueprintSlot.isEmpty() && rocketBlueprintSlot.getStackInSlot(0).hasTagCompound()) {
-            NBTTagCompound tag = rocketBlueprintSlot.getStackInSlot(0).getTagCompound();
-            AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
-            if (bp.readFromNBT(tag)) {
-                this.slots = mainwindow.generateSlotsFromBlueprint(bp, this);
-                mainwindow.generateFromBlueprint(bp);
-            } else {
-                SusyLog.logger.error("invalid blueprint");
-            }
-        }
-    }
-
-    public void buildBlueprint(ClickData clickdata, RocketStageDisplayWidget mainwindow) {
-        if (!rocketBlueprintSlot.isEmpty() && rocketBlueprintSlot.getStackInSlot(0).hasTagCompound()) {
-            NBTTagCompound tag = rocketBlueprintSlot.getStackInSlot(0).getTagCompound();
-            AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
-            if (mainwindow.blueprintBuildAttempt(bp)) {
-                SusyLog.logger.info("build success, blueprint writeout: {}", bp.writeToNBT());
-                this.rocketBlueprintSlot.addToCompound(
-                        x -> {
-                            return bp.writeToNBT();
-                        });
-            } else {
-                SusyLog.logger.info(
-                        "status: {}\nerror stage: {}\nerror component: {}",
-                        mainwindow.error.getTranslationKey(),
-                        mainwindow.errorStage,
-                        mainwindow.errorComponentType);
-            }
-        }
-    }
-
-    // TODO: remove ts
-    public void setDefaultBlueprint(Widget.ClickData data) {
-        rocketBlueprintSlot.clearNBT();
-        var tag = SusyRocketComponents.ROCKET_SOYUZ_BLUEPRINT_DEFAULT.writeToNBT();
-        rocketBlueprintSlot.addToCompound(
-                compound -> {
-                    return tag;
-                });
-        SusyLog.logger.info("set the nbt to {}", tag);
-    }
-
-    @Override
-    public void receiveCustomData(int dataId, PacketBuffer buf) {
-        super.receiveCustomData(dataId, buf);
-        if (dataId == GregtechDataCodes.LOCK_OBJECT_HOLDER) {
-            rocketBlueprintSlot.setLocked(buf.readBoolean());
-        }
-    }
-
-    @Override
-    protected boolean shouldSerializeInventories() {
-        return false; // this block needs its own implementation
-    }
-
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
-        return super.writeToNBT(data);
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound data) {
-        super.readFromNBT(data);
-    }
-
-    @Override
-    public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
-        return new MetaTileEntityBlueprintAssembler(metaTileEntityId);
     }
 }

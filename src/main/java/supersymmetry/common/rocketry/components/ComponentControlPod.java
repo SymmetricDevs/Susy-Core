@@ -42,7 +42,7 @@ public class ComponentControlPod extends AbstractComponent<ComponentControlPod> 
         AxisAlignedBB aabb = input.getFirst().getBB(input.getSecond());
 
         Set<BlockPos> blocks = input.getFirst().getBlockConn(
-                        aabb, input.getFirst().getBlocks(input.getFirst().world, aabb, true).get(0));
+                aabb, input.getFirst().getBlocks(input.getFirst().world, aabb, true).get(0));
         input.getFirst().checkHull(aabb, blocks, false);
         // for some reason this is the thing that sets BuildStat status to
         // HULL_FULL

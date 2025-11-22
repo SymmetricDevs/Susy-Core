@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -135,7 +134,7 @@ public class StructAnalysis {
     public record HullData(Set<BlockPos> exterior, Set<BlockPos> interior) {}
 
     public HullData checkHull(AxisAlignedBB aaBB, Set<BlockPos> actualBlocks,
-                                                         boolean testStrength) {
+                              boolean testStrength) {
         AxisAlignedBB floodBB = aaBB.grow(1);// initializes flood fill box
         BlockPos bottom = new BlockPos(floodBB.minX, floodBB.minY, floodBB.minZ); // initializes flood fill start
         Queue<BlockPos> uncheckedBlocks = new ArrayDeque<>();

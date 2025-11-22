@@ -43,10 +43,10 @@ import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.common.blocks.BlockRocketAssemblerCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.entities.EntityRocket;
 import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityComponentRedstoneController;
 import supersymmetry.common.mui.widget.ItemCostWidget;
 import supersymmetry.common.mui.widget.SlotWidgetMentallyStable;
-import supersymmetry.common.entities.EntityRocket;
 
 public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                                            implements IProgressBarMultiblock, IRedstoneControllable {
@@ -165,8 +165,9 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         this.componentIndex = 0;
         this.componentList.clear();
         // TODO: actually spawn the rocket entity?
-        EntityRocket newRocket = new EntityRocket(this.getWorld(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 90);
-        //abortAssembly();
+        EntityRocket newRocket = new EntityRocket(this.getWorld(), this.getPos().getX(), this.getPos().getY(),
+                this.getPos().getZ(), 90);
+        // abortAssembly();
     }
 
     public void startAssembly(AbstractRocketBlueprint bp) {
