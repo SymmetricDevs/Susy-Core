@@ -22,5 +22,8 @@
     "RecyclingRecipesMixin",
     "ToolBuilderAccessor",
     "ToolItemsMixin"
+  ],
+  "client" : [
+    "WorldSceneRendererMixin"
   ]
 }

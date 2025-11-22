@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.ResourceLocation;
 
 import gregtech.api.GTValues;
@@ -108,5 +109,10 @@ public class SuSyUtility {
 
     public static String getRLPrefix(Material material) {
         return material.getModid().equals(GTValues.MODID) ? "" : material.getModid() + ":";
+    }
+
+    /// I hate this...
+    public static String getNameForColor(EnumDyeColor color) {
+        return color == EnumDyeColor.SILVER ? "light_gray" : color.getName();
     }
 }

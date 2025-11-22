@@ -91,4 +91,24 @@ public class VariantDirectionalRotatableBlock<T extends Enum<T> & IStringSeriali
                                   @NotNull BlockPos pos, @NotNull EntityPlayer player) {
         return getItemVariant(state.getValue(VARIANT), 1);
     }
+
+    // protected static <T, R> Class<T> getActualTypeParameter(Class<? extends R> thisClass, Class<R> declaringClass) {
+    // Type type = thisClass.getGenericSuperclass();
+    //
+    // while(!(type instanceof ParameterizedType) || ((ParameterizedType)type).getRawType() != declaringClass) {
+    // if (type instanceof ParameterizedType) {
+    // type = ((Class)((ParameterizedType)type).getRawType()).getGenericSuperclass();
+    // } else {
+    // type = ((Class)type).getGenericSuperclass();
+    // }
+    // }
+    //
+    // Object output = ((ParameterizedType)type).getActualTypeArguments()[0];
+    //
+    // if (output instanceof TypeVariable<?>){
+    // return (Class)((TypeVariable)output).getBounds()[0];
+    // }
+    // return (Class)output;
+
+    // }
 }

@@ -58,9 +58,20 @@ public class GravityHandler {
                     entity.motionY -= (gravMult * ARROW_OFFSET - ARROW_OFFSET);
                 else if (entity instanceof EntityLivingBase && entity.isInWater() || entity.isInLava()) {
                     entity.motionY -= (gravMult * FLUID_LIVING_OFFSET - FLUID_LIVING_OFFSET);
-                } else if (entity instanceof EntityLivingBase)
+                } else if (entity instanceof EntityLivingBase) {
+                    // Normally gravity works for living entities by accelerating motionY by 0.08, and then applying
+                    // "drag"
+                    // in the form of multiplying the resulting value by 0.98.
+                    // This code we have here runs *before* all of that, and I'm not about to make a second mixin to
+                    // change that.
+                    // Let's say we've figured out that the *next* motionY should be X after the vanilla code runs.
+                    // X = (motionY - 0.08) * 0.98
+                    // motionY = X / 0.98 + 0.08
 
-                    entity.motionY -= (gravMult * LIVING_OFFSET - LIVING_OFFSET);
+                    double drag = SuSyDimensions.PLANETS.get(entity.world.provider.getDimension()).dragMultiplier;
+                    double intended = (entity.motionY - (gravMult * 0.08)) * drag;
+                    entity.motionY = intended / 0.98 + 0.08;
+                }
 
             }
         }

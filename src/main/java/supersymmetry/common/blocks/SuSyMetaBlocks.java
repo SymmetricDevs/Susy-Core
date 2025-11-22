@@ -1,6 +1,7 @@
 package supersymmetry.common.blocks;
 
 import static gregtech.api.unification.material.info.MaterialFlags.GENERATE_FRAME;
+import static supersymmetry.api.util.SuSyUtility.susyId;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -18,6 +19,7 @@ import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -29,6 +31,7 @@ import gregtech.api.unification.material.properties.PropertyKey;
 import gregtech.api.unification.stack.ItemMaterialInfo;
 import gregtech.api.unification.stack.MaterialStack;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
+import supersymmetry.common.tile.TileEntityCoverable;
 
 public class SuSyMetaBlocks {
 
@@ -40,6 +43,7 @@ public class SuSyMetaBlocks {
     public static void init() {
         createGeneratedBlock(m -> m.hasProperty(PropertyKey.DUST) && m.hasFlag(GENERATE_FRAME),
                 SuSyMetaBlocks::createSheetedFrameBlock);
+        registerTileEntity();
     }
 
     public static void createSheetedFrameBlock(Material[] materials, int index) {
@@ -69,7 +73,6 @@ public class SuSyMetaBlocks {
                     Arrays.fill(materials, Materials.NULL);
                     blocksToGenerate.put(metaBlockID, materials);
                 }
-
                 (blocksToGenerate.get(metaBlockID))[subBlockID] = material;
             }
         }
@@ -168,5 +171,9 @@ public class SuSyMetaBlocks {
     @SuppressWarnings("unchecked")
     private static <T extends Comparable<T>> String getPropertyName(IProperty<T> property, Comparable<?> value) {
         return property.getName((T) value);
+    }
+
+    public static void registerTileEntity() {
+        GameRegistry.registerTileEntity(TileEntityCoverable.class, susyId("coverable"));
     }
 }

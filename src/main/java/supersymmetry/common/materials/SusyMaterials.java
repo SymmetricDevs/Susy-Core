@@ -14,6 +14,8 @@ import gregtech.api.unification.material.info.MaterialFlags;
 import gregtech.api.unification.material.properties.*;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
+import supersymmetry.api.unification.material.properties.MillBallProperty;
+import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 
 public class SusyMaterials {
 
@@ -37,6 +39,8 @@ public class SusyMaterials {
     public static Material Coolant;
     public static Material AdvancedCoolant;
     public static Material LubricatingOil;
+    public static Material MetallizedBoPET;
+    public static Material Aluminium7075;
 
     public static Material RefractoryGunningMixture;
 
@@ -57,6 +61,8 @@ public class SusyMaterials {
 
     // Thermodynamic materials
     public static Material PreheatedAir;
+
+    public static Material RP_1;
 
     public static void init() {
         SuSyElementMaterials.init();
@@ -188,6 +194,9 @@ public class SusyMaterials {
         Materials.Electrum.setProperty(PropertyKey.ORE, new OreProperty());
 
         Materials.Hydrogen.addFlags(MaterialFlags.FLAMMABLE);
+
+        // Debug only
+        Materials.Steel.setProperty(SuSyPropertyKey.MILL_BALL, new MillBallProperty(23123));
     }
 
     private static void removeProperty(PropertyKey<?> key, Material material) {

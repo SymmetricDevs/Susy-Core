@@ -1,0 +1,29 @@
+{
+  "forge_marker" : 1,
+  "variants" : {
+    "axis=y,variant=steel" : {
+      "model" : "minecraft:cube_column",
+      "textures" : {
+        "end" : "gregtech:blocks/casings/grinder_casing/girth_gear_tooth_end",
+        "side" : "gregtech:blocks/casings/grinder_casing/girth_gear_tooth_side"
+      }
+    },
+    "axis=z,variant=steel" : {
+      "model" : "minecraft:cube_column",
+      "textures" : {
+        "end" : "gregtech:blocks/casings/grinder_casing/girth_gear_tooth_end",
+        "side" : "gregtech:blocks/casings/grinder_casing/girth_gear_tooth_side"
+      },
+      "x" : 90
+    },
+    "axis=x,variant=steel" : {
+      "model" : "minecraft:cube_column",
+      "textures" : {
+        "end" : "gregtech:blocks/casings/grinder_casing/girth_gear_tooth_end",
+        "side" : "gregtech:blocks/casings/grinder_casing/girth_gear_tooth_side"
+      },
+      "x" : 90,
+      "y" : 90
+    }
+  }
+}
