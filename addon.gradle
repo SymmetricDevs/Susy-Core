@@ -1,5 +1,3 @@
-import kotlin.jvm.functions.Function1
-
 apply plugin: 'xyz.wagyourtail.jvmdowngrader'
 
 java {
@@ -22,8 +20,7 @@ dependencies {
 
 // downgrade code runClient/runServer/build
 shadeDowngradedApi {
-    // TODO)) yeet the cast to kt function in the next jvmdg update
-    shadePath = { _ -> "${project.modGroup.replace('.', '/')}/shadow/".toString() } as Function1
+    shadePath { _ -> "${project.modGroup.replace('.', '/')}/shadow/".toString() }
     archiveClassifier = "dev" // debug session will use the "-dev" jar
 }
 
