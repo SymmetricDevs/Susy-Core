@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.init.Biomes;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeManager.BiomeEntry;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import supersymmetry.api.SusyLog;
+import supersymmetry.api.space.CelestialObjects;
 import supersymmetry.client.renderer.sky.SkyRendererMoon;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
@@ -38,12 +40,15 @@ public class SuSyDimensions {
 
         // Actually registers dimension layout.
 
-        new Planet(0, 800, "Moon").setBiomeList(
-                new BiomeEntry(SuSyBiomes.LUNAR_HIGHLANDS, 100),
-                new BiomeEntry(SuSyBiomes.LUNAR_MARIA, 100))
+        new Planet(0, CelestialObjects.MOON.getDimension(), "Moon").setBiomeList(
+                new BiomeEntry(SuSyBiomes.LUNAR_HIGHLANDS, 80),
+                new BiomeEntry(SuSyBiomes.LUNAR_MARIA, 20))
                 .setStone(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH)
                         .getState(SusyStoneVariantBlock.StoneType.ANORTHOSITE))
                 .setSkyRenderer(new SkyRendererMoon())
-                .setGravity(0.166f).setBiomeSize(7).load();
+                .setGravity(0.166f).setDragMultiplier(1f).setBiomeSize(7).load();
+
+        new Planet(0, 700, "Water Test World").setBiomeList(
+                new BiomeEntry(Biomes.OCEAN, 1)).load();
     }
 }
