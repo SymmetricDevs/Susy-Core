@@ -24,7 +24,6 @@ import gregtech.api.gui.widgets.DynamicLabelWidget;
 import gregtech.api.gui.widgets.SlotWidget;
 import gregtech.api.util.Position;
 import gregtech.api.util.Size;
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
@@ -198,22 +197,23 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
         for (Entry<String, RocketSimulatorComponentContainerWidget> stageEntry : this.stageContainers.entrySet()) {
             RocketStage stageFrombp;
             Optional<RocketStage> st = blueprint.getStages().stream()
-                    .filter(x -> x.getName() == stageEntry.getKey())
+                    .filter(x -> x.getName().hashCode() == stageEntry.getKey().hashCode())
                     .findFirst();
             if (!st.isPresent()) {
-                SusyLog.logger.error(
-                        "blueprint stages: {} actually here: {}",
-                        blueprint.getStages().stream().map(x -> x.getName()).collect(Collectors.toList()),
-                        this.stageContainers.keySet());
+                // it appears like strings with the same exact text are not always equal in java..
+
+                // SusyLog.logger.error(
+                // "blueprint stages: {} actually here: {}",
+                // blueprint.getStages().stream().map(x -> x.getName()).collect(Collectors.toList()),
+                // this.stageContainers.keySet());
                 // for (RocketStage stage : blueprint.getStages()) {
                 // for (Entry<String, RocketSimulatorComponentContainerWidget> guiEntry :
-                // this.stageContainers
-                // .entrySet()) {
+                // this.stageContainers.entrySet()) {
                 // SusyLog.logger.info(
                 // "stage name: \"{}\" guiEntry name: \"{}\" equal??? {}",
                 // stage.getName(),
                 // guiEntry.getKey(),
-                // stage.getName() == guiEntry.getKey());
+                // stage.getName().hashCode() == guiEntry.getKey().hashCode());
                 // }
                 // }
                 throw new RuntimeException(
@@ -325,7 +325,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
             ) return "";
         }
         return String.format(
-                "test %s \n%s \n%s",
+                "%s \n%s \n%s",
                 I18n.format(this.error.getTranslationKey()),
                 I18n.format("susy.rocketry.stages." + this.errorStage + ".name"),
                 I18n.format("susy.rocketry.components." + this.errorComponentType + ".name"));

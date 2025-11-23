@@ -162,18 +162,19 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
             NBTTagCompound tag = rocketBlueprintSlot.getStackInSlot(0).getTagCompound();
             AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
             if (mainwindow.blueprintBuildAttempt(bp)) {
-                SusyLog.logger.info("build success, blueprint writeout: {}", bp.writeToNBT());
+                // SusyLog.logger.info("build success, blueprint writeout: {}", bp.writeToNBT());
                 this.rocketBlueprintSlot.addToCompound(
                         x -> {
                             return bp.writeToNBT();
                         });
-            } else {
-                SusyLog.logger.info(
-                        "status: {}\nerror stage: {}\nerror component: {}",
-                        mainwindow.error.getTranslationKey(),
-                        mainwindow.errorStage,
-                        mainwindow.errorComponentType);
             }
+            // else {
+            // SusyLog.logger.info(
+            // "status: {}\nerror stage: {}\nerror component: {}",
+            // mainwindow.error.getTranslationKey(),
+            // mainwindow.errorStage,
+            // mainwindow.errorComponentType);
+            // }
         }
     }
 
@@ -397,7 +398,7 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
         builder.image(4, 4, width - 8, height - 8, GuiTextures.DISPLAY);
 
         builder.dynamicLabel(
-                width / 2,
+                width / 2 - 20,
                 height / 2 - 16,
                 () -> rocketBlueprintSlot.isEmpty() ? I18n.format(this.getMetaName() + ".blueprint_request") : "",
                 0x404040);
@@ -448,14 +449,19 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                         .getFormattedText(),
                 (c) -> {
                     this.buildBlueprint(c, mainWindow);
-                });
+                })
+                        .setShouldClientCallback(true);
         builder.dynamicLabel(
-                width / 5,
-                height / 5,
+                50,
+                150,
                 () -> {
-                    return mainWindow.getStatusText();
+                    if (!this.rocketBlueprintSlot.isEmpty()) {
+                        return mainWindow.getStatusText();
+                    } else {
+                        return "";
+                    }
                 },
-                0x505050);
+                0x808080);
         // doesnt get ran sometimes so you have to check in the main too
         rocketBlueprintSlot.setLocked(!slotsEmpty());
 
@@ -503,14 +509,6 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                 SusyLog.logger.error("invalid blueprint");
             }
         }
-
-        builder.dynamicLabel(
-                width,
-                height,
-                () -> {
-                    return mainWindow.getStatusText();
-                },
-                0xffffff);
 
         builder.widget(mainWindow);
         builder.widget(blueprintContainer.setBackgroundTexture(GuiTextures.SLOT_DARK));
