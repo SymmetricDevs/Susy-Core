@@ -71,7 +71,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                     this.updateSelectedStageView();
                 })
                         .setShouldClientCallback(true)
-                        .setButtonTexture(SusyGuiTextures.SPACEFLIGHT_SIMULATOR_BUTTON_LEFT);
+                        .setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_LEFT);
         nextButton = new ClickButtonWidget(
                 (size.width - 20),
                 0,
@@ -83,7 +83,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                     this.updateSelectedStageView();
                 })
                         .setShouldClientCallback(true)
-                        .setButtonTexture(SusyGuiTextures.SPACEFLIGHT_SIMULATOR_BUTTON_RIGHT);
+                        .setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_RIGHT);
         amountTextField = new DynamicLabelWidget(
                 (int) ((size.width / 5) * 2.5),
                 -1,

@@ -34,6 +34,7 @@ import gregtech.api.util.Size;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import supersymmetry.api.SusyLog;
+import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.metatileentity.multiblock.IRedstoneControllable;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
@@ -151,7 +152,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
 
     public void abortAssembly() {
         this.blueprintSlot.setLocked(false);
-        SusyLog.logger.info("assembly force stopped");
+        // SusyLog.logger.info("assembly force stopped");
         this.isWorking = false;
         this.componentIndex = 0;
         this.componentList.clear();
@@ -159,14 +160,14 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     }
 
     public void finishAssembly() {
-        SusyLog.logger.info("assembly finished");
+        // SusyLog.logger.info("assembly finished");
         this.blueprintSlot.setLocked(false);
         this.isWorking = false;
         this.componentIndex = 0;
         this.componentList.clear();
         // TODO: actually spawn the rocket entity?
-        EntityRocket newRocket = new EntityRocket(this.getWorld(), this.getPos().getX(), this.getPos().getY(),
-                this.getPos().getZ(), 90);
+        EntityRocket newRocket = new EntityRocket(
+                this.getWorld(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 90);
         // abortAssembly();
     }
 
@@ -654,12 +655,14 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                         143,
                         18,
                         18,
-                        "susy.machine.rocket_assembler.gui.start",
+                        "",
                         (clickData -> {
                             if (!this.blueprintSlot.isEmpty()) {
                                 this.startAssembly(this.getCurrentBlueprint());
                             }
-                        })));
+                        }))
+                                .setTooltipText("susy.machine.rocket_assembler.gui.start")
+                                .setButtonTexture(SusyGuiTextures.ROCKET_ASSEMBLER_BUTTON_START));
 
         builder.widget(getFlexButton(173, 125, 18, 18));
         builder.dynamicLabel(
@@ -699,9 +702,11 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                 y,
                 width,
                 height,
-                "susy.machine.rocket_assembler.gui.stop",
+                "",
                 (clickData -> {
                     this.abortAssembly();
-                }));
+                }))
+                        .setButtonTexture(SusyGuiTextures.ROCKET_ASSEMBLER_BUTTON_STOP)
+                        .setTooltipText("susy.machine.rocket_assembler.gui.stop");
     }
 }

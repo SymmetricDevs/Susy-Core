@@ -391,10 +391,6 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
     private ModularUI.Builder createGUITemplate(EntityPlayer entityPlayer) {
         int width = 300;
         int height = 280;
-        SusyLog.logger.info(
-                "blueprint item {}\nslots:{}",
-                this.rocketBlueprintSlot.getStackInSlot(0),
-                this.slots.size());
 
         ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, width, height);
         // black display screen in the background

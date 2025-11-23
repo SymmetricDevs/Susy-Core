@@ -40,7 +40,7 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
                         this.selectedIndex--;
                     })
                             .setShouldClientCallback(true)
-                            .setButtonTexture(SusyGuiTextures.SPACEFLIGHT_SIMULATOR_BUTTON_LEFT);
+                            .setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_LEFT);
             increaseButton = new ClickButtonWidget(
                     (size.width / 5) * 4,
                     0,
@@ -51,7 +51,7 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
                         this.selectedIndex++;
                     })
                             .setShouldClientCallback(true)
-                            .setButtonTexture(SusyGuiTextures.SPACEFLIGHT_SIMULATOR_BUTTON_RIGHT);
+                            .setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_RIGHT);
             amountTextField = new TextFieldWidget2(
                     (int) ((size.width / 5) * 2.5) - 5,
                     3,
@@ -112,7 +112,7 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
                 0,
                 12,
                 12,
-                SusyGuiTextures.SPACEFLIGHT_SIMULATOR_BUTTON_SHORTVIEW,
+                SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_SHORTVIEW,
                 () -> {
                     return !this.shortView;
                 },
@@ -205,7 +205,7 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
                 sbutton.getSelfPosition().y - 2,
                 sbutton.getSize().width + 4,
                 sbutton.getSize().height + 4,
-                SusyGuiTextures.SPACEFLIGHT_SIMULATOR_SLIDER_BACKGROUND);
+                SusyGuiTextures.BLUEPRINT_ASSEMBLER_SLIDER_BACKGROUND);
     }
 
     // true == shortened version is to be displayed, with only 1 slot visible

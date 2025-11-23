@@ -1,35 +1,36 @@
 package supersymmetry.common.metatileentities.multi.rocket;
 
+import java.util.ArrayList;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.IControllable;
 import gregtech.api.capability.IEnergyContainer;
 import gregtech.api.capability.IWorkable;
 import gregtech.api.capability.impl.EnergyContainerList;
-import gregtech.api.metatileentity.multiblock.MultiblockAbility;
-import gregtech.api.pattern.PatternMatchContext;
-import gregtech.common.ConfigHolder;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
-
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
+import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.MultiblockWithDisplayBase;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.PatternMatchContext;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
+import gregtech.common.ConfigHolder;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.common.item.SuSyMetaItems;
 
-import java.util.ArrayList;
-
-public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDisplayBase implements IControllable, IWorkable {
+public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDisplayBase
+                                                    implements IControllable, IWorkable {
 
     private IEnergyContainer energyContainer;
     private boolean isActive = false;
@@ -37,7 +38,9 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     protected boolean hasNotEnoughEnergy;
     private int progress = 0;
 
-    public DataStorageLoader rocketBlueprintSlot = new DataStorageLoader(this, item -> SuSyMetaItems.isMetaItem(item) == SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.metaValue && item.getTagCompound() != null && !item.getTagCompound().getBoolean("buildstat"));
+    public DataStorageLoader rocketBlueprintSlot = new DataStorageLoader(this,
+            item -> SuSyMetaItems.isMetaItem(item) == SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.metaValue &&
+                    item.getTagCompound() != null && item.getTagCompound().getBoolean("buildstat"));
 
     public MetaTileEntityAerospaceFlightSimulator(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
@@ -122,7 +125,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             this.hasNotEnoughEnergy = true;
             setActive(false);
         }
-
     }
 
     @Override
