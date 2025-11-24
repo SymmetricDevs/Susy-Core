@@ -100,7 +100,7 @@ public class MetaTileEntityMetallurgicalConverter extends RecipeMapMultiblockCon
     }
 
     private IBlockState getRefractoryState() {
-        return SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.ADVANCED_REFRACTORY_LINING);
+        return SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.TABULAR_ALUMINA_REFRACTORY);
     }
 
     @Override
