@@ -50,7 +50,7 @@ public class MetaTileEntityVacuumDistillationTower extends MetaTileEntityOrdered
     @Override
     @NotNull
     public DistillationTowerLogicHandler createHandler() {
-        return new ExtendedDTLogicHandler(this, 3, ignored -> 3);
+        return new ExtendedDTLogicHandler(this, 3, _ -> 3);
     }
 
     @Override

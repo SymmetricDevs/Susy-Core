@@ -49,14 +49,15 @@ public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
     @Override
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle("CCCCC", "CWGWC", "  G  ")
+                .aisle("CCKCC", "CWGWC", "  G  ")
                 .aisle("CCCCC", "I>>>O", "CCGCC")
                 .aisle("CCSCC", "CWHWC", "  G  ")
                 .where('S', selfPredicate())
                 .where('I', abilities(MultiblockAbility.IMPORT_ITEMS))
                 .where('O', abilities(MultiblockAbility.EXPORT_ITEMS))
                 .where('H', abilities(MultiblockAbility.IMPORT_FLUIDS))
-                .where('C', states(getCasingState()).setMinGlobalLimited(18)
+                .where('K', abilities(MultiblockAbility.EXPORT_FLUIDS))
+                .where('C', states(getCasingState()).setMinGlobalLimited(17)
                         .or(autoAbilities(true, true, false, false, false, false, false)))
                 .where('G', states(getGearBoxState()))
                 .where('W', states(getGlassState()))
@@ -76,6 +77,7 @@ public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
                 .where('O', MetaTileEntities.ITEM_EXPORT_BUS[GTValues.LV], EnumFacing.WEST)
                 .where('o', MetaTileEntities.ITEM_EXPORT_BUS[GTValues.LV], EnumFacing.EAST)
                 .where('H', MetaTileEntities.FLUID_IMPORT_HATCH[GTValues.LV], EnumFacing.SOUTH)
+                .where('K', MetaTileEntities.FLUID_EXPORT_HATCH[GTValues.LV], EnumFacing.NORTH)
                 .where('E', MetaTileEntities.ENERGY_INPUT_HATCH[GTValues.LV], EnumFacing.NORTH)
                 .where('G', getGearBoxState())
                 .where('W', getGlassState())
@@ -88,7 +90,7 @@ public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
                                 getCasingState(),
                         EnumFacing.SOUTH);
         shapeInfo.add(baseBuilder.shallowCopy()
-                .aisle("CCCCC", "CWGWC", "  G  ")
+                .aisle("CCKCC", "CWGWC", "  G  ")
                 .aisle("CCCCC", "I>>>o", "CCGCC")
                 .aisle("CESMC", "CWHWC", "  G  ")
                 .build());

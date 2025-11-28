@@ -1,5 +1,7 @@
 package supersymmetry.integration.jei;
 
+import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
 
 import cam72cam.immersiverailroading.IRItems;
@@ -12,9 +14,15 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.ISubtypeRegistry;
 import mezz.jei.api.JEIPlugin;
+import mezz.jei.api.ingredients.IModIngredientRegistration;
 import supersymmetry.Supersymmetry;
+import supersymmetry.api.particle.ParticleBeam;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
+import supersymmetry.integration.jei.ingredient.ParticleBeamHelper;
+import supersymmetry.integration.jei.ingredient.ParticleBeamListFactory;
+import supersymmetry.integration.jei.ingredient.ParticleBeamRenderer;
+import supersymmetry.integration.jei.ingredient.ParticleType;
 import supersymmetry.modules.SuSyModules;
 
 @JEIPlugin
@@ -30,6 +38,14 @@ public class JeiModule extends IntegrationSubmodule implements IModPlugin {
     public void registerItemSubtypes(@NotNull ISubtypeRegistry subtypeRegistry) {
         subtypeRegistry.registerSubtypeInterpreter(IRItems.ITEM_ROLLING_STOCK.internal,
                 new RollingStockSubtypeHandler());
+    }
+
+    @Override
+    public void registerIngredients(IModIngredientRegistration registry) {
+        List<ParticleBeam> particleBeamList = ParticleBeamListFactory.createList();
+        ParticleBeamHelper particleBeamHelper = new ParticleBeamHelper();
+        ParticleBeamRenderer particleBeamRenderer = new ParticleBeamRenderer();
+        registry.register(ParticleType.Particle, particleBeamList, particleBeamHelper, particleBeamRenderer);
     }
 
     @Override

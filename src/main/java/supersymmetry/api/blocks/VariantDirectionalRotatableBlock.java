@@ -40,6 +40,10 @@ public class VariantDirectionalRotatableBlock<T extends Enum<T> & IStringSeriali
     public IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull EnumFacing facing,
                                             float hitX, float hitY, float hitZ, int meta,
                                             @NotNull EntityLivingBase placer) {
+        if (placer.isSneaking()) {
+            return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING,
+                    facing);
+        }
         return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING,
                 EnumFacing.getDirectionFromEntityLiving(pos, placer));
     }

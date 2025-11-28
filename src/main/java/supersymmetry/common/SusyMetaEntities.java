@@ -9,9 +9,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import supersymmetry.Supersymmetry;
 import supersymmetry.client.renderer.handler.DroneRenderer;
 import supersymmetry.client.renderer.handler.DropPodRenderer;
+import supersymmetry.client.renderer.handler.LanderRenderer;
 import supersymmetry.client.renderer.handler.RocketRenderer;
 import supersymmetry.common.entities.EntityDrone;
 import supersymmetry.common.entities.EntityDropPod;
+import supersymmetry.common.entities.EntityLander;
 import supersymmetry.common.entities.EntityRocket;
 
 public class SusyMetaEntities {
@@ -23,6 +25,8 @@ public class SusyMetaEntities {
                 2, Supersymmetry.instance, 64, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(Supersymmetry.MODID, "rocket_basic"), EntityRocket.class,
                 "Rocket", 3, Supersymmetry.instance, 64, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(Supersymmetry.MODID, "lander"), EntityLander.class,
+                "Lander", 4, Supersymmetry.instance, 64, 3, true);
     }
 
     @SideOnly(Side.CLIENT)
@@ -30,5 +34,6 @@ public class SusyMetaEntities {
         RenderingRegistry.registerEntityRenderingHandler(EntityDropPod.class, DropPodRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityDrone.class, DroneRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityRocket.class, RocketRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityLander.class, LanderRenderer::new);
     }
 }

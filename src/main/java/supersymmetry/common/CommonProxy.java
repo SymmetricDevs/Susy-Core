@@ -43,6 +43,7 @@ import supersymmetry.api.SusyLog;
 import supersymmetry.api.blocks.VariantItemBlockFalling;
 import supersymmetry.api.event.MobHordeEvent;
 import supersymmetry.api.fluids.SusyGeneratedFluidHandler;
+import supersymmetry.api.particle.Particles;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.api.unification.ore.SusyStoneTypes;
 import supersymmetry.common.blocks.SheetedFrameItemBlock;
@@ -66,6 +67,8 @@ public class CommonProxy {
     public void preLoad() {
         GeckoLib.initialize();
         SusyStoneTypes.init();
+        Particles.init();
+        Particles.register();
     }
 
     /**
@@ -162,6 +165,12 @@ public class CommonProxy {
         registry.register(SuSyBlocks.ROCKET_ASSEMBLER_CASING);
         registry.register(SuSyBlocks.REGOLITH);
         registry.register(SuSyBlocks.FAKEWOOL);
+        registry.register(SuSyBlocks.RANDOM_CONCRETE);
+        registry.register(SuSyBlocks.RANDOM_CONCRETE1);
+        registry.register(SuSyBlocks.INDUCTION_COIL_ASSEMBLY);
+        registry.register(SuSyBlocks.ENGINE_CASING);
+        registry.register(SuSyBlocks.ENGINE_CASING_2);
+        registry.register(SuSyBlocks.ACTIVE_CASING);
 
         SHEETED_FRAMES.values().stream().distinct().forEach(registry::register);
     }
@@ -202,6 +211,12 @@ public class CommonProxy {
         registry.register(createItemBlock(SuSyBlocks.ROCKET_ASSEMBLER_CASING, VariantItemBlock::new));
         registry.register(createItemBlock(SuSyBlocks.REGOLITH, VariantItemBlockFalling::new));
         registry.register(createItemBlock(SuSyBlocks.FAKEWOOL, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.RANDOM_CONCRETE, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.RANDOM_CONCRETE1, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.INDUCTION_COIL_ASSEMBLY, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.ENGINE_CASING, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.ENGINE_CASING_2, VariantItemBlock::new));
+        registry.register(createItemBlock(SuSyBlocks.ACTIVE_CASING, VariantItemBlock::new));
 
         SHEETED_FRAMES.values()
                 .stream().distinct()

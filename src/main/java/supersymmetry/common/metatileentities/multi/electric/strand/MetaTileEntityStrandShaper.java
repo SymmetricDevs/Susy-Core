@@ -2,9 +2,7 @@ package supersymmetry.common.metatileentities.multi.electric.strand;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.function.Supplier;
 
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
@@ -35,7 +33,6 @@ import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.unification.FluidUnifier;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.properties.PropertyKey;
-import gregtech.api.util.BlockInfo;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.RelativeDirection;
 import supersymmetry.api.blocks.VariantAxialRotatableBlock;
@@ -43,6 +40,7 @@ import supersymmetry.api.capability.IStrandProvider;
 import supersymmetry.api.capability.Strand;
 import supersymmetry.api.capability.StrandConversion;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
+import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.common.blocks.BlockMetallurgyRoll;
 import supersymmetry.common.blocks.SuSyBlocks;
 
@@ -319,40 +317,9 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
                 isActive, true);
     }
 
-    protected TraceabilityPredicate orientation(IBlockState state, RelativeDirection direction,
-                                                IProperty<EnumFacing> facingProperty) {
-        EnumFacing facing = getRelativeFacing(direction);
-
-        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[] {
-                new BlockInfo(state.withProperty(facingProperty, facing)) };
-        return new TraceabilityPredicate(blockWorldState -> {
-            if (blockWorldState.getBlockState() != state.withProperty(facingProperty, facing)) {
-                if (blockWorldState.getBlockState().getBlock() != state.getBlock()) return false;
-                getWorld().setBlockState(blockWorldState.getPos(), state.withProperty(facingProperty, facing));
-            }
-            return true;
-        }, supplier);
-    }
-
-    protected TraceabilityPredicate axisOrientation(IBlockState state, RelativeDirection direction,
-                                                    IProperty<EnumFacing.Axis> facingProperty) {
-        EnumFacing facing = getRelativeFacing(direction);
-        EnumFacing.Axis axis = facing.getAxis();
-
-        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[] {
-                new BlockInfo(state.withProperty(facingProperty, axis)) };
-        return new TraceabilityPredicate(blockWorldState -> {
-            if (blockWorldState.getBlockState() != state.withProperty(facingProperty, axis)) {
-                if (blockWorldState.getBlockState().getBlock() != state.getBlock()) return false;
-                getWorld().setBlockState(blockWorldState.getPos(), state.withProperty(facingProperty, axis));
-            }
-            return true;
-        }, supplier);
-    }
-
     protected TraceabilityPredicate rollOrientation(RelativeDirection direction) {
         // makes sure rotor's front faces the left side (relative to the player) of controller front
-        return axisOrientation(rollState(), direction, VariantAxialRotatableBlock.AXIS);
+        return SuSyPredicates.axisOrientation(this, rollState(), direction, VariantAxialRotatableBlock.AXIS);
     }
 
     private IBlockState rollState() {

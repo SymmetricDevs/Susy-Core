@@ -73,8 +73,9 @@ public class BlockSuSyMultiblockCasing extends VariantBlock<BlockSuSyMultiblockC
         MONEL_500_PIPE("monel_casing_pipe"),
         COPPER_PIPE("copper_casing_pipe"),
         HEAVY_DUTY_PAD("heavy_duty_pad"),
-        ADVANCED_REFRACTORY_LINING("advanced_refractory_lining"),
-        COALESCENCE_PLATE("coalescence_plate");
+        TABULAR_ALUMINA_REFRACTORY("tabular_alumina_refractory"),
+        COALESCENCE_PLATE("coalescence_plate"),
+        SYNTHETIC_MULLITE_REFRACTORY("synthetic_mullite_refractory");
 
         private final String name;
 
