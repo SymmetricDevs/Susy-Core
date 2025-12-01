@@ -109,7 +109,9 @@ public class MetaTileEntityStrandBus extends MetaTileEntityMultiblockPart
         if (sender.getStrand() == null || receiver.getStrand() != null) {
             return;
         }
-        receiver.insertStrand(sender.take());
+        if (receiver.insertStrand(sender.getStrand()) == null) {
+            sender.take();
+        }
     }
 
     private <T> void transferToNearby(Capability<T> capability, BiConsumer<T, T> transfer, EnumFacing... allowedFaces) {
