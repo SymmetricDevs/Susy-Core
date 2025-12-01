@@ -37,6 +37,9 @@ public class MetaTileEntityStrandCooler extends MetaTileEntityStrandShaper {
     @Override
     protected boolean consumeInputsAndSetupRecipe() {
         if (input.getStrand() != null) {
+            if (!input.getStrand().isCut) {
+                return false;
+            }
             StrandConversion conversion = StrandConversion.getConversion(input.getStrand());
             if (conversion == null) {
                 return false;
