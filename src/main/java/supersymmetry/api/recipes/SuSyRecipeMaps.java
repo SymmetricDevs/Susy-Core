@@ -224,7 +224,7 @@ public class SuSyRecipeMaps {
                     .setProgressBar(GuiTextures.PROGRESS_BAR_EXTRACT, ProgressWidget.MoveType.HORIZONTAL)
                     .setSound(GTSoundEvents.COMPRESSOR);
 
-    public static final RecipeMap<SimpleRecipeBuilder> FLUID_COMPRESSOR_RECIPES = new RecipeMap<>("fluid_compressor", 1,
+    public static final RecipeMap<SimpleRecipeBuilder> FLUID_COMPRESSOR_RECIPES = new RecipeMap<>("fluid_compressor", 2,
             0, 2, 2, new SimpleRecipeBuilder(), false)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_COMPRESS, ProgressWidget.MoveType.HORIZONTAL)
                     .setSound(GTSoundEvents.COMPRESSOR);
@@ -307,13 +307,13 @@ public class SuSyRecipeMaps {
                     .setProgressBar(GuiTextures.PROGRESS_BAR_SIFT, ProgressWidget.MoveType.VERTICAL)
                     .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
-    public static final RecipeMap<SimpleRecipeBuilder> CLARIFIER = new RecipeMap<>("clarifier", 1, 1, 1, 2,
+    public static final RecipeMap<SimpleRecipeBuilder> CLARIFIER = new RecipeMap<>("clarifier", 2, 2, 2, 2,
             new SimpleRecipeBuilder(), false)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_MIXER, ProgressWidget.MoveType.CIRCULAR)
                     .setSound(GTSoundEvents.CENTRIFUGE);
 
     public static final RecipeMap<SimpleRecipeBuilder> MULTI_STAGE_FLASH_DISTILLATION = new RecipeMap<>(
-            "multi_stage_flash_distillation", 0, 0, 3, 3, new SimpleRecipeBuilder(), false)
+            "multi_stage_flash_distillation", 1, 0, 3, 3, new SimpleRecipeBuilder(), false)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
                     .setSound(GTSoundEvents.COOLING);
 
@@ -484,6 +484,10 @@ public class SuSyRecipeMaps {
             "induction_furnace", 6, 3, 3, 3, new SimpleRecipeBuilder(), false)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
                     .setSound(GTSoundEvents.ARC);
+
+    public static final RecipeMap<SimpleRecipeBuilder> RESISTANCE_FURNACE = new RecipeMap<>("resistance_furnace",
+            6, 2, 0, 1, new SimpleRecipeBuilder(), false)
+                    .setSound(GTSoundEvents.FURNACE);
 
     static {
         GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()
