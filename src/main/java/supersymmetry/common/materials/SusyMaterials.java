@@ -6,13 +6,17 @@ import java.util.Map;
 
 import gregtech.api.GregTechAPI;
 import gregtech.api.fluids.FluidBuilder;
+import gregtech.api.fluids.store.FluidStorageImpl;
+import gregtech.api.fluids.store.FluidStorageKey;
 import gregtech.api.fluids.store.FluidStorageKeys;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.info.MaterialFlag;
 import gregtech.api.unification.material.info.MaterialFlags;
 import gregtech.api.unification.material.properties.*;
+import net.minecraftforge.fluids.Fluid;
 import supersymmetry.api.SusyLog;
+import supersymmetry.api.fluids.SusyFluidStorageKeys;
 import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
 
 public class SusyMaterials {
@@ -65,7 +69,6 @@ public class SusyMaterials {
         SuSyOrganicChemistryMaterials.init();
         SuSyHighDegreeMaterials.init();
         SuSyUnknownCompositionMaterials.init();
-        changeProperties();
     }
 
     public static void removeFlags() {
@@ -75,7 +78,8 @@ public class SusyMaterials {
         }
     }
 
-    private static void changeProperties() {
+
+    public static void changeProperties() {
         // removeProperty(PropertyKey.ORE, Materials.Graphite);
 
         removeProperty(PropertyKey.ORE, Materials.Soapstone);
@@ -131,24 +135,26 @@ public class SusyMaterials {
         Materials.Thallium.setProperty(PropertyKey.DUST, new DustProperty());
 
         Materials.CalciumChloride.setProperty(PropertyKey.FLUID,
-                new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
+                new FluidProperty(SusyFluidStorageKeys.MOLTEN, new FluidBuilder()));
 
         Materials.MagnesiumChloride.setProperty(PropertyKey.FLUID,
-                new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
+                new FluidProperty(SusyFluidStorageKeys.MOLTEN, new FluidBuilder()));
 
         Materials.RockSalt.setProperty(PropertyKey.FLUID,
-                new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
+                new FluidProperty(SusyFluidStorageKeys.MOLTEN, new FluidBuilder()));
 
-        Materials.Salt.setProperty(PropertyKey.FLUID, new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
+        Materials.Salt.setProperty(PropertyKey.FLUID,
+                new FluidProperty(SusyFluidStorageKeys.MOLTEN, new FluidBuilder()));
 
         Materials.SodiumHydroxide.setProperty(PropertyKey.FLUID,
-                new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
+                new FluidProperty(SusyFluidStorageKeys.MOLTEN, new FluidBuilder()));
 
-        Materials.Sodium.setProperty(PropertyKey.FLUID, new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder()));
+        Materials.Sodium.setProperty(PropertyKey.FLUID,
+                new FluidProperty(SusyFluidStorageKeys.MOLTEN, new FluidBuilder()));
 
         Materials.Phosphorus.setProperty(PropertyKey.INGOT, new IngotProperty());
         Materials.Phosphorus.setProperty(PropertyKey.FLUID,
-                new FluidProperty(FluidStorageKeys.LIQUID, new FluidBuilder().temperature(317)));
+                new FluidProperty(SusyFluidStorageKeys.MOLTEN, new FluidBuilder().temperature(317)));
         Materials.Phosphorus.setMaterialRGB(0xfffed6);
 
         Materials.HydrochloricAcid.setFormula("(H2O)(HCl)", true);
@@ -188,6 +194,65 @@ public class SusyMaterials {
         Materials.Electrum.setProperty(PropertyKey.ORE, new OreProperty());
 
         Materials.Hydrogen.addFlags(MaterialFlags.FLAMMABLE);
+
+        for (Material material : GregTechAPI.materialManager.getRegisteredMaterials()) {
+
+            DustProperty dustProperty = material.getProperty(PropertyKey.DUST);
+            if (dustProperty != null) {
+
+                FluidProperty fluidProperty = material.getProperty(PropertyKey.FLUID);
+                if (fluidProperty != null) {
+
+                    FluidStorageKey fluidState = fluidProperty.getPrimaryKey();
+                    if (fluidState == FluidStorageKeys.LIQUID) {
+
+                        removeFluidKey(FluidStorageKeys.LIQUID, material);
+                        fluidProperty.enqueueRegistration(SusyFluidStorageKeys.MOLTEN, new FluidBuilder());
+                    }
+                }
+            }
+        }
+
+        // Exceptions (Could probably condense)
+        removeFluidKey(SusyFluidStorageKeys.MOLTEN, SusyMaterials.Latex);
+        SusyMaterials.Latex.getProperty(PropertyKey.FLUID).enqueueRegistration(FluidStorageKeys.LIQUID, new FluidBuilder());
+        removeFluidKey(SusyFluidStorageKeys.MOLTEN, Materials.Concrete);
+        Materials.Concrete.getProperty(PropertyKey.FLUID).enqueueRegistration(FluidStorageKeys.LIQUID, new FluidBuilder());
+        removeFluidKey(SusyFluidStorageKeys.MOLTEN, Materials.Ice);
+        Materials.Ice.getProperty(PropertyKey.FLUID).enqueueRegistration(FluidStorageKeys.LIQUID, new FluidBuilder());
+    }
+
+    private static void removeFluidKey(FluidStorageKey key, Material material) {
+        FluidProperty fluidProperty = material.getProperty(PropertyKey.FLUID);
+        if (fluidProperty == null) return;
+
+        try {
+            Field storageField = FluidProperty.class.getDeclaredField("storage");
+            storageField.setAccessible(true);
+            FluidStorageImpl storage = (FluidStorageImpl) storageField.get(fluidProperty);
+
+            Field mapField = FluidStorageImpl.class.getDeclaredField("map");
+            mapField.setAccessible(true);
+            // noinspection unchecked
+            Map<FluidStorageKey, Fluid> map = (Map<FluidStorageKey, Fluid>) mapField.get(storage);
+            map.keySet().removeIf(k -> k == key);
+
+            Field toRegField = FluidStorageImpl.class.getDeclaredField("toRegister");
+            toRegField.setAccessible(true);
+            // noinspection unchecked
+            Map<FluidStorageKey, FluidBuilder> toReg = (Map<FluidStorageKey, FluidBuilder>) toRegField.get(storage);
+
+            if (toReg != null) {
+                toReg.keySet().removeIf(k -> k == key);
+            }
+
+            if (key == fluidProperty.getPrimaryKey()) {
+                fluidProperty.setPrimaryKey(null);
+            }
+
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException("Failed removing FluidStorageKey", e);
+        }
     }
 
     private static void removeProperty(PropertyKey<?> key, Material material) {
