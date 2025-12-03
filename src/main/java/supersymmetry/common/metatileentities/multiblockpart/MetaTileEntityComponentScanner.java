@@ -168,7 +168,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                 Optional<NBTTagCompound> scanResult = component.analyzePattern(struct, linkedCleanroom.getInteriorBB());
                 if (scanResult.isPresent()) {
                     getInventory()
-                            .addToCompound(
+                            .setNBT(
                                     _ -> {
                                         NBTTagCompound t = scanResult.get();
                                         component.writeToNBT(t);

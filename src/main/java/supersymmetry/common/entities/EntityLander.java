@@ -39,6 +39,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.client.audio.MovingSoundDropPod;
 import supersymmetry.client.renderer.particles.SusyParticleFlame;
 import supersymmetry.client.renderer.particles.SusyParticleSmoke;
@@ -312,6 +313,11 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
                 soundDropPod.stopPlaying();
             }
         }
+    }
+
+    @Override
+    public RocketFuelEntry getFuel() {
+        return null;
     }
 
     @Override

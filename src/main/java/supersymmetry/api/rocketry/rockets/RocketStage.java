@@ -142,12 +142,21 @@ public class RocketStage {
         return components.values().stream()
                 .flatMap(List::stream)
                 .filter(c -> c.getType().equals("engine"))
-                .mapToDouble(engine -> ((ComponentLavalEngine) engine).fuel_throughput)
+                .mapToDouble(engine -> ((ComponentLavalEngine) engine).fuelThroughput)
                 .sum();
     }
 
     public double getThrust(RocketFuelEntry rocketFuelEntry, double gravity) {
         return getFuelThroughput() * rocketFuelEntry.getSpecificImpulse() * gravity;
+    }
+
+    public double getRadius() {
+        // Max radius, in meters
+        return components.values().stream()
+                .flatMap(List::stream)
+                .mapToDouble(AbstractComponent::getRadius)
+                .max()
+                .orElse(0);
     }
 
     public void setComponentValidationFunction(

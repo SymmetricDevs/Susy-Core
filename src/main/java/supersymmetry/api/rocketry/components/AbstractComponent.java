@@ -40,12 +40,29 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
     private static boolean registrylock = false;
     private static final Map<String, Class<? extends AbstractComponent<?>>> nameToComponentRegistry = new HashMap<>();
 
+    protected String name;
+    // ex name="laval_engine", type="engine" so that you can do some silly things with engine types
+    protected String type;
+    protected BuildStat status = BuildStat.ERROR;
+    protected double mass;
+    protected double radius;
+    public List<MaterialCost> materials = new ArrayList<>();
+
+    public AbstractComponent(
+            String name,
+            String type,
+            Predicate<Tuple<StructAnalysis, List<BlockPos>>> detectionPredicate) {
+        this.detectionPredicate = detectionPredicate;
+        this.name = name;
+        this.type = type;
+    }
+
     public static Map<String, Class<? extends AbstractComponent<?>>> getNameRegistry() {
         return new HashMap<>(nameToComponentRegistry);
     }
 
     public static boolean nameRegistered(String name) {
-        return nameToComponentRegistry.containsKey(name) && registry.stream().anyMatch(x -> x.getName() == name);
+        return nameToComponentRegistry.containsKey(name) && registry.stream().anyMatch(x -> x.getName().equals(name));
     }
 
     public static AbstractComponent<?> getComponentFromName(String name) {
@@ -72,7 +89,7 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
         if (!getRegistryLock()) {
             nameToComponentRegistry.put(
                     component.getName(), (Class<? extends AbstractComponent<?>>) component.getClass());
-            if (registry.stream().noneMatch(x -> x.getName() == component.getName())) {
+            if (registry.stream().noneMatch(x -> x.getName().equals(component.getName()))) {
                 registry.add(component);
             }
         } else {
@@ -129,7 +146,7 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
         }
     }
 
-    public static double getMass(IBlockState state) {
+    public static double getMassOfBlock(IBlockState state) {
         Block block = state.getBlock();
         if (!(block instanceof VariantBlock<?>)) {
             return 50.0;
@@ -176,16 +193,6 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
     protected Predicate<String> componentSlotValidator = name -> name.equals(this.getType()) ||
             name.equals(this.getName());
 
-    protected String name;
-
-    // ex name="laval_engine", type="engine" so that you can do some silly things with engine types
-    protected String type;
-
-    protected BuildStat status = BuildStat.ERROR;
-
-    protected double mass;
-
-    public List<MaterialCost> materials = new ArrayList<>();
 
     public List<MaterialCost> getMaterials() {
         return materials;
@@ -197,15 +204,6 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
 
     public void setMaterials(List<MaterialCost> materials) {
         this.materials = materials;
-    }
-
-    public AbstractComponent(
-                             String name,
-                             String type,
-                             Predicate<Tuple<StructAnalysis, List<BlockPos>>> detectionPredicate) {
-        this.detectionPredicate = detectionPredicate;
-        this.name = name;
-        this.type = type;
     }
 
     public String getLocalizationKey() {
@@ -230,6 +228,10 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
 
     public String getType() {
         return this.type;
+    }
+
+    public double getRadius() {
+        return this.radius;
     }
 
     public Predicate<Map<String, AbstractComponent<?>>> getCompatabilityValidationPredicate() {

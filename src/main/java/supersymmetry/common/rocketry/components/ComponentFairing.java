@@ -204,7 +204,7 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
         tag.setInteger("num_conns", connectorBlocks.size());
         tag.setInteger("volume", intPartition.size());
         tag.setDouble(
-                "mass", blocksConnected.stream().mapToDouble(bp -> getMass(world.getBlockState(bp))).sum());
+                "mass", blocksConnected.stream().mapToDouble(bp -> getMassOfBlock(world.getBlockState(bp))).sum());
         Double bottomSemiRadius = analysis.getApproximateRadius(analysis.getLowestLayer(blocksConnected));
         // as it turns out, the integral of distances from the centroid of a semicircle to its path is
         // pi/4 * the radius

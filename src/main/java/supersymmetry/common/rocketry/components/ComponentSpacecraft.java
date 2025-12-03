@@ -25,7 +25,6 @@ import supersymmetry.common.tile.TileEntityCoverable;
 
 public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> {
 
-    public double radius;
     public Map<String, Integer> parts = new HashMap<>();
     public Map<String, Integer> instruments = new HashMap<>();
     public boolean hasAir;
@@ -205,7 +204,7 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         this.radius = radius;
         double mass = 0;
         for (BlockPos block : blocksConnected) {
-            mass += getMass(analysis.world.getBlockState(block));
+            mass += getMassOfBlock(analysis.world.getBlockState(block));
         }
         tag.setDouble("mass", mass);
         this.mass = mass;

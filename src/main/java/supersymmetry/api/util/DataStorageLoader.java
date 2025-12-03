@@ -102,7 +102,7 @@ public class DataStorageLoader extends NotifiableItemStackHandler implements IIt
         }
     }
 
-    public void addToCompound(Function<NBTTagCompound, NBTTagCompound> consumer) {
+    public void setNBT(Function<NBTTagCompound, NBTTagCompound> consumer) {
         if (!dataStorage.hasTagCompound()) {
             dataStorage.setTagCompound(new NBTTagCompound());
         }

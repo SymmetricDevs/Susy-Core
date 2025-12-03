@@ -20,6 +20,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import gregtech.api.GregTechAPI;
+import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.client.audio.MovingSoundRocket;
 import supersymmetry.client.renderer.handler.IAlwaysRender;
 import supersymmetry.client.renderer.particles.SusyParticleFlameLarge;
@@ -212,6 +213,11 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender 
          * }
          */
         this.setAge(age + 1);
+    }
+
+    @Override
+    public RocketFuelEntry getFuel() {
+        return null; // TODO: need to fix later
     }
 
     @Override

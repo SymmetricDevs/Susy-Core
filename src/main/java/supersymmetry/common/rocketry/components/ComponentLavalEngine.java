@@ -28,9 +28,8 @@ import supersymmetry.common.blocks.rocketry.BlockCombustionChamber;
 
 public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine> {
 
-    public double radius;
-    public double area_ratio;
-    public double fuel_throughput;
+    public double areaRatio;
+    public double fuelThroughput;
 
     public ComponentLavalEngine() {
         super(
@@ -54,8 +53,8 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         tag.setDouble("radius", this.radius);
-        tag.setDouble("area_ratio", this.area_ratio);
-        tag.setDouble("throughput", this.fuel_throughput);
+        tag.setDouble("area_ratio", this.areaRatio);
+        tag.setDouble("throughput", this.fuelThroughput);
     }
 
     @Override
@@ -72,10 +71,10 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
                 .getTagList("materials", Constants.NBT.TAG_COMPOUND)
                 .forEach(x -> engine.materials.add(MaterialCost.fromNBT((NBTTagCompound) x)));
 
-        engine.area_ratio = compound.getDouble("area_ratio");
+        engine.areaRatio = compound.getDouble("area_ratio");
         engine.radius = compound.getDouble("radius");
         engine.mass = compound.getDouble("mass");
-        engine.fuel_throughput = compound.getDouble("throughput");
+        engine.fuelThroughput = compound.getDouble("throughput");
 
         if (engine.materials.isEmpty()) {
             SusyLog.logger.warn("shitten poopen farten no materialen from compounden {}", compound);
@@ -182,12 +181,12 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
         // currently a double
         NBTTagCompound tag = new NBTTagCompound();
         tag.setDouble("area_ratio", area_ratio);
-        this.area_ratio = area_ratio;
+        this.areaRatio = area_ratio;
         tag.setString("type", this.type);
         tag.setString("name", this.name);
         double mass = 0;
         for (BlockPos block : blocks) {
-            mass += getMass(analysis.world.getBlockState(block));
+            mass += getMassOfBlock(analysis.world.getBlockState(block));
         }
         double innerRadius = analysis.getApproximateRadius(
                 blocks.stream().filter(bp -> bp.getY() == nozzleBB.maxY).collect(Collectors.toSet()));
@@ -204,8 +203,8 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
         // pump)).getState(pump)).getThroughput();
         // }
 
-        this.fuel_throughput = throughput;
-        tag.setDouble("throughput", fuel_throughput);
+        this.fuelThroughput = throughput;
+        tag.setDouble("throughput", fuelThroughput);
 
         writeBlocksToNBT(blocks, analysis.world);
         return Optional.of(tag);

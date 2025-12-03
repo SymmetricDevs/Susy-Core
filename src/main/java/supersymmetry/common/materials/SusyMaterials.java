@@ -63,6 +63,8 @@ public class SusyMaterials {
     public static Material PreheatedAir;
 
     public static Material RP_1;
+    // Fuels
+    public static Material LOX;
 
     public static void init() {
         SuSyElementMaterials.init();

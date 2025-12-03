@@ -276,20 +276,20 @@ susy.machine.blueprint_assembler.build_button_label=Build
 susy.machine.blueprint_assembler.blueprint_request=Insert Blueprint:
 
 
-susy.rocketry.components.engine.name=engine(s)
-susy.rocketry.components.engine_small.name=vernier engine(s)
-susy.rocketry.components.tank.name=tank(s)
+susy.rocketry.components.engine.name=Engine(s)
+susy.rocketry.components.engine_small.name=Vernier engine(s)
+susy.rocketry.components.tank.name=Tank(s)
 
-susy.rocketry.components.validation_codes.invalid_amount=invalid amount of components
-susy.rocketry.component.validation_codes.invalid_amount=invalid amount of commponents inserted
-susy.rocketry.components.validation_codes.invalid_card=malformed component card
-susy.rocketry.components.validation_codes.incompatible_card=incompatible card
-susy.rocketry.components.validation_codes.unknown=something broke
-susy.rocketry.components.validation_codes.success=blueprint assembled successfully
+susy.rocketry.components.validation_codes.invalid_amount=Invalid amount of components
+susy.rocketry.component.validation_codes.invalid_amount=Invalid amount of commponents inserted
+susy.rocketry.components.validation_codes.invalid_card=Malformed component card
+susy.rocketry.components.validation_codes.incompatible_card=Incompatible card
+susy.rocketry.components.validation_codes.unknown=Something broke
+susy.rocketry.components.validation_codes.success=Blueprint assembled successfully
 
-susy.rocketry.stages.block_F.name=block F
-susy.rocketry.stages.block_A.name=block A
-susy.rocketry.stages.boosters.name=boosters
+susy.rocketry.stages.block_F.name=Block F
+susy.rocketry.stages.block_A.name=Block A
+susy.rocketry.stages.boosters.name=Boosters
 
 susy.machine.magnetic_refrigerator.name=Magnetic Refrigerator
 susy.multiblock.magnetic_refrigerator.min_temperature=§bTemperature Limit: %s

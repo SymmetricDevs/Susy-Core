@@ -9,6 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
 import supersymmetry.Supersymmetry;
+import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 
 public abstract class AbstractRocketBlueprint {
 
@@ -92,6 +93,14 @@ public abstract class AbstractRocketBlueprint {
 
     public double getMass() {
         return this.getStages().stream().mapToDouble(RocketStage::getMass).sum();
+    }
+
+    public double getMaxRadius() {
+        return this.getStages().stream().mapToDouble(RocketStage::getRadius).max().orElse(0);
+    }
+
+    public double getThrust(RocketFuelEntry entry, double gravity) {
+        return this.getStages().stream().mapToDouble((stage) -> stage.getThrust(entry, gravity)).sum();
     }
 
     public void setName(String name) {

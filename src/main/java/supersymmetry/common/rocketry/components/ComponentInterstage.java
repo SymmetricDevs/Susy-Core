@@ -16,8 +16,6 @@ import supersymmetry.common.blocks.SuSyBlocks;
 
 public class ComponentInterstage extends AbstractComponent<ComponentInterstage> {
 
-    public double radius;
-
     public ComponentInterstage() {
         super(
                 "interstage",
@@ -88,7 +86,7 @@ public class ComponentInterstage extends AbstractComponent<ComponentInterstage> 
         double radius = analysis.getApproximateRadius(analysis.getLowestLayer(hullBlocks));
         double mass = 0;
         for (BlockPos block : blocks) {
-            mass += getMass(analysis.world.getBlockState(block));
+            mass += getMassOfBlock(analysis.world.getBlockState(block));
         }
         NBTTagCompound tag = new NBTTagCompound();
 

@@ -25,7 +25,6 @@ import supersymmetry.common.tile.TileEntityCoverable;
 public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFuelTank> {
 
     public int volume;
-    public double radius;
 
     public ComponentLiquidFuelTank() {
         super(
@@ -135,7 +134,7 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
         this.radius = radius;
         double mass = 0;
         for (BlockPos block : blocks) {
-            mass += getMass(analysis.world.getBlockState(block));
+            mass += getMassOfBlock(analysis.world.getBlockState(block));
         }
         tag.setDouble("mass", Double.valueOf(mass));
         this.mass = mass;
