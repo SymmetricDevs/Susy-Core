@@ -36,8 +36,10 @@ import supersymmetry.common.tile.TileEntityCoverable;
 
 public abstract class AbstractComponent<T extends AbstractComponent<T>> {
 
+    protected static final String PARTS_KEY = "parts";
+    protected static final String INSTRUMENTS_KEY = "instruments";
     private static final Set<AbstractComponent<?>> registry = new HashSet<>();
-    private static boolean registrylock = false;
+    private static boolean registryLock = false;
     private static final Map<String, Class<? extends AbstractComponent<?>>> nameToComponentRegistry = new HashMap<>();
 
     protected String name;
@@ -49,9 +51,9 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
     public List<MaterialCost> materials = new ArrayList<>();
 
     public AbstractComponent(
-            String name,
-            String type,
-            Predicate<Tuple<StructAnalysis, List<BlockPos>>> detectionPredicate) {
+                             String name,
+                             String type,
+                             Predicate<Tuple<StructAnalysis, List<BlockPos>>> detectionPredicate) {
         this.detectionPredicate = detectionPredicate;
         this.name = name;
         this.type = type;
@@ -99,11 +101,11 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
     }
 
     public static void lockRegistry() {
-        registrylock = true;
+        registryLock = true;
     }
 
     public static boolean getRegistryLock() {
-        return registrylock;
+        return registryLock;
     }
 
     public static Set<AbstractComponent<?>> getRegistry() {
@@ -192,7 +194,6 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
     // when in the aerospace flight simulator ui, this defines if a component can be put into a row
     protected Predicate<String> componentSlotValidator = name -> name.equals(this.getType()) ||
             name.equals(this.getName());
-
 
     public List<MaterialCost> getMaterials() {
         return materials;

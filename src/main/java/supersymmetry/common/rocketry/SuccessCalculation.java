@@ -32,8 +32,7 @@ public class SuccessCalculation {
         }
 
         // Oblateness (height / radius)
-        //blueprint.getMaxRadius() / blueprint.getHeight();
-
+        // blueprint.getMaxRadius() / blueprint.getHeight();
 
         if (Math.random() < success) {
             return LaunchResult.LAUNCHES;

@@ -20,15 +20,13 @@ public class ComponentInterstage extends AbstractComponent<ComponentInterstage> 
         super(
                 "interstage",
                 "interstage",
-                tuple -> {
-                    return tuple.getSecond().stream()
-                            .anyMatch(
-                                    pos -> tuple
-                                            .getFirst().world
-                                                    .getBlockState(pos)
-                                                    .getBlock()
-                                                    .equals(SuSyBlocks.INTERSTAGE));
-                });
+                tuple -> tuple.getSecond().stream()
+                        .anyMatch(
+                                pos -> tuple
+                                        .getFirst().world
+                                                .getBlockState(pos)
+                                                .getBlock()
+                                                .equals(SuSyBlocks.INTERSTAGE)));
     }
 
     @Override
@@ -40,15 +38,23 @@ public class ComponentInterstage extends AbstractComponent<ComponentInterstage> 
 
     @Override
     public Optional<ComponentInterstage> readFromNBT(NBTTagCompound compound) {
+        if (!this.type.equals(compound.getString("type")) || !this.name.equals(compound.getString("name"))) {
+            return Optional.empty();
+        }
+        if (!compound.hasKey("mass", NBT.TAG_DOUBLE)) {
+            return Optional.empty();
+        }
+        if (!compound.hasKey("radius", NBT.TAG_DOUBLE)) {
+            return Optional.empty();
+        }
+        if (!compound.hasKey("materials", NBT.TAG_LIST)) {
+            return Optional.empty();
+        }
+
         ComponentInterstage interstage = new ComponentInterstage();
-        if (compound.getString("type") != this.type || compound.getString("name") != this.name)
-            Optional.empty();
-        if (!compound.hasKey("mass", NBT.TAG_DOUBLE)) Optional.empty();
-        if (!compound.hasKey("radius", NBT.TAG_DOUBLE)) Optional.empty();
-        if (!compound.hasKey("materials", NBT.TAG_LIST)) return Optional.empty();
         compound
                 .getTagList("materials", NBT.TAG_COMPOUND)
-                .forEach(x -> interstage.materials.add(MaterialCost.fromNBT((NBTTagCompound) x)));
+                .forEach(tag -> interstage.materials.add(MaterialCost.fromNBT((NBTTagCompound) tag)));
 
         interstage.radius = compound.getDouble("radius");
         interstage.mass = compound.getDouble("mass");
@@ -56,49 +62,55 @@ public class ComponentInterstage extends AbstractComponent<ComponentInterstage> 
     }
 
     @Override
-    public Optional<NBTTagCompound> analyzePattern(StructAnalysis analysis, AxisAlignedBB aabb) {
-        Set<BlockPos> blocks = analysis.getBlockConn(aabb, analysis.getBlocks(analysis.world, aabb, true).get(0));
-        StructAnalysis.HullData hullData = analysis.checkHull(aabb, blocks, false);
+    public Optional<NBTTagCompound> analyzePattern(StructAnalysis analysis, AxisAlignedBB bounds) {
+        List<BlockPos> initialBlocks = analysis.getBlocks(analysis.world, bounds, true);
+        if (initialBlocks.isEmpty()) {
+            analysis.status = BuildStat.ERROR;
+            return Optional.empty();
+        }
+
+        Set<BlockPos> connectedBlocks = analysis.getBlockConn(bounds, initialBlocks.get(0));
+        StructAnalysis.HullData hullData = analysis.checkHull(bounds, connectedBlocks, false);
 
         Set<BlockPos> hullBlocks = hullData.exterior();
-        Set<BlockPos> prevAir = null;
-        if (!hullBlocks.containsAll(blocks)) {
+        if (!hullBlocks.containsAll(connectedBlocks)) {
             analysis.status = BuildStat.INTERSTAGE_NOT_CYLINDRICAL;
             return Optional.empty();
         }
-        AxisAlignedBB bb = analysis.getBB(blocks);
-        for (int i = (int) bb.minY; i < (int) bb.maxY; i++) {
-            Set<BlockPos> air = analysis.getLayerAir(bb, i);
-            if (prevAir != null) {
-                for (BlockPos b : air) {
-                    if (!prevAir.contains(b.add(0, -1, 0))) {
+
+        Set<BlockPos> previousAirLayer = null;
+        AxisAlignedBB hullBounds = analysis.getBB(connectedBlocks);
+        for (int y = (int) hullBounds.minY; y < (int) hullBounds.maxY; y++) {
+            Set<BlockPos> airLayer = analysis.getLayerAir(hullBounds, y);
+            if (previousAirLayer != null) {
+                for (BlockPos blockPos : airLayer) {
+                    if (!previousAirLayer.contains(blockPos.add(0, -1, 0))) {
                         analysis.status = BuildStat.INTERSTAGE_NOT_CYLINDRICAL;
                         return Optional.empty();
                     }
                 }
             }
-            if (analysis.getPerimeter(air, StructAnalysis.layerVecs).size() >= Math.sqrt(air.size()) * 4) {
+
+            if (analysis.getPerimeter(airLayer, StructAnalysis.layerVecs).size() >= Math.sqrt(airLayer.size()) * 4) {
                 analysis.status = BuildStat.INTERSTAGE_NOT_CYLINDRICAL;
                 return Optional.empty();
             }
-            prevAir = air;
+            previousAirLayer = airLayer;
         }
-        double radius = analysis.getApproximateRadius(analysis.getLowestLayer(hullBlocks));
-        double mass = 0;
-        for (BlockPos block : blocks) {
-            mass += getMassOfBlock(analysis.world.getBlockState(block));
-        }
-        NBTTagCompound tag = new NBTTagCompound();
 
-        tag.setDouble("mass", Double.valueOf(mass));
-        tag.setDouble("radius", Double.valueOf(radius));
+        double radius = analysis.getApproximateRadius(analysis.getLowestLayer(hullBlocks));
+        double mass = connectedBlocks.stream()
+                .mapToDouble(block -> getMassOfBlock(analysis.world.getBlockState(block)))
+                .sum();
+
+        NBTTagCompound tag = new NBTTagCompound();
+        tag.setDouble("mass", mass);
+        tag.setDouble("radius", radius);
         tag.setString("type", this.type);
         tag.setString("name", this.name);
 
-        writeBlocksToNBT(blocks, analysis.world);
-
+        writeBlocksToNBT(connectedBlocks, analysis.world);
         analysis.status = BuildStat.SUCCESS;
-
         return Optional.of(tag);
     }
 }

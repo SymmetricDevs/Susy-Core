@@ -12,8 +12,9 @@ import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 public class RocketFuelEntry {
 
     private Material material; // the main fuel
-    private ArrayList<Triple<Material, Double, Double>> sides; // any extra required materials, their proportions, and their
-                                                       // densities
+    private ArrayList<Triple<Material, Double, Double>> sides; // any extra required materials, their proportions, and
+                                                               // their
+    // densities
     private String registryName;
     private double density; // kg/L
     private double sIVacuum; // kg * m / s

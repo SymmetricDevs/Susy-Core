@@ -1,6 +1,10 @@
 package supersymmetry.common.rocketry.components;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -31,29 +35,30 @@ public class ComponentControlPod extends AbstractComponent<ComponentControlPod> 
         super(
                 "spacecraft_control_pod",
                 "spacecraft_control_pod",
-                _ -> {
-                    return false;
-                });
-        this.setDetectionPredicate(ComponentControlPod::detect);
+                ComponentControlPod::detect);
     }
 
     private static boolean detect(Tuple<StructAnalysis, List<BlockPos>> input) {
         AxisAlignedBB aabb = input.getFirst().getBB(input.getSecond());
 
-        Set<BlockPos> blocks = input.getFirst().getBlockConn(
-                aabb, input.getFirst().getBlocks(input.getFirst().world, aabb, true).get(0));
-        input.getFirst().checkHull(aabb, blocks, false);
+        StructAnalysis analysis = input.getFirst();
+        List<BlockPos> detectedBlocks = analysis.getBlocks(analysis.world, aabb, true);
+        if (detectedBlocks.isEmpty()) {
+            return false;
+        }
+
+        Set<BlockPos> blocks = analysis.getBlockConn(aabb, detectedBlocks.get(0));
+        analysis.checkHull(aabb, blocks, false);
         // for some reason this is the thing that sets BuildStat status to
         // HULL_FULL
 
-        boolean hasAir = input.getFirst().status != BuildStat.HULL_FULL;
+        boolean hasAir = analysis.status != BuildStat.HULL_FULL;
         boolean hasTheBlock = input.getSecond().stream()
                 .anyMatch(
-                        bp -> input
-                                .getFirst().world
-                                        .getBlockState(bp)
-                                        .getBlock()
-                                        .equals(SuSyBlocks.ROCKET_CONTROL));
+                        bp -> analysis.world
+                                .getBlockState(bp)
+                                .getBlock()
+                                .equals(SuSyBlocks.ROCKET_CONTROL));
 
         return hasAir && hasTheBlock;
     }
@@ -81,12 +86,12 @@ public class ComponentControlPod extends AbstractComponent<ComponentControlPod> 
         lifeSupports.forEach(
                 bp -> {
                     Block block = analysis.world.getBlockState(bp).getBlock();
-                    NBTTagCompound list = tag.getCompoundTag("parts");
+                    NBTTagCompound list = tag.getCompoundTag(AbstractComponent.PARTS_KEY);
                     String part = ((VariantBlock<?>) block).getState(analysis.world.getBlockState(bp)).toString();
                     int num = list.getInteger(part); // default behavior is 0
                     list.setInteger(part, num + 1);
                     this.parts.put(part, num + 1);
-                    tag.setTag("parts", list);
+                    tag.setTag(AbstractComponent.PARTS_KEY, list);
                 });
 
         for (BlockPos bp : exterior) {
@@ -102,12 +107,12 @@ public class ComponentControlPod extends AbstractComponent<ComponentControlPod> 
             } else if (analysis.world.getBlockState(bp).getBlock().equals(SuSyBlocks.SPACE_INSTRUMENT)) {
                 {
                     Block block = analysis.world.getBlockState(bp).getBlock();
-                    NBTTagCompound list = tag.getCompoundTag("instruments");
+                    NBTTagCompound list = tag.getCompoundTag(AbstractComponent.INSTRUMENTS_KEY);
                     String part = ((VariantBlock<?>) block).getState(analysis.world.getBlockState(bp)).toString();
                     int num = list.getInteger(part); // default behavior is 0
                     list.setInteger(part, num + 1);
                     this.instruments.put(part, num + 1);
-                    tag.setTag("parts", list);
+                    tag.setTag(AbstractComponent.PARTS_KEY, list);
                 }
             } else {
                 analysis.status = BuildStat.HULL_WEAK;
@@ -155,10 +160,9 @@ public class ComponentControlPod extends AbstractComponent<ComponentControlPod> 
         tag.setString("name", name);
         tag.setDouble("radius", (radius));
         this.radius = radius;
-        double mass = 0;
-        for (BlockPos block : blocksConnected) {
-            mass += getMassOfBlock(analysis.world.getBlockState(block));
-        }
+        double mass = blocksConnected.stream()
+                .mapToDouble(block -> getMassOfBlock(analysis.world.getBlockState(block)))
+                .sum();
         tag.setDouble("mass", mass);
         this.mass = mass;
         writeBlocksToNBT(blocksConnected, analysis.world);
@@ -171,50 +175,50 @@ public class ComponentControlPod extends AbstractComponent<ComponentControlPod> 
         tag.setDouble("radius", this.radius);
         tag.setDouble("volume", this.volume);
         tag.setBoolean("hasAir", this.hasAir);
-        NBTTagCompound instruments = new NBTTagCompound();
-        NBTTagCompound parts = new NBTTagCompound();
+        NBTTagCompound instrumentsTag = new NBTTagCompound();
+        NBTTagCompound partsTag = new NBTTagCompound();
         for (var part : this.parts.entrySet()) {
-            parts.setInteger(part.getKey(), part.getValue());
+            partsTag.setInteger(part.getKey(), part.getValue());
         }
         for (var instrument : this.instruments.entrySet()) {
-            instruments.setInteger(instrument.getKey(), instrument.getValue());
+            instrumentsTag.setInteger(instrument.getKey(), instrument.getValue());
         }
-        tag.setTag("instruments", instruments);
-        tag.setTag("tools", parts);
+        tag.setTag(AbstractComponent.INSTRUMENTS_KEY, instrumentsTag);
+        tag.setTag("tools", partsTag);
     }
 
     @Override
     public Optional<ComponentControlPod> readFromNBT(NBTTagCompound compound) {
-        ComponentControlPod controlpod = new ComponentControlPod();
+        ComponentControlPod controlPod = new ComponentControlPod();
 
-        if (!compound.getString("name").equals(controlpod.name)) return Optional.empty();
-        if (!compound.getString("type").equals(controlpod.type)) return Optional.empty();
+        if (compound.getString("name").isEmpty()) return Optional.empty();
+        if (compound.getString("type").isEmpty()) return Optional.empty();
         if (!compound.hasKey("radius", NBT.TAG_DOUBLE)) return Optional.empty();
         if (!compound.hasKey("mass", NBT.TAG_DOUBLE)) return Optional.empty();
         if (!compound.hasKey("hasAir")) return Optional.empty();
         if (!compound.hasKey("volume", NBT.TAG_DOUBLE)) return Optional.empty();
-        if (!compound.hasKey("parts", NBT.TAG_COMPOUND)) return Optional.empty();
-        if (!compound.hasKey("instruments", NBT.TAG_COMPOUND)) return Optional.empty();
+        if (!compound.hasKey(AbstractComponent.PARTS_KEY, NBT.TAG_COMPOUND)) return Optional.empty();
+        if (!compound.hasKey(AbstractComponent.INSTRUMENTS_KEY, NBT.TAG_COMPOUND)) return Optional.empty();
 
         if (!compound.hasKey("materials", NBT.TAG_LIST)) return Optional.empty();
         compound
                 .getTagList("materials", NBT.TAG_COMPOUND)
-                .forEach(x -> controlpod.materials.add(MaterialCost.fromNBT((NBTTagCompound) x)));
-        controlpod.radius = compound.getDouble("radius");
-        controlpod.mass = compound.getDouble("mass");
-        controlpod.volume = compound.getDouble("volume");
-        controlpod.hasAir = compound.getBoolean("hasAir");
+                .forEach(tag -> controlPod.materials.add(MaterialCost.fromNBT((NBTTagCompound) tag)));
+        controlPod.radius = compound.getDouble("radius");
+        controlPod.mass = compound.getDouble("mass");
+        controlPod.volume = compound.getDouble("volume");
+        controlPod.hasAir = compound.getBoolean("hasAir");
 
-        NBTTagCompound instrumentsList = compound.getCompoundTag("instruments");
+        NBTTagCompound instrumentsList = compound.getCompoundTag(AbstractComponent.INSTRUMENTS_KEY);
         for (String key : instrumentsList.getKeySet()) {
-            controlpod.instruments.put(key, compound.getInteger(key));
+            controlPod.instruments.put(key, instrumentsList.getInteger(key));
         }
 
-        NBTTagCompound partsList = compound.getCompoundTag("parts");
+        NBTTagCompound partsList = compound.getCompoundTag(AbstractComponent.PARTS_KEY);
         for (String key : partsList.getKeySet()) {
-            controlpod.parts.put(key, compound.getInteger(key));
+            controlPod.parts.put(key, partsList.getInteger(key));
         }
 
-        return Optional.of(controlpod);
+        return Optional.of(controlPod);
     }
 }

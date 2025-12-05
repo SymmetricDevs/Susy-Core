@@ -34,12 +34,13 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         super(
                 "spacecraft_hull",
                 "spacecraft_hull",
-                (tupl) -> tupl.getSecond().stream()
+                tuple -> tuple.getSecond().stream()
                         .anyMatch(
-                                x -> tupl.getFirst().world
-                                        .getBlockState(x)
-                                        .getBlock()
-                                        .equals(SuSyBlocks.SPACECRAFT_HULL)));
+                                pos -> tuple
+                                        .getFirst().world
+                                                .getBlockState(pos)
+                                                .getBlock()
+                                                .equals(SuSyBlocks.SPACECRAFT_HULL)));
     }
 
     @Override
@@ -48,16 +49,16 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         tag.setDouble("radius", this.radius);
         tag.setDouble("volume", this.volume);
         tag.setBoolean("hasAir", this.hasAir);
-        NBTTagCompound instruments = new NBTTagCompound();
-        NBTTagCompound parts = new NBTTagCompound();
+        NBTTagCompound instrumentsTag = new NBTTagCompound();
+        NBTTagCompound partsTag = new NBTTagCompound();
         for (Entry<String, Integer> part : this.parts.entrySet()) {
-            parts.setInteger(part.getKey(), part.getValue());
+            partsTag.setInteger(part.getKey(), part.getValue());
         }
         for (Entry<String, Integer> instrument : this.instruments.entrySet()) {
-            instruments.setInteger(instrument.getKey(), instrument.getValue());
+            instrumentsTag.setInteger(instrument.getKey(), instrument.getValue());
         }
-        tag.setTag("instruments", instruments);
-        tag.setTag("tools", parts);
+        tag.setTag(INSTRUMENTS_KEY, instrumentsTag);
+        tag.setTag(PARTS_KEY, partsTag);
     }
 
     @Override
@@ -70,8 +71,8 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         if (!compound.hasKey("mass", NBT.TAG_DOUBLE)) return Optional.empty();
         if (!compound.hasKey("hasAir")) return Optional.empty();
         if (!compound.hasKey("volume", NBT.TAG_DOUBLE)) return Optional.empty();
-        if (!compound.hasKey("parts", NBT.TAG_COMPOUND)) return Optional.empty();
-        if (!compound.hasKey("instruments", NBT.TAG_COMPOUND)) return Optional.empty();
+        if (!compound.hasKey(AbstractComponent.PARTS_KEY, NBT.TAG_COMPOUND)) return Optional.empty();
+        if (!compound.hasKey(AbstractComponent.INSTRUMENTS_KEY, NBT.TAG_COMPOUND)) return Optional.empty();
         if (!compound.hasKey("materials", NBT.TAG_LIST)) return Optional.empty();
         compound
                 .getTagList("materials", NBT.TAG_COMPOUND)
@@ -82,14 +83,14 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         spacecraft.volume = compound.getDouble("volume");
         spacecraft.hasAir = compound.getBoolean("hasAir");
 
-        NBTTagCompound instrumentsList = compound.getCompoundTag("instruments");
+        NBTTagCompound instrumentsList = compound.getCompoundTag(AbstractComponent.INSTRUMENTS_KEY);
         for (String key : instrumentsList.getKeySet()) {
             spacecraft.instruments.put(key, compound.getInteger(key));
         }
 
-        NBTTagCompound partsList = compound.getCompoundTag("parts");
+        NBTTagCompound partsList = compound.getCompoundTag(AbstractComponent.PARTS_KEY);
         for (String key : partsList.getKeySet()) {
-            spacecraft.parts.put(key, compound.getInteger(key));
+            spacecraft.parts.put(key, partsList.getInteger(key));
         }
 
         return Optional.of(spacecraft);
@@ -122,12 +123,12 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         lifeSupports.forEach(
                 bp -> {
                     Block block = analysis.world.getBlockState(bp).getBlock();
-                    NBTTagCompound list = tag.getCompoundTag("life_supports");
+                    NBTTagCompound partsTag = tag.getCompoundTag(PARTS_KEY);
                     String part = ((VariantBlock<?>) block).getState(analysis.world.getBlockState(bp)).toString();
-                    int num = list.getInteger(part); // default behavior is 0
-                    list.setInteger(part, num + 1);
-                    this.parts.put(part, num + 1);
-                    tag.setTag("life_supports", list);
+                    int count = partsTag.getInteger(part); // default behavior is 0
+                    partsTag.setInteger(part, count + 1);
+                    this.parts.put(part, count + 1);
+                    tag.setTag(PARTS_KEY, partsTag);
                 });
 
         for (BlockPos bp : exterior) {
@@ -144,12 +145,12 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
             } else if (analysis.world.getBlockState(bp).getBlock().equals(SuSyBlocks.SPACE_INSTRUMENT)) {
                 {
                     Block block = analysis.world.getBlockState(bp).getBlock();
-                    NBTTagCompound list = tag.getCompoundTag("instruments");
+                    NBTTagCompound instrumentsTag = tag.getCompoundTag(INSTRUMENTS_KEY);
                     String part = ((VariantBlock<?>) block).getState(analysis.world.getBlockState(bp)).toString();
-                    int num = list.getInteger(part); // default behavior is 0
-                    list.setInteger(part, num + 1);
-                    this.instruments.put(part, num + 1);
-                    tag.setTag("instruments", list);
+                    int count = instrumentsTag.getInteger(part); // default behavior is 0
+                    instrumentsTag.setInteger(part, count + 1);
+                    this.instruments.put(part, count + 1);
+                    tag.setTag(INSTRUMENTS_KEY, instrumentsTag);
                 }
             } else {
                 analysis.status = BuildStat.HULL_WEAK;
@@ -202,10 +203,9 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         tag.setString("name", name);
         tag.setDouble("radius", (radius));
         this.radius = radius;
-        double mass = 0;
-        for (BlockPos block : blocksConnected) {
-            mass += getMassOfBlock(analysis.world.getBlockState(block));
-        }
+        double mass = blocksConnected.stream()
+                .mapToDouble(block -> getMassOfBlock(analysis.world.getBlockState(block)))
+                .sum();
         tag.setDouble("mass", mass);
         this.mass = mass;
         writeBlocksToNBT(blocksConnected, analysis.world);

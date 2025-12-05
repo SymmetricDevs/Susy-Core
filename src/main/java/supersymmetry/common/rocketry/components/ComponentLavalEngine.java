@@ -35,14 +35,13 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
         super(
                 "laval_engine",
                 "engine",
-                t -> {
-                    return t.getSecond().stream()
-                            .anyMatch(
-                                    bp -> t.getFirst().world
-                                            .getBlockState(bp)
-                                            .getBlock()
-                                            .equals(SuSyBlocks.COMBUSTION_CHAMBER));
-                });
+                candidate -> candidate.getSecond().stream()
+                        .anyMatch(
+                                pos -> candidate
+                                        .getFirst().world
+                                                .getBlockState(pos)
+                                                .getBlock()
+                                                .equals(SuSyBlocks.COMBUSTION_CHAMBER)));
         this.setComponentSlotValidator(
                 x -> x.equals(this.getName()) || x.equals(this.getType()) ||
                         (x.equals(this.getType() + "_small") && this.radius < 2) ||
@@ -59,8 +58,9 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
 
     @Override
     public Optional<ComponentLavalEngine> readFromNBT(NBTTagCompound compound) {
-        if (compound.getString("type") != this.type || compound.getString("name") != this.name)
-            Optional.empty();
+        if (compound.getString("type").isEmpty() || compound.getString("name").isEmpty()) {
+            return Optional.empty();
+        }
         ComponentLavalEngine engine = new ComponentLavalEngine();
         if (!compound.hasKey("mass", Constants.NBT.TAG_DOUBLE)) return Optional.empty();
         if (!compound.hasKey("radius", Constants.NBT.TAG_DOUBLE)) return Optional.empty();
@@ -77,7 +77,7 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
         engine.fuelThroughput = compound.getDouble("throughput");
 
         if (engine.materials.isEmpty()) {
-            SusyLog.logger.warn("shitten poopen farten no materialen from compounden {}", compound);
+            SusyLog.logger.warn("No materials were found in {}!", compound);
         }
         return Optional.of(engine);
     }
@@ -125,8 +125,8 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
                 return Optional.empty();
             }
         }
-        float area_ratio = ((float) fin) / initial;
-        if (area_ratio < 1.5) {
+        float computedAreaRatio = ((float) fin) / initial;
+        if (computedAreaRatio < 1.5) {
             analysis.status = BuildStat.NOT_LAVAL;
         }
 
@@ -180,23 +180,23 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
         analysis.status = BuildStat.SUCCESS;
         // currently a double
         NBTTagCompound tag = new NBTTagCompound();
-        tag.setDouble("area_ratio", area_ratio);
-        this.areaRatio = area_ratio;
+        tag.setDouble("area_ratio", computedAreaRatio);
+        this.areaRatio = computedAreaRatio;
         tag.setString("type", this.type);
         tag.setString("name", this.name);
-        double mass = 0;
-        for (BlockPos block : blocks) {
-            mass += getMassOfBlock(analysis.world.getBlockState(block));
-        }
+        double mass = blocks.stream()
+                .mapToDouble(block -> getMassOfBlock(analysis.world.getBlockState(block)))
+                .sum();
         double innerRadius = analysis.getApproximateRadius(
                 blocks.stream().filter(bp -> bp.getY() == nozzleBB.maxY).collect(Collectors.toSet()));
-        tag.setDouble("radius", Double.valueOf(innerRadius));
+        tag.setDouble("radius", innerRadius);
         this.radius = innerRadius;
-        tag.setDouble("mass", Double.valueOf(mass));
+        tag.setDouble("mass", mass);
         this.mass = mass;
 
         double throughput = 0;
-        // this crashes :C
+
+        // TODO this crashes :C
         // for (BlockPos pumpPos : pumps) {
         // IBlockState pump = analysis.world.getBlockState(pumpPos);
         // throughput += ((BlockTurboPump.HPPType) (((VariantBlock<?>)

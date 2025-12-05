@@ -69,8 +69,8 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                     selectedStageIndex = (selectedStageIndex == 0) ? stages.size() : selectedStageIndex - 1;
                     this.updateSelectedStageView();
                 })
-                .setShouldClientCallback(true)
-                .setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_LEFT);
+                        .setShouldClientCallback(true)
+                        .setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_LEFT);
         nextButton = new ClickButtonWidget(
                 (size.width - 20),
                 0,
@@ -81,8 +81,8 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                     this.selectedStageIndex++;
                     this.updateSelectedStageView();
                 })
-                .setShouldClientCallback(true)
-                .setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_RIGHT);
+                        .setShouldClientCallback(true)
+                        .setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_RIGHT);
         amountTextField = new DynamicLabelWidget(
                 (int) ((size.width / 5) * 2.5),
                 -1,
@@ -158,7 +158,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                                     0,
                                     0 /* i forgot where exactly, but the x possition gets set later somewhere */,
                                     0)
-                                    .setBackgroundTexture(GuiTextures.SLOT_DARK));
+                                            .setBackgroundTexture(GuiTextures.SLOT_DARK));
                 }
 
                 slots.setSliderActive(slots.widgets.size() > 5);
@@ -231,7 +231,8 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                 if (!entryWidgets.getValue().isShortView()) {
                     // go through each slot and add each component separately
                     for (DataStorageLoader componentContainer : entryWidgets.getValue().getSlots()) {
-                        @NotNull ItemStack cardStack = componentContainer.getStackInSlot(0);
+                        @NotNull
+                        ItemStack cardStack = componentContainer.getStackInSlot(0);
                         if (!cardStack.hasTagCompound()) {
                             // this.error = ComponentValidationResult.INVALID_CARD;
                             // return false;
@@ -251,7 +252,8 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                 // duplicate the component from the first slot n times since its the same stuff most of the
                 // times
                 else {
-                    @NotNull ItemStack cardStack = entryWidgets.getValue().getSlots().get(0).getStackInSlot(0);
+                    @NotNull
+                    ItemStack cardStack = entryWidgets.getValue().getSlots().get(0).getStackInSlot(0);
                     if (!cardStack.hasTagCompound()) {
                         this.error = ComponentValidationResult.INVALID_CARD;
                         return false;
@@ -302,14 +304,12 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
     }
 
     public void onBlueprintRemoved() {
-        this.writeUpdateInfo(101, (buf) -> {
-        });
+        this.writeUpdateInfo(101, (buf) -> {});
         this.removalAction.accept(this);
     }
 
     public void onBlueprintInserted() {
-        this.writeUpdateInfo(100, (buf) -> {
-        });
+        this.writeUpdateInfo(100, (buf) -> {});
         this.insertionAction.accept(this);
     }
 
@@ -319,7 +319,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
             return I18n.format(ComponentValidationResult.SUCCESS.getTranslationKey());
         } else {
             if (this.errorComponentType == "" || this.errorStage == ""
-                // || this.error == ComponentValidationResult.UNKNOWN
+            // || this.error == ComponentValidationResult.UNKNOWN
             ) return "";
         }
         return String.format(
