@@ -98,16 +98,12 @@ public class ComponentInterstage extends AbstractComponent<ComponentInterstage> 
             previousAirLayer = airLayer;
         }
 
-        double radius = analysis.getApproximateRadius(analysis.getLowestLayer(hullBlocks));
-        double mass = connectedBlocks.stream()
-                .mapToDouble(block -> getMassOfBlock(analysis.world.getBlockState(block)))
-                .sum();
+        double radius = analysis.getRadius(analysis.getLowestLayer(hullBlocks));
 
         NBTTagCompound tag = new NBTTagCompound();
-        tag.setDouble("mass", mass);
         tag.setDouble("radius", radius);
-        tag.setString("type", this.type);
-        tag.setString("name", this.name);
+
+        collectInfo(analysis, connectedBlocks, tag);
 
         writeBlocksToNBT(connectedBlocks, analysis.world);
         analysis.status = BuildStat.SUCCESS;

@@ -9,8 +9,10 @@ import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 import supersymmetry.api.blocks.VariantDirectionalCoverableBlock;
+import supersymmetry.api.rocketry.WeightedBlock;
 
-public class BlockTankShell1 extends VariantDirectionalCoverableBlock<BlockTankShell1.TankCoverType> {
+public class BlockTankShell1 extends VariantDirectionalCoverableBlock<BlockTankShell1.TankCoverType>
+        implements WeightedBlock {
 
     public BlockTankShell1() {
         super(net.minecraft.block.material.Material.IRON);
@@ -48,5 +50,10 @@ public class BlockTankShell1 extends VariantDirectionalCoverableBlock<BlockTankS
         public String getName() {
             return name;
         }
+    }
+
+    @Override
+    public double getMass(IBlockState state) {
+        return 25 + 50 * 3;
     }
 }

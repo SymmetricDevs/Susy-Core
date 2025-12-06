@@ -39,9 +39,9 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
                         .anyMatch(
                                 pos -> candidate
                                         .getFirst().world
-                                                .getBlockState(pos)
-                                                .getBlock()
-                                                .equals(SuSyBlocks.COMBUSTION_CHAMBER)));
+                                        .getBlockState(pos)
+                                        .getBlock()
+                                        .equals(SuSyBlocks.COMBUSTION_CHAMBER)));
         this.setComponentSlotValidator(
                 x -> x.equals(this.getName()) || x.equals(this.getType()) ||
                         (x.equals(this.getType() + "_small") && this.radius < 2) ||
@@ -155,7 +155,7 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
         IBlockState chamberState = analysis.world.getBlockState(cChamber);
         int pumpNum = ((BlockCombustionChamber.CombustionType) (((VariantBlock<?>) chamberState.getBlock())
                 .getState(chamberState)))
-                        .getMinPumps();
+                .getMinPumps();
         if (pumps.size() < pumpNum) {
             analysis.status = BuildStat.WRONG_NUM_PUMPS;
             return Optional.empty();
@@ -182,17 +182,12 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
         NBTTagCompound tag = new NBTTagCompound();
         tag.setDouble("area_ratio", computedAreaRatio);
         this.areaRatio = computedAreaRatio;
-        tag.setString("type", this.type);
-        tag.setString("name", this.name);
-        double mass = blocks.stream()
-                .mapToDouble(block -> getMassOfBlock(analysis.world.getBlockState(block)))
-                .sum();
-        double innerRadius = analysis.getApproximateRadius(
+        // Not the default; more of an inner radius
+        this.radius = analysis.getRadius(
                 blocks.stream().filter(bp -> bp.getY() == nozzleBB.maxY).collect(Collectors.toSet()));
-        tag.setDouble("radius", innerRadius);
-        this.radius = innerRadius;
-        tag.setDouble("mass", mass);
-        this.mass = mass;
+        tag.setDouble("radius", radius);
+
+        collectInfo(analysis, blocks, tag);
 
         double throughput = 0;
 

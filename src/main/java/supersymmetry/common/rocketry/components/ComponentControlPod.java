@@ -74,14 +74,16 @@ public class ComponentControlPod extends AbstractComponent<ComponentControlPod> 
     }
 
     public Optional<NBTTagCompound> spacecraftPattern(
-                                                      Set<BlockPos> blocksConnected,
-                                                      Set<BlockPos> interior,
-                                                      Set<BlockPos> exterior,
-                                                      StructAnalysis analysis) {
+            Set<BlockPos> blocksConnected,
+            Set<BlockPos> interior,
+            Set<BlockPos> exterior,
+            StructAnalysis analysis) {
+        NBTTagCompound tag = new NBTTagCompound();
+
         Predicate<BlockPos> lifeSupportCheck = bp -> analysis.world.getBlockState(bp).getBlock()
                 .equals(SuSyBlocks.LIFE_SUPPORT);
         Set<BlockPos> lifeSupports = blocksConnected.stream().filter(lifeSupportCheck).collect(Collectors.toSet());
-        NBTTagCompound tag = new NBTTagCompound();
+
 
         lifeSupports.forEach(
                 bp -> {
@@ -105,15 +107,13 @@ public class ComponentControlPod extends AbstractComponent<ComponentControlPod> 
                     }
                 }
             } else if (analysis.world.getBlockState(bp).getBlock().equals(SuSyBlocks.SPACE_INSTRUMENT)) {
-                {
-                    Block block = analysis.world.getBlockState(bp).getBlock();
-                    NBTTagCompound list = tag.getCompoundTag(AbstractComponent.INSTRUMENTS_KEY);
-                    String part = ((VariantBlock<?>) block).getState(analysis.world.getBlockState(bp)).toString();
-                    int num = list.getInteger(part); // default behavior is 0
-                    list.setInteger(part, num + 1);
-                    this.instruments.put(part, num + 1);
-                    tag.setTag(AbstractComponent.PARTS_KEY, list);
-                }
+                Block block = analysis.world.getBlockState(bp).getBlock();
+                NBTTagCompound list = tag.getCompoundTag(AbstractComponent.INSTRUMENTS_KEY);
+                String part = ((VariantBlock<?>) block).getState(analysis.world.getBlockState(bp)).toString();
+                int num = list.getInteger(part); // default behavior is 0
+                list.setInteger(part, num + 1);
+                this.instruments.put(part, num + 1);
+                tag.setTag(AbstractComponent.PARTS_KEY, list);
             } else {
                 analysis.status = BuildStat.HULL_WEAK;
             }
@@ -152,19 +152,12 @@ public class ComponentControlPod extends AbstractComponent<ComponentControlPod> 
             tag.setBoolean("hasAir", true);
             this.hasAir = true;
         }
-        double radius = analysis.getApproximateRadius(blocksConnected);
+        double radius = analysis.getRadius(blocksConnected);
 
         // The scan is successful by this point
         analysis.status = BuildStat.SUCCESS;
-        tag.setString("type", type);
-        tag.setString("name", name);
-        tag.setDouble("radius", (radius));
-        this.radius = radius;
-        double mass = blocksConnected.stream()
-                .mapToDouble(block -> getMassOfBlock(analysis.world.getBlockState(block)))
-                .sum();
-        tag.setDouble("mass", mass);
-        this.mass = mass;
+        collectInfo(analysis, blocksConnected, tag);
+
         writeBlocksToNBT(blocksConnected, analysis.world);
         return Optional.of(tag);
     }

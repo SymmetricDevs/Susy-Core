@@ -7,8 +7,10 @@ import net.minecraft.util.IStringSerializable;
 
 import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantBlock;
+import supersymmetry.api.rocketry.WeightedBlock;
 
-public class BlockCombustionChamber extends VariantBlock<BlockCombustionChamber.CombustionType> {
+public class BlockCombustionChamber extends VariantBlock<BlockCombustionChamber.CombustionType>
+        implements WeightedBlock {
 
     public BlockCombustionChamber() {
         super(Material.IRON);
@@ -54,5 +56,15 @@ public class BlockCombustionChamber extends VariantBlock<BlockCombustionChamber.
         public int getMinPumps() {
             return pumps;
         }
+    }
+
+    @Override
+    public double getMass(IBlockState state) {
+        CombustionType type = getState(state);
+        return 800 + 100 * switch (type) {
+            case BIPROPELLANT -> 200.0;
+            case MONOPROPELLANT -> 150.0;
+            case OXIDISER -> 200.0;
+        };
     }
 }

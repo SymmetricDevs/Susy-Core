@@ -38,9 +38,9 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                         .anyMatch(
                                 pos -> tuple
                                         .getFirst().world
-                                                .getBlockState(pos)
-                                                .getBlock()
-                                                .equals(SuSyBlocks.SPACECRAFT_HULL)));
+                                        .getBlockState(pos)
+                                        .getBlock()
+                                        .equals(SuSyBlocks.SPACECRAFT_HULL)));
     }
 
     @Override
@@ -111,25 +111,17 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
     }
 
     public Optional<NBTTagCompound> spacecraftPattern(
-                                                      Set<BlockPos> blocksConnected,
-                                                      Set<BlockPos> exterior,
-                                                      Set<BlockPos> interior,
-                                                      StructAnalysis analysis) {
+            Set<BlockPos> blocksConnected,
+            Set<BlockPos> exterior,
+            Set<BlockPos> interior,
+            StructAnalysis analysis) {
         Predicate<BlockPos> lifeSupportCheck = bp -> analysis.world.getBlockState(bp).getBlock()
                 .equals(SuSyBlocks.LIFE_SUPPORT);
         Set<BlockPos> lifeSupports = blocksConnected.stream().filter(lifeSupportCheck).collect(Collectors.toSet());
         NBTTagCompound tag = new NBTTagCompound();
 
         lifeSupports.forEach(
-                bp -> {
-                    Block block = analysis.world.getBlockState(bp).getBlock();
-                    NBTTagCompound partsTag = tag.getCompoundTag(PARTS_KEY);
-                    String part = ((VariantBlock<?>) block).getState(analysis.world.getBlockState(bp)).toString();
-                    int count = partsTag.getInteger(part); // default behavior is 0
-                    partsTag.setInteger(part, count + 1);
-                    this.parts.put(part, count + 1);
-                    tag.setTag(PARTS_KEY, partsTag);
-                });
+                bp -> includePart(analysis, bp, tag, PARTS_KEY, this.parts));
 
         for (BlockPos bp : exterior) {
             if (analysis.world.getBlockState(bp).getBlock().equals(SuSyBlocks.SPACECRAFT_HULL)) {
@@ -143,15 +135,7 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                     }
                 }
             } else if (analysis.world.getBlockState(bp).getBlock().equals(SuSyBlocks.SPACE_INSTRUMENT)) {
-                {
-                    Block block = analysis.world.getBlockState(bp).getBlock();
-                    NBTTagCompound instrumentsTag = tag.getCompoundTag(INSTRUMENTS_KEY);
-                    String part = ((VariantBlock<?>) block).getState(analysis.world.getBlockState(bp)).toString();
-                    int count = instrumentsTag.getInteger(part); // default behavior is 0
-                    instrumentsTag.setInteger(part, count + 1);
-                    this.instruments.put(part, count + 1);
-                    tag.setTag(INSTRUMENTS_KEY, instrumentsTag);
-                }
+                includePart(analysis, bp, tag, INSTRUMENTS_KEY, this.instruments);
             } else {
                 analysis.status = BuildStat.HULL_WEAK;
             }
@@ -195,13 +179,13 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
             tag.setBoolean("hasAir", true);
             this.hasAir = true;
         }
-        double radius = analysis.getApproximateRadius(blocksConnected);
+        double radius = analysis.getRadius(blocksConnected);
 
         // The scan is successful by this point
         analysis.status = BuildStat.SUCCESS;
         tag.setString("type", type);
         tag.setString("name", name);
-        tag.setDouble("radius", (radius));
+        tag.setDouble("radius", radius);
         this.radius = radius;
         double mass = blocksConnected.stream()
                 .mapToDouble(block -> getMassOfBlock(analysis.world.getBlockState(block)))
@@ -210,5 +194,15 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         this.mass = mass;
         writeBlocksToNBT(blocksConnected, analysis.world);
         return Optional.of(tag);
+    }
+
+    private void includePart(StructAnalysis analysis, BlockPos bp, NBTTagCompound tag, String key, Map<String, Integer> instruments) {
+        Block block = analysis.world.getBlockState(bp).getBlock();
+        NBTTagCompound subTag = tag.getCompoundTag(key);
+        String part = ((VariantBlock<?>) block).getState(analysis.world.getBlockState(bp)).toString();
+        int count = subTag.getInteger(part); // default behavior is 0
+        subTag.setInteger(part, count + 1);
+        instruments.put(part, count + 1);
+        tag.setTag(key, subTag);
     }
 }

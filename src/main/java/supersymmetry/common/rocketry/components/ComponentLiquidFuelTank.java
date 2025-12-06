@@ -22,7 +22,9 @@ import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.tile.TileEntityCoverable;
 
-/** componentLiquidFuelTank */
+/**
+ * componentLiquidFuelTank
+ */
 public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFuelTank> {
 
     public int volume;
@@ -35,9 +37,9 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
                         .anyMatch(
                                 pos -> candidate
                                         .getFirst().world
-                                                .getBlockState(pos)
-                                                .getBlock()
-                                                .equals(SuSyBlocks.TANK_SHELL)));
+                                        .getBlockState(pos)
+                                        .getBlock()
+                                        .equals(SuSyBlocks.TANK_SHELL)));
     }
 
     @Override
@@ -118,22 +120,22 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
                 if (interiorAir.contains(neighbor)) {
                     Vec3i difference = analysis.diff(neighbor, block);
                     if (!difference.equals(facingFromBlock.getOpposite().getDirectionVec())) { // incorrect with
-                                                                                               // honeycombs
+                        // honeycombs
                         analysis.status = BuildStat.HULL_WEAK;
                         return Optional.empty();
                     }
                 } else if (!interiorAir.contains(neighbor) &&
-                        (analysis.world.isAirBlock(neighbor) || !StructAnalysis.blockCont(
-                                aabb, neighbor))) { // this means it should be exterior air
-                                    if (!blockTiles.isCovered(facing)) {
-                                        analysis.status = BuildStat.MISSING_TILE;
-                                        return Optional.empty();
-                                    }
-                                }
+                        (analysis.world.isAirBlock(neighbor) ||
+                                !StructAnalysis.blockCont(aabb, neighbor))) { // this means it should be exterior air
+                    if (!blockTiles.isCovered(facing)) {
+                        analysis.status = BuildStat.MISSING_TILE;
+                        return Optional.empty();
+                    }
+                }
             }
         }
 
-        double radius = analysis.getApproximateRadius(blocks);
+        double radius = analysis.getRadius(blocks);
         int calculatedHeight = (int) (analysis.getBB(blocks).maxZ - analysis.getBB(blocks).minZ);
         if (calculatedHeight > radius * 2) {
             analysis.status = BuildStat.TOO_SHORT;
@@ -142,17 +144,10 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
 
         // The scan is successful by this point
         analysis.status = BuildStat.SUCCESS;
-        tag.setInteger("volume", interiorAir.size());
         this.volume = interiorAir.size();
-        tag.setString("type", this.type);
-        tag.setString("name", this.name);
-        tag.setDouble("radius", radius);
-        this.radius = radius;
-        double mass = blocks.stream()
-                .mapToDouble(block -> getMassOfBlock(analysis.world.getBlockState(block)))
-                .sum();
-        tag.setDouble("mass", mass);
-        this.mass = mass;
+        tag.setInteger("volume", this.volume);
+
+        collectInfo(analysis, blocks, tag);
         writeBlocksToNBT(blocks, analysis.world);
         return Optional.of(tag);
     }

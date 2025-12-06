@@ -159,6 +159,16 @@ public class RocketStage {
                 .orElse(0);
     }
 
+    public double getHeight() {
+        // Height (again max), in meters
+        return components.values().stream()
+                .flatMap(List::stream)
+                .mapToDouble(AbstractComponent::getHeight)
+                .max()
+                .orElse(0);
+    }
+
+
     public void setComponentValidationFunction(
                                                Function<Tuple<String, List<AbstractComponent<?>>>, ComponentValidationResult> componentValidationPredicate) {
         this.componentValidationFunction = componentValidationPredicate;

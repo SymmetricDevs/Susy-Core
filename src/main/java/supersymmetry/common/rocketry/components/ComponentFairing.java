@@ -27,7 +27,9 @@ import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.rocketry.BlockFairingConnector;
 import supersymmetry.common.tile.TileEntityCoverable;
 
-/** ComponentFairing */
+/**
+ * ComponentFairing
+ */
 public class ComponentFairing extends AbstractComponent<ComponentFairing> {
 
     // Note: the radius is the radius of the bottom of the fairing
@@ -71,8 +73,7 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
     }
 
     @Override
-    public Optional<NBTTagCompound> analyzePattern(
-                                                   StructAnalysis analysis, AxisAlignedBB interiorBB) {
+    public Optional<NBTTagCompound> analyzePattern(StructAnalysis analysis, AxisAlignedBB interiorBB) {
         Set<BlockPos> blocksConnected = analysis.getBlockConn(
                 interiorBB, analysis.getBlocks(analysis.world, interiorBB, true).get(0));
 
@@ -198,24 +199,20 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
                 }
             }
         }
-        double radius = analysis.getApproximateRadius(blocksConnected);
+        double radius = analysis.getRadius(blocksConnected);
         int calculatedHeight = (int) (fairingBB.maxY - fairingBB.minY);
         if (calculatedHeight > radius * 2) {
             analysis.status = BuildStat.TOO_SHORT;
         }
         NBTTagCompound tag = new NBTTagCompound();
-        tag.setString("type", "fairing");
-        tag.setInteger("height", calculatedHeight);
         tag.setInteger("num_conns", connectorBlocks.size());
         tag.setInteger("volume", intPartition.size());
-        tag.setDouble(
-                "mass", blocksConnected.stream().mapToDouble(bp -> getMassOfBlock(world.getBlockState(bp))).sum());
-        Double bottomSemiRadius = analysis.getApproximateRadius(analysis.getLowestLayer(blocksConnected));
-        // as it turns out, the integral of distances from the centroid of a semicircle to its path is
-        // pi/4 * the radius
-        double bottomRadius = bottomSemiRadius * 4 / Math.PI;
+
+        // If it really is a semicircle, then the tightest radius has to be the same as the semicircle's.
+        double bottomRadius = analysis.getRadius(analysis.getLowestLayer(blocksConnected));
         tag.setDouble("bottom_radius", bottomRadius);
 
+        collectInfo(analysis, blocksConnected, tag);
         analysis.status = BuildStat.SUCCESS;
         writeBlocksToNBT(blocksConnected, analysis.world);
 
