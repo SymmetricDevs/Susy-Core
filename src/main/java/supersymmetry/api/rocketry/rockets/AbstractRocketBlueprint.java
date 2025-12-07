@@ -99,8 +99,26 @@ public abstract class AbstractRocketBlueprint {
         return this.getStages().stream().mapToDouble(RocketStage::getRadius).max().orElse(0);
     }
 
+    public double getTotalRadiusMismatch() {
+        // Sum of the absolute differences between consecutive stages.
+        double mismatch = 0;
+        for (int i = 0; i < this.getStages().size() - 1; i++) {
+            mismatch += Math.abs(this.getStages().get(i).getRadius() -
+                    this.getStages().get(i + 1).getRadius());
+        }
+        return mismatch;
+    }
+
+    public double getHeight() {
+        return this.getStages().stream().mapToDouble(RocketStage::getHeight).sum();
+    }
+
     public double getThrust(RocketFuelEntry entry, double gravity) {
         return this.getStages().stream().mapToDouble((stage) -> stage.getThrust(entry, gravity)).sum();
+    }
+
+    public int getEngineCount() {
+        return this.getStages().stream().mapToInt(RocketStage::getEngineCount).sum();
     }
 
     public void setName(String name) {
@@ -118,4 +136,6 @@ public abstract class AbstractRocketBlueprint {
     public void setStages(List<RocketStage> stages) {
         this.stages = stages;
     }
+
+
 }

@@ -221,6 +221,12 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender 
     }
 
     @Override
+    public double getCargoMass() {
+        // TODO
+        return 0;
+    }
+
+    @Override
     public boolean canBeCollidedWith() {
         return true; // note that this prevents it from being seen on theoneprobe, and /gs looking
     }

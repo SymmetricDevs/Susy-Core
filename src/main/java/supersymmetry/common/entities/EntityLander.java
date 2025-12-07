@@ -321,6 +321,12 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
     }
 
     @Override
+    public double getCargoMass() {
+        // Not worrying about this
+        return 0;
+    }
+
+    @Override
     protected void removePassenger(@NotNull Entity passenger) {
         if (this.canPlayerDismount()) {
             super.removePassenger(passenger);

@@ -146,6 +146,14 @@ public class RocketStage {
                 .sum();
     }
 
+    public int getEngineCount() {
+        return components.values().stream()
+                .flatMap(List::stream)
+                .filter(c -> c.getType().equals("engine"))
+                .mapToInt(engine -> 1)
+                .sum();
+    }
+
     public double getThrust(RocketFuelEntry rocketFuelEntry, double gravity) {
         return getFuelThroughput() * rocketFuelEntry.getSpecificImpulse() * gravity;
     }

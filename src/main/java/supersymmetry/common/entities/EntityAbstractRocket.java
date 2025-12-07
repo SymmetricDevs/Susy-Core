@@ -190,4 +190,6 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
     }
 
     public abstract RocketFuelEntry getFuel();
+
+    public abstract double getCargoMass();
 }

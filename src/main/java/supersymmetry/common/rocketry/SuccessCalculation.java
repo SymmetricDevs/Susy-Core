@@ -21,7 +21,7 @@ public class SuccessCalculation {
         if (rocket.world.provider instanceof WorldProviderPlanet) {
             gravMult = SuSyDimensions.PLANETS.get(rocket.world.provider.getDimension()).gravity;
         }
-        double weight = blueprint.getMass() * gravMult;
+        double weight = (blueprint.getMass() + rocket.getCargoMass()) * gravMult;
         double thrust = blueprint.getThrust(null, gravMult);
         double thrustToWeightRatio = thrust / weight;
 
@@ -32,13 +32,29 @@ public class SuccessCalculation {
         }
 
         // Oblateness (height / radius)
-        // blueprint.getMaxRadius() / blueprint.getHeight();
+        double oblateness = blueprint.getHeight() / blueprint.getMaxRadius();
+        success *= (1 - (0.1 * Math.exp(-oblateness)));
+
+        // Number of engines, radius mismatch
+        success *= Math.pow(0.995, blueprint.getEngineCount());
+        success *= (1 - (0.5 * Math.exp(blueprint.getTotalRadiusMismatch() / 10)));
+
+        // TODO: Guidance computer
+
+        success = augmentSuccess(success);
 
         if (Math.random() < success) {
             return LaunchResult.LAUNCHES;
         } else {
             return LaunchResult.DOES_NOT_LAUNCH;
         }
+    }
+
+    private double augmentSuccess(double success) {
+        success = Math.min(0.0001, success);
+        double inverseSigmoid = Math.log(success / (1 - success));
+        inverseSigmoid += success * augmentation;
+        return 1 / (1 + Math.exp(-inverseSigmoid));
     }
 
     public enum LaunchResult {
