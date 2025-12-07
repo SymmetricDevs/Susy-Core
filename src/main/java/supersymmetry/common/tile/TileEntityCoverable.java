@@ -3,6 +3,7 @@ package supersymmetry.common.tile;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import codechicken.lib.vec.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -152,7 +153,8 @@ public class TileEntityCoverable extends TickableTileEntityBase {
         setSourceModel();
         EnumFacing[] faces = getSides();
         for (EnumFacing face : faces) {
-            Textures.FROST_PROOF_CASING.renderSided(face, renderState, translation, pipeline);
+            Matrix4 zFought = translation.copy().translate(Vector3.fromVec3i(face.getDirectionVec()).multiply(0.0001));
+            Textures.FROST_PROOF_CASING.renderSided(face, renderState, zFought, pipeline);
         }
     }
 

@@ -91,7 +91,9 @@ public class ComponentInterstage extends AbstractComponent<ComponentInterstage> 
                 }
             }
 
-            if (analysis.getPerimeter(airLayer, StructAnalysis.layerVecs).size() >= Math.sqrt(airLayer.size()) * 4) {
+            int perim = analysis.getPerimeter(airLayer, StructAnalysis.layerVecs).size();
+            // excludes squares. don't ask
+            if (airLayer.size() / (double) (perim * perim) < 0.07 / (1 + Math.exp(-0.17 * perim))) {
                 analysis.status = BuildStat.INTERSTAGE_NOT_CYLINDRICAL;
                 return Optional.empty();
             }
