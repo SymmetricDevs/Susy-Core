@@ -32,7 +32,7 @@ import supersymmetry.common.blocks.rocketry.BlockRocketNozzle;
 import supersymmetry.common.blocks.rocketry.BlockTankShell;
 import supersymmetry.common.blocks.rocketry.BlockTankShell1;
 import supersymmetry.common.blocks.rocketry.BlockTurboPump;
-import supersymmetry.common.tile.TileEntityCoverable;
+import supersymmetry.common.tileentities.TileEntityCoverable;
 
 public abstract class AbstractComponent<T extends AbstractComponent<T>> {
 
@@ -106,9 +106,9 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
                 if (te instanceof TileEntityCoverable) {
                     TileEntityCoverable teCoverable = (TileEntityCoverable) te;
                     if (teCoverable != null &&
-                            teCoverable.getCoverType().getItem().getRegistryName() != Items.AIR.getRegistryName()) {
-                        String key = teCoverable.getCoverType().getItem().getRegistryName().toString() + "#" +
-                                teCoverable.getCoverType().getMetadata() + "#cover"; // i am sorry for this
+                            teCoverable.getCoverItem().getItem().getRegistryName() != Items.AIR.getRegistryName()) {
+                        String key = teCoverable.getCoverItem().getItem().getRegistryName().toString() + "#" +
+                                teCoverable.getCoverItem().getMetadata() + "#cover"; // i am sorry for this
                         counts.put(key, counts.getOrDefault(key, 0) + teCoverable.getCoverCount());
                     }
                 }

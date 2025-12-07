@@ -25,7 +25,7 @@ import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.rocketry.BlockFairingConnector;
-import supersymmetry.common.tile.TileEntityCoverable;
+import supersymmetry.common.tileentities.TileEntityCoverable;
 
 /** ComponentFairing */
 public class ComponentFairing extends AbstractComponent<ComponentFairing> {

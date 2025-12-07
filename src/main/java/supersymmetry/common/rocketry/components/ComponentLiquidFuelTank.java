@@ -20,7 +20,7 @@ import supersymmetry.api.rocketry.components.MaterialCost;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.common.tile.TileEntityCoverable;
+import supersymmetry.common.tileentities.TileEntityCoverable;
 
 /** componentLiquidFuelTank */
 public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFuelTank> {
