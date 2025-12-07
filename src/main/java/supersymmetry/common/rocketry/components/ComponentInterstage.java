@@ -4,7 +4,6 @@ import java.util.*;
 import java.util.Optional;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants.NBT;
@@ -17,21 +16,17 @@ import supersymmetry.common.blocks.SuSyBlocks;
 
 public class ComponentInterstage extends AbstractComponent<ComponentInterstage> {
 
-    public double radius;
-
     public ComponentInterstage() {
         super(
                 "interstage",
                 "interstage",
-                tuple -> {
-                    return tuple.getSecond().stream()
-                            .anyMatch(
-                                    pos -> tuple
-                                            .getFirst().world
-                                                    .getBlockState(pos)
-                                                    .getBlock()
-                                                    .equals(SuSyBlocks.INTERSTAGE));
-                });
+                tuple -> tuple.getSecond().stream()
+                        .anyMatch(
+                                pos -> tuple
+                                        .getFirst().world
+                                                .getBlockState(pos)
+                                                .getBlock()
+                                                .equals(SuSyBlocks.INTERSTAGE)));
     }
 
     @Override
@@ -43,15 +38,23 @@ public class ComponentInterstage extends AbstractComponent<ComponentInterstage> 
 
     @Override
     public Optional<ComponentInterstage> readFromNBT(NBTTagCompound compound) {
+        if (!this.type.equals(compound.getString("type")) || !this.name.equals(compound.getString("name"))) {
+            return Optional.empty();
+        }
+        if (!compound.hasKey("mass", NBT.TAG_DOUBLE)) {
+            return Optional.empty();
+        }
+        if (!compound.hasKey("radius", NBT.TAG_DOUBLE)) {
+            return Optional.empty();
+        }
+        if (!compound.hasKey("materials", NBT.TAG_LIST)) {
+            return Optional.empty();
+        }
+
         ComponentInterstage interstage = new ComponentInterstage();
-        if (compound.getString("type") != this.type || compound.getString("name") != this.name)
-            Optional.empty();
-        if (!compound.hasKey("mass", NBT.TAG_DOUBLE)) Optional.empty();
-        if (!compound.hasKey("radius", NBT.TAG_DOUBLE)) Optional.empty();
-        if (!compound.hasKey("materials", NBT.TAG_LIST)) return Optional.empty();
         compound
                 .getTagList("materials", NBT.TAG_COMPOUND)
-                .forEach(x -> interstage.materials.add(MaterialCost.fromNBT((NBTTagCompound) x)));
+                .forEach(tag -> interstage.materials.add(MaterialCost.fromNBT((NBTTagCompound) tag)));
 
         interstage.radius = compound.getDouble("radius");
         interstage.mass = compound.getDouble("mass");
@@ -59,49 +62,53 @@ public class ComponentInterstage extends AbstractComponent<ComponentInterstage> 
     }
 
     @Override
-    public Optional<NBTTagCompound> analyzePattern(StructAnalysis analysis, AxisAlignedBB aabb) {
-        Set<BlockPos> blocks = analysis.getBlockConn(aabb, analysis.getBlocks(analysis.world, aabb, true).get(0));
-        Tuple<Set<BlockPos>, Set<BlockPos>> hullData = analysis.checkHull(aabb, blocks, false);
+    public Optional<NBTTagCompound> analyzePattern(StructAnalysis analysis, AxisAlignedBB bounds) {
+        List<BlockPos> initialBlocks = analysis.getBlocks(analysis.world, bounds, true);
+        if (initialBlocks.isEmpty()) {
+            analysis.status = BuildStat.ERROR;
+            return Optional.empty();
+        }
 
-        Set<BlockPos> hullBlocks = hullData.getFirst();
-        Set<BlockPos> prevAir = null;
-        if (!hullBlocks.containsAll(blocks)) {
+        Set<BlockPos> connectedBlocks = analysis.getBlockConn(bounds, initialBlocks.get(0));
+        StructAnalysis.HullData hullData = analysis.checkHull(bounds, connectedBlocks, false);
+
+        Set<BlockPos> hullBlocks = hullData.exterior();
+        if (!hullBlocks.containsAll(connectedBlocks)) {
             analysis.status = BuildStat.INTERSTAGE_NOT_CYLINDRICAL;
             return Optional.empty();
         }
-        AxisAlignedBB bb = analysis.getBB(blocks);
-        for (int i = (int) bb.minY; i < (int) bb.maxY; i++) {
-            Set<BlockPos> air = analysis.getLayerAir(bb, i);
-            if (prevAir != null) {
-                for (BlockPos b : air) {
-                    if (!prevAir.contains(b.add(0, -1, 0))) {
+
+        Set<BlockPos> previousAirLayer = null;
+        AxisAlignedBB hullBounds = analysis.getBB(connectedBlocks);
+        for (int y = (int) hullBounds.minY; y < (int) hullBounds.maxY; y++) {
+            Set<BlockPos> airLayer = analysis.getLayerAir(hullBounds, y);
+            if (previousAirLayer != null) {
+                for (BlockPos blockPos : airLayer) {
+                    if (!previousAirLayer.contains(blockPos.add(0, -1, 0))) {
                         analysis.status = BuildStat.INTERSTAGE_NOT_CYLINDRICAL;
                         return Optional.empty();
                     }
                 }
             }
-            if (analysis.getPerimeter(air, StructAnalysis.layerVecs).size() >= Math.sqrt(air.size()) * 4) {
+
+            int perim = analysis.getPerimeter(airLayer, StructAnalysis.layerVecs).size();
+            // excludes squares. don't ask
+            if (airLayer.size() / (double) (perim * perim) < 0.07 / (1 + Math.exp(-0.17 * perim))) {
                 analysis.status = BuildStat.INTERSTAGE_NOT_CYLINDRICAL;
                 return Optional.empty();
             }
-            prevAir = air;
+            previousAirLayer = airLayer;
         }
-        double radius = analysis.getApproximateRadius(analysis.getLowestLayer(hullBlocks));
-        double mass = 0;
-        for (BlockPos block : blocks) {
-            mass += getMass(analysis.world.getBlockState(block));
-        }
+
+        double radius = analysis.getRadius(analysis.getLowestLayer(hullBlocks));
+
         NBTTagCompound tag = new NBTTagCompound();
+        tag.setDouble("radius", radius);
 
-        tag.setDouble("mass", Double.valueOf(mass));
-        tag.setDouble("radius", Double.valueOf(radius));
-        tag.setString("type", this.type);
-        tag.setString("name", this.name);
+        collectInfo(analysis, connectedBlocks, tag);
 
-        writeBlocksToNBT(blocks, analysis.world);
-
+        writeBlocksToNBT(connectedBlocks, analysis.world);
         analysis.status = BuildStat.SUCCESS;
-
         return Optional.of(tag);
     }
 }

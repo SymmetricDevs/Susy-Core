@@ -2,14 +2,14 @@ package supersymmetry.common.rocketry.components;
 
 import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
 
-import java.util.*;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
 
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
@@ -22,24 +22,24 @@ import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.tileentities.TileEntityCoverable;
 
-/** componentLiquidFuelTank */
+/**
+ * componentLiquidFuelTank
+ */
 public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFuelTank> {
 
     public int volume;
-    public double radius;
 
     public ComponentLiquidFuelTank() {
         super(
                 "fluid_tank",
                 "tank",
-                thing -> {
-                    return thing.getSecond().stream()
-                            .anyMatch(
-                                    bp -> thing.getFirst().world
-                                            .getBlockState(bp)
-                                            .getBlock()
-                                            .equals(SuSyBlocks.TANK_SHELL));
-                });
+                candidate -> candidate.getSecond().stream()
+                        .anyMatch(
+                                pos -> candidate
+                                        .getFirst().world
+                                        .getBlockState(pos)
+                                        .getBlock()
+                                        .equals(SuSyBlocks.TANK_SHELL)));
     }
 
     @Override
@@ -54,42 +54,58 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
     // for he knows their day is coming.
     @Override
     public Optional<ComponentLiquidFuelTank> readFromNBT(NBTTagCompound compound) {
-        if (compound.getString("type") != this.type || compound.getString("name") != this.name)
-            Optional.empty();
+        if (compound.getString("type").isEmpty() || compound.getString("name").isEmpty()) {
+            return Optional.empty();
+        }
+        if (!compound.hasKey("mass")) {
+            return Optional.empty();
+        }
+        if (!compound.hasKey("radius")) {
+            return Optional.empty();
+        }
+        if (!compound.hasKey("volume")) {
+            return Optional.empty();
+        }
+        if (!compound.hasKey("materials")) {
+            return Optional.empty();
+        }
+
         ComponentLiquidFuelTank tank = new ComponentLiquidFuelTank();
-        if (!compound.hasKey("mass", Constants.NBT.TAG_DOUBLE)) Optional.empty();
-        if (!compound.hasKey("radius", Constants.NBT.TAG_DOUBLE)) Optional.empty();
-        if (!compound.hasKey("area_ratio", Constants.NBT.TAG_DOUBLE)) Optional.empty();
-        if (!compound.hasKey("materials", Constants.NBT.TAG_LIST)) return Optional.empty();
         compound
                 .getTagList("materials", Constants.NBT.TAG_COMPOUND)
-                .forEach(x -> tank.materials.add(MaterialCost.fromNBT((NBTTagCompound) x)));
+                .forEach(tag -> tank.materials.add(MaterialCost.fromNBT((NBTTagCompound) tag)));
+
         tank.volume = compound.getInteger("volume");
         tank.radius = compound.getDouble("radius");
         tank.mass = compound.getDouble("mass");
-
         return Optional.of(tank);
     }
 
     @Override
     public Optional<NBTTagCompound> analyzePattern(StructAnalysis analysis, AxisAlignedBB aabb) {
-        Set<BlockPos> blocks = analysis.getBlockConn(aabb, analysis.getBlocks(analysis.world, aabb, true).get(0));
-        Tuple<Set<BlockPos>, Set<BlockPos>> hullData = analysis.checkHull(aabb, blocks, false);
+        List<BlockPos> detectedBlocks = analysis.getBlocks(analysis.world, aabb, true);
+        if (detectedBlocks.isEmpty()) {
+            analysis.status = BuildStat.ERROR;
+            return Optional.empty();
+        }
 
-        Set<BlockPos> hullBlocks = hullData.getFirst();
-        Set<BlockPos> interiorAir = hullData.getSecond();
+        Set<BlockPos> blocks = analysis.getBlockConn(aabb, detectedBlocks.get(0));
+        StructAnalysis.HullData hullData = analysis.checkHull(aabb, blocks, false);
+
+        Set<BlockPos> hullBlocks = hullData.exterior();
+        Set<BlockPos> interiorAir = hullData.interior();
 
         if (interiorAir.size() < 2) {
             analysis.status = BuildStat.HULL_FULL;
             return Optional.empty();
         }
 
-        Predicate<BlockPos> fuelPredicate = (block) -> {
-            Block b = analysis.world.getBlockState(block).getBlock();
-            return b.equals(SuSyBlocks.TANK_SHELL) || b.equals(SuSyBlocks.TANK_SHELL1);
+        Predicate<BlockPos> shellPredicate = block -> {
+            Block candidate = analysis.world.getBlockState(block).getBlock();
+            return candidate.equals(SuSyBlocks.TANK_SHELL) || candidate.equals(SuSyBlocks.TANK_SHELL1);
         };
         for (BlockPos block : hullBlocks) {
-            if (!fuelPredicate.test(block)) {
+            if (!shellPredicate.test(block)) {
                 analysis.status = BuildStat.HULL_WEAK;
                 return Optional.empty();
             }
@@ -98,48 +114,40 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
                 analysis.status = BuildStat.ERROR;
                 return Optional.empty();
             }
-            EnumFacing dir = analysis.world.getBlockState(block).getValue(FACING);
-            // ArrayList<BlockPos> neighbors = analysis.getBlockNeighbors(block, StructAnalysis.orthVecs);
+            EnumFacing facingFromBlock = analysis.world.getBlockState(block).getValue(FACING);
             for (EnumFacing facing : EnumFacing.values()) {
                 BlockPos neighbor = block.add(facing.getDirectionVec());
                 if (interiorAir.contains(neighbor)) {
-                    Vec3i diff = analysis.diff(neighbor, block);
-                    if (!diff.equals(dir.getOpposite().getDirectionVec())) { // incorrect with honeycombs
+                    Vec3i difference = analysis.diff(neighbor, block);
+                    if (!difference.equals(facingFromBlock.getDirectionVec())) { // incorrect with
+                        // honeycombs
                         analysis.status = BuildStat.HULL_WEAK;
                         return Optional.empty();
                     }
                 } else if (!interiorAir.contains(neighbor) &&
-                        (analysis.world.isAirBlock(neighbor) || !StructAnalysis.blockCont(
-                                aabb, neighbor))) { // this means it should be exterior air
-                                    if (!blockTiles.isCovered(facing)) {
-                                        analysis.status = BuildStat.MISSING_TILE;
-                                        return Optional.empty();
-                                    }
-                                }
+                        (analysis.world.isAirBlock(neighbor) ||
+                                !StructAnalysis.blockCont(aabb, neighbor))) { // this means it should be exterior air
+                    if (!blockTiles.isCovered(facing)) {
+                        analysis.status = BuildStat.MISSING_TILE;
+                        return Optional.empty();
+                    }
+                }
             }
         }
 
-        double radius = analysis.getApproximateRadius(blocks);
-        int height = (int) (analysis.getBB(blocks).maxZ - analysis.getBB(blocks).minZ);
-        if (height > radius * 2) {
+        double radius = analysis.getRadius(blocks);
+        int calculatedHeight = (int) (analysis.getBB(blocks).maxZ - analysis.getBB(blocks).minZ);
+        if (calculatedHeight > radius * 2) {
             analysis.status = BuildStat.TOO_SHORT;
         }
         NBTTagCompound tag = new NBTTagCompound();
 
         // The scan is successful by this point
         analysis.status = BuildStat.SUCCESS;
-        tag.setInteger("volume", ((Integer) interiorAir.size()));
         this.volume = interiorAir.size();
-        tag.setString("type", this.type);
-        tag.setString("name", this.name);
-        tag.setDouble("radius", Double.valueOf(radius));
-        this.radius = radius;
-        double mass = 0;
-        for (BlockPos block : blocks) {
-            mass += getMass(analysis.world.getBlockState(block));
-        }
-        tag.setDouble("mass", Double.valueOf(mass));
-        this.mass = mass;
+        tag.setInteger("volume", this.volume);
+
+        collectInfo(analysis, blocks, tag);
         writeBlocksToNBT(blocks, analysis.world);
         return Optional.of(tag);
     }

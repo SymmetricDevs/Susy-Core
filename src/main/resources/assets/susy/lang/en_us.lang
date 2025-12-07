@@ -74,7 +74,7 @@ tile.rocket_nozzle.bell_basic.name=Bell Rocket Nozzle Shell
 tile.rocket_combustion_chamber.monopropellant.name=Monopropellant Combustion Chamber
 tile.rocket_combustion_chamber.bipropellant.name=Bipropellant Combustion Chamber
 tile.rocket_combustion_chamber.oxidiser.name=Oxidiser Combustion Chamber
-tile.spacecraft_life_support.oxygen_regen.name=Life Support for Oxygen Regen
+tile.spacecraft_life_support.oxygen_regen.name=Oxygen Regenerator
 tile.spacecraft_instrument.sensors.name=Spacecraft Sensor Array
 tile.spacecraft_hull.al_li.name=Al-Li Spacecraft Shell
 tile.rocket_nozzle.plug.name=Rocket Nozzle Plug
@@ -275,12 +275,21 @@ susy.machine.blueprint_assembler.stagename=Stage: %s
 susy.machine.blueprint_assembler.build_button_label=Build
 susy.machine.blueprint_assembler.blueprint_request=Insert Blueprint:
 
-susy.rocketry.components.engine.name=engine(s)
-susy.rocketry.components.engine_small.name=vernier engine(s)
-susy.rocketry.components.tank.name=tank(s)
-susy.rocketry.stages.block_F.name=block F
-susy.rocketry.stages.block_A.name=block A
-susy.rocketry.stages.boosters.name=boosters
+
+susy.rocketry.components.engine.name=Engine(s)
+susy.rocketry.components.engine_small.name=Vernier engine(s)
+susy.rocketry.components.tank.name=Tank(s)
+
+susy.rocketry.components.validation_codes.invalid_amount=Invalid amount of components
+susy.rocketry.component.validation_codes.invalid_amount=Invalid amount of commponents inserted
+susy.rocketry.components.validation_codes.invalid_card=Malformed component card
+susy.rocketry.components.validation_codes.incompatible_card=Incompatible card
+susy.rocketry.components.validation_codes.unknown=Something broke
+susy.rocketry.components.validation_codes.success=Blueprint assembled successfully
+
+susy.rocketry.stages.block_F.name=Block F
+susy.rocketry.stages.block_A.name=Block A
+susy.rocketry.stages.boosters.name=Boosters
 
 susy.machine.magnetic_refrigerator.name=Magnetic Refrigerator
 susy.multiblock.magnetic_refrigerator.min_temperature=§bTemperature Limit: %s
@@ -1406,5 +1415,6 @@ susy.msg.rocket_component.too_short=The component is too short!
 susy.msg.rocket_component.conn_unaligned=The fairing connectors are not in planar alignment.
 susy.msg.rocket_component.conn_wrong_dir=A fairing connector is facing a block.
 susy.msg.rocket_component.wrong_tile=A tile was used incorrectly.
+susy.msg.rocket_component.interstage_not_cylindrical=The interstage looks weird.
 
 entity.Rocket.name=Soyuz FG Rocket

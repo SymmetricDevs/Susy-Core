@@ -1,6 +1,7 @@
 package supersymmetry.api.util;
 
 import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
+import static supersymmetry.api.util.Welzl.computeMinimalRadius;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -9,7 +10,6 @@ import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -19,10 +19,12 @@ import net.minecraft.world.World;
 import gregtech.api.pattern.BlockWorldState;
 import gregtech.api.pattern.PatternMatchContext;
 import supersymmetry.SuSyValues;
+import supersymmetry.api.SusyLog;
 
 public class StructAnalysis {
 
     public BuildStat status = BuildStat.SUCCESS;
+
 
     public enum BuildStat {
 
@@ -65,7 +67,7 @@ public class StructAnalysis {
         public String getCode() {
             return code;
         }
-    };
+    }
 
     public World world;
 
@@ -73,9 +75,9 @@ public class StructAnalysis {
         this.world = world;
     }
 
-    public static Vec3i layerVecs[] = new Vec3i[] { new Vec3i(1, 0, 0), new Vec3i(0, 0, 1) };
-    public static Vec3i orthVecs[] = new Vec3i[] { new Vec3i(1, 0, 0), new Vec3i(0, 1, 0), new Vec3i(0, 0, 1) };
-    public static Vec3i neighborVecs[] = new Vec3i[] {
+    public static Vec3i[] layerVecs = new Vec3i[] { new Vec3i(1, 0, 0), new Vec3i(0, 0, 1) };
+    public static Vec3i[] orthVecs = new Vec3i[] { new Vec3i(1, 0, 0), new Vec3i(0, 1, 0), new Vec3i(0, 0, 1) };
+    public static Vec3i[] neighborVecs = new Vec3i[] {
             new Vec3i(1, 0, 0), new Vec3i(-1, 0, 0),
             new Vec3i(0, 1, 0), new Vec3i(0, -1, 0),
             new Vec3i(0, 0, 1), new Vec3i(0, 0, -1),
@@ -90,7 +92,7 @@ public class StructAnalysis {
             new Vec3i(-1, 1, 1), new Vec3i(1, -1, -1),
             new Vec3i(1, -1, 1), new Vec3i(-1, 1, -1)
     };
-    private static AxisAlignedBB MAX_BB = new AxisAlignedBB(-3.0E7, 0, -3.0E7, 3.0E7, 255, 3.0E7);
+    private static final AxisAlignedBB MAX_BB = new AxisAlignedBB(-3.0E7, 0, -3.0E7, 3.0E7, 255, 3.0E7);
 
     public ArrayList<BlockPos> getBlocks(World world, AxisAlignedBB faaBB, boolean checkAir) {
         AxisAlignedBB aaBB = new AxisAlignedBB(Math.round(faaBB.minX), Math.round(faaBB.minY),
@@ -116,11 +118,11 @@ public class StructAnalysis {
 
     public Set<BlockPos> getBlockConn(AxisAlignedBB aaBB, BlockPos beg) {
         if (!blockCont(aaBB, beg)) {
-            return new HashSet<BlockPos>(); // wtf moment
+            return new HashSet<>(); // wtf moment
         }
         Set<BlockPos> blocksCollected = new HashSet<BlockPos>();
         blocksCollected.add(beg);
-        Queue<BlockPos> uncheckedBlocks = new ArrayDeque<>(Arrays.asList(beg));
+        Queue<BlockPos> uncheckedBlocks = new ArrayDeque<>(List.of(beg));
 
         while (!uncheckedBlocks.isEmpty()) {
             BlockPos bp = uncheckedBlocks.remove();
@@ -132,13 +134,10 @@ public class StructAnalysis {
         return blocksCollected;
     }
 
-    /**
-     * Returns as a tuple:
-     * - The blocks comprising the exterior
-     * - The air exposed to the rest
-     */
-    public Tuple<Set<BlockPos>, Set<BlockPos>> checkHull(AxisAlignedBB aaBB, Set<BlockPos> actualBlocks,
-                                                         boolean testStrength) {
+    public record HullData(Set<BlockPos> exterior, Set<BlockPos> interior) {}
+
+    public HullData checkHull(AxisAlignedBB aaBB, Set<BlockPos> actualBlocks,
+                              boolean testStrength) {
         AxisAlignedBB floodBB = aaBB.grow(1);// initializes flood fill box
         BlockPos bottom = new BlockPos(floodBB.minX, floodBB.minY, floodBB.minZ); // initializes flood fill start
         Queue<BlockPos> uncheckedBlocks = new ArrayDeque<>();
@@ -175,7 +174,7 @@ public class StructAnalysis {
             status = BuildStat.HULL_FULL;
             return null;
         }
-        return new Tuple<>(hullBlocks, air);
+        return new HullData(hullBlocks, air);
     }
 
     public ArrayList<BlockPos> getBlockNeighbors(BlockPos beg, AxisAlignedBB aaBB) {
@@ -202,11 +201,22 @@ public class StructAnalysis {
         return neighbors;
     }
 
+    /**
+     * Checks if a block is within an axis aligned bounding box
+     * @param bb the bounding box
+     * @param bp the block position
+     * @return If the block is inside or not
+     */
     public static boolean blockCont(AxisAlignedBB bb, BlockPos bp) {
         return bb.minX <= bp.getX() && bb.minY <= bp.getY() && bb.minZ <= bp.getZ() &&
                 bb.maxX > bp.getX() && bb.maxY > bp.getY() && bb.maxZ > bp.getZ();
     }
 
+    /**
+     * Creates a hash set of all block positions within an AABB
+     * @param bb the AABB to find all blocks fitting inside
+     * @return A hash set
+     */
     public HashSet<BlockPos> getBlocks(AxisAlignedBB bb) {
         HashSet<BlockPos> ret = new HashSet<>();
         for (int x = (int) bb.minX; x < bb.maxX; x++) {
@@ -219,6 +229,11 @@ public class StructAnalysis {
         return ret;
     }
 
+    /**
+     *
+     * @param sect
+     * @return
+     */
     public List<HashSet<BlockPos>> getPartitions(AxisAlignedBB sect) {
         Predicate<BlockPos> isNotObstacle = ((Predicate<BlockPos>) world::isAirBlock).or(bp -> !blockCont(sect, bp));
         Set<BlockPos> blocks = getBlocks(sect).stream().filter(isNotObstacle).collect(Collectors.toSet());
@@ -256,28 +271,7 @@ public class StructAnalysis {
         Set<BlockPos> blocks = getBlocks(sect).stream().filter(isNotObstacle).collect(Collectors.toSet());
         // the one-argument getBlocks doesn't care about air blocks (again)
 
-        List<HashSet<BlockPos>> partitions = new ArrayList<>();
-        Set<BlockPos> consumed = new HashSet<>();
-        for (BlockPos block : blocks) {
-            if (consumed.contains(block)) {
-                continue;
-            }
-            consumed.add(block);
-            ArrayDeque<BlockPos> remaining = new ArrayDeque<>();
-            HashSet<BlockPos> bPart = new HashSet<>();
-            remaining.add(block);
-            while (!remaining.isEmpty()) {
-                BlockPos bp = remaining.pop();
-                bPart.add(bp);
-                Stream<BlockPos> stream = getBlockNeighbors(bp, sect, layerVecs).stream()
-                        .filter(((Predicate<BlockPos>) bPart::contains).negate().and(isNotObstacle));
-                remaining.addAll(getBlockNeighbors(bp, sect, layerVecs).stream()
-                        .filter(((Predicate<BlockPos>) bPart::contains).negate().and(isNotObstacle))
-                        .collect(Collectors.toList()));
-                stream.forEach(consumed::add);
-            }
-            partitions.add(bPart);
-        }
+        List<HashSet<BlockPos>> partitions = getPartitions(sect);
         // This looks cursed, but the idea is to ensure that
         if (partitions.size() != 2) {
             status = BuildStat.NOZZLE_MALFORMED;
@@ -296,8 +290,13 @@ public class StructAnalysis {
         return null;
     }
 
-    // Gets all blocks bordering a region
-    public Set<BlockPos> getPerimeter(Collection<BlockPos> blocks, Vec3i vecs[]) {
+    /**
+     * Gets all blocks bordering a collection of BlockPoses given a certain neighborhood
+     * @param blocks The blocks to find those around.
+     * @param vecs The offsets of blocks considered in a neighborhood
+     * @return A set containing the border, not any of blocks.
+     */
+    public Set<BlockPos> getPerimeter(Collection<BlockPos> blocks, Vec3i[] vecs) {
         Set<BlockPos> ret = new HashSet<>();
         for (BlockPos block : blocks) {
             ret.addAll(getBlockNeighbors(block, MAX_BB, vecs).stream()
@@ -321,31 +320,48 @@ public class StructAnalysis {
         return new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
-    public double getApproximateRadius(Collection<BlockPos> blocks) {
-        double avgX = 0, avgZ = 0;
-
-        for (BlockPos block : blocks) {
-            avgX += block.getX();
-            avgZ += block.getZ();
+    public double getRadius(Collection<BlockPos> blocks) {
+        if (blocks.isEmpty()) {
+            SusyLog.logger.warn("No blocks were found in {}!", blocks);
+            return 0;
         }
-        avgX /= blocks.size();
-        avgZ /= blocks.size();
 
-        double radius = 0;
-        double X = avgX, Z = avgZ; // apparently maps don't like possibly mutated variables
-
-        List<Double> dists = blocks.stream().map(blockPos -> blockPos.distanceSq(X, blockPos.getY(), Z))
+        List<Welzl.Point2D> points = blocks.stream()
+                .map(blockPos -> new Welzl.Point2D(blockPos.getX(), blockPos.getZ()))
                 .collect(Collectors.toList());
-        // calculate the median
-        dists.sort(Double::compare);
-        if (dists.size() % 2 == 0)
-            return (dists.get(dists.size() / 2 - 1) + dists.get(dists.size() / 2)) / 2;
-        else
-            return dists.get(dists.size() / 2);
+
+        return computeMinimalRadius(points);
     }
 
+    public int getHeight(Collection<BlockPos> blocks) {
+        // Get max and min at same time
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+
+        for (BlockPos block : blocks) {
+            int y = block.getY();
+            if (y > max) {
+                max = y;
+            }
+            if (y < min) {
+                min = y;
+            }
+        }
+
+        return max - min;
+    }
+
+    /**
+     * Gets the lowest layer of a set of blocks
+     * @param set A set of blocks
+     * @return All blocks in set with the minimum Y value
+     */
     public Set<BlockPos> getLowestLayer(Set<BlockPos> set) {
-        return set.stream().filter(bp -> bp.getY() == set.stream().map(Vec3i::getY).min(Integer::compare).get())
+        if (set.isEmpty()) {
+            return new HashSet<>();
+        }
+        int minY = set.stream().map(Vec3i::getY).min(Integer::compare).get();
+        return set.stream().filter(bp -> bp.getY() == minY)
                 .collect(Collectors.toSet());
     }
 

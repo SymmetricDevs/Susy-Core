@@ -8,6 +8,7 @@ import javax.annotation.Nonnull;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
@@ -33,6 +34,7 @@ import gregtech.api.util.Size;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import supersymmetry.api.SusyLog;
+import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.metatileentity.multiblock.IRedstoneControllable;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
@@ -42,10 +44,10 @@ import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.common.blocks.BlockRocketAssemblerCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.entities.EntityRocket;
 import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityComponentRedstoneController;
 import supersymmetry.common.mui.widget.ItemCostWidget;
 import supersymmetry.common.mui.widget.SlotWidgetMentallyStable;
-import supersymmetry.common.entities.EntityRocket;
 
 public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                                            implements IProgressBarMultiblock, IRedstoneControllable {
@@ -68,12 +70,36 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
 
     // list of every component that has to be constructed.
     public List<AbstractComponent<?>> componentList = new ArrayList<>();
-
     public int componentIndex = 0;
-
     public boolean isWorking = false;
     private List<String> signalNames = new ArrayList<>();
     private List<Runnable> signalActions = new ArrayList<>();
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        data = super.writeToNBT(data);
+        data.setTag("blueprint", this.blueprintSlot.getStackInSlot(0).writeToNBT(new NBTTagCompound()));
+
+        data.setBoolean("isWorking", isWorking);
+        data.setInteger("componentIndex", componentIndex);
+
+        return data;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound data) {
+        super.readFromNBT(data);
+        NBTTagCompound stackdata = (NBTTagCompound) data.getTag("blueprint");
+        if (stackdata != null && stackdata != new NBTTagCompound()) {
+            ItemStack stack = new ItemStack(stackdata);
+            this.blueprintSlot.setStackInSlot(0, stack);
+            if (!this.blueprintSlot.isEmpty()) {
+                this.startAssembly(this.getCurrentBlueprint());
+            }
+        }
+        this.componentIndex = data.getInteger("componentIndex");
+        this.isWorking = data.getBoolean("isWorking");
+    }
 
     public MetaTileEntityRocketAssembler(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.ROCKET_ASSEMBLER);
@@ -126,7 +152,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
 
     public void abortAssembly() {
         this.blueprintSlot.setLocked(false);
-        SusyLog.logger.info("assembly force stopped");
+        // SusyLog.logger.info("assembly force stopped");
         this.isWorking = false;
         this.componentIndex = 0;
         this.componentList.clear();
@@ -134,14 +160,15 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     }
 
     public void finishAssembly() {
-        SusyLog.logger.info("assembly finished");
+        // SusyLog.logger.info("assembly finished");
         this.blueprintSlot.setLocked(false);
         this.isWorking = false;
         this.componentIndex = 0;
         this.componentList.clear();
         // TODO: actually spawn the rocket entity?
-        EntityRocket newRocket = new EntityRocket(this.getWorld(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 90);
-        //abortAssembly();
+        EntityRocket newRocket = new EntityRocket(
+                this.getWorld(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 90);
+        // abortAssembly();
     }
 
     public void startAssembly(AbstractRocketBlueprint bp) {
@@ -180,13 +207,13 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         if (!isWorking) return;
         if (this.componentList.size() - 1 > this.componentIndex) {
             this.componentIndex++;
-            SusyLog.logger.info(
-                    "processing component {}/{}, isWorking:{},component:{}",
-                    this.componentIndex,
-                    this.componentList.size(),
-                    this.isWorking,
-                    getCurrentCraftTarget() == null ? null : getCurrentCraftTarget().getName());
-
+            // SusyLog.logger.info(
+            // "processing component {}/{}, isWorking:{},component:{}",
+            // this.componentIndex,
+            // this.componentList.size(),
+            // this.isWorking,
+            // getCurrentCraftTarget() == null ? null : getCurrentCraftTarget().getName());
+            //
         } else {
             finishAssembly();
         }
@@ -628,16 +655,18 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                         143,
                         18,
                         18,
-                        "susy.machine.rocket_assembler.gui.start",
+                        "",
                         (clickData -> {
                             if (!this.blueprintSlot.isEmpty()) {
                                 this.startAssembly(this.getCurrentBlueprint());
                             }
-                        })));
+                        }))
+                                .setTooltipText("susy.machine.rocket_assembler.gui.start")
+                                .setButtonTexture(SusyGuiTextures.ROCKET_ASSEMBLER_BUTTON_START));
 
         builder.widget(getFlexButton(173, 125, 18, 18));
         builder.dynamicLabel(
-                110,
+                80,
                 52,
                 () -> {
                     return !blueprintSlot.isEmpty() ? "" : I18n.format(this.getMetaName() + ".blueprint_slot.name");
@@ -673,9 +702,11 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                 y,
                 width,
                 height,
-                "susy.machine.rocket_assembler.gui.stop",
+                "",
                 (clickData -> {
                     this.abortAssembly();
-                }));
+                }))
+                        .setButtonTexture(SusyGuiTextures.ROCKET_ASSEMBLER_BUTTON_STOP)
+                        .setTooltipText("susy.machine.rocket_assembler.gui.stop");
     }
 }

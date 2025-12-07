@@ -103,14 +103,14 @@ public class HorizontalScrollableListWidget extends AbstractWidgetGroup {
         Size size = getSize();
         int paneSize = scrollPaneWidth; // ---##------- <- that slidey bit width, along with the bar itself
         if (sliderActive) {
-            SusyGuiTextures.SPACEFLIGHT_SIMULATOR_SLIDER_BACKGROUND.draw(
+            SusyGuiTextures.BLUEPRINT_ASSEMBLER_SLIDER_BACKGROUND.draw(
                     position.x, position.y - paneSize, size.width, paneSize);
             int scrollSliderY = position.y - paneSize;
 
             int maxScrollOffset = getMaxScrollOffset();
             float scrollPercent = maxScrollOffset == 0 ? 0 : scrollOffset / (maxScrollOffset * 1.0f);
             int scrollSliderX = Math.round(position.x + (size.width - paneSize) * scrollPercent);
-            SusyGuiTextures.SPACEFLIGHT_SIMULATOR_SLIDER.draw(
+            SusyGuiTextures.BLUEPRINT_ASSEMBLER_SLIDER.draw(
                     scrollSliderX, scrollSliderY + 1, paneSize, paneSize - 2);
         } else {
             paneSize = 0;

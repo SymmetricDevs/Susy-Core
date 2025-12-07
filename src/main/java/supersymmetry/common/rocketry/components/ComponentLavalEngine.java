@@ -28,22 +28,20 @@ import supersymmetry.common.blocks.rocketry.BlockCombustionChamber;
 
 public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine> {
 
-    public double radius;
-    public double area_ratio;
-    public double fuel_throughput;
+    public double areaRatio;
+    public double fuelThroughput;
 
     public ComponentLavalEngine() {
         super(
                 "laval_engine",
                 "engine",
-                t -> {
-                    return t.getSecond().stream()
-                            .anyMatch(
-                                    bp -> t.getFirst().world
-                                            .getBlockState(bp)
-                                            .getBlock()
-                                            .equals(SuSyBlocks.COMBUSTION_CHAMBER));
-                });
+                candidate -> candidate.getSecond().stream()
+                        .anyMatch(
+                                pos -> candidate
+                                        .getFirst().world
+                                        .getBlockState(pos)
+                                        .getBlock()
+                                        .equals(SuSyBlocks.COMBUSTION_CHAMBER)));
         this.setComponentSlotValidator(
                 x -> x.equals(this.getName()) || x.equals(this.getType()) ||
                         (x.equals(this.getType() + "_small") && this.radius < 2) ||
@@ -54,14 +52,15 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         tag.setDouble("radius", this.radius);
-        tag.setDouble("area_ratio", this.area_ratio);
-        tag.setDouble("throughput", this.fuel_throughput);
+        tag.setDouble("area_ratio", this.areaRatio);
+        tag.setDouble("throughput", this.fuelThroughput);
     }
 
     @Override
     public Optional<ComponentLavalEngine> readFromNBT(NBTTagCompound compound) {
-        if (compound.getString("type") != this.type || compound.getString("name") != this.name)
-            Optional.empty();
+        if (compound.getString("type").isEmpty() || compound.getString("name").isEmpty()) {
+            return Optional.empty();
+        }
         ComponentLavalEngine engine = new ComponentLavalEngine();
         if (!compound.hasKey("mass", Constants.NBT.TAG_DOUBLE)) return Optional.empty();
         if (!compound.hasKey("radius", Constants.NBT.TAG_DOUBLE)) return Optional.empty();
@@ -72,13 +71,13 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
                 .getTagList("materials", Constants.NBT.TAG_COMPOUND)
                 .forEach(x -> engine.materials.add(MaterialCost.fromNBT((NBTTagCompound) x)));
 
-        engine.area_ratio = compound.getDouble("area_ratio");
+        engine.areaRatio = compound.getDouble("area_ratio");
         engine.radius = compound.getDouble("radius");
         engine.mass = compound.getDouble("mass");
-        engine.fuel_throughput = compound.getDouble("throughput");
+        engine.fuelThroughput = compound.getDouble("throughput");
 
         if (engine.materials.isEmpty()) {
-            SusyLog.logger.warn("shitten poopen farten no materialen from compounden {}", compound);
+            SusyLog.logger.warn("No materials were found in {}!", compound);
         }
         return Optional.of(engine);
     }
@@ -126,8 +125,8 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
                 return Optional.empty();
             }
         }
-        float area_ratio = ((float) fin) / initial;
-        if (area_ratio < 1.5) {
+        float computedAreaRatio = ((float) fin) / initial;
+        if (computedAreaRatio < 1.5) {
             analysis.status = BuildStat.NOT_LAVAL;
         }
 
@@ -156,7 +155,7 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
         IBlockState chamberState = analysis.world.getBlockState(cChamber);
         int pumpNum = ((BlockCombustionChamber.CombustionType) (((VariantBlock<?>) chamberState.getBlock())
                 .getState(chamberState)))
-                        .getMinPumps();
+                .getMinPumps();
         if (pumps.size() < pumpNum) {
             analysis.status = BuildStat.WRONG_NUM_PUMPS;
             return Optional.empty();
@@ -181,31 +180,26 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
         analysis.status = BuildStat.SUCCESS;
         // currently a double
         NBTTagCompound tag = new NBTTagCompound();
-        tag.setDouble("area_ratio", area_ratio);
-        this.area_ratio = area_ratio;
-        tag.setString("type", this.type);
-        tag.setString("name", this.name);
-        double mass = 0;
-        for (BlockPos block : blocks) {
-            mass += getMass(analysis.world.getBlockState(block));
-        }
-        double innerRadius = analysis.getApproximateRadius(
+        tag.setDouble("area_ratio", computedAreaRatio);
+        this.areaRatio = computedAreaRatio;
+        // Not the default; more of an inner radius
+        this.radius = analysis.getRadius(
                 blocks.stream().filter(bp -> bp.getY() == nozzleBB.maxY).collect(Collectors.toSet()));
-        tag.setDouble("radius", Double.valueOf(innerRadius));
-        this.radius = innerRadius;
-        tag.setDouble("mass", Double.valueOf(mass));
-        this.mass = mass;
+        tag.setDouble("radius", radius);
+
+        collectInfo(analysis, blocks, tag);
 
         double throughput = 0;
-        // this crashes :C
+
+        // TODO this crashes :C
         // for (BlockPos pumpPos : pumps) {
         // IBlockState pump = analysis.world.getBlockState(pumpPos);
         // throughput += ((BlockTurboPump.HPPType) (((VariantBlock<?>)
         // pump)).getState(pump)).getThroughput();
         // }
 
-        this.fuel_throughput = throughput;
-        tag.setDouble("throughput", fuel_throughput);
+        this.fuelThroughput = throughput;
+        tag.setDouble("throughput", fuelThroughput);
 
         writeBlocksToNBT(blocks, analysis.world);
         return Optional.of(tag);

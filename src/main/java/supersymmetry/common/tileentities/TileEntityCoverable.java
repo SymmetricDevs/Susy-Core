@@ -8,6 +8,7 @@ import codechicken.lib.raytracer.CuboidRayTraceResult;
 import gregtech.api.cover.Cover;
 import gregtech.api.cover.CoverRayTracer;
 import gregtech.api.items.toolitem.ToolClasses;
+import codechicken.lib.vec.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;

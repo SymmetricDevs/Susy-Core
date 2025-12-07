@@ -7,8 +7,9 @@ import net.minecraft.util.IStringSerializable;
 
 import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantBlock;
+import supersymmetry.api.rocketry.WeightedBlock;
 
-public class BlockRocketNozzle extends VariantBlock<BlockRocketNozzle.NozzleShapeType> {
+public class BlockRocketNozzle extends VariantBlock<BlockRocketNozzle.NozzleShapeType> implements WeightedBlock {
 
     public BlockRocketNozzle() {
         super(Material.IRON);
@@ -48,5 +49,16 @@ public class BlockRocketNozzle extends VariantBlock<BlockRocketNozzle.NozzleShap
         public String getName() {
             return this.name;
         }
+    }
+
+    @Override
+    public double getMass(IBlockState state) {
+        NozzleShapeType type = getState(state);
+        double multiplier = switch (type) {
+            case BELL_NOZZLE -> 60.0;
+            case PLUG_NOZZLE -> 65.0;
+            case EXPANDING_NOZZLE -> 80.0;
+        };
+        return 500 + 100 * multiplier;
     }
 }

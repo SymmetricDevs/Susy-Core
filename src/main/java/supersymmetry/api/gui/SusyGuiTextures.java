@@ -64,16 +64,20 @@ public class SusyGuiTextures {
             .fullImage("textures/gui/widget/icon_indicator_arrow.png");
     public static final TextureArea BUTTON_ENERGY_VOIDING = TextureArea
             .fullImage("textures/gui/widget/button_energy_voiding.png");
-    public static final TextureArea SPACEFLIGHT_SIMULATOR_SLIDER_BACKGROUND = TextureArea
+    public static final TextureArea BLUEPRINT_ASSEMBLER_SLIDER_BACKGROUND = TextureArea
             .fullImage("textures/gui/widget/slider_background_dark.png");
-    public static final TextureArea SPACEFLIGHT_SIMULATOR_SLIDER = TextureArea
+    public static final TextureArea BLUEPRINT_ASSEMBLER_SLIDER = TextureArea
             .fullImage("textures/gui/widget/slider_dark.png");
-    public static final TextureArea SPACEFLIGHT_SIMULATOR_BUTTON_LEFT = TextureArea
+    public static final TextureArea BLUEPRINT_ASSEMBLER_BUTTON_LEFT = TextureArea
             .fullImage("textures/gui/widget/button_left_dark.png");
-    public static final TextureArea SPACEFLIGHT_SIMULATOR_BUTTON_RIGHT = TextureArea
+    public static final TextureArea BLUEPRINT_ASSEMBLER_BUTTON_RIGHT = TextureArea
             .fullImage("textures/gui/widget/button_right_dark.png");
-    public static final TextureArea SPACEFLIGHT_SIMULATOR_BUTTON_SHORTVIEW = TextureArea
-            .fullImage("textures/gui/widget/circle_geen.png");
+    public static final TextureArea BLUEPRINT_ASSEMBLER_BUTTON_SHORTVIEW = TextureArea
+            .fullImage("textures/gui/widget/circle_green.png");
+    public static final TextureArea ROCKET_ASSEMBLER_BUTTON_STOP = TextureArea
+            .fullImage("textures/gui/widget/hazard.png");
+    public static final TextureArea ROCKET_ASSEMBLER_BUTTON_START = TextureArea
+            .fullImage("textures/gui/widget/suspicious_button.png");
 
     public static final UITexture BACKGROUND_POPUP = UITexture.builder()
             .location(GTValues.MODID, "textures/gui/base/background_popup.png")

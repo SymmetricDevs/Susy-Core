@@ -1,7 +1,5 @@
 package supersymmetry.common.blocks.rocketry;
 
-import gregtech.api.unification.OreDictUnifier;
-import gregtech.api.unification.ore.OrePrefix;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
@@ -9,8 +7,6 @@ import net.minecraft.util.IStringSerializable;
 
 import supersymmetry.api.blocks.VariantDirectionalCoverableBlock;
 import supersymmetry.common.item.SuSyMetaItems;
-
-import static supersymmetry.common.materials.SusyMaterials.MetallizedBoPET;
 
 public class BlockRoomPadding extends VariantDirectionalCoverableBlock<BlockRoomPadding.CoveringType> {
 

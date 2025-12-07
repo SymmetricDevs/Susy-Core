@@ -7,8 +7,10 @@ import net.minecraft.util.IStringSerializable;
 
 import gregtech.api.block.IStateHarvestLevel;
 import supersymmetry.api.blocks.VariantDirectionalRotatableBlock;
+import supersymmetry.api.rocketry.WeightedBlock;
 
-public class BlockTurboPump extends VariantDirectionalRotatableBlock<BlockTurboPump.HPPType> {
+public class BlockTurboPump extends VariantDirectionalRotatableBlock<BlockTurboPump.HPPType>
+        implements WeightedBlock {
 
     public BlockTurboPump() {
         super(Material.IRON);
@@ -56,5 +58,14 @@ public class BlockTurboPump extends VariantDirectionalRotatableBlock<BlockTurboP
         public double getThroughput() {
             return this.throughput;
         }
+    }
+
+    @Override
+    public double getMass(IBlockState state) {
+        HPPType type = getState(state);
+        double multiplier = switch (type) {
+            case BASIC -> 150.0;
+        };
+        return 1000 + 100 * multiplier;
     }
 }

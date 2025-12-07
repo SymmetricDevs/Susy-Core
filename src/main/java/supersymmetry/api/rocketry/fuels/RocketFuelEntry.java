@@ -4,19 +4,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import gregtech.api.unification.material.Material;
 import org.apache.commons.lang3.tuple.Triple;
+
+import gregtech.api.unification.material.Material;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 
 public class RocketFuelEntry {
-    Material material; // the main fuel
-    ArrayList<Triple<Material, Double, Double>> sides; // any extra required materials, their proportions, and their densities
-    String registryName;
-    double density; // kg/L
-    double sIVacuum; // kg * m / s
-    double sIPerPressure;
 
-    public RocketFuelEntry(String registryName, Material material, ArrayList<Triple<Material, Double, Double>> sides, double density, double sIVacuum, double sIPerPressure) {
+    private Material material; // the main fuel
+    private ArrayList<Triple<Material, Double, Double>> sides; // any extra required materials, their proportions, and
+                                                               // their
+    // densities
+    private String registryName;
+    private double density; // kg/L
+    private double sIVacuum; // kg * m / s
+    private double sIPerPressure;
+
+    public RocketFuelEntry(String registryName, Material material, ArrayList<Triple<Material, Double, Double>> sides,
+                           double density, double sIVacuum, double sIPerPressure) {
         this.registryName = registryName;
         this.material = material;
         this.sides = sides;
@@ -83,5 +88,7 @@ public class RocketFuelEntry {
         return this.sIVacuum;
     }
 
-    public double getSIVariation() {return this.sIPerPressure;}
+    public double getSIVariation() {
+        return this.sIPerPressure;
+    }
 }

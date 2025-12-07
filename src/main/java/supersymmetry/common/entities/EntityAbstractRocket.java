@@ -11,6 +11,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.world.World;
 
+import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.common.blocks.rocketry.BlockSpacecraftInstrument;
 import supersymmetry.common.rocketry.RocketConfiguration;
 
@@ -187,4 +188,8 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
     public boolean canBePushed() {
         return false;
     }
+
+    public abstract RocketFuelEntry getFuel();
+
+    public abstract double getCargoMass();
 }
