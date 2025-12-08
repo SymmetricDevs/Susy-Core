@@ -43,12 +43,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
-import org.lwjgl.opengl.GL11;
 import supersymmetry.client.renderer.handler.VariantCoverableBlockRenderer;
 import supersymmetry.common.tileentities.TileEntityCoverable;
-
-import static supersymmetry.client.renderer.handler.GridOverlayRenderer.renderGridOverlays;
-import static supersymmetry.client.renderer.handler.GridOverlayRenderer.shouldRenderGridOverlays;
 
 public class VariantDirectionalCoverableBlock<T extends Enum<T> & IStringSerializable> extends
                                              VariantDirectionalRotatableBlock<T> implements ITileEntityProvider {
@@ -60,7 +56,7 @@ public class VariantDirectionalCoverableBlock<T extends Enum<T> & IStringSeriali
         // CustomBlockRotations.registerCustomRotation(this, BLOCK_DIRECTIONAL_BEHAVIOR);
     }
 
-    protected Predicate<ItemStack> validCover;
+    public Predicate<ItemStack> validCover;
 
     @Nonnull
     @Override

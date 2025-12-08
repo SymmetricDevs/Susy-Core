@@ -41,11 +41,14 @@ import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 import scala.reflect.internal.Trees;
 import supersymmetry.Supersymmetry;
+import supersymmetry.api.blocks.VariantDirectionalCoverableBlock;
 import supersymmetry.common.tileentities.TileEntityCoverable;
 
 import java.util.Set;
 import java.util.function.BooleanSupplier;
 import java.util.function.Predicate;
+
+import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class GridOverlayRenderer {
@@ -83,7 +86,13 @@ public class GridOverlayRenderer {
               (float) Math.sin((float) (System.currentTimeMillis() % (Math.PI * 800)) / 800) / 2;
 
       if (tile instanceof TileEntityCoverable) {
-        drawGridOverlays(facing,box,face -> ((TileEntityCoverable) tile).isCovered(face));
+        ItemStack item = player.getHeldItemMainhand();
+        VariantDirectionalCoverableBlock<?> block = (VariantDirectionalCoverableBlock<?>) state.getBlock();
+        if (block.validCover.test(item)) {
+          drawGridOverlays(facing,box,face -> ((TileEntityCoverable) tile).isCovered(face));
+        } else {
+          drawGridOverlays(facing,box, face -> face.equals(state.getValue(FACING)));
+        }
       }
       GlStateManager.depthMask(true);
       GlStateManager.enableTexture2D();

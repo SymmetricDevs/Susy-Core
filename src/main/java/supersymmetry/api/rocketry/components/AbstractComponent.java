@@ -258,5 +258,6 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
     public abstract Optional<T> readFromNBT(NBTTagCompound compound);
 
     public double getHeight() {
+        return this.height;
     }
 }
