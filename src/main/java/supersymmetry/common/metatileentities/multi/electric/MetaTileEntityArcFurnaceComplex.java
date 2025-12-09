@@ -62,7 +62,7 @@ public class MetaTileEntityArcFurnaceComplex extends MetaTileEntityAdvancedArcFu
                         " AAAAA   AAAAA ", "               ")
                 .aisle(" AAAAA   AAAAA ", "AABBBAA AABBBAA", "AB###BA AB###BA", "EB###BE EB###BE", "A##C##A A##C##A",
                         "E##C##E E##C##E", "A##C##A A##C##A", " AACAA   AACAA ", "   C       C   ", "   C       C   ",
-                        "  ACA     ACA  ", "   C       C   ")
+                        " AACAA   AACAA ", "   C       C   ")
                 .aisle("  AAA     AAA  ", " AAAAA   AAAAA ", " ABBBA   ABBBA ", " EBBBE   EBBBE ", " A###A   A###A ",
                         " E###E   E###E ", " A###A   A###A ", "  AAA     AAA  ", "               ", "               ",
                         "  A A     A A  ", "               ")
