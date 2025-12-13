@@ -10,7 +10,7 @@ import gregtech.api.block.VariantBlock;
 import supersymmetry.api.rocketry.WeightedBlock;
 
 public class BlockCombustionChamber extends VariantBlock<BlockCombustionChamber.CombustionType>
-        implements WeightedBlock {
+                                    implements WeightedBlock {
 
     public BlockCombustionChamber() {
         super(Material.IRON);

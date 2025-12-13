@@ -26,7 +26,6 @@ public class StructAnalysis {
 
     public BuildStat status = BuildStat.SUCCESS;
 
-
     public enum BuildStat {
 
         SUCCESS("build_success"),
@@ -204,6 +203,7 @@ public class StructAnalysis {
 
     /**
      * Checks if a block is within an axis aligned bounding box
+     * 
      * @param bb the bounding box
      * @param bp the block position
      * @return If the block is inside or not
@@ -215,6 +215,7 @@ public class StructAnalysis {
 
     /**
      * Creates a hash set of all block positions within an AABB
+     * 
      * @param bb the AABB to find all blocks fitting inside
      * @return A hash set
      */
@@ -293,8 +294,9 @@ public class StructAnalysis {
 
     /**
      * Gets all blocks bordering a collection of BlockPoses given a certain neighborhood
+     * 
      * @param blocks The blocks to find those around.
-     * @param vecs The offsets of blocks considered in a neighborhood
+     * @param vecs   The offsets of blocks considered in a neighborhood
      * @return A set containing the border, not any of blocks.
      */
     public Set<BlockPos> getPerimeter(Collection<BlockPos> blocks, Vec3i[] vecs) {
@@ -354,6 +356,7 @@ public class StructAnalysis {
 
     /**
      * Gets the lowest layer of a set of blocks
+     * 
      * @param set A set of blocks
      * @return All blocks in set with the minimum Y value
      */

@@ -38,9 +38,9 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                         .anyMatch(
                                 pos -> tuple
                                         .getFirst().world
-                                        .getBlockState(pos)
-                                        .getBlock()
-                                        .equals(SuSyBlocks.SPACECRAFT_HULL)));
+                                                .getBlockState(pos)
+                                                .getBlock()
+                                                .equals(SuSyBlocks.SPACECRAFT_HULL)));
     }
 
     @Override
@@ -111,10 +111,10 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
     }
 
     public Optional<NBTTagCompound> spacecraftPattern(
-            Set<BlockPos> blocksConnected,
-            Set<BlockPos> exterior,
-            Set<BlockPos> interior,
-            StructAnalysis analysis) {
+                                                      Set<BlockPos> blocksConnected,
+                                                      Set<BlockPos> exterior,
+                                                      Set<BlockPos> interior,
+                                                      StructAnalysis analysis) {
         Predicate<BlockPos> lifeSupportCheck = bp -> analysis.world.getBlockState(bp).getBlock()
                 .equals(SuSyBlocks.LIFE_SUPPORT);
         Set<BlockPos> lifeSupports = blocksConnected.stream().filter(lifeSupportCheck).collect(Collectors.toSet());
@@ -130,8 +130,8 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                     // If it is both covered but facing another hull block
                     // or not covered but facing air, then fail.
                     if (!te.isCovered(side) &&
-                            !exterior.contains(bp.add(side.getDirectionVec()))
-                    && !interior.contains(bp.add(side.getDirectionVec()))) {
+                            !exterior.contains(bp.add(side.getDirectionVec())) &&
+                            !interior.contains(bp.add(side.getDirectionVec()))) {
                         analysis.status = BuildStat.HULL_WEAK;
                         return analysis.errorPos(bp);
                     }
@@ -198,7 +198,8 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         return Optional.of(tag);
     }
 
-    private void includePart(StructAnalysis analysis, BlockPos bp, NBTTagCompound tag, String key, Map<String, Integer> instruments) {
+    private void includePart(StructAnalysis analysis, BlockPos bp, NBTTagCompound tag, String key,
+                             Map<String, Integer> instruments) {
         Block block = analysis.world.getBlockState(bp).getBlock();
         NBTTagCompound subTag = tag.getCompoundTag(key);
         String part = ((VariantBlock<?>) block).getState(analysis.world.getBlockState(bp)).toString();

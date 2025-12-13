@@ -39,9 +39,9 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
                         .anyMatch(
                                 pos -> candidate
                                         .getFirst().world
-                                        .getBlockState(pos)
-                                        .getBlock()
-                                        .equals(SuSyBlocks.COMBUSTION_CHAMBER)));
+                                                .getBlockState(pos)
+                                                .getBlock()
+                                                .equals(SuSyBlocks.COMBUSTION_CHAMBER)));
         this.setComponentSlotValidator(
                 x -> x.equals(this.getName()) || x.equals(this.getType()) ||
                         (x.equals(this.getType() + "_small") && this.radius < 2) ||
@@ -156,7 +156,7 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
         IBlockState chamberState = analysis.world.getBlockState(cChamber);
         int pumpNum = ((BlockCombustionChamber.CombustionType) (((VariantBlock<?>) chamberState.getBlock())
                 .getState(chamberState)))
-                .getMinPumps();
+                        .getMinPumps();
         if (pumps.size() < pumpNum) {
             analysis.status = BuildStat.WRONG_NUM_PUMPS;
             return Optional.empty();

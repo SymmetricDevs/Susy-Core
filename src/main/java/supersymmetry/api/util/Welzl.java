@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Welzl {
+
     public static double computeMinimalRadius(List<Point2D> points) {
         if (points.isEmpty()) {
             return 0;
@@ -88,6 +89,7 @@ public class Welzl {
     }
 
     private static class Circle {
+
         private static final double EPSILON = 1e-9;
         final double x;
         final double z;
@@ -109,5 +111,4 @@ public class Welzl {
     public record Point2D(double x, double z) {}
 
     private static final double EPSILON = 1e-9;
-
 }

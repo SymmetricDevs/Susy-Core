@@ -37,9 +37,9 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
                         .anyMatch(
                                 pos -> candidate
                                         .getFirst().world
-                                        .getBlockState(pos)
-                                        .getBlock()
-                                        .equals(SuSyBlocks.TANK_SHELL)));
+                                                .getBlockState(pos)
+                                                .getBlock()
+                                                .equals(SuSyBlocks.TANK_SHELL)));
     }
 
     @Override
@@ -127,11 +127,12 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
                 } else if (!interiorAir.contains(neighbor) &&
                         (analysis.world.isAirBlock(neighbor) ||
                                 !StructAnalysis.blockCont(aabb, neighbor))) { // this means it should be exterior air
-                    if (!blockTiles.isCovered(facing)) {
-                        analysis.status = BuildStat.MISSING_TILE;
-                        return analysis.errorPos(block);
-                    }
-                }
+                                    if (!blockTiles.isCovered(facing)) {
+                                        analysis.status = BuildStat.MISSING_TILE;
+                                        return analysis.errorPos(block);
+                                    }
+                                }
+
             }
         }
 

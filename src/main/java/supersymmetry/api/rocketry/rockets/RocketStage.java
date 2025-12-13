@@ -176,7 +176,6 @@ public class RocketStage {
                 .orElse(0);
     }
 
-
     public void setComponentValidationFunction(
                                                Function<Tuple<String, List<AbstractComponent<?>>>, ComponentValidationResult> componentValidationPredicate) {
         this.componentValidationFunction = componentValidationPredicate;

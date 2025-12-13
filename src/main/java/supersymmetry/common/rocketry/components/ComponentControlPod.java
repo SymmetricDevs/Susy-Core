@@ -74,16 +74,15 @@ public class ComponentControlPod extends AbstractComponent<ComponentControlPod> 
     }
 
     public Optional<NBTTagCompound> spacecraftPattern(
-            Set<BlockPos> blocksConnected,
-            Set<BlockPos> interior,
-            Set<BlockPos> exterior,
-            StructAnalysis analysis) {
+                                                      Set<BlockPos> blocksConnected,
+                                                      Set<BlockPos> interior,
+                                                      Set<BlockPos> exterior,
+                                                      StructAnalysis analysis) {
         NBTTagCompound tag = new NBTTagCompound();
 
         Predicate<BlockPos> lifeSupportCheck = bp -> analysis.world.getBlockState(bp).getBlock()
                 .equals(SuSyBlocks.LIFE_SUPPORT);
         Set<BlockPos> lifeSupports = blocksConnected.stream().filter(lifeSupportCheck).collect(Collectors.toSet());
-
 
         lifeSupports.forEach(
                 bp -> {

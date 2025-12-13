@@ -1,7 +1,5 @@
 package supersymmetry.api.rocketry.components;
 
-import static supersymmetry.common.blocks.SuSyBlocks.TANK_SHELL;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,13 +24,8 @@ import supersymmetry.api.SusyLog;
 import supersymmetry.api.rocketry.WeightedBlock;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
-import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.tileentities.TileEntityCoverable;
-import supersymmetry.common.blocks.rocketry.BlockCombustionChamber;
-import supersymmetry.common.blocks.rocketry.BlockRocketNozzle;
-import supersymmetry.common.blocks.rocketry.BlockTankShell;
-import supersymmetry.common.blocks.rocketry.BlockTankShell1;
-import supersymmetry.common.blocks.rocketry.BlockTurboPump;
+
 public abstract class AbstractComponent<T extends AbstractComponent<T>> {
 
     protected static final String PARTS_KEY = "parts";

@@ -136,6 +136,4 @@ public abstract class AbstractRocketBlueprint {
     public void setStages(List<RocketStage> stages) {
         this.stages = stages;
     }
-
-
 }

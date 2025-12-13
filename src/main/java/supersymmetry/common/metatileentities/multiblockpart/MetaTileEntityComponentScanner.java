@@ -1,7 +1,6 @@
 package supersymmetry.common.metatileentities.multiblockpart;
 
 import java.util.*;
-import java.util.function.Predicate;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -364,10 +363,10 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                                 }
                             }
                         })
-                .addCustom((tl) ->
-                {
+                .addCustom((tl) -> {
                     if (errorPos != null && shownStatus != BuildStat.SCANNING) {
-                        tl.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY, "susy.machine.component_scanner.pos", errorPos.toString()));
+                        tl.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                                "susy.machine.component_scanner.pos", errorPos.toString()));
                     }
                 })
                 .addProgressLine(this.scannerLogic.getProgressPercent());

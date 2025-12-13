@@ -2,13 +2,7 @@ package supersymmetry.common.tileentities;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Set;
 
-import codechicken.lib.raytracer.CuboidRayTraceResult;
-import gregtech.api.cover.Cover;
-import gregtech.api.cover.CoverRayTracer;
-import gregtech.api.items.toolitem.ToolClasses;
-import codechicken.lib.vec.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -17,7 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
