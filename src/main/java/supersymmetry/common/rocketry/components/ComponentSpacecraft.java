@@ -129,7 +129,9 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                 for (EnumFacing side : EnumFacing.VALUES) {
                     // If it is both covered but facing another hull block
                     // or not covered but facing air, then fail.
-                    if (te.isCovered(side) == exterior.contains(bp.add(side.getDirectionVec()))) {
+                    if (!te.isCovered(side) &&
+                            !exterior.contains(bp.add(side.getDirectionVec()))
+                    && !interior.contains(bp.add(side.getDirectionVec()))) {
                         analysis.status = BuildStat.HULL_WEAK;
                         return Optional.empty();
                     }

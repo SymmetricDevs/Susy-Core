@@ -128,6 +128,7 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
         float computedAreaRatio = ((float) fin) / initial;
         if (computedAreaRatio < 1.5) {
             analysis.status = BuildStat.NOT_LAVAL;
+            return Optional.empty();
         }
 
         // One combustion chamber is, I think, reasonable
