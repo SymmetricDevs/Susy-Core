@@ -9,6 +9,7 @@ import java.util.stream.*;
 import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -426,5 +427,11 @@ public class StructAnalysis {
 
     public Vec3i diff(Vec3i one, Vec3i two) {
         return new Vec3i(one.getX() - two.getX(), one.getY() - two.getY(), one.getZ() - two.getZ());
+    }
+
+    public Optional<NBTTagCompound> errorPos(BlockPos error) {
+        NBTTagCompound tag = new NBTTagCompound();
+        tag.setLong("errorPos", error.toLong());
+        return Optional.of(tag);
     }
 }

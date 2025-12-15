@@ -86,7 +86,7 @@ public class ComponentInterstage extends AbstractComponent<ComponentInterstage> 
                 for (BlockPos blockPos : airLayer) {
                     if (!previousAirLayer.contains(blockPos.add(0, -1, 0))) {
                         analysis.status = BuildStat.INTERSTAGE_NOT_CYLINDRICAL;
-                        return Optional.empty();
+                        return analysis.errorPos(blockPos);
                     }
                 }
             }

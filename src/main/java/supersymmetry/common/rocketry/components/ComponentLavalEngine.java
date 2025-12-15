@@ -150,7 +150,7 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
         }
         if (!analysis.world.isAirBlock(cChamber.add(0, -1, 0))) {
             analysis.status = BuildStat.NOZZLE_MALFORMED;
-            return Optional.empty();
+            return analysis.errorPos(cChamber.add(0, -1, 0));
         }
         // Analyze turbopumps
         IBlockState chamberState = analysis.world.getBlockState(cChamber);
@@ -165,7 +165,7 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
             EnumFacing dir = analysis.world.getBlockState(pumpPos).getValue(FACING);
             if (!dir.equals(EnumFacing.DOWN) && !pumpPos.add(dir.getOpposite().getDirectionVec()).equals(cChamber)) {
                 analysis.status = BuildStat.WEIRD_PUMP;
-                return Optional.empty();
+                return analysis.errorPos(pumpPos);
             }
         }
         // Creates engine

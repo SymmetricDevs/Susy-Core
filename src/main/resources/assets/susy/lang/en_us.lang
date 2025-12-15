@@ -902,6 +902,7 @@ susy.machine.component_scanner.unscanned=Component unscanned.
 susy.machine.component_scanner.failure=Scan failed.
 susy.machine.component_scanner.success=Component successfully analyzed.
 susy.machine.component_scanner.scanning=Scanning...
+susy.machine.component_scanner.pos=Error found at %s
 
 susy.machine.building_cleanroom.name=Spacecraft Component Cleanroom
 

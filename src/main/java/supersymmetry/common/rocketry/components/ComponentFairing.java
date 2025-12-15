@@ -151,7 +151,7 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
                 // Ensures that there's one line of connectors (no branching)
                 if (blockNeighbors.size() > 2) {
                     analysis.status = BuildStat.WEIRD_FAIRING;
-                    return Optional.empty();
+                    return analysis.errorPos(initiate);
                 }
                 newNeighbors.addAll(
                         blockNeighbors.stream()
@@ -168,7 +168,7 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
             Block b = world.getBlockState(bp).getBlock();
             if (!(world.getTileEntity(bp) instanceof TileEntityCoverable)) {
                 analysis.status = BuildStat.WEIRD_FAIRING;
-                return Optional.empty();
+                return analysis.errorPos(bp);
             }
             TileEntityCoverable te = (TileEntityCoverable) world.getTileEntity(bp);
 
@@ -195,7 +195,7 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
                 if (expectation ^ te.isCovered(
                         facing)) { // xor: one is true, one is false, therefore the expectation is wrong
                     analysis.status = BuildStat.WRONG_TILE;
-                    return Optional.empty();
+                    return analysis.errorPos(bp);
                 }
             }
         }

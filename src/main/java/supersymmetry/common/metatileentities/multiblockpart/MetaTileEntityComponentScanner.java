@@ -52,13 +52,14 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
     private float scanDuration = 0;
     private MetaTileEntityBuildingCleanroom linkedCleanroom;
     private BuildStat shownStatus;
-    private Predicate<BlockPos> fuelTankDetect;
+    private BlockPos errorPos = null;
 
     public StructAnalysis struct;
 
     public MetaTileEntityComponentScanner(ResourceLocation mteId) {
         super(mteId, 0); // it kind of is and isn't
         shownStatus = BuildStat.UNSCANNED;
+
         struct = new StructAnalysis(getWorld());
         importItems = new DataStorageLoader(
                 this,
@@ -167,6 +168,10 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                     .test(new Tuple<>(struct, blockList))) {
                 Optional<NBTTagCompound> scanResult = component.analyzePattern(struct, linkedCleanroom.getInteriorBB());
                 if (scanResult.isPresent()) {
+                    if (scanResult.get().hasKey("errorPos")) {
+                        errorPos = BlockPos.fromLong(scanResult.get().getLong("errorPos"));
+                        continue;
+                    }
                     getInventory()
                             .setNBT(
                                     _ -> {
@@ -174,7 +179,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                                         component.writeToNBT(t);
                                         return t;
                                     });
-
+                    errorPos = null;
                     break;
                 }
             }
@@ -359,6 +364,12 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                                 }
                             }
                         })
+                .addCustom((tl) ->
+                {
+                    if (errorPos != null && shownStatus != BuildStat.SCANNING) {
+                        tl.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY, "susy.machine.component_scanner.pos", errorPos.toString()));
+                    }
+                })
                 .addProgressLine(this.scannerLogic.getProgressPercent());
     }
 

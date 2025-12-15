@@ -133,7 +133,7 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                             !exterior.contains(bp.add(side.getDirectionVec()))
                     && !interior.contains(bp.add(side.getDirectionVec()))) {
                         analysis.status = BuildStat.HULL_WEAK;
-                        return Optional.empty();
+                        return analysis.errorPos(bp);
                     }
                 }
             } else if (analysis.world.getBlockState(bp).getBlock().equals(SuSyBlocks.SPACE_INSTRUMENT)) {
@@ -173,7 +173,7 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                     for (EnumFacing side : EnumFacing.VALUES) {
                         if (te.isCovered(side) == interior.contains(bp.add(side.getDirectionVec()))) {
                             analysis.status = BuildStat.WEIRD_PADDING;
-                            return Optional.empty();
+                            return analysis.errorPos(bp);
                         }
                     }
                 }

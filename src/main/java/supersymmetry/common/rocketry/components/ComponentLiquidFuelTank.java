@@ -107,12 +107,12 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
         for (BlockPos block : hullBlocks) {
             if (!shellPredicate.test(block)) {
                 analysis.status = BuildStat.HULL_WEAK;
-                return Optional.empty();
+                return analysis.errorPos(block);
             }
             TileEntityCoverable blockTiles = (TileEntityCoverable) analysis.world.getTileEntity(block);
             if (blockTiles == null) {
                 analysis.status = BuildStat.ERROR;
-                return Optional.empty();
+                return analysis.errorPos(block);
             }
             EnumFacing facingFromBlock = analysis.world.getBlockState(block).getValue(FACING);
             for (EnumFacing facing : EnumFacing.values()) {
@@ -122,14 +122,14 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
                     if (!difference.equals(facingFromBlock.getDirectionVec())) { // incorrect with
                         // honeycombs
                         analysis.status = BuildStat.HULL_WEAK;
-                        return Optional.empty();
+                        return analysis.errorPos(block);
                     }
                 } else if (!interiorAir.contains(neighbor) &&
                         (analysis.world.isAirBlock(neighbor) ||
                                 !StructAnalysis.blockCont(aabb, neighbor))) { // this means it should be exterior air
                     if (!blockTiles.isCovered(facing)) {
                         analysis.status = BuildStat.MISSING_TILE;
-                        return Optional.empty();
+                        return analysis.errorPos(block);
                     }
                 }
             }
