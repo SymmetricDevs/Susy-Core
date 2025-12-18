@@ -23,14 +23,17 @@ public abstract class AbstractRocketBlueprint {
 
     public static AbstractRocketBlueprint getCopyOf(String name) {
         try {
+            if (blueprintsRegistry.containsKey(name)) {
+                AbstractRocketBlueprint bp = AbstractRocketBlueprint.getBlueprintsRegistry().get(name);
+                AbstractRocketBlueprint newbp = (AbstractRocketBlueprint) bp.getClass()
+                        .getDeclaredConstructors()[0]
+                                .newInstance(bp.getName(), bp.getRelatedEntity());
 
-            AbstractRocketBlueprint bp = AbstractRocketBlueprint.getBlueprintsRegistry().get(name);
-            AbstractRocketBlueprint newbp = (AbstractRocketBlueprint) bp.getClass()
-                    .getDeclaredConstructors()[0]
-                            .newInstance(bp.getName(), bp.getRelatedEntity());
-
-            newbp.readFromNBT(bp.writeToNBT());
-            return newbp;
+                newbp.readFromNBT(bp.writeToNBT());
+                return newbp;
+            } else {
+                return null;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("failed to create a blueprint copy");
@@ -103,8 +106,7 @@ public abstract class AbstractRocketBlueprint {
         // Sum of the absolute differences between consecutive stages.
         double mismatch = 0;
         for (int i = 0; i < this.getStages().size() - 1; i++) {
-            mismatch += Math.abs(this.getStages().get(i).getRadius() -
-                    this.getStages().get(i + 1).getRadius());
+            mismatch += Math.abs(this.getStages().get(i).getRadius() - this.getStages().get(i + 1).getRadius());
         }
         return mismatch;
     }

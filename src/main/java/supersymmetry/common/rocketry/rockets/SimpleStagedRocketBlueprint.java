@@ -63,6 +63,8 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint {
         }
     }
 
+    public double failureRate = 0.4;
+
     public SimpleStagedRocketBlueprint(String name, ResourceLocation entity) {
         super(name, entity);
     }
@@ -79,6 +81,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint {
         tag.setTag("ignitionOrder", ignitionOrder);
         tag.setString("name", this.getName());
         tag.setBoolean("buildstat", this.isFullBlueprint());
+        tag.setDouble("failureRate", this.failureRate);
 
         return tag;
     }
@@ -107,6 +110,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint {
                 .map(x -> (NBTTagIntArray) x)
                 .forEach(t -> this.ignitionStages.add(t.getIntArray()));
         this.setName(tag.getString("name"));
+        this.failureRate = tag.getDouble("failureRate");
         return true;
     }
 }

@@ -95,8 +95,9 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
     // built :c
     public DataStorageLoader rocketBlueprintSlot = new DataStorageLoader(
             this,
-            item -> SuSyMetaItems.isMetaItem(item) == SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.metaValue &&
-                    item.getTagCompound() != null
+            item -> SuSyMetaItems.isMetaItem(item) == SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.metaValue
+    // &&
+    // item.getTagCompound() != null
     // && !item.getTagCompound().getBoolean("buildstat")
     );
 
@@ -163,8 +164,7 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
             AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
             if (mainWindow.blueprintBuildAttempt(bp)) {
                 // SusyLog.logger.info("build success, blueprint writeout: {}", bp.writeToNBT());
-                this.rocketBlueprintSlot.setNBT(
-                        _ -> bp.writeToNBT());
+                this.rocketBlueprintSlot.setNBT(_ -> bp.writeToNBT());
             }
             // else {
             // SusyLog.logger.info(
@@ -180,8 +180,7 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
     public void setDefaultBlueprint(Widget.ClickData data) {
         rocketBlueprintSlot.clearNBT();
         NBTTagCompound tag = SusyRocketComponents.ROCKET_SOYUZ_BLUEPRINT_DEFAULT.writeToNBT();
-        rocketBlueprintSlot.setNBT(
-                _ -> tag);
+        rocketBlueprintSlot.setNBT(_ -> tag);
         SusyLog.logger.info("set the nbt to {}", tag);
     }
 
@@ -475,24 +474,29 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
 
                     // the part that actually matters should be server side
                     if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-                        if (this.rocketBlueprintSlot.isEmpty()) {
-                            // this.onBlueprintRemoved(mainWindow);
+                        if (this.rocketBlueprintSlot.isEmpty() ||
+                                !this.rocketBlueprintSlot.getStackInSlot(0).hasTagCompound()) {
                             mainWindow.onBlueprintRemoved();
 
                         } else {
                             if (this.rocketBlueprintSlot.getStackInSlot(0).getMetadata() ==
-                                    SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.metaValue) {
-                                // this.onBlueprintInserted(mainWindow);
+                                    SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.metaValue &&
+                                    this.rocketBlueprintSlot.getStackInSlot(0).hasTagCompound()) {
                                 mainWindow.onBlueprintInserted();
                             }
                         }
                     }
                 });
         // initialize the thing in case the blueprint was already in the machine
-        if (!this.rocketBlueprintSlot.isEmpty()) {
+        if (!this.rocketBlueprintSlot.isEmpty() && rocketBlueprintSlot.getStackInSlot(0).hasTagCompound()) {
 
             NBTTagCompound tag = rocketBlueprintSlot.getStackInSlot(0).getTagCompound();
+
             AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
+            if (bp == null) {
+                SusyLog.logger.error("invalid blueprint");
+                return builder;
+            }
             if (this.slots.isEmpty()) {
                 mainWindow.onBlueprintInserted();
             }
