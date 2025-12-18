@@ -21,13 +21,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import gregtech.api.GregTechAPI;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
+import supersymmetry.api.rocketry.rockets.ISFSRendered;
 import supersymmetry.client.audio.MovingSoundRocket;
 import supersymmetry.client.renderer.handler.IAlwaysRender;
 import supersymmetry.client.renderer.particles.SusyParticleFlameLarge;
 import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
 import supersymmetry.common.network.CPacketRocketInteract;
 
-public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender {
+public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender, ISFSRendered {
 
     private static final Random rnd = new Random();
     protected static final float jerk = 0.0001F;
@@ -261,5 +262,10 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender 
     @Override
     public double getMountedYOffset() {
         return 38D;
+    }
+
+    @Override
+    public AxisAlignedBB aabb() {
+        return new AxisAlignedBB(new Vec3d(5, 46, 5), (new Vec3d(-5, 0, -5)));
     }
 }

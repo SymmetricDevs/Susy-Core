@@ -436,10 +436,10 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                 height / 2);
 
         ClickButtonWidget buildButton = new ClickButtonWidget(
-                0,
-                height - 130,
-                40,
-                30,
+                7,
+                height - 140,
+                35,
+                25,
                 new TextComponentTranslation(this.getMetaName() + ".build_button_label")
                         .getFormattedText(),
                 (c) -> {
