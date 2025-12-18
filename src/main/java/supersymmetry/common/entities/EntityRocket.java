@@ -21,14 +21,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import gregtech.api.GregTechAPI;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
-import supersymmetry.api.rocketry.rockets.ISFSRendered;
+import supersymmetry.api.rocketry.rockets.AFSRendered;
 import supersymmetry.client.audio.MovingSoundRocket;
 import supersymmetry.client.renderer.handler.IAlwaysRender;
 import supersymmetry.client.renderer.particles.SusyParticleFlameLarge;
 import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
 import supersymmetry.common.network.CPacketRocketInteract;
 
-public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender, ISFSRendered {
+public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender, AFSRendered {
 
     private static final Random rnd = new Random();
     protected static final float jerk = 0.0001F;
