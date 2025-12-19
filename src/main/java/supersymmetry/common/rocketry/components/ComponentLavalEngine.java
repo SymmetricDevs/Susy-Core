@@ -25,6 +25,7 @@ import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.rocketry.BlockCombustionChamber;
+import supersymmetry.common.blocks.rocketry.BlockTurboPump;
 
 public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine> {
 
@@ -192,12 +193,10 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
 
         double throughput = 0;
 
-        // TODO this crashes :C
-        // for (BlockPos pumpPos : pumps) {
-        // IBlockState pump = analysis.world.getBlockState(pumpPos);
-        // throughput += ((BlockTurboPump.HPPType) (((VariantBlock<?>)
-        // pump)).getState(pump)).getThroughput();
-        // }
+         for (BlockPos pumpPos : pumps) {
+             IBlockState pump = analysis.world.getBlockState(pumpPos);
+             throughput += (SuSyBlocks.TURBOPUMP.getState(pump)).getThroughput();
+         }
 
         this.fuelThroughput = throughput;
         tag.setDouble("throughput", fuelThroughput);
