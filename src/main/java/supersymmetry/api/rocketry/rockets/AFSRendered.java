@@ -3,7 +3,7 @@ package supersymmetry.api.rocketry.rockets;
 import net.minecraft.util.math.AxisAlignedBB;
 
 public interface AFSRendered {
-  //aabb for the rendered model
-  public AxisAlignedBB aabb();
-    
+
+    // aabb for the rendered model
+    public AxisAlignedBB aabb();
 }
