@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -15,14 +16,16 @@ import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.GregtechTileCapabilities;
 import gregtech.api.capability.IControllable;
 import gregtech.api.capability.IEnergyContainer;
+import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.IWorkable;
 import gregtech.api.capability.impl.EnergyContainerList;
+import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
-import gregtech.api.gui.widgets.AdvancedTextWidget;
 import gregtech.api.gui.widgets.ImageCycleButtonWidget;
 import gregtech.api.gui.widgets.ImageWidget;
 import gregtech.api.gui.widgets.IndicatorImageWidget;
+import gregtech.api.gui.widgets.LabelWidget;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -42,6 +45,7 @@ import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.common.item.SuSyMetaItems;
+import supersymmetry.common.mui.widget.ConditionalWidget;
 import supersymmetry.common.mui.widget.RocketRenderWidget;
 import supersymmetry.common.mui.widget.SlotWidgetMentallyStable;
 
@@ -56,12 +60,13 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         try {
             return entry.newInstance(world);
         } catch (Exception e) {
-            throw new RuntimeException(
-                    "Failed to instantiate entity " + rl + " with constructor (World)", e);
+            throw new RuntimeException("Failed to instantiate entity with constructor (World)", e);
         }
     }
 
     private IEnergyContainer energyContainer;
+    public IMultipleTankHandler inputCoolant;
+    public IMultipleTankHandler outputCoolant;
     private boolean isActive = false;
     private boolean isWorkingEnabled = true;
     protected boolean hasNotEnoughEnergy;
@@ -123,6 +128,8 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     public void invalidateStructure() {
         super.invalidateStructure();
         this.energyContainer = new EnergyContainerList(new ArrayList<>());
+        this.inputCoolant = new FluidTankList(true);
+        this.fluidInventory = new FluidTankList(true);
         this.progress = 0;
     }
 
@@ -153,6 +160,8 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     protected void formStructure(PatternMatchContext context) {
         super.formStructure(context);
         this.energyContainer = new EnergyContainerList(getAbilities(MultiblockAbility.INPUT_ENERGY));
+        this.inputCoolant = new FluidTankList(true, getAbilities(MultiblockAbility.IMPORT_FLUIDS));
+        this.fluidInventory = new FluidTankList(true, getAbilities(MultiblockAbility.IMPORT_FLUIDS));
         this.progress = 0;
     }
 
@@ -205,8 +214,27 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         return createGUITemplate(entityPlayer).build(this.getHolder(), entityPlayer);
     }
 
+    // doesnt check if the blueprint itself is complete but that should go onto the slot check
+    public boolean hasBlueprint() {
+        return !this.rocketBlueprintSlot.isEmpty() && this.rocketBlueprintSlot.getStackInSlot(0).hasTagCompound() &&
+                this.rocketBlueprintSlot.getStackInSlot(0).getMetadata() ==
+                        SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.metaValue;
+    }
+
+    // can return null if something breaks
+    public AbstractRocketBlueprint getBlueprint() {
+        if (!this.rocketBlueprintSlot.isEmpty() && this.rocketBlueprintSlot.getStackInSlot(0).hasTagCompound()) {
+            NBTTagCompound tag = this.rocketBlueprintSlot.getStackInSlot(0).getTagCompound();
+            AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
+            if (bp != null && bp.readFromNBT(tag) && bp.isFullBlueprint()) {
+                return bp;
+            }
+        }
+        return null;
+    }
+
     private ModularUI.Builder createGUITemplate(EntityPlayer entityPlayer) {
-        int width = 250;
+        int width = 280;
         int height = 210;
 
         ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, width, height);
@@ -215,11 +243,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 new IndicatorImageWidget(width - 24, height / 2 - 3, 17, 17, getLogo())
                         .setWarningStatus(getWarningLogo(), this::addWarningText)
                         .setErrorStatus(getErrorLogo(), this::addErrorText));
-        builder.label(9, 9, getMetaFullName(), 0xFFFFFF);
-        builder.widget(
-                new AdvancedTextWidget(9, 20, this::addDisplayText, 0xFFFFFF)
-                        .setMaxWidthLimit(width - 17)
-                        .setClickHandler(this::handleDisplayClick));
         IControllable controllable = getCapability(GregtechTileCapabilities.CAPABILITY_CONTROLLABLE, null);
         if (controllable != null) {
             builder.widget(
@@ -239,30 +262,68 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         // blueprint slot
         var bpw = new SlotWidgetMentallyStable(this.rocketBlueprintSlot, 0, 0, 0);
         bpw.setSelfPosition(new Position(12, height / 2 - 27));
+
+        var c = new ConditionalWidget(
+                0,
+                0,
+                width,
+                height,
+                () -> {
+                    return true;
+                });
+
         bpw.setChangeListener(
                 () -> {
                     if (this.rocketBlueprintSlot.isEmpty()) {
                         bpw.setSelfPosition(new Position(12, height / 2 - 27));
                     } else {
-                        bpw.setSelfPosition(new Position(width - 20, height - 20));
+                        bpw.setSelfPosition(new Position(width - 23, height - 23));
                     }
                 });
         bpw.setBackgroundTexture(GuiTextures.SLOT_DARK);
         builder.widget(bpw);
+        // label gets in the way a little
+        c.addWidgetWithTest(
+                new LabelWidget(9, 9, getMetaFullName(), 0xffffff),
+                () -> {
+                    return (!this.isActive());
+                });
 
         // rocket render
-        if (!this.rocketBlueprintSlot.isEmpty() && this.rocketBlueprintSlot.getStackInSlot(0).hasTagCompound()) {
-            var tag = this.rocketBlueprintSlot.getStackInSlot(0).getTagCompound();
-            var bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
-            if (bp != null && bp.readFromNBT(tag) && bp.isFullBlueprint()) {
-                ResourceLocation entity_res = bp.relatedEntity;
-                DummyWorld world = new DummyWorld();
-                Entity rocketentity = this.createEntityByResource(entity_res, world);
-                rocketentity.setPosition(0, 0, 0);
-                builder.widget(
-                        new RocketRenderWidget(new Size(width - 15, 100), new Position(7, 18), rocketentity));
-            }
-        }
+
+        c.addWidgetConditionalInit(
+                () -> {
+                    if (!this.rocketBlueprintSlot.isEmpty() &&
+                            this.rocketBlueprintSlot.getStackInSlot(0).hasTagCompound()) {
+                        // NBTTagCompound tag = this.rocketBlueprintSlot.getStackInSlot(0).getTagCompound();
+                        // AbstractRocketBlueprint bp =
+                        // AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
+                        // if (bp != null && bp.readFromNBT(tag) && bp.isFullBlueprint()) {
+                        // return true;
+                        // }
+                        // ^^ this should be the actual check but the slot should have it anyways
+                        return true;
+                    }
+                    return false;
+                },
+                () -> {
+                    if (!this.rocketBlueprintSlot.isEmpty() &&
+                            this.rocketBlueprintSlot.getStackInSlot(0).hasTagCompound()) {
+                        NBTTagCompound tag = this.rocketBlueprintSlot.getStackInSlot(0).getTagCompound();
+                        AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
+                        if (bp != null && bp.readFromNBT(tag) && bp.isFullBlueprint()) {
+                            ResourceLocation entity_res = bp.relatedEntity;
+                            DummyWorld world = new DummyWorld();
+                            Entity rocketentity = this.createEntityByResource(entity_res, world);
+                            rocketentity.setPosition(0, 0, 0);
+                            return new RocketRenderWidget(
+                                    new Size(width - 15, 100), new Position(7, 11), rocketentity);
+                        }
+                    }
+                    return null;
+                });
+
+        builder.widget(c);
 
         return builder;
     }
