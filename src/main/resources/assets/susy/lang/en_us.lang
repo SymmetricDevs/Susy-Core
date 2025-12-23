@@ -269,6 +269,8 @@ susy.machine.steam_extractor_cannot_melt_items.warning=Steam Extractors cannot m
 
 # Machines/Multiblocks
 susy.machine.aerospace_flight_simulator.name=Aerospace Flight Simulator
+susy.machine.aerospace_flight_simulator.gui.rocket_name=Rocket:§6 %s
+susy.machine.aerospace_flight_simulator.gui.stages=stages:
 
 susy.machine.blueprint_assembler.name=Blueprint Assembler
 susy.machine.blueprint_assembler.stagename=Stage: %s
@@ -290,6 +292,8 @@ susy.rocketry.components.validation_codes.success=Blueprint assembled successful
 susy.rocketry.stages.block_F.name=Block F
 susy.rocketry.stages.block_A.name=Block A
 susy.rocketry.stages.boosters.name=Boosters
+
+susy.rocketry.soyuz.name=Soyuz FG
 
 susy.machine.magnetic_refrigerator.name=Magnetic Refrigerator
 susy.multiblock.magnetic_refrigerator.min_temperature=§bTemperature Limit: %s

@@ -34,6 +34,11 @@ public class ConditionalWidget extends AbstractWidgetGroup {
         addWidget(widget);
     }
 
+    // everything in ceu is private :C :C
+    public void addWidget(Widget widget) {
+        super.addWidget(widget);
+    }
+
     // jdtls provides the option to suppress warnings but not to automatically insert the fix even
     // when it suggests one :C :C
 
@@ -67,20 +72,23 @@ public class ConditionalWidget extends AbstractWidgetGroup {
         }
     }
 
-    private void updateState(Widget w, boolean ns) {
-        if (!(w.isVisible() == ns && w.isActive() == ns)) {
-            w.setVisible(ns);
-            w.setActive(ns);
-            writeUpdateInfo(this.stateUpdate + (ns ? 0 : 1), buf -> buf.writeInt(widgets.indexOf(w)));
-        }
-    }
-
     @Override
     public void readUpdateInfo(int id, PacketBuffer buffer) {
         super.readUpdateInfo(id, buffer);
         if (id == this.stateUpdate || id == this.stateUpdate + 1) {
             boolean state = id == this.stateUpdate;
-            Widget w = widgets.get(buffer.readInt());
+            int index = buffer.readInt();
+            if (index >= widgets.size()) {
+                SusyLog.logger.error(
+                        "widgets.size():[{}]: tried to {} widget:{}",
+                        widgets.size(),
+                        state ? "turn on" : "turn off",
+                        id);
+                // SusyLog.logger.info("client; wsize:{}, {}", widgets.size(), widgets);
+                //
+                // writeClientAction(0xddd, (buf) -> {});
+            }
+            Widget w = widgets.get(index);
             w.setActive(state);
             w.setVisible(state);
         }
@@ -91,10 +99,18 @@ public class ConditionalWidget extends AbstractWidgetGroup {
             if (test.getAsBoolean()) {
                 addWidgetWithTest(supplier.get(), test);
             } else {
-                SusyLog.logger.error("ui state desynced, the ui is likely to implode soon");
+                SusyLog.logger.error("ui state desynced, the ui is likely to implode soon. sp:{}", supplier);
             }
         }
     }
+
+    // @Override
+    // public void handleClientAction(int id, PacketBuffer buffer) {
+    // super.handleClientAction(id, buffer);
+    // if (id == 0xddd) {
+    // SusyLog.logger.info("server; wsize:{}, {}", widgets.size(), widgets);
+    // }
+    // }
 
     @Override
     public void drawInBackground(int mouseX, int mouseY, float partialTicks, IRenderContext context) {
@@ -117,6 +133,14 @@ public class ConditionalWidget extends AbstractWidgetGroup {
                 widget.drawInForeground(mouseX, mouseY);
                 GlStateManager.color(1, 1, 1, 1);
             }
+        }
+    }
+
+    private void updateState(Widget w, boolean ns) {
+        if (!(w.isVisible() == ns && w.isActive() == ns)) {
+            w.setVisible(ns);
+            w.setActive(ns);
+            writeUpdateInfo(this.stateUpdate + (ns ? 0 : 1), buf -> buf.writeInt(widgets.indexOf(w)));
         }
     }
 }
