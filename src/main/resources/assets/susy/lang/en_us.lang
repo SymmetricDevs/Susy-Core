@@ -269,8 +269,14 @@ susy.machine.steam_extractor_cannot_melt_items.warning=Steam Extractors cannot m
 
 # Machines/Multiblocks
 susy.machine.aerospace_flight_simulator.name=Aerospace Flight Simulator
-susy.machine.aerospace_flight_simulator.gui.rocket_name=Rocket:§6 %s
+susy.machine.aerospace_flight_simulator.gui.not_formed=Structure not formed!
+susy.machine.aerospace_flight_simulator.gui.success_chance=blah blah blah change it later %s
+susy.machine.aerospace_flight_simulator.gui.rocket_name=Rocket: %s
 susy.machine.aerospace_flight_simulator.gui.stages=stages:
+
+susy.machine.aerospace_flight_simulator.gui.computation_power=computation: %s googs/s
+susy.machine.aerospace_flight_simulator.gui.energy_consumption=power input: %s eu/t
+susy.machine.aerospace_flight_simulator.gui.coolant_flow=coolant input: %s mb/s
 
 susy.machine.blueprint_assembler.name=Blueprint Assembler
 susy.machine.blueprint_assembler.stagename=Stage: %s

@@ -16,6 +16,7 @@ import gregtech.api.util.Position;
 import gregtech.api.util.Size;
 import supersymmetry.api.SusyLog;
 
+// very laggy i think..
 public class ConditionalWidget extends AbstractWidgetGroup {
 
     public static final int stateUpdate = 1334383949; // math.random(0,0xffffffff) <3

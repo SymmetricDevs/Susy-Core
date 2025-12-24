@@ -14,6 +14,23 @@ public class SuccessCalculation {
         this.blueprint = blueprint;
     }
 
+    // lobotomized version of the function bellow to only take in the blueprint
+    public double calculateInitialSuccess() {
+        double success = 1;
+        double weight = blueprint.getMass();
+        // double thrust = blueprint.getThrust(null, 9.8d); // ??????
+        double thrust = 10000d; // 🙏
+        double thrustToWeightRatio = thrust / weight;
+        if (thrustToWeightRatio < 1) return 0d;
+        success *= (1 - (0.5 * Math.exp(1 - thrustToWeightRatio)));
+        double oblateness = blueprint.getHeight() / blueprint.getMaxRadius();
+        success *= (1 - (0.1 * Math.exp(-oblateness)));
+        success *= Math.pow(0.995, blueprint.getEngineCount());
+        success *= (1 - (0.5 * Math.exp(blueprint.getTotalRadiusMismatch() / 10)));
+        success = augmentSuccess(success);
+        return success;
+    }
+
     public LaunchResult calculateSuccess(EntityAbstractRocket rocket) {
         double success = 1;
         // Thrust to weight ratio

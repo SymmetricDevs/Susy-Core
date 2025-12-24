@@ -56,7 +56,7 @@ public abstract class AbstractRocketBlueprint {
 
     public String name;
 
-    public double AFSSuccessChance = 0.5;
+    public double AFSSuccessChance = 0.0;
 
     public ResourceLocation relatedEntity = new ResourceLocation(Supersymmetry.MODID, "rocket_basic");
 

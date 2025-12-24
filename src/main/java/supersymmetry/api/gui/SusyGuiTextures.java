@@ -60,8 +60,7 @@ public class SusyGuiTextures {
             .fullImage("textures/gui/base/fluid_slot_primitive.png");
     public static final TextureArea BUTTON_QUARRY_MODES = TextureArea
             .fullImage("textures/gui/widget/button_quarry_modes.png");
-    public static final TextureArea ARROW = TextureArea
-            .fullImage("textures/gui/widget/icon_indicator_arrow.png");
+    public static final TextureArea ARROW = TextureArea.fullImage("textures/gui/widget/icon_indicator_arrow.png");
     public static final TextureArea BUTTON_ENERGY_VOIDING = TextureArea
             .fullImage("textures/gui/widget/button_energy_voiding.png");
     public static final TextureArea BLUEPRINT_ASSEMBLER_SLIDER_BACKGROUND = TextureArea
@@ -78,6 +77,9 @@ public class SusyGuiTextures {
             .fullImage("textures/gui/widget/hazard.png");
     public static final TextureArea ROCKET_ASSEMBLER_BUTTON_START = TextureArea
             .fullImage("textures/gui/widget/suspicious_button.png");
+
+    public static final TextureArea GREEN_CIRCLE = TextureArea.fullImage("textures/gui/widget/green.png");
+    public static final TextureArea RED_CIRCLE = TextureArea.fullImage("textures/gui/widget/red.png");
 
     public static final UITexture BACKGROUND_POPUP = UITexture.builder()
             .location(GTValues.MODID, "textures/gui/base/background_popup.png")
