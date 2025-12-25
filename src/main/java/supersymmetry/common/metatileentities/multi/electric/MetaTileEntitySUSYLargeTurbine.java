@@ -2,10 +2,13 @@ package supersymmetry.common.metatileentities.multi.electric;
 
 import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import gregtech.api.capability.impl.AbstractRecipeLogic;
+import gregtech.api.recipes.Recipe;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -265,8 +268,37 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
                         .setTooltipText("susy.gui.toggle_energy_voiding");
     }
 
+    public static void addFuelNeededLine(List<ITextComponent> textList, SuSyTurbineRecipeLogic recipeLogic) {
+        Recipe previousRecipe = recipeLogic.getPreviousRecipe();
+        Field parallelRecipesPerformed;
+        int parallel;
+        try {
+            parallelRecipesPerformed = AbstractRecipeLogic.class.getDeclaredField("parallelRecipesPerformed");
+            parallelRecipesPerformed.setAccessible(true);
+            parallel = (int) parallelRecipesPerformed.get(recipeLogic);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            parallel = 1;
+        }
+
+        String fluidInputInfo = recipeLogic.getRecipeFluidInputInfo();
+
+        int amount = previousRecipe != null ? previousRecipe.getFluidInputs().getFirst().getInputFluidStack().amount : 0;
+
+        ITextComponent fuelCurrent = TextComponentUtil.stringWithColor(TextFormatting.RED,
+                amount * parallel + "L");
+        ITextComponent fuelNeeded = TextComponentUtil.stringWithColor(TextFormatting.RED, previousRecipe != null ? amount * recipeLogic.getMaximumAllowedVoltage() / previousRecipe.getEUt() + "L": "0L");
+        ITextComponent numTicks = TextComponentUtil.stringWithColor(TextFormatting.AQUA,
+                TextFormattingUtil.formatNumbers(recipeLogic.getPreviousRecipeDuration()));
+        textList.add(TextComponentUtil.translationWithColor(
+                TextFormatting.GRAY,
+                "susy.multiblock.rotation_generator.fuel_needed",
+                fuelCurrent, fuelNeeded, numTicks));
+    }
+
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
+        MultiblockFuelRecipeLogic recipeLogic = (MultiblockFuelRecipeLogic) recipeMapWorkable;
+
         if (isStructureFormed()) {
             FluidStack fuelStack = ((SuSyTurbineRecipeLogic) recipeMapWorkable).getInputFluidStack();
             if (fuelStack != null && fuelStack.amount > 0) {
@@ -281,13 +313,14 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
             }
             textList.add(new TextComponentTranslation("susy.multiblock.rotation_generator.power", getMaxVoltage(),
                     Math.min(recipeMapWorkable.getEnergyContainer().getOutputVoltage(), GTValues.V[tier] * 16)));
-        }
 
-        MultiblockFuelRecipeLogic recipeLogic = (MultiblockFuelRecipeLogic) recipeMapWorkable;
+            if (isActive())
+                addFuelNeededLine(textList, (SuSyTurbineRecipeLogic) recipeLogic);
+        }
 
         MultiblockDisplayText.builder(textList, isStructureFormed())
                 .setWorkingStatus(recipeLogic.isWorkingEnabled(), recipeLogic.isActive())
-                .addFuelNeededLine(recipeLogic.getRecipeFluidInputInfo(), recipeLogic.getPreviousRecipeDuration())
+//                .addFuelNeededLine(recipeLogic.getRecipeFluidInputInfo(), recipeLogic.getPreviousRecipeDuration())
                 .addWorkingStatusLine();
     }
 

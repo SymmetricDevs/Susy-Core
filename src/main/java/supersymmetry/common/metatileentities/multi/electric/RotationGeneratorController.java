@@ -172,6 +172,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
 
         private RotationGeneratorController tileEntity;
         private int proposedEUt;
+        public int currentEUt;
 
         protected boolean voidEnergy = false;
 
@@ -205,6 +206,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
 
         @Override
         protected boolean drawEnergy(int recipeEUt, boolean simulate) {
+            currentEUt = -recipeEUt;
             long euToDraw = -getActualVoltage(); // Will be negative
             long resultEnergy = getEnergyStored() - euToDraw;
             if (resultEnergy >= 0L && resultEnergy <= getEnergyCapacity()) {
@@ -240,12 +242,13 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
                     Math.min(proposedEUt, maximumOutput));
         }
 
-        protected long getMaximumAllowedVoltage() {
+        public long getMaximumAllowedVoltage() {
             return Math.min((GTValues.V[tileEntity.getTier()]) * 16, getMaxVoltage());
         }
 
         protected long getActualVoltage() {
-            return scaleProduction(getMaximumAllowedVoltage());
+//            return scaleProduction(getMaximumAllowedVoltage());
+            return scaleProduction(currentEUt); // So that it doesn't generate 16a with fuel of 1a amount
         }
     }
 }
