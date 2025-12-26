@@ -2,13 +2,10 @@ package supersymmetry.common.metatileentities.multi.electric;
 
 import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import gregtech.api.capability.impl.AbstractRecipeLogic;
-import gregtech.api.recipes.Recipe;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -37,6 +34,7 @@ import gregtech.api.metatileentity.multiblock.MultiblockDisplayText;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.TraceabilityPredicate;
+import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.util.*;
 import gregtech.client.renderer.ICubeRenderer;
@@ -272,11 +270,13 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
         Recipe previousRecipe = recipeLogic.getPreviousRecipe();
         int parallel = recipeLogic.getCurrentParallel();
 
-        int amount = previousRecipe != null ? previousRecipe.getFluidInputs().getFirst().getInputFluidStack().amount : 0;
+        int amount = previousRecipe != null ? previousRecipe.getFluidInputs().getFirst().getInputFluidStack().amount :
+                0;
 
         ITextComponent fuelCurrent = TextComponentUtil.stringWithColor(TextFormatting.RED,
                 amount * parallel + "L");
-        ITextComponent fuelNeeded = TextComponentUtil.stringWithColor(TextFormatting.RED, previousRecipe != null ? amount * recipeLogic.getMaximumAllowedVoltage() / previousRecipe.getEUt() + "L": "0L");
+        ITextComponent fuelNeeded = TextComponentUtil.stringWithColor(TextFormatting.RED, previousRecipe != null ?
+                amount * recipeLogic.getMaximumAllowedVoltage() / previousRecipe.getEUt() + "L" : "0L");
         ITextComponent numTicks = TextComponentUtil.stringWithColor(TextFormatting.AQUA,
                 TextFormattingUtil.formatNumbers(recipeLogic.getPreviousRecipeDuration()));
         textList.add(TextComponentUtil.translationWithColor(

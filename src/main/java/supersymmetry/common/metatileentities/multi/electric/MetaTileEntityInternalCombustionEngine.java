@@ -298,7 +298,7 @@ public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorCon
 
         MultiblockDisplayText.builder(textList, isStructureFormed())
                 .setWorkingStatus(recipeLogic.isWorkingEnabled(), recipeLogic.isActive())
-//                .addFuelNeededLine(recipeLogic.getRecipeFluidInputInfo(), recipeLogic.getPreviousRecipeDuration())
+                // .addFuelNeededLine(recipeLogic.getRecipeFluidInputInfo(), recipeLogic.getPreviousRecipeDuration())
                 .addWorkingStatusLine();
     }
 }
