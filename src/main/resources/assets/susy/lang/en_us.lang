@@ -828,6 +828,7 @@ susy.multiblock.rotation_generator.lubricant=Lubricant: %s (%sx)
 susy.multiblock.rotation_generator.power=Power: %s / %s EU/t
 susy.multiblock.rotation_generator.lubricant_amount=Lubricant: %s | Consumption: %s
 susy.multiblock.rotation_generator.tooltip=Max Rotation Speed: %s RPM, Spin-Up: %s RPM/t, Spin-Down: %s RPM/t.
+susy.multiblock.rotation_generator.fuel_needed=Consuming %s (Max %s) per %s ticks
 
 # Sputtering Machine
 susy.machine.sputter_deposition.lv.name=Basic Sputtering Machine
