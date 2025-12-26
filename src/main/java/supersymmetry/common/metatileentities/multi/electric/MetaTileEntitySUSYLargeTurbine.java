@@ -270,17 +270,7 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
 
     public static void addFuelNeededLine(List<ITextComponent> textList, SuSyTurbineRecipeLogic recipeLogic) {
         Recipe previousRecipe = recipeLogic.getPreviousRecipe();
-        Field parallelRecipesPerformed;
-        int parallel;
-        try {
-            parallelRecipesPerformed = AbstractRecipeLogic.class.getDeclaredField("parallelRecipesPerformed");
-            parallelRecipesPerformed.setAccessible(true);
-            parallel = (int) parallelRecipesPerformed.get(recipeLogic);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            parallel = 1;
-        }
-
-        String fluidInputInfo = recipeLogic.getRecipeFluidInputInfo();
+        int parallel = recipeLogic.getCurrentParallel();
 
         int amount = previousRecipe != null ? previousRecipe.getFluidInputs().getFirst().getInputFluidStack().amount : 0;
 
@@ -320,7 +310,6 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
 
         MultiblockDisplayText.builder(textList, isStructureFormed())
                 .setWorkingStatus(recipeLogic.isWorkingEnabled(), recipeLogic.isActive())
-//                .addFuelNeededLine(recipeLogic.getRecipeFluidInputInfo(), recipeLogic.getPreviousRecipeDuration())
                 .addWorkingStatusLine();
     }
 
