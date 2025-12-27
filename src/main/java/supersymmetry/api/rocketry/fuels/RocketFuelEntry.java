@@ -30,6 +30,7 @@ public class RocketFuelEntry {
         this.sIPerPressure = sIPerPressure;
     }
 
+    @SuppressWarnings("unchecked")
     public RocketFuelEntry(RocketFuelEntry copy) {
         this.material = copy.material;
         this.density = copy.density;

@@ -57,7 +57,7 @@ public class RocketRenderer<T extends EntityRocket> extends Render<T> {
 
         GlStateManager.pushMatrix(); // pushMatrix because we'll translate and rotate stuff
         GlStateManager.disableCull();
-        GlStateManager.color(1F, 1F, 1F, 1F);
+        // GlStateManager.color(1F, 1F, 1F, 1F);
         GlStateManager.translate((float) x, (float) y, (float) z); // You shouldn't forget to translate to x, y, z
                                                                    // before rendering. Other specific are made so
                                                                    // Rubik's cube renders at the middle.

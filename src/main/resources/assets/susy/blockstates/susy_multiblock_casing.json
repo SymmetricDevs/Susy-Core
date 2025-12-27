@@ -81,6 +81,12 @@
       "textures" : {
         "all" : "gregtech:blocks/multiblock_casing/coalescence_plate"
       }
+    },
+    "variant=processor_cluster" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/multiblock_casing/processor_cluster"
+      }
     }
   }
 }

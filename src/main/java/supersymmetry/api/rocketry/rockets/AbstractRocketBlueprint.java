@@ -13,8 +13,8 @@ import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 
 public abstract class AbstractRocketBlueprint {
 
-    public String name;
     private static Map<String, AbstractRocketBlueprint> blueprintsRegistry = new HashMap<>();
+    public static boolean registryLock = false;
 
     // default blueprints for stuff.
     public static Map<String, AbstractRocketBlueprint> getBlueprintsRegistry() {
@@ -46,8 +46,6 @@ public abstract class AbstractRocketBlueprint {
         }
     }
 
-    public static boolean registryLock = false;
-
     public static boolean getRegistryLock() {
         return registryLock;
     }
@@ -56,7 +54,12 @@ public abstract class AbstractRocketBlueprint {
         AbstractRocketBlueprint.registryLock = registryLock;
     }
 
+    public String name;
+
+    public double AFSSuccessChance = 0.0;
+
     public ResourceLocation relatedEntity = new ResourceLocation(Supersymmetry.MODID, "rocket_basic");
+
     public List<int[]> ignitionStages = new ArrayList<>(); // allows for multiple stages to be ignited at once, ex.
     // boosters together with the main stage, or the second stage together with the EES which im
     // definitely not adding
@@ -68,6 +71,14 @@ public abstract class AbstractRocketBlueprint {
     public AbstractRocketBlueprint(String name, ResourceLocation relatedEntity) {
         setName(name);
         setRelatedEntity(relatedEntity);
+    }
+
+    public double getAFSSuccessChance() {
+        return AFSSuccessChance;
+    }
+
+    public void setAFSSuccessChance(double aFSSuccessChance) {
+        AFSSuccessChance = aFSSuccessChance;
     }
 
     public List<int[]> getIgnitionStages() {

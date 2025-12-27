@@ -21,6 +21,7 @@ tile.turbine_rotor.combustion.name=Combustion Turbine Block
 tile.drill_head.steel.name=Steel Drill Head
 
 tile.susy_multiblock_casing.silicon_carbide_casing.name=Tough Silicon Carbide Casing
+tile.susy_multiblock_casing.processor_cluster.name=Processor Cluster
 
 tile.susy_multiblock_casing.sieve_tray.name=Sieve Tray
 tile.susy_multiblock_casing.coalescence_plate.name=Coalescence Plate
@@ -235,6 +236,10 @@ susy.material.anorthite=Anorthite
 susy.material.forsterite=Forsterite
 susy.material.lizardite=Lizardite
 
+# Fluorinate Ketones
+
+susy.material.perfluoro_2_methyl_3_pentanone=Perfluoro(2-methyl-3-pentanone)
+
 # Ore Prefixes (%s is the localised material name)
 item.material.oreprefix.oreGabbro=Gabbro %s Ore
 item.material.oreprefix.oreGneiss=Gneiss %s Ore
@@ -269,6 +274,14 @@ susy.machine.steam_extractor_cannot_melt_items.warning=Steam Extractors cannot m
 
 # Machines/Multiblocks
 susy.machine.aerospace_flight_simulator.name=Aerospace Flight Simulator
+susy.machine.aerospace_flight_simulator.gui.not_formed=Structure not formed!
+susy.machine.aerospace_flight_simulator.gui.success_chance=blah blah blah change it later %s
+susy.machine.aerospace_flight_simulator.gui.rocket_name=Rocket: %s
+susy.machine.aerospace_flight_simulator.gui.stages=stages:
+
+susy.machine.aerospace_flight_simulator.gui.computation_power=computation: %s googs/s
+susy.machine.aerospace_flight_simulator.gui.energy_consumption=power input: %s eu/t
+susy.machine.aerospace_flight_simulator.gui.coolant_flow=coolant input: %s mb/s
 
 susy.machine.blueprint_assembler.name=Blueprint Assembler
 susy.machine.blueprint_assembler.stagename=Stage: %s
@@ -290,6 +303,8 @@ susy.rocketry.components.validation_codes.success=Blueprint assembled successful
 susy.rocketry.stages.block_F.name=Block F
 susy.rocketry.stages.block_A.name=Block A
 susy.rocketry.stages.boosters.name=Boosters
+
+susy.rocketry.soyuz.name=Soyuz FG
 
 susy.machine.magnetic_refrigerator.name=Magnetic Refrigerator
 susy.multiblock.magnetic_refrigerator.min_temperature=§bTemperature Limit: %s

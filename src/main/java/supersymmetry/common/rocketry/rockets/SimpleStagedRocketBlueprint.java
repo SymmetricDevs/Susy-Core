@@ -82,6 +82,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint {
         tag.setString("name", this.getName());
         tag.setBoolean("buildstat", this.isFullBlueprint());
         tag.setDouble("failureRate", this.failureRate);
+        tag.setDouble("afs_chance", this.AFSSuccessChance);
 
         return tag;
     }
@@ -111,6 +112,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint {
                 .forEach(t -> this.ignitionStages.add(t.getIntArray()));
         this.setName(tag.getString("name"));
         this.failureRate = tag.getDouble("failureRate");
+        this.AFSSuccessChance = tag.getDouble("afs_chance");
         return true;
     }
 }
