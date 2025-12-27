@@ -3,6 +3,7 @@ package supersymmetry.common.tileentities;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import codechicken.lib.vec.Vector3;
 import gregtech.client.renderer.texture.cube.SimpleOverlayRenderer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -155,7 +156,8 @@ public class TileEntityCoverable extends TickableTileEntityBase {
         setSourceModel();
         EnumFacing[] faces = getSides();
         for (EnumFacing face : faces) {
-            coverTexture().renderSided(face, renderState, translation, pipeline);
+            Matrix4 zFought = translation.copy().translate(Vector3.fromVec3i(face.getDirectionVec()).multiply(0.001));
+            coverTexture().renderSided(face, renderState, zFought, pipeline);
         }
     }
 
