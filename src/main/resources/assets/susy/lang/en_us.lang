@@ -1309,3 +1309,5 @@ tile.random_concrete.smoothindustrialconcrete.name=Smooth Industrial Concrete
 tile.random_concrete.smoothindustrialconcretegrey.name=Smooth Gray Industrial Concrete
 tile.random_concrete1.smoothindustrialconcretewhite.name=Smooth White Industrial Concrete
 
+#LittleTiles Loot
+susy.top.lt_loot=This Contains Loot
