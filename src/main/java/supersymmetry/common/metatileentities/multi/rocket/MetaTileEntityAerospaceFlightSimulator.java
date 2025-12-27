@@ -3,6 +3,7 @@ package supersymmetry.common.metatileentities.multi.rocket;
 import java.util.ArrayList;
 import java.util.List;
 
+import gregtech.common.blocks.BlockGlassCasing;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
@@ -10,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -59,11 +61,17 @@ import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.api.util.DataStorageLoader;
+import supersymmetry.common.blocks.BlockSerpentine;
+import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
+import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.item.SuSyMetaItems;
+import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.common.mui.widget.ConditionalWidget;
 import supersymmetry.common.mui.widget.RocketRenderWidget;
 import supersymmetry.common.mui.widget.SlotWidgetMentallyStable;
 import supersymmetry.common.rocketry.SuccessCalculation;
+
+import static supercritical.api.pattern.SCPredicates.*;
 
 // TODO add a tooltip to the controller item that mentions losing progress if power/coolant is cut
 public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDisplayBase
@@ -105,6 +113,9 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
 
     private int progress = 0;
 
+    private boolean coolantFilled;
+    private List<BlockPos> coolantPositions;
+
     public DataStorageLoader rocketBlueprintSlot = new DataStorageLoader(
             this,
             item -> SuSyMetaItems.isMetaItem(item) == SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.metaValue &&
@@ -115,7 +126,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     public MetaTileEntityAerospaceFlightSimulator(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
 
-        COOLANT_IN = FluidRegistry.getFluid("water");
+        COOLANT_IN = SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid();
 
         COOLANT_OUT = FluidRegistry.getFluid("warm_water");
         if (COOLANT_OUT == null) {
@@ -189,6 +200,10 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         this.inputCoolant = new FluidTankList(true);
         this.outputCoolant = new FluidTankList(true);
         this.progress = 0;
+
+        super.invalidateStructure();
+        this.coolantPositions = null; // Clear water fill data when the structure is invalidated
+        this.coolantFilled = false;
     }
 
     @Override
@@ -201,7 +216,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     }
 
     public IBlockState getComputerState() {
-        return MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID);
+        return SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.PROCESSOR_CLUSTER);
     }
 
     @Override
@@ -293,6 +308,11 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         this.inputCoolant = new FluidTankList(true, getAbilities(MultiblockAbility.IMPORT_FLUIDS));
         this.outputCoolant = new FluidTankList(true, getAbilities(MultiblockAbility.EXPORT_FLUIDS));
         this.progress = 0;
+
+        super.formStructure(context);
+
+        this.coolantPositions = context.getOrDefault(FLUID_BLOCKS_KEY, new ArrayList<>());
+        this.coolantFilled = coolantPositions.isEmpty();
     }
 
     @Override
@@ -348,39 +368,87 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             hasNotEnoughEnergy = true;
             crash();
         }
+
+        updateFormedValid();
+        if (!coolantFilled && getOffsetTimer() % 5 == 0) {
+            fillFluid(this, this.coolantPositions, SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid());
+            if (this.coolantPositions.isEmpty()) {
+                this.coolantFilled = true;
+            }
+        }
+    }
+
+    // Trying to get the fluid to show in world
+
+    /*@Override
+    protected void formStructure(PatternMatchContext context) {
+        super.formStructure(context);
+
+        this.coolantPositions = context.getOrDefault(FLUID_BLOCKS_KEY, new ArrayList<>());
+        this.coolantFilled = coolantPositions.isEmpty();
+    }
+
+    @Override
+    public void invalidateStructure() {
+        super.invalidateStructure();
+        this.coolantPositions = null; // Clear water fill data when the structure is invalidated
+        this.coolantFilled = false;
+    }
+
+    @Override
+    protected void updateFormedValid() {
+        super.updateFormedValid();
+        if (!coolantFilled && getOffsetTimer() % 5 == 0) {
+            fillFluid(this, this.coolantPositions, SusyMaterials.Perfluoro2Methyl3Pentanone);
+            if (this.coolantPositions.isEmpty()) {
+                this.coolantFilled = true;
+            }
+        }
+    }*/
+
+    @Override
+    public boolean isStructureObstructed() {
+        return super.isStructureObstructed() || !coolantFilled;
     }
 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle("EEEEE", "EEEEE", "     ", "     ", "     ", "CCCCC")
+                .aisle("EIIIIIIC", "CBBBBBBC", "CBBBBBBC", "CBBBBBBC")
+                .aisle("ECCCCCCE", "CPPPFPPC", "CPPPFPPC", "CFFFFFFC")
+                .aisle("ECCCCCCE", "CPPPFPPC", "CPPPFPPC", "CFFFFFFC")
+                .aisle("ECCCCCCE", "CPPPFPPC", "CPPPFPPC", "CFFFFFFC")
+                .aisle("ECCCCCCE", "CPPPFPPC", "CPPPFPPC", "CFFFFFFC")
+                .aisle("EESEEEEE", "CTTTTTTC", "CTTTTTTC", "CTTTTTTC")
+                /*.aisle("EEEEE", "EEEEE", "     ", "     ", "     ", "CCCCC")
                 .aisle("CCCCC", "CCCCC", "PPPPP", "IPPPO", "PPPPP", "CCCCC")
                 .aisle("CCCCC", "CCCCC", "PPPPP", "IPPPO", "PPPPP", "CCCCC")
                 .aisle("CCCCC", "CCCCC", "PPPPP", "IPPPO", "PPPPP", "CCCCC")
-                .aisle("CCSMC", "CCCCC", "     ", "     ", "     ", "CCCCC")
-                .where('M', maintenancePredicate())
+                .aisle("CCSMC", "CCCCC", "     ", "     ", "     ", "CCCCC")*/
+                //.where('M', maintenancePredicate())
                 .where('S', selfPredicate())
                 .where(' ', air())
                 .where('C', states(getCasingState()))
                 .where('P', states(getComputerState()))
-                .where(
-                        'I',
-                        abilities(MultiblockAbility.IMPORT_FLUIDS)
-                                .setMaxGlobalLimited(2)
-                                .setMinGlobalLimited(1, 1)
-                                .or(states(getComputerState())))
-                .where(
+                .where('T', states(MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.TEMPERED_GLASS)))
+                .where('B', states(SuSyBlocks.SERPENTINE.getState(BlockSerpentine.SerpentineType.BASIC)))
+                .where('F', fluid(SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid()))
+                .where('I', abilities(MultiblockAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1).setMinGlobalLimited(1, 1)
+                                .or(abilities(MultiblockAbility.EXPORT_FLUIDS).setMaxGlobalLimited(1).setMaxGlobalLimited(1, 1))
+                                .or(states(getCasingState())))
+                /*.where(
                         'O',
                         abilities(MultiblockAbility.EXPORT_FLUIDS)
                                 .setMaxGlobalLimited(2)
                                 .setMinGlobalLimited(1, 1)
-                                .or(states(getComputerState())))
+                                .or(states(getComputerState())))*/
                 .where(
                         'E',
                         abilities(MultiblockAbility.INPUT_ENERGY)
-                                .setMaxGlobalLimited(6)
-                                .setMinGlobalLimited(1, 6)
-                                .or(states(getCasingState())))
+                                .setMaxGlobalLimited(2)
+                                .setMinGlobalLimited(1, 1)
+                        .or(states(getCasingState()))
+                        .or(maintenancePredicate().setMaxGlobalLimited(1).setMinGlobalLimited(1, 1)))
                 .build();
     }
 

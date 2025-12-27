@@ -359,6 +359,9 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                 .aisle("CCCCC", "CCCCC", "PPPPP", "PPPPP", "PPPPP", "CCCCC")
                 .aisle("CCCCC", "CCCCC", "PPPPP", "PPPPP", "PPPPP", "CCCCC")
                 .aisle("CCSMC", "CCCCC", "AAAAA", "AAAAA", "AAAAA", "CCCCC")
+                /*
+                .aisle("EIIIIE", "")
+                */
                 .where('M', maintenancePredicate())
                 .where('S', selfPredicate())
                 .where('A', air())

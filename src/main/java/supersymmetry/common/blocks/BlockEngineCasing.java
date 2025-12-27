@@ -15,7 +15,8 @@ import org.jetbrains.annotations.NotNull;
 import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantBlock;
 
-public class BlockEngineCasing extends VariantBlock<BlockEngineCasing.EngineCasingType> {
+public class
+BlockEngineCasing extends VariantBlock<BlockEngineCasing.EngineCasingType> {
 
     public BlockEngineCasing() {
         super(net.minecraft.block.material.Material.IRON);
