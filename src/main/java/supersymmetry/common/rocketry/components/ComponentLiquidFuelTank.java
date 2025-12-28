@@ -119,7 +119,7 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
                 BlockPos neighbor = block.add(facing.getDirectionVec());
                 if (interiorAir.contains(neighbor)) {
                     Vec3i difference = analysis.diff(neighbor, block);
-                    if (!difference.equals(facingFromBlock.getDirectionVec())) { // incorrect with
+                    if (!difference.equals(facingFromBlock.getOpposite().getDirectionVec())) {
                         // honeycombs
                         analysis.status = BuildStat.HULL_WEAK;
                         return analysis.errorPos(block);

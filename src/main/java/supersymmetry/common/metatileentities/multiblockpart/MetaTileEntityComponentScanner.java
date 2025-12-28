@@ -356,17 +356,16 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                                 } else {
                                     tl.add(
                                             TextComponentUtil.translationWithColor(
-                                                    TextFormatting.DARK_RED, "susy.machine.component_scanner.failure"));
-                                    tl.add(
-                                            TextComponentUtil.translationWithColor(
-                                                    TextFormatting.GRAY, shownStatus.getCode()));
+                                                    TextFormatting.DARK_RED, shownStatus.getCode()));
                                 }
                             }
                         })
                 .addCustom((tl) -> {
-                    if (errorPos != null && shownStatus != BuildStat.SCANNING) {
+                    if (errorPos != null &&
+                            !(scannerLogic.isActive() || struct.status == BuildStat.SCANNING)) {
                         tl.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
-                                "susy.machine.component_scanner.pos", errorPos.toString()));
+                                "susy.machine.component_scanner.pos",
+                                "(" + errorPos.getX() + ", " + errorPos.getY() + ", " + errorPos.getZ() + ")"));
                     }
                 })
                 .addProgressLine(this.scannerLogic.getProgressPercent());
@@ -420,7 +419,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                 .widget(
                         new ClickButtonWidget(
                                 68,
-                                62,
+                                75,
                                 54,
                                 18,
                                 new TextComponentTranslation("susy.machine.component_scanner.scan_button")

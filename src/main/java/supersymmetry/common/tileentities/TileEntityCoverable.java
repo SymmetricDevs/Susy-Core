@@ -3,6 +3,9 @@ package supersymmetry.common.tileentities;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import codechicken.lib.vec.Vector3;
+import gregtech.client.renderer.texture.cube.SimpleOverlayRenderer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -12,6 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -152,8 +156,13 @@ public class TileEntityCoverable extends TickableTileEntityBase {
         setSourceModel();
         EnumFacing[] faces = getSides();
         for (EnumFacing face : faces) {
-            Textures.FROST_PROOF_CASING.renderSided(face, renderState, translation, pipeline);
+            Matrix4 zFought = translation.copy().translate(Vector3.fromVec3i(face.getDirectionVec()).multiply(0.001));
+            coverTexture().renderSided(face, renderState, zFought, pipeline);
         }
+    }
+
+    public SimpleOverlayRenderer coverTexture() {
+        return Textures.FROST_PROOF_CASING;
     }
 
     @Override
@@ -236,5 +245,10 @@ public class TileEntityCoverable extends TickableTileEntityBase {
     public void setSourceModel() {
         this.sourceModel = Minecraft.getMinecraft().getBlockRendererDispatcher()
                 .getModelForState(getWorld().getBlockState(pos));
+    }
+
+    @Override
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+        return !oldState.getBlock().equals(newState.getBlock());
     }
 }
