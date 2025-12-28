@@ -174,6 +174,14 @@ public class SuSyFirstDegreeMaterials {
                 .build()
                 .setFormula("C6F12O", true);
 
+        WarmPerfluoro2Methyl3Pentanone = new Material.Builder(27118, SuSyUtility.susyId("warm_perfluoro_2_methyl_3_pentanone"))
+                .liquid()
+                .color(0xCEE3F0)
+                .flags(DISABLE_DECOMPOSITION)
+                .components(Carbon, 6, Fluorine, 12, Oxygen, 1)
+                .build()
+                .setFormula("C6F12O", true);
+
         // Thermodynamic materials
 
         PreheatedAir = new Material.Builder(27150, SuSyUtility.susyId("preheated_air"))
