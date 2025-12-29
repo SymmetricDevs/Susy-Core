@@ -3,6 +3,9 @@ package supersymmetry.common.metatileentities.multi.rocket;
 import java.util.ArrayList;
 import java.util.List;
 
+import gregtech.api.capability.impl.AbstractRecipeLogic;
+import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
+import gregtech.api.util.TextComponentUtil;
 import gregtech.common.blocks.BlockGlassCasing;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -15,6 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -56,6 +60,7 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.common.ConfigHolder;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
+import supercritical.mixins.gregtech.AbstractRecipeLogicAccessor;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
@@ -128,7 +133,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
 
         COOLANT_IN = SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid();
 
-        COOLANT_OUT = FluidRegistry.getFluid("warm_water");
+        COOLANT_OUT = SusyMaterials.WarmPerfluoro2Methyl3Pentanone.getFluid();
         if (COOLANT_OUT == null) {
             COOLANT_OUT = FluidRegistry.getFluid("lava");
         }
@@ -201,9 +206,28 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         this.outputCoolant = new FluidTankList(true);
         this.progress = 0;
 
-        super.invalidateStructure();
         this.coolantPositions = null; // Clear water fill data when the structure is invalidated
         this.coolantFilled = false;
+    }
+
+    public void fillCoolant(List<BlockPos> toFill, Fluid fluid, IMultipleTankHandler fluidInputs) {
+
+        if (fluidInputs != null) {
+            FluidStack toDrain = new FluidStack(fluid, 1000);
+            FluidStack drained = fluidInputs.drain(toDrain, false);
+            if (drained != null && drained.amount != 0) {
+                if (drained.amount == 1000) {
+                    World world = this.getWorld();
+                    BlockPos pos = (BlockPos)toFill.get(0);
+                    if (world.isBlockLoaded(pos) && (world.isAirBlock(pos) || world.getBlockState(pos).getBlock() == fluid.getBlock())) {
+                        world.setBlockState(pos, fluid.getBlock().getDefaultState(), 2);
+                        fluidInputs.drain(drained, true);
+                        toFill.remove(0);
+                    }
+                }
+
+            }
+        }
     }
 
     @Override
@@ -309,8 +333,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         this.outputCoolant = new FluidTankList(true, getAbilities(MultiblockAbility.EXPORT_FLUIDS));
         this.progress = 0;
 
-        super.formStructure(context);
-
         this.coolantPositions = context.getOrDefault(FLUID_BLOCKS_KEY, new ArrayList<>());
         this.coolantFilled = coolantPositions.isEmpty();
     }
@@ -321,6 +343,12 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         if (hasNotEnoughCoolant) {
             textList.add(new TextComponentTranslation(this.getMetaName() + ".gui.no_coolant_warning"));
         }
+        if (isStructureFormed() && !coolantFilled) {
+            textList.add(TextComponentUtil.translationWithColor(TextFormatting.RED,
+                    "susy.multiblock.aerospace_flight_simulator.obstructed"));
+            textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                    "susy.multiblock.aerospace_flight_simulator.obstructed.desc"));
+        }
     }
 
     // mb/tick
@@ -329,8 +357,20 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     }
 
     @Override
+    public boolean isStructureObstructed() {
+        return super.isStructureObstructed() || !coolantFilled;
+    }
+
+    @Override
     protected void updateFormedValid() {
-        if (!this.isActive() || !this.isWorkingEnabled()) {
+        if (!coolantFilled && getOffsetTimer() % 5 == 0) {
+            fillCoolant(this.coolantPositions, SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid(), inputCoolant);
+            if (this.coolantPositions.isEmpty()) {
+                this.coolantFilled = true;
+            }
+        }
+
+        if (!this.isActive() || !this.isWorkingEnabled() || this.isStructureObstructed()) {
             return;
         }
         int energyToConsume = getEnergyToConsume();
@@ -339,8 +379,9 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             energyToConsume += getNumMaintenanceProblems() * energyToConsume / 10;
         }
         int coolantToConsume = getCoolantToConsume(energyToConsume);
-        boolean enoughCoolant = inputCoolant.drain(new FluidStack(COOLANT_IN, coolantToConsume), false).amount ==
-                coolantToConsume;
+        FluidStack drainedFluid = inputCoolant.drain(new FluidStack(COOLANT_IN, coolantToConsume), false);
+        boolean enoughCoolant = false;
+        if (drainedFluid != null) { enoughCoolant = drainedFluid.amount == coolantToConsume; }
         boolean enoughSpaceForCoolant = outputCoolant.fill(new FluidStack(COOLANT_OUT, coolantToConsume), false) ==
                 coolantToConsume;
         if (enoughCoolant && enoughSpaceForCoolant) {
@@ -368,47 +409,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             hasNotEnoughEnergy = true;
             crash();
         }
-
-        updateFormedValid();
-        if (!coolantFilled && getOffsetTimer() % 5 == 0) {
-            fillFluid(this, this.coolantPositions, SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid());
-            if (this.coolantPositions.isEmpty()) {
-                this.coolantFilled = true;
-            }
-        }
-    }
-
-    // Trying to get the fluid to show in world
-
-    /*@Override
-    protected void formStructure(PatternMatchContext context) {
-        super.formStructure(context);
-
-        this.coolantPositions = context.getOrDefault(FLUID_BLOCKS_KEY, new ArrayList<>());
-        this.coolantFilled = coolantPositions.isEmpty();
-    }
-
-    @Override
-    public void invalidateStructure() {
-        super.invalidateStructure();
-        this.coolantPositions = null; // Clear water fill data when the structure is invalidated
-        this.coolantFilled = false;
-    }
-
-    @Override
-    protected void updateFormedValid() {
-        super.updateFormedValid();
-        if (!coolantFilled && getOffsetTimer() % 5 == 0) {
-            fillFluid(this, this.coolantPositions, SusyMaterials.Perfluoro2Methyl3Pentanone);
-            if (this.coolantPositions.isEmpty()) {
-                this.coolantFilled = true;
-            }
-        }
-    }*/
-
-    @Override
-    public boolean isStructureObstructed() {
-        return super.isStructureObstructed() || !coolantFilled;
     }
 
     @Override
@@ -420,28 +420,18 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 .aisle("ECCCCCCE", "CPPPFPPC", "CPPPFPPC", "CFFFFFFC")
                 .aisle("ECCCCCCE", "CPPPFPPC", "CPPPFPPC", "CFFFFFFC")
                 .aisle("EESEEEEE", "CTTTTTTC", "CTTTTTTC", "CTTTTTTC")
-                /*.aisle("EEEEE", "EEEEE", "     ", "     ", "     ", "CCCCC")
-                .aisle("CCCCC", "CCCCC", "PPPPP", "IPPPO", "PPPPP", "CCCCC")
-                .aisle("CCCCC", "CCCCC", "PPPPP", "IPPPO", "PPPPP", "CCCCC")
-                .aisle("CCCCC", "CCCCC", "PPPPP", "IPPPO", "PPPPP", "CCCCC")
-                .aisle("CCSMC", "CCCCC", "     ", "     ", "     ", "CCCCC")*/
-                //.where('M', maintenancePredicate())
                 .where('S', selfPredicate())
                 .where(' ', air())
                 .where('C', states(getCasingState()))
                 .where('P', states(getComputerState()))
                 .where('T', states(MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.TEMPERED_GLASS)))
                 .where('B', states(SuSyBlocks.SERPENTINE.getState(BlockSerpentine.SerpentineType.BASIC)))
-                .where('F', fluid(SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid()))
+                .where('F', fluid(SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid())
+                                .or(air())
+                                .or(any()))
                 .where('I', abilities(MultiblockAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1).setMinGlobalLimited(1, 1)
                                 .or(abilities(MultiblockAbility.EXPORT_FLUIDS).setMaxGlobalLimited(1).setMaxGlobalLimited(1, 1))
                                 .or(states(getCasingState())))
-                /*.where(
-                        'O',
-                        abilities(MultiblockAbility.EXPORT_FLUIDS)
-                                .setMaxGlobalLimited(2)
-                                .setMinGlobalLimited(1, 1)
-                                .or(states(getComputerState())))*/
                 .where(
                         'E',
                         abilities(MultiblockAbility.INPUT_ENERGY)

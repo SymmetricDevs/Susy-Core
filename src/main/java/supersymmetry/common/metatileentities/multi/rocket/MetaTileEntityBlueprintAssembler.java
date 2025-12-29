@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import gregtech.api.metatileentity.multiblock.MultiblockAbility;
+import gregtech.common.blocks.BlockGlassCasing;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -46,10 +48,16 @@ import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.api.util.DataStorageLoader;
+import supersymmetry.common.blocks.BlockSerpentine;
+import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
+import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.item.SuSyMetaItems;
+import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.common.mui.widget.RocketStageDisplayWidget;
 import supersymmetry.common.mui.widget.SlotWidgetMentallyStable;
 import supersymmetry.common.rocketry.SusyRocketComponents;
+
+import static supercritical.api.pattern.SCPredicates.fluid;
 
 public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase {
 
@@ -116,7 +124,7 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
     }
 
     public IBlockState getComputerState() {
-        return MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID);
+        return SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.PROCESSOR_CLUSTER);
     }
 
     @Override
@@ -354,19 +362,35 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle("CCCCC", "CCCCC", "AAAAA", "AAAAA", "AAAAA", "CCCCC")
-                .aisle("CCCCC", "CCCCC", "PPPPP", "PPPPP", "PPPPP", "CCCCC")
-                .aisle("CCCCC", "CCCCC", "PPPPP", "PPPPP", "PPPPP", "CCCCC")
-                .aisle("CCCCC", "CCCCC", "PPPPP", "PPPPP", "PPPPP", "CCCCC")
-                .aisle("CCSMC", "CCCCC", "AAAAA", "AAAAA", "AAAAA", "CCCCC")
-                /*
-                .aisle("EIIIIE", "")
-                */
-                .where('M', maintenancePredicate())
+                .aisle("EIIIIE", "CBBBBC", "CBBBBC", "CBBBBC")
+                .aisle("ECCCCE", "CPPFPC", "CPPFPC", "CFFFFC")
+                .aisle("ECCCCE", "CPPFPC", "CPPFPC", "CFFFFC")
+                .aisle("ECCCCE", "CPPFPC", "CPPFPC", "CFFFFC")
+                .aisle("EESEEE", "CTTTTC", "CTTTTC", "CTTTTC")
                 .where('S', selfPredicate())
-                .where('A', air())
                 .where('C', states(getCasingState()))
                 .where('P', states(getComputerState()))
+                .where('T', states(MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.TEMPERED_GLASS)))
+                .where('B', states(SuSyBlocks.SERPENTINE.getState(BlockSerpentine.SerpentineType.BASIC)))
+                .where('F', fluid(SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid())
+                        .or(air())
+                        .or(any()))
+                .where('I', abilities(MultiblockAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1).setMinGlobalLimited(1, 1)
+                        .or(abilities(MultiblockAbility.EXPORT_FLUIDS).setMaxGlobalLimited(1).setMaxGlobalLimited(1, 1))
+                        .or(states(getCasingState())))
+                .where(
+                        'E',
+                        abilities(MultiblockAbility.INPUT_ENERGY)
+                                .setMaxGlobalLimited(2)
+                                .setMinGlobalLimited(1, 1)
+                        .or(abilities(MultiblockAbility.IMPORT_ITEMS))
+                                .setMaxGlobalLimited(2)
+                                .setMinGlobalLimited(1, 1)
+                        .or(abilities(MultiblockAbility.EXPORT_ITEMS))
+                                .setMaxGlobalLimited(1)
+                                .setMinGlobalLimited(1, 1)
+                        .or(states(getCasingState()))
+                        .or(maintenancePredicate().setMaxGlobalLimited(1).setMinGlobalLimited(1, 1)))
                 .build();
     }
 
