@@ -445,11 +445,11 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle("EIIIIE", "CBBBBC", "CBBBBC", "CBBBBC")
-                .aisle("ECCCCE", "CPPFPC", "CPPFPC", "CFFFFC")
-                .aisle("ECCCCE", "CPPFPC", "CPPFPC", "CFFFFC")
-                .aisle("ECCCCE", "CPPFPC", "CPPFPC", "CFFFFC")
-                .aisle("EESEEE", "CTTTTC", "CTTTTC", "CTTTTC")
+                .aisle("EIIIIE", "CBBBBC", "CBBBBC", "CBBBBC", "CCCCCC")
+                .aisle("ECCCCE", "CPPFPC", "CPPFPC", "CFFFFC", "CTTTTC")
+                .aisle("ECCCCE", "CPPFPC", "CPPFPC", "CFFFFC", "CTTTTC")
+                .aisle("ECCCCE", "CPPFPC", "CPPFPC", "CFFFFC", "CTTTTC")
+                .aisle("EESEEE", "CTTTTC", "CTTTTC", "CTTTTC", "CTTTTC")
                 .where('S', selfPredicate())
                 .where(' ', air())
                 .where('C', states(getCasingState()))
