@@ -421,12 +421,12 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle("EIIIIIIC", "CBBBBBBC", "CBBBBBBC", "CBBBBBBC")
-                .aisle("ECCCCCCE", "CPPPFPPC", "CPPPFPPC", "CFFFFFFC")
-                .aisle("ECCCCCCE", "CPPPFPPC", "CPPPFPPC", "CFFFFFFC")
-                .aisle("ECCCCCCE", "CPPPFPPC", "CPPPFPPC", "CFFFFFFC")
-                .aisle("ECCCCCCE", "CPPPFPPC", "CPPPFPPC", "CFFFFFFC")
-                .aisle("EESEEEEE", "CTTTTTTC", "CTTTTTTC", "CTTTTTTC")
+                .aisle("EIIIIIIC", "CBBBBBBC", "CBBBBBBC", "CBBBBBBC", "CCCCCCCC")
+                .aisle("ECCCCCCE", "CPPPFPPC", "CPPPFPPC", "CFFFFFFC", "CTTTTTTC")
+                .aisle("ECCCCCCE", "CPPPFPPC", "CPPPFPPC", "CFFFFFFC", "CTTTTTTC")
+                .aisle("ECCCCCCE", "CPPPFPPC", "CPPPFPPC", "CFFFFFFC", "CTTTTTTC")
+                .aisle("ECCCCCCE", "CPPPFPPC", "CPPPFPPC", "CFFFFFFC", "CTTTTTTC")
+                .aisle("EESEEEEE", "CTTTTTTC", "CTTTTTTC", "CTTTTTTC", "CTTTTTTC")
                 .where('S', selfPredicate())
                 .where(' ', air())
                 .where('C', states(getCasingState()))
