@@ -357,6 +357,11 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     }
 
     @Override
+    public boolean isStructureObstructed() {
+        return super.isStructureObstructed() || !coolantFilled;
+    }
+
+    @Override
     protected void updateFormedValid() {
         if (!coolantFilled && getOffsetTimer() % 5 == 0) {
             fillCoolant(this.coolantPositions, SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid(), inputCoolant);
@@ -365,7 +370,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             }
         }
 
-        if (!this.isActive() || !this.isWorkingEnabled() || !this.isStructureObstructed()) {
+        if (!this.isActive() || !this.isWorkingEnabled() || this.isStructureObstructed()) {
             return;
         }
         int energyToConsume = getEnergyToConsume();
@@ -404,11 +409,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             hasNotEnoughEnergy = true;
             crash();
         }
-    }
-
-    @Override
-    public boolean isStructureObstructed() {
-        return super.isStructureObstructed() || !coolantFilled;
     }
 
     @Override
