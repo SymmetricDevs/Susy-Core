@@ -1,0 +1,29 @@
+{
+  "forge_marker" : 1,
+  "defaults": {
+    "model": "minecraft:cube_all",
+    "textures": {
+      "all": "gregtech:blocks/rocket_multiblock_casing/vinyl_ceiling_grid"
+    }
+  },
+  "variants" : {
+    "variant=vinyl_ceiling_grid" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/rocket_multiblock_casing/vinyl_ceiling_grid"
+      }
+    },
+    "variant=vinyl_composite_floor" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/rocket_multiblock_casing/vinyl_composite_floor"
+      }
+    },
+    "variant=processor_cluster" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/rocket_multiblock_casing/processor_cluster"
+      }
+    }
+  }
+}

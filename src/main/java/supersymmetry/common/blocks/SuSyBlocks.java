@@ -69,6 +69,8 @@ public class SuSyBlocks {
     public static BlocksActiveCasing ACTIVE_CASING;
     public static BlockSupport SUPPORT;
 
+    public static BlockSuSyRocketMultiblockCasing ROCKET_MULTIBLOCK_CASING;
+
     public static BlockOuterHatch OUTER_HATCH;
     public static BlockInterStage INTERSTAGE;
     public static BlockFairingHull FAIRING_HULL;

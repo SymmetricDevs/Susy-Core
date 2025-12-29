@@ -21,8 +21,6 @@ tile.turbine_rotor.combustion.name=Combustion Turbine Block
 tile.drill_head.steel.name=Steel Drill Head
 
 tile.susy_multiblock_casing.silicon_carbide_casing.name=Tough Silicon Carbide Casing
-tile.susy_multiblock_casing.processor_cluster.name=Processor Cluster
-
 tile.susy_multiblock_casing.sieve_tray.name=Sieve Tray
 tile.susy_multiblock_casing.coalescence_plate.name=Coalescence Plate
 tile.susy_multiblock_casing.structural_packing.name=Structural Packing
@@ -35,6 +33,10 @@ tile.rocket_assembler_casing.foundation.name=Rocket Assembler Foundation
 tile.rocket_assembler_casing.rails.name=Rocket Assembler Rails
 tile.rocket_assembler_casing.structural_frame.name=Rocket Assembler Structural Frame
 tile.susy_multiblock_casing.euv_safe_casing.name=Extreme-Ultraviolet-Safe Lithographer Casing
+
+tile.susy_multiblock_casing.processor_cluster.name=Processor Cluster
+tile.susy_rocket_multiblock_casing.vinyl_ceiling_grid.name=Vinyl Ceiling Grid
+tile.susy_rocket_multiblock_casing.vinyl_composite_floor.name=Vinyl Composite Floor
 
 tile.serpentine.basic.name=Copper Tubing Serpentine Block
 
