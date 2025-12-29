@@ -61,12 +61,15 @@ import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.common.blocks.BlockSerpentine;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
+import supersymmetry.common.blocks.BlockSuSyRocketMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.common.mui.widget.RocketStageDisplayWidget;
 import supersymmetry.common.mui.widget.SlotWidgetMentallyStable;
 import supersymmetry.common.rocketry.SusyRocketComponents;
+
+import javax.annotation.Nonnull;
 
 import static supercritical.api.pattern.SCPredicates.FLUID_BLOCKS_KEY;
 import static supercritical.api.pattern.SCPredicates.fluid;
@@ -163,7 +166,7 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
     }
 
     public IBlockState getComputerState() {
-        return SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.PROCESSOR_CLUSTER);
+        return SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(BlockSuSyRocketMultiblockCasing.CasingType.PROCESSOR_CLUSTER);
     }
 
     @Override
@@ -453,9 +456,7 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                 .where('P', states(getComputerState()))
                 .where('T', states(MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.TEMPERED_GLASS)))
                 .where('B', states(SuSyBlocks.SERPENTINE.getState(BlockSerpentine.SerpentineType.BASIC)))
-                .where('F', fluid(SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid())
-                        .or(air())
-                        .or(any()))
+                .where('F', fluid(SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid()))
                 .where('I', abilities(MultiblockAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1).setMinGlobalLimited(1, 1)
                         .or(abilities(MultiblockAbility.EXPORT_FLUIDS).setMaxGlobalLimited(1).setMaxGlobalLimited(1, 1))
                         .or(states(getCasingState())))
@@ -467,6 +468,12 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                                 .or(states(getCasingState()))
                                 .or(maintenancePredicate().setMaxGlobalLimited(1).setMinGlobalLimited(1, 1)))
                 .build();
+    }
+
+    @Nonnull
+    @Override
+    protected ICubeRenderer getFrontOverlay() {
+        return Textures.ASSEMBLER_OVERLAY;
     }
 
     @Override
