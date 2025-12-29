@@ -75,7 +75,11 @@ public class BlockSuSyMultiblockCasing extends VariantBlock<BlockSuSyMultiblockC
         HEAVY_DUTY_PAD("heavy_duty_pad"),
         ADVANCED_REFRACTORY_LINING("advanced_refractory_lining"),
         COALESCENCE_PLATE("coalescence_plate"),
-        PROCESSOR_CLUSTER("processor_cluster");
+        PROCESSOR_CLUSTER("processor_cluster"),
+        VINYL_CEILING_TILE("vinyl_ceiling_tile"),
+        CEILING_GRID_FILTER_UNIT("ceiling_grid_filter_unit"),
+        VINYL_COMPOSITE_FLOORING("vinyl_composite_flooring"),
+        AEROSPACE_GASKET("aerospace_gasket");
 
         private final String name;
 
