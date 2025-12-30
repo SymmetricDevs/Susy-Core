@@ -1,9 +1,12 @@
 package supersymmetry.mixins.gregtech;
 
+import gregtech.api.unification.stack.ItemAndMetadata;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.item.ItemStack;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
@@ -14,8 +17,12 @@ import gregtech.api.unification.stack.ItemMaterialInfo;
 import gregtech.api.unification.stack.MaterialStack;
 import supersymmetry.loaders.recipes.handlers.RecyclingManager;
 
+import java.util.Map;
+
 @Mixin(value = OreDictUnifier.class, remap = false)
 public abstract class OreDictUnifierMixin {
+    @Shadow
+    private static final Map<ItemAndMetadata, ItemMaterialInfo> materialUnificationInfo = new Object2ObjectOpenHashMap<>();
 
     /**
      * @author Tian_mi
@@ -24,7 +31,7 @@ public abstract class OreDictUnifierMixin {
     @Overwrite
     public static void registerOre(ItemStack itemStack, ItemMaterialInfo materialInfo) {
         RecyclingManager.registerOre(itemStack, materialInfo);
-        OreDictUnifier.registerOre(itemStack, materialInfo);
+        materialUnificationInfo.put(new ItemAndMetadata(itemStack), materialInfo);
     }
 
     @WrapOperation(method = "getMaterial(Lnet/minecraft/item/ItemStack;)Lgregtech/api/unification/stack/MaterialStack;",
