@@ -3,26 +3,44 @@
   "defaults": {
     "model": "minecraft:cube_all",
     "textures": {
-      "all": "gregtech:blocks/rocket_multiblock_casing/vinyl_ceiling_grid"
+      "all": "gregtech:blocks/rocket_multiblock_casing/processor_cluster"
     }
   },
   "variants" : {
-    "variant=vinyl_ceiling_grid" : {
-      "model" : "minecraft:cube_all",
-      "textures" : {
-        "all" : "gregtech:blocks/rocket_multiblock_casing/vinyl_ceiling_grid"
-      }
-    },
-    "variant=vinyl_composite_floor" : {
-      "model" : "minecraft:cube_all",
-      "textures" : {
-        "all" : "gregtech:blocks/rocket_multiblock_casing/vinyl_composite_floor"
-      }
-    },
     "variant=processor_cluster" : {
       "model" : "minecraft:cube_all",
       "textures" : {
         "all" : "gregtech:blocks/rocket_multiblock_casing/processor_cluster"
+      }
+    },
+    "variant=vinyl_ceiling_tile" : {
+      "model" : "minecraft:cube_bottom_top",
+      "textures" : {
+        "bottom": "gregtech:blocks/rocket_multiblock_casing/vinyl_ceiling_tile_bottom",
+        "top": "gregtech:blocks/rocket_multiblock_casing/vinyl_ceiling_tile_top",
+        "side": "gregtech:blocks/rocket_multiblock_casing/vinyl_ceiling_tile_side"
+      }
+    },
+    "variant=ceiling_grid_filter_unit" : {
+      "model" : "minecraft:cube_bottom_top",
+      "textures" : {
+        "bottom": "gregtech:blocks/rocket_multiblock_casing/ceiling_grid_filter_unit_bottom",
+        "top": "gregtech:blocks/rocket_multiblock_casing/ceiling_grid_filter_unit_top",
+        "side": "gregtech:blocks/rocket_multiblock_casing/vinyl_ceiling_tile_side"
+      }
+    },
+    "variant=vinyl_composite_flooring" : {
+      "model" : "minecraft:cube_bottom_top",
+      "textures" : {
+        "bottom" : "gregtech:blocks/rocket_multiblock_casing/vinyl_composite_flooring_bottom",
+        "side" : "gregtech:blocks/rocket_multiblock_casing/vinyl_composite_flooring_side",
+        "top" : "gregtech:blocks/rocket_multiblock_casing/vinyl_composite_flooring_top"
+      }
+    },
+    "variant=aerospace_gasket" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/rocket_multiblock_casing/aerospace_gasket"
       }
     }
   }

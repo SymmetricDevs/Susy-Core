@@ -81,40 +81,6 @@
       "textures" : {
         "all" : "gregtech:blocks/multiblock_casing/coalescence_plate"
       }
-    },
-    "variant=processor_cluster" : {
-      "model" : "minecraft:cube_all",
-      "textures" : {
-        "all" : "gregtech:blocks/multiblock_casing/processor_cluster"
-      }
-    },
-    "variant=vinyl_ceiling_tile" : {
-      "model" : "minecraft:cube_bottom_top",
-      "textures" : {
-        "bottom": "gregtech:blocks/multiblock_casing/vinyl_ceiling_tile_bottom",
-        "top": "gregtech:blocks/multiblock_casing/vinyl_ceiling_tile_top",
-        "side": "gregtech:blocks/multiblock_casing/vinyl_ceiling_tile_side"
-      }
-    },
-    "variant=ceiling_grid_filter_unit" : {
-      "model" : "minecraft:cube_bottom_top",
-      "textures" : {
-        "bottom": "gregtech:blocks/multiblock_casing/ceiling_grid_filter_unit_bottom",
-        "top": "gregtech:blocks/multiblock_casing/vinyl_ceiling_tile_top",
-        "side": "gregtech:blocks/multiblock_casing/vinyl_ceiling_tile_side"
-      }
-    },
-    "variant=vinyl_composite_flooring" : {
-      "model" : "minecraft:cube_all",
-      "textures" : {
-        "all" : "gregtech:blocks/multiblock_casing/vinyl_composite_flooring"
-      }
-    },
-    "variant=aerospace_gasket" : {
-      "model" : "minecraft:cube_all",
-      "textures" : {
-        "all" : "gregtech:blocks/multiblock_casing/aerospace_gasket"
-      }
     }
   }
 }
