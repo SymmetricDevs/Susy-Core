@@ -26,7 +26,7 @@ public class BlockSuSyRocketMultiblockCasing extends VariantBlock<BlockSuSyRocke
         setResistance(10.0f);
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 2);
-        setDefaultState(getState(CasingType.VINYL_CEILING_GRID));
+        setDefaultState(getState(CasingType.PROCESSOR_CLUSTER));
     }
 
     @Override
@@ -55,9 +55,11 @@ public class BlockSuSyRocketMultiblockCasing extends VariantBlock<BlockSuSyRocke
 
     public enum CasingType implements IStringSerializable {
 
-        VINYL_CEILING_GRID("vinyl_ceiling_grid"),
-        VINYL_COMPOSITE_FLOOR("vinyl_composite_floor"),
-        PROCESSOR_CLUSTER("processor_cluster");
+        PROCESSOR_CLUSTER("processor_cluster"),
+        VINYL_CEILING_TILE("vinyl_ceiling_tile"),
+        CEILING_GRID_FILTER_UNIT("ceiling_grid_filter_unit"),
+        VINYL_COMPOSITE_FLOORING("vinyl_composite_flooring"),
+        AEROSPACE_GASKET("aerospace_gasket");
 
         private final String name;
 
