@@ -66,8 +66,10 @@ import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.api.util.DataStorageLoader;
+import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockSerpentine;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
+import supersymmetry.common.blocks.BlockSuSyRocketMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.materials.SusyMaterials;
@@ -75,6 +77,8 @@ import supersymmetry.common.mui.widget.ConditionalWidget;
 import supersymmetry.common.mui.widget.RocketRenderWidget;
 import supersymmetry.common.mui.widget.SlotWidgetMentallyStable;
 import supersymmetry.common.rocketry.SuccessCalculation;
+
+import javax.annotation.Nonnull;
 
 import static supercritical.api.pattern.SCPredicates.*;
 
@@ -231,6 +235,9 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     }
 
     @Override
+    protected @Nonnull ICubeRenderer getFrontOverlay() { return SusyTextures.ORE_SORTER_OVERLAY; }
+
+    @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
         return Textures.SOLID_STEEL_CASING;
     }
@@ -240,7 +247,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     }
 
     public IBlockState getComputerState() {
-        return SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.PROCESSOR_CLUSTER);
+        return SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(BlockSuSyRocketMultiblockCasing.CasingType.PROCESSOR_CLUSTER);
     }
 
     @Override
@@ -414,21 +421,19 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle("EIIIIIIC", "CBBBBBBC", "CBBBBBBC", "CBBBBBBC")
-                .aisle("ECCCCCCE", "CPPPFPPC", "CPPPFPPC", "CFFFFFFC")
-                .aisle("ECCCCCCE", "CPPPFPPC", "CPPPFPPC", "CFFFFFFC")
-                .aisle("ECCCCCCE", "CPPPFPPC", "CPPPFPPC", "CFFFFFFC")
-                .aisle("ECCCCCCE", "CPPPFPPC", "CPPPFPPC", "CFFFFFFC")
-                .aisle("EESEEEEE", "CTTTTTTC", "CTTTTTTC", "CTTTTTTC")
+                .aisle("EIIIIIIC", "CBBBBBBC", "CBBBBBBC", "CBBBBBBC", "CCCCCCCC")
+                .aisle("ECCCCCCE", "CPPPFPPC", "CPPPFPPC", "CFFFFFFC", "CTTTTTTC")
+                .aisle("ECCCCCCE", "CPPPFPPC", "CPPPFPPC", "CFFFFFFC", "CTTTTTTC")
+                .aisle("ECCCCCCE", "CPPPFPPC", "CPPPFPPC", "CFFFFFFC", "CTTTTTTC")
+                .aisle("ECCCCCCE", "CPPPFPPC", "CPPPFPPC", "CFFFFFFC", "CTTTTTTC")
+                .aisle("EESEEEEE", "CTTTTTTC", "CTTTTTTC", "CTTTTTTC", "CTTTTTTC")
                 .where('S', selfPredicate())
                 .where(' ', air())
                 .where('C', states(getCasingState()))
                 .where('P', states(getComputerState()))
                 .where('T', states(MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.TEMPERED_GLASS)))
                 .where('B', states(SuSyBlocks.SERPENTINE.getState(BlockSerpentine.SerpentineType.BASIC)))
-                .where('F', fluid(SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid())
-                                .or(air())
-                                .or(any()))
+                .where('F', fluid(SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid()))
                 .where('I', abilities(MultiblockAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1).setMinGlobalLimited(1, 1)
                                 .or(abilities(MultiblockAbility.EXPORT_FLUIDS).setMaxGlobalLimited(1).setMaxGlobalLimited(1, 1))
                                 .or(states(getCasingState())))

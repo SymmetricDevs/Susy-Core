@@ -17,16 +17,16 @@ import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.block.VariantBlock;
 
-public class BlockSuSyMultiblockCasing extends VariantBlock<BlockSuSyMultiblockCasing.CasingType> {
+public class BlockSuSyRocketMultiblockCasing extends VariantBlock<BlockSuSyRocketMultiblockCasing.CasingType> {
 
-    public BlockSuSyMultiblockCasing() {
+    public BlockSuSyRocketMultiblockCasing() {
         super(Material.IRON);
-        setTranslationKey("susy_multiblock_casing");
+        setTranslationKey("susy_rocket_multiblock_casing");
         setHardness(5.0f);
         setResistance(10.0f);
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 2);
-        setDefaultState(getState(CasingType.SILICON_CARBIDE_CASING));
+        setDefaultState(getState(CasingType.PROCESSOR_CLUSTER));
     }
 
     @Override
@@ -38,43 +38,28 @@ public class BlockSuSyMultiblockCasing extends VariantBlock<BlockSuSyMultiblockC
     @Override
     @SideOnly(Side.CLIENT)
     public boolean canRenderInLayer(@NotNull IBlockState state, @NotNull BlockRenderLayer layer) {
-        if (state.getValue(VARIANT) == CasingType.COALESCENCE_PLATE) {
-            return layer == BlockRenderLayer.CUTOUT;
-        }
         return super.canRenderInLayer(state, layer);
     }
 
     @Override
     @SuppressWarnings("deprecation")
     public boolean isOpaqueCube(@NotNull IBlockState state) {
-        if (state.getValue(VARIANT) == CasingType.COALESCENCE_PLATE) {
-            return false;
-        }
         return super.isOpaqueCube(state);
     }
 
     @Override
     @SuppressWarnings("deprecation")
     public int getLightOpacity(@NotNull IBlockState state) {
-        if (state.getValue(VARIANT) == CasingType.COALESCENCE_PLATE) {
-            return 3; // Some random number IDK
-        }
         return super.getLightOpacity(state);
     }
 
     public enum CasingType implements IStringSerializable {
 
-        SILICON_CARBIDE_CASING("silicon_carbide_casing"),
-        SIEVE_TRAY("sieve_tray"),
-        STRUCTURAL_PACKING("structural_packing"),
-        ULV_STRUCTURAL_CASING("ulv_structural_casing"),
-        DRONE_PAD("drone_pad"),
-        MONEL_500_CASING("monel_casing"),
-        MONEL_500_PIPE("monel_casing_pipe"),
-        COPPER_PIPE("copper_casing_pipe"),
-        HEAVY_DUTY_PAD("heavy_duty_pad"),
-        ADVANCED_REFRACTORY_LINING("advanced_refractory_lining"),
-        COALESCENCE_PLATE("coalescence_plate");
+        PROCESSOR_CLUSTER("processor_cluster"),
+        VINYL_CEILING_TILE("vinyl_ceiling_tile"),
+        CEILING_GRID_FILTER_UNIT("ceiling_grid_filter_unit"),
+        VINYL_COMPOSITE_FLOORING("vinyl_composite_flooring"),
+        AEROSPACE_GASKET("aerospace_gasket");
 
         private final String name;
 

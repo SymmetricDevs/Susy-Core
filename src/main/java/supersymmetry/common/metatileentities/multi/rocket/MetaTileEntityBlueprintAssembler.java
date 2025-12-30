@@ -7,7 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import gregtech.api.capability.IMultipleTankHandler;
+import gregtech.api.capability.impl.EnergyContainerList;
+import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
+import gregtech.api.pattern.PatternMatchContext;
+import gregtech.api.util.TextComponentUtil;
 import gregtech.common.blocks.BlockGlassCasing;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -17,8 +22,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants.NBT;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -50,6 +61,7 @@ import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.common.blocks.BlockSerpentine;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
+import supersymmetry.common.blocks.BlockSuSyRocketMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.materials.SusyMaterials;
@@ -57,9 +69,17 @@ import supersymmetry.common.mui.widget.RocketStageDisplayWidget;
 import supersymmetry.common.mui.widget.SlotWidgetMentallyStable;
 import supersymmetry.common.rocketry.SusyRocketComponents;
 
+import javax.annotation.Nonnull;
+
+import static supercritical.api.pattern.SCPredicates.FLUID_BLOCKS_KEY;
 import static supercritical.api.pattern.SCPredicates.fluid;
 
 public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase {
+
+    private boolean coolantFilled;
+    private List<BlockPos> coolantPositions;
+
+    public IMultipleTankHandler inputCoolant;
 
     public static Map<String, Map<String, List<DataStorageLoader>>> generateSlotsFromBlueprint(
                                                                                                AbstractRocketBlueprint bp,
@@ -109,8 +129,30 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
     // && !item.getTagCompound().getBoolean("buildstat")
     );
 
+    public void fillCoolant(List<BlockPos> toFill, Fluid fluid, IMultipleTankHandler fluidInputs) {
+
+        if (fluidInputs != null) {
+            FluidStack toDrain = new FluidStack(fluid, 1000);
+            FluidStack drained = fluidInputs.drain(toDrain, false);
+            if (drained != null && drained.amount != 0) {
+                if (drained.amount == 1000) {
+                    World world = this.getWorld();
+                    BlockPos pos = (BlockPos)toFill.get(0);
+                    if (world.isBlockLoaded(pos) && (world.isAirBlock(pos) || world.getBlockState(pos).getBlock() == fluid.getBlock())) {
+                        world.setBlockState(pos, fluid.getBlock().getDefaultState(), 2);
+                        fluidInputs.drain(drained, true);
+                        toFill.remove(0);
+                    }
+                }
+
+            }
+        }
+    }
+
     public MetaTileEntityBlueprintAssembler(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
+
+        this.inputCoolant = new FluidTankList(true);
     }
 
     @Override
@@ -124,7 +166,7 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
     }
 
     public IBlockState getComputerState() {
-        return SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.PROCESSOR_CLUSTER);
+        return SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(BlockSuSyRocketMultiblockCasing.CasingType.PROCESSOR_CLUSTER);
     }
 
     @Override
@@ -352,29 +394,69 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
     }
 
     @Override
+    protected void addErrorText(List<ITextComponent> textList) {
+        super.addErrorText(textList);
+        if (isStructureFormed() && !coolantFilled) {
+            textList.add(TextComponentUtil.translationWithColor(TextFormatting.RED,
+                    "susy.multiblock.aerospace_flight_simulator.obstructed"));
+            textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                    "susy.multiblock.aerospace_flight_simulator.obstructed.desc"));
+        }
+    }
+
+    @Override
+    public void invalidateStructure() {
+        super.invalidateStructure();
+        this.inputCoolant = new FluidTankList(true);
+
+        this.coolantPositions = null; // Clear water fill data when the structure is invalidated
+        this.coolantFilled = false;
+    }
+
+    @Override
+    protected void formStructure(PatternMatchContext context) {
+        super.formStructure(context);
+        this.inputCoolant = new FluidTankList(true, getAbilities(MultiblockAbility.IMPORT_FLUIDS));
+
+        this.coolantPositions = context.getOrDefault(FLUID_BLOCKS_KEY, new ArrayList<>());
+        this.coolantFilled = coolantPositions.isEmpty();
+    }
+
+    @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
         return new MetaTileEntityBlueprintAssembler(metaTileEntityId);
     }
 
     @Override
-    protected void updateFormedValid() {}
+    protected void updateFormedValid() {
+        if (!coolantFilled && getOffsetTimer() % 5 == 0) {
+            fillCoolant(this.coolantPositions, SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid(), inputCoolant);
+            if (this.coolantPositions.isEmpty()) {
+                this.coolantFilled = true;
+            }
+        }
+    }
+
+    @Override
+    public boolean isStructureObstructed() {
+        return super.isStructureObstructed() || !coolantFilled;
+    }
 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle("EIIIIE", "CBBBBC", "CBBBBC", "CBBBBC")
-                .aisle("ECCCCE", "CPPFPC", "CPPFPC", "CFFFFC")
-                .aisle("ECCCCE", "CPPFPC", "CPPFPC", "CFFFFC")
-                .aisle("ECCCCE", "CPPFPC", "CPPFPC", "CFFFFC")
-                .aisle("EESEEE", "CTTTTC", "CTTTTC", "CTTTTC")
+                .aisle("EIIIIE", "CBBBBC", "CBBBBC", "CBBBBC", "CCCCCC")
+                .aisle("ECCCCE", "CPPFPC", "CPPFPC", "CFFFFC", "CTTTTC")
+                .aisle("ECCCCE", "CPPFPC", "CPPFPC", "CFFFFC", "CTTTTC")
+                .aisle("ECCCCE", "CPPFPC", "CPPFPC", "CFFFFC", "CTTTTC")
+                .aisle("EESEEE", "CTTTTC", "CTTTTC", "CTTTTC", "CTTTTC")
                 .where('S', selfPredicate())
+                .where(' ', air())
                 .where('C', states(getCasingState()))
                 .where('P', states(getComputerState()))
                 .where('T', states(MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.TEMPERED_GLASS)))
                 .where('B', states(SuSyBlocks.SERPENTINE.getState(BlockSerpentine.SerpentineType.BASIC)))
-                .where('F', fluid(SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid())
-                        .or(air())
-                        .or(any()))
+                .where('F', fluid(SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid()))
                 .where('I', abilities(MultiblockAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1).setMinGlobalLimited(1, 1)
                         .or(abilities(MultiblockAbility.EXPORT_FLUIDS).setMaxGlobalLimited(1).setMaxGlobalLimited(1, 1))
                         .or(states(getCasingState())))
@@ -383,15 +465,15 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                         abilities(MultiblockAbility.INPUT_ENERGY)
                                 .setMaxGlobalLimited(2)
                                 .setMinGlobalLimited(1, 1)
-                        .or(abilities(MultiblockAbility.IMPORT_ITEMS))
-                                .setMaxGlobalLimited(2)
-                                .setMinGlobalLimited(1, 1)
-                        .or(abilities(MultiblockAbility.EXPORT_ITEMS))
-                                .setMaxGlobalLimited(1)
-                                .setMinGlobalLimited(1, 1)
-                        .or(states(getCasingState()))
-                        .or(maintenancePredicate().setMaxGlobalLimited(1).setMinGlobalLimited(1, 1)))
+                                .or(states(getCasingState()))
+                                .or(maintenancePredicate().setMaxGlobalLimited(1).setMinGlobalLimited(1, 1)))
                 .build();
+    }
+
+    @Nonnull
+    @Override
+    protected ICubeRenderer getFrontOverlay() {
+        return Textures.ASSEMBLER_OVERLAY;
     }
 
     @Override

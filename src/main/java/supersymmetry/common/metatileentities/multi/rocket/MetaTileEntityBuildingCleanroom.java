@@ -47,6 +47,7 @@ import supersymmetry.api.blocks.VariantDirectionalRotatableBlock;
 import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 import supersymmetry.common.blocks.BlockMetallurgy2;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
+import supersymmetry.common.blocks.BlockSuSyRocketMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityComponentScanner;
@@ -177,7 +178,7 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
     public boolean isBlockEdge(@NotNull World world, @NotNull BlockPos.MutableBlockPos pos,
                                @NotNull EnumFacing direction) {
         return world.getBlockState(pos.move(direction)) ==
-                SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.AEROSPACE_GASKET);
+                SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(BlockSuSyRocketMultiblockCasing.CasingType.AEROSPACE_GASKET);
     }
 
     /**
@@ -189,7 +190,7 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
     public boolean isBlockFloor(@NotNull World world, @NotNull BlockPos.MutableBlockPos pos,
                                 @NotNull EnumFacing direction) {
         return isBlockEdge(world, pos, direction) || world.getBlockState(pos) ==
-                SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.VINYL_COMPOSITE_FLOORING);
+                SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(BlockSuSyRocketMultiblockCasing.CasingType.VINYL_COMPOSITE_FLOORING);
     }
 
     @Override
@@ -321,9 +322,9 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
                     .setRepeatable(fDist_f.getInt(this) - 1)
                     .aisle(wall)
                     .where('S', this.selfPredicate())
-                    .where('B', states(SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.AEROSPACE_GASKET))
+                    .where('B', states(SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(BlockSuSyRocketMultiblockCasing.CasingType.AEROSPACE_GASKET))
                             .or(basePredicate))
-                    .where('L', states(SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.VINYL_COMPOSITE_FLOORING)))
+                    .where('L', states(SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(BlockSuSyRocketMultiblockCasing.CasingType.VINYL_COMPOSITE_FLOORING)))
                     .where('W', glassPredicate.or(polystyreneEWPredicate)
                             .or(basePredicate)
                             .or(doorPredicate().setMaxGlobalLimited(8))
@@ -335,8 +336,8 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
                             .or(scannerPredicate)
                             .or(abilities(MultiblockAbility.PASSTHROUGH_HATCH).setMaxGlobalLimited(30)))
                     .where('K', glassPredicate.or(polystyreneNSPredicate).or(polystyreneEWPredicate))
-                    .where('F', states(SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.VINYL_CEILING_TILE))
-                            .or(states(SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.CEILING_GRID_FILTER_UNIT))
+                    .where('F', states(SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(BlockSuSyRocketMultiblockCasing.CasingType.VINYL_CEILING_TILE))
+                            .or(states(SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(BlockSuSyRocketMultiblockCasing.CasingType.CEILING_GRID_FILTER_UNIT))
                                     .setMinGlobalLimited(minFilters)))
                     .where(' ', this.innerPredicate())
                     .build();
@@ -393,23 +394,23 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
                 .aisle(new String[] { "BJJJB", "W   X", "W   X", "W   X", "BFGFB" })
                 .aisle(new String[] { "BBMBB", "BZPZB", "BZRZB", "BZZZB", "BBBBB" })
                 // Edges/borders
-                .where('B', SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.AEROSPACE_GASKET))
+                .where('B', SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(BlockSuSyRocketMultiblockCasing.CasingType.AEROSPACE_GASKET))
                 // Floor
-                .where('J', SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.VINYL_COMPOSITE_FLOORING))
+                .where('J', SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(BlockSuSyRocketMultiblockCasing.CasingType.VINYL_COMPOSITE_FLOORING))
                 // Ceiling tiles
-                .where('F', SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.VINYL_CEILING_TILE))
+                .where('F', SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(BlockSuSyRocketMultiblockCasing.CasingType.VINYL_CEILING_TILE))
                 // Ceiling grid filter (satisfies 5% requirement)
-                .where('G', SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.CEILING_GRID_FILTER_UNIT))
+                .where('G', SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(BlockSuSyRocketMultiblockCasing.CasingType.CEILING_GRID_FILTER_UNIT))
                 // Polystyrene walls - left/right (EAST/WEST facing)
                 .where('W', SuSyBlocks.METALLURGY_2.getState(BlockMetallurgy2.BlockMetallurgy2Type.POLYSTYRENE_WALL)
-                        .withProperty(VariantHorizontalRotatableBlock.FACING, EnumFacing.WEST))
+                        .withProperty(VariantHorizontalRotatableBlock.FACING, EnumFacing.SOUTH))
                 .where('X', SuSyBlocks.METALLURGY_2.getState(BlockMetallurgy2.BlockMetallurgy2Type.POLYSTYRENE_WALL)
-                        .withProperty(VariantHorizontalRotatableBlock.FACING, EnumFacing.EAST))
+                        .withProperty(VariantHorizontalRotatableBlock.FACING, EnumFacing.NORTH))
                 // Polystyrene walls - back/front (NORTH/SOUTH facing)
                 .where('Y', SuSyBlocks.METALLURGY_2.getState(BlockMetallurgy2.BlockMetallurgy2Type.POLYSTYRENE_WALL)
-                        .withProperty(VariantHorizontalRotatableBlock.FACING, EnumFacing.NORTH))
+                        .withProperty(VariantHorizontalRotatableBlock.FACING, EnumFacing.EAST))
                 .where('Z', SuSyBlocks.METALLURGY_2.getState(BlockMetallurgy2.BlockMetallurgy2Type.POLYSTYRENE_WALL)
-                        .withProperty(VariantHorizontalRotatableBlock.FACING, EnumFacing.SOUTH))
+                        .withProperty(VariantHorizontalRotatableBlock.FACING, EnumFacing.WEST))
                 // Controller
                 .where('S', SuSyMetaTileEntities.BUILDING_CLEANROOM, EnumFacing.SOUTH)
                 // Air
@@ -431,8 +432,8 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
                         'M',
                         () -> {
                             return ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH :
-                                    SuSyBlocks.MULTIBLOCK_CASING.getState(
-                                            BlockSuSyMultiblockCasing.CasingType.AEROSPACE_GASKET);
+                                    SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(
+                                            BlockSuSyRocketMultiblockCasing.CasingType.AEROSPACE_GASKET);
                         },
                         EnumFacing.SOUTH)
                 // Door (lower half)
