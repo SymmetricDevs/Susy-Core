@@ -1,15 +1,20 @@
 package supersymmetry.api.util;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import gregtech.api.GTValues;
 import gregtech.api.unification.material.Material;
 import supersymmetry.Supersymmetry;
+import supersymmetry.SusyConfig;
 
 public class SuSyUtility {
 
@@ -114,5 +119,17 @@ public class SuSyUtility {
     /// I hate this...
     public static String getNameForColor(EnumDyeColor color) {
         return color == EnumDyeColor.SILVER ? "light_gray" : color.getName();
+    }
+
+    private static Set<String> bannedSpaceItems;
+    public static void loadBannedSpaceItems() {
+        bannedSpaceItems = Arrays.stream(SusyConfig.bannedSpaceItems).collect(Collectors.toSet());
+    }
+
+    public static boolean isAllowedItemForSpace(ItemStack item) {
+        if (bannedSpaceItems == null) {
+            loadBannedSpaceItems();
+        }
+        return bannedSpaceItems.contains(item.getItem().getRegistryName().toString());
     }
 }

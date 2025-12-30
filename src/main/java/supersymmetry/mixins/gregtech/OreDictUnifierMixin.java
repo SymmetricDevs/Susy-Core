@@ -24,6 +24,7 @@ public abstract class OreDictUnifierMixin {
     @Overwrite
     public static void registerOre(ItemStack itemStack, ItemMaterialInfo materialInfo) {
         RecyclingManager.registerOre(itemStack, materialInfo);
+        OreDictUnifier.registerOre(itemStack, materialInfo);
     }
 
     @WrapOperation(method = "getMaterial(Lnet/minecraft/item/ItemStack;)Lgregtech/api/unification/stack/MaterialStack;",

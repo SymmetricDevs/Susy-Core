@@ -9,4 +9,8 @@ public class SusyConfig {
             "Default: true" })
     @Config.RequiresMcRestart
     public static boolean disableLdItemPipes = true;
+
+    @Config.Comment({ "Ban certain items from space." })
+    @Config.RequiresMcRestart
+    public static String[] bannedSpaceItems = {};
 }
