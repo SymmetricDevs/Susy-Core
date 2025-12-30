@@ -34,9 +34,12 @@ tile.rocket_assembler_casing.rails.name=Rocket Assembler Rails
 tile.rocket_assembler_casing.structural_frame.name=Rocket Assembler Structural Frame
 tile.susy_multiblock_casing.euv_safe_casing.name=Extreme-Ultraviolet-Safe Lithographer Casing
 
-tile.susy_multiblock_casing.processor_cluster.name=Processor Cluster
-tile.susy_rocket_multiblock_casing.vinyl_ceiling_grid.name=Vinyl Ceiling Grid
-tile.susy_rocket_multiblock_casing.vinyl_composite_floor.name=Vinyl Composite Floor
+tile.susy_rocket_multiblock_casing.processor_cluster.name=Processor Cluster
+tile.susy_rocket_multiblock_casing.vinyl_ceiling_tile.name=Vinyl Ceiling Tile
+tile.susy_rocket_multiblock_casing.ceiling_grid_filter_unit.name=Ceiling Grid Filter Unit
+tile.susy_rocket_multiblock_casing.vinyl_composite_flooring.name=Vinyl Composite Flooring
+tile.susy_rocket_multiblock_casing.aerospace_gasket.name=Aerospace Gasket
+tile.metallurgy_2.polystyrene_wall.name=Polystyrene Wall
 
 tile.serpentine.basic.name=Copper Tubing Serpentine Block
 
