@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import gregtech.client.renderer.ICubeRenderer;
+import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockGlassCasing;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.state.IBlockState;
@@ -45,6 +47,7 @@ import gregtech.common.metatileentities.MetaTileEntities;
 import gregtech.common.metatileentities.multi.electric.MetaTileEntityCleanroom;
 import supersymmetry.api.blocks.VariantDirectionalRotatableBlock;
 import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
+import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockMetallurgy2;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.BlockSuSyRocketMultiblockCasing;
@@ -335,7 +338,6 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
                             .or(doorPredicate().setMaxGlobalLimited(8))
                             .or(scannerPredicate)
                             .or(abilities(MultiblockAbility.PASSTHROUGH_HATCH).setMaxGlobalLimited(30)))
-                    .where('K', glassPredicate.or(polystyreneNSPredicate).or(polystyreneEWPredicate))
                     .where('F', states(SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(BlockSuSyRocketMultiblockCasing.CasingType.VINYL_CEILING_TILE))
                             .or(states(SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(BlockSuSyRocketMultiblockCasing.CasingType.CEILING_GRID_FILTER_UNIT))
                                     .setMinGlobalLimited(minFilters)))
@@ -403,14 +405,14 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
                 .where('G', SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(BlockSuSyRocketMultiblockCasing.CasingType.CEILING_GRID_FILTER_UNIT))
                 // Polystyrene walls - left/right (EAST/WEST facing)
                 .where('W', SuSyBlocks.METALLURGY_2.getState(BlockMetallurgy2.BlockMetallurgy2Type.POLYSTYRENE_WALL)
-                        .withProperty(VariantHorizontalRotatableBlock.FACING, EnumFacing.SOUTH))
+                        .withProperty(VariantHorizontalRotatableBlock.FACING, EnumFacing.EAST))
                 .where('X', SuSyBlocks.METALLURGY_2.getState(BlockMetallurgy2.BlockMetallurgy2Type.POLYSTYRENE_WALL)
-                        .withProperty(VariantHorizontalRotatableBlock.FACING, EnumFacing.NORTH))
+                        .withProperty(VariantHorizontalRotatableBlock.FACING, EnumFacing.WEST))
                 // Polystyrene walls - back/front (NORTH/SOUTH facing)
                 .where('Y', SuSyBlocks.METALLURGY_2.getState(BlockMetallurgy2.BlockMetallurgy2Type.POLYSTYRENE_WALL)
-                        .withProperty(VariantHorizontalRotatableBlock.FACING, EnumFacing.EAST))
+                        .withProperty(VariantHorizontalRotatableBlock.FACING, EnumFacing.NORTH))
                 .where('Z', SuSyBlocks.METALLURGY_2.getState(BlockMetallurgy2.BlockMetallurgy2Type.POLYSTYRENE_WALL)
-                        .withProperty(VariantHorizontalRotatableBlock.FACING, EnumFacing.WEST))
+                        .withProperty(VariantHorizontalRotatableBlock.FACING, EnumFacing.SOUTH))
                 // Controller
                 .where('S', SuSyMetaTileEntities.BUILDING_CLEANROOM, EnumFacing.SOUTH)
                 // Air
@@ -453,6 +455,11 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
         // Build the shape
         shapeInfo.add(builder.build());
         return shapeInfo;
+    }
+
+    @Override
+    public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
+        return SusyTextures.AEROSPACE_GASKET;
     }
 
     public AxisAlignedBB getInteriorBB() {
