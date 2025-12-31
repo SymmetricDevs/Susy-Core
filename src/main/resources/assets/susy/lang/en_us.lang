@@ -205,7 +205,6 @@ tile.susy_stone_bricks.minitary_concrete.name=Military Concrete Bricks
 susy.material.manganese_iron_arsenic_phosphide=Manganese Iron Arsenic Phosphide
 susy.material.praseodymium_nickel=Praseodymium-Nickel
 susy.material.gadolinium_silicon_germanium=Gadolinium Silicon Germanium
-susy.material.aluminium_7075=Aluminium Alloy 7075
 susy.material.latex=Latex
 susy.material.mud=Mud
 susy.material.sea_water=Sea Water
@@ -217,6 +216,8 @@ susy.material.supreme_lubricant=Supreme Lubricant
 susy.material.coolant=Coolant
 susy.material.advanced_coolant=Advanced Coolant
 susy.material.lubricating_oil=Lubricating Oil
+susy.material.aluminium_alloy_7075=Aluminium Alloy 7075
+susy.material.aluminium_alloy_6061=Aluminium Alloy 6061
 
 # Rock/Mineral Materials
 susy.material.fluorite=Fluorite
