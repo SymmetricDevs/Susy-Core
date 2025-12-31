@@ -4,23 +4,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.util.Tuple;
 import org.apache.commons.lang3.tuple.Triple;
 
 import gregtech.api.unification.material.Material;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
+import supersymmetry.integration.immersiverailroading.model.part.Rocket;
 
 public class RocketFuelEntry {
 
     private Material material; // the main fuel
-    private ArrayList<Triple<Material, Double, Double>> sides; // any extra required materials, their proportions, and
-                                                               // their
-    // densities
+    private ArrayList<Tuple<Material, Double>> sides; // any extra required materials, their proportions
     private String registryName;
     private double density; // kg/L
     private double sIVacuum; // kg * m / s
     private double sIPerPressure;
 
-    public RocketFuelEntry(String registryName, Material material, ArrayList<Triple<Material, Double, Double>> sides,
+    public RocketFuelEntry(String registryName, Material material, ArrayList<Tuple<Material, Double>> sides,
                            double density, double sIVacuum, double sIPerPressure) {
         this.registryName = registryName;
         this.material = material;
@@ -34,7 +34,7 @@ public class RocketFuelEntry {
     public RocketFuelEntry(RocketFuelEntry copy) {
         this.material = copy.material;
         this.density = copy.density;
-        this.sides = (ArrayList<Triple<Material, Double, Double>>) copy.sides.clone();
+        this.sides = (ArrayList<Tuple<Material, Double>>) copy.sides.clone();
         this.sIVacuum = copy.sIVacuum;
         this.registryName = copy.registryName;
     }
@@ -58,19 +58,7 @@ public class RocketFuelEntry {
     }
 
     public static void registerFuel(RocketFuelEntry rfe) {
-        if (!getRegistryLock()) {
-            FUEL_REGISTRY.put(rfe.registryName, rfe);
-        }
-    }
-
-    public static boolean registryLock = false;
-
-    public static boolean getRegistryLock() {
-        return registryLock;
-    }
-
-    public static void setRegistryLock(boolean registryLock) {
-        AbstractRocketBlueprint.registryLock = registryLock;
+        FUEL_REGISTRY.put(rfe.registryName, rfe);
     }
 
     public String getRegistryName() {
@@ -91,5 +79,38 @@ public class RocketFuelEntry {
 
     public double getSIVariation() {
         return this.sIPerPressure;
+    }
+
+    public class RocketFuelEntryBuilder {
+        private RocketFuelEntry rfe;
+        private double proportionTot = 0;
+        public RocketFuelEntryBuilder(String name) {
+            this.rfe.registryName=name;
+            this.rfe.sides = new ArrayList<>();
+        }
+
+        public void addComponent(Material mat, double proportion) throws Exception {
+            proportionTot += proportion;
+            if (proportionTot >= 1) {
+                throw new Exception("total proportion over 1");
+            }
+            rfe.sides.add(new Tuple<Material, Double>(mat, proportion));
+        }
+
+        public void setCharacteristics(double density, double sIVacuum, double sIPerPressure) {
+            rfe.density = density;
+            rfe.sIVacuum = sIVacuum;
+            rfe.sIPerPressure = sIPerPressure;
+        }
+
+        public void register() throws Exception {
+            if (sides.isEmpty()) {
+                throw new Exception("empty list of fuel component entries");
+            }
+            if (proportionTot != 1) {
+                throw new Exception("incorrect total proportion");
+            }
+            RocketFuelEntry.registerFuel(rfe);
+        }
     }
 }
