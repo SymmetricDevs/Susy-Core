@@ -200,6 +200,8 @@ public class SusyTextures {
             "gregtech:blocks/casings/mechanic/machine_casing_turbine_steel");
     public static final SimpleCubeRenderer TITANIUM_TURBINE_CASING = new SimpleCubeRenderer(
             "gregtech:blocks/casings/mechanic/machine_casing_turbine_titanium");
+    public static final SimpleCubeRenderer AEROSPACE_GASKET = new SimpleCubeRenderer(
+            "gregtech:blocks/rocket_multiblock_casing/aerospace_gasket");
 
     public static final DrumRenderer PLASTIC_CAN = new DrumRenderer("storage/drums/plastic_can");
 
