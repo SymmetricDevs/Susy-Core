@@ -159,7 +159,7 @@ public class PlanetChunkGenerator implements IChunkGenerator {
                             // Loop through z axis
                             for (int jZ = 0; jZ < 4; ++jZ) {
                                 // If the noiseLevel is above 0, set block to stone.
-                                if (height < 2) {
+                                if (height < 1) {
                                     primer.setBlockState(iX * 4 + jX, iY * 8 + jY, iZ * 4 + jZ, bedrock);
                                 } else if ((zVariation += d16) > 0.0D) {
                                     primer.setBlockState(iX * 4 + jX, iY * 8 + jY, iZ * 4 + jZ, stone);
