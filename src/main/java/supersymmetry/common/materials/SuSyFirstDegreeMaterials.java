@@ -3,6 +3,7 @@ package supersymmetry.common.materials;
 import static gregtech.api.unification.material.Materials.*;
 import static gregtech.api.unification.material.info.MaterialFlags.*;
 import static gregtech.api.unification.material.info.MaterialIconSet.*;
+import static supersymmetry.api.unification.material.info.SuSyMaterialFlags.CONTINUOUSLY_CAST;
 import static supersymmetry.common.materials.SusyMaterials.*;
 
 import gregtech.api.GTValues;
@@ -39,16 +40,7 @@ public class SuSyFirstDegreeMaterials {
                 .components(Gadolinium, 5, Silicon, 2, Germanium, 2)
                 .blastTemp(2100, BlastProperty.GasTier.HIGH)
                 .build();
-
-        Aluminium7075 = new Material.Builder(27103, SuSyUtility.susyId("aluminium_7075"))
-                .ingot()
-                .color(0x63c8d8).iconSet(SHINY)
-                .cableProperties(GTValues.V[4], 1, 2)
-                .components(Aluminium, 8, Zinc, 1, Magnesium, 1, Chrome, 1)
-                .blast(2700, BlastProperty.GasTier.MID)
-                .build();
-        Aluminium7075.addFlags(GENERATE_PLATE);
-
+;
         // Minerals
 
         Anorthite = new Material.Builder(27104, SuSyUtility.susyId("anorthite"))
@@ -196,5 +188,23 @@ public class SuSyFirstDegreeMaterials {
                 .color(0xb50707)
                 .flags(FLAMMABLE)
                 .build();
+
+        // Aluminium Alloys
+
+        AluminiumAlloy6061 = new Material.Builder(8759, SuSyUtility.susyId("aluminium_alloy_6061"))
+                .ingot().liquid(new FluidBuilder().temperature(923))
+                .color(0x8aa1e5)
+                .flags(DISABLE_DECOMPOSITION, CONTINUOUSLY_CAST)
+                .components(Aluminium, 634, Magnesium, 8, Silicon, 4, Copper, 1, Chrome, 1)
+                .build();
+        AluminiumAlloy6061.addFlags(GENERATE_FINE_WIRE);
+
+        AluminiumAlloy7075 = new Material.Builder(8760, SuSyUtility.susyId("aluminium_alloy_7075"))
+                .ingot().liquid(new FluidBuilder().temperature(913))
+                .color(0x9fe9ef)
+                .flags(DISABLE_DECOMPOSITION, CONTINUOUSLY_CAST)
+                .components(Aluminium, 678, Zinc, 17, Magnesium, 20, Copper, 4, Chrome, 1)
+                .build();
+        AluminiumAlloy7075.addFlags(GENERATE_FINE_WIRE);
     }
 }

@@ -20,7 +20,7 @@ public class BlockFairingHull extends VariantDirectionalCoverableBlock<BlockFair
         setResistance(15f);
         setSoundType(SoundType.METAL);
         setDefaultState(getState(FairingType.ALUMINIUM_FAIRING));
-        validCover = itemStack -> OreDictUnifier.get(OrePrefix.plate, SusyMaterials.Aluminium7075)
+        validCover = itemStack -> OreDictUnifier.get(OrePrefix.plate, SusyMaterials.AluminiumAlloy7075)
                 .isItemEqual(itemStack);
         setHarvestLevel("wrench", 4);
     }
