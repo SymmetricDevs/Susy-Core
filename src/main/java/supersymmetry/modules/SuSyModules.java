@@ -11,6 +11,7 @@ public class SuSyModules implements IModuleContainer {
     public static final String MODULE_BDSAndM = "susy_bdsandm_integration";
     public static final String MODULE_BAUBLES = "susy_baubles_integration";
     public static final String MODULE_TOP = "susy_top_integration";
+    public static final String MODULE_TOP_LT = "susy_top_lt_integration";
     public static final String MODULE_JEI = "susy_jei_integration";
     public static final String MODULE_PYROTECH = "susy_pyrotech_integration";
     public static final String MODULE_LITTLETILES = "susy_littletiles_integration";

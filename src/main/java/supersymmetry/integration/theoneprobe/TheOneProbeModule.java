@@ -10,7 +10,6 @@ import mcjty.theoneprobe.api.ITheOneProbe;
 import supersymmetry.Supersymmetry;
 import supersymmetry.integration.theoneprobe.provider.DelegatorInfoProvider;
 import supersymmetry.integration.theoneprobe.provider.EvaporationPoolInfoProvider;
-import supersymmetry.integration.theoneprobe.provider.LittleTilesStorageInfoProvider;
 import supersymmetry.integration.theoneprobe.provider.StrandShaperInfoProvider;
 import supersymmetry.modules.SuSyModules;
 
@@ -29,6 +28,5 @@ public class TheOneProbeModule extends IntegrationSubmodule {
         oneProbe.registerProvider(new EvaporationPoolInfoProvider());
         oneProbe.registerProvider(new DelegatorInfoProvider());
         oneProbe.registerProvider(new StrandShaperInfoProvider());
-        oneProbe.registerProvider(new LittleTilesStorageInfoProvider());
     }
 }
