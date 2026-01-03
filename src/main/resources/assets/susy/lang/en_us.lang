@@ -173,6 +173,8 @@ tile.susy_stone_bricks.anorthosite.name=Anorthosite Bricks
 tile.susy_stone_bricks.industrial_concrete.name=Industrial Concrete Bricks
 tile.susy_stone_bricks.minitary_concrete.name=Military Concrete Bricks
 
+tile.concrete_reinforced.framed.name=Frame-Reinforced Concrete
+
 # Materials
 susy.material.manganese_iron_arsenic_phosphide=Manganese Iron Arsenic Phosphide
 susy.material.praseodymium_nickel=Praseodymium-Nickel
