@@ -5,6 +5,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import gregtech.api.capability.IMultipleTankHandler;
+import gregtech.api.capability.impl.FluidTankList;
+import gregtech.api.capability.impl.ItemHandlerList;
+import gregtech.api.items.itemhandlers.GTItemStackHandler;
+import gregtech.api.metatileentity.multiblock.MultiblockAbility;
+import gregtech.api.pattern.TraceabilityPredicate;
+import gregtech.api.util.GTTransferUtils;
+import gregtech.api.util.GTUtility;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTBase;
@@ -23,6 +31,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import net.minecraftforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -59,6 +68,8 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     private EntityTransporterErector selectedErector;
     private EntityRocket selectedRocket;
     private LaunchPadState state = LaunchPadState.EMPTY;
+    protected IItemHandlerModifiable inputInventory;
+    protected IMultipleTankHandler inputFluidInventory;
 
     // Animation helpers
     private double supportAngle = Math.PI / 4;
@@ -134,6 +145,12 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                 .build();
     }
 
+    public TraceabilityPredicate autoAbilities() {
+        return autoAbilities(true, true).or(
+                abilities(MultiblockAbility.IMPORT_ITEMS).setMaxGlobalLimited(1)
+        );
+    }
+
     public IBlockState getFoundationState() {
         return SuSyBlocks.ROCKET_ASSEMBLER_CASING
                 .getState(BlockRocketAssemblerCasing.RocketAssemblerCasingType.FOUNDATION);
@@ -161,6 +178,10 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         if (this.needsReinitialization) {
             this.setLaunchPadState(LaunchPadState.INITIALIZING);
         }
+
+        this.inputInventory = new ItemHandlerList(getAbilities(MultiblockAbility.IMPORT_ITEMS));
+        this.inputFluidInventory = new FluidTankList(false,
+                getAbilities(MultiblockAbility.IMPORT_FLUIDS));
     }
 
     @Override
@@ -175,6 +196,8 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         this.fillHiddenBlocksWith(Blocks.AIR.getDefaultState());
         this.trainAABB = null;
         this.needsReinitialization = true;
+        this.inputInventory = new GTItemStackHandler(this, 0);
+        this.inputFluidInventory = new FluidTankList(true);
     }
 
     @Override
@@ -276,6 +299,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                         break;
                     }
                 }
+                loadCargo();
                 if (this.getInputRedstoneSignal(this.getFrontFacing(), false) == 0) {
                     break;
                 }
@@ -300,6 +324,15 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                 }
                 break;
         }
+    }
+
+    private void loadCargo() {
+        GTTransferUtils.moveInventoryItems(this.itemInventory, this.selectedRocket.cargo);
+    }
+
+    @Override
+    protected void initializeInventory() {
+        super.initializeInventory();
     }
 
     @Override
@@ -346,6 +379,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
             for (Map.Entry<String, NBTBase> tag : selectedErector.getRocketNBT().tagMap.entrySet()) {
                 this.selectedRocket.getEntityData().setTag(tag.getKey(), tag.getValue());
             }
+            this.selectedRocket.initializeCargo();
         }
         this.getWorld().spawnEntity(this.selectedRocket);
     }

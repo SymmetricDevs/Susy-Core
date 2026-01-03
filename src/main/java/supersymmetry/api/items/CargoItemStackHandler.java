@@ -11,6 +11,8 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenCustomHashSet;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.NotNull;
@@ -21,15 +23,57 @@ import java.util.List;
 import java.util.Set;
 
 
-public class CargoItemStackHandler implements IItemHandler {
-    private final int maxVolume;
-    private final int maxWeight;
+public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBTTagCompound> {
+    private int maxVolume;
+    private int maxWeight;
     private int currentVolume = 0;
     private int currentWeight = 0;
 
     private boolean loading = true;
     private static final ItemStackHashStrategy STACK_STRATEGY = ItemStackHashStrategy.comparingAllButCount();
     private final ObjectOpenCustomHashSet<List<ItemStack>> cargo = new ObjectOpenCustomHashSet<>(new CargoHashStrategy());
+
+    @Override
+    public NBTTagCompound serializeNBT() {
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setInteger("cargoSize", cargo.size());
+        nbt.setInteger("currentVolume", currentVolume);
+        nbt.setInteger("currentWeight", currentWeight);
+        nbt.setBoolean("loading", loading);
+        nbt.setInteger("maxVolume", maxVolume);
+        nbt.setInteger("maxWeight", maxWeight);
+
+        List<List<ItemStack>> cargoList = new ArrayList<>(cargo);
+        for (int i = 0; i < cargo.size(); i++) {
+            List<ItemStack> itemType = cargoList.get(i);
+            NBTTagCompound itemNbt = new NBTTagCompound();
+            itemNbt.setInteger("size", itemType.size());
+            for (int j = 0; j < itemType.size(); j++) {
+                itemNbt.setTag("item" + j, itemType.get(j).serializeNBT());
+            }
+            nbt.setTag("entry" + i, itemNbt);
+        }
+        return nbt;
+    }
+
+    @Override
+    public void deserializeNBT(NBTTagCompound nbt) {
+        this.maxVolume = nbt.getInteger("maxVolume");
+        this.maxWeight = nbt.getInteger("maxWeight");
+        this.currentVolume = nbt.getInteger("currentVolume");
+        this.currentWeight = nbt.getInteger("currentWeight");
+        this.loading = nbt.getBoolean("loading");
+        this.cargo.clear();
+
+        for (int i = 0; i < nbt.getInteger("cargoSize"); i++) {
+            NBTTagCompound itemTag = nbt.getCompoundTag("item" + i);
+            List<ItemStack> itemType = new ArrayList<>(itemTag.getInteger("size"));
+            for (int j = 0; j < itemTag.getInteger("size"); j++) {
+                itemType.add(new ItemStack(itemTag.getCompoundTag("item" + j)));
+            }
+            cargo.add(itemType);
+        }
+    }
 
     public static class CargoHashStrategy implements Hash.Strategy<List<ItemStack>> {
 
@@ -169,4 +213,6 @@ public class CargoItemStackHandler implements IItemHandler {
     public boolean massTooHigh() {
         return currentWeight * 6 >= maxWeight * 5;
     }
+
+
 }

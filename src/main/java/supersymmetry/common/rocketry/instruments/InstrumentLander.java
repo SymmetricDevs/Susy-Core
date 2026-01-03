@@ -19,6 +19,9 @@ public class InstrumentLander implements Instrument {
             i++;
             if (i > count) break;
             EntityLander dropPod = new EntityLander(rocket.world, passenger.posX, passenger.posY, passenger.posZ);
+            if (i == 0) {
+                dropPod.cargo = rocket.cargo;
+            }
 
             // Pop the next mission from the rocket configuration
             RocketConfiguration config = rocket.getRocketConfiguration();

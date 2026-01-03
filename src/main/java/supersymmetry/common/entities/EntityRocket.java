@@ -20,6 +20,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import gregtech.api.GregTechAPI;
+import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AFSRendered;
 import supersymmetry.client.audio.MovingSoundRocket;
@@ -32,6 +33,7 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
 
     private static final Random rnd = new Random();
     protected static final float jerk = 0.0001F;
+    public CargoItemStackHandler cargo;
 
     @SideOnly(Side.CLIENT)
     private MovingSoundRocket soundRocket;
@@ -89,6 +91,8 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
         this.setLaunchTime(compound.getInteger("LaunchTime"));
         this.setFlightTime(compound.getInteger("FlightTime"));
         this.setStartPos(compound.getFloat("StartPos"));
+        this.cargo.deserializeNBT(compound.getCompoundTag("cargo"));
+
     }
 
     @Override
@@ -100,6 +104,13 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
         compound.setInteger("LaunchTime", this.getLaunchTime());
         compound.setInteger("FlightTime", this.getFlightTime());
         compound.setFloat("StartPos", this.getStartPos());
+        compound.setTag("cargo", this.cargo.serializeNBT());
+
+    }
+
+    public void initializeCargo() {
+        this.cargo = new CargoItemStackHandler(this.getEntityData().getInteger("maxVolume"),
+                this.getEntityData().getInteger("maxWeight"));
     }
 
     @SideOnly(Side.CLIENT)
