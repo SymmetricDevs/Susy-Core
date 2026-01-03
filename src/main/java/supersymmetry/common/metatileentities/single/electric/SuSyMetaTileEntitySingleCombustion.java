@@ -137,10 +137,15 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
                 exportItems, displayedTankList, exportFluids, yOffset);
         builder.widget(new LabelWidget(6, 6, getMetaFullName()))
                 .bindPlayerInventory(player.inventory, GuiTextures.SLOT, yOffset);
+
         builder.widget(new TankWidget(lubricantTank, 110, 21, 10, 54)
-                .setBackgroundTexture(GuiTextures.PROGRESS_BAR_BOILER_EMPTY.get(true)));
+                .setBackgroundTexture(GuiTextures.PROGRESS_BAR_BOILER_EMPTY.get(true))
+                .setAlwaysShowFull(false)
+                .setContainerClicking(true, true));  // Enable container clicking
         builder.widget(new TankWidget(coolantTank, 124, 21, 10, 54)
-                .setBackgroundTexture(GuiTextures.PROGRESS_BAR_BOILER_EMPTY.get(true)));
+                .setBackgroundTexture(GuiTextures.PROGRESS_BAR_BOILER_EMPTY.get(true))
+                .setAlwaysShowFull(false)
+                .setContainerClicking(true, true));  // Enable container clicking
         builder.widget(new ImageWidget(152, 63 + yOffset, 17, 17,
                 GTValues.XMAS.get() ? GuiTextures.GREGTECH_LOGO_XMAS : GuiTextures.GREGTECH_LOGO)
                         .setIgnoreColor(true));
