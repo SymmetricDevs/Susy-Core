@@ -8,9 +8,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import gregtech.client.renderer.ICubeRenderer;
-import gregtech.client.renderer.texture.Textures;
-import gregtech.common.blocks.BlockGlassCasing;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -40,16 +37,13 @@ import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.util.GTUtility;
+import gregtech.client.renderer.ICubeRenderer;
 import gregtech.common.ConfigHolder;
-import gregtech.common.blocks.BlockCleanroomCasing;
-import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.MetaTileEntities;
 import gregtech.common.metatileentities.multi.electric.MetaTileEntityCleanroom;
-import supersymmetry.api.blocks.VariantDirectionalRotatableBlock;
 import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockMetallurgy2;
-import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.BlockSuSyRocketMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
@@ -181,7 +175,8 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
     public boolean isBlockEdge(@NotNull World world, @NotNull BlockPos.MutableBlockPos pos,
                                @NotNull EnumFacing direction) {
         return world.getBlockState(pos.move(direction)) ==
-                SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(BlockSuSyRocketMultiblockCasing.CasingType.AEROSPACE_GASKET);
+                SuSyBlocks.ROCKET_MULTIBLOCK_CASING
+                        .getState(BlockSuSyRocketMultiblockCasing.CasingType.AEROSPACE_GASKET);
     }
 
     /**
@@ -193,7 +188,8 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
     public boolean isBlockFloor(@NotNull World world, @NotNull BlockPos.MutableBlockPos pos,
                                 @NotNull EnumFacing direction) {
         return isBlockEdge(world, pos, direction) || world.getBlockState(pos) ==
-                SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(BlockSuSyRocketMultiblockCasing.CasingType.VINYL_COMPOSITE_FLOORING);
+                SuSyBlocks.ROCKET_MULTIBLOCK_CASING
+                        .getState(BlockSuSyRocketMultiblockCasing.CasingType.VINYL_COMPOSITE_FLOORING);
     }
 
     @Override
@@ -277,7 +273,8 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
                 center[center.length - 1] = controllerBuilder.toString();  // Ceiling with controller
             } else {
                 center[0] = floorBuilder.reverse().toString();  // Floor with edges (reversed)
-                center[center.length - 1] = controllerBuilder.reverse().toString();  // Ceiling with controller (reversed)
+                center[center.length - 1] = controllerBuilder.reverse().toString();  // Ceiling with controller
+                                                                                     // (reversed)
             }
 
             // Count total ceiling positions for 5% calculation
@@ -299,8 +296,9 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
                 if (state.getBlock() != SuSyBlocks.METALLURGY_2) return false;
                 EnumFacing facing = state.getValue(VariantHorizontalRotatableBlock.FACING);
 
-                return SuSyBlocks.METALLURGY_2.getState(state) == BlockMetallurgy2.BlockMetallurgy2Type.POLYSTYRENE_WALL &&
-                       (facing == EnumFacing.NORTH || facing == EnumFacing.SOUTH);
+                return SuSyBlocks.METALLURGY_2.getState(state) ==
+                        BlockMetallurgy2.BlockMetallurgy2Type.POLYSTYRENE_WALL &&
+                        (facing == EnumFacing.NORTH || facing == EnumFacing.SOUTH);
             }));
 
             // Polystyrene wall with EAST/WEST facing (for front/back walls perpendicular to Z-axis)
@@ -309,12 +307,14 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
                 if (state.getBlock() != SuSyBlocks.METALLURGY_2) return false;
                 EnumFacing facing = state.getValue(VariantHorizontalRotatableBlock.FACING);
 
-                return SuSyBlocks.METALLURGY_2.getState(state) == BlockMetallurgy2.BlockMetallurgy2Type.POLYSTYRENE_WALL &&
-                       (facing == EnumFacing.EAST || facing == EnumFacing.WEST);
+                return SuSyBlocks.METALLURGY_2.getState(state) ==
+                        BlockMetallurgy2.BlockMetallurgy2Type.POLYSTYRENE_WALL &&
+                        (facing == EnumFacing.EAST || facing == EnumFacing.WEST);
             }));
 
             // Scanner predicate to catch both sides
-            TraceabilityPredicate scannerPredicate = this.scannerPredicate().setMaxGlobalLimited(1).setMinGlobalLimited(1);
+            TraceabilityPredicate scannerPredicate = this.scannerPredicate().setMaxGlobalLimited(1)
+                    .setMinGlobalLimited(1);
 
             return FactoryBlockPattern.start()
                     .aisle(wall)
@@ -325,9 +325,13 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
                     .setRepeatable(fDist_f.getInt(this) - 1)
                     .aisle(wall)
                     .where('S', this.selfPredicate())
-                    .where('B', states(SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(BlockSuSyRocketMultiblockCasing.CasingType.AEROSPACE_GASKET))
-                            .or(basePredicate))
-                    .where('L', states(SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(BlockSuSyRocketMultiblockCasing.CasingType.VINYL_COMPOSITE_FLOORING)))
+                    .where('B',
+                            states(SuSyBlocks.ROCKET_MULTIBLOCK_CASING
+                                    .getState(BlockSuSyRocketMultiblockCasing.CasingType.AEROSPACE_GASKET))
+                                            .or(basePredicate))
+                    .where('L',
+                            states(SuSyBlocks.ROCKET_MULTIBLOCK_CASING
+                                    .getState(BlockSuSyRocketMultiblockCasing.CasingType.VINYL_COMPOSITE_FLOORING)))
                     .where('W', glassPredicate.or(polystyreneEWPredicate)
                             .or(basePredicate)
                             .or(doorPredicate().setMaxGlobalLimited(8))
@@ -338,9 +342,11 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
                             .or(doorPredicate().setMaxGlobalLimited(8))
                             .or(scannerPredicate)
                             .or(abilities(MultiblockAbility.PASSTHROUGH_HATCH).setMaxGlobalLimited(30)))
-                    .where('F', states(SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(BlockSuSyRocketMultiblockCasing.CasingType.VINYL_CEILING_TILE))
-                            .or(states(SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(BlockSuSyRocketMultiblockCasing.CasingType.CEILING_GRID_FILTER_UNIT))
-                                    .setMinGlobalLimited(minFilters)))
+                    .where('F', states(SuSyBlocks.ROCKET_MULTIBLOCK_CASING
+                            .getState(BlockSuSyRocketMultiblockCasing.CasingType.VINYL_CEILING_TILE))
+                                    .or(states(SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(
+                                            BlockSuSyRocketMultiblockCasing.CasingType.CEILING_GRID_FILTER_UNIT))
+                                                    .setMinGlobalLimited(minFilters)))
                     .where(' ', this.innerPredicate())
                     .build();
         } catch (Exception e) {
@@ -396,13 +402,21 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
                 .aisle(new String[] { "BJJJB", "W   X", "W   X", "W   X", "BFGFB" })
                 .aisle(new String[] { "BBMBB", "BZPZB", "BZRZB", "BZZZB", "BBBBB" })
                 // Edges/borders
-                .where('B', SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(BlockSuSyRocketMultiblockCasing.CasingType.AEROSPACE_GASKET))
+                .where('B',
+                        SuSyBlocks.ROCKET_MULTIBLOCK_CASING
+                                .getState(BlockSuSyRocketMultiblockCasing.CasingType.AEROSPACE_GASKET))
                 // Floor
-                .where('J', SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(BlockSuSyRocketMultiblockCasing.CasingType.VINYL_COMPOSITE_FLOORING))
+                .where('J',
+                        SuSyBlocks.ROCKET_MULTIBLOCK_CASING
+                                .getState(BlockSuSyRocketMultiblockCasing.CasingType.VINYL_COMPOSITE_FLOORING))
                 // Ceiling tiles
-                .where('F', SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(BlockSuSyRocketMultiblockCasing.CasingType.VINYL_CEILING_TILE))
+                .where('F',
+                        SuSyBlocks.ROCKET_MULTIBLOCK_CASING
+                                .getState(BlockSuSyRocketMultiblockCasing.CasingType.VINYL_CEILING_TILE))
                 // Ceiling grid filter (satisfies 5% requirement)
-                .where('G', SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(BlockSuSyRocketMultiblockCasing.CasingType.CEILING_GRID_FILTER_UNIT))
+                .where('G',
+                        SuSyBlocks.ROCKET_MULTIBLOCK_CASING
+                                .getState(BlockSuSyRocketMultiblockCasing.CasingType.CEILING_GRID_FILTER_UNIT))
                 // Polystyrene walls - left/right (EAST/WEST facing)
                 .where('W', SuSyBlocks.METALLURGY_2.getState(BlockMetallurgy2.BlockMetallurgy2Type.POLYSTYRENE_WALL)
                         .withProperty(VariantHorizontalRotatableBlock.FACING, EnumFacing.EAST))

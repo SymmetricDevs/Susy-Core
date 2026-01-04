@@ -1,5 +1,8 @@
 package supersymmetry.common.metatileentities.multi.rocket;
 
+import static supercritical.api.pattern.SCPredicates.FLUID_BLOCKS_KEY;
+import static supercritical.api.pattern.SCPredicates.fluid;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -7,13 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import gregtech.api.capability.IMultipleTankHandler;
-import gregtech.api.capability.impl.EnergyContainerList;
-import gregtech.api.capability.impl.FluidTankList;
-import gregtech.api.metatileentity.multiblock.MultiblockAbility;
-import gregtech.api.pattern.PatternMatchContext;
-import gregtech.api.util.TextComponentUtil;
-import gregtech.common.blocks.BlockGlassCasing;
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,6 +34,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.capability.GregtechDataCodes;
+import gregtech.api.capability.IMultipleTankHandler;
+import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.Widget;
@@ -45,13 +45,17 @@ import gregtech.api.gui.widgets.IndicatorImageWidget;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
+import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.MultiblockWithDisplayBase;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.util.Position;
 import gregtech.api.util.Size;
+import gregtech.api.util.TextComponentUtil;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
+import gregtech.common.blocks.BlockGlassCasing;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.SusyLog;
@@ -60,7 +64,6 @@ import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.common.blocks.BlockSerpentine;
-import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.BlockSuSyRocketMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.item.SuSyMetaItems;
@@ -68,11 +71,6 @@ import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.common.mui.widget.RocketStageDisplayWidget;
 import supersymmetry.common.mui.widget.SlotWidgetMentallyStable;
 import supersymmetry.common.rocketry.SusyRocketComponents;
-
-import javax.annotation.Nonnull;
-
-import static supercritical.api.pattern.SCPredicates.FLUID_BLOCKS_KEY;
-import static supercritical.api.pattern.SCPredicates.fluid;
 
 public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase {
 
@@ -130,15 +128,15 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
     );
 
     public void fillCoolant(List<BlockPos> toFill, Fluid fluid, IMultipleTankHandler fluidInputs) {
-
         if (fluidInputs != null) {
             FluidStack toDrain = new FluidStack(fluid, 1000);
             FluidStack drained = fluidInputs.drain(toDrain, false);
             if (drained != null && drained.amount != 0) {
                 if (drained.amount == 1000) {
                     World world = this.getWorld();
-                    BlockPos pos = (BlockPos)toFill.get(0);
-                    if (world.isBlockLoaded(pos) && (world.isAirBlock(pos) || world.getBlockState(pos).getBlock() == fluid.getBlock())) {
+                    BlockPos pos = (BlockPos) toFill.get(0);
+                    if (world.isBlockLoaded(pos) &&
+                            (world.isAirBlock(pos) || world.getBlockState(pos).getBlock() == fluid.getBlock())) {
                         world.setBlockState(pos, fluid.getBlock().getDefaultState(), 2);
                         fluidInputs.drain(drained, true);
                         toFill.remove(0);
@@ -166,7 +164,8 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
     }
 
     public IBlockState getComputerState() {
-        return SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(BlockSuSyRocketMultiblockCasing.CasingType.PROCESSOR_CLUSTER);
+        return SuSyBlocks.ROCKET_MULTIBLOCK_CASING
+                .getState(BlockSuSyRocketMultiblockCasing.CasingType.PROCESSOR_CLUSTER);
     }
 
     @Override

@@ -1,12 +1,12 @@
 package supersymmetry.common.metatileentities.multi.rocket;
 
+import static supercritical.api.pattern.SCPredicates.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import gregtech.api.capability.impl.AbstractRecipeLogic;
-import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
-import gregtech.api.util.TextComponentUtil;
-import gregtech.common.blocks.BlockGlassCasing;
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
@@ -54,21 +54,22 @@ import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.util.Position;
 import gregtech.api.util.Size;
+import gregtech.api.util.TextComponentUtil;
 import gregtech.api.util.world.DummyWorld;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.ConfigHolder;
+import gregtech.common.blocks.BlockGlassCasing;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
-import supercritical.mixins.gregtech.AbstractRecipeLogicAccessor;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.gui.SusyGuiTextures;
+import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockSerpentine;
-import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.BlockSuSyRocketMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.item.SuSyMetaItems;
@@ -77,10 +78,6 @@ import supersymmetry.common.mui.widget.ConditionalWidget;
 import supersymmetry.common.mui.widget.RocketRenderWidget;
 import supersymmetry.common.mui.widget.SlotWidgetMentallyStable;
 import supersymmetry.common.rocketry.SuccessCalculation;
-
-import javax.annotation.Nonnull;
-
-import static supercritical.api.pattern.SCPredicates.*;
 
 // TODO add a tooltip to the controller item that mentions losing progress if power/coolant is cut
 public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDisplayBase
@@ -131,6 +128,8 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                     item.getTagCompound() != null && item.getTagCompound().getBoolean("buildstat"));
 
     private boolean hasNotEnoughCoolant = false;
+
+    public RocketFuelEntry fuel;
 
     public MetaTileEntityAerospaceFlightSimulator(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
@@ -215,27 +214,23 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     }
 
     public void fillCoolant(List<BlockPos> toFill, Fluid fluid, IMultipleTankHandler fluidInputs) {
-
         if (fluidInputs != null) {
             FluidStack toDrain = new FluidStack(fluid, 1000);
             FluidStack drained = fluidInputs.drain(toDrain, false);
             if (drained != null && drained.amount != 0) {
                 if (drained.amount == 1000) {
                     World world = this.getWorld();
-                    BlockPos pos = (BlockPos)toFill.get(0);
-                    if (world.isBlockLoaded(pos) && (world.isAirBlock(pos) || world.getBlockState(pos).getBlock() == fluid.getBlock())) {
+                    BlockPos pos = (BlockPos) toFill.get(0);
+                    if (world.isBlockLoaded(pos) &&
+                            (world.isAirBlock(pos) || world.getBlockState(pos).getBlock() == fluid.getBlock())) {
                         world.setBlockState(pos, fluid.getBlock().getDefaultState(), 2);
                         fluidInputs.drain(drained, true);
                         toFill.remove(0);
                     }
                 }
-
             }
         }
     }
-
-    @Override
-    protected @Nonnull ICubeRenderer getFrontOverlay() { return SusyTextures.ORE_SORTER_OVERLAY; }
 
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
@@ -247,7 +242,8 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     }
 
     public IBlockState getComputerState() {
-        return SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(BlockSuSyRocketMultiblockCasing.CasingType.PROCESSOR_CLUSTER);
+        return SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(
+                BlockSuSyRocketMultiblockCasing.CasingType.PROCESSOR_CLUSTER);
     }
 
     @Override
@@ -322,6 +318,16 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         this.rocketBlueprintSlot.setLocked(true);
     }
 
+    @Override
+    public boolean isStructureObstructed() {
+        return super.isStructureObstructed() || !coolantFilled;
+    }
+
+    @Override
+    protected @Nonnull ICubeRenderer getFrontOverlay() {
+        return SusyTextures.ORE_SORTER_OVERLAY;
+    }
+
     // fix getEnergyToConsume and getCompute when some generic computer blocks are added
     protected int getEnergyToConsume() {
         return 1000;
@@ -351,10 +357,12 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             textList.add(new TextComponentTranslation(this.getMetaName() + ".gui.no_coolant_warning"));
         }
         if (isStructureFormed() && !coolantFilled) {
-            textList.add(TextComponentUtil.translationWithColor(TextFormatting.RED,
-                    "susy.multiblock.aerospace_flight_simulator.obstructed"));
-            textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
-                    "susy.multiblock.aerospace_flight_simulator.obstructed.desc"));
+            textList.add(
+                    TextComponentUtil.translationWithColor(
+                            TextFormatting.RED, this.getMetaName() + ".obstructed"));
+            textList.add(
+                    TextComponentUtil.translationWithColor(
+                            TextFormatting.GRAY, this.getMetaName() + ".obstructed.desc"));
         }
     }
 
@@ -364,14 +372,10 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     }
 
     @Override
-    public boolean isStructureObstructed() {
-        return super.isStructureObstructed() || !coolantFilled;
-    }
-
-    @Override
     protected void updateFormedValid() {
         if (!coolantFilled && getOffsetTimer() % 5 == 0) {
-            fillCoolant(this.coolantPositions, SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid(), inputCoolant);
+            fillCoolant(
+                    this.coolantPositions, SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid(), inputCoolant);
             if (this.coolantPositions.isEmpty()) {
                 this.coolantFilled = true;
             }
@@ -388,7 +392,9 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         int coolantToConsume = getCoolantToConsume(energyToConsume);
         FluidStack drainedFluid = inputCoolant.drain(new FluidStack(COOLANT_IN, coolantToConsume), false);
         boolean enoughCoolant = false;
-        if (drainedFluid != null) { enoughCoolant = drainedFluid.amount == coolantToConsume; }
+        if (drainedFluid != null) {
+            enoughCoolant = drainedFluid.amount == coolantToConsume;
+        }
         boolean enoughSpaceForCoolant = outputCoolant.fill(new FluidStack(COOLANT_OUT, coolantToConsume), false) ==
                 coolantToConsume;
         if (enoughCoolant && enoughSpaceForCoolant) {
@@ -431,19 +437,29 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 .where(' ', air())
                 .where('C', states(getCasingState()))
                 .where('P', states(getComputerState()))
-                .where('T', states(MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.TEMPERED_GLASS)))
+                .where(
+                        'T',
+                        states(
+                                MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.TEMPERED_GLASS)))
                 .where('B', states(SuSyBlocks.SERPENTINE.getState(BlockSerpentine.SerpentineType.BASIC)))
                 .where('F', fluid(SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid()))
-                .where('I', abilities(MultiblockAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1).setMinGlobalLimited(1, 1)
-                                .or(abilities(MultiblockAbility.EXPORT_FLUIDS).setMaxGlobalLimited(1).setMaxGlobalLimited(1, 1))
+                .where(
+                        'I',
+                        abilities(MultiblockAbility.IMPORT_FLUIDS)
+                                .setMaxGlobalLimited(1)
+                                .setMinGlobalLimited(1, 1)
+                                .or(
+                                        abilities(MultiblockAbility.EXPORT_FLUIDS)
+                                                .setMaxGlobalLimited(1)
+                                                .setMaxGlobalLimited(1, 1))
                                 .or(states(getCasingState())))
                 .where(
                         'E',
                         abilities(MultiblockAbility.INPUT_ENERGY)
                                 .setMaxGlobalLimited(2)
                                 .setMinGlobalLimited(1, 1)
-                        .or(states(getCasingState()))
-                        .or(maintenancePredicate().setMaxGlobalLimited(1).setMinGlobalLimited(1, 1)))
+                                .or(states(getCasingState()))
+                                .or(maintenancePredicate().setMaxGlobalLimited(1).setMinGlobalLimited(1, 1)))
                 .build();
     }
 
@@ -487,7 +503,26 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         SlotWidgetMentallyStable bpw = new SlotWidgetMentallyStable(this.rocketBlueprintSlot, 0, 0, 0);
 
         bpw.setSelfPosition(new Position(12, height / 5 - 27));
-
+        ConditionalWidget f = new ConditionalWidget(
+                -120,
+                0,
+                120,
+                80,
+                () -> {
+                    return true;
+                });
+        f.addWidget(new ImageWidget(0, 0, 120, 80, GuiTextures.DISPLAY));
+        f.addWidget(
+                new LabelWidget(5, 5, I18n.format(this.getMetaName() + ".gui.fuel_selector_label"), 0xffffff));
+        f.addWidget(
+                new FuelRegistrySelectorWidget(
+                        4,
+                        14,
+                        80,
+                        60,
+                        (fuel) -> {
+                            this.fuel = fuel;
+                        }));
         ConditionalWidget g = new ConditionalWidget(
                 0,
                 0,
@@ -496,6 +531,13 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 () -> {
                     return true;
                 });
+
+        g.addWidgetWithTest(
+                f,
+                () -> {
+                    return this.hasBlueprint() && !this.isActive && this.fuel == null;
+                });
+
         g.addWidgetWithTest(
                 new AdvancedTextWidget(
                         9,
@@ -577,7 +619,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                         18,
                         "",
                         (_) -> {
-                            if (this.hasBlueprint() && !this.isActive()) {
+                            if (this.hasBlueprint() && !this.isActive() && this.fuel != null) {
                                 int energyToConsume = getEnergyToConsume();
                                 boolean maintenance = ConfigHolder.machines.enableMaintenance &&
                                         hasMaintenanceMechanics();
@@ -585,7 +627,8 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                                     energyToConsume += getNumMaintenanceProblems() * energyToConsume / 10;
                                 }
                                 int coolantToConsume = getCoolantToConsume(energyToConsume);
-                                // TODO: spam if null checks because when you break the input hatch and the structure
+                                // TODO: spam if null checks because when you break the input hatch and the
+                                // structure
                                 // forms again its messed up somehow
                                 boolean enoughCoolant = inputCoolant.drain(new FluidStack(COOLANT_IN, coolantToConsume),
                                         false).amount == coolantToConsume;
@@ -629,6 +672,26 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                                 .setButtonTexture(SusyGuiTextures.RED_CIRCLE),
                 () -> {
                     return (this.isActive() && this.hasBlueprint());
+                });
+        g.addWidgetWithTest(
+                new ClickButtonWidget(
+                        width - 78,
+                        height - 23,
+                        18,
+                        18,
+                        "",
+                        (_) -> {
+                            if (this.hasBlueprint() && !this.isActive() && this.fuel != null) {
+
+                                // && !hasNotEnoughCoolant
+                                // && !hasNotEnoughEnergy
+                                this.fuel = null;
+                            }
+                        })
+                                .setTooltipText(this.getMetaName() + ".gui.reset_fuel")
+                                .setButtonTexture(SusyGuiTextures.RED_X),
+                () -> {
+                    return (this.hasBlueprint() && !this.isActive() && this.fuel != null);
                 });
 
         // rocket render
