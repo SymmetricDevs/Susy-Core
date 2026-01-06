@@ -39,8 +39,7 @@ public class SuSyFirstDegreeMaterials {
                 .cableProperties(GTValues.V[4], 2, 4)
                 .components(Gadolinium, 5, Silicon, 2, Germanium, 2)
                 .blastTemp(2100, BlastProperty.GasTier.HIGH)
-                .build();
-;
+                .build();;
         // Minerals
 
         Anorthite = new Material.Builder(27104, SuSyUtility.susyId("anorthite"))
@@ -166,13 +165,14 @@ public class SuSyFirstDegreeMaterials {
                 .build()
                 .setFormula("C6F12O", true);
 
-        WarmPerfluoro2Methyl3Pentanone = new Material.Builder(27118, SuSyUtility.susyId("warm_perfluoro_2_methyl_3_pentanone"))
-                .liquid()
-                .color(0xCEE3F0)
-                .flags(DISABLE_DECOMPOSITION)
-                .components(Carbon, 6, Fluorine, 12, Oxygen, 1)
-                .build()
-                .setFormula("C6F12O", true);
+        WarmPerfluoro2Methyl3Pentanone = new Material.Builder(27118,
+                SuSyUtility.susyId("warm_perfluoro_2_methyl_3_pentanone"))
+                        .liquid()
+                        .color(0xCEE3F0)
+                        .flags(DISABLE_DECOMPOSITION)
+                        .components(Carbon, 6, Fluorine, 12, Oxygen, 1)
+                        .build()
+                        .setFormula("C6F12O", true);
 
         // Thermodynamic materials
 

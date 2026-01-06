@@ -122,6 +122,7 @@ public class SuSyUtility {
     }
 
     private static Set<String> bannedSpaceItems;
+
     public static void loadBannedSpaceItems() {
         bannedSpaceItems = Arrays.stream(SusyConfig.bannedSpaceItems).collect(Collectors.toSet());
     }

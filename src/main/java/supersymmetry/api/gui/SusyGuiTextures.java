@@ -80,6 +80,7 @@ public class SusyGuiTextures {
 
     public static final TextureArea GREEN_CIRCLE = TextureArea.fullImage("textures/gui/widget/green.png");
     public static final TextureArea RED_CIRCLE = TextureArea.fullImage("textures/gui/widget/red.png");
+    public static final TextureArea RED_X = TextureArea.fullImage("textures/gui/widget/x.png");
 
     public static final UITexture BACKGROUND_POPUP = UITexture.builder()
             .location(GTValues.MODID, "textures/gui/base/background_popup.png")
