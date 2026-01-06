@@ -16,6 +16,7 @@ import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.api.recipes.ingredients.GTRecipeItemInput;
 import supersymmetry.api.rocketry.components.AbstractComponent;
+import supersymmetry.common.entities.EntityTransporterErector;
 import supersymmetry.common.metatileentities.multi.rocket.MetaTileEntityRocketAssembler;
 
 public class RocketAssemblerLogic extends MultiblockRecipeLogic {
@@ -52,6 +53,8 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
     protected @Nullable Recipe findRecipe(
                                           long maxVoltage, IItemHandlerModifiable inputs,
                                           IMultipleTankHandler fluidInputs) {
+        EntityTransporterErector erector = ((MetaTileEntityRocketAssembler) this.metaTileEntity).findTransporterErector();
+        if (erector != null) return null;
         Recipe r = super.findRecipe(maxVoltage, inputs, fluidInputs);
         if (r != null) return r; // unlikely for this thing
         MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;

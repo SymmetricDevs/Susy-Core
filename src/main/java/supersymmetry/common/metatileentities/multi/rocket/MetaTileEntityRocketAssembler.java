@@ -6,13 +6,19 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 
+import cam72cam.mod.entity.ModdedEntity;
+import gregtech.api.util.RelativeDirection;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.capability.*;
@@ -45,6 +51,7 @@ import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.common.blocks.BlockRocketAssemblerCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.entities.EntityRocket;
+import supersymmetry.common.entities.EntityTransporterErector;
 import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityComponentRedstoneController;
 import supersymmetry.common.mui.widget.ItemCostWidget;
 import supersymmetry.common.mui.widget.SlotWidgetMentallyStable;
@@ -165,11 +172,46 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         this.isWorking = false;
         this.componentIndex = 0;
         this.componentList.clear();
-        // TODO: actually spawn the rocket entity?
-        EntityRocket newRocket = new EntityRocket(
-                this.getWorld(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 90);
+        EntityTransporterErector erector = findTransporterErector();
+
+        if (erector != null) {
+            erector.setRocketLoaded(true);
+            NBTTagCompound rocketNBT = erector.getRocketNBT();
+            rocketNBT.setTag("rocket", this.getCurrentBlueprint().writeToNBT());
+        } else {
+            doExplosion(1000000);
+        }
         // abortAssembly();
     }
+
+    public EntityTransporterErector findTransporterErector() {
+        AxisAlignedBB internalBB = this.getInternalBB();
+        List<ModdedEntity> trains = getWorld().getEntitiesWithinAABB(ModdedEntity.class, internalBB);
+
+        if (!trains.isEmpty()) {
+            for (ModdedEntity forgeTrainEntity : trains) {
+                if (forgeTrainEntity.getSelf() instanceof EntityTransporterErector rollingStock &&
+                        !rollingStock.isRocketLoaded()) {
+                    return rollingStock;
+                }
+            }
+        }
+        return null;
+    }
+
+    private AxisAlignedBB getInternalBB() {
+        EnumFacing front = getFrontFacing();
+        // The left side of the controller, not from the player's perspective
+        EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(front, getUpwardsFacing(), isFlipped());
+        EnumFacing up = RelativeDirection.UP.getRelativeFacing(front, getUpwardsFacing(), isFlipped());
+
+        BlockPos pos = getPos();
+
+        var v1 = pos.offset(left.getOpposite(), 17).offset(up, 2);
+        var v2 = pos.offset(left, 17).offset(up, 10).offset(front.getOpposite(), 17);
+        return new AxisAlignedBB(v1, v2);
+    }
+
 
     public void startAssembly(AbstractRocketBlueprint bp) {
         ((RocketAssemblerLogic) this.recipeMapWorkable).setInputsValid();
