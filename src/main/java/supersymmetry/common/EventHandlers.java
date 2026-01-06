@@ -259,7 +259,7 @@ public class EventHandlers {
 
                 // Copy items to lander's inventory
                 for (int i = 0; i < Math.min(inventory.getSlots(), lander.getInventory().getSlots()); i++) {
-                   cargo.insertItem(0, inventory.getStackInSlot(i), false);
+                    cargo.insertItem(0, inventory.getStackInSlot(i), false);
                 }
             }
             cargo.stopLoading();

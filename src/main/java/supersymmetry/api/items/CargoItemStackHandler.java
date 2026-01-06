@@ -1,31 +1,26 @@
 package supersymmetry.api.items;
 
-import gregtech.api.GTValues;
-import gregtech.api.unification.Elements;
-import gregtech.api.unification.OreDictUnifier;
-import gregtech.api.unification.material.Material;
-import gregtech.api.unification.stack.ItemMaterialInfo;
-import gregtech.api.util.GTUtility;
-import gregtech.api.util.ItemStackHashStrategy;
-import it.unimi.dsi.fastutil.Hash;
-import it.unimi.dsi.fastutil.objects.ObjectOpenCustomHashSet;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.item.Item;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
+
 import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.GTValues;
+import gregtech.api.unification.OreDictUnifier;
+import gregtech.api.unification.stack.ItemMaterialInfo;
+import gregtech.api.util.ItemStackHashStrategy;
+import it.unimi.dsi.fastutil.Hash;
+import it.unimi.dsi.fastutil.objects.ObjectOpenCustomHashSet;
 import supersymmetry.api.util.SuSyUtility;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-
 public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBTTagCompound> {
+
     private int maxVolume;
     private int maxWeight;
     private int currentVolume = 0;
@@ -33,7 +28,8 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
 
     private boolean loading = true;
     private static final ItemStackHashStrategy STACK_STRATEGY = ItemStackHashStrategy.comparingAllButCount();
-    private final ObjectOpenCustomHashSet<List<ItemStack>> cargo = new ObjectOpenCustomHashSet<>(new CargoHashStrategy());
+    private final ObjectOpenCustomHashSet<List<ItemStack>> cargo = new ObjectOpenCustomHashSet<>(
+            new CargoHashStrategy());
 
     @Override
     public NBTTagCompound serializeNBT() {
@@ -182,7 +178,8 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
         // GTCEu mass info
         ItemMaterialInfo info = OreDictUnifier.getMaterialInfo(item);
         if (info != null) {
-            return (int) (info.getMaterials().stream().mapToLong((stack) -> stack.material.getMass() * stack.amount).sum() /
+            return (int) (info.getMaterials().stream().mapToLong((stack) -> stack.material.getMass() * stack.amount)
+                    .sum() /
                     (GTValues.M / 36));
         }
         return 98 * 36 * 4; // default mass times 36 times another fudge factor
@@ -230,9 +227,8 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
     public boolean isFull() {
         return currentVolume >= maxVolume;
     }
+
     public boolean massTooHigh() {
         return currentWeight * 6 >= maxWeight * 5;
     }
-
-
 }
