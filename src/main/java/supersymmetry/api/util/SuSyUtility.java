@@ -130,6 +130,6 @@ public class SuSyUtility {
         if (bannedSpaceItems == null) {
             loadBannedSpaceItems();
         }
-        return bannedSpaceItems.contains(item.getItem().getRegistryName().toString());
+        return !bannedSpaceItems.contains(item.getItem().getRegistryName().toString());
     }
 }

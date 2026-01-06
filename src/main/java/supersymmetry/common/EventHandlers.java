@@ -34,6 +34,7 @@ import gregtech.common.items.MetaItems;
 import gregtechfoodoption.item.GTFOMetaItem;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
+import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.entities.EntityLander;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
@@ -248,6 +249,8 @@ public class EventHandlers {
 
             // Create the lander entity
             EntityLander lander = new EntityLander(targetWorld, entry.getX(), entry.getY(), entry.getZ());
+            CargoItemStackHandler cargo = new CargoItemStackHandler(Integer.MAX_VALUE, Integer.MAX_VALUE);
+            lander.setInventory(cargo);
 
             // Load inventory if present
             if (entry.getInventoryData() != null) {
@@ -256,9 +259,10 @@ public class EventHandlers {
 
                 // Copy items to lander's inventory
                 for (int i = 0; i < Math.min(inventory.getSlots(), lander.getInventory().getSlots()); i++) {
-                    lander.getInventory().setStackInSlot(i, inventory.getStackInSlot(i));
+                   cargo.insertItem(0, inventory.getStackInSlot(i), false);
                 }
             }
+            cargo.stopLoading();
 
             // Spawn the lander
             targetWorld.spawnEntity(lander);

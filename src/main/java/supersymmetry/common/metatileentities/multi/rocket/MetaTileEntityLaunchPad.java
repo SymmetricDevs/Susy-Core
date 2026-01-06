@@ -177,6 +177,11 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         }
         if (this.needsReinitialization) {
             this.setLaunchPadState(LaunchPadState.INITIALIZING);
+        } else {
+            findRocket();
+            if (this.selectedRocket != null) {
+                this.setLaunchPadState(LaunchPadState.LOADED);
+            }
         }
 
         this.inputInventory = new ItemHandlerList(getAbilities(MultiblockAbility.IMPORT_ITEMS));
@@ -327,7 +332,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     }
 
     private void loadCargo() {
-        GTTransferUtils.moveInventoryItems(this.itemInventory, this.selectedRocket.cargo);
+        GTTransferUtils.moveInventoryItems(this.inputInventory, this.selectedRocket.cargo);
     }
 
     @Override

@@ -84,6 +84,7 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
 
     @Override
     public void readEntityFromNBT(NBTTagCompound compound) {
+        super.readEntityFromNBT(compound);
         this.setLaunched(compound.getBoolean("Launched"));
         this.setCountdownStarted(compound.getBoolean("CountdownStarted"));
         this.setAge(compound.getInteger("Age"));
@@ -91,12 +92,11 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
         this.setLaunchTime(compound.getInteger("LaunchTime"));
         this.setFlightTime(compound.getInteger("FlightTime"));
         this.setStartPos(compound.getFloat("StartPos"));
-        this.cargo.deserializeNBT(compound.getCompoundTag("cargo"));
-
     }
 
     @Override
     public void writeEntityToNBT(NBTTagCompound compound) {
+        super.writeEntityToNBT(compound);
         compound.setBoolean("Launched", this.isLaunched());
         compound.setBoolean("CountdownStarted", this.isCountDownStarted());
         compound.setInteger("Age", this.getAge());
@@ -104,13 +104,15 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
         compound.setInteger("LaunchTime", this.getLaunchTime());
         compound.setInteger("FlightTime", this.getFlightTime());
         compound.setFloat("StartPos", this.getStartPos());
-        compound.setTag("cargo", this.cargo.serializeNBT());
-
     }
 
     public void initializeCargo() {
-        this.cargo = new CargoItemStackHandler(this.getEntityData().getInteger("maxVolume"),
-                this.getEntityData().getInteger("maxWeight"));
+        if (!this.getEntityData().hasKey("maxVolume")) {
+            this.cargo = new CargoItemStackHandler(10000, 10000);
+        } else {
+            this.cargo = new CargoItemStackHandler(this.getEntityData().getInteger("maxVolume"),
+                    this.getEntityData().getInteger("maxWeight"));
+        }
     }
 
     @SideOnly(Side.CLIENT)
@@ -240,7 +242,12 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
 
     @Override
     public boolean canBeCollidedWith() {
-        return true; // note that this prevents it from being seen on theoneprobe, and /gs looking
+        return true; // This needs to be true to allow passengers
+    }
+
+    @Override
+    protected void collideWithNearbyEntities() {
+        // do nothing ourselves, although other entities will still collide with us
     }
 
     @Override

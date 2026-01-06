@@ -1,6 +1,7 @@
 package supersymmetry.api.items;
 
 import gregtech.api.GTValues;
+import gregtech.api.unification.Elements;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.stack.ItemMaterialInfo;
@@ -14,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.util.SuSyUtility;
@@ -75,6 +77,16 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
         }
     }
 
+    public void clear() {
+        this.cargo.clear();
+        this.currentVolume = 0;
+        this.currentWeight = 0;
+    }
+
+    public boolean isEmpty() {
+        return this.cargo.isEmpty();
+    }
+
     public static class CargoHashStrategy implements Hash.Strategy<List<ItemStack>> {
 
         @Override
@@ -87,6 +99,9 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
 
         @Override
         public boolean equals(List<ItemStack> a, List<ItemStack> b) {
+            if (a == null || b == null) {
+                return a == b;
+            }
             if (a.isEmpty() || b.isEmpty()) {
                 return a.isEmpty() && b.isEmpty();
             }
@@ -170,7 +185,7 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
             return (int) (info.getMaterials().stream().mapToLong((stack) -> stack.material.getMass() * stack.amount).sum() /
                     (GTValues.M / 36));
         }
-        return 12; // TODO
+        return 98 * 36 * 4; // default mass times 36 times another fudge factor
     }
 
     @Override
@@ -196,6 +211,11 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
             }
         }
         return ItemHandlerHelper.copyStackWithSize(last, actuallyRemoved);
+    }
+
+    public ItemStack getExposedStack() {
+        if (cargo.isEmpty()) return ItemStack.EMPTY;
+        return cargo.iterator().next().getLast();
     }
 
     @Override

@@ -11,6 +11,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.world.World;
 
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.common.blocks.rocketry.BlockSpacecraftInstrument;
@@ -41,6 +42,7 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
     protected static final DataParameter<Boolean> ACTED = EntityDataManager.<Boolean>createKey(
             EntityAbstractRocket.class,
             DataSerializers.BOOLEAN);
+    protected CargoItemStackHandler cargo;
 
     public EntityAbstractRocket(World worldIn) {
         super(worldIn);
@@ -194,5 +196,19 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
 
     public abstract double getCargoMass();
 
+    @Override
+    public void writeEntityToNBT(@NotNull NBTTagCompound compound) {
+        super.writeEntityToNBT(compound);
+        compound.setTag("cargo", this.cargo.serializeNBT());
+    }
 
+    @Override
+    public void readEntityFromNBT(@NotNull NBTTagCompound compound) {
+        super.readEntityFromNBT(compound);
+        this.cargo.deserializeNBT(compound.getCompoundTag("cargo"));
+    }
+
+    public CargoItemStackHandler getInventory() {
+        return this.cargo;
+    }
 }

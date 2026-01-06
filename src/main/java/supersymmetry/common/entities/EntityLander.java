@@ -11,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerChest;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -19,14 +20,10 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.ILockableContainer;
-import net.minecraft.world.LockCode;
+import net.minecraft.world.IInteractionObject;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemStackHandler;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -39,12 +36,13 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.client.audio.MovingSoundDropPod;
 import supersymmetry.client.renderer.particles.SusyParticleFlame;
 import supersymmetry.client.renderer.particles.SusyParticleSmoke;
 
-public class EntityLander extends EntityAbstractRocket implements IAnimatable, ILockableContainer {
+public class EntityLander extends EntityAbstractRocket implements IAnimatable, IInventory, IInteractionObject {
 
     private static final DataParameter<Boolean> HAS_LANDED = EntityDataManager.<Boolean>createKey(EntityLander.class,
             DataSerializers.BOOLEAN);
@@ -55,8 +53,6 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
 
     private AnimationFactory factory = new AnimationFactory(this);
 
-    private IItemHandlerModifiable inventory = new ItemStackHandler(36);
-    private LockCode lockCode = LockCode.EMPTY_CODE;
     @SideOnly(Side.CLIENT)
     private MovingSoundDropPod soundDropPod;
 
@@ -214,31 +210,18 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
 
     @Override
     public void writeEntityToNBT(@NotNull NBTTagCompound compound) {
+        super.writeEntityToNBT(compound);
         compound.setBoolean("landed", this.hasLanded());
         compound.setInteger("time_since_landing", this.getTimeSinceLanding());
-
-        // Write inventory
-        if (this.inventory instanceof ItemStackHandler) {
-            compound.setTag("Inventory", ((ItemStackHandler) this.inventory).serializeNBT());
-        }
-
-        // Write lock code
-        if (!this.lockCode.isEmpty()) {
-            this.lockCode.toNBT(compound);
-        }
+        compound.setTag("cargo", this.cargo.serializeNBT());
     }
 
     @Override
     public void readEntityFromNBT(@NotNull NBTTagCompound compound) {
+        super.readEntityFromNBT(compound);
         this.setLanded(compound.getBoolean("landed"));
         this.setTimeSinceLanding(compound.getInteger("time_since_landing"));
-        // Read inventory
-        if (this.inventory instanceof ItemStackHandler && compound.hasKey("Inventory", Constants.NBT.TAG_COMPOUND)) {
-            ((ItemStackHandler) this.inventory).deserializeNBT(compound.getCompoundTag("Inventory"));
-        }
-
-        // Read lock code
-        this.lockCode = LockCode.fromNBT(compound);
+        this.cargo.deserializeNBT(compound.getCompoundTag("cargo"));
     }
 
     @Override
@@ -280,9 +263,6 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
                     }
                 }
                 this.setTimeSinceLanding(this.getTimeSinceLanding() + 1);
-                if (this.getTimeSinceLanding() > 1000) {
-                    this.setDead();
-                }
             }
 
             if (this.isLaunched()) {
@@ -412,74 +392,36 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
     }
 
     @Override
-    public boolean isLocked() {
-        return this.lockCode != null && !this.lockCode.isEmpty();
-    }
-
-    @Override
-    public void setLockCode(LockCode code) {
-        this.lockCode = code;
-    }
-
-    @Override
-    public LockCode getLockCode() {
-        return this.lockCode;
-    }
-
-    @Override
     public int getSizeInventory() {
-        return this.inventory.getSlots();
+        return 1;
     }
 
     @Override
     public boolean isEmpty() {
-        for (int i = 0; i < this.inventory.getSlots(); i++) {
-            if (!this.inventory.getStackInSlot(i).isEmpty()) {
-                return false;
-            }
-        }
-        return true;
+        return this.cargo.isEmpty();
     }
 
     @Override
     public ItemStack getStackInSlot(int index) {
-        return this.inventory.getStackInSlot(index);
+        return this.cargo.getExposedStack();
     }
 
     @Override
     public ItemStack decrStackSize(int index, int count) {
-        ItemStack stack = this.inventory.getStackInSlot(index);
-        if (!stack.isEmpty()) {
-            if (stack.getCount() <= count) {
-                this.inventory.setStackInSlot(index, ItemStack.EMPTY);
-                this.markDirty();
-                return stack;
-            } else {
-                ItemStack result = stack.splitStack(count);
-                if (stack.isEmpty()) {
-                    this.inventory.setStackInSlot(index, ItemStack.EMPTY);
-                }
-                this.markDirty();
-                return result;
-            }
-        }
-        return ItemStack.EMPTY;
+        this.markDirty();
+        return cargo.extractItem(0, count, false);
     }
 
     @Override
     public ItemStack removeStackFromSlot(int index) {
-        ItemStack stack = this.inventory.getStackInSlot(index);
-        this.inventory.setStackInSlot(index, ItemStack.EMPTY);
-        return stack;
+        this.markDirty();
+        return cargo.extractItem(0, cargo.getExposedStack().getCount(), false);
     }
 
     @Override
     public void setInventorySlotContents(int index, ItemStack stack) {
-        this.inventory.setStackInSlot(index, stack);
-        if (!stack.isEmpty() && stack.getCount() > this.getInventoryStackLimit()) {
-            stack.setCount(this.getInventoryStackLimit());
-        }
         this.markDirty();
+        cargo.insertItem(0, stack, false);
     }
 
     @Override
@@ -532,9 +474,7 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
 
     @Override
     public void clear() {
-        for (int i = 0; i < this.inventory.getSlots(); i++) {
-            this.inventory.setStackInSlot(i, ItemStack.EMPTY);
-        }
+        this.cargo.clear();
     }
 
     @Override
@@ -547,11 +487,11 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
         return "supersymmetry:lander";
     }
 
-    /**
-     * Gets the IItemHandlerModifiable for this lander.
-     * This can be used for capability-based inventory access.
-     */
-    public IItemHandlerModifiable getInventory() {
-        return this.inventory;
+    public CargoItemStackHandler getInventory() {
+        return this.cargo;
+    }
+
+    public void setInventory(CargoItemStackHandler cargoItemStackHandler) {
+        this.cargo = cargoItemStackHandler;
     }
 }
