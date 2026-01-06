@@ -1,0 +1,11 @@
+{
+  "forge_marker" : 1,
+  "variants" : {
+    "variant=framed" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/concrete_reinforced/framed"
+      }
+    }
+  }
+}

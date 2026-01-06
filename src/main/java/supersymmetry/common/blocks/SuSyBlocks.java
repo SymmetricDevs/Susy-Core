@@ -52,6 +52,7 @@ public class SuSyBlocks {
     public static BlockMetallurgyRoll METALLURGY_ROLL;
     public static BlockConveyor CONVEYOR_BELT;
     public static BlockRocketAssemblerCasing ROCKET_ASSEMBLER_CASING;
+    public static BlockReinforcedConcrete REINFORCED_CONCRETE;
     public static BlockRegolith REGOLITH;
     public static BlocksFakeWool FAKEWOOL;
     public static BlockRandomConcrete RANDOM_CONCRETE;
@@ -148,6 +149,9 @@ public class SuSyBlocks {
         ROCKET_ASSEMBLER_CASING = new BlockRocketAssemblerCasing();
         ROCKET_ASSEMBLER_CASING.setRegistryName("rocket_assembler_casing");
 
+        REINFORCED_CONCRETE = new BlockReinforcedConcrete();
+        REINFORCED_CONCRETE.setRegistryName("concrete_reinforced");
+      
         REGOLITH = new BlockRegolith();
         REGOLITH.setRegistryName("regolith");
 
@@ -204,6 +208,7 @@ public class SuSyBlocks {
         registerItemModel(METALLURGY_ROLL);
         registerItemModel(CONVEYOR_BELT);
         registerItemModel(ROCKET_ASSEMBLER_CASING);
+        registerItemModel(REINFORCED_CONCRETE);
         registerItemModel(REGOLITH);
         registerItemModel(FAKEWOOL);
         registerItemModel(RANDOM_CONCRETE);
