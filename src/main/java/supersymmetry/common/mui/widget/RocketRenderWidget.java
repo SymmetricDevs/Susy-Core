@@ -23,28 +23,27 @@ public class RocketRenderWidget extends Widget {
     public Entity entity;
     public Render<Entity> renderer;
     public float interpolation = 0f;
-    public AxisAlignedBB model_aabb;
+    public AxisAlignedBB modelAABB;
     public double scale;
-    public double dvdzone;
-    public boolean should_go_side_to_side = false;
-    public boolean going_right = true;
+    public double dvdZone;
+    public boolean shouldGoSideToSide;
 
     public RocketRenderWidget(Size size, Position pos, Entity entity) {
         super(pos, size);
         if (entity instanceof AFSRendered r) {
-            this.model_aabb = r.model_aabb();
+            this.modelAABB = r.modelAABB();
         } else {
             throw new RuntimeException();
         }
         this.entity = entity;
         this.renderer = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(entity);
-        double side_len = Math.max(
-                Math.abs(model_aabb.minX) + Math.abs(model_aabb.maxX),
-                Math.abs(model_aabb.minZ) + Math.abs(model_aabb.maxZ));
-        scale = ((float) size.height / side_len);
-        should_go_side_to_side = (model_aabb.maxY * scale) > size.width;
-        double rscale = scale * model_aabb.maxY;
-        dvdzone = rscale - size.width;
+        double sideLen = Math.max(
+                Math.abs(modelAABB.minX) + Math.abs(modelAABB.maxX),
+                Math.abs(modelAABB.minZ) + Math.abs(modelAABB.maxZ));
+        scale = ((float) size.height / sideLen);
+        shouldGoSideToSide = (modelAABB.maxY * scale) > size.width;
+        double rscale = scale * modelAABB.maxY;
+        dvdZone = rscale - size.width;
     }
 
     @Override
@@ -59,8 +58,8 @@ public class RocketRenderWidget extends Widget {
         GlStateManager.pushAttrib();
         GlStateManager.pushMatrix();
         {
-            double offset = (dvdzone * (interpolation * SQRT_3 * 0.2)) % (dvdzone * 2);
-            double x = should_go_side_to_side ? ((offset < dvdzone) ? pos.x - offset : pos.x - dvdzone * 2 + offset) :
+            double offset = (dvdZone * (interpolation * SQRT_3 * 0.2)) % (dvdZone * 2);
+            double x = shouldGoSideToSide ? ((offset < dvdZone) ? pos.x - offset : pos.x - dvdZone * 2 + offset) :
                     pos.x;
             GlStateManager.translate(x, pos.y + size.height / 2, 1.0F);
             GlStateManager.scale(scale, scale, scale);

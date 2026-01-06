@@ -302,7 +302,7 @@ susy.rocketry.components.engine_small.name=Vernier engine(s)
 susy.rocketry.components.tank.name=Tank(s)
 
 susy.rocketry.components.validation_codes.invalid_amount=Invalid amount of components
-susy.rocketry.component.validation_codes.invalid_amount=Invalid amount of commponents inserted
+susy.rocketry.component.validation_codes.invalid_amount=Invalid amount of components inserted
 susy.rocketry.components.validation_codes.invalid_card=Malformed component card
 susy.rocketry.components.validation_codes.incompatible_card=Incompatible card
 susy.rocketry.components.validation_codes.unknown=Something broke

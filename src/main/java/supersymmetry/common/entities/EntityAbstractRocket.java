@@ -58,6 +58,7 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
         this.dataManager.register(FLIGHT_TIME, 0);
         this.dataManager.register(START_POS, 0.F);
         this.dataManager.register(ACTED, false);
+
     }
 
     public boolean isLaunched() {
@@ -200,6 +201,9 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
     @Override
     public void writeEntityToNBT(@NotNull NBTTagCompound compound) {
         super.writeEntityToNBT(compound);
+        if (this.cargo == null) {
+            this.cargo = new CargoItemStackHandler(0, 0);
+        }
         compound.setTag("cargo", this.cargo.serializeNBT());
     }
 
