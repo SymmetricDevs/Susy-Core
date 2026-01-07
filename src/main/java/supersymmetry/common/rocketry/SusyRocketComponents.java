@@ -16,8 +16,8 @@ public class SusyRocketComponents {
 
     public static void init() {
         AbstractComponent.registerComponent(new ComponentFairing());
-        AbstractComponent.registerComponent(new ComponentControlPod());
         AbstractComponent.registerComponent(new ComponentLavalEngine());
+        AbstractComponent.registerComponent(new ComponentVernierEngine());
         AbstractComponent.registerComponent(new ComponentInterstage());
         AbstractComponent.registerComponent(new ComponentSpacecraft());
         AbstractComponent.registerComponent(new ComponentLiquidFuelTank());
