@@ -37,11 +37,20 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
                 "engine",
                 candidate -> candidate.getSecond().stream()
                         .anyMatch(
-                                pos -> candidate
-                                        .getFirst().world
-                                                .getBlockState(pos)
-                                                .getBlock()
-                                                .equals(SuSyBlocks.COMBUSTION_CHAMBER)));
+                                pos -> {
+                                    boolean a =
+                                            candidate
+                                                    .getFirst().world
+                                                    .getBlockState(pos)
+                                                    .getBlock()
+                                                    .equals(SuSyBlocks.COMBUSTION_CHAMBER);
+                                    boolean b =
+                                            candidate
+                                                    .getFirst().world
+                                                    .getBlockState(pos)
+                                                    .equals(SuSyBlocks.COMBUSTION_CHAMBER.getState(BlockCombustionChamber.CombustionType.MONOPROPELLANT));
+                                    return a && !b;
+                                }));
         this.setComponentSlotValidator(
                 x -> x.equals(this.getName()) || x.equals(this.getType()) ||
                         (x.equals(this.getType() + "_small") && this.radius < 2) ||
