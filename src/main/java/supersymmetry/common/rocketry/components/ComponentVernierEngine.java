@@ -32,11 +32,20 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
                 "engine",
                 candidate -> candidate.getSecond().stream()
                         .anyMatch(
-                                pos -> candidate
-                                        .getFirst().world
-                                                .getBlockState(pos)
-                                                .getBlock()
-                                                .equals(SuSyBlocks.COMBUSTION_CHAMBER.getState(BlockCombustionChamber.CombustionType.MONOPROPELLANT))));
+                                pos -> {
+                                    boolean a = candidate
+                                            .getFirst().world
+                                            .getBlockState(pos)
+                                            .getBlock()
+                                            .equals(SuSyBlocks.COMBUSTION_CHAMBER);
+                                    return a && candidate
+                                            .getFirst().world
+                                            .getBlockState(pos)
+                                            .getProperties()
+                                            .values()
+                                            .toString()
+                                            .equals("[MONOPROPELLANT]");
+                                }));
         this.setComponentSlotValidator(
                 x -> x.equals(this.getName()) || x.equals(this.getType()) ||
                         (x.equals(this.getType() + "_small") && this.radius < 2) ||
@@ -112,19 +121,19 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
         int initial = areas.get(0);
         int fin = initial;
 
-        for (int a : areas) {
+        /*for (int a : areas) {
             if (fin <= a) {
                 fin = a;
             } else {
                 analysis.status = BuildStat.NOT_LAVAL;
                 return Optional.empty();
             }
-        }
+        }*/
         float computedAreaRatio = ((float) fin) / initial;
-        if (computedAreaRatio < 1.5) {
+        /*if (computedAreaRatio < 1.5) {
             analysis.status = BuildStat.NOT_LAVAL;
             return Optional.empty();
-        }
+        }*/
 
         // One combustion chamber is, I think, reasonable
         List<BlockPos> cChambers = analysis.getOfBlockType(blocks, SuSyBlocks.COMBUSTION_CHAMBER)
