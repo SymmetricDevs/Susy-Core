@@ -610,7 +610,6 @@ public class SuSyMetaTileEntities {
         ROCKET_PROGRAMMER = registerMetaTileEntity(18008,
                 new MetaTileEntityRocketProgrammer(susyId("rocket_programmer")));
 
-
         REDSTONE_CONTROLLER = registerMetaTileEntity(18061,
                 new MetaTileEntityComponentRedstoneController(susyId("redstone_controller")));
 

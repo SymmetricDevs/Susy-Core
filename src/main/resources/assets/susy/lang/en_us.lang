@@ -1236,6 +1236,28 @@ susy.machine.locked_crate.tungstensteel.name=Tungstensteel Crate
 susy.machine.large_boiler.bronze.name=Large Bronze Boiler
 susy.machine.large_boiler.steel.name=Large Steel Boiler
 
+susy.machine.large_boiler.bronze.signal.incr1=Throttle increase (1%%)
+susy.machine.large_boiler.bronze.signal.incr5=Throttle increase (5%%)
+susy.machine.large_boiler.bronze.signal.incr10=Throttle increase (10%%)
+susy.machine.large_boiler.bronze.signal.incr25=Throttle increase (25%%)
+susy.machine.large_boiler.bronze.signal.dec1=Throttle decrease (1%%)
+susy.machine.large_boiler.bronze.signal.dec5=Throttle decrease (5%%)
+susy.machine.large_boiler.bronze.signal.dec10=Throttle decrease (10%%)
+susy.machine.large_boiler.bronze.signal.dec25=Throttle decrease (25%%)
+susy.machine.large_boiler.bronze.signal.set100=Set throttle to 100%%
+susy.machine.large_boiler.bronze.signal.set25=Set throttle to 25%%
+
+susy.machine.large_boiler.bronze.signal.incr1=Throttle increase (1%%)
+susy.machine.large_boiler.steel.signal.incr5=Throttle increase (5%%)
+susy.machine.large_boiler.steel.signal.incr10=Throttle increase (10%%)
+susy.machine.large_boiler.steel.signal.incr25=Throttle increase (25%%)
+susy.machine.large_boiler.bronze.signal.dec1=Throttle decrease (1%%)
+susy.machine.large_boiler.steel.signal.dec5=Throttle decrease (5%%)
+susy.machine.large_boiler.steel.signal.dec10=Throttle decrease (10%%)
+susy.machine.large_boiler.steel.signal.dec25=Throttle decrease (25%%)
+susy.machine.large_boiler.steel.signal.set100=Set throttle to 100%%
+susy.machine.large_boiler.steel.signal.set25=Set throttle to 25%%
+
 susy.machine.steam_boiler_coal.bronze.name=Small Steam Solid Fuel Boiler
 susy.machine.steam_boiler_coal.bronze.tooltip=An early way to get Steam Power
 susy.machine.steam_boiler_coal.steel.name=High Pressure Steam Solid Fuel Boiler
