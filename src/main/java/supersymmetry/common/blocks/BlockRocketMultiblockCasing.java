@@ -17,16 +17,16 @@ import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.block.VariantBlock;
 
-public class BlockSuSyRocketMultiblockCasing extends VariantBlock<BlockSuSyRocketMultiblockCasing.CasingType> {
+public class BlockRocketMultiblockCasing extends VariantBlock<BlockRocketMultiblockCasing.CasingType> {
 
-    public BlockSuSyRocketMultiblockCasing() {
+    public BlockRocketMultiblockCasing() {
         super(Material.IRON);
-        setTranslationKey("susy_rocket_multiblock_casing");
+        setTranslationKey("rocket_multiblock_casing");
         setHardness(5.0f);
         setResistance(10.0f);
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 2);
-        setDefaultState(getState(CasingType.PROCESSOR_CLUSTER));
+        setDefaultState(getState(CasingType.VINYL_CEILING_TILE));
     }
 
     @Override
@@ -55,7 +55,6 @@ public class BlockSuSyRocketMultiblockCasing extends VariantBlock<BlockSuSyRocke
 
     public enum CasingType implements IStringSerializable {
 
-        PROCESSOR_CLUSTER("processor_cluster"),
         VINYL_CEILING_TILE("vinyl_ceiling_tile"),
         CEILING_GRID_FILTER_UNIT("ceiling_grid_filter_unit"),
         VINYL_COMPOSITE_FLOORING("vinyl_composite_flooring"),

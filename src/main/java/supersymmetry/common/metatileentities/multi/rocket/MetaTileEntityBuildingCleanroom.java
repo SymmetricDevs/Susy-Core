@@ -44,7 +44,7 @@ import gregtech.common.metatileentities.multi.electric.MetaTileEntityCleanroom;
 import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockMetallurgy2;
-import supersymmetry.common.blocks.BlockSuSyRocketMultiblockCasing;
+import supersymmetry.common.blocks.BlockRocketMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityComponentScanner;
@@ -176,7 +176,7 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
                                @NotNull EnumFacing direction) {
         return world.getBlockState(pos.move(direction)) ==
                 SuSyBlocks.ROCKET_MULTIBLOCK_CASING
-                        .getState(BlockSuSyRocketMultiblockCasing.CasingType.AEROSPACE_GASKET);
+                        .getState(BlockRocketMultiblockCasing.CasingType.AEROSPACE_GASKET);
     }
 
     /**
@@ -189,7 +189,7 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
                                 @NotNull EnumFacing direction) {
         return isBlockEdge(world, pos, direction) || world.getBlockState(pos) ==
                 SuSyBlocks.ROCKET_MULTIBLOCK_CASING
-                        .getState(BlockSuSyRocketMultiblockCasing.CasingType.VINYL_COMPOSITE_FLOORING);
+                        .getState(BlockRocketMultiblockCasing.CasingType.VINYL_COMPOSITE_FLOORING);
     }
 
     @Override
@@ -327,11 +327,11 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
                     .where('S', this.selfPredicate())
                     .where('B',
                             states(SuSyBlocks.ROCKET_MULTIBLOCK_CASING
-                                    .getState(BlockSuSyRocketMultiblockCasing.CasingType.AEROSPACE_GASKET))
+                                    .getState(BlockRocketMultiblockCasing.CasingType.AEROSPACE_GASKET))
                                             .or(basePredicate))
                     .where('L',
                             states(SuSyBlocks.ROCKET_MULTIBLOCK_CASING
-                                    .getState(BlockSuSyRocketMultiblockCasing.CasingType.VINYL_COMPOSITE_FLOORING)))
+                                    .getState(BlockRocketMultiblockCasing.CasingType.VINYL_COMPOSITE_FLOORING)))
                     .where('W', glassPredicate.or(polystyreneEWPredicate)
                             .or(basePredicate)
                             .or(doorPredicate().setMaxGlobalLimited(8))
@@ -343,9 +343,9 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
                             .or(scannerPredicate)
                             .or(abilities(MultiblockAbility.PASSTHROUGH_HATCH).setMaxGlobalLimited(30)))
                     .where('F', states(SuSyBlocks.ROCKET_MULTIBLOCK_CASING
-                            .getState(BlockSuSyRocketMultiblockCasing.CasingType.VINYL_CEILING_TILE))
+                            .getState(BlockRocketMultiblockCasing.CasingType.VINYL_CEILING_TILE))
                                     .or(states(SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(
-                                            BlockSuSyRocketMultiblockCasing.CasingType.CEILING_GRID_FILTER_UNIT))
+                                            BlockRocketMultiblockCasing.CasingType.CEILING_GRID_FILTER_UNIT))
                                                     .setMinGlobalLimited(minFilters)))
                     .where(' ', this.innerPredicate())
                     .build();
@@ -404,19 +404,19 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
                 // Edges/borders
                 .where('B',
                         SuSyBlocks.ROCKET_MULTIBLOCK_CASING
-                                .getState(BlockSuSyRocketMultiblockCasing.CasingType.AEROSPACE_GASKET))
+                                .getState(BlockRocketMultiblockCasing.CasingType.AEROSPACE_GASKET))
                 // Floor
                 .where('J',
                         SuSyBlocks.ROCKET_MULTIBLOCK_CASING
-                                .getState(BlockSuSyRocketMultiblockCasing.CasingType.VINYL_COMPOSITE_FLOORING))
+                                .getState(BlockRocketMultiblockCasing.CasingType.VINYL_COMPOSITE_FLOORING))
                 // Ceiling tiles
                 .where('F',
                         SuSyBlocks.ROCKET_MULTIBLOCK_CASING
-                                .getState(BlockSuSyRocketMultiblockCasing.CasingType.VINYL_CEILING_TILE))
+                                .getState(BlockRocketMultiblockCasing.CasingType.VINYL_CEILING_TILE))
                 // Ceiling grid filter (satisfies 5% requirement)
                 .where('G',
                         SuSyBlocks.ROCKET_MULTIBLOCK_CASING
-                                .getState(BlockSuSyRocketMultiblockCasing.CasingType.CEILING_GRID_FILTER_UNIT))
+                                .getState(BlockRocketMultiblockCasing.CasingType.CEILING_GRID_FILTER_UNIT))
                 // Polystyrene walls - left/right (EAST/WEST facing)
                 .where('W', SuSyBlocks.METALLURGY_2.getState(BlockMetallurgy2.BlockMetallurgy2Type.POLYSTYRENE_WALL)
                         .withProperty(VariantHorizontalRotatableBlock.FACING, EnumFacing.EAST))
@@ -449,7 +449,7 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
                         () -> {
                             return ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH :
                                     SuSyBlocks.ROCKET_MULTIBLOCK_CASING.getState(
-                                            BlockSuSyRocketMultiblockCasing.CasingType.AEROSPACE_GASKET);
+                                            BlockRocketMultiblockCasing.CasingType.AEROSPACE_GASKET);
                         },
                         EnumFacing.SOUTH)
                 // Door (lower half)

@@ -64,8 +64,9 @@ import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.common.blocks.BlockSerpentine;
-import supersymmetry.common.blocks.BlockSuSyRocketMultiblockCasing;
+import supersymmetry.common.blocks.BlockRocketMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.blocks.rocketry.BlockProcessorCluster;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.common.mui.widget.RocketStageDisplayWidget;
@@ -164,8 +165,8 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
     }
 
     public IBlockState getComputerState() {
-        return SuSyBlocks.ROCKET_MULTIBLOCK_CASING
-                .getState(BlockSuSyRocketMultiblockCasing.CasingType.PROCESSOR_CLUSTER);
+        return SuSyBlocks.PROCESSOR_CLUSTER
+                .getState(BlockProcessorCluster.TierType.TIER_1);
     }
 
     @Override
