@@ -1,0 +1,8 @@
+{
+  "parent": "block/orientable",
+  "textures" : {
+    "front" : "gregtech:blocks/processor_cluster/tier1.front",
+    "top" : "gregtech:blocks/processor_cluster/tier1.top",
+    "side" : "gregtech:blocks/processor_cluster/tier1.side"
+  }
+}

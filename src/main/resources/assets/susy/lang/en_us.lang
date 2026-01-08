@@ -34,11 +34,11 @@ tile.rocket_assembler_casing.rails.name=Rocket Assembler Rails
 tile.rocket_assembler_casing.structural_frame.name=Rocket Assembler Structural Frame
 tile.susy_multiblock_casing.euv_safe_casing.name=Extreme-Ultraviolet-Safe Lithographer Casing
 
-tile.susy_rocket_multiblock_casing.processor_cluster.name=Processor Cluster
-tile.susy_rocket_multiblock_casing.vinyl_ceiling_tile.name=Vinyl Ceiling Tile
-tile.susy_rocket_multiblock_casing.ceiling_grid_filter_unit.name=Ceiling Grid Filter Unit
-tile.susy_rocket_multiblock_casing.vinyl_composite_flooring.name=Vinyl Composite Flooring
-tile.susy_rocket_multiblock_casing.aerospace_gasket.name=Aerospace Gasket
+tile.processor_cluster.tier1.name=Processor Cluster
+tile.rocket_multiblock_casing.vinyl_ceiling_tile.name=Vinyl Ceiling Tile
+tile.rocket_multiblock_casing.ceiling_grid_filter_unit.name=Ceiling Grid Filter Unit
+tile.rocket_multiblock_casing.vinyl_composite_flooring.name=Vinyl Composite Flooring
+tile.rocket_multiblock_casing.aerospace_gasket.name=Aerospace Gasket
 tile.metallurgy_2.polystyrene_wall.name=Polystyrene Wall
 
 tile.serpentine.basic.name=Copper Tubing Serpentine Block
@@ -1147,6 +1147,7 @@ metaitem.data_card.name=Empty Structure Card
 metaitem.data_card.tooltip.1=Insert into a Component Scanner to store the part representation.
 metaitem.data_card.active.name=Loaded Structure Card
 metaitem.data_card.active.tooltip.1=Load this into a Rocket Assembler to build the component.
+metaitem.data_card.master_blueprint.name=Rocket Blueprint
 
 # Machine Translations
 susy.wrongbiome=Machine can not work in this biome!
