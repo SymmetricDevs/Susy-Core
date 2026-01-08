@@ -126,12 +126,12 @@ public abstract class AbstractRocketBlueprint {
         return this.getStages().stream().mapToDouble(RocketStage::getHeight).sum();
     }
 
-    public double getThrust(RocketFuelEntry entry, double gravity) {
-        return this.getStages().stream().mapToDouble((stage) -> stage.getThrust(entry, gravity)).sum();
+    public double getThrust(RocketFuelEntry entry, double gravity, String componentType) {
+        return this.getStages().stream().mapToDouble((stage) -> stage.getThrust(entry, gravity, componentType)).sum();
     }
 
-    public int getEngineCount() {
-        return this.getStages().stream().mapToInt(RocketStage::getEngineCount).sum();
+    public int getComponentCount(String componentType) {
+        return this.getStages().stream().mapToInt((comp) -> comp.getComponentCount(componentType)).sum();
     }
 
     public void setName(String name) {

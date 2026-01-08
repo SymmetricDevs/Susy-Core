@@ -11,6 +11,7 @@ import net.minecraftforge.common.util.Constants;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.components.MaterialCost;
+import supersymmetry.api.rocketry.components.RocketEngine;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 
 import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
 
-public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEngine> {
+public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEngine> implements RocketEngine {
 
     public double areaRatio;
     public double fuelThroughput;
@@ -29,7 +30,7 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
     public ComponentVernierEngine() {
         super(
                 "vernier_engine",
-                "engine",
+                "engine_small",
                 candidate -> candidate.getSecond().stream()
                         .anyMatch(
                                 pos -> {
@@ -130,10 +131,10 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
             }
         }*/
         float computedAreaRatio = ((float) fin) / initial;
-        /*if (computedAreaRatio < 1.5) {
+        if (computedAreaRatio < 1) {
             analysis.status = BuildStat.NOT_LAVAL;
             return Optional.empty();
-        }*/
+        }
 
         // One combustion chamber is, I think, reasonable
         List<BlockPos> cChambers = analysis.getOfBlockType(blocks, SuSyBlocks.COMBUSTION_CHAMBER)
@@ -206,5 +207,10 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
 
         writeBlocksToNBT(blocks, analysis.world);
         return Optional.of(tag);
+    }
+
+    @Override
+    public double getFuelThroughput() {
+        return fuelThroughput;
     }
 }
