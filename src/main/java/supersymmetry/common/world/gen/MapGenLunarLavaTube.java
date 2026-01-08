@@ -24,8 +24,6 @@ public class MapGenLunarLavaTube extends MapGenBase {
     protected static final IBlockState AIR = Blocks.AIR.getDefaultState();
     protected static final IBlockState BASALT = MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH)
             .getState(StoneVariantBlock.StoneType.BASALT);
-    // protected static final IBlockState PIT = Blocks.BEDROCK.getDefaultState();
-    protected static final IBlockState PIT = Blocks.END_PORTAL_FRAME.getDefaultState();
 
     // modified from net.minecraft.world.gen.MapGenCaves
     protected void addTunnel(long seed, int x, int z, ChunkPrimer primer, double startX, double startY, double startZ,
@@ -46,8 +44,7 @@ public class MapGenLunarLavaTube extends MapGenBase {
 
         boolean deep = random.nextInt(6) == 0;
         for (; currentLength < length; ++currentLength) {
-            double currentWidth = width +
-                    (double) (MathHelper.sin((float) currentLength * (float) Math.PI / (float) length) * widthDiff);
+            double currentWidth = width + widthDiff;
             double height = currentWidth * squish;
             float cos = MathHelper.cos(pitch);
             float sin = MathHelper.sin(pitch);
@@ -57,16 +54,21 @@ public class MapGenLunarLavaTube extends MapGenBase {
 
             if (deep) {
                 pitch *= 0x.fp0f;
+                if (random.nextInt(0x20) == 0) deep = false;
             } else {
                 pitch *= 0.7F;
+                if (random.nextInt(0x100) == 0) deep = true;
             }
 
             pitch += deltaPitch * 0.1F;
             yaw += deltaYaw * 0.1F;
             deltaPitch *= 0.9F;
             deltaYaw *= 0x.cp0f;
+            widthDiff *= 0x.fp0f;
+            // generate upwards for better lava flow merge
             deltaPitch += (random.nextFloat() - random.nextFloat()) * random.nextFloat() * 1.0F + 0x.08p0f;
             deltaYaw += (random.nextFloat() - random.nextFloat()) * random.nextFloat() * 0x.cp0f;
+            widthDiff += (random.nextFloat() - random.nextFloat()) * random.nextFloat() * 0x.8p0f;
             if (startY + height > 0x38) deltaPitch -= 0x.1p0f;
             if (startY + height > 0x3c) {
                 deltaPitch -= 0x.4p0f;
@@ -77,20 +79,20 @@ public class MapGenLunarLavaTube extends MapGenBase {
             }
             if (startY + height > 0x40) pitch = -0x.1p0f;
 
-            if (width > 2) width *= 1 - 0x0.001p0d * currentLength / length;
-            else deltaPitch -= 0x.18p0f;
+            if (width < 2)  deltaPitch -= 1;
 
-            if (currentLength == j && width > 4.0F) {
+            if (currentLength == j && width > 5) {
                 double large = width * (1 - random.nextFloat() * random.nextFloat() * 0x.6p0);
                 double small = MathHelper.sqrt(width * width - large * large);
                 if (large < 3) large = 3;
-                if (small < 2) small = 2;
-                this.addTunnel(random.nextLong(), x, z, primer, startX, startY, startZ, random.nextFloat() * 0x.2p0f,
+                if (small < 3) small = 3;
+                double newLen = (length - currentLength) * random.nextFloat(0x.8p0f, 0x1.4p0f);
+                this.addTunnel(random.nextLong(), x, z, primer, startX, startY, startZ, (float) (width - large),
                         yaw + random.nextFloat() * 0x.8p0f - 0x.4p0f,
-                        pitch / 2.0F + random.nextFloat() * 0x.4p0f - 0x.2p0f, currentLength, length, 1.0D, large);
-                this.addTunnel(random.nextLong(), x, z, primer, startX, startY, startZ, random.nextFloat() * 0x.2p0f,
+                        pitch * 0x.ep0f + random.nextFloat() * 0x.2p0f - 0x.1p0f, currentLength, length, squish, large);
+                this.addTunnel(random.nextLong(), x, z, primer, startX, startY, startZ, (float) (width - small) * 0x.cp0f,
                         yaw + random.nextFloat() * 0x4p0f - 0x2p0f,
-                        pitch / 2.0F + random.nextFloat() * 0x.4p0f - 0x.2p0f, currentLength, length, 1.0D, small);
+                        pitch / 2.0F + random.nextFloat() * 0x.8p0f - 0x.4p0f, (int) (newLen * currentLength / length), (int) newLen, squish / 2 + 0x.8p0, small);
                 return;
             }
 
@@ -104,7 +106,18 @@ public class MapGenLunarLavaTube extends MapGenBase {
                     return;
                 }
 
-                // carving spheres?
+                double basaltFillLevel = currentLength < length * 0x.1p0 ?
+                        (0x.1p0 - (double) currentLength / length) :
+                        currentLength > length * 0x.fp0 ?
+                                (-0x.fp0 + (double) currentLength / length) :
+                                0; // 0 ~ 0x.1
+                basaltFillLevel *= 0x180 * basaltFillLevel; // 0 ~ 0x1.8
+                double stoneFillLevel = basaltFillLevel * basaltFillLevel - 0x1.2p0; // -0x1.2 ~ 0x1.2;
+
+                long localRandomSeed = random.nextLong();
+                boolean canHavePit = random.nextInt(8) == 0;
+
+                // carving spheres
                 if (startX >= centerX - 16.0D - currentWidth * 2.0D &&
                         startZ >= centerZ - 16.0D - currentWidth * 2.0D &&
                         startX <= centerX + 16.0D + currentWidth * 2.0D &&
@@ -123,7 +136,8 @@ public class MapGenLunarLavaTube extends MapGenBase {
                     if (z1 < 0) z1 = 0;
                     if (z2 > 16) z2 = 16;
 
-                    boolean pit = false;
+                    // for consistency
+                    Random localRandom = new Random(localRandomSeed);
 
                     // lx: local x
                     for (int localX = x1; localX < x2; ++localX) {
@@ -134,18 +148,11 @@ public class MapGenLunarLavaTube extends MapGenBase {
                             boolean foundTop = false;
 
                             if (distX * distX + distZ * distZ < 1.0D) {
-                                for (int localY = y2; localY > y1; --localY) {
+                                int localY = y2;
+                                float lavacicles = y2 > 0x3c ? 1 : localRandom.nextFloat(0x.cp0f, 0x1.4p0f);
+                                for (; localY > y1; --localY) {
                                     double distY = ((double) (localY - 1) + 0.5D - startY) / height;
-
-                                    if (!pit && y2 > 0x3d &&
-                                            world.getBiome(new BlockPos(localX + x * 16, localY, localZ + z * 16)) ==
-                                                    SuSyBiomes.LUNAR_MARIA) {
-                                        int x_ = (int) startX - x * 16;
-                                        int z_ = (int) startZ - z * 16;
-                                        if (0 <= x_ && x_ < 16 && 0 <= z_ && z_ < 16 && width > 3.0)
-                                            fillBlock(primer, x_, 0x50, z_, false, AIR, PIT);
-                                        pit = true;
-                                    }
+                                    if (distY > 0) distY *= lavacicles;
 
                                     if (distX * distX + distY * distY + distZ * distZ < 1.0D) {
                                         IBlockState state = primer.getBlockState(localX, localY, localZ);
@@ -156,12 +163,14 @@ public class MapGenLunarLavaTube extends MapGenBase {
                                             foundTop = true;
                                         }
 
-                                        double edge = distX * distX + distZ * distZ < 0x.cp0 ? 0 :
-                                                distX * distX + distZ * distZ * 2 - 0x1.8p0;
-                                        if (distY - edge > -0.5D) {
-                                            digBlock(primer, localX, localY, localZ, x, z, foundTop, state, up);
-                                        } else {
-                                            fillBlock(primer, localX, localY, localZ, true, state, BASALT);
+                                        double edge = distX * distX + distZ * distZ < 0x.5p0 ? 0 :
+                                                distX * distX + distZ * distZ - 0x.5p0;
+                                        if (distY > stoneFillLevel) {
+                                            if (distY - edge > -0.5D + basaltFillLevel) {
+                                                digBlock(primer, localX, localY, localZ, x, z, foundTop, state, up);
+                                            } else {
+                                                fillBlock(primer, localX, localY, localZ, true, state, BASALT);
+                                            }
                                         }
                                     }
                                 }
@@ -203,7 +212,6 @@ public class MapGenLunarLavaTube extends MapGenBase {
 
         for (int j = 0; j < i; ++j) {
             double startX = chunkX * 16 + this.rand.nextInt(16);
-            // double startY = this.rand.nextInt(this.rand.nextInt(112) + 8) + 8;
             double startY = this.rand.nextInt(this.rand.nextInt(16) + 4) + 4;
             double startZ = chunkZ * 16 + this.rand.nextInt(16);
             int k = 1;
@@ -219,8 +227,8 @@ public class MapGenLunarLavaTube extends MapGenBase {
                 float f2 = this.rand.nextFloat() * 0x.4p0f;
 
                 this.addTunnel(this.rand.nextLong(), originalX, originalZ, chunkPrimerIn, startX, startY, startZ, f2,
-                        yaw, pitch, 0, 0, 1.0D,
-                        rand.nextFloat() * (rand.nextFloat() * 4 + 4) + rand.nextFloat() * 2 + 2);
+                        yaw, pitch, 0, 0, 0x.cp0,
+                        rand.nextFloat() * (rand.nextFloat() * 8 + 4) + rand.nextFloat() * 2 + 2);
             }
         }
     }
@@ -254,9 +262,10 @@ public class MapGenLunarLavaTube extends MapGenBase {
         }
     }
 
-    protected void fillBlock(ChunkPrimer primer, int x, int y, int z, boolean replace, IBlockState state,
+    // replace = null for both
+    protected void fillBlock(ChunkPrimer primer, int x, int y, int z, Boolean replace, IBlockState state,
                              IBlockState toReplace) {
-        if (canReplaceBlock(state, null) && ((state == AIR) ^ replace)) {
+        if (canReplaceBlock(state, null) && (replace == null || ((state == AIR) ^ replace))) {
             primer.setBlockState(x, y, z, toReplace);
         }
     }
