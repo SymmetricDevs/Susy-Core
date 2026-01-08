@@ -159,7 +159,7 @@ public class SuSyFirstDegreeMaterials {
 
         Perfluoro2Methyl3Pentanone = new Material.Builder(27117, SuSyUtility.susyId("perfluoro_2_methyl_3_pentanone"))
                 .liquid(new FluidBuilder().block())
-                .color(0x90D5FF)
+                .color(0xA090D5FF)
                 .flags(DISABLE_DECOMPOSITION)
                 .components(Carbon, 6, Fluorine, 12, Oxygen, 1)
                 .build()
