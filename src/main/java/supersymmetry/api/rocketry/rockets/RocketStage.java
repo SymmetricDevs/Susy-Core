@@ -138,24 +138,24 @@ public class RocketStage {
     }
 
     // In kg/s
-    public double getFuelThroughput() {
+    public double getFuelThroughput(String componentType) {
         return components.values().stream()
                 .flatMap(List::stream)
-                .filter(c -> c.getType().equals("engine"))
+                .filter(c -> c.getType().equals(componentType))
                 .mapToDouble(engine -> ((ComponentLavalEngine) engine).fuelThroughput)
                 .sum();
     }
 
-    public int getEngineCount() {
+    public int getComponentCount(String componentType) {
         return components.values().stream()
                 .flatMap(List::stream)
-                .filter(c -> c.getType().equals("engine"))
+                .filter(c -> c.getType().equals(componentType))
                 .mapToInt(engine -> 1)
                 .sum();
     }
 
-    public double getThrust(RocketFuelEntry rocketFuelEntry, double gravity) {
-        return getFuelThroughput() * rocketFuelEntry.getSpecificImpulse() * gravity;
+    public double getThrust(RocketFuelEntry rocketFuelEntry, double gravity, String componentType) {
+        return getFuelThroughput(componentType) * rocketFuelEntry.getSpecificImpulse() * gravity;
     }
 
     public double getRadius() {

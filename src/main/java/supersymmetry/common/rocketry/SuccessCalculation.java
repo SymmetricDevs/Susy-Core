@@ -15,18 +15,30 @@ public class SuccessCalculation {
     }
 
     // lobotomized version of the function bellow to only take in the blueprint
-    public double calculateInitialSuccess() {
+    public double calculateInitialSuccess(double gravity) {
         double success = 1;
         double weight = blueprint.getMass();
-        // double thrust = blueprint.getThrust(null, 9.8d); // ??????
-        double thrust = 10000d; // 🙏
+        // TODO: AFS gravity selection
+        double thrust = blueprint.getThrust(null, gravity / 9.81, "engine");
         double thrustToWeightRatio = thrust / weight;
         if (thrustToWeightRatio < 1) return 0d;
+
         success *= (1 - (0.5 * Math.exp(1 - thrustToWeightRatio)));
         double oblateness = blueprint.getHeight() / blueprint.getMaxRadius();
         success *= (1 - (0.1 * Math.exp(-oblateness)));
-        success *= Math.pow(0.995, blueprint.getEngineCount());
+        success *= Math.pow(0.995, blueprint.getComponentCount("engine"));
         success *= (1 - (0.5 * Math.exp(blueprint.getTotalRadiusMismatch() / 10)));
+
+        double smallThrust = blueprint.getThrust(null, gravity / 9.81, "small_engine");
+        if (smallThrust == 0) {
+            return 0;
+        }
+        if (thrust / smallThrust > 10) {
+            success *= (1 - (0.2 * Math.exp((thrust / smallThrust) - 10)));
+        } else if (thrust / smallThrust < 3) {
+            success *= (1 - (0.5 * Math.exp(3 - (thrust / smallThrust))));
+        }
+
         success = augmentSuccess(success);
         return success;
     }
@@ -39,7 +51,7 @@ public class SuccessCalculation {
             gravMult = SuSyDimensions.PLANETS.get(rocket.world.provider.getDimension()).gravity;
         }
         double weight = (blueprint.getMass() + rocket.getCargoMass()) * gravMult;
-        double thrust = blueprint.getThrust(null, gravMult);
+        double thrust = blueprint.getThrust(null, gravMult, "engine");
         double thrustToWeightRatio = thrust / weight;
 
         if (thrustToWeightRatio < 1) {
@@ -53,8 +65,19 @@ public class SuccessCalculation {
         success *= (1 - (0.1 * Math.exp(-oblateness)));
 
         // Number of engines, radius mismatch
-        success *= Math.pow(0.995, blueprint.getEngineCount());
+        success *= Math.pow(0.995, blueprint.getComponentCount("engine"));
         success *= (1 - (0.5 * Math.exp(blueprint.getTotalRadiusMismatch() / 10)));
+
+        // Small engines shouldn't have that much throughput
+        double smallThrust = blueprint.getThrust(null, gravMult, "small_engine");
+        if (smallThrust == 0) {
+            return LaunchResult.CRASHES;
+        }
+        if (thrust / smallThrust > 10) {
+            success *= (1 - (0.2 * Math.exp((thrust / smallThrust) - 10)));
+        } else if (thrust / smallThrust < 3) {
+            success *= (1 - (0.5 * Math.exp(3 - (thrust / smallThrust))));
+        }
 
         // TODO: Guidance computer
 

@@ -46,7 +46,7 @@ public class SuSyDimensions {
                 .setStone(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH)
                         .getState(SusyStoneVariantBlock.StoneType.ANORTHOSITE))
                 .setSkyRenderer(new SkyRendererMoon())
-                .setGravity(0.166f).setDragMultiplier(1f).setBiomeSize(7).load();
+                .setGravity(0.166f).setDragMultiplier(0f).setBiomeSize(7).load();
 
         new Planet(0, 700, "Water Test World").setBiomeList(
                 new BiomeEntry(Biomes.OCEAN, 1)).load();

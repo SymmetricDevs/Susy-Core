@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import gregtech.api.gui.widgets.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
@@ -37,13 +38,6 @@ import gregtech.api.capability.impl.EnergyContainerList;
 import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
-import gregtech.api.gui.widgets.AdvancedTextWidget;
-import gregtech.api.gui.widgets.ClickButtonWidget;
-import gregtech.api.gui.widgets.DynamicLabelWidget;
-import gregtech.api.gui.widgets.ImageCycleButtonWidget;
-import gregtech.api.gui.widgets.ImageWidget;
-import gregtech.api.gui.widgets.IndicatorImageWidget;
-import gregtech.api.gui.widgets.LabelWidget;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -131,6 +125,8 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     private boolean hasNotEnoughCoolant = false;
 
     public RocketFuelEntry fuel;
+
+    private double gravity = 9.81;
 
     public MetaTileEntityAerospaceFlightSimulator(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
@@ -221,7 +217,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             if (drained != null && drained.amount != 0) {
                 if (drained.amount == 1000) {
                     World world = this.getWorld();
-                    BlockPos pos = (BlockPos) toFill.get(0);
+                    BlockPos pos = toFill.get(0);
                     if (world.isBlockLoaded(pos) &&
                             (world.isAirBlock(pos) || world.getBlockState(pos).getBlock() == fluid.getBlock())) {
                         world.setBlockState(pos, fluid.getBlock().getDefaultState(), 2);
@@ -287,7 +283,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 .sum();
         // TODO this is likely wrong and will increase the success chance by a lot if you just spam turn
         // on/off signals
-        double minimalChance = Math.max(bp.AFSSuccessChance, new SuccessCalculation(bp).calculateInitialSuccess());
+        double minimalChance = Math.max(bp.AFSSuccessChance, new SuccessCalculation(bp).calculateInitialSuccess(gravity));
         double successProb = getSuccessProbability(minimalChance, (double) this.progress / totalAssemblyTime);
         bp.AFSSuccessChance = successProb;
 
@@ -508,9 +504,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 0,
                 120,
                 80,
-                () -> {
-                    return true;
-                });
+                () -> true);
         f.addWidget(new ImageWidget(0, 0, 120, 80, GuiTextures.DISPLAY));
         f.addWidget(
                 new LabelWidget(5, 5, I18n.format(this.getMetaName() + ".gui.fuel_selector_label"), 0xffffff));
@@ -523,20 +517,24 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                         (fuel) -> {
                             this.fuel = fuel;
                         }));
+        // Gravity selector
+        f.addWidget(new LabelWidget(width - 30, 5, I18n.format(this.getMetaName() + ".gui.gravity_selector_label"), 0xffffff));
+        f.addWidget(new TextFieldWidget2(width - 30, 10, 60, 16, () -> String.valueOf(gravity), value -> {
+            if (!value.isEmpty()) {
+                gravity = Double.parseDouble(value);
+            }
+        }).setAllowedChars(TextFieldWidget2.DECIMALS).setMaxLength(6));
+
         ConditionalWidget g = new ConditionalWidget(
                 0,
                 0,
                 width,
                 height,
-                () -> {
-                    return true;
-                });
+                () -> true);
 
         g.addWidgetWithTest(
                 f,
-                () -> {
-                    return this.hasBlueprint() && !this.isActive && this.fuel == null;
-                });
+                () -> this.hasBlueprint() && !this.isActive && this.fuel == null);
 
         g.addWidgetWithTest(
                 new AdvancedTextWidget(
@@ -559,9 +557,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                             }
                         },
                         0xffffff),
-                () -> {
-                    return this.hasBlueprint() && !isActive();
-                });
+                () -> this.hasBlueprint() && !isActive());
         bpw.setChangeListener(
                 () -> {
                     if (this.rocketBlueprintSlot.isEmpty()) {
@@ -579,9 +575,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                         9,
                         I18n.format(getMetaName() + ".gui.computation_power", this.getCompute()),
                         0xffffff),
-                () -> {
-                    return (!this.isActive());
-                });
+                () -> !this.isActive());
         // these should probably be visible at all times in some different corner
         g.addWidgetWithTest(
                 new LabelWidget(
@@ -591,9 +585,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                                 getMetaName() + ".gui.coolant_flow",
                                 this.getCoolantToConsume(this.getEnergyToConsume()) * 20),
                         0xffffff),
-                () -> {
-                    return (!this.isActive());
-                });
+                () -> !this.isActive());
 
         g.addWidgetWithTest(
                 new LabelWidget(
@@ -601,16 +593,12 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                         31,
                         I18n.format(getMetaName() + ".gui.energy_consumption", this.getEnergyToConsume()),
                         0xffffff),
-                () -> {
-                    return (!this.isActive());
-                });
+                () -> !this.isActive());
 
         // label gets in the way a little
         g.addWidgetWithTest(
                 new LabelWidget(9, 9, getMetaFullName(), 0xffffff),
-                () -> {
-                    return (!this.isActive());
-                });
+                () -> !this.isActive());
         g.addWidgetWithTest(
                 new ClickButtonWidget(
                         width - 62,
@@ -650,9 +638,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                         })
                                 .setTooltipText(this.getMetaName() + ".gui.start_button")
                                 .setButtonTexture(SusyGuiTextures.GREEN_CIRCLE),
-                () -> {
-                    return (!this.isActive() && this.hasBlueprint());
-                });
+                () -> !this.isActive() && this.hasBlueprint());
         g.addWidgetWithTest(
                 new ClickButtonWidget(
                         width - 62,
@@ -670,9 +656,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                         })
                                 .setTooltipText(this.getMetaName() + ".gui.stop_button")
                                 .setButtonTexture(SusyGuiTextures.RED_CIRCLE),
-                () -> {
-                    return (this.isActive() && this.hasBlueprint());
-                });
+                () -> this.isActive() && this.hasBlueprint());
         g.addWidgetWithTest(
                 new ClickButtonWidget(
                         width - 78,
@@ -690,9 +674,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                         })
                                 .setTooltipText(this.getMetaName() + ".gui.reset_fuel")
                                 .setButtonTexture(SusyGuiTextures.RED_X),
-                () -> {
-                    return (this.hasBlueprint() && !this.isActive() && this.fuel != null);
-                });
+                () -> this.hasBlueprint() && !this.isActive() && this.fuel != null);
 
         // rocket render
 
@@ -717,26 +699,22 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 });
 
         g.addWidgetConditionalInit(
-                () -> {
-                    return this.hasBlueprint() && this.getBlueprint() != null;
-                },
-                () -> {
-                    return new DynamicLabelWidget(
-                            width - 120,
-                            height - 71,
-                            () -> {
-                                var bp = this.getBlueprint();
-                                if (bp != null) {
-                                    double c = Math.max(
-                                            bp.AFSSuccessChance,
-                                            getSuccessProbability(bp.AFSSuccessChance, progress));
-                                    return I18n.format(
-                                            this.getMetaName() + ".gui.success_chance",
-                                            String.format("%.10f", c * 100));
-                                }
-                                return "";
-                            });
-                });
+                () -> this.hasBlueprint() && this.getBlueprint() != null,
+                () -> new DynamicLabelWidget(
+                        width - 120,
+                        height - 71,
+                        () -> {
+                            var bp = this.getBlueprint();
+                            if (bp != null) {
+                                double c = Math.max(
+                                        bp.AFSSuccessChance,
+                                        getSuccessProbability(bp.AFSSuccessChance, progress));
+                                return I18n.format(
+                                        this.getMetaName() + ".gui.success_chance",
+                                        String.format("%.10f", c * 100));
+                            }
+                            return "";
+                        }));
         builder.widget(
                 new AdvancedTextWidget(
                         width - 100,

@@ -20,13 +20,14 @@ import net.minecraftforge.common.util.Constants;
 import gregtech.api.block.VariantBlock;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.rocketry.components.AbstractComponent;
+import supersymmetry.api.rocketry.components.RocketEngine;
 import supersymmetry.api.rocketry.components.MaterialCost;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.rocketry.BlockCombustionChamber;
 
-public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine> {
+public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine> implements RocketEngine {
 
     public double areaRatio;
     public double fuelThroughput;
@@ -211,5 +212,10 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
 
         writeBlocksToNBT(blocks, analysis.world);
         return Optional.of(tag);
+    }
+
+    @Override
+    public double getFuelThroughput() {
+        return fuelThroughput;
     }
 }
