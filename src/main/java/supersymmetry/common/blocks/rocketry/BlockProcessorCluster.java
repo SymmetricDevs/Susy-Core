@@ -16,7 +16,8 @@ import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
 import javax.annotation.Nonnull;
 
-public class BlockProcessorCluster extends VariantHorizontalRotatableBlock<BlockProcessorCluster.tierType> {
+public class BlockProcessorCluster extends VariantHorizontalRotatableBlock<BlockProcessorCluster.TierType> {
+
 
     public BlockProcessorCluster() {
         super(Material.IRON);
@@ -25,7 +26,7 @@ public class BlockProcessorCluster extends VariantHorizontalRotatableBlock<Block
         setResistance(10.0f);
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 2);
-        setDefaultState(getState(tierType.TIER_1));
+        setDefaultState(getState(TierType.TIER_1));
     }
 
     @Override
@@ -52,13 +53,13 @@ public class BlockProcessorCluster extends VariantHorizontalRotatableBlock<Block
         return super.getLightOpacity(state);
     }
 
-    public enum tierType implements IStringSerializable {
+    public enum TierType implements IStringSerializable {
 
         TIER_1("tier1");
 
         private final String name;
 
-        tierType(String name) {
+        TierType(String name) {
             this.name = name;
         }
 
