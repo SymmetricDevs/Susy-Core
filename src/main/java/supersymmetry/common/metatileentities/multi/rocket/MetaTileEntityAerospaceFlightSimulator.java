@@ -424,11 +424,11 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
                 .aisle("IIIIIIIII", "EEEEEEEEE", "EEEEEEEEE", "EEEEEEEEE", "EEEEEEEEE")
-                .aisle("IIIIIIIII", "EPCPCPCPE", "EPCPCPCPE", "ECCCCCCCE", "ETTTTTTTE")
-                .aisle("IIIIIIIII", "EPCPCPCPE", "EPCPCPCPE", "ECCCCCCCE", "ETTTTTTTE")
-                .aisle("IIIIIIIII", "EPCPCPCPE", "EPCPCPCPE", "ECCCCCCCE", "ETTTTTTTE")
-                .aisle("IIIIIIIII", "EPCPCPCPE", "EPCPCPCPE", "ECCCCCCCE", "ETTTTTTTE")
-                .aisle("IIIIIIIII", "ETCTCTCTE", "ETCTCTCTE", "ETCTCTCTE", "EEEEEEEEE")
+                .aisle("IIIIIIIII", "EPFPFPFPE", "EPFPFPFPE", "EFFFFFFFE", "ETTTTTTTE")
+                .aisle("IIIIIIIII", "EPFPFPFPE", "EPFPFPFPE", "EFFFFFFFE", "ETTTTTTTE")
+                .aisle("IIIIIIIII", "EPFPFPFPE", "EPFPFPFPE", "EFFFFFFFE", "ETTTTTTTE")
+                .aisle("IIIIIIIII", "EPFPFPFPE", "EPFPFPFPE", "EFFFFFFFE", "ETTTTTTTE")
+                .aisle("IIIISIIII", "ETCTCTCTE", "ETCTCTCTE", "ETCTCTCTE", "EEEEEEEEE")
                 .where('S', selfPredicate())
                 .where(' ', air())
                 .where('C', states(getCasingState()))
@@ -437,7 +437,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                         'T',
                         states(
                                 MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.TEMPERED_GLASS)))
-                .where('C', fluid(SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid()))
+                .where('F', fluid(SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid()))
                 .where(
                         'I',
                         abilities(MultiblockAbility.IMPORT_FLUIDS)

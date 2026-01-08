@@ -446,10 +446,10 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
                 .aisle("IIIIIII", "EEEEEEE", "EEEEEEE", "EEEEEEE", "EEEEEEE")
-                .aisle("IIIIIII", "EPCPCPE", "EPCPCPE", "ECCCCCE", "ETTTTTE")
-                .aisle("IIIIIII", "EPCPCPE", "EPCPCPE", "ECCCCCE", "ETTTTTE")
-                .aisle("IIIIIII", "EPCPCPE", "EPCPCPE", "ECCCCCE", "ETTTTTE")
-                .aisle("IIIIIII", "ETCTCTE", "ETCTCTE", "ETCTCTE", "EEEEEEE")
+                .aisle("IIIIIII", "EPFPFPE", "EPFPFPE", "EFFFFFE", "ETTTTTE")
+                .aisle("IIIIIII", "EPFPFPE", "EPFPFPE", "EFFFFFE", "ETTTTTE")
+                .aisle("IIIIIII", "EPFPFPE", "EPFPFPE", "EFFFFFE", "ETTTTTE")
+                .aisle("IIISIII", "ETCTCTE", "ETCTCTE", "ETCTCTE", "EEEEEEE")
                 .where('S', selfPredicate())
                 .where(' ', air())
                 .where('C', states(getCasingState()))
@@ -457,9 +457,20 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                 .where('T', states(MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.TEMPERED_GLASS)))
                 .where('B', states(SuSyBlocks.SERPENTINE.getState(BlockSerpentine.SerpentineType.BASIC)))
                 .where('F', fluid(SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid()))
-                .where('I', abilities(MultiblockAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1).setMinGlobalLimited(1, 1)
-                        .or(abilities(MultiblockAbility.EXPORT_FLUIDS).setMaxGlobalLimited(1).setMaxGlobalLimited(1, 1))
-                        .or(states(getCasingState())))
+                .where(
+                        'I',
+                        abilities(MultiblockAbility.IMPORT_FLUIDS)
+                                .setMaxGlobalLimited(1)
+                                .setMinGlobalLimited(1, 1)
+                                .or(abilities(MultiblockAbility.EXPORT_FLUIDS)
+                                        .setMaxGlobalLimited(1)
+                                        .setMaxGlobalLimited(1, 1))
+                                .or(abilities(MultiblockAbility.INPUT_ENERGY)
+                                        .setMaxGlobalLimited(2)
+                                        .setMinGlobalLimited(1, 1)
+                                        .or(states(getCasingState()))
+                                        .or(maintenancePredicate().setMaxGlobalLimited(1).setMinGlobalLimited(1, 1)))
+                                .or(states(getCasingState())))
                 .where(
                         'E',
                         abilities(MultiblockAbility.INPUT_ENERGY)
