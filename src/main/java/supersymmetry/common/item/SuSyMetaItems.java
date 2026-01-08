@@ -150,9 +150,9 @@ public class SuSyMetaItems {
         DATA_CARD_ACTIVE = initOneItem("data_card.active").setMaxStackSize(1).addComponents(new DataCardBehavior(
                 lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1")), Arrays.asList("type")));
 
-        DATA_CARD_MASTER_BLUEPRINT = initOneItem("datacard.master_blueprint").setMaxStackSize(1)
+        DATA_CARD_MASTER_BLUEPRINT = initOneItem("data_card.master_blueprint").setMaxStackSize(1)
                 .addComponents(new DataCardBehavior(
-                        lines -> lines.add(I18n.format("metaitem.datacard.master_blueprint.tooltip.1")),
+                        lines -> lines.add(I18n.format("metaitem.data_card.master_blueprint.tooltip.1")),
                         Arrays.asList("rocketType")));
 
         TUNGSTEN_ELECTRODE = initOneItem("tungsten_electrode");
