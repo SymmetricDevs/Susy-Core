@@ -17,13 +17,13 @@ import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
-import supersymmetry.common.world.SuSyBiomes;
 
 public class MapGenLunarLavaTube extends MapGenBase {
 
     protected static final IBlockState AIR = Blocks.AIR.getDefaultState();
-    protected static final IBlockState BASALT = MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH)
+    public static final IBlockState BASALT = MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH)
             .getState(StoneVariantBlock.StoneType.BASALT);
+    // public static final Block PIT = Blocks.END_PORTAL_FRAME;
 
     // modified from net.minecraft.world.gen.MapGenCaves
     protected void addTunnel(long seed, int x, int z, ChunkPrimer primer, double startX, double startY, double startZ,
@@ -79,7 +79,7 @@ public class MapGenLunarLavaTube extends MapGenBase {
             }
             if (startY + height > 0x40) pitch = -0x.1p0f;
 
-            if (width < 2)  deltaPitch -= 1;
+            if (width < 2) deltaPitch -= 1;
 
             if (currentLength == j && width > 5) {
                 double large = width * (1 - random.nextFloat() * random.nextFloat() * 0x.6p0);
@@ -90,9 +90,11 @@ public class MapGenLunarLavaTube extends MapGenBase {
                 this.addTunnel(random.nextLong(), x, z, primer, startX, startY, startZ, (float) (width - large),
                         yaw + random.nextFloat() * 0x.8p0f - 0x.4p0f,
                         pitch * 0x.ep0f + random.nextFloat() * 0x.2p0f - 0x.1p0f, currentLength, length, squish, large);
-                this.addTunnel(random.nextLong(), x, z, primer, startX, startY, startZ, (float) (width - small) * 0x.cp0f,
+                this.addTunnel(random.nextLong(), x, z, primer, startX, startY, startZ,
+                        (float) (width - small) * 0x.cp0f,
                         yaw + random.nextFloat() * 0x4p0f - 0x2p0f,
-                        pitch / 2.0F + random.nextFloat() * 0x.8p0f - 0x.4p0f, (int) (newLen * currentLength / length), (int) newLen, squish / 2 + 0x.8p0, small);
+                        pitch / 2.0F + random.nextFloat() * 0x.8p0f - 0x.4p0f, (int) (newLen * currentLength / length),
+                        (int) newLen, squish / 2 + 0x.8p0, small);
                 return;
             }
 
@@ -139,6 +141,14 @@ public class MapGenLunarLavaTube extends MapGenBase {
                     // for consistency
                     Random localRandom = new Random(localRandomSeed);
 
+                    // int x3 = MathHelper.floor(startX) - x * 16;
+                    // int z3 = MathHelper.floor(startZ) - z * 16;
+                    // if (0 <= x3 && x3 < 16 && 0 < z3 && z3 < 16 && width > 0x3 && localRandom.nextInt(0x4) == 1 && y2
+                    // > primer.findGroundBlockIdx(x3, z3 - 1) - 2) {
+                    // fillBlock(primer, x3, 0x60, z3, null, AIR, PIT.getStateFromMeta(width > 0x10 ? 7 : (int) (width -
+                    // 3)));
+                    // }
+
                     // lx: local x
                     for (int localX = x1; localX < x2; ++localX) {
                         double distX = ((double) (localX + x * 16) + 0.5D - startX) / currentWidth;
@@ -149,7 +159,7 @@ public class MapGenLunarLavaTube extends MapGenBase {
 
                             if (distX * distX + distZ * distZ < 1.0D) {
                                 int localY = y2;
-                                float lavacicles = y2 > 0x3c ? 1 : localRandom.nextFloat(0x.cp0f, 0x1.4p0f);
+                                float lavacicles = y2 > 0x3c ? 1 : localRandom.nextFloat(0x.ap0f, 0x1.4p0f);
                                 for (; localY > y1; --localY) {
                                     double distY = ((double) (localY - 1) + 0.5D - startY) / height;
                                     if (distY > 0) distY *= lavacicles;
@@ -206,7 +216,7 @@ public class MapGenLunarLavaTube extends MapGenBase {
             i = rand.nextInt(2);
         }
 
-        if (this.rand.nextInt(32) != 0) {
+        if (this.rand.nextInt(0x30) != 0) {
             i = 0;
         }
 
@@ -228,7 +238,7 @@ public class MapGenLunarLavaTube extends MapGenBase {
 
                 this.addTunnel(this.rand.nextLong(), originalX, originalZ, chunkPrimerIn, startX, startY, startZ, f2,
                         yaw, pitch, 0, 0, 0x.cp0,
-                        rand.nextFloat() * (rand.nextFloat() * 8 + 4) + rand.nextFloat() * 2 + 2);
+                        rand.nextFloat() * (rand.nextFloat() * 0x10) + rand.nextFloat() * 2 + 2);
             }
         }
     }

@@ -15,6 +15,8 @@ public class PlanetaryBiome extends Biome {
 
     public PlanetaryBiome(BiomeProperties properties) {
         super(properties);
+        // mushrooms still generate with mushroomsPerChunk = 0;
+        this.decorator = new BiomePlanetaryDecorator();
         this.decorator.generateFalls = false;
         this.decorator.flowersPerChunk = 0;
         this.decorator.grassPerChunk = 0;
