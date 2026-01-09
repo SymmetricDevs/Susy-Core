@@ -14,6 +14,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -57,6 +58,7 @@ import gregtech.common.blocks.BlockGlassCasing;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.SusyLog;
+import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
@@ -423,23 +425,19 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle("IIIIIIIII", "EEEEEEEEE", "EEEEEEEEE", "EEEEEEEEE", "EEEEEEEEE")
-                .aisle("IIIIIIIII", "EPFPFPFPE", "EPFPFPFPE", "EFFFFFFFE", "ETTTTTTTE")
-                .aisle("IIIIIIIII", "EPFPFPFPE", "EPFPFPFPE", "EFFFFFFFE", "ETTTTTTTE")
-                .aisle("IIIIIIIII", "EPFPFPFPE", "EPFPFPFPE", "EFFFFFFFE", "ETTTTTTTE")
-                .aisle("IIIIIIIII", "EPFPFPFPE", "EPFPFPFPE", "EFFFFFFFE", "ETTTTTTTE")
-                .aisle("IIIISIIII", "ETCTCTCTE", "ETCTCTCTE", "ETCTCTCTE", "EEEEEEEEE")
+                .aisle("IIIIIIIII", "IIIIIIIII", "IIIIIIIII", "IIIIIIIII", "IIIIIIIII")
+                .aisle("IIIIIIIII", "IPFPFPFPI", "IPFPFPFPI", "IFFFFFFFI", "ITTTTTTTI")
+                .aisle("IIIIIIIII", "IPFPFPFPI", "IPFPFPFPI", "IFFFFFFFI", "ITTTTTTTI")
+                .aisle("IIIIIIIII", "IPFPFPFPI", "IPFPFPFPI", "IFFFFFFFI", "ITTTTTTTI")
+                .aisle("IIIIIIIII", "IPFPFPFPI", "IPFPFPFPI", "IFFFFFFFI", "ITTTTTTTI")
+                .aisle("IIIISIIII", "ITCTCTCTI", "ITCTCTCTI", "ITCTCTCTI", "IIIIIIIII")
                 .where('S', selfPredicate())
                 .where(' ', air())
                 .where('C', states(getCasingState()))
-                .where('P', states(getComputerState()))
-                .where(
-                        'T',
-                        states(
-                                MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.TEMPERED_GLASS)))
+                .where('P', states(getComputerState().withProperty(VariantHorizontalRotatableBlock.FACING, EnumFacing.SOUTH)))
+                .where('T', states(MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.TEMPERED_GLASS)))
                 .where('F', fluid(SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid()))
-                .where(
-                        'I',
+                .where('I',
                         abilities(MultiblockAbility.IMPORT_FLUIDS)
                                 .setMaxGlobalLimited(1)
                                 .setMinGlobalLimited(1, 1)
@@ -452,13 +450,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                                 .or(states(getCasingState()))
                                 .or(maintenancePredicate().setMaxGlobalLimited(1).setMinGlobalLimited(1, 1)))
                         .or(states(getCasingState())))
-                .where(
-                        'E',
-                        abilities(MultiblockAbility.INPUT_ENERGY)
-                                .setMaxGlobalLimited(2)
-                                .setMinGlobalLimited(1, 1)
-                                .or(states(getCasingState()))
-                                .or(maintenancePredicate().setMaxGlobalLimited(1).setMinGlobalLimited(1, 1)))
                 .build();
     }
 
