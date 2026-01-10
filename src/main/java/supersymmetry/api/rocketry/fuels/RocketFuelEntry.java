@@ -3,6 +3,7 @@ package supersymmetry.api.rocketry.fuels;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import net.minecraft.util.Tuple;
 
@@ -10,38 +11,59 @@ import gregtech.api.unification.material.Material;
 
 public class RocketFuelEntry {
 
-    public class RocketFuelEntryBuilder {
+    public static class RocketFuelEntryBuilder {
 
-        private RocketFuelEntry rfe;
         private double proportionTot = 0;
 
-        public RocketFuelEntryBuilder(String name) {
-            this.rfe.registryName = name;
-            this.rfe.sides = new ArrayList<>();
+        private Material material;
+
+        private ArrayList<Tuple<Material, Double>> sides;
+        private String registryName;
+
+        private double density;
+        private double sIVacuum;
+
+        private double sIPerPressure;
+
+        public RocketFuelEntryBuilder(String name, Material primary, double primaryProportion) {
+            this.registryName = name;
+            this.sides = new ArrayList<>();
+            this.material = primary;
+            this.proportionTot = primaryProportion;
         }
 
-        public void addComponent(Material mat, double proportion) throws Exception {
+        public RocketFuelEntryBuilder addComponent(Material mat, double proportion) {
             proportionTot += proportion;
-            if (proportionTot >= 1) {
-                throw new Exception("total proportion over 1");
+            if (proportionTot > 1 + 1e-15) {
+                throw new RuntimeException(String.format("total proportion over 1 [%s]", proportionTot));
             }
-            rfe.sides.add(new Tuple<Material, Double>(mat, proportion));
+            this.sides.add(new Tuple<Material, Double>(mat, proportion));
+            return this;
         }
 
-        public void setCharacteristics(double density, double sIVacuum, double sIPerPressure) {
-            rfe.density = density;
-            rfe.sIVacuum = sIVacuum;
-            rfe.sIPerPressure = sIPerPressure;
+        public RocketFuelEntryBuilder setCharacteristics(
+                                                         double density, double sIVacuum, double sIPerPressure) {
+            this.density = density;
+            this.sIVacuum = sIVacuum;
+            this.sIPerPressure = sIPerPressure;
+            return this;
         }
 
-        public void register() throws Exception {
-            if (sides.isEmpty()) {
-                throw new Exception("empty list of fuel component entries");
+        public void register() {
+            if (this.sides.isEmpty()) {
+                throw new RuntimeException("empty list of fuel component entries");
             }
-            if (proportionTot != 1) {
-                throw new Exception("incorrect total proportion");
+            if (Math.abs(proportionTot - 1.0) > 1e-15) {
+                throw new RuntimeException(String.format("incorrect total proportion", proportionTot));
             }
-            RocketFuelEntry.registerFuel(rfe);
+            RocketFuelEntry.registerFuel(
+                    new RocketFuelEntry(
+                            this.registryName,
+                            this.material,
+                            this.sides,
+                            this.density,
+                            this.sIVacuum,
+                            this.sIPerPressure));
         }
     }
 
@@ -133,5 +155,23 @@ public class RocketFuelEntry {
 
     public double getSIVariation() {
         return this.sIPerPressure;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "RocketFuelEntry[%s]{sIVacuum:%s,sIPerPressure:%s,density:%s,material:%s,sides:[%s]}",
+                this.registryName,
+                this.sIVacuum,
+                this.sIPerPressure,
+                this.density,
+                this.material,
+                this.sides.stream()
+                        .map(
+                                x -> {
+                                    return String.format("[%s:%.2f%]", x.getFirst(), x.getSecond() * 100);
+                                })
+                        .collect(Collectors.toList())
+                        .toString());
     }
 }

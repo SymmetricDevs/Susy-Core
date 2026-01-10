@@ -1,6 +1,10 @@
 package supersymmetry.common.rocketry.components;
 
-import gregtech.api.block.VariantBlock;
+import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -8,6 +12,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.util.Constants;
+
+import gregtech.api.block.VariantBlock;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.components.MaterialCost;
@@ -16,11 +22,6 @@ import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.rocketry.BlockCombustionChamber;
-
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
 
 public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEngine> implements RocketEngine {
 
@@ -34,9 +35,10 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
                 candidate -> candidate.getSecond().stream()
                         .anyMatch(
                                 pos -> candidate
-                                            .getFirst().world
-                                            .getBlockState(pos)
-                                            .equals(SuSyBlocks.COMBUSTION_CHAMBER.getState(BlockCombustionChamber.CombustionType.MONOPROPELLANT))));
+                                        .getFirst().world
+                                                .getBlockState(pos)
+                                                .equals(SuSyBlocks.COMBUSTION_CHAMBER.getState(
+                                                        BlockCombustionChamber.CombustionType.MONOPROPELLANT))));
         this.setComponentSlotValidator(
                 x -> x.equals(this.getName()) || x.equals(this.getType()) ||
                         (x.equals(this.getType() + "_small") && this.radius < 2) ||
@@ -112,14 +114,16 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
         int initial = areas.get(0);
         int fin = initial;
 
-        /*for (int a : areas) {
-            if (fin <= a) {
-                fin = a;
-            } else {
-                analysis.status = BuildStat.NOT_LAVAL;
-                return Optional.empty();
-            }
-        }*/
+        /*
+         * for (int a : areas) {
+         * if (fin <= a) {
+         * fin = a;
+         * } else {
+         * analysis.status = BuildStat.NOT_LAVAL;
+         * return Optional.empty();
+         * }
+         * }
+         */
         float computedAreaRatio = ((float) fin) / initial;
         if (computedAreaRatio < 1) {
             analysis.status = BuildStat.NOT_LAVAL;

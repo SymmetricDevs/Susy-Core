@@ -6,8 +6,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 
-import cam72cam.mod.entity.ModdedEntity;
-import gregtech.api.util.RelativeDirection;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -15,12 +13,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+
 import org.jetbrains.annotations.NotNull;
 
+import cam72cam.mod.entity.ModdedEntity;
 import gregtech.api.capability.*;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
@@ -36,6 +34,7 @@ import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.util.Position;
+import gregtech.api.util.RelativeDirection;
 import gregtech.api.util.Size;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
@@ -50,7 +49,6 @@ import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.common.blocks.BlockRocketAssemblerCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.common.entities.EntityRocket;
 import supersymmetry.common.entities.EntityTransporterErector;
 import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityComponentRedstoneController;
 import supersymmetry.common.mui.widget.ItemCostWidget;
@@ -211,7 +209,6 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         var v2 = pos.offset(left, 17).offset(up, 10).offset(front.getOpposite(), 17);
         return new AxisAlignedBB(v1, v2);
     }
-
 
     public void startAssembly(AbstractRocketBlueprint bp) {
         ((RocketAssemblerLogic) this.recipeMapWorkable).setInputsValid();

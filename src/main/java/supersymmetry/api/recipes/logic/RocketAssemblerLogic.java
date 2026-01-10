@@ -53,7 +53,8 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
     protected @Nullable Recipe findRecipe(
                                           long maxVoltage, IItemHandlerModifiable inputs,
                                           IMultipleTankHandler fluidInputs) {
-        EntityTransporterErector erector = ((MetaTileEntityRocketAssembler) this.metaTileEntity).findTransporterErector();
+        EntityTransporterErector erector = ((MetaTileEntityRocketAssembler) this.metaTileEntity)
+                .findTransporterErector();
         if (erector != null) return null;
         Recipe r = super.findRecipe(maxVoltage, inputs, fluidInputs);
         if (r != null) return r; // unlikely for this thing

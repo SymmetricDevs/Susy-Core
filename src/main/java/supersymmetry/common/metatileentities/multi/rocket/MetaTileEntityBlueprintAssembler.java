@@ -65,8 +65,6 @@ import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.api.util.DataStorageLoader;
-import supersymmetry.common.blocks.BlockSerpentine;
-import supersymmetry.common.blocks.BlockRocketMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.rocketry.BlockProcessorCluster;
 import supersymmetry.common.item.SuSyMetaItems;
@@ -455,7 +453,9 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                 .where('S', selfPredicate())
                 .where(' ', air())
                 .where('C', states(getCasingState()))
-                .where('P', states(getComputerState().withProperty(VariantHorizontalRotatableBlock.FACING, EnumFacing.SOUTH)))
+                .where('P',
+                        states(getComputerState().withProperty(VariantHorizontalRotatableBlock.FACING,
+                                EnumFacing.SOUTH)))
                 .where('T', states(MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.TEMPERED_GLASS)))
                 .where('F', fluid(SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid()))
                 .where('I',
