@@ -20,6 +20,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -56,6 +57,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.api.metatileentity.IAnimatableMTE;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
+import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.common.blocks.BlockRocketAssemblerCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.entities.EntityRocket;
@@ -85,6 +87,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     @Nullable
     private Collection<BlockPos> hiddenBlocks;
     private AxisAlignedBB renderBounding;
+    private int fuelingProgress;
 
     public MetaTileEntityLaunchPad(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
@@ -145,8 +148,9 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     }
 
     public TraceabilityPredicate autoAbilities() {
-        return autoAbilities(true, true).or(
-                abilities(MultiblockAbility.IMPORT_ITEMS).setMaxGlobalLimited(1));
+        return autoAbilities(true, true)
+                .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMaxGlobalLimited(1))
+                .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setMaxGlobalLimited(4));
     }
 
     public IBlockState getFoundationState() {
@@ -329,8 +333,30 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         }
     }
 
+    // In liters per second
+    private static final int MAX_FUELING_SPEED = 100;
+
     private void loadCargo() {
-        GTTransferUtils.moveInventoryItems(this.inputInventory, this.selectedRocket.cargo);
+        GTTransferUtils.moveInventoryItems(this.inputInventory, selectedRocket.cargo);
+
+        RocketFuelEntry fuelEntry = selectedRocket.getFuel();
+        var composition = fuelEntry.getComposition();
+        int unitsDrained = MAX_FUELING_SPEED;
+        for (var comp : composition) {
+            FluidStack drained = inputFluidInventory.drain(comp.getFirst().getFluid(MAX_FUELING_SPEED), false);
+            int amount = drained == null ? 0 : drained.amount;
+            // Intentional integer division moment
+            unitsDrained = Math.min(amount, unitsDrained / comp.getSecond());
+        }
+        for (var comp : composition) {
+            FluidStack drained = inputFluidInventory.drain(comp.getFirst()
+                    .getFluid(comp.getSecond() * unitsDrained), true);
+        }
+    }
+
+    private void setFuelingProgress(int fuelingProgress) {
+        this.fuelingProgress = fuelingProgress;
+        writeCustomData(SuSyDataCodes.UPDATE_FUEL_PROGRESS, (buf) -> buf.writeInt(fuelingProgress));
     }
 
     @Override
@@ -391,11 +417,13 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         this.state = LaunchPadState.valueOf(data.getString("state"));
+        this.fuelingProgress = data.getInteger("fuelingProgress");
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         data.setString("state", this.state.name());
+        data.setInteger("fuelProgress", this.fuelingProgress);
         return super.writeToNBT(data);
     }
 
@@ -407,12 +435,14 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
             updateSelectedErector();
         }
         buf.writeEnumValue(this.state);
+        buf.writeInt(this.fuelingProgress);
     }
 
     @Override
     public void receiveInitialSyncData(PacketBuffer buf) {
         super.receiveInitialSyncData(buf);
         this.state = buf.readEnumValue(LaunchPadState.class);
+        this.fuelingProgress = buf.readInt();
     }
 
     @Override
@@ -423,6 +453,8 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
             this.transformation = null;
         } else if (dataId == SuSyDataCodes.UPDATE_RENDER_STATE) {
             this.state = buf.readEnumValue(LaunchPadState.class);
+        } else if (dataId == SuSyDataCodes.UPDATE_FUEL_PROGRESS) {
+            this.fuelingProgress = buf.readInt();
         } else {
             super.receiveCustomData(dataId, buf);
         }

@@ -17,29 +17,32 @@ public class RocketFuelEntry {
 
         public RocketFuelEntryBuilder(String name) {
             this.rfe.registryName = name;
-            this.rfe.sides = new ArrayList<>();
+            this.rfe.composition = new ArrayList<>();
         }
 
-        public void addComponent(Material mat, double proportion) throws Exception {
+        public void addComponent(Material mat, int proportion) throws Exception {
             proportionTot += proportion;
             if (proportionTot >= 1) {
                 throw new Exception("total proportion over 1");
             }
-            rfe.sides.add(new Tuple<Material, Double>(mat, proportion));
+            rfe.composition.add(new Tuple<Material, Integer>(mat, proportion));
         }
 
-        public void setCharacteristics(double density, double sIVacuum, double sIPerPressure) {
+        public void density(double density) {
             rfe.density = density;
+        }
+
+        public void sIVacuum(double sIVacuum) {
             rfe.sIVacuum = sIVacuum;
+        }
+
+        public void sIPerPressure(double sIPerPressure) {
             rfe.sIPerPressure = sIPerPressure;
         }
 
         public void register() throws Exception {
-            if (sides.isEmpty()) {
+            if (composition.isEmpty()) {
                 throw new Exception("empty list of fuel component entries");
-            }
-            if (proportionTot != 1) {
-                throw new Exception("incorrect total proportion");
             }
             RocketFuelEntry.registerFuel(rfe);
         }
@@ -63,9 +66,7 @@ public class RocketFuelEntry {
         FUEL_REGISTRY.put(rfe.registryName, rfe);
     }
 
-    private Material material; // the main fuel
-
-    private ArrayList<Tuple<Material, Double>> sides; // any extra required materials, their proportions
+    private ArrayList<Tuple<Material, Integer>> composition; // any extra required materials, their proportions
 
     private String registryName;
 
@@ -77,14 +78,12 @@ public class RocketFuelEntry {
 
     public RocketFuelEntry(
                            String registryName,
-                           Material material,
-                           ArrayList<Tuple<Material, Double>> sides,
+                           ArrayList<Tuple<Material, Integer>> composition,
                            double density,
                            double sIVacuum,
                            double sIPerPressure) {
         this.registryName = registryName;
-        this.material = material;
-        this.sides = sides;
+        this.composition = composition;
         this.density = density;
         this.sIVacuum = sIVacuum;
         this.sIPerPressure = sIPerPressure;
@@ -92,9 +91,8 @@ public class RocketFuelEntry {
 
     @SuppressWarnings("unchecked")
     public RocketFuelEntry(RocketFuelEntry copy) {
-        this.material = copy.material;
         this.density = copy.density;
-        this.sides = (ArrayList<Tuple<Material, Double>>) copy.sides.clone();
+        this.composition = (ArrayList<Tuple<Material, Integer>>) copy.composition.clone();
         this.sIVacuum = copy.sIVacuum;
         this.registryName = copy.registryName;
     }
@@ -107,8 +105,8 @@ public class RocketFuelEntry {
         return sIPerPressure;
     }
 
-    public ArrayList<Tuple<Material, Double>> getSides() {
-        return sides;
+    public ArrayList<Tuple<Material, Integer>> getComposition() {
+        return composition;
     }
 
     public RocketFuelEntry clone() {
@@ -117,10 +115,6 @@ public class RocketFuelEntry {
 
     public String getRegistryName() {
         return this.registryName;
-    }
-
-    public Material getMaterial() {
-        return this.material;
     }
 
     public double getDensity() {

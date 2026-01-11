@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.Tuple;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.Nullable;
@@ -26,7 +27,7 @@ public class FuelRegistrySelectorWidget extends AbstractWidgetGroup {
     public Consumer<RocketFuelEntry> cb;
 
     public FuelRegistrySelectorWidget(
-                                      int x, int y, int w, int h, @Nullable Consumer<RocketFuelEntry> cb) {
+            int x, int y, int w, int h, @Nullable Consumer<RocketFuelEntry> cb) {
         super(new Position(x, y), new Size(w, h));
         PhantomFluidWidget initial = this.newWidget(0);
         slots = 1;
@@ -34,7 +35,7 @@ public class FuelRegistrySelectorWidget extends AbstractWidgetGroup {
         this.cb = cb;
     }
 
-    public void OnFluidChanged(@Nullable FluidStack stack, int index) {
+    public void onFluidChanged(@Nullable FluidStack stack, int index) {
         if (stack == null) {
             for (int i = slots - 1; i != index; i--) {
                 stacks.remove(i);
@@ -65,21 +66,14 @@ public class FuelRegistrySelectorWidget extends AbstractWidgetGroup {
 
     public Optional<RocketFuelEntry> search() {
         for (RocketFuelEntry entry : RocketFuelEntry.getFuelRegistry().values()) {
-            if (this.stacks.stream()
-                    .filter(x -> x.getFluid() == entry.getMaterial().getFluid(1).getFluid())
-                    .findFirst()
-                    .isPresent()) {
-                if (entry.getSides().stream()
-                        .map(x -> x.getFirst())
-                        .allMatch(
-                                x -> {
-                                    return stacks.stream()
-                                            .map(y -> y.getFluid())
-                                            .collect(Collectors.toList())
-                                            .contains(x.getFluid(1).getFluid());
-                                })) {
-                    return Optional.of(entry);
-                }
+            if (entry.getComposition().stream()
+                    .map(Tuple::getFirst)
+                    .anyMatch(
+                            x -> stacks.stream()
+                                    .map(FluidStack::getFluid)
+                                    .toList()
+                                    .contains(x.getFluid()))) {
+                return Optional.of(entry);
             }
         }
 
@@ -103,7 +97,7 @@ public class FuelRegistrySelectorWidget extends AbstractWidgetGroup {
                     return stacks.get(index);
                 },
                 (stack) -> {
-                    this.OnFluidChanged(stack, index);
+                    this.onFluidChanged(stack, index);
                     writeUpdateInfo(
                             10000,
                             (buf) -> {
@@ -123,13 +117,14 @@ public class FuelRegistrySelectorWidget extends AbstractWidgetGroup {
             int i = buffer.readInt();
             boolean nul = buffer.readBoolean();
             if (nul) {
-                OnFluidChanged(null, i);
+                onFluidChanged(null, i);
             }
             try {
                 NBTTagCompound tag = buffer.readCompoundTag();
                 FluidStack stack = FluidStack.loadFluidStackFromNBT(tag);
-                OnFluidChanged(stack, i);
-            } catch (Exception e) {}
+                onFluidChanged(stack, i);
+            } catch (Exception e) {
+            }
         }
     }
 }

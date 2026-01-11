@@ -34,6 +34,7 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
     private static final Random rnd = new Random();
     protected static final float jerk = 0.0001F;
     public CargoItemStackHandler cargo;
+    private RocketFuelEntry fuelEntry;
 
     @SideOnly(Side.CLIENT)
     private MovingSoundRocket soundRocket;
@@ -112,6 +113,7 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
         } else {
             this.cargo = new CargoItemStackHandler(this.getEntityData().getInteger("maxVolume"),
                     this.getEntityData().getInteger("maxWeight"));
+            this.fuelEntry = RocketFuelEntry.getCopyOf(this.getEntityData().getString("fuel"));
         }
     }
 
@@ -231,13 +233,12 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
 
     @Override
     public RocketFuelEntry getFuel() {
-        return null; // TODO: need to fix later
+        return fuelEntry;
     }
 
     @Override
     public double getCargoMass() {
-        // TODO
-        return 0;
+        return cargo.mass();
     }
 
     @Override

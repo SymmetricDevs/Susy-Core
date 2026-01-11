@@ -18,7 +18,6 @@ public class SuccessCalculation {
     public double calculateInitialSuccess(double gravity) {
         double success = 1;
         double weight = blueprint.getMass();
-        // TODO: AFS gravity selection
         double thrust = blueprint.getThrust(null, gravity / 9.81, "engine");
         double thrustToWeightRatio = thrust / weight;
         if (thrustToWeightRatio < 1) return 0d;

@@ -228,6 +228,8 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
         return currentVolume >= maxVolume;
     }
 
+    public int mass() { return currentWeight; }
+
     public boolean massTooHigh() {
         return currentWeight * 6 >= maxWeight * 5;
     }
