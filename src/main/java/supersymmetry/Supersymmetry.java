@@ -75,7 +75,6 @@ public class Supersymmetry {
 
         SuSyMetaTileEntities.init();
         SuSyCapabilities.init();
-        SusyRocketComponents.init();
 
         SusyMetaEntities.init();
 
@@ -94,6 +93,7 @@ public class Supersymmetry {
 
     @Mod.EventHandler
     public void onPostInit(@NotNull FMLPostInitializationEvent event) {
+        SusyRocketComponents.init();
         proxy.postLoad();
     }
 

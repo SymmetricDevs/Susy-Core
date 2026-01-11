@@ -20,8 +20,8 @@ import net.minecraftforge.common.util.Constants;
 import gregtech.api.block.VariantBlock;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.rocketry.components.AbstractComponent;
-import supersymmetry.api.rocketry.components.RocketEngine;
 import supersymmetry.api.rocketry.components.MaterialCost;
+import supersymmetry.api.rocketry.components.RocketEngine;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -39,17 +39,16 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
                 candidate -> candidate.getSecond().stream()
                         .anyMatch(
                                 pos -> {
-                                    boolean a =
-                                            candidate
-                                                    .getFirst().world
+                                    boolean a = candidate
+                                            .getFirst().world
                                                     .getBlockState(pos)
                                                     .getBlock()
                                                     .equals(SuSyBlocks.COMBUSTION_CHAMBER);
-                                    boolean b =
-                                            candidate
-                                                    .getFirst().world
+                                    boolean b = candidate
+                                            .getFirst().world
                                                     .getBlockState(pos)
-                                                    .equals(SuSyBlocks.COMBUSTION_CHAMBER.getState(BlockCombustionChamber.CombustionType.MONOPROPELLANT));
+                                                    .equals(SuSyBlocks.COMBUSTION_CHAMBER.getState(
+                                                            BlockCombustionChamber.CombustionType.MONOPROPELLANT));
                                     return a && !b;
                                 }));
         this.setComponentSlotValidator(

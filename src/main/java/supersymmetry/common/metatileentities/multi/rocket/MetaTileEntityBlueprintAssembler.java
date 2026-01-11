@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -59,12 +60,11 @@ import gregtech.common.blocks.BlockGlassCasing;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.SusyLog;
+import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.api.util.DataStorageLoader;
-import supersymmetry.common.blocks.BlockSerpentine;
-import supersymmetry.common.blocks.BlockRocketMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.rocketry.BlockProcessorCluster;
 import supersymmetry.common.item.SuSyMetaItems;
@@ -445,20 +445,20 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle("IIIIIII", "EEEEEEE", "EEEEEEE", "EEEEEEE", "EEEEEEE")
-                .aisle("IIIIIII", "EPFPFPE", "EPFPFPE", "EFFFFFE", "ETTTTTE")
-                .aisle("IIIIIII", "EPFPFPE", "EPFPFPE", "EFFFFFE", "ETTTTTE")
-                .aisle("IIIIIII", "EPFPFPE", "EPFPFPE", "EFFFFFE", "ETTTTTE")
-                .aisle("IIISIII", "ETCTCTE", "ETCTCTE", "ETCTCTE", "EEEEEEE")
+                .aisle("IIIIIII", "IIIIIII", "IIIIIII", "IIIIIII", "IIIIIII")
+                .aisle("IIIIIII", "IPFPFPI", "IPFPFPI", "IFFFFFI", "ITTTTTI")
+                .aisle("IIIIIII", "IPFPFPI", "IPFPFPI", "IFFFFFI", "ITTTTTI")
+                .aisle("IIIIIII", "IPFPFPI", "IPFPFPI", "IFFFFFI", "ITTTTTI")
+                .aisle("IIISIII", "ITCTCTI", "ITCTCTI", "ITCTCTI", "IIIIIII")
                 .where('S', selfPredicate())
                 .where(' ', air())
                 .where('C', states(getCasingState()))
-                .where('P', states(getComputerState()))
+                .where('P',
+                        states(getComputerState().withProperty(VariantHorizontalRotatableBlock.FACING,
+                                EnumFacing.SOUTH)))
                 .where('T', states(MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.TEMPERED_GLASS)))
-                .where('B', states(SuSyBlocks.SERPENTINE.getState(BlockSerpentine.SerpentineType.BASIC)))
                 .where('F', fluid(SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid()))
-                .where(
-                        'I',
+                .where('I',
                         abilities(MultiblockAbility.IMPORT_FLUIDS)
                                 .setMaxGlobalLimited(1)
                                 .setMinGlobalLimited(1, 1)
@@ -471,13 +471,6 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                                         .or(states(getCasingState()))
                                         .or(maintenancePredicate().setMaxGlobalLimited(1).setMinGlobalLimited(1, 1)))
                                 .or(states(getCasingState())))
-                .where(
-                        'E',
-                        abilities(MultiblockAbility.INPUT_ENERGY)
-                                .setMaxGlobalLimited(2)
-                                .setMinGlobalLimited(1, 1)
-                                .or(states(getCasingState()))
-                                .or(maintenancePredicate().setMaxGlobalLimited(1).setMinGlobalLimited(1, 1)))
                 .build();
     }
 

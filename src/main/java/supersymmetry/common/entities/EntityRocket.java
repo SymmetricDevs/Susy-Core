@@ -287,6 +287,4 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
     public AxisAlignedBB modelAABB() {
         return new AxisAlignedBB(new Vec3d(4, 46, 4), (new Vec3d(-4, 0, -4)));
     }
-
-
 }

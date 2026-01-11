@@ -7,13 +7,13 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import gregtech.api.gui.widgets.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -38,6 +38,7 @@ import gregtech.api.capability.impl.EnergyContainerList;
 import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
+import gregtech.api.gui.widgets.*;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -57,14 +58,13 @@ import gregtech.common.blocks.BlockGlassCasing;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.SusyLog;
+import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.client.renderer.textures.SusyTextures;
-import supersymmetry.common.blocks.BlockSerpentine;
-import supersymmetry.common.blocks.BlockRocketMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.rocketry.BlockProcessorCluster;
 import supersymmetry.common.item.SuSyMetaItems;
@@ -158,17 +158,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         return super.isActive() && this.isActive;
     }
 
-    public void setActive(boolean active) {
-        if (this.isActive != active && this.isStructureFormed()) {
-            this.isActive = active;
-            markDirty();
-            World world = getWorld();
-            if (world != null && !world.isRemote) {
-                writeCustomData(GregtechDataCodes.WORKABLE_ACTIVE, buf -> buf.writeBoolean(active));
-            }
-        }
-    }
-
     @Override
     public boolean isWorkingEnabled() {
         return this.isWorkingEnabled;
@@ -181,6 +170,18 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         World world = getWorld();
         if (world != null && !world.isRemote) {
             writeCustomData(GregtechDataCodes.WORKING_ENABLED, buf -> buf.writeBoolean(isWorkingEnabled));
+        }
+    }
+
+    public void setActive(boolean active) {
+        if (this.isActive != active && this.isStructureFormed()) {
+            // SusyLog.logger.info("setActive({})", active);
+            this.isActive = active;
+            markDirty();
+            World world = getWorld();
+            if (world != null && !world.isRemote) {
+                writeCustomData(GregtechDataCodes.WORKABLE_ACTIVE, buf -> buf.writeBoolean(active));
+            }
         }
     }
 
@@ -283,7 +284,8 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 .sum();
         // TODO this is likely wrong and will increase the success chance by a lot if you just spam turn
         // on/off signals
-        double minimalChance = Math.max(bp.AFSSuccessChance, new SuccessCalculation(bp).calculateInitialSuccess(gravity));
+        double minimalChance = Math.max(bp.AFSSuccessChance,
+                new SuccessCalculation(bp).calculateInitialSuccess(gravity));
         double successProb = getSuccessProbability(minimalChance, (double) this.progress / totalAssemblyTime);
         bp.AFSSuccessChance = successProb;
 
@@ -293,8 +295,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                     n.setBoolean("buildstat", true);
                     return n;
                 });
-        setActive(false);
-        this.rocketBlueprintSlot.setLocked(false);
         this.progress = 0;
     }
 
@@ -423,16 +423,20 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle("IIIIIIIII", "EEEEEEEEE", "EEEEEEEEE", "EEEEEEEEE", "EEEEEEEEE")
-                .aisle("IIIIIIIII", "EPFPFPFPE", "EPFPFPFPE", "EFFFFFFFE", "ETTTTTTTE")
-                .aisle("IIIIIIIII", "EPFPFPFPE", "EPFPFPFPE", "EFFFFFFFE", "ETTTTTTTE")
-                .aisle("IIIIIIIII", "EPFPFPFPE", "EPFPFPFPE", "EFFFFFFFE", "ETTTTTTTE")
-                .aisle("IIIIIIIII", "EPFPFPFPE", "EPFPFPFPE", "EFFFFFFFE", "ETTTTTTTE")
-                .aisle("IIIISIIII", "ETCTCTCTE", "ETCTCTCTE", "ETCTCTCTE", "EEEEEEEEE")
+                .aisle("IIIIIIIII", "IIIIIIIII", "IIIIIIIII", "IIIIIIIII", "IIIIIIIII")
+                .aisle("IIIIIIIII", "IPFPFPFPI", "IPFPFPFPI", "IFFFFFFFI", "ITTTTTTTI")
+                .aisle("IIIIIIIII", "IPFPFPFPI", "IPFPFPFPI", "IFFFFFFFI", "ITTTTTTTI")
+                .aisle("IIIIIIIII", "IPFPFPFPI", "IPFPFPFPI", "IFFFFFFFI", "ITTTTTTTI")
+                .aisle("IIIIIIIII", "IPFPFPFPI", "IPFPFPFPI", "IFFFFFFFI", "ITTTTTTTI")
+                .aisle("IIIISIIII", "ITCTCTCTI", "ITCTCTCTI", "ITCTCTCTI", "IIIIIIIII")
                 .where('S', selfPredicate())
                 .where(' ', air())
                 .where('C', states(getCasingState()))
-                .where('P', states(getComputerState()))
+                .where(
+                        'P',
+                        states(
+                                getComputerState()
+                                        .withProperty(VariantHorizontalRotatableBlock.FACING, EnumFacing.SOUTH)))
                 .where(
                         'T',
                         states(
@@ -443,22 +447,20 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                         abilities(MultiblockAbility.IMPORT_FLUIDS)
                                 .setMaxGlobalLimited(1)
                                 .setMinGlobalLimited(1, 1)
-                        .or(abilities(MultiblockAbility.EXPORT_FLUIDS)
-                                .setMaxGlobalLimited(1)
-                                .setMaxGlobalLimited(1, 1))
-                        .or(abilities(MultiblockAbility.INPUT_ENERGY)
-                                .setMaxGlobalLimited(2)
-                                .setMinGlobalLimited(1, 1)
-                                .or(states(getCasingState()))
-                                .or(maintenancePredicate().setMaxGlobalLimited(1).setMinGlobalLimited(1, 1)))
-                        .or(states(getCasingState())))
-                .where(
-                        'E',
-                        abilities(MultiblockAbility.INPUT_ENERGY)
-                                .setMaxGlobalLimited(2)
-                                .setMinGlobalLimited(1, 1)
-                                .or(states(getCasingState()))
-                                .or(maintenancePredicate().setMaxGlobalLimited(1).setMinGlobalLimited(1, 1)))
+                                .or(
+                                        abilities(MultiblockAbility.EXPORT_FLUIDS)
+                                                .setMaxGlobalLimited(1)
+                                                .setMaxGlobalLimited(1, 1))
+                                .or(
+                                        abilities(MultiblockAbility.INPUT_ENERGY)
+                                                .setMaxGlobalLimited(2)
+                                                .setMinGlobalLimited(1, 1)
+                                                .or(states(getCasingState()))
+                                                .or(
+                                                        maintenancePredicate()
+                                                                .setMaxGlobalLimited(1)
+                                                                .setMinGlobalLimited(1, 1)))
+                                .or(states(getCasingState())))
                 .build();
     }
 
@@ -499,19 +501,27 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         builder.bindPlayerInventory(entityPlayer.inventory, 125);
 
         // blueprint slot
-        SlotWidgetMentallyStable bpw = new SlotWidgetMentallyStable(this.rocketBlueprintSlot, 0, 0, 0);
+        SlotWidgetMentallyStable blueprintSlot = new SlotWidgetMentallyStable(this.rocketBlueprintSlot, 0, 0, 0);
 
-        bpw.setSelfPosition(new Position(12, height / 5 - 27));
-        ConditionalWidget f = new ConditionalWidget(
-                -120,
-                0,
-                120,
-                80,
-                () -> true);
-        f.addWidget(new ImageWidget(0, 0, 120, 80, GuiTextures.DISPLAY));
-        f.addWidget(
-                new LabelWidget(5, 5, I18n.format(this.getMetaName() + ".gui.fuel_selector_label"), 0xffffff));
-        f.addWidget(
+        blueprintSlot.setSelfPosition(new Position(12, height / 5 - 27));
+        blueprintSlot.setChangeListener(
+                () -> {
+                    if (this.rocketBlueprintSlot.isEmpty()) {
+                        blueprintSlot.setSelfPosition(new Position(12, height / 2 - 27));
+                    } else {
+                        blueprintSlot.setSelfPosition(new Position(width - 23, height - 23));
+                    }
+                });
+        blueprintSlot.setBackgroundTexture(GuiTextures.SLOT_DARK);
+        builder.widget(blueprintSlot);
+
+        ConditionalWidget mainGroup = new ConditionalWidget(0, 0, width, height, () -> true);
+        ConditionalWidget fuelGroup = new ConditionalWidget(-120, 0, 120, 80, () -> true);
+        fuelGroup.addWidget(new ImageWidget(0, 0, 120, 80, GuiTextures.DISPLAY));
+        fuelGroup.addWidget(
+                new LabelWidget(
+                        5, 5, I18n.format(this.getMetaName() + ".gui.fuel_selector_label"), 0xffffff));
+        fuelGroup.addWidget(
                 new FuelRegistrySelectorWidget(
                         4,
                         14,
@@ -521,25 +531,32 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                             this.fuel = fuel;
                         }));
         // Gravity selector
-        f.addWidget(new LabelWidget(width - 30, 5, I18n.format(this.getMetaName() + ".gui.gravity_selector_label"), 0xffffff));
-        f.addWidget(new TextFieldWidget2(width - 30, 10, 60, 16, () -> String.valueOf(gravity), value -> {
-            if (!value.isEmpty()) {
-                gravity = Double.parseDouble(value);
-            }
-        }).setAllowedChars(TextFieldWidget2.DECIMALS).setMaxLength(6));
+        fuelGroup.addWidget(
+                new LabelWidget(
+                        5, 60, I18n.format(this.getMetaName() + ".gui.gravity_selector_label"), 0xffffff));
+        fuelGroup.addWidget(
+                new TextFieldWidget2(
+                        5,
+                        68,
+                        60,
+                        12,
+                        () -> String.valueOf(gravity),
+                        value -> {
+                            if (!value.isEmpty()) {
+                                try {
+                                    gravity = Double.parseDouble(value);
+                                } catch (NumberFormatException _) {
+                                    gravity = 9.81;
+                                }
+                            }
+                        })
+                                .setAllowedChars(TextFieldWidget2.DECIMALS)
+                                .setMaxLength(6));
 
-        ConditionalWidget g = new ConditionalWidget(
-                0,
-                0,
-                width,
-                height,
-                () -> true);
+        mainGroup.addWidgetWithTest(
+                fuelGroup, () -> this.hasBlueprint() && !this.isActive() && this.fuel == null);
 
-        g.addWidgetWithTest(
-                f,
-                () -> this.hasBlueprint() && !this.isActive && this.fuel == null);
-
-        g.addWidgetWithTest(
+        mainGroup.addWidgetWithTest(
                 new AdvancedTextWidget(
                         9,
                         19,
@@ -561,26 +578,17 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                         },
                         0xffffff),
                 () -> this.hasBlueprint() && !isActive());
-        bpw.setChangeListener(
-                () -> {
-                    if (this.rocketBlueprintSlot.isEmpty()) {
-                        bpw.setSelfPosition(new Position(12, height / 2 - 27));
-                    } else {
-                        bpw.setSelfPosition(new Position(width - 23, height - 23));
-                    }
-                });
-        bpw.setBackgroundTexture(GuiTextures.SLOT_DARK);
-        builder.widget(bpw);
 
-        g.addWidgetWithTest(
+        // multi information
+        // these should probably be visible at all times in some different corner
+        mainGroup.addWidgetWithTest(
                 new LabelWidget(
                         width - 130,
                         9,
                         I18n.format(getMetaName() + ".gui.computation_power", this.getCompute()),
                         0xffffff),
                 () -> !this.isActive());
-        // these should probably be visible at all times in some different corner
-        g.addWidgetWithTest(
+        mainGroup.addWidgetWithTest(
                 new LabelWidget(
                         width - 130,
                         20,
@@ -589,22 +597,40 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                                 this.getCoolantToConsume(this.getEnergyToConsume()) * 20),
                         0xffffff),
                 () -> !this.isActive());
-
-        g.addWidgetWithTest(
+        mainGroup.addWidgetWithTest(
                 new LabelWidget(
                         width - 130,
                         31,
                         I18n.format(getMetaName() + ".gui.energy_consumption", this.getEnergyToConsume()),
                         0xffffff),
                 () -> !this.isActive());
+        mainGroup.addWidgetConditionalInit(
+                () -> !this.isActive() && this.hasBlueprint() && this.getBlueprint() != null,
+                () -> {
+                    return new DynamicLabelWidget(
+                            width - 130,
+                            42,
+                            () -> {
+                                var bp = this.getBlueprint();
+                                if (bp != null) {
+                                    double c = Math.max(
+                                            bp.AFSSuccessChance,
+                                            getSuccessProbability(bp.AFSSuccessChance, progress));
+                                    return I18n.format(
+                                            this.getMetaName() + ".gui.success_chance",
+                                            String.format("%3.4f", c * 100));
+                                }
+                                return "";
+                            },
+                            0xffffff);
+                });
 
         // label gets in the way a little
-        g.addWidgetWithTest(
-                new LabelWidget(9, 9, getMetaFullName(), 0xffffff),
-                () -> !this.isActive());
-        g.addWidgetWithTest(
+        mainGroup.addWidgetWithTest(
+                new LabelWidget(9, 9, getMetaFullName(), 0xffffff), () -> !this.isActive());
+        mainGroup.addWidgetWithTest(
                 new ClickButtonWidget(
-                        width - 62,
+                        width - 61,
                         height - 23,
                         18,
                         18,
@@ -642,9 +668,9 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                                 .setTooltipText(this.getMetaName() + ".gui.start_button")
                                 .setButtonTexture(SusyGuiTextures.GREEN_CIRCLE),
                 () -> !this.isActive() && this.hasBlueprint());
-        g.addWidgetWithTest(
+        mainGroup.addWidgetWithTest(
                 new ClickButtonWidget(
-                        width - 62,
+                        width - 61,
                         height - 23,
                         18,
                         18,
@@ -660,30 +686,30 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                                 .setTooltipText(this.getMetaName() + ".gui.stop_button")
                                 .setButtonTexture(SusyGuiTextures.RED_CIRCLE),
                 () -> this.isActive() && this.hasBlueprint());
-        g.addWidgetWithTest(
+
+        // button to open the fuel selector ui again, would be nice to give it a different texture
+        mainGroup.addWidgetWithTest(
                 new ClickButtonWidget(
-                        width - 78,
+                        width - 79,
                         height - 23,
                         18,
                         18,
                         "",
                         (_) -> {
-                            if (this.hasBlueprint() && !this.isActive() && this.fuel != null) {
-
-                                // && !hasNotEnoughCoolant
-                                // && !hasNotEnoughEnergy
+                            if (!this.isActive() && this.fuel != null) {
                                 this.fuel = null;
                             }
                         })
                                 .setTooltipText(this.getMetaName() + ".gui.reset_fuel")
-                                .setButtonTexture(SusyGuiTextures.RED_X),
-                () -> this.hasBlueprint() && !this.isActive() && this.fuel != null);
+                                .setButtonTexture(SusyGuiTextures.RED_X)
+                                .setShouldClientCallback(true),
+                () -> !this.isActive() && this.fuel != null);
 
         // rocket render
 
-        g.addWidgetConditionalInit(
+        mainGroup.addWidgetConditionalInit(
                 () -> {
-                    if (this.hasBlueprint() && this.getBlueprint() != null && isActive()) {
+                    if (this.hasBlueprint() && this.getBlueprint() != null && this.isActive()) {
                         return true;
                     }
                     return false;
@@ -700,24 +726,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                     }
                     return null;
                 });
-
-        g.addWidgetConditionalInit(
-                () -> this.hasBlueprint() && this.getBlueprint() != null,
-                () -> new DynamicLabelWidget(
-                        width - 120,
-                        height - 71,
-                        () -> {
-                            var bp = this.getBlueprint();
-                            if (bp != null) {
-                                double c = Math.max(
-                                        bp.AFSSuccessChance,
-                                        getSuccessProbability(bp.AFSSuccessChance, progress));
-                                return I18n.format(
-                                        this.getMetaName() + ".gui.success_chance",
-                                        String.format("%.10f", c * 100));
-                            }
-                            return "";
-                        }));
+        // TODO nuke this
         builder.widget(
                 new AdvancedTextWidget(
                         width - 100,
@@ -729,7 +738,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                         },
                         0xffffff));
 
-        builder.widget(g);
+        builder.widget(mainGroup);
 
         return builder;
     }

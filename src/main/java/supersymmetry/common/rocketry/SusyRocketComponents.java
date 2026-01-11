@@ -2,8 +2,10 @@ package supersymmetry.common.rocketry;
 
 import net.minecraft.util.ResourceLocation;
 
+import gregtech.api.unification.material.Materials;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.rocketry.components.AbstractComponent;
+import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.common.rocketry.components.*;
@@ -22,6 +24,14 @@ public class SusyRocketComponents {
         AbstractComponent.registerComponent(new ComponentSpacecraft());
         AbstractComponent.registerComponent(new ComponentLiquidFuelTank());
         AbstractComponent.lockRegistry();
+        if (Materials.Benzene == null || Materials.Oxygen == null) {
+            throw new RuntimeException();
+        }
+        new RocketFuelEntry.RocketFuelEntryBuilder("kerosene-lox", Materials.Benzene, 0.5)
+                .addComponent(Materials.Oxygen, 0.5)
+                .setCharacteristics(1000, 1000, 1000)
+                .register();
+
         // TODO add the emergency escape system
         ROCKET_SOYUZ_BLUEPRINT_DEFAULT = new SimpleStagedRocketBlueprint.Builder("soyuz")
                 .stage(

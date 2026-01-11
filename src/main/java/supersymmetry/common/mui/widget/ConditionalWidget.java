@@ -1,7 +1,11 @@
 package supersymmetry.common.mui.widget;
 
+import static supersymmetry.api.capability.SuSyDataCodes.LATE_INIT_WIDGET;
+import static supersymmetry.api.capability.SuSyDataCodes.STATE_UPDATE;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
@@ -16,13 +20,12 @@ import gregtech.api.util.Position;
 import gregtech.api.util.Size;
 import supersymmetry.api.SusyLog;
 
-import static supersymmetry.api.capability.SuSyDataCodes.LATE_INIT_WIDGET;
-import static supersymmetry.api.capability.SuSyDataCodes.STATE_UPDATE;
-
 // very laggy i think..
 public class ConditionalWidget extends AbstractWidgetGroup {
+
     private HashMap<Widget, BooleanSupplier> tests = new HashMap<>();
-    private ArrayList<Tuple<BooleanSupplier, Supplier<Widget>>> lateInit = new ArrayList<>();
+    private List<Tuple<BooleanSupplier, Supplier<Widget>>> lateInit = new ArrayList<>();
+    private List<Integer> lateInitDone = new ArrayList<>();
     private BooleanSupplier defaultPredicate;
 
     public ConditionalWidget(int x, int y, int w, int h, BooleanSupplier state_predicate) {
@@ -43,7 +46,7 @@ public class ConditionalWidget extends AbstractWidgetGroup {
     // jdtls provides the option to suppress warnings but not to automatically insert the fix even
     // when it suggests one :C :C
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public void addWidgetConditionalInit(BooleanSupplier test, Supplier<Widget> init) {
         lateInit.add(new Tuple(test, init));
     }
@@ -54,15 +57,20 @@ public class ConditionalWidget extends AbstractWidgetGroup {
         if (!this.isActive()) {
             return;
         }
-        if (lateInit.size() > 0) {
+        if (lateInit.size() > lateInitDone.size()) {
             for (Tuple<BooleanSupplier, Supplier<Widget>> w : lateInit) {
+                if (lateInitDone.contains(lateInit.indexOf(w))) {
+                    continue;
+                }
                 if (w.getFirst().getAsBoolean()) {
                     addWidgetWithTest(w.getSecond().get(), w.getFirst());
                     int id = lateInit.indexOf(w);
                     if (id == -1) {
                         throw new RuntimeException();
                     }
-                    lateInit.remove(w);
+                    // SusyLog.logger.info("lateInit on i:{}", id);
+                    // lateInit.remove(w);
+                    lateInitDone.add(id);
                     writeUpdateInfo(LATE_INIT_WIDGET, buf -> buf.writeInt(id));
                     break; // i think it will error if you continue going after deleting an item from a list
                 }
@@ -81,12 +89,12 @@ public class ConditionalWidget extends AbstractWidgetGroup {
             int index = buffer.readInt();
             if (index >= widgets.size()) {
                 SusyLog.logger.error(
-                        "widgets.size():[{}]: tried to {} widget:{}",
+                        "widgets.size()->[{}]: tried to {} widget:{}",
                         widgets.size(),
                         state ? "turn on" : "turn off",
                         id);
                 // SusyLog.logger.info("client; wsize:{}, {}", widgets.size(), widgets);
-                //
+                // ui state
                 // writeClientAction(0xddd, (buf) -> {});
             }
             Widget w = widgets.get(index);
@@ -94,13 +102,18 @@ public class ConditionalWidget extends AbstractWidgetGroup {
             w.setVisible(state);
         }
         if (id == LATE_INIT_WIDGET) {
-            var c = lateInit.get(buffer.readInt());
-            var test = c.getFirst();
-            var supplier = c.getSecond();
+            Tuple<BooleanSupplier, Supplier<Widget>> c = lateInit.get(buffer.readInt());
+            BooleanSupplier test = c.getFirst();
+            Supplier<Widget> supplier = c.getSecond();
             if (test.getAsBoolean()) {
                 addWidgetWithTest(supplier.get(), test);
             } else {
-                SusyLog.logger.error("ui state desynced, the ui is likely to implode soon. sp:{}", supplier);
+                SusyLog.logger.error(
+                        "ui state desynced, the ui is likely to implode soon. supplier/test {}/{}",
+                        supplier,
+                        test);
+                // decided to make it add anyways so that it does the error in the log
+                addWidgetWithTest(supplier.get(), test);
             }
         }
     }
@@ -133,10 +146,12 @@ public class ConditionalWidget extends AbstractWidgetGroup {
         if (!(w.isVisible() == ns && w.isActive() == ns)) {
             w.setVisible(ns);
             w.setActive(ns);
-            writeUpdateInfo(STATE_UPDATE, buf -> {
-                buf.writeBoolean(ns);
-                buf.writeInt(widgets.indexOf(w));
-            });
+            writeUpdateInfo(
+                    STATE_UPDATE,
+                    buf -> {
+                        buf.writeBoolean(ns);
+                        buf.writeInt(widgets.indexOf(w));
+                    });
         }
     }
 }

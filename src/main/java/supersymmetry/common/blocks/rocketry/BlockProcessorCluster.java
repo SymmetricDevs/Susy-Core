@@ -1,6 +1,7 @@
 package supersymmetry.common.blocks.rocketry;
 
-import gregtech.api.block.VariantBlock;
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -11,13 +12,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
+
 import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
-import javax.annotation.Nonnull;
-
 public class BlockProcessorCluster extends VariantHorizontalRotatableBlock<BlockProcessorCluster.TierType> {
-
 
     public BlockProcessorCluster() {
         super(Material.IRON);
