@@ -83,7 +83,7 @@ public class FuelRegistrySelectorWidget extends AbstractWidgetGroup {
                                 })
                         .collect(Collectors.toList());
 
-                if (entry.getSides().stream()
+                if (entry.getComposition().stream()
                         .map(
                                 x -> {
                                     Material mat = x.getFirst();
