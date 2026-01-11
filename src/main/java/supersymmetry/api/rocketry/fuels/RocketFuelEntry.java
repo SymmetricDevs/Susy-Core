@@ -10,39 +10,38 @@ import gregtech.api.unification.material.Material;
 
 public class RocketFuelEntry {
 
-    public class RocketFuelEntryBuilder {
+    public static class RocketFuelEntryBuilder {
 
         private RocketFuelEntry rfe;
-        private double proportionTot = 0;
 
         public RocketFuelEntryBuilder(String name) {
             this.rfe.registryName = name;
             this.rfe.composition = new ArrayList<>();
         }
 
-        public void addComponent(Material mat, int proportion) throws Exception {
-            proportionTot += proportion;
-            if (proportionTot >= 1) {
-                throw new Exception("total proportion over 1");
-            }
+        public RocketFuelEntryBuilder addComponent(Material mat, int proportion) {
             rfe.composition.add(new Tuple<Material, Integer>(mat, proportion));
+            return this;
         }
 
-        public void density(double density) {
+        public RocketFuelEntryBuilder density(double density) {
             rfe.density = density;
+            return this;
         }
 
-        public void sIVacuum(double sIVacuum) {
+        public RocketFuelEntryBuilder sIVacuum(double sIVacuum) {
             rfe.sIVacuum = sIVacuum;
+            return this;
         }
 
-        public void sIPerPressure(double sIPerPressure) {
+        public RocketFuelEntryBuilder sIPerPressure(double sIPerPressure) {
             rfe.sIPerPressure = sIPerPressure;
+            return this;
         }
 
-        public void register() throws Exception {
-            if (composition.isEmpty()) {
-                throw new Exception("empty list of fuel component entries");
+        public void register() {
+            if (rfe.composition.isEmpty()) {
+                throw new IllegalStateException("empty list of fuel component entries");
             }
             RocketFuelEntry.registerFuel(rfe);
         }

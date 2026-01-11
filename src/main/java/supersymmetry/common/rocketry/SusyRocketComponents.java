@@ -27,9 +27,10 @@ public class SusyRocketComponents {
         if (Materials.Benzene == null || Materials.Oxygen == null) {
             throw new RuntimeException();
         }
-        new RocketFuelEntry.RocketFuelEntryBuilder("kerosene-lox", Materials.Benzene, 0.5)
-                .addComponent(Materials.Oxygen, 0.5)
-                .setCharacteristics(1000, 1000, 1000)
+        new RocketFuelEntry.RocketFuelEntryBuilder("kerosene-lox")
+                .addComponent(Materials.Benzene, 1)
+                .addComponent(Materials.Oxygen, 1)
+                .density(1000).sIVacuum(1000).sIPerPressure(1000)
                 .register();
 
         // TODO add the emergency escape system
