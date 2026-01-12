@@ -27,12 +27,14 @@ tile.susy_multiblock_casing.structural_packing.name=Structural Packing
 tile.susy_multiblock_casing.ulv_structural_casing.name=Basic Structural Casing
 tile.susy_multiblock_casing.drone_pad.name=Drone Pad
 tile.susy_multiblock_casing.heavy_duty_pad.name=Heavy Duty Pad
-tile.susy_multiblock_casing.advanced_refractory_lining.name=Advanced Refractory Lining
+tile.susy_multiblock_casing.synthetic_mullite_refractory.name=Synthetic Mullite Refractory Bricks
 tile.rocket_assembler_casing.reinforced_foundation.name=Reinforced Foundation
 tile.rocket_assembler_casing.foundation.name=Rocket Assembler Foundation
 tile.rocket_assembler_casing.rails.name=Rocket Assembler Rails
 tile.rocket_assembler_casing.structural_frame.name=Rocket Assembler Structural Frame
 tile.susy_multiblock_casing.euv_safe_casing.name=Extreme-Ultraviolet-Safe Lithographer Casing
+tile.susy_multiblock_casing.tabular_alumina_refractory.name=Tabular Alumina Refractory Lining
+
 
 tile.processor_cluster.tier1.name=Processor Cluster
 tile.rocket_multiblock_casing.vinyl_ceiling_tile.name=Vinyl Ceiling Tile
@@ -384,7 +386,7 @@ susy.machine.evaporation_pool.tooltip.structure_info=Evaporation Pools can be fo
 susy.top.evaporation_pool_heated_preface=Heating Coil:
 susy.top.evaporation_pool.exposed_blocks=Exposed Blocks:
 susy.top.evaporation_pool.average_speed=Avg Speed:
-susy.multiblock.evaporation_pool.description=The Evaporation Pool has interior dimensions specified in its description and a concrete exterior for IO/controller placement, with at most two of each IO type. The controller may be placed anywhere along the protruding bottom row "in front" of the interior.            The Evaporation Pool can run recipes both unpowered and powered. In order to power recipes, the multiblock will need to be formed with a "snaking" coil pattern of uniform type, as shown in the preview. Unpowered Evaporation Pools do not require any coils.        The speed of any recipe depends on the heat provided to the multi, which is based off of the number of interior blocks exposed to sunlight, the energy provided, and the tier of coil. [1EU = 10J, currently].                                                                                 Each exposed block (takes time to check) produces 1kJ/s, with heat provided by coils varying based on coil temperature * amount.
+gregtech.multiblock.evaporation_pool.description=The Evaporation Pool has interior dimensions specified in its description and a concrete exterior for IO/controller placement, with at most two of each IO type. The controller may be placed anywhere along the protruding bottom row "in front" of the interior.\n\nThe Evaporation Pool can run recipes both unpowered and powered. In order to power recipes, the multiblock will need to be formed with a "snaking" coil pattern of uniform type, as shown in the preview. Unpowered Evaporation Pools do not require any coils.\n\nThe speed of any recipe depends on the heat provided to the multi, which is based off of the number of interior blocks exposed to sunlight, the energy provided, and the tier of coil. [1EU = 10J, currently].\n\nEach exposed block (takes time to check) produces 1kJ/s, with heat provided by coils varying based on coil temperature * amount.
 susy.multiblock.evaporation_pool_heated_preface=Heating Coil: %s
 susy.multiblock.evaporation_pool.is_heating=On
 susy.multiblock.evaporation_pool.is_not_heating=Off/Missing
@@ -848,6 +850,21 @@ susy.machine.polishing_machine.uiv.name=Epic Polishing Machine III
 susy.machine.polishing_machine.uxv.name=Epic Polishing Machine IV
 susy.machine.polishing_machine.opv.name=Legendary Polishing Machine
 
+# Resistance Furnace
+susy.machine.resistance_furnace.lv.name=Basic Resistance Furnace
+susy.machine.resistance_furnace.mv.name=Advanced Resistance Furnace
+susy.machine.resistance_furnace.hv.name=Advanced Resistance Furnace II
+susy.machine.resistance_furnace.ev.name=Advanced Resistance Furnace III
+susy.machine.resistance_furnace.iv.name=Elite Resistance Furnace
+susy.machine.resistance_furnace.luv.name=Elite Resistance Furnace II
+susy.machine.resistance_furnace.zpm.name=Elite Resistance Furnace III
+susy.machine.resistance_furnace.uv.name=Ultimate Resistance Furnace
+susy.machine.resistance_furnace.uhv.name=Epic Resistance Furnace
+susy.machine.resistance_furnace.uev.name=Epic Resistance Furnace II
+susy.machine.resistance_furnace.uiv.name=Epic Resistance Furnace III
+susy.machine.resistance_furnace.uxv.name=Epic Resistance Furnace IV
+susy.machine.resistance_furnace.opv.name=Legendary Resistance Furnace
+
 susy.machine.bath_condenser.name=Bath Condenser
 susy.machine.bath_condenser.tooltip=Only works inside a Cryogenic Distillation Tower
 
@@ -905,6 +922,7 @@ susy.multiblock.rotation_generator.lubricant=Lubricant: %s (%sx)
 susy.multiblock.rotation_generator.power=Power: %s / %s EU/t
 susy.multiblock.rotation_generator.lubricant_amount=Lubricant: %s | Consumption: %s
 susy.multiblock.rotation_generator.tooltip=Max Rotation Speed: %s RPM, Spin-Up: %s RPM/t, Spin-Down: %s RPM/t.
+susy.multiblock.rotation_generator.fuel_needed=Consuming %s (Max %s) per %s ticks
 
 # Sputtering Machine
 susy.machine.sputter_deposition.lv.name=Basic Sputtering Machine
@@ -1006,6 +1024,7 @@ recipemap.injection_molder=Injection Molding
 recipemap.boiler.name=Solid Boiler Fuels
 recipemap.fuel_cell.name=Solid Oxide Fuel Cell (SOFC)
 recipemap.induction_furnace.name=Induction Furnace
+recipemap.resistance_furnace.name=Resistance Furnace
 recipemap.eccentric_roll_crusher.name=Eccentric Roll Crushing
 
 susy.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
@@ -1412,6 +1431,9 @@ tile.random_concrete.industrialcinderbricksgrey.name=Grey Industrial Cinder Bric
 tile.random_concrete.smoothindustrialconcrete.name=Smooth Industrial Concrete
 tile.random_concrete.smoothindustrialconcretegrey.name=Smooth Gray Industrial Concrete
 tile.random_concrete1.smoothindustrialconcretewhite.name=Smooth White Industrial Concrete
+
+#LittleTiles Loot
+susy.top.lt_loot=This Contains Loot
 
 susy.machine.building_cleanroom.tooltip.1=Creates §fStructure Cards§7 from the rocket components encoded within
 susy.machine.building_cleanroom.tooltip.2=Also works as a regular cleanroom, if you wish.

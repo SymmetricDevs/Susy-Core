@@ -240,12 +240,16 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
                     Math.min(proposedEUt, maximumOutput));
         }
 
-        protected long getMaximumAllowedVoltage() {
+        public long getMaximumAllowedVoltage() {
             return Math.min((GTValues.V[tileEntity.getTier()]) * 16, getMaxVoltage());
         }
 
         protected long getActualVoltage() {
-            return scaleProduction(getMaximumAllowedVoltage());
+            return scaleProduction(-recipeEUt);
+        }
+
+        public int getCurrentParallel() {
+            return this.parallelRecipesPerformed;
         }
     }
 }
