@@ -1,10 +1,14 @@
 package supersymmetry.api.space;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Nullable;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+
 public class CelestialObject {
+
+    private String translationKey;
 
     private double mass;
     private double posT;
@@ -15,10 +19,11 @@ public class CelestialObject {
     private CelestialObject parentBody;
     private CelestialBodyType celestialBodyType;
 
-    private ArrayList<CelestialObject> childBodies;
+    private List<CelestialObject> childBodies = new ObjectArrayList<>();
 
-    public CelestialObject(double mass, double posT, double posX, double posY, double posZ,
-                           @Nullable CelestialObject parentBody, CelestialBodyType celestialBodyType) {
+    public CelestialObject(String translationKey, double posT, double posX, double posY, double posZ, double mass,
+                           CelestialBodyType celestialBodyType, @Nullable CelestialObject parentBody) {
+        this.translationKey = translationKey;
         this.mass = mass;
         this.posT = posT;
         this.posX = posX;
@@ -65,7 +70,29 @@ public class CelestialObject {
         childBodies.add(body);
     }
 
-    public ArrayList<CelestialObject> getChildBodies() {
+    public List<CelestialObject> getChildBodies() {
         return childBodies;
+    }
+
+    public String getTranslationKey() {
+        return "susy." + translationKey;
+    }
+
+    public Planetoid getPlanetarySystem() {
+        if (this.getParentBody() instanceof Star && this instanceof Planetoid) {
+            return (Planetoid) this;
+        } else if (this.getParentBody() != null) {
+            return this.getParentBody().getPlanetarySystem();
+        }
+        return null;
+    }
+
+    public StarSystem getStarSystem() {
+        if (this instanceof StarSystem) {
+            return (StarSystem) this;
+        } else if (this.getParentBody() != null) {
+            return this.getParentBody().getStarSystem();
+        }
+        return null;
     }
 }

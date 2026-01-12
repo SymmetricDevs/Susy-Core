@@ -21,7 +21,6 @@ tile.turbine_rotor.combustion.name=Combustion Turbine Block
 tile.drill_head.steel.name=Steel Drill Head
 
 tile.susy_multiblock_casing.silicon_carbide_casing.name=Tough Silicon Carbide Casing
-
 tile.susy_multiblock_casing.sieve_tray.name=Sieve Tray
 tile.susy_multiblock_casing.coalescence_plate.name=Coalescence Plate
 tile.susy_multiblock_casing.structural_packing.name=Structural Packing
@@ -36,6 +35,13 @@ tile.rocket_assembler_casing.structural_frame.name=Rocket Assembler Structural F
 tile.susy_multiblock_casing.euv_safe_casing.name=Extreme-Ultraviolet-Safe Lithographer Casing
 tile.susy_multiblock_casing.tabular_alumina_refractory.name=Tabular Alumina Refractory Lining
 
+
+tile.processor_cluster.tier1.name=Processor Cluster
+tile.rocket_multiblock_casing.vinyl_ceiling_tile.name=Vinyl Ceiling Tile
+tile.rocket_multiblock_casing.ceiling_grid_filter_unit.name=Ceiling Grid Filter Unit
+tile.rocket_multiblock_casing.vinyl_composite_flooring.name=Vinyl Composite Flooring
+tile.rocket_multiblock_casing.aerospace_gasket.name=Aerospace Gasket
+tile.metallurgy_2.polystyrene_wall.name=Polystyrene Wall
 
 tile.serpentine.basic.name=Copper Tubing Serpentine Block
 
@@ -65,6 +71,23 @@ tile.structural_block_1.structural_block_cable_junction.name=Structural Block Ca
 tile.structural_block_1.structural_block_pipocalypse.name=Structural Block Dense Pipes
 tile.structural_block_1.structural_block_vent.name=Structural Block Vent
 tile.structural_block_1.structural_block_vent_broken.name=Structural Block Vent (Broken)
+
+tile.rocket_turbopump.basic.name=Basic Rocket Turbopump
+tile.rocket_control.basic.name=Basic Rocket Control System
+tile.rocket_outer_hatch.al_2219.name=Al-2219 Rocket Hatch
+tile.rocket_tank_shell.al_2219.name=Al-2219 Tank Shell
+tile.rocket_interstage.al_7075.name=Al-7075 Rocket Interstage
+tile.rocket_fairing.al_7075.name=Al-7075 Payload Fairing Panel
+tile.rocket_nozzle.bell_basic.name=Bell Rocket Nozzle Shell
+tile.rocket_combustion_chamber.monopropellant.name=Monopropellant Combustion Chamber
+tile.rocket_combustion_chamber.bipropellant.name=Bipropellant Combustion Chamber
+tile.rocket_combustion_chamber.oxidiser.name=Oxidiser Combustion Chamber
+tile.spacecraft_life_support.oxygen_regen.name=Oxygen Regenerator
+tile.spacecraft_instrument.sensors.name=Spacecraft Sensor Array
+tile.spacecraft_hull.al_li.name=Al-Li Spacecraft Shell
+tile.rocket_nozzle.plug.name=Rocket Nozzle Plug
+tile.rocket_nozzle.expanding.name=Expanding Rocket Nozzle Shell
+tile.rocket_fairing_connector.al_7075.name=Al-7075 Fairing Connector
 
 tile.deposit_block.orthomagmatic.name=Orthomagmatic Deposit Block
 tile.deposit_block.metamorphic.name=Metamorphic Deposit Block
@@ -120,6 +143,13 @@ tile.conveyor_belt.lv.name=Conveyor Belt
 tile.drill_bit.steel.name=Steel Drill Bit Block
 
 tile.induction_coil_assembly.copper.name=Induction Coil Assembly
+tile.eccentric_roll.steel.name=Eccentric Crushing Wheel
+tile.grinder_casing.abrasion_resistant_casing.name=Abrasion Resistant Casing
+tile.grinder_casing.hydraulic_mechanical_gearbox.name=Hydraulic Mechanical Gearbox
+tile.grinder_casing.wear_resistant_lined_mill_shell.name=Wear Resistant Lined Mill Shell
+tile.grinder_casing.wear_resistant_lined_shell_head.name=Wear Resistant Lined Shell Head
+tile.grinder_casing.intermediate_diaphragm.name=Intermediate Diaphragm
+tile.girth_gear_tooth.steel.name=Steel Girth Gear Tooth
 
 tile.engine_casing.piston_block.name=Engine Block
 
@@ -188,6 +218,8 @@ susy.material.supreme_lubricant=Supreme Lubricant
 susy.material.coolant=Coolant
 susy.material.advanced_coolant=Advanced Coolant
 susy.material.lubricating_oil=Lubricating Oil
+susy.material.aluminium_alloy_7075=Aluminium Alloy 7075
+susy.material.aluminium_alloy_6061=Aluminium Alloy 6061
 
 # Rock/Mineral Materials
 susy.material.fluorite=Fluorite
@@ -212,6 +244,11 @@ susy.material.anorthite=Anorthite
 susy.material.forsterite=Forsterite
 susy.material.lizardite=Lizardite
 
+# Fluorinate Ketones
+
+susy.material.perfluoro_2_methyl_3_pentanone=Perfluoro(2-methyl-3-pentanone)
+susy.material.warm_perfluoro_2_methyl_3_pentanone=Warm Perfluoro(2-methyl-3-pentanone)
+
 # Ore Prefixes (%s is the localised material name)
 item.material.oreprefix.oreGabbro=Gabbro %s Ore
 item.material.oreprefix.oreGneiss=Gneiss %s Ore
@@ -235,6 +272,7 @@ item.material.oreprefix.fiberWet=Wet %s Fiber
 item.material.oreprefix.thread=%s Thread
 item.material.oreprefix.dustWet=Wet %s Dust
 item.material.oreprefix.electrode=%s Electrode
+item.material.oreprefix.millBall=%s Mill Ball
 
 susy.fluid.supercritical=Supercritical %s
 susy.fluid.impure_slurry=Impure %s Slurry
@@ -244,6 +282,42 @@ susy.fluid.slurry=%s Slurry
 susy.machine.steam_extractor_cannot_melt_items.warning=Steam Extractors cannot melt items!
 
 # Machines/Multiblocks
+susy.machine.aerospace_flight_simulator.name=Aerospace Flight Simulator
+susy.machine.aerospace_flight_simulator.gui.not_formed=Structure not formed!
+susy.machine.aerospace_flight_simulator.gui.fuel_selector_label=Fuel selector
+susy.machine.aerospace_flight_simulator.gui.gravity_selector_label=Gravity
+susy.machine.aerospace_flight_simulator.gui.success_chance=Success chance: %s
+susy.machine.aerospace_flight_simulator.gui.rocket_name=Rocket: %s
+susy.machine.aerospace_flight_simulator.gui.stages=Stages:
+
+susy.machine.aerospace_flight_simulator.gui.computation_power=Computation: %s googs/s
+# googs/s is a very technical term
+susy.machine.aerospace_flight_simulator.gui.energy_consumption=Power input: %s eu/t
+susy.machine.aerospace_flight_simulator.gui.coolant_flow=Coolant input: %s mb/s
+
+susy.machine.blueprint_assembler.name=Blueprint Assembler
+susy.machine.blueprint_assembler.stagename=Stage: %s
+susy.machine.blueprint_assembler.build_button_label=Build
+susy.machine.blueprint_assembler.blueprint_request=Insert Blueprint:
+
+
+susy.rocketry.components.engine.name=Engine(s)
+susy.rocketry.components.engine_small.name=Vernier engine(s)
+susy.rocketry.components.tank.name=Tank(s)
+
+susy.rocketry.components.validation_codes.invalid_amount=Invalid amount of components
+susy.rocketry.component.validation_codes.invalid_amount=Invalid amount of components inserted
+susy.rocketry.components.validation_codes.invalid_card=Malformed component card
+susy.rocketry.components.validation_codes.incompatible_card=Incompatible card
+susy.rocketry.components.validation_codes.unknown=Something broke
+susy.rocketry.components.validation_codes.success=Blueprint assembled successfully
+
+susy.rocketry.stages.block_F.name=Block F
+susy.rocketry.stages.block_A.name=Block A
+susy.rocketry.stages.boosters.name=Boosters
+
+susy.rocketry.soyuz.name=Soyuz FG
+
 susy.machine.magnetic_refrigerator.name=Magnetic Refrigerator
 susy.multiblock.magnetic_refrigerator.min_temperature=§bTemperature Limit: %s
 
@@ -295,6 +369,16 @@ susy.machine.railroad_engineering_station.name=Railroad Engineering Station
 susy.machine.railroad_engineering_station.tooltip=Place Immersive Railroading Tracks in the middle to form the multiblock
 susy.machine.railroad_engineering_station.tooltip.1=The concrete below the tracks can be substituted with any block, including pipes or air
 susy.machine.quarry.name=Quarry
+susy.machine.eccentric_roll_crusher.name=Eccentric Roll Crusher
+susy.machine.eccentric_roll_crusher.tooltip=Eccentricity does not mean low efficiency.
+susy.machine.ball_mill.name=Ball Mill
+susy.machine.ball_mill.tooltip=Rolling now!
+susy.machine.redstone_controller.not_connected=No machine to control found!
+susy.machine.redstone_controller.signal_desc=selected signal: %s
+susy.machine.redstone_controller.signal_label=signal: %s/%s
+susy.machine.redstone_controller.pulled.false=Can be activated
+susy.machine.redstone_controller.pulled.true=Signal sent, needs a reset
+susy.machine.redstone_controller.name=Redstone machine controller
 
 susy.machine.evaporation_pool.name=Evaporation Pool
 susy.machine.evaporation_pool.tooltip.info=Max square of %1$sx%1$s, minimum %2$sx%2$s. Read info tab and tool info for more details.
@@ -381,8 +465,18 @@ susy.machine.primitive_smelter.name=Primitive Smelter
 susy.machine.large_steam_hammer.name=Large Steam Hammer
 susy.machine.landing_pad.name=Landing Pad
 susy.machine.scrap_recycler.name=Scrap Recycler
+
 susy.machine.rocket_assembler.name=Rocket Assembler
+susy.machine.rocket_assembler.signal.start_assembly=Start assembly
+susy.machine.rocket_assembler.signal.stop_assembly=Stop and discard assembly
+susy.machine.rocket_assembler.blueprint_slot.name=insert a rocket blueprint
+susy.machine.rocket_assembler.gui.required_items=Required Items:
+susy.machine.rocket_assembler.gui.stop=Stop and reset assembly
+susy.machine.rocket_assembler.gui.start=start the assembly process
+susy.machine.rocket_assembler.blueprint_stop.name=Blueprint Slot
+
 susy.machine.rocket_programmer.name=Rocket Programmer
+susy.machine.rocket_programmer.gui.not_enough_budget=The rocket cannot perform every programmed mission.
 susy.machine.metallurgical_converter.name=Metallurgical Converter
 susy.machine.injection_molder.name=Injection Molder
 
@@ -845,6 +939,16 @@ susy.machine.sputter_deposition.uiv.name=Epic Sputtering Machine III
 susy.machine.sputter_deposition.uxv.name=Epic Sputtering Machine IV
 susy.machine.sputter_deposition.opv.name=Legendary Sputtering Machine
 
+susy.machine.component_scanner.name=Spacecraft Component Scanner
+susy.machine.component_scanner.scan_button=Scan Part
+susy.machine.component_scanner.unscanned=Component unscanned.
+susy.machine.component_scanner.failure=Scan failed.
+susy.machine.component_scanner.success=Component successfully analyzed.
+susy.machine.component_scanner.scanning=Scanning...
+susy.machine.component_scanner.pos=Error found at %s
+
+susy.machine.building_cleanroom.name=Spacecraft Component Cleanroom
+
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
 recipemap.latex_collector.name=Arboreal Collector
@@ -921,6 +1025,7 @@ recipemap.boiler.name=Solid Boiler Fuels
 recipemap.fuel_cell.name=Solid Oxide Fuel Cell (SOFC)
 recipemap.induction_furnace.name=Induction Furnace
 recipemap.resistance_furnace.name=Resistance Furnace
+recipemap.eccentric_roll_crusher.name=Eccentric Roll Crushing
 
 susy.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 
@@ -1058,6 +1163,13 @@ metaarmor.hud.engine_status=Engine: %s
 metaarmor.jet_wingpack.engine_active=Jet Wingpack: Engine Activated
 metaarmor.jet_wingpack.engine_inactive=Jet Wingpack: Engine Deactivated
 
+# Structure Data Cards
+metaitem.data_card.name=Empty Structure Card
+metaitem.data_card.tooltip.1=Insert into a Component Scanner to store the part representation.
+metaitem.data_card.active.name=Loaded Structure Card
+metaitem.data_card.active.tooltip.1=Load this into a Rocket Assembler to build the component.
+metaitem.data_card.master_blueprint.name=Rocket Blueprint
+
 # Machine Translations
 susy.wrongbiome=Machine can not work in this biome!
 susy.weather_resistance=§2Will not explode from water, lava, fire or rain.
@@ -1104,6 +1216,16 @@ susy.gui.stock_interactor.controller_setting.active_brake.tooltip=Brake (Powered
 susy.gui.stock_interactor.controller_setting.active_throttle.tooltip=Throttle (Powered)
 susy.gui.stock_interactor.controller_setting.inactive_brake.tooltip=Brake (Unpowered)
 susy.gui.stock_interactor.controller_setting.inactive_throttle.tooltip=Throttle (Unpowered)
+
+susy.gui.rocket_programmer.orbit=Orbit the destination
+susy.gui.rocket_programmer.landing=Land on the destination at specific coordinates
+
+susy.gui.rocket_programmer.mission_type=Mission type
+susy.gui.rocket_programmer.planetoid=Destination
+susy.gui.rocket_programmer.destination_type=Destination type
+susy.gui.rocket_programmer.landing_coordinates=Landing coordinates
+
+susy.gui.page=Page %s / %s
 
 susy.gui.temperature_celsius=Temperature: %s / %s°C
 
@@ -1159,6 +1281,7 @@ death.attack.gamma_radiation=%s died from internal sunburns
 death.attack.spaghettification=%s was spaghettified
 death.attack.age=%s died of old age
 death.attack.chronoerasure=%s never existed
+death.attack.crusher=%s was ground into a pulp
 
 metaitem.simple_gas_mask.name=Primitive Gas Mask
 metaitem.simple_gas_mask.tooltip=Survive in oxygenless environments
@@ -1311,3 +1434,36 @@ tile.random_concrete1.smoothindustrialconcretewhite.name=Smooth White Industrial
 
 #LittleTiles Loot
 susy.top.lt_loot=This Contains Loot
+
+susy.machine.building_cleanroom.tooltip.1=Creates §fStructure Cards§7 from the rocket components encoded within
+susy.machine.building_cleanroom.tooltip.2=Also works as a regular cleanroom, if you wish.
+# Error Messages
+susy.msg.rocket_component.build_success=Component successfully analyzed.
+susy.msg.rocket_component.unscanned=Component not scanned.
+susy.msg.rocket_component.blocks_disconnected=The structure is in two or more parts!
+susy.msg.rocket_component.no_blocks=No blocks were found in scanning zone.
+susy.msg.rocket_component.hull_weak=A hull block was found unsuitable for flight.
+susy.msg.rocket_component.hull_full=The component is lacking interior space (at least 2 blocks).
+susy.msg.rocket_component.no_nozzle=Nozzle blocks are missing.
+susy.msg.rocket_component.nozzle_invalid=The nozzle shape is incorrect.
+susy.msg.rocket_component.unknown_error=An unknown error occurred.
+susy.msg.rocket_component.wrong_num_c_chambers=There are too many or not enough combustion chambers.
+susy.msg.rocket_component.wrong_num_pumps=There are extraneous unused turbopumps.
+susy.msg.rocket_component.weird_pump=For some reason, a pump is facing upwards. Why?
+susy.msg.rocket_component.weird_fairing=Something about this fairing is weird.
+susy.msg.rocket_component.chamber_wrong_place=A combustion chamber is inside the rocket nozzle. That's strange...
+susy.msg.rocket_component.invalid_transparent=A transparent block is in this component!
+susy.msg.rocket_component.chamber_extraneous_blocks=An unneeded block was found in the component!
+susy.msg.rocket_component.cleanroom_not_clean=The Cleanroom is not clean yet (or nonexistent)
+susy.msg.rocket_component.nozzle_not_laval=The rocket nozzle does not resemble a de Laval nozzle!
+susy.msg.rocket_component.tile_missing=There is a tile missing on the hull tank!
+susy.msg.rocket_component.no_card=Please insert an Empty Structure Card.
+susy.msg.rocket_component.part_unrecognized=The part was not recognized.
+susy.msg.rocket_component.spacecraft_hollow=The spacecraft is hollow but has no life support.
+susy.msg.rocket_component.too_short=The component is too short!
+susy.msg.rocket_component.conn_unaligned=The fairing connectors are not in planar alignment.
+susy.msg.rocket_component.conn_wrong_dir=A fairing connector is facing a block.
+susy.msg.rocket_component.wrong_tile=A tile was used incorrectly.
+susy.msg.rocket_component.interstage_not_cylindrical=The interstage looks weird.
+
+entity.Rocket.name=Soyuz FG Rocket

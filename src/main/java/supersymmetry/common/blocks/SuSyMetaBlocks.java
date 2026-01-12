@@ -69,7 +69,6 @@ public class SuSyMetaBlocks {
                     Arrays.fill(materials, Materials.NULL);
                     blocksToGenerate.put(metaBlockID, materials);
                 }
-
                 (blocksToGenerate.get(metaBlockID))[subBlockID] = material;
             }
         }
