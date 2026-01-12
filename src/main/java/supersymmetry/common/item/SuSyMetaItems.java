@@ -9,7 +9,6 @@ import gregtech.api.items.metaitem.MetaItem.MetaValueItem;
 import gregtech.api.items.metaitem.MetaOreDictItem;
 import gregtech.api.items.metaitem.MetaOreDictItem.OreDictValueItem;
 import gregtech.api.items.metaitem.StandardMetaItem;
-import gregtech.api.items.metaitem.stats.IItemDurabilityManager;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.info.MaterialIconSet;
 import gregtech.api.unification.material.registry.MaterialRegistry;
@@ -20,6 +19,7 @@ import net.minecraft.client.resources.I18n;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
+import supersymmetry.common.item.behavior.MillBallDurabilityManager;
 
 public class SuSyMetaItems {
 
@@ -72,7 +72,7 @@ public class SuSyMetaItems {
                         short i = (short) registry.getIDForObject(material);
                         if (canGenerate(SusyOrePrefix.millBall, material)) {
                             var metaItem = addItem(i, new UnificationEntry(SusyOrePrefix.millBall, material).toString());
-                            metaItem.addComponents((IItemDurabilityManager) stack -> 0.5);
+                            metaItem.addComponents(MillBallDurabilityManager.INSTANCE);
                             metaItem.setMaxStackSize(1);
                         }
                     }

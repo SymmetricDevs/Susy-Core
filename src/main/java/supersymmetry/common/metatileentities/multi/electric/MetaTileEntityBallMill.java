@@ -1,5 +1,9 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import gregtech.api.capability.IMultipleTankHandler;
+import gregtech.api.capability.impl.MultiblockRecipeLogic;
+import gregtech.api.items.materialitem.MetaPrefixItem;
+import gregtech.api.items.metaitem.stats.IItemDurabilityManager;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockAbilityPart;
@@ -9,7 +13,10 @@ import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.PatternMatchContext;
+import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMap;
+import gregtech.api.unification.OreDictUnifier;
+import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
@@ -18,6 +25,7 @@ import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -27,6 +35,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.PlayState;
@@ -38,9 +47,11 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.api.metatileentity.IAnimatableMTE;
+import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockGrinderCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.item.behavior.MillBallDurabilityManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -65,6 +76,7 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
 
     public MetaTileEntityBallMill(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap) {
         super(metaTileEntityId, recipeMap);
+        this.recipeMapWorkable = new BallMillLogic(this);
     }
 
     private static IBlockState getGearBoxState() {
@@ -279,6 +291,59 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
     public void renderMetaTileEntity(double x, double y, double z, float partialTicks) {
         if (isStructureFormed()) {
             IAnimatableMTE.super.renderMetaTileEntity(x, y, z, partialTicks);
+        }
+    }
+
+    private static class BallMillLogic extends MultiblockRecipeLogic {
+        private static final int EU_PER_DURABILITY = 256;
+
+        public BallMillLogic(RecipeMapMultiblockController tileEntity) {
+            super(tileEntity);
+        }
+
+        @Override
+        public boolean checkRecipe(@NotNull Recipe recipe) {
+            // Check if we have a mill ball in the input inventory
+            boolean hasMillBall = false;
+            for (int i = 0; i < getInputInventory().getSlots(); i++) {
+                ItemStack stack = getInputInventory().getStackInSlot(i);
+                if (!stack.isEmpty() && OreDictUnifier.getPrefix(stack) == SusyOrePrefix.millBall) {
+                    hasMillBall = true;
+                    break;
+                }
+            }
+
+            // If no mill ball found, recipe cannot run
+            if (!hasMillBall) {
+                return false;
+            }
+
+            return super.checkRecipe(recipe);
+        }
+
+        @Override
+        protected boolean setupAndConsumeRecipeInputs(@NotNull Recipe recipe, @NotNull IItemHandlerModifiable importInventory, @NotNull IMultipleTankHandler importFluids) {
+            if (!super.setupAndConsumeRecipeInputs(recipe, importInventory, importFluids)) {
+                return false;
+            }
+
+            // Find and damage the mill ball
+            for (int i = 0; i < importInventory.getSlots(); i++) {
+                ItemStack stack = importInventory.getStackInSlot(i);
+                if (!stack.isEmpty() && OreDictUnifier.getPrefix(stack) == SusyOrePrefix.millBall) {
+                    // Calculate damage based on EUt * duration
+                    long totalEnergy = (long) recipe.getEUt() * recipe.getDuration();
+                    int damage = (int) (totalEnergy / EU_PER_DURABILITY);
+
+                    // Apply damage to the mill ball using NBT-based method
+                    if (damage > 0) {
+                        MillBallDurabilityManager.applyMillBallDamage(stack, damage);
+                    }
+                    break;
+                }
+            }
+
+            return true;
         }
     }
 }
