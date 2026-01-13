@@ -73,7 +73,6 @@ public class SuSyMetaItems {
                         if (canGenerate(SusyOrePrefix.millBall, material)) {
                             var metaItem = addItem(i, new UnificationEntry(SusyOrePrefix.millBall, material).toString());
                             metaItem.addComponents(MillBallDurabilityManager.INSTANCE);
-                            metaItem.setMaxStackSize(1);
                         }
                     }
                 }

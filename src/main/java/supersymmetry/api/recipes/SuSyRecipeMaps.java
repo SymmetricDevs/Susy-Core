@@ -4,10 +4,12 @@ import gregicality.multiblocks.api.recipes.GCYMRecipeMaps;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.widgets.ProgressWidget;
 import gregtech.api.recipes.RecipeMap;
+import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.recipes.builders.FuelRecipeBuilder;
 import gregtech.api.recipes.builders.PrimitiveRecipeBuilder;
 import gregtech.api.recipes.builders.SimpleRecipeBuilder;
 import gregtech.api.recipes.ingredients.GTRecipeInput;
+import gregtech.api.unification.material.Materials;
 import gregtech.core.sound.GTSoundEvents;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.recipes.builders.*;
@@ -380,11 +382,17 @@ public class SuSyRecipeMaps {
             .setSound(GTSoundEvents.FURNACE);
 
     public static final RecipeMap<SimpleRecipeBuilder> ECCENTRIC_ROLL_CRUSHER = new RecipeMap<>("eccentric_roll_crusher", 1, 4, 0, 0, new SimpleRecipeBuilder(), false)
-            .setSlotOverlay(false, false, GuiTextures.DUST_OVERLAY)
+            .setSlotOverlay(false, false, GuiTextures.CRUSHED_ORE_OVERLAY)
             .setSlotOverlay(true, false, GuiTextures.CRUSHED_ORE_OVERLAY)
             .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.MACERATOR);
-  
+
+    public static final RecipeMap<SimpleRecipeBuilder> BALL_MILL = new RecipeMap<>("ball_mill", 1, 4, 1, 0, new SimpleRecipeBuilder().EUt(VA[LV]), false)
+            .setSlotOverlay(false, false, GuiTextures.CRUSHED_ORE_OVERLAY)
+            .setSlotOverlay(true, false, GuiTextures.DUST_OVERLAY)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.MACERATOR);
+
     static {
         GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()
                 .inputs(recipeBuilder.getInputs().toArray(new GTRecipeInput[0]))
@@ -419,5 +427,9 @@ public class SuSyRecipeMaps {
                 .duration(recipeBuilder.getDuration())
                 .EUt(recipeBuilder.getEUt())
                 .buildAndRegister());
+
+        SuSyRecipeMaps.BALL_MILL.onRecipeBuild(recipeBuilder ->
+                recipeBuilder.fluidInputs(Materials.Steam.getFluid(recipeBuilder.getDuration() * recipeBuilder.getEUt() / 512))
+        );
     }
 }

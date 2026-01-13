@@ -77,22 +77,24 @@ public class MillBallDurabilityManager implements IItemDurabilityManager, IItemB
     }
 
     /**
-     * Applies damage to the mill ball. If damage exceeds durability, destroys the item.
+     * Applies damage to the mill ball. If damage exceeds durability, sets it to zero durability.
      *
      * @param itemStack the mill ball ItemStack
      * @param damageApplied the amount of damage to apply
      */
-    public static void applyMillBallDamage(ItemStack itemStack, int damageApplied) {
+    public static boolean applyMillBallDamage(ItemStack itemStack, int damageApplied) {
         int maxDurability = getMillBallMaxDurability(itemStack);
         int currentDamage = getMillBallDamage(itemStack);
         int resultDamage = currentDamage + damageApplied;
 
         if (resultDamage >= maxDurability) {
             // Mill ball is broken, consume it
-            itemStack.shrink(1);
+            setMillBallDamage(itemStack, 0);
+            return true;
         } else {
             // Apply damage
             setMillBallDamage(itemStack, resultDamage);
+            return false;
         }
     }
 
