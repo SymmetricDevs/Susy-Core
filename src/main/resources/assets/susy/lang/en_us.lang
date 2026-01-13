@@ -299,7 +299,7 @@ susy.machine.ball_mill.name=Ball Mill
 susy.machine.ball_mill.tooltip=Rolling now!
 
 susy.machine.redstone_controller.not_connected=No machine to control found!
-susy.machine.redstone_controller.signal_desc=Selected signal: %s
+susy.machine.redstone_controller.signal_desc=Transmitting signal: %s
 susy.machine.redstone_controller.signal_label=Signal: %s/%s
 susy.machine.redstone_controller.pulled.false=Can be activated
 susy.machine.redstone_controller.pulled.true=Signal sent, needs a reset

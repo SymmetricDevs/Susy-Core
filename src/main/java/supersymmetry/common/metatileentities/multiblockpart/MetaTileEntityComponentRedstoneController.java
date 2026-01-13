@@ -66,7 +66,7 @@ public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMul
     // public RedstoneControllerMode mode = RedstoneControllerMode.Pulse;
     public int signal = 0;
 
-    boolean pulled_up = false;
+    boolean pulledUp = false;
 
     public MetaTileEntityComponentRedstoneController(ResourceLocation mteId) {
         super(mteId, GTValues.HV);
@@ -130,10 +130,10 @@ public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMul
             this.signal = buf.readInt();
         }
         if (dataId == 103) {
-            this.pulled_up = true;
+            this.pulledUp = true;
         }
         if (dataId == 104) {
-            this.pulled_up = false;
+            this.pulledUp = false;
         }
     }
 
@@ -141,15 +141,15 @@ public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMul
     public void updateInputRedstoneSignals() {
         super.updateInputRedstoneSignals();
         int val = this.getInputRedstoneSignal(this.frontFacing, true);
-        if (pulled_up) {
+        if (pulledUp) {
             if (val == 0) {
-                pulled_up = false;
+                pulledUp = false;
                 writeCustomData(104, buf -> {});
             }
         } else {
             if (val != 0) {
                 pulse();
-                pulled_up = true;
+                pulledUp = true;
                 writeCustomData(103, buf -> {});
             }
         }
@@ -189,7 +189,7 @@ public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMul
                     this::changeSignal);
             DynamicLabelWidget sig = new DynamicLabelWidget(
                     27,
-                    7,
+                    11,
                     () -> {
                         return I18n.format(
                                 this.getMetaName() + ".signal_label",
@@ -218,7 +218,7 @@ public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMul
                     110,
                     () -> {
                         return I18n.format(
-                                this.getMetaName() + ".pulled." + Boolean.toString(this.pulled_up));
+                                this.getMetaName() + ".pulled." + Boolean.toString(this.pulledUp));
                     });
             builder.widget(screen);
             builder.widget(sig);
@@ -243,14 +243,14 @@ public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMul
     @Override
     public void readFromNBT(NBTTagCompound data) {
         this.signal = data.getInteger("signal");
-        this.pulled_up = data.getBoolean("state");
+        this.pulledUp = data.getBoolean("state");
         super.readFromNBT(data);
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         data.setInteger("signal", this.signal);
-        data.setBoolean("state", this.pulled_up);
+        data.setBoolean("state", this.pulledUp);
         return super.writeToNBT(data);
     }
 }
