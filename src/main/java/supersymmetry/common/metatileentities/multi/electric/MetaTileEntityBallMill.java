@@ -296,6 +296,7 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
 
     private static class BallMillLogic extends MultiblockRecipeLogic {
         private static final int EU_PER_DURABILITY = 256;
+        private int slotCache;
 
         public BallMillLogic(RecipeMapMultiblockController tileEntity) {
             super(tileEntity);
@@ -304,10 +305,12 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
         @Override
         public boolean checkRecipe(@NotNull Recipe recipe) {
             // Check if we have a mill ball in the input inventory
+            slotCache = -1;
             boolean hasMillBall = false;
             for (int i = 0; i < getInputInventory().getSlots(); i++) {
                 ItemStack stack = getInputInventory().getStackInSlot(i);
                 if (!stack.isEmpty() && OreDictUnifier.getPrefix(stack) == SusyOrePrefix.millBall) {
+                    this.slotCache = i;
                     hasMillBall = true;
                     break;
                 }
@@ -323,27 +326,23 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
 
         @Override
         protected boolean setupAndConsumeRecipeInputs(@NotNull Recipe recipe, @NotNull IItemHandlerModifiable importInventory, @NotNull IMultipleTankHandler importFluids) {
-            if (!super.setupAndConsumeRecipeInputs(recipe, importInventory, importFluids)) {
+            if (slotCache == -1) {
                 return false;
             }
 
-            // Find and damage the mill ball
-            for (int i = 0; i < importInventory.getSlots(); i++) {
-                ItemStack stack = importInventory.getStackInSlot(i);
-                if (!stack.isEmpty() && OreDictUnifier.getPrefix(stack) == SusyOrePrefix.millBall) {
-                    // Calculate damage based on EUt * duration
-                    long totalEnergy = (long) recipe.getEUt() * recipe.getDuration();
-                    int damage = (int) (totalEnergy / EU_PER_DURABILITY);
+            ItemStack stack = importInventory.getStackInSlot(slotCache);
+            if (!stack.isEmpty() && OreDictUnifier.getPrefix(stack) == SusyOrePrefix.millBall) {
+                // Calculate damage based on EUt * duration
+                long totalEnergy = (long) recipe.getEUt() * recipe.getDuration();
+                int damage = (int) (totalEnergy / EU_PER_DURABILITY);
 
-                    // Apply damage to the mill ball using NBT-based method
-                    if (damage > 0) {
-                        MillBallDurabilityManager.applyMillBallDamage(stack, damage);
-                    }
-                    break;
+                // Apply damage to the mill ball using NBT-based method
+                if (damage > 0) {
+                    MillBallDurabilityManager.applyMillBallDamage(stack, damage);
                 }
             }
 
-            return true;
+            return super.setupAndConsumeRecipeInputs(recipe, importInventory, importFluids);
         }
     }
 }

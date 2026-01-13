@@ -1,26 +1,33 @@
 package supersymmetry.common.item.behavior;
 
 import gregtech.api.items.materialitem.MetaPrefixItem;
+import gregtech.api.items.metaitem.stats.IItemBehaviour;
 import gregtech.api.items.metaitem.stats.IItemDurabilityManager;
 import gregtech.api.unification.material.Material;
+import gregtech.common.items.behaviors.TooltipBehavior;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.Constants.NBT;
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.unification.material.properties.MillBallProperty;
 import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
+
+import java.util.List;
 
 /**
  * Durability manager for mill balls.
  * Displays durability based on NBT-stored damage value and the material's MillBallProperty.
  */
-public class MillBallDurabilityManager implements IItemDurabilityManager {
+public class MillBallDurabilityManager implements IItemDurabilityManager, IItemBehaviour {
 
     public static final MillBallDurabilityManager INSTANCE = new MillBallDurabilityManager();
 
     private static final String MILL_BALL_STATS_TAG = "GT.MillBallStats";
     private static final String DAMAGE_KEY = "Damage";
 
-    private MillBallDurabilityManager() {}
+    private MillBallDurabilityManager() {
+    }
 
     /**
      * Gets the mill ball stats NBT tag (read-only).
@@ -107,4 +114,14 @@ public class MillBallDurabilityManager implements IItemDurabilityManager {
     public boolean showFullBar(ItemStack itemStack) {
         return false; // Don't show the bar when completely full
     }
+
+    @Override
+    public void addInformation(ItemStack itemStack, @NotNull List<String> lines) {
+        int maxDurability = getMillBallMaxDurability(itemStack);
+        int currentDamage = getMillBallDamage(itemStack);
+
+        lines.add(I18n.format("item.durability", maxDurability - currentDamage,
+                getMillBallMaxDurability(itemStack)));
+    }
+
 }
