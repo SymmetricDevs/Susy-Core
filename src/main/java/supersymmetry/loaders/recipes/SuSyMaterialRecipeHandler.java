@@ -201,13 +201,15 @@ public class SuSyMaterialRecipeHandler {
     }
 
     public static void processContinuouslyCast(OrePrefix orePrefix, Material material, DustProperty dustProperty) {
-        WIREMILL_RECIPES.recipeBuilder()
-                .input(stick, material)
-                .circuitMeta(1)
-                .output(wireGtSingle, material, 1)
-                .duration((int) material.getMass() / 4)
-                .EUt(getVoltageMultiplier(material))
-                .buildAndRegister();
+        if (material.hasProperty(PropertyKey.WIRE)) {
+            WIREMILL_RECIPES.recipeBuilder()
+                    .input(stick, material)
+                    .circuitMeta(1)
+                    .output(wireGtSingle, material, 1)
+                    .duration((int) material.getMass() / 4)
+                    .EUt(getVoltageMultiplier(material))
+                    .buildAndRegister();
+        }
     }
 
     private static int getVoltageMultiplier(Material material) {

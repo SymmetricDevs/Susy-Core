@@ -6,8 +6,10 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
+import org.reflections.Reflections;
 
 import gregtech.GTInternalTags;
 import supersymmetry.api.capability.SuSyCapabilities;
@@ -24,6 +26,8 @@ import supersymmetry.common.covers.SuSyCoverBehaviors;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
+import supersymmetry.common.rocketry.SusyRocketComponents;
+import supersymmetry.common.tileentities.SuSyTileEntities;
 import supersymmetry.loaders.SuSyIRLoader;
 
 @Mod(name = Supersymmetry.NAME,
@@ -44,6 +48,8 @@ public class Supersymmetry {
     @Mod.Instance(Supersymmetry.MODID)
     public static Supersymmetry instance;
 
+    public static Reflections reflectionHandler;
+
     @Mod.EventHandler
     public void onModConstruction(FMLConstructionEvent event) {
         // This is now a config option I think
@@ -58,6 +64,8 @@ public class Supersymmetry {
     @Mod.EventHandler
     public void onPreInit(@NotNull FMLPreInitializationEvent event) {
         proxy.preLoad();
+
+        reflectionHandler = new Reflections("supersymmetry");
 
         SuSyMetaBlocks.init();
         SuSyMetaItems.initMetaItems();
@@ -85,6 +93,7 @@ public class Supersymmetry {
 
     @Mod.EventHandler
     public void onPostInit(@NotNull FMLPostInitializationEvent event) {
+        SusyRocketComponents.init();
         proxy.postLoad();
     }
 
@@ -96,5 +105,11 @@ public class Supersymmetry {
         hordeCommand.addSubcommand(new CommandHordeStart());
         hordeCommand.addSubcommand(new CommandHordeStop());
         hordeCommand.addSubcommand(new CommandHordeStatus());
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Mod.EventHandler
+    public void registerRenderers(FMLPreInitializationEvent event) {
+        SuSyTileEntities.registerRenderers();
     }
 }

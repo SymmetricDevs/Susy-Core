@@ -1,0 +1,9 @@
+{
+  "forge_marker" : 1,
+  "variants" : {
+    "facing=north,variant=basic": { "model": "susy:rocket_control/basic" },
+    "facing=south,variant=basic": { "model": "susy:rocket_control/basic", "y": 180 },
+    "facing=west,variant=basic": { "model": "susy:rocket_control/basic", "y": 270 },
+    "facing=east,variant=basic": { "model": "susy:rocket_control/basic", "y": 90 }
+  }
+}

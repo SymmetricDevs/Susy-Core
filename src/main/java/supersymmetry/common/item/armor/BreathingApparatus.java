@@ -11,12 +11,16 @@ import java.util.List;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.enchantment.EnchantmentDurability;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Enchantments;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -40,8 +44,11 @@ public class BreathingApparatus implements IBreathingArmorLogic, IItemDurability
 
     private static final double DEFAULT_ABSORPTION = 0;
 
-    public BreathingApparatus(EntityEquipmentSlot slot) {
+    protected int maxDurability;
+
+    public BreathingApparatus(EntityEquipmentSlot slot, int maxDurability) {
         SLOT = slot;
+        this.maxDurability = maxDurability;
     }
 
     @Override
@@ -65,6 +72,30 @@ public class BreathingApparatus implements IBreathingArmorLogic, IItemDurability
         if (model == null)
             model = new SimpleBreathingApparatusModel("gas", armorSlot);
         return model;
+    }
+
+    @Override
+    public void damageArmor(EntityLivingBase entity, ItemStack itemStack, DamageSource source, int damage,
+                            EntityEquipmentSlot equipmentSlot) {
+        itemStack.attemptDamageItem(damage, entity.getRNG(), null);
+        if (damage > 0) {
+            int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, itemStack);
+            int j = 0;
+
+            for (int k = 0; i > 0 && k < damage; ++k) {
+                if (EnchantmentDurability.negateDamage(itemStack, i, entity.getRNG())) {
+                    ++j;
+                }
+            }
+
+            damage -= j;
+
+            if (damage <= 0) {
+                return;
+            }
+        }
+
+        changeDurability(itemStack, -damage);
     }
 
     @Override
@@ -103,6 +134,7 @@ public class BreathingApparatus implements IBreathingArmorLogic, IItemDurability
             int oxygen = (int) getOxygen(stack);
             int maxOxygen = (int) getMaxOxygen(stack);
             tooltips.add(I18n.format("supersymmetry.oxygen", oxygen, maxOxygen));
+            tooltips.add(I18n.format("item.durability", getDurability(stack), maxDurability));
         }
     }
 
@@ -141,6 +173,25 @@ public class BreathingApparatus implements IBreathingArmorLogic, IItemDurability
         } // only nomex doesnt have it
         NBTTagCompound compound = stack.getTagCompound();
         compound.setDouble("oxygen", getOxygen(stack) + oxygenChange);
+        stack.setTagCompound(compound);
+    }
+
+    int getDurability(ItemStack stack) {
+        if (stack.getTagCompound() == null) {
+            return 0;
+        }
+        if (!stack.getTagCompound().hasKey("durability")) {
+            stack.getTagCompound().setInteger("durability", maxDurability);
+        }
+        return stack.getTagCompound().getInteger("durability");
+    }
+
+    void changeDurability(ItemStack stack, int durabilityChange) {
+        if (!stack.hasTagCompound()) {
+            return;
+        } // only nomex doesnt have it
+        NBTTagCompound compound = stack.getTagCompound();
+        compound.setInteger("durability", getDurability(stack) + durabilityChange);
         stack.setTagCompound(compound);
     }
 
