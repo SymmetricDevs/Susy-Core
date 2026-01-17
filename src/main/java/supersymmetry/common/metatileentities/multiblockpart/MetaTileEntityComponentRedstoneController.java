@@ -35,6 +35,9 @@ import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMulti
 import supersymmetry.api.metatileentity.multiblock.IRedstoneControllable;
 import supersymmetry.client.renderer.textures.SusyTextures;
 
+import static supersymmetry.api.capability.SuSyDataCodes.UPDATE_REDSTONE_ACTIVATION;
+import static supersymmetry.api.capability.SuSyDataCodes.UPDATE_REDSTONE_SIGNAL;
+
 public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMultiblockPart {
 
     public static TraceabilityPredicate controllerPredicate() {
@@ -53,17 +56,8 @@ public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMul
                     }
                     return false;
                 })));
-        // return MultiblockControllerBase.tilePredicate((state,mte) -> {return true;}, () -> { return
-        // })
     }
 
-    // //decided to not do that yet
-    // public static enum RedstoneControllerMode {
-    // Pulse,
-    // Continious
-    // }
-
-    // public RedstoneControllerMode mode = RedstoneControllerMode.Pulse;
     public int signal = 0;
 
     boolean pulledUp = false;
@@ -78,7 +72,7 @@ public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMul
             int newsig = Math.floorMod(this.signal + delta, controllable.getSignalCeiling() + 1);
             if (newsig != this.signal && newsig >= 0) {
                 this.writeCustomData(
-                        102,
+                        UPDATE_REDSTONE_SIGNAL,
                         (buf) -> {
                             buf.writeInt(newsig);
                             this.signal = newsig;
@@ -99,7 +93,7 @@ public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMul
 
     @Override
     public void renderMetaTileEntity(
-                                     CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
+            CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
         super.renderMetaTileEntity(renderState, translation, pipeline);
         getOverlay().renderSided(getFrontFacing(), renderState, translation, pipeline);
     }
@@ -126,14 +120,11 @@ public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMul
     @Override
     public void receiveCustomData(int dataId, PacketBuffer buf) {
         super.receiveCustomData(dataId, buf);
-        if (dataId == 102) {
+        if (dataId == UPDATE_REDSTONE_SIGNAL) {
             this.signal = buf.readInt();
         }
-        if (dataId == 103) {
-            this.pulledUp = true;
-        }
-        if (dataId == 104) {
-            this.pulledUp = false;
+        if (dataId == UPDATE_REDSTONE_ACTIVATION) {
+            this.pulledUp = buf.readBoolean();
         }
     }
 
@@ -141,17 +132,14 @@ public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMul
     public void updateInputRedstoneSignals() {
         super.updateInputRedstoneSignals();
         int val = this.getInputRedstoneSignal(this.frontFacing, true);
-        if (pulledUp) {
-            if (val == 0) {
-                pulledUp = false;
-                writeCustomData(104, buf -> {});
-            }
-        } else {
+        if (pulledUp ^ (val == 0)) { // Only one is true; they are not equal
             if (val != 0) {
                 pulse();
-                pulledUp = true;
-                writeCustomData(103, buf -> {});
             }
+            pulledUp = val != 0;
+            writeCustomData(UPDATE_REDSTONE_ACTIVATION, buf -> {
+                buf.writeBoolean(pulledUp);
+            });
         }
     }
 
@@ -164,18 +152,6 @@ public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMul
     protected boolean canMachineConnectRedstone(EnumFacing side) {
         return this.frontFacing == side;
     }
-
-    // @Override
-    // public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation,
-    // IVertexOperation[] pipeline) {
-    // super.renderMetaTileEntity(renderState, translation, pipeline);
-    // this.getFrontOverlay().renderOrientedState(renderState, translation, pipeline,
-    // this.getFrontFacing(),
-    // this.isActive(), this.isWorkingEnabled());
-    // }
-    // public ICubeRenderer getFrontOverlay() {
-    // return Textures.RESEARCH_STATION_OVERLAY;
-    // }
 
     private ModularUI.Builder createGUITemplate(EntityPlayer entityPlayer) {
         MultiblockControllerBase controller = this.getController();
