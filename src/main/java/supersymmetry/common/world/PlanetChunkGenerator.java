@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -61,6 +62,12 @@ public class PlanetChunkGenerator implements IChunkGenerator {
     private final IBlockState stone;
     private final IBlockState bedrock;
 
+    // NEW: Crater materials
+    private final IBlockState breccia;
+    private final IBlockState impactMelt;
+    private final IBlockState impactEjecta;
+    private NoiseGeneratorOctaves craterNoise;
+
     public PlanetChunkGenerator(World worldIn, long seed) {
         world = worldIn;
         mapFeaturesEnabled = true;
@@ -72,12 +79,18 @@ public class PlanetChunkGenerator implements IChunkGenerator {
         surfaceNoise = new NoiseGeneratorPerlin(this.rand, 4);
         scaleNoise = new NoiseGeneratorOctaves(this.rand, 10);
         depthNoise = new NoiseGeneratorOctaves(this.rand, 16);
+        craterNoise = new NoiseGeneratorOctaves(this.rand, 4);
         heightMap = new double[825];
         biomeWeights = new float[25];
 
         Planet planet = SuSyDimensions.PLANETS.get(world.provider.getDimension());
         this.stone = planet.getStone();
         this.bedrock = planet.getBedrock();
+
+        // Get crater materials from planet or use defaults
+        this.breccia = planet.hasCraterMaterials() ? planet.getBreccia() : stone;
+        this.impactMelt = planet.hasCraterMaterials() ? planet.getImpactMelt() : stone;
+        this.impactEjecta = planet.hasCraterMaterials() ? planet.getImpactEjecta() : stone;
 
         for (int i = -2; i <= 2; ++i) {
             for (int j = -2; j <= 2; ++j) {
@@ -215,6 +228,8 @@ public class PlanetChunkGenerator implements IChunkGenerator {
         this.replaceBiomeBlocks(x, z, chunkprimer, this.biomesForGeneration);
 
         this.caveGenerator.generate(this.world, x, z, chunkprimer);
+        // NEW: Apply craters to the chunk
+        this.generateCraters(x, z, chunkprimer);
 
         Chunk chunk = new Chunk(this.world, chunkprimer, x, z);
         byte[] abyte = chunk.getBiomeArray();
@@ -334,6 +349,135 @@ public class PlanetChunkGenerator implements IChunkGenerator {
                 }
             }
         }
+    }
+
+    // NEW: Crater generation method
+    private void generateCraters(int chunkX, int chunkZ, ChunkPrimer primer) {
+        // Check surrounding chunks for crater centers
+        for (int cx = chunkX - 2; cx <= chunkX + 2; cx++) {
+            for (int cz = chunkZ - 2; cz <= chunkZ + 2; cz++) {
+                Random craterRand = new Random(world.getSeed() +
+                        (long) cx * 341873128712L + (long) cz * 132897987541L);
+
+                // Low probability of crater per chunk
+                if (craterRand.nextDouble() < 0.015) {
+                    // Random position within the chunk
+                    int centerX = cx * 16 + craterRand.nextInt(16);
+                    int centerZ = cz * 16 + craterRand.nextInt(16);
+                    int diameter = 8 + craterRand.nextInt(35);
+
+                    applyCraterToChunk(primer, chunkX, chunkZ, centerX, centerZ, diameter, craterRand);
+                }
+            }
+        }
+    }
+
+    // NEW: Apply crater modifications to chunk primer
+    private void applyCraterToChunk(ChunkPrimer primer, int chunkX, int chunkZ,
+                                    int craterCenterX, int craterCenterZ,
+                                    int diameter, Random craterRand) {
+        int radius = diameter / 2;
+        boolean isComplex = diameter >= 20;
+        int depth = isComplex ? (int) (radius * 0.4) : (int) (radius * 0.6);
+
+        // Only process blocks within this chunk
+        int chunkStartX = chunkX * 16;
+        int chunkStartZ = chunkZ * 16;
+
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                int worldX = chunkStartX + x;
+                int worldZ = chunkStartZ + z;
+
+                double distance = Math.sqrt(
+                        (worldX - craterCenterX) * (worldX - craterCenterX) +
+                                (worldZ - craterCenterZ) * (worldZ - craterCenterZ));
+
+                // Find surface height
+                int surfaceY = findSurfaceY(primer, x, z);
+                if (surfaceY < 0) continue;
+
+                // Apply crater excavation
+                if (distance <= radius) {
+                    double normalizedDist = distance / radius;
+                    int craterDepth;
+
+                    if (isComplex && normalizedDist < 0.3) {
+                        craterDepth = depth; // Flat floor
+                    } else if (isComplex) {
+                        craterDepth = (int) (depth * (1 - Math.pow((normalizedDist - 0.3) / 0.7, 1.5)));
+                    } else {
+                        craterDepth = (int) (depth * (1 - normalizedDist * normalizedDist));
+                    }
+
+                    // Excavate crater
+                    for (int y = surfaceY; y > surfaceY - craterDepth && y > 2; y--) {
+                        primer.setBlockState(x, y, z, AIR);
+                    }
+
+                    int floorY = surfaceY - craterDepth;
+
+                    // Add central peak for complex craters
+                    if (isComplex && distance <= radius * 0.2) {
+                        int peakHeight = (int) (depth * 0.6);
+                        double peakNormDist = distance / (radius * 0.2);
+                        int currentPeakHeight = (int) (peakHeight * (1 - peakNormDist * peakNormDist));
+
+                        for (int y = floorY; y < floorY + currentPeakHeight && y < 255; y++) {
+                            primer.setBlockState(x, y, z, bedrock);
+                        }
+                    }
+                    // Add impact melt in center
+                    else if (distance < radius * 0.3 && floorY > 2) {
+                        int meltDepth = 1 + craterRand.nextInt(2);
+                        for (int y = floorY; y > floorY - meltDepth && y > 2; y--) {
+                            primer.setBlockState(x, y, z, impactMelt);
+                        }
+                    }
+                    // Add breccia layer
+                    else if (normalizedDist < 0.8 && floorY > 2) {
+                        int brecciaDepth = 1 + craterRand.nextInt(2);
+                        for (int y = floorY; y > floorY - brecciaDepth && y > 2; y--) {
+                            primer.setBlockState(x, y, z, breccia);
+                        }
+                    }
+
+                    // Add fractured bedrock beneath
+                    if (craterRand.nextDouble() < 0.4 && floorY > 6) {
+                        int fractureDepth = 3 + craterRand.nextInt(5);
+                        for (int y = floorY - 4; y > floorY - 4 - fractureDepth && y > 2; y--) {
+                            if (craterRand.nextDouble() < 0.6) {
+                                primer.setBlockState(x, y, z, bedrock);
+                            }
+                        }
+                    }
+                }
+                // Apply ejecta blanket
+                else if (distance > radius && distance < radius * 2) {
+                    double ejectaHeight = (radius * 2 - distance) / radius * 3;
+                    int ejectaBlocks = (int) ejectaHeight;
+
+                    for (int y = 0; y < ejectaBlocks && surfaceY + y < 255; y++) {
+                        if (craterRand.nextDouble() < 0.7) {
+                            primer.setBlockState(x, surfaceY + y + 1, z, impactEjecta);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private static final IBlockState AIR = Blocks.AIR.getDefaultState();
+
+    // NEW: Helper to find surface Y level
+    private int findSurfaceY(ChunkPrimer primer, int x, int z) {
+        for (int y = 255; y >= 0; y--) {
+            IBlockState state = primer.getBlockState(x, y, z);
+            if (state != AIR && state != null) {
+                return y;
+            }
+        }
+        return -1;
     }
 
     @Override

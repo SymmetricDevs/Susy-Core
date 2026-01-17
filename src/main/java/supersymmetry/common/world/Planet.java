@@ -178,4 +178,41 @@ public class Planet {
     public int getBiomeSize() {
         return this.biomeSize;
     }
+
+    private IBlockState breccia = null;
+    private IBlockState impactMelt = null;
+    private IBlockState impactEjecta = null;
+
+    // Add these methods to Planet class
+    public boolean hasCraterMaterials() {
+        return breccia != null && impactMelt != null && impactEjecta != null;
+    }
+
+    public IBlockState getBreccia() {
+        return breccia != null ? breccia : getStone();
+    }
+
+    public IBlockState getImpactMelt() {
+        return impactMelt != null ? impactMelt : getStone();
+    }
+
+    public IBlockState getImpactEjecta() {
+        return impactEjecta != null ? impactEjecta : getStone();
+    }
+
+    // Add setter methods for builder pattern (if Planet uses builder)
+    public Planet setBreccia(IBlockState breccia) {
+        this.breccia = breccia;
+        return this;
+    }
+
+    public Planet setImpactMelt(IBlockState impactMelt) {
+        this.impactMelt = impactMelt;
+        return this;
+    }
+
+    public Planet setImpactEjecta(IBlockState impactEjecta) {
+        this.impactEjecta = impactEjecta;
+        return this;
+    }
 }
