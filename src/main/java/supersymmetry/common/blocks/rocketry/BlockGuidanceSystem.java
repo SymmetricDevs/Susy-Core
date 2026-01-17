@@ -1,11 +1,12 @@
 package supersymmetry.common.blocks.rocketry;
 
-import gregtech.api.block.IStateHarvestLevel;
-import gregtech.api.block.VariantBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.IStringSerializable;
+
+import gregtech.api.block.IStateHarvestLevel;
+import gregtech.api.block.VariantBlock;
 
 public class BlockGuidanceSystem extends VariantBlock<BlockGuidanceSystem.GuidanceSystemType> {
 
@@ -18,6 +19,7 @@ public class BlockGuidanceSystem extends VariantBlock<BlockGuidanceSystem.Guidan
         setDefaultState(getState(BlockGuidanceSystem.GuidanceSystemType.SOYUZ));
         setHarvestLevel("wrench", 4);
     }
+
     public enum GuidanceSystemType implements IStringSerializable, IStateHarvestLevel {
 
         SOYUZ("soyuz", 4);

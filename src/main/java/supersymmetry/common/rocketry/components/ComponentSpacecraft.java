@@ -19,7 +19,6 @@ import supersymmetry.api.rocketry.components.MaterialCost;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.common.blocks.rocketry.BlockGuidanceSystem;
 import supersymmetry.common.tileentities.TileEntityCoverable;
 
 public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> {
@@ -120,7 +119,8 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                 .equals(SuSyBlocks.GUIDANCE_SYSTEM);
 
         Set<BlockPos> lifeSupports = blocksConnected.stream().filter(lifeSupportCheck).collect(Collectors.toSet());
-        List<BlockPos> guidanceComputers = blocksConnected.stream().filter(guidanceComputerCheck).collect(Collectors.toList());
+        List<BlockPos> guidanceComputers = blocksConnected.stream().filter(guidanceComputerCheck)
+                .collect(Collectors.toList());
         NBTTagCompound tag = new NBTTagCompound();
 
         lifeSupports.forEach(

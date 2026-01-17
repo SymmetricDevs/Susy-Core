@@ -484,7 +484,7 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> RESISTANCE_FURNACE = new RecipeMap<>("resistance_furnace",
             6, 2, 0, 1, new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.FURNACE);
-  
+
     public static final RecipeMap<SimpleRecipeBuilder> ECCENTRIC_ROLL_CRUSHER = new RecipeMap<>(
             "eccentric_roll_crusher", 1, 4, 0, 0, new SimpleRecipeBuilder(), false)
                     .setSlotOverlay(false, false, GuiTextures.DUST_OVERLAY)

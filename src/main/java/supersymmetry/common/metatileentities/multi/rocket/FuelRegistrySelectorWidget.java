@@ -31,7 +31,7 @@ public class FuelRegistrySelectorWidget extends AbstractWidgetGroup {
     public Consumer<RocketFuelEntry> cb;
 
     public FuelRegistrySelectorWidget(
-            int x, int y, int w, int h, @Nullable Consumer<RocketFuelEntry> cb) {
+                                      int x, int y, int w, int h, @Nullable Consumer<RocketFuelEntry> cb) {
         super(new Position(x, y), new Size(w, h));
         this.stacks = new ArrayList<>(limit);
         PhantomFluidWidget initial = this.newWidget(0);
@@ -76,37 +76,37 @@ public class FuelRegistrySelectorWidget extends AbstractWidgetGroup {
         List<FluidStack> stacksNotNull = this.stacks.stream().filter(x -> x != null).collect(Collectors.toList());
 
         for (RocketFuelEntry entry : RocketFuelEntry.getFuelRegistry().values()) {
-                List<Fluid> fluids = stacksNotNull.stream()
-                        .map(
-                                x -> {
-                                    return x.getFluid();
-                                })
-                        .collect(Collectors.toList());
+            List<Fluid> fluids = stacksNotNull.stream()
+                    .map(
+                            x -> {
+                                return x.getFluid();
+                            })
+                    .collect(Collectors.toList());
 
-                if (entry.getComposition().stream()
-                        .map(
-                                x -> {
-                                    Material mat = x.getFirst();
-                                    Fluid l = mat.getFluid(FluidStorageKeys.LIQUID);
-                                    if (l != null) {
-                                        return l;
+            if (entry.getComposition().stream()
+                    .map(
+                            x -> {
+                                Material mat = x.getFirst();
+                                Fluid l = mat.getFluid(FluidStorageKeys.LIQUID);
+                                if (l != null) {
+                                    return l;
+                                }
+                                FluidProperty fluidprop = mat.getProperty(PropertyKey.FLUID);
+                                if (fluidprop != null) {
+                                    @Nullable
+                                    Fluid fluid = fluidprop.get(fluidprop.getPrimaryKey());
+                                    if (fluid != null) {
+                                        return fluid;
                                     }
-                                    FluidProperty fluidprop = mat.getProperty(PropertyKey.FLUID);
-                                    if (fluidprop != null) {
-                                        @Nullable
-                                        Fluid fluid = fluidprop.get(fluidprop.getPrimaryKey());
-                                        if (fluid != null) {
-                                            return fluid;
-                                        }
-                                    }
-                                    return mat.getFluid();
-                                })
-                        .allMatch(
-                                x -> {
-                                    return fluids.contains(x);
-                                })) {
-                    return Optional.of(entry);
-                }
+                                }
+                                return mat.getFluid();
+                            })
+                    .allMatch(
+                            x -> {
+                                return fluids.contains(x);
+                            })) {
+                return Optional.of(entry);
+            }
         }
 
         return Optional.empty();
@@ -157,8 +157,7 @@ public class FuelRegistrySelectorWidget extends AbstractWidgetGroup {
                 NBTTagCompound tag = buffer.readCompoundTag();
                 FluidStack stack = FluidStack.loadFluidStackFromNBT(tag);
                 onFluidChanged(stack, i);
-            } catch (Exception e) {
-            }
+            } catch (Exception e) {}
         }
     }
 }

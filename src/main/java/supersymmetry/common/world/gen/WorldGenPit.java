@@ -8,9 +8,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
-import supersymmetry.api.SusyLog;
 
 public class WorldGenPit extends WorldGenerator {
+
     protected static final IBlockState AIR = Blocks.AIR.getDefaultState();
 
     @Override
@@ -25,7 +25,8 @@ public class WorldGenPit extends WorldGenerator {
                 if (x * x + z * z <= size * size * rand.nextFloat(0x.cp0f, 0x1.4p0f)) {
                     int top = worldIn.getHeight(position.getX() + x, position.getZ() + z);
                     if (top < 0x40) top = 0x40;
-                    BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(position.getX() + x, top, position.getZ() + z);
+                    BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(position.getX() + x, top,
+                            position.getZ() + z);
 
                     for (int i = 0; i < 5; i++) {
                         worldIn.setBlockState(pos, AIR, 2);
