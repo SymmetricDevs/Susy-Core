@@ -289,13 +289,16 @@ public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorCon
             }
             textList.add(new TextComponentTranslation("susy.multiblock.rotation_generator.power", getMaxVoltage(),
                     Math.min(recipeMapWorkable.getEnergyContainer().getOutputVoltage(), GTValues.V[tier] * 16)));
+
+            if (isActive())
+                MetaTileEntitySUSYLargeTurbine.addFuelNeededLine(textList, (SuSyTurbineRecipeLogic) recipeMapWorkable);
         }
 
         MultiblockFuelRecipeLogic recipeLogic = (MultiblockFuelRecipeLogic) recipeMapWorkable;
 
         MultiblockDisplayText.builder(textList, isStructureFormed())
                 .setWorkingStatus(recipeLogic.isWorkingEnabled(), recipeLogic.isActive())
-                .addFuelNeededLine(recipeLogic.getRecipeFluidInputInfo(), recipeLogic.getPreviousRecipeDuration())
+                // .addFuelNeededLine(recipeLogic.getRecipeFluidInputInfo(), recipeLogic.getPreviousRecipeDuration())
                 .addWorkingStatusLine();
     }
 }

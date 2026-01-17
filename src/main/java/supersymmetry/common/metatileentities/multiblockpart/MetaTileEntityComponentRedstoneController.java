@@ -249,6 +249,7 @@ public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMul
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        data = super.writeToNBT(data);
         data.setInteger("signal", this.signal);
         data.setBoolean("state", this.pulledUp);
         return super.writeToNBT(data);

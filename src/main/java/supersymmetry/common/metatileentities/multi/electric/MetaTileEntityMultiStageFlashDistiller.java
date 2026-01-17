@@ -71,10 +71,10 @@ public class MetaTileEntityMultiStageFlashDistiller extends RecipeMapMultiblockC
                         .or(maintenanceEnergy))
                 .where('E', casingPredicate
                         .or(maintenanceEnergy)
-                        .or(autoAbilities(false, false, false, false, false, true, false)))
+                        .or(autoAbilities(false, false, true, false, false, true, false)))
                 .where('F', casingPredicate
                         .or(maintenanceEnergy)
-                        .or(autoAbilities(false, false, false, false, true, false, false)))
+                        .or(autoAbilities(false, false, true, false, true, false, false)))
                 .where(' ', any())
                 .where('#', air())
                 .build();

@@ -16,6 +16,8 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.*;
 
+import supersymmetry.common.world.gen.MapGenLunarLavaTube;
+
 public class PlanetChunkGenerator implements IChunkGenerator {
 
     private final Random rand;
@@ -36,7 +38,7 @@ public class PlanetChunkGenerator implements IChunkGenerator {
     private NoiseGeneratorOctaves mainPerlinNoise;
     private NoiseGeneratorPerlin surfaceNoise;
     private double[] depthBuffer = new double[256];
-    private final MapGenBase caveGenerator = new MapGenCaves();
+    private final MapGenLunarLavaTube caveGenerator = new MapGenLunarLavaTube();
     private Biome[] biomesForGeneration;
     private final double depthNoiseScaleX = 200.0D;
     private final double depthNoiseScaleZ = 200.0D;
@@ -159,7 +161,7 @@ public class PlanetChunkGenerator implements IChunkGenerator {
                             // Loop through z axis
                             for (int jZ = 0; jZ < 4; ++jZ) {
                                 // If the noiseLevel is above 0, set block to stone.
-                                if (height < 2) {
+                                if (height < 1) {
                                     primer.setBlockState(iX * 4 + jX, iY * 8 + jY, iZ * 4 + jZ, bedrock);
                                 } else if ((zVariation += d16) > 0.0D) {
                                     primer.setBlockState(iX * 4 + jX, iY * 8 + jY, iZ * 4 + jZ, stone);
@@ -211,6 +213,8 @@ public class PlanetChunkGenerator implements IChunkGenerator {
         this.biomesForGeneration = this.world.getBiomeProvider().getBiomes(this.biomesForGeneration, x * 16, z * 16, 16,
                 16);
         this.replaceBiomeBlocks(x, z, chunkprimer, this.biomesForGeneration);
+
+        this.caveGenerator.generate(this.world, x, z, chunkprimer);
 
         Chunk chunk = new Chunk(this.world, chunkprimer, x, z);
         byte[] abyte = chunk.getBiomeArray();
