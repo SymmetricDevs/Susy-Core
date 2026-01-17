@@ -1,5 +1,8 @@
 package supersymmetry.common.metatileentities.multiblockpart;
 
+import static supersymmetry.api.capability.SuSyDataCodes.UPDATE_REDSTONE_ACTIVATION;
+import static supersymmetry.api.capability.SuSyDataCodes.UPDATE_REDSTONE_SIGNAL;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -34,9 +37,6 @@ import gregtech.client.renderer.texture.cube.SimpleOverlayRenderer;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
 import supersymmetry.api.metatileentity.multiblock.IRedstoneControllable;
 import supersymmetry.client.renderer.textures.SusyTextures;
-
-import static supersymmetry.api.capability.SuSyDataCodes.UPDATE_REDSTONE_ACTIVATION;
-import static supersymmetry.api.capability.SuSyDataCodes.UPDATE_REDSTONE_SIGNAL;
 
 public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMultiblockPart {
 
@@ -93,7 +93,7 @@ public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMul
 
     @Override
     public void renderMetaTileEntity(
-            CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
+                                     CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
         super.renderMetaTileEntity(renderState, translation, pipeline);
         getOverlay().renderSided(getFrontFacing(), renderState, translation, pipeline);
     }
