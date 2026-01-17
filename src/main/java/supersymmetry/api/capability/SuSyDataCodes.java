@@ -11,4 +11,6 @@ public class SuSyDataCodes {
     public static final int STATE_UPDATE = assignId();
     public static final int LATE_INIT_WIDGET = assignId();
     public static final int UPDATE_FUEL_PROGRESS = assignId();
+    public static final int UPDATE_REDSTONE_ACTIVATION = assignId();
+    public static final int UPDATE_REDSTONE_SIGNAL = assignId();
 }
