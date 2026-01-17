@@ -31,8 +31,8 @@ import gregtech.common.items.behaviors.TooltipBehavior;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
-import supersymmetry.common.item.behavior.MillBallDurabilityManager;
 import supersymmetry.common.item.behavior.DataCardBehavior;
+import supersymmetry.common.item.behavior.MillBallDurabilityManager;
 import supersymmetry.common.item.behavior.PipeNetPainterBehavior;
 import supersymmetry.common.item.behavior.RocketConfigBehavior;
 
@@ -102,7 +102,8 @@ public class SuSyMetaItems {
                     for (Material material : registry) {
                         short i = (short) registry.getIDForObject(material);
                         if (canGenerate(SusyOrePrefix.millBall, material)) {
-                            var metaItem = addItem(i, new UnificationEntry(SusyOrePrefix.millBall, material).toString());
+                            var metaItem = addItem(i,
+                                    new UnificationEntry(SusyOrePrefix.millBall, material).toString());
                             metaItem.addComponents(MillBallDurabilityManager.INSTANCE);
                         }
                     }

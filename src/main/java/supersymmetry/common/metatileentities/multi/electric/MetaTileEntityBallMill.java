@@ -7,15 +7,20 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandlerModifiable;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -38,11 +43,6 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.items.IItemHandlerModifiable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.builder.ILoopType;
@@ -128,13 +128,20 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
         var shell = states(getShellCasingState());
 
         return FactoryBlockPattern.start()
-                .aisle(" XMMMXXXXXXXX", "  NMM        ", "             ", "  G          ", "  G          ", "  G          ", "             ", "             ")
-                .aisle(" X          X", "             ", "  G          ", "  HCCCCCCCCH ", "  HCCCCCCCCH ", "  HCCCCCCCCH ", "  G          ", "             ")
-                .aisle(" X          X", " XG         X", " XHCCCCCCCCHX", " XH#####D##HX", " XH#####D##HX", " XH#####D##H ", "  HCCCCCCCCH ", "  G          ")
-                .aisle(" X          X", "  G          ", "  HCCCCCCCCH ", "OXH#####D##HY", "AA######D###Y", "ZXH#####D##HI", "  HCCCCCCCCH ", "  G          ")
-                .aisle(" X          X", " XG         X", " XHCCCCCCCCHX", " XH#####D##HX", " XH#####D##HX", " XH#####D##H ", "  HCCCCCCCCH ", "  G          ")
-                .aisle(" X          X", "             ", "  G          ", "  HCCCCCCCCH ", "  HCCCCCCCCH ", "  HCCCCCCCCH ", "  G          ", "             ")
-                .aisle(" XMMMXXXXXXXX", "  NSM        ", "             ", "  G          ", "  G          ", "  G          ", "             ", "             ")
+                .aisle(" XMMMXXXXXXXX", "  NMM        ", "             ", "  G          ", "  G          ",
+                        "  G          ", "             ", "             ")
+                .aisle(" X          X", "             ", "  G          ", "  HCCCCCCCCH ", "  HCCCCCCCCH ",
+                        "  HCCCCCCCCH ", "  G          ", "             ")
+                .aisle(" X          X", " XG         X", " XHCCCCCCCCHX", " XH#####D##HX", " XH#####D##HX",
+                        " XH#####D##H ", "  HCCCCCCCCH ", "  G          ")
+                .aisle(" X          X", "  G          ", "  HCCCCCCCCH ", "OXH#####D##HY", "AA######D###Y",
+                        "ZXH#####D##HI", "  HCCCCCCCCH ", "  G          ")
+                .aisle(" X          X", " XG         X", " XHCCCCCCCCHX", " XH#####D##HX", " XH#####D##HX",
+                        " XH#####D##H ", "  HCCCCCCCCH ", "  G          ")
+                .aisle(" X          X", "             ", "  G          ", "  HCCCCCCCCH ", "  HCCCCCCCCH ",
+                        "  HCCCCCCCCH ", "  G          ", "             ")
+                .aisle(" XMMMXXXXXXXX", "  NSM        ", "             ", "  G          ", "  G          ",
+                        "  G          ", "             ", "             ")
                 .where('M', states(getCasingState()).or(autoAbilities(
                         true, true, false,
                         false, false, false, false)))
@@ -232,11 +239,11 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip,
+                               boolean advanced) {
         super.addInformation(stack, world, tooltip, advanced);
         // Parallel
         tooltip.add(I18n.format("gregtech.universal.tooltip.parallel", PARALLEL_LIMIT));
-
     }
 
     @SideOnly(Side.CLIENT)
@@ -326,6 +333,7 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
     }
 
     private static class BallMillLogic extends MultiblockRecipeLogic {
+
         private static final int EU_PER_DURABILITY = 256;
         private static final int MILL_BALL_REQUIREMENT = 8;
         private int[] slotCache = new int[MILL_BALL_REQUIREMENT];
@@ -367,7 +375,9 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
         }
 
         @Override
-        protected boolean setupAndConsumeRecipeInputs(@NotNull Recipe recipe, @NotNull IItemHandlerModifiable importInventory, @NotNull IMultipleTankHandler importFluids) {
+        protected boolean setupAndConsumeRecipeInputs(@NotNull Recipe recipe,
+                                                      @NotNull IItemHandlerModifiable importInventory,
+                                                      @NotNull IMultipleTankHandler importFluids) {
             if (!hasMillBalls) {
                 return false;
             }

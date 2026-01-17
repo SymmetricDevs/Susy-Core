@@ -1,19 +1,20 @@
 package supersymmetry.common.item.behavior;
 
-import gregtech.api.items.materialitem.MetaPrefixItem;
-import gregtech.api.items.metaitem.stats.IItemBehaviour;
-import gregtech.api.items.metaitem.stats.IItemDurabilityManager;
-import gregtech.api.unification.material.Material;
-import gregtech.common.items.behaviors.TooltipBehavior;
+import java.util.List;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.Constants.NBT;
+
 import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.items.materialitem.MetaPrefixItem;
+import gregtech.api.items.metaitem.stats.IItemBehaviour;
+import gregtech.api.items.metaitem.stats.IItemDurabilityManager;
+import gregtech.api.unification.material.Material;
 import supersymmetry.api.unification.material.properties.MillBallProperty;
 import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
-
-import java.util.List;
 
 /**
  * Durability manager for mill balls.
@@ -26,8 +27,7 @@ public class MillBallDurabilityManager implements IItemDurabilityManager, IItemB
     private static final String MILL_BALL_STATS_TAG = "GT.MillBallStats";
     private static final String DAMAGE_KEY = "Damage";
 
-    private MillBallDurabilityManager() {
-    }
+    private MillBallDurabilityManager() {}
 
     /**
      * Gets the mill ball stats NBT tag (read-only).
@@ -79,7 +79,7 @@ public class MillBallDurabilityManager implements IItemDurabilityManager, IItemB
     /**
      * Applies damage to the mill ball. If damage exceeds durability, sets it to zero durability.
      *
-     * @param itemStack the mill ball ItemStack
+     * @param itemStack     the mill ball ItemStack
      * @param damageApplied the amount of damage to apply
      */
     public static boolean applyMillBallDamage(ItemStack itemStack, int damageApplied) {
@@ -125,5 +125,4 @@ public class MillBallDurabilityManager implements IItemDurabilityManager, IItemB
         lines.add(I18n.format("item.durability", maxDurability - currentDamage,
                 getMillBallMaxDurability(itemStack)));
     }
-
 }

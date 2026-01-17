@@ -10,14 +10,13 @@ import gregtech.api.GTValues;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.widgets.ProgressWidget;
 import gregtech.api.recipes.RecipeMap;
-import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.recipes.builders.FuelRecipeBuilder;
 import gregtech.api.recipes.builders.PrimitiveRecipeBuilder;
 import gregtech.api.recipes.builders.SimpleRecipeBuilder;
 import gregtech.api.recipes.ingredients.GTRecipeInput;
-import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.material.Material;
+import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.unification.stack.MaterialStack;
 import gregtech.core.sound.GTSoundEvents;
@@ -460,17 +459,19 @@ public class SuSyRecipeMaps {
                     .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressWidget.MoveType.HORIZONTAL)
                     .setSound(GTSoundEvents.FURNACE);
 
-    public static final RecipeMap<SimpleRecipeBuilder> ECCENTRIC_ROLL_CRUSHER = new RecipeMap<>("eccentric_roll_crusher", 1, 4, 0, 0, new SimpleRecipeBuilder(), false)
-            .setSlotOverlay(false, false, GuiTextures.CRUSHED_ORE_OVERLAY)
-            .setSlotOverlay(true, false, GuiTextures.CRUSHED_ORE_OVERLAY)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, ProgressWidget.MoveType.HORIZONTAL)
-            .setSound(GTSoundEvents.MACERATOR);
+    public static final RecipeMap<SimpleRecipeBuilder> ECCENTRIC_ROLL_CRUSHER = new RecipeMap<>(
+            "eccentric_roll_crusher", 1, 4, 0, 0, new SimpleRecipeBuilder(), false)
+                    .setSlotOverlay(false, false, GuiTextures.CRUSHED_ORE_OVERLAY)
+                    .setSlotOverlay(true, false, GuiTextures.CRUSHED_ORE_OVERLAY)
+                    .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, ProgressWidget.MoveType.HORIZONTAL)
+                    .setSound(GTSoundEvents.MACERATOR);
 
-    public static final RecipeMap<SimpleRecipeBuilder> BALL_MILL = new RecipeMap<>("ball_mill", 1, 4, 1, 0, new SimpleRecipeBuilder().EUt(VA[LV]), false)
-            .setSlotOverlay(false, false, GuiTextures.CRUSHED_ORE_OVERLAY)
-            .setSlotOverlay(true, false, GuiTextures.DUST_OVERLAY)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, ProgressWidget.MoveType.HORIZONTAL)
-            .setSound(GTSoundEvents.MACERATOR);
+    public static final RecipeMap<SimpleRecipeBuilder> BALL_MILL = new RecipeMap<>("ball_mill", 1, 4, 1, 0,
+            new SimpleRecipeBuilder().EUt(VA[LV]), false)
+                    .setSlotOverlay(false, false, GuiTextures.CRUSHED_ORE_OVERLAY)
+                    .setSlotOverlay(true, false, GuiTextures.DUST_OVERLAY)
+                    .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, ProgressWidget.MoveType.HORIZONTAL)
+                    .setSound(GTSoundEvents.MACERATOR);
 
     public static final RecipeMap<SimpleRecipeBuilder> INJECTION_MOLDER = new RecipeMap<>("injection_molder", 2, 1, 0,
             0, new SimpleRecipeBuilder(), false)
@@ -578,9 +579,7 @@ public class SuSyRecipeMaps {
             }
         });
 
-
-        SuSyRecipeMaps.BALL_MILL.onRecipeBuild(recipeBuilder ->
-                recipeBuilder.fluidInputs(Materials.Steam.getFluid(recipeBuilder.getDuration() * recipeBuilder.getEUt() / 512))
-        );
+        SuSyRecipeMaps.BALL_MILL.onRecipeBuild(recipeBuilder -> recipeBuilder
+                .fluidInputs(Materials.Steam.getFluid(recipeBuilder.getDuration() * recipeBuilder.getEUt() / 512)));
     }
 }

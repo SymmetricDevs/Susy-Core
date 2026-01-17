@@ -5,7 +5,6 @@ import net.minecraft.item.ItemStack;
 import gregtech.api.recipes.ModHandler;
 import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.recipes.RecipeMaps;
-import gregtech.api.recipes.builders.SimpleRecipeBuilder;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.properties.OreProperty;
@@ -74,15 +73,19 @@ public class SusyOreRecipeHandler {
         ingotStack.setCount(ingotStack.getCount() * property.getOreMultiplier() * oreTypeMultiplier);
         crushedStack.setCount(crushedStack.getCount() * property.getOreMultiplier());
         if (!crushedStack.isEmpty()) {
-            RecipeBuilder<?> builder = RecipeMaps.FORGE_HAMMER_RECIPES.recipeBuilder().input(orePrefix, material).duration(10).EUt(16);
+            RecipeBuilder<?> builder = RecipeMaps.FORGE_HAMMER_RECIPES.recipeBuilder().input(orePrefix, material)
+                    .duration(10).EUt(16);
             if (material.hasProperty(PropertyKey.GEM) && !OreDictUnifier.get(OrePrefix.gem, material).isEmpty()) {
-                builder.outputs(GTUtility.copy((int)Math.ceil(amountOfCrushedOre) * oreTypeMultiplier, OreDictUnifier.get(OrePrefix.gem, material, crushedStack.getCount())));
+                builder.outputs(GTUtility.copy((int) Math.ceil(amountOfCrushedOre) * oreTypeMultiplier,
+                        OreDictUnifier.get(OrePrefix.gem, material, crushedStack.getCount())));
             } else {
-                builder.outputs(GTUtility.copy((int)Math.ceil(amountOfCrushedOre) * oreTypeMultiplier, crushedStack));
+                builder.outputs(GTUtility.copy((int) Math.ceil(amountOfCrushedOre) * oreTypeMultiplier, crushedStack));
             }
 
             builder.buildAndRegister();
-            builder = RecipeMaps.MACERATOR_RECIPES.recipeBuilder().input(orePrefix, material).outputs(GTUtility.copy((int)Math.round(amountOfCrushedOre) * 2 * oreTypeMultiplier, crushedStack)).chancedOutput(byproductStack, 1400, 850).duration(400);
+            builder = RecipeMaps.MACERATOR_RECIPES.recipeBuilder().input(orePrefix, material)
+                    .outputs(GTUtility.copy((int) Math.round(amountOfCrushedOre) * 2 * oreTypeMultiplier, crushedStack))
+                    .chancedOutput(byproductStack, 1400, 850).duration(400);
 
             for (MaterialStack secondaryMaterial : orePrefix.secondaryMaterials) {
                 if (secondaryMaterial.material.hasProperty(PropertyKey.DUST)) {
