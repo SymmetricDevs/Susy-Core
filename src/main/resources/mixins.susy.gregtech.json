@@ -6,15 +6,13 @@
   "compatibilityLevel" : "JAVA_8",
   "mixins" : [
     "AnonToolDefinitionAccessor",
-    "BlockMachineMixin",
     "BlockPipeAccessor",
-    "CommonProxyMixin",
+    "MetaTileEntityCrateAccessor",
     "MetaTileEntityDrumAccessor",
     "MetaTileEntityFluidDrillMixin",
     "MetaTileEntityHolderMixin",
     "MetaTileEntityLargeMinerMixin",
     "MetaTileEntityMinerMixin",
-    "MetaTileEntityMixin",
     "ModHandlerMixin",
     "MultiblockControllerBaseMixin",
     "OreDictUnifierAccessor",
@@ -22,12 +20,10 @@
     "RecipeBuilderAccessor",
     "RecipeMapsMixin",
     "RecyclingRecipesMixin",
-    "TileEntityPipeBaseMixin",
     "ToolBuilderAccessor",
     "ToolItemsMixin"
   ],
   "client" : [
-    "TargetBlockAccessMixin",
     "WorldSceneRendererMixin"
   ]
 }

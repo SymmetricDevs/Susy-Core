@@ -1,5 +1,14 @@
 package supersymmetry.api.capability.impl;
 
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import net.minecraftforge.fluids.IFluidTank;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.capability.IDistillationTower;
 import gregtech.api.capability.impl.DistillationTowerLogicHandler;
 import gregtech.api.capability.impl.FluidTankList;
@@ -9,20 +18,11 @@ import gregtech.api.pattern.BlockPattern;
 import gregtech.api.util.GTLog;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraftforge.fluids.IFluidTank;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 
 public class ExtendedDTLogicHandler extends DistillationTowerLogicHandler {
 
     // This have to be an anonymous class. Just blame ceu.
-    protected static final FakeTank BLACK_HOLE = new FakeTank() {
-    };
+    protected static final FakeTank BLACK_HOLE = new FakeTank() {};
 
     // Y offset from the controller to the first layer that output hatch can be placed on
     // As a function since monsters like LP Cryo DT exist
@@ -30,7 +30,8 @@ public class ExtendedDTLogicHandler extends DistillationTowerLogicHandler {
     // The index of the extendable aisle repetition
     protected final int outputLayerIndex;
 
-    public ExtendedDTLogicHandler(IDistillationTower tower, int outputLayerIndex, Function<Integer, Integer> offsetCounter) {
+    public ExtendedDTLogicHandler(IDistillationTower tower, int outputLayerIndex,
+                                  Function<Integer, Integer> offsetCounter) {
         super(tower);
         this.outputLayerIndex = outputLayerIndex;
         this.offsetCounter = offsetCounter;
@@ -45,7 +46,7 @@ public class ExtendedDTLogicHandler extends DistillationTowerLogicHandler {
     public void determineOrderedFluidOutputs() {
         // noinspection SimplifyStreamApiCallChains
         List<MetaTileEntityMultiblockPart> fluidExportParts = tower.getMultiblockParts().stream()
-                .filter(iMultiblockPart -> iMultiblockPart instanceof IMultiblockAbilityPart<?> abilityPart &&
+                .filter(iMultiblockPart -> iMultiblockPart instanceof IMultiblockAbilityPart<?>abilityPart &&
                         abilityPart.getAbility() == MultiblockAbility.EXPORT_FLUIDS &&
                         abilityPart instanceof MetaTileEntityMultiblockPart)
                 .map(iMultiblockPart -> (MetaTileEntityMultiblockPart) iMultiblockPart)

@@ -1,18 +1,21 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.block.IStateHarvestLevel;
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+
 import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.block.IStateHarvestLevel;
 import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
-import javax.annotation.Nonnull;
-
 public class BlockTurbineRotor extends VariantHorizontalRotatableBlock<BlockTurbineRotor.BlockTurbineRotorType> {
+
     public BlockTurbineRotor() {
         super(net.minecraft.block.material.Material.IRON);
         setTranslationKey("turbine_rotor");
@@ -29,9 +32,11 @@ public class BlockTurbineRotor extends VariantHorizontalRotatableBlock<BlockTurb
     }
 
     public enum BlockTurbineRotorType implements IStringSerializable, IStateHarvestLevel {
+
         STEEL("steel", 1),
         LOW_PRESSURE("low_pressure", 1),
-        HIGH_PRESSURE("high_pressure", 1);
+        HIGH_PRESSURE("high_pressure", 1),
+        COMBUSTION("combustion", 1);
 
         private final String name;
         private final int harvestLevel;

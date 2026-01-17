@@ -13,7 +13,7 @@
     "sounds": [
       {
         "name": "susy:drone_takeoff",
-        "stream": true
+        "stream": false
       }
     ]
   },
@@ -31,6 +31,42 @@
     "sounds" : [
       {
         "name" : "susy:jet_engine_active",
+        "stream" : true
+      }
+    ]
+  },
+  "block.locked_crate" : {
+    "category" : "block",
+    "sounds" : [
+      {
+        "name" : "susy:locked_crate",
+        "stream" : true
+      }
+    ]
+  },
+  "block.complex_alarm" : {
+    "category" : "block",
+    "sounds" : [
+      {
+        "name" : "susy:complex_alarm",
+        "stream" : true
+      }
+    ]
+  },
+  "block.metal_door_close" : {
+    "category" : "block",
+    "sounds" : [
+      {
+        "name" : "susy:metal_door_close",
+        "stream" : true
+      }
+    ]
+  },
+  "block.metal_drawer_open" : {
+    "category" : "block",
+    "sounds" : [
+      {
+        "name" : "susy:metal_drawer_open",
         "stream" : true
       }
     ]

@@ -1,0 +1,39 @@
+apply plugin: 'xyz.wagyourtail.jvmdowngrader'
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(22))
+    }
+}
+
+tasks.withType JavaCompile configureEach {
+    if (it.name !in ['compileMcLauncherJava', 'compilePatchedMcJava']) {
+        sourceCompatibility = 22
+    }
+}
+
+dependencies {
+    // Allow jdk.unsupported classes like sun.misc.Unsafe, workaround for JDK-8206937 and fixes Forge crashes in tests.
+    patchedMinecraft 'me.eigenraven.java8unsupported:java-8-unsupported-shim:1.0.0'
+    testCompileOnly "me.eigenraven.java8unsupported:java-8-unsupported-shim:1.0.0"
+}
+
+// downgrade code runClient/runServer/build
+shadeDowngradedApi {
+    shadePath { _ -> "${project.modGroup.replace('.', '/')}/shadow/".toString() }
+    archiveClassifier = "dev" // debug session will use the "-dev" jar
+}
+
+jar {
+    archiveClassifier = "dev-undowngraded"
+    finalizedBy(shadeDowngradedApi)
+}
+
+reobfJar {
+    inputJar.set((shadeDowngradedApi as Jar).archiveFile)
+}
+
+tasks.withType(JavaExec).named { it.contains('runClient') || it.contains('runServer') }.configureEach {
+    dependsOn(shadeDowngradedApi)
+    classpath = classpath - layout.files(jar) + layout.files(shadeDowngradedApi)
+}

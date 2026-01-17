@@ -1,20 +1,18 @@
 package supersymmetry;
 
-import com.cleanroommc.modularui.factory.GuiManager;
-import gregtech.GTInternalTags;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLConstructionEvent;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
+import org.reflections.Reflections;
+
+import gregtech.GTInternalTags;
 import supersymmetry.api.capability.SuSyCapabilities;
-import supersymmetry.api.metatileentity.MetaTileEntityGuiFactory;
 import supersymmetry.api.sound.SusySounds;
 import supersymmetry.common.CommonProxy;
 import supersymmetry.common.SusyMetaEntities;
@@ -28,26 +26,34 @@ import supersymmetry.common.covers.SuSyCoverBehaviors;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
+import supersymmetry.common.rocketry.SusyRocketComponents;
 import supersymmetry.common.tileentities.SuSyTileEntities;
 import supersymmetry.loaders.SuSyIRLoader;
 
-@Mod(name = Supersymmetry.NAME, modid = Supersymmetry.MODID, version = Tags.VERSION, dependencies = GTInternalTags.DEP_VERSION_STRING + ";required-after:gcym;after:immersiverailroading")
+@Mod(name = Supersymmetry.NAME,
+     modid = Supersymmetry.MODID,
+     version = Tags.VERSION,
+     dependencies = GTInternalTags.DEP_VERSION_STRING + ";required-after:gcym;after:immersiverailroading")
 
 public class Supersymmetry {
 
     public static final String NAME = "Supersymmetry";
     public static final String MODID = "susy";
 
-    @SidedProxy(modId = MODID, clientSide = "supersymmetry.client.ClientProxy", serverSide = "supersymmetry.common.CommonProxy")
+    @SidedProxy(modId = MODID,
+                clientSide = "supersymmetry.client.ClientProxy",
+                serverSide = "supersymmetry.common.CommonProxy")
     public static CommonProxy proxy;
 
     @Mod.Instance(Supersymmetry.MODID)
     public static Supersymmetry instance;
 
+    public static Reflections reflectionHandler;
+
     @Mod.EventHandler
     public void onModConstruction(FMLConstructionEvent event) {
-        //This is now a config option I think
-        //GTValues.HT = true;
+        // This is now a config option I think
+        // GTValues.HT = true;
         SuSyIRLoader.initDefinitions();
         SuSyIRLoader.initEntities();
 
@@ -55,19 +61,17 @@ public class Supersymmetry {
         proxy.checkCanaryFile();
     }
 
-
     @Mod.EventHandler
     public void onPreInit(@NotNull FMLPreInitializationEvent event) {
-
         proxy.preLoad();
+
+        reflectionHandler = new Reflections("supersymmetry");
 
         SuSyMetaBlocks.init();
         SuSyMetaItems.initMetaItems();
         SuSyBlocks.init();
 
         SusySounds.registerSounds();
-
-        GuiManager.registerFactory(MetaTileEntityGuiFactory.INSTANCE);
 
         SuSyMetaTileEntities.init();
         SuSyCapabilities.init();
@@ -85,6 +89,12 @@ public class Supersymmetry {
     public void onInit(@NotNull FMLInitializationEvent event) {
         proxy.load();
         SuSyCoverBehaviors.init();
+    }
+
+    @Mod.EventHandler
+    public void onPostInit(@NotNull FMLPostInitializationEvent event) {
+        SusyRocketComponents.init();
+        proxy.postLoad();
     }
 
     @Mod.EventHandler

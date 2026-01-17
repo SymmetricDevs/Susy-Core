@@ -1,5 +1,10 @@
 package supersymmetry.common.world;
 
+import java.util.List;
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.math.BlockPos;
@@ -11,9 +16,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.*;
 
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Random;
+import supersymmetry.common.world.gen.MapGenLunarLavaTube;
 
 public class PlanetChunkGenerator implements IChunkGenerator {
 
@@ -35,7 +38,7 @@ public class PlanetChunkGenerator implements IChunkGenerator {
     private NoiseGeneratorOctaves mainPerlinNoise;
     private NoiseGeneratorPerlin surfaceNoise;
     private double[] depthBuffer = new double[256];
-    private final MapGenBase caveGenerator = new MapGenCaves();
+    private final MapGenLunarLavaTube caveGenerator = new MapGenLunarLavaTube();
     private Biome[] biomesForGeneration;
     private final double depthNoiseScaleX = 200.0D;
     private final double depthNoiseScaleZ = 200.0D;
@@ -158,7 +161,7 @@ public class PlanetChunkGenerator implements IChunkGenerator {
                             // Loop through z axis
                             for (int jZ = 0; jZ < 4; ++jZ) {
                                 // If the noiseLevel is above 0, set block to stone.
-                                if (height < 2) {
+                                if (height < 1) {
                                     primer.setBlockState(iX * 4 + jX, iY * 8 + jY, iZ * 4 + jZ, bedrock);
                                 } else if ((zVariation += d16) > 0.0D) {
                                     primer.setBlockState(iX * 4 + jX, iY * 8 + jY, iZ * 4 + jZ, stone);
@@ -211,6 +214,8 @@ public class PlanetChunkGenerator implements IChunkGenerator {
                 16);
         this.replaceBiomeBlocks(x, z, chunkprimer, this.biomesForGeneration);
 
+        this.caveGenerator.generate(this.world, x, z, chunkprimer);
+
         Chunk chunk = new Chunk(this.world, chunkprimer, x, z);
         byte[] abyte = chunk.getBiomeArray();
 
@@ -248,15 +253,18 @@ public class PlanetChunkGenerator implements IChunkGenerator {
                 for (int chunkXOffset = -2; chunkXOffset <= 2; ++chunkXOffset) {
                     for (int chunkZOffset = -2; chunkZOffset <= 2; ++chunkZOffset) {
                         Biome otherBiome = this.biomesForGeneration[k + chunkXOffset + 2 + (l + chunkZOffset + 2) * 10];
-                        float otherBiomeBaseHeight = this.biomeDepthOffSet + otherBiome.getBaseHeight() * this.biomeDepthWeight;
-                        float otherBiomeHeightVariation = this.biomeScaleOffset + otherBiome.getHeightVariation() * this.biomeScaleWeight;
+                        float otherBiomeBaseHeight = this.biomeDepthOffSet +
+                                otherBiome.getBaseHeight() * this.biomeDepthWeight;
+                        float otherBiomeHeightVariation = this.biomeScaleOffset +
+                                otherBiome.getHeightVariation() * this.biomeScaleWeight;
 
                         if (this.terrainType == WorldType.AMPLIFIED && otherBiomeBaseHeight > 0.0F) {
                             otherBiomeBaseHeight = 1.0F + otherBiomeBaseHeight * 2.0F;
                             otherBiomeHeightVariation = 1.0F + otherBiomeHeightVariation * 4.0F;
                         }
 
-                        float heightEffect = this.biomeWeights[chunkXOffset + 2 + (chunkZOffset + 2) * 5] / (otherBiomeBaseHeight + 2.0F);
+                        float heightEffect = this.biomeWeights[chunkXOffset + 2 + (chunkZOffset + 2) * 5] /
+                                (otherBiomeBaseHeight + 2.0F);
 
                         if (otherBiome.getBaseHeight() > biome.getBaseHeight()) {
                             heightEffect /= 2.0F;
@@ -366,6 +374,5 @@ public class PlanetChunkGenerator implements IChunkGenerator {
      * placing any blocks. When called for the first time before any chunk is generated - also initializes the internal
      * state needed by getPossibleCreatures.
      */
-    public void recreateStructures(Chunk chunkIn, int x, int z) {
-    }
+    public void recreateStructures(Chunk chunkIn, int x, int z) {}
 }

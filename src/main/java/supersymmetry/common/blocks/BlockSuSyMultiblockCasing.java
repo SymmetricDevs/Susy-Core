@@ -1,6 +1,7 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.block.VariantBlock;
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -11,9 +12,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
+import gregtech.api.block.VariantBlock;
 
 public class BlockSuSyMultiblockCasing extends VariantBlock<BlockSuSyMultiblockCasing.CasingType> {
 
@@ -28,7 +30,8 @@ public class BlockSuSyMultiblockCasing extends VariantBlock<BlockSuSyMultiblockC
     }
 
     @Override
-    public boolean canCreatureSpawn(@Nonnull IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull EntityLiving.SpawnPlacementType type) {
+    public boolean canCreatureSpawn(@Nonnull IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos,
+                                    @Nonnull EntityLiving.SpawnPlacementType type) {
         return false;
     }
 
@@ -50,7 +53,6 @@ public class BlockSuSyMultiblockCasing extends VariantBlock<BlockSuSyMultiblockC
         return super.isOpaqueCube(state);
     }
 
-
     @Override
     @SuppressWarnings("deprecation")
     public int getLightOpacity(@NotNull IBlockState state) {
@@ -71,8 +73,9 @@ public class BlockSuSyMultiblockCasing extends VariantBlock<BlockSuSyMultiblockC
         MONEL_500_PIPE("monel_casing_pipe"),
         COPPER_PIPE("copper_casing_pipe"),
         HEAVY_DUTY_PAD("heavy_duty_pad"),
-        ADVANCED_REFRACTORY_LINING("advanced_refractory_lining"),
-        COALESCENCE_PLATE("coalescence_plate");
+        TABULAR_ALUMINA_REFRACTORY("tabular_alumina_refractory"),
+        COALESCENCE_PLATE("coalescence_plate"),
+        SYNTHETIC_MULLITE_REFRACTORY("synthetic_mullite_refractory");
 
         private final String name;
 

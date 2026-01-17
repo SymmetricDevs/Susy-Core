@@ -1,13 +1,14 @@
 package supersymmetry.client.renderer.handler;
 
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
-import gregtech.api.util.RelativeDirection;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3i;
+
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
+import gregtech.api.util.RelativeDirection;
 import software.bernie.geckolib3.core.IAnimatableModel;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
@@ -17,6 +18,7 @@ import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import supersymmetry.api.metatileentity.IAnimatableMTE;
 
 public enum GeoMTERenderer implements IGeoRenderer<IAnimatableMTE> {
+
     INSTANCE;
 
     public final AnimatedGeoModel<IAnimatableMTE> MODEL_DISPATCHER = new ModelDispatcher();
@@ -24,7 +26,7 @@ public enum GeoMTERenderer implements IGeoRenderer<IAnimatableMTE> {
     static {
         AnimationController.addModelFetcher(object -> {
             if (object instanceof IAnimatableMTE) {
-                //noinspection rawtypes,unchecked
+                // noinspection rawtypes,unchecked
                 return (IAnimatableModel) INSTANCE.getGeoModelProvider();
             }
             return null;
@@ -41,80 +43,44 @@ public enum GeoMTERenderer implements IGeoRenderer<IAnimatableMTE> {
         return MODEL_DISPATCHER.getTextureLocation(mte);
     }
 
-    private static void rotateBlock(MetaTileEntity mte) {
-        EnumFacing front = mte.getFrontFacing();
-        if (mte instanceof MultiblockControllerBase controller) {
-            EnumFacing upwards = controller.getUpwardsFacing();
-
-            //            if (controller.allowsExtendedFacing()) {
-            //                int degree = 90 * (upwards == EnumFacing.EAST ? -1 :
-            //                        upwards == EnumFacing.SOUTH ? 2 : upwards == EnumFacing.WEST ? 1 : 0);
-            //                GlStateManager.rotate(degree, 0, 0, -1);
-            //                if (front == EnumFacing.DOWN && upwards.getAxis() == EnumFacing.Axis.Z) {
-            //                    GlStateManager.rotate(180, 0, 1, 0);
-            //                }
-            //            }
-
-            if (controller.allowsFlip() && controller.isFlipped()) {
-
-                EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(front, upwards, true);
-
-                int fX = left.getXOffset() == 0 ? 1 : -1;
-                int fY = left.getYOffset() == 0 ? 1 : -1;
-                int fZ = left.getZOffset() == 0 ? 1 : -1;
-
-                GlStateManager.scale(fX, fY, fZ);
+    public static void rotateToFace(EnumFacing face, EnumFacing spin) {
+        int angle = spin == EnumFacing.EAST ? 90 : spin == EnumFacing.SOUTH ? 180 : spin == EnumFacing.WEST ? 270 : 0;
+        switch (face) {
+            case UP -> {
+                GlStateManager.scale(-1, 1, 1);
+                GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
+                GlStateManager.rotate(-angle, 0, 0, 1);
+            }
+            case DOWN -> {
+                GlStateManager.rotate(270.0F, 1.0F, 0.0F, 0.0F);
+                GlStateManager.rotate(spin == EnumFacing.EAST || spin == EnumFacing.WEST ? -angle : angle, 0, 0, 1);
+            }
+            case EAST -> {
+                GlStateManager.rotate(270.0F, 0.0F, 1.0F, 0.0F);
+                GlStateManager.rotate(angle, 0, 0, 1);
+            }
+            case WEST -> {
+                GlStateManager.rotate(90.0F, 0.0F, 1.0F, 0.0F);
+                GlStateManager.rotate(angle, 0, 0, 1);
+            }
+            case NORTH -> GlStateManager.rotate(angle, 0, 0, 1);
+            case SOUTH -> {
+                GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
+                GlStateManager.rotate(angle, 0, 0, 1);
             }
         }
-        FixedGeoBlockRenderer.rotateBlock(front);
     }
 
-    //    public static void rotateBlock(MetaTileEntity mte) {
-    //        Matrix4 translation = new Matrix4();
-    //        float halfPi = (float) (Math.PI / 2);
-    //
-    //        EnumFacing front = mte.getFrontFacing();
-    //
-    //        translation.apply(switch (front) {
-    //            case SOUTH -> new Rotation(halfPi * 2, 0, 1, 0);
-    //            case WEST ->  new Rotation(halfPi, 0, 1, 0);
-    //            case EAST ->  new Rotation(halfPi * 3, 0, 1, 0);
-    //            case UP ->  new Rotation(halfPi, 1, 0, 0);
-    //            case DOWN ->  new Rotation(halfPi * 3, 1, 0, 0);
-    //            default -> new RedundantTransformation(); // Do nothing for North
-    //        });
-    //
-    //        if (mte instanceof MultiblockControllerBase controller) {
-    //            EnumFacing upwards = controller.getUpwardsFacing();
-    //
-    //            if (controller.allowsExtendedFacing()) {
-    //                double degree = Math.PI / 2 * (upwards == EnumFacing.EAST ? -1 :
-    //                        upwards == EnumFacing.SOUTH ? 2 : upwards == EnumFacing.WEST ? 1 : 0);
-    //                Rotation rotation = new Rotation(degree, front.getXOffset(), front.getYOffset(),
-    //                        front.getZOffset());
-    //                if (front == EnumFacing.DOWN && upwards.getAxis() == EnumFacing.Axis.Z) {
-    //                    translation.apply(new Rotation(Math.PI, 0, 1, 0));
-    //                }
-    //                translation.apply(rotation);
-    //            }
-    //
-    //            if (controller.allowsFlip() && controller.isFlipped()) {
-    //
-    //                EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(front, upwards, true);
-    //
-    //                int fX = left.getXOffset() == 0 ? 1 : -1;
-    //                int fY = left.getYOffset() == 0 ? 1 : -1;
-    //                int fZ = left.getZOffset() == 0 ? 1 : -1;
-    //
-    //                translation.scale(fX, fY, fZ);
-    //            }
-    //        }
-    //
-    //    }
+    public static void flip(EnumFacing facing) {
+        int fX = facing.getXOffset() == 0 ? 1 : -1;
+        int fY = facing.getYOffset() == 0 ? 1 : -1;
+        int fZ = facing.getZOffset() == 0 ? 1 : -1;
+        GlStateManager.scale(fX, fY, fZ);
+    }
 
     @SuppressWarnings("DuplicatedCode")
-    public <T extends MetaTileEntity & IAnimatableMTE> void render(
-            T mte, double x, double y, double z, float partialTicks) {
+    public <T extends MetaTileEntity & IAnimatableMTE> void render(T mte, double x, double y, double z,
+                                                                   float partialTicks) {
         GeoModel model = MODEL_DISPATCHER.getModel(MODEL_DISPATCHER.getModelLocation(mte));
         Vec3i vec3i = mte.getTransformation();
         MODEL_DISPATCHER.setLivingAnimations(mte, getUniqueID(mte));
@@ -123,9 +89,17 @@ public enum GeoMTERenderer implements IGeoRenderer<IAnimatableMTE> {
         {
             FixedGeoBlockRenderer.setupLight(mte.getWorld().getCombinedLight(mte.getLightPos(), 0));
 
+            EnumFacing front = mte.getFrontFacing();
             GlStateManager.translate(x + 0.5, y + 0.5, z + 0.5);
             GlStateManager.translate(vec3i.getX(), vec3i.getY(), vec3i.getZ());
-            rotateBlock(mte);
+
+            if (mte instanceof MultiblockControllerBase controller) {
+                EnumFacing upwards = controller.getUpwardsFacing();
+                EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(front, upwards, controller.isFlipped());
+
+                if (/* controller.allowsFlip() && */ controller.isFlipped()) flip(left);
+                rotateToFace(front, upwards);
+            }
 
             Minecraft.getMinecraft().getTextureManager().bindTexture(getTextureLocation(mte));
             render(model, mte, partialTicks, 1, 1, 1, 1);

@@ -3,6 +3,7 @@ package supersymmetry.api.unification.material.info;
 import gregtech.api.unification.material.info.MaterialIconType;
 
 public class SuSyMaterialIconType {
+
     public static final MaterialIconType catalystBed = new MaterialIconType("catalystBed");
     public static final MaterialIconType catalystPellet = new MaterialIconType("catalystPellet");
     public static final MaterialIconType sheetedFrame = new MaterialIconType("sheetedFrame");

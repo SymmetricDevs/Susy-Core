@@ -1,13 +1,5 @@
 {
   "forge_marker" : 1,
-  "defaults": {
-    "model": "minecraft:cube_bottom_top",
-    "textures": {
-      "bottom": "gregtech:blocks/resource/resource_block_bauxite",
-      "top": "gregtech:blocks/resource/resource_block_bauxite",
-      "side": "gregtech:blocks/resource/resource_block_bauxite"
-    }
-  },
   "variants" : {
     "variant=bauxite" : {
       "model" : "minecraft:cube_all",

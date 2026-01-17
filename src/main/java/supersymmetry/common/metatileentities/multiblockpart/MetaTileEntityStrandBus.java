@@ -1,5 +1,17 @@
 package supersymmetry.common.metatileentities.multiblockpart;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.function.BiConsumer;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.capabilities.Capability;
+
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
@@ -11,24 +23,15 @@ import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.renderer.texture.cube.SimpleOverlayRenderer;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.capabilities.Capability;
 import supersymmetry.api.capability.IStrandProvider;
 import supersymmetry.api.capability.Strand;
 import supersymmetry.api.capability.SuSyCapabilities;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
 import supersymmetry.client.renderer.textures.SusyTextures;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.function.BiConsumer;
+public class MetaTileEntityStrandBus extends MetaTileEntityMultiblockPart
+                                     implements IStrandProvider, IMultiblockAbilityPart<IStrandProvider> {
 
-public class MetaTileEntityStrandBus extends MetaTileEntityMultiblockPart implements IStrandProvider, IMultiblockAbilityPart<IStrandProvider> {
     private Strand strand;
     private boolean isExport;
 
@@ -98,14 +101,17 @@ public class MetaTileEntityStrandBus extends MetaTileEntityMultiblockPart implem
     }
 
     public void pullItemsFromNearbyHandlers(EnumFacing... allowedFaces) {
-        this.transferToNearby(SuSyCapabilities.STRAND_PROVIDER, (thisCap, otherCap) -> this.transferStrand(otherCap, thisCap), allowedFaces);
+        this.transferToNearby(SuSyCapabilities.STRAND_PROVIDER,
+                (thisCap, otherCap) -> this.transferStrand(otherCap, thisCap), allowedFaces);
     }
 
     public void transferStrand(IStrandProvider sender, IStrandProvider receiver) {
         if (sender.getStrand() == null || receiver.getStrand() != null) {
             return;
         }
-        receiver.insertStrand(sender.take());
+        if (receiver.insertStrand(sender.getStrand()) == null) {
+            sender.take();
+        }
     }
 
     private <T> void transferToNearby(Capability<T> capability, BiConsumer<T, T> transfer, EnumFacing... allowedFaces) {
@@ -120,7 +126,6 @@ public class MetaTileEntityStrandBus extends MetaTileEntityMultiblockPart implem
             }
         }
     }
-
 
     @Override
     public MultiblockAbility<IStrandProvider> getAbility() {

@@ -1,11 +1,9 @@
 package supersymmetry.common.entities;
 
-import gregtech.api.util.GTUtility;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -17,7 +15,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.util.GTUtility;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -31,10 +32,14 @@ import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityDroneP
 
 public class EntityDrone extends EntityLiving implements IAnimatable {
 
-    private static final DataParameter<Integer> AGE = EntityDataManager.<Integer>createKey(EntityDrone.class, DataSerializers.VARINT);
-    private static final DataParameter<Integer> PAD_ALTITUDE = EntityDataManager.createKey(EntityDrone.class, DataSerializers.VARINT);
-    private static final DataParameter<Boolean> DESCENDING_MODE = EntityDataManager.createKey(EntityDrone.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> HAS_LANDED = EntityDataManager.createKey(EntityDrone.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Integer> AGE = EntityDataManager.<Integer>createKey(EntityDrone.class,
+            DataSerializers.VARINT);
+    private static final DataParameter<Integer> PAD_ALTITUDE = EntityDataManager.createKey(EntityDrone.class,
+            DataSerializers.VARINT);
+    private static final DataParameter<Boolean> DESCENDING_MODE = EntityDataManager.createKey(EntityDrone.class,
+            DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> HAS_LANDED = EntityDataManager.createKey(EntityDrone.class,
+            DataSerializers.BOOLEAN);
 
     private static final BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
 
@@ -55,7 +60,7 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
         this.setLocationAndAngles(x, y, z, 0.F, 0.F);
         this.setSize(1.F, 1.F);
         rideCooldown = -1;
-        this.setEntityBoundingBox(new AxisAlignedBB(x-1, y+0, z-1, x+1, y+1, z+1));
+        this.setEntityBoundingBox(new AxisAlignedBB(x - 1, y + 0, z - 1, x + 1, y + 1, z + 1));
     }
 
     public EntityDrone(World worldIn, BlockPos pos) {
@@ -118,9 +123,7 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
     }
 
     @Override
-    public void fall(float distance, float damageMultiplier) {
-
-    }
+    public void fall(float distance, float damageMultiplier) {}
 
     @Override
     protected boolean canDespawn() {
@@ -148,9 +151,7 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
     }
 
     @Override
-    public void knockBack(@NotNull Entity entityIn, float strength, double xRatio, double zRatio) {
-
-    }
+    public void knockBack(@NotNull Entity entityIn, float strength, double xRatio, double zRatio) {}
 
     private void explode() {
         this.world.newExplosion(this, this.posX, this.posY, this.posZ, 2, true, true);
@@ -189,7 +190,6 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
                     this.explode();
                 }
 
-
             } else if (descendingMode) {
                 this.motionY = -1.D * Math.min((this.posY - padAltitude) * 0.125, 2.);
                 if (this.isCollidingWithBlocks()) {
@@ -223,8 +223,10 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
     }
 
     public boolean isCollidingWithBlocks() {
-        return !(this.world.getBlockState(mutableBlockPos.setPos(this.posX, this.posY + 1, this.posZ)).getBlock().isPassable(world, mutableBlockPos)
-                 && this.world.getBlockState(mutableBlockPos.setPos(this.posX, this.posY - 1, this.posZ)).getBlock().isPassable(world, mutableBlockPos));
+        return !(this.world.getBlockState(mutableBlockPos.setPos(this.posX, this.posY + 1, this.posZ)).getBlock()
+                .isPassable(world, mutableBlockPos) &&
+                this.world.getBlockState(mutableBlockPos.setPos(this.posX, this.posY - 1, this.posZ)).getBlock()
+                        .isPassable(world, mutableBlockPos));
     }
 
     public boolean reachedSky() {
@@ -256,21 +258,23 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-
         int age = this.dataManager.get(AGE);
         boolean descendingMode = this.dataManager.get(DESCENDING_MODE);
         boolean hasLanded = this.dataManager.get(HAS_LANDED);
 
         if (age <= 55 && !descendingMode) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.drone.takeoff", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.drone.takeoff",
+                    ILoopType.EDefaultLoopTypes.PLAY_ONCE));
         }
 
         if ((age >= 55 || descendingMode) && !hasLanded) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.drone.flying", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(
+                    new AnimationBuilder().addAnimation("animation.drone.flying", ILoopType.EDefaultLoopTypes.LOOP));
         }
 
         if (hasLanded) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.drone.landing", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.drone.landing",
+                    ILoopType.EDefaultLoopTypes.PLAY_ONCE));
         }
 
         return PlayState.CONTINUE;
@@ -278,7 +282,8 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
 
     @Override
     public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController<EntityDrone>(this, "controller", 0, this::predicate));
+        animationData
+                .addAnimationController(new AnimationController<EntityDrone>(this, "controller", 0, this::predicate));
     }
 
     @Override

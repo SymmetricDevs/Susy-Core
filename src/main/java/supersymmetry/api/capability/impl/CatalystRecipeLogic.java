@@ -1,5 +1,13 @@
 package supersymmetry.api.capability.impl;
 
+import java.util.function.Supplier;
+
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.items.IItemHandlerModifiable;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import gregtech.api.capability.IEnergyContainer;
 import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.impl.RecipeLogicEnergy;
@@ -8,24 +16,19 @@ import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.logic.OverclockingLogic;
 import gregtech.api.recipes.recipeproperties.IRecipePropertyStorage;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.recipes.builders.logic.SuSyOverclockingLogic;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
 import supersymmetry.api.recipes.properties.CatalystProperty;
 import supersymmetry.api.recipes.properties.CatalystPropertyValue;
 
-import java.util.function.Supplier;
-
 public class CatalystRecipeLogic extends RecipeLogicEnergy {
 
     protected @Nullable CatalystInfo catalystInfo;
     protected int requiredCatalystTier;
 
-    public CatalystRecipeLogic(MetaTileEntity tileEntity, RecipeMap<?> recipeMap, Supplier<IEnergyContainer> energyContainer) {
+    public CatalystRecipeLogic(MetaTileEntity tileEntity, RecipeMap<?> recipeMap,
+                               Supplier<IEnergyContainer> energyContainer) {
         super(tileEntity, recipeMap, energyContainer);
     }
 
@@ -107,7 +110,8 @@ public class CatalystRecipeLogic extends RecipeLogicEnergy {
     }
 
     @Override
-    protected int[] runOverclockingLogic(@NotNull IRecipePropertyStorage propertyStorage, int recipeEUt, long maxVoltage, int duration, int amountOC) {
+    protected int[] runOverclockingLogic(@NotNull IRecipePropertyStorage propertyStorage, int recipeEUt,
+                                         long maxVoltage, int duration, int amountOC) {
         if (requiredCatalystTier != CatalystInfo.NO_TIER && catalystInfo != null) {
             return SuSyOverclockingLogic.catalystOverclockingLogic(
                     recipeEUt,
@@ -117,8 +121,7 @@ public class CatalystRecipeLogic extends RecipeLogicEnergy {
                     catalystInfo,
                     requiredCatalystTier,
                     getOverclockingDurationDivisor(),
-                    getOverclockingVoltageMultiplier()
-            );
+                    getOverclockingVoltageMultiplier());
         } else {
             return OverclockingLogic.standardOverclockingLogic(
                     recipeEUt,
@@ -126,8 +129,7 @@ public class CatalystRecipeLogic extends RecipeLogicEnergy {
                     duration,
                     amountOC,
                     this.getOverclockingDurationDivisor(),
-                    this.getOverclockingVoltageMultiplier()
-            );
+                    this.getOverclockingVoltageMultiplier());
         }
     }
 

@@ -1,5 +1,12 @@
 package supersymmetry.common.item.armor;
 
+import static net.minecraft.inventory.EntityEquipmentSlot.*;
+import static supersymmetry.api.util.SuSyUtility.susyId;
+import static supersymmetry.common.event.DimensionBreathabilityHandler.ABSORB_ALL;
+
+import java.util.Collections;
+import java.util.List;
+
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
@@ -13,31 +20,33 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ISpecialArmor;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import gregtech.api.damagesources.DamageSources;
-import supersymmetry.client.renderer.handler.BreathingApparatusModel;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
+import supersymmetry.api.items.IGeoMetaArmor;
+import supersymmetry.client.renderer.handler.GeoMetaArmorRenderer;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.item.SuSyArmorItem;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static net.minecraft.inventory.EntityEquipmentSlot.*;
-import static supersymmetry.api.util.SuSyUtility.susyId;
-import static supersymmetry.common.event.DimensionBreathabilityHandler.ABSORB_ALL;
-
-public class AdvancedBreathingApparatus extends BreathingApparatus {
-    private final double hoursOfLife;
-    private final String name;
-    private final int tier;
-    private final double relativeAbsorption;
+public class AdvancedBreathingApparatus extends BreathingApparatus implements IGeoMetaArmor {
 
     private static final double DEFAULT_ABSORPTION = 0;
+    private final double hoursOfLife;
+    protected final String name;
+    private final int tier;
+    private final double relativeAbsorption;
+    // We don't really use animations, but this can't be null
+    // Luckily this isn't instanced for every itemStack so we're fine here
+    private AnimationFactory factory;
 
-    public AdvancedBreathingApparatus(EntityEquipmentSlot slot, double hoursOfLife, String name, int tier, double relativeAbsorption) {
-        super(slot);
+    public AdvancedBreathingApparatus(EntityEquipmentSlot slot, int maxDurability, double hoursOfLife, String name,
+                                      int tier,
+                                      double relativeAbsorption) {
+        super(slot, maxDurability);
         this.hoursOfLife = hoursOfLife;
         this.name = name;
         this.tier = tier;
@@ -45,21 +54,9 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
     }
 
     @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-        return "susy:textures/armor/" + name + "_" + slot.getName() + ".png";
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public @Nullable ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped defaultModel) {
-        if (model == null)
-            model = new BreathingApparatusModel(name, armorSlot);
-        return model;
-    }
-
-    @Override
     public boolean mayBreatheWith(ItemStack stack, EntityPlayer player) {
-        return player.dimension == DimensionBreathabilityHandler.BENEATH_ID || player.dimension == DimensionBreathabilityHandler.NETHER_ID;
+        return player.dimension == DimensionBreathabilityHandler.BENEATH_ID ||
+                player.dimension == DimensionBreathabilityHandler.NETHER_ID;
     }
 
     @Override
@@ -106,7 +103,6 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
         return DEFAULT_ABSORPTION;
     }
 
-
     private double getDamage(ItemStack stack) {
         if (stack.getTagCompound() == null) {
             stack.setTagCompound(new NBTTagCompound());
@@ -122,7 +118,6 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
         compound.setDouble("damage", getDamage(stack) + damageChange);
         stack.setTagCompound(compound);
     }
-
 
     private void handleDamage(ItemStack stack, EntityPlayer player) {
         if (hoursOfLife == 0 || player.dimension == DimensionBreathabilityHandler.BENEATH_ID) {
@@ -156,8 +151,8 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
 
     @Override
     public ISpecialArmor.ArmorProperties getProperties(EntityLivingBase player, @NotNull ItemStack armor,
-            DamageSource source,
-            double damage, EntityEquipmentSlot equipmentSlot) {
+                                                       DamageSource source,
+                                                       double damage, EntityEquipmentSlot equipmentSlot) {
         ISpecialArmor.ArmorProperties prop = new ISpecialArmor.ArmorProperties(0, 0.0, 0);
         if (source.isUnblockable())
             return prop;
@@ -204,17 +199,53 @@ public class AdvancedBreathingApparatus extends BreathingApparatus {
             strings.add(I18n.format("attribute.modifier.plus.0", armor, I18n.format("attribute.name.generic.armor")));
     }
 
-
     @Override
     public int getArmorDisplay(EntityPlayer player, ItemStack armor, int slot) {
         return (int) Math.round(20.0F * this.getAbsorption(armor) * relativeAbsorption);
     }
 
     @Override
+    public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
+        return textureRL().toString();
+    }
+
+    @Nullable
     @SideOnly(Side.CLIENT)
+    @Override
+    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack,
+                                    EntityEquipmentSlot armorSlot, ModelBiped defaultModel) {
+        return GeoMetaArmorRenderer.INSTANCE
+                .setCurrentItem(entityLiving, itemStack, armorSlot)
+                .applyEntityStats(defaultModel)
+                .applySlot(armorSlot);
+    }
+
+    @Override
     public List<ResourceLocation> getTextureLocations() {
-        List<ResourceLocation> models = new ArrayList<>();
-        models.add(susyId("armor/" + name + "_" + this.SLOT.toString()));
-        return models;
+        return Collections.emptyList();
+    }
+
+    @Override
+    public void registerControllers(AnimationData data) {
+        /* Do nothing */
+    }
+
+    @Override
+    public AnimationFactory getFactory() {
+        if (this.factory == null) {
+            this.factory = new AnimationFactory(this);
+        }
+        return this.factory;
+    }
+
+    @Override
+    public String getGeoName() {
+        return name + "_armor";
+    }
+
+    // No animation needed
+    @Override
+    public ResourceLocation animationRL() {
+        return susyId("animations/dummy.animation.json");
     }
 }

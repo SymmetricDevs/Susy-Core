@@ -1,5 +1,19 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.minecraftforge.items.IItemHandlerModifiable;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregicality.multiblocks.common.block.GCYMMetaBlocks;
 import gregicality.multiblocks.common.block.blocks.BlockLargeMultiblockCasing;
 import gregicality.multiblocks.common.block.blocks.BlockUniqueCasing;
@@ -9,7 +23,6 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
-import gregtech.api.metatileentity.multiblock.ParallelLogicType;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
@@ -23,22 +36,11 @@ import gregtech.common.blocks.BlockBoilerCasing;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.logic.SuSyParallelLogic;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class MetaTileEntityMetallurgicalConverter extends RecipeMapMultiblockController {
 
@@ -50,22 +52,34 @@ public class MetaTileEntityMetallurgicalConverter extends RecipeMapMultiblockCon
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start(RelativeDirection.BACK, RelativeDirection.UP, RelativeDirection.RIGHT)
-                .aisle(" F   F ", " F   F ", " F   F ", " F   F ", " FF FF ", "  FAF  ", "  AGA  ", "   A   ", "       ", "       ")
-                .aisle("HHHHHH ", "HFFFFF ", "H ###  ", "  ###  ", "  BBB  ", "  VVV  ", "  BBB  ", "  VVV  ", "  BBB  ", "       ")
-                .aisle(" HHHHHH", " H###FH", " ##### ", " #BBB# ", " BRRRB ", " VRRRV ", " BRRRB ", " VRRRV ", " BRRRB ", "  BBB  ")
-                .aisle("  HHHHH", "  #P#FS", " ##P## ", " #BBB# ", " BRRRB ", " VR#RV ", " BR#RB ", " VR#RV ", " BR#RB ", "  BMB  ")
-                .aisle(" HHHHHH", " H###FH", " ##### ", " #BBB# ", " BRRRB ", " VRRRV ", " BRRRB ", " VRRRV ", " BRRRB ", "  BBB  ")
-                .aisle("HHHHHH ", "HFFFFF ", "H ###  ", "  ###  ", "  BBB  ", "  VVV  ", "  BBB  ", "  VVV  ", "  BBB  ", "       ")
-                .aisle(" F   F ", " F   F ", " F   F ", " F   F ", " FF FF ", "  FAF  ", "  AGA  ", "   A   ", "       ", "       ")
+                .aisle(" F   F ", " F   F ", " F   F ", " F   F ", " FF FF ", "  FAF  ", "  AGA  ", "   A   ",
+                        "       ", "       ")
+                .aisle("HHHHHH ", "HFFFFF ", "H ###  ", "  ###  ", "  BBB  ", "  VVV  ", "  BBB  ", "  VVV  ",
+                        "  BBB  ", "       ")
+                .aisle(" HHHHHH", " H###FH", " ##### ", " #BBB# ", " BRRRB ", " VRRRV ", " BRRRB ", " VRRRV ",
+                        " BRRRB ", "  BBB  ")
+                .aisle("  HHHHH", "  #P#FS", " ##P## ", " #BBB# ", " BRRRB ", " VR#RV ", " BR#RB ", " VR#RV ",
+                        " BR#RB ", "  BMB  ")
+                .aisle(" HHHHHH", " H###FH", " ##### ", " #BBB# ", " BRRRB ", " VRRRV ", " BRRRB ", " VRRRV ",
+                        " BRRRB ", "  BBB  ")
+                .aisle("HHHHHH ", "HFFFFF ", "H ###  ", "  ###  ", "  BBB  ", "  VVV  ", "  BBB  ", "  VVV  ",
+                        "  BBB  ", "       ")
+                .aisle(" F   F ", " F   F ", " F   F ", " F   F ", " FF FF ", "  FAF  ", "  AGA  ", "   A   ",
+                        "       ", "       ")
                 .where('#', air())
                 .where('S', selfPredicate())
                 .where('R', states(getRefractoryState()))
-                .where('H', states(getCasingState()).setMinGlobalLimited(31).or(autoAbilities(true, true, true, true, true, true, false)))
+                .where('H',
+                        states(getCasingState()).setMinGlobalLimited(31)
+                                .or(autoAbilities(true, true, true, true, true, true, false)))
                 .where('A', states(getCasingState()))
-                .where('B', states(GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING.getState(BlockLargeMultiblockCasing.CasingType.STRESS_PROOF_CASING)))
+                .where('B',
+                        states(GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING
+                                .getState(BlockLargeMultiblockCasing.CasingType.STRESS_PROOF_CASING)))
                 .where('F', frames(Materials.Steel))
                 .where('V', states(GCYMMetaBlocks.UNIQUE_CASING.getState(BlockUniqueCasing.UniqueCasingType.HEAT_VENT)))
-                .where('G', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
+                .where('G',
+                        states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('P', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE)))
                 .where('M', abilities(MultiblockAbility.MUFFLER_HATCH))
                 .where(' ', any())
@@ -86,7 +100,7 @@ public class MetaTileEntityMetallurgicalConverter extends RecipeMapMultiblockCon
     }
 
     private IBlockState getRefractoryState() {
-        return SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.ADVANCED_REFRACTORY_LINING);
+        return SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.TABULAR_ALUMINA_REFRACTORY);
     }
 
     @Override
@@ -110,6 +124,7 @@ public class MetaTileEntityMetallurgicalConverter extends RecipeMapMultiblockCon
     }
 
     private class MetallurgicalConverterLogic extends MultiblockRecipeLogic {
+
         public MetallurgicalConverterLogic(RecipeMapMultiblockController tileEntity) {
             super(tileEntity);
         }
@@ -125,10 +140,15 @@ public class MetaTileEntityMetallurgicalConverter extends RecipeMapMultiblockCon
         }
 
         @Override
-        public Recipe findParallelRecipe(@NotNull Recipe currentRecipe, @NotNull IItemHandlerModifiable inputs, @NotNull IMultipleTankHandler fluidInputs, @NotNull IItemHandlerModifiable outputs, @NotNull IMultipleTankHandler fluidOutputs, long maxVoltage, int parallelLimit) {
+        public Recipe findParallelRecipe(@NotNull Recipe currentRecipe, @NotNull IItemHandlerModifiable inputs,
+                                         @NotNull IMultipleTankHandler fluidInputs,
+                                         @NotNull IItemHandlerModifiable outputs,
+                                         @NotNull IMultipleTankHandler fluidOutputs, long maxVoltage,
+                                         int parallelLimit) {
             if (parallelLimit > 1 && this.getRecipeMap() != null) {
                 RecipeBuilder<?> parallelBuilder;
-                parallelBuilder = SuSyParallelLogic.pureParallelRecipe(currentRecipe, this.getRecipeMap(), inputs, fluidInputs, outputs, fluidOutputs, parallelLimit, maxVoltage, this.getMetaTileEntity());
+                parallelBuilder = SuSyParallelLogic.pureParallelRecipe(currentRecipe, this.getRecipeMap(), inputs,
+                        fluidInputs, outputs, fluidOutputs, parallelLimit, maxVoltage, this.getMetaTileEntity());
 
                 if (parallelBuilder == null) {
                     this.invalidateInputs();
@@ -145,6 +165,5 @@ public class MetaTileEntityMetallurgicalConverter extends RecipeMapMultiblockCon
                 return currentRecipe;
             }
         }
-
     }
 }

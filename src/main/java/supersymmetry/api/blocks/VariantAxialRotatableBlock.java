@@ -1,9 +1,7 @@
 package supersymmetry.api.blocks;
 
-import gregtech.api.block.VariantBlock;
-import gregtech.api.cover.CoverRayTracer;
-import gregtech.common.items.tool.rotation.CustomBlockRotations;
-import gregtech.common.items.tool.rotation.ICustomRotationBehavior;
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -16,9 +14,13 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
+import gregtech.api.block.VariantBlock;
+import gregtech.api.cover.CoverRayTracer;
+import gregtech.common.items.tool.rotation.CustomBlockRotations;
+import gregtech.common.items.tool.rotation.ICustomRotationBehavior;
 
 public class VariantAxialRotatableBlock<T extends Enum<T> & IStringSerializable> extends VariantBlock<T> {
 
@@ -38,15 +40,19 @@ public class VariantAxialRotatableBlock<T extends Enum<T> & IStringSerializable>
 
     public VariantAxialRotatableBlock(Material materialIn) {
         super(materialIn);
-        this.setDefaultState(blockState.getBaseState().withProperty(VARIANT, VALUES[0]).withProperty(AXIS, EnumFacing.Axis.X));
+        this.setDefaultState(
+                blockState.getBaseState().withProperty(VARIANT, VALUES[0]).withProperty(AXIS, EnumFacing.Axis.X));
         CustomBlockRotations.registerCustomRotation(this, BLOCK_AXIAL_BEHAVIOR);
     }
 
     @Nonnull
     @Override
     @SuppressWarnings("deprecation")
-    public IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull EnumFacing facing, float hitX, float hitY, float hitZ, int meta, @NotNull EntityLivingBase placer) {
-        return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(AXIS, EnumFacing.getDirectionFromEntityLiving(pos, placer).getAxis());
+    public IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull EnumFacing facing,
+                                            float hitX, float hitY, float hitZ, int meta,
+                                            @NotNull EntityLivingBase placer) {
+        return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(AXIS,
+                EnumFacing.getDirectionFromEntityLiving(pos, placer).getAxis());
     }
 
     @Override
@@ -75,8 +81,8 @@ public class VariantAxialRotatableBlock<T extends Enum<T> & IStringSerializable>
         int j = meta % 3;
 
         // Makes meta = 0 <-> Axis.Z(ord = 2)
-        //              1 <-> Axis.X(ord = 0)
-        //              2 <-> Axis.Y(ord = 1)
+        // 1 <-> Axis.X(ord = 0)
+        // 2 <-> Axis.Y(ord = 1)
         EnumFacing.Axis axis = EnumFacing.Axis.values()[(j + 2) % 3];
         return getDefaultState()
                 .withProperty(AXIS, axis)
@@ -86,14 +92,15 @@ public class VariantAxialRotatableBlock<T extends Enum<T> & IStringSerializable>
     @Override
     public int getMetaFromState(IBlockState state) {
         // Makes meta = 0 <-> Axis.Z(ord = 2)
-        //              1 <-> Axis.X(ord = 0)
-        //              2 <-> Axis.Y(ord = 1)
+        // 1 <-> Axis.X(ord = 0)
+        // 2 <-> Axis.Y(ord = 1)
         return state.getValue(VARIANT).ordinal() * 3 + (state.getValue(AXIS).ordinal() + 1) % 3;
     }
 
     @Nonnull
     @Override
-    public ItemStack getPickBlock(IBlockState state, @NotNull RayTraceResult target, @NotNull World world, @NotNull BlockPos pos, @NotNull EntityPlayer player) {
+    public ItemStack getPickBlock(IBlockState state, @NotNull RayTraceResult target, @NotNull World world,
+                                  @NotNull BlockPos pos, @NotNull EntityPlayer player) {
         return this.getItemVariant(state.getValue(VARIANT), 1);
     }
 

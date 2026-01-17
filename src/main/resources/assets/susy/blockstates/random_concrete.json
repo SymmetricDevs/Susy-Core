@@ -1,0 +1,104 @@
+{
+  "forge_marker" : 1,
+  "variants" : {
+    "variant=greyindustrialconcrete" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/susy_stones/industrial_concrete_grey"
+      }
+    },
+    "variant=mossyindustrialconcrete" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/susy_stones/industrial_concrete_mossy"
+      }
+    },
+    "variant=silverindustrialconcrete" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/susy_stones/industrial_concrete_silver"
+      }
+    },
+    "variant=whiteindustrialconcrete" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/susy_stones/industrial_concrete_white"
+      }
+    },
+
+    "variant=dottedpanel" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/susy_stones/dotted_panel"
+      }
+    },
+    "variant=dottedpanelborder" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/susy_stones/dotted_panel_bordered"
+      }
+    },
+    "variant=dottedpanelcomb" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/susy_stones/dotted_panel_comb"
+      }
+    },
+    "variant=dottedpanelgrid" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/susy_stones/dotted_panel_grid"
+      }
+    },
+
+    "variant=industrialcinderbricks" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/susy_stones/industrial_cinder_bricks"
+      }
+    },
+    "variant=industrialcinderbrickscement" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/susy_stones/industrial_cinder_bricks_cement"
+      }
+    },
+    "variant=industrialcinderbrickscementgray" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/susy_stones/industrial_cinder_bricks_cement_grey"
+      }
+    },
+    "variant=industrialcinderbricksdark" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/susy_stones/industrial_cinder_bricks_dark"
+      }
+    },
+    "variant=industrialcinderbricksdarkgrey" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/susy_stones/industrial_cinder_bricks_dark_grey"
+      }
+    },
+    "variant=industrialcinderbricksgrey" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/susy_stones/industrial_cinder_bricks_grey"
+      }
+    },
+
+    "variant=smoothindustrialconcrete" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/susy_stones/smooth_industrial_concrete"
+      }
+    },
+    "variant=smoothindustrialconcretegrey" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/susy_stones/smooth_industrial_concrete_grey"
+      }
+    }
+  }
+}

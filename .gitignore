@@ -81,9 +81,13 @@ local.properties
 run/
 
 logs/
+/modpack/
 src/main/resources/mixins.susy.json
 
 !run/config/supercritical.cfg
 
 # OptiFine libs
 libs/optifine/
+
+# Claude instructions
+CLAUDE.md

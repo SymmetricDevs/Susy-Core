@@ -1,5 +1,14 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.init.SoundEvents;
+import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.items.IItemHandlerModifiable;
 
 import gregtech.api.GTValues;
 import gregtech.api.capability.impl.ItemHandlerList;
@@ -15,17 +24,9 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.common.ConfigHolder;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.items.IItemHandlerModifiable;
+import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
-import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
-
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MetaTileEntityReverberatoryFurnace extends RecipeMapMultiblockController {
 
@@ -63,12 +64,13 @@ public class MetaTileEntityReverberatoryFurnace extends RecipeMapMultiblockContr
         List<IItemHandlerModifiable> imports = new ArrayList<>();
         imports.addAll(getAbilities(SuSyMultiblockAbilities.PRIMITIVE_IMPORT_ITEMS));
         imports.addAll(getAbilities(MultiblockAbility.IMPORT_ITEMS));
-        this.importItems = new ItemHandlerList(imports);
+        this.inputInventory = new ItemHandlerList(imports); // Please remember to use inputInventory for all things to
+                                                            // do with recipe logic.
 
         List<IItemHandlerModifiable> exports = new ArrayList<>();
         exports.addAll(getAbilities(SuSyMultiblockAbilities.PRIMITIVE_EXPORT_ITEMS));
         exports.addAll(getAbilities(MultiblockAbility.EXPORT_ITEMS));
-        this.exportItems = new ItemHandlerList(exports);
+        this.outputInventory = new ItemHandlerList(exports);
     }
 
     @Override
@@ -110,9 +112,7 @@ public class MetaTileEntityReverberatoryFurnace extends RecipeMapMultiblockContr
         }
     }
 
-    private void pollutionParticles() {
-
-    }
+    private void pollutionParticles() {}
 
     @Override
     public void randomDisplayTick() {
@@ -135,7 +135,8 @@ public class MetaTileEntityReverberatoryFurnace extends RecipeMapMultiblockContr
                 x += horizontalOffset;
             }
             if (ConfigHolder.machines.machineSounds && GTValues.RNG.nextDouble() < 0.1) {
-                getWorld().playSound(x, y, z, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
+                getWorld().playSound(x, y, z, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F,
+                        false);
             }
             getWorld().spawnParticle(EnumParticleTypes.SMOKE_LARGE, x, y, z, 0, 0, 0);
             getWorld().spawnParticle(EnumParticleTypes.FLAME, x, y, z, 0, 0, 0);

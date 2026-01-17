@@ -1,5 +1,15 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import static gregtech.api.util.RelativeDirection.*;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.ResourceLocation;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.capability.impl.DistillationTowerLogicHandler;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -12,9 +22,6 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiFluidHatch;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.capability.impl.ExtendedDTLogicHandler;
 import supersymmetry.api.metatileentity.multiblock.ICryogenicProvider;
 import supersymmetry.api.metatileentity.multiblock.ICryogenicReceiver;
@@ -24,12 +31,8 @@ import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import static gregtech.api.util.RelativeDirection.*;
-
-public class MetaTileEntityLowPressureCryogenicDistillationPlant extends MetaTileEntityOrderedDT implements ICryogenicProvider {
+public class MetaTileEntityLowPressureCryogenicDistillationPlant extends MetaTileEntityOrderedDT
+                                                                 implements ICryogenicProvider {
 
     @Nullable
     private ICryogenicReceiver receiver;
@@ -46,7 +49,7 @@ public class MetaTileEntityLowPressureCryogenicDistillationPlant extends MetaTil
     @Override
     @NotNull
     public DistillationTowerLogicHandler createHandler() {
-        return new ExtendedDTLogicHandler(this, 2, ignored -> 1);
+        return new ExtendedDTLogicHandler(this, 2, _ -> 1);
     }
 
     @Override
@@ -55,7 +58,7 @@ public class MetaTileEntityLowPressureCryogenicDistillationPlant extends MetaTil
         return FactoryBlockPattern.start(RIGHT, FRONT, UP)
                 .aisle("DDD", "DDD", "DDD")
                 .aisle("CSC", "CFC", "CCC")
-                .aisle("XXX", "XFX", "XXX").setRepeatable(1,16)
+                .aisle("XXX", "XFX", "XXX").setRepeatable(1, 16)
                 .aisle("DED", "EZE", "DED")
                 .aisle("DDD", "DDD", "DDD")
                 .where('S', this.selfPredicate())
@@ -63,16 +66,18 @@ public class MetaTileEntityLowPressureCryogenicDistillationPlant extends MetaTil
                         .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2))
                         .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMaxGlobalLimited(1))
                         .or(autoAbilities(true, false).setExactLimit(1)))
-                .where('F', states(SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.STRUCTURAL_PACKING)))
+                .where('F',
+                        states(SuSyBlocks.MULTIBLOCK_CASING
+                                .getState(BlockSuSyMultiblockCasing.CasingType.STRUCTURAL_PACKING)))
                 .where('X', states(getCasingState())
                         .or(metaTileEntities(MultiblockAbility.REGISTRY.get(MultiblockAbility.EXPORT_FLUIDS).stream()
-                                .filter(mte->!(mte instanceof MetaTileEntityMultiFluidHatch))
+                                .filter(mte -> !(mte instanceof MetaTileEntityMultiFluidHatch))
                                 .toArray(MetaTileEntity[]::new))
-                                .setMaxLayerLimited(1))
+                                        .setMaxLayerLimited(1))
                         .or(metaTileEntities(MultiblockAbility.REGISTRY.get(MultiblockAbility.IMPORT_FLUIDS).stream()
-                                .filter(mte->!(mte instanceof MetaTileEntityMultiFluidHatch))
+                                .filter(mte -> !(mte instanceof MetaTileEntityMultiFluidHatch))
                                 .toArray(MetaTileEntity[]::new))
-                                .setMaxLayerLimited(4)))
+                                        .setMaxLayerLimited(4)))
                 .where('D', states(getCasingState()))
                 .where('E', states(getCasingState())
                         .or(abilities(MultiblockAbility.PASSTHROUGH_HATCH)))

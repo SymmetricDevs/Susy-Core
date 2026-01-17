@@ -9,9 +9,8 @@ import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 
 public class SuSyMaterialFlags {
 
-
     public static final MaterialFlag GENERATE_CATALYST_PELLET = (new MaterialFlag.Builder("generate_catalyst_pellet"))
-            .requireProps(new PropertyKey[]{PropertyKey.DUST})
+            .requireProps(new PropertyKey[] { PropertyKey.DUST })
             .build();
 
     public static final MaterialFlag GENERATE_CATALYST_BED = (new MaterialFlag.Builder("generate_catalyst_bed"))
@@ -20,31 +19,31 @@ public class SuSyMaterialFlags {
             .build();
 
     public static final MaterialFlag GENERATE_SIFTED = (new MaterialFlag.Builder("generate_sifted"))
-            .requireProps(new PropertyKey[]{PropertyKey.ORE})
+            .requireProps(new PropertyKey[] { PropertyKey.ORE })
             .build();
 
     public static final MaterialFlag GENERATE_FLOTATED = (new MaterialFlag.Builder("generate_flotated"))
-            .requireProps(new PropertyKey[]{PropertyKey.ORE})
+            .requireProps(new PropertyKey[] { PropertyKey.ORE })
             .build();
 
     public static final MaterialFlag GENERATE_CONCENTRATE = (new MaterialFlag.Builder("generate_concentrate"))
-            .requireProps(new PropertyKey[]{PropertyKey.ORE})
+            .requireProps(new PropertyKey[] { PropertyKey.ORE })
             .build();
 
     public static final MaterialFlag GENERATE_FIBER = (new MaterialFlag.Builder("generate_fiber"))
-            .requireProps(new PropertyKey[]{SuSyPropertyKey.FIBER})
+            .requireProps(new PropertyKey[] { SuSyPropertyKey.FIBER })
             .build();
 
     public static final MaterialFlag GENERATE_WET_FIBER = (new MaterialFlag.Builder("generate_wet_fiber"))
-            .requireProps(new PropertyKey[]{SuSyPropertyKey.FIBER})
+            .requireProps(new PropertyKey[] { SuSyPropertyKey.FIBER })
             .build();
 
     public static final MaterialFlag GENERATE_THREAD = (new MaterialFlag.Builder("generate_thread"))
-            .requireProps(new PropertyKey[]{SuSyPropertyKey.FIBER})
+            .requireProps(new PropertyKey[] { SuSyPropertyKey.FIBER })
             .build();
 
     public static final MaterialFlag GENERATE_WET_DUST = (new MaterialFlag.Builder("generate_wet_dust"))
-            .requireProps(new PropertyKey[]{PropertyKey.DUST})
+            .requireProps(new PropertyKey[] { PropertyKey.DUST })
             .build();
 
     public static final MaterialFlag HIP_PRESSED = (new MaterialFlag.Builder("hip_pressed"))
@@ -58,10 +57,9 @@ public class SuSyMaterialFlags {
             .build();
 
     public static final MaterialFlag CONTINUOUSLY_CAST = (new MaterialFlag.Builder("continuously_cast"))
-            .requireProps(new PropertyKey[]{PropertyKey.DUST, PropertyKey.FLUID, GCYMPropertyKey.ALLOY_BLAST})
+            .requireProps(PropertyKey.DUST, PropertyKey.FLUID, GCYMPropertyKey.ALLOY_BLAST)
             .requireFlags(GCYMMaterialFlags.NO_ALLOY_BLAST_RECIPES)
             .build();
 
     public SuSyMaterialFlags() {}
-    
 }

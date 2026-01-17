@@ -1,5 +1,8 @@
 package supersymmetry.common.command;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -8,14 +11,13 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import supersymmetry.api.event.MobHordeEvent;
 import supersymmetry.common.event.MobHordePlayerData;
 import supersymmetry.common.event.MobHordeWorldData;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class CommandHordeStart extends CommandBase {
 
@@ -32,13 +34,14 @@ public class CommandHordeStart extends CommandBase {
     }
 
     @Override
-    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args,
+                                          @Nullable BlockPos targetPos) {
         return MobHordeEvent.EVENTS.values().stream().map(event -> event.KEY).collect(Collectors.toList());
     }
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        if(sender instanceof EntityPlayerMP) {
+        if (sender instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP) sender;
             if (args.length > 0) {
                 String name = args[0];
@@ -60,7 +63,8 @@ public class CommandHordeStart extends CommandBase {
                     if (args.length > 1 && args[1].equals("true")) {
                         playerData.stopInvasion(player);
                     } else {
-                        ITextComponent textComponent = new TextComponentTranslation("susy.command.horde.start.has_active_invasion", playerData.currentInvasion);
+                        ITextComponent textComponent = new TextComponentTranslation(
+                                "susy.command.horde.start.has_active_invasion", playerData.currentInvasion);
                         sender.sendMessage(textComponent);
                         return;
                     }
@@ -71,7 +75,8 @@ public class CommandHordeStart extends CommandBase {
                 }
 
                 playerData.setCurrentInvasion(event);
-                ITextComponent textComponent = new TextComponentTranslation("susy.command.horde.start.started", event.KEY);
+                ITextComponent textComponent = new TextComponentTranslation("susy.command.horde.start.started",
+                        event.KEY);
                 sender.sendMessage(textComponent);
             } else {
                 throw new CommandException("susy.command.horde.start.argument_required");

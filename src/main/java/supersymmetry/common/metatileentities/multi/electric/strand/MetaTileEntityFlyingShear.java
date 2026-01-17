@@ -1,5 +1,10 @@
 package supersymmetry.common.metatileentities.multi.electric.strand;
 
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.ResourceLocation;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -12,17 +17,16 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 import supersymmetry.api.capability.Strand;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
+import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockMetallurgy2;
 import supersymmetry.common.blocks.SuSyBlocks;
 
 public class MetaTileEntityFlyingShear extends MetaTileEntityStrandShaper {
+
     public MetaTileEntityFlyingShear(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
     }
@@ -43,7 +47,6 @@ public class MetaTileEntityFlyingShear extends MetaTileEntityStrandShaper {
         return str;
     }
 
-
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
@@ -57,10 +60,13 @@ public class MetaTileEntityFlyingShear extends MetaTileEntityStrandShaper {
                 .where('C', states(getCasingState()).or(autoAbilities()))
                 .where('I', abilities(SuSyMultiblockAbilities.STRAND_IMPORT))
                 .where('O', abilities(SuSyMultiblockAbilities.STRAND_EXPORT))
-                .where('X', orientation(getSawbladeState(), RelativeDirection.RIGHT, VariantHorizontalRotatableBlock.FACING))
+                .where('X',
+                        SuSyPredicates.orientation(this, getSawbladeState(), RelativeDirection.RIGHT,
+                                VariantHorizontalRotatableBlock.FACING))
                 .where('F', frames(Materials.Steel))
                 .where('R', rollOrientation(RelativeDirection.FRONT))
-                .where('G', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
+                .where('G',
+                        states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where(' ', any())
                 .build();
     }

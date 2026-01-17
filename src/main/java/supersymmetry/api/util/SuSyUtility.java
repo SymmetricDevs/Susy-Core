@@ -1,21 +1,31 @@
 package supersymmetry.api.util;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
 import gregtech.api.GTValues;
 import gregtech.api.unification.material.Material;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.util.ResourceLocation;
 import supersymmetry.Supersymmetry;
-
-import java.util.function.Function;
+import supersymmetry.SusyConfig;
 
 public class SuSyUtility {
 
     /*
-        if we assume a solar boiler to have an approximately 1m^2 "collecting" surface, and take the hp to be less inefficient,
-        one can approximate the J to EU conversion via 18L/t -> 9EU/t -> 180EU/s -> 1000J/180EU ~= 6J in one EU.
-        Assuming solar actually gets slightly less sunlight than 1m^2 conversion may be ~= 5, but potential inefficiencies
-        make it unclear the specific amount. Just going to round to one sig fig and leave it at 10J -> 1EU
-    */
+     * if we assume a solar boiler to have an approximately 1m^2 "collecting" surface, and take the hp to be less
+     * inefficient,
+     * one can approximate the J to EU conversion via 18L/t -> 9EU/t -> 180EU/s -> 1000J/180EU ~= 6J in one EU.
+     * Assuming solar actually gets slightly less sunlight than 1m^2 conversion may be ~= 5, but potential
+     * inefficiencies
+     * make it unclear the specific amount. Just going to round to one sig fig and leave it at 10J -> 1EU
+     */
     public static final int JOULES_PER_EU = 10;
 
     public static final Function<Integer, Integer> reactorTankSizeFunction = tier -> {
@@ -55,6 +65,49 @@ public class SuSyUtility {
         return 64000;
     };
 
+    public static class Lubricant {
+
+        public String name;
+        public int amount_required;
+        public double boost;
+
+        public Lubricant(String name, int amount_required, double boost) {
+            this.name = name;
+            this.amount_required = amount_required;
+            this.boost = boost;
+        }
+    }
+
+    public static final Map<String, Lubricant> lubricants;
+    static {
+        lubricants = new HashMap<>();
+        lubricants.put("lubricating_oil", new Lubricant("LubricatingOil", 16, 1.0));
+        lubricants.put("lubricant", new Lubricant("Lubricant", 8, 1.0));
+        lubricants.put("midgrade_lubricant", new Lubricant("MidgradeLubricant", 4, 1.2));
+        lubricants.put("premium_lubricant", new Lubricant("PremiumLubricant", 2, 1.4));
+        lubricants.put("supreme_lubricant", new Lubricant("SupremeLubricant", 1, 1.6));
+    }
+
+    public static class Coolant {
+
+        public String name;
+        public int amount_required;
+
+        public Coolant(String name, int amount_required) {
+            this.name = name;
+            this.amount_required = amount_required;
+        }
+    }
+
+    public static final Map<String, Coolant> coolants;
+    static {
+        coolants = new HashMap<>();
+        coolants.put("water", new Coolant("Water", 16));
+        coolants.put("distilled_water", new Coolant("DistilledWater", 8));
+        coolants.put("coolant", new Coolant("Coolant", 4));
+        coolants.put("advanced_coolant", new Coolant("AdvancedCoolant", 1));
+    }
+
     public static ResourceLocation susyId(String path) {
         return new ResourceLocation(Supersymmetry.MODID, path);
     }
@@ -66,5 +119,18 @@ public class SuSyUtility {
     /// I hate this...
     public static String getNameForColor(EnumDyeColor color) {
         return color == EnumDyeColor.SILVER ? "light_gray" : color.getName();
+    }
+
+    private static Set<String> bannedSpaceItems;
+
+    public static void loadBannedSpaceItems() {
+        bannedSpaceItems = Arrays.stream(SusyConfig.bannedSpaceItems).collect(Collectors.toSet());
+    }
+
+    public static boolean isAllowedItemForSpace(ItemStack item) {
+        if (bannedSpaceItems == null) {
+            loadBannedSpaceItems();
+        }
+        return !bannedSpaceItems.contains(item.getItem().getRegistryName().toString());
     }
 }

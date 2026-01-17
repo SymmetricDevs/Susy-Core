@@ -20,6 +20,7 @@
  * For more details, see https://docs.gradle.org/8.0.1/userguide/java_library_plugin.html#sec:java_library_configurations_graph
  */
 dependencies {
+    implementation 'org.reflections:reflections:0.10.2'
 
     // # Fix crashes on macOS with Narrator
     runtimeOnly 'com.cleanroommc:osxnarratorblocker:1.0'
@@ -36,17 +37,19 @@ dependencies {
     api rfg.deobf('curse.maven:ctm-267602:2915363')
 
     // # GregTech Addons
-    // Supercritical 0.1.2
-    implementation rfg.deobf('curse.maven:supercritical-1185871:6694408')
+    // Supercritical 0.2.2
+    implementation rfg.deobf('curse.maven:supercritical-1185871:7034114')
     // GT-FO 1.12.4
     implementation rfg.deobf('curse.maven:gregtech-food-option-477021:6147619')
 
     // # GroovyScript
-    api 'com.cleanroommc:groovyscript:1.2.4' transitive false
+    api 'com.cleanroommc:groovyscript:1.2.5' transitive false
 
     // # Lib Mods we are using
-    api 'com.cleanroommc:modularui:2.5.0-rc5' transitive false
+    api 'com.cleanroommc:modularui:3.0.2' transitive false
     api rfg.deobf('curse.maven:geckolib-388172:4020277')
+    // SussyPatches 0.4.0
+    api 'maven.modrinth:sussypatches:1.8.0'
 
     // # Immersive Railroading dependencies
     // Universal Mod Care 1.2.1
@@ -59,7 +62,8 @@ dependencies {
     // # Recurrent Complex dependencies
     compileOnly rfg.deobf('curse.maven:recurrent-complex-223150:5615733')
     compileOnly rfg.deobf('curse.maven:ivtoolkit-224535:2443253')
-    compileOnly rfg.deobf('curse.maven:fluidlogged-api-485654:4564413')
+
+    compileOnly 'maven.modrinth:fluidlogged-api:3.1.1'
 
     // # Pyrotech dependencies
     compileOnly rfg.deobf('curse.maven:pyrotech-306676:5351359')
@@ -70,13 +74,17 @@ dependencies {
     compileOnly rfg.deobf('curse.maven:biomes-o-plenty-220318:2842510')
     // XNet-1.8.3-ynet
     compileOnly rfg.deobf('curse.maven:ynet-an-xnet-fork-999559:5243319')
-    // RFTools 7.73
-    compileOnly rfg.deobf('curse.maven:rftools-224641:2861573')
-    compileOnly rfg.deobf('curse.maven:mcjtylib-233105:2745846')
+    // ReFinedTools 7.77
+    compileOnly rfg.deobf('curse.maven:refinedtools-1085014:6743085')
+    compileOnly rfg.deobf('curse.maven:mcjtylib-refilmed-1086841:5643297')
     compileOnly rfg.deobf('curse.maven:travelers-backpack-321117:3150850')
     compileOnly rfg.deobf('curse.maven:bubbles-a-baubles-fork-995393:5719448')
     compileOnly rfg.deobf('curse.maven:barrels-drums-storage-more-319404:2708193')
+    // LittleTiles
+    compileOnly rfg.deobf("curse.maven:creativecore-257814:4722163")
+    compileOnly rfg.deobf("curse.maven:littletiles-257818:5180387")
 
+    runtimeOnly rfg.deobf("curse.maven:serverutil-282484:2503313")
     // # Optional dependencies. Uncomment the ones you need
 //    runtimeOnlyNonPublishable rfg.deobf('curse.maven:the-beneath-254629:3425551')
 //    runtimeOnlyNonPublishable rfg.deobf('curse.maven:realistic-terrain-generation-unofficial-648514:4404814')
@@ -97,5 +105,5 @@ dependencies {
 //    ant.get(src: 'https://github.com/SynArchive/OptiFine-Archive/raw/refs/heads/main/1.12.2/preview_OptiFine_1.12.2_HD_U_G6_pre1.jar',
 //            dest: 'libs/optifine/',
 //            skipexisting: 'true')
-//    runtimeOnly files('libs/optifine/*')
+//    runtimeOnly fileTree('libs/optifine/*')
 }

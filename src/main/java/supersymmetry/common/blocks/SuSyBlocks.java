@@ -1,6 +1,15 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.util.BlockUtility;
+import static gregtech.common.blocks.MetaBlocks.ASPHALT;
+
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.Comparator;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -9,23 +18,23 @@ import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.block.VariantActiveBlock;
+import gregtech.api.block.VariantBlock;
+import gregtech.api.util.BlockUtility;
+import supersymmetry.common.blocks.rocketry.*;
 import supersymmetry.common.tileentities.SuSyTileEntities;
-
-import java.util.Comparator;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import static gregtech.common.blocks.MetaBlocks.ASPHALT;
 
 public class SuSyBlocks {
 
+    public static BlockSpacecraftInstrument SPACE_INSTRUMENT;
     public static BlockCoolingCoil COOLING_COIL;
     public static BlockSinteringBrick SINTERING_BRICK;
     public static BlockCoagulationTankWall COAGULATION_TANK_WALL;
-    public static final EnumMap<SusyStoneVariantBlock.StoneVariant, SusyStoneVariantBlock> SUSY_STONE_BLOCKS = new EnumMap<>(SusyStoneVariantBlock.StoneVariant.class);
+    public static final EnumMap<SusyStoneVariantBlock.StoneVariant, SusyStoneVariantBlock> SUSY_STONE_BLOCKS = new EnumMap<>(
+            SusyStoneVariantBlock.StoneVariant.class);
     public static BlockAlternatorCoil ALTERNATOR_COIL;
     public static BlockTurbineRotor TURBINE_ROTOR;
     public static BlockSeparatorRotor SEPARATOR_ROTOR;
@@ -51,108 +60,65 @@ public class SuSyBlocks {
     public static BlockConveyor CONVEYOR_BELT;
     public static BlockRocketAssemblerCasing ROCKET_ASSEMBLER_CASING;
     public static BlockRegolith REGOLITH;
+    public static BlocksFakeWool FAKEWOOL;
+    public static BlockRandomConcrete RANDOM_CONCRETE;
+    public static BlockRandomConcrete1 RANDOM_CONCRETE1;
+    public static BlockInductionCoilAssembly INDUCTION_COIL_ASSEMBLY;
+    public static BlockEngineCasing ENGINE_CASING;
+    public static BlockEngineCasing2 ENGINE_CASING_2;
+    public static BlocksActiveCasing ACTIVE_CASING;
+    public static BlockSupport SUPPORT;
+
+    public static BlockRocketMultiblockCasing ROCKET_MULTIBLOCK_CASING;
+    public static BlockProcessorCluster PROCESSOR_CLUSTER;
+
+    public static BlockOuterHatch OUTER_HATCH;
+    public static BlockInterStage INTERSTAGE;
+    public static BlockFairingHull FAIRING_HULL;
+    public static BlockRocketControl ROCKET_CONTROL;
+    public static BlockTankShell TANK_SHELL;
+    public static BlockGuidanceSystem GUIDANCE_SYSTEM;
+    public static BlockTankShell1 TANK_SHELL1;
+    public static BlockTurboPump TURBOPUMP;
+    public static BlockRocketNozzle ROCKET_NOZZLE;
+    public static BlockCombustionChamber COMBUSTION_CHAMBER;
+    public static BlockLifeSupport LIFE_SUPPORT;
+    public static BlockRoomPadding ROOM_PADDING;
+    public static BlockFairingConnector FAIRING_CONNECTOR;
+    public static BlockSpacecraftHull SPACECRAFT_HULL;
     public static BlockEccentricRoll ECCENTRIC_ROLL;
     public static BlockGrinderCasing GRINDER_CASING;
     public static BlockGirthGearTooth GIRTH_GEAR_TOOTH;
 
+    public static ArrayList<VariantBlock<?>> susyBlocks;
+
     public static void init() {
-        COOLING_COIL = new BlockCoolingCoil();
-        COOLING_COIL.setRegistryName("cooling_coil");
-
-        SINTERING_BRICK = new BlockSinteringBrick();
-        SINTERING_BRICK.setRegistryName("sintering_brick");
-
-        DRILL_HEAD = new BlockDrillHead();
-        DRILL_HEAD.setRegistryName("drill_head");
-
-        DRILL_BIT = new BlockDrillBit();
-        DRILL_BIT.setRegistryName("drill_bit");
-
-        COAGULATION_TANK_WALL = new BlockCoagulationTankWall();
-        COAGULATION_TANK_WALL.setRegistryName("coagulation_tank_wall");
-
         for (SusyStoneVariantBlock.StoneVariant shape : SusyStoneVariantBlock.StoneVariant.values()) {
             SUSY_STONE_BLOCKS.put(shape, new SusyStoneVariantBlock(shape));
         }
         registerWalkingSpeedBonus();
-
-        ALTERNATOR_COIL = new BlockAlternatorCoil();
-        ALTERNATOR_COIL.setRegistryName("alternator_coil");
-
-        TURBINE_ROTOR = new BlockTurbineRotor();
-        TURBINE_ROTOR.setRegistryName("turbine_rotor");
-
-        SEPARATOR_ROTOR = new BlockSeparatorRotor();
-        SEPARATOR_ROTOR.setRegistryName("separator_rotor");
-
-        STRUCTURAL_BLOCK = new BlockStructural();
-        STRUCTURAL_BLOCK.setRegistryName("structural_block");
-
-        STRUCTURAL_BLOCK_1 = new BlockStructural1();
-        STRUCTURAL_BLOCK_1.setRegistryName("structural_block_1");
-
-        DEPOSIT_BLOCK = new BlockDeposit();
-        DEPOSIT_BLOCK.setRegistryName("deposit_block");
-
-        RESOURCE_BLOCK = new BlockResource();
-        RESOURCE_BLOCK.setRegistryName("resource_block");
-
-        RESOURCE_BLOCK_1 = new BlockResource1();
-        RESOURCE_BLOCK_1.setRegistryName("resource_block_1");
-
-        HOME = new BlockHome();
-        HOME.setRegistryName("home_block");
-
-        EVAPORATION_BED = new BlockEvaporationBed();
-        EVAPORATION_BED.setRegistryName("evaporation_bed");
-
-        MULTIBLOCK_TANK = new BlockMultiblockTank();
-        MULTIBLOCK_TANK.setRegistryName("multiblock_tank");
-
-        ELECTRODE_ASSEMBLY = new BlockElectrodeAssembly();
-        ELECTRODE_ASSEMBLY.setRegistryName("electrode_assembly");
-
-        MULTIBLOCK_CASING = new BlockSuSyMultiblockCasing();
-        MULTIBLOCK_CASING.setRegistryName("susy_multiblock_casing");
-
-        SERPENTINE = new BlockSerpentine();
-        SERPENTINE.setRegistryName("serpentine");
-
-        HARDBLOCKS = new BlocksHardened();
-        HARDBLOCKS.setRegistryName("hardened_blocks");
-
-        HARDBLOCKS1 = new BlocksHardened1();
-        HARDBLOCKS1.setRegistryName("hardened_blocks1");
-
-        CUSTOMSHEETS = new BlocksCustomSheets();
-        CUSTOMSHEETS.setRegistryName("custom_sheets");
-
-        METALLURGY = new BlockMetallurgy();
-        METALLURGY.setRegistryName("metallurgy");
-
-        METALLURGY_2 = new BlockMetallurgy2();
-        METALLURGY_2.setRegistryName("metallurgy_2");
-
-        METALLURGY_ROLL = new BlockMetallurgyRoll();
-        METALLURGY_ROLL.setRegistryName("metallurgy_roll");
-
-        CONVEYOR_BELT = new BlockConveyor();
-        CONVEYOR_BELT.setRegistryName("conveyor_belt");
-
-        ROCKET_ASSEMBLER_CASING = new BlockRocketAssemblerCasing();
-        ROCKET_ASSEMBLER_CASING.setRegistryName("rocket_assembler_casing");
+        susyBlocks = new ArrayList<>();
+        // Test all fields
+        for (Field field : SuSyBlocks.class.getDeclaredFields()) {
+            if (VariantBlock.class.isAssignableFrom(field.getType())) {
+                // Try block is necessary in case getDeclaredConstructor does not exist (though it should)
+                try {
+                    VariantBlock<?> newBlock = (VariantBlock<?>) field.getType().getDeclaredConstructor().newInstance();
+                    // the 5 is used because getTranslationKey leaves ".file" at the start
+                    newBlock.setRegistryName(newBlock.getTranslationKey().substring(5));
+                    field.set(null, newBlock);
+                    susyBlocks.add(newBlock);
+                } catch (Exception e) {
+                    System.out.println("Field " + field.getName() + " of type " + field.getType() +
+                            " is a variant block in SuSyBlocks and yet is not valid");
+                    e.printStackTrace();
+                    throw new RuntimeException(e);
+                }
+            }
+        }
 
         REGOLITH = new BlockRegolith();
         REGOLITH.setRegistryName("regolith");
-
-        ECCENTRIC_ROLL = new BlockEccentricRoll();
-        ECCENTRIC_ROLL.setRegistryName("eccentric_roll");
-
-        GRINDER_CASING = new BlockGrinderCasing();
-        GRINDER_CASING.setRegistryName("grinder_casing");
-
-        GIRTH_GEAR_TOOTH = new BlockGirthGearTooth();
-        GIRTH_GEAR_TOOTH.setRegistryName("girth_gear_tooth");
 
         SuSyTileEntities.register();
     }
@@ -164,34 +130,11 @@ public class SuSyBlocks {
         registerItemModel(COAGULATION_TANK_WALL);
         for (SusyStoneVariantBlock block : SUSY_STONE_BLOCKS.values())
             registerItemModel(block);
-        registerItemModel(ALTERNATOR_COIL);
-        registerItemModel(DRILL_HEAD);
-        registerItemModel(DRILL_BIT);
-        registerItemModel(TURBINE_ROTOR);
-        registerItemModel(SEPARATOR_ROTOR);
-        registerItemModel(STRUCTURAL_BLOCK);
-        registerItemModel(STRUCTURAL_BLOCK_1);
-        registerItemModel(DEPOSIT_BLOCK);
-        registerItemModel(RESOURCE_BLOCK);
-        registerItemModel(RESOURCE_BLOCK_1);
-        registerItemModel(HOME);
-        EVAPORATION_BED.onModelRegister();
-        MULTIBLOCK_TANK.onModelRegister();
-        ELECTRODE_ASSEMBLY.onModelRegister();
-        registerItemModel(MULTIBLOCK_CASING);
-        SERPENTINE.onModelRegister();
-        registerItemModel(HARDBLOCKS);
-        registerItemModel(HARDBLOCKS1);
-        registerItemModel(CUSTOMSHEETS);
-        registerItemModel(METALLURGY);
-        registerItemModel(METALLURGY_2);
-        registerItemModel(METALLURGY_ROLL);
-        registerItemModel(CONVEYOR_BELT);
-        registerItemModel(ROCKET_ASSEMBLER_CASING);
+        susyBlocks.forEach(b -> {
+            if (b instanceof VariantActiveBlock) ((VariantActiveBlock<?>) b).onModelRegister();
+            else registerItemModel(b);
+        });
         registerItemModel(REGOLITH);
-        registerItemModel(ECCENTRIC_ROLL);
-        registerItemModel(GRINDER_CASING);
-        registerItemModel(GIRTH_GEAR_TOOTH);
     }
 
     @SideOnly(Side.CLIENT)
@@ -242,7 +185,8 @@ public class SuSyBlocks {
     }
 
     @SuppressWarnings("unchecked")
-    private static <T extends Comparable<T>> @NotNull String getPropertyName(@NotNull IProperty<T> property, Comparable<?> value) {
+    private static <T extends Comparable<T>> @NotNull String getPropertyName(@NotNull IProperty<T> property,
+                                                                             Comparable<?> value) {
         return property.getName((T) value);
     }
 }

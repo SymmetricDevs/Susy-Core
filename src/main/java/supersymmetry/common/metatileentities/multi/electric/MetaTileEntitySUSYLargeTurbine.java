@@ -1,75 +1,72 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import gregtech.api.GTValues;
-import gregtech.api.metatileentity.ITieredMetaTileEntity;
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.metatileentity.multiblock.FuelMultiblockController;
-import gregtech.api.metatileentity.multiblock.IMultiblockPart;
-import gregtech.api.metatileentity.multiblock.MultiblockAbility;
-import gregtech.api.pattern.BlockPattern;
-import gregtech.api.pattern.FactoryBlockPattern;
-import gregtech.api.pattern.TraceabilityPredicate;
-import gregtech.api.recipes.RecipeMap;
-import gregtech.api.util.BlockInfo;
-import gregtech.api.util.GTUtility;
-import gregtech.api.util.RelativeDirection;
-import gregtech.client.renderer.ICubeRenderer;
+import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
+
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
+
 import org.jetbrains.annotations.NotNull;
-import supersymmetry.api.capability.impl.SuSyTurbineRecipeLogic;
+import org.jetbrains.annotations.Nullable;
+
+import gregtech.api.GTValues;
+import gregtech.api.capability.impl.MultiblockFuelRecipeLogic;
+import gregtech.api.gui.GuiTextures;
+import gregtech.api.gui.Widget;
+import gregtech.api.gui.resources.TextureArea;
+import gregtech.api.gui.widgets.ToggleButtonWidget;
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.api.metatileentity.multiblock.IMultiblockPart;
+import gregtech.api.metatileentity.multiblock.IProgressBarMultiblock;
+import gregtech.api.metatileentity.multiblock.MultiblockAbility;
+import gregtech.api.metatileentity.multiblock.MultiblockDisplayText;
+import gregtech.api.pattern.BlockPattern;
+import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.TraceabilityPredicate;
+import gregtech.api.recipes.Recipe;
+import gregtech.api.recipes.RecipeMap;
+import gregtech.api.util.*;
+import gregtech.client.renderer.ICubeRenderer;
+import supersymmetry.api.gui.SusyGuiTextures;
+import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.common.blocks.BlockAlternatorCoil;
 import supersymmetry.common.blocks.SuSyBlocks;
 
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.function.Supplier;
-
-import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
-
-public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController implements ITieredMetaTileEntity {
-
-    public final int tier;
+public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController implements IProgressBarMultiblock {
 
     public final IBlockState casingState;
     public final IBlockState rotorState;
     public final ICubeRenderer casingRenderer;
     public final ICubeRenderer frontOverlay;
 
-
-    public MetaTileEntitySUSYLargeTurbine(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap, int tier, IBlockState casingState, IBlockState rotorState, ICubeRenderer casingRenderer, ICubeRenderer frontOverlay) {
-        super(metaTileEntityId, recipeMap, tier);
+    public MetaTileEntitySUSYLargeTurbine(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap, int tier,
+                                          int maxSpeed, int accel, int decel, IBlockState casingState,
+                                          IBlockState rotorState, ICubeRenderer casingRenderer,
+                                          ICubeRenderer frontOverlay) {
+        super(metaTileEntityId, recipeMap, tier, maxSpeed, accel, decel);
         this.casingState = casingState;
         this.rotorState = rotorState;
         this.casingRenderer = casingRenderer;
         this.frontOverlay = frontOverlay;
-        this.tier = tier;
         this.recipeMapWorkable = new SuSyTurbineRecipeLogic(this);
         this.recipeMapWorkable.setMaximumOverclockVoltage(GTValues.V[tier]);
     }
 
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
-        return new MetaTileEntitySUSYLargeTurbine(metaTileEntityId, recipeMap, tier, casingState, rotorState, casingRenderer, frontOverlay);
-    }
-
-    @Override
-    protected void addDisplayText(List<ITextComponent> textList) {
-        if (isStructureFormed()) {
-            FluidStack fuelStack = ((SuSyTurbineRecipeLogic) recipeMapWorkable).getInputFluidStack();
-            if (fuelStack != null && fuelStack.amount > 0) {
-                int fuelAmount = fuelStack.amount;
-
-                ITextComponent fuelName = GTUtility.getFluidTranslation(fuelStack.getFluid());
-                textList.add(new TextComponentTranslation("gregtech.multiblock.turbine.fuel_amount", fuelAmount, fuelName));
-            }
-        }
-        super.addDisplayText(textList);
+        return new MetaTileEntitySUSYLargeTurbine(metaTileEntityId, recipeMap, tier, maxSpeed, accel, decel,
+                casingState, rotorState, casingRenderer, frontOverlay);
     }
 
     @Override
@@ -85,8 +82,8 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
                 .aisle("GAAAAAAAO", "GSAAAAAAO", "G   A   O")
                 .where('S', selfPredicate())
                 .where('A', casingPredicate
-                       .or(autoAbilities(false, false, false, false, false, false, false))
-                       .or(maintenance))
+                        .or(autoAbilities(false, false, false, false, false, false, false))
+                        .or(maintenance))
                 .where('O', casingPredicate
                         .or(autoAbilities(false, false, false, false, false, true, false))
                         .or(maintenance))
@@ -101,45 +98,13 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
     }
 
     protected TraceabilityPredicate rotorOrientation() {
-        //makes sure rotor's front faces the left side (relative to the player) of controller front
-        EnumFacing leftFacing = RelativeDirection.RIGHT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), isFlipped());
-
-        // converting the left facing to positive x or z axis direction
-        // this is needed for the following update which converts this rotatable block from horizontal directional into axial directional.
-        EnumFacing axialFacing = leftFacing.getIndex() < 4 ? EnumFacing.SOUTH : EnumFacing.WEST;
-
-        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(this.rotorState.withProperty(FACING, axialFacing))};
-        return new TraceabilityPredicate(blockWorldState -> {
-            IBlockState state = blockWorldState.getBlockState();
-            if (state.getBlock() != this.rotorState.getBlock()) return false;
-
-            // auto-correct rotor orientation
-            if (state != this.rotorState.withProperty(FACING, axialFacing))
-                getWorld().setBlockState(blockWorldState.getPos(), this.rotorState.withProperty(FACING, axialFacing));
-
-            return true;
-        }, supplier);
+        // makes sure rotor's front faces the left side (relative to the player) of controller front
+        return SuSyPredicates.horizontalOrientation(this, rotorState, RelativeDirection.RIGHT, FACING);
     }
 
     protected TraceabilityPredicate coilOrientation() {
-        //makes sure rotor's front faces the left side (relative to the player) of controller front
-        EnumFacing leftFacing = RelativeDirection.RIGHT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), isFlipped());
-
-        // converting the left facing to positive x or z axis direction
-        // this is needed for the following update which converts this rotatable block from horizontal directional into axial directional.
-        EnumFacing axialFacing = leftFacing.getIndex() < 4 ? EnumFacing.SOUTH : EnumFacing.WEST;
-
-        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[]{new BlockInfo(copperCoilState().withProperty(FACING, axialFacing))};
-        return new TraceabilityPredicate(blockWorldState -> {
-            IBlockState state = blockWorldState.getBlockState();
-            if (!(state.getBlock() instanceof BlockAlternatorCoil)) return false;
-
-            // auto-correct rotor orientation
-            if (state != copperCoilState().withProperty(FACING, axialFacing)) {
-                getWorld().setBlockState(blockWorldState.getPos(), copperCoilState().withProperty(FACING, axialFacing));
-            }
-            return true;
-        }, supplier);
+        // makes sure rotor's front faces the left side (relative to the player) of controller front
+        return SuSyPredicates.horizontalOrientation(this, copperCoilState(), RelativeDirection.RIGHT, FACING);
     }
 
     protected IBlockState copperCoilState() {
@@ -185,5 +150,175 @@ public class MetaTileEntitySUSYLargeTurbine extends FuelMultiblockController imp
     @Override
     public boolean allowsExtendedFacing() {
         return false;
+    }
+
+    // GUI stuff
+
+    @Override
+    public int getNumProgressBars() {
+        return 3;
+    }
+
+    @Override
+    public double getFillPercentage(int index) {
+        if (index == 0) {
+            int[] fuelAmount = new int[2];
+            if (getInputFluidInventory() != null) {
+                SuSyTurbineRecipeLogic recipeLogic = (SuSyTurbineRecipeLogic) recipeMapWorkable;
+                if (recipeLogic.getInputFluidStack() != null) {
+                    FluidStack testStack = recipeLogic.getInputFluidStack().copy();
+                    testStack.amount = Integer.MAX_VALUE;
+                    fuelAmount = getTotalFluidAmount(testStack, getInputFluidInventory());
+                }
+            }
+            return fuelAmount[1] != 0 ? 1.0 * fuelAmount[0] / fuelAmount[1] : 0;
+        } else if (index == 1) {
+            int[] lubricantAmount = new int[2];
+            if (lubricantStack != null) {
+                FluidStack testStack = lubricantStack.copy();
+                testStack.amount = Integer.MAX_VALUE;
+                lubricantAmount = getTotalFluidAmount(testStack, getInputFluidInventory());
+            }
+
+            return lubricantAmount[1] != 0 ? 1.0 * lubricantAmount[0] / lubricantAmount[1] : 0;
+        } else {
+            return 1.0 * getRotationSpeed() / maxSpeed;
+        }
+    }
+
+    @Override
+    public TextureArea getProgressBarTexture(int index) {
+        if (index == 0) {
+            return GuiTextures.PROGRESS_BAR_LCE_FUEL;
+        } else if (index == 1) {
+            return GuiTextures.PROGRESS_BAR_LCE_LUBRICANT;
+        } else {
+            return GuiTextures.PROGRESS_BAR_TURBINE_ROTOR_SPEED;
+        }
+    }
+
+    @Override
+    public void addBarHoverText(List<ITextComponent> hoverList, int index) {
+        if (index == 0) {
+            addFuelText(hoverList);
+        } else if (index == 1) {
+            int lubricantStored = 0;
+            int lubricantCapacity = 0;
+            double lubricantConsumptionRate = 0;
+
+            if (isStructureFormed() && lubricantStack != null) {
+                int[] lubricantAmount;
+                FluidStack testStack = lubricantStack.copy();
+                testStack.amount = Integer.MAX_VALUE;
+                lubricantAmount = getTotalFluidAmount(testStack, getInputFluidInventory());
+                lubricantStored = lubricantAmount[0];
+                lubricantCapacity = lubricantAmount[1];
+                lubricantConsumptionRate = lubricantInfo.amount_required * (2.0 * getRotationSpeed() / 3600);
+            }
+
+            ITextComponent lubricantStorage = TextComponentUtil.stringWithColor(
+                    TextFormatting.GOLD,
+                    TextFormattingUtil.formatNumbers(lubricantStored) + " / " +
+                            TextFormattingUtil.formatNumbers(lubricantCapacity) + " L");
+
+            ITextComponent lubricantConsumption = TextComponentUtil.stringWithColor(
+                    TextFormatting.GOLD,
+                    TextFormattingUtil.formatNumbers(lubricantConsumptionRate) + " L/min ");
+
+            hoverList.add(TextComponentUtil.translationWithColor(
+                    TextFormatting.GRAY,
+                    "susy.multiblock.rotation_generator.lubricant_amount",
+                    lubricantStorage, lubricantConsumption));
+        } else {
+            ITextComponent rpmTranslated = TextComponentUtil.translationWithColor(
+                    getRotorSpeedColor(getRotationSpeed(), getMaxRotationSpeed()),
+                    "gregtech.multiblock.turbine.rotor_rpm_unit_name");
+            ITextComponent rotorInfo = TextComponentUtil.translationWithColor(
+                    getRotorSpeedColor(getRotationSpeed(), getMaxRotationSpeed()),
+                    "%s / %s %s",
+                    TextFormattingUtil.formatNumbers(getRotationSpeed()),
+                    TextFormattingUtil.formatNumbers(getMaxRotationSpeed()),
+                    rpmTranslated);
+            hoverList.add(TextComponentUtil.translationWithColor(
+                    TextFormatting.GRAY,
+                    "gregtech.multiblock.turbine.rotor_speed",
+                    rotorInfo));
+        }
+    }
+
+    private TextFormatting getRotorSpeedColor(int rotorSpeed, int maxRotorSpeed) {
+        double speedRatio = 1.0 * rotorSpeed / maxRotorSpeed;
+        if (speedRatio < 0.4) {
+            return TextFormatting.RED;
+        } else if (speedRatio < 0.8) {
+            return TextFormatting.YELLOW;
+        } else {
+            return TextFormatting.GREEN;
+        }
+    }
+
+    @Override
+    protected @NotNull Widget getFlexButton(int x, int y, int width, int height) {
+        SuSyTurbineRecipeLogic logic = (SuSyTurbineRecipeLogic) this.recipeMapWorkable;
+
+        return new ToggleButtonWidget(x, y, width, height, SusyGuiTextures.BUTTON_ENERGY_VOIDING,
+                logic::getVoidingEnergy, logic::setVoidingEnergy)
+                        .setTooltipText("susy.gui.toggle_energy_voiding");
+    }
+
+    public static void addFuelNeededLine(List<ITextComponent> textList, SuSyTurbineRecipeLogic recipeLogic) {
+        Recipe previousRecipe = recipeLogic.getPreviousRecipe();
+        int parallel = recipeLogic.getCurrentParallel();
+
+        int amount = previousRecipe != null ? previousRecipe.getFluidInputs().getFirst().getInputFluidStack().amount :
+                0;
+
+        ITextComponent fuelCurrent = TextComponentUtil.stringWithColor(TextFormatting.RED,
+                amount * parallel + "L");
+        ITextComponent fuelNeeded = TextComponentUtil.stringWithColor(TextFormatting.RED, previousRecipe != null ?
+                amount * recipeLogic.getMaximumAllowedVoltage() / previousRecipe.getEUt() + "L" : "0L");
+        ITextComponent numTicks = TextComponentUtil.stringWithColor(TextFormatting.AQUA,
+                TextFormattingUtil.formatNumbers(recipeLogic.getPreviousRecipeDuration()));
+        textList.add(TextComponentUtil.translationWithColor(
+                TextFormatting.GRAY,
+                "susy.multiblock.rotation_generator.fuel_needed",
+                fuelCurrent, fuelNeeded, numTicks));
+    }
+
+    @Override
+    protected void addDisplayText(List<ITextComponent> textList) {
+        MultiblockFuelRecipeLogic recipeLogic = (MultiblockFuelRecipeLogic) recipeMapWorkable;
+
+        if (isStructureFormed()) {
+            FluidStack fuelStack = ((SuSyTurbineRecipeLogic) recipeMapWorkable).getInputFluidStack();
+            if (fuelStack != null && fuelStack.amount > 0) {
+                ITextComponent fuelName = GTUtility.getFluidTranslation(fuelStack.getFluid());
+                textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                        "susy.multiblock.rotation_generator.fuel_name", fuelName));
+                if (lubricantStack != null && lubricantStack.amount > 0) {
+                    ITextComponent lubricantName = GTUtility.getFluidTranslation((lubricantStack.getFluid()));
+                    textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                            "susy.multiblock.rotation_generator.lubricant", lubricantName, lubricantInfo.boost));
+                }
+            }
+            textList.add(new TextComponentTranslation("susy.multiblock.rotation_generator.power", getMaxVoltage(),
+                    Math.min(recipeMapWorkable.getEnergyContainer().getOutputVoltage(), GTValues.V[tier] * 16)));
+
+            if (isActive())
+                addFuelNeededLine(textList, (SuSyTurbineRecipeLogic) recipeLogic);
+        }
+
+        MultiblockDisplayText.builder(textList, isStructureFormed())
+                .setWorkingStatus(recipeLogic.isWorkingEnabled(), recipeLogic.isActive())
+                .addWorkingStatusLine();
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip,
+                               boolean advanced) {
+        super.addInformation(stack, world, tooltip, advanced);
+        tooltip.add(I18n.format("gregtech.universal.tooltip.max_voltage_out", GTValues.V[tier + 2],
+                GTValues.VNF[tier + 2]));
+        tooltip.add(I18n.format("susy.multiblock.rotation_generator.tooltip", maxSpeed, accel, decel));
     }
 }

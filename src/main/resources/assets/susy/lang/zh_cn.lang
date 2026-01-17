@@ -27,7 +27,7 @@ tile.susy_multiblock_casing.structural_packing.name=蒸馏塔填料
 tile.susy_multiblock_casing.ulv_structural_casing.name=基础结构外壳
 tile.susy_multiblock_casing.drone_pad.name=停机坪方块
 tile.susy_multiblock_casing.heavy_duty_pad.name=重型支撑坪方块
-tile.susy_multiblock_casing.advanced_refractory_lining.name=高级耐火内衬
+tile.susy_multiblock_casing.synthetic_mullite_refractory.name=高级耐火内衬
 tile.rocket_assembler_casing.reinforced_foundation.name=强化地基方块
 tile.rocket_assembler_casing.foundation.name=火箭装配站地基方块
 tile.rocket_assembler_casing.rails.name=火箭装配站导轨
@@ -283,7 +283,7 @@ susy.machine.evaporation_pool.tooltip.structure_info=蒸发池池底可由%2$sx%
 susy.top.evaporation_pool_heated_preface=线圈加热：
 susy.top.evaporation_pool.exposed_blocks=直晒格数：
 susy.top.evaporation_pool.average_speed=平均速率：
-susy.multiblock.evaporation_pool.description=蒸发池由可变大小的砂壤土池底与其外部用于放置仓室的混凝土壁面组成。其控制器方块可放置于沿砂壤土外侧，与池底同一高度的任一位置。蒸发池可以在供能无供能状态下运行：供能运行需要在池底以蛇形放置加热线圈（可参考JEI结构预览）；而无供能状态下则不需要。蒸发池的运行速度取决于接收到热量的多少，其由阳光直晒的池底方块数，外部供能（1EU = 10J），以及用于加热的线圈等级决定。每个阳光直晒的方块（检查需要消耗一定时间）每秒可以提供1kJ的热量，而线圈提供的热量与则与其基础温度*数量有关。
+gregtech.multiblock.evaporation_pool.description=蒸发池由可变大小的砂壤土池底与其外部用于放置仓室的混凝土壁面组成。其控制器方块可放置于沿砂壤土外侧，与池底同一高度的任一位置。\n\n蒸发池可以在供能无供能状态下运行：供能运行需要在池底以蛇形放置加热线圈（可参考JEI结构预览）；而无供能状态下则不需要。\n\n蒸发池的运行速度取决于接收到热量的多少，其由阳光直晒的池底方块数，外部供能（1EU = 10J），以及用于加热的线圈等级决定。\n\n每个阳光直晒的方块（检查需要消耗一定时间）每秒可以提供1kJ的热量，而线圈提供的热量与则与其基础温度*数量有关。
 susy.multiblock.evaporation_pool_heated_preface=线圈加热：%s
 susy.multiblock.evaporation_pool.is_heating=开
 susy.multiblock.evaporation_pool.is_not_heating=关（或无线圈）
@@ -311,8 +311,7 @@ supersymmetry.prefix.foil=箔
 susy.machine.primitive_mud_pump.name=简易泥泵
 susy.machine.primitive_mud_pump.tooltip=仅在Y=64与Y=80之间的河流群系运行
 susy.machine.basic_steam_turbine.name=大型蒸汽轮机
-susy.machine.low_pressure_advanced_steam_turbine.name=低压高级蒸汽轮机
-susy.machine.high_pressure_advanced_steam_turbine.name=高压高级蒸汽轮机
+susy.machine.advanced_steam_turbine.name=高级蒸汽轮机
 susy.machine.basic_gas_turbine.name=大型燃气轮机
 susy.machine.large_fluid_pump.name=大型液泵
 susy.machine.large_fluid_pump.tooltip.1=这势必会对当地的鲑鱼种群造成影响。
@@ -841,8 +840,7 @@ recipemap.milling.name=精密铣销
 recipemap.hot_isostatic_press.name=热等静压烧结
 recipemap.gas_atomizer.name=气雾化制粉
 recipemap.metallurgical_converter.name=转炉冶炼
-recipemap.low_pressure_advanced_steam_turbine.name=低压高级蒸汽轮机
-recipemap.high_pressure_advanced_steam_turbine.name=高压高级蒸汽轮机
+recipemap.advanced_steam_turbine.name=高级蒸汽轮机
 recipemap.mixer_settler.name=Mixer-Settler
 
 susy.multiblock.primitive_mud_pump.description=简易泥泵是一台蒸汽时代的多方块机器。当它的控制器方块处于河流生物群系，且高度介于 Y = 64 与 Y = 80（含）之间时将每秒收集一次泥。它可以使用 ULV、LV 输出仓或水泵输出仓。
@@ -920,6 +918,7 @@ metaitem.track_segment.tooltip=可用于§8盾构机
 metaitem.track_segment.length_info=相当于§610格§7的单轨铁道。
 metaitem.air_vent.tooltip.1=§b收集速率：§f%,d L/s
 metaitem.orbital.scrap.earth.name=地球轨道太空垃圾
+metaitem.code_breacher.name=密码破译器
 
 # Catalysts
 susy.universal.catalysts.tooltip.tier=§e最高电压：§f%,d EU/t（%s§f）
@@ -985,10 +984,6 @@ susy.wrongbiome=此机器不能在该群系运行！
 susy.weather_resistance=§2不会在接触到水、熔岩、火或者雨时爆炸。
 susy.large_fluid_pump.y_level=控制器高度：Y=%s
 susy.large_fluid_pump.biome=底部钢管道所处群系：%s
-
-# Latex Logs
-susy.block_group_members.latex_logs.name=橡胶木
-
 
 # Stock Interfaces
 susy.machine.stock_controller.name=机车控制器
