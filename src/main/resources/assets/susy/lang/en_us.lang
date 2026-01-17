@@ -88,6 +88,7 @@ tile.spacecraft_hull.al_li.name=Al-Li Spacecraft Shell
 tile.rocket_nozzle.plug.name=Rocket Nozzle Plug
 tile.rocket_nozzle.expanding.name=Expanding Rocket Nozzle Shell
 tile.rocket_fairing_connector.al_7075.name=Al-7075 Fairing Connector
+tile.guidance_system.soyuz.name=Soyuz 7K Guidance System
 
 tile.deposit_block.orthomagmatic.name=Orthomagmatic Deposit Block
 tile.deposit_block.metamorphic.name=Metamorphic Deposit Block

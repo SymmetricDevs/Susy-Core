@@ -1,14 +1,12 @@
 package supersymmetry.common.rocketry.components;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Optional;
-import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -21,6 +19,7 @@ import supersymmetry.api.rocketry.components.MaterialCost;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.blocks.rocketry.BlockGuidanceSystem;
 import supersymmetry.common.tileentities.TileEntityCoverable;
 
 public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> {
@@ -117,7 +116,11 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                                                       StructAnalysis analysis) {
         Predicate<BlockPos> lifeSupportCheck = bp -> analysis.world.getBlockState(bp).getBlock()
                 .equals(SuSyBlocks.LIFE_SUPPORT);
+        Predicate<BlockPos> guidanceComputerCheck = bp -> analysis.world.getBlockState(bp).getBlock()
+                .equals(SuSyBlocks.GUIDANCE_SYSTEM);
+
         Set<BlockPos> lifeSupports = blocksConnected.stream().filter(lifeSupportCheck).collect(Collectors.toSet());
+        List<BlockPos> guidanceComputers = blocksConnected.stream().filter(guidanceComputerCheck).collect(Collectors.toList());
         NBTTagCompound tag = new NBTTagCompound();
 
         lifeSupports.forEach(
@@ -142,6 +145,16 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                 analysis.status = BuildStat.HULL_WEAK;
             }
         }
+
+        if (guidanceComputers.isEmpty()) {
+            analysis.status = BuildStat.NO_GUIDANCE;
+            return Optional.empty();
+        } else if (guidanceComputers.size() > 1) {
+            analysis.status = BuildStat.TOO_MUCH_GUIDANCE;
+            return Optional.empty();
+        }
+        IBlockState guidanceBlock = analysis.world.getBlockState(guidanceComputers.get(0));
+        tag.setString("guidance", SuSyBlocks.GUIDANCE_SYSTEM.getState(guidanceBlock).toString());
 
         if (lifeSupports.isEmpty()) {
             // no airspace necessary

@@ -56,7 +56,9 @@ public class StructAnalysis {
         TOO_SHORT("too_short"),
         CONN_UNALIGNED("conn_unaligned"),
         CONN_WRONG_DIR("conn_wrong_dir"),
-        WRONG_TILE("wrong_tile");
+        WRONG_TILE("wrong_tile"),
+        NO_GUIDANCE("no_guidance"),
+        TOO_MUCH_GUIDANCE("too_much_guidance");
 
         String code;
 

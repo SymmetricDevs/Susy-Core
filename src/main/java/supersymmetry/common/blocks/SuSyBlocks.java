@@ -77,6 +77,7 @@ public class SuSyBlocks {
     public static BlockFairingHull FAIRING_HULL;
     public static BlockRocketControl ROCKET_CONTROL;
     public static BlockTankShell TANK_SHELL;
+    public static BlockGuidanceSystem GUIDANCE_SYSTEM;
     public static BlockTankShell1 TANK_SHELL1;
     public static BlockTurboPump TURBOPUMP;
     public static BlockRocketNozzle ROCKET_NOZZLE;
