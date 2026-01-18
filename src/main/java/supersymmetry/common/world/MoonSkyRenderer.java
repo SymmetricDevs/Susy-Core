@@ -75,6 +75,9 @@ public class MoonSkyRenderer extends IRenderHandler {
         // Rotate straight upward – zenith (Moon is tidally locked)
         GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
 
+        // Rotate the Earth texture 90 degrees clockwise
+        GlStateManager.rotate(-90.0F, 0.0F, 0.0F, 1.0F);
+
         Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 
         // Phase UV calc
