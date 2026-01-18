@@ -10,7 +10,6 @@ import net.minecraftforge.common.BiomeManager.BiomeEntry;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import supersymmetry.api.SusyLog;
-import supersymmetry.client.renderer.sky.SkyRendererMoon;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
 
@@ -43,7 +42,9 @@ public class SuSyDimensions {
                 new BiomeEntry(SuSyBiomes.LUNAR_MARIA, 100))
                 .setStone(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH)
                         .getState(SusyStoneVariantBlock.StoneType.ANORTHOSITE))
-                .setSkyRenderer(new SkyRendererMoon())
-                .setGravity(0.166f).setBiomeSize(7).load();
+                .setMoonSkyRenderer(new MoonSkyRenderer())
+                .setGravity(0.166f)
+                .setBiomeSize(7)
+                .load();
     }
 }

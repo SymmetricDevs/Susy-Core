@@ -20,6 +20,14 @@ public class WorldProviderPlanet extends WorldProvider {
     protected void init() {
         this.hasSkyLight = true;
         biomeProvider = new PlanetBiomeProvider(world);
+        Planet planet = SuSyDimensions.PLANETS.get(this.getDimension());
+        if (planet != null) {
+            // Use getEffectiveSkyRenderer to get custom sky if available, otherwise default
+            IRenderHandler renderer = planet.getEffectiveSkyRenderer();
+            if (renderer != null) {
+                this.setSkyRenderer(renderer);
+            }
+        }
     }
 
     @Override
@@ -47,7 +55,12 @@ public class WorldProviderPlanet extends WorldProvider {
 
     @Override
     public @Nullable IRenderHandler getSkyRenderer() {
-        return SuSyDimensions.PLANETS.get(getDimension()).skyRenderer;
+        Planet planet = SuSyDimensions.PLANETS.get(getDimension());
+        if (planet != null) {
+            // Return the effective sky renderer (custom if set, otherwise default)
+            return planet.getEffectiveSkyRenderer();
+        }
+        return null;
     }
 
     @Override

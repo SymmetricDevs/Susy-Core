@@ -31,6 +31,9 @@ public class Planet {
     public double gravity;
     public boolean supportsFire;
 
+    // Custom sky renderer (optional override)
+    private MoonSkyRenderer MoonSkyRenderer;
+
     // Atmosphere
 
     public Planet(int id, String planetName) {
@@ -51,7 +54,6 @@ public class Planet {
     public void load() {
         if (!isLoaded) {
             isLoaded = true;
-            // TODO: add check if dim already exists, if it does load it/or idk
             if (this.dimID != 0) {
                 SuSyDimensions.PLANETS.put(dimID, this);
 
@@ -65,8 +67,25 @@ public class Planet {
                         DimensionManager.initDimension(this.dimID);
                     }
                 }
+
+                // Apply sky renderer - try immediately and log result
+                applySkyRenderer();
             }
             SusyLog.logger.info("Loaded Planet with ID " + this.getId() + " and name " + this.getPlanetName());
+        }
+    }
+
+    // Add this helper method
+    private void applySkyRenderer() {
+        net.minecraft.world.World world = DimensionManager.getWorld(this.dimID);
+        if (world != null && world.provider != null) {
+            IRenderHandler renderer = getEffectiveSkyRenderer();
+            if (renderer != null) {
+                world.provider.setSkyRenderer(renderer);
+                SusyLog.logger.info("Applied sky renderer for " + this.getPlanetName());
+            }
+        } else {
+            SusyLog.logger.warn("Could not apply sky renderer for " + this.getPlanetName() + " - world not loaded yet");
         }
     }
 
@@ -208,5 +227,26 @@ public class Planet {
     public Planet setImpactEjecta(IBlockState impactEjecta) {
         this.impactEjecta = impactEjecta;
         return this;
+    }
+
+    // Custom sky renderer methods
+    public boolean hasCustomSky() {
+        return MoonSkyRenderer != null;
+    }
+
+    public MoonSkyRenderer getMoonSkyRenderer() {
+        return MoonSkyRenderer;
+    }
+
+    public Planet setMoonSkyRenderer(MoonSkyRenderer MoonSkyRenderer) {
+        this.MoonSkyRenderer = MoonSkyRenderer;
+        return this;
+    }
+
+    /**
+     * Get the effective sky renderer - returns custom sky if set, otherwise returns the default skyRenderer
+     */
+    public IRenderHandler getEffectiveSkyRenderer() {
+        return MoonSkyRenderer != null ? MoonSkyRenderer : skyRenderer;
     }
 }
