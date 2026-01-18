@@ -61,9 +61,6 @@ public class MoonSkyRenderer extends IRenderHandler {
         long worldTime = world.getWorldTime();
         int currentPhase = calculateEarthPhase(worldTime);
 
-        // Render Earth opposite to sun (like the moon - tidally locked, always facing us, showing phases)
-        // Earth appears opposite the sun, so add 0.5 (180 degrees) to celestial angle
-        float earthAngle = celestialAngle + 0.5F;
         renderEarthAtZenith(EarthFromMoon, earthSize, currentPhase);
 
         GlStateManager.depthMask(true);
@@ -75,14 +72,12 @@ public class MoonSkyRenderer extends IRenderHandler {
     private void renderEarthAtZenith(ResourceLocation texture, float size, int phase) {
         GlStateManager.pushMatrix();
 
-        // Face straight upward → zenith
-        GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);  // tilt up
-        GlStateManager.rotate(0.0F, 0.0F, 1.0F, 0.0F);   // no azimuth rotation
+        // Rotate straight upward – zenith (Moon is tidally locked)
+        GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
 
-        // Bind texture
         Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 
-        // UV calculation for phases
+        // Phase UV calc
         int column = phase % EARTH_PHASES_COLUMNS;
         int row = phase / EARTH_PHASES_COLUMNS;
 
@@ -91,7 +86,7 @@ public class MoonSkyRenderer extends IRenderHandler {
         float vMin = row / (float) EARTH_PHASES_ROWS;
         float vMax = (row + 1) / (float) EARTH_PHASES_ROWS;
 
-        // Mirror horizontally
+        // Mirror to face correct direction
         float tmp = uMin;
         uMin = uMax;
         uMax = tmp;
@@ -100,10 +95,13 @@ public class MoonSkyRenderer extends IRenderHandler {
         BufferBuilder buffer = tess.getBuffer();
 
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        buffer.pos(-size, 100.0D, -size).tex(uMin, vMin).endVertex();
-        buffer.pos(size, 100.0D, -size).tex(uMax, vMin).endVertex();
-        buffer.pos(size, 100.0D, size).tex(uMax, vMax).endVertex();
-        buffer.pos(-size, 100.0D, size).tex(uMin, vMax).endVertex();
+
+        // After 90° X rotation, -Z points to zenith
+        buffer.pos(-size, -size, -100.0D).tex(uMin, vMin).endVertex();
+        buffer.pos(size, -size, -100.0D).tex(uMax, vMin).endVertex();
+        buffer.pos(size, size, -100.0D).tex(uMax, vMax).endVertex();
+        buffer.pos(-size, size, -100.0D).tex(uMin, vMax).endVertex();
+
         tess.draw();
 
         GlStateManager.popMatrix();
