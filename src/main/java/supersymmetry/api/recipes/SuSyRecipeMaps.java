@@ -580,6 +580,6 @@ public class SuSyRecipeMaps {
         });
 
         SuSyRecipeMaps.BALL_MILL.onRecipeBuild(recipeBuilder -> recipeBuilder
-                .fluidInputs(Materials.Steam.getFluid(recipeBuilder.getDuration() * recipeBuilder.getEUt() / 512)));
+                .fluidInputs(SusyMaterials.PreheatedAir.getFluid(recipeBuilder.getDuration() * recipeBuilder.getEUt() / 512)));
     }
 }
