@@ -39,6 +39,7 @@ public class PlanetChunkGenerator implements IChunkGenerator {
     private NoiseGeneratorOctaves mainPerlinNoise;
     private NoiseGeneratorPerlin surfaceNoise;
     private double[] depthBuffer = new double[256];
+
     private final MapGenLunarLavaTube caveGenerator = new MapGenLunarLavaTube();
     private Biome[] biomesForGeneration;
     private final double depthNoiseScaleX = 200.0D;
@@ -227,9 +228,9 @@ public class PlanetChunkGenerator implements IChunkGenerator {
                 16);
         this.replaceBiomeBlocks(x, z, chunkprimer, this.biomesForGeneration);
 
-        this.caveGenerator.generate(this.world, x, z, chunkprimer);
         // NEW: Apply craters to the chunk
         this.generateCraters(x, z, chunkprimer);
+        this.caveGenerator.generate(this.world, x, z, chunkprimer);
 
         Chunk chunk = new Chunk(this.world, chunkprimer, x, z);
         byte[] abyte = chunk.getBiomeArray();
