@@ -36,6 +36,7 @@ public class Planet {
 
     // Time
     private float dayLength = 1.0f; // Default: normal Earth-like day (1.0 = 24000 ticks)
+    private float timeOffset = 0.0f; // Offset in celestial angle (0.0 to 1.0, where 0.5 = 12 hours)
     private IRenderHandler customSkyRenderer = null;
 
     // Atmosphere
@@ -250,11 +251,20 @@ public class Planet {
 
     public Planet setDayLength(float dayLength) {
         this.dayLength = dayLength;
-        return this; // For builder pattern
+        return this;
     }
 
     public float getDayLength() {
         return this.dayLength;
+    }
+
+    public Planet setTimeOffset(float timeOffset) {
+        this.timeOffset = timeOffset;
+        return this;
+    }
+
+    public float getTimeOffset() {
+        return this.timeOffset;
     }
 
     public Planet setCustomSkyRenderer(IRenderHandler renderer) {

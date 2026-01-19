@@ -42,28 +42,28 @@ public class SuSyDimensions {
         // Create sky renderer for the Moon
         SuSySkyRenderer moonSky = new SuSySkyRenderer();
 
-        // Configure the Sun (follows celestial sphere - day/night cycle)
+        // Sun at zenith - behind Earth
         SkyRenderData sun = new SkyRenderData.Builder(
                 new ResourceLocation("susy", "textures/environment/sun.png"),
-                30.0F)  // size
-                        .positionType(SkyRenderData.PositionType.CELESTIAL_SPHERE)
+                30.0F)
+                        .positionType(SkyRenderData.PositionType.ZENITH)
+                        .rotationX(90.0F)  // Point to zenith
                         .useLinearFiltering(false)
                         .build();
 
-        // Configure Earth (stationary at zenith with phases)
+        // Earth at zenith - in front of Sun
         SkyRenderData earth = new SkyRenderData.Builder(
                 new ResourceLocation("susy", "textures/environment/earth_phases.png"),
-                40.0F)  // size - larger since it's closer
+                40.0F)
                         .positionType(SkyRenderData.PositionType.ZENITH)
                         .rotationX(90.0F)  // Point to zenith
-                        .phases(4, 2, 29.53F)  // 8 phases, 1 row, 29.53 day cycle (synodic month)
+                        .phases(4, 2, 29.53F)
                         .useLinearFiltering(false)
                         .brightness(0.8F)  // Slightly dimmer than sun
                         .mirrorTexture(true)  // flip the texture horizontally? for some reason it is flipped
-                        .reversePhases(true)
                         .build();
 
-        // Set the celestial objects
+        // Set the celestial objects - Sun first (renders behind), then Earth (renders in front)
         moonSky.setCelestialObjects(sun, earth);
 
         new Planet(0, 800, "Moon").setBiomeList(
@@ -75,6 +75,7 @@ public class SuSyDimensions {
                 .setGravity(0.166f)
                 .setBiomeSize(7)
                 .setDayLength(29.53f)
+                .setTimeOffset(0.5f)  // Start at night (sun behind Earth)
                 .load();
     }
 }

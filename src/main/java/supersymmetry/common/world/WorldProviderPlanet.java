@@ -93,6 +93,10 @@ public class WorldProviderPlanet extends WorldProvider {
             // Normalize to 0-1 range
             angle = angle - (float) Math.floor(angle);
 
+            // Apply the planet's time offset
+            // 0.0 = start at sunrise, 0.5 = start at night, etc.
+            angle = (angle + planet.getTimeOffset()) % 1.0F;
+
             return angle;
         }
 
@@ -105,7 +109,7 @@ public class WorldProviderPlanet extends WorldProvider {
         Planet planet = getPlanet();
         if (planet != null && planet.getDayLength() > 0) {
             float angle = calculateCelestialAngle(this.world.getWorldTime(), 0);
-            // Day is when angle is between 0.0 and 0.5
+            // Day is when angle is between 0.0 and 0.5 (same as vanilla)
             return angle >= 0.0F && angle < 0.5F;
         }
         return super.isDaytime();
