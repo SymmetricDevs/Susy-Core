@@ -47,7 +47,8 @@ public class RocketFuelEntry {
             if (this.composition.isEmpty()) {
                 throw new IllegalStateException("empty list of fuel component entries");
             }
-            RocketFuelEntry.registerFuel(new RocketFuelEntry(this.registryName, this.composition, this.density, this.sIVacuum, this.sIPerPressure));
+            RocketFuelEntry.registerFuel(new RocketFuelEntry(this.registryName, this.composition, this.density,
+                    this.sIVacuum, this.sIPerPressure));
         }
     }
 
