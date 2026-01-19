@@ -77,6 +77,9 @@ public class SuSyMetaTileEntities {
     public static CatalystMachineMetaTileEntity[] VULCANIZING_PRESS;
     public static SuSySimpleSteamMetaTileEntity[] STEAM_VULCANIZING_PRESS;
 
+    public static CatalystMachineMetaTileEntity[] BATCH_REACTOR;
+    public static SuSySimpleSteamMetaTileEntity[] STEAM_BATCH_REACTOR;
+
     public static CatalystMachineMetaTileEntity[] ROASTER;
     public static SuSySimpleSteamMetaTileEntity[] STEAM_ROASTER;
 
@@ -786,6 +789,7 @@ public class SuSyMetaTileEntities {
 
         STEAM_MIXER = new SuSySimpleSteamMetaTileEntity[2];
         STEAM_VACUUM_CHAMBER = new SuSySimpleSteamMetaTileEntity[2];
+        STEAM_BATCH_REACTOR = new SuSySimpleSteamMetaTileEntity[2];
 
         LATEX_COLLECTOR = new PseudoMultiMachineMetaTileEntity[GTValues.EV];
         VULCANIZING_PRESS = new CatalystMachineMetaTileEntity[GTValues.EV];
