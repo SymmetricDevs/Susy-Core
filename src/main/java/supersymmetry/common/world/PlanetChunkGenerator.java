@@ -18,6 +18,7 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.*;
 
 import supersymmetry.common.world.gen.MapGenLunarLavaTube;
+import supersymmetry.common.world.gen.WorldGenPit;
 
 public class PlanetChunkGenerator implements IChunkGenerator {
 
@@ -41,6 +42,7 @@ public class PlanetChunkGenerator implements IChunkGenerator {
     private double[] depthBuffer = new double[256];
 
     private final MapGenLunarLavaTube caveGenerator = new MapGenLunarLavaTube();
+    private final WorldGenPit pitGenerator = new WorldGenPit();
 
     private Biome[] biomesForGeneration;
     private final double depthNoiseScaleX = 200.0D;
@@ -469,7 +471,6 @@ public class PlanetChunkGenerator implements IChunkGenerator {
 
     private static final IBlockState AIR = Blocks.AIR.getDefaultState();
 
-    // NEW: Helper to find surface Y level
     private int findSurfaceY(ChunkPrimer primer, int x, int z) {
         for (int y = 255; y >= 0; y--) {
             IBlockState state = primer.getBlockState(x, y, z);
@@ -487,12 +488,38 @@ public class PlanetChunkGenerator implements IChunkGenerator {
         BlockPos blockpos = new BlockPos(i, 0, j);
         Biome biome = this.world.getBiome(blockpos.add(16, 0, 16));
 
+        // Call biome decoration first
         biome.decorate(this.world, this.rand, blockpos);
+
+        // Generate pit entrances to lava tubes
+        generatePitEntrances(x, z, blockpos);
     }
 
-    /**
-     * Called to generate additional structures after initial worldgen, used by ocean monuments
-     */
+    private void generatePitEntrances(int chunkX, int chunkZ, BlockPos chunkPos) {
+        // Use chunk-based random with world seed
+        Random pitRand = new Random(world.getSeed() +
+                (long) chunkX * 341873128712L + (long) chunkZ * 132897987541L);
+
+        // Low probability of pit entrance per chunk (adjust as needed)
+        if (pitRand.nextDouble() < 0.02) { // 2% chance per chunk
+            // Random position within chunk
+            int x = chunkPos.getX() + pitRand.nextInt(16);
+            int z = chunkPos.getZ() + pitRand.nextInt(16);
+
+            // Find surface height
+            int y = world.getHeight(x, z);
+
+            // Create a marker block that WorldGenPit will use to determine size
+            // The metadata determines the pit size (0-15, where size = meta + 1)
+            int size = 2 + pitRand.nextInt(6); // Size 3-8
+
+            BlockPos pitPos = new BlockPos(x, y, z);
+
+            // Generate the pit
+            pitGenerator.generate(world, pitRand, pitPos);
+        }
+    }
+
     public boolean generateStructures(Chunk chunkIn, int x, int z) {
         return false;
     }
@@ -513,10 +540,5 @@ public class PlanetChunkGenerator implements IChunkGenerator {
         return null;
     }
 
-    /**
-     * Recreates data about structures intersecting given chunk (used for example by getPossibleCreatures), without
-     * placing any blocks. When called for the first time before any chunk is generated - also initializes the internal
-     * state needed by getPossibleCreatures.
-     */
     public void recreateStructures(Chunk chunkIn, int x, int z) {}
 }

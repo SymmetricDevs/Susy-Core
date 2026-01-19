@@ -33,7 +33,7 @@ public class PlanetaryBiome extends Biome {
 
     @Override
     public void decorate(World worldIn, Random rand, BlockPos pos) {
-        // Empty - prevents all vanilla decoration including structures
+        // Empty, prevents all vanilla decoration including structures
     }
 
     @Override
