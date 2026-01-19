@@ -42,16 +42,15 @@ public class SuSyDimensions {
         // Create sky renderer for the Moon
         SuSySkyRenderer moonSky = new SuSySkyRenderer();
 
-        // Sun at zenith - behind Earth
+        // Sun moves on celestial sphere
         SkyRenderData sun = new SkyRenderData.Builder(
                 new ResourceLocation("susy", "textures/environment/sun.png"),
                 30.0F)
-                        .positionType(SkyRenderData.PositionType.ZENITH)
-                        .rotationX(90.0F)  // Point to zenith
+                        .positionType(SkyRenderData.PositionType.CELESTIAL_SPHERE)
                         .useLinearFiltering(false)
                         .build();
 
-        // Earth at zenith - in front of Sun
+        // Earth stays fixed at zenith
         SkyRenderData earth = new SkyRenderData.Builder(
                 new ResourceLocation("susy", "textures/environment/earth_phases.png"),
                 40.0F)
@@ -63,7 +62,7 @@ public class SuSyDimensions {
                         .mirrorTexture(true)  // flip the texture horizontally? for some reason it is flipped
                         .build();
 
-        // Set the celestial objects - Sun first (renders behind), then Earth (renders in front)
+        // Set the celestial objects
         moonSky.setCelestialObjects(sun, earth);
 
         new Planet(0, 800, "Moon").setBiomeList(

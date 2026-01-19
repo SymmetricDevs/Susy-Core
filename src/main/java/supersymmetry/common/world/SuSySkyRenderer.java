@@ -27,13 +27,6 @@ public class SuSySkyRenderer extends IRenderHandler {
     // Celestial objects to render (passed from outside, not stored in renderer)
     private SkyRenderData[] celestialObjects;
 
-    // Star field data
-    private static final int STAR_COUNT = 1500;
-    private float[] starPositions;
-    private float[] starBrightness;
-    private float[] starSizes;
-    private boolean starsInitialized = false;
-    private boolean renderStars = true;
     private boolean debugLogged = false;
 
     public SuSySkyRenderer() {
@@ -43,7 +36,7 @@ public class SuSySkyRenderer extends IRenderHandler {
 
     /**
      * Set the celestial objects to render
-     * 
+     *
      * @param objects Array of render data for celestial objects
      */
     public void setCelestialObjects(SkyRenderData... objects) {
@@ -54,13 +47,6 @@ public class SuSySkyRenderer extends IRenderHandler {
                     ", type=" + objects[i].getPositionType() +
                     ", size=" + objects[i].getSize());
         }
-    }
-
-    /**
-     * Enable or disable star rendering
-     */
-    public void setRenderStars(boolean render) {
-        this.renderStars = render;
     }
 
     @Override
@@ -89,15 +75,6 @@ public class SuSySkyRenderer extends IRenderHandler {
         float celestialAngle = world.getCelestialAngle(partialTicks);
         long worldTime = world.getWorldTime();
 
-        // Render stars if enabled
-        if (renderStars) {
-            float sunElevation = calculateSunElevation(celestialAngle);
-            float starVisibility = calculateStarVisibility(sunElevation);
-            if (starVisibility > 0.0F) {
-                renderStars(starVisibility);
-            }
-        }
-
         // Render all celestial objects
         for (int i = 0; i < celestialObjects.length; i++) {
             SkyRenderData obj = celestialObjects[i];
@@ -120,95 +97,6 @@ public class SuSySkyRenderer extends IRenderHandler {
         GlStateManager.enableFog();
     }
 
-    private float calculateSunElevation(float celestialAngle) {
-        // Convert celestial angle to elevation (-90 to +90 degrees)
-        float angle = celestialAngle * 360.0F;
-        if (angle > 180.0F) angle -= 360.0F;
-        return 90.0F - angle;
-    }
-
-    private float calculateStarVisibility(float sunElevation) {
-        // Stars fully visible when sun is 18° below horizon (astronomical twilight)
-        // Stars invisible when sun is above horizon
-        if (sunElevation > 0) {
-            return 0.0F; // Sun is up, no stars
-        } else if (sunElevation < -18.0F) {
-            return 1.0F; // Full night, full stars
-        } else {
-            // Twilight zone: fade stars in/out
-            return (-sunElevation) / 18.0F;
-        }
-    }
-
-    private void initializeStars() {
-        if (starsInitialized) return;
-
-        starPositions = new float[STAR_COUNT * 3]; // x, y, z for each star
-        starBrightness = new float[STAR_COUNT];
-        starSizes = new float[STAR_COUNT];
-
-        Random rand = new Random(10842L); // Fixed seed for consistent stars
-
-        for (int i = 0; i < STAR_COUNT; i++) {
-            // Generate random point on a sphere
-            float theta = rand.nextFloat() * (float) Math.PI * 2.0F; // Azimuth
-            float phi = (float) Math.acos(2.0F * rand.nextFloat() - 1.0F); // Elevation
-
-            float distance = 100.0F; // Same distance as celestial sphere
-
-            starPositions[i * 3] = distance * (float) Math.sin(phi) * (float) Math.cos(theta);
-            starPositions[i * 3 + 1] = distance * (float) Math.sin(phi) * (float) Math.sin(theta);
-            starPositions[i * 3 + 2] = distance * (float) Math.cos(phi);
-
-            // Random brightness (some stars brighter than others)
-            starBrightness[i] = 0.5F + rand.nextFloat() * 0.5F;
-
-            // Random size (most small, some larger)
-            starSizes[i] = rand.nextFloat() < 0.9F ? 0.15F : 0.15F + rand.nextFloat() * 0.2F;
-        }
-
-        starsInitialized = true;
-    }
-
-    private void renderStars(float visibility) {
-        if (!starsInitialized) {
-            initializeStars();
-        }
-
-        GlStateManager.pushMatrix();
-
-        // Disable texture for point rendering
-        GlStateManager.disableTexture2D();
-
-        Tessellator tess = Tessellator.getInstance();
-        BufferBuilder buffer = tess.getBuffer();
-
-        // Render stars as points
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-
-        for (int i = 0; i < STAR_COUNT; i++) {
-            float x = starPositions[i * 3];
-            float y = starPositions[i * 3 + 1];
-            float z = starPositions[i * 3 + 2];
-
-            float brightness = starBrightness[i] * visibility;
-            float size = starSizes[i];
-
-            // Simple quad facing the camera
-            buffer.pos(x - size, y - size, z).color(brightness, brightness, brightness, visibility).endVertex();
-            buffer.pos(x - size, y + size, z).color(brightness, brightness, brightness, visibility).endVertex();
-            buffer.pos(x + size, y + size, z).color(brightness, brightness, brightness, visibility).endVertex();
-            buffer.pos(x + size, y - size, z).color(brightness, brightness, brightness, visibility).endVertex();
-        }
-
-        tess.draw();
-
-        // Re-enable texture
-        GlStateManager.enableTexture2D();
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-
-        GlStateManager.popMatrix();
-    }
 
     private void renderCelestialSphereObject(SkyRenderData data, float celestialAngle, long worldTime) {
         GlStateManager.pushMatrix();
