@@ -32,7 +32,7 @@ public class Planet {
     public boolean supportsFire;
 
     // Custom sky renderer (optional override)
-    private MoonSkyRenderer MoonSkyRenderer;
+    private SuSySkyRenderer SuSySkyRenderer;
 
     // Time
     private float dayLength = 1.0f; // Default: normal Earth-like day (1.0 = 24000 ticks)
@@ -235,15 +235,16 @@ public class Planet {
 
     // Custom sky renderer methods
     public boolean hasCustomSky() {
-        return MoonSkyRenderer != null;
+        return SuSySkyRenderer != null;
     }
 
-    public MoonSkyRenderer getMoonSkyRenderer() {
-        return MoonSkyRenderer;
+    public SuSySkyRenderer getSuSySkyRenderer() {
+        return SuSySkyRenderer;
     }
 
-    public Planet setMoonSkyRenderer(MoonSkyRenderer MoonSkyRenderer) {
-        this.MoonSkyRenderer = MoonSkyRenderer;
+    public Planet setSuSySkyRenderer(SuSySkyRenderer renderer) {
+        this.SuSySkyRenderer = renderer;
+        this.customSkyRenderer = renderer;
         return this;
     }
 
@@ -262,6 +263,14 @@ public class Planet {
     }
 
     public IRenderHandler getEffectiveSkyRenderer() {
-        return this.customSkyRenderer;
+        // Return the custom renderer if set (SuSySkyRenderer)
+        if (this.customSkyRenderer != null) {
+            return this.customSkyRenderer;
+        }
+        // Fallback to the generic skyRenderer
+        if (this.skyRenderer != null) {
+            return this.skyRenderer;
+        }
+        return null;
     }
 }
