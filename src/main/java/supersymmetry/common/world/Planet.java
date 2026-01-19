@@ -38,7 +38,6 @@ public class Planet {
     private float dayLength = 1.0f; // Default: normal Earth-like day (1.0 = 24000 ticks)
     private IRenderHandler customSkyRenderer = null;
 
-
     // Atmosphere
 
     public Planet(int id, String planetName) {
@@ -256,6 +255,7 @@ public class Planet {
     public float getDayLength() {
         return this.dayLength;
     }
+
     public Planet setCustomSkyRenderer(IRenderHandler renderer) {
         this.customSkyRenderer = renderer;
         return this;

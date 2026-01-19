@@ -19,9 +19,24 @@ public class PlanetaryBiome extends Biome {
         this.decorator.flowersPerChunk = 0;
         this.decorator.grassPerChunk = 0;
         this.decorator.treesPerChunk = 0;
+
+        // mushrooms still generate with mushroomsPerChunk = 0;
         this.decorator.mushroomsPerChunk = 0;
+        this.decorator.cactiPerChunk = 0;
+        this.decorator.deadBushPerChunk = 0;
+        this.decorator.reedsPerChunk = 0;
+        this.decorator.sandPatchesPerChunk = 0;
+        this.decorator.gravelPatchesPerChunk = 0;
+        this.decorator.clayPerChunk = 0;
+        this.decorator.bigMushroomsPerChunk = 0;
     }
 
+    @Override
+    public void decorate(World worldIn, Random rand, BlockPos pos) {
+        // Empty - prevents all vanilla decoration including structures
+    }
+
+    @Override
     public void genTerrainBlocks(World worldIn, Random rand, ChunkPrimer chunkPrimerIn, int x, int z, double noiseVal) {
         int i = worldIn.getSeaLevel();
         IBlockState iblockstate = this.topBlock;
