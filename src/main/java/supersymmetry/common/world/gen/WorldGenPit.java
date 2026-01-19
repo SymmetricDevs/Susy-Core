@@ -37,7 +37,8 @@ public class WorldGenPit extends WorldGenerator {
                         pos.move(EnumFacing.DOWN);
                     }
 
-                    int height = (int) (size * size * rand.nextFloat(0x.8p0f, 0x1.8p0f) / (x * x + z * z + size));
+                    int height = (int) (size * size * rand.nextFloat(0x.8p0f, 0x1.0p0f) / (x * x + z * z + size)) +
+                            rand.nextInt(1);
                     for (int i = 0; i < height; i++) {
                         pos.move(EnumFacing.UP);
                         worldIn.setBlockState(pos, biomeBlock, 2);

@@ -9,26 +9,16 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeDecorator;
 import net.minecraft.world.chunk.ChunkPrimer;
+import net.minecraft.world.gen.feature.WorldGenerator;
+import supersymmetry.common.world.gen.MapGenLunarLavaTube;
+import supersymmetry.common.world.gen.WorldGenPit;
 
 public class PlanetaryBiome extends Biome {
-
     public PlanetaryBiome(BiomeProperties properties) {
         super(properties);
-        this.decorator.generateFalls = false;
-        this.decorator.flowersPerChunk = 0;
-        this.decorator.grassPerChunk = 0;
-        this.decorator.treesPerChunk = 0;
-
-        // mushrooms still generate with mushroomsPerChunk = 0;
-        this.decorator.mushroomsPerChunk = 0;
-        this.decorator.cactiPerChunk = 0;
-        this.decorator.deadBushPerChunk = 0;
-        this.decorator.reedsPerChunk = 0;
-        this.decorator.sandPatchesPerChunk = 0;
-        this.decorator.gravelPatchesPerChunk = 0;
-        this.decorator.clayPerChunk = 0;
-        this.decorator.bigMushroomsPerChunk = 0;
+        this.decorator = new BiomePlanetaryDecorator();
     }
 
     @Override

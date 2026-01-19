@@ -23,6 +23,7 @@ public class MapGenLunarLavaTube extends MapGenBase {
     protected static final IBlockState AIR = Blocks.AIR.getDefaultState();
     public static final IBlockState BASALT = MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH)
             .getState(StoneVariantBlock.StoneType.BASALT);
+    public static final Block PIT = Blocks.END_PORTAL_FRAME;
 
     // modified from net.minecraft.world.gen.MapGenCaves
     protected void addTunnel(long seed, int x, int z, ChunkPrimer primer, double startX, double startY, double startZ,
@@ -143,6 +144,11 @@ public class MapGenLunarLavaTube extends MapGenBase {
 
                     int x3 = MathHelper.floor(startX) - x * 16;
                     int z3 = MathHelper.floor(startZ) - z * 16;
+                    if (0 <= x3 && x3 < 16 && 0 <= z3 && z3 < 16 && width > 0x3 && x3 % 2 == 0 && z3 % 2 == 0 &&
+                            localRandom.nextInt(0x2) == 1 && y2 > primer.findGroundBlockIdx(x3, z3) - 2) {
+                        fillBlock(primer, x3, 0x60, z3, null, AIR,
+                                PIT.getStateFromMeta(width > 0xa ? 7 : (int) (width - 3)));
+                    }
 
                     // lx: local x
                     for (int localX = x1; localX < x2; ++localX) {
@@ -190,7 +196,7 @@ public class MapGenLunarLavaTube extends MapGenBase {
     protected boolean canReplaceBlock(IBlockState state, IBlockState up) {
         Block block = state.getBlock();
         return block == SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH) ||
-                block == SuSyBlocks.REGOLITH ||
+                // block == SuSyBlocks.REGOLITH ||
                 block == MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH) || block == Blocks.AIR;
     }
 
@@ -207,11 +213,11 @@ public class MapGenLunarLavaTube extends MapGenBase {
                                      ChunkPrimer chunkPrimerIn) {
         int i = 1;
 
-        if (this.rand.nextInt(16) == 0) {
+        if (this.rand.nextInt(8) == 0) {
             i = rand.nextInt(2);
         }
 
-        if (this.rand.nextInt(0x30) != 0) {
+        if (this.rand.nextInt(0x38) != 0) {
             i = 0;
         }
 
