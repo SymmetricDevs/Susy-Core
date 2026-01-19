@@ -81,8 +81,6 @@ public class WorldProviderPlanet extends WorldProvider {
         return new float[] { 0.0F, 0.0F, 0.0F, 0.0F };
     }
 
-
-
     // All this stuff below is for custom day/night cycle time overrides
     @Override
     public float calculateCelestialAngle(long worldTime, float partialTicks) {
