@@ -15,6 +15,8 @@ public class SkyRenderData {
     private final float rotationX;
     private final float rotationZ;
 
+    private boolean reversePhases;
+
     private SkyRenderData(Builder builder) {
         this.texture = builder.texture;
         this.size = builder.size;
@@ -77,7 +79,13 @@ public class SkyRenderData {
 
         float minecraftDays = worldTime / 24000.0f;
         float phaseProgress = (minecraftDays % phaseData.cycleLength) / phaseData.cycleLength;
-        return (int) (phaseProgress * phaseData.totalPhases) % phaseData.totalPhases;
+        int phase = (int) (phaseProgress * phaseData.totalPhases) % phaseData.totalPhases;
+
+        if (reversePhases) {
+            phase = (phaseData.totalPhases - 1 - phase) % phaseData.totalPhases;
+        }
+
+        return phase;
     }
 
     public enum PositionType {
@@ -129,6 +137,12 @@ public class SkyRenderData {
         private boolean mirrorTexture = false;
         private float rotationX = 0.0F;
         private float rotationZ = 0.0F;
+        private boolean reversePhases = false;
+
+        public Builder reversePhases(boolean reverse) {
+            this.reversePhases = reverse;
+            return this;
+        }
 
         public Builder(ResourceLocation texture, float size) {
             this.texture = texture;

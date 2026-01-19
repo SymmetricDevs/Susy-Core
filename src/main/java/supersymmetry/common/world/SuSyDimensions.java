@@ -59,8 +59,8 @@ public class SuSyDimensions {
                         .phases(4, 2, 29.53F)  // 8 phases, 1 row, 29.53 day cycle (synodic month)
                         .useLinearFiltering(false)
                         .brightness(0.8F)  // Slightly dimmer than sun
-                        .mirrorTexture(true)  // flip the texture horizontally? for some reason it is flipped in game oh
-                                              // well
+                        .mirrorTexture(true)  // flip the texture horizontally? for some reason it is flipped
+                        .reversePhases(true)
                         .build();
 
         // Set the celestial objects
