@@ -28,7 +28,14 @@ public class MoonSkyRenderer extends IRenderHandler {
     private static final int EARTH_PHASES_COLUMNS = 4;
     private static final int EARTH_PHASES_ROWS = 2;
     private static final int TOTAL_EARTH_PHASES = 8;
-    private static final float LUNAR_MONTH_DAYS = 29.53f; // Synodic month length
+
+    // Lunar constants
+    private static final float LUNAR_DAY_LENGTH = 29.53f; // Synodic month (Earth days)
+    private static final float MINECRAFT_TICKS_PER_DAY = 24000f;
+
+    // How many Minecraft days should equal one lunar day (29.53 Earth days)
+    // Adjust this for gameplay: 1.0 = real speed, 0.1 = 10x faster, etc.
+    private static final float TIME_SCALE = 0.1f; // 10x faster for gameplay
 
     // Configuration
     private float earthSize = 20.0F;
@@ -52,21 +59,83 @@ public class MoonSkyRenderer extends IRenderHandler {
         // Disable depth test and writing - celestial objects are infinitely far
         GlStateManager.depthMask(false);
 
-        float celestialAngle = world.getCelestialAngle(partialTicks);
-
-        // Render sun on the celestial sphere
-        renderCelestialObject(SUN_TEXTURES, sunSize, celestialAngle, 0.0F, false, 0);
-
-        // Calculate current Earth phase
+        // Calculate lunar sun position (slow, retrograde motion)
         long worldTime = world.getWorldTime();
-        int currentPhase = calculateEarthPhase(worldTime);
+        float lunarSunAngle = calculateLunarSunAngle(worldTime, partialTicks);
 
+        // Render sun with custom lunar motion
+        renderLunarSun(SUN_TEXTURES, sunSize, lunarSunAngle);
+
+        // Calculate Earth phase based on sun position
+        int currentPhase = calculateEarthPhaseFromSun(lunarSunAngle);
+
+        // Render Earth at zenith (always overhead, tidally locked)
         renderEarthAtZenith(EarthFromMoon, earthSize, currentPhase);
 
         GlStateManager.depthMask(true);
         GlStateManager.disableBlend();
         GlStateManager.enableAlpha();
         GlStateManager.enableFog();
+    }
+
+    /**
+     * Calculate the sun's position in lunar sky
+     * On the Moon, the sun moves slowly (29.53 day cycle) in retrograde direction
+     */
+    private float calculateLunarSunAngle(long worldTime, float partialTicks) {
+        // Convert world time to effective lunar time
+        float totalTicks = worldTime + partialTicks;
+        float minecraftDays = totalTicks / MINECRAFT_TICKS_PER_DAY;
+
+        // Scale to lunar day length
+        float lunarDayProgress = (minecraftDays * TIME_SCALE) / LUNAR_DAY_LENGTH;
+
+        // Normalize to 0-1 range
+        float normalizedProgress = lunarDayProgress % 1.0f;
+
+        // REVERSE direction (retrograde motion due to orbital movement)
+        // On Earth: 0.0 = sunrise, 0.25 = noon, 0.5 = sunset, 0.75 = midnight
+        // On Moon: reverse this, so sun moves west-to-east
+        float reversedAngle = 1.0f - normalizedProgress;
+
+        return reversedAngle;
+    }
+
+    /**
+     * Render the sun with lunar motion characteristics
+     */
+    private void renderLunarSun(ResourceLocation texture, float size, float lunarSunAngle) {
+        GlStateManager.pushMatrix();
+
+        // Rotate to position on celestial sphere
+        // Note: reversed rotation for retrograde motion
+        GlStateManager.rotate(-90.0F, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(lunarSunAngle * 360.0F, 1.0F, 0.0F, 0.0F);
+
+        // Bind texture
+        Minecraft.getMinecraft().renderEngine.bindTexture(texture);
+
+        // Use nearest neighbor filtering
+        GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+        GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+        GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
+        GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
+
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.enableTexture2D();
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buffer = tessellator.getBuffer();
+
+        // Render as billboard on celestial sphere (distance = 100)
+        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        buffer.pos(-size, 100.0D, -size).tex(0, 0).endVertex();
+        buffer.pos(size, 100.0D, -size).tex(1, 0).endVertex();
+        buffer.pos(size, 100.0D, size).tex(1, 1).endVertex();
+        buffer.pos(-size, 100.0D, size).tex(0, 1).endVertex();
+        tessellator.draw();
+
+        GlStateManager.popMatrix();
     }
 
     private void renderEarthAtZenith(ResourceLocation texture, float size, int phase) {
@@ -110,118 +179,26 @@ public class MoonSkyRenderer extends IRenderHandler {
         GlStateManager.popMatrix();
     }
 
-    private void renderCelestialObject(ResourceLocation texture, float size, float celestialAngle,
-                                       float azimuthOffset, boolean hasPhases, int phase) {
-        GlStateManager.pushMatrix();
-
-        // Rotate to position on celestial sphere
-        GlStateManager.rotate(-90.0F, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate(celestialAngle * 360.0F, 1.0F, 0.0F, 0.0F);
-        GlStateManager.rotate(azimuthOffset * 360.0F, 0.0F, 0.0F, 1.0F);
-
-        // Bind texture
-        Minecraft.getMinecraft().renderEngine.bindTexture(texture);
-
-        // Process Earth texture once to remove black pixels
-        if (hasPhases && !textureProcessed) {
-            removeBlackPixelsFromTexture();
-            textureProcessed = true;
-        }
-
-        // Use nearest neighbor filtering
-        GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
-        GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-        GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
-        GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
-
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        GlStateManager.enableTexture2D();
-
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.getBuffer();
-
-        // Calculate UV coordinates
-        float uMin = 0.0F;
-        float uMax = 1.0F;
-        float vMin = 0.0F;
-        float vMax = 1.0F;
-
-        if (hasPhases) {
-            int column = phase % EARTH_PHASES_COLUMNS;
-            int row = phase / EARTH_PHASES_COLUMNS;
-
-            uMin = column / (float) EARTH_PHASES_COLUMNS;
-            uMax = (column + 1) / (float) EARTH_PHASES_COLUMNS;
-            vMin = row / (float) EARTH_PHASES_ROWS;
-            vMax = (row + 1) / (float) EARTH_PHASES_ROWS;
-
-            // Swap UVs to flip the texture horizontally (mirror it)
-            float temp = uMin;
-            uMin = uMax;
-            uMax = temp;
-        }
-
-        // Render as billboard on celestial sphere (distance = 100)
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        buffer.pos(-size, 100.0D, -size).tex(uMin, vMin).endVertex();
-        buffer.pos(size, 100.0D, -size).tex(uMax, vMin).endVertex();
-        buffer.pos(size, 100.0D, size).tex(uMax, vMax).endVertex();
-        buffer.pos(-size, 100.0D, size).tex(uMin, vMax).endVertex();
-        tessellator.draw();
-
-        GlStateManager.popMatrix();
-    }
-
-    private void removeBlackPixelsFromTexture() {
-        try {
-            // Get current texture dimensions using direct LWJGL calls
-            int w = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH);
-            int h = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT);
-
-            if (w == 0 || h == 0) return;
-
-            // Get texture pixels
-            java.nio.ByteBuffer buffer = org.lwjgl.BufferUtils.createByteBuffer(w * h * 4);
-            GL11.glGetTexImage(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
-
-            // Process each pixel
-            for (int i = 0; i < w * h * 4; i += 4) {
-                int r = buffer.get(i) & 0xFF;
-                int g = buffer.get(i + 1) & 0xFF;
-                int b = buffer.get(i + 2) & 0xFF;
-
-                // If pixel is pure black (0,0,0), make it transparent
-                if (r == 0 && g == 0 && b == 0) {
-                    buffer.put(i, (byte) 0);     // R = 0
-                    buffer.put(i + 1, (byte) 0); // G = 0
-                    buffer.put(i + 2, (byte) 0); // B = 0
-                    buffer.put(i + 3, (byte) 0); // A = 0 (fully transparent)
-                }
-            }
-
-            // Re-upload the texture
-            buffer.rewind();
-            GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, w, h, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE,
-                    buffer);
-
-        } catch (Exception e) {
-            // Silently fail if texture processing doesn't work
-        }
-    }
-
     /**
-     * Calculate which Earth phase to display based on world time
-     * Earth phases as seen from Moon are opposite to Moon phases from Earth
+     * Calculate which Earth phase to display based on sun position
+     *
+     * When sun is overhead: New Earth (phase 0 - dark, sun is behind Earth)
+     * When sun is on horizon: Quarter Earth (phase 2 or 6)
+     * When sun is opposite/midnight: Full Earth (phase 4 - fully lit)
      */
-    private int calculateEarthPhase(long worldTime) {
-        // Convert ticks to days (24000 ticks per Minecraft day)
-        float minecraftDays = worldTime / 24000.0f;
+    private int calculateEarthPhaseFromSun(float lunarSunAngle) {
+        // lunarSunAngle cycles from 0 to 1:
+        // 0.75 = sunrise, 0.5 = noon, 0.25 = sunset, 0.0 = midnight (reversed from Earth)
 
-        // Calculate position in lunar month
-        float phaseProgress = (minecraftDays % LUNAR_MONTH_DAYS) / LUNAR_MONTH_DAYS;
+        // We want:
+        // noon (0.5) → New Earth (phase 0)
+        // midnight (0.0/1.0) → Full Earth (phase 4)
 
-        // Map to one of 8 phases
-        int phase = (int) (phaseProgress * TOTAL_EARTH_PHASES) % TOTAL_EARTH_PHASES;
+        // Offset by 0.5 so that noon maps to 0
+        float adjustedAngle = (lunarSunAngle + 0.5f) % 1.0f;
+
+        // Map to 8 phases
+        int phase = (int) (adjustedAngle * TOTAL_EARTH_PHASES) % TOTAL_EARTH_PHASES;
 
         return phase;
     }

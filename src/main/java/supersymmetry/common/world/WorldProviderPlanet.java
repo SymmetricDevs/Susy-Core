@@ -11,6 +11,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class WorldProviderPlanet extends WorldProvider {
 
+    private static final long TICKS_PER_DAY = 24000L;
+
     @Override
     public @NotNull DimensionType getDimensionType() {
         return SuSyDimensions.planetType;
@@ -71,6 +73,44 @@ public class WorldProviderPlanet extends WorldProvider {
     @Override
     public @Nullable float[] calcSunriseSunsetColors(float celestialAngle, float partialTicks) {
         return new float[] { 0.0F, 0.0F, 0.0F, 0.0F };
+    }
+
+
+
+    // All this stuff below is for custom day/night cycle time overrides
+    @Override
+    public float calculateCelestialAngle(long worldTime, float partialTicks) {
+        Planet planet = getPlanet();
+        if (planet != null && planet.getDayLength() > 0) {
+            // Get the planet's custom day length
+            float dayLengthMultiplier = planet.getDayLength();
+
+            // Example: for the moon, dayLength = 29.53, so one full cycle takes 29.53 Minecraft days
+            long adjustedTime = (long) (worldTime / dayLengthMultiplier);
+
+            // Calculate the angle within a single day cycle
+            int dayPart = (int) (adjustedTime % TICKS_PER_DAY);
+            float angle = ((float) dayPart + partialTicks) / (float) TICKS_PER_DAY;
+
+            // Normalize to 0-1 range
+            angle = angle - (float) Math.floor(angle);
+
+            return angle;
+        }
+
+        // Default behavior for planets without custom day length
+        return super.calculateCelestialAngle(worldTime, partialTicks);
+    }
+
+    @Override
+    public boolean isDaytime() {
+        Planet planet = getPlanet();
+        if (planet != null && planet.getDayLength() > 0) {
+            float angle = calculateCelestialAngle(this.world.getWorldTime(), 0);
+            // Day is when angle is between 0.0 and 0.5
+            return angle >= 0.0F && angle < 0.5F;
+        }
+        return super.isDaytime();
     }
 
     public Planet getPlanet() {

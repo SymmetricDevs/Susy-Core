@@ -16,6 +16,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.*;
+
 import supersymmetry.common.world.gen.MapGenLunarLavaTube;
 
 public class PlanetChunkGenerator implements IChunkGenerator {
@@ -352,7 +353,6 @@ public class PlanetChunkGenerator implements IChunkGenerator {
         }
     }
 
-    // NEW: Crater generation method
     private void generateCraters(int chunkX, int chunkZ, ChunkPrimer primer) {
         // Check surrounding chunks for crater centers
         for (int cx = chunkX - 2; cx <= chunkX + 2; cx++) {
@@ -373,7 +373,6 @@ public class PlanetChunkGenerator implements IChunkGenerator {
         }
     }
 
-    // NEW: Apply crater modifications to chunk primer
     private void applyCraterToChunk(ChunkPrimer primer, int chunkX, int chunkZ,
                                     int craterCenterX, int craterCenterZ,
                                     int diameter, Random craterRand) {

@@ -45,6 +45,7 @@ public class SuSyDimensions {
                 .setMoonSkyRenderer(new MoonSkyRenderer())
                 .setGravity(0.166f)
                 .setBiomeSize(7)
+                .setDayLength(29.53f)
                 .load();
     }
 }

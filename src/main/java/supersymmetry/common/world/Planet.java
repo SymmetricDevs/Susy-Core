@@ -34,6 +34,11 @@ public class Planet {
     // Custom sky renderer (optional override)
     private MoonSkyRenderer MoonSkyRenderer;
 
+    // Time
+    private float dayLength = 1.0f; // Default: normal Earth-like day (1.0 = 24000 ticks)
+    private IRenderHandler customSkyRenderer = null;
+
+
     // Atmosphere
 
     public Planet(int id, String planetName) {
@@ -243,10 +248,20 @@ public class Planet {
         return this;
     }
 
-    /**
-     * Get the effective sky renderer - returns custom sky if set, otherwise returns the default skyRenderer
-     */
+    public Planet setDayLength(float dayLength) {
+        this.dayLength = dayLength;
+        return this; // For builder pattern
+    }
+
+    public float getDayLength() {
+        return this.dayLength;
+    }
+    public Planet setCustomSkyRenderer(IRenderHandler renderer) {
+        this.customSkyRenderer = renderer;
+        return this;
+    }
+
     public IRenderHandler getEffectiveSkyRenderer() {
-        return MoonSkyRenderer != null ? MoonSkyRenderer : skyRenderer;
+        return this.customSkyRenderer;
     }
 }
