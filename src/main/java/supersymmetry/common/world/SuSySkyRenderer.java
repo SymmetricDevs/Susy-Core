@@ -1,7 +1,5 @@
 package supersymmetry.common.world;
 
-import java.util.Random;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -96,7 +94,6 @@ public class SuSySkyRenderer extends IRenderHandler {
         GlStateManager.enableAlpha();
         GlStateManager.enableFog();
     }
-
 
     private void renderCelestialSphereObject(SkyRenderData data, float celestialAngle, long worldTime) {
         GlStateManager.pushMatrix();
