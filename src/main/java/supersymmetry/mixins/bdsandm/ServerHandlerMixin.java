@@ -19,7 +19,8 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import funwayguy.bdsandm.blocks.IStorageBlock;
 import funwayguy.bdsandm.network.PacketBdsm;
 
-@Mixin(value = PacketBdsm.ServerHandler.class, remap = false)
+// I will PR this to UniversalTweaks as well.
+@Mixin(value = PacketBdsm.ServerHandler.class, remap = false, priority = Integer.MAX_VALUE)
 public class ServerHandlerMixin {
 
     @WrapOperation(method = "onMessage(Lfunwayguy/bdsandm/network/PacketBdsm;Lnet/minecraftforge/fml/common/network/simpleimpl/MessageContext;)Lfunwayguy/bdsandm/network/PacketBdsm;",
