@@ -9,13 +9,10 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeDecorator;
 import net.minecraft.world.chunk.ChunkPrimer;
-import net.minecraft.world.gen.feature.WorldGenerator;
-import supersymmetry.common.world.gen.MapGenLunarLavaTube;
-import supersymmetry.common.world.gen.WorldGenPit;
 
 public class PlanetaryBiome extends Biome {
+
     public PlanetaryBiome(BiomeProperties properties) {
         super(properties);
         this.decorator = new BiomePlanetaryDecorator();
@@ -23,7 +20,8 @@ public class PlanetaryBiome extends Biome {
 
     @Override
     public void decorate(World worldIn, Random rand, BlockPos pos) {
-        // Empty, prevents all vanilla decoration including structures
+        // BiomePlanetaryDecorator is set to not generate vanilla decorations
+        this.decorator.decorate(worldIn, rand, this, pos);
     }
 
     @Override

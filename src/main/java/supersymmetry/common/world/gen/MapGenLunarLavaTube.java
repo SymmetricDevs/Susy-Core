@@ -259,8 +259,7 @@ public class MapGenLunarLavaTube extends MapGenBase {
         IBlockState top = biome.topBlock;
         IBlockState filler = biome.fillerBlock;
 
-        if (this.canReplaceBlock(state, up) || state.getBlock() == top.getBlock() ||
-                state.getBlock() == filler.getBlock()) {
+        if (this.canReplaceBlock(state, up)) {
             if (y < 6) {
                 data.setBlockState(x, y, z, BASALT);
             } else {

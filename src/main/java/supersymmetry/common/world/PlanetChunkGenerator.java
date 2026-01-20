@@ -178,9 +178,7 @@ public class PlanetChunkGenerator implements IChunkGenerator {
                             // Loop through z axis
                             for (int jZ = 0; jZ < 4; ++jZ) {
                                 // If the noiseLevel is above 0, set block to stone.
-                                if (height < 2) {
-                                    primer.setBlockState(iX * 4 + jX, iY * 8 + jY, iZ * 4 + jZ, bedrock);
-                                } else if ((zVariation += d16) > 0.0D) {
+                                if (height < 2 || (zVariation += d16) > 0.0D) {
                                     primer.setBlockState(iX * 4 + jX, iY * 8 + jY, iZ * 4 + jZ, stone);
                                 }
 
@@ -490,34 +488,6 @@ public class PlanetChunkGenerator implements IChunkGenerator {
 
         // Call biome decoration first
         biome.decorate(this.world, this.rand, blockpos);
-
-        // Generate pit entrances to lava tubes
-        generatePitEntrances(x, z, blockpos);
-    }
-
-    private void generatePitEntrances(int chunkX, int chunkZ, BlockPos chunkPos) {
-        // Use chunk-based random with world seed
-        Random pitRand = new Random(world.getSeed() +
-                (long) chunkX * 341873128712L + (long) chunkZ * 132897987541L);
-
-        // Low probability of pit entrance per chunk (adjust as needed)
-        if (pitRand.nextDouble() < 0.02) { // 2% chance per chunk
-            // Random position within chunk
-            int x = chunkPos.getX() + pitRand.nextInt(16);
-            int z = chunkPos.getZ() + pitRand.nextInt(16);
-
-            // Find surface height
-            int y = world.getHeight(x, z);
-
-            // Create a marker block that WorldGenPit will use to determine size
-            // The metadata determines the pit size (0-15, where size = meta + 1)
-            int size = 2 + pitRand.nextInt(6); // Size 3-8
-
-            BlockPos pitPos = new BlockPos(x, y, z);
-
-            // Generate the pit
-            pitGenerator.generate(world, pitRand, pitPos);
-        }
     }
 
     public boolean generateStructures(Chunk chunkIn, int x, int z) {
