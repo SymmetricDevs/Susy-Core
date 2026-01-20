@@ -102,4 +102,8 @@ public class SusyOrePrefix {
     // Mill ball
     public static final OrePrefix millBall = new OrePrefix("millBall", GTValues.M, null, SuSyMaterialIconType.millBall,
             OrePrefix.Flags.ENABLE_UNIFICATION, mat -> mat.hasProperty(SuSyPropertyKey.MILL_BALL));
+
+    static {
+        millBall.maxStackSize = 1;
+    }
 }
