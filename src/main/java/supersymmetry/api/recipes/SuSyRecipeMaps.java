@@ -16,7 +16,6 @@ import gregtech.api.recipes.builders.SimpleRecipeBuilder;
 import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.material.Material;
-import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.unification.stack.MaterialStack;
 import gregtech.core.sound.GTSoundEvents;
@@ -580,6 +579,7 @@ public class SuSyRecipeMaps {
         });
 
         SuSyRecipeMaps.BALL_MILL.onRecipeBuild(recipeBuilder -> recipeBuilder
-                .fluidInputs(SusyMaterials.PreheatedAir.getFluid(recipeBuilder.getDuration() * recipeBuilder.getEUt() / 512)));
+                .fluidInputs(SusyMaterials.PreheatedAir
+                        .getFluid(recipeBuilder.getDuration() * recipeBuilder.getEUt() / 512)));
     }
 }
