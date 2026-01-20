@@ -20,7 +20,8 @@ public class SuSyLateMixinLoader implements ILateMixinLoader {
             "reccomplex",
             "fluidlogged_api",
             "littletiles",
-            "celeritas");
+            "celeritas",
+            "projectred-core");
 
     @Override
     public List<String> getMixinConfigs() {
