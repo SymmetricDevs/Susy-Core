@@ -114,7 +114,7 @@ public class SuSyRecipeMaps {
                     .setSlotOverlay(true, true, true, GuiTextures.MOLECULAR_OVERLAY_4)
                     .setSound(GTSoundEvents.BATH);
 
-    public static final RecipeMap<SimpleRecipeBuilder> ZONE_REFINER_RECIPES = new RecipeMap<>("zone_refiner", 1, 1, 0,
+    public static final RecipeMap<SimpleRecipeBuilder> ZONE_REFINER_RECIPES = new RecipeMap<>("zone_refiner", 3, 1, 2,
             0, new SimpleRecipeBuilder(), false)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_CRYSTALLIZATION, ProgressWidget.MoveType.HORIZONTAL)
                     .setSlotOverlay(false, false, true, GuiTextures.FURNACE_OVERLAY_1)
