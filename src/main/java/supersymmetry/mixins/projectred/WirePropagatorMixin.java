@@ -21,7 +21,7 @@ public class WirePropagatorMixin {
     private final Field liftedTree1$1() {
         try {
             // Can provide power
-            Field c = ObfuscationReflectionHelper.findField(BlockRedstoneWire.class, "field_150181_a");;
+            Field c = ObfuscationReflectionHelper.findField(BlockRedstoneWire.class, "field_150181_a");
             c.setAccessible(true);
             return c;
         } catch (Exception var3) {
