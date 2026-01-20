@@ -76,7 +76,7 @@ public class MetaTileEntityPrimitiveSmelter extends RecipeMapPrimitiveMultiblock
                 .where('B', states(getCasingState()).setMinGlobalLimited(14)
                         .or(abilities(SuSyMultiblockAbilities.PRIMITIVE_IMPORT_ITEMS).setPreviewCount(1))
                         .or(abilities(SuSyMultiblockAbilities.PRIMITIVE_EXPORT_ITEMS).setPreviewCount(1)))
-                .where('S', selfPredicate())
+                .where('C', selfPredicate())
                 .where('S', states(ModuleCore.Blocks.MASONRY_BRICK_SLAB.getDefaultState()))
                 .where('#', air().or(SNOW_PREDICATE))
                 .where(' ', air())
