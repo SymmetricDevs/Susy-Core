@@ -5,6 +5,7 @@ import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.hiddenS
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
