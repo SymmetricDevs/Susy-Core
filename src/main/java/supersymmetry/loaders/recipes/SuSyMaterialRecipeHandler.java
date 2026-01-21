@@ -1,18 +1,5 @@
 package supersymmetry.loaders.recipes;
 
-import static gregtech.api.GTValues.*;
-import static gregtech.api.recipes.RecipeMaps.*;
-import static gregtech.api.unification.material.Materials.*;
-import static gregtech.api.unification.ore.OrePrefix.*;
-
-import java.util.*;
-
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
-
-import org.jetbrains.annotations.NotNull;
-
 import gregtech.api.GTValues;
 import gregtech.api.recipes.ModHandler;
 import gregtech.api.recipes.Recipe;
@@ -32,12 +19,24 @@ import gregtech.api.util.function.TriConsumer;
 import gregtech.common.items.MetaItems;
 import gregtech.common.items.ToolItems;
 import gregtech.loaders.recipe.handlers.RecyclingRecipeHandler;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
 import supersymmetry.api.unification.material.properties.FiberProperty;
+import supersymmetry.api.unification.material.properties.MillBallProperty;
 import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.item.SuSyMetaItems;
+
+import java.util.*;
+
+import static gregtech.api.GTValues.*;
+import static gregtech.api.recipes.RecipeMaps.*;
+import static gregtech.api.unification.material.Materials.*;
+import static gregtech.api.unification.ore.OrePrefix.*;
 
 public class SuSyMaterialRecipeHandler {
 
@@ -62,6 +61,8 @@ public class SuSyMaterialRecipeHandler {
                 SuSyMaterialRecipeHandler::processHIPPressing);
         addProcessingHandler(PropertyKey.DUST, OrePrefix.dust, SuSyMaterialFlags.CONTINUOUSLY_CAST,
                 SuSyMaterialRecipeHandler::processContinuouslyCast);
+        SusyOrePrefix.millBall.addProcessingHandler(SuSyPropertyKey.MILL_BALL,
+                SuSyMaterialRecipeHandler::processMillBall);
     }
 
     public static <T extends IMaterialProperty> void addProcessingHandler(PropertyKey<T> propertyKey, OrePrefix prefix,
@@ -362,5 +363,15 @@ public class SuSyMaterialRecipeHandler {
          * .buildAndRegister();
          * }
          */
+    }
+
+    public static void processMillBall(OrePrefix millBallPrefix, Material mat, MillBallProperty property) {
+        FLUID_SOLIDFICATION_RECIPES.recipeBuilder()
+                .notConsumable(MetaItems.SHAPE_MOLD_BALL)
+                .fluidInputs(mat.getFluid(144))
+                .output(SusyOrePrefix.millBall, mat, 1)
+                .EUt(VA[LV])
+                .duration(200)
+                .buildAndRegister();
     }
 }
