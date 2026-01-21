@@ -17,6 +17,10 @@ public class SkyRenderData {
 
     private boolean reversePhases;
 
+    private final float orbitalInclination; // Max angle (degrees) the path deviates from the equator
+    private final float nodalPeriodLength;  // Time (in ticks) for one full cycle of the inclination (e.g., eclipse
+    private final float baseInclination;
+
     private SkyRenderData(Builder builder) {
         this.texture = builder.texture;
         this.size = builder.size;
@@ -28,6 +32,9 @@ public class SkyRenderData {
         this.mirrorTexture = builder.mirrorTexture;
         this.rotationX = builder.rotationX;
         this.rotationZ = builder.rotationZ;
+        this.orbitalInclination = builder.orbitalInclination;
+        this.nodalPeriodLength = builder.nodalPeriodLength;
+        this.baseInclination = builder.baseInclination;
     }
 
     public ResourceLocation getTexture() {
@@ -72,6 +79,22 @@ public class SkyRenderData {
 
     public boolean hasPhases() {
         return phaseData != null;
+    }
+
+    public float getOrbitalInclination() {
+        return orbitalInclination;
+    }
+
+    public float getNodalPeriodLength() {
+        return nodalPeriodLength;
+    }
+
+    public float getCurrentInclination(long worldTime) {
+        if (nodalPeriodLength <= 0) return baseInclination;
+        // Oscillate AROUND the base inclination
+        float progress = (worldTime % (long) nodalPeriodLength) / nodalPeriodLength;
+        float oscillation = (float) Math.sin(progress * Math.PI * 2.0) * orbitalInclination;
+        return baseInclination + oscillation;
     }
 
     public int getCurrentPhase(long worldTime) {
@@ -138,15 +161,30 @@ public class SkyRenderData {
         private float rotationX = 0.0F;
         private float rotationZ = 0.0F;
         private boolean reversePhases = false;
+        private float baseInclination = 5.14F; // Default offset
+
+        private float orbitalInclination = 0.0F;
+        private float nodalPeriodLength = 0.0F;
 
         public Builder reversePhases(boolean reverse) {
             this.reversePhases = reverse;
             return this;
         }
 
+        public Builder baseInclination(float angle) {
+            this.baseInclination = angle;
+            return this;
+        }
+
         public Builder(ResourceLocation texture, float size) {
             this.texture = texture;
             this.size = size;
+        }
+
+        public Builder inclination(float angle, float cycleLengthInTicks) {
+            this.orbitalInclination = angle;
+            this.nodalPeriodLength = cycleLengthInTicks;
+            return this;
         }
 
         public Builder positionType(PositionType type) {
