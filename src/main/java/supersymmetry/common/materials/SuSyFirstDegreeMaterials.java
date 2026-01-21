@@ -16,14 +16,14 @@ import supersymmetry.api.util.SuSyUtility;
 public class SuSyFirstDegreeMaterials {
 
     public static void init() {
-
-        ManganeseIronArsenicPhosphide = new Material.Builder(27100, SuSyUtility.susyId("manganese_iron_arsenic_phosphide"))
-                .ingot()
-                .color(0x03FCF0).iconSet(MaterialIconSet.METALLIC)
-                .cableProperties(GTValues.V[4], 2, 4)
-                .components(Manganese, 2, Iron, 2, Arsenic, 1, Phosphorus, 1)
-                .blastTemp(2100, BlastProperty.GasTier.LOW)
-                .build();
+        ManganeseIronArsenicPhosphide = new Material.Builder(27100,
+                SuSyUtility.susyId("manganese_iron_arsenic_phosphide"))
+                        .ingot()
+                        .color(0x03FCF0).iconSet(MaterialIconSet.METALLIC)
+                        .cableProperties(GTValues.V[4], 2, 4)
+                        .components(Manganese, 2, Iron, 2, Arsenic, 1, Phosphorus, 1)
+                        .blastTemp(2100, BlastProperty.GasTier.LOW)
+                        .build();
 
         PraseodymiumNickel = new Material.Builder(27101, SuSyUtility.susyId("praseodymium_nickel"))
                 .ingot()
@@ -41,7 +41,7 @@ public class SuSyFirstDegreeMaterials {
                 .blastTemp(2100, BlastProperty.GasTier.HIGH)
                 .build();
 
-        //Minerals
+        // Minerals
 
         Anorthite = new Material.Builder(27103, SuSyUtility.susyId("anorthite"))
                 .dust()
@@ -51,7 +51,6 @@ public class SuSyFirstDegreeMaterials {
                 .components(Calcium, 1, Aluminium, 2, Silicon, 2, Oxygen, 8)
                 .build()
                 .setFormula("Ca(Al2Si2O8)", true);
-
 
         Albite = new Material.Builder(27104, SuSyUtility.susyId("albite"))
                 .dust()
@@ -114,7 +113,6 @@ public class SuSyFirstDegreeMaterials {
                 .components(Calcium, 2, Magnesium, 3, Iron, 3, Silicon, 8, Oxygen, 24)
                 .build()
                 .setFormula("(Ca2MgFe)(MgFe)2(Si2O6)4", true);
-
 
         Dolomite = new Material.Builder(27111, SuSyUtility.susyId("dolomite"))
                 .dust()
