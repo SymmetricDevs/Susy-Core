@@ -15,25 +15,13 @@ public class PlanetaryBiome extends Biome {
 
     public PlanetaryBiome(BiomeProperties properties) {
         super(properties);
-        this.decorator.generateFalls = false;
-        this.decorator.flowersPerChunk = 0;
-        this.decorator.grassPerChunk = 0;
-        this.decorator.treesPerChunk = 0;
-
-        // mushrooms still generate with mushroomsPerChunk = 0;
-        this.decorator.mushroomsPerChunk = 0;
-        this.decorator.cactiPerChunk = 0;
-        this.decorator.deadBushPerChunk = 0;
-        this.decorator.reedsPerChunk = 0;
-        this.decorator.sandPatchesPerChunk = 0;
-        this.decorator.gravelPatchesPerChunk = 0;
-        this.decorator.clayPerChunk = 0;
-        this.decorator.bigMushroomsPerChunk = 0;
+        this.decorator = new BiomePlanetaryDecorator();
     }
 
     @Override
     public void decorate(World worldIn, Random rand, BlockPos pos) {
-        // Empty, prevents all vanilla decoration including structures
+        // BiomePlanetaryDecorator is set to not generate vanilla decorations
+        this.decorator.decorate(worldIn, rand, this, pos);
     }
 
     @Override
