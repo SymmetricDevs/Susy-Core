@@ -79,7 +79,6 @@ public class Planet {
                 // Apply sky renderer - try immediately and log result
                 applySkyRenderer();
             }
-            SusyLog.logger.info("Loaded Planet with ID " + this.getId() + " and name " + this.getPlanetName());
         }
     }
 
@@ -90,17 +89,13 @@ public class Planet {
             IRenderHandler renderer = getEffectiveSkyRenderer();
             if (renderer != null) {
                 world.provider.setSkyRenderer(renderer);
-                SusyLog.logger.info("Applied sky renderer for " + this.getPlanetName());
             }
-        } else {
-            SusyLog.logger.warn("Could not apply sky renderer for " + this.getPlanetName() + " - world not loaded yet");
         }
     }
 
     public void unload() {
         if (isLoaded) {
             isLoaded = false;
-            SusyLog.logger.info("Unloaded Planet with ID " + this.getId() + " and name " + this.getPlanetName());
         }
     }
 

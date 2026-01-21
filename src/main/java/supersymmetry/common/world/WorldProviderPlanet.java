@@ -16,7 +16,7 @@ import supersymmetry.common.world.sky.SkyRenderData;
 
 public class WorldProviderPlanet extends WorldProvider {
 
-    private long TICKS_PER_DAY = 24000L;
+    private long TICKS_PER_DAY = 24000L; // the maximum for a long (signed 64 bit) is 2^63
 
     public void setTicksPerDay(long ticksPerDay) {
         this.TICKS_PER_DAY = ticksPerDay;
@@ -80,8 +80,7 @@ public class WorldProviderPlanet extends WorldProvider {
             SuSySkyRenderer skyRenderer = planet.getSuSySkyRenderer();
             if (skyRenderer != null && skyRenderer.getSkyColorData() != null) {
                 float celestialAngle = world.getCelestialAngle(partialTicks);
-                Vec3d color = skyRenderer.getSkyColorData().getSkyColor(celestialAngle);
-                return color;
+                return skyRenderer.getSkyColorData().getSkyColor(celestialAngle);
             }
         }
         return new Vec3d(0.0D, 0.0D, 0.0D);
@@ -142,15 +141,6 @@ public class WorldProviderPlanet extends WorldProvider {
             angle = angle - (float) Math.floor(angle);
             angle = (angle + planet.getTimeOffset()) % 1.0F;
 
-            // DEBUG
-            if (worldTime % 100 == 0) {
-                SusyLog.logger.info("Celestial Angle Debug - worldTime: " + worldTime +
-                        ", adjustedTime: " + adjustedTime +
-                        ", dayPart: " + dayPart +
-                        ", angle: " + String.format("%.4f", angle) +
-                        " (0.25 = zenith/noon)");
-            }
-
             return angle;
         }
         return world.getCelestialAngle(partialTicks);
@@ -178,17 +168,6 @@ public class WorldProviderPlanet extends WorldProvider {
         // This means the inclination must be near zero (within eclipse threshold)
         float eclipseThreshold = 2.0f; // degrees - tune this for eclipse frequency
 
-        // DEBUG: Always log current state every 100 ticks
-        if (worldTime % 100 == 0) {
-            float celestialAngle = realCelestialAngle(worldTime, partialTicks);
-
-            SusyLog.logger.info("Moon Debug - Inclination: " + String.format("%.2f", currentInclination) +
-                    "°, Threshold: " + eclipseThreshold +
-                    "°, In season: " + (Math.abs(currentInclination) <= eclipseThreshold) +
-                    " | Celestial angle: " + String.format("%.4f", celestialAngle) +
-                    " (0.25 = zenith) | worldTime: " + worldTime);
-        }
-
         if (Math.abs(currentInclination) > eclipseThreshold) {
             return false; // Not in eclipse season
         }
@@ -211,15 +190,7 @@ public class WorldProviderPlanet extends WorldProvider {
         // Eclipse occurs when sun is within Earth's angular radius
         float earthAngularRadius = earth.getSize() / 3.0f;
 
-        boolean eclipse = angleInDegrees < earthAngularRadius;
-
-        if (eclipse) {
-            SusyLog.logger.info("🌑 ECLIPSE ACTIVE! Celestial angle: " + String.format("%.4f", celestialAngle) +
-                    ", Separation from zenith: " + String.format("%.2f", angleInDegrees) +
-                    "°, Earth radius: " + String.format("%.2f", earthAngularRadius) + "°");
-        }
-
-        return eclipse;
+        return angleInDegrees < earthAngularRadius;
     }
 
     @Override

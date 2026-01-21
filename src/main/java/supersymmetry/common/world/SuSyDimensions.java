@@ -38,7 +38,6 @@ public class SuSyDimensions {
         SusyLog.logger.info("Registering planet dimension type at id " + id);
         planetType = DimensionType.register("susy_planet", "_susy", id, WorldProviderPlanet.class, false);
 
-        // Create sky renderer for the Moon
         SuSySkyRenderer moonSky = new SuSySkyRenderer();
 
         // Lunar eclipse mechanics:
@@ -52,12 +51,8 @@ public class SuSyDimensions {
 
         long lunarDayTicks = 708734L; // 29.5306 * 24000
 
-        // FOR TESTING: Use a much shorter nodal period so you can see eclipses quickly
-        // PRODUCTION: Use 11.73 lunar days for realistic eclipse frequency
         float nodalPeriodInLunarDays = 11.73f; // Realistic eclipse cycle
         long nodalPeriodTicks = (long) (nodalPeriodInLunarDays * lunarDayTicks); // Use lunar day length!
-        // Orbital inclination of 5.14 degrees (Moon's actual orbital inclination)
-        // This creates eclipse seasons when the inclination crosses zero
         float orbitalInclination = 5.14f;
 
         // Sun moves on celestial sphere with orbital inclination
