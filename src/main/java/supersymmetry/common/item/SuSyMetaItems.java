@@ -37,6 +37,7 @@ import supersymmetry.common.item.behavior.PipeNetPainterBehavior;
 import supersymmetry.common.item.behavior.RocketConfigBehavior;
 
 public class SuSyMetaItems {
+
     // DO NOT CHANGE
     private static int itemIndex = 1;
 
