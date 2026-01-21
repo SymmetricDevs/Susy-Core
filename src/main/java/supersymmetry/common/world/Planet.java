@@ -41,6 +41,8 @@ public class Planet {
 
     // Atmosphere
 
+    private long ticksPerDay = 24000L;
+
     public Planet(int id, String planetName) {
         this.id = id;
         this.planetName = planetName;
@@ -282,5 +284,14 @@ public class Planet {
             return this.skyRenderer;
         }
         return null;
+    }
+
+    public Planet setTicksPerDay(long ticks) {
+        this.ticksPerDay = ticks;
+        return this;
+    }
+
+    public long getTicksPerDay() {
+        return this.ticksPerDay;
     }
 }
