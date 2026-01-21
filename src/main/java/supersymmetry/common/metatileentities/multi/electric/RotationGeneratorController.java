@@ -137,6 +137,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         super.writeToNBT(data);
         data.setInteger("Speed", this.speed);
         data.setInteger("LubricantCounter", this.lubricantCounter);
+        data.setBoolean("VoidingEnergy", ((SuSyTurbineRecipeLogic) recipeMapWorkable).getVoidingEnergy());
         return data;
     }
 
@@ -146,6 +147,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         super.readFromNBT(data);
         this.speed = data.getInteger("Speed");
         this.lubricantCounter = data.getInteger("LubricantCounter");
+        ((SuSyTurbineRecipeLogic) recipeMapWorkable).setVoidingEnergy(data.getBoolean("VoidingEnergy"));
     }
 
     @Override
