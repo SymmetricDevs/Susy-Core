@@ -17,7 +17,7 @@ public class TectonicZone {
     public static TectonicZone VOLCANIC_ARC = new TectonicZone("rainforest");
     public static TectonicZone OROGENIC_BELT = new TectonicZone("alps");
     public static TectonicZone SHEAR_ZONE = new TectonicZone("crag");
-    public static TectonicZone ABYSSAL_PLAIN = new TectonicZone("kelp_forest");
+    public static TectonicZone ABYSSAL_PLAIN = new TectonicZone(Biomes.OCEAN);
 
     public int biomeId;
 

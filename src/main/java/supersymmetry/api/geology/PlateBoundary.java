@@ -38,7 +38,9 @@ public class PlateBoundary {
         this.setNeighbours(PlateMap.MIN_PLATE_DISTANCE / 2);
 
         this.length = cornerA.distance(cornerB);
-        this.noiseOffset = PlateMap.instance.noise.noise2d(cornerA.x, cornerA.y);
+
+        Vec2d m = this.a.center.add(this.b.center).scale(0.5);
+        this.noiseOffset = PlateMap.instance.noise.noise2d(m.x, m.y);
     }
 
     public double distanceSquaredToBoundary(Vec2d P) {
@@ -83,17 +85,38 @@ public class PlateBoundary {
 
         Vec2d normal = this.d.normalize();
 
-        double noiseX = Math.cos(angle) + cornerA.x;
-        double noiseZ = Math.sin(angle) + cornerB.y;
+        double noiseX = Math.cos(angle) + m.x;
+        double noiseZ = Math.sin(angle) + m.y;
 
         double primary = PlateMap.instance.noise.noise2d(noiseX, noiseZ) - this.noiseOffset;
 
-        //noiseX = Math.cos(angle) * this.length / 500. + cornerA.x;
-        //noiseZ = Math.sin(angle) * this.length / 500. + cornerB.y;
+        noiseX = - Math.cos(angle) + m.x;
+        noiseZ = - Math.sin(angle) + m.y;
 
-        //double secondary = PlateMap.instance.noise.noise2d(noiseX, noiseZ) - this.noiseOffset;
+        primary += PlateMap.instance.noise.noise2d(noiseX, noiseZ) - this.noiseOffset;
+
+        noiseX = Math.cos(angle) * this.length / 200. + m.x;
+        noiseZ = Math.sin(angle) * this.length / 200. + m.y;
+
+        double secondary = PlateMap.instance.noise.noise2d(noiseX, noiseZ) - this.noiseOffset;
+
+        noiseX = - Math.cos(angle) * this.length / 200. + m.x;
+        noiseZ = - Math.sin(angle) * this.length / 200. + m.y;
+
+        secondary += PlateMap.instance.noise.noise2d(noiseX, noiseZ) - this.noiseOffset;
+
+        noiseX = Math.cos(angle) * this.length / 50. + m.x;
+        noiseZ = Math.sin(angle) * this.length / 50. + m.y;
+
+        double tertiary = PlateMap.instance.noise.noise2d(noiseX, noiseZ) - this.noiseOffset;
+
+        noiseX = - Math.cos(angle) * this.length / 50. + m.x;
+        noiseZ = - Math.sin(angle) * this.length / 50. + m.y;
+
+        secondary += PlateMap.instance.noise.noise2d(noiseX, noiseZ) - this.noiseOffset;
+
         // Apply perpendicular noise displacement
-        double offset = primary * 256;
+        double offset = 0; //primary * 160 + secondary * 16 + tertiary * 4;
 
         normal = normal.scale(offset);
 
