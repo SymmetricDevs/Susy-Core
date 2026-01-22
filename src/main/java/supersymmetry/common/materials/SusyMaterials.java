@@ -1,5 +1,9 @@
 package supersymmetry.common.materials;
 
+import java.lang.reflect.Field;
+import java.util.HashSet;
+import java.util.Map;
+
 import gregtech.api.GregTechAPI;
 import gregtech.api.fluids.FluidBuilder;
 import gregtech.api.fluids.store.FluidStorageKeys;
@@ -10,10 +14,6 @@ import gregtech.api.unification.material.info.MaterialFlags;
 import gregtech.api.unification.material.properties.*;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
-
-import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.Map;
 
 public class SusyMaterials {
 
