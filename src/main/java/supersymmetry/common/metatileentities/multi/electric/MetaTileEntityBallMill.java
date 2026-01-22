@@ -62,6 +62,7 @@ import supersymmetry.common.item.behavior.MillBallDurabilityManager;
 public class MetaTileEntityBallMill extends RecipeMapMultiblockController implements IAnimatableMTE {
 
     private static final int PARALLEL_LIMIT = 32;
+    public static final int MILL_BALL_REQUIREMENT = 8;
 
     @SideOnly(Side.CLIENT)
     private BlockPos lightPos;
@@ -245,6 +246,7 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
         super.addInformation(stack, world, tooltip, advanced);
         // Parallel
         tooltip.add(I18n.format("gregtech.universal.tooltip.parallel", PARALLEL_LIMIT));
+        tooltip.add(I18n.format("susy.multiblock.ball_mill.tooltip.mill_balls", MILL_BALL_REQUIREMENT));
     }
 
     @SideOnly(Side.CLIENT)
@@ -278,9 +280,9 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
             EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(front, upwards, flipped);
             EnumFacing up = RelativeDirection.UP.getRelativeFacing(front, upwards, flipped);
 
-            int xOff = back.getXOffset() * 3 + left.getXOffset() * 3 + up.getXOffset() * 3;
-            int yOff = back.getYOffset() * 3 + left.getYOffset() * 3 + up.getYOffset() * 3;
-            int zOff = back.getZOffset() * 3 + left.getZOffset() * 3 + up.getZOffset() * 3;
+            int xOff = back.getXOffset() * 3 + left.getXOffset() * 4 + up.getXOffset() * 3;
+            int yOff = back.getYOffset() * 3 + left.getYOffset() * 4 + up.getYOffset() * 3;
+            int zOff = back.getZOffset() * 3 + left.getZOffset() * 4 + up.getZOffset() * 3;
 
             this.transformation = new Vec3i(xOff, yOff, zOff);
         }
@@ -336,13 +338,18 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
     private static class BallMillLogic extends MultiblockRecipeLogic {
 
         private static final int EU_PER_DURABILITY = 256;
-        private static final int MILL_BALL_REQUIREMENT = 8;
         private int[] slotCache = new int[MILL_BALL_REQUIREMENT];
-        private boolean hasMillBalls;
+        private boolean hasMillBalls = true;
 
         public BallMillLogic(RecipeMapMultiblockController tileEntity) {
             super(tileEntity);
             this.setParallelLimit(PARALLEL_LIMIT);
+        }
+
+        @Override
+        protected void trySearchNewRecipe() {
+            hasMillBalls = true;
+            super.trySearchNewRecipe();
         }
 
         @Override
@@ -371,7 +378,6 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
                 return false;
             }
 
-            hasMillBalls = true;
             return super.checkRecipe(recipe);
         }
 

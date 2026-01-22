@@ -374,7 +374,8 @@ susy.machine.eccentric_roll_crusher.name=Eccentric Roll Crusher
 susy.machine.eccentric_roll_crusher.tooltip=Eccentricity does not mean low efficiency.
 susy.machine.ball_mill.name=Ball Mill
 susy.machine.ball_mill.tooltip=They see me rolling
-susy.multiblock.ball_mill.error.missing_mill_balls=Not enough mill balls were found.
+susy.multiblock.ball_mill.tooltip.mill_balls=Requires 8 mill balls to function.
+susy.multiblock.ball_mill.error.missing_mill_balls=Not enough mill balls were found for the recipe!
 
 susy.machine.redstone_controller.not_connected=No machine to control found!
 susy.machine.redstone_controller.signal_desc=Transmitting signal: %s
