@@ -10,8 +10,6 @@ import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeChunkManager;
 
-import supersymmetry.api.SusyLog;
-
 public class Planet {
 
     // Defining variables

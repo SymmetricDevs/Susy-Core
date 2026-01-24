@@ -10,7 +10,6 @@ import net.minecraftforge.client.IRenderHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import supersymmetry.api.SusyLog;
 import supersymmetry.common.world.sky.SkyColorData;
 import supersymmetry.common.world.sky.SkyRenderData;
 
