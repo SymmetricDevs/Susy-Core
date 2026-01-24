@@ -1,0 +1,1310 @@
+# Blocs
+tile.cooling_coil.manganese_iron_arsenic_phosphide.name=Serpentin de Refroidissement Manganèse-Fer-Arséniure-Phosphure
+tile.cooling_coil.praseodymium_nickel.name=Serpentin de Refroidissement Praséodyme-Nickel
+tile.cooling_coil.gadolinium_silicon_germanium.name=Serpentin de Refroidissement Gadolinium-Silicium-Germanium
+tile.cooling_coil.tooltip_temperature=Capacité de Refroidissement de Base : §b%,d K
+tile.wire_coil.tooltip_evaporation=§8Bassin d'Évaporation
+tile.wire_coil.tooltip_energy_evaporating= §cGénération de Chaleur : §f%,d kJ/t
+
+tile.sintering_brick.sintering_block_brick.name=Bloc de Frittage en Briques
+tile.sintering_brick.sintering_block_magnetoplated.name=Bloc de Frittage Magnétoplacé
+
+tile.coagulation_tank_wall.wooden_coagulation_tank_wall.name=Paroi de Cuve de Coagulation en Bois
+tile.separator_rotor.steel.name=Rotor de Séparateur par Gravité en Acier
+
+tile.alternator_coil.copper.name=Bobine d'Alternateur en Cuivre
+tile.turbine_rotor.steel.name=Bloc de Turbine en Acier
+tile.turbine_rotor.low_pressure.name=Bloc de Turbine Basse Pression
+tile.turbine_rotor.high_pressure.name=Bloc de Turbine Haute Pression
+tile.turbine_rotor.combustion.name=Bloc de Turbine à Combustion
+
+tile.drill_head.steel.name=Tête de Forage en Acier
+
+tile.susy_multiblock_casing.silicon_carbide_casing.name=Bloc Robuste en Carbure de Silicium
+
+tile.susy_multiblock_casing.sieve_tray.name=Plateau de Tamis
+tile.susy_multiblock_casing.coalescence_plate.name=Plaque de Coalescence
+tile.susy_multiblock_casing.structural_packing.name=Remplissage Structurel
+tile.susy_multiblock_casing.ulv_structural_casing.name=Bloc Structurel Basique
+tile.susy_multiblock_casing.drone_pad.name=Plateforme pour Drone
+tile.susy_multiblock_casing.heavy_duty_pad.name=Plateforme Renforcée
+tile.susy_multiblock_casing.synthetic_mullite_refractory.name=Briques Réfractaires en Mullite Synthétique
+tile.rocket_assembler_casing.reinforced_foundation.name=Fondation Renforcée
+tile.rocket_assembler_casing.foundation.name=Fondation d'Assemblage de Fusée
+tile.rocket_assembler_casing.rails.name=Rails d'Assemblage de Fusée
+tile.rocket_assembler_casing.structural_frame.name=Cadre Structurel d'Assemblage de Fusée
+tile.susy_multiblock_casing.euv_safe_casing.name=Bloc Sécurisé pour Lithographie EUV
+tile.susy_multiblock_casing.tabular_alumina_refractory.name=Revêtement Réfractaire en Alumine Tabulaire
+
+tile.serpentine.basic.name=Bloc Serpentin en Tubes de Cuivre
+
+tile.structural_block.base_structural_block.name=Bloc Structurel
+tile.structural_block.structural_block_low.name=Bloc Structurel Rayé
+tile.structural_block.structural_block_lowlight.name=Bloc Structurel Rayé Claire
+tile.structural_block.structural_block_danger_a.name=Bloc Structurel Avertissement (A)
+tile.structural_block.structural_block_danger_b.name=Bloc Structurel Avertissement (B)
+tile.structural_block.structural_block_danger_c.name=Bloc Structurel Avertissement (C)
+tile.structural_block.structural_block_danger_d.name=Bloc Structurel Avertissement (D)
+tile.structural_block.structural_block_column.name=Colonne Structurelle
+tile.structural_block.structural_block_column_old.name=Ancienne Colonne Structurelle
+tile.structural_block.structural_block_light.name=Lumière Structurelle
+tile.structural_block.structural_block_light_broken.name=Lumière Structurelle Cassée
+tile.structural_block.structural_block_light_cable.name=Câble Structurel
+tile.structural_block.structural_block_instruments.name=Bloc d'Instruments Structurels
+tile.structural_block.structural_block_sign_0.name=Panneau Structurel Zéro
+tile.structural_block.structural_block_sign_1.name=Panneau Structurel Un
+tile.structural_block.structural_block_sign_2.name=Panneau Structurel Deux
+tile.structural_block_1.structural_block_exposed.name=Bloc Structurel Exposé (A)
+tile.structural_block_1.structural_block_exposed_1.name=Bloc Structurel Exposé (B)
+tile.structural_block_1.structural_block_exposed_2.name=Bloc Structurel Exposé (C)
+tile.structural_block_1.structural_block_danger_sign.name=Panneau de Danger Structurel
+tile.structural_block_1.structural_block_cable.name=Câble Structurel (Vertical)
+tile.structural_block_1.structural_block_cable_horizontal.name=Câble Structurel (Horizontal)
+tile.structural_block_1.structural_block_cable_junction.name=Câble Structurel (Coude)
+tile.structural_block_1.structural_block_pipocalypse.name=Tuyauteries Denses Structurelles
+tile.structural_block_1.structural_block_vent.name=Ventilation Structurelle
+tile.structural_block_1.structural_block_vent_broken.name=Ventilation Structurelle (Cassée)
+
+tile.deposit_block.orthomagmatic.name=Bloc de Dépôt Orthomagmatique
+tile.deposit_block.metamorphic.name=Bloc de Dépôt Métamorphique
+tile.deposit_block.sedimentary.name=Bloc de Dépôt Sédimentaire
+tile.deposit_block.hydrothermal.name=Bloc de Dépôt Hydrothermal
+tile.deposit_block.alluvial.name=Bloc de Dépôt Alluvial
+tile.deposit_block.magmatic_hydrothermal.name=Bloc de Dépôt Magmatique-Hydrothermal
+tile.deposit_block.ice_cap.name=Bloc de Dépôt de Calotte Glaciaire
+tile.deposit_block.crater_deposit.name=Bloc de Dépôt de Cratère
+
+tile.resource_block.bauxite.name=Minerai de Bauxite
+tile.resource_block.caliche.name=Caliche
+tile.resource_block.non_marine_evaporite.name=Dépôt Évaporitique Non Marin
+tile.resource_block.halide_evaporite.name=Dépôt Évaporitique d'Halogénure
+tile.resource_block.sulfate_evaporite.name=Dépôt Évaporitique de Sulfate
+tile.resource_block.carbonate_evaporite.name=Dépôt Évaporitique de Carbonate
+tile.resource_block.monazite_alluvial.name=Dépôt Alluvial de Monazite
+tile.resource_block.bastnasite_alluvial.name=Dépôt Alluvial de Bastnaésite
+tile.resource_block.euxenite_alluvial.name=Dépôt Alluvial d'Euxénite
+tile.resource_block.xenotime_alluvial.name=Dépôt Alluvial de Xénotime
+tile.resource_block.gold_alluvial.name=Dépôt Alluvial d'Or
+tile.resource_block.platinum_placer.name=Dépôt Placérien de Platine
+tile.resource_block.phosphorite.name=Dépôt de Phosphorite
+tile.resource_block.potash.name=Dépôt de Potasse
+tile.resource_block.sulfur.name=Dépôt de Soufre
+tile.resource_block.coal.name=Dépôt de Charbon
+tile.resource_block_1.native_copper.name=Dépôt de Cuivre Natif
+tile.resource_block_1.anthracite.name=Dépôt d'Anthracite
+tile.resource_block_1.lignite.name=Dépôt de Lignite
+
+tile.multiblock_tank.clarifier.name=Cuve de Clarification
+tile.multiblock_tank.flotation.name=Cuve de Flottation par Moussage
+
+tile.evaporation_bed.dirt.name=Bassin d'Évaporation
+
+tile.electrode_assembly.carbon.name=Assemblage d'Électrodes en Carbone
+
+tile.home_block.home_block_home.name="Bloc Maison (Par défaut)"
+tile.home.allowed=Point de réapparition défini
+tile.home.denied=Impossible de définir le point de réapparition
+
+tile.home_block.home_primitive.name=Bloc Maison
+tile.home_block.home_primitive.tooltip=Primitif
+tile.home_block.home_gt_brutalist.name=Bloc Maison
+tile.home_block.home_gt_brutalist.tooltip=Brutaliste GT
+tile.home_block.home_renewal_brutalist.name=Bloc Maison
+tile.home_block.home_renewal_brutalist.tooltip=Brutaliste Renouvelé
+tile.home_block.home_scifi.name=Bloc Maison
+tile.home_block.home_scifi.tooltip=Science-Fiction
+
+tile.conveyor_belt.lv.name=Tapis Roulant
+
+tile.drill_bit.steel.name=Bloc de Foret en Acier
+
+tile.induction_coil_assembly.copper.name=Assemblage de Bobine d'Induction
+
+tile.engine_casing.piston_block.name=Bloc Moteur
+
+tile.engine_casing_2.crankshaft.name=Carter de Vilebrequin
+
+tile.active_casing.basic_intake_casing.name=Carter d'Admission Basique
+
+# Roches
+tile.susy_stone_smooth.gabbro.name=Gabbro
+tile.susy_stone_smooth.gneiss.name=Gneiss
+tile.susy_stone_smooth.graphite.name=Graphite
+tile.susy_stone_smooth.limestone.name=Calcaire
+tile.susy_stone_smooth.mica.name=Mica
+tile.susy_stone_smooth.phyllite.name=Phyllite
+tile.susy_stone_smooth.quartzite.name=Quartzite
+tile.susy_stone_smooth.shale.name=Schiste Argileux
+tile.susy_stone_smooth.slate.name=Ardoise
+tile.susy_stone_smooth.soapstone.name=Stéatite
+tile.susy_stone_smooth.kimberlite.name=Kimberlite
+tile.susy_stone_smooth.anorthosite.name=Anorthosite
+tile.susy_stone_smooth.industrial_concrete.name=Béton Industriel
+tile.susy_stone_smooth.minitary_concrete.name=Béton Militaire
+
+tile.susy_stone_cobble.gabbro.name=Pavés de Gabbro
+tile.susy_stone_cobble.gneiss.name=Pavés de Gneiss
+tile.susy_stone_cobble.graphite.name=Pavés de Graphite
+tile.susy_stone_cobble.limestone.name=Pavés de Calcaire
+tile.susy_stone_cobble.mica.name=Pavés de Mica
+tile.susy_stone_cobble.phyllite.name=Pavés de Phyllite
+tile.susy_stone_cobble.quartzite.name=Pavés de Quartzite
+tile.susy_stone_cobble.shale.name=Pavés de Schiste Argileux
+tile.susy_stone_cobble.slate.name=Pavés d'Ardoise
+tile.susy_stone_cobble.soapstone.name=Pavés de Stéatite
+tile.susy_stone_cobble.kimberlite.name=Pavés de Kimberlite
+tile.susy_stone_cobble.anorthosite.name=Pavés d'Anorthosite
+tile.susy_stone_cobble.industrial_concrete.name=Pavés de Béton Industriel
+tile.susy_stone_cobble.minitary_concrete.name=Pavés de Béton Militaire
+
+tile.susy_stone_bricks.gabbro.name=Briques de Gabbro
+tile.susy_stone_bricks.gneiss.name=Briques de Gneiss
+tile.susy_stone_bricks.graphite.name=Briques de Graphite
+tile.susy_stone_bricks.limestone.name=Briques de Calcaire
+tile.susy_stone_bricks.mica.name=Briques de Mica
+tile.susy_stone_bricks.phyllite.name=Briques de Phyllite
+tile.susy_stone_bricks.quartzite.name=Briques de Quartzite
+tile.susy_stone_bricks.shale.name=Briques de Schiste Argileux
+tile.susy_stone_bricks.slate.name=Briques d'Ardoise
+tile.susy_stone_bricks.soapstone.name=Briques de Stéatite
+tile.susy_stone_bricks.kimberlite.name=Briques de Kimberlite
+tile.susy_stone_bricks.anorthosite.name=Briques d'Anorthosite
+tile.susy_stone_bricks.industrial_concrete.name=Briques de Béton Industriel
+tile.susy_stone_bricks.minitary_concrete.name=Briques de Béton Militaire
+
+# Matériaux
+susy.material.manganese_iron_arsenic_phosphide=Manganèse Fer Arséniure Phosphure
+susy.material.praseodymium_nickel=Praséodyme-Nickel
+susy.material.gadolinium_silicon_germanium=Gadolinium Silicium Germanium
+susy.material.latex=Latex
+susy.material.mud=Boue
+susy.material.sea_water=Eau de Mer
+susy.material.refractory_gunning_mixture=Mélange de Projection Réfractaire
+susy.material.preheated_air=Air Préchauffé
+susy.material.midgrade_lubricant=Lubrifiant de Qualité Moyenne
+susy.material.premium_lubricant=Lubrifiant Premium
+susy.material.supreme_lubricant=Lubrifiant Suprême
+susy.material.coolant=Refroidisseur
+susy.material.advanced_coolant=Refroidisseur Avancé
+susy.material.lubricating_oil=Huile Lubrifiante
+
+# Matériaux Rocheux/Minéraux
+susy.material.fluorite=Fluorine
+susy.material.gabbro=Gabbro
+susy.material.slate=Ardoise
+susy.material.shale=Schiste Argileux
+susy.material.phyllite=Phyllite
+susy.material.limestone=Calcaire
+susy.material.gneiss=Gneiss
+susy.material.kimberlite=Kimberlite
+susy.material.anorthosite=Anorthosite
+susy.material.muscovite=Muscovite
+susy.material.dolomite=Dolomite
+susy.material.augite=Augite
+susy.material.chlinochlore=Clinochlore
+susy.material.bytownite=Bytownite
+susy.material.labradorite=Labradorite
+susy.material.andesine=Andésine
+susy.material.oligoclase=Oligoclase
+susy.material.albite=Albite
+susy.material.anorthite=Anorthite
+susy.material.forsterite=Forstérite
+susy.material.lizardite=Lizardite
+
+# Préfixes de Minerai (%s est le nom du matériau localisé)
+item.material.oreprefix.oreGabbro=Minerai de %s en Gabbro
+item.material.oreprefix.oreGneiss=Minerai de %s en Gneiss
+item.material.oreprefix.oreGraphite=Minerai de %s en Graphite
+item.material.oreprefix.oreLimestone=Minerai de %s en Calcaire
+item.material.oreprefix.oreMica=Minerai de %s en Mica
+item.material.oreprefix.orePhyllite=Minerai de %s en Phyllite
+item.material.oreprefix.oreQuartzite=Minerai de %s en Quartzite
+item.material.oreprefix.oreShale=Minerai de %s en Schiste Argileux
+item.material.oreprefix.oreSlate=Minerai de %s en Ardoise
+item.material.oreprefix.oreSoapstone=Minerai de %s en Stéatite
+item.material.oreprefix.oreKimberlite=Minerai de %s en Kimberlite
+item.material.oreprefix.catalystBed=Lit Catalytique %s
+item.material.oreprefix.catalystPellet=Bille Catalytique %s
+item.material.oreprefix.dustFlotated=Poussière Flottée %s
+item.material.oreprefix.dustConcentrate=Poussière Concentrée %s
+item.material.oreprefix.dustSifted=Poussière Tamisée %s
+item.material.oreprefix.sheetedFrame=Boîte à Cadre Plaqué %s
+item.material.oreprefix.fiber=Fibre %s
+item.material.oreprefix.fiberWet=Fibre Humide %s
+item.material.oreprefix.thread=Fil %s
+item.material.oreprefix.dustWet=Poussière Humide %s
+item.material.oreprefix.electrode=Électrode %s
+
+susy.fluid.supercritical=%s Supercritique
+susy.fluid.impure_slurry=Boue Impure de %s
+susy.fluid.slurry=Boue de %s
+
+# Avertissements d'Info-bulle
+susy.machine.steam_extractor_cannot_melt_items.warning=Les Extracteurs à Vapeur ne peuvent pas faire fondre les objets !
+
+# Machines/Multiblocs
+susy.machine.magnetic_refrigerator.name=Réfrigérateur Magnétique
+susy.multiblock.magnetic_refrigerator.min_temperature=§bLimite de Température : %s
+
+susy.machine.sintering_oven.name=Four de Frittage
+susy.multiblock.sintering_oven.can_use_plasma=Plasma activé : %s
+susy.multiblocks.sintering_oven.use_plasma.affirmative=Oui
+susy.multiblocks.sintering_oven.use_plasma.negative=Non
+
+susy.machine.coagulation_tank.name=Cuve de Coagulation
+susy.machine.coagulation_tank.tooltip=Ne peut pas être utilisée pour arrêter les saignements.
+susy.machine.coagulation_tank.tooltip.1=Gagne un parallélisme par bloc de longueur supplémentaire
+susy.machine.drum.lead.name=Tambour en Plomb
+susy.machine.drum.brass.name=Tambour en Laiton
+susy.machine.drum.pe.name=Bidon en Polyéthylène (PE)
+susy.machine.drum.pp.name=Bidon en Polypropylène (PP)
+susy.machine.drum.ptfe.name=Bidon en Polytétrafluoroéthylène (PTFE)
+susy.machine.drum.uhmwpe.name=Bidon en Polyéthylène à Ultra Haut Poids Moléculaire (UHMWPE)
+
+susy.machine.crate.pe.name=Caisse Hermétiquement Scellée
+
+susy.machine.polymerization_tank.name=Cuve de Polymérisation
+susy.machine.fluidized_bed_reactor.name=Réacteur à Lit Fluidisé
+
+susy.machine.electrolytic_cell.name=Cellule Électrolytique
+
+susy.machine.coking_tower.name=Tour de Cokéfaction
+susy.machine.vacuum_distillation_tower.name=Tour de Distillation sous Vide
+susy.machine.catalytic_reformer.name=Reformeur Catalytique
+susy.machine.pressure_swing_adsorber.name=Adsorbeur à Pression Alternée
+susy.machine.reaction_furnace.name=Four de Réaction
+
+susy.machine.fermentation_vat.name=Cuve de Fermentation
+susy.machine.ore_sorter.name=Trieur de Minerai
+susy.machine.gravity_separator.name=Séparateur par Gravité
+susy.machine.condenser.name=Condenseur
+susy.machine.natural_draft_cooling_tower.name=Tour de Refroidissement à Tirage Naturel
+susy.machine.gas_turbine.name=Turbine à Gaz
+susy.machine.heat_exchanger.name=Échangeur de Chaleur
+susy.machine.heat_radiator.name=Radiateur Thermique
+susy.multiblock.heat_radiator.tooltip.1=L'efficacité est proportionnelle à la surface de dissipation.
+susy.multiblock.heat_radiator.tooltip.2=§bTaille : §f3x3 à 11x16
+susy.machine.heat_radiator.parallel=Parallélisme Maximum : %s
+susy.machine.heat_radiator.parallel_hover=Le nombre de parallèles est déterminé par la quantité de blocs tubulaires.
+susy.machine.large_weapons_factory.name=Grande Usine d'Armement
+susy.machine.magnetohydrodynamic_generator.name=Générateur Magnétohydrodynamique (MHD)
+susy.machine.mining_drill.name=Foreuse Minière
+susy.machine.quencher.name=Trempeur
+susy.machine.railroad_engineering_station.name=Station d'Ingénierie Ferroviaire
+susy.machine.railroad_engineering_station.tooltip=Placez des Rails Immersive Railroading au centre pour former le multibloc
+susy.machine.railroad_engineering_station.tooltip.1=Le béton sous les rails peut être remplacé par n'importe quel bloc, y compris des tuyaux ou de l'air
+susy.machine.quarry.name=Carrière
+
+susy.machine.evaporation_pool.name=Bassin d'Évaporation
+susy.machine.evaporation_pool.tooltip.info=Maximum carré de %1$sx%1$s, minimum %2$sx%2$s. Lire l'onglet info et les infos d'outil pour plus de détails.
+susy.machine.evaporation_pool.tooltip.structure_info=Les Bassins d'Évaporation peuvent être formés avec n'importe quelles dimensions allant de %2$sx%2$s à %1$sx%1$s, même non carrées. Pour former un bassin d'évaporation chauffé valide, les serpentins doivent être placés suivant le motif montré dans l'aperçu. Pour une explication plus détaillée, consultez l'onglet info dans JEI.
+susy.top.evaporation_pool_heated_preface=Serpentin de Chauffage :
+susy.top.evaporation_pool.exposed_blocks=Blocs Exposés :
+susy.top.evaporation_pool.average_speed=Vitesse Moy. :
+gregtech.multiblock.evaporation_pool.description=Le Bassin d'Évaporation a des dimensions intérieures spécifiées dans sa description et un extérieur en béton pour le placement des entrées/sorties/contrôleur, avec au plus deux de chaque type d'E/S. Le contrôleur peut être placé n'importe où le long de la rangée du bas qui dépasse "devant" l'intérieur.\n\nLe Bassin d'Évaporation peut exécuter des recettes sans alimentation et avec alimentation. Pour alimenter les recettes, le multibloc doit être formé avec un motif "serpentant" uniforme de serpentins, comme montré dans l'aperçu. Les Bassins d'Évaporation non alimentés ne nécessitent aucun serpentin.\n\nLa vitesse de toute recette dépend de la chaleur fournie au multi, qui est basée sur le nombre de blocs intérieurs exposés à la lumière du soleil, l'énergie fournie, et le niveau des serpentins. [1EU = 10J, actuellement].\n\nChaque bloc exposé (prend du temps à vérifier) produit 1 kJ/s, avec une chaleur fournie par les serpentins variant selon la température du serpentin * la quantité.
+susy.multiblock.evaporation_pool_heated_preface=Serpentin de Chauffage : %s
+susy.multiblock.evaporation_pool.is_heating=Activé
+susy.multiblock.evaporation_pool.is_not_heating=Désactivé/Manquant
+susy.multiblock.evaporation_pool.exposed_blocks=Blocs Exposés : %s
+susy.multiblock.evaporation_pool.average_speed=Vitesse Moyenne : %sx
+susy.multiblock.pattern.error.coils_or_bed=§cTous les serpentins de chauffage ou les bassins d'évaporation doivent être identiques§r
+
+susy.multiblock.strand_casting.thickness=Épaisseur : %s
+susy.multiblock.strand_casting.width=Largeur : %s
+susy.multiblock.strand_casting.no_strand=Aucune barre détectée
+susy.multiblock.strand_casting.output_detected=Barre trouvée uniquement dans l'emplacement de sortie
+susy.multiblock.strand_casting.ore_prefix=Produira un : %s
+susy.multiblock.strand_casting.no_conversion=Actuellement pas un objet valide !
+
+susy.multiblock.natural_draft_cooling_tower.obstructed=Le bassin d'eau froide n'est pas rempli !
+susy.multiblock.natural_draft_cooling_tower.obstructed.desc=Le bassin d'eau froide doit être rempli d'eau pour que la Tour de Refroidissement fonctionne.
+
+supersymmetry.prefix.stick=Bâtonnet
+supersymmetry.prefix.ingot=Lingot
+supersymmetry.prefix.platedense=Plaque Dense
+supersymmetry.prefix.platedouble=Plaque Double
+supersymmetry.prefix.plate=Plaque
+supersymmetry.prefix.foil=Feuille
+
+susy.machine.primitive_mud_pump.name=Pompe à Boue Primitive
+susy.machine.primitive_mud_pump.tooltip=Fonctionne uniquement dans les biomes de Rivière entre Y=64 et Y=80
+susy.machine.basic_steam_turbine.name=Grande Turbine à Vapeur
+susy.machine.advanced_steam_turbine.name=Turbine à Vapeur Avancée
+susy.machine.basic_gas_turbine.name=Grande Turbine à Gaz
+susy.machine.internal_combustion_generator.name=Générateur à Combustion Interne
+susy.machine.large_fluid_pump.name=Grande Pompe à Fluide
+susy.machine.large_fluid_pump.tooltip.1=Cela affecterait définitivement la population locale de truites.
+susy.machine.large_fluid_pump.tooltip.2=Fonctionne uniquement lorsque le contrôleur est à Y=64 et que le Carter de Tuyau en Acier du bas est situé dans le bon biome.
+susy.machine.advanced_arc_furnace.name=Four à Arc Industriel
+susy.machine.arc_furnace_complex.name=Complexe de Fours à Arc
+susy.machine.clarifier.name=Clarificateur
+susy.machine.flare_stack.name=Torchère
+susy.machine.flare_stack.height=Hauteur de la Torchère : %s §9blocs
+susy.machine.flare_stack.rate=Taux de Brûlage : %s
+susy.machine.flare_stack.rate_hover=Multiplicateur du taux de brûlage défini par la hauteur de la torchère.
+susy.machine.flare_stack.tooltip=Propagateur industriel de cancer du poumon.
+susy.machine.flare_stack.tooltip.1=§6Taux de Brûlage de Base :§7 §f%d L tous les 10 ticks
+susy.machine.flare_stack.tooltip.2=Double sa vitesse pour chaque bloc au-dessus de 5
+susy.machine.smoke_stack.name=Cheminée
+susy.machine.smoke_stack.height=Hauteur de la Cheminée : %s §9blocs
+susy.machine.smoke_stack.rate=Taux d'Évacuation : %s
+susy.machine.smoke_stack.rate_hover=Multiplicateur du taux d'évacuation défini par la hauteur de la cheminée.
+susy.machine.smoke_stack.tooltip=Pour enrichir l'atmosphère de votre planète.
+susy.machine.smoke_stack.tooltip.1=§8Taux d'Évacuation de Base :§7 §f%d L tous les 10 ticks
+susy.machine.smoke_stack.tooltip.2=Double sa vitesse pour chaque bloc au-dessus de 5
+susy.machine.dumper.name=Déverseur
+susy.machine.dumper.rate=Taux de Déversement : %s
+susy.machine.dumper.tooltip=Contamine tous vos écosystèmes locaux.
+susy.machine.dumper.tooltip.1=§2Taux de Déversement de Base :§7 §f %d L tous les 10 ticks
+susy.machine.froth_flotation_tank.name=Cuve de Flottation par Moussage
+susy.machine.multi_stage_flash_distiller.name=Distillateur Flash Multi-étagé
+susy.machine.high_temperature_distillation_tower.name=Tour de Distillation à Haute Température
+susy.machine.rotary_kiln.name=Four Rotatif
+susy.machine.low_pressure_cryogenic_distillation_plant.name=Usine de Distillation Cryogénique Basse Pression
+susy.machine.high_pressure_cryogenic_distillation_plant.name=Usine de Distillation Cryogénique Haute Pression
+susy.machine.single_column_cryogenic_distillation_plant.name=Usine de Distillation Cryogénique à Colonne Unique
+susy.machine.reverberatory_furnace.name=Four à Réverbère
+susy.machine.blender.name=Mélangeur
+susy.machine.sieve_distillation_tower.name=Tour de Distillation par Tamisage
+susy.machine.induction_furnace.name=Four à Induction
+
+susy.machine.curtain_coater.name=Machine d'Enduction par Rideau
+susy.multiblock.pattern.error.conveyor=§cTous les tapis roulants doivent être identiques§r
+
+susy.machine.milling.name=Fraiseuse de Précision
+susy.multiblock.pattern.error.milling.upper=§cAutorisé uniquement sur la partie supérieure de la machine§r
+susy.multiblock.pattern.error.milling.lower=§cAutorisé uniquement sur la partie inférieure de la machine§r
+
+susy.machine.drone_pad.name=Plateforme pour Drone
+susy.machine.primitive_smelter.name=Fonderie Primitive
+susy.machine.large_steam_hammer.name=Grand Marteau à Vapeur
+susy.machine.landing_pad.name=Plateforme d'Atterrissage
+susy.machine.scrap_recycler.name=Recycleur de Ferraille
+susy.machine.rocket_assembler.name=Assembleur de Fusée
+susy.machine.rocket_programmer.name=Programmeur de Fusée
+susy.machine.metallurgical_converter.name=Convertisseur Métallurgique
+susy.machine.injection_molder.name=Mouleur par Injection
+
+susy.machine.primitive_item_import.name=Bus d'Importation d'Objets Primitive
+susy.machine.primitive_item_import.tooltip=Ne remplace pas l'ULV
+susy.machine.primitive_item_export.name=Bus d'Exportation d'Objets Primitive
+susy.machine.primitive_item_export.tooltip=Ne remplace pas l'ULV
+susy.machine.mixer_settler.name=Mélangeur-Décanteur
+susy.machine.mixer_settler.tooltip=D'abord il mélange, puis il décante... - Sun Tzu, L'Art de SuSy
+susy.machine.mixer_settler.tooltip.1=La structure initiale contient 2 cellules, chaque extension en ajoute 2 de plus
+susy.machine.mixer_settler.tooltip.2=Peut travailler jusqu'à 2x plus vite avec plus de cellules
+
+susy.machine.parallel_pure=Peut paralléliser pour produire jusqu'à §b%d§r§7 objets à la fois
+
+# Propriétés
+susy.recipe.plasma_requirement=Nécessite du plasma : %s
+susy.recipe.catalyseur=Catalyseur : %s %s
+susy.recipe.blocks=Blocs : %s
+susy.recipe.evaporation=Énergie Requise : %d J/t
+susy.recipe.cryogenic_environment=Nécessite un Environnement Cryogénique
+susy.recipe.mixer_settler_cells=Cellules de mélangeur-décanteur requises : %s
+
+# Collecteur de Latex
+susy.machine.latex_collector.steam=Nécessite de la Vapeur !
+susy.machine.latex_collector.tooltip=Extrait des liquides des bûches adjacentes.
+susy.machine.latex_collector.bronze.name=Collecteur de Latex à Vapeur
+susy.machine.latex_collector.steel.name=Collecteur de Latex à Vapeur Haute Pression
+susy.machine.latex_collector.lv.name=Collecteur de Latex Basique
+susy.machine.latex_collector.mv.name=Collecteur de Latex Avancé
+susy.machine.latex_collector.hv.name=Collecteur de Latex Avancé II
+susy.machine.latex_collector.ev.name=Collecteur de Latex Avancé III
+
+# Presse de Vulcanisation
+susy.machine.vulcanizing_press.bronze.name=Presse de Vulcanisation à Vapeur
+susy.machine.vulcanizing_press.steel.name=Presse de Vulcanisation à Vapeur Haute Pression
+susy.machine.vulcanizing_press.lv.name=Presse de Vulcanisation Basique
+susy.machine.vulcanizing_press.mv.name=Presse de Vulcanisation Avancée
+susy.machinesusy.machine.vulcanizing_press.hv.name=Presse de Vulcanisation Avancée II
+susy.machine.vulcanizing_press.ev.name=Presse de Vulcanisation Avancée III
+
+# Mélangeur à Vapeur
+susy.machine.mixer.bronze.name=Mélangeur à Vapeur
+susy.machine.mixer.steel.name=Mélangeur à Vapeur Haute Pression
+
+# Grilleur
+susy.machine.roaster.bronze.name=Grilleur à Vapeur
+susy.machine.roaster.steel.name=Grilleur à Vapeur Haute Pression
+susy.machine.roaster.lv.name=Grilleur Basique
+susy.machine.roaster.mv.name=Grilleur Avancé
+susy.machine.roaster.hv.name=Grilleur Avancé II
+susy.machine.roaster.ev.name=Grilleur Avancé III
+susy.machine.roaster.iv.name=Grilleur Élite
+susy.machine.roaster.luv.name=Grilleur Élite II
+susy.machine.roaster.zpm.name=Grilleur Élite III
+susy.machine.roaster.uv.name=Grilleur Ultime
+susy.machine.roaster.uhv.name=Grilleur Épique
+susy.machine.roaster.uev.name=Grilleur Épique II
+susy.machine.roaster.uiv.name=Grilleur Épique III
+susy.machine.roaster.uxv.name=Grilleur Épique IV
+susy.machine.roaster.opv.name=Grilleur Légendaire
+
+# Chambre à Vide
+susy.machine.vacuum_chamber.bronze.name=Chambre à Vide à Vapeur
+susy.machine.vacuum_chamber.steel.name=Chambre à Vide à Vapeur Haute Pression
+susy.machine.vacuum_chamber.lv.name=Chambre à Vide Basique
+susy.machine.vacuum_chamber.mv.name=Chambre à Vide Avancée
+susy.machine.vacuum_chamber.hv.name=Chambre à Vide Avancée II
+susy.machine.vacuum_chamber.ev.name=Chambre à Vide Avancée III
+susy.machine.vacuum_chamber.iv.name=Chambre à Vide Élite
+susy.machine.vacuum_chamber.luv.name=Chambre à Vide Élite II
+susy.machine.vacuum_chamber.zpm.name=Chambre à Vide Élite III
+susy.machine.vacuum_chamber.uv.name=Chambre à Vide Ultime
+susy.machine.vacuum_chamber.uhv.name=Chambre à Vide Épique
+susy.machine.vacuum_chamber.uev.name=Chambre à Vide Épique II
+susy.machine.vacuum_chamber.uiv.name=Chambre à Vide Épique III
+susy.machine.vacuum_chamber.uxv.name=Chambre à Vide Épique IV
+susy.machine.vacuum_chamber.opv.name=Chambre à Vide Légendaire
+
+# RACT (Réacteur à Agitation Continue en Cuve)
+susy.machine.continuous_stirred_tank_reactor.lv.name=Réacteur à Agitation Continue en Cuve (RACT) Basique
+susy.machine.continuous_stirred_tank_reactor.mv.name=Réacteur à Agitation Continue en Cuve (RACT) Avancé
+susy.machine.continuous_stirred_tank_reactor.hv.name=Réacteur à Agitation Continue en Cuve (RACT) Avancé II
+susy.machine.continuous_stirred_tank_reactor.ev.name=Réacteur à Agitation Continue en Cuve (RACT) Avancé III
+susy.machine.continuous_stirred_tank_reactor.iv.name=Réacteur à Agitation Continue en Cuve (RACT) Élite
+susy.machine.continuous_stirred_tank_reactor.luv.name=Réacteur à Agitation Continue en Cuve (RACT) Élite II
+susy.machine.continuous_stirred_tank_reactor.zpm.name=Réacteur à Agitation Continue en Cuve (RACT) Élite III
+susy.machine.continuous_stirred_tank_reactor.uv.name=Réacteur à Agitation Continue en Cuve (RACT) Ultime
+susy.machine.continuous_stirred_tank_reactor.uhv.name=Réacteur à Agitation Continue en Cuve (RACT) Épique
+susy.machine.continuous_stirred_tank_reactor.uev.name=Réacteur à Agitation Continue en Cuve (RACT) Épique II
+susy.machine.continuous_stirred_tank_reactor.uiv.name=Réacteur à Agitation Continue en Cuve (RACT) Épique III
+susy.machine.continuous_stirred_tank_reactor.uxv.name=Réacteur à Agitation Continue en Cuve (RACT) Épique IV
+susy.machine.continuous_stirred_tank_reactor.opv.name=Réacteur à Agitation Continue en Cuve (RACT) Légendaire
+
+# Réacteur à Lit Fixe
+susy.machine.fixed_bed_reactor.lv.name=Réacteur à Lit Fixe Basique
+susy.machine.fixed_bed_reactor.mv.name=Réacteur à Lit Fixe Avancé
+susy.machine.fixed_bed_reactor.hv.name=Réacteur à Lit Fixe Avancé II
+susy.machine.fixed_bed_reactor.ev.name=Réacteur à Lit Fixe Avancé III
+susy.machine.fixed_bed_reactor.iv.name=Réacteur à Lit Fixe Élite
+susy.machine.fixed_bed_reactor.luv.name=Réacteur à Lit Fixe Élite II
+susy.machine.fixed_bed_reactor.zpm.name=Réacteur à Lit Fixe Élite III
+susy.machine.fixed_bed_reactor.uv.name=Réacteur à Lit Fixe Ultime
+susy.machine.fixed_bed_reactor.uhv.name=Réacteur à Lit Fixe Épique
+susy.machine.fixed_bed_reactor.uev.name=Réacteur à Lit Fixe Épique II
+susy.machine.fixed_bed_reactor.uiv.name=Réacteur à Lit Fixe Épique III
+susy.machine.fixed_bed_reactor.uxv.name=Réacteur à Lit Fixe Épique IV
+susy.machine.fixed_bed_reactor.opv.name=Réacteur à Lit Fixe Légendaire
+
+# Réacteur à Lit Ruisselant
+susy.machine.trickle_bed_reactor.lv.name=Réacteur à Lit Ruisselant Basique
+susy.machine.trickle_bed_reactor.mv.name=Réacteur à Lit Ruisselant Avancé
+susy.machine.trickle_bed_reactor.hv.name=Réacteur à Lit Ruisselant Avancé II
+susy.machine.trickle_bed_reactor.ev.name=Réacteur à Lit Ruisselant Avancé III
+susy.machine.trickle_bed_reactor.iv.name=Réacteur à Lit Ruisselant Élite
+susy.machine.trickle_bed_reactor.luv.name=Réacteur à Lit Ruisselant Élite II
+susy.machine.trickle_bed_reactor.zpm.name=Réacteur à Lit Ruisselant Élite III
+susy.machine.trickle_bed_reactor.uv.name=Réacteur à Lit Ruisselant Ultime
+susy.machine.trickle_bed_reactor.uhv.name=Réacteur à Lit Ruisselant Épique
+susy.machine.trickle_bed_reactor.uev.name=Réacteur à Lit Ruisselant Épique II
+susy.machine.trickle_bed_reactor.uiv.name=Réacteur à Lit Ruisselant Épique III
+susy.machine.trickle_bed_reactor.uxv.name=Réacteur à Lit Ruisselant Épique IV
+susy.machine.trickle_bed_reactor.opv.name=Réacteur à Lit Ruisselant Légendaire
+
+# Réacteur à Colonne à Bulles
+susy.machine.bubble_column_reactor.lv.name=Réacteur à Colonne à Bulles Basique
+susy.machine.bubble_column_reactor.mv.name=Réacteur à Colonne à Bulles Avancé
+susy.machine.bubble_column_reactor.hv.name=Réacteur à Colonne à Bulles Avancé II
+susy.machine.bubble_column_reactor.ev.name=Réacteur à Colonne à Bulles Avancé III
+susy.machine.bubble_column_reactor.iv.name=Réacteur à Colonne à Bulles Élite
+susy.machine.bubble_column_reactor.luv.name=Réacteur à Colonne à Bulles Élite II
+susy.machine.bubble_column_reactor.zpm.name=Réacteur à Colonne à Bulles Élite III
+susy.machine.bubble_column_reactor.uv.name=Réacteur à Colonne à Bulles Ultime
+susy.machine.bubble_column_reactor.uhv.name=Réacteur à Colonne à Bulles Épique
+susy.machine.bubble_column_reactor.uev.name=Réacteur à Colonne à Bulles Épique II
+susy.machine.bubble_column_reactor.uiv.name=Réacteur à Colonne à Bulles Épique III
+susy.machine.bubble_column_reactor.uxv.name=Réacteur à Colonne à Bulles Épique IV
+susy.machine.bubble_column_reactor.opv.name=Réacteur à Colonne à Bulles Légendaire
+
+# Réacteur Discontinu
+susy.machine.batch_reactor.lv.name=Réacteur Discontinu Basique
+susy.machine.batch_reactor.mv.name=Réacteur Discontinu Avancé
+susy.machine.batch_reactor.hv.name=Réacteur Discontinu Avancé II
+susy.machine.batch_reactor.ev.name=Réacteur Discontinu Avancé III
+susy.machine.batch_reactor.iv.name=Réacteur Discontinu Élite
+susy.machine.batch_reactor.luv.name=Réacteur Discontinu Élite II
+susy.machine.batch_reactor.zpm.name=Réacteur Discontinu Élite III
+susy.machine.batch_reactor.uv.name=Réacteur Discontinu Ultime
+susy.machine.batch_reactor.uhv.name=Réacteur Discontinu Épique
+susy.machine.batch_reactor.uev.name=Réacteur Discontinu Épique II
+susy.machine.batch_reactor.uiv.name=Réacteur Discontinu Épique III
+susy.machine.batch_reactor.uxv.name=Réacteur Discontinu Épique IV
+susy.machine.batch_reactor.opv.name=Réacteur Discontinu Légendaire
+
+# Cristalliseur
+susy.machine.crystallizer.lv.name=Cristalliseur Basique
+susy.machine.crystallizer.mv.name=Cristalliseur Avancé
+susy.machine.crystallizer.hv.name=Cristalliseur Avancé II
+susy.machine.crystallizer.ev.name=Cristalliseur Avancé III
+susy.machine.crystallizer.iv.name=Cristalliseur Élite
+susy.machine.crystallizer.luv.name=Cristalliseur Élite II
+susy.machine.crystallizer.zpm.name=Cristalliseur Élite III
+susy.machine.crystallizer.uv.name=Cristalliseur Ultime
+susy.machine.crystallizer.uhv.name=Cristalliseur Épique
+susy.machine.crystallizer.uev.name=Cristalliseur Épique II
+susy.machine.crystallizer.uiv.name=Cristalliseur Épique III
+susy.machine.crystallizer.uxv.name=Cristalliseur Épique IV
+susy.machine.crystallizer.opv.name=Cristalliseur Légendaire
+
+# Sécheur
+susy.machine.dryer.lv.name=Sécheur Basique
+susy.machine.dryer.mv.name=Sécheur Avancé
+susy.machine.dryer.hv.name=Sécheur Avancé II
+susy.machine.dryer.ev.name=Sécheur Avancé III
+susy.machine.dryer.iv.name=Sécheur Élite
+susy.machine.dryer.luv.name=Sécheur Élite II
+susy.machine.dryer.zpm.name=Sécheur Élite III
+susy.machine.dryer.uv.name=Sécheur Ultime
+susy.machine.dryer.uhv.name=Sécheur Épique
+susy.machine.dryer.uev.name=Sécheur Épique II
+susy.machine.dryer.uiv.name=Sécheur Épique III
+susy.machine.dryer.uxv.name=Sécheur Épique IV
+susy.machine.dryer.opv.name=Sécheur Légendaire
+
+# Colonne d'Échange d'Ions
+susy.machine.ion_exchange_column.lv.name=Colonne d'Échange d'Ions Basique
+susy.machine.ion_exchange_column.mv.name=Colonne d'Échange d'Ions Avancée
+susy.machine.ion_exchange_column.hv.name=Colonne d'Échange d'Ions Avancée II
+susy.machine.ion_exchange_column.ev.name=Colonne d'Échange d'Ions Avancée III
+susy.machine.ion_exchange_column.iv.name=Colonne d'Échange d'Ions Élite
+susy.machine.ion_exchange_column.luv.name=Colonne d'Échange d'Ions Élite II
+susy.machine.ion_exchange_column.zpm.name=Colonne d'Échange d'Ions Élite III
+susy.machine.ion_exchange_column.uv.name=Colonne d'Échange d'Ions Ultime
+susy.machine.ion_exchange_column.uhv.name=Colonne d'Échange d'Ions Épique
+susy.machine.ion_exchange_column.uev.name=Colonne d'Échange d'Ions Épique II
+susy.machine.ion_exchange_column.uiv.name=Colonne d'Échange d'Ions Épique III
+susy.machine.ion_exchange_column.uxv.name=Colonne d'Échange d'Ions Épique IV
+susy.machine.ion_exchange_column.opv.name=Colonne d'Échange d'Ions Légendaire
+
+# Affineur par Zone
+susy.machine.zone_refiner.lv.name=Affineur par Zone Basique
+susy.machine.zone_refiner.mv.name=Affineur par Zone Avancé
+susy.machine.zone_refiner.hv.name=Affineur par Zone Avancé II
+susy.machine.zone_refiner.ev.name=Affineur par Zone Avancé III
+susy.machine.zone_refiner.iv.name=Affineur par Zone Élite
+susy.machine.zone_refiner.luv.name=Affineur par Zone Élite II
+susy.machine.zone_refiner.zpm.name=Affineur par Zone Élite III
+susy.machine.zone_refiner.uv.name=Affineur par Zone Ultime
+susy.machine.zone_refiner.uhv.name=Affineur par Zone Épique
+susy.machine.zone_refiner.uev.name=Affineur par Zone Épique II
+susy.machine.zone_refiner.uiv.name=Affineur par Zone Épique III
+susy.machine.zone_refiner.uxv.name=Affineur par Zone Épique IV
+susy.machine.zone_refiner.opv.name=Affineur par Zone Légendaire
+
+# Four Tubulaire
+susy.machine.tube_furnace.lv.name=Four Tubulaire Basique
+susy.machine.tube_furnace.mv.name=Four Tubulaire Avancé
+susy.machine.tube_furnace.hv.name=Four Tubulaire Avancé II
+susy.machine.tube_furnace.ev.name=Four Tubulaire Avancé III
+susy.machine.tube_furnace.iv.name=Four Tubulaire Élite
+susy.machine.tube_furnace.luv.name=Four Tubulaire Élite II
+susy.machine.tube_furnace.zpm.name=Four Tubulaire Élite III
+susy.machine.tube_furnace.uv.name=Four Tubulaire Ultime
+susy.machine.tube_furnace.uhv.name=Four Tubulaire Épique
+susy.machine.tube_furnace.uev.name=Four Tubulaire Épique II
+susy.machine.tube_furnace.uiv.name=Four Tubulaire Épique III
+susy.machine.tube_furnace.uxv.name=Four Tubulaire Épique IV
+susy.machine.tube_furnace.opv.name=Four Tubulaire Légendaire
+
+# Boîte à Lumière UV
+susy.machine.uv_light_box.lv.name=Boîte à Lumière UV Basique
+susy.machine.uv_light_box.mv.name=Boîte à Lumière UV Avancée
+susy.machine.uv_light_box.hv.name=Boîte à Lumière UV Avancée II
+susy.machine.uv_light_box.ev.name=Boîte à Lumière UV Avancée III
+susy.machine.uv_light_box.iv.name=Boîte à Lumière UV Élite
+susy.machine.uv_light_box.luv.name=Boîte à Lumière UV Élite II
+susy.machine.uv_light_box.zpm.name=Boîte à Lumière UV Élite III
+susy.machine.uv_light_box.uv.name=Boîte à Lumière UV Ultime
+susy.machine.uv_light_box.uhv.name=Boîte à Lumière UV Épique
+susy.machine.uv_light_box.uev.name=Boîte à Lumière UV Épique II
+susy.machine.uv_light_box.uiv.name=Boîte à Lumière UV Épique III
+susy.machine.uv_light_box.uxv.name=Boîte à Lumière UV Épique IV
+susy.machine.uv_light_box.opv.name=Boîte à Lumière UV Légendaire
+
+# Dépôt Chimique en Phase Vapeur (CVD)
+susy.machine.cvd.lv.name=Unité CVD Basique
+susy.machine.cvd.mv.name=Unité CVD Avancée
+susy.machine.cvd.hv.name=Unité CVD Avancée II
+susy.machine.cvd.ev.name=Unité CVD Avancée III
+susy.machine.cvd.iv.name=Unité CVD Élite
+susy.machine.cvd.luv.name=Unité CVD Élite II
+susy.machine.cvd.zpm.name=Unité CVD Élite III
+susy.machine.cvd.uv.name=Unité CVD Ultime
+susy.machine.cvd.uhv.name=Unité CVD Épique
+susy.machine.cvd.uev.name=Unité CVD Épique II
+susy.machine.cvd.uiv.name=Unité CVD Épique III
+susy.machine.cvd.uxv.name=Unité CVD Épique IV
+susy.machine.cvd.opv.name=Unité CVD Légendaire
+
+# Implanteur d'Ions
+susy.machine.ion_implanter.lv.name=Implanteur d'Ions Basique
+susy.machine.ion_implanter.mv.name=Implanteur d'Ions Avancé
+susy.machine.ion_implanter.hv.name=Implanteur d'Ions Avancé II
+susy.machine.ion_implanter.ev.name=Implanteur d'Ions Avancé III
+susy.machine.ion_implanter.iv.name=Implanteur d'Ions Élite
+susy.machine.ion_implanter.luv.name=Implanteur d'Ions Élite II
+susy.machine.ion_implanter.zpm.name=Implanteur d'Ions Élite III
+susy.machine.ion_implanter.uv.name=Implanteur d'Ions Ultime
+susy.machine.ion_implanter.uhv.name=Implanteur d'Ions Épique
+susy.machine.ion_implanter.uev.name=Implanteur d'Ions Épique II
+susy.machine.ion_implanter.uiv.name=Implanteur d'Ions Épique III
+susy.machine.ion_implanter.uxv.name=Implanteur d'Ions Épique IV
+susy.machine.ion_implanter.opv.name=Implanteur d'Ions Légendaire
+
+# Compresseur de Fluide
+susy.machine.fluid_compressor.lv.name=Compresseur de Fluide Basique
+susy.machine.fluid_compressor.mv.name=Compresseur de Fluide Avancé
+susy.machine.fluid_compressor.hv.name=Compresseur de Fluide Avancé II
+susy.machine.fluid_compressor.ev.name=Compresseur de Fluide Avancé III
+susy.machine.fluid_compressor.iv.name=Compresseur de Fluide Élite
+susy.machine.fluid_compressor.luv.name=Compresseur de Fluide Élite II
+susy.machine.fluid_compressor.zpm.name=Compresseur de Fluide Élite III
+susy.machine.fluid_compressor.uv.name=Compresseur de Fluide Ultime
+susy.machine.fluid_compressor.uhv.name=Compresseur de Fluide Épique
+susy.machine.fluid_compressor.uev.name=Compresseur de Fluide Épique II
+susy.machine.fluid_compressor.uiv.name=Compresseur de Fluide Épique III
+susy.machine.fluid_compressor.uxv.name=Compresseur de Fluide Épique IV
+susy.machine.fluid_compressor.opv.name=Compresseur de Fluide Légendaire
+
+# Décompresseur de Fluide
+susy.machine.fluid_decompressor.lv.name=Décompresseur de Fluide Basique
+susy.machine.fluid_decompressor.mv.name=Décompresseur de Fluide Avancé
+susy.machine.fluid_decompressor.hv.name=Décompresseur de Fluide Avancé II
+susy.machine.fluid_decompressor.ev.name=Décompresseur de Fluide Avancé III
+susy.machine.fluid_decompressor.iv.name=Décompresseur de Fluide Élite
+susy.machine.fluid_decompressor.luv.name=Décompresseur de Fluide Élite II
+susy.machine.fluid_decompressor.zpm.name=Décompresseur de Fluide Élite III
+susy.machine.fluid_decompressor.uv.name=Décompresseur de Fluide Ultime
+susy.machine.fluid_decompressor.uhv.name=Décompresseur de Fluide Épique
+susy.machine.fluid_decompressor.uev.name=Décompresseur de Fluide Épique II
+susy.machine.fluid_decompressor.uiv.name=Décompresseur de Fluide Épique III
+susy.machine.fluid_decompressor.uxv.name=Décompresseur de Fluide Épique IV
+susy.machine.fluid_decompressor.opv.name=Décompresseur de Fluide Légendaire
+
+# Usine d'Armement
+susy.machine.weapons_factory.lv.name=Usine d'Armement Basique
+susy.machine.weapons_factory.mv.name=Usine d'Armement Avancée
+susy.machine.weapons_factory.hv.name=Usine d'Armement Avancée II
+susy.machine.weapons_factory.ev.name=Usine d'Armement Avancée III
+susy.machine.weapons_factory.iv.name=Usine d'Armement Élite
+susy.machine.weapons_factory.luv.name=Usine d'Armement Élite II
+susy.machine.weapons_factory.zpm.name=Usine d'Armement Élite III
+susy.machine.weapons_factory.uv.name=Usine d'Armement Ultime
+susy.machine.weapons_factory.uhv.name=Usine d'Armement Épique
+susy.machine.weapons_factory.uev.name=Usine d'Armement Épique II
+susy.machine.weapons_factory.uiv.name=Usine d'Armement Épique III
+susy.machine.weapons_factory.uxv.name=Usine d'Armement Épique IV
+susy.machine.weapons_factory.opv.name=Usine d'Armement Légendaire
+
+# Séparateur de Phase
+susy.machine.phase_separator.name=Séparateur de Phase
+
+# Générateur Thermoélectrique à Radioisotope (RTG)
+susy.machine.rtg.lv.name=RTG Basique
+susy.machine.rtg.mv.name=RTG Avancé
+susy.machine.rtg.tooltip.info=Énergie pour votre stimulateur cardiaque.
+susy.machine.rtg.tooltip.description=Génère une petite mais constante quantité d'électricité en utilisant la désintégration d'isotopes radioactifs.
+susy.machine.rtg.voltage_produced=§aTension PRODUITE : §f%,d EU/t (%s§f)
+
+# Séparateur Électrostatique
+susy.machine.electrostatic_separator.lv.name=Séparateur Électrostatique Basique
+susy.machine.electrostatic_separator.mv.name=Séparateur Électrostatique Avancé
+susy.machine.electrostatic_separator.hv.name=Séparateur Électrostatique Avancé II
+susy.machine.electrostatic_separator.ev.name=Séparateur Électrostatique Avancé III
+susy.machine.electrostatic_separator.iv.name=Séparateur Électrostatique Élite
+susy.machine.electrostatic_separator.luv.name=Séparateur Électrostatique Élite II
+susy.machine.electrostatic_separator.zpm.name=Séparateur Électrostatique Élite III
+susy.machine.electrostatic_separator.uv.name=Séparateur Électrostatique Ultime
+susy.machine.electrostatic_separator.uhv.name=Séparateur Électrostatique Épique
+susy.machine.electrostatic_separator.uev.name=Séparateur Électrostatique Épique II
+susy.machine.electrostatic_separator.uiv.name=Séparateur Électrostatique Épique III
+susy.machine.electrostatic_separator.uxv.name=Séparateur Électrostatique Épique IV
+susy.machine.electrostatic_separator.opv.name=Séparateur Électrostatique Légendaire
+
+# Fileuse Textile
+susy.machine.textile_spinner.lv.name=Fileuse Textile Basique
+susy.machine.textile_spinner.mv.name=Fileuse Textile Avancée
+susy.machine.textile_spinner.hv.name=Fileuse Textile Avancée II
+susy.machine.textile_spinner.ev.name=Fileuse Textile Avancée III
+susy.machine.textile_spinner.iv.name=Fileuse Textile Élite
+susy.machine.textile_spinner.luv.name=Fileuse Textile Élite II
+susy.machine.textile_spinner.zpm.name=Fileuse Textile Élite III
+susy.machine.textile_spinner.uv.name=Fileuse Textile Ultime
+susy.machine.textile_spinner.uhv.name=Fileuse Textile Épique
+susy.machine.textile_spinner.uev.name=Fileuse Textile Épique II
+susy.machine.textile_spinner.uiv.name=Fileuse Textile Épique III
+susy.machine.textile_spinner.uxv.name=Fileuse Textile Épique IV
+susy.machine.textile_spinner.opv.name=Fileuse Textile Légendaire
+
+# Machine à Polir
+susy.machine.polishing_machine.lv.name=Machine à Polir Basique
+susy.machine.polishing_machine.mv.name=Machine à Polir Avancée
+susy.machine.polishing_machine.hv.name=Machine à Polir Avancée II
+susy.machine.polishing_machine.ev.name=Machine à Polir Avancée III
+susy.machine.polishing_machine.iv.name=Machine à Polir Élite
+susy.machine.polishing_machine.luv.name=Machine à Polir Élite II
+susy.machine.polishing_machine.zpm.name=Machine à Polir Élite III
+susy.machine.polishing_machine.uv.name=Machine à Polir Ultime
+susy.machine.polishing_machine.uhv.name=Machine à Polir Épique
+susy.machine.polishing_machine.uev.name=Machine à Polir Épique II
+susy.machine.polishing_machine.uiv.name=Machine à Polir Épique III
+susy.machine.polishing_machine.uxv.name=Machine à Polir Épique IV
+susy.machine.polishing_machine.opv.name=Machine à Polir Légendaire
+
+# Four à Résistance
+susy.machine.resistance_furnace.lv.name=Four à Résistance Basique
+susy.machine.resistance_furnace.mv.name=Four à Résistance Avancé
+susy.machine.resistance_furnace.hv.name=Four à Résistance Avancé II
+susy.machine.resistance_furnace.ev.name=Four à Résistance Avancé III
+susy.machine.resistance_furnace.iv.name=Four à Résistance Élite
+susy.machine.resistance_furnace.luv.name=Four à Résistance Élite II
+susy.machine.resistance_furnace.zpm.name=Four à Résistance Élite III
+susy.machine.resistance_furnace.uv.name=Four à Résistance Ultime
+susy.machine.resistance_furnace.uhv.name=Four à Résistance Épique
+susy.machine.resistance_furnace.uev.name=Four à Résistance Épique II
+susy.machine.resistance_furnace.uiv.name=Four à Résistance Épique III
+susy.machine.resistance_furnace.uxv.name=Four à Résistance Épique IV
+susy.machine.resistance_furnace.opv.name=Four à Résistance Légendaire
+
+susy.machine.bath_condenser.name=Condenseur à Bain
+susy.machine.bath_condenser.tooltip=Fonctionne uniquement à l'intérieur d'une Tour de Distillation Cryogénique
+
+susy.machine.incinerator.lv.name=Incinérateur Basique
+susy.machine.incinerator.mv.name=Incinérateur Avancé
+susy.machine.incinerator.hv.name=Incinérateur Avancé II
+susy.machine.incinerator.ev.name=Incinérateur Avancé III
+susy.machine.incinerator.tooltip.1=§6Incinère§r %s objet(s) par %s tick(s)
+susy.machine.incinerator.tooltip.2=§cNécessite huit blocs d'air pour libérer les gaz
+susy.machine.incinerator.tooltip.3=§8Ne vous inquiétez pas de la destination des métaux lourds.
+susy.multiblock.incinerator.clogged=§4Bouché ! (Le dessus est-il bloqué ?)
+susy.multiblock.incinerator.working=§2Libre
+
+susy.machine.strand_bus.import.name=Bus d'Importation de Barre
+susy.machine.strand_bus.export.name=Bus d'Exportation de Barre
+susy.machine.turning_zone.name=Zone de Virage
+susy.machine.turning_zone.tooltip=Cœur d'un Système de Coulée Continue
+susy.machine.turning_zone.description=Courbe une barre de métal partiellement fondu vers l'horizontal. Ceci est requis pour tous les systèmes de coulée continue, car les autres machines ne peuvent sinon pas être tournées.
+susy.machine.strand_cooler.name=Refroidisseur de Barre
+susy.machine.strand_cooler.tooltip=Refroidit les barres coupées de métal en produits finis en utilisant de l'eau
+susy.machine.rolling_mill.name=Laminoir
+susy.machine.rolling_mill.tooltip=Aplatit une barre de métal, diminuant l'épaisseur et augmentant la largeur
+susy.machine.cluster_mill.name=Laminoir en Grappe
+susy.machine.cluster_mill.tooltip=Aplatit une barre de métal davantage, au prix d'un débit plus faible
+susy.machine.hot_isostatic_press.name=Presse Isostatique à Chaud
+susy.machine.flying_shear.name=Cisailles Volantes
+susy.machine.flying_shear.tooltip=Nécessaire pour couper une barre de métal en morceaux séparés pour le refroidissement
+susy.machine.slab_mold.name=Moule à Brame
+susy.machine.slab_mold.tooltip=Utile pour fabriquer tous types de plaques et feuilles
+susy.machine.billet_mold.name=Moule à Billette
+susy.machine.billet_mold.tooltip=Utile pour fabriquer des lingots et des barres
+susy.multiblock.strand_mold.tooltip=Accepte 2592L de métal fondu par opération et 50L d'eau (produisant de la vapeur évacuable)
+susy.multiblock.slab_mold.description=Crée une brame de 2 mètres de large et 0,5 mètre d'épaisseur à partir de divers types de métal fondu compatibles, y compris l'acier, l'aluminium et le cuivre. Après la création de la brame, elle doit être tournée à l'aide d'une zone de virage. Ensuite, elle peut être laminée en ces types de matériaux : Plaque Dense (0,5-1 m d'épaisseur), Plaque Double (0,2-0,33 m d'épaisseur), Plaque (0,1-0,125 m d'épaisseur), Feuille (0,025-0,031 m d'épaisseur). Une plaque dense ne nécessite techniquement aucun laminage pour être produite. Enfin, utilisez une scie à cisaillement volant et un refroidisseur de barre pour collecter les produits finis.
+susy.multiblock.billet_mold.description=Crée une bille d'un tiers de mètre de large et d'épaisseur à partir de divers types de métal fondu compatibles, y compris l'acier, l'aluminium et le cuivre. Après la création de la billette, elle doit être tournée à l'aide d'une zone de virage. Ensuite, elle peut être laminée en ces types de matériaux : Lingot (0,2-0,25 m d'épaisseur), Barre (0,28-0,37 m d'épaisseur). Une barre ne nécessite techniquement aucun laminage pour être produite. Enfin, utilisez une scie à cisaillement volant et un refroidisseur de barre pour collecter les produits finis.
+susy.machine.gas_atomizer.name=Atomiseur à Gaz
+tile.susy_multiblock_casing.monel_casing.name=Carter Cryogénique Monel 500
+tile.susy_multiblock_casing.monel_casing_pipe.name=Carter de Tuyau Cryogénique Monel 500
+tile.susy_multiblock_casing.copper_casing_pipe.name=Carter de Tuyau Conducteur en Cuivre
+tile.metallurgy.hydraulic_cylinder.name=Cylindre Hydraulique
+tile.metallurgy_2.flying_shear_saw.name=Scie à Cisaillement Volant
+tile.metallurgy_roll.roll.name=Rouleau
+
+susy.machine.fuel_cell.ev.name=Pile à Combustible Basse Température
+susy.machine.fuel_cell.iv.name=Pile à Combustible Haute Température
+susy.machine.fuel_cell.tooltip=Exigences de température pour le fonctionnement : %s°C
+
+susy.machine.combustion_generator.lv.name=Générateur à Combustion Basique
+susy.machine.combustion_generator.mv.name=Générateur à Combustion Avancé
+susy.machine.combustion_generator.hv.name=Générateur à Combustion Avancé II
+susy.machine.combustion_generator.tooltip=Nécessite du lubrifiant et du refroidisse pour fonctionner. Refroidisseurs acceptés : Eau, Eau Distillée, Refroidisseur, Refroidisseur Avancé.
+
+susy.multiblock.rotation_generator.fuel_name=Carburant : %s
+susy.multiblock.rotation_generator.lubricant=Lubrifiant : %s (%sx)
+susy.multiblock.rotation_generator.power=Puissance : %s / %s EU/t
+susy.multiblock.rotation_generator.lubricant_amount=Lubrifiant : %s | Consommation : %s
+susy.multiblock.rotation_generator.tooltip=Vitesse de Rotation Max : %s RPM, Accélération : %s RPM/t, Décélération : %s RPM/t.
+susy.multiblock.rotation_generator.fuel_needed=Consommation %s (Max %s) par %s ticks
+
+# Machine de Pulvérisation
+susy.machine.sputter_deposition.lv.name=Machine de Pulvérisation Basique
+susy.machine.sputter_deposition.mv.name=Machine de Pulvérisation Avancée
+susy.machine.sputter_deposition.hv.name=Machine de Pulvérisation Avancée II
+susy.machine.sputter_deposition.ev.name=Machine de Pulvérisation Avancée III
+susy.machine.sputter_deposition.iv.name=Machine de Pulvérisation Élite
+susy.machine.sputter_deposition.luv.name=Machine de Pulvérisation Élite II
+susy.machine.sputter_deposition.zpm.name=Machine de Pulvérisation Élite III
+susy.machine.sputter_deposition.uv.name=Machine de Pulvérisation Ultime
+susy.machine.sputter_deposition.uhv.name=Machine de Pulvérisation Épique
+susy.machine.sputter_deposition.uev.name=Machine de Pulvérisation Épique II
+susy.machine.sputter_deposition.uiv.name=Machine de Pulvérisation Épique III
+susy.machine.sputter_deposition.uxv.name=Machine de Pulvérisation Épique IV
+susy.machine.sputter_deposition.opv.name=Machine de Pulvérisation Légendaire
+
+# Cartes de Recettes
+recipemap.coagulation_tank.name=Coagulation
+recipemap.latex_collector.name=Collecteur Arboricole
+recipemap.vulcanizing_press.name=Vulcanisation
+recipemap.roaster.name=Grillage
+recipemap.vacuum_chamber.name=Éjection sous Vide
+recipemap.continuous_stirred_tank_reactor.name=Réacteur à Agitation Continue en Cuve
+recipemap.fixed_bed_reactor.name=Réacteur à Lit Fixe
+recipemap.trickle_bed_reactor.name=Réacteur à Lit Ruisselant
+recipemap.crystallizer.name=Cristalliseur
+recipemap.bubble_column_reactor.name=Réacteur à Colonne à Bulles
+recipemap.fluidized_bed_reactor.name=Réacteur à Lit Fluidisé
+recipemap.batch_reactor.name=Réacteur Discontinu
+recipemap.tube_furnace.name=Four Tubulaire
+recipemap.zone_refiner.name=Affineur par Zone
+recipemap.ion_exchange_column.name=Colonne d'Échange d'Ions
+recipemap.polymerization_tank.name=Cuve de Polymérisation
+recipemap.uv_light_box.name=Boîte à Lumière UV
+recipemap.ion_implantation.name=Implantation d'Ions
+recipemap.cvd.name=Dépôt Chimique en Phase Vapeur
+recipemap.ore_sorter.name=Tri de Minerai
+recipemap.cooling_tower.name=Tour de Refroidissement
+recipemap.natural_draft_cooling_tower.name=Tour de Refroidissement à Tirage Naturel
+recipemap.fluid_decompressor.name=Décompression de Fluide
+recipemap.fluid_compressor.name=Compression de Fluide
+recipemap.heat_exchanger.name=Échange de Chaleur
+recipemap.condenser.name=Condensation
+recipemap.radiator.name=Radiateur Thermique
+recipemap.quencher.name=Trempe
+recipemap.quarry.name=Excavation
+recipemap.weapons_factory.name=Usine d'Armement
+recipemap.large_weapons_factory.name=Grande Usine d'Armement
+recipemap.railroad_engineering_station.name=Station d'Ingénierie Ferroviaire
+recipemap.mining_drill.name=Foreuse Minière
+recipemap.magnetohydrodynamic_generator.name=Générateur Magnétohydrodynamique
+recipemap.reaction_furnace.name=Four de Réaction
+recipemap.pressure_swing_adsorption.name=Adsorption à Pression Alternée
+recipemap.high_temperature_distillation.name=Distillation à Haute Température
+recipemap.in_situ_leacher.name=Lixiviation In Situ
+recipemap.euv_lithography.name=Lithographie UV Extrême
+recipemap.advanced_arc_furnace.name=Four à Arc Industriel
+recipemap.evaporation_pool.name=Bassin d'Évaporation
+recipemap.clarifier.name=Clarificateur
+recipemap.multi_stage_flash_distillation.name=Distillation Flash Multi-étagée
+recipemap.froth_flotation.name=Flottation par Moussage
+recipemap.rotary_kiln.name=Four Rotatif
+recipemap.low_pressure_cryogenic_distillation.name=Distillation Cryogénique Basse Pression
+recipemap.high_pressure_cryogenic_distillation.name=Distillation Cryogénique Haute Pression
+recipemap.reverberatory_furnace.name=Four à Réverbère
+recipemap.blender.name=Mélangeur
+recipemap.phase_separator.name=Séparation de Phase
+recipemap.bath_condenser.name=Condenseur à Bain
+recipemap.drone_pad.name=Plateforme pour Drone
+recipemap.polishing_machine.name=Polissage
+recipemap.gravity_separator=Séparation par Gravité
+recipemap.spinning.name=Filature Textile
+recipemap.large_steam_turbine.name=Grande Turbine à Vapeur
+recipemap.primitive_smelter.name=Fusion Primitive
+recipemap.large_fluid_pump.name=Grande Pompe à Fluide
+recipemap.sieve_distillation.name=Distillation Fractionnée
+recipemap.jet_wingpack_fuels.name=Carburants pour Propulseur Dorsal
+recipemap.curtain_coater.name=Enduction par Rideau
+recipemap.milling.name=Fraiseuse de Précision
+recipemap.hot_isostatic_press.name=Presse Isostatique à Chaud
+recipemap.gas_atomizer.name=Atomiseur à Gaz
+recipemap.metallurgical_converter.name=Convertisseur Métallurgique
+recipemap.advanced_steam_turbine.name=Turbine à Vapeur Avancée
+recipemap.low_pressure_advanced_steam_turbine.name=Turbine à Vapeur Avancée Basse Pression
+recipemap.high_pressure_advanced_steam_turbine.name=Turbine à Vapeur Avancée Haute Pression
+recipemap.sputter_deposition.name=Pulvérisation
+recipemap.mixer_settler.name=Mélangeur-Décanteur
+recipemap.injection_molder=Moulage par Injection
+recipemap.boiler.name=Carburants pour Chaudière Solide
+recipemap.fuel_cell.name=Pile à Combustible à Oxyde Solide (SOFC)
+recipemap.induction_furnace.name=Four à Induction
+recipemap.resistance_furnace.name=Four à Résistance
+
+susy.multiblock.primitive_mud_pump.description=La Pompe à Boue Primitive est un multibloc de l'Ère de la Vapeur qui collecte de la boue une fois par seconde, mais seulement si elle se trouve dans un biome de rivière, et lorsque le contrôleur est entre Y = 64 et Y = 80 (inclus). Elle peut utiliser une Pompe, une Sortie ULV ou LV.
+
+# Trappes d'Énergie
+susy.machine.energy_hatch.output_4a.lv.name=Trappe Dynamo LV 4A
+susy.machine.energy_hatch.output_16a.lv.name=Trappe Dynamo LV 16A
+susy.machine.energy_hatch.output_4a.mv.name=Trappe Dynamo MV 4A
+susy.machine.energy_hatch.output_16a.mv.name=Trappe Dynamo MV 16A
+susy.machine.energy_hatch.output_4a.hv.name=Trappe Dynamo HV 4A
+susy.machine.energy_hatch.output_16a.hv.name=Trappe Dynamo HV 16A
+susy.machine.energy_hatch.output_16a.ev.name=Trappe Dynamo EV 16A
+
+# Trappes de Fluide Quadruples & Nonuples
+gregtech.machine.fluid_hatch.import_4x.lv.name=Trappe d'Entrée Quadruple LV
+gregtech.machine.fluid_hatch.import_4x.mv.name=Trappe d'Entrée Quadruple MV
+gregtech.machine.fluid_hatch.import_4x.hv.name=Trappe d'Entrée Quadruple HV
+
+gregtech.machine.fluid_hatch.import_9x.lv.name=Trappe d'Entrée Nonuple LV
+gregtech.machine.fluid_hatch.import_9x.mv.name=Trappe d'Entrée Nonuple MV
+gregtech.machine.fluid_hatch.import_9x.hv.name=Trappe d'Entrée Nonuple HV
+
+gregtech.machine.fluid_hatch.export_4x.lv.name=Trappe de Sortie Quadruple LV
+gregtech.machine.fluid_hatch.export_4x.mv.name=Trappe de Sortie Quadruple MV
+
+gregtech.machine.fluid_hatch.export_4x.hv.name=Trappe de Sortie Quadruple HV
+
+gregtech.machine.fluid_hatch.export_9x.lv.name=Trappe de Sortie Nonuple LV
+gregtech.machine.fluid_hatch.export_9x.mv.name=Trappe de Sortie Nonuple MV
+gregtech.machine.fluid_hatch.export_9x.hv.name=Trappe de Sortie Nonuple HV
+
+# Autres pièces de multiblocs
+susy.machine.dumping_hatch=Trappe de Déversement
+susy.machine.dumping_hatch.lv.name=Trappe de Déversement
+
+# Explications de la tour de distillation
+susy.machine.ordered_dt.tooltip.1=Les trappes d'entrée et de sortie de fluide sont sur les mêmes couches
+susy.machine.ordered_dt.tooltip.2=§cNe pas mettre une sortie fluide dans la Nième couche en partant du bas évacue la Nième sortie§7
+
+# Logistique
+susy.machine.delegator.tooltip.non_recursion=§6Ne peut pas être attaché à d'autres Déléguants !
+susy.top.delegator.delegating_face=Face de délégation :
+
+susy.machine.bridge.inv.name=Pont d'Inventaire
+susy.machine.bridge.inv.tooltip=§bRelaye les Inventaires
+susy.machine.bridge.tank.name=Pont de Réservoir
+susy.machine.bridge.tank.tooltip=§bRelaye les Réservoirs
+susy.machine.bridge.inv_tank.name=Pont d'Inventaire et de Réservoir
+susy.machine.bridge.inv_tank.tooltip=§bRelaye les Inventaires et Réservoirs
+susy.machine.bridge.universal.name=Pont Universel
+susy.machine.bridge.universal.tooltip=§bRelaye Tout
+
+susy.machine.extender.inv.name=Extension d'Inventaire
+susy.machine.extender.inv.tooltip=§bRelaye les Inventaires
+susy.machine.extender.tank.name=Extension de Réservoir
+susy.machine.extender.tank.tooltip=§bRelaye les Réservoirs
+susy.machine.extender.inv_tank.name=Extension d'Inventaire et de Réservoir
+susy.machine.extender.inv_tank.tooltip=§bRelaye les Inventaires et Réservoirs
+susy.machine.extender.universal.name=Extension Universelle
+susy.machine.extender.universal.tooltip=§bRelaye Tout
+
+# Métaritems
+metaitem.catalyst_bed_support_grid.name=Grille de Support de Lit Catalytique
+metaitem.conveyor.steam.name=Tapis Roulant à Vapeur
+cover.conveyor.steam.title=Module de Tapis Roulant à Vapeur
+metaitem.pump.steam.name=Pompe à Vapeur
+cover.pump.steam.title=Pompe à Vapeur
+metaitem.air_vent.name=Ventilation d'Air
+metaitem.restrictive_filter.name=Filtre d'Objets Restrictif
+metaitem.restrictive_filter.tooltip=N'autorise qu'§6une pile§7 de tout type d'objet à l'intérieur. Peut remplacer les bras robotiques. /n§oTu pourras venir jusqu'ici, mais tu n'iras pas plus loin.§r §7Job 38:11
+metaitem.air_vent.tooltip=Collecte passivement l'Air d'une Dimension pour vos Machines lorsqu'elle fait face à de l'Air
+metaitem.track_segment.name=Segment de Rail Monorail
+metaitem.track_segment.tooltip=Pour utilisation dans le §8tunnelier.
+metaitem.track_segment.length_info=§6Piste monorail de 10 blocs§7.
+metaitem.air_vent.tooltip.1=§bTaux de Collecte : §f%,d L/s
+metaitem.orbital.scrap.earth.name=Ferraille Orbitale Terrestre
+metaitem.code_breacher.name=Pirateur de Code
+
+# Catalyseurs
+susy.universal.catalysts.tooltip.tier=§eTension Max : §f%,d EU/T (%s§f)
+susy.universal.catalysts.tooltip.non_tiered=§eCatalyseur Non-Nivelé§
+susy.universal.catalysts.tooltip.yield.tiered=§aBonus de Rendement : §fx%d §apar niveau.§f
+susy.universal.catalysts.tooltip.energy.tiered=§aConsommation d'Énergie : §fx%d §apar niveau.§f
+susy.universal.catalysts.tooltip.speed.tiered=§aBonus de Vitesse : §fx%d §apar niveau.§f
+susy.universal.catalysts.tooltip.yield=§aBonus de Rendement : §fx%d
+susy.universal.catalysts.tooltip.energy=§aConsommation d'Énergie : §fx%d
+susy.universal.catalysts.tooltip.speed=§aBonus de Vitesse : §fx%d
+susy.universal.catalysts.tooltip.title=%s
+
+# Lit Catalytique d'Oxydation
+susy.catalyst_group.oxidation_catalyst_beds.name=Catalyseur d'Oxydation
+metaitem.ulv_catalyst_bed_oxidation.name=Lit Catalytique d'Oxydation ULV
+metaitem.lv_catalyst_bed_oxidation.name=Lit Catalytique d'Oxydation LV
+metaitem.mv_catalyst_bed_oxidation.name=Lit Catalytique d'Oxydation MV
+metaitem.hv_catalyst_bed_oxidation.name=Lit Catalytique d'Oxydation HV
+metaitem.ev_catalyst_bed_oxidation.name=Lit Catalytique d'Oxydation EV
+metaitem.iv_catalyst_bed_oxidation.name=Lit Catalytique d'Oxydation IV
+metaitem.luv_catalyst_bed_oxidation.name=Lit Catalytique d'Oxydation LUV
+metaitem.zpm_catalyst_bed_oxidation.name=Lit Catalytique d'Oxydation ZPM
+metaitem.uv_catalyst_bed_oxidation.name=Lit Catalytique d'Oxydation UV
+metaitem.uhv_catalyst_bed_oxidation.name=Lit Catalytique d'Oxydation UHV
+metaitem.uev_catalyst_bed_oxidation.name=Lit Catalytique d'Oxydation UEV
+metaitem.uiv_catalyst_bed_oxidation.name=Lit Catalytique d'Oxydation UIV
+metaitem.uxv_catalyst_bed_oxidation.name=Lit Catalytique d'Oxydation UXV
+metaitem.opv_catalyst_bed_oxidation.name=Lit Catalytique d'Oxydation OpV
+
+# Lit Catalytique de Réduction
+susy.catalyst_group.reduction_catalyst_beds.name=Catalyseur de Réduction
+metaitem.ulv_catalyst_bed_reduction.name=Lit Catalytique de Réduction ULV
+metaitem.lv_catalyst_bed_reduction.name=Lit Catalytique de Réduction LV
+metaitem.mv_catalyst_bed_reduction.name=Lit Catalytique de Réduction MV
+metaitem.hv_catalyst_bed_reduction.name=Lit Catalytique de Réduction HV
+metaitem.ev_catalyst_bed_reduction.name=Lit Catalytique de Réduction EV
+metaitem.iv_catalyst_bed_reduction.name=Lit Catalytique de Réduction IV
+metaitem.luv_catalyst_bed_reduction.name=Lit Catalytique de Réduction LUV
+metaitem.zpm_catalyst_bed_reduction.name=Lit Catalytique de Réduction ZPM
+metaitem.uv_catalyst_bed_reduction.name=Lit Catalytique de Réduction UV
+metaitem.uhv_catalyst_bed_reduction.name=Lit Catalytique de Réduction UHV
+metaitem.uev_catalyst_bed_reduction.name=Lit Catalytique de Réduction UEV
+metaitem.uiv_catalyst_bed_reduction.name=Lit Catalytique de Réduction UIV
+metaitem.uxv_catalyst_bed_reduction.name=Lit Catalytique de Réduction UXV
+metaitem.opv_catalyst_bed_reduction.name=Lit Catalytique de Réduction OpV
+
+# Catalyseur Standard
+susy.catalyst_group.standard_catalysts.name=Catalyseur Standard
+
+# Catalyseur de Craquage
+susy.catalyst_group.cracking_catalyst_beds.name=Catalyseur de Craquage
+metaitem.standard_catalyst_bed_cracking.name=Lit Catalytique de Craquage
+
+# Armures
+metaitem.jet_wingpack.name=Propulseur Dorsal
+metaitem.jet_wingpack.tooltip=Maintenir shift pour freiner lorsque le moteur est activé
+metaarmor.hud.engine_status=Moteur : %s
+metaarmor.jet_wingpack.engine_active=Propulseur Dorsal : Moteur Activé
+metaarmor.jet_wingpack.engine_inactive=Propulseur Dorsal : Moteur Désactivé
+
+# Traductions de Machines
+susy.wrongbiome=La machine ne peut pas fonctionner dans ce biome !
+susy.weather_resistance=§2N'explosera pas à cause de l'eau, de la lave, du feu ou de la pluie.
+susy.large_fluid_pump.y_level=Niveau Y actuel du contrôleur : Y=%s
+susy.large_fluid_pump.biome=Biome actuel du Carter de Tuyau du bas : %s
+
+# Interfaces de Stock
+susy.machine.stock_controller.name=Contrôleur de Locomotive
+susy.stock_interfaces.locomotive_controller.description=Contrôle la poussée et le freinage des locomotives à proximité en fonction de l'entrée de redstone
+
+susy.machine.stock_detector.name=Détecteur de Stock
+susy.stock_interfaces.stock_detector.description=Détecte le stock à proximité et émet un signal redstone
+
+susy.machine.stock_fluid_exchanger.name=Échangeur de Fluide
+susy.stock_interfaces.fluid_exchanger.description=Transfère du fluide depuis et vers le stock à proximité
+
+susy.machine.stock_item_exchanger.name=Échangeur d'Objets
+susy.stock_interfaces.item_exchanger.description=Transfère des objets depuis et vers le stock à proximité
+
+susy.machine.stock_content_reader.name=Lecteur de Stock
+susy.stock_interfaces.stock_reader.description=Émet un signal redstone basé sur l'inventaire/réservoir du stock en face de lui
+
+susy.gui.stock_interactor.button.stock_filter.tooltip=Cliquer pour ouvrir l'interface de filtre de stock
+susy.gui.stock_interactor.button.controller_setting.tooltip=Cliquer pour ouvrir l'interface des paramètres du contrôleur
+susy.gui.stock_interactor.button.render_bounding_box.tooltip=Cliquer pour activer/désactiver le rendu de la zone d'interaction
+susy.gui.stock_interactor.button.highlight_selected_stock.tooltip=Cliquer pour activer/désactiver la mise en évidence du stock sélectionné
+
+susy.gui.stock_interactor.title.highlight_selected_stock=Mettre en évidence le stock sélectionné
+susy.gui.stock_interactor.title.render_bounding_box=Afficher la Zone d'Interaction
+susy.gui.stock_interactor.title.stock_filter=Filtre de Stock
+susy.gui.stock_interactor.title.controller_setting=Paramètres
+
+susy.gui.stock_interactor.stock_filter.enabled.tooltip=Activer/Désactiver le filtre
+susy.gui.stock_interactor.stock_filter.enabled.title=Activer/Désactiver
+susy.gui.stock_interactor.stock_filter.regex.tooltip.info=§bAccepte les expressions regex, sensible à la casse\n§6^§r pour le début de chaîne\n§6$§r pour la fin de chaîne\n§6§r pour n'importe quel caractère (0 ou plus)\n§6a§r pour zéro ou plusieurs caractères a consécutifs\n§6?§r pour n'importe quel 1 caractère\n§6()§r pour correspondre à une entrée vide\n§bVous pouvez en apprendre plus sur regex sur regex101.com§r
+susy.gui.stock_interactor.stock_filter.regex.tooltip.error=§4Erreur de compilation du motif regex !§r\nLe filtre de nom ne sera pas appliqué !
+susy.gui.stock_interactor.stock_filter.regex.tooltip.waiting=Aucun motif regex défini\nLe filtre de nom ne sera pas appliqué !
+susy.gui.stock_interactor.stock_filter.regex.tooltip.success=§aRegex compilé avec succès !§r\nLe filtre de nom sera appliqué !
+
+susy.gui.stock_interactor.controller_setting.button.control_active.tooltip=Cliquer pour activer/désactiver le contrôle des locomotives lorsque le contrôleur est alimenté par redstone
+susy.gui.stock_interactor.controller_setting.button.control_inactive.tooltip=Cliquer pour activer/désactiver le contrôle des locomotives lorsque le contrôleur n'est pas alimenté par redstone
+
+susy.gui.stock_interactor.controller_setting.active_brake.tooltip=Frein (Alimenté)
+susy.gui.stock_interactor.controller_setting.active_throttle.tooltip=Accélérateur (Alimenté)
+susy.gui.stock_interactor.controller_setting.inactive_brake.tooltip=Frein (Non alimenté)
+susy.gui.stock_interactor.controller_setting.inactive_throttle.tooltip=Accélérateur (Non alimenté)
+
+susy.gui.temperature_celsius=Température : %s / %s°C
+
+susy.gui.toggle_energy_voiding.enabled=Évacuation d'énergie lorsqu'elle est pleine
+susy.gui.toggle_energy_voiding.disabled=Ne vide pas l'énergie
+
+# Informations de recette supplémentaires
+susy.recipe.dimensions=Dimensions : %s
+susy.recipe.biomes=Biomes : %s
+susy.recipe.biomes_blocked=Biomes Bloqués : %s
+susy.recipe.biomeTypes=Types de Biomes : %s
+susy.recipe.biomeTypes_blocked=Types de Biomes Bloqués : %s
+
+# Commandes
+susy.command.horde.usage=/mobHorde <start/stop/status>
+susy.command.horde.start.usage=/mobHorde start <name>
+susy.command.horde.start.argument_required=Utilisez /mobHorde start <name>.
+susy.command.horde.start.no_such_horde=Aucune horde %s n'existe.
+susy.command.horde.start.unable_to_run=La horde %s ne peut pas être exécutée. Cela peut être dû à des restrictions dimensionnelles, à la lumière du jour, etc.
+susy.command.horde.start.error_executing_horde=Les créatures de la horde n'ont pas été correctement apparues.
+susy.command.horde.start.has_active_invasion=Vous avez déjà une invasion active de %s.
+susy.command.horde.start.started=Invasion %s démarrée avec succès.
+susy.command.horde.stop.usage=/mobHorde stop
+susy.command.horde.stop.has_active_no_invasion=Aucune invasion active à arrêter.
+susy.command.horde.stop.stopped=Invasion %s arrêtée avec succès.
+susy.command.horde.status.usage=/mobHorde status <player>
+susy.command.horde.status.has_active_invasion=Le joueur %s a une invasion active de %s depuis %d ticks. Elle expirera dans %s ticks.
+susy.command.horde.status.no_active_invasion=Le joueur %s n'a pas d'invasion active.
+
+# Infos-bulles de Fluide
+susy.fluid.voiding.liquid=Évacuable avec Déverseur
+susy.fluid.voiding.gas=Évacuable avec Cheminée
+susy.fluid.voiding.flammable=Évacuable avec Torchère
+
+# Modes de Carrière
+susy.multiblock.quarry.excavation_mode=Mode Excavation
+susy.multiblock.quarry.recipe_mode=Mode Recette
+susy.machine.quarry.tooltip.info=Maximum carré de %1$sx%1$s, minimum %2$sx%2$s. Maintenir shift pour plus de détails.
+susy.machine.quarry.tooltip.structure_info=Les Carrières peuvent être formées avec n'importe quelles dimensions impaires allant de %2$sx%2$s à %1$sx%1$s, même non carrées. Étendez la couche inférieure de blocs de béton sur les coins, ainsi une carrière de 23 de large aura 9 béton par côté, et 5 blocs intérieurs.
+
+death.attack.toxic_atmo=%s a eu les poumons déchirés
+death.attack.suffocation=%s n'a pas pu respirer
+death.attack.pressure=%s a été écrasé
+death.attack.depressurization=%s est mort d'une embolie
+death.attack.impact=%s a subi une décélération terminale
+death.attack.vaporization=%s a cessé d'être de la biologie et est devenu de la physique
+death.attack.alpha_radiation=%s a ingéré quelque chose de trop épicé
+death.attack.beta_radiation=%s a eu ses chromosomes déchiquetés
+death.attack.neutron_radiation=%s a été épicé par des neutrons
+death.attack.uv_radiation=%s a oublié d'appliquer de la crème solaire
+death.attack.x_radiation=%s a subi une radiographie non consentie
+death.attack.gamma_radiation=%s est mort de brûlures internes
+death.attack.spaghettification=%s a été spaghettifié
+death.attack.age=%s est mort de vieillesse
+death.attack.chronoerasure=%s n'a jamais existé
+
+metaitem.simple_gas_mask.name=Masque à Gaz Simple
+metaitem.simple_gas_mask.tooltip=Survie dans des environnements sans oxygène
+metaitem.gas_mask.name=Masque à Gaz
+metaitem.gas_mask.tooltip=Survie plus longtemps dans des environnements sans oxygène
+metaitem.gas_tank.name=Bouteille de Gaz
+metaitem.gas_tank.tooltip=Survie plus longtemps dans des environnements sans oxygène
+metaitem.asbestos_mask.name=Masque à Gaz en Amiante
+metaitem.asbestos_mask.tooltip=Survie dans des environnements chauds
+metaitem.asbestos_chestplate.name=Bouteille en Amiante
+metaitem.asbestos_chestplate.tooltip=Survie dans des environnements chauds
+metaitem.asbestos_leggings.name=Jambières en Amiante
+metaitem.asbestos_leggings.tooltip=Survie dans des environnements chauds
+metaitem.asbestos_boots.name=Bottes en Amiante
+metaitem.asbestos_boots.tooltip=Survie dans des environnements chauds
+metaitem.rebreather_tank.name=Bouteille de Recycleur
+metaitem.rebreather_tank.tooltip=Contient de l'oxygène plus longtemps
+metaitem.reflective_mask.name=Masque à Gaz Réfléchissant
+metaitem.reflective_mask.tooltip=Réduit les dégâts de chaleur
+metaitem.reflective_chestplate.name=Bouteille Réfléchissante
+metaitem.reflective_chestplate.tooltip=Réduit les dégâts de chaleur
+metaitem.reflective_leggings.name=Jambières Réfléchissantes
+metaitem.reflective_leggings.tooltip=Réduit les dégâts de chaleur
+metaitem.reflective_boots.name=Bottes Réfléchissantes
+metaitem.reflective_boots.tooltip=Réduit les dégâts de chaleur
+metaitem.filtered_tank.name=Bouteille Filtrée
+metaitem.filtered_tank.tooltip=Contient de l'oxygène très longtemps
+metaitem.nomex_mask.name=Masque à Gaz Nomex
+metaitem.nomex_mask.tooltip=Reste indéfiniment dans le manteau !
+metaitem.nomex_chestplate.name=Bouteille Nomex
+metaitem.nomex_chestplate.tooltip=Reste indéfiniment dans le manteau !
+metaitem.nomex_leggings.name=Jambières Nomex
+metaitem.nomex_leggings.tooltip=Reste indéfiniment dans le manteau !
+metaitem.nomex_boots.name=Bottes Nomex
+metaitem.nomex_boots.tooltip=Reste indéfiniment dans le manteau !
+
+supersymmetry.oxygène=Air restant : §b%s secondes§r (sur %s)
+supersymmetry.unlimited_oxygen=Air restant : §bIllimité§r
+supersymmetry.seconds_left=Vie restante : §2%s secondes§r
+supersymmetry.unlimited=Vie restante : §bIllimité§r
+
+# Blocs Durcis
+tile.hardened_blocks.lair7.name=Lair 7 Durci
+tile.hardened_blocks.lair10.name=Lair 10 Durci
+tile.hardened_blocks.lair11.name=Lair 11 Durci
+tile.hardened_blocks.kryp7.name=Kryp 7 Durci
+tile.hardened_blocks.kryp8.name=Kryp 8 Durci
+tile.hardened_blocks1.industrial_concrete_hardened.name=Béton Industriel Grade Fédération
+tile.hardened_blocks1.military_concrete_hardened.name=Béton Militaire Grade Fédération
+tile.hardened_blocks1.military_concrete_cobblestone_hardened.name=Pavés de Béton Militaire Grade Fédération
+
+# Tôles Personnalisées
+tile.custom_sheets.darkwhitemetalsheet.name=Tôle Métallique Blanche Plus Sombre
+tile.custom_sheets.lightergraymetalsheet.name=Tôle Métallique Grise Plus Claire
+tile.custom_sheets.decorativecopper.name=Cuivre Décoratif Spatial
+tile.custom_sheets.decorativecopperbricks.name=Briques de Cuivre Décoratif Spatial
+
+tile.regolith.highland.name=Régolithe Anorthositique
+tile.regolith.lowland.name=Régolithe Basaltique
+
+# Comportements d'Outil
+item.susy.tool.behavior.pipeliner=§6Pipeliner : §fActionne tous les tuyaux adjacents
+item.susy.tool.tooltip.pipeliner=§7Maintenir §f[%s]§7 pour activer le mode §6Pipeliner§7
+
+# Titres
+supersymmetry.title.1=§3SUPERSYMMETRY
+supersymmetry.subtitle.1=Un modpack par SymmetricDevs
+supersymmetry.title.2=BIENVENUE SUR §2LA TERRE
+supersymmetry.subtitle.2=Signes vitaux : §astables§r. Carburant du pod : §e46%%§r.
+
+# Caisses Verrouillées
+chat.susy.crate.requires_code_breacher=Cette caisse nécessite un pirateur de code !
+susy.machine.locked_crate.pe.name=Caisse Hermétiquement Scellée
+susy.machine.locked_crate.wood.name=Caisse en Bois
+susy.machine.locked_crate.bronze.name=Caisse en Bronze
+susy.machine.locked_crate.steel.name=Caisse en Acier
+susy.machine.locked_crate.aluminium.name=Caisse en Aluminium
+susy.machine.locked_crate.stainless_steel.name=Caisse en Acier Inoxydable
+susy.machine.locked_crate.titanium.name=Caisse en Titane
+susy.machine.locked_crate.tungstensteel.name=Caisse en Acier au Tungstène
+
+# Chaudières
+susy.machine.large_boiler.bronze.name=Grande Chaudière en Bronze
+susy.machine.large_boiler.steel.name=Grande Chaudière en Acier
+
+susy.machine.steam_boiler_coal.bronze.name=Petite Chaudière à Vapeur à Combustible Solide
+susy.machine.steam_boiler_coal.bronze.tooltip=Un moyen précoce d'obtenir de l'Énergie à Vapeur
+susy.machine.steam_boiler_coal.steel.name=Chaudière à Vapeur Haute Pression à Combustible Solide
+susy.machine.steam_boiler_coal.steel.tooltip=Plus rapide que la Petite Chaudière à Vapeur à Combustible Solide
+susy.machine.steam_boiler_liquid.bronze.name=Petite Chaudière à Vapeur Liquide
+susy.machine.steam_boiler_liquid.bronze.tooltip=Une Chaudière fonctionnant avec des Liquides
+susy.machine.steam_boiler_liquid.steel.name=Chaudière à Vapeur Haute Pression Liquide
+susy.machine.steam_boiler_liquid.steel.tooltip=Plus rapide que la Petite Chaudière à Vapeur Liquide
+
+# Fausse Laine
+tile.fake_wool.whitefakewool.name=Fibre d'Amiante Blanche
+tile.fake_wool.orangefakewool.name=Fibre d'Amiante Orange
+tile.fake_wool.magentafakewool.name=Fibre d'Amiante Magenta
+tile.fake_wool.lightbluefakewool.name=Fibre d'Amiante Bleu Clair
+tile.fake_wool.yellowfakewool.name=Fibre d'Amiante Jaune
+tile.fake_wool.limefakewool.name=Fibre d'Amiante Lime
+tile.fake_wool.pinkfakewool.name=Fibre d'Amiante Rose
+tile.fake_wool.grayfakewool.name=Fibre d'Amiante Grise
+tile.fake_wool.lightgrayfakewool.name=Fibre d'Amiante Gris Clair
+tile.fake_wool.cyanfakewool.name=Fibre d'Amiante Cyan
+tile.fake_wool.purplefakewool.name=Fibre d'Amiante Violette
+tile.fake_wool.bluefakewool.name=Fibre d'Amiante Bleue
+tile.fake_wool.brownfakewool.name=Fibre d'Amiante Brune
+tile.fake_wool.greenfakewool.name=Fibre d'Amiante Verte
+tile.fake_wool.redfakewool.name=Fibre d'Amiante Rouge
+tile.fake_wool.blackfakewool.name=Fibre d'Amiante Noire
+
+# Physique des particules
+susy.particlebeam.energy=Énergie
+susy.particlebeam.bunch.spacing=Espacement des Paquets
+susy.particlebeam.bunch.length=Longueur des Paquets
+susy.particlebeam.nbunches=Nombre total de Paquets
+susy.particlebeam.nparticles=Particules par paquet
+susy.particlebeam.emittance=Émittance du Faisceau
+susy.particlebeam.beamsize=Section du Faisceau
+susy.machine.beam_import_hatch.name=Trappe d'Importation de Faisceau
+susy.machine.beam_export_hatch.name=Trappe d'Exportation de Faisceau
+
+# Particules
+susy.particle.electron.name=Électron
+susy.particle.positron.name=Positron
+susy.particle.photon.name=Photon
+
+# Béton Divers
+tile.random_concrete.greyindustrialconcrete.name=Béton Industriel Gris
+tile.random_concrete.mossyindustrialconcrete.name=Béton Industriel Moussu
+tile.random_concrete.silverindustrialconcrete.name=Béton Industriel Argenté
+tile.random_concrete.whiteindustrialconcrete.name=Béton Industriel Blanc
+
+tile.random_concrete.dottedpanel.name=Panneau Pointillé
+tile.random_concrete.dottedpanelborder.name=Panneau Pointillé Bordé
+tile.random_concrete.dottedpanelcomb.name=Panneau Pointillé en Peigne
+tile.random_concrete.dottedpanelgrid.name=Panneau Pointillé en Grille
+
+tile.random_concrete.industrialcinderbricks.name=Briques de Cendre Industrielles
+tile.random_concrete.industrialcinderbrickscement.name=Briques de Cendre Ciment Industriel
+tile.random_concrete.industrialcinderbrickscementgray.name=Briques de Cendre Ciment Industriel Gris
+tile.random_concrete.industrialcinderbricksdark.name=Briques de Cendre Industrielles Sombres
+tile.random_concrete.industrialcinderbricksdarkgrey.name=Briques de Cendre Industrielles Gris Foncé
+tile.random_concrete.industrialcinderbricksgrey.name=Briques de Cendre Industrielles Grises
+
+tile.random_concrete.smoothindustrialconcrete.name=Béton Industriel Lisse
+tile.random_concrete.smoothindustrialconcretegrey.name=Béton Industriel Gris Lisse
+tile.random_concrete1.smoothindustrialconcretewhite.name=Béton Industriel Blanc Lisse
+
+# Butin LittleTiles
+susy.top.lt_loot=Cela Contient du Butin
