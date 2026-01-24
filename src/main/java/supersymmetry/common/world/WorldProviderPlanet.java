@@ -1,6 +1,5 @@
 package supersymmetry.common.world;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
@@ -97,11 +96,6 @@ public class WorldProviderPlanet extends WorldProvider {
                 }
             }
         }
-        return new Vec3d(0.0D, 0.0D, 0.0D);
-    }
-
-    @Override
-    public Vec3d getSkyColor(Entity cameraEntity, float partialTicks) {
         return new Vec3d(0.0D, 0.0D, 0.0D);
     }
 
