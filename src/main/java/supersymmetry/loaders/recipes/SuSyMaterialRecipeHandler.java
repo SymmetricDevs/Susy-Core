@@ -35,6 +35,7 @@ import gregtech.loaders.recipe.handlers.RecyclingRecipeHandler;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
 import supersymmetry.api.unification.material.properties.FiberProperty;
+import supersymmetry.api.unification.material.properties.MillBallProperty;
 import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.item.SuSyMetaItems;
@@ -62,6 +63,8 @@ public class SuSyMaterialRecipeHandler {
                 SuSyMaterialRecipeHandler::processHIPPressing);
         addProcessingHandler(PropertyKey.DUST, OrePrefix.dust, SuSyMaterialFlags.CONTINUOUSLY_CAST,
                 SuSyMaterialRecipeHandler::processContinuouslyCast);
+        SusyOrePrefix.millBall.addProcessingHandler(SuSyPropertyKey.MILL_BALL,
+                SuSyMaterialRecipeHandler::processMillBall);
     }
 
     public static <T extends IMaterialProperty> void addProcessingHandler(PropertyKey<T> propertyKey, OrePrefix prefix,
@@ -201,13 +204,15 @@ public class SuSyMaterialRecipeHandler {
     }
 
     public static void processContinuouslyCast(OrePrefix orePrefix, Material material, DustProperty dustProperty) {
-        WIREMILL_RECIPES.recipeBuilder()
-                .input(stick, material)
-                .circuitMeta(1)
-                .output(wireGtSingle, material, 1)
-                .duration((int) material.getMass() / 4)
-                .EUt(getVoltageMultiplier(material))
-                .buildAndRegister();
+        if (material.hasProperty(PropertyKey.WIRE)) {
+            WIREMILL_RECIPES.recipeBuilder()
+                    .input(stick, material)
+                    .circuitMeta(1)
+                    .output(wireGtSingle, material, 1)
+                    .duration((int) material.getMass() / 4)
+                    .EUt(getVoltageMultiplier(material))
+                    .buildAndRegister();
+        }
     }
 
     private static int getVoltageMultiplier(Material material) {
@@ -360,5 +365,15 @@ public class SuSyMaterialRecipeHandler {
          * .buildAndRegister();
          * }
          */
+    }
+
+    public static void processMillBall(OrePrefix millBallPrefix, Material mat, MillBallProperty property) {
+        FLUID_SOLIDFICATION_RECIPES.recipeBuilder()
+                .notConsumable(MetaItems.SHAPE_MOLD_BALL)
+                .fluidInputs(mat.getFluid(144))
+                .output(SusyOrePrefix.millBall, mat, 1)
+                .EUt(VA[LV])
+                .duration(200)
+                .buildAndRegister();
     }
 }
