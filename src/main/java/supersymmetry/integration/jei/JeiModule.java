@@ -6,9 +6,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Collectors;
 
-import gregtechfoodoption.integration.jei.EatingRecipeCategory;
-import gregtechfoodoption.integration.jei.LacingCategory;
-import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import org.jetbrains.annotations.NotNull;
 
 import cam72cam.immersiverailroading.IRItems;
@@ -76,7 +73,8 @@ public class JeiModule extends IntegrationSubmodule implements IModPlugin {
         registry.addRecipeCatalyst(SuSyMetaTileEntities.STEAM_BOILER_COAL_BRONZE.getStackForm(), solidMapId);
         registry.addRecipeCatalyst(SuSyMetaTileEntities.STEAM_BOILER_COAL_STEEL.getStackForm(), solidMapId);
 
-        registry.addRecipes(RocketFuelEntry.getFuelRegistry().values().stream().map(RocketFuelWrapper::new).collect(Collectors.toList()), RocketFuelCategory.UID);
+        registry.addRecipes(RocketFuelEntry.getFuelRegistry().values().stream().map(RocketFuelWrapper::new)
+                .collect(Collectors.toList()), RocketFuelCategory.UID);
         registry.addRecipeCatalyst(SuSyMetaTileEntities.LAUNCH_PAD.getStackForm(), RocketFuelCategory.UID);
 
         String strandCastingId = GTValues.MODID + ":strand_casting";
@@ -96,5 +94,4 @@ public class JeiModule extends IntegrationSubmodule implements IModPlugin {
 
         registry.addRecipeCategories(new StrandCategory(registry.getJeiHelpers().getGuiHelper()));
     }
-
 }

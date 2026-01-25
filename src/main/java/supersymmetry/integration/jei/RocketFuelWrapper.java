@@ -1,14 +1,16 @@
 package supersymmetry.integration.jei;
 
+import java.util.stream.Collectors;
+
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 
-import java.util.stream.Collectors;
-
 public class RocketFuelWrapper implements IRecipeWrapper {
+
     private final RocketFuelEntry entry;
+
     public RocketFuelWrapper(RocketFuelEntry entry) {
         this.entry = entry;
     }
