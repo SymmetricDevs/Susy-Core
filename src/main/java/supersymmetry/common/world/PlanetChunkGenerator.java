@@ -66,7 +66,7 @@ public class PlanetChunkGenerator implements IChunkGenerator {
     private final IBlockState stone;
     private final IBlockState bedrock;
 
-    // NEW: Crater materials
+    // Crater
     private final IBlockState breccia;
     private final IBlockState impactMelt;
     private final IBlockState impactEjecta;
@@ -169,7 +169,7 @@ public class PlanetChunkGenerator implements IChunkGenerator {
                         double d13 = (d4 - d2) * 0.25D;
 
                         int height = (iY * 8) + jY;
-                        // Loop through x axis
+                        // Loop through x-axis
                         for (int jX = 0; jX < 4; ++jX) {
                             double d14 = 0.25D;
                             double d16 = (d11 - d10) * 0.25D;
@@ -426,7 +426,7 @@ public class PlanetChunkGenerator implements IChunkGenerator {
                         int currentPeakHeight = (int) (peakHeight * (1 - peakNormDist * peakNormDist));
 
                         for (int y = floorY; y < floorY + currentPeakHeight && y < 255; y++) {
-                            primer.setBlockState(x, y, z, bedrock);
+                            primer.setBlockState(x, y, z, stone);
                         }
                     }
                     // Add impact melt in center
@@ -449,7 +449,7 @@ public class PlanetChunkGenerator implements IChunkGenerator {
                         int fractureDepth = 3 + craterRand.nextInt(5);
                         for (int y = floorY - 4; y > floorY - 4 - fractureDepth && y > 2; y--) {
                             if (craterRand.nextDouble() < 0.6) {
-                                primer.setBlockState(x, y, z, bedrock);
+                                primer.setBlockState(x, y, z, stone); // Replace with a cool deposit block?
                             }
                         }
                     }

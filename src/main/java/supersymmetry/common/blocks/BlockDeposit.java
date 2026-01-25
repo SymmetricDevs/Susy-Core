@@ -61,7 +61,8 @@ public class BlockDeposit extends VariantBlock<BlockDeposit.DepositBlockType> {
         HYDROTHERMAL("hydrothermal"),
         ALLUVIAL("alluvial"),
         MAGMATIC_HYDROTHERMAL("magmatic_hydrothermal"),
-        ICE_CAP("ice_cap");
+        ICE_CAP("ice_cap"),
+        CRATER_DEPOSIT("crater_deposit");
 
         private final String name;
 
