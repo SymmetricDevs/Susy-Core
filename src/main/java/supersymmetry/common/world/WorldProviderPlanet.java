@@ -103,11 +103,6 @@ public class WorldProviderPlanet extends WorldProvider {
     }
 
     @Override
-    public Vec3d getSkyColor(Entity cameraEntity, float partialTicks) {
-        return new Vec3d(0.0D, 0.0D, 0.0D);
-    }
-
-    @Override
     public @Nullable float[] calcSunriseSunsetColors(float celestialAngle, float partialTicks) {
         Planet planet = getPlanet();
         if (planet != null && planet.hasCustomSky()) {

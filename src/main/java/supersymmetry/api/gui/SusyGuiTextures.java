@@ -1,14 +1,12 @@
 package supersymmetry.api.gui;
 
-import static com.cleanroommc.modularui.drawable.UITexture.fullImage;
-
-import org.jetbrains.annotations.ApiStatus;
-
 import com.cleanroommc.modularui.drawable.UITexture;
-
 import gregtech.api.GTValues;
 import gregtech.api.gui.resources.SteamTexture;
 import gregtech.api.gui.resources.TextureArea;
+import org.jetbrains.annotations.ApiStatus;
+
+import static com.cleanroommc.modularui.drawable.UITexture.fullImage;
 
 public class SusyGuiTextures {
 
@@ -127,6 +125,15 @@ public class SusyGuiTextures {
             .name("standard_slot")
             .canApplyTheme()
             .build();
+
+    public static final UITexture FLUID_SLOT = new UITexture.Builder()
+            .location(GTValues.MODID, "textures/gui/base/fluid_slot.png")
+            .imageSize(18, 18)
+            .adaptable(1)
+            .name("standard_fluid_slot")
+            .canApplyTheme()
+            .build();
+
 
     @Deprecated
     @ApiStatus.ScheduledForRemoval(inVersion = "GTCEu 2.9")
