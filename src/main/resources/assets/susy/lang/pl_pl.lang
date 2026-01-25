@@ -1,0 +1,1498 @@
+# Blocks
+tile.cooling_coil.manganese_iron_arsenic_phosphide.name=Wężownica chłodząca z fosforkiem manganu i żelaza arsenu
+tile.cooling_coil.praseodymium_nickel.name=Wężownica chłodząca prazeodymowo-niklowa
+tile.cooling_coil.gadolinium_silicon_germanium.name=Wężownica chłodząca z gadolinu, krzemu i germanu
+tile.cooling_coil.tooltip_temperature=Podstawowa wydajność chłodzenia: §b%,dK
+tile.wire_coil.tooltip_evaporation=§8Basen parujący
+tile.wire_coil.tooltip_energy_evaporating=§cWytwarzanie ciepła: §f%,d kJ/t
+
+tile.sintering_brick.sintering_block_brick.name=Blok do spiekania cegły
+tile.sintering_brick.sintering_block_magnetoplated.name=Magnetopolowany blok spiekany
+
+tile.coagulation_tank_wall.wooden_coagulation_tank_wall.name=Drewniana ściana zbiornika koagulacyjnego
+tile.separator_rotor.steel.name=Stalowy wirnik separatora grawitacyjnego
+
+tile.alternator_coil.copper.name=Miedziana cewka alternatora
+tile.turbine_rotor.steel.name=Stalowy blok turbiny
+tile.turbine_rotor.low_pressure.name=Blok turbiny niskiego ciśnienia
+tile.turbine_rotor.high_pressure.name=Blok turbiny wysokiego ciśnienia
+tile.turbine_rotor.combustion.name=Blok turbiny spalinowej
+
+tile.drill_head.steel.name=Stalowa głowica wiertarska
+
+tile.susy_multiblock_casing.silicon_carbide_casing.name=Wytrzymała obudowa z węglika krzemu
+tile.susy_multiblock_casing.sieve_tray.name=Taca sitowa
+tile.susy_multiblock_casing.coalescence_plate.name=Płyta koalescencyjna
+tile.susy_multiblock_casing.structural_packing.name=Pakowanie strukturalne
+tile.susy_multiblock_casing.ulv_structural_casing.name=Podstawowa obudowa konstrukcyjna
+tile.susy_multiblock_casing.drone_pad.name=Podkładka dla drona
+tile.susy_multiblock_casing.heavy_duty_pad.name=Wytrzymała podkładka
+tile.susy_multiblock_casing.synthetic_mullite_refractory.name=Syntetyczne mulitowe cegły ogniotrwałe
+tile.rocket_assembler_casing.reinforced_foundation.name=Wzmocniony fundament
+tile.rocket_assembler_casing.foundation.name=Fundacja Montażystów Rakiet
+tile.rocket_assembler_casing.rails.name=Szyny do montażu rakiet
+tile.rocket_assembler_casing.structural_frame.name=Rama konstrukcyjna montera rakiet
+tile.susy_multiblock_casing.euv_safe_casing.name=Obudowa litograficzna odporna na ekstremalnie promieniowanie ultrafioletowe
+tile.susy_multiblock_casing.tabular_alumina_refractory.name=Tabelaryczna wykładzina ogniotrwała z tlenku glinu
+
+
+tile.processor_cluster.tier1.name=Klaster procesorów
+tile.rocket_multiblock_casing.vinyl_ceiling_tile.name=Płyta sufitowa winylowa
+tile.rocket_multiblock_casing.ceiling_grid_filter_unit.name=Sufitowy moduł filtra siatkowego
+tile.rocket_multiblock_casing.vinyl_composite_flooring.name=Podłogi kompozytowe winylowe
+tile.rocket_multiblock_casing.aerospace_gasket.name=Uszczelka lotnicza
+tile.metallurgy_2.polystyrene_wall.name=Ściana ze styropianu
+
+tile.serpentine.basic.name=Blok serpentynowy z rurkami miedzianymi
+
+tile.structural_block.base_structural_block.name=Blok konstrukcyjny
+tile.structural_block.structural_block_low.name=Pasiasty blok konstrukcyjny
+tile.structural_block.structural_block_lowlight.name=Lekki blok konstrukcyjny w paski
+tile.structural_block.structural_block_danger_a.name=Ostrzeżenie dotyczące bloku konstrukcyjnego (A)
+tile.structural_block.structural_block_danger_b.name=Ostrzeżenie dotyczące bloku konstrukcyjnego (B)
+tile.structural_block.structural_block_danger_c.name=Ostrzeżenie dotyczące bloku konstrukcyjnego (C)
+tile.structural_block.structural_block_danger_d.name=Ostrzeżenie dotyczące bloku konstrukcyjnego (D)
+tile.structural_block.structural_block_column.name=Kolumna bloku konstrukcyjnego
+tile.structural_block.structural_block_column_old.name=Stara kolumna bloku konstrukcyjnego
+tile.structural_block.structural_block_light.name=Światło blokowe strukturalne
+tile.structural_block.structural_block_light_broken.name=Uszkodzone światło bloku konstrukcyjnego
+tile.structural_block.structural_block_light_cable.name=Drut blokowy konstrukcyjny
+tile.structural_block.structural_block_instruments.name=Blok instrumentów strukturalnych
+tile.structural_block.structural_block_sign_0.name=Znak zerowy bloku konstrukcyjnego
+tile.structural_block.structural_block_sign_1.name=Blok konstrukcyjny jeden znak
+tile.structural_block.structural_block_sign_2.name=Blok konstrukcyjny dwa znak
+tile.structural_block_1.structural_block_exposed.name=Odsłonięty blok konstrukcyjny (A)
+tile.structural_block_1.structural_block_exposed_1.name=Odsłonięty blok konstrukcyjny (B)
+tile.structural_block_1.structural_block_exposed_2.name=Odsłonięty blok konstrukcyjny (C)
+tile.structural_block_1.structural_block_danger_sign.name=Blok znaku niebezpieczeństwa konstrukcyjnego
+tile.structural_block_1.structural_block_cable.name=Kabel bloku strukturalnego (pionowy)
+tile.structural_block_1.structural_block_cable_horizontal.name=Kabel bloku konstrukcyjnego (poziomy)
+tile.structural_block_1.structural_block_cable_junction.name=Kabel bloku konstrukcyjnego (skręt)
+tile.structural_block_1.structural_block_pipocalypse.name=Rury z gęstymi blokami konstrukcyjnymi
+tile.structural_block_1.structural_block_vent.name=Otwór wentylacyjny bloku konstrukcyjnego
+tile.structural_block_1.structural_block_vent_broken.name=Wentylacja bloku konstrukcyjnego (uszkodzona)
+
+tile.rocket_turbopump.basic.name=Podstawowa turbopompa rakietowa
+tile.rocket_control.basic.name=Podstawowy system kontroli rakiet
+tile.rocket_outer_hatch.al_2219.name=Właz rakietowy Al-2219
+tile.rocket_tank_shell.al_2219.name=Powłoka czołgu Al-2219
+tile.rocket_interstage.al_7075.name=Międzystopniowa rakieta Al-7075
+tile.rocket_fairing.al_7075.name=Panel owiewki ładunku Al-7075
+tile.rocket_nozzle.bell_basic.name=Osłona dyszy rakiety Bell
+tile.rocket_combustion_chamber.monopropellant.name=Komora spalania monopropelentu
+tile.rocket_combustion_chamber.bipropellant.name=Komora spalania biopropelanta
+tile.rocket_combustion_chamber.oxidiser.name=Komora spalania utleniacza
+tile.spacecraft_life_support.oxygen_regen.name=Regenerator tlenu
+tile.spacecraft_instrument.sensors.name=Układ czujników statku kosmicznego
+tile.spacecraft_hull.al_li.name=Powłoka statku kosmicznego Al-Li
+tile.rocket_nozzle.plug.name=Zatyczka dyszy rakietowej
+tile.rocket_nozzle.expanding.name=Rozszerzająca się skorupa dyszy rakiety
+tile.rocket_fairing_connector.al_7075.name=Złącze owiewki Al-7075
+tile.guidance_system.soyuz.name=System naprowadzania Sojuz 7K
+
+tile.deposit_block.orthomagmatic.name=Blokada depozytu ortomagmatycznego
+tile.deposit_block.metamorphic.name=Metamorficzny blok depozytowy
+tile.deposit_block.sedimentary.name=Blok osadowy
+tile.deposit_block.hydrothermal.name=Blok złoża hydrotermalnego
+tile.deposit_block.alluvial.name=Blok osadów aluwialnych
+tile.deposit_block.magmatic_hydrothermal.name=Blok złoża hydrotermalnego Magmatic
+tile.deposit_block.ice_cap.name=Blok depozytowy pokrywy lodowej
+tile.deposit_block.crater_deposit.name=Blok depozytowy krateru
+
+tile.resource_block.bauxite.name=Ruda boksytu
+tile.resource_block.caliche.name=Caliche
+tile.resource_block.non_marine_evaporite.name=Złoże ewaporatów inne niż morskie
+tile.resource_block.halide_evaporite.name=Złoże ewaporatu halogenkowego
+tile.resource_block.sulfate_evaporite.name=Złoże ewaporatu siarczanowego
+tile.resource_block.carbonate_evaporite.name=Złoże ewaporatu węglanowego
+tile.resource_block.monazite_alluvial.name=Złoże monacytu aluwialnego
+tile.resource_block.bastnasite_alluvial.name=Złoże bastnazytu aluwialnego
+tile.resource_block.euxenite_alluvial.name=Złoże euksenitu aluwialnego
+tile.resource_block.xenotime_alluvial.name=Aluwialne złoże ksenotymu
+tile.resource_block.gold_alluvial.name=Złoża złota aluwialnego
+tile.resource_block.platinum_placer.name=Platynowy depozyt przyjemności
+tile.resource_block.phosphorite.name=Złoże fosforytu
+tile.resource_block.potash.name=Depozyt potażu
+tile.resource_block.sulfur.name=Złoże siarki
+tile.resource_block.coal.name=Złoże węgla
+tile.resource_block_1.native_copper.name=Rodzime złoża miedzi
+tile.resource_block_1.anthracite.name=Depozyt Antracytu
+tile.resource_block_1.lignite.name=Złoże węgla brunatnego
+
+
+tile.multiblock_tank.clarifier.name=Klaryfikator Vat
+tile.multiblock_tank.flotation.name=Kadź flotacyjna na pianę
+
+tile.evaporation_bed.dirt.name=Złoże parowania
+
+tile.electrode_assembly.carbon.name=Zespół elektrody węglowej
+
+tile.home_block.home_block_home.name=„Blok główny (domyślny)”
+tile.home.allowed=Zestaw spawnujący
+tile.home.denied=Nie można ustawić spawnu
+
+tile.home_block.home_primitive.name=Blok domowy
+tile.home_block.home_primitive.tooltip=Prymitywny
+tile.home_block.home_gt_brutalist.name=Blok domowy
+tile.home_block.home_gt_brutalist.tooltip=Brutalista GT
+tile.home_block.home_renewal_brutalist.name=Blok domowy
+tile.home_block.home_renewal_brutalist.tooltip=Brutalista Odnowy
+tile.home_block.home_scifi.name=Blok domowy
+tile.home_block.home_scifi.tooltip=Sci-Fi
+
+tile.conveyor_belt.lv.name=Przenośnik Taśmowy
+
+tile.drill_bit.steel.name=Blok wierteł stalowych
+
+tile.induction_coil_assembly.copper.name=Zespół cewki indukcyjnej
+tile.eccentric_roll.steel.name=Ekscentryczne koło kruszące
+tile.grinder_casing.abrasion_resistant_casing.name=Obudowa odporna na ścieranie
+tile.grinder_casing.hydraulic_mechanical_gearbox.name=Hydrauliczna mechaniczna skrzynia biegów
+tile.grinder_casing.wear_resistant_lined_mill_shell.name=Odporna na zużycie powłoka młyna
+tile.grinder_casing.wear_resistant_lined_shell_head.name=Głowica skorupowa z odporną na zużycie wyściółką
+tile.grinder_casing.intermediate_diaphragm.name=Membrana pośrednia
+tile.girth_gear_tooth.steel.name=Ząb przekładni zębatej ze stali
+
+tile.engine_casing.piston_block.name=Blok silnika
+
+tile.engine_casing_2.crankshaft.name=Obudowa wału korbowego
+
+tile.active_casing.basic_intake_casing.name=Podstawowa obudowa wlotu
+
+# Rocks
+tile.susy_stone_smooth.gabbro.name=Gabbro
+tile.susy_stone_smooth.gneiss.name=Gnejs
+tile.susy_stone_smooth.graphite.name=Grafit
+tile.susy_stone_smooth.limestone.name=Wapień
+tile.susy_stone_smooth.mica.name=Mika
+tile.susy_stone_smooth.phyllite.name=Fyllit
+tile.susy_stone_smooth.quartzite.name=kwarcyt
+tile.susy_stone_smooth.shale.name=Łupek ilasty
+tile.susy_stone_smooth.slate.name=Łupek
+tile.susy_stone_smooth.soapstone.name=Steatyt
+tile.susy_stone_smooth.kimberlite.name=Kimberlit
+tile.susy_stone_smooth.anorthosite.name=Anortozyt
+tile.susy_stone_smooth.industrial_concrete.name=Beton przemysłowy
+tile.susy_stone_smooth.minitary_concrete.name=Beton wojskowy
+
+tile.susy_stone_cobble.gabbro.name=Gabbro Brukowiec
+tile.susy_stone_cobble.gneiss.name=Gnejsowy bruk
+tile.susy_stone_cobble.graphite.name=Kostka grafitowa
+tile.susy_stone_cobble.limestone.name=Kamień wapienny
+tile.susy_stone_cobble.mica.name=Kostka mikowa
+tile.susy_stone_cobble.phyllite.name=Bruk fyllitowy
+tile.susy_stone_cobble.quartzite.name=Kamień kwarcytowy
+tile.susy_stone_cobble.shale.name=Łupkowy brukowiec
+tile.susy_stone_cobble.slate.name=Łupkowa kostka brukowa
+tile.susy_stone_cobble.soapstone.name=Kamień steatytowy
+tile.susy_stone_cobble.kimberlite.name=Kostka brukowa Kimberlit
+tile.susy_stone_cobble.anorthosite.name=Anortozytowy bruk
+tile.susy_stone_cobble.industrial_concrete.name=Przemysłowy betonowy bruk
+tile.susy_stone_cobble.minitary_concrete.name=Wojskowy betonowy bruk
+
+tile.susy_stone_bricks.gabbro.name=Cegły Gabbro
+tile.susy_stone_bricks.gneiss.name=Cegły gnejsowe
+tile.susy_stone_bricks.graphite.name=Cegły grafitowe
+tile.susy_stone_bricks.limestone.name=Cegły wapienne
+tile.susy_stone_bricks.mica.name=Cegły mikowe
+tile.susy_stone_bricks.phyllite.name=Cegły filitowe
+tile.susy_stone_bricks.quartzite.name=Cegły kwarcytowe
+tile.susy_stone_bricks.shale.name=Cegły łupkowe
+tile.susy_stone_bricks.slate.name=Cegły łupkowe
+tile.susy_stone_bricks.soapstone.name=Cegły ze steatytu
+tile.susy_stone_bricks.kimberlite.name=Cegły Kimberlitowe
+tile.susy_stone_bricks.anorthosite.name=Cegły anortozytowe
+tile.susy_stone_bricks.industrial_concrete.name=Przemysłowe cegły betonowe
+tile.susy_stone_bricks.minitary_concrete.name=Wojskowe cegły betonowe
+
+# Materials
+susy.material.manganese_iron_arsenic_phosphide=Fosforek manganu i żelaza arsenu
+susy.material.praseodymium_nickel=Prazeodym-nikiel
+susy.material.gadolinium_silicon_germanium=Gadolin Krzem German
+susy.material.latex=Lateks
+susy.material.mud=Błoto
+susy.material.sea_water=Woda morska
+susy.material.refractory_gunning_mixture=Ogniotrwała mieszanina strzelnicza
+susy.material.preheated_air=Podgrzane powietrze
+susy.material.midgrade_lubricant=Smar średniej klasy
+susy.material.premium_lubricant=Wysokiej jakości smar
+susy.material.supreme_lubricant=Najwyższy smar
+susy.material.coolant=Płyn chłodzący
+susy.material.advanced_coolant=Zaawansowany płyn chłodzący
+susy.material.lubricating_oil=Olej smarujący
+susy.material.aluminium_alloy_7075=Stop aluminium 7075
+susy.material.aluminium_alloy_6061=Stop aluminium 6061
+
+# Rock/Mineral Materials
+susy.material.fluorite=Fluoryt
+susy.material.gabbro=Gabbro
+susy.material.slate=Łupek
+susy.material.shale=Łupek ilasty
+susy.material.phyllite=Fyllit
+susy.material.limestone=Wapień
+susy.material.gneiss=Gnejs
+susy.material.kimberlite=Kimberlit
+susy.material.anorthosite=Anortozyt
+susy.material.muscovite=Moskal
+susy.material.dolomite=Dolomit
+susy.material.augite=Augit
+susy.material.chlinochlore=Chlinochlor
+susy.material.bytownite=Bytownite
+susy.material.labradorite=Labradoryt
+susy.material.andesine=Andezyna
+susy.material.oligoclase=Oligoklaz
+susy.material.albite=Albit
+susy.material.anorthite=Anortyt
+susy.material.forsterite=Forsteryt
+susy.material.lizardite=Jaszczurka
+
+# Fluorinate Ketones
+
+susy.material.perfluoro_2_methyl_3_pentanone=Perfluoro(2-metylo-3-pentanon)
+susy.material.warm_perfluoro_2_methyl_3_pentanone=Ciepły Perfluoro(2-metylo-3-pentanon)
+
+# Ore Prefixes (%s is the localised material name)
+item.material.oreprefix.oreGabbro=Gabro %s Ruda
+item.material.oreprefix.oreGneiss=Gnejs %s Ruda
+item.material.oreprefix.oreGraphite=Grafit %s Ruda
+item.material.oreprefix.oreLimestone=Wapień %s Ruda
+item.material.oreprefix.oreMica=Nie %s godzin
+item.material.oreprefix.orePhyllite=Fyllit %s Ruda
+item.material.oreprefix.oreQuartzite=Kwarcyt %s Ruda
+item.material.oreprefix.oreShale=Łupki %s Ruda
+item.material.oreprefix.oreSlate=Łupek %s Ruda
+item.material.oreprefix.oreSoapstone=Steatyt %s Ruda
+item.material.oreprefix.oreKimberlite=Kimberlit %s Ruda
+item.material.oreprefix.catalystBed=%s Złoże katalizatora
+item.material.oreprefix.catalystPellet=%s Pellet Katalizatora
+item.material.oreprefix.dustFlotated=Unoszący się %s pył
+item.material.oreprefix.dustConcentrate=%s Skoncentrowany pył
+item.material.oreprefix.dustSifted=Przesiany %s pył
+item.material.oreprefix.sheetedFrame=%s Pudełko z ramką w arkuszach
+item.material.oreprefix.fiber=%s Włókno
+item.material.oreprefix.fiberWet=Mokre %s włókno
+item.material.oreprefix.thread=%s wątek
+item.material.oreprefix.dustWet=Mokry %s pył
+item.material.oreprefix.electrode=%s Elektroda
+item.material.oreprefix.millBall=%s Kula Młyńska
+
+susy.fluid.supercritical=Nadkrytyczny %s
+susy.fluid.impure_slurry=Nieczysta %s zawiesina
+susy.fluid.slurry=%s Szlam
+
+# Tooltip Warnings
+susy.machine.steam_extractor_cannot_melt_items.warning=Ekstraktory parowe nie mogą topić przedmiotów!
+
+# Machines/Multiblocks
+susy.machine.aerospace_flight_simulator.name=Symulator lotu kosmicznego
+susy.machine.aerospace_flight_simulator.gui.not_formed=Struktura nie utworzona!
+susy.machine.aerospace_flight_simulator.gui.fuel_selector_label=Selektor paliwa
+susy.machine.aerospace_flight_simulator.gui.gravity_selector_label=Powaga
+susy.machine.aerospace_flight_simulator.gui.success_chance=Szansa na sukces: %s
+susy.machine.aerospace_flight_simulator.gui.rocket_name=Rakieta: %s
+susy.machine.aerospace_flight_simulator.gui.stages=Gradacja:
+
+susy.machine.aerospace_flight_simulator.gui.computation_power=Obliczenia: %s googów/s
+# googs/s is a very technical term
+susy.machine.aerospace_flight_simulator.gui.energy_consumption=Pobór mocy: %s eu/t
+susy.machine.aerospace_flight_simulator.gui.coolant_flow=Dopływ chłodziwa: %s mb/s
+
+susy.machine.blueprint_assembler.name=Asembler planów
+susy.machine.blueprint_assembler.stagename=Etap: %s
+susy.machine.blueprint_assembler.build_button_label=Zbudować
+susy.machine.blueprint_assembler.blueprint_request=Wstaw plan:
+
+
+susy.rocketry.components.engine.name=Silnik(i)
+susy.rocketry.components.engine_small.name=Silniki Verniera
+susy.rocketry.components.tank.name=Zbiornik(i)
+
+susy.rocketry.components.validation_codes.invalid_amount=Nieprawidłowa ilość składników
+susy.rocketry.component.validation_codes.invalid_amount=Wstawiono nieprawidłową ilość komponentów
+susy.rocketry.components.validation_codes.invalid_card=Zniekształcona karta komponentowa
+susy.rocketry.components.validation_codes.incompatible_card=Niekompatybilna karta
+susy.rocketry.components.validation_codes.unknown=Coś się zepsuło
+susy.rocketry.components.validation_codes.success=Plan został pomyślnie złożony
+
+susy.rocketry.stages.block_F.name=Blok F
+susy.rocketry.stages.block_A.name=Blok A
+susy.rocketry.stages.boosters.name=Dopalacze
+
+susy.rocketry.soyuz.name=Sojuz FG
+
+susy.machine.magnetic_refrigerator.name=Lodówka magnetyczna
+susy.multiblock.magnetic_refrigerator.min_temperature=§b Limit temperatury: %s
+
+susy.machine.sintering_oven.name=Piec do spiekania
+susy.multiblock.sintering_oven.can_use_plasma=Plazma włączona: %s
+susy.multiblocks.sintering_oven.use_plasma.affirmative=Tak
+susy.multiblocks.sintering_oven.use_plasma.negative=NIE
+
+susy.machine.coagulation_tank.name=Zbiornik koagulacyjny
+susy.machine.coagulation_tank.tooltip=Nie można go użyć do zatrzymania krwawienia.
+susy.machine.coagulation_tank.tooltip.1=Zyskuje jedną równoległą na blok dłużej
+susy.machine.drum.lead.name=Bęben prowadzący
+susy.machine.drum.brass.name=Mosiężny bęben
+susy.machine.drum.pe.name=Polietylen (PE) Puszka
+susy.machine.drum.pp.name=Polipropylen (PP) Puszka
+susy.machine.drum.ptfe.name=Politetrafluoroetylen (PTFE) Puszka
+susy.machine.drum.uhmwpe.name=Polietylen o ultrawysokiej masie cząsteczkowej (UHMWPE) Puszka
+
+susy.machine.crate.pe.name=Hermetycznie zamknięta skrzynia
+
+susy.machine.polymerization_tank.name=Zbiornik polimeryzacyjny
+susy.machine.fluidized_bed_reactor.name=Reaktor ze złożem fluidalnym
+
+susy.machine.electrolytic_cell.name=Ogniwo elektrolityczne
+
+susy.machine.coking_tower.name=Wieża Koksownicza
+susy.machine.vacuum_distillation_tower.name=Wieża destylacji próżniowej
+susy.machine.catalytic_reformer.name=Reformator katalityczny
+susy.machine.pressure_swing_adsorber.name=Adsorber zmiennociśnieniowy
+susy.machine.reaction_furnace.name=Piec reakcyjny
+
+susy.machine.fermentation_vat.name=Kadź fermentacyjna
+susy.machine.ore_sorter.name=Sortowanie rud
+susy.machine.gravity_separator.name=Separator grawitacyjny
+susy.machine.condenser.name=Skraplacz
+susy.machine.natural_draft_cooling_tower.name=Wieża chłodnicza z naturalnym ciągiem
+susy.machine.gas_turbine.name=Turbina gazowa
+susy.machine.heat_exchanger.name=Wymiennik ciepła
+susy.machine.heat_radiator.name=Radiator ciepła
+susy.multiblock.heat_radiator.tooltip.1=Wydajność jest proporcjonalna do obszaru rozpraszania.
+susy.multiblock.heat_radiator.tooltip.2=§bRozmiar: §f3x3 do 11x16
+susy.machine.heat_radiator.parallel=Maksymalne połączenie równoległe: %s
+susy.machine.heat_radiator.parallel_hover=Ilość równoległa jest określana na podstawie ilości bloku rurowego.
+susy.machine.large_weapons_factory.name=Duża fabryka broni
+susy.machine.magnetohydrodynamic_generator.name=Generator magnetohydrodynamiczny (MHD).
+susy.machine.mining_drill.name=Wiertło górnicze
+susy.machine.quencher.name=Wygaszacz
+susy.machine.railroad_engineering_station.name=Stacja Inżynierii Kolejowej
+susy.machine.railroad_engineering_station.tooltip=Umieść wciągające tory kolejowe na środku, tworząc multiblok
+susy.machine.railroad_engineering_station.tooltip.1=Beton pod torami można zastąpić dowolnym blokiem, w tym rurami lub powietrzem
+susy.machine.quarry.name=Kamieniołom
+susy.machine.eccentric_roll_crusher.name=Ekscentryczna kruszarka walcowa
+susy.machine.eccentric_roll_crusher.tooltip=Ekscentryczność nie oznacza niskiej wydajności.
+susy.machine.ball_mill.name=Młyn Kulowy
+susy.machine.ball_mill.tooltip=Widzą, jak się toczę
+susy.multiblock.ball_mill.tooltip.mill_balls=Do działania wymaga %s kul młyńskich.
+susy.multiblock.ball_mill.error.missing_mill_balls=Znaleziono za mało kulek młyńskich dla przepisu!
+
+susy.machine.redstone_controller.not_connected=Nie znaleziono maszyny do sterowania!
+susy.machine.redstone_controller.signal_desc=Sygnał nadawczy: %s
+susy.machine.redstone_controller.signal_label=Sygnał: %s/%s
+susy.machine.redstone_controller.pulled.false=Można aktywować
+susy.machine.redstone_controller.pulled.true=Sygnał wysłany, wymaga resetu
+susy.machine.redstone_controller.name=Kontroler maszyny Redstone
+
+susy.machine.evaporation_pool.name=Basen parowania
+susy.machine.evaporation_pool.tooltip.info=Maksymalny kwadrat %1$sx%1$s, minimalny %2$sx%2$s. Aby uzyskać więcej informacji, przeczytaj zakładkę Informacje i informacje o narzędziach.
+susy.machine.evaporation_pool.tooltip.structure_info=Baseny parujące można tworzyć o dowolnych wymiarach od %2$sx%2$s do %1$sx%1$s, nawet jeśli nie są kwadratowe. Aby utworzyć prawidłowy podgrzewany basen do odparowywania, wężownice należy umieścić zgodnie ze wzorem pokazanym na podglądzie. Bardziej szczegółowe wyjaśnienia można znaleźć w zakładce informacyjnej w JEI.
+susy.top.evaporation_pool_heated_preface=Wężownica grzewcza:
+susy.top.evaporation_pool.exposed_blocks=Odsłonięte bloki:
+susy.top.evaporation_pool.average_speed=Średnia prędkość:
+gregtech.multiblock.evaporation_pool.description=Basen wyparny ma wymiary wewnętrzne określone w jego opisie i betonową konstrukcję zewnętrzną do umieszczenia we/wy/sterownika, z maksymalnie dwoma wejściami każdego typu. Sterownik można umieścić w dowolnym miejscu wzdłuż wystającego dolnego rzędu „przed” wnętrzem.\n\nBasen wyparny może obsługiwać receptury zarówno bez zasilania, jak i z zasilaniem. Aby zasilić receptury, multiblok będzie musiał zostać uformowany w formie „wijącego się” uzwojenia jednolitego typu, jak pokazano na podglądzie. Niezasilane baseny parujące nie wymagają żadnych wężownic.\n\nPrędkość dowolnej receptury zależy od ciepła dostarczanego do multi, które opiera się na liczbie wewnętrznych bloków wystawionych na działanie światła słonecznego, dostarczonej energii i poziomie wężownicy. [1EU = 10J, obecnie].\n\nKażdy odsłonięty blok (sprawdzenie wymaga czasu) wytwarza 1kJ/s, a ciepło dostarczane przez cewki różni się w zależności od temperatury cewki * ilości.
+susy.multiblock.evaporation_pool_heated_preface=Nagrzewnica: %s
+susy.multiblock.evaporation_pool.is_heating=NA
+susy.multiblock.evaporation_pool.is_not_heating=Wyłączone/brak
+susy.multiblock.evaporation_pool.exposed_blocks=Odsłonięte bloki: %s
+susy.multiblock.evaporation_pool.average_speed=Średnia prędkość: %sx
+susy.multiblock.pattern.error.coils_or_bed=§cWszystkie wężownice grzewcze lub złoża wyparne muszą być takie same§r
+
+susy.multiblock.strand_casting.thickness=Grubość: %s
+susy.multiblock.strand_casting.width=Szerokość: %s
+susy.multiblock.strand_casting.no_strand=Nie wykryto nici
+susy.multiblock.strand_casting.output_detected=Linka znaleziona tylko w gnieździe wyjściowym
+susy.multiblock.strand_casting.ore_prefix=Wygeneruje: %s
+susy.multiblock.strand_casting.no_conversion=Obecnie nie jest to ważny przedmiot!
+
+susy.multiblock.natural_draft_cooling_tower.obstructed=Zbiornik zimnej wody nie jest napełniony!
+susy.multiblock.natural_draft_cooling_tower.obstructed.desc=Aby wieża chłodnicza mogła działać, zbiornik zimnej wody musi być napełniony wodą.
+
+supersymmetry.prefix.stick=Pręt
+supersymmetry.prefix.ingot=Wlewek
+supersymmetry.prefix.platedense=Gęsty talerz
+supersymmetry.prefix.platedouble=Podwójny talerz
+supersymmetry.prefix.plate=Płyta
+supersymmetry.prefix.foil=Folia
+
+susy.machine.primitive_mud_pump.name=Prymitywna pompa błotna
+susy.machine.primitive_mud_pump.tooltip=Działa tylko w biomach rzecznych pomiędzy Y=64 a Y=80
+susy.machine.basic_steam_turbine.name=Duża turbina parowa
+susy.machine.advanced_steam_turbine.name=Zaawansowana turbina parowa
+susy.machine.basic_gas_turbine.name=Duża turbina gazowa
+susy.machine.internal_combustion_generator.name=Generator spalania wewnętrznego
+susy.machine.large_fluid_pump.name=Duża pompa płynu
+susy.machine.large_fluid_pump.tooltip.1=Miałoby to z pewnością wpływ na lokalną populację pstrągów.
+susy.machine.large_fluid_pump.tooltip.2=Działa tylko wtedy, gdy kontroler jest na Y=64, a dolna obudowa rury stalowej znajduje się w prawym biomie.
+susy.machine.advanced_arc_furnace.name=Przemysłowy piec łukowy
+susy.machine.arc_furnace_complex.name=Kompleks pieców łukowych
+susy.machine.clarifier.name=Wyjaśniający
+susy.machine.flare_stack.name=Stos Flarów
+susy.machine.flare_stack.height=Wysokość stosu: %s §9 bloków
+susy.machine.flare_stack.rate=Szybkość rozbłysku: %s
+susy.machine.flare_stack.rate_hover=Mnożnik szybkości flar ustalany na podstawie wysokości stosu flar.
+susy.machine.flare_stack.tooltip=Przemysłowy propagator raka płuc.
+susy.machine.flare_stack.tooltip.1=§6Podstawowa częstotliwość spalania:§7 §f%d L co 10 taktów
+susy.machine.flare_stack.tooltip.2=Podwaja prędkość dla każdego bloku wyższego niż 5
+susy.machine.smoke_stack.name=Stos dymu
+susy.machine.smoke_stack.height=Wysokość stosu: %s §9 bloków
+susy.machine.smoke_stack.rate=Stopień wyczerpania: %s
+susy.machine.smoke_stack.rate_hover=Mnożnik szybkości wyczerpania ustalany na podstawie wysokości komina.
+susy.machine.smoke_stack.tooltip=Do wzbogacania atmosfery Twojej planety.
+susy.machine.smoke_stack.tooltip.1=§8Podstawowy współczynnik wyczerpania:§7 §f%d L co 10 ticków
+susy.machine.smoke_stack.tooltip.2=Podwaja prędkość dla każdego bloku wyższego niż 5
+susy.machine.dumper.name=Wywrotka
+susy.machine.dumper.rate=Współczynnik dumpingu: %s
+susy.machine.dumper.tooltip=Zanieczyszcza wszystkie lokalne ekosystemy.
+susy.machine.dumper.tooltip.1=§2Podstawowy współczynnik dumpingu:§7 §f %d L co 10 taktów
+susy.machine.froth_flotation_tank.name=Zbiornik flotacyjny na pianę
+susy.machine.multi_stage_flash_distiller.name=Wielostopniowy destylator rzutowy
+susy.machine.high_temperature_distillation_tower.name=Wieża destylacyjna w wysokiej temperaturze
+susy.machine.rotary_kiln.name=Piec obrotowy
+susy.machine.low_pressure_cryogenic_distillation_plant.name=Instalacja destylacji kriogenicznej niskociśnieniowej
+susy.machine.high_pressure_cryogenic_distillation_plant.name=Wysokociśnieniowa instalacja destylacji kriogenicznej
+susy.machine.single_column_cryogenic_distillation_plant.name=Jednokolumnowa instalacja destylacji kriogenicznej
+susy.machine.reverberatory_furnace.name=Piec pogłosowy
+susy.machine.blender.name=Mikser
+susy.machine.sieve_distillation_tower.name=Wieża destylacyjna sitowa
+susy.machine.induction_furnace.name=Piec indukcyjny
+
+susy.machine.curtain_coater.name=Powlekacz zasłon
+susy.multiblock.pattern.error.conveyor=§cWszystkie przenośniki taśmowe muszą być takie same§r
+
+susy.machine.milling.name=Precyzyjna frezarka
+susy.multiblock.pattern.error.milling.upper=§cDozwolone wyłącznie w górnej części maszyny§r
+susy.multiblock.pattern.error.milling.lower=§cDozwolone tylko w dolnej części maszyny§r
+
+susy.machine.drone_pad.name=Podkładka dla drona
+susy.machine.primitive_smelter.name=Prymitywna huta
+susy.machine.large_steam_hammer.name=Duży młot parowy
+susy.machine.landing_pad.name=Lądowisko
+susy.machine.scrap_recycler.name=Recykler złomu
+
+susy.machine.rocket_assembler.name=Montażysta rakiet
+susy.machine.rocket_assembler.signal.start_assembly=Rozpocznij montaż
+susy.machine.rocket_assembler.signal.stop_assembly=Zatrzymaj i wyrzuć montaż
+susy.machine.rocket_assembler.blueprint_slot.name=wstaw plan rakiety
+susy.machine.rocket_assembler.gui.required_items=Wymagane przedmioty:
+susy.machine.rocket_assembler.gui.stop=Zatrzymaj i zresetuj montaż
+susy.machine.rocket_assembler.gui.start=rozpocząć proces montażu
+susy.machine.rocket_assembler.blueprint_stop.name=Miejsce na plan
+
+susy.machine.rocket_programmer.name=Programy rakietowe
+susy.machine.rocket_programmer.gui.not_enough_budget=Rakieta nie jest w stanie wykonać każdej zaprogramowanej misji.
+susy.machine.metallurgical_converter.name=Konwerter metalurgiczny
+susy.machine.injection_molder.name=Forma wtryskowa
+
+susy.machine.primitive_item_import.name=Szyna importująca prymitywne przedmioty
+susy.machine.primitive_item_import.tooltip=Nie zastępuje ULV
+susy.machine.primitive_item_export.name=Prymitywny autobus eksportujący przedmioty
+susy.machine.primitive_item_export.tooltip=Nie zastępuje ULV
+susy.machine.mixer_settler.name=Osadnik miksujący
+susy.machine.mixer_settler.tooltip=Najpierw się miesza, potem uspokaja... - Sun Tzu, Sztuka SuSy
+susy.machine.mixer_settler.tooltip.1=Początkowa struktura zawiera 2 komórki, każde rozszerzenie dodaje 2 kolejne
+susy.machine.mixer_settler.tooltip.2=Może pracować nawet 2x szybciej przy większej liczbie ogniw
+
+susy.machine.parallel_pure=Można równolegle wyprowadzać do §b%d§r§7 elementów jednocześnie
+
+# Properties
+susy.recipe.plasma_requirement=Wymaga plazmy: %s
+susy.recipe.catalyst=Katalizator: %s %s
+susy.recipe.blocks=Bloki: %s
+susy.recipe.evaporation=Wymagana energia: %d J/t
+susy.recipe.cryogenic_environment=Wymaga środowiska kriogenicznego
+susy.recipe.mixer_settler_cells=Wymagane komórki osadnika miksera: %s
+
+# Latex Collector
+susy.machine.latex_collector.steam=Potrzebuje Steama!
+susy.machine.latex_collector.tooltip=Wyciąga płyny z sąsiednich kłód.
+susy.machine.latex_collector.bronze.name=Kolekcjoner lateksu Steam
+susy.machine.latex_collector.steel.name=Wysokociśnieniowy kolektor lateksowy z parą wodną
+susy.machine.latex_collector.lv.name=Podstawowy kolekcjoner lateksu
+susy.machine.latex_collector.mv.name=Zaawansowany kolekcjoner lateksu
+susy.machine.latex_collector.hv.name=Zaawansowany kolekcjoner lateksu II
+susy.machine.latex_collector.ev.name=Zaawansowany kolekcjoner lateksu III
+
+# Vulcanizing Press
+susy.machine.vulcanizing_press.bronze.name=Prasa wulkanizacyjna parowa
+susy.machine.vulcanizing_press.steel.name=Wysokociśnieniowa prasa wulkanizacyjna parowa
+susy.machine.vulcanizing_press.lv.name=Podstawowa prasa wulkanizacyjna
+susy.machine.vulcanizing_press.mv.name=Zaawansowana prasa wulkanizacyjna
+susy.machine.vulcanizing_press.hv.name=Zaawansowana prasa wulkanizacyjna II
+susy.machine.vulcanizing_press.ev.name=Zaawansowana prasa wulkanizacyjna III
+
+# Steam Mixer
+susy.machine.mixer.bronze.name=Mikser parowy
+susy.machine.mixer.steel.name=Wysokociśnieniowy mikser parowy
+
+# Roaster
+susy.machine.roaster.bronze.name=Piekarnik parowy
+susy.machine.roaster.steel.name=Wysokociśnieniowa maszyna do pieczenia parowego
+susy.machine.roaster.lv.name=Podstawowy piec
+susy.machine.roaster.mv.name=Zaawansowany piec
+susy.machine.roaster.hv.name=Zaawansowany piec do pieczenia II
+susy.machine.roaster.ev.name=Zaawansowany piec do pieczenia III
+susy.machine.roaster.iv.name=Elitarny Piekarnik
+susy.machine.roaster.luv.name=Elitarna palarnia II
+susy.machine.roaster.zpm.name=Elitarna Palarnia III
+susy.machine.roaster.uv.name=Ostateczny Piekarnik
+susy.machine.roaster.uhv.name=Epicka pieczeń
+susy.machine.roaster.uev.name=Epicka pieczeń II
+susy.machine.roaster.uiv.name=Epicka Piekarnia III
+susy.machine.roaster.uxv.name=Epicka Piekarnia IV
+susy.machine.roaster.opv.name=Legendarny Piekarnik
+
+# Vacuum Chamber
+susy.machine.vacuum_chamber.bronze.name=Parowa komora próżniowa
+susy.machine.vacuum_chamber.steel.name=Komora próżniowa z parą wysokociśnieniową
+susy.machine.vacuum_chamber.lv.name=Podstawowa komora próżniowa
+susy.machine.vacuum_chamber.mv.name=Zaawansowana komora próżniowa
+susy.machine.vacuum_chamber.hv.name=Zaawansowana komora próżniowa II
+susy.machine.vacuum_chamber.ev.name=Zaawansowana komora próżniowa III
+susy.machine.vacuum_chamber.iv.name=Elitarna komora próżniowa
+susy.machine.vacuum_chamber.luv.name=Elitarna komora próżniowa II
+susy.machine.vacuum_chamber.zpm.name=Elitarna komora próżniowa III
+susy.machine.vacuum_chamber.uv.name=Najlepsza komora próżniowa
+susy.machine.vacuum_chamber.uhv.name=Epicka komora próżniowa
+susy.machine.vacuum_chamber.uev.name=Epicka komora próżniowa II
+susy.machine.vacuum_chamber.uiv.name=Epicka komora próżniowa III
+susy.machine.vacuum_chamber.uxv.name=Epicka komora próżniowa IV
+susy.machine.vacuum_chamber.opv.name=Legendarna komora próżniowa
+
+# CSTR
+susy.machine.continuous_stirred_tank_reactor.lv.name=Podstawowy reaktor zbiornikowy z ciągłym mieszaniem (CSTR)
+susy.machine.continuous_stirred_tank_reactor.mv.name=Zaawansowany reaktor zbiornikowy z ciągłym mieszaniem (CSTR)
+susy.machine.continuous_stirred_tank_reactor.hv.name=Zaawansowany reaktor zbiornikowy z ciągłym mieszaniem (CSTR) II
+susy.machine.continuous_stirred_tank_reactor.ev.name=Zaawansowany reaktor zbiornikowy z ciągłym mieszaniem (CSTR) III
+susy.machine.continuous_stirred_tank_reactor.iv.name=Elitarny reaktor zbiornikowy z ciągłym mieszaniem (CSTR)
+susy.machine.continuous_stirred_tank_reactor.luv.name=Elitarny reaktor zbiornikowy z ciągłym mieszaniem (CSTR) II
+susy.machine.continuous_stirred_tank_reactor.zpm.name=Elitarny reaktor zbiornikowy z ciągłym mieszaniem (CSTR) III
+susy.machine.continuous_stirred_tank_reactor.uv.name=Najlepszy reaktor zbiornikowy z ciągłym mieszaniem (CSTR)
+susy.machine.continuous_stirred_tank_reactor.uhv.name=Epicki reaktor zbiornikowy z ciągłym mieszaniem (CSTR)
+susy.machine.continuous_stirred_tank_reactor.uev.name=Epicki reaktor zbiornikowy z ciągłym mieszaniem (CSTR) II
+susy.machine.continuous_stirred_tank_reactor.uiv.name=Epicki reaktor zbiornikowy z ciągłym mieszaniem (CSTR) III
+susy.machine.continuous_stirred_tank_reactor.uxv.name=Epicki reaktor zbiornikowy z ciągłym mieszaniem (CSTR) IV
+susy.machine.continuous_stirred_tank_reactor.opv.name=Legendarny reaktor zbiornikowy z ciągłym mieszaniem (CSTR)
+
+# Fixed Bed Reactor
+susy.machine.fixed_bed_reactor.lv.name=Podstawowy reaktor ze złożem stałym
+susy.machine.fixed_bed_reactor.mv.name=Zaawansowany reaktor ze złożem stałym
+susy.machine.fixed_bed_reactor.hv.name=Zaawansowany reaktor ze złożem stałym II
+susy.machine.fixed_bed_reactor.ev.name=Zaawansowany reaktor ze złożem stałym III
+susy.machine.fixed_bed_reactor.iv.name=Elitarny reaktor ze złożem stałym
+susy.machine.fixed_bed_reactor.luv.name=Elitarny reaktor ze złożem stałym II
+susy.machine.fixed_bed_reactor.zpm.name=Elitarny reaktor ze złożem stałym III
+susy.machine.fixed_bed_reactor.uv.name=Najlepszy reaktor ze stałym złożem
+susy.machine.fixed_bed_reactor.uhv.name=Epicki reaktor ze stałym złożem
+susy.machine.fixed_bed_reactor.uev.name=Epicki reaktor ze stałym złożem II
+susy.machine.fixed_bed_reactor.uiv.name=Epicki reaktor ze stałym złożem III
+susy.machine.fixed_bed_reactor.uxv.name=Epicki reaktor ze stałym złożem IV
+susy.machine.fixed_bed_reactor.opv.name=Legendarny reaktor ze stałym złożem
+
+# Trickle Bed Reactor
+susy.machine.trickle_bed_reactor.lv.name=Podstawowy reaktor ze złożem złożowym
+susy.machine.trickle_bed_reactor.mv.name=Zaawansowany reaktor ze złożem złoża
+susy.machine.trickle_bed_reactor.hv.name=Zaawansowany reaktor ze złożem złoża II
+susy.machine.trickle_bed_reactor.ev.name=Zaawansowany reaktor ze złożem złoża III
+susy.machine.trickle_bed_reactor.iv.name=Elitarny reaktor ze złożem złożowym
+susy.machine.trickle_bed_reactor.luv.name=Elitarny reaktor ze złożem ze złożem II
+susy.machine.trickle_bed_reactor.zpm.name=Elitarny reaktor ze złożem ze złożem III
+susy.machine.trickle_bed_reactor.uv.name=Ostateczny reaktor ze złożem złożowym
+susy.machine.trickle_bed_reactor.uhv.name=Epicki reaktor ze złożem złożowym
+susy.machine.trickle_bed_reactor.uev.name=Epicki reaktor ze złożem złożowym II
+susy.machine.trickle_bed_reactor.uiv.name=Epicki reaktor ze złożem złoża III
+susy.machine.trickle_bed_reactor.uxv.name=Epicki reaktor ze złożem złożowym IV
+susy.machine.trickle_bed_reactor.opv.name=Legendarny reaktor ze złożem złoża
+
+# Bubble Column Reactor
+susy.machine.bubble_column_reactor.lv.name=Podstawowy reaktor kolumnowy bąbelkowy
+susy.machine.bubble_column_reactor.mv.name=Zaawansowany reaktor kolumnowy bąbelkowy
+susy.machine.bubble_column_reactor.hv.name=Zaawansowany reaktor kolumnowy bąbelkowy II
+susy.machine.bubble_column_reactor.ev.name=Zaawansowany reaktor kolumnowy bąbelkowy III
+susy.machine.bubble_column_reactor.iv.name=Elitarny reaktor kolumnowy bąbelkowy
+susy.machine.bubble_column_reactor.luv.name=Elitarny reaktor kolumnowy bąbelkowy II
+susy.machine.bubble_column_reactor.zpm.name=Elitarny reaktor kolumnowy bąbelkowy III
+susy.machine.bubble_column_reactor.uv.name=Ostateczny reaktor kolumnowy bąbelkowy
+susy.machine.bubble_column_reactor.uhv.name=Epicki reaktor kolumnowy bąbelkowy
+susy.machine.bubble_column_reactor.uev.name=Epicki reaktor kolumnowy bąbelkowy II
+susy.machine.bubble_column_reactor.uiv.name=Epicki reaktor kolumnowy bąbelkowy III
+susy.machine.bubble_column_reactor.uxv.name=Epicki reaktor kolumnowy bąbelkowy IV
+susy.machine.bubble_column_reactor.opv.name=Legendarny reaktor z kolumną bąbelkową
+
+# Batch Reactor
+susy.machine.batch_reactor.lv.name=Podstawowy reaktor wsadowy
+susy.machine.batch_reactor.mv.name=Zaawansowany reaktor wsadowy
+susy.machine.batch_reactor.hv.name=Zaawansowany reaktor wsadowy II
+susy.machine.batch_reactor.ev.name=Zaawansowany reaktor wsadowy III
+susy.machine.batch_reactor.iv.name=Elitarny reaktor wsadowy
+susy.machine.batch_reactor.luv.name=Elitarny reaktor wsadowy II
+susy.machine.batch_reactor.zpm.name=Elitarny reaktor wsadowy III
+susy.machine.batch_reactor.uv.name=Ostateczny reaktor wsadowy
+susy.machine.batch_reactor.uhv.name=Epicki reaktor wsadowy
+susy.machine.batch_reactor.uev.name=Epicki reaktor wsadowy II
+susy.machine.batch_reactor.uiv.name=Epicki reaktor wsadowy III
+susy.machine.batch_reactor.uxv.name=Epicki reaktor wsadowy IV
+susy.machine.batch_reactor.opv.name=Legendarny reaktor wsadowy
+
+# Crystallizer
+susy.machine.crystallizer.lv.name=Podstawowy krystalizator
+susy.machine.crystallizer.mv.name=Zaawansowany krystalizator
+susy.machine.crystallizer.hv.name=Zaawansowany krystalizator II
+susy.machine.crystallizer.ev.name=Zaawansowany krystalizator III
+susy.machine.crystallizer.iv.name=Elitarny krystalizator
+susy.machine.crystallizer.luv.name=Elitarny Krystalizator II
+susy.machine.crystallizer.zpm.name=Elitarny Krystalizator III
+susy.machine.crystallizer.uv.name=Najlepszy krystalizator
+susy.machine.crystallizer.uhv.name=Epicki krystalizator
+susy.machine.crystallizer.uev.name=Epicki krystalizator II
+susy.machine.crystallizer.uiv.name=Epicki krystalizator III
+susy.machine.crystallizer.uxv.name=Epicki krystalizator IV
+susy.machine.crystallizer.opv.name=Legendarny krystalizator
+
+# Dryer
+susy.machine.dryer.lv.name=Podstawowa suszarka
+susy.machine.dryer.mv.name=Zaawansowana suszarka
+susy.machine.dryer.hv.name=Zaawansowana suszarka II
+susy.machine.dryer.ev.name=Zaawansowana suszarka III
+susy.machine.dryer.iv.name=Elitarna suszarka
+susy.machine.dryer.luv.name=Elitarna Suszarka II
+susy.machine.dryer.zpm.name=Elitarna Suszarka III
+susy.machine.dryer.uv.name=Najlepsza suszarka
+susy.machine.dryer.uhv.name=Epicka suszarka
+susy.machine.dryer.uev.name=Epicka suszarka II
+susy.machine.dryer.uiv.name=Epicka suszarka III
+susy.machine.dryer.uxv.name=Epicka suszarka IV
+susy.machine.dryer.opv.name=Legendarna suszarka
+
+# Ion Exchange Column
+susy.machine.ion_exchange_column.lv.name=Podstawowa kolumna wymiany jonowej
+susy.machine.ion_exchange_column.mv.name=Zaawansowana kolumna wymiany jonowej
+susy.machine.ion_exchange_column.hv.name=Zaawansowana kolumna wymiany jonowej II
+susy.machine.ion_exchange_column.ev.name=Zaawansowana kolumna wymiany jonowej III
+susy.machine.ion_exchange_column.iv.name=Elitarna kolumna wymiany jonowej
+susy.machine.ion_exchange_column.luv.name=Elitarna kolumna wymiany jonowej II
+susy.machine.ion_exchange_column.zpm.name=Elitarna kolumna wymiany jonowej III
+susy.machine.ion_exchange_column.uv.name=Najlepsza kolumna wymiany jonowej
+susy.machine.ion_exchange_column.uhv.name=Epicka kolumna wymiany jonowej
+susy.machine.ion_exchange_column.uev.name=Epicka kolumna wymiany jonowej II
+susy.machine.ion_exchange_column.uiv.name=Epicka kolumna wymiany jonowej III
+susy.machine.ion_exchange_column.uxv.name=Epicka kolumna wymiany jonowej IV
+susy.machine.ion_exchange_column.opv.name=Legendarna kolumna wymiany jonowej
+
+# Zone Refiner
+susy.machine.zone_refiner.lv.name=Podstawowy rafiner strefowy
+susy.machine.zone_refiner.mv.name=Zaawansowany rafiner stref
+susy.machine.zone_refiner.hv.name=Zaawansowany rafiner strefowy II
+susy.machine.zone_refiner.ev.name=Zaawansowany rafiner strefowy III
+susy.machine.zone_refiner.iv.name=Rafiner Strefy Elitarnej
+susy.machine.zone_refiner.luv.name=Elitarny Rafiner Strefy II
+susy.machine.zone_refiner.zpm.name=Elitarny Rafiner Strefy III
+susy.machine.zone_refiner.uv.name=Ostateczny rafiner strefowy
+susy.machine.zone_refiner.uhv.name=Epicki udoskonalacz stref
+susy.machine.zone_refiner.uev.name=Epicki Udoskonalacz Strefy II
+susy.machine.zone_refiner.uiv.name=Epicki Uszlachetniacz Strefy III
+susy.machine.zone_refiner.uxv.name=Epicki Udoskonalacz Strefy IV
+susy.machine.zone_refiner.opv.name=Legendarny rafiner strefowy
+
+# Tube Furnace
+susy.machine.tube_furnace.lv.name=Podstawowy piec rurowy
+susy.machine.tube_furnace.mv.name=Zaawansowany piec rurowy
+susy.machine.tube_furnace.hv.name=Zaawansowany piec rurowy II
+susy.machine.tube_furnace.ev.name=Zaawansowany piec rurowy III
+susy.machine.tube_furnace.iv.name=Elitarny piec rurowy
+susy.machine.tube_furnace.luv.name=Elite piec rurowy II
+susy.machine.tube_furnace.zpm.name=Elitarny piec rurowy III
+susy.machine.tube_furnace.uv.name=Najlepszy piec rurowy
+susy.machine.tube_furnace.uhv.name=Epicki piec rurowy
+susy.machine.tube_furnace.uev.name=Epicki piec rurowy II
+susy.machine.tube_furnace.uiv.name=Epicki piec rurowy III
+susy.machine.tube_furnace.uxv.name=Epicki piec rurowy IV
+susy.machine.tube_furnace.opv.name=Legendarny piec rurowy
+
+# UV Light Box
+susy.machine.uv_light_box.lv.name=Podstawowe pudełko na światło UV
+susy.machine.uv_light_box.mv.name=Zaawansowane pudełko na światło UV
+susy.machine.uv_light_box.hv.name=Zaawansowana lampa UV II
+susy.machine.uv_light_box.ev.name=Zaawansowana lampa UV III
+susy.machine.uv_light_box.iv.name=Elitarne pudełko na światło UV
+susy.machine.uv_light_box.luv.name=Elite Lampa UV II
+susy.machine.uv_light_box.zpm.name=Elite Lampa UV III
+susy.machine.uv_light_box.uv.name=Najlepsze pudełko na światło UV
+susy.machine.uv_light_box.uhv.name=Epicka lampa UV
+susy.machine.uv_light_box.uev.name=Epicka lampa UV II
+susy.machine.uv_light_box.uiv.name=Epicka lampa UV III
+susy.machine.uv_light_box.uxv.name=Epicka lampa UV IV
+susy.machine.uv_light_box.opv.name=Legendarna kaseta na światło UV
+
+# CVD
+susy.machine.cvd.lv.name=Podstawowa jednostka CVD
+susy.machine.cvd.mv.name=Zaawansowana jednostka CVD
+susy.machine.cvd.hv.name=Zaawansowany moduł CVD II
+susy.machine.cvd.ev.name=Zaawansowana jednostka CVD III
+susy.machine.cvd.iv.name=Elitarna jednostka CVD
+susy.machine.cvd.luv.name=Elitarna jednostka CVD II
+susy.machine.cvd.zpm.name=Elitarna jednostka CVD III
+susy.machine.cvd.uv.name=Najlepsza jednostka CVD
+susy.machine.cvd.uhv.name=Epicka jednostka CVD
+susy.machine.cvd.uev.name=Epicka jednostka CVD II
+susy.machine.cvd.uiv.name=Epicka jednostka CVD III
+susy.machine.cvd.uxv.name=Epicka jednostka CVD IV
+susy.machine.cvd.opv.name=Legendarna jednostka CVD
+
+# Ion Implanter
+susy.machine.ion_implanter.lv.name=Podstawowy jon
+susy.machine.ion_implanter.mv.name=Zaawansowany implanter jonowy
+susy.machine.ion_implanter.hv.name=Zaawansowany implanter jonowy II
+susy.machine.ion_implanter.ev.name=Zaawansowany implanter jonowy III
+susy.machine.ion_implanter.iv.name=Elitarny implant jonowy
+susy.machine.ion_implanter.luv.name=Elitarny implanter jonowy II
+susy.machine.ion_implanter.zpm.name=Elitarny implanter jonowy III
+susy.machine.ion_implanter.uv.name=Najlepszy implanter jonowy
+susy.machine.ion_implanter.uhv.name=Epicki implanter jonowy
+susy.machine.ion_implanter.uev.name=Epicki implanter jonowy II
+susy.machine.ion_implanter.uiv.name=Epicki implanter jonowy III
+susy.machine.ion_implanter.uxv.name=Epicki implanter jonowy IV
+susy.machine.ion_implanter.opv.name=Legendarny implanter jonowy
+
+# Fluid Compressor
+susy.machine.fluid_compressor.lv.name=Podstawowy kompresor cieczy
+susy.machine.fluid_compressor.mv.name=Zaawansowany kompresor cieczy
+susy.machine.fluid_compressor.hv.name=Zaawansowana sprężarka cieczy II
+susy.machine.fluid_compressor.ev.name=Zaawansowana sprężarka cieczy III
+susy.machine.fluid_compressor.iv.name=Elitarny kompresor cieczy
+susy.machine.fluid_compressor.luv.name=Elitarny kompresor cieczy II
+susy.machine.fluid_compressor.zpm.name=Elitarny kompresor cieczy III
+susy.machine.fluid_compressor.uv.name=Najlepszy kompresor cieczy
+susy.machine.fluid_compressor.uhv.name=Epicki kompresor cieczy
+susy.machine.fluid_compressor.uev.name=Epicki kompresor płynów II
+susy.machine.fluid_compressor.uiv.name=Epicki kompresor płynów III
+susy.machine.fluid_compressor.uxv.name=Epicki kompresor płynów IV
+susy.machine.fluid_compressor.opv.name=Legendarny kompresor cieczy
+
+# Fluid Decompressor
+susy.machine.fluid_decompressor.lv.name=Podstawowy dekompresor cieczy
+susy.machine.fluid_decompressor.mv.name=Zaawansowany dekompresor płynów
+susy.machine.fluid_decompressor.hv.name=Zaawansowany dekompresor płynów II
+susy.machine.fluid_decompressor.ev.name=Zaawansowany dekompresor płynów III
+susy.machine.fluid_decompressor.iv.name=Elitarny dekompresor płynów
+susy.machine.fluid_decompressor.luv.name=Elite Fluid Decompressor II
+susy.machine.fluid_decompressor.zpm.name=Elitarny dekompresor płynów III
+susy.machine.fluid_decompressor.uv.name=Najlepszy dekompresor płynów
+susy.machine.fluid_decompressor.uhv.name=Epicki dekompresor płynów
+susy.machine.fluid_decompressor.uev.name=Epicki dekompresor płynów II
+susy.machine.fluid_decompressor.uiv.name=Epicki dekompresor płynów III
+susy.machine.fluid_decompressor.uxv.name=Epicki dekompresor płynów IV
+susy.machine.fluid_decompressor.opv.name=Legendarny dekompresor płynów
+
+# Weapons Factory
+susy.machine.weapons_factory.lv.name=Podstawowa fabryka broni
+susy.machine.weapons_factory.mv.name=Fabryka zaawansowanej broni
+susy.machine.weapons_factory.hv.name=Fabryka Zaawansowanej Broni II
+susy.machine.weapons_factory.ev.name=Fabryka Zaawansowanej Broni III
+susy.machine.weapons_factory.iv.name=Elitarna fabryka broni
+susy.machine.weapons_factory.luv.name=Elitarna Fabryka Broni II
+susy.machine.weapons_factory.zpm.name=Elitarna Fabryka Broni III
+susy.machine.weapons_factory.uv.name=Fabryka Broni Ostatecznej
+susy.machine.weapons_factory.uhv.name=Epicka fabryka broni
+susy.machine.weapons_factory.uev.name=Epicka Fabryka Broni II
+susy.machine.weapons_factory.uiv.name=Epicka Fabryka Broni III
+susy.machine.weapons_factory.uxv.name=Epicka Fabryka Broni IV
+susy.machine.weapons_factory.opv.name=Legendarna fabryka broni
+
+# Phase Separator
+susy.machine.phase_separator.name=Separator faz
+
+# RTG
+susy.machine.rtg.lv.name=Podstawowe RTG
+susy.machine.rtg.mv.name=Zaawansowane RTG
+susy.machine.rtg.tooltip.info=Moc dla Twojego rozrusznika serca.
+susy.machine.rtg.tooltip.description=Generuje niewielką, ale stałą ilość energii elektrycznej poprzez rozpad izotopów promieniotwórczych.
+susy.machine.rtg.voltage_produced=§a WYtworzone napięcie: §f%,d EU/t (%s§f)
+
+# Electrostatic Separator
+susy.machine.electrostatic_separator.lv.name=Podstawowy separator elektrostatyczny
+susy.machine.electrostatic_separator.mv.name=Zaawansowany separator elektrostatyczny
+susy.machine.electrostatic_separator.hv.name=Zaawansowany separator elektrostatyczny II
+susy.machine.electrostatic_separator.ev.name=Zaawansowany separator elektrostatyczny III
+susy.machine.electrostatic_separator.iv.name=Elitarny separator elektrostatyczny
+susy.machine.electrostatic_separator.luv.name=Elite Separator Elektrostatyczny II
+susy.machine.electrostatic_separator.zpm.name=Elitarny separator elektrostatyczny III
+susy.machine.electrostatic_separator.uv.name=Najlepszy separator elektrostatyczny
+susy.machine.electrostatic_separator.uhv.name=Epicki separator elektrostatyczny
+susy.machine.electrostatic_separator.uev.name=Epicki separator elektrostatyczny II
+susy.machine.electrostatic_separator.uiv.name=Epicki separator elektrostatyczny III
+susy.machine.electrostatic_separator.uxv.name=Epicki separator elektrostatyczny IV
+susy.machine.electrostatic_separator.opv.name=Legendarny separator elektrostatyczny
+
+# Textile Spinner
+susy.machine.textile_spinner.lv.name=Podstawowa przędzarka tekstylna
+susy.machine.textile_spinner.mv.name=Zaawansowana przędzarka tekstylna
+susy.machine.textile_spinner.hv.name=Zaawansowana przędzarka tekstylna II
+susy.machine.textile_spinner.ev.name=Zaawansowana przędzarka tekstylna III
+susy.machine.textile_spinner.iv.name=Elitarna przędzarka tekstylna
+susy.machine.textile_spinner.luv.name=Elitarna przędzarka tekstylna II
+susy.machine.textile_spinner.zpm.name=Elitarna przędzarka tekstylna III
+susy.machine.textile_spinner.uv.name=Najlepsza przędzarka tekstylna
+susy.machine.textile_spinner.uhv.name=Epicka przędzarka tekstylna
+susy.machine.textile_spinner.uev.name=Epicka przędzarka tekstylna II
+susy.machine.textile_spinner.uiv.name=Epicka przędzarka tekstylna III
+susy.machine.textile_spinner.uxv.name=Epicka przędzarka tekstylna IV
+susy.machine.textile_spinner.opv.name=Legendarna przędzarka tekstylna
+
+# Polishing Machine
+susy.machine.polishing_machine.lv.name=Podstawowa maszyna do polerowania
+susy.machine.polishing_machine.mv.name=Zaawansowana maszyna do polerowania
+susy.machine.polishing_machine.hv.name=Zaawansowana maszyna polerska II
+susy.machine.polishing_machine.ev.name=Zaawansowana maszyna polerska III
+susy.machine.polishing_machine.iv.name=Elitarna maszyna do polerowania
+susy.machine.polishing_machine.luv.name=Elitarna maszyna polerska II
+susy.machine.polishing_machine.zpm.name=Elitarna maszyna polerska III
+susy.machine.polishing_machine.uv.name=Najlepsza maszyna do polerowania
+susy.machine.polishing_machine.uhv.name=Epicka maszyna do polerowania
+susy.machine.polishing_machine.uev.name=Epicka maszyna do polerowania II
+susy.machine.polishing_machine.uiv.name=Epicka maszyna do polerowania III
+susy.machine.polishing_machine.uxv.name=Epicka maszyna do polerowania IV
+susy.machine.polishing_machine.opv.name=Legendarna maszyna do polerowania
+
+# Resistance Furnace
+susy.machine.resistance_furnace.lv.name=Podstawowy piec oporowy
+susy.machine.resistance_furnace.mv.name=Zaawansowany piec oporowy
+susy.machine.resistance_furnace.hv.name=Zaawansowany piec oporowy II
+susy.machine.resistance_furnace.ev.name=Zaawansowany piec oporowy III
+susy.machine.resistance_furnace.iv.name=Elitarny piec oporowy
+susy.machine.resistance_furnace.luv.name=Elitarny piec oporowy II
+susy.machine.resistance_furnace.zpm.name=Elitarny piec oporowy III
+susy.machine.resistance_furnace.uv.name=Ostateczny piec oporowy
+susy.machine.resistance_furnace.uhv.name=Epicki piec oporu
+susy.machine.resistance_furnace.uev.name=Epicki piec oporu II
+susy.machine.resistance_furnace.uiv.name=Epicki piec oporu III
+susy.machine.resistance_furnace.uxv.name=Epicki piec oporu IV
+susy.machine.resistance_furnace.opv.name=Legendarny piec oporowy
+
+susy.machine.bath_condenser.name=Kondensator do kąpieli
+susy.machine.bath_condenser.tooltip=Działa tylko w wieży do destylacji kriogenicznej
+
+susy.machine.incinerator.lv.name=Podstawowa spalarnia
+susy.machine.incinerator.mv.name=Zaawansowana spalarnia
+susy.machine.incinerator.hv.name=Zaawansowana spalarnia II
+susy.machine.incinerator.ev.name=Zaawansowana spalarnia III
+susy.machine.incinerator.tooltip.1=§6Spala§r %s elementów na %s znaczników
+susy.machine.incinerator.tooltip.2=§cPotrzebuje ośmiu bloków powietrza, do których można uwolnić gazy
+susy.machine.incinerator.tooltip.3=§8 Nie martw się dokąd zmierzają metale ciężkie.
+susy.multiblock.incinerator.clogged=§4Zatkany! (Czy góra jest zablokowana?)
+susy.multiblock.incinerator.working=§2 Bez zatykania
+
+susy.machine.strand_bus.import.name=Autobus importujący Strand
+susy.machine.strand_bus.export.name=Strandowy autobus eksportowy
+susy.machine.turning_zone.name=Strefa skrętu
+susy.machine.turning_zone.tooltip=Serce systemu ciągłego odlewania
+susy.machine.turning_zone.description=Zakrzywia pasmo częściowo stopionego metalu w kierunku poziomym. Jest to wymagane w przypadku wszystkich systemów odlewania ciągłego, ponieważ w przeciwnym razie inne maszyny nie mogłyby się obracać.
+susy.machine.strand_cooler.name=Chłodnica pasma
+susy.machine.strand_cooler.tooltip=Chłodzi pocięte pasma metalu na gotowe produkty za pomocą wody
+susy.machine.rolling_mill.name=Walcownia
+susy.machine.rolling_mill.tooltip=Spłaszcza pasmo metalu, zmniejszając grubość i zwiększając szerokość
+susy.machine.cluster_mill.name=Klaster Młyn
+susy.machine.cluster_mill.tooltip=Bardziej spłaszcza pasmo metalu kosztem mniejszej przepustowości
+susy.machine.hot_isostatic_press.name=Gorąca prasa izostatyczna
+susy.machine.flying_shear.name=Latające ścinanie
+susy.machine.flying_shear.tooltip=Wymagane do przecięcia pasma metalu na osobne kawałki w celu ochłodzenia
+susy.machine.slab_mold.name=Forma płyty
+susy.machine.slab_mold.tooltip=Przydatna do wyrobu wszelkiego rodzaju płyt i folii
+susy.machine.billet_mold.name=Forma kęsów
+susy.machine.billet_mold.tooltip=Przydatny do wyrobu wlewków i prętów
+susy.multiblock.strand_mold.tooltip=Pobiera 2592 l stopionego metalu na operację i 50 l wody (wytwarzając parę, która może uchodzić za próżnię)
+susy.multiblock.slab_mold.description=Tworzy płytę o szerokości 2 metrów i grubości 0,5 metra z różnych kompatybilnych rodzajów stopionego metalu, w tym stali, aluminium i miedzi. Po utworzeniu płyty należy ją obrócić za pomocą strefy toczenia. Następnie można go zwinąć w następujące rodzaje materiałów: Płyta gęsta (grubość 0,5-1 m), Płyta podwójna (grubość 0,2-0,33 m), Płyta (grubość 0,1-0,125 m), Folia (grubość 0,025-0,031 m). Gęsta płyta technicznie nie wymaga walcowania do wytworzenia. Na koniec użyj latającej piły ścinającej i chłodnicy pasma, aby zebrać gotowe produkty.
+susy.multiblock.billet_mold.description=Tworzy płytę o szerokości i grubości jednej trzeciej metra z różnych kompatybilnych rodzajów stopionego metalu, w tym stali, aluminium i miedzi. Po utworzeniu kęsa należy go obrócić za pomocą strefy toczenia. Następnie można go walcować na następujące rodzaje materiałów: wlewek (grubość 0,2-0,25 m), pręt (grubość 0,28-0,37 m). Wędka technicznie nie wymaga walcowania do produkcji. Na koniec użyj latającej piły ścinającej i chłodnicy pasma, aby zebrać gotowe produkty.
+susy.machine.gas_atomizer.name=Atomizer gazowy
+tile.susy_multiblock_casing.monel_casing.name=Obudowa kriogeniczna Monel 500
+tile.susy_multiblock_casing.monel_casing_pipe.name=Osłona rury kriogenicznej Monel 500
+tile.susy_multiblock_casing.copper_casing_pipe.name=Przewodząca obudowa z rur miedzianych
+tile.metallurgy.hydraulic_cylinder.name=Cylinder hydrauliczny
+tile.metallurgy_2.flying_shear_saw.name=Latająca piła ścinająca
+tile.metallurgy_roll.roll.name=Rolka
+
+susy.machine.fuel_cell.ev.name=Niskotemperaturowe ogniwo paliwowe
+susy.machine.fuel_cell.iv.name=Ogniwo paliwowe o wysokiej temperaturze
+susy.machine.fuel_cell.tooltip=Wymagania temperaturowe do pracy: %s°C
+
+
+susy.machine.combustion_generator.lv.name=Podstawowy generator spalinowy
+susy.machine.combustion_generator.mv.name=Zaawansowany generator spalania
+susy.machine.combustion_generator.hv.name=Zaawansowany generator spalania II
+susy.machine.combustion_generator.tooltip=Do działania wymaga smaru i chłodziwa. Akceptowane chłodziwa: woda, woda destylowana, płyn chłodzący, zaawansowany płyn chłodzący.
+
+susy.multiblock.rotation_generator.fuel_name=Paliwo: %s
+susy.multiblock.rotation_generator.lubricant=Smar: %s (%sx)
+susy.multiblock.rotation_generator.power=Moc: %s / %s EU/t
+susy.multiblock.rotation_generator.lubricant_amount=Smar: %s | Zużycie: %s
+susy.multiblock.rotation_generator.tooltip=Maksymalna prędkość obrotowa: %s RPM, Rozkręcanie: %s RPM/t, Obrót w dół: %s RPM/t.
+susy.multiblock.rotation_generator.fuel_needed=Zużywa %s (maks. %s) na %s taktów
+
+# Sputtering Machine
+susy.machine.sputter_deposition.lv.name=Podstawowa maszyna do napylania
+susy.machine.sputter_deposition.mv.name=Zaawansowana maszyna do napylania
+susy.machine.sputter_deposition.hv.name=Zaawansowana maszyna do napylania II
+susy.machine.sputter_deposition.ev.name=Zaawansowana maszyna do napylania III
+susy.machine.sputter_deposition.iv.name=Elitarna maszyna do rozpylania
+susy.machine.sputter_deposition.luv.name=Elitarna maszyna do napylania II
+susy.machine.sputter_deposition.zpm.name=Elitarna maszyna do rozpylania III
+susy.machine.sputter_deposition.uv.name=Najlepsza maszyna do rozpylania
+susy.machine.sputter_deposition.uhv.name=Epicka maszyna do rozpylania
+susy.machine.sputter_deposition.uev.name=Epicka maszyna do rozpylania II
+susy.machine.sputter_deposition.uiv.name=Epicka maszyna do rozpylania III
+susy.machine.sputter_deposition.uxv.name=Epicka maszyna do rozpylania IV
+susy.machine.sputter_deposition.opv.name=Legendarna maszyna do rozpylania
+
+susy.machine.component_scanner.name=Skaner komponentów statku kosmicznego
+susy.machine.component_scanner.scan_button=Zeskanuj część
+susy.machine.component_scanner.unscanned=Komponent nieprzeskanowany.
+susy.machine.component_scanner.failure=Skanowanie nie powiodło się.
+susy.machine.component_scanner.success=Komponent został pomyślnie przeanalizowany.
+susy.machine.component_scanner.scanning=Łów...
+susy.machine.component_scanner.pos=Znaleziono błąd w %s
+
+susy.machine.building_cleanroom.name=Pomieszczenie czyste komponentów statku kosmicznego
+
+# Recipemaps
+recipemap.coagulation_tank.name=Koagulacja
+recipemap.latex_collector.name=Kolekcjoner nadrzewny
+recipemap.vulcanizing_press.name=Wulkanizacja
+recipemap.roaster.name=Prażenie
+recipemap.vacuum_chamber.name=Wyrzut próżniowy
+recipemap.continuous_stirred_tank_reactor.name=Reaktor zbiornikowy z ciągłym mieszaniem
+recipemap.fixed_bed_reactor.name=Reaktor ze stałym złożem
+recipemap.trickle_bed_reactor.name=Reaktor złożowy
+recipemap.crystallizer.name=Krystalizator
+recipemap.bubble_column_reactor.name=Reaktor kolumnowy bąbelkowy
+recipemap.fluidized_bed_reactor.name=Reaktor ze złożem fluidalnym
+recipemap.batch_reactor.name=Reaktor wsadowy
+recipemap.tube_furnace.name=Piec rurowy
+recipemap.zone_refiner.name=Rafiner Strefy
+recipemap.ion_exchange_column.name=Kolumna wymiany jonowej
+recipemap.polymerization_tank.name=Zbiornik polimeryzacyjny
+recipemap.uv_light_box.name=Pudełko na światło UV
+recipemap.ion_implantation.name=Implantacja jonowa
+recipemap.cvd.name=Chemiczne osadzanie z fazy gazowej
+recipemap.ore_sorter.name=Sortowanie rudy
+recipemap.cooling_tower.name=Wieża chłodnicza
+recipemap.natural_draft_cooling_tower.name=Wieża chłodnicza z naturalnym ciągiem
+recipemap.fluid_decompressor.name=Dekompresja płynu
+recipemap.fluid_compressor.name=Sprężanie płynu
+recipemap.heat_exchanger.name=Wymiana ciepła
+recipemap.condenser.name=Kondensacja
+recipemap.radiator.name=Radiator ciepła
+recipemap.quencher.name=Hartowanie
+recipemap.quarry.name=Wykop
+recipemap.weapons_factory.name=Fabryka Broni
+recipemap.large_weapons_factory.name=Duża fabryka broni
+recipemap.railroad_engineering_station.name=Stacja Inżynierii Kolejowej
+recipemap.mining_drill.name=Wiertło górnicze
+recipemap.magnetohydrodynamic_generator.name=Generator magnetohydrodynamiczny
+recipemap.reaction_furnace.name=Piec reakcyjny
+recipemap.pressure_swing_adsorption.name=Adsorpcja zmiennociśnieniowa
+recipemap.high_temperature_distillation.name=Destylacja w wysokiej temperaturze
+recipemap.in_situ_leacher.name=Wymywanie na miejscu
+recipemap.euv_lithography.name=Ekstremalna litografia UV
+recipemap.advanced_arc_furnace.name=Przemysłowy piec łukowy
+recipemap.evaporation_pool.name=Basen parowania
+recipemap.clarifier.name=Wyjaśniający
+recipemap.multi_stage_flash_distillation.name=Wielostopniowa destylacja błyskawiczna
+recipemap.froth_flotation.name=Flotacja piany
+recipemap.rotary_kiln.name=Piec obrotowy
+recipemap.low_pressure_cryogenic_distillation.name=Destylacja kriogeniczna pod niskim ciśnieniem
+recipemap.high_pressure_cryogenic_distillation.name=Wysokociśnieniowa destylacja kriogeniczna
+recipemap.reverberatory_furnace.name=Piec pogłosowy
+recipemap.blender.name=Mikser
+recipemap.phase_separator.name=Separacja faz
+recipemap.bath_condenser.name=Kondensator do kąpieli
+recipemap.drone_pad.name=Podkładka dla drona
+recipemap.polishing_machine.name=Polerowanie
+recipemap.gravity_separator=Separacja grawitacyjna
+recipemap.spinning.name=Przędzenie tekstyliów
+recipemap.large_steam_turbine.name=Duża turbina parowa
+recipemap.primitive_smelter.name=Prymitywne wytapianie
+recipemap.large_fluid_pump.name=Duża pompa płynu
+recipemap.sieve_distillation.name=Destylacja frakcyjna
+recipemap.jet_wingpack_fuels.name=Paliwa Jet Wingpack
+recipemap.curtain_coater.name=Powlekacz zasłon
+recipemap.milling.name=Precyzyjna frezarka
+recipemap.hot_isostatic_press.name=Gorąca prasa izostatyczna
+recipemap.gas_atomizer.name=Atomizer gazowy
+recipemap.metallurgical_converter.name=Konwerter metalurgiczny
+recipemap.advanced_steam_turbine.name=Zaawansowana turbina parowa
+recipemap.low_pressure_advanced_steam_turbine.name=Zaawansowana turbina parowa niskociśnieniowa
+recipemap.high_pressure_advanced_steam_turbine.name=Wysokociśnieniowa zaawansowana turbina parowa
+recipemap.sputter_deposition.name=Odkładanie się napylania
+recipemap.mixer_settler.name=Mikser-Osadnik
+recipemap.injection_molder=Formowanie wtryskowe
+recipemap.boiler.name=Stałe paliwa kotłowe
+recipemap.fuel_cell.name=Ogniwo paliwowe ze stałym tlenkiem (SOFC)
+recipemap.induction_furnace.name=Piec indukcyjny
+recipemap.resistance_furnace.name=Piec oporowy
+recipemap.eccentric_roll_crusher.name=Mimośrodowe kruszenie walców
+recipemap.ball_mill.name=Frezowanie kulowe
+
+
+susy.multiblock.primitive_mud_pump.description=Prymitywna pompa błotna to multiblok z epoki pary, który zbiera błoto raz na sekundę, ale tylko wtedy, gdy znajduje się w biomie rzecznym i gdy kontroler znajduje się w przedziale od Y = 64 do Y = 80 (włącznie). Można w nim zastosować pompę, ULV lub klapę wyjściową NN.
+
+# Energy Hatches
+
+susy.machine.energy_hatch.output_4a.lv.name=Właz z dynamem LV 4A
+susy.machine.energy_hatch.output_16a.lv.name=Właz z dynamem LV 16A
+susy.machine.energy_hatch.output_4a.mv.name=Właz na dynamo MV 4A
+susy.machine.energy_hatch.output_16a.mv.name=Właz na dynamo MV 16A
+susy.machine.energy_hatch.output_4a.hv.name=Właz na dynamo HV 4A
+susy.machine.energy_hatch.output_16a.hv.name=Właz na dynamo HV 16A
+susy.machine.energy_hatch.output_16a.ev.name=Klapka z dynamem EV 16A
+
+# Quadruple & Nonuple Fluid Hatches
+
+gregtech.machine.fluid_hatch.import_4x.lv.name=Poczwórny właz wejściowy NN
+gregtech.machine.fluid_hatch.import_4x.mv.name=Poczwórny właz wejściowy SN
+gregtech.machine.fluid_hatch.import_4x.hv.name=Poczwórny właz wejściowy HV
+
+gregtech.machine.fluid_hatch.import_9x.lv.name=Niejednolity właz wejściowy LV
+gregtech.machine.fluid_hatch.import_9x.mv.name=Klapka wejściowa MV nieduża
+gregtech.machine.fluid_hatch.import_9x.hv.name=Niejednolity właz wejściowy HV
+
+gregtech.machine.fluid_hatch.export_4x.lv.name=Poczwórny właz wyjściowy NN
+gregtech.machine.fluid_hatch.export_4x.mv.name=Poczwórny właz wyjściowy średniego napięcia
+gregtech.machine.fluid_hatch.export_4x.hv.name=Poczwórny właz wyjściowy HV
+
+gregtech.machine.fluid_hatch.export_9x.lv.name=Niejednolity właz wyjściowy LV
+gregtech.machine.fluid_hatch.export_9x.mv.name=Klapka wyjściowa nieduża MV
+gregtech.machine.fluid_hatch.export_9x.hv.name=Niejednolity właz wyjściowy HV
+
+# Other multiblock parts
+susy.machine.dumping_hatch=Właz zrzutowy
+susy.machine.dumping_hatch.lv.name=Właz zrzutowy
+
+# Distillation tower explanations
+susy.machine.ordered_dt.tooltip.1=Włazy wejściowe i wyjściowe płynu znajdują się na tych samych warstwach
+susy.machine.ordered_dt.tooltip.2=§cNie wprowadzenie wypływu płynu do N-tej warstwy od dołu powoduje utratę N-tego wypływu§7
+
+# Logistics
+susy.machine.delegator.tooltip.non_recursion=§6 Nie można przyłączać do innych Delegatów!
+susy.top.delegator.delegating_face=Delegowanie twarzy:
+
+susy.machine.bridge.inv.name=Most inwentarzowy
+susy.machine.bridge.inv.tooltip=§bPrzekaźniki Zapasy
+susy.machine.bridge.tank.name=Most czołgowy
+susy.machine.bridge.tank.tooltip=§bPrzekaźniki Zbiorniki
+susy.machine.bridge.inv_tank.name=Inwentarz i most czołgowy
+susy.machine.bridge.inv_tank.tooltip=§bPrzekazuje Zapasy i Czołgi
+susy.machine.bridge.universal.name=Most Uniwersalny
+susy.machine.bridge.universal.tooltip=§bPrzekazuje wszystko
+
+susy.machine.extender.inv.name=Rozszerzenie zapasów
+susy.machine.extender.inv.tooltip=§bPrzekaźniki Zapasy
+susy.machine.extender.tank.name=Przedłużacz zbiornika
+susy.machine.extender.tank.tooltip=§bPrzekaźniki Zbiorniki
+susy.machine.extender.inv_tank.name=Rozszerzenie ekwipunku i zbiornika
+susy.machine.extender.inv_tank.tooltip=§bPrzekazuje Zapasy i Czołgi
+susy.machine.extender.universal.name=Uniwersalny przedłużacz
+susy.machine.extender.universal.tooltip=§bPrzekazuje wszystko
+
+# Metaitems
+metaitem.catalyst_bed_support_grid.name=Siatka podtrzymująca złoże katalizatora
+metaitem.conveyor.steam.name=Przenośnik parowy
+cover.conveyor.steam.title=Moduł przenośnika parowego
+metaitem.pump.steam.name=Pompa parowa
+cover.pump.steam.title=Pompa parowa
+metaitem.air_vent.name=Odpowietrznik
+metaitem.restrictive_filter.name=Ograniczający filtr pozycji
+metaitem.restrictive_filter.tooltip=Zezwala tylko na §6jeden stos§7 dowolnego typu przedmiotu w środku. Może zastąpić ramiona robota. /n§oTutaj możesz przyjść, ale nie dalej.§r §7Hioba 38:11
+metaitem.air_vent.tooltip=Pasywnie zbiera Powietrze Wymiaru dla Twoich Maszyn, gdy stajesz twarzą w twarz z Powietrzem
+metaitem.track_segment.name=Odcinek toru jednoszynowego
+metaitem.track_segment.tooltip=Do stosowania w otworze tunelu §8.
+metaitem.track_segment.length_info=§610 blokuje §7wartość toru jednoszynowego.
+metaitem.air_vent.tooltip.1=§bSzybkość pobierania: §f%,d L/s
+metaitem.orbital.scrap.earth.name=Złom orbitalny Ziemi
+metaitem.code_breacher.name=Łamacz kodów
+
+# Catalysts
+susy.universal.catalysts.tooltip.tier=§eMax Napięcie: §f%,d EU/T (%s§f)
+susy.universal.catalysts.tooltip.non_tiered=§eKatalizator niewarstwowy§
+susy.universal.catalysts.tooltip.yield.tiered=§a Zwiększenie rentowności: §fx%d §aper tier.§f
+susy.universal.catalysts.tooltip.energy.tiered=§aZużycie energii: §fx%d §poziom.§f
+susy.universal.catalysts.tooltip.speed.tiered=§aPrzyspieszenie prędkości: §fx%d §poziom.§f
+susy.universal.catalysts.tooltip.yield=§a Zwiększenie rentowności: §fx%d
+susy.universal.catalysts.tooltip.energy=§aZużycie energii: §fx%d
+susy.universal.catalysts.tooltip.speed=§aPrzyspieszenie prędkości: §fx%d
+susy.universal.catalysts.tooltip.title=%S
+
+# Oxidation Catalyst Bed
+susy.catalyst_group.oxidation_catalyst_beds.name=Katalizator utleniający
+metaitem.ulv_catalyst_bed_oxidation.name=Złoże katalizatora utleniającego ULV
+metaitem.lv_catalyst_bed_oxidation.name=Złoże katalizatora utleniającego LV
+metaitem.mv_catalyst_bed_oxidation.name=Złoże katalizatora utleniającego MV
+metaitem.hv_catalyst_bed_oxidation.name=Złoże katalizatora utleniającego HV
+metaitem.ev_catalyst_bed_oxidation.name=Złoże katalizatora utleniającego EV
+metaitem.iv_catalyst_bed_oxidation.name=Złoże katalizatora utleniającego IV
+metaitem.luv_catalyst_bed_oxidation.name=Złoże katalizatora utleniającego LUV
+metaitem.zpm_catalyst_bed_oxidation.name=Złoże katalizatora utleniającego ZPM
+metaitem.uv_catalyst_bed_oxidation.name=Złoże katalizatora utleniającego UV
+metaitem.uhv_catalyst_bed_oxidation.name=Złoże katalizatora utleniającego UHV
+metaitem.uev_catalyst_bed_oxidation.name=Złoże katalizatora utleniającego UEV
+metaitem.uiv_catalyst_bed_oxidation.name=Złoże katalizatora utleniającego UIV
+metaitem.uxv_catalyst_bed_oxidation.name=Złoże katalizatora utleniającego UXV
+metaitem.opv_catalyst_bed_oxidation.name=Złoże katalizatora utleniającego OpV
+
+# Reduction Catalyst Bed
+susy.catalyst_group.reduction_catalyst_beds.name=Katalizator redukcyjny
+metaitem.ulv_catalyst_bed_reduction.name=Złoże katalizatora redukcyjnego ULV
+metaitem.lv_catalyst_bed_reduction.name=Złoże katalizatora redukcyjnego LV
+metaitem.mv_catalyst_bed_reduction.name=Złoże katalizatora redukcyjnego MV
+metaitem.hv_catalyst_bed_reduction.name=Złoże katalizatora redukcyjnego HV
+metaitem.ev_catalyst_bed_reduction.name=Złoże katalizatora redukcyjnego EV
+metaitem.iv_catalyst_bed_reduction.name=Złoże katalizatora redukcyjnego IV
+metaitem.luv_catalyst_bed_reduction.name=Złoże katalizatora redukcyjnego LUV
+metaitem.zpm_catalyst_bed_reduction.name=Złoże katalizatora redukcyjnego ZPM
+metaitem.uv_catalyst_bed_reduction.name=Złoże katalizatora redukującego UV
+metaitem.uhv_catalyst_bed_reduction.name=Złoże katalizatora redukcyjnego UHV
+metaitem.uev_catalyst_bed_reduction.name=Złoże katalizatora redukcyjnego UEV
+metaitem.uiv_catalyst_bed_reduction.name=Złoże katalizatora redukcyjnego UIV
+metaitem.uxv_catalyst_bed_reduction.name=Złoże katalizatora redukcyjnego UXV
+metaitem.opv_catalyst_bed_reduction.name=Złoże katalizatora redukcyjnego OpV
+
+# Standard Catalyst
+susy.catalyst_group.standard_catalysts.name=Standardowy katalizator
+
+# Cracking Catalyst
+susy.catalyst_group.cracking_catalyst_beds.name=Katalizator krakingowy
+metaitem.standard_catalyst_bed_cracking.name=Pękające złoże katalizatora
+
+# Armors
+metaitem.jet_wingpack.name=Odrzutowy Wingpack
+metaitem.jet_wingpack.tooltip=Przytrzymaj bieg, aby zahamować, gdy silnik jest włączony
+metaarmor.hud.engine_status=Silnik: %s
+metaarmor.jet_wingpack.engine_active=Jet Wingpack: Silnik aktywowany
+metaarmor.jet_wingpack.engine_inactive=Jet Wingpack: Silnik wyłączony
+
+# Structure Data Cards
+metaitem.data_card.name=Pusta karta struktury
+metaitem.data_card.tooltip.1=Wstaw do skanera komponentów, aby zapisać reprezentację części.
+metaitem.data_card.active.name=Załadowana karta struktury
+metaitem.data_card.active.tooltip.1=Załaduj to do Rocket Assemblera, aby zbudować komponent.
+metaitem.data_card.master_blueprint.name=Projekt rakiety
+
+# Machine Translations
+susy.wrongbiome=Maszyna nie może pracować w tym biomie!
+susy.weather_resistance=§2 Nie eksploduje pod wpływem wody, lawy, ognia lub deszczu.
+susy.large_fluid_pump.y_level=Aktualny poziom kontrolera Y: Y=%s
+susy.large_fluid_pump.biome=Bieżący biom dolnej obudowy rury: %s
+
+# Stock Interfaces
+susy.machine.stock_controller.name=Kontroler lokomotywy
+susy.stock_interfaces.locomotive_controller.description=Kontroluje ciąg i hamowanie pobliskich lokomotyw w zależności od sygnału wejściowego z czerwonego kamienia
+
+susy.machine.stock_detector.name=Detektor zapasów
+susy.stock_interfaces.stock_detector.description=Wykrywa pobliskie zapasy i wysyła sygnał redstone
+
+susy.machine.stock_fluid_exchanger.name=Wymiennik płynu
+susy.stock_interfaces.fluid_exchanger.description=Przenosi płyn do i z pobliskiego magazynu
+
+susy.machine.stock_item_exchanger.name=Wymiana przedmiotów
+susy.stock_interfaces.item_exchanger.description=Przenosi elementy do i z pobliskiego magazynu
+
+susy.machine.stock_content_reader.name=Czytnik akcji
+susy.stock_interfaces.stock_reader.description=Wysyła sygnał czerwonego kamienia na podstawie zapasów/zbiornika zapasów znajdujących się przed nim
+
+susy.gui.stock_interactor.button.stock_filter.tooltip=Kliknij, aby otworzyć graficzny interfejs użytkownika filtra giełdowego
+susy.gui.stock_interactor.button.controller_setting.tooltip=Kliknij, aby otworzyć graficzny interfejs użytkownika ustawień kontrolera
+susy.gui.stock_interactor.button.render_bounding_box.tooltip=Kliknij, aby przełączyć renderowanie obszaru interakcji
+susy.gui.stock_interactor.button.highlight_selected_stock.tooltip=Kliknij, aby przełączyć podświetlanie wybranych akcji
+
+susy.gui.stock_interactor.title.highlight_selected_stock=Podświetl wybrane akcje
+susy.gui.stock_interactor.title.render_bounding_box=Renderuj obszar interakcji
+susy.gui.stock_interactor.title.stock_filter=Filtr zapasowy
+susy.gui.stock_interactor.title.controller_setting=Ustawienia
+
+susy.gui.stock_interactor.stock_filter.enabled.tooltip=Przełącz filtr
+susy.gui.stock_interactor.stock_filter.enabled.title=Dźwignia kolankowa
+susy.gui.stock_interactor.stock_filter.regex.tooltip.info=§bAkceptuje wyrażenia regularne, z uwzględnieniem wielkości liter\n§6^§r na początku ciągu\n§6$§r na końcu ciągu\n§6*§r na symbol wieloznaczny (tzn. 0 lub więcej znaków)\n§6a*§r na zero lub więcej kolejnych znaków `a`\n§6?§r na dowolny 1 znak\n§6()§r na dopasowanie pustego wpisu\n§bWięcej informacji na temat wyrażeń regularnych można znaleźć pod adresem regex101.com§r
+susy.gui.stock_interactor.stock_filter.regex.tooltip.error=§4Błąd podczas kompilacji wzoru wyrażenia regularnego!§r\nFiltr nazw nie zostanie zastosowany!
+susy.gui.stock_interactor.stock_filter.regex.tooltip.waiting=Nie ustawiono wzorca wyrażenia regularnego\nFiltr nazw nie zostanie zastosowany!
+susy.gui.stock_interactor.stock_filter.regex.tooltip.success=§aRegex skompilowany pomyślnie!§r\nZastosowany zostanie filtr nazw!
+
+susy.gui.stock_interactor.controller_setting.button.control_active.tooltip=Kliknij, aby przełączyć lub sterować lokomotywami, gdy kontroler jest zasilany przez Redstone
+susy.gui.stock_interactor.controller_setting.button.control_inactive.tooltip=Kliknij, aby przełączyć lub sterować lokomotywami, gdy kontroler nie jest zasilany przez Redstone
+
+susy.gui.stock_interactor.controller_setting.active_brake.tooltip=Hamulec (napędzany)
+susy.gui.stock_interactor.controller_setting.active_throttle.tooltip=Przepustnica (z napędem)
+susy.gui.stock_interactor.controller_setting.inactive_brake.tooltip=Hamulec (bez zasilania)
+susy.gui.stock_interactor.controller_setting.inactive_throttle.tooltip=Przepustnica (bez zasilania)
+
+susy.gui.rocket_programmer.orbit=Orbituj miejsce docelowe
+susy.gui.rocket_programmer.landing=Wyląduj w miejscu docelowym pod określonymi współrzędnymi
+
+susy.gui.rocket_programmer.mission_type=Typ misji
+susy.gui.rocket_programmer.planetoid=Miejsce docelowe
+susy.gui.rocket_programmer.destination_type=Typ miejsca docelowego
+susy.gui.rocket_programmer.landing_coordinates=Współrzędne lądowania
+
+susy.gui.page=Strona %s / %s
+
+susy.gui.temperature_celsius=Temperatura: %s / %s°C
+
+susy.gui.toggle_energy_voiding.enabled=Puszczanie energii, gdy jest pełne
+susy.gui.toggle_energy_voiding.disabled=Nie tracąc energii
+
+# Extra recipe info
+susy.recipe.dimensions=Wymiary: %s
+susy.recipe.biomes=Biomy: %s
+susy.recipe.biomes_blocked=Zablokowane biomy: %s
+susy.recipe.biomeTypes=Typy biomów: %s
+susy.recipe.biomeTypes_blocked=Zablokowane typy biomów: %s
+
+# Commands
+susy.command.horde.usage=/mobHorde <start/stop/status>
+susy.command.horde.start.usage=/mobHorde start <nazwa>
+susy.command.horde.start.argument_required=Użyj /mobHorde start <nazwa>.
+susy.command.horde.start.no_such_horde=Nie istnieje taka horda %s.
+susy.command.horde.start.unable_to_run=Horda %s nie może zostać stracona. Może to być spowodowane ograniczeniami wymiarowymi, światłem dziennym itp.
+susy.command.horde.start.error_executing_horde=Moby Hordy nie zostały poprawnie spawnowane.
+susy.command.horde.start.has_active_invasion=Masz już aktywną inwazję %s.
+susy.command.horde.start.started=Pomyślnie rozpoczęto inwazję %s.
+susy.command.horde.stop.usage=/mobHorde przestań
+susy.command.horde.stop.has_active_no_invasion=Brak aktywnej inwazji, którą można by zatrzymać.
+susy.command.horde.stop.stopped=Pomyślnie zatrzymano inwazję %s.
+susy.command.horde.status.usage=/mobHorde status <gracz>
+susy.command.horde.status.has_active_invasion=Gracz %s ma aktywną inwazję %s przez %d taktów. Upłynie limit czasu za %s taktów.
+susy.command.horde.status.no_active_invasion=Gracz %s nie ma aktywnej inwazji.
+
+# Fluid Tooltips
+susy.fluid.voiding.liquid=Możliwość unieważnienia za pomocą Dumper'a
+susy.fluid.voiding.gas=Możliwość unieważnienia za pomocą Smoke Stack
+susy.fluid.voiding.flammable=Można unieważnić za pomocą stosu flar
+
+# Quarry Modes
+susy.multiblock.quarry.excavation_mode=Tryb wykopalisk
+susy.multiblock.quarry.recipe_mode=Tryb przepisu
+susy.machine.quarry.tooltip.info=Maksymalny kwadrat %1$sx%1$s, minimalny %2$sx%2$s. Przytrzymaj Shift, aby uzyskać więcej szczegółów.
+susy.machine.quarry.tooltip.structure_info=Można tworzyć kamieniołomy o dowolnych nieparzystych wymiarach od %2$sx%2$s do %1$sx%1$s, nawet jeśli nie są kwadratowe. Rozciągnij dolną warstwę bloków betonowych w rogach, tak aby kamieniołom o szerokości 23 miał 9 betonu na stronę i 5 bloków wewnętrznych.
+
+death.attack.toxic_atmo=Płuca %s zostały zniszczone
+death.attack.suffocation=%s nie mógł oddychać
+death.attack.pressure=%s został ściśnięty
+death.attack.depressurization=%s zmarł z powodu zatoru
+death.attack.impact=%s doświadczył końcowego opóźnienia
+death.attack.vaporization=%s przestał być biologią i zaczął być fizyką
+death.attack.alpha_radiation=%s zjadł coś zbyt ostrego
+death.attack.beta_radiation=%s miał zniszczone chromosomy
+death.attack.neutron_radiation=%s został doprawiony neutronami
+death.attack.uv_radiation=%s zapomniał nałożyć krem ​​​​przeciwsłoneczny
+death.attack.x_radiation=%s otrzymał prześwietlenie wykonane bez jego zgody
+death.attack.gamma_radiation=%s zmarł w wyniku wewnętrznych oparzeń słonecznych
+death.attack.spaghettification=%s został spaghettiowany
+death.attack.age=%s zmarł ze starości
+death.attack.chronoerasure=%s nigdy nie istniał
+death.attack.crusher=%s został zmielony na miąższ
+
+metaitem.simple_gas_mask.name=Prymitywna maska ​​gazowa
+metaitem.simple_gas_mask.tooltip=Przetrwaj w środowiskach beztlenowych
+metaitem.gas_mask.name=Maska gazowa
+metaitem.gas_mask.tooltip=Przeżyj dłużej w środowisku beztlenowym
+metaitem.gas_tank.name=Zbiornik gazu
+metaitem.gas_tank.tooltip=Przeżyj dłużej w środowisku beztlenowym
+metaitem.asbestos_mask.name=Azbestowa maska ​​gazowa
+metaitem.asbestos_mask.tooltip=Przetrwaj w gorącym otoczeniu
+metaitem.asbestos_chestplate.name=Zbiornik na azbest
+metaitem.asbestos_chestplate.tooltip=Przetrwaj w gorącym otoczeniu
+metaitem.asbestos_leggings.name=Legginsy azbestowe
+metaitem.asbestos_leggings.tooltip=Przetrwaj w gorącym otoczeniu
+metaitem.asbestos_boots.name=Azbestowe buty
+metaitem.asbestos_boots.tooltip=Przetrwaj w gorącym otoczeniu
+metaitem.rebreather_tank.name=Zbiornik Rebreathera
+metaitem.rebreather_tank.tooltip=Zatrzymuje tlen na dłużej
+metaitem.reflective_mask.name=Odblaskowa maska ​​gazowa
+metaitem.reflective_mask.tooltip=Zmniejsz uszkodzenia spowodowane ogrzewaniem
+metaitem.reflective_chestplate.name=Odblaskowy zbiornik
+metaitem.reflective_chestplate.tooltip=Zmniejsz uszkodzenia spowodowane ogrzewaniem
+metaitem.reflective_leggings.name=Odblaskowe legginsy
+metaitem.reflective_leggings.tooltip=Zmniejsz uszkodzenia spowodowane ogrzewaniem
+metaitem.reflective_boots.name=Odblaskowe buty
+metaitem.reflective_boots.tooltip=Zmniejsz uszkodzenia spowodowane ogrzewaniem
+metaitem.filtered_tank.name=Filtrowany zbiornik
+metaitem.filtered_tank.tooltip=Zatrzymuje tlen bardzo długo
+metaitem.nomex_mask.name=Maska gazowa Nomex
+metaitem.nomex_mask.tooltip=Pozostań w płaszczu na czas nieokreślony!
+metaitem.nomex_chestplate.name=Zbiornik z Nomexu
+metaitem.nomex_chestplate.tooltip=Pozostań w płaszczu na czas nieokreślony!
+metaitem.nomex_leggings.name=Legginsy Nomex
+metaitem.nomex_leggings.tooltip=Pozostań w płaszczu na czas nieokreślony!
+metaitem.nomex_boots.name=Buty z Nomexu
+metaitem.nomex_boots.tooltip=Pozostań w płaszczu na czas nieokreślony!
+
+supersymmetry.oxygen=Pozostałe powietrze: §b%s sekund§r (z %s)
+supersymmetry.unlimited_oxygen=Pozostałe powietrze: §bBez ograniczeń§r
+supersymmetry.seconds_left=Pozostałe życie: §2%s sekund§r
+supersymmetry.unlimited=Pozostały czas życia: §bBez ograniczeń§r
+
+#Hardened blocks
+tile.hardened_blocks.lair7.name=Utwardzone Legowisko 7
+tile.hardened_blocks.lair10.name=Utwardzone Legowisko 10
+tile.hardened_blocks.lair11.name=Utwardzone Legowisko 11
+tile.hardened_blocks.kryp7.name=Utwardzone pełzanie 7
+tile.hardened_blocks.kryp8.name=Utwardzone pełzanie 8
+tile.hardened_blocks1.industrial_concrete_hardened.name=Beton przemysłowy klasy federacyjnej
+tile.hardened_blocks1.military_concrete_hardened.name=Beton wojskowy klasy federacyjnej
+tile.hardened_blocks1.military_concrete_cobblestone_hardened.name=Bruk betonowy klasy federacyjnej
+
+#Custom Sheets
+tile.custom_sheets.darkwhitemetalsheet.name=Ciemniejsza biała blacha
+tile.custom_sheets.lightergraymetalsheet.name=Jaśniejsza szara blacha
+tile.custom_sheets.decorativecopper.name=Miedź dekoracyjna klasy kosmicznej
+tile.custom_sheets.decorativecopperbricks.name=Dekoracyjne cegły miedziane klasy kosmicznej
+
+tile.regolith.highland.name=Regolit anortozytowy
+tile.regolith.lowland.name=Bazaltowy regolit
+
+# ToolBehaviors
+item.susy.tool.behavior.pipeliner=§6 Rurociąg: §fObsługuje wszystkie sąsiednie rurociągi
+item.susy.tool.tooltip.pipeliner=§7Przytrzymaj §f[%s]§7, aby aktywować tryb §6Pipeliner§7
+
+# Titles
+supersymmetry.title.1=§3SUPERSYMETRIA
+supersymmetry.subtitle.1=Pakiet modów autorstwa SymmetricDevs
+supersymmetry.title.2=WITAJ W §2ZIEMI
+supersymmetry.subtitle.2=Parametry życiowe: §stabilny§r. Paliwo pod: §e46%%§r.
+
+# Locked Crates
+chat.susy.crate.requires_code_breacher=Do tej skrzyni potrzebny jest łamacz szyfrów!
+susy.machine.locked_crate.pe.name=Hermetycznie zamknięta skrzynia
+susy.machine.locked_crate.wood.name=Drewniana skrzynia
+susy.machine.locked_crate.bronze.name=Brązowa skrzynia
+susy.machine.locked_crate.steel.name=Stalowa skrzynia
+susy.machine.locked_crate.aluminium.name=Skrzynia aluminiowa
+susy.machine.locked_crate.stainless_steel.name=Skrzynia ze stali nierdzewnej
+susy.machine.locked_crate.titanium.name=Tytanowa skrzynia
+susy.machine.locked_crate.tungstensteel.name=Skrzynia ze stali wolframowej
+
+# Boilers
+susy.machine.large_boiler.bronze.name=Duży kocioł z brązu
+susy.machine.large_boiler.steel.name=Duży stalowy kocioł
+
+susy.machine.large_boiler.bronze.signal.incr1=Zwiększenie przepustnicy (1%%)
+susy.machine.large_boiler.bronze.signal.incr5=Zwiększenie przepustnicy (5%%)
+susy.machine.large_boiler.bronze.signal.incr10=Zwiększenie przepustnicy (10%%)
+susy.machine.large_boiler.bronze.signal.incr25=Zwiększenie przepustnicy (25%%)
+susy.machine.large_boiler.bronze.signal.dec1=Zmniejszenie przepustnicy (1%%)
+susy.machine.large_boiler.bronze.signal.dec5=Zmniejszenie przepustnicy (5%%)
+susy.machine.large_boiler.bronze.signal.dec10=Zmniejszenie przepustnicy (10%%)
+susy.machine.large_boiler.bronze.signal.dec25=Zmniejszenie przepustnicy (25%%)
+susy.machine.large_boiler.bronze.signal.set100=Ustaw przepustnicę na 100%%
+susy.machine.large_boiler.bronze.signal.set25=Ustaw przepustnicę na 25%%
+
+susy.machine.large_boiler.bronze.signal.incr1=Zwiększenie przepustnicy (1%%)
+susy.machine.large_boiler.steel.signal.incr5=Zwiększenie przepustnicy (5%%)
+susy.machine.large_boiler.steel.signal.incr10=Zwiększenie przepustnicy (10%%)
+susy.machine.large_boiler.steel.signal.incr25=Zwiększenie przepustnicy (25%%)
+susy.machine.large_boiler.bronze.signal.dec1=Zmniejszenie przepustnicy (1%%)
+susy.machine.large_boiler.steel.signal.dec5=Zmniejszenie przepustnicy (5%%)
+susy.machine.large_boiler.steel.signal.dec10=Zmniejszenie przepustnicy (10%%)
+susy.machine.large_boiler.steel.signal.dec25=Zmniejszenie przepustnicy (25%%)
+susy.machine.large_boiler.steel.signal.set100=Ustaw przepustnicę na 100%%
+susy.machine.large_boiler.steel.signal.set25=Ustaw przepustnicę na 25%%
+
+susy.machine.steam_boiler_coal.bronze.name=Mały kocioł parowy na paliwo stałe
+susy.machine.steam_boiler_coal.bronze.tooltip=Wczesny sposób na zdobycie Mocy Steam
+susy.machine.steam_boiler_coal.steel.name=Wysokociśnieniowy kocioł parowy na paliwo stałe
+susy.machine.steam_boiler_coal.steel.tooltip=Szybszy niż mały kocioł parowy na paliwo stałe
+susy.machine.steam_boiler_liquid.bronze.name=Mały parowy kocioł na ciecz
+susy.machine.steam_boiler_liquid.bronze.tooltip=Kocioł odprowadzający ciecze
+susy.machine.steam_boiler_liquid.steel.name=Wysokociśnieniowy kocioł parowy na ciecz
+susy.machine.steam_boiler_liquid.steel.tooltip=Szybszy niż mały kocioł parowy na ciecz
+
+#Fake Wool
+tile.fake_wool.whitefakewool.name=Białe włókno azbestowe
+tile.fake_wool.orangefakewool.name=Pomarańczowe włókno azbestowe
+tile.fake_wool.magentafakewool.name=Włókno azbestowe w kolorze magenty
+tile.fake_wool.lightbluefakewool.name=Jasnoniebieskie włókno azbestowe
+tile.fake_wool.yellowfakewool.name=Żółte włókno azbestowe
+tile.fake_wool.limefakewool.name=Wapienne włókno azbestowe
+tile.fake_wool.pinkfakewool.name=Różowe włókno azbestowe
+tile.fake_wool.grayfakewool.name=Szare włókno azbestowe
+tile.fake_wool.lightgrayfakewool.name=Jasnoszare włókno azbestowe
+tile.fake_wool.cyanfakewool.name=Cyjanowe włókno azbestowe
+tile.fake_wool.purplefakewool.name=Fioletowe włókno azbestowe
+tile.fake_wool.bluefakewool.name=Niebieskie włókno azbestowe
+tile.fake_wool.brownfakewool.name=Brązowe włókno azbestowe
+tile.fake_wool.greenfakewool.name=Zielone włókno azbestowe
+tile.fake_wool.redfakewool.name=Czerwone włókno azbestowe
+tile.fake_wool.blackfakewool.name=Czarne włókno azbestowe
+
+#Particle physics stuff
+susy.particlebeam.energy=Energia
+susy.particlebeam.bunch.spacing=Rozstaw pęczków
+susy.particlebeam.bunch.length=Długość pęczka
+susy.particlebeam.nbunches=Razem pęczki
+susy.particlebeam.nparticles=Cząsteczki w pęczku
+susy.particlebeam.emittance=Emisja wiązki
+susy.particlebeam.beamsize=Sekcja Belki
+susy.machine.beam_import_hatch.name=Kreskowanie importu belki
+susy.machine.beam_export_hatch.name=Właz eksportu belki
+
+#Particles
+susy.particle.electron.name=Elektron
+susy.particle.positron.name=Pozyton
+susy.particle.photon.name=Foton
+
+#Random Concrete
+tile.random_concrete.greyindustrialconcrete.name=Szary beton przemysłowy
+tile.random_concrete.mossyindustrialconcrete.name=Omszały beton przemysłowy
+tile.random_concrete.silverindustrialconcrete.name=Srebrny beton przemysłowy
+tile.random_concrete.whiteindustrialconcrete.name=Biały beton przemysłowy
+
+tile.random_concrete.dottedpanel.name=Panel kropkowany
+tile.random_concrete.dottedpanelborder.name=Kropkowany panel otoczony
+tile.random_concrete.dottedpanelcomb.name=Grzebień panelowy w kropki
+tile.random_concrete.dottedpanelgrid.name=Kropkowana siatka paneli
+
+tile.random_concrete.industrialcinderbricks.name=Przemysłowe cegły żużlowe
+tile.random_concrete.industrialcinderbrickscement.name=Przemysłowe cegły cementowo-żużlowe
+tile.random_concrete.industrialcinderbrickscementgray.name=Szare przemysłowe cegły cementowo-żużlowe
+tile.random_concrete.industrialcinderbricksdark.name=Ciemne przemysłowe cegły żużlowe
+tile.random_concrete.industrialcinderbricksdarkgrey.name=Ciemnoszare przemysłowe cegły żużlowe
+tile.random_concrete.industrialcinderbricksgrey.name=Szare przemysłowe cegły żużlowe
+
+tile.random_concrete.smoothindustrialconcrete.name=Gładki beton przemysłowy
+tile.random_concrete.smoothindustrialconcretegrey.name=Gładki szary beton przemysłowy
+tile.random_concrete1.smoothindustrialconcretewhite.name=Gładki biały beton przemysłowy
+
+#LittleTiles Loot
+susy.top.lt_loot=Zawiera łupy
+
+susy.machine.building_cleanroom.tooltip.1=Tworzy §fKarty Struktury§7 z zakodowanych w nich elementów rakiety
+susy.machine.building_cleanroom.tooltip.2=Jeśli chcesz, działa również jako zwykłe pomieszczenie czyste.
+# Error Messages
+susy.msg.rocket_component.build_success=Komponent został pomyślnie przeanalizowany.
+susy.msg.rocket_component.unscanned=Komponent nie został przeskanowany.
+susy.msg.rocket_component.blocks_disconnected=Struktura składa się z dwóch lub więcej części!
+susy.msg.rocket_component.no_blocks=W strefie skanowania nie znaleziono żadnych bloków.
+susy.msg.rocket_component.hull_weak=Stwierdzono, że blok kadłuba nie nadaje się do lotu.
+susy.msg.rocket_component.hull_full=Komponentowi brakuje przestrzeni wewnętrznej (co najmniej 2 bloki).
+susy.msg.rocket_component.no_nozzle=Brakuje bloków dysz.
+susy.msg.rocket_component.nozzle_invalid=Kształt dyszy jest nieprawidłowy.
+susy.msg.rocket_component.unknown_error=Wystąpił nieznany błąd.
+susy.msg.rocket_component.wrong_num_c_chambers=Komór spalania jest za dużo lub za mało.
+susy.msg.rocket_component.wrong_num_pumps=Istnieją obce, nieużywane turbopompy.
+susy.msg.rocket_component.weird_pump=Z jakiegoś powodu pompa jest skierowana do góry. Dlaczego?
+susy.msg.rocket_component.weird_fairing=Coś dziwnego jest w tej owiewce.
+susy.msg.rocket_component.chamber_wrong_place=Komora spalania znajduje się wewnątrz dyszy rakiety. To dziwne...
+susy.msg.rocket_component.invalid_transparent=W tym komponencie znajduje się przezroczysty blok!
+susy.msg.rocket_component.chamber_extraneous_blocks=W komponencie znaleziono niepotrzebny blok!
+susy.msg.rocket_component.cleanroom_not_clean=Pomieszczenie czyste nie jest jeszcze czyste (lub nie istnieje)
+susy.msg.rocket_component.nozzle_not_laval=Dysza rakietowa w niczym nie przypomina dyszy de Lavala!
+susy.msg.rocket_component.tile_missing=Na zbiorniku kadłuba brakuje płytki!
+susy.msg.rocket_component.no_card=Proszę włożyć pustą kartę struktury.
+susy.msg.rocket_component.part_unrecognized=Część nie została rozpoznana.
+susy.msg.rocket_component.spacecraft_hollow=Statek kosmiczny jest pusty, ale nie ma układu podtrzymującego życie.
+susy.msg.rocket_component.too_short=Element jest za krótki!
+susy.msg.rocket_component.conn_unaligned=Złącza owiewki nie są ustawione płasko.
+susy.msg.rocket_component.conn_wrong_dir=Złącze owiewki skierowane jest w stronę bloku.
+susy.msg.rocket_component.wrong_tile=Płytka została użyta nieprawidłowo.
+susy.msg.rocket_component.interstage_not_cylindrical=Międzyscena wygląda dziwnie.
+
+entity.Rocket.name=Rakieta FG Sojuz
