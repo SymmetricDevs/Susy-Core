@@ -1,5 +1,17 @@
 package supersymmetry.integration.jei;
 
+import java.lang.reflect.Field;
+import java.util.List;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fluids.FluidStack;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.lwjgl.input.Mouse;
+
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.screen.ModularScreen;
 import com.cleanroommc.modularui.screen.UISettings;
@@ -9,42 +21,37 @@ import com.cleanroommc.modularui.value.sync.FluidSlotSyncHandler;
 import com.cleanroommc.modularui.widget.Widget;
 import com.cleanroommc.modularui.widget.WidgetTree;
 import com.cleanroommc.modularui.widgets.slot.FluidSlot;
+
 import gregtech.integration.jei.basic.BasicRecipeCategory;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.lwjgl.input.Mouse;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.gui.SusyGuiTextures;
 
-import java.lang.reflect.Field;
-import java.util.List;
-
 public class RocketFuelCategory extends BasicRecipeCategory<RocketFuelWrapper, RocketFuelWrapper> {
+
     public static final String UID = Supersymmetry.MODID + ":rocket_fuel";
 
     private ModularPanel modularUI;
     private ModularGuiContext context;
     private final FluidStack[] slots = new FluidStack[3];
+
     public RocketFuelCategory(IGuiHelper guiHelper) {
         super("rocket_fuel", "rocket_fuel.name", guiHelper.createBlankDrawable(176, 90), guiHelper);
 
         this.modularUI = ModularPanel.defaultPanel("rocket_fuel_ui").invisible().child(new FluidSlot().syncHandler(
-                new JEIFluidSyncHandler(0).canFillSlot(false).canDrainSlot(false)
-        ).overlayTexture(SusyGuiTextures.FLUID_SLOT));
+                new JEIFluidSyncHandler(0).canFillSlot(false).canDrainSlot(false))
+                .overlayTexture(SusyGuiTextures.FLUID_SLOT));
     }
+
     @Override
     public void drawExtras(Minecraft minecraft) {
         if (context == null) {
             context = new ModularScreen(modularUI) {
+
                 @Override
                 public boolean isClientOnly() {
                     return true;
@@ -94,7 +101,9 @@ public class RocketFuelCategory extends BasicRecipeCategory<RocketFuelWrapper, R
     }
 
     public class JEIFluidSyncHandler extends FluidSlotSyncHandler {
+
         private int i;
+
         public JEIFluidSyncHandler(int i) {
             super(null);
             this.i = i;
@@ -106,23 +115,15 @@ public class RocketFuelCategory extends BasicRecipeCategory<RocketFuelWrapper, R
         }
 
         @Override
-        public void tryClickPhantom(MouseData mouseData) {
-
-        }
+        public void tryClickPhantom(MouseData mouseData) {}
 
         @Override
-        public void tryScrollPhantom(MouseData mouseData) {
-
-        }
+        public void tryScrollPhantom(MouseData mouseData) {}
 
         @Override
-        public void readOnClient(int id, PacketBuffer buf) {
-
-        }
+        public void readOnClient(int id, PacketBuffer buf) {}
 
         @Override
-        public void readOnServer(int id, PacketBuffer buf) {
-
-        }
+        public void readOnServer(int id, PacketBuffer buf) {}
     }
 }

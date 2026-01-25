@@ -1,6 +1,7 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.block.VariantBlock;
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
@@ -11,9 +12,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
+import gregtech.api.block.VariantBlock;
 
 public class BlockDeposit extends VariantBlock<BlockDeposit.DepositBlockType> {
 

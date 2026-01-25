@@ -3,9 +3,6 @@ package supersymmetry.integration.jei;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import gregtechfoodoption.integration.jei.EatingRecipeCategory;
-import gregtechfoodoption.integration.jei.LacingCategory;
-import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import org.jetbrains.annotations.NotNull;
 
 import cam72cam.immersiverailroading.IRItems;
@@ -19,6 +16,7 @@ import mezz.jei.api.IModRegistry;
 import mezz.jei.api.ISubtypeRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
+import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.particle.ParticleBeam;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
@@ -69,7 +67,8 @@ public class JeiModule extends IntegrationSubmodule implements IModPlugin {
         registry.addRecipeCatalyst(SuSyMetaTileEntities.STEAM_BOILER_COAL_BRONZE.getStackForm(), solidMapId);
         registry.addRecipeCatalyst(SuSyMetaTileEntities.STEAM_BOILER_COAL_STEEL.getStackForm(), solidMapId);
 
-        registry.addRecipes(RocketFuelEntry.getFuelRegistry().values().stream().map(RocketFuelWrapper::new).collect(Collectors.toList()), RocketFuelCategory.UID);
+        registry.addRecipes(RocketFuelEntry.getFuelRegistry().values().stream().map(RocketFuelWrapper::new)
+                .collect(Collectors.toList()), RocketFuelCategory.UID);
         registry.addRecipeCatalyst(SuSyMetaTileEntities.LAUNCH_PAD.getStackForm(), RocketFuelCategory.UID);
     }
 
@@ -77,5 +76,4 @@ public class JeiModule extends IntegrationSubmodule implements IModPlugin {
     public void registerCategories(IRecipeCategoryRegistration registry) {
         registry.addRecipeCategories(new RocketFuelCategory(registry.getJeiHelpers().getGuiHelper()));
     }
-
 }
