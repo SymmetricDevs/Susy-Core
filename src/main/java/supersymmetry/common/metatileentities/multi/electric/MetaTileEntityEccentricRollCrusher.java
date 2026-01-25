@@ -1,26 +1,5 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import static net.minecraft.block.BlockDirectional.FACING;
-import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.eccentricRolls;
-import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.metalSheets;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import org.jetbrains.annotations.NotNull;
-
 import gregtech.api.GTValues;
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -36,12 +15,31 @@ import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.MetaTileEntities;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.blocks.IAnimatablePartBlock;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockGrinderCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import static net.minecraft.block.BlockDirectional.FACING;
+import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.eccentricRolls;
+import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.metalSheets;
 
 public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockController {
 
@@ -239,7 +237,10 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
             World world = getWorld();
             for (BlockPos pos : ercRolls) {
                 IBlockState state = world.getBlockState(pos);
-                world.setBlockState(pos, state.withProperty(IAnimatablePartBlock.ACTIVE, isActive));
+                // In case that it is air (or somehow replaced)
+                if (state.getProperties().containsKey(IAnimatablePartBlock.ACTIVE)) {
+                    world.setBlockState(pos, state.withProperty(IAnimatablePartBlock.ACTIVE, isActive));
+                }
             }
         }
     }
