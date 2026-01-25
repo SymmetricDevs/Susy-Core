@@ -1,7 +1,8 @@
 package supersymmetry.common.world.gen;
 
-import java.util.Random;
-
+import com.google.common.base.MoreObjects;
+import gregtech.common.blocks.MetaBlocks;
+import gregtech.common.blocks.StoneVariantBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -10,13 +11,10 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.MapGenBase;
-
-import com.google.common.base.MoreObjects;
-
-import gregtech.common.blocks.MetaBlocks;
-import gregtech.common.blocks.StoneVariantBlock;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
+
+import java.util.Random;
 
 public class MapGenLunarLavaTube extends MapGenBase {
 
@@ -146,8 +144,7 @@ public class MapGenLunarLavaTube extends MapGenBase {
                     int z3 = MathHelper.floor(startZ) - z * 16;
                     if (0 <= x3 && x3 < 16 && 0 < z3 && z3 < 16 && width > 0x3 && localRandom.nextInt(0x4) == 1 &&
                             y2 > primer.findGroundBlockIdx(x3, z3 - 1) - 2) {
-                        fillBlock(primer, x3, 0x60, z3, null, AIR,
-                                PIT.getStateFromMeta(width > 0xa ? 7 : (int) (width - 3)));
+                        fillBlock(primer, x3, 0x60, z3, null, AIR, PIT);
                     }
 
                     // lx: local x
