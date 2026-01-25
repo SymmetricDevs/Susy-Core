@@ -4,7 +4,11 @@ import static supersymmetry.api.fluids.SusyGeneratedFluidHandler.CAST_MATERIALS;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Collectors;
 
+import gregtechfoodoption.integration.jei.EatingRecipeCategory;
+import gregtechfoodoption.integration.jei.LacingCategory;
+import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import org.jetbrains.annotations.NotNull;
 
 import cam72cam.immersiverailroading.IRItems;
@@ -22,6 +26,8 @@ import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.particle.ParticleBeam;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
+import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 import supersymmetry.integration.jei.category.StrandCategory;
 import supersymmetry.integration.jei.category.StrandInfo;
@@ -70,6 +76,9 @@ public class JeiModule extends IntegrationSubmodule implements IModPlugin {
         registry.addRecipeCatalyst(SuSyMetaTileEntities.STEAM_BOILER_COAL_BRONZE.getStackForm(), solidMapId);
         registry.addRecipeCatalyst(SuSyMetaTileEntities.STEAM_BOILER_COAL_STEEL.getStackForm(), solidMapId);
 
+        registry.addRecipes(RocketFuelEntry.getFuelRegistry().values().stream().map(RocketFuelWrapper::new).collect(Collectors.toList()), RocketFuelCategory.UID);
+        registry.addRecipeCatalyst(SuSyMetaTileEntities.LAUNCH_PAD.getStackForm(), RocketFuelCategory.UID);
+
         String strandCastingId = GTValues.MODID + ":strand_casting";
         registry.addRecipes(CAST_MATERIALS.stream().map(StrandInfo::new).collect(Collectors.toList()), strandCastingId);
         registry.addRecipeCatalyst(SuSyMetaTileEntities.TURNING_ZONE.getStackForm(), strandCastingId);
@@ -82,7 +91,10 @@ public class JeiModule extends IntegrationSubmodule implements IModPlugin {
     }
 
     @Override
-    public void registerCategories(@NotNull IRecipeCategoryRegistration registry) {
+    public void registerCategories(IRecipeCategoryRegistration registry) {
+        registry.addRecipeCategories(new RocketFuelCategory(registry.getJeiHelpers().getGuiHelper()));
+
         registry.addRecipeCategories(new StrandCategory(registry.getJeiHelpers().getGuiHelper()));
     }
+
 }
