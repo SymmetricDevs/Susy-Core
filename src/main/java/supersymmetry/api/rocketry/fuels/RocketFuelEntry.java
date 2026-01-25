@@ -1,12 +1,11 @@
 package supersymmetry.api.rocketry.fuels;
 
+import gregtech.api.unification.material.Material;
+import net.minecraft.util.Tuple;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import net.minecraft.util.Tuple;
-
-import gregtech.api.unification.material.Material;
 
 public class RocketFuelEntry {
 
@@ -25,6 +24,9 @@ public class RocketFuelEntry {
 
         public RocketFuelEntryBuilder addComponent(Material mat, int proportion) {
             composition.add(new Tuple<>(mat, proportion));
+            if (composition.size() > 3) {
+                throw new IllegalStateException("too many fuel components");
+            }
             return this;
         }
 
