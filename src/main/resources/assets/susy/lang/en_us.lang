@@ -1353,6 +1353,10 @@ tile.regolith.lowland.name=Basaltic Regolith
 item.susy.tool.behavior.pipeliner=§6Pipeliner: §fOperates all adjacent pipes
 item.susy.tool.tooltip.pipeliner=§7Hold §f[%s]§7 to activate §6Pipeliner§7 mode
 
+# JEI Info
+susy.tooltip.specific_impulse=Specific Impulse: %s
+rocket_fuel.name=Rocket Fuel
+
 # Titles
 supersymmetry.title.1=§3SUPERSYMMETRY
 supersymmetry.subtitle.1=A modpack by SymmetricDevs
