@@ -278,6 +278,7 @@ item.material.oreprefix.millBall=%s Mill Ball
 susy.fluid.supercritical=Supercritical %s
 susy.fluid.impure_slurry=Impure %s Slurry
 susy.fluid.slurry=%s Slurry
+susy.fluid.molten=Molten %s
 
 # Tooltip Warnings
 susy.machine.steam_extractor_cannot_melt_items.warning=Steam Extractors cannot melt items!
