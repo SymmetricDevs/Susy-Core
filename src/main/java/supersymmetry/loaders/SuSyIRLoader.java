@@ -15,7 +15,9 @@ import cam72cam.mod.render.EntityRenderer;
 import cam72cam.mod.render.IEntityRender;
 import cam72cam.mod.render.opengl.RenderState;
 import supersymmetry.api.SusyLog;
+import supersymmetry.common.entities.EntityTransporterErector;
 import supersymmetry.common.entities.EntityTunnelBore;
+import supersymmetry.integration.immersiverailroading.registry.TransporterErectorDefinition;
 import supersymmetry.integration.immersiverailroading.registry.TunnelBoreDefinition;
 
 public class SuSyIRLoader {
@@ -65,6 +67,7 @@ public class SuSyIRLoader {
             Map<String, StockLoader> stockLoaders = (Map<String, StockLoader>) jsonLoadersField.get(null);
 
             stockLoaders.put("tunnel_bore", TunnelBoreDefinition::new);
+            stockLoaders.put("transporter_erector", TransporterErectorDefinition::new);
 
         } catch (NoSuchFieldException e) {
             SusyLog.logger.error("Failed to reflect definition manager json loaders", e);
@@ -79,6 +82,7 @@ public class SuSyIRLoader {
             instanceField.setAccessible(true);
             ModCore.Mod instance = (ModCore.Mod) instanceField.get(ImmersiveRailroading.class);
             EntityRegistry.register(instance, EntityTunnelBore::new, 512);
+            EntityRegistry.register(instance, EntityTransporterErector::new, 512);
         } catch (NoSuchFieldException e) {
             SusyLog.logger.error("Failed to reflect immersive railroading instance", e);
         } catch (IllegalAccessException e) {
@@ -104,6 +108,7 @@ public class SuSyIRLoader {
             }
         };
         EntityRenderer.register(EntityTunnelBore.class, stockRender);
+        EntityRenderer.register(EntityTransporterErector.class, stockRender);
     }
 
     @FunctionalInterface

@@ -19,7 +19,9 @@ public class SuSyLateMixinLoader implements ILateMixinLoader {
             "travelersbackpack",
             "reccomplex",
             "fluidlogged_api",
-            "littletiles");
+            "littletiles",
+            "celeritas",
+            "projectred-core");
 
     @Override
     public List<String> getMixinConfigs() {

@@ -6,9 +6,10 @@ public class Galaxy extends CelestialObject {
 
     private final GalaxyType galaxyType;
 
-    public Galaxy(double mass, double posT, double posX, double posY, double posZ, @Nullable CelestialObject parentBody,
+    public Galaxy(String translationKey, double mass, double posT, double posX, double posY, double posZ,
+                  @Nullable CelestialObject parentBody,
                   GalaxyType galaxyType) {
-        super(mass, posT, posX, posY, posZ, parentBody, CelestialBodyType.GALAXY);
+        super(translationKey, posT, posX, posY, posZ, mass, CelestialBodyType.GALAXY, parentBody);
         this.galaxyType = galaxyType;
     }
 

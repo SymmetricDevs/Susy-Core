@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "gregtech:blocks/rocket_multiblock_casing/polystyrene_wall_side",
+    "up": "gregtech:blocks/rocket_multiblock_casing/polystyrene_wall_side",
+    "north": "gregtech:blocks/rocket_multiblock_casing/polystyrene_wall_front",
+    "east": "gregtech:blocks/rocket_multiblock_casing/polystyrene_wall_side",
+    "south": "gregtech:blocks/rocket_multiblock_casing/polystyrene_wall_front",
+    "west": "gregtech:blocks/rocket_multiblock_casing/polystyrene_wall_side",
+    "particle": "gregtech:blocks/casings/solid/machine_casing_solid_steel"
+  }
+}
