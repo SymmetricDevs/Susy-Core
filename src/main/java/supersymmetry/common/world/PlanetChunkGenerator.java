@@ -21,6 +21,7 @@ import net.minecraft.world.gen.*;
 
 import supersymmetry.common.blocks.BlockDeposit;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.world.gen.Crater;
 import supersymmetry.common.world.gen.MapGenLunarLavaTube;
 import supersymmetry.common.world.gen.WorldGenPit;
 
@@ -48,6 +49,9 @@ public class PlanetChunkGenerator implements IChunkGenerator {
     private final MapGenLunarLavaTube caveGenerator = new MapGenLunarLavaTube();
     private final WorldGenPit pitGenerator = new WorldGenPit();
 
+    // REFACTORED: Crater generation moved to separate class
+    private final Crater craterGenerator;
+
     private Biome[] biomesForGeneration;
     private final double depthNoiseScaleX = 200.0D;
     private final double depthNoiseScaleZ = 200.0D;
@@ -70,12 +74,6 @@ public class PlanetChunkGenerator implements IChunkGenerator {
     private final IBlockState stone;
     private final IBlockState bedrock;
 
-    // Crater
-    private final IBlockState breccia;
-    private final IBlockState impactMelt;
-    private final IBlockState impactEjecta;
-    private NoiseGeneratorOctaves craterNoise;
-
     public PlanetChunkGenerator(World worldIn, long seed) {
         world = worldIn;
         mapFeaturesEnabled = true;
@@ -87,18 +85,18 @@ public class PlanetChunkGenerator implements IChunkGenerator {
         surfaceNoise = new NoiseGeneratorPerlin(this.rand, 4);
         scaleNoise = new NoiseGeneratorOctaves(this.rand, 10);
         depthNoise = new NoiseGeneratorOctaves(this.rand, 16);
-        craterNoise = new NoiseGeneratorOctaves(this.rand, 4);
         heightMap = new double[825];
         biomeWeights = new float[25];
 
         Planet planet = SuSyDimensions.PLANETS.get(world.provider.getDimension());
         this.stone = planet.getStone();
         this.bedrock = planet.getBedrock();
+        // REFACTORED: Initialize crater generator with planet-specific materials
+        IBlockState breccia = planet.hasCraterMaterials() ? planet.getBreccia() : stone;
+        IBlockState impactMelt = DEPOSIT_BLOCK.getState(BlockDeposit.DepositBlockType.LUNAR_CRATER);
+        IBlockState impactEjecta = SuSyBlocks.REGOLITH.getDefaultState();
 
-        // Get crater materials from planet or use defaults
-        this.breccia = planet.hasCraterMaterials() ? planet.getBreccia() : stone;
-        this.impactMelt = DEPOSIT_BLOCK.getState(BlockDeposit.DepositBlockType.LUNAR_CRATER);
-        this.impactEjecta = SuSyBlocks.REGOLITH.getDefaultState();
+        this.craterGenerator = new Crater(stone, breccia, impactMelt, impactEjecta);
 
         for (int i = -2; i <= 2; ++i) {
             for (int j = -2; j <= 2; ++j) {
@@ -124,10 +122,6 @@ public class PlanetChunkGenerator implements IChunkGenerator {
 
     /**
      * Creates base terrain (air and stone) using heightmaps.
-     *
-     * @param chunkX
-     * @param chunkZ
-     * @param primer
      */
     public void generateTerrain(int chunkX, int chunkZ, ChunkPrimer primer) {
         // Get biomes being used in this chunk
@@ -150,7 +144,6 @@ public class PlanetChunkGenerator implements IChunkGenerator {
                 int l1 = (k + iZ + 1) * 33;
 
                 // Divide chunk along y axis.
-                // Now have a 4 x 8 x 4 subchunk to work with.
                 for (int iY = 0; iY < 32; ++iY) {
                     // Get noise values from heightmap.
                     double d1 = this.heightMap[i1 + iY];
@@ -187,7 +180,6 @@ public class PlanetChunkGenerator implements IChunkGenerator {
                                 } else if ((zVariation += d16) > 0.0D) {
                                     primer.setBlockState(iX * 4 + jX, iY * 8 + jY, iZ * 4 + jZ, stone);
                                 }
-
                             }
 
                             d10 += d12;
@@ -214,7 +206,7 @@ public class PlanetChunkGenerator implements IChunkGenerator {
         for (int iX = 0; iX < 16; ++iX) {
             // Loop through each y row.
             for (int iZ = 0; iZ < 16; ++iZ) {
-                // Get the biome at this x,z coord?
+                // Get the biome at this x,z coord
                 Biome biome = biomesIn[iZ + iX * 16];
 
                 // Use the biome to replace blocks at this x, z coord (full y column).
@@ -235,8 +227,8 @@ public class PlanetChunkGenerator implements IChunkGenerator {
                 x * 16, z * 16, 16, 16);
         this.replaceBiomeBlocks(x, z, chunkprimer, this.biomesForGeneration);
 
-        // Apply craters to the chunk
-        this.generateCraters(x, z, chunkprimer);
+        // REFACTORED: Use dedicated crater generator
+        this.craterGenerator.generate(this.world, x, z, chunkprimer);
         this.caveGenerator.generate(this.world, x, z, chunkprimer);
 
         Chunk chunk = new Chunk(this.world, chunkprimer, x, z);
@@ -425,7 +417,7 @@ public class PlanetChunkGenerator implements IChunkGenerator {
 
                     // Always place regolith as the top block and fill beneath
                     if (floorY > 2) {
-                        primer.setBlockState(x, floorY, z, impactEjecta);
+                        primer.setBlockState(x, floorY, z, craterGenerator.getImpactEjecta());
 
                         // Determine subsurface material based on distance
                         IBlockState subsurfaceMaterial;
@@ -433,11 +425,11 @@ public class PlanetChunkGenerator implements IChunkGenerator {
 
                         if (distance < radius * 0.3) {
                             // Central crater - impact melt
-                            subsurfaceMaterial = impactMelt;
+                            subsurfaceMaterial = craterGenerator.getImpactMelt();
                             subsurfaceDepth = 2;
                         } else if (normalizedDist < 0.8) {
                             // Mid crater - breccia
-                            subsurfaceMaterial = breccia;
+                            subsurfaceMaterial = craterGenerator.getBreccia();
                             subsurfaceDepth = 2;
                         } else {
                             // Outer crater - stone
@@ -467,7 +459,7 @@ public class PlanetChunkGenerator implements IChunkGenerator {
                     int ejectaBlocks = (int) ejectaHeight;
 
                     for (int y = 0; y < ejectaBlocks && surfaceY + y < 255; y++) {
-                        primer.setBlockState(x, surfaceY + y + 1, z, impactEjecta);
+                        primer.setBlockState(x, surfaceY + y + 1, z, craterGenerator.getImpactEjecta());
                     }
                 }
             }
