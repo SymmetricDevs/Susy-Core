@@ -1,18 +1,21 @@
 package supersymmetry.integration.jei;
 
+import java.util.stream.Collectors;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
+
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 
-import java.util.stream.Collectors;
-
 public class RocketFuelWrapper implements IRecipeWrapper {
+
     private final RocketFuelEntry entry;
 
     private final String specificImpulse;
+
     public RocketFuelWrapper(RocketFuelEntry entry) {
         this.entry = entry;
         this.specificImpulse = I18n.format("susy.tooltip.specific_impulse", entry.getSpecificImpulse());

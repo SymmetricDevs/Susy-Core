@@ -23,7 +23,7 @@ public class MapGenLunarLavaTube extends MapGenBase {
     protected static final IBlockState AIR = Blocks.AIR.getDefaultState();
     public static final IBlockState BASALT = MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH)
             .getState(StoneVariantBlock.StoneType.BASALT);
-    public static final IBlockState PIT = SuSyBlocks.REGOLITH.getDefaultState();
+    public static final IBlockState PIT = Blocks.AIR.getDefaultState();  // This spawns stuff midair for some reason
 
     // modified from net.minecraft.world.gen.MapGenCaves
     protected void addTunnel(long seed, int x, int z, ChunkPrimer primer, double startX, double startY, double startZ,

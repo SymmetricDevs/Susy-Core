@@ -1,5 +1,7 @@
 package supersymmetry.common.world;
 
+import static supersymmetry.common.blocks.SuSyBlocks.DEPOSIT_BLOCK;
+
 import java.util.List;
 import java.util.Random;
 
@@ -17,6 +19,8 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.*;
 
+import supersymmetry.common.blocks.BlockDeposit;
+import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.world.gen.MapGenLunarLavaTube;
 import supersymmetry.common.world.gen.WorldGenPit;
 
@@ -93,8 +97,8 @@ public class PlanetChunkGenerator implements IChunkGenerator {
 
         // Get crater materials from planet or use defaults
         this.breccia = planet.hasCraterMaterials() ? planet.getBreccia() : stone;
-        this.impactMelt = planet.hasCraterMaterials() ? planet.getImpactMelt() : stone;
-        this.impactEjecta = planet.hasCraterMaterials() ? planet.getImpactEjecta() : stone;
+        this.impactMelt = DEPOSIT_BLOCK.getState(BlockDeposit.DepositBlockType.LUNAR_CRATER);
+        this.impactEjecta = SuSyBlocks.REGOLITH.getDefaultState();
 
         for (int i = -2; i <= 2; ++i) {
             for (int j = -2; j <= 2; ++j) {
@@ -419,28 +423,31 @@ public class PlanetChunkGenerator implements IChunkGenerator {
 
                     int floorY = surfaceY - craterDepth;
 
-                    // Add central peak for complex craters
-                    if (isComplex && distance <= radius * 0.2) {
-                        int peakHeight = (int) (depth * 0.6);
-                        double peakNormDist = distance / (radius * 0.2);
-                        int currentPeakHeight = (int) (peakHeight * (1 - peakNormDist * peakNormDist));
+                    // Always place regolith as the top block and fill beneath
+                    if (floorY > 2) {
+                        primer.setBlockState(x, floorY, z, impactEjecta);
 
-                        for (int y = floorY; y < floorY + currentPeakHeight && y < 255; y++) {
-                            primer.setBlockState(x, y, z, stone);
+                        // Determine subsurface material based on distance
+                        IBlockState subsurfaceMaterial;
+                        int subsurfaceDepth;
+
+                        if (distance < radius * 0.3) {
+                            // Central crater - impact melt
+                            subsurfaceMaterial = impactMelt;
+                            subsurfaceDepth = 2;
+                        } else if (normalizedDist < 0.8) {
+                            // Mid crater - breccia
+                            subsurfaceMaterial = breccia;
+                            subsurfaceDepth = 2;
+                        } else {
+                            // Outer crater - stone
+                            subsurfaceMaterial = stone;
+                            subsurfaceDepth = 2;
                         }
-                    }
-                    // Add impact melt in center
-                    else if (distance < radius * 0.3 && floorY > 2) {
-                        int meltDepth = 1 + craterRand.nextInt(2);
-                        for (int y = floorY; y > floorY - meltDepth && y > 2; y--) {
-                            primer.setBlockState(x, y, z, impactMelt);
-                        }
-                    }
-                    // Add breccia layer
-                    else if (normalizedDist < 0.8 && floorY > 2) {
-                        int brecciaDepth = 1 + craterRand.nextInt(2);
-                        for (int y = floorY; y > floorY - brecciaDepth && y > 2; y--) {
-                            primer.setBlockState(x, y, z, breccia);
+
+                        // Fill subsurface layers
+                        for (int y = floorY - 1; y > floorY - 1 - subsurfaceDepth && y > 2; y--) {
+                            primer.setBlockState(x, y, z, subsurfaceMaterial);
                         }
                     }
 
@@ -449,7 +456,7 @@ public class PlanetChunkGenerator implements IChunkGenerator {
                         int fractureDepth = 3 + craterRand.nextInt(5);
                         for (int y = floorY - 4; y > floorY - 4 - fractureDepth && y > 2; y--) {
                             if (craterRand.nextDouble() < 0.6) {
-                                primer.setBlockState(x, y, z, stone); // Replace with a cool deposit block?
+                                primer.setBlockState(x, y, z, stone); // Replace with a compressed block?
                             }
                         }
                     }
@@ -460,9 +467,7 @@ public class PlanetChunkGenerator implements IChunkGenerator {
                     int ejectaBlocks = (int) ejectaHeight;
 
                     for (int y = 0; y < ejectaBlocks && surfaceY + y < 255; y++) {
-                        if (craterRand.nextDouble() < 0.7) {
-                            primer.setBlockState(x, surfaceY + y + 1, z, impactEjecta);
-                        }
+                        primer.setBlockState(x, surfaceY + y + 1, z, impactEjecta);
                     }
                 }
             }

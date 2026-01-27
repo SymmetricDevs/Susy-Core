@@ -10,6 +10,8 @@ import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeChunkManager;
 
+import supersymmetry.common.blocks.SuSyBlocks;
+
 public class Planet {
 
     // Defining variables
@@ -215,10 +217,6 @@ public class Planet {
         return impactMelt != null ? impactMelt : getStone();
     }
 
-    public IBlockState getImpactEjecta() {
-        return impactEjecta != null ? impactEjecta : getStone();
-    }
-
     // Add setter methods for builder pattern (if Planet uses builder)
     public Planet setBreccia(IBlockState breccia) {
         this.breccia = breccia;
@@ -292,5 +290,9 @@ public class Planet {
 
     public long getTicksPerDay() {
         return this.ticksPerDay;
+    }
+
+    public IBlockState getImpactEjecta() {
+        return SuSyBlocks.REGOLITH.getDefaultState();
     }
 }

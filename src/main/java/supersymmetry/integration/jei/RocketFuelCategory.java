@@ -1,5 +1,12 @@
 package supersymmetry.integration.jei;
 
+import java.util.List;
+
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.fluids.FluidStack;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.gui.GuiTextures;
 import gregtech.integration.jei.basic.BasicRecipeCategory;
 import gregtech.integration.jei.utils.render.FluidStackTextRenderer;
@@ -10,14 +17,10 @@ import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.Supersymmetry;
 
-import java.util.List;
-
 public class RocketFuelCategory extends BasicRecipeCategory<RocketFuelWrapper, RocketFuelWrapper> {
+
     public static final String UID = Supersymmetry.MODID + ":rocket_fuel";
 
     private final FluidStack[] stacks = new FluidStack[3];
@@ -73,5 +76,4 @@ public class RocketFuelCategory extends BasicRecipeCategory<RocketFuelWrapper, R
     public @NotNull String getModName() {
         return Supersymmetry.MODID;
     }
-
 }
