@@ -1,13 +1,15 @@
 package supersymmetry.common.command;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.*;
-import java.util.Map.Entry;
-
+import com.google.gson.*;
+import gregtech.api.GregTechAPI;
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.WorkableTieredMetaTileEntity;
+import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
+import gregtech.api.recipes.Recipe;
+import gregtech.api.recipes.RecipeMap;
+import gregtech.api.recipes.ingredients.GTRecipeInput;
+import gregtech.api.recipes.recipeproperties.RecipeProperty;
 import gregtech.common.crafting.GTFluidCraftingIngredient;
-import gregtech.common.crafting.GTShapelessOreRecipe;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -29,25 +31,18 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-
-import com.google.gson.*;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
-import gregtech.api.*;
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.WorkableTieredMetaTileEntity;
-import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
-import gregtech.api.recipes.Recipe;
-import gregtech.api.recipes.RecipeMap;
-import gregtech.api.recipes.ingredients.GTRecipeInput;
-import gregtech.api.recipes.recipeproperties.RecipeProperty;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.OreIngredient;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import supersymmetry.api.SusyLog;
 
-import static net.minecraftforge.fml.common.registry.ForgeRegistries.ITEMS;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class CommandRecipemapDump extends CommandBase {
 
@@ -113,7 +108,7 @@ public class CommandRecipemapDump extends CommandBase {
         root.add("crafting", this.dumpCraftingRecipes());
         root.add("gtMTEs", this.dumpMachines());
 
-        writeJsonToRoot(root, "everything", sender);
+        writeJsonToRoot(root, "recipedump", sender);
     }
 
     public JsonElement dumpOreDict() {
@@ -158,7 +153,7 @@ public class CommandRecipemapDump extends CommandBase {
     }
 
     public void writeJsonToRoot(JsonObject obj, String name, ICommandSender sender) {
-        File root = FMLCommonHandler.instance().getSavesDirectory();
+        File root = FMLCommonHandler.instance().getSavesDirectory().getParentFile();
         File outFile = new File(root, name + ".json");
         try (FileWriter writer = new FileWriter(outFile)) {
             new Gson().toJson(obj, writer);
@@ -307,12 +302,13 @@ public class CommandRecipemapDump extends CommandBase {
         JsonObject stackObj = new JsonObject();
         if (stack == null || stack.getItem() == null) return stackObj;
 
-        stackObj.addProperty("type", "ItemStack");
-        stackObj.addProperty("displayName", stack.getDisplayName());
+        stackObj.addProperty("resource", stack.getItem().getRegistryName().toString());
         stackObj.addProperty("count", stack.getCount());
         stackObj.addProperty("metadata", stack.getMetadata());
         stackObj.addProperty("itemDamage", stack.getItemDamage());
-        stackObj.add("nbt", CommandRecipemapDump.nbtToJson(stack.getTagCompound()));
+        if (stack.getTagCompound() != null) {
+            stackObj.add("nbt", CommandRecipemapDump.nbtToJson(stack.getTagCompound()));
+        }
         return stackObj;
     }
 
@@ -320,7 +316,6 @@ public class CommandRecipemapDump extends CommandBase {
         JsonObject stackObj = new JsonObject();
         if (stack == null || stack.getItem() == null) return stackObj;
 
-        stackObj.addProperty("type", "ItemStack");
         stackObj.addProperty("displayName", stack.getDisplayName());
         stackObj.addProperty("translationKey", stack.getTranslationKey());
         stackObj.addProperty("resource", stack.getItem().getRegistryName().toString());
@@ -339,8 +334,8 @@ public class CommandRecipemapDump extends CommandBase {
         JsonObject fluidObj = new JsonObject();
         if (fluid == null) return JsonNull.INSTANCE;
         fluidObj.addProperty("fluidName", fluid.getName());
-        fluidObj.addProperty("fluidUnlocalizedName", fluid.getUnlocalizedName());
-        fluidObj.addProperty("fluidLocalizedName", fluid.getLocalizedName(new FluidStack(fluid, 1)));
+        fluidObj.addProperty("unlocalizedName", fluid.getUnlocalizedName());
+        fluidObj.addProperty("localizedName", fluid.getLocalizedName(new FluidStack(fluid, 1)));
         fluidObj.addProperty("fluidColor", fluid.getColor());
 
         fluidObj.addProperty("fluidDensity", fluid.getDensity());
@@ -356,8 +351,8 @@ public class CommandRecipemapDump extends CommandBase {
         if (fluidStack == null) return stackObj;
         if (fluidStack.getFluid() == null) return stackObj;
         stackObj.addProperty("type", "FluidStack");
-        stackObj.addProperty("localizedName", fluidStack.getLocalizedName());
         stackObj.addProperty("unlocalizedName", fluidStack.getUnlocalizedName());
+        stackObj.addProperty("specificLocalizedName", fluidStack.getLocalizedName());
         stackObj.addProperty("amount", fluidStack.amount);
 
         return stackObj;
@@ -398,7 +393,7 @@ public class CommandRecipemapDump extends CommandBase {
                 // } else if (cr instanceof GTShapedOreRecipe shapedore) {
                 // recipeobj.addProperty("type", "gtShaped");
                 //
-            } else if (cr instanceof GTShapelessOreRecipe oreRecipe) {
+            } else if (cr instanceof ShapelessOreRecipe oreRecipe) {
                 recipeobj.addProperty("type", "shapelessOre");
                 recipeobj.add("recipe", this.shapelessOreToJson(oreRecipe));
             } else {
@@ -406,6 +401,7 @@ public class CommandRecipemapDump extends CommandBase {
                 SusyLog.logger.warn("unknown type of {}", cr.getClass().getName());
                 recipeobj.add("recipe", JsonNull.INSTANCE);
             }
+            recipeobj.add("output", stackToJson(cr.getRecipeOutput()));
             root.add(recipeobj);
         }
 
@@ -508,21 +504,13 @@ public class CommandRecipemapDump extends CommandBase {
         return root;
     }
 
-    private JsonElement shapelessOreToJson(GTShapelessOreRecipe shapeless) {
-        JsonArray ingredients = new JsonArray();
-        var root = new JsonObject();
-        for (var ingredient : shapeless.getIngredients()) {
-            ingredients.add(ingredientToJson(ingredient));
-        }
-        return root;
-    }
-
     private JsonElement shapelessOreToJson(ShapelessOreRecipe shapeless) {
         JsonArray ingredients = new JsonArray();
         var root = new JsonObject();
         for (var ingredient : shapeless.getIngredients()) {
             ingredients.add(ingredientToJson(ingredient));
         }
+        root.add("ingredients", ingredients);
         return root;
     }
 
