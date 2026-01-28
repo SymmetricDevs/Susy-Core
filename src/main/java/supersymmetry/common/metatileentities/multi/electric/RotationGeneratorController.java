@@ -204,6 +204,12 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
             }
         }
 
+
+        @Override
+        public int getRecipeEUt() {
+            return proposedEUt;
+        }
+
         public boolean getVoidingEnergy() {
             return this.voidEnergy;
         }
@@ -264,7 +270,11 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         }
 
         protected long getActualVoltage() {
+<<<<<<< HEAD
             return scaleProduction(-proposedEUt);
+=======
+            return scaleProduction(getRecipeEUt());
+>>>>>>> d016b33f (separate power generation from recipe running)
         }
 
         public int getCurrentParallel() {
