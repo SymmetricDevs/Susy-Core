@@ -204,11 +204,6 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
             }
         }
 
-        @Override
-        public int getRecipeEUt() {
-            return proposedEUt;
-        }
-
         public boolean getVoidingEnergy() {
             return this.voidEnergy;
         }
@@ -235,11 +230,12 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         }
 
         public boolean tryDrawEnergy() {
-            return drawEnergy(getRecipeEUt(), true);
+            return drawEnergy(proposedEUt, true); // replace recipeEUt with proposedEUt since if the recipe cannot be
+                                                  // run but speed > 0, recipeEUt gets set to 0 but proposedEUt isn't
         }
 
         public boolean doDrawEnergy() {
-            return drawEnergy(getRecipeEUt(), false);
+            return drawEnergy(proposedEUt, false);
         }
 
         @Override
@@ -268,7 +264,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         }
 
         protected long getActualVoltage() {
-            return scaleProduction(getRecipeEUt());
+            return scaleProduction(-proposedEUt);
         }
 
         public int getCurrentParallel() {
