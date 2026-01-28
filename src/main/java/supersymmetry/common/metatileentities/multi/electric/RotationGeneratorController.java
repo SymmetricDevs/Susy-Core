@@ -93,6 +93,8 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
             speed = Math.min(speed, maxSpeed);
             speed = Math.max(speed, 0);
 
+            ((SuSyTurbineRecipeLogic) recipeMapWorkable).doDrawEnergy();
+
             if (lubricantStack != null && lubricantCounter >= (600 * 3600)) {
                 lubricantCounter = 0;
                 tanks.drain(new FluidStack(lubricantStack.getFluid(), lubricantInfo.amount_required), true);
@@ -192,6 +194,21 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
             return sufficientFluids;
         }
 
+        @Override
+        protected void updateRecipeProgress() {
+            if (canRecipeProgress && drawEnergy(recipeEUt, true)) {
+                // as recipe starts with progress on 1 this has to be > only not => to compensate for it
+                if (++progressTime > maxProgressTime) {
+                    completeRecipe();
+                }
+            }
+        }
+
+        @Override
+        public int getRecipeEUt() {
+            return proposedEUt;
+        }
+
         public boolean getVoidingEnergy() {
             return this.voidEnergy;
         }
@@ -218,7 +235,11 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         }
 
         public boolean tryDrawEnergy() {
-            return drawEnergy(this.recipeEUt, true);
+            return drawEnergy(getRecipeEUt(), true);
+        }
+
+        public boolean doDrawEnergy() {
+            return drawEnergy(getRecipeEUt(), false);
         }
 
         @Override
@@ -247,7 +268,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         }
 
         protected long getActualVoltage() {
-            return scaleProduction(-recipeEUt);
+            return scaleProduction(getRecipeEUt());
         }
 
         public int getCurrentParallel() {
