@@ -45,6 +45,7 @@ import supersymmetry.common.metatileentities.multi.electric.strand.*;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCoagulationTank;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimitiveMudPump;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimitiveSmelter;
+import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCupolaFurnace;
 import supersymmetry.common.metatileentities.multi.rocket.*;
 import supersymmetry.common.metatileentities.multi.steam.MetaTileEntitySuSyLargeBoiler;
 import supersymmetry.common.metatileentities.multi.steam.MetaTileEntitySuSyLargeHammer;
@@ -187,6 +188,8 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityPrimitiveSmelter PRIMITIVE_SMELTER;
     public static MetaTileEntityPrimitiveItemBus PRIMITIVE_ITEM_IMPORT;
     public static MetaTileEntityPrimitiveItemBus PRIMITIVE_ITEM_EXPORT;
+
+    public static MetaTileEntityCupolaFurnace CUPOLA_FURNACE;
 
     // Space multis
     public static MetaTileEntityLandingPad LANDING_PAD;
