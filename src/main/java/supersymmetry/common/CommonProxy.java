@@ -7,7 +7,6 @@ import java.io.File;
 import java.util.Objects;
 import java.util.function.Function;
 
-import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.monster.EntityZombie;
@@ -31,6 +30,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.block.VariantItemBlock;
+import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.modules.ModuleContainerRegistryEvent;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.event.MaterialEvent;
