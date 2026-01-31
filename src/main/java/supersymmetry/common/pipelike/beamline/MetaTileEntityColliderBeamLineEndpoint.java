@@ -7,16 +7,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import supersymmetry.common.metatileentities.storage.MetaTileEntityBeamLineEndpoint;
 
-public class MetaTileEntitySingleBeamLineEndpoint  extends MetaTileEntityBeamLineEndpoint {
+public class MetaTileEntityColliderBeamLineEndpoint extends MetaTileEntityBeamLineEndpoint {
 
 
-    public MetaTileEntitySingleBeamLineEndpoint(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SingleBeamLineType.INSTANCE);
+    public MetaTileEntityColliderBeamLineEndpoint(ResourceLocation metaTileEntityId) {
+        super(metaTileEntityId, ColliderBeamLineType.INSTANCE);
     }
 
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
-        return new MetaTileEntitySingleBeamLineEndpoint(this.metaTileEntityId);
+        return new MetaTileEntityColliderBeamLineEndpoint(this.metaTileEntityId);
     }
 
     @Override
