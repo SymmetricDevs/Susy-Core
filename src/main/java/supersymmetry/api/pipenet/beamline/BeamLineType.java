@@ -5,6 +5,8 @@ import net.minecraft.world.World;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.common.pipelike.beamline.ColliderBeamLineType;
+import supersymmetry.common.pipelike.beamline.SingleBeamLineType;
 
 import java.util.Objects;
 
@@ -32,6 +34,14 @@ public abstract class BeamLineType {
 
     public static BeamLineType getBeamLineType(String name) {
         return BEAMLINE_TYPES.get(name);
+    }
+
+    public static SingleBeamLineType single() {
+        return SingleBeamLineType.INSTANCE;
+    }
+
+    public static ColliderBeamLineType collider() {
+        return ColliderBeamLineType.INSTANCE;
     }
 
     public boolean isValidPart(IParticleNetworkPart networkPart) {
