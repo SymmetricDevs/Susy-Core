@@ -39,6 +39,13 @@ public interface IBeamLineEndpoint extends IParticleNetworkPart, INeighborCache 
     }
 
     /**
+     * @return true if this endpoint is doing both input and output
+     */
+    default boolean isCollider() {
+        return getIoType() == IOType.DOUBLE;
+    }
+
+    /**
      * @return the currently linked endpoint or null
      */
     @Nullable
@@ -89,6 +96,7 @@ public interface IBeamLineEndpoint extends IParticleNetworkPart, INeighborCache 
     enum IOType {
         NONE,
         INPUT,
-        OUTPUT
+        OUTPUT,
+        DOUBLE
     }
 }
