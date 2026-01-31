@@ -33,6 +33,7 @@ public class ParticleNetworkBuilder extends Thread {
     private final List<BlockPos> pipes = new ArrayList<>();
     private final List<IBeamLineEndpoint> endpoints = new ArrayList<>();
     private final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+    private final BlockPos.MutableBlockPos opposite = new BlockPos.MutableBlockPos();
     private final ObjectOpenHashSet<Chunk> loadedChunks = new ObjectOpenHashSet<>();
 
     public ParticleNetworkBuilder(ParticleNetwork.WorldData worldData, ParticleNetwork network,
@@ -80,7 +81,8 @@ public class ParticleNetworkBuilder extends Thread {
             BlockPos current = this.currentPoints.remove(0);
             for (EnumFacing facing : EnumFacing.VALUES) {
                 this.pos.setPos(current).move(facing);
-                if (this.walked.contains(this.pos)) {
+                this.opposite.setPos(current).move(facing.getOpposite());
+                if (this.walked.contains(this.pos) || !this.walked.contains(this.opposite)) {
                     continue;
                 }
                 IBlockState blockState = getBlockState(this.pos);
