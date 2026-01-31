@@ -1,9 +1,11 @@
 package supersymmetry.common.metatileentities.multi.primitive;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.*;
 
 import org.jetbrains.annotations.NotNull;
 
+import gregtech.api.gui.ModularUI;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -20,7 +22,7 @@ import supersymmetry.api.recipes.SuSyRecipeMaps;
 public class MetaTileEntityCupolaFurnace extends RecipeMapPrimitiveMultiblockController {
 
     public MetaTileEntityCupolaFurnace(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SuSyRecipeMaps.PRIMITIVE_SMELTER);
+        super(metaTileEntityId, SuSyRecipeMaps.CUPOLA_FURNACE);
     }
 
     @Override
@@ -46,5 +48,20 @@ public class MetaTileEntityCupolaFurnace extends RecipeMapPrimitiveMultiblockCon
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
         return Textures.PRIMITIVE_BRICKS;
+    }
+
+    @Override
+    public boolean hasMaintenanceMechanics() {
+        return false;
+    }
+
+    @Override
+    protected ModularUI createUI(EntityPlayer entityPlayer) {
+        return null;
+    }
+
+    @Override
+    protected boolean openGUIOnRightClick() {
+        return false;
     }
 }

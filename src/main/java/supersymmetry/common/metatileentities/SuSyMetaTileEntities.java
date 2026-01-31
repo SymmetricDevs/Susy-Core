@@ -423,6 +423,9 @@ public class SuSyMetaTileEntities {
         PRIMITIVE_ITEM_EXPORT = registerMetaTileEntity(14802,
                 new MetaTileEntityPrimitiveItemBus(susyId("primitive_item_export"), true));
 
+        CUPOLA_FURNACE = registerMetaTileEntity(14850,
+                new MetaTileEntityCupolaFurnace(susyId("cupola_furnace")));
+
         // oil stuff
         COKING_TOWER = registerMetaTileEntity(14635, new MetaTileEntityCokingTower(susyId("coking_tower")));
         VACUUM_DISTILLATION_TOWER = registerMetaTileEntity(14636,
