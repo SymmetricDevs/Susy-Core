@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.Objects;
 import java.util.function.Function;
 
+import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.monster.EntityZombie;
@@ -131,7 +132,11 @@ public class CommonProxy {
         }
     }
 
-    public void postLoad() {}
+    public void postLoad() {
+        // Remove the ULV energy hatches from multiblock preview, they are a trap for new players
+        MultiblockAbility.REGISTRY.get(MultiblockAbility.INPUT_ENERGY).remove(0);
+        MultiblockAbility.REGISTRY.get(MultiblockAbility.OUTPUT_ENERGY).remove(0);
+    }
 
     @SubscribeEvent
     public static void registerBlocks(@NotNull RegistryEvent.Register<Block> event) {
