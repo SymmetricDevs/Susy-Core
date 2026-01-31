@@ -239,7 +239,10 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
             World world = getWorld();
             for (BlockPos pos : ercRolls) {
                 IBlockState state = world.getBlockState(pos);
-                world.setBlockState(pos, state.withProperty(IAnimatablePartBlock.ACTIVE, isActive));
+                // In case that it is air (or somehow replaced)
+                if (state.getProperties().containsKey(IAnimatablePartBlock.ACTIVE)) {
+                    world.setBlockState(pos, state.withProperty(IAnimatablePartBlock.ACTIVE, isActive));
+                }
             }
         }
     }

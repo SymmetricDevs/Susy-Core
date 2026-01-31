@@ -38,7 +38,8 @@ import supersymmetry.common.item.behavior.RocketConfigBehavior;
 
 public class SuSyMetaItems {
 
-    private static int itemIndex = 0;
+    // DO NOT CHANGE
+    private static int itemIndex = 1;
 
     private static StandardMetaItem metaItem;
     public static SuSyArmorItem armorItem;
@@ -122,7 +123,7 @@ public class SuSyMetaItems {
         addExtraBehaviours();
 
         // initialize metaitems here
-        if (itemIndex != 0) { // but only once
+        if (itemIndex != 1) { // but only once
             return;
         }
         CATALYST_BED_SUPPORT_GRID = initOneItem("catalyst_bed_support_grid");
