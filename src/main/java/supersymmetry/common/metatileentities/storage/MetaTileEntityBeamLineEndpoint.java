@@ -254,6 +254,9 @@ public abstract class MetaTileEntityBeamLineEndpoint extends MetaTileEntity impl
         if (isOutput()) {
             textComponents.add(new TextComponentString("Output endpoint"));
         }
+        if (isCollider()) {
+            textComponents.add(new TextComponentString("Collider endpoint"));
+        }
         return textComponents;
     }
 
