@@ -35,7 +35,7 @@ public class MetaTileEntityCupolaFurnace extends RecipeMapPrimitiveMultiblockCon
                 .aisle("CCC", "CSC", "CCC", "CCC")
                 .aisle("CCC", "CAC", "CAC", "CAC")
                 .aisle("CCC", "CAC", "CAC", "CAC")
-                .where('C', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.BRONZE_BRICKS))
+                .where('C', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.PRIMITIVE_BRICKS))
                         .or(abilities(MultiblockAbility.EXPORT_ITEMS, MultiblockAbility.IMPORT_ITEMS)))
                 .where('A', air())
                 .where('S', selfPredicate())
