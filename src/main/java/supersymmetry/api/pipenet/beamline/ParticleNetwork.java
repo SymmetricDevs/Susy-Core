@@ -331,7 +331,7 @@ public class ParticleNetwork {
             if (worldData != null) {
                 return worldData;
             }
-            String DATA_ID = WorldPipeNet.getDataID("long_dist_pipe", world);
+            String DATA_ID = WorldPipeNet.getDataID("beamline_pipe", world);
             WorldData netWorldData = (WorldData) world.loadData(WorldData.class, DATA_ID);
             if (netWorldData == null) {
                 netWorldData = new WorldData(DATA_ID);
