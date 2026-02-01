@@ -30,6 +30,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.block.VariantItemBlock;
+import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.modules.ModuleContainerRegistryEvent;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.event.MaterialEvent;
@@ -131,7 +132,11 @@ public class CommonProxy {
         }
     }
 
-    public void postLoad() {}
+    public void postLoad() {
+        // Remove the ULV energy hatches from multiblock preview, they are a trap for new players
+        MultiblockAbility.REGISTRY.get(MultiblockAbility.INPUT_ENERGY).remove(0);
+        MultiblockAbility.REGISTRY.get(MultiblockAbility.OUTPUT_ENERGY).remove(0);
+    }
 
     @SubscribeEvent
     public static void registerBlocks(@NotNull RegistryEvent.Register<Block> event) {
