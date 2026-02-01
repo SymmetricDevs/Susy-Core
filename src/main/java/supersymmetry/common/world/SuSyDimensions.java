@@ -7,12 +7,13 @@ import java.util.Map;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.BiomeManager.BiomeEntry;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import supersymmetry.api.SusyLog;
+import supersymmetry.common.blocks.BlockRegolith;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
+import supersymmetry.common.world.biome.SuSyBiomeEntry;
 import supersymmetry.common.world.sky.SkyColorData;
 import supersymmetry.common.world.sky.SkyRenderData;
 
@@ -94,8 +95,10 @@ public class SuSyDimensions {
         moonSky.setSkyColorData(moonColors);
 
         new Planet(0, 800, "Moon").setBiomeList(
-                new BiomeEntry(SuSyBiomes.LUNAR_HIGHLANDS, 100),
-                new BiomeEntry(SuSyBiomes.LUNAR_MARIA, 100))
+                new SuSyBiomeEntry(SuSyBiomes.LUNAR_HIGHLANDS, 100)
+                        .setCraterBlock(SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.HIGHLAND)),
+                new SuSyBiomeEntry(SuSyBiomes.LUNAR_MARIA, 100)
+                        .setCraterBlock(SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.LOWLAND)))
                 .setStone(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH)
                         .getState(SusyStoneVariantBlock.StoneType.ANORTHOSITE))
                 .setSuSySkyRenderer(moonSky)

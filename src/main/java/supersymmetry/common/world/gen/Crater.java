@@ -8,10 +8,12 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.MapGenBase;
 
 import supersymmetry.common.blocks.BlockDeposit;
+import supersymmetry.common.world.SuSyBiomes;
 
 /**
  * Generates impact craters on planetary surfaces.
@@ -26,7 +28,10 @@ public class Crater extends MapGenBase {
     private final IBlockState stone;
     private final IBlockState breccia;
     private final IBlockState impactMelt;
-    private final IBlockState impactEjecta;
+    private final IBlockState defaultImpactEjecta;
+
+    // Store biome data for biome-specific materials
+    private Biome[] cachedBiomes;
 
     /**
      * Constructor for crater generation with custom materials.
@@ -34,13 +39,13 @@ public class Crater extends MapGenBase {
      * @param stone        The base stone material for the planet
      * @param breccia      The brecciated material found in craters
      * @param impactMelt   The impact melt material
-     * @param impactEjecta The ejecta material
+     * @param impactEjecta The default ejecta material (used as fallback)
      */
     public Crater(IBlockState stone, IBlockState breccia, IBlockState impactMelt, IBlockState impactEjecta) {
         this.stone = stone;
         this.breccia = breccia;
         this.impactMelt = impactMelt;
-        this.impactEjecta = impactEjecta;
+        this.defaultImpactEjecta = impactEjecta;
     }
 
     /**
@@ -54,6 +59,9 @@ public class Crater extends MapGenBase {
      */
     @Override
     public void generate(World worldIn, int chunkX, int chunkZ, ChunkPrimer primer) {
+        // Cache biomes for this chunk
+        this.cachedBiomes = worldIn.getBiomeProvider().getBiomes(null, chunkX * 16, chunkZ * 16, 16, 16);
+
         // Check surrounding chunks for crater centers
         for (int cx = chunkX - 2; cx <= chunkX + 2; cx++) {
             for (int cz = chunkZ - 2; cz <= chunkZ + 2; cz++) {
@@ -111,34 +119,58 @@ public class Crater extends MapGenBase {
                 int surfaceY = findSurfaceY(primer, x, z);
                 if (surfaceY < 0) continue;
 
+                // Get biome-specific ejecta material
+                IBlockState biomeEjecta = getBiomeEjecta(x, z);
+
                 // Apply crater excavation
                 if (distance <= radius) {
-                    excavateCrater(primer, x, z, surfaceY, distance, radius, depth, isComplex, craterRand);
+                    excavateCrater(primer, x, z, surfaceY, distance, radius, depth, isComplex, craterRand, biomeEjecta);
                 }
                 // Apply ejecta blanket
                 else if (distance > radius && distance < radius * 2) {
-                    applyEjectaBlanket(primer, x, z, surfaceY, distance, radius);
+                    applyEjectaBlanket(primer, x, z, surfaceY, distance, radius, biomeEjecta);
                 }
             }
         }
     }
 
     /**
+     * Gets the biome-specific ejecta material for the given local coordinates.
+     *
+     * @param x Local X coordinate
+     * @param z Local Z coordinate
+     * @return The IBlockState for ejecta in this biome
+     */
+    private IBlockState getBiomeEjecta(int x, int z) {
+        if (cachedBiomes != null && cachedBiomes.length > 0) {
+            int index = z * 16 + x;
+            if (index >= 0 && index < cachedBiomes.length) {
+                Biome biome = cachedBiomes[index];
+                if (biome != null) {
+                    return SuSyBiomes.getCraterBlock(biome);
+                }
+            }
+        }
+        return defaultImpactEjecta;
+    }
+
+    /**
      * Excavates the crater and fills with appropriate materials.
      *
-     * @param primer    The chunk primer
-     * @param x         Local X coordinate
-     * @param z         Local Z coordinate
-     * @param surfaceY  Surface height
-     * @param distance  Distance from crater center
-     * @param radius    Crater radius
-     * @param depth     Maximum crater depth
-     * @param isComplex Whether this is a complex crater
-     * @param rand      Random instance
+     * @param primer      The chunk primer
+     * @param x           Local X coordinate
+     * @param z           Local Z coordinate
+     * @param surfaceY    Surface height
+     * @param distance    Distance from crater center
+     * @param radius      Crater radius
+     * @param depth       Maximum crater depth
+     * @param isComplex   Whether this is a complex crater
+     * @param rand        Random instance
+     * @param biomeEjecta The biome-specific ejecta material
      */
     private void excavateCrater(ChunkPrimer primer, int x, int z, int surfaceY,
                                 double distance, int radius, int depth,
-                                boolean isComplex, Random rand) {
+                                boolean isComplex, Random rand, IBlockState biomeEjecta) {
         double normalizedDist = distance / radius;
         int craterDepth;
 
@@ -165,7 +197,8 @@ public class Crater extends MapGenBase {
         }
 
         // CRITICAL: Always place the floor block - this prevents holes
-        primer.setBlockState(x, floorY, z, impactEjecta);
+        // Use biome-specific ejecta
+        primer.setBlockState(x, floorY, z, biomeEjecta);
 
         // Determine subsurface material based on distance from center
         IBlockState subsurfaceMaterial;
@@ -205,20 +238,21 @@ public class Crater extends MapGenBase {
     /**
      * Applies the ejecta blanket around the crater rim.
      *
-     * @param primer   The chunk primer
-     * @param x        Local X coordinate
-     * @param z        Local Z coordinate
-     * @param surfaceY Surface height
-     * @param distance Distance from crater center
-     * @param radius   Crater radius
+     * @param primer      The chunk primer
+     * @param x           Local X coordinate
+     * @param z           Local Z coordinate
+     * @param surfaceY    Surface height
+     * @param distance    Distance from crater center
+     * @param radius      Crater radius
+     * @param biomeEjecta The biome-specific ejecta material
      */
     private void applyEjectaBlanket(ChunkPrimer primer, int x, int z, int surfaceY,
-                                    double distance, int radius) {
+                                    double distance, int radius, IBlockState biomeEjecta) {
         double ejectaHeight = (radius * 2 - distance) / radius * 3;
         int ejectaBlocks = (int) ejectaHeight;
 
         for (int y = 0; y < ejectaBlocks && surfaceY + y < 255; y++) {
-            primer.setBlockState(x, surfaceY + y + 1, z, impactEjecta);
+            primer.setBlockState(x, surfaceY + y + 1, z, biomeEjecta);
         }
     }
 
@@ -277,6 +311,6 @@ public class Crater extends MapGenBase {
     }
 
     public IBlockState getImpactEjecta() {
-        return impactEjecta;
+        return defaultImpactEjecta;
     }
 }

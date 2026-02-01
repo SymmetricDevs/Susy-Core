@@ -19,6 +19,8 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.*;
 
+import org.jetbrains.annotations.NotNull;
+
 import supersymmetry.common.blocks.BlockDeposit;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.world.gen.Crater;
@@ -49,7 +51,6 @@ public class PlanetChunkGenerator implements IChunkGenerator {
     private final MapGenLunarLavaTube caveGenerator = new MapGenLunarLavaTube();
     private final WorldGenPit pitGenerator = new WorldGenPit();
 
-    // REFACTORED: Crater generation moved to separate class
     private final Crater craterGenerator;
 
     private Biome[] biomesForGeneration;
@@ -91,7 +92,7 @@ public class PlanetChunkGenerator implements IChunkGenerator {
         Planet planet = SuSyDimensions.PLANETS.get(world.provider.getDimension());
         this.stone = planet.getStone();
         this.bedrock = planet.getBedrock();
-        // REFACTORED: Initialize crater generator with planet-specific materials
+
         IBlockState breccia = planet.hasCraterMaterials() ? planet.getBreccia() : stone;
         IBlockState impactMelt = DEPOSIT_BLOCK.getState(BlockDeposit.DepositBlockType.LUNAR_CRATER);
         IBlockState impactEjecta = SuSyBlocks.REGOLITH.getDefaultState();
@@ -538,4 +539,9 @@ public class PlanetChunkGenerator implements IChunkGenerator {
     }
 
     public void recreateStructures(Chunk chunkIn, int x, int z) {}
+
+    @NotNull
+    public Crater getCraterGenerator() {
+        return this.craterGenerator;
+    }
 }
