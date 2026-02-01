@@ -3,6 +3,7 @@ package supersymmetry.common.world;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraftforge.client.IRenderHandler;
@@ -11,6 +12,7 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeChunkManager;
 
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.world.biome.SuSyBiomeEntry;
 
 public class Planet {
 
@@ -147,6 +149,13 @@ public class Planet {
         return this;
     }
 
+    public Planet setBiomeList(SuSyBiomeEntry... biomeList) {
+        // Convert to standard BiomeEntry list
+        this.biomeList = Arrays.stream(biomeList)
+                .collect(Collectors.toList());
+        return this;
+    }
+
     public Planet setBiomeSize(int biomeSize) {
         this.biomeSize = biomeSize;
         return this;
@@ -182,7 +191,6 @@ public class Planet {
     }
 
     public Planet setGravity(double gravity) {
-        this.gravity = gravity;
         return this;
     }
 
