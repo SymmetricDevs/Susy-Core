@@ -191,6 +191,7 @@ public class Planet {
     }
 
     public Planet setGravity(double gravity) {
+        this.gravity = gravity;
         return this;
     }
 
