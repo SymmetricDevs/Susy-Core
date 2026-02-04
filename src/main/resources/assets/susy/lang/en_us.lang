@@ -373,7 +373,9 @@ susy.machine.quarry.name=Quarry
 susy.machine.eccentric_roll_crusher.name=Eccentric Roll Crusher
 susy.machine.eccentric_roll_crusher.tooltip=Eccentricity does not mean low efficiency.
 susy.machine.ball_mill.name=Ball Mill
-susy.machine.ball_mill.tooltip=Rolling now!
+susy.machine.ball_mill.tooltip=They see me rolling
+susy.multiblock.ball_mill.tooltip.mill_balls=Requires %s mill balls to function.
+susy.multiblock.ball_mill.error.missing_mill_balls=Not enough mill balls were found for the recipe!
 
 susy.machine.redstone_controller.not_connected=No machine to control found!
 susy.machine.redstone_controller.signal_desc=Transmitting signal: %s
@@ -1028,6 +1030,8 @@ recipemap.fuel_cell.name=Solid Oxide Fuel Cell (SOFC)
 recipemap.induction_furnace.name=Induction Furnace
 recipemap.resistance_furnace.name=Resistance Furnace
 recipemap.eccentric_roll_crusher.name=Eccentric Roll Crushing
+recipemap.ball_mill.name=Ball Milling
+
 
 susy.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 

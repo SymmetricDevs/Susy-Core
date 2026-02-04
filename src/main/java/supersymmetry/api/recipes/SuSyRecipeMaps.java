@@ -458,6 +458,20 @@ public class SuSyRecipeMaps {
                     .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressWidget.MoveType.HORIZONTAL)
                     .setSound(GTSoundEvents.FURNACE);
 
+    public static final RecipeMap<SimpleRecipeBuilder> ECCENTRIC_ROLL_CRUSHER = new RecipeMap<>(
+            "eccentric_roll_crusher", 1, 4, 0, 0, new SimpleRecipeBuilder(), false)
+                    .setSlotOverlay(false, false, GuiTextures.CRUSHED_ORE_OVERLAY)
+                    .setSlotOverlay(true, false, GuiTextures.CRUSHED_ORE_OVERLAY)
+                    .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, ProgressWidget.MoveType.HORIZONTAL)
+                    .setSound(GTSoundEvents.MACERATOR);
+
+    public static final RecipeMap<SimpleRecipeBuilder> BALL_MILL = new RecipeMap<>("ball_mill", 1, 4, 1, 0,
+            new SimpleRecipeBuilder().EUt(VA[LV]), false)
+                    .setSlotOverlay(false, false, GuiTextures.CRUSHED_ORE_OVERLAY)
+                    .setSlotOverlay(true, false, GuiTextures.DUST_OVERLAY)
+                    .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, ProgressWidget.MoveType.HORIZONTAL)
+                    .setSound(GTSoundEvents.MACERATOR);
+
     public static final RecipeMap<SimpleRecipeBuilder> INJECTION_MOLDER = new RecipeMap<>("injection_molder", 2, 1, 0,
             0, new SimpleRecipeBuilder(), false)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressWidget.MoveType.HORIZONTAL)
@@ -484,13 +498,6 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> RESISTANCE_FURNACE = new RecipeMap<>("resistance_furnace",
             6, 2, 0, 1, new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.FURNACE);
-
-    public static final RecipeMap<SimpleRecipeBuilder> ECCENTRIC_ROLL_CRUSHER = new RecipeMap<>(
-            "eccentric_roll_crusher", 1, 4, 0, 0, new SimpleRecipeBuilder(), false)
-                    .setSlotOverlay(false, false, GuiTextures.DUST_OVERLAY)
-                    .setSlotOverlay(true, false, GuiTextures.CRUSHED_ORE_OVERLAY)
-                    .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, ProgressWidget.MoveType.HORIZONTAL)
-                    .setSound(GTSoundEvents.MACERATOR);
 
     public static final RecipeMap<SimpleRecipeBuilder> SALVAGING_RECIPES = new RecipeMap<>("salvaging", 1, 9, 0, 0,
             new SimpleRecipeBuilder(), false)
@@ -571,5 +578,8 @@ public class SuSyRecipeMaps {
             }
         });
 
+        SuSyRecipeMaps.BALL_MILL.onRecipeBuild(recipeBuilder -> recipeBuilder
+                .fluidInputs(SusyMaterials.PreheatedAir
+                        .getFluid(recipeBuilder.getDuration() * recipeBuilder.getEUt() / 512)));
     }
 }

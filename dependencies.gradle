@@ -20,8 +20,6 @@
  * For more details, see https://docs.gradle.org/8.0.1/userguide/java_library_plugin.html#sec:java_library_configurations_graph
  */
 dependencies {
-    implementation 'org.reflections:reflections:0.10.2'
-
     // # Fix crashes on macOS with Narrator
     runtimeOnly 'com.cleanroommc:osxnarratorblocker:1.0'
 
@@ -83,6 +81,12 @@ dependencies {
     // LittleTiles
     compileOnly rfg.deobf("curse.maven:creativecore-257814:4722163")
     compileOnly rfg.deobf("curse.maven:littletiles-257818:5180387")
+
+    // ProjectRed
+    compileOnly 'codechicken:ChickenASM:1.12-1.0.2.9' transitive false
+    compileOnly rfg.deobf('curse.maven:mrtjpcore-229002:2735197')
+    compileOnly rfg.deobf('curse.maven:cb-multipart-258426:2755790')
+    compileOnly rfg.deobf('curse.maven:project-red-core-228702:2745545')
 
     runtimeOnly rfg.deobf("curse.maven:serverutil-282484:2503313")
     // # Optional dependencies. Uncomment the ones you need

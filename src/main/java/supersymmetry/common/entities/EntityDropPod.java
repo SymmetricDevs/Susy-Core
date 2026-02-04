@@ -276,7 +276,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
             if (this.hasTakenOff()) {
                 if (this.motionY < 10.D) {
                     if (this.motionY < 1.D) {
-                        this.motionY += 0.1;
+                        this.motionY += 0.15;
                     }
                     this.motionY *= 1.1D;
                 }

@@ -21,7 +21,6 @@ import gregtech.api.items.metaitem.MetaItem.MetaValueItem;
 import gregtech.api.items.metaitem.MetaOreDictItem;
 import gregtech.api.items.metaitem.MetaOreDictItem.OreDictValueItem;
 import gregtech.api.items.metaitem.StandardMetaItem;
-import gregtech.api.items.metaitem.stats.IItemDurabilityManager;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.info.MaterialIconSet;
 import gregtech.api.unification.material.registry.MaterialRegistry;
@@ -33,12 +32,14 @@ import supersymmetry.SuSyValues;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
 import supersymmetry.common.item.behavior.DataCardBehavior;
+import supersymmetry.common.item.behavior.MillBallDurabilityManager;
 import supersymmetry.common.item.behavior.PipeNetPainterBehavior;
 import supersymmetry.common.item.behavior.RocketConfigBehavior;
 
 public class SuSyMetaItems {
 
-    private static int itemIndex = 0;
+    // DO NOT CHANGE
+    private static int itemIndex = 1;
 
     private static StandardMetaItem metaItem;
     public static SuSyArmorItem armorItem;
@@ -104,8 +105,7 @@ public class SuSyMetaItems {
                         if (canGenerate(SusyOrePrefix.millBall, material)) {
                             var metaItem = addItem(i,
                                     new UnificationEntry(SusyOrePrefix.millBall, material).toString());
-                            metaItem.addComponents((IItemDurabilityManager) stack -> 0.5);
-                            metaItem.setMaxStackSize(1);
+                            metaItem.addComponents(MillBallDurabilityManager.INSTANCE);
                         }
                     }
                 }
@@ -123,7 +123,7 @@ public class SuSyMetaItems {
         addExtraBehaviours();
 
         // initialize metaitems here
-        if (itemIndex != 0) { // but only once
+        if (itemIndex != 1) { // but only once
             return;
         }
         CATALYST_BED_SUPPORT_GRID = initOneItem("catalyst_bed_support_grid");

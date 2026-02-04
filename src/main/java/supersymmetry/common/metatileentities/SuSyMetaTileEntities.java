@@ -415,7 +415,7 @@ public class SuSyMetaTileEntities {
         ECCENTRIC_ROLL_CRUSHER = registerMetaTileEntity(14741, new MetaTileEntityEccentricRollCrusher(
                 susyId("eccentric_roll_crusher"), SuSyRecipeMaps.ECCENTRIC_ROLL_CRUSHER));
         BALL_MILL = registerMetaTileEntity(14742,
-                new MetaTileEntityBallMill(susyId("ball_mill"), RecipeMaps.MACERATOR_RECIPES));
+                new MetaTileEntityBallMill(susyId("ball_mill"), SuSyRecipeMaps.BALL_MILL));
 
         // 14800 Pyrotech Integration: Primitive Smelter
         PRIMITIVE_ITEM_IMPORT = registerMetaTileEntity(14801,

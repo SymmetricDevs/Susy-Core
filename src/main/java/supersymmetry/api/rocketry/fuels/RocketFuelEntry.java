@@ -12,38 +12,43 @@ public class RocketFuelEntry {
 
     public static class RocketFuelEntryBuilder {
 
-        private RocketFuelEntry rfe;
+        private String registryName;
+        private ArrayList<Tuple<Material, Integer>> composition;
+        private double density;
+        private double sIVacuum;
+        private double sIPerPressure;
 
         public RocketFuelEntryBuilder(String name) {
-            this.rfe.registryName = name;
-            this.rfe.composition = new ArrayList<>();
+            this.registryName = name;
+            this.composition = new ArrayList<>();
         }
 
         public RocketFuelEntryBuilder addComponent(Material mat, int proportion) {
-            rfe.composition.add(new Tuple<Material, Integer>(mat, proportion));
+            composition.add(new Tuple<>(mat, proportion));
             return this;
         }
 
         public RocketFuelEntryBuilder density(double density) {
-            rfe.density = density;
+            this.density = density;
             return this;
         }
 
         public RocketFuelEntryBuilder sIVacuum(double sIVacuum) {
-            rfe.sIVacuum = sIVacuum;
+            this.sIVacuum = sIVacuum;
             return this;
         }
 
         public RocketFuelEntryBuilder sIPerPressure(double sIPerPressure) {
-            rfe.sIPerPressure = sIPerPressure;
+            this.sIPerPressure = sIPerPressure;
             return this;
         }
 
         public void register() {
-            if (rfe.composition.isEmpty()) {
+            if (this.composition.isEmpty()) {
                 throw new IllegalStateException("empty list of fuel component entries");
             }
-            RocketFuelEntry.registerFuel(rfe);
+            RocketFuelEntry.registerFuel(new RocketFuelEntry(this.registryName, this.composition, this.density,
+                    this.sIVacuum, this.sIPerPressure));
         }
     }
 
