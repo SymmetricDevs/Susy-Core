@@ -51,7 +51,7 @@ public class MetaTileEntityCupolaFurnace extends RecipeMapPrimitiveMultiblockCon
     public static TraceabilityPredicate isIndicatorPredicate() {
         return new TraceabilityPredicate((blockWorldState) -> {
             if (air().test(blockWorldState)) {
-                blockWorldState.getMatchContext().increment("tankLength", 1);
+                blockWorldState.getMatchContext().increment("height", 1);
                 return true;
             } else
                 return false;
@@ -72,7 +72,6 @@ public class MetaTileEntityCupolaFurnace extends RecipeMapPrimitiveMultiblockCon
                 .where('A', air())
                 .where('H', isIndicatorPredicate())
                 .where('S', selfPredicate())
-                .where(' ', air())
                 .where('O', abilities(MultiblockAbility.EXPORT_ITEMS))
                 .where('F', frames(Materials.Steel))
                 .build();
@@ -82,6 +81,8 @@ public class MetaTileEntityCupolaFurnace extends RecipeMapPrimitiveMultiblockCon
     protected void formStructure(PatternMatchContext context) {
         super.formStructure(context);
         this.initializeAbilities();
+        this.size = context.getOrDefault("height", 1) - 2; // dumb fix since there's 2 air blocks under where the height
+                                                           // calc should start
     }
 
     @Override
