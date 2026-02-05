@@ -2,9 +2,12 @@ package supersymmetry.common.metatileentities.multi.primitive;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.*;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
 
+import gregtech.api.capability.impl.ItemHandlerList;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -13,13 +16,14 @@ import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapPrimitiveMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.unification.material.Materials;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
-import supersymmetry.api.SusyLog;
+import supersymmetry.client.renderer.textures.SusyTextures;
 
 public class MetaTileEntityCupolaFurnace extends RecipeMapPrimitiveMultiblockController {
 
@@ -65,6 +69,11 @@ public class MetaTileEntityCupolaFurnace extends RecipeMapPrimitiveMultiblockCon
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
         return Textures.PRIMITIVE_BRICKS;
+    }
+
+    @SideOnly(Side.CLIENT)
+    protected @NotNull ICubeRenderer getFrontOverlay() {
+        return SusyTextures.CUPOLA_FURNACE_OVERLAY;
     }
 
     @Override
