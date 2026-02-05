@@ -40,6 +40,7 @@ public class MetaTileEntityCupolaFurnace extends RecipeMapPrimitiveMultiblockCon
 
     public MetaTileEntityCupolaFurnace(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.CUPOLA_FURNACE);
+        this.recipeMapWorkable = new CupolaFurnaceLogic(this, SuSyRecipeMaps.CUPOLA_FURNACE);
     }
 
     @Override
@@ -61,8 +62,9 @@ public class MetaTileEntityCupolaFurnace extends RecipeMapPrimitiveMultiblockCon
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start(RIGHT, BACK, UP)
                 .aisle("FAF", "AOA", "FAF")
-                .aisle("CCC", "CHC", "CSC")
-                .aisle("CCC", "CHC", "CCC").setRepeatable(2, 8)
+                .aisle("CCC", "CAC", "CSC")
+                .aisle("CCC", "CAC", "CCC")
+                .aisle("CCC", "CHC", "CCC").setRepeatable(1, 8)
                 .where('C',
                         states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.PRIMITIVE_BRICKS))
                                 .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMinGlobalLimited(1)
