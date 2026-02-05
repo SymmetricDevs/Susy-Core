@@ -51,6 +51,18 @@ public class MetaTileEntityCupolaFurnace extends RecipeMapPrimitiveMultiblockCon
     }
 
     @Override
+    protected void initializeAbilities() {
+        this.importItems = new ItemHandlerList(getAbilities(MultiblockAbility.IMPORT_ITEMS));
+        this.exportItems = new ItemHandlerList(getAbilities(MultiblockAbility.EXPORT_ITEMS));
+    }
+
+    @Override
+    protected void formStructure(PatternMatchContext context) {
+        super.formStructure(context);
+        this.initializeAbilities();
+    }
+
+    @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
         return Textures.PRIMITIVE_BRICKS;
     }
