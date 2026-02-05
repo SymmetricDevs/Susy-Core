@@ -7,6 +7,7 @@ import static supersymmetry.api.util.SuSyUtility.susyId;
 import java.util.ArrayList;
 import java.util.function.Function;
 
+import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 
@@ -78,7 +79,6 @@ public class SuSyMetaTileEntities {
     public static CatalystMachineMetaTileEntity[] VULCANIZING_PRESS;
     public static SuSySimpleSteamMetaTileEntity[] STEAM_VULCANIZING_PRESS;
 
-    public static CatalystMachineMetaTileEntity[] BATCH_REACTOR;
     public static SuSySimpleSteamMetaTileEntity[] STEAM_BATCH_REACTOR;
 
     public static CatalystMachineMetaTileEntity[] ROASTER;
@@ -360,6 +360,8 @@ public class SuSyMetaTileEntities {
                 SuSyRecipeMaps.BUBBLE_COLUMN_REACTOR_RECIPES, SusyTextures.BUBBLE_COLUMN_REACTOR_OVERLAY, true,
                 SuSyUtility.reactorTankSizeFunction);
 
+        registerSimpleSteamMTE(STEAM_BATCH_REACTOR, 20000, "batch_reactor", SuSyRecipeMaps.BATCH_REACTOR_RECIPES,
+                SuSySteamProgressIndicators.ARROW, SusyTextures.BATCH_REACTOR_OVERLAY, false);
         registerSimpleMTE(BATCH_REACTOR, 12, 14681, "batch_reactor", SuSyRecipeMaps.BATCH_REACTOR_RECIPES,
                 SusyTextures.BATCH_REACTOR_OVERLAY, true, SuSyUtility.reactorTankSizeFunction);
 
