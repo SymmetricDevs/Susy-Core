@@ -217,6 +217,13 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
             return voidEnergy;
         }
 
+        @Override
+        protected void completeRecipe() {
+            int prev_eut = recipeEUt;
+            super.completeRecipe();
+            recipeEUt = prev_eut;
+        }
+
         public boolean tryDrawEnergy() {
             return drawEnergy(this.recipeEUt, true);
         }
