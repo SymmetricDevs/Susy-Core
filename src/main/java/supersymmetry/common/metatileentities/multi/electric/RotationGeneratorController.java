@@ -165,7 +165,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
 
     @Override
     protected long getMaxVoltage() {
-        if (!isFull && speed > 0) {
+        if (!isFull && speed > 0 && ((SuSyTurbineRecipeLogic) recipeMapWorkable).tryDrawEnergy()) {
             return ((SuSyTurbineRecipeLogic) recipeMapWorkable).getActualVoltage();
         } else {
             return 0L;
