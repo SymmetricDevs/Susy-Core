@@ -229,11 +229,6 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
             return voidEnergy;
         }
 
-        @Override
-        protected boolean shouldSearchForRecipes() {
-            return super.shouldSearchForRecipes();
-        }
-
         public boolean tryDrawEnergy() {
             return drawEnergy((int) getMaxParallelVoltage(), true); // have energy draw only tied to speed? (ignore
                                                                     // recipe EUt entirely)
