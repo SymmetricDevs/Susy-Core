@@ -93,6 +93,8 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
             speed = Math.min(speed, maxSpeed);
             speed = Math.max(speed, 0);
 
+            ((SuSyTurbineRecipeLogic) recipeMapWorkable).doDrawEnergy();
+
             if (lubricantStack != null && lubricantCounter >= (600 * 3600)) {
                 lubricantCounter = 0;
                 tanks.drain(new FluidStack(lubricantStack.getFluid(), lubricantInfo.amount_required), true);
@@ -163,7 +165,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
 
     @Override
     protected long getMaxVoltage() {
-        if (!isFull && recipeMapWorkable.isActive()) {
+        if (!isFull && speed > 0) {
             return ((SuSyTurbineRecipeLogic) recipeMapWorkable).getActualVoltage();
         } else {
             return 0L;
@@ -190,6 +192,16 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
                 return false;
             }
             return sufficientFluids;
+        }
+
+        @Override
+        protected void updateRecipeProgress() {
+            if (canRecipeProgress && drawEnergy(recipeEUt, true)) {
+                // as recipe starts with progress on 1 this has to be > only not => to compensate for it
+                if (++progressTime > maxProgressTime) {
+                    completeRecipe();
+                }
+            }
         }
 
         public boolean getVoidingEnergy() {
@@ -225,7 +237,12 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         }
 
         public boolean tryDrawEnergy() {
-            return drawEnergy(this.recipeEUt, true);
+            return drawEnergy(proposedEUt, true); // replace recipeEUt with proposedEUt since if the recipe cannot be
+                                                  // run but speed > 0, recipeEUt gets set to 0 but proposedEUt isn't
+        }
+
+        public boolean doDrawEnergy() {
+            return drawEnergy(proposedEUt, false);
         }
 
         @Override
@@ -254,7 +271,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         }
 
         protected long getActualVoltage() {
-            return scaleProduction(-recipeEUt);
+            return scaleProduction(-proposedEUt);
         }
 
         public int getCurrentParallel() {
