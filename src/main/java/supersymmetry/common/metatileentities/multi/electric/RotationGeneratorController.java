@@ -198,7 +198,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         protected void updateRecipeProgress() {
             if (canRecipeProgress && drawEnergy(recipeEUt, true)) {
                 // as recipe starts with progress on 1 this has to be > only not => to compensate for it
-                if (++progressTime > maxProgressTime) {
+                if (++progressTime > getMaxProgress()) {
                     completeRecipe();
                 }
             }
