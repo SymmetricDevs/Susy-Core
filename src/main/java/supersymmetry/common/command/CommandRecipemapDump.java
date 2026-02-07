@@ -140,7 +140,9 @@ public class CommandRecipemapDump extends CommandBase {
             if (item.getHasSubtypes()) {
                 NonNullList<ItemStack> subItems = NonNullList.create();
                 for (CreativeTabs tab : item.getCreativeTabs()) {
-                    item.getSubItems(tab, subItems);
+                    if (tab != null) {
+                        item.getSubItems(tab, subItems);
+                    }
                 }
                 for (ItemStack stack : subItems) {
                     allItemsObj.add(fullStackInformation(stack));
