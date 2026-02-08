@@ -1,12 +1,11 @@
 package supersymmetry.api.rocketry.fuels;
 
+import gregtech.api.unification.material.Material;
+import net.minecraft.util.Tuple;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import net.minecraft.util.Tuple;
-
-import gregtech.api.unification.material.Material;
 
 public class RocketFuelEntry {
 
@@ -14,7 +13,7 @@ public class RocketFuelEntry {
 
         private String registryName;
         private ArrayList<Tuple<Material, Integer>> composition;
-        private double density;
+        private double density = 1;
         private double sIVacuum;
         private double sIPerPressure;
 
