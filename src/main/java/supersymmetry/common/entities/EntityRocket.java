@@ -1,8 +1,6 @@
 package supersymmetry.common.entities;
 
-import java.util.List;
-import java.util.Random;
-
+import gregtech.api.GregTechAPI;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -18,8 +16,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import gregtech.api.GregTechAPI;
 import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AFSRendered;
@@ -28,6 +24,9 @@ import supersymmetry.client.renderer.handler.IAlwaysRender;
 import supersymmetry.client.renderer.particles.SusyParticleFlameLarge;
 import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
 import supersymmetry.common.network.CPacketRocketInteract;
+
+import java.util.List;
+import java.util.Random;
 
 public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender, AFSRendered {
 
@@ -241,6 +240,10 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
         return cargo.mass();
     }
 
+    public int getFuelNeeded() {
+        return 1000;
+    }
+
     @Override
     public boolean canBeCollidedWith() {
         return true; // This needs to be true to allow passengers
@@ -260,11 +263,6 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
     public void setupRocketSound() {
         this.soundRocket = new MovingSoundRocket(this);
         Minecraft.getMinecraft().getSoundHandler().playSound(this.soundRocket);
-    }
-
-    @Override
-    public boolean shouldRenderInPass(int pass) {
-        return pass == RENDER_PASS_ALWAYS;
     }
 
     @Override // The override is about leashing the rocket, which makes it alright to completely ignore
