@@ -1,15 +1,14 @@
 package supersymmetry.api.rocketry.rockets;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import supersymmetry.Supersymmetry;
+import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
-
-import supersymmetry.Supersymmetry;
-import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 
 public abstract class AbstractRocketBlueprint {
 
@@ -128,6 +127,16 @@ public abstract class AbstractRocketBlueprint {
 
     public double getThrust(RocketFuelEntry entry, double gravity, String componentType) {
         return this.getStages().stream().mapToDouble((stage) -> stage.getThrust(entry, gravity, componentType)).sum();
+    }
+
+    public double getEffectiveFuelVelocity(RocketFuelEntry entry, double gravity, String componentType) {
+        double totalFuelThroughput = this.getStages().stream().mapToDouble((stage) -> stage.getFuelThroughput(componentType)).sum();
+
+        return this.getStages().stream().mapToDouble((stage) -> stage.getEffectiveFuelVelocity(entry, gravity) * stage.getFuelThroughput(componentType) / totalFuelThroughput).sum();
+    }
+
+    public double getFuelVolume() {
+        return this.getStages().stream().mapToDouble(RocketStage::getFuelCapacity).sum();
     }
 
     public int getComponentCount(String componentType) {

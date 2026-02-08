@@ -1,23 +1,21 @@
 package supersymmetry.api.items;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
-
-import org.jetbrains.annotations.NotNull;
-
 import gregtech.api.GTValues;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.stack.ItemMaterialInfo;
 import gregtech.api.util.ItemStackHashStrategy;
 import it.unimi.dsi.fastutil.Hash;
 import it.unimi.dsi.fastutil.objects.ObjectOpenCustomHashSet;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.util.SuSyUtility;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBTTagCompound> {
 

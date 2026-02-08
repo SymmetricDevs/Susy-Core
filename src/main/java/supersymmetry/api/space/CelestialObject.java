@@ -1,20 +1,20 @@
 package supersymmetry.api.space;
 
-import java.util.List;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 import javax.annotation.Nullable;
-
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import java.util.List;
 
 public class CelestialObject {
 
     private String translationKey;
 
-    private double mass;
+    private double mass; // Normalized by Earth's mass
     private double posT;
     private double posX;
     private double posY;
     private double posZ;
+    private double radius = 1; // Normalized by Earth's radius
 
     private CelestialObject parentBody;
     private CelestialBodyType celestialBodyType;
@@ -37,24 +37,36 @@ public class CelestialObject {
         }
     }
 
-    double getMass() {
+    public double getMass() {
         return mass;
     }
 
-    double getPosT() {
+    public double getPosT() {
         return posT;
     }
 
-    double getPosX() {
+    public double getPosX() {
         return posX;
     }
 
-    double getPosY() {
+    public double getPosY() {
         return posY;
     }
 
-    double getPosZ() {
+    public double getPosZ() {
         return posZ;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
+    public double getEscapeVelocity() {
+        return 11186 * Math.sqrt(mass / radius);
+    }
+
+    public void setRadius(double radius) {
+        this.radius = radius;
     }
 
     @Nullable
