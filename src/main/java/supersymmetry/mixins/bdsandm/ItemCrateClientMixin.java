@@ -3,6 +3,7 @@ package supersymmetry.mixins.bdsandm;
 import funwayguy.bdsandm.inventory.capability.BdsmCapabilies;
 import funwayguy.bdsandm.inventory.capability.ICrate;
 import funwayguy.bdsandm.items.ItemCrate;
+import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -19,12 +20,15 @@ import java.util.List;
 
 @Mixin(ItemCrate.class)
 public class ItemCrateClientMixin extends ItemBlock {
+    public ItemCrateClientMixin(Block block) {
+        super(block);
+    }
 
     /**
      * @author Bruberu
      * @reason It was literally using an assert in client-side logic, causing crashes in servers.
      */
-    @Overwrite
+    @Overwrite(remap = true)
     @SideOnly(Side.CLIENT)
     public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<String> tooltip, @Nonnull ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
