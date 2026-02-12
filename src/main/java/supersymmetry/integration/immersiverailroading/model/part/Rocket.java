@@ -11,7 +11,7 @@ import util.Matrix4;
 
 public class Rocket {
 
-    public static final String ROCKET_COMPONENT_REGEX = ".*ROCKET*.";
+    public static final String ROCKET_COMPONENT_REGEX = ".*ROCKET.*";
     protected final ModelComponent rocket;
 
     public Rocket(ComponentProvider provider, ModelState state,
@@ -19,10 +19,15 @@ public class Rocket {
                   Function<EntityTransporterErector, Float> lifterAngle) {
         this.rocket = ModelHelper.parseCustomComponent(provider, ROCKET_COMPONENT_REGEX);
         state.push(settings -> settings
-                .add((ModelState.GroupVisibility) (stock, string) -> rocket.modelIDs.contains(string) ?
-                        stock instanceof EntityTransporterErector transporterErector &&
-                                renderRocket.apply(transporterErector) :
-                        null)
+                .add((ModelState.GroupVisibility) (stock, string) -> {
+                    if (rocket.modelIDs.contains(string)) {
+                        if (stock instanceof EntityTransporterErector transporterErector) {
+                            return renderRocket.apply(transporterErector); // true = visible, false = hidden
+                        }
+                        return false; // Hide if not the right entity type
+                    }
+                    return null; // Not a rocket component, let other handlers decide
+                })
                 .add((ModelState.Animator) (stock, partialTicks) -> new Matrix4()
                         .translate(-7, 1.1, 0)
                         .rotate(stock instanceof EntityTransporterErector transporterErector ?

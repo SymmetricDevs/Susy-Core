@@ -1701,3 +1701,6 @@ chat.susy.location_card.x=X (%s)
 chat.susy.location_card.y=Y (%s)
 chat.susy.location_card.z=Z (%s)
 
+susy.machine.large_railroad_engineering_station.name=Large Railroad Engineering Station
+susy.machine.large_railroad_engineering_station.description=A massive facility for constructing and maintaining railroad rolling stock
+susy.machine.large_railroad_engineering_station.tip=Used to build and service trains
