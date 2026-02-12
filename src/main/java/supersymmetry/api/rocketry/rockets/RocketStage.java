@@ -1,26 +1,20 @@
 package supersymmetry.api.rocketry.rockets;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.common.util.Constants.NBT;
-
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.common.rocketry.components.ComponentLavalEngine;
 import supersymmetry.common.rocketry.components.ComponentLiquidFuelTank;
+
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class RocketStage {
 
@@ -154,8 +148,12 @@ public class RocketStage {
                 .sum();
     }
 
+    public double getEffectiveFuelVelocity(RocketFuelEntry rocketFuelEntry, double gravity) {
+        return rocketFuelEntry.getSpecificImpulse() * gravity;
+    }
+
     public double getThrust(RocketFuelEntry rocketFuelEntry, double gravity, String componentType) {
-        return getFuelThroughput(componentType) * rocketFuelEntry.getSpecificImpulse() * gravity;
+        return getFuelThroughput(componentType) * getEffectiveFuelVelocity(rocketFuelEntry, gravity);
     }
 
     public double getRadius() {

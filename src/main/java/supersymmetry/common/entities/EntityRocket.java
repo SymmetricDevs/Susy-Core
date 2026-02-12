@@ -1,8 +1,6 @@
 package supersymmetry.common.entities;
 
-import java.util.List;
-import java.util.Random;
-
+import gregtech.api.GregTechAPI;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -18,16 +16,18 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import gregtech.api.GregTechAPI;
 import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AFSRendered;
+import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.client.audio.MovingSoundRocket;
 import supersymmetry.client.renderer.handler.IAlwaysRender;
 import supersymmetry.client.renderer.particles.SusyParticleFlameLarge;
 import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
 import supersymmetry.common.network.CPacketRocketInteract;
+
+import java.util.List;
+import java.util.Random;
 
 public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender, AFSRendered {
 
@@ -35,6 +35,7 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
     protected static final float jerk = 0.0001F;
     public CargoItemStackHandler cargo;
     private RocketFuelEntry fuelEntry;
+    private int maxFuelVolume;
 
     @SideOnly(Side.CLIENT)
     private MovingSoundRocket soundRocket;
@@ -114,6 +115,9 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
             this.cargo = new CargoItemStackHandler(this.getEntityData().getInteger("maxVolume"),
                     this.getEntityData().getInteger("maxWeight"));
             this.fuelEntry = RocketFuelEntry.getCopyOf(this.getEntityData().getString("fuel"));
+            AbstractRocketBlueprint blueprint = AbstractRocketBlueprint.getCopyOf(this.getEntityData().getCompoundTag("rocket").getString("name"));
+            blueprint.readFromNBT(this.getEntityData().getCompoundTag("rocket"));
+            this.maxFuelVolume = (int) blueprint.getFuelVolume();
         }
     }
 
@@ -286,5 +290,9 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
     @Override
     public AxisAlignedBB modelAABB() {
         return new AxisAlignedBB(new Vec3d(4, 46, 4), (new Vec3d(-4, 0, -4)));
+    }
+
+    public int getFuelVolume() {
+        return this.maxFuelVolume;
     }
 }
