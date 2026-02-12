@@ -26,8 +26,7 @@ public class SuccessCalculation {
 
         // TODO: somehow incorporate cargo volume in a fair way
         double velocitySpeedup = blueprint.getEffectiveFuelVelocity(null, gravity / 9.81, "engine") *
-                Math.log((fuel.getDensity() * blueprint.getFuelVolume() + blueprint.getMass())
-                        / blueprint.getMass());
+                Math.log((fuel.getDensity() * blueprint.getFuelVolume() + blueprint.getMass()) / blueprint.getMass());
 
         // Very approximate, assuming constant density rho = 5515 kg/m^3
         // g = GM / R^2
@@ -72,7 +71,8 @@ public class SuccessCalculation {
             gravMult = SuSyDimensions.PLANETS.get(rocket.world.provider.getDimension()).gravity;
         }
         if (Planetoid.PLANETOIDS.containsValue(rocket.world.provider.getDimension())) {
-            escapeVelocity = Planetoid.PLANETOIDS.inverse().get(rocket.world.provider.getDimension()).getEscapeVelocity();
+            escapeVelocity = Planetoid.PLANETOIDS.inverse().get(rocket.world.provider.getDimension())
+                    .getEscapeVelocity();
         }
         double weight = blueprint.getMass() * gravMult;
         double thrust = blueprint.getThrust(rocket.getFuel(), gravMult, "engine");
@@ -86,8 +86,8 @@ public class SuccessCalculation {
 
         // Tsiolkovsky rocket equation
         double velocitySpeedup = blueprint.getEffectiveFuelVelocity(rocket.getFuel(), gravMult, "engine") *
-                Math.log((rocket.getFuel().getDensity() * blueprint.getFuelVolume() + blueprint.getMass())
-                    / (blueprint.getMass()));
+                Math.log((rocket.getFuel().getDensity() * blueprint.getFuelVolume() + blueprint.getMass()) /
+                        (blueprint.getMass()));
 
         if (velocitySpeedup < escapeVelocity) {
             return LaunchResult.CRASHES;
