@@ -14,7 +14,7 @@ public class EntityTransporterErector extends Freight implements IAlwaysRender {
 
     @TagField("isRocketLoaded")
     @TagSync
-    private boolean isRocketLoaded;
+    private boolean isRocketLoaded = false;
     @TagField("lifterAngle")
     @TagSync
     private float lifterAngle = (float) 0;

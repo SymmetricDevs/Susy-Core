@@ -165,7 +165,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
 
     @Override
     protected long getMaxVoltage() {
-        if (!isFull && speed > 0) {
+        if (!isFull && speed > 0 && ((SuSyTurbineRecipeLogic) recipeMapWorkable).tryDrawEnergy()) {
             return ((SuSyTurbineRecipeLogic) recipeMapWorkable).getActualVoltage();
         } else {
             return 0L;
@@ -189,6 +189,10 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
             // Hack to get the recipeEUt early
             proposedEUt = recipe.getEUt();
             if (proposedEUt > getMaximumAllowedVoltage()) {
+                return false;
+            }
+            // Prevent recipe from starting if energy buffer is full and we're not voiding energy
+            if (isFull && !voidEnergy) {
                 return false;
             }
             return sufficientFluids;
@@ -230,12 +234,12 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         }
 
         public boolean tryDrawEnergy() {
-            return drawEnergy(proposedEUt, true); // replace recipeEUt with proposedEUt since if the recipe cannot be
-                                                  // run but speed > 0, recipeEUt gets set to 0 but proposedEUt isn't
+            return drawEnergy((int) getMaxParallelVoltage(), true); // have energy draw only tied to speed? (ignore
+            // recipe EUt entirely)
         }
 
         public boolean doDrawEnergy() {
-            return drawEnergy(proposedEUt, false);
+            return drawEnergy((int) getMaxParallelVoltage(), false);
         }
 
         @Override
@@ -264,7 +268,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         }
 
         protected long getActualVoltage() {
-            return scaleProduction(-proposedEUt);
+            return scaleProduction(getMaxParallelVoltage());
         }
 
         public int getCurrentParallel() {

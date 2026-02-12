@@ -7,6 +7,7 @@ import static supersymmetry.api.util.SuSyUtility.susyId;
 import java.util.ArrayList;
 import java.util.function.Function;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 
@@ -45,6 +46,7 @@ import supersymmetry.common.metatileentities.multi.electric.strand.*;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCoagulationTank;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimitiveMudPump;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimitiveSmelter;
+import supersymmetry.common.metatileentities.multi.rail.MetaTileEntityLargeRES;
 import supersymmetry.common.metatileentities.multi.rocket.*;
 import supersymmetry.common.metatileentities.multi.steam.MetaTileEntitySuSyLargeBoiler;
 import supersymmetry.common.metatileentities.multi.steam.MetaTileEntitySuSyLargeHammer;
@@ -283,6 +285,8 @@ public class SuSyMetaTileEntities {
 
     public static MetaTileEntityEccentricRollCrusher ECCENTRIC_ROLL_CRUSHER;
     public static MetaTileEntityBallMill BALL_MILL;
+
+    public static MetaTileEntityLargeRES LARGE_RES;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500,
@@ -716,6 +720,8 @@ public class SuSyMetaTileEntities {
 
         registerSimpleMTE(RESISTANCE_FURNACE, 12, 18503, "resistance_furnace", SuSyRecipeMaps.RESISTANCE_FURNACE,
                 Textures.ELECTRIC_FURNACE_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+        LARGE_RES = registerMetaTileEntity(18520,
+                new MetaTileEntityLargeRES(new ResourceLocation("railroad_engineering_station")));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name,

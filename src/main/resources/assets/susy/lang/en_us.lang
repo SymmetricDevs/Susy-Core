@@ -1500,3 +1500,8 @@ susy.msg.rocket_component.wrong_tile=A tile was used incorrectly.
 susy.msg.rocket_component.interstage_not_cylindrical=The interstage looks weird.
 
 entity.Rocket.name=Soyuz FG Rocket
+
+
+susy.machine.large_railroad_engineering_station.name=Large Railroad Engineering Station
+susy.machine.large_railroad_engineering_station.description=A massive facility for constructing and maintaining railroad rolling stock
+susy.machine.large_railroad_engineering_station.tip=Used to build and service trains

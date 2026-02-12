@@ -8,7 +8,7 @@
 		"horsepower": 3000,
 		"tractive_effort_lbf": 92000,
 		"max_speed_kmh": 15,
-		"weight_kg": 3000,
+		"weight_kg": 300000,
 		"horn_sustained": true
 	},
 	"trucks": {
