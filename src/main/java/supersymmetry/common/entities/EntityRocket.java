@@ -245,6 +245,10 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
         return cargo.mass();
     }
 
+    public int getFuelNeeded() {
+        return 1000;
+    }
+
     @Override
     public boolean canBeCollidedWith() {
         return true; // This needs to be true to allow passengers
@@ -264,11 +268,6 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
     public void setupRocketSound() {
         this.soundRocket = new MovingSoundRocket(this);
         Minecraft.getMinecraft().getSoundHandler().playSound(this.soundRocket);
-    }
-
-    @Override
-    public boolean shouldRenderInPass(int pass) {
-        return pass == RENDER_PASS_ALWAYS;
     }
 
     @Override // The override is about leashing the rocket, which makes it alright to completely ignore
