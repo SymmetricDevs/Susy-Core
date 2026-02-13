@@ -82,6 +82,7 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
     List<ItemComponentType> spawnedRollingStackComponentsSorted;
     private NotifiableItemStackHandler trainOutputSlot;
     private NotifiableItemStackHandler trainInputSlot;
+    private List<BlockPos> railPositions = new ArrayList<>();
 
     private UUID previousEntityUUID;
 
@@ -502,7 +503,7 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
                         "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA",
                         "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA",
                         "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA")
-                .where('A', air())
+                .where('A', any())
                 .where('B', states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH)
                         .getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)))
                 .where('C', selfPredicate())
@@ -542,6 +543,18 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
     protected void formStructure(PatternMatchContext context) {
         super.formStructure(context);
         this.setStructureAABB();
+
+        // Capture all rail positions from the structure
+        this.railPositions.clear();
+        Object railsObj = context.get("D");
+        if (railsObj instanceof List) {
+            List<?> railsList = (List<?>) railsObj;
+            for (Object posObj : railsList) {
+                if (posObj instanceof BlockPos) {
+                    this.railPositions.add((BlockPos) posObj);
+                }
+            }
+        }
     }
 
     @Override
@@ -655,8 +668,29 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
         }
     }
 
-    public BlockPos getRailPos(net.minecraft.util.math.Vec3i direction) {
-        return getPos().add(direction.getX() * 5, 0, direction.getZ() * 5);
+    public BlockPos getRailPos() {
+        // Use the center rail position from the structure
+        // If we have rails, return the middle one
+        if (!this.railPositions.isEmpty()) {
+            // Get the rail closest to the center of the structure
+            BlockPos center = getPos();
+            BlockPos closestRail = this.railPositions.get(0);
+            double minDist = center.distanceSq(closestRail);
+
+            for (BlockPos rail : this.railPositions) {
+                double dist = center.distanceSq(rail);
+                if (dist < minDist) {
+                    minDist = dist;
+                    closestRail = rail;
+                }
+            }
+            return closestRail;
+        }
+
+        // Fallback to old behavior if no rails found
+        return getPos().add(this.getFrontFacing().rotateY().getDirectionVec().getX() * 5,
+                0,
+                this.getFrontFacing().rotateY().getDirectionVec().getZ() * 5);
     }
 
     public EntityRollingStock spawnRollingStock(ItemStack stack) {
@@ -674,9 +708,8 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
             // double offset = def.getCouplerPosition(EntityCoupleableRollingStock.CouplerType.BACK, gauge) -
             // Config.ConfigDebug.couplerRange;
 
-            // Spawn on rails that run perpendicular to the controller
-            // Using rotateY() to get the direction to the left of the controller
-            BlockPos railPos = getRailPos(this.getFrontFacing().rotateY().getDirectionVec());
+            // Spawn on rails that are part of the structure
+            BlockPos railPos = getRailPos();
 
             TickPos tp = new TickPos(
                     0,
@@ -743,6 +776,7 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
         super.invalidateStructure();
         this.structureAABB = null;
         this.selectedRollingStock = null;
+        this.railPositions.clear();
         if (this.spawnedRollingStock != null) {
             this.spawnedRollingStock.kill();
             this.spawnedRollingStock = null;
@@ -879,6 +913,7 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
         protected boolean setupAndConsumeRecipeInputs(@NotNull Recipe recipe,
                                                       @NotNull IItemHandlerModifiable importInventory,
                                                       @NotNull IMultipleTankHandler importFluids) {
+            // Use parent logic but don't validate outputs
             boolean result = super.setupAndConsumeRecipeInputs(recipe, importInventory, importFluids);
 
             if (result) {
@@ -923,6 +958,7 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
         @Override
         protected void completeRecipe() {
             GTTransferUtils.addFluidsToFluidHandler(this.getOutputTank(), false, this.fluidOutputs);
+            // Don't output items - train is already on rails from setupAndConsumeRecipeInputs
             this.progressTime = 0;
             this.setMaxProgress(0);
             this.recipeEUt = 0;
