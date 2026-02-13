@@ -29,6 +29,7 @@ import supersymmetry.api.capability.impl.SuSyBoilerLogic;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.recipes.builders.*;
 import supersymmetry.common.materials.SusyMaterials;
+import supersymmetry.common.metatileentities.multi.rail.LargeRESRecipeMap;
 
 public class SuSyRecipeMaps {
 
@@ -564,6 +565,8 @@ public class SuSyRecipeMaps {
 
     public static final RecipeMap<SimpleRecipeBuilder> CARGO_DRONE_PAD = new RecipeMap<>(
             "cargo_drone_pad", 1, 1, 0, 0, new SimpleRecipeBuilder(), true);
+
+    public static final RecipeMap<SimpleRecipeBuilder> LARGE_RAILROAD_ENGINEERING_STATION_RECIPES = LargeRESRecipeMap.RES_RECIPES;
 
     static {
         GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()
