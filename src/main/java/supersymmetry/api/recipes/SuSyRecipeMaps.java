@@ -23,6 +23,7 @@ import supersymmetry.api.capability.impl.SuSyBoilerLogic;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.recipes.builders.*;
 import supersymmetry.common.materials.SusyMaterials;
+import supersymmetry.common.metatileentities.multi.rail.LargeRESRecipeMap;
 
 public class SuSyRecipeMaps {
 
@@ -503,6 +504,8 @@ public class SuSyRecipeMaps {
             new SimpleRecipeBuilder(), false)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_RECYCLER, ProgressWidget.MoveType.HORIZONTAL)
                     .setSlotOverlay(true, false, GuiTextures.BOXED_OVERLAY);
+
+    public static final RecipeMap<SimpleRecipeBuilder> LARGE_RAILROAD_ENGINEERING_STATION_RECIPES = LargeRESRecipeMap.RES_RECIPES;
 
     static {
         GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()

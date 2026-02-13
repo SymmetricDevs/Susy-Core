@@ -9,13 +9,13 @@ public class LargeRESRecipeMap {
 
     public static final RecipeMap<SimpleRecipeBuilder> RES_RECIPES = new RecipeMap<>(
             "large_railroad_engineering_station",
-            5000,
+            25,
             1,
-            5000,
+            3,
             0,
             new SimpleRecipeBuilder(),
             false)
-                    .setSlotOverlay(false, false, GuiTextures.FURNACE_OVERLAY_1)
-                    .setSlotOverlay(true, false, GuiTextures.FURNACE_OVERLAY_2)
-                    .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressWidget.MoveType.HORIZONTAL);
+                    .setSlotOverlay(false, false, GuiTextures.SLOT)
+                    .setSlotOverlay(true, false, GuiTextures.SLOT)
+                    .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressWidget.MoveType.HORIZONTAL);
 }

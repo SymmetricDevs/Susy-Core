@@ -67,7 +67,6 @@ import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
-import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.particles.SusyParticleFlame;
 import supersymmetry.client.renderer.textures.SusyTextures;
 
@@ -87,7 +86,7 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
     private UUID previousEntityUUID;
 
     public MetaTileEntityLargeRES(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SuSyRecipeMaps.RAILROAD_ENGINEERING_STATION_RECIPES);
+        super(metaTileEntityId, LargeRESRecipeMap.RES_RECIPES);
     }
 
     @Override
@@ -470,7 +469,7 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
                         "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA",
                         "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA",
                         "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAGGAAAGGAAAAAAAAA", "AAAFFFFFFGGAAAGGFFFFFFAAA",
-                        "AAAFFFFFFGGAAAGGFFFFFFAAA", "AAAAAAAAAGGAAAGGAAAAAAAAA", "AAAAAAAAAAAAAAGGAAAAAAAAA",
+                        "AAAFFFFFFGGAAAGGFFFFFFAAA", "AAAAAAAAAGGAAAGGAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA",
                         "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA",
                         "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA",
                         "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA",
@@ -492,7 +491,7 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
                         "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA",
                         "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA",
                         "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAFFFGGAAAGGFFFAAAAAA",
-                        "AAAAAAFFFGGAAAGGFFFAAAAAA", "AAAAAAAAAAAAAAGGAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "AAAAAAFFFGGAAAGGFFFAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA",
                         "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA",
                         "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA",
                         "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA",
@@ -675,7 +674,9 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
             // double offset = def.getCouplerPosition(EntityCoupleableRollingStock.CouplerType.BACK, gauge) -
             // Config.ConfigDebug.couplerRange;
 
-            BlockPos railPos = getRailPos(this.getFrontFacing().getOpposite().getDirectionVec());
+            // Spawn on rails that run perpendicular to the controller
+            // Using rotateY() to get the direction to the left of the controller
+            BlockPos railPos = getRailPos(this.getFrontFacing().rotateY().getDirectionVec());
 
             TickPos tp = new TickPos(
                     0,
