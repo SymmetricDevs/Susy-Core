@@ -209,6 +209,9 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
     @Override
     public void readEntityFromNBT(@NotNull NBTTagCompound compound) {
         super.readEntityFromNBT(compound);
+        if (this.cargo == null) {
+            this.cargo = new CargoItemStackHandler(0, 0);
+        }
         this.cargo.deserializeNBT(compound.getCompoundTag("cargo"));
     }
 

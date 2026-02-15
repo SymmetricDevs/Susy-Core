@@ -24,7 +24,7 @@ public class SuccessCalculation {
         double thrustToWeightRatio = thrust / weight;
         if (thrustToWeightRatio < 1) return 0d;
 
-        // TODO: somehow incorporate cargo volume in a fair way
+        // TODO: somehow incorporate cargo mass in a fair way
         double velocitySpeedup = blueprint.getEffectiveFuelVelocity(null, gravity / 9.81, "engine") *
                 Math.log((fuel.getDensity() * blueprint.getFuelVolume() + blueprint.getMass())
                         / blueprint.getMass());
@@ -114,7 +114,7 @@ public class SuccessCalculation {
             success *= (1 - (0.5 * Math.exp(3 - (thrust / smallThrust))));
         }
 
-        // Guidance system TODO: make this more complex
+        // Guidance system TODO: make this more complex when more guidance systems are added
         success *= 0.9;
 
         success = augmentSuccess(success);
