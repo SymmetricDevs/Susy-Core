@@ -29,6 +29,11 @@ import supersymmetry.client.renderer.handler.IAlwaysRender;
 import supersymmetry.client.renderer.particles.SusyParticleFlameLarge;
 import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
 import supersymmetry.common.network.CPacketRocketInteract;
+import supersymmetry.common.rocketry.SuccessCalculation.LaunchResult;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Random;
 
 public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender, AFSRendered {
 
@@ -37,6 +42,11 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
     public CargoItemStackHandler cargo;
     private RocketFuelEntry fuelEntry;
     private int maxFuelVolume;
+
+    // Troll mode - rocket curves back towards launch pad
+    private LaunchResult launchResult = LaunchResult.LAUNCHES;
+    @Nullable
+    private BlockPos trollTargetPos = null;
 
     @SideOnly(Side.CLIENT)
     private MovingSoundRocket soundRocket;
@@ -47,11 +57,13 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
         rideCooldown = -1;
         ignoreFrustumCheck = true;
         isImmuneToFire = true;
+        this.launchResult = LaunchResult.TROLLS;
+        this.trollTargetPos = new BlockPos(0, 0, 0);
     }
 
     public EntityRocket(World worldIn, double x, double y, double z, float rotationYaw) {
         this(worldIn);
-        this.setLocationAndAngles(x, y, z, rotationYaw, 180.0F);
+        this.setLocationAndAngles(x, y, z, rotationYaw, 0);
         this.setEntityBoundingBox(new AxisAlignedBB(x - 5, y + 0.1, z - 5, x + 5, y + 46, z + 5));
     }
 
@@ -95,6 +107,16 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
         this.setLaunchTime(compound.getInteger("LaunchTime"));
         this.setFlightTime(compound.getInteger("FlightTime"));
         this.setStartPos(compound.getFloat("StartPos"));
+        if (compound.hasKey("LaunchResult")) {
+            this.launchResult = LaunchResult.valueOf(compound.getString("LaunchResult"));
+        }
+        if (compound.hasKey("TrollTargetX")) {
+            this.trollTargetPos = new BlockPos(
+                compound.getInteger("TrollTargetX"),
+                compound.getInteger("TrollTargetY"),
+                compound.getInteger("TrollTargetZ")
+            );
+        }
     }
 
     @Override
@@ -107,6 +129,12 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
         compound.setInteger("LaunchTime", this.getLaunchTime());
         compound.setInteger("FlightTime", this.getFlightTime());
         compound.setFloat("StartPos", this.getStartPos());
+        compound.setString("LaunchResult", this.launchResult.name());
+        if (this.trollTargetPos != null) {
+            compound.setInteger("TrollTargetX", this.trollTargetPos.getX());
+            compound.setInteger("TrollTargetY", this.trollTargetPos.getY());
+            compound.setInteger("TrollTargetZ", this.trollTargetPos.getZ());
+        }
     }
 
     public void initializeCargo() {
@@ -203,8 +231,55 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
             this.prevPosX = this.posX;
             this.prevPosY = this.posY;
             this.prevPosZ = this.posZ;
-            this.motionY = jerk * Math.pow(getFlightTime(), 2) / 2;
-            this.setPosition(this.posX, startPos + jerk * Math.pow(flightTime, 3) / 6, this.posZ);
+
+            // Troll mode: curve the rocket back towards the launch pad
+            if (this.launchResult == LaunchResult.TROLLS && this.trollTargetPos != null) {
+                // Calculate direction to target
+                double dx = this.trollTargetPos.getX() + 0.5 - this.posX;
+                double dy = this.trollTargetPos.getY() - this.posY;
+                double dz = this.trollTargetPos.getZ() + 0.5 - this.posZ;
+                double horizontalDistance = Math.sqrt(dx * dx + dz * dz);
+
+                // Calculate target yaw and pitch
+                float targetYaw = 90 + (float) (Math.atan2(dz, dx) * 180.0 / Math.PI);
+                float targetPitch = 180 + (float) (-(Math.atan2(dy, horizontalDistance) * 180.0 / Math.PI));
+
+                // Gradually adjust yaw and pitch (semi-realistic curve)
+                float yawDiff = targetYaw - this.rotationYaw;
+                while (yawDiff > 180.0F) yawDiff -= 360.0F;
+                while (yawDiff < -180.0F) yawDiff += 360.0F;
+
+                float pitchDiff = targetPitch - this.rotationPitch;
+                while (pitchDiff > 180.0F) pitchDiff -= 360.0F;
+                while (pitchDiff < -180.0F) pitchDiff += 360.0F;
+
+                // Curve rate increases with flight time (rocket becomes more unstable)
+                float curveRate = Math.min(flightTime * flightTime * 0.000001F, 5.0F);
+                this.rotationYaw += yawDiff * curveRate;
+                this.rotationPitch += pitchDiff * curveRate * 0.05F;
+
+                // Apply lateral motion based on rotation
+                double speed = jerk * Math.pow(flightTime, 2) / 2;
+                double yawRad = Math.toRadians(this.rotationYaw);
+                double pitchRad = Math.toRadians(this.rotationPitch);
+
+                this.motionX = -Math.sin(yawRad) * Math.sin(pitchRad) * speed;
+                this.motionZ = Math.cos(yawRad) * Math.sin(pitchRad) * speed;
+                this.motionY = Math.cos(pitchRad) * speed;
+
+                this.setPositionAndRotation(
+                    this.posX + this.motionX,
+                    this.posY + this.motionY,
+                    this.posZ + this.motionZ,
+                        this.rotationYaw,
+                        this.rotationPitch
+                );
+            } else {
+                // Normal flight
+                this.motionY = jerk * Math.pow(getFlightTime(), 2) / 2;
+                this.setPosition(this.posX, startPos + jerk * Math.pow(flightTime, 3) / 6, this.posZ);
+            }
+
             this.setFlightTime(flightTime + 1);
 
             if (flightTime % 2 == 0 && getEntityWorld().isRemote) {
@@ -288,6 +363,18 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
         return 38D;
     }
 
+    public void updatePassenger(Entity passenger)
+    {
+        if (this.isPassenger(passenger))
+        {
+            double yawRad = Math.toRadians(this.rotationYaw);
+            double pitchRad = Math.toRadians(this.rotationPitch);
+            passenger.setPosition(this.posX + this.getMountedYOffset() * -Math.sin(yawRad) * Math.sin(pitchRad),
+                    this.posY + this.getMountedYOffset() * Math.cos(pitchRad) + passenger.getYOffset(),
+                    this.posZ + this.getMountedYOffset() * Math.cos(yawRad) * Math.sin(pitchRad));
+        }
+    }
+
     @Override
     public AxisAlignedBB modelAABB() {
         return new AxisAlignedBB(new Vec3d(4, 46, 4), (new Vec3d(-4, 0, -4)));
@@ -295,5 +382,22 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
 
     public int getFuelVolume() {
         return this.maxFuelVolume;
+    }
+
+    public void setLaunchResult(LaunchResult result) {
+        this.launchResult = result;
+    }
+
+    public LaunchResult getLaunchResult() {
+        return this.launchResult;
+    }
+
+    public void setTrollTargetPos(@Nullable BlockPos pos) {
+        this.trollTargetPos = pos;
+    }
+
+    @Nullable
+    public BlockPos getTrollTargetPos() {
+        return this.trollTargetPos;
     }
 }
