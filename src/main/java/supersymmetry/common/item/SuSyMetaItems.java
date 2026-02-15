@@ -51,7 +51,7 @@ public class SuSyMetaItems {
     public static MetaValueItem RESTRICTIVE_FILTER;
     public static MetaValueItem TRACK_SEGMENT;
     public static MetaValueItem EARTH_ORBITAL_SCRAP;
-    public static MetaValueItem TUNGSTEN_ELECTRODE;
+    public static MetaValueItem TIG_TUNGSTEN_ELECTRODE;
     public static MetaValueItem CODE_BREACHER;
 
     public static MetaValueItem DATA_CARD;
@@ -155,7 +155,7 @@ public class SuSyMetaItems {
                         lines -> lines.add(I18n.format("metaitem.data_card.master_blueprint.tooltip.1")),
                         Arrays.asList("rocketType")));
 
-        TUNGSTEN_ELECTRODE = initOneItem("tungsten_electrode");
+        TIG_TUNGSTEN_ELECTRODE = initOneItem("tig_tungsten_electrode").setMaxStackSize(1);
 
         ROCKET_CONFIGURER = initOneItem("rocket_configurer").setMaxStackSize(1)
                 .addComponents(new RocketConfigBehavior());
