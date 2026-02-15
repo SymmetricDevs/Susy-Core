@@ -155,8 +155,6 @@ public class SuSyMetaItems {
                         lines -> lines.add(I18n.format("metaitem.data_card.master_blueprint.tooltip.1")),
                         Arrays.asList("rocketType")));
 
-        TUNGSTEN_ELECTRODE = initOneItem("tungsten_electrode");
-
         ROCKET_CONFIGURER = initOneItem("rocket_configurer").setMaxStackSize(1)
                 .addComponents(new RocketConfigBehavior());
 
