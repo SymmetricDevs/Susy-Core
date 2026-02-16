@@ -1,15 +1,14 @@
 package supersymmetry.common.command;
 
-import com.google.gson.*;
-import gregtech.api.GregTechAPI;
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.WorkableTieredMetaTileEntity;
-import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
-import gregtech.api.recipes.Recipe;
-import gregtech.api.recipes.RecipeMap;
-import gregtech.api.recipes.ingredients.GTRecipeInput;
-import gregtech.api.recipes.recipeproperties.RecipeProperty;
-import gregtech.common.crafting.GTFluidCraftingIngredient;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -33,16 +32,19 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import supersymmetry.api.SusyLog;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
+import com.google.gson.*;
+
+import gregtech.api.GregTechAPI;
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.WorkableTieredMetaTileEntity;
+import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
+import gregtech.api.recipes.Recipe;
+import gregtech.api.recipes.RecipeMap;
+import gregtech.api.recipes.ingredients.GTRecipeInput;
+import gregtech.api.recipes.recipeproperties.RecipeProperty;
+import gregtech.common.crafting.GTFluidCraftingIngredient;
+import supersymmetry.api.SusyLog;
 
 public class CommandRecipemapDump extends CommandBase {
 
@@ -92,7 +94,7 @@ public class CommandRecipemapDump extends CommandBase {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args)
-            throws CommandException {
+                                                                                      throws CommandException {
         // List<String> args2 = Stream.of(args).collect(Collectors.toList());
         // TODO make it accept a list of required items ( like "recipemaps", "crafting") and output it in
         // a file name that is a combination of the arguments, dump everything if no args passed
@@ -272,7 +274,8 @@ public class CommandRecipemapDump extends CommandBase {
                             stack.addProperty("chance", x.getChance());
                             chancedOutputs.add(stack);
                         });
-                        chancedOutputObj.addProperty("logic", I18n.format(chanced.getChancedOutputLogic().getTranslationKey()));
+                        chancedOutputObj.addProperty("logic",
+                                I18n.format(chanced.getChancedOutputLogic().getTranslationKey()));
                         recipeobj.add("chancedOutputs", chancedOutputs);
                     }
                     if (recipe.getChancedFluidOutputs() != null) {
@@ -284,7 +287,8 @@ public class CommandRecipemapDump extends CommandBase {
                             stack.addProperty("chance", x.getChance());
                             chancedOutputs.add(stack);
                         });
-                        chancedOutputObj.addProperty("logic", I18n.format(chanced.getChancedOutputLogic().getTranslationKey()));
+                        chancedOutputObj.addProperty("logic",
+                                I18n.format(chanced.getChancedOutputLogic().getTranslationKey()));
                         recipeobj.add("chancedFluidOutputs", chancedOutputs);
                     }
                     recipeobj.add("inputsFluid", fluidInputs);
@@ -498,7 +502,8 @@ public class CommandRecipemapDump extends CommandBase {
         JsonArray ingredients = new JsonArray();
         var root = new JsonObject();
         for (var ingredient : shapeless.getIngredients()) {
-            if (ingredient != null && ingredient.getMatchingStacks() != null && ingredient.getMatchingStacks().length != 0) {
+            if (ingredient != null && ingredient.getMatchingStacks() != null &&
+                    ingredient.getMatchingStacks().length != 0) {
                 ingredients.add(ingredientToJson(ingredient));
             }
         }
@@ -515,5 +520,4 @@ public class CommandRecipemapDump extends CommandBase {
         root.add("ingredients", ingredients);
         return root;
     }
-
 }
