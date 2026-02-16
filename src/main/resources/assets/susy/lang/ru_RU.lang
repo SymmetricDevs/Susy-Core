@@ -308,6 +308,7 @@ susy.machine.sieve_distillation_tower.name=Ситовая дистилляцио
 
 susy.machine.drone_pad.name=Drone Pad
 susy.machine.primitive_smelter.name=Примитивный плавильный печь
+susy.machine.cupola_furnace.name=Вагранка
 
 susy.machine.primitive_item_import.name=Примитивная шина импорта  предметов
 susy.machine.primitive_item_import.tooltip=Только для использования с примитивной плавильной печью.
@@ -739,6 +740,7 @@ recipemap.gravity_separator=Гравитационное разделение
 recipemap.spinning.name=Текстильное прядение
 recipemap.large_steam_turbine.name=Большая паровая турбина
 recipemap.primitive_smelter.name=Первобытная плавка
+recipemap.cupola_furnace.name=Вагранка
 recipemap.large_fluid_pump.name=Большой жидкостный насос
 recipemap.sieve_distillation.name=Фракционная перегонка
 recipemap.jet_wingpack_fuels.name=Топливо для реактивных крыльев

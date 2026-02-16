@@ -38,7 +38,7 @@ dependencies {
     // Supercritical 0.2.2
     implementation rfg.deobf('curse.maven:supercritical-1185871:7034114')
     // GT-FO 1.12.4
-    implementation rfg.deobf('curse.maven:gregtech-food-option-477021:6147619')
+    implementation rfg.deobf('curse.maven:gregtech-food-option-477021:7449314')
 
     // # GroovyScript
     api 'com.cleanroommc:groovyscript:1.2.5' transitive false

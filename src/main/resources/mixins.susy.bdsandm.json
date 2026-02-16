@@ -7,6 +7,10 @@
   "mixins" : [
     "BlockBarrelBaseMixin",
     "ItemBarrelMixin",
-    "ServerHandlerMixin"
+    "ServerHandlerMixin",
+    "ItemCrateMixin"
+  ],
+  "client" : [
+    "ItemCrateClientMixin"
   ]
 }
