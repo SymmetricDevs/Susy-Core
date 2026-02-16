@@ -84,13 +84,12 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
             setLubricantStack(tanks);
             updateSufficientFluids();
             isFull = energyContainer.getEnergyStored() - energyContainer.getEnergyCapacity() == 0;
+            generatingPower = !isFull && recipeMapWorkable.isWorking();
 
             if (recipeMapWorkable.isWorking() && ((SuSyTurbineRecipeLogic) recipeMapWorkable).tryDrawEnergy()) {
-                generatingPower = true;
                 speed += getRotationAcceleration();
                 lubricantCounter += speed;
             } else {
-                generatingPower = false;
                 speed -= getRotationDeceleration();
             }
 
@@ -225,6 +224,9 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         protected boolean drawEnergy(int recipeEUt, boolean simulate) {
             long euToDraw = -getActualVoltage(); // Will be negative
             long resultEnergy = getEnergyStored() - euToDraw;
+            if (!isFull && resultEnergy > getEnergyCapacity()) {
+                resultEnergy = getEnergyCapacity();
+            }
             if (resultEnergy >= 0L && resultEnergy <= getEnergyCapacity()) {
                 if (!simulate) getEnergyContainer().changeEnergy(-euToDraw); // So this is positive
                 return true;
