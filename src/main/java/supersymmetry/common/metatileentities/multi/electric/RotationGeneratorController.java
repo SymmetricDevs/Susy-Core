@@ -224,7 +224,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         protected boolean drawEnergy(int recipeEUt, boolean simulate) {
             long euToDraw = -getActualVoltage(); // Will be negative
             long resultEnergy = getEnergyStored() - euToDraw;
-            if (!isFull && resultEnergy > getEnergyCapacity()) {
+            if (!(getEnergyCapacity() == getEnergyStored()) && resultEnergy > getEnergyCapacity()) {
                 resultEnergy = getEnergyCapacity();
             }
             if (resultEnergy >= 0L && resultEnergy <= getEnergyCapacity()) {
