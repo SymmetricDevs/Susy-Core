@@ -145,6 +145,8 @@ public class SusyTextures {
             "machines/multiblocks/smoke_stack");
     public static final OrientedOverlayRenderer PRIMITIVE_SMELTER_OVERLAY = new OrientedOverlayRenderer(
             "machines/multiblocks/primitive_smelter");
+    public static final OrientedOverlayRenderer CUPOLA_FURNACE_OVERLAY = new OrientedOverlayRenderer(
+            "machines/multiblocks/cupola_furnace");
     public static final OrientedOverlayRenderer TURNING_ZONE_OVERLAY = new OrientedOverlayRenderer(
             "machines/multiblocks/turning_zone");
     public static final OrientedOverlayRenderer MILLING_OVERLAY = new OrientedOverlayRenderer(
