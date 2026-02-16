@@ -39,6 +39,8 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
     private boolean sufficientFluids;
     private boolean isFull;
 
+    protected boolean generatingPower;
+
     protected FluidStack lubricantStack;
     protected SuSyUtility.Lubricant lubricantInfo;
 
@@ -84,9 +86,11 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
             isFull = energyContainer.getEnergyStored() - energyContainer.getEnergyCapacity() == 0;
 
             if (recipeMapWorkable.isWorking() && ((SuSyTurbineRecipeLogic) recipeMapWorkable).tryDrawEnergy()) {
+                generatingPower = true;
                 speed += getRotationAcceleration();
                 lubricantCounter += speed;
             } else {
+                generatingPower = false;
                 speed -= getRotationDeceleration();
             }
 
