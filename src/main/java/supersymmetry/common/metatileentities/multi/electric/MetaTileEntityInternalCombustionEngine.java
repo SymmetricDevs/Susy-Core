@@ -220,7 +220,8 @@ public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorCon
                 lubricantAmount = getTotalFluidAmount(testStack, getInputFluidInventory());
                 lubricantStored = lubricantAmount[0];
                 lubricantCapacity = lubricantAmount[1];
-                lubricantConsumptionRate = lubricantInfo.amount_required * (2.0 * getRotationSpeed() / 3600);
+                lubricantConsumptionRate = (generatingPower) ?
+                        lubricantInfo.amount_required * (2.0 * getRotationSpeed() / 3600) : 0;
             }
 
             ITextComponent lubricantStorage = TextComponentUtil.stringWithColor(
