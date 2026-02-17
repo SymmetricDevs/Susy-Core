@@ -1,5 +1,15 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import java.util.List;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fluids.FluidStack;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.GTValues;
 import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.impl.MultiblockFuelRecipeLogic;
@@ -10,17 +20,9 @@ import gregtech.api.recipes.RecipeMap;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.util.TextComponentUtil;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.capability.IRotationSpeedHandler;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.common.materials.SusyMaterials;
-
-import java.util.List;
 
 public abstract class RotationGeneratorController extends FuelMultiblockController
                                                   implements IRotationSpeedHandler, ITieredMetaTileEntity {
