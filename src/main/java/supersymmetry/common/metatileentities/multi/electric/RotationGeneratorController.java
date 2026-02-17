@@ -1,15 +1,5 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import java.util.List;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fluids.FluidStack;
-
-import org.jetbrains.annotations.NotNull;
-
 import gregtech.api.GTValues;
 import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.impl.MultiblockFuelRecipeLogic;
@@ -20,9 +10,17 @@ import gregtech.api.recipes.RecipeMap;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.util.TextComponentUtil;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.capability.IRotationSpeedHandler;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.common.materials.SusyMaterials;
+
+import java.util.List;
 
 public abstract class RotationGeneratorController extends FuelMultiblockController
                                                   implements IRotationSpeedHandler, ITieredMetaTileEntity {
@@ -198,6 +196,15 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         }
 
         @Override
+        public int getInfoProviderEUt() {
+            if (!isFull && speed > 0 && tryDrawEnergy()) {
+                return (int) getActualVoltage();
+            } else {
+                return 0;
+            }
+        }
+
+        @Override
         protected void updateRecipeProgress() {
             if (canRecipeProgress && drawEnergy(recipeEUt, true)) {
                 // as recipe starts with progress on 1 this has to be > only not => to compensate for it
@@ -224,10 +231,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         protected boolean drawEnergy(int recipeEUt, boolean simulate) {
             long euToDraw = -getActualVoltage(); // Will be negative
             long resultEnergy = getEnergyStored() - euToDraw;
-            if (!(getEnergyCapacity() == getEnergyStored()) && resultEnergy > getEnergyCapacity()) {
-                resultEnergy = getEnergyCapacity();
-            }
-            if (resultEnergy >= 0L && resultEnergy <= getEnergyCapacity()) {
+            if (resultEnergy >= 0L && getEnergyStored() < getEnergyCapacity()) {
                 if (!simulate) getEnergyContainer().changeEnergy(-euToDraw); // So this is positive
                 return true;
             }
