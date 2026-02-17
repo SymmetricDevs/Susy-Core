@@ -53,6 +53,7 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
         super(worldIn);
         this.setSize(1.F, 1.F);
         rideCooldown = -1;
+        this.enablePersistence();
     }
 
     public EntityDrone(World worldIn, double x, double y, double z) {
@@ -61,6 +62,7 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
         this.setSize(1.F, 1.F);
         rideCooldown = -1;
         this.setEntityBoundingBox(new AxisAlignedBB(x - 1, y + 0, z - 1, x + 1, y + 1, z + 1));
+        this.enablePersistence();
     }
 
     public EntityDrone(World worldIn, BlockPos pos) {

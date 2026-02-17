@@ -21,6 +21,7 @@ import supersymmetry.common.command.CommandHordeBase;
 import supersymmetry.common.command.CommandHordeStart;
 import supersymmetry.common.command.CommandHordeStatus;
 import supersymmetry.common.command.CommandHordeStop;
+import supersymmetry.common.command.CommandRecipemapDump;
 import supersymmetry.common.covers.SuSyCoverBehaviors;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.item.SuSyMetaItems;
@@ -95,7 +96,9 @@ public class Supersymmetry {
     @Mod.EventHandler
     public void onServerStarting(@NotNull FMLServerStartingEvent event) {
         CommandHordeBase hordeCommand = new CommandHordeBase();
+        CommandRecipemapDump jeidump = new CommandRecipemapDump();
         event.registerServerCommand(hordeCommand);
+        event.registerServerCommand(jeidump);
 
         hordeCommand.addSubcommand(new CommandHordeStart());
         hordeCommand.addSubcommand(new CommandHordeStop());
