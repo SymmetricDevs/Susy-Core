@@ -1,15 +1,5 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import java.util.List;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fluids.FluidStack;
-
-import org.jetbrains.annotations.NotNull;
-
 import gregtech.api.GTValues;
 import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.impl.MultiblockFuelRecipeLogic;
@@ -20,9 +10,17 @@ import gregtech.api.recipes.RecipeMap;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.util.TextComponentUtil;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.capability.IRotationSpeedHandler;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.common.materials.SusyMaterials;
+
+import java.util.List;
 
 public abstract class RotationGeneratorController extends FuelMultiblockController
                                                   implements IRotationSpeedHandler, ITieredMetaTileEntity {
@@ -38,6 +36,8 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
 
     private boolean sufficientFluids;
     private boolean isFull;
+
+    protected boolean generatingPower;
 
     protected FluidStack lubricantStack;
     protected SuSyUtility.Lubricant lubricantInfo;
@@ -82,6 +82,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
             setLubricantStack(tanks);
             updateSufficientFluids();
             isFull = energyContainer.getEnergyStored() - energyContainer.getEnergyCapacity() == 0;
+            generatingPower = !isFull && recipeMapWorkable.isWorking();
 
             if (recipeMapWorkable.isWorking() && ((SuSyTurbineRecipeLogic) recipeMapWorkable).tryDrawEnergy()) {
                 speed += getRotationAcceleration();
@@ -165,7 +166,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
 
     @Override
     protected long getMaxVoltage() {
-        if (!isFull && speed > 0) {
+        if (!isFull && speed > 0 && ((SuSyTurbineRecipeLogic) recipeMapWorkable).tryDrawEnergy()) {
             return ((SuSyTurbineRecipeLogic) recipeMapWorkable).getActualVoltage();
         } else {
             return 0L;
@@ -195,6 +196,15 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         }
 
         @Override
+        public int getInfoProviderEUt() {
+            if (!isFull && speed > 0 && tryDrawEnergy()) {
+                return (int) getActualVoltage();
+            } else {
+                return 0;
+            }
+        }
+
+        @Override
         protected void updateRecipeProgress() {
             if (canRecipeProgress && drawEnergy(recipeEUt, true)) {
                 // as recipe starts with progress on 1 this has to be > only not => to compensate for it
@@ -221,7 +231,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         protected boolean drawEnergy(int recipeEUt, boolean simulate) {
             long euToDraw = -getActualVoltage(); // Will be negative
             long resultEnergy = getEnergyStored() - euToDraw;
-            if (resultEnergy >= 0L && resultEnergy <= getEnergyCapacity()) {
+            if (resultEnergy >= 0L && getEnergyStored() < getEnergyCapacity()) {
                 if (!simulate) getEnergyContainer().changeEnergy(-euToDraw); // So this is positive
                 return true;
             }
@@ -230,12 +240,12 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         }
 
         public boolean tryDrawEnergy() {
-            return drawEnergy(proposedEUt, true); // replace recipeEUt with proposedEUt since if the recipe cannot be
-                                                  // run but speed > 0, recipeEUt gets set to 0 but proposedEUt isn't
+            return drawEnergy((int) getMaxParallelVoltage(), true); // have energy draw only tied to speed? (ignore
+                                                                    // recipe EUt entirely)
         }
 
         public boolean doDrawEnergy() {
-            return drawEnergy(proposedEUt, false);
+            return drawEnergy((int) getMaxParallelVoltage(), false);
         }
 
         @Override
@@ -264,7 +274,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         }
 
         protected long getActualVoltage() {
-            return scaleProduction(-proposedEUt);
+            return scaleProduction(getMaxParallelVoltage());
         }
 
         public int getCurrentParallel() {
