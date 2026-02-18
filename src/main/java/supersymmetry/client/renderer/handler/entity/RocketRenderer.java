@@ -1,10 +1,5 @@
 package supersymmetry.client.renderer.handler.entity;
 
-import java.lang.reflect.Field;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -20,9 +15,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import supersymmetry.SuSyValues;
 import supersymmetry.common.entities.EntityRocket;
+
+import javax.annotation.Nullable;
+import java.lang.reflect.Field;
+import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class RocketRenderer<T extends EntityRocket> extends Render<T> {
@@ -61,6 +59,11 @@ public class RocketRenderer<T extends EntityRocket> extends Render<T> {
         GlStateManager.translate((float) x, (float) y, (float) z); // You shouldn't forget to translate to x, y, z
                                                                    // before rendering. Other specific are made so
                                                                    // Rubik's cube renders at the middle.
+
+        // Rotate the rocket based on its yaw and pitch (for troll mode and other flight dynamics)
+        GlStateManager.rotate(-entity.rotationYaw, 0.0F, 1.0F, 0.0F); // Rotate around Y axis for yaw
+        GlStateManager.rotate(entity.rotationPitch, 1.0F, 0.0F, 0.0F); // Rotate around X axis for pitch
+
         GlStateManager.scale(1F, 1F, 1F); // Yep models are too ginormous for buffer builder.
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
