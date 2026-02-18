@@ -3,6 +3,8 @@ package supersymmetry.common.entities;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -30,10 +32,6 @@ import supersymmetry.client.renderer.particles.SusyParticleFlameLarge;
 import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
 import supersymmetry.common.network.CPacketRocketInteract;
 import supersymmetry.common.rocketry.SuccessCalculation.LaunchResult;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Random;
 
 public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender, AFSRendered {
 
@@ -112,10 +110,9 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
         }
         if (compound.hasKey("TrollTargetX")) {
             this.trollTargetPos = new BlockPos(
-                compound.getInteger("TrollTargetX"),
-                compound.getInteger("TrollTargetY"),
-                compound.getInteger("TrollTargetZ")
-            );
+                    compound.getInteger("TrollTargetX"),
+                    compound.getInteger("TrollTargetY"),
+                    compound.getInteger("TrollTargetZ"));
         }
     }
 
@@ -268,12 +265,11 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
                 this.motionY = Math.cos(pitchRad) * speed;
 
                 this.setPositionAndRotation(
-                    this.posX + this.motionX,
-                    this.posY + this.motionY,
-                    this.posZ + this.motionZ,
+                        this.posX + this.motionX,
+                        this.posY + this.motionY,
+                        this.posZ + this.motionZ,
                         this.rotationYaw,
-                        this.rotationPitch
-                );
+                        this.rotationPitch);
             } else {
                 // Normal flight
                 this.motionY = jerk * Math.pow(getFlightTime(), 2) / 2;
@@ -363,10 +359,8 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
         return 38D;
     }
 
-    public void updatePassenger(Entity passenger)
-    {
-        if (this.isPassenger(passenger))
-        {
+    public void updatePassenger(Entity passenger) {
+        if (this.isPassenger(passenger)) {
             double yawRad = Math.toRadians(this.rotationYaw);
             double pitchRad = Math.toRadians(this.rotationPitch);
             passenger.setPosition(this.posX + this.getMountedYOffset() * -Math.sin(yawRad) * Math.sin(pitchRad),
