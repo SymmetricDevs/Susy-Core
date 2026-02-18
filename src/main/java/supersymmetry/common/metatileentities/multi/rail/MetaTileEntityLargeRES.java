@@ -83,20 +83,19 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
     private NotifiableItemStackHandler trainOutputSlot;
     private NotifiableItemStackHandler trainInputSlot;
     private List<BlockPos> railPositions = new ArrayList<>();
-
     private UUID previousEntityUUID;
 
     public MetaTileEntityLargeRES(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, LargeRESRecipeMap.RES_RECIPES);
+        trainOutputSlot = new NotifiableItemStackHandler(this, 1, this, true);
+        trainInputSlot = new NotifiableItemStackHandler(this, 1, this, false);
+        this.recipeMapWorkable = new RailroadEngineeringStationWorkable(this, trainInputSlot, trainOutputSlot);
+        System.out.println("=== CONSTRUCTOR: Workable created ===");
     }
 
     @Override
     protected void initializeInventory() {
         super.initializeInventory();
-        trainOutputSlot = new NotifiableItemStackHandler(this, 1, this, true);
-        trainInputSlot = new NotifiableItemStackHandler(this, 1, this, false);
-        // Initialize the workable HERE after the slots are created
-        this.recipeMapWorkable = new RailroadEngineeringStationWorkable(this, trainInputSlot, trainOutputSlot);
     }
 
     @Override
@@ -555,6 +554,19 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
                 }
             }
         }
+
+        // DEBUG: List all recipes in the recipe map
+        System.out.println("=== STRUCTURE FORMED - CHECKING RECIPES ===");
+        System.out.println("Recipe map: " + LargeRESRecipeMap.RES_RECIPES);
+        if (LargeRESRecipeMap.RES_RECIPES != null) {
+            System.out.println("Total recipes: " + LargeRESRecipeMap.RES_RECIPES.getRecipeList().size());
+            for (Recipe recipe : LargeRESRecipeMap.RES_RECIPES.getRecipeList()) {
+                System.out.println("  Recipe: " + recipe);
+                System.out.println("    Inputs: " + recipe.getInputs());
+                System.out.println("    Outputs: " + recipe.getOutputs());
+            }
+        }
+        System.out.println("=== END RECIPE CHECK ===");
     }
 
     @Override
@@ -670,60 +682,55 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
 
     public BlockPos getRailPos() {
         // Use the center rail position from the structure
-        // If we have rails, return the middle one
         if (!this.railPositions.isEmpty()) {
-            // Get the rail closest to the center of the structure
+            // Sort rails by distance from controller to get the centermost one
             BlockPos center = getPos();
-            BlockPos closestRail = this.railPositions.get(0);
-            double minDist = center.distanceSq(closestRail);
 
-            for (BlockPos rail : this.railPositions) {
-                double dist = center.distanceSq(rail);
-                if (dist < minDist) {
-                    minDist = dist;
-                    closestRail = rail;
-                }
-            }
-            return closestRail;
+            // Get rails sorted by distance from center
+            List<BlockPos> sortedRails = new ArrayList<>(this.railPositions);
+            sortedRails.sort(Comparator.comparingDouble(rail -> center.distanceSq(rail)));
+
+            // Return the most central rail
+            BlockPos centralRail = sortedRails.get(sortedRails.size() / 2);
+
+            // DEBUG: Log which rail was selected
+            System.out.println("Selected rail at: " + centralRail + " from " + railPositions.size() + " rails");
+
+            return centralRail;
         }
 
-        // Fallback to old behavior if no rails found
-        return getPos().add(this.getFrontFacing().rotateY().getDirectionVec().getX() * 5,
-                0,
-                this.getFrontFacing().rotateY().getDirectionVec().getZ() * 5);
+        // This should never happen if structure is formed correctly
+        System.err.println("WARNING: No rails found in structure!");
+        return getPos();
     }
 
     public EntityRollingStock spawnRollingStock(ItemStack stack) {
         ItemRollingStock.Data data = new ItemRollingStock.Data(stack);
-
         EntityRollingStockDefinition def = data.def;
 
         if (def != null) {
             World irWorld = World.get(getWorld());
 
-            // net.minecraft.util.math.Vec3i direction = this.getFrontFacing().getOpposite().getDirectionVec();
-
-            // Centered around the middle rail
-
-            // double offset = def.getCouplerPosition(EntityCoupleableRollingStock.CouplerType.BACK, gauge) -
-            // Config.ConfigDebug.couplerRange;
-
-            // Spawn on rails that are part of the structure
+            // Get the rail position from structure
             BlockPos railPos = getRailPos();
 
+            // DEBUG: Log spawn details
+            System.out.println("Spawning train at rail: " + railPos);
+            System.out.println("Front facing: " + this.getFrontFacing());
+            System.out.println("Spawn angle: " + this.getTrainSpawnAngle());
+
+            // Spawn exactly on the rail center - IR should handle rail snapping
             TickPos tp = new TickPos(
                     0,
                     Speed.ZERO,
-                    (new Vec3d(railPos.getX(), railPos.getY(), railPos.getZ())).add(0.0, 0.25, 0.0).add(0.5, 0.0, 0.5),
+                    new Vec3d(railPos.getX() + 0.5, railPos.getY() + 0.0625, railPos.getZ() + 0.5), // Just above rail
                     0,
                     0,
                     0,
                     0.0F,
                     false);
-            EntityRollingStock stock = def.spawn(irWorld, tp.position, 0, gauge, data.texture);
 
-            float yaw = this.getTrainSpawnAngle();
-            stock.setRotationYaw(yaw);
+            EntityRollingStock stock = def.spawn(irWorld, tp.position, this.getTrainSpawnAngle(), gauge, data.texture);
 
             if (stock instanceof EntityMoveableRollingStock) {
                 EntityMoveableRollingStock mrs = (EntityMoveableRollingStock) stock;
@@ -731,15 +738,13 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
                 mrs.initPositions(tp);
             }
 
-            // Buildable Rolling Stocks will be continuously built - we have to spawn them now as opposed to after the
-            // recipe completion
             if (stock instanceof EntityBuildableRollingStock) {
                 this.setStockInWorld(stock);
-                // Also sort the item components of the thing
                 this.spawnedRollingStackComponentsSorted = def.getItemComponents().stream()
                         .sorted(Comparator.comparingInt(i -> i.ordinal()))
                         .collect(Collectors.toList());
             }
+
             return stock;
         }
 
@@ -885,9 +890,11 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
             super(tileEntity);
             this.trainInput = trainInput;
             this.trainOutput = trainOutput;
+            System.out.println("RailroadEngineeringStationWorkable constructed!");
+            System.out.println("  Train input: " + trainInput);
+            System.out.println("  Train output: " + trainOutput);
         }
 
-        @Override
         public MetaTileEntityLargeRES getMetaTileEntity() {
             return (MetaTileEntityLargeRES) super.getMetaTileEntity();
         }
@@ -895,12 +902,9 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
         @Override
         protected IItemHandlerModifiable getInputInventory() {
             IItemHandlerModifiable inputs = super.getInputInventory();
-
             List<IItemHandlerModifiable> inputList = new ArrayList<>();
-
             if (inputs != null) inputList.add(inputs);
             inputList.add(trainInput);
-
             return new ItemHandlerList(inputList);
         }
 
@@ -910,23 +914,136 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
         }
 
         @Override
+        public void update() {
+            super.update();
+
+            if (getMetaTileEntity().getOffsetTimer() % 40 == 0) {
+                System.out.println("=== WORKABLE UPDATE [" +
+                        (getMetaTileEntity().getWorld().isRemote ? "CLIENT" : "SERVER") + "] ===");
+                System.out.println("Is active: " + isActive());
+                System.out.println("Is working enabled: " + isWorkingEnabled());
+                System.out.println("Can progress: " + canRecipeProgress);
+                System.out.println("Progress: " + progressTime + "/" + maxProgressTime);
+                System.out.println("Recipe EU/t: " + recipeEUt);
+            }
+        }
+
+        @Override
+        protected Recipe findRecipe(long maxVoltage, IItemHandlerModifiable inputs, IMultipleTankHandler fluidInputs) {
+            System.out.println("=== FINDING RECIPE ===");
+            System.out.println("Max voltage: " + maxVoltage);
+            System.out.println("Input handler slots: " + inputs.getSlots());
+
+            // Log all items in input slots
+            for (int i = 0; i < inputs.getSlots(); i++) {
+                net.minecraft.item.ItemStack stack = inputs.getStackInSlot(i);
+                if (!stack.isEmpty()) {
+                    System.out.println("  Slot " + i + ": " + stack + " x" + stack.getCount());
+                }
+            }
+
+            Recipe recipe = super.findRecipe(maxVoltage, inputs, fluidInputs);
+
+            System.out.println("Found recipe: " + recipe);
+            System.out.println("=== RECIPE SEARCH COMPLETE ===");
+
+            return recipe;
+        }
+
+        @Override
         protected boolean setupAndConsumeRecipeInputs(@NotNull Recipe recipe,
                                                       @NotNull IItemHandlerModifiable importInventory,
                                                       @NotNull IMultipleTankHandler importFluids) {
-            // Use parent logic but don't validate outputs
-            boolean result = super.setupAndConsumeRecipeInputs(recipe, importInventory, importFluids);
+            MetaTileEntityLargeRES mte = this.getMetaTileEntity();
 
-            if (result) {
-                MetaTileEntityLargeRES mte = this.getMetaTileEntity();
+            // Debug logging
+            System.out.println("=== RECIPE SETUP DEBUG ===");
+            System.out.println("Recipe: " + recipe);
+            System.out.println("Recipe inputs: " + recipe.getInputs());
+            System.out.println("Recipe outputs: " + recipe.getOutputs());
 
-                if (this.trainInput.getStackInSlot(0).isEmpty() && mte.selectedRollingStock != null) {
-                    mte.selectedRollingStock.kill();
-                    mte.selectedRollingStock = null;
+            // Manually check and consume inputs using Recipe's built-in methods
+            // Try to match items
+            for (gregtech.api.recipes.ingredients.GTRecipeInput input : recipe.getInputs()) {
+                int amountNeeded = input.getAmount();
+                int amountFound = 0;
+
+                System.out.println("Checking input: " + input + ", amount needed: " + amountNeeded);
+
+                // Count how many we have
+                for (int j = 0; j < importInventory.getSlots(); j++) {
+                    net.minecraft.item.ItemStack stack = importInventory.getStackInSlot(j);
+                    if (!stack.isEmpty() && input.acceptsStack(stack)) {
+                        amountFound += stack.getCount();
+                        System.out.println("  Found " + stack.getCount() + " in slot " + j);
+                    }
                 }
 
-                mte.spawnedRollingStock = mte.spawnRollingStock(new ItemStack(recipe.getOutputs().get(0)));
+                System.out.println("  Total found: " + amountFound + " / " + amountNeeded);
+
+                if (amountFound < amountNeeded) {
+                    System.out.println("  NOT ENOUGH! Recipe cannot start.");
+                    return false;
+                }
             }
-            return result;
+
+            // Check fluids
+            for (gregtech.api.recipes.ingredients.GTRecipeInput fluidInput : recipe.getFluidInputs()) {
+                int amountNeeded = fluidInput.getAmount();
+                net.minecraftforge.fluids.FluidStack drained = importFluids.drain(
+                        new net.minecraftforge.fluids.FluidStack(fluidInput.getInputFluidStack().getFluid(),
+                                amountNeeded),
+                        false);
+
+                System.out.println("Checking fluid: " + fluidInput + ", needed: " + amountNeeded);
+
+                if (drained == null || drained.amount < amountNeeded) {
+                    System.out.println("  NOT ENOUGH FLUID! Recipe cannot start.");
+                    return false;
+                }
+            }
+
+            System.out.println("All inputs available! Consuming...");
+
+            // We have everything, consume it
+            for (gregtech.api.recipes.ingredients.GTRecipeInput input : recipe.getInputs()) {
+                int toConsume = input.getAmount();
+
+                for (int j = 0; j < importInventory.getSlots() && toConsume > 0; j++) {
+                    net.minecraft.item.ItemStack stack = importInventory.getStackInSlot(j);
+                    if (!stack.isEmpty() && input.acceptsStack(stack)) {
+                        int consumed = Math.min(stack.getCount(), toConsume);
+                        stack.shrink(consumed);
+                        toConsume -= consumed;
+                        System.out.println("  Consumed " + consumed + " from slot " + j);
+                    }
+                }
+            }
+
+            // Consume fluids
+            for (gregtech.api.recipes.ingredients.GTRecipeInput fluidInput : recipe.getFluidInputs()) {
+                int amountNeeded = fluidInput.getAmount();
+                importFluids.drain(
+                        new net.minecraftforge.fluids.FluidStack(fluidInput.getInputFluidStack().getFluid(),
+                                amountNeeded),
+                        true);
+                System.out.println("  Consumed fluid: " + fluidInput);
+            }
+
+            // Kill any existing selected rolling stock
+            if (this.trainInput.getStackInSlot(0).isEmpty() && mte.selectedRollingStock != null) {
+                mte.selectedRollingStock.kill();
+                mte.selectedRollingStock = null;
+            }
+
+            // Spawn the new rolling stock
+            System.out.println("Spawning rolling stock from recipe output: " + recipe.getOutputs().get(0));
+            mte.spawnedRollingStock = mte.spawnRollingStock(new ItemStack(recipe.getOutputs().get(0)));
+
+            System.out.println("Spawned rolling stock: " + mte.spawnedRollingStock);
+            System.out.println("=== RECIPE SETUP COMPLETE ===");
+
+            return true;
         }
 
         @Override
@@ -958,7 +1075,7 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
         @Override
         protected void completeRecipe() {
             GTTransferUtils.addFluidsToFluidHandler(this.getOutputTank(), false, this.fluidOutputs);
-            // Don't output items - train is already on rails from setupAndConsumeRecipeInputs
+            // Don't output items - train is already on rails
             this.progressTime = 0;
             this.setMaxProgress(0);
             this.recipeEUt = 0;
@@ -969,6 +1086,8 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
             this.parallelRecipesPerformed = 0;
             this.overclockResults = new int[] { 0, 0 };
             this.getMetaTileEntity().completeSpawnedStock();
+
+            System.out.println("Recipe completed!");
         }
     }
 
