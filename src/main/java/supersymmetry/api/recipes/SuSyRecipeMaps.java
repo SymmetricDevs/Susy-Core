@@ -568,6 +568,8 @@ public class SuSyRecipeMaps {
 
     public static final RecipeMap<SimpleRecipeBuilder> LARGE_RAILROAD_ENGINEERING_STATION_RECIPES = LargeRESRecipeMap.RES_RECIPES;
 
+    public static final RecipeMap<?> LARGE_RES = LargeRESRecipeMap.RES_RECIPES;
+
     static {
         GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()
                 .fluidInputs(SusyMaterials.RefractoryGunningMixture.getFluid(50 *

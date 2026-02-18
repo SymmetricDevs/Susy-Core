@@ -128,7 +128,7 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
                         "AAAABBBBBBBBBBBBBBBBBAAAA", "AAAABBBBBBBBBBBBBBBBBAAAA", "AAAABBBBBBBBBBBBBBBBBAAAA",
                         "AAAABBBBBBBBBBBBBBBBBAAAA", "AAABBBBBBBBBBBBBBBBBBBAAA", "AAABBBBBBBBBBBBBBBBBBBAAA",
                         "AAABBBBBBBBBBBBBBBBBBBAAA", "AAABBBBBBBBBBBBBBBBBBBAAA", "AAAABBBBBBBBBBBBBBBBBAAAA")
-                .aisle("AAAABBAAAAABBBAAAAABBAAAA", "AAABBBBAAAADDDAAAABBBBAAA", "AAABBBBAAAADDDAAAABBBBAAA",
+                .aisle("AAAABBAAAAADDDAAAAABBAAAA", "AAABBBBAAAADDDAAAABBBBAAA", "AAABBBBAAAADDDAAAABBBBAAA",
                         "AAABBBBAAAADDDAAAABBBBAAA", "AAABBBBAAAADDDAAAABBBBAAA", "AAAABBAAAAADDDAAAAABBAAAA",
                         "AAAABBAAAAADDDAAAAABBAAAA", "AAAABBAAAAADDDAAAAABBAAAA", "AAAABBAAAAADDDAAAAABBAAAA",
                         "AAAABBAAAAADDDAAAAABBAAAA", "AAAABBAAAAADDDAAAAABBAAAA", "AAAABBAAAAADDDAAAAABBAAAA",
@@ -954,96 +954,23 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
         protected boolean setupAndConsumeRecipeInputs(@NotNull Recipe recipe,
                                                       @NotNull IItemHandlerModifiable importInventory,
                                                       @NotNull IMultipleTankHandler importFluids) {
-            MetaTileEntityLargeRES mte = this.getMetaTileEntity();
+            // Let super run first to set itemOutputs, fluidOutputs, recipeEUt, etc.
+            boolean result = super.setupAndConsumeRecipeInputs(recipe, importInventory, importFluids);
 
-            // Debug logging
-            System.out.println("=== RECIPE SETUP DEBUG ===");
-            System.out.println("Recipe: " + recipe);
-            System.out.println("Recipe inputs: " + recipe.getInputs());
-            System.out.println("Recipe outputs: " + recipe.getOutputs());
+            if (result) {
+                MetaTileEntityLargeRES mte = this.getMetaTileEntity();
 
-            // Manually check and consume inputs using Recipe's built-in methods
-            // Try to match items
-            for (gregtech.api.recipes.ingredients.GTRecipeInput input : recipe.getInputs()) {
-                int amountNeeded = input.getAmount();
-                int amountFound = 0;
-
-                System.out.println("Checking input: " + input + ", amount needed: " + amountNeeded);
-
-                // Count how many we have
-                for (int j = 0; j < importInventory.getSlots(); j++) {
-                    net.minecraft.item.ItemStack stack = importInventory.getStackInSlot(j);
-                    if (!stack.isEmpty() && input.acceptsStack(stack)) {
-                        amountFound += stack.getCount();
-                        System.out.println("  Found " + stack.getCount() + " in slot " + j);
-                    }
+                // Kill existing selected rolling stock
+                if (this.trainInput.getStackInSlot(0).isEmpty() && mte.selectedRollingStock != null) {
+                    mte.selectedRollingStock.kill();
+                    mte.selectedRollingStock = null;
                 }
 
-                System.out.println("  Total found: " + amountFound + " / " + amountNeeded);
-
-                if (amountFound < amountNeeded) {
-                    System.out.println("  NOT ENOUGH! Recipe cannot start.");
-                    return false;
-                }
+                // Spawn the new rolling stock
+                mte.spawnedRollingStock = mte.spawnRollingStock(new ItemStack(recipe.getOutputs().get(0)));
             }
 
-            // Check fluids
-            for (gregtech.api.recipes.ingredients.GTRecipeInput fluidInput : recipe.getFluidInputs()) {
-                int amountNeeded = fluidInput.getAmount();
-                net.minecraftforge.fluids.FluidStack drained = importFluids.drain(
-                        new net.minecraftforge.fluids.FluidStack(fluidInput.getInputFluidStack().getFluid(),
-                                amountNeeded),
-                        false);
-
-                System.out.println("Checking fluid: " + fluidInput + ", needed: " + amountNeeded);
-
-                if (drained == null || drained.amount < amountNeeded) {
-                    System.out.println("  NOT ENOUGH FLUID! Recipe cannot start.");
-                    return false;
-                }
-            }
-
-            System.out.println("All inputs available! Consuming...");
-
-            // We have everything, consume it
-            for (gregtech.api.recipes.ingredients.GTRecipeInput input : recipe.getInputs()) {
-                int toConsume = input.getAmount();
-
-                for (int j = 0; j < importInventory.getSlots() && toConsume > 0; j++) {
-                    net.minecraft.item.ItemStack stack = importInventory.getStackInSlot(j);
-                    if (!stack.isEmpty() && input.acceptsStack(stack)) {
-                        int consumed = Math.min(stack.getCount(), toConsume);
-                        stack.shrink(consumed);
-                        toConsume -= consumed;
-                        System.out.println("  Consumed " + consumed + " from slot " + j);
-                    }
-                }
-            }
-
-            // Consume fluids
-            for (gregtech.api.recipes.ingredients.GTRecipeInput fluidInput : recipe.getFluidInputs()) {
-                int amountNeeded = fluidInput.getAmount();
-                importFluids.drain(
-                        new net.minecraftforge.fluids.FluidStack(fluidInput.getInputFluidStack().getFluid(),
-                                amountNeeded),
-                        true);
-                System.out.println("  Consumed fluid: " + fluidInput);
-            }
-
-            // Kill any existing selected rolling stock
-            if (this.trainInput.getStackInSlot(0).isEmpty() && mte.selectedRollingStock != null) {
-                mte.selectedRollingStock.kill();
-                mte.selectedRollingStock = null;
-            }
-
-            // Spawn the new rolling stock
-            System.out.println("Spawning rolling stock from recipe output: " + recipe.getOutputs().get(0));
-            mte.spawnedRollingStock = mte.spawnRollingStock(new ItemStack(recipe.getOutputs().get(0)));
-
-            System.out.println("Spawned rolling stock: " + mte.spawnedRollingStock);
-            System.out.println("=== RECIPE SETUP COMPLETE ===");
-
-            return true;
+            return result;
         }
 
         @Override

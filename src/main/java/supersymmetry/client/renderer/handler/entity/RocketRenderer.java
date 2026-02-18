@@ -1,5 +1,10 @@
 package supersymmetry.client.renderer.handler.entity;
 
+import java.lang.reflect.Field;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -15,12 +20,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import supersymmetry.SuSyValues;
 import supersymmetry.common.entities.EntityRocket;
-
-import javax.annotation.Nullable;
-import java.lang.reflect.Field;
-import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class RocketRenderer<T extends EntityRocket> extends Render<T> {
