@@ -179,6 +179,25 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
         }
 
         @Override
+        protected void updateRecipeProgress() {
+            if (canRecipeProgress && drawEnergy(recipeEUt, true)) {
+                drawEnergy(recipeEUt, false);
+                // as recipe starts with progress on 1 this has to be > only not => to compensate for it
+                if (++progressTime > getMaxProgress()) {
+                    completeRecipe();
+                }
+                if (this.hasNotEnoughEnergy && getEnergyInputPerSecond() > 19L * recipeEUt) {
+                    this.hasNotEnoughEnergy = false;
+                }
+            } else if (recipeEUt > 0) {
+                // only set hasNotEnoughEnergy if this recipe is consuming recipe
+                // generators always have enough energy
+                this.hasNotEnoughEnergy = true;
+                decreaseProgress();
+            }
+        }
+
+        @Override
         public int getMaxProgress() {
             int baseDuration = super.getMaxProgress();
 

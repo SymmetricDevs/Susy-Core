@@ -44,6 +44,7 @@ import supersymmetry.common.metatileentities.logistics.MetaTileEntityExtender;
 import supersymmetry.common.metatileentities.multi.electric.*;
 import supersymmetry.common.metatileentities.multi.electric.strand.*;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCoagulationTank;
+import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCupolaFurnace;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimitiveMudPump;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimitiveSmelter;
 import supersymmetry.common.metatileentities.multi.rail.MetaTileEntityLargeRES;
@@ -189,6 +190,8 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityPrimitiveSmelter PRIMITIVE_SMELTER;
     public static MetaTileEntityPrimitiveItemBus PRIMITIVE_ITEM_IMPORT;
     public static MetaTileEntityPrimitiveItemBus PRIMITIVE_ITEM_EXPORT;
+
+    public static MetaTileEntityCupolaFurnace CUPOLA_FURNACE;
 
     // Space multis
     public static MetaTileEntityLandingPad LANDING_PAD;
@@ -423,6 +426,9 @@ public class SuSyMetaTileEntities {
                 new MetaTileEntityPrimitiveItemBus(susyId("primitive_item_import"), false));
         PRIMITIVE_ITEM_EXPORT = registerMetaTileEntity(14802,
                 new MetaTileEntityPrimitiveItemBus(susyId("primitive_item_export"), true));
+
+        CUPOLA_FURNACE = registerMetaTileEntity(14850,
+                new MetaTileEntityCupolaFurnace(susyId("cupola_furnace")));
 
         // oil stuff
         COKING_TOWER = registerMetaTileEntity(14635, new MetaTileEntityCokingTower(susyId("coking_tower")));

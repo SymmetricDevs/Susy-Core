@@ -505,7 +505,9 @@ public class SuSyRecipeMaps {
                     .setProgressBar(GuiTextures.PROGRESS_BAR_RECYCLER, ProgressWidget.MoveType.HORIZONTAL)
                     .setSlotOverlay(true, false, GuiTextures.BOXED_OVERLAY);
 
-    public static final RecipeMap<SimpleRecipeBuilder> LARGE_RAILROAD_ENGINEERING_STATION_RECIPES = LargeRESRecipeMap.RES_RECIPES;
+    public static final RecipeMap<PrimitiveRecipeBuilder> CUPOLA_FURNACE = new RecipeMap<>("cupola_furnace", 4, 1, 0, 0,
+            new PrimitiveRecipeBuilder(), false)
+                    .setSound(GTSoundEvents.FURNACE);
 
     static {
         GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()

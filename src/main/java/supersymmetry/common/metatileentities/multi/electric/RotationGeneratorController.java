@@ -39,6 +39,8 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
     private boolean sufficientFluids;
     private boolean isFull;
 
+    protected boolean generatingPower;
+
     protected FluidStack lubricantStack;
     protected SuSyUtility.Lubricant lubricantInfo;
 
@@ -82,6 +84,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
             setLubricantStack(tanks);
             updateSufficientFluids();
             isFull = energyContainer.getEnergyStored() - energyContainer.getEnergyCapacity() == 0;
+            generatingPower = !isFull && recipeMapWorkable.isWorking();
 
             if (recipeMapWorkable.isWorking() && ((SuSyTurbineRecipeLogic) recipeMapWorkable).tryDrawEnergy()) {
                 speed += getRotationAcceleration();
@@ -199,10 +202,19 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         }
 
         @Override
+        public int getInfoProviderEUt() {
+            if (!isFull && speed > 0 && tryDrawEnergy()) {
+                return (int) getActualVoltage();
+            } else {
+                return 0;
+            }
+        }
+
+        @Override
         protected void updateRecipeProgress() {
             if (canRecipeProgress && drawEnergy(recipeEUt, true)) {
                 // as recipe starts with progress on 1 this has to be > only not => to compensate for it
-                if (++progressTime > maxProgressTime) {
+                if (++progressTime > getMaxProgress()) {
                     completeRecipe();
                 }
             }
@@ -225,7 +237,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         protected boolean drawEnergy(int recipeEUt, boolean simulate) {
             long euToDraw = -getActualVoltage(); // Will be negative
             long resultEnergy = getEnergyStored() - euToDraw;
-            if (resultEnergy >= 0L && resultEnergy <= getEnergyCapacity()) {
+            if (resultEnergy >= 0L && getEnergyStored() < getEnergyCapacity()) {
                 if (!simulate) getEnergyContainer().changeEnergy(-euToDraw); // So this is positive
                 return true;
             }
@@ -235,7 +247,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
 
         public boolean tryDrawEnergy() {
             return drawEnergy((int) getMaxParallelVoltage(), true); // have energy draw only tied to speed? (ignore
-            // recipe EUt entirely)
+                                                                    // recipe EUt entirely)
         }
 
         public boolean doDrawEnergy() {
