@@ -1,8 +1,6 @@
 package supersymmetry.common.entities;
 
-import java.util.List;
-import java.util.Random;
-
+import gregtech.api.GregTechAPI;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -18,8 +16,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import gregtech.api.GregTechAPI;
 import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AFSRendered;
@@ -29,6 +25,7 @@ import supersymmetry.client.renderer.handler.IAlwaysRender;
 import supersymmetry.client.renderer.particles.SusyParticleFlameLarge;
 import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
 import supersymmetry.common.network.CPacketRocketInteract;
+import supersymmetry.common.rocketry.SuccessCalculation;
 import supersymmetry.common.rocketry.SuccessCalculation.LaunchResult;
 
 import javax.annotation.Nullable;
@@ -57,8 +54,6 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
         rideCooldown = -1;
         ignoreFrustumCheck = true;
         isImmuneToFire = true;
-        this.launchResult = LaunchResult.TROLLS;
-        this.trollTargetPos = new BlockPos(0, 0, 0);
     }
 
     public EntityRocket(World worldIn, double x, double y, double z, float rotationYaw) {
@@ -137,9 +132,11 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
         }
     }
 
-    public void initializeCargo() {
+    public void initializeLaunch() {
         if (!this.getEntityData().hasKey("maxVolume")) {
+            // Testing only
             this.cargo = new CargoItemStackHandler(10000, 10000);
+            this.maxFuelVolume = 1;
         } else {
             this.cargo = new CargoItemStackHandler(this.getEntityData().getInteger("maxVolume"),
                     this.getEntityData().getInteger("maxWeight"));
@@ -147,6 +144,15 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
             AbstractRocketBlueprint blueprint = AbstractRocketBlueprint
                     .getCopyOf(this.getEntityData().getCompoundTag("rocket").getString("name"));
             blueprint.readFromNBT(this.getEntityData().getCompoundTag("rocket"));
+            BlockPos assemblerPosition = BlockPos.fromLong(this.getEntityData().getLong("assemblerPosition"));
+            if (!assemblerPosition.equals(BlockPos.NULL_VECTOR) &&
+                    this.getPosition().distanceSq(assemblerPosition) < 100) {
+                this.trollTargetPos = assemblerPosition;
+                this.launchResult = LaunchResult.TROLLS;
+            } else {
+                this.launchResult = new SuccessCalculation(blueprint).calculateSuccess(this);
+            }
+
             this.maxFuelVolume = (int) blueprint.getFuelVolume();
         }
     }
@@ -232,52 +238,30 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
             this.prevPosY = this.posY;
             this.prevPosZ = this.posZ;
 
-            // Troll mode: curve the rocket back towards the launch pad
-            if (this.launchResult == LaunchResult.TROLLS && this.trollTargetPos != null) {
-                // Calculate direction to target
-                double dx = this.trollTargetPos.getX() + 0.5 - this.posX;
-                double dy = this.trollTargetPos.getY() - this.posY;
-                double dz = this.trollTargetPos.getZ() + 0.5 - this.posZ;
-                double horizontalDistance = Math.sqrt(dx * dx + dz * dz);
-
-                // Calculate target yaw and pitch
-                float targetYaw = 90 + (float) (Math.atan2(dz, dx) * 180.0 / Math.PI);
-                float targetPitch = 180 + (float) (-(Math.atan2(dy, horizontalDistance) * 180.0 / Math.PI));
-
-                // Gradually adjust yaw and pitch (semi-realistic curve)
-                float yawDiff = targetYaw - this.rotationYaw;
-                while (yawDiff > 180.0F) yawDiff -= 360.0F;
-                while (yawDiff < -180.0F) yawDiff += 360.0F;
-
-                float pitchDiff = targetPitch - this.rotationPitch;
-                while (pitchDiff > 180.0F) pitchDiff -= 360.0F;
-                while (pitchDiff < -180.0F) pitchDiff += 360.0F;
-
-                // Curve rate increases with flight time (rocket becomes more unstable)
-                float curveRate = Math.min(flightTime * flightTime * 0.000001F, 5.0F);
-                this.rotationYaw += yawDiff * curveRate;
-                this.rotationPitch += pitchDiff * curveRate * 0.05F;
-
-                // Apply lateral motion based on rotation
-                double speed = jerk * Math.pow(flightTime, 2) / 2;
-                double yawRad = Math.toRadians(this.rotationYaw);
-                double pitchRad = Math.toRadians(this.rotationPitch);
-
-                this.motionX = -Math.sin(yawRad) * Math.sin(pitchRad) * speed;
-                this.motionZ = Math.cos(yawRad) * Math.sin(pitchRad) * speed;
-                this.motionY = Math.cos(pitchRad) * speed;
-
-                this.setPositionAndRotation(
-                    this.posX + this.motionX,
-                    this.posY + this.motionY,
-                    this.posZ + this.motionZ,
-                        this.rotationYaw,
-                        this.rotationPitch
-                );
-            } else {
-                // Normal flight
-                this.motionY = jerk * Math.pow(getFlightTime(), 2) / 2;
-                this.setPosition(this.posX, startPos + jerk * Math.pow(flightTime, 3) / 6, this.posZ);
+            switch (this.launchResult) {
+                case DOES_NOT_LAUNCH:
+                    if (flightTime > 400) {
+                        explode();
+                    }
+                    break;
+                case CRASHES:
+                    if (Math.random() < 0.02) {
+                        trollTargetPos = new BlockPos(this.getPosition().getX() + (1000 * Math.random() - 500),
+                                0,
+                                this.getPosition().getZ() + (1000 * Math.random() - 500));
+                    }
+                    if (Math.random() < 0.01 && flightTime > 200) {
+                        explode();
+                    }
+                case TROLLS:
+                    if (trollTargetPos != null) {
+                        flyToTroll(flightTime);
+                        break;
+                    }
+                case LAUNCHES:
+                    // Normal flight
+                    this.motionY = jerk * Math.pow(flightTime, 2) / 2;
+                    this.setPosition(this.posX, startPos + jerk * Math.pow(flightTime, 3) / 6, this.posZ);
             }
 
             this.setFlightTime(flightTime + 1);
@@ -310,6 +294,50 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
          * }
          */
         this.setAge(age + 1);
+    }
+
+    protected void flyToTroll(int flightTime) {
+        // Calculate direction to target
+        double dx = this.trollTargetPos.getX() + 0.5 - this.posX;
+        double dy = this.trollTargetPos.getY() - this.posY;
+        double dz = this.trollTargetPos.getZ() + 0.5 - this.posZ;
+        double horizontalDistance = Math.sqrt(dx * dx + dz * dz);
+
+        // Calculate target yaw and pitch
+        float targetYaw = 90 + (float) (Math.atan2(dz, dx) * 180.0 / Math.PI);
+        float targetPitch = 180 + (float) (-(Math.atan2(dy, horizontalDistance) * 180.0 / Math.PI));
+
+        // Gradually adjust yaw and pitch (semi-realistic curve)
+        float yawDiff = targetYaw - this.rotationYaw;
+        while (yawDiff > 180.0F) yawDiff -= 360.0F;
+        while (yawDiff < -180.0F) yawDiff += 360.0F;
+
+        float pitchDiff = targetPitch - this.rotationPitch;
+        while (pitchDiff > 180.0F) pitchDiff -= 360.0F;
+        while (pitchDiff < -180.0F) pitchDiff += 360.0F;
+
+        // Curve rate increases with flight time (rocket becomes more unstable)
+        float curveRate = Math.min(flightTime * flightTime * 0.000001F, 5.0F);
+        this.rotationYaw += yawDiff * curveRate;
+        this.rotationPitch += pitchDiff * curveRate * 0.05F;
+
+        // Apply lateral motion based on rotation
+        double speed = jerk * Math.pow(flightTime, 2) / 2;
+        double yawRad = Math.toRadians(this.rotationYaw);
+        double pitchRad = Math.toRadians(this.rotationPitch);
+
+        this.motionX = -Math.sin(yawRad) * Math.sin(pitchRad) * speed;
+        this.motionZ = Math.cos(yawRad) * Math.sin(pitchRad) * speed;
+        this.motionY = Math.cos(pitchRad) * speed;
+
+        this.setPositionAndRotation(
+                this.posX + this.motionX,
+                this.posY + this.motionY,
+                this.posZ + this.motionZ,
+                this.rotationYaw,
+                this.rotationPitch
+        );
+
     }
 
     @Override
