@@ -32,8 +32,8 @@ import gregtech.api.recipes.RecipeMap;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.common.metatileentities.electric.MetaTileEntitySingleCombustion;
 import supersymmetry.api.capability.impl.SuSyFluidFilters;
+import supersymmetry.api.fluids.SuSyFluidTankWidget;
 import supersymmetry.api.util.SuSyUtility;
-import supersymmetry.common.gregtechoverrides.SuSyFilteredFluidTank;
 
 public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleCombustion {
 
@@ -75,11 +75,11 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
             displayedTanks[i] = filteredFluidHandler;
         }
 
-        this.lubricantTank = new SuSyFilteredFluidTank(1000, this, false)
+        this.lubricantTank = new SuSyFluidTankWidget(1000, this, false)
                 .setFilter(SuSyFluidFilters.LUBRICANT);
         fluidImports[fluidImports.length - 2] = lubricantTank;
 
-        this.coolantTank = new SuSyFilteredFluidTank(1000, this, false)
+        this.coolantTank = new SuSyFluidTankWidget(1000, this, false)
                 .setFilter(SuSyFluidFilters.COOLANT);
         fluidImports[fluidImports.length - 1] = coolantTank;
 

@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,6 +29,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import cam72cam.immersiverailroading.IRBlocks;
 import cam72cam.immersiverailroading.IRItems;
 import cam72cam.immersiverailroading.entity.EntityBuildableRollingStock;
 import cam72cam.immersiverailroading.entity.EntityMoveableRollingStock;
@@ -542,31 +544,19 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
     protected void formStructure(PatternMatchContext context) {
         super.formStructure(context);
         this.setStructureAABB();
-
-        // Capture all rail positions from the structure
         this.railPositions.clear();
-        Object railsObj = context.get("D");
-        if (railsObj instanceof List) {
-            List<?> railsList = (List<?>) railsObj;
-            for (Object posObj : railsList) {
-                if (posObj instanceof BlockPos) {
-                    this.railPositions.add((BlockPos) posObj);
-                }
+
+        for (BlockPos pos : BlockPos.getAllInBoxMutable(
+                (int) structureAABB.minX, (int) structureAABB.minY, (int) structureAABB.minZ,
+                (int) structureAABB.maxX, (int) structureAABB.maxY, (int) structureAABB.maxZ)) {
+            Block block = getWorld().getBlockState(pos).getBlock();
+            if (block == IRBlocks.BLOCK_RAIL.internal || block == IRBlocks.BLOCK_RAIL_GAG.internal) {
+                this.railPositions.add(pos.toImmutable()); // toImmutable() is critical - mutable pos reuses the same
+                                                           // object
             }
         }
 
-        // DEBUG: List all recipes in the recipe map
-        System.out.println("=== STRUCTURE FORMED - CHECKING RECIPES ===");
-        System.out.println("Recipe map: " + LargeRESRecipeMap.RES_RECIPES);
-        if (LargeRESRecipeMap.RES_RECIPES != null) {
-            System.out.println("Total recipes: " + LargeRESRecipeMap.RES_RECIPES.getRecipeList().size());
-            for (Recipe recipe : LargeRESRecipeMap.RES_RECIPES.getRecipeList()) {
-                System.out.println("  Recipe: " + recipe);
-                System.out.println("    Inputs: " + recipe.getInputs());
-                System.out.println("    Outputs: " + recipe.getOutputs());
-            }
-        }
-        System.out.println("=== END RECIPE CHECK ===");
+        System.out.println("Found " + railPositions.size() + " rails by world scan");
     }
 
     @Override
@@ -681,27 +671,9 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
     }
 
     public BlockPos getRailPos() {
-        // Use the center rail position from the structure
-        if (!this.railPositions.isEmpty()) {
-            // Sort rails by distance from controller to get the centermost one
-            BlockPos center = getPos();
-
-            // Get rails sorted by distance from center
-            List<BlockPos> sortedRails = new ArrayList<>(this.railPositions);
-            sortedRails.sort(Comparator.comparingDouble(rail -> center.distanceSq(rail)));
-
-            // Return the most central rail
-            BlockPos centralRail = sortedRails.get(sortedRails.size() / 2);
-
-            // DEBUG: Log which rail was selected
-            System.out.println("Selected rail at: " + centralRail + " from " + railPositions.size() + " rails");
-
-            return centralRail;
-        }
-
-        // This should never happen if structure is formed correctly
-        System.err.println("WARNING: No rails found in structure!");
-        return getPos();
+        BlockPos pos = getPos();
+        EnumFacing front = getFrontFacing();
+        return pos.offset(front.getOpposite(), 1);
     }
 
     public EntityRollingStock spawnRollingStock(ItemStack stack) {

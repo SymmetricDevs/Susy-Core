@@ -1,4 +1,4 @@
-package supersymmetry.common.gregtechoverrides;
+package supersymmetry.api.fluids;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
@@ -6,9 +6,9 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import gregtech.api.capability.impl.NotifiableFilteredFluidHandler;
 import gregtech.api.metatileentity.MetaTileEntity;
 
-public class SuSyFilteredFluidTank extends NotifiableFilteredFluidHandler {
+public class SuSyFluidTankWidget extends NotifiableFilteredFluidHandler {
 
-    public SuSyFilteredFluidTank(int capacity, MetaTileEntity entityToNotify, boolean isExport) {
+    public SuSyFluidTankWidget(int capacity, MetaTileEntity entityToNotify, boolean isExport) {
         super(capacity, entityToNotify, isExport);
     }
 
@@ -63,7 +63,7 @@ public class SuSyFilteredFluidTank extends NotifiableFilteredFluidHandler {
 
                     @Override
                     public boolean canFillFluidType(FluidStack fluidStack) {
-                        boolean result = fluidStack != null && SuSyFilteredFluidTank.this.canFillFluidType(fluidStack);
+                        boolean result = fluidStack != null && SuSyFluidTankWidget.this.canFillFluidType(fluidStack);
                         System.out.println("[SuSyFilteredFluidTank] getTankProperties().canFillFluidType() with: " +
                                 (fluidStack != null ? fluidStack.getFluid().getName() : "null") + ", result: " +
                                 result);
