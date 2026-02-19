@@ -1,25 +1,9 @@
 package supersymmetry.common.metatileentities.multi.rocket;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.annotation.Nonnull;
-
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-
-import org.jetbrains.annotations.NotNull;
-
 import cam72cam.mod.entity.ModdedEntity;
-import gregtech.api.capability.*;
+import gregtech.api.capability.GregtechDataCodes;
+import gregtech.api.capability.GregtechTileCapabilities;
+import gregtech.api.capability.IControllable;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.Widget;
@@ -38,6 +22,16 @@ import gregtech.api.util.RelativeDirection;
 import gregtech.api.util.Size;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.metatileentity.multiblock.IRedstoneControllable;
@@ -53,6 +47,11 @@ import supersymmetry.common.entities.EntityTransporterErector;
 import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityComponentRedstoneController;
 import supersymmetry.common.mui.widget.ItemCostWidget;
 import supersymmetry.common.mui.widget.SlotWidgetMentallyStable;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                                            implements IProgressBarMultiblock, IRedstoneControllable {
@@ -175,6 +174,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         if (erector != null) {
             erector.setRocketLoaded(true);
             NBTTagCompound rocketNBT = erector.getRocketNBT();
+            rocketNBT.setLong("assemblerPosition", this.getPos().toLong());
             rocketNBT.setTag("rocket", this.getCurrentBlueprint().writeToNBT());
         } else {
             doExplosion(1000000);
@@ -604,24 +604,6 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     protected ModularUI createUI(EntityPlayer entityPlayer) {
         return createUITemplate(entityPlayer).build(getHolder(), entityPlayer);
     }
-
-    // @Override
-    // public void checkStructurePattern() {
-    // SusyLog.logger.info("checkStructurePattern");
-    // PatternMatchContext context =
-    // structurePattern.checkPatternFastAt(
-    // getWorld(), getPos(), getFrontFacing().getOpposite(), getUpwardsFacing(),
-    // allowsFlip());
-    // if (context != null && !this.isStructureFormed()) {
-    // Set<IMultiblockPart> rawPartsSet = context.getOrCreate("MultiblockParts", HashSet::new);
-    // ArrayList<IMultiblockPart> parts = new ArrayList<>(rawPartsSet);
-    // for (var part : parts) {
-    // SusyLog.logger.info("part: {}\n{}", part.getClass().toString(), part);
-    // }
-    // }
-    //
-    // super.checkStructurePattern();
-    // }
 
     protected ModularUI.Builder createUITemplate(EntityPlayer entityPlayer) {
         ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, 198, 208);

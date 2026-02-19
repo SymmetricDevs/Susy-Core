@@ -1,17 +1,16 @@
 package supersymmetry.common.rocketry.rockets;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants.NBT;
-
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.RocketStage;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint {
 
@@ -63,10 +62,20 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint {
         }
     }
 
-    public double failureRate = 0.4;
+    public double augmentation = 0.;
 
     public SimpleStagedRocketBlueprint(String name, ResourceLocation entity) {
         super(name, entity);
+    }
+
+    @Override
+    public double getAugmentation() {
+        return augmentation;
+    }
+
+    @Override
+    public void setAugmentation(double augmentation) {
+        this.augmentation = augmentation;
     }
 
     @Override
@@ -81,8 +90,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint {
         tag.setTag("ignitionOrder", ignitionOrder);
         tag.setString("name", this.getName());
         tag.setBoolean("buildstat", this.isFullBlueprint());
-        tag.setDouble("failureRate", this.failureRate);
-        tag.setDouble("afs_chance", this.AFSSuccessChance);
+        tag.setDouble("augmentation", this.augmentation);
 
         return tag;
     }
@@ -111,8 +119,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint {
                 .map(x -> (NBTTagIntArray) x)
                 .forEach(t -> this.ignitionStages.add(t.getIntArray()));
         this.setName(tag.getString("name"));
-        this.failureRate = tag.getDouble("failureRate");
-        this.AFSSuccessChance = tag.getDouble("afs_chance");
+        this.augmentation = tag.getDouble("augmentation");
         return true;
     }
 }

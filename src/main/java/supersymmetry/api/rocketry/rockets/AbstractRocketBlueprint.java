@@ -1,15 +1,14 @@
 package supersymmetry.api.rocketry.rockets;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import supersymmetry.Supersymmetry;
+import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
-
-import supersymmetry.Supersymmetry;
-import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 
 public abstract class AbstractRocketBlueprint {
 
@@ -56,8 +55,6 @@ public abstract class AbstractRocketBlueprint {
 
     public String name;
 
-    public double AFSSuccessChance = 0.0;
-
     public ResourceLocation relatedEntity = new ResourceLocation(Supersymmetry.MODID, "rocket_basic");
 
     public List<int[]> ignitionStages = new ArrayList<>(); // allows for multiple stages to be ignited at once, ex.
@@ -73,13 +70,9 @@ public abstract class AbstractRocketBlueprint {
         setRelatedEntity(relatedEntity);
     }
 
-    public double getAFSSuccessChance() {
-        return AFSSuccessChance;
-    }
+    public abstract double getAugmentation();
 
-    public void setAFSSuccessChance(double aFSSuccessChance) {
-        AFSSuccessChance = aFSSuccessChance;
-    }
+    public abstract void setAugmentation(double augmentation);
 
     public List<int[]> getIgnitionStages() {
         return ignitionStages;
