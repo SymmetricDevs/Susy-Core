@@ -156,13 +156,4 @@ public abstract class AbstractRocketBlueprint {
     }
 
     public double afsSuccessChance;
-
-    public double getAFSSuccessChance() {
-        return afsSuccessChance;
-    }
-
-    public void setAFSSuccessChance(double afsSuccessChance) {
-        afsSuccessChance = afsSuccessChance;
-    }
-
 }
