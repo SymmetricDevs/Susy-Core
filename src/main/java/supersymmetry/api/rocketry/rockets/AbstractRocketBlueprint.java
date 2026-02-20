@@ -154,4 +154,15 @@ public abstract class AbstractRocketBlueprint {
     public void setStages(List<RocketStage> stages) {
         this.stages = stages;
     }
+
+    public double afsSuccessChance;
+
+    public double getAFSSuccessChance() {
+        return afsSuccessChance;
+    }
+
+    public void setAFSSuccessChance(double afsSuccessChance) {
+        afsSuccessChance = afsSuccessChance;
+    }
+
 }

@@ -22,6 +22,9 @@ import gregtech.api.util.RelativeDirection;
 import gregtech.api.util.Size;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
+import gregtech.common.blocks.BlockBoilerCasing;
+import gregtech.common.blocks.BlockTurbineCasing;
+import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -398,11 +401,11 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                         "                                                               ",
                         "                                                               ",
                         "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-                        " P           P   P           P   P           P   P           P ")
+                        "             HH HH           HH HH           HH HH             ",
+                        "              HGH             HGH             HGH              ",
+                        "               H               H               H               ",
+                        "BBBBBBBBBBBBBBBGBBBBBBBBBBBBBBBGBBBBBBBBBBBBBBBGBBBBBBBBBBBBBBB",
+                        " P           PHHHP           PHHHP           PHHHP           P ")
                 .aisle(
                         "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
                         "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
@@ -466,11 +469,11 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                         "                                                               ",
                         "                                                               ",
                         "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-                        " P           P   P           P   P           P   P           P ")
+                        "             HH HH           HH HH           HH HH             ",
+                        "              HGH             HGH             HGH              ",
+                        "               H               H               H               ",
+                        "BBBBBBBBBBBBBBBGBBBBBBBBBBBBBBBGBBBBBBBBBBBBBBBGBBBBBBBBBBBBBBB",
+                        " P           PHHHP           PHHHP           PHHHP           P ")
                 .aisle(
                         "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
                         "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
@@ -591,6 +594,8 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                         states(
                                 SuSyBlocks.ROCKET_ASSEMBLER_CASING.getState(
                                         BlockRocketAssemblerCasing.RocketAssemblerCasingType.RAILS)))
+                .where('G', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
+                .where('H', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE)))
                 .build();
     }
 
