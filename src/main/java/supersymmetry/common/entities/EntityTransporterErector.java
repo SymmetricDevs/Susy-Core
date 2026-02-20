@@ -29,7 +29,6 @@ public class EntityTransporterErector extends Freight implements IAlwaysRender {
     private double liftingSpeed = 0.087 / 20;
 
     public EntityTransporterErector() {
-        this.setRocketLoaded(true);
     }
 
     @Override

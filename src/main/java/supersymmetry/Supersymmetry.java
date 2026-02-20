@@ -1,9 +1,6 @@
 package supersymmetry;
 
-import java.awt.*;
-
-import javax.swing.*;
-
+import gregtech.GTInternalTags;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -11,21 +8,14 @@ import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import org.jetbrains.annotations.NotNull;
-
-import gregtech.GTInternalTags;
 import supersymmetry.api.capability.SuSyCapabilities;
 import supersymmetry.api.sound.SusySounds;
 import supersymmetry.common.CommonProxy;
 import supersymmetry.common.SusyMetaEntities;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SuSyMetaBlocks;
-import supersymmetry.common.command.CommandHordeBase;
-import supersymmetry.common.command.CommandHordeStart;
-import supersymmetry.common.command.CommandHordeStatus;
-import supersymmetry.common.command.CommandHordeStop;
-import supersymmetry.common.command.CommandRecipemapDump;
+import supersymmetry.common.command.*;
 import supersymmetry.common.covers.SuSyCoverBehaviors;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.item.SuSyMetaItems;
