@@ -72,7 +72,8 @@ public class SuSyConnectedTextures {
                 susyId("smoke_stack"),
                 susyId("vacuum_distillation_tower"),
                 susyId("landing_pad"),
-                susyId("advanced_arc_furnace"));
+                susyId("advanced_arc_furnace"),
+                susyId("internal_combustion_generator"));
         FROST_PROOF_CASING_CTM.override(susyId("condenser"),
                 susyId("high_pressure_cryogenic_distillation_plant"),
                 susyId("low_pressure_cryogenic_distillation_plant"),
@@ -85,9 +86,9 @@ public class SuSyConnectedTextures {
                 susyId("mixer_settler"),
                 susyId("quencher"),
                 susyId("sieve_distillation_tower"));
-        STEEL_TURBINE_CASING_CTM.override(susyId("basic_steam_turbine"),
-                susyId("basic_gas_turbine"));
-        TITANIUM_TURBINE_CASING_CTM.override(susyId("advanced_steam_turbine"));
+        STEEL_TURBINE_CASING_CTM.override(susyId("basic_steam_turbine"));
+        TITANIUM_TURBINE_CASING_CTM.override(susyId("advanced_steam_turbine"),
+                susyId("gas_turbine"));
         INERT_PTFE_CASING_CTM.override(susyId("fluidized_bed_reactor"),
                 susyId("blender"));
         SILICON_CARBIDE_CASING_CTM.override(susyId("high_temperature_distillation_tower"),
