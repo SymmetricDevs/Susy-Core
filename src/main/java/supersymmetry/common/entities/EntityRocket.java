@@ -21,6 +21,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import gregtech.api.GregTechAPI;
 import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AFSRendered;
@@ -335,9 +337,7 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
                 this.posY + this.motionY,
                 this.posZ + this.motionZ,
                 this.rotationYaw,
-                this.rotationPitch
-        );
-
+                this.rotationPitch);
     }
 
     @Override
