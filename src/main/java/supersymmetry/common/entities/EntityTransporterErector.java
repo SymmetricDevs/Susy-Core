@@ -1,5 +1,7 @@
 package supersymmetry.common.entities;
 
+import cam72cam.immersiverailroading.util.Speed;
+import cam72cam.mod.math.Vec3i;
 import net.minecraft.nbt.NBTTagCompound;
 
 import cam72cam.immersiverailroading.entity.Freight;
@@ -9,6 +11,8 @@ import cam72cam.mod.entity.sync.TagSync;
 import cam72cam.mod.serialization.TagField;
 import supersymmetry.client.renderer.handler.IAlwaysRender;
 import supersymmetry.integration.immersiverailroading.registry.TransporterErectorDefinition;
+
+import java.util.List;
 
 public class EntityTransporterErector extends Freight implements IAlwaysRender {
 
@@ -29,7 +33,6 @@ public class EntityTransporterErector extends Freight implements IAlwaysRender {
     private double liftingSpeed = 0.087 / 20;
 
     public EntityTransporterErector() {
-        this.setRocketLoaded(true);
     }
 
     @Override
@@ -83,7 +86,7 @@ public class EntityTransporterErector extends Freight implements IAlwaysRender {
     @Override
     public void onTick() {
         super.onTick();
-
+        this.setCurrentSpeed(Speed.ZERO);
         if (this.getCurrentSpeed().isZero()) {
             switch (this.liftingMode) {
                 case UP:
@@ -113,5 +116,13 @@ public class EntityTransporterErector extends Freight implements IAlwaysRender {
         UP,
         DOWN,
         STOP;
+    }
+
+    @Override
+    public double getDirectFrictionNewtons(List<Vec3i> track) {
+        if (this.lifterAngle > 0 || this.liftingMode == LiftingMode.UP) {
+            return 1000000;
+        }
+        return super.getDirectFrictionNewtons(track);
     }
 }

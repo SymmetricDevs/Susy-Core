@@ -139,7 +139,7 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
     public void onUpdate() {
         super.onUpdate();
 
-        if (this.posY > 600 && this.isLaunched()) {
+        if (this.posY > 1000 && this.isLaunched()) {
             if (this.hasActed() && this.getPassengers().isEmpty()) {
                 this.setDead();
             } else {

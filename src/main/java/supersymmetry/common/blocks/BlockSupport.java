@@ -1,7 +1,6 @@
 package supersymmetry.common.blocks;
 
-import javax.annotation.Nonnull;
-
+import gregtech.api.block.VariantBlock;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -9,16 +8,18 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import org.jetbrains.annotations.NotNull;
 
-import gregtech.api.block.VariantBlock;
+import javax.annotation.Nonnull;
 
 public class BlockSupport extends VariantBlock<BlockSupport.SupportType> {
+    public static final AxisAlignedBB FULL_BLOCK_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)
+            .grow(-0.0625D);
 
     public BlockSupport() {
         super(Material.IRON);
@@ -54,22 +55,12 @@ public class BlockSupport extends VariantBlock<BlockSupport.SupportType> {
                          int fortune) {
         // Nothing
     }
-    /*
-     * @Override
-     * 
-     * @NotNull
-     * 
-     * @SuppressWarnings("deprecation")
-     * public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
-     * {
-     * return ;
-     * }
-     */
 
     @Override
+    @NotNull
     @SuppressWarnings("deprecation")
-    public boolean isFullCube(@NotNull IBlockState state) {
-        return true;
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return BlockSupport.FULL_BLOCK_AABB;
     }
 
     @Override

@@ -14,6 +14,7 @@ public class SuccessCalculation {
 
     public SuccessCalculation(AbstractRocketBlueprint blueprint) {
         this.blueprint = blueprint;
+        this.augmentation = blueprint.getAugmentation();
     }
 
     // lobotomized version of the function below to only take in the blueprint
@@ -32,7 +33,7 @@ public class SuccessCalculation {
         // g = GM / R^2
         // g = GR * 4/3pi * rho
         // R = 3/(4G * rho * pi) * g
-        // escape velocity = sqrt(2gR) = g * sqrt(3/2Grhopi)
+        // escape velocity = sqrt(2gR) = g * sqrt(3/(2G * rho * pi))
         double escapeVelocity = 1138 * gravity;
 
         if (velocitySpeedup < escapeVelocity) {
@@ -48,9 +49,8 @@ public class SuccessCalculation {
         success *= (1 - (0.5 * Math.exp(blueprint.getTotalRadiusMismatch() / 10)));
 
         double smallThrust = blueprint.getThrust(null, gravity / 9.81, "small_engine");
-        if (smallThrust == 0) {
-            return 0;
-        }
+        success *= (1 - (0.2 * Math.exp(3 - smallThrust)));
+
         if (thrust / smallThrust > 10) {
             success *= (1 - (0.2 * Math.exp((thrust / smallThrust) - 10)));
         } else if (thrust / smallThrust < 3) {
@@ -105,9 +105,9 @@ public class SuccessCalculation {
 
         // Small engines shouldn't have that much throughput
         double smallThrust = blueprint.getThrust(null, gravMult, "small_engine");
-        if (smallThrust == 0) {
-            return LaunchResult.CRASHES;
-        }
+        double torqueNeeded = 1 + rocket.world.rainingStrength + rocket.world.thunderingStrength;
+        success *= (1 - (0.2 * Math.exp(torqueNeeded - smallThrust)));
+
         if (thrust / smallThrust > 10) {
             success *= (1 - (0.2 * Math.exp((thrust / smallThrust) - 10)));
         } else if (thrust / smallThrust < 3) {
@@ -122,7 +122,7 @@ public class SuccessCalculation {
         if (Math.random() < success) {
             return LaunchResult.LAUNCHES;
         } else {
-            return LaunchResult.DOES_NOT_LAUNCH;
+            return LaunchResult.CRASHES;
         }
     }
 

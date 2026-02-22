@@ -412,7 +412,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
             for (Map.Entry<String, NBTBase> tag : selectedErector.getRocketNBT().tagMap.entrySet()) {
                 this.selectedRocket.getEntityData().setTag(tag.getKey(), tag.getValue());
             }
-            this.selectedRocket.initializeCargo();
+            this.selectedRocket.initializeLaunch();
         }
         this.getWorld().spawnEntity(this.selectedRocket);
     }
