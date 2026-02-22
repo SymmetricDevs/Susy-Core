@@ -12,7 +12,6 @@ import net.minecraft.world.biome.Biome;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.image.Cubemap;
-import supersymmetry.api.image.DebugCubemap;
 import supersymmetry.api.space.CelestialObjects;
 import supersymmetry.api.space.RenderableCelestialObject;
 import supersymmetry.api.space.dimension.SpaceDimension;
@@ -24,9 +23,6 @@ import supersymmetry.common.blocks.SusyStoneVariantBlock;
 import supersymmetry.common.world.biome.SuSyBiomeEntry;
 import supersymmetry.common.world.sky.SkyColorData;
 import supersymmetry.common.world.sky.SkyRenderData;
-
-import static supersymmetry.MartinsUtility.createSingleColorTexture;
-import static supersymmetry.MartinsUtility.makeColorTexture;
 
 public class SuSyDimensions {
 
@@ -69,8 +65,7 @@ public class SuSyDimensions {
                 new ResourceLocation("susy", "textures/space/sun/sun/pz.png"),
                 new ResourceLocation("susy", "textures/space/sun/sun/nx.png"),
                 new ResourceLocation("susy", "textures/space/sun/sun/ny.png"),
-                new ResourceLocation("susy", "textures/space/sun/sun/nz.png")
-        );
+                new ResourceLocation("susy", "textures/space/sun/sun/nz.png"));
         RenderableCelestialObject SUN = new RenderableCelestialObject(CelestialObjects.SUN, solCubemap);
 
         Cubemap moonCubemap = new Cubemap(
@@ -79,32 +74,31 @@ public class SuSyDimensions {
                 new ResourceLocation("susy", "textures/space/moon/pz.png"),
                 new ResourceLocation("susy", "textures/space/moon/nx.png"),
                 new ResourceLocation("susy", "textures/space/moon/ny.png"),
-                new ResourceLocation("susy", "textures/space/moon/nz.png")
-        );
+                new ResourceLocation("susy", "textures/space/moon/nz.png"));
         Cubemap earthCubemap = new Cubemap(new ResourceLocation("susy", "textures/space/earth/cubemap.png"));
 
-        RenderableCelestialObject renderableMoon  = new RenderableCelestialObject(CelestialObjects.MOON,  moonCubemap);
+        RenderableCelestialObject renderableMoon = new RenderableCelestialObject(CelestialObjects.MOON, moonCubemap);
         RenderableCelestialObject renderableEarth = new RenderableCelestialObject(CelestialObjects.EARTH, earthCubemap);
 
         SkyRenderData sun = new SkyRenderData.Builder(
                 new ResourceLocation("susy", "textures/environment/sun.png"),
                 10.0F)
-                .positionType(SkyRenderData.PositionType.CELESTIAL_SPHERE)
-                .useLinearFiltering(false)
-                .baseInclination(5.14f)
-                .inclination(5.14f, nodalPeriodTicks)
-                .build();
+                        .positionType(SkyRenderData.PositionType.CELESTIAL_SPHERE)
+                        .useLinearFiltering(false)
+                        .baseInclination(5.14f)
+                        .inclination(5.14f, nodalPeriodTicks)
+                        .build();
 
         SkyRenderData earth = new SkyRenderData.Builder(
                 new ResourceLocation("susy", "textures/environment/earth_phases.png"),
                 40.0F)
-                .positionType(SkyRenderData.PositionType.ZENITH)
-                .rotationX(90.0F)
-                .phases(4, 2, 29.53F)
-                .useLinearFiltering(false)
-                .brightness(0.8F)
-                .mirrorTexture(true)
-                .build();
+                        .positionType(SkyRenderData.PositionType.ZENITH)
+                        .rotationX(90.0F)
+                        .phases(4, 2, 29.53F)
+                        .useLinearFiltering(false)
+                        .brightness(0.8F)
+                        .mirrorTexture(true)
+                        .build();
 
         moonSky.setCelestialObjects(sun, earth);
 
@@ -119,10 +113,10 @@ public class SuSyDimensions {
         moonSky.setSkyColorData(moonColors);
 
         new Planet(0, 800, "Moon").setBiomeList(
-                        new SuSyBiomeEntry(SuSyBiomes.LUNAR_HIGHLANDS, 100)
-                                .setCraterBlock(SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.HIGHLAND)),
-                        new SuSyBiomeEntry(SuSyBiomes.LUNAR_MARIA, 100)
-                                .setCraterBlock(SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.LOWLAND)))
+                new SuSyBiomeEntry(SuSyBiomes.LUNAR_HIGHLANDS, 100)
+                        .setCraterBlock(SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.HIGHLAND)),
+                new SuSyBiomeEntry(SuSyBiomes.LUNAR_MARIA, 100)
+                        .setCraterBlock(SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.LOWLAND)))
                 .setStone(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH)
                         .getState(SusyStoneVariantBlock.StoneType.ANORTHOSITE))
                 .setSuSySkyRenderer(moonSky)
@@ -136,7 +130,7 @@ public class SuSyDimensions {
         SuSySpaceRenderer leoRenderer = new SuSySpaceRenderer();
         leoRenderer.setCelestialObjects(renderableEarth, renderableMoon, SUN);
 
-        // ISS completes one orbit every ~92 minutes → 92 * 60 * 20 ticks
+        // 92 minutes * 60 seconds * 20 ticks/s
         long leoOrbitTicks = 110_400L;
 
         new SpaceDimension(802, "low_earth_orbit")

@@ -1,16 +1,18 @@
 package supersymmetry.api.image;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL13;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 public class Cubemap {
 
@@ -22,7 +24,7 @@ public class Cubemap {
     public Cubemap(ResourceLocation px, ResourceLocation nx,
                    ResourceLocation py, ResourceLocation ny,
                    ResourceLocation pz, ResourceLocation nz) {
-        this.faces = new ResourceLocation[]{px, nx, py, ny, pz, nz};
+        this.faces = new ResourceLocation[] { px, nx, py, ny, pz, nz };
         this.cross = null;
     }
 
@@ -69,14 +71,15 @@ public class Cubemap {
             int b = p & 0xFF;
 
             int idx = i * 4;
-            data[idx]     = (byte)b;
-            data[idx + 1] = (byte)g;
-            data[idx + 2] = (byte)r;
-            data[idx + 3] = (byte)a;
+            data[idx] = (byte) b;
+            data[idx + 1] = (byte) g;
+            data[idx + 2] = (byte) r;
+            data[idx + 3] = (byte) a;
         }
 
         GL11.glTexImage2D(target, 0, GL11.GL_RGBA8, w, h, 0,
-                GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, org.lwjgl.BufferUtils.createByteBuffer(data.length).put(data).flip());
+                GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE,
+                org.lwjgl.BufferUtils.createByteBuffer(data.length).put(data).flip());
     }
 
     private void loadSixFaceTextures() throws IOException {
@@ -98,18 +101,18 @@ public class Cubemap {
         int h = img.getHeight() / 4;
 
         // Standard vertical cross layout:
-        //        PY
-        //   NX   PZ   PX
-        //        NY
-        //        NZ
+        // PY
+        // NX PZ PX
+        // NY
+        // NZ
 
         int[][] layout = {
-                {2, 1}, // PX
-                {0, 1}, // NX
-                {1, 0}, // PY
-                {1, 2}, // NY
-                {1, 1}, // PZ
-                {1, 3}  // NZ
+                { 2, 1 }, // PX
+                { 0, 1 }, // NX
+                { 1, 0 }, // PY
+                { 1, 2 }, // NY
+                { 1, 1 }, // PZ
+                { 1, 3 }  // NZ
         };
 
         for (int i = 0; i < 6; i++) {

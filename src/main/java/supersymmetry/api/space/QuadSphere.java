@@ -1,12 +1,14 @@
 package supersymmetry.api.space;
 
-import org.lwjgl.util.vector.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.lwjgl.util.vector.Vector3f;
 
 public class QuadSphere {
 
     public static class Vertex {
+
         public final float x, y, z;     // position
         public final float nx, ny, nz;  // normal (cubemap direction)
 
@@ -16,7 +18,7 @@ public class QuadSphere {
             this.z = z;
 
             // normalize for cubemap lookup
-            float len = (float)Math.sqrt(x*x + y*y + z*z);
+            float len = (float) Math.sqrt(x * x + y * y + z * z);
             this.nx = x / len;
             this.ny = y / len;
             this.nz = z / len;
@@ -51,12 +53,12 @@ public class QuadSphere {
     // ===========================================
     private void build() {
         // 6 cube faces
-        makeFace(new Vector3f( 1,  0,  0)); // +X
-        makeFace(new Vector3f(-1,  0,  0)); // -X
-        makeFace(new Vector3f( 0,  1,  0)); // +Y
-        makeFace(new Vector3f( 0, -1,  0)); // -Y
-        makeFace(new Vector3f( 0,  0,  1)); // +Z
-        makeFace(new Vector3f( 0,  0, -1)); // -Z
+        makeFace(new Vector3f(1, 0, 0)); // +X
+        makeFace(new Vector3f(-1, 0, 0)); // -X
+        makeFace(new Vector3f(0, 1, 0)); // +Y
+        makeFace(new Vector3f(0, -1, 0)); // -Y
+        makeFace(new Vector3f(0, 0, 1)); // +Z
+        makeFace(new Vector3f(0, 0, -1)); // -Z
     }
 
     // Make one cube face subdivided into quads
@@ -105,11 +107,11 @@ public class QuadSphere {
                 int i2 = i0 + (N + 1);
                 int i3 = i2 + 1;
 
-                quads.add(new int[]{i0, i1, i3, i2});
+                quads.add(new int[] { i0, i1, i3, i2 });
 
                 // Optional triangles
-                triangles.add(new int[]{i0, i1, i3});
-                triangles.add(new int[]{i0, i3, i2});
+                triangles.add(new int[] { i0, i1, i3 });
+                triangles.add(new int[] { i0, i3, i2 });
             }
         }
     }
@@ -123,7 +125,7 @@ public class QuadSphere {
     }
 
     private static void normalize(Vector3f v) {
-        float l = (float)Math.sqrt(v.x*v.x + v.y*v.y + v.z*v.z);
+        float l = (float) Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
         v.x /= l;
         v.y /= l;
         v.z /= l;

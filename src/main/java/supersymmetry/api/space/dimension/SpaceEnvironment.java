@@ -1,6 +1,7 @@
 package supersymmetry.api.space.dimension;
 
 import javax.annotation.Nullable;
+
 import org.eclipse.lsp4j.jsonrpc.validation.NonNull;
 
 import supersymmetry.api.space.RenderableCelestialObject;
@@ -47,11 +48,9 @@ public class SpaceEnvironment {
     /** Should fog be rendered? Space usually has none. */
     public boolean renderFog = false;
 
-
     public SpaceEnvironment(
-            @Nullable RenderableCelestialObject objectToOrbit,
-            @NonNull RenderableCelestialObject[] visibleObjects
-    ) {
+                            @Nullable RenderableCelestialObject objectToOrbit,
+                            @NonNull RenderableCelestialObject[] visibleObjects) {
         this.objectToOrbit = objectToOrbit;
         this.visibleObjects = visibleObjects;
     }

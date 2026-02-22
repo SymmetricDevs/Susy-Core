@@ -4,6 +4,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.world.WorldProvider;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
 import supersymmetry.api.space.dimension.WorldProviderSpace;
 
 public class SpaceGravityHandler {

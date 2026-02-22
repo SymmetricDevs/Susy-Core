@@ -1,12 +1,13 @@
 package supersymmetry.api.space.dimension.biome;
 
+import java.util.Random;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
-import supersymmetry.common.world.biome.BiomePlanetaryDecorator;
 
-import java.util.Random;
+import supersymmetry.common.world.biome.BiomePlanetaryDecorator;
 
 public class SpaceBiome extends Biome {
 
@@ -37,6 +38,6 @@ public class SpaceBiome extends Biome {
 
     @Override
     public void genTerrainBlocks(World worldIn, Random rand, ChunkPrimer chunkPrimerIn, int x, int z, double noiseVal) {
-       // nothing because its void bro like why else
+        // nothing because its void bro like why else
     }
 }
