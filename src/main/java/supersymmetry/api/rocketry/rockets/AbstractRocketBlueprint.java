@@ -1,14 +1,15 @@
 package supersymmetry.api.rocketry.rockets;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
-import supersymmetry.Supersymmetry;
-import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+
+import supersymmetry.Supersymmetry;
+import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 
 public abstract class AbstractRocketBlueprint {
 
