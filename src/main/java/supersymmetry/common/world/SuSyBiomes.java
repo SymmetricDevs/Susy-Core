@@ -9,11 +9,13 @@ import net.minecraft.world.biome.Biome;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.world.biome.BiomeLunarHighlands;
 import supersymmetry.common.world.biome.BiomeLunarMaria;
+import supersymmetry.common.world.biome.BiomeVoid;
 
 public class SuSyBiomes {
 
     public static BiomeLunarHighlands LUNAR_HIGHLANDS;
     public static BiomeLunarMaria LUNAR_MARIA;
+    public static BiomeVoid VOID;
 
     private static final Map<Biome, IBlockState> BIOME_CRATER_BLOCKS = new HashMap<>();
 
