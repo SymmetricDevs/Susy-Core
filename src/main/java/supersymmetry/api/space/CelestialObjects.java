@@ -28,5 +28,6 @@ public class CelestialObjects {
                 .setDimension(0);
         MOON = new Planetoid("moon", 0.0123, 0., 1., 0., 0., EARTH, PlanetType.TERRESTRIAL)
                 .setDimension(800);
+        MOON.setRadius(0.2724); // ~27% of Earth's radius
     }
 }
