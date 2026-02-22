@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,7 +18,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
@@ -29,7 +27,6 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import cam72cam.immersiverailroading.IRBlocks;
 import cam72cam.immersiverailroading.IRItems;
 import cam72cam.immersiverailroading.entity.EntityBuildableRollingStock;
 import cam72cam.immersiverailroading.entity.EntityMoveableRollingStock;
@@ -546,17 +543,21 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
         this.setStructureAABB();
         this.railPositions.clear();
 
-        for (BlockPos pos : BlockPos.getAllInBoxMutable(
-                (int) structureAABB.minX, (int) structureAABB.minY, (int) structureAABB.minZ,
-                (int) structureAABB.maxX, (int) structureAABB.maxY, (int) structureAABB.maxZ)) {
-            Block block = getWorld().getBlockState(pos).getBlock();
-            if (block == IRBlocks.BLOCK_RAIL.internal || block == IRBlocks.BLOCK_RAIL_GAG.internal) {
-                this.railPositions.add(pos.toImmutable()); // toImmutable() is critical - mutable pos reuses the same
-                                                           // object
+        EnumFacing right = getFrontFacing().rotateY();
+        BlockPos aisleBase = getPos().offset(getFrontFacing().getOpposite(), 1);
+
+        System.out.println("Controller: " + getPos() + " facing: " + getFrontFacing());
+        System.out.println("AisleBase: " + aisleBase + " right: " + right);
+
+        for (int offset = -12; offset <= 12; offset++) {
+            BlockPos candidate = aisleBase.offset(right, offset);
+            net.minecraft.block.Block block = getWorld().getBlockState(candidate).getBlock();
+            System.out.println("  offset " + offset + " pos " + candidate + " = " + block.getRegistryName());
+            if (block.getRegistryName() != null &&
+                    block.getRegistryName().toString().contains("block_rail")) {
+                this.railPositions.add(candidate);
             }
         }
-
-        System.out.println("Found " + railPositions.size() + " rails by world scan");
     }
 
     @Override
@@ -671,9 +672,9 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
     }
 
     public BlockPos getRailPos() {
-        BlockPos pos = getPos();
         EnumFacing front = getFrontFacing();
-        return pos.offset(front.getOpposite(), 1);
+        // Rails are 1 block back from controller, centered (no right offset)
+        return getPos().offset(front.getOpposite(), 9);
     }
 
     public EntityRollingStock spawnRollingStock(ItemStack stack) {
@@ -682,50 +683,53 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
 
         if (def != null) {
             World irWorld = World.get(getWorld());
+            BlockPos railPos = railPositions.isEmpty() ? getRailPos() : railPositions.get(railPositions.size() / 2);
+            System.out.println("Controller pos: " + getPos());
+            System.out.println("Facing: " + getFrontFacing());
+            System.out.println("Rail positions found: " + railPositions.size());
+            for (BlockPos p : railPositions) {
+                System.out.println("  Rail: " + p);
+            }
+            System.out.println("Selected rail pos: " + railPos);
 
-            // Get the rail position from structure
-            BlockPos railPos = getRailPos();
-
-            // DEBUG: Log spawn details
-            System.out.println("Spawning train at rail: " + railPos);
-            System.out.println("Front facing: " + this.getFrontFacing());
-            System.out.println("Spawn angle: " + this.getTrainSpawnAngle());
-
-            // Spawn exactly on the rail center - IR should handle rail snapping
             TickPos tp = new TickPos(
-                    0,
-                    Speed.ZERO,
-                    new Vec3d(railPos.getX() + 0.5, railPos.getY() + 0.0625, railPos.getZ() + 0.5), // Just above rail
-                    0,
-                    0,
-                    0,
-                    0.0F,
-                    false);
+                    0, Speed.ZERO,
+                    new Vec3d(railPos.getX() + 0.5, railPos.getY() + 0.0625, railPos.getZ() + 0.5),
+                    0, 0, 0, 0.0F, false);
 
             EntityRollingStock stock = def.spawn(irWorld, tp.position, this.getTrainSpawnAngle(), gauge, data.texture);
 
-            if (stock instanceof EntityMoveableRollingStock) {
-                EntityMoveableRollingStock mrs = (EntityMoveableRollingStock) stock;
+            if (stock instanceof EntityMoveableRollingStock mrs) {
                 tp.speed = Speed.ZERO;
                 mrs.initPositions(tp);
             }
 
             if (stock instanceof EntityBuildableRollingStock) {
-                this.setStockInWorld(stock);
                 this.spawnedRollingStackComponentsSorted = def.getItemComponents().stream()
-                        .sorted(Comparator.comparingInt(i -> i.ordinal()))
+                        .sorted(Comparator.comparingInt(ItemComponentType::ordinal))
                         .collect(Collectors.toList());
+                this.spawnedRollingStockAddedToWorld = false; // not yet in world
+            } else {
+                this.setStockInWorld(stock);
+                this.spawnedRollingStockAddedToWorld = true;
             }
 
             return stock;
         }
-
         return null;
     }
 
+    private boolean spawnedRollingStockAddedToWorld = false;
+
     public void updateSpawnedStock(float recipeProgress) {
         if (this.spawnedRollingStock instanceof EntityBuildableRollingStock buildableRollingStock &&
-                spawnedRollingStackComponentsSorted.size() > 0) {
+                spawnedRollingStackComponentsSorted != null && !spawnedRollingStackComponentsSorted.isEmpty()) {
+
+            if (!this.spawnedRollingStockAddedToWorld) {
+                this.setStockInWorld(this.spawnedRollingStock);
+                this.spawnedRollingStockAddedToWorld = true;
+            }
+
             int idx = (int) (recipeProgress * spawnedRollingStackComponentsSorted.size());
             buildableRollingStock.setComponents(spawnedRollingStackComponentsSorted.subList(0, idx));
         }
@@ -740,6 +744,7 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
             this.setStockInWorld(this.spawnedRollingStock);
         }
         this.spawnedRollingStock = null;
+        this.spawnedRollingStockAddedToWorld = false;
         this.spawnedRollingStackComponentsSorted = null;
     }
 
@@ -753,6 +758,7 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
         super.invalidateStructure();
         this.structureAABB = null;
         this.selectedRollingStock = null;
+        this.spawnedRollingStockAddedToWorld = false;
         this.railPositions.clear();
         if (this.spawnedRollingStock != null) {
             this.spawnedRollingStock.kill();
@@ -810,28 +816,11 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
     }
 
     public void setStructureAABB() {
-        // Had to make it overshoot a little :(
-        net.minecraft.util.math.BlockPos offsetBottomLeft = new net.minecraft.util.math.BlockPos(9, -1, 2);
-        net.minecraft.util.math.BlockPos offsetTopRight = new net.minecraft.util.math.BlockPos(-9, 8, 7);
-
-        switch (this.getFrontFacing()) {
-            case EAST:
-                offsetBottomLeft = offsetBottomLeft.rotate(Rotation.CLOCKWISE_90);
-                offsetTopRight = offsetTopRight.rotate(Rotation.CLOCKWISE_90);
-                break;
-            case SOUTH:
-                offsetBottomLeft = offsetBottomLeft.rotate(Rotation.CLOCKWISE_180);
-                offsetTopRight = offsetTopRight.rotate(Rotation.CLOCKWISE_180);
-                break;
-            case WEST:
-                offsetBottomLeft = offsetBottomLeft.rotate(Rotation.COUNTERCLOCKWISE_90);
-                offsetTopRight = offsetTopRight.rotate(Rotation.COUNTERCLOCKWISE_90);
-                break;
-            default:
-                break;
-        }
-
-        this.structureAABB = new AxisAlignedBB(getPos().add(offsetBottomLeft), getPos().add(offsetTopRight));
+        BlockPos pos = this.getPos();
+        // Convert your relative coordinates to absolute world coordinates
+        this.structureAABB = new AxisAlignedBB(
+                pos.getX() - 3, pos.getY() - 24, pos.getZ() - 1,
+                pos.getX() + 22, pos.getY() + 42, pos.getZ() + 17);
     }
 
     @SideOnly(Side.CLIENT)
