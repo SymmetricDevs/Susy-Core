@@ -6,6 +6,7 @@ import net.minecraft.world.WorldProvider;
 import net.minecraft.world.biome.BiomeProviderSingle;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.client.IRenderHandler;
+
 import supersymmetry.common.world.ChunkGeneratorVoid;
 import supersymmetry.common.world.SuSyBiomes;
 import supersymmetry.common.world.SuSyDimensions;
