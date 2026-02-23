@@ -23,8 +23,9 @@ import org.jetbrains.annotations.NotNull;
 
 import supersymmetry.common.blocks.BlockDeposit;
 import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.common.world.gen.Crater;
+import supersymmetry.common.world.gen.ComplexCrater;
 import supersymmetry.common.world.gen.MapGenLunarLavaTube;
+import supersymmetry.common.world.gen.SimpleCrater;
 import supersymmetry.common.world.gen.WorldGenPit;
 
 public class PlanetChunkGenerator implements IChunkGenerator {
@@ -51,7 +52,8 @@ public class PlanetChunkGenerator implements IChunkGenerator {
     private final MapGenLunarLavaTube caveGenerator = new MapGenLunarLavaTube();
     private final WorldGenPit pitGenerator = new WorldGenPit();
 
-    private final Crater craterGenerator;
+    private final SimpleCrater simpleCraterGenerator;
+    private final ComplexCrater complexCraterGenerator;
 
     private Biome[] biomesForGeneration;
     private final double depthNoiseScaleX = 200.0D;
@@ -97,7 +99,8 @@ public class PlanetChunkGenerator implements IChunkGenerator {
         IBlockState impactMelt = DEPOSIT_BLOCK.getState(BlockDeposit.DepositBlockType.LUNAR_CRATER);
         IBlockState impactEjecta = SuSyBlocks.REGOLITH.getDefaultState();
 
-        this.craterGenerator = new Crater(stone, breccia, impactMelt, impactEjecta);
+        this.simpleCraterGenerator = new SimpleCrater(stone, breccia, impactMelt, impactEjecta);
+        this.complexCraterGenerator = new ComplexCrater(stone, breccia, impactMelt, impactEjecta);
 
         for (int i = -2; i <= 2; ++i) {
             for (int j = -2; j <= 2; ++j) {
@@ -228,8 +231,9 @@ public class PlanetChunkGenerator implements IChunkGenerator {
                 x * 16, z * 16, 16, 16);
         this.replaceBiomeBlocks(x, z, chunkprimer, this.biomesForGeneration);
 
-        // REFACTORED: Use dedicated crater generator
-        this.craterGenerator.generate(this.world, x, z, chunkprimer);
+        this.simpleCraterGenerator.generate(this.world, x, z, chunkprimer);
+        this.complexCraterGenerator.generate(this.world, x, z, chunkprimer);
+
         this.caveGenerator.generate(this.world, x, z, chunkprimer);
 
         Chunk chunk = new Chunk(this.world, chunkprimer, x, z);
@@ -352,133 +356,7 @@ public class PlanetChunkGenerator implements IChunkGenerator {
         }
     }
 
-    private void generateCraters(int chunkX, int chunkZ, ChunkPrimer primer) {
-        // Check surrounding chunks for crater centers
-        for (int cx = chunkX - 2; cx <= chunkX + 2; cx++) {
-            for (int cz = chunkZ - 2; cz <= chunkZ + 2; cz++) {
-                Random craterRand = new Random(world.getSeed() +
-                        (long) cx * 341873128712L + (long) cz * 132897987541L);
-
-                // Low probability of crater per chunk
-                if (craterRand.nextDouble() < 0.015) {
-                    // Random position within the chunk
-                    int centerX = cx * 16 + craterRand.nextInt(16);
-                    int centerZ = cz * 16 + craterRand.nextInt(16);
-                    int diameter = 8 + craterRand.nextInt(35);
-
-                    applyCraterToChunk(primer, chunkX, chunkZ, centerX, centerZ, diameter, craterRand);
-                }
-            }
-        }
-    }
-
-    private void applyCraterToChunk(ChunkPrimer primer, int chunkX, int chunkZ,
-                                    int craterCenterX, int craterCenterZ,
-                                    int diameter, Random craterRand) {
-        int radius = diameter / 2;
-        boolean isComplex = diameter >= 20;
-        int depth = isComplex ? (int) (radius * 0.4) : (int) (radius * 0.6);
-
-        // Only process blocks within this chunk
-        int chunkStartX = chunkX * 16;
-        int chunkStartZ = chunkZ * 16;
-
-        for (int x = 0; x < 16; x++) {
-            for (int z = 0; z < 16; z++) {
-                int worldX = chunkStartX + x;
-                int worldZ = chunkStartZ + z;
-
-                double distance = Math.sqrt(
-                        (worldX - craterCenterX) * (worldX - craterCenterX) +
-                                (worldZ - craterCenterZ) * (worldZ - craterCenterZ));
-
-                // Find surface height
-                int surfaceY = findSurfaceY(primer, x, z);
-                if (surfaceY < 0) continue;
-
-                // Apply crater excavation
-                if (distance <= radius) {
-                    double normalizedDist = distance / radius;
-                    int craterDepth;
-
-                    if (isComplex && normalizedDist < 0.3) {
-                        craterDepth = depth; // Flat floor
-                    } else if (isComplex) {
-                        craterDepth = (int) (depth * (1 - Math.pow((normalizedDist - 0.3) / 0.7, 1.5)));
-                    } else {
-                        craterDepth = (int) (depth * (1 - normalizedDist * normalizedDist));
-                    }
-
-                    // Excavate crater
-                    for (int y = surfaceY; y > surfaceY - craterDepth && y > 2; y--) {
-                        primer.setBlockState(x, y, z, AIR);
-                    }
-
-                    int floorY = surfaceY - craterDepth;
-
-                    // Always place regolith as the top block and fill beneath
-                    if (floorY > 2) {
-                        primer.setBlockState(x, floorY, z, craterGenerator.getImpactEjecta());
-
-                        // Determine subsurface material based on distance
-                        IBlockState subsurfaceMaterial;
-                        int subsurfaceDepth;
-
-                        if (distance < radius * 0.3) {
-                            // Central crater - impact melt
-                            subsurfaceMaterial = craterGenerator.getImpactMelt();
-                            subsurfaceDepth = 2;
-                        } else if (normalizedDist < 0.8) {
-                            // Mid crater - breccia
-                            subsurfaceMaterial = craterGenerator.getBreccia();
-                            subsurfaceDepth = 2;
-                        } else {
-                            // Outer crater - stone
-                            subsurfaceMaterial = stone;
-                            subsurfaceDepth = 2;
-                        }
-
-                        // Fill subsurface layers
-                        for (int y = floorY - 1; y > floorY - 1 - subsurfaceDepth && y > 2; y--) {
-                            primer.setBlockState(x, y, z, subsurfaceMaterial);
-                        }
-                    }
-
-                    // Add fractured bedrock beneath
-                    if (craterRand.nextDouble() < 0.4 && floorY > 6) {
-                        int fractureDepth = 3 + craterRand.nextInt(5);
-                        for (int y = floorY - 4; y > floorY - 4 - fractureDepth && y > 2; y--) {
-                            if (craterRand.nextDouble() < 0.6) {
-                                primer.setBlockState(x, y, z, stone); // Replace with a compressed block?
-                            }
-                        }
-                    }
-                }
-                // Apply ejecta blanket
-                else if (distance > radius && distance < radius * 2) {
-                    double ejectaHeight = (radius * 2 - distance) / radius * 3;
-                    int ejectaBlocks = (int) ejectaHeight;
-
-                    for (int y = 0; y < ejectaBlocks && surfaceY + y < 255; y++) {
-                        primer.setBlockState(x, surfaceY + y + 1, z, craterGenerator.getImpactEjecta());
-                    }
-                }
-            }
-        }
-    }
-
     private static final IBlockState AIR = Blocks.AIR.getDefaultState();
-
-    private int findSurfaceY(ChunkPrimer primer, int x, int z) {
-        for (int y = 255; y >= 0; y--) {
-            IBlockState state = primer.getBlockState(x, y, z);
-            if (state != AIR && state != null) {
-                return y;
-            }
-        }
-        return -1;
-    }
-
     @Override
     public void populate(int x, int z) {
         int i = x * 16;
@@ -541,7 +419,12 @@ public class PlanetChunkGenerator implements IChunkGenerator {
     public void recreateStructures(Chunk chunkIn, int x, int z) {}
 
     @NotNull
-    public Crater getCraterGenerator() {
-        return this.craterGenerator;
+    public SimpleCrater getSimpleCraterGenerator() {
+        return this.simpleCraterGenerator;
+    }
+
+    @NotNull
+    public ComplexCrater getComplexCraterGenerator() {
+        return this.complexCraterGenerator;
     }
 }
