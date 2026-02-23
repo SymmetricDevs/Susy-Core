@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.image.Cubemap;
 
 public class RenderableCelestialObject {
@@ -12,30 +13,13 @@ public class RenderableCelestialObject {
     private final CelestialObject object;
     private final Cubemap cubemap;
 
-    /**
-     * Apparent angular diameter in degrees as seen from the observer dimension.
-     * Earth from Moon surface ≈ 1.9°, Sun from Earth ≈ 0.53°, Moon from Earth ≈ 0.52°.
-     */
-    private float angularSizeDeg = 1.0f;
-
-    /**
-     * Orbital period in world ticks. Used to animate the object's position
-     * around the observer over time. 0 = fixed/stationary (e.g. the body being orbited).
-     */
+    private float angularSizeDeg = 20.0f;
     private long orbitalPeriodTicks = 0L;
-
-    /**
-     * Orbital inclination in degrees relative to the observer's equatorial plane.
-     * 0 = equatorial orbit, 90 = polar orbit.
-     */
     private float orbitalInclinationDeg = 0.0f;
-
-    /**
-     * Phase offset in ticks — shifts where in the orbit the object starts.
-     */
     private long phaseOffsetTicks = 0L;
 
     private int textureId = -1;
+    private boolean loadAttempted = false;
 
     public RenderableCelestialObject(CelestialObject object, Cubemap cubemap) {
         this.object = object;
@@ -66,128 +50,78 @@ public class RenderableCelestialObject {
         return object;
     }
 
-    public int getTextureId() {
-        if (textureId == -1) {
+    private int getTextureId() {
+        if (!loadAttempted) {
+            loadAttempted = true;
             try {
                 textureId = cubemap.load();
+                SusyLog.logger.info("[Space] Cubemap loaded for " + object.getTranslationKey() + " texId=" + textureId);
             } catch (Exception e) {
-                e.printStackTrace();
-                textureId = -1;
+                SusyLog.logger.error("[Space] Cubemap FAILED for " + object.getTranslationKey(), e);
             }
         }
         return textureId;
     }
 
-    /**
-     * Renders this object at the correct position on the celestial sphere for the given world time.
-     *
-     * <p>
-     * Each object is placed at a direction determined by its orbital angle,
-     * then rendered as a billboard quad at its apparent angular size.
-     * </p>
-     *
-     * @param worldTime current world time in ticks
-     * @param mesh      shared quad sphere mesh (used only when renderAsSphere is desired)
-     */
     public void renderAtPosition(long worldTime, QuadSphere mesh) {
-        int tex = getTextureId();
-        if (tex == -1) return;
-
-        // Compute orbital angle [0, 2π)
-        double orbitalAngleRad;
-        if (orbitalPeriodTicks <= 0) {
-            orbitalAngleRad = 0.0; // stationary — the body being orbited, render at zenith/nadir
-        } else {
-            long adjustedTime = (worldTime + phaseOffsetTicks) % orbitalPeriodTicks;
-            orbitalAngleRad = (adjustedTime / (double) orbitalPeriodTicks) * 2.0 * Math.PI;
+        // Compute orbital position
+        double angle = 0.0;
+        if (orbitalPeriodTicks > 0) {
+            angle = ((worldTime + phaseOffsetTicks) % orbitalPeriodTicks) / (double) orbitalPeriodTicks * 2.0 * Math.PI;
         }
-
-        // Direction vector on the celestial sphere
-        // Orbit in the XZ plane, then tilt by inclination around X axis
         float incRad = (float) Math.toRadians(orbitalInclinationDeg);
-        float dx = (float) Math.cos(orbitalAngleRad);
-        float dy = (float) (Math.sin(orbitalAngleRad) * Math.sin(incRad));
-        float dz = (float) (Math.sin(orbitalAngleRad) * Math.cos(incRad));
+        float dx = (float) Math.cos(angle);
+        float dy = (float) (Math.sin(angle) * Math.sin(incRad));
+        float dz = (float) (Math.sin(angle) * Math.cos(incRad));
 
-        // Half-size of the billboard in "sky units" from angular size
-        // tan(θ/2) gives the half-size at unit distance
-        float halfSize = (float) Math.tan(Math.toRadians(angularSizeDeg / 2.0));
+        // Apparent radius at unit distance from angular size
+        float radius = (float) Math.tan(Math.toRadians(angularSizeDeg / 2.0));
 
-        GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, tex);
+        int tex = getTextureId();
+
         GlStateManager.pushMatrix();
 
-        // Translate to the object's direction on the unit sphere
+        // Move to object's position on the celestial sphere
         GL11.glTranslatef(dx, dy, dz);
+        // Scale to apparent size
+        GL11.glScalef(radius, radius, radius);
 
-        // Build a billboard: we need two axes perpendicular to the view direction (dx,dy,dz)
-        // Use world up (0,1,0) to derive right, then recompute up
-        float[] right = normalize(cross(new float[] { dx, dy, dz }, new float[] { 0, 1, 0 }));
-        if (right[0] == 0 && right[1] == 0 && right[2] == 0) {
-            // Object is at zenith/nadir — use X as right
-            right = new float[] { 1, 0, 0 };
+        if (tex != -1) {
+            // Bind cubemap and render the QuadSphere.
+            // Each vertex position on the unit sphere IS the cubemap lookup vector.
+            GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, tex);
+            GL11.glEnable(GL13.GL_TEXTURE_CUBE_MAP);
+            GlStateManager.disableTexture2D();
+
+            GL11.glBegin(GL11.GL_QUADS);
+            for (int[] quad : mesh.getQuads()) {
+                for (int idx : quad) {
+                    QuadSphere.Vertex v = mesh.getVertices().get(idx);
+                    // Vertex position on unit sphere = cubemap direction vector
+                    GL11.glTexCoord3f(v.x, v.y, v.z);
+                    GL11.glVertex3f(v.x, v.y, v.z);
+                }
+            }
+            GL11.glEnd();
+
+            GL11.glDisable(GL13.GL_TEXTURE_CUBE_MAP);
+            GlStateManager.enableTexture2D();
+        } else {
+            // Magenta fallback — confirms rendering works without textures
+            GlStateManager.disableTexture2D();
+            GL11.glColor4f(1.0f, 0.0f, 1.0f, 1.0f);
+            GL11.glBegin(GL11.GL_QUADS);
+            for (int[] quad : mesh.getQuads()) {
+                for (int idx : quad) {
+                    QuadSphere.Vertex v = mesh.getVertices().get(idx);
+                    GL11.glVertex3f(v.x, v.y, v.z);
+                }
+            }
+            GL11.glEnd();
+            GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+            GlStateManager.enableTexture2D();
         }
-        float[] up = normalize(cross(right, new float[] { dx, dy, dz }));
-
-        float rx = right[0] * halfSize, ry = right[1] * halfSize, rz = right[2] * halfSize;
-        float ux = up[0] * halfSize, uy = up[1] * halfSize, uz = up[2] * halfSize;
-
-        // Render a single quad facing the observer
-        GL11.glBegin(GL11.GL_QUADS);
-        // Map cubemap normals: use the direction to the object as the cubemap lookup direction
-        // All four corners share the same base normal; small angular extent means negligible error
-        GL11.glNormal3f(-dx, -dy, -dz);
-        GL11.glTexCoord2f(0, 0);
-        GL11.glVertex3f(-rx - ux, -ry - uy, -rz - uz);
-        GL11.glTexCoord2f(1, 0);
-        GL11.glVertex3f(rx - ux, ry - uy, rz - uz);
-        GL11.glTexCoord2f(1, 1);
-        GL11.glVertex3f(rx + ux, ry + uy, rz + uz);
-        GL11.glTexCoord2f(0, 1);
-        GL11.glVertex3f(-rx + ux, -ry + uy, -rz + uz);
-        GL11.glEnd();
 
         GlStateManager.popMatrix();
-    }
-
-    /**
-     * Legacy full-sphere render (kept for compatibility / background starfield use).
-     */
-    public void render(double scale, QuadSphere mesh) {
-        int tex = getTextureId();
-        if (tex == -1) return;
-
-        GL11.glPushMatrix();
-        GL11.glScaled(scale, scale, scale);
-        GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, tex);
-
-        GL11.glBegin(GL11.GL_QUADS);
-        for (int[] quad : mesh.getQuads()) {
-            for (int idx : quad) {
-                QuadSphere.Vertex v = mesh.getVertices().get(idx);
-                GL11.glNormal3f(v.nx, v.ny, v.nz);
-                GL11.glVertex3f(v.x, v.y, v.z);
-            }
-        }
-        GL11.glEnd();
-
-        GL11.glPopMatrix();
-    }
-
-    // ------------------------------------------------------------------
-    // Math helpers
-    // ------------------------------------------------------------------
-
-    private static float[] cross(float[] a, float[] b) {
-        return new float[] {
-                a[1] * b[2] - a[2] * b[1],
-                a[2] * b[0] - a[0] * b[2],
-                a[0] * b[1] - a[1] * b[0]
-        };
-    }
-
-    private static float[] normalize(float[] v) {
-        float len = (float) Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
-        if (len < 1e-6f) return new float[] { 0, 0, 0 };
-        return new float[] { v[0] / len, v[1] / len, v[2] / len };
     }
 }

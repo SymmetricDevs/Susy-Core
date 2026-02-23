@@ -97,9 +97,12 @@ public class Supersymmetry {
         CommandHordeBase hordeCommand = new CommandHordeBase();
         CommandRecipemapDump jeidump = new CommandRecipemapDump();
         CommandMultiblock multiblockCommand = new CommandMultiblock();
+        CommandTPDimSpace tpDimSpace = new CommandTPDimSpace();
+
         event.registerServerCommand(hordeCommand);
         event.registerServerCommand(jeidump);
         event.registerServerCommand(multiblockCommand);
+        event.registerServerCommand(tpDimSpace);
 
         hordeCommand.addSubcommand(new CommandHordeStart());
         hordeCommand.addSubcommand(new CommandHordeStop());

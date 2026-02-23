@@ -1,5 +1,8 @@
 package supersymmetry.api.space.dimension;
 
+import net.minecraftforge.common.DimensionManager;
+
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.space.RenderableCelestialObject;
 import supersymmetry.common.world.SuSyDimensions;
 
@@ -15,11 +18,7 @@ public class SpaceDimension {
     public float dayLength = 24.0f;
     public float timeOffset = 0.0f;
     public SuSySpaceRenderer renderer;
-
-    /** Ambient light level in space (0.0–1.0). Default near-zero (no atmosphere). */
     public float ambientLight = 0.02f;
-
-    /** Whether the player should have vacuum damage applied */
     public boolean isVacuum = true;
 
     public SpaceDimension(int id, String name) {
@@ -66,5 +65,11 @@ public class SpaceDimension {
 
     public void load() {
         SuSyDimensions.SPACE.put(id, this);
+
+        // Register with Forge so the dimension actually exists
+        if (!DimensionManager.isDimensionRegistered(id)) {
+            DimensionManager.registerDimension(id, SuSyDimensions.spaceType);
+            SusyLog.logger.info("Registered space dimension '" + name + "' at id " + id);
+        }
     }
 }
