@@ -231,10 +231,10 @@ public class PlanetChunkGenerator implements IChunkGenerator {
                 x * 16, z * 16, 16, 16);
         this.replaceBiomeBlocks(x, z, chunkprimer, this.biomesForGeneration);
 
+        this.caveGenerator.generate(this.world, x, z, chunkprimer);
+
         this.simpleCraterGenerator.generate(this.world, x, z, chunkprimer);
         this.complexCraterGenerator.generate(this.world, x, z, chunkprimer);
-
-        this.caveGenerator.generate(this.world, x, z, chunkprimer);
 
         Chunk chunk = new Chunk(this.world, chunkprimer, x, z);
         byte[] abyte = chunk.getBiomeArray();
@@ -357,6 +357,7 @@ public class PlanetChunkGenerator implements IChunkGenerator {
     }
 
     private static final IBlockState AIR = Blocks.AIR.getDefaultState();
+
     @Override
     public void populate(int x, int z) {
         int i = x * 16;

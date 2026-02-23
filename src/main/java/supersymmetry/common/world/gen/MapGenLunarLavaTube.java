@@ -1,5 +1,7 @@
 package supersymmetry.common.world.gen;
 
+import static supersymmetry.common.blocks.SuSyBlocks.DEPOSIT_BLOCK;
+
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -196,7 +198,8 @@ public class MapGenLunarLavaTube extends MapGenBase {
         Block block = state.getBlock();
         return block == SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH) ||
                 block == SuSyBlocks.REGOLITH ||
-                block == MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH) || block == Blocks.AIR;
+                block == MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH) || block == Blocks.AIR ||
+                block == DEPOSIT_BLOCK;  // Allow caves to carve through crater deposits
     }
 
     @Override
