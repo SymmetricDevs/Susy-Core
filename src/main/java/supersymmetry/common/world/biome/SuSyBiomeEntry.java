@@ -1,5 +1,8 @@
 package supersymmetry.common.world.biome;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeManager.BiomeEntry;
@@ -7,9 +10,6 @@ import net.minecraftforge.common.BiomeManager.BiomeEntry;
 import supersymmetry.common.world.SuSyBiomes;
 import supersymmetry.common.world.weather.IWeatherBiome;
 import supersymmetry.common.world.weather.WeatherType;
-
-import java.util.EnumSet;
-import java.util.Set;
 
 /**
  * Extended BiomeEntry that allows setting crater-specific materials inline.

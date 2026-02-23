@@ -14,6 +14,7 @@ import supersymmetry.common.world.sky.SkyRenderData;
 import supersymmetry.common.world.weather.PlanetWeatherManager;
 
 public class WorldProviderPlanet extends WorldProvider {
+
     private final PlanetWeatherManager weatherManager = new PlanetWeatherManager();
 
     private long TICKS_PER_DAY = 24000L; // the maximum for a long (signed 64 bit) is 2^63
@@ -272,6 +273,7 @@ public class WorldProviderPlanet extends WorldProvider {
         // Tick our custom weather system
         weatherManager.tick(this.world);
     }
+
     public PlanetWeatherManager getWeatherManager() {
         return weatherManager;
     }
