@@ -21,7 +21,7 @@ public class SuSyBiomes {
     public static BiomeVoid VOID;
 
     private static final Map<Biome, IBlockState> BIOME_CRATER_BLOCKS = new HashMap<>();
-    private static final List<SuSyBiomeEntry> ENTRIES = new ArrayList<>();
+    private static final Map<Biome, SuSyBiomeEntry> BIOME_ENTRIES = new HashMap<>();
 
     /**
      * Sets the crater/regolith block for a specific biome.
@@ -62,16 +62,12 @@ public class SuSyBiomes {
         BIOME_CRATER_BLOCKS.clear();
     }
 
+
     public static void register(SuSyBiomeEntry entry) {
-        ENTRIES.add(entry);
+        BIOME_ENTRIES.put(entry.biome, entry);
     }
 
     public static SuSyBiomeEntry getEntry(Biome biome) {
-        for (SuSyBiomeEntry entry : ENTRIES) {
-            if (entry.biome == biome) {
-                return entry;
-            }
-        }
-        return null;
+        return BIOME_ENTRIES.get(biome);
     }
 }
