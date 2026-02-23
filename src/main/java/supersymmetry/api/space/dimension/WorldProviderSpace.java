@@ -7,6 +7,7 @@ import net.minecraft.world.biome.BiomeProviderSingle;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.client.IRenderHandler;
 
+import supersymmetry.api.SusyLog;
 import supersymmetry.common.world.ChunkGeneratorVoid;
 import supersymmetry.common.world.SuSyBiomes;
 import supersymmetry.common.world.SuSyDimensions;
@@ -17,13 +18,32 @@ public class WorldProviderSpace extends WorldProvider {
 
     @Override
     protected void init() {
-        this.config = SuSyDimensions.SPACE.get(this.getDimension());
+        int dimId = this.getDimension();
+        this.config = SuSyDimensions.SPACE.get(dimId);
+
         if (this.config == null) {
-            throw new IllegalStateException(
-                    "No SpaceDimension registered for dimension id " + this.getDimension());
+            throw new IllegalStateException("No SpaceDimension registered for id " + dimId + ". SPACE map has: " +
+                    SuSyDimensions.SPACE.keySet());
         }
+
+        SusyLog.logger.info("[Space] WorldProviderSpace.init() dimId=" + dimId + " name=" + config.name + " renderer=" +
+                config.renderer);
+
         this.biomeProvider = new BiomeProviderSingle(SuSyBiomes.VOID);
         this.hasSkyLight = true;
+
+        // Inject ambient light floor into the brightness table Minecraft uses
+        generateLightBrightnessTable();
+    }
+
+    /** Override the light table to give a minimum ambient level in space. */
+    @Override
+    protected void generateLightBrightnessTable() {
+        float ambientLight = (config != null) ? config.ambientLight : 0.05f;
+        for (int i = 0; i <= 15; i++) {
+            float vanilla = 1.0F - i / 15.0F;
+            this.lightBrightnessTable[i] = Math.max((1.0F - vanilla * vanilla * vanilla * vanilla), ambientLight);
+        }
     }
 
     @Override
@@ -57,6 +77,7 @@ public class WorldProviderSpace extends WorldProvider {
 
     @Override
     public IRenderHandler getSkyRenderer() {
+        SusyLog.logger.info("[Space] getSkyRenderer() returning " + config.renderer);
         return config.renderer;
     }
 
@@ -73,16 +94,6 @@ public class WorldProviderSpace extends WorldProvider {
     @Override
     public Vec3d getSkyColor(net.minecraft.entity.Entity cameraEntity, float partialTicks) {
         return new Vec3d(0.0, 0.0, 0.0);
-    }
-
-    @Override
-    public float[] getLightBrightnessTable() {
-        float[] table = new float[16];
-        for (int i = 0; i < 16; i++) {
-            float vanilla = i / 15.0F;
-            table[i] = Math.max(vanilla, config.ambientLight);
-        }
-        return table;
     }
 
     @Override
@@ -113,20 +124,5 @@ public class WorldProviderSpace extends WorldProvider {
     @Override
     public boolean canRespawnHere() {
         return false;
-    }
-
-    @Override
-    public void onWorldUpdateEntities() {
-        super.onWorldUpdateEntities();
-        this.world.getWorldInfo().setRainTime(0);
-        this.world.getWorldInfo().setRaining(false);
-    }
-
-    @Override
-    public void updateWeather() {
-        this.world.getWorldInfo().setRainTime(0);
-        this.world.getWorldInfo().setRaining(false);
-        this.world.getWorldInfo().setThunderTime(0);
-        this.world.getWorldInfo().setThundering(false);
     }
 }

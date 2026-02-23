@@ -111,8 +111,9 @@ public class Supersymmetry {
     @Mod.EventHandler
     public void onServerStarting(@NotNull FMLServerStartingEvent event) {
         CommandHordeBase hordeCommand = new CommandHordeBase();
-        CommandMultiblock multiblockCommand = new CommandMultiblock();
         CommandRecipemapDump jeidump = new CommandRecipemapDump();
+        CommandMultiblock multiblockCommand = new CommandMultiblock();
+        CommandTPDimSpace tpDimSpace = new CommandTPDimSpace();
         CommandUntranslatedKeys untranslatedKeys = new CommandUntranslatedKeys();
 
         hordeCommand.addSubcommand(new CommandHordeStart());
@@ -124,6 +125,8 @@ public class Supersymmetry {
         event.registerServerCommand(jeidump);
         event.registerServerCommand(untranslatedKeys);
         event.registerServerCommand(multiblockCommand);
+        event.registerServerCommand(tpDimSpace);
+
         event.registerServerCommand(new CommandFactionHate());
     }
 
