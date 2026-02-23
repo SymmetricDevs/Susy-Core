@@ -2,6 +2,7 @@ package supersymmetry;
 
 import net.minecraft.item.EnumDyeColor;
 import net.minecraftforge.client.model.obj.OBJLoader;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
@@ -29,6 +30,7 @@ import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 import supersymmetry.common.rocketry.SusyRocketComponents;
 import supersymmetry.common.tileentities.SuSyTileEntities;
+import supersymmetry.common.world.weather.WeatherEventHandler;
 import supersymmetry.loaders.SuSyIRLoader;
 
 @Mod(name = Supersymmetry.NAME,
@@ -102,6 +104,7 @@ public class Supersymmetry {
     @Mod.EventHandler
     public void onPostInit(@NotNull FMLPostInitializationEvent event) {
         SusyRocketComponents.init();
+        registerWeatherHandler(event);
         proxy.postLoad();
     }
 
@@ -128,5 +131,9 @@ public class Supersymmetry {
     @Mod.EventHandler
     public void registerRenderers(FMLPreInitializationEvent event) {
         SuSyTileEntities.registerRenderers();
+    }
+
+    public void registerWeatherHandler(FMLPostInitializationEvent event) {
+        MinecraftForge.EVENT_BUS.register(new WeatherEventHandler());
     }
 }

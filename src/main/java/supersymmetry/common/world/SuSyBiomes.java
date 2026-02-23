@@ -1,8 +1,6 @@
 package supersymmetry.common.world;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import net.minecraft.block.state.IBlockState;
@@ -61,7 +59,6 @@ public class SuSyBiomes {
     public static void clearCraterBlocks() {
         BIOME_CRATER_BLOCKS.clear();
     }
-
 
     public static void register(SuSyBiomeEntry entry) {
         BIOME_ENTRIES.put(entry.biome, entry);
