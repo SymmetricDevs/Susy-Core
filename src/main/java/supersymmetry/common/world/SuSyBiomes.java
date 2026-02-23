@@ -1,6 +1,8 @@
 package supersymmetry.common.world;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.minecraft.block.state.IBlockState;
@@ -10,6 +12,7 @@ import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.world.biome.BiomeLunarHighlands;
 import supersymmetry.common.world.biome.BiomeLunarMaria;
 import supersymmetry.common.world.biome.BiomeVoid;
+import supersymmetry.common.world.biome.SuSyBiomeEntry;
 
 public class SuSyBiomes {
 
@@ -18,6 +21,7 @@ public class SuSyBiomes {
     public static BiomeVoid VOID;
 
     private static final Map<Biome, IBlockState> BIOME_CRATER_BLOCKS = new HashMap<>();
+    private static final List<SuSyBiomeEntry> ENTRIES = new ArrayList<>();
 
     /**
      * Sets the crater/regolith block for a specific biome.
@@ -56,5 +60,18 @@ public class SuSyBiomes {
      */
     public static void clearCraterBlocks() {
         BIOME_CRATER_BLOCKS.clear();
+    }
+
+    public static void register(SuSyBiomeEntry entry) {
+        ENTRIES.add(entry);
+    }
+
+    public static SuSyBiomeEntry getEntry(Biome biome) {
+        for (SuSyBiomeEntry entry : ENTRIES) {
+            if (entry.biome == biome) {
+                return entry;
+            }
+        }
+        return null;
     }
 }
