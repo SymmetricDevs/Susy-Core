@@ -84,25 +84,21 @@ public class QuadSphere {
     // Core quad-sphere generation
     // ===========================================
     private void build() {
-        makeFace(new Vector3f(1, 0, 0));
-        makeFace(new Vector3f(-1, 0, 0));
-        makeFace(new Vector3f(0, 1, 0));
-        makeFace(new Vector3f(0, -1, 0));
-        makeFace(new Vector3f(0, 0, 1));
-        makeFace(new Vector3f(0, 0, -1));
+        makeFace(new Vector3f(1, 0, 0), new Vector3f(0, 0, -1), new Vector3f(0, -1, 0)); // 0 +X
+        makeFace(new Vector3f(-1, 0, 0), new Vector3f(0, 0, 1), new Vector3f(0, -1, 0)); // 1 -X
+        makeFace(new Vector3f(0, 1, 0), new Vector3f(1, 0, 0), new Vector3f(0, 0, 1)); // 2 +Y
+        makeFace(new Vector3f(0, -1, 0), new Vector3f(1, 0, 0), new Vector3f(0, 0, -1)); // 3 -Y
+        makeFace(new Vector3f(0, 0, 1), new Vector3f(1, 0, 0), new Vector3f(0, -1, 0)); // 4 +Z
+        makeFace(new Vector3f(0, 0, -1), new Vector3f(-1, 0, 0), new Vector3f(0, -1, 0)); // 5 -Z
 
         smoothNormals();
     }
 
-    private void makeFace(Vector3f normal) {
-        Vector3f axisA = perpendicular(normal);
-        Vector3f axisB = Vector3f.cross(normal, axisA, null);
-
+    private void makeFace(Vector3f normal, Vector3f axisA, Vector3f axisB) {
         int N = subdivisions;
         float step = 2f / N;
 
-        // Grid of vertex indices for this face
-        int[][] grid = new int[(N + 1)][(N + 1)];
+        int[][] grid = new int[N + 1][N + 1];
 
         for (int y = 0; y <= N; y++) {
             for (int x = 0; x <= N; x++) {
@@ -125,6 +121,7 @@ public class QuadSphere {
                 int i2 = grid[y + 1][x];
                 int i3 = grid[y + 1][x + 1];
 
+                // Consistent CCW winding viewed from outside
                 quads.add(new int[] { i0, i1, i3, i2 });
                 triangles.add(new int[] { i0, i1, i3 });
                 triangles.add(new int[] { i0, i3, i2 });

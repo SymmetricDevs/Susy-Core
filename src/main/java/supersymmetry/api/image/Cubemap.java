@@ -115,10 +115,19 @@ public class Cubemap {
             try (java.io.InputStream s = rm.getResource(cross).getInputStream()) {
                 BufferedImage sheet = ImageIO.read(s);
                 if (sheet == null) throw new IOException("ImageIO returned null for " + cross);
-                int w = sheet.getWidth() / 3;
-                int h = sheet.getHeight() / 4;
-                // PX, NX, PY, NY, PZ, NZ — vertical cross layout
-                int[][] layout = { { 2, 1 }, { 0, 1 }, { 1, 0 }, { 1, 2 }, { 1, 1 }, { 1, 3 } };
+                int w = sheet.getWidth() / 4;
+                int h = sheet.getHeight() / 3;
+
+                // {col, row} for each face in order: PX, NX, PY, NY, PZ, NZ
+                int[][] layout = {
+                        { 2, 1 }, // PX (face 0) — 3rd column, middle row
+                        { 0, 1 }, // NX (face 1) — 1st column, middle row
+                        { 1, 0 }, // PY (face 2) — 2nd column, top row
+                        { 1, 2 }, // NY (face 3) — 2nd column, bottom row
+                        { 1, 1 }, // PZ (face 4) — 2nd column, middle row
+                        { 3, 1 }, // NZ (face 5) — 4th column, middle row
+                };
+
                 for (int i = 0; i < 6; i++) {
                     BufferedImage sub = sheet.getSubimage(layout[i][0] * w, layout[i][1] * h, w, h);
                     BufferedImage copy = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
