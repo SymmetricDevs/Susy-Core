@@ -32,7 +32,9 @@ public class Planetoid extends CelestialObject {
 
     public Planetoid setDimension(int dimension) {
         this.dimension = dimension;
-        PLANETOIDS.put(this, dimension);
+        // forcePut replaces any existing key→value or value→key mapping
+        // instead of throwing when the value (dim id) is already present
+        PLANETOIDS.forcePut(this, dimension);
         return this;
     }
 

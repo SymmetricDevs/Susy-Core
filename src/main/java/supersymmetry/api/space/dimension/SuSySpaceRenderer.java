@@ -14,7 +14,7 @@ import supersymmetry.api.space.RenderableCelestialObject;
 public class SuSySpaceRenderer extends IRenderHandler {
 
     private RenderableCelestialObject[] objects = new RenderableCelestialObject[0];
-    private final QuadSphere mesh = new QuadSphere(4);
+    private final QuadSphere mesh = new QuadSphere(32);
     private boolean loggedOnce = false;
 
     public SuSySpaceRenderer setCelestialObjects(RenderableCelestialObject... objs) {
@@ -24,18 +24,16 @@ public class SuSySpaceRenderer extends IRenderHandler {
 
     @Override
     public void render(float partialTicks, WorldClient world, Minecraft mc) {
+        if (objects.length == 0) return;
+
         if (!loggedOnce) {
             SusyLog.logger.info("[Space] SuSySpaceRenderer.render() called, objects=" + objects.length);
             loggedOnce = true;
         }
 
-        if (objects.length == 0) return;
-
         long worldTime = world.getWorldTime();
 
-        // Save and set up GL state for sky rendering
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-
         GlStateManager.disableFog();
         GlStateManager.disableLighting();
         GlStateManager.disableAlpha();
@@ -44,12 +42,13 @@ public class SuSySpaceRenderer extends IRenderHandler {
         GlStateManager.depthMask(false);
         GlStateManager.enableTexture2D();
         GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
-        // Draw each celestial object
         GlStateManager.pushMatrix();
-        GlStateManager.rotate(-90.0F, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate(world.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
+
+        // Scale up so objects at unit distance fill a meaningful portion of the sky.
+        // The vanilla sky dome is rendered at ~100 units radius; we match that.
+        GL11.glScalef(100.0f, 100.0f, 100.0f);
 
         for (RenderableCelestialObject obj : objects) {
             obj.renderAtPosition(worldTime, mesh);
@@ -57,7 +56,6 @@ public class SuSySpaceRenderer extends IRenderHandler {
 
         GlStateManager.popMatrix();
 
-        // Restore GL state
         GlStateManager.disableBlend();
         GlStateManager.enableDepth();
         GlStateManager.depthMask(true);
@@ -65,7 +63,6 @@ public class SuSySpaceRenderer extends IRenderHandler {
         GlStateManager.enableAlpha();
         GlStateManager.enableLighting();
         GlStateManager.enableFog();
-
         GL11.glPopAttrib();
     }
 }

@@ -8,6 +8,7 @@ import java.util.Map;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.DimensionManager;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import supersymmetry.api.SusyLog;
@@ -32,16 +33,13 @@ public class SuSyDimensions {
     public static List<Biome> BIOMES = new ArrayList<>();
     public static Map<Integer, Planet> PLANETS = new Int2ObjectArrayMap<>();
 
+    /** Registry of all SpaceDimensions, keyed by dimension id. Populated via SpaceDimension#load(). */
     public static Map<Integer, SpaceDimension> SPACE = new Int2ObjectArrayMap<>();
 
     public static void init() {
-        // Registers dimension type. Uses a negative ID so that fire blocks have less logic.
         int id = -2;
-
         for (DimensionType type : DimensionType.values()) {
-            if (type.getId() < id) {
-                id = type.getId();
-            }
+            if (type.getId() < id) id = type.getId();
         }
         id--;
 
@@ -51,22 +49,17 @@ public class SuSyDimensions {
         SusyLog.logger.info("Registering space dimension type at id " + (id - 1));
         spaceType = DimensionType.register("susy_space", "_susyspace", id - 1, WorldProviderSpace.class, false);
 
-        SuSySkyRenderer moonSky = new SuSySkyRenderer();
-
-        long lunarDayTicks = 708734L; // 29.5306 * 24000
-
-        float nodalPeriodInLunarDays = 11.73f;
-        long nodalPeriodTicks = (long) (nodalPeriodInLunarDays * lunarDayTicks);
-        float orbitalInclination = 5.14f;
-
         Cubemap solCubemap = new Cubemap(
-                new ResourceLocation("susy", "textures/space/sun/sun/px.png"),
-                new ResourceLocation("susy", "textures/space/sun/sun/py.png"),
-                new ResourceLocation("susy", "textures/space/sun/sun/pz.png"),
-                new ResourceLocation("susy", "textures/space/sun/sun/nx.png"),
-                new ResourceLocation("susy", "textures/space/sun/sun/ny.png"),
-                new ResourceLocation("susy", "textures/space/sun/sun/nz.png"));
-        RenderableCelestialObject SUN = new RenderableCelestialObject(CelestialObjects.SUN, solCubemap);
+                new ResourceLocation("susy", "textures/space/sun/px.png"),
+                new ResourceLocation("susy", "textures/space/sun/py.png"),
+                new ResourceLocation("susy", "textures/space/sun/pz.png"),
+                new ResourceLocation("susy", "textures/space/sun/nx.png"),
+                new ResourceLocation("susy", "textures/space/sun/ny.png"),
+                new ResourceLocation("susy", "textures/space/sun/nz.png"));
+        RenderableCelestialObject SUN = new RenderableCelestialObject(CelestialObjects.SUN, solCubemap)
+                .setAngularSize(20.0f)
+                .setOrbitalPeriod(24000L)
+                .setOrbitalInclination(23.5f);
 
         Cubemap moonCubemap = new Cubemap(
                 new ResourceLocation("susy", "textures/space/moon/px.png"),
@@ -75,14 +68,24 @@ public class SuSyDimensions {
                 new ResourceLocation("susy", "textures/space/moon/nx.png"),
                 new ResourceLocation("susy", "textures/space/moon/ny.png"),
                 new ResourceLocation("susy", "textures/space/moon/nz.png"));
-        Cubemap earthCubemap = new Cubemap(new ResourceLocation("susy", "textures/space/earth/cubemap.png"));
+        long lunarDayTicks = 708734L;
+        RenderableCelestialObject renderableMoon = new RenderableCelestialObject(CelestialObjects.MOON, moonCubemap)
+                .setAngularSize(20.0f)
+                .setOrbitalPeriod(lunarDayTicks)
+                .setOrbitalInclination(5.14f);
 
-        RenderableCelestialObject renderableMoon = new RenderableCelestialObject(CelestialObjects.MOON, moonCubemap);
-        RenderableCelestialObject renderableEarth = new RenderableCelestialObject(CelestialObjects.EARTH, earthCubemap);
+        Cubemap earthCubemap = new Cubemap(new ResourceLocation("susy", "textures/space/earth/cubemap.png"));
+        RenderableCelestialObject renderableEarth = new RenderableCelestialObject(CelestialObjects.EARTH, earthCubemap)
+                .setAngularSize(180.0f)
+                .setFixedDirection(0, -1, 0);
+
+        SuSySkyRenderer moonSky = new SuSySkyRenderer();
+
+        float nodalPeriodInLunarDays = 11.73f;
+        long nodalPeriodTicks = (long) (nodalPeriodInLunarDays * lunarDayTicks);
 
         SkyRenderData sun = new SkyRenderData.Builder(
-                new ResourceLocation("susy", "textures/environment/sun.png"),
-                10.0F)
+                new ResourceLocation("susy", "textures/environment/sun.png"), 10.0F)
                         .positionType(SkyRenderData.PositionType.CELESTIAL_SPHERE)
                         .useLinearFiltering(false)
                         .baseInclination(5.14f)
@@ -90,8 +93,7 @@ public class SuSyDimensions {
                         .build();
 
         SkyRenderData earth = new SkyRenderData.Builder(
-                new ResourceLocation("susy", "textures/environment/earth_phases.png"),
-                40.0F)
+                new ResourceLocation("susy", "textures/environment/earth_phases.png"), 40.0F)
                         .positionType(SkyRenderData.PositionType.ZENITH)
                         .rotationX(90.0F)
                         .phases(4, 2, 29.53F)
@@ -109,7 +111,6 @@ public class SuSyDimensions {
                 .midnightColor(0.0, 0.0, 0.0)
                 .noFog()
                 .build();
-
         moonSky.setSkyColorData(moonColors);
 
         new Planet(0, 800, "Moon").setBiomeList(
@@ -130,8 +131,7 @@ public class SuSyDimensions {
         SuSySpaceRenderer leoRenderer = new SuSySpaceRenderer();
         leoRenderer.setCelestialObjects(renderableEarth, renderableMoon, SUN);
 
-        // 92 minutes * 60 seconds * 20 ticks/s
-        long leoOrbitTicks = 110_400L;
+        long leoOrbitTicks = 110_400L; // 92 min * 60 s * 20 ticks/s
 
         new SpaceDimension(802, "low_earth_orbit")
                 .setOrbitTarget(renderableEarth)
@@ -143,6 +143,10 @@ public class SuSyDimensions {
                 .setDayCycle(leoOrbitTicks, 1.53f, 0.0f)
                 .load();
 
-        SusyLog.logger.info("Registered Low Earth Orbit space dimension at id 802");
+        // Register dim 802 with Forge's DimensionManager so it can be entered
+        if (!DimensionManager.isDimensionRegistered(802)) {
+            DimensionManager.registerDimension(802, spaceType);
+            SusyLog.logger.info("Registered Low Earth Orbit space dimension at id 802");
+        }
     }
 }

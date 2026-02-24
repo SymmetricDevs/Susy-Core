@@ -6,21 +6,29 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
-import org.lwjgl.opengl.GL13;
 
+/**
+ * Loads a cubemap as 6 individual GL textures — one per face.
+ * Used directly by RenderableCelestialObject to texture each QuadSphere face
+ * with the matching cubemap face, eliminating seams entirely.
+ *
+ * Face index order matches QuadSphere.build() face order:
+ * 0=+X, 1=-X, 2=+Y, 3=-Y, 4=+Z, 5=-Z
+ */
 public class Cubemap {
 
-    private final ResourceLocation[] faces;
-    private final ResourceLocation cross;
-    private int textureId = -1;
+    // 6 separate GL texture IDs, one per face
+    protected final int[] faceTexIds = new int[] { -1, -1, -1, -1, -1, -1 };
 
-    // Constructor for 6 textures
+    private final ResourceLocation[] faces; // PX, NX, PY, NY, PZ, NZ
+    private final ResourceLocation cross;
+    protected boolean loaded = false;
+
     public Cubemap(ResourceLocation px, ResourceLocation nx,
                    ResourceLocation py, ResourceLocation ny,
                    ResourceLocation pz, ResourceLocation nz) {
@@ -28,103 +36,97 @@ public class Cubemap {
         this.cross = null;
     }
 
-    // Constructor for 1 cross-layout texture
     public Cubemap(ResourceLocation cross) {
         this.faces = null;
         this.cross = cross;
     }
 
+    /** Legacy single-id load — returns the PX face id for compatibility. */
     public int load() throws IOException {
-        if (textureId != -1) return textureId;
-
-        textureId = GL11.glGenTextures();
-        GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, textureId);
-
-        // Basic filtering
-        GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-        GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
-        GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL12.GL_TEXTURE_WRAP_R, GL12.GL_CLAMP_TO_EDGE);
-
-        if (faces != null) {
-            loadSixFaceTextures();
-        } else {
-            loadCrossTexture();
-        }
-
-        return textureId;
+        loadAll();
+        return faceTexIds[0];
     }
 
-    private void uploadToCubemap(int target, BufferedImage img) {
-        int w = img.getWidth();
-        int h = img.getHeight();
+    public void loadAll() throws IOException {
+        if (loaded) return;
+        loaded = true;
 
-        int[] pixels = new int[w * h];
-        img.getRGB(0, 0, w, h, pixels, 0, w);
-
-        // Convert ARGB → ABGR (OpenGL expects ABGR for glTexImage2D)
-        byte[] data = new byte[w * h * 4];
-        for (int i = 0; i < pixels.length; i++) {
-            int p = pixels[i];
-            int a = (p >> 24) & 0xFF;
-            int r = (p >> 16) & 0xFF;
-            int g = (p >> 8) & 0xFF;
-            int b = p & 0xFF;
-
-            int idx = i * 4;
-            data[idx] = (byte) b;
-            data[idx + 1] = (byte) g;
-            data[idx + 2] = (byte) r;
-            data[idx + 3] = (byte) a;
-        }
-
-        GL11.glTexImage2D(target, 0, GL11.GL_RGBA8, w, h, 0,
-                GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE,
-                org.lwjgl.BufferUtils.createByteBuffer(data.length).put(data).flip());
-    }
-
-    private void loadSixFaceTextures() throws IOException {
-        IResourceManager rm = Minecraft.getMinecraft().getResourceManager();
-
+        BufferedImage[] imgs = loadFaceImages();
         for (int i = 0; i < 6; i++) {
-            IResource res = rm.getResource(faces[i]);
-            BufferedImage img = ImageIO.read(res.getInputStream());
-            uploadToCubemap(GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, img);
+            faceTexIds[i] = uploadTexture(imgs[i]);
         }
     }
 
-    private void loadCrossTexture() throws IOException {
-        IResourceManager rm = Minecraft.getMinecraft().getResourceManager();
-        IResource res = rm.getResource(cross);
-        BufferedImage img = ImageIO.read(res.getInputStream());
+    /** Returns the GL texture id for a specific face (0=PX,1=NX,2=PY,3=NY,4=PZ,5=NZ). */
+    public int getFaceTexId(int face) {
+        return faceTexIds[face];
+    }
 
-        int w = img.getWidth() / 3;
-        int h = img.getHeight() / 4;
-
-        // Standard vertical cross layout:
-        // PY
-        // NX PZ PX
-        // NY
-        // NZ
-
-        int[][] layout = {
-                { 2, 1 }, // PX
-                { 0, 1 }, // NX
-                { 1, 0 }, // PY
-                { 1, 2 }, // NY
-                { 1, 1 }, // PZ
-                { 1, 3 }  // NZ
-        };
-
-        for (int i = 0; i < 6; i++) {
-            int sx = layout[i][0] * w;
-            int sy = layout[i][1] * h;
-            BufferedImage face = img.getSubimage(sx, sy, w, h);
-
-            uploadToCubemap(GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, face);
-        }
+    public boolean isLoaded() {
+        return loaded;
     }
 
     public int getTextureId() {
-        return textureId;
+        return faceTexIds[0];
+    }
+
+    // ------------------------------------------------------------------
+
+    private int uploadTexture(BufferedImage img) {
+        int id = GL11.glGenTextures();
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, id);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
+
+        int w = img.getWidth(), h = img.getHeight();
+        int[] pixels = new int[w * h];
+        img.getRGB(0, 0, w, h, pixels, 0, w);
+
+        byte[] data = new byte[w * h * 4];
+        for (int i = 0; i < pixels.length; i++) {
+            int p = pixels[i];
+            data[i * 4] = (byte) ((p >> 16) & 0xFF); // R
+            data[i * 4 + 1] = (byte) ((p >> 8) & 0xFF); // G
+            data[i * 4 + 2] = (byte) (p & 0xFF); // B
+            data[i * 4 + 3] = (byte) ((p >> 24) & 0xFF); // A
+        }
+
+        java.nio.ByteBuffer buf = org.lwjgl.BufferUtils.createByteBuffer(data.length);
+        buf.put(data).flip();
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, w, h, 0,
+                GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buf);
+        return id;
+    }
+
+    private BufferedImage[] loadFaceImages() throws IOException {
+        IResourceManager rm = Minecraft.getMinecraft().getResourceManager();
+        BufferedImage[] imgs = new BufferedImage[6];
+
+        if (faces != null) {
+            for (int i = 0; i < 6; i++) {
+                try (java.io.InputStream s = rm.getResource(faces[i]).getInputStream()) {
+                    imgs[i] = ImageIO.read(s);
+                    if (imgs[i] == null) throw new IOException("ImageIO returned null for " + faces[i]);
+                }
+            }
+        } else {
+            try (java.io.InputStream s = rm.getResource(cross).getInputStream()) {
+                BufferedImage sheet = ImageIO.read(s);
+                if (sheet == null) throw new IOException("ImageIO returned null for " + cross);
+                int w = sheet.getWidth() / 3;
+                int h = sheet.getHeight() / 4;
+                // PX, NX, PY, NY, PZ, NZ — vertical cross layout
+                int[][] layout = { { 2, 1 }, { 0, 1 }, { 1, 0 }, { 1, 2 }, { 1, 1 }, { 1, 3 } };
+                for (int i = 0; i < 6; i++) {
+                    BufferedImage sub = sheet.getSubimage(layout[i][0] * w, layout[i][1] * h, w, h);
+                    BufferedImage copy = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+                    copy.getGraphics().drawImage(sub, 0, 0, null);
+                    imgs[i] = copy;
+                }
+            }
+        }
+        return imgs;
     }
 }
