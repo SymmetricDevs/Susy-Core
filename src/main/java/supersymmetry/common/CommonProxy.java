@@ -184,6 +184,7 @@ public class CommonProxy {
         MetaItems.addOrePrefix(SusyOrePrefix.dustWet);
         MetaItems.addOrePrefix(SusyOrePrefix.electrode);
 
+        SusyMaterials.changeProperties();
         Materials.Aluminium.addFlags("continuously_cast");
         SusyGeneratedFluidHandler.init();
 
