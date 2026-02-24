@@ -77,7 +77,6 @@ public class WorldProviderSpace extends WorldProvider {
 
     @Override
     public IRenderHandler getSkyRenderer() {
-        SusyLog.logger.info("[Space] getSkyRenderer() returning " + config.renderer);
         return config.renderer;
     }
 
@@ -105,6 +104,12 @@ public class WorldProviderSpace extends WorldProvider {
     @Override
     public boolean isSkyColored() {
         return false;
+    }
+
+    /** Suppress vanilla sunrise/sunset horizon glow. */
+    @Override
+    public float[] calcSunriseSunsetColors(float celestialAngle, float partialTicks) {
+        return null; // null = no sunrise/sunset color
     }
 
     public float getGravity() {
