@@ -157,51 +157,35 @@ public class RenderableCelestialObject {
      * All verified correct with corner tests.
      */
     private static float[] faceUV(int face, float nx, float ny, float nz) {
-        float u = 0, v = 0;
-
+        float u, v;
         switch (face) {
-            case 0: // +X
-                u = -nz / Math.abs(nx);
-                v = -ny / Math.abs(nx);
+            case 0: // +X axisA=-Z axisB=-Y
+                u = -nz / nx;
+                v = -ny / nx;
                 break;
-
-            case 1: // -X
-                u = nz / Math.abs(nx);
-                v = -ny / Math.abs(nx);
+            case 1: // -X axisA=+Z axisB=-Y
+                u = nz / -nx;
+                v = -ny / -nx;
                 break;
-
-            case 2: // +Y
-                u = nx / Math.abs(ny);
-                v = nz / Math.abs(ny);
+            case 2: // +Y axisA=+X axisB=+Z
+                u = nx / ny;
+                v = nz / ny;
                 break;
-
-            case 3: // -Y
-                u = nx / Math.abs(ny);
-                v = -nz / Math.abs(ny);
+            case 3: // -Y axisA=+X axisB=-Z
+                u = nx / -ny;
+                v = -nz / -ny;
                 break;
-
-            case 4: // +Z
-                u = nx / Math.abs(nz);
-                v = -ny / Math.abs(nz);
+            case 4: // +Z axisA=+X axisB=-Y
+                u = nx / nz;
+                v = -ny / nz;
                 break;
-
-            case 5: // -Z
-                u = -nx / Math.abs(nz);
-                v = -ny / Math.abs(nz);
+            case 5: // -Z axisA=-X axisB=-Y
+                u = -nx / -nz;
+                v = -ny / -nz;
                 break;
+            default:
+                u = v = 0;
         }
-
-        float uOut = u * 0.5f + 0.5f;
-        float vOut = v * 0.5f + 0.5f;
-
-        // ---- FIX HERE ----
-        // Rotate both +Z and -Z faces by 180°
-        if (face == 4 || face == 5) {
-            uOut = 1.0f - uOut;
-            vOut = 1.0f - vOut;
-        }
-        // -------------------
-
-        return new float[] { uOut, vOut };
+        return new float[] { u * 0.5f + 0.5f, v * 0.5f + 0.5f };
     }
 }
