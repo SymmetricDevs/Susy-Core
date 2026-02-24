@@ -266,9 +266,12 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
 
         @Override
         protected long getMaxParallelVoltage() {
-            long maximumOutput = getMaximumAllowedVoltage();
-            return Math.max(scaleProduction(maximumOutput),
-                    Math.min(proposedEUt, maximumOutput));
+            // By returning the maximum here, the parallel limit will be based on the input
+            // fluid amount. If you scale production here, the parallel will be limited based
+            // on the speed. So, the first run will only do 1X parallel and will consume much less
+            // fluid, yet the speed will continue to increase and generate thousands of EU/t before
+            // the initial fuel supply runs out.
+            return getMaximumAllowedVoltage();
         }
 
         public long getMaximumAllowedVoltage() {
@@ -276,7 +279,10 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         }
 
         protected long getActualVoltage() {
-            return scaleProduction(getMaxParallelVoltage());
+            // actual voltage should be based off of the recipe EU/t which reflects the
+            // current parallel. If max is used then it will always generate 32,768 EU/t
+            // at full speed for 16A EV, even if a fraction of the fuel was given as input.
+            return scaleProduction(-recipeEUt);
         }
 
         public int getCurrentParallel() {
