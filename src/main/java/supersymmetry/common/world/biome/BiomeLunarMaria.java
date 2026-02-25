@@ -15,7 +15,10 @@ import supersymmetry.common.blocks.SuSyBlocks;
 public class BiomeLunarMaria extends PlanetaryBiome {
 
     public BiomeLunarMaria(BiomeProperties properties) {
-        super(properties);
+        super(new BiomeProperties("lunar maria")
+                .setTemperature(0.0f) // fuck you
+                .setRainfall(0.0f)
+                .setRainDisabled());
 
         this.topBlock = SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.LOWLAND);
         this.fillerBlock = MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH)
