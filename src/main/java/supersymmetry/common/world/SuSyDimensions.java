@@ -62,12 +62,7 @@ public class SuSyDimensions {
                 .setOrbitalInclination(23.5f);
 
         Cubemap moonCubemap = new Cubemap(
-                new ResourceLocation("susy", "textures/space/moon/px.png"),
-                new ResourceLocation("susy", "textures/space/moon/py.png"),
-                new ResourceLocation("susy", "textures/space/moon/pz.png"),
-                new ResourceLocation("susy", "textures/space/moon/nx.png"),
-                new ResourceLocation("susy", "textures/space/moon/ny.png"),
-                new ResourceLocation("susy", "textures/space/moon/nz.png"));
+                new ResourceLocation("susy", "textures/space/moon/cubemap.png"));
         long lunarDayTicks = 708734L;
         RenderableCelestialObject renderableMoon = new RenderableCelestialObject(CelestialObjects.MOON, moonCubemap)
                 .setAngularSize(20.0f)
