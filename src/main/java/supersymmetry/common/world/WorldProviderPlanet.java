@@ -277,4 +277,9 @@ public class WorldProviderPlanet extends WorldProvider {
     public PlanetWeatherManager getWeatherManager() {
         return weatherManager;
     }
+
+    @Override
+    public boolean canDoLightning(net.minecraft.world.chunk.Chunk chunk) {
+        return false;
+    }
 }
