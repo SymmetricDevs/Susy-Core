@@ -53,7 +53,10 @@ public class Cubemap {
 
         BufferedImage[] imgs = loadFaceImages();
         for (int i = 0; i < 6; i++) {
-            faceTexIds[i] = uploadTexture(imgs[i]);
+            if (imgs[i] != null) {
+                faceTexIds[i] = uploadTexture(imgs[i]);
+            }
+            // faceTexIds[i] stays -1 for missing faces, renderAtPosition already skips these
         }
     }
 
@@ -90,7 +93,8 @@ public class Cubemap {
             data[i * 4] = (byte) ((p >> 16) & 0xFF); // R
             data[i * 4 + 1] = (byte) ((p >> 8) & 0xFF); // G
             data[i * 4 + 2] = (byte) (p & 0xFF); // B
-            data[i * 4 + 3] = (byte) ((p >> 24) & 0xFF); // A
+            // data[i * 4 + 3] = (byte) ((p >> 24) & 0xFF); // A
+            data[i * 4 + 3] = (byte) 0xFF; // A — always opaque
         }
 
         java.nio.ByteBuffer buf = org.lwjgl.BufferUtils.createByteBuffer(data.length);
@@ -118,18 +122,30 @@ public class Cubemap {
                 int w = sheet.getWidth() / 4;
                 int h = sheet.getHeight() / 3;
 
-                // {col, row} for each face in order: PX, NX, PY, NY, PZ, NZ
+                // {col, row}
                 int[][] layout = {
-                        { 2, 1 }, // PX (face 0) — 3rd column, middle row
-                        { 0, 1 }, // NX (face 1) — 1st column, middle row
-                        { 1, 0 }, // PY (face 2) — 2nd column, top row
-                        { 1, 2 }, // NY (face 3) — 2nd column, bottom row
-                        { 1, 1 }, // PZ (face 4) — 2nd column, middle row
-                        { 3, 1 }, // NZ (face 5) — 4th column, middle row
+                        { 2, 1 }, // PX (face 0)
+                        { 0, 1 }, // NX (face 1)
+                        { 1, 0 }, // PY (face 2)
+                        { 1, 2 }, // NY (face 3)
+                        { 1, 1 }, // PZ (face 4)
+                        { 3, 1 }, // NZ (face 5)
                 };
 
                 for (int i = 0; i < 6; i++) {
-                    BufferedImage sub = sheet.getSubimage(layout[i][0] * w, layout[i][1] * h, w, h);
+                    int col = layout[i][0];
+                    int row = layout[i][1];
+                    int x = col * w;
+                    int y = row * h;
+
+                    // Guard against white/empty tiles outside the cross
+                    if (x + w > sheet.getWidth() || y + h > sheet.getHeight()) {
+                        imgs[i] = null;
+                        continue;
+                    }
+
+                    // Check if this tile is actually part of the cross or just white padding
+                    BufferedImage sub = sheet.getSubimage(x, y, w, h);
                     BufferedImage copy = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
                     copy.getGraphics().drawImage(sub, 0, 0, null);
                     imgs[i] = copy;

@@ -1,5 +1,7 @@
 package supersymmetry.api.space;
 
+import java.util.List;
+
 import net.minecraft.client.renderer.GlStateManager;
 
 import org.lwjgl.opengl.GL11;
@@ -88,46 +90,41 @@ public class RenderableCelestialObject {
             dz = (float) (Math.sin(angle) * Math.cos(incRad));
         }
 
+        // radius in the unit-sphere space that the renderer already scaled to 100 units
         float radius = (float) Math.tan(Math.toRadians(angularSizeDeg / 2.0));
         boolean hasTexture = ensureLoaded();
 
         GlStateManager.pushMatrix();
-        GL11.glTranslatef(dx, dy, dz);
-        GL11.glScalef(radius, radius, radius);
+        GL11.glTranslatef(dx, dy, dz);   // move to direction on the unit sphere
+        GL11.glScalef(radius, radius, radius); // scale by apparent angular size
 
         if (hasTexture) {
             GlStateManager.enableTexture2D();
             GL11.glColor4f(1f, 1f, 1f, 1f);
 
-            // QuadSphere builds 6 faces in order: +X,-X,+Y,-Y,+Z,-Z
-            // Each face has subdivisions² quads.
-            // We bind the matching cubemap face texture for each group.
-            int subdivs = mesh.subdivisions;
-            int quadsPerFace = subdivs * subdivs;
-            java.util.List<int[]> allQuads = mesh.getQuads();
-            java.util.List<QuadSphere.Vertex> verts = mesh.getVertices();
+            List<int[]> allQuads = mesh.getQuads();
+            List<float[][]> allUVs = mesh.getQuadUVs();
+            List<List<Integer>> faceQuadIndices = mesh.getFaceQuadIndices();
+            List<QuadSphere.Vertex> verts = mesh.getVertices();
 
             for (int face = 0; face < 6; face++) {
                 int faceTexId = cubemap.getFaceTexId(face);
                 if (faceTexId == -1) continue;
 
                 GlStateManager.bindTexture(faceTexId);
-
                 GL11.glBegin(GL11.GL_QUADS);
-                int start = face * quadsPerFace;
-                int end = start + quadsPerFace;
-                for (int qi = start; qi < end; qi++) {
+
+                for (int qi : faceQuadIndices.get(face)) {
                     int[] quad = allQuads.get(qi);
-                    for (int idx : quad) {
-                        QuadSphere.Vertex v = verts.get(idx);
-                        // Map the vertex position on the unit sphere to a UV
-                        // within this face's [0,1]² space using the face's
-                        // two tangent axes.
-                        float[] uv = faceUV(face, v.nx, v.ny, v.nz);
-                        GL11.glTexCoord2f(uv[0], uv[1]);
+                    float[][] uvs = allUVs.get(qi); // [4][2]: BL BR TR TL
+
+                    for (int c = 0; c < 4; c++) {
+                        QuadSphere.Vertex v = verts.get(quad[c]);
+                        GL11.glTexCoord2f(uvs[c][0], uvs[c][1]);
                         GL11.glVertex3f(v.x, v.y, v.z);
                     }
                 }
+
                 GL11.glEnd();
             }
 
@@ -148,44 +145,5 @@ public class RenderableCelestialObject {
         }
 
         GlStateManager.popMatrix();
-    }
-
-    /**
-     * Perspective-correct UV derived from QuadSphere face axes.
-     * u = dot(n, axisA) / dot(n, faceNormal)
-     * v = dot(n, axisB) / dot(n, faceNormal)
-     * All verified correct with corner tests.
-     */
-    private static float[] faceUV(int face, float nx, float ny, float nz) {
-        float u, v;
-        switch (face) {
-            case 0: // +X axisA=-Z axisB=-Y
-                u = -nz / nx;
-                v = -ny / nx;
-                break;
-            case 1: // -X axisA=+Z axisB=-Y
-                u = nz / -nx;
-                v = -ny / -nx;
-                break;
-            case 2: // +Y axisA=+X axisB=+Z
-                u = nx / ny;
-                v = nz / ny;
-                break;
-            case 3: // -Y axisA=+X axisB=-Z
-                u = nx / -ny;
-                v = -nz / -ny;
-                break;
-            case 4: // +Z axisA=+X axisB=-Y
-                u = nx / nz;
-                v = -ny / nz;
-                break;
-            case 5: // -Z axisA=-X axisB=-Y
-                u = -nx / -nz;
-                v = -ny / -nz;
-                break;
-            default:
-                u = v = 0;
-        }
-        return new float[] { u * 0.5f + 0.5f, v * 0.5f + 0.5f };
     }
 }
