@@ -7,20 +7,15 @@ import javax.annotation.Nonnull;
 
 import net.minecraft.entity.EnumCreatureType;
 
-import gregtech.common.blocks.MetaBlocks;
-import gregtech.common.blocks.StoneVariantBlock;
 import supersymmetry.api.space.dimension.biome.SpaceBiome;
-import supersymmetry.common.blocks.BlockRegolith;
-import supersymmetry.common.blocks.SuSyBlocks;
 
 public class BiomeVoid extends SpaceBiome {
 
     public BiomeVoid(BiomeProperties properties) {
-        super(properties);
-
-        this.topBlock = SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.LOWLAND);
-        this.fillerBlock = MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH)
-                .getState(StoneVariantBlock.StoneType.BASALT);
+        super(new BiomeProperties("void")
+                .setTemperature(0.0f) // fuck you
+                .setRainfall(0.0f)
+                .setRainDisabled());
     }
 
     @Override
