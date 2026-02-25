@@ -38,6 +38,8 @@ public class SuSySpaceRenderer extends IRenderHandler {
         GlStateManager.disableLighting();
         GlStateManager.disableAlpha();
         GlStateManager.disableCull();
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glCullFace(GL11.GL_FRONT); // sphere winding is inverted, cull front faces
         GlStateManager.disableDepth();
         GlStateManager.depthMask(false);
         GlStateManager.enableTexture2D();
