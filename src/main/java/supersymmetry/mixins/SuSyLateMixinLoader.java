@@ -1,13 +1,11 @@
 package supersymmetry.mixins;
 
+import com.google.common.collect.ImmutableList;
+import net.minecraftforge.fml.common.Loader;
+import zone.rong.mixinbooter.ILateMixinLoader;
+
 import java.util.List;
 import java.util.stream.Collectors;
-
-import net.minecraftforge.fml.common.Loader;
-
-import com.google.common.collect.ImmutableList;
-
-import zone.rong.mixinbooter.ILateMixinLoader;
 
 @SuppressWarnings("unused")
 public class SuSyLateMixinLoader implements ILateMixinLoader {
@@ -21,7 +19,8 @@ public class SuSyLateMixinLoader implements ILateMixinLoader {
             "fluidlogged_api",
             "littletiles",
             "celeritas",
-            "projectred-core");
+            "projectred-core",
+            "techguns");
 
     @Override
     public List<String> getMixinConfigs() {
