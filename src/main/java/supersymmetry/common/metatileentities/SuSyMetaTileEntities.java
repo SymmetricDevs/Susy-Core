@@ -80,6 +80,7 @@ public class SuSyMetaTileEntities {
     public static SuSySimpleSteamMetaTileEntity[] STEAM_VULCANIZING_PRESS;
 
     public static SuSySimpleSteamMetaTileEntity[] STEAM_BATCH_REACTOR;
+    public static SuSySimpleSteamMetaTileEntity[] STEAM_DISTILLER;
 
     public static CatalystMachineMetaTileEntity[] ROASTER;
     public static SuSySimpleSteamMetaTileEntity[] STEAM_ROASTER;
@@ -345,6 +346,9 @@ public class SuSyMetaTileEntities {
                 SuSySteamProgressIndicators.COMPRESS, Textures.GAS_COLLECTOR_OVERLAY, false);
         registerSimpleMTE(VACUUM_CHAMBER, 12, 14540, "vacuum_chamber", SuSyRecipeMaps.VACUUM_CHAMBER,
                 Textures.GAS_COLLECTOR_OVERLAY, true);
+
+        registerSimpleSteamMTE(STEAM_DISTILLER, 20002, "distiller", RecipeMaps.DISTILLERY_RECIPES,
+                SuSySteamProgressIndicators.ARROW, Textures.DISTILLERY_OVERLAY, false);
 
         // chem overhaul
         registerContinuousMachineMTE(CONTINUOUS_STIRRED_TANK_REACTOR, 12, 14554, "continuous_stirred_tank_reactor",
@@ -798,6 +802,7 @@ public class SuSyMetaTileEntities {
         STEAM_MIXER = new SuSySimpleSteamMetaTileEntity[2];
         STEAM_VACUUM_CHAMBER = new SuSySimpleSteamMetaTileEntity[2];
         STEAM_BATCH_REACTOR = new SuSySimpleSteamMetaTileEntity[2];
+        STEAM_DISTILLER = new SuSySimpleSteamMetaTileEntity[2];
 
         LATEX_COLLECTOR = new PseudoMultiMachineMetaTileEntity[GTValues.EV];
         VULCANIZING_PRESS = new CatalystMachineMetaTileEntity[GTValues.EV];
