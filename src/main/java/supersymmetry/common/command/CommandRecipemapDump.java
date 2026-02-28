@@ -8,15 +8,20 @@ import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.ingredients.GTRecipeInput;
+import gregtech.api.recipes.recipeproperties.CleanroomProperty;
+import gregtech.api.recipes.recipeproperties.FusionEUToStartProperty;
 import gregtech.api.recipes.recipeproperties.RecipeProperty;
+import gregtech.api.recipes.recipeproperties.TemperatureProperty;
 import gregtech.api.unification.FluidUnifier;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.properties.*;
 import gregtech.api.unification.stack.MaterialStack;
+import gregtech.api.unification.stack.UnificationEntry;
 import gregtech.common.crafting.GTFluidCraftingIngredient;
 import gregtech.core.unification.material.internal.MaterialRegistryManager;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -43,6 +48,8 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.SusyLog;
+import supersymmetry.api.recipes.properties.DimensionProperty;
+import supersymmetry.api.recipes.properties.MixerSettlerCellsProperty;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -316,16 +323,7 @@ public class CommandRecipemapDump extends CommandBase {
         recipeobj.addProperty("isCTRecipe", recipe.getIsCTRecipe());
         recipeobj.addProperty("propertyCount", recipe.getPropertyCount());
         recipeobj.addProperty("unhiddenPropertyCount", recipe.getUnhiddenPropertyCount());
-        JsonArray propertyArray = new JsonArray();
-        // properties, not sure if anyone needs this but why not
-        for (Entry<RecipeProperty<?>, Object> propEntry : recipe.getPropertyValues()) {
-            JsonObject propdesc = new JsonObject();
-            propdesc.addProperty("propertyKey", propEntry.getKey().getKey());
-            propdesc.addProperty("propertyClass", propEntry.getKey().getClass().toString());
-            propdesc.addProperty("propertyHash", propEntry.getKey().hashCode());
-            propdesc.addProperty("propertyValueClass", propEntry.getValue().getClass().toString());
-            propertyArray.add(propdesc);
-        }
+        JsonArray propertyArray = getPropertiesArray(recipe);
         recipeobj.add("properties", propertyArray);
         recipeobj.addProperty("categoryName", recipe.getRecipeCategory().getName());
         recipeobj.addProperty(
@@ -420,6 +418,32 @@ public class CommandRecipemapDump extends CommandBase {
         return recipeobj;
     }
 
+    private static @NotNull JsonArray getPropertiesArray(Recipe recipe) {
+        JsonArray propertyArray = new JsonArray();
+        for (Entry<RecipeProperty<?>, Object> propEntry : recipe.getPropertyValues()) {
+            JsonObject propdesc = new JsonObject();
+            String key = propEntry.getKey().getKey();
+            propdesc.addProperty("propertyKey", key);
+            if (key.equals(DimensionProperty.KEY)) { // dimension
+                JsonArray arr = new JsonArray();
+                for (int dim : (IntList) propEntry.getValue()) {
+                    arr.add(dim);
+                }
+                propdesc.add("dimensions", arr);
+            } else if (key.equals(CleanroomProperty.KEY)) { // cleanroom
+                propdesc.addProperty("cleanroom", propEntry.getValue().toString());
+            } else if (key.equals(TemperatureProperty.KEY)) { // temperature
+                propdesc.addProperty("temperature", (int) propEntry.getValue());
+            } else if (key.equals(MixerSettlerCellsProperty.KEY)) { // mixer_settler_cells
+                propdesc.addProperty("cells", (int) propEntry.getValue());
+            } else if (key.equals(FusionEUToStartProperty.KEY)) { // eu_to_start
+                propdesc.addProperty("eu_to_start", (long) propEntry.getValue());
+            }
+            propertyArray.add(propdesc);
+        }
+        return propertyArray;
+    }
+
     public JsonObject stackToJson(ItemStack stack) {
         JsonObject stackObj = new JsonObject();
         if (stack == null || stack.getItem() == null) return stackObj;
@@ -449,10 +473,13 @@ public class CommandRecipemapDump extends CommandBase {
         stackObj.addProperty("itemClass", stack.getItem().getClass().toString());
         stackObj.addProperty("itemTranslationKey", stack.getItem().getTranslationKey());
 
-        MaterialStack mat = OreDictUnifier.getMaterial(stack);
-        if (mat != null) {
-            stackObj.addProperty("material", mat.material.getRegistryName());
-            stackObj.addProperty("materialAmount", mat.amount);
+        UnificationEntry entry = OreDictUnifier.getUnificationEntry(stack);
+        if (entry != null && entry.material != null) {
+            MaterialStack matStack = new MaterialStack(entry.material, entry.orePrefix.getMaterialAmount(entry.material));
+
+            stackObj.addProperty("material", matStack.material.getRegistryName());
+            stackObj.addProperty("materialAmount", matStack.amount);
+            itemStorage.computeIfAbsent(matStack.material, _ -> new ArrayList<>()).add(stack);
         }
 
         return stackObj;
