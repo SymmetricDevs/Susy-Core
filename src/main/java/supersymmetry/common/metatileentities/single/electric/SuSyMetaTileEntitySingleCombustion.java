@@ -19,13 +19,11 @@ import gregtech.api.GTValues;
 import gregtech.api.capability.IEnergyContainer;
 import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.capability.impl.FuelRecipeLogic;
-import gregtech.api.capability.impl.NotifiableFilteredFluidHandler;
 import gregtech.api.capability.impl.NotifiableFluidTank;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.widgets.ImageWidget;
 import gregtech.api.gui.widgets.LabelWidget;
-import gregtech.api.gui.widgets.TankWidget;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.recipes.Recipe;
@@ -33,6 +31,8 @@ import gregtech.api.recipes.RecipeMap;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.common.metatileentities.electric.MetaTileEntitySingleCombustion;
 import supersymmetry.api.capability.impl.SuSyFluidFilters;
+import supersymmetry.api.fluids.FilteredTankWidget;
+import supersymmetry.api.fluids.SuSyFluidTankWidget;
 import supersymmetry.api.util.SuSyUtility;
 
 public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleCombustion {
@@ -45,8 +45,8 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
 
     private boolean sufficientFluids;
 
-    private FluidTank lubricantTank;
-    private FluidTank coolantTank;
+    private SuSyFluidTankWidget lubricantTank;
+    private SuSyFluidTankWidget coolantTank;
 
     private FluidTankList displayedTankList;
 
@@ -63,24 +63,24 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
     }
 
     @Override
-    // Handle fluid imports
     protected FluidTankList createImportFluidHandler() {
         if (workable == null) return new FluidTankList(false);
-        FluidTank[] fluidImports = new FluidTank[workable.getRecipeMap().getMaxFluidInputs() + 2];
+
+        // Only recipe fluid inputs go here — no lubricant/coolant
+        FluidTank[] fluidImports = new FluidTank[workable.getRecipeMap().getMaxFluidInputs()];
         FluidTank[] displayedTanks = new FluidTank[workable.getRecipeMap().getMaxFluidInputs()];
-        for (int i = 0; i < fluidImports.length - 2; i++) {
-            NotifiableFluidTank filteredFluidHandler = new NotifiableFluidTank(
+        for (int i = 0; i < fluidImports.length; i++) {
+            NotifiableFluidTank tank = new NotifiableFluidTank(
                     this.getTankScalingFunction().apply(this.getTier()), this, false);
-            fluidImports[i] = filteredFluidHandler;
-            displayedTanks[i] = filteredFluidHandler;
+            fluidImports[i] = tank;
+            displayedTanks[i] = tank;
         }
 
-        this.lubricantTank = new NotifiableFilteredFluidHandler(1000, this, false)
+        // Lubricant/coolant tanks are standalone — NOT part of the import handler
+        this.lubricantTank = (SuSyFluidTankWidget) new SuSyFluidTankWidget(1000, this, false)
                 .setFilter(SuSyFluidFilters.LUBRICANT);
-        fluidImports[fluidImports.length - 2] = lubricantTank;
-
-        this.coolantTank = new NotifiableFilteredFluidHandler(1000, this, false).setFilter(SuSyFluidFilters.COOLANT);
-        fluidImports[fluidImports.length - 1] = coolantTank;
+        this.coolantTank = (SuSyFluidTankWidget) new SuSyFluidTankWidget(1000, this, false)
+                .setFilter(SuSyFluidFilters.COOLANT);
 
         this.displayedTankList = new FluidTankList(false, displayedTanks);
         return new FluidTankList(false, fluidImports);
@@ -97,7 +97,7 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
         super.update();
         if (!getWorld().isRemote) {
             updateSufficientFluids();
-            isFull = energyContainer.getEnergyStored() - energyContainer.getEnergyCapacity() == 0;
+            isFull = energyContainer.getEnergyStored() >= energyContainer.getEnergyCapacity();
 
             if (workable.isWorking() && !isFull) workCounter += 1;
             if (workCounter == 600) {
@@ -138,14 +138,14 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
         builder.widget(new LabelWidget(6, 6, getMetaFullName()))
                 .bindPlayerInventory(player.inventory, GuiTextures.SLOT, yOffset);
 
-        builder.widget(new TankWidget(lubricantTank, 110, 21, 10, 54)
+        builder.widget(new FilteredTankWidget(lubricantTank, 110, 21, 10, 54)
                 .setBackgroundTexture(GuiTextures.PROGRESS_BAR_BOILER_EMPTY.get(true))
                 .setAlwaysShowFull(false)
-                .setContainerClicking(true, true));  // Enable container clicking
-        builder.widget(new TankWidget(coolantTank, 124, 21, 10, 54)
+                .setContainerClicking(true, true));  // both directions, filter guards filling
+        builder.widget(new FilteredTankWidget(coolantTank, 124, 21, 10, 54)
                 .setBackgroundTexture(GuiTextures.PROGRESS_BAR_BOILER_EMPTY.get(true))
                 .setAlwaysShowFull(false)
-                .setContainerClicking(true, true));  // Enable container clicking
+                .setContainerClicking(true, true));
         builder.widget(new ImageWidget(152, 63 + yOffset, 17, 17,
                 GTValues.XMAS.get() ? GuiTextures.GREGTECH_LOGO_XMAS : GuiTextures.GREGTECH_LOGO)
                         .setIgnoreColor(true));
@@ -169,12 +169,12 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
 
         @Override
         public boolean checkRecipe(@NotNull Recipe recipe) {
-            return sufficientFluids;
+            return sufficientFluids && !isFull;
         }
 
         @Override
         public boolean isWorking() {
-            return sufficientFluids && super.isWorking();
+            return sufficientFluids && !isFull && super.isWorking();
         }
 
         @Override

@@ -1,3 +1,4 @@
+
 package supersymmetry.common.metatileentities.multi.electric;
 
 import java.util.List;
@@ -194,6 +195,11 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
             if (proposedEUt > getMaximumAllowedVoltage()) {
                 return false;
             }
+            // Prevent recipe from starting if energy buffer is full, and we're not voiding energy
+            if (isFull && !voidEnergy) {
+                return false;
+            }
+            
             return sufficientFluids;
         }
 
