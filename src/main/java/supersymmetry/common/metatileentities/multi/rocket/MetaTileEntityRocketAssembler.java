@@ -70,9 +70,6 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                     NBTTagCompound tag = x.getTagCompound();
                     AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
                     if (bp.readFromNBT(tag) && bp.isFullBlueprint()) {
-                        // this.startAssembly(bp); <- this will nullref if you call it before its
-                        // actually inserted, which
-                        // happens after this function returns :C
                         return true;
                     }
                 }
@@ -83,8 +80,22 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     public List<AbstractComponent<?>> componentList = new ArrayList<>();
     public int componentIndex = 0;
     public boolean isWorking = false;
-    private List<String> signalNames = new ArrayList<>();
     private List<Runnable> signalActions = new ArrayList<>();
+
+    public MetaTileEntityRocketAssembler(ResourceLocation metaTileEntityId) {
+        super(metaTileEntityId, SuSyRecipeMaps.ROCKET_ASSEMBLER);
+        signalActions.add(
+                () -> {
+                    if (!this.blueprintSlot.isEmpty()) {
+                        this.startAssembly(this.getCurrentBlueprint());
+                    }
+                });
+        signalActions.add(
+                () -> {
+                    this.abortAssembly();
+                });
+        this.recipeMapWorkable = new RocketAssemblerLogic(this); // <-- recipes are generated here
+    }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
@@ -110,33 +121,16 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         }
         this.componentIndex = data.getInteger("componentIndex");
         this.isWorking = data.getBoolean("isWorking");
+        this.blueprintSlot.setLocked(this.isWorking);
     }
 
-    public MetaTileEntityRocketAssembler(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SuSyRecipeMaps.ROCKET_ASSEMBLER);
-        signalNames.add("start_assembly");
-        signalNames.add("stop_assembly");
-        signalActions.add(
-                () -> {
-                    if (!this.blueprintSlot.isEmpty()) {
-                        this.startAssembly(this.getCurrentBlueprint());
-                    }
-                });
-        signalActions.add(
-                () -> {
-                    this.abortAssembly();
-                });
-        this.recipeMapWorkable = new RocketAssemblerLogic(this); // <-- recipes are generated here
+    public List<Runnable> getSignalActions() {
+        return signalActions;
     }
 
     @Override
-    public List<String> getSignals() {
-        return signalNames;
-    }
-
-    @Override
-    public String getSignalName(int sig) {
-        return this.signalNames.get(sig);
+    public int getSignalCeiling() {
+        return signalActions.size() - 1;
     }
 
     @Override
@@ -158,7 +152,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     }
 
     public Recipe getCurrentRecipe() {
-        return isWorking ? ((RocketAssemblerLogic) this.recipeMapWorkable).getComponentRecipe() : null;
+        return isWorking ? ((RocketAssemblerLogic) this.recipeMapWorkable).getRecipe(100000) : null;
     }
 
     public void abortAssembly() {
@@ -171,7 +165,6 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     }
 
     public void finishAssembly() {
-        // SusyLog.logger.info("assembly finished");
         this.blueprintSlot.setLocked(false);
         this.isWorking = false;
         this.componentIndex = 0;
@@ -184,9 +177,8 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
             rocketNBT.setLong("assemblerPosition", this.getPos().toLong());
             rocketNBT.setTag("rocket", this.getCurrentBlueprint().writeToNBT());
         } else {
-            doExplosion(1000000);
+            doExplosion(1000);
         }
-        // abortAssembly();
     }
 
     public EntityTransporterErector findTransporterErector() {
@@ -204,19 +196,6 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         return null;
     }
 
-    private AxisAlignedBB getInternalBB() {
-        EnumFacing front = getFrontFacing();
-        // The left side of the controller, not from the player's perspective
-        EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(front, getUpwardsFacing(), isFlipped());
-        EnumFacing up = RelativeDirection.UP.getRelativeFacing(front, getUpwardsFacing(), isFlipped());
-
-        BlockPos pos = getPos();
-
-        var v1 = pos.offset(left.getOpposite(), 17).offset(up, 2);
-        var v2 = pos.offset(left, 17).offset(up, 10).offset(front.getOpposite(), 17);
-        return new AxisAlignedBB(v1, v2);
-    }
-
     public void startAssembly(AbstractRocketBlueprint bp) {
         ((RocketAssemblerLogic) this.recipeMapWorkable).setInputsValid();
         this.componentIndex = 0;
@@ -226,15 +205,6 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                 .flatMap(x -> x.getComponents().values().stream())
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
-        // for (var input :
-        // ((RocketAssemblerLogic) this.recipeMapWorkable).getComponentRecipe().getInputs()) {
-        // SusyLog.logger.info(
-        // "amount {} item {}",
-        // input.getAmount(),
-        // Stream.of(input.getInputStacks())
-        // .map(x -> x.getDisplayName())
-        // .collect(Collectors.toList()));
-        // }
         this.blueprintSlot.setLocked(true);
     }
 
@@ -253,13 +223,12 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         if (!isWorking) return;
         if (this.componentList.size() - 1 > this.componentIndex) {
             this.componentIndex++;
-            // SusyLog.logger.info(
-            // "processing component {}/{}, isWorking:{},component:{}",
-            // this.componentIndex,
-            // this.componentList.size(),
-            // this.isWorking,
-            // getCurrentCraftTarget() == null ? null : getCurrentCraftTarget().getName());
-            //
+            SusyLog.logger.info(
+                    "processing component {}/{}, isWorking:{},component:{}",
+                    this.componentIndex,
+                    this.componentList.size(),
+                    this.isWorking,
+                    getCurrentCraftTarget() == null ? null : getCurrentCraftTarget().getName());
         } else {
             finishAssembly();
         }
@@ -303,6 +272,141 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     @Override
     protected boolean shouldShowVoidingModeButton() {
         return false;
+    }
+
+    @Nonnull
+    @Override
+    protected ICubeRenderer getFrontOverlay() {
+        return Textures.ASSEMBLER_OVERLAY;
+    }
+
+    @Override
+    protected ModularUI createUI(EntityPlayer entityPlayer) {
+        return createUITemplate(entityPlayer).build(getHolder(), entityPlayer);
+    }
+
+    protected ModularUI.Builder createUITemplate(EntityPlayer entityPlayer) {
+        ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, 198, 208);
+        builder.image(4, 4, 190, 109, GuiTextures.DISPLAY);
+        ProgressWidget progressBar = new ProgressWidget(
+                () -> this.getFillPercentage(0),
+                4,
+                115,
+                94,
+                7,
+                this.getProgressBarTexture(0),
+                ProgressWidget.MoveType.HORIZONTAL)
+                        .setHoverTextConsumer(list -> this.addBarHoverText(list, 0));
+        builder.widget(progressBar);
+        progressBar = new ProgressWidget(
+                () -> this.getFillPercentage(1),
+                100,
+                115,
+                94,
+                7,
+                this.getProgressBarTexture(1),
+                ProgressWidget.MoveType.HORIZONTAL)
+                        .setHoverTextConsumer(list -> this.addBarHoverText(list, 1));
+        builder.widget(progressBar);
+        builder.widget(
+                new IndicatorImageWidget(174, 93, 17, 17, getLogo())
+                        .setWarningStatus(getWarningLogo(), this::addWarningText)
+                        .setErrorStatus(getErrorLogo(), this::addErrorText));
+        builder.image(4, 4, 190, 117, GuiTextures.DISPLAY);
+        builder.widget(
+                new IndicatorImageWidget(174, 101, 17, 17, getLogo())
+                        .setWarningStatus(getWarningLogo(), this::addWarningText)
+                        .setErrorStatus(getErrorLogo(), this::addErrorText));
+
+        builder.label(9, 9, getMetaFullName(), 0xFFFFFF);
+        builder.widget(
+                new AdvancedTextWidget(9, 20, this::addDisplayText, 0xFFFFFF)
+                        .setMaxWidthLimit(181)
+                        .setClickHandler(this::handleDisplayClick));
+
+        // Power Button
+        IControllable controllable = getCapability(GregtechTileCapabilities.CAPABILITY_CONTROLLABLE, null);
+        if (controllable != null) {
+            builder.widget(
+                    new ImageCycleButtonWidget(
+                            173,
+                            183,
+                            18,
+                            18,
+                            GuiTextures.BUTTON_POWER,
+                            controllable::isWorkingEnabled,
+                            controllable::setWorkingEnabled));
+            builder.widget(new ImageWidget(173, 201, 18, 6, GuiTextures.BUTTON_POWER_DETAIL));
+        }
+
+        // start button
+        builder.widget(
+                new ClickButtonWidget(
+                        173,
+                        143,
+                        18,
+                        18,
+                        "",
+                        (clickData -> {
+                            if (!this.blueprintSlot.isEmpty()) {
+                                this.startAssembly(this.getCurrentBlueprint());
+                            }
+                        }))
+                                .setTooltipText("susy.machine.rocket_assembler.gui.start")
+                                .setButtonTexture(SusyGuiTextures.ROCKET_ASSEMBLER_BUTTON_START));
+        // stop button
+        builder.widget(
+                new ClickButtonWidget(
+                        173,
+                        125,
+                        18,
+                        18,
+                        "",
+                        (clickData1 -> {
+                            this.abortAssembly();
+                        }))
+                                .setButtonTexture(SusyGuiTextures.ROCKET_ASSEMBLER_BUTTON_STOP)
+                                .setTooltipText("susy.machine.rocket_assembler.gui.stop"));
+        builder.dynamicLabel(
+                65,
+                52,
+                () -> {
+                    return !blueprintSlot.isEmpty() ? "" : I18n.format(this.getMetaName() + ".blueprint_slot.name");
+                },
+                0x404040);
+        SlotWidgetMentallyStable blueprintslot = new SlotWidgetMentallyStable(this.blueprintSlot, 0, 170, 72);
+        blueprintslot.setBackgroundTexture(GuiTextures.SLOT_DARK);
+        blueprintslot.setChangeListener(
+                () -> {
+                    if (blueprintSlot.isEmpty()) {
+                        this.abortAssembly();
+                    }
+                });
+        builder.widget(blueprintslot);
+        builder.widget(
+                new ItemCostWidget(
+                        new Size(158, 70),
+                        new Position(9, 60),
+                        this::getCurrentRecipe,
+                        this.recipeMapWorkable::isWorking));
+
+        builder.bindPlayerInventory(entityPlayer.inventory, 125);
+        return builder;
+    }
+
+    @Override
+    protected @NotNull Widget getFlexButton(int x, int y, int width, int height) {
+        return new ClickButtonWidget(
+                x,
+                y,
+                width,
+                height,
+                "",
+                (clickData -> {
+                    this.abortAssembly();
+                }))
+                        .setButtonTexture(SusyGuiTextures.ROCKET_ASSEMBLER_BUTTON_STOP)
+                        .setTooltipText("susy.machine.rocket_assembler.gui.stop");
     }
 
     @Override
@@ -576,7 +680,8 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                         states(
                                 SuSyBlocks.ROCKET_ASSEMBLER_CASING.getState(
                                         BlockRocketAssemblerCasing.RocketAssemblerCasingType.FOUNDATION))
-                                                .or(MetaTileEntityComponentRedstoneController.controllerPredicate())
+                                                .or(MetaTileEntityComponentRedstoneController.controllerPredicate()
+                                                        .setMaxGlobalLimited(2))
                                                 .or(
                                                         abilities(MultiblockAbility.IMPORT_ITEMS)
                                                                 .setPreviewCount(1)
@@ -605,129 +710,6 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                 .build();
     }
 
-    @Nonnull
-    @Override
-    protected ICubeRenderer getFrontOverlay() {
-        return Textures.ASSEMBLER_OVERLAY;
-    }
-
-    @Override
-    protected ModularUI createUI(EntityPlayer entityPlayer) {
-        return createUITemplate(entityPlayer).build(getHolder(), entityPlayer);
-    }
-
-    protected ModularUI.Builder createUITemplate(EntityPlayer entityPlayer) {
-        ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, 198, 208);
-        // Display
-        if (this.showProgressBar()) {
-            builder.image(4, 4, 190, 109, GuiTextures.DISPLAY);
-
-            if (this.getNumProgressBars() == 2) {
-                // double bar
-                ProgressWidget progressBar = new ProgressWidget(
-                        () -> this.getFillPercentage(0),
-                        4,
-                        115,
-                        94,
-                        7,
-                        this.getProgressBarTexture(0),
-                        ProgressWidget.MoveType.HORIZONTAL)
-                                .setHoverTextConsumer(list -> this.addBarHoverText(list, 0));
-                builder.widget(progressBar);
-
-                progressBar = new ProgressWidget(
-                        () -> this.getFillPercentage(1),
-                        100,
-                        115,
-                        94,
-                        7,
-                        this.getProgressBarTexture(1),
-                        ProgressWidget.MoveType.HORIZONTAL)
-                                .setHoverTextConsumer(list -> this.addBarHoverText(list, 1));
-                builder.widget(progressBar);
-            }
-
-            builder.widget(
-                    new IndicatorImageWidget(174, 93, 17, 17, getLogo())
-                            .setWarningStatus(getWarningLogo(), this::addWarningText)
-                            .setErrorStatus(getErrorLogo(), this::addErrorText));
-        } else {
-            builder.image(4, 4, 190, 117, GuiTextures.DISPLAY);
-            builder.widget(
-                    new IndicatorImageWidget(174, 101, 17, 17, getLogo())
-                            .setWarningStatus(getWarningLogo(), this::addWarningText)
-                            .setErrorStatus(getErrorLogo(), this::addErrorText));
-        }
-
-        builder.label(9, 9, getMetaFullName(), 0xFFFFFF);
-        builder.widget(
-                new AdvancedTextWidget(9, 20, this::addDisplayText, 0xFFFFFF)
-                        .setMaxWidthLimit(181)
-                        .setClickHandler(this::handleDisplayClick));
-
-        // Power Button
-        IControllable controllable = getCapability(GregtechTileCapabilities.CAPABILITY_CONTROLLABLE, null);
-        if (controllable != null) {
-            builder.widget(
-                    new ImageCycleButtonWidget(
-                            173,
-                            183,
-                            18,
-                            18,
-                            GuiTextures.BUTTON_POWER,
-                            controllable::isWorkingEnabled,
-                            controllable::setWorkingEnabled));
-            builder.widget(new ImageWidget(173, 201, 18, 6, GuiTextures.BUTTON_POWER_DETAIL));
-        }
-
-        // Flex Button
-        builder.widget(
-                new ClickButtonWidget(
-                        173,
-                        143,
-                        18,
-                        18,
-                        "",
-                        (clickData -> {
-                            if (!this.blueprintSlot.isEmpty()) {
-                                this.startAssembly(this.getCurrentBlueprint());
-                            }
-                        }))
-                                .setTooltipText("susy.machine.rocket_assembler.gui.start")
-                                .setButtonTexture(SusyGuiTextures.ROCKET_ASSEMBLER_BUTTON_START));
-
-        builder.widget(getFlexButton(173, 125, 18, 18));
-        builder.dynamicLabel(
-                80,
-                52,
-                () -> {
-                    return !blueprintSlot.isEmpty() ? "" : I18n.format(this.getMetaName() + ".blueprint_slot.name");
-                },
-                0x404040);
-        SlotWidgetMentallyStable blueprintslot = new SlotWidgetMentallyStable(this.blueprintSlot, 0, 170, 72);
-        blueprintslot.setBackgroundTexture(GuiTextures.SLOT_DARK);
-        blueprintslot.setChangeListener(
-                () -> {
-                    if (blueprintSlot.isEmpty()) {
-                        this.abortAssembly();
-                    }
-                });
-        builder.widget(blueprintslot);
-        builder.widget(
-                new ItemCostWidget(
-                        new Size(158, 70),
-                        new Position(9, 60),
-                        this::getCurrentRecipe,
-                        this.recipeMapWorkable::isWorking));
-        builder.bindPlayerInventory(entityPlayer.inventory, 125);
-        return builder;
-    }
-
-    @Override
-    protected @NotNull Widget getFlexButton(int x, int y, int width, int height) {
-        return getStopButton(x, y, width, height);
-    }
-
     protected @NotNull Widget getStopButton(int x, int y, int width, int height) {
         return new ClickButtonWidget(
                 x,
@@ -740,5 +722,17 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                 }))
                         .setButtonTexture(SusyGuiTextures.ROCKET_ASSEMBLER_BUTTON_STOP)
                         .setTooltipText("susy.machine.rocket_assembler.gui.stop");
+    }
+
+    private AxisAlignedBB getInternalBB() {
+        EnumFacing front = getFrontFacing();
+        // The left side of the controller, not from the player's perspective
+        EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(front, getUpwardsFacing(), isFlipped());
+        EnumFacing up = RelativeDirection.UP.getRelativeFacing(front, getUpwardsFacing(), isFlipped());
+
+        BlockPos pos = getPos();
+        var v1 = pos.offset(left.getOpposite(), 17).offset(up, 2);
+        var v2 = pos.offset(left, 17).offset(up, 10).offset(front.getOpposite(), 17);
+        return new AxisAlignedBB(v1, v2);
     }
 }

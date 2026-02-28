@@ -25,41 +25,16 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
         super(assembler);
     }
 
-    public Recipe getComponentRecipe() {
-        MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
-        if (!assembler.isWorking) return null; // assume that it doesnt have a blueprint inside i guess
-        AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
-        if (targetComponent == null) return null;
-        List<GTRecipeInput> flatExpandedInput = targetComponent.materials.stream()
-                .flatMap(
-                        x -> {
-                            return x.expandRecipe(RecipeMaps.ASSEMBLER_RECIPES, 2 << 15).stream();
-                        })
-                .collect(Collectors.toList());
-        return assembler.recipeMap
-                .recipeBuilder()
-                .inputIngredients(collapse(flatExpandedInput))
-                .EUt(2 << 15) // LuV amp. this means that you need 8 4A EV energy hatches :goog:
-                .duration((int) Math.ceil(targetComponent.getAssemblyDuration() * 20))
-                .build()
-                .getResult();
-    }
-
     public void setInputsValid() {
         this.invalidInputsForRecipes = false;
     }
 
-    @Override
-    protected @Nullable Recipe findRecipe(
-                                          long maxVoltage, IItemHandlerModifiable inputs,
-                                          IMultipleTankHandler fluidInputs) {
-        EntityTransporterErector erector = ((MetaTileEntityRocketAssembler) this.metaTileEntity)
-                .findTransporterErector();
-        if (erector != null) return null;
-        Recipe r = super.findRecipe(maxVoltage, inputs, fluidInputs);
-        if (r != null) return r; // unlikely for this thing
+    public Recipe getRecipe(long maxVoltage) {
         MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
-        if (!assembler.isWorking) return null; // assume that it doesnt have a blueprint inside i guess
+        EntityTransporterErector erector = assembler.findTransporterErector();
+        if (erector != null) return null;
+        if (!assembler.isWorking) return null;
+
         AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
         if (targetComponent == null) return null;
         List<GTRecipeInput> flatExpandedInput = targetComponent.materials.stream()
@@ -71,11 +46,18 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
         Recipe recipe = assembler.recipeMap
                 .recipeBuilder()
                 .inputIngredients(collapse(flatExpandedInput))
-                .EUt(2 << 15) // LuV amp. this means that you need 8 4A EV energy hatches :goog:
+                .EUt(2 << 15) // 1 LuV amp
                 .duration((int) Math.ceil(targetComponent.getAssemblyDuration() * 20))
                 .build()
                 .getResult();
         return recipe;
+    }
+
+    @Override
+    protected @Nullable Recipe findRecipe(
+                                          long maxVoltage, IItemHandlerModifiable inputs,
+                                          IMultipleTankHandler fluidInputs) {
+        return getRecipe(maxVoltage);
     }
 
     // mental illness n6: this runs when a recipe with nothing in it (findrecipe returns null) is
@@ -85,11 +67,11 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
         // SusyLog.logger.info(
         // "progressTime:{} maxprogresstime:{}", this.progressTime, this.maxProgressTime);
 
+        super.completeRecipe();
         if (!(this.progressTime == 0 || this.maxProgressTime == 0)) {
             MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
             assembler.nextComponent();
         }
-        super.completeRecipe();
     }
 
     // doesnt work for this multi
@@ -112,8 +94,6 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
         return counts.entrySet().stream()
                 .map(
                         x -> {
-                            // x.getKey().setCount(x.getValue());
-                            // return x.getKey();
                             return new GTRecipeItemInput(x.getKey(), x.getValue());
                         })
                 .collect(Collectors.toList());
