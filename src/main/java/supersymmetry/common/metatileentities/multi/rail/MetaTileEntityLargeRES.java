@@ -1,6 +1,7 @@
 package supersymmetry.common.metatileentities.multi.rail;
 
 import static gregtech.api.util.RelativeDirection.*;
+import static supersymmetry.api.recipes.SuSyRecipeMaps.LARGE_RES;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -85,7 +86,7 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
     private UUID previousEntityUUID;
 
     public MetaTileEntityLargeRES(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, LargeRESRecipeMap.RES_RECIPES);
+        super(metaTileEntityId, LARGE_RES);
         trainOutputSlot = new NotifiableItemStackHandler(this, 1, this, true);
         trainInputSlot = new NotifiableItemStackHandler(this, 1, this, false);
         this.recipeMapWorkable = new RailroadEngineeringStationWorkable(this, trainInputSlot, trainOutputSlot);
