@@ -1,18 +1,18 @@
 package supersymmetry.common.entities;
 
-import cam72cam.immersiverailroading.util.Speed;
-import cam72cam.mod.math.Vec3i;
+import java.util.List;
+
 import net.minecraft.nbt.NBTTagCompound;
 
 import cam72cam.immersiverailroading.entity.Freight;
+import cam72cam.immersiverailroading.util.Speed;
 import cam72cam.mod.entity.Entity;
 import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.entity.sync.TagSync;
+import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.serialization.TagField;
 import supersymmetry.client.renderer.handler.IAlwaysRender;
 import supersymmetry.integration.immersiverailroading.registry.TransporterErectorDefinition;
-
-import java.util.List;
 
 public class EntityTransporterErector extends Freight implements IAlwaysRender {
 
@@ -32,8 +32,7 @@ public class EntityTransporterErector extends Freight implements IAlwaysRender {
     // In radians per tick
     private double liftingSpeed = 0.087 / 20;
 
-    public EntityTransporterErector() {
-    }
+    public EntityTransporterErector() {}
 
     @Override
     public IBoundingBox getBounds() {

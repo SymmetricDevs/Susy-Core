@@ -103,17 +103,12 @@ public class MetaTileEntitySuSyLargeBoiler extends MultiblockWithDisplayBase
     }
 
     @Override
-    public String getSignalName(int sig) {
+    public String getSignalTranslationKey(int sig) {
         if (signalNames.size() > sig) {
             return signalNames.get(sig);
         } else {
-            return ""; // shouldnt happen
+            return "";
         }
-    }
-
-    @Override
-    public List<String> getSignals() {
-        return this.signalNames;
     }
 
     @Override
@@ -121,6 +116,11 @@ public class MetaTileEntitySuSyLargeBoiler extends MultiblockWithDisplayBase
         if (signalOps.size() > sig) {
             signalOps.get(sig).accept(this);
         }
+    }
+
+    @Override
+    public int getSignalCeiling() {
+        return signalOps.size() - 1;
     }
 
     @Override

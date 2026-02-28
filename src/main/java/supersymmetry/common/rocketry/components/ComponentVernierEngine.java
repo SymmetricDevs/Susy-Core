@@ -40,9 +40,7 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
                                                 .equals(SuSyBlocks.COMBUSTION_CHAMBER.getState(
                                                         BlockCombustionChamber.CombustionType.MONOPROPELLANT))));
         this.setComponentSlotValidator(
-                x -> x.equals(this.getName()) || x.equals(this.getType()) ||
-                        (x.equals(this.getType() + "_small") && this.radius < 2) ||
-                        (x.equals(this.getName() + "_small") && this.radius < 2));
+                x -> x.equals(this.getName()) || x.equals(this.getType()));
     }
 
     @Override

@@ -135,21 +135,12 @@ public class ItemCostWidget extends Widget {
                         });
 
         if (!items.stream()
-                // this is one of the worst things ive wrote so far, but i forgot how to make a tuple in
-                // this
-                // horrible language, but the tostring of an itemstack returns pretty much what i need
-                // to
-                // check for so yeah good
-                // luck reading this, im sorry :c
-
-                // .allMatch(x -> lastSyncedItems.contains(x))) {
                 .allMatch(
                         x -> lastSyncedItems.stream()
                                 .map(y -> y.toString())
                                 .collect(Collectors.toList())
                                 .contains(x.toString())) ||
                 (items.size() == 0 && lastSyncedItems.size() == 0)) {
-
             this.writeUpdateInfo(
                     100,
                     buf -> {
@@ -199,23 +190,6 @@ public class ItemCostWidget extends Widget {
                 size.width - paneSize,
                 size.height,
                 () -> {
-                    // int min =
-                    // MathHelper.clamp((scrollOffset / HEIGHT_OFFSET) - 1, 0,
-                    // this.lastSyncedItems.size());
-                    // int max =
-                    // MathHelper.clamp(
-                    // ((scrollOffset + this.getSize().height) / HEIGHT_OFFSET) + 1,
-                    // 0,
-                    // this.lastSyncedItems.size());
-                    // for (int i = min; i < max; i++) {
-                    // this.drawStack(
-                    // new Position(
-                    // this.getPosition().x,
-                    // this.getPosition().y + HEIGHT_OFFSET * i + /* small offset from the text */
-                    // 10),
-                    // this.getSize(),
-                    // this.lastSyncedItems.get(i));
-                    // }
                     Position startpos = new Position(this.getPosition().x, this.getPosition().y + scrollOffset - 8);
                     for (ItemStack itemStack : lastSyncedItems) {
                         startpos = startpos.add(new Position(0, ItemCostWidget.HEIGHT_OFFSET));
@@ -273,12 +247,6 @@ public class ItemCostWidget extends Widget {
                     SusyLog.logger.error("failed to read an itemstack nbt, this shouldnt happen!");
                 }
             }
-            // SusyLog.logger.info(
-            // "this.lastSyncedItems.size(){} >{} this.getSize().height{} / HEIGHT_OFFSET{}",
-            // this.lastSyncedItems.size(),
-            // this.lastSyncedItems.size() > this.getSize().height / HEIGHT_OFFSET,
-            // this.getSize().height,
-            // ItemCostWidget.HEIGHT_OFFSET);
         }
     }
 

@@ -475,8 +475,8 @@ susy.machine.landing_pad.name=Landing Pad
 susy.machine.scrap_recycler.name=Scrap Recycler
 
 susy.machine.rocket_assembler.name=Rocket Assembler
-susy.machine.rocket_assembler.signal.start_assembly=Start assembly
-susy.machine.rocket_assembler.signal.stop_assembly=Stop and discard assembly
+susy.machine.rocket_assembler.signal.0=Start assembly
+susy.machine.rocket_assembler.signal.1=Stop and discard assembly
 susy.machine.rocket_assembler.blueprint_slot.name=insert a rocket blueprint
 susy.machine.rocket_assembler.gui.required_items=Required Items:
 susy.machine.rocket_assembler.gui.stop=Stop and reset assembly
