@@ -4,6 +4,7 @@ import com.google.gson.*;
 import gregtech.api.GregTechAPI;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.WorkableTieredMetaTileEntity;
+import gregtech.api.metatileentity.multiblock.CleanroomType;
 import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMap;
@@ -431,7 +432,7 @@ public class CommandRecipemapDump extends CommandBase {
                 }
                 propdesc.add("dimensions", arr);
             } else if (key.equals(CleanroomProperty.KEY)) { // cleanroom
-                propdesc.addProperty("cleanroom", propEntry.getValue().toString());
+                propdesc.addProperty("cleanroom", ((CleanroomType) propEntry.getValue()).getName());
             } else if (key.equals(TemperatureProperty.KEY)) { // temperature
                 propdesc.addProperty("temperature", (int) propEntry.getValue());
             } else if (key.equals(MixerSettlerCellsProperty.KEY)) { // mixer_settler_cells
