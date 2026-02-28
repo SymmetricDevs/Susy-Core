@@ -70,6 +70,12 @@ public class JeiModule extends IntegrationSubmodule implements IModPlugin {
         registry.addRecipes(RocketFuelEntry.getFuelRegistry().values().stream().map(RocketFuelWrapper::new)
                 .collect(Collectors.toList()), RocketFuelCategory.UID);
         registry.addRecipeCatalyst(SuSyMetaTileEntities.LAUNCH_PAD.getStackForm(), RocketFuelCategory.UID);
+        String largeRESMapId = GTValues.MODID + ":" + SuSyRecipeMaps.LARGE_RES.getUnlocalizedName();
+        registry.addRecipeCatalyst(SuSyMetaTileEntities.LARGE_RES.getStackForm(), largeRESMapId);
+
+        registry.addRecipes(RocketFuelEntry.getFuelRegistry().values().stream().map(RocketFuelWrapper::new)
+                .collect(Collectors.toList()), RocketFuelCategory.UID);
+        registry.addRecipeCatalyst(SuSyMetaTileEntities.LAUNCH_PAD.getStackForm(), RocketFuelCategory.UID);
     }
 
     @Override

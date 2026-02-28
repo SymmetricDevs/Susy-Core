@@ -1508,3 +1508,8 @@ entity.Rocket.name=Soyuz FG Rocket
 susy.machine.large_railroad_engineering_station.name=Large Railroad Engineering Station
 susy.machine.large_railroad_engineering_station.description=A massive facility for constructing and maintaining railroad rolling stock
 susy.machine.large_railroad_engineering_station.tip=Used to build and service trains
+
+metatileentity.susy.large_railroad_engineering_station.name=Large Railroad Engineering Station
+metatileentity.susy.large_railroad_engineering_station.description=A massive facility for constructing and maintaining railroad rolling stock
+metatileentity.susy.large_railroad_engineering_station.tooltip=Used to build and service trains
+large_railroad_engineering_station.name=Large Railroad Engineering Station

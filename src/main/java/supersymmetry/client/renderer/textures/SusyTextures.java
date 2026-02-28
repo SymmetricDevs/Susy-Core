@@ -137,6 +137,8 @@ public class SusyTextures {
             "machines/multiblocks/radiator");
     public static final OrientedOverlayRenderer RAILROAD_ENGINEERING_STATION_OVERLAY = new OrientedOverlayRenderer(
             "machines/multiblocks/railroad_engineering_station");
+    public static final OrientedOverlayRenderer LARGE_RES = new OrientedOverlayRenderer(
+            "machines/multiblocks/railroad_engineering_station");
     public static final OrientedOverlayRenderer ROTARY_KILN_OVERLAY = new OrientedOverlayRenderer(
             "machines/multiblocks/rotary_kiln");
     public static final OrientedOverlayRenderer SINTERING_OVERLAY = new OrientedOverlayRenderer(
