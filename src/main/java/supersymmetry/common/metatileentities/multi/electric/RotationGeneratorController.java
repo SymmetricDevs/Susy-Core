@@ -83,13 +83,24 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         if (!getWorld().isRemote) {
             setLubricantStack(tanks);
             updateSufficientFluids();
-            isFull = energyContainer.getEnergyStored() - energyContainer.getEnergyCapacity() == 0;
-            generatingPower = !isFull && recipeMapWorkable.isWorking();
+            isFull = energyContainer.getEnergyStored() >= energyContainer.getEnergyCapacity();
+            generatingPower = speed > 0 && sufficientFluids;
 
-            if (recipeMapWorkable.isWorking() && ((SuSyTurbineRecipeLogic) recipeMapWorkable).tryDrawEnergy()) {
-                speed += getRotationAcceleration();
+            // Speed control: ramp up during startup, hold steady when buffer full,
+            // decel only when no recipe or no fluids. Mirrors steam turbine governor behavior —
+            // a full buffer doesn't stall the turbine, it just stops adding energy.
+            boolean hasActiveRecipe = recipeMapWorkable.isActive();
+            boolean canSpin = hasActiveRecipe && sufficientFluids;
+
+            if (canSpin) {
+                if (speed < maxSpeed) {
+                    // Still spinning up
+                    speed += getRotationAcceleration();
+                }
+                // At or above maxSpeed: hold governor keeps rated RPM regardless of buffer state
                 lubricantCounter += speed;
             } else {
+                // No fuel or no recipe: coast down
                 speed -= getRotationDeceleration();
             }
 
@@ -106,7 +117,6 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
     }
 
     protected void updateSufficientFluids() {
-        // Check lubricant levels
         if (lubricantStack == null) {
             sufficientFluids = false;
             return;
@@ -132,12 +142,10 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
                 return;
             }
         }
-
         this.lubricantStack = null;
     }
 
     @Override
-    // Save temperature to NBT data
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setInteger("Speed", this.speed);
@@ -147,7 +155,6 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
     }
 
     @Override
-    // Retrieve temperature from NBT data
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         this.speed = data.getInteger("Speed");
@@ -168,16 +175,19 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
 
     @Override
     protected long getMaxVoltage() {
-        if (!isFull && speed > 0 && ((SuSyTurbineRecipeLogic) recipeMapWorkable).tryDrawEnergy()) {
+        // Output is purely a function of speed; no isFull gate.
+        // The energy container's own capacity caps what actually gets stored.
+        // This mirrors governor behavior: the turbine always produces at rated voltage
+        // when spinning; downstream load and buffer state don't affect shaft speed.
+        if (speed > 0 && ((SuSyTurbineRecipeLogic) recipeMapWorkable).tryDrawEnergy()) {
             return ((SuSyTurbineRecipeLogic) recipeMapWorkable).getActualVoltage();
-        } else {
-            return 0L;
         }
+        return 0L;
     }
 
     public class SuSyTurbineRecipeLogic extends MultiblockFuelRecipeLogic {
 
-        private RotationGeneratorController tileEntity;
+        private final RotationGeneratorController tileEntity;
         private int proposedEUt;
 
         protected boolean voidEnergy = false;
@@ -189,31 +199,26 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
 
         @Override
         public boolean checkRecipe(@NotNull Recipe recipe) {
-            // Hack to get the recipeEUt early
             proposedEUt = recipe.getEUt();
             if (proposedEUt > getMaximumAllowedVoltage()) {
                 return false;
             }
-            // Prevent recipe from starting if energy buffer is full, and we're not voiding energy
-            if (isFull && !voidEnergy) {
-                return false;
-            }
+            // Allow recipe to keep running when full; turbine stays on,
+            // drawEnergy will void if voidEnergy is set, or simply not store if buffer is full.
             return sufficientFluids;
         }
 
         @Override
         public int getInfoProviderEUt() {
-            if (!isFull && speed > 0 && tryDrawEnergy()) {
+            if (speed > 0 && tryDrawEnergy()) {
                 return (int) getActualVoltage();
-            } else {
-                return 0;
             }
+            return 0;
         }
 
         @Override
         protected void updateRecipeProgress() {
             if (canRecipeProgress && drawEnergy(recipeEUt, true)) {
-                // as recipe starts with progress on 1 this has to be > only not => to compensate for it
                 if (++progressTime > getMaxProgress()) {
                     completeRecipe();
                 }
@@ -235,19 +240,18 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
 
         @Override
         protected boolean drawEnergy(int recipeEUt, boolean simulate) {
-            long euToDraw = -getActualVoltage(); // Will be negative
+            long euToDraw = -getActualVoltage(); // negative = generation
             long resultEnergy = getEnergyStored() - euToDraw;
             if (resultEnergy >= 0L && getEnergyStored() < getEnergyCapacity()) {
-                if (!simulate) getEnergyContainer().changeEnergy(-euToDraw); // So this is positive
+                if (!simulate) getEnergyContainer().changeEnergy(-euToDraw);
                 return true;
             }
-            // Turbine voids excess fuel to keep spinning in any case.
+            // Void excess to keep spinning when buffer is full
             return voidEnergy;
         }
 
         public boolean tryDrawEnergy() {
-            return drawEnergy((int) getMaxParallelVoltage(), true); // have energy draw only tied to speed? (ignore
-                                                                    // recipe EUt entirely)
+            return drawEnergy((int) getMaxParallelVoltage(), true);
         }
 
         public boolean doDrawEnergy() {
@@ -260,7 +264,6 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
             if (lubricantStack != null) {
                 return (int) (baseDuration * lubricantInfo.boost);
             }
-
             return baseDuration;
         }
 
