@@ -1,5 +1,9 @@
 package supersymmetry.network;
-import io.netty.buffer.ByteBuf;
+
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -7,9 +11,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import io.netty.buffer.ByteBuf;
 
 public class MissingModsMessage implements IMessage {
 
@@ -44,12 +46,12 @@ public class MissingModsMessage implements IMessage {
     }
 
     public static class Handler implements IMessageHandler<MissingModsMessage, IMessage> {
+
         @Override
         @SideOnly(Side.CLIENT)
         public IMessage onMessage(MissingModsMessage message, MessageContext ctx) {
-            Minecraft.getMinecraft().addScheduledTask(() ->
-                    Minecraft.getMinecraft().displayGuiScreen(new GuiMissingMods(message.missingModNames))
-            );
+            Minecraft.getMinecraft().addScheduledTask(
+                    () -> Minecraft.getMinecraft().displayGuiScreen(new GuiMissingMods(message.missingModNames)));
             return null;
         }
     }
