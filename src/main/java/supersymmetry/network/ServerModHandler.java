@@ -1,13 +1,14 @@
 package supersymmetry.network;
 
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
 import supersymmetry.Supersymmetry;
+import supersymmetry.api.SusyLog;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class ServerModHandler {
@@ -20,20 +21,21 @@ public class ServerModHandler {
     };
 
     @SubscribeEvent
-    public static void onPlayerConnecting(FMLNetworkEvent.ServerConnectionFromClientEvent event) {
-        StringBuilder missing = new StringBuilder();
+    public static void onClientConnect(net.minecraftforge.fml.common.network.FMLNetworkEvent.ServerConnectionFromClientEvent event) {
+        List<String> missing = new ArrayList<>();
         for (String[] mod : REQUIRED_MODS) {
             if (!Loader.isModLoaded(mod[0])) {
-                if (missing.length() > 0) missing.append(", ");
-                missing.append(mod[1]);
+                missing.add(mod[1]);
             }
         }
 
-        if (missing.length() > 0) {
-            event.getManager().closeChannel(new TextComponentString(
-                    TextFormatting.RED +
-                            "[Supersymmetry] This server is missing required mods and cannot accept connections.\n" +
-                            TextFormatting.YELLOW + "Missing: " + missing));
+        SusyLog.logger.info("SUSY MOD CHECK: found {} missing mods: {}", missing.size(), missing);
+
+        if (!missing.isEmpty()) {
+            event.getManager().closeChannel(
+                    new net.minecraft.util.text.TextComponentString(
+                            "§cThis server is missing required mods:\n§e" + String.join("\n", missing) +
+                                    "\n§7Please contact the server owner."));
         }
     }
 }

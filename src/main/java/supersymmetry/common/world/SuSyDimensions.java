@@ -9,6 +9,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
+import net.minecraftforge.fml.relauncher.Side;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import supersymmetry.api.SusyLog;
@@ -123,15 +125,18 @@ public class SuSyDimensions {
                 .setTimeOffset(0.0f)
                 .load();
 
-        SuSySpaceRenderer leoRenderer = new SuSySpaceRenderer();
-        leoRenderer.setCelestialObjects(renderableEarth, renderableMoon, SUN);
+        SuSySpaceRenderer leoRenderer = null;
+        if (FMLLaunchHandler.side() == Side.CLIENT) {
+            leoRenderer = new SuSySpaceRenderer();
+            leoRenderer.setCelestialObjects(renderableEarth, renderableMoon, SUN);
+        }
 
-        long leoOrbitTicks = 110_400L; // 92 min * 60 s * 20 ticks/s
+        long leoOrbitTicks = 110_400L;
 
         new SpaceDimension(802, "low_earth_orbit")
                 .setOrbitTarget(renderableEarth)
                 .setCelestialObjects(renderableEarth, renderableMoon, SUN)
-                .setRenderer(leoRenderer)
+                .setRenderer(leoRenderer)  // will be null on server, which is fine
                 .setGravity(0.0f)
                 .setAmbientLight(0.02f)
                 .setVacuum(true)
