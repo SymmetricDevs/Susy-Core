@@ -490,10 +490,13 @@ susy.machine.primitive_item_import.name=Primitive Item Import Bus
 susy.machine.primitive_item_import.tooltip=Not a substitute for ULV
 susy.machine.primitive_item_export.name=Primitive Item Export Bus
 susy.machine.primitive_item_export.tooltip=Not a substitute for ULV
-susy.machine.mixer_settler.name=Mixer Settler
+susy.machine.mixer_settler.name=Mixer Settler (Old)
 susy.machine.mixer_settler.tooltip=First it mixes, then it settles... - Sun Tzu, The Art of SuSy
 susy.machine.mixer_settler.tooltip.1=The initial structure contains 2 cells, each expansion adds 2 more
 susy.machine.mixer_settler.tooltip.2=Can work up to 2x faster with more cells
+
+susy.machine.mixer_settler_v2.name=Mixer Settler
+susy.machine.mixer_settler_v2.tooltip=First it mixes, then it settles... - Sun Tzu, The Art of SuSy
 
 susy.machine.parallel_pure=Can parallel to output up to §b%d§r§7 items at once
 
