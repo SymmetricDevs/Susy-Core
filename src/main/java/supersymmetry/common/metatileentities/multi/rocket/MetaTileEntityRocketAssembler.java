@@ -23,6 +23,7 @@ import gregtech.api.util.Size;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockBoilerCasing;
+import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.client.resources.I18n;
@@ -401,9 +402,9 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                         "                                                               ",
                         "                                                               ",
                         "                                                               ",
-                        "             HH HH           HH HH           HH HH             ",
-                        "              HGH             HGH             HGH              ",
-                        "               H               H               H               ",
+                        "                                                               ",
+                        "             VV VV           VV VV           VV VV             ",
+                        "              VGV             VGV             VGV              ",
                         "BBBBBBBBBBBBBBBGBBBBBBBBBBBBBBBGBBBBBBBBBBBBBBBGBBBBBBBBBBBBBBB",
                         " P           PHHHP           PHHHP           PHHHP           P ")
                 .aisle(
@@ -469,9 +470,9 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                         "                                                               ",
                         "                                                               ",
                         "                                                               ",
-                        "             HH HH           HH HH           HH HH             ",
-                        "              HGH             HGH             HGH              ",
-                        "               H               H               H               ",
+                        "                                                               ",
+                        "             VV VV           VV VV           VV VV             ",
+                        "              VGV             VGV             VGV              ",
                         "BBBBBBBBBBBBBBBGBBBBBBBBBBBBBBBGBBBBBBBBBBBBBBBGBBBBBBBBBBBBBBB",
                         " P           PHHHP           PHHHP           PHHHP           P ")
                 .aisle(
@@ -596,6 +597,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                                         BlockRocketAssemblerCasing.RocketAssemblerCasingType.RAILS)))
                 .where('G', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('H', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE)))
+                .where('H', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID)))
                 .build();
     }
 
