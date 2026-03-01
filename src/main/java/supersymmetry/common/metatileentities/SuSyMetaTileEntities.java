@@ -150,6 +150,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityQuencher QUENCHER;
     public static MetaTileEntityRailroadEngineeringStation RAILROAD_ENGINEERING_STATION;
     public static MetaTileEntityMixerSettler MIXER_SETTLER;
+    public static MetaTileEntityMixerSettlerV2 MIXER_SETTLER_V2;
 
     public static MetaTileEntityEnergyHatch[] NEW_ENERGY_OUTPUT_HATCH_4A = new MetaTileEntityEnergyHatch[3];
     public static MetaTileEntityEnergyHatch[] NEW_ENERGY_OUTPUT_HATCH_16A = new MetaTileEntityEnergyHatch[4];
@@ -618,6 +619,7 @@ public class SuSyMetaTileEntities {
         SusyLog.logger.debug("Available ID(s) are: {}", ids);
 
         MIXER_SETTLER = registerMetaTileEntity(17100, new MetaTileEntityMixerSettler(susyId("mixer_settler")));
+        MIXER_SETTLER_V2 = registerMetaTileEntity(17101, new MetaTileEntityMixerSettlerV2(susyId("mixer_settler_v2")));
 
         // STOCK_DETECTOR = registerMetaTileEntity(18000, new MetaTileEntityStockDetector(susyId("stock_detector")));
         STOCK_FLUID_EXCHANGER = registerMetaTileEntity(18001,
