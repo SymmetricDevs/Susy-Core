@@ -25,7 +25,6 @@ import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 import supersymmetry.common.rocketry.SusyRocketComponents;
 import supersymmetry.common.tileentities.SuSyTileEntities;
-import supersymmetry.common.world.weather.WeatherEventHandler;
 import supersymmetry.loaders.SuSyIRLoader;
 import supersymmetry.network.SuSyNetwork;
 
@@ -90,7 +89,6 @@ public class Supersymmetry {
     @Mod.EventHandler
     public void onPostInit(@NotNull FMLPostInitializationEvent event) {
         SusyRocketComponents.init();
-        registerWeatherHandler(event);
         proxy.postLoad();
     }
 
@@ -115,10 +113,5 @@ public class Supersymmetry {
     @Mod.EventHandler
     public void registerRenderers(FMLPreInitializationEvent event) {
         SuSyTileEntities.registerRenderers();
-    }
-
-    public void registerWeatherHandler(FMLPostInitializationEvent event) {
-        if (FMLLaunchHandler.side() == Side.SERVER) return;
-        MinecraftForge.EVENT_BUS.register(new WeatherEventHandler());
     }
 }
