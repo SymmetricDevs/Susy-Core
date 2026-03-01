@@ -5,6 +5,8 @@ import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.client.IRenderHandler;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
+import net.minecraftforge.fml.relauncher.Side;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,11 +38,14 @@ public class WorldProviderPlanet extends WorldProvider {
     protected void init() {
         this.hasSkyLight = true;
         biomeProvider = new PlanetBiomeProvider(world);
-        Planet planet = SuSyDimensions.PLANETS.get(this.getDimension());
-        if (planet != null) {
-            IRenderHandler renderer = planet.getEffectiveSkyRenderer();
-            if (renderer != null) {
-                this.setSkyRenderer(renderer);
+
+        if (FMLLaunchHandler.side() == Side.CLIENT) {
+            Planet planet = SuSyDimensions.PLANETS.get(this.getDimension());
+            if (planet != null) {
+                IRenderHandler renderer = planet.getEffectiveSkyRenderer();
+                if (renderer != null) {
+                    this.setSkyRenderer(renderer);
+                }
             }
         }
     }

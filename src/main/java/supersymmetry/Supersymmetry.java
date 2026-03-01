@@ -139,6 +139,7 @@ public class Supersymmetry {
     }
 
     public void registerWeatherHandler(FMLPostInitializationEvent event) {
+        if (FMLLaunchHandler.side() == Side.SERVER) return;
         MinecraftForge.EVENT_BUS.register(new WeatherEventHandler());
     }
 }
