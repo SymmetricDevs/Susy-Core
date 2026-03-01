@@ -472,8 +472,8 @@ susy.machine.landing_pad.name=Lądowisko
 susy.machine.scrap_recycler.name=Recykler złomu
 
 susy.machine.rocket_assembler.name=Montażysta rakiet
-susy.machine.rocket_assembler.signal.start_assembly=Rozpocznij montaż
-susy.machine.rocket_assembler.signal.stop_assembly=Zatrzymaj i wyrzuć montaż
+susy.machine.rocket_assembler.signal.0=Rozpocznij montaż
+susy.machine.rocket_assembler.signal.1=Zatrzymaj i wyrzuć montaż
 susy.machine.rocket_assembler.blueprint_slot.name=wstaw plan rakiety
 susy.machine.rocket_assembler.gui.required_items=Wymagane przedmioty:
 susy.machine.rocket_assembler.gui.stop=Zatrzymaj i zresetuj montaż

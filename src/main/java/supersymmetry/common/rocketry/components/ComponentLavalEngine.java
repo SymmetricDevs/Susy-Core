@@ -51,10 +51,6 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
                                                             BlockCombustionChamber.CombustionType.MONOPROPELLANT));
                                     return a && !b;
                                 }));
-        this.setComponentSlotValidator(
-                x -> x.equals(this.getName()) || x.equals(this.getType()) ||
-                        (x.equals(this.getType() + "_small") && this.radius < 2) ||
-                        (x.equals(this.getName() + "_small") && this.radius < 2));
     }
 
     @Override

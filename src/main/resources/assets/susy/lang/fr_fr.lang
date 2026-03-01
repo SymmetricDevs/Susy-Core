@@ -472,8 +472,8 @@ susy.machine.landing_pad.name=Aire d'atterrissage
 susy.machine.scrap_recycler.name=Recycleur de ferraille
 
 susy.machine.rocket_assembler.name=Assembleur de fusées
-susy.machine.rocket_assembler.signal.start_assembly=Commencer l'assemblage
-susy.machine.rocket_assembler.signal.stop_assembly=Arrêter et jeter l'assemblage
+susy.machine.rocket_assembler.signal.0=Commencer l'assemblage
+susy.machine.rocket_assembler.signal.1=Arrêter et jeter l'assemblage
 susy.machine.rocket_assembler.blueprint_slot.name=insérer un plan de fusée
 susy.machine.rocket_assembler.gui.required_items=Éléments requis :
 susy.machine.rocket_assembler.gui.stop=Arrêter et réinitialiser l'assemblage

@@ -17,7 +17,7 @@ import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.common.rocketry.components.ComponentLavalEngine;
 import supersymmetry.common.rocketry.components.ComponentLiquidFuelTank;
 
-public class RocketStage {
+public class RocketStage implements Cloneable {
 
     public enum ComponentValidationResult {
 
@@ -87,7 +87,6 @@ public class RocketStage {
     // between components of the same type
     public Function<Tuple<String, List<AbstractComponent<?>>>, ComponentValidationResult> componentValidationFunction = x -> {
         return ComponentValidationResult.SUCCESS;
-        // this is done after the type checks in the gui anyways, no need to double check ithink
     };
 
     // limits on how many of each component it can have
@@ -307,5 +306,20 @@ public class RocketStage {
         this.name = tag.getString("name");
 
         return true;
+    }
+
+    @Override
+    public RocketStage clone() {
+        try {
+            RocketStage cloned = (RocketStage) super.clone();
+            cloned.components = new HashMap<>();
+            for (Map.Entry<String, List<AbstractComponent<?>>> entry : this.components.entrySet()) {
+                cloned.components.put(entry.getKey(), new ArrayList<>(entry.getValue()));
+            }
+            cloned.componentLimits = new HashMap<>(this.componentLimits);
+            return cloned;
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

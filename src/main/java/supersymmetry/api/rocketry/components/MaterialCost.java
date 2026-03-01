@@ -18,7 +18,7 @@ import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.api.recipes.ingredients.GTRecipeItemInput;
 
-// only supports items so uhh just throw in 5000L of tin alloy during the recipe creation i guess
+// item / block -> nbt serialization
 public class MaterialCost {
 
     private static class Pair<A, B> {
@@ -38,10 +38,10 @@ public class MaterialCost {
     // not checked since you should probably only ever use the function above to make it
     public static MaterialCost fromNBT(NBTTagCompound tag) {
         return new MaterialCost(
-                tag.getString("resource"),
-                tag.getString("type"),
-                tag.getInteger("meta"),
-                tag.getInteger("count"));
+                tag.getString("r"),
+                tag.getString("t"),
+                tag.getInteger("m"),
+                tag.getInteger("c"));
     }
 
     String resource;
@@ -72,10 +72,10 @@ public class MaterialCost {
 
     public NBTTagCompound toNBT() {
         NBTTagCompound tag = new NBTTagCompound();
-        tag.setString("resource", this.resource);
-        tag.setString("type", this.type);
-        tag.setInteger("meta", this.meta);
-        tag.setInteger("count", this.count);
+        tag.setString("r", this.resource);
+        tag.setString("t", this.type);
+        tag.setInteger("m", this.meta);
+        tag.setInteger("c", this.count);
         return tag;
     }
 

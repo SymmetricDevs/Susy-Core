@@ -6,8 +6,6 @@ import static supercritical.api.pattern.SCPredicates.fluid;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
@@ -29,6 +27,7 @@ import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import gregtech.api.capability.*;
 import gregtech.api.capability.impl.EnergyContainerList;
@@ -59,9 +58,9 @@ import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
+import supersymmetry.api.rocketry.rockets.IAFSimprovable;
 import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.api.util.DataStorageLoader;
-import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.rocketry.BlockProcessorCluster;
 import supersymmetry.common.item.SuSyMetaItems;
@@ -69,7 +68,6 @@ import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.common.mui.widget.ConditionalWidget;
 import supersymmetry.common.mui.widget.RocketRenderWidget;
 import supersymmetry.common.mui.widget.SlotWidgetMentallyStable;
-import supersymmetry.common.rocketry.SuccessCalculation;
 
 // TODO add a tooltip to the controller item that mentions losing progress if power/coolant is cut
 public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDisplayBase
@@ -79,9 +77,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
 
     private static Fluid COOLANT_OUT;
 
-    private static final double k = 1.0;
-
-    public static Entity createEntityByResource(ResourceLocation rl, World world) {
+    private static Entity createEntityByResource(ResourceLocation rl, World world) {
         EntityEntry entry = ForgeRegistries.ENTITIES.getValue(rl);
         if (entry == null) {
             throw new IllegalArgumentException("No entity registered under " + rl);
@@ -91,11 +87,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         } catch (Exception e) {
             throw new RuntimeException("Failed to instantiate entity with constructor (World)", e);
         }
-    }
-
-    public static double getSuccessProbability(double f0, double progress) {
-        double xh = -1000.0 / k * Math.log(1.0 - f0);
-        return 1.0 - Math.exp(-k * (progress + xh) / 1000.0);
     }
 
     private IEnergyContainer energyContainer;
@@ -109,7 +100,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
 
     protected boolean hasNotEnoughEnergy;
 
-    private int progress = 0;
+    private long progress = 0;
 
     private boolean coolantFilled;
     private List<BlockPos> coolantPositions;
@@ -142,7 +133,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
 
     @Override
     public int getProgress() {
-        return this.progress;
+        return (int) this.progress;
     }
 
     @Override
@@ -252,7 +243,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                         SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.metaValue;
     }
 
-    // can return null if something breaks
+    @Nullable
     public AbstractRocketBlueprint getBlueprint() {
         if (!this.rocketBlueprintSlot.isEmpty() && this.rocketBlueprintSlot.getStackInSlot(0).hasTagCompound()) {
             NBTTagCompound tag = this.rocketBlueprintSlot.getStackInSlot(0).getTagCompound();
@@ -273,18 +264,9 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             SusyLog.logger.info("bp == {}", bp);
             return;
         }
-        // used as a measure of how complex the entire rocket is -> should take longer to simulate i
-        // guess?
-        double totalAssemblyTime = bp.getStages().stream()
-                .flatMap(x -> x.getComponents().values().stream().flatMap(y -> y.stream()))
-                .mapToDouble(x -> x.getAssemblyDuration())
-                .sum();
-        // TODO this is likely wrong and will increase the success chance by a lot if you just spam turn
-        // on/off signals
-
-        double minimalChance = Math.max(bp.afsSuccessChance,
-                new SuccessCalculation(bp).calculateInitialSuccess(gravity, fuel));
-        double successProb = getSuccessProbability(minimalChance, (double) this.progress / totalAssemblyTime);
+        if (bp instanceof IAFSimprovable bp2) {
+            bp2.setAFSimprovement(this.progress);
+        }
 
         this.rocketBlueprintSlot.setNBT(
                 (ignored) -> {
@@ -305,10 +287,13 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     }
 
     public void start() {
-        this.progress = 0;
-        setActive(true);
-        setWorkingEnabled(true);
-        this.rocketBlueprintSlot.setLocked(true);
+        var bp = this.getBlueprint();
+        if (bp instanceof IAFSimprovable bp2) {
+            this.progress = bp2.getAFSimprovement();
+            setActive(true);
+            setWorkingEnabled(true);
+            this.rocketBlueprintSlot.setLocked(true);
+        }
     }
 
     @Override
@@ -317,8 +302,8 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     }
 
     @Override
-    protected @Nonnull ICubeRenderer getFrontOverlay() {
-        return SusyTextures.ORE_SORTER_OVERLAY;
+    protected ICubeRenderer getFrontOverlay() {
+        return Textures.ASSEMBLER_OVERLAY;
     }
 
     // fix getEnergyToConsume and getCompute when some generic computer blocks are added
@@ -601,30 +586,34 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                         I18n.format(getMetaName() + ".gui.energy_consumption", this.getEnergyToConsume()),
                         0xffffff),
                 () -> !this.isActive());
-        mainGroup.addWidgetConditionalInit(
-                () -> !this.isActive() && this.hasBlueprint() && this.getBlueprint() != null,
-                () -> {
-                    return new DynamicLabelWidget(
-                            width - 130,
-                            42,
-                            () -> {
-                                var bp = this.getBlueprint();
-                                if (bp != null) {
-                                    double c = Math.max(
-                                            bp.afsSuccessChance,
-                                            getSuccessProbability(bp.afsSuccessChance, progress));
-                                    return I18n.format(
-                                            this.getMetaName() + ".gui.success_chance",
-                                            String.format("%3.4f", c * 100));
-                                }
-                                return "";
-                            },
-                            0xffffff);
-                });
 
+        // mainGroup.addWidgetConditionalInit(
+        // () -> !this.isActive() && this.hasBlueprint() && this.getBlueprint() != null,
+        // () -> {
+        // return new DynamicLabelWidget(
+        // width - 130,
+        // 42,
+        // () -> {
+        // var bp = this.getBlueprint();
+        // if (bp != null) {
+        // double c = Math.max(bp.minimalSuccessChance(),
+        // getSuccessProbability(bp.minimalSuccessChance(), progress));
+        // return I18n.format(
+        // this.getMetaName() + ".gui.success_chance",
+        // String.format("%3.4f", c * 100));
+        // }
+        // return "";
+        // },
+        // 0xffffff);
+        // });
         // label gets in the way a little
         mainGroup.addWidgetWithTest(
                 new LabelWidget(9, 9, getMetaFullName(), 0xffffff), () -> !this.isActive());
+
+        mainGroup.addWidgetWithTest(
+                new LabelWidget(9, height - 80, I18n.format(this.getMetaName() + "gui.cant_improve_error"), 0xff0000),
+                () -> this.hasBlueprint() && !(this.getBlueprint() instanceof IAFSimprovable));
+        // start button
         mainGroup.addWidgetWithTest(
                 new ClickButtonWidget(
                         width - 61,
@@ -641,9 +630,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                                     energyToConsume += getNumMaintenanceProblems() * energyToConsume / 10;
                                 }
                                 int coolantToConsume = getCoolantToConsume(energyToConsume);
-                                // TODO: spam if null checks because when you break the input hatch and the
-                                // structure
-                                // forms again its messed up somehow
                                 boolean enoughCoolant = inputCoolant.drain(new FluidStack(COOLANT_IN, coolantToConsume),
                                         false).amount == coolantToConsume;
                                 boolean enoughSpaceForCoolant = outputCoolant
@@ -664,7 +650,8 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                         })
                                 .setTooltipText(this.getMetaName() + ".gui.start_button")
                                 .setButtonTexture(SusyGuiTextures.GREEN_CIRCLE),
-                () -> !this.isActive() && this.hasBlueprint());
+                () -> !this.isActive() && this.hasBlueprint() && this.getBlueprint() instanceof IAFSimprovable);
+        // stop button
         mainGroup.addWidgetWithTest(
                 new ClickButtonWidget(
                         width - 61,
@@ -729,9 +716,9 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                         width - 100,
                         height - 82,
                         (l) -> {
-                            int c = this.progress;
+                            long c = this.progress;
 
-                            l.add(new TextComponentTranslation(Integer.toString(c)));
+                            l.add(new TextComponentTranslation(Long.toString(c)));
                         },
                         0xffffff));
 
