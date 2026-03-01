@@ -13,7 +13,7 @@ import supersymmetry.api.SusyLog;
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class ServerModHandler {
 
-    private static final String[][] REQUIRED_MODS = {
+    public static final String[][] REQUIRED_MODS = {
             { "srparasites", "Scape and Run Parasites" },
             { "openglasses", "OpenGlasses" },
             { "rendertoolkit", "Commons0815 (renderToolkit)" },

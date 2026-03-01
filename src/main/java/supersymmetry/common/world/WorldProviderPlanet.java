@@ -15,6 +15,7 @@ import supersymmetry.common.world.sky.SkyColorData;
 import supersymmetry.common.world.sky.SkyRenderData;
 
 public class WorldProviderPlanet extends WorldProvider {
+
     private long TICKS_PER_DAY = 24000L; // the maximum for a long (signed 64 bit) is 2^63
 
     public void setTicksPerDay(long ticksPerDay) {
