@@ -5,6 +5,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeManager.BiomeEntry;
 
 import supersymmetry.common.world.SuSyBiomes;
+
 /**
  * Extended BiomeEntry that allows setting crater-specific materials inline.
  * Provides a fluent API for configuring biome properties during planet setup.
