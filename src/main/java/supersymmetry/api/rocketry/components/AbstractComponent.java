@@ -35,7 +35,6 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
     private static final Map<String, Class<? extends AbstractComponent<?>>> nameToComponentRegistry = new HashMap<>();
 
     protected String name;
-    // ex name="laval_engine", type="engine" so that you can do some silly things with engine types
     protected String type;
     protected BuildStat status = BuildStat.ERROR;
     protected double mass;
@@ -78,8 +77,6 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
     }
 
     @SuppressWarnings("unchecked")
-    // probably fine because if you manage to put in an AbstractComponent<?> and it doesnt
-    // extend from AbstractComponent<?> you deserved to get a crash
     public static void registerComponent(AbstractComponent<?> component) {
         if (!getRegistryLock()) {
             nameToComponentRegistry.put(
@@ -105,7 +102,6 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
         return new HashSet<>(registry);
     }
 
-    // sort of works
     public void writeBlocksToNBT(Set<BlockPos> blocks, World world) {
         Map<String, Integer> counts = new HashMap<String, Integer>();
         for (BlockPos blockpos : blocks) {
@@ -120,7 +116,7 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
                     if (teCoverable != null &&
                             teCoverable.getCoverItem().getItem().getRegistryName() != Items.AIR.getRegistryName()) {
                         String key = teCoverable.getCoverItem().getItem().getRegistryName().toString() + "#" +
-                                teCoverable.getCoverItem().getMetadata() + "#cover"; // i am sorry for this
+                                teCoverable.getCoverItem().getMetadata() + "#cover";
                         counts.put(key, counts.getOrDefault(key, 0) + teCoverable.getCoverCount());
                     }
                 }
@@ -131,11 +127,6 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
 
         for (Map.Entry<String, Integer> e : counts.entrySet()) {
             String[] p = e.getKey().split("#", 3);
-            // NBTTagCompound c = new NBTTagCompound();
-            // c.setString("registryName", p[0]);
-            // c.setInteger("meta", Integer.parseInt(p[1]));
-            // c.setString("type", p[2]);
-            // c.setInteger("count", e.getValue());
             MaterialCost mat = new MaterialCost(p[0], p[2], Integer.parseInt(p[1]), e.getValue());
             this.materials.add(mat);
         }

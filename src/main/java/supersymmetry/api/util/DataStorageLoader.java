@@ -7,7 +7,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
-import net.minecraftforge.items.IItemHandlerModifiable;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -15,7 +14,7 @@ import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.impl.NotifiableItemStackHandler;
 import gregtech.api.metatileentity.MetaTileEntity;
 
-public class DataStorageLoader extends NotifiableItemStackHandler implements IItemHandlerModifiable {
+public class DataStorageLoader extends NotifiableItemStackHandler {
 
     private ItemStack dataStorage = ItemStack.EMPTY;
     private boolean locked = false;

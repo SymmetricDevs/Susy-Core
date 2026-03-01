@@ -56,6 +56,7 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
 
     @Override
     public void deserializeNBT(NBTTagCompound nbt) {
+        if (nbt == null || nbt.tagMap.size() == 0) return;
         this.maxVolume = nbt.getInteger("maxVolume");
         this.maxWeight = nbt.getInteger("maxWeight");
         this.currentVolume = nbt.getInteger("currentVolume");

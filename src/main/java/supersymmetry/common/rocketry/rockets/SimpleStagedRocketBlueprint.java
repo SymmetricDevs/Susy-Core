@@ -2,18 +2,17 @@ package supersymmetry.common.rocketry.rockets;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants.NBT;
 
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
+import supersymmetry.api.rocketry.rockets.IAFSimprovable;
 import supersymmetry.api.rocketry.rockets.RocketStage;
 
-public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint {
+public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint implements IAFSimprovable {
 
     public static class Builder {
 
@@ -21,7 +20,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint {
         ResourceLocation location;
         int stageCount = 0;
         public List<RocketStage> stages = new ArrayList<>();
-        public List<List<Integer>> ignitionSequence = new ArrayList<>();
+        public double minSuccessChance = 0.01;
 
         public Builder(String name) {
             this.name = name;
@@ -36,91 +35,93 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint {
             this.stages.add(stage);
             List<Integer> l = new ArrayList<>();
             l.add(stageCount);
-            ignitionSequence.add(l);
             stageCount++;
 
             return this;
         }
 
-        public Builder ignitesWith(RocketStage stage) {
-            this.stages.add(stage);
-
-            List<Integer> ignitions = ignitionSequence.get(ignitionSequence.size() - 1 /* last one added i guess */);
-            ignitions.add(stageCount);
-            stageCount++;
+        public Builder minSuccessChance(double f) {
+            this.minSuccessChance = f;
             return this;
         }
 
         public SimpleStagedRocketBlueprint build() {
             SimpleStagedRocketBlueprint blueprint = new SimpleStagedRocketBlueprint(name, location);
             blueprint.setStages(stages);
-            blueprint.setIgnitionStages(
-                    ignitionSequence.stream()
-                            .map(inner -> inner.stream().mapToInt(Integer::intValue).toArray())
-                            .collect(Collectors.toList()));
+            blueprint.setMinimalSuccessChance(this.minSuccessChance);
             assert blueprint.isFullBlueprint() : "full blueprint produced by the builder, thats not meant to happen :C";
             return blueprint;
         }
     }
 
-    public double augmentation = 0.;
+    public double minimalSuccessChance = 0.01;
+
+    public long AFSimporvement = 0;
 
     public SimpleStagedRocketBlueprint(String name, ResourceLocation entity) {
         super(name, entity);
     }
 
-    @Override
-    public double getAugmentation() {
-        return augmentation;
+    public double getMinimalSuccessChance() {
+        return this.minimalSuccessChance;
     }
 
-    @Override
-    public void setAugmentation(double augmentation) {
-        this.augmentation = augmentation;
+    public void setMinimalSuccessChance(double minimalSuccessChance) {
+        this.minimalSuccessChance = minimalSuccessChance;
+    }
+
+    public long getAFSimprovement() {
+        return AFSimporvement;
+    }
+
+    public void setAFSimprovement(long a) {
+        this.AFSimporvement = a;
     }
 
     @Override
     public NBTTagCompound writeToNBT() {
         NBTTagCompound tag = new NBTTagCompound();
+        boolean complete = this.isFullBlueprint();
         NBTTagList stageList = new NBTTagList();
-        NBTTagList ignitionOrder = new NBTTagList();
-        this.getStages().stream().forEach(x -> stageList.appendTag(x.writeToNBT()));
-        this.getIgnitionStages().stream().forEach(x -> ignitionOrder.appendTag(new NBTTagIntArray(x)));
+        if (complete) {
+            this.getStages().stream().forEach(x -> stageList.appendTag(x.writeToNBT()));
+            tag.setTag("stages", stageList);
+        }
 
-        tag.setTag("stages", stageList);
-        tag.setTag("ignitionOrder", ignitionOrder);
         tag.setString("name", this.getName());
-        tag.setBoolean("buildstat", this.isFullBlueprint());
-        tag.setDouble("augmentation", this.augmentation);
+        tag.setBoolean("buildstat", complete);
+
+        tag.setLong("AFSimporvement", this.AFSimporvement);
 
         return tag;
     }
 
     @Override
     public boolean readFromNBT(NBTTagCompound tag) {
-        if (!tag.hasKey("stages", NBT.TAG_LIST)) return false;
-        if (!tag.hasKey("ignitionOrder", NBT.TAG_LIST)) return false;
         if (!tag.hasKey("name", NBT.TAG_STRING)) return false;
         if (!tag.hasKey("buildstat")) return false;
         this.stages.clear();
-        this.ignitionStages.clear();
 
-        List<NBTTagCompound> stagesCompounds = tag.getTagList("stages", NBT.TAG_COMPOUND).tagList.stream()
-                .map(x -> (NBTTagCompound) x)
-                .collect(Collectors.toList());
-        for (var comp : stagesCompounds) {
-            var stageRead = new RocketStage();
-            if (stageRead.readFromNBT(comp)) {
-                this.stages.add(stageRead);
-            } else {
-                return false;
-            }
-        }
-        tag.getTagList("ignitionOrder", NBT.TAG_INT_ARRAY).tagList.stream()
-                .map(x -> (NBTTagIntArray) x)
-                .forEach(t -> this.ignitionStages.add(t.getIntArray()));
         this.setName(tag.getString("name"));
-        this.augmentation = tag.getDouble("augmentation");
+        if (tag.getBoolean("buildstat")) {
+            boolean ok = tag.getTagList("stages", NBT.TAG_COMPOUND).tagList.stream()
+                    .map(x -> (NBTTagCompound) x)
+                    .map(
+                            comp -> {
+                                RocketStage s = new RocketStage();
+                                if (s.readFromNBT(comp)) {
+                                    this.stages.add(s);
+                                    return true;
+                                }
+                                return false;
+                            })
+                    .allMatch(Boolean::booleanValue);
+            if (!ok) return false;
+        } else {
+            this.stages = new ArrayList<>(AbstractRocketBlueprint.getBlueprintsRegistry().get(name).stages);
+        }
+        this.setName(tag.getString("name"));
+        this.AFSimporvement = tag.getLong("AFSimporvement");
         return true;
     }
 }

@@ -44,7 +44,7 @@ public class SusyRocketComponents {
                                 .type("engine_small")
                                 .limit(8)
                                 .build())
-                .ignitesWith(
+                .stage(
                         new RocketStage.Builder("block_A")
                                 .type("engine")
                                 .limit(4)

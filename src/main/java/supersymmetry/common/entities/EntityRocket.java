@@ -34,6 +34,7 @@ import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
 import supersymmetry.common.network.CPacketRocketInteract;
 import supersymmetry.common.rocketry.SuccessCalculation;
 import supersymmetry.common.rocketry.SuccessCalculation.LaunchResult;
+import supersymmetry.common.rocketry.rockets.SimpleStagedRocketBlueprint;
 
 public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender, AFSRendered {
 
@@ -152,7 +153,8 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
                 this.trollTargetPos = assemblerPosition;
                 this.launchResult = LaunchResult.TROLLS;
             } else {
-                this.launchResult = new SuccessCalculation(blueprint).calculateSuccess(this);
+                this.launchResult = new SuccessCalculation((SimpleStagedRocketBlueprint) blueprint)
+                        .calculateSuccess(this);
             }
 
             this.maxFuelVolume = (int) blueprint.getFuelVolume();
