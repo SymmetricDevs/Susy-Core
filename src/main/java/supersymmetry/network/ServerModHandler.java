@@ -13,10 +13,10 @@ import supersymmetry.Supersymmetry;
 public class ServerModHandler {
 
     private static final String[][] REQUIRED_MODS = {
-            { "srparasites",   "Scape and Run Parasites"     },
-            { "openglasses",   "OpenGlasses"                 },
-            { "rendertoolkit", "Commons0815 (renderToolkit)"  },
-            { "guitoolkit",    "Commons0815 (guiToolkit)"     }
+            { "srparasites", "Scape and Run Parasites" },
+            { "openglasses", "OpenGlasses" },
+            { "rendertoolkit", "Commons0815 (renderToolkit)" },
+            { "guitoolkit", "Commons0815 (guiToolkit)" }
     };
 
     @SubscribeEvent
@@ -31,9 +31,9 @@ public class ServerModHandler {
 
         if (missing.length() > 0) {
             event.getManager().closeChannel(new TextComponentString(
-                    TextFormatting.RED + "[Supersymmetry] This server is missing required mods and cannot accept connections.\n" +
-                            TextFormatting.YELLOW + "Missing: " + missing
-            ));
+                    TextFormatting.RED +
+                            "[Supersymmetry] This server is missing required mods and cannot accept connections.\n" +
+                            TextFormatting.YELLOW + "Missing: " + missing));
         }
     }
 }
