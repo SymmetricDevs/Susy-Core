@@ -32,6 +32,7 @@ import supersymmetry.common.rocketry.SusyRocketComponents;
 import supersymmetry.common.tileentities.SuSyTileEntities;
 import supersymmetry.common.world.weather.WeatherEventHandler;
 import supersymmetry.loaders.SuSyIRLoader;
+import supersymmetry.network.SuSyNetwork;
 
 @Mod(name = Supersymmetry.NAME,
      modid = Supersymmetry.MODID,
@@ -69,6 +70,7 @@ public class Supersymmetry {
     public void onPreInit(@NotNull FMLPreInitializationEvent event) {
         proxy.preLoad();
 
+        SuSyNetwork.init();
         SuSyMetaBlocks.init();
         SuSyMetaItems.initMetaItems();
         SuSyBlocks.init();
