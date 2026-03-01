@@ -14,15 +14,8 @@ public class SuSyFluidTankWidget extends NotifiableFilteredFluidHandler {
 
     @Override
     public int fill(FluidStack resource, boolean doFill) {
-        // Debug logging
-        if (resource != null) {
-            boolean canFill = canFillFluidType(resource);
-            System.out.println("[SuSyFilteredFluidTank] fill() called with: " + resource.getFluid().getName() +
-                    ", canFill: " + canFill + ", doFill: " + doFill);
-            if (!canFill) {
-                System.out.println("[SuSyFilteredFluidTank] REJECTING fluid!");
-                return 0;
-            }
+        if (resource == null || !canFillFluidType(resource)) {
+            return 0;
         }
         return super.fill(resource, doFill);
     }
@@ -75,6 +68,7 @@ public class SuSyFluidTankWidget extends NotifiableFilteredFluidHandler {
                         return properties[0].canDrainFluidType(fluidStack);
                     }
                 }
+                // gross
         };
     }
 }
