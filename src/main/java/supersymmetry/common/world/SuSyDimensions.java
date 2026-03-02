@@ -82,7 +82,7 @@ public class SuSyDimensions {
         long nodalPeriodTicks = (long) (nodalPeriodInLunarDays * lunarDayTicks);
 
         SkyRenderData sun = new SkyRenderData.Builder(
-                new ResourceLocation("susy", "textures/environment/sun.png"), 10.0F)
+                new ResourceLocation("susy", "textures/environment/sun.png"), 10.6F) 
                         .positionType(SkyRenderData.PositionType.CELESTIAL_SPHERE)
                         .useLinearFiltering(false)
                         .baseInclination(5.14f)
