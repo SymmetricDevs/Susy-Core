@@ -137,10 +137,15 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
                 exportItems, displayedTankList, exportFluids, yOffset);
         builder.widget(new LabelWidget(6, 6, getMetaFullName()))
                 .bindPlayerInventory(player.inventory, GuiTextures.SLOT, yOffset);
+
         builder.widget(new TankWidget(lubricantTank, 110, 21, 10, 54)
-                .setBackgroundTexture(GuiTextures.PROGRESS_BAR_BOILER_EMPTY.get(true)));
+                .setBackgroundTexture(GuiTextures.PROGRESS_BAR_BOILER_EMPTY.get(true))
+                .setAlwaysShowFull(false)
+                .setContainerClicking(true, true));  // Enable container clicking
         builder.widget(new TankWidget(coolantTank, 124, 21, 10, 54)
-                .setBackgroundTexture(GuiTextures.PROGRESS_BAR_BOILER_EMPTY.get(true)));
+                .setBackgroundTexture(GuiTextures.PROGRESS_BAR_BOILER_EMPTY.get(true))
+                .setAlwaysShowFull(false)
+                .setContainerClicking(true, true));  // Enable container clicking
         builder.widget(new ImageWidget(152, 63 + yOffset, 17, 17,
                 GTValues.XMAS.get() ? GuiTextures.GREGTECH_LOGO_XMAS : GuiTextures.GREGTECH_LOGO)
                         .setIgnoreColor(true));
@@ -170,6 +175,25 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
         @Override
         public boolean isWorking() {
             return sufficientFluids && super.isWorking();
+        }
+
+        @Override
+        protected void updateRecipeProgress() {
+            if (canRecipeProgress && drawEnergy(recipeEUt, true)) {
+                drawEnergy(recipeEUt, false);
+                // as recipe starts with progress on 1 this has to be > only not => to compensate for it
+                if (++progressTime > getMaxProgress()) {
+                    completeRecipe();
+                }
+                if (this.hasNotEnoughEnergy && getEnergyInputPerSecond() > 19L * recipeEUt) {
+                    this.hasNotEnoughEnergy = false;
+                }
+            } else if (recipeEUt > 0) {
+                // only set hasNotEnoughEnergy if this recipe is consuming recipe
+                // generators always have enough energy
+                this.hasNotEnoughEnergy = true;
+                decreaseProgress();
+            }
         }
 
         @Override

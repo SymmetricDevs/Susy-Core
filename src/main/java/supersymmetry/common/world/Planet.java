@@ -29,6 +29,7 @@ public class Planet {
     public IBlockState bedrock;
     public IRenderHandler skyRenderer;
     public double gravity;
+    public double dragMultiplier = 0.98;
     public boolean supportsFire;
 
     // Atmosphere
@@ -161,6 +162,11 @@ public class Planet {
 
     public Planet setGravity(double gravity) {
         this.gravity = gravity;
+        return this;
+    }
+
+    public Planet setDragMultiplier(double dragMultiplier) {
+        this.dragMultiplier = dragMultiplier;
         return this;
     }
 

@@ -14,12 +14,14 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 import supersymmetry.api.util.SuSyDamageSources;
+import supersymmetry.common.entities.EntityRocket;
 import supersymmetry.common.item.SuSyArmorItem;
 
 public final class DimensionBreathabilityHandler {
 
     private static final Map<Integer, BreathabilityInfo> dimensionBreathabilityMap = new HashMap<>();
 
+    private static final BreathabilityInfo SPACE = new BreathabilityInfo(SuSyDamageSources.DEPRESSURIZATION, 3);
     public static final int BENEATH_ID = 10;
     public static final int NETHER_ID = -1;
 
@@ -50,7 +52,8 @@ public final class DimensionBreathabilityHandler {
     }
 
     public static boolean isInHazardousEnvironment(EntityPlayer player) {
-        return dimensionBreathabilityMap.containsKey(player.dimension);
+        return dimensionBreathabilityMap.containsKey(player.dimension) ||
+                (player.posY > 600 && !(player.isRiding() && player.getRidingEntity() instanceof EntityRocket));
     }
 
     public static void tickPlayer(EntityPlayer player) {
@@ -59,11 +62,19 @@ public final class DimensionBreathabilityHandler {
                 if (item.isValid(player.getItemStackFromSlot(HEAD), player)) {
                     double damageAbsorbed = item.getDamageAbsorbed(player.getItemStackFromSlot(HEAD), player);
                     if (damageAbsorbed != ABSORB_ALL)
-                        dimensionBreathabilityMap.get(player.dimension).damagePlayer(player, damageAbsorbed);
+                        applyDamage(player, damageAbsorbed);
                     return;
                 }
             }
-            dimensionBreathabilityMap.get(player.dimension).damagePlayer(player);
+            applyDamage(player, 0);
+        }
+    }
+
+    public static void applyDamage(EntityPlayer player, double amountAbsorbed) {
+        if (dimensionBreathabilityMap.containsKey(player.dimension)) {
+            dimensionBreathabilityMap.get(player.dimension).damagePlayer(player, amountAbsorbed);
+        } else {
+            SPACE.damagePlayer(player, amountAbsorbed);
         }
     }
 

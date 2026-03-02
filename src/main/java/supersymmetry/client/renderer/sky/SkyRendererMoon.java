@@ -19,7 +19,7 @@ public class SkyRendererMoon extends IRenderHandler {
             "textures/environment/earth_phases.png");
     private static final ResourceLocation SUN_TEXTURES = new ResourceLocation("textures/environment/sun.png");
 
-    private final int earthSize = 50;
+    private final float earthSize = 6;
 
     private int starGLCallList;
     private boolean isInitialized = false;
@@ -46,14 +46,13 @@ public class SkyRendererMoon extends IRenderHandler {
         BufferBuilder bb = Tessellator.getInstance().getBuffer();
 
         GlStateManager.enableTexture2D();
-        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE,
-                GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        // GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE,
+        // GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 
         mc.getTextureManager().bindTexture(EARTH_TEXTURE);
-        // GlStateManager.rotate(world.getCelestialAngle(partialTicks) * 360, 1, 0, 0);
         bb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        int distEarth = 100;
-        int phase = world.getMoonPhase();
+        int distEarth = 50;
+        int phase = calculateEarthPhase(partialTicks, world);
         int phaseX = phase % 4;
         int phaseY = phase / 4 % 2;
         float phaseXL = (float) (phaseX) / 4.0F;
@@ -69,9 +68,11 @@ public class SkyRendererMoon extends IRenderHandler {
         // Sun render
         GlStateManager.pushMatrix();
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        GlStateManager.rotate(-90.0F, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(-90F, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(getSunAngle(world), 0.0F, 0.0F, 1.0F);
         GlStateManager.rotate(world.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
-        float sunSize = 30.0F;
+        float sunSize = 25F; // A little smaller than on Earth, but mostly to exaggerate the distance between the sun
+                             // and Earth in the sky
         double distSun = distEarth * 2;
 
         mc.getTextureManager().bindTexture(SUN_TEXTURES);
@@ -94,6 +95,11 @@ public class SkyRendererMoon extends IRenderHandler {
         GlStateManager.popMatrix();
         GlStateManager.enableFog();
         GlStateManager.enableTexture2D();
+    }
+
+    private int calculateEarthPhase(float partialTicks, WorldClient world) {
+        double sunRotation = world.getCelestialAngle(partialTicks) * 360.0F;
+        return (int) ((sunRotation / 360.0F * 8.0F) + 4) % 8;
     }
 
     private void renderStars(BufferBuilder bufferBuilderIn) {
@@ -138,5 +144,10 @@ public class SkyRendererMoon extends IRenderHandler {
                 }
             }
         }
+    }
+
+    private float getSunAngle(WorldClient world) {
+        return 15 * (float) Math.cos((double) world.getWorldTime() / 708000); // Approximating a 29.5-day cycle of the
+        // moon with respect to the sun
     }
 }

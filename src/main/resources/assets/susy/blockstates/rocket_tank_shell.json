@@ -1,0 +1,11 @@
+{
+	"variants": 	{
+    "normal,variant=al_2219": { "model": "susy:rocket_struct/rockethulltile" },
+    "facing=north,variant=al_2219": { "model": "susy:rocket_struct/rockethulltile", "x": 90 },
+    "facing=south,variant=al_2219": {  "model": "susy:rocket_struct/rockethulltile", "x": 90, "y": 180 },
+    "facing=west,variant=al_2219":  { "model": "susy:rocket_struct/rockethulltile", "x": 90, "y": 270 },
+    "facing=east,variant=al_2219":  { "model": "susy:rocket_struct/rockethulltile", "x": 90, "y": 90 },
+    "facing=up,variant=al_2219":  { "model": "susy:rocket_struct/rockethulltile" },
+    "facing=down,variant=al_2219":  { "model": "susy:rocket_struct/rockethulltile", "x": 180  }
+  }
+}

@@ -3,6 +3,7 @@ package supersymmetry.common.materials;
 import static gregtech.api.unification.material.Materials.*;
 import static gregtech.api.unification.material.info.MaterialFlags.*;
 import static gregtech.api.unification.material.info.MaterialIconSet.*;
+import static supersymmetry.api.unification.material.info.SuSyMaterialFlags.CONTINUOUSLY_CAST;
 import static supersymmetry.common.materials.SusyMaterials.*;
 
 import gregtech.api.GTValues;
@@ -155,6 +156,25 @@ public class SuSyFirstDegreeMaterials {
                 .build()
                 .setFormula("Mg3Si2O5(OH)4", true);
 
+        // Flourinated Ketones
+
+        Perfluoro2Methyl3Pentanone = new Material.Builder(27117, SuSyUtility.susyId("perfluoro_2_methyl_3_pentanone"))
+                .liquid(new FluidBuilder().block())
+                .color(0xA090D5FF)
+                .flags(DISABLE_DECOMPOSITION)
+                .components(Carbon, 6, Fluorine, 12, Oxygen, 1)
+                .build()
+                .setFormula("C6F12O", true);
+
+        WarmPerfluoro2Methyl3Pentanone = new Material.Builder(27118,
+                SuSyUtility.susyId("warm_perfluoro_2_methyl_3_pentanone"))
+                        .liquid()
+                        .color(0xCEE3F0)
+                        .flags(DISABLE_DECOMPOSITION)
+                        .components(Carbon, 6, Fluorine, 12, Oxygen, 1)
+                        .build()
+                        .setFormula("C6F12O", true);
+
         // Thermodynamic materials
 
         PreheatedAir = new Material.Builder(27150, SuSyUtility.susyId("preheated_air"))
@@ -163,5 +183,29 @@ public class SuSyFirstDegreeMaterials {
                 .flags(DISABLE_DECOMPOSITION)
                 .components(Nitrogen, 78, Oxygen, 21, Argon, 9)
                 .build();
+
+        RP_1 = new Material.Builder(27151, SuSyUtility.susyId("RP_1"))
+                .fluid()
+                .color(0xb50707)
+                .flags(FLAMMABLE)
+                .build();
+
+        // Aluminium Alloys
+
+        AluminiumAlloy6061 = new Material.Builder(8759, SuSyUtility.susyId("aluminium_alloy_6061"))
+                .ingot().liquid(new FluidBuilder().temperature(923))
+                .color(0x8aa1e5)
+                .flags(DISABLE_DECOMPOSITION, CONTINUOUSLY_CAST)
+                .components(Aluminium, 634, Magnesium, 8, Silicon, 4, Copper, 1, Chrome, 1)
+                .build();
+        AluminiumAlloy6061.addFlags(GENERATE_FINE_WIRE);
+
+        AluminiumAlloy7075 = new Material.Builder(8760, SuSyUtility.susyId("aluminium_alloy_7075"))
+                .ingot().liquid(new FluidBuilder().temperature(913))
+                .color(0x9fe9ef)
+                .flags(DISABLE_DECOMPOSITION, CONTINUOUSLY_CAST)
+                .components(Aluminium, 678, Zinc, 17, Magnesium, 20, Copper, 4, Chrome, 1)
+                .build();
+        AluminiumAlloy7075.addFlags(GENERATE_FINE_WIRE);
     }
 }

@@ -1,0 +1,11 @@
+{
+  "variants": {
+    "normal,variant=al_7075": { "model": "susy:rocket_struct/fairing_connector" },
+    "facing=north,variant=al_7075": { "model": "susy:rocket_struct/fairing_connector", "x": 90 },
+    "facing=south,variant=al_7075": {  "model": "susy:rocket_struct/fairing_connector", "x": 90, "y": 180 },
+    "facing=west,variant=al_7075":  { "model": "susy:rocket_struct/fairing_connector", "x": 90, "y": 270 },
+    "facing=east,variant=al_7075":  { "model": "susy:rocket_struct/fairing_connector", "x": 90, "y": 90 },
+    "facing=up,variant=al_7075":  { "model": "susy:rocket_struct/fairing_connector" },
+    "facing=down,variant=al_7075":  { "model": "susy:rocket_struct/fairing_connector", "x": 180  }
+  }
+}

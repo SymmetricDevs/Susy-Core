@@ -220,7 +220,8 @@ public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorCon
                 lubricantAmount = getTotalFluidAmount(testStack, getInputFluidInventory());
                 lubricantStored = lubricantAmount[0];
                 lubricantCapacity = lubricantAmount[1];
-                lubricantConsumptionRate = lubricantInfo.amount_required * (2.0 * getRotationSpeed() / 3600);
+                lubricantConsumptionRate = (generatingPower) ?
+                        lubricantInfo.amount_required * (2.0 * getRotationSpeed() / 3600) : 0;
             }
 
             ITextComponent lubricantStorage = TextComponentUtil.stringWithColor(
@@ -289,13 +290,16 @@ public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorCon
             }
             textList.add(new TextComponentTranslation("susy.multiblock.rotation_generator.power", getMaxVoltage(),
                     Math.min(recipeMapWorkable.getEnergyContainer().getOutputVoltage(), GTValues.V[tier] * 16)));
+
+            if (isActive())
+                MetaTileEntitySUSYLargeTurbine.addFuelNeededLine(textList, (SuSyTurbineRecipeLogic) recipeMapWorkable);
         }
 
         MultiblockFuelRecipeLogic recipeLogic = (MultiblockFuelRecipeLogic) recipeMapWorkable;
 
         MultiblockDisplayText.builder(textList, isStructureFormed())
                 .setWorkingStatus(recipeLogic.isWorkingEnabled(), recipeLogic.isActive())
-                .addFuelNeededLine(recipeLogic.getRecipeFluidInputInfo(), recipeLogic.getPreviousRecipeDuration())
+                // .addFuelNeededLine(recipeLogic.getRecipeFluidInputInfo(), recipeLogic.getPreviousRecipeDuration())
                 .addWorkingStatusLine();
     }
 }

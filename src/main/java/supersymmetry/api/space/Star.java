@@ -6,9 +6,10 @@ public class Star extends CelestialObject {
 
     private final StarType starType;
 
-    public Star(double mass, double posT, double posX, double posY, double posZ, @Nullable CelestialObject parentBody,
+    public Star(String translationKey, double mass, double posT, double posX, double posY, double posZ,
+                @Nullable CelestialObject parentBody,
                 StarType starType) {
-        super(mass, posT, posX, posY, posZ, parentBody, CelestialBodyType.STAR);
+        super(translationKey, posT, posX, posY, posZ, mass, CelestialBodyType.STAR, parentBody);
         this.starType = starType;
     }
 

@@ -16,4 +16,5 @@ public class SuSyMultiblockAbilities {
     public static final MultiblockAbility<IStrandProvider> STRAND_EXPORT = new MultiblockAbility<>("strand_export");
     public static final MultiblockAbility<IParticleBeamProvider> BEAM_IMPORT = new MultiblockAbility<>("beam_import");
     public static final MultiblockAbility<IParticleBeamProvider> BEAM_EXPORT = new MultiblockAbility<>("beam_export");
+    public static final MultiblockAbility<IItemHandlerModifiable> SCANNER = new MultiblockAbility<>("scanner");
 }
