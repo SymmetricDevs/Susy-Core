@@ -86,6 +86,7 @@ public class SuSyBlocks {
     public static BlockRoomPadding ROOM_PADDING;
     public static BlockFairingConnector FAIRING_CONNECTOR;
     public static BlockSpacecraftHull SPACECRAFT_HULL;
+    public static BlockRocketEngineGasGenerator ROCKET_ENGINE_GAS_GENERATOR;
     public static BlockEccentricRoll ECCENTRIC_ROLL;
     public static BlockGrinderCasing GRINDER_CASING;
     public static BlockGirthGearTooth GIRTH_GEAR_TOOTH;
