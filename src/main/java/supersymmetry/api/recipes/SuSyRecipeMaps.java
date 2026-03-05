@@ -57,7 +57,7 @@ public class SuSyRecipeMaps {
                     .setSound(GTSoundEvents.CENTRIFUGE);
 
     public static final RecipeMap<CatalystRecipeBuilder> CSTR_RECIPES = new RecipeMap<>(
-            "continuous_stirred_tank_reactor", 1, 0, 4, 2, new CatalystRecipeBuilder(), false)
+            "continuous_stirred_tank_reactor", 2, 0, 4, 2, new CatalystRecipeBuilder(), false)
                     .setSlotOverlay(false, true, false, GuiTextures.MOLECULAR_OVERLAY_3)
                     .setSlotOverlay(false, true, true, GuiTextures.MOLECULAR_OVERLAY_4)
                     .setSlotOverlay(true, true, GuiTextures.VIAL_OVERLAY_2)
