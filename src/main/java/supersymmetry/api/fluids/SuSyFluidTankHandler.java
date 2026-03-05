@@ -6,9 +6,9 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import gregtech.api.capability.impl.NotifiableFilteredFluidHandler;
 import gregtech.api.metatileentity.MetaTileEntity;
 
-public class SuSyFluidTankWidget extends NotifiableFilteredFluidHandler {
+public class SuSyFluidTankHandler extends NotifiableFilteredFluidHandler {
 
-    public SuSyFluidTankWidget(int capacity, MetaTileEntity entityToNotify, boolean isExport) {
+    public SuSyFluidTankHandler(int capacity, MetaTileEntity entityToNotify, boolean isExport) {
         super(capacity, entityToNotify, isExport);
     }
 
@@ -56,7 +56,7 @@ public class SuSyFluidTankWidget extends NotifiableFilteredFluidHandler {
 
                     @Override
                     public boolean canFillFluidType(FluidStack fluidStack) {
-                        boolean result = fluidStack != null && SuSyFluidTankWidget.this.canFillFluidType(fluidStack);
+                        boolean result = fluidStack != null && SuSyFluidTankHandler.this.canFillFluidType(fluidStack);
                         System.out.println("[SuSyFilteredFluidTank] getTankProperties().canFillFluidType() with: " +
                                 (fluidStack != null ? fluidStack.getFluid().getName() : "null") + ", result: " +
                                 result);

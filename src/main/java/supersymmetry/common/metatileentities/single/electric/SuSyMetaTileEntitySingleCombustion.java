@@ -32,7 +32,7 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.common.metatileentities.electric.MetaTileEntitySingleCombustion;
 import supersymmetry.api.capability.impl.SuSyFluidFilters;
 import supersymmetry.api.fluids.FilteredTankWidget;
-import supersymmetry.api.fluids.SuSyFluidTankWidget;
+import supersymmetry.api.fluids.SuSyFluidTankHandler;
 import supersymmetry.api.util.SuSyUtility;
 
 public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleCombustion {
@@ -45,8 +45,8 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
 
     private boolean sufficientFluids;
 
-    private SuSyFluidTankWidget lubricantTank;
-    private SuSyFluidTankWidget coolantTank;
+    private SuSyFluidTankHandler lubricantTank;
+    private SuSyFluidTankHandler coolantTank;
 
     private FluidTankList displayedTankList;
 
@@ -77,9 +77,9 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
         }
 
         // Lubricant/coolant tanks are standalone — NOT part of the import handler
-        this.lubricantTank = (SuSyFluidTankWidget) new SuSyFluidTankWidget(1000, this, false)
+        this.lubricantTank = (SuSyFluidTankHandler) new SuSyFluidTankHandler(1000, this, false)
                 .setFilter(SuSyFluidFilters.LUBRICANT);
-        this.coolantTank = (SuSyFluidTankWidget) new SuSyFluidTankWidget(1000, this, false)
+        this.coolantTank = (SuSyFluidTankHandler) new SuSyFluidTankHandler(1000, this, false)
                 .setFilter(SuSyFluidFilters.COOLANT);
 
         this.displayedTankList = new FluidTankList(false, displayedTanks);

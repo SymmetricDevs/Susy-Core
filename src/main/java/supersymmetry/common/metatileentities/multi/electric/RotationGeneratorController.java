@@ -1,4 +1,3 @@
-
 package supersymmetry.common.metatileentities.multi.electric;
 
 import java.util.List;
@@ -199,7 +198,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
             if (isFull && !voidEnergy) {
                 return false;
             }
-            
+
             return sufficientFluids;
         }
 
