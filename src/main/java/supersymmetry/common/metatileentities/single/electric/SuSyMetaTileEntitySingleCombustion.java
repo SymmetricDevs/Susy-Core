@@ -7,6 +7,7 @@ import java.util.function.Supplier;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
@@ -60,6 +61,25 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
         return new SuSyMetaTileEntitySingleCombustion(metaTileEntityId, recipeMap, renderer, this.getTier(),
                 this.getTankScalingFunction());
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        super.writeToNBT(data);
+        if (lubricantTank != null)
+            data.setTag("LubricantTank", lubricantTank.writeToNBT(new NBTTagCompound()));
+        if (coolantTank != null)
+            data.setTag("CoolantTank", coolantTank.writeToNBT(new NBTTagCompound()));
+        return data;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound data) {
+        super.readFromNBT(data);
+        if (lubricantTank != null && data.hasKey("LubricantTank"))
+            lubricantTank.readFromNBT(data.getCompoundTag("LubricantTank"));
+        if (coolantTank != null && data.hasKey("CoolantTank"))
+            coolantTank.readFromNBT(data.getCompoundTag("CoolantTank"));
     }
 
     @Override
