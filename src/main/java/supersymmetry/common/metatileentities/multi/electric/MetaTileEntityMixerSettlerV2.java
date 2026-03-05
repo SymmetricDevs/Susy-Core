@@ -1,24 +1,5 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -40,8 +21,27 @@ import gregtech.common.blocks.BlockBoilerCasing;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.properties.MixerSettlerCellsProperty;
+import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
+import supersymmetry.common.blocks.SuSyBlocks;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class MetaTileEntityMixerSettlerV2 extends RecipeMapMultiblockController {
 
@@ -162,12 +162,12 @@ public class MetaTileEntityMixerSettlerV2 extends RecipeMapMultiblockController 
         for (int x = 0; x < width; x++) {
             layer0[0][x] = (x == 0 || x == width - 1) ? ' ' : 'F'; // frames at the bottom back
 
-            // tank casings
+            // tank casings/coalescence plates
             layer0[1][x] = (x % 3 == 0) ? ' ' : 'C';
             layer0[2][x] = (x % 3 == 0) ? ' ' : 'C';
             layer1[0][x] = (x % 3 == 0) ? ' ' : 'C';
             layer1[1][x] = (x % 3 == 0) ? ' ' : 'C';
-            layer1[2][x] = (x % 3 == 0) ? ' ' : 'C';
+            layer1[2][x] = (x % 3 == 0) ? ' ' : 'T';
 
             // mixer-tank connecting pipes
             layer1[3][x] = (x % 3 == 0) ? ' ' : 'P';
@@ -222,6 +222,9 @@ public class MetaTileEntityMixerSettlerV2 extends RecipeMapMultiblockController 
                 .where('O', abilities(MultiblockAbility.EXPORT_FLUIDS))
                 .where('P', states(getPipeCasingState()))
                 .where('C', states(getCasingState()))
+                .where('T', states(SuSyBlocks.MULTIBLOCK_CASING
+                                .getState(BlockSuSyMultiblockCasing.CasingType.COALESCENCE_PLATE)))
+
                 .where('G',
                         states(MetaBlocks.TURBINE_CASING
                                 .getState(BlockTurbineCasing.TurbineCasingType.STAINLESS_STEEL_GEARBOX)))
