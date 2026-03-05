@@ -27,6 +27,7 @@ import supersymmetry.common.world.biome.SuSyBiomeEntry;
 import supersymmetry.common.world.sky.SkyColorData;
 import supersymmetry.common.world.sky.SkyRenderData;
 
+// thismightbenoah & martin are the same people
 public class SuSyDimensions {
 
     public static DimensionType planetType;
@@ -82,7 +83,7 @@ public class SuSyDimensions {
         long nodalPeriodTicks = (long) (nodalPeriodInLunarDays * lunarDayTicks);
 
         SkyRenderData sun = new SkyRenderData.Builder(
-                new ResourceLocation("susy", "textures/environment/sun.png"), 10.6F) 
+                new ResourceLocation("susy", "textures/environment/sun.png"), 10.6F)
                         .positionType(SkyRenderData.PositionType.CELESTIAL_SPHERE)
                         .useLinearFiltering(false)
                         .baseInclination(5.14f)
