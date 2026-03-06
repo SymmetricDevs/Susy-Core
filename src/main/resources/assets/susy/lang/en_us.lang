@@ -508,6 +508,12 @@ susy.recipe.evaporation=Required Energy: %d J/t
 susy.recipe.cryogenic_environment=Requires Cryogenic Environment
 susy.recipe.mixer_settler_cells=Required mixer settler cells: %s
 
+# More Distilleries
+susy.machine.distiller.bronze.name=Steam Distillery
+susy.machine.distiller.steel.name=High Pressure Steam Distillery
+susy.machine.distiller.bronze.tooltip=Extracting most relevant Parts of Fluids
+susy.machine.distiller.steel.tooltip=Extracting most relevant Parts of Fluids
+
 # Latex Collector
 susy.machine.latex_collector.steam=Needs Steam!
 susy.machine.latex_collector.tooltip=Extracts liquids from adjacent logs.
@@ -625,6 +631,8 @@ susy.machine.bubble_column_reactor.uxv.name=Epic Bubble Column Reactor IV
 susy.machine.bubble_column_reactor.opv.name=Legendary Bubble Column Reactor
 
 # Batch Reactor
+susy.machine.batch_reactor.bronze.name=Steam Batch Reactor
+susy.machine.batch_reactor.steel.name=High Pressure Steam Batch Reactor
 susy.machine.batch_reactor.lv.name=Basic Batch Reactor
 susy.machine.batch_reactor.mv.name=Advanced Batch Reactor
 susy.machine.batch_reactor.hv.name=Advanced Batch Reactor II
