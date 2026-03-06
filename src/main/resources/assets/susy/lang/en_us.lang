@@ -491,10 +491,13 @@ susy.machine.primitive_item_import.name=Primitive Item Import Bus
 susy.machine.primitive_item_import.tooltip=Not a substitute for ULV
 susy.machine.primitive_item_export.name=Primitive Item Export Bus
 susy.machine.primitive_item_export.tooltip=Not a substitute for ULV
-susy.machine.mixer_settler.name=Mixer Settler
+susy.machine.mixer_settler.name=Mixer Settler (Old)
 susy.machine.mixer_settler.tooltip=First it mixes, then it settles... - Sun Tzu, The Art of SuSy
 susy.machine.mixer_settler.tooltip.1=The initial structure contains 2 cells, each expansion adds 2 more
 susy.machine.mixer_settler.tooltip.2=Can work up to 2x faster with more cells
+
+susy.machine.mixer_settler_v2.name=Mixer Settler
+susy.machine.mixer_settler_v2.tooltip=First it mixes, then it settles... - Sun Tzu, The Art of SuSy
 
 susy.machine.parallel_pure=Can parallel to output up to §b%d§r§7 items at once
 
@@ -505,6 +508,12 @@ susy.recipe.blocks=Blocks: %s
 susy.recipe.evaporation=Required Energy: %d J/t
 susy.recipe.cryogenic_environment=Requires Cryogenic Environment
 susy.recipe.mixer_settler_cells=Required mixer settler cells: %s
+
+# More Distilleries
+susy.machine.distiller.bronze.name=Steam Distillery
+susy.machine.distiller.steel.name=High Pressure Steam Distillery
+susy.machine.distiller.bronze.tooltip=Extracting most relevant Parts of Fluids
+susy.machine.distiller.steel.tooltip=Extracting most relevant Parts of Fluids
 
 # Latex Collector
 susy.machine.latex_collector.steam=Needs Steam!
@@ -623,6 +632,8 @@ susy.machine.bubble_column_reactor.uxv.name=Epic Bubble Column Reactor IV
 susy.machine.bubble_column_reactor.opv.name=Legendary Bubble Column Reactor
 
 # Batch Reactor
+susy.machine.batch_reactor.bronze.name=Steam Batch Reactor
+susy.machine.batch_reactor.steel.name=High Pressure Steam Batch Reactor
 susy.machine.batch_reactor.lv.name=Basic Batch Reactor
 susy.machine.batch_reactor.mv.name=Advanced Batch Reactor
 susy.machine.batch_reactor.hv.name=Advanced Batch Reactor II
