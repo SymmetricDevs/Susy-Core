@@ -194,6 +194,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityPrimitiveItemBus PRIMITIVE_ITEM_EXPORT;
 
     public static MetaTileEntityCupolaFurnace CUPOLA_FURNACE;
+    public static MetaTileEntityGreenhouse GREENHOUSE;
 
     // Space multis
     public static MetaTileEntityLandingPad LANDING_PAD;
@@ -425,6 +426,7 @@ public class SuSyMetaTileEntities {
                 susyId("eccentric_roll_crusher"), SuSyRecipeMaps.ECCENTRIC_ROLL_CRUSHER));
         BALL_MILL = registerMetaTileEntity(14742,
                 new MetaTileEntityBallMill(susyId("ball_mill"), SuSyRecipeMaps.BALL_MILL));
+        GREENHOUSE = registerMetaTileEntity(14743, new MetaTileEntityGreenhouse(susyId("greenhouse")));
 
         // 14800 Pyrotech Integration: Primitive Smelter
         PRIMITIVE_ITEM_IMPORT = registerMetaTileEntity(14801,
