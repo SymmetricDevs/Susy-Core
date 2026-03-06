@@ -287,7 +287,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         double successProb = getSuccessProbability(minimalChance, (double) this.progress / totalAssemblyTime);
 
         this.rocketBlueprintSlot.setNBT(
-                (_) -> {
+                (ignored) -> {
                     NBTTagCompound n = bp.writeToNBT();
                     n.setBoolean("buildstat", true);
                     return n;
@@ -542,7 +542,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                             if (!value.isEmpty()) {
                                 try {
                                     gravity = Double.parseDouble(value);
-                                } catch (NumberFormatException _) {
+                                } catch (NumberFormatException ignored) {
                                     gravity = 9.81;
                                 }
                             }
@@ -632,7 +632,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                         18,
                         18,
                         "",
-                        (_) -> {
+                        (ignored) -> {
                             if (this.hasBlueprint() && !this.isActive() && this.fuel != null) {
                                 int energyToConsume = getEnergyToConsume();
                                 boolean maintenance = ConfigHolder.machines.enableMaintenance &&
@@ -672,7 +672,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                         18,
                         18,
                         "",
-                        (_) -> {
+                        (ignored) -> {
                             if (this.hasBlueprint() && this.isActive()) {
 
                                 // && !hasNotEnoughCoolant
@@ -692,7 +692,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                         18,
                         18,
                         "",
-                        (_) -> {
+                        (ignored) -> {
                             if (!this.isActive() && this.fuel != null) {
                                 this.fuel = null;
                             }
