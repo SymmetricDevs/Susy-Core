@@ -367,10 +367,13 @@ susy.machine.primitive_item_import.name=简易输入总线
 susy.machine.primitive_item_import.tooltip=仅可用于简易冶炼炉
 susy.machine.primitive_item_export.name=简易输出总线
 susy.machine.primitive_item_export.tooltip=仅可用于简易冶炼炉
-susy.machine.mixer_settler.name=混合沉降器
+susy.machine.mixer_settler.name=混合沉降器（旧）
 susy.machine.mixer_settler.tooltip=§o凡善澄者，必先杂而后清§r ——孙子，《苏西兵法》
 susy.machine.mixer_settler.tooltip.1=基础结构包含2个沉降单元；每此拓展增加2个单元
 susy.machine.mixer_settler.tooltip.2=可以通过增加沉降器单元获得最高2倍的速率提升
+
+susy.machine.mixer_settler_v2.name=混合沉降器
+susy.machine.mixer_settler_v2.tooltip=§o凡善澄者，必先杂而后清§r ——孙子，《苏西兵法》
 
 susy.machine.parallel_pure=可并行输出至多§b%d§7个物品。
 
