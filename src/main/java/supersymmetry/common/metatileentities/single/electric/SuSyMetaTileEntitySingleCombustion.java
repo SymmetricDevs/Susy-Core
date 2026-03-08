@@ -1,5 +1,7 @@
 package supersymmetry.common.metatileentities.single.electric;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -7,7 +9,6 @@ import java.util.function.Supplier;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
@@ -64,29 +65,9 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
-        super.writeToNBT(data);
-        if (lubricantTank != null)
-            data.setTag("LubricantTank", lubricantTank.writeToNBT(new NBTTagCompound()));
-        if (coolantTank != null)
-            data.setTag("CoolantTank", coolantTank.writeToNBT(new NBTTagCompound()));
-        return data;
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound data) {
-        super.readFromNBT(data);
-        if (lubricantTank != null && data.hasKey("LubricantTank"))
-            lubricantTank.readFromNBT(data.getCompoundTag("LubricantTank"));
-        if (coolantTank != null && data.hasKey("CoolantTank"))
-            coolantTank.readFromNBT(data.getCompoundTag("CoolantTank"));
-    }
-
-    @Override
     protected FluidTankList createImportFluidHandler() {
         if (workable == null) return new FluidTankList(false);
 
-        // Only recipe fluid inputs go here — no lubricant/coolant
         FluidTank[] fluidImports = new FluidTank[workable.getRecipeMap().getMaxFluidInputs()];
         FluidTank[] displayedTanks = new FluidTank[workable.getRecipeMap().getMaxFluidInputs()];
         for (int i = 0; i < fluidImports.length; i++) {
@@ -96,14 +77,17 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
             displayedTanks[i] = tank;
         }
 
-        // Lubricant/coolant tanks are standalone — NOT part of the import handler
         this.lubricantTank = (SuSyFluidTankHandler) new SuSyFluidTankHandler(1000, this, false)
                 .setFilter(SuSyFluidFilters.LUBRICANT);
         this.coolantTank = (SuSyFluidTankHandler) new SuSyFluidTankHandler(1000, this, false)
                 .setFilter(SuSyFluidFilters.COOLANT);
 
         this.displayedTankList = new FluidTankList(false, displayedTanks);
-        return new FluidTankList(false, fluidImports);
+
+        List<FluidTank> allTanks = new ArrayList<>(Arrays.asList(fluidImports));
+        allTanks.add(lubricantTank);
+        allTanks.add(coolantTank);
+        return new FluidTankList(false, allTanks.toArray(new FluidTank[0]));
     }
 
     @Override

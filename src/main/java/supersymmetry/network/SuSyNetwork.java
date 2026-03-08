@@ -1,5 +1,6 @@
 package supersymmetry.network;
 
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
@@ -10,5 +11,7 @@ public class SuSyNetwork {
     public static final SimpleNetworkWrapper CHANNEL = NetworkRegistry.INSTANCE
             .newSimpleChannel(Supersymmetry.MODID + ":warnings");
 
-    public static void init() {}
+    public static void init() {
+        MinecraftForge.EVENT_BUS.register(new MissingMods());
+    }
 }
