@@ -1,21 +1,19 @@
 package supersymmetry.common.event;
 
-import static net.minecraft.inventory.EntityEquipmentSlot.HEAD;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import supersymmetry.api.space.CelestialObjects;
+import supersymmetry.api.util.SuSyDamageSources;
+import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.item.SuSyArmorItem;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.DamageSource;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-
-import supersymmetry.api.util.SuSyDamageSources;
-import supersymmetry.common.entities.EntityRocket;
-import supersymmetry.common.item.SuSyArmorItem;
+import static net.minecraft.inventory.EntityEquipmentSlot.HEAD;
 
 public final class DimensionBreathabilityHandler {
 
@@ -36,46 +34,43 @@ public final class DimensionBreathabilityHandler {
         dimensionBreathabilityMap.put(-1, new BreathabilityInfo(SuSyDamageSources.getToxicAtmoDamage(), 2));
         // Beneath
         dimensionBreathabilityMap.put(10, new BreathabilityInfo(SuSyDamageSources.getSuffocationDamage(), 0.5));
-    }
-
-    public static boolean tickAir(EntityPlayer player, FluidStack oxyStack) {
-        // don't drain if we are in creative
-        if (player.isCreative()) return true;
-        Optional<IFluidHandlerItem> tank = player.inventory.mainInventory.stream()
-                .map(a -> a.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null))
-                .filter(Objects::nonNull)
-                .filter(a -> {
-                    FluidStack drain = a.drain(oxyStack, false);
-                    return drain != null && drain.amount > 0;
-                }).findFirst();
-        return tank.isPresent();
+        // SPACE
+        dimensionBreathabilityMap.put(CelestialObjects.MOON.getDimension(), SPACE);
     }
 
     public static boolean isInHazardousEnvironment(EntityPlayer player) {
-        return dimensionBreathabilityMap.containsKey(player.dimension) ||
-                (player.posY > 600 && !(player.isRiding() && player.getRidingEntity() instanceof EntityRocket));
+        return dimensionBreathabilityMap.containsKey(player.dimension);
     }
 
     public static void tickPlayer(EntityPlayer player) {
         if (isInHazardousEnvironment(player)) {
+            BreathabilityInfo info = dimensionBreathabilityMap.get(player.dimension);
+            if (info.damageType == SuSyDamageSources.DEPRESSURIZATION) {
+                if (findOxygen(player)) {
+                    return;
+                }
+            }
             if (player.getItemStackFromSlot(HEAD).getItem() instanceof SuSyArmorItem item) {
                 if (item.isValid(player.getItemStackFromSlot(HEAD), player)) {
                     double damageAbsorbed = item.getDamageAbsorbed(player.getItemStackFromSlot(HEAD), player);
                     if (damageAbsorbed != ABSORB_ALL)
-                        applyDamage(player, damageAbsorbed);
+                        info.damagePlayer(player, damageAbsorbed);
                     return;
                 }
             }
-            applyDamage(player, 0);
+            info.damagePlayer(player, 0);
         }
     }
 
-    public static void applyDamage(EntityPlayer player, double amountAbsorbed) {
-        if (dimensionBreathabilityMap.containsKey(player.dimension)) {
-            dimensionBreathabilityMap.get(player.dimension).damagePlayer(player, amountAbsorbed);
-        } else {
-            SPACE.damagePlayer(player, amountAbsorbed);
+    public static boolean findOxygen(EntityPlayer player) {
+        World world = player.getEntityWorld();
+        AxisAlignedBB aabb = player.getEntityBoundingBox().expand(2, 2, 2).expand(-2, -2, -2);
+        for (BlockPos pos : BlockPos.getAllInBox(new BlockPos(aabb.minX, aabb.minY, aabb.minZ), new BlockPos(aabb.maxX, aabb.maxY, aabb.maxZ))) {
+            if (world.getBlockState(pos).getBlock() == SuSyBlocks.BREATHING_GAS) {
+                return true;
+            }
         }
+        return false;
     }
 
     public static final class BreathabilityInfo {

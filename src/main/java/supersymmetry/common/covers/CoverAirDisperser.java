@@ -52,6 +52,9 @@ public class CoverAirDisperser extends CoverBase implements ITickable {
         BlockPos frontPos = getPos().offset(getAttachedSide());
         Block block = world.getBlockState(frontPos).getBlock();
         if (!block.isReplaceable(world, frontPos) && block != SuSyBlocks.BREATHING_GAS) {
+            if (block == SuSyBlocks.BREATHING_GAS) {
+                world.scheduleUpdate(frontPos, SuSyBlocks.BREATHING_GAS, 10);
+            }
             return;
         }
 
@@ -67,6 +70,7 @@ public class CoverAirDisperser extends CoverBase implements ITickable {
         if (drained != null && drained.amount >= oxygenPerSecond) {
             fluidHandler.drain(oxygenStack, true);
             world.setBlockState(frontPos, SuSyBlocks.BREATHING_GAS.getDefaultState());
+            world.scheduleUpdate(frontPos, SuSyBlocks.BREATHING_GAS, 10);
         }
     }
 }
