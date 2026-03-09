@@ -8,7 +8,7 @@ import biomesoplenty.api.biome.IExtendedBiome;
 public class SuSyWorldLoader {
 
     public static void init() {
-        if (Loader.isModLoaded("biomesoplenty")) { // TODO GT2.8+: GTValues.MODID_BOP
+        if (Loader.isModLoaded("biomesoplenty")) { // CEu 2.9 removes the mod id anyway...
             BOPBiomes.REG_INSTANCE.getPresentBiomes().forEach(biome -> {
                 IExtendedBiome actualBiome = BOPBiomes.REG_INSTANCE.getExtendedBiome(biome);
                 if (actualBiome != null) {

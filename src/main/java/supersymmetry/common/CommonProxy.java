@@ -70,6 +70,7 @@ public class CommonProxy {
         SusyStoneTypes.init();
         Particles.init();
         Particles.register();
+        CelestialObjects.init();
     }
 
     /**
@@ -253,7 +254,6 @@ public class CommonProxy {
         evt.getRegistry().register(SuSyBiomes.LUNAR_MARIA);
         BiomeDictionary.addTypes(SuSyBiomes.LUNAR_MARIA, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.VOID);
 
-        CelestialObjects.init();
         SuSyDimensions.init();
     }
 }

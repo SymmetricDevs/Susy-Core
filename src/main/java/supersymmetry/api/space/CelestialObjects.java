@@ -16,6 +16,7 @@ public class CelestialObjects {
     // Planetoids
     public static Planetoid EARTH;
     public static Planetoid MOON;
+    public static Planetoid MARS;
 
     public static void init() {
         MILKY_WAY = new Galaxy("milky_way", 1., 0., 0., 0., 0., null, GalaxyType.SPIRAL);

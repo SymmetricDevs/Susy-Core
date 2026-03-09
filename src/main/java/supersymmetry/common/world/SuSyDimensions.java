@@ -1,15 +1,11 @@
 package supersymmetry.common.world;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
-
-import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import supersymmetry.api.SusyLog;
+import supersymmetry.api.space.CelestialObjects;
 import supersymmetry.common.blocks.BlockRegolith;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
@@ -17,13 +13,17 @@ import supersymmetry.common.world.biome.SuSyBiomeEntry;
 import supersymmetry.common.world.sky.SkyColorData;
 import supersymmetry.common.world.sky.SkyRenderData;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class SuSyDimensions {
 
     public static DimensionType planetType;
     public static DimensionType spaceType;
 
     public static List<Biome> BIOMES = new ArrayList<>();
-    public static Map<Integer, Planet> PLANETS = new Int2ObjectArrayMap<>();
+    public static Map<Integer, PlanetoidHandler> PLANETS = new Int2ObjectArrayMap<>();
 
     public static void init() {
         // Registers dimension type. Uses a negative ID so that fire blocks have less logic.
@@ -37,7 +37,7 @@ public class SuSyDimensions {
         id--;
 
         SusyLog.logger.info("Registering planet dimension type at id " + id);
-        planetType = DimensionType.register("susy_planet", "_susy", id, WorldProviderPlanet.class, false);
+        planetType = DimensionType.register("Supersymmetry Planet", "_susy", id, WorldProviderPlanet.class, false);
 
         SuSySkyRenderer moonSky = new SuSySkyRenderer();
 
@@ -94,7 +94,7 @@ public class SuSyDimensions {
         // Set the sky colors
         moonSky.setSkyColorData(moonColors);
 
-        new Planet(0, 800, "Moon").setBiomeList(
+        new PlanetoidHandler(CelestialObjects.MOON).setBiomeList(
                 new SuSyBiomeEntry(SuSyBiomes.LUNAR_HIGHLANDS, 100)
                         .setCraterBlock(SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.HIGHLAND)),
                 new SuSyBiomeEntry(SuSyBiomes.LUNAR_MARIA, 100)

@@ -18,7 +18,8 @@ import java.util.Random;
 
 public class BlockBreathingGas extends Block {
     public BlockBreathingGas() {
-        super(Material.AIR, MapColor.AIR);
+        // Unfortunately, Material.AIR causes the update logic to act very strangely.
+        super(Material.FIRE, MapColor.AIR);
         setTranslationKey("breathing_gas");
         setTickRandomly(true);
     }
@@ -34,11 +35,6 @@ public class BlockBreathingGas extends Block {
     }
 
     @Override
-    public int tickRate(World worldIn) {
-        return 10;
-    }
-
-    @Override
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         // Occasionally just disappear
         if (rand.nextInt(50) < 1) {
@@ -50,11 +46,18 @@ public class BlockBreathingGas extends Block {
         for (int i = 0; i < EnumFacing.VALUES.length; i++) {
             // Use the wrapping of .byIndex
             BlockPos offset = pos.offset(EnumFacing.byIndex(facingOff + i));
-            IBlockState other = worldIn.getBlockState(offset);
-            if (other.getBlock() != this) {
+            Block other = worldIn.getBlockState(offset).getBlock();
+            while (other == Blocks.AIR && rand.nextInt(4) > 0) {
+                offset = offset.offset(EnumFacing.byIndex(facingOff + i));
+                other = worldIn.getBlockState(offset).getBlock();
+            }
+            if (other == Blocks.AIR) {
                 worldIn.setBlockState(offset, getDefaultState(), 2 | 4 | 16);
                 worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 2 | 4 | 16);
+                worldIn.scheduleUpdate(offset, SuSyBlocks.BREATHING_GAS, 10);
                 return;
+            } else if (other == SuSyBlocks.BREATHING_GAS) {
+                worldIn.scheduleUpdate(offset, SuSyBlocks.BREATHING_GAS, 10);
             }
         }
     }
