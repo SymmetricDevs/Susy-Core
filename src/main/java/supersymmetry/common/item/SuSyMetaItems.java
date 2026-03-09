@@ -12,7 +12,6 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 
 import com.google.common.base.CaseFormat;
-
 import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
 import gregtech.api.items.armor.ArmorMetaItem;
@@ -27,10 +26,19 @@ import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.unification.stack.UnificationEntry;
 import gregtech.common.items.MetaItems;
 import gregtech.common.items.behaviors.TooltipBehavior;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.ItemStack;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
 import supersymmetry.common.item.behavior.*;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Objects;
+
+import static gregtech.common.items.MetaItems.SPRAY_EMPTY;
 
 public class SuSyMetaItems {
 
@@ -59,6 +67,9 @@ public class SuSyMetaItems {
     public static MetaValueItem DATA_CARD_MASTER_BLUEPRINT;
     public static MetaValueItem ROCKET_CONFIGURER;
     public static MetaValueItem PADDING_CLOTH;
+
+    public static MetaValueItem AIR_DISPERSER;
+
 
     public static ArmorMetaItem<?>.ArmorMetaValueItem SIMPLE_GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_MASK;
