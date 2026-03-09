@@ -1,15 +1,8 @@
 package supersymmetry.common.blocks;
 
-import static gregtech.common.blocks.MetaBlocks.ASPHALT;
-
-import java.lang.reflect.Field;
-import java.util.*;
-import java.util.Comparator;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
+import gregtech.api.block.VariantActiveBlock;
+import gregtech.api.block.VariantBlock;
+import gregtech.api.util.BlockUtility;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -18,14 +11,15 @@ import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import org.jetbrains.annotations.NotNull;
-
-import gregtech.api.block.VariantActiveBlock;
-import gregtech.api.block.VariantBlock;
-import gregtech.api.util.BlockUtility;
 import supersymmetry.common.blocks.rocketry.*;
 import supersymmetry.common.tileentities.SuSyTileEntities;
+
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static gregtech.common.blocks.MetaBlocks.ASPHALT;
 
 public class SuSyBlocks {
 
@@ -91,6 +85,8 @@ public class SuSyBlocks {
     public static BlockGrinderCasing GRINDER_CASING;
     public static BlockGirthGearTooth GIRTH_GEAR_TOOTH;
 
+    public static BlockBreathingGas BREATHING_GAS;
+
     public static ArrayList<VariantBlock<?>> susyBlocks;
 
     public static void init() {
@@ -120,6 +116,9 @@ public class SuSyBlocks {
 
         REGOLITH = new BlockRegolith();
         REGOLITH.setRegistryName("regolith");
+
+        BREATHING_GAS = new BlockBreathingGas();
+        BREATHING_GAS.setRegistryName("breathing_gas");
 
         SuSyTileEntities.register();
     }

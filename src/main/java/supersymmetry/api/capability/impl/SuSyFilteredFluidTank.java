@@ -1,4 +1,4 @@
-package supersymmetry.common.gregtechoverrides;
+package supersymmetry.api.capability.impl;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;

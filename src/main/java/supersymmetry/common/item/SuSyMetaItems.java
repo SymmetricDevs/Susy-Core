@@ -156,6 +156,8 @@ public class SuSyMetaItems {
                 .addComponents(new RocketConfigBehavior());
 
         PADDING_CLOTH = metaItem.addItem(14, "padding_cloth");
+
+        AIR_DISPERSER = metaItem.addItem(15, "air_disperser");
     }
 
     private static void addExtraBehaviours() {
