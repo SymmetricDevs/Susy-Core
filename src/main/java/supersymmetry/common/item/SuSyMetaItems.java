@@ -188,6 +188,8 @@ public class SuSyMetaItems {
 
         ELITE_CARGO_DRONE = metaItem.addItem(21, "cargo_drone.elite").setMaxStackSize(1)
                 .addComponents(new HydrogenPoweredDroneBehavior(eliteDroneFuel));
+
+        AIR_DISPERSER = metaItem.addItem(22, "air_disperser");
     }
 
     private static void addExtraBehaviours() {

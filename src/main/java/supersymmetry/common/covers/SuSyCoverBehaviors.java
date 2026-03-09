@@ -1,10 +1,10 @@
 package supersymmetry.common.covers;
 
-import static gregtech.common.covers.CoverBehaviors.registerBehavior;
-
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.common.item.SuSyMetaItems;
+
+import static gregtech.common.covers.CoverBehaviors.registerBehavior;
 
 public final class SuSyCoverBehaviors {
 
@@ -27,5 +27,8 @@ public final class SuSyCoverBehaviors {
 
         registerBehavior(SuSyUtility.susyId("restrictive_filter"), SuSyMetaItems.RESTRICTIVE_FILTER,
                 CoverRestrictive::new);
+
+        registerBehavior(SuSyUtility.susyId("air_disperser"), SuSyMetaItems.AIR_DISPERSER,
+                (definition, coverableView, attachedSide) -> new CoverAirDisperser(definition, coverableView, attachedSide, 100));
     }
 }
