@@ -1,5 +1,6 @@
 package supersymmetry.common.event;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -7,35 +8,50 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import supersymmetry.api.space.CelestialObjects;
 import supersymmetry.api.util.SuSyDamageSources;
+import supersymmetry.common.blocks.BlockBreathingGas;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.item.SuSyArmorItem;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static net.minecraft.inventory.EntityEquipmentSlot.HEAD;
 
 public final class DimensionBreathabilityHandler {
 
-    private static final Map<Integer, BreathabilityInfo> dimensionBreathabilityMap = new HashMap<>();
+    private static final Map<Integer, List<BreathabilityInfo>> dimensionBreathabilityMap = new HashMap<>();
 
-    private static final BreathabilityInfo SPACE = new BreathabilityInfo(SuSyDamageSources.DEPRESSURIZATION, 3);
+    private static final BreathabilityInfo SPACE = new BreathabilityInfo(SuSyDamageSources.DEPRESSURIZATION, 4);
     public static final int BENEATH_ID = 10;
     public static final int NETHER_ID = -1;
 
     public static final double ABSORB_ALL = -1;
 
-    private DimensionBreathabilityHandler() {}
+    private DimensionBreathabilityHandler() {
+    }
 
     public static void loadConfig() {
         dimensionBreathabilityMap.clear();
 
         // Nether
-        dimensionBreathabilityMap.put(-1, new BreathabilityInfo(SuSyDamageSources.getToxicAtmoDamage(), 2));
+        addHazard(-1, new BreathabilityInfo(SuSyDamageSources.getToxicAtmoDamage(), 2));
         // Beneath
-        dimensionBreathabilityMap.put(10, new BreathabilityInfo(SuSyDamageSources.getSuffocationDamage(), 0.5));
+        addHazard(10, new BreathabilityInfo(SuSyDamageSources.getSuffocationDamage(), 0.5));
         // SPACE
-        dimensionBreathabilityMap.put(CelestialObjects.MOON.getDimension(), SPACE);
+        addHazard(CelestialObjects.MOON.getDimension(), SPACE);
+    }
+
+    public static void addHazard(int dim, BreathabilityInfo info) {
+        dimensionBreathabilityMap.compute(dim, (d, list) -> {
+            if (list == null) {
+                list = new ArrayList<>();
+            }
+            list.add(info);
+
+            return list;
+        });
     }
 
     public static boolean isInHazardousEnvironment(EntityPlayer player) {
@@ -44,33 +60,53 @@ public final class DimensionBreathabilityHandler {
 
     public static void tickPlayer(EntityPlayer player) {
         if (isInHazardousEnvironment(player)) {
-            BreathabilityInfo info = dimensionBreathabilityMap.get(player.dimension);
-            if (info.damageType == SuSyDamageSources.DEPRESSURIZATION) {
-                if (findOxygen(player)) {
-                    return;
+            for (BreathabilityInfo info : dimensionBreathabilityMap.get(player.dimension)) {
+                if (info.damageType == SuSyDamageSources.DEPRESSURIZATION) {
+                    if (countBreathingGas(player, BlockBreathingGas.GasType.OXYGEN, 2) == 2) {
+                        return;
+                    }
+                } else if (info.damageType == SuSyDamageSources.DARKNESS) {
+                    if (player.getBrightness() > 0.05F || countBreathingGas(player, BlockBreathingGas.GasType.PESTICIDE, 2) == 2) {
+                        return;
+                    }
                 }
-            }
-            if (player.getItemStackFromSlot(HEAD).getItem() instanceof SuSyArmorItem item) {
-                if (item.isValid(player.getItemStackFromSlot(HEAD), player)) {
-                    double damageAbsorbed = item.getDamageAbsorbed(player.getItemStackFromSlot(HEAD), player);
-                    if (damageAbsorbed != ABSORB_ALL)
-                        info.damagePlayer(player, damageAbsorbed);
-                    return;
+                if (player.getItemStackFromSlot(HEAD).getItem() instanceof SuSyArmorItem item) {
+                    if (item.isValid(player.getItemStackFromSlot(HEAD), player)) {
+                        double damageAbsorbed = item.getDamageAbsorbed(player.getItemStackFromSlot(HEAD), player);
+                        if (damageAbsorbed != ABSORB_ALL)
+                            info.damagePlayer(player, damageAbsorbed);
+                        return;
+                    }
                 }
+                info.damagePlayer(player);
             }
-            info.damagePlayer(player, 0);
         }
     }
 
-    public static boolean findOxygen(EntityPlayer player) {
-        World world = player.getEntityWorld();
-        AxisAlignedBB aabb = player.getEntityBoundingBox().expand(2, 2, 2).expand(-2, -2, -2);
-        for (BlockPos pos : BlockPos.getAllInBox(new BlockPos(aabb.minX, aabb.minY, aabb.minZ), new BlockPos(aabb.maxX, aabb.maxY, aabb.maxZ))) {
-            if (world.getBlockState(pos).getBlock() == SuSyBlocks.BREATHING_GAS) {
-                return true;
-            }
+    public static boolean isInDepressurizationHazard(EntityPlayer player) {
+        List<BreathabilityInfo> infos = dimensionBreathabilityMap.get(player.dimension);
+        if (infos == null) return false;
+        for (BreathabilityInfo info : infos) {
+            if (info.damageType == SuSyDamageSources.DEPRESSURIZATION) return true;
         }
         return false;
+    }
+
+    public static int countBreathingGas(EntityPlayer player, BlockBreathingGas.GasType type, int stopAt) {
+        World world = player.getEntityWorld();
+        AxisAlignedBB aabb = new AxisAlignedBB(player.getPosition(), player.getPosition())
+                .expand(3, 3, 3).expand(-3, -3, -3);
+        int count = 0;
+        for (BlockPos pos : BlockPos.getAllInBox(new BlockPos(aabb.minX, aabb.minY, aabb.minZ), new BlockPos(aabb.maxX, aabb.maxY, aabb.maxZ))) {
+            IBlockState state = world.getBlockState(pos);
+            if (state.getBlock() == SuSyBlocks.BREATHING_GAS && SuSyBlocks.BREATHING_GAS.getState(state) == type) {
+                count++;
+                if (count == stopAt) {
+                    break;
+                }
+            }
+        }
+        return count;
     }
 
     public static final class BreathabilityInfo {

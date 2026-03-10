@@ -16,6 +16,7 @@ public class SusySounds {
     public static SoundEvent COMPLEX_ALARM;
     public static SoundEvent METAL_DOOR_CLOSE;
     public static SoundEvent METAL_DRAWER_OPEN;
+    public static SoundEvent OXYGEN_SENSOR_BEEP;
 
     public static void registerSounds() {
         ROCKET_LOOP = registerSound("entity.rocket_loop");
@@ -26,6 +27,7 @@ public class SusySounds {
         COMPLEX_ALARM = registerSound("block.complex_alarm");
         METAL_DOOR_CLOSE = registerSound("block.metal_door_close");
         METAL_DRAWER_OPEN = registerSound("block.metal_drawer_open");
+        OXYGEN_SENSOR_BEEP = registerSound("item.oxygen_sensor_beep");
     }
 
     private static SoundEvent registerSound(String soundNameIn) {

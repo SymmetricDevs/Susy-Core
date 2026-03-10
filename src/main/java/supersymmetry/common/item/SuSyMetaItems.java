@@ -32,6 +32,7 @@ import net.minecraft.item.ItemStack;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
+import gregtech.api.items.metaitem.ElectricStats;
 import supersymmetry.common.item.behavior.*;
 
 import java.util.Arrays;
@@ -69,6 +70,7 @@ public class SuSyMetaItems {
     public static MetaValueItem PADDING_CLOTH;
 
     public static MetaValueItem AIR_DISPERSER;
+    public static MetaValueItem OXYGEN_SENSOR;
 
 
     public static ArmorMetaItem<?>.ArmorMetaValueItem SIMPLE_GAS_MASK;
@@ -190,6 +192,10 @@ public class SuSyMetaItems {
                 .addComponents(new HydrogenPoweredDroneBehavior(eliteDroneFuel));
 
         AIR_DISPERSER = metaItem.addItem(22, "air_disperser");
+
+        OXYGEN_SENSOR = metaItem.addItem(23, "oxygen_sensor").setMaxStackSize(1)
+                .addComponents(ElectricStats.createElectricItem(10000L, GTValues.LV),
+                        new OxygenSensorBehavior());
     }
 
     private static void addExtraBehaviours() {

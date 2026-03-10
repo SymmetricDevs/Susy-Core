@@ -1252,6 +1252,14 @@ metaitem.cargo_drone.advanced.name=Advanced Cargo Drone
 metaitem.cargo_drone.advanced.tooltip=Max range: §62000 blocks§7, speed: §b7.5 blocks/second§b
 metaitem.cargo_drone.elite.name=Elite Cargo Drone
 metaitem.cargo_drone.elite.tooltip=Max range: §610000 blocks§7, speed: §b25 blocks/second§b. Powered by §9Hydrogen§7.
+metaitem.oxygen_sensor.name=Oxygen Sensor
+metaitem.oxygen_sensor.tooltip.1=Detects nearby oxygen levels. Beeps when insufficient oxygen is detected.
+metaitem.oxygen_sensor.tooltip.charge=§aCharge: §f%,d / %,d EU
+metaitem.oxygen_sensor.oxygen_level.none=Oxygen Level: §4None
+metaitem.oxygen_sensor.oxygen_level.very_low=Oxygen Level: §cVery Low
+metaitem.oxygen_sensor.oxygen_level.low=Oxygen Level: §6Low
+metaitem.oxygen_sensor.oxygen_level.medium=Oxygen Level: §eModerate
+metaitem.oxygen_sensor.oxygen_level.high=Oxygen Level: §aHigh
 
 # Catalysts
 susy.universal.catalysts.tooltip.tier=§eMax Voltage: §f%,d EU/t (%s§f)

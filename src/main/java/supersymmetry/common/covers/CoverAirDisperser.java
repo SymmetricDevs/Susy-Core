@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.common.blocks.BlockBreathingGas;
 import supersymmetry.common.blocks.SuSyBlocks;
 
 public class CoverAirDisperser extends CoverBase implements ITickable {
@@ -65,11 +66,20 @@ public class CoverAirDisperser extends CoverBase implements ITickable {
                 getAttachedSide());
         if (fluidHandler == null) return;
 
+        BlockBreathingGas.GasType gasType = null;
         FluidStack oxygenStack = new FluidStack(Materials.Oxygen.getFluid(), oxygenPerSecond);
         FluidStack drained = fluidHandler.drain(oxygenStack, false);
-        if (drained != null && drained.amount >= oxygenPerSecond) {
+        if (drained == null) {
+            drained = fluidHandler.drain(oxygenPerSecond, false);
+            if (drained != null && drained.getFluid().getName().equals("pesticide")) {
+                gasType = BlockBreathingGas.GasType.PESTICIDE;
+            }
+        } else {
+            gasType = BlockBreathingGas.GasType.OXYGEN;
+        }
+        if (gasType != null && drained.amount >= oxygenPerSecond) {
             fluidHandler.drain(oxygenStack, true);
-            world.setBlockState(frontPos, SuSyBlocks.BREATHING_GAS.getDefaultState());
+            world.setBlockState(frontPos, SuSyBlocks.BREATHING_GAS.getState(gasType));
             world.scheduleUpdate(frontPos, SuSyBlocks.BREATHING_GAS, 10);
         }
     }

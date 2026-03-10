@@ -22,6 +22,8 @@ public class SuSyDamageSources {
     public static final DamageSource SPAGHETTIFICATION = new DamageSource("spaghettification");
     public static final DamageSource AGE = new DamageSource("age");
     public static final DamageSource CHRONOERASURE = new DamageSource("chronoerasure");
+    // From the beneath.
+    public static final DamageSource DARKNESS = new DamageSource("darkness").setDamageBypassesArmor();
 
     public static DamageSource getSuffocationDamage() {
         return SUFFOCATION;

@@ -154,7 +154,6 @@ public class CommonProxy {
             registry.register(b);
         }
         registry.register(REGOLITH);
-        registry.register(BREATHING_GAS);
 
         SHEETED_FRAMES.values().stream().distinct().forEach(registry::register);
     }
