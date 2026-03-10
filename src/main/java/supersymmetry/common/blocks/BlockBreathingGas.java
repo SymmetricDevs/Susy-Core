@@ -28,8 +28,7 @@ public class BlockBreathingGas extends VariantBlock<BlockBreathingGas.GasType> {
         setTickRandomly(true);
     }
 
-    public MapColor getMapColor(IBlockState state, IBlockAccess worldIn, BlockPos pos)
-    {
+    public MapColor getMapColor(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         return MapColor.AIR;
     }
 
@@ -44,36 +43,60 @@ public class BlockBreathingGas extends VariantBlock<BlockBreathingGas.GasType> {
     }
 
     @Override
+    public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+        if (world instanceof World) {
+            updateTick((World) world, pos, world.getBlockState(pos), ((World) world).rand);
+        }
+    }
+
+    @Override
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         // Occasionally just disappear
         if (rand.nextInt(50) < 1) {
             worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 2 | 4 | 16);
             return;
         }
-        // Otherwise, swap around randomly
+        BlockPos offset;
+        Block other;
+        // Swap around randomly by default
         int facingOff = rand.nextInt(EnumFacing.VALUES.length);
         for (int i = 0; i < EnumFacing.VALUES.length; i++) {
             // Use the wrapping of .byIndex
-            BlockPos offset = pos.offset(EnumFacing.byIndex(facingOff + i));
-            Block other = worldIn.getBlockState(offset).getBlock();
-            int moved = 0;
-            while (other == Blocks.AIR && rand.nextInt(4) > 0) {
+            boolean isGood = false;
+            BlockPos goodPos = pos;
+            offset = pos.offset(EnumFacing.byIndex(facingOff + i));
+            other = worldIn.getBlockState(offset).getBlock();
+
+            while (other == Blocks.AIR || other == SuSyBlocks.BREATHING_GAS) {
+                if (other == Blocks.AIR) {
+                    isGood = true;
+                    goodPos = offset;
+                    if (rand.nextInt(6) == 0) {
+                        break;
+                    }
+                }
                 offset = offset.offset(EnumFacing.byIndex(facingOff + i));
                 other = worldIn.getBlockState(offset).getBlock();
-                moved++;
             }
-            if (moved == 0) {
+            if (!isGood) {
                 continue;
             }
-            // Step back by one, since we found an obstacle
-            offset = offset.offset(EnumFacing.byIndex(facingOff + i).getOpposite());
-            if (other == Blocks.AIR) {
-                worldIn.setBlockState(offset, state, 2 | 4 | 16);
-                worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 2 | 4 | 16);
-                worldIn.scheduleUpdate(offset, SuSyBlocks.BREATHING_GAS, 10);
-                return;
-            } else if (other == SuSyBlocks.BREATHING_GAS) {
-                worldIn.scheduleUpdate(offset, SuSyBlocks.BREATHING_GAS, 10);
+            worldIn.setBlockState(goodPos, state, 2 | 4 | 16);
+            worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 2 | 4 | 16);
+            worldIn.scheduleUpdate(offset, SuSyBlocks.BREATHING_GAS, 200);
+            return;
+        }
+
+        // Tell other blocks to get out of the way
+        for (int i = 0; i < EnumFacing.VALUES.length; i++) {
+            // OK so we need to tell blocks in this direction to get out of the way
+            offset = pos.offset(EnumFacing.byIndex(facingOff + i));
+            other = worldIn.getBlockState(offset).getBlock();
+
+            while (other == SuSyBlocks.BREATHING_GAS) {
+                worldIn.scheduleUpdate(offset, SuSyBlocks.BREATHING_GAS, 150 + i);
+                offset = offset.offset(EnumFacing.byIndex(facingOff + i));
+                other = worldIn.getBlockState(offset).getBlock();
             }
         }
     }
