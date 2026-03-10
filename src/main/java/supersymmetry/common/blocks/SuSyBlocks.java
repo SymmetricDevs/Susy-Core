@@ -117,9 +117,6 @@ public class SuSyBlocks {
         REGOLITH = new BlockRegolith();
         REGOLITH.setRegistryName("regolith");
 
-        BREATHING_GAS = new BlockBreathingGas();
-        BREATHING_GAS.setRegistryName("breathing_gas");
-
         SuSyTileEntities.register();
     }
 
