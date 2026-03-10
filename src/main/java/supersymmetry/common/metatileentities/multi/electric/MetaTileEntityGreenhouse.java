@@ -52,6 +52,7 @@ public class MetaTileEntityGreenhouse extends RecipeMapMultiblockController {
         for (int i = 1; i <= MAX_LENGTH; i++) {
             if (isBlockEdge(world, bPos, back)) {
                 length = i;
+            } else {
                 break;
             }
         }
@@ -67,7 +68,7 @@ public class MetaTileEntityGreenhouse extends RecipeMapMultiblockController {
         }
 
         this.length = length;
-        this.cellCount = (length - 1) / 4;
+        this.cellCount = (length / 4) - 1;
         return true;
     }
 
@@ -81,7 +82,9 @@ public class MetaTileEntityGreenhouse extends RecipeMapMultiblockController {
         if (getWorld() != null) {
             updateStructureDimensions();
         }
-        if (cellCount < 1) {cellCount = 1;}
+        if (cellCount < 1) {
+            cellCount = 1;
+        }
         return createStructurePattern(this.cellCount);
     };
 
