@@ -46,8 +46,7 @@ public class OxygenSensorBehavior implements IItemBehaviour {
         if (isHeld) euCost += EU_PER_DISPLAY;
         if (insufficient) euCost += EU_PER_BEEP;
 
-        if (electricItem.discharge(euCost, Integer.MAX_VALUE, true, false, true) < euCost) return;
-        electricItem.discharge(euCost, Integer.MAX_VALUE, true, false, false);
+        if (electricItem.discharge(euCost, Integer.MAX_VALUE, true, false, false) < euCost) return;
 
         if (isHeld) {
             String level = getOxygenLevel(oxygenCount);
