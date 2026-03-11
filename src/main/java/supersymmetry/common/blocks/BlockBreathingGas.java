@@ -1,12 +1,10 @@
 package supersymmetry.common.blocks;
 
 import gregtech.api.block.VariantBlock;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
@@ -51,54 +49,7 @@ public class BlockBreathingGas extends VariantBlock<BlockBreathingGas.GasType> {
 
     @Override
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-        // Occasionally just disappear
-        if (rand.nextInt(50) < 1) {
-            worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 2 | 4 | 16);
-            return;
-        }
-        BlockPos offset;
-        Block other;
-        // Swap around randomly by default
-        int facingOff = rand.nextInt(EnumFacing.VALUES.length);
-        for (int i = 0; i < EnumFacing.VALUES.length; i++) {
-            // Use the wrapping of .byIndex
-            boolean isGood = false;
-            BlockPos goodPos = pos;
-            offset = pos.offset(EnumFacing.byIndex(facingOff + i));
-            other = worldIn.getBlockState(offset).getBlock();
 
-            while (other == Blocks.AIR || other == SuSyBlocks.BREATHING_GAS) {
-                if (other == Blocks.AIR) {
-                    isGood = true;
-                    goodPos = offset;
-                    if (rand.nextInt(6) == 0) {
-                        break;
-                    }
-                }
-                offset = offset.offset(EnumFacing.byIndex(facingOff + i));
-                other = worldIn.getBlockState(offset).getBlock();
-            }
-            if (!isGood) {
-                continue;
-            }
-            worldIn.setBlockState(goodPos, state, 2 | 4 | 16);
-            worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 2 | 4 | 16);
-            worldIn.scheduleUpdate(offset, SuSyBlocks.BREATHING_GAS, 200);
-            return;
-        }
-
-        // Tell other blocks to get out of the way
-        for (int i = 0; i < EnumFacing.VALUES.length; i++) {
-            // OK so we need to tell blocks in this direction to get out of the way
-            offset = pos.offset(EnumFacing.byIndex(facingOff + i));
-            other = worldIn.getBlockState(offset).getBlock();
-
-            while (other == SuSyBlocks.BREATHING_GAS) {
-                worldIn.scheduleUpdate(offset, SuSyBlocks.BREATHING_GAS, 150 + i);
-                offset = offset.offset(EnumFacing.byIndex(facingOff + i));
-                other = worldIn.getBlockState(offset).getBlock();
-            }
-        }
     }
 
     public EnumBlockRenderType getRenderType(IBlockState state) {

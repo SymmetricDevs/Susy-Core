@@ -10,8 +10,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentTranslation;
 import supersymmetry.api.sound.SusySounds;
-import supersymmetry.common.blocks.BlockBreathingGas;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
+import supersymmetry.common.world.atmosphere.AtmosphereWorldData;
 
 import java.util.List;
 
@@ -39,8 +39,9 @@ public class OxygenSensorBehavior implements IItemBehaviour {
                 || player.getHeldItemOffhand() == itemStack;
 
         boolean inHazard = DimensionBreathabilityHandler.isInDepressurizationHazard(player);
-        int oxygenCount = DimensionBreathabilityHandler.countBreathingGas(player, BlockBreathingGas.GasType.OXYGEN, -1);
-        boolean insufficient = inHazard && oxygenCount < 2;
+        double pressure = !inHazard ? 1: AtmosphereWorldData.get(player.getEntityWorld()).getGraph()
+                .getOxygenation(player.getPosition());
+        boolean insufficient = pressure < 0.1;
 
         long euCost = EU_PER_CHECK;
         if (isHeld) euCost += EU_PER_DISPLAY;
@@ -49,7 +50,7 @@ public class OxygenSensorBehavior implements IItemBehaviour {
         if (electricItem.discharge(euCost, Integer.MAX_VALUE, true, false, false) < euCost) return;
 
         if (isHeld) {
-            String level = getOxygenLevel(oxygenCount);
+            String level = getOxygenLevel(pressure);
             player.sendStatusMessage(
                     new TextComponentTranslation("metaitem.oxygen_sensor.oxygen_level." + level), true);
         }
@@ -60,11 +61,11 @@ public class OxygenSensorBehavior implements IItemBehaviour {
         }
     }
 
-    private String getOxygenLevel(int count) {
-        if (count == 0) return "none";
-        if (count < 2) return "very_low";
-        if (count < 5) return "low";
-        if (count < 9) return "medium";
+    private String getOxygenLevel(double pressure) {
+        if (pressure < 0.01) return "none";
+        if (pressure < 0.1) return "very_low";
+        if (pressure < 0.3) return "low";
+        if (pressure < 0.7) return "medium";
         return "high";
     }
 

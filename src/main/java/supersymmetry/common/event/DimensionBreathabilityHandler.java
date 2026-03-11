@@ -1,16 +1,11 @@
 package supersymmetry.common.event;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import supersymmetry.api.space.CelestialObjects;
 import supersymmetry.api.util.SuSyDamageSources;
-import supersymmetry.common.blocks.BlockBreathingGas;
-import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.item.SuSyArmorItem;
+import supersymmetry.common.world.atmosphere.AtmosphereWorldData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,11 +57,12 @@ public final class DimensionBreathabilityHandler {
         if (isInHazardousEnvironment(player)) {
             for (BreathabilityInfo info : dimensionBreathabilityMap.get(player.dimension)) {
                 if (info.damageType == SuSyDamageSources.DEPRESSURIZATION) {
-                    if (countBreathingGas(player, BlockBreathingGas.GasType.OXYGEN, 2) == 2) {
+                    if (AtmosphereWorldData.get(player.getEntityWorld()).getGraph()
+                            .getOxygenation(player.getPosition()) >= 0.1) {
                         return;
                     }
                 } else if (info.damageType == SuSyDamageSources.DARKNESS) {
-                    if (player.getBrightness() > 0.05F || countBreathingGas(player, BlockBreathingGas.GasType.PESTICIDE, 2) == 2) {
+                    if (player.getBrightness() > 0.05F) {
                         return;
                     }
                 }
@@ -90,23 +86,6 @@ public final class DimensionBreathabilityHandler {
             if (info.damageType == SuSyDamageSources.DEPRESSURIZATION) return true;
         }
         return false;
-    }
-
-    public static int countBreathingGas(EntityPlayer player, BlockBreathingGas.GasType type, int stopAt) {
-        World world = player.getEntityWorld();
-        AxisAlignedBB aabb = new AxisAlignedBB(player.getPosition(), player.getPosition())
-                .expand(3, 3, 3).expand(-3, -3, -3);
-        int count = 0;
-        for (BlockPos pos : BlockPos.getAllInBox(new BlockPos(aabb.minX, aabb.minY, aabb.minZ), new BlockPos(aabb.maxX, aabb.maxY, aabb.maxZ))) {
-            IBlockState state = world.getBlockState(pos);
-            if (state.getBlock() == SuSyBlocks.BREATHING_GAS && SuSyBlocks.BREATHING_GAS.getState(state) == type) {
-                count++;
-                if (count == stopAt) {
-                    break;
-                }
-            }
-        }
-        return count;
     }
 
     public static final class BreathabilityInfo {
