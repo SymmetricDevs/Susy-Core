@@ -1,10 +1,10 @@
 package supersymmetry.common.item.armor;
 
-import static net.minecraft.inventory.EntityEquipmentSlot.*;
-import static supersymmetry.common.item.SuSyMetaItems.*;
-
 import supersymmetry.common.item.SuSyArmorItem;
 import supersymmetry.common.item.SuSyMetaItems;
+
+import static net.minecraft.inventory.EntityEquipmentSlot.*;
+import static supersymmetry.common.item.SuSyMetaItems.*;
 
 public class SuSyMetaArmor extends SuSyArmorItem {
 
@@ -45,7 +45,7 @@ public class SuSyMetaArmor extends SuSyArmorItem {
         ASTRONAUT_HELMET = addItem(18, "astronaut_helmet")
                 .setArmorLogic(new SpaceSuit(HEAD, 100, 0, "astronaut", 1, 0.6));
         ASTRONAUT_CHESTPLATE = addItem(19, "astronaut_chestplate")
-                .setArmorLogic(new SpaceSuitTank(200, 0, "astronaut", 1, 0.6, AdvancedBreathingTank.INFINITE_OXYGEN));
+                .setArmorLogic(new SpaceSuitTank(200, 0, "astronaut", 1, 0.6, 3600));
         ASTRONAUT_LEGGINGS = addItem(20, "astronaut_leggings")
                 .setArmorLogic(new SpaceSuit(LEGS, 175, 0, "astronaut", 1, 0.6));
         ASTRONAUT_BOOTS = addItem(21, "astronaut_boots")
