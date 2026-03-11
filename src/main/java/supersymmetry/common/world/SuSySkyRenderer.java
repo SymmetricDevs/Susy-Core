@@ -18,33 +18,28 @@ import org.lwjgl.opengl.GL12;
 import supersymmetry.api.SusyLog;
 import supersymmetry.common.world.sky.*;
 
+/*
+ * TODO:
+ * - ADD STARS
+ */
 public class SuSySkyRenderer extends IRenderHandler {
 
     public static final ResourceLocation SUN_TEXTURE = new ResourceLocation("susy", "textures/environment/sun.png");
 
     private SkyRenderData[] celestialObjects;
     private SkyColorData skyColorData;
-    private boolean debugLogged = false;
 
     public SuSySkyRenderer() {
         this.celestialObjects = new SkyRenderData[0];
         this.skyColorData = null;
-        SusyLog.logger.info("SuSySkyRenderer created");
     }
 
     public void setCelestialObjects(SkyRenderData... objects) {
         this.celestialObjects = objects;
-        SusyLog.logger.info("Set " + objects.length + " celestial objects");
-        for (int i = 0; i < objects.length; i++) {
-            SusyLog.logger.info("  Object " + i + ": texture=" + objects[i].getTexture() +
-                    ", type=" + objects[i].getPositionType() +
-                    ", size=" + objects[i].getSize());
-        }
     }
 
     public void setSkyColorData(SkyColorData colorData) {
         this.skyColorData = colorData;
-        SusyLog.logger.info("Set custom sky color data");
     }
 
     public SkyColorData getSkyColorData() {
@@ -54,11 +49,6 @@ public class SuSySkyRenderer extends IRenderHandler {
     @Override
     @SideOnly(Side.CLIENT)
     public void render(float partialTicks, WorldClient world, Minecraft mc) {
-        if (!debugLogged) {
-            SusyLog.logger.info("SuSySkyRenderer.render() called with " + celestialObjects.length + " objects");
-            debugLogged = true;
-        }
-
         float celestialAngle = world.getCelestialAngle(partialTicks);
         long worldTime = world.getWorldTime();
 
