@@ -1,6 +1,5 @@
 package supersymmetry.common.world;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -127,17 +126,19 @@ public class SuSyDimensions {
                 .load();
 
         SuSySpaceRenderer leoRenderer = null;
+
+        long leoOrbitTicks = 110_400L;
+        // After creating leoRenderer and earthCubemap:
         if (FMLLaunchHandler.side() == Side.CLIENT) {
             leoRenderer = new SuSySpaceRenderer();
             leoRenderer.setCelestialObjects(renderableEarth, renderableMoon, SUN);
+            leoRenderer.setOrbitalBody(renderableEarth, earthCubemap, leoOrbitTicks);
         }
-
-        long leoOrbitTicks = 110_400L;
 
         new SpaceDimension(802, "low_earth_orbit")
                 .setOrbitTarget(renderableEarth)
                 .setCelestialObjects(renderableEarth, renderableMoon, SUN)
-                .setRenderer(leoRenderer)  // will be null on server, which is fine
+                .setRenderer(leoRenderer)  // can be null on server, which is fine
                 .setGravity(0.0f)
                 .setAmbientLight(0.02f)
                 .setVacuum(true)

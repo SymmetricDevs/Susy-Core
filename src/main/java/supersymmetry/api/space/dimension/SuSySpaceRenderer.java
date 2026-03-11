@@ -1,20 +1,30 @@
 package supersymmetry.api.space.dimension;
 
+import java.util.List;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.client.IRenderHandler;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 import supersymmetry.api.SusyLog;
+import supersymmetry.api.image.Cubemap;
+import supersymmetry.api.space.CelestialObjects;
 import supersymmetry.api.space.QuadSphere;
 import supersymmetry.api.space.RenderableCelestialObject;
 
 public class SuSySpaceRenderer extends IRenderHandler {
 
     private RenderableCelestialObject[] objects = new RenderableCelestialObject[0];
+    private RenderableCelestialObject earthObject = null;
+    private Cubemap earthCubemap = null;
+    private long earthOrbitalPeriodTicks = 110_400L;
+
     private final QuadSphere mesh = new QuadSphere(32);
+    private int terminatorTexId = -1;
     private boolean loggedOnce = false;
 
     public SuSySpaceRenderer setCelestialObjects(RenderableCelestialObject... objs) {
@@ -22,10 +32,15 @@ public class SuSySpaceRenderer extends IRenderHandler {
         return this;
     }
 
+    public SuSySpaceRenderer setOrbitalBody(RenderableCelestialObject earth, Cubemap cubemap, long orbitalPeriodTicks) {
+        this.earthObject = earth;
+        this.earthCubemap = cubemap;
+        this.earthOrbitalPeriodTicks = orbitalPeriodTicks;
+        return this;
+    }
+
     @Override
     public void render(float partialTicks, WorldClient world, Minecraft mc) {
-        if (objects.length == 0) return;
-
         if (!loggedOnce) {
             SusyLog.logger.info("[Space] SuSySpaceRenderer.render() called, objects=" + objects.length);
             loggedOnce = true;
@@ -39,24 +54,27 @@ public class SuSySpaceRenderer extends IRenderHandler {
         GlStateManager.disableAlpha();
         GlStateManager.disableCull();
         GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glCullFace(GL11.GL_FRONT); // sphere winding is inverted, cull front faces
+        GL11.glCullFace(GL11.GL_FRONT);
         GlStateManager.disableDepth();
         GlStateManager.depthMask(false);
         GlStateManager.enableTexture2D();
         GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA,
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
         GlStateManager.pushMatrix();
-
-        // Scale up so objects at unit distance fill a meaningful portion of the sky.
-        // The vanilla sky dome is rendered at ~100 units radius; we match that.
         GL11.glScalef(100.0f, 100.0f, 100.0f);
 
         for (RenderableCelestialObject obj : objects) {
+            if (obj.getCelestialObject() == CelestialObjects.EARTH) continue;
             obj.renderAtPosition(worldTime, mesh);
         }
 
         GlStateManager.popMatrix();
+
+        if (earthObject != null && earthCubemap != null) {
+            renderEarthHemisphere(worldTime);
+        }
 
         GlStateManager.disableBlend();
         GlStateManager.enableDepth();
@@ -66,5 +84,131 @@ public class SuSySpaceRenderer extends IRenderHandler {
         GlStateManager.enableLighting();
         GlStateManager.enableFog();
         GL11.glPopAttrib();
+    }
+
+    private void renderEarthHemisphere(long worldTime) {
+        if (!earthCubemap.isLoaded()) {
+            try {
+                earthCubemap.loadAll();
+            } catch (Exception e) {
+                SusyLog.logger.error("[Space] Failed to load Earth cubemap", e);
+                return;
+            }
+        }
+
+        double orbitAngle = (worldTime % earthOrbitalPeriodTicks) /
+                (double) earthOrbitalPeriodTicks * 2.0 * Math.PI;
+
+        double sunAngle = (worldTime % 24000L) / 24000.0 * 2.0 * Math.PI;
+        float sunX = (float) Math.cos(sunAngle);
+        float sunZ = (float) Math.sin(sunAngle);
+
+        float cosOrbit = (float) Math.cos(-orbitAngle);
+        float sinOrbit = (float) Math.sin(-orbitAngle);
+        float localSunX = sunX * cosOrbit - sunZ * sinOrbit;
+        float localSunZ = sunX * sinOrbit + sunZ * cosOrbit;
+
+        List<QuadSphere.Vertex> verts = mesh.getVertices();
+        List<int[]> quads = mesh.getQuads();
+        List<float[][]> uvs = mesh.getQuadUVs();
+        List<List<Integer>> faceQuads = mesh.getFaceQuadIndices();
+
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        GlStateManager.disableFog();
+        GlStateManager.disableLighting();
+        GlStateManager.disableDepth();
+        GlStateManager.depthMask(false);
+        GlStateManager.enableBlend();
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glCullFace(GL11.GL_FRONT);
+
+        GlStateManager.pushMatrix();
+        GL11.glScalef(2500.0f, 2500.0f, 2500.0f);
+        GL11.glTranslatef(0f, -1.02f, 0f);
+        GL11.glRotatef(90.0f, 1f, 0f, 0f);  // tilt poles sideways, orbit over equator
+        GL11.glRotatef((float) Math.toDegrees(orbitAngle), 0f, 1f, 0f);
+
+        // ---- Pass 1: texture ----
+        GlStateManager.enableTexture2D();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA,
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GL11.glColor4f(1f, 1f, 1f, 1f);
+
+        for (int face = 0; face < 6; face++) {
+            int texId = earthCubemap.getFaceTexId(face);
+            if (texId == -1) continue;
+            GlStateManager.bindTexture(texId);
+            GL11.glBegin(GL11.GL_QUADS);
+            for (int qi : faceQuads.get(face)) {
+                int[] quad = quads.get(qi);
+                float[][] quadUV = uvs.get(qi);
+                for (int c = 0; c < 4; c++) {
+                    QuadSphere.Vertex v = verts.get(quad[c]);
+                    GL11.glTexCoord2f(quadUV[c][0], quadUV[c][1]);
+                    GL11.glVertex3f(v.x, v.y, v.z);
+                }
+            }
+            GL11.glEnd();
+        }
+
+        // ---- Pass 2: terminator shadow overlay ----
+        if (terminatorTexId == -1) terminatorTexId = buildTerminatorTexture();
+
+        GlStateManager.enableTexture2D();
+        GlStateManager.bindTexture(terminatorTexId);
+        GL11.glBlendFunc(GL11.GL_ZERO, GL11.GL_SRC_COLOR);
+        GL11.glColor4f(1f, 1f, 1f, 1f);
+
+        GL11.glBegin(GL11.GL_QUADS);
+        for (int face = 0; face < 6; face++) {
+            for (int qi : faceQuads.get(face)) {
+                int[] quad = quads.get(qi);
+                for (int c = 0; c < 4; c++) {
+                    QuadSphere.Vertex v = verts.get(quad[c]);
+                    float dot = v.nx * localSunX + v.nz * localSunZ;
+                    // remap dot [-0.1, 0.1] -> U [0, 1]
+                    float u = 1.0f - (dot + 0.1f) / 0.2f;
+                    u = Math.max(0f, Math.min(1f, u));
+                    GL11.glTexCoord2f(u, 0.5f);
+                    GL11.glVertex3f(v.x, v.y, v.z);
+                }
+            }
+        }
+        GL11.glEnd();
+
+        GlStateManager.popMatrix();
+        GL11.glColor4f(1f, 1f, 1f, 1f);
+        GL11.glPopAttrib();
+    }
+
+    private int buildTerminatorTexture() {
+        int width = 512;
+        byte[] data = new byte[width * 4];
+        for (int i = 0; i < width; i++) {
+            float t = i / (float) (width - 1);
+            float dot = (t * 2f - 1f) * 0.1f;
+            float light = smoothstep(-0.02f, 0.02f, dot);
+            byte b = (byte) (light * 255);
+            data[i * 4] = b;
+            data[i * 4 + 1] = b;
+            data[i * 4 + 2] = b;
+            data[i * 4 + 3] = (byte) 0xFF;
+        }
+        int id = GL11.glGenTextures();
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, id);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
+        java.nio.ByteBuffer buf = org.lwjgl.BufferUtils.createByteBuffer(data.length);
+        buf.put(data).flip();
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, width, 1, 0,
+                GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buf);
+        return id;
+    }
+
+    private static float smoothstep(float edge0, float edge1, float x) {
+        float t = Math.max(0f, Math.min(1f, (x - edge0) / (edge1 - edge0)));
+        return t * t * (3f - 2f * t);
     }
 }
