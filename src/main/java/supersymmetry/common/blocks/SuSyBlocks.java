@@ -95,8 +95,6 @@ public class SuSyBlocks {
 
     public static BlockLunarConcrete LUNAR_CONCRETE;
 
-    public static BlockBreathingGas BREATHING_GAS;
-
     public static ArrayList<VariantBlock<?>> susyBlocks;
 
     public static void init() {
