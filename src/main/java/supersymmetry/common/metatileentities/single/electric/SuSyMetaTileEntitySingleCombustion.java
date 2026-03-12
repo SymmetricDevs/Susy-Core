@@ -1,7 +1,5 @@
 package supersymmetry.common.metatileentities.single.electric;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -26,15 +24,15 @@ import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.widgets.ImageWidget;
 import gregtech.api.gui.widgets.LabelWidget;
+import gregtech.api.gui.widgets.TankWidget;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.common.metatileentities.electric.MetaTileEntitySingleCombustion;
+import supersymmetry.api.capability.impl.SuSyFilteredFluidTank;
 import supersymmetry.api.capability.impl.SuSyFluidFilters;
-import supersymmetry.api.fluids.FilteredTankWidget;
-import supersymmetry.api.fluids.SuSyFluidTankHandler;
 import supersymmetry.api.util.SuSyUtility;
 
 public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleCombustion {
@@ -47,8 +45,8 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
 
     private boolean sufficientFluids;
 
-    private SuSyFluidTankHandler lubricantTank;
-    private SuSyFluidTankHandler coolantTank;
+    private FluidTank lubricantTank;
+    private FluidTank coolantTank;
 
     private FluidTankList displayedTankList;
 
@@ -65,29 +63,28 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
     }
 
     @Override
+    // Handle fluid imports
     protected FluidTankList createImportFluidHandler() {
         if (workable == null) return new FluidTankList(false);
-
-        FluidTank[] fluidImports = new FluidTank[workable.getRecipeMap().getMaxFluidInputs()];
+        FluidTank[] fluidImports = new FluidTank[workable.getRecipeMap().getMaxFluidInputs() + 2];
         FluidTank[] displayedTanks = new FluidTank[workable.getRecipeMap().getMaxFluidInputs()];
-        for (int i = 0; i < fluidImports.length; i++) {
-            NotifiableFluidTank tank = new NotifiableFluidTank(
+        for (int i = 0; i < fluidImports.length - 2; i++) {
+            NotifiableFluidTank filteredFluidHandler = new NotifiableFluidTank(
                     this.getTankScalingFunction().apply(this.getTier()), this, false);
-            fluidImports[i] = tank;
-            displayedTanks[i] = tank;
+            fluidImports[i] = filteredFluidHandler;
+            displayedTanks[i] = filteredFluidHandler;
         }
 
-        this.lubricantTank = (SuSyFluidTankHandler) new SuSyFluidTankHandler(1000, this, false)
+        this.lubricantTank = new SuSyFilteredFluidTank(1000, this, false)
                 .setFilter(SuSyFluidFilters.LUBRICANT);
-        this.coolantTank = (SuSyFluidTankHandler) new SuSyFluidTankHandler(1000, this, false)
+        fluidImports[fluidImports.length - 2] = lubricantTank;
+
+        this.coolantTank = new SuSyFilteredFluidTank(1000, this, false)
                 .setFilter(SuSyFluidFilters.COOLANT);
+        fluidImports[fluidImports.length - 1] = coolantTank;
 
         this.displayedTankList = new FluidTankList(false, displayedTanks);
-
-        List<FluidTank> allTanks = new ArrayList<>(Arrays.asList(fluidImports));
-        allTanks.add(lubricantTank);
-        allTanks.add(coolantTank);
-        return new FluidTankList(false, allTanks.toArray(new FluidTank[0]));
+        return new FluidTankList(false, fluidImports);
     }
 
     @Override
@@ -142,14 +139,14 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
         builder.widget(new LabelWidget(6, 6, getMetaFullName()))
                 .bindPlayerInventory(player.inventory, GuiTextures.SLOT, yOffset);
 
-        builder.widget(new FilteredTankWidget(lubricantTank, 110, 21, 10, 54)
+        builder.widget(new TankWidget(lubricantTank, 110, 21, 10, 54)
                 .setBackgroundTexture(GuiTextures.PROGRESS_BAR_BOILER_EMPTY.get(true))
                 .setAlwaysShowFull(false)
-                .setContainerClicking(true, true));  // both directions, filter guards filling
-        builder.widget(new FilteredTankWidget(coolantTank, 124, 21, 10, 54)
+                .setContainerClicking(true, true));  // Filter should prevent wrong fluids
+        builder.widget(new TankWidget(coolantTank, 124, 21, 10, 54)
                 .setBackgroundTexture(GuiTextures.PROGRESS_BAR_BOILER_EMPTY.get(true))
                 .setAlwaysShowFull(false)
-                .setContainerClicking(true, true));
+                .setContainerClicking(true, true));  // Filter should prevent wrong fluids
         builder.widget(new ImageWidget(152, 63 + yOffset, 17, 17,
                 GTValues.XMAS.get() ? GuiTextures.GREGTECH_LOGO_XMAS : GuiTextures.GREGTECH_LOGO)
                         .setIgnoreColor(true));

@@ -1,18 +1,19 @@
 package supersymmetry.common.world;
 
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeChunkManager;
+
 import supersymmetry.api.space.Planetoid;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.world.biome.SuSyBiomeEntry;
-
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class PlanetoidHandler {
 

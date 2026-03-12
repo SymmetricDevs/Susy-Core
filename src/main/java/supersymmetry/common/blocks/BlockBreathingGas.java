@@ -1,6 +1,10 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.block.VariantBlock;
+import java.util.Random;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -15,11 +19,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Random;
+import gregtech.api.block.VariantBlock;
 
 public class BlockBreathingGas extends VariantBlock<BlockBreathingGas.GasType> {
+
     public BlockBreathingGas() {
         // Unfortunately, Material.AIR causes the update logic to act very strangely.
         super(Material.FIRE);
@@ -114,9 +117,7 @@ public class BlockBreathingGas extends VariantBlock<BlockBreathingGas.GasType> {
         return false;
     }
 
-
-    public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune) {
-    }
+    public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune) {}
 
     public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos) {
         return true;
@@ -131,6 +132,7 @@ public class BlockBreathingGas extends VariantBlock<BlockBreathingGas.GasType> {
     }
 
     public enum GasType implements IStringSerializable {
+
         OXYGEN("oxygen"),
         PESTICIDE("pesticide");
 

@@ -1,23 +1,24 @@
 package supersymmetry.common.event;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import supersymmetry.api.space.CelestialObjects;
-import supersymmetry.api.util.SuSyDamageSources;
-import supersymmetry.common.blocks.BlockBreathingGas;
-import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.common.item.SuSyArmorItem;
+import static net.minecraft.inventory.EntityEquipmentSlot.HEAD;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static net.minecraft.inventory.EntityEquipmentSlot.HEAD;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import supersymmetry.api.space.CelestialObjects;
+import supersymmetry.api.util.SuSyDamageSources;
+import supersymmetry.common.blocks.BlockBreathingGas;
+import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.item.SuSyArmorItem;
 
 public final class DimensionBreathabilityHandler {
 
@@ -29,8 +30,7 @@ public final class DimensionBreathabilityHandler {
 
     public static final double ABSORB_ALL = -1;
 
-    private DimensionBreathabilityHandler() {
-    }
+    private DimensionBreathabilityHandler() {}
 
     public static void loadConfig() {
         dimensionBreathabilityMap.clear();
@@ -66,7 +66,8 @@ public final class DimensionBreathabilityHandler {
                         return;
                     }
                 } else if (info.damageType == SuSyDamageSources.DARKNESS) {
-                    if (player.getBrightness() > 0.05F || countBreathingGas(player, BlockBreathingGas.GasType.PESTICIDE, 2) == 2) {
+                    if (player.getBrightness() > 0.05F ||
+                            countBreathingGas(player, BlockBreathingGas.GasType.PESTICIDE, 2) == 2) {
                         return;
                     }
                 }
@@ -97,7 +98,8 @@ public final class DimensionBreathabilityHandler {
         AxisAlignedBB aabb = new AxisAlignedBB(player.getPosition(), player.getPosition())
                 .expand(3, 3, 3).expand(-3, -3, -3);
         int count = 0;
-        for (BlockPos pos : BlockPos.getAllInBox(new BlockPos(aabb.minX, aabb.minY, aabb.minZ), new BlockPos(aabb.maxX, aabb.maxY, aabb.maxZ))) {
+        for (BlockPos pos : BlockPos.getAllInBox(new BlockPos(aabb.minX, aabb.minY, aabb.minZ),
+                new BlockPos(aabb.maxX, aabb.maxY, aabb.maxZ))) {
             IBlockState state = world.getBlockState(pos);
             if (state.getBlock() == SuSyBlocks.BREATHING_GAS && SuSyBlocks.BREATHING_GAS.getState(state) == type) {
                 count++;
