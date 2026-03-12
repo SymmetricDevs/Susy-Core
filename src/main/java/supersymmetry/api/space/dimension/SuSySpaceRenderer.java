@@ -65,17 +65,16 @@ public class SuSySpaceRenderer extends IRenderHandler {
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA,
                 GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
-        GlStateManager.pushMatrix();
-        GL11.glScalef(100.0f, 100.0f, 100.0f);
-
-        // Read camera forward from the modelview matrix.
-        // For a pure rotation matrix, the inverse is the transpose,
-        // so the camera forward vector is column 2 = elements [2, 6, 10].
+        // Read camera forward BEFORE any matrix push so the scale doesn't corrupt it.
+        // For a pure rotation matrix, inverse = transpose, so forward = column 2 = [2, 6, 10].
         FloatBuffer mvBuf = BufferUtils.createFloatBuffer(16);
         GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, mvBuf);
         float camFwdX = mvBuf.get(2);
         float camFwdY = mvBuf.get(6);
         float camFwdZ = mvBuf.get(10);
+
+        GlStateManager.pushMatrix();
+        GL11.glScalef(100.0f, 100.0f, 100.0f);
 
         // Depth-sort: objects furthest from camera direction draw first so
         // closer objects (e.g. Moon) correctly overdraw farther ones (e.g. Sun).
@@ -155,7 +154,7 @@ public class SuSySpaceRenderer extends IRenderHandler {
         GlStateManager.depthMask(false);
         GlStateManager.enableBlend();
         GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glCullFace(GL11.GL_FRONT);
+        GL11.glCullFace(GL11.GL_BACK); // player is above/outside the hemisphere, cull back faces
 
         GlStateManager.pushMatrix();
         GL11.glScalef(2500.0f, 2500.0f, 2500.0f);
