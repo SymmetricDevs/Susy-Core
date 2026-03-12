@@ -75,28 +75,35 @@ public class RenderableCelestialObject {
         }
     }
 
-    public void renderAtPosition(long worldTime, QuadSphere mesh) {
-        float dx, dy, dz;
+    /**
+     * Returns the normalised world-space direction toward this object at the given world time.
+     * Reused by both renderAtPosition and the depth-sort in SuSySpaceRenderer.
+     */
+    public float[] getWorldDirection(long worldTime) {
         if (hasFixedDirection) {
-            dx = fixedDx;
-            dy = fixedDy;
-            dz = fixedDz;
-        } else {
-            double angle = orbitalPeriodTicks > 0 ? ((worldTime + phaseOffsetTicks) % orbitalPeriodTicks) /
-                    (double) orbitalPeriodTicks * 2.0 * Math.PI : 0.0;
-            float incRad = (float) Math.toRadians(orbitalInclinationDeg);
-            dx = (float) Math.cos(angle);
-            dy = (float) (Math.sin(angle) * Math.sin(incRad));
-            dz = (float) (Math.sin(angle) * Math.cos(incRad));
+            return new float[] { fixedDx, fixedDy, fixedDz };
         }
+        double angle = orbitalPeriodTicks > 0 ?
+                ((worldTime + phaseOffsetTicks) % orbitalPeriodTicks) / (double) orbitalPeriodTicks * 2.0 * Math.PI :
+                0.0;
+        float incRad = (float) Math.toRadians(orbitalInclinationDeg);
+        return new float[] {
+                (float) Math.cos(angle),
+                (float) (Math.sin(angle) * Math.sin(incRad)),
+                (float) (Math.sin(angle) * Math.cos(incRad))
+        };
+    }
 
-        // radius in the unit-sphere space that the renderer already scaled to 100 units
+    public void renderAtPosition(long worldTime, QuadSphere mesh) {
+        float[] dir = getWorldDirection(worldTime);
+        float dx = dir[0], dy = dir[1], dz = dir[2];
+
         float radius = (float) Math.tan(Math.toRadians(angularSizeDeg / 2.0));
         boolean hasTexture = ensureLoaded();
 
         GlStateManager.pushMatrix();
-        GL11.glTranslatef(dx, dy, dz);   // move to direction on the unit sphere
-        GL11.glScalef(radius, radius, radius); // scale by apparent angular size
+        GL11.glTranslatef(dx, dy, dz);
+        GL11.glScalef(radius, radius, radius);
 
         if (hasTexture) {
             GlStateManager.enableTexture2D();
@@ -116,7 +123,7 @@ public class RenderableCelestialObject {
 
                 for (int qi : faceQuadIndices.get(face)) {
                     int[] quad = allQuads.get(qi);
-                    float[][] uvs = allUVs.get(qi); // [4][2]: BL BR TR TL
+                    float[][] uvs = allUVs.get(qi);
 
                     for (int c = 0; c < 4; c++) {
                         QuadSphere.Vertex v = verts.get(quad[c]);

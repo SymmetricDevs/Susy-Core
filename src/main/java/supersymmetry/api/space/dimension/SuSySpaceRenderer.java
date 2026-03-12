@@ -1,5 +1,7 @@
 package supersymmetry.api.space.dimension;
 
+import java.nio.FloatBuffer;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
@@ -7,6 +9,7 @@ import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.client.IRenderHandler;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -65,13 +68,35 @@ public class SuSySpaceRenderer extends IRenderHandler {
         GlStateManager.pushMatrix();
         GL11.glScalef(100.0f, 100.0f, 100.0f);
 
+        // Read camera forward from the modelview matrix.
+        // For a pure rotation matrix, the inverse is the transpose,
+        // so the camera forward vector is column 2 = elements [2, 6, 10].
+        FloatBuffer mvBuf = BufferUtils.createFloatBuffer(16);
+        GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, mvBuf);
+        float camFwdX = mvBuf.get(2);
+        float camFwdY = mvBuf.get(6);
+        float camFwdZ = mvBuf.get(10);
+
+        // Depth-sort: objects furthest from camera direction draw first so
+        // closer objects (e.g. Moon) correctly overdraw farther ones (e.g. Sun).
+        List<RenderableCelestialObject> sorted = new ArrayList<>();
         for (RenderableCelestialObject obj : objects) {
-            if (obj.getCelestialObject() == CelestialObjects.EARTH) continue;
+            if (obj.getCelestialObject() != CelestialObjects.EARTH) sorted.add(obj);
+        }
+        sorted.sort((a, b) -> {
+            float[] da = a.getWorldDirection(worldTime);
+            float[] db = b.getWorldDirection(worldTime);
+            float dotA = da[0] * camFwdX + da[1] * camFwdY + da[2] * camFwdZ;
+            float dotB = db[0] * camFwdX + db[1] * camFwdY + db[2] * camFwdZ;
+            return Float.compare(dotA, dotB); // most-negative dot = furthest behind camera = draw first
+        });
+        for (RenderableCelestialObject obj : sorted) {
             obj.renderAtPosition(worldTime, mesh);
         }
 
-        GlStateManager.popMatrix();
+        GlStateManager.popMatrix(); // closes glScalef(100)
 
+        // Earth hemisphere — drawn after sky objects so it composites on top
         if (earthObject != null && earthCubemap != null) {
             renderEarthHemisphere(worldTime);
         }
@@ -98,13 +123,23 @@ public class SuSySpaceRenderer extends IRenderHandler {
 
         double orbitAngle = (worldTime % earthOrbitalPeriodTicks) /
                 (double) earthOrbitalPeriodTicks * 2.0 * Math.PI;
+        float orbitFaceDeg = (float) Math.toDegrees(orbitAngle);
 
+        // Earth's own axial spin — one full rotation per 24000 ticks.
+        // This only rotates the texture; vertex normals rotate with it, so
+        // the terminator dot product is invariant to earthSelfRotation.
+        float earthSelfRotation = (float) (worldTime % 24000L) / 24000.0f * 360.0f;
+
+        // World-space sun direction (orbits on the XZ plane)
         double sunAngle = (worldTime % 24000L) / 24000.0 * 2.0 * Math.PI;
         float sunX = (float) Math.cos(sunAngle);
         float sunZ = (float) Math.sin(sunAngle);
 
-        float cosOrbit = (float) Math.cos(-orbitAngle);
-        float sinOrbit = (float) Math.sin(-orbitAngle);
+        // Bring sun direction into Earth-local space by undoing the orbitFaceDeg
+        // Y-rotation. earthSelfRotation cancels out (normals rotate with mesh).
+        float orbitRad = (float) Math.toRadians(-orbitFaceDeg);
+        float cosOrbit = (float) Math.cos(orbitRad);
+        float sinOrbit = (float) Math.sin(orbitRad);
         float localSunX = sunX * cosOrbit - sunZ * sinOrbit;
         float localSunZ = sunX * sinOrbit + sunZ * cosOrbit;
 
@@ -125,8 +160,9 @@ public class SuSySpaceRenderer extends IRenderHandler {
         GlStateManager.pushMatrix();
         GL11.glScalef(2500.0f, 2500.0f, 2500.0f);
         GL11.glTranslatef(0f, -1.02f, 0f);
-        GL11.glRotatef(90.0f, 1f, 0f, 0f);  // tilt poles sideways, orbit over equator
-        GL11.glRotatef((float) Math.toDegrees(orbitAngle), 0f, 1f, 0f);
+        GL11.glRotatef(90.0f, 1f, 0f, 0f);           // tilt: poles sideways, orbit over equator
+        GL11.glRotatef(orbitFaceDeg, 0f, 1f, 0f);    // which longitude is beneath the player
+        GL11.glRotatef(earthSelfRotation, 0f, 0f, 1f); // Earth's own axial spin
 
         // ---- Pass 1: texture ----
         GlStateManager.enableTexture2D();
@@ -152,6 +188,7 @@ public class SuSySpaceRenderer extends IRenderHandler {
         }
 
         // ---- Pass 2: terminator shadow overlay ----
+        // localSunX/Z are in Earth-local space so the dot against mesh normals is correct.
         if (terminatorTexId == -1) terminatorTexId = buildTerminatorTexture();
 
         GlStateManager.enableTexture2D();
@@ -200,7 +237,7 @@ public class SuSySpaceRenderer extends IRenderHandler {
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
-        java.nio.ByteBuffer buf = org.lwjgl.BufferUtils.createByteBuffer(data.length);
+        java.nio.ByteBuffer buf = BufferUtils.createByteBuffer(data.length);
         buf.put(data).flip();
         GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, width, 1, 0,
                 GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buf);

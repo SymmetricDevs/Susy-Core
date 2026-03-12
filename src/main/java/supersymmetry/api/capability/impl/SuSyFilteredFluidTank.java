@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:src/main/java/supersymmetry/api/fluids/SuSyFluidTankHandler.java
-package supersymmetry.api.fluids;
-========
 package supersymmetry.api.capability.impl;
->>>>>>>> 047d41e486c155818666d05d085d048ed13f146a:src/main/java/supersymmetry/api/capability/impl/SuSyFilteredFluidTank.java
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
@@ -10,16 +6,23 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import gregtech.api.capability.impl.NotifiableFilteredFluidHandler;
 import gregtech.api.metatileentity.MetaTileEntity;
 
-public class SuSyFluidTankHandler extends NotifiableFilteredFluidHandler {
+public class SuSyFilteredFluidTank extends NotifiableFilteredFluidHandler {
 
-    public SuSyFluidTankHandler(int capacity, MetaTileEntity entityToNotify, boolean isExport) {
+    public SuSyFilteredFluidTank(int capacity, MetaTileEntity entityToNotify, boolean isExport) {
         super(capacity, entityToNotify, isExport);
     }
 
     @Override
     public int fill(FluidStack resource, boolean doFill) {
-        if (resource == null || !canFillFluidType(resource)) {
-            return 0;
+        // Debug logging
+        if (resource != null) {
+            boolean canFill = canFillFluidType(resource);
+            System.out.println("[SuSyFilteredFluidTank] fill() called with: " + resource.getFluid().getName() +
+                    ", canFill: " + canFill + ", doFill: " + doFill);
+            if (!canFill) {
+                System.out.println("[SuSyFilteredFluidTank] REJECTING fluid!");
+                return 0;
+            }
         }
         return super.fill(resource, doFill);
     }
@@ -60,7 +63,7 @@ public class SuSyFluidTankHandler extends NotifiableFilteredFluidHandler {
 
                     @Override
                     public boolean canFillFluidType(FluidStack fluidStack) {
-                        boolean result = fluidStack != null && SuSyFluidTankHandler.this.canFillFluidType(fluidStack);
+                        boolean result = fluidStack != null && SuSyFilteredFluidTank.this.canFillFluidType(fluidStack);
                         System.out.println("[SuSyFilteredFluidTank] getTankProperties().canFillFluidType() with: " +
                                 (fluidStack != null ? fluidStack.getFluid().getName() : "null") + ", result: " +
                                 result);
@@ -72,7 +75,6 @@ public class SuSyFluidTankHandler extends NotifiableFilteredFluidHandler {
                         return properties[0].canDrainFluidType(fluidStack);
                     }
                 }
-                // gross
         };
     }
 }
