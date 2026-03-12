@@ -24,15 +24,25 @@ import java.util.*;
  */
 public class AtmosphereRegionGraph {
 
-    /** Pressure decrease per breach per tick, scaled by 1/volume. */
-    private static final double DEPRESSURIZE_RATE = 8.0;
-    /** Pressure increase per tick when sealed with disperser, scaled by 1/volume. */
+    /**
+     * Pressure decrease per breach per tick, scaled by 1/volume.
+     */
+    private static final double DEPRESSURIZE_RATE = 10.0;
+    /**
+     * Pressure increase per tick when sealed with disperser, scaled by 1/volume.
+     */
     private static final double PRESSURIZE_RATE = 4.0;
-    /** Blocks processed per tick for flood fills. */
+    /**
+     * Blocks processed per tick for flood fills.
+     */
     private static final int FILL_BUDGET_PER_TICK = 256;
-    /** Blocks processed per tick for revalidation. */
+    /**
+     * Blocks processed per tick for revalidation.
+     */
     private static final int REVALIDATE_BUDGET_PER_TICK = 128;
-    /** How often (in ticks) to scan regions for breaches. */
+    /**
+     * How often (in ticks) to scan regions for breaches.
+     */
     private static final int BREACH_SCAN_INTERVAL = 20;
 
     private final List<AtmosphereRegion> regions = new ArrayList<>();
@@ -473,15 +483,8 @@ public class AtmosphereRegionGraph {
             }
             regionTag.setIntArray("dispersers", dispCoords);
 
-            List<BlockPos> positions = region.getAllPositions();
-            int[] posCoords = new int[positions.size() * 3];
-            for (int j = 0; j < positions.size(); j++) {
-                BlockPos p = positions.get(j);
-                posCoords[j * 3] = p.getX();
-                posCoords[j * 3 + 1] = p.getY();
-                posCoords[j * 3 + 2] = p.getZ();
-            }
-            regionTag.setIntArray("positions", posCoords);
+            // Serialize octree structure (much smaller than listing all positions)
+            regionTag.setByteArray("octreeData", region.getOctree().serialize());
             regionList.appendTag(regionTag);
         }
         nbt.setTag("regions", regionList);
@@ -515,27 +518,15 @@ public class AtmosphereRegionGraph {
                 regionDispersers.add(src);
             }
 
-            int[] posCoords = regionTag.getIntArray("positions");
-            Set<BlockPos> positions = new HashSet<>();
-            for (int j = 0; j + 2 < posCoords.length; j += 3) {
-                positions.add(new BlockPos(posCoords[j], posCoords[j + 1], posCoords[j + 2]));
-            }
+            byte[] octreeData = regionTag.getByteArray("octreeData");
+            Octree octree = Octree.deserialize(octreeOriginX, octreeOriginY, octreeOriginZ, octreeSize, octreeData);
+            if (octree.isEmpty()) continue;
+            AtmosphereRegion region = new AtmosphereRegion(src, octree, pressure, regionDispersers);
 
-            if (positions.isEmpty()) continue;
-
-            AtmosphereRegion region = new AtmosphereRegion(
-                    src, positions, pressure, regionDispersers,
-                    octreeOriginX, octreeOriginY, octreeOriginZ, octreeSize);
             regions.add(region);
 
             // Rebuild global disperser set
             dispersers.addAll(regionDispersers);
         }
-    }
-
-    // ---- Accessors ----
-
-    public List<AtmosphereRegion> getRegions() {
-        return regions;
     }
 }

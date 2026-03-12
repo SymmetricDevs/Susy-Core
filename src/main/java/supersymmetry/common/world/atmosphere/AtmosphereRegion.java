@@ -75,7 +75,7 @@ public class AtmosphereRegion {
     }
 
     /**
-     * Reconstruct a region from saved data.
+     * Reconstruct a region from saved data (old format with position set).
      */
     public AtmosphereRegion(BlockPos source, Set<BlockPos> positions, double pressure, Set<BlockPos> dispersers,
                             int octreeOriginX, int octreeOriginY, int octreeOriginZ, int octreeSize) {
@@ -88,6 +88,17 @@ public class AtmosphereRegion {
         for (BlockPos pos : positions) {
             octree.insert(pos);
         }
+    }
+
+    /**
+     * Reconstruct a region from a serialized octree.
+     */
+    public AtmosphereRegion(BlockPos source, Octree octree, double pressure, Set<BlockPos> dispersers) {
+        this.octree = octree;
+        this.source = source;
+        this.pressure = pressure;
+        this.fillComplete = true;
+        this.dispersers.addAll(dispersers);
     }
 
     // ---- Disperser management ----
