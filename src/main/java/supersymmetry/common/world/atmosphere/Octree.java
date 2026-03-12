@@ -3,12 +3,9 @@ package supersymmetry.common.world.atmosphere;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.function.Predicate;
 
 public class Octree implements Iterable<BlockPos> {
 
@@ -56,14 +53,6 @@ public class Octree implements Iterable<BlockPos> {
     public int size() { return count; }
     public boolean isEmpty() { return state == State.EMPTY; }
 
-    public Set<BlockPos> getBoundaryPositions() { return getBoundaryPositions(pos -> false); }
-
-    public Set<BlockPos> getBoundaryPositions(Predicate<BlockPos> isSolid) {
-        Set<BlockPos> result = new HashSet<>();
-        collectBoundary(result, isSolid);
-        return result;
-    }
-
     public List<BlockPos> getAllPositions() {
         List<BlockPos> result = new ArrayList<>(count);
         collectAll(result);
@@ -103,36 +92,6 @@ public class Octree implements Iterable<BlockPos> {
         if (state == State.FULL) return true;
         if (state == State.EMPTY) return false;
         return children[childIndex(px, py, pz)].contains(px, py, pz);
-    }
-
-    private void collectBoundary(Set<BlockPos> result, Predicate<BlockPos> isSolid) {
-        if (state == State.EMPTY) return;
-        if (state == State.FULL && size == MIN_SIZE) {
-            BlockPos pos = new BlockPos(originX, originY, originZ);
-            for (BlockPos nb : BlockPosUtil.neighbors(pos)) {
-                if (!root.contains(nb) || isSolid.test(nb)) { result.add(pos); return; }
-            }
-            return;
-        }
-        if (state == State.FULL) { collectFullBoundary(result, isSolid); return; }
-        for (Octree child : children) { child.collectBoundary(result, isSolid); }
-    }
-
-    private void collectFullBoundary(Set<BlockPos> result, Predicate<BlockPos> isSolid) {
-        for (int a = originX; a < originX + size; a++) {
-            for (int b = originY; b < originY + size; b++) {
-                for (int c = originZ; c < originZ + size; c++) {
-                    boolean onFace = (a == originX || a == originX + size - 1 ||
-                                      b == originY || b == originY + size - 1 ||
-                                      c == originZ || c == originZ + size - 1);
-                    if (!onFace) continue;
-                    BlockPos pos = new BlockPos(a, b, c);
-                    for (BlockPos nb : BlockPosUtil.neighbors(pos)) {
-                        if (!root.contains(nb) || isSolid.test(nb)) { result.add(pos); break; }
-                    }
-                }
-            }
-        }
     }
 
     private void collectAll(List<BlockPos> result) {
