@@ -1,24 +1,23 @@
 package supersymmetry.common.world;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeChunkManager;
-
+import supersymmetry.api.space.Planetoid;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.world.biome.SuSyBiomeEntry;
 
-public class Planet {
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class PlanetoidHandler {
 
     // Defining variables
     private String planetName;
-    private int id;
     private int dimID;
 
     private int biomeSize = 5;
@@ -46,15 +45,9 @@ public class Planet {
 
     private long ticksPerDay = 24000L;
 
-    public Planet(int id, String planetName) {
-        this.id = id;
-        this.planetName = planetName;
-    }
-
-    public Planet(int id, int dimID, String planetName) {
-        this.id = id;
-        this.dimID = dimID;
-        this.planetName = planetName;
+    public PlanetoidHandler(Planetoid planetoid) {
+        this.planetName = planetoid.getTranslationKey();
+        this.dimID = planetoid.getDimension();
     }
 
     public boolean isLoaded() {
@@ -101,14 +94,6 @@ public class Planet {
         }
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public int getDimID() {
         return dimID;
     }
@@ -121,7 +106,7 @@ public class Planet {
         return planetName;
     }
 
-    public Planet setPlanetName(String planetName) {
+    public PlanetoidHandler setPlanetName(String planetName) {
         this.planetName = planetName;
         return this;
     }
@@ -138,25 +123,25 @@ public class Planet {
         return this.biomeList;
     }
 
-    public Planet setBiomeList(List<BiomeManager.BiomeEntry> biomeList) {
+    public PlanetoidHandler setBiomeList(List<BiomeManager.BiomeEntry> biomeList) {
         this.biomeList = biomeList;
         return this;
     }
 
-    public Planet setBiomeList(BiomeManager.BiomeEntry... biomeList) {
+    public PlanetoidHandler setBiomeList(BiomeManager.BiomeEntry... biomeList) {
         // List.of() does not exist in 1.8
         this.biomeList = Arrays.asList(biomeList);
         return this;
     }
 
-    public Planet setBiomeList(SuSyBiomeEntry... biomeList) {
+    public PlanetoidHandler setBiomeList(SuSyBiomeEntry... biomeList) {
         // Convert to standard BiomeEntry list
         this.biomeList = Arrays.stream(biomeList)
                 .collect(Collectors.toList());
         return this;
     }
 
-    public Planet setBiomeSize(int biomeSize) {
+    public PlanetoidHandler setBiomeSize(int biomeSize) {
         this.biomeSize = biomeSize;
         return this;
     }
@@ -165,7 +150,7 @@ public class Planet {
         return this.stone;
     }
 
-    public Planet setStone(IBlockState stone) {
+    public PlanetoidHandler setStone(IBlockState stone) {
         this.stone = stone;
         return this;
     }
@@ -174,33 +159,33 @@ public class Planet {
         return this.bedrock;
     }
 
-    public Planet setBedrock(IBlockState bedrock) {
+    public PlanetoidHandler setBedrock(IBlockState bedrock) {
         this.bedrock = bedrock;
         return this;
     }
 
     @Override
     public String toString() {
-        return "Planet Name: " + this.getPlanetName() + " Planet Id: " + this.getId() + " Planet DIM ID: " +
+        return "Planet Name: " + this.getPlanetName() + " Planet DIM ID: " +
                 this.getDimID();
     }
 
-    public Planet setSkyRenderer(IRenderHandler skyRenderer) {
+    public PlanetoidHandler setSkyRenderer(IRenderHandler skyRenderer) {
         this.skyRenderer = skyRenderer;
         return this;
     }
 
-    public Planet setGravity(double gravity) {
+    public PlanetoidHandler setGravity(double gravity) {
         this.gravity = gravity;
         return this;
     }
 
-    public Planet setDragMultiplier(double dragMultiplier) {
+    public PlanetoidHandler setDragMultiplier(double dragMultiplier) {
         this.dragMultiplier = dragMultiplier;
         return this;
     }
 
-    public Planet setSupportsFire(boolean supportsFire) {
+    public PlanetoidHandler setSupportsFire(boolean supportsFire) {
         this.supportsFire = supportsFire;
         return this;
     }
@@ -227,17 +212,17 @@ public class Planet {
     }
 
     // Add setter methods for builder pattern (if Planet uses builder)
-    public Planet setBreccia(IBlockState breccia) {
+    public PlanetoidHandler setBreccia(IBlockState breccia) {
         this.breccia = breccia;
         return this;
     }
 
-    public Planet setImpactMelt(IBlockState impactMelt) {
+    public PlanetoidHandler setImpactMelt(IBlockState impactMelt) {
         this.impactMelt = impactMelt;
         return this;
     }
 
-    public Planet setImpactEjecta(IBlockState impactEjecta) {
+    public PlanetoidHandler setImpactEjecta(IBlockState impactEjecta) {
         this.impactEjecta = impactEjecta;
         return this;
     }
@@ -251,13 +236,13 @@ public class Planet {
         return SuSySkyRenderer;
     }
 
-    public Planet setSuSySkyRenderer(SuSySkyRenderer renderer) {
+    public PlanetoidHandler setSuSySkyRenderer(SuSySkyRenderer renderer) {
         this.SuSySkyRenderer = renderer;
         this.customSkyRenderer = renderer;
         return this;
     }
 
-    public Planet setDayLength(float dayLength) {
+    public PlanetoidHandler setDayLength(float dayLength) {
         this.dayLength = dayLength;
         return this;
     }
@@ -266,7 +251,7 @@ public class Planet {
         return this.dayLength;
     }
 
-    public Planet setTimeOffset(float timeOffset) {
+    public PlanetoidHandler setTimeOffset(float timeOffset) {
         this.timeOffset = timeOffset;
         return this;
     }
@@ -275,7 +260,7 @@ public class Planet {
         return this.timeOffset;
     }
 
-    public Planet setCustomSkyRenderer(IRenderHandler renderer) {
+    public PlanetoidHandler setCustomSkyRenderer(IRenderHandler renderer) {
         this.customSkyRenderer = renderer;
         return this;
     }
@@ -292,7 +277,7 @@ public class Planet {
         return null;
     }
 
-    public Planet setTicksPerDay(long ticks) {
+    public PlanetoidHandler setTicksPerDay(long ticks) {
         this.ticksPerDay = ticks;
         return this;
     }

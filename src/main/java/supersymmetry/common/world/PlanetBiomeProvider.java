@@ -32,7 +32,7 @@ public class PlanetBiomeProvider extends BiomeProvider {
         super(world.getWorldInfo());
 
         // Biome list is actually initialized in getModdedBiomeGenerators, and so we need to keep the reference the same
-        Planet planet = SuSyDimensions.PLANETS.get(world.provider.getDimension());
+        PlanetoidHandler planet = SuSyDimensions.PLANETS.get(world.provider.getDimension());
 
         biomeList.addAll(planet.biomeList);
         biomeSize = planet.getBiomeSize();

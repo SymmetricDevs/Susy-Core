@@ -1,7 +1,7 @@
 package supersymmetry.common.blocks;
 
-import javax.annotation.Nonnull;
-
+import gregtech.api.GregTechAPI;
+import gregtech.api.block.IStateHarvestLevel;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -11,9 +11,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import gregtech.api.block.IStateHarvestLevel;
 import supersymmetry.api.blocks.VariantBlockFalling;
+
+import javax.annotation.Nonnull;
 
 public class BlockRegolith extends VariantBlockFalling<BlockRegolith.BlockRegolithType> {
 
@@ -23,6 +23,7 @@ public class BlockRegolith extends VariantBlockFalling<BlockRegolith.BlockRegoli
         setHardness(1.0f);
         setResistance(2.0f);
         setSoundType(SoundType.SAND);
+        setCreativeTab(GregTechAPI.TAB_GREGTECH);
     }
 
     public MapColor getMapColor(IBlockState state, IBlockAccess worldIn, BlockPos pos) {

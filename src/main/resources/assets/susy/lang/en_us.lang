@@ -1125,6 +1125,16 @@ metaitem.track_segment.length_info=§610 blocks §7worth of monorail track.
 metaitem.air_vent.tooltip.1=§bCollecting Rate: §f%,d L/s
 metaitem.orbital.scrap.earth.name=Earth Orbital Scrap
 metaitem.code_breacher.name=Code Breacher
+metaitem.air_disperser.name=Air Disperser
+metaitem.air_disperser.tooltip=Disperses Oxygen to Breathe (use 1/8th mB Oxygen per block per second for optimal coverage)
+metaitem.oxygen_sensor.name=Oxygen Sensor
+metaitem.oxygen_sensor.tooltip.1=Detects nearby oxygen levels. Beeps when insufficient oxygen is detected.
+metaitem.oxygen_sensor.tooltip.charge=§aCharge: §f%,d / %,d EU
+metaitem.oxygen_sensor.oxygen_level.none=Oxygen Level: §4None
+metaitem.oxygen_sensor.oxygen_level.very_low=Oxygen Level: §cVery Low
+metaitem.oxygen_sensor.oxygen_level.low=Oxygen Level: §6Low
+metaitem.oxygen_sensor.oxygen_level.medium=Oxygen Level: §eModerate
+metaitem.oxygen_sensor.oxygen_level.high=Oxygen Level: §aHigh
 
 # Catalysts
 susy.universal.catalysts.tooltip.tier=§eMax Voltage: §f%,d EU/T (%s§f)

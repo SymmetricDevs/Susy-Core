@@ -69,7 +69,7 @@ public class WorldProviderPlanet extends WorldProvider {
 
     @Override
     public @Nullable IRenderHandler getSkyRenderer() {
-        Planet planet = SuSyDimensions.PLANETS.get(getDimension());
+        PlanetoidHandler planet = SuSyDimensions.PLANETS.get(getDimension());
         if (planet != null) {
             return planet.getEffectiveSkyRenderer();
         }
@@ -78,7 +78,7 @@ public class WorldProviderPlanet extends WorldProvider {
 
     @Override
     public @NotNull Vec3d getSkyColor(net.minecraft.entity.Entity cameraEntity, float partialTicks) {
-        Planet planet = getPlanet();
+        PlanetoidHandler planet = getPlanet();
         if (planet != null && planet.hasCustomSky()) {
             SuSySkyRenderer skyRenderer = planet.getSuSySkyRenderer();
             if (skyRenderer != null && skyRenderer.getSkyColorData() != null) {
@@ -91,7 +91,7 @@ public class WorldProviderPlanet extends WorldProvider {
 
     @Override
     public @NotNull Vec3d getFogColor(float celestialAngle, float partialTicks) {
-        Planet planet = getPlanet();
+        PlanetoidHandler planet = getPlanet();
         if (planet != null && planet.hasCustomSky()) {
             SuSySkyRenderer skyRenderer = planet.getSuSySkyRenderer();
             if (skyRenderer != null && skyRenderer.getSkyColorData() != null) {
@@ -106,7 +106,7 @@ public class WorldProviderPlanet extends WorldProvider {
 
     @Override
     public @Nullable float[] calcSunriseSunsetColors(float celestialAngle, float partialTicks) {
-        Planet planet = getPlanet();
+        PlanetoidHandler planet = getPlanet();
         if (planet != null && planet.hasCustomSky()) {
             SuSySkyRenderer skyRenderer = planet.getSuSySkyRenderer();
             if (skyRenderer != null && skyRenderer.getSkyColorData() != null) {
@@ -125,12 +125,12 @@ public class WorldProviderPlanet extends WorldProvider {
         return super.isDaytime();
     }
 
-    public Planet getPlanet() {
+    public PlanetoidHandler getPlanet() {
         return SuSyDimensions.PLANETS.get(getDimension());
     }
 
     private float realCelestialAngle(long worldTime, float partialTicks) {
-        Planet planet = getPlanet();
+        PlanetoidHandler planet = getPlanet();
         if (planet != null && planet.getDayLength() > 0) {
             float dayLengthMultiplier = planet.getDayLength();
             long adjustedTime = (long) (worldTime / dayLengthMultiplier);
@@ -145,7 +145,7 @@ public class WorldProviderPlanet extends WorldProvider {
     }
 
     public boolean isEclipse(float partialTicks) {
-        Planet planet = getPlanet();
+        PlanetoidHandler planet = getPlanet();
         if (planet == null || !planet.hasCustomSky()) return false;
 
         SuSySkyRenderer renderer = planet.getSuSySkyRenderer();
@@ -232,7 +232,7 @@ public class WorldProviderPlanet extends WorldProvider {
 
     @Override
     public float calculateCelestialAngle(long worldTime, float partialTicks) {
-        Planet planet = getPlanet();
+        PlanetoidHandler planet = getPlanet();
         if (planet != null) {
             // During eclipse, trick Minecraft into thinking it's night
             if (isEclipse(partialTicks)) {
