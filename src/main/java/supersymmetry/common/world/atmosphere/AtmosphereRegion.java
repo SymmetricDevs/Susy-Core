@@ -4,7 +4,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.*;
-import java.util.function.Predicate;
 
 /**
  * A pressurized volume of oxygenated blocks, stored in an Octree.
@@ -263,10 +262,6 @@ public class AtmosphereRegion {
 
     public int size() {
         return octree.size();
-    }
-
-    public Set<BlockPos> getBoundaryPositions(Predicate<BlockPos> isSolid) {
-        return octree.getBoundaryPositions(isSolid);
     }
 
     public List<BlockPos> getAllPositions() {

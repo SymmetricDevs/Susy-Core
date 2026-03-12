@@ -159,8 +159,7 @@ public class AtmosphereRegionGraph {
                     for (BlockPos bp : region.getBreachPoints()) {
                         expandingRegion.addBreach(bp);
                     }
-                    regions.remove(region);
-                    fillingRegions.remove(region);
+                    removeRegion(region);
                 }
             }
         }
@@ -228,13 +227,6 @@ public class AtmosphereRegionGraph {
         return null;
     }
 
-    // ---- Revalidation ----
-
-    public void triggerRevalidation() {
-        for (AtmosphereRegion region : new ArrayList<>(regions)) {
-            revalidator.schedule(region);
-        }
-    }
 
     // ---- Tick ----
 
@@ -289,7 +281,7 @@ public class AtmosphereRegionGraph {
         });
 
         // Prune dead sourceless regions with no volume
-        regions.removeIf(r -> r.isSourceless() && r.getVolume() == 0);
+        regions.removeIf(r -> r.getVolume() == 0 && r.isSourceless() && !fillingRegions.contains(r));
 
         reRefillRegions(world);
     }
