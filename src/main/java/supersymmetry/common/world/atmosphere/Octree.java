@@ -208,6 +208,67 @@ public class Octree implements Iterable<BlockPos> {
     public int getOriginZ() { return originZ; }
     public int getTreeSize() { return size; }
 
+    // ---- Serialization ----
+
+    /**
+     * Serialize the octree structure as a compact byte array.
+     * Encoding: 0=EMPTY, 1=FULL, 2=MIXED (followed by 8 children recursively).
+     */
+    public byte[] serialize() {
+        // Estimate upper bound: each node is 1 byte, max nodes is bounded by tree structure
+        List<Byte> bytes = new ArrayList<>();
+        serializeNode(this, bytes);
+        byte[] result = new byte[bytes.size()];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = bytes.get(i);
+        }
+        return result;
+    }
+
+    private static void serializeNode(Octree node, List<Byte> bytes) {
+        if (node.state == State.EMPTY) {
+            bytes.add((byte) 0);
+        } else if (node.state == State.FULL) {
+            bytes.add((byte) 1);
+        } else {
+            bytes.add((byte) 2);
+            for (Octree child : node.children) {
+                serializeNode(child, bytes);
+            }
+        }
+    }
+
+    /**
+     * Deserialize an octree from a byte array produced by {@link #serialize()}.
+     */
+    public static Octree deserialize(int originX, int originY, int originZ, int size, byte[] data) {
+        Octree tree = new Octree(originX, originY, originZ, size);
+        int[] idx = {0};
+        deserializeNode(tree, data, idx);
+        return tree;
+    }
+
+    private static void deserializeNode(Octree node, byte[] data, int[] idx) {
+        if (idx[0] >= data.length) return;
+        byte b = data[idx[0]++];
+        if (b == 0) {
+            node.state = State.EMPTY;
+            node.count = 0;
+        } else if (b == 1) {
+            node.state = State.FULL;
+            node.count = node.size * node.size * node.size;
+        } else {
+            node.expand();
+            int total = 0;
+            for (int i = 0; i < 8; i++) {
+                deserializeNode(node.children[i], data, idx);
+                total += node.children[i].count;
+            }
+            node.count = total;
+            node.tryCollapse();
+        }
+    }
+
     private static class OctreeIterator implements Iterator<BlockPos> {
 
         private static class Frame {
