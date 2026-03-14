@@ -1,5 +1,7 @@
 package supersymmetry.common.metatileentities.single.electric;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -63,10 +65,10 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
     }
 
     @Override
-    // Handle fluid imports
     protected FluidTankList createImportFluidHandler() {
         if (workable == null) return new FluidTankList(false);
-        FluidTank[] fluidImports = new FluidTank[workable.getRecipeMap().getMaxFluidInputs() + 2];
+
+        FluidTank[] fluidImports = new FluidTank[workable.getRecipeMap().getMaxFluidInputs()];
         FluidTank[] displayedTanks = new FluidTank[workable.getRecipeMap().getMaxFluidInputs()];
         for (int i = 0; i < fluidImports.length - 2; i++) {
             NotifiableFluidTank filteredFluidHandler = new NotifiableFluidTank(
@@ -75,7 +77,7 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
             displayedTanks[i] = filteredFluidHandler;
         }
 
-        this.lubricantTank = new SuSyFilteredFluidTank(1000, this, false)
+        this.lubricantTank = (SuSyFluidTankHandler) new SuSyFluidTankHandler(1000, this, false)
                 .setFilter(SuSyFluidFilters.LUBRICANT);
         fluidImports[fluidImports.length - 2] = lubricantTank;
 
@@ -84,7 +86,11 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
         fluidImports[fluidImports.length - 1] = coolantTank;
 
         this.displayedTankList = new FluidTankList(false, displayedTanks);
-        return new FluidTankList(false, fluidImports);
+
+        List<FluidTank> allTanks = new ArrayList<>(Arrays.asList(fluidImports));
+        allTanks.add(lubricantTank);
+        allTanks.add(coolantTank);
+        return new FluidTankList(false, allTanks.toArray(new FluidTank[0]));
     }
 
     @Override
