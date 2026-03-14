@@ -26,7 +26,7 @@ import supersymmetry.common.world.biome.SuSyBiomeEntry;
 import supersymmetry.common.world.sky.SkyColorData;
 import supersymmetry.common.world.sky.SkyRenderData;
 
-// thismightbenoah & martin are the same people
+// thismightbenoah, thismightbemartin martin are the same person
 public class SuSyDimensions {
 
     public static DimensionType planetType;
@@ -52,12 +52,7 @@ public class SuSyDimensions {
         spaceType = DimensionType.register("susy_space", "_susyspace", id - 1, WorldProviderSpace.class, false);
 
         Cubemap solCubemap = new Cubemap(
-                new ResourceLocation("susy", "textures/space/sun/px.png"),
-                new ResourceLocation("susy", "textures/space/sun/py.png"),
-                new ResourceLocation("susy", "textures/space/sun/pz.png"),
-                new ResourceLocation("susy", "textures/space/sun/nx.png"),
-                new ResourceLocation("susy", "textures/space/sun/ny.png"),
-                new ResourceLocation("susy", "textures/space/sun/nz.png"));
+                new ResourceLocation("susy", "textures/space/sun/cubemap.png"));
         RenderableCelestialObject SUN = new RenderableCelestialObject(CelestialObjects.SUN, solCubemap)
                 .setAngularSize(20.0f)
                 .setOrbitalPeriod(24000L)
@@ -69,7 +64,8 @@ public class SuSyDimensions {
         RenderableCelestialObject renderableMoon = new RenderableCelestialObject(CelestialObjects.MOON, moonCubemap)
                 .setAngularSize(20.0f)
                 .setOrbitalPeriod(lunarDayTicks)
-                .setOrbitalInclination(5.14f);
+                .setOrbitalInclination(5.14f)
+                .setSunReference(SUN);   // put the fries in the back lil bro
 
         Cubemap earthCubemap = new Cubemap(new ResourceLocation("susy", "textures/space/earth/cubemap.png"));
         RenderableCelestialObject renderableEarth = new RenderableCelestialObject(CelestialObjects.EARTH, earthCubemap)
@@ -128,17 +124,18 @@ public class SuSyDimensions {
         SuSySpaceRenderer leoRenderer = null;
 
         long leoOrbitTicks = 110_400L;
-        // After creating leoRenderer and earthCubemap:
+
         if (FMLLaunchHandler.side() == Side.CLIENT) {
             leoRenderer = new SuSySpaceRenderer();
-            leoRenderer.setCelestialObjects(renderableEarth, renderableMoon, SUN);
+            leoRenderer.setCelestialObjects(SUN, renderableMoon, renderableEarth);
             leoRenderer.setOrbitalBody(renderableEarth, earthCubemap, leoOrbitTicks);
+            leoRenderer.setSunObject(SUN);
         }
 
         new SpaceDimension(802, "low_earth_orbit")
                 .setOrbitTarget(renderableEarth)
-                .setCelestialObjects(renderableEarth, renderableMoon, SUN)
-                .setRenderer(leoRenderer)  // can be null on server, which is fine
+                .setCelestialObjects(SUN, renderableMoon, renderableEarth)
+                .setRenderer(leoRenderer)
                 .setGravity(0.0f)
                 .setAmbientLight(0.02f)
                 .setVacuum(true)

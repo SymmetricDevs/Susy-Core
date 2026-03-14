@@ -37,7 +37,7 @@ public class WorldProviderPlanet extends WorldProvider {
         biomeProvider = new PlanetBiomeProvider(world);
 
         if (FMLLaunchHandler.side() == Side.CLIENT) {
-            Planet planet = SuSyDimensions.PLANETS.get(this.getDimension());
+            PlanetoidHandler planet = SuSyDimensions.PLANETS.get(this.getDimension());
             if (planet != null) {
                 IRenderHandler renderer = planet.getEffectiveSkyRenderer();
                 if (renderer != null) {
