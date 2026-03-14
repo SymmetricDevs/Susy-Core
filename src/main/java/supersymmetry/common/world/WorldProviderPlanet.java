@@ -33,11 +33,14 @@ public class WorldProviderPlanet extends WorldProvider {
     protected void init() {
         this.hasSkyLight = true;
         biomeProvider = new PlanetBiomeProvider(world);
-        PlanetoidHandler planet = SuSyDimensions.PLANETS.get(this.getDimension());
-        if (planet != null) {
-            IRenderHandler renderer = planet.getEffectiveSkyRenderer();
-            if (renderer != null) {
-                this.setSkyRenderer(renderer);
+
+        if (FMLLaunchHandler.side() == Side.CLIENT) {
+            PlanetoidHandler planet = SuSyDimensions.PLANETS.get(this.getDimension());
+            if (planet != null) {
+                IRenderHandler renderer = planet.getEffectiveSkyRenderer();
+                if (renderer != null) {
+                    this.setSkyRenderer(renderer);
+                }
             }
         }
     }

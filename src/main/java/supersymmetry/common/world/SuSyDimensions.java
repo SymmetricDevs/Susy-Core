@@ -15,7 +15,6 @@ import supersymmetry.common.blocks.SusyStoneVariantBlock;
 import supersymmetry.common.world.biome.SuSyBiomeEntry;
 import supersymmetry.common.world.sky.SkyColorData;
 import supersymmetry.common.world.sky.SkyRenderData;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +40,30 @@ public class SuSyDimensions {
 
         SusyLog.logger.info("Registering planet dimension type at id " + id);
         planetType = DimensionType.register("Supersymmetry Planet", "_susy", id, WorldProviderPlanet.class, false);
+
+        SusyLog.logger.info("Registering space dimension type at id " + (id - 1));
+        spaceType = DimensionType.register("susy_space", "_susyspace", id - 1, WorldProviderSpace.class, false);
+
+        Cubemap solCubemap = new Cubemap(
+                new ResourceLocation("susy", "textures/space/sun/cubemap.png"));
+        RenderableCelestialObject SUN = new RenderableCelestialObject(CelestialObjects.SUN, solCubemap)
+                .setAngularSize(20.0f)
+                .setOrbitalPeriod(24000L)
+                .setOrbitalInclination(23.5f);
+
+        Cubemap moonCubemap = new Cubemap(
+                new ResourceLocation("susy", "textures/space/moon/cubemap.png"));
+        long lunarDayTicks = 708734L;
+        RenderableCelestialObject renderableMoon = new RenderableCelestialObject(CelestialObjects.MOON, moonCubemap)
+                .setAngularSize(20.0f)
+                .setOrbitalPeriod(lunarDayTicks)
+                .setOrbitalInclination(5.14f)
+                .setSunReference(SUN);   // put the fries in the back lil bro
+
+        Cubemap earthCubemap = new Cubemap(new ResourceLocation("susy", "textures/space/earth/cubemap.png"));
+        RenderableCelestialObject renderableEarth = new RenderableCelestialObject(CelestialObjects.EARTH, earthCubemap)
+                .setAngularSize(180.0f)
+                .setFixedDirection(0, -1, 0);
 
         SuSySkyRenderer moonSky = new SuSySkyRenderer();
 
@@ -111,5 +134,32 @@ public class SuSyDimensions {
                 .setDayLength(29.53f)
                 .setTimeOffset(0.0f)
                 .load();
+
+        SuSySpaceRenderer leoRenderer = null;
+
+        long leoOrbitTicks = 110_400L;
+
+        if (FMLLaunchHandler.side() == Side.CLIENT) {
+            leoRenderer = new SuSySpaceRenderer();
+            leoRenderer.setCelestialObjects(SUN, renderableMoon, renderableEarth);
+            leoRenderer.setOrbitalBody(renderableEarth, earthCubemap, leoOrbitTicks);
+            leoRenderer.setSunObject(SUN);
+        }
+
+        new SpaceDimension(802, "low_earth_orbit")
+                .setOrbitTarget(renderableEarth)
+                .setCelestialObjects(SUN, renderableMoon, renderableEarth)
+                .setRenderer(leoRenderer)
+                .setGravity(0.0f)
+                .setAmbientLight(0.02f)
+                .setVacuum(true)
+                .setDayCycle(leoOrbitTicks, 1.53f, 0.0f)
+                .load();
+
+        // Register dim 802 with Forge's DimensionManager so it can be entered
+        if (!DimensionManager.isDimensionRegistered(802)) {
+            DimensionManager.registerDimension(802, spaceType);
+            SusyLog.logger.info("Registered Low Earth Orbit space dimension at id 802");
+        }
     }
 }
