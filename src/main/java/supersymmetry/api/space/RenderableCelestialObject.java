@@ -22,6 +22,9 @@ public class RenderableCelestialObject {
     private boolean hasFixedDirection = false;
     private float fixedDx, fixedDy, fixedDz;
 
+    // When set, the sphere rotates so its lit face points toward this object (e.g. the sun).
+    private RenderableCelestialObject sunReference = null;
+
     private boolean loadAttempted = false;
 
     public RenderableCelestialObject(CelestialObject object, Cubemap cubemap) {
@@ -58,6 +61,16 @@ public class RenderableCelestialObject {
         return this;
     }
 
+    /**
+     * When set, this object's cubemap will be rotated so its lit face (+Z axis)
+     * points toward the given sun object. Use for the moon so its bright side
+     * always faces the sun.
+     */
+    public RenderableCelestialObject setSunReference(RenderableCelestialObject sun) {
+        this.sunReference = sun;
+        return this;
+    }
+
     public CelestialObject getCelestialObject() {
         return object;
     }
@@ -77,7 +90,6 @@ public class RenderableCelestialObject {
 
     /**
      * Returns the normalised world-space direction toward this object at the given world time.
-     * Reused by both renderAtPosition and the depth-sort in SuSySpaceRenderer.
      */
     public float[] getWorldDirection(long worldTime) {
         if (hasFixedDirection) {
@@ -95,8 +107,19 @@ public class RenderableCelestialObject {
     }
 
     public void renderAtPosition(long worldTime, QuadSphere mesh) {
-        float[] dir = getWorldDirection(worldTime);
-        float dx = dir[0], dy = dir[1], dz = dir[2];
+        float dx, dy, dz;
+        if (hasFixedDirection) {
+            dx = fixedDx;
+            dy = fixedDy;
+            dz = fixedDz;
+        } else {
+            double angle = orbitalPeriodTicks > 0 ? ((worldTime + phaseOffsetTicks) % orbitalPeriodTicks) /
+                    (double) orbitalPeriodTicks * 2.0 * Math.PI : 0.0;
+            float incRad = (float) Math.toRadians(orbitalInclinationDeg);
+            dx = (float) Math.cos(angle);
+            dy = (float) (Math.sin(angle) * Math.sin(incRad));
+            dz = (float) (Math.sin(angle) * Math.cos(incRad));
+        }
 
         float radius = (float) Math.tan(Math.toRadians(angularSizeDeg / 2.0));
         boolean hasTexture = ensureLoaded();
@@ -104,6 +127,37 @@ public class RenderableCelestialObject {
         GlStateManager.pushMatrix();
         GL11.glTranslatef(dx, dy, dz);
         GL11.glScalef(radius, radius, radius);
+
+        // If a sun reference is set, rotate the sphere so its +Z face points toward the sun.
+        // This ensures the lit side of the cubemap always faces the light source.
+        if (sunReference != null) {
+            float[] sunDir = sunReference.getWorldDirection(worldTime);
+            // Sun direction relative to this object's position
+            float sx = sunDir[0] - dx;
+            float sy = sunDir[1] - dy;
+            float sz = sunDir[2] - dz;
+            float len = (float) Math.sqrt(sx * sx + sy * sy + sz * sz);
+            if (len > 1e-6f) {
+                sx /= len;
+                sy /= len;
+                sz /= len;
+            }
+            // Rotate from default +Z axis (0,0,1) to point toward sun direction (sx,sy,sz).
+            // Cross product gives rotation axis, dot product gives angle.
+            // Default forward is +Z = (0,0,1)
+            float crossX = sy;   // (0,0,1) x (sx,sy,sz) = (0*sz-1*sy, 1*sx-0*sz, 0*sy-0*sx) = (-sy, sx, 0)
+            float crossY = -sx;
+            float crossZ = 0f;
+            float sinA = (float) Math.sqrt(crossX * crossX + crossY * crossY + crossZ * crossZ);
+            float cosA = sz; // dot of (0,0,1) with (sx,sy,sz)
+            if (sinA > 1e-6f) {
+                float axisX = crossX / sinA;
+                float axisY = crossY / sinA;
+                float axisZ = crossZ / sinA;
+                float angleDeg = (float) Math.toDegrees(Math.atan2(sinA, cosA));
+                GL11.glRotatef(angleDeg, axisX, axisY, axisZ);
+            }
+        }
 
         if (hasTexture) {
             GlStateManager.enableTexture2D();

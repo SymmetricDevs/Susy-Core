@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import gregtech.GTInternalTags;
 import supersymmetry.api.capability.SuSyCapabilities;
 import supersymmetry.api.sound.SusySounds;
+import supersymmetry.client.shaders.ShaderManager;
 import supersymmetry.common.CommonProxy;
 import supersymmetry.common.SusyMetaEntities;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -82,6 +83,9 @@ public class Supersymmetry {
     @Mod.EventHandler
     public void onInit(@NotNull FMLInitializationEvent event) {
         proxy.load();
+        if (event.getSide().isClient()) {
+            ShaderManager.initShaders();
+        }
         SuSyCoverBehaviors.init();
     }
 
