@@ -1,9 +1,10 @@
 package supersymmetry.mixins.dimstack;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Invoker;
+import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 
@@ -16,24 +17,17 @@ import cd4017be.lib.tileentity.BaseTileEntity;
 @Mixin(value = DimensionalPipe.class, remap = false)
 interface DimensionalPipeMixinAccessor {
 
-    @Invoker
-    void callLink(DimensionalPipe tile);
-
-    @Invoker
-    void callProcess();
+    @Accessor
+    EnumFacing getSide();
 }
 
 @Mixin(value = DimensionalPipe.class, remap = false)
 public abstract class DimensionalPipeMixin extends BaseTileEntity
                                            implements INeighborAwareTile, IUpdatable, IInteractiveTile {
 
-    @Inject(method = "link", at = @At("HEAD"))
+    @Inject(method = "link", at = @At("TAIL"))
     void linkOther(DimensionalPipe tile) {
-        ((DimensionalPipeMixinAccessor) tile).callLink(((DimensionalPipe) (Object) this));
-    }
-
-    @Inject(method = "loadState", at = @At("TAIL"))
-    void tryLink(NBTTagCompound nbt, int mode) {
-        ((DimensionalPipeMixinAccessor) this).callProcess();
+        BlockPos adjTEPos = pos.offset(((DimensionalPipeMixinAccessor) this).getSide());
+        world.getTileEntity(adjTEPos).getBlockType().onNeighborChange(world, adjTEPos, pos);
     }
 }
