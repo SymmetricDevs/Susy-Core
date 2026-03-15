@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentTranslation;
 import supersymmetry.api.sound.SusySounds;
-import supersymmetry.common.blocks.BlockBreathingGas;
+// import supersymmetry.common.blocks.BlockBreathingGas;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 
 import java.util.List;
@@ -28,36 +28,39 @@ public class OxygenSensorBehavior implements IItemBehaviour {
 
     @Override
     public void onUpdate(ItemStack itemStack, Entity entity) {
-        if (!(entity instanceof EntityPlayer player)) return;
-        if (player.world.isRemote) return;
-        if (player.ticksExisted % CHECK_INTERVAL != 0) return;
+        //i dont know whats meant to happen here and i failed to merge it correctly sorry
 
-        IElectricItem electricItem = itemStack.getCapability(GregtechCapabilities.CAPABILITY_ELECTRIC_ITEM, null);
-        if (electricItem == null) return;
 
-        boolean isHeld = player.getHeldItemMainhand() == itemStack
-                || player.getHeldItemOffhand() == itemStack;
-
-        boolean inHazard = DimensionBreathabilityHandler.isInDepressurizationHazard(player);
-        int oxygenCount = DimensionBreathabilityHandler.countBreathingGas(player, BlockBreathingGas.GasType.OXYGEN, -1);
-        boolean insufficient = inHazard && oxygenCount < 2;
-
-        long euCost = EU_PER_CHECK;
-        if (isHeld) euCost += EU_PER_DISPLAY;
-        if (insufficient) euCost += EU_PER_BEEP;
-
-        if (electricItem.discharge(euCost, Integer.MAX_VALUE, true, false, false) < euCost) return;
-
-        if (isHeld) {
-            String level = getOxygenLevel(oxygenCount);
-            player.sendStatusMessage(
-                    new TextComponentTranslation("metaitem.oxygen_sensor.oxygen_level." + level), true);
-        }
-
-        if (insufficient) {
-            player.world.playSound(null, player.posX, player.posY, player.posZ,
-                    SusySounds.OXYGEN_SENSOR_BEEP, SoundCategory.PLAYERS, 1.0F, 1.0F);
-        }
+        // if (!(entity instanceof EntityPlayer player)) return;
+        // if (player.world.isRemote) return;
+        // if (player.ticksExisted % CHECK_INTERVAL != 0) return;
+        //
+        // IElectricItem electricItem = itemStack.getCapability(GregtechCapabilities.CAPABILITY_ELECTRIC_ITEM, null);
+        // if (electricItem == null) return;
+        //
+        // boolean isHeld = player.getHeldItemMainhand() == itemStack
+        //         || player.getHeldItemOffhand() == itemStack;
+        //
+        // boolean inHazard = DimensionBreathabilityHandler.isInDepressurizationHazard(player);
+        // int oxygenCount = DimensionBreathabilityHandler.countBreathingGas(player, BlockBreathingGas.GasType.OXYGEN, -1);
+        // boolean insufficient = inHazard && oxygenCount < 2;
+        //
+        // long euCost = EU_PER_CHECK;
+        // if (isHeld) euCost += EU_PER_DISPLAY;
+        // if (insufficient) euCost += EU_PER_BEEP;
+        //
+        // if (electricItem.discharge(euCost, Integer.MAX_VALUE, true, false, false) < euCost) return;
+        //
+        // if (isHeld) {
+        //     String level = getOxygenLevel(oxygenCount);
+        //     player.sendStatusMessage(
+        //             new TextComponentTranslation("metaitem.oxygen_sensor.oxygen_level." + level), true);
+        // }
+        //
+        // if (insufficient) {
+        //     player.world.playSound(null, player.posX, player.posY, player.posZ,
+        //             SusySounds.OXYGEN_SENSOR_BEEP, SoundCategory.PLAYERS, 1.0F, 1.0F);
+        // }
     }
 
     private String getOxygenLevel(int count) {
