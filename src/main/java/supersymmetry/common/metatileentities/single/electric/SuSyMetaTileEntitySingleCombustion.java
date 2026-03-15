@@ -31,9 +31,9 @@ import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.common.metatileentities.electric.MetaTileEntitySingleCombustion;
+import supersymmetry.api.capability.impl.SuSyFilteredFluidTank;
 import supersymmetry.api.capability.impl.SuSyFluidFilters;
 import supersymmetry.api.util.SuSyUtility;
-import supersymmetry.api.capability.impl.SuSyFilteredFluidTank;
 
 public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleCombustion {
 

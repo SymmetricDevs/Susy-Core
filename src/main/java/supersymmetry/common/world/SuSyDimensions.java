@@ -1,9 +1,14 @@
 package supersymmetry.common.world;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
+
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.space.CelestialObjects;
 import supersymmetry.common.blocks.BlockRegolith;
@@ -12,10 +17,6 @@ import supersymmetry.common.blocks.SusyStoneVariantBlock;
 import supersymmetry.common.world.biome.SuSyBiomeEntry;
 import supersymmetry.common.world.sky.SkyColorData;
 import supersymmetry.common.world.sky.SkyRenderData;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class SuSyDimensions {
 

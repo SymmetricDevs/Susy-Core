@@ -1,6 +1,17 @@
 package supersymmetry.common.item;
 
+import static gregtech.common.items.MetaItems.SPRAY_EMPTY;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Objects;
+
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.ItemStack;
+
 import com.google.common.base.CaseFormat;
+
 import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
 import gregtech.api.items.armor.ArmorMetaItem;
@@ -17,9 +28,6 @@ import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.unification.stack.UnificationEntry;
 import gregtech.common.items.MetaItems;
 import gregtech.common.items.behaviors.TooltipBehavior;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.ItemStack;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
@@ -29,12 +37,6 @@ import supersymmetry.common.item.behavior.MillBallDurabilityManager;
 import supersymmetry.common.item.behavior.OxygenSensorBehavior;
 import supersymmetry.common.item.behavior.PipeNetPainterBehavior;
 import supersymmetry.common.item.behavior.RocketConfigBehavior;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Objects;
-
-import static gregtech.common.items.MetaItems.SPRAY_EMPTY;
 
 public class SuSyMetaItems {
 
@@ -59,7 +61,6 @@ public class SuSyMetaItems {
 
     public static MetaValueItem AIR_DISPERSER;
     public static MetaValueItem OXYGEN_SENSOR;
-
 
     public static ArmorMetaItem<?>.ArmorMetaValueItem SIMPLE_GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_MASK;
@@ -129,9 +130,10 @@ public class SuSyMetaItems {
                 .addComponents(new TooltipBehavior(lines -> Collections.addAll(lines,
                         I18n.format("metaitem.conveyor.module.tooltip"),
                         I18n.format("gregtech.universal.tooltip.item_transfer_rate", 4))));
-        PUMP_STEAM = metaItem.addItem(3, "pump.steam").addComponents(new TooltipBehavior(lines -> Collections.addAll(lines,
-                I18n.format("metaitem.electric.pump.tooltip"),
-                I18n.format("gregtech.universal.tooltip.fluid_transfer_rate", 32))));
+        PUMP_STEAM = metaItem.addItem(3, "pump.steam")
+                .addComponents(new TooltipBehavior(lines -> Collections.addAll(lines,
+                        I18n.format("metaitem.electric.pump.tooltip"),
+                        I18n.format("gregtech.universal.tooltip.fluid_transfer_rate", 32))));
         AIR_VENT = metaItem.addItem(4, "air_vent").addComponents(
                 new TooltipBehavior(lines -> lines.add(I18n.format("metaitem.air_vent.tooltip.1", 100))));
 
@@ -145,8 +147,9 @@ public class SuSyMetaItems {
         DATA_CARD = metaItem.addItem(9, "data_card").setMaxStackSize(1)
                 .addComponents(new TooltipBehavior(lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1"))));
 
-        DATA_CARD_ACTIVE = metaItem.addItem(10, "data_card.active").setMaxStackSize(1).addComponents(new DataCardBehavior(
-                lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1")), Arrays.asList("type")));
+        DATA_CARD_ACTIVE = metaItem.addItem(10, "data_card.active").setMaxStackSize(1)
+                .addComponents(new DataCardBehavior(
+                        lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1")), Arrays.asList("type")));
 
         DATA_CARD_MASTER_BLUEPRINT = metaItem.addItem(11, "data_card.master_blueprint").setMaxStackSize(1)
                 .addComponents(new DataCardBehavior(

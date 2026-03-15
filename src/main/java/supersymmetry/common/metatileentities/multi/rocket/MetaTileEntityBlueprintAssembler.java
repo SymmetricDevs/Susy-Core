@@ -626,8 +626,8 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
         ConditionalWidget conditional = new ConditionalWidget(0, 0, width, height, () -> !hasBlueprint());
         conditional.addWidget(
                 new LabelWidget(
-                        width / 2 - 20,
-                        height / 2 - 16,
+                        width / 2 - 40,
+                        height / 2 - 29,
                         I18n.format(this.getMetaName() + ".blueprint_request"),
                         0x505050));
         builder.widget(conditional);
@@ -676,10 +676,10 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
         conditional.addWidgetWithTest(
                 new ClickButtonWidget(
                         7,
-                        height - 140,
+                        height - 115,
                         35,
                         25,
-                        "build",
+                        I18n.format(this.getMetaName() + ".build_button"),
                         click -> {
                             AbstractRocketBlueprint bp = getCurrentBlueprint();
                             if (bp != null) {
@@ -695,7 +695,14 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                                 .setShouldClientCallback(true),
                 () -> this.hasBlueprint());
 
-        builder.widget(new DynamicLabelWidget(50, height - 130, this::getLastErrorMessage, 0xFF5555));
+        conditional.addWidgetWithTest(new DynamicLabelWidget(50, height - 130, this::getLastErrorMessage, 0xFF5555),
+                () -> this.lastErrorResult != RocketStage.ComponentValidationResult.SUCCESS && hasBlueprint());
+        conditional.addWidgetWithTest(
+                new LabelWidget(50, height - 130, this.getMetaName() + ".build_error.success", 0x55FF55),
+                () -> this.lastErrorResult == RocketStage.ComponentValidationResult.SUCCESS && hasBlueprint());
+        conditional.addWidgetWithTest(
+                new LabelWidget(50, height - 118, this.getMetaName() + ".build_error.success.extract", 0x55FF55),
+                () -> this.lastErrorResult == RocketStage.ComponentValidationResult.SUCCESS && hasBlueprint());
 
         return builder;
     }

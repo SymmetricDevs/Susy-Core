@@ -10,6 +10,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
@@ -132,6 +133,94 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     }
 
     @Override
+    public void readFromNBT(NBTTagCompound data) {
+        super.readFromNBT(data);
+        this.isActive = data.getBoolean("isActive");
+        this.isWorkingEnabled = data.getBoolean("isWorkingEnabled");
+        if (data.hasKey("progress")) {
+            this.progress = data.getLong("progress");
+        }
+        this.gravity = data.getDouble("gravity");
+
+        if (data.hasKey("fuelRegistryName")) {
+            this.fuel = RocketFuelEntry.getCopyOf(data.getString("fuelRegistryName"));
+        }
+
+        NBTTagCompound blueprintTag = data.getCompoundTag("blueprint_slot");
+        if (blueprintTag != null) {
+            ItemStack blueprintStack = new ItemStack(blueprintTag);
+            this.rocketBlueprintSlot.setStackInSlot(0, blueprintStack);
+        }
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        NBTTagCompound tag = super.writeToNBT(data);
+        tag.setBoolean("isActive", this.isActive);
+        tag.setBoolean("isWorkingEnabled", this.isWorkingEnabled);
+        if (progress != 0)
+            tag.setLong("progress", this.progress);
+        tag.setDouble("gravity", this.gravity);
+
+        if (this.fuel != null) {
+            tag.setString("fuelRegistryName", this.fuel.getRegistryName());
+        }
+
+        if (!rocketBlueprintSlot.isEmpty()) {
+            var bp = rocketBlueprintSlot.getStackInSlot(0).writeToNBT(new NBTTagCompound());
+            tag.setTag("blueprint_slot", bp);
+        }
+
+        return tag;
+    }
+
+    @Override
+    public void writeInitialSyncData(PacketBuffer buf) {
+        super.writeInitialSyncData(buf);
+        buf.writeBoolean(this.isActive);
+        buf.writeBoolean(this.isWorkingEnabled);
+        buf.writeLong(this.progress);
+        buf.writeDouble(this.gravity);
+        if (this.fuel != null) {
+            buf.writeBoolean(true);
+            buf.writeString(this.fuel.getRegistryName());
+        } else {
+            buf.writeBoolean(false);
+        }
+
+        if (hasBlueprint()) {
+            buf.writeBoolean(true);
+            buf.writeItemStack(rocketBlueprintSlot.getStackInSlot(0));
+        } else {
+            buf.writeBoolean(false);
+        }
+        if (this.isActive)
+            this.rocketBlueprintSlot.setLocked(true);
+    }
+
+    @Override
+    public void receiveInitialSyncData(PacketBuffer buf) {
+        super.receiveInitialSyncData(buf);
+        this.isActive = buf.readBoolean();
+        this.isWorkingEnabled = buf.readBoolean();
+        this.progress = buf.readLong();
+        this.gravity = buf.readDouble();
+        if (buf.readBoolean()) {
+            this.fuel = RocketFuelEntry.getCopyOf(buf.readString(32767));
+        }
+
+        if (buf.readBoolean()) {
+            try {
+                ItemStack blueprintStack = buf.readItemStack();
+                this.rocketBlueprintSlot.setStackInSlot(0, blueprintStack);
+            } catch (Exception e) {
+                // goognt
+            }
+        }
+        if (this.isActive) this.rocketBlueprintSlot.setLocked(true);
+    }
+
+    @Override
     public int getProgress() {
         return (int) this.progress;
     }
@@ -163,7 +252,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
 
     public void setActive(boolean active) {
         if (this.isActive != active && this.isStructureFormed()) {
-            // SusyLog.logger.info("setActive({})", active);
             this.isActive = active;
             markDirty();
             World world = getWorld();
@@ -322,7 +410,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         this.energyContainer = new EnergyContainerList(getAbilities(MultiblockAbility.INPUT_ENERGY));
         this.inputCoolant = new FluidTankList(true, getAbilities(MultiblockAbility.IMPORT_FLUIDS));
         this.outputCoolant = new FluidTankList(true, getAbilities(MultiblockAbility.EXPORT_FLUIDS));
-        this.progress = 0;
 
         this.coolantPositions = context.getOrDefault(FLUID_BLOCKS_KEY, new ArrayList<>());
         this.coolantFilled = coolantPositions.isEmpty();
@@ -522,11 +609,14 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                         68,
                         60,
                         12,
-                        () -> String.valueOf(gravity),
+                        () -> Double.valueOf(gravity).toString(),
                         value -> {
                             if (!value.isEmpty()) {
                                 try {
                                     gravity = Double.parseDouble(value);
+                                    if (gravity <= 0) {
+                                        gravity = 9.81;
+                                    }
                                 } catch (NumberFormatException ignored) {
                                     gravity = 9.81;
                                 }
@@ -587,26 +677,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                         0xffffff),
                 () -> !this.isActive());
 
-        // mainGroup.addWidgetConditionalInit(
-        // () -> !this.isActive() && this.hasBlueprint() && this.getBlueprint() != null,
-        // () -> {
-        // return new DynamicLabelWidget(
-        // width - 130,
-        // 42,
-        // () -> {
-        // var bp = this.getBlueprint();
-        // if (bp != null) {
-        // double c = Math.max(bp.minimalSuccessChance(),
-        // getSuccessProbability(bp.minimalSuccessChance(), progress));
-        // return I18n.format(
-        // this.getMetaName() + ".gui.success_chance",
-        // String.format("%3.4f", c * 100));
-        // }
-        // return "";
-        // },
-        // 0xffffff);
-        // });
-        // label gets in the way a little
         mainGroup.addWidgetWithTest(
                 new LabelWidget(9, 9, getMetaFullName(), 0xffffff), () -> !this.isActive());
 
@@ -693,7 +763,8 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
 
         mainGroup.addWidgetConditionalInit(
                 () -> {
-                    if (this.hasBlueprint() && this.getBlueprint() != null && this.isActive()) {
+                    AbstractRocketBlueprint bp = this.getBlueprint();
+                    if (this.hasBlueprint() && bp != null && bp.isFullBlueprint() && this.isActive()) {
                         return true;
                     }
                     return false;
@@ -708,20 +779,10 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                         return new RocketRenderWidget(
                                 new Size(width - 15, 100), new Position(7, 11), rocketentity);
                     }
+                    SusyLog.logger.fatal("something very very bad happened in the ui, bp:{}",
+                            bp == null ? "null" : bp.writeToNBT());
                     return null;
                 });
-        // TODO nuke this
-        builder.widget(
-                new AdvancedTextWidget(
-                        width - 100,
-                        height - 82,
-                        (l) -> {
-                            long c = this.progress;
-
-                            l.add(new TextComponentTranslation(Long.toString(c)));
-                        },
-                        0xffffff));
-
         builder.widget(mainGroup);
 
         return builder;

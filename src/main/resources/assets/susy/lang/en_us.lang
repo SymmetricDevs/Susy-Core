@@ -303,11 +303,14 @@ susy.machine.blueprint_assembler.stagename=Stage: %s
 susy.machine.blueprint_assembler.build_button_label=Build
 susy.machine.blueprint_assembler.blueprint_request=Insert Blueprint:
 
-susy.machine.blueprint_assembler.build_error.invalid_card=Invalid card in %1$s %2$s
-susy.machine.blueprint_assembler.build_error.validation_failure=Validation failed for %1$s %2$s
+susy.machine.blueprint_assembler.build_error.invalid_card=Invalid card in %1$s, %2$s
+susy.machine.blueprint_assembler.build_error.validation_failure=Validation failed for %1$s, %2$s
 susy.machine.blueprint_assembler.build_error.invalid_amount=Invalid amount of components in %1$s, %2$s row
-susy.machine.blueprint_assembler.build_error.incompatible_card=Incompatible card in %1$s %2$s
-susy.machine.blueprint_assembler.build_error.unknown=Unknown error in %1$s %2$s
+susy.machine.blueprint_assembler.build_error.incompatible_card=Incompatible card in %1$s, %2$s
+susy.machine.blueprint_assembler.build_error.unknown=Unknown error in %1$s. %2$s
+susy.machine.blueprint_assembler.build_error.success=Build successful!
+susy.machine.blueprint_assembler.build_error.success.extract=Extract the component cards now
+susy.machine.blueprint_assembler.build_button=build
 
 
 susy.rocketry.components.engine.name=Engine(s)

@@ -72,43 +72,34 @@ public class FuelRegistrySelectorWidget extends AbstractWidgetGroup {
         }
     }
 
+    private static List<Fluid> getMaterialFluids(Material mat) {
+        List<Fluid> fluids = new ArrayList<>();
+        Fluid fl1 = mat.getFluid(FluidStorageKeys.LIQUID);
+        if (fl1 != null) fluids.add(fl1);
+        FluidProperty fluidprop = mat.getProperty(PropertyKey.FLUID);
+        if (fluidprop != null) {
+            Fluid fl2 = fluidprop.get(fluidprop.getPrimaryKey());
+            if (fl2 != null) fluids.add(fl2);
+        }
+        Fluid fl3 = mat.getFluid();
+        if (fl3 != null) fluids.add(fl3);
+        return fluids;
+    }
+
     public Optional<RocketFuelEntry> search() {
-        List<FluidStack> stacksNotNull = this.stacks.stream().filter(x -> x != null).collect(Collectors.toList());
+        List<Fluid> userFluids = this.stacks.stream()
+                .filter(x -> x != null)
+                .map(FluidStack::getFluid)
+                .collect(Collectors.toList());
 
         for (RocketFuelEntry entry : RocketFuelEntry.getFuelRegistry().values()) {
-            List<Fluid> fluids = stacksNotNull.stream()
-                    .map(
-                            x -> {
-                                return x.getFluid();
-                            })
-                    .collect(Collectors.toList());
-
-            if (entry.getComposition().stream()
-                    .map(
-                            x -> {
-                                Material mat = x.getFirst();
-                                Fluid l = mat.getFluid(FluidStorageKeys.LIQUID);
-                                if (l != null) {
-                                    return l;
-                                }
-                                FluidProperty fluidprop = mat.getProperty(PropertyKey.FLUID);
-                                if (fluidprop != null) {
-                                    @Nullable
-                                    Fluid fluid = fluidprop.get(fluidprop.getPrimaryKey());
-                                    if (fluid != null) {
-                                        return fluid;
-                                    }
-                                }
-                                return mat.getFluid();
-                            })
-                    .allMatch(
-                            x -> {
-                                return fluids.contains(x);
-                            })) {
+            boolean matches = entry.getComposition().stream()
+                    .map(pair -> getMaterialFluids(pair.getFirst()))
+                    .allMatch(matFluids -> matFluids.stream().anyMatch(userFluids::contains));
+            if (matches) {
                 return Optional.of(entry);
             }
         }
-
         return Optional.empty();
     }
 

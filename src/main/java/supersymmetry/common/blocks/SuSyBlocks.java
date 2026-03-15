@@ -1,8 +1,11 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.block.VariantActiveBlock;
-import gregtech.api.block.VariantBlock;
-import gregtech.api.util.BlockUtility;
+import static gregtech.common.blocks.MetaBlocks.ASPHALT;
+
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.stream.Collectors;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -11,15 +14,14 @@ import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.block.VariantActiveBlock;
+import gregtech.api.block.VariantBlock;
+import gregtech.api.util.BlockUtility;
 import supersymmetry.common.blocks.rocketry.*;
 import supersymmetry.common.tileentities.SuSyTileEntities;
-
-import java.lang.reflect.Field;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static gregtech.common.blocks.MetaBlocks.ASPHALT;
 
 public class SuSyBlocks {
 
