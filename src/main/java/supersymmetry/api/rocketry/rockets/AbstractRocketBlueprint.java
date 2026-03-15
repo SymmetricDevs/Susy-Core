@@ -11,7 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 
-public abstract class AbstractRocketBlueprint {
+public abstract class AbstractRocketBlueprint implements Cloneable {
 
     private static Map<String, AbstractRocketBlueprint> blueprintsRegistry = new HashMap<>();
     public static boolean registryLock = false;
@@ -22,22 +22,10 @@ public abstract class AbstractRocketBlueprint {
     }
 
     public static AbstractRocketBlueprint getCopyOf(String name) {
-        try {
-            if (blueprintsRegistry.containsKey(name)) {
-                AbstractRocketBlueprint bp = AbstractRocketBlueprint.getBlueprintsRegistry().get(name);
-                AbstractRocketBlueprint newbp = (AbstractRocketBlueprint) bp.getClass()
-                        .getDeclaredConstructors()[0]
-                                .newInstance(bp.getName(), bp.getRelatedEntity());
-
-                newbp.readFromNBT(bp.writeToNBT());
-                return newbp;
-            } else {
-                return null;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("failed to create a blueprint copy");
+        if (blueprintsRegistry.containsKey(name)) {
+            return blueprintsRegistry.get(name).clone();
         }
+        return null;
     }
 
     public static void registerBlueprint(AbstractRocketBlueprint bp) {
@@ -58,12 +46,6 @@ public abstract class AbstractRocketBlueprint {
 
     public ResourceLocation relatedEntity = new ResourceLocation(Supersymmetry.MODID, "rocket_basic");
 
-    public List<int[]> ignitionStages = new ArrayList<>(); // allows for multiple stages to be ignited at once, ex.
-    // boosters together with the main stage, or the second stage together with the EES which im
-    // definitely not adding
-
-    // meant to contain the INDEX of the stages in the list bellow
-    // actually i dont remember why i added this
     public List<RocketStage> stages = new ArrayList<>();
 
     public AbstractRocketBlueprint(String name, ResourceLocation relatedEntity) {
@@ -71,17 +53,7 @@ public abstract class AbstractRocketBlueprint {
         setRelatedEntity(relatedEntity);
     }
 
-    public abstract double getAugmentation();
-
-    public abstract void setAugmentation(double augmentation);
-
-    public List<int[]> getIgnitionStages() {
-        return ignitionStages;
-    }
-
-    public void setIgnitionStages(List<int[]> ignitionStages) {
-        this.ignitionStages = ignitionStages;
-    }
+    public abstract double getMinimalSuccessChance();
 
     public List<RocketStage> getStages() {
         return this.stages;
@@ -121,7 +93,9 @@ public abstract class AbstractRocketBlueprint {
     }
 
     public double getThrust(RocketFuelEntry entry, double gravity, String componentType) {
-        return this.getStages().stream().mapToDouble((stage) -> stage.getThrust(entry, gravity, componentType)).sum();
+        return this.getStages().stream()
+                .mapToDouble((stage) -> stage.getThrust(entry, gravity, componentType))
+                .sum();
     }
 
     public double getEffectiveFuelVelocity(RocketFuelEntry entry, double gravity, String componentType) {
@@ -137,7 +111,9 @@ public abstract class AbstractRocketBlueprint {
     }
 
     public int getComponentCount(String componentType) {
-        return this.getStages().stream().mapToInt((comp) -> comp.getComponentCount(componentType)).sum();
+        return this.getStages().stream()
+                .mapToInt((comp) -> comp.getComponentCount(componentType))
+                .sum();
     }
 
     public void setName(String name) {
@@ -156,5 +132,17 @@ public abstract class AbstractRocketBlueprint {
         this.stages = stages;
     }
 
-    public double afsSuccessChance;
+    @Override
+    public AbstractRocketBlueprint clone() {
+        try {
+            AbstractRocketBlueprint cloned = (AbstractRocketBlueprint) super.clone();
+            cloned.stages = new ArrayList<>();
+            for (RocketStage stage : this.stages) {
+                cloned.stages.add((RocketStage) stage.clone());
+            }
+            return cloned;
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

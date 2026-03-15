@@ -137,9 +137,11 @@ public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMul
                 pulse();
             }
             pulledUp = val != 0;
-            writeCustomData(UPDATE_REDSTONE_ACTIVATION, buf -> {
-                buf.writeBoolean(pulledUp);
-            });
+            writeCustomData(
+                    UPDATE_REDSTONE_ACTIVATION,
+                    buf -> {
+                        buf.writeBoolean(pulledUp);
+                    });
         }
     }
 
@@ -181,8 +183,7 @@ public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMul
                         int n = 34;
                         String s = I18n.format(
                                 this.getMetaName() + ".signal_desc",
-                                I18n.format(
-                                        controller.getMetaName() + ".signal." + receiver.getSignalName(this.signal)));
+                                I18n.format(receiver.getSignalTranslationKey(this.signal)));
 
                         return IntStream.range(0, (s.length() + n - 1) / n)
                                 .mapToObj(i -> s.substring(i * n, Math.min(s.length(), (i + 1) * n)))

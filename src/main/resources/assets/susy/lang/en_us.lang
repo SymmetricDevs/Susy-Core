@@ -303,17 +303,27 @@ susy.machine.blueprint_assembler.stagename=Stage: %s
 susy.machine.blueprint_assembler.build_button_label=Build
 susy.machine.blueprint_assembler.blueprint_request=Insert Blueprint:
 
+susy.machine.blueprint_assembler.build_error.invalid_card=Invalid card in %1$s, %2$s
+susy.machine.blueprint_assembler.build_error.validation_failure=Validation failed for %1$s, %2$s
+susy.machine.blueprint_assembler.build_error.invalid_amount=Invalid amount of components in %1$s, %2$s row
+susy.machine.blueprint_assembler.build_error.incompatible_card=Incompatible card in %1$s, %2$s
+susy.machine.blueprint_assembler.build_error.unknown=Unknown error in %1$s. %2$s
+susy.machine.blueprint_assembler.build_error.success=Build successful!
+susy.machine.blueprint_assembler.build_error.success.extract=Extract the component cards now
+susy.machine.blueprint_assembler.build_button=build
+
 
 susy.rocketry.components.engine.name=Engine(s)
 susy.rocketry.components.engine_small.name=Vernier engine(s)
 susy.rocketry.components.tank.name=Tank(s)
 
 susy.rocketry.components.validation_codes.invalid_amount=Invalid amount of components
-susy.rocketry.component.validation_codes.invalid_amount=Invalid amount of components inserted
+susy.rocketry.components.validation_codes.invalid_amount=Invalid amount of components inserted
 susy.rocketry.components.validation_codes.invalid_card=Malformed component card
 susy.rocketry.components.validation_codes.incompatible_card=Incompatible card
 susy.rocketry.components.validation_codes.unknown=Something broke
 susy.rocketry.components.validation_codes.success=Blueprint assembled successfully
+
 
 susy.rocketry.stages.block_F.name=Block F
 susy.rocketry.stages.block_A.name=Block A
@@ -475,8 +485,8 @@ susy.machine.landing_pad.name=Landing Pad
 susy.machine.scrap_recycler.name=Scrap Recycler
 
 susy.machine.rocket_assembler.name=Rocket Assembler
-susy.machine.rocket_assembler.signal.start_assembly=Start assembly
-susy.machine.rocket_assembler.signal.stop_assembly=Stop and discard assembly
+susy.machine.rocket_assembler.signal.0=Start assembly
+susy.machine.rocket_assembler.signal.1=Stop and discard assembly
 susy.machine.rocket_assembler.blueprint_slot.name=insert a rocket blueprint
 susy.machine.rocket_assembler.gui.required_items=Required Items:
 susy.machine.rocket_assembler.gui.stop=Stop and reset assembly
