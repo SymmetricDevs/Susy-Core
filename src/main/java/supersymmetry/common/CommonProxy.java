@@ -1,5 +1,12 @@
 package supersymmetry.common;
 
+import static supersymmetry.common.blocks.SuSyBlocks.*;
+import static supersymmetry.common.blocks.SuSyMetaBlocks.SHEETED_FRAMES;
+
+import java.io.File;
+import java.util.Objects;
+import java.util.function.Function;
+
 import gregtech.api.block.VariantItemBlock;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.modules.ModuleContainerRegistryEvent;

@@ -22,7 +22,6 @@ import gregtech.api.cover.CoverDefinition;
 import gregtech.api.cover.CoverableView;
 import gregtech.api.unification.material.Materials;
 import gregtech.client.renderer.texture.Textures;
-import supersymmetry.common.blocks.BlockBreathingGas;
 import supersymmetry.common.blocks.SuSyBlocks;
 
 public class CoverAirDisperser extends CoverBase implements ITickable {
@@ -68,20 +67,11 @@ public class CoverAirDisperser extends CoverBase implements ITickable {
                 getAttachedSide());
         if (fluidHandler == null) return;
 
-        BlockBreathingGas.GasType gasType = null;
         FluidStack oxygenStack = new FluidStack(Materials.Oxygen.getFluid(), oxygenPerSecond);
         FluidStack drained = fluidHandler.drain(oxygenStack, false);
-        if (drained == null) {
-            drained = fluidHandler.drain(oxygenPerSecond, false);
-            if (drained != null && drained.getFluid().getName().equals("pesticide")) {
-                gasType = BlockBreathingGas.GasType.PESTICIDE;
-            }
-        } else {
-            gasType = BlockBreathingGas.GasType.OXYGEN;
-        }
-        if (gasType != null && drained.amount >= oxygenPerSecond) {
+        if (drained != null && drained.amount >= oxygenPerSecond) {
             fluidHandler.drain(oxygenStack, true);
-            world.setBlockState(frontPos, SuSyBlocks.BREATHING_GAS.getState(gasType));
+            world.setBlockState(frontPos, SuSyBlocks.BREATHING_GAS.getDefaultState());
             world.scheduleUpdate(frontPos, SuSyBlocks.BREATHING_GAS, 10);
         }
     }
