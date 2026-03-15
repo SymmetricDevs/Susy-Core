@@ -27,7 +27,9 @@
     "RecipeMapsMixin",
     "RecyclingRecipesMixin",
     "ToolBuilderAccessor",
-    "ToolItemsMixin"
+    "ToolItemsMixin",
+    "WorldItemPipeNetAccessor",
+    "WorldItemPipeNetMixin"
   ],
   "client" : [
     "WorldSceneRendererMixin"
