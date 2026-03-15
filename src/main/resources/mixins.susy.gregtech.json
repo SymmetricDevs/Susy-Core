@@ -28,8 +28,8 @@
     "RecyclingRecipesMixin",
     "ToolBuilderAccessor",
     "ToolItemsMixin",
-    "WorldItemPipeNetAccessor",
-    "WorldItemPipeNetMixin"
+    "WorldItemPipeNetMixin",
+    "WorldPipeNetAccessor"
   ],
   "client" : [
     "WorldSceneRendererMixin"
