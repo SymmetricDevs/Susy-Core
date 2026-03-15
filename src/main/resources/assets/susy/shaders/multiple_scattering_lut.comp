@@ -1,0 +1,166 @@
+#version 430 core
+
+// Bakes the multiple scattering LUT.
+// Exact port of Blackrack's MultipleScatteringLut.comp to GL 4.3.
+//
+// Each workgroup = one texel. 8x8 = 64 threads each march one direction.
+// Results are summed via parallel reduction, then geometric series applied.
+//
+// LUT axes: x = sunCosZenith (0..1 → -1..1), y = altitude (0..1)
+// Output: total multiple scattering radiance for all orders
+
+layout(local_size_x = 8, local_size_y = 8) in;
+
+layout(rgba16f, binding = 0) uniform image2D u_multipleScatteringLut;
+
+uniform sampler2D u_transmittanceLut;
+uniform vec2      u_transmittanceLutSize;
+
+uniform float u_bottomRadius;
+uniform float u_topRadius;
+uniform vec3  u_rayleighCoefficients;
+uniform float u_rayleighScaleHeight;
+uniform vec3  u_mieCoefficients;
+uniform float u_mieScaleHeight;
+uniform float u_mieAbsorptionMult;
+uniform vec3  u_ozoneCoefficients;
+uniform float u_ozoneAltitude;
+uniform float u_ozoneExtent;
+
+const float PI    = 3.14159265359;
+const int   STEPS = 20;
+const int   GROUP = 8;
+
+shared vec3 sharedIsotropic[GROUP * GROUP];
+shared vec3 sharedTransferFactor[GROUP * GROUP];
+
+vec2 raySphere(vec3 ro, vec3 rd, vec3 c, float r) {
+    vec3 f=ro-c; float b=dot(rd,f);
+    float d=b*b-dot(f,f)+r*r;
+    if(d<0.0) return vec2(1e20,-1e20);
+    float s=sqrt(d); return vec2(-b-s,-b+s);
+}
+
+vec3 GetTransmittanceFromLut(float altitude, float cosZenith) {
+    float maxH    = sqrt(u_topRadius*u_topRadius - u_bottomRadius*u_bottomRadius);
+    float radDist = sqrt(max(0.0, altitude*altitude - u_bottomRadius*u_bottomRadius));
+    float disc    = altitude*altitude*(cosZenith*cosZenith-1.0) + u_topRadius*u_topRadius;
+    float rayDist = max(0.0, -altitude*cosZenith + sqrt(max(disc,0.0)));
+    float minD    = u_topRadius - altitude;
+    float maxD    = radDist + maxH;
+    vec2  coords  = clamp(vec2(
+        (maxD>minD) ? (rayDist-minD)/(maxD-minD) : 0.0,
+        (maxH>0.0)  ? radDist/maxH : 0.0
+    ), 0.0, 1.0);
+    vec2 uv = (coords*(u_transmittanceLutSize-1.0)+0.5)/u_transmittanceLutSize;
+    vec3 T  = textureLod(u_transmittanceLut, uv, 0.0).rgb;
+    float sinH   = clamp(u_bottomRadius/altitude, 0.0, 1.0);
+    float cosH   = -sqrt(max(1.0-sinH*sinH, 0.0));
+    float shadow = smoothstep(cosH-0.002, cosH+0.002, cosZenith);
+    return T * shadow;
+}
+
+void RaymarchDirection(vec3 rayOrigin, vec3 rayDir, vec3 planetPos, vec3 sunDir,
+                       out vec3 inscatterIsotropic, out vec3 transferFactor) {
+    inscatterIsotropic = vec3(0.0);
+    transferFactor     = vec3(0.0);
+
+    vec2 aHit = raySphere(rayOrigin, rayDir, planetPos, u_topRadius);
+    vec2 pHit = raySphere(rayOrigin, rayDir, planetPos, u_bottomRadius);
+
+    float tEnd = aHit.y;
+    if (pHit.x > 0.0) tEnd = min(tEnd, pHit.x);
+    if (tEnd <= 0.0) return;
+
+    float stepSize = tEnd / float(STEPS);
+    vec3  rayleighAbs = u_rayleighCoefficients;
+    vec3  mieAbs      = u_mieCoefficients * u_mieAbsorptionMult;
+    vec3  totalT      = vec3(1.0);
+
+    float uniformPhase = 1.0 / (4.0 * PI);
+
+    for (int i = 0; i < STEPS; i++) {
+        vec3  pos  = rayOrigin + rayDir * (float(i)+0.5)*stepSize;
+        vec3  rel  = pos - planetPos;
+        float dist = length(rel);
+        float alt  = max(dist - u_bottomRadius, 0.0);
+
+        vec2  dens = exp(-alt / vec2(u_rayleighScaleHeight, u_mieScaleHeight));
+        float dO   = clamp(1.0-abs(alt-u_ozoneAltitude)/u_ozoneExtent, 0.0, 1.0);
+
+        vec3 localAbs = rayleighAbs*dens.x + mieAbs*dens.y + u_ozoneCoefficients*dO;
+        vec3 stepT    = exp(-localAbs * stepSize);
+        vec3 weight   = totalT * (vec3(1.0)-stepT) / max(localAbs, vec3(1e-10));
+
+        vec3 curR = dens.x * u_rayleighCoefficients;
+        vec3 curM = dens.y * u_mieCoefficients;
+
+        // Transfer factor: how much this column rescatters light (uniform phase)
+        transferFactor += weight * (curR + curM);
+
+        // Isotropic inscatter: single scatter with uniform phase, lit by sun
+        float sunCosZ = dot(rel/dist, sunDir);
+        vec3  lightT  = GetTransmittanceFromLut(dist, sunCosZ);
+        inscatterIsotropic += weight * lightT * uniformPhase * (curR + curM);
+
+        totalT *= stepT;
+    }
+}
+
+void main() {
+    ivec2 dim      = imageSize(u_multipleScatteringLut);
+    ivec2 texelId  = ivec2(gl_WorkGroupID.xy);
+    int   threadId = int(gl_LocalInvocationID.x + gl_LocalInvocationID.y * GROUP);
+
+    // LUT coords for this texel
+    vec2 coords = vec2(texelId) / vec2(dim - ivec2(1));
+
+    // Decode physical parameters - matches GetMultiScatteringLutCoordsFromPhysicalParameters inverse
+    float sunCosZenith = coords.x * 2.0 - 1.0;
+    float altitude     = coords.y * (u_topRadius - u_bottomRadius);
+    float distToCenter = u_bottomRadius + max(altitude, 1.0);
+
+    vec3 planetPos = vec3(0.0, 0.0, -distToCenter);
+    vec3 rayOrigin = vec3(0.0);
+
+    float sunSinZenith = sqrt(max(1.0 - sunCosZenith*sunCosZenith, 0.0));
+    vec3  sunDir       = vec3(0.0, sunSinZenith, sunCosZenith);
+
+    // This thread marches one direction on the sphere
+    // 8x8 grid covers sphere with uniform-ish distribution
+    float u = float(gl_LocalInvocationID.x) / float(GROUP);
+    float v = float(gl_LocalInvocationID.y) / float(GROUP);
+
+    float azimuth       = 2.0 * PI * u;
+    float cosPolar      = 1.0 - 2.0 * v;   // uniform sphere sampling
+    float sinPolar      = sqrt(max(1.0 - cosPolar*cosPolar, 0.0));
+    vec3  viewDir       = vec3(cos(azimuth)*sinPolar, sin(azimuth)*sinPolar, cosPolar);
+
+    vec3 iso, transfer;
+    RaymarchDirection(rayOrigin, viewDir, planetPos, sunDir, iso, transfer);
+
+    sharedIsotropic[threadId]     = iso;
+    sharedTransferFactor[threadId] = transfer;
+
+    // Parallel reduction sum - exact from Blackrack
+    barrier();
+    for (uint stride = uint(GROUP*GROUP)/2u; stride > 0u; stride /= 2u) {
+        if (uint(threadId) < stride) {
+            sharedIsotropic[threadId]     += sharedIsotropic[threadId + int(stride)];
+            sharedTransferFactor[threadId] += sharedTransferFactor[threadId + int(stride)];
+        }
+        barrier();
+    }
+
+    if (threadId > 0) return;
+
+    float totalSamples = float(GROUP * GROUP);
+    vec3 avgIsotropic  = sharedIsotropic[0]     / totalSamples;
+    vec3 avgTransfer   = sharedTransferFactor[0] / totalSamples;
+
+    // Geometric series sum: total multiple scattering = isotropic / (1 - transferFactor)
+    // This accounts for all scattering orders analytically
+    vec3 multiScatter = avgIsotropic / max(vec3(1.0) - avgTransfer, vec3(1e-4));
+
+    imageStore(u_multipleScatteringLut, texelId, vec4(multiScatter, 1.0));
+}

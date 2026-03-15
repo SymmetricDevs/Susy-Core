@@ -38,6 +38,8 @@ public class SuSyDimensions {
     /** Registry of all SpaceDimensions, keyed by dimension id. Populated via SpaceDimension#load(). */
     public static Map<Integer, SpaceDimension> SPACE = new Int2ObjectArrayMap<>();
 
+    static long leoOrbitTicks = 110_400L;
+
     public static void init() {
         int id = -2;
         for (DimensionType type : DimensionType.values()) {
@@ -55,17 +57,18 @@ public class SuSyDimensions {
                 new ResourceLocation("susy", "textures/space/sun/cubemap.png"));
         RenderableCelestialObject SUN = new RenderableCelestialObject(CelestialObjects.SUN, solCubemap)
                 .setAngularSize(20.0f)
-                .setOrbitalPeriod(24000L)
+                .setOrbitalPeriod(leoOrbitTicks)   // was 24000L - sun moves once per LEO orbit
                 .setOrbitalInclination(23.5f);
 
         Cubemap moonCubemap = new Cubemap(
                 new ResourceLocation("susy", "textures/space/moon/cubemap.png"));
         long lunarDayTicks = 708734L;
         RenderableCelestialObject renderableMoon = new RenderableCelestialObject(CelestialObjects.MOON, moonCubemap)
-                .setAngularSize(20.0f)
+                .setAngularSize(4.0f)
                 .setOrbitalPeriod(lunarDayTicks)
                 .setOrbitalInclination(5.14f)
-                .setSunReference(SUN);   // put the fries in the back lil bro
+                .setTidallyLocked(true)
+                .setSunReference(SUN);
 
         Cubemap earthCubemap = new Cubemap(new ResourceLocation("susy", "textures/space/earth/cubemap.png"));
         RenderableCelestialObject renderableEarth = new RenderableCelestialObject(CelestialObjects.EARTH, earthCubemap)
@@ -123,11 +126,9 @@ public class SuSyDimensions {
 
         SuSySpaceRenderer leoRenderer = null;
 
-        long leoOrbitTicks = 110_400L;
-
         if (FMLLaunchHandler.side() == Side.CLIENT) {
             leoRenderer = new SuSySpaceRenderer();
-            leoRenderer.setCelestialObjects(SUN, renderableMoon, renderableEarth);
+            leoRenderer.setCelestialObjects(/* SUN, */ renderableMoon, renderableEarth);
             leoRenderer.setOrbitalBody(renderableEarth, earthCubemap, leoOrbitTicks);
             leoRenderer.setSunObject(SUN);
         }
