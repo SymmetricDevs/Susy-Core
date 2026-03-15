@@ -1509,3 +1509,14 @@ susy.msg.rocket_component.wrong_tile=A tile was used incorrectly.
 susy.msg.rocket_component.interstage_not_cylindrical=The interstage looks weird.
 
 entity.Rocket.name=Soyuz FG Rocket
+
+#BMRF blocks
+tile.bmrf_blocks.bmrf1.name=BMRF-1
+tile.bmrf_blocks.bmrf2.name=BMRF-2
+tile.bmrf_blocks.bmrf3.name=BMRF-3
+tile.bmrf_blocks.bmrf4.name=BMRF-4
+tile.bmrf_blocks.bmrf5.name=BMRF-5
+tile.bmrf_blocks.bmrf6.name=BMRF-6
+tile.bmrf_blocks.bmrf7.name=BMRF-7
+tile.bmrf_blocks.bmrf8.name=BMRF-8
+tile.bmrf_blocks.bmrf9.name=BMRF-9
