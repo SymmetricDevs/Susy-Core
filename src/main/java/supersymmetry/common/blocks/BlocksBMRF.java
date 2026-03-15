@@ -19,6 +19,7 @@ public class BlocksBMRF extends VariantBlock<BlocksBMRF.BMRFBlockType> {
     }
 
     public static enum BMRFBlockType implements IStringSerializable, IStateHarvestLevel {
+
         BMRF1("bmrf1", 2),
         BMRF2("bmrf2", 2),
         BMRF3("bmrf3", 2),
@@ -28,7 +29,6 @@ public class BlocksBMRF extends VariantBlock<BlocksBMRF.BMRFBlockType> {
         BMRF7("bmrf7", 2),
         BMRF8("bmrf8", 2),
         BMRF9("bmrf9", 2);
-
 
         private final String name;
         private final int harvestLevel;
