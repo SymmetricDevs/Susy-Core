@@ -1,12 +1,6 @@
 package supersymmetry.mixins.dimstack;
 
-import supersymmetry.mixins.dimstack.DimensionalPipeMixinAccessor;
-
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -23,7 +17,6 @@ public abstract class DimensionalPipeMixin extends BaseTileEntity
 
     @Inject(method = "link", at = @At("TAIL"))
     void link(DimensionalPipe tile, CallbackInfo ci) {
-        BlockPos neighbor = pos.offset(((DimensionalPipeMixinAccessor) this).getSide());
-        world.getTileEntity(neighbor).getBlockType().onNeighborChange(world, pos, neighbor);
+        world.notifyNeighborsOfStateChange(pos, blockType, true);
     }
 }
