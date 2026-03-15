@@ -8,7 +8,7 @@ public class FisherPlane {
      * @param grid 3D grid with two classes of points.
      * @return  Fisher discriminant normal vector (pointing from 0s to 1s)
      */
-    public static Vec3d fisherNormal(boolean[][][] grid) {
+    public static Vec3d fisherNormal(boolean[][][] grid, boolean normalize) {
 
         int n = grid.length;
 
@@ -104,7 +104,15 @@ public class FisherPlane {
 
         Vec3d normal = new Vec3d(wx, wy, wz);
 
-        return normal.normalize();
+        if (normalize) {
+            return normal.normalize();
+        } else {
+            return normal;
+        }
+    }
+
+    public static Vec3d fisherNormal(boolean[][][] grid) {
+        return fisherNormal(grid, true);
     }
 
 }

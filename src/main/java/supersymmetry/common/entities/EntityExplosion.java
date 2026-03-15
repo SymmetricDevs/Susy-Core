@@ -7,6 +7,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.util.FisherPlane;
 import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
@@ -59,26 +61,37 @@ public class EntityExplosion extends Entity {
         } else if (this.ticksExisted == 100) {
             //SusyLog.logger.info("Boom");
             explode();
-            spawnExplosionParticles();
+            if (world.isRemote) {
+                spawnExplosionParticles();
+            }
             this.setDead();
         }
 
     }
 
     protected void explode() {
-
+        this.world.createExplosion(null, this.posX, this.posY, this.posZ, 5f, true);
     }
 
+    @SideOnly(Side.CLIENT)
+    @Override
+    public boolean isInRangeToRenderDist(double distance) {
+        return false;
+    }
+
+    @SideOnly(Side.CLIENT)
     protected void spawnExplosionParticles() {
-        for (int i = 0; i < 20; i++) {
+        double v0scaled;
+        for (int i = 0; i < 25; i++) {
+            v0scaled = v0 * rnd.nextFloat() * 2f;
             SusyParticleSmokeLarge smoke = new SusyParticleSmokeLarge(
                     this.world,
-                    this.posX,
-                    this.posY,
-                    this.posZ,
-                    v0 * (this.fisherNormal.x + 0.5 * (rnd.nextFloat() - 0.5)),
-                    v0 * (this.fisherNormal.y + 0.5 * (rnd.nextFloat() - 0.5)),
-                    v0 * (this.fisherNormal.z + 0.5 * (rnd.nextFloat() - 0.5))
+                    this.posX + this.power * (rnd.nextFloat() - 0.5) * 0.5,
+                    this.posY + this.power * (rnd.nextFloat() - 0.5) * 0.5,
+                    this.posZ + this.power * (rnd.nextFloat() - 0.5) * 0.5,
+                    v0scaled * (this.fisherNormal.x + 0.5 * (rnd.nextFloat() - 0.5)),
+                    v0scaled * (this.fisherNormal.y + 0.5 * (rnd.nextFloat() - 0.5)),
+                    v0scaled * (this.fisherNormal.z + 0.5 * (rnd.nextFloat() - 0.5))
             );
             Minecraft.getMinecraft().effectRenderer.addEffect(smoke);
         }
