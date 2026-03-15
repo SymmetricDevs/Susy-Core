@@ -1,5 +1,7 @@
 package supersymmetry.api.space.dimension;
 
+import static supersymmetry.client.shaders.util.ShaderUtils.invertMat4;
+
 import java.nio.FloatBuffer;
 import java.util.List;
 
@@ -75,8 +77,7 @@ public class SuSySpaceRenderer extends IRenderHandler {
 
         ShaderManager.ensureInitialised();
 
-        gameTime += partialTicks / 20f; // ticks → seconds for shader uniforms
-
+        gameTime += partialTicks / 20f;
         long worldTime = world.getWorldTime();
 
         capturedView = getMatrix(GL11.GL_MODELVIEW_MATRIX);
@@ -96,6 +97,7 @@ public class SuSySpaceRenderer extends IRenderHandler {
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA,
                 GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
+        // ── 1. Sun ────────────────────────────────────────────────────────────
         if (sunObject != null && ShaderManager.shadersAllowed()) {
             renderSunShader(worldTime);
         } else if (sunObject != null) {
@@ -105,26 +107,27 @@ public class SuSySpaceRenderer extends IRenderHandler {
             GlStateManager.popMatrix();
         }
 
+        // ── 2. Earth hemisphere ───────────────────────────────────────────────
         if (mainPlanet != null && mainCubemap != null) {
             rendermainPlanetoidHemisphere(worldTime);
         }
 
+        // ── 3. Moon / stars ───────────────────────────────────────────────────
         GlStateManager.pushMatrix();
         GL11.glScalef(100.0f, 100.0f, 100.0f);
-
         for (RenderableCelestialObject obj : objects) {
             if (obj.getCelestialObject() == CelestialObjects.EARTH) continue;
             if (obj == sunObject) continue;
+            if (obj.getCelestialObject() == CelestialObjects.SUN) continue;
             obj.renderAtPosition(worldTime, mesh);
         }
-
         GlStateManager.popMatrix();
 
-        if (mainPlanet != null) {
+        // ── 4. Atmosphere – last so it composites over earth + moon ──────────
+        if (mainPlanet != null && ShaderManager.shadersAllowed()) {
             float scale = 2500.0f;
             float planetY = -scale * 1.02f;
             float[] sd = (sunObject != null) ? sunObject.getWorldDirection(worldTime) : new float[] { 0f, 1f, 0f };
-
             atmosphereRenderer.render(capturedView, capturedProj, sd, planetY, scale);
         }
 
@@ -143,34 +146,11 @@ public class SuSySpaceRenderer extends IRenderHandler {
 
         float[] sd = sunObject.getWorldDirection(worldTime);
 
-        if (!loggedOnce) {
-            SusyLog.logger.info("[Sun] sunDir=({},{},{}) angularRadius={} diskIntensity={} coronaScale={}",
-                    sd[0], sd[1], sd[2], sunAngularRadius, diskIntensity, coronaScale);
-            SusyLog.logger.info("[Sun] view[0]={} view[5]={} view[10]={} view[15]={}",
-                    capturedView[0], capturedView[5], capturedView[10], capturedView[15]);
-            SusyLog.logger.info("[Sun] proj[0]={} proj[5]={} proj[10]={} proj[15]={}",
-                    capturedProj[0], capturedProj[5], capturedProj[10], capturedProj[15]);
-            float len = (float) Math.sqrt(sd[0] * sd[0] + sd[1] * sd[1] + sd[2] * sd[2]);
-            SusyLog.logger.info("[Sun] sunDir length={}", len);
-        }
-
         GlStateManager.enableBlend();
         GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 
         int progId = ShaderManager.getRawProgram("sun.vert", "sun.frag");
-        if (!loggedOnce) {
-            SusyLog.logger.info("[Sun] progId={} sunDir=({},{},{}) len={} angR={} intensity={}",
-                    progId, sd[0], sd[1], sd[2],
-                    Math.sqrt(sd[0] * sd[0] + sd[1] * sd[1] + sd[2] * sd[2]),
-                    sunAngularRadius, diskIntensity);
-            SusyLog.logger.info("[Sun] view diag=({},{},{},{}) proj diag=({},{},{},{})",
-                    capturedView[0], capturedView[5], capturedView[10], capturedView[15],
-                    capturedProj[0], capturedProj[5], capturedProj[10], capturedProj[15]);
-        }
-        if (progId <= 0) {
-            if (!loggedOnce) SusyLog.logger.error("[Sun] progId <= 0, shader link failed");
-            return;
-        }
+        if (progId <= 0) return;
 
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
@@ -185,15 +165,18 @@ public class SuSySpaceRenderer extends IRenderHandler {
         GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 
         GL20.glUseProgram(progId);
-        setUniform3f(progId, "u_sunDir", sd[0], sd[1], sd[2]);
-        setUniform1f(progId, "u_angularRadius", sunAngularRadius);
-        setUniform3f(progId, "u_sunColor", sunColor[0], sunColor[1], sunColor[2]);
-        setUniform1f(progId, "u_diskIntensity", diskIntensity);
-        setUniform1f(progId, "u_coronaScale", coronaScale);
-        setUniform1f(progId, "u_time", gameTime);
-        setUniform1f(progId, "u_limbDarkening", limbDarkening);
-        setUniformMat4(progId, "u_invView", ShaderUtils.invertMat4(capturedView));
-        setUniformMat4(progId, "u_invProjection", ShaderUtils.invertMat4(capturedProj));
+        ShaderUtils.setUniform3f(progId, "u_sunDir", sd[0], sd[1], sd[2]);
+        ShaderUtils.setUniform1f(progId, "u_angularRadius", sunAngularRadius);
+        ShaderUtils.setUniform3f(progId, "u_sunColor", sunColor[0], sunColor[1], sunColor[2]);
+        ShaderUtils.setUniform1f(progId, "u_diskIntensity", diskIntensity);
+        ShaderUtils.setUniform1f(progId, "u_coronaScale", coronaScale);
+        ShaderUtils.setUniform1f(progId, "u_time", gameTime);
+        ShaderUtils.setUniform1f(progId, "u_limbDarkening", limbDarkening);
+        ShaderUtils.setUniformMat4(progId, "u_invView", invertMat4(capturedView));
+        ShaderUtils.setUniformMat4(progId, "u_invProjection", invertMat4(capturedProj));
+        float[] sunScreenPos = ShaderUtils.projectDirToNDC(sd, capturedView, capturedProj);
+        ShaderUtils.setUniform2f(progId, "u_sunScreenPos", sunScreenPos[0], sunScreenPos[1]);
+
         drawFullScreenQuad();
         GL20.glUseProgram(0);
         GL11.glPopAttrib();
@@ -218,6 +201,7 @@ public class SuSySpaceRenderer extends IRenderHandler {
         List<List<Integer>> faceQuads = mesh.getFaceQuadIndices();
 
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        GL11.glEnable(GL32.GL_TEXTURE_CUBE_MAP_SEAMLESS);
         GlStateManager.disableFog();
         GlStateManager.disableLighting();
         GlStateManager.disableDepth();
@@ -256,6 +240,7 @@ public class SuSySpaceRenderer extends IRenderHandler {
 
         GlStateManager.popMatrix();
         GL11.glColor4f(1f, 1f, 1f, 1f);
+        GL11.glDisable(GL32.GL_TEXTURE_CUBE_MAP_SEAMLESS);
         GL11.glPopAttrib();
     }
 
@@ -288,23 +273,5 @@ public class SuSySpaceRenderer extends IRenderHandler {
         float[] m = new float[16];
         matBuf.get(m);
         return m;
-    }
-
-    private static void setUniform1f(int prog, String name, float v) {
-        int loc = GL20.glGetUniformLocation(prog, name);
-        if (loc >= 0) GL20.glUniform1f(loc, v);
-    }
-
-    private static void setUniform3f(int prog, String name, float x, float y, float z) {
-        int loc = GL20.glGetUniformLocation(prog, name);
-        if (loc >= 0) GL20.glUniform3f(loc, x, y, z);
-    }
-
-    private static void setUniformMat4(int prog, String name, float[] m) {
-        int loc = GL20.glGetUniformLocation(prog, name);
-        if (loc < 0) return;
-        FloatBuffer buf = BufferUtils.createFloatBuffer(16);
-        buf.put(m).flip();
-        GL20.glUniformMatrix4(loc, false, buf);
     }
 }

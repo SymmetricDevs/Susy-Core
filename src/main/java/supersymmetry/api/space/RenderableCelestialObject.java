@@ -22,8 +22,12 @@ public class RenderableCelestialObject {
     private boolean hasFixedDirection = false;
     private float fixedDx, fixedDy, fixedDz;
 
-    // When set, the sphere rotates so its lit face points toward this object (e.g. the sun).
     private RenderableCelestialObject sunReference = null;
+
+    // When true, the cubemap always shows the same face toward the planet centre (origin).
+    // The object still orbits normally but does not spin on its own axis.
+    // This is the definition of tidal locking.
+    private boolean tidallyLocked = false;
 
     private boolean loadAttempted = false;
 
@@ -61,13 +65,18 @@ public class RenderableCelestialObject {
         return this;
     }
 
-    /**
-     * When set, this object's cubemap will be rotated so its lit face (+Z axis)
-     * points toward the given sun object. Use for the moon so its bright side
-     * always faces the sun.
-     */
     public RenderableCelestialObject setSunReference(RenderableCelestialObject sun) {
         this.sunReference = sun;
+        return this;
+    }
+
+    /**
+     * Tidally locked: the same cubemap face always points toward the planet centre (origin).
+     * The object still orbits normally - only the self-rotation is locked.
+     * Use for the Moon.
+     */
+    public RenderableCelestialObject setTidallyLocked(boolean locked) {
+        this.tidallyLocked = locked;
         return this;
     }
 
@@ -88,9 +97,6 @@ public class RenderableCelestialObject {
         }
     }
 
-    /**
-     * Returns the normalised world-space direction toward this object at the given world time.
-     */
     public float[] getWorldDirection(long worldTime) {
         if (hasFixedDirection) {
             return new float[] { fixedDx, fixedDy, fixedDz };
@@ -113,8 +119,10 @@ public class RenderableCelestialObject {
             dy = fixedDy;
             dz = fixedDz;
         } else {
-            double angle = orbitalPeriodTicks > 0 ? ((worldTime + phaseOffsetTicks) % orbitalPeriodTicks) /
-                    (double) orbitalPeriodTicks * 2.0 * Math.PI : 0.0;
+            double angle = orbitalPeriodTicks > 0 ?
+                    ((worldTime + phaseOffsetTicks) % orbitalPeriodTicks) /
+                            (double) orbitalPeriodTicks * 2.0 * Math.PI :
+                    0.0;
             float incRad = (float) Math.toRadians(orbitalInclinationDeg);
             dx = (float) Math.cos(angle);
             dy = (float) (Math.sin(angle) * Math.sin(incRad));
@@ -128,11 +136,30 @@ public class RenderableCelestialObject {
         GL11.glTranslatef(dx, dy, dz);
         GL11.glScalef(radius, radius, radius);
 
-        // If a sun reference is set, rotate the sphere so its +Z face points toward the sun.
-        // This ensures the lit side of the cubemap always faces the light source.
-        if (sunReference != null) {
+        if (tidallyLocked) {
+            // Tidal lock: rotate the sphere so its -Z face (the "near side") always
+            // points toward the planet centre (origin). Since the object is at (dx,dy,dz),
+            // the direction toward the planet is (-dx,-dy,-dz) normalised.
+            float len = (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
+            if (len > 1e-6f) {
+                float nx = -dx / len, ny = -dy / len, nz = -dz / len;
+                // Rotate default -Z axis (0,0,-1) to point toward (nx,ny,nz)
+                // Cross product: (0,0,-1) x (nx,ny,nz) = (0*nz-(-1)*ny, (-1)*nx-0*nz, 0*ny-0*nx)
+                // = (ny, -nx, 0)
+                float crossX = ny, crossY = -nx, crossZ = 0f;
+                float sinA = (float) Math.sqrt(crossX * crossX + crossY * crossY);
+                float cosA = -nz; // dot of (0,0,-1) with (nx,ny,nz)
+                if (sinA > 1e-6f) {
+                    float angleDeg = (float) Math.toDegrees(Math.atan2(sinA, cosA));
+                    GL11.glRotatef(angleDeg, crossX / sinA, crossY / sinA, 0f);
+                } else if (cosA < 0) {
+                    // Already pointing away - rotate 180 around X
+                    GL11.glRotatef(180f, 1f, 0f, 0f);
+                }
+            }
+        } else if (sunReference != null) {
+            // Rotate cubemap so +Z face points toward the sun (for lit-face alignment)
             float[] sunDir = sunReference.getWorldDirection(worldTime);
-            // Sun direction relative to this object's position
             float sx = sunDir[0] - dx;
             float sy = sunDir[1] - dy;
             float sz = sunDir[2] - dz;
@@ -142,20 +169,12 @@ public class RenderableCelestialObject {
                 sy /= len;
                 sz /= len;
             }
-            // Rotate from default +Z axis (0,0,1) to point toward sun direction (sx,sy,sz).
-            // Cross product gives rotation axis, dot product gives angle.
-            // Default forward is +Z = (0,0,1)
-            float crossX = sy;   // (0,0,1) x (sx,sy,sz) = (0*sz-1*sy, 1*sx-0*sz, 0*sy-0*sx) = (-sy, sx, 0)
-            float crossY = -sx;
-            float crossZ = 0f;
-            float sinA = (float) Math.sqrt(crossX * crossX + crossY * crossY + crossZ * crossZ);
-            float cosA = sz; // dot of (0,0,1) with (sx,sy,sz)
+            float crossX = sy, crossY = -sx, crossZ = 0f;
+            float sinA = (float) Math.sqrt(crossX * crossX + crossY * crossY);
+            float cosA = sz;
             if (sinA > 1e-6f) {
-                float axisX = crossX / sinA;
-                float axisY = crossY / sinA;
-                float axisZ = crossZ / sinA;
                 float angleDeg = (float) Math.toDegrees(Math.atan2(sinA, cosA));
-                GL11.glRotatef(angleDeg, axisX, axisY, axisZ);
+                GL11.glRotatef(angleDeg, crossX / sinA, crossY / sinA, 0f);
             }
         }
 
@@ -171,26 +190,20 @@ public class RenderableCelestialObject {
             for (int face = 0; face < 6; face++) {
                 int faceTexId = cubemap.getFaceTexId(face);
                 if (faceTexId == -1) continue;
-
                 GlStateManager.bindTexture(faceTexId);
                 GL11.glBegin(GL11.GL_QUADS);
-
                 for (int qi : faceQuadIndices.get(face)) {
                     int[] quad = allQuads.get(qi);
                     float[][] uvs = allUVs.get(qi);
-
                     for (int c = 0; c < 4; c++) {
                         QuadSphere.Vertex v = verts.get(quad[c]);
                         GL11.glTexCoord2f(uvs[c][0], uvs[c][1]);
                         GL11.glVertex3f(v.x, v.y, v.z);
                     }
                 }
-
                 GL11.glEnd();
             }
-
         } else {
-            // Magenta fallback
             GlStateManager.disableTexture2D();
             GL11.glColor4f(1f, 0f, 1f, 1f);
             GL11.glBegin(GL11.GL_QUADS);

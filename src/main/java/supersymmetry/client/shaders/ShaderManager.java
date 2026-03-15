@@ -23,6 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL43;
 
 import codechicken.lib.render.shader.ShaderObject;
 import codechicken.lib.render.shader.ShaderProgram;
@@ -259,6 +260,40 @@ public class ShaderManager {
             return p;
         } catch (Exception e) {
             LOGGER.error("getRawProgram exception [{} + {}]", vertFile, fragFile, e);
+            return -1;
+        }
+    }
+
+    public static int getRawComputeProgram(String compFile) {
+        String key = "compute|" + compFile;
+        if (RAW_PROGRAM_CACHE.containsKey(key)) {
+            return RAW_PROGRAM_CACHE.get(key);
+        }
+        try {
+            String src = readShader(getStream(
+                    String.format("/assets/%s/shaders/%s", MODID, compFile)));
+
+            int shader = compileRaw(GL43.GL_COMPUTE_SHADER, compFile, src);
+            if (shader <= 0) return -1;
+
+            int p = GL20.glCreateProgram();
+            GL20.glAttachShader(p, shader);
+            GL20.glLinkProgram(p);
+            GL20.glDeleteShader(shader);
+
+            String log = GL20.glGetProgramInfoLog(p, 512).trim();
+            if (!log.isEmpty()) LOGGER.warn("getRawComputeProgram [{}] link log: {}", compFile, log);
+            if (GL20.glGetProgrami(p, GL20.GL_LINK_STATUS) == 0) {
+                LOGGER.error("getRawComputeProgram: link failed [{}]", compFile);
+                GL20.glDeleteProgram(p);
+                RAW_PROGRAM_CACHE.put(key, -1);
+                return -1;
+            }
+            LOGGER.info("getRawComputeProgram: linked [{}] id={}", compFile, p);
+            RAW_PROGRAM_CACHE.put(key, p);
+            return p;
+        } catch (Exception e) {
+            LOGGER.error("getRawComputeProgram exception [{}]", compFile, e);
             return -1;
         }
     }
