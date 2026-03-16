@@ -36,10 +36,9 @@ void main() {
 
     float angle = acos(clamp(dot(rayDir,sunDir),-1.0,1.0));
     float diskR = u_angularRadius;
-    float maxReach = diskR * 80.0; // wide enough for full corona falloff
-    if(angle > maxReach) discard;
-    // Fade out at edges so no hard seam
-    float edgeFade = 1.0 - smoothstep(maxReach * 0.7, maxReach, angle);
+
+    float maxReach = diskR * 50.0;
+    float edgeFade = 1.0 - smoothstep(maxReach * 0.9, maxReach * 1.4, angle);
 
     vec3 up     = abs(sunDir.y)<0.999 ? vec3(0,1,0) : vec3(1,0,0);
     vec3 basisX = normalize(cross(sunDir,up));
@@ -52,18 +51,17 @@ void main() {
 
     vec3 color = vec3(0.0);
 
-    // ── Solar disk + limb darkening ──────────────────────────────────────
+
     float disk     = smoothstep(diskR*1.05, diskR*0.90, angle);
     float limbEdge = 1.0 - clamp(angle/diskR, 0.0, 1.0);
     float limb     = mix(1.0, pow(limbEdge,0.6), u_limbDarkening);
     float normAngle = angle/diskR;
     float g1 = exp(-normAngle*3.5)*1.4;
     float g2 = exp(-normAngle*1.8)*0.55;
-    float g3 = exp(-normAngle*0.3)*0.4; // wide corona halo
+    float g3 = exp(-normAngle * 0.6) * 0.6;
     color += u_sunColor * (disk*limb*4.0 + g1 + g2 + g3) * u_diskIntensity * 0.5;
 
-
-    color += u_sunColor * exp(-r2d * 3.0) * 0.5; // wider bloom
+    color += u_sunColor * exp(-r2d * 8.0) * 0.4;
 
     float ndcScale = 2.0; // uv2d to NDC approximate scale
     vec2 fragScreen = u_sunScreenPos + uv2d * ndcScale;
@@ -79,8 +77,8 @@ void main() {
         color += vec3(1.0,0.8,0.6) * exp(-pow(length(fragScreen-ghost3)/0.05,2.0)) * 0.20;
     }
 
-    color -= vec3(noise2(vec2(r2d*1920.0+u_time))*0.015);
-
+    float dither = hash21(gl_FragCoord.xy) * 2.0 - 1.0;
+    color += dither * 0.003;  // very tiny
     color *= edgeFade;
     FragColor = vec4(max(color,vec3(0.0)), 1.0);
 }
