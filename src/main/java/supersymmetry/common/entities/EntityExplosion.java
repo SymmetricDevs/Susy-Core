@@ -2,8 +2,10 @@ package supersymmetry.common.entities;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -26,6 +28,14 @@ public class EntityExplosion extends Entity {
     public EntityExplosion(World worldIn) {
         super(worldIn);
         this.power = 5;
+        this.setEntityBoundingBox(new AxisAlignedBB(
+                this.posX - 3 * this.power,
+                this.posY - 3 * this.power,
+                this.posZ - 3 * this.power,
+                this.posX + 3 * this.power,
+                this.posY + 3 * this.power,
+                this.posZ + 3 * this.power
+        ));
     }
 
     public EntityExplosion(World worldIn, double x, double y, double z) {
@@ -41,7 +51,14 @@ public class EntityExplosion extends Entity {
 
     @Override
     protected void entityInit() {
-
+        this.setEntityBoundingBox(new AxisAlignedBB(
+                this.posX - 3 * this.power,
+                this.posY - 3 * this.power,
+                this.posZ - 3 * this.power,
+                this.posX + 3 * this.power,
+                this.posY + 3 * this.power,
+                this.posZ + 3 * this.power
+        ));
     }
 
     @Override
@@ -64,6 +81,12 @@ public class EntityExplosion extends Entity {
             if (world.isRemote) {
                 spawnExplosionParticles();
             }
+        } else if (this.ticksExisted >= 100 && this.ticksExisted <= 110 && world.isRemote) {
+            for (EntityPlayer player : world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox())) {
+                player.rotationPitch += (rnd.nextFloat() - 0.5f);
+                player.rotationYaw += (rnd.nextFloat() - 0.5f);
+            }
+        } else if (this.ticksExisted == 111) {
             this.setDead();
         }
 
