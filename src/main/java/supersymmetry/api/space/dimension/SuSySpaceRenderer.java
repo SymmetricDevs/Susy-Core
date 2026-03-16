@@ -3,7 +3,6 @@ package supersymmetry.api.space.dimension;
 import static supersymmetry.client.shaders.util.ShaderUtils.invertMat4;
 
 import java.nio.FloatBuffer;
-import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -20,6 +19,7 @@ import supersymmetry.api.space.QuadSphere;
 import supersymmetry.api.space.RenderableCelestialObject;
 import supersymmetry.client.shaders.ShaderManager;
 import supersymmetry.client.shaders.space.atmosphere.AtmosphereRenderer;
+import supersymmetry.client.shaders.space.planet.PlanetSurfaceRenderer;
 import supersymmetry.client.shaders.util.ShaderUtils;
 
 public class SuSySpaceRenderer extends IRenderHandler {
@@ -29,9 +29,10 @@ public class SuSySpaceRenderer extends IRenderHandler {
     private RenderableCelestialObject sunObject = null;
     private Cubemap mainCubemap = null;
     private long mainPlanetoidOrbitalPeriodTicks = 110_400L;
-    private final AtmosphereRenderer atmosphereRenderer = new AtmosphereRenderer();
 
-    // ── geometry ─────────────────────────────────────────────────────────────
+    private final AtmosphereRenderer atmosphereRenderer = new AtmosphereRenderer();
+    private final PlanetSurfaceRenderer planetSurfaceRenderer = new PlanetSurfaceRenderer();
+
     private final QuadSphere mesh = new QuadSphere(64);
 
     private int quadVbo = -1; // lazily created, reused every frame
@@ -46,9 +47,10 @@ public class SuSySpaceRenderer extends IRenderHandler {
     private float gameTime = 0f;
 
     private final FloatBuffer matBuf = BufferUtils.createFloatBuffer(16);
-    // Captured once per frame BEFORE any GL matrix manipulation
     private float[] capturedView = new float[16];
     private float[] capturedProj = new float[16];
+
+    private float[] currentSunDir = new float[] { 0f, 1f, 0f };
 
     public SuSySpaceRenderer setCelestialObjects(RenderableCelestialObject... objs) {
         this.objects = (objs != null) ? objs : new RenderableCelestialObject[0];
@@ -80,6 +82,8 @@ public class SuSySpaceRenderer extends IRenderHandler {
         gameTime += partialTicks / 20f;
         long worldTime = world.getWorldTime();
 
+        currentSunDir = (sunObject != null) ? sunObject.getWorldDirection(worldTime) : new float[] { 0f, 1f, 0f };
+
         capturedView = getMatrix(GL11.GL_MODELVIEW_MATRIX);
         capturedProj = getMatrix(GL11.GL_PROJECTION_MATRIX);
 
@@ -97,7 +101,6 @@ public class SuSySpaceRenderer extends IRenderHandler {
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA,
                 GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
-        // ── 1. Sun ────────────────────────────────────────────────────────────
         if (sunObject != null && ShaderManager.shadersAllowed()) {
             renderSunShader(worldTime);
         } else if (sunObject != null) {
@@ -107,27 +110,46 @@ public class SuSySpaceRenderer extends IRenderHandler {
             GlStateManager.popMatrix();
         }
 
-        // ── 2. Earth hemisphere ───────────────────────────────────────────────
         if (mainPlanet != null && mainCubemap != null) {
-            rendermainPlanetoidHemisphere(worldTime);
+            renderMainPlanetoidHemisphere(worldTime);
         }
 
-        // ── 3. Moon / stars ───────────────────────────────────────────────────
         GlStateManager.pushMatrix();
         GL11.glScalef(100.0f, 100.0f, 100.0f);
         for (RenderableCelestialObject obj : objects) {
             if (obj.getCelestialObject() == CelestialObjects.EARTH) continue;
-            if (obj == sunObject) continue;
             if (obj.getCelestialObject() == CelestialObjects.SUN) continue;
-            obj.renderAtPosition(worldTime, mesh);
+            if (obj == sunObject) continue;
+
+            if (obj.getCelestialObject() == CelestialObjects.MOON && ShaderManager.shadersAllowed()) {
+                // Moon uses PlanetSurfaceRenderer with terminator
+                if (obj.ensureLoaded()) {
+                    float[] moonDir = obj.getWorldDirection(worldTime);
+                    float moonScale = 100.0f * (float) Math.tan(Math.toRadians(4.0 / 2.0)); // angularSize/2
+
+                    // Moon rotation: tidally locked - same face always toward Earth (origin)
+                    // The -Z face points toward Earth (origin from moon position)
+                    float[] moonRot = buildTidalLockRotation(moonDir);
+
+                    int[] moonFaces = new int[6];
+
+                    for (int i = 0; i < 6; i++) moonFaces[i] = obj.getCubemap().getFaceTexId(i);
+                    float[] sd = currentSunDir;
+                    planetSurfaceRenderer.render(
+                            capturedView, capturedProj, sd,
+                            new float[] { moonDir[0] * 100f, moonDir[1] * 100f, moonDir[2] * 100f },
+                            moonScale, moonRot, moonFaces);
+                }
+            } else {
+                obj.renderAtPosition(worldTime, mesh);
+            }
         }
         GlStateManager.popMatrix();
 
-        // ── 4. Atmosphere – last so it composites over earth + moon ──────────
         if (mainPlanet != null && ShaderManager.shadersAllowed()) {
             float scale = 2500.0f;
             float planetY = -scale * 1.02f;
-            float[] sd = (sunObject != null) ? sunObject.getWorldDirection(worldTime) : new float[] { 0f, 1f, 0f };
+            float[] sd = currentSunDir;
             atmosphereRenderer.render(capturedView, capturedProj, sd, planetY, scale);
         }
 
@@ -144,7 +166,7 @@ public class SuSySpaceRenderer extends IRenderHandler {
     private void renderSunShader(long worldTime) {
         if (!ShaderManager.shadersAllowed()) return;
 
-        float[] sd = sunObject.getWorldDirection(worldTime);
+        float[] sd = currentSunDir;
 
         GlStateManager.enableBlend();
         GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
@@ -182,12 +204,12 @@ public class SuSySpaceRenderer extends IRenderHandler {
         GL11.glPopAttrib();
     }
 
-    private void rendermainPlanetoidHemisphere(long worldTime) {
+    private void renderMainPlanetoidHemisphere(long worldTime) {
         if (!mainCubemap.isLoaded()) {
             try {
                 mainCubemap.loadAll();
             } catch (Exception e) {
-                SusyLog.logger.error("[Space] Failed to load mainPlanetoid cubemap", e);
+                SusyLog.logger.error("[Space] Failed to load Earth cubemap", e);
                 return;
             }
         }
@@ -195,53 +217,36 @@ public class SuSySpaceRenderer extends IRenderHandler {
         double orbitAngle = (worldTime % mainPlanetoidOrbitalPeriodTicks) /
                 (double) mainPlanetoidOrbitalPeriodTicks * 2.0 * Math.PI;
 
-        List<QuadSphere.Vertex> verts = mesh.getVertices();
-        List<int[]> quads = mesh.getQuads();
-        List<float[][]> uvs = mesh.getQuadUVs();
-        List<List<Integer>> faceQuads = mesh.getFaceQuadIndices();
+        // Matches old GL calls: glRotatef(90,1,0,0) then glRotatef(orbitDeg,0,1,0)
+        // Ry(orbit) * Rx(90) in column-major:
+        // col0=(co,0,-so,0) col1=(so,0,co,0) col2=(0,-1,0,0) col3=(0,0,0,1)
+        float co = (float) Math.cos(orbitAngle);
+        float so = (float) Math.sin(orbitAngle);
+        float[] rot = {
+                co, 0f, -so, 0f,
+                so, 0f, co, 0f,
+                0f, -1f, 0f, 0f,
+                0f, 0f, 0f, 1f
+        };
 
-        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-        GL11.glEnable(GL32.GL_TEXTURE_CUBE_MAP_SEAMLESS);
-        GlStateManager.disableFog();
-        GlStateManager.disableLighting();
-        GlStateManager.disableDepth();
-        GlStateManager.depthMask(false);
-        GlStateManager.enableBlend();
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glCullFace(GL11.GL_FRONT);
+        int[] faceTexIds = new int[6];
+        for (int i = 0; i < 6; i++) faceTexIds[i] = mainCubemap.getFaceTexId(i);
 
-        GlStateManager.pushMatrix();
-        GL11.glScalef(2500.0f, 2500.0f, 2500.0f);
-        GL11.glTranslatef(0f, -1.02f, 0f);
-        GL11.glRotatef(90.0f, 1f, 0f, 0f);
-        GL11.glRotatef((float) Math.toDegrees(orbitAngle), 0f, 1f, 0f);
+        float scale = 2500.0f;
+        float planetY = -scale * 1.02f;
+        float[] sd = (sunObject != null) ? sunObject.getWorldDirection(worldTime) : new float[] { 0f, 1f, 0f };
 
-        GlStateManager.enableTexture2D();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA,
-                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        GL11.glColor4f(1f, 1f, 1f, 1f);
+        // Earth has atmosphere - disable terminator in surface shader,
+        // the atmosphere pass handles night-side darkening
+        float savedSunR = planetSurfaceRenderer.sunAngularRadius;
+        planetSurfaceRenderer.sunAngularRadius = 0.0f;
 
-        for (int face = 0; face < 6; face++) {
-            int texId = mainCubemap.getFaceTexId(face);
-            if (texId == -1) continue;
-            GlStateManager.bindTexture(texId);
-            GL11.glBegin(GL11.GL_QUADS);
-            for (int qi : faceQuads.get(face)) {
-                int[] quad = quads.get(qi);
-                float[][] quadUV = uvs.get(qi);
-                for (int c = 0; c < 4; c++) {
-                    QuadSphere.Vertex v = verts.get(quad[c]);
-                    GL11.glTexCoord2f(quadUV[c][0], quadUV[c][1]);
-                    GL11.glVertex3f(v.x, v.y, v.z);
-                }
-            }
-            GL11.glEnd();
-        }
+        planetSurfaceRenderer.render(
+                capturedView, capturedProj, sd,
+                new float[] { 0f, planetY, 0f },
+                scale, rot, faceTexIds);
 
-        GlStateManager.popMatrix();
-        GL11.glColor4f(1f, 1f, 1f, 1f);
-        GL11.glDisable(GL32.GL_TEXTURE_CUBE_MAP_SEAMLESS);
-        GL11.glPopAttrib();
+        planetSurfaceRenderer.sunAngularRadius = savedSunR;
     }
 
     private void drawFullScreenQuad() {
@@ -266,12 +271,44 @@ public class SuSySpaceRenderer extends IRenderHandler {
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
     }
 
-    /** Reads the current GL matrix into a float[16] array. */
     private float[] getMatrix(int glEnum) {
         matBuf.clear();
         GL11.glGetFloat(glEnum, matBuf);
         float[] m = new float[16];
         matBuf.get(m);
         return m;
+    }
+
+    private static float[] buildTidalLockRotation(float[] moonDir) {
+        // We want the cubemap's -Z face to point toward -moonDir (back toward Earth).
+        // Rotate (0,0,-1) to point toward (-moonDir[0], -moonDir[1], -moonDir[2]).
+        float tx = -moonDir[0], ty = -moonDir[1], tz = -moonDir[2];
+        float len = (float) Math.sqrt(tx * tx + ty * ty + tz * tz);
+        if (len < 1e-6f) return new float[] { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
+        tx /= len;
+        ty /= len;
+        tz /= len;
+
+        // Rodrigues rotation: (0,0,-1) → (tx,ty,tz)
+        // axis = (0,0,-1) x (tx,ty,tz) = (-ty*(-1)-tz*0, tz*0-(-1)*tx-... )
+        // cross((0,0,-1),(tx,ty,tz)) = (0*tz-(-1)*ty, (-1)*tx-0*tz, 0*ty-0*tx) = (ty, -tx, 0)
+        float ax = ty, ay = -tx, az = 0f;
+        float sinA = (float) Math.sqrt(ax * ax + ay * ay);
+        float cosA = -tz; // dot((0,0,-1),(tx,ty,tz))
+
+        if (sinA < 1e-6f) {
+            if (cosA > 0) return new float[] { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
+            else return new float[] { 1, 0, 0, 0, 0, -1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1 };
+        }
+
+        // Rodrigues: R = I*cos + (1-cos)*nnT + sin*[n]x where n = axis/|axis|
+        float nx = ax / sinA, ny = ay / sinA;
+        float c = cosA, s = sinA, mc = 1f - c;
+        return new float[] {
+                c + nx * nx * mc, ny * nx * mc + 0 * s, 0 * nx * mc - ny * s, 0f,  // col 0
+                nx * ny * mc - 0 * s, c + ny * ny * mc, 0 * ny * mc + nx * s, 0f,  // col 1
+                0 * nx * mc + ny * s, 0 * ny * mc - nx * s, c, 0f,  // col 2
+                0f, 0f, 0f, 1f   // col 3
+        };
     }
 }
