@@ -1,9 +1,9 @@
 package supersymmetry.mixins.dimstack;
 
+import net.minecraft.tileentity.TileEntity;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 
 import cd4017be.dimstack.tileentity.DimensionalPipe;
 import cd4017be.lib.TickRegistry.IUpdatable;
@@ -26,11 +26,8 @@ public abstract class DimensionalPipeMixin extends BaseTileEntity
             ((DimensionalPipeAccessor) this).setLinkTile(tile);
         }
         ((DimensionalPipeAccessor) this).setUpdateLink(false);
-        world.notifyNeighborsOfStateChange(pos, blockType, true);
-    }
-
-    @Inject(method = "onLoad", at = @At("TAIL"))
-    void immediateProcess() {
-        ((DimensionalPipeAccessor) this).callProcess();
+        TileEntity connected = ((DimensionalPipeAccessor) this).callGetCon();
+        connected.getBlockType().observedNeighborChange(((DimensionalPipeAccessor) this).getConBlock(), world,
+                connected.getPos(), this.getBlockType(), this.getPos()); // definitely force a pipenet reload
     }
 }

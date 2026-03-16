@@ -1,5 +1,7 @@
 package supersymmetry.mixins.dimstack;
 
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,6 +24,12 @@ public interface DimensionalPipeAccessor {
 
     @Accessor
     void setUpdateLink(boolean value);
+
+    @Accessor
+    IBlockState getConBlock();
+
+    @Invoker
+    TileEntity callGetCon();
 
     @Invoker
     void callProcess();
