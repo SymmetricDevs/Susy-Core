@@ -4,17 +4,11 @@ import java.util.List;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.TextComponentTranslation;
 
 import gregtech.api.capability.GregtechCapabilities;
 import gregtech.api.capability.IElectricItem;
 import gregtech.api.items.metaitem.stats.IItemBehaviour;
-import supersymmetry.api.sound.SusySounds;
-// import supersymmetry.common.blocks.BlockBreathingGas;
-import supersymmetry.common.event.DimensionBreathabilityHandler;
 
 public class OxygenSensorBehavior implements IItemBehaviour {
 
@@ -29,8 +23,7 @@ public class OxygenSensorBehavior implements IItemBehaviour {
 
     @Override
     public void onUpdate(ItemStack itemStack, Entity entity) {
-        //i dont know whats meant to happen here and i failed to merge it correctly sorry
-
+        // i dont know whats meant to happen here and i failed to merge it correctly sorry
 
         // if (!(entity instanceof EntityPlayer player)) return;
         // if (player.world.isRemote) return;
@@ -40,10 +33,11 @@ public class OxygenSensorBehavior implements IItemBehaviour {
         // if (electricItem == null) return;
         //
         // boolean isHeld = player.getHeldItemMainhand() == itemStack
-        //         || player.getHeldItemOffhand() == itemStack;
+        // || player.getHeldItemOffhand() == itemStack;
         //
         // boolean inHazard = DimensionBreathabilityHandler.isInDepressurizationHazard(player);
-        // int oxygenCount = DimensionBreathabilityHandler.countBreathingGas(player, BlockBreathingGas.GasType.OXYGEN, -1);
+        // int oxygenCount = DimensionBreathabilityHandler.countBreathingGas(player, BlockBreathingGas.GasType.OXYGEN,
+        // -1);
         // boolean insufficient = inHazard && oxygenCount < 2;
         //
         // long euCost = EU_PER_CHECK;
@@ -53,14 +47,14 @@ public class OxygenSensorBehavior implements IItemBehaviour {
         // if (electricItem.discharge(euCost, Integer.MAX_VALUE, true, false, false) < euCost) return;
         //
         // if (isHeld) {
-        //     String level = getOxygenLevel(oxygenCount);
-        //     player.sendStatusMessage(
-        //             new TextComponentTranslation("metaitem.oxygen_sensor.oxygen_level." + level), true);
+        // String level = getOxygenLevel(oxygenCount);
+        // player.sendStatusMessage(
+        // new TextComponentTranslation("metaitem.oxygen_sensor.oxygen_level." + level), true);
         // }
         //
         // if (insufficient) {
-        //     player.world.playSound(null, player.posX, player.posY, player.posZ,
-        //             SusySounds.OXYGEN_SENSOR_BEEP, SoundCategory.PLAYERS, 1.0F, 1.0F);
+        // player.world.playSound(null, player.posX, player.posY, player.posZ,
+        // SusySounds.OXYGEN_SENSOR_BEEP, SoundCategory.PLAYERS, 1.0F, 1.0F);
         // }
     }
 
