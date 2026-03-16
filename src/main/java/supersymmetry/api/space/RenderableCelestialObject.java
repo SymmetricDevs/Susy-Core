@@ -23,10 +23,6 @@ public class RenderableCelestialObject {
     private float fixedDx, fixedDy, fixedDz;
 
     private RenderableCelestialObject sunReference = null;
-
-    // When true, the cubemap always shows the same face toward the planet centre (origin).
-    // The object still orbits normally but does not spin on its own axis.
-    // This is the definition of tidal locking.
     private boolean tidallyLocked = false;
 
     private boolean loadAttempted = false;
@@ -84,7 +80,15 @@ public class RenderableCelestialObject {
         return object;
     }
 
-    private boolean ensureLoaded() {
+    public Cubemap getCubemap() {
+        return cubemap;
+    }
+
+    public boolean ensureLoaded() {
+        return ensureLoadedInternal();
+    }
+
+    private boolean ensureLoadedInternal() {
         if (loadAttempted) return cubemap.isLoaded();
         loadAttempted = true;
         try {
@@ -130,7 +134,7 @@ public class RenderableCelestialObject {
         }
 
         float radius = (float) Math.tan(Math.toRadians(angularSizeDeg / 2.0));
-        boolean hasTexture = ensureLoaded();
+        boolean hasTexture = ensureLoadedInternal();
 
         GlStateManager.pushMatrix();
         GL11.glTranslatef(dx, dy, dz);
