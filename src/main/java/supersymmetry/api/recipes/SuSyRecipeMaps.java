@@ -29,6 +29,7 @@ import supersymmetry.api.capability.impl.SuSyBoilerLogic;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.recipes.builders.*;
 import supersymmetry.common.materials.SusyMaterials;
+import supersymmetry.common.metatileentities.multi.rail.LargeRESRecipeMap;
 
 public class SuSyRecipeMaps {
 
