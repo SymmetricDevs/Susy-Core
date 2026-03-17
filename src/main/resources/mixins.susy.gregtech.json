@@ -20,6 +20,8 @@
     "RecipeBuilderAccessor",
     "RecipeMapsMixin",
     "RecyclingRecipesMixin",
+    "TileEntityItemPipeAccessor",
+    "TileEntityItemPipeMixin",
     "ToolBuilderAccessor",
     "ToolItemsMixin",
     "WorldPipeNetAccessor",
