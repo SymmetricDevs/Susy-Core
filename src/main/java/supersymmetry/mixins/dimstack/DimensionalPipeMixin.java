@@ -27,7 +27,9 @@ public abstract class DimensionalPipeMixin extends BaseTileEntity
         }
         ((DimensionalPipeAccessor) this).setUpdateLink(false);
         TileEntity connected = ((DimensionalPipeAccessor) this).callGetCon();
-        connected.getBlockType().observedNeighborChange(((DimensionalPipeAccessor) this).getConBlock(), world,
-                connected.getPos(), this.getBlockType(), this.getPos()); // definitely force a pipenet reload
+        if (connected != null) {
+            connected.getBlockType().observedNeighborChange(((DimensionalPipeAccessor) this).getConBlock(), world,
+                    connected.getPos(), this.getBlockType(), this.getPos()); // definitely force a pipenet reload
+        }
     }
 }
