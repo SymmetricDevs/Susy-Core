@@ -9,7 +9,7 @@ import gregtech.api.pipenet.WorldPipeNet;
 import gregtech.common.pipelike.itempipe.net.WorldItemPipeNet;
 
 @Mixin(value = WorldItemPipeNet.class, remap = false)
-public abstract class WorldItemPipeNetMixin {
+public class WorldItemPipeNetMixin {
 
     /**
      * @author aliu-here
