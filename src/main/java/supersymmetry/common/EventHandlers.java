@@ -1,8 +1,10 @@
 package supersymmetry.common;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import gregtech.api.GregTechAPI;
+import gregtech.api.util.GTTeleporter;
+import gregtech.api.util.TeleportHandler;
+import gregtech.common.items.MetaItems;
+import gregtechfoodoption.item.GTFOMetaItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.entity.Entity;
@@ -24,14 +26,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.items.ItemStackHandler;
-
 import org.jetbrains.annotations.NotNull;
-
-import gregtech.api.GregTechAPI;
-import gregtech.api.util.GTTeleporter;
-import gregtech.api.util.TeleportHandler;
-import gregtech.common.items.MetaItems;
-import gregtechfoodoption.item.GTFOMetaItem;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.items.CargoItemStackHandler;
@@ -45,6 +40,10 @@ import supersymmetry.common.network.SPacketFirstJoin;
 import supersymmetry.common.rocketry.LanderSpawnEntry;
 import supersymmetry.common.rocketry.LanderSpawnQueue;
 import supersymmetry.common.world.WorldProviderPlanet;
+import supersymmetry.common.world.atmosphere.AtmosphereWorldData;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class EventHandlers {
@@ -112,6 +111,11 @@ public class EventHandlers {
         // Process lander spawn queue for all dimensions
         processLanderSpawnQueue(server);
 
+        // Tick atmosphere system for planet dimensions
+        if (world.provider instanceof WorldProviderPlanet) {
+            AtmosphereWorldData.get(world).getGraph().tick(world);
+        }
+
         if (world.provider.getDimension() != 0) {
             return;
         }
@@ -158,7 +162,7 @@ public class EventHandlers {
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.player.world.getTotalWorldTime() % 20 == 0 && event.phase == TickEvent.Phase.START) {
+        if (!event.player.world.isRemote && event.player.world.getTotalWorldTime() % 20 == 0 && event.phase == TickEvent.Phase.START) {
             DimensionBreathabilityHandler.tickPlayer(event.player);
         }
     }
@@ -192,11 +196,27 @@ public class EventHandlers {
     }
 
     @SubscribeEvent
+    public static void onBlockBreak(BlockEvent.BreakEvent event) {
+        World world = event.getWorld();
+        if (world.isRemote) return;
+        if (!(world.provider instanceof WorldProviderPlanet)) return;
+        AtmosphereWorldData.get(world).getGraph().onBlockBreak(world, event.getPos());
+        AtmosphereWorldData.get(world).markDirty();
+    }
+
+    @SubscribeEvent
     public static void onBlockPlaceEvent(BlockEvent.EntityPlaceEvent event) {
         if (event.getWorld().provider instanceof WorldProviderPlanet provider && !provider.getPlanet().supportsFire) {
             Block block = event.getPlacedBlock().getBlock();
             if (block instanceof BlockTorch) {
                 event.setCanceled(true);
+            }
+        }
+        if (!event.isCanceled()) {
+            World world = event.getWorld();
+            if (!world.isRemote && world.provider instanceof WorldProviderPlanet) {
+                AtmosphereWorldData.get(world).getGraph().onBlockPlace(world, event.getPos());
+                AtmosphereWorldData.get(world).markDirty();
             }
         }
     }
