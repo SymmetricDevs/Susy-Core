@@ -128,6 +128,7 @@ public class SuSyMetaTileEntities {
     public static SimpleMachineMetaTileEntity[] ION_IMPLANTER;
     public static SimpleMachineMetaTileEntity[] CVD;
     public static SimpleMachineMetaTileEntity[] SPUTTER_DEPOSITION; // atomic layer depositor
+    public static SimpleMachineMetaTileEntity[] SCREEN_PRINTER;
 
     public static SimpleMachineMetaTileEntity[] WEAPONS_FACTORY;
 
@@ -291,7 +292,6 @@ public class SuSyMetaTileEntities {
 
     public static MetaTileEntityEccentricRollCrusher ECCENTRIC_ROLL_CRUSHER;
     public static MetaTileEntityBallMill BALL_MILL;
-    public static MetaTileEntityScreenPrinter SCREEN_PRINTER;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500,
@@ -458,10 +458,11 @@ public class SuSyMetaTileEntities {
         registerSimpleMTE(SPUTTER_DEPOSITION, 12, 14755, "sputter_deposition",
                 SuSyRecipeMaps.SPUTTER_DEPOSITION_RECIPES, SusyTextures.SPUTTER_DEPOSITION_OVERLAY, true,
                 GTUtility.defaultTankSizeFunction);
+        registerSimpleMTE(SCREEN_PRINTER, 3, 19000, "screen_printer", SuSyRecipeMaps.SCREEN_PRINTER,
+                SusyTextures.SCREEN_PRINTER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
 
         CURTAIN_COATER = registerMetaTileEntity(14513, new MetaTileEntityCurtainCoater(susyId("curtain_coater")));
         MILLING = registerMetaTileEntity(14514, new MetaTileEntityPreciseMillingMachine(susyId("milling")));
-        SCREEN_PRINTER = registerMetaTileEntity(14515, new MetaTileEntityScreenPrinter(susyId("screen_printer")));
 
         // thermodynamic stuff
         registerSimpleMTE(FLUID_COMPRESSOR, 12, 15000, "fluid_compressor", SuSyRecipeMaps.FLUID_COMPRESSOR_RECIPES,
@@ -839,6 +840,7 @@ public class SuSyMetaTileEntities {
         CVD = new SimpleMachineMetaTileEntity[GTValues.OpV];
         ION_IMPLANTER = new SimpleMachineMetaTileEntity[GTValues.OpV];
         SPUTTER_DEPOSITION = new SimpleMachineMetaTileEntity[GTValues.OpV];
+        SCREEN_PRINTER = new SimpleMachineMetaTileEntity[GTValues.EV];
 
         FLUID_COMPRESSOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
         FLUID_DECOMPRESSOR = new SimpleMachineMetaTileEntity[GTValues.OpV];

@@ -636,6 +636,12 @@ susy.machine.ion_implanter.uiv.name=史诗离子注入机 III
 susy.machine.ion_implanter.uxv.name=史诗离子注入机 IV
 susy.machine.ion_implanter.opv.name=传说离子注入机
 
+# Screen Printer
+susy.machine.screen_printer.lv.name=基础丝网印刷机
+susy.machine.screen_printer.mv.name=进阶丝网印刷机
+susy.machine.screen_printer.hv.name=进阶丝网印刷机 II
+susy.machine.screen_printer.ev.name=进阶丝网印刷机 III
+
 # Fluid Compressor
 susy.machine.fluid_compressor.lv.name=基础流体加压机
 susy.machine.fluid_compressor.mv.name=进阶流体加压机

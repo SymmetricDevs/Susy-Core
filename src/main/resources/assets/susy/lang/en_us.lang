@@ -767,6 +767,12 @@ susy.machine.ion_implanter.uiv.name=Epic Ion Implanter III
 susy.machine.ion_implanter.uxv.name=Epic Ion Implanter IV
 susy.machine.ion_implanter.opv.name=Legendary Ion Implanter
 
+# Screen Printer
+susy.machine.screen_printer.lv.name=Basic Screen Printer
+susy.machine.screen_printer.mv.name=Advanced Screen Printer
+susy.machine.screen_printer.hv.name=Advanced Screen Printer II
+susy.machine.screen_printer.ev.name=Advanced Screen Printer III
+
 # Fluid Compressor
 susy.machine.fluid_compressor.lv.name=Basic Fluid Compressor
 susy.machine.fluid_compressor.mv.name=Advanced Fluid Compressor
