@@ -1,28 +1,11 @@
 package supersymmetry.common.command;
 
-import com.google.gson.*;
-import gregtech.api.GregTechAPI;
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.WorkableTieredMetaTileEntity;
-import gregtech.api.metatileentity.multiblock.CleanroomType;
-import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
-import gregtech.api.recipes.Recipe;
-import gregtech.api.recipes.RecipeMap;
-import gregtech.api.recipes.ingredients.GTRecipeInput;
-import gregtech.api.recipes.recipeproperties.CleanroomProperty;
-import gregtech.api.recipes.recipeproperties.FusionEUToStartProperty;
-import gregtech.api.recipes.recipeproperties.RecipeProperty;
-import gregtech.api.recipes.recipeproperties.TemperatureProperty;
-import gregtech.api.unification.FluidUnifier;
-import gregtech.api.unification.OreDictUnifier;
-import gregtech.api.unification.material.Material;
-import gregtech.api.unification.material.Materials;
-import gregtech.api.unification.material.properties.*;
-import gregtech.api.unification.stack.MaterialStack;
-import gregtech.api.unification.stack.UnificationEntry;
-import gregtech.common.crafting.GTFluidCraftingIngredient;
-import gregtech.core.unification.material.internal.MaterialRegistryManager;
-import it.unimi.dsi.fastutil.ints.IntList;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.*;
+import java.util.Map.Entry;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -46,17 +29,37 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import com.google.gson.*;
+
+import gregtech.api.GregTechAPI;
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.WorkableTieredMetaTileEntity;
+import gregtech.api.metatileentity.multiblock.CleanroomType;
+import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
+import gregtech.api.recipes.Recipe;
+import gregtech.api.recipes.RecipeMap;
+import gregtech.api.recipes.ingredients.GTRecipeInput;
+import gregtech.api.recipes.recipeproperties.CleanroomProperty;
+import gregtech.api.recipes.recipeproperties.FusionEUToStartProperty;
+import gregtech.api.recipes.recipeproperties.RecipeProperty;
+import gregtech.api.recipes.recipeproperties.TemperatureProperty;
+import gregtech.api.unification.FluidUnifier;
+import gregtech.api.unification.OreDictUnifier;
+import gregtech.api.unification.material.Material;
+import gregtech.api.unification.material.Materials;
+import gregtech.api.unification.material.properties.*;
+import gregtech.api.unification.stack.MaterialStack;
+import gregtech.api.unification.stack.UnificationEntry;
+import gregtech.common.crafting.GTFluidCraftingIngredient;
+import gregtech.core.unification.material.internal.MaterialRegistryManager;
+import it.unimi.dsi.fastutil.ints.IntList;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.recipes.properties.DimensionProperty;
 import supersymmetry.api.recipes.properties.MixerSettlerCellsProperty;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.*;
-import java.util.Map.Entry;
 
 public class CommandRecipemapDump extends CommandBase {
 
@@ -109,7 +112,7 @@ public class CommandRecipemapDump extends CommandBase {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args)
-            throws CommandException {
+                                                                                      throws CommandException {
         // List<String> args2 = Stream.of(args).collect(Collectors.toList());
         // TODO make it accept a list of required items ( like "recipemaps", "crafting") and output it in
         // a file name that is a combination of the arguments, dump everything if no args passed
@@ -476,7 +479,8 @@ public class CommandRecipemapDump extends CommandBase {
 
         UnificationEntry entry = OreDictUnifier.getUnificationEntry(stack);
         if (entry != null && entry.material != null) {
-            MaterialStack matStack = new MaterialStack(entry.material, entry.orePrefix.getMaterialAmount(entry.material));
+            MaterialStack matStack = new MaterialStack(entry.material,
+                    entry.orePrefix.getMaterialAmount(entry.material));
 
             stackObj.addProperty("material", matStack.material.getRegistryName());
             stackObj.addProperty("materialAmount", matStack.amount);
