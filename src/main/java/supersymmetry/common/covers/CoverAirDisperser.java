@@ -1,6 +1,14 @@
 package supersymmetry.common.covers;
 
-import net.minecraft.block.Block;
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Cuboid6;
+import codechicken.lib.vec.Matrix4;
+import gregtech.api.cover.CoverBase;
+import gregtech.api.cover.CoverDefinition;
+import gregtech.api.cover.CoverableView;
+import gregtech.api.unification.material.Materials;
+import gregtech.client.renderer.texture.Textures;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
@@ -12,21 +20,15 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import org.jetbrains.annotations.NotNull;
-
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.pipeline.IVertexOperation;
-import codechicken.lib.vec.Cuboid6;
-import codechicken.lib.vec.Matrix4;
-import gregtech.api.cover.CoverBase;
-import gregtech.api.cover.CoverDefinition;
-import gregtech.api.cover.CoverableView;
-import gregtech.api.unification.material.Materials;
-import gregtech.client.renderer.texture.Textures;
-import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.world.WorldProviderPlanet;
+import supersymmetry.common.world.atmosphere.AtmosphereRegion;
+import supersymmetry.common.world.atmosphere.AtmosphereRegionGraph;
+import supersymmetry.common.world.atmosphere.AtmosphereWorldData;
 
 public class CoverAirDisperser extends CoverBase implements ITickable {
 
     private final int oxygenPerSecond;
+    private boolean registeredWithAtmosphere = false;
 
     public CoverAirDisperser(@NotNull CoverDefinition definition, @NotNull CoverableView coverableView,
                              @NotNull EnumFacing attachedSide, int oxygenPerSecond) {
@@ -51,15 +53,6 @@ public class CoverAirDisperser extends CoverBase implements ITickable {
         World world = getWorld();
         if (world.isRemote || getOffsetTimer() % 20 != 0) return;
 
-        BlockPos frontPos = getPos().offset(getAttachedSide());
-        Block block = world.getBlockState(frontPos).getBlock();
-        if (!block.isReplaceable(world, frontPos) && block != SuSyBlocks.BREATHING_GAS) {
-            if (block == SuSyBlocks.BREATHING_GAS) {
-                world.scheduleUpdate(frontPos, SuSyBlocks.BREATHING_GAS, 10);
-            }
-            return;
-        }
-
         TileEntity tileEntity = getTileEntityHere();
         if (tileEntity == null) return;
 
@@ -67,12 +60,40 @@ public class CoverAirDisperser extends CoverBase implements ITickable {
                 getAttachedSide());
         if (fluidHandler == null) return;
 
+        if (!(world.provider instanceof WorldProviderPlanet)) return;
+
+        BlockPos frontPos = getPos().offset(getAttachedSide());
+        AtmosphereWorldData data = AtmosphereWorldData.get(world);
+        AtmosphereRegionGraph graph = data.getGraph();
+
+        if (!registeredWithAtmosphere) {
+            graph.addDisperser(frontPos);
+            registeredWithAtmosphere = true;
+            data.markDirty();
+        }
+
+        // Only consume oxygen if the region needs it (pressure < 1.0 or still filling)
+        AtmosphereRegion region = graph.getRegionAt(frontPos);
+        if (region != null && region.getPressure() >= 1.0 && region.isFillComplete()) return;
+
         FluidStack oxygenStack = new FluidStack(Materials.Oxygen.getFluid(), oxygenPerSecond);
         FluidStack drained = fluidHandler.drain(oxygenStack, false);
         if (drained != null && drained.amount >= oxygenPerSecond) {
             fluidHandler.drain(oxygenStack, true);
-            world.setBlockState(frontPos, SuSyBlocks.BREATHING_GAS.getDefaultState());
-            world.scheduleUpdate(frontPos, SuSyBlocks.BREATHING_GAS, 10);
+            if (region != null) {
+                region.markOxygenSupplied();
+            }
+        }
+    }
+
+    @Override
+    public void onRemoval() {
+        World world = getWorld();
+        if (!world.isRemote && registeredWithAtmosphere && world.provider instanceof WorldProviderPlanet) {
+            BlockPos frontPos = getPos().offset(getAttachedSide());
+            AtmosphereWorldData data = AtmosphereWorldData.get(world);
+            data.getGraph().removeDisperser(frontPos);
+            data.markDirty();
         }
     }
 }

@@ -87,8 +87,6 @@ public class SuSyBlocks {
     public static BlockGrinderCasing GRINDER_CASING;
     public static BlockGirthGearTooth GIRTH_GEAR_TOOTH;
 
-    public static BlockBreathingGas BREATHING_GAS;
-
     public static ArrayList<VariantBlock<?>> susyBlocks;
 
     public static void init() {

@@ -1,20 +1,11 @@
 package supersymmetry.common.event;
 
-import static net.minecraft.inventory.EntityEquipmentSlot.HEAD;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
 import supersymmetry.api.space.CelestialObjects;
 import supersymmetry.api.util.SuSyDamageSources;
-import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.item.SuSyArmorItem;
+import supersymmetry.common.world.atmosphere.AtmosphereWorldData;
 
 public final class DimensionBreathabilityHandler {
 
@@ -45,10 +36,16 @@ public final class DimensionBreathabilityHandler {
 
     public static void tickPlayer(EntityPlayer player) {
         if (isInHazardousEnvironment(player)) {
-            BreathabilityInfo info = dimensionBreathabilityMap.get(player.dimension);
-            if (info.damageType == SuSyDamageSources.DEPRESSURIZATION) {
-                if (findOxygen(player)) {
-                    return;
+            for (BreathabilityInfo info : dimensionBreathabilityMap.get(player.dimension)) {
+                if (info.damageType == SuSyDamageSources.DEPRESSURIZATION) {
+                    if (AtmosphereWorldData.get(player.getEntityWorld()).getGraph()
+                            .getOxygenation(player.getPosition()) >= 0.1) {
+                        return;
+                    }
+                } else if (info.damageType == SuSyDamageSources.DARKNESS) {
+                    if (player.getBrightness() > 0.05F) {
+                        return;
+                    }
                 }
             }
             if (player.getItemStackFromSlot(HEAD).getItem() instanceof SuSyArmorItem item) {
@@ -63,14 +60,11 @@ public final class DimensionBreathabilityHandler {
         }
     }
 
-    public static boolean findOxygen(EntityPlayer player) {
-        World world = player.getEntityWorld();
-        AxisAlignedBB aabb = player.getEntityBoundingBox().expand(2, 2, 2).expand(-2, -2, -2);
-        for (BlockPos pos : BlockPos.getAllInBox(new BlockPos(aabb.minX, aabb.minY, aabb.minZ),
-                new BlockPos(aabb.maxX, aabb.maxY, aabb.maxZ))) {
-            if (world.getBlockState(pos).getBlock() == SuSyBlocks.BREATHING_GAS) {
-                return true;
-            }
+    public static boolean isInDepressurizationHazard(EntityPlayer player) {
+        List<BreathabilityInfo> infos = dimensionBreathabilityMap.get(player.dimension);
+        if (infos == null) return false;
+        for (BreathabilityInfo info : infos) {
+            if (info.damageType == SuSyDamageSources.DEPRESSURIZATION) return true;
         }
         return false;
     }
