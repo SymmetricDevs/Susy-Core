@@ -1,3 +1,4 @@
+// Thank you blackrack, your scatterer project was very useful to me.
 #version 330 core
 
 uniform vec3  u_sunDir;

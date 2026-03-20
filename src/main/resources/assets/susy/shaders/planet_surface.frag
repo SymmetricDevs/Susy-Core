@@ -1,17 +1,8 @@
 #version 330 core
 
-// Planet surface shader - renders the cubemap with a physically correct terminator.
-// Used for bodies WITHOUT an atmosphere (moon, mars, etc).
-// For bodies WITH an atmosphere, this pass is skipped and the atmosphere
-// shader handles terminator darkening itself.
-//
-// The terminator is a smooth penumbra based on the sun's angular radius,
-// matching how real planetary terminators look from orbit.
-
 in  vec3 v_rayDir;
 out vec4 FragColor;
 
-// Face order: +X, -X, +Y, -Y, +Z, -Z
 uniform sampler2D u_face0; // +X
 uniform sampler2D u_face1; // -X
 uniform sampler2D u_face2; // +Y
@@ -82,23 +73,15 @@ void main() {
     // Surface normal in world space
     vec3 normal = normalize(hitPos - u_planetPos);
 
-    // Sample cubemap using surface normal as lookup direction
     vec4 surfaceColor = sampleCubemap(normal);
 
-    // Terminator: smooth penumbra using sun's angular radius
-    // cosHorizon = cos of angle between normal and sun at the terminator
     float cosTheta = dot(normal, u_sunDir);
 
-    // Penumbra width based on sun angular radius (umbra to full light)
-    // smoothstep from -sunAngularRadius to +sunAngularRadius around terminator
     float light = smoothstep(-u_sunAngularRadius, u_sunAngularRadius, cosTheta);
 
-    // Night side: very dark (ambient ~2% for earthshine/starlight)
     float ambient = 0.02;
     float illumination = ambient + (1.0 - ambient) * light;
 
     vec3 color = surfaceColor.rgb * illumination;
-
-    // Output fully opaque - this is the base layer under atmosphere
     FragColor = vec4(color, surfaceColor.a);
 }

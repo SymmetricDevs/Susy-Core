@@ -1,7 +1,5 @@
 #version 120
 
-// ── Bloom pass 3 of 3: composite ────────────────────────────────────────────
-//
 // Additively blends the blurred emissive bloom onto the original scene.
 //
 // Uniforms
@@ -9,7 +7,6 @@
 //   u_bloomTexture – the blurred emissive mask (GL_TEXTURE1)
 //   u_intensity    – how strong the bloom glow is, good default: 1.0
 //                    Values > 1 produce HDR-style over-exposure.
-// ────────────────────────────────────────────────────────────────────────────
 
 uniform sampler2D u_texture;      // scene
 uniform sampler2D u_bloomTexture; // blurred bloom
