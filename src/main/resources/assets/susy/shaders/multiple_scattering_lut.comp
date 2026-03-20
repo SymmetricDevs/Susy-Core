@@ -1,14 +1,5 @@
 #version 430 core
 
-// Bakes the multiple scattering LUT.
-// Exact port of Blackrack's MultipleScatteringLut.comp to GL 4.3.
-//
-// Each workgroup = one texel. 8x8 = 64 threads each march one direction.
-// Results are summed via parallel reduction, then geometric series applied.
-//
-// LUT axes: x = sunCosZenith (0..1 → -1..1), y = altitude (0..1)
-// Output: total multiple scattering radiance for all orders
-
 layout(local_size_x = 8, local_size_y = 8) in;
 
 layout(rgba16f, binding = 0) uniform image2D u_multipleScatteringLut;
@@ -95,10 +86,8 @@ void RaymarchDirection(vec3 rayOrigin, vec3 rayDir, vec3 planetPos, vec3 sunDir,
         vec3 curR = dens.x * u_rayleighCoefficients;
         vec3 curM = dens.y * u_mieCoefficients;
 
-        // Transfer factor: how much this column rescatters light (uniform phase)
         transferFactor += weight * (curR + curM);
 
-        // Isotropic inscatter: single scatter with uniform phase, lit by sun
         float sunCosZ = dot(rel/dist, sunDir);
         vec3  lightT  = GetTransmittanceFromLut(dist, sunCosZ);
         inscatterIsotropic += weight * lightT * uniformPhase * (curR + curM);
@@ -112,10 +101,8 @@ void main() {
     ivec2 texelId  = ivec2(gl_WorkGroupID.xy);
     int   threadId = int(gl_LocalInvocationID.x + gl_LocalInvocationID.y * GROUP);
 
-    // LUT coords for this texel
     vec2 coords = vec2(texelId) / vec2(dim - ivec2(1));
 
-    // Decode physical parameters - matches GetMultiScatteringLutCoordsFromPhysicalParameters inverse
     float sunCosZenith = coords.x * 2.0 - 1.0;
     float altitude     = coords.y * (u_topRadius - u_bottomRadius);
     float distToCenter = u_bottomRadius + max(altitude, 1.0);
@@ -126,8 +113,6 @@ void main() {
     float sunSinZenith = sqrt(max(1.0 - sunCosZenith*sunCosZenith, 0.0));
     vec3  sunDir       = vec3(0.0, sunSinZenith, sunCosZenith);
 
-    // This thread marches one direction on the sphere
-    // 8x8 grid covers sphere with uniform-ish distribution
     float u = float(gl_LocalInvocationID.x) / float(GROUP);
     float v = float(gl_LocalInvocationID.y) / float(GROUP);
 
@@ -142,7 +127,6 @@ void main() {
     sharedIsotropic[threadId]     = iso;
     sharedTransferFactor[threadId] = transfer;
 
-    // Parallel reduction sum - exact from Blackrack
     barrier();
     for (uint stride = uint(GROUP*GROUP)/2u; stride > 0u; stride /= 2u) {
         if (uint(threadId) < stride) {
@@ -158,8 +142,6 @@ void main() {
     vec3 avgIsotropic  = sharedIsotropic[0]     / totalSamples;
     vec3 avgTransfer   = sharedTransferFactor[0] / totalSamples;
 
-    // Geometric series sum: total multiple scattering = isotropic / (1 - transferFactor)
-    // This accounts for all scattering orders analytically
     vec3 multiScatter = avgIsotropic / max(vec3(1.0) - avgTransfer, vec3(1e-4));
 
     imageStore(u_multipleScatteringLut, texelId, vec4(multiScatter, 1.0));

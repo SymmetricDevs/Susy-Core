@@ -1,7 +1,5 @@
 #version 120
 
-// ── Bloom passes 2 & 3 of 3: separable Gaussian blur ────────────────────────
-//
 // Run this shader TWICE:
 //   Pass A (horizontal):  u_direction = (1, 0)
 //   Pass B (vertical):    u_direction = (0, 1)
@@ -10,10 +8,9 @@
 // but requires only 2*N samples instead of N^2 – much cheaper.
 //
 // Uniforms
-//   u_texture   – input image (emissive mask on pass A, horizontal result on B)
-//   u_direction – (1,0) for horizontal, (0,1) for vertical
-//   u_radius    – blur radius in pixels, good default: 4.0
-// ────────────────────────────────────────────────────────────────────────────
+//   u_texture   - input image (emissive mask on pass A, horizontal result on B)
+//   u_direction - (1,0) for horizontal, (0,1) for vertical
+//   u_radius    - blur radius in pixels, good default: 4.0
 
 uniform sampler2D u_texture;
 uniform vec2      u_resolution;

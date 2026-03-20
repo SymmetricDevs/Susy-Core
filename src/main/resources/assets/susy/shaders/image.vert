@@ -1,8 +1,5 @@
 #version 120
 
-// Full-screen quad vertex shader.
-// Accepts NDC positions (-1..1) and passes UVs to the fragment stage.
-// All post-process shaders share this single vertex program.
 
 attribute vec4 Position;
 attribute vec2 UV0;

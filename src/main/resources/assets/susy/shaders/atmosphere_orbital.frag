@@ -25,7 +25,6 @@ uniform float u_renderUnitRadius;
 uniform mat4  u_invProjection;
 uniform mat4  u_invView;
 
-// Multiple scattering LUT - indexed by (sunCosZenith*0.5+0.5, altitude/thickness)
 uniform sampler2D u_multipleScatteringLut;
 uniform vec2      u_msLutSize;
 
@@ -48,7 +47,6 @@ vec3 MiePhase(float c, vec3 g) {
            * pow(max(denom,vec3(1e-4)), vec3(-1.5)) / (2.0+g2);
 }
 
-// Exact from Blackrack - inline light ray march with soft planet shadow
 vec3 GetTransmittanceToSun(vec3 posSI, vec3 planSI) {
     vec3  rel    = posSI - planSI;
     float dist   = length(rel);
@@ -73,7 +71,6 @@ vec3 GetTransmittanceToSun(vec3 posSI, vec3 planSI) {
     return T * softShadow;
 }
 
-// Exact from Blackrack GetMultiScatteringLutCoordsFromPhysicalParameters
 vec2 GetMultiScatteringUV(float sunCosZenith, float altitude) {
     vec2 coords = clamp(vec2(
         sunCosZenith * 0.5 + 0.5,
@@ -113,7 +110,7 @@ void main() {
     vec3 totalT  = vec3(1.0);
     vec3 accumR  = vec3(0.0);
     vec3 accumM  = vec3(0.0);
-    vec3 accumMS = vec3(0.0); // multiple scattering
+    vec3 accumMS = vec3(0.0);
 
     for (int i = 0; i < V_STEPS; i++) {
         vec3  absSI = u_cameraPos*ruToM + rd*(tStartM + (float(i)+0.5)*stepM);
@@ -127,7 +124,6 @@ void main() {
         vec3 localAbs  = rayleighAbs*dens.x + mieAbs*dens.y + u_ozoneCoefficients*dO;
         vec3 stepT     = exp(-localAbs * stepM);
 
-        // Blackrack's exact integration weight
         vec3 weight = totalT * (vec3(1.0)-stepT) / max(localAbs, vec3(1e-10));
 
         vec3 lightT = GetTransmittanceToSun(absSI, planSI);
@@ -135,12 +131,9 @@ void main() {
         vec3 curR = dens.x * rayleighAbs;
         vec3 curM = dens.y * u_mieCoefficients;
 
-        // Single scatter - Blackrack lines 83-85
         accumR += weight * lightT * curR;
         accumM += weight * lightT * curM;
 
-        // Multiple scatter - Blackrack line 80:
-        // inscatter += integrationWeight * multipleScatteringLight * (curR + curM)
         float sunCosZ = dot(relSI / dist, u_sunDir);
         vec2  msUV    = GetMultiScatteringUV(sunCosZ, alt);
         vec3  msLight = textureLod(u_multipleScatteringLut, msUV, 0.0).rgb;
@@ -149,7 +142,6 @@ void main() {
         totalT *= stepT;
     }
 
-    // Blackrack lines 93-96 + multiple scattering
     vec3 inscatter = u_sunIntensity * (accumR * pR + accumM * pM + accumMS);
 
     float avgT  = dot(totalT, vec3(1.0/3.0));
