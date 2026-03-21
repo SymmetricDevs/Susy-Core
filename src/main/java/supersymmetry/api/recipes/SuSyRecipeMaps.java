@@ -516,9 +516,13 @@ public class SuSyRecipeMaps {
             new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.ARC);
 
-    public static final RecipeMap<SimpleRecipeBuilder> RESIST_PROCESSOR = new RecipeMap<>("resist_processing", 1, 1, 2, 0,
+    public static final RecipeMap<SimpleRecipeBuilder> RESIST_PROCESSOR = new RecipeMap<>("resist_processing", 1, 1, 2,
+            0,
             new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.CENTRIFUGE); // because it spins
+    public static final RecipeMap<SimpleRecipeBuilder> PLASMA_ASHER = new RecipeMap<>("plasma_ashing", 1, 1, 2, 0,
+            new SimpleRecipeBuilder(), false)
+                    .setSound(GTSoundEvents.ARC);
 
     static {
         GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()
