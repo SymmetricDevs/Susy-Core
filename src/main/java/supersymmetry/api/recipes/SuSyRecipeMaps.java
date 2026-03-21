@@ -520,7 +520,12 @@ public class SuSyRecipeMaps {
             0,
             new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.CENTRIFUGE); // because it spins
+
     public static final RecipeMap<SimpleRecipeBuilder> PLASMA_ASHER = new RecipeMap<>("plasma_ashing", 1, 1, 2, 0,
+            new SimpleRecipeBuilder(), false)
+                    .setSound(GTSoundEvents.ARC);
+
+    public static final RecipeMap<SimpleRecipeBuilder> ELECTRON_BEAM_LITHOGRAPHY = new RecipeMap<>("electron_beam_lithography", 1, 1, 0, 0,
             new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.ARC);
 
