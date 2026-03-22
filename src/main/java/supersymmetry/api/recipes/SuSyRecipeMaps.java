@@ -525,7 +525,8 @@ public class SuSyRecipeMaps {
             new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.ARC);
 
-    public static final RecipeMap<SimpleRecipeBuilder> ELECTRON_BEAM_LITHOGRAPHY = new RecipeMap<>("electron_beam_lithography", 1, 1, 0, 0,
+    public static final RecipeMap<SimpleRecipeBuilder> ELECTRON_BEAM_LITHOGRAPHY = new RecipeMap<>(
+            "electron_beam_lithography", 1, 1, 0, 0,
             new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.ARC);
 
