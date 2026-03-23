@@ -348,7 +348,7 @@ public class SuSyMetaTileEntities {
                 Textures.GAS_COLLECTOR_OVERLAY, true);
 
         registerSimpleSteamMTE(STEAM_DISTILLER, 20002, "distiller", RecipeMaps.DISTILLERY_RECIPES,
-                SuSySteamProgressIndicators.ARROW, Textures.DISTILLERY_OVERLAY, false);
+                SuSySteamProgressIndicators.ARROW, Textures.DISTILLERY_OVERLAY, false, true);
 
         // chem overhaul
         registerContinuousMachineMTE(CONTINUOUS_STIRRED_TANK_REACTOR, 12, 14554, "continuous_stirred_tank_reactor",
@@ -365,7 +365,7 @@ public class SuSyMetaTileEntities {
                 SuSyUtility.reactorTankSizeFunction);
 
         registerSimpleSteamMTE(STEAM_BATCH_REACTOR, 20000, "batch_reactor", SuSyRecipeMaps.BATCH_REACTOR_RECIPES,
-                SuSySteamProgressIndicators.ARROW, SusyTextures.BATCH_REACTOR_OVERLAY, false);
+                SuSySteamProgressIndicators.ARROW, SusyTextures.BATCH_REACTOR_OVERLAY, false, true);
         registerSimpleMTE(BATCH_REACTOR, 12, 14681, "batch_reactor", SuSyRecipeMaps.BATCH_REACTOR_RECIPES,
                 SusyTextures.BATCH_REACTOR_OVERLAY, true, SuSyUtility.reactorTankSizeFunction);
 
@@ -737,10 +737,18 @@ public class SuSyMetaTileEntities {
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name,
                                                RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator,
                                                ICubeRenderer texture, boolean isBricked) {
+        registerSimpleSteamMTE(machines, startId, name, recipeMap, progressIndicator, texture, isBricked, false);
+    }
+
+    private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name,
+                                               RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator,
+                                               ICubeRenderer texture, boolean isBricked, boolean ulvOnly) {
         machines[0] = registerMetaTileEntity(startId, new SuSySimpleSteamMetaTileEntity(
-                susyId(String.format("%s.bronze", name)), recipeMap, progressIndicator, texture, isBricked, false));
+                susyId(String.format("%s.bronze", name)), recipeMap, progressIndicator, texture, isBricked, false,
+                ulvOnly));
         machines[1] = registerMetaTileEntity(startId + 1, new SuSySimpleSteamMetaTileEntity(
-                susyId(String.format("%s.steel", name)), recipeMap, progressIndicator, texture, isBricked, true));
+                susyId(String.format("%s.steel", name)), recipeMap, progressIndicator, texture, isBricked, true,
+                ulvOnly));
     }
 
     private static void registerSimpleMTE(SimpleMachineMetaTileEntity[] machines, int maxTier, int startId, String name,
