@@ -30,6 +30,14 @@ public class OxygenSensorBehavior implements IItemBehaviour {
     public void onUpdate(ItemStack itemStack, Entity entity) {
         //i dont know whats meant to happen here and i failed to merge it correctly sorry
 
+        if (!(entity instanceof EntityPlayer)) return;
+
+        EntityPlayer player = (EntityPlayer) entity;
+        if (player.world.isRemote) return;
+        if (player.ticksExisted % CHECK_INTERVAL != 0) return;
+
+        IElectricItem electricItem = itemStack.getCapability(GregtechCapabilities.CAPABILITY_ELECTRIC_ITEM, null);
+        if (electricItem == null) return;
 
         boolean isHeld = player.getHeldItemMainhand() == itemStack
                 || player.getHeldItemOffhand() == itemStack;
