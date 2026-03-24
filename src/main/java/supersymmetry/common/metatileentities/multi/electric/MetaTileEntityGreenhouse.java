@@ -6,6 +6,7 @@ import javax.annotation.Nonnull;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -70,6 +71,26 @@ public class MetaTileEntityGreenhouse extends RecipeMapMultiblockController {
         this.length = length;
         this.cellCount = (length / 4) - 1;
         return true;
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        data.setInteger("cellCount", this.cellCount);
+        return super.writeToNBT(data);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound data) {
+        super.readFromNBT(data);
+        this.cellCount = data.getInteger("cellCount");
+    }
+
+    @Override
+    public void checkStructurePattern() {
+        if (updateStructureDimensions()) {
+            reinitializeStructurePattern();
+        }
+        super.checkStructurePattern();
     }
 
     @Override
