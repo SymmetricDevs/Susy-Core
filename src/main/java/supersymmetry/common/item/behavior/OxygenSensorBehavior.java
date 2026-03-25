@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -28,7 +29,14 @@ public class OxygenSensorBehavior implements IItemBehaviour {
 
     @Override
     public void onUpdate(ItemStack itemStack, Entity entity) {
-        // i dont know whats meant to happen here and i failed to merge it correctly sorry
+        if (!(entity instanceof EntityPlayer)) return;
+
+        EntityPlayer player = (EntityPlayer) entity;
+        if (player.world.isRemote) return;
+        if (player.ticksExisted % CHECK_INTERVAL != 0) return;
+
+        IElectricItem electricItem = itemStack.getCapability(GregtechCapabilities.CAPABILITY_ELECTRIC_ITEM, null);
+        if (electricItem == null) return;
 
         boolean isHeld = player.getHeldItemMainhand() == itemStack || player.getHeldItemOffhand() == itemStack;
 
