@@ -20,7 +20,8 @@ public class RenderGlobalMixin {
                    at = @At(value = "INVOKE",
                             target = "Lnet/minecraft/client/renderer/entity/RenderManager;shouldRender(Lnet/minecraft/entity/Entity;Lnet/minecraft/client/renderer/culling/ICamera;DDD)Z"))
     public boolean checkForAlwaysRender(RenderManager renderManager, Entity entityIn, ICamera camera, double camX,
-                                        double camY, double camZ,
+                                        double camY,
+                                        double camZ,
                                         Operation<Boolean> shouldRender) {
         if (entityIn instanceof IAlwaysRender) {
             return true;
@@ -30,6 +31,6 @@ public class RenderGlobalMixin {
                 return true;
             }
         }
-        return shouldRender.call(renderManager, entityIn, camera, camX, camY, camZ);
+        return shouldRender.call(mgr, entityIn, camera, camX, camY, camZ);
     }
 }

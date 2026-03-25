@@ -29,6 +29,8 @@ public class OxygenSensorBehavior implements IItemBehaviour {
 
     @Override
     public void onUpdate(ItemStack itemStack, Entity entity) {
+        // i dont know whats meant to happen here and i failed to merge it correctly sorry
+
         if (!(entity instanceof EntityPlayer)) return;
 
         EntityPlayer player = (EntityPlayer) entity;
