@@ -1,19 +1,20 @@
 package supersymmetry.common.item.behavior;
 
-import gregtech.api.capability.GregtechCapabilities;
-import gregtech.api.capability.IElectricItem;
-import gregtech.api.items.metaitem.stats.IItemBehaviour;
+import java.util.List;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentTranslation;
+
+import gregtech.api.capability.GregtechCapabilities;
+import gregtech.api.capability.IElectricItem;
+import gregtech.api.items.metaitem.stats.IItemBehaviour;
 import supersymmetry.api.sound.SusySounds;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.world.atmosphere.AtmosphereWorldData;
-
-import java.util.List;
 
 public class OxygenSensorBehavior implements IItemBehaviour {
 
@@ -28,18 +29,19 @@ public class OxygenSensorBehavior implements IItemBehaviour {
 
     @Override
     public void onUpdate(ItemStack itemStack, Entity entity) {
-        if (!(entity instanceof EntityPlayer player)) return;
+        if (!(entity instanceof EntityPlayer)) return;
+
+        EntityPlayer player = (EntityPlayer) entity;
         if (player.world.isRemote) return;
         if (player.ticksExisted % CHECK_INTERVAL != 0) return;
 
         IElectricItem electricItem = itemStack.getCapability(GregtechCapabilities.CAPABILITY_ELECTRIC_ITEM, null);
         if (electricItem == null) return;
 
-        boolean isHeld = player.getHeldItemMainhand() == itemStack
-                || player.getHeldItemOffhand() == itemStack;
+        boolean isHeld = player.getHeldItemMainhand() == itemStack || player.getHeldItemOffhand() == itemStack;
 
         boolean inHazard = DimensionBreathabilityHandler.isInDepressurizationHazard(player);
-        double pressure = !inHazard ? 1: AtmosphereWorldData.get(player.getEntityWorld()).getGraph()
+        double pressure = !inHazard ? 1 : AtmosphereWorldData.get(player.getEntityWorld()).getGraph()
                 .getOxygenation(player.getPosition());
         boolean insufficient = pressure < 0.1;
 
