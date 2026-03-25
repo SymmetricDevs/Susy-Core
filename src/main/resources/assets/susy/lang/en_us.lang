@@ -1145,6 +1145,7 @@ metaitem.oxygen_sensor.oxygen_level.very_low=Oxygen Level: §cVery Low
 metaitem.oxygen_sensor.oxygen_level.low=Oxygen Level: §6Low
 metaitem.oxygen_sensor.oxygen_level.medium=Oxygen Level: §eModerate
 metaitem.oxygen_sensor.oxygen_level.high=Oxygen Level: §aHigh
+metaitem.tungsten_electrode.name=Thoriated Tungsten Electrode
 
 # Catalysts
 susy.universal.catalysts.tooltip.tier=§eMax Voltage: §f%,d EU/T (%s§f)
