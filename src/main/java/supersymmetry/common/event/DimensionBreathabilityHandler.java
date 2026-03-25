@@ -1,7 +1,12 @@
 package supersymmetry.common.event;
 
+import static net.minecraft.inventory.EntityEquipmentSlot.HEAD;
+
+import java.util.*;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
+
 import supersymmetry.api.space.CelestialObjects;
 import supersymmetry.api.util.SuSyDamageSources;
 import supersymmetry.common.item.SuSyArmorItem;
@@ -9,7 +14,7 @@ import supersymmetry.common.world.atmosphere.AtmosphereWorldData;
 
 public final class DimensionBreathabilityHandler {
 
-    private static final Map<Integer, BreathabilityInfo> dimensionBreathabilityMap = new HashMap<>();
+    private static final Map<Integer, BreathabilityInfo[]> dimensionBreathabilityMap = new HashMap<>();
 
     private static final BreathabilityInfo SPACE = new BreathabilityInfo(SuSyDamageSources.DEPRESSURIZATION, 3);
     public static final int BENEATH_ID = 10;
@@ -22,12 +27,18 @@ public final class DimensionBreathabilityHandler {
     public static void loadConfig() {
         dimensionBreathabilityMap.clear();
 
+        int[] hello = { 1, 2, 3 };
+
         // Nether
-        dimensionBreathabilityMap.put(-1, new BreathabilityInfo(SuSyDamageSources.getToxicAtmoDamage(), 2));
+        dimensionBreathabilityMap.put(-1,
+                new BreathabilityInfo[] { new BreathabilityInfo(SuSyDamageSources.getToxicAtmoDamage(),
+                        2) });
         // Beneath
-        dimensionBreathabilityMap.put(10, new BreathabilityInfo(SuSyDamageSources.getSuffocationDamage(), 0.5));
+        dimensionBreathabilityMap.put(10,
+                new BreathabilityInfo[] { new BreathabilityInfo(SuSyDamageSources.getSuffocationDamage(),
+                        0.5) });
         // SPACE
-        dimensionBreathabilityMap.put(CelestialObjects.MOON.getDimension(), SPACE);
+        dimensionBreathabilityMap.put(CelestialObjects.MOON.getDimension(), new BreathabilityInfo[] { SPACE });
     }
 
     public static boolean isInHazardousEnvironment(EntityPlayer player) {
@@ -47,21 +58,22 @@ public final class DimensionBreathabilityHandler {
                         return;
                     }
                 }
-            }
-            if (player.getItemStackFromSlot(HEAD).getItem() instanceof SuSyArmorItem item) {
-                if (item.isValid(player.getItemStackFromSlot(HEAD), player)) {
-                    double damageAbsorbed = item.getDamageAbsorbed(player.getItemStackFromSlot(HEAD), player);
-                    if (damageAbsorbed != ABSORB_ALL)
-                        info.damagePlayer(player, damageAbsorbed);
-                    return;
+                if (player.getItemStackFromSlot(HEAD).getItem() instanceof SuSyArmorItem item) {
+                    if (item.isValid(player.getItemStackFromSlot(HEAD), player)) {
+                        double damageAbsorbed = item.getDamageAbsorbed(player.getItemStackFromSlot(HEAD), player);
+                        if (damageAbsorbed != ABSORB_ALL)
+                            info.damagePlayer(player, damageAbsorbed);
+                        return;
+                    }
                 }
+                info.damagePlayer(player, 0);
             }
-            info.damagePlayer(player, 0);
+
         }
     }
 
     public static boolean isInDepressurizationHazard(EntityPlayer player) {
-        List<BreathabilityInfo> infos = dimensionBreathabilityMap.get(player.dimension);
+        List<BreathabilityInfo> infos = Arrays.asList(dimensionBreathabilityMap.get(player.dimension));
         if (infos == null) return false;
         for (BreathabilityInfo info : infos) {
             if (info.damageType == SuSyDamageSources.DEPRESSURIZATION) return true;

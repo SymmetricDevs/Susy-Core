@@ -30,6 +30,7 @@ import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.ingredients.IntCircuitIngredient;
 import gregtech.api.util.GTTransferUtils;
 import gregtech.client.renderer.ICubeRenderer;
+import supersymmetry.api.capability.impl.RecipeLogicSteamLimited;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicator;
 
@@ -37,6 +38,7 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity implement
 
     protected SuSySteamProgressIndicator progressIndicator;
     protected boolean isBrickedCasing;
+    protected boolean ulvOnly;
     @Nullable
     protected GhostCircuitItemStackHandler circuitInventory;
     protected IItemHandler outputItemInventory;
@@ -46,16 +48,24 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity implement
     public SuSySimpleSteamMetaTileEntity(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap,
                                          SuSySteamProgressIndicator progressIndicator, ICubeRenderer renderer,
                                          boolean isBrickedCasing, boolean isHighPressure) {
+        this(metaTileEntityId, recipeMap, progressIndicator, renderer, isBrickedCasing, isHighPressure, false);
+    }
+
+    public SuSySimpleSteamMetaTileEntity(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap,
+                                         SuSySteamProgressIndicator progressIndicator, ICubeRenderer renderer,
+                                         boolean isBrickedCasing, boolean isHighPressure, boolean ulvOnly) {
         super(metaTileEntityId, recipeMap, renderer, isHighPressure);
         this.progressIndicator = progressIndicator;
         this.isBrickedCasing = isBrickedCasing;
+        this.ulvOnly = ulvOnly;
         if (hasGhostCircuitInventory()) {
             this.circuitInventory = new GhostCircuitItemStackHandler(this);
             this.circuitInventory.addNotifiableMetaTileEntity(this);
         }
         initializeInventory();
-        this.workableHandler = new RecipeLogicSteam(this,
-                recipeMap, isHighPressure, steamFluidTank, 1.0);
+        this.workableHandler = ulvOnly ?
+                new RecipeLogicSteamLimited(this, recipeMap, isHighPressure, steamFluidTank, 1.0) :
+                new RecipeLogicSteam(this, recipeMap, isHighPressure, steamFluidTank, 1.0);
     }
 
     @Override
@@ -77,7 +87,7 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity implement
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
         return new SuSySimpleSteamMetaTileEntity(metaTileEntityId, workableHandler.getRecipeMap(), progressIndicator,
-                renderer, isBrickedCasing, isHighPressure);
+                renderer, isBrickedCasing, isHighPressure, ulvOnly);
     }
 
     @Override
@@ -239,7 +249,7 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity implement
         // 3
         boolean isVerticalFluid = itemsSlotsDown >= fluidSlotsCount && itemsSlotsLeft < 3;
         int fluidGridHeight = ((fluidSlotsCount / 3 == 0) ? 1 : fluidSlotsCount / 3); // fit into at most 3 wide by x
-                                                                                      // tall
+        // tall
 
         int fullGridHeight = itemsSlotsDown + (isVerticalFluid ? 0 : fluidGridHeight);
         if (fullGridHeight >= 3) yOffset += 4;

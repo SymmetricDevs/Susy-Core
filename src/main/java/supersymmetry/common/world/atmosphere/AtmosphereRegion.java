@@ -1,18 +1,20 @@
 package supersymmetry.common.world.atmosphere;
 
+import java.util.*;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import java.util.*;
 
 /**
  * A pressurized volume of oxygenated blocks, stored in an Octree.
  *
- * <p>The region is built by flood-filling outward from a source position
+ * <p>
+ * The region is built by flood-filling outward from a source position
  * (the disperser). Filling can be budgeted so only N blocks are processed
  * per call, making it safe for incremental/tick-based expansion.
  *
- * <p>Pressure is tracked as a separate value (0.0–1.0). The octree represents
+ * <p>
+ * Pressure is tracked as a separate value (0.0–1.0). The octree represents
  * the room shape; pressure determines whether the oxygen is active.
  * Depressurization decreases pressure without removing octree positions,
  * eliminating "lost block" edge cases.
@@ -229,6 +231,7 @@ public class AtmosphereRegion {
 
     /**
      * Remove a breach if the position is now solid.
+     * 
      * @return true if the breach was present and removed
      */
     public boolean sealBreach(BlockPos pos) {
@@ -270,17 +273,35 @@ public class AtmosphereRegion {
 
     // ---- Getters / setters ----
 
-    public BlockPos getSource() { return source; }
-    public double getPressure() { return pressure; }
+    public BlockPos getSource() {
+        return source;
+    }
+
+    public double getPressure() {
+        return pressure;
+    }
 
     public void setPressure(double pressure) {
         this.pressure = Math.max(0.0, Math.min(1.0, pressure));
     }
 
-    public int getVolume() { return octree.size(); }
-    public boolean isFillComplete() { return fillComplete; }
-    public Octree getOctree() { return octree; }
-    public boolean isSourceless() { return dispersers.isEmpty(); }
+    public int getVolume() {
+        return octree.size();
+    }
 
-    public boolean isFillFailed() { return fillFailed; }
+    public boolean isFillComplete() {
+        return fillComplete;
+    }
+
+    public Octree getOctree() {
+        return octree;
+    }
+
+    public boolean isSourceless() {
+        return dispersers.isEmpty();
+    }
+
+    public boolean isFillFailed() {
+        return fillFailed;
+    }
 }
