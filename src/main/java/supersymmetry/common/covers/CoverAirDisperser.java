@@ -1,14 +1,5 @@
 package supersymmetry.common.covers;
 
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.pipeline.IVertexOperation;
-import codechicken.lib.vec.Cuboid6;
-import codechicken.lib.vec.Matrix4;
-import gregtech.api.cover.CoverBase;
-import gregtech.api.cover.CoverDefinition;
-import gregtech.api.cover.CoverableView;
-import gregtech.api.unification.material.Materials;
-import gregtech.client.renderer.texture.Textures;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
@@ -20,6 +11,16 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import org.jetbrains.annotations.NotNull;
+
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Cuboid6;
+import codechicken.lib.vec.Matrix4;
+import gregtech.api.cover.CoverBase;
+import gregtech.api.cover.CoverDefinition;
+import gregtech.api.cover.CoverableView;
+import gregtech.api.unification.material.Materials;
+import gregtech.client.renderer.texture.Textures;
 import supersymmetry.common.world.WorldProviderPlanet;
 import supersymmetry.common.world.atmosphere.AtmosphereRegion;
 import supersymmetry.common.world.atmosphere.AtmosphereRegionGraph;
