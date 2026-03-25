@@ -1,0 +1,214 @@
+package supersymmetry.common.metatileentities.single.electric;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import gregtech.api.GTValues;
+import gregtech.api.capability.IEnergyContainer;
+import gregtech.api.capability.impl.FluidTankList;
+import gregtech.api.capability.impl.FuelRecipeLogic;
+import gregtech.api.capability.impl.NotifiableFluidTank;
+import gregtech.api.gui.GuiTextures;
+import gregtech.api.gui.ModularUI;
+import gregtech.api.gui.widgets.ImageWidget;
+import gregtech.api.gui.widgets.LabelWidget;
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.api.recipes.Recipe;
+import gregtech.api.recipes.RecipeMap;
+import gregtech.client.renderer.ICubeRenderer;
+import gregtech.common.metatileentities.electric.MetaTileEntitySingleCombustion;
+import supersymmetry.api.capability.impl.SuSyFluidFilters;
+import supersymmetry.api.fluids.FilteredTankWidget;
+import supersymmetry.api.fluids.SuSyFluidTankHandler;
+import supersymmetry.api.util.SuSyUtility;
+
+public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleCombustion {
+
+    private int workCounter;
+    private boolean isFull;
+
+    private SuSyUtility.Lubricant lubricant;
+    private SuSyUtility.Coolant coolant;
+
+    private boolean sufficientFluids;
+
+    private SuSyFluidTankHandler lubricantTank;
+    private SuSyFluidTankHandler coolantTank;
+
+    private FluidTankList displayedTankList;
+
+    public SuSyMetaTileEntitySingleCombustion(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap,
+                                              ICubeRenderer renderer, int tier,
+                                              Function<Integer, Integer> tankScalingFunction) {
+        super(metaTileEntityId, recipeMap, renderer, tier, tankScalingFunction);
+    }
+
+    @Override
+    public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
+        return new SuSyMetaTileEntitySingleCombustion(metaTileEntityId, recipeMap, renderer, this.getTier(),
+                this.getTankScalingFunction());
+    }
+
+    @Override
+    protected FluidTankList createImportFluidHandler() {
+        if (workable == null) return new FluidTankList(false);
+
+        FluidTank[] fluidImports = new FluidTank[workable.getRecipeMap().getMaxFluidInputs()];
+        FluidTank[] displayedTanks = new FluidTank[workable.getRecipeMap().getMaxFluidInputs()];
+        for (int i = 0; i < fluidImports.length; i++) {
+            NotifiableFluidTank tank = new NotifiableFluidTank(
+                    this.getTankScalingFunction().apply(this.getTier()), this, false);
+            fluidImports[i] = tank;
+            displayedTanks[i] = tank;
+        }
+
+        this.lubricantTank = (SuSyFluidTankHandler) new SuSyFluidTankHandler(1000, this, false)
+                .setFilter(SuSyFluidFilters.LUBRICANT);
+        this.coolantTank = (SuSyFluidTankHandler) new SuSyFluidTankHandler(1000, this, false)
+                .setFilter(SuSyFluidFilters.COOLANT);
+
+        this.displayedTankList = new FluidTankList(false, displayedTanks);
+
+        List<FluidTank> allTanks = new ArrayList<>(Arrays.asList(fluidImports));
+        allTanks.add(lubricantTank);
+        allTanks.add(coolantTank);
+        return new FluidTankList(false, allTanks.toArray(new FluidTank[0]));
+    }
+
+    @Override
+    // Override recipe logic
+    protected CombustionRecipeLogic createWorkable(RecipeMap<?> recipeMap) {
+        return new CombustionRecipeLogic(this, recipeMap, () -> this.energyContainer);
+    }
+
+    @Override
+    public void update() {
+        super.update();
+        if (!getWorld().isRemote) {
+            updateSufficientFluids();
+            isFull = energyContainer.getEnergyStored() >= energyContainer.getEnergyCapacity();
+
+            if (workable.isWorking() && !isFull) workCounter += 1;
+            if (workCounter == 600) {
+                workCounter = 0;
+
+                lubricantTank.drain((int) (lubricant.amount_required * Math.pow(4, getTier() - 1)), true);
+                coolantTank.drain((int) (coolant.amount_required * Math.pow(4, getTier() - 1)), true);
+            }
+        }
+    }
+
+    protected void updateSufficientFluids() {
+        // Check coolant & lubricant levels, activity
+        FluidStack lubricantStack = lubricantTank.drain(Integer.MAX_VALUE, false);
+        FluidStack coolantStack = coolantTank.drain(Integer.MAX_VALUE, false);
+
+        lubricant = lubricantStack == null ? null : SuSyUtility.lubricants.get(lubricantStack.getFluid().getName());
+        coolant = coolantStack == null ? null : SuSyUtility.coolants.get(coolantStack.getFluid().getName());
+
+        if (lubricant == null || coolant == null) {
+            sufficientFluids = false;
+            return;
+        }
+
+        sufficientFluids = lubricantStack.amount >= lubricant.amount_required &&
+                coolantStack.amount >= coolant.amount_required;
+    }
+
+    @Override
+    // Create GUI template for the combustion generator
+    protected ModularUI.Builder createGuiTemplate(EntityPlayer player) {
+        RecipeMap<?> workableRecipeMap = workable.getRecipeMap();
+        int yOffset = 15;
+
+        ModularUI.Builder builder;
+        builder = workableRecipeMap.createUITemplateNoOutputs(workable::getProgressPercent, importItems,
+                exportItems, displayedTankList, exportFluids, yOffset);
+        builder.widget(new LabelWidget(6, 6, getMetaFullName()))
+                .bindPlayerInventory(player.inventory, GuiTextures.SLOT, yOffset);
+
+        builder.widget(new FilteredTankWidget(lubricantTank, 110, 21, 10, 54)
+                .setBackgroundTexture(GuiTextures.PROGRESS_BAR_BOILER_EMPTY.get(true))
+                .setAlwaysShowFull(false)
+                .setContainerClicking(true, true));  // both directions, filter guards filling
+        builder.widget(new FilteredTankWidget(coolantTank, 124, 21, 10, 54)
+                .setBackgroundTexture(GuiTextures.PROGRESS_BAR_BOILER_EMPTY.get(true))
+                .setAlwaysShowFull(false)
+                .setContainerClicking(true, true));
+        builder.widget(new ImageWidget(152, 63 + yOffset, 17, 17,
+                GTValues.XMAS.get() ? GuiTextures.GREGTECH_LOGO_XMAS : GuiTextures.GREGTECH_LOGO)
+                        .setIgnoreColor(true));
+
+        return builder;
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip,
+                               boolean advanced) {
+        super.addInformation(stack, world, tooltip, advanced);
+        tooltip.add(I18n.format("susy.machine.combustion_generator.tooltip"));
+    }
+
+    private class CombustionRecipeLogic extends FuelRecipeLogic {
+
+        public CombustionRecipeLogic(SuSyMetaTileEntitySingleCombustion metaTileEntity, RecipeMap<?> recipeMap,
+                                     Supplier<IEnergyContainer> energyContainer) {
+            super(metaTileEntity, recipeMap, energyContainer);
+        }
+
+        @Override
+        public boolean checkRecipe(@NotNull Recipe recipe) {
+            return sufficientFluids && !isFull;
+        }
+
+        @Override
+        public boolean isWorking() {
+            return sufficientFluids && !isFull && super.isWorking();
+        }
+
+        @Override
+        protected void updateRecipeProgress() {
+            if (canRecipeProgress && drawEnergy(recipeEUt, true)) {
+                drawEnergy(recipeEUt, false);
+                // as recipe starts with progress on 1 this has to be > only not => to compensate for it
+                if (++progressTime > getMaxProgress()) {
+                    completeRecipe();
+                }
+                if (this.hasNotEnoughEnergy && getEnergyInputPerSecond() > 19L * recipeEUt) {
+                    this.hasNotEnoughEnergy = false;
+                }
+            } else if (recipeEUt > 0) {
+                // only set hasNotEnoughEnergy if this recipe is consuming recipe
+                // generators always have enough energy
+                this.hasNotEnoughEnergy = true;
+                decreaseProgress();
+            }
+        }
+
+        @Override
+        public int getMaxProgress() {
+            int baseDuration = super.getMaxProgress();
+
+            if (lubricant != null) {
+                return (int) (baseDuration * lubricant.boost);
+            }
+
+            return baseDuration;
+        }
+    }
+}

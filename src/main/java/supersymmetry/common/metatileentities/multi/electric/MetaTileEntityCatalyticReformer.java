@@ -1,5 +1,9 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import javax.annotation.Nonnull;
+
+import net.minecraft.util.ResourceLocation;
+
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -13,10 +17,7 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockBoilerCasing;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.util.ResourceLocation;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
-
-import javax.annotation.Nonnull;
 
 public class MetaTileEntityCatalyticReformer extends RecipeMapMultiblockController {
 
@@ -38,8 +39,8 @@ public class MetaTileEntityCatalyticReformer extends RecipeMapMultiblockControll
                 .where('S', selfPredicate())
                 .where('X', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STAINLESS_CLEAN),
                         MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.TITANIUM_STABLE))
-                        .setMinGlobalLimited(24)
-                        .or(autoAbilities(true, true, true, true, true, true, false)))
+                                .setMinGlobalLimited(24)
+                                .or(autoAbilities(true, true, true, true, true, true, false)))
                 .where('P', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE),
                         MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.TITANIUM_PIPE)))
                 .where('F', frames(Materials.StainlessSteel, Materials.Titanium))

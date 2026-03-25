@@ -1,5 +1,25 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
@@ -16,27 +36,11 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.metatileentities.multi.VoidingMultiblockBase;
 
-import javax.annotation.Nonnull;
-import java.util.List;
-
 public class MetaTileEntityDumper extends VoidingMultiblockBase {
+
     public MetaTileEntityDumper(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
         // Hardcode these annoyances for now
@@ -86,20 +90,21 @@ public class MetaTileEntityDumper extends VoidingMultiblockBase {
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
         super.addDisplayText(textList);
-        if(isStructureFormed()) {
+        if (isStructureFormed()) {
             ITextComponent componentRate = TextComponentUtil.stringWithColor(TextFormatting.DARK_PURPLE,
                     this.getBaseVoidingRate() + " L/10t");
 
             textList.add(TextComponentUtil.translationWithColor(
                     TextFormatting.GRAY,
-                    "gregtech.machine.dumper.rate",
+                    "susy.machine.dumper.rate",
                     componentRate));
         }
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
-        tooltip.add(I18n.format("gregtech.machine.dumper.tooltip.1", getBaseVoidingRate()));
+    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip,
+                               boolean advanced) {
+        tooltip.add(I18n.format("susy.machine.dumper.tooltip.1", getBaseVoidingRate()));
         super.addInformation(stack, world, tooltip, advanced);
     }
 
@@ -115,15 +120,15 @@ public class MetaTileEntityDumper extends VoidingMultiblockBase {
                 this.isActive(), true);
     }
 
-
     @SideOnly(Side.CLIENT)
     private void dumpingParticles() {
-        BlockPos pos = this.getPos();
         EnumFacing facing = this.getFrontFacing().getOpposite();
-        float xPos = pos.getX() + (1.5F * facing.getXOffset()) + (3F * -facing.getZOffset());
-        float yPos = pos.getY();
-        float zPos = pos.getZ() + (3F * facing.getXOffset()) + (1.5F * facing.getZOffset());
+        Vec3d pos = new Vec3d(this.getPos()).add(0.5, 0.5, 0.5);
 
+        float xPos = (float) (pos.x + (1F * facing.getXOffset()) + (2.5F * -facing.getZOffset()));
+        float yPos = (float) pos.y;
+
+        float zPos = (float) (pos.z + (2.5F * facing.getXOffset()) + (1F * facing.getZOffset()));
         float ySpd = 0F;
         float xSpd = facing.getZOffset() * 1F;
         float zSpd = -facing.getXOffset() * 1F;

@@ -1,12 +1,14 @@
 package supersymmetry.api.recipes.properties;
 
-import net.minecraft.block.state.IBlockState;
-
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import javax.annotation.Nonnull;
+
+import net.minecraft.block.state.IBlockState;
+
 public class PseudoMultiPropertyValues {
+
     public ArrayList<IBlockState> validBlockStates;
 
     public final String blockGroupName;

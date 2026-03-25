@@ -1,5 +1,9 @@
 package supersymmetry.common.command;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -8,11 +12,9 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
+
 import supersymmetry.common.event.MobHordePlayerData;
 import supersymmetry.common.event.MobHordeWorldData;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class CommandHordeStatus extends CommandBase {
 
@@ -27,7 +29,8 @@ public class CommandHordeStatus extends CommandBase {
     }
 
     @Override
-    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args,
+                                          @Nullable BlockPos targetPos) {
         return getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
     }
 
@@ -44,10 +47,14 @@ public class CommandHordeStatus extends CommandBase {
                     .getPlayerData(player.getPersistentID());
 
             if (playerData.hasActiveInvasion) {
-                ITextComponent textComponent = new TextComponentTranslation("susy.command.horde.status.has_active_invasion", player.getDisplayName(), playerData.currentInvasion, playerData.ticksActive, playerData.timeoutPeriod - playerData.ticksActive);
+                ITextComponent textComponent = new TextComponentTranslation(
+                        "susy.command.horde.status.has_active_invasion", player.getDisplayName(),
+                        playerData.currentInvasion, playerData.ticksActive,
+                        playerData.timeoutPeriod - playerData.ticksActive);
                 sender.sendMessage(textComponent);
             } else {
-                ITextComponent textComponent = new TextComponentTranslation("susy.command.horde.status.no_active_invasion", player.getDisplayName());
+                ITextComponent textComponent = new TextComponentTranslation(
+                        "susy.command.horde.status.no_active_invasion", player.getDisplayName());
                 sender.sendMessage(textComponent);
             }
         }

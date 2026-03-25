@@ -1,17 +1,19 @@
 package supersymmetry.api.metatileentity.multiblock;
 
+import java.util.Objects;
+
+import net.minecraft.init.Blocks;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.metatileentity.MetaTileEntityHolder;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.util.BlockInfo;
 import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.init.Blocks;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.SusyLog;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
-
-import java.util.Objects;
 
 /**
  * Something with provides a cryogenic property to {@link ICryogenicReceiver}.

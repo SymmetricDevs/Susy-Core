@@ -1,15 +1,16 @@
 package supersymmetry.api.metatileentity;
 
-import codechicken.lib.raytracer.CuboidRayTraceResult;
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.recipes.RecipeMap;
-import gregtech.client.renderer.ICubeRenderer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+
+import codechicken.lib.raytracer.CuboidRayTraceResult;
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.api.recipes.RecipeMap;
+import gregtech.client.renderer.ICubeRenderer;
 import supersymmetry.api.capability.impl.PseudoMultiSteamRecipeLogic;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicator;
 import supersymmetry.common.metatileentities.single.steam.SuSySimpleSteamMetaTileEntity;
@@ -22,24 +23,27 @@ public class PseudoMultiSteamMachineMetaTileEntity extends SuSySimpleSteamMetaTi
         return targetBlockState;
     }
 
-    public PseudoMultiSteamMachineMetaTileEntity(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator, ICubeRenderer renderer, boolean isBrickedCasing, boolean isHighPressure) {
+    public PseudoMultiSteamMachineMetaTileEntity(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap,
+                                                 SuSySteamProgressIndicator progressIndicator, ICubeRenderer renderer,
+                                                 boolean isBrickedCasing, boolean isHighPressure) {
         super(metaTileEntityId, recipeMap, progressIndicator, renderer, isBrickedCasing, isHighPressure);
         this.workableHandler = new PseudoMultiSteamRecipeLogic(this, recipeMap, isHighPressure, steamFluidTank, 1.0);
     }
 
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
-        return new PseudoMultiSteamMachineMetaTileEntity(metaTileEntityId, workableHandler.getRecipeMap(), progressIndicator, renderer, isBrickedCasing, isHighPressure);
+        return new PseudoMultiSteamMachineMetaTileEntity(metaTileEntityId, workableHandler.getRecipeMap(),
+                progressIndicator, renderer, isBrickedCasing, isHighPressure);
     }
 
-    public void checkAdjacentBlocks(){
-        if(this.getWorld() == null || this.getWorld().isRemote) {
+    public void checkAdjacentBlocks() {
+        if (this.getWorld() == null || this.getWorld().isRemote) {
             targetBlockState = null;
             return;
         }
 
-        //the traditional "back" side of this type of MTE is actually treated as its front for recipe purposes,
-        //making wrench movement feel as though you are holding onto or manipulating the back side to point the MTE.
+        // the traditional "back" side of this type of MTE is actually treated as its front for recipe purposes,
+        // making wrench movement feel as though you are holding onto or manipulating the back side to point the MTE.
         targetBlockState = this.getWorld().getBlockState(this.getPos().offset(this.getFrontFacing().getOpposite()));
     }
 
@@ -62,7 +66,8 @@ public class PseudoMultiSteamMachineMetaTileEntity extends SuSySimpleSteamMetaTi
     }
 
     @Override
-    public boolean onWrenchClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing, CuboidRayTraceResult hitResult) {
+    public boolean onWrenchClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing,
+                                 CuboidRayTraceResult hitResult) {
         boolean wrenchClickSucceeded = super.onWrenchClick(playerIn, hand, facing, hitResult);
         if (wrenchClickSucceeded) this.checkAdjacentBlocks();
         return wrenchClickSucceeded;

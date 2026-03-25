@@ -1,19 +1,17 @@
 package supersymmetry;
 
-import com.cleanroommc.modularui.factory.GuiManager;
-import gregtech.GTInternalTags;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLConstructionEvent;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
+
+import gregtech.GTInternalTags;
 import supersymmetry.api.capability.SuSyCapabilities;
-import supersymmetry.api.metatileentity.MetaTileEntityGuiFactory;
 import supersymmetry.api.sound.SusySounds;
 import supersymmetry.common.CommonProxy;
 import supersymmetry.common.SusyMetaEntities;
@@ -23,20 +21,28 @@ import supersymmetry.common.command.CommandHordeBase;
 import supersymmetry.common.command.CommandHordeStart;
 import supersymmetry.common.command.CommandHordeStatus;
 import supersymmetry.common.command.CommandHordeStop;
+import supersymmetry.common.command.CommandRecipemapDump;
 import supersymmetry.common.covers.SuSyCoverBehaviors;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
+import supersymmetry.common.rocketry.SusyRocketComponents;
+import supersymmetry.common.tileentities.SuSyTileEntities;
 import supersymmetry.loaders.SuSyIRLoader;
 
-@Mod(name = Supersymmetry.NAME, modid = Supersymmetry.MODID, version = Tags.VERSION, dependencies = GTInternalTags.DEP_VERSION_STRING + ";required-after:gcym;after:immersiverailroading")
+@Mod(name = Supersymmetry.NAME,
+     modid = Supersymmetry.MODID,
+     version = Tags.VERSION,
+     dependencies = GTInternalTags.DEP_VERSION_STRING + ";required-after:gcym;after:immersiverailroading")
 
 public class Supersymmetry {
 
     public static final String NAME = "Supersymmetry";
     public static final String MODID = "susy";
 
-    @SidedProxy(modId = MODID, clientSide = "supersymmetry.client.ClientProxy", serverSide = "supersymmetry.common.CommonProxy")
+    @SidedProxy(modId = MODID,
+                clientSide = "supersymmetry.client.ClientProxy",
+                serverSide = "supersymmetry.common.CommonProxy")
     public static CommonProxy proxy;
 
     @Mod.Instance(Supersymmetry.MODID)
@@ -44,10 +50,13 @@ public class Supersymmetry {
 
     @Mod.EventHandler
     public void onModConstruction(FMLConstructionEvent event) {
-        //This is now a config option I think
-        //GTValues.HT = true;
+        // This is now a config option I think
+        // GTValues.HT = true;
         SuSyIRLoader.initDefinitions();
         SuSyIRLoader.initEntities();
+
+        // Groovyscript starts immediately!
+        proxy.checkCanaryFile();
     }
 
     @Mod.EventHandler
@@ -59,8 +68,6 @@ public class Supersymmetry {
         SuSyBlocks.init();
 
         SusySounds.registerSounds();
-
-        GuiManager.registerFactory(MetaTileEntityGuiFactory.INSTANCE);
 
         SuSyMetaTileEntities.init();
         SuSyCapabilities.init();
@@ -81,12 +88,26 @@ public class Supersymmetry {
     }
 
     @Mod.EventHandler
+    public void onPostInit(@NotNull FMLPostInitializationEvent event) {
+        SusyRocketComponents.init();
+        proxy.postLoad();
+    }
+
+    @Mod.EventHandler
     public void onServerStarting(@NotNull FMLServerStartingEvent event) {
         CommandHordeBase hordeCommand = new CommandHordeBase();
+        CommandRecipemapDump jeidump = new CommandRecipemapDump();
         event.registerServerCommand(hordeCommand);
+        event.registerServerCommand(jeidump);
 
         hordeCommand.addSubcommand(new CommandHordeStart());
         hordeCommand.addSubcommand(new CommandHordeStop());
         hordeCommand.addSubcommand(new CommandHordeStatus());
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Mod.EventHandler
+    public void registerRenderers(FMLPreInitializationEvent event) {
+        SuSyTileEntities.registerRenderers();
     }
 }

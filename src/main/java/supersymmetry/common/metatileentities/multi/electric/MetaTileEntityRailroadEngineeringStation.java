@@ -1,5 +1,35 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.MobEffects;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagFloat;
+import net.minecraft.nbt.NBTTagInt;
+import net.minecraft.nbt.NBTTagString;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Rotation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandlerModifiable;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import cam72cam.immersiverailroading.IRBlocks;
 import cam72cam.immersiverailroading.IRItems;
 import cam72cam.immersiverailroading.entity.EntityBuildableRollingStock;
@@ -49,40 +79,14 @@ import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
 import gregtech.common.metatileentities.MetaTileEntities;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.MobEffects;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagFloat;
-import net.minecraft.nbt.NBTTagInt;
-import net.minecraft.nbt.NBTTagString;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.particles.SusyParticleFlame;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultiblockController {
+
     private AxisAlignedBB structureAABB;
     private Gauge gauge = Gauge.from(Gauge.STANDARD);
     private boolean canFindTrain = true;
@@ -108,42 +112,83 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
 
     @Override
     protected BlockPattern createStructurePattern() {
-        // When changing the structure, do not forget to update the preview and the structure AABB - It's best ot just bug MTBO if you do not understand what that means
+        // When changing the structure, do not forget to update the preview and the structure AABB - It's best ot just
+        // bug MTBO if you do not understand what that means
         return FactoryBlockPattern.start()
-                .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
-                .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
-                .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
-                .aisle("  CCC  BBB  CCC  ", "  CCC  BBB  CCC  ", "   C    B    C   ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "       F F       ", "       F F       ")
-                .aisle("CCCCCCCCCCCCCCCCC", "CCCFCCCCFCCCCFCCC", "CCCFCCCCFCCCCFCCC", "   F    F    F   ", "   F    F    F   ", "   F    F    F   ", "   F    F    F   ", " FFFFFFFFFFFFFFF ", "  FF   FGF   FF  ", "       F F       ")
-                .aisle("CCCCCCCCCCCCCCCCC", "CCCCCCCCCCCCCCCCC", "   C    C    C   ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "       F F       ", "       F F       ")
-                .aisle("CCCCCCCCCCCCCCCCC", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
-                .aisle("CCCCCCCCCCCCCCCCC", "RRRRRRRRRRRRRRRRR", "                 ", "                 ", "                 ", "                 ", "                 ", "       MMM       ", "       FGF       ", "       MMM       ")
-                .aisle("                 ", "RRRRRRRRRRRRRRRRR", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       FMF       ", "                 ")
-                .aisle("CCCCCCCCCCCCCCCCC", "RRRRRRRRRRRRRRRRR", "                 ", "                 ", "                 ", "                 ", "                 ", "       MMM       ", "       FGF       ", "       MAM       ")
-                .aisle("CCCCCCCCCCCCCCCCC", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
-                .aisle("CCCCCCCCCCCCCCCCC", "CCCCCCCCCCCCCCCCC", "   C    C    C   ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "       F F       ", "       F F       ")
-                .aisle("CCCCCCCCCCCCCCCCC", "CCCFCCCCFCCCCFCCC", "CCCFCCCCFCCCCFCCC", "   F    F    F   ", "   F    F    F   ", "   F    F    F   ", "   F    F    F   ", " FFFFFFFFFFFFFFF ", "  FF   FGF   FF  ", "       F F       ")
-                .aisle("  CCC  CCC  CCC  ", "  CCC  CSC  CCC  ", "   C    C    C   ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "       F F       ", "       F F       ")
-                .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
-                .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
-                .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
+                .aisle("                 ", "                 ", "                 ", "                 ",
+                        "                 ", "                 ", "                 ", "                 ",
+                        "       F F       ", "                 ")
+                .aisle("                 ", "                 ", "                 ", "                 ",
+                        "                 ", "                 ", "                 ", "                 ",
+                        "       F F       ", "                 ")
+                .aisle("                 ", "                 ", "                 ", "                 ",
+                        "                 ", "                 ", "                 ", "                 ",
+                        "       F F       ", "                 ")
+                .aisle("  CCC  BBB  CCC  ", "  CCC  BBB  CCC  ", "   C    B    C   ", "                 ",
+                        "                 ", "                 ", "                 ", "       F F       ",
+                        "       F F       ", "       F F       ")
+                .aisle("CCCCCCCCCCCCCCCCC", "CCCFCCCCFCCCCFCCC", "CCCFCCCCFCCCCFCCC", "   F    F    F   ",
+                        "   F    F    F   ", "   F    F    F   ", "   F    F    F   ", " FFFFFFFFFFFFFFF ",
+                        "  FF   FGF   FF  ", "       F F       ")
+                .aisle("CCCCCCCCCCCCCCCCC", "CCCCCCCCCCCCCCCCC", "   C    C    C   ", "                 ",
+                        "                 ", "                 ", "                 ", "       F F       ",
+                        "       F F       ", "       F F       ")
+                .aisle("CCCCCCCCCCCCCCCCC", "                 ", "                 ", "                 ",
+                        "                 ", "                 ", "                 ", "                 ",
+                        "       F F       ", "                 ")
+                .aisle("CCCCCCCCCCCCCCCCC", "RRRRRRRRRRRRRRRRR", "                 ", "                 ",
+                        "                 ", "                 ", "                 ", "       MMM       ",
+                        "       FGF       ", "       MMM       ")
+                .aisle("                 ", "RRRRRRRRRRRRRRRRR", "                 ", "                 ",
+                        "                 ", "                 ", "                 ", "                 ",
+                        "       FMF       ", "                 ")
+                .aisle("CCCCCCCCCCCCCCCCC", "RRRRRRRRRRRRRRRRR", "                 ", "                 ",
+                        "                 ", "                 ", "                 ", "       MMM       ",
+                        "       FGF       ", "       MAM       ")
+                .aisle("CCCCCCCCCCCCCCCCC", "                 ", "                 ", "                 ",
+                        "                 ", "                 ", "                 ", "                 ",
+                        "       F F       ", "                 ")
+                .aisle("CCCCCCCCCCCCCCCCC", "CCCCCCCCCCCCCCCCC", "   C    C    C   ", "                 ",
+                        "                 ", "                 ", "                 ", "       F F       ",
+                        "       F F       ", "       F F       ")
+                .aisle("CCCCCCCCCCCCCCCCC", "CCCFCCCCFCCCCFCCC", "CCCFCCCCFCCCCFCCC", "   F    F    F   ",
+                        "   F    F    F   ", "   F    F    F   ", "   F    F    F   ", " FFFFFFFFFFFFFFF ",
+                        "  FF   FGF   FF  ", "       F F       ")
+                .aisle("  CCC  CCC  CCC  ", "  CCC  CSC  CCC  ", "   C    C    C   ", "                 ",
+                        "                 ", "                 ", "                 ", "       F F       ",
+                        "       F F       ", "       F F       ")
+                .aisle("                 ", "                 ", "                 ", "                 ",
+                        "                 ", "                 ", "                 ", "                 ",
+                        "       F F       ", "                 ")
+                .aisle("                 ", "                 ", "                 ", "                 ",
+                        "                 ", "                 ", "                 ", "                 ",
+                        "       F F       ", "                 ")
+                .aisle("                 ", "                 ", "                 ", "                 ",
+                        "                 ", "                 ", "                 ", "                 ",
+                        "       F F       ", "                 ")
                 .where('S', selfPredicate())
                 .where('F', frames(Materials.Steel))
                 .where('M', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)))
-                .where('G', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
-                .where('C', states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)))
+                .where('G',
+                        states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
+                .where('C',
+                        states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH)
+                                .getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)))
                 .where('A', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
-                        .or(autoAbilities(true,false)))
-                .where('B', states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT))
-                        .or(autoAbilities(true,false, true, false, true, false, false)))
+                        .or(autoAbilities(true, false)))
+                .where('B',
+                        states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH)
+                                .getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT))
+                                        .or(autoAbilities(true, false, true, false, true, false, false)))
                 .where(' ', any())
                 .where('R', SuSyPredicates.rails())
                 .build();
     }
 
     @Override
-    public void addInformation(net.minecraft.item.ItemStack stack, @Nullable net.minecraft.world.World world, @NotNull List<String> tooltip, boolean advanced) {
-        tooltip.add(I18n.format("gregtech.machine.railroad_engineering_station.tooltip.1"));
+    public void addInformation(net.minecraft.item.ItemStack stack, @Nullable net.minecraft.world.World world,
+                               @NotNull List<String> tooltip, boolean advanced) {
+        tooltip.add(I18n.format("susy.machine.railroad_engineering_station.tooltip.1"));
         super.addInformation(stack, world, tooltip, advanced);
     }
 
@@ -163,29 +208,68 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
         ArrayList<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
 
         MultiblockShapeInfo.Builder builder = MultiblockShapeInfo.builder()
-                .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
-                .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
-                .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
-                .aisle("  CCC  EIH  CCC  ", "  CCC  CCC  CCC  ", "   C    C    C   ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "       F F       ", "       F F       ")
-                .aisle("CCCCCCCCCCCCCCCCC", "CCCFCCCCFCCCCFCCC", "CCCFCCCCFCCCCFCCC", "   F    F    F   ", "   F    F    F   ", "   F    F    F   ", "   F    F    F   ", " FFFFFFFFFFFFFFF ", "  FF   FGF   FF  ", "       F F       ")
-                .aisle("CCCCCCCCCCCCCCCCC", "CCCCCCCCCCCCCCCCC", "   C    C    C   ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "       F F       ", "       F F       ")
-                .aisle("CCCCCCCCCCCCCCCCC", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
-                .aisle("CCCCCCCCCCCCCCCCC", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       MMM       ", "       FGF       ", "       MMM       ")
-                .aisle("CCCCCCCCCCCCCCCCC", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       FMF       ", "                 ")
-                .aisle("CCCCCCCCCCCCCCCCC", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       MMM       ", "       FGF       ", "       MAM       ")
-                .aisle("CCCCCCCCCCCCCCCCC", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
-                .aisle("CCCCCCCCCCCCCCCCC", "CCCCCCCCCCCCCCCCC", "   C    C    C   ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "       F F       ", "       F F       ")
-                .aisle("CCCCCCCCCCCCCCCCC", "CCCFCCCCFCCCCFCCC", "CCCFCCCCFCCCCFCCC", "   F    F    F   ", "   F    F    F   ", "   F    F    F   ", "   F    F    F   ", " FFFFFFFFFFFFFFF ", "  FF   FGF   FF  ", "       F F       ")
-                .aisle("  CCC  CCC  CCC  ", "  CCC  CSC  CCC  ", "   C    C    C   ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "       F F       ", "       F F       ")
-                .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
-                .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
-                .aisle("                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "                 ", "       F F       ", "                 ")
+                .aisle("                 ", "                 ", "                 ", "                 ",
+                        "                 ", "                 ", "                 ", "                 ",
+                        "       F F       ", "                 ")
+                .aisle("                 ", "                 ", "                 ", "                 ",
+                        "                 ", "                 ", "                 ", "                 ",
+                        "       F F       ", "                 ")
+                .aisle("                 ", "                 ", "                 ", "                 ",
+                        "                 ", "                 ", "                 ", "                 ",
+                        "       F F       ", "                 ")
+                .aisle("  CCC  EIH  CCC  ", "  CCC  CCC  CCC  ", "   C    C    C   ", "                 ",
+                        "                 ", "                 ", "                 ", "       F F       ",
+                        "       F F       ", "       F F       ")
+                .aisle("CCCCCCCCCCCCCCCCC", "CCCFCCCCFCCCCFCCC", "CCCFCCCCFCCCCFCCC", "   F    F    F   ",
+                        "   F    F    F   ", "   F    F    F   ", "   F    F    F   ", " FFFFFFFFFFFFFFF ",
+                        "  FF   FGF   FF  ", "       F F       ")
+                .aisle("CCCCCCCCCCCCCCCCC", "CCCCCCCCCCCCCCCCC", "   C    C    C   ", "                 ",
+                        "                 ", "                 ", "                 ", "       F F       ",
+                        "       F F       ", "       F F       ")
+                .aisle("CCCCCCCCCCCCCCCCC", "                 ", "                 ", "                 ",
+                        "                 ", "                 ", "                 ", "                 ",
+                        "       F F       ", "                 ")
+                .aisle("CCCCCCCCCCCCCCCCC", "                 ", "                 ", "                 ",
+                        "                 ", "                 ", "                 ", "       MMM       ",
+                        "       FGF       ", "       MMM       ")
+                .aisle("CCCCCCCCCCCCCCCCC", "                 ", "                 ", "                 ",
+                        "                 ", "                 ", "                 ", "                 ",
+                        "       FMF       ", "                 ")
+                .aisle("CCCCCCCCCCCCCCCCC", "                 ", "                 ", "                 ",
+                        "                 ", "                 ", "                 ", "       MMM       ",
+                        "       FGF       ", "       MAM       ")
+                .aisle("CCCCCCCCCCCCCCCCC", "                 ", "                 ", "                 ",
+                        "                 ", "                 ", "                 ", "                 ",
+                        "       F F       ", "                 ")
+                .aisle("CCCCCCCCCCCCCCCCC", "CCCCCCCCCCCCCCCCC", "   C    C    C   ", "                 ",
+                        "                 ", "                 ", "                 ", "       F F       ",
+                        "       F F       ", "       F F       ")
+                .aisle("CCCCCCCCCCCCCCCCC", "CCCFCCCCFCCCCFCCC", "CCCFCCCCFCCCCFCCC", "   F    F    F   ",
+                        "   F    F    F   ", "   F    F    F   ", "   F    F    F   ", " FFFFFFFFFFFFFFF ",
+                        "  FF   FGF   FF  ", "       F F       ")
+                .aisle("  CCC  CCC  CCC  ", "  CCC  CSC  CCC  ", "   C    C    C   ", "                 ",
+                        "                 ", "                 ", "                 ", "       F F       ",
+                        "       F F       ", "       F F       ")
+                .aisle("                 ", "                 ", "                 ", "                 ",
+                        "                 ", "                 ", "                 ", "                 ",
+                        "       F F       ", "                 ")
+                .aisle("                 ", "                 ", "                 ", "                 ",
+                        "                 ", "                 ", "                 ", "                 ",
+                        "       F F       ", "                 ")
+                .aisle("                 ", "                 ", "                 ", "                 ",
+                        "                 ", "                 ", "                 ", "                 ",
+                        "       F F       ", "                 ")
                 .where('S', SuSyMetaTileEntities.RAILROAD_ENGINEERING_STATION, EnumFacing.SOUTH)
                 .where('F', MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel))
                 .where('M', MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
-                .where('A', () -> ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH : MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID), EnumFacing.SOUTH)
+                .where('A',
+                        () -> ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH :
+                                MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID),
+                        EnumFacing.SOUTH)
                 .where('G', MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX))
-                .where('C', MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH).getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT))
+                .where('C',
+                        MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH)
+                                .getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT))
                 .where('I', MetaTileEntities.ITEM_IMPORT_BUS[3], EnumFacing.NORTH)
                 .where('E', MetaTileEntities.ENERGY_INPUT_HATCH[3], EnumFacing.NORTH)
                 .where('H', MetaTileEntities.FLUID_IMPORT_HATCH[3], EnumFacing.NORTH)
@@ -197,21 +281,21 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
         trackBlueprintStack.internal.setTagInfo("length", new NBTTagInt(17));
         trackBlueprintStack.internal.setTagInfo("degrees", new NBTTagFloat(0));
         trackBlueprintStack.internal.setTagInfo("track", new NBTTagString("immersiverailroading:track/bmtrack.json"));
-        PlacementInfo placementInfo = new PlacementInfo(trackBlueprintStack, 270, new Vec3d(0.5,0.5,0.5));
+        PlacementInfo placementInfo = new PlacementInfo(trackBlueprintStack, 270, new Vec3d(0.5, 0.5, 0.5));
         RailInfo railInfo = new RailInfo(trackBlueprintStack, placementInfo, null);
         World irWorld = World.get(DummyWorld.INSTANCE);
-        BuilderBase trackBuilder = railInfo.getBuilder(irWorld, new Vec3i(0,1,8));
+        BuilderBase trackBuilder = railInfo.getBuilder(irWorld, new Vec3i(0, 1, 8));
         List<TrackBase> tracks = trackBuilder.getTracksForRender();
 
         BlockInfo[][][] blockInfos = preInfo.getBlocks();
 
-        for(TrackBase track : tracks) {
+        for (TrackBase track : tracks) {
             track.setRailHeight(0.5F);
             TileRailBase tr = track.placeTrack(true);
 
             BlockInfo blockInfo;
 
-            if(tr instanceof TileRail) {
+            if (tr instanceof TileRail) {
                 blockInfo = new BlockInfo(IRBlocks.BLOCK_RAIL.internal.getDefaultState(), tr.internal);
             } else {
                 blockInfo = new BlockInfo(IRBlocks.BLOCK_RAIL_GAG.internal.getDefaultState(), tr.internal);
@@ -237,14 +321,15 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
     protected void updateFormedValid() {
         super.updateFormedValid();
 
-        if(isFirstTick()) {
+        if (isFirstTick()) {
             List<ModdedEntity> trains = getWorld().getEntitiesWithinAABB(ModdedEntity.class, this.structureAABB);
-            if(!trains.isEmpty()) {
+            if (!trains.isEmpty()) {
                 for (ModdedEntity forgeTrainEntity : trains) {
-                    if(forgeTrainEntity.getSelf() instanceof EntityRollingStock rollingStock) {
-                        if(rollingStock.getUUID().equals(this.previousEntityUUID)) {
+                    if (forgeTrainEntity.getSelf() instanceof EntityRollingStock rollingStock) {
+                        if (rollingStock.getUUID().equals(this.previousEntityUUID)) {
                             this.spawnedRollingStock = rollingStock;
-                            this.spawnedRollingStackComponentsSorted = rollingStock.getDefinition().getItemComponents().stream()
+                            this.spawnedRollingStackComponentsSorted = rollingStock.getDefinition().getItemComponents()
+                                    .stream()
                                     .sorted(Comparator.comparingInt(i -> i.ordinal()))
                                     .collect(Collectors.toList());
                             break;
@@ -254,21 +339,21 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
             }
         }
 
-        if(this.getOffsetTimer() % 20 == 1) {
-            if(recipeMapWorkable.isActive()) {
+        if (this.getOffsetTimer() % 20 == 1) {
+            if (recipeMapWorkable.isActive()) {
                 List<EntityPlayer> players = getWorld().getEntitiesWithinAABB(EntityPlayer.class, this.structureAABB);
                 for (EntityPlayer player : players) {
                     player.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 21, 1));
                 }
             }
 
-            if(this.canFindTrain) {
+            if (this.canFindTrain) {
                 List<ModdedEntity> trains = getWorld().getEntitiesWithinAABB(ModdedEntity.class, this.structureAABB);
                 this.rollingStocks = new ArrayList<>();
 
-                if(!trains.isEmpty()) {
+                if (!trains.isEmpty()) {
                     for (ModdedEntity forgeTrainEntity : trains) {
-                        if(forgeTrainEntity.getSelf() instanceof EntityRollingStock rollingStock) {
+                        if (forgeTrainEntity.getSelf() instanceof EntityRollingStock rollingStock) {
                             this.rollingStocks.add(rollingStock);
                         }
                     }
@@ -278,13 +363,12 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
                 // Currently this just selects the first train entity it found
                 // Probably using the UI, showing shows each found entity
                 // And the player select one specific entity
-                if(!this.rollingStocks.isEmpty()) {
+                if (!this.rollingStocks.isEmpty()) {
                     this.setSelectedEntity(this.rollingStocks.get(0));
                 } else {
                     this.trainInputSlot.setStackInSlot(
                             0,
-                            net.minecraft.item.ItemStack.EMPTY
-                    );
+                            net.minecraft.item.ItemStack.EMPTY);
                     this.selectedRollingStock = null;
                 }
             }
@@ -329,8 +413,7 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
         this.selectedRollingStock = rollingStock;
         this.trainInputSlot.setStackInSlot(
                 0,
-                this.getTrainItemStackFromCache(this.selectedRollingStock)
-        );
+                this.getTrainItemStackFromCache(this.selectedRollingStock));
     }
 
     public float getTrainSpawnAngle() {
@@ -357,18 +440,19 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
         if (def != null) {
             World irWorld = World.get(getWorld());
 
-            //net.minecraft.util.math.Vec3i direction = this.getFrontFacing().getOpposite().getDirectionVec();
+            // net.minecraft.util.math.Vec3i direction = this.getFrontFacing().getOpposite().getDirectionVec();
 
             // Centered around the middle rail
 
-            //double offset = def.getCouplerPosition(EntityCoupleableRollingStock.CouplerType.BACK, gauge) - Config.ConfigDebug.couplerRange;
+            // double offset = def.getCouplerPosition(EntityCoupleableRollingStock.CouplerType.BACK, gauge) -
+            // Config.ConfigDebug.couplerRange;
 
             BlockPos railPos = getRailPos(this.getFrontFacing().getOpposite().getDirectionVec());
 
             TickPos tp = new TickPos(
                     0,
                     Speed.ZERO,
-                    (new Vec3d(railPos.getX() , railPos.getY(), railPos.getZ())).add(0.0, 0.25, 0.0).add(0.5, 0.0, 0.5),
+                    (new Vec3d(railPos.getX(), railPos.getY(), railPos.getZ())).add(0.0, 0.25, 0.0).add(0.5, 0.0, 0.5),
                     0,
                     0,
                     0,
@@ -380,13 +464,14 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
             stock.setRotationYaw(yaw);
 
             if (stock instanceof EntityMoveableRollingStock) {
-                EntityMoveableRollingStock mrs = (EntityMoveableRollingStock)stock;
+                EntityMoveableRollingStock mrs = (EntityMoveableRollingStock) stock;
                 tp.speed = Speed.ZERO;
                 mrs.initPositions(tp);
             }
 
-            // Buildable Rolling Stocks will be continuously built - we have to spawn them now as opposed to after the recipe completion
-            if(stock instanceof EntityBuildableRollingStock) {
+            // Buildable Rolling Stocks will be continuously built - we have to spawn them now as opposed to after the
+            // recipe completion
+            if (stock instanceof EntityBuildableRollingStock) {
                 this.setStockInWorld(stock);
                 // Also sort the item components of the thing
                 this.spawnedRollingStackComponentsSorted = def.getItemComponents().stream()
@@ -400,14 +485,16 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
     }
 
     public void updateSpawnedStock(float recipeProgress) {
-        if(this.spawnedRollingStock instanceof EntityBuildableRollingStock buildableRollingStock && spawnedRollingStackComponentsSorted.size() > 0) {
+        if (this.spawnedRollingStock instanceof EntityBuildableRollingStock buildableRollingStock &&
+                spawnedRollingStackComponentsSorted.size() > 0) {
             int idx = (int) (recipeProgress * spawnedRollingStackComponentsSorted.size());
             buildableRollingStock.setComponents(spawnedRollingStackComponentsSorted.subList(0, idx));
         }
     }
 
     public void completeSpawnedStock() {
-        if(this.spawnedRollingStock instanceof EntityBuildableRollingStock buildableRollingStock && spawnedRollingStackComponentsSorted.size() > 0) {
+        if (this.spawnedRollingStock instanceof EntityBuildableRollingStock buildableRollingStock &&
+                spawnedRollingStackComponentsSorted.size() > 0) {
             // Finish the rolling stock
             buildableRollingStock.setComponents(buildableRollingStock.getItemComponents());
         } else {
@@ -434,7 +521,7 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
         super.invalidateStructure();
         this.structureAABB = null;
         this.selectedRollingStock = null;
-        if(this.spawnedRollingStock != null) {
+        if (this.spawnedRollingStock != null) {
             this.spawnedRollingStock.kill();
             this.spawnedRollingStock = null;
         }
@@ -443,7 +530,7 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
-        if(this.spawnedRollingStock != null) {
+        if (this.spawnedRollingStock != null) {
             UUID rollingStockEntityID = spawnedRollingStock.getUUID();
             data.setUniqueId("RollingStockEntityID", rollingStockEntityID);
         }
@@ -454,7 +541,7 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
     public void readFromNBT(NBTTagCompound data) {
         // UUIDs get saved as two IDs I guess
         super.readFromNBT(data);
-        if(data.hasKey("RollingStockEntityIDMost")) {
+        if (data.hasKey("RollingStockEntityIDMost")) {
             this.setStructureAABB();
             this.previousEntityUUID = data.getUniqueId("RollingStockEntityID");
         }
@@ -462,7 +549,7 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
 
     @Override
     public void onRemoval() {
-        if(this.spawnedRollingStock != null) {
+        if (this.spawnedRollingStock != null) {
             this.spawnedRollingStock.kill();
         }
         super.onRemoval();
@@ -494,7 +581,7 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
         net.minecraft.util.math.BlockPos offsetBottomLeft = new net.minecraft.util.math.BlockPos(9, -1, 2);
         net.minecraft.util.math.BlockPos offsetTopRight = new net.minecraft.util.math.BlockPos(-9, 8, 7);
 
-        switch(this.getFrontFacing()) {
+        switch (this.getFrontFacing()) {
             case EAST:
                 offsetBottomLeft = offsetBottomLeft.rotate(Rotation.CLOCKWISE_90);
                 offsetTopRight = offsetTopRight.rotate(Rotation.CLOCKWISE_90);
@@ -518,9 +605,13 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
     public void spawnWorkingParticles() {
         SusyParticleFlame spark = new SusyParticleFlame(
                 this.getWorld(),
-                this.getPos().getX() + this.getFrontFacing().getOpposite().getDirectionVec().getX() * 5 + (1 - this.getFrontFacing().getOpposite().getDirectionVec().getX()) * 3 * (GTValues.RNG.nextFloat() - 0.5),
+                this.getPos().getX() + this.getFrontFacing().getOpposite().getDirectionVec().getX() * 5 +
+                        (1 - this.getFrontFacing().getOpposite().getDirectionVec().getX()) * 3 *
+                                (GTValues.RNG.nextFloat() - 0.5),
                 this.getPos().getY() + 0.5,
-                this.getPos().getZ() + this.getFrontFacing().getOpposite().getDirectionVec().getZ() * 5 + (1 - this.getFrontFacing().getOpposite().getDirectionVec().getZ()) * 3 * (GTValues.RNG.nextFloat() - 0.5),
+                this.getPos().getZ() + this.getFrontFacing().getOpposite().getDirectionVec().getZ() * 5 +
+                        (1 - this.getFrontFacing().getOpposite().getDirectionVec().getZ()) * 3 *
+                                (GTValues.RNG.nextFloat() - 0.5),
                 (GTValues.RNG.nextFloat() - 0.5) * 1.2F,
                 GTValues.RNG.nextFloat() * 1.5F,
                 (GTValues.RNG.nextFloat() - 0.5) * 1.2F);
@@ -532,7 +623,9 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
         NotifiableItemStackHandler trainOutput;
         NotifiableItemStackHandler trainInput;
 
-        public RailroadEngineeringStationWorkable(RecipeMapMultiblockController tileEntity, NotifiableItemStackHandler trainInput, NotifiableItemStackHandler trainOutput) {
+        public RailroadEngineeringStationWorkable(RecipeMapMultiblockController tileEntity,
+                                                  NotifiableItemStackHandler trainInput,
+                                                  NotifiableItemStackHandler trainOutput) {
             super(tileEntity);
             this.trainInput = trainInput;
             this.trainOutput = trainOutput;
@@ -549,7 +642,7 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
 
             List<IItemHandlerModifiable> inputList = new ArrayList<>();
 
-            if(inputs != null) inputList.add(inputs);
+            if (inputs != null) inputList.add(inputs);
             inputList.add(trainInput);
 
             return new ItemHandlerList(inputList);
@@ -561,13 +654,15 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
         }
 
         @Override
-        protected boolean setupAndConsumeRecipeInputs(@NotNull Recipe recipe, @NotNull IItemHandlerModifiable importInventory, @NotNull IMultipleTankHandler importFluids) {
+        protected boolean setupAndConsumeRecipeInputs(@NotNull Recipe recipe,
+                                                      @NotNull IItemHandlerModifiable importInventory,
+                                                      @NotNull IMultipleTankHandler importFluids) {
             boolean result = super.setupAndConsumeRecipeInputs(recipe, importInventory, importFluids);
 
             if (result) {
                 MetaTileEntityRailroadEngineeringStation mte = this.getMetaTileEntity();
 
-                if(this.trainInput.getStackInSlot(0).isEmpty() && mte.selectedRollingStock != null) {
+                if (this.trainInput.getStackInSlot(0).isEmpty() && mte.selectedRollingStock != null) {
                     mte.selectedRollingStock.kill();
                     mte.selectedRollingStock = null;
                 }
@@ -582,13 +677,13 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
             if (this.canRecipeProgress && this.drawEnergy(this.recipeEUt, true)) {
                 this.drawEnergy(this.recipeEUt, false);
 
-                this.getMetaTileEntity().updateSpawnedStock((float) this.progressTime/this.maxProgressTime);
+                this.getMetaTileEntity().updateSpawnedStock((float) this.progressTime / this.maxProgressTime);
 
                 if (++this.progressTime > this.maxProgressTime) {
                     this.completeRecipe();
                 }
 
-                if (this.hasNotEnoughEnergy && this.getEnergyInputPerSecond() > 19L * (long)this.recipeEUt) {
+                if (this.hasNotEnoughEnergy && this.getEnergyInputPerSecond() > 19L * (long) this.recipeEUt) {
                     this.hasNotEnoughEnergy = false;
                 }
             } else if (this.recipeEUt > 0) {
@@ -601,7 +696,6 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
                     }
                 }
             }
-
         }
 
         @Override
@@ -615,7 +709,7 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
             this.hasNotEnoughEnergy = false;
             this.wasActiveAndNeedsUpdate = true;
             this.parallelRecipesPerformed = 0;
-            this.overclockResults = new int[]{0, 0};
+            this.overclockResults = new int[] { 0, 0 };
             this.getMetaTileEntity().completeSpawnedStock();
         }
     }

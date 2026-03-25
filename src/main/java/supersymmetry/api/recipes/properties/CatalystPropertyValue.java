@@ -1,8 +1,8 @@
 package supersymmetry.api.recipes.properties;
 
-import supersymmetry.api.recipes.catalysts.CatalystGroup;
-
 import javax.annotation.Nonnull;
+
+import supersymmetry.api.recipes.catalysts.CatalystGroup;
 
 public class CatalystPropertyValue {
 

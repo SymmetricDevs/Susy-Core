@@ -1,6 +1,7 @@
 package supersymmetry.api.metatileentity.logistics;
 
 import net.minecraft.util.EnumFacing;
+
 import org.jetbrains.annotations.Nullable;
 
 // Mostly a marker interface

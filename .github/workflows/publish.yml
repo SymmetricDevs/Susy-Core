@@ -25,16 +25,16 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Build
         uses: ./.github/actions/build_setup
 
       - name: Build Project
-        run: ./gradlew build --warning-mode all --build-cache
+        run: ./gradlew build --warning-mode all
 
       - name: Publish to GitHub
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v2.2.2
         with:
           files: "build/libs/*.jar"
           generate_release_notes: true

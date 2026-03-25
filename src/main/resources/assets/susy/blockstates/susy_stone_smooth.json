@@ -60,9 +60,19 @@
           "all" : "gregtech:blocks/susy_stones/kimberlite"
         }
       },
+      "anorthosite" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/anorthosite"
+        }
+      },
       "industrial_concrete" : {
         "textures" : {
           "all" : "gregtech:blocks/susy_stones/industrial_concrete"
+        }
+      },
+      "minitary_concrete" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/military_concrete"
         }
       }
     }

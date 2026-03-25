@@ -1,9 +1,11 @@
 package supersymmetry.api.recipes.properties;
 
-import gregtech.api.recipes.recipeproperties.RecipeProperty;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+
 import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.recipes.recipeproperties.RecipeProperty;
 
 public class SinterProperty extends RecipeProperty<Boolean> {
 
@@ -17,7 +19,8 @@ public class SinterProperty extends RecipeProperty<Boolean> {
     @Override
     public void drawInfo(@NotNull Minecraft minecraft, int x, int y, int color, Object value) {
         if (castValue(value)) {
-            minecraft.fontRenderer.drawString(I18n.format("gregtech.recipe.plasma_requirement", castValue(value)), x, y, color);
+            minecraft.fontRenderer.drawString(I18n.format("susy.recipe.plasma_requirement", castValue(value)), x, y,
+                    color);
         }
     }
 

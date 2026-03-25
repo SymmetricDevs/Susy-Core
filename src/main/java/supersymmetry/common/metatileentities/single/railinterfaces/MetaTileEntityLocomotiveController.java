@@ -1,6 +1,22 @@
 package supersymmetry.common.metatileentities.single.railinterfaces;
 
-import cam72cam.immersiverailroading.entity.Locomotive;
+import java.util.List;
+
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.cleanroommc.modularui.api.GuiAxis;
 import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.drawable.GuiTextures;
@@ -8,6 +24,7 @@ import com.cleanroommc.modularui.drawable.Rectangle;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.cleanroommc.modularui.factory.PosGuiData;
 import com.cleanroommc.modularui.screen.ModularPanel;
+import com.cleanroommc.modularui.screen.UISettings;
 import com.cleanroommc.modularui.utils.Alignment;
 import com.cleanroommc.modularui.value.sync.BooleanSyncValue;
 import com.cleanroommc.modularui.value.sync.DoubleSyncValue;
@@ -18,25 +35,13 @@ import com.cleanroommc.modularui.widgets.ButtonWidget;
 import com.cleanroommc.modularui.widgets.SliderWidget;
 import com.cleanroommc.modularui.widgets.ToggleButton;
 import com.cleanroommc.modularui.widgets.layout.Flow;
+
+import cam72cam.immersiverailroading.entity.Locomotive;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.gui.SusyGuiTextures;
-import supersymmetry.api.metatileentity.Mui2MetaTileEntity;
+import supersymmetry.api.metatileentity.Mui2Utils;
 import supersymmetry.client.renderer.textures.SusyTextures;
-
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.List;
 
 public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInteractor {
 
@@ -57,13 +62,12 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
     }
 
     @Override
-    public ModularPanel buildUI(PosGuiData guiData, PanelSyncManager syncManager) {
-
+    public ModularPanel buildUI(PosGuiData guiData, PanelSyncManager syncManager, UISettings settings) {
         PanelSyncHandler panel = (PanelSyncHandler) syncManager.panel("controller_panel",
                 (panelSyncManager, syncHandler) -> createPopupPanel(panelSyncManager),
                 true);
 
-        ModularPanel mainPanel = super.buildUI(guiData, syncManager);
+        ModularPanel mainPanel = super.buildUI(guiData, syncManager, settings);
         mainPanel.height(186);
         Flow flow = (Flow) mainPanel.getChildren().get(4);
         flow.child(Flow.row()
@@ -80,27 +84,30 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
                                 panel.closePanel();
                             }
                             return true;
-                        })
-                )
+                        }))
                 .child(IKey.lang("susy.gui.stock_interactor.title.controller_setting").asWidget()
-                        .align(Alignment.CenterRight).height(18))
-        );
+                        .align(Alignment.CenterRight).height(18)));
         return mainPanel;
     }
 
+    @SuppressWarnings("deprecation")
     public ModularPanel createPopupPanel(PanelSyncManager syncManager) {
-
         BooleanSyncValue controlActive = new BooleanSyncValue(() -> this.controlActive, x -> this.controlActive = x);
-        BooleanSyncValue controlInactive = new BooleanSyncValue(() -> this.controlInactive, x -> this.controlInactive = x);
+        BooleanSyncValue controlInactive = new BooleanSyncValue(() -> this.controlInactive,
+                x -> this.controlInactive = x);
 
         DoubleSyncValue activeBrake = new DoubleSyncValue(() -> this.activeBrake, x -> this.activeBrake = (float) x);
-        DoubleSyncValue activeThrottle = new DoubleSyncValue(() -> this.activeThrottle, x -> this.activeThrottle = (float) x);
-        DoubleSyncValue inactiveBrake = new DoubleSyncValue(() -> this.inactiveBrake, x -> this.inactiveBrake = (float) x);
-        DoubleSyncValue inactiveThrottle = new DoubleSyncValue(() -> this.inactiveThrottle, x -> this.inactiveThrottle = (float) x);
+        DoubleSyncValue activeThrottle = new DoubleSyncValue(() -> this.activeThrottle,
+                x -> this.activeThrottle = (float) x);
+        DoubleSyncValue inactiveBrake = new DoubleSyncValue(() -> this.inactiveBrake,
+                x -> this.inactiveBrake = (float) x);
+        DoubleSyncValue inactiveThrottle = new DoubleSyncValue(() -> this.inactiveThrottle,
+                x -> this.inactiveThrottle = (float) x);
 
-        return Mui2MetaTileEntity.createPopupPanel("controller_settings", 81, 150)
+        return Mui2Utils.createPopupPanel("controller_settings", 81, 150)
                 .padding(4)
-                .child(IKey.lang("susy.gui.stock_interactor.title.controller_setting").asWidget()
+                .child(IKey.lang("susy.gui.stock_interactor.title.controller_setting")
+                        .asWidget()
                         .pos(5, 5))
                 .child(Flow.row()
                         .top(18)
@@ -111,15 +118,25 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
                                         .value(controlActive)
                                         .invertSelected(true)
                                         .size(24, 8)
-                                        .addTooltipLine(IKey.lang("susy.gui.stock_interactor.controller_setting.button.control_active.tooltip"))
+                                        .addTooltipLine(
+                                                IKey.lang(
+                                                        "susy.gui.stock_interactor.controller_setting.button.control_active.tooltip"))
                                         .marginBottom(2))
                                 .child(Flow.row()
                                         .setEnabledIf(widget -> controlActive.getValue())
                                         .coverChildrenWidth()
                                         .height(116)
-                                        .child(createSliderColumn("active_brake", SusyGuiTextures.BRAKE_ACTIVE, activeBrake, 0, 1))
-                                        .child(createSliderColumn("active_throttle", SusyGuiTextures.THROTTLE_ACTIVE, activeThrottle, -1, 1))))
-                        .child(new Rectangle().setColor(0xFF555555).asWidget()
+                                        .child(createSliderColumn(
+                                                "active_brake", SusyGuiTextures.BRAKE_ACTIVE, activeBrake, 0, 1))
+                                        .child(createSliderColumn(
+                                                "active_throttle",
+                                                SusyGuiTextures.THROTTLE_ACTIVE,
+                                                activeThrottle,
+                                                -1,
+                                                1))))
+                        .child(new Rectangle()
+                                .setColor(0xFF555555)
+                                .asWidget()
                                 .width(1)
                                 .height(124)
                                 .margin(4, 0))
@@ -130,19 +147,28 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
                                         .value(controlInactive)
                                         .invertSelected(true)
                                         .size(24, 8)
-                                        .addTooltipLine(IKey.lang("susy.gui.stock_interactor.controller_setting.button.control_inactive.tooltip"))
+                                        .addTooltipLine(
+                                                IKey.lang(
+                                                        "susy.gui.stock_interactor.controller_setting.button.control_inactive.tooltip"))
                                         .marginBottom(2))
                                 .child(Flow.row()
                                         .setEnabledIf(widget -> controlInactive.getValue())
                                         .coverChildrenWidth()
                                         .height(116)
-                                        .child(createSliderColumn("inactive_brake", SusyGuiTextures.BRAKE_INACTIVE, inactiveBrake, 0, 1))
-                                        .child(createSliderColumn("inactive_throttle", SusyGuiTextures.THROTTLE_INACTIVE, inactiveThrottle, -1, 1)))));
+                                        .child(createSliderColumn(
+                                                "inactive_brake", SusyGuiTextures.BRAKE_INACTIVE, inactiveBrake, 0, 1))
+                                        .child(createSliderColumn(
+                                                "inactive_throttle",
+                                                SusyGuiTextures.THROTTLE_INACTIVE,
+                                                inactiveThrottle,
+                                                -1,
+                                                1)))));
     }
 
     @SuppressWarnings("SameParameterValue")
     @ParametersAreNonnullByDefault
-    protected Widget<?> createSliderColumn(String name, UITexture texture, DoubleSyncValue value, double min, double max) {
+    protected Widget<?> createSliderColumn(String name, UITexture texture, DoubleSyncValue value, double min,
+                                           double max) {
         return Flow.column()
                 .width(16)
                 .child(texture.asWidget()
@@ -186,13 +212,15 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip,
+                               boolean advanced) {
         tooltip.add(I18n.format("susy.stock_interfaces.locomotive_controller.description"));
     }
 
-    //#fix# does detected need to be saved or just refreshed on load? does ticks-alive need to be saved to prevent every one ticking at once?
-    //update system based on chunk and global time instead of ticks alive?
-    //should detection area be changeable and saved?
+    // #fix# does detected need to be saved or just refreshed on load? does ticks-alive need to be saved to prevent
+    // every one ticking at once?
+    // update system based on chunk and global time instead of ticks alive?
+    // should detection area be changeable and saved?
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);

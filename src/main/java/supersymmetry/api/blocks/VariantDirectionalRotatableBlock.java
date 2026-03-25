@@ -1,7 +1,9 @@
 package supersymmetry.api.blocks;
 
-import gregtech.api.block.VariantBlock;
-import gregtech.common.items.tool.rotation.CustomBlockRotations;
+import static gregtech.common.items.tool.rotation.CustomBlockRotations.BLOCK_DIRECTIONAL_BEHAVIOR;
+
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
@@ -15,26 +17,35 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-
-import static gregtech.common.items.tool.rotation.CustomBlockRotations.BLOCK_DIRECTIONAL_BEHAVIOR;
+import gregtech.api.block.VariantBlock;
+import gregtech.common.items.tool.rotation.CustomBlockRotations;
 
 public class VariantDirectionalRotatableBlock<T extends Enum<T> & IStringSerializable> extends VariantBlock<T> {
+
     public static final PropertyDirection FACING = PropertyDirection.create("facing");
 
     public VariantDirectionalRotatableBlock(Material materialIn) {
         super(materialIn);
-        this.setDefaultState(blockState.getBaseState().withProperty(VARIANT, VALUES[0]).withProperty(FACING, EnumFacing.SOUTH));
+        this.setDefaultState(
+                blockState.getBaseState().withProperty(VARIANT, VALUES[0]).withProperty(FACING, EnumFacing.SOUTH));
         CustomBlockRotations.registerCustomRotation(this, BLOCK_DIRECTIONAL_BEHAVIOR);
     }
 
     @Nonnull
     @Override
     @SuppressWarnings("deprecation")
-    public IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull EnumFacing facing, float hitX, float hitY, float hitZ, int meta, @NotNull EntityLivingBase placer) {
-        return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING, EnumFacing.getDirectionFromEntityLiving(pos, placer));
+    public IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull EnumFacing facing,
+                                            float hitX, float hitY, float hitZ, int meta,
+                                            @NotNull EntityLivingBase placer) {
+        if (placer.isSneaking()) {
+            return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING,
+                    facing);
+        }
+        return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING,
+                EnumFacing.getDirectionFromEntityLiving(pos, placer));
     }
 
     @Override
@@ -76,7 +87,28 @@ public class VariantDirectionalRotatableBlock<T extends Enum<T> & IStringSeriali
 
     @Nonnull
     @Override
-    public ItemStack getPickBlock(IBlockState state, @NotNull RayTraceResult target, @NotNull World world, @NotNull BlockPos pos, @NotNull EntityPlayer player) {
+    public ItemStack getPickBlock(IBlockState state, @NotNull RayTraceResult target, @NotNull World world,
+                                  @NotNull BlockPos pos, @NotNull EntityPlayer player) {
         return getItemVariant(state.getValue(VARIANT), 1);
     }
+
+    // protected static <T, R> Class<T> getActualTypeParameter(Class<? extends R> thisClass, Class<R> declaringClass) {
+    // Type type = thisClass.getGenericSuperclass();
+    //
+    // while(!(type instanceof ParameterizedType) || ((ParameterizedType)type).getRawType() != declaringClass) {
+    // if (type instanceof ParameterizedType) {
+    // type = ((Class)((ParameterizedType)type).getRawType()).getGenericSuperclass();
+    // } else {
+    // type = ((Class)type).getGenericSuperclass();
+    // }
+    // }
+    //
+    // Object output = ((ParameterizedType)type).getActualTypeArguments()[0];
+    //
+    // if (output instanceof TypeVariable<?>){
+    // return (Class)((TypeVariable)output).getBounds()[0];
+    // }
+    // return (Class)output;
+
+    // }
 }

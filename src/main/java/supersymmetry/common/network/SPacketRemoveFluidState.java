@@ -1,7 +1,5 @@
 package supersymmetry.common.network;
 
-import gregtech.api.network.IClientExecutor;
-import gregtech.api.network.IPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.PacketBuffer;
@@ -10,11 +8,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import gregtech.api.network.IClientExecutor;
+import gregtech.api.network.IPacket;
+
 public class SPacketRemoveFluidState implements IPacket, IClientExecutor {
+
     private BlockPos blockPosition;
 
-    public SPacketRemoveFluidState() {
-    }
+    public SPacketRemoveFluidState() {}
 
     public SPacketRemoveFluidState(BlockPos pos) {
         this.blockPosition = pos;

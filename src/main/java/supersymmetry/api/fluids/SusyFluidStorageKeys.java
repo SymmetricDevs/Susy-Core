@@ -1,10 +1,10 @@
 package supersymmetry.api.fluids;
 
+import static supersymmetry.api.util.SuSyUtility.susyId;
+
 import gregtech.api.fluids.FluidState;
 import gregtech.api.fluids.store.FluidStorageKey;
 import supersymmetry.api.unification.material.info.SuSyMaterialIconType;
-
-import static supersymmetry.api.util.SuSyUtility.susyId;
 
 public final class SusyFluidStorageKeys {
 

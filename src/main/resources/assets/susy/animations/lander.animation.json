@@ -1,0 +1,54 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.ladder.idle": {
+			"loop": true,
+			"animation_length": 0.25,
+			"bones": {
+				"ladder": {
+					"position": {
+						"0.0": {
+							"vector": [0, 16, 0]
+						},
+						"0.25": {
+							"vector": [0, 16, 0]
+						}
+					}
+				}
+			}
+		},
+		"animation.ladder.extend": {
+			"animation_length": 2,
+			"bones": {
+				"ladder": {
+					"position": {
+						"0.0": {
+							"vector": [0, 16, 0]
+						},
+						"2.0": {
+							"vector": [0, 0, 0],
+							"easing": "easeInOutQuad"
+						}
+					}
+				}
+			}
+		},
+		"animation.ladder.retract": {
+			"animation_length": 2,
+			"bones": {
+				"ladder": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"2.0": {
+							"vector": [0, 16, 0],
+							"easing": "easeInOutQuad"
+						}
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

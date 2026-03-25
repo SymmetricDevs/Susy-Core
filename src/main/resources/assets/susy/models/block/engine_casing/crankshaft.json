@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "gregtech:blocks/casings/engine_casing/crankshaft/bottom",
+    "up": "gregtech:blocks/casings/engine_casing/crankshaft/top",
+    "north": "gregtech:blocks/casings/engine_casing/crankshaft/front",
+    "east": "gregtech:blocks/casings/engine_casing/crankshaft/side",
+    "south": "gregtech:blocks/casings/engine_casing/crankshaft/front",
+    "west": "gregtech:blocks/casings/engine_casing/crankshaft/side",
+    "particle": "gregtech:blocks/casings/engine_casing/crankshaft/bottom"
+  }
+}

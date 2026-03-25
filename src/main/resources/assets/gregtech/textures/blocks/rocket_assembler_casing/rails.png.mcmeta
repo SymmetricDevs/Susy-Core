@@ -1,0 +1,13 @@
+{
+  "ctm": {
+    "ctm_version": 1,
+    "type": "CTM",
+    "layer": "SOLID",
+    "textures": [
+      "gregtech:blocks/rocket_assembler_casing/rails_ctm"
+    ],
+    "extra": {
+      "connect_inside": true
+    }
+  }
+}

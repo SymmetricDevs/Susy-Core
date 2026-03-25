@@ -44,6 +44,12 @@
       "textures" : {
         "all" : "gregtech:blocks/deposit/magmatic_hydrothermal"
       }
+    },
+    "variant=ice_cap" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/deposit/ice_cap"
+      }
     }
   }
 }

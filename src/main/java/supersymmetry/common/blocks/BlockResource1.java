@@ -1,11 +1,12 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.block.VariantBlock;
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.IStringSerializable;
 
-import javax.annotation.Nonnull;
+import gregtech.api.block.VariantBlock;
 
 public class BlockResource1 extends VariantBlock<BlockResource1.ResourceBlockType> {
 
@@ -20,6 +21,7 @@ public class BlockResource1 extends VariantBlock<BlockResource1.ResourceBlockTyp
     }
 
     public enum ResourceBlockType implements IStringSerializable {
+
         NATIVE_COPPER("native_copper", 1),
         ANTHRACITE("anthracite", 0),
         LIGNITE("lignite", 0);

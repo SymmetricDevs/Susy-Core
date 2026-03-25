@@ -10,14 +10,30 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+
 import org.jetbrains.annotations.NotNull;
+
+import gregtech.modules.ModuleManager;
 import supersymmetry.api.capability.SuSyCapabilities;
+import supersymmetry.integration.baubles.BaublesModule;
+import supersymmetry.modules.SuSyModules;
 
 public class ElytraFlyingUtils {
 
     @SuppressWarnings("DataFlowIssue")
     public static boolean isElytraFlying(@NotNull EntityLivingBase entity) {
         ItemStack itemstack = entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+        if (isFlying(entity, itemstack)) {
+            return true;
+        }
+        if (ModuleManager.getInstance().isModuleEnabled(SuSyModules.MODULE_BAUBLES)) {
+            itemstack = BaublesModule.getElytraBauble(entity);
+            return isFlying(entity, itemstack);
+        }
+        return false;
+    }
+
+    public static boolean isFlying(@NotNull EntityLivingBase entity, ItemStack itemstack) {
         if (itemstack.hasCapability(SuSyCapabilities.ELYTRA_FLYING_PROVIDER, null)) {
             return itemstack.getCapability(SuSyCapabilities.ELYTRA_FLYING_PROVIDER, null).isElytraFlying(
                     entity, itemstack,
@@ -29,7 +45,8 @@ public class ElytraFlyingUtils {
     }
 
     public static boolean canTakeOff(EntityPlayer player, boolean ignoreOnGround) {
-        return (ignoreOnGround || (!player.onGround && player.motionY < 0.0D)) && !player.isElytraFlying() && !player.isInWater() && !isInLavaSafe(player);
+        return (ignoreOnGround || (!player.onGround && player.motionY < 0.0D)) && !player.isElytraFlying() &&
+                !player.isInWater() && !isInLavaSafe(player);
     }
 
     // non-chunkloading copy of Entity.isInLava()

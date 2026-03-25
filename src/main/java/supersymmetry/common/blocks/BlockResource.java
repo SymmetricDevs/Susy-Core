@@ -1,12 +1,13 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.block.IStateHarvestLevel;
-import gregtech.api.block.VariantBlock;
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.IStringSerializable;
 
-import javax.annotation.Nonnull;
+import gregtech.api.block.IStateHarvestLevel;
+import gregtech.api.block.VariantBlock;
 
 public class BlockResource extends VariantBlock<BlockResource.ResourceBlockType> {
 
@@ -21,6 +22,7 @@ public class BlockResource extends VariantBlock<BlockResource.ResourceBlockType>
     }
 
     public enum ResourceBlockType implements IStringSerializable, IStateHarvestLevel {
+
         BAUXITE("bauxite", 1),
         CALICHE("caliche", 1),
         NON_MARINE_EVAPORITE("non_marine_evaporite", 1),

@@ -1,7 +1,7 @@
 package supersymmetry.client.renderer.handler;
 
-import codechicken.lib.texture.TextureUtils;
-import codechicken.lib.util.TransformUtils;
+import java.util.List;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
@@ -17,18 +17,19 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.lwjgl.opengl.GL11;
+
+import codechicken.lib.texture.TextureUtils;
+import codechicken.lib.util.TransformUtils;
 import supersymmetry.api.SusyLog;
-
-import java.util.List;
-
 
 /**
  * A wrapped OBJ IBakedModel
  * Mostly copied from Draconic Evolution, with minor modifications.
  *
  * @author brandon3055
- * <a href="https://github.com/Draconic-Inc/Draconic-Evolution">Link</a>
+ *         <a href="https://github.com/Draconic-Inc/Draconic-Evolution">Link</a>
  */
 @SideOnly(Side.CLIENT)
 public class OBJModelRender extends ModelRenderer {
@@ -48,7 +49,8 @@ public class OBJModelRender extends ModelRenderer {
         super(baseModel);
 
         try {
-            objModel = OBJLoader.INSTANCE.loadModel(customModel).bake(TransformUtils.DEFAULT_TOOL, DefaultVertexFormats.ITEM, TextureUtils::getTexture);
+            objModel = OBJLoader.INSTANCE.loadModel(customModel).bake(TransformUtils.DEFAULT_TOOL,
+                    DefaultVertexFormats.ITEM, TextureUtils::getTexture);
         } catch (Exception e) {
             SusyLog.logger.error(e);
         }
@@ -86,13 +88,16 @@ public class OBJModelRender extends ModelRenderer {
                 if (this.rotationPointX == 0.0F && this.rotationPointY == 0.0F && this.rotationPointZ == 0.0F) {
                     GlStateManager.callList(this.displayList);
                 } else {
-                    GlStateManager.translate(this.rotationPointX * scale, this.rotationPointY * scale, this.rotationPointZ * scale);
+                    GlStateManager.translate(this.rotationPointX * scale, this.rotationPointY * scale,
+                            this.rotationPointZ * scale);
                     GlStateManager.callList(this.displayList);
-                    GlStateManager.translate(-this.rotationPointX * scale, -this.rotationPointY * scale, -this.rotationPointZ * scale);
+                    GlStateManager.translate(-this.rotationPointX * scale, -this.rotationPointY * scale,
+                            -this.rotationPointZ * scale);
                 }
             } else {
                 GlStateManager.pushMatrix();
-                GlStateManager.translate(this.rotationPointX * scale, this.rotationPointY * scale, this.rotationPointZ * scale);
+                GlStateManager.translate(this.rotationPointX * scale, this.rotationPointY * scale,
+                        this.rotationPointZ * scale);
                 if (this.rotateAngleZ != 0.0F) {
                     GlStateManager.rotate(this.rotateAngleZ * 57.295776F, 0.0F, 0.0F, 1.0F);
                 }
@@ -149,7 +154,8 @@ public class OBJModelRender extends ModelRenderer {
             }
 
             GlStateManager.pushMatrix();
-            GlStateManager.translate(this.rotationPointX * scale, this.rotationPointY * scale, this.rotationPointZ * scale);
+            GlStateManager.translate(this.rotationPointX * scale, this.rotationPointY * scale,
+                    this.rotationPointZ * scale);
             if (this.rotateAngleY != 0.0F) {
                 GlStateManager.rotate(this.rotateAngleY * 57.295776F, 0.0F, 1.0F, 0.0F);
             }
@@ -173,10 +179,12 @@ public class OBJModelRender extends ModelRenderer {
 
             if (this.rotateAngleX == 0.0F && this.rotateAngleY == 0.0F && this.rotateAngleZ == 0.0F) {
                 if (this.rotationPointX != 0.0F || this.rotationPointY != 0.0F || this.rotationPointZ != 0.0F) {
-                    GlStateManager.translate(this.rotationPointX * scale, this.rotationPointY * scale, this.rotationPointZ * scale);
+                    GlStateManager.translate(this.rotationPointX * scale, this.rotationPointY * scale,
+                            this.rotationPointZ * scale);
                 }
             } else {
-                GlStateManager.translate(this.rotationPointX * scale, this.rotationPointY * scale, this.rotationPointZ * scale);
+                GlStateManager.translate(this.rotationPointX * scale, this.rotationPointY * scale,
+                        this.rotationPointZ * scale);
                 if (this.rotateAngleZ != 0.0F) {
                     GlStateManager.rotate(this.rotateAngleZ * 57.295776F, 0.0F, 0.0F, 1.0F);
                 }

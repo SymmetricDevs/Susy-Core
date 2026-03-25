@@ -1,5 +1,26 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import static gregtech.api.util.RelativeDirection.*;
+
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
@@ -18,28 +39,11 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockFireboxCasing;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMufflerHatch;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.metatileentities.multi.VoidingMultiblockBase;
 
-import javax.annotation.Nonnull;
-import java.util.List;
-
-import static gregtech.api.util.RelativeDirection.*;
-
 public class MetaTileEntityFlareStack extends VoidingMultiblockBase {
+
     // Storing this, just in case it is ever needed
     private int height = 5;
 
@@ -68,7 +72,7 @@ public class MetaTileEntityFlareStack extends VoidingMultiblockBase {
         // May want to force the input to be underneath the pipe casings
         return FactoryBlockPattern.start(FRONT, RIGHT, UP)
                 .aisle("S")
-                .aisle("P").setRepeatable(3,7)
+                .aisle("P").setRepeatable(3, 7)
                 .aisle("F")
                 .where('S', this.selfPredicate())
                 .where('P', states(this.getFireboxCasingState())
@@ -76,7 +80,6 @@ public class MetaTileEntityFlareStack extends VoidingMultiblockBase {
                 .where('F', abilities(MultiblockAbility.MUFFLER_HATCH).setExactLimit(1))
                 .build();
     }
-
 
     // Updates the height and rate of the multiblock
     @Override
@@ -104,8 +107,8 @@ public class MetaTileEntityFlareStack extends VoidingMultiblockBase {
         EnumFacing relativeUp = UP.getRelativeFacing(this.getFrontFacing(), this.getUpwardsFacing(), this.isFlipped());
 
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(getPos().offset(relativeUp, height - 2));
-        for ( ; height < 10 ; height++ ) {
-            if(isBlockMuffler(world, pos.move(relativeUp))) break;
+        for (; height < 10; height++) {
+            if (isBlockMuffler(world, pos.move(relativeUp))) break;
         }
 
         this.height = height;
@@ -145,7 +148,7 @@ public class MetaTileEntityFlareStack extends VoidingMultiblockBase {
     @Override
     public void receiveCustomData(int dataId, PacketBuffer buf) {
         super.receiveCustomData(dataId, buf);
-        if(dataId == GregtechDataCodes.UPDATE_STRUCTURE_SIZE) {
+        if (dataId == GregtechDataCodes.UPDATE_STRUCTURE_SIZE) {
             this.height = buf.readInt();
             this.rateBonus = buf.readInt();
         }
@@ -183,29 +186,30 @@ public class MetaTileEntityFlareStack extends VoidingMultiblockBase {
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
         super.addDisplayText(textList);
-        if(isStructureFormed()) {
+        if (isStructureFormed()) {
             ITextComponent componentHeight = TextComponentUtil.stringWithColor(TextFormatting.BLUE,
                     String.valueOf(this.height));
             ITextComponent componentRateBonus = TextComponentUtil.stringWithColor(TextFormatting.DARK_PURPLE,
                     this.rateBonus + "x");
             ITextComponent componentRateBase = TextComponentUtil.translationWithColor(TextFormatting.GRAY,
-                    "gregtech.machine.flare_stack.rate",
+                    "susy.machine.flare_stack.rate",
                     componentRateBonus);
             ITextComponent componentRateHover = TextComponentUtil.translationWithColor(TextFormatting.GRAY,
-                    "gregtech.machine.flare_stack.rate_hover");
+                    "susy.machine.flare_stack.rate_hover");
 
             textList.add(TextComponentUtil.translationWithColor(
                     TextFormatting.GRAY,
-                    "gregtech.machine.flare_stack.height",
+                    "susy.machine.flare_stack.height",
                     componentHeight));
             textList.add(TextComponentUtil.setHover(componentRateBase, componentRateHover));
         }
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
-        tooltip.add(I18n.format("gregtech.machine.flare_stack.tooltip.1", getBaseVoidingRate()));
-        tooltip.add(I18n.format("gregtech.machine.flare_stack.tooltip.2"));
+    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip,
+                               boolean advanced) {
+        tooltip.add(I18n.format("susy.machine.flare_stack.tooltip.1", getBaseVoidingRate()));
+        tooltip.add(I18n.format("susy.machine.flare_stack.tooltip.2"));
         super.addInformation(stack, world, tooltip, advanced);
     }
 

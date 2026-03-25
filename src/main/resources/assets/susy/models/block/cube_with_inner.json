@@ -1,0 +1,31 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"parent": "block/cube_all",
+	"elements": [
+		{
+			"from": [15.99, 15.99, 15.99],
+			"to": [0.01, 0.01, 0.01],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "rotation": 180, "texture": "#all"},
+				"east": {"uv": [0, 0, 16, 16], "rotation": 180, "texture": "#all"},
+				"south": {"uv": [0, 0, 16, 16], "rotation": 180, "texture": "#all"},
+				"west": {"uv": [0, 0, 16, 16], "rotation": 180, "texture": "#all"},
+				"up": {"uv": [0, 0, 16, 16], "rotation": 180, "texture": "#all"},
+				"down": {"uv": [0, 0, 16, 16], "rotation": 180, "texture": "#all"}
+			}
+		},
+		{
+			"from": [0, 0, 0],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#all", "cullface": "north"},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#all", "cullface": "east"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#all", "cullface": "south"},
+				"west": {"uv": [0, 0, 16, 16], "texture": "#all", "cullface": "west"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#all", "cullface": "up"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#all", "cullface": "down"}
+			}
+		}
+	]
+}

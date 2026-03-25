@@ -1,0 +1,8 @@
+# Blender 4.0.2 MTL File: 'soyuz_fix.blend'
+# www.blender.org
+
+newmtl Rocket
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+map_Kd susy:entities/soyuz
+map_d susy:entities/soyuz

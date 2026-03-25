@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Build
         uses: ./.github/actions/build_setup
@@ -23,7 +23,7 @@ jobs:
         run: ./gradlew build --warning-mode all --build-cache
 
       - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v4.4.0
+        uses: actions/upload-artifact@v5
         with:
             name: susy_core
             path: build/libs

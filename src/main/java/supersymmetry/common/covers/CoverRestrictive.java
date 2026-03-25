@@ -1,5 +1,19 @@
 package supersymmetry.common.covers;
 
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
+
+import org.jetbrains.annotations.NotNull;
+
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Cuboid6;
@@ -11,19 +25,7 @@ import gregtech.api.cover.CoverableView;
 import gregtech.api.util.ItemStackHashStrategy;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.client.renderer.textures.SusyTextures;
-
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
 
 public class CoverRestrictive extends CoverBase {
 
@@ -60,13 +62,17 @@ public class CoverRestrictive extends CoverBase {
     }
 
     @Override
-    public void renderCover(@NotNull CCRenderState renderState, @NotNull Matrix4 translation, @NotNull IVertexOperation[] pipeline,
+    public void renderCover(@NotNull CCRenderState renderState, @NotNull Matrix4 translation,
+                            @NotNull IVertexOperation[] pipeline,
                             @NotNull Cuboid6 plateBox, @NotNull BlockRenderLayer renderLayer) {
-        SusyTextures.RESTRICTIVE_FILTER_FILTER_OVERLAY.renderSided(getAttachedSide(), plateBox, renderState, pipeline, translation);
+        SusyTextures.RESTRICTIVE_FILTER_FILTER_OVERLAY.renderSided(getAttachedSide(), plateBox, renderState, pipeline,
+                translation);
     }
 
     protected static class ItemHandlerRestrictive extends ItemHandlerDelegate {
-        private final Map<ItemStack, Set<Integer>> multimap = new Object2ObjectOpenCustomHashMap<>(ItemStackHashStrategy.comparingAllButCount());
+
+        private final Map<ItemStack, Set<Integer>> multimap = new Object2ObjectOpenCustomHashMap<>(
+                ItemStackHashStrategy.comparingAllButCount());
 
         public ItemHandlerRestrictive(IItemHandler delegate) {
             super(delegate);
@@ -105,7 +111,8 @@ public class CoverRestrictive extends CoverBase {
                     }
                     // Well, I guess it was already removed, then.
                 }
-                // If it's not already in the set of what goes where, we search if it happens to be anywhere already, for some reason.
+                // If it's not already in the set of what goes where, we search if it happens to be anywhere already,
+                // for some reason.
                 for (int i = 0; i < getSlots(); i++) {
                     if (ItemHandlerHelper.canItemStacksStack(stack, getStackInSlot(i))) {
                         addToMap(i, stack);
@@ -119,7 +126,5 @@ public class CoverRestrictive extends CoverBase {
             // It simply wouldn't even fit in that slot anyway.
             return stack;
         }
-
-
     }
 }

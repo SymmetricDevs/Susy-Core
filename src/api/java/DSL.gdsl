@@ -1,0 +1,7 @@
+def ctx = context(ctype: 'org.gradle.api.artifacts.dsl.DependencyHandler',
+                  scope: scriptScope(null),
+                  filetypes: ['gradle'])
+
+contributor(ctx) {
+    property name: 'rfg', type: 'com.gtnewhorizons.retrofuturagradle.modutils.ModUtils.RfgDependencyExtension'
+}

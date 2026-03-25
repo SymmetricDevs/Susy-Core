@@ -1,0 +1,109 @@
+{
+  "forge_marker" : 1,
+  "defaults": {
+    "model": "minecraft:cube_bottom_top",
+    "textures": {
+      "bottom": "gregtech:blocks/wool/wool_colored_white",
+      "top": "gregtech:blocks/wool/wool_colored_white",
+      "side": "gregtech:blocks/wool/wool_colored_white"
+    }
+  },
+  "variants" : {
+    "variant=whitefakewool" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/wool/wool_colored_white"
+      }
+    },
+    "variant=orangefakewool" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/wool/wool_colored_orange"
+      }
+    },
+    "variant=magentafakewool" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/wool/wool_colored_magenta"
+      }
+    },
+    "variant=lightbluefakewool" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/wool/wool_colored_light_blue"
+      }
+    },
+    "variant=yellowfakewool" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/wool/wool_colored_yellow"
+      }
+    },
+    "variant=limefakewool" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/wool/wool_colored_lime"
+      }
+    },
+    "variant=pinkfakewool" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/wool/wool_colored_pink"
+      }
+    },
+    "variant=grayfakewool" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/wool/wool_colored_gray"
+      }
+    },
+    "variant=lightgrayfakewool" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/wool/wool_colored_silver"
+      }
+    },
+    "variant=cyanfakewool" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/wool/wool_colored_cyan"
+      }
+    },
+    "variant=purplefakewool" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/wool/wool_colored_purple"
+      }
+    },
+    "variant=bluefakewool" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/wool/wool_colored_blue"
+      }
+    },
+    "variant=brownfakewool" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/wool/wool_colored_brown"
+      }
+    },
+    "variant=greenfakewool" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/wool/wool_colored_green"
+      }
+    },
+    "variant=redfakewool" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/wool/wool_colored_red"
+      }
+    },
+    "variant=blackfakewool" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/wool/wool_colored_black"
+      }
+    }
+  }
+}

@@ -1,12 +1,13 @@
 package supersymmetry.client.renderer.handler;
 
+import static supersymmetry.api.util.SuSyUtility.susyId;
+
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.ResourceLocation;
 
-import static supersymmetry.api.util.SuSyUtility.susyId;
-
 public class BreathingApparatusModel extends ModelBiped {
+
     public BreathingApparatusModel(String name, EntityEquipmentSlot slot) {
         this.textureWidth = 64;
         this.textureHeight = 64;
