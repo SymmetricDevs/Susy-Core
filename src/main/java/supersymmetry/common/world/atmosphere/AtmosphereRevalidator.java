@@ -1,10 +1,6 @@
 package supersymmetry.common.world.atmosphere;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
 import java.util.ArrayDeque;
-
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashSet;
@@ -12,19 +8,25 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
 /**
  * Handles lazy revalidation of regions.
  *
- * <p>When a wall is built that might split a region, the revalidator
+ * <p>
+ * When a wall is built that might split a region, the revalidator
  * re-floods from the disperser source, diffs against the existing octree,
  * and splits disconnected portions into separate regions (or removes them).
  *
- * <p>Revalidation is budgeted: each call to {@link #tick} processes up to
+ * <p>
+ * Revalidation is budgeted: each call to {@link #tick} processes up to
  * a configurable number of blocks, so it can run across multiple game ticks.
  */
 public class AtmosphereRevalidator {
 
     private static class Job {
+
         final AtmosphereRegion region;
 
         final Deque<BlockPos> frontier = new ArrayDeque<>();
@@ -123,6 +125,7 @@ public class AtmosphereRevalidator {
 
     @FunctionalInterface
     public interface SplitCallback {
+
         void onDisconnected(AtmosphereRegion region, Set<BlockPos> disconnected);
     }
 }

@@ -1,24 +1,26 @@
 package supersymmetry.common.world.atmosphere;
 
+import java.util.*;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
-import java.util.*;
-
 /**
  * Top-level manager for the atmosphere/oxygen system.
  *
- * <p>Maintains a collection of {@link AtmosphereRegion}s and handles block-change
+ * <p>
+ * Maintains a collection of {@link AtmosphereRegion}s and handles block-change
  * events and per-tick operations.
  *
- * <p>Each region's octree represents the room shape (derived via flood fill).
+ * <p>
+ * Each region's octree represents the room shape (derived via flood fill).
  * Pressure is tracked separately as a 0.0–1.0 value:
  * <ul>
- *   <li>Decreases when breaches exist (wall broken to vacuum)</li>
- *   <li>Increases when sealed and a disperser is active</li>
+ * <li>Decreases when breaches exist (wall broken to vacuum)</li>
+ * <li>Increases when sealed and a disperser is active</li>
  * </ul>
  * This avoids per-block drain state and the edge cases it caused.
  */
@@ -219,14 +221,12 @@ public class AtmosphereRegionGraph {
         return 0;
     }
 
-
     public AtmosphereRegion getRegionAt(BlockPos pos) {
         for (AtmosphereRegion region : regions) {
             if (region.contains(pos)) return region;
         }
         return null;
     }
-
 
     // ---- Tick ----
 

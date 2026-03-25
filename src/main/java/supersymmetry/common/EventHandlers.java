@@ -1,10 +1,8 @@
 package supersymmetry.common;
 
-import gregtech.api.GregTechAPI;
-import gregtech.api.util.GTTeleporter;
-import gregtech.api.util.TeleportHandler;
-import gregtech.common.items.MetaItems;
-import gregtechfoodoption.item.GTFOMetaItem;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.entity.Entity;
@@ -27,7 +25,14 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.items.ItemStackHandler;
+
 import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.GregTechAPI;
+import gregtech.api.util.GTTeleporter;
+import gregtech.api.util.TeleportHandler;
+import gregtech.common.items.MetaItems;
+import gregtechfoodoption.item.GTFOMetaItem;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.items.CargoItemStackHandler;
@@ -42,9 +47,6 @@ import supersymmetry.common.rocketry.LanderSpawnEntry;
 import supersymmetry.common.rocketry.LanderSpawnQueue;
 import supersymmetry.common.world.WorldProviderPlanet;
 import supersymmetry.common.world.atmosphere.AtmosphereWorldData;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class EventHandlers {
@@ -175,7 +177,8 @@ public class EventHandlers {
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (!event.player.world.isRemote && event.player.world.getTotalWorldTime() % 20 == 0 && event.phase == TickEvent.Phase.START) {
+        if (!event.player.world.isRemote && event.player.world.getTotalWorldTime() % 20 == 0 &&
+                event.phase == TickEvent.Phase.START) {
             DimensionBreathabilityHandler.tickPlayer(event.player);
         }
     }

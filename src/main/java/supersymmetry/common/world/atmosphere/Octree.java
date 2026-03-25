@@ -1,17 +1,21 @@
 package supersymmetry.common.world.atmosphere;
 
-import net.minecraft.util.math.BlockPos;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import net.minecraft.util.math.BlockPos;
+
 public class Octree implements Iterable<BlockPos> {
 
     private static final int MIN_SIZE = 1;
 
-    private enum State { EMPTY, FULL, MIXED }
+    private enum State {
+        EMPTY,
+        FULL,
+        MIXED
+    }
 
     private State state;
     private Octree[] children;
@@ -47,11 +51,25 @@ public class Octree implements Iterable<BlockPos> {
         this.root = root;
     }
 
-    public boolean insert(BlockPos pos) { return insert(pos.getX(), pos.getY(), pos.getZ()); }
-    public boolean remove(BlockPos pos) { return remove(pos.getX(), pos.getY(), pos.getZ()); }
-    public boolean contains(BlockPos pos) { return contains(pos.getX(), pos.getY(), pos.getZ()); }
-    public int size() { return count; }
-    public boolean isEmpty() { return state == State.EMPTY; }
+    public boolean insert(BlockPos pos) {
+        return insert(pos.getX(), pos.getY(), pos.getZ());
+    }
+
+    public boolean remove(BlockPos pos) {
+        return remove(pos.getX(), pos.getY(), pos.getZ());
+    }
+
+    public boolean contains(BlockPos pos) {
+        return contains(pos.getX(), pos.getY(), pos.getZ());
+    }
+
+    public int size() {
+        return count;
+    }
+
+    public boolean isEmpty() {
+        return state == State.EMPTY;
+    }
 
     public List<BlockPos> getAllPositions() {
         List<BlockPos> result = new ArrayList<>(count);
@@ -60,16 +78,27 @@ public class Octree implements Iterable<BlockPos> {
     }
 
     @Override
-    public Iterator<BlockPos> iterator() { return new OctreeIterator(this); }
+    public Iterator<BlockPos> iterator() {
+        return new OctreeIterator(this);
+    }
 
     private boolean insert(int px, int py, int pz) {
         if (!inBounds(px, py, pz)) return false;
         if (state == State.FULL) return false;
-        if (size == MIN_SIZE) { state = State.FULL; count = 1; return true; }
-        if (state == State.EMPTY) { expand(); }
+        if (size == MIN_SIZE) {
+            state = State.FULL;
+            count = 1;
+            return true;
+        }
+        if (state == State.EMPTY) {
+            expand();
+        }
         int idx = childIndex(px, py, pz);
         boolean added = children[idx].insert(px, py, pz);
-        if (added) { count++; tryCollapse(); }
+        if (added) {
+            count++;
+            tryCollapse();
+        }
         return added;
     }
 
@@ -77,13 +106,22 @@ public class Octree implements Iterable<BlockPos> {
         if (!inBounds(px, py, pz)) return false;
         if (state == State.EMPTY) return false;
         if (size == MIN_SIZE) {
-            if (state == State.FULL) { state = State.EMPTY; count = 0; return true; }
+            if (state == State.FULL) {
+                state = State.EMPTY;
+                count = 0;
+                return true;
+            }
             return false;
         }
-        if (state == State.FULL) { splitFull(); }
+        if (state == State.FULL) {
+            splitFull();
+        }
         int idx = childIndex(px, py, pz);
         boolean removed = children[idx].remove(px, py, pz);
-        if (removed) { count--; tryCollapse(); }
+        if (removed) {
+            count--;
+            tryCollapse();
+        }
         return removed;
     }
 
@@ -97,8 +135,9 @@ public class Octree implements Iterable<BlockPos> {
     private void collectAll(List<BlockPos> result) {
         if (state == State.EMPTY) return;
         if (state == State.FULL) {
-            if (size == MIN_SIZE) { result.add(new BlockPos(originX, originY, originZ)); }
-            else {
+            if (size == MIN_SIZE) {
+                result.add(new BlockPos(originX, originY, originZ));
+            } else {
                 for (int x = originX; x < originX + size; x++)
                     for (int y = originY; y < originY + size; y++)
                         for (int z = originZ; z < originZ + size; z++)
@@ -106,7 +145,9 @@ public class Octree implements Iterable<BlockPos> {
             }
             return;
         }
-        for (Octree child : children) { child.collectAll(result); }
+        for (Octree child : children) {
+            child.collectAll(result);
+        }
     }
 
     private int childIndex(int px, int py, int pz) {
@@ -152,20 +193,38 @@ public class Octree implements Iterable<BlockPos> {
             if (c.state != State.FULL) allFull = false;
             if (c.state != State.EMPTY) allEmpty = false;
         }
-        if (allFull) { state = State.FULL; children = null; count = size * size * size; }
-        else if (allEmpty) { state = State.EMPTY; children = null; count = 0; }
+        if (allFull) {
+            state = State.FULL;
+            children = null;
+            count = size * size * size;
+        } else if (allEmpty) {
+            state = State.EMPTY;
+            children = null;
+            count = 0;
+        }
     }
 
     private boolean inBounds(int px, int py, int pz) {
         return px >= originX && px < originX + size &&
-               py >= originY && py < originY + size &&
-               pz >= originZ && pz < originZ + size;
+                py >= originY && py < originY + size &&
+                pz >= originZ && pz < originZ + size;
     }
 
-    public int getOriginX() { return originX; }
-    public int getOriginY() { return originY; }
-    public int getOriginZ() { return originZ; }
-    public int getTreeSize() { return size; }
+    public int getOriginX() {
+        return originX;
+    }
+
+    public int getOriginY() {
+        return originY;
+    }
+
+    public int getOriginZ() {
+        return originZ;
+    }
+
+    public int getTreeSize() {
+        return size;
+    }
 
     // ---- Serialization ----
 
@@ -202,7 +261,7 @@ public class Octree implements Iterable<BlockPos> {
      */
     public static Octree deserialize(int originX, int originY, int originZ, int size, byte[] data) {
         Octree tree = new Octree(originX, originY, originZ, size);
-        int[] idx = {0};
+        int[] idx = { 0 };
         deserializeNode(tree, data, idx);
         return tree;
     }
@@ -231,25 +290,39 @@ public class Octree implements Iterable<BlockPos> {
     private static class OctreeIterator implements Iterator<BlockPos> {
 
         private static class Frame {
+
             final Octree node;
             int childIdx;
             int flatIdx;
-            Frame(Octree node) { this.node = node; this.childIdx = 0; this.flatIdx = 0; }
+
+            Frame(Octree node) {
+                this.node = node;
+                this.childIdx = 0;
+                this.flatIdx = 0;
+            }
         }
 
         private final List<Frame> stack = new ArrayList<>();
         private BlockPos next;
 
         OctreeIterator(Octree root) {
-            if (root.state != State.EMPTY) { stack.add(new Frame(root)); }
+            if (root.state != State.EMPTY) {
+                stack.add(new Frame(root));
+            }
             advance();
         }
 
-        @Override public boolean hasNext() { return next != null; }
+        @Override
+        public boolean hasNext() {
+            return next != null;
+        }
 
-        @Override public BlockPos next() {
+        @Override
+        public BlockPos next() {
             if (next == null) throw new NoSuchElementException();
-            BlockPos ret = next; advance(); return ret;
+            BlockPos ret = next;
+            advance();
+            return ret;
         }
 
         private void advance() {
@@ -267,15 +340,22 @@ public class Octree implements Iterable<BlockPos> {
                         next = new BlockPos(node.originX + lx, node.originY + ly, node.originZ + lz);
                         return;
                     }
-                    stack.remove(stack.size() - 1); continue;
+                    stack.remove(stack.size() - 1);
+                    continue;
                 }
                 if (node.state == State.MIXED) {
                     boolean pushed = false;
                     while (frame.childIdx < 8) {
                         Octree child = node.children[frame.childIdx++];
-                        if (child.state != State.EMPTY) { stack.add(new Frame(child)); pushed = true; break; }
+                        if (child.state != State.EMPTY) {
+                            stack.add(new Frame(child));
+                            pushed = true;
+                            break;
+                        }
                     }
-                    if (!pushed) { stack.remove(stack.size() - 1); }
+                    if (!pushed) {
+                        stack.remove(stack.size() - 1);
+                    }
                     continue;
                 }
                 stack.remove(stack.size() - 1);
