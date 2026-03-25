@@ -18,5 +18,5 @@ public class SuSyMaterialIconType {
     public static final MaterialIconType dustWet = new MaterialIconType("dustWet");
     public static final MaterialIconType electrode = new MaterialIconType("electrode");
     public static final MaterialIconType millBall = new MaterialIconType("millBall");
-    public static final MaterailIconType pin = new MaterialIconType("pin");
+    public static final MaterialIconType pin = new MaterialIconType("pin");
 }

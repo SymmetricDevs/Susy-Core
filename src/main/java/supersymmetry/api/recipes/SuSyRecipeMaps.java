@@ -209,6 +209,10 @@ public class SuSyRecipeMaps {
             "sputter_deposition", 6, 1, 2, 2, new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.ELECTROLYZER);
 
+    public static final RecipeMap<SimpleRecipeBuilder> EVAPORATION_DEPOSITION_RECIPES = new ReciepMap<>(
+            "evaporation_deposition", 2, 1, 0, 0, new SimpleRecipeBuilder(), false)
+                    .setSound(GTSoundEvents.ARC);
+
     public static final RecipeMap<SimpleRecipeBuilder> ORE_SORTER_RECIPES = new RecipeMap<>("ore_sorter", 2, 20, 1, 1,
             new SimpleRecipeBuilder(), false)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_EXTRACT, ProgressWidget.MoveType.HORIZONTAL)

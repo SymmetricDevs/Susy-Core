@@ -61,12 +61,8 @@ public class SuSyMaterialFlags {
             .requireFlags(GCYMMaterialFlags.NO_ALLOY_BLAST_RECIPES)
             .build();
 
-    public static final MaterialFlag GENERATE_NUGGET = (new MaterialFlag.builder("nugget"))
+    public static final MaterialFlag GENERATE_PINS = (new MaterialFlag.Builder("pin"))
             .requireProps(PropertyKey.INGOT)
-            .build();
-
-    public static final MaterialFlag GENERATE_PINS = (new MaterialFlag.builder("pin"))
-            .requireProps(PropertyKey.PLATE)
             .build();
 
     public SuSyMaterialFlags() {}
