@@ -1,16 +1,16 @@
 package supersymmetry.common.event;
 
-import static net.minecraft.inventory.EntityEquipmentSlot.HEAD;
-
-import java.util.*;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
-
 import supersymmetry.api.space.CelestialObjects;
 import supersymmetry.api.util.SuSyDamageSources;
 import supersymmetry.common.item.SuSyArmorItem;
 import supersymmetry.common.world.atmosphere.AtmosphereWorldData;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static net.minecraft.inventory.EntityEquipmentSlot.HEAD;
 
 public final class DimensionBreathabilityHandler {
 
@@ -73,7 +73,7 @@ public final class DimensionBreathabilityHandler {
     }
 
     public static boolean isInDepressurizationHazard(EntityPlayer player) {
-        List<BreathabilityInfo> infos = Arrays.asList(dimensionBreathabilityMap.get(player.dimension));
+        BreathabilityInfo[] infos = dimensionBreathabilityMap.get(player.dimension);
         if (infos == null) return false;
         for (BreathabilityInfo info : infos) {
             if (info.damageType == SuSyDamageSources.DEPRESSURIZATION) return true;

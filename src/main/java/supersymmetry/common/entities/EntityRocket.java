@@ -10,6 +10,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
@@ -30,6 +31,7 @@ import supersymmetry.client.audio.MovingSoundRocket;
 import supersymmetry.client.renderer.handler.IAlwaysRender;
 import supersymmetry.client.renderer.particles.SusyParticleFlameLarge;
 import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
+import supersymmetry.common.advancement.SusyCriteriaTriggers;
 import supersymmetry.common.network.CPacketRocketInteract;
 import supersymmetry.common.rocketry.SuccessCalculation;
 import supersymmetry.common.rocketry.SuccessCalculation.LaunchResult;
@@ -271,6 +273,14 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
 
             if (flightTime % 2 == 0 && getEntityWorld().isRemote) {
                 this.spawnFlightParticles();
+            }
+
+            if (!world.isRemote) {
+                for (Entity passenger : this.getPassengers()) {
+                    if (passenger instanceof EntityPlayerMP) {
+                        SusyCriteriaTriggers.ROCKET_LAUNCH.trigger((EntityPlayerMP) passenger);
+                    }
+                }
             }
 
             if (this.world.collidesWithAnyBlock(this.getEntityBoundingBox())) {

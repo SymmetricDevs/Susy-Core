@@ -1552,3 +1552,7 @@ tile.bmrf_blocks.bmrf6.name=BMRF-6
 tile.bmrf_blocks.bmrf7.name=BMRF-7
 tile.bmrf_blocks.bmrf8.name=BMRF-8
 tile.bmrf_blocks.bmrf9.name=BMRF-9
+
+# Advancements
+gregtech.advancement.extreme_voltage.rocket_launch.name=Hopefully It Doesn't Crash :)
+gregtech.advancement.extreme_voltage.rocket_launch.desc=Get in a launching rocket.
