@@ -1731,3 +1731,7 @@ metatileentity.susy.large_railroad_engineering_station.name=Large Railroad Engin
 metatileentity.susy.large_railroad_engineering_station.description=A massive facility for constructing and maintaining railroad rolling stock
 metatileentity.susy.large_railroad_engineering_station.tooltip=Used to build and service trains
 large_railroad_engineering_station.name=Large Railroad Engineering Station
+
+# Advancements
+gregtech.advancement.extreme_voltage.rocket_launch.name=Hopefully It Doesn't Crash :)
+gregtech.advancement.extreme_voltage.rocket_launch.desc=Get in a launching rocket.
