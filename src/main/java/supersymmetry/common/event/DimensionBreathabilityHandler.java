@@ -1,16 +1,16 @@
 package supersymmetry.common.event;
 
+import static net.minecraft.inventory.EntityEquipmentSlot.HEAD;
+
+import java.util.*;
+
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.DamageSource;
+
 import supersymmetry.api.space.CelestialObjects;
 import supersymmetry.api.util.SuSyDamageSources;
 import supersymmetry.common.item.SuSyArmorItem;
 import supersymmetry.common.world.atmosphere.AtmosphereWorldData;
-
-import java.util.*;
-
-import static net.minecraft.inventory.EntityEquipmentSlot.HEAD;
 
 public final class DimensionBreathabilityHandler {
 
@@ -27,16 +27,18 @@ public final class DimensionBreathabilityHandler {
     public static void loadConfig() {
         dimensionBreathabilityMap.clear();
 
-        int[] hello = {1, 2, 3};
+        int[] hello = { 1, 2, 3 };
 
         // Nether
-        dimensionBreathabilityMap.put(-1, new BreathabilityInfo[]{new BreathabilityInfo(SuSyDamageSources.getToxicAtmoDamage(),
-                2)});
+        dimensionBreathabilityMap.put(-1,
+                new BreathabilityInfo[] { new BreathabilityInfo(SuSyDamageSources.getToxicAtmoDamage(),
+                        2) });
         // Beneath
-        dimensionBreathabilityMap.put(10, new BreathabilityInfo[]{new BreathabilityInfo(SuSyDamageSources.getSuffocationDamage(),
-                0.5)});
+        dimensionBreathabilityMap.put(10,
+                new BreathabilityInfo[] { new BreathabilityInfo(SuSyDamageSources.getSuffocationDamage(),
+                        0.5) });
         // SPACE
-        dimensionBreathabilityMap.put(CelestialObjects.MOON.getDimension(), new BreathabilityInfo[]{SPACE});
+        dimensionBreathabilityMap.put(CelestialObjects.MOON.getDimension(), new BreathabilityInfo[] { SPACE });
     }
 
     public static boolean isInHazardousEnvironment(EntityPlayer player) {
