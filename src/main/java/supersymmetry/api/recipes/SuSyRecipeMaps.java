@@ -534,6 +534,9 @@ public class SuSyRecipeMaps {
             new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.ARC);
 
+    public static final RecipeMap<SimpleRecipeBuilder> WIRE_BONDING = new RecipeMap<>("wire_bonding", 2, 1, 1, 0,
+            new SimpleRecipeBuilder(), false);
+
     static {
         GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()
                 .fluidInputs(SusyMaterials.RefractoryGunningMixture.getFluid(50 *
