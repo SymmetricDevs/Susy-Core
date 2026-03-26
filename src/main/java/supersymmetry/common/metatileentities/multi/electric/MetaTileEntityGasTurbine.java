@@ -2,9 +2,11 @@ package supersymmetry.common.metatileentities.multi.electric;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
 
+import gregtech.api.GTValues;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
@@ -23,6 +25,8 @@ public class MetaTileEntityGasTurbine extends MetaTileEntitySUSYLargeTurbine {
                                     ICubeRenderer casingRenderer, ICubeRenderer frontOverlay) {
         super(metaTileEntityId, recipeMap, tier, maxSpeed, accel, decel, casingState, rotorState, casingRenderer,
                 frontOverlay);
+        this.recipeMapWorkable = new GasTurbineRecipeLogic(this);
+        this.recipeMapWorkable.setMaximumOverclockVoltage(GTValues.V[tier]);
     }
 
     @Override
@@ -60,5 +64,51 @@ public class MetaTileEntityGasTurbine extends MetaTileEntitySUSYLargeTurbine {
                                 .getState(BlockMultiblockCasing.MultiblockCasingType.ENGINE_INTAKE_CASING)))
                 .where(' ', any())
                 .build();
+    }
+
+    public class GasTurbineRecipeLogic extends SuSyTurbineRecipeLogic {
+
+        public GasTurbineRecipeLogic(MetaTileEntityGasTurbine tileEntity) {
+            super(tileEntity);
+        }
+
+        @Override
+        protected void outputRecipeOutputs() {
+            // The super call just outputs items + fluids. Turbines have no item output,
+            // and for Flue we have to only output the remainder.
+            int remainder = getMaxProgress() % 20;
+            int remainingFlue = (int) (fluePerSecond() * (remainder / 20.0));
+            outputFlue(remainingFlue);
+        }
+
+        @Override
+        protected void updateRecipeProgress() {
+            if (canRecipeProgress && drawEnergy(recipeEUt, true)) {
+                // as recipe starts with progress on 1 this has to be > only not => to compensate for it
+                if (++progressTime > getMaxProgress()) {
+                    completeRecipe();
+                    return;
+                }
+                if (progressTime % 20 == 0) {
+                    outputFlue(fluePerSecond());
+                }
+            }
+        }
+
+        private int fluePerSecond() {
+            if (fluidOutputs.isEmpty()) {
+                return 0;
+            }
+            return 20 * fluidOutputs.getFirst().amount / getMaxProgress();
+        }
+
+        private void outputFlue(int amount) {
+            if (amount <= 0) {
+                return;
+            }
+            FluidStack flueStack = fluidOutputs.getFirst().copy();
+            flueStack.amount = amount;
+            getOutputTank().fill(flueStack, true);
+        }
     }
 }

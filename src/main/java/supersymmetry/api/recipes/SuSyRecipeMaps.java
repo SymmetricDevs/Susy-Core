@@ -57,7 +57,7 @@ public class SuSyRecipeMaps {
                     .setSound(GTSoundEvents.CENTRIFUGE);
 
     public static final RecipeMap<CatalystRecipeBuilder> CSTR_RECIPES = new RecipeMap<>(
-            "continuous_stirred_tank_reactor", 1, 0, 4, 2, new CatalystRecipeBuilder(), false)
+            "continuous_stirred_tank_reactor", 2, 0, 4, 2, new CatalystRecipeBuilder(), false)
                     .setSlotOverlay(false, true, false, GuiTextures.MOLECULAR_OVERLAY_3)
                     .setSlotOverlay(false, true, true, GuiTextures.MOLECULAR_OVERLAY_4)
                     .setSlotOverlay(true, true, GuiTextures.VIAL_OVERLAY_2)
@@ -410,7 +410,7 @@ public class SuSyRecipeMaps {
                     .setSlotOverlay(true, false, GuiTextures.FURNACE_OVERLAY_2)
                     .setSound(GTSoundEvents.FURNACE);
 
-    public static final RecipeMap<SimpleRecipeBuilder> SCRAP_RECYCLER = new RecipeMap<>("scrap_recycler", 1, 9, 0, 0,
+    public static final RecipeMap<SimpleRecipeBuilder> SCRAP_RECYCLER = new RecipeMap<>("scrap_recycler", 2, 9, 0, 3,
             new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.ASSEMBLER);
 
@@ -499,8 +499,8 @@ public class SuSyRecipeMaps {
             6, 2, 0, 1, new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.FURNACE);
 
-    public static final RecipeMap<SimpleRecipeBuilder> SALVAGING_RECIPES = new RecipeMap<>("salvaging", 1, 9, 0, 0,
-            new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<NoEnergyRecipeBuilder> SALVAGING_RECIPES = new RecipeMap<>("salvaging", 1, 9, 0, 0,
+            new NoEnergyRecipeBuilder(), false)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_RECYCLER, ProgressWidget.MoveType.HORIZONTAL)
                     .setSlotOverlay(true, false, GuiTextures.BOXED_OVERLAY);
 
