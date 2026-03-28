@@ -1,5 +1,7 @@
 package supersymmetry.common.entities;
 
+import java.util.Random;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,10 +12,9 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import supersymmetry.api.util.FisherPlane;
 import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
-
-import java.util.Random;
 
 public class EntityExplosion extends Entity {
 
@@ -40,20 +41,18 @@ public class EntityExplosion extends Entity {
         this.power = power;
     }
 
-
     @Override
-    protected void entityInit() {
-
-    }
+    protected void entityInit() {}
 
     @Override
     public double getDistanceSq(Entity entity) {
-        return (this.posX - entity.posX)*(this.posX - entity.posX) + (this.posY - entity.posY)*(this.posY - entity.posY) + (this.posZ - entity.posZ)*(this.posZ - entity.posZ);
+        return (this.posX - entity.posX) * (this.posX - entity.posX) +
+                (this.posY - entity.posY) * (this.posY - entity.posY) +
+                (this.posZ - entity.posZ) * (this.posZ - entity.posZ);
     }
 
     @Override
     public void onUpdate() {
-
         super.onUpdate();
 
         if (this.ticksExisted == 1) {
@@ -71,14 +70,13 @@ public class EntityExplosion extends Entity {
         } else if (this.ticksExisted >= 4 + delay && this.ticksExisted <= 14 + delay && world.isRemote) {
             for (EntityPlayer player : world.playerEntities) {
                 if (player != null && getDistanceSq(player) < 1024) {
-                    player.rotationPitch += 1.25f*(rnd.nextFloat() - 0.5f);
-                    player.rotationYaw += 1.25f*(rnd.nextFloat() - 0.5f);
+                    player.rotationPitch += 1.25f * (rnd.nextFloat() - 0.5f);
+                    player.rotationYaw += 1.25f * (rnd.nextFloat() - 0.5f);
                 }
             }
         } else if (this.ticksExisted == 15 + delay) {
             this.setDead();
         }
-
     }
 
     protected void explode() {
@@ -104,14 +102,14 @@ public class EntityExplosion extends Entity {
                     this.posZ + this.power * (rnd.nextFloat() - 0.5) * 0.5,
                     v0scaled * (this.fisherNormal.x + 0.5 * (rnd.nextFloat() - 0.5)),
                     v0scaled * (this.fisherNormal.y + 0.5 * (rnd.nextFloat() - 0.5)),
-                    v0scaled * (this.fisherNormal.z + 0.5 * (rnd.nextFloat() - 0.5))
-            );
+                    v0scaled * (this.fisherNormal.z + 0.5 * (rnd.nextFloat() - 0.5)));
             Minecraft.getMinecraft().effectRenderer.addEffect(smoke);
         }
     }
 
     protected void fillGrid() {
-        BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos((int)this.posX - power, (int)this.posY - power, (int)this.posZ - power);
+        BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos((int) this.posX - power, (int) this.posY - power,
+                (int) this.posZ - power);
         int d = 2 * power;
         for (int i = 0; i < d; i++) {
             for (int j = 0; j < d; j++) {
@@ -124,12 +122,8 @@ public class EntityExplosion extends Entity {
     }
 
     @Override
-    protected void readEntityFromNBT(NBTTagCompound compound) {
-
-    }
+    protected void readEntityFromNBT(NBTTagCompound compound) {}
 
     @Override
-    protected void writeEntityToNBT(NBTTagCompound compound) {
-
-    }
+    protected void writeEntityToNBT(NBTTagCompound compound) {}
 }
