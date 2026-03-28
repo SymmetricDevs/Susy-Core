@@ -5,13 +5,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.util.FisherPlane;
 import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
 
@@ -28,14 +26,6 @@ public class EntityExplosion extends Entity {
     public EntityExplosion(World worldIn) {
         super(worldIn);
         this.power = 5;
-        this.setEntityBoundingBox(new AxisAlignedBB(
-                this.posX - 3 * this.power,
-                this.posY - 3 * this.power,
-                this.posZ - 3 * this.power,
-                this.posX + 3 * this.power,
-                this.posY + 3 * this.power,
-                this.posZ + 3 * this.power
-        ));
     }
 
     public EntityExplosion(World worldIn, double x, double y, double z) {
@@ -51,14 +41,7 @@ public class EntityExplosion extends Entity {
 
     @Override
     protected void entityInit() {
-        this.setEntityBoundingBox(new AxisAlignedBB(
-                this.posX - 3 * this.power,
-                this.posY - 3 * this.power,
-                this.posZ - 3 * this.power,
-                this.posX + 3 * this.power,
-                this.posY + 3 * this.power,
-                this.posZ + 3 * this.power
-        ));
+
     }
 
     @Override
@@ -69,17 +52,14 @@ public class EntityExplosion extends Entity {
         if (this.ticksExisted == 1) {
             this.grid = new boolean[2 * this.power][2 * this.power][2 * this.power];
         } else if (this.ticksExisted == 2) {
-            //SusyLog.logger.info("Filling grid");
             fillGrid();
         } else if (this.ticksExisted == 3) {
-            //SusyLog.logger.info("Computing fisher");
             this.fisherNormal = FisherPlane.fisherNormal(grid);
-            //SusyLog.logger.info(fisherNormal);
         } else if (this.ticksExisted == 100) {
-            //SusyLog.logger.info("Boom");
-            explode();
             if (world.isRemote) {
                 spawnExplosionParticles();
+            } else {
+                explode();
             }
         } else if (this.ticksExisted >= 100 && this.ticksExisted <= 110 && world.isRemote) {
             for (EntityPlayer player : world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox())) {
@@ -123,15 +103,10 @@ public class EntityExplosion extends Entity {
     protected void fillGrid() {
         BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos((int)this.posX - power, (int)this.posY - power, (int)this.posZ - power);
         int d = 2 * power;
-        //SusyLog.logger.info(d);
-        //SusyLog.logger.info(grid.length);
         for (int i = 0; i < d; i++) {
             for (int j = 0; j < d; j++) {
                 for (int k = 0; k < d; k++) {
                     BlockPos newPos = p.add(i, j, k);
-                    //SusyLog.logger.info(i);
-                    //SusyLog.logger.info(j);
-                    //SusyLog.logger.info(k);
                     grid[i][j][k] = world.getBlockState(newPos) == Blocks.AIR.getDefaultState();
                 }
             }
