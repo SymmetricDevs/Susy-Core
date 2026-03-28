@@ -1417,6 +1417,7 @@ susy.machine.steam_boiler_liquid.bronze.name=Small Steam Liquid Boiler
 susy.machine.steam_boiler_liquid.bronze.tooltip=A Boiler running off Liquids
 susy.machine.steam_boiler_liquid.steel.name=High Pressure Steam Liquid Boiler
 susy.machine.steam_boiler_liquid.steel.tooltip=Faster than Small Steam Liquid Boiler
+susy.machine.steam_limited.ulv_only.tooltip=Can only run recipes up to 8 EU/t
 
 #Fake Wool
 tile.fake_wool.whitefakewool.name=White Asbestos Fiber
