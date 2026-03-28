@@ -14,6 +14,7 @@ import supersymmetry.api.util.FisherPlane;
 import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
 
 import java.util.Random;
+import java.util.function.Predicate;
 
 public class EntityExplosion extends Entity {
 
@@ -45,6 +46,11 @@ public class EntityExplosion extends Entity {
     }
 
     @Override
+    public double getDistanceSq(Entity entity) {
+        return (this.posX - entity.posX)*(this.posX - entity.posX) + (this.posY - entity.posY)*(this.posY - entity.posY) + (this.posZ - entity.posZ)*(this.posZ - entity.posZ);
+    }
+
+    @Override
     public void onUpdate() {
 
         super.onUpdate();
@@ -62,9 +68,11 @@ public class EntityExplosion extends Entity {
                 explode();
             }
         } else if (this.ticksExisted >= 100 && this.ticksExisted <= 110 && world.isRemote) {
-            for (EntityPlayer player : world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox())) {
-                player.rotationPitch += (rnd.nextFloat() - 0.5f);
-                player.rotationYaw += (rnd.nextFloat() - 0.5f);
+            for (EntityPlayer player : world.playerEntities) {
+                if (player != null && getDistanceSq(player) < 1024) {
+                    player.rotationPitch += 1.25f*(rnd.nextFloat() - 0.5f);
+                    player.rotationYaw += 1.25f*(rnd.nextFloat() - 0.5f);
+                }
             }
         } else if (this.ticksExisted == 111) {
             this.setDead();
