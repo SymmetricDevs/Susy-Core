@@ -14,7 +14,6 @@ import supersymmetry.api.util.FisherPlane;
 import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
 
 import java.util.Random;
-import java.util.function.Predicate;
 
 public class EntityExplosion extends Entity {
 
@@ -23,6 +22,8 @@ public class EntityExplosion extends Entity {
     private Vec3d fisherNormal;
     private static final Random rnd = new Random();
     private static final double v0 = 1d;
+
+    private static final int delay = 0;
 
     public EntityExplosion(World worldIn) {
         super(worldIn);
@@ -61,27 +62,27 @@ public class EntityExplosion extends Entity {
             fillGrid();
         } else if (this.ticksExisted == 3) {
             this.fisherNormal = FisherPlane.fisherNormal(grid);
-        } else if (this.ticksExisted == 100) {
+        } else if (this.ticksExisted == 4 + delay) {
             if (world.isRemote) {
                 spawnExplosionParticles();
             } else {
                 explode();
             }
-        } else if (this.ticksExisted >= 100 && this.ticksExisted <= 110 && world.isRemote) {
+        } else if (this.ticksExisted >= 4 + delay && this.ticksExisted <= 14 + delay && world.isRemote) {
             for (EntityPlayer player : world.playerEntities) {
                 if (player != null && getDistanceSq(player) < 1024) {
                     player.rotationPitch += 1.25f*(rnd.nextFloat() - 0.5f);
                     player.rotationYaw += 1.25f*(rnd.nextFloat() - 0.5f);
                 }
             }
-        } else if (this.ticksExisted == 111) {
+        } else if (this.ticksExisted == 15 + delay) {
             this.setDead();
         }
 
     }
 
     protected void explode() {
-        this.world.createExplosion(null, this.posX, this.posY, this.posZ, 5f, true);
+        this.world.createExplosion(null, this.posX, this.posY, this.posZ, this.power, true);
     }
 
     @SideOnly(Side.CLIENT)
@@ -93,8 +94,9 @@ public class EntityExplosion extends Entity {
     @SideOnly(Side.CLIENT)
     protected void spawnExplosionParticles() {
         double v0scaled;
-        for (int i = 0; i < 25; i++) {
-            v0scaled = v0 * rnd.nextFloat() * 2f;
+        int powerSq = this.power * this.power;
+        for (int i = 0; i < powerSq; i++) {
+            v0scaled = v0 * rnd.nextFloat() * 1.5f;
             SusyParticleSmokeLarge smoke = new SusyParticleSmokeLarge(
                     this.world,
                     this.posX + this.power * (rnd.nextFloat() - 0.5) * 0.5,
