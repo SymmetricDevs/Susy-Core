@@ -84,6 +84,10 @@ public class RenderableCelestialObject {
         return cubemap;
     }
 
+    public float getAngularSizeDeg() {
+        return angularSizeDeg;
+    }
+
     public boolean ensureLoaded() {
         return ensureLoadedInternal();
     }
@@ -157,7 +161,7 @@ public class RenderableCelestialObject {
                     float angleDeg = (float) Math.toDegrees(Math.atan2(sinA, cosA));
                     GL11.glRotatef(angleDeg, crossX / sinA, crossY / sinA, 0f);
                 } else if (cosA < 0) {
-                    // Already pointing away - rotate 180 around X
+                    // Already pointing away, rotate 180 around X
                     GL11.glRotatef(180f, 1f, 0f, 0f);
                 }
             }

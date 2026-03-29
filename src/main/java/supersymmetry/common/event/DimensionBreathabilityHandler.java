@@ -1,18 +1,19 @@
 package supersymmetry.common.event;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.DamageSource;
-import supersymmetry.api.space.CelestialObjects;
-import supersymmetry.api.util.SuSyDamageSources;
-import supersymmetry.common.item.SuSyArmorItem;
-import supersymmetry.common.world.atmosphere.AtmosphereWorldData;
+import static net.minecraft.inventory.EntityEquipmentSlot.HEAD;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static net.minecraft.inventory.EntityEquipmentSlot.HEAD;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.DamageSource;
+
+import supersymmetry.api.space.CelestialObjects;
+import supersymmetry.api.util.SuSyDamageSources;
+import supersymmetry.common.item.SuSyArmorItem;
+import supersymmetry.common.world.atmosphere.AtmosphereWorldData;
 
 public final class DimensionBreathabilityHandler {
 

@@ -28,9 +28,8 @@ public class FilteredTankWidget extends TankWidget {
                 if (itemHandler != null) {
                     FluidStack heldFluid = itemHandler.drain(Integer.MAX_VALUE, false);
                     if (heldFluid != null && heldFluid.amount > 0) {
-                        // Simulate: would the tank accept this fluid?
                         if (((IFluidHandler) fluidTank).fill(heldFluid, false) <= 0) {
-                            return false; // block the click entirely — no packet sent
+                            return false;
                         }
                     }
                 }
