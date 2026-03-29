@@ -31,7 +31,6 @@ import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.common.metatileentities.electric.MetaTileEntitySingleCombustion;
-import supersymmetry.api.capability.impl.SuSyFilteredFluidTank;
 import supersymmetry.api.capability.impl.SuSyFluidFilters;
 import supersymmetry.api.util.SuSyUtility;
 
@@ -75,13 +74,10 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
             displayedTanks[i] = filteredFluidHandler;
         }
 
-        this.lubricantTank = new SuSyFilteredFluidTank(1000, this, false)
+        this.lubricantTank = (SuSyFluidTankHandler) new SuSyFluidTankHandler(1000, this, false)
                 .setFilter(SuSyFluidFilters.LUBRICANT);
-        fluidImports[fluidImports.length - 2] = lubricantTank;
-
-        this.coolantTank = new SuSyFilteredFluidTank(1000, this, false)
+        this.coolantTank = (SuSyFluidTankHandler) new SuSyFluidTankHandler(1000, this, false)
                 .setFilter(SuSyFluidFilters.COOLANT);
-        fluidImports[fluidImports.length - 1] = coolantTank;
 
         this.displayedTankList = new FluidTankList(false, displayedTanks);
         return new FluidTankList(false, fluidImports);
@@ -142,11 +138,11 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
         builder.widget(new TankWidget(lubricantTank, 110, 21, 10, 54)
                 .setBackgroundTexture(GuiTextures.PROGRESS_BAR_BOILER_EMPTY.get(true))
                 .setAlwaysShowFull(false)
-                .setContainerClicking(true, true));  // Filter should prevent wrong fluids
-        builder.widget(new TankWidget(coolantTank, 124, 21, 10, 54)
+                .setContainerClicking(true, true));  // both directions, filter guards filling
+        builder.widget(new FilteredTankWidget(coolantTank, 124, 21, 10, 54)
                 .setBackgroundTexture(GuiTextures.PROGRESS_BAR_BOILER_EMPTY.get(true))
                 .setAlwaysShowFull(false)
-                .setContainerClicking(true, true));  // Filter should prevent wrong fluids
+                .setContainerClicking(true, true));
         builder.widget(new ImageWidget(152, 63 + yOffset, 17, 17,
                 GTValues.XMAS.get() ? GuiTextures.GREGTECH_LOGO_XMAS : GuiTextures.GREGTECH_LOGO)
                         .setIgnoreColor(true));

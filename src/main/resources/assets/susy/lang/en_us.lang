@@ -1546,3 +1546,18 @@ metatileentity.susy.large_railroad_engineering_station.name=Large Railroad Engin
 metatileentity.susy.large_railroad_engineering_station.description=A massive facility for constructing and maintaining railroad rolling stock
 metatileentity.susy.large_railroad_engineering_station.tooltip=Used to build and service trains
 large_railroad_engineering_station.name=Large Railroad Engineering Station
+
+#BMRF blocks
+tile.bmrf_blocks.bmrf1.name=BMRF-1
+tile.bmrf_blocks.bmrf2.name=BMRF-2
+tile.bmrf_blocks.bmrf3.name=BMRF-3
+tile.bmrf_blocks.bmrf4.name=BMRF-4
+tile.bmrf_blocks.bmrf5.name=BMRF-5
+tile.bmrf_blocks.bmrf6.name=BMRF-6
+tile.bmrf_blocks.bmrf7.name=BMRF-7
+tile.bmrf_blocks.bmrf8.name=BMRF-8
+tile.bmrf_blocks.bmrf9.name=BMRF-9
+
+# Advancements
+gregtech.advancement.extreme_voltage.rocket_launch.name=Hopefully It Doesn't Crash :)
+gregtech.advancement.extreme_voltage.rocket_launch.desc=Get in a launching rocket.
