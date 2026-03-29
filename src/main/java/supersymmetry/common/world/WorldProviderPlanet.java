@@ -11,12 +11,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import supersymmetry.api.space.RenderableCelestialObject;
 import supersymmetry.common.world.sky.SkyColorData;
-import supersymmetry.common.world.sky.SkyRenderData;
 
 public class WorldProviderPlanet extends WorldProvider {
 
-    private long TICKS_PER_DAY = 24000L; // the maximum for a long (signed 64 bit) is 2^63
+    private long TICKS_PER_DAY = 24000L;
 
     public void setTicksPerDay(long ticksPerDay) {
         this.TICKS_PER_DAY = ticksPerDay;
@@ -118,7 +118,6 @@ public class WorldProviderPlanet extends WorldProvider {
 
     @Override
     public boolean isDaytime() {
-        // During eclipse, it's night (mobs spawn, beds work, etc)
         if (isEclipse(0.0f)) {
             return false;
         }
@@ -138,7 +137,6 @@ public class WorldProviderPlanet extends WorldProvider {
             float angle = ((float) dayPart + partialTicks) / (float) TICKS_PER_DAY;
             angle = angle - (float) Math.floor(angle);
             angle = (angle + planet.getTimeOffset()) % 1.0F;
-
             return angle;
         }
         return world.getCelestialAngle(partialTicks);
@@ -149,79 +147,55 @@ public class WorldProviderPlanet extends WorldProvider {
         if (planet == null || !planet.hasCustomSky()) return false;
 
         SuSySkyRenderer renderer = planet.getSuSySkyRenderer();
-        SkyRenderData sun = renderer.getSun();
-        SkyRenderData earth = renderer.getObjectAtZenith();
+        if (renderer == null) return false;
 
-        if (sun == null || earth == null) return false;
+        RenderableCelestialObject sun = renderer.getSunObject();
+        RenderableCelestialObject primaryBody = renderer.getPrimaryBody(); // Earth on the Moon
 
-        // Check if sun has orbital inclination configured
-        if (sun.getNodalPeriodLength() <= 0) return false;
+        if (sun == null || primaryBody == null) return false;
 
         long worldTime = world.getWorldTime();
 
-        // Get current orbital inclination (how far north/south the sun's path is)
-        float currentInclination = sun.getCurrentInclination(worldTime);
+        float[] sunDir = sun.getWorldDirection(worldTime);
+        float eclipseThresholdY = 0.035f;
 
-        // Eclipse can only occur when the orbital plane crosses the zenith
-        // This means the inclination must be near zero (within eclipse threshold)
-        float eclipseThreshold = 2.0f; // degrees - tune this for eclipse frequency
-
-        if (Math.abs(currentInclination) > eclipseThreshold) {
+        if (Math.abs(sunDir[1]) > eclipseThresholdY) {
             return false; // Not in eclipse season
         }
 
-        // Now check if sun is at zenith (same position as Earth)
-        // With timeOffset=0.25, when worldTime=0, celestialAngle should be 0.25
         float celestialAngle = realCelestialAngle(worldTime, partialTicks);
-
-        // Zenith is at 0.25
         float angleFromZenith = Math.abs(celestialAngle - 0.25f);
+        if (angleFromZenith > 0.5f) angleFromZenith = 1.0f - angleFromZenith;
 
-        // Handle wrap-around
-        if (angleFromZenith > 0.5f) {
-            angleFromZenith = 1.0f - angleFromZenith;
-        }
-
-        // Convert to degrees
         float angleInDegrees = angleFromZenith * 360.0f;
 
-        // Eclipse occurs when sun is within Earth's angular radius
-        float earthAngularRadius = earth.getSize() / 3.0f;
+        // Half the angular diameter == angular radius
+        float bodyAngularRadius = primaryBody.getAngularSizeDeg() / 2.0f;
 
-        return angleInDegrees < earthAngularRadius;
+        return angleInDegrees < bodyAngularRadius;
     }
 
     @Override
     public float getSunBrightnessFactor(float partialTicks) {
-        if (isEclipse(partialTicks)) {
-            return 0.0f;
-        }
+        if (isEclipse(partialTicks)) return 0.0f;
         return super.getSunBrightnessFactor(partialTicks);
     }
 
     @Override
     public float getSunBrightness(float partialTicks) {
-        if (isEclipse(partialTicks)) {
-            return 0.0f;
-        }
+        if (isEclipse(partialTicks)) return 0.0f;
         return super.getSunBrightness(partialTicks);
     }
 
     @Override
     public float getStarBrightness(float partialTicks) {
-        // Show stars during eclipse
-        if (isEclipse(partialTicks)) {
-            return 1.0f;
-        }
+        if (isEclipse(partialTicks)) return 1.0f;
         return super.getStarBrightness(partialTicks);
     }
 
     @Override
     public float getCurrentMoonPhaseFactor() {
-        // During eclipse, return 1.0 to maximize darkness
-        if (isEclipse(0.0f)) {
-            return 1.0f;
-        }
+        if (isEclipse(0.0f)) return 1.0f;
         return 0.25f; // Normal Moon lighting (no actual moon)
     }
 
@@ -234,12 +208,9 @@ public class WorldProviderPlanet extends WorldProvider {
     public float calculateCelestialAngle(long worldTime, float partialTicks) {
         PlanetoidHandler planet = getPlanet();
         if (planet != null) {
-            // During eclipse, trick Minecraft into thinking it's night
             if (isEclipse(partialTicks)) {
-                // Return an angle that corresponds to midnight (0.75)
-                return 0.75f;
+                return 0.75f; // Trick Minecraft into treating it as midnight
             }
-
             if (planet.getDayLength() > 0) {
                 float dayLengthMultiplier = planet.getDayLength();
                 long adjustedTime = (long) (worldTime / dayLengthMultiplier);
