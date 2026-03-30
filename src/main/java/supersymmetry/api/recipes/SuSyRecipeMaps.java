@@ -78,7 +78,7 @@ public class SuSyRecipeMaps {
                     .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
     public static final RecipeMap<CatalystRecipeBuilder> BUBBLE_COLUMN_REACTOR_RECIPES = new RecipeMap<>(
-            "bubble_column_reactor", 1, 0, 3, 2, new CatalystRecipeBuilder(), false)
+            "bubble_column_reactor", 1, 1, 3, 2, new CatalystRecipeBuilder(), false)
                     .setSlotOverlay(false, false, SusyGuiTextures.LARGE_REACTOR_ITEM_OVERLAY)
                     .setSlotOverlay(false, true, GuiTextures.MOLECULAR_OVERLAY_3)
                     .setSlotOverlay(true, true, GuiTextures.MOLECULAR_OVERLAY_3)
@@ -114,14 +114,14 @@ public class SuSyRecipeMaps {
                     .setSlotOverlay(true, true, true, GuiTextures.MOLECULAR_OVERLAY_4)
                     .setSound(GTSoundEvents.BATH);
 
-    public static final RecipeMap<SimpleRecipeBuilder> ZONE_REFINER_RECIPES = new RecipeMap<>("zone_refiner", 1, 1, 0,
+    public static final RecipeMap<SimpleRecipeBuilder> ZONE_REFINER_RECIPES = new RecipeMap<>("zone_refiner", 3, 1, 2,
             0, new SimpleRecipeBuilder(), false)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_CRYSTALLIZATION, ProgressWidget.MoveType.HORIZONTAL)
                     .setSlotOverlay(false, false, true, GuiTextures.FURNACE_OVERLAY_1)
                     .setSlotOverlay(true, false, true, GuiTextures.CRYSTAL_OVERLAY)
                     .setSound(GTSoundEvents.FURNACE);
 
-    public static final RecipeMap<SimpleRecipeBuilder> TUBE_FURNACE_RECIPES = new RecipeMap<>("tube_furnace", 6, 1, 1,
+    public static final RecipeMap<SimpleRecipeBuilder> TUBE_FURNACE_RECIPES = new RecipeMap<>("tube_furnace", 6, 1, 3,
             1, new SimpleRecipeBuilder(), false)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
                     .setSlotOverlay(false, false, false, GuiTextures.FURNACE_OVERLAY_1)
@@ -512,15 +512,11 @@ public class SuSyRecipeMaps {
             new PrimitiveRecipeBuilder(), false)
                     .setSound(GTSoundEvents.FURNACE);
 
-    public static final RecipeMap<SimpleRecipeBuilder> SPUTTERER = new RecipeMap<>("sputtering", 2, 2, 0, 0,
-            new SimpleRecipeBuilder(), false)
-                    .setSound(GTSoundEvents.ARC);
-
     public static final RecipeMap<SimpleRecipeBuilder> RIE = new RecipeMap<>("reactive_ion_etching", 1, 1, 1, 0,
             new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.ARC);
 
-    public static final RecipeMap<SimpleRecipeBuilder> RESIST_PROCESSOR = new RecipeMap<>("resist_processing", 1, 1, 2,
+    public static final RecipeMap<SimpleRecipeBuilder> RESIST_PROCESSOR = new RecipeMap<>("resist_processing", 1, 1, 3,
             0,
             new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.CENTRIFUGE); // because it spins
