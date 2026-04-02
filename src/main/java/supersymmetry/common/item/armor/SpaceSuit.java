@@ -1,12 +1,6 @@
 package supersymmetry.common.item.armor;
 
-import static net.minecraft.inventory.EntityEquipmentSlot.*;
-import static supersymmetry.api.util.SuSyUtility.susyId;
-import static supersymmetry.common.event.DimensionBreathabilityHandler.ABSORB_ALL;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import gregtech.api.damagesources.DamageSources;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
@@ -20,16 +14,23 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ISpecialArmor;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import gregtech.api.damagesources.DamageSources;
-import supersymmetry.client.renderer.handler.BreathingApparatusModel;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
+import supersymmetry.api.items.IGeoMetaArmor;
+import supersymmetry.client.renderer.handler.GeoMetaArmorRenderer;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.item.SuSyArmorItem;
 
-public class SpaceSuit extends BreathingApparatus {
+import java.util.Collections;
+import java.util.List;
+
+import static net.minecraft.inventory.EntityEquipmentSlot.*;
+import static supersymmetry.api.util.SuSyUtility.susyId;
+import static supersymmetry.common.event.DimensionBreathabilityHandler.ABSORB_ALL;
+
+public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
 
     private final double hoursOfLife;
     private final String name;
@@ -37,6 +38,7 @@ public class SpaceSuit extends BreathingApparatus {
     private final double relativeAbsorption;
 
     private static final double DEFAULT_ABSORPTION = 0;
+    private AnimationFactory factory;
 
     public SpaceSuit(EntityEquipmentSlot slot, int maxDurability, double hoursOfLife, String name, int tier,
                      double relativeAbsorption) {
@@ -49,16 +51,47 @@ public class SpaceSuit extends BreathingApparatus {
 
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-        return "susy:textures/armor/" + name + "_" + slot.getName() + ".png";
+        return textureRL().toString();
     }
 
+    @Nullable
     @SideOnly(Side.CLIENT)
     @Override
-    public @Nullable ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack,
-                                              EntityEquipmentSlot armorSlot, ModelBiped defaultModel) {
-        if (model == null)
-            model = new BreathingApparatusModel(name, armorSlot);
-        return model;
+    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack,
+                                    EntityEquipmentSlot armorSlot, ModelBiped defaultModel) {
+        return GeoMetaArmorRenderer.INSTANCE
+                .setCurrentItem(entityLiving, itemStack, armorSlot)
+                .applyEntityStats(defaultModel)
+                .applySlot(armorSlot);
+    }
+
+    @Override
+    public List<ResourceLocation> getTextureLocations() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public void registerControllers(AnimationData data) {
+        /* Do nothing */
+    }
+
+    @Override
+    public AnimationFactory getFactory() {
+        if (this.factory == null) {
+            this.factory = new AnimationFactory(this);
+        }
+        return this.factory;
+    }
+
+    @Override
+    public String getGeoName() {
+        return name + "_armor";
+    }
+
+    // No animation needed
+    @Override
+    public ResourceLocation animationRL() {
+        return susyId("animations/dummy.animation.json");
     }
 
     @Override
@@ -210,11 +243,4 @@ public class SpaceSuit extends BreathingApparatus {
         return (int) Math.round(20.0F * this.getAbsorption(armor) * relativeAbsorption);
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public List<ResourceLocation> getTextureLocations() {
-        List<ResourceLocation> models = new ArrayList<>();
-        models.add(susyId("armor/" + name + "_" + this.SLOT.toString()));
-        return models;
-    }
 }

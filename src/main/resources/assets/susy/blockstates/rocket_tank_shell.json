@@ -1,11 +1,77 @@
 {
-	"variants": 	{
-    "normal,variant=al_2219": { "model": "susy:rocket_struct/rockethulltile" },
-    "facing=north,variant=al_2219": { "model": "susy:rocket_struct/rockethulltile", "x": 90 },
-    "facing=south,variant=al_2219": {  "model": "susy:rocket_struct/rockethulltile", "x": 90, "y": 180 },
-    "facing=west,variant=al_2219":  { "model": "susy:rocket_struct/rockethulltile", "x": 90, "y": 270 },
-    "facing=east,variant=al_2219":  { "model": "susy:rocket_struct/rockethulltile", "x": 90, "y": 90 },
-    "facing=up,variant=al_2219":  { "model": "susy:rocket_struct/rockethulltile" },
-    "facing=down,variant=al_2219":  { "model": "susy:rocket_struct/rockethulltile", "x": 180  }
+  "variants" : {
+    "normal,variant=al_2219" : {
+      "model" : "susy:rocket_struct/rockethulltile"
+    },
+    "facing=north,variant=al_2219" : {
+      "model" : "susy:rocket_struct/rockethulltile",
+      "x" : 90
+    },
+    "facing=south,variant=al_2219" : {
+      "model" : "susy:rocket_struct/rockethulltile",
+      "x" : 90,
+      "y" : 180
+    },
+    "facing=west,variant=al_2219" : {
+      "model" : "susy:rocket_struct/rockethulltile",
+      "x" : 90,
+      "y" : 270
+    },
+    "facing=east,variant=al_2219" : {
+      "model" : "susy:rocket_struct/rockethulltile",
+      "x" : 90,
+      "y" : 90
+    },
+    "facing=up,variant=al_2219" : {
+      "model" : "susy:rocket_struct/rockethulltile"
+    },
+    "facing=down,variant=al_2219" : {
+      "model" : "susy:rocket_struct/rockethulltile",
+      "x" : 180
+    },
+    "facing=north,variant=steel" : {
+      "model" : "susy:rocket_struct/rockethulltile",
+      "x" : 90,
+      "textures" : {
+        "0" : "gregtech:blocks/rocketry/struct/rockethulltilesteel"
+      }
+    },
+    "facing=south,variant=steel" : {
+      "model" : "susy:rocket_struct/rockethulltile",
+      "x" : 90,
+      "y" : 180,
+      "textures" : {
+        "0" : "gregtech:blocks/rocketry/struct/rockethulltilesteel"
+      }
+    },
+    "facing=west,variant=steel" : {
+      "model" : "susy:rocket_struct/rockethulltile",
+      "x" : 90,
+      "y" : 270,
+      "textures" : {
+        "0" : "gregtech:blocks/rocketry/struct/rockethulltilesteel"
+      }
+    },
+    "facing=east,variant=steel" : {
+      "model" : "susy:rocket_struct/rockethulltile",
+      "x" : 90,
+      "y" : 90,
+      "textures" : {
+        "0" : "gregtech:blocks/rocketry/struct/rockethulltilesteel"
+      }
+    },
+    "facing=up,variant=steel" : {
+      "model" : "susy:rocket_struct/rockethulltile",
+      "textures" : {
+        "0" : "gregtech:blocks/rocketry/struct/rockethulltilesteel"
+      }
+    },
+    "facing=down,variant=steel" : {
+      "model" : "susy:rocket_struct/rockethulltile",
+      "x" : 180,
+      "textures" : {
+        "0" : "gregtech:blocks/rocketry/struct/rockethulltilesteel"
+      }
+    }
   }
 }
