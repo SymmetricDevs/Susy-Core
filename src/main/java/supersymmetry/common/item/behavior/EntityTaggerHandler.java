@@ -24,7 +24,7 @@ public class EntityTaggerHandler {
     private static final String TAG_ROOT = "susy";
     private static final String TAG_FACTION = "faction";
     private static final String TAG_HATE = "hate";
-    private static final double radius = 128.0;
+    private static final double radius = 32;
 
     //right click on entity to add to faction (sets nbt tag)
     @SubscribeEvent
