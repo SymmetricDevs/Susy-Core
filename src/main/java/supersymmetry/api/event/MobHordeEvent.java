@@ -6,13 +6,9 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementManager;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
-import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTException;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -41,14 +37,11 @@ public class MobHordeEvent {
     private int maximumDistanceUnderground = -1;
     private boolean canUsePods = true;
     public String KEY;
-    private String ScriptNBTdata = "";
-    private String ScriptNBTdataOuter = "";
-    private static int dropPodCount = 0;
-    private String pattern = "";
-    private static double centerx = 0;
-    private static double centerz = 0;
-    private static Set<String> occupiedCoordinates = new HashSet<>();
-    private double ratio = 0.2;
+    private final List<Function<Double, Vec2>> patternFunctions = new ArrayList<>();
+    private boolean allignTheBlock = false;
+    private List<String> commandsOnLanding = new ArrayList<>();
+    private List<List<String>> commandsOnLandingPattern = new ArrayList<>();
+    private List<Double> distribution; //WIP
 
     public static final Map<String, MobHordeEvent> EVENTS = new HashMap<>();
 
@@ -80,48 +73,27 @@ public class MobHordeEvent {
         return this;
     }
 
-    public MobHordeEvent beScriptBlock(String NBTdata){
-        this.ScriptNBTdata = NBTdata;
-        return this;
-    }
-    public MobHordeEvent multiScriptBlockPlacement(String NBTdata,String NBTdata2){
-        this.ScriptNBTdata = NBTdata;
-        this.ScriptNBTdataOuter = NBTdata2;
-        return this;
-    }
-
-    public MobHordeEvent organisedSpawn(String pattern){
-        this.pattern = pattern;
-        return this;
-    }
-
-    public MobHordeEvent setRatio(double ratio){
-        this.ratio = ratio;
-        return this;
-    }
-
 
     public boolean run(EntityPlayer player) throws NBTException {
         MobHordeWorldData worldData = MobHordeWorldData.get(player.world);
         MobHordePlayerData playerData = worldData.getPlayerData(player.getPersistentID());
-        dropPodCount = 0;
-        occupiedCoordinates.clear();
         return run(player, playerData::addEntity);
     }
     public boolean run(EntityPlayer player, Consumer<UUID> uuidConsumer) throws NBTException {
-        dropPodCount = 0;
-        occupiedCoordinates.clear();
         int quantity = (int) (Math.random() * (quantityMax - quantityMin) + quantityMin);
+        System.out.println(quantity);
+        if (quantity <= 0) quantity = 1;
+
         boolean didSpawn = false;
+
         if (hasToBeUnderground(player) || !canUsePods) {
             for (int i = 0; i < quantity; i++) {
                 didSpawn |= spawnMobWithoutPod(player, uuidConsumer);
             }
         } else {
-            for (int i = 0; i < quantity; i++) {
-                didSpawn |= spawnMobWithPod(player, uuidConsumer);
-            }
+            didSpawn |= spawnMobWithPod(player, uuidConsumer, quantity);
         }
+
         return didSpawn;
     }
 
@@ -142,159 +114,170 @@ public class MobHordeEvent {
         return advManager.getAdvancement(location);
     }
 
-    public boolean spawnMobWithPod(EntityPlayer player, Consumer<UUID> uuidConsumer) throws NBTException {
-        EntityDropPod pod = new EntityDropPod(player.world);
-        pod.rotationYaw = (float) Math.random() * 360;
+    public MobHordeEvent runCommandOnLanding(String... commands) {
+        this.commandsOnLanding = Arrays.asList(commands);
+        return this;
+    }
 
-        if (this.ScriptNBTdata != ""){
+    public static List<String> addCommand(String... commands) {
+        return Arrays.asList(commands);
+    }
 
-            //there is probably a way to do this without copy-pasting stuff
-            IBlockState blockState = Blocks.REDSTONE_BLOCK.getDefaultState();
-            EntityFallingBlock mob = new EntityFallingBlock(player.world, 0,0,0, blockState);
-            EntityFallingBlock block = new EntityFallingBlock(player.world, 0, 0, 0, blockState);
-            EntityFallingBlock block2 = new EntityFallingBlock(player.world, 0, 0, 0, blockState);
+    //pattern handlers
+    // Pattern without commands (existing behavior)
+    public MobHordeEvent addPattern(Function<Double, Vec2> patternFunction) {
+        this.patternFunctions.add(patternFunction);
+        this.commandsOnLandingPattern.add(Collections.emptyList()); // keep list sizes aligned
+        return this;
+    }
+
+    // Pattern with a List<String> of commands
+    public MobHordeEvent addPattern(Function<Double, Vec2> patternFunction, List<String> commands) {
+        this.patternFunctions.add(patternFunction);
+        this.commandsOnLandingPattern.add(commands);
+        return this;
+    }
+
+    // Pattern with a single command shorthand
+    public MobHordeEvent addPattern(Function<Double, Vec2> patternFunction, String command) {
+        return addPattern(patternFunction, addCommand(command));
+    }
 
 
-            pod.CanExplode(false); //disable explosion so if things land close together they don't end up pushing the falling blocks
-            block.fallTime = 1;
-            block.shouldDropItem = false;
-            block2.fallTime = 1;
-            block2.shouldDropItem = false;
-            NBTTagCompound NBTtags;
+    public static class Vec2 {
+        public final double x;
+        public final double z;
+
+        public Vec2(double x, double z) {
+            this.x = x;
+            this.z = z;
+        }
+    }
+
+    public MobHordeEvent allignBlock() {
+        this.allignTheBlock = true;
+        return this;
+    }
+
+    public MobHordeEvent setDistribution(List<Double> distribution){ //WIP
+        this.distribution = distribution;
+        return this;
+    }
 
 
-            int R = 60;
-            double x = (int)(Math.floor(player.posX + Math.random() * R)); //default
-            double z = (int)(Math.floor(player.posZ + Math.random() * R)); //default
+    public boolean spawnMobWithPod(EntityPlayer player, Consumer<UUID> uuidConsumer, int quantity) {
 
+        boolean finishSpawning = false;
 
-            if (this.ScriptNBTdataOuter != "") {
-                if (dropPodCount < this.quantityMax * this.ratio){
-                    NBTtags = (NBTTagCompound) JsonToNBT.getTagFromJson(this.ScriptNBTdata);
-                }
-                else{
-                    NBTtags = (NBTTagCompound) JsonToNBT.getTagFromJson(this.ScriptNBTdataOuter);
-                }
+        int patternsCount = patternFunctions.size();
+        System.out.println("Patterns: " + patternsCount);
 
+        if (patternsCount == 0) {
+            // NO PATTERN normal spawn like before
+            for (int i = 0; i < quantity; i++) {
+                finishSpawning |= spawnMobWithoutPattern(player, uuidConsumer);
             }
-            else{
-                NBTtags = (NBTTagCompound) JsonToNBT.getTagFromJson(this.ScriptNBTdata);
+        } else {
+            // WITH PATTERNS new code
+            int baseQtyPerPattern = quantity / patternsCount;
+            int remainder = quantity % patternsCount;
+
+            Double offsetx = player.posX + (Math.random() - 0.5) * 60;
+            Double offsetz = player.posZ + (Math.random() - 0.5) * 60;
+
+            for (int i = 0; i < patternsCount; i++) {
+                int qtyForThisPattern = baseQtyPerPattern + (i < remainder ? 1 : 0);
+
+                List<String> commands = (i < commandsOnLandingPattern.size())
+                        ? commandsOnLandingPattern.get(i)
+                        : Collections.emptyList();
+
+                finishSpawning |= spawnMobWithPattern(
+                        player,
+                        uuidConsumer,
+                        qtyForThisPattern,
+                        patternFunctions.get(i),
+                        commands,
+                        offsetx,
+                        offsetz
+                );
             }
-            mob.readFromNBT(NBTtags);
-            mob.shouldDropItem = false;
+        }
 
-            if (dropPodCount == 0 && this.pattern != ""){
-                centerx = (int)(Math.floor(player.posX + 30 + Math.random() * R/2));
-                centerz = (int)(Math.floor(player.posZ + 30 + Math.random() * R/2));
-            }
-            dropPodCount++; //useless without pattern
+        return finishSpawning;
+    }
 
-            if (this.pattern != ""){
+    private boolean spawnMobWithPattern(EntityPlayer player, Consumer<UUID> uuidConsumer,
+                                        int quantity, Function<Double, Vec2> pattern,
+                                        List<String> commands, Double centerX, Double centerZ) {
+        boolean didSpawn = false;
 
-                switch(this.pattern){
-                    case "square":
-                        R = 50;
-                        if (dropPodCount < this.quantityMax * this.ratio) {
-                            double innerHalf = R / 6;
-                            boolean placed = false;
+        int spawned = 0;
+        Set<String> occupiedCoordinates = new HashSet<>();
 
-                            while (!placed) {
-                                x = centerx + (int) Math.floor((Math.random() * (2 * innerHalf)) - innerHalf);
-                                z = centerz + (int) Math.floor((Math.random() * (2 * innerHalf)) - innerHalf);
+        while (spawned < quantity) {
 
-                                boolean tooClose = false;
-                                for (String coord : occupiedCoordinates) {
-                                    String[] parts = coord.split(",");
-                                    int existingX = Integer.parseInt(parts[0]);
-                                    int existingZ = Integer.parseInt(parts[1]);
+            EntityDropPod pod = new EntityDropPod(player.world);
+            pod.rotationYaw = (float) (Math.random() * 360);
 
-                                    if (Math.abs(existingX - x) < 5 && Math.abs(existingZ - z) < 5) { //size of mortar is 5x5, therefore
-                                        tooClose = true;
-                                        break;
-                                    }
-                                }
+            // Combine global and pattern-specific commands
+            List<String> allCommands = new ArrayList<>();
+            allCommands.addAll(this.commandsOnLanding);
+            if (commands != null) allCommands.addAll(commands);
+            pod.setCommandsOnLanding(allCommands);
 
-                                if (!tooClose) {
-                                    occupiedCoordinates.add((int) x + "," + (int) z);
-                                    placed = true;
-                                }
-                            }
-                        } else {
-                            boolean placed = false;
-                            while (!placed) {
-                                x = (Math.random() < 0.5)
-                                        ? (int) (Math.floor(Math.random() * -R / 3) - R / 6)
-                                        : (int) (Math.floor(Math.random() * R / 3 + 1) + R / 6);
+            // t for pattern
+            double t = quantity == 1 ? 0.0 : ((double) spawned + 0.5) / quantity;
 
-                                z = (Math.random() < 0.5)
-                                        ? (int) (Math.floor(Math.random() * -R / 3) - R / 6)
-                                        : (int) (Math.floor(Math.random() * R / 3 + 1) + R / 6);
+            // pattern
+            Vec2 offset = pattern.apply(t);
+            double x = centerX + offset.x;
+            double y = 350 + Math.random() * 200;
+            double z = centerZ + offset.z;
 
-                                x += centerx;
-                                z += centerz;
-
-                                if (!occupiedCoordinates.contains(x + "," + z)) {
-                                    occupiedCoordinates.add((int) x + "," + (int) z);
-                                    placed = true;
-                                }
-                            }
-                        }
-
-                        break;
-                    default:
-                        System.out.println("UNRECOGNISED PATTERN, SCRAMBLING");
-                        break;
-                }
+            if (allignTheBlock) {
+                x = Math.floor(x) + 0.5;
+                z = Math.floor(z) + 0.5;
             }
 
-            x = x + 0.5;
-            z = z + 0.5;
-            int y = 256;
-            //double y = 350 + Math.random() * 200;
-            //has to be under 256 for now, otherwise this causes problems, and idk how to get rid of it :pain:
-            //if someone wants to undertake this sisyphean task, figure out a way to override onUpdate() in EntityFallingBlock
-            //and remove blockpos1.getY() > 256
-            /*
-                            if (!this.onGround && !flag1)
-                {
-                    if (this.fallTime > 100 && !this.world.isRemote && (blockpos1.getY() < 1 || blockpos1.getY() > 256) || this.fallTime > 600)
-                    {
-                        if (this.shouldDropItem && this.world.getGameRules().getBoolean("doEntityDrops"))
-                        {
-                            this.entityDropItem(new ItemStack(block, 1, block.damageDropped(this.fallTile)), 0.0F);
-                        }
-
-                        this.setDead();
-                    }
-                }
-             */
-
-            GTTeleporter teleporter = new GTTeleporter((WorldServer) player.world, x, y, z);
-            TeleportHandler.teleport(block, player.dimension, teleporter, x, y, z);
-            TeleportHandler.teleport(block2, player.dimension, teleporter, x, y, z);
-            TeleportHandler.teleport(mob, player.dimension, teleporter, x, y, z);
+            String key = ((int) Math.floor(x)) + "," + ((int) Math.floor(z));
+            if (occupiedCoordinates.contains(key)) continue;
+            occupiedCoordinates.add(key);
 
             pod.setPosition(x, y, z);
             player.world.spawnEntity(pod);
-            player.world.spawnEntity(mob);
-            player.world.spawnEntity(block);
-            player.world.spawnEntity(block2);
-            block2.startRiding(block, true);
-            block.startRiding(mob, true);
-            mob.startRiding(pod, true);
-            uuidConsumer.accept(mob.getUniqueID());
-            return true;
+
+            EntityLiving passenger = entitySupplier != null ? entitySupplier.apply(player) : null;
+            if (passenger != null) {
+                passenger.setPosition(x, y, z);
+                player.world.spawnEntity(passenger);
+                passenger.startRiding(pod, true);
+                passenger.onInitialSpawn(player.world.getDifficultyForLocation(new BlockPos(passenger)), null);
+                passenger.enablePersistence();
+                uuidConsumer.accept(passenger.getPersistentID());
+            } else {
+                uuidConsumer.accept(pod.getUniqueID());
+            }
+
+            didSpawn = true;
+            spawned++;
         }
 
+        return didSpawn;
+    }
+
+    //moved over bru's old code
+    private boolean spawnMobWithoutPattern(EntityPlayer player, Consumer<UUID> uuidConsumer) {
+        EntityDropPod pod = new EntityDropPod(player.world);
+        pod.rotationYaw = (float) Math.random() * 360;
         EntityLiving mob = entitySupplier.apply(player);
 
-        double x = player.posX + Math.random() * 60;
+        double x = player.posX + (Math.random() - 0.5) * 60;
         double y = 350 + Math.random() * 200;
-        double z = player.posZ + Math.random() * 60;
+        double z = player.posZ + (Math.random() - 0.5) * 60;
 
         GTTeleporter teleporter = new GTTeleporter((WorldServer) player.world, x, y, z);
         TeleportHandler.teleport(mob, player.dimension, teleporter, x, y, z);
-
 
         pod.setPosition(x, y, z);
         player.world.spawnEntity(pod);
@@ -369,5 +352,4 @@ public class MobHordeEvent {
     protected boolean hasToBeUnderground(EntityPlayer player) {
         return (maximumDistanceUnderground != -1 && !player.world.canBlockSeeSky(new BlockPos(player).up(maximumDistanceUnderground)));
     }
-
 }

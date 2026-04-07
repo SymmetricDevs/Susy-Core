@@ -4,6 +4,8 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.command.CommandResultStats;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -12,10 +14,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -23,6 +29,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.GTValues;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -35,6 +42,9 @@ import supersymmetry.client.audio.MovingSoundDropPod;
 import supersymmetry.client.renderer.particles.SusyParticleFlame;
 import supersymmetry.client.renderer.particles.SusyParticleSmoke;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EntityDropPod extends EntityLiving implements IAnimatable {
 
     private static final DataParameter<Boolean> HAS_LANDED = EntityDataManager.<Boolean>createKey(EntityDropPod.class,
@@ -46,6 +56,8 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
 
     private AnimationFactory factory = new AnimationFactory(this);
     private boolean explosive = true;
+
+    private List<String> commandsOnLanding = new ArrayList<>();
 
     @SideOnly(Side.CLIENT)
     private MovingSoundDropPod soundDropPod;
@@ -236,6 +248,13 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
         this.setTimeSinceLanding(compound.getInteger("time_since_landing"));
     }
 
+    public void setCommandsOnLanding(List<String> commands) {
+        this.commandsOnLanding.clear();
+        if (commands != null) {
+            this.commandsOnLanding.addAll(commands);
+        }
+    }
+
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
@@ -260,6 +279,13 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
             this.setLanded(this.hasLanded() || this.onGround);
 
             if (this.hasLanded()) {
+                if (!this.commandsOnLanding.isEmpty()) {
+                    for (String command : new ArrayList<>(this.commandsOnLanding)) { // copy to avoid concurrent modification
+                        this.world.getMinecraftServer().getCommandManager()
+                                .executeCommand(this.getCommandSender(), command);
+                    }
+                    this.commandsOnLanding.clear(); // ensure they only run once
+                }
                 if (this.getTimeSinceLanding() == 0) {
                     int posXRounded = MathHelper.floor(this.posX);
                     int posYBeneath = MathHelper.floor(this.posY - 1.20000000298023224D);
@@ -308,6 +334,63 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
                 soundDropPod.stopPlaying();
             }
         }
+    }
+
+    private ICommandSender getCommandSender() {
+        return new ICommandSender() {
+            @Override
+            public String getName() {
+                return "DropPod";
+            }
+
+            @Override
+            public ITextComponent getDisplayName() {
+                return new TextComponentString(getName());
+            }
+
+            @Override
+            public void sendMessage(ITextComponent component) {
+                System.out.println("[DropPod] " + component.getUnformattedText());
+            }
+
+            @Override
+            public boolean canUseCommand(int permLevel, String commandName) {
+                return true; // allow all commands
+            }
+
+            @Override
+            public BlockPos getPosition() {
+                return new BlockPos(posX, posY, posZ);
+            }
+
+            @Override
+            public Vec3d getPositionVector() {
+                return new Vec3d(posX, posY, posZ);
+            }
+
+            @Override
+            public World getEntityWorld() {
+                return world;
+            }
+
+            @Override
+            public Entity getCommandSenderEntity() {
+                return EntityDropPod.this;
+            }
+
+            @Override
+            public boolean sendCommandFeedback() {
+                return false;
+            }
+
+            @Override
+            public void setCommandStat(CommandResultStats.Type type, int amount) {}
+
+            @Override
+            public @Nullable MinecraftServer getServer() {
+                return null;
+            }
+        };
     }
 
     @Override
