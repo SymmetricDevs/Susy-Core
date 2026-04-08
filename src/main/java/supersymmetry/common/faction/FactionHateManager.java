@@ -20,7 +20,16 @@ public class FactionHateManager {
         NBTTagCompound hate = root.getCompoundTag(TAG_HATE);
 
         int current = hate.getInteger(faction);
-        int next = Math.max(0, current + amount);
+
+        int next = current + amount;
+
+        //baseline hate, once you progress there is no going back bellow this point.
+        int baseline = supersymmetry.common.faction.FactionBaselineRegistry
+                .getBaseline((net.minecraft.entity.player.EntityPlayerMP) player);
+        if (next < baseline) {
+            next = baseline;
+        }
+        next = Math.max(0, next);
 
         hate.setInteger(faction, next);
         root.setTag(TAG_HATE, hate);

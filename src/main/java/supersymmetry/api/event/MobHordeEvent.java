@@ -2,20 +2,16 @@ package supersymmetry.api.event;
 
 import gregtech.api.util.GTTeleporter;
 import gregtech.api.util.TeleportHandler;
-import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementManager;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTException;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.event.MobHordePlayerData;
 import supersymmetry.common.event.MobHordeWorldData;
@@ -30,7 +26,6 @@ public class MobHordeEvent {
     private int quantityMin;
     private int quantityMax;
     private boolean nightOnly;
-    private ResourceLocation advancementUnlock;
     private int timerMin;
     private int timerMax;
     public int timeoutPeriod;
@@ -71,11 +66,6 @@ public class MobHordeEvent {
         return this;
     }
 
-    public MobHordeEvent setAdvancementUnlock(ResourceLocation advancementUnlock) {
-        this.advancementUnlock = advancementUnlock;
-        return this;
-    }
-
 
     public boolean run(EntityPlayer player) throws NBTException {
         MobHordeWorldData worldData = MobHordeWorldData.get(player.world);
@@ -100,11 +90,6 @@ public class MobHordeEvent {
     }
 
     public boolean canRun(EntityPlayerMP player) {
-        if (advancementUnlock != null) {
-            Advancement advancement = resourceLocationToAdvancement(advancementUnlock, player.world);
-            if (!player.getAdvancements().getProgress(advancement).isDone())
-                return false;
-        }
         if (player.dimension != this.dimension) {
             return false;
         }
@@ -113,11 +98,6 @@ public class MobHordeEvent {
                 return false;
             }
         return !(player.world.isDaytime() && nightOnly) || hasToBeUnderground(player);
-    }
-
-    private static Advancement resourceLocationToAdvancement(ResourceLocation location, World world) {
-        AdvancementManager advManager = ObfuscationReflectionHelper.getPrivateValue(World.class, world, "field_191951_C");
-        return advManager.getAdvancement(location);
     }
 
     public MobHordeEvent runCommandOnLanding(String... commands) {
@@ -401,5 +381,9 @@ public class MobHordeEvent {
 
     protected boolean hasToBeUnderground(EntityPlayer player) {
         return (maximumDistanceUnderground != -1 && !player.world.canBlockSeeSky(new BlockPos(player).up(maximumDistanceUnderground)));
+    }
+
+    public static void baseline(ResourceLocation advancement, int hate) {
+        supersymmetry.common.faction.FactionBaselineRegistry.add(advancement, hate);
     }
 }
