@@ -291,6 +291,7 @@ public class SuSyMetaTileEntities {
 
     public static MetaTileEntityEccentricRollCrusher ECCENTRIC_ROLL_CRUSHER;
     public static MetaTileEntityBallMill BALL_MILL;
+    public static MetaTileEntityScreenPrinter SCREEN_PRINTER;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500,
@@ -460,6 +461,7 @@ public class SuSyMetaTileEntities {
 
         CURTAIN_COATER = registerMetaTileEntity(14513, new MetaTileEntityCurtainCoater(susyId("curtain_coater")));
         MILLING = registerMetaTileEntity(14514, new MetaTileEntityPreciseMillingMachine(susyId("milling")));
+        SCREEN_PRINTER = registerMetaTileEntity(14515, new MetaTileEntityScreenPrinter(susyId("screen_printer")));
 
         // thermodynamic stuff
         registerSimpleMTE(FLUID_COMPRESSOR, 12, 15000, "fluid_compressor", SuSyRecipeMaps.FLUID_COMPRESSOR_RECIPES,
