@@ -271,8 +271,8 @@ public class MobHordeEvent {
 
             // Combine global and pattern-specific commands
             List<String> allCommands = new ArrayList<>();
-            allCommands.addAll(this.commandsOnLanding);
             if (commands != null) allCommands.addAll(commands);
+            allCommands.addAll(this.commandsOnLanding);
             pod.setCommandsOnLanding(allCommands);
 
             // t for pattern
