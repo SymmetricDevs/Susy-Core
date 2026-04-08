@@ -19,6 +19,7 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.event.MobHordePlayerData;
 import supersymmetry.common.event.MobHordeWorldData;
+import supersymmetry.common.faction.FactionHateManager;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -41,7 +42,9 @@ public class MobHordeEvent {
     private boolean allignTheBlock = false;
     private List<String> commandsOnLanding = new ArrayList<>();
     private List<List<String>> commandsOnLandingPattern = new ArrayList<>();
-    private List<Double> distribution; //WIP
+    private List<Double> distribution;
+    private int minhate = 0;
+    private String faction = "";
 
     public static final Map<String, MobHordeEvent> EVENTS = new HashMap<>();
 
@@ -81,7 +84,6 @@ public class MobHordeEvent {
     }
     public boolean run(EntityPlayer player, Consumer<UUID> uuidConsumer) throws NBTException {
         int quantity = (int) (Math.random() * (quantityMax - quantityMin) + quantityMin);
-        System.out.println(quantity);
         if (quantity <= 0) quantity = 1;
 
         boolean didSpawn = false;
@@ -106,6 +108,11 @@ public class MobHordeEvent {
         if (player.dimension != this.dimension) {
             return false;
         }
+            int hate = FactionHateManager.getHate(player, faction);
+            System.out.println(hate);
+            if (hate < minhate) {
+                return false;
+            }
         return !(player.world.isDaytime() && nightOnly) || hasToBeUnderground(player);
     }
 
@@ -159,18 +166,22 @@ public class MobHordeEvent {
         return this;
     }
 
-    public MobHordeEvent setDistribution(List<Double> distribution){ //WIP
-        this.distribution = distribution;
+    public MobHordeEvent setDistribution(Double... distribution) {
+        this.distribution = Arrays.asList(distribution);
         return this;
     }
 
+    public MobHordeEvent minHate(String faction, int minhate) {
+        this.faction = faction;
+        this.minhate = minhate;
+        return this;
+    }
 
     public boolean spawnMobWithPod(EntityPlayer player, Consumer<UUID> uuidConsumer, int quantity) {
 
         boolean finishSpawning = false;
 
         int patternsCount = patternFunctions.size();
-        System.out.println("Patterns: " + patternsCount);
 
         if (patternsCount == 0) {
             // NO PATTERN normal spawn like before
@@ -179,14 +190,52 @@ public class MobHordeEvent {
             }
         } else {
             // WITH PATTERNS new code
-            int baseQtyPerPattern = quantity / patternsCount;
-            int remainder = quantity % patternsCount;
+
+            int[] quantitiesPerPattern = new int[patternsCount];
+            if (distribution != null && distribution.size() == patternsCount) {
+                double totalWeight = distribution.stream().mapToDouble(Double::doubleValue).sum();
+                // First pass: assign floor values
+                int assigned = 0;
+                double[] exactValues = new double[patternsCount];
+
+                for (int i = 0; i < patternsCount; i++) {
+                    double normalized = distribution.get(i) / totalWeight;
+                    double exact = normalized * quantity;
+                    exactValues[i] = exact;
+                    quantitiesPerPattern[i] = (int) Math.floor(exact);
+                    assigned += quantitiesPerPattern[i];
+                }
+
+                // Handle leftovers (due to flooring)
+                int remainder = quantity - assigned;
+                while (remainder > 0) {
+                    int bestIndex = 0;
+                    double bestFraction = 0;
+                    for (int i = 0; i < patternsCount; i++) {
+                        double fraction = exactValues[i] - quantitiesPerPattern[i];
+                        if (fraction > bestFraction) {
+                            bestFraction = fraction;
+                            bestIndex = i;
+                        }
+                    }
+                    quantitiesPerPattern[bestIndex]++;
+                    remainder--;
+                }
+            } else {
+                // fallback to equal distribution
+                int baseQtyPerPattern = quantity / patternsCount;
+                int remainder = quantity % patternsCount;
+                for (int i = 0; i < patternsCount; i++) {
+                    quantitiesPerPattern[i] = baseQtyPerPattern + (i < remainder ? 1 : 0);
+                }
+            }
+
 
             Double offsetx = player.posX + (Math.random() - 0.5) * 60;
             Double offsetz = player.posZ + (Math.random() - 0.5) * 60;
 
             for (int i = 0; i < patternsCount; i++) {
-                int qtyForThisPattern = baseQtyPerPattern + (i < remainder ? 1 : 0);
+                int qtyForThisPattern = quantitiesPerPattern[i];
 
                 List<String> commands = (i < commandsOnLandingPattern.size())
                         ? commandsOnLandingPattern.get(i)

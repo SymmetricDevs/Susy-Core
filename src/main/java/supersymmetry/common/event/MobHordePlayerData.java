@@ -15,6 +15,9 @@ import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import net.minecraft.entity.Entity;
+import supersymmetry.common.faction.FactionHateManager;
+
 import supersymmetry.api.event.MobHordeEvent;
 
 public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
@@ -72,7 +75,7 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
         if (hasActiveInvasion) {
             ++ticksActive;
             if (this.ticksActive > this.timeoutPeriod) {
-                this.finishInvasion();
+                this.stopInvasion(player);
             } else return;
         }
         ticksUntilCanSpawn--;
@@ -140,6 +143,38 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
     }
 
     public void stopInvasion(EntityPlayerMP player) {
+        if (!this.hasActiveInvasion) return;
+
+        WorldServer world = player.getServerWorld();
+
+        for (UUID uuid : invasionEntitiesUUIDs) {
+            Entity entity = world.getEntityFromUuid(uuid);
+
+            if (entity == null) continue;
+
+            NBTTagCompound entityTag = entity.getEntityData();
+            if (!entityTag.hasKey("susy")) continue;
+
+            NBTTagCompound susy = entityTag.getCompoundTag("susy");
+
+            String faction = susy.getString("faction");
+            int hate = susy.getInteger("hate");
+            hate = hate * -1;
+
+            if (!faction.isEmpty()) {
+                // surviving mob inverts hate and adds to player
+                FactionHateManager.addHate(player, faction, hate);
+            }
+
+            // despawn / escape
+            entity.setDead();
+        }
+
+        this.invasionEntitiesUUIDs.clear();
+        this.finishInvasion();
+    }
+    //moved over loxos code
+    public void killInvasion(EntityPlayerMP player) {
         if (this.hasActiveInvasion) {
             WorldServer world = player.getServerWorld();
             this.invasionEntitiesUUIDs.stream()

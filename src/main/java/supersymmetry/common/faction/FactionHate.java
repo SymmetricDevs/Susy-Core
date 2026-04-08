@@ -4,7 +4,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.text.TextComponentString;
 
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -41,16 +40,8 @@ public class FactionHate {
         if (faction.isEmpty()) return;
 
         int hateValue = susy.getInteger(TAG_HATE);
-        if (hateValue <= 0) return;
 
         // Apply to player
         FactionHateManager.addHate(player, faction, hateValue);
-
-        int newTotal = FactionHateManager.getHate(player, faction);
-
-        player.sendMessage(new TextComponentString(
-                "Gained " + hateValue + " hate with " + faction +
-                        " (Total: " + newTotal + ")"
-        ));
     }
 }

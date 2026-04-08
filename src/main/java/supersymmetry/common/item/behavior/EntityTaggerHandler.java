@@ -122,7 +122,7 @@ public class EntityTaggerHandler {
 
             // Modify hate
             int amount = player.isSneaking() ? -1 : 1;
-            int newHate = Math.max(0, currentHate + amount);
+            int newHate = currentHate + amount;
 
             susyTag.setInteger(TAG_HATE, newHate);
             entityTag.setTag(TAG_ROOT, susyTag);

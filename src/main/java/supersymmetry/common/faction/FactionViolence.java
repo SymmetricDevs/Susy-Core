@@ -17,7 +17,7 @@ public class FactionViolence {
 
     private static final String TAG_ROOT = "susy";
     private static final String TAG_FACTION = "faction";
-    private static final double radius = 128.0;
+    private static final double radius = 32.0;
 
     // violence
     //checks every mob every tick, probably not the best way to do this
@@ -29,9 +29,12 @@ public class FactionViolence {
 
         EntityLiving mob = (EntityLiving) event.getEntity();
         NBTTagCompound tag = mob.getEntityData();
-        if (!tag.hasKey("susy.faction")) return;
+        if (!tag.hasKey(TAG_ROOT)) return;
 
-        String mobFaction = tag.getString("susy.faction");
+        NBTTagCompound susyTag = tag.getCompoundTag(TAG_ROOT);
+        if (!susyTag.hasKey(TAG_FACTION)) return;
+
+        String mobFaction = susyTag.getString(TAG_FACTION);
         if (mobFaction.isEmpty()) return;
 
         // Clear attack target if dead or invalid
@@ -45,32 +48,48 @@ public class FactionViolence {
         }
 
         // Only assign a new target if none exists
-        if (mob.getAttackTarget() == null) {
-            for (EntityLiving target : mob.world.getEntitiesWithinAABB(EntityLiving.class, mob.getEntityBoundingBox().grow(radius))) {
+        EntityLiving bestTarget = null;
+        double bestDistanceSq = Double.MAX_VALUE;
 
-                // Must be visible, skips a lot of the loop
-                if (!mob.canEntityBeSeen(target)) continue;
+        for (EntityLiving target : mob.world.getEntitiesWithinAABB(EntityLiving.class, mob.getEntityBoundingBox().grow(radius))) {
 
-                if (target == mob) continue;
+            if (target == mob) continue;
+            if (!mob.canEntityBeSeen(target)) continue;
 
-                String targetFaction = target.getEntityData().getString("susy.faction");
-                boolean isUnaligned = targetFaction == null || targetFaction.isEmpty();
-                boolean isOpposingFaction = !isUnaligned && !mobFaction.equals(targetFaction);
+            NBTTagCompound targetTag = target.getEntityData();
+            String targetFaction = "";
 
-                // Case 1: Unaligned get attacked only if hostile
-                if (isUnaligned) {
-                    if (target instanceof net.minecraft.entity.monster.IMob) {
-                        mob.setAttackTarget(target);
-                        break;
-                    }
-                }
-
-                // Case 2: attack everything from other factions
-                else if (isOpposingFaction) {
-                    mob.setAttackTarget(target);
-                    break;
+            if (targetTag.hasKey(TAG_ROOT)) {
+                NBTTagCompound targetSusy = targetTag.getCompoundTag(TAG_ROOT);
+                if (targetSusy.hasKey(TAG_FACTION)) {
+                    targetFaction = targetSusy.getString(TAG_FACTION);
                 }
             }
+
+            boolean isUnaligned = targetFaction.isEmpty();
+            boolean isOpposingFaction = !isUnaligned && !mobFaction.equals(targetFaction);
+
+            boolean shouldAttack = false;
+
+            if (isUnaligned) {
+                if (target instanceof net.minecraft.entity.monster.IMob) {
+                    shouldAttack = true;
+                }
+            } else if (isOpposingFaction) {
+                shouldAttack = true;
+            }
+
+            if (!shouldAttack) continue;
+
+            double distSq = mob.getDistanceSq(target);
+            if (distSq < bestDistanceSq) {
+                bestDistanceSq = distSq;
+                bestTarget = target; //smart targetting
+            }
+        }
+
+        if (bestTarget != null) {
+            mob.setAttackTarget(bestTarget);
         }
     }
 }
