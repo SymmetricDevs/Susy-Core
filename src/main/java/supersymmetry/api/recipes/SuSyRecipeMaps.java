@@ -537,8 +537,6 @@ public class SuSyRecipeMaps {
             new SimpleRecipeBuilder(), false)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressWidget.MoveType.HORIZONTAL);
 
-    public static final RecipeMap<SimpleRecipeBuilder> SCREEN_PRINTER = new RecipeMap<>("screen_printer", 2, 1, 1, 0, new SimpleRecipeBuilder(), false);
-
     public static final RecipeMap<SimpleRecipeBuilder> SCREEN_PRINTER = new RecipeMap<>("screen_printer", 2, 1, 1, 0,
             new SimpleRecipeBuilder(), false);
 
