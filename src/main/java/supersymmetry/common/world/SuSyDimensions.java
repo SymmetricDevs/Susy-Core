@@ -51,10 +51,6 @@ public class SuSyDimensions {
         SusyLog.logger.info("Registering space dimension type at id " + (id - 1));
         spaceType = DimensionType.register("susy_space", "_susyspace", id - 1, WorldProviderSpace.class, false);
 
-        // -----------------------------------------------------------------
-        // Shared celestial objects
-        // -----------------------------------------------------------------
-
         Cubemap solCubemap = new Cubemap(
                 new ResourceLocation("susy", "textures/space/sun/cubemap.png"));
         RenderableCelestialObject SUN = new RenderableCelestialObject(CelestialObjects.SUN, solCubemap)

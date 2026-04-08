@@ -14,6 +14,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
 
+import supersymmetry.api.space.CelestialObjects;
 import supersymmetry.api.space.QuadSphere;
 import supersymmetry.api.space.RenderableCelestialObject;
 import supersymmetry.client.shaders.ShaderManager;
@@ -93,6 +94,7 @@ public class SuSySkyRenderer extends IRenderHandler {
         if (skyColorData != null) {
             renderSkyBackground(world.getCelestialAngle(partialTicks));
         }
+
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GlStateManager.disableFog();
         GlStateManager.disableLighting();
@@ -126,9 +128,10 @@ public class SuSySkyRenderer extends IRenderHandler {
             if (ShaderManager.shadersAllowed() && obj.ensureLoaded()) {
                 float[] dir = obj.getWorldDirection(worldTime);
                 float scale = 100f * (float) Math.tan(Math.toRadians(obj.getAngularSizeDeg() / 2.0));
-                float[] rot = buildCubemapRotation(dir, currentSunDir);
+                float[] rot = buildCubemapRotation(dir);
                 int[] faces = new int[6];
                 for (int i = 0; i < 6; i++) faces[i] = obj.getCubemap().getFaceTexId(i);
+
                 boolean hasAtmosphere = isEarthLike(obj);
                 float savedSunR = planetSurfaceRenderer.sunAngularRadius;
                 if (hasAtmosphere) planetSurfaceRenderer.sunAngularRadius = 0.0f;
@@ -147,16 +150,14 @@ public class SuSySkyRenderer extends IRenderHandler {
         GlStateManager.popMatrix();
 
         for (RenderableCelestialObject obj : objects) {
-            if (obj == sunObject) continue;
-            if (!isEarthLike(obj)) continue;
+            if (obj == sunObject || !isEarthLike(obj)) continue;
             if (!ShaderManager.shadersAllowed()) continue;
 
             float[] dir = obj.getWorldDirection(worldTime);
             float scale = 100f * (float) Math.tan(Math.toRadians(obj.getAngularSizeDeg() / 2.0));
-            float planetY = dir[1] * 100f * scale; // position along direction
             atmosphereRenderer.render(
                     capturedView, capturedProj, currentSunDir,
-                    dir[1] * 100f, // planetY: the object's Y in sky space
+                    dir[1] * 100f,
                     scale);
         }
 
@@ -170,22 +171,21 @@ public class SuSySkyRenderer extends IRenderHandler {
         GL11.glPopAttrib();
     }
 
-    private static boolean isEarthLike(RenderableCelestialObject obj) {
-        return obj.getCelestialObject() == supersymmetry.api.space.CelestialObjects.EARTH;
-    }
-
-    private static float[] buildCubemapRotation(float[] dir, float[] sunDir) {
+    private static float[] buildCubemapRotation(float[] dir) {
+        // Normalise
         float len = (float) Math.sqrt(dir[0] * dir[0] + dir[1] * dir[1] + dir[2] * dir[2]);
         if (len < 1e-6f) return identity();
         float dx = dir[0] / len, dy = dir[1] / len, dz = dir[2] / len;
 
-        float ux = 0, uy = 1, uz = 0;
+        // World-up candidate; fall back to -Z when dir is nearly vertical
+        float ux = 0f, uy = 1f, uz = 0f;
         if (Math.abs(dy) > 0.99f) {
-            ux = 0;
-            uy = 0;
-            uz = -1;
+            ux = 0f;
+            uy = 0f;
+            uz = -1f;
         }
 
+        // right = dir × up
         float rx = dy * uz - dz * uy;
         float ry = dz * ux - dx * uz;
         float rz = dx * uy - dy * ux;
@@ -195,16 +195,21 @@ public class SuSySkyRenderer extends IRenderHandler {
         ry /= rlen;
         rz /= rlen;
 
+        // Recomputed orthonormal up = right × dir
         float upx = ry * dz - rz * dy;
         float upy = rz * dx - rx * dz;
         float upz = rx * dy - ry * dx;
 
         return new float[] {
-                rx, ry, rz, 0f,
-                upx, upy, upz, 0f,
-                dx, dy, dz, 0f,
-                0f, 0f, 0f, 1f
+                -rx, -ry, -rz, 0f,   // col 0: cubemap +X (negated = fix mirror)
+                upx, upy, upz, 0f,   // col 1: cubemap +Y
+                dx, dy, dz, 0f,   // col 2: cubemap +Z (toward object)
+                0f, 0f, 0f, 1f    // col 3
         };
+    }
+
+    private static boolean isEarthLike(RenderableCelestialObject obj) {
+        return obj.getCelestialObject() == CelestialObjects.EARTH;
     }
 
     private void renderSkyBackground(float celestialAngle) {
