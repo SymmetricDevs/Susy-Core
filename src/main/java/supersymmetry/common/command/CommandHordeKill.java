@@ -35,7 +35,7 @@ public class CommandHordeKill extends CommandBase {
 
             if (!playerData.hasActiveInvasion) {
                 ITextComponent textComponent = new TextComponentTranslation(
-                        "susy.command.horde.stop.has_active_no_invasion");
+                        "susy.command.horde.kill.has_active_no_invasion");
                 sender.sendMessage(textComponent);
                 return;
             }
@@ -44,7 +44,7 @@ public class CommandHordeKill extends CommandBase {
 
             playerData.killInvasion(player);
 
-            ITextComponent textComponent = new TextComponentTranslation("susy.command.horde.stop.killed", invasion);
+            ITextComponent textComponent = new TextComponentTranslation("susy.command.horde.kill.killed", invasion);
             sender.sendMessage(textComponent);
         }
     }

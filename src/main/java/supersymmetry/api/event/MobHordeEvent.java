@@ -109,7 +109,6 @@ public class MobHordeEvent {
             return false;
         }
             int hate = FactionHateManager.getHate(player, faction);
-            System.out.println(hate);
             if (hate < minhate) {
                 return false;
             }
@@ -271,7 +270,7 @@ public class MobHordeEvent {
 
             // Combine global and pattern-specific commands
             List<String> allCommands = new ArrayList<>();
-            if (commands != null) allCommands.addAll(commands);
+            allCommands.addAll(commands);
             allCommands.addAll(this.commandsOnLanding);
             pod.setCommandsOnLanding(allCommands);
 
@@ -331,6 +330,8 @@ public class MobHordeEvent {
         pod.setPosition(x, y, z);
         player.world.spawnEntity(pod);
         player.world.spawnEntity(mob);
+
+        pod.setCommandsOnLanding(this.commandsOnLanding);
 
         mob.startRiding(pod, true);
         mob.onInitialSpawn(player.world.getDifficultyForLocation(new BlockPos(mob)), (IEntityLivingData) null);
