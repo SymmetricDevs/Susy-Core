@@ -339,7 +339,7 @@ public class MobHordeEvent {
 
             if (y > maxY) continue;
 
-            mob.setPosition(x, y, z);
+            mob.setPosition(x, y, z); //test
 
             if (!mob.getCanSpawnHere() || !mob.isNotColliding()) continue;
 
