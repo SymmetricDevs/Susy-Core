@@ -175,6 +175,8 @@ public class SusyTextures {
             "machines/multiblocks/eccentric_roll_crusher");
     public static final OrientedOverlayRenderer BALL_MILL_OVERLAY = new OrientedOverlayRenderer(
             "machines/multiblocks/ball_mill");
+    public static final OrientedOverlayRenderer SCREEN_PRINTER_OVERLAY = new OrientedOverlayRenderer(
+            "machines/multiblocks/screen_printer");
 
     public static final SimpleOverlayRenderer SLAG_HOT = new SimpleOverlayRenderer("resource/slag_hot");
     public static final SimpleOverlayRenderer RESTRICTIVE_FILTER_FILTER_OVERLAY = new SimpleOverlayRenderer(
