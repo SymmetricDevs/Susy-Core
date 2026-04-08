@@ -323,34 +323,33 @@ public class MobHordeEvent {
     }
 
     public boolean spawnMobWithoutPod(EntityPlayer player, Consumer<UUID> uuidConsumer) {
-        EntityLiving mob = entitySupplier.apply(player);
 
+        EntityLiving mob = entitySupplier.apply(player);
         for (int i = 0; i < 4; i++) {
             double angle = Math.random() * 2 * Math.PI;
             int radius = 16 + (int) (20 * Math.random());
+
             double x = (int) (player.posX + radius * Math.cos(angle)) + 0.5;
             double z = (int) (player.posZ + radius * Math.sin(angle)) + 0.5;
-            double y = Math.floor(player.posY) + 7;
-            BlockPos pos = new BlockPos(x, y, z);
-            IBlockState blockstate = player.world.getBlockState(pos);
-            Block block = blockstate.getBlock();
+
+            BlockPos topPos = player.world.getTopSolidOrLiquidBlock(new BlockPos(x, 0, z));
+            double y = topPos.getY() + 0.01;
+
+            double maxY = player.posY + 8;
+
+            if (y > maxY) continue;
 
             mob.setPosition(x, y, z);
-            while ((!mob.getCanSpawnHere() || !mob.isNotColliding() || block.isAir(blockstate, player.world, pos))
-                    && (Math.abs(mob.posY - player.posY) < 8)) {
-                mob.setPosition(x, mob.posY - 1, z);
-                pos = new BlockPos(x, mob.posY - 1, z);
-                blockstate = player.world.getBlockState(pos);
-                block = blockstate.getBlock();
-            }
 
-            if ((Math.abs(mob.posY - player.posY) < 8) && !block.isAir(blockstate, player.world, pos)) {
-                player.world.spawnEntity(mob);
-                mob.enablePersistence();
-                uuidConsumer.accept(mob.getPersistentID());
-                return true;
-            }
+            if (!mob.getCanSpawnHere() || !mob.isNotColliding()) continue;
+
+            player.world.spawnEntity(mob);
+            mob.enablePersistence();
+            uuidConsumer.accept(mob.getPersistentID());
+
+            return true;
         }
+        System.out.println("failure");
         return false;
     }
 
