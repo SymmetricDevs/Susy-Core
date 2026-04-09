@@ -40,6 +40,7 @@ public class MobHordeEvent {
     private List<Double> distribution;
     private int minhate = 0;
     private String faction = "";
+    private List<Function<EntityPlayer, EntityLiving>> entitySupplierOverrides = new ArrayList<>();
 
     public static final Map<String, MobHordeEvent> EVENTS = new HashMap<>();
 
@@ -110,23 +111,41 @@ public class MobHordeEvent {
     }
 
     //pattern handlers
-    // Pattern without commands (existing behavior)
+        // Pattern only
     public MobHordeEvent addPattern(Function<Double, Vec2> patternFunction) {
         this.patternFunctions.add(patternFunction);
-        this.commandsOnLandingPattern.add(Collections.emptyList()); // keep list sizes aligned
+        this.commandsOnLandingPattern.add(Collections.emptyList());
+        this.entitySupplierOverrides.add(null);
         return this;
     }
 
-    // Pattern with a List<String> of commands
+    // Pattern + commands
     public MobHordeEvent addPattern(Function<Double, Vec2> patternFunction, List<String> commands) {
         this.patternFunctions.add(patternFunction);
         this.commandsOnLandingPattern.add(commands);
+        this.entitySupplierOverrides.add(null);
         return this;
     }
 
-    // Pattern with a single command shorthand
+    // Pattern + single command
     public MobHordeEvent addPattern(Function<Double, Vec2> patternFunction, String command) {
         return addPattern(patternFunction, addCommand(command));
+    }
+
+    public MobHordeEvent addPattern(Function<Double, Vec2> patternFunction,
+                                    List<String> commands,
+                                    Function<EntityPlayer, EntityLiving> supplierOverride) {
+        this.patternFunctions.add(patternFunction);
+        this.commandsOnLandingPattern.add(commands);
+        this.entitySupplierOverrides.add(supplierOverride);
+        return this;
+    }
+
+    // optional convenience
+    public MobHordeEvent addPattern(Function<Double, Vec2> patternFunction,
+                                    String command,
+                                    Function<EntityPlayer, EntityLiving> supplierOverride) {
+        return addPattern(patternFunction, addCommand(command), supplierOverride);
     }
 
 
@@ -220,12 +239,18 @@ public class MobHordeEvent {
                         ? commandsOnLandingPattern.get(i)
                         : Collections.emptyList();
 
+                Function<EntityPlayer, EntityLiving> supplierOverride =
+                        (i < entitySupplierOverrides.size())
+                                ? entitySupplierOverrides.get(i)
+                                : null;
+
                 finishSpawning |= spawnMobWithPattern(
                         player,
                         uuidConsumer,
                         qtyForThisPattern,
                         patternFunctions.get(i),
                         commands,
+                        supplierOverride,
                         offsetx,
                         offsetz
                 );
@@ -237,7 +262,9 @@ public class MobHordeEvent {
 
     private boolean spawnMobWithPattern(EntityPlayer player, Consumer<UUID> uuidConsumer,
                                         int quantity, Function<Double, Vec2> pattern,
-                                        List<String> commands, Double centerX, Double centerZ) {
+                                        List<String> commands,
+                                        Function<EntityPlayer, EntityLiving> supplierOverride,
+                                        Double centerX, Double centerZ) {
         boolean didSpawn = false;
 
         int spawned = 0;
@@ -275,7 +302,10 @@ public class MobHordeEvent {
             pod.setPosition(x, y, z);
             player.world.spawnEntity(pod);
 
-            EntityLiving passenger = entitySupplier != null ? entitySupplier.apply(player) : null;
+            Function<EntityPlayer, EntityLiving> supplier =
+                    supplierOverride != null ? supplierOverride : this.entitySupplier;
+
+            EntityLiving passenger = supplier != null ? supplier.apply(player) : null;
             if (passenger != null) {
                 passenger.setPosition(x, y, z);
                 player.world.spawnEntity(passenger);
