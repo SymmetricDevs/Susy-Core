@@ -31,16 +31,19 @@ public class MobHordeEvent {
     private int maximumDistanceUnderground = -1;
     private boolean canUsePods = true;
     public String KEY;
-    private final List<Function<Double, Vec2>> patternFunctions = new ArrayList<>();
     private boolean allignTheBlock = false;
-    private List<String> commandsOnLanding = new ArrayList<>();
-    private List<List<String>> commandsOnLandingPattern = new ArrayList<>();
     private List<Double> distribution;
     private int minhate = 0;
     private String faction = "";
+
+    public static final Map<String, MobHordeEvent> EVENTS = new HashMap<>();
+
+    private final List<Function<Double, Vec2>> patternFunctions = new ArrayList<>();
+    private final List<Function<EntityLiving, EntityLiving>> postSpawnOverrides = new ArrayList<>();
     private List<Function<EntityPlayer, EntityLiving>> entitySupplierOverrides = new ArrayList<>();
     private Function<EntityLiving, EntityLiving> postSpawnModifier = null;
-    public static final Map<String, MobHordeEvent> EVENTS = new HashMap<>();
+    private List<String> commandsOnLanding = new ArrayList<>();
+    private List<List<String>> commandsOnLandingPattern = new ArrayList<>();
 
     public MobHordeEvent(Function<EntityPlayer, EntityLiving> entitySupplier, int quantityMin, int quantityMax, String name) {
         this(entitySupplier, quantityMin, quantityMax, name, 18000);
@@ -108,42 +111,26 @@ public class MobHordeEvent {
         return Arrays.asList(commands);
     }
 
-    //pattern handlers
-        // Pattern only
-    public MobHordeEvent addPattern(Function<Double, Vec2> patternFunction) {
-        this.patternFunctions.add(patternFunction);
-        this.commandsOnLandingPattern.add(Collections.emptyList());
-        this.entitySupplierOverrides.add(null);
-        return this;
-    }
+    //the great addpattern unfucking
+    public MobHordeEvent addPattern(
+            Function<Double, Vec2> patternFunction,
+            List<String> commands,
+            Function<EntityPlayer, EntityLiving> supplierOverride,
+            Function<EntityLiving, EntityLiving> postSpawnModifier
+    ) {
+        if (patternFunction == null) {
+            throw new IllegalArgumentException("patternFunction cannot be null");
+        }
+        if (commands == null) {
+            commands = Collections.emptyList();
+        }
 
-    // Pattern + commands
-    public MobHordeEvent addPattern(Function<Double, Vec2> patternFunction, List<String> commands) {
-        this.patternFunctions.add(patternFunction);
-        this.commandsOnLandingPattern.add(commands);
-        this.entitySupplierOverrides.add(null);
-        return this;
-    }
-
-    // Pattern + single command
-    public MobHordeEvent addPattern(Function<Double, Vec2> patternFunction, String command) {
-        return addPattern(patternFunction, addCommand(command));
-    }
-
-    public MobHordeEvent addPattern(Function<Double, Vec2> patternFunction,
-                                    List<String> commands,
-                                    Function<EntityPlayer, EntityLiving> supplierOverride) {
         this.patternFunctions.add(patternFunction);
         this.commandsOnLandingPattern.add(commands);
-        this.entitySupplierOverrides.add(supplierOverride);
-        return this;
-    }
+        this.entitySupplierOverrides.add(supplierOverride); // can be null
+        this.postSpawnOverrides.add(postSpawnModifier);     // can be null
 
-    // optional convenience
-    public MobHordeEvent addPattern(Function<Double, Vec2> patternFunction,
-                                    String command,
-                                    Function<EntityPlayer, EntityLiving> supplierOverride) {
-        return addPattern(patternFunction, addCommand(command), supplierOverride);
+        return this;
     }
 
 
@@ -287,7 +274,7 @@ public class MobHordeEvent {
             // t for pattern
             double t = quantity == 1 ? 0.0 : ((double) spawned + 0.5) / quantity;
 
-            // pattern
+            // pattern offset
             Vec2 offset = pattern.apply(t);
             double x = centerX + offset.x;
             double y = 350 + Math.random() * 200;
@@ -309,14 +296,23 @@ public class MobHordeEvent {
                     supplierOverride != null ? supplierOverride : this.entitySupplier;
 
             EntityLiving passenger = supplier != null ? supplier.apply(player) : null;
+
             if (passenger != null) {
                 passenger.setPosition(x, y, z);
                 player.world.spawnEntity(passenger);
                 passenger.startRiding(pod, true);
                 passenger.onInitialSpawn(player.world.getDifficultyForLocation(new BlockPos(passenger)), null);
-                if (this.postSpawnModifier != null) {
+
+                // Apply per-pattern post-spawn modifier if available
+                Function<EntityLiving, EntityLiving> patternModifier =
+                        (spawned < postSpawnOverrides.size()) ? postSpawnOverrides.get(spawned) : null;
+
+                if (patternModifier != null) {
+                    passenger = patternModifier.apply(passenger);
+                } else if (this.postSpawnModifier != null) {
                     passenger = this.postSpawnModifier.apply(passenger);
                 }
+
                 passenger.enablePersistence();
                 uuidConsumer.accept(passenger.getPersistentID());
             } else {
