@@ -1,5 +1,8 @@
 package supersymmetry.common.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -27,9 +30,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import gregtech.api.GTValues;
-import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -41,9 +44,6 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import supersymmetry.client.audio.MovingSoundDropPod;
 import supersymmetry.client.renderer.particles.SusyParticleFlame;
 import supersymmetry.client.renderer.particles.SusyParticleSmoke;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class EntityDropPod extends EntityLiving implements IAnimatable {
 
@@ -211,7 +211,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
         this.explode();
     }
 
-    public void CanExplode(boolean explosive){
+    public void CanExplode(boolean explosive) {
         this.explosive = explosive;
     }
 
@@ -280,7 +280,8 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
 
             if (this.hasLanded()) {
                 if (!this.commandsOnLanding.isEmpty()) {
-                    for (String command : new ArrayList<>(this.commandsOnLanding)) { // copy to avoid concurrent modification
+                    for (String command : new ArrayList<>(this.commandsOnLanding)) { // copy to avoid concurrent
+                                                                                     // modification
                         this.world.getMinecraftServer().getCommandManager()
                                 .executeCommand(this.getCommandSender(), command);
                     }
@@ -338,6 +339,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
 
     private ICommandSender getCommandSender() {
         return new ICommandSender() {
+
             @Override
             public String getName() {
                 return "DropPod";

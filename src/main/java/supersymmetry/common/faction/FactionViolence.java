@@ -1,16 +1,12 @@
 package supersymmetry.common.faction;
 
-
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.nbt.NBTTagCompound;
-
-
 import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import supersymmetry.Supersymmetry;
-
-import net.minecraft.entity.EntityLiving;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class FactionViolence {
@@ -20,7 +16,7 @@ public class FactionViolence {
     private static final double radius = 32.0;
 
     // violence
-    //checks every mob every tick, probably not the best way to do this
+    // checks every mob every tick, probably not the best way to do this
     @SubscribeEvent
     public static void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
         if (event.getEntity().world.isRemote) return; // server only
@@ -51,7 +47,8 @@ public class FactionViolence {
         EntityLiving bestTarget = null;
         double bestDistanceSq = Double.MAX_VALUE;
 
-        for (EntityLiving target : mob.world.getEntitiesWithinAABB(EntityLiving.class, mob.getEntityBoundingBox().grow(radius))) {
+        for (EntityLiving target : mob.world.getEntitiesWithinAABB(EntityLiving.class,
+                mob.getEntityBoundingBox().grow(radius))) {
 
             if (target == mob) continue;
             if (!mob.canEntityBeSeen(target)) continue;
@@ -84,7 +81,7 @@ public class FactionViolence {
             double distSq = mob.getDistanceSq(target);
             if (distSq < bestDistanceSq) {
                 bestDistanceSq = distSq;
-                bestTarget = target; //smart targetting
+                bestTarget = target; // smart targetting
             }
         }
 

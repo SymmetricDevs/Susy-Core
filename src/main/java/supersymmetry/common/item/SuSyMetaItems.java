@@ -58,7 +58,6 @@ public class SuSyMetaItems {
     public static MetaValueItem ROCKET_CONFIGURER;
     public static MetaValueItem PADDING_CLOTH;
 
-
     public static ArmorMetaItem<?>.ArmorMetaValueItem SIMPLE_GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_TANK;

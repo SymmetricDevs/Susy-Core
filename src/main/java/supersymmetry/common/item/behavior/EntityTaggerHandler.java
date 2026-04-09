@@ -1,5 +1,7 @@
 package supersymmetry.common.item.behavior;
 
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -7,16 +9,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.text.TextComponentString;
-
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import java.util.List;
-
+import supersymmetry.Supersymmetry;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.util.FactionHelper;
-import supersymmetry.Supersymmetry;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class EntityTaggerHandler {
@@ -26,7 +25,7 @@ public class EntityTaggerHandler {
     private static final String TAG_HATE = "hate";
     private static final double radius = 32;
 
-    //right click on entity to add to faction (sets nbt tag)
+    // right click on entity to add to faction (sets nbt tag)
     @SubscribeEvent
     public static void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
         EntityPlayer player = event.getEntityPlayer();
@@ -69,7 +68,7 @@ public class EntityTaggerHandler {
         event.setCanceled(true);
     }
 
-    //chaing selected faction
+    // chaing selected faction
     @SubscribeEvent
     public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
         EntityPlayer player = event.getEntityPlayer();
@@ -128,15 +127,14 @@ public class EntityTaggerHandler {
             entityTag.setTag(TAG_ROOT, susyTag);
 
             player.sendMessage(new TextComponentString(
-                    "Mob hate value: " + newHate
-            ));
+                    "Mob hate value: " + newHate));
         }
 
         // Prevent damage
         event.setCanceled(true);
     }
 
-    //glow for easier attaching, dev only, might make a config to unsubscribe this so it doesn't spam the ticks
+    // glow for easier attaching, dev only, might make a config to unsubscribe this so it doesn't spam the ticks
     @SubscribeEvent
     public static void onPlayerTick(net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent event) {
         if (event.phase != net.minecraftforge.fml.common.gameevent.TickEvent.Phase.END) return;
@@ -156,8 +154,7 @@ public class EntityTaggerHandler {
 
             List<EntityLivingBase> entities = player.world.getEntitiesWithinAABB(
                     EntityLivingBase.class,
-                    player.getEntityBoundingBox().grow(radius)
-            );
+                    player.getEntityBoundingBox().grow(radius));
 
             for (EntityLivingBase entity : entities) {
                 if (entity.isGlowing()) {
@@ -175,8 +172,7 @@ public class EntityTaggerHandler {
 
         List<EntityLivingBase> entities = player.world.getEntitiesWithinAABB(
                 EntityLivingBase.class,
-                player.getEntityBoundingBox().grow(radius)
-        );
+                player.getEntityBoundingBox().grow(radius));
 
         for (EntityLivingBase entity : entities) {
             NBTTagCompound susy = entity.getEntityData().getCompoundTag(TAG_ROOT);

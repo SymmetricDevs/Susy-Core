@@ -23,7 +23,7 @@ public class FactionHateManager {
 
         int next = current + amount;
 
-        //baseline hate, once you progress there is no going back bellow this point.
+        // baseline hate, once you progress there is no going back bellow this point.
         int baseline = supersymmetry.common.faction.FactionBaselineRegistry
                 .getBaseline((net.minecraft.entity.player.EntityPlayerMP) player);
         if (next < baseline) {
@@ -37,7 +37,7 @@ public class FactionHateManager {
     }
 
     public static void setHate(EntityPlayer player, String faction, int amount) {
-        //debug only, use addHate
+        // debug only, use addHate
         NBTTagCompound root = player.getEntityData().getCompoundTag(TAG_ROOT);
         NBTTagCompound hate = root.getCompoundTag(TAG_HATE);
         hate.setInteger(faction, amount);

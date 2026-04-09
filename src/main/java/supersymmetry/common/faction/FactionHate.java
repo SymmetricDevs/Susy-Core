@@ -4,10 +4,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import supersymmetry.Supersymmetry;
 
@@ -20,7 +19,6 @@ public class FactionHate {
 
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent event) {
-
         if (event.getEntity().world.isRemote) return;
 
         EntityLivingBase dead = (EntityLivingBase) event.getEntity();

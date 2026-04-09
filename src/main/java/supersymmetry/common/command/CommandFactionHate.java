@@ -47,17 +47,17 @@ public class CommandFactionHate extends CommandBase {
 
         switch (arg) {
             case "get":
-                int hate = FactionHateManager.getHate((EntityPlayer) sender,faction);
+                int hate = FactionHateManager.getHate((EntityPlayer) sender, faction);
                 sender.sendMessage(new TextComponentString("current HATE for " + faction + ": " + hate));
                 break;
             case "add":
                 int hate1 = Integer.parseInt(args[2]);
-                FactionHateManager.addHate((EntityPlayer) sender, faction,hate1);
+                FactionHateManager.addHate((EntityPlayer) sender, faction, hate1);
                 sender.sendMessage(new TextComponentString("Added " + hate1 + " HATE to faction: " + faction));
                 break;
             case "set":
                 int hate2 = Integer.parseInt(args[2]);
-                FactionHateManager.setHate((EntityPlayer) sender, faction,hate2);
+                FactionHateManager.setHate((EntityPlayer) sender, faction, hate2);
                 sender.sendMessage(new TextComponentString("Set " + hate2 + " HATE for faction: " + faction));
                 break;
             default:

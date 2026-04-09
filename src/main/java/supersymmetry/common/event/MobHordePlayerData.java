@@ -3,6 +3,7 @@ package supersymmetry.common.event;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTException;
@@ -15,10 +16,8 @@ import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import net.minecraft.entity.Entity;
-import supersymmetry.common.faction.FactionHateManager;
-
 import supersymmetry.api.event.MobHordeEvent;
+import supersymmetry.common.faction.FactionHateManager;
 
 public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
 
@@ -173,7 +172,8 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
         this.invasionEntitiesUUIDs.clear();
         this.finishInvasion();
     }
-    //moved over loxos code
+
+    // moved over loxos code
     public void killInvasion(EntityPlayerMP player) {
         if (this.hasActiveInvasion) {
             WorldServer world = player.getServerWorld();
