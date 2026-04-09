@@ -7,8 +7,6 @@ import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTException;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
@@ -41,7 +39,7 @@ public class MobHordeEvent {
     private int minhate = 0;
     private String faction = "";
     private List<Function<EntityPlayer, EntityLiving>> entitySupplierOverrides = new ArrayList<>();
-
+    private Function<EntityLiving, EntityLiving> postSpawnModifier = null;
     public static final Map<String, MobHordeEvent> EVENTS = new HashMap<>();
 
     public MobHordeEvent(Function<EntityPlayer, EntityLiving> entitySupplier, int quantityMin, int quantityMax, String name) {
@@ -172,6 +170,11 @@ public class MobHordeEvent {
     public MobHordeEvent minHate(String faction, int minhate) {
         this.faction = faction;
         this.minhate = minhate;
+        return this;
+    }
+
+    public MobHordeEvent setPostSpawnModifier(Function<EntityLiving, EntityLiving> modifier) {
+        this.postSpawnModifier = modifier;
         return this;
     }
 
@@ -311,6 +314,9 @@ public class MobHordeEvent {
                 player.world.spawnEntity(passenger);
                 passenger.startRiding(pod, true);
                 passenger.onInitialSpawn(player.world.getDifficultyForLocation(new BlockPos(passenger)), null);
+                if (this.postSpawnModifier != null) {
+                    passenger = this.postSpawnModifier.apply(passenger);
+                }
                 passenger.enablePersistence();
                 uuidConsumer.accept(passenger.getPersistentID());
             } else {
@@ -345,6 +351,9 @@ public class MobHordeEvent {
 
         mob.startRiding(pod, true);
         mob.onInitialSpawn(player.world.getDifficultyForLocation(new BlockPos(mob)), (IEntityLivingData) null);
+        if (this.postSpawnModifier != null) {
+            mob = this.postSpawnModifier.apply(mob);
+        }
         mob.enablePersistence();
 
         uuidConsumer.accept(mob.getPersistentID());
