@@ -871,6 +871,12 @@ susy.machine.resistance_furnace.uiv.name=Epic Resistance Furnace III
 susy.machine.resistance_furnace.uxv.name=Epic Resistance Furnace IV
 susy.machine.resistance_furnace.opv.name=Legendary Resistance Furnace
 
+# Greenhouse
+susy.machine.greenhouse.name=Greenhouse
+susy.machine.greenhouse.tooltip.1=Each cell is one additional parallel
+susy.machine.greenhouse.tooltip.2=Max parallels: §c6
+recipemap.greenhouse_plant.name=Greenhouse
+
 susy.machine.bath_condenser.name=Bath Condenser
 susy.machine.bath_condenser.tooltip=Only works inside a Cryogenic Distillation Tower
 

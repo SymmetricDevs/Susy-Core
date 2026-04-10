@@ -4,12 +4,19 @@ import static gregtech.api.util.RelativeDirection.*;
 
 import javax.annotation.Nonnull;
 
+import gregtech.api.GTValues;
+import gregtech.api.pattern.MultiblockShapeInfo;
+import gregtech.common.ConfigHolder;
+import gregtech.common.metatileentities.MetaTileEntities;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 import org.jetbrains.annotations.NotNull;
@@ -31,6 +38,11 @@ import gregtech.common.blocks.MetaBlocks;
 import gregtechfoodoption.block.GTFOGlassCasing;
 import gregtechfoodoption.block.GTFOMetaBlocks;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.common.blocks.BlockCoolingCoil;
+import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
+
+import java.util.*;
 
 public class MetaTileEntityGreenhouse extends RecipeMapMultiblockController {
 
@@ -39,7 +51,7 @@ public class MetaTileEntityGreenhouse extends RecipeMapMultiblockController {
     private int length;
 
     public MetaTileEntityGreenhouse(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SuSyRecipeMaps.GREENHOUSE_TEST);
+        super(metaTileEntityId, SuSyRecipeMaps.GREENHOUSE_PLANT);
         this.recipeMapWorkable = new GreenhouseRecipeLogic(this);
     }
 
@@ -149,13 +161,6 @@ public class MetaTileEntityGreenhouse extends RecipeMapMultiblockController {
         return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID);
     }
 
-    private class GreenhouseRecipeLogic extends MultiblockRecipeLogic {
-
-        public GreenhouseRecipeLogic(RecipeMapMultiblockController tileEntity) {
-            super(tileEntity);
-        }
-    }
-
     public boolean isBlockEdge(@Nonnull World world, @Nonnull BlockPos.MutableBlockPos pos,
                                @Nonnull EnumFacing direction) {
         return world.getBlockState(pos.move(direction)) == getSecondaryCasingState();
@@ -163,5 +168,31 @@ public class MetaTileEntityGreenhouse extends RecipeMapMultiblockController {
 
     public IBlockState getSecondaryCasingState() {
         return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID);
+    }
+
+    @Override
+    public List<MultiblockShapeInfo> getMatchingShapes() {
+        List<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
+        for (int i = 1; i <= 5; i++) {
+            shapeInfo.add(
+                    new MultiblockShapeInfo(createStructurePattern(i).getPreview(new int[] { 1, 1, 1, 1, 1 })));
+        }
+        return shapeInfo;
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, World world, List<String> tooltip, boolean advanced) {
+        super.addInformation(stack, world, tooltip, advanced);
+        tooltip.add(TextFormatting.GRAY + I18n.format("susy.machine.greenhouse.tooltip.1"));
+        tooltip.add(TextFormatting.GRAY + I18n.format("susy.machine.greenhouse.tooltip.2"));
+    }
+
+    private class GreenhouseRecipeLogic extends MultiblockRecipeLogic {
+
+        public GreenhouseRecipeLogic(RecipeMapMultiblockController tileEntity) {
+            super(tileEntity);
+        }
+
+        public int getParallelLimit() {return cellCount + 1;}
     }
 }
