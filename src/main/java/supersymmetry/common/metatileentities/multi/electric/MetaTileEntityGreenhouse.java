@@ -13,6 +13,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -98,6 +99,14 @@ public class MetaTileEntityGreenhouse extends RecipeMapMultiblockController {
     }
 
     @Override
+    public void receiveCustomData(int dataId, PacketBuffer buf) {
+        super.receiveCustomData(dataId, buf);
+        if (dataId == GregtechDataCodes.UPDATE_STRUCTURE_SIZE) {
+            this.length = buf.readInt();
+        }
+    }
+
+    @Override
     public void checkStructurePattern() {
         if (updateStructureDimensions()) {
             reinitializeStructurePattern();
@@ -173,9 +182,11 @@ public class MetaTileEntityGreenhouse extends RecipeMapMultiblockController {
     @Override
     public List<MultiblockShapeInfo> getMatchingShapes() {
         List<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
-        for (int i = 1; i <= 5; i++) {
-            shapeInfo.add(
-                    new MultiblockShapeInfo(createStructurePattern(i).getPreview(new int[] { 1, 1, 1, 1, 1 })));
+        for (int i = 1; i < 6; i++) {
+            BlockPattern pattern = createStructurePattern(i);
+            int[] repetition = new int[pattern.aisleRepetitions.length];
+            Arrays.fill(repetition, 1);
+            shapeInfo.add(new MultiblockShapeInfo(pattern.getPreview(repetition)));
         }
         return shapeInfo;
     }
