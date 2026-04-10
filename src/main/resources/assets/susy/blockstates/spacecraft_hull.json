@@ -1,0 +1,14 @@
+{
+  "forge_marker" : 1,
+  "defaults": {
+    "model": "susy:rocket_struct/spacecraft_hull"
+  },
+  "variants": {
+    "facing=north,variant=al_li": { "x": 90 },
+    "facing=south,variant=al_li": { "x": 90, "y": 180 },
+    "facing=west,variant=al_li":  { "x": 90, "y": 270 },
+    "facing=east,variant=al_li":  { "x": 90, "y": 90 },
+    "facing=up,variant=al_li":  {},
+    "facing=down,variant=al_li":  { "x": 180  }
+  }
+}
