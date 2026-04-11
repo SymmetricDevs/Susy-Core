@@ -31,7 +31,7 @@ public class MobHordeEvent {
     private int maximumDistanceUnderground = -1;
     private boolean canUsePods = true;
     public String KEY;
-    private boolean allignTheBlock = false;
+    private boolean alignTheBlock = false;
     private List<Double> distribution;
     private int minhate = 0;
     private String faction = "";
@@ -144,8 +144,8 @@ public class MobHordeEvent {
         }
     }
 
-    public MobHordeEvent allignBlock() {
-        this.allignTheBlock = true;
+    public MobHordeEvent alignBlock() {
+        this.alignTheBlock = true;
         return this;
     }
 
@@ -280,7 +280,7 @@ public class MobHordeEvent {
             double y = 350 + Math.random() * 200;
             double z = centerZ + offset.z;
 
-            if (allignTheBlock) {
+            if (alignTheBlock) {
                 x = Math.floor(x) + 0.5;
                 z = Math.floor(z) + 0.5;
             }

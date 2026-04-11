@@ -5,18 +5,38 @@ import gregtech.api.block.VariantBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import supersymmetry.common.tileentities.TileEntityFlare;
+
+import java.util.Random;
 
 public class BlockRaidFlare extends VariantBlock<BlockRaidFlare.BlockRaidFlareType> {
     public BlockRaidFlare() {
         super(Material.IRON);
-        this.setTranslationKey("bandit_flare_block");
+        this.setTranslationKey("raid_flare_block");
         this.setHardness(0.5f);
         this.setSoundType(SoundType.METAL);
         this.setHarvestLevel("pickaxe", 1);
+        this.setLightLevel(1.0f);
+    }
+
+    public int quantityDropped(Random random) {
+        return 0;
+    }
+
+    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+        return Items.AIR;
+    }
+
+    @Override
+    public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+        return false;
     }
 
     public static enum BlockRaidFlareType implements IStringSerializable, IStateHarvestLevel {
@@ -61,8 +81,12 @@ public class BlockRaidFlare extends VariantBlock<BlockRaidFlare.BlockRaidFlareTy
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
         BlockRaidFlareType type = this.getState(state);
+
         TileEntityFlare flare = new TileEntityFlare();
         flare.setColor(type.getRed(), type.getGreen(), type.getBlue());
+
+        flare.setFlareType(type.getName());
+
         return flare;
     }
 }

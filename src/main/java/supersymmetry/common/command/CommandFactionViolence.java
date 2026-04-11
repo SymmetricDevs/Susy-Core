@@ -15,6 +15,8 @@ import supersymmetry.common.faction.FactionViolenceManager;
 
 public class CommandFactionViolence extends CommandBase {
 
+    //replace with gamerule later, default enabled
+    //still a command for now
     @Override
     public String getName() {
         return "factionViolence";
@@ -61,5 +63,9 @@ public class CommandFactionViolence extends CommandBase {
                 sender.sendMessage(new TextComponentString("Invalid argument. Use on, off, or toggle."));
                 break;
         }
+    }
+    @Override
+    public int getRequiredPermissionLevel() {
+        return 2;
     }
 }

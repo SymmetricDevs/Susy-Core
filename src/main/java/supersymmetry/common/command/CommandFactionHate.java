@@ -38,7 +38,7 @@ public class CommandFactionHate extends CommandBase {
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         if (args.length < 1) {
-            sender.sendMessage(new TextComponentString("Usage: /factionHate <get|add|set>"));
+            sender.sendMessage(new TextComponentString("Usage: /factionHate <get|add|set> | /factionHate add Bandits 5"));
             return;
         }
 
@@ -64,5 +64,9 @@ public class CommandFactionHate extends CommandBase {
                 sender.sendMessage(new TextComponentString("Invalid argument. Use get, add, or set."));
                 break;
         }
+    }
+    @Override
+    public int getRequiredPermissionLevel() {
+        return 2;
     }
 }
