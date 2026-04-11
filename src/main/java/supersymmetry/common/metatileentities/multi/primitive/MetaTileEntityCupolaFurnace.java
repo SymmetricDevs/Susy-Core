@@ -1,14 +1,5 @@
 package supersymmetry.common.metatileentities.multi.primitive;
 
-import static gregtech.api.util.RelativeDirection.*;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.*;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import org.jetbrains.annotations.NotNull;
-
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
@@ -31,8 +22,15 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
+
+import static gregtech.api.util.RelativeDirection.*;
 
 public class MetaTileEntityCupolaFurnace extends RecipeMapPrimitiveMultiblockController {
 
@@ -81,8 +79,7 @@ public class MetaTileEntityCupolaFurnace extends RecipeMapPrimitiveMultiblockCon
     protected void formStructure(PatternMatchContext context) {
         super.formStructure(context);
         this.initializeAbilities();
-        this.size = context.getOrDefault("height", 1) - 2; // dumb fix since there's 2 air blocks under where the height
-                                                           // calc should start
+        this.size = context.getOrDefault("height", 1);
     }
 
     @Override
