@@ -154,6 +154,14 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
         int pumpNum = ((BlockCombustionChamber.CombustionType) (((VariantBlock<?>) chamberState.getBlock())
                 .getState(chamberState)))
                         .getMinPumps();
+
+        if (!((VariantBlock<?>) chamberState.getBlock()).getState(chamberState).equals(
+                BlockCombustionChamber.CombustionType.BIPROPELLANT
+        )) {
+            analysis.status = BuildStat.WRONG_CHAMBER_TYPE;
+            return Optional.empty();
+        }
+
         if (pumps.size() < pumpNum) {
             analysis.status = BuildStat.WRONG_NUM_PUMPS;
             return Optional.empty();
