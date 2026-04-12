@@ -1,7 +1,10 @@
 package supersymmetry.common.rocketry.components;
 
-import gregtech.api.block.VariantBlock;
-import gregtech.api.unification.material.Materials;
+import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -9,6 +12,9 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.util.Constants;
+
+import gregtech.api.block.VariantBlock;
+import gregtech.api.unification.material.Materials;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.components.MaterialCost;
@@ -17,11 +23,6 @@ import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.rocketry.BlockCombustionChamber;
-
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
 
 public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEngine> implements RocketEngine {
 

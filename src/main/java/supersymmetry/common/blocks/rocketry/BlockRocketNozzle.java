@@ -24,6 +24,7 @@ public class BlockRocketNozzle extends VariantBlock<BlockRocketNozzle.NozzleShap
     public enum NozzleShapeType implements IStringSerializable, IStateHarvestLevel {
 
         BELL_NOZZLE("bell_basic", 4);
+
         private String name;
         private int harvestLevel;
 

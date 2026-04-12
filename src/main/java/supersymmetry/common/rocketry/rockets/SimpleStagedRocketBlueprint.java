@@ -1,15 +1,16 @@
 package supersymmetry.common.rocketry.rockets;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants.NBT;
+
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.IAFSimprovable;
 import supersymmetry.api.rocketry.rockets.RocketStage;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint implements IAFSimprovable {
 
