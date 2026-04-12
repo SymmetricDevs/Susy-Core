@@ -10,16 +10,13 @@ import supersymmetry.client.particle.ParticleFlareSmoke;
 import java.util.UUID;
 
 public class TileEntityFlare extends TileEntity implements ITickable {
-
-    //todo
-    //make it so when the flare is broken and it has a target, the target looses HATE for the faction in flareType
-
     private float red = 1.0f;
     private float green = 0.0f;
     private float blue = 0.0f;
 
     private UUID target;
     private String flareType;
+    private String faction;
 
     private int tickCounter = 0;
     private static final int SPAWN_INTERVAL = 1200; //hard coded for now, maybe later replace with config
@@ -42,6 +39,15 @@ public class TileEntityFlare extends TileEntity implements ITickable {
     public void setFlareType(String type) {
         this.flareType = type;
         markDirty();
+    }
+
+    public void setFlareFaction(String faction){
+        this.faction = faction;
+        markDirty();
+    }
+
+    public String getFlareFaction() {
+        return faction;
     }
 
     private void spawnMobsForType() {
