@@ -8,7 +8,11 @@ import java.util.function.Predicate;
 import java.util.stream.*;
 import java.util.stream.Collectors;
 
+import gregtech.api.unification.OreDictUnifier;
+import gregtech.api.unification.material.Material;
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -59,7 +63,8 @@ public class StructAnalysis {
         WRONG_TILE("wrong_tile"),
         NO_GUIDANCE("no_guidance"),
         TOO_MUCH_GUIDANCE("too_much_guidance"),
-        WRONG_CHAMBER_TYPE("wrong_chamber_type");
+        WRONG_CHAMBER_TYPE("wrong_chamber_type"),
+        MATCH_WRONG("match_wrong");
 
         String code;
 
@@ -277,7 +282,7 @@ public class StructAnalysis {
         // the one-argument getBlocks doesn't care about air blocks (again)
 
         List<HashSet<BlockPos>> partitions = getPartitions(sect);
-        // This looks cursed, but the idea is to ensure that
+        // This looks cursed, but the idea is to ensure that the system is a ring of blocks surrounding a patch of air
         if (partitions.size() != 2) {
             status = BuildStat.NOZZLE_MALFORMED;
             return null;
@@ -412,6 +417,13 @@ public class StructAnalysis {
     public Stream<BlockPos> getOfBlockType(Collection<BlockPos> bp, Block block) {
         return bp.stream()
                 .filter(p -> world.getBlockState(p).getBlock().equals(block));
+    }
+
+    public Stream<BlockPos> getOfMaterial(Collection<BlockPos> bp, Material mat) {
+        return bp.stream()
+                .filter(p -> Objects.requireNonNull(OreDictUnifier.getMaterial(
+                        new ItemStack(Item.getItemFromBlock(world.getBlockState(p).getBlock())))
+                        ).material.equals(mat));
     }
 
     public int getCoordOfAxis(BlockPos bp) {
