@@ -5,6 +5,7 @@ import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import gregtech.api.unification.material.Materials;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -173,12 +174,26 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
                 return analysis.errorPos(pumpPos);
             }
         }
+
+        // Analyzes match
+        Set<BlockPos> stickBlocks = analysis.getOfMaterial(blocks, Materials.Wood).collect(Collectors.toSet());
+        if (!stickBlocks.isEmpty()) {
+            for (BlockPos stickPos : stickBlocks) {
+                if (!nozzleBB.contains(new Vec3d(stickPos))) {
+                    analysis.status = BuildStat.MATCH_WRONG;
+                    return Optional.empty();
+                }
+            }
+        }
+
         // Creates engine
         Set<BlockPos> engineBlocks = new HashSet<>(nozzle);
         engineBlocks.addAll(pumps);
         engineBlocks.add(cChamber);
         engineBlocks.addAll(
                 analysis.getOfBlockType(blocks, SuSyBlocks.INTERSTAGE).collect(Collectors.toSet()));
+        engineBlocks.addAll(stickBlocks);
+
         if (engineBlocks.size() < blocks.size()) {
             analysis.status = BuildStat.EXTRANEOUS_BLOCKS;
             return Optional.empty();
@@ -204,6 +219,8 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
 
         this.fuelThroughput = throughput;
         tag.setDouble("throughput", fuelThroughput);
+
+        tag.setBoolean("has_match", !stickBlocks.isEmpty());
 
         writeBlocksToNBT(blocks, analysis.world);
         return Optional.of(tag);
