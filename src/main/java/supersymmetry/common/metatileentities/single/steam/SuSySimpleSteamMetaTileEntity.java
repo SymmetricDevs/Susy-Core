@@ -1,14 +1,17 @@
 package supersymmetry.common.metatileentities.single.steam;
 
 import java.util.Arrays;
+import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.IFluidTank;
@@ -88,6 +91,14 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity implement
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
         return new SuSySimpleSteamMetaTileEntity(metaTileEntityId, workableHandler.getRecipeMap(), progressIndicator,
                 renderer, isBrickedCasing, isHighPressure, ulvOnly);
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
+        super.addInformation(stack, player, tooltip, advanced);
+        if (ulvOnly) {
+            tooltip.add(I18n.format("susy.machine.steam_limited.ulv_only.tooltip"));
+        }
     }
 
     @Override
