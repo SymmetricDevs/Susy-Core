@@ -107,8 +107,8 @@ public class SusyOrePrefix {
     public static final OrePrefix pin = new OrePrefix("pin", GTValues.M, null, SuSyMaterialIconType.pin,
             OrePrefix.Flags.ENABLE_UNIFICATION, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_PINS));
 
-    public static final OrePrefix source = new OrePrefix("source", GTValues.M, null, SuSyMaterialIconType.source,
-            OrePrefix.Flags.ENABLE_UNIFICATION, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_SPUTTERING_SOURCE));
+    public static final OrePrefix target = new OrePrefix("target", GTValues.M, null, SuSyMaterialIconType.target,
+            OrePrefix.Flags.ENABLE_UNIFICATION, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_SPUTTERING_TARGET));
 
     static {
         millBall.maxStackSize = 1;
