@@ -65,7 +65,7 @@ public class SuSyMaterialRecipeHandler {
                 SuSyMaterialRecipeHandler::processContinuouslyCast);
         SusyOrePrefix.millBall.addProcessingHandler(SuSyPropertyKey.MILL_BALL,
                 SuSyMaterialRecipeHandler::processMillBall);
-        SusyOrePrefix.target.addProcessingHandler(SuSyPropertyKey.TARGET,
+        SusyOrePrefix.target.addProcessingHandler(PropertyKey.DUST,
                 SuSyMaterialRecipeHandler::processTarget);
     }
 
@@ -379,13 +379,13 @@ public class SuSyMaterialRecipeHandler {
                 .buildAndRegister();
     }
 
-    public static void processTarget(OrePrefix targetPrefix, Material mat, DustProperty property) {
-        SINTERING_RECIPES.recipeBuilder()
-            .notConsumable(SuSyMetaItems.SHAPE_MOLD_TARGET)
-            .inputs(OrePrefix.dust, mat, 8)
-            .outputs(SusyOrePrefix.target, mat, 1)
-            .EUt(VA[MV])
-            .duration(200)
-            .buildAndRegister();
+    public static void processTarget(OrePrefix dustPrefix, Material mat, DustProperty property) {
+        SuSyRecipeMaps.SINTERING_RECIPES.recipeBuilder()
+                .notConsumable(SuSyMetaItems.SHAPE_MOLD_TARGET)
+                .input(OrePrefix.dust, mat, 8)
+                .output(SusyOrePrefix.target, mat, 1)
+                .EUt(VA[MV])
+                .duration(200)
+                .buildAndRegister();
     }
 }
