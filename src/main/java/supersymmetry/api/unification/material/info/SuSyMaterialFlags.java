@@ -66,5 +66,10 @@ public class SuSyMaterialFlags {
             .requireFlags(MaterialFlags.GENERATE_PLATE)
             .build();
 
+    public static final MaterialFlag GENERATE_SPUTTERING_SOURCE = (new MaterialFlag.Builder(
+            "GENERATE_SPUTTERING_SOURCE"))
+                    .requireProps(PropertyKey.DUST)
+                    .build();
+
     public SuSyMaterialFlags() {}
 }
