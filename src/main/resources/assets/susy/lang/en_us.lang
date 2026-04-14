@@ -882,6 +882,12 @@ susy.machine.resistance_furnace.uiv.name=Epic Resistance Furnace III
 susy.machine.resistance_furnace.uxv.name=Epic Resistance Furnace IV
 susy.machine.resistance_furnace.opv.name=Legendary Resistance Furnace
 
+# Greenhouse
+susy.machine.greenhouse.name=Greenhouse
+susy.machine.greenhouse.tooltip.1=Each cell is one additional parallel
+susy.machine.greenhouse.tooltip.2=Max parallels: §c6
+recipemap.greenhouse_plant.name=Greenhouse
+
 susy.machine.bath_condenser.name=Bath Condenser
 susy.machine.bath_condenser.tooltip=Only works inside a Cryogenic Distillation Tower
 
@@ -1417,6 +1423,7 @@ susy.machine.steam_boiler_liquid.bronze.name=Small Steam Liquid Boiler
 susy.machine.steam_boiler_liquid.bronze.tooltip=A Boiler running off Liquids
 susy.machine.steam_boiler_liquid.steel.name=High Pressure Steam Liquid Boiler
 susy.machine.steam_boiler_liquid.steel.tooltip=Faster than Small Steam Liquid Boiler
+susy.machine.steam_limited.ulv_only.tooltip=Can only run recipes up to 8 EU/t
 
 #Fake Wool
 tile.fake_wool.whitefakewool.name=White Asbestos Fiber

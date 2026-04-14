@@ -3,7 +3,7 @@ package supersymmetry.common.metatileentities.multi.primitive;
 import static gregtech.api.util.RelativeDirection.*;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.*;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -81,8 +81,7 @@ public class MetaTileEntityCupolaFurnace extends RecipeMapPrimitiveMultiblockCon
     protected void formStructure(PatternMatchContext context) {
         super.formStructure(context);
         this.initializeAbilities();
-        this.size = context.getOrDefault("height", 1) - 2; // dumb fix since there's 2 air blocks under where the height
-                                                           // calc should start
+        this.size = context.getOrDefault("height", 1);
     }
 
     @Override
