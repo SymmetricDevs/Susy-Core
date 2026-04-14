@@ -508,6 +508,10 @@ public class SuSyRecipeMaps {
             new PrimitiveRecipeBuilder(), false)
                     .setSound(GTSoundEvents.FURNACE);
 
+    public static final RecipeMap<SimpleRecipeBuilder> GREENHOUSE_PLANT = new RecipeMap<>("greenhouse_plant", 2, 4, 3, 1,
+            new SimpleRecipeBuilder(), false)
+                    .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressWidget.MoveType.HORIZONTAL);
+
     static {
         GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()
                 .fluidInputs(SusyMaterials.RefractoryGunningMixture.getFluid(50 *
