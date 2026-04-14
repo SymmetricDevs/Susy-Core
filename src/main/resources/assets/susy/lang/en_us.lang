@@ -1535,6 +1535,8 @@ susy.msg.rocket_component.conn_unaligned=The fairing connectors are not in plana
 susy.msg.rocket_component.conn_wrong_dir=A fairing connector is facing a block.
 susy.msg.rocket_component.wrong_tile=A tile was used incorrectly.
 susy.msg.rocket_component.interstage_not_cylindrical=The interstage looks weird.
+susy.msg.rocket_component.wrong_chamber_type=A different chamber should be used.
+susy.msg.rocket_component.match_wrong=The match is not within the nozzle.
 
 entity.Rocket.name=Soyuz FG Rocket
 
