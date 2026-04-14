@@ -161,13 +161,8 @@ public class MetaTileEntityGreenhouse extends RecipeMapMultiblockController {
 
     public boolean isBlockEdge(@Nonnull World world, @Nonnull BlockPos.MutableBlockPos pos,
                                @Nonnull EnumFacing direction) {
-        return world.getBlockState(pos.move(direction)) == getSecondaryCasingState();
+        return world.getBlockState(pos.move(direction)) == getCasingState();
     }
-
-    public IBlockState getSecondaryCasingState() {
-        return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID);
-    }
-
     @Override
     public List<MultiblockShapeInfo> getMatchingShapes() {
         List<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
