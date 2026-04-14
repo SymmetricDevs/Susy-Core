@@ -20,7 +20,7 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
         setHardness(5f);
         setResistance(15f);
         setSoundType(SoundType.METAL);
-        setDefaultState(getState(Type.FLIGHT_COMPUTER));
+        setDefaultState(getState(Type.SENSOR_ARRAY));
         setHarvestLevel("wrench", 4);
     }
 
@@ -29,7 +29,6 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
         SENSOR_ARRAY("sensors", 4),
         COLLECTOR("collector", 4),
         CAMERA("position", 4),
-        FLIGHT_COMPUTER("computer", 4),
         ENGINE("engine", 4),
         SOLAR_PANEL("solar_panel", 4),
         BATTERY("battery", 4),
