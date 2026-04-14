@@ -10,7 +10,7 @@ import supersymmetry.client.particle.ParticleFlareSmoke;
 import java.util.UUID;
 
 public class TileEntityFlare extends TileEntity implements ITickable {
-    private float red = 1.0f;
+    private float red = 0.0f;
     private float green = 0.0f;
     private float blue = 0.0f;
 

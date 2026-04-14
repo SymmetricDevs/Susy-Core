@@ -101,7 +101,6 @@ public class Supersymmetry {
         hordeCommand.addSubcommand(new CommandHordeStatus());
         hordeCommand.addSubcommand(new CommandHordeKill());
 
-        event.registerServerCommand(new CommandFactionViolence());
         event.registerServerCommand(new CommandFactionHate());
     }
 

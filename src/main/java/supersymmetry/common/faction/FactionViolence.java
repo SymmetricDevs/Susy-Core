@@ -20,7 +20,7 @@ public class FactionViolence {
     @SubscribeEvent
     public static void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
         if (event.getEntity().world.isRemote) return; // server only
-        if (!FactionViolenceManager.isEnabled()) return;
+        if (!FactionViolenceManager.isEnabled(event.getEntity().world)) return;
         if (!(event.getEntity() instanceof EntityLiving)) return;
 
         EntityLiving mob = (EntityLiving) event.getEntity();
