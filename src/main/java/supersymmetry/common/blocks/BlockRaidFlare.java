@@ -102,20 +102,27 @@ public class BlockRaidFlare extends VariantBlock<BlockRaidFlare.BlockRaidFlareTy
 
     //HATE
     @Override
-    public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+    public void breakBlock(World world, BlockPos pos, IBlockState state) {
         if (!world.isRemote) {
             TileEntity tile = world.getTileEntity(pos);
 
             if (tile instanceof TileEntityFlare) {
                 TileEntityFlare flare = (TileEntityFlare) tile;
+
                 String faction = flare.getFlareFaction();
-                if (faction != null && !faction.isEmpty()) {
-                    int currentHate = getHate(player, faction);
-                    addHate(player, faction, -currentHate);
+                java.util.UUID targetUUID = flare.getTarget();
+
+                if (faction != null && !faction.isEmpty() && targetUUID != null) {
+                    EntityPlayer player = world.getPlayerEntityByUUID(targetUUID);
+
+                    if (player != null) {
+                        int currentHate = getHate(player, faction);
+                        addHate(player, faction, -currentHate);
+                    }
                 }
             }
         }
 
-        super.onBlockHarvested(world, pos, state, player);
+        super.breakBlock(world, pos, state);
     }
 }
