@@ -104,8 +104,11 @@ public class EventHandlers {
     @SubscribeEvent
     public static void onWorldTick(TickEvent.WorldTickEvent event) {
         World world = event.world;
-
         if (world.isRemote || !(world instanceof WorldServer server)) {
+            return;
+        }
+        //this can be done earlier, saves some tps
+        if (!world.getGameRules().getBoolean("doInvasions")) {
             return;
         }
         if (!travellingPassengers.isEmpty()) {
@@ -122,9 +125,7 @@ public class EventHandlers {
         if (world.provider.getDimension() != 0) {
             return;
         }
-        if (!world.getGameRules().getBoolean("doInvasions")) {
-            return;
-        }
+
 
         PlayerList list = server.getMinecraftServer().getPlayerList();
         MobHordeWorldData mobHordeWorldData = MobHordeWorldData.get(world);

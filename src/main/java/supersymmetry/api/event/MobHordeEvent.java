@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTException;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.event.MobHordePlayerData;
@@ -44,6 +45,8 @@ public class MobHordeEvent {
     private Function<EntityLiving, EntityLiving> postSpawnModifier = null;
     private List<String> commandsOnLanding = new ArrayList<>();
     private List<List<String>> commandsOnLandingPattern = new ArrayList<>();
+    private ResourceLocation requiredAdvancement = null;
+    private boolean runOnce = false;
 
     public MobHordeEvent(Function<EntityPlayer, EntityLiving> entitySupplier, int quantityMin, int quantityMax, String name) {
         this(entitySupplier, quantityMin, quantityMax, name, 18000);
@@ -92,6 +95,15 @@ public class MobHordeEvent {
     }
 
     public boolean canRun(EntityPlayerMP player) {
+        //I know there is an earlier check, but we have trigger on advancement now
+        World world = player.getServerWorld();
+        if (!world.getGameRules().getBoolean("doInvasions")) {
+            System.out.println("Invasion stopped, gamerule prevents execution");
+            return false;
+        }
+        if (requiredAdvancement != null) {
+            return false; //check if the event is locked behind advancement, if so, do not let natural spawn
+        }
         if (player.dimension != this.dimension) {
             return false;
         }
@@ -163,6 +175,24 @@ public class MobHordeEvent {
     public MobHordeEvent setPostSpawnModifier(Function<EntityLiving, EntityLiving> modifier) {
         this.postSpawnModifier = modifier;
         return this;
+    }
+
+    public MobHordeEvent triggerOnAdvancement(ResourceLocation advancement) {
+        this.requiredAdvancement = advancement;
+        return this;
+    }
+
+    public MobHordeEvent runOnce() {
+        this.runOnce = true;
+        return this;
+    }
+
+    public ResourceLocation getRequiredAdvancement() {
+        return requiredAdvancement;
+    }
+
+    public boolean isRunOnce() {
+        return runOnce;
     }
 
     public boolean spawnMobWithPod(EntityPlayer player, Consumer<UUID> uuidConsumer, int quantity) {

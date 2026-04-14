@@ -30,6 +30,7 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
     public boolean hasActiveInvasion = false;
     public List<UUID> invasionEntitiesUUIDs = new ArrayList<>();
     public String currentInvasion = "";
+    public Set<String> completedScriptedEvents = new HashSet<>();
 
     public MobHordePlayerData(int gracePeriod) {
         this.ticksUntilCanSpawn = gracePeriod;
@@ -52,6 +53,13 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
                     .forEach(uuid -> tagList.appendTag(NBTUtil.createUUIDTag(uuid)));
             result.setTag("invasionEntitiesUUIDs", tagList);
         }
+        NBTTagList scriptedList = new NBTTagList();
+        for (String key : completedScriptedEvents) {
+            scriptedList.appendTag(new NBTTagCompound() {{
+                setString("key", key);
+            }});
+        }
+        result.setTag("completedScriptedEvents", scriptedList);
         return result;
     }
 
@@ -68,6 +76,20 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
             NBTTagList tagList = nbt.getTagList("invasionEntitiesUUIDs", Constants.NBT.TAG_COMPOUND);
             tagList.forEach(compound -> invasionEntitiesUUIDs.add(NBTUtil.getUUIDFromTag((NBTTagCompound) compound)));
         }
+        completedScriptedEvents.clear();
+        NBTTagList scriptedList = nbt.getTagList("completedScriptedEvents", Constants.NBT.TAG_COMPOUND);
+        for (int i = 0; i < scriptedList.tagCount(); i++) {
+            NBTTagCompound tag = scriptedList.getCompoundTagAt(i);
+            completedScriptedEvents.add(tag.getString("key"));
+        }
+    }
+
+    public boolean hasCompleted(String key) {
+        return completedScriptedEvents.contains(key);
+    }
+
+    public void markCompleted(String key) {
+        completedScriptedEvents.add(key);
     }
 
     public void update(EntityPlayerMP player) throws NBTException {
