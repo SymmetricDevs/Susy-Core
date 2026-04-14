@@ -216,6 +216,8 @@ item.material.oreprefix.fiberWet=湿%s纤维
 item.material.oreprefix.thread=%s纱线
 item.material.oreprefix.dustWet=湿%s粉
 item.material.oreprefix.electrode=%s电极
+item.material.oreprefix.pin=%s引脚
+item.material.oreprefix.target=%s溅射靶
 
 susy.fluid.supercritical=超临界%s
 susy.fluid.impure_slurry=含杂%s浆液
@@ -851,6 +853,12 @@ recipemap.gas_atomizer.name=气雾化制粉
 recipemap.metallurgical_converter.name=转炉冶炼
 recipemap.advanced_steam_turbine.name=高级蒸汽轮机
 recipemap.mixer_settler.name=Mixer-Settler
+recipemap.atomic_layer_deposition.name=原子层沉积
+recipemap.wire_bonding.name=打線接合
+recipemap.screen_printer=絲網印刷
+recipemap.plasma_asher=等离子灰化
+recipemap.resist_processor=旋转涂覆
+recipemap.reactive_ion_etching=反应离子蝕刻
 
 susy.multiblock.primitive_mud_pump.description=简易泥泵是一台蒸汽时代的多方块机器。当它的控制器方块处于河流生物群系，且高度介于 Y = 64 与 Y = 80（含）之间时将每秒收集一次泥。它可以使用 ULV、LV 输出仓或水泵输出仓。
 
@@ -928,6 +936,7 @@ metaitem.track_segment.length_info=相当于§610格§7的单轨铁道。
 metaitem.air_vent.tooltip.1=§b收集速率：§f%,d L/s
 metaitem.orbital.scrap.earth.name=地球轨道太空垃圾
 metaitem.code_breacher.name=密码破译器
+metaitem.shape.mold.target=溅射靶模具
 
 # Catalysts
 susy.universal.catalysts.tooltip.tier=§e最高电压：§f%,d EU/t（%s§f）
