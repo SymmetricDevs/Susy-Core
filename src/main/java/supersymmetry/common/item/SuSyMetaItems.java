@@ -53,6 +53,7 @@ public class SuSyMetaItems {
     public static MetaValueItem EARTH_ORBITAL_SCRAP;
     public static MetaValueItem TUNGSTEN_ELECTRODE;
     public static MetaValueItem CODE_BREACHER;
+    public static MetaValueItem SHAPE_MOLD_TARGET;
 
     public static MetaValueItem DATA_CARD;
     public static MetaValueItem DATA_CARD_ACTIVE;
@@ -161,6 +162,7 @@ public class SuSyMetaItems {
                 .addComponents(new RocketConfigBehavior());
 
         PADDING_CLOTH = initOneItem("padding_cloth");
+        SHAPE_MOLD_TARGET = initOneItem("shape.mold.target");
     }
 
     // Ensures ID stability when merging
