@@ -34,6 +34,7 @@ public class MobHordeEvent {
     public String KEY;
     private boolean alignTheBlock = false;
     private List<Double> distribution;
+    private List<Integer> exactDistribution;
     private int minhate = 0;
     private String faction = "";
 
@@ -187,6 +188,11 @@ public class MobHordeEvent {
         return this;
     }
 
+    public MobHordeEvent setExactDistribution(Integer... distribution) {
+        this.exactDistribution = Arrays.asList(distribution);
+        return this;
+    }
+
     public ResourceLocation getRequiredAdvancement() {
         return requiredAdvancement;
     }
@@ -210,9 +216,28 @@ public class MobHordeEvent {
             // WITH PATTERNS new code
 
             int[] quantitiesPerPattern = new int[patternsCount];
-            if (distribution != null && distribution.size() == patternsCount) {
+
+            if (exactDistribution != null && exactDistribution.size() == patternsCount) {
+                // exact distribution takes priority
+                int totalAssigned = 0;
+
+                for (int i = 0; i < patternsCount; i++) {
+                    int value = Math.max(0, exactDistribution.get(i));
+                    quantitiesPerPattern[i] = value;
+                    totalAssigned += value;
+                }
+
+                int remainder = quantity - totalAssigned;
+                int index = 0;
+                while (remainder > 0) {
+                    quantitiesPerPattern[index % patternsCount]++;
+                    index++;
+                    remainder--;
+                }
+
+            } else if (distribution != null && distribution.size() == patternsCount) {
                 double totalWeight = distribution.stream().mapToDouble(Double::doubleValue).sum();
-                // First pass: assign floor values
+
                 int assigned = 0;
                 double[] exactValues = new double[patternsCount];
 
@@ -224,7 +249,6 @@ public class MobHordeEvent {
                     assigned += quantitiesPerPattern[i];
                 }
 
-                // Handle leftovers (due to flooring)
                 int remainder = quantity - assigned;
                 while (remainder > 0) {
                     int bestIndex = 0;
@@ -239,6 +263,7 @@ public class MobHordeEvent {
                     quantitiesPerPattern[bestIndex]++;
                     remainder--;
                 }
+
             } else {
                 // fallback to equal distribution
                 int baseQtyPerPattern = quantity / patternsCount;
@@ -264,6 +289,9 @@ public class MobHordeEvent {
                                 ? entitySupplierOverrides.get(i)
                                 : null;
 
+                Function<EntityLiving, EntityLiving> patternModifier =
+                        (i < postSpawnOverrides.size()) ? postSpawnOverrides.get(i) : null;
+
                 finishSpawning |= spawnMobWithPattern(
                         player,
                         uuidConsumer,
@@ -271,6 +299,7 @@ public class MobHordeEvent {
                         patternFunctions.get(i),
                         commands,
                         supplierOverride,
+                        patternModifier,
                         offsetx,
                         offsetz
                 );
@@ -281,9 +310,11 @@ public class MobHordeEvent {
     }
 
     private boolean spawnMobWithPattern(EntityPlayer player, Consumer<UUID> uuidConsumer,
-                                        int quantity, Function<Double, Vec2> pattern,
+                                        int quantity,
+                                        Function<Double, Vec2> pattern,
                                         List<String> commands,
                                         Function<EntityPlayer, EntityLiving> supplierOverride,
+                                        Function<EntityLiving, EntityLiving> patternModifier,
                                         Double centerX, Double centerZ) {
         boolean didSpawn = false;
 
@@ -329,20 +360,17 @@ public class MobHordeEvent {
 
             if (passenger != null) {
                 passenger.setPosition(x, y, z);
-                player.world.spawnEntity(passenger);
                 passenger.startRiding(pod, true);
-                passenger.onInitialSpawn(player.world.getDifficultyForLocation(new BlockPos(passenger)), null);
-
-                // Apply per-pattern post-spawn modifier if available
-                Function<EntityLiving, EntityLiving> patternModifier =
-                        (spawned < postSpawnOverrides.size()) ? postSpawnOverrides.get(spawned) : null;
-
+                passenger.onInitialSpawn(
+                        player.world.getDifficultyForLocation(new BlockPos(passenger)),
+                        null
+                );
                 if (patternModifier != null) {
-                    passenger = patternModifier.apply(passenger);
+                    patternModifier.apply(passenger);
                 } else if (this.postSpawnModifier != null) {
-                    passenger = this.postSpawnModifier.apply(passenger);
+                    this.postSpawnModifier.apply(passenger);
                 }
-
+                player.world.spawnEntity(passenger);
                 passenger.enablePersistence();
                 uuidConsumer.accept(passenger.getPersistentID());
             } else {
@@ -358,30 +386,36 @@ public class MobHordeEvent {
 
     //moved over bru's old code
     private boolean spawnMobWithoutPattern(EntityPlayer player, Consumer<UUID> uuidConsumer) {
+
         EntityDropPod pod = new EntityDropPod(player.world);
-        pod.rotationYaw = (float) Math.random() * 360;
+        pod.rotationYaw = (float) (Math.random() * 360);
+
         EntityLiving mob = entitySupplier.apply(player);
 
         double x = player.posX + (Math.random() - 0.5) * 60;
         double y = 350 + Math.random() * 200;
         double z = player.posZ + (Math.random() - 0.5) * 60;
 
+        mob.setPosition(x, y, z);
+        mob.onInitialSpawn(
+                player.world.getDifficultyForLocation(new BlockPos(mob)),
+                null
+        );
+        mob.startRiding(pod, true);
+        if (this.postSpawnModifier != null) {
+            this.postSpawnModifier.apply(mob);
+        }
+
         GTTeleporter teleporter = new GTTeleporter((WorldServer) player.world, x, y, z);
         TeleportHandler.teleport(mob, player.dimension, teleporter, x, y, z);
 
-        pod.setPosition(x, y, z);
         player.world.spawnEntity(pod);
         player.world.spawnEntity(mob);
 
+        pod.setPosition(x, y, z);
         pod.setCommandsOnLanding(this.commandsOnLanding);
 
-        mob.startRiding(pod, true);
-        mob.onInitialSpawn(player.world.getDifficultyForLocation(new BlockPos(mob)), (IEntityLivingData) null);
-        if (this.postSpawnModifier != null) {
-            mob = this.postSpawnModifier.apply(mob);
-        }
         mob.enablePersistence();
-
         uuidConsumer.accept(mob.getPersistentID());
 
         return true;
