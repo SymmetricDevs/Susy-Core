@@ -274,8 +274,8 @@ public class MobHordeEvent {
             }
 
 
-            Double offsetx = player.posX + (Math.random() - 0.5) * 60;
-            Double offsetz = player.posZ + (Math.random() - 0.5) * 60;
+            Double offsetx = player.posX + (Math.random() - 0.5) * 200;
+            Double offsetz = player.posZ + (Math.random() - 0.5) * 200;
 
             for (int i = 0; i < patternsCount; i++) {
                 int qtyForThisPattern = quantitiesPerPattern[i];
