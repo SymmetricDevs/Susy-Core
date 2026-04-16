@@ -328,8 +328,17 @@ public class MobHordeEvent {
 
             // Combine global and pattern-specific commands
             List<String> allCommands = new ArrayList<>();
-            allCommands.addAll(commands);
-            allCommands.addAll(this.commandsOnLanding);
+
+            UUID playerUUID = player.getUniqueID();
+            String uuidString = playerUUID.toString();
+
+            for (String cmd : commands) {
+                allCommands.add(cmd.replace("%player_uuid%", uuidString));
+            }
+            for (String cmd : this.commandsOnLanding) {
+                allCommands.add(cmd.replace("%player_uuid%", uuidString));
+            }
+
             pod.setCommandsOnLanding(allCommands);
 
             // t for pattern
@@ -413,7 +422,14 @@ public class MobHordeEvent {
         player.world.spawnEntity(mob);
 
         pod.setPosition(x, y, z);
-        pod.setCommandsOnLanding(this.commandsOnLanding);
+        List<String> processedCommands = new ArrayList<>();
+        String uuidString = player.getUniqueID().toString();
+
+        for (String cmd : this.commandsOnLanding) {
+            processedCommands.add(cmd.replace("%player_uuid%", uuidString));
+        }
+
+        pod.setCommandsOnLanding(processedCommands);
 
         mob.enablePersistence();
         uuidConsumer.accept(mob.getPersistentID());
