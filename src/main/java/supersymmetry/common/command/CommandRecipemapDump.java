@@ -1,40 +1,6 @@
 package supersymmetry.common.command;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.*;
-import java.util.Map.Entry;
-
-import net.minecraft.client.resources.I18n;
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapelessRecipes;
-import net.minecraft.nbt.*;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraftforge.common.crafting.IShapedRecipe;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import com.google.gson.*;
-
 import gregtech.api.GregTechAPI;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.WorkableTieredMetaTileEntity;
@@ -57,9 +23,40 @@ import gregtech.api.unification.stack.UnificationEntry;
 import gregtech.common.crafting.GTFluidCraftingIngredient;
 import gregtech.core.unification.material.internal.MaterialRegistryManager;
 import it.unimi.dsi.fastutil.ints.IntList;
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraft.nbt.*;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.common.crafting.IShapedRecipe;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.recipes.properties.DimensionProperty;
 import supersymmetry.api.recipes.properties.MixerSettlerCellsProperty;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class CommandRecipemapDump extends CommandBase {
 
@@ -398,7 +395,7 @@ public class CommandRecipemapDump extends CommandBase {
                     chancedOutputs.add(stack);
                 });
                 chancedOutputObj.addProperty("logic",
-                        I18n.format(chanced.getChancedOutputLogic().getTranslationKey()));
+                        I18n.translateToLocal(chanced.getChancedOutputLogic().getTranslationKey()));
                 recipeobj.add("chancedOutputs", chancedOutputs);
             }
             if (recipe.getChancedFluidOutputs() != null) {
@@ -411,7 +408,7 @@ public class CommandRecipemapDump extends CommandBase {
                     chancedOutputs.add(stack);
                 });
                 chancedOutputObj.addProperty("logic",
-                        I18n.format(chanced.getChancedOutputLogic().getTranslationKey()));
+                        I18n.translateToLocal(chanced.getChancedOutputLogic().getTranslationKey()));
                 recipeobj.add("chancedFluidOutputs", chancedOutputs);
             }
             recipeobj.add("inputsFluid", fluidInputs);
