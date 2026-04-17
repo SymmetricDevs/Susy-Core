@@ -48,6 +48,7 @@ public class MobHordeEvent {
     private List<List<String>> commandsOnLandingPattern = new ArrayList<>();
     private ResourceLocation requiredAdvancement = null;
     private boolean runOnce = false;
+    private boolean dropPodExplosions = true;
 
     public MobHordeEvent(Function<EntityPlayer, EntityLiving> entitySupplier, int quantityMin, int quantityMax, String name) {
         this(entitySupplier, quantityMin, quantityMax, name, 18000);
@@ -201,6 +202,11 @@ public class MobHordeEvent {
         return runOnce;
     }
 
+    public MobHordeEvent setDropPodExplosions(boolean enabled) {
+        this.dropPodExplosions = enabled;
+        return this;
+    }
+
     public boolean spawnMobWithPod(EntityPlayer player, Consumer<UUID> uuidConsumer, int quantity) {
 
         boolean finishSpawning = false;
@@ -324,6 +330,7 @@ public class MobHordeEvent {
         while (spawned < quantity) {
 
             EntityDropPod pod = new EntityDropPod(player.world);
+            pod.CanExplode(this.dropPodExplosions);
             pod.rotationYaw = (float) (Math.random() * 360);
 
             // Combine global and pattern-specific commands
@@ -397,6 +404,7 @@ public class MobHordeEvent {
     private boolean spawnMobWithoutPattern(EntityPlayer player, Consumer<UUID> uuidConsumer) {
 
         EntityDropPod pod = new EntityDropPod(player.world);
+        pod.CanExplode(this.dropPodExplosions);
         pod.rotationYaw = (float) (Math.random() * 360);
 
         EntityLiving mob = entitySupplier.apply(player);
