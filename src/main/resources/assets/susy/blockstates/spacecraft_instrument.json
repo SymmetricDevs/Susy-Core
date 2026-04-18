@@ -4,44 +4,46 @@
     "model" : "minecraft:cube_all"
   },
   "variants" : {
-    "variant=sensors" : {
-      "textures" : {
-        "all" : "gregtech:blocks/rocketry/struct/sensors"
-      }
-    },
-    "variant=collector" : {
-      "textures" : {
-        "all" : "gregtech:blocks/rocketry/struct/collector"
-      }
-    },
-    "variant=camera" : {
-      "textures" : {
-        "all" : "gregtech:blocks/rocketry/struct/camera"
-      }
-    },
-    "variant=engine" : {
-      "textures" : {
-        "all" : "gregtech:blocks/rocketry/struct/engine"
-      }
-    },
-    "variant=solar_panel" : {
-      "textures" : {
-        "all" : "gregtech:blocks/rocketry/struct/solar_panel"
-      }
-    },
-    "variant=battery" : {
-      "textures" : {
-        "all" : "gregtech:blocks/rocketry/struct/battery"
-      }
-    },
-    "variant=arm" : {
-      "textures" : {
-        "all" : "gregtech:blocks/rocketry/struct/arm"
-      }
-    },
-    "variant=lander" : {
-      "textures" : {
-        "all" : "gregtech:blocks/rocketry/struct/lander"
+    "variant": {
+      "sensors" : {
+        "textures" : {
+          "all" : "gregtech:blocks/rocketry/struct/sensors"
+        }
+      },
+      "collector" : {
+        "textures" : {
+          "all" : "gregtech:blocks/rocketry/struct/collector"
+        }
+      },
+      "camera" : {
+        "textures" : {
+          "all" : "gregtech:blocks/rocketry/struct/camera"
+        }
+      },
+      "engine" : {
+        "textures" : {
+          "all" : "gregtech:blocks/rocketry/struct/engine"
+        }
+      },
+      "solar_panel" : {
+        "textures" : {
+          "all" : "gregtech:blocks/rocketry/struct/solar_panel"
+        }
+      },
+      "battery" : {
+        "textures" : {
+          "all" : "gregtech:blocks/rocketry/struct/battery"
+        }
+      },
+      "arm" : {
+        "textures" : {
+          "all" : "gregtech:blocks/rocketry/struct/arm"
+        }
+      },
+      "lander" : {
+        "textures" : {
+          "all" : "gregtech:blocks/rocketry/struct/lander"
+        }
       }
     }
   }

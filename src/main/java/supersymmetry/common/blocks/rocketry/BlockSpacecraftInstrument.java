@@ -28,7 +28,7 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
 
         SENSOR_ARRAY("sensors", 4),
         COLLECTOR("collector", 4),
-        CAMERA("position", 4),
+        CAMERA("camera", 4),
         ENGINE("engine", 4),
         SOLAR_PANEL("solar_panel", 4),
         BATTERY("battery", 4),

@@ -1,0 +1,5 @@
+{
+	"variants": {
+		"variant=lv": { "model": "minecraft:cube_all", "texture": "susy:empty" }
+	}
+}

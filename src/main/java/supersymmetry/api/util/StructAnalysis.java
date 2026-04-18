@@ -8,8 +8,6 @@ import java.util.function.Predicate;
 import java.util.stream.*;
 import java.util.stream.Collectors;
 
-import gregtech.api.unification.OreDictUnifier;
-import gregtech.api.unification.material.Material;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -23,6 +21,8 @@ import net.minecraft.world.World;
 
 import gregtech.api.pattern.BlockWorldState;
 import gregtech.api.pattern.PatternMatchContext;
+import gregtech.api.unification.OreDictUnifier;
+import gregtech.api.unification.material.Material;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.SusyLog;
 
@@ -422,8 +422,7 @@ public class StructAnalysis {
     public Stream<BlockPos> getOfMaterial(Collection<BlockPos> bp, Material mat) {
         return bp.stream()
                 .filter(p -> Objects.requireNonNull(OreDictUnifier.getMaterial(
-                        new ItemStack(Item.getItemFromBlock(world.getBlockState(p).getBlock())))
-                        ).material.equals(mat));
+                        new ItemStack(Item.getItemFromBlock(world.getBlockState(p).getBlock())))).material.equals(mat));
     }
 
     public int getCoordOfAxis(BlockPos bp) {

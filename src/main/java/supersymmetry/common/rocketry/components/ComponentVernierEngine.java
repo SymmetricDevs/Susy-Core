@@ -5,7 +5,6 @@ import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import gregtech.api.unification.material.Materials;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -15,6 +14,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.util.Constants;
 
 import gregtech.api.block.VariantBlock;
+import gregtech.api.unification.material.Materials;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.components.MaterialCost;
@@ -157,8 +157,7 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
                         .getMinPumps();
 
         if (!((VariantBlock<?>) chamberState.getBlock()).getState(chamberState).equals(
-                BlockCombustionChamber.CombustionType.BIPROPELLANT
-        )) {
+                BlockCombustionChamber.CombustionType.BIPROPELLANT)) {
             analysis.status = BuildStat.WRONG_CHAMBER_TYPE;
             return Optional.empty();
         }

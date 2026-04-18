@@ -1,6 +1,7 @@
 package supersymmetry.common;
 
-import static supersymmetry.common.blocks.SuSyBlocks.*;
+import static supersymmetry.common.blocks.SuSyBlocks.REGOLITH;
+import static supersymmetry.common.blocks.SuSyBlocks.susyBlocks;
 import static supersymmetry.common.blocks.SuSyMetaBlocks.SHEETED_FRAMES;
 
 import java.io.File;
