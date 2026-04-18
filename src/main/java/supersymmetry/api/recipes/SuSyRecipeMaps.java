@@ -164,7 +164,7 @@ public class SuSyRecipeMaps {
                     .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
     public static final RecipeMap<SimpleRecipeBuilder> ELECTROLYTIC_CELL_RECIPES = new RecipeMap<>("electrolytic_cell",
-            3, 3, 3, 4, new SimpleRecipeBuilder(), false)
+            4, 3, 3, 4, new SimpleRecipeBuilder(), false)
                     .setSlotOverlay(false, true, GuiTextures.MOLECULAR_OVERLAY_3)
                     .setSlotOverlay(true, true, GuiTextures.MOLECULAR_OVERLAY_3)
                     .setSlotOverlay(false, false, SusyGuiTextures.ELECTRODE_OVERLAY)
