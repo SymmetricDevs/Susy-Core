@@ -1,0 +1,40 @@
+{
+  "variants" : {
+    "facing=north,variant=al_7075" : {
+      "model": "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/rocket_interstage/al_7075"
+      }
+    },
+    "facing=south,variant=al_7075" : {
+      "model": "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/rocket_interstage/al_7075"
+      }
+    },
+    "facing=west,variant=al_7075" : {
+      "model": "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/rocket_interstage/al_7075"
+      }
+    },
+    "facing=east,variant=al_7075" : {
+      "model": "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/rocket_interstage/al_7075"
+      }
+    },
+    "facing=up,variant=al_7075" : {
+      "model": "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/rocket_interstage/al_7075"
+      }
+    },
+    "facing=down,variant=al_7075" : {
+      "model": "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/rocket_interstage/al_7075"
+      }
+    }
+  }
+}

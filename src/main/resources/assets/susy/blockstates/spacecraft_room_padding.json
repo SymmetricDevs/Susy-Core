@@ -3,12 +3,12 @@
   "defaults": {
     "model": "minecraft:cube_all",
     "textures" : {
-      "all" : "gregtech:blocks/rocketry/struct/spacecraft_hull_al_li"
+      "all" : "gregtech:blocks/rocketry/struct/room_padding"
     }
   },
   "variants": {
     "variant": {
-      "al_li": {}
+      "padding": {}
     },
     "facing": {
       "north": {},

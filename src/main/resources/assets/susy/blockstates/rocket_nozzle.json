@@ -1,6 +1,20 @@
 {
   "forge_marker" : 1,
-  "variants": {
-    "variant=bell_basic": { "model": "susy:rocket_struct/rocket_nozzle" }
+  "variants" : {
+    "variant=bell_basic" : {
+      "model" : "susy:rocket_struct/rocket_nozzle"
+    },
+    "variant=expanding" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/rocketry/struct/rocket_nozzle_expanding"
+      }
+    },
+    "variant=plug" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/rocketry/struct/rocket_nozzle_plug"
+      }
+    }
   }
 }
