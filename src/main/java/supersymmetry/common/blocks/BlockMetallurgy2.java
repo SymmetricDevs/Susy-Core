@@ -32,7 +32,8 @@ public class BlockMetallurgy2 extends VariantHorizontalRotatableBlock<BlockMetal
 
     public enum BlockMetallurgy2Type implements IStringSerializable {
 
-        FLYING_SHEAR_SAW("flying_shear_saw");
+        FLYING_SHEAR_SAW("flying_shear_saw"),
+        POLYSTYRENE_WALL("polystyrene_wall");
 
         private String name;
 

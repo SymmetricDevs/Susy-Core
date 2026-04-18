@@ -34,6 +34,7 @@ import gregtech.api.metatileentity.multiblock.MultiblockDisplayText;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.TraceabilityPredicate;
+import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.util.*;
 import gregtech.client.renderer.ICubeRenderer;
@@ -73,7 +74,8 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
         // Different characters use common constraints. Copied from GCyM
         TraceabilityPredicate casingPredicate = states(this.casingState).setMinGlobalLimited(52)
                 .or(abilities(MultiblockAbility.IMPORT_ITEMS).setPreviewCount(1));
-        TraceabilityPredicate maintenance = abilities(MultiblockAbility.MAINTENANCE_HATCH).setMaxGlobalLimited(1);
+        TraceabilityPredicate maintenance = abilities(MultiblockAbility.MAINTENANCE_HATCH).setMaxGlobalLimited(1)
+                .setMinGlobalLimited(1);
 
         return FactoryBlockPattern.start()
                 .aisle("GAAAAAAAO", "GAAAAAAAO", "G   A   O")
@@ -212,7 +214,8 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
                 lubricantAmount = getTotalFluidAmount(testStack, getInputFluidInventory());
                 lubricantStored = lubricantAmount[0];
                 lubricantCapacity = lubricantAmount[1];
-                lubricantConsumptionRate = lubricantInfo.amount_required * (2.0 * getRotationSpeed() / 3600);
+                lubricantConsumptionRate = (generatingPower) ?
+                        lubricantInfo.amount_required * (2.0 * getRotationSpeed() / 3600) : 0;
             }
 
             ITextComponent lubricantStorage = TextComponentUtil.stringWithColor(
@@ -265,8 +268,29 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
                         .setTooltipText("susy.gui.toggle_energy_voiding");
     }
 
+    public static void addFuelNeededLine(List<ITextComponent> textList, SuSyTurbineRecipeLogic recipeLogic) {
+        Recipe previousRecipe = recipeLogic.getPreviousRecipe();
+        int parallel = recipeLogic.getCurrentParallel();
+
+        int amount = previousRecipe != null ? previousRecipe.getFluidInputs().getFirst().getInputFluidStack().amount :
+                0;
+
+        ITextComponent fuelCurrent = TextComponentUtil.stringWithColor(TextFormatting.RED,
+                amount * parallel + "L");
+        ITextComponent fuelNeeded = TextComponentUtil.stringWithColor(TextFormatting.RED, previousRecipe != null ?
+                amount * recipeLogic.getMaximumAllowedVoltage() / previousRecipe.getEUt() + "L" : "0L");
+        ITextComponent numTicks = TextComponentUtil.stringWithColor(TextFormatting.AQUA,
+                TextFormattingUtil.formatNumbers(recipeLogic.getPreviousRecipeDuration()));
+        textList.add(TextComponentUtil.translationWithColor(
+                TextFormatting.GRAY,
+                "susy.multiblock.rotation_generator.fuel_needed",
+                fuelCurrent, fuelNeeded, numTicks));
+    }
+
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
+        MultiblockFuelRecipeLogic recipeLogic = (MultiblockFuelRecipeLogic) recipeMapWorkable;
+
         if (isStructureFormed()) {
             FluidStack fuelStack = ((SuSyTurbineRecipeLogic) recipeMapWorkable).getInputFluidStack();
             if (fuelStack != null && fuelStack.amount > 0) {
@@ -281,13 +305,13 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
             }
             textList.add(new TextComponentTranslation("susy.multiblock.rotation_generator.power", getMaxVoltage(),
                     Math.min(recipeMapWorkable.getEnergyContainer().getOutputVoltage(), GTValues.V[tier] * 16)));
-        }
 
-        MultiblockFuelRecipeLogic recipeLogic = (MultiblockFuelRecipeLogic) recipeMapWorkable;
+            if (isActive())
+                addFuelNeededLine(textList, (SuSyTurbineRecipeLogic) recipeLogic);
+        }
 
         MultiblockDisplayText.builder(textList, isStructureFormed())
                 .setWorkingStatus(recipeLogic.isWorkingEnabled(), recipeLogic.isActive())
-                .addFuelNeededLine(recipeLogic.getRecipeFluidInputInfo(), recipeLogic.getPreviousRecipeDuration())
                 .addWorkingStatusLine();
     }
 

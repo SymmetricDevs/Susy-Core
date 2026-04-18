@@ -39,6 +39,8 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
     private boolean sufficientFluids;
     private boolean isFull;
 
+    protected boolean generatingPower;
+
     protected FluidStack lubricantStack;
     protected SuSyUtility.Lubricant lubricantInfo;
 
@@ -82,6 +84,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
             setLubricantStack(tanks);
             updateSufficientFluids();
             isFull = energyContainer.getEnergyStored() - energyContainer.getEnergyCapacity() == 0;
+            generatingPower = !isFull && recipeMapWorkable.isWorking();
 
             if (recipeMapWorkable.isWorking() && ((SuSyTurbineRecipeLogic) recipeMapWorkable).tryDrawEnergy()) {
                 speed += getRotationAcceleration();
@@ -92,6 +95,8 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
 
             speed = Math.min(speed, maxSpeed);
             speed = Math.max(speed, 0);
+
+            ((SuSyTurbineRecipeLogic) recipeMapWorkable).doDrawEnergy();
 
             if (lubricantStack != null && lubricantCounter >= (600 * 3600)) {
                 lubricantCounter = 0;
@@ -137,6 +142,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         super.writeToNBT(data);
         data.setInteger("Speed", this.speed);
         data.setInteger("LubricantCounter", this.lubricantCounter);
+        data.setBoolean("VoidingEnergy", ((SuSyTurbineRecipeLogic) recipeMapWorkable).getVoidingEnergy());
         return data;
     }
 
@@ -146,6 +152,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         super.readFromNBT(data);
         this.speed = data.getInteger("Speed");
         this.lubricantCounter = data.getInteger("LubricantCounter");
+        ((SuSyTurbineRecipeLogic) recipeMapWorkable).setVoidingEnergy(data.getBoolean("VoidingEnergy"));
     }
 
     @Override
@@ -161,7 +168,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
 
     @Override
     protected long getMaxVoltage() {
-        if (!isFull && recipeMapWorkable.isActive()) {
+        if (!isFull && speed > 0 && ((SuSyTurbineRecipeLogic) recipeMapWorkable).tryDrawEnergy()) {
             return ((SuSyTurbineRecipeLogic) recipeMapWorkable).getActualVoltage();
         } else {
             return 0L;
@@ -187,7 +194,31 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
             if (proposedEUt > getMaximumAllowedVoltage()) {
                 return false;
             }
+            // Prevent recipe from starting if energy buffer is full, and we're not voiding energy
+            if (isFull && !voidEnergy) {
+                return false;
+            }
+
             return sufficientFluids;
+        }
+
+        @Override
+        public int getInfoProviderEUt() {
+            if (!isFull && speed > 0 && tryDrawEnergy()) {
+                return (int) getActualVoltage();
+            } else {
+                return 0;
+            }
+        }
+
+        @Override
+        protected void updateRecipeProgress() {
+            if (canRecipeProgress && drawEnergy(recipeEUt, true)) {
+                // as recipe starts with progress on 1 this has to be > only not => to compensate for it
+                if (++progressTime > getMaxProgress()) {
+                    completeRecipe();
+                }
+            }
         }
 
         public boolean getVoidingEnergy() {
@@ -207,7 +238,7 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         protected boolean drawEnergy(int recipeEUt, boolean simulate) {
             long euToDraw = -getActualVoltage(); // Will be negative
             long resultEnergy = getEnergyStored() - euToDraw;
-            if (resultEnergy >= 0L && resultEnergy <= getEnergyCapacity()) {
+            if (resultEnergy >= 0L && getEnergyStored() < getEnergyCapacity()) {
                 if (!simulate) getEnergyContainer().changeEnergy(-euToDraw); // So this is positive
                 return true;
             }
@@ -216,7 +247,12 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         }
 
         public boolean tryDrawEnergy() {
-            return drawEnergy(this.recipeEUt, true);
+            return drawEnergy((int) getMaxParallelVoltage(), true); // have energy draw only tied to speed? (ignore
+                                                                    // recipe EUt entirely)
+        }
+
+        public boolean doDrawEnergy() {
+            return drawEnergy((int) getMaxParallelVoltage(), false);
         }
 
         @Override
@@ -235,17 +271,27 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
 
         @Override
         protected long getMaxParallelVoltage() {
-            long maximumOutput = getMaximumAllowedVoltage();
-            return Math.max(scaleProduction(maximumOutput),
-                    Math.min(proposedEUt, maximumOutput));
+            // By returning the maximum here, the parallel limit will be based on the input
+            // fluid amount. If you scale production here, the parallel will be limited based
+            // on the speed. So, the first run will only do 1X parallel and will consume much less
+            // fluid, yet the speed will continue to increase and generate thousands of EU/t before
+            // the initial fuel supply runs out.
+            return getMaximumAllowedVoltage();
         }
 
-        protected long getMaximumAllowedVoltage() {
+        public long getMaximumAllowedVoltage() {
             return Math.min((GTValues.V[tileEntity.getTier()]) * 16, getMaxVoltage());
         }
 
         protected long getActualVoltage() {
-            return scaleProduction(getMaximumAllowedVoltage());
+            // actual voltage should be based off of the recipe EU/t which reflects the
+            // current parallel. If max is used then it will always generate 32,768 EU/t
+            // at full speed for 16A EV, even if a fraction of the fuel was given as input.
+            return scaleProduction(-recipeEUt);
+        }
+
+        public int getCurrentParallel() {
+            return this.parallelRecipesPerformed;
         }
     }
 }

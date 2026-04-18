@@ -216,6 +216,8 @@ item.material.oreprefix.fiberWet=湿%s纤维
 item.material.oreprefix.thread=%s纱线
 item.material.oreprefix.dustWet=湿%s粉
 item.material.oreprefix.electrode=%s电极
+item.material.oreprefix.pin=%s引脚
+item.material.oreprefix.target=%s溅射靶
 
 susy.fluid.supercritical=超临界%s
 susy.fluid.impure_slurry=含杂%s浆液
@@ -367,10 +369,13 @@ susy.machine.primitive_item_import.name=简易输入总线
 susy.machine.primitive_item_import.tooltip=仅可用于简易冶炼炉
 susy.machine.primitive_item_export.name=简易输出总线
 susy.machine.primitive_item_export.tooltip=仅可用于简易冶炼炉
-susy.machine.mixer_settler.name=混合沉降器
+susy.machine.mixer_settler.name=混合沉降器（旧）
 susy.machine.mixer_settler.tooltip=§o凡善澄者，必先杂而后清§r ——孙子，《苏西兵法》
 susy.machine.mixer_settler.tooltip.1=基础结构包含2个沉降单元；每此拓展增加2个单元
 susy.machine.mixer_settler.tooltip.2=可以通过增加沉降器单元获得最高2倍的速率提升
+
+susy.machine.mixer_settler_v2.name=混合沉降器
+susy.machine.mixer_settler_v2.tooltip=§o凡善澄者，必先杂而后清§r ——孙子，《苏西兵法》
 
 susy.machine.parallel_pure=可并行输出至多§b%d§7个物品。
 
@@ -633,6 +638,12 @@ susy.machine.ion_implanter.uiv.name=史诗离子注入机 III
 susy.machine.ion_implanter.uxv.name=史诗离子注入机 IV
 susy.machine.ion_implanter.opv.name=传说离子注入机
 
+# Screen Printer
+susy.machine.screen_printer.lv.name=基础丝网印刷机
+susy.machine.screen_printer.mv.name=进阶丝网印刷机
+susy.machine.screen_printer.hv.name=进阶丝网印刷机 II
+susy.machine.screen_printer.ev.name=进阶丝网印刷机 III
+
 # Fluid Compressor
 susy.machine.fluid_compressor.lv.name=基础流体加压机
 susy.machine.fluid_compressor.mv.name=进阶流体加压机
@@ -842,6 +853,12 @@ recipemap.gas_atomizer.name=气雾化制粉
 recipemap.metallurgical_converter.name=转炉冶炼
 recipemap.advanced_steam_turbine.name=高级蒸汽轮机
 recipemap.mixer_settler.name=Mixer-Settler
+recipemap.atomic_layer_deposition.name=原子层沉积
+recipemap.wire_bonding.name=打線接合
+recipemap.screen_printer=絲網印刷
+recipemap.plasma_asher=等离子灰化
+recipemap.resist_processor=旋转涂覆
+recipemap.reactive_ion_etching=反应离子蝕刻
 
 susy.multiblock.primitive_mud_pump.description=简易泥泵是一台蒸汽时代的多方块机器。当它的控制器方块处于河流生物群系，且高度介于 Y = 64 与 Y = 80（含）之间时将每秒收集一次泥。它可以使用 ULV、LV 输出仓或水泵输出仓。
 
@@ -919,6 +936,7 @@ metaitem.track_segment.length_info=相当于§610格§7的单轨铁道。
 metaitem.air_vent.tooltip.1=§b收集速率：§f%,d L/s
 metaitem.orbital.scrap.earth.name=地球轨道太空垃圾
 metaitem.code_breacher.name=密码破译器
+metaitem.shape.mold.target=溅射靶模具
 
 # Catalysts
 susy.universal.catalysts.tooltip.tier=§e最高电压：§f%,d EU/t（%s§f）

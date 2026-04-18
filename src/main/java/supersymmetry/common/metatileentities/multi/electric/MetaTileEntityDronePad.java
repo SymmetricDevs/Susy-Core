@@ -269,6 +269,10 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
                 this.getMetaTileEntity().setDroneDead(true);
             }
 
+            if (this.getMetaTileEntity().getDrone() == null && !this.getMetaTileEntity().droneReachedSky) {
+                this.invalidate();
+            }
+
             if (maxProgressTime - progressTime == 240 && this.getMetaTileEntity().droneReachedSky) {
                 this.getMetaTileEntity().spawnDroneEntity(true);
             }

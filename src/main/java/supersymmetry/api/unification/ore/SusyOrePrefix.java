@@ -8,6 +8,7 @@ import gregtech.api.unification.material.info.MaterialIconType;
 import gregtech.api.unification.ore.OrePrefix;
 import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
 import supersymmetry.api.unification.material.info.SuSyMaterialIconType;
+import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 
 public class SusyOrePrefix {
 
@@ -97,4 +98,19 @@ public class SusyOrePrefix {
     public static final OrePrefix electrode = new OrePrefix("electrode", GTValues.M, null,
             SuSyMaterialIconType.electrode, OrePrefix.Flags.ENABLE_UNIFICATION,
             mat -> mat.hasFlag(SuSyMaterialFlags.SUPERALLOY));
+
+    // Mill ball
+    public static final OrePrefix millBall = new OrePrefix("millBall", GTValues.M, null, SuSyMaterialIconType.millBall,
+            OrePrefix.Flags.ENABLE_UNIFICATION, mat -> mat.hasProperty(SuSyPropertyKey.MILL_BALL));
+
+    // pins
+    public static final OrePrefix pin = new OrePrefix("pin", GTValues.M, null, SuSyMaterialIconType.pin,
+            OrePrefix.Flags.ENABLE_UNIFICATION, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_PINS));
+
+    public static final OrePrefix target = new OrePrefix("target", GTValues.M, null, SuSyMaterialIconType.target,
+            OrePrefix.Flags.ENABLE_UNIFICATION, mat -> mat.hasFlag(SuSyMaterialFlags.GENERATE_SPUTTERING_TARGET));
+
+    static {
+        millBall.maxStackSize = 1;
+    }
 }

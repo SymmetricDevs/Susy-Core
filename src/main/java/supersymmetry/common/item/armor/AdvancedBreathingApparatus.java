@@ -43,9 +43,10 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IG
     // Luckily this isn't instanced for every itemStack so we're fine here
     private AnimationFactory factory;
 
-    public AdvancedBreathingApparatus(EntityEquipmentSlot slot, double hoursOfLife, String name, int tier,
+    public AdvancedBreathingApparatus(EntityEquipmentSlot slot, int maxDurability, double hoursOfLife, String name,
+                                      int tier,
                                       double relativeAbsorption) {
-        super(slot);
+        super(slot, maxDurability);
         this.hoursOfLife = hoursOfLife;
         this.name = name;
         this.tier = tier;

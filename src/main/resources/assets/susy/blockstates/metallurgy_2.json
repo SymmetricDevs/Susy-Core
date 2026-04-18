@@ -4,6 +4,10 @@
     "facing=north,variant=flying_shear_saw": { "model": "susy:metallurgy/flying_shear_saw" },
     "facing=south,variant=flying_shear_saw": { "model": "susy:metallurgy/flying_shear_saw", "y": 180 },
     "facing=west,variant=flying_shear_saw": { "model": "susy:metallurgy/flying_shear_saw", "y": 270 },
-    "facing=east,variant=flying_shear_saw": { "model": "susy:metallurgy/flying_shear_saw", "y": 90 }
+    "facing=east,variant=flying_shear_saw": { "model": "susy:metallurgy/flying_shear_saw", "y": 90 },
+    "facing=north,variant=polystyrene_wall": { "model": "susy:metallurgy/polystyrene_wall" },
+    "facing=south,variant=polystyrene_wall": { "model": "susy:metallurgy/polystyrene_wall", "y": 180 },
+    "facing=west,variant=polystyrene_wall": { "model": "susy:metallurgy/polystyrene_wall", "y": 270 },
+    "facing=east,variant=polystyrene_wall": { "model": "susy:metallurgy/polystyrene_wall", "y": 90 }
   }
 }

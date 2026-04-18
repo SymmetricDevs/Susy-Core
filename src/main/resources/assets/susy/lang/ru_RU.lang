@@ -308,6 +308,7 @@ susy.machine.sieve_distillation_tower.name=Ситовая дистилляцио
 
 susy.machine.drone_pad.name=Drone Pad
 susy.machine.primitive_smelter.name=Примитивный плавильный печь
+susy.machine.cupola_furnace.name=Вагранка
 
 susy.machine.primitive_item_import.name=Примитивная шина импорта  предметов
 susy.machine.primitive_item_import.tooltip=Только для использования с примитивной плавильной печью.
@@ -572,6 +573,12 @@ susy.machine.ion_implanter.uiv.name=Идеальный ионный имплан
 susy.machine.ion_implanter.uxv.name=Идеальный ионный имплантатор IV
 susy.machine.ion_implanter.opv.name=Совершенный ионный имплантатор
 
+# Screen Printer
+susy.machine.screen_printer.lv.name=Обычный трафаретная печатная машина
+susy.machine.screen_printer.mv.name=Улучшеный трафаретная печатная машина
+susy.machine.screen_printer.hv.name=Улучшеный трафаретная печатная машина II
+susy.machine.screen_printer.ev.name=Улучшеный трафаретная печатная машина III
+
 # Fluid Compressor
 susy.machine.fluid_compressor.lv.name=Обычный жидкостный компрессор
 susy.machine.fluid_compressor.mv.name=Улучшеный жидкостный компрессор
@@ -739,6 +746,7 @@ recipemap.gravity_separator=Гравитационное разделение
 recipemap.spinning.name=Текстильное прядение
 recipemap.large_steam_turbine.name=Большая паровая турбина
 recipemap.primitive_smelter.name=Первобытная плавка
+recipemap.cupola_furnace.name=Вагранка
 recipemap.large_fluid_pump.name=Большой жидкостный насос
 recipemap.sieve_distillation.name=Фракционная перегонка
 recipemap.jet_wingpack_fuels.name=Топливо для реактивных крыльев

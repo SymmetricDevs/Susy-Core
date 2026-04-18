@@ -1,0 +1,9 @@
+{
+  "forge_marker" : 1,
+  "variants" : {
+    "facing=north,variant=tier1": { "model": "susy:processor_cluster/tier1" },
+    "facing=east,variant=tier1": { "model": "susy:processor_cluster/tier1", "y": 90 },
+    "facing=south,variant=tier1": { "model": "susy:processor_cluster/tier1", "y": 180 },
+    "facing=west,variant=tier1": { "model": "susy:processor_cluster/tier1", "y": 270 }
+  }
+}
