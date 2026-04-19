@@ -540,7 +540,7 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> SCREEN_PRINTER = new RecipeMap<>("screen_printer", 2, 1, 1, 0,
             new SimpleRecipeBuilder(), false);
 
-    public static final RecipeMap<SimpleRecipeBuilder> ALD = new RecipeMap<>("atomic_layer_deposition", 1, 1, 3, 2,
+    public static final RecipeMap<SimpleRecipeBuilder> ALD_RECIPES = new RecipeMap<>("atomic_layer_deposition", 1, 1, 3, 2,
             new SimpleRecipeBuilder(), false);
 
     static {
