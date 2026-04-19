@@ -187,6 +187,16 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer LOG_WASHER_OVERLAY = new OrientedOverlayRenderer(
             "machines/multiblocks/log_washer");
 
+    public static final OrientedOverlayRenderer LAUNCH_PAD_OVERLAY = new OrientedOverlayRenderer(
+            "machines/multiblocks/launch_pad");
+    public static final OrientedOverlayRenderer ROCKET_PROGRAMMER_OVERLAY = new OrientedOverlayRenderer(
+            "machines/multiblocks/rocket_programmer");
+    public static final OrientedOverlayRenderer AFS_OVERLAY = new OrientedOverlayRenderer(
+            "machines/multiblocks/aerospace_flight_simulator");
+    public static final OrientedOverlayRenderer BLUEPRINT_ASSEMBLER_OVERLAY = new OrientedOverlayRenderer(
+            "machines/multiblocks/blueprint_assembler");
+
+
     public static final SimpleOverlayRenderer SLAG_HOT = new SimpleOverlayRenderer("resource/slag_hot");
     public static final SimpleOverlayRenderer RESTRICTIVE_FILTER_FILTER_OVERLAY = new SimpleOverlayRenderer(
             "cover/overlay_restrictive_filter");

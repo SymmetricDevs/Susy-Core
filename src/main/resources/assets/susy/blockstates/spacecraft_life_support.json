@@ -1,13 +1,14 @@
 {
   "forge_marker" : 1,
   "defaults": {
-    "model": "minecraft:cube_all"
+    "model": "minecraft:cube_column"
   },
   "variants": {
     "variant": {
       "oxygen_regen": {
         "textures" : {
-          "all" : "gregtech:blocks/rocketry/struct/oxygen_regen"
+          "side" : "gregtech:blocks/rocketry/struct/oxygen_regen",
+          "end" : "gregtech:blocks/rocketry/struct/oxygen_regen_top"
         }
       }
     }
