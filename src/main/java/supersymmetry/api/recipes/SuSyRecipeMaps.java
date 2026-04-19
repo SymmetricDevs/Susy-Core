@@ -97,7 +97,7 @@ public class SuSyRecipeMaps {
                     .setSlotOverlay(true, true, true, GuiTextures.BEAKER_OVERLAY_3)
                     .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
-    public static final RecipeMap<SimpleRecipeBuilder> CRYSTALLIZER_RECIPES = new RecipeMap<>("crystallizer", 3, 3, 3,
+    public static final RecipeMap<SimpleRecipeBuilder> CRYSTALLIZER_RECIPES = new RecipeMap<>("crystallizer", 4, 3, 3,
             3, new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
