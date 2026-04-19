@@ -20,11 +20,6 @@
           "all" : "gregtech:blocks/rocketry/struct/camera"
         }
       },
-      "engine" : {
-        "textures" : {
-          "all" : "gregtech:blocks/rocketry/struct/engine"
-        }
-      },
       "solar_panel" : {
         "textures" : {
           "all" : "gregtech:blocks/rocketry/struct/solar_panel"

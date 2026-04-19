@@ -23,10 +23,7 @@ public class BlockRocketNozzle extends VariantBlock<BlockRocketNozzle.NozzleShap
 
     public enum NozzleShapeType implements IStringSerializable, IStateHarvestLevel {
 
-        BELL_NOZZLE("bell_basic", 4),
-        PLUG_NOZZLE("plug", 4), // note: these must be used with plug blocks
-        EXPANDING_NOZZLE("expanding", 4);
-
+        BELL_NOZZLE("bell_basic", 4);
         private String name;
         private int harvestLevel;
 
@@ -56,8 +53,6 @@ public class BlockRocketNozzle extends VariantBlock<BlockRocketNozzle.NozzleShap
         NozzleShapeType type = getState(state);
         double multiplier = switch (type) {
             case BELL_NOZZLE -> 60.0;
-            case PLUG_NOZZLE -> 65.0;
-            case EXPANDING_NOZZLE -> 80.0;
         };
         return 500 + 100 * multiplier;
     }
