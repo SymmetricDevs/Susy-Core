@@ -500,7 +500,7 @@ public class SuSyRecipeMaps {
                     .setSound(GTSoundEvents.ARC);
 
     public static final RecipeMap<SimpleRecipeBuilder> RESISTANCE_FURNACE = new RecipeMap<>("resistance_furnace",
-            6, 2, 0, 1, new SimpleRecipeBuilder(), false)
+            6, 2, 1, 1, new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.FURNACE);
 
     public static final RecipeMap<NoEnergyRecipeBuilder> SALVAGING_RECIPES = new RecipeMap<>("salvaging", 1, 9, 0, 0,
