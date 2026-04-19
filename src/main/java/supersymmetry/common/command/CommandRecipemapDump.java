@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.function.Supplier;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -89,14 +90,11 @@ public class CommandRecipemapDump extends CommandBase {
         else if (nbt instanceof NBTTagFloat) return new JsonPrimitive(((NBTTagFloat) nbt).getFloat());
         else if (nbt instanceof NBTTagDouble)
             return new JsonPrimitive(((NBTTagDouble) nbt).getDouble());
-        else if (nbt instanceof NBTTagByteArray)
-            return new JsonPrimitive(nbt.toString());
+        else if (nbt instanceof NBTTagByteArray) return new JsonPrimitive(nbt.toString());
         else if (nbt instanceof NBTTagString)
             return new JsonPrimitive(((NBTTagString) nbt).getString());
-        else if (nbt instanceof NBTTagIntArray)
-            return new JsonPrimitive(nbt.toString());
-        else if (nbt instanceof NBTTagLongArray)
-            return new JsonPrimitive(nbt.toString());
+        else if (nbt instanceof NBTTagIntArray) return new JsonPrimitive(nbt.toString());
+        else if (nbt instanceof NBTTagLongArray) return new JsonPrimitive(nbt.toString());
         else throw new IllegalArgumentException("weird nbt class" + nbt.getClass());
     }
 
@@ -113,26 +111,51 @@ public class CommandRecipemapDump extends CommandBase {
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args)
                                                                                       throws CommandException {
-        // List<String> args2 = Stream.of(args).collect(Collectors.toList());
-        // TODO make it accept a list of required items ( like "recipemaps", "crafting") and output it in
-        // a file name that is a combination of the arguments, dump everything if no args passed
-
-        itemStorage.clear();
-        fluidStorage.clear();
-
-        // also this command takes seconds to run :C
+        Map<String, Supplier<JsonElement>> fns = Map.of(
+                "items", () -> this.dumpItems(),
+                "fluids", () -> this.dumpFluids(),
+                "oreDict", () -> this.dumpOreDict(),
+                "recipemaps", () -> this.gtRecipeMaps(),
+                "smelting", () -> this.dumpSmeltingRecipes(),
+                "crafting", () -> this.dumpCraftingRecipes(),
+                "gtMTEs", () -> this.dumpMachines(),
+                "materials", () -> this.dumpMaterials());
+        if (args.length == 0) {
+            this.runAll(sender, fns);
+            return;
+        }
+        for (String arg : args) {
+            if (!fns.containsKey(arg)) {
+                throw new CommandException(
+                        String.format("Unknown function: \"%s\" Available: %s", arg, fns.keySet().toString()));
+            }
+        }
         JsonObject root = new JsonObject();
+        for (String arg : args) {
+            long start = System.nanoTime();
+            JsonElement el = fns.get(arg).get();
+            long end = System.nanoTime();
+            sender.sendMessage(
+                    new TextComponentString(
+                            String.format("%s" + " ran in %.3fms", arg, (end - start) / 1e6)));
 
-        root.add("items", this.dumpItems());
-        root.add("fluids", this.dumpFluids());
-        root.add("oreDict", this.dumpOreDict());
-        root.add("recipemaps", gtRecipeMaps());
-        root.add("smelting", this.dumpSmeltingRecipes());
-        root.add("crafting", this.dumpCraftingRecipes());
-        root.add("gtMTEs", this.dumpMachines());
-        root.add("materials", this.dumpMaterials());
+            root.add(arg, el);
+        }
+        this.writeJsonToRoot(root, "recipedump", sender);
+    }
 
-        writeJsonToRoot(root, "recipedump", sender);
+    private void runAll(ICommandSender sender, Map<String, Supplier<JsonElement>> funcMap) {
+        JsonObject root = new JsonObject();
+        for (Map.Entry<String, Supplier<JsonElement>> e : funcMap.entrySet()) {
+            long start = System.nanoTime();
+            JsonElement el = e.getValue().get();
+            long end = System.nanoTime();
+            sender.sendMessage(
+                    new TextComponentString(
+                            String.format("%s" + " ran in %.3fms", e.getKey(), (end - start) / 1e6)));
+            root.add(e.getKey(), el);
+        }
+        this.writeJsonToRoot(root, "recipedump", sender);
     }
 
     public JsonElement dumpMaterials() {
@@ -164,7 +187,6 @@ public class CommandRecipemapDump extends CommandBase {
                 matFluids.add(fluid.getUnlocalizedName());
             }
             matObj.add("fluids", matFluids);
-
         }
         if (itemStorage.get(mat) != null) {
             JsonArray matItems = new JsonArray();
@@ -177,7 +199,8 @@ public class CommandRecipemapDump extends CommandBase {
         if (mat.hasProperty(PropertyKey.TOOL)) {
             JsonObject toolProps = new JsonObject();
             ToolProperty prop = mat.getProperty(PropertyKey.TOOL);
-            toolProps.addProperty("durability", prop.getToolDurability() * prop.getDurabilityMultiplier());
+            toolProps.addProperty(
+                    "durability", prop.getToolDurability() * prop.getDurabilityMultiplier());
             toolProps.addProperty("miningSpeed", prop.getToolSpeed());
             toolProps.addProperty("attackDamage", prop.getToolAttackDamage());
             toolProps.addProperty("attackSpeed", prop.getToolAttackSpeed());
@@ -330,8 +353,7 @@ public class CommandRecipemapDump extends CommandBase {
         JsonArray propertyArray = getPropertiesArray(recipe);
         recipeobj.add("properties", propertyArray);
         recipeobj.addProperty("categoryName", recipe.getRecipeCategory().getName());
-        recipeobj.addProperty(
-                "categoryTranslationKey", recipe.getRecipeCategory().getTranslationKey());
+        recipeobj.addProperty("categoryTranslationKey", recipe.getRecipeCategory().getTranslationKey());
         recipeobj.addProperty("categoryUniqueID", recipe.getRecipeCategory().getUniqueID());
         recipeobj.addProperty("categoryModID", recipe.getRecipeCategory().getModid());
 
