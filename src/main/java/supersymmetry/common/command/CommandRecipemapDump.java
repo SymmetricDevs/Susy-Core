@@ -484,7 +484,7 @@ public class CommandRecipemapDump extends CommandBase {
 
             stackObj.addProperty("material", matStack.material.getRegistryName());
             stackObj.addProperty("materialAmount", matStack.amount);
-            itemStorage.computeIfAbsent(matStack.material, _ -> new ArrayList<>()).add(stack);
+            itemStorage.computeIfAbsent(matStack.material, m -> new ArrayList<>()).add(stack);
         }
 
         return stackObj;
