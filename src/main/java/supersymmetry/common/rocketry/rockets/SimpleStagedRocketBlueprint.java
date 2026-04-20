@@ -1,16 +1,15 @@
 package supersymmetry.common.rocketry.rockets;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants.NBT;
-
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.IAFSimprovable;
 import supersymmetry.api.rocketry.rockets.RocketStage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint implements IAFSimprovable {
 
@@ -56,7 +55,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
 
     public double minimalSuccessChance = 0.01;
 
-    public long AFSimporvement = 0;
+    public long AFSimprovement = 0;
 
     public SimpleStagedRocketBlueprint(String name, ResourceLocation entity) {
         super(name, entity);
@@ -71,11 +70,11 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
     }
 
     public long getAFSimprovement() {
-        return AFSimporvement;
+        return AFSimprovement;
     }
 
     public void setAFSimprovement(long a) {
-        this.AFSimporvement = a;
+        this.AFSimprovement = a;
     }
 
     @Override
@@ -91,7 +90,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         tag.setString("name", this.getName());
         tag.setBoolean("buildstat", complete);
 
-        tag.setLong("AFSimporvement", this.AFSimporvement);
+        tag.setLong("AFSimprovement", this.AFSimprovement);
 
         return tag;
     }
@@ -121,7 +120,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
             this.stages = new ArrayList<>(AbstractRocketBlueprint.getBlueprintsRegistry().get(name).stages);
         }
         this.setName(tag.getString("name"));
-        this.AFSimporvement = tag.getLong("AFSimporvement");
+        this.AFSimprovement = tag.getLong("AFSimprovement");
         return true;
     }
 }

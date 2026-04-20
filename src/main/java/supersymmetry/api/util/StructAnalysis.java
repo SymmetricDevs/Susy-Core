@@ -1,14 +1,12 @@
 package supersymmetry.api.util;
 
-import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
-import static supersymmetry.api.util.Welzl.computeMinimalRadius;
-
-import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.*;
-import java.util.stream.Collectors;
-
+import gregtech.api.pattern.BlockWorldState;
+import gregtech.api.pattern.PatternMatchContext;
+import gregtech.api.unification.OreDictUnifier;
+import gregtech.api.unification.material.Material;
+import gregtech.common.blocks.BlockLamp;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,13 +16,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-
-import gregtech.api.pattern.BlockWorldState;
-import gregtech.api.pattern.PatternMatchContext;
-import gregtech.api.unification.OreDictUnifier;
-import gregtech.api.unification.material.Material;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.SusyLog;
+
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
+import static supersymmetry.api.util.Welzl.computeMinimalRadius;
 
 public class StructAnalysis {
 
@@ -112,9 +113,13 @@ public class StructAnalysis {
                 for (int z = (int) aaBB.minZ; z < aaBB.maxZ; z++) {
                     BlockPos bp = new BlockPos(x, y, z);
                     if (!world.isAirBlock(bp)) {
-                        if (checkAir && world.getBlockState(bp).getCollisionBoundingBox(world, bp) == null) {
+                        IBlockState state = world.getBlockState(bp);
+                        if (checkAir && state.getCollisionBoundingBox(world, bp) == null) {
                             status = BuildStat.INVALID_AIRLIKE;
                             return null;
+                        }
+                        if (state.getBlock() instanceof BlockLamp) {
+                            continue;
                         }
                         ret.add(bp);
                     }
