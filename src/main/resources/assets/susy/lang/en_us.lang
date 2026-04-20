@@ -310,7 +310,7 @@ susy.machine.blueprint_assembler.build_error.incompatible_card=Incompatible card
 susy.machine.blueprint_assembler.build_error.unknown=Unknown error in %1$s. %2$s
 susy.machine.blueprint_assembler.build_error.success=Build successful!
 susy.machine.blueprint_assembler.build_error.success.extract=Extract the component cards now
-susy.machine.blueprint_assembler.build_button=build
+susy.machine.blueprint_assembler.build_button=Build
 
 
 susy.rocketry.components.engine.name=Engine(s)
@@ -1518,7 +1518,7 @@ susy.msg.rocket_component.no_nozzle=Nozzle blocks are missing.
 susy.msg.rocket_component.nozzle_invalid=The nozzle shape is incorrect.
 susy.msg.rocket_component.unknown_error=An unknown error occurred.
 susy.msg.rocket_component.wrong_num_c_chambers=There are too many or not enough combustion chambers.
-susy.msg.rocket_component.wrong_num_pumps=There are extraneous unused turbopumps.
+susy.msg.rocket_component.wrong_num_pumps=A combustion chamber has the wrong number of turbopumps.
 susy.msg.rocket_component.weird_pump=For some reason, a pump is facing upwards. Why?
 susy.msg.rocket_component.weird_fairing=Something about this fairing is weird.
 susy.msg.rocket_component.chamber_wrong_place=A combustion chamber is inside the rocket nozzle. That's strange...
