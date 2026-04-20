@@ -14,6 +14,7 @@ import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
+import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.network.PacketBuffer;
@@ -88,24 +89,25 @@ public class MetaTileEntityRotaryKiln extends RecipeMapMultiblockController impl
         TraceabilityPredicate maintenance = abilities(MultiblockAbility.MAINTENANCE_HATCH).setMinGlobalLimited(1).setMaxGlobalLimited(1);
 
         return FactoryBlockPattern.start()
-                .aisle("A         A", "A         A", "A         A", "A         A", "           ")
-                .aisle("A         A", "LD   B   DR", "LDCCCBCCCDR", "LD   B   DR", "A         A")
-                .aisle("A    F    A", "LDCCCBCCCDR", "L#########R", "LDCCCBCCCDR", "A         A")
-                .aisle("A         A", "LD   B   DR", "LDCCCSCCCDR", "LD   B   DR", "A         A")
-                .aisle("A         A", "A         A", "A         A", "A         A", "           ")
+                .aisle("F         F", "GD   B   DR", "LDCCCBCCCDR", "LD   B   DG")
+                .aisle("     F     ", "LDCCCBCCCDR", "L#########R", "LDCCCBCCCDR")
+                .aisle("F         F", "GD   B   DR", "LDCCCSCCCDR", "LD   B   DG")
                 .where('S', selfPredicate())
-                .where('A', states(getCasingState()).setMinGlobalLimited(25).or(maintenance)
-                        .or(autoAbilities(true, false, false, false, false, false, false).setMinGlobalLimited(0)))
                 .where('B', hiddenStates(getCasingState()))
                 .where('C', hiddenStates(getShellCasingState()))
                 .where('D', hiddenGearTooth(
                         RelativeDirection.LEFT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), false)
                         .getAxis()))
                 .where('F', frames(Materials.Steel))
+                .where('G', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('L', casingPredicate
-                        .or(autoAbilities(false, false, true, false, false, true, false)))
+                        .or(autoAbilities(false, false, true, false, false, true, false))
+                        .or(autoAbilities(true, false, false, false, false, false, false)).setMinGlobalLimited(0)
+                        .or(maintenance))
                 .where('R', casingPredicate
-                        .or(autoAbilities(false, false, false, true, true, false, false)))
+                        .or(autoAbilities(false, false, false, true, true, false, false))
+                        .or(autoAbilities(true, false, false, false, false, false, false)).setMinGlobalLimited(0)
+                        .or(maintenance))
                 .where(' ', any())
                 .where('#', air())
                 .build();
