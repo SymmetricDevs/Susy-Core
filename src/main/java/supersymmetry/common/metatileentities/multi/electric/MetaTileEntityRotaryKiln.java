@@ -20,7 +20,6 @@ import org.jetbrains.annotations.NotNull;
 import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.hiddenGearTooth;
 import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.hiddenStates;
 
-import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -92,11 +91,11 @@ public class MetaTileEntityRotaryKiln extends RecipeMapMultiblockController impl
         TraceabilityPredicate maintenance = abilities(MultiblockAbility.MAINTENANCE_HATCH).setMaxGlobalLimited(1);
 
         return FactoryBlockPattern.start()
-                .aisle("A           A", "A           A", "A           A", "A           A", "             ")
-                .aisle("A           A", "LD    B    DR", "LDCCCCBCCCCDR", "LD    B    DR", "A           A")
-                .aisle("A     F     A", "LDCCCCBCCCCDR", "L###########R", "LDCCCCBCCCCDR", "A           A")
-                .aisle("A           A", "LD    B    DR", "LDCCCCSCCCCDR", "LD    B    DR", "A           A")
-                .aisle("A           A", "A           A", "A           A", "A           A", "             ")
+                .aisle("A         A", "A         A", "A         A", "A         A", "           ")
+                .aisle("A         A", "LD   B   DR", "LDCCCBCCCDR", "LD   B   DR", "A         A")
+                .aisle("A    F    A", "LDCCCBCCCDR", "L#########R", "LDCCCBCCCDR", "A         A")
+                .aisle("A         A", "LD   B   DR", "LDCCCSCCCDR", "LD   B   DR", "A         A")
+                .aisle("A         A", "A         A", "A         A", "A         A", "           ")
                 .where('S', selfPredicate())
                 .where('A', states(getCasingState()).setMinGlobalLimited(25).or(maintenance)
                         .or(autoAbilities(true, false, false, false, false, false, false).setMinGlobalLimited(0)))
