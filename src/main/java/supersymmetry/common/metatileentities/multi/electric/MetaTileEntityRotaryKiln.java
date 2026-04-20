@@ -85,7 +85,7 @@ public class MetaTileEntityRotaryKiln extends RecipeMapMultiblockController impl
     @Override
     protected BlockPattern createStructurePattern() {
         // Different characters use common constraints. Copied from GCyM
-        TraceabilityPredicate casingPredicate = states(getCasingState()).setMinGlobalLimited(8);
+        TraceabilityPredicate casingPredicate = states(getCasingState()).setMinGlobalLimited(6);
         TraceabilityPredicate maintenance = abilities(MultiblockAbility.MAINTENANCE_HATCH).setMinGlobalLimited(1).setMaxGlobalLimited(1);
 
         return FactoryBlockPattern.start()
