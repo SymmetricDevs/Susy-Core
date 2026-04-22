@@ -1,0 +1,42 @@
+Shader License (All Rights Reserved – Restricted Use)
+
+Copyright © Martin.
+All rights reserved.
+
+The creation of these shaders involved other sources. This license are for these implementations.
+The following shaders provided by Martin (see contact and shaders below) are provided under the terms listed here.
+
+You Are NOT Allowed To:
+Copy, reproduce, or distribute the shaders, in whole or in part.
+Modify, adapt, translate, or create derivative works from the shaders.
+Use the shaders in any project, product, or commercial work without explicit written permission.
+Re-upload or share the shaders on any platform.
+You Are Allowed To:
+Use the shaders only in the specific project for which Martin has directly granted permission.
+View and study the code for personal learning purposes (no reuse allowed).
+
+Permission Requirements
+
+Any other use must be approved in writing by Martin.
+Permission must be obtained before distributing, modifying, or integrating the shaders into any project.
+
+Misuse
+
+Unauthorized copying, modification, or redistribution is strictly prohibited and may result in takedown requests or further action.
+
+Shaders
+
+planet surface
+atmosphere orbital
+emissive 
+composite
+reentry plasma
+sun
+transmittance
+multiple scattering
+seperable blur
+
+Contact
+
+Discord: @chancelier_martin
+GitHub: @ChancelierMartin
