@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "gregtech:blocks/rocketry/struct/spacecraft_hull/side",
+    "down": "gregtech:blocks/rocketry/struct/spacecraft_hull/front",
+    "up": "gregtech:blocks/rocketry/struct/spacecraft_hull/side",
+    "north": "gregtech:blocks/rocketry/struct/spacecraft_hull/side",
+    "east": "gregtech:blocks/rocketry/struct/spacecraft_hull/side",
+    "south": "gregtech:blocks/rocketry/struct/spacecraft_hull/side",
+    "west": "gregtech:blocks/rocketry/struct/spacecraft_hull/side"
+  }
+}
