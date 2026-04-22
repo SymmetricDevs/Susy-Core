@@ -65,6 +65,8 @@ import supersymmetry.api.event.MobHordeEvent;
 import supersymmetry.api.fluids.SusyGeneratedFluidHandler;
 import supersymmetry.api.particle.Particles;
 import supersymmetry.api.space.CelestialObjects;
+import supersymmetry.api.space.reentry.ItemDebugReEntry;
+import supersymmetry.api.space.reentry.ReEntryDimensions;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.api.unification.ore.SusyStoneTypes;
 import supersymmetry.common.blocks.SheetedFrameItemBlock;
@@ -183,6 +185,8 @@ public class CommonProxy {
                 .stream().distinct()
                 .map(block -> createItemBlock(block, SheetedFrameItemBlock::new))
                 .forEach(registry::register);
+
+        registry.register(new ItemDebugReEntry());
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
@@ -276,5 +280,6 @@ public class CommonProxy {
         BiomeDictionary.addTypes(SuSyBiomes.LUNAR_MARIA, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.VOID);
 
         SuSyDimensions.init();
+        ReEntryDimensions.init();
     }
 }
