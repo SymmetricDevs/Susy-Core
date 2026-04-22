@@ -3,7 +3,6 @@ package supersymmetry.api.event;
 import gregtech.api.util.GTTeleporter;
 import gregtech.api.util.TeleportHandler;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTException;

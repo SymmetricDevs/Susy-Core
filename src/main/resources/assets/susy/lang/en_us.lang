@@ -1528,3 +1528,8 @@ tile.bmrf_blocks.bmrf9.name=BMRF-9
 metaitem.entity_tagger.name=Factions Dev Tool
 #Raid Flares
 tile.raid_flare_block.bandit_flare.name=Bandit Raid Flare
+#Radios
+chat.susy.radio.no_tag=§7This radio appears broken...
+chat.susy.radio.no_faction=§7This radio is not connected to any known frequency...
+chat.susy.radio.get_hate=§7The radio intercepts a message! (%s§7)
+metaitem.faction_radio.name=Universal Federation Radio

@@ -51,6 +51,7 @@ public class SuSyMetaItems {
     public static MetaValueItem TUNGSTEN_ELECTRODE;
     public static MetaValueItem CODE_BREACHER;
     public static MetaValueItem ENTITY_TAGGER;
+    public static MetaValueItem FACTION_RADIO;
 
     public static MetaValueItem DATA_CARD;
     public static MetaValueItem DATA_CARD_ACTIVE;
@@ -143,6 +144,8 @@ public class SuSyMetaItems {
         CODE_BREACHER = initOneItem("code_breacher").setMaxStackSize(1);
 
         ENTITY_TAGGER = initOneItem("entity_tagger").setMaxStackSize(1);
+
+        FACTION_RADIO = initOneItem("faction_radio").setMaxStackSize(1);
 
         DATA_CARD = initOneItem("data_card").setMaxStackSize(1)
                 .addComponents(new TooltipBehavior(lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1"))));
