@@ -1,7 +1,5 @@
 package supersymmetry.common.world;
 
-import static supersymmetry.common.blocks.SuSyBlocks.DEPOSIT_BLOCK;
-
 import java.util.List;
 import java.util.Random;
 
@@ -21,7 +19,6 @@ import net.minecraft.world.gen.*;
 
 import org.jetbrains.annotations.NotNull;
 
-import supersymmetry.common.blocks.BlockDeposit;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.world.gen.ComplexCrater;
 import supersymmetry.common.world.gen.MapGenLunarLavaTube;
@@ -96,7 +93,7 @@ public class PlanetChunkGenerator implements IChunkGenerator {
         this.bedrock = planet.getBedrock();
 
         IBlockState breccia = planet.hasCraterMaterials() ? planet.getBreccia() : stone;
-        IBlockState impactMelt = DEPOSIT_BLOCK.getState(BlockDeposit.DepositBlockType.LUNAR_CRATER);
+        IBlockState impactMelt = SuSyBlocks.REGOLITH.getDefaultState();
         IBlockState impactEjecta = SuSyBlocks.REGOLITH.getDefaultState();
 
         this.simpleCraterGenerator = new SimpleCrater(stone, breccia, impactMelt, impactEjecta);

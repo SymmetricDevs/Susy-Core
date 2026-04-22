@@ -1,6 +1,12 @@
 package supersymmetry.common.item.armor;
 
-import gregtech.api.damagesources.DamageSources;
+import static net.minecraft.inventory.EntityEquipmentSlot.*;
+import static supersymmetry.api.util.SuSyUtility.susyId;
+import static supersymmetry.common.event.DimensionBreathabilityHandler.ABSORB_ALL;
+
+import java.util.Collections;
+import java.util.List;
+
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
@@ -14,21 +20,17 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ISpecialArmor;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import gregtech.api.damagesources.DamageSources;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import supersymmetry.api.items.IGeoMetaArmor;
 import supersymmetry.client.renderer.handler.GeoMetaArmorRenderer;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.item.SuSyArmorItem;
-
-import java.util.Collections;
-import java.util.List;
-
-import static net.minecraft.inventory.EntityEquipmentSlot.*;
-import static supersymmetry.api.util.SuSyUtility.susyId;
-import static supersymmetry.common.event.DimensionBreathabilityHandler.ABSORB_ALL;
 
 public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
 
@@ -242,5 +244,4 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
     public int getArmorDisplay(EntityPlayer player, ItemStack armor, int slot) {
         return (int) Math.round(20.0F * this.getAbsorption(armor) * relativeAbsorption);
     }
-
 }
