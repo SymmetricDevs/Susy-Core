@@ -274,6 +274,8 @@ item.material.oreprefix.thread=%s Thread
 item.material.oreprefix.dustWet=Wet %s Dust
 item.material.oreprefix.electrode=%s Electrode
 item.material.oreprefix.millBall=%s Mill Ball
+item.material.oreprefix.pin=%s Pin
+item.material.oreprefix.target=%s Sputtering Target
 
 susy.fluid.supercritical=Supercritical %s
 susy.fluid.impure_slurry=Impure %s Slurry
@@ -767,6 +769,12 @@ susy.machine.ion_implanter.uiv.name=Epic Ion Implanter III
 susy.machine.ion_implanter.uxv.name=Epic Ion Implanter IV
 susy.machine.ion_implanter.opv.name=Legendary Ion Implanter
 
+# Screen Printer
+susy.machine.screen_printer.lv.name=Basic Screen Printer
+susy.machine.screen_printer.mv.name=Advanced Screen Printer
+susy.machine.screen_printer.hv.name=Advanced Screen Printer II
+susy.machine.screen_printer.ev.name=Advanced Screen Printer III
+
 # Fluid Compressor
 susy.machine.fluid_compressor.lv.name=Basic Fluid Compressor
 susy.machine.fluid_compressor.mv.name=Advanced Fluid Compressor
@@ -881,6 +889,12 @@ susy.machine.resistance_furnace.uev.name=Epic Resistance Furnace II
 susy.machine.resistance_furnace.uiv.name=Epic Resistance Furnace III
 susy.machine.resistance_furnace.uxv.name=Epic Resistance Furnace IV
 susy.machine.resistance_furnace.opv.name=Legendary Resistance Furnace
+
+# Greenhouse
+susy.machine.greenhouse.name=Greenhouse
+susy.machine.greenhouse.tooltip.1=Each cell is one additional parallel
+susy.machine.greenhouse.tooltip.2=Max parallels: §c6
+recipemap.greenhouse_plant.name=Greenhouse
 
 susy.machine.bath_condenser.name=Bath Condenser
 susy.machine.bath_condenser.tooltip=Only works inside a Cryogenic Distillation Tower
@@ -1045,7 +1059,12 @@ recipemap.induction_furnace.name=Induction Furnace
 recipemap.resistance_furnace.name=Resistance Furnace
 recipemap.eccentric_roll_crusher.name=Eccentric Roll Crushing
 recipemap.ball_mill.name=Ball Milling
-
+recipemap.atomic_layer_deposition.name=Atomic Layer Deposition
+recipemap.wire_bonding=Wire Bonding
+recipemap.screen_printer=Screen Printing
+recipemap.plasma_ashing=Plasma Asher
+recipemap.resist_processor=Photoresist Processor
+recipemap.reactive_ion_etching=Reactive Ion Etching
 
 susy.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 
@@ -1123,6 +1142,7 @@ metaitem.track_segment.length_info=§610 blocks §7worth of monorail track.
 metaitem.air_vent.tooltip.1=§bCollecting Rate: §f%,d L/s
 metaitem.orbital.scrap.earth.name=Earth Orbital Scrap
 metaitem.code_breacher.name=Code Breacher
+metaitem.shape.mold.target=Sputtering Target Mold
 
 # Catalysts
 susy.universal.catalysts.tooltip.tier=§eMax Voltage: §f%,d EU/T (%s§f)
@@ -1420,6 +1440,7 @@ susy.machine.steam_boiler_liquid.bronze.name=Small Steam Liquid Boiler
 susy.machine.steam_boiler_liquid.bronze.tooltip=A Boiler running off Liquids
 susy.machine.steam_boiler_liquid.steel.name=High Pressure Steam Liquid Boiler
 susy.machine.steam_boiler_liquid.steel.tooltip=Faster than Small Steam Liquid Boiler
+susy.machine.steam_limited.ulv_only.tooltip=Can only run recipes up to 8 EU/t
 
 #Fake Wool
 tile.fake_wool.whitefakewool.name=White Asbestos Fiber

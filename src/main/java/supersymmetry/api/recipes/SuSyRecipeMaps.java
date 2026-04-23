@@ -78,7 +78,7 @@ public class SuSyRecipeMaps {
                     .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
     public static final RecipeMap<CatalystRecipeBuilder> BUBBLE_COLUMN_REACTOR_RECIPES = new RecipeMap<>(
-            "bubble_column_reactor", 1, 0, 3, 2, new CatalystRecipeBuilder(), false)
+            "bubble_column_reactor", 1, 1, 3, 2, new CatalystRecipeBuilder(), false)
                     .setSlotOverlay(false, false, SusyGuiTextures.LARGE_REACTOR_ITEM_OVERLAY)
                     .setSlotOverlay(false, true, GuiTextures.MOLECULAR_OVERLAY_3)
                     .setSlotOverlay(true, true, GuiTextures.MOLECULAR_OVERLAY_3)
@@ -114,14 +114,14 @@ public class SuSyRecipeMaps {
                     .setSlotOverlay(true, true, true, GuiTextures.MOLECULAR_OVERLAY_4)
                     .setSound(GTSoundEvents.BATH);
 
-    public static final RecipeMap<SimpleRecipeBuilder> ZONE_REFINER_RECIPES = new RecipeMap<>("zone_refiner", 1, 1, 0,
+    public static final RecipeMap<SimpleRecipeBuilder> ZONE_REFINER_RECIPES = new RecipeMap<>("zone_refiner", 3, 1, 2,
             0, new SimpleRecipeBuilder(), false)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_CRYSTALLIZATION, ProgressWidget.MoveType.HORIZONTAL)
                     .setSlotOverlay(false, false, true, GuiTextures.FURNACE_OVERLAY_1)
                     .setSlotOverlay(true, false, true, GuiTextures.CRYSTAL_OVERLAY)
                     .setSound(GTSoundEvents.FURNACE);
 
-    public static final RecipeMap<SimpleRecipeBuilder> TUBE_FURNACE_RECIPES = new RecipeMap<>("tube_furnace", 6, 1, 1,
+    public static final RecipeMap<SimpleRecipeBuilder> TUBE_FURNACE_RECIPES = new RecipeMap<>("tube_furnace", 6, 1, 3,
             1, new SimpleRecipeBuilder(), false)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
                     .setSlotOverlay(false, false, false, GuiTextures.FURNACE_OVERLAY_1)
@@ -208,6 +208,10 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> SPUTTER_DEPOSITION_RECIPES = new RecipeMap<>(
             "sputter_deposition", 6, 1, 2, 2, new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.ELECTROLYZER);
+
+    public static final RecipeMap<SimpleRecipeBuilder> EVAPORATION_DEPOSITION_RECIPES = new RecipeMap<>(
+            "evaporation_deposition", 2, 1, 0, 0, new SimpleRecipeBuilder(), false)
+                    .setSound(GTSoundEvents.ARC);
 
     public static final RecipeMap<SimpleRecipeBuilder> ORE_SORTER_RECIPES = new RecipeMap<>("ore_sorter", 2, 20, 1, 1,
             new SimpleRecipeBuilder(), false)
@@ -507,6 +511,37 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<PrimitiveRecipeBuilder> CUPOLA_FURNACE = new RecipeMap<>("cupola_furnace", 4, 1, 0, 0,
             new PrimitiveRecipeBuilder(), false)
                     .setSound(GTSoundEvents.FURNACE);
+
+    public static final RecipeMap<SimpleRecipeBuilder> RIE = new RecipeMap<>("reactive_ion_etching", 1, 1, 1, 0,
+            new SimpleRecipeBuilder(), false)
+                    .setSound(GTSoundEvents.ARC);
+
+    public static final RecipeMap<SimpleRecipeBuilder> RESIST_PROCESSOR = new RecipeMap<>("resist_processing", 1, 1, 3,
+            0,
+            new SimpleRecipeBuilder(), false)
+                    .setSound(GTSoundEvents.CENTRIFUGE); // because it spins
+
+    public static final RecipeMap<SimpleRecipeBuilder> PLASMA_ASHER = new RecipeMap<>("plasma_ashing", 1, 1, 2, 0,
+            new SimpleRecipeBuilder(), false)
+                    .setSound(GTSoundEvents.ARC);
+
+    public static final RecipeMap<SimpleRecipeBuilder> ELECTRON_BEAM_LITHOGRAPHY = new RecipeMap<>(
+            "electron_beam_lithography", 1, 1, 0, 0,
+            new SimpleRecipeBuilder(), false)
+                    .setSound(GTSoundEvents.ARC);
+
+    public static final RecipeMap<SimpleRecipeBuilder> WIRE_BONDING = new RecipeMap<>("wire_bonding", 2, 1, 1, 0,
+            new SimpleRecipeBuilder(), false);
+    public static final RecipeMap<SimpleRecipeBuilder> GREENHOUSE_PLANT = new RecipeMap<>("greenhouse_plant", 2, 4, 3,
+            1,
+            new SimpleRecipeBuilder(), false)
+                    .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressWidget.MoveType.HORIZONTAL);
+
+    public static final RecipeMap<SimpleRecipeBuilder> SCREEN_PRINTER = new RecipeMap<>("screen_printer", 2, 1, 1, 0,
+            new SimpleRecipeBuilder(), false);
+
+    public static final RecipeMap<SimpleRecipeBuilder> ALD = new RecipeMap<>("atomic_layer_deposition", 1, 1, 3, 2,
+            new SimpleRecipeBuilder(), false);
 
     static {
         GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()

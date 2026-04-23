@@ -573,6 +573,12 @@ susy.machine.ion_implanter.uiv.name=Идеальный ионный имплан
 susy.machine.ion_implanter.uxv.name=Идеальный ионный имплантатор IV
 susy.machine.ion_implanter.opv.name=Совершенный ионный имплантатор
 
+# Screen Printer
+susy.machine.screen_printer.lv.name=Обычный трафаретная печатная машина
+susy.machine.screen_printer.mv.name=Улучшеный трафаретная печатная машина
+susy.machine.screen_printer.hv.name=Улучшеный трафаретная печатная машина II
+susy.machine.screen_printer.ev.name=Улучшеный трафаретная печатная машина III
+
 # Fluid Compressor
 susy.machine.fluid_compressor.lv.name=Обычный жидкостный компрессор
 susy.machine.fluid_compressor.mv.name=Улучшеный жидкостный компрессор
