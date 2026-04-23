@@ -1,12 +1,11 @@
 package supersymmetry.api.space.reentry;
 
-import java.util.Map;
-
-import net.minecraft.world.DimensionType;
-
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import net.minecraft.world.DimensionType;
 import supersymmetry.api.SusyLog;
 import supersymmetry.common.world.SuSyDimensions;
+
+import java.util.Map;
 
 /**
  * Central registry for all re-entry corridor dimensions.
@@ -21,7 +20,6 @@ public class ReEntryDimensions {
     public static final int EARTH_REENTRY_DIM_ID = 803;
 
     public static void init() {
-        ReEntryNetworking.init();
         int id = -2;
         for (DimensionType type : DimensionType.values()) {
             if (type.getId() < id) id = type.getId();

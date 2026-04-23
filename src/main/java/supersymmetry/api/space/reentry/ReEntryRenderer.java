@@ -1,17 +1,14 @@
 package supersymmetry.api.space.reentry;
 
-import static supersymmetry.client.shaders.util.ShaderUtils.invertMat4;
-
-import java.nio.FloatBuffer;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.client.IRenderHandler;
-
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.*;
-
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL15;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.image.Cubemap;
 import supersymmetry.api.space.QuadSphere;
@@ -20,6 +17,10 @@ import supersymmetry.client.shaders.ShaderManager;
 import supersymmetry.client.shaders.space.atmosphere.AtmosphereRenderer;
 import supersymmetry.client.shaders.space.planet.PlanetSurfaceRenderer;
 import supersymmetry.client.shaders.util.ShaderUtils;
+
+import java.nio.FloatBuffer;
+
+import static supersymmetry.client.shaders.util.ShaderUtils.invertMat4;
 
 /**
  * Sky renderer for the atmospheric re-entry corridor dimension.
@@ -168,9 +169,12 @@ public class ReEntryRenderer extends IRenderHandler {
         GlStateManager.popMatrix(); // end tilt
 
         // --- Plasma overlay: screen-space, outside tilt ---
+        // Need to redo later
+/*
         if (reEntryStarted && plasmaIntensity > 0f && ShaderManager.shadersAllowed()) {
             renderPlasmaOverlay();
         }
+*/
 
         // Restore GL state
         GlStateManager.disableBlend();
