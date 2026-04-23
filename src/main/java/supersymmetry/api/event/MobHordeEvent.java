@@ -1,7 +1,9 @@
 package supersymmetry.api.event;
 
-import gregtech.api.util.GTTeleporter;
-import gregtech.api.util.TeleportHandler;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -10,16 +12,16 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+
+import gregtech.api.util.GTTeleporter;
+import gregtech.api.util.TeleportHandler;
 import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.event.MobHordePlayerData;
 import supersymmetry.common.event.MobHordeWorldData;
 import supersymmetry.common.faction.FactionHateManager;
 
-import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Function;
-
 public class MobHordeEvent {
+
     private Function<EntityPlayer, EntityLiving> entitySupplier;
     private int quantityMin;
     private int quantityMax;
@@ -49,11 +51,13 @@ public class MobHordeEvent {
     private boolean runOnce = false;
     private boolean dropPodExplosions = true;
 
-    public MobHordeEvent(Function<EntityPlayer, EntityLiving> entitySupplier, int quantityMin, int quantityMax, String name) {
+    public MobHordeEvent(Function<EntityPlayer, EntityLiving> entitySupplier, int quantityMin, int quantityMax,
+                         String name) {
         this(entitySupplier, quantityMin, quantityMax, name, 18000);
     }
 
-    public MobHordeEvent(Function<EntityPlayer, EntityLiving> entitySupplier, int quantityMin, int quantityMax, String name, int timeoutPeriod) {
+    public MobHordeEvent(Function<EntityPlayer, EntityLiving> entitySupplier, int quantityMin, int quantityMax,
+                         String name, int timeoutPeriod) {
         this.entitySupplier = entitySupplier;
         this.quantityMin = quantityMin;
         this.quantityMax = quantityMax;
@@ -72,12 +76,12 @@ public class MobHordeEvent {
         return this;
     }
 
-
     public boolean run(EntityPlayer player) throws NBTException {
         MobHordeWorldData worldData = MobHordeWorldData.get(player.world);
         MobHordePlayerData playerData = worldData.getPlayerData(player.getPersistentID());
         return run(player, playerData::addEntity);
     }
+
     public boolean run(EntityPlayer player, Consumer<UUID> uuidConsumer) throws NBTException {
         int quantity = (int) (Math.random() * (quantityMax - quantityMin) + quantityMin);
         if (quantity <= 0) quantity = 1;
@@ -96,22 +100,22 @@ public class MobHordeEvent {
     }
 
     public boolean canRun(EntityPlayerMP player) {
-        //I know there is an earlier check, but we have trigger on advancement now
+        // I know there is an earlier check, but we have trigger on advancement now
         World world = player.getServerWorld();
         if (!world.getGameRules().getBoolean("doInvasions")) {
             System.out.println("Invasion stopped, gamerule prevents execution");
             return false;
         }
         if (requiredAdvancement != null) {
-            return false; //check if the event is locked behind advancement, if so, do not let natural spawn
+            return false; // check if the event is locked behind advancement, if so, do not let natural spawn
         }
         if (player.dimension != this.dimension) {
             return false;
         }
-            int hate = FactionHateManager.getHate(player, faction);
-            if (hate < minhate) {
-                return false;
-            }
+        int hate = FactionHateManager.getHate(player, faction);
+        if (hate < minhate) {
+            return false;
+        }
         return !(player.world.isDaytime() && nightOnly) || hasToBeUnderground(player);
     }
 
@@ -124,13 +128,12 @@ public class MobHordeEvent {
         return Arrays.asList(commands);
     }
 
-    //the great addpattern unfucking
+    // the great addpattern unfucking
     public MobHordeEvent addPattern(
-            Function<Double, Vec2> patternFunction,
-            List<String> commands,
-            Function<EntityPlayer, EntityLiving> supplierOverride,
-            Function<EntityLiving, EntityLiving> postSpawnModifier
-    ) {
+                                    Function<Double, Vec2> patternFunction,
+                                    List<String> commands,
+                                    Function<EntityPlayer, EntityLiving> supplierOverride,
+                                    Function<EntityLiving, EntityLiving> postSpawnModifier) {
         if (patternFunction == null) {
             throw new IllegalArgumentException("patternFunction cannot be null");
         }
@@ -146,8 +149,8 @@ public class MobHordeEvent {
         return this;
     }
 
-
     public static class Vec2 {
+
         public final double x;
         public final double z;
 
@@ -207,7 +210,6 @@ public class MobHordeEvent {
     }
 
     public boolean spawnMobWithPod(EntityPlayer player, Consumer<UUID> uuidConsumer, int quantity) {
-
         boolean finishSpawning = false;
 
         int patternsCount = patternFunctions.size();
@@ -278,24 +280,20 @@ public class MobHordeEvent {
                 }
             }
 
-
             Double offsetx = player.posX + (Math.random() - 0.5) * 200;
             Double offsetz = player.posZ + (Math.random() - 0.5) * 200;
 
             for (int i = 0; i < patternsCount; i++) {
                 int qtyForThisPattern = quantitiesPerPattern[i];
 
-                List<String> commands = (i < commandsOnLandingPattern.size())
-                        ? commandsOnLandingPattern.get(i)
-                        : Collections.emptyList();
+                List<String> commands = (i < commandsOnLandingPattern.size()) ? commandsOnLandingPattern.get(i) :
+                        Collections.emptyList();
 
-                Function<EntityPlayer, EntityLiving> supplierOverride =
-                        (i < entitySupplierOverrides.size())
-                                ? entitySupplierOverrides.get(i)
-                                : null;
+                Function<EntityPlayer, EntityLiving> supplierOverride = (i < entitySupplierOverrides.size()) ?
+                        entitySupplierOverrides.get(i) : null;
 
-                Function<EntityLiving, EntityLiving> patternModifier =
-                        (i < postSpawnOverrides.size()) ? postSpawnOverrides.get(i) : null;
+                Function<EntityLiving, EntityLiving> patternModifier = (i < postSpawnOverrides.size()) ?
+                        postSpawnOverrides.get(i) : null;
 
                 finishSpawning |= spawnMobWithPattern(
                         player,
@@ -306,8 +304,7 @@ public class MobHordeEvent {
                         supplierOverride,
                         patternModifier,
                         offsetx,
-                        offsetz
-                );
+                        offsetz);
             }
         }
 
@@ -368,8 +365,8 @@ public class MobHordeEvent {
             pod.setPosition(x, y, z);
             player.world.spawnEntity(pod);
 
-            Function<EntityPlayer, EntityLiving> supplier =
-                    supplierOverride != null ? supplierOverride : this.entitySupplier;
+            Function<EntityPlayer, EntityLiving> supplier = supplierOverride != null ? supplierOverride :
+                    this.entitySupplier;
 
             EntityLiving passenger = supplier != null ? supplier.apply(player) : null;
 
@@ -378,8 +375,7 @@ public class MobHordeEvent {
                 passenger.startRiding(pod, true);
                 passenger.onInitialSpawn(
                         player.world.getDifficultyForLocation(new BlockPos(passenger)),
-                        null
-                );
+                        null);
                 if (patternModifier != null) {
                     patternModifier.apply(passenger);
                 } else if (this.postSpawnModifier != null) {
@@ -399,9 +395,8 @@ public class MobHordeEvent {
         return didSpawn;
     }
 
-    //moved over bru's old code
+    // moved over bru's old code
     private boolean spawnMobWithoutPattern(EntityPlayer player, Consumer<UUID> uuidConsumer) {
-
         EntityDropPod pod = new EntityDropPod(player.world);
         pod.CanExplode(this.dropPodExplosions);
         pod.rotationYaw = (float) (Math.random() * 360);
@@ -415,8 +410,7 @@ public class MobHordeEvent {
         mob.setPosition(x, y, z);
         mob.onInitialSpawn(
                 player.world.getDifficultyForLocation(new BlockPos(mob)),
-                null
-        );
+                null);
         mob.startRiding(pod, true);
         if (this.postSpawnModifier != null) {
             this.postSpawnModifier.apply(mob);
@@ -445,7 +439,6 @@ public class MobHordeEvent {
     }
 
     public boolean spawnMobWithoutPod(EntityPlayer player, Consumer<UUID> uuidConsumer) {
-
         EntityLiving mob = entitySupplier.apply(player);
         for (int i = 0; i < 4; i++) {
             double angle = Math.random() * 2 * Math.PI;
@@ -461,7 +454,7 @@ public class MobHordeEvent {
 
             if (y > maxY) continue;
 
-            mob.setPosition(x, y, z); //test
+            mob.setPosition(x, y, z); // test
 
             if (!mob.getCanSpawnHere() || !mob.isNotColliding()) continue;
 
@@ -501,7 +494,8 @@ public class MobHordeEvent {
     }
 
     protected boolean hasToBeUnderground(EntityPlayer player) {
-        return (maximumDistanceUnderground != -1 && !player.world.canBlockSeeSky(new BlockPos(player).up(maximumDistanceUnderground)));
+        return (maximumDistanceUnderground != -1 &&
+                !player.world.canBlockSeeSky(new BlockPos(player).up(maximumDistanceUnderground)));
     }
 
     public static void baseline(ResourceLocation advancement, int hate) {

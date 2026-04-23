@@ -1,7 +1,10 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.block.IStateHarvestLevel;
-import gregtech.api.block.VariantBlock;
+import static supersymmetry.common.faction.FactionHateManager.addHate;
+import static supersymmetry.common.faction.FactionHateManager.getHate;
+
+import java.util.Random;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -12,14 +15,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import gregtech.api.block.IStateHarvestLevel;
+import gregtech.api.block.VariantBlock;
 import supersymmetry.common.tileentities.TileEntityFlare;
 
-import java.util.Random;
-
-import static supersymmetry.common.faction.FactionHateManager.addHate;
-import static supersymmetry.common.faction.FactionHateManager.getHate;
-
 public class BlockRaidFlare extends VariantBlock<BlockRaidFlare.BlockRaidFlareType> {
+
     public BlockRaidFlare() {
         super(Material.IRON);
         this.setTranslationKey("raid_flare_block");
@@ -44,8 +46,8 @@ public class BlockRaidFlare extends VariantBlock<BlockRaidFlare.BlockRaidFlareTy
 
     public static enum BlockRaidFlareType implements IStringSerializable, IStateHarvestLevel {
 
-        BANDITFLARE("bandit_flare", 2, 1.0f, 0.0f, 0.0f,"Bandits");
-        //add feds later
+        BANDITFLARE("bandit_flare", 2, 1.0f, 0.0f, 0.0f, "Bandits");
+        // add feds later
 
         private final String name;
         private final int harvestLevel;
@@ -63,9 +65,17 @@ public class BlockRaidFlare extends VariantBlock<BlockRaidFlare.BlockRaidFlareTy
             this.faction = faction;
         }
 
-        public float getRed()   { return red; }
-        public float getGreen() { return green; }
-        public float getBlue()  { return blue; }
+        public float getRed() {
+            return red;
+        }
+
+        public float getGreen() {
+            return green;
+        }
+
+        public float getBlue() {
+            return blue;
+        }
 
         @Override
         public int getHarvestLevel(IBlockState iBlockState) {
@@ -77,7 +87,7 @@ public class BlockRaidFlare extends VariantBlock<BlockRaidFlare.BlockRaidFlareTy
             return this.name;
         }
 
-        public String getFaction(){
+        public String getFaction() {
             return this.faction;
         }
     }
@@ -100,7 +110,7 @@ public class BlockRaidFlare extends VariantBlock<BlockRaidFlare.BlockRaidFlareTy
         return flare;
     }
 
-    //HATE
+    // HATE
     @Override
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
         if (!world.isRemote) {

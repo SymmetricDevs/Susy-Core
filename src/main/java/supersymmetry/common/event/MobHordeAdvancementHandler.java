@@ -9,7 +9,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.event.MobHordeEvent;
 
-
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class MobHordeAdvancementHandler {
 
@@ -47,5 +46,4 @@ public class MobHordeAdvancementHandler {
             }
         }
     }
-
 }

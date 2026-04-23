@@ -21,7 +21,7 @@ import supersymmetry.common.faction.FactionHateManager;
 
 public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
 
-    public static int DEFAULT_GRACE_PERIOD = 72000; //setting grace period as 1 hour (also made it static)
+    public static int DEFAULT_GRACE_PERIOD = 72000; // setting grace period as 1 hour (also made it static)
 
     // Player cooldown for all events.
     public int ticksUntilCanSpawn;
@@ -57,9 +57,12 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
         }
         NBTTagList scriptedList = new NBTTagList();
         for (String key : completedScriptedEvents) {
-            scriptedList.appendTag(new NBTTagCompound() {{
-                setString("key", key);
-            }});
+            scriptedList.appendTag(new NBTTagCompound() {
+
+                {
+                    setString("key", key);
+                }
+            });
         }
         result.setTag("completedScriptedEvents", scriptedList);
         return result;

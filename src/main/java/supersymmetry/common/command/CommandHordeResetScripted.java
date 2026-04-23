@@ -1,22 +1,22 @@
 package supersymmetry.common.command;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTException;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import supersymmetry.api.event.MobHordeEvent;
 import supersymmetry.common.event.MobHordePlayerData;
 import supersymmetry.common.event.MobHordeWorldData;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class CommandHordeResetScripted extends CommandBase {
 
@@ -35,7 +35,6 @@ public class CommandHordeResetScripted extends CommandBase {
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args,
                                           @Nullable BlockPos targetPos) {
-
         List<String> list = MobHordeEvent.EVENTS.values()
                 .stream()
                 .map(event -> event.KEY)
@@ -67,8 +66,7 @@ public class CommandHordeResetScripted extends CommandBase {
             playerData.completedScriptedEvents.clear();
 
             sender.sendMessage(new TextComponentTranslation(
-                    "susy.command.horde.resetscripted.all"
-            ));
+                    "susy.command.horde.resetscripted.all"));
             return;
         }
 
@@ -81,8 +79,7 @@ public class CommandHordeResetScripted extends CommandBase {
         if (!playerData.hasCompleted(event.KEY)) {
             sender.sendMessage(new TextComponentTranslation(
                     "susy.command.horde.resetscripted.not_set",
-                    event.KEY
-            ));
+                    event.KEY));
             return;
         }
 
@@ -90,7 +87,6 @@ public class CommandHordeResetScripted extends CommandBase {
 
         sender.sendMessage(new TextComponentTranslation(
                 "susy.command.horde.resetscripted.success",
-                event.KEY
-        ));
+                event.KEY));
     }
 }

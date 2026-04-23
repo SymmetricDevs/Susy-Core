@@ -8,18 +8,19 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
 import supersymmetry.Supersymmetry;
 import supersymmetry.common.faction.FactionHateManager;
 import supersymmetry.common.item.SuSyMetaItems;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class FactionRadioBehaviour {
+
     private static final String TAG_ROOT = "susy";
     private static final String TAG_FACTION = "faction";
 
     @SubscribeEvent
     public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
-
         EntityPlayer player = event.getEntityPlayer();
         ItemStack stack = event.getItemStack();
 
@@ -35,8 +36,7 @@ public class FactionRadioBehaviour {
         if (tag == null) {
             player.sendStatusMessage(
                     new TextComponentTranslation("chat.susy.radio.no_tag"),
-                    true
-            );
+                    true);
             event.setCanceled(true);
             return;
         }
@@ -46,8 +46,7 @@ public class FactionRadioBehaviour {
         if (faction.isEmpty()) {
             player.sendStatusMessage(
                     new TextComponentTranslation("chat.susy.radio.no_faction"),
-                    true
-            );
+                    true);
             event.setCanceled(true);
             return;
         }
@@ -58,8 +57,7 @@ public class FactionRadioBehaviour {
         // Send to player (action bar)
         player.sendStatusMessage(
                 new TextComponentTranslation("chat.susy.radio.get_hate", hate),
-                true
-        );
+                true);
 
         event.setCanceled(true);
 

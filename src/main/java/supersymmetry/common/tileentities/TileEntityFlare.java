@@ -1,15 +1,18 @@
 package supersymmetry.common.tileentities;
 
+import java.util.UUID;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
+
 import org.codehaus.groovy.runtime.InvokerHelper;
+
 import supersymmetry.client.particle.ParticleFlareSmoke;
 
-import java.util.UUID;
-
 public class TileEntityFlare extends TileEntity implements ITickable {
+
     private float red = 0.0f;
     private float green = 0.0f;
     private float blue = 0.0f;
@@ -19,7 +22,7 @@ public class TileEntityFlare extends TileEntity implements ITickable {
     private String faction;
 
     private int tickCounter = 0;
-    private static final int SPAWN_INTERVAL = 1200; //hard coded for now, maybe later replace with config
+    private static final int SPAWN_INTERVAL = 1200; // hard coded for now, maybe later replace with config
 
     public void setColor(float red, float green, float blue) {
         this.red = red;
@@ -41,7 +44,7 @@ public class TileEntityFlare extends TileEntity implements ITickable {
         markDirty();
     }
 
-    public void setFlareFaction(String faction){
+    public void setFlareFaction(String faction) {
         this.faction = faction;
         markDirty();
     }
@@ -53,8 +56,7 @@ public class TileEntityFlare extends TileEntity implements ITickable {
     private void spawnMobsForType() {
         if (target == null || flareType == null) return;
 
-        net.minecraft.entity.player.EntityPlayer player =
-                world.getPlayerEntityByUUID(target);
+        net.minecraft.entity.player.EntityPlayer player = world.getPlayerEntityByUUID(target);
 
         if (player == null) return;
 
@@ -64,8 +66,7 @@ public class TileEntityFlare extends TileEntity implements ITickable {
             InvokerHelper.invokeMethod(
                     this,
                     "callGroovySpawn",
-                    new Object[]{flareType, player}
-            );
+                    new Object[] { flareType, player });
         } catch (Throwable t) {
             System.out.println("Groovy spawn handler missing or failed");
             t.printStackTrace();
@@ -110,7 +111,7 @@ public class TileEntityFlare extends TileEntity implements ITickable {
 
     @Override
     public void update() {
-        if (target != null){ //skip outright if the flare was just placed down as decoration.
+        if (target != null) { // skip outright if the flare was just placed down as decoration.
             if (!world.isRemote) {
                 tickCounter++;
                 if (tickCounter >= SPAWN_INTERVAL) {
@@ -130,9 +131,7 @@ public class TileEntityFlare extends TileEntity implements ITickable {
                             pos.getX() + 0.5 + (world.rand.nextDouble() - 0.5) * 0.2,
                             pos.getY() + 0.1,
                             pos.getZ() + 0.5 + (world.rand.nextDouble() - 0.5) * 0.2,
-                            red, green, blue
-                    )
-            );
+                            red, green, blue));
         }
     }
 }

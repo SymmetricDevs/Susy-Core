@@ -23,7 +23,6 @@ public class ParticleFlareSmoke extends Particle {
         this.particleMaxAge = 100;
 
         this.canCollide = false;
-
     }
 
     @Override

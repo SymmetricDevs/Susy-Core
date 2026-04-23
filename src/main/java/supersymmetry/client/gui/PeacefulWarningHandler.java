@@ -4,12 +4,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiOptions;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiYesNo;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraft.client.resources.I18n;
+
 import supersymmetry.Supersymmetry;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
@@ -39,10 +39,10 @@ public class PeacefulWarningHandler {
                     },
                     I18n.format("ui.susy.settings.peaceful_button.ln1"),
                     formatted,
-                    0
-            ));
+                    0));
         }
     }
+
     @SubscribeEvent
     public static void onDraw(GuiScreenEvent.DrawScreenEvent.Post event) {
         if (!(event.getGui() instanceof net.minecraft.client.gui.GuiOptions)) return;

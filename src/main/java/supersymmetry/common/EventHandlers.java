@@ -107,7 +107,7 @@ public class EventHandlers {
         if (world.isRemote || !(world instanceof WorldServer server)) {
             return;
         }
-        //this can be done earlier, saves some tps
+        // this can be done earlier, saves some tps
         if (!world.getGameRules().getBoolean("doInvasions")) {
             return;
         }
@@ -121,11 +121,10 @@ public class EventHandlers {
         // Process lander spawn queue for all dimensions
         processLanderSpawnQueue(server);
 
-        //to be replaced with a proper setter/getter in grs, we will have invasions in other later dims as well
+        // to be replaced with a proper setter/getter in grs, we will have invasions in other later dims as well
         if (world.provider.getDimension() != 0) {
             return;
         }
-
 
         PlayerList list = server.getMinecraftServer().getPlayerList();
         MobHordeWorldData mobHordeWorldData = MobHordeWorldData.get(world);
