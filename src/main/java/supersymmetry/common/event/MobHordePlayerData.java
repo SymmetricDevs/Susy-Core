@@ -21,6 +21,8 @@ import supersymmetry.common.faction.FactionHateManager;
 
 public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
 
+    public static int DEFAULT_GRACE_PERIOD = 72000; //setting grace period as 1 hour (also made it static)
+
     // Player cooldown for all events.
     public int ticksUntilCanSpawn;
     public int gracePeriod;
@@ -32,9 +34,9 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
     public String currentInvasion = "";
     public Set<String> completedScriptedEvents = new HashSet<>();
 
-    public MobHordePlayerData(int gracePeriod) {
-        this.ticksUntilCanSpawn = gracePeriod;
-        this.gracePeriod = gracePeriod;
+    public MobHordePlayerData() {
+        this.gracePeriod = DEFAULT_GRACE_PERIOD;
+        this.ticksUntilCanSpawn = DEFAULT_GRACE_PERIOD;
         this.invasionTimers = new int[MobHordeEvent.EVENTS.size()];
     }
 
