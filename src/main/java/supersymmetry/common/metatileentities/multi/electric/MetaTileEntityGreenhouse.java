@@ -1,13 +1,22 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import static gregtech.api.util.RelativeDirection.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
+import gregtech.api.capability.GregtechDataCodes;
+import gregtech.api.capability.impl.MultiblockRecipeLogic;
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.api.metatileentity.multiblock.IMultiblockPart;
+import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
+import gregtech.api.pattern.BlockPattern;
+import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.MultiblockShapeInfo;
+import gregtech.api.unification.material.Materials;
+import gregtech.api.util.GTUtility;
+import gregtech.client.renderer.ICubeRenderer;
+import gregtech.client.renderer.texture.Textures;
+import gregtech.common.blocks.BlockMetalCasing;
+import gregtech.common.blocks.MetaBlocks;
+import gregtechfoodoption.block.GTFOGlassCasing;
+import gregtechfoodoption.block.GTFOMetaBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
@@ -19,26 +28,15 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-
 import org.jetbrains.annotations.NotNull;
-
-import gregtech.api.capability.GregtechDataCodes;
-import gregtech.api.capability.impl.MultiblockRecipeLogic;
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.metatileentity.multiblock.IMultiblockPart;
-import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
-import gregtech.api.pattern.BlockPattern;
-import gregtech.api.pattern.FactoryBlockPattern;
-import gregtech.api.pattern.MultiblockShapeInfo;
-import gregtech.api.unification.material.Materials;
-import gregtech.client.renderer.ICubeRenderer;
-import gregtech.client.renderer.texture.Textures;
-import gregtech.common.blocks.BlockMetalCasing;
-import gregtech.common.blocks.MetaBlocks;
-import gregtechfoodoption.block.GTFOGlassCasing;
-import gregtechfoodoption.block.GTFOMetaBlocks;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static gregtech.api.util.RelativeDirection.*;
 
 public class MetaTileEntityGreenhouse extends RecipeMapMultiblockController {
 
@@ -76,7 +74,7 @@ public class MetaTileEntityGreenhouse extends RecipeMapMultiblockController {
         }
 
         this.length = length;
-        this.cellCount = (length / 4) - 1;
+        this.cellCount = length / 4;
         return true;
     }
 
@@ -132,7 +130,7 @@ public class MetaTileEntityGreenhouse extends RecipeMapMultiblockController {
         builder.aisle("CDDDC", "G###G", "G###G", " GGG ");
         builder.aisle("CDDDC", "G###G", "G###G", " GGG ");
 
-        for (int i = 1; i <= cells; i++) {
+        for (int i = 1; i < cells; i++) {
             builder.aisle("CDDDC", "F###F", "F###F", " FFF ");
             builder.aisle("CDDDC", "G###G", "G###G", " GGG ");
             builder.aisle("CDDDC", "G###G", "G###G", " GGG ");
@@ -164,7 +162,9 @@ public class MetaTileEntityGreenhouse extends RecipeMapMultiblockController {
 
     public boolean isBlockEdge(@Nonnull World world, @Nonnull BlockPos.MutableBlockPos pos,
                                @Nonnull EnumFacing direction) {
-        return world.getBlockState(pos.move(direction)) == getCasingState();
+        pos.move(direction);
+        return world.getBlockState(pos) == getCasingState() ||
+                GTUtility.getMetaTileEntity(world, pos) instanceof IMultiblockPart;
     }
 
     @Override
@@ -193,7 +193,7 @@ public class MetaTileEntityGreenhouse extends RecipeMapMultiblockController {
         }
 
         public int getParallelLimit() {
-            return cellCount + 1;
+            return cellCount;
         }
     }
 }
