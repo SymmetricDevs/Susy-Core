@@ -89,9 +89,9 @@ public class MetaTileEntityRotaryKilnV2 extends RecipeMapMultiblockController im
         TraceabilityPredicate maintenance = abilities(MultiblockAbility.MAINTENANCE_HATCH).setMinGlobalLimited(1).setMaxGlobalLimited(1);
 
         return FactoryBlockPattern.start()
-                .aisle("F         F", "GD   B   DR", "LDCCCBCCCDR", "LD   B   DG")
+                .aisle("F         F", "LD   B   DR", "LDCCCBCCCDR", "GD   B   DG")
                 .aisle("     F     ", "LDCCCBCCCDR", "L#########R", "LDCCCBCCCDR")
-                .aisle("F         F", "GD   B   DR", "LDCCCSCCCDR", "LD   B   DG")
+                .aisle("F         F", "LD   B   DR", "LDCCCSCCCDR", "GD   B   DG")
                 .where('S', selfPredicate())
                 .where('B', hiddenStates(getCasingState()))
                 .where('C', hiddenStates(getShellCasingState()))
