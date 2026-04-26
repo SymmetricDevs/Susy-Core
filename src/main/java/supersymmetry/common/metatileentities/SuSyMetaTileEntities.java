@@ -1,15 +1,5 @@
 package supersymmetry.common.metatileentities;
 
-import static gregtech.api.util.GTUtility.gregtechId;
-import static gregtech.common.metatileentities.MetaTileEntities.registerMetaTileEntity;
-import static supersymmetry.api.util.SuSyUtility.susyId;
-
-import java.util.ArrayList;
-import java.util.function.Function;
-
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.items.CapabilityItemHandler;
-
 import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
 import gregtech.api.capability.impl.PropertyFluidFilter;
@@ -26,6 +16,8 @@ import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityEnerg
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiFluidHatch;
 import gregtech.common.metatileentities.storage.MetaTileEntityCrate;
 import gregtech.common.metatileentities.storage.MetaTileEntityDrum;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.items.CapabilityItemHandler;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.metatileentity.CatalystMachineMetaTileEntity;
 import supersymmetry.api.metatileentity.ContinuousMachineMetaTileEntity;
@@ -51,11 +43,7 @@ import supersymmetry.common.metatileentities.multi.steam.MetaTileEntitySuSyLarge
 import supersymmetry.common.metatileentities.multi.steam.MetaTileEntitySuSyLargeHammer;
 import supersymmetry.common.metatileentities.multi.steam.SuSyBoilerType;
 import supersymmetry.common.metatileentities.multiblockpart.*;
-import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityComponentScanner;
 import supersymmetry.common.metatileentities.single.electric.*;
-import supersymmetry.common.metatileentities.single.electric.MetaTileEntityBathCondenser;
-import supersymmetry.common.metatileentities.single.electric.MetaTileEntityLatexCollector;
-import supersymmetry.common.metatileentities.single.electric.MetaTileEntityPhaseSeparator;
 import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityLocomotiveController;
 import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityStockFluidExchanger;
 import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityStockItemExchanger;
@@ -65,6 +53,13 @@ import supersymmetry.common.metatileentities.single.steam.SuSyLiquidBoiler;
 import supersymmetry.common.metatileentities.single.steam.SuSySimpleSteamMetaTileEntity;
 import supersymmetry.common.metatileentities.storage.MetaTileEntityLockedCrate;
 import supersymmetry.common.metatileentities.storage.MetaTileEntityPlasticCan;
+
+import java.util.ArrayList;
+import java.util.function.Function;
+
+import static gregtech.api.util.GTUtility.gregtechId;
+import static gregtech.common.metatileentities.MetaTileEntities.registerMetaTileEntity;
+import static supersymmetry.api.util.SuSyUtility.susyId;
 
 public class SuSyMetaTileEntities {
 
@@ -178,6 +173,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityLargeFluidPump LARGE_FLUID_PUMP;
     public static MetaTileEntityHighTemperatureDistillationTower HIGH_TEMPERATURE_DISTILLATION_TOWER;
     public static MetaTileEntityRotaryKiln ROTARY_KILN;
+    public static MetaTileEntityRotaryKilnV2 ROTARY_KILN_V2;
     public static MetaTileEntityHighPressureCryogenicDistillationPlant HIGH_PRESSURE_CRYOGENIC_DISTILLATION_PLANT;
     public static MetaTileEntityLowPressureCryogenicDistillationPlant LOW_PRESSURE_CRYOGENIC_DISTILLATION_PLANT;
     public static MetaTileEntitySingleColumnCryogenicDistillationPlant SINGLE_COLUMN_CRYOGENIC_DISTILLATION_PLANT;
@@ -625,6 +621,8 @@ public class SuSyMetaTileEntities {
                 SusyTextures.POLISHING_MACHINE_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         registerSimpleMTE(TEXTILE_SPINNER, 12, 17061, "textile_spinner", SuSyRecipeMaps.SPINNING_RECIPES,
                 SusyTextures.TEXTILE_SPINNER_OVERLAY, true);
+        ROTARY_KILN_V2 = registerMetaTileEntity(17074, new MetaTileEntityRotaryKilnV2(susyId("rotary_kiln_v2")));
+
         ArrayList<Integer> ids = new ArrayList<>();
         for (int id = 14500; id < 15000; id++) {
             if (GregTechAPI.MTE_REGISTRY.getObjectById(id) == null) ids.add(id);

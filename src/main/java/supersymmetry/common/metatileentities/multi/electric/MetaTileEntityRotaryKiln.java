@@ -1,12 +1,5 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import javax.annotation.Nonnull;
-
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.ResourceLocation;
-
-import org.jetbrains.annotations.NotNull;
-
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -22,8 +15,13 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
+
+import javax.annotation.Nonnull;
 
 public class MetaTileEntityRotaryKiln extends RecipeMapMultiblockController {
 
