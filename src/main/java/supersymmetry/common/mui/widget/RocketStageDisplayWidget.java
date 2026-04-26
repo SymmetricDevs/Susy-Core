@@ -279,7 +279,8 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
 
                 for (int i = 0; i < maxSlotCount; i++) {
                     DataStorageLoader slot = slots.get(i);
-                    SlotWidget s = new SlotWidget(slot, 0, 0, 0);
+                    // SlotWidget s = new SlotWidget(slot, 0, 0, 0);
+                    SlotWidget s = new ComponentCardSlotWidget(slot, 0, 0, 0);
                     s.setBackgroundTexture(GuiTextures.SLOT_DARK);
                     // s.setClearSlotOnRightClick(true);
                     slotsw.addWidget(s);
