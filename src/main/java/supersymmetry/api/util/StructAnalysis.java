@@ -65,7 +65,7 @@ public class StructAnalysis {
         NO_GUIDANCE("no_guidance"),
         TOO_MUCH_GUIDANCE("too_much_guidance"),
         WRONG_CHAMBER_TYPE("wrong_chamber_type"),
-        MATCH_WRONG("match_wrong");
+        MATCH_WRONG("match_wrong"), NOZZLE_TOO_SHORT("nozzle_too_short");
 
         String code;
 
@@ -216,6 +216,7 @@ public class StructAnalysis {
 
     /**
      * Checks if a block is within an axis aligned bounding box
+     * This must be used, since just testing new Vec3d(bp) doesn't work
      * 
      * @param bb the bounding box
      * @param bp the block position
@@ -279,6 +280,39 @@ public class StructAnalysis {
         return partitions;
     }
 
+    /**
+     *
+     * @param sect
+     * @return
+     */
+    public List<HashSet<BlockPos>> getPartitionsBy(AxisAlignedBB sect, Predicate<BlockPos> pred) {
+        Set<BlockPos> blocks = getBlocks(sect).stream().filter(pred).collect(Collectors.toSet());
+
+        List<HashSet<BlockPos>> partitions = new ArrayList<>();
+        Set<BlockPos> consumed = new HashSet<>();
+        for (BlockPos block : blocks) {
+            if (consumed.contains(block)) {
+                continue;
+            }
+            consumed.add(block);
+            ArrayDeque<BlockPos> remaining = new ArrayDeque<>();
+            HashSet<BlockPos> bPart = new HashSet<>();
+            remaining.add(block);
+            while (!remaining.isEmpty()) {
+                BlockPos bp = remaining.pop();
+                bPart.add(bp);
+                Stream<BlockPos> stream = getBlockNeighbors(bp, sect, orthVecs).stream()
+                        .filter(((Predicate<BlockPos>) bPart::contains).negate().and(pred));
+                remaining.addAll(getBlockNeighbors(bp, sect, orthVecs).stream()
+                        .filter(((Predicate<BlockPos>) bPart::contains).negate().and(pred))
+                        .collect(Collectors.toList()));
+                stream.forEach(consumed::add);
+            }
+            partitions.add(bPart);
+        }
+        return partitions;
+    }
+
     public Set<BlockPos> getLayerAir(AxisAlignedBB section, int y) {
         AxisAlignedBB sect = new AxisAlignedBB(section.minX - 1, y, section.minZ - 1, section.maxX + 1, y + 1,
                 section.maxZ + 1);
@@ -287,6 +321,32 @@ public class StructAnalysis {
         // the one-argument getBlocks doesn't care about air blocks (again)
 
         List<HashSet<BlockPos>> partitions = getPartitions(sect);
+        // This looks cursed, but the idea is to ensure that the system is a ring of blocks surrounding a patch of air
+        if (partitions.size() != 2) {
+            status = BuildStat.NOZZLE_MALFORMED;
+            return null;
+        } else {
+            List<Boolean> res = partitions.stream()
+                    .map(set -> getPerimeter(set, layerVecs).stream().allMatch(p -> blockCont(sect, p)))
+                    .collect(Collectors.toList());
+            for (int i = 0; i < 2; i++) {
+                if (res.get(i)) {
+                    return partitions.get(i);
+                }
+            }
+        }
+        status = BuildStat.ERROR;
+        return null;
+    }
+
+    public Set<BlockPos> getLayerOccupied(AxisAlignedBB section, int y, Collection<Block> types) {
+        AxisAlignedBB sect = new AxisAlignedBB(section.minX - 1, y, section.minZ - 1, section.maxX + 1, y + 1,
+                section.maxZ + 1);
+        Predicate<BlockPos> isNotObstacle = ((Predicate<BlockPos>) bp -> types.contains(this.world.getBlockState(bp).getBlock())).or(bp -> !blockCont(section, bp));
+        Set<BlockPos> blocks = getBlocks(sect).stream().filter(isNotObstacle).collect(Collectors.toSet());
+        // the one-argument getBlocks doesn't care about air blocks (again)
+
+        List<HashSet<BlockPos>> partitions = getPartitionsBy(sect, isNotObstacle);
         // This looks cursed, but the idea is to ensure that the system is a ring of blocks surrounding a patch of air
         if (partitions.size() != 2) {
             status = BuildStat.NOZZLE_MALFORMED;
@@ -426,8 +486,10 @@ public class StructAnalysis {
 
     public Stream<BlockPos> getOfMaterial(Collection<BlockPos> bp, Material mat) {
         return bp.stream()
-                .filter(p -> Objects.requireNonNull(OreDictUnifier.getMaterial(
-                        new ItemStack(Item.getItemFromBlock(world.getBlockState(p).getBlock())))).material.equals(mat));
+                .filter(p -> Objects.nonNull(OreDictUnifier.getMaterial(
+                        new ItemStack(Item.getItemFromBlock(world.getBlockState(p).getBlock())))))
+                .filter(p -> OreDictUnifier.getMaterial(
+                        new ItemStack(Item.getItemFromBlock(world.getBlockState(p).getBlock()))).material.equals(mat));
     }
 
     public int getCoordOfAxis(BlockPos bp) {

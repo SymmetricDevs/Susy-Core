@@ -1537,6 +1537,7 @@ susy.msg.rocket_component.wrong_tile=A tile was used incorrectly.
 susy.msg.rocket_component.interstage_not_cylindrical=The interstage looks weird.
 susy.msg.rocket_component.wrong_chamber_type=A different chamber should be used.
 susy.msg.rocket_component.match_wrong=The match is not within the nozzle.
+susy.msg.rocket_component.nozzle_too_short=The nozzle is not long enough!
 
 entity.Rocket.name=Soyuz FG Rocket
 
