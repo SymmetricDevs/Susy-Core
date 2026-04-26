@@ -2,14 +2,12 @@ package supersymmetry.common.rocketry.components;
 
 import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -98,8 +96,10 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
         }
         ArrayList<Integer> areas = new ArrayList<>();
         AxisAlignedBB nozzleBB = analysis.getBB(nozzle);
+        List<Block> allowedBlocks = Arrays.asList(Blocks.AIR, Blocks.PLANKS);
+
         for (int i = (int) nozzleBB.maxY - 1; i >= (int) nozzleBB.minY; i--) {
-            Set<BlockPos> airLayer = analysis.getLayerAir(nozzleBB, i);
+            Set<BlockPos> airLayer = analysis.getLayerOccupied(nozzleBB, i, allowedBlocks);
             if (airLayer == null) { // there should be an error here
                 analysis.status = BuildStat.NOZZLE_MALFORMED;
                 return Optional.empty();
@@ -116,7 +116,11 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
         // For all rocket nozzles, the air layer list should be increasing. 3 blocks should be a minimum
         // length under that assumption.
         if (areas.size() < 3 || areas.get(0) > 5) {
-            analysis.status = BuildStat.NOZZLE_MALFORMED;
+            if (areas.size() < 3) {
+                analysis.status = BuildStat.NOZZLE_TOO_SHORT;
+            } else {
+                analysis.status = BuildStat.NOZZLE_MALFORMED;
+            }
             return Optional.empty();
         }
 
@@ -154,7 +158,7 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
             analysis.status = BuildStat.C_CHAMBER_INSIDE;
             return Optional.empty();
         }
-        if (!analysis.world.isAirBlock(cChamber.add(0, -1, 0))) {
+        if (!analysis.world.isAirBlock(cChamber.add(0, -1, 0)) && !analysis.world.getBlockState(cChamber.add(0, -1, 0)).getBlock().equals(Blocks.PLANKS)) {
             analysis.status = BuildStat.NOZZLE_MALFORMED;
             return analysis.errorPos(cChamber.add(0, -1, 0));
         }
@@ -169,7 +173,7 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
         }
         for (BlockPos pumpPos : pumps) {
             EnumFacing dir = analysis.world.getBlockState(pumpPos).getValue(FACING);
-            if (dir.equals(EnumFacing.UP) || !pumpPos.add(dir.getOpposite().getDirectionVec()).equals(cChamber)) {
+            if (dir.equals(EnumFacing.UP) || !pumpPos.add(dir.getDirectionVec()).equals(cChamber)) {
                 analysis.status = BuildStat.WEIRD_PUMP;
                 return analysis.errorPos(pumpPos);
             }
@@ -179,7 +183,7 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
         Set<BlockPos> stickBlocks = analysis.getOfMaterial(blocks, Materials.Wood).collect(Collectors.toSet());
         if (!stickBlocks.isEmpty()) {
             for (BlockPos stickPos : stickBlocks) {
-                if (!nozzleBB.contains(new Vec3d(stickPos))) {
+                if (!StructAnalysis.blockCont(nozzleBB, stickPos)) {
                     analysis.status = BuildStat.MATCH_WRONG;
                     return Optional.empty();
                 }
