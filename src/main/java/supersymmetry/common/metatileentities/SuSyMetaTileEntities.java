@@ -1,5 +1,15 @@
 package supersymmetry.common.metatileentities;
 
+import static gregtech.api.util.GTUtility.gregtechId;
+import static gregtech.common.metatileentities.MetaTileEntities.registerMetaTileEntity;
+import static supersymmetry.api.util.SuSyUtility.susyId;
+
+import java.util.ArrayList;
+import java.util.function.Function;
+
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.items.CapabilityItemHandler;
+
 import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
 import gregtech.api.capability.impl.PropertyFluidFilter;
@@ -16,8 +26,6 @@ import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityEnerg
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiFluidHatch;
 import gregtech.common.metatileentities.storage.MetaTileEntityCrate;
 import gregtech.common.metatileentities.storage.MetaTileEntityDrum;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.items.CapabilityItemHandler;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.metatileentity.CatalystMachineMetaTileEntity;
 import supersymmetry.api.metatileentity.ContinuousMachineMetaTileEntity;
@@ -53,13 +61,6 @@ import supersymmetry.common.metatileentities.single.steam.SuSyLiquidBoiler;
 import supersymmetry.common.metatileentities.single.steam.SuSySimpleSteamMetaTileEntity;
 import supersymmetry.common.metatileentities.storage.MetaTileEntityLockedCrate;
 import supersymmetry.common.metatileentities.storage.MetaTileEntityPlasticCan;
-
-import java.util.ArrayList;
-import java.util.function.Function;
-
-import static gregtech.api.util.GTUtility.gregtechId;
-import static gregtech.common.metatileentities.MetaTileEntities.registerMetaTileEntity;
-import static supersymmetry.api.util.SuSyUtility.susyId;
 
 public class SuSyMetaTileEntities {
 

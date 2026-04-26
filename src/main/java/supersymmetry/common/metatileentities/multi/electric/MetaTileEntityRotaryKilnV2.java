@@ -1,5 +1,27 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.hiddenGearTooth;
+import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.hiddenStates;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -16,18 +38,6 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.builder.ILoopType;
@@ -41,13 +51,6 @@ import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockGrinderCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
-
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Collection;
-
-import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.hiddenGearTooth;
-import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.hiddenStates;
 
 public class MetaTileEntityRotaryKilnV2 extends RecipeMapMultiblockController implements IAnimatableMTE {
 
@@ -86,7 +89,8 @@ public class MetaTileEntityRotaryKilnV2 extends RecipeMapMultiblockController im
     protected BlockPattern createStructurePattern() {
         // Different characters use common constraints. Copied from GCyM
         TraceabilityPredicate casingPredicate = states(getCasingState()).setMinGlobalLimited(6);
-        TraceabilityPredicate maintenance = abilities(MultiblockAbility.MAINTENANCE_HATCH).setMinGlobalLimited(1).setMaxGlobalLimited(1);
+        TraceabilityPredicate maintenance = abilities(MultiblockAbility.MAINTENANCE_HATCH).setMinGlobalLimited(1)
+                .setMaxGlobalLimited(1);
 
         return FactoryBlockPattern.start()
                 .aisle("F         F", "LD   B   DR", "LDCCCBCCCDR", "GD   B   DG")
@@ -97,9 +101,10 @@ public class MetaTileEntityRotaryKilnV2 extends RecipeMapMultiblockController im
                 .where('C', hiddenStates(getShellCasingState()))
                 .where('D', hiddenGearTooth(
                         RelativeDirection.LEFT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), false)
-                        .getAxis()))
+                                .getAxis()))
                 .where('F', frames(Materials.Steel))
-                .where('G', states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
+                .where('G',
+                        states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('L', casingPredicate
                         .or(autoAbilities(false, false, true, false, false, true, false))
                         .or(autoAbilities(true, false, false, false, false, false, false)).setMinGlobalLimited(0)
