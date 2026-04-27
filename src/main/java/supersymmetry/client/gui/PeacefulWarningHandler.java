@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import supersymmetry.Supersymmetry;
 
-@Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
+@Mod.EventBusSubscriber(modid = Supersymmetry.MODID, value = net.minecraftforge.fml.relauncher.Side.CLIENT)
 public class PeacefulWarningHandler {
 
     @SubscribeEvent
