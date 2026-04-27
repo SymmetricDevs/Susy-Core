@@ -11,6 +11,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.GTInternalTags;
+import supercritical.common.SCConfigHolder;
 import supersymmetry.api.capability.SuSyCapabilities;
 import supersymmetry.api.sound.SusySounds;
 import supersymmetry.common.CommonProxy;
@@ -50,6 +51,9 @@ public class Supersymmetry {
         // GTValues.HT = true;
         SuSyIRLoader.initDefinitions();
         SuSyIRLoader.initEntities();
+
+        // Very annoying config
+        SCConfigHolder.misc.enableMaterialModifications = false;
 
         // Groovyscript starts immediately!
         proxy.checkCanaryFile();

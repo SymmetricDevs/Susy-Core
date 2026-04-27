@@ -51,11 +51,7 @@ import supersymmetry.common.metatileentities.multi.steam.MetaTileEntitySuSyLarge
 import supersymmetry.common.metatileentities.multi.steam.MetaTileEntitySuSyLargeHammer;
 import supersymmetry.common.metatileentities.multi.steam.SuSyBoilerType;
 import supersymmetry.common.metatileentities.multiblockpart.*;
-import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityComponentScanner;
 import supersymmetry.common.metatileentities.single.electric.*;
-import supersymmetry.common.metatileentities.single.electric.MetaTileEntityBathCondenser;
-import supersymmetry.common.metatileentities.single.electric.MetaTileEntityLatexCollector;
-import supersymmetry.common.metatileentities.single.electric.MetaTileEntityPhaseSeparator;
 import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityLocomotiveController;
 import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityStockFluidExchanger;
 import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityStockItemExchanger;
@@ -178,6 +174,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityLargeFluidPump LARGE_FLUID_PUMP;
     public static MetaTileEntityHighTemperatureDistillationTower HIGH_TEMPERATURE_DISTILLATION_TOWER;
     public static MetaTileEntityRotaryKiln ROTARY_KILN;
+    public static MetaTileEntityRotaryKilnV2 ROTARY_KILN_V2;
     public static MetaTileEntityHighPressureCryogenicDistillationPlant HIGH_PRESSURE_CRYOGENIC_DISTILLATION_PLANT;
     public static MetaTileEntityLowPressureCryogenicDistillationPlant LOW_PRESSURE_CRYOGENIC_DISTILLATION_PLANT;
     public static MetaTileEntitySingleColumnCryogenicDistillationPlant SINGLE_COLUMN_CRYOGENIC_DISTILLATION_PLANT;
@@ -625,6 +622,8 @@ public class SuSyMetaTileEntities {
                 SusyTextures.POLISHING_MACHINE_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         registerSimpleMTE(TEXTILE_SPINNER, 12, 17061, "textile_spinner", SuSyRecipeMaps.SPINNING_RECIPES,
                 SusyTextures.TEXTILE_SPINNER_OVERLAY, true);
+        ROTARY_KILN_V2 = registerMetaTileEntity(17074, new MetaTileEntityRotaryKilnV2(susyId("rotary_kiln_v2")));
+
         ArrayList<Integer> ids = new ArrayList<>();
         for (int id = 14500; id < 15000; id++) {
             if (GregTechAPI.MTE_REGISTRY.getObjectById(id) == null) ids.add(id);
