@@ -214,7 +214,7 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
             AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
             if (mainWindow.blueprintBuildAttempt(bp)) {
                 // SusyLog.logger.info("build success, blueprint writeout: {}", bp.writeToNBT());
-                this.rocketBlueprintSlot.setNBT(_ -> bp.writeToNBT());
+                this.rocketBlueprintSlot.setNBT(t -> bp.writeToNBT());
             }
             // else {
             // SusyLog.logger.info(

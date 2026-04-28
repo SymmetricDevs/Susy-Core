@@ -65,7 +65,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                 10,
                 10,
                 "",
-                (_) -> {
+                (d) -> {
                     selectedStageIndex = (selectedStageIndex == 0) ? stages.size() : selectedStageIndex - 1;
                     this.updateSelectedStageView();
                 })

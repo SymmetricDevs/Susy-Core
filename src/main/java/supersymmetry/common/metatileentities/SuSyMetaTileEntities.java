@@ -123,7 +123,8 @@ public class SuSyMetaTileEntities {
 
     public static SimpleMachineMetaTileEntity[] ION_IMPLANTER;
     public static SimpleMachineMetaTileEntity[] CVD;
-    public static SimpleMachineMetaTileEntity[] SPUTTER_DEPOSITION; // atomic layer depositor
+    public static SimpleMachineMetaTileEntity[] ALD;
+    public static SimpleMachineMetaTileEntity[] SPUTTER_DEPOSITION;
     public static SimpleMachineMetaTileEntity[] SCREEN_PRINTER;
 
     public static SimpleMachineMetaTileEntity[] WEAPONS_FACTORY;
@@ -448,10 +449,11 @@ public class SuSyMetaTileEntities {
         registerSimpleMTE(UV_LIGHT_BOX, 12, 14640, "uv_light_box", SuSyRecipeMaps.UV_RECIPES,
                 SusyTextures.UV_LIGHT_BOX_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         registerSimpleMTE(CVD, 12, 14653, "cvd", SuSyRecipeMaps.CVD_RECIPES, SusyTextures.CVD_OVERLAY, true,
-                GTUtility.defaultTankSizeFunction);
+                GTUtility.largeTankSizeFunction);
         registerSimpleMTE(ION_IMPLANTER, 12, 14666, "ion_implanter", SuSyRecipeMaps.ION_IMPLANTATION_RECIPES,
                 SusyTextures.ION_IMPLANTER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
-
+        registerSimpleMTE(ALD, 12, 19013, "ald", SuSyRecipeMaps.ALD_RECIPES, SusyTextures.ALD_OVERLAY, true,
+                GTUtility.largeTankSizeFunction);
         registerSimpleMTE(SPUTTER_DEPOSITION, 12, 14755, "sputter_deposition",
                 SuSyRecipeMaps.SPUTTER_DEPOSITION_RECIPES, SusyTextures.SPUTTER_DEPOSITION_OVERLAY, true,
                 GTUtility.defaultTankSizeFunction);
@@ -837,6 +839,7 @@ public class SuSyMetaTileEntities {
 
         UV_LIGHT_BOX = new SimpleMachineMetaTileEntity[GTValues.OpV];
         CVD = new SimpleMachineMetaTileEntity[GTValues.OpV];
+        ALD = new SimpleMachineMetaTileEntity[GTValues.OpV];
         ION_IMPLANTER = new SimpleMachineMetaTileEntity[GTValues.OpV];
         SPUTTER_DEPOSITION = new SimpleMachineMetaTileEntity[GTValues.OpV];
         SCREEN_PRINTER = new SimpleMachineMetaTileEntity[GTValues.EV];
