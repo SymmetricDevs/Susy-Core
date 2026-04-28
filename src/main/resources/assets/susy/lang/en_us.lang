@@ -450,7 +450,8 @@ susy.machine.dumper.tooltip.1=§2Base Dumping Rate:§7 §f %d L every 10 ticks
 susy.machine.froth_flotation_tank.name=Froth Flotation Tank
 susy.machine.multi_stage_flash_distiller.name=Multi Stage Flash Distiller
 susy.machine.high_temperature_distillation_tower.name=High Temperature Distillation Tower
-susy.machine.rotary_kiln.name=Rotary Kiln
+susy.machine.rotary_kiln.name=Rotary Kiln (Old)
+susy.machine.rotary_kiln_v2.name=Rotary Kiln
 susy.machine.low_pressure_cryogenic_distillation_plant.name=Low Pressure Cryogenic Distillation Plant
 susy.machine.high_pressure_cryogenic_distillation_plant.name=High Pressure Cryogenic Distillation Plant
 susy.machine.single_column_cryogenic_distillation_plant.name=Single Column Cryogenic Distillation Plant
@@ -754,6 +755,21 @@ susy.machine.cvd.uiv.name=Epic CVD Unit III
 susy.machine.cvd.uxv.name=Epic CVD Unit IV
 susy.machine.cvd.opv.name=Legendary CVD Unit
 
+# ALD
+susy.machine.ald.lv.name=Basic ALD Unit
+susy.machine.ald.mv.name=Advanced ALD Unit
+susy.machine.ald.hv.name=Advanced ALD Unit II
+susy.machine.ald.ev.name=Advanced ALD Unit III
+susy.machine.ald.iv.name=Elite ALD Unit
+susy.machine.ald.luv.name=Elite ALD Unit II
+susy.machine.ald.zpm.name=Elite ALD Unit III
+susy.machine.ald.uv.name=Ultimate ALD Unit
+susy.machine.ald.uhv.name=Epic ALD Unit
+susy.machine.ald.uev.name=Epic ALD Unit II
+susy.machine.ald.uiv.name=Epic ALD Unit III
+susy.machine.ald.uxv.name=Epic ALD Unit IV
+susy.machine.ald.opv.name=Legendary ALD Unit
+
 # Ion Implanter
 susy.machine.ion_implanter.lv.name=Basic Ion Implanter
 susy.machine.ion_implanter.mv.name=Advanced Ion Implanter
@@ -1000,6 +1016,7 @@ recipemap.polymerization_tank.name=Polymerization Tank
 recipemap.uv_light_box.name=UV Light Box
 recipemap.ion_implantation.name=Ion Implantation
 recipemap.cvd.name=Chemical Vapor Deposition
+recipemap.ald.name=Atomic Layer Deposition
 recipemap.ore_sorter.name=Ore Sorting
 recipemap.cooling_tower.name=Cooling Tower
 recipemap.natural_draft_cooling_tower.name=Natural Draft Cooling Tower

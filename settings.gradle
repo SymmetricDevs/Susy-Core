@@ -35,7 +35,7 @@ plugins {
 
 blowdryerSetup {
     repoSubfolder 'spotless'
-    github 'GregTechCEu/Buildscripts', 'tag', 'v1.0.7'
+    github 'GregTechCEu/Buildscripts', 'tag', 'v1.1.4'
 }
 
 rootProject.name = rootProject.projectDir.getName()

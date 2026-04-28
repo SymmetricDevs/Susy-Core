@@ -97,7 +97,7 @@ public class SuSyRecipeMaps {
                     .setSlotOverlay(true, true, true, GuiTextures.BEAKER_OVERLAY_3)
                     .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
-    public static final RecipeMap<SimpleRecipeBuilder> CRYSTALLIZER_RECIPES = new RecipeMap<>("crystallizer", 3, 3, 3,
+    public static final RecipeMap<SimpleRecipeBuilder> CRYSTALLIZER_RECIPES = new RecipeMap<>("crystallizer", 4, 3, 3,
             3, new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
@@ -164,7 +164,7 @@ public class SuSyRecipeMaps {
                     .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
     public static final RecipeMap<SimpleRecipeBuilder> ELECTROLYTIC_CELL_RECIPES = new RecipeMap<>("electrolytic_cell",
-            3, 3, 3, 4, new SimpleRecipeBuilder(), false)
+            4, 3, 3, 4, new SimpleRecipeBuilder(), false)
                     .setSlotOverlay(false, true, GuiTextures.MOLECULAR_OVERLAY_3)
                     .setSlotOverlay(true, true, GuiTextures.MOLECULAR_OVERLAY_3)
                     .setSlotOverlay(false, false, SusyGuiTextures.ELECTRODE_OVERLAY)
@@ -500,7 +500,7 @@ public class SuSyRecipeMaps {
                     .setSound(GTSoundEvents.ARC);
 
     public static final RecipeMap<SimpleRecipeBuilder> RESISTANCE_FURNACE = new RecipeMap<>("resistance_furnace",
-            6, 2, 0, 1, new SimpleRecipeBuilder(), false)
+            6, 2, 1, 1, new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.FURNACE);
 
     public static final RecipeMap<NoEnergyRecipeBuilder> SALVAGING_RECIPES = new RecipeMap<>("salvaging", 1, 9, 0, 0,
@@ -540,7 +540,8 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> SCREEN_PRINTER = new RecipeMap<>("screen_printer", 2, 1, 1, 0,
             new SimpleRecipeBuilder(), false);
 
-    public static final RecipeMap<SimpleRecipeBuilder> ALD = new RecipeMap<>("atomic_layer_deposition", 1, 1, 3, 2,
+    public static final RecipeMap<SimpleRecipeBuilder> ALD_RECIPES = new RecipeMap<>("atomic_layer_deposition", 1, 1, 3,
+            2,
             new SimpleRecipeBuilder(), false);
 
     static {
