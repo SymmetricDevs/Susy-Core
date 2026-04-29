@@ -15,6 +15,7 @@ import net.minecraft.world.WorldServer;
 
 import gregtech.api.util.GTTeleporter;
 import gregtech.api.util.TeleportHandler;
+import supersymmetry.api.SusyLog;
 import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.event.MobHordePlayerData;
 import supersymmetry.common.event.MobHordeWorldData;
@@ -88,9 +89,14 @@ public class MobHordeEvent {
 
         boolean didSpawn = false;
 
-        if (hasToBeUnderground(player) || !canUsePods) {
+        if (!canUsePods) {
+            BlockPos spawnPos = findSpawnPos(player);
+            if (spawnPos == null) {
+                SusyLog.logger.warn("Failed to find spawn position for player {}", player.getName());
+                return false;
+            }
             for (int i = 0; i < quantity; i++) {
-                didSpawn |= spawnMobWithoutPod(player, uuidConsumer);
+                didSpawn |= spawnMobWithoutPod(player, uuidConsumer, spawnPos);
             }
         } else {
             didSpawn |= spawnMobWithPod(player, uuidConsumer, quantity);
@@ -103,7 +109,7 @@ public class MobHordeEvent {
         // I know there is an earlier check, but we have trigger on advancement now
         World world = player.getServerWorld();
         if (!world.getGameRules().getBoolean("doInvasions")) {
-            System.out.println("Invasion stopped, gamerule prevents execution");
+            SusyLog.logger.warn("Invasion stopped, gamerule prevents execution");
             return false;
         }
         if (requiredAdvancement != null) {
@@ -207,6 +213,26 @@ public class MobHordeEvent {
     public MobHordeEvent setDropPodExplosions(boolean enabled) {
         this.dropPodExplosions = enabled;
         return this;
+    }
+
+    private BlockPos findSpawnPos(EntityPlayer player) {
+        for (int i = 0; i < 12; i++) {
+            double angle = Math.random() * 2 * Math.PI;
+            int radius = 16 + (int) (20 * Math.random());
+
+            double x = (int) (player.posX + radius * Math.cos(angle)) + 0.5;
+            double z = (int) (player.posZ + radius * Math.sin(angle)) + 0.5;
+
+            BlockPos topPos = player.world.getTopSolidOrLiquidBlock(new BlockPos(x, 0, z));
+            if (topPos.getY() < player.posY - 2 || topPos.getY() > player.posY + 8) continue;
+
+            EntityLiving test = entitySupplier.apply(player);
+            test.setPosition(x, topPos.getY() + 0.01, z);
+            if (!test.getCanSpawnHere() || !test.isNotColliding()) continue;
+
+            return topPos;
+        }
+        return null;
     }
 
     public boolean spawnMobWithPod(EntityPlayer player, Consumer<UUID> uuidConsumer, int quantity) {
@@ -438,34 +464,18 @@ public class MobHordeEvent {
         return true;
     }
 
-    public boolean spawnMobWithoutPod(EntityPlayer player, Consumer<UUID> uuidConsumer) {
+    public boolean spawnMobWithoutPod(EntityPlayer player, Consumer<UUID> uuidConsumer, BlockPos spawnPos) {
         EntityLiving mob = entitySupplier.apply(player);
-        for (int i = 0; i < 4; i++) {
-            double angle = Math.random() * 2 * Math.PI;
-            int radius = 16 + (int) (20 * Math.random());
+        mob.setPosition(spawnPos.getX() + 0.5, spawnPos.getY() + 0.01, spawnPos.getZ() + 0.5);
 
-            double x = (int) (player.posX + radius * Math.cos(angle)) + 0.5;
-            double z = (int) (player.posZ + radius * Math.sin(angle)) + 0.5;
+        mob.motionX = (Math.random() - 0.5) * 0.4;
+        mob.motionZ = (Math.random() - 0.5) * 0.4;
+        mob.motionY = 0.1;
 
-            BlockPos topPos = player.world.getTopSolidOrLiquidBlock(new BlockPos(x, 0, z));
-            double y = topPos.getY() + 0.01;
-
-            double maxY = player.posY + 8;
-
-            if (y > maxY) continue;
-
-            mob.setPosition(x, y, z); // test
-
-            if (!mob.getCanSpawnHere() || !mob.isNotColliding()) continue;
-
-            player.world.spawnEntity(mob);
-            mob.enablePersistence();
-            uuidConsumer.accept(mob.getPersistentID());
-
-            return true;
-        }
-        System.out.println("failure");
-        return false;
+        player.world.spawnEntity(mob);
+        mob.enablePersistence();
+        uuidConsumer.accept(mob.getPersistentID());
+        return true;
     }
 
     public int getNextDelay() {
