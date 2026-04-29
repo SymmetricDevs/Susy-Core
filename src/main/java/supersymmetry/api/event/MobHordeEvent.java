@@ -326,7 +326,7 @@ public class MobHordeEvent {
         while (spawned < quantity) {
 
             EntityDropPod pod = new EntityDropPod(player.world);
-            pod.CanExplode(this.dropPodExplosions);
+            pod.canExplode(this.dropPodExplosions);
             pod.rotationYaw = (float) (Math.random() * 360);
 
             // Combine global and pattern-specific commands
@@ -398,7 +398,7 @@ public class MobHordeEvent {
     // moved over bru's old code
     private boolean spawnMobWithoutPattern(EntityPlayer player, Consumer<UUID> uuidConsumer) {
         EntityDropPod pod = new EntityDropPod(player.world);
-        pod.CanExplode(this.dropPodExplosions);
+        pod.canExplode(this.dropPodExplosions);
         pod.rotationYaw = (float) (Math.random() * 360);
 
         EntityLiving mob = entitySupplier.apply(player);

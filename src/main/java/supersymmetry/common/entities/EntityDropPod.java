@@ -211,7 +211,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
         this.explode();
     }
 
-    public void CanExplode(boolean explosive) {
+    public void canExplode(boolean explosive) {
         this.explosive = explosive;
     }
 

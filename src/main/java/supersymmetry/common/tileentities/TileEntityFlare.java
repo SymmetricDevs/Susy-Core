@@ -7,9 +7,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.codehaus.groovy.runtime.InvokerHelper;
 
-import supersymmetry.client.particle.ParticleFlareSmoke;
+import supersymmetry.client.renderer.particles.SusyParticleFlareSmoke;
 
 public class TileEntityFlare extends TileEntity implements ITickable {
 
@@ -109,6 +111,19 @@ public class TileEntityFlare extends TileEntity implements ITickable {
         }
     }
 
+    @SideOnly(Side.CLIENT)
+    private void spawnClientParticles() {
+        Minecraft.getMinecraft().effectRenderer.addEffect(
+                new SusyParticleFlareSmoke(
+                        world,
+                        pos.getX() + 0.5 + (world.rand.nextDouble() - 0.5) * 0.2,
+                        pos.getY() + 0.1,
+                        pos.getZ() + 0.5 + (world.rand.nextDouble() - 0.5) * 0.2,
+                        red, green, blue
+                )
+        );
+    }
+
     @Override
     public void update() {
         if (target != null) { // skip outright if the flare was just placed down as decoration.
@@ -125,13 +140,7 @@ public class TileEntityFlare extends TileEntity implements ITickable {
         }
 
         if (world.isRemote) {
-            Minecraft.getMinecraft().effectRenderer.addEffect(
-                    new ParticleFlareSmoke(
-                            world,
-                            pos.getX() + 0.5 + (world.rand.nextDouble() - 0.5) * 0.2,
-                            pos.getY() + 0.1,
-                            pos.getZ() + 0.5 + (world.rand.nextDouble() - 0.5) * 0.2,
-                            red, green, blue));
+            spawnClientParticles();
         }
     }
 }
