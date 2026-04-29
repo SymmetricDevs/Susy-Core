@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 
 import supersymmetry.common.faction.FactionHateManager;
+import supersymmetry.common.util.FactionHelper;
 
 public class CommandFactionHate extends CommandBase {
 
@@ -29,9 +30,30 @@ public class CommandFactionHate extends CommandBase {
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args,
                                           @Nullable BlockPos targetPos) {
+
+        // /factionHate <subcommand>
         if (args.length == 1) {
             return getListOfStringsMatchingLastWord(args, "get", "add", "set");
         }
+
+        // /factionHate <subcommand> <faction>
+        if (args.length == 2) {
+            return getListOfStringsMatchingLastWord(args, FactionHelper.FACTIONS);
+        }
+
+        // /factionHate <subcommand> <faction> <value>
+        if (args.length == 3) {
+            String sub = args[0].toLowerCase();
+
+            if (sub.equals("add") || sub.equals("set")) {
+                // common useful values for hate manipulation
+                return getListOfStringsMatchingLastWord(args, "<number>");
+            }
+
+            // "get" doesn't need a third argument
+            return java.util.Collections.emptyList();
+        }
+
         return super.getTabCompletions(server, sender, args, targetPos);
     }
 
