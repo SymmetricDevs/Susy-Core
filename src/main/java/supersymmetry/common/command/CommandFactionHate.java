@@ -10,8 +10,10 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 
+import net.minecraft.util.text.TextComponentTranslation;
 import supersymmetry.common.faction.FactionHateManager;
 import supersymmetry.common.util.FactionHelper;
 
@@ -24,7 +26,9 @@ public class CommandFactionHate extends CommandBase {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "/factionHate <get|add|set>";
+        return new TextComponentTranslation(
+                "susy.command.faction.generic.usage"
+        ).getUnformattedText();
     }
 
     @Override
@@ -46,7 +50,6 @@ public class CommandFactionHate extends CommandBase {
             String sub = args[0].toLowerCase();
 
             if (sub.equals("add") || sub.equals("set")) {
-                // common useful values for hate manipulation
                 return getListOfStringsMatchingLastWord(args, "<number>");
             }
 
@@ -60,8 +63,9 @@ public class CommandFactionHate extends CommandBase {
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         if (args.length < 1) {
-            sender.sendMessage(
-                    new TextComponentString("Usage: /factionHate <get|add|set> | /factionHate add Bandits 5"));
+            ITextComponent textComponent = new TextComponentTranslation(
+                    "susy.command.faction.generic.usage");
+            sender.sendMessage(textComponent);
             return;
         }
 
@@ -69,23 +73,46 @@ public class CommandFactionHate extends CommandBase {
         String faction = args[1];
 
         switch (arg) {
-            case "get":
+            case "get": {
                 int hate = FactionHateManager.getHate((EntityPlayer) sender, faction);
-                sender.sendMessage(new TextComponentString("current HATE for " + faction + ": " + hate));
+                ITextComponent text = new TextComponentTranslation(
+                        "susy.command.faction.get",
+                        faction,
+                        hate
+                );
+
+                sender.sendMessage(text);
                 break;
-            case "add":
-                int hate1 = Integer.parseInt(args[2]);
-                FactionHateManager.addHate((EntityPlayer) sender, faction, hate1);
-                sender.sendMessage(new TextComponentString("Added " + hate1 + " HATE to faction: " + faction));
+            }
+            case "add": {
+                int value = Integer.parseInt(args[2]);
+                FactionHateManager.addHate((EntityPlayer) sender, faction, value);
+                ITextComponent text = new TextComponentTranslation(
+                        "susy.command.faction.add",
+                        value,
+                        faction
+                );
+                sender.sendMessage(text);
                 break;
-            case "set":
-                int hate2 = Integer.parseInt(args[2]);
-                FactionHateManager.setHate((EntityPlayer) sender, faction, hate2);
-                sender.sendMessage(new TextComponentString("Set " + hate2 + " HATE for faction: " + faction));
+            }
+            case "set": {
+                int value = Integer.parseInt(args[2]);
+                FactionHateManager.setHate((EntityPlayer) sender, faction, value);
+                ITextComponent text = new TextComponentTranslation(
+                        "susy.command.faction.set",
+                        value,
+                        faction
+                );
+                sender.sendMessage(text);
                 break;
-            default:
-                sender.sendMessage(new TextComponentString("Invalid argument. Use get, add, or set."));
+            }
+            default: {
+                ITextComponent text = new TextComponentTranslation(
+                        "susy.command.faction.invalid"
+                );
+                sender.sendMessage(text);
                 break;
+            }
         }
     }
 
