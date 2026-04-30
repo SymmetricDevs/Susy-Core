@@ -11,9 +11,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-
 import net.minecraft.util.text.TextComponentTranslation;
+
 import supersymmetry.common.faction.FactionHateManager;
 import supersymmetry.common.util.FactionHelper;
 
@@ -27,14 +26,12 @@ public class CommandFactionHate extends CommandBase {
     @Override
     public String getUsage(ICommandSender sender) {
         return new TextComponentTranslation(
-                "susy.command.faction.generic.usage"
-        ).getUnformattedText();
+                "susy.command.faction.generic.usage").getUnformattedText();
     }
 
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args,
                                           @Nullable BlockPos targetPos) {
-
         // /factionHate <subcommand>
         if (args.length == 1) {
             return getListOfStringsMatchingLastWord(args, "get", "add", "set");
@@ -78,8 +75,7 @@ public class CommandFactionHate extends CommandBase {
                 ITextComponent text = new TextComponentTranslation(
                         "susy.command.faction.get",
                         faction,
-                        hate
-                );
+                        hate);
 
                 sender.sendMessage(text);
                 break;
@@ -90,8 +86,7 @@ public class CommandFactionHate extends CommandBase {
                 ITextComponent text = new TextComponentTranslation(
                         "susy.command.faction.add",
                         value,
-                        faction
-                );
+                        faction);
                 sender.sendMessage(text);
                 break;
             }
@@ -101,15 +96,13 @@ public class CommandFactionHate extends CommandBase {
                 ITextComponent text = new TextComponentTranslation(
                         "susy.command.faction.set",
                         value,
-                        faction
-                );
+                        faction);
                 sender.sendMessage(text);
                 break;
             }
             default: {
                 ITextComponent text = new TextComponentTranslation(
-                        "susy.command.faction.invalid"
-                );
+                        "susy.command.faction.invalid");
                 sender.sendMessage(text);
                 break;
             }

@@ -6,9 +6,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.codehaus.groovy.runtime.InvokerHelper;
 
 import supersymmetry.client.renderer.particles.SusyParticleFlareSmoke;
@@ -119,9 +119,7 @@ public class TileEntityFlare extends TileEntity implements ITickable {
                         pos.getX() + 0.5 + (world.rand.nextDouble() - 0.5) * 0.2,
                         pos.getY() + 0.1,
                         pos.getZ() + 0.5 + (world.rand.nextDouble() - 0.5) * 0.2,
-                        red, green, blue
-                )
-        );
+                        red, green, blue));
     }
 
     @Override

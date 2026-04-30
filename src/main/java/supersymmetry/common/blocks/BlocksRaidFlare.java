@@ -49,7 +49,6 @@ public class BlocksRaidFlare extends VariantBlock<BlocksRaidFlare.BlockRaidFlare
         BANDITFLARE("bandit_flare", 2, 1.0f, 0.0f, 0.0f, "Bandits"),
         FEDFLARE("fed_flare", 2, 0.0f, 0.0f, 1.0f, "Feds");
 
-
         private final String name;
         private final int harvestLevel;
         private final float red;
