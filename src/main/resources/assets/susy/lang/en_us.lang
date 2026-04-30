@@ -1568,6 +1568,7 @@ metaitem.entity_tagger.name=Factions Dev Tool
 metaitem.faction_radio.name=Universal Federation Radio
 #Blocks
 tile.raid_flare_block.bandit_flare.name=Bandit Raid Flare
+tile.raid_flare_block.fed_flare.name=Former Federation Raid Flare
 #Comments and text
 chat.susy.radio.no_tag=§7This radio appears broken...
 chat.susy.radio.no_faction=§7This radio is not tuned to any known frequency...

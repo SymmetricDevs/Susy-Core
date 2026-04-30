@@ -20,9 +20,9 @@ import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantBlock;
 import supersymmetry.common.tileentities.TileEntityFlare;
 
-public class BlockRaidFlare extends VariantBlock<BlockRaidFlare.BlockRaidFlareType> {
+public class BlocksRaidFlare extends VariantBlock<BlocksRaidFlare.BlockRaidFlareType> {
 
-    public BlockRaidFlare() {
+    public BlocksRaidFlare() {
         super(Material.IRON);
         this.setTranslationKey("raid_flare_block");
         this.setHardness(0.5f);
@@ -46,8 +46,9 @@ public class BlockRaidFlare extends VariantBlock<BlockRaidFlare.BlockRaidFlareTy
 
     public static enum BlockRaidFlareType implements IStringSerializable, IStateHarvestLevel {
 
-        BANDITFLARE("bandit_flare", 2, 1.0f, 0.0f, 0.0f, "Bandits");
-        // add feds later
+        BANDITFLARE("bandit_flare", 2, 1.0f, 0.0f, 0.0f, "Bandits"),
+        FEDFLARE("fed_flare", 2, 0.0f, 0.0f, 1.0f, "Feds");
+
 
         private final String name;
         private final int harvestLevel;
