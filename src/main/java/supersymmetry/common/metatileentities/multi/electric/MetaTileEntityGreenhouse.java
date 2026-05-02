@@ -188,6 +188,16 @@ public class MetaTileEntityGreenhouse extends RecipeMapMultiblockController {
         tooltip.add(TextFormatting.GRAY + I18n.format("susy.machine.greenhouse.tooltip.2"));
     }
 
+    @Override
+    public boolean isMultiblockPartWeatherResistant(@Nonnull IMultiblockPart part) {
+        return true;
+    }
+
+    @Override
+    public boolean getIsWeatherOrTerrainResistant() {
+        return true;
+    }
+
     private class GreenhouseRecipeLogic extends MultiblockRecipeLogic {
 
         public GreenhouseRecipeLogic(RecipeMapMultiblockController tileEntity) {
