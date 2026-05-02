@@ -1,10 +1,7 @@
 package supersymmetry.common.rocketry.components;
 
-import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
-
-import java.util.*;
-import java.util.stream.Collectors;
-
+import gregtech.api.block.VariantBlock;
+import gregtech.api.unification.material.Materials;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -14,9 +11,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.util.Constants;
-
-import gregtech.api.block.VariantBlock;
-import gregtech.api.unification.material.Materials;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.components.MaterialCost;
@@ -25,6 +19,11 @@ import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.rocketry.BlockCombustionChamber;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
 
 public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine> implements RocketEngine {
 
@@ -173,7 +172,7 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
         }
         for (BlockPos pumpPos : pumps) {
             EnumFacing dir = analysis.world.getBlockState(pumpPos).getValue(FACING);
-            if (dir.equals(EnumFacing.UP) || !pumpPos.add(dir.getDirectionVec()).equals(cChamber)) {
+            if (dir.equals(EnumFacing.UP) || !pumpPos.add(dir.getOpposite().getDirectionVec()).equals(cChamber)) {
                 analysis.status = BuildStat.WEIRD_PUMP;
                 return analysis.errorPos(pumpPos);
             }
