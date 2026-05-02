@@ -1,31 +1,32 @@
 package supersymmetry.loaders.recipes;
 
-import gregtech.api.recipes.ModHandler;
-import gregtech.api.recipes.Recipe;
-import gregtech.api.recipes.category.RecipeCategories;
-import gregtech.api.unification.material.Materials;
-import gregtech.common.blocks.MetaBlocks;
-import gregtech.common.blocks.StoneVariantBlock;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
-import supersymmetry.SusyConfig;
-import supersymmetry.api.recipes.SuSyRecipeMaps;
-import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.common.blocks.SusyStoneVariantBlock;
-import supersymmetry.loaders.SuSyMetaTileEntityLoader;
-
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import static gregtech.api.recipes.RecipeMaps.*;
 import static gregtech.api.unification.ore.OrePrefix.dust;
 import static gregtech.api.unification.ore.OrePrefix.ingot;
 import static gregtech.common.blocks.MetaBlocks.LD_ITEM_PIPE;
 import static gregtech.common.items.MetaItems.SHAPE_EXTRUDER_BLOCK;
 import static gregtech.common.metatileentities.MetaTileEntities.LONG_DIST_ITEM_ENDPOINT;
+
+import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
+
+import gregtech.api.recipes.ModHandler;
+import gregtech.api.recipes.Recipe;
+import gregtech.api.recipes.category.RecipeCategories;
+import gregtech.api.unification.material.Materials;
+import gregtech.common.blocks.MetaBlocks;
+import gregtech.common.blocks.StoneVariantBlock;
+import supersymmetry.SusyConfig;
+import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.blocks.SusyStoneVariantBlock;
+import supersymmetry.loaders.SuSyMetaTileEntityLoader;
 
 public class SuSyRecipeLoader {
 
