@@ -26,6 +26,8 @@ public class FactionRadioBehaviour {
 
         if (stack.isEmpty()) return;
 
+        if (player.world.isRemote) return;
+
         // Only our faction radio item
         if (SuSyMetaItems.isMetaItem(stack) != SuSyMetaItems.FACTION_RADIO.metaValue)
             return;
