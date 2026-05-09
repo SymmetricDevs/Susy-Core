@@ -1,12 +1,12 @@
-package supersymmetry.client.particle;
+package supersymmetry.client.renderer.particles;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.world.World;
 
-public class ParticleFlareSmoke extends Particle {
+public class SusyParticleFlareSmoke extends Particle {
 
-    public ParticleFlareSmoke(World worldIn, double x, double y, double z, float R, float G, float B) {
+    public SusyParticleFlareSmoke(World worldIn, double x, double y, double z, float R, float G, float B) {
         super(worldIn, x, y, z);
 
         this.motionX = (rand.nextDouble() - 0.5) * 0.01;
