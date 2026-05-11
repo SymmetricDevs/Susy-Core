@@ -1,10 +1,6 @@
 package supersymmetry.common.rocketry.components;
 
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
+import gregtech.api.block.VariantBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,14 +8,17 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants.NBT;
-
-import gregtech.api.block.VariantBlock;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.components.MaterialCost;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.tileentities.TileEntityCoverable;
+
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> {
 
@@ -30,8 +29,8 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
 
     public ComponentSpacecraft() {
         super(
-                "spacecraft_hull",
-                "spacecraft_hull",
+                "spacecraft",
+                "spacecraft",
                 tuple -> tuple.getSecond().stream()
                         .anyMatch(
                                 pos -> tuple
