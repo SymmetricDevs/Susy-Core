@@ -1,16 +1,14 @@
 package supersymmetry.common.item.behavior;
 
-import java.util.List;
-import java.util.function.Consumer;
-
+import gregtech.api.items.metaitem.stats.IItemBehaviour;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.Constants;
-
 import org.jetbrains.annotations.NotNull;
 
-import gregtech.api.items.metaitem.stats.IItemBehaviour;
+import java.util.List;
+import java.util.function.Consumer;
 
 public class DataCardBehavior implements IItemBehaviour {
 
@@ -29,9 +27,16 @@ public class DataCardBehavior implements IItemBehaviour {
             NBTTagCompound tag = itemStack.getTagCompound();
             for (String key : this.keys) {
                 if (tag.hasKey(key, Constants.NBT.TAG_STRING)) {
-                    lines.add(I18n.format(itemStack.getTranslationKey() + ".tag." + tag.getString(key)));
+                    lines.add(I18n.format(itemStack.getTranslationKey() + ".tag." + tag.getString(key)) +
+                            " ID: " + getID(tag));
                 }
             }
         }
+    }
+
+    private String getID(NBTTagCompound key) {
+        // Left pad
+        String fullID = String.format("%08x", key.hashCode());
+        return fullID.toUpperCase();
     }
 }

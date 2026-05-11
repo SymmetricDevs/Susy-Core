@@ -1,23 +1,22 @@
 package supersymmetry.common.mui.widget;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import net.minecraft.client.resources.I18n;
-import net.minecraft.network.PacketBuffer;
-
 import gregtech.api.gui.GuiTextures;
-import gregtech.api.gui.widgets.AbstractWidgetGroup;
-import gregtech.api.gui.widgets.ClickButtonWidget;
-import gregtech.api.gui.widgets.DynamicLabelWidget;
-import gregtech.api.gui.widgets.SlotWidget;
+import gregtech.api.gui.Widget;
+import gregtech.api.gui.widgets.*;
 import gregtech.api.util.Position;
 import gregtech.api.util.Size;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.api.util.DataStorageLoader;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class RocketStageDisplayWidget extends AbstractWidgetGroup {
 
@@ -59,10 +58,10 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
     public Map<String, StageContainerWidget> stageContainers = new HashMap<>();
 
     public RocketStageDisplayWidget(
-                                    Position pos,
-                                    Size size,
-                                    BlueprintProvider blueprintProvider,
-                                    SlotListProvider slotListProvider) {
+            Position pos,
+            Size size,
+            BlueprintProvider blueprintProvider,
+            SlotListProvider slotListProvider) {
         super(pos, size);
         this.blueprintProvider = blueprintProvider;
         this.slotListProvider = slotListProvider;
@@ -80,8 +79,8 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                         updateStageVisibility();
                     }
                 })
-                        .setShouldClientCallback(true)
-                        .setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_LEFT);
+                .setShouldClientCallback(true)
+                .setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_LEFT);
 
         nextButton = new ClickButtonWidget(
                 (size.width - 20),
@@ -96,8 +95,8 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                         updateStageVisibility();
                     }
                 })
-                        .setShouldClientCallback(true)
-                        .setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_RIGHT);
+                .setShouldClientCallback(true)
+                .setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_RIGHT);
 
         amountTextField = new DynamicLabelWidget(
                 (int) ((size.width / 5) * 2.5),
@@ -266,7 +265,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
         public static final int ROW_SEPARATION = 18;
 
         public StageContainerWidget(
-                                    Position pos, Size size, RocketStage stage, SlotListProvider slotListProvider) {
+                Position pos, Size size, RocketStage stage, SlotListProvider slotListProvider) {
             super(pos, size);
 
             for (Map.Entry<String, int[]> componentLimits : stage.getComponentLimits().entrySet()) {
@@ -352,8 +351,8 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                         (data) -> {
                             selectedIndex = (selectedIndex - 1 + validValues.length) % validValues.length;
                         })
-                                .setShouldClientCallback(true)
-                                .setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_LEFT);
+                        .setShouldClientCallback(true)
+                        .setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_LEFT);
 
                 increaseButton = new ClickButtonWidget(
                         (size.width / 5) * 4,
@@ -364,8 +363,8 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                         (data) -> {
                             selectedIndex = (selectedIndex + 1) % validValues.length;
                         })
-                                .setShouldClientCallback(true)
-                                .setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_RIGHT);
+                        .setShouldClientCallback(true)
+                        .setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_RIGHT);
 
                 amountTextField = new DynamicLabelWidget(
                         (int) ((size.width / 5) * 1.5),
@@ -395,33 +394,43 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
         public WidgetIntSelector selector;
         public boolean shortView = false;
         public HorizontalScrollableListWidget itemList;
-        public final ClickButtonWidget shortViewButton;
+        public final Widget shortViewButton;
 
         public Size previousStateSize = new Size(18 * 5 + 2, 28);
         public boolean previousSliderState = false;
 
         public ComponentEntryWidget(
-                                    Position pos, Size size, HorizontalScrollableListWidget itemList,
-                                    int[] validValues) {
+                Position pos, Size size, HorizontalScrollableListWidget itemList,
+                int[] validValues) {
             super(pos, size);
             this.itemList = itemList;
 
-            shortViewButton = new ClickButtonWidget(
+            shortViewButton = new ToggleButtonWidget(
                     itemList.getSize().width + 10,
                     0,
-                    12,
-                    12,
-                    "",
-                    (data) -> {
-                        setShortView(!shortView);
-                    })
-                            .setShouldClientCallback(true)
-                            .setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_SHORTVIEW);
+                    16,
+                    16,
+                    this::isShortView,
+                    (isShort) -> {
+                        setShortView(isShort);
+                    }) {
+                @Override
+                @SideOnly(Side.CLIENT)
+                public boolean mouseClicked(int mouseX, int mouseY, int button) {
+                    if (super.mouseClicked(mouseX, mouseY, button)) {
+                        setShortView(this.isPressed);
+                        return true;
+                    }
+                    return false;
+                }
+            }
+                    .setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_SHORTVIEW)
+                    .setTooltipText("susy.gui.toggle_short_view");
 
             selector = new WidgetIntSelector(
                     validValues,
                     new Position(itemList.getSize().width - 25, 0),
-                    new Size((int) (itemList.getSize().width / 2 - 10), 18));
+                    new Size(itemList.getSize().width / 2 - 10, 18));
 
             selector.setVisible(false);
             selector.setActive(false);

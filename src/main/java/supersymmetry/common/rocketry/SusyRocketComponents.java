@@ -72,6 +72,17 @@ public class SusyRocketComponents {
                                 .type("tank")
                                 .limit(2)
                                 .build())
+                .stage(
+                        new RocketStage.Builder("payload")
+                                .type("spacecraft")
+                                .limit(4)
+                                .type("fairing")
+                                .limit(2)
+                                .type("engine_small")
+                                .limit(3)
+                                .type("tank")
+                                .limit(1)
+                                .build())
                 .entityResourceLocation(new ResourceLocation(Supersymmetry.MODID, "rocket_basic"))
                 .build();
 
