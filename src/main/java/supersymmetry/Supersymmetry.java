@@ -105,6 +105,10 @@ public class Supersymmetry {
         hordeCommand.addSubcommand(new CommandHordeStart());
         hordeCommand.addSubcommand(new CommandHordeStop());
         hordeCommand.addSubcommand(new CommandHordeStatus());
+        hordeCommand.addSubcommand(new CommandHordeKill());
+        hordeCommand.addSubcommand(new CommandHordeResetScripted());
+
+        event.registerServerCommand(new CommandFactionHate());
     }
 
     @SideOnly(Side.CLIENT)

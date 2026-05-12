@@ -1308,6 +1308,9 @@ susy.command.horde.start.started=Successfully started %s invasion.
 susy.command.horde.stop.usage=/mobHorde stop
 susy.command.horde.stop.has_active_no_invasion=No active invasion to stop.
 susy.command.horde.stop.stopped=Successfully stopped %s invasion.
+susy.command.horde.kill.usage=/mobHorde kill
+susy.command.horde.kill.has_active_no_invasion=No active invasion to kill.
+susy.command.horde.kill.killed=Successfully killed %s invasion.
 susy.command.horde.status.usage=/mobHorde status <player>
 susy.command.horde.status.has_active_invasion=Player %s has an active %s invasion for %d ticks. It will time out in %s ticks.
 susy.command.horde.status.no_active_invasion=Player %s has no active invasion.
@@ -1558,3 +1561,23 @@ tile.bmrf_blocks.bmrf6.name=BMRF-6
 tile.bmrf_blocks.bmrf7.name=BMRF-7
 tile.bmrf_blocks.bmrf8.name=BMRF-8
 tile.bmrf_blocks.bmrf9.name=BMRF-9
+
+##Factions
+#Items
+metaitem.entity_tagger.name=Factions Dev Tool
+metaitem.faction_radio.name=Universal Federation Radio
+#Blocks
+tile.raid_flare_block.bandit_flare.name=Bandit Raid Flare
+tile.raid_flare_block.fed_flare.name=Former Federation Raid Flare
+#Comments and text
+chat.susy.radio.no_tag=§7This radio appears broken...
+chat.susy.radio.no_faction=§7This radio is not tuned to any known frequency...
+chat.susy.radio.get_hate=§7The radio intercepts a message! (%s§7)
+ui.susy.settings.peaceful_button.ln1=Change to Peaceful?
+ui.susy.settings.peaceful_button.ln2=Supersymmetry is intended to be played at difficulty Easy or higher.\nIf you do not like mobs attacking your base, use §6/gamerule doInvasions false§f instead.\nOnly change this setting if you know what you're doing, as doing so may break parts of the game.
+#Commands
+susy.command.faction.generic.usage=Usage: /factionHate <get|add|set> | /factionHate add Bandits 5
+susy.command.faction.get=current HATE for %s: %s
+susy.command.faction.add=Added %s HATE to faction: %s
+susy.command.faction.set=Set %s HATE for faction: %s
+susy.command.faction.invalid=Invalid argument. Use get, add, or set.
