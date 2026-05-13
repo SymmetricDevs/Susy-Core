@@ -1,12 +1,14 @@
 package supersymmetry.mixins.icbmclassic;
 
-import icbm.classic.content.blocks.radarstation.EnumRadarState;
-import icbm.classic.content.blocks.radarstation.TileRadarStation;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -14,11 +16,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import icbm.classic.content.blocks.radarstation.EnumRadarState;
+import icbm.classic.content.blocks.radarstation.TileRadarStation;
 import supersymmetry.api.mixin.IDropPodRadar;
 import supersymmetry.common.entities.EntityDropPod;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Mixin(value = TileRadarStation.class, remap = false)
 public abstract class TileRadarStationMixin implements IDropPodRadar {
@@ -38,7 +40,7 @@ public abstract class TileRadarStationMixin implements IDropPodRadar {
     private void supersymmetry$scanDropPods(CallbackInfo ci) {
         susy$incomingDropPods.clear();
 
-        TileEntity self = (TileEntity)(Object) this;
+        TileEntity self = (TileEntity) (Object) this;
         BlockPos pos = self.getPos();
         net.minecraft.world.World world = self.getWorld();
         if (world == null) return;
@@ -47,8 +49,7 @@ public abstract class TileRadarStationMixin implements IDropPodRadar {
 
         AxisAlignedBB area = new AxisAlignedBB(
                 pos.getX() - detectionRange, pos.getY() - detectionRange, pos.getZ() - detectionRange,
-                pos.getX() + detectionRange, pos.getY() + detectionRange, pos.getZ() + detectionRange
-        );
+                pos.getX() + detectionRange, pos.getY() + detectionRange, pos.getZ() + detectionRange);
 
         List<EntityDropPod> pods = world.getEntitiesWithinAABB(EntityDropPod.class, area);
 
@@ -70,7 +71,10 @@ public abstract class TileRadarStationMixin implements IDropPodRadar {
         }
     }
 
-    @Inject(method = "getRadarState()Licbm/classic/content/blocks/radarstation/EnumRadarState;", at = @At("RETURN"), remap = false, cancellable = true)
+    @Inject(method = "getRadarState()Licbm/classic/content/blocks/radarstation/EnumRadarState;",
+            at = @At("RETURN"),
+            remap = false,
+            cancellable = true)
     private void supersymmetry$getRadarState(CallbackInfoReturnable<EnumRadarState> cir) {
         // Only upgrade the state, never downgrade
         if (!susy$incomingDropPods.isEmpty() && cir.getReturnValue() != EnumRadarState.DANGER) {
@@ -78,7 +82,10 @@ public abstract class TileRadarStationMixin implements IDropPodRadar {
         }
     }
 
-    @Inject(method = "getStrongRedstonePower(Lnet/minecraft/util/EnumFacing;)I", at = @At("RETURN"), remap = false, cancellable = true)
+    @Inject(method = "getStrongRedstonePower(Lnet/minecraft/util/EnumFacing;)I",
+            at = @At("RETURN"),
+            remap = false,
+            cancellable = true)
     private void supersymmetry$redstonePower(EnumFacing side, CallbackInfoReturnable<Integer> cir) {
         if (!susy$incomingDropPods.isEmpty()) {
             cir.setReturnValue(Math.min(15, cir.getReturnValue() + susy$incomingDropPods.size()));
