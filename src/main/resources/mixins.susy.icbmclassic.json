@@ -6,6 +6,7 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "SAMTargetDataMixin",
-    "TileRadarStationMixin"
+    "TileRadarStationMixin",
+    "RadarRenderDataMixin"
   ]
 }
