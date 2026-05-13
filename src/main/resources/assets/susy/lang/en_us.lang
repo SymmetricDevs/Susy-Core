@@ -1581,3 +1581,8 @@ susy.command.faction.get=current HATE for %s: %s
 susy.command.faction.add=Added %s HATE to faction: %s
 susy.command.faction.set=Set %s HATE for faction: %s
 susy.command.faction.invalid=Invalid argument. Use get, add, or set.
+
+# Defoliator
+susy.machine.defoliator.lv.name=Basic Defoliator
+susy.machine.defoliator.tooltip.info=Global warning has never been this easy!
+susy.machine.defoliator.tooltip.description=Destroys all plant life in a ever-expanding radius until destroyed.

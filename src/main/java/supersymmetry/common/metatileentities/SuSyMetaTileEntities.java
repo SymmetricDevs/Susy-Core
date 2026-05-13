@@ -291,6 +291,8 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityEccentricRollCrusher ECCENTRIC_ROLL_CRUSHER;
     public static MetaTileEntityBallMill BALL_MILL;
 
+    public static MetaTileEntityDefoliator[] DEFOLIATOR = new MetaTileEntityDefoliator[8];
+
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500,
                 new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -738,6 +740,9 @@ public class SuSyMetaTileEntities {
 
         registerSimpleMTE(RESISTANCE_FURNACE, 12, 18503, "resistance_furnace", SuSyRecipeMaps.RESISTANCE_FURNACE,
                 Textures.ELECTRIC_FURNACE_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+
+        // Defoliators: 18600-18700
+        DEFOLIATOR[0] = registerMetaTileEntity(18600, new MetaTileEntityDefoliator(susyId("defoliator.lv"), 1));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name,
