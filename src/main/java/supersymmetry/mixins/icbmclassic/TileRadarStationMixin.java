@@ -14,7 +14,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.mixin.IDropPodRadar;
 import supersymmetry.common.entities.EntityDropPod;
 
@@ -23,10 +22,6 @@ import java.util.List;
 
 @Mixin(value = TileRadarStation.class, remap = false)
 public abstract class TileRadarStationMixin implements IDropPodRadar {
-
-    static {
-        SusyLog.logger.info("[SUSY MIXIN] TileRadarStationMixin class loaded");
-    }
 
     @Shadow
     private int detectionRange;
@@ -56,7 +51,6 @@ public abstract class TileRadarStationMixin implements IDropPodRadar {
         );
 
         List<EntityDropPod> pods = world.getEntitiesWithinAABB(EntityDropPod.class, area);
-        SusyLog.logger.info("[SUSY MIXIN] doScan found {} drop pods", pods.size());
 
         for (EntityDropPod pod : pods) {
             if (!pod.isEntityAlive()) continue;
@@ -65,7 +59,6 @@ public abstract class TileRadarStationMixin implements IDropPodRadar {
             double nextDistance = podPos.add(pod.motionX, pod.motionY, pod.motionZ).distanceTo(radarPos);
             if (nextDistance < currentDistance) {
                 susy$incomingDropPods.add(pod);
-                SusyLog.logger.info("[SUSY MIXIN] drop pod incoming at {}, {}, {}", pod.posX, pod.posY, pod.posZ);
             }
         }
     }
