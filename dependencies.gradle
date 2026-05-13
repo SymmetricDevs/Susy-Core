@@ -88,6 +88,9 @@ dependencies {
     compileOnly rfg.deobf('curse.maven:cb-multipart-258426:2755790')
     compileOnly rfg.deobf('curse.maven:project-red-core-228702:2745545')
 
+    compileOnly rfg.deobf("curse.maven:vertically-stacked-dimensions-310992:2937031")
+    compileOnly rfg.deobf("curse.maven:cd4017be-library-229208:3004631")
+
     runtimeOnly rfg.deobf("curse.maven:serverutil-282484:2503313")
     // # Optional dependencies. Uncomment the ones you need
 //    runtimeOnlyNonPublishable rfg.deobf('curse.maven:the-beneath-254629:3425551')
