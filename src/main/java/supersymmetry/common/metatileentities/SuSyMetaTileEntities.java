@@ -741,8 +741,13 @@ public class SuSyMetaTileEntities {
         registerSimpleMTE(RESISTANCE_FURNACE, 12, 18503, "resistance_furnace", SuSyRecipeMaps.RESISTANCE_FURNACE,
                 Textures.ELECTRIC_FURNACE_OVERLAY, true, GTUtility.defaultTankSizeFunction);
 
-        // Defoliators: 18600-18700
+        // Siege elements: 18600-18700
         DEFOLIATOR[0] = registerMetaTileEntity(18600, new MetaTileEntityDefoliator(susyId("defoliator.lv"), 1));
+        /* todo
+        interference dynamo
+        toxic spewer
+        atmospheric oxidizer
+         */
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name,
