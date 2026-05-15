@@ -104,7 +104,7 @@ public class CommandUntranslatedKeys extends CommandBase {
         checkFluids(untranslated);
         checkItems(untranslated);
 
-        List.of(BLACKLIST).forEach(untranslated::remove);
+        Arrays.asList(BLACKLIST).forEach(untranslated::remove);
 
         StringBuilder builder = new StringBuilder();
         for (String str : untranslated) {
@@ -130,7 +130,7 @@ public class CommandUntranslatedKeys extends CommandBase {
         Map<String, Fluid> fluids = FluidRegistry.getRegisteredFluids();
         for (Fluid fluid : fluids.values()) {
             String localized = fluid.getLocalizedName(new FluidStack(fluid, 1));
-            if (localized.isBlank() || localized.equals(fluid.getUnlocalizedName())) {
+            if (localized.isEmpty() || localized.trim().isEmpty() || localized.equals(fluid.getUnlocalizedName())) {
                 untranslated.add(fluid.getUnlocalizedName());
             }
         }
