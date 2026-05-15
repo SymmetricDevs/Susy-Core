@@ -1,12 +1,14 @@
 package supersymmetry.api.gui;
 
+import static com.cleanroommc.modularui.drawable.UITexture.fullImage;
+
+import org.jetbrains.annotations.ApiStatus;
+
 import com.cleanroommc.modularui.drawable.UITexture;
+
 import gregtech.api.GTValues;
 import gregtech.api.gui.resources.SteamTexture;
 import gregtech.api.gui.resources.TextureArea;
-import org.jetbrains.annotations.ApiStatus;
-
-import static com.cleanroommc.modularui.drawable.UITexture.fullImage;
 
 public class SusyGuiTextures {
 

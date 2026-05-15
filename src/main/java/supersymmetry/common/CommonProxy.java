@@ -1,15 +1,13 @@
 package supersymmetry.common;
 
-import gregtech.api.block.VariantItemBlock;
-import gregtech.api.metatileentity.multiblock.MultiblockAbility;
-import gregtech.api.modules.ModuleContainerRegistryEvent;
-import gregtech.api.unification.material.Materials;
-import gregtech.api.unification.material.event.MaterialEvent;
-import gregtech.api.unification.material.event.PostMaterialEvent;
-import gregtech.client.utils.TooltipHelper;
-import gregtech.common.blocks.BlockWireCoil;
-import gregtech.common.items.MetaItems;
-import gregtech.modules.ModuleManager;
+import static supersymmetry.common.blocks.SuSyBlocks.REGOLITH;
+import static supersymmetry.common.blocks.SuSyBlocks.susyBlocks;
+import static supersymmetry.common.blocks.SuSyMetaBlocks.SHEETED_FRAMES;
+
+import java.io.File;
+import java.util.Objects;
+import java.util.function.Function;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.monster.EntityZombie;
@@ -29,7 +27,19 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
+
 import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.block.VariantItemBlock;
+import gregtech.api.metatileentity.multiblock.MultiblockAbility;
+import gregtech.api.modules.ModuleContainerRegistryEvent;
+import gregtech.api.unification.material.Materials;
+import gregtech.api.unification.material.event.MaterialEvent;
+import gregtech.api.unification.material.event.PostMaterialEvent;
+import gregtech.client.utils.TooltipHelper;
+import gregtech.common.blocks.BlockWireCoil;
+import gregtech.common.items.MetaItems;
+import gregtech.modules.ModuleManager;
 import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
@@ -54,14 +64,6 @@ import supersymmetry.loaders.SuSyWorldLoader;
 import supersymmetry.loaders.SusyOreDictionaryLoader;
 import supersymmetry.loaders.recipes.SuSyRecipeLoader;
 import supersymmetry.modules.SuSyModules;
-
-import java.io.File;
-import java.util.Objects;
-import java.util.function.Function;
-
-import static supersymmetry.common.blocks.SuSyBlocks.REGOLITH;
-import static supersymmetry.common.blocks.SuSyBlocks.susyBlocks;
-import static supersymmetry.common.blocks.SuSyMetaBlocks.SHEETED_FRAMES;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class CommonProxy {
