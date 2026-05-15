@@ -1,13 +1,17 @@
 package supersymmetry.common.rocketry;
 
+import gregtech.api.GregTechAPI;
+import gregtech.api.fluids.store.FluidStorageKeys;
 import net.minecraft.util.ResourceLocation;
 
 import gregtech.api.unification.material.Materials;
+import net.minecraftforge.fluids.FluidRegistry;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.RocketStage;
+import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.common.rocketry.components.*;
 import supersymmetry.common.rocketry.rockets.SimpleStagedRocketBlueprint;
 
@@ -27,9 +31,15 @@ public class SusyRocketComponents {
         if (Materials.Benzene == null || Materials.Oxygen == null) {
             throw new RuntimeException();
         }
-        new RocketFuelEntry.RocketFuelEntryBuilder("kerosene-lox")
-                .addComponent(Materials.Benzene, 1)
-                .addComponent(Materials.Oxygen, 1)
+        new RocketFuelEntry.RocketFuelEntryBuilder("rp1-lox")
+                .addComponent(SusyMaterials.RP_1.getFluid(), 1)
+                .addComponent(Materials.Oxygen.getFluid(FluidStorageKeys.LIQUID), 1)
+                .density(1000).sIVacuum(1000).sIPerPressure(1000)
+                .register();
+
+        new RocketFuelEntry.RocketFuelEntryBuilder("methane-lox")
+                .addComponent(Materials.Methane.getFluid(), 1)
+                .addComponent(Materials.Oxygen.getFluid(FluidStorageKeys.LIQUID), 1)
                 .density(1000).sIVacuum(1000).sIPerPressure(1000)
                 .register();
 
