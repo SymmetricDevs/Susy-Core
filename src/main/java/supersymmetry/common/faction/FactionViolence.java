@@ -76,7 +76,7 @@ public class FactionViolence {
                 if (target instanceof net.minecraft.entity.monster.IMob ||
                         (target instanceof net.minecraft.entity.player.EntityPlayer &&
                                 !((net.minecraft.entity.player.EntityPlayer) target).isCreative()) &&
-                                !((net.minecraft.entity.player.EntityPlayer) target).isSpectator())  {
+                                !((net.minecraft.entity.player.EntityPlayer) target).isSpectator()) {
                     shouldAttack = true;
                 }
             } else if (isOpposingFaction) {
