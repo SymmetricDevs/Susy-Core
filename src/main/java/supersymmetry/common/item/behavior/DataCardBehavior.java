@@ -1,14 +1,16 @@
 package supersymmetry.common.item.behavior;
 
-import gregtech.api.items.metaitem.stats.IItemBehaviour;
+import java.util.List;
+import java.util.function.Consumer;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.Constants;
+
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-import java.util.function.Consumer;
+import gregtech.api.items.metaitem.stats.IItemBehaviour;
 
 public class DataCardBehavior implements IItemBehaviour {
 

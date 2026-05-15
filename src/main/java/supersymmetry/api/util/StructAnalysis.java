@@ -66,7 +66,8 @@ public class StructAnalysis {
         NO_GUIDANCE("no_guidance"),
         TOO_MUCH_GUIDANCE("too_much_guidance"),
         WRONG_CHAMBER_TYPE("wrong_chamber_type"),
-        MATCH_WRONG("match_wrong"), NOZZLE_TOO_SHORT("nozzle_too_short");
+        MATCH_WRONG("match_wrong"),
+        NOZZLE_TOO_SHORT("nozzle_too_short");
 
         String code;
 
@@ -343,7 +344,8 @@ public class StructAnalysis {
     public Set<BlockPos> getLayerOccupied(AxisAlignedBB section, int y, Collection<Block> types) {
         AxisAlignedBB sect = new AxisAlignedBB(section.minX - 1, y, section.minZ - 1, section.maxX + 1, y + 1,
                 section.maxZ + 1);
-        Predicate<BlockPos> isNotObstacle = ((Predicate<BlockPos>) bp -> types.contains(this.world.getBlockState(bp).getBlock())).or(bp -> !blockCont(section, bp));
+        Predicate<BlockPos> isNotObstacle = ((Predicate<BlockPos>) bp -> types
+                .contains(this.world.getBlockState(bp).getBlock())).or(bp -> !blockCont(section, bp));
         Set<BlockPos> blocks = getBlocks(sect).stream().filter(isNotObstacle).collect(Collectors.toSet());
         // the one-argument getBlocks doesn't care about air blocks (again)
 

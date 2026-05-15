@@ -1,11 +1,12 @@
 package supersymmetry.api.space.reentry;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import java.util.Map;
+
 import net.minecraft.world.DimensionType;
+
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import supersymmetry.api.SusyLog;
 import supersymmetry.common.world.SuSyDimensions;
-
-import java.util.Map;
 
 /**
  * Central registry for all re-entry corridor dimensions.

@@ -1,7 +1,10 @@
 package supersymmetry.common.rocketry.components;
 
-import gregtech.api.block.VariantBlock;
-import gregtech.api.unification.material.Materials;
+import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -11,6 +14,9 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.util.Constants;
+
+import gregtech.api.block.VariantBlock;
+import gregtech.api.unification.material.Materials;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.components.MaterialCost;
@@ -19,11 +25,6 @@ import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.rocketry.BlockCombustionChamber;
-
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
 
 public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine> implements RocketEngine {
 
@@ -157,7 +158,8 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
             analysis.status = BuildStat.C_CHAMBER_INSIDE;
             return Optional.empty();
         }
-        if (!analysis.world.isAirBlock(cChamber.add(0, -1, 0)) && !analysis.world.getBlockState(cChamber.add(0, -1, 0)).getBlock().equals(Blocks.PLANKS)) {
+        if (!analysis.world.isAirBlock(cChamber.add(0, -1, 0)) &&
+                !analysis.world.getBlockState(cChamber.add(0, -1, 0)).getBlock().equals(Blocks.PLANKS)) {
             analysis.status = BuildStat.NOZZLE_MALFORMED;
             return analysis.errorPos(cChamber.add(0, -1, 0));
         }

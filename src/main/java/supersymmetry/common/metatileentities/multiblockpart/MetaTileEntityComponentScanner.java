@@ -1,5 +1,26 @@
 package supersymmetry.common.metatileentities.multiblockpart;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Tuple;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.common.capabilities.Capability;
+
+import org.jetbrains.annotations.Nullable;
+
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
@@ -18,20 +39,6 @@ import gregtech.api.util.TextComponentUtil;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Tuple;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.common.capabilities.Capability;
-import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.capability.impl.ScannerLogic;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.util.DataStorageLoader;
@@ -40,13 +47,8 @@ import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.multi.rocket.MetaTileEntityBuildingCleanroom;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
 public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
-        implements ICleanroomReceiver, IWorkable {
+                                            implements ICleanroomReceiver, IWorkable {
 
     private final ScannerLogic scannerLogic;
     private float scanDuration = 0;
@@ -276,7 +278,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
 
     @Override
     public void renderMetaTileEntity(
-            CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
+                                     CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
         super.renderMetaTileEntity(renderState, translation, pipeline);
         this.getFrontOverlay()
                 .renderOrientedState(
@@ -388,7 +390,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                 7,
                 GuiTextures.PROGRESS_BAR_MULTI_ENERGY_YELLOW,
                 ProgressWidget.MoveType.HORIZONTAL)
-                .setHoverTextConsumer(list -> addBarHoverText(list, 0));
+                        .setHoverTextConsumer(list -> addBarHoverText(list, 0));
         builder.widget(progressBar);
 
         builder.widget(
@@ -433,11 +435,9 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         return builder;
     }
 
-    private void handleDisplayClick(String s, Widget.ClickData clickData) {
-    }
+    private void handleDisplayClick(String s, Widget.ClickData clickData) {}
 
-    private void addBarHoverText(List<ITextComponent> list, int i) {
-    }
+    private void addBarHoverText(List<ITextComponent> list, int i) {}
 
     private void addWarningText(List<ITextComponent> iTextComponents) {
         if (struct.status == BuildStat.UNSCANNED) {
