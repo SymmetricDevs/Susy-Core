@@ -94,8 +94,7 @@ public class FuelRegistrySelectorWidget extends AbstractWidgetGroup {
 
         for (RocketFuelEntry entry : RocketFuelEntry.getFuelRegistry().values()) {
             boolean matches = entry.getComposition().stream()
-                    .map(pair -> getMaterialFluids(pair.getFirst()))
-                    .allMatch(matFluids -> matFluids.stream().anyMatch(userFluids::contains));
+                    .allMatch(userFluids::contains);
             if (matches) {
                 return Optional.of(entry);
             }
