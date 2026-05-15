@@ -1,6 +1,7 @@
 package supersymmetry.common.faction;
 
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -39,15 +40,18 @@ public class FactionViolence {
         if (mob.getAttackTarget() != null &&
                 (mob.getAttackTarget().isDead ||
                         !mob.getAttackTarget().isEntityAlive() ||
-                        !(mob.getAttackTarget() instanceof net.minecraft.entity.monster.IMob))) {
+                        !(mob.getAttackTarget() instanceof net.minecraft.entity.monster.IMob) &&
+                                !(mob.getAttackTarget() instanceof net.minecraft.entity.player.EntityPlayer))) {
             mob.setAttackTarget(null);
         }
 
         // Only assign a new target if none exists
-        EntityLiving bestTarget = null;
+        if (mob.getAttackTarget() != null) return;
+
+        EntityLivingBase bestTarget = null;
         double bestDistanceSq = Double.MAX_VALUE;
 
-        for (EntityLiving target : mob.world.getEntitiesWithinAABB(EntityLiving.class,
+        for (EntityLivingBase target : mob.world.getEntitiesWithinAABB(EntityLivingBase.class,
                 mob.getEntityBoundingBox().grow(radius))) {
 
             if (target == mob) continue;
@@ -65,11 +69,14 @@ public class FactionViolence {
 
             boolean isUnaligned = targetFaction.isEmpty();
             boolean isOpposingFaction = !isUnaligned && !mobFaction.equals(targetFaction);
-
             boolean shouldAttack = false;
 
             if (isUnaligned) {
-                if (target instanceof net.minecraft.entity.monster.IMob) {
+                // Fix the mobs not attacking the player
+                if (target instanceof net.minecraft.entity.monster.IMob ||
+                        (target instanceof net.minecraft.entity.player.EntityPlayer &&
+                                !((net.minecraft.entity.player.EntityPlayer) target).isCreative()) &&
+                                !((net.minecraft.entity.player.EntityPlayer) target).isSpectator())  {
                     shouldAttack = true;
                 }
             } else if (isOpposingFaction) {
