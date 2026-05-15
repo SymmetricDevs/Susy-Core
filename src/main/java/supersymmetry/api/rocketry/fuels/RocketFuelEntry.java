@@ -7,13 +7,14 @@ import java.util.Map;
 import net.minecraft.util.Tuple;
 
 import gregtech.api.unification.material.Material;
+import net.minecraftforge.fluids.Fluid;
 
 public class RocketFuelEntry {
 
     public static class RocketFuelEntryBuilder {
 
         private String registryName;
-        private ArrayList<Tuple<Material, Integer>> composition;
+        private ArrayList<Tuple<Fluid, Integer>> composition;
         private double density = 1;
         private double sIVacuum;
         private double sIPerPressure;
@@ -23,7 +24,7 @@ public class RocketFuelEntry {
             this.composition = new ArrayList<>();
         }
 
-        public RocketFuelEntryBuilder addComponent(Material mat, int proportion) {
+        public RocketFuelEntryBuilder addComponent(Fluid mat, int proportion) {
             composition.add(new Tuple<>(mat, proportion));
             if (composition.size() > 3) {
                 throw new IllegalStateException("too many fuel components");
@@ -73,7 +74,7 @@ public class RocketFuelEntry {
         FUEL_REGISTRY.put(rfe.registryName, rfe);
     }
 
-    private ArrayList<Tuple<Material, Integer>> composition; // any extra required materials, their proportions
+    private ArrayList<Tuple<Fluid, Integer>> composition; // any extra required materials, their proportions
 
     private String registryName;
 
@@ -85,7 +86,7 @@ public class RocketFuelEntry {
 
     public RocketFuelEntry(
                            String registryName,
-                           ArrayList<Tuple<Material, Integer>> composition,
+                           ArrayList<Tuple<Fluid, Integer>> composition,
                            double density,
                            double sIVacuum,
                            double sIPerPressure) {
@@ -99,7 +100,7 @@ public class RocketFuelEntry {
     @SuppressWarnings("unchecked")
     public RocketFuelEntry(RocketFuelEntry copy) {
         this.density = copy.density;
-        this.composition = (ArrayList<Tuple<Material, Integer>>) copy.composition.clone();
+        this.composition = (ArrayList<Tuple<Fluid, Integer>>) copy.composition.clone();
         this.sIVacuum = copy.sIVacuum;
         this.registryName = copy.registryName;
     }
@@ -112,7 +113,7 @@ public class RocketFuelEntry {
         return sIPerPressure;
     }
 
-    public ArrayList<Tuple<Material, Integer>> getComposition() {
+    public ArrayList<Tuple<Fluid, Integer>> getComposition() {
         return composition;
     }
 

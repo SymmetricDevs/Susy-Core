@@ -351,14 +351,14 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         var composition = fuelEntry.getComposition();
         int unitsDrained = Math.min(selectedRocket.getFuelVolume() - this.fuelingProgress, MAX_FUELING_SPEED);
         for (var comp : composition) {
-            FluidStack drained = inputFluidInventory.drain(comp.getFirst().getFluid(MAX_FUELING_SPEED), false);
+            FluidStack drained = new FluidStack(comp.getFirst(), MAX_FUELING_SPEED);
             int amount = drained == null ? 0 : drained.amount;
             // Intentional integer division moment
             unitsDrained = Math.min(amount, unitsDrained / comp.getSecond());
         }
         setFuelingProgress(this.fuelingProgress + unitsDrained);
         for (var comp : composition) {
-            inputFluidInventory.drain(comp.getFirst().getFluid(comp.getSecond() * unitsDrained), true);
+            inputFluidInventory.drain(new FluidStack(comp.getFirst(), (comp.getSecond() * unitsDrained)), true);
         }
     }
 
