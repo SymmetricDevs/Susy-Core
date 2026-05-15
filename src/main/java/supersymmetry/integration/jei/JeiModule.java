@@ -79,8 +79,6 @@ public class JeiModule extends IntegrationSubmodule implements IModPlugin {
         String largeRESMapId = GTValues.MODID + ":" + SuSyRecipeMaps.LARGE_RES.getUnlocalizedName();
         registry.addRecipeCatalyst(SuSyMetaTileEntities.LARGE_RES.getStackForm(), largeRESMapId);
 
-        registry.addRecipeCatalyst(SuSyMetaTileEntities.LAUNCH_PAD.getStackForm(), RocketFuelCategory.UID);
-
         String strandCastingId = GTValues.MODID + ":strand_casting";
         registry.addRecipes(CAST_MATERIALS.stream().map(StrandInfo::new).collect(Collectors.toList()), strandCastingId);
         registry.addRecipeCatalyst(SuSyMetaTileEntities.TURNING_ZONE.getStackForm(), strandCastingId);
