@@ -3,8 +3,10 @@ package supersymmetry.common.event;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
@@ -15,8 +17,11 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import supersymmetry.api.event.MobHordeEvent;
+import supersymmetry.common.faction.FactionHateManager;
 
 public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
+
+    public static int DEFAULT_GRACE_PERIOD = 72000; // setting grace period as 1 hour (also made it static)
 
     // Player cooldown for all events.
     public int ticksUntilCanSpawn;
@@ -27,10 +32,11 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
     public boolean hasActiveInvasion = false;
     public List<UUID> invasionEntitiesUUIDs = new ArrayList<>();
     public String currentInvasion = "";
+    public Set<String> completedScriptedEvents = new HashSet<>();
 
-    public MobHordePlayerData(int gracePeriod) {
-        this.ticksUntilCanSpawn = gracePeriod;
-        this.gracePeriod = gracePeriod;
+    public MobHordePlayerData() {
+        this.gracePeriod = DEFAULT_GRACE_PERIOD;
+        this.ticksUntilCanSpawn = DEFAULT_GRACE_PERIOD;
         this.invasionTimers = new int[MobHordeEvent.EVENTS.size()];
     }
 
@@ -49,6 +55,16 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
                     .forEach(uuid -> tagList.appendTag(NBTUtil.createUUIDTag(uuid)));
             result.setTag("invasionEntitiesUUIDs", tagList);
         }
+        NBTTagList scriptedList = new NBTTagList();
+        for (String key : completedScriptedEvents) {
+            scriptedList.appendTag(new NBTTagCompound() {
+
+                {
+                    setString("key", key);
+                }
+            });
+        }
+        result.setTag("completedScriptedEvents", scriptedList);
         return result;
     }
 
@@ -65,13 +81,27 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
             NBTTagList tagList = nbt.getTagList("invasionEntitiesUUIDs", Constants.NBT.TAG_COMPOUND);
             tagList.forEach(compound -> invasionEntitiesUUIDs.add(NBTUtil.getUUIDFromTag((NBTTagCompound) compound)));
         }
+        completedScriptedEvents.clear();
+        NBTTagList scriptedList = nbt.getTagList("completedScriptedEvents", Constants.NBT.TAG_COMPOUND);
+        for (int i = 0; i < scriptedList.tagCount(); i++) {
+            NBTTagCompound tag = scriptedList.getCompoundTagAt(i);
+            completedScriptedEvents.add(tag.getString("key"));
+        }
     }
 
-    public void update(EntityPlayerMP player) {
+    public boolean hasCompleted(String key) {
+        return completedScriptedEvents.contains(key);
+    }
+
+    public void markCompleted(String key) {
+        completedScriptedEvents.add(key);
+    }
+
+    public void update(EntityPlayerMP player) throws NBTException {
         if (hasActiveInvasion) {
             ++ticksActive;
             if (this.ticksActive > this.timeoutPeriod) {
-                this.finishInvasion();
+                this.stopInvasion(player);
             } else return;
         }
         ticksUntilCanSpawn--;
@@ -139,6 +169,39 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
     }
 
     public void stopInvasion(EntityPlayerMP player) {
+        if (!this.hasActiveInvasion) return;
+
+        WorldServer world = player.getServerWorld();
+
+        for (UUID uuid : invasionEntitiesUUIDs) {
+            Entity entity = world.getEntityFromUuid(uuid);
+
+            if (entity == null) continue;
+
+            NBTTagCompound entityTag = entity.getEntityData();
+            if (!entityTag.hasKey("susy")) continue;
+
+            NBTTagCompound susy = entityTag.getCompoundTag("susy");
+
+            String faction = susy.getString("faction");
+            int hate = susy.getInteger("hate");
+            hate = hate * -1;
+
+            if (!faction.isEmpty()) {
+                // surviving mob inverts hate and adds to player
+                FactionHateManager.addHate(player, faction, hate);
+            }
+
+            // despawn / escape
+            entity.setDead();
+        }
+
+        this.invasionEntitiesUUIDs.clear();
+        this.finishInvasion();
+    }
+
+    // moved over loxos code
+    public void killInvasion(EntityPlayerMP player) {
         if (this.hasActiveInvasion) {
             WorldServer world = player.getServerWorld();
             this.invasionEntitiesUUIDs.stream()

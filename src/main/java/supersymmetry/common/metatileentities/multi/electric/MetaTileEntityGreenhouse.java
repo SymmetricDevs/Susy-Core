@@ -32,6 +32,7 @@ import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.unification.material.Materials;
+import gregtech.api.util.GTUtility;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing;
@@ -65,8 +66,9 @@ public class MetaTileEntityGreenhouse extends RecipeMapMultiblockController {
             }
         }
 
-        if (length < 5 || ((length - 1) % 4) != 0) {
+        if (length < 4 || (length % 4) != 0) {
             invalidateStructure();
+            return false;
         }
 
         if (!this.getWorld().isRemote) {
@@ -75,9 +77,10 @@ public class MetaTileEntityGreenhouse extends RecipeMapMultiblockController {
             });
         }
 
+        int oldLength = this.length;
         this.length = length;
-        this.cellCount = (length / 4) - 1;
-        return true;
+        this.cellCount = length / 4;
+        return !isStructureFormed() || this.length != oldLength;
     }
 
     @Override
@@ -132,7 +135,7 @@ public class MetaTileEntityGreenhouse extends RecipeMapMultiblockController {
         builder.aisle("CDDDC", "G###G", "G###G", " GGG ");
         builder.aisle("CDDDC", "G###G", "G###G", " GGG ");
 
-        for (int i = 1; i <= cells; i++) {
+        for (int i = 1; i < cells; i++) {
             builder.aisle("CDDDC", "F###F", "F###F", " FFF ");
             builder.aisle("CDDDC", "G###G", "G###G", " GGG ");
             builder.aisle("CDDDC", "G###G", "G###G", " GGG ");
@@ -164,7 +167,9 @@ public class MetaTileEntityGreenhouse extends RecipeMapMultiblockController {
 
     public boolean isBlockEdge(@Nonnull World world, @Nonnull BlockPos.MutableBlockPos pos,
                                @Nonnull EnumFacing direction) {
-        return world.getBlockState(pos.move(direction)) == getCasingState();
+        pos.move(direction);
+        return world.getBlockState(pos) == getCasingState() ||
+                GTUtility.getMetaTileEntity(world, pos) instanceof IMultiblockPart;
     }
 
     @Override
@@ -186,6 +191,16 @@ public class MetaTileEntityGreenhouse extends RecipeMapMultiblockController {
         tooltip.add(TextFormatting.GRAY + I18n.format("susy.machine.greenhouse.tooltip.2"));
     }
 
+    @Override
+    public boolean isMultiblockPartWeatherResistant(@Nonnull IMultiblockPart part) {
+        return true;
+    }
+
+    @Override
+    public boolean getIsWeatherOrTerrainResistant() {
+        return true;
+    }
+
     private class GreenhouseRecipeLogic extends MultiblockRecipeLogic {
 
         public GreenhouseRecipeLogic(RecipeMapMultiblockController tileEntity) {
@@ -193,7 +208,7 @@ public class MetaTileEntityGreenhouse extends RecipeMapMultiblockController {
         }
 
         public int getParallelLimit() {
-            return cellCount + 1;
+            return cellCount;
         }
     }
 }

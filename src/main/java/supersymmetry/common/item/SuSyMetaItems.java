@@ -31,10 +31,7 @@ import gregtech.common.items.behaviors.TooltipBehavior;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
-import supersymmetry.common.item.behavior.DataCardBehavior;
-import supersymmetry.common.item.behavior.MillBallDurabilityManager;
-import supersymmetry.common.item.behavior.PipeNetPainterBehavior;
-import supersymmetry.common.item.behavior.RocketConfigBehavior;
+import supersymmetry.common.item.behavior.*;
 
 public class SuSyMetaItems {
 
@@ -54,6 +51,8 @@ public class SuSyMetaItems {
     public static MetaValueItem TUNGSTEN_ELECTRODE;
     public static MetaValueItem CODE_BREACHER;
     public static MetaValueItem SHAPE_MOLD_TARGET;
+    public static MetaValueItem ENTITY_TAGGER;
+    public static MetaValueItem FACTION_RADIO;
 
     public static MetaValueItem DATA_CARD;
     public static MetaValueItem DATA_CARD_ACTIVE;
@@ -144,6 +143,10 @@ public class SuSyMetaItems {
         EARTH_ORBITAL_SCRAP = initOneItem("orbital.scrap.earth").setMaxStackSize(8);
 
         CODE_BREACHER = initOneItem("code_breacher").setMaxStackSize(1);
+
+        ENTITY_TAGGER = initOneItem("entity_tagger").setMaxStackSize(1);
+
+        FACTION_RADIO = initOneItem("faction_radio").setMaxStackSize(1);
 
         DATA_CARD = initOneItem("data_card").setMaxStackSize(1)
                 .addComponents(new TooltipBehavior(lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1"))));
