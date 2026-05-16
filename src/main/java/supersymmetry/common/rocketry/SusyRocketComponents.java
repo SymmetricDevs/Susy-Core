@@ -32,15 +32,15 @@ public class SusyRocketComponents {
             throw new RuntimeException();
         }
         new RocketFuelEntry.RocketFuelEntryBuilder("rp1-lox")
-                .addComponent(SusyMaterials.RP_1.getFluid(), 1)
-                .addComponent(Materials.Oxygen.getFluid(FluidStorageKeys.LIQUID), 1)
-                .density(1000).sIVacuum(1000).sIPerPressure(1000)
+                .addComponent(SusyMaterials.RP_1.getFluid(), 100)
+                .addComponent(Materials.Oxygen.getFluid(FluidStorageKeys.LIQUID), 256)
+                .density(0.915).sIVacuum(380).sIPerPressure(327)
                 .register();
 
         new RocketFuelEntry.RocketFuelEntryBuilder("methane-lox")
-                .addComponent(Materials.Methane.getFluid(), 1)
-                .addComponent(Materials.Oxygen.getFluid(FluidStorageKeys.LIQUID), 1)
-                .density(1000).sIVacuum(1000).sIPerPressure(1000)
+                .addComponent(Materials.Methane.getFluid(), 100)
+                .addComponent(Materials.Oxygen.getFluid(FluidStorageKeys.LIQUID), 355)
+                .density(0.983).sIVacuum(315).sIPerPressure(250)
                 .register();
 
         // TODO add the emergency escape system
