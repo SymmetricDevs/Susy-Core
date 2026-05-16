@@ -257,5 +257,6 @@ public class CommonProxy {
         BiomeDictionary.addTypes(SuSyBiomes.LUNAR_MARIA, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.VOID);
 
         SuSyDimensions.init();
+        // ReEntryDimensions.init();
     }
 }

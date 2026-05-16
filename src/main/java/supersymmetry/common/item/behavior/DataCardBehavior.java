@@ -29,9 +29,16 @@ public class DataCardBehavior implements IItemBehaviour {
             NBTTagCompound tag = itemStack.getTagCompound();
             for (String key : this.keys) {
                 if (tag.hasKey(key, Constants.NBT.TAG_STRING)) {
-                    lines.add(I18n.format(itemStack.getTranslationKey() + ".tag." + tag.getString(key)));
+                    lines.add(I18n.format(itemStack.getTranslationKey() + ".tag." + tag.getString(key)) +
+                            " ID: " + getID(tag));
                 }
             }
         }
+    }
+
+    private String getID(NBTTagCompound key) {
+        // Left pad
+        String fullID = String.format("%08x", key.hashCode());
+        return fullID.toUpperCase();
     }
 }

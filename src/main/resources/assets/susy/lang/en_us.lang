@@ -316,6 +316,8 @@ susy.machine.blueprint_assembler.build_button=Build
 susy.rocketry.components.engine.name=Engine(s)
 susy.rocketry.components.engine_small.name=Vernier engine(s)
 susy.rocketry.components.tank.name=Tank(s)
+susy.rocketry.components.spacecraft.name=Spacecraft
+susy.rocketry.components.fairing.name=Fairing
 
 susy.rocketry.components.validation_codes.invalid_amount=Invalid amount of components
 susy.rocketry.components.validation_codes.invalid_amount=Invalid amount of components inserted
@@ -324,7 +326,7 @@ susy.rocketry.components.validation_codes.incompatible_card=Incompatible card
 susy.rocketry.components.validation_codes.unknown=Something broke
 susy.rocketry.components.validation_codes.success=Blueprint assembled successfully
 
-
+susy.rocketry.stages.payload.name=Payload
 susy.rocketry.stages.block_F.name=Block F
 susy.rocketry.stages.block_A.name=Block A
 susy.rocketry.stages.boosters.name=Boosters
@@ -1212,6 +1214,11 @@ metaitem.data_card.tooltip.1=Insert into a Component Scanner to store the part r
 metaitem.data_card.active.name=Loaded Structure Card
 metaitem.data_card.active.tooltip.1=Load this into a Rocket Assembler to build the component.
 metaitem.data_card.master_blueprint.name=Rocket Blueprint
+metaitem.data_card.active.tag.engine=§6Engine
+metaitem.data_card.active.tag.engine_small=§6Small Engine
+metaitem.data_card.active.tag.fairing=§6Fairing
+metaitem.data_card.active.tag.spacecraft=§6Spacecraft
+metaitem.data_card.active.tag.tank=§6Tank
 
 # Machine Translations
 susy.wrongbiome=Machine can not work in this biome!
@@ -1274,6 +1281,8 @@ susy.gui.temperature_celsius=Temperature: %s / %s°C
 
 susy.gui.toggle_energy_voiding.enabled=Voiding energy when full
 susy.gui.toggle_energy_voiding.disabled=Not voiding energy
+susy.gui.toggle_short_view.enabled=Multiplying data card
+susy.gui.toggle_short_view.disabled=Showing all data cards
 
 # Extra recipe info
 susy.recipe.dimensions=Dimensions: %s
@@ -1537,6 +1546,7 @@ susy.msg.rocket_component.wrong_tile=A tile was used incorrectly.
 susy.msg.rocket_component.interstage_not_cylindrical=The interstage looks weird.
 susy.msg.rocket_component.wrong_chamber_type=A different chamber should be used.
 susy.msg.rocket_component.match_wrong=The match is not within the nozzle.
+susy.msg.rocket_component.nozzle_too_short=The nozzle is not long enough!
 
 entity.Rocket.name=Soyuz FG Rocket
 

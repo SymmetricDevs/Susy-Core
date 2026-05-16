@@ -1,5 +1,24 @@
 package supersymmetry.common.metatileentities.multi.rocket;
 
+import static supersymmetry.common.entities.EntityAbstractRocket.ROCKET_CONFIG_KEY;
+
+import java.util.List;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.ItemStackHandler;
+
+import org.jetbrains.annotations.NotNull;
+
 import cam72cam.mod.entity.ModdedEntity;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
@@ -17,27 +36,10 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemStackHandler;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.entities.EntityTransporterErector;
 import supersymmetry.common.rocketry.RocketConfiguration;
-
-import java.util.List;
-
-import static supersymmetry.common.entities.EntityAbstractRocket.ROCKET_CONFIG_KEY;
 
 public class MetaTileEntityRocketProgrammer extends MultiblockWithDisplayBase {
 

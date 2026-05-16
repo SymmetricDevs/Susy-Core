@@ -67,6 +67,9 @@ public class ShaderManager {
     public static ShaderObject ATMOSPHERE_V;
     public static ShaderObject ATMOSPHERE_F;
 
+    public static ShaderObject REENTRY_PLASMA_V;
+    public static ShaderObject REENTRY_PLASMA_F;
+
     private static final Map<ShaderObject, ShaderProgram> FULL_IMAGE_PROGRAMS = new HashMap<>();
     private static final Map<Long, ShaderProgram> PROGRAM_CACHE = new HashMap<>();
     private static final Minecraft MC = Minecraft.getMinecraft();
@@ -109,6 +112,10 @@ public class ShaderManager {
         SUN_F = init(SUN_F, FRAGMENT, "sun.frag");
         ATMOSPHERE_V = init(ATMOSPHERE_V, VERTEX, "atmosphere_orbital.vert");
         ATMOSPHERE_F = init(ATMOSPHERE_F, FRAGMENT, "atmosphere_orbital.frag");
+
+        REENTRY_PLASMA_V = init(REENTRY_PLASMA_V, VERTEX, "reentry_plasma.vert");
+        REENTRY_PLASMA_F = init(REENTRY_PLASMA_F, FRAGMENT, "reentry_plasma.frag");
+
         FULL_IMAGE_PROGRAMS.clear();
         PROGRAM_CACHE.clear();
         // Delete existing raw GL programs before clearing cache

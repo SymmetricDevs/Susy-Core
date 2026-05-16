@@ -6,12 +6,12 @@ import java.util.Map;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import gregtech.api.gui.GuiTextures;
-import gregtech.api.gui.widgets.AbstractWidgetGroup;
-import gregtech.api.gui.widgets.ClickButtonWidget;
-import gregtech.api.gui.widgets.DynamicLabelWidget;
-import gregtech.api.gui.widgets.SlotWidget;
+import gregtech.api.gui.Widget;
+import gregtech.api.gui.widgets.*;
 import gregtech.api.util.Position;
 import gregtech.api.util.Size;
 import supersymmetry.api.gui.SusyGuiTextures;
@@ -279,7 +279,8 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
 
                 for (int i = 0; i < maxSlotCount; i++) {
                     DataStorageLoader slot = slots.get(i);
-                    SlotWidget s = new SlotWidget(slot, 0, 0, 0);
+                    // SlotWidget s = new SlotWidget(slot, 0, 0, 0);
+                    SlotWidget s = new ComponentCardSlotWidget(slot, 0, 0, 0);
                     s.setBackgroundTexture(GuiTextures.SLOT_DARK);
                     // s.setClearSlotOnRightClick(true);
                     slotsw.addWidget(s);
@@ -394,7 +395,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
         public WidgetIntSelector selector;
         public boolean shortView = false;
         public HorizontalScrollableListWidget itemList;
-        public final ClickButtonWidget shortViewButton;
+        public final Widget shortViewButton;
 
         public Size previousStateSize = new Size(18 * 5 + 2, 28);
         public boolean previousSliderState = false;
@@ -405,22 +406,33 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
             super(pos, size);
             this.itemList = itemList;
 
-            shortViewButton = new ClickButtonWidget(
+            shortViewButton = new ToggleButtonWidget(
                     itemList.getSize().width + 10,
                     0,
-                    12,
-                    12,
-                    "",
-                    (data) -> {
-                        setShortView(!shortView);
-                    })
-                            .setShouldClientCallback(true)
-                            .setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_SHORTVIEW);
+                    16,
+                    16,
+                    this::isShortView,
+                    (isShort) -> {
+                        setShortView(isShort);
+                    }) {
+
+                @Override
+                @SideOnly(Side.CLIENT)
+                public boolean mouseClicked(int mouseX, int mouseY, int button) {
+                    if (super.mouseClicked(mouseX, mouseY, button)) {
+                        setShortView(this.isPressed);
+                        return true;
+                    }
+                    return false;
+                }
+            }
+                    .setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_SHORTVIEW)
+                    .setTooltipText("susy.gui.toggle_short_view");
 
             selector = new WidgetIntSelector(
                     validValues,
                     new Position(itemList.getSize().width - 25, 0),
-                    new Size((int) (itemList.getSize().width / 2 - 10), 18));
+                    new Size(itemList.getSize().width / 2 - 10, 18));
 
             selector.setVisible(false);
             selector.setActive(false);

@@ -30,8 +30,8 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
 
     public ComponentSpacecraft() {
         super(
-                "spacecraft_hull",
-                "spacecraft_hull",
+                "spacecraft",
+                "spacecraft",
                 tuple -> tuple.getSecond().stream()
                         .anyMatch(
                                 pos -> tuple
