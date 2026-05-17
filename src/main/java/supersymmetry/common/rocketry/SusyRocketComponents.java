@@ -31,13 +31,13 @@ public class SusyRocketComponents {
         if (Materials.Benzene == null || Materials.Oxygen == null) {
             throw new RuntimeException();
         }
-        new RocketFuelEntry.RocketFuelEntryBuilder("rp1-lox")
+        new RocketFuelEntry.RocketFuelEntryBuilder("RP1-LOX")
                 .addComponent(SusyMaterials.RP_1.getFluid(), 100)
                 .addComponent(Materials.Oxygen.getFluid(FluidStorageKeys.LIQUID), 256)
                 .density(0.915).sIVacuum(380).sIPerPressure(327)
                 .register();
 
-        new RocketFuelEntry.RocketFuelEntryBuilder("methane-lox")
+        new RocketFuelEntry.RocketFuelEntryBuilder("Methane-LOX")
                 .addComponent(Materials.Methane.getFluid(), 100)
                 .addComponent(Materials.Oxygen.getFluid(FluidStorageKeys.LIQUID), 355)
                 .density(0.983).sIVacuum(315).sIPerPressure(250)
