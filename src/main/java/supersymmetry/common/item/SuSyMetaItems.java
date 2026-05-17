@@ -1,17 +1,6 @@
 package supersymmetry.common.item;
 
-import static gregtech.common.items.MetaItems.SPRAY_EMPTY;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Objects;
-
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.ItemStack;
-
 import com.google.common.base.CaseFormat;
-
 import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
 import gregtech.api.items.armor.ArmorMetaItem;
@@ -29,10 +18,19 @@ import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.unification.stack.UnificationEntry;
 import gregtech.common.items.MetaItems;
 import gregtech.common.items.behaviors.TooltipBehavior;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.ItemStack;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
 import supersymmetry.common.item.behavior.*;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Objects;
+
+import static gregtech.common.items.MetaItems.SPRAY_EMPTY;
 
 public class SuSyMetaItems {
 
@@ -172,9 +170,7 @@ public class SuSyMetaItems {
         OXYGEN_SENSOR = metaItem.addItem(19, "oxygen_sensor").setMaxStackSize(1)
                 .addComponents(ElectricStats.createElectricItem(10000L, GTValues.LV),
                         new OxygenSensorBehavior());
-
-
-}
+    }
 
     private static void addExtraBehaviours() {
         MetaItems.SPRAY_SOLVENT.addComponents(new PipeNetPainterBehavior(1024, SPRAY_EMPTY.getStackForm(), -1));
