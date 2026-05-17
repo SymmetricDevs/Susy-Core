@@ -276,6 +276,8 @@ item.material.oreprefix.thread=%s Thread
 item.material.oreprefix.dustWet=Wet %s Dust
 item.material.oreprefix.electrode=%s Electrode
 item.material.oreprefix.millBall=%s Mill Ball
+item.material.oreprefix.pin=%s Pin
+item.material.oreprefix.target=%s Sputtering Target
 
 susy.fluid.supercritical=Supercritical %s
 susy.fluid.impure_slurry=Impure %s Slurry
@@ -462,7 +464,8 @@ susy.machine.dumper.tooltip.1=§2Base Dumping Rate:§7 §f %d L every 10 ticks
 susy.machine.froth_flotation_tank.name=Froth Flotation Tank
 susy.machine.multi_stage_flash_distiller.name=Multi Stage Flash Distiller
 susy.machine.high_temperature_distillation_tower.name=High Temperature Distillation Tower
-susy.machine.rotary_kiln.name=Rotary Kiln
+susy.machine.rotary_kiln.name=Rotary Kiln (Old)
+susy.machine.rotary_kiln_v2.name=Rotary Kiln
 susy.machine.low_pressure_cryogenic_distillation_plant.name=Low Pressure Cryogenic Distillation Plant
 susy.machine.high_pressure_cryogenic_distillation_plant.name=High Pressure Cryogenic Distillation Plant
 susy.machine.single_column_cryogenic_distillation_plant.name=Single Column Cryogenic Distillation Plant
@@ -766,6 +769,21 @@ susy.machine.cvd.uiv.name=Epic CVD Unit III
 susy.machine.cvd.uxv.name=Epic CVD Unit IV
 susy.machine.cvd.opv.name=Legendary CVD Unit
 
+# ALD
+susy.machine.ald.lv.name=Basic ALD Unit
+susy.machine.ald.mv.name=Advanced ALD Unit
+susy.machine.ald.hv.name=Advanced ALD Unit II
+susy.machine.ald.ev.name=Advanced ALD Unit III
+susy.machine.ald.iv.name=Elite ALD Unit
+susy.machine.ald.luv.name=Elite ALD Unit II
+susy.machine.ald.zpm.name=Elite ALD Unit III
+susy.machine.ald.uv.name=Ultimate ALD Unit
+susy.machine.ald.uhv.name=Epic ALD Unit
+susy.machine.ald.uev.name=Epic ALD Unit II
+susy.machine.ald.uiv.name=Epic ALD Unit III
+susy.machine.ald.uxv.name=Epic ALD Unit IV
+susy.machine.ald.opv.name=Legendary ALD Unit
+
 # Ion Implanter
 susy.machine.ion_implanter.lv.name=Basic Ion Implanter
 susy.machine.ion_implanter.mv.name=Advanced Ion Implanter
@@ -780,6 +798,12 @@ susy.machine.ion_implanter.uev.name=Epic Ion Implanter II
 susy.machine.ion_implanter.uiv.name=Epic Ion Implanter III
 susy.machine.ion_implanter.uxv.name=Epic Ion Implanter IV
 susy.machine.ion_implanter.opv.name=Legendary Ion Implanter
+
+# Screen Printer
+susy.machine.screen_printer.lv.name=Basic Screen Printer
+susy.machine.screen_printer.mv.name=Advanced Screen Printer
+susy.machine.screen_printer.hv.name=Advanced Screen Printer II
+susy.machine.screen_printer.ev.name=Advanced Screen Printer III
 
 # Fluid Compressor
 susy.machine.fluid_compressor.lv.name=Basic Fluid Compressor
@@ -896,6 +920,12 @@ susy.machine.resistance_furnace.uiv.name=Epic Resistance Furnace III
 susy.machine.resistance_furnace.uxv.name=Epic Resistance Furnace IV
 susy.machine.resistance_furnace.opv.name=Legendary Resistance Furnace
 
+# Greenhouse
+susy.machine.greenhouse.name=Greenhouse
+susy.machine.greenhouse.tooltip.1=Each cell is one additional parallel
+susy.machine.greenhouse.tooltip.2=Max parallels: §c6
+recipemap.greenhouse_plant.name=Greenhouse
+
 susy.machine.bath_condenser.name=Bath Condenser
 susy.machine.bath_condenser.tooltip=Only works inside a Cryogenic Distillation Tower
 
@@ -1000,6 +1030,7 @@ recipemap.polymerization_tank.name=Polymerization Tank
 recipemap.uv_light_box.name=UV Light Box
 recipemap.ion_implantation.name=Ion Implantation
 recipemap.cvd.name=Chemical Vapor Deposition
+recipemap.ald.name=Atomic Layer Deposition
 recipemap.ore_sorter.name=Ore Sorting
 recipemap.cooling_tower.name=Cooling Tower
 recipemap.natural_draft_cooling_tower.name=Natural Draft Cooling Tower
@@ -1059,7 +1090,12 @@ recipemap.induction_furnace.name=Induction Furnace
 recipemap.resistance_furnace.name=Resistance Furnace
 recipemap.eccentric_roll_crusher.name=Eccentric Roll Crushing
 recipemap.ball_mill.name=Ball Milling
-
+recipemap.atomic_layer_deposition.name=Atomic Layer Deposition
+recipemap.wire_bonding=Wire Bonding
+recipemap.screen_printer=Screen Printing
+recipemap.plasma_ashing=Plasma Asher
+recipemap.resist_processor=Photoresist Processor
+recipemap.reactive_ion_etching=Reactive Ion Etching
 
 susy.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 
@@ -1148,6 +1184,7 @@ metaitem.oxygen_sensor.oxygen_level.low=Oxygen Level: §6Low
 metaitem.oxygen_sensor.oxygen_level.medium=Oxygen Level: §eModerate
 metaitem.oxygen_sensor.oxygen_level.high=Oxygen Level: §aHigh
 metaitem.tungsten_electrode.name=Thoriated Tungsten Electrode
+metaitem.shape.mold.target=Sputtering Target Mold
 
 # Catalysts
 susy.universal.catalysts.tooltip.tier=§eMax Voltage: §f%,d EU/T (%s§f)
@@ -1303,6 +1340,9 @@ susy.command.horde.start.started=Successfully started %s invasion.
 susy.command.horde.stop.usage=/mobHorde stop
 susy.command.horde.stop.has_active_no_invasion=No active invasion to stop.
 susy.command.horde.stop.stopped=Successfully stopped %s invasion.
+susy.command.horde.kill.usage=/mobHorde kill
+susy.command.horde.kill.has_active_no_invasion=No active invasion to kill.
+susy.command.horde.kill.killed=Successfully killed %s invasion.
 susy.command.horde.status.usage=/mobHorde status <player>
 susy.command.horde.status.has_active_invasion=Player %s has an active %s invasion for %d ticks. It will time out in %s ticks.
 susy.command.horde.status.no_active_invasion=Player %s has no active invasion.
@@ -1570,6 +1610,26 @@ tile.bmrf_blocks.bmrf6.name=BMRF-6
 tile.bmrf_blocks.bmrf7.name=BMRF-7
 tile.bmrf_blocks.bmrf8.name=BMRF-8
 tile.bmrf_blocks.bmrf9.name=BMRF-9
+
+##Factions
+#Items
+metaitem.entity_tagger.name=Factions Dev Tool
+metaitem.faction_radio.name=Universal Federation Radio
+#Blocks
+tile.raid_flare_block.bandit_flare.name=Bandit Raid Flare
+tile.raid_flare_block.fed_flare.name=Former Federation Raid Flare
+#Comments and text
+chat.susy.radio.no_tag=§7This radio appears broken...
+chat.susy.radio.no_faction=§7This radio is not tuned to any known frequency...
+chat.susy.radio.get_hate=§7The radio intercepts a message! (%s§7)
+ui.susy.settings.peaceful_button.ln1=Change to Peaceful?
+ui.susy.settings.peaceful_button.ln2=Supersymmetry is intended to be played at difficulty Easy or higher.\nIf you do not like mobs attacking your base, use §6/gamerule doInvasions false§f instead.\nOnly change this setting if you know what you're doing, as doing so may break parts of the game.
+#Commands
+susy.command.faction.generic.usage=Usage: /factionHate <get|add|set> | /factionHate add Bandits 5
+susy.command.faction.get=current HATE for %s: %s
+susy.command.faction.add=Added %s HATE to faction: %s
+susy.command.faction.set=Set %s HATE for faction: %s
+susy.command.faction.invalid=Invalid argument. Use get, add, or set.
 
 # Advancements
 gregtech.advancement.extreme_voltage.rocket_launch.name=Hopefully It Doesn't Crash :)

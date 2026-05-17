@@ -73,7 +73,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                 10,
                 10,
                 "",
-                (data) -> {
+                (d) -> {
                     AbstractRocketBlueprint bp = blueprintProvider.get();
                     if (bp != null && !bp.getStages().isEmpty()) {
                         selectedStageIndex = (selectedStageIndex - 1 + bp.getStages().size()) % bp.getStages().size();

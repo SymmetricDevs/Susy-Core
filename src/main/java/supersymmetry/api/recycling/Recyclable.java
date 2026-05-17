@@ -18,7 +18,7 @@ import supersymmetry.loaders.recipes.handlers.RecyclingManager;
 
 public interface Recyclable {
 
-    Recyclable EMPTY = x -> ItemStack.EMPTY;
+    Recyclable EMPTY = v -> ItemStack.EMPTY;
 
     // TODO: registry?
     static Recyclable from(Object obj) {
