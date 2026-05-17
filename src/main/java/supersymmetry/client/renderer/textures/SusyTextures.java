@@ -59,6 +59,7 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer UV_LIGHT_BOX_OVERLAY = new OrientedOverlayRenderer(
             "machines/uv_light_box");
     public static final OrientedOverlayRenderer CVD_OVERLAY = new OrientedOverlayRenderer("machines/cvd");
+    public static final OrientedOverlayRenderer ALD_OVERLAY = new OrientedOverlayRenderer("machines/ald");
     public static final OrientedOverlayRenderer ION_IMPLANTER_OVERLAY = new OrientedOverlayRenderer(
             "machines/ion_implanter");
     public static final OrientedOverlayRenderer SPIN_COATER_OVERLAY = new OrientedOverlayRenderer(
@@ -177,6 +178,8 @@ public class SusyTextures {
             "machines/multiblocks/eccentric_roll_crusher");
     public static final OrientedOverlayRenderer BALL_MILL_OVERLAY = new OrientedOverlayRenderer(
             "machines/multiblocks/ball_mill");
+    public static final OrientedOverlayRenderer SCREEN_PRINTER_OVERLAY = new OrientedOverlayRenderer(
+            "machines/screen_printer");
 
     public static final OrientedOverlayRenderer LAUNCH_PAD_OVERLAY = new OrientedOverlayRenderer(
             "machines/multiblocks/launch_pad");

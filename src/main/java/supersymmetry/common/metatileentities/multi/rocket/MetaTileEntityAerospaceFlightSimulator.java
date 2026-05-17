@@ -357,7 +357,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         }
 
         this.rocketBlueprintSlot.setNBT(
-                (ignored) -> {
+                (t) -> {
                     NBTTagCompound n = bp.writeToNBT();
                     n.setBoolean("buildstat", true);
                     return n;

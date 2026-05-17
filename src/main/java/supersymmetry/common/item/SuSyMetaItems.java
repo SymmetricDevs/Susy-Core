@@ -32,11 +32,7 @@ import gregtech.common.items.behaviors.TooltipBehavior;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
-import supersymmetry.common.item.behavior.DataCardBehavior;
-import supersymmetry.common.item.behavior.MillBallDurabilityManager;
-import supersymmetry.common.item.behavior.OxygenSensorBehavior;
-import supersymmetry.common.item.behavior.PipeNetPainterBehavior;
-import supersymmetry.common.item.behavior.RocketConfigBehavior;
+import supersymmetry.common.item.behavior.*;
 
 public class SuSyMetaItems {
 
@@ -52,6 +48,9 @@ public class SuSyMetaItems {
     public static MetaValueItem EARTH_ORBITAL_SCRAP;
     public static MetaValueItem TUNGSTEN_ELECTRODE;
     public static MetaValueItem CODE_BREACHER;
+    public static MetaValueItem SHAPE_MOLD_TARGET;
+    public static MetaValueItem ENTITY_TAGGER;
+    public static MetaValueItem FACTION_RADIO;
 
     public static MetaValueItem DATA_CARD;
     public static MetaValueItem DATA_CARD_ACTIVE;
@@ -143,32 +142,39 @@ public class SuSyMetaItems {
         EARTH_ORBITAL_SCRAP = metaItem.addItem(7, "orbital.scrap.earth").setMaxStackSize(8);
 
         CODE_BREACHER = metaItem.addItem(8, "code_breacher").setMaxStackSize(1);
+        ENTITY_TAGGER = metaItem.addItem(9, "entity_tagger").setMaxStackSize(1);
 
-        DATA_CARD = metaItem.addItem(9, "data_card").setMaxStackSize(1)
+        FACTION_RADIO = metaItem.addItem(10, "faction_radio").setMaxStackSize(1);
+
+        DATA_CARD = metaItem.addItem(11, "data_card").setMaxStackSize(1)
                 .addComponents(new TooltipBehavior(lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1"))));
 
-        DATA_CARD_ACTIVE = metaItem.addItem(10, "data_card.active").setMaxStackSize(1)
+        DATA_CARD_ACTIVE = metaItem.addItem(12, "data_card.active").setMaxStackSize(1)
                 .addComponents(new DataCardBehavior(
                         lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1")), Arrays.asList("type")));
 
-        DATA_CARD_MASTER_BLUEPRINT = metaItem.addItem(11, "data_card.master_blueprint").setMaxStackSize(1)
+        DATA_CARD_MASTER_BLUEPRINT = metaItem.addItem(13, "data_card.master_blueprint").setMaxStackSize(1)
                 .addComponents(new DataCardBehavior(
                         lines -> lines.add(I18n.format("metaitem.data_card.master_blueprint.tooltip.1")),
                         Arrays.asList("rocketType")));
 
-        TUNGSTEN_ELECTRODE = metaItem.addItem(12, "tungsten_electrode");
+        TUNGSTEN_ELECTRODE = metaItem.addItem(14, "tungsten_electrode");
 
-        ROCKET_CONFIGURER = metaItem.addItem(13, "rocket_configurer").setMaxStackSize(1)
+        ROCKET_CONFIGURER = metaItem.addItem(15, "rocket_configurer").setMaxStackSize(1)
                 .addComponents(new RocketConfigBehavior());
 
-        PADDING_CLOTH = metaItem.addItem(14, "padding_cloth");
+        PADDING_CLOTH = metaItem.addItem(16, "padding_cloth");
 
-        AIR_DISPERSER = metaItem.addItem(15, "air_disperser");
+        SHAPE_MOLD_TARGET = metaItem.addItem(17, "shape.mold.target");
 
-        OXYGEN_SENSOR = metaItem.addItem(16, "oxygen_sensor").setMaxStackSize(1)
+        AIR_DISPERSER = metaItem.addItem(18, "air_disperser");
+
+        OXYGEN_SENSOR = metaItem.addItem(19, "oxygen_sensor").setMaxStackSize(1)
                 .addComponents(ElectricStats.createElectricItem(10000L, GTValues.LV),
                         new OxygenSensorBehavior());
-    }
+
+
+}
 
     private static void addExtraBehaviours() {
         MetaItems.SPRAY_SOLVENT.addComponents(new PipeNetPainterBehavior(1024, SPRAY_EMPTY.getStackForm(), -1));

@@ -14,6 +14,7 @@ public class SuSyTileEntities {
     public static void register() {
         GameRegistry.registerTileEntity(AnimatablePartTileEntity.class, susyId("animatable_part"));
         GameRegistry.registerTileEntity(TileEntityCoverable.class, susyId("coverable"));
+        GameRegistry.registerTileEntity(TileEntityFlare.class, susyId("flare"));
     }
 
     @SideOnly(Side.CLIENT)

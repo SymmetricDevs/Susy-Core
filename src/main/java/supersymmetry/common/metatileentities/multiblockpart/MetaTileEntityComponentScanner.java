@@ -175,13 +175,14 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                         errorPos = BlockPos.fromLong(scanResult.get().getLong("errorPos"));
                         continue;
                     }
-                    getInventory().setNBT(
-                            _ -> {
-                                NBTTagCompound t = scanResult.get();
-                                t.setInteger("dataid", (int) (Math.random() * Integer.MAX_VALUE));
-                                component.writeToNBT(t);
-                                return t;
-                            });
+                    getInventory()
+                            .setNBT(
+                                    t -> {
+                                        NBTTagCompound tag = scanResult.get();
+                                        tag.setInteger("dataid", (int) (Math.random() * Integer.MAX_VALUE));
+                                        component.writeToNBT(tag);
+                                        return tag;
+                                    });
                     errorPos = null;
                     break;
                 }
