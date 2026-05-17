@@ -1,6 +1,17 @@
 package supersymmetry.common.item;
 
+import static gregtech.common.items.MetaItems.SPRAY_EMPTY;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Objects;
+
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.ItemStack;
+
 import com.google.common.base.CaseFormat;
+
 import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
 import gregtech.api.items.armor.ArmorMetaItem;
@@ -17,9 +28,6 @@ import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.unification.stack.UnificationEntry;
 import gregtech.common.items.MetaItems;
 import gregtech.common.items.behaviors.TooltipBehavior;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.ItemStack;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
@@ -27,12 +35,6 @@ import supersymmetry.common.item.behavior.DataCardBehavior;
 import supersymmetry.common.item.behavior.MillBallDurabilityManager;
 import supersymmetry.common.item.behavior.PipeNetPainterBehavior;
 import supersymmetry.common.item.behavior.RocketConfigBehavior;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Objects;
-
-import static gregtech.common.items.MetaItems.SPRAY_EMPTY;
 
 public class SuSyMetaItems {
 
