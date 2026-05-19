@@ -292,6 +292,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityBallMill BALL_MILL;
 
     public static MetaTileEntityDefoliator[] DEFOLIATOR = new MetaTileEntityDefoliator[8];
+    public static MetaTileEntityInterferenceDynamo[] INTERFERENCE_DYNAMO = new MetaTileEntityInterferenceDynamo[8];
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500,
@@ -743,8 +744,9 @@ public class SuSyMetaTileEntities {
 
         // Siege elements: 18600-18700
         DEFOLIATOR[0] = registerMetaTileEntity(18600, new MetaTileEntityDefoliator(susyId("defoliator.lv"), 1));
+        INTERFERENCE_DYNAMO[0] = registerMetaTileEntity(18610, new MetaTileEntityInterferenceDynamo(susyId("interference_dynamo.lv"), 1));
+
         /* todo
-        interference dynamo
         toxic spewer
         atmospheric oxidizer
          */

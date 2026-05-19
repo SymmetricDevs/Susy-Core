@@ -1586,3 +1586,10 @@ susy.command.faction.invalid=Invalid argument. Use get, add, or set.
 susy.machine.defoliator.lv.name=Basic Defoliator
 susy.machine.defoliator.tooltip.info=Global warning has never been this easy!
 susy.machine.defoliator.tooltip.description=Destroys all plant life in a ever-expanding radius until destroyed.
+
+#Interference Dynamo
+susy.machine.interference_dynamo.lv.name=Basic Interference Dynamo
+susy.machine.interference_dynamo.tooltip.info=A vampire on your power grid.
+susy.machine.interference_dynamo.tooltip.description=Slowly drains power from surrounding machines.
+susy.machine.interference_dynamo.tooltip.description2=Can overamp improperly prepared power grids.
+susy.machine.interference_dynamo.tooltip.drain=§cDrains §f%s EU§c from machines in range per operation.
