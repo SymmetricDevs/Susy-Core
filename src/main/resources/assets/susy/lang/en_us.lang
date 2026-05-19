@@ -1582,14 +1582,24 @@ susy.command.faction.add=Added %s HATE to faction: %s
 susy.command.faction.set=Set %s HATE for faction: %s
 susy.command.faction.invalid=Invalid argument. Use get, add, or set.
 
+# Generic range warning
+susy.machine.generic.tooltip.radius_warning=Expands it's radius every completed cycle until destroyed.
+
 # Defoliator
 susy.machine.defoliator.lv.name=Basic Defoliator
 susy.machine.defoliator.tooltip.info=Global warning has never been this easy!
-susy.machine.defoliator.tooltip.description=Destroys all plant life in a ever-expanding radius until destroyed.
+susy.machine.defoliator.tooltip.description=Destroys all plant life close to it without harming animals or people.
 
 #Interference Dynamo
 susy.machine.interference_dynamo.lv.name=Basic Interference Dynamo
 susy.machine.interference_dynamo.tooltip.info=A vampire on your power grid.
 susy.machine.interference_dynamo.tooltip.description=Slowly drains power from surrounding machines.
 susy.machine.interference_dynamo.tooltip.description2=Can overamp improperly prepared power grids.
+
 susy.machine.interference_dynamo.tooltip.drain=§cDrains §f%s EU§c from machines in range per operation.
+
+#Toxic Spewer
+susy.machine.toxic_spewer.lv.name=Basic Toxic Spewer
+susy.machine.toxic_spewer.tooltip.info=As for what's in the canister... It's best you don't ask.
+susy.machine.toxic_spewer.tooltip.description=Makes the nearby atmosphere poisonous to living creatures.
+susy.machine.toxic_spewer.tooltip.description1=Standing under the open sky while it's active will apply debilitating effects.

@@ -103,6 +103,7 @@ public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
     public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, boolean advanced) {
         tooltip.add(I18n.format("susy.machine.defoliator.tooltip.info"));
         tooltip.add(I18n.format("susy.machine.defoliator.tooltip.description"));
+        tooltip.add(I18n.format("susy.machine.generic.tooltip.radius_warning"));
     }
 
     @Override
