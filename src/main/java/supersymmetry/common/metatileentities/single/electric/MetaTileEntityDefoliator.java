@@ -45,14 +45,14 @@ public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        data.setInteger("defoliatorRadius", currentRadius);
+        data.setInteger("harmRadius", currentRadius);
         return data;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        currentRadius = data.getInteger("defoliatorRadius");
+        currentRadius = data.getInteger("harmRadius");
     }
 
     @Override

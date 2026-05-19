@@ -43,14 +43,14 @@ public class MetaTileEntityInterferenceDynamo extends TieredMetaTileEntity {
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        data.setInteger("interferenceRadius", currentRadius);
+        data.setInteger("harmRadius", currentRadius);
         return data;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        currentRadius = data.getInteger("interferenceRadius");
+        currentRadius = data.getInteger("harmRadius");
     }
 
     @Override
