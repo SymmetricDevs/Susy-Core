@@ -144,6 +144,16 @@ public class BlockRadicalAir extends VariantBlock<BlockRadicalAir.BlockRadicalAi
         @Override public int getHarvestLevel(IBlockState state) { return 0; }
     }
 
+    //decay
+    @Override
+    public void randomTick(World world, BlockPos pos, IBlockState state, Random rand) {
+        if (world.isRemote) return;
+
+        if (rand.nextInt(20) == 0) {
+            world.setBlockToAir(pos);
+        }
+    }
+
     //fire logic
     //moved over so it can still ignite torches if they are right next to it even after the machine is gone and the gas has not yet decayed
 
