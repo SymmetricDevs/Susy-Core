@@ -89,6 +89,10 @@ dependencies {
     compileOnly rfg.deobf('curse.maven:project-red-core-228702:2745545')
 
     runtimeOnly rfg.deobf("curse.maven:serverutil-282484:2503313")
+
+    //ICBM
+    //temporary dep, will replace once we have our own missiles
+    implementation rfg.deobf("curse.maven:icbm-244451:6496624")
     // # Optional dependencies. Uncomment the ones you need
 //    runtimeOnlyNonPublishable rfg.deobf('curse.maven:the-beneath-254629:3425551')
 //    runtimeOnlyNonPublishable rfg.deobf('curse.maven:realistic-terrain-generation-unofficial-648514:4404814')
