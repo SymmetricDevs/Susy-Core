@@ -149,7 +149,7 @@ public class BlockRadicalAir extends VariantBlock<BlockRadicalAir.BlockRadicalAi
     public void randomTick(World world, BlockPos pos, IBlockState state, Random rand) {
         if (world.isRemote) return;
 
-        if (rand.nextInt(20) == 0) {
+        if (rand.nextInt(40) == 0) {
             world.setBlockToAir(pos);
         }
     }
@@ -196,6 +196,5 @@ public class BlockRadicalAir extends VariantBlock<BlockRadicalAir.BlockRadicalAi
     //add shit here
     public static void registerIgnitables() {
         addIgnitable(new ResourceLocation("minecraft", "torch"));
-        System.out.println("registering flammables");
     }
 }
