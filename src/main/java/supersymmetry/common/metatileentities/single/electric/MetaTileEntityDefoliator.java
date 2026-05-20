@@ -163,6 +163,7 @@ public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
             map.put(new ResourceLocation("minecraft", "leaves2"),        AIR);
             map.put(new ResourceLocation("minecraft", "sapling"),        AIR);
             map.put(new ResourceLocation("minecraft", "grass"),          COARSE_DIRT);
+            map.put(new ResourceLocation("minecraft", "farmland"),       COARSE_DIRT);
             map.put(new ResourceLocation("minecraft", "mycelium"),       COARSE_DIRT);
             map.put(new ResourceLocation("minecraft", "snow_layer"),     AIR); //snow on trees stays floating
 
