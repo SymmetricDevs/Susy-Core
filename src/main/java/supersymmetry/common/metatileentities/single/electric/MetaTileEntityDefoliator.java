@@ -83,6 +83,10 @@ public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
                     if (!world.isValid(target)) continue;
 
                     IBlockState state     = world.getBlockState(target);
+                    //skips air for better performance
+                    if (state.getBlock() == Blocks.AIR){
+                        continue;
+                    }
                     ResourceLocation blockName = ForgeRegistries.BLOCKS.getKey(state.getBlock());
                     if (blockName == null) continue;
 

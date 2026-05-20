@@ -71,13 +71,12 @@ public class MetaTileEntityAtmosphericOxidizer extends TieredMetaTileEntity {
         if (getWorld().isRemote) return;
 
         this.energyContainer.removeEnergy(this.energyContainer.getEnergyCapacity());
-        processFloodFill(getWorld(), getPos(), 10);
+        processFloodFill(getWorld(), getPos(), GTValues.VH[getTier()]);
     }
 
     private static final int MAX_RADIUS = 32;
 
     private void processFloodFill(World world, BlockPos origin, int budget) {
-        IBlockState RADICAL_AIR = IgnitableReplacements.stateOf("susy", "radical_air", 0);
         Map<ResourceLocation, IBlockState> replacements = IgnitableReplacements.getReplacements();
         Map<String, IBlockState> metaReplacements = IgnitableReplacements.getMetaReplacements();
 
