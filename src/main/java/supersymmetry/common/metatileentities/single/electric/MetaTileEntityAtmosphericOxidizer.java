@@ -12,6 +12,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Set;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -26,6 +31,7 @@ import java.util.Map;
 public class MetaTileEntityAtmosphericOxidizer extends TieredMetaTileEntity {
 
     private int currentRadius = 0;
+    IBlockState RADICAL_AIR = IgnitableReplacements.stateOf("susy", "radical_air", 0);
 
     public MetaTileEntityAtmosphericOxidizer(ResourceLocation metaTileEntityId, int tier) {
         super(metaTileEntityId, tier);
@@ -65,55 +71,76 @@ public class MetaTileEntityAtmosphericOxidizer extends TieredMetaTileEntity {
         if (getWorld().isRemote) return;
 
         this.energyContainer.removeEnergy(this.energyContainer.getEnergyCapacity());
-        processShell(getWorld(), getPos(), currentRadius);
-
-        if (currentRadius <= 32) currentRadius++;
+        processFloodFill(getWorld(), getPos(), 10);
     }
 
-    private void processShell(World world, BlockPos center, int radius) {
-        if (radius == 0) return;
+    private static final int MAX_RADIUS = 32;
 
+    private void processFloodFill(World world, BlockPos origin, int budget) {
+        IBlockState RADICAL_AIR = IgnitableReplacements.stateOf("susy", "radical_air", 0);
         Map<ResourceLocation, IBlockState> replacements = IgnitableReplacements.getReplacements();
         Map<String, IBlockState> metaReplacements = IgnitableReplacements.getMetaReplacements();
 
-        for (int dx = -radius; dx <= radius; dx++) {
-            for (int dy = -radius; dy <= radius; dy++) {
-                for (int dz = -radius; dz <= radius; dz++) {
+        Queue<BlockPos> queue = new LinkedList<>();
+        Set<BlockPos> visited = new HashSet<>();
 
-                    BlockPos target = center.add(dx, dy, dz);
+        queue.add(origin);
+        visited.add(origin);
 
-                    if (!world.isBlockLoaded(target)) continue;
+        int filled = 0;
 
-                    IBlockState state = world.getBlockState(target);
-                    if (state == null) continue;
+        while (!queue.isEmpty() && filled < budget) {
+            BlockPos current = queue.poll();
 
-                    Block block = state.getBlock();
-                    if (block == null) continue;
+            for (EnumFacing facing : EnumFacing.VALUES) {
+                BlockPos neighbor = current.offset(facing);
 
-                    ResourceLocation blockName = ForgeRegistries.BLOCKS.getKey(block);
-                    if (blockName == null) continue;
+                // Enforce max radius
+                if (Math.abs(neighbor.getX() - origin.getX()) > MAX_RADIUS) continue;
+                if (Math.abs(neighbor.getY() - origin.getY()) > MAX_RADIUS) continue;
+                if (Math.abs(neighbor.getZ() - origin.getZ()) > MAX_RADIUS) continue;
 
-                    String metaKey = blockName.toString() + ":" + block.getMetaFromState(state);
+                if (visited.contains(neighbor)) continue;
+                visited.add(neighbor);
 
-                    IBlockState replacement = metaReplacements.get(metaKey);
-                    if (replacement == null) {
-                        replacement = replacements.get(blockName);
+                if (!world.isBlockLoaded(neighbor)) continue;
+
+                IBlockState state = world.getBlockState(neighbor);
+                if (state == null) continue;
+
+                Block block = state.getBlock();
+                if (block == null) continue;
+
+                // Radical air is already filled, keep propagating through it
+                if (state == RADICAL_AIR) {
+                    queue.add(neighbor);
+                    continue;
+                }
+
+                ResourceLocation blockName = ForgeRegistries.BLOCKS.getKey(block);
+                if (blockName == null) continue;
+
+                String metaKey = blockName.toString() + ":" + block.getMetaFromState(state);
+
+                IBlockState replacement = metaReplacements.get(metaKey);
+                if (replacement == null) {
+                    replacement = replacements.get(blockName);
+                }
+
+                if (replacement != null) {
+                    if (replacement.getBlock() == Blocks.FIRE) {
+                        BlockPos below = neighbor.down();
+                        if (!world.isBlockLoaded(below)) continue;
+                        IBlockState belowState = world.getBlockState(below);
+                        if (!belowState.isSideSolid(world, below, EnumFacing.UP)) continue;
                     }
 
-                    if (replacement != null) {
+                    world.setBlockState(neighbor, replacement, 2);
+                    filled++;
 
-                        // Fire is :dimbass:, requires another block under it to work
-                        if (replacement.getBlock() == Blocks.FIRE) {
-                            BlockPos below = target.down();
-                            if (!world.isBlockLoaded(below)) continue;
-
-                            IBlockState belowState = world.getBlockState(below);
-                            if (!belowState.isSideSolid(world, below, net.minecraft.util.EnumFacing.UP)) {
-                                continue;
-                            }
-                        }
-
-                        world.setBlockState(target, replacement, 2);
+                    // If we turned this block into radical air, keep spreading through it
+                    if (replacement == RADICAL_AIR) {
+                        queue.add(neighbor);
                     }
                 }
             }
@@ -152,7 +179,7 @@ public class MetaTileEntityAtmosphericOxidizer extends TieredMetaTileEntity {
             return metaReplacements;
         }
 
-        private static IBlockState stateOf(String domain, String path, int meta) {
+        public static IBlockState stateOf(String domain, String path, int meta) {
             Block block = Block.REGISTRY.getObject(new ResourceLocation(domain, path));
             return block != null ? block.getStateFromMeta(meta) : Blocks.AIR.getDefaultState();
         }
@@ -164,7 +191,11 @@ public class MetaTileEntityAtmosphericOxidizer extends TieredMetaTileEntity {
 
             IBlockState FIRE = stateOf("minecraft", "fire", 0);
             ResourceLocation torch = new ResourceLocation("minecraft", "torch");
+            IBlockState RADICAL_ODIXDE_AIR = stateOf("susy","radical_air",0);
+            ResourceLocation air = new ResourceLocation("minecraft","air");
+
             replacements.put(torch, FIRE);
+            replacements.put(air,RADICAL_ODIXDE_AIR);
 
             //metadata
             //metaReplacements.put("minecraft:torch:0", FIRE);
