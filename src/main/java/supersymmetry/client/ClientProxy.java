@@ -33,6 +33,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -62,6 +63,7 @@ import supersymmetry.Supersymmetry;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
 import supersymmetry.api.util.RenderMaskManager;
+import supersymmetry.client.renderer.block.RadicalAirModelLoader;
 import supersymmetry.client.renderer.handler.VariantCoverableBlockRenderer;
 import supersymmetry.client.renderer.textures.SuSyConnectedTextures;
 import supersymmetry.common.CommonProxy;
@@ -89,6 +91,7 @@ public class ClientProxy extends CommonProxy {
         SusyMetaEntities.initRenderers();
         SuSyIRLoader.initEntityRenderers();
         VariantCoverableBlockRenderer.preInit();
+        ModelLoaderRegistry.registerLoader(RadicalAirModelLoader.INSTANCE); //can be moved somewhere else if necessary (I think)
     }
 
     @Override

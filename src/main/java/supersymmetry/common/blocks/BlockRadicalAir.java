@@ -28,7 +28,6 @@ public class BlockRadicalAir extends VariantBlock<BlockRadicalAir.BlockRadicalAi
         setHardness(0.0F);
         setResistance(0.0F);
         setLightOpacity(0);
-        this.useNeighborBrightness = true;
     }
 
     @Override
@@ -110,6 +109,26 @@ public class BlockRadicalAir extends VariantBlock<BlockRadicalAir.BlockRadicalAi
 
     @Override
     public boolean isReplaceable(IBlockAccess world, BlockPos pos) {
+        return true;
+    }
+
+    @Override
+    public boolean isFlammable(IBlockAccess world, BlockPos pos, EnumFacing face) {
+        return true;
+    }
+
+    @Override
+    public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
+        return 300;
+    }
+
+    @Override
+    public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face) {
+        return 1000;
+    }
+
+    @Override
+    public boolean isFireSource(World world, BlockPos pos, EnumFacing side) {
         return true;
     }
 

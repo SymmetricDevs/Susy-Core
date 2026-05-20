@@ -1,11 +1,8 @@
 {
-  "forge_marker" : 1,
-  "variants" : {
-    "variant=radicalair" : {
-      "model" : "minecraft:cube_all",
-      "textures" : {
-        "all" : "gregtech:blocks/air/radical_air"
-      }
+  "forge_marker": 1,
+  "variants": {
+    "variant=radicalair": {
+      "model": "susy:air/radical_air_double_face"
     }
   }
 }
