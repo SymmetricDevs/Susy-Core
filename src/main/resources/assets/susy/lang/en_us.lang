@@ -1612,3 +1612,6 @@ susy.machine.atmospheric_oxidizer.tooltip.description2=§cLetting this machine r
 
 #Radical Air
 tile.radical_air.radicalair.name=Radical Air
+
+#Mercury
+tile.fluid_placer.mercury_fluid.name=Mercury Placer
