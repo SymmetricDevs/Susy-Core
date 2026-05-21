@@ -8,58 +8,91 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-
-//WIP
-//shit don't work but I'm getting close
-
 @SideOnly(Side.CLIENT)
 public class DustFogRenderer {
 
-    public static float fogStrength = 0.0f;
-    public static float targetFog = 0.0f;
-    public static long lastUpdate = 0L;
+    private enum FogState { IDLE, RAMPING_UP, HOLDING, RAMPING_DOWN }
+    private static FogState state       = FogState.IDLE;
+    public  static float    fogStrength = 0.0f;
 
-    private static final long TIMEOUT_MS = 20000L;
-    private static final float RAMP   = 0.15f;
+    private static final int   RAMP   = 80; //ticks
+    private static final int   HOLD_TICKS      = 600; //30 sec, slightly more than the machine takes to cycle for seamless continuation
+
+    private static int tickCounter = 0;
+    public static void applyPacket() {
+        switch (state) {
+            case IDLE:
+            case RAMPING_DOWN:
+                state = FogState.RAMPING_UP;
+                tickCounter = (int) (fogStrength * RAMP);
+                break;
+
+            case RAMPING_UP:
+            case HOLDING:
+                if (state == FogState.HOLDING) {
+                    tickCounter = 0;
+                }
+                break;
+        }
+    }
 
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END) return;
         if (Minecraft.getMinecraft().player == null) return;
 
-        long now = System.currentTimeMillis();
-        boolean receiving = (now - lastUpdate) <= TIMEOUT_MS;
+        switch (state) {
 
-        if (receiving) {
-            System.out.println("rampup");
-            fogStrength = Math.min(fogStrength + RAMP, targetFog);
-        } else {
-            targetFog    = Math.max(targetFog    - RAMP, 0.0f);
-            fogStrength  = Math.max(fogStrength  - RAMP, 0.0f);
+            case IDLE:
+                break;
+
+            case RAMPING_UP:
+                tickCounter++;
+                fogStrength = Math.min((float) tickCounter / RAMP, 1.0f);
+                if (tickCounter >= RAMP) {
+                    fogStrength = 1.0f;
+                    state       = FogState.HOLDING;
+                    tickCounter = 0;
+                }
+                break;
+
+            case HOLDING:
+                tickCounter++;
+                if (tickCounter >= HOLD_TICKS) {
+                    state       = FogState.RAMPING_DOWN;
+                    tickCounter = 0;
+                }
+                break;
+
+            case RAMPING_DOWN:
+                tickCounter++;
+                fogStrength = 1.0f - ((float) tickCounter / RAMP);
+                if (fogStrength <= 0.0f) {  // let the math decide when we're done + grace period for the game to actually catch up
+                    fogStrength = 0.0f;
+                    state       = FogState.IDLE;
+                    tickCounter = 0;
+                }
+                System.out.println(fogStrength);
+                break;
         }
-    }
-
-    public static void applyPacket(float strength) {
-        if (strength > targetFog) targetFog = strength;
-        lastUpdate = System.currentTimeMillis();
     }
 
     @SubscribeEvent
     public static void onFogDensity(EntityViewRenderEvent.FogDensity event) {
-        if (fogStrength <= 0.01f) return;
+        if (state == FogState.IDLE) return;
 
-        GlStateManager.setFog(GlStateManager.FogMode.EXP);
-        event.setDensity(0.02f + (fogStrength * 0.25f));
+        GlStateManager.setFog(GlStateManager.FogMode.EXP2);
+        event.setDensity(fogStrength * 0.25f);
         event.setCanceled(true);
     }
 
     @SubscribeEvent
     public static void onFogColors(EntityViewRenderEvent.FogColors event) {
-        if (fogStrength <= 0.0f) return;
+        if (state == FogState.IDLE) return;
 
         float multiplier = 1.0f - (fogStrength * 0.85f);
-        event.setRed(event.getRed()     * multiplier);
+        event.setRed  (event.getRed()   * multiplier);
         event.setGreen(event.getGreen() * multiplier);
-        event.setBlue(event.getBlue()   * multiplier);
+        event.setBlue (event.getBlue()  * multiplier);
     }
 }

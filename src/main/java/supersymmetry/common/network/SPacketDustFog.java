@@ -29,14 +29,12 @@ public class SPacketDustFog implements IPacket, IClientExecutor {
     @SideOnly(Side.CLIENT)
     @Override
     public void executeClient(NetHandlerPlayClient handler) {
-
         Minecraft mc = Minecraft.getMinecraft();
 
         if (mc.player == null || mc.world == null)
             return;
 
-        DustFogRenderer.fogStrength = fogStrength;
-        DustFogRenderer.lastUpdate = System.currentTimeMillis();
+        DustFogRenderer.applyPacket();
     }
 
     @Override

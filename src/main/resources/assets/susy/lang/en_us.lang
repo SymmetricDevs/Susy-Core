@@ -1612,7 +1612,7 @@ susy.machine.atmospheric_oxidizer.tooltip.description2=§cLetting this machine r
 
 #Dust Agitator
 susy.machine.dust_agitator.lv.name=Basic Dust Agitator
-susy.machine.dust_agitator.tooltip.info=Smoke screen in a can
+susy.machine.dust_agitator.tooltip.info=The Great Smog of London in a can
 susy.machine.dust_agitator.tooltip.description=Disturbs dust particles in the local area to dramatically reduce visibility
 
 #Radical Air
