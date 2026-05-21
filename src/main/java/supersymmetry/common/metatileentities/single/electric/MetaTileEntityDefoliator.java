@@ -1,10 +1,9 @@
 package supersymmetry.common.metatileentities.single.electric;
 
-import gregtech.api.GTValues;
-import gregtech.api.gui.ModularUI;
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.TieredMetaTileEntity;
-import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -16,12 +15,15 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import gregtech.api.GTValues;
+import gregtech.api.gui.ModularUI;
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.TieredMetaTileEntity;
+import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 
 public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
 
@@ -37,10 +39,14 @@ public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
     }
 
     @Override
-    protected ModularUI createUI(EntityPlayer entityPlayer) { return null; }
+    protected ModularUI createUI(EntityPlayer entityPlayer) {
+        return null;
+    }
 
     @Override
-    protected boolean openGUIOnRightClick() { return false; }
+    protected boolean openGUIOnRightClick() {
+        return false;
+    }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
@@ -73,8 +79,8 @@ public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
     private void processShell(World world, BlockPos center, int radius) {
         if (radius == 0) return;
 
-        Map<ResourceLocation, IBlockState> replacements     = DefoliatorReplacements.getReplacements();
-        Map<String, IBlockState>           metaReplacements = DefoliatorReplacements.getMetaReplacements();
+        Map<ResourceLocation, IBlockState> replacements = DefoliatorReplacements.getReplacements();
+        Map<String, IBlockState> metaReplacements = DefoliatorReplacements.getMetaReplacements();
 
         for (int dx = -radius; dx <= radius; dx++) {
             for (int dy = -radius; dy <= radius; dy++) {
@@ -82,7 +88,7 @@ public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
                     BlockPos target = center.add(dx, dy, dz);
                     if (!world.isValid(target)) continue;
 
-                    IBlockState state     = world.getBlockState(target);
+                    IBlockState state = world.getBlockState(target);
                     //skips air for better performance
                     if (state.getBlock() == Blocks.AIR){
                         continue;
@@ -104,7 +110,8 @@ public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip,
+                               boolean advanced) {
         tooltip.add(I18n.format("susy.machine.defoliator.tooltip.info"));
         tooltip.add(I18n.format("susy.machine.defoliator.tooltip.description"));
         tooltip.add(I18n.format("susy.machine.generic.tooltip.radius_warning"));
@@ -117,8 +124,8 @@ public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
 
     public static class DefoliatorReplacements {
 
-        private static Map<ResourceLocation, IBlockState> replacements     = null;
-        private static Map<String, IBlockState>           metaReplacements = null;
+        private static Map<ResourceLocation, IBlockState> replacements = null;
+        private static Map<String, IBlockState> metaReplacements = null;
 
         public static Map<ResourceLocation, IBlockState> getReplacements() {
             if (replacements == null) buildReplacements();
@@ -136,6 +143,7 @@ public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
         }
 
         private static void buildReplacements() {
+            // spotless:off
 
             //no metadata
             IBlockState AIR         = stateOf("minecraft", "air",  0);
@@ -148,24 +156,26 @@ public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
             Map<ResourceLocation, IBlockState> map = new HashMap<>();
 
             // Minecraft
-            map.put(new ResourceLocation("minecraft", "tallgrass"),      AIR);
-            map.put(new ResourceLocation("minecraft", "yellow_flower"),  AIR);
-            map.put(new ResourceLocation("minecraft", "red_flower"),     AIR);
-            map.put(new ResourceLocation("minecraft", "double_plant"),   AIR);
-            map.put(new ResourceLocation("minecraft", "deadbush"),       AIR);
-            map.put(new ResourceLocation("minecraft", "brown_mushroom"), AIR);
-            map.put(new ResourceLocation("minecraft", "red_mushroom"),   AIR);
-            map.put(new ResourceLocation("minecraft", "vine"),           AIR);
-            map.put(new ResourceLocation("minecraft", "waterlily"),      AIR);
-            map.put(new ResourceLocation("minecraft", "cactus"),         AIR);
-            map.put(new ResourceLocation("minecraft", "reeds"),          AIR);
-            map.put(new ResourceLocation("minecraft", "leaves"),         AIR);
-            map.put(new ResourceLocation("minecraft", "leaves2"),        AIR);
-            map.put(new ResourceLocation("minecraft", "sapling"),        AIR);
-            map.put(new ResourceLocation("minecraft", "grass"),          COARSE_DIRT);
-            map.put(new ResourceLocation("minecraft", "farmland"),       COARSE_DIRT);
-            map.put(new ResourceLocation("minecraft", "mycelium"),       COARSE_DIRT);
-            map.put(new ResourceLocation("minecraft", "snow_layer"),     AIR); //snow on trees stays floating
+            map.put(new ResourceLocation("minecraft", "tallgrass"),            AIR);
+            map.put(new ResourceLocation("minecraft", "yellow_flower"),        AIR);
+            map.put(new ResourceLocation("minecraft", "red_flower"),           AIR);
+            map.put(new ResourceLocation("minecraft", "double_plant"),         AIR);
+            map.put(new ResourceLocation("minecraft", "deadbush"),             AIR);
+            map.put(new ResourceLocation("minecraft", "brown_mushroom"),       AIR);
+            map.put(new ResourceLocation("minecraft", "brown_mushroom_block"), AIR);
+            map.put(new ResourceLocation("minecraft", "red_mushroom"),         AIR);
+            map.put(new ResourceLocation("minecraft", "red_mushroom_block"),   AIR);
+            map.put(new ResourceLocation("minecraft", "vine"),                 AIR);
+            map.put(new ResourceLocation("minecraft", "waterlily"),            AIR);
+            map.put(new ResourceLocation("minecraft", "cactus"),               AIR);
+            map.put(new ResourceLocation("minecraft", "reeds"),                AIR);
+            map.put(new ResourceLocation("minecraft", "leaves"),               AIR);
+            map.put(new ResourceLocation("minecraft", "leaves2"),              AIR);
+            map.put(new ResourceLocation("minecraft", "sapling"),              AIR);
+            map.put(new ResourceLocation("minecraft", "grass"),                COARSE_DIRT);
+            map.put(new ResourceLocation("minecraft", "farmland"),             COARSE_DIRT);
+            map.put(new ResourceLocation("minecraft", "grass_path"),           COARSE_DIRT);
+            map.put(new ResourceLocation("minecraft", "mycelium"),             COARSE_DIRT);
 
             // Biomes O' Plenty
             map.put(new ResourceLocation("biomesoplenty", "bamboo"),          AIR);
@@ -210,6 +220,7 @@ public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
             metaMap.put("biomesoplenty:grass:7",  COARSE_DIRT);
 
             metaReplacements = metaMap;
+            // spotless:on
         }
 
         private DefoliatorReplacements() {}

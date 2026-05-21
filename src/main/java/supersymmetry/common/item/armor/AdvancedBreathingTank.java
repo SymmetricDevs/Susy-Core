@@ -1,6 +1,7 @@
 package supersymmetry.common.item.armor;
 
 import static net.minecraft.inventory.EntityEquipmentSlot.CHEST;
+import static net.minecraft.inventory.EntityEquipmentSlot.HEAD;
 import static supersymmetry.common.event.DimensionBreathabilityHandler.isInHazardousEnvironment;
 
 import java.util.List;
@@ -11,6 +12,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import supersymmetry.common.item.SuSyArmorItem;
 
 public class AdvancedBreathingTank extends AdvancedBreathingApparatus {
 
@@ -58,6 +61,12 @@ public class AdvancedBreathingTank extends AdvancedBreathingApparatus {
     @Override
     public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
         if (player.isInsideOfMaterial(Material.WATER)) {
+            ItemStack headStack = player.getItemStackFromSlot(HEAD);
+            // need a helmet to breathe too
+            if (!(headStack.getItem() instanceof SuSyArmorItem headItem &&
+                    headItem.getItem(headStack).getArmorLogic() instanceof BreathingApparatus)) {
+                return;
+            }
             if (getOxygen(player.getItemStackFromSlot(CHEST)) > 0) {
                 player.setAir(300);
                 if (!isInHazardousEnvironment(player)) {

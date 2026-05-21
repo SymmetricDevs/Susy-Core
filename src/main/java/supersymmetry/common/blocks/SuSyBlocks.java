@@ -127,7 +127,7 @@ public class SuSyBlocks {
         REGOLITH.setRegistryName("regolith");
 
         MERCURY_FLUID = new BlockMercuryFluid();
-        MERCURY_FLUID.setRegistryName(GTValues.MODID,"fluid.mercury");
+        MERCURY_FLUID.setRegistryName(GTValues.MODID, "fluid.mercury");
         GTFluidRegistration.INSTANCE.registerFluidBlock(MERCURY_FLUID);
 
         SuSyTileEntities.register();
