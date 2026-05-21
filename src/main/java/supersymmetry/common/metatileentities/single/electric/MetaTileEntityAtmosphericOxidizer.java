@@ -24,7 +24,7 @@ public class MetaTileEntityAtmosphericOxidizer extends TieredMetaTileEntity {
 
     private int currentRadius = 0;
     private final IBlockState RADICAL_AIR = stateOf("susy", "radical_air", 0);
-    private final IBlockState AIR         = net.minecraft.init.Blocks.AIR.getDefaultState();
+    private static final int MAX_RADIUS = 32;
 
     public MetaTileEntityAtmosphericOxidizer(ResourceLocation metaTileEntityId, int tier) {
         super(metaTileEntityId, tier);
@@ -66,8 +66,6 @@ public class MetaTileEntityAtmosphericOxidizer extends TieredMetaTileEntity {
         this.energyContainer.removeEnergy(this.energyContainer.getEnergyCapacity());
         processFloodFill(getWorld(), getPos(), (int) GTValues.V[getTier()]);
     }
-
-    private static final int MAX_RADIUS = 32;
 
     private void processFloodFill(World world, BlockPos origin, int budget) {
         Queue<BlockPos> queue = new ArrayDeque<>();
