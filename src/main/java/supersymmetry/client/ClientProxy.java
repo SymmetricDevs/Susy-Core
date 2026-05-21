@@ -35,6 +35,7 @@ import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.obj.OBJLoader;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -64,6 +65,7 @@ import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
 import supersymmetry.api.util.RenderMaskManager;
 import supersymmetry.client.renderer.block.RadicalAirModelLoader;
+import supersymmetry.client.renderer.handler.DustFogRenderer;
 import supersymmetry.client.renderer.handler.VariantCoverableBlockRenderer;
 import supersymmetry.client.renderer.textures.SuSyConnectedTextures;
 import supersymmetry.common.CommonProxy;
@@ -100,6 +102,7 @@ public class ClientProxy extends CommonProxy {
         super.load();
         SuSyMetaBlocks.registerColors();
         SuSyFluidTooltipLoader.registerTooltips();
+        MinecraftForge.EVENT_BUS.register(DustFogRenderer.class);
     }
 
     @Override

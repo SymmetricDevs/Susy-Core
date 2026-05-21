@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.*;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
+
 import gregtech.api.GTValues;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.metatileentity.MetaTileEntity;
