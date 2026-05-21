@@ -1,14 +1,14 @@
 package supersymmetry.common.metatileentities.single.electric;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import gregtech.api.GTValues;
+import gregtech.api.gui.ModularUI;
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.TieredMetaTileEntity;
+import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -17,13 +17,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import java.util.*;
 
-import gregtech.api.GTValues;
-import gregtech.api.gui.ModularUI;
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.TieredMetaTileEntity;
-import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import java.util.*;
 
 public class MetaTileEntityAtmosphericOxidizer extends TieredMetaTileEntity {
 
@@ -44,9 +39,7 @@ public class MetaTileEntityAtmosphericOxidizer extends TieredMetaTileEntity {
     protected ModularUI createUI(EntityPlayer player) { return null; }
 
     @Override
-    protected boolean openGUIOnRightClick() {
-        return false;
-    }
+    protected boolean openGUIOnRightClick() { return false; }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
@@ -146,44 +139,4 @@ public class MetaTileEntityAtmosphericOxidizer extends TieredMetaTileEntity {
 
     @Override
     public boolean getIsWeatherOrTerrainResistant() { return true; }
-    // -------------------------------------------------------------------------
-
-    public static class IgnitableReplacements {
-
-        private static Map<ResourceLocation, IBlockState> replacements;
-        private static Map<String, IBlockState> metaReplacements;
-
-        public static Map<ResourceLocation, IBlockState> getReplacements() {
-            if (replacements == null || metaReplacements == null) {
-                buildReplacements();
-            }
-            return replacements;
-        }
-
-        public static Map<String, IBlockState> getMetaReplacements() {
-            if (replacements == null || metaReplacements == null) {
-                buildReplacements();
-            }
-            return metaReplacements;
-        }
-
-        private static IBlockState stateOf(String domain, String path, int meta) {
-            Block block = Block.REGISTRY.getObject(new ResourceLocation(domain, path));
-            return block != null ? block.getStateFromMeta(meta) : Blocks.AIR.getDefaultState();
-        }
-
-        private static void buildReplacements() {
-            replacements = new HashMap<>();
-            metaReplacements = new HashMap<>();
-
-            IBlockState FIRE = stateOf("minecraft", "fire", 0);
-            ResourceLocation torch = new ResourceLocation("minecraft", "torch");
-            replacements.put(torch, FIRE);
-
-            // metadata
-            // metaReplacements.put("minecraft:torch:0", FIRE);
-        }
-
-        private IgnitableReplacements() {}
-    }
 }
