@@ -118,7 +118,9 @@ public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
     }
 
     @Override
-    public boolean getIsWeatherOrTerrainResistant() { return true; }
+    public boolean getIsWeatherOrTerrainResistant() {
+        return true;
+    }
 
     // -------------------------------------------------------------------------
 

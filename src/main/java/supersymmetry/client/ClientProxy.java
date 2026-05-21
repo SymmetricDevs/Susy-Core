@@ -91,7 +91,8 @@ public class ClientProxy extends CommonProxy {
         SusyMetaEntities.initRenderers();
         SuSyIRLoader.initEntityRenderers();
         VariantCoverableBlockRenderer.preInit();
-        ModelLoaderRegistry.registerLoader(RadicalAirModelLoader.INSTANCE); //can be moved somewhere else if necessary (I think)
+        ModelLoaderRegistry.registerLoader(RadicalAirModelLoader.INSTANCE); // can be moved somewhere else if necessary
+                                                                            // (I think)
     }
 
     @Override

@@ -15,6 +15,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.ResourceLocation;
@@ -77,27 +78,35 @@ public class BlockMercuryFluid extends GTFluidBlock {
                                   @NotNull IBlockState state,
                                   @NotNull Entity entityIn) {
         super.onEntityCollision(worldIn, pos, state, entityIn);
-        entityIn.addVelocity(0, 0.035, 0);
-        if (entityIn instanceof EntityLivingBase living && worldIn.getTotalWorldTime() % 20 == 0) {
-            if (living instanceof EntityPlayer player) {
-                ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-                if (chest.getItem() instanceof SuSyArmorItem chestItem &&
-                        chestItem.getItem(chest).getArmorLogic() instanceof AdvancedBreathingTank tank &&
-                        tank.getOxygen(chest) > 0 && Arrays.stream(EntityEquipmentSlot.values())
-                                .filter(s -> s.getSlotType() == EntityEquipmentSlot.Type.ARMOR)
-                                .map(player::getItemStackFromSlot)
-                                .allMatch(
-                                        stack -> stack.getItem() instanceof SuSyArmorItem armor &&
-                                                armor.getItem(stack).getArmorLogic() instanceof BreathingApparatus)) {
-                    if (!player.isInsideOfMaterial(net.minecraft.block.material.Material.WATER)) {
-                        tank.changeOxygen(chest, -1);
-                    }
-                    return;
-                }
-            }
-            living.addPotionEffect(new PotionEffect(MobEffects.POISON, 80, 1));
-            living.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 80, 1));
+        final String LAST_COLLISION_KEY = "susy.mercury.collisionTick";
+        if (entityIn instanceof EntityPlayer player) {
+            // this makes it so that this function is only called once properly even when the player
+            // stands in multiple mercury blocks
+            NBTTagCompound data = player.getEntityData();
+            if (data.getLong(LAST_COLLISION_KEY) == worldIn.getTotalWorldTime()) return;
+            data.setLong(LAST_COLLISION_KEY, worldIn.getTotalWorldTime());
         }
+        entityIn.addVelocity(0, 0.06, 0);
+        if (!(entityIn instanceof EntityLivingBase living && worldIn.getTotalWorldTime() % 20 == 0))
+            return;
+        if (living instanceof EntityPlayer player) {
+            ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+            if (chest.getItem() instanceof SuSyArmorItem chestItem &&
+                    chestItem.getItem(chest).getArmorLogic() instanceof AdvancedBreathingTank tank &&
+                    tank.getOxygen(chest) > 0 && Arrays.stream(EntityEquipmentSlot.values())
+                            .filter(s -> s.getSlotType() == EntityEquipmentSlot.Type.ARMOR)
+                            .map(player::getItemStackFromSlot)
+                            .allMatch(
+                                    stack -> stack.getItem() instanceof SuSyArmorItem armor &&
+                                            armor.getItem(stack).getArmorLogic() instanceof BreathingApparatus)) {
+                if (!player.isInsideOfMaterial(net.minecraft.block.material.Material.WATER)) {
+                    tank.changeOxygen(chest, -1);
+                }
+                return;
+            }
+        }
+        living.addPotionEffect(new PotionEffect(MobEffects.POISON, 80, 1));
+        living.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 80, 1));
     }
 
     @Override

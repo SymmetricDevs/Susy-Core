@@ -1,12 +1,7 @@
 package supersymmetry.common.metatileentities.single.electric;
 
-import gregtech.api.GTValues;
-import gregtech.api.capability.GregtechCapabilities;
-import gregtech.api.capability.IEnergyContainer;
-import gregtech.api.gui.ModularUI;
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.TieredMetaTileEntity;
-import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import java.util.List;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -15,15 +10,22 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
+import gregtech.api.GTValues;
+import gregtech.api.capability.GregtechCapabilities;
+import gregtech.api.capability.IEnergyContainer;
+import gregtech.api.gui.ModularUI;
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.TieredMetaTileEntity;
+import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 
 public class MetaTileEntityInterferenceDynamo extends TieredMetaTileEntity {
 
     private int currentRadius = 0;
-    private long drainPerCycle = GTValues.V[getTier()+1];
+    private long drainPerCycle = GTValues.V[getTier() + 1];
 
     public MetaTileEntityInterferenceDynamo(ResourceLocation metaTileEntityId, int tier) {
         super(metaTileEntityId, tier);
@@ -35,10 +37,14 @@ public class MetaTileEntityInterferenceDynamo extends TieredMetaTileEntity {
     }
 
     @Override
-    protected ModularUI createUI(EntityPlayer entityPlayer) { return null; }
+    protected ModularUI createUI(EntityPlayer entityPlayer) {
+        return null;
+    }
 
     @Override
-    protected boolean openGUIOnRightClick() { return false; }
+    protected boolean openGUIOnRightClick() {
+        return false;
+    }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
@@ -109,5 +115,7 @@ public class MetaTileEntityInterferenceDynamo extends TieredMetaTileEntity {
     }
 
     @Override
-    public boolean getIsWeatherOrTerrainResistant() { return true; }
+    public boolean getIsWeatherOrTerrainResistant() {
+        return true;
+    }
 }
