@@ -10,6 +10,7 @@ import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
@@ -19,6 +20,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -74,21 +76,47 @@ public class BlockMercuryFluid extends GTFluidBlock {
     }
 
     @Override
+    public Boolean isAABBInsideMaterial(
+                                        World world,
+                                        BlockPos pos,
+                                        AxisAlignedBB boundingBox,
+                                        net.minecraft.block.material.Material materialIn) {
+        if (materialIn == net.minecraft.block.material.Material.WATER) return true;
+        return null;
+    }
+
+    @Override
     public void onEntityCollision(
                                   @NotNull World worldIn,
                                   @NotNull BlockPos pos,
                                   @NotNull IBlockState state,
                                   @NotNull Entity entityIn) {
         super.onEntityCollision(worldIn, pos, state, entityIn);
-        final String LAST_COLLISION_KEY = "susy.mercury.collisionTick";
-        if (entityIn instanceof EntityPlayer player) {
-            // this makes it so that this function is only called once properly even when the player
-            // stands in multiple mercury blocks
-            NBTTagCompound data = player.getEntityData();
-            if (data.getLong(LAST_COLLISION_KEY) == worldIn.getTotalWorldTime()) return;
-            data.setLong(LAST_COLLISION_KEY, worldIn.getTotalWorldTime());
+        if (!(entityIn instanceof EntityBoat)) {
+            var height = getBlockLiquidHeight(worldIn, pos, state, material);
+            var box = new AxisAlignedBB(
+                    pos.getX(),
+                    pos.getY(),
+                    pos.getZ(),
+                    pos.getX() + 1,
+                    pos.getY() + height,
+                    pos.getZ() + 1);
+            var ebox = entityIn.getEntityBoundingBox();
+            var intersection = box.intersect(ebox);
+            double v = (intersection.maxX - intersection.minX) * (intersection.maxY - intersection.minY) *
+                    (intersection.maxZ - intersection.minZ);
+            entityIn.addVelocity(0, v / 6.0, 0);
+            entityIn.motionY *= 0.97;
         }
-        entityIn.addVelocity(0, 0.06, 0);
+        final String LAST_COLLISION_KEY = "susy.mercury.collisionTick";
+        // if (entityIn instanceof EntityPlayer player) {
+        // this makes it so that this function is only called once properly even when the player
+        // stands in multiple mercury blocks
+        NBTTagCompound data = entityIn.getEntityData();
+        if (data.getLong(LAST_COLLISION_KEY) == worldIn.getTotalWorldTime()) return;
+        data.setLong(LAST_COLLISION_KEY, worldIn.getTotalWorldTime());
+        // }
+
         if (!(entityIn instanceof EntityLivingBase living && worldIn.getTotalWorldTime() % 20 == 0))
             return;
         // full armor set check
