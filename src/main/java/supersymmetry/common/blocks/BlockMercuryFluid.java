@@ -20,6 +20,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import org.jetbrains.annotations.NotNull;
@@ -51,6 +52,7 @@ public class BlockMercuryFluid extends GTFluidBlock {
         super(m.getFluid(), new GTFluidMaterial(MapColor.GRAY, true), m);
         this.setQuantaPerBlock(16); // need to basically reimplement FluidBase to set this higher
         this.setTickRate(1);
+        this.lightOpacity = 255;
     }
 
     @Override
@@ -89,6 +91,7 @@ public class BlockMercuryFluid extends GTFluidBlock {
         entityIn.addVelocity(0, 0.06, 0);
         if (!(entityIn instanceof EntityLivingBase living && worldIn.getTotalWorldTime() % 20 == 0))
             return;
+        // full armor set check
         if (living instanceof EntityPlayer player) {
             ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
             if (chest.getItem() instanceof SuSyArmorItem chestItem &&
@@ -107,6 +110,11 @@ public class BlockMercuryFluid extends GTFluidBlock {
         }
         living.addPotionEffect(new PotionEffect(MobEffects.POISON, 80, 1));
         living.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 80, 1));
+    }
+
+    @Override
+    public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return 0;
     }
 
     @Override
@@ -130,6 +138,7 @@ public class BlockMercuryFluid extends GTFluidBlock {
 
         BlockPos target = pos.add(dx, dy, dz);
         if (target == pos) return;
+        // copied from the defoliator
         if (!world.isBlockLoaded(target)) return;
 
         IBlockState state = world.getBlockState(target);
