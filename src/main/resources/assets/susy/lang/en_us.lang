@@ -333,6 +333,14 @@ susy.rocketry.stages.block_F.name=Block F
 susy.rocketry.stages.block_A.name=Block A
 susy.rocketry.stages.boosters.name=Boosters
 
+tile.spacecraft_instrument.sensors.name=Spacecraft Sensors
+tile.spacecraft_instrument.collector.name=Spacecraft Collector
+tile.spacecraft_instrument.camera.name=Spacecraft Camera
+tile.spacecraft_instrument.solar_panel.name=Spacecraft Solar Panel Array
+tile.spacecraft_instrument.battery.name=Spacecraft Battery
+tile.spacecraft_instrument.arm.name=Spacecraft Arm
+tile.spacecraft_instrument.lander.name=Spacecraft Lander
+
 susy.rocketry.soyuz.name=Soyuz FG
 
 susy.machine.magnetic_refrigerator.name=Magnetic Refrigerator
