@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
@@ -13,7 +14,7 @@ import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 
 public abstract class AbstractRocketBlueprint implements Cloneable {
 
-    private static Map<String, AbstractRocketBlueprint> blueprintsRegistry = new HashMap<>();
+    private static Map<String, AbstractRocketBlueprint> blueprintsRegistry = new TreeMap<>();
     public static boolean registryLock = false;
 
     // default blueprints for stuff.
