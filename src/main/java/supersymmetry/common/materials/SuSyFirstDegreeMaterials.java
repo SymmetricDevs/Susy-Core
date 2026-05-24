@@ -158,20 +158,20 @@ public class SuSyFirstDegreeMaterials {
 
         // Flourinated Ketones
 
-        Perfluoro2Methyl3Pentanone = new Material.Builder(27117, SuSyUtility.susyId("perfluoro_2_methyl_3_pentanone"))
+        FC75 = new Material.Builder(27117, SuSyUtility.susyId("fc_75"))
                 .liquid(new FluidBuilder().block())
                 .color(0xA090D5FF)
                 .flags(DISABLE_DECOMPOSITION)
-                .components(Carbon, 6, Fluorine, 12, Oxygen, 1)
+                .components(Carbon, 8, Fluorine, 16, Oxygen, 1)
                 .build()
                 .setFormula("C6F12O", true);
 
-        WarmPerfluoro2Methyl3Pentanone = new Material.Builder(27118,
-                SuSyUtility.susyId("warm_perfluoro_2_methyl_3_pentanone"))
+        WarmFC75 = new Material.Builder(27118,
+                SuSyUtility.susyId("warm_fc_75"))
                         .liquid()
                         .color(0xCEE3F0)
                         .flags(DISABLE_DECOMPOSITION)
-                        .components(Carbon, 6, Fluorine, 12, Oxygen, 1)
+                        .components(Carbon, 8, Fluorine, 16, Oxygen, 1)
                         .build()
                         .setFormula("C6F12O", true);
 
