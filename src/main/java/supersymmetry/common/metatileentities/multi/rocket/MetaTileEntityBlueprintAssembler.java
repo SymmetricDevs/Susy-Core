@@ -423,7 +423,7 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
     protected void updateFormedValid() {
         if (!coolantFilled && getOffsetTimer() % 5 == 0) {
             fillCoolant(
-                    this.coolantPositions, SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid(), inputCoolant);
+                    this.coolantPositions, SusyMaterials.FC75.getFluid(), inputCoolant);
             if (this.coolantPositions.isEmpty()) {
                 this.coolantFilled = true;
             }
@@ -450,7 +450,7 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                         'T',
                         states(
                                 MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.TEMPERED_GLASS)))
-                .where('F', fluid(SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid()))
+                .where('F', fluid(SusyMaterials.FC75.getFluid()))
                 .where(
                         'I',
                         abilities(MultiblockAbility.IMPORT_FLUIDS)
