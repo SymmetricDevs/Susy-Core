@@ -349,6 +349,9 @@ tile.spacecraft_instrument.battery.name=Spacecraft Battery
 tile.spacecraft_instrument.arm.name=Spacecraft Arm
 tile.spacecraft_instrument.lander.name=Spacecraft Lander
 
+tile.spacecraft_room_padding.padding.name=Spacecraft Room Padding
+metaitem.padding_cloth.name=Padding Cloth
+
 susy.rocketry.soyuz.name=Soyuz FG
 
 susy.machine.magnetic_refrigerator.name=Magnetic Refrigerator
