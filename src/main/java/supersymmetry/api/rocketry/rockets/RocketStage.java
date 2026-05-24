@@ -193,13 +193,7 @@ public class RocketStage implements Cloneable {
                                                                        String name,
                                                                        List<AbstractComponent<?>> componentList) {
         if (componentList.stream().anyMatch(x -> x.materials.isEmpty())) {
-            SusyLog.logger.info(
-                    "empty material list. {}",
-                    componentList.stream()
-                            .map(x -> x.materials)
-                            .flatMap(m -> m.stream())
-                            .map(x -> x.toNBT())
-                            .collect(Collectors.toList()));
+            SusyLog.logger.info("empty material list in entry {}",name);
         }
         if (IntStream.of(this.componentLimits.get(name)).noneMatch(x -> x == componentList.size())) {
             return ComponentValidationResult.INVALID_AMOUNT; // fail if you cant put that amount of components is

@@ -11,6 +11,16 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 
+import static gregtech.common.items.MetaItems.SPRAY_EMPTY;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Objects;
+
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.ItemStack;
+
 import com.google.common.base.CaseFormat;
 
 import gregtech.api.GTValues;
@@ -157,9 +167,7 @@ public class SuSyMetaItems {
                         lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1")), Arrays.asList("type")));
 
         DATA_CARD_MASTER_BLUEPRINT = metaItem.addItem(13, "data_card.master_blueprint").setMaxStackSize(1)
-                .addComponents(new DataCardBehavior(
-                        lines -> lines.add(I18n.format("metaitem.data_card.master_blueprint.tooltip.1")),
-                        Arrays.asList("rocketType")));
+                .addComponents(new DataCardBehavior(_->{}, Arrays.asList("rocketType")));
 
         TUNGSTEN_ELECTRODE = metaItem.addItem(14, "tungsten_electrode");
 
@@ -185,8 +193,6 @@ public class SuSyMetaItems {
         AIR_DISPERSER = metaItem.addItem(22, "air_disperser");
 
         OXYGEN_SENSOR = metaItem.addItem(23, "oxygen_sensor").setMaxStackSize(1)
-                .addComponents(ElectricStats.createElectricItem(10000L, GTValues.LV),
-                        new OxygenSensorBehavior());
     }
 
     private static void addExtraBehaviours() {

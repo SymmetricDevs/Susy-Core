@@ -3,6 +3,8 @@ package supersymmetry.common.rocketry.components;
 import java.util.*;
 import java.util.Optional;
 
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -27,6 +29,14 @@ public class ComponentInterstage extends AbstractComponent<ComponentInterstage> 
                                                 .getBlockState(pos)
                                                 .getBlock()
                                                 .equals(SuSyBlocks.INTERSTAGE)));
+    }
+
+    @Override
+    public boolean configureDefaults() {
+        this.materials.add(new MaterialCost(new ItemStack(Items.DIAMOND), MaterialCost.SourceType.ITEM, 1));
+        this.radius = 3.0;
+        this.mass = 5000.0;
+        return true;
     }
 
     @Override

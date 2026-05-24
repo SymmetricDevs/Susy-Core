@@ -1,17 +1,15 @@
 package supersymmetry.common.rocketry;
 
-import gregtech.api.GregTechAPI;
-import gregtech.api.fluids.store.FluidStorageKeys;
 import net.minecraft.util.ResourceLocation;
 
+import gregtech.api.GregTechAPI;
+import gregtech.api.fluids.store.FluidStorageKeys;
 import gregtech.api.unification.material.Materials;
-import net.minecraftforge.fluids.FluidRegistry;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.RocketStage;
-import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.common.rocketry.components.*;
 import supersymmetry.common.rocketry.rockets.SimpleStagedRocketBlueprint;
 
@@ -46,7 +44,8 @@ public class SusyRocketComponents {
                     .register();
         }
 
-        if ((GregTechAPI.materialManager.getMaterial("monomethylhydrazine") != null) && (GregTechAPI.materialManager.getMaterial("dinitrogen_tetroxide") != null)) {
+        if ((GregTechAPI.materialManager.getMaterial("monomethylhydrazine") != null) &&
+                (GregTechAPI.materialManager.getMaterial("dinitrogen_tetroxide") != null)) {
             new RocketFuelEntry.RocketFuelEntryBuilder("MMH-N2O4")
                     .addComponent(GregTechAPI.materialManager.getMaterial("monomethylhydrazine").getFluid(), 100)
                     .addComponent(GregTechAPI.materialManager.getMaterial("dinitrogen_tetroxide").getFluid(), 216)

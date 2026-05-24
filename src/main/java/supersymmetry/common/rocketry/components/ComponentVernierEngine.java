@@ -6,6 +6,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -228,5 +231,28 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
     @Override
     public double getFuelThroughput() {
         return fuelThroughput;
+    }
+
+    @Override
+    public boolean configureDefaults() {
+        this.materials.add(new MaterialCost(new ItemStack(Items.DIAMOND), MaterialCost.SourceType.ITEM, 1));
+
+        this.radius = 1.0;
+        this.areaRatio = 1.0;
+        this.fuelThroughput = 50.0;
+        this.mass = 550.0;
+        return true;
+    }
+
+    @Override
+    public List<String> getTooltipLines(NBTTagCompound tag) {
+        List<String> lines = super.getTooltipLines(tag);
+        if (tag.hasKey("area_ratio")) {
+            lines.add(I18n.format("susy.rocketry.tooltip.area_ratio", tag.getDouble("area_ratio")));
+        }
+        if (tag.hasKey("throughput")) {
+            lines.add(I18n.format("susy.rocketry.tooltip.throughput", tag.getDouble("throughput")));
+        }
+        return lines;
     }
 }

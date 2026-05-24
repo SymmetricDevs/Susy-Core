@@ -11,6 +11,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -47,6 +50,24 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
                                             .getBlock()
                                             .equals(SuSyBlocks.FAIRING_HULL));
                 });
+    }
+
+    @Override
+    public boolean configureDefaults() {
+        this.materials.add(new MaterialCost(new ItemStack(Items.DIAMOND), MaterialCost.SourceType.ITEM, 1));
+        this.radius = 5.0;
+        this.height = 5;
+        this.mass = 1000.0;
+        return true;
+    }
+
+    @Override
+    public List<String> getTooltipLines(NBTTagCompound tag) {
+        List<String> lines = super.getTooltipLines(tag);
+        if (tag.hasKey("height")) {
+            lines.add(I18n.format("susy.rocketry.tooltip.height", tag.getInteger("height")));
+        }
+        return lines;
     }
 
     @Override
