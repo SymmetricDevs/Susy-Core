@@ -120,9 +120,9 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     public MetaTileEntityAerospaceFlightSimulator(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
 
-        COOLANT_IN = SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid();
+        COOLANT_IN = SusyMaterials.FC75.getFluid();
 
-        COOLANT_OUT = SusyMaterials.WarmPerfluoro2Methyl3Pentanone.getFluid();
+        COOLANT_OUT = SusyMaterials.WarmFC75.getFluid();
         if (COOLANT_OUT == null) {
             COOLANT_OUT = FluidRegistry.getFluid("lava");
         }
@@ -440,7 +440,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     protected void updateFormedValid() {
         if (!coolantFilled && getOffsetTimer() % 5 == 0) {
             fillCoolant(
-                    this.coolantPositions, SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid(), inputCoolant);
+                    this.coolantPositions, SusyMaterials.FC75.getFluid(), inputCoolant);
             if (this.coolantPositions.isEmpty()) {
                 this.coolantFilled = true;
             }
@@ -510,7 +510,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                         'T',
                         states(
                                 MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.TEMPERED_GLASS)))
-                .where('F', fluid(SusyMaterials.Perfluoro2Methyl3Pentanone.getFluid()))
+                .where('F', fluid(SusyMaterials.FC75.getFluid()))
                 .where(
                         'I',
                         abilities(MultiblockAbility.IMPORT_FLUIDS)

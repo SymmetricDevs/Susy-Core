@@ -65,8 +65,8 @@ public class SusyMaterials {
     public static Material RP_1;
 
     // Fluorinated Ketones
-    public static Material Perfluoro2Methyl3Pentanone;
-    public static Material WarmPerfluoro2Methyl3Pentanone;
+    public static Material FC75;
+    public static Material WarmFC75;
 
     // Fuels
     public static Material LOX;

@@ -248,8 +248,8 @@ susy.material.lizardite=Lézardite
 
 # Fluorinate Ketones
 
-susy.material.perfluoro_2_methyl_3_pentanone=Perfluoro(2-méthyl-3-pentanone)
-susy.material.warm_perfluoro_2_methyl_3_pentanone=Perfluoro chaud (2-méthyl-3-pentanone)
+susy.material.fc_75=FC-75
+susy.material.warm_fc_75=FC-75 chaud
 
 # Ore Prefixes (%s is the localised material name)
 item.material.oreprefix.oreGabbro=Minerai de gabbro %s
