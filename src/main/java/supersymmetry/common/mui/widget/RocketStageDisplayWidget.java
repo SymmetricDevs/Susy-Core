@@ -1,8 +1,8 @@
 package supersymmetry.common.mui.widget;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.network.PacketBuffer;
@@ -56,7 +56,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
     public DynamicLabelWidget amountTextField;
     public DynamicLabelWidget stageName;
 
-    public Map<String, StageContainerWidget> stageContainers = new HashMap<>();
+    public Map<String, StageContainerWidget> stageContainers = new TreeMap<>();
 
     public RocketStageDisplayWidget(
                                     Position pos,
@@ -260,7 +260,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
 
     public static class StageContainerWidget extends AbstractWidgetGroup {
 
-        public Map<String, ComponentEntryWidget> components = new HashMap<>();
+        public Map<String, ComponentEntryWidget> components = new TreeMap<>();
         public int rowSkip = 0;
 
         public static final int ROW_SEPARATION = 18;
@@ -351,6 +351,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                         "",
                         (data) -> {
                             selectedIndex = (selectedIndex - 1 + validValues.length) % validValues.length;
+                            writeClientAction(3, buf -> buf.writeVarInt(selectedIndex));
                         })
                                 .setShouldClientCallback(true)
                                 .setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_LEFT);
@@ -363,6 +364,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                         "",
                         (data) -> {
                             selectedIndex = (selectedIndex + 1) % validValues.length;
+                            writeClientAction(3, buf -> buf.writeVarInt(selectedIndex));
                         })
                                 .setShouldClientCallback(true)
                                 .setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_RIGHT);
@@ -387,9 +389,13 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                 return validValues[selectedIndex];
             }
 
-            // public void setSelectedIndex(int index) {
-            // this.selectedIndex = ((index % validValues.length) + validValues.length) % validValues.length;
-            // }
+            @Override
+            public void handleClientAction(int id, PacketBuffer buffer) {
+                super.handleClientAction(id, buffer);
+                if (id == 3) {
+                    selectedIndex = buffer.readVarInt();
+                }
+            }
         }
 
         public WidgetIntSelector selector;
@@ -474,6 +480,15 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
             this.shortView = state;
             selector.setActive(state);
             selector.setVisible(state);
+            writeClientAction(4, buf -> buf.writeBoolean(state));
+        }
+
+        @Override
+        public void handleClientAction(int id, PacketBuffer buffer) {
+            super.handleClientAction(id, buffer);
+            if (id == 4) {
+                setShortView(buffer.readBoolean());
+            }
         }
     }
 }

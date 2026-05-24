@@ -4,7 +4,6 @@ import static supercritical.api.pattern.SCPredicates.FLUID_BLOCKS_KEY;
 import static supercritical.api.pattern.SCPredicates.fluid;
 
 import java.util.*;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -15,7 +14,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -24,7 +22,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -56,6 +53,7 @@ import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
+import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.RocketStage;
@@ -79,7 +77,7 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
 
     public IMultipleTankHandler inputCoolant;
 
-    public Map<String, Map<String, List<DataStorageLoader>>> slots = new HashMap<>();
+    public Map<String, Map<String, List<DataStorageLoader>>> slots = new TreeMap<>();
 
     private String lastErrorStage;
     private String lastErrorComponent;
@@ -161,6 +159,7 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
         NBTTagCompound tag = rocketBlueprintSlot.getStackInSlot(0).getTagCompound();
         AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
         if (bp != null && bp.readFromNBT(tag)) {
+            bp.setStages(bp.getStages().stream().map(s -> (RocketStage) s.clone()).collect(Collectors.toList()));
             return bp;
         }
         return null;
@@ -177,23 +176,6 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         NBTTagCompound tag = super.writeToNBT(data);
-
-        NBTTagCompound guiSlots = new NBTTagCompound();
-        for (Entry<String, Map<String, List<DataStorageLoader>>> stageEntry : slots.entrySet()) {
-            NBTTagCompound stage = new NBTTagCompound();
-            for (Entry<String, List<DataStorageLoader>> componentEntry : stageEntry.getValue().entrySet()) {
-                NBTTagList cards = new NBTTagList();
-                for (DataStorageLoader componentCard : componentEntry.getValue()) {
-                    ItemStack stack = componentCard.getStackInSlot(0);
-                    if (!stack.isEmpty()) {
-                        cards.appendTag(stack.writeToNBT(new NBTTagCompound()));
-                    }
-                }
-                stage.setTag(componentEntry.getKey(), cards);
-            }
-            guiSlots.setTag(stageEntry.getKey(), stage);
-        }
-        tag.setTag("gui_slots", guiSlots);
 
         if (!rocketBlueprintSlot.isEmpty()) {
             tag.setTag(
@@ -218,30 +200,6 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                 AbstractRocketBlueprint bp = getCurrentBlueprint();
                 if (bp != null) {
                     this.slots = generateSlotsFromBlueprint(bp, this);
-
-                    NBTTagCompound guiSlotsTag = data.getCompoundTag("gui_slots");
-                    if (guiSlotsTag != null && guiSlotsTag.getSize() > 0) {
-                        for (String stageKey : guiSlotsTag.getKeySet()) {
-                            if (!slots.containsKey(stageKey)) continue;
-                            NBTTagCompound stageTag = guiSlotsTag.getCompoundTag(stageKey);
-                            if (stageTag == null || stageTag.getSize() == 0) continue;
-
-                            for (String componentKey : stageTag.getKeySet()) {
-                                if (!slots.get(stageKey).containsKey(componentKey)) continue;
-                                NBTTagList componentCards = stageTag.getTagList(componentKey, NBT.TAG_COMPOUND);
-                                if (componentCards == null) continue;
-
-                                List<DataStorageLoader> slotList = slots.get(stageKey).get(componentKey);
-                                for (int i = 0; i < componentCards.tagCount() && i < slotList.size(); i++) {
-                                    NBTTagCompound stackTag = componentCards.getCompoundTagAt(i);
-                                    if (stackTag != null && stackTag.getSize() > 0) {
-                                        ItemStack stack = new ItemStack(stackTag);
-                                        slotList.get(i).setStackInSlot(0, stack);
-                                    }
-                                }
-                            }
-                        }
-                    }
                 }
             }
         } catch (Exception e) {
@@ -263,19 +221,6 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                 NBTTagCompound bpTag = bp.writeToNBT();
                 buf.writeCompoundTag(bpTag);
             }
-
-            buf.writeVarInt(slots.size());
-            for (Entry<String, Map<String, List<DataStorageLoader>>> stageEntry : slots.entrySet()) {
-                buf.writeString(stageEntry.getKey());
-                buf.writeVarInt(stageEntry.getValue().size());
-                for (Entry<String, List<DataStorageLoader>> componentEntry : stageEntry.getValue().entrySet()) {
-                    buf.writeString(componentEntry.getKey());
-                    buf.writeVarInt(componentEntry.getValue().size());
-                    for (DataStorageLoader slot : componentEntry.getValue()) {
-                        buf.writeItemStack(slot.getStackInSlot(0));
-                    }
-                }
-            }
         } else {
             buf.writeBoolean(false);
         }
@@ -295,25 +240,6 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                 AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(bpTag.getString("name"));
                 if (bp != null && bp.readFromNBT(bpTag)) {
                     this.slots = generateSlotsFromBlueprint(bp, this);
-
-                    int numStages = buf.readVarInt();
-                    for (int i = 0; i < numStages; i++) {
-                        String stageKey = buf.readString(Short.MAX_VALUE);
-                        if (!slots.containsKey(stageKey)) continue;
-                        int numComponents = buf.readVarInt();
-                        for (int j = 0; j < numComponents; j++) {
-                            String componentKey = buf.readString(Short.MAX_VALUE);
-                            if (!slots.get(stageKey).containsKey(componentKey)) continue;
-                            int numSlots = buf.readVarInt();
-                            List<DataStorageLoader> slotList = slots.get(stageKey).get(componentKey);
-                            for (int k = 0; k < numSlots && k < slotList.size(); k++) {
-                                ItemStack stack = buf.readItemStack();
-                                if (!stack.isEmpty()) {
-                                    slotList.get(k).setStackInSlot(0, stack);
-                                }
-                            }
-                        }
-                    }
                 }
             } else {
                 this.slots.clear();
@@ -328,6 +254,11 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
     public void receiveCustomData(int dataId, PacketBuffer buf) {
         if (dataId == GregtechDataCodes.LOCK_OBJECT_HOLDER) {
             rocketBlueprintSlot.setLocked(buf.readBoolean());
+        } else if (dataId == SuSyDataCodes.BLUEPRINT_BUILD_RESULT) {
+            String resultName = buf.readString(Short.MAX_VALUE);
+            lastErrorStage = buf.readString(Short.MAX_VALUE);
+            lastErrorComponent = buf.readString(Short.MAX_VALUE);
+            lastErrorResult = resultName.isEmpty() ? null : RocketStage.ComponentValidationResult.valueOf(resultName);
         }
         super.receiveCustomData(dataId, buf);
     }
@@ -368,6 +299,13 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
             var rows = aisle.getValue().components;
             for (var row : rows.entrySet()) {
                 var componentType = row.getKey();
+                SusyLog.logger.info("aisle: {}, row type:{} [shortView:{},selected:{}] [{}]", aisle.getKey(),
+                        componentType, row.getValue().shortView, row.getValue().selector.getSelectedValue(),
+                        row.getValue().itemList.widgets.stream()
+                                .map((x) -> ((SlotWidget) x).getHandle().getStack()).filter(x -> x.hasTagCompound())
+                                .map(x -> x.getTagCompound()).filter(x -> x.hasKey("name"))
+                                .map(x -> AbstractComponent.getComponentFromName(x.getString("name")).getName())
+                                .collect(Collectors.toList()));
                 var entry = row.getValue();
                 lastErrorComponent = componentType;
                 List<AbstractComponent<?>> rowCandidate;
@@ -378,11 +316,15 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                             .getTagCompound();
                     if (firstnbt == null) {
                         lastErrorResult = RocketStage.ComponentValidationResult.INVALID_CARD;
+                        SusyLog.logger.info("some bullshit at {}: {}", row.getKey(),
+                                row.getValue().itemList.widgets.stream().map(x -> (SlotWidget) x)
+                                        .map(x -> x.getHandle().getStack()).collect(Collectors.toList()));
                         return false;
                     }
                     var template = AbstractComponent.getComponentFromName(firstnbt.getString("name"))
                             .readFromNBT(firstnbt);
                     if (!template.isPresent()) {
+                        SusyLog.logger.warn("nbt read failed: {}", firstnbt);
                         lastErrorResult = RocketStage.ComponentValidationResult.INVALID_CARD;
                         return false;
                     }
@@ -531,9 +473,9 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
     private Map<String, Map<String, List<DataStorageLoader>>> generateSlotsFromBlueprint(
                                                                                          AbstractRocketBlueprint bp,
                                                                                          MetaTileEntity mte) {
-        Map<String, Map<String, List<DataStorageLoader>>> map = new HashMap<>();
+        Map<String, Map<String, List<DataStorageLoader>>> map = new TreeMap<>();
         for (RocketStage stage : bp.getStages()) {
-            Map<String, List<DataStorageLoader>> stageComponents = new HashMap<>();
+            Map<String, List<DataStorageLoader>> stageComponents = new TreeMap<>();
             for (String componentType : stage.getComponentLimits().keySet()) {
                 List<DataStorageLoader> slots = new ArrayList<>();
                 int maxSlots = stage.maxComponentsOf(componentType);
@@ -686,9 +628,18 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                                         rocketBlueprintSlot.setNBT(nbt -> tag);
                                     }
                                 }
+                                if (!getWorld().isRemote) {
+                                    writeCustomData(
+                                            SuSyDataCodes.BLUEPRINT_BUILD_RESULT,
+                                            buf -> {
+                                                buf.writeString(lastErrorResult != null ? lastErrorResult.name() : "");
+                                                buf.writeString(lastErrorStage != null ? lastErrorStage : "");
+                                                buf.writeString(lastErrorComponent != null ? lastErrorComponent : "");
+                                            });
+                                }
                             }
-                        })
-                                .setShouldClientCallback(true),
+                        }),
+                // .setShouldClientCallback(true),
                 () -> this.hasBlueprint());
 
         conditional.addWidgetWithTest(new DynamicLabelWidget(50, height - 130, this::getLastErrorMessage, 0xFF5555),
