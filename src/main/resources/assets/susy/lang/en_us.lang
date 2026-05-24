@@ -25,6 +25,8 @@ tile.susy_multiblock_casing.sieve_tray.name=Sieve Tray
 tile.susy_multiblock_casing.coalescence_plate.name=Coalescence Plate
 tile.susy_multiblock_casing.structural_packing.name=Structural Packing
 tile.susy_multiblock_casing.ulv_structural_casing.name=Basic Structural Casing
+tile.susy_multiblock_casing.hydrostatic_casing.name=Hydrostatic Casing
+tile.susy_multiblock_casing.aluminium_gearbox.name=Aluminium Gearbox
 tile.susy_multiblock_casing.drone_pad.name=Drone Pad
 tile.susy_multiblock_casing.heavy_duty_pad.name=Heavy Duty Pad
 tile.susy_multiblock_casing.synthetic_mullite_refractory.name=Synthetic Mullite Refractory Bricks
@@ -378,6 +380,8 @@ susy.machine.ball_mill.name=Ball Mill
 susy.machine.ball_mill.tooltip=They see me rolling
 susy.multiblock.ball_mill.tooltip.mill_balls=Requires %s mill balls to function.
 susy.multiblock.ball_mill.error.missing_mill_balls=Not enough mill balls were found for the recipe!
+susy.machine.attrition_scrubber.name=Attrition Scrubber
+susy.machine.attrition_scrubber.tooltip=Glorified Washing Machine
 
 susy.machine.redstone_controller.not_connected=No machine to control found!
 susy.machine.redstone_controller.signal_desc=Transmitting signal: %s

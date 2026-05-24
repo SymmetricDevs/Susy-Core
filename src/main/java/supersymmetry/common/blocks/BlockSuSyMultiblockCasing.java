@@ -68,6 +68,8 @@ public class BlockSuSyMultiblockCasing extends VariantBlock<BlockSuSyMultiblockC
         SIEVE_TRAY("sieve_tray"),
         STRUCTURAL_PACKING("structural_packing"),
         ULV_STRUCTURAL_CASING("ulv_structural_casing"),
+        HYDROSTATIC_CASING("hydrostatic_casing"),
+        ALUMINIUM_GEARBOX("aluminium_gearbox"),
         DRONE_PAD("drone_pad"),
         MONEL_500_CASING("monel_casing"),
         MONEL_500_PIPE("monel_casing_pipe"),
