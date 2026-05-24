@@ -1594,7 +1594,7 @@ susy.machine.defoliator.tooltip.description=Destroys all plant life close to it 
 susy.machine.interference_dynamo.lv.name=Basic Interference Dynamo
 susy.machine.interference_dynamo.tooltip.info=A vampire on your power grid.
 susy.machine.interference_dynamo.tooltip.description=Slowly drains power from surrounding machines.
-susy.machine.interference_dynamo.tooltip.description2=Can overamp improperly prepared power grids.
+susy.machine.interference_dynamo.tooltip.description1=Can overamp improperly prepared power grids.
 susy.machine.interference_dynamo.tooltip.drain=§cDrains §f%s EU§c from machines in range per operation.
 
 #Toxic Spewer
