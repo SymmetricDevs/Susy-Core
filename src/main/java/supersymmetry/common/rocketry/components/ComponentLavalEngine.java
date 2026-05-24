@@ -7,7 +7,10 @@ import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -50,6 +53,28 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
                                                             BlockCombustionChamber.CombustionType.MONOPROPELLANT));
                                     return a && !b;
                                 }));
+    }
+
+    @Override
+    public boolean configureDefaults() {
+        this.materials.add(new MaterialCost(new ItemStack(Items.DIAMOND), MaterialCost.SourceType.ITEM, 1));
+        this.radius = 3.0;
+        this.areaRatio = 1.0;
+        this.fuelThroughput = 500.0;
+        this.mass = 3000.0;
+        return true;
+    }
+
+    @Override
+    public List<String> getTooltipLines(NBTTagCompound tag) {
+        List<String> lines = super.getTooltipLines(tag);
+        if (tag.hasKey("area_ratio")) {
+            lines.add(I18n.format("susy.rocketry.tooltip.area_ratio", tag.getDouble("area_ratio")));
+        }
+        if (tag.hasKey("throughput")) {
+            lines.add(I18n.format("susy.rocketry.tooltip.throughput", tag.getDouble("throughput")));
+        }
+        return lines;
     }
 
     @Override

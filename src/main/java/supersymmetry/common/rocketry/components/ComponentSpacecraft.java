@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -39,6 +40,25 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                                                 .getBlockState(pos)
                                                 .getBlock()
                                                 .equals(SuSyBlocks.SPACECRAFT_HULL)));
+    }
+
+    @Override
+    public boolean configureDefaults() {
+        this.radius = 3.0;
+        this.volume = 5.0;
+        this.hasAir = true;
+        this.mass = 1000.0;
+        return true;
+    }
+
+    @Override
+    public List<String> getTooltipLines(NBTTagCompound tag) {
+        List<String> lines = super.getTooltipLines(tag);
+        if (tag.hasKey("volume")) {
+            lines.add(I18n.format("susy.rocketry.tooltip.volume", tag.getDouble("volume")));
+        }
+        //not sure what hasAir means here so no tooltip for that
+        return lines;
     }
 
     @Override

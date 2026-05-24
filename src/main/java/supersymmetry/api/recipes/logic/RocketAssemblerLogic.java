@@ -12,7 +12,6 @@ import org.jetbrains.annotations.Nullable;
 import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.recipes.Recipe;
-import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.api.recipes.ingredients.GTRecipeItemInput;
 import supersymmetry.api.rocketry.components.AbstractComponent;
@@ -38,10 +37,7 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
         AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
         if (targetComponent == null) return null;
         List<GTRecipeInput> flatExpandedInput = targetComponent.materials.stream()
-                .flatMap(
-                        x -> {
-                            return x.expandRecipe(RecipeMaps.ASSEMBLER_RECIPES, maxVoltage).stream();
-                        })
+                .flatMap(x -> x.expandRecipe(maxVoltage).stream())
                 .collect(Collectors.toList());
         Recipe recipe = assembler.recipeMap
                 .recipeBuilder()

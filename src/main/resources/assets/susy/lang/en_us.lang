@@ -321,6 +321,14 @@ susy.rocketry.components.tank.name=Tank(s)
 susy.rocketry.components.spacecraft.name=Spacecraft
 susy.rocketry.components.fairing.name=Fairing
 
+# Component tooltips
+susy.rocketry.tooltip.mass=Mass: %.1f kg
+susy.rocketry.tooltip.radius=Radius: %.1f
+susy.rocketry.tooltip.height=Height: %d
+susy.rocketry.tooltip.area_ratio=Area ratio: %.1f
+susy.rocketry.tooltip.throughput=Throughput: %.1f
+susy.rocketry.tooltip.volume=Volume: %.0f
+
 susy.rocketry.components.validation_codes.invalid_amount=Invalid amount of components
 susy.rocketry.components.validation_codes.invalid_amount=Invalid amount of components inserted
 susy.rocketry.components.validation_codes.invalid_card=Malformed component card
@@ -1259,6 +1267,7 @@ metaitem.data_card.tooltip.1=Insert into a Component Scanner to store the part r
 metaitem.data_card.active.name=Loaded Structure Card
 metaitem.data_card.active.tooltip.1=Load this into a Rocket Assembler to build the component.
 metaitem.data_card.master_blueprint.name=Rocket Blueprint
+metaitem.data_card.master_blueprint.tag.soyuz=§6Soyuz
 metaitem.data_card.active.tag.engine=§6Engine
 metaitem.data_card.active.tag.engine_small=§6Small Engine
 metaitem.data_card.active.tag.fairing=§6Fairing

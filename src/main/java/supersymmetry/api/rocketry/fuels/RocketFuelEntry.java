@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.util.Tuple;
-
-import gregtech.api.unification.material.Material;
 import net.minecraftforge.fluids.Fluid;
 
 public class RocketFuelEntry {

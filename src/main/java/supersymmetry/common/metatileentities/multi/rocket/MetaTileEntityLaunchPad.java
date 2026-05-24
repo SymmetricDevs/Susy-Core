@@ -104,14 +104,14 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
-        String allD    = "DDDDDDDDDDDDDDDDDDDDDDD"; // 23 D's
+        String allD = "DDDDDDDDDDDDDDDDDDDDDDD"; // 23 D's
         String dcTrack = "DDDDDDDDCCCCCCCDDDDDDDD"; // 8D + 7C + 8D = 23
         String ctrlRow = "DDDDDDDDDDDSDDDDDDDDDDD"; // 11D + S + 11D = 23
-        String sp23    = "                       "; // 23 spaces
-        String ccc23   = "          CCC          "; // 10sp + 3C + 10sp = 23
-        String rrr23   = "          RRR          "; // 10sp + 3R + 10sp = 23
-        String fff23   = "          FFF          "; // 10sp + 3F + 10sp = 23
-        String l23     = "      L         L      "; // 6sp + L + 9sp + L + 6sp = 23
+        String sp23 = "                       "; // 23 spaces
+        String ccc23 = "          CCC          "; // 10sp + 3C + 10sp = 23
+        String rrr23 = "          RRR          "; // 10sp + 3R + 10sp = 23
+        String fff23 = "          FFF          "; // 10sp + 3F + 10sp = 23
+        String l23 = "      L         L      "; // 6sp + L + 9sp + L + 6sp = 23
 
         return FactoryBlockPattern.start()
                 // 11 erector approach aisles (original 6 + 5 new)

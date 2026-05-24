@@ -1,6 +1,17 @@
 package supersymmetry.common.item;
 
+import static gregtech.common.items.MetaItems.SPRAY_EMPTY;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Objects;
+
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.ItemStack;
+
 import com.google.common.base.CaseFormat;
+
 import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
 import gregtech.api.items.armor.ArmorMetaItem;
@@ -18,19 +29,10 @@ import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.unification.stack.UnificationEntry;
 import gregtech.common.items.MetaItems;
 import gregtech.common.items.behaviors.TooltipBehavior;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.ItemStack;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
 import supersymmetry.common.item.behavior.*;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Objects;
-
-import static gregtech.common.items.MetaItems.SPRAY_EMPTY;
 
 public class SuSyMetaItems {
 
@@ -152,9 +154,7 @@ public class SuSyMetaItems {
                         lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1")), Arrays.asList("type")));
 
         DATA_CARD_MASTER_BLUEPRINT = metaItem.addItem(13, "data_card.master_blueprint").setMaxStackSize(1)
-                .addComponents(new DataCardBehavior(
-                        lines -> lines.add(I18n.format("metaitem.data_card.master_blueprint.tooltip.1")),
-                        Arrays.asList("rocketType")));
+                .addComponents(new DataCardBehavior(_->{}, Arrays.asList("rocketType")));
 
         TUNGSTEN_ELECTRODE = metaItem.addItem(14, "tungsten_electrode");
 

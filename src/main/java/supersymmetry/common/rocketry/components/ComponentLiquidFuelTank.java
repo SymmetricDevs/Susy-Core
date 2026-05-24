@@ -8,6 +8,9 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -151,5 +154,23 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
         collectInfo(analysis, blocks, tag);
         writeBlocksToNBT(blocks, analysis.world);
         return Optional.of(tag);
+    }
+
+    @Override
+    public boolean configureDefaults() {
+        this.materials.add(new MaterialCost(new ItemStack(Items.DIAMOND), MaterialCost.SourceType.ITEM, 1));
+        this.radius = 3.0;
+        this.volume = 4;
+        this.mass = 2000.0;
+        return true;
+    }
+
+    @Override
+    public List<String> getTooltipLines(NBTTagCompound tag) {
+        List<String> lines = super.getTooltipLines(tag);
+        if (tag.hasKey("volume")) {
+            lines.add(I18n.format("susy.rocketry.tooltip.volume", tag.getInteger("volume")));
+        }
+        return lines;
     }
 }

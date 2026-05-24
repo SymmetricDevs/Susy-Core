@@ -4,11 +4,11 @@ import java.util.stream.Collectors;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import net.minecraftforge.fluids.FluidStack;
 
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
-import net.minecraftforge.fluids.FluidStack;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 
 public class RocketFuelWrapper implements IRecipeWrapper {
