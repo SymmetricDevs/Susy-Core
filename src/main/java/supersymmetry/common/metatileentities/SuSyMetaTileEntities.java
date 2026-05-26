@@ -288,7 +288,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityAerospaceFlightSimulator AEROSPACE_FLIGHT_SIMULATOR;
     public static MetaTileEntityBlueprintAssembler BLUEPRINT_ASSEMBLER;
 
-    //Parallel Ore Processing
+    // Parallel Ore Processing
     public static MetaTileEntityEccentricRollCrusher ECCENTRIC_ROLL_CRUSHER;
     public static MetaTileEntityBallMill BALL_MILL;
     public static MetaTileEntityAttritionScrubber ATTRITION_SCRUBBER;
@@ -423,14 +423,14 @@ public class SuSyMetaTileEntities {
         UNIVERSAL_EXTENDER = registerMetaTileEntity(14740, new MetaTileEntityExtender(susyId("extender.universal"),
                 cap -> true, SusyTextures.UNIVERSAL_EXTENDER, Materials.Aluminium));
 
-        //Parallel Ore Processing
+        // Parallel Ore Processing
         ECCENTRIC_ROLL_CRUSHER = registerMetaTileEntity(14741, new MetaTileEntityEccentricRollCrusher(
                 susyId("eccentric_roll_crusher"), SuSyRecipeMaps.ECCENTRIC_ROLL_CRUSHER));
         BALL_MILL = registerMetaTileEntity(14742, new MetaTileEntityBallMill(
                 susyId("ball_mill"), SuSyRecipeMaps.BALL_MILL));
         ATTRITION_SCRUBBER = registerMetaTileEntity(14744, new MetaTileEntityAttritionScrubber(
                 susyId("attrition_scrubber")));
-        
+
         GREENHOUSE = registerMetaTileEntity(14743, new MetaTileEntityGreenhouse(susyId("greenhouse")));
 
         // 14800 Pyrotech Integration: Primitive Smelter

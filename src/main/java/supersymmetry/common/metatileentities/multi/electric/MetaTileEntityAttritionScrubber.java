@@ -2,8 +2,6 @@ package supersymmetry.common.metatileentities.multi.electric;
 
 import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.hiddenGearTooth;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 
@@ -36,14 +34,13 @@ public class MetaTileEntityAttritionScrubber extends RecipeMapMultiblockControll
         return new MetaTileEntityAttritionScrubber(this.metaTileEntityId);
     }
 
-private static IBlockState getHydrostaticCasingState() {
+    private static IBlockState getHydrostaticCasingState() {
         return SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.HYDROSTATIC_CASING);
     }
 
-private static IBlockState getAluminiumGearboxState() {
+    private static IBlockState getAluminiumGearboxState() {
         return SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.ALUMINIUM_GEARBOX);
     }
-
 
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
@@ -71,7 +68,7 @@ private static IBlockState getAluminiumGearboxState() {
                                 .getAxis()))
                 .build();
     }
-    
+
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart multiblockPart) {
         return SusyTextures.HYDROSTATIC_CASING;
