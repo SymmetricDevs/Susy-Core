@@ -2,6 +2,8 @@ package supersymmetry.common.metatileentities.single.electric;
 
 import java.util.List;
 
+import gregtech.api.capability.GregtechTileCapabilities;
+import gregtech.api.capability.impl.AbstractRecipeLogic;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -15,8 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import gregtech.api.GTValues;
-import gregtech.api.capability.GregtechCapabilities;
-import gregtech.api.capability.IEnergyContainer;
+import java.lang.reflect.Field;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.TieredMetaTileEntity;
@@ -26,6 +27,7 @@ public class MetaTileEntityInterferenceDynamo extends TieredMetaTileEntity {
 
     private int currentRadius = 0;
     private long drainPerCycle = GTValues.V[getTier() + 1];
+    private static final Field PROGRESS_TIME_FIELD;
 
     public MetaTileEntityInterferenceDynamo(ResourceLocation metaTileEntityId, int tier) {
         super(metaTileEntityId, tier);
@@ -75,6 +77,16 @@ public class MetaTileEntityInterferenceDynamo extends TieredMetaTileEntity {
         if (currentRadius < 32) currentRadius++;
     }
 
+
+    static {
+        try {
+            PROGRESS_TIME_FIELD = AbstractRecipeLogic.class.getDeclaredField("progressTime");
+            PROGRESS_TIME_FIELD.setAccessible(true);
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException("Could not find progressTime field in AbstractRecipeLogic", e);
+        }
+    }
+
     private void drainInRadius(World world, BlockPos center, int radius) {
         if (radius == 0) return;
 
@@ -83,21 +95,23 @@ public class MetaTileEntityInterferenceDynamo extends TieredMetaTileEntity {
                 for (int dz = -radius; dz <= radius; dz++) {
                     BlockPos target = center.add(dx, dy, dz);
                     if (!world.isValid(target)) continue;
-
                     if (target.equals(center)) continue;
 
                     TileEntity te = world.getTileEntity(target);
-                    if (te == null) continue;
+                    if (!(te instanceof IGregTechTileEntity)) continue;
 
-                    IEnergyContainer energy = te.getCapability(
-                            GregtechCapabilities.CAPABILITY_ENERGY_CONTAINER, null);
+                    MetaTileEntity mte = ((IGregTechTileEntity) te).getMetaTileEntity();
+                    if (mte == null) continue;
 
-                    if (energy == null) continue;
+                    AbstractRecipeLogic logic = mte.getCapability(
+                            GregtechTileCapabilities.CAPABILITY_RECIPE_LOGIC, null);
+                    if (logic == null || logic.getProgress() <= 0) continue;
 
-                    long available = energy.getEnergyStored();
-                    if (available <= 0) continue;
-
-                    energy.removeEnergy(Math.min(drainPerCycle, available));
+                    try {
+                        PROGRESS_TIME_FIELD.setInt(logic, 0);
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException("Could not reset progressTime", e);
+                    }
                 }
             }
         }
