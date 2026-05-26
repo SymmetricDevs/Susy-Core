@@ -1592,10 +1592,9 @@ susy.machine.defoliator.tooltip.description=Destroys all plant life close to it 
 
 #Interference Dynamo
 susy.machine.interference_dynamo.lv.name=Basic Interference Dynamo
-susy.machine.interference_dynamo.tooltip.info=A vampire on your power grid.
-susy.machine.interference_dynamo.tooltip.description=Slowly drains power from surrounding machines.
-susy.machine.interference_dynamo.tooltip.description1=Can overamp improperly prepared power grids.
-susy.machine.interference_dynamo.tooltip.drain=§cDrains §f%s EU§c from machines in range per operation.
+susy.machine.interference_dynamo.tooltip.info=A vampire on your factory.
+susy.machine.interference_dynamo.tooltip.description=Machines in it's range will fail to complete some recipes.
+susy.machine.interference_dynamo.tooltip.description1=§cWill reset the progress on all recipes back to 0 every 25 seconds!
 
 #Toxic Spewer
 susy.machine.toxic_spewer.lv.name=Basic Toxic Spewer

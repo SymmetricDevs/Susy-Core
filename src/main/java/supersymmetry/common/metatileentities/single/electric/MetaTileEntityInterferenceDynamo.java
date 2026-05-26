@@ -123,8 +123,6 @@ public class MetaTileEntityInterferenceDynamo extends TieredMetaTileEntity {
         tooltip.add(I18n.format("susy.machine.interference_dynamo.tooltip.info"));
         tooltip.add(I18n.format("susy.machine.interference_dynamo.tooltip.description"));
         tooltip.add(I18n.format("susy.machine.interference_dynamo.tooltip.description1"));
-        tooltip.add(I18n.format("susy.machine.interference_dynamo.tooltip.drain",
-                drainPerCycle));
         tooltip.add(I18n.format("susy.machine.generic.tooltip.radius_warning"));
     }
 
