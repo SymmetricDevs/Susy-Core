@@ -469,12 +469,19 @@ public class SuSyRecipeMaps {
                     .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, ProgressWidget.MoveType.HORIZONTAL)
                     .setSound(GTSoundEvents.MACERATOR);
 
-    public static final RecipeMap<SimpleRecipeBuilder> BALL_MILL = new RecipeMap<>("ball_mill", 1, 4, 1, 0,
-            new SimpleRecipeBuilder().EUt(VA[LV]), false)
+    public static final RecipeMap<SimpleRecipeBuilder> BALL_MILL = new RecipeMap<>(
+            "ball_mill", 1, 4, 1, 0, new SimpleRecipeBuilder().EUt(VA[LV]), false)
                     .setSlotOverlay(false, false, GuiTextures.CRUSHED_ORE_OVERLAY)
                     .setSlotOverlay(true, false, GuiTextures.DUST_OVERLAY)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, ProgressWidget.MoveType.HORIZONTAL)
                     .setSound(GTSoundEvents.MACERATOR);
+
+    public static final RecipeMap<SimpleRecipeBuilder> ATTRITION_SCRUBBER = new RecipeMap<>(
+            "attrition_scrubber", 1, 1, 1, 1, new SimpleRecipeBuilder().EUt(VA[LV]), false)
+                    .setSlotOverlay(false, false, GuiTextures.CRUSHED_ORE_OVERLAY)
+                    .setSlotOverlay(true, false, GuiTextures.DUST_OVERLAY)
+                    .setProgressBar(GuiTextures.PROGRESS_BAR_BATH, ProgressWidget.MoveType.CIRCULAR)
+                    .setSound(GTSoundEvents.BATH);
 
     public static final RecipeMap<SimpleRecipeBuilder> INJECTION_MOLDER = new RecipeMap<>("injection_molder", 2, 1, 0,
             0, new SimpleRecipeBuilder(), false)

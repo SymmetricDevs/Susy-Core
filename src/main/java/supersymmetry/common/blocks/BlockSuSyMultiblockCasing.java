@@ -1,7 +1,6 @@
 package supersymmetry.common.blocks;
 
-import javax.annotation.Nonnull;
-
+import gregtech.api.block.VariantBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -12,10 +11,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import org.jetbrains.annotations.NotNull;
 
-import gregtech.api.block.VariantBlock;
+import javax.annotation.Nonnull;
 
 public class BlockSuSyMultiblockCasing extends VariantBlock<BlockSuSyMultiblockCasing.CasingType> {
 
@@ -75,7 +73,9 @@ public class BlockSuSyMultiblockCasing extends VariantBlock<BlockSuSyMultiblockC
         HEAVY_DUTY_PAD("heavy_duty_pad"),
         TABULAR_ALUMINA_REFRACTORY("tabular_alumina_refractory"),
         COALESCENCE_PLATE("coalescence_plate"),
-        SYNTHETIC_MULLITE_REFRACTORY("synthetic_mullite_refractory");
+        SYNTHETIC_MULLITE_REFRACTORY("synthetic_mullite_refractory"),
+        HYDROSTATIC_CASING("hydrostatic_casing"),
+        ALUMINIUM_GEARBOX("aluminium_gearbox");
 
         private final String name;
 

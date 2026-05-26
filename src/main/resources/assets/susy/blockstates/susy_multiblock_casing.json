@@ -87,6 +87,18 @@
       "textures" : {
         "all" : "gregtech:blocks/multiblock_casing/tabular_alumina_refractory"
       }
+    },
+    "variant=hydrostatic_casing" : {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/multiblock_casing/hydrostatic_casing"
+      }
+    },
+    "variant=aluminium_gearbox": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/multiblock_casing/aluminium_gearbox"
+      }
     }
   }
 }
