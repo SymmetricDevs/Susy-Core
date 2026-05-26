@@ -108,7 +108,7 @@ public class MetaTileEntityInterferenceDynamo extends TieredMetaTileEntity {
                     if (logic == null || logic.getProgress() <= 0) continue;
 
                     try {
-                        PROGRESS_TIME_FIELD.setInt(logic, 0);
+                        PROGRESS_TIME_FIELD.setInt(logic, 1);
                     } catch (IllegalAccessException e) {
                         throw new RuntimeException("Could not reset progressTime", e);
                     }
