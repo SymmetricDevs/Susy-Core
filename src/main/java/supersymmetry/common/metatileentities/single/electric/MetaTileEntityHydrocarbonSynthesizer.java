@@ -20,19 +20,19 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class MetaTileEntityAtmosphericOxidizer extends TieredMetaTileEntity {
+public class MetaTileEntityHydrocarbonSynthesizer extends TieredMetaTileEntity {
 
     private int currentRadius = 0;
-    private final IBlockState RADICAL_AIR = stateOf("susy", "radical_air", 0);
+    private final IBlockState FLAMMABLE_AIR = stateOf("susy", "flammable_air", 0);
     private static final int MAX_RADIUS = 32;
 
-    public MetaTileEntityAtmosphericOxidizer(ResourceLocation metaTileEntityId, int tier) {
+    public MetaTileEntityHydrocarbonSynthesizer(ResourceLocation metaTileEntityId, int tier) {
         super(metaTileEntityId, tier);
     }
 
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tile) {
-        return new MetaTileEntityAtmosphericOxidizer(this.metaTileEntityId, this.getTier());
+        return new MetaTileEntityHydrocarbonSynthesizer(this.metaTileEntityId, this.getTier());
     }
 
     @Override
@@ -98,7 +98,7 @@ public class MetaTileEntityAtmosphericOxidizer extends TieredMetaTileEntity {
                 Block block = state.getBlock();
 
 
-                if (block == RADICAL_AIR.getBlock()) {
+                if (block == FLAMMABLE_AIR.getBlock()) {
                     visited.add(neighbor);
                     queue.add(neighbor);
                     continue;
@@ -109,7 +109,7 @@ public class MetaTileEntityAtmosphericOxidizer extends TieredMetaTileEntity {
                         return;
                     }
 
-                    world.setBlockState(neighbor, RADICAL_AIR, 3);
+                    world.setBlockState(neighbor, FLAMMABLE_AIR, 3);
 
                     visited.add(neighbor);
                     queue.add(neighbor);

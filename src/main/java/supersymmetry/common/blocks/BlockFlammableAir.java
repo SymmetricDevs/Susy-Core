@@ -20,11 +20,11 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class BlockRadicalAir extends VariantBlock<BlockRadicalAir.BlockRadicalAirType> {
+public class BlockFlammableAir extends VariantBlock<BlockFlammableAir.BlockRadicalAirType> {
 
-    public BlockRadicalAir() {
+    public BlockFlammableAir() {
         super(Material.AIR);
-        setTranslationKey("radical_air");
+        setTranslationKey("flammable_air");
         setHardness(0.0F);
         setResistance(0.0F);
         setLightOpacity(0);
@@ -135,7 +135,7 @@ public class BlockRadicalAir extends VariantBlock<BlockRadicalAir.BlockRadicalAi
     }
 
     public enum BlockRadicalAirType implements IStringSerializable, IStateHarvestLevel {
-        RADICAL_AIR("radicalair");
+        FLAMMABLE_AIR("flammableair");
 
         private final String name;
         BlockRadicalAirType(String name) { this.name = name; }

@@ -19,7 +19,7 @@ import java.util.List;
 //who the fuck was the funny guy that removed setRenderFromInside() after 1.7? do you see the kind of bullshit you've caused?
 //sincerely, Polska Spółka Gazownictwa (PSG)
 
-public class RadicalAirBakedModel implements IBakedModel {
+public class FlammableAirBakedModel implements IBakedModel {
 
     private static final float[] CORNER_X = { 0, 0, 1, 1 };
     private static final float[] CORNER_Y = { 0, 1, 1, 0 };
@@ -29,7 +29,7 @@ public class RadicalAirBakedModel implements IBakedModel {
     private final TextureAtlasSprite sprite;
     private final VertexFormat format;
 
-    public RadicalAirBakedModel(TextureAtlasSprite sprite) {
+    public FlammableAirBakedModel(TextureAtlasSprite sprite) {
         this.sprite = sprite;
         this.format = DefaultVertexFormats.BLOCK;
     }

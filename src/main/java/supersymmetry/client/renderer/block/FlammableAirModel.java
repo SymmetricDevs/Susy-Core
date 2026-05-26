@@ -12,11 +12,11 @@ import net.minecraftforge.common.model.IModelState;
 import com.google.common.collect.ImmutableSet;
 
 // glue
-public enum RadicalAirModel implements IModel {
+public enum FlammableAirModel implements IModel {
 
     INSTANCE;
 
-    public static final ResourceLocation TEXTURE = new ResourceLocation("gregtech", "blocks/air/radical_air");
+    public static final ResourceLocation TEXTURE = new ResourceLocation("gregtech", "blocks/air/flammable_air");
 
     @Override
     public Collection<ResourceLocation> getTextures() {
@@ -29,6 +29,6 @@ public enum RadicalAirModel implements IModel {
                                                                       VertexFormat format,
                                                                       Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
         TextureAtlasSprite sprite = bakedTextureGetter.apply(TEXTURE);
-        return new RadicalAirBakedModel(sprite);
+        return new FlammableAirBakedModel(sprite);
     }
 }

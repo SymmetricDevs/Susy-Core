@@ -1,8 +1,0 @@
-{
-  "forge_marker": 1,
-  "variants": {
-    "variant=radicalair": {
-      "model": "susy:air/radical_air_double_face"
-    }
-  }
-}

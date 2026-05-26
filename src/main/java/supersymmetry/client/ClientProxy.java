@@ -64,7 +64,7 @@ import supersymmetry.Supersymmetry;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
 import supersymmetry.api.util.RenderMaskManager;
-import supersymmetry.client.renderer.block.RadicalAirModelLoader;
+import supersymmetry.client.renderer.block.FlammableAirModelLoader;
 import supersymmetry.client.renderer.handler.DustFogRenderer;
 import supersymmetry.client.renderer.handler.VariantCoverableBlockRenderer;
 import supersymmetry.client.renderer.textures.SuSyConnectedTextures;
@@ -93,7 +93,7 @@ public class ClientProxy extends CommonProxy {
         SusyMetaEntities.initRenderers();
         SuSyIRLoader.initEntityRenderers();
         VariantCoverableBlockRenderer.preInit();
-        ModelLoaderRegistry.registerLoader(RadicalAirModelLoader.INSTANCE); // can be moved somewhere else if necessary
+        ModelLoaderRegistry.registerLoader(FlammableAirModelLoader.INSTANCE); // can be moved somewhere else if necessary
                                                                             // (I think)
     }
 

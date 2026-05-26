@@ -72,7 +72,7 @@ public class SuSyBlocks {
     public static BlockSupport SUPPORT;
     public static BlocksBMRF BMRF;
     public static BlocksRaidFlare BLOCKBANDITFLARE;
-    public static BlockRadicalAir BLOCKRADICALAIR;
+    public static BlockFlammableAir BLOCKRADICALAIR;
     public static BlockFluidPlacer BLOCKFLUIDPLACER;
 
     public static BlockRocketMultiblockCasing ROCKET_MULTIBLOCK_CASING;

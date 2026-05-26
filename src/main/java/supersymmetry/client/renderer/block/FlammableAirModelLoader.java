@@ -8,11 +8,11 @@ import net.minecraftforge.client.model.IModel;
 import supersymmetry.Supersymmetry;
 
 // because of the bs implementation, texture is added like this instead of via json
-public enum RadicalAirModelLoader implements ICustomModelLoader {
+public enum FlammableAirModelLoader implements ICustomModelLoader {
 
     INSTANCE;
 
-    private static final String MODEL_PATH = "models/block/air/radical_air_double_face";
+    private static final String MODEL_PATH = "models/block/air/flammable_air_double_face";
 
     @Override
     public boolean accepts(ResourceLocation modelLocation) {
@@ -21,7 +21,7 @@ public enum RadicalAirModelLoader implements ICustomModelLoader {
 
     @Override
     public IModel loadModel(ResourceLocation modelLocation) {
-        return RadicalAirModel.INSTANCE;
+        return FlammableAirModel.INSTANCE;
     }
 
     @Override
