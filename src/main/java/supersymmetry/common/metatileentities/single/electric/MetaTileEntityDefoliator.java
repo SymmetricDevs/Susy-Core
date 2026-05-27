@@ -139,6 +139,12 @@ public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
             return metaReplacements;
         }
 
+        //appease gtfo, without this we don't get resource location
+        public static void init() {
+            replacements = null;
+            metaReplacements = null;
+        }
+
         private static IBlockState stateOf(String domain, String path, int meta) {
             Block block = Block.REGISTRY.getObject(new ResourceLocation(domain, path));
             return block != null ? block.getStateFromMeta(meta) : Blocks.AIR.getDefaultState();

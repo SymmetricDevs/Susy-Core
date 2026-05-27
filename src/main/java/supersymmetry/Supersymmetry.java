@@ -23,6 +23,7 @@ import supersymmetry.common.covers.SuSyCoverBehaviors;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
+import supersymmetry.common.metatileentities.single.electric.MetaTileEntityDefoliator;
 import supersymmetry.common.rocketry.SusyRocketComponents;
 import supersymmetry.common.tileentities.SuSyTileEntities;
 import supersymmetry.loaders.SuSyIRLoader;
@@ -90,6 +91,7 @@ public class Supersymmetry {
     @Mod.EventHandler
     public void onPostInit(@NotNull FMLPostInitializationEvent event) {
         SusyRocketComponents.init();
+        MetaTileEntityDefoliator.DefoliatorReplacements.init(); //appease GTFO
         proxy.postLoad();
     }
 
