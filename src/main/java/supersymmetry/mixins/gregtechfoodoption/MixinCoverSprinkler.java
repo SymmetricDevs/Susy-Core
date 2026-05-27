@@ -61,7 +61,6 @@ public abstract class MixinCoverSprinkler {
 
     private void suppressFire(World world, BlockPos basePos) {
 
-        System.out.println("FIRE DETECTED");
         AxisAlignedBB area = new AxisAlignedBB(
                 basePos.offset(EnumFacing.SOUTH, 4).offset(EnumFacing.EAST, 4),
                 basePos.offset(EnumFacing.NORTH, 4).offset(EnumFacing.WEST, 4)
