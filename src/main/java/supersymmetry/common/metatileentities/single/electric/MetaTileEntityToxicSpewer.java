@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
@@ -89,15 +90,14 @@ public class MetaTileEntityToxicSpewer extends TieredMetaTileEntity {
             if (dx * dx + dz * dz > (double) radius * radius) continue;
             BlockPos entityPos = new BlockPos(entity.posX, entity.posY, entity.posZ);
             if (!world.canSeeSky(entityPos)) continue;
-            System.out.println(GTValues.VH[getTier()]);
             entity.addPotionEffect(new net.minecraft.potion.PotionEffect(
-                    net.minecraft.init.MobEffects.POISON, (int) (GTValues.V[getTier()] * 20), getTier() - 1, false,
+                    MobEffects.POISON, (int) (GTValues.V[getTier()] * 20), getTier() - 1, false,
                     true));
             entity.addPotionEffect(new net.minecraft.potion.PotionEffect(
-                    net.minecraft.init.MobEffects.WITHER, (int) (GTValues.V[getTier()] * 20), getTier() - 1, false,
+                    MobEffects.WITHER, (int) (GTValues.V[getTier()] * 20), getTier() - 1, false,
                     true));
             entity.addPotionEffect(new net.minecraft.potion.PotionEffect(
-                    net.minecraft.init.MobEffects.NAUSEA, (int) (GTValues.V[getTier()] * 20), getTier() - 1, false,
+                    MobEffects.HUNGER, (int) (GTValues.V[getTier()] * 20), getTier() - 1, false,
                     true));
         }
     }
