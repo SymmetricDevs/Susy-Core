@@ -20,19 +20,19 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class MetaTileEntityHydrocarbonSynthesizer extends TieredMetaTileEntity {
+public class MetaTileEntityHydrocarbonSaturator extends TieredMetaTileEntity {
 
     private int currentRadius = 0;
     private final IBlockState FLAMMABLE_AIR = stateOf("susy", "flammable_air", 0);
     private static final int MAX_RADIUS = 32;
 
-    public MetaTileEntityHydrocarbonSynthesizer(ResourceLocation metaTileEntityId, int tier) {
+    public MetaTileEntityHydrocarbonSaturator(ResourceLocation metaTileEntityId, int tier) {
         super(metaTileEntityId, tier);
     }
 
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tile) {
-        return new MetaTileEntityHydrocarbonSynthesizer(this.metaTileEntityId, this.getTier());
+        return new MetaTileEntityHydrocarbonSaturator(this.metaTileEntityId, this.getTier());
     }
 
     @Override
@@ -130,10 +130,10 @@ public class MetaTileEntityHydrocarbonSynthesizer extends TieredMetaTileEntity {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
-        tooltip.add(I18n.format("susy.machine.atmospheric_oxidizer.tooltip.info"));
-        tooltip.add(I18n.format("susy.machine.atmospheric_oxidizer.tooltip.description"));
-        tooltip.add(I18n.format("susy.machine.atmospheric_oxidizer.tooltip.description1"));
-        tooltip.add(I18n.format("susy.machine.atmospheric_oxidizer.tooltip.description2"));
+        tooltip.add(I18n.format("susy.machine.hydrocarbon_saturator.tooltip.info"));
+        tooltip.add(I18n.format("susy.machine.hydrocarbon_saturator.tooltip.description"));
+        tooltip.add(I18n.format("susy.machine.hydrocarbon_saturator.tooltip.description1"));
+        tooltip.add(I18n.format("susy.machine.hydrocarbon_saturator.tooltip.description2"));
         tooltip.add(I18n.format("susy.machine.generic.tooltip.radius_warning"));
     }
 

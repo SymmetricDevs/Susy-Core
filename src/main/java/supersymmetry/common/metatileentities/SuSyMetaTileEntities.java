@@ -294,7 +294,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityDefoliator[] DEFOLIATOR = new MetaTileEntityDefoliator[8];
     public static MetaTileEntityInterferenceDynamo[] INTERFERENCE_DYNAMO = new MetaTileEntityInterferenceDynamo[8];
     public static MetaTileEntityToxicSpewer[] TOXIC_SPEWER = new MetaTileEntityToxicSpewer[8];
-    public static MetaTileEntityHydrocarbonSynthesizer[] ATMOSPHERIC_OXIDIZER = new MetaTileEntityHydrocarbonSynthesizer[8];
+    public static MetaTileEntityHydrocarbonSaturator[] HYDROCARBON_SATURATOR = new MetaTileEntityHydrocarbonSaturator[8];
     public static MetaTileEntityDustAgitator[] DUST_AGITATOR = new MetaTileEntityDustAgitator[8];
 
     public static void init() {
@@ -750,8 +750,8 @@ public class SuSyMetaTileEntities {
         INTERFERENCE_DYNAMO[0] = registerMetaTileEntity(18610,
                 new MetaTileEntityInterferenceDynamo(susyId("interference_dynamo.lv"), 1));
         TOXIC_SPEWER[0] = registerMetaTileEntity(18620, new MetaTileEntityToxicSpewer(susyId("toxic_spewer.lv"), 1));
-        ATMOSPHERIC_OXIDIZER[0] = registerMetaTileEntity(18630,
-                new MetaTileEntityHydrocarbonSynthesizer(susyId("atmospheric_oxidizer.lv"), 1));
+        HYDROCARBON_SATURATOR[0] = registerMetaTileEntity(18630,
+                new MetaTileEntityHydrocarbonSaturator(susyId("hydrocarbon_saturator.lv"), 1));
         DUST_AGITATOR[0] = registerMetaTileEntity(18640,
                 new MetaTileEntityDustAgitator(susyId("dust_agitator.lv"), 1));
     }

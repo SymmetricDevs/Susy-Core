@@ -1602,12 +1602,12 @@ susy.machine.toxic_spewer.tooltip.info=As for what's in the canister... It's bes
 susy.machine.toxic_spewer.tooltip.description=Makes the nearby atmosphere poisonous to living creatures.
 susy.machine.toxic_spewer.tooltip.description1=Standing under the open sky while it's active will apply debilitating effects.
 
-#Hydrocarbon Synthesizer
-susy.machine.atmospheric_oxidizer.lv.name=Basic Hydrocarbon Synthesizer
-susy.machine.atmospheric_oxidizer.tooltip.info=It all starts with a spark!
-susy.machine.atmospheric_oxidizer.tooltip.description=Reforms harmless air into propane and other flammable gasses.
-susy.machine.atmospheric_oxidizer.tooltip.description1=Any open sources of fire can spontaneously combust and cause massive wildfires.
-susy.machine.atmospheric_oxidizer.tooltip.description2=§cLetting this machine run for too long can result in a massive flashover!
+#Hydrocarbon Saturator
+susy.machine.hydrocarbon_saturator.lv.name=Basic Hydrocarbon Saturator
+susy.machine.hydrocarbon_saturator.tooltip.info=It all starts with a spark!
+susy.machine.hydrocarbon_saturator.tooltip.description=Slowly releases highly flammable gasses from a internal ME component.
+susy.machine.hydrocarbon_saturator.tooltip.description1=Any open sources of fire can trigger spontaneous combustion and start wildfires.
+susy.machine.hydrocarbon_saturator.tooltip.description2=§cLetting this machine run for too long can result in a massive flashover!
 
 #Dust Agitator
 susy.machine.dust_agitator.lv.name=Basic Dust Agitator
