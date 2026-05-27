@@ -24,7 +24,7 @@ public class MetaTileEntityHydrocarbonSaturator extends TieredMetaTileEntity {
 
     private int currentRadius = 0;
     private final IBlockState FLAMMABLE_AIR = stateOf("susy", "flammable_air", 0);
-    private static final int MAX_RADIUS = 32;
+    public static final int MAX_RADIUS = 32;
 
     public MetaTileEntityHydrocarbonSaturator(ResourceLocation metaTileEntityId, int tier) {
         super(metaTileEntityId, tier);

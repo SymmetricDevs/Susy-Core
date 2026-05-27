@@ -1,5 +1,6 @@
 package supersymmetry.common.blocks;
 
+import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -16,6 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantBlock;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import supersymmetry.common.metatileentities.single.electric.MetaTileEntityHydrocarbonSaturator;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -150,8 +152,26 @@ public class BlockFlammableAir extends VariantBlock<BlockFlammableAir.BlockRadic
         if (world.isRemote) return;
 
         if (rand.nextInt(40) == 0) {
-            world.setBlockToAir(pos);
+            if (!isConnectedToSaturator(world, pos)) {
+                world.setBlockToAir(pos);
+            }
         }
+    }
+
+    private boolean isConnectedToSaturator(World world, BlockPos origin) {
+        int r = MetaTileEntityHydrocarbonSaturator.MAX_RADIUS;
+        for (BlockPos pos : BlockPos.getAllInBox(
+                origin.add(-r, -r, -r),
+                origin.add( r,  r,  r))) {
+            if (isSaturator(world, pos)) return true;
+        }
+        return false;
+    }
+
+    private boolean isSaturator(World world, BlockPos pos) {
+        net.minecraft.tileentity.TileEntity te = world.getTileEntity(pos);
+        if (!(te instanceof IGregTechTileEntity)) return false;
+        return ((IGregTechTileEntity) te).getMetaTileEntity() instanceof MetaTileEntityHydrocarbonSaturator;
     }
 
     //fire logic
