@@ -7,6 +7,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 
 import supersymmetry.Supersymmetry;
 
@@ -41,5 +42,24 @@ public class FactionHate {
 
         // Apply to player
         FactionHateManager.addHate(player, faction, hateValue);
+    }
+
+    //making sure the hate stays after you die
+    @SubscribeEvent
+    public static void onPlayerClone(PlayerEvent.Clone event) {
+        if (event.getEntity().world.isRemote) return;
+
+        EntityPlayer original = event.getOriginal();
+        EntityPlayer clone = (EntityPlayer) event.getEntity();
+
+        NBTTagCompound originalData = original.getEntityData();
+        if (!originalData.hasKey(TAG_ROOT)) return;
+
+        NBTTagCompound susyData = originalData.getCompoundTag(TAG_ROOT);
+        if (!susyData.hasKey(TAG_HATE)) return;
+
+
+        NBTTagCompound cloneData = clone.getEntityData();
+        cloneData.setTag(TAG_ROOT, susyData.copy());
     }
 }
