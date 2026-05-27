@@ -195,6 +195,8 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityCupolaFurnace CUPOLA_FURNACE;
     public static MetaTileEntityGreenhouse GREENHOUSE;
 
+    public static MetaTileEntityElectricDischargeMachine ELECTRIC_DISCHARGE_MACHINE;
+
     // Space multis
     public static MetaTileEntityLandingPad LANDING_PAD;
     public static MetaTileEntityScrapRecycler SCRAP_RECYCLER;
@@ -676,6 +678,8 @@ public class SuSyMetaTileEntities {
                 new MetaTileEntityComponentRedstoneController(susyId("redstone_controller")));
 
         INJECTION_MOLDER = registerMetaTileEntity(18110, new MetaTileEntityInjectionMolder(susyId("injection_molder")));
+
+        ELECTRIC_DISCHARGE_MACHINE = registerMetaTileEntity(18111, new MetaTileEntityElectricDischargeMachine(susyId("electric_discharge_machine")));
 
         // Locked Loot Crates
         LOCKED_HERMETICALLY_SEALED_CRATE = registerMetaTileEntity(18200,
