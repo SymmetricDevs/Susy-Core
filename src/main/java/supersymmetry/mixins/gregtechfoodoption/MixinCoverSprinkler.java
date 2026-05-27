@@ -21,6 +21,7 @@ import supersymmetry.common.util.FireSuppressantProperty;
 @Mixin(value = CoverSprinkler.class, remap = false)
 public abstract class MixinCoverSprinkler {
 
+    private int fireSuppressTimer = 0;
 
     @Shadow
     public abstract BlockPos getPos();
@@ -31,6 +32,9 @@ public abstract class MixinCoverSprinkler {
 
         if (self.getWorld().isRemote) return;
 
+        if (++fireSuppressTimer < 20) return;
+        fireSuppressTimer = 0;
+
         IFluidHandler fluidHandler = self.getCoverableView()
                 .getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, self.getAttachedSide());
         if (fluidHandler == null) return;
@@ -39,24 +43,25 @@ public abstract class MixinCoverSprinkler {
         if (fluid == null) return;
 
         boolean canSuppressFire = false;
-        int fireBlocksPerTick = 1;
 
         Material mat = GregTechAPI.materialManager.getMaterial(fluid.getFluid().getName());
         if (mat != null) {
             FireSuppressantProperty fireProp = mat.getProperty(FireSuppressantProperty.FIRE_SUPPRESSANT);
             if (fireProp != null) {
                 canSuppressFire = true;
-                fireBlocksPerTick = fireProp.getBlocksPerTick();
             }
         }
 
         if (canSuppressFire) {
-            suppressFire(self.getWorld(), getPos(), fireBlocksPerTick);
+            suppressFire(self.getWorld(), self.getCoverableView().getPos());
         }
     }
 
-    private void suppressFire(World world, BlockPos basePos, int maxBlocks) {
-        int suppressed = 0;
+    private static final int FIRE_SUPPRESSION_HEIGHT = 9;
+
+    private void suppressFire(World world, BlockPos basePos) {
+
+        System.out.println("FIRE DETECTED");
         AxisAlignedBB area = new AxisAlignedBB(
                 basePos.offset(EnumFacing.SOUTH, 4).offset(EnumFacing.EAST, 4),
                 basePos.offset(EnumFacing.NORTH, 4).offset(EnumFacing.WEST, 4)
@@ -66,15 +71,15 @@ public abstract class MixinCoverSprinkler {
         int minZ = (int) Math.floor(area.minZ);
         int maxX = (int) Math.ceil(area.maxX);
         int maxZ = (int) Math.ceil(area.maxZ);
-        int y    = basePos.getY();
+        int minY = basePos.getY() - FIRE_SUPPRESSION_HEIGHT + 1;
+        int maxY = basePos.getY();
 
-        for (int scanY = y; scanY <= y + 1 && suppressed < maxBlocks; scanY++) {
-            for (int x = minX; x <= maxX && suppressed < maxBlocks; x++) {
-                for (int z = minZ; z <= maxZ && suppressed < maxBlocks; z++) {
+        for (int scanY = minY; scanY <= maxY; scanY++) {
+            for (int x = minX; x <= maxX; x++) {
+                for (int z = minZ; z <= maxZ; z++) {
                     BlockPos candidate = new BlockPos(x, scanY, z);
                     if (world.getBlockState(candidate).getBlock() instanceof BlockFire) {
                         world.setBlockToAir(candidate);
-                        suppressed++;
                     }
                 }
             }

@@ -9,20 +9,6 @@ public class FireSuppressantProperty implements IMaterialProperty {
     public static final PropertyKey<FireSuppressantProperty> FIRE_SUPPRESSANT =
             new PropertyKey<>("fire_suppressant", FireSuppressantProperty.class);
 
-    private final int blocksPerTick;
-
-    public FireSuppressantProperty() {
-        this.blocksPerTick = 1;
-    }
-
-    public FireSuppressantProperty(int blocksPerTick) {
-        this.blocksPerTick = blocksPerTick;
-    }
-
-    public int getBlocksPerTick() {
-        return blocksPerTick;
-    }
-
     @Override
     public void verifyProperty(MaterialProperties properties) {}
 }
