@@ -1081,11 +1081,12 @@ recipemap.resistance_furnace.name=Resistance Furnace
 recipemap.eccentric_roll_crusher.name=Eccentric Roll Crushing
 recipemap.ball_mill.name=Ball Milling
 recipemap.atomic_layer_deposition.name=Atomic Layer Deposition
-recipemap.wire_bonding=Wire Bonding
-recipemap.screen_printer=Screen Printing
-recipemap.plasma_ashing=Plasma Asher
-recipemap.resist_processor=Photoresist Processor
-recipemap.reactive_ion_etching=Reactive Ion Etching
+recipemap.wire_bonding.name=Wire Bonding
+recipemap.screen_printer.name=Screen Printing
+recipemap.plasma_ashing.name=Plasma Asher
+recipemap.resist_processor.name=Photoresist Processor
+recipemap.reactive_ion_etching.name=Reactive Ion Etching
+recipemap.attrition_scrubber.name=Attrition Scrubbing
 
 susy.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 
