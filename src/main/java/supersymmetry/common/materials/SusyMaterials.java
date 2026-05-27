@@ -14,6 +14,7 @@ import gregtech.api.unification.material.info.MaterialFlags;
 import gregtech.api.unification.material.properties.*;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
+import supersymmetry.common.util.FireSuppressantProperty;
 
 public class SusyMaterials {
 
@@ -200,6 +201,8 @@ public class SusyMaterials {
         Materials.Electrum.setProperty(PropertyKey.ORE, new OreProperty());
 
         Materials.Hydrogen.addFlags(MaterialFlags.FLAMMABLE);
+
+        Materials.Water.setProperty(FireSuppressantProperty.FIRE_SUPPRESSANT, new FireSuppressantProperty());
     }
 
     private static void removeProperty(PropertyKey<?> key, Material material) {
