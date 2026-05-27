@@ -114,7 +114,7 @@ public class SuSyRecipeMaps {
                     .setSlotOverlay(true, true, true, GuiTextures.MOLECULAR_OVERLAY_4)
                     .setSound(GTSoundEvents.BATH);
 
-    public static final RecipeMap<SimpleRecipeBuilder> ZONE_REFINER_RECIPES = new RecipeMap<>("zone_refiner", 3, 1, 2,
+    public static final RecipeMap<SimpleRecipeBuilder> ZONE_REFINER_RECIPES = new RecipeMap<>("zone_refiner", 4, 1, 2,
             0, new SimpleRecipeBuilder(), false)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_CRYSTALLIZATION, ProgressWidget.MoveType.HORIZONTAL)
                     .setSlotOverlay(false, false, true, GuiTextures.FURNACE_OVERLAY_1)
@@ -156,7 +156,7 @@ public class SuSyRecipeMaps {
                     .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
     public static final RecipeMap<CatalystRecipeBuilder> POLYMERIZATION_RECIPES = new RecipeMap<>("polymerization_tank",
-            3, 1, 3, 2, new CatalystRecipeBuilder(), false)
+            4, 1, 4, 2, new CatalystRecipeBuilder(), false)
                     .setSlotOverlay(false, true, GuiTextures.MOLECULAR_OVERLAY_3)
                     .setSlotOverlay(true, true, GuiTextures.MOLECULAR_OVERLAY_3)
                     .setSlotOverlay(false, false, GuiTextures.MOLECULAR_OVERLAY_1)
@@ -201,7 +201,7 @@ public class SuSyRecipeMaps {
             1, 2, 0, new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.ELECTROLYZER);
 
-    public static final RecipeMap<SimpleRecipeBuilder> CVD_RECIPES = new RecipeMap<>("cvd", 3, 1, 3, 2,
+    public static final RecipeMap<SimpleRecipeBuilder> CVD_RECIPES = new RecipeMap<>("cvd", 3, 1, 4, 2,
             new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.ARC);
 
@@ -523,7 +523,7 @@ public class SuSyRecipeMaps {
             new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.ARC);
 
-    public static final RecipeMap<SimpleRecipeBuilder> RESIST_PROCESSOR = new RecipeMap<>("resist_processing", 1, 1, 3,
+    public static final RecipeMap<SimpleRecipeBuilder> RESIST_PROCESSOR = new RecipeMap<>("resist_processing", 2, 1, 5,
             0,
             new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.CENTRIFUGE); // because it spins
@@ -547,7 +547,7 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> SCREEN_PRINTER = new RecipeMap<>("screen_printer", 2, 1, 1, 0,
             new SimpleRecipeBuilder(), false);
 
-    public static final RecipeMap<SimpleRecipeBuilder> ALD_RECIPES = new RecipeMap<>("atomic_layer_deposition", 1, 1, 3,
+    public static final RecipeMap<SimpleRecipeBuilder> ALD_RECIPES = new RecipeMap<>("atomic_layer_deposition", 1, 1, 4,
             2,
             new SimpleRecipeBuilder(), false);
 
