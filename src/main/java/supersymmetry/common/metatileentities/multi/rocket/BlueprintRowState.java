@@ -7,6 +7,8 @@ import java.util.stream.Stream;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.common.util.Constants.NBT;
 
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.util.DataStorageLoader;
@@ -64,6 +66,17 @@ public class BlueprintRowState {
         NBTTagCompound tag = new NBTTagCompound();
         tag.setBoolean("shortView", shortView);
         tag.setInteger("multiplierIndex", multiplierIndex);
+        NBTTagList slotList = new NBTTagList();
+        for (int i = 0; i < slots.size(); i++) {
+            ItemStack stack = slots.get(i).getStackInSlot(0);
+            if (!stack.isEmpty()) {
+                NBTTagCompound slotTag = new NBTTagCompound();
+                slotTag.setInteger("slot", i);
+                stack.writeToNBT(slotTag);
+                slotList.appendTag(slotTag);
+            }
+        }
+        tag.setTag("slots", slotList);
         return tag;
     }
 
@@ -71,5 +84,16 @@ public class BlueprintRowState {
         shortView = tag.getBoolean("shortView");
         int idx = tag.getInteger("multiplierIndex");
         multiplierIndex = (idx >= 0 && idx < validMultiplierValues.length) ? idx : 0;
+        for (DataStorageLoader slot : slots) {
+            slot.setStackInSlot(0, ItemStack.EMPTY);
+        }
+        NBTTagList slotList = tag.getTagList("slots", NBT.TAG_COMPOUND);
+        for (int i = 0; i < slotList.tagCount(); i++) {
+            NBTTagCompound slotTag = slotList.getCompoundTagAt(i);
+            int slot = slotTag.getInteger("slot");
+            if (slot >= 0 && slot < slots.size()) {
+                slots.get(slot).setStackInSlot(0, new ItemStack(slotTag));
+            }
+        }
     }
 }

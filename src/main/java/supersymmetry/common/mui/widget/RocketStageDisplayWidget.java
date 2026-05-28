@@ -1,5 +1,6 @@
 package supersymmetry.common.mui.widget;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -270,6 +271,21 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
 
         public static final int ROW_SEPARATION = 18;
 
+        private static class RowLayoutEntry {
+
+            final DynamicLabelWidget label;
+            final ComponentEntryWidget entry;
+            final int labelX;
+
+            RowLayoutEntry(DynamicLabelWidget label, ComponentEntryWidget entry, int labelX) {
+                this.label = label;
+                this.entry = entry;
+                this.labelX = labelX;
+            }
+        }
+
+        private final List<RowLayoutEntry> rowEntries = new ArrayList<>();
+
         public StageContainerWidget(
                                     Position pos, Size size, RocketStage stage, RowStateProvider rowStateProvider,
                                     Runnable markDirty) {
@@ -302,7 +318,10 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
         }
 
         public void addSlotList(String entryName, String localizationKey, ComponentEntryWidget entry) {
-            int scrollbarPadding = entry.itemList.sliderActive ? HorizontalScrollableListWidget.scrollPaneWidth : 0;
+            // Use the natural (non-short-view) slider state so rows initialized with shortView=true
+            // still reserve the right amount of vertical space for their scrollbar.
+            boolean naturalSlider = entry.shortView ? entry.previousSliderState : entry.itemList.sliderActive;
+            int scrollbarPadding = naturalSlider ? HorizontalScrollableListWidget.scrollPaneWidth : 0;
 
             String text = I18n.format(localizationKey);
             int textWidth = net.minecraft.client.Minecraft.getMinecraft().fontRenderer.getStringWidth(text);
@@ -319,6 +338,8 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
             entry.setSelfPosition(new Position(9, rowSkip + ROW_SEPARATION + scrollbarPadding));
             entry.setSize(new Size(90, 28));
             this.addWidget(entry);
+
+            rowEntries.add(new RowLayoutEntry(textWidget, entry, xPos));
 
             components.put(entryName, entry);
             rowSkip += ROW_SEPARATION + scrollbarPadding;
