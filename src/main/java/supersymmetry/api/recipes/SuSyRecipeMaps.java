@@ -553,7 +553,7 @@ public class SuSyRecipeMaps {
 
     public static final RecipeMap<SimpleRecipeBuilder> EDM_RECIPES = new RecipeMap<>(
             "edm", 3, 3, 1, 1, new SimpleRecipeBuilder(), false)
-            .setSound(GTSoundEvents.ELECTROLYZER);
+                    .setSound(GTSoundEvents.ELECTROLYZER);
 
     static {
         GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()

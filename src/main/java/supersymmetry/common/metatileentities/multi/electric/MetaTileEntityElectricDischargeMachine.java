@@ -1,5 +1,14 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregicality.multiblocks.api.render.GCYMTextures;
 import gregicality.multiblocks.common.block.GCYMMetaBlocks;
 import gregicality.multiblocks.common.block.blocks.BlockLargeMultiblockCasing;
@@ -14,26 +23,15 @@ import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.client.renderer.ICubeRenderer;
-import gregtech.client.renderer.texture.Textures;
 import gregtech.common.ConfigHolder;
 import gregtech.common.blocks.BlockGlassCasing;
-import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
-import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.MetaTileEntities;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
-import supersymmetry.common.blocks.BlockDrillBit;
 import supersymmetry.common.blocks.BlockEDMElectrode;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MetaTileEntityElectricDischargeMachine extends RecipeMapMultiblockController {
 
@@ -53,18 +51,21 @@ public class MetaTileEntityElectricDischargeMachine extends RecipeMapMultiblockC
                 .aisle("CCCCC", "C   C", "C   C", "C   C", " CCC ")
                 .aisle(" CSC ", " GGG ", " GGG ", " CCC ", "     ")
                 .where('S', selfPredicate())
-                .where('C', states(GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING.getState(BlockLargeMultiblockCasing.CasingType.NONCONDUCTING_CASING)).setMinGlobalLimited(45)
-                        .or(abilities(MultiblockAbility.INPUT_ENERGY)
-                                .setMinGlobalLimited(1).setMaxGlobalLimited(2))
-                        .or(abilities(MultiblockAbility.MAINTENANCE_HATCH)
-                                .setExactLimit(1))
-                        .or(abilities(MultiblockAbility.IMPORT_ITEMS)
-                                .setMinGlobalLimited(1))
-                        .or(abilities(MultiblockAbility.EXPORT_ITEMS)
-                                .setMinGlobalLimited(1))
-                        .or(abilities(MultiblockAbility.IMPORT_FLUIDS)
-                                .setMinGlobalLimited(1))
-                        .or(abilities(MultiblockAbility.EXPORT_FLUIDS)))
+                .where('C',
+                        states(GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING
+                                .getState(BlockLargeMultiblockCasing.CasingType.NONCONDUCTING_CASING))
+                                        .setMinGlobalLimited(45)
+                                        .or(abilities(MultiblockAbility.INPUT_ENERGY)
+                                                .setMinGlobalLimited(1).setMaxGlobalLimited(2))
+                                        .or(abilities(MultiblockAbility.MAINTENANCE_HATCH)
+                                                .setExactLimit(1))
+                                        .or(abilities(MultiblockAbility.IMPORT_ITEMS)
+                                                .setMinGlobalLimited(1))
+                                        .or(abilities(MultiblockAbility.EXPORT_ITEMS)
+                                                .setMinGlobalLimited(1))
+                                        .or(abilities(MultiblockAbility.IMPORT_FLUIDS)
+                                                .setMinGlobalLimited(1))
+                                        .or(abilities(MultiblockAbility.EXPORT_FLUIDS)))
                 .where('E', states(getElectrodeState()))
                 .where('G', states(getGlassState()))
                 .build();
@@ -103,7 +104,8 @@ public class MetaTileEntityElectricDischargeMachine extends RecipeMapMultiblockC
     }
 
     protected static IBlockState getCasingState() {
-        return GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING.getState(BlockLargeMultiblockCasing.CasingType.NONCONDUCTING_CASING);
+        return GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING
+                .getState(BlockLargeMultiblockCasing.CasingType.NONCONDUCTING_CASING);
     }
 
     protected static IBlockState getElectrodeState() {
@@ -113,7 +115,6 @@ public class MetaTileEntityElectricDischargeMachine extends RecipeMapMultiblockC
     protected static IBlockState getGlassState() {
         return MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.LAMINATED_GLASS);
     }
-
 
     @Override
     public boolean allowsExtendedFacing() {

@@ -679,7 +679,8 @@ public class SuSyMetaTileEntities {
 
         INJECTION_MOLDER = registerMetaTileEntity(18110, new MetaTileEntityInjectionMolder(susyId("injection_molder")));
 
-        ELECTRIC_DISCHARGE_MACHINE = registerMetaTileEntity(18111, new MetaTileEntityElectricDischargeMachine(susyId("electric_discharge_machine")));
+        ELECTRIC_DISCHARGE_MACHINE = registerMetaTileEntity(18111,
+                new MetaTileEntityElectricDischargeMachine(susyId("electric_discharge_machine")));
 
         // Locked Loot Crates
         LOCKED_HERMETICALLY_SEALED_CRATE = registerMetaTileEntity(18200,
