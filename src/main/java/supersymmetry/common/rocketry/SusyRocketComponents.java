@@ -58,11 +58,11 @@ public class SusyRocketComponents {
                 .stage(
                         new RocketStage.Builder("boosters")
                                 .type("engine")
-                                .limit(16)
+                                .limit(4)
                                 .type("tank")
-                                .limit(8)
+                                .limit(4)
                                 .type("engine_small")
-                                .limit(8)
+                                .limit(16)
                                 .build())
                 .stage(
                         new RocketStage.Builder("block_A")
@@ -72,6 +72,8 @@ public class SusyRocketComponents {
                                 .limit(4)
                                 .type("tank")
                                 .limit(2)
+                                .type("interstage")
+                                .limit(1)
                                 .build())
                 .stage(
                         new RocketStage.Builder("block_F")
@@ -81,6 +83,8 @@ public class SusyRocketComponents {
                                 .limit(4)
                                 .type("tank")
                                 .limit(2)
+                                .type("interstage")
+                                .limit(1)
                                 .build())
                 .stage(
                         new RocketStage.Builder("payload")

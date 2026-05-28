@@ -320,6 +320,7 @@ susy.rocketry.components.engine_small.name=Vernier engine(s)
 susy.rocketry.components.tank.name=Tank(s)
 susy.rocketry.components.spacecraft.name=Spacecraft
 susy.rocketry.components.fairing.name=Fairing
+susy.rocketry.components.interstage.name=Interstage
 
 # Component tooltips
 susy.rocketry.tooltip.mass=Mass: %.1f kg
@@ -1269,10 +1270,11 @@ metaitem.data_card.active.tooltip.1=Load this into a Rocket Assembler to build t
 metaitem.data_card.master_blueprint.name=Rocket Blueprint
 metaitem.data_card.master_blueprint.tag.soyuz=§6Soyuz
 metaitem.data_card.active.tag.engine=§6Engine
-metaitem.data_card.active.tag.engine_small=§6Small Engine
+metaitem.data_card.active.tag.engine_small=§6Vernier Engine
 metaitem.data_card.active.tag.fairing=§6Fairing
 metaitem.data_card.active.tag.spacecraft=§6Spacecraft
 metaitem.data_card.active.tag.tank=§6Tank
+metaitem.data_card.active.tag.interstage=§6Interstage
 
 # Machine Translations
 susy.wrongbiome=Machine can not work in this biome!
