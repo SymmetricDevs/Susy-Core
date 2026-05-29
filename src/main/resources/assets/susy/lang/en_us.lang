@@ -206,6 +206,19 @@ tile.susy_stone_bricks.anorthosite.name=Anorthosite Bricks
 tile.susy_stone_bricks.industrial_concrete.name=Industrial Concrete Bricks
 tile.susy_stone_bricks.minitary_concrete.name=Military Concrete Bricks
 
+tile.lunar_concrete.lunar_concrete_smooth.name=Smooth Lunar Concrete
+tile.lunar_concrete.lunar_concrete_bricks.name=Lunar Concrete Bricks
+tile.lunar_concrete.lunar_concrete_bricks_cracked.name=Cracked Lunar Concrete Bricks
+tile.lunar_concrete.lunar_concrete_bricks_small.name=Small Lunar Concrete Bricks
+tile.lunar_concrete.lunar_concrete_bricks_square.name=Square Lunar Concrete Bricks
+tile.lunar_concrete.lunar_concrete_chiseled.name=Chiseled Lunar Concrete
+tile.lunar_concrete.lunar_concrete_cobble.name=Lunar Concrete Cobblestone
+tile.lunar_concrete.lunar_concrete_polished.name=Polished Lunar Concrete
+tile.lunar_concrete.lunar_concrete_tiled.name=Lunar Concrete Tiles
+tile.lunar_concrete.lunar_concrete_tiled_small.name=Small Lunar Concrete Tiles
+tile.lunar_concrete.lunar_concrete_windmill_a.name=Lunar Concrete Windmill Tiles A
+tile.lunar_concrete.lunar_concrete_windmill_b.name=Lunar Concrete Windmill Tiles B
+
 # Materials
 susy.material.manganese_iron_arsenic_phosphide=Manganese Iron Arsenic Phosphide
 susy.material.praseodymium_nickel=Praseodymium-Nickel

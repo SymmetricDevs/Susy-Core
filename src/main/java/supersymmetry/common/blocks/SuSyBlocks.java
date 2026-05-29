@@ -92,6 +92,8 @@ public class SuSyBlocks {
     public static BlockGrinderCasing GRINDER_CASING;
     public static BlockGirthGearTooth GIRTH_GEAR_TOOTH;
 
+    public static BlockLunarConcrete LUNAR_CONCRETE;
+
     public static ArrayList<VariantBlock<?>> susyBlocks;
 
     public static void init() {
@@ -184,6 +186,7 @@ public class SuSyBlocks {
         for (IBlockState state : ASPHALT.getBlockState().getValidStates()) {
             BlockUtility.setWalkingSpeedBonus(state, 1); // Buff from 0.6F
         }
+
     }
 
     @SuppressWarnings("unchecked")
