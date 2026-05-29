@@ -160,7 +160,7 @@ tile.engine_casing_2.crankshaft.name=Crankshaft Casing
 
 tile.active_casing.basic_intake_casing.name=Basic Intake Casing
 
-tile.edm_electrode.copper_tungsten.name=Copper-Tungsten EDM Electrode
+tile.edm_electrode.copper_tungsten.name=Copper-Tungsten EDM Electrode Assembly
 
 
 # Rocks
