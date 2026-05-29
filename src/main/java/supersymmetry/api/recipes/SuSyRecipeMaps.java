@@ -3,13 +3,17 @@ package supersymmetry.api.recipes;
 import static gregtech.api.GTValues.*;
 import static gregtech.api.recipes.RecipeMaps.MIXER_RECIPES;
 
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 
 import gregicality.multiblocks.api.recipes.GCYMRecipeMaps;
 import gregtech.api.GTValues;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.widgets.ProgressWidget;
+import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.recipes.RecipeMap;
+import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.recipes.builders.FuelRecipeBuilder;
 import gregtech.api.recipes.builders.PrimitiveRecipeBuilder;
 import gregtech.api.recipes.builders.SimpleRecipeBuilder;
@@ -19,6 +23,8 @@ import gregtech.api.unification.material.Material;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.unification.stack.MaterialStack;
 import gregtech.core.sound.GTSoundEvents;
+import gregtech.core.unification.material.internal.MaterialRegistryManager;
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.capability.impl.SuSyBoilerLogic;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.recipes.builders.*;
@@ -477,7 +483,7 @@ public class SuSyRecipeMaps {
                     .setSound(GTSoundEvents.MACERATOR);
 
     public static final RecipeMap<SimpleRecipeBuilder> ATTRITION_SCRUBBER = new RecipeMap<>(
-            "attrition_scrubber", 1, 1, 1, 1, new SimpleRecipeBuilder().EUt(VA[LV]), false)
+            "attrition_scrubber", 2, 3, 1, 1, new SimpleRecipeBuilder().EUt(VA[LV]), false)
                     .setSlotOverlay(false, false, GuiTextures.CRUSHED_ORE_OVERLAY)
                     .setSlotOverlay(true, false, GuiTextures.DUST_OVERLAY)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_BATH, ProgressWidget.MoveType.CIRCULAR)
@@ -632,5 +638,49 @@ public class SuSyRecipeMaps {
         SuSyRecipeMaps.BALL_MILL.onRecipeBuild(recipeBuilder -> recipeBuilder
                 .fluidInputs(SusyMaterials.PreheatedAir
                         .getFluid(recipeBuilder.getDuration() * recipeBuilder.getEUt() / 512)));
+
+        RecipeMaps.ORE_WASHER_RECIPES.onRecipeBuild(recipeBuilder -> {
+            RecipeBuilder<SimpleRecipeBuilder> atBuilder = SuSyRecipeMaps.ATTRITION_SCRUBBER.recipeBuilder()
+                    .inputs(recipeBuilder.getInputs().toArray(new GTRecipeInput[0]))
+                    .fluidInputs(recipeBuilder.getFluidInputs())
+                    .outputs(recipeBuilder.getOutputs())
+                    .chancedOutputs(recipeBuilder.getChancedOutputs())
+                    .fluidOutputs(recipeBuilder.getFluidOutputs())
+                    .chancedFluidOutputs(recipeBuilder.getChancedFluidOutputs())
+                    .cleanroom(recipeBuilder.getCleanroom())
+                    .duration(recipeBuilder.getDuration())
+                    .EUt(recipeBuilder.getEUt());
+            if (recipeBuilder.getAllItemOutputs().size() == 3) {
+                // Add first two outputs, get the third output meta
+                List<ItemStack> outputs = recipeBuilder.getAllItemOutputs();
+                int meta = outputs.get(2).getMetadata();
+                SusyLog.logger.info("Meta: " + meta);
+                if (MaterialRegistryManager.getInstance().getMaterial("granite_tailing_slurry") != null) {
+                    switch (meta) {
+                        case 4039: // Granite
+                            atBuilder.fluidOutputs(MaterialRegistryManager.getInstance()
+                                    .getMaterial("granite_tailing_slurry").getFluid(100));
+                            break;
+                        case 4040: // Limestone
+                            atBuilder.fluidOutputs(MaterialRegistryManager.getInstance()
+                                    .getMaterial("limestone_tailing_slurry").getFluid(100));
+                            break;
+                        case 4041: // Pegmatite
+                            atBuilder.fluidOutputs(MaterialRegistryManager.getInstance()
+                                    .getMaterial("pegmatite_tailing_slurry").getFluid(100));
+                            break;
+                        case 4042: // Ultramafic
+                            atBuilder.fluidOutputs(MaterialRegistryManager.getInstance()
+                                    .getMaterial("ultramafic_tailing_slurry").getFluid(100));
+                            break;
+                        default:
+                            atBuilder.buildAndRegister();
+                            return;
+                    }
+                }
+                atBuilder.clearChancedOutput();
+            }
+            atBuilder.buildAndRegister();
+        });
     }
 }
