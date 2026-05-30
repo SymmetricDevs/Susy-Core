@@ -1100,6 +1100,13 @@ susy.machine.energy_hatch.output_4a.hv.name=HV 4A Dynamo Hatch
 susy.machine.energy_hatch.output_16a.hv.name=HV 16A Dynamo Hatch
 susy.machine.energy_hatch.output_16a.ev.name=EV 16A Dynamo Hatch
 
+susy.machine.substation_energy_hatch.input_64a.ev.name=EV 64A Substation Energy Hatch
+
+susy.machine.substation_energy_hatch.output_64a.lv.name=LV 64A Substation Dynamo Hatch
+susy.machine.substation_energy_hatch.output_64a.mv.name=MV 64A Substation Dynamo Hatch
+susy.machine.substation_energy_hatch.output_64a.hv.name=HV 64A Substation Dynamo Hatch
+susy.machine.substation_energy_hatch.output_64a.ev.name=EV 64A Substation Dynamo Hatch
+
 # Quadruple & Nonuple Fluid Hatches
 
 gregtech.machine.fluid_hatch.import_4x.lv.name=LV Quadruple Input Hatch
