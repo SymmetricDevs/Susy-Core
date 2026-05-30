@@ -158,10 +158,10 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityEnergyHatch[] NEW_ENERGY_OUTPUT_HATCH_16A = new MetaTileEntityEnergyHatch[4];
 
     public static MetaTileEntityEnergyHatch[] NEW_SUBSTATION_ENERGY_OUTPUT_HATCH_64A = new MetaTileEntitySubstationEnergyHatch[4];
-    public static MetaTileEntityEnergyHatch[] NEW_SUBSTATION_ENERGY_OUTPUT_HATCH_256A = new MetaTileEntitySubstationEnergyHatch[4];
+    public static MetaTileEntityEnergyHatch[] NEW_SUBSTATION_ENERGY_OUTPUT_HATCH_256A = new MetaTileEntitySubstationEnergyHatch[5];
 
     public static MetaTileEntityEnergyHatch[] NEW_SUBSTATION_ENERGY_INPUT_HATCH_64A = new MetaTileEntitySubstationEnergyHatch[4];
-    public static MetaTileEntityEnergyHatch[] NEW_SUBSTATION_ENERGY_INPUT_HATCH_256A = new MetaTileEntitySubstationEnergyHatch[4];
+    public static MetaTileEntityEnergyHatch[] NEW_SUBSTATION_ENERGY_INPUT_HATCH_256A = new MetaTileEntitySubstationEnergyHatch[5];
 
     public static MetaTileEntityPrimitiveMudPump PRIMITIVE_MUD_PUMP;
 
