@@ -216,7 +216,7 @@ public class SuSyRecipeMaps {
                     .setSound(GTSoundEvents.ELECTROLYZER);
 
     public static final RecipeMap<SimpleRecipeBuilder> EVAPORATION_DEPOSITION_RECIPES = new RecipeMap<>(
-            "evaporation_deposition", 2, 1, 0, 0, new SimpleRecipeBuilder(), false)
+            "evaporation_deposition", 4, 1, 0, 0, new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.ARC);
 
     public static final RecipeMap<SimpleRecipeBuilder> ORE_SORTER_RECIPES = new RecipeMap<>("ore_sorter", 2, 20, 1, 1,
