@@ -1,14 +1,17 @@
 package supersymmetry.common.metatileentities.single.steam;
 
 import java.util.Arrays;
+import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.IFluidTank;
@@ -30,6 +33,7 @@ import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.ingredients.IntCircuitIngredient;
 import gregtech.api.util.GTTransferUtils;
 import gregtech.client.renderer.ICubeRenderer;
+import supersymmetry.api.capability.impl.RecipeLogicSteamLimited;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicator;
 
@@ -37,6 +41,7 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity implement
 
     protected SuSySteamProgressIndicator progressIndicator;
     protected boolean isBrickedCasing;
+    protected boolean ulvOnly;
     @Nullable
     protected GhostCircuitItemStackHandler circuitInventory;
     protected IItemHandler outputItemInventory;
@@ -46,16 +51,24 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity implement
     public SuSySimpleSteamMetaTileEntity(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap,
                                          SuSySteamProgressIndicator progressIndicator, ICubeRenderer renderer,
                                          boolean isBrickedCasing, boolean isHighPressure) {
+        this(metaTileEntityId, recipeMap, progressIndicator, renderer, isBrickedCasing, isHighPressure, false);
+    }
+
+    public SuSySimpleSteamMetaTileEntity(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap,
+                                         SuSySteamProgressIndicator progressIndicator, ICubeRenderer renderer,
+                                         boolean isBrickedCasing, boolean isHighPressure, boolean ulvOnly) {
         super(metaTileEntityId, recipeMap, renderer, isHighPressure);
         this.progressIndicator = progressIndicator;
         this.isBrickedCasing = isBrickedCasing;
+        this.ulvOnly = ulvOnly;
         if (hasGhostCircuitInventory()) {
             this.circuitInventory = new GhostCircuitItemStackHandler(this);
             this.circuitInventory.addNotifiableMetaTileEntity(this);
         }
         initializeInventory();
-        this.workableHandler = new RecipeLogicSteam(this,
-                recipeMap, isHighPressure, steamFluidTank, 1.0);
+        this.workableHandler = ulvOnly ?
+                new RecipeLogicSteamLimited(this, recipeMap, isHighPressure, steamFluidTank, 1.0) :
+                new RecipeLogicSteam(this, recipeMap, isHighPressure, steamFluidTank, 1.0);
     }
 
     @Override
@@ -77,7 +90,15 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity implement
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
         return new SuSySimpleSteamMetaTileEntity(metaTileEntityId, workableHandler.getRecipeMap(), progressIndicator,
-                renderer, isBrickedCasing, isHighPressure);
+                renderer, isBrickedCasing, isHighPressure, ulvOnly);
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
+        super.addInformation(stack, player, tooltip, advanced);
+        if (ulvOnly) {
+            tooltip.add(I18n.format("susy.machine.steam_limited.ulv_only.tooltip"));
+        }
     }
 
     @Override

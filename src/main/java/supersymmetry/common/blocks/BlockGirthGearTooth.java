@@ -33,6 +33,16 @@ public class BlockGirthGearTooth extends VariantAxialRotatableBlock<BlockGirthGe
         return false;
     }
 
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean isTranslucent(IBlockState state) {
+        return true;
+    }
+
     public enum Type implements IStringSerializable {
 
         STEEL("steel"),

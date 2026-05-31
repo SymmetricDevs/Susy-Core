@@ -1,6 +1,7 @@
 package supersymmetry.common;
 
-import static supersymmetry.common.blocks.SuSyBlocks.*;
+import static supersymmetry.common.blocks.SuSyBlocks.REGOLITH;
+import static supersymmetry.common.blocks.SuSyBlocks.susyBlocks;
 import static supersymmetry.common.blocks.SuSyMetaBlocks.SHEETED_FRAMES;
 
 import java.io.File;
@@ -183,6 +184,8 @@ public class CommonProxy {
         MetaItems.addOrePrefix(SusyOrePrefix.thread);
         MetaItems.addOrePrefix(SusyOrePrefix.dustWet);
         MetaItems.addOrePrefix(SusyOrePrefix.electrode);
+        MetaItems.addOrePrefix(SusyOrePrefix.pin);
+        MetaItems.addOrePrefix(SusyOrePrefix.target);
 
         Materials.Aluminium.addFlags("continuously_cast");
         SusyGeneratedFluidHandler.init();

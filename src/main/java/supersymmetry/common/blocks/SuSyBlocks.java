@@ -68,6 +68,8 @@ public class SuSyBlocks {
     public static BlockEngineCasing2 ENGINE_CASING_2;
     public static BlocksActiveCasing ACTIVE_CASING;
     public static BlockSupport SUPPORT;
+    public static BlocksBMRF BMRF;
+    public static BlocksRaidFlare BLOCKBANDITFLARE;
 
     public static BlockRocketMultiblockCasing ROCKET_MULTIBLOCK_CASING;
     public static BlockProcessorCluster PROCESSOR_CLUSTER;

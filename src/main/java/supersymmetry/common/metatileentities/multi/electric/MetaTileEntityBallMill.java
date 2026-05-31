@@ -30,7 +30,10 @@ import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.metatileentity.multiblock.*;
+import gregtech.api.metatileentity.multiblock.IMultiblockAbilityPart;
+import gregtech.api.metatileentity.multiblock.IMultiblockPart;
+import gregtech.api.metatileentity.multiblock.MultiblockAbility;
+import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.PatternMatchContext;
@@ -395,10 +398,8 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
                 long totalEnergy = (long) recipe.getEUt() * recipe.getDuration();
                 int damage = (int) (totalEnergy / EU_PER_DURABILITY);
 
-                // Apply damage to the mill ball using NBT-based method
-                // Output it if needed
                 if (damage > 0 && MillBallDurabilityManager.applyMillBallDamage(stack, damage)) {
-                    recipe.getOutputs().add(stack);
+                    importInventory.setStackInSlot(slotCache[itemToDamage], ItemStack.EMPTY);
                 }
             }
 
