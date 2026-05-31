@@ -1,5 +1,6 @@
 package supersymmetry.common.mui.widget;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -18,6 +19,7 @@ import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.api.util.DataStorageLoader;
+import supersymmetry.common.metatileentities.multi.rocket.BlueprintRowState;
 
 public class RocketStageDisplayWidget extends AbstractWidgetGroup {
 
@@ -28,9 +30,9 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
     }
 
     @FunctionalInterface
-    public interface SlotListProvider {
+    public interface RowStateProvider {
 
-        List<DataStorageLoader> get(RocketStage stage, String componentType);
+        BlueprintRowState get(RocketStage stage, String componentType);
     }
 
     @FunctionalInterface
@@ -46,7 +48,8 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
     }
 
     public final BlueprintProvider blueprintProvider;
-    public final SlotListProvider slotListProvider;
+    public final RowStateProvider rowStateProvider;
+    public final Runnable markDirty;
 
     public int selectedStageIndex = 0;
     public int previousSelectedStageIndex = 0;
@@ -62,10 +65,12 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                                     Position pos,
                                     Size size,
                                     BlueprintProvider blueprintProvider,
-                                    SlotListProvider slotListProvider) {
+                                    RowStateProvider rowStateProvider,
+                                    Runnable markDirty) {
         super(pos, size);
         this.blueprintProvider = blueprintProvider;
-        this.slotListProvider = slotListProvider;
+        this.rowStateProvider = rowStateProvider;
+        this.markDirty = markDirty;
 
         previousButton = new ClickButtonWidget(
                 0,
@@ -209,7 +214,8 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                     new Position(0, 15),
                     new Size(this.getSize().width, this.getSize().height - 15),
                     stage,
-                    slotListProvider);
+                    rowStateProvider,
+                    markDirty);
 
             stageContainers.put(stage.getName(), stageView);
             this.addWidget(stageView);
@@ -265,38 +271,57 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
 
         public static final int ROW_SEPARATION = 18;
 
+        private static class RowLayoutEntry {
+
+            final DynamicLabelWidget label;
+            final ComponentEntryWidget entry;
+            final int labelX;
+
+            RowLayoutEntry(DynamicLabelWidget label, ComponentEntryWidget entry, int labelX) {
+                this.label = label;
+                this.entry = entry;
+                this.labelX = labelX;
+            }
+        }
+
+        private final List<RowLayoutEntry> rowEntries = new ArrayList<>();
+
         public StageContainerWidget(
-                                    Position pos, Size size, RocketStage stage, SlotListProvider slotListProvider) {
+                                    Position pos, Size size, RocketStage stage, RowStateProvider rowStateProvider,
+                                    Runnable markDirty) {
             super(pos, size);
 
             for (Map.Entry<String, int[]> componentLimits : stage.getComponentLimits().entrySet()) {
                 String componentType = componentLimits.getKey();
                 int maxSlotCount = stage.maxComponentsOf(componentType);
 
-                List<DataStorageLoader> slots = slotListProvider.get(stage, componentType);
+                BlueprintRowState rowState = rowStateProvider.get(stage, componentType);
 
                 HorizontalScrollableListWidget slotsw = new HorizontalScrollableListWidget(0, 0, 18 * 5, 28);
 
-                for (int i = 0; i < maxSlotCount; i++) {
-                    DataStorageLoader slot = slots.get(i);
-                    // SlotWidget s = new SlotWidget(slot, 0, 0, 0);
-                    SlotWidget s = new ComponentCardSlotWidget(slot, 0, 0, 0);
-                    s.setBackgroundTexture(GuiTextures.SLOT_DARK);
-                    // s.setClearSlotOnRightClick(true);
-                    slotsw.addWidget(s);
+                if (rowState != null) {
+                    for (int i = 0; i < maxSlotCount; i++) {
+                        DataStorageLoader slot = rowState.slots.get(i);
+                        SlotWidget s = new ComponentCardSlotWidget(slot, 0, 0, 0);
+                        s.setBackgroundTexture(GuiTextures.SLOT_DARK);
+                        slotsw.addWidget(s);
+                    }
                 }
 
                 slotsw.setSliderActive(slotsw.widgets.size() > 5);
 
                 ComponentEntryWidget entry = new ComponentEntryWidget(
-                        new Position(0, 0), new Size(18 * 5, 28), slotsw, componentLimits.getValue());
+                        new Position(0, 0), new Size(18 * 5, 28), slotsw, rowState, markDirty);
 
                 addSlotList(componentType, "susy.rocketry.components." + componentType + ".name", entry);
             }
         }
 
         public void addSlotList(String entryName, String localizationKey, ComponentEntryWidget entry) {
-            int scrollbarPadding = entry.itemList.sliderActive ? HorizontalScrollableListWidget.scrollPaneWidth : 0;
+            // Use the natural (non-short-view) slider state so rows initialized with shortView=true
+            // still reserve the right amount of vertical space for their scrollbar.
+            boolean naturalSlider = entry.shortView ? entry.previousSliderState : entry.itemList.sliderActive;
+            int scrollbarPadding = naturalSlider ? HorizontalScrollableListWidget.scrollPaneWidth : 0;
 
             String text = I18n.format(localizationKey);
             int textWidth = net.minecraft.client.Minecraft.getMinecraft().fontRenderer.getStringWidth(text);
@@ -313,6 +338,8 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
             entry.setSelfPosition(new Position(9, rowSkip + ROW_SEPARATION + scrollbarPadding));
             entry.setSize(new Size(90, 28));
             this.addWidget(entry);
+
+            rowEntries.add(new RowLayoutEntry(textWidget, entry, xPos));
 
             components.put(entryName, entry);
             rowSkip += ROW_SEPARATION + scrollbarPadding;
@@ -394,6 +421,10 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                 super.handleClientAction(id, buffer);
                 if (id == 3) {
                     selectedIndex = buffer.readVarInt();
+                    if (boundRow != null) {
+                        boundRow.multiplierIndex = selectedIndex;
+                        markDirty.run();
+                    }
                 }
             }
         }
@@ -402,15 +433,21 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
         public boolean shortView = false;
         public HorizontalScrollableListWidget itemList;
         public final Widget shortViewButton;
+        public final BlueprintRowState boundRow;
+        public final Runnable markDirty;
 
         public Size previousStateSize = new Size(18 * 5 + 2, 28);
         public boolean previousSliderState = false;
 
         public ComponentEntryWidget(
                                     Position pos, Size size, HorizontalScrollableListWidget itemList,
-                                    int[] validValues) {
+                                    BlueprintRowState boundRow, Runnable markDirty) {
             super(pos, size);
             this.itemList = itemList;
+            this.boundRow = boundRow;
+            this.markDirty = markDirty;
+
+            int[] validValues = (boundRow != null) ? boundRow.validMultiplierValues : new int[] { 1 };
 
             shortViewButton = new ToggleButtonWidget(
                     itemList.getSize().width + 10,
@@ -446,6 +483,16 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
             this.addWidget(itemList);
             this.addWidget(shortViewButton);
             this.addWidget(selector);
+
+            if (boundRow != null) {
+                selector.selectedIndex = Math.min(boundRow.multiplierIndex, validValues.length - 1);
+                if (boundRow.shortView) {
+                    applyShortViewSize(true);
+                    this.shortView = true;
+                    selector.setActive(true);
+                    selector.setVisible(true);
+                }
+            }
         }
 
         @Override
@@ -463,9 +510,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
             return shortView;
         }
 
-        public void setShortView(boolean state) {
-            if (this.shortView == state) return;
-
+        private void applyShortViewSize(boolean state) {
             if (state) {
                 previousStateSize = itemList.getSize();
                 previousSliderState = itemList.sliderActive;
@@ -476,8 +521,18 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                 itemList.setSize(previousStateSize);
                 itemList.setSliderActive(previousSliderState);
             }
+        }
+
+        public void setShortView(boolean state) {
+            if (this.shortView == state) return;
+
+            applyShortViewSize(state);
 
             this.shortView = state;
+            if (boundRow != null) {
+                boundRow.shortView = state;
+                markDirty.run();
+            }
             selector.setActive(state);
             selector.setVisible(state);
             writeClientAction(4, buf -> buf.writeBoolean(state));
@@ -487,7 +542,17 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
         public void handleClientAction(int id, PacketBuffer buffer) {
             super.handleClientAction(id, buffer);
             if (id == 4) {
-                setShortView(buffer.readBoolean());
+                boolean state = buffer.readBoolean();
+                if (this.shortView != state) {
+                    applyShortViewSize(state);
+                    this.shortView = state;
+                    if (boundRow != null) {
+                        boundRow.shortView = state;
+                        markDirty.run();
+                    }
+                    selector.setActive(state);
+                    selector.setVisible(state);
+                }
             }
         }
     }

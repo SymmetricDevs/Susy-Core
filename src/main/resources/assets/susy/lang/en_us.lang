@@ -310,9 +310,12 @@ susy.machine.blueprint_assembler.build_error.validation_failure=Validation faile
 susy.machine.blueprint_assembler.build_error.invalid_amount=Invalid amount of components in %1$s, %2$s row
 susy.machine.blueprint_assembler.build_error.incompatible_card=Incompatible card in %1$s, %2$s
 susy.machine.blueprint_assembler.build_error.unknown=Unknown error in %1$s. %2$s
-susy.machine.blueprint_assembler.build_error.success=Build successful!
-susy.machine.blueprint_assembler.build_error.success.extract=Extract the component cards now
+susy.machine.blueprint_assembler.build_error.success=Compilation successful!
+susy.machine.blueprint_assembler.build_error.success.extract=You may now extract the blueprint
 susy.machine.blueprint_assembler.build_button=Build
+susy.machine.blueprint_assembler.compiling=Compiling: %s%%
+susy.machine.blueprint_assembler.no_energy_build=Insufficient energy (MV minimum required)
+susy.machine.blueprint_assembler.no_coolant_build=Insufficient FC-75 coolant flow
 
 
 susy.rocketry.components.engine.name=Engine(s)
@@ -320,6 +323,7 @@ susy.rocketry.components.engine_small.name=Vernier engine(s)
 susy.rocketry.components.tank.name=Tank(s)
 susy.rocketry.components.spacecraft.name=Spacecraft
 susy.rocketry.components.fairing.name=Fairing
+susy.rocketry.components.interstage.name=Interstage
 
 # Component tooltips
 susy.rocketry.tooltip.mass=Mass: %.1f kg
@@ -1272,10 +1276,11 @@ metaitem.data_card.active.tooltip.1=Load this into a Rocket Assembler to build t
 metaitem.data_card.master_blueprint.name=Rocket Blueprint
 metaitem.data_card.master_blueprint.tag.soyuz=§6Soyuz
 metaitem.data_card.active.tag.engine=§6Engine
-metaitem.data_card.active.tag.engine_small=§6Small Engine
+metaitem.data_card.active.tag.engine_small=§6Vernier Engine
 metaitem.data_card.active.tag.fairing=§6Fairing
 metaitem.data_card.active.tag.spacecraft=§6Spacecraft
 metaitem.data_card.active.tag.tank=§6Tank
+metaitem.data_card.active.tag.interstage=§6Interstage
 
 # Machine Translations
 susy.wrongbiome=Machine can not work in this biome!

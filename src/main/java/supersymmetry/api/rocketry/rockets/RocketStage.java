@@ -202,7 +202,7 @@ public class RocketStage implements Cloneable {
             // invalid
         }
         ComponentValidationResult validation_result = componentValidationFunction.apply(
-                new Tuple<String, List<AbstractComponent<?>>>(name, componentList));
+                new Tuple<>(name, componentList));
         if (validation_result != ComponentValidationResult.SUCCESS) return validation_result;
         components.put(name, componentList);
         return ComponentValidationResult.SUCCESS;
