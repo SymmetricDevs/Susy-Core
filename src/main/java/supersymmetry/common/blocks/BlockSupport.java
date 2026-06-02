@@ -6,7 +6,9 @@ import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -15,6 +17,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.block.VariantBlock;
@@ -48,33 +52,46 @@ public class BlockSupport extends VariantBlock<BlockSupport.SupportType> {
         }
     }
 
-    @Nonnull
-    public EnumPushReaction getPushReaction(@Nonnull IBlockState state) {
-        return EnumPushReaction.NORMAL;
+
+    @Override
+    public boolean canCreatureSpawn(
+            @NotNull IBlockState state,
+            @NotNull IBlockAccess world,
+            @NotNull BlockPos pos,
+            @NotNull EntityLiving.SpawnPlacementType type) {
+        return false;
     }
 
     @Override
-    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state,
-                         int fortune) {
-        // Nothing
-    }
-
-    @Override
-    @NotNull
-    @SuppressWarnings("deprecation")
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return BlockSupport.FULL_BLOCK_AABB;
+    @SideOnly(Side.CLIENT)
+    public boolean canRenderInLayer(@NotNull IBlockState state, @NotNull BlockRenderLayer layer) {
+        if (state.getValue(VARIANT) == SupportType.SUPPORT) {
+            return layer == BlockRenderLayer.CUTOUT;
+        }
+        return super.canRenderInLayer(state, layer);
     }
 
     @Override
     @SuppressWarnings("deprecation")
     public boolean isOpaqueCube(@NotNull IBlockState state) {
-        return false;
+        if (state.getValue(VARIANT) == SupportType.SUPPORT) {
+            return false;
+        }
+        return super.isOpaqueCube(state);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public int getLightOpacity(@NotNull IBlockState state) {
+        if (state.getValue(VARIANT) == SupportType.SUPPORT) {
+            return 3; // Some random number IDK
+        }
+        return super.getLightOpacity(state);
     }
 
     public enum SupportType implements IStringSerializable {
 
-        LAUNCH_PAD_TYPE("lv");
+        SUPPORT("support");
 
         public final String name;
 
