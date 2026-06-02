@@ -1,5 +1,32 @@
 package supersymmetry.common.metatileentities.multi.rocket;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Rotation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandlerModifiable;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import cam72cam.mod.entity.ModdedEntity;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
@@ -22,27 +49,6 @@ import gregtech.api.util.GTTransferUtils;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.builder.ILoopType;
@@ -59,11 +65,6 @@ import supersymmetry.common.blocks.BlockRocketAssemblerCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.entities.EntityRocket;
 import supersymmetry.common.entities.EntityTransporterErector;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 
 public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implements IAnimatableMTE {
 
@@ -108,50 +109,62 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         String sp23 = "                       "; // 23 spaces
         String ccc23 = "          CCC          "; // 10sp + 3C + 10sp = 23
         String rrr23 = "          RRR          "; // 10sp + 3R + 10sp = 23
-        String fff23 = "          FFF          "; // 10sp + 3F + 10sp = 23
+        String fff23 = "          LLL          "; // 10sp + 3F + 10sp = 23
         String l23 = "      L         L      "; // 6sp + L + 9sp + L + 6sp = 23
 
-        return FactoryBlockPattern.start()
-                // 11 erector approach aisles (original 6 + 5 new)
-                .aisle(allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23)
-                .aisle(allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23)
-                .aisle(allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23)
-                .aisle(allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23)
-                .aisle(allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23)
-                .aisle(allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23)
-                .aisle(allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23)
-                .aisle(allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23)
-                .aisle(allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23)
-                .aisle(allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23)
-                .aisle(allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23)
-                // Front frame separator
-                .aisle(allD, fff23, fff23, fff23, fff23, fff23, fff23, fff23, fff23)
-                // Main platform (front half)
-                .aisle(dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23)
-                .aisle(dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23)
-                .aisle(dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23)
-                // Main platform (center — support pillars)
-                .aisle(dcTrack, l23, l23, l23, l23, l23, l23, l23, l23)
-                // Main platform (back half)
-                .aisle(dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23)
-                .aisle(dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23)
-                .aisle(dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23)
-                // Transition
-                .aisle(allD, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23)
-                // Back frame separator
-                .aisle(allD, fff23, fff23, fff23, fff23, fff23, fff23, fff23, fff23)
-                // Controller
-                .aisle(ctrlRow, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23)
-                .where(' ', any())
+        FactoryBlockPattern p = FactoryBlockPattern.start();
+        // 11 erector approach aisles (original 6 + 5 new)
+        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        // Front frame separator
+        aisleWithSpace(p, sp23, allD, fff23, fff23, fff23, fff23, fff23, fff23, fff23, fff23);
+        // Main platform (front half)
+        aisleWithSpace(p, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
+        aisleWithSpace(p, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
+        // Main platform (center — support pillars)
+        aisleWithSpace(p, l23, dcTrack, l23, l23, l23, l23, l23, l23, l23, l23);
+        aisleWithSpace(p, l23, dcTrack, l23, l23, l23, l23, l23, l23, l23, l23);
+        aisleWithSpace(p, l23, dcTrack, l23, l23, l23, l23, l23, l23, l23, l23);
+        // Main platform (back half)
+        aisleWithSpace(p, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
+        aisleWithSpace(p, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
+        // Transition
+        aisleWithSpace(p, sp23, allD, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
+        // Back frame separator
+        aisleWithSpace(p, fff23, allD, fff23, fff23, fff23, fff23, fff23, fff23, fff23, fff23);
+        // Controller
+        aisleWithSpace(p, sp23, ctrlRow, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
+        return p.where(' ', any())
                 .where('A', air())
                 .where('S', selfPredicate())
                 .where('D', states(getFoundationState()).or(autoAbilities()))
                 .where('C', states(getReinforcedFoundationState()))
                 .where('F', frames(Materials.Steel))
                 .where('R', SuSyPredicates.rails())
-                .where('L', SuSyPredicates.hiddenStates(Blocks.AIR.getDefaultState(),
-                        SuSyBlocks.SUPPORT.getDefaultState()))
+                .where('L', SuSyPredicates.hiddenStates(SuSyBlocks.SUPPORT.getDefaultState()))
                 .build();
+    }
+
+    private void aisleWithSpace(FactoryBlockPattern pattern, String repeat,
+                                String v1, String v2, String v3, String v4, String v5, String v6, String v7, String v8,
+                                String v9) {
+        // Repeat 30 times
+        pattern.aisle(v1, v2, v3, v4, v5, v6, v7, v8, v9,
+                repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat);
     }
 
     public TraceabilityPredicate autoAbilities() {
@@ -182,7 +195,6 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         // so actually no need to check !world.isRemote
         if (world != null) {
             disableBlockRendering(true);
-            this.fillHiddenBlocksWith(SuSyBlocks.SUPPORT.getDefaultState());
         }
         if (this.needsReinitialization) {
             this.setLaunchPadState(LaunchPadState.INITIALIZING);
@@ -207,7 +219,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     @Override
     public void invalidateStructure() {
         super.invalidateStructure();
-        this.fillHiddenBlocksWith(Blocks.AIR.getDefaultState());
+        disableBlockRendering(false);
         this.trainAABB = null;
         this.needsReinitialization = true;
         this.inputInventory = new GTItemStackHandler(this, 0);
