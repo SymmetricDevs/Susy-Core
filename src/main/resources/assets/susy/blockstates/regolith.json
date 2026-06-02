@@ -6,18 +6,92 @@
       "all" : "gregtech:blocks/susy_stones/regolith/lowland"
     }
   },
-  "variants" : {
-    "variant=highland" : {
-      "model" : "minecraft:cube_all",
-      "textures" : {
-        "all" : "gregtech:blocks/susy_stones/regolith/highland"
+  "variants": {
+    "variant=highland": [
+
+      { "model": "minecraft:cube_all",
+        "weight": 1000,
+        "textures": {"all" :  "gregtech:blocks/susy_stones/regolith/highland2"}
+      },
+      { "model": "minecraft:cube_all",
+        "weight": 1000,
+        "textures": {"all" :  "gregtech:blocks/susy_stones/regolith/highland3"}
+      },
+      { "model": "minecraft:cube_all",
+        "weight": 1000,
+        "textures": {"all" :  "gregtech:blocks/susy_stones/regolith/highland4"}
+      },
+      { "model": "minecraft:cube_all",
+        "weight": 1000,
+        "textures": {"all" :  "gregtech:blocks/susy_stones/regolith/highland5"}
+      },
+      { "model": "minecraft:cube_bottom_top",
+        "weight": 10,
+        "textures": {
+          "bottom": "gregtech:blocks/susy_stones/regolith/highland3",
+          "top": "gregtech:blocks/susy_stones/regolith/highland_crater",
+          "side": "gregtech:blocks/susy_stones/regolith/highland3"
+        }
+      },
+      { "model": "minecraft:cube_bottom_top",
+        "weight": 0.001,
+        "textures": {
+          "bottom": "gregtech:blocks/susy_stones/regolith/highland4",
+          "top": "gregtech:blocks/susy_stones/regolith/highland_soviet",
+          "side": "gregtech:blocks/susy_stones/regolith/highland4"
+        }
+      },
+      { "model": "minecraft:cube_bottom_top",
+        "weight": 0.001,
+        "textures": {
+          "bottom": "gregtech:blocks/susy_stones/regolith/highland5",
+          "top": "gregtech:blocks/susy_stones/regolith/highland_amogus",
+          "side": "gregtech:blocks/susy_stones/regolith/highland5"
+        }
       }
-    },
-    "variant=lowland" : {
-      "model" : "minecraft:cube_all",
-      "textures" : {
-        "all" : "gregtech:blocks/susy_stones/regolith/lowland"
+    ],
+    "variant=lowland": [
+
+      { "model": "minecraft:cube_all",
+        "weight": 1000,
+        "textures": {"all" :  "gregtech:blocks/susy_stones/regolith/lowland2"}
+      },
+      { "model": "minecraft:cube_all",
+        "weight": 1000,
+        "textures": {"all" :  "gregtech:blocks/susy_stones/regolith/lowland3"}
+      },
+      { "model": "minecraft:cube_all",
+        "weight": 1000,
+        "textures": {"all" :  "gregtech:blocks/susy_stones/regolith/lowland4"}
+      },
+      { "model": "minecraft:cube_all",
+        "weight": 1000,
+        "textures": {"all" :  "gregtech:blocks/susy_stones/regolith/lowland5"}
+      },
+      { "model": "minecraft:cube_bottom_top",
+        "weight": 10,
+        "textures": {
+          "bottom": "gregtech:blocks/susy_stones/regolith/lowland3",
+          "top": "gregtech:blocks/susy_stones/regolith/lowland_crater",
+          "side": "gregtech:blocks/susy_stones/regolith/lowland3"
+        }
+      },
+      { "model": "minecraft:cube_bottom_top",
+        "weight": 0.001,
+        "textures": {
+          "bottom": "gregtech:blocks/susy_stones/regolith/lowland5",
+          "top": "gregtech:blocks/susy_stones/regolith/lowland_amogus",
+          "side": "gregtech:blocks/susy_stones/regolith/lowland5"
+        }
+      },
+      { "model": "minecraft:cube_bottom_top",
+        "weight": 0.001,
+        "textures": {
+          "bottom": "gregtech:blocks/susy_stones/regolith/lowland4",
+          "top": "gregtech:blocks/susy_stones/regolith/lowland_soviet",
+          "side": "gregtech:blocks/susy_stones/regolith/lowland4"
+        }
       }
-    }
+    ]
   }
 }
