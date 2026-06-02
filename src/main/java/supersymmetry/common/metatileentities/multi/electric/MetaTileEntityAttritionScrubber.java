@@ -2,8 +2,15 @@ package supersymmetry.common.metatileentities.multi.electric;
 
 import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.hiddenGearTooth;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -27,7 +34,7 @@ public class MetaTileEntityAttritionScrubber extends RecipeMapMultiblockControll
 
     public MetaTileEntityAttritionScrubber(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.ATTRITION_SCRUBBER);
-        this.recipeMapWorkable = new MultiblockRecipeLogic(this, true);
+        this.recipeMapWorkable = new MultiblockRecipeLogic(this, false);
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
@@ -46,7 +53,7 @@ public class MetaTileEntityAttritionScrubber extends RecipeMapMultiblockControll
         return FactoryBlockPattern.start()
                 .aisle(" CCC CCC ", " CCCCCCC ", " CCCCCCC ", " CCCCCCC ", " CCC CCC ", " FGF FGF ")
                 .aisle("CCCCCCCCC", "W#B###B#S", "C###C###C", "I#B#C#B#O", "C###C###C", " FGF FGF ")
-                .aisle("CCCCCCCCC", "WBBB#BBBS", "C#A#C#A#C", "IBABCBSBO", "C#A#C#A#C", " FGF FGF ")
+                .aisle("CCCCCCCCC", "WBBB#BBBS", "C#A#C#A#C", "IBABCBABO", "C#A#C#A#C", " FGF FGF ")
                 .aisle("CCCCCCCCC", "W#B###B#S", "C###C###C", "I#B#C#B#O", "C###C###C", " F F F F ")
                 .aisle(" CCC CCC ", " CXCCCCC ", " CCCCCCC ", " CCCCCCC ", " CCC CCC ", " F F F F ")
                 .where('C', states(getHydrostaticCasingState()).or(autoAbilities(
@@ -76,5 +83,10 @@ public class MetaTileEntityAttritionScrubber extends RecipeMapMultiblockControll
 
     protected static IBlockState getCasingState() {
         return SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.HYDROSTATIC_CASING);
+    }
+
+    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
+        super.addInformation(stack, player, tooltip, advanced);
+        tooltip.add(I18n.format("susy.machine.parallel_pure", 32));
     }
 }
