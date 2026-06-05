@@ -1,12 +1,21 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.block.IStateHarvestLevel;
-import gregtech.api.block.VariantBlock;
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.block.IStateHarvestLevel;
+import gregtech.api.block.VariantBlock;
 
 public class BlockLunarConcrete extends VariantBlock<BlockLunarConcrete.LunarConcreteType> {
 
@@ -20,7 +29,21 @@ public class BlockLunarConcrete extends VariantBlock<BlockLunarConcrete.LunarCon
         setDefaultState(getState(LunarConcreteType.LUNAR_CONCRETE_SMOOTH));
     }
 
-    public static enum LunarConcreteType implements IStringSerializable, IStateHarvestLevel {
+    @Override
+    public int damageDropped(@NotNull IBlockState state) {
+        if (this.getState(state) == LunarConcreteType.LUNAR_CONCRETE_SMOOTH) {
+            return LunarConcreteType.LUNAR_CONCRETE_COBBLE.ordinal();
+        }
+        return super.damageDropped(state);
+    }
+
+    @Override
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
+                                  EntityPlayer player) {
+        return new ItemStack(Item.getItemFromBlock(this), 1, this.getMetaFromState(state));
+    }
+
+    public enum LunarConcreteType implements IStringSerializable, IStateHarvestLevel {
 
         LUNAR_CONCRETE_SMOOTH("lunar_concrete_smooth", 1),
         LUNAR_CONCRETE_BRICKS("lunar_concrete_bricks", 1),
@@ -35,11 +58,10 @@ public class BlockLunarConcrete extends VariantBlock<BlockLunarConcrete.LunarCon
         LUNAR_CONCRETE_WINDMILL_A("lunar_concrete_windmill_a", 1),
         LUNAR_CONCRETE_WINDMILL_B("lunar_concrete_windmill_b", 1);
 
-
         private final String name;
         private final int harvestLevel;
 
-        private LunarConcreteType(String name, int harvestLevel) {
+        LunarConcreteType(String name, int harvestLevel) {
             this.name = name;
             this.harvestLevel = harvestLevel;
         }

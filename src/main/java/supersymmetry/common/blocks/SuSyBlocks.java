@@ -100,7 +100,6 @@ public class SuSyBlocks {
         for (SusyStoneVariantBlock.StoneVariant shape : SusyStoneVariantBlock.StoneVariant.values()) {
             SUSY_STONE_BLOCKS.put(shape, new SusyStoneVariantBlock(shape));
         }
-        registerWalkingSpeedBonus();
         susyBlocks = new ArrayList<>();
         // Test all fields
         for (Field field : SuSyBlocks.class.getDeclaredFields()) {
@@ -123,6 +122,7 @@ public class SuSyBlocks {
 
         REGOLITH = new BlockRegolith();
         REGOLITH.setRegistryName("regolith");
+        registerWalkingSpeedBonus();
 
         SuSyTileEntities.register();
     }
@@ -186,7 +186,9 @@ public class SuSyBlocks {
         for (IBlockState state : ASPHALT.getBlockState().getValidStates()) {
             BlockUtility.setWalkingSpeedBonus(state, 1); // Buff from 0.6F
         }
-
+        for (IBlockState state : LUNAR_CONCRETE.getBlockState().getValidStates()) {
+            BlockUtility.setWalkingSpeedBonus(state, BlockUtility.ASPHALT_WALKING_SPEED_BONUS);
+        }
     }
 
     @SuppressWarnings("unchecked")
