@@ -27,12 +27,8 @@ public class BlockLootbox extends VariantBlock<BlockLootbox.LootboxType> {
     public BlockLootbox() {
         super(net.minecraft.block.material.Material.IRON);
         setTranslationKey("lootbox");
-        try {
-            setHardness(5.0f);
-            setResistance(10.0f);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        setHardness(5.0f);
+        setResistance(10.0f);
         setSoundType(SoundType.METAL);
         setDefaultState(getState(LootboxType.BASIC_FOOD_I));
     }
