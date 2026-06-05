@@ -20,16 +20,20 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import gregtech.api.block.VariantBlock;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 public class BlockLootbox extends VariantBlock<BlockLootbox.LootboxType> {
 
     public BlockLootbox() {
         super(net.minecraft.block.material.Material.IRON);
         setTranslationKey("lootbox");
-        setHardness(5.0f);
-        setResistance(10.0f);
+        try {
+            setHardness(5.0f);
+            setResistance(10.0f);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         setSoundType(SoundType.METAL);
-        setHarvestLevel("hammer", 0);
         setDefaultState(getState(LootboxType.BASIC_FOOD_I));
     }
 
@@ -50,7 +54,7 @@ public class BlockLootbox extends VariantBlock<BlockLootbox.LootboxType> {
         SAVINGS_STYLE_III("savings_style_iii");
 
         private String name;
-        private List<LootEntry> loot;
+        public List<LootEntry> loot = new ObjectArrayList<>();
 
         LootboxType(String name) {
             this.name = name;
@@ -59,6 +63,10 @@ public class BlockLootbox extends VariantBlock<BlockLootbox.LootboxType> {
         @Override
         public String getName() {
             return name;
+        }
+
+        public void addLoot(ItemStack stack, int weight) {
+            this.loot.add(new LootEntry(stack, weight));
         }
     }
 
@@ -85,21 +93,20 @@ public class BlockLootbox extends VariantBlock<BlockLootbox.LootboxType> {
         if (!toolClasses.contains("hammer")) {
             return;
         }
-        if (worldIn.rand.nextInt() < 0.4) {
-            worldIn.playSound(null, pos, SoundEvents.BLOCK_ANVIL_BREAK, SoundCategory.BLOCKS, 0.3f, 0.5f);
-            // Choose loot
-            IBlockState state = worldIn.getBlockState(pos);
-            LootboxType type = this.getState(state);
-            ItemStack stack = WeightedRandom.getRandomItem(worldIn.rand, type.loot).loot;
-            // Spawn item
-            worldIn.spawnEntity(new EntityItem(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack));
-            // Remove block
-            worldIn.setBlockToAir(pos);
-            // Explosion particle effect
-            worldIn.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 0, 0, 0);
-        } else {
-            worldIn.playSound(null, pos, SoundEvents.BLOCK_ANVIL_HIT, SoundCategory.BLOCKS, 0.3f, 0.5f);
-        }
-    }
 
+        worldIn.playSound(null, pos, SoundEvents.BLOCK_ANVIL_DESTROY, SoundCategory.BLOCKS, 1f, 1f);
+        // Choose loot
+        IBlockState state = worldIn.getBlockState(pos);
+        LootboxType type = this.getState(state);
+        ItemStack stack = WeightedRandom.getRandomItem(worldIn.rand, type.loot).loot;
+        // Spawn item
+        if (!worldIn.isRemote) {
+            worldIn.spawnEntity(new EntityItem(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack));
+        }
+        // Remove block
+        worldIn.setBlockToAir(pos);
+        // Explosion particle effect
+        worldIn.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, pos.getX() + 0.5, pos.getY() + 0.5,
+                pos.getZ() + 0.5, 0, 0, 0);
+    }
 }

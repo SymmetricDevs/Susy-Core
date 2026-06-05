@@ -1,0 +1,103 @@
+{
+  "forge_marker" : 1,
+  "defaults": {
+    "model": "minecraft:cube_column",
+    "textures": {
+      "end": "gregtech:blocks/lootbox/basic_food_i/end",
+      "side": "gregtech:blocks/lootbox/basic_food_i/side"
+    }
+  },
+  "variants" : {
+    "variant=basic_food_i" : {
+      "model": "minecraft:cube_column",
+      "textures": {
+        "end": "gregtech:blocks/lootbox/basic_food_i/end",
+        "side": "gregtech:blocks/lootbox/basic_food_i/side"
+      }
+    },
+    "variant=premium_food_i" : {
+      "model": "minecraft:cube_column",
+      "textures": {
+        "end": "gregtech:blocks/lootbox/premium_food_i/end",
+        "side": "gregtech:blocks/lootbox/premium_food_i/side"
+      }
+    },
+    "variant=golden_food_i" : {
+      "model": "minecraft:cube_column",
+      "textures": {
+        "end": "gregtech:blocks/lootbox/golden_food_i/end",
+        "side": "gregtech:blocks/lootbox/golden_food_i/side"
+      }
+    },
+    "variant=basic_food_ii" : {
+      "model": "minecraft:cube_column",
+      "textures": {
+        "end": "gregtech:blocks/lootbox/basic_food_ii/end",
+        "side": "gregtech:blocks/lootbox/basic_food_ii/side"
+      }
+    },
+    "variant=supreme_food_ii" : {
+      "model": "minecraft:cube_column",
+      "textures": {
+        "end": "gregtech:blocks/lootbox/supreme_food_ii/end",
+        "side": "gregtech:blocks/lootbox/supreme_food_ii/side"
+      }
+    },
+    "variant=savings_food_iii" : {
+      "model": "minecraft:cube_column",
+      "textures": {
+        "end": "gregtech:blocks/lootbox/savings_food_iii/end",
+        "side": "gregtech:blocks/lootbox/savings_food_iii/side"
+      }
+    },
+    "variant=basic_weapons_i" : {
+      "model": "minecraft:cube_column",
+      "textures": {
+        "end": "gregtech:blocks/lootbox/basic_weapons_i/end",
+        "side": "gregtech:blocks/lootbox/basic_weapons_i/side"
+      }
+    },
+    "variant=golden_weapons_i" : {
+      "model": "minecraft:cube_column",
+      "textures": {
+        "end": "gregtech:blocks/lootbox/golden_weapons_i/end",
+        "side": "gregtech:blocks/lootbox/golden_weapons_i/side"
+      }
+    },
+    "variant=elite_weapons_iv" : {
+      "model": "minecraft:cube_column",
+      "textures": {
+        "end": "gregtech:blocks/lootbox/elite_weapons_iv/end",
+        "side": "gregtech:blocks/lootbox/elite_weapons_iv/side"
+      }
+    },
+    "variant=value_machines_iii" : {
+      "model": "minecraft:cube_column",
+      "textures": {
+        "end": "gregtech:blocks/lootbox/value_machines_iii/end",
+        "side": "gregtech:blocks/lootbox/value_machines_iii/side"
+      }
+    },
+    "variant=basic_style_ii" : {
+      "model": "minecraft:cube_column",
+      "textures": {
+        "end": "gregtech:blocks/lootbox/basic_style_ii/end",
+        "side": "gregtech:blocks/lootbox/basic_style_ii/side"
+      }
+    },
+    "variant=trendy_style_ii" : {
+      "model": "minecraft:cube_column",
+      "textures": {
+        "end": "gregtech:blocks/lootbox/trendy_style_ii/end",
+        "side": "gregtech:blocks/lootbox/trendy_style_ii/side"
+      }
+    },
+    "variant=savings_style_iii" : {
+      "model": "minecraft:cube_column",
+      "textures": {
+        "end": "gregtech:blocks/lootbox/savings_style_iii/end",
+        "side": "gregtech:blocks/lootbox/savings_style_iii/side"
+      }
+    }
+  }
+}
