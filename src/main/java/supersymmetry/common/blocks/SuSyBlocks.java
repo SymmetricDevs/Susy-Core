@@ -91,6 +91,7 @@ public class SuSyBlocks {
     public static BlockEccentricRoll ECCENTRIC_ROLL;
     public static BlockGrinderCasing GRINDER_CASING;
     public static BlockGirthGearTooth GIRTH_GEAR_TOOTH;
+    public static BlockEDMElectrode EDM_ELECTRODE;
 
     public static ArrayList<VariantBlock<?>> susyBlocks;
 

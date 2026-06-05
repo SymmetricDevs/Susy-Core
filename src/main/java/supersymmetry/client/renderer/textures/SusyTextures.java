@@ -180,6 +180,8 @@ public class SusyTextures {
             "machines/multiblocks/attrition_scrubber");
     public static final OrientedOverlayRenderer SCREEN_PRINTER_OVERLAY = new OrientedOverlayRenderer(
             "machines/screen_printer");
+    public static final OrientedOverlayRenderer EDM_OVERLAY = new OrientedOverlayRenderer(
+            "machines/multiblocks/edm");
 
     public static final SimpleOverlayRenderer SLAG_HOT = new SimpleOverlayRenderer("resource/slag_hot");
     public static final SimpleOverlayRenderer RESTRICTIVE_FILTER_FILTER_OVERLAY = new SimpleOverlayRenderer(

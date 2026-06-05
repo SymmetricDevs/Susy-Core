@@ -160,6 +160,9 @@ tile.engine_casing_2.crankshaft.name=Crankshaft Casing
 
 tile.active_casing.basic_intake_casing.name=Basic Intake Casing
 
+tile.edm_electrode.copper_tungsten.name=Copper-Tungsten EDM Electrode Assembly
+
+
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
 tile.susy_stone_smooth.gneiss.name=Gneiss
@@ -506,6 +509,9 @@ susy.machine.mixer_settler_v2.name=Mixer Settler
 susy.machine.mixer_settler_v2.tooltip=First it mixes, then it settles... - Sun Tzu, The Art of SuSy
 
 susy.machine.parallel_pure=Can parallel to output up to §b%d§r§7 items at once
+
+susy.machine.electric_discharge_machine.name=Electric Discharge Machine (EDM)
+susy.machine.electric_discharge_machine.tooltip=Electronic Dance Machine
 
 # Properties
 susy.recipe.plasma_requirement=Requires plasma: %s
@@ -1087,6 +1093,7 @@ recipemap.plasma_ashing.name=Plasma Asher
 recipemap.resist_processor.name=Photoresist Processor
 recipemap.reactive_ion_etching.name=Reactive Ion Etching
 recipemap.attrition_scrubber.name=Attrition Scrubbing
+recipemap.edm.name=Electric Discharge Machining (EDM)
 
 susy.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 
