@@ -75,7 +75,9 @@ public class BlockSuSyMultiblockCasing extends VariantBlock<BlockSuSyMultiblockC
         HEAVY_DUTY_PAD("heavy_duty_pad"),
         TABULAR_ALUMINA_REFRACTORY("tabular_alumina_refractory"),
         COALESCENCE_PLATE("coalescence_plate"),
-        SYNTHETIC_MULLITE_REFRACTORY("synthetic_mullite_refractory");
+        SYNTHETIC_MULLITE_REFRACTORY("synthetic_mullite_refractory"),
+        HYDROSTATIC_CASING("hydrostatic_casing"),
+        ALUMINIUM_GEARBOX("aluminium_gearbox");
 
         private final String name;
 

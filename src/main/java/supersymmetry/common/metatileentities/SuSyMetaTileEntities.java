@@ -195,6 +195,8 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityCupolaFurnace CUPOLA_FURNACE;
     public static MetaTileEntityGreenhouse GREENHOUSE;
 
+    public static MetaTileEntityElectricDischargeMachine ELECTRIC_DISCHARGE_MACHINE;
+
     // Space multis
     public static MetaTileEntityLandingPad LANDING_PAD;
     public static MetaTileEntityScrapRecycler SCRAP_RECYCLER;
@@ -288,8 +290,10 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityAerospaceFlightSimulator AEROSPACE_FLIGHT_SIMULATOR;
     public static MetaTileEntityBlueprintAssembler BLUEPRINT_ASSEMBLER;
 
+    // Parallel Ore Processing
     public static MetaTileEntityEccentricRollCrusher ECCENTRIC_ROLL_CRUSHER;
     public static MetaTileEntityBallMill BALL_MILL;
+    public static MetaTileEntityAttritionScrubber ATTRITION_SCRUBBER;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500,
@@ -421,10 +425,14 @@ public class SuSyMetaTileEntities {
         UNIVERSAL_EXTENDER = registerMetaTileEntity(14740, new MetaTileEntityExtender(susyId("extender.universal"),
                 cap -> true, SusyTextures.UNIVERSAL_EXTENDER, Materials.Aluminium));
 
+        // Parallel Ore Processing
         ECCENTRIC_ROLL_CRUSHER = registerMetaTileEntity(14741, new MetaTileEntityEccentricRollCrusher(
                 susyId("eccentric_roll_crusher"), SuSyRecipeMaps.ECCENTRIC_ROLL_CRUSHER));
-        BALL_MILL = registerMetaTileEntity(14742,
-                new MetaTileEntityBallMill(susyId("ball_mill"), SuSyRecipeMaps.BALL_MILL));
+        BALL_MILL = registerMetaTileEntity(14742, new MetaTileEntityBallMill(
+                susyId("ball_mill"), SuSyRecipeMaps.BALL_MILL));
+        ATTRITION_SCRUBBER = registerMetaTileEntity(14744, new MetaTileEntityAttritionScrubber(
+                susyId("attrition_scrubber")));
+
         GREENHOUSE = registerMetaTileEntity(14743, new MetaTileEntityGreenhouse(susyId("greenhouse")));
 
         // 14800 Pyrotech Integration: Primitive Smelter
@@ -670,6 +678,9 @@ public class SuSyMetaTileEntities {
                 new MetaTileEntityComponentRedstoneController(susyId("redstone_controller")));
 
         INJECTION_MOLDER = registerMetaTileEntity(18110, new MetaTileEntityInjectionMolder(susyId("injection_molder")));
+
+        ELECTRIC_DISCHARGE_MACHINE = registerMetaTileEntity(18111,
+                new MetaTileEntityElectricDischargeMachine(susyId("electric_discharge_machine")));
 
         // Locked Loot Crates
         LOCKED_HERMETICALLY_SEALED_CRATE = registerMetaTileEntity(18200,

@@ -176,8 +176,12 @@ public class SusyTextures {
             "machines/multiblocks/eccentric_roll_crusher");
     public static final OrientedOverlayRenderer BALL_MILL_OVERLAY = new OrientedOverlayRenderer(
             "machines/multiblocks/ball_mill");
+    public static final OrientedOverlayRenderer ATTRITION_SCRUBBER_OVERLAY = new OrientedOverlayRenderer(
+            "machines/multiblocks/attrition_scrubber");
     public static final OrientedOverlayRenderer SCREEN_PRINTER_OVERLAY = new OrientedOverlayRenderer(
             "machines/screen_printer");
+    public static final OrientedOverlayRenderer EDM_OVERLAY = new OrientedOverlayRenderer(
+            "machines/multiblocks/edm");
 
     public static final SimpleOverlayRenderer SLAG_HOT = new SimpleOverlayRenderer("resource/slag_hot");
     public static final SimpleOverlayRenderer RESTRICTIVE_FILTER_FILTER_OVERLAY = new SimpleOverlayRenderer(
@@ -201,6 +205,10 @@ public class SusyTextures {
             "gregtech:blocks/multiblock_casing/copper_casing_pipe");
     public static final SimpleCubeRenderer ULV_STRUCTURAL_CASING = new SimpleCubeRenderer(
             "gregtech:blocks/multiblock_casing/ulv_structural_casing");
+    public static final SimpleCubeRenderer HYDROSTATIC_CASING = new SimpleCubeRenderer(
+            "gregtech:blocks/multiblock_casing/hydrostatic_casing");
+    public static final SimpleCubeRenderer ALUMINIUM_GEARBOX = new SimpleCubeRenderer(
+            "gregtech:blocks/multiblock_casing/aluminium_gearbox");
     public static final SimpleCubeRenderer STEEL_TURBINE_CASING = new SimpleCubeRenderer(
             "gregtech:blocks/casings/mechanic/machine_casing_turbine_steel");
     public static final SimpleCubeRenderer TITANIUM_TURBINE_CASING = new SimpleCubeRenderer(
