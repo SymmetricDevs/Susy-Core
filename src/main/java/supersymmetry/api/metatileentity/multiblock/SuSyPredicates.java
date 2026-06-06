@@ -38,6 +38,7 @@ import supersymmetry.common.blocks.BlockConveyor;
 import supersymmetry.common.blocks.BlockCoolingCoil;
 import supersymmetry.common.blocks.BlockSinteringBrick;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.blocks.rocketry.BlockProcessorCluster;
 
 /**
  * Class containing global predicates
@@ -334,5 +335,21 @@ public class SuSyPredicates {
             // Supplies an eccentric roll with the correct direction
         }, () -> new BlockInfo[] { new BlockInfo(SuSyBlocks.GIRTH_GEAR_TOOTH.getDefaultState()
                 .withProperty(VariantAxialRotatableBlock.AXIS, axis)) });
+    }
+
+    public static TraceabilityPredicate computation() {
+        return new TraceabilityPredicate(blockWorldState -> {
+                IBlockState state = blockWorldState.getBlockState();
+                if (!(state.getBlock() instanceof BlockProcessorCluster)) {
+                    return false;
+                }
+                BlockProcessorCluster.TierType type = SuSyBlocks.PROCESSOR_CLUSTER.getState(state);
+                blockWorldState.getMatchContext().increment("computation", type.computation);
+                blockWorldState.getMatchContext().increment("coolant", type.coolant);
+                blockWorldState.getMatchContext().increment("energy", type.eut);
+                return true;
+            }, () -> Arrays.stream(BlockProcessorCluster.TierType.values())
+                    .map(type -> new BlockInfo(SuSyBlocks.PROCESSOR_CLUSTER.getState(type)))
+                    .toArray(BlockInfo[]::new));
     }
 }

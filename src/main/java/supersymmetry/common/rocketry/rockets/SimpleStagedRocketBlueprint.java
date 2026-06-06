@@ -9,10 +9,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants.NBT;
 
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
-import supersymmetry.api.rocketry.rockets.IAFSimprovable;
+import supersymmetry.api.rocketry.rockets.IAFSImprovable;
 import supersymmetry.api.rocketry.rockets.RocketStage;
 
-public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint implements IAFSimprovable {
+public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint implements IAFSImprovable {
 
     public static class Builder {
 
@@ -70,11 +70,11 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         this.minimalSuccessChance = minimalSuccessChance;
     }
 
-    public long getAFSimprovement() {
+    public long getAFSImprovement() {
         return AFSimprovement;
     }
 
-    public void setAFSimprovement(long a) {
+    public void setAFSImprovement(long a) {
         this.AFSimprovement = a;
     }
 

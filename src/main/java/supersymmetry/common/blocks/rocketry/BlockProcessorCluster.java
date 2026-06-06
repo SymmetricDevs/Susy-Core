@@ -55,12 +55,18 @@ public class BlockProcessorCluster extends VariantHorizontalRotatableBlock<Block
 
     public enum TierType implements IStringSerializable {
 
-        TIER_1("tier1");
+        TIER_1("tier1", 32, 5, 1);
 
         private final String name;
+        public final int eut;
+        public final int coolant;
+        public final int computation;
 
-        TierType(String name) {
+        TierType(String name, int eut, int coolant, int computation) {
             this.name = name;
+            this.eut = eut;
+            this.coolant = coolant;
+            this.computation = computation;
         }
 
         @Nonnull

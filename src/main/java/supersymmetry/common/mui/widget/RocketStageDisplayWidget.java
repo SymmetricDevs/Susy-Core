@@ -19,7 +19,6 @@ import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.api.util.DataStorageLoader;
-import supersymmetry.common.metatileentities.multi.rocket.BlueprintRowState;
 
 public class RocketStageDisplayWidget extends AbstractWidgetGroup {
 
@@ -32,7 +31,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
     @FunctionalInterface
     public interface RowStateProvider {
 
-        BlueprintRowState get(RocketStage stage, String componentType);
+        ConditionalWidget.BlueprintRowState get(RocketStage stage, String componentType);
     }
 
     @FunctionalInterface
@@ -295,7 +294,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                 String componentType = componentLimits.getKey();
                 int maxSlotCount = stage.maxComponentsOf(componentType);
 
-                BlueprintRowState rowState = rowStateProvider.get(stage, componentType);
+                ConditionalWidget.BlueprintRowState rowState = rowStateProvider.get(stage, componentType);
 
                 HorizontalScrollableListWidget slotsw = new HorizontalScrollableListWidget(0, 0, 18 * 5, 28);
 
@@ -433,15 +432,15 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
         public boolean shortView = false;
         public HorizontalScrollableListWidget itemList;
         public final Widget shortViewButton;
-        public final BlueprintRowState boundRow;
+        public final ConditionalWidget.BlueprintRowState boundRow;
         public final Runnable markDirty;
 
         public Size previousStateSize = new Size(18 * 5 + 2, 28);
         public boolean previousSliderState = false;
 
         public ComponentEntryWidget(
-                                    Position pos, Size size, HorizontalScrollableListWidget itemList,
-                                    BlueprintRowState boundRow, Runnable markDirty) {
+                Position pos, Size size, HorizontalScrollableListWidget itemList,
+                ConditionalWidget.BlueprintRowState boundRow, Runnable markDirty) {
             super(pos, size);
             this.itemList = itemList;
             this.boundRow = boundRow;
