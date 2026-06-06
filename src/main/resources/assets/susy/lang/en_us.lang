@@ -294,11 +294,14 @@ susy.machine.aerospace_flight_simulator.gui.gravity_selector_label=Gravity
 susy.machine.aerospace_flight_simulator.gui.success_chance=Success chance: %s
 susy.machine.aerospace_flight_simulator.gui.rocket_name=Rocket: %s
 susy.machine.aerospace_flight_simulator.gui.stages=Stages:
+susy.machine.aerospace_flight_simulator.gui.start_button=Begin simulation
+susy.machine.aerospace_flight_simulator.gui.start_button=Stop simulation
+susy.machine.aerospace_flight_simulator.gui.reset_fuel=Clear fuel
 
-susy.machine.aerospace_flight_simulator.gui.computation_power=Computation: %s googs/s
+susy.machine.aerospace_flight_simulator.gui.computation_power=Computation: %s goog/t
 # googs/s is a very technical term
-susy.machine.aerospace_flight_simulator.gui.energy_consumption=Power input: %s eu/t
-susy.machine.aerospace_flight_simulator.gui.coolant_flow=Coolant input: %s mb/s
+susy.machine.aerospace_flight_simulator.gui.energy_consumption=Power input: %s EU/t
+susy.machine.aerospace_flight_simulator.gui.coolant_flow=Coolant input: %s mB/s
 
 susy.machine.blueprint_assembler.name=Blueprint Assembler
 susy.machine.blueprint_assembler.stagename=Stage: %s

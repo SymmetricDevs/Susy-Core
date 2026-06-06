@@ -1,6 +1,7 @@
 package supersymmetry.loaders.recipes;
 
 import static gregtech.api.recipes.RecipeMaps.*;
+import static gregtech.api.unification.material.Materials.Water;
 import static gregtech.api.unification.ore.OrePrefix.dust;
 import static gregtech.api.unification.ore.OrePrefix.ingot;
 import static gregtech.common.blocks.MetaBlocks.LD_ITEM_PIPE;
@@ -78,6 +79,11 @@ public class SuSyRecipeLoader {
                     .output(Items.BEEF)
                     .duration(800)
                     .EUt(2)
+                    .buildAndRegister();
+            SuSyRecipeMaps.JET_WINGPACK_FUELS.recipeBuilder()
+                    .fluidInputs(Water.getFluid(1))
+                    .duration(1000)
+                    .EUt(10000)
                     .buildAndRegister();
         }
     }

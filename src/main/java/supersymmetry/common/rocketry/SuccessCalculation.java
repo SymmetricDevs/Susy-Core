@@ -20,7 +20,7 @@ public class SuccessCalculation {
 
     public SuccessCalculation(SimpleStagedRocketBlueprint blueprint) {
         this.blueprint = blueprint;
-        this.augmentation = getSuccessProbability(blueprint.getMinimalSuccessChance(), blueprint.getAFSimprovement());
+        this.augmentation = getSuccessProbability(blueprint.getMinimalSuccessChance(), blueprint.getAFSImprovement());
     }
 
     // lobotomized version of the function below to only take in the blueprint

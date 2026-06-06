@@ -13,11 +13,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -30,6 +28,9 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Matrix4;
 import gregtech.api.capability.*;
 import gregtech.api.capability.impl.EnergyContainerList;
 import gregtech.api.capability.impl.FluidTankList;
@@ -55,15 +56,13 @@ import gregtech.common.blocks.BlockGlassCasing;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.SusyLog;
-import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 import supersymmetry.api.gui.SusyGuiTextures;
+import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
-import supersymmetry.api.rocketry.rockets.IAFSimprovable;
-import supersymmetry.api.rocketry.rockets.RocketStage;
+import supersymmetry.api.rocketry.rockets.IAFSImprovable;
 import supersymmetry.api.util.DataStorageLoader;
-import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.common.blocks.rocketry.BlockProcessorCluster;
+import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.common.mui.widget.ConditionalWidget;
@@ -94,8 +93,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     public IMultipleTankHandler inputCoolant;
 
     public IMultipleTankHandler outputCoolant;
-
-    private boolean isActive = false;
 
     private boolean isWorkingEnabled = true;
 
@@ -135,7 +132,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        this.isActive = data.getBoolean("isActive");
         this.isWorkingEnabled = data.getBoolean("isWorkingEnabled");
         if (data.hasKey("progress")) {
             this.progress = data.getLong("progress");
@@ -156,7 +152,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         NBTTagCompound tag = super.writeToNBT(data);
-        tag.setBoolean("isActive", this.isActive);
         tag.setBoolean("isWorkingEnabled", this.isWorkingEnabled);
         if (progress != 0)
             tag.setLong("progress", this.progress);
@@ -177,7 +172,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     @Override
     public void writeInitialSyncData(PacketBuffer buf) {
         super.writeInitialSyncData(buf);
-        buf.writeBoolean(this.isActive);
         buf.writeBoolean(this.isWorkingEnabled);
         buf.writeLong(this.progress);
         buf.writeDouble(this.gravity);
@@ -194,14 +188,13 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         } else {
             buf.writeBoolean(false);
         }
-        if (this.isActive)
+        if (this.isWorkingEnabled)
             this.rocketBlueprintSlot.setLocked(true);
     }
 
     @Override
     public void receiveInitialSyncData(PacketBuffer buf) {
         super.receiveInitialSyncData(buf);
-        this.isActive = buf.readBoolean();
         this.isWorkingEnabled = buf.readBoolean();
         this.progress = buf.readLong();
         this.gravity = buf.readDouble();
@@ -217,7 +210,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 // goognt
             }
         }
-        if (this.isActive) this.rocketBlueprintSlot.setLocked(true);
+        if (this.isWorkingEnabled) this.rocketBlueprintSlot.setLocked(true);
     }
 
     @Override
@@ -232,7 +225,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
 
     @Override
     public boolean isActive() {
-        return super.isActive() && this.isActive;
+        return this.isWorkingEnabled;
     }
 
     @Override
@@ -250,25 +243,11 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         }
     }
 
-    public void setActive(boolean active) {
-        if (this.isActive != active && this.isStructureFormed()) {
-            this.isActive = active;
-            markDirty();
-            World world = getWorld();
-            if (world != null && !world.isRemote) {
-                writeCustomData(GregtechDataCodes.WORKABLE_ACTIVE, buf -> buf.writeBoolean(active));
-            }
-        }
-    }
-
     @Override
     public void receiveCustomData(int dataId, PacketBuffer buf) {
         super.receiveCustomData(dataId, buf);
         if (dataId == GregtechDataCodes.WORKING_ENABLED) {
             this.setWorkingEnabled(buf.readBoolean());
-        }
-        if (dataId == GregtechDataCodes.WORKABLE_ACTIVE) {
-            this.setActive(buf.readBoolean());
         }
         if (dataId == GregtechDataCodes.LOCK_OBJECT_HOLDER) {
             this.rocketBlueprintSlot.setLocked(buf.readBoolean());
@@ -315,10 +294,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         return MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID);
     }
 
-    public IBlockState getComputerState() {
-        return SuSyBlocks.PROCESSOR_CLUSTER.getState(BlockProcessorCluster.TierType.TIER_1);
-    }
-
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
         return new MetaTileEntityAerospaceFlightSimulator(metaTileEntityId);
@@ -344,7 +319,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     }
 
     public void stop() {
-        setActive(false);
         setWorkingEnabled(false);
         this.rocketBlueprintSlot.setLocked(false);
         AbstractRocketBlueprint bp = getBlueprint();
@@ -352,8 +326,8 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             SusyLog.logger.info("bp == {}", bp);
             return;
         }
-        if (bp instanceof IAFSimprovable bp2) {
-            bp2.setAFSimprovement(this.progress);
+        if (bp instanceof IAFSImprovable bp2) {
+            bp2.setAFSImprovement(this.progress);
         }
 
         this.rocketBlueprintSlot.setNBT(
@@ -368,7 +342,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     // wipe the progress when there is not enough power/coolant to prevent the player from having too
     // much fun
     public void crash() {
-        setActive(false);
         setWorkingEnabled(false);
         this.rocketBlueprintSlot.setLocked(false);
         this.progress = 0;
@@ -376,9 +349,8 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
 
     public void start() {
         var bp = this.getBlueprint();
-        if (bp instanceof IAFSimprovable bp2) {
-            this.progress = bp2.getAFSimprovement();
-            setActive(true);
+        if (bp instanceof IAFSImprovable bp2) {
+            this.progress = bp2.getAFSImprovement();
             setWorkingEnabled(true);
             this.rocketBlueprintSlot.setLocked(true);
         }
@@ -391,7 +363,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
 
     @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.ASSEMBLER_OVERLAY;
+        return SusyTextures.AFS_OVERLAY;
     }
 
     // fix getEnergyToConsume and getCompute when some generic computer blocks are added
@@ -477,7 +449,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             if (consumed == -energyToConsume) {
                 inputCoolant.drain(new FluidStack(COOLANT_IN, coolantToConsume), true);
                 outputCoolant.fill(new FluidStack(COOLANT_OUT, coolantToConsume), true);
-                setActive(true);
                 this.progress += this.getCompute();
             } else {
                 hasNotEnoughEnergy = true;
@@ -501,11 +472,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 .where('S', selfPredicate())
                 .where(' ', air())
                 .where('C', states(getCasingState()))
-                .where(
-                        'P',
-                        states(
-                                getComputerState()
-                                        .withProperty(VariantHorizontalRotatableBlock.FACING, EnumFacing.SOUTH)))
+                .where('P', SuSyPredicates.computation())
                 .where(
                         'T',
                         states(
@@ -554,19 +521,17 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 new IndicatorImageWidget(width - 24, height / 2 - 3, 17, 17, getLogo())
                         .setWarningStatus(getWarningLogo(), this::addWarningText)
                         .setErrorStatus(getErrorLogo(), this::addErrorText));
-        if (this instanceof IControllable controllable) {
-            builder.widget(
-                    new ImageCycleButtonWidget(
-                            width - 42,
-                            height - 23,
-                            18,
-                            18,
-                            GuiTextures.BUTTON_POWER,
-                            controllable::isWorkingEnabled,
-                            controllable::setWorkingEnabled));
-            builder.widget(
-                    new ImageWidget(width - 42, height - 5, 18, 6, GuiTextures.BUTTON_POWER_DETAIL));
-        }
+        builder.widget(
+                new ImageCycleButtonWidget(
+                        width - 42,
+                        height - 23,
+                        18,
+                        18,
+                        GuiTextures.BUTTON_POWER,
+                        this::isWorkingEnabled,
+                        this::setWorkingEnabled));
+        builder.widget(
+                new ImageWidget(width - 42, height - 5, 18, 6, GuiTextures.BUTTON_POWER_DETAIL));
         builder.bindPlayerInventory(entityPlayer.inventory, 125);
 
         // blueprint slot
@@ -585,13 +550,11 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         builder.widget(blueprintSlot);
 
         ConditionalWidget mainGroup = new ConditionalWidget(0, 0, width, height, () -> true);
-        ConditionalWidget fuelGroup = new ConditionalWidget(-120, 0, 120, 80, () -> true);
-        fuelGroup.addWidget(new ImageWidget(0, 0, 120, 80, GuiTextures.DISPLAY));
-        fuelGroup.addWidget(
+        mainGroup.addWidget(
                 new LabelWidget(
                         5, 5, I18n.format(this.getMetaName() + ".gui.fuel_selector_label"), 0xffffff));
-        fuelGroup.addWidget(
-                new FuelRegistrySelectorWidget(
+        mainGroup.addWidget(
+                new ConditionalWidget.FuelRegistrySelectorWidget(
                         4,
                         14,
                         80,
@@ -600,10 +563,10 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                             this.fuel = fuel;
                         }));
         // Gravity selector
-        fuelGroup.addWidget(
+        mainGroup.addWidget(
                 new LabelWidget(
                         5, 60, I18n.format(this.getMetaName() + ".gui.gravity_selector_label"), 0xffffff));
-        fuelGroup.addWidget(
+        mainGroup.addWidget(
                 new TextFieldWidget2(
                         5,
                         68,
@@ -626,9 +589,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                                 .setMaxLength(6));
 
         mainGroup.addWidgetWithTest(
-                fuelGroup, () -> this.hasBlueprint() && !this.isActive() && this.fuel == null);
-
-        mainGroup.addWidgetWithTest(
                 new AdvancedTextWidget(
                         9,
                         19,
@@ -640,12 +600,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                                                 this.getMetaName() + ".gui.rocket_name",
                                                 I18n.format("susy.rocketry." + bp.name + ".name")));
 
-                                l.add(
-                                        new TextComponentTranslation(
-                                                this.getMetaName() + ".gui.stages", bp.getStages().size()));
-                                for (RocketStage stage : bp.getStages()) {
-                                    l.add(new TextComponentString("  - " + I18n.format(stage.getLocalizationKey())));
-                                }
                             }
                         },
                         0xffffff),
@@ -682,7 +636,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
 
         mainGroup.addWidgetWithTest(
                 new LabelWidget(9, height - 80, I18n.format(this.getMetaName() + "gui.cant_improve_error"), 0xff0000),
-                () -> this.hasBlueprint() && !(this.getBlueprint() instanceof IAFSimprovable));
+                () -> this.hasBlueprint() && !(this.getBlueprint() instanceof IAFSImprovable));
         // start button
         mainGroup.addWidgetWithTest(
                 new ClickButtonWidget(
@@ -700,8 +654,9 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                                     energyToConsume += getNumMaintenanceProblems() * energyToConsume / 10;
                                 }
                                 int coolantToConsume = getCoolantToConsume(energyToConsume);
-                                boolean enoughCoolant = inputCoolant.drain(new FluidStack(COOLANT_IN, coolantToConsume),
-                                        false).amount == coolantToConsume;
+                                FluidStack drained = inputCoolant.drain(new FluidStack(COOLANT_IN, coolantToConsume),
+                                        false);
+                                boolean enoughCoolant = drained != null && drained.amount == coolantToConsume;
                                 boolean enoughSpaceForCoolant = outputCoolant
                                         .fill(new FluidStack(COOLANT_OUT, coolantToConsume), false) == coolantToConsume;
                                 if (enoughCoolant && enoughSpaceForCoolant) {
@@ -720,7 +675,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                         })
                                 .setTooltipText(this.getMetaName() + ".gui.start_button")
                                 .setButtonTexture(SusyGuiTextures.GREEN_CIRCLE),
-                () -> !this.isActive() && this.hasBlueprint() && this.getBlueprint() instanceof IAFSimprovable);
+                () -> !this.isActive() && this.hasBlueprint() && this.getBlueprint() instanceof IAFSImprovable);
         // stop button
         mainGroup.addWidgetWithTest(
                 new ClickButtonWidget(
@@ -740,24 +695,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                                 .setTooltipText(this.getMetaName() + ".gui.stop_button")
                                 .setButtonTexture(SusyGuiTextures.RED_CIRCLE),
                 () -> this.isActive() && this.hasBlueprint());
-
-        // button to open the fuel selector ui again, would be nice to give it a different texture
-        mainGroup.addWidgetWithTest(
-                new ClickButtonWidget(
-                        width - 79,
-                        height - 23,
-                        18,
-                        18,
-                        "",
-                        (ignored) -> {
-                            if (!this.isActive() && this.fuel != null) {
-                                this.fuel = null;
-                            }
-                        })
-                                .setTooltipText(this.getMetaName() + ".gui.reset_fuel")
-                                .setButtonTexture(SusyGuiTextures.RED_X)
-                                .setShouldClientCallback(true),
-                () -> !this.isActive() && this.fuel != null);
 
         // rocket render
 
@@ -779,12 +716,19 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                         return new RocketRenderWidget(
                                 new Size(width - 15, 100), new Position(7, 11), rocketentity);
                     }
-                    SusyLog.logger.fatal("something very very bad happened in the ui, bp:{}",
+                    SusyLog.logger.fatal("Somehow the blueprint wasn't a full blueprint? bp:{}",
                             bp == null ? "null" : bp.writeToNBT());
                     return null;
                 });
         builder.widget(mainGroup);
 
         return builder;
+    }
+
+    @Override
+    public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
+        super.renderMetaTileEntity(renderState, translation, pipeline);
+        this.getFrontOverlay().renderOrientedState(renderState, translation, pipeline, getFrontFacing(),
+                this.isStructureFormed(), true);
     }
 }
