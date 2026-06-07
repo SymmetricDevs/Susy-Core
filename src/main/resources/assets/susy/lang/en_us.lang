@@ -223,6 +223,7 @@ susy.material.advanced_coolant=Advanced Coolant
 susy.material.lubricating_oil=Lubricating Oil
 susy.material.aluminium_alloy_7075=Aluminium Alloy 7075
 susy.material.aluminium_alloy_6061=Aluminium Alloy 6061
+susy.material.aluminium_alloy_mg_6=Aluminium Alloy Mg6
 
 # Rock/Mineral Materials
 susy.material.fluorite=Fluorite

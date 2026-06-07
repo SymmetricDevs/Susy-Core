@@ -207,5 +207,13 @@ public class SuSyFirstDegreeMaterials {
                 .components(Aluminium, 678, Zinc, 17, Magnesium, 20, Copper, 4, Chrome, 1)
                 .build();
         AluminiumAlloy7075.addFlags(GENERATE_FINE_WIRE);
+
+        AluminiumAlloyMg6 = new Material.Builder(8761, SuSyUtility.susyId("aluminium_alloy_Mg_6"))
+                .ingot().liquid(new FluidBuilder().temperature(960))
+                .color(0xAceAf1)
+                .flags(DISABLE_DECOMPOSITION, CONTINUOUSLY_CAST, GENERATE_PLATE)
+                .components(Aluminium, 934, Magnesium, 60, Manganese, 6)
+                .build();
+
     }
 }

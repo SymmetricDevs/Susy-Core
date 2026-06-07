@@ -40,6 +40,7 @@ public class SusyMaterials {
     public static Material MetallizedBoPET;
     public static Material AluminiumAlloy6061;
     public static Material AluminiumAlloy7075;
+    public static Material AluminiumAlloyMg6;
 
     public static Material RefractoryGunningMixture;
 
