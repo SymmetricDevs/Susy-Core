@@ -132,6 +132,11 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
                                         return analysis.errorPos(block);
                                     }
                                 }
+                else if (hullBlocks.contains(neighbor) && blockTiles.isCovered(facing))
+                {
+                    analysis.status = BuildStat.WRONG_TILE;
+                    return analysis.errorPos(block);
+                }
 
             }
         }

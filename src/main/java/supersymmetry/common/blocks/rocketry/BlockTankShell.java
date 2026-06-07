@@ -10,6 +10,7 @@ import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 import supersymmetry.api.blocks.VariantDirectionalCoverableBlock;
 import supersymmetry.api.rocketry.WeightedBlock;
+import supersymmetry.common.materials.SusyMaterials;
 
 public class BlockTankShell extends VariantDirectionalCoverableBlock<BlockTankShell.TankCoverType>
                             implements WeightedBlock {
@@ -22,7 +23,7 @@ public class BlockTankShell extends VariantDirectionalCoverableBlock<BlockTankSh
         setSoundType(SoundType.METAL);
         setDefaultState(getState(TankCoverType.TANK_SHELL));
         setHarvestLevel("wrench", 2);
-        validCover = itemStack -> OreDictUnifier.get(OrePrefix.plate, Materials.Aluminium).isItemEqual(itemStack);
+        validCover = itemStack -> OreDictUnifier.get(OrePrefix.plate, SusyMaterials.AluminiumAlloyMg6).isItemEqual(itemStack);
     }
 
     public enum TankCoverType implements IStringSerializable, IStateHarvestLevel {
