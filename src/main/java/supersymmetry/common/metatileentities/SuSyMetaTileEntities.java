@@ -23,8 +23,8 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityEnergyHatch;
-import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntitySubstationEnergyHatch;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiFluidHatch;
+import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntitySubstationEnergyHatch;
 import gregtech.common.metatileentities.storage.MetaTileEntityCrate;
 import gregtech.common.metatileentities.storage.MetaTileEntityDrum;
 import supersymmetry.api.SusyLog;
@@ -537,17 +537,21 @@ public class SuSyMetaTileEntities {
                 new SusyMetaTileEntityEnergyHatch(susyId("energy_hatch.output_16a.ev"), 4, 16, true));
 
         NEW_SUBSTATION_ENERGY_OUTPUT_HATCH_64A[0] = registerMetaTileEntity(16100,
-                new SusyMetaTileEntitySubstationEnergyHatch(susyId("substation_energy_hatch.output_64a.lv"), 1, 64, true));
+                new SusyMetaTileEntitySubstationEnergyHatch(susyId("substation_energy_hatch.output_64a.lv"), 1, 64,
+                        true));
         NEW_SUBSTATION_ENERGY_OUTPUT_HATCH_64A[1] = registerMetaTileEntity(16101,
-                new SusyMetaTileEntitySubstationEnergyHatch(susyId("substation_energy_hatch.output_64a.mv"), 2, 64, true));
+                new SusyMetaTileEntitySubstationEnergyHatch(susyId("substation_energy_hatch.output_64a.mv"), 2, 64,
+                        true));
         NEW_SUBSTATION_ENERGY_OUTPUT_HATCH_64A[2] = registerMetaTileEntity(16102,
-                new SusyMetaTileEntitySubstationEnergyHatch(susyId("substation_energy_hatch.output_64a.hv"), 3, 64, true));
+                new SusyMetaTileEntitySubstationEnergyHatch(susyId("substation_energy_hatch.output_64a.hv"), 3, 64,
+                        true));
         NEW_SUBSTATION_ENERGY_OUTPUT_HATCH_64A[3] = registerMetaTileEntity(16103,
-                new SusyMetaTileEntitySubstationEnergyHatch(susyId("substation_energy_hatch.output_64a.ev"), 4, 64, true));
+                new SusyMetaTileEntitySubstationEnergyHatch(susyId("substation_energy_hatch.output_64a.ev"), 4, 64,
+                        true));
 
         NEW_SUBSTATION_ENERGY_INPUT_HATCH_64A[3] = registerMetaTileEntity(16109,
-                new SusyMetaTileEntitySubstationEnergyHatch(susyId("substation_energy_hatch.input_64a.ev"), 4, 64, false));
-
+                new SusyMetaTileEntitySubstationEnergyHatch(susyId("substation_energy_hatch.input_64a.ev"), 4, 64,
+                        false));
 
         INCINERATOR[0] = registerMetaTileEntity(16500,
                 new MetaTileEntityIncinerator(susyId("incinerator.lv"), 1, 20, 10));
