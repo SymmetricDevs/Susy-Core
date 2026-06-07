@@ -109,17 +109,6 @@ public class ClientProxy extends CommonProxy {
         if (Loader.isModLoaded("sussypatches") && Mods.CTM.isModLoaded() && SusConfig.FEAT.multiCTM) {
             SuSyConnectedTextures.init();
         }
-        try {
-            org.lwjgl.opengl.Display.setTitle("Supersymmetry");
-
-            ByteBuffer icon16 = loadIconFromDisk("resources/universaltweaks/icon16.png");
-            ByteBuffer icon32 = loadIconFromDisk("resources/universaltweaks/icon32.png");
-            ByteBuffer icon256 = loadIconFromDisk("resources/universaltweaks/icon256.png");
-
-            org.lwjgl.opengl.Display.setIcon(new ByteBuffer[] { icon16, icon32, icon256 });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @SubscribeEvent
@@ -344,31 +333,5 @@ public class ClientProxy extends CommonProxy {
         if (Minecraft.getMinecraft().world == event.getWorld()) {
             RenderMaskManager.clearDisabled();
         }
-    }
-
-    private static ByteBuffer loadIconFromDisk(String relativePath) throws IOException {
-        File file = new File(Minecraft.getMinecraft().gameDir, relativePath);
-        System.out.println("[Supersymmetry] Loading icon: " + file.getAbsolutePath());
-        if (!file.exists()) {
-            System.err.println("[Supersymmetry] Icon NOT FOUND!");
-        }
-
-        BufferedImage image = ImageIO.read(file);
-        if (image == null) {
-            throw new IOException("Failed to read image: " + file);
-        }
-
-        int[] pixels = image.getRGB(0, 0, image.getWidth(), image.getHeight(), null, 0, image.getWidth());
-        ByteBuffer buffer = ByteBuffer.allocateDirect(4 * pixels.length);
-
-        for (int pixel : pixels) {
-            buffer.put((byte) ((pixel >> 16) & 0xFF));  // R
-            buffer.put((byte) ((pixel >> 8) & 0xFF));   // G
-            buffer.put((byte) (pixel & 0xFF));          // B
-            buffer.put((byte) ((pixel >> 24) & 0xFF));  // A
-        }
-
-        buffer.flip();
-        return buffer;
     }
 }

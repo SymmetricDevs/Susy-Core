@@ -56,7 +56,7 @@ public class MobHordeWorldData extends WorldSavedData
         MobHordePlayerData invasionPlayerData = this.playerDataMap.get(uuid);
 
         if (invasionPlayerData == null) {
-            invasionPlayerData = new MobHordePlayerData(1000);
+            invasionPlayerData = new MobHordePlayerData();
             this.playerDataMap.put(uuid, invasionPlayerData);
             this.markDirty();
         }
@@ -71,7 +71,7 @@ public class MobHordeWorldData extends WorldSavedData
         for (int i = 0; i < tagList.tagCount(); i++) {
             NBTTagCompound tagEntry = (NBTTagCompound) tagList.get(i);
             UUID uuid = UUID.fromString(tagEntry.getString("UUID"));
-            MobHordePlayerData data = new MobHordePlayerData(1000);
+            MobHordePlayerData data = new MobHordePlayerData();
             data.deserializeNBT(tagEntry.getCompoundTag("Data"));
             this.playerDataMap.put(uuid, data);
         }

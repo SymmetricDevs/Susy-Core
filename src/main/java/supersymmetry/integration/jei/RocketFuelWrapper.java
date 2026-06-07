@@ -4,6 +4,7 @@ import java.util.stream.Collectors;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import net.minecraftforge.fluids.FluidStack;
 
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
@@ -24,7 +25,7 @@ public class RocketFuelWrapper implements IRecipeWrapper {
     @Override
     public void getIngredients(IIngredients ingredients) {
         ingredients.setInputs(VanillaTypes.FLUID, entry.getComposition().stream()
-                .map((t) -> t.getFirst().getFluid(t.getSecond()))
+                .map((t) -> new FluidStack(t.getFirst(), t.getSecond()))
                 .collect(Collectors.toList()));
     }
 

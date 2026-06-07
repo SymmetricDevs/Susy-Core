@@ -13,4 +13,6 @@ public class SuSyDataCodes {
     public static final int UPDATE_FUEL_PROGRESS = assignId();
     public static final int UPDATE_REDSTONE_ACTIVATION = assignId();
     public static final int UPDATE_REDSTONE_SIGNAL = assignId();
+    public static final int BLUEPRINT_BUILD_RESULT = assignId();
+    public static final int BLUEPRINT_BUILD_STATE = assignId();
 }

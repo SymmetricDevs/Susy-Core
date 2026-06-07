@@ -72,7 +72,7 @@ public class SusyGuiTextures {
     public static final TextureArea BLUEPRINT_ASSEMBLER_BUTTON_RIGHT = TextureArea
             .fullImage("textures/gui/widget/button_right_dark.png");
     public static final TextureArea BLUEPRINT_ASSEMBLER_BUTTON_SHORTVIEW = TextureArea
-            .fullImage("textures/gui/widget/circle_green.png");
+            .fullImage("textures/gui/widget/short_all_dial.png");
     public static final TextureArea ROCKET_ASSEMBLER_BUTTON_STOP = TextureArea
             .fullImage("textures/gui/widget/hazard.png");
     public static final TextureArea ROCKET_ASSEMBLER_BUTTON_START = TextureArea

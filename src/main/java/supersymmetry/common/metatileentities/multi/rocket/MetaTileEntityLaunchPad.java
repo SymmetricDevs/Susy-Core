@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
@@ -104,51 +103,68 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle("DDDDDDDDDDDDD", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ",
-                        "     CCC     ", "     CCC     ", "     CCC     ", "     RRR     ")
-                .aisle("DDDDDDDDDDDDD", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ",
-                        "     CCC     ", "     CCC     ", "     CCC     ", "     RRR     ")
-                .aisle("DDDDDDDDDDDDD", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ",
-                        "     CCC     ", "     CCC     ", "     CCC     ", "     RRR     ")
-                .aisle("DDDDDDDDDDDDD", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ",
-                        "     CCC     ", "     CCC     ", "     CCC     ", "     RRR     ")
-                .aisle("DDDDDDDDDDDDD", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ",
-                        "     CCC     ", "     CCC     ", "     CCC     ", "     RRR     ")
-                .aisle("DDDDDDDDDDDDD", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ",
-                        "     CCC     ", "     CCC     ", "     CCC     ", "     RRR     ")
-                .aisle("DDDDDDDDDDDDD", "     FFF     ", "     FFF     ", "     FFF     ", "     FFF     ",
-                        "     FFF     ", "     FFF     ", "     FFF     ", "     FFF     ")
-                .aisle("DDDCCCCCCCDDD", "             ", "             ", "             ", "             ",
-                        "             ", "             ", "             ", "             ")
-                .aisle("DDDCCCCCCCDDD", "             ", "             ", "             ", "             ",
-                        "             ", "             ", "             ", "             ")
-                .aisle("DDDCCCCCCCDDD", "             ", "             ", "             ", "             ",
-                        "             ", "             ", "             ", "             ")
-                .aisle("DDDCCCCCCCDDD", " L         L ", " L         L ", " L         L ", " L         L ",
-                        " L         L ", " L         L ", " L         L ", " L         L ")
-                .aisle("DDDCCCCCCCDDD", "             ", "             ", "             ", "             ",
-                        "             ", "             ", "             ", "             ")
-                .aisle("DDDCCCCCCCDDD", "             ", "             ", "             ", "             ",
-                        "             ", "             ", "             ", "             ")
-                .aisle("DDDCCCCCCCDDD", "             ", "             ", "             ", "             ",
-                        "             ", "             ", "             ", "             ")
-                .aisle("DDDDDDDDDDDDD", "             ", "             ", "             ", "             ",
-                        "             ", "             ", "             ", "             ")
-                .aisle("DDDDDDDDDDDDD", "     FFF     ", "     FFF     ", "     FFF     ", "     FFF     ",
-                        "     FFF     ", "     FFF     ", "     FFF     ", "     FFF     ")
-                .aisle("DDDDDDSDDDDDD", "             ", "             ", "             ", "             ",
-                        "             ", "             ", "             ", "             ")
-                .where(' ', any())
+        String allD = "DDDDDDDDDDDDDDDDDDDDDDD"; // 23 D's
+        String dcTrack = "DDDDDDDDCCCCCCCDDDDDDDD"; // 8D + 7C + 8D = 23
+        String ctrlRow = "DDDDDDDDDDDSDDDDDDDDDDD"; // 11D + S + 11D = 23
+        String sp23 = "                       "; // 23 spaces
+        String ccc23 = "          CCC          "; // 10sp + 3C + 10sp = 23
+        String rrr23 = "          RRR          "; // 10sp + 3R + 10sp = 23
+        String fff23 = "          LLL          "; // 10sp + 3F + 10sp = 23
+        String l23 = "      L         L      "; // 6sp + L + 9sp + L + 6sp = 23
+
+        FactoryBlockPattern p = FactoryBlockPattern.start();
+        // 11 erector approach aisles (original 6 + 5 new)
+        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        // Front frame separator
+        aisleWithSpace(p, sp23, allD, fff23, fff23, fff23, fff23, fff23, fff23, fff23, fff23);
+        // Main platform (front half)
+        aisleWithSpace(p, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
+        aisleWithSpace(p, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
+        // Main platform (center — support pillars)
+        aisleWithSpace(p, l23, dcTrack, l23, l23, l23, l23, l23, l23, l23, l23);
+        aisleWithSpace(p, l23, dcTrack, l23, l23, l23, l23, l23, l23, l23, l23);
+        aisleWithSpace(p, l23, dcTrack, l23, l23, l23, l23, l23, l23, l23, l23);
+        // Main platform (back half)
+        aisleWithSpace(p, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
+        aisleWithSpace(p, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
+        // Transition
+        aisleWithSpace(p, sp23, allD, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
+        // Back frame separator
+        aisleWithSpace(p, fff23, allD, fff23, fff23, fff23, fff23, fff23, fff23, fff23, fff23);
+        // Controller
+        aisleWithSpace(p, sp23, ctrlRow, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
+        return p.where(' ', any())
                 .where('A', air())
                 .where('S', selfPredicate())
                 .where('D', states(getFoundationState()).or(autoAbilities()))
                 .where('C', states(getReinforcedFoundationState()))
                 .where('F', frames(Materials.Steel))
                 .where('R', SuSyPredicates.rails())
-                .where('L', SuSyPredicates.hiddenStates(Blocks.AIR.getDefaultState(),
-                        SuSyBlocks.SUPPORT.getDefaultState()))
+                .where('L', SuSyPredicates.hiddenStates(SuSyBlocks.SUPPORT.getDefaultState()))
                 .build();
+    }
+
+    private void aisleWithSpace(FactoryBlockPattern pattern, String repeat,
+                                String v1, String v2, String v3, String v4, String v5, String v6, String v7, String v8,
+                                String v9) {
+        // Repeat 30 times
+        pattern.aisle(v1, v2, v3, v4, v5, v6, v7, v8, v9,
+                repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat);
     }
 
     public TraceabilityPredicate autoAbilities() {
@@ -179,7 +195,6 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         // so actually no need to check !world.isRemote
         if (world != null) {
             disableBlockRendering(true);
-            this.fillHiddenBlocksWith(SuSyBlocks.SUPPORT.getDefaultState());
         }
         if (this.needsReinitialization) {
             this.setLaunchPadState(LaunchPadState.INITIALIZING);
@@ -204,7 +219,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     @Override
     public void invalidateStructure() {
         super.invalidateStructure();
-        this.fillHiddenBlocksWith(Blocks.AIR.getDefaultState());
+        disableBlockRendering(false);
         this.trainAABB = null;
         this.needsReinitialization = true;
         this.inputInventory = new GTItemStackHandler(this, 0);
@@ -351,14 +366,14 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         var composition = fuelEntry.getComposition();
         int unitsDrained = Math.min(selectedRocket.getFuelVolume() - this.fuelingProgress, MAX_FUELING_SPEED);
         for (var comp : composition) {
-            FluidStack drained = inputFluidInventory.drain(comp.getFirst().getFluid(MAX_FUELING_SPEED), false);
+            FluidStack drained = new FluidStack(comp.getFirst(), MAX_FUELING_SPEED);
             int amount = drained == null ? 0 : drained.amount;
             // Intentional integer division moment
             unitsDrained = Math.min(amount, unitsDrained / comp.getSecond());
         }
         setFuelingProgress(this.fuelingProgress + unitsDrained);
         for (var comp : composition) {
-            inputFluidInventory.drain(comp.getFirst().getFluid(comp.getSecond() * unitsDrained), true);
+            inputFluidInventory.drain(new FluidStack(comp.getFirst(), (comp.getSecond() * unitsDrained)), true);
         }
     }
 
@@ -551,7 +566,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         EMPTY, // No rocket transporter has been selected, nor is there any rocket in the launch pad.
         LOADING, // A rocket transporter has been selected, causing it to begin the erecting process.
         LOADED, // A rocket has been loaded into the launch pad. Players should be able to enter through physical rocket
-                // supports and remotely launch the rocket.
+        // supports and remotely launch the rocket.
         LAUNCHING // The rocket supports retract and the engines are turned on.
     }
 
@@ -565,5 +580,33 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         super.renderMetaTileEntity(renderState, translation, pipeline);
         this.getFrontOverlay().renderOrientedState(renderState, translation, pipeline, getFrontFacing(),
                 this.isStructureFormed(), this.isStructureFormed());
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public BlockPos getLightPos() {
+        if (this.lightPos == null) {
+            this.lightPos = getPos().offset(EnumFacing.UP, 6);
+        }
+        return lightPos;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public Vec3i getTransformation() {
+        if (this.transformation == null) {
+            EnumFacing front = getFrontFacing();
+            EnumFacing upwards = getUpwardsFacing();
+            boolean flipped = isFlipped();
+            EnumFacing back = front.getOpposite();
+            EnumFacing up = RelativeDirection.UP.getRelativeFacing(front, upwards, flipped);
+
+            int xOff = back.getXOffset() * 6 + up.getXOffset() * -8;
+            int yOff = back.getYOffset() * 6 + up.getYOffset() * -8;
+            int zOff = back.getZOffset() * 6 + up.getZOffset() * -8;
+
+            this.transformation = new Vec3i(xOff, yOff, zOff);
+        }
+        return transformation;
     }
 }

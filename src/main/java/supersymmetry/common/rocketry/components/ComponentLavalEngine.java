@@ -7,7 +7,10 @@ import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -50,6 +53,28 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
                                                             BlockCombustionChamber.CombustionType.MONOPROPELLANT));
                                     return a && !b;
                                 }));
+    }
+
+    @Override
+    public boolean configureDefaults() {
+        this.materials.add(new MaterialCost(new ItemStack(Items.DIAMOND), MaterialCost.SourceType.ITEM, 1));
+        this.radius = 3.0;
+        this.areaRatio = 1.0;
+        this.fuelThroughput = 500.0;
+        this.mass = 3000.0;
+        return true;
+    }
+
+    @Override
+    public List<String> getTooltipLines(NBTTagCompound tag) {
+        List<String> lines = super.getTooltipLines(tag);
+        if (tag.hasKey("area_ratio")) {
+            lines.add(I18n.format("susy.rocketry.tooltip.area_ratio", tag.getDouble("area_ratio")));
+        }
+        if (tag.hasKey("throughput")) {
+            lines.add(I18n.format("susy.rocketry.tooltip.throughput", tag.getDouble("throughput")));
+        }
+        return lines;
     }
 
     @Override
@@ -158,7 +183,8 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
             analysis.status = BuildStat.C_CHAMBER_INSIDE;
             return Optional.empty();
         }
-        if (!analysis.world.isAirBlock(cChamber.add(0, -1, 0)) && !analysis.world.getBlockState(cChamber.add(0, -1, 0)).getBlock().equals(Blocks.PLANKS)) {
+        if (!analysis.world.isAirBlock(cChamber.add(0, -1, 0)) &&
+                !analysis.world.getBlockState(cChamber.add(0, -1, 0)).getBlock().equals(Blocks.PLANKS)) {
             analysis.status = BuildStat.NOZZLE_MALFORMED;
             return analysis.errorPos(cChamber.add(0, -1, 0));
         }
@@ -173,7 +199,7 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
         }
         for (BlockPos pumpPos : pumps) {
             EnumFacing dir = analysis.world.getBlockState(pumpPos).getValue(FACING);
-            if (dir.equals(EnumFacing.UP) || !pumpPos.add(dir.getDirectionVec()).equals(cChamber)) {
+            if (dir.equals(EnumFacing.UP) || !pumpPos.add(dir.getOpposite().getDirectionVec()).equals(cChamber)) {
                 analysis.status = BuildStat.WEIRD_PUMP;
                 return analysis.errorPos(pumpPos);
             }

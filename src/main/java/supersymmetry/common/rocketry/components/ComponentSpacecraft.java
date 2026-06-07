@@ -7,6 +7,9 @@ import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -30,8 +33,8 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
 
     public ComponentSpacecraft() {
         super(
-                "spacecraft_hull",
-                "spacecraft_hull",
+                "spacecraft",
+                "spacecraft",
                 tuple -> tuple.getSecond().stream()
                         .anyMatch(
                                 pos -> tuple
@@ -39,6 +42,26 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                                                 .getBlockState(pos)
                                                 .getBlock()
                                                 .equals(SuSyBlocks.SPACECRAFT_HULL)));
+    }
+
+    @Override
+    public boolean configureDefaults() {
+        this.materials.add(new MaterialCost(new ItemStack(Items.DIAMOND), MaterialCost.SourceType.ITEM, 1));
+        this.radius = 3.0;
+        this.volume = 5.0;
+        this.mass = 1000.0;
+        this.hasAir = true;
+        return true;
+    }
+
+    @Override
+    public List<String> getTooltipLines(NBTTagCompound tag) {
+        List<String> lines = super.getTooltipLines(tag);
+        if (tag.hasKey("volume")) {
+            lines.add(I18n.format("susy.rocketry.tooltip.volume", tag.getDouble("volume")));
+        }
+        // not sure what hasAir means here so no tooltip for that
+        return lines;
     }
 
     @Override

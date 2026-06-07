@@ -1,6 +1,9 @@
 package supersymmetry.common.metatileentities.multiblockpart;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -122,7 +125,8 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
 
         if (struct.status == BuildStat.SCANNING) {
             struct.status = BuildStat.UNRECOGNIZED;
-            /* if it wasnt changed after scanning, nothing matched */ }
+            /* if it wasnt changed after scanning, nothing matched */
+        }
 
         /*
          * Plan from here on out:
@@ -173,10 +177,11 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                     }
                     getInventory()
                             .setNBT(
-                                    _ -> {
-                                        NBTTagCompound t = scanResult.get();
-                                        component.writeToNBT(t);
-                                        return t;
+                                    t -> {
+                                        NBTTagCompound tag = scanResult.get();
+                                        tag.setInteger("dataid", (int) (Math.random() * Integer.MAX_VALUE));
+                                        component.writeToNBT(tag);
+                                        return tag;
                                     });
                     errorPos = null;
                     break;

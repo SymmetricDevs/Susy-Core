@@ -11,6 +11,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.GTInternalTags;
+import supercritical.common.SCConfigHolder;
 import supersymmetry.api.capability.SuSyCapabilities;
 import supersymmetry.api.sound.SusySounds;
 import supersymmetry.client.shaders.ShaderManager;
@@ -53,6 +54,9 @@ public class Supersymmetry {
         // GTValues.HT = true;
         SuSyIRLoader.initDefinitions();
         SuSyIRLoader.initEntities();
+
+        // Very annoying config
+        SCConfigHolder.misc.enableMaterialModifications = false;
 
         // Groovyscript starts immediately!
         proxy.checkCanaryFile();
@@ -101,17 +105,23 @@ public class Supersymmetry {
     public void onServerStarting(@NotNull FMLServerStartingEvent event) {
         CommandHordeBase hordeCommand = new CommandHordeBase();
         CommandRecipemapDump jeidump = new CommandRecipemapDump();
+        CommandUntranslatedKeys untranslatedKeys = new CommandUntranslatedKeys();
         CommandMultiblock multiblockCommand = new CommandMultiblock();
         CommandTPDimSpace tpDimSpace = new CommandTPDimSpace();
 
         event.registerServerCommand(hordeCommand);
         event.registerServerCommand(jeidump);
+        event.registerServerCommand(untranslatedKeys);
         event.registerServerCommand(multiblockCommand);
         event.registerServerCommand(tpDimSpace);
 
         hordeCommand.addSubcommand(new CommandHordeStart());
         hordeCommand.addSubcommand(new CommandHordeStop());
         hordeCommand.addSubcommand(new CommandHordeStatus());
+        hordeCommand.addSubcommand(new CommandHordeKill());
+        hordeCommand.addSubcommand(new CommandHordeResetScripted());
+
+        event.registerServerCommand(new CommandFactionHate());
     }
 
     @SideOnly(Side.CLIENT)

@@ -158,22 +158,22 @@ public class SuSyFirstDegreeMaterials {
 
         // Flourinated Ketones
 
-        Perfluoro2Methyl3Pentanone = new Material.Builder(27117, SuSyUtility.susyId("perfluoro_2_methyl_3_pentanone"))
+        FC75 = new Material.Builder(27117, SuSyUtility.susyId("fc_75"))
                 .liquid(new FluidBuilder().block())
                 .color(0xA090D5FF)
                 .flags(DISABLE_DECOMPOSITION)
-                .components(Carbon, 6, Fluorine, 12, Oxygen, 1)
+                .components(Carbon, 8, Fluorine, 16, Oxygen, 1)
                 .build()
-                .setFormula("C6F12O", true);
+                .setFormula("C8F16O", true);
 
-        WarmPerfluoro2Methyl3Pentanone = new Material.Builder(27118,
-                SuSyUtility.susyId("warm_perfluoro_2_methyl_3_pentanone"))
+        WarmFC75 = new Material.Builder(27118,
+                SuSyUtility.susyId("warm_fc_75"))
                         .liquid()
                         .color(0xCEE3F0)
                         .flags(DISABLE_DECOMPOSITION)
-                        .components(Carbon, 6, Fluorine, 12, Oxygen, 1)
+                        .components(Carbon, 8, Fluorine, 16, Oxygen, 1)
                         .build()
-                        .setFormula("C6F12O", true);
+                        .setFormula("C8F16O", true);
 
         // Thermodynamic materials
 
@@ -182,12 +182,6 @@ public class SuSyFirstDegreeMaterials {
                 .color(0xA9D0F5)
                 .flags(DISABLE_DECOMPOSITION)
                 .components(Nitrogen, 78, Oxygen, 21, Argon, 9)
-                .build();
-
-        RP_1 = new Material.Builder(27151, SuSyUtility.susyId("RP_1"))
-                .fluid()
-                .color(0xb50707)
-                .flags(FLAMMABLE)
                 .build();
 
         // Aluminium Alloys
