@@ -18,6 +18,7 @@ import gregtech.common.blocks.BlockBoilerCasing;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.client.renderer.textures.SusyTextures;
 
 public class MetaTileEntityCatalyticReformer extends RecipeMapMultiblockController {
 
@@ -58,7 +59,7 @@ public class MetaTileEntityCatalyticReformer extends RecipeMapMultiblockControll
     @Nonnull
     @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.BLAST_FURNACE_OVERLAY;
+        return SusyTextures.CATALYTIC_REFORMER_OVERLAY;
     }
 
     @Override

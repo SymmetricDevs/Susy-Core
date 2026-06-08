@@ -1009,6 +1009,21 @@ susy.machine.sputter_deposition.uiv.name=Epic Sputtering Machine III
 susy.machine.sputter_deposition.uxv.name=Epic Sputtering Machine IV
 susy.machine.sputter_deposition.opv.name=Legendary Sputtering Machine
 
+# Evaporation Deposition Machine
+susy.machine.evaporation_deposition.lv.name=Basic Evaporation Deposition Machine
+susy.machine.evaporation_deposition.mv.name=Advanced Evaporation Deposition Machine
+susy.machine.evaporation_deposition.hv.name=Advanced Evaporation Deposition Machine II
+susy.machine.evaporation_deposition.ev.name=Advanced Evaporation Deposition Machine III
+susy.machine.evaporation_deposition.iv.name=Elite Evaporation Deposition Machine
+susy.machine.evaporation_deposition.luv.name=Elite Evaporation Deposition Machine II
+susy.machine.evaporation_deposition.zpm.name=Elite Evaporation Deposition Machine III
+susy.machine.evaporation_deposition.uv.name=Ultimate Evaporation Deposition Machine
+susy.machine.evaporation_deposition.uhv.name=Epic Evaporation Deposition Machine I
+susy.machine.evaporation_deposition.uev.name=Epic Evaporation Deposition Machine II
+susy.machine.evaporation_deposition.uiv.name=Epic Evaporation Deposition Machine III
+susy.machine.evaporation_deposition.uxv.name=Epic Evaporation Deposition Machine IV
+susy.machine.evaporation_deposition.opv.name=Legendary Evaporation Deposition Machine
+
 susy.machine.component_scanner.name=Spacecraft Component Scanner
 susy.machine.component_scanner.scan_button=Scan Part
 susy.machine.component_scanner.unscanned=Component unscanned.
