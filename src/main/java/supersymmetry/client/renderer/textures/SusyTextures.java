@@ -71,7 +71,7 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer BATH_CONDENSER_OVERLAY = new OrientedOverlayRenderer(
             "machines/bath_condenser");
     public static final OrientedOverlayRenderer CATALYTIC_REFORMER_OVERLAY = new OrientedOverlayRenderer(
-            "multiblock/catalytic_reformer");
+            "machines/multiblocks/catalytic_reformer");
     public static final OrientedOverlayRenderer INCINERATOR_OVERLAY = new OrientedOverlayRenderer(
             "machines/incinerator");
 

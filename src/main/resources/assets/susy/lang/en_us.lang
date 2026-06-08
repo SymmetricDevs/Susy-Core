@@ -1002,7 +1002,7 @@ susy.machine.evaporation_deposition.uv.name=Ultimate Evaporation Deposition Mach
 susy.machine.evaporation_deposition.uhv.name=Epic Evaporation Deposition Machine I
 susy.machine.evaporation_deposition.uev.name=Epic Evaporation Deposition Machine II
 susy.machine.evaporation_deposition.uiv.name=Epic Evaporation Deposition Machine III
-susy.machine.evaporation_deposition.oxv.name=Epic Evaporation Deposition Machine IV
+susy.machine.evaporation_deposition.uxv.name=Epic Evaporation Deposition Machine IV
 susy.machine.evaporation_deposition.opv.name=Legendary Evaporation Deposition Machine
 
 susy.machine.component_scanner.name=Spacecraft Component Scanner

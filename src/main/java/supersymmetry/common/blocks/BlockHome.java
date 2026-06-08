@@ -8,6 +8,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
@@ -15,9 +16,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
 
+import gregtech.client.utils.BloomEffectUtil;
+import gregtech.common.ConfigHolder;
 import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
 public class BlockHome extends VariantHorizontalRotatableBlock<BlockHome.HomeType> {
@@ -59,6 +64,23 @@ public class BlockHome extends VariantHorizontalRotatableBlock<BlockHome.HomeTyp
             playerIn.sendStatusMessage(new TextComponentTranslation("tile.home.denied"), true);
             return false;
         }
+    }
+
+    @SideOnly(Side.CLIENT)
+    protected boolean isBloomEnabled() {
+        return ConfigHolder.client.machinesEmissiveTextures;
+    }
+
+    @NotNull
+    @Override
+    public BlockRenderLayer getRenderLayer() {
+        return BlockRenderLayer.CUTOUT;
+    }
+
+    @Override
+    public boolean canRenderInLayer(@NotNull IBlockState state, @NotNull BlockRenderLayer layer) {
+        return layer == getRenderLayer() ||
+                layer == BloomEffectUtil.getEffectiveBloomLayer(isBloomEnabled());
     }
 
     public enum HomeType implements IStringSerializable {
