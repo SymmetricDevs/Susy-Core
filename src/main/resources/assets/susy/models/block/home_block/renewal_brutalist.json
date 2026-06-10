@@ -1,9 +1,11 @@
 {
   "parent": "block/orientable",
   "textures": {
-    "front": "gregtech:blocks/home_blocks/renewal_brutalist/renewal_brutalist_front",
-    "side": "gregtech:blocks/home_blocks/renewal_brutalist/renewal_brutalist_left",
+    "north": "gregtech:blocks/home_blocks/renewal_brutalist/renewal_brutalist_front",
+    "east":  "gregtech:blocks/home_blocks/renewal_brutalist/renewal_brutalist_left",
     "south": "gregtech:blocks/home_blocks/renewal_brutalist/renewal_brutalist_back",
-    "top": "gregtech:blocks/home_blocks/renewal_brutalist/renewal_brutalist_top"
+    "west":  "gregtech:blocks/home_blocks/renewal_brutalist/renewal_brutalist_right",
+    "up":    "gregtech:blocks/home_blocks/renewal_brutalist/renewal_brutalist_top",
+    "down":  "gregtech:blocks/home_blocks/renewal_brutalist/renewal_brutalist_bottom"
   }
 }

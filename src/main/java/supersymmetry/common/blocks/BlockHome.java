@@ -79,8 +79,8 @@ public class BlockHome extends VariantHorizontalRotatableBlock<BlockHome.HomeTyp
 
     @Override
     public boolean canRenderInLayer(@NotNull IBlockState state, @NotNull BlockRenderLayer layer) {
-        return layer == getRenderLayer() ||
-                layer == BloomEffectUtil.getEffectiveBloomLayer(isBloomEnabled());
+        return layer == getRenderLayer() || (getState(state) == HomeType.HOME_SCIFI &&
+                layer == BloomEffectUtil.getEffectiveBloomLayer(isBloomEnabled()));
     }
 
     public enum HomeType implements IStringSerializable {
