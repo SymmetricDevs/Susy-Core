@@ -19,6 +19,7 @@
     "OreDictUnifierMixin",
     "RecipeBuilderAccessor",
     "RecipeMapsMixin",
+    "RecipeMapCategoryMixin",
     "RecyclingRecipesMixin",
     "ToolBuilderAccessor",
     "ToolItemsMixin"
