@@ -70,6 +70,7 @@ import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.rocketry.BlockProcessorCluster;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.materials.SusyMaterials;
+import supersymmetry.common.mui.widget.BlueprintRowState;
 import supersymmetry.common.mui.widget.ConditionalWidget;
 import supersymmetry.common.mui.widget.RocketStageDisplayWidget;
 import supersymmetry.common.mui.widget.SlotWidgetMentallyStable;
@@ -85,7 +86,7 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
     public IMultipleTankHandler outputCoolant;
     private IEnergyContainer energyContainer;
 
-    public Map<String, Map<String, ConditionalWidget.BlueprintRowState>> stageRows = new TreeMap<>();
+    public Map<String, Map<String, BlueprintRowState>> stageRows = new TreeMap<>();
 
     private String lastErrorStage;
     private String lastErrorComponent;
@@ -223,8 +224,8 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
         return null;
     }
 
-    public ConditionalWidget.BlueprintRowState getRowState(RocketStage stage, String componentType) {
-        Map<String, ConditionalWidget.BlueprintRowState> stageSlots = stageRows.get(stage.getName());
+    public BlueprintRowState getRowState(RocketStage stage, String componentType) {
+        Map<String, BlueprintRowState> stageSlots = stageRows.get(stage.getName());
         if (stageSlots == null) return null;
         return stageSlots.get(componentType);
     }
@@ -249,9 +250,9 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
 
     private NBTTagCompound writeRowStatesToNBT() {
         NBTTagCompound root = new NBTTagCompound();
-        for (Map.Entry<String, Map<String, ConditionalWidget.BlueprintRowState>> stageEntry : stageRows.entrySet()) {
+        for (Map.Entry<String, Map<String, BlueprintRowState>> stageEntry : stageRows.entrySet()) {
             NBTTagCompound stageTag = new NBTTagCompound();
-            for (Map.Entry<String, ConditionalWidget.BlueprintRowState> rowEntry : stageEntry.getValue().entrySet()) {
+            for (Map.Entry<String, BlueprintRowState> rowEntry : stageEntry.getValue().entrySet()) {
                 stageTag.setTag(rowEntry.getKey(), rowEntry.getValue().writeStateToNBT());
             }
             root.setTag(stageEntry.getKey(), stageTag);
@@ -262,11 +263,11 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
     private void applyRowStatesFromNBT(NBTTagCompound root) {
         if (root == null) return;
         for (String stageName : root.getKeySet()) {
-            Map<String, ConditionalWidget.BlueprintRowState> stageMap = stageRows.get(stageName);
+            Map<String, BlueprintRowState> stageMap = stageRows.get(stageName);
             if (stageMap == null) continue;
             NBTTagCompound stageTag = root.getCompoundTag(stageName);
             for (String componentType : stageTag.getKeySet()) {
-                ConditionalWidget.BlueprintRowState row = stageMap.get(componentType);
+                BlueprintRowState row = stageMap.get(componentType);
                 if (row == null) continue;
                 row.readStateFromNBT(stageTag.getCompoundTag(componentType));
             }
@@ -420,7 +421,7 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                 RocketStage stage = st.get();
                 for (var rowEntry : stageEntry.getValue().entrySet()) {
                     String componentType = rowEntry.getKey();
-                    ConditionalWidget.BlueprintRowState rowState = rowEntry.getValue();
+                    BlueprintRowState rowState = rowEntry.getValue();
                     lastErrorComponent = componentType;
                     SusyLog.logger.info("stage: {}, row type:{} [shortView:{},multiplier:{}]", stageName,
                             componentType, rowState.shortView, rowState.getMultiplier());
@@ -608,11 +609,11 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
     private void autofillFromBlueprint(AbstractRocketBlueprint bp) {
         if (bp == null) return;
         for (RocketStage stage : bp.getStages()) {
-            Map<String, ConditionalWidget.BlueprintRowState> stageMap = stageRows.get(stage.getName());
+            Map<String, BlueprintRowState> stageMap = stageRows.get(stage.getName());
             if (stageMap == null) continue;
             for (Map.Entry<String, List<AbstractComponent<?>>> entry : stage.getComponents().entrySet()) {
                 String compType = entry.getKey();
-                ConditionalWidget.BlueprintRowState rowState = stageMap.get(compType);
+                BlueprintRowState rowState = stageMap.get(compType);
                 if (rowState == null) continue;
                 List<AbstractComponent<?>> comps = entry.getValue();
                 if (comps.isEmpty()) continue;
@@ -691,12 +692,12 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
         return false; // this block needs its own implementation
     }
 
-    private Map<String, Map<String, ConditionalWidget.BlueprintRowState>> generateRowsFromBlueprint(
+    private Map<String, Map<String, BlueprintRowState>> generateRowsFromBlueprint(
                                                                                   AbstractRocketBlueprint bp,
                                                                                   MetaTileEntity mte) {
-        Map<String, Map<String, ConditionalWidget.BlueprintRowState>> map = new TreeMap<>();
+        Map<String, Map<String, BlueprintRowState>> map = new TreeMap<>();
         for (RocketStage stage : bp.getStages()) {
-            Map<String, ConditionalWidget.BlueprintRowState> stageComponents = new TreeMap<>();
+            Map<String, BlueprintRowState> stageComponents = new TreeMap<>();
             for (Map.Entry<String, int[]> entry : stage.getComponentLimits().entrySet()) {
                 String componentType = entry.getKey();
                 int[] validMultiplierValues = entry.getValue();
@@ -724,7 +725,7 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                                         return false;
                                     }));
                 }
-                stageComponents.put(componentType, new ConditionalWidget.BlueprintRowState(slots, validMultiplierValues));
+                stageComponents.put(componentType, new BlueprintRowState(slots, validMultiplierValues));
             }
             map.put(stage.getName(), stageComponents);
         }
