@@ -1,5 +1,6 @@
 package supersymmetry.common.rocketry.rockets;
 
+import static supersymmetry.common.rocketry.SuccessCalculation.ESCAPE_VELOCITY_CONSTANT;
 import static supersymmetry.common.rocketry.SuccessCalculation.augmentSuccess;
 
 import java.util.ArrayList;
@@ -18,7 +19,6 @@ import supersymmetry.api.space.Planetoid;
 import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.rocketry.SuccessCalculation;
 import supersymmetry.common.world.SuSyDimensions;
-import supersymmetry.common.world.WorldProviderPlanet;
 
 public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint implements IAFSImprovable {
 
@@ -116,24 +116,30 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         return true;
     }
 
+    public double calculateVelocity(double gravity, RocketFuelEntry fuel) {
+        double weight = this.getMass();
+
+        // TODO: somehow incorporate cargo mass in a fair way
+        return this.getEffectiveFuelVelocity(fuel, gravity, "engine") *
+                Math.log((fuel.getDensity() * this.getFuelVolume() + weight) / weight);
+    }
+
     // lobotomized version of the function below to only take in the blueprint
     public double calculateInitialSuccess(double gravity, RocketFuelEntry fuel, long augmentation) {
         double success = 1;
         double weight = this.getMass();
-        double thrust = this.getThrust(fuel, gravity / 9.81, "engine");
+        double thrust = this.getThrust(fuel, gravity, "engine");
         double thrustToWeightRatio = thrust / weight;
         if (thrustToWeightRatio < 1) return 0d;
 
-        // TODO: somehow incorporate cargo mass in a fair way
-        double velocitySpeedup = this.getEffectiveFuelVelocity(fuel, gravity / 9.81, "engine") *
-                Math.log((fuel.getDensity() * this.getFuelVolume() + this.getMass()) / this.getMass());
+        double velocitySpeedup = calculateVelocity(gravity, fuel);
 
         // Very approximate, assuming constant density rho = 5515 kg/m^3
         // g = GM / R^2
         // g = GR * 4/3pi * rho
         // R = 3/(4G * rho * pi) * g
         // escape velocity = sqrt(2gR) = g * sqrt(3/(2G * rho * pi))
-        double escapeVelocity = 1138 * gravity;
+        double escapeVelocity = ESCAPE_VELOCITY_CONSTANT * gravity;
 
         if (velocitySpeedup < escapeVelocity) {
             return 0;
@@ -143,11 +149,12 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
 
         success *= (1 - (0.5 * Math.exp(1 - thrustToWeightRatio)));
         double oblateness = this.getHeight() / this.getMaxRadius();
-        success *= (1 - (0.1 * Math.exp(-oblateness)));
+        success *= (1 - (0.2 * Math.exp(-oblateness)));
         success *= Math.pow(0.995, this.getComponentCount("engine"));
-        success *= (1 - (0.5 * Math.exp(this.getTotalRadiusMismatch() / 10)));
+        double mismatch = this.getTotalRadiusMismatch();
+        success *= (1 - (0.02 * mismatch * Math.exp(mismatch / 10)));
 
-        double smallThrust = this.getThrust(fuel, gravity / 9.81, "small_engine");
+        double smallThrust = this.getThrust(fuel, gravity, "engine_small");
         success *= (1 - (0.2 * Math.exp(3 - smallThrust)));
 
         if (thrust / smallThrust > 10) {
@@ -156,6 +163,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
             success *= (1 - (0.5 * Math.exp(3 - (thrust / smallThrust))));
         }
         success *= 0.9;
+        success = Math.min(0, success);
 
         success = augmentSuccess(success, augmentation);
         return success;
@@ -164,17 +172,15 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
     public SuccessCalculation.LaunchResult calculateSuccess(EntityAbstractRocket rocket, long augmentation) {
         double success = 1;
         // Thrust to weight ratio
-        double gravMult = 1;
-        double escapeVelocity = 11000;
-        if (rocket.world.provider instanceof WorldProviderPlanet) {
-            gravMult = SuSyDimensions.PLANETS.get(rocket.world.provider.getDimension()).gravity;
-        }
+        double gravity = 9.81;
+        double escapeVelocity = 11186;
         if (Planetoid.PLANETOIDS.containsValue(rocket.world.provider.getDimension())) {
+            gravity = SuSyDimensions.PLANETS.get(rocket.world.provider.getDimension()).gravity * 9.81;
             escapeVelocity = Planetoid.PLANETOIDS.inverse().get(rocket.world.provider.getDimension())
                     .getEscapeVelocity();
         }
-        double weight = this.getMass() * gravMult;
-        double thrust = this.getThrust(rocket.getFuel(), gravMult, "engine");
+        double weight = this.getMass() * gravity;
+        double thrust = this.getThrust(rocket.getFuel(), gravity, "engine");
         double thrustToWeightRatio = thrust / weight;
 
         if (thrustToWeightRatio < 1) {
@@ -183,11 +189,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
             success *= (1 - (0.5 * Math.exp(1 - thrustToWeightRatio)));
         }
 
-        // Tsiolkovsky rocket equation
-        double velocitySpeedup = this.getEffectiveFuelVelocity(rocket.getFuel(), gravMult, "engine") *
-                Math.log((rocket.getFuel().getDensity() * this.getFuelVolume() + this.getMass()) /
-                        (this.getMass()));
-
+        double velocitySpeedup = this.calculateVelocity(gravity, rocket.getFuel());
         if (velocitySpeedup < escapeVelocity) {
             return SuccessCalculation.LaunchResult.CRASHES;
         } else {
@@ -203,7 +205,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         success *= (1 - (0.5 * Math.exp(this.getTotalRadiusMismatch() / 10)));
 
         // Small engines shouldn't have that much throughput
-        double smallThrust = this.getThrust(null, gravMult, "small_engine");
+        double smallThrust = this.getThrust(rocket.getFuel(), gravity, "engine_small");
         double torqueNeeded = 1 + rocket.world.rainingStrength + rocket.world.thunderingStrength;
         success *= (1 - (0.2 * Math.exp(torqueNeeded - smallThrust)));
 
