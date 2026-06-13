@@ -148,6 +148,7 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
         }
     }
 
+    public abstract double calculateVelocity(double gravity, RocketFuelEntry fuel);
     public abstract double calculateInitialSuccess(double gravity, RocketFuelEntry fuel, long augmentation);
     public abstract SuccessCalculation.LaunchResult calculateSuccess(EntityAbstractRocket rocket, long augmentation);
 }

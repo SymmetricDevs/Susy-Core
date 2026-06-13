@@ -2,6 +2,7 @@ package supersymmetry.common.metatileentities.multi.rocket;
 
 import static supercritical.api.pattern.SCPredicates.FLUID_BLOCKS_KEY;
 import static supercritical.api.pattern.SCPredicates.fluid;
+import static supersymmetry.common.rocketry.SuccessCalculation.ESCAPE_VELOCITY_CONSTANT;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -120,6 +121,12 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     private double gravity = 9.81;
     private double currentSuccessProbability = -1;
 
+    // Stats
+    private double mass;
+    private double fuelMass;
+    private double velocity;
+    private double escapeVelocity;
+
     public MetaTileEntityAerospaceFlightSimulator(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
 
@@ -168,6 +175,9 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             ItemStack blueprintStack = new ItemStack(blueprintTag);
             this.rocketBlueprintSlot.setStackInSlot(0, blueprintStack);
         }
+        this.computationPerTick = data.getInteger("computation");
+        this.coolantPerTick = data.getInteger("coolant");
+        this.energyPerTick = data.getInteger("energy");
     }
 
     @Override
@@ -195,7 +205,9 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             tag.setTag("blueprint_slot", bp);
         }
         tag.setDouble("currentSuccessProbability", this.currentSuccessProbability);
-
+        tag.setInteger("computation", this.computationPerTick);
+        tag.setInteger("coolant", this.coolantPerTick);
+        tag.setInteger("energy", this.energyPerTick);
         return tag;
     }
 
@@ -555,6 +567,20 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     }
 
     @Override
+    public void update() {
+        super.update();
+        // Client update
+        if (!this.getWorld().isRemote || !this.isActive())
+            return;
+        if (getOffsetTimer() % 20 == 0) {
+            this.mass = this.getBlueprint().getMass();
+            this.fuelMass = this.getBlueprint().getFuelVolume() * this.fuel.getDensity();
+            this.escapeVelocity = ESCAPE_VELOCITY_CONSTANT * gravity;
+            this.velocity = this.getBlueprint().calculateVelocity(gravity, fuel);
+        }
+    }
+
+    @Override
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
                 .aisle("IIIIIIIII", "IIIIIIIII", "IIIIIIIII", "IIIIIIIII", "IIIIIIIII")
@@ -726,9 +752,35 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 new LabelWidget(
                         width - 130,
                         52,
-                        I18n.format(getMetaName() + ".gui.success_chance", this.getSuccessChance()),
+                        I18n.format(getMetaName() + ".gui.success_chance",
+                                String.format("%.2f", this.getSuccessChance())),
                         0xffffff),
                 () -> !this.isActive() && this.getSuccessChance() != -1);
+        // Various stats beneath
+        // Dry weight
+        menuGroup.addWidgetWithTest(
+                new LabelWidget(
+                        width - 130,
+                        63,
+                        I18n.format(getMetaName() + ".gui.mass",
+                                this.mass)),
+                () -> !this.isActive() && this.getSuccessChance() != -1 && this.fuel != null);
+        // Fuel mass
+        menuGroup.addWidgetWithTest(
+                new LabelWidget(
+                        width - 130,
+                        74,
+                        I18n.format(getMetaName() + ".gui.fuel_mass",
+                                this.fuelMass)),
+                () -> !this.isActive() && this.getSuccessChance() != -1 && this.fuel != null);
+        // Velocity/escape velocity
+        menuGroup.addWidgetWithTest(
+                new LabelWidget(
+                        width - 130,
+                        85,
+                        I18n.format(getMetaName() + ".gui.velocity_percent",
+                                String.format("%.2f", velocity / escapeVelocity))),
+                () -> !this.isActive() && this.getSuccessChance() != -1 && this.fuel != null);
 
         menuGroup.addWidget(
                 new LabelWidget(9, 9, getMetaFullName(), 0xffffff));

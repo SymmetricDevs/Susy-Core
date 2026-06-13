@@ -134,12 +134,11 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
                                         analysis.status = BuildStat.MISSING_TILE;
                                         return analysis.errorPos(block);
                                     }
-                                }
-                else if (hullBlocks.contains(neighbor) && blockTiles.isCovered(facing))
-                {
-                    analysis.status = BuildStat.WRONG_TILE;
-                    return analysis.errorPos(block);
-                }
+                                } else
+                    if (hullBlocks.contains(neighbor) && blockTiles.isCovered(facing)) {
+                        analysis.status = BuildStat.WRONG_TILE;
+                        return analysis.errorPos(block);
+                    }
 
             }
         }
@@ -164,9 +163,9 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
     @Override
     public boolean configureDefaults() {
         this.materials.add(new MaterialCost(new ItemStack(Items.DIAMOND), MaterialCost.SourceType.ITEM, 1));
-        this.radius = 3.0;
-        this.volume = 4;
-        this.mass = 2000.0;
+        this.radius = 5.0;
+        this.volume = 80;
+        this.mass = 3000.0;
         return true;
     }
 

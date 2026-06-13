@@ -293,6 +293,10 @@ susy.machine.aerospace_flight_simulator.gui.not_formed=Structure not formed!
 susy.machine.aerospace_flight_simulator.gui.fuel_selector_label=Select fuel:
 susy.machine.aerospace_flight_simulator.gui.gravity_selector_label=Set simulation gravity:
 susy.machine.aerospace_flight_simulator.gui.success_chance=Success chance: %s
+susy.machine.aerospace_flight_simulator.gui.mass=Dry mass: %s kg
+susy.machine.aerospace_flight_simulator.gui.fuel_mass=Fuel mass: %s kg
+susy.machine.aerospace_flight_simulator.gui.velocity_percent=Escape velocity%: %s
+
 susy.machine.aerospace_flight_simulator.gui.rocket_name=Rocket: %s
 susy.machine.aerospace_flight_simulator.gui.stages=Stages:
 susy.machine.aerospace_flight_simulator.gui.start_button=Begin simulation
@@ -303,7 +307,7 @@ susy.machine.aerospace_flight_simulator.gui.computation_power=Computation: %s go
 # googs/s is a very technical term
 susy.machine.aerospace_flight_simulator.gui.energy_consumption=Power input: %s EU/t
 susy.machine.aerospace_flight_simulator.gui.coolant_flow=Coolant input: %s mB/s
-susy.machine.aerospace_flight_simulator.no_coolant_warning=Insufficient FC-75 coolant flow
+susy.machine.aerospace_flight_simulator.gui.no_coolant_warning=Insufficient FC-75 coolant flow
 
 susy.machine.blueprint_assembler.name=Blueprint Assembler
 susy.machine.blueprint_assembler.stagename=Stage: %s
