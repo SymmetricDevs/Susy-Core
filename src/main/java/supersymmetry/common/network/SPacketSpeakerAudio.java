@@ -23,14 +23,16 @@ public class SPacketSpeakerAudio implements IPacket, IClientExecutor {
     public int rate;
     public BlockPos pos;
     public byte[] bytes;
+    public int radius;
 
     public SPacketSpeakerAudio() {}
 
-    public SPacketSpeakerAudio(String id, int rate, BlockPos pos, byte[] bytes) {
+    public SPacketSpeakerAudio(String id, int rate, BlockPos pos, byte[] bytes, int radius) {
         this.id = id;
         this.rate = rate;
         this.pos = pos;
         this.bytes = bytes;
+        this.radius = radius;
     }
 
     @Override
@@ -68,14 +70,14 @@ public class SPacketSpeakerAudio implements IPacket, IClientExecutor {
                     (float) pos.getX() + 0.5f,
                     (float) pos.getY() + 0.5f,
                     (float) pos.getZ() + 0.5f,
-                    SoundSystemConfig.ATTENUATION_NONE,
-                    1f);
+                    SoundSystemConfig.ATTENUATION_LINEAR,
+                    radius);
         } catch (URISyntaxException | MalformedURLException e) {
             SusyLog.logger.error("failed to play speaker sound: {}", e.getMessage());
             return;
         }
         snd.play(id);
-        snd.setVolume(id, 1.0f);
+        snd.setVolume(id, 0.7f);
     }
 
     @Override
@@ -85,6 +87,7 @@ public class SPacketSpeakerAudio implements IPacket, IClientExecutor {
 
         buf.writeInt(rate);
         buf.writeBlockPos(pos);
+        buf.writeInt(radius);
 
         buf.writeInt(bytes.length);
         buf.writeBytes(bytes);
@@ -96,6 +99,7 @@ public class SPacketSpeakerAudio implements IPacket, IClientExecutor {
 
         rate = buf.readInt();
         pos = buf.readBlockPos();
+        radius = buf.readInt();
 
         int len = buf.readInt();
         if (len > TileEntitySpeaker.MAX_AUDIO_SIZE) {

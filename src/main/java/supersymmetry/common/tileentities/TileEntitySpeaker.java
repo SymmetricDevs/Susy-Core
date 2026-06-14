@@ -12,6 +12,7 @@ import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.Environment;
 import li.cil.oc.api.network.SimpleComponent;
+import supersymmetry.api.SusyLog;
 import supersymmetry.common.blocks.BlockSpeaker;
 import supersymmetry.common.network.SPacketSpeakerAudio;
 import supersymmetry.common.network.SPacketSpeakerStop;
@@ -83,7 +84,9 @@ public class TileEntitySpeaker extends TileEntity implements SimpleComponent {
         long time_till_sound_stops_ms = (long) (len / (2.0 * rate) * 1000) + 1;
 
         // dumb spinlock to prevent a race condition caused by 2 oc lua threads making a call at the exact same time
-        // dont even know if thats a possible fail case but
+        // dont even know if thats a possible fail case but im not going to read scala to find out
+        //
+        // SusyLog.logger.info("{} < {}? = {}",System.currentTimeMillis(),playbackEnd.get(),System.currentTimeMillis() < playbackEnd.get());
         while (true) {
             long prev = playbackEnd.get();
             if (System.currentTimeMillis() < prev) {
@@ -100,7 +103,7 @@ public class TileEntitySpeaker extends TileEntity implements SimpleComponent {
         }
 
         GregTechAPI.networkHandler.sendToAllAround(
-                new SPacketSpeakerAudio(node.address(), rate, this.getPos(), data),
+                new SPacketSpeakerAudio(node.address(), rate, this.getPos(), data, this.type.getRadius()),
                 new TargetPoint(
                         this.getWorld().provider.getDimension(),
                         this.getPos().getX(),
@@ -112,17 +115,17 @@ public class TileEntitySpeaker extends TileEntity implements SimpleComponent {
             ctx.pause(0.05);
             return new Object[] { time_till_sound_stops_ms };
         } else {
-            ctx.pause((double) (playbackEnd.get() + 1) / 1000.0);
+            ctx.pause((double) (time_till_sound_stops_ms) / 1000.0);
             return new Object[] {};
         }
     }
 
-    @Callback(doc = "playSoundBlocking(rate:int,data:string) -- plays a sound and blocks until it finishes")
+    @Callback(doc = "playSoundBlocking(rate:int,data:string) -- plays a sound from a MONO16 wave format")
     public Object[] playSoundBlocking(Context ctx, Arguments args) {
         return playSound(ctx, args, false);
     }
 
-    @Callback(doc = "playSoundAsync(rate:int,data:string) -- plays a sound and returns immediately with the duration in ms")
+    @Callback(doc = "playSoundAsync(rate:int,data:string) -- same as the blocking version except it only blocks for 0.05s and returns the amount of time until the sound stops playing in ms")
     public Object[] playSoundAsync(Context ctx, Arguments args) {
         return playSound(ctx, args, true);
     }
