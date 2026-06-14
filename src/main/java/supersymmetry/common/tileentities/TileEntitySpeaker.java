@@ -12,7 +12,6 @@ import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.Environment;
 import li.cil.oc.api.network.SimpleComponent;
-import supersymmetry.api.SusyLog;
 import supersymmetry.common.blocks.BlockSpeaker;
 import supersymmetry.common.network.SPacketSpeakerAudio;
 import supersymmetry.common.network.SPacketSpeakerStop;
@@ -84,9 +83,8 @@ public class TileEntitySpeaker extends TileEntity implements SimpleComponent {
         long time_till_sound_stops_ms = (long) (len / (2.0 * rate) * 1000) + 1;
 
         // dumb spinlock to prevent a race condition caused by 2 oc lua threads making a call at the exact same time
-        // dont even know if thats a possible fail case but im not going to read scala to find out
-        //
-        // SusyLog.logger.info("{} < {}? = {}",System.currentTimeMillis(),playbackEnd.get(),System.currentTimeMillis() < playbackEnd.get());
+        // dont even know if thats a possible fail case because oliwier throws the "wouldnt you like to know" line 
+        // when asked
         while (true) {
             long prev = playbackEnd.get();
             if (System.currentTimeMillis() < prev) {

@@ -9,6 +9,7 @@ import javax.sound.sampled.AudioFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 
 import gregtech.api.network.IClientExecutor;
@@ -77,7 +78,7 @@ public class SPacketSpeakerAudio implements IPacket, IClientExecutor {
             return;
         }
         snd.play(id);
-        snd.setVolume(id, 0.7f);
+        snd.setVolume(id, 0.7f * Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.RECORDS));
     }
 
     @Override
