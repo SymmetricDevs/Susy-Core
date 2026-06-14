@@ -42,8 +42,7 @@ public class TileEntitySpeaker extends TileEntity implements SimpleComponent {
         return String.format("speaker_%s", type.name().toLowerCase());
     }
 
-    @Callback(doc = "playSound(rate:int,data:string) -- plays a sound through this speaker with the MONO16 wave format byte array as input")
-    public Object[] playSound(Context ctx, Arguments args) {
+    private Object[] playSound(Context ctx, Arguments args, boolean async) {
         if (System.currentTimeMillis() < playbackEnd) {
             throw new IllegalStateException("this speaker is already playing!");
         }
@@ -88,12 +87,26 @@ public class TileEntitySpeaker extends TileEntity implements SimpleComponent {
                         this.type.getRadius()));
 
         int len = data.length & ~1;
-        // uses system time because using ticks would mean that your audio will slow down too if the server is lagging
-        playbackEnd = System.currentTimeMillis() + (long) (len / (2.0 * rate) * 1000);
-        // TODO maybe this isnt even needed that much?
-        ctx.pause(0.05);
+        long time_till_sound_stops_ms = (long) (len / (2.0 * rate) * 1000) + 1;
+        playbackEnd = System.currentTimeMillis() + time_till_sound_stops_ms;
 
-        return new Object[] {};
+        if (async) {
+            ctx.pause(0.05);
+            return new Object[] { time_till_sound_stops_ms };
+        } else {
+            ctx.pause((double) (playbackEnd + 1) / 1000.0);
+            return new Object[] {};
+        }
+    }
+
+    @Callback(doc = "playSoundBlocking(rate:int,data:string) -- plays a sound and blocks until it finishes")
+    public Object[] playSoundBlocking(Context ctx, Arguments args) {
+        return playSound(ctx, args, false);
+    }
+
+    @Callback(doc = "playSoundAsync(rate:int,data:string) -- plays a sound and returns immediately with the duration in ms")
+    public Object[] playSoundAsync(Context ctx, Arguments args) {
+        return playSound(ctx, args, true);
     }
 
     @Callback(doc = "stopSound() -- stops the currently playing sound on this speaker")
