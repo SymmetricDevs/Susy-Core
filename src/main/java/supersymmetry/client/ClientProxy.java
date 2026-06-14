@@ -72,6 +72,7 @@ import supersymmetry.common.blocks.SuSyMetaBlocks;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.item.armor.AdvancedBreathingApparatus;
 import supersymmetry.common.item.behavior.PipeNetWalkerBehavior;
+import supersymmetry.common.network.SpeakerCodec;
 import supersymmetry.loaders.SuSyFluidTooltipLoader;
 import supersymmetry.loaders.SuSyIRLoader;
 
@@ -86,6 +87,7 @@ public class ClientProxy extends CommonProxy {
     public void preLoad() {
         super.preLoad();
         GeckoLib.initialize();
+        SpeakerCodec.register();
         SusyMetaEntities.initRenderers();
         SuSyIRLoader.initEntityRenderers();
         VariantCoverableBlockRenderer.preInit();

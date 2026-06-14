@@ -14,19 +14,19 @@ public class BlockSpeaker extends VariantBlock<BlockSpeaker.BlockSpeakerType> {
 
     public static enum BlockSpeakerType implements IStringSerializable {
 
-        SINGLE("single", 16),
+        SINGLE("single", 32),
         NETWORKED("networked", 64);
 
         private final String name;
-        private final int volume;
+        private final int radius;
 
-        private BlockSpeakerType(String name, int volume) {
+        private BlockSpeakerType(String name, int radius) {
             this.name = name;
-            this.volume = volume;
+            this.radius = radius;
         }
 
-        public int getVolume() {
-            return volume;
+        public int getRadius() {
+            return radius;
         }
 
         @Override
@@ -51,7 +51,6 @@ public class BlockSpeaker extends VariantBlock<BlockSpeaker.BlockSpeakerType> {
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
         BlockSpeakerType type = this.getState(state);
-
         var te = new TileEntitySpeaker(type);
         return te;
     }

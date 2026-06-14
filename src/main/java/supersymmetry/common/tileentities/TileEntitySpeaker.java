@@ -12,9 +12,20 @@ import li.cil.oc.api.network.Environment;
 import li.cil.oc.api.network.SimpleComponent;
 import supersymmetry.common.blocks.BlockSpeaker;
 import supersymmetry.common.network.SPacketSpeakerAudio;
+import supersymmetry.common.network.SPacketSpeakerStop;
 
 public class TileEntitySpeaker extends TileEntity implements SimpleComponent {
 
+    private static final int MIN_RATE = 32;
+    // TODO put this into SusyConfig.java
+    private static final int MAX_RATE = 11025;
+    // TODO put this into SusyConfig.java
+    private static final double MAX_DURATION = 1.5;
+    // TODO put this into SusyConfig.java
+    private static final double MIN_DURATION = 0.05;
+    private static final int MAX_AUDIO_SIZE = (int) (MAX_RATE * MAX_DURATION * 2);
+
+    private long playbackEnd;
     public BlockSpeaker.BlockSpeakerType type;
 
     public TileEntitySpeaker() {
@@ -31,30 +42,80 @@ public class TileEntitySpeaker extends TileEntity implements SimpleComponent {
         return String.format("speaker_%s", type.name().toLowerCase());
     }
 
-    @Callback(doc = "playSound(rate:int,data:string) -- plays a sound through this speaker")
+    @Callback(doc = "playSound(rate:int,data:string) -- plays a sound through this speaker with the MONO16 wave format byte array as input")
     public Object[] playSound(Context ctx, Arguments args) {
-        var datastring = args.checkString(1);
-        var data = datastring.getBytes();
+        if (System.currentTimeMillis() < playbackEnd) {
+            throw new IllegalStateException("this speaker is already playing!");
+        }
+        var data = args.checkByteArray(1);
         var rate = args.checkInteger(0);
-        if (rate < 0 || rate > 41100) {
+        if (rate < MIN_RATE || rate > MAX_RATE) {
             throw new IllegalArgumentException("invalid rate");
         }
-        if (data.length >= 41100) {
-            throw new IllegalArgumentException("too much data");
+        if ((data.length & 1) != 0) {
+            throw new IllegalArgumentException(
+                    "data length must be even for AL_FORMAT_MONO16 (you need 16 bit chunks of audio)");
+        }
+        if (data.length > MAX_AUDIO_SIZE) {
+            throw new IllegalArgumentException(
+                    String.format(
+                            "too much data for a single audio packet (max %.1fs of MONO16 at %dHz), split your sound into multiple chunks and play them sequentially",
+                            MAX_DURATION, MAX_RATE));
+        }
+        // the *2 is here because data is [u8] but the audio playback takes in [u16]
+        int maxSize = (int) (rate * MAX_DURATION * 2);
+        if (data.length > maxSize) {
+            throw new IllegalArgumentException(
+                    String.format(
+                            "too much data (max %.1fs of MONO16), split your sound into multiple chunks and play them sequentially",
+                            MAX_DURATION, rate));
+        }
+        int minSize = Math.max(32, (int) (rate * MIN_DURATION * 2));
+        if (data.length < minSize) {
+            throw new IllegalArgumentException(
+                    String.format("not enough data (min %.0fms of MONO16)", MIN_DURATION * 1000));
         }
 
         var node = ((Environment) this).node();
 
         GregTechAPI.networkHandler.sendToAllAround(
-                new SPacketSpeakerAudio("goog", rate, this.getPos(), data),
+                new SPacketSpeakerAudio(node.address(), rate, this.getPos(), data),
                 new TargetPoint(
                         this.getWorld().provider.getDimension(),
                         this.getPos().getX(),
                         this.getPos().getY(),
                         this.getPos().getZ(),
-                        this.type.getVolume()));
+                        this.type.getRadius()));
 
-        return new Object[] { "goog" };
+        int len = data.length & ~1;
+        // uses system time because using ticks would mean that your audio will slow down too if the server is lagging
+        playbackEnd = System.currentTimeMillis() + (long) (len / (2.0 * rate) * 1000);
+        // TODO maybe this isnt even needed that much?
+        ctx.pause(0.05);
+
+        return new Object[] {};
+    }
+
+    @Callback(doc = "stopSound() -- stops the currently playing sound on this speaker")
+    public Object[] stopSound(Context ctx, Arguments args) {
+        if (System.currentTimeMillis() >= playbackEnd) {
+            throw new IllegalStateException("speaker is not playing");
+        }
+
+        var node = ((Environment) this).node();
+
+        GregTechAPI.networkHandler.sendToAllAround(
+                new SPacketSpeakerStop(node.address()),
+                new TargetPoint(
+                        this.getWorld().provider.getDimension(),
+                        this.getPos().getX(),
+                        this.getPos().getY(),
+                        this.getPos().getZ(),
+                        this.type.getRadius()));
+
+        playbackEnd = 0;
+        ctx.pause(0.05);
+        return new Object[] {};
     }
 
     @Override
