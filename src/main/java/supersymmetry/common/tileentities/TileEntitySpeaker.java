@@ -1,5 +1,7 @@
 package supersymmetry.common.tileentities;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
@@ -13,6 +15,7 @@ import li.cil.oc.api.network.SimpleComponent;
 import supersymmetry.common.blocks.BlockSpeaker;
 import supersymmetry.common.network.SPacketSpeakerAudio;
 import supersymmetry.common.network.SPacketSpeakerStop;
+import supersymmetry.common.network.SpeakerCodec;
 
 public class TileEntitySpeaker extends TileEntity implements SimpleComponent {
 
@@ -23,9 +26,10 @@ public class TileEntitySpeaker extends TileEntity implements SimpleComponent {
     private static final double MAX_DURATION = 1.5;
     // TODO put this into SusyConfig.java
     private static final double MIN_DURATION = 0.05;
-    private static final int MAX_AUDIO_SIZE = (int) (MAX_RATE * MAX_DURATION * 2);
+    public static final int MAX_AUDIO_SIZE = (int) (MAX_RATE * MAX_DURATION * 2);
 
-    private long playbackEnd;
+    private final AtomicLong playbackEnd = new AtomicLong();
+    private String nodeAddress;
     public BlockSpeaker.BlockSpeakerType type;
 
     public TileEntitySpeaker() {
@@ -43,39 +47,57 @@ public class TileEntitySpeaker extends TileEntity implements SimpleComponent {
     }
 
     private Object[] playSound(Context ctx, Arguments args, boolean async) {
-        if (System.currentTimeMillis() < playbackEnd) {
-            throw new IllegalStateException("this speaker is already playing!");
-        }
         var data = args.checkByteArray(1);
         var rate = args.checkInteger(0);
-        if (rate < MIN_RATE || rate > MAX_RATE) {
-            throw new IllegalArgumentException("invalid rate");
+        // checks
+        {
+            if (rate < MIN_RATE || rate > MAX_RATE) {
+                throw new IllegalArgumentException("invalid rate");
+            }
+            if ((data.length & 1) != 0) {
+                throw new IllegalArgumentException(
+                        "data length must be even for AL_FORMAT_MONO16 (you need 16 bit chunks of audio)");
+            }
+            if (data.length > MAX_AUDIO_SIZE) {
+                throw new IllegalArgumentException(
+                        String.format(
+                                "too much data for a single audio packet (max %.1fs of MONO16 at %dHz), split your sound into multiple chunks and play them sequentially",
+                                MAX_DURATION, MAX_RATE));
+            }
+            // the *2 is here because data is [u8] but the audio playback takes in [u16]
+            int maxSize = (int) (rate * MAX_DURATION * 2);
+            if (data.length > maxSize) {
+                throw new IllegalArgumentException(
+                        String.format(
+                                "too much data (max %.1fs of MONO16), split your sound into multiple chunks and play them sequentially",
+                                MAX_DURATION, rate));
+            }
+            int minSize = Math.max(32, (int) (rate * MIN_DURATION * 2));
+            if (data.length < minSize) {
+                throw new IllegalArgumentException(
+                        String.format("not enough data (min %.0fms of MONO16)", MIN_DURATION * 1000));
+            }
         }
-        if ((data.length & 1) != 0) {
-            throw new IllegalArgumentException(
-                    "data length must be even for AL_FORMAT_MONO16 (you need 16 bit chunks of audio)");
-        }
-        if (data.length > MAX_AUDIO_SIZE) {
-            throw new IllegalArgumentException(
-                    String.format(
-                            "too much data for a single audio packet (max %.1fs of MONO16 at %dHz), split your sound into multiple chunks and play them sequentially",
-                            MAX_DURATION, MAX_RATE));
-        }
-        // the *2 is here because data is [u8] but the audio playback takes in [u16]
-        int maxSize = (int) (rate * MAX_DURATION * 2);
-        if (data.length > maxSize) {
-            throw new IllegalArgumentException(
-                    String.format(
-                            "too much data (max %.1fs of MONO16), split your sound into multiple chunks and play them sequentially",
-                            MAX_DURATION, rate));
-        }
-        int minSize = Math.max(32, (int) (rate * MIN_DURATION * 2));
-        if (data.length < minSize) {
-            throw new IllegalArgumentException(
-                    String.format("not enough data (min %.0fms of MONO16)", MIN_DURATION * 1000));
+
+        int len = data.length & ~1;
+        long time_till_sound_stops_ms = (long) (len / (2.0 * rate) * 1000) + 1;
+
+        // dumb spinlock to prevent a race condition caused by 2 oc lua threads making a call at the exact same time
+        // dont even know if thats a possible fail case but
+        while (true) {
+            long prev = playbackEnd.get();
+            if (System.currentTimeMillis() < prev) {
+                throw new IllegalStateException("this speaker is already playing!");
+            }
+            if (playbackEnd.compareAndSet(prev, System.currentTimeMillis() + time_till_sound_stops_ms)) {
+                break;
+            }
         }
 
         var node = ((Environment) this).node();
+        if (nodeAddress == null) {
+            nodeAddress = node.address();
+        }
 
         GregTechAPI.networkHandler.sendToAllAround(
                 new SPacketSpeakerAudio(node.address(), rate, this.getPos(), data),
@@ -86,15 +108,11 @@ public class TileEntitySpeaker extends TileEntity implements SimpleComponent {
                         this.getPos().getZ(),
                         this.type.getRadius()));
 
-        int len = data.length & ~1;
-        long time_till_sound_stops_ms = (long) (len / (2.0 * rate) * 1000) + 1;
-        playbackEnd = System.currentTimeMillis() + time_till_sound_stops_ms;
-
         if (async) {
             ctx.pause(0.05);
             return new Object[] { time_till_sound_stops_ms };
         } else {
-            ctx.pause((double) (playbackEnd + 1) / 1000.0);
+            ctx.pause((double) (playbackEnd.get() + 1) / 1000.0);
             return new Object[] {};
         }
     }
@@ -111,11 +129,18 @@ public class TileEntitySpeaker extends TileEntity implements SimpleComponent {
 
     @Callback(doc = "stopSound() -- stops the currently playing sound on this speaker")
     public Object[] stopSound(Context ctx, Arguments args) {
-        if (System.currentTimeMillis() >= playbackEnd) {
+        long prev = playbackEnd.get();
+        if (System.currentTimeMillis() >= prev) {
             throw new IllegalStateException("speaker is not playing");
         }
-
+        if (!playbackEnd.compareAndSet(prev, 0)) {
+            throw new IllegalStateException("speaker playback state changed");
+        }
         var node = ((Environment) this).node();
+        if (nodeAddress == null) {
+            // if node.address is not constant this will blow up
+            nodeAddress = node.address();
+        }
 
         GregTechAPI.networkHandler.sendToAllAround(
                 new SPacketSpeakerStop(node.address()),
@@ -125,10 +150,16 @@ public class TileEntitySpeaker extends TileEntity implements SimpleComponent {
                         this.getPos().getY(),
                         this.getPos().getZ(),
                         this.type.getRadius()));
-
-        playbackEnd = 0;
         ctx.pause(0.05);
         return new Object[] {};
+    }
+
+    @Override
+    public void invalidate() {
+        super.invalidate();
+        if (nodeAddress != null) {
+            SpeakerCodec.remove(nodeAddress);
+        }
     }
 
     @Override

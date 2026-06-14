@@ -15,6 +15,7 @@ import gregtech.api.network.IClientExecutor;
 import gregtech.api.network.IPacket;
 import paulscode.sound.SoundSystemConfig;
 import supersymmetry.api.SusyLog;
+import supersymmetry.common.tileentities.TileEntitySpeaker;
 
 public class SPacketSpeakerAudio implements IPacket, IClientExecutor {
 
@@ -36,6 +37,11 @@ public class SPacketSpeakerAudio implements IPacket, IClientExecutor {
     public void executeClient(NetHandlerPlayClient handler) {
         var snd = Minecraft.getMinecraft().getSoundHandler().sndManager.sndSystem;
         if (snd == null) return;
+        if (id == null || id.isEmpty()) {
+            SusyLog.logger.error("speaker packet with missing id");
+            return;
+        }
+        if (bytes.length == 0) return;
         if ((bytes.length & 1) != 0) {
             SusyLog.logger.error("odd number of bytes in a u16 sound array, this shouldve been checked server side");
             return;
@@ -92,6 +98,12 @@ public class SPacketSpeakerAudio implements IPacket, IClientExecutor {
         pos = buf.readBlockPos();
 
         int len = buf.readInt();
+        if (len > TileEntitySpeaker.MAX_AUDIO_SIZE) {
+            SusyLog.logger.error("oversized audio packet ({} bytes, max {})", len, TileEntitySpeaker.MAX_AUDIO_SIZE);
+            buf.skipBytes(len);
+            bytes = new byte[0];
+            return;
+        }
         bytes = new byte[len];
         buf.readBytes(bytes);
     }
