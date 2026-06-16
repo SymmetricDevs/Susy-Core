@@ -572,7 +572,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         // Client update
         if (!this.getWorld().isRemote || !this.isActive())
             return;
-        if (getOffsetTimer() % 20 == 0) {
+        if (getOffsetTimer() % 20 == 0 && this.getBlueprint() != null) {
             this.mass = this.getBlueprint().getMass();
             this.fuelMass = this.getBlueprint().getFuelVolume() * this.fuel.getDensity();
             this.escapeVelocity = ESCAPE_VELOCITY_CONSTANT * gravity;
