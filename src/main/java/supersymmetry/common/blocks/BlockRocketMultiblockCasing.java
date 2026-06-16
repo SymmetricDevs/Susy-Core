@@ -42,6 +42,12 @@ public class BlockRocketMultiblockCasing extends VariantBlock<BlockRocketMultibl
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
+    public @NotNull BlockRenderLayer getRenderLayer() {
+        return BlockRenderLayer.CUTOUT_MIPPED;
+    }
+
+    @Override
     @SuppressWarnings("deprecation")
     public boolean isOpaqueCube(@NotNull IBlockState state) {
         return super.isOpaqueCube(state);
