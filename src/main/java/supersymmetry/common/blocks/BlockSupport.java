@@ -2,23 +2,20 @@ package supersymmetry.common.blocks;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.block.VariantBlock;
@@ -52,13 +49,12 @@ public class BlockSupport extends VariantBlock<BlockSupport.SupportType> {
         }
     }
 
-
     @Override
     public boolean canCreatureSpawn(
-            @NotNull IBlockState state,
-            @NotNull IBlockAccess world,
-            @NotNull BlockPos pos,
-            @NotNull EntityLiving.SpawnPlacementType type) {
+                                    @NotNull IBlockState state,
+                                    @NotNull IBlockAccess world,
+                                    @NotNull BlockPos pos,
+                                    @NotNull EntityLiving.SpawnPlacementType type) {
         return false;
     }
 
