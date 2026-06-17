@@ -28,6 +28,11 @@ public class DataStorageLoader extends NotifiableItemStackHandler {
     }
 
     @Override
+    public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+        return slot == 0 && acceptableTypes.test(stack);
+    }
+
+    @Override
     public int getSlots() {
         return 1;
     }

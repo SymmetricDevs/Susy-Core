@@ -109,8 +109,18 @@ public class ComponentCardSlotWidget extends SlotWidget implements IGhostIngredi
     }
 
     @Override
-    public boolean canMergeSlot(ItemStack stack) {
+    public boolean canPutStack(ItemStack stack) {
+        // no, but I will take your card, quick stack handler
+        if (isVisible() && isActive() && getHandler().isItemValid(0, stack)) {
+            getHandler().insertItem(0, stack, false);
+            syncSlot();
+        }
         return false;
+    }
+
+    @Override
+    public boolean canMergeSlot(ItemStack stack) {
+        return getHandler().isItemValid(0, stack);
     }
 
     private ItemStack slotClickPhantom(int mouseButton, ClickType clickTypeIn, ItemStack stackHeld) {

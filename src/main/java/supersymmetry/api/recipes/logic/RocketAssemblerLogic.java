@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import gregtech.api.capability.IMultipleTankHandler;
@@ -34,7 +35,7 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
     public Recipe getRecipe(long maxVoltage) {
         MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
         EntityTransporterErector erector = assembler.findTransporterErector();
-        if (erector != null) return null;
+        if (erector == null) return null;
         if (!assembler.isWorking) return null;
 
         AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
@@ -65,12 +66,21 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
     protected void completeRecipe() {
         // SusyLog.logger.info(
         // "progressTime:{} maxprogresstime:{}", this.progressTime, this.maxProgressTime);
-
-        super.completeRecipe();
         if (!(this.progressTime == 0 || this.maxProgressTime == 0)) {
             MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
             assembler.nextComponent();
         }
+        super.completeRecipe();
+    }
+
+    // The lists are null
+    @Override
+    protected void outputRecipeOutputs() {}
+
+    // Needs to be 2x the recipe EUt rather than 8x due to irregular energy hatch amperage draws
+    @Override
+    protected boolean hasEnoughPower(int @NotNull [] resultOverclock) {
+        return getEnergyStored() >= ((long) recipeEUt << 1);
     }
 
     // doesnt work for this multi
