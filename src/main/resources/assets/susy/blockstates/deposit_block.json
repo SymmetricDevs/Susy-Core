@@ -50,6 +50,12 @@
       "textures" : {
         "all" : "gregtech:blocks/deposit/ice_cap"
       }
+    },
+    "variant=evaporite" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/deposit/evaporite"
+      }
     }
   }
 }
