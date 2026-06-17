@@ -24,6 +24,7 @@ import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Matrix4;
+import gregtech.api.gui.ModularUI;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.MetaTileEntityUIFactory;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -83,6 +84,15 @@ public class MetaTileEntityLockedCrate extends MetaTileEntityCrate {
     @Override
     protected boolean openGUIOnRightClick() {
         return false; // To avoid opening the GUI on the right-click in the super method
+    }
+
+    @Override
+    protected ModularUI createUI(EntityPlayer entityPlayer) {
+        ItemStack heldStack = entityPlayer.getHeldItemMainhand();
+        if (!heldStack.isItemEqual(SuSyMetaItems.CODE_BREACHER.getStackForm())) {
+            return null;
+        }
+        return super.createUI(entityPlayer);
     }
 
     @Override
