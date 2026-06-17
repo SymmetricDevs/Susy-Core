@@ -61,7 +61,7 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
         this.radius = 3.0;
         this.areaRatio = 1.0;
         this.fuelThroughput = 500.0;
-        this.mass = 3000.0;
+        this.mass = 1200.0;
         return true;
     }
 

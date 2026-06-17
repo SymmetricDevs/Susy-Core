@@ -2,7 +2,9 @@ package supersymmetry.common.metatileentities.multi.rocket;
 
 import static supercritical.api.pattern.SCPredicates.FLUID_BLOCKS_KEY;
 import static supercritical.api.pattern.SCPredicates.fluid;
+import static supersymmetry.common.rocketry.SuccessCalculation.ESCAPE_VELOCITY_CONSTANT;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +58,6 @@ import gregtech.common.blocks.BlockGlassCasing;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.SusyLog;
-import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
@@ -66,6 +67,7 @@ import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.common.mui.widget.ConditionalWidget;
+import supersymmetry.common.mui.widget.FuelRegistrySelectorWidget;
 import supersymmetry.common.mui.widget.RocketRenderWidget;
 import supersymmetry.common.mui.widget.SlotWidgetMentallyStable;
 
@@ -76,6 +78,9 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     private static Fluid COOLANT_IN;
 
     private static Fluid COOLANT_OUT;
+    private int computationPerTick;
+    private int coolantPerTick;
+    private int energyPerTick;
 
     private static Entity createEntityByResource(ResourceLocation rl, World world) {
         EntityEntry entry = ForgeRegistries.ENTITIES.getValue(rl);
@@ -94,7 +99,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
 
     public IMultipleTankHandler outputCoolant;
 
-    private boolean isWorkingEnabled = true;
+    private boolean isWorkingEnabled = false;
 
     protected boolean hasNotEnoughEnergy;
 
@@ -111,8 +116,16 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     private boolean hasNotEnoughCoolant = false;
 
     public RocketFuelEntry fuel;
+    public final List<FluidStack> fuelList = new ArrayList<>();
 
     private double gravity = 9.81;
+    private double currentSuccessProbability = -1;
+
+    // Stats
+    private double mass;
+    private double fuelMass;
+    private double velocity;
+    private double escapeVelocity;
 
     public MetaTileEntityAerospaceFlightSimulator(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
@@ -127,6 +140,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         this.energyContainer = new EnergyContainerList(new ArrayList<>());
         this.inputCoolant = new FluidTankList(true);
         this.outputCoolant = new FluidTankList(true);
+        this.fuelList.add(null);
     }
 
     @Override
@@ -141,12 +155,29 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         if (data.hasKey("fuelRegistryName")) {
             this.fuel = RocketFuelEntry.getCopyOf(data.getString("fuelRegistryName"));
         }
+        this.fuelList.clear();
+        if (data.hasKey("fuelListSize")) {
+            for (int i = 0; i < data.getInteger("fuelListSize"); i++) {
+                NBTTagCompound tag = data.getCompoundTag("fuelList" + i);
+                if (tag.isEmpty()) {
+                    this.fuelList.add(null);
+                } else {
+                    this.fuelList.add(FluidStack.loadFluidStackFromNBT(data.getCompoundTag("fuelList" + i)));
+                }
+            }
+        }
+        if (data.hasKey("currentSuccessProbability")) {
+            this.currentSuccessProbability = data.getDouble("currentSuccessProbability");
+        }
 
         NBTTagCompound blueprintTag = data.getCompoundTag("blueprint_slot");
         if (blueprintTag != null) {
             ItemStack blueprintStack = new ItemStack(blueprintTag);
             this.rocketBlueprintSlot.setStackInSlot(0, blueprintStack);
         }
+        this.computationPerTick = data.getInteger("computation");
+        this.coolantPerTick = data.getInteger("coolant");
+        this.energyPerTick = data.getInteger("energy");
     }
 
     @Override
@@ -160,12 +191,23 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         if (this.fuel != null) {
             tag.setString("fuelRegistryName", this.fuel.getRegistryName());
         }
+        tag.setInteger("fuelListSize", this.fuelList.size());
+        for (int i = 0; i < this.fuelList.size(); i++) {
+            if (fuelList.get(i) == null) {
+                tag.setTag("fuelList" + i, new NBTTagCompound());
+            } else {
+                tag.setTag("fuelList" + i, this.fuelList.get(i).writeToNBT(new NBTTagCompound()));
+            }
+        }
 
         if (!rocketBlueprintSlot.isEmpty()) {
             var bp = rocketBlueprintSlot.getStackInSlot(0).writeToNBT(new NBTTagCompound());
             tag.setTag("blueprint_slot", bp);
         }
-
+        tag.setDouble("currentSuccessProbability", this.currentSuccessProbability);
+        tag.setInteger("computation", this.computationPerTick);
+        tag.setInteger("coolant", this.coolantPerTick);
+        tag.setInteger("energy", this.energyPerTick);
         return tag;
     }
 
@@ -181,6 +223,15 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         } else {
             buf.writeBoolean(false);
         }
+        buf.writeInt(this.fuelList.size());
+        for (int i = 0; i < this.fuelList.size(); i++) {
+            if (this.fuelList.get(i) == null) {
+                buf.writeBoolean(false);
+            } else {
+                buf.writeBoolean(true);
+                buf.writeCompoundTag(this.fuelList.get(i).writeToNBT(new NBTTagCompound()));
+            }
+        }
 
         if (hasBlueprint()) {
             buf.writeBoolean(true);
@@ -188,6 +239,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         } else {
             buf.writeBoolean(false);
         }
+        buf.writeDouble(this.currentSuccessProbability);
         if (this.isWorkingEnabled)
             this.rocketBlueprintSlot.setLocked(true);
     }
@@ -201,6 +253,19 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         if (buf.readBoolean()) {
             this.fuel = RocketFuelEntry.getCopyOf(buf.readString(32767));
         }
+        this.fuelList.clear();
+        int size = buf.readInt();
+        for (int i = 0; i < size; i++) {
+            if (buf.readBoolean()) {
+                try {
+                    this.fuelList.add(FluidStack.loadFluidStackFromNBT(buf.readCompoundTag()));
+                } catch (IOException e) {
+                    // goognt
+                }
+            } else {
+                this.fuelList.add(null);
+            }
+        }
 
         if (buf.readBoolean()) {
             try {
@@ -210,6 +275,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 // goognt
             }
         }
+        this.currentSuccessProbability = buf.readDouble();
         if (this.isWorkingEnabled) this.rocketBlueprintSlot.setLocked(true);
     }
 
@@ -233,8 +299,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         return this.isWorkingEnabled;
     }
 
-    @Override
-    public void setWorkingEnabled(boolean isWorkingAllowed) {
+    protected void setWorkingEnabledInternal(boolean isWorkingAllowed) {
         this.isWorkingEnabled = isWorkingAllowed;
         markDirty();
         World world = getWorld();
@@ -244,10 +309,20 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     }
 
     @Override
+    public void setWorkingEnabled(boolean isWorkingAllowed) {
+        // May or may not go
+        if (isWorkingAllowed) {
+            this.start();
+        } else {
+            this.stop();
+        }
+    }
+
+    @Override
     public void receiveCustomData(int dataId, PacketBuffer buf) {
         super.receiveCustomData(dataId, buf);
         if (dataId == GregtechDataCodes.WORKING_ENABLED) {
-            this.setWorkingEnabled(buf.readBoolean());
+            this.setWorkingEnabledInternal(buf.readBoolean());
         }
         if (dataId == GregtechDataCodes.LOCK_OBJECT_HOLDER) {
             this.rocketBlueprintSlot.setLocked(buf.readBoolean());
@@ -319,7 +394,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     }
 
     public void stop() {
-        setWorkingEnabled(false);
+        setWorkingEnabledInternal(false);
         this.rocketBlueprintSlot.setLocked(false);
         AbstractRocketBlueprint bp = getBlueprint();
         if (bp == null || !bp.isFullBlueprint()) {
@@ -342,17 +417,42 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     // wipe the progress when there is not enough power/coolant to prevent the player from having too
     // much fun
     public void crash() {
-        setWorkingEnabled(false);
+        setWorkingEnabledInternal(false);
         this.rocketBlueprintSlot.setLocked(false);
         this.progress = 0;
     }
 
     public void start() {
-        var bp = this.getBlueprint();
-        if (bp instanceof IAFSImprovable bp2) {
-            this.progress = bp2.getAFSImprovement();
-            setWorkingEnabled(true);
-            this.rocketBlueprintSlot.setLocked(true);
+        if (this.hasBlueprint() && !this.isActive() && this.fuel != null) {
+            int energyToConsume = getEnergyToConsume();
+            boolean maintenance = ConfigHolder.machines.enableMaintenance &&
+                    hasMaintenanceMechanics();
+            if (maintenance) {
+                energyToConsume += getNumMaintenanceProblems() * energyToConsume / 10;
+            }
+            int coolantToConsume = getCoolantToConsume();
+            FluidStack drained = inputCoolant.drain(new FluidStack(COOLANT_IN, coolantToConsume),
+                    false);
+            boolean enoughCoolant = drained != null && drained.amount == coolantToConsume;
+            boolean enoughSpaceForCoolant = outputCoolant
+                    .fill(new FluidStack(COOLANT_OUT, coolantToConsume), false) == coolantToConsume;
+            if (enoughCoolant && enoughSpaceForCoolant) {
+                hasNotEnoughCoolant = false;
+            } else {
+                hasNotEnoughCoolant = true;
+                crash();
+            }
+            if (hasNotEnoughEnergy && energyContainer.getInputPerSec() > 19L * energyToConsume) {
+                hasNotEnoughEnergy = false;
+            }
+            if (!hasNotEnoughEnergy && !hasNotEnoughCoolant) {
+                var bp = this.getBlueprint();
+                if (bp instanceof IAFSImprovable bp2) {
+                    this.progress = bp2.getAFSImprovement();
+                    setWorkingEnabledInternal(true);
+                    this.rocketBlueprintSlot.setLocked(true);
+                }
+            }
         }
     }
 
@@ -366,14 +466,13 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         return SusyTextures.AFS_OVERLAY;
     }
 
-    // fix getEnergyToConsume and getCompute when some generic computer blocks are added
     protected int getEnergyToConsume() {
-        return 1000;
+        return energyPerTick;
     }
 
     // per tick
     protected int getCompute() {
-        return 1;
+        return computationPerTick;
     }
 
     @Override
@@ -385,6 +484,9 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
 
         this.coolantPositions = context.getOrDefault(FLUID_BLOCKS_KEY, new ArrayList<>());
         this.coolantFilled = coolantPositions.isEmpty();
+        this.computationPerTick = context.getOrDefault("computation", 0);
+        this.coolantPerTick = context.getOrDefault("coolant", 0);
+        this.energyPerTick = context.getOrDefault("energy", 0);
     }
 
     @Override
@@ -404,8 +506,8 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     }
 
     // mb/tick
-    protected int getCoolantToConsume(int energyUsage) {
-        return (int) Math.ceil(Math.sqrt((double) energyUsage / 20));
+    protected int getCoolantToConsume() {
+        return coolantPerTick;
     }
 
     @Override
@@ -426,7 +528,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         if (maintenance) {
             energyToConsume += getNumMaintenanceProblems() * energyToConsume / 10;
         }
-        int coolantToConsume = getCoolantToConsume(energyToConsume);
+        int coolantToConsume = getCoolantToConsume();
         FluidStack drainedFluid = inputCoolant.drain(new FluidStack(COOLANT_IN, coolantToConsume), false);
         boolean enoughCoolant = false;
         if (drainedFluid != null) {
@@ -457,6 +559,24 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         } else {
             hasNotEnoughEnergy = true;
             crash();
+        }
+        if (getOffsetTimer() % 20 == 0) {
+            this.currentSuccessProbability = this.getBlueprint().calculateInitialSuccess(gravity, this.fuel,
+                    this.progress);
+        }
+    }
+
+    @Override
+    public void update() {
+        super.update();
+        // Client update
+        if (!this.getWorld().isRemote || !this.isActive())
+            return;
+        if (getOffsetTimer() % 20 == 0 && this.getBlueprint() != null) {
+            this.mass = this.getBlueprint().getMass();
+            this.fuelMass = this.getBlueprint().getFuelVolume() * this.fuel.getDensity();
+            this.escapeVelocity = ESCAPE_VELOCITY_CONSTANT * gravity;
+            this.velocity = this.getBlueprint().calculateVelocity(gravity, fuel);
         }
     }
 
@@ -537,39 +657,40 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         // blueprint slot
         SlotWidgetMentallyStable blueprintSlot = new SlotWidgetMentallyStable(this.rocketBlueprintSlot, 0, 0, 0);
 
-        blueprintSlot.setSelfPosition(new Position(12, height / 5 - 27));
-        blueprintSlot.setChangeListener(
-                () -> {
-                    if (this.rocketBlueprintSlot.isEmpty()) {
-                        blueprintSlot.setSelfPosition(new Position(12, height / 2 - 27));
-                    } else {
-                        blueprintSlot.setSelfPosition(new Position(width - 23, height - 23));
-                    }
-                });
+        blueprintSlot.setSelfPosition(new Position(width - 23, height - 23));
         blueprintSlot.setBackgroundTexture(GuiTextures.SLOT_DARK);
+        blueprintSlot.setChangeListener(() -> {
+            if (this.rocketBlueprintSlot.isEmpty()) {
+                this.currentSuccessProbability = -1;
+            }
+        });
         builder.widget(blueprintSlot);
 
         ConditionalWidget mainGroup = new ConditionalWidget(0, 0, width, height, () -> true);
-        mainGroup.addWidget(
+        ConditionalWidget menuGroup = new ConditionalWidget(0, 0, width, height, () -> !this.isActive());
+        mainGroup.addWidget(menuGroup);
+        // Fuel selector
+        menuGroup.addWidget(
                 new LabelWidget(
-                        5, 5, I18n.format(this.getMetaName() + ".gui.fuel_selector_label"), 0xffffff));
-        mainGroup.addWidget(
-                new ConditionalWidget.FuelRegistrySelectorWidget(
-                        4,
-                        14,
+                        10, 45, I18n.format(this.getMetaName() + ".gui.fuel_selector_label"), 0xffffff));
+        menuGroup.addWidget(
+                new FuelRegistrySelectorWidget(
+                        10,
+                        54,
                         80,
                         60,
+                        this.fuelList,
                         (fuel) -> {
                             this.fuel = fuel;
                         }));
         // Gravity selector
-        mainGroup.addWidget(
+        menuGroup.addWidget(
                 new LabelWidget(
-                        5, 60, I18n.format(this.getMetaName() + ".gui.gravity_selector_label"), 0xffffff));
-        mainGroup.addWidget(
+                        10, 80, I18n.format(this.getMetaName() + ".gui.gravity_selector_label"), 0xffffff));
+        menuGroup.addWidget(
                 new TextFieldWidget2(
-                        5,
-                        68,
+                        10,
+                        88,
                         60,
                         12,
                         () -> Double.valueOf(gravity).toString(),
@@ -588,7 +709,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                                 .setAllowedChars(TextFieldWidget2.DECIMALS)
                                 .setMaxLength(6));
 
-        mainGroup.addWidgetWithTest(
+        menuGroup.addWidgetWithTest(
                 new AdvancedTextWidget(
                         9,
                         19,
@@ -603,99 +724,70 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                             }
                         },
                         0xffffff),
-                () -> this.hasBlueprint() && !isActive());
+                () -> !this.isActive() && this.hasBlueprint());
 
         // multi information
         // these should probably be visible at all times in some different corner
-        mainGroup.addWidgetWithTest(
+        menuGroup.addWidget(
                 new LabelWidget(
                         width - 130,
                         9,
                         I18n.format(getMetaName() + ".gui.computation_power", this.getCompute()),
-                        0xffffff),
-                () -> !this.isActive());
-        mainGroup.addWidgetWithTest(
+                        0xffffff));
+        menuGroup.addWidget(
                 new LabelWidget(
                         width - 130,
                         20,
                         I18n.format(
                                 getMetaName() + ".gui.coolant_flow",
-                                this.getCoolantToConsume(this.getEnergyToConsume()) * 20),
-                        0xffffff),
-                () -> !this.isActive());
-        mainGroup.addWidgetWithTest(
+                                this.getCoolantToConsume() * 20),
+                        0xffffff));
+        menuGroup.addWidget(
                 new LabelWidget(
                         width - 130,
                         31,
                         I18n.format(getMetaName() + ".gui.energy_consumption", this.getEnergyToConsume()),
+                        0xffffff));
+        menuGroup.addWidgetWithTest(
+                new LabelWidget(
+                        width - 130,
+                        52,
+                        I18n.format(getMetaName() + ".gui.success_chance",
+                                String.format("%.2f", this.getSuccessChance())),
                         0xffffff),
-                () -> !this.isActive());
+                () -> !this.isActive() && this.getSuccessChance() != -1);
+        // Various stats beneath
+        // Dry weight
+        menuGroup.addWidgetWithTest(
+                new LabelWidget(
+                        width - 130,
+                        63,
+                        I18n.format(getMetaName() + ".gui.mass",
+                                this.mass)),
+                () -> !this.isActive() && this.getSuccessChance() != -1 && this.fuel != null);
+        // Fuel mass
+        menuGroup.addWidgetWithTest(
+                new LabelWidget(
+                        width - 130,
+                        74,
+                        I18n.format(getMetaName() + ".gui.fuel_mass",
+                                this.fuelMass)),
+                () -> !this.isActive() && this.getSuccessChance() != -1 && this.fuel != null);
+        // Velocity/escape velocity
+        menuGroup.addWidgetWithTest(
+                new LabelWidget(
+                        width - 130,
+                        85,
+                        I18n.format(getMetaName() + ".gui.velocity_percent",
+                                String.format("%.2f", velocity / escapeVelocity))),
+                () -> !this.isActive() && this.getSuccessChance() != -1 && this.fuel != null);
 
-        mainGroup.addWidgetWithTest(
-                new LabelWidget(9, 9, getMetaFullName(), 0xffffff), () -> !this.isActive());
+        menuGroup.addWidget(
+                new LabelWidget(9, 9, getMetaFullName(), 0xffffff));
 
-        mainGroup.addWidgetWithTest(
+        menuGroup.addWidgetWithTest(
                 new LabelWidget(9, height - 80, I18n.format(this.getMetaName() + "gui.cant_improve_error"), 0xff0000),
                 () -> this.hasBlueprint() && !(this.getBlueprint() instanceof IAFSImprovable));
-        // start button
-        mainGroup.addWidgetWithTest(
-                new ClickButtonWidget(
-                        width - 61,
-                        height - 23,
-                        18,
-                        18,
-                        "",
-                        (ignored) -> {
-                            if (this.hasBlueprint() && !this.isActive() && this.fuel != null) {
-                                int energyToConsume = getEnergyToConsume();
-                                boolean maintenance = ConfigHolder.machines.enableMaintenance &&
-                                        hasMaintenanceMechanics();
-                                if (maintenance) {
-                                    energyToConsume += getNumMaintenanceProblems() * energyToConsume / 10;
-                                }
-                                int coolantToConsume = getCoolantToConsume(energyToConsume);
-                                FluidStack drained = inputCoolant.drain(new FluidStack(COOLANT_IN, coolantToConsume),
-                                        false);
-                                boolean enoughCoolant = drained != null && drained.amount == coolantToConsume;
-                                boolean enoughSpaceForCoolant = outputCoolant
-                                        .fill(new FluidStack(COOLANT_OUT, coolantToConsume), false) == coolantToConsume;
-                                if (enoughCoolant && enoughSpaceForCoolant) {
-                                    hasNotEnoughCoolant = false;
-                                } else {
-                                    hasNotEnoughCoolant = true;
-                                    crash();
-                                }
-                                if (hasNotEnoughEnergy && energyContainer.getInputPerSec() > 19L * energyToConsume) {
-                                    hasNotEnoughEnergy = false;
-                                }
-                                if (!hasNotEnoughEnergy && !hasNotEnoughCoolant) {
-                                    this.start();
-                                }
-                            }
-                        })
-                                .setTooltipText(this.getMetaName() + ".gui.start_button")
-                                .setButtonTexture(SusyGuiTextures.GREEN_CIRCLE),
-                () -> !this.isActive() && this.hasBlueprint() && this.getBlueprint() instanceof IAFSImprovable);
-        // stop button
-        mainGroup.addWidgetWithTest(
-                new ClickButtonWidget(
-                        width - 61,
-                        height - 23,
-                        18,
-                        18,
-                        "",
-                        (ignored) -> {
-                            if (this.hasBlueprint() && this.isActive()) {
-
-                                // && !hasNotEnoughCoolant
-                                // && !hasNotEnoughEnergy
-                                this.stop();
-                            }
-                        })
-                                .setTooltipText(this.getMetaName() + ".gui.stop_button")
-                                .setButtonTexture(SusyGuiTextures.RED_CIRCLE),
-                () -> this.isActive() && this.hasBlueprint());
-
         // rocket render
 
         mainGroup.addWidgetConditionalInit(
@@ -723,6 +815,10 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         builder.widget(mainGroup);
 
         return builder;
+    }
+
+    private double getSuccessChance() {
+        return this.currentSuccessProbability;
     }
 
     @Override

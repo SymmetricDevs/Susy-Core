@@ -290,9 +290,13 @@ susy.machine.steam_extractor_cannot_melt_items.warning=Steam Extractors cannot m
 # Machines/Multiblocks
 susy.machine.aerospace_flight_simulator.name=Aerospace Flight Simulator
 susy.machine.aerospace_flight_simulator.gui.not_formed=Structure not formed!
-susy.machine.aerospace_flight_simulator.gui.fuel_selector_label=Fuel selector
-susy.machine.aerospace_flight_simulator.gui.gravity_selector_label=Gravity
-susy.machine.aerospace_flight_simulator.gui.success_chance=Success chance: %s
+susy.machine.aerospace_flight_simulator.gui.fuel_selector_label=Select fuel:
+susy.machine.aerospace_flight_simulator.gui.gravity_selector_label=Set simulation gravity:
+susy.machine.aerospace_flight_simulator.gui.success_chance=Success chance: %.1f
+susy.machine.aerospace_flight_simulator.gui.mass=Dry mass: %s kg
+susy.machine.aerospace_flight_simulator.gui.fuel_mass=Fuel mass: %s kg
+susy.machine.aerospace_flight_simulator.gui.velocity_percent=Escape velocity%: %s
+
 susy.machine.aerospace_flight_simulator.gui.rocket_name=Rocket: %s
 susy.machine.aerospace_flight_simulator.gui.stages=Stages:
 susy.machine.aerospace_flight_simulator.gui.start_button=Begin simulation
@@ -303,6 +307,7 @@ susy.machine.aerospace_flight_simulator.gui.computation_power=Computation: %s go
 # googs/s is a very technical term
 susy.machine.aerospace_flight_simulator.gui.energy_consumption=Power input: %s EU/t
 susy.machine.aerospace_flight_simulator.gui.coolant_flow=Coolant input: %s mB/s
+susy.machine.aerospace_flight_simulator.gui.no_coolant_warning=Insufficient FC-75 coolant flow
 
 susy.machine.blueprint_assembler.name=Blueprint Assembler
 susy.machine.blueprint_assembler.stagename=Stage: %s
@@ -519,12 +524,12 @@ susy.machine.scrap_recycler.name=Scrap Recycler
 susy.machine.rocket_assembler.name=Rocket Assembler
 susy.machine.rocket_assembler.signal.0=Start assembly
 susy.machine.rocket_assembler.signal.1=Stop and discard assembly
-susy.machine.rocket_assembler.blueprint_slot.name=insert a rocket blueprint
+susy.machine.rocket_assembler.blueprint_slot.name=Insert a rocket blueprint
 susy.machine.rocket_assembler.gui.required_items=Required Items:
 susy.machine.rocket_assembler.gui.stop=Stop and reset assembly
-susy.machine.rocket_assembler.gui.start=start the assembly process
+susy.machine.rocket_assembler.gui.start=Start the assembly process
 susy.machine.rocket_assembler.blueprint_stop.name=Blueprint Slot
-
+susy.machine.rocket_assembler.gui.overall_progress=Component no. %d/%d (%s%%)
 susy.machine.rocket_programmer.name=Rocket Programmer
 susy.machine.rocket_programmer.gui.not_enough_budget=The rocket cannot perform every programmed mission.
 susy.machine.metallurgical_converter.name=Metallurgical Converter

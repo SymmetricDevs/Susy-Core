@@ -11,6 +11,8 @@ import net.minecraft.util.ResourceLocation;
 
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
+import supersymmetry.common.entities.EntityAbstractRocket;
+import supersymmetry.common.rocketry.SuccessCalculation;
 
 public abstract class AbstractRocketBlueprint implements Cloneable {
 
@@ -54,7 +56,6 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
         setRelatedEntity(relatedEntity);
     }
 
-    public abstract double getMinimalSuccessChance();
 
     public List<RocketStage> getStages() {
         return this.stages;
@@ -146,4 +147,8 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
             throw new RuntimeException(e);
         }
     }
+
+    public abstract double calculateVelocity(double gravity, RocketFuelEntry fuel);
+    public abstract double calculateInitialSuccess(double gravity, RocketFuelEntry fuel, long augmentation);
+    public abstract SuccessCalculation.LaunchResult calculateSuccess(EntityAbstractRocket rocket, long augmentation);
 }

@@ -32,10 +32,12 @@ import supersymmetry.client.renderer.handler.IAlwaysRender;
 import supersymmetry.client.renderer.particles.SusyParticleFlameLarge;
 import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
 import supersymmetry.common.advancement.SusyCriteriaTriggers;
+import supersymmetry.common.event.GravityHandler;
 import supersymmetry.common.network.CPacketRocketInteract;
 import supersymmetry.common.rocketry.SuccessCalculation;
 import supersymmetry.common.rocketry.SuccessCalculation.LaunchResult;
 import supersymmetry.common.rocketry.rockets.SimpleStagedRocketBlueprint;
+import supersymmetry.common.world.SuSyDimensions;
 
 public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender, AFSRendered {
 
@@ -44,6 +46,7 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
     public CargoItemStackHandler cargo;
     private RocketFuelEntry fuelEntry;
     private int maxFuelVolume;
+    private long augmentation;
 
     // Troll mode - rocket curves back towards launch pad
     private LaunchResult launchResult = LaunchResult.LAUNCHES;
@@ -141,6 +144,7 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
             // Testing only
             this.cargo = new CargoItemStackHandler(10000, 10000);
             this.maxFuelVolume = 1;
+            this.augmentation = 0;
         } else {
             this.cargo = new CargoItemStackHandler(this.getEntityData().getInteger("maxVolume"),
                     this.getEntityData().getInteger("maxWeight"));
@@ -154,8 +158,8 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
                 this.trollTargetPos = assemblerPosition;
                 this.launchResult = LaunchResult.TROLLS;
             } else {
-                this.launchResult = new SuccessCalculation((SimpleStagedRocketBlueprint) blueprint)
-                        .calculateSuccess(this);
+                this.augmentation = this.getEntityData().getLong("AFSimprovement");
+                this.launchResult = blueprint.calculateSuccess(this, this.augmentation);
             }
 
             this.maxFuelVolume = (int) blueprint.getFuelVolume();

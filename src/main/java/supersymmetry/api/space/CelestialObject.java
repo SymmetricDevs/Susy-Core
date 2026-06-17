@@ -6,6 +6,8 @@ import javax.annotation.Nullable;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
+import static supersymmetry.common.rocketry.SuccessCalculation.ESCAPE_VELOCITY_CONSTANT;
+
 public class CelestialObject {
 
     private String translationKey;
@@ -63,7 +65,7 @@ public class CelestialObject {
     }
 
     public double getEscapeVelocity() {
-        return 11186 * Math.sqrt(mass / radius);
+        return ESCAPE_VELOCITY_CONSTANT * Math.sqrt(mass / radius);
     }
 
     public void setRadius(double radius) {

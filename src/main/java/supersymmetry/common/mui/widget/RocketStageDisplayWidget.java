@@ -31,7 +31,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
     @FunctionalInterface
     public interface RowStateProvider {
 
-        ConditionalWidget.BlueprintRowState get(RocketStage stage, String componentType);
+        BlueprintRowState get(RocketStage stage, String componentType);
     }
 
     @FunctionalInterface
@@ -294,7 +294,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                 String componentType = componentLimits.getKey();
                 int maxSlotCount = stage.maxComponentsOf(componentType);
 
-                ConditionalWidget.BlueprintRowState rowState = rowStateProvider.get(stage, componentType);
+                BlueprintRowState rowState = rowStateProvider.get(stage, componentType);
 
                 HorizontalScrollableListWidget slotsw = new HorizontalScrollableListWidget(0, 0, 18 * 5, 28);
 
@@ -432,7 +432,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
         public boolean shortView = false;
         public HorizontalScrollableListWidget itemList;
         public final Widget shortViewButton;
-        public final ConditionalWidget.BlueprintRowState boundRow;
+        public final BlueprintRowState boundRow;
         public final Runnable markDirty;
 
         public Size previousStateSize = new Size(18 * 5 + 2, 28);
@@ -440,7 +440,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
 
         public ComponentEntryWidget(
                 Position pos, Size size, HorizontalScrollableListWidget itemList,
-                ConditionalWidget.BlueprintRowState boundRow, Runnable markDirty) {
+                BlueprintRowState boundRow, Runnable markDirty) {
             super(pos, size);
             this.itemList = itemList;
             this.boundRow = boundRow;

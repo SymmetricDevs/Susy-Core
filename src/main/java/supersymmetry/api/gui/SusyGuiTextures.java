@@ -78,6 +78,11 @@ public class SusyGuiTextures {
     public static final TextureArea ROCKET_ASSEMBLER_BUTTON_START = TextureArea
             .fullImage("textures/gui/widget/suspicious_button.png");
 
+    public static final TextureArea PROGRESS_BAR_ROCKET_ASSEMBLER_COMPONENT = TextureArea
+            .fullImage("textures/gui/progress_bar/rocket_assembler_component.png");
+    public static final TextureArea PROGRESS_BAR_ROCKET_ASSEMBLER_OVERALL = TextureArea
+            .fullImage("textures/gui/progress_bar/rocket_assembler_overall.png");
+
     public static final TextureArea GREEN_CIRCLE = TextureArea.fullImage("textures/gui/widget/green.png");
     public static final TextureArea RED_CIRCLE = TextureArea.fullImage("textures/gui/widget/red.png");
     public static final TextureArea RED_X = TextureArea.fullImage("textures/gui/widget/x.png");
