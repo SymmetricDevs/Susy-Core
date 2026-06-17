@@ -99,7 +99,7 @@ tile.deposit_block.hydrothermal.name=Hydrothermal Deposit Block
 tile.deposit_block.alluvial.name=Alluvial Deposit Block
 tile.deposit_block.magmatic_hydrothermal.name=Magmatic Hydrothermal Deposit Block
 tile.deposit_block.ice_cap.name=Ice Cap Deposit Block
-tile.deposit_block.evaporite.name=Evaporite Deposit Block
+tile.deposit_block.evaporite.name=Evaporite Block
 
 tile.resource_block.bauxite.name=Bauxite Ore
 tile.resource_block.caliche.name=Caliche
