@@ -1,5 +1,8 @@
 package supersymmetry.api.recipes.logic;
 
+import static gregtech.api.GTValues.LuV;
+import static gregtech.api.GTValues.VA;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,7 +45,7 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
         Recipe recipe = assembler.recipeMap
                 .recipeBuilder()
                 .inputIngredients(collapse(flatExpandedInput))
-                .EUt(2 << 15) // 1 LuV amp
+                .EUt(VA[LuV]) // Almost 1 LuV amp
                 .duration((int) Math.ceil(targetComponent.getAssemblyDuration() * 20))
                 .build()
                 .getResult();

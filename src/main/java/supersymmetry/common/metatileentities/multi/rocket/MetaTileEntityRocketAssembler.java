@@ -28,6 +28,7 @@ import gregtech.api.capability.IControllable;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.Widget;
+import gregtech.api.gui.resources.TextureArea;
 import gregtech.api.gui.widgets.*;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -297,33 +298,18 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     }
 
     protected ModularUI.Builder createUITemplate(EntityPlayer entityPlayer) {
-        ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, 198, 208);
-        builder.image(4, 4, 190, 109, GuiTextures.DISPLAY);
-        ProgressWidget progressBar = new ProgressWidget(
-                () -> this.getFillPercentage(0),
-                4,
-                115,
-                94,
-                7,
-                this.getProgressBarTexture(0),
-                ProgressWidget.MoveType.HORIZONTAL)
-                        .setHoverTextConsumer(list -> this.addBarHoverText(list, 0));
-        builder.widget(progressBar);
-        progressBar = new ProgressWidget(
-                () -> this.getFillPercentage(1),
-                100,
-                115,
-                94,
-                7,
-                this.getProgressBarTexture(1),
-                ProgressWidget.MoveType.HORIZONTAL)
-                        .setHoverTextConsumer(list -> this.addBarHoverText(list, 1));
-        builder.widget(progressBar);
-        builder.widget(
-                new IndicatorImageWidget(174, 93, 17, 17, getLogo())
-                        .setWarningStatus(getWarningLogo(), this::addWarningText)
-                        .setErrorStatus(getErrorLogo(), this::addErrorText));
-        builder.image(4, 4, 190, 117, GuiTextures.DISPLAY);
+        ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, 198, 216);
+        builder.image(4, 4, 190, 117, GuiTextures.DISPLAY)
+                .widget(new ProgressWidget(
+                        () -> this.getFillPercentage(0),
+                        4, 123, 94, 7,
+                        this.getProgressBarTexture(0),
+                        ProgressWidget.MoveType.HORIZONTAL).setIgnoreColor(true))
+                .widget(new ProgressWidget(
+                        () -> this.getFillPercentage(1),
+                        100, 123, 94, 7,
+                        this.getProgressBarTexture(1),
+                        ProgressWidget.MoveType.HORIZONTAL));
         builder.widget(
                 new IndicatorImageWidget(174, 101, 17, 17, getLogo())
                         .setWarningStatus(getWarningLogo(), this::addWarningText)
@@ -340,21 +326,21 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         if (controllable != null) {
             builder.widget(
                     new ImageCycleButtonWidget(
-                            173,
+                            181,
                             183,
                             18,
                             18,
                             GuiTextures.BUTTON_POWER,
                             controllable::isWorkingEnabled,
                             controllable::setWorkingEnabled));
-            builder.widget(new ImageWidget(173, 201, 18, 6, GuiTextures.BUTTON_POWER_DETAIL));
+            builder.widget(new ImageWidget(181, 201, 18, 6, GuiTextures.BUTTON_POWER_DETAIL));
         }
 
         // start button
         builder.widget(
                 new ClickButtonWidget(
                         173,
-                        143,
+                        151,
                         18,
                         18,
                         "",
@@ -369,7 +355,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         builder.widget(
                 new ClickButtonWidget(
                         173,
-                        125,
+                        133,
                         18,
                         18,
                         "",
@@ -401,7 +387,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                         this::getCurrentRecipe,
                         this.recipeMapWorkable::isWorking));
 
-        builder.bindPlayerInventory(entityPlayer.inventory, 125);
+        builder.bindPlayerInventory(entityPlayer.inventory, 133);
         return builder;
     }
 
@@ -745,5 +731,11 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         var v1 = pos.offset(left.getOpposite(), 17).offset(up, 2);
         var v2 = pos.offset(left, 17).offset(up, 10).offset(front.getOpposite(), 17);
         return new AxisAlignedBB(v1, v2);
+    }
+
+    @Override
+    public TextureArea getProgressBarTexture(int index) {
+        return index == 1 ? SusyGuiTextures.PROGRESS_BAR_ROCKET_ASSEMBLER_COMPONENT :
+                SusyGuiTextures.PROGRESS_BAR_ROCKET_ASSEMBLER_OVERALL;
     }
 }
