@@ -15,6 +15,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -162,7 +164,6 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
 
     public void abortAssembly() {
         this.blueprintSlot.setLocked(false);
-        // SusyLog.logger.info("assembly force stopped");
         this.isWorking = false;
         this.componentIndex = 0;
         this.componentList.clear();
@@ -228,12 +229,6 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         if (!isWorking) return;
         if (this.componentList.size() - 1 > this.componentIndex) {
             this.componentIndex++;
-            SusyLog.logger.info(
-                    "processing component {}/{}, isWorking:{},component:{}",
-                    this.componentIndex,
-                    this.componentList.size(),
-                    this.isWorking,
-                    getCurrentCraftTarget() == null ? null : getCurrentCraftTarget().getName());
         } else {
             finishAssembly();
         }
@@ -304,12 +299,13 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                         () -> this.getFillPercentage(0),
                         4, 123, 94, 7,
                         this.getProgressBarTexture(0),
-                        ProgressWidget.MoveType.HORIZONTAL).setIgnoreColor(true))
+                        ProgressWidget.MoveType.HORIZONTAL))
                 .widget(new ProgressWidget(
                         () -> this.getFillPercentage(1),
                         100, 123, 94, 7,
                         this.getProgressBarTexture(1),
-                        ProgressWidget.MoveType.HORIZONTAL));
+                        ProgressWidget.MoveType.HORIZONTAL)
+                                .setHoverTextConsumer(this::addBarHoverText));
         builder.widget(
                 new IndicatorImageWidget(174, 101, 17, 17, getLogo())
                         .setWarningStatus(getWarningLogo(), this::addWarningText)
@@ -326,14 +322,14 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         if (controllable != null) {
             builder.widget(
                     new ImageCycleButtonWidget(
-                            181,
-                            183,
+                            173,
+                            191,
                             18,
                             18,
                             GuiTextures.BUTTON_POWER,
                             controllable::isWorkingEnabled,
                             controllable::setWorkingEnabled));
-            builder.widget(new ImageWidget(181, 201, 18, 6, GuiTextures.BUTTON_POWER_DETAIL));
+            builder.widget(new ImageWidget(173, 209, 18, 6, GuiTextures.BUTTON_POWER_DETAIL));
         }
 
         // start button
@@ -365,13 +361,13 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                                 .setButtonTexture(SusyGuiTextures.ROCKET_ASSEMBLER_BUTTON_STOP)
                                 .setTooltipText("susy.machine.rocket_assembler.gui.stop"));
         builder.dynamicLabel(
-                65,
-                52,
+                40,
+                79,
                 () -> {
                     return !blueprintSlot.isEmpty() ? "" : I18n.format(this.getMetaName() + ".blueprint_slot.name");
                 },
                 0x404040);
-        SlotWidgetMentallyStable blueprintslot = new SlotWidgetMentallyStable(this.blueprintSlot, 0, 170, 72);
+        SlotWidgetMentallyStable blueprintslot = new SlotWidgetMentallyStable(this.blueprintSlot, 0, 173, 79);
         blueprintslot.setBackgroundTexture(GuiTextures.SLOT_DARK);
         blueprintslot.setChangeListener(
                 () -> {
@@ -389,6 +385,14 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
 
         builder.bindPlayerInventory(entityPlayer.inventory, 133);
         return builder;
+    }
+
+    private void addBarHoverText(List<ITextComponent> iTextComponents) {
+        if (componentList.isEmpty())
+            return;
+        iTextComponents.add(new TextComponentTranslation("susy.machine.rocket_assembler.gui.overall_progress",
+                this.componentIndex, this.componentList.size(),
+                String.format("%.1f", (double) 100 * this.componentIndex / this.componentList.size())));
     }
 
     @Override
@@ -728,14 +732,14 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         EnumFacing up = RelativeDirection.UP.getRelativeFacing(front, getUpwardsFacing(), isFlipped());
 
         BlockPos pos = getPos();
-        var v1 = pos.offset(left.getOpposite(), 17).offset(up, 2);
-        var v2 = pos.offset(left, 17).offset(up, 10).offset(front.getOpposite(), 17);
+        var v1 = pos.offset(left.getOpposite(), 33).offset(up.getOpposite(), 4);
+        var v2 = pos.offset(left, 33).offset(up, 10).offset(front.getOpposite(), 17);
         return new AxisAlignedBB(v1, v2);
     }
 
     @Override
     public TextureArea getProgressBarTexture(int index) {
-        return index == 1 ? SusyGuiTextures.PROGRESS_BAR_ROCKET_ASSEMBLER_COMPONENT :
+        return index == 0 ? SusyGuiTextures.PROGRESS_BAR_ROCKET_ASSEMBLER_COMPONENT :
                 SusyGuiTextures.PROGRESS_BAR_ROCKET_ASSEMBLER_OVERALL;
     }
 }

@@ -529,7 +529,7 @@ susy.machine.rocket_assembler.gui.required_items=Required Items:
 susy.machine.rocket_assembler.gui.stop=Stop and reset assembly
 susy.machine.rocket_assembler.gui.start=Start the assembly process
 susy.machine.rocket_assembler.blueprint_stop.name=Blueprint Slot
-
+susy.machine.rocket_assembler.gui.overall_progress=Component no. %d/%d (%s%%)
 susy.machine.rocket_programmer.name=Rocket Programmer
 susy.machine.rocket_programmer.gui.not_enough_budget=The rocket cannot perform every programmed mission.
 susy.machine.metallurgical_converter.name=Metallurgical Converter
