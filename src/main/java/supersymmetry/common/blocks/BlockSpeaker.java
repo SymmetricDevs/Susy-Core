@@ -9,13 +9,14 @@ import net.minecraft.world.World;
 
 import gregtech.api.block.VariantBlock;
 import supersymmetry.common.tileentities.TileEntitySpeaker;
+import supersymmetry.common.tileentities.TileEntitySpeakerBroadcast;
 
 public class BlockSpeaker extends VariantBlock<BlockSpeaker.BlockSpeakerType> {
 
     public static enum BlockSpeakerType implements IStringSerializable {
 
         SINGLE("single", 32),
-        NETWORKED("networked", 64);
+        BROADCAST("broadcast", 64);
 
         private final String name;
         private final int radius;
@@ -51,7 +52,10 @@ public class BlockSpeaker extends VariantBlock<BlockSpeaker.BlockSpeakerType> {
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
         BlockSpeakerType type = this.getState(state);
-        var te = new TileEntitySpeaker(type);
-        return te;
+        if (type == BlockSpeakerType.BROADCAST) {
+            return new TileEntitySpeakerBroadcast(type);
+        } else {
+            return new TileEntitySpeaker(type);
+        }
     }
 }

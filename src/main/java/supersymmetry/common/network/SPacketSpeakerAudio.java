@@ -38,6 +38,8 @@ public class SPacketSpeakerAudio implements IPacket, IClientExecutor {
 
     @Override
     public void executeClient(NetHandlerPlayClient handler) {
+        // TODO highpass maybe?
+        // also could make it also work with susy planets, so that there is no sound in space
         var snd = Minecraft.getMinecraft().getSoundHandler().sndManager.sndSystem;
         if (snd == null) return;
         if (id == null || id.isEmpty()) {

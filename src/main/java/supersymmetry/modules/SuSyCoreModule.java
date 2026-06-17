@@ -12,6 +12,8 @@ import supersymmetry.common.network.CPacketRocketInteract;
 import supersymmetry.common.network.SPacketFirstJoin;
 import supersymmetry.common.network.SPacketRemoveFluidState;
 import supersymmetry.common.network.SPacketSpeakerAudio;
+import supersymmetry.common.network.SPacketSpeakerBroadcastAudio;
+import supersymmetry.common.network.SPacketSpeakerBroadcastStop;
 import supersymmetry.common.network.SPacketSpeakerStop;
 import supersymmetry.common.network.SPacketUpdateRenderMask;
 
@@ -36,5 +38,7 @@ public class SuSyCoreModule implements IGregTechModule {
         GregTechAPI.networkHandler.registerPacket(SPacketUpdateRenderMask.class);
         GregTechAPI.networkHandler.registerPacket(SPacketSpeakerAudio.class);
         GregTechAPI.networkHandler.registerPacket(SPacketSpeakerStop.class);
+        GregTechAPI.networkHandler.registerPacket(SPacketSpeakerBroadcastAudio.class);
+        GregTechAPI.networkHandler.registerPacket(SPacketSpeakerBroadcastStop.class);
     }
 }
