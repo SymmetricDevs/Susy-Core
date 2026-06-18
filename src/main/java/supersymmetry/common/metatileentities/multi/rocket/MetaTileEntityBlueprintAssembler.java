@@ -391,6 +391,11 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
         this.coolantFilled = false;
         this.buildInProgress = false;
         this.buildProgress = 0;
+        this.blueprintBuilt = false;
+        this.lastErrorResult = null;
+        this.lastErrorStage = null;
+        this.lastErrorComponent = null;
+        syncBuildState();
     }
 
     @Override
@@ -423,8 +428,6 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                     String componentType = rowEntry.getKey();
                     BlueprintRowState rowState = rowEntry.getValue();
                     lastErrorComponent = componentType;
-                    SusyLog.logger.info("stage: {}, row type:{} [shortView:{},multiplier:{}]", stageName,
-                            componentType, rowState.shortView, rowState.getMultiplier());
                     List<AbstractComponent<?>> rowCandidate = rowState.materializeComponents();
                     if (rowCandidate == null) {
                         lastErrorResult = RocketStage.ComponentValidationResult.INVALID_CARD;

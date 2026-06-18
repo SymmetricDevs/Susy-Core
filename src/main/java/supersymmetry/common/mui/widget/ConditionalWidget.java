@@ -1,25 +1,14 @@
 package supersymmetry.common.mui.widget;
 
-import java.io.IOException;
+import static supersymmetry.api.capability.SuSyDataCodes.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.BooleanSupplier;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import gregtech.api.fluids.store.FluidStorageKeys;
-import gregtech.api.gui.widgets.PhantomFluidWidget;
-import gregtech.api.unification.material.Material;
-import gregtech.api.unification.material.properties.FluidProperty;
-import gregtech.api.unification.material.properties.PropertyKey;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Tuple;
 
@@ -28,16 +17,7 @@ import gregtech.api.gui.Widget;
 import gregtech.api.gui.widgets.AbstractWidgetGroup;
 import gregtech.api.util.Position;
 import gregtech.api.util.Size;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.SusyLog;
-import supersymmetry.api.rocketry.components.AbstractComponent;
-import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
-import supersymmetry.api.util.DataStorageLoader;
-
-import static supersymmetry.api.capability.SuSyDataCodes.*;
 
 // very laggy i think..
 public class ConditionalWidget extends AbstractWidgetGroup {

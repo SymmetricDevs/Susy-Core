@@ -339,17 +339,17 @@ public class SuSyPredicates {
 
     public static TraceabilityPredicate computation() {
         return new TraceabilityPredicate(blockWorldState -> {
-                IBlockState state = blockWorldState.getBlockState();
-                if (!(state.getBlock() instanceof BlockProcessorCluster)) {
-                    return false;
-                }
-                BlockProcessorCluster.TierType type = SuSyBlocks.PROCESSOR_CLUSTER.getState(state);
-                blockWorldState.getMatchContext().increment("computation", type.computation);
-                blockWorldState.getMatchContext().increment("coolant", type.coolant);
-                blockWorldState.getMatchContext().increment("energy", type.eut);
-                return true;
-            }, () -> Arrays.stream(BlockProcessorCluster.TierType.values())
-                    .map(type -> new BlockInfo(SuSyBlocks.PROCESSOR_CLUSTER.getState(type)))
-                    .toArray(BlockInfo[]::new));
+            IBlockState state = blockWorldState.getBlockState();
+            if (!(state.getBlock() instanceof BlockProcessorCluster)) {
+                return false;
+            }
+            BlockProcessorCluster.TierType type = SuSyBlocks.PROCESSOR_CLUSTER.getState(state);
+            blockWorldState.getMatchContext().increment("computation", type.computation);
+            blockWorldState.getMatchContext().increment("coolant", type.coolant);
+            blockWorldState.getMatchContext().increment("energy", type.eut);
+            return true;
+        }, () -> Arrays.stream(BlockProcessorCluster.TierType.values())
+                .map(type -> new BlockInfo(SuSyBlocks.PROCESSOR_CLUSTER.getState(type)))
+                .toArray(BlockInfo[]::new));
     }
 }

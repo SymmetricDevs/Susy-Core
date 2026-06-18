@@ -339,6 +339,8 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
 
         this.coolantPositions = null; // Clear water fill data when the structure is invalidated
         this.coolantFilled = false;
+
+        crash();
     }
 
     public void fillCoolant(List<BlockPos> toFill, Fluid fluid, IMultipleTankHandler fluidInputs) {
@@ -420,6 +422,8 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         setWorkingEnabledInternal(false);
         this.rocketBlueprintSlot.setLocked(false);
         this.progress = 0;
+        this.hasNotEnoughEnergy = false;
+        this.hasNotEnoughCoolant = false;
     }
 
     public void start() {

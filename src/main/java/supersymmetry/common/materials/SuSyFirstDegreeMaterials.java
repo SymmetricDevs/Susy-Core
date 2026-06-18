@@ -208,6 +208,5 @@ public class SuSyFirstDegreeMaterials {
                 .flags(DISABLE_DECOMPOSITION, CONTINUOUSLY_CAST, GENERATE_PLATE)
                 .components(Aluminium, 934, Magnesium, 60, Manganese, 6)
                 .build();
-
     }
 }

@@ -32,12 +32,8 @@ import supersymmetry.client.renderer.handler.IAlwaysRender;
 import supersymmetry.client.renderer.particles.SusyParticleFlameLarge;
 import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
 import supersymmetry.common.advancement.SusyCriteriaTriggers;
-import supersymmetry.common.event.GravityHandler;
 import supersymmetry.common.network.CPacketRocketInteract;
-import supersymmetry.common.rocketry.SuccessCalculation;
 import supersymmetry.common.rocketry.SuccessCalculation.LaunchResult;
-import supersymmetry.common.rocketry.rockets.SimpleStagedRocketBlueprint;
-import supersymmetry.common.world.SuSyDimensions;
 
 public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender, AFSRendered {
 

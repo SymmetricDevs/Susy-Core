@@ -1,12 +1,12 @@
 package supersymmetry.api.space;
 
+import static supersymmetry.common.rocketry.SuccessCalculation.ESCAPE_VELOCITY_CONSTANT;
+
 import java.util.List;
 
 import javax.annotation.Nullable;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-
-import static supersymmetry.common.rocketry.SuccessCalculation.ESCAPE_VELOCITY_CONSTANT;
 
 public class CelestialObject {
 
