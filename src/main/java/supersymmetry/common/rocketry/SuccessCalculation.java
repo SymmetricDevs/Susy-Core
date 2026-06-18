@@ -1,6 +1,7 @@
 package supersymmetry.common.rocketry;
 
 public class SuccessCalculation {
+
     public static final double ESCAPE_VELOCITY_CONSTANT = 1138.92;
 
     public static double augmentSuccess(double success, long augmentation) {

@@ -17,6 +17,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.items.IItemHandlerModifiable;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -63,6 +64,7 @@ import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockRocketAssemblerCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.entities.EntityTransporterErector;
+import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityComponentRedstoneController;
 import supersymmetry.common.mui.widget.ItemCostWidget;
 import supersymmetry.common.mui.widget.SlotWidgetMentallyStable;
@@ -86,7 +88,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     // list of every component that has to be constructed.
     public List<AbstractComponent<?>> componentList = new ArrayList<>();
     public int componentIndex = 0;
-    public boolean isWorking = false;
+    public boolean isAssemblyWorking = false;
     private List<Runnable> signalActions = new ArrayList<>();
 
     public MetaTileEntityRocketAssembler(ResourceLocation metaTileEntityId) {
@@ -109,7 +111,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         data = super.writeToNBT(data);
         data.setTag("blueprint", this.blueprintSlot.getStackInSlot(0).writeToNBT(new NBTTagCompound()));
 
-        data.setBoolean("isWorking", isWorking);
+        data.setBoolean("isWorking", isAssemblyWorking);
         data.setInteger("componentIndex", componentIndex);
 
         return data;
@@ -127,8 +129,8 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
             }
         }
         this.componentIndex = data.getInteger("componentIndex");
-        this.isWorking = data.getBoolean("isWorking");
-        this.blueprintSlot.setLocked(this.isWorking);
+        this.isAssemblyWorking = data.getBoolean("isWorking");
+        this.blueprintSlot.setLocked(this.isAssemblyWorking);
     }
 
     public List<Runnable> getSignalActions() {
@@ -159,12 +161,12 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     }
 
     public Recipe getCurrentRecipe() {
-        return isWorking ? ((RocketAssemblerLogic) this.recipeMapWorkable).getRecipe(100000) : null;
+        return isAssemblyWorking ? ((RocketAssemblerLogic) this.recipeMapWorkable).getRecipe(100000) : null;
     }
 
     public void abortAssembly() {
         this.blueprintSlot.setLocked(false);
-        this.isWorking = false;
+        this.isAssemblyWorking = false;
         this.componentIndex = 0;
         this.componentList.clear();
         this.recipeMapWorkable.invalidate(); // this can break some things
@@ -172,7 +174,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
 
     public void finishAssembly() {
         this.blueprintSlot.setLocked(false);
-        this.isWorking = false;
+        this.isAssemblyWorking = false;
         this.componentIndex = 0;
         this.componentList.clear();
         EntityTransporterErector erector = findTransporterErector();
@@ -206,7 +208,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         ((RocketAssemblerLogic) this.recipeMapWorkable).setInputsValid();
         this.componentIndex = 0;
 
-        this.isWorking = true;
+        this.isAssemblyWorking = true;
         this.componentList = bp.getStages().stream()
                 .flatMap(x -> x.getComponents().values().stream())
                 .flatMap(List::stream)
@@ -215,7 +217,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     }
 
     public AbstractComponent<?> getCurrentCraftTarget() {
-        if (isWorking && componentList.size() >= componentIndex + 1) {
+        if (isAssemblyWorking && componentList.size() >= componentIndex + 1) {
             return this.componentList.get(this.componentIndex);
         } else {
             abortAssembly();
@@ -226,7 +228,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
 
     // meant to be called after a recipe is done
     public void nextComponent() {
-        if (!isWorking) return;
+        if (!isAssemblyWorking) return;
         if (this.componentList.size() - 1 > this.componentIndex) {
             this.componentIndex++;
         } else {
@@ -255,10 +257,10 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     @Override
     public double getFillPercentage(int index) {
         if (!isStructureFormed()) return 0;
-        if (index == 1 && isWorking && this.componentList.size() != 0) {
+        if (index == 1 && isAssemblyWorking && this.componentList.size() != 0) {
             return (float) (this.componentIndex + 1) / (float) this.componentList.size();
         }
-        if (index == 0 && isWorking && this.recipeMapWorkable.isWorking()) {
+        if (index == 0 && isAssemblyWorking && this.recipeMapWorkable.isWorking()) {
             return (float) this.recipeMapWorkable.getProgress() / (float) this.recipeMapWorkable.getMaxProgress();
         }
         return 0;
@@ -381,7 +383,9 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                         new Size(158, 70),
                         new Position(9, 60),
                         this::getCurrentRecipe,
-                        this.recipeMapWorkable::isWorking));
+                        // TODO less stupid predicate thats synced to the client
+                        // because isAssemblyWorking is not
+                        () -> !this.blueprintSlot.isLocked()));
 
         builder.bindPlayerInventory(entityPlayer.inventory, 133);
         return builder;
@@ -393,6 +397,34 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         iTextComponents.add(new TextComponentTranslation("susy.machine.rocket_assembler.gui.overall_progress",
                 this.componentIndex, this.componentList.size(),
                 String.format("%.1f", (double) 100 * this.componentIndex / this.componentList.size())));
+    }
+
+    @Override
+    protected void addWarningText(List<ITextComponent> textList) {
+        super.addWarningText(textList);
+        if (isAssemblyWorking && hasNoElectrodes()) {
+            textList.add(new TextComponentTranslation("susy.machine.rocket_assembler.warning.no_electrodes"));
+        }
+    }
+
+    @Override
+    protected void addErrorText(List<ITextComponent> textList) {
+        super.addErrorText(textList);
+        if (isAssemblyWorking && findTransporterErector() == null) {
+            textList.add(new TextComponentTranslation("susy.machine.rocket_assembler.error.no_erector"));
+        }
+    }
+
+    private boolean hasNoElectrodes() {
+        for (IItemHandlerModifiable handler : getAbilities(MultiblockAbility.IMPORT_ITEMS)) {
+            for (int i = 0; i < handler.getSlots(); i++) {
+                ItemStack stack = handler.getStackInSlot(i);
+                if (SuSyMetaItems.TUNGSTEN_ELECTRODE.getStackForm().isItemEqual(stack)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     @Override

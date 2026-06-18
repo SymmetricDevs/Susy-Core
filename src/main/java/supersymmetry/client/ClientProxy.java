@@ -2,17 +2,12 @@ package supersymmetry.client;
 
 import static org.lwjgl.opengl.GL11.*;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.Nonnull;
-import javax.imageio.ImageIO;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;

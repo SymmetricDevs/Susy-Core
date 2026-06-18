@@ -26,9 +26,6 @@ public class SusyRocketComponents {
         AbstractComponent.registerComponent(new ComponentSpacecraft());
         AbstractComponent.registerComponent(new ComponentLiquidFuelTank());
         AbstractComponent.lockRegistry();
-        if (Materials.Benzene == null || Materials.Oxygen == null) {
-            throw new RuntimeException();
-        }
 
         new RocketFuelEntry.RocketFuelEntryBuilder("Methane-LOX")
                 .addComponent(Materials.Methane.getFluid(), 100)

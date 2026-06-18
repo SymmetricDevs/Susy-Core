@@ -439,8 +439,8 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
         public boolean previousSliderState = false;
 
         public ComponentEntryWidget(
-                Position pos, Size size, HorizontalScrollableListWidget itemList,
-                BlueprintRowState boundRow, Runnable markDirty) {
+                                    Position pos, Size size, HorizontalScrollableListWidget itemList,
+                                    BlueprintRowState boundRow, Runnable markDirty) {
             super(pos, size);
             this.itemList = itemList;
             this.boundRow = boundRow;

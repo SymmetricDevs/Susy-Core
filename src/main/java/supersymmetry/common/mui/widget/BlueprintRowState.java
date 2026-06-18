@@ -1,16 +1,17 @@
 package supersymmetry.common.mui.widget;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.common.util.Constants;
-import supersymmetry.api.rocketry.components.AbstractComponent;
-import supersymmetry.api.util.DataStorageLoader;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.common.util.Constants;
+
+import supersymmetry.api.rocketry.components.AbstractComponent;
+import supersymmetry.api.util.DataStorageLoader;
 
 public class BlueprintRowState {
 

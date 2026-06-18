@@ -3,6 +3,7 @@ package supersymmetry.api.recipes.logic;
 import static gregtech.api.GTValues.LuV;
 import static gregtech.api.GTValues.VA;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,9 +21,14 @@ import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.api.recipes.ingredients.GTRecipeItemInput;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.common.entities.EntityTransporterErector;
+import supersymmetry.common.item.SuSyMetaItems;
+import supersymmetry.common.item.behavior.ElectrodeDurabilityManager;
 import supersymmetry.common.metatileentities.multi.rocket.MetaTileEntityRocketAssembler;
 
 public class RocketAssemblerLogic extends MultiblockRecipeLogic {
+
+    private List<Integer> electrodeSlotCache = new ArrayList<>();
+    private boolean hasEnoughElectrodes = true;
 
     public RocketAssemblerLogic(MetaTileEntityRocketAssembler assembler) {
         super(assembler);
@@ -34,9 +40,7 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
 
     public Recipe getRecipe(long maxVoltage) {
         MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
-        EntityTransporterErector erector = assembler.findTransporterErector();
-        if (erector == null) return null;
-        if (!assembler.isWorking) return null;
+        if (!assembler.isAssemblyWorking) return null;
 
         AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
         if (targetComponent == null) return null;
@@ -57,6 +61,9 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
     protected @Nullable Recipe findRecipe(
                                           long maxVoltage, IItemHandlerModifiable inputs,
                                           IMultipleTankHandler fluidInputs) {
+        MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
+        EntityTransporterErector erector = assembler.findTransporterErector();
+        if (erector == null) return null;
         return getRecipe(maxVoltage);
     }
 
@@ -64,8 +71,6 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
     // "complete" too!
     @Override
     protected void completeRecipe() {
-        // SusyLog.logger.info(
-        // "progressTime:{} maxprogresstime:{}", this.progressTime, this.maxProgressTime);
         if (!(this.progressTime == 0 || this.maxProgressTime == 0)) {
             MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
             assembler.nextComponent();
@@ -87,6 +92,78 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
     @Override
     protected boolean checkPreviousRecipe() {
         return false;
+    }
+
+    @Override
+    protected void trySearchNewRecipe() {
+        hasEnoughElectrodes = true;
+        super.trySearchNewRecipe();
+    }
+
+    // mostly taken from the ball mill logic
+    @Override
+    public boolean checkRecipe(@NotNull Recipe recipe) {
+        MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
+        AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
+        if (targetComponent == null) return false;
+        int requiredDamage = getRequiredDamage(recipe, targetComponent);
+        electrodeSlotCache.clear();
+        int totalUses = 0;
+        for (int i = 0; i < getInputInventory().getSlots(); i++) {
+            ItemStack stack = getInputInventory().getStackInSlot(i);
+            if (stack.isEmpty() || !SuSyMetaItems.TUNGSTEN_ELECTRODE.getStackForm().isItemEqual(stack)) {
+                continue;
+            }
+            int remaining = ElectrodeDurabilityManager.getRemainingUses(stack);
+            if (remaining > 0) {
+                electrodeSlotCache.add(i);
+                totalUses += remaining;
+            }
+        }
+        if (totalUses < requiredDamage) {
+            hasEnoughElectrodes = false;
+            this.invalidInputsForRecipes = true;
+            return false;
+        }
+
+        return super.checkRecipe(recipe);
+    }
+
+    // mostly taken from the ball mill logic
+    @Override
+    protected boolean setupAndConsumeRecipeInputs(
+                                                  @NotNull Recipe recipe,
+                                                  @NotNull IItemHandlerModifiable importInventory,
+                                                  @NotNull IMultipleTankHandler importFluids) {
+        if (!hasEnoughElectrodes) {
+            return false;
+        }
+        MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
+        AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
+        if (targetComponent == null) return false;
+        int requiredDamage = getRequiredDamage(recipe, targetComponent);
+        for (int slot : electrodeSlotCache) {
+            if (requiredDamage <= 0) break;
+            ItemStack stack = importInventory.getStackInSlot(slot);
+            if (stack.isEmpty() || !SuSyMetaItems.TUNGSTEN_ELECTRODE.getStackForm().isItemEqual(stack))
+                continue;
+            int canTake = Math.min(ElectrodeDurabilityManager.getRemainingUses(stack), requiredDamage);
+            if (ElectrodeDurabilityManager.getRemainingUses(stack) == canTake) {
+                importInventory.setStackInSlot(slot, ItemStack.EMPTY);
+            } else {
+                ElectrodeDurabilityManager.setElectrodeDamage(stack,
+                        ElectrodeDurabilityManager.getElectrodeDamage(stack) + canTake);
+            }
+            requiredDamage -= canTake;
+        }
+
+        return super.setupAndConsumeRecipeInputs(recipe, importInventory, importFluids);
+    }
+
+    // maybe this is a little too much
+    private static int getRequiredDamage(@NotNull Recipe recipe, @NotNull AbstractComponent<?> component) {
+        return (int) ((double) recipe.getInputs().size() *
+                (component.getAssemblyDuration() + component.getRadius()));
     }
 
     private List<GTRecipeInput> collapse(List<GTRecipeInput> in) {

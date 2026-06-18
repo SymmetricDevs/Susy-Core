@@ -42,6 +42,7 @@ import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
 import gregtech.api.items.metaitem.ElectricStats;
 import supersymmetry.common.item.behavior.*;
+import supersymmetry.common.item.behavior.ElectrodeDurabilityManager;
 
 public class SuSyMetaItems {
 
@@ -169,7 +170,8 @@ public class SuSyMetaItems {
         DATA_CARD_MASTER_BLUEPRINT = metaItem.addItem(13, "data_card.master_blueprint").setMaxStackSize(1)
                 .addComponents(new DataCardBehavior(_ -> {}, Arrays.asList("rocketType")));
 
-        TUNGSTEN_ELECTRODE = metaItem.addItem(14, "tungsten_electrode");
+        TUNGSTEN_ELECTRODE = metaItem.addItem(14, "tungsten_electrode").setMaxStackSize(1)
+                .addComponents(ElectrodeDurabilityManager.INSTANCE);
 
         ROCKET_CONFIGURER = metaItem.addItem(15, "rocket_configurer").setMaxStackSize(1)
                 .addComponents(new RocketConfigBehavior());
