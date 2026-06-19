@@ -461,6 +461,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                         "                                                               ",
                         "                                                               ",
                         "                                                               ",
+                        "                                                               ",
                         "                                                               ")
                 .aisle(
                         "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
@@ -478,6 +479,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                         " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
                         " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
                         " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
                         " PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP ")
                 .aisle(
                         "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
@@ -495,22 +497,6 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                         "                                                               ",
                         "                                                               ",
                         "                                                               ",
-                        " P           P   P           P   P           P   P           P ")
-                .aisle(
-                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
                         "                                                               ",
                         " P           P   P           P   P           P   P           P ")
                 .aisle(
@@ -529,11 +515,31 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                         "                                                               ",
                         "                                                               ",
                         "                                                               ",
+                        "                                                               ",
                         " P           P   P           P   P           P   P           P ")
                 .aisle(
                         "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
                         "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
                         "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        " P           P   P           P   P           P   P           P ")
+                .aisle(
+                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "                                                               ",
                         "                                                               ",
                         "                                                               ",
                         "                                                               ",
@@ -563,12 +569,14 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                         "                                                               ",
                         "                                                               ",
                         "                                                               ",
+                        "                                                               ",
                         " P           P   P           P   P           P   P           P ")
                 .aisle(
                         "                                                               ",
                         "                                                               ",
                         "                                                               ",
                         "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR",
+                        "                                                               ",
                         "                                                               ",
                         "                                                               ",
                         "                                                               ",
@@ -597,28 +605,13 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                         "                                                               ",
                         "                                                               ",
                         "                                                               ",
-                        " P           P   P           P   P           P   P           P ")
-                .aisle(
-                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
-                        "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
                         "                                                               ",
                         " P           P   P           P   P           P   P           P ")
                 .aisle(
                         "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
                         "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
                         "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "                                                               ",
                         "                                                               ",
                         "                                                               ",
                         "                                                               ",
@@ -648,22 +641,6 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                         "                                                               ",
                         "                                                               ",
                         "                                                               ",
-                        " P           P   P           P   P           P   P           P ")
-                .aisle(
-                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
                         "                                                               ",
                         " P           P   P           P   P           P   P           P ")
                 .aisle(
@@ -682,6 +659,25 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                         "                                                               ",
                         "                                                               ",
                         "                                                               ",
+                        "                                                               ",
+                        " P           P   P           P   P           P   P           P ")
+                .aisle(
+                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
                         " P           P   P           P   P           P   P           P ")
                 .aisle(
                         "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
@@ -689,6 +685,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                         "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
                         "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
                         "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
                         " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
                         " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
                         " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
@@ -706,6 +703,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                         "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
                         "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
                         "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCSMCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "                                                               ",
                         "                                                               ",
                         "                                                               ",
                         "                                                               ",
