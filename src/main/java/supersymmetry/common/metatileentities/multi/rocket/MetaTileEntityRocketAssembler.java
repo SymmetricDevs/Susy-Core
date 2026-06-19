@@ -78,7 +78,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                 if (x.hasTagCompound()) {
                     NBTTagCompound tag = x.getTagCompound();
                     AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
-                    if (bp.readFromNBT(tag) && bp.isFullBlueprint()) {
+                    if (bp != null && bp.readFromNBT(tag) && bp.isFullBlueprint()) {
                         return true;
                     }
                 }
@@ -568,6 +568,23 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                         "                                                               ",
                         "                                                               ",
                         "                                                               ",
+                        "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        " P           P   P           P   P           P   P           P ")
+                .aisle(
+                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
                         "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR",
                         "                                                               ",
                         "                                                               ",
