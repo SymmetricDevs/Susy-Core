@@ -125,8 +125,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
         aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
         aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
-        // Front frame separator
-        aisleWithSpace(p, sp23, allD, fff23, fff23, fff23, fff23, fff23, fff23, fff23, fff23);
+        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
         // Main platform (front half)
         aisleWithSpace(p, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
         aisleWithSpace(p, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
@@ -506,15 +505,6 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         return hiddenBlocks;
     }
 
-    protected void fillHiddenBlocksWith(IBlockState state) {
-        if (this.hiddenBlocks == null) {
-            return;
-        }
-        for (BlockPos pos : this.hiddenBlocks) {
-            getWorld().setBlockState(pos, state);
-        }
-    }
-
     @Override
     public void registerControllers(AnimationData animationData) {
         animationData.addAnimationController(new AnimationController<>(this, "controller", 0.0F, this::predicate));
@@ -553,6 +543,14 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
             this.factory = new AnimationFactory(this);
         }
         return this.factory;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void renderMetaTileEntity(double x, double y, double z, float partialTicks) {
+        if (isStructureFormed()) {
+            IAnimatableMTE.super.renderMetaTileEntity(x, y, z, partialTicks);
+        }
     }
 
     @Override
