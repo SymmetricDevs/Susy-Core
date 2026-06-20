@@ -75,7 +75,9 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
     }
 
     public void launchRocket() {
-        super.launchRocket();
+        if (this.launchResult != LaunchResult.DOES_NOT_LAUNCH) {
+            super.launchRocket();
+        }
         if (world.isRemote) {
             setupRocketSound();
             soundRocket.startPlaying();
@@ -152,7 +154,7 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
             if (!assemblerPosition.equals(BlockPos.NULL_VECTOR) &&
                     this.getPosition().distanceSq(assemblerPosition) < 100) {
                 this.trollTargetPos = assemblerPosition;
-                this.launchResult = LaunchResult.TROLLS;
+                this.launchResult = LaunchResult.CRASHES;
             } else {
                 this.augmentation = this.getEntityData().getLong("AFSimprovement");
                 this.launchResult = blueprint.calculateSuccess(this, this.augmentation);
@@ -243,8 +245,20 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
             this.prevPosY = this.posY;
             this.prevPosZ = this.posZ;
 
+            if (this.launchResult == LaunchResult.CRASHES && this.posY > 256) {
+                this.trollTargetPos = this.getPosition().add(((Math.random() * 2) - 1) * 1000, 0,
+                        ((Math.random() * 2) - 1) * 1000);
+                // Clear out Y
+                this.trollTargetPos = this.trollTargetPos.down(this.trollTargetPos.getY());
+            }
+
+            if (this.launchResult == LaunchResult.EXPLODES &&
+                    this.rand.nextInt(Math.max(1, 400 - (int) this.posY)) < 1) {
+                this.explode();
+            }
+
             // Troll mode: curve the rocket back towards the launch pad
-            if (this.launchResult == LaunchResult.TROLLS && this.trollTargetPos != null) {
+            if (this.launchResult == LaunchResult.CRASHES && this.trollTargetPos != null) {
                 // Calculate direction to target
                 double dx = this.trollTargetPos.getX() + 0.5 - this.posX;
                 double dy = this.trollTargetPos.getY() - this.posY;

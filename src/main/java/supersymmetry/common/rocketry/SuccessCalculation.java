@@ -15,6 +15,6 @@ public class SuccessCalculation {
         DOES_NOT_LAUNCH,
         LAUNCHES,
         CRASHES,
-        TROLLS
+        EXPLODES
     }
 }
