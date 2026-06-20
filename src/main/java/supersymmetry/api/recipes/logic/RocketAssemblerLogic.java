@@ -28,7 +28,7 @@ import supersymmetry.common.metatileentities.multi.rocket.MetaTileEntityRocketAs
 public class RocketAssemblerLogic extends MultiblockRecipeLogic {
 
     private List<Integer> electrodeSlotCache = new ArrayList<>();
-    private boolean hasEnoughElectrodes = true;
+    public boolean hasEnoughElectrodes = true;
 
     public RocketAssemblerLogic(MetaTileEntityRocketAssembler assembler) {
         super(assembler);
@@ -122,7 +122,6 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
         }
         if (totalUses < requiredDamage) {
             hasEnoughElectrodes = false;
-            this.invalidInputsForRecipes = true;
             return false;
         }
 
@@ -135,7 +134,7 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
                                                   @NotNull Recipe recipe,
                                                   @NotNull IItemHandlerModifiable importInventory,
                                                   @NotNull IMultipleTankHandler importFluids) {
-        if (!hasEnoughElectrodes) {
+        if (!hasEnoughElectrodes || !super.setupAndConsumeRecipeInputs(recipe, importInventory, importFluids)) {
             return false;
         }
         MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
@@ -157,7 +156,7 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
             requiredDamage -= canTake;
         }
 
-        return super.setupAndConsumeRecipeInputs(recipe, importInventory, importFluids);
+        return true;
     }
 
     // maybe this is a little too much
