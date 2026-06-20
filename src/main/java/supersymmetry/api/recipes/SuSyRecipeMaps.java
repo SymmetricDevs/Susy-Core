@@ -547,6 +547,9 @@ public class SuSyRecipeMaps {
             2,
             new SimpleRecipeBuilder(), false);
 
+    public static final RecipeMap<SimpleRecipeBuilder> LAYUP = new RecipeMap<>("layup", 2, 1, 2, 0,
+            new SimpleRecipeBuilder(), false);
+
     static {
         GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()
                 .fluidInputs(SusyMaterials.RefractoryGunningMixture.getFluid(50 *

@@ -74,7 +74,8 @@ public class SuSyConnectedTextures {
                 susyId("landing_pad"),
                 susyId("advanced_arc_furnace"),
                 susyId("internal_combustion_generator"),
-                susyId("large_steam_hammer"));
+                susyId("large_steam_hammer"),
+                susyId("layup_machine"));
         FROST_PROOF_CASING_CTM.override(susyId("condenser"),
                 susyId("high_pressure_cryogenic_distillation_plant"),
                 susyId("low_pressure_cryogenic_distillation_plant"),
