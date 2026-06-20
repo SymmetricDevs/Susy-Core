@@ -1197,6 +1197,7 @@ recipemap.resist_processor.name=Photoresist Processor
 recipemap.reactive_ion_etching.name=Reactive Ion Etching
 recipemap.attrition_scrubber.name=Attrition Scrubbing
 recipemap.edm.name=Electric Discharge Machining (EDM)
+recipemap.layup=Layup
 
 strand_casting.name=Continuous Casting
 susy.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
@@ -1728,6 +1729,18 @@ susy.msg.rocket_component.match_wrong=The match is not within the nozzle.
 susy.msg.rocket_component.nozzle_too_short=The nozzle is not long enough!
 
 entity.Rocket.name=Soyuz FG Rocket
+
+
+susy.machine.large_railroad_engineering_station.name=Large Railroad Engineering Station
+susy.machine.large_railroad_engineering_station.description=A massive facility for constructing and maintaining railroad rolling stock
+susy.machine.large_railroad_engineering_station.tooltip=Used to build and service trains
+
+metatileentity.susy.large_railroad_engineering_station.name=Large Railroad Engineering Station
+metatileentity.susy.large_railroad_engineering_station.description=A massive facility for constructing and maintaining railroad rolling stock
+metatileentity.susy.large_railroad_engineering_station.tooltip=Used to build and service trains
+large_railroad_engineering_station.name=Large Railroad Engineering Station
+susy.machine.layup_machine.name=Layup Machine
+susy.machine.layup_machine.tooltip=Slathering It on
 
 #BMRF blocks
 tile.bmrf_blocks.bmrf1.name=BMRF-1

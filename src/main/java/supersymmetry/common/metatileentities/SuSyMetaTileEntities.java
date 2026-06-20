@@ -318,6 +318,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityCargoDronePad CARGO_DRONE_PAD;
 
     public static MetaTileEntityLargeRES LARGE_RES;
+    public static MetaTileEntityLayupMachine LAYUP_MACHINE;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500,
@@ -818,6 +819,7 @@ public class SuSyMetaTileEntities {
                 Textures.ELECTRIC_FURNACE_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         LARGE_RES = registerMetaTileEntity(18520,
                 new MetaTileEntityLargeRES(new ResourceLocation("railroad_engineering_station")));
+        LAYUP_MACHINE = registerMetaTileEntity(18521, new MetaTileEntityLayupMachine(susyId("layup_machine")));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name,
