@@ -17,7 +17,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.items.IItemHandlerModifiable;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -64,7 +63,6 @@ import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockRocketAssemblerCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.entities.EntityTransporterErector;
-import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityComponentRedstoneController;
 import supersymmetry.common.mui.widget.ItemCostWidget;
 import supersymmetry.common.mui.widget.SlotWidgetMentallyStable;
@@ -237,6 +235,21 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     }
 
     @Override
+    public void writeInitialSyncData(PacketBuffer buf) {
+        super.writeInitialSyncData(buf);
+        buf.writeBoolean(isAssemblyWorking);
+        buf.writeInt(componentIndex);
+    }
+
+    @Override
+    public void receiveInitialSyncData(PacketBuffer buf) {
+        super.receiveInitialSyncData(buf);
+        this.isAssemblyWorking = buf.readBoolean();
+        this.componentIndex = buf.readInt();
+        this.blueprintSlot.setLocked(this.isAssemblyWorking);
+    }
+
+    @Override
     public void receiveCustomData(int dataId, PacketBuffer buf) {
         super.receiveCustomData(dataId, buf);
         if (dataId == GregtechDataCodes.LOCK_OBJECT_HOLDER) {
@@ -314,6 +327,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                         .setErrorStatus(getErrorLogo(), this::addErrorText));
 
         builder.label(9, 9, getMetaFullName(), 0xFFFFFF);
+        // TODO make this take less space so that the ItemCostWidget has more space
         builder.widget(
                 new AdvancedTextWidget(9, 20, this::addDisplayText, 0xFFFFFF)
                         .setMaxWidthLimit(181)
@@ -381,7 +395,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         builder.widget(
                 new ItemCostWidget(
                         new Size(158, 70),
-                        new Position(9, 60),
+                        new Position(9, 70),
                         this::getCurrentRecipe,
                         // TODO less stupid predicate thats synced to the client
                         // because isAssemblyWorking is not
@@ -402,7 +416,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     @Override
     protected void addWarningText(List<ITextComponent> textList) {
         super.addWarningText(textList);
-        if (isAssemblyWorking && hasNoElectrodes()) {
+        if (isAssemblyWorking && !((RocketAssemblerLogic) recipeMapWorkable).hasEnoughElectrodes) {
             textList.add(new TextComponentTranslation("susy.machine.rocket_assembler.warning.no_electrodes"));
         }
     }
@@ -413,18 +427,6 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         if (isAssemblyWorking && findTransporterErector() == null) {
             textList.add(new TextComponentTranslation("susy.machine.rocket_assembler.error.no_erector"));
         }
-    }
-
-    private boolean hasNoElectrodes() {
-        for (IItemHandlerModifiable handler : getAbilities(MultiblockAbility.IMPORT_ITEMS)) {
-            for (int i = 0; i < handler.getSlots(); i++) {
-                ItemStack stack = handler.getStackInSlot(i);
-                if (SuSyMetaItems.TUNGSTEN_ELECTRODE.getStackForm().isItemEqual(stack)) {
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 
     @Override
