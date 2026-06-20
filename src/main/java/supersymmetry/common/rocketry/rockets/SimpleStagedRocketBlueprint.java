@@ -223,7 +223,9 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         if (Math.random() < success) {
             return SuccessCalculation.LaunchResult.LAUNCHES;
         } else {
-            return SuccessCalculation.LaunchResult.CRASHES;
+            double engineActivity = this.getThrust(rocket.getFuel(), gravity, "engine") * this.getComponentCount("tank");
+            double chanceExplosion = 1 - Math.exp(-engineActivity / 100000);
+            return Math.random() < chanceExplosion ? SuccessCalculation.LaunchResult.EXPLODES : SuccessCalculation.LaunchResult.CRASHES;
         }
     }
 }
