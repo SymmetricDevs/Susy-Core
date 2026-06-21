@@ -238,17 +238,14 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
                 .addWorkingStatusLine().addProgressLine(this.getProgressPercent())
                 .addLowPowerLine(hasNotEnoughEnergy)
                 .addCustom((comps) -> {
-                    if (this.isStructureFormed()) {
+                    if (!this.isStructureFormed()) {
                         return;
                     }
-                    Strand displayStrand = strand;
-                    if (strand == null) {
-                        if (output == null || output.getStrand() == null) {
-                            comps.add(new TextComponentTranslation("susy.multiblock.strand_casting.no_strand"));
-                            return;
-                        }
-                        comps.add(new TextComponentTranslation("susy.multiblock.strand_casting.output_detected"));
-                        displayStrand = output.getStrand();
+                    Strand displayStrand = strand != null ? strand :
+                            ((output == null || output.getStrand() == null) ? input.getStrand() : output.getStrand());
+                    if (displayStrand == null) {
+                        comps.add(new TextComponentTranslation("susy.multiblock.strand_casting.no_strand"));
+                        return;
                     }
                     comps.add(new TextComponentTranslation("susy.multiblock.strand_casting.thickness",
                             String.format("%.2f", displayStrand.thickness)));

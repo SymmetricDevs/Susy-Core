@@ -24,7 +24,8 @@ public class SusyGeneratedFluidHandler {
 
         if (material.hasFlag(SuSyMaterialFlags.CONTINUOUSLY_CAST)) {
             fluidProperty.enqueueRegistration(GCYMFluidStorageKeys.MOLTEN, new FluidBuilder()
-                    .temperature(material.getBlastTemperature() + 1000));
+                    .temperature(
+                            Math.max(material.getBlastTemperature() + 1000, 2400)));
         }
     }
 }

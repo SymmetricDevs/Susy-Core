@@ -424,9 +424,9 @@ susy.multiblock.pattern.error.coils_or_bed=§cAll heating coils or evaporation b
 susy.multiblock.strand_casting.thickness=Thickness: %s
 susy.multiblock.strand_casting.width=Width: %s
 susy.multiblock.strand_casting.no_strand=No strand detected
-susy.multiblock.strand_casting.output_detected=Strand found only in the output slot
+susy.multiblock.strand_casting.output_detected=Strand found
 susy.multiblock.strand_casting.ore_prefix=Will output a: %s
-susy.multiblock.strand_casting.no_conversion=Currently not a valid item!
+susy.multiblock.strand_casting.no_conversion=§6This strand is not usable!
 
 susy.multiblock.natural_draft_cooling_tower.obstructed=The cold water basin is not filled!
 susy.multiblock.natural_draft_cooling_tower.obstructed.desc=The cold water basin must be filled with water for the Cooling Tower to operate.
@@ -1172,6 +1172,12 @@ susy.machine.ordered_dt.tooltip.2=§cNot putting a fluid output in the Nth layer
 # Logistics
 susy.machine.delegator.tooltip.non_recursion=§6Cannot be attached to other Delegators!
 susy.top.delegator.delegating_face=Delegating face:
+supersymmetry.top.no_strand=No strand
+supersymmetry.top.thickness=Thickness:
+supersymmetry.top.width=Width:
+supersymmetry.top.material=Material:
+supersymmetry.top.strand_not_usable=Not a usable strand!
+supersymmetry.top.conversion=Making:
 
 susy.machine.bridge.inv.name=Inventory Bridge
 susy.machine.bridge.inv.tooltip=§bRelays Inventories
