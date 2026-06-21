@@ -3,7 +3,6 @@ package supersymmetry.integration.theoneprobe.provider;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
@@ -17,7 +16,6 @@ import supersymmetry.Supersymmetry;
 import supersymmetry.api.capability.IStrandProvider;
 import supersymmetry.api.capability.StrandConversion;
 import supersymmetry.common.metatileentities.multi.electric.strand.MetaTileEntityStrandShaper;
-import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityStrandBus;
 
 public class StrandShaperInfoProvider implements IProbeInfoProvider {
 
@@ -47,14 +45,18 @@ public class StrandShaperInfoProvider implements IProbeInfoProvider {
                 if (bus.getStrand() == null) {
                     probeInfo.text(TextStyleClass.INFO + "{*supersymmetry.top.no_strand*}");
                 } else {
-                    probeInfo.text(TextStyleClass.INFO + "{*supersymmetry.top.thickness*} " + bus.getStrand().thickness);
+                    probeInfo
+                            .text(TextStyleClass.INFO + "{*supersymmetry.top.thickness*} " + bus.getStrand().thickness);
                     probeInfo.text(TextStyleClass.INFO + "{*supersymmetry.top.width*} " + bus.getStrand().width);
-                    probeInfo.text(TextStyleClass.INFO + "{*supersymmetry.top.material*} " + bus.getStrand().material.getLocalizedName());
+                    probeInfo.text(TextStyleClass.INFO + "{*supersymmetry.top.material*} " +
+                            bus.getStrand().material.getLocalizedName());
                     StrandConversion conversion = StrandConversion.getConversion(bus.getStrand());
                     if (conversion == null) {
                         probeInfo.text(TextStyleClass.WARNING + "{*supersymmetry.top.strand_not_usable*}");
                     } else {
-                        probeInfo.text(TextStyleClass.INFO + "{*supersymmetry.top.conversion*} {*supersymmetry.prefix." + conversion.prefix.name.toLowerCase() + "*}");
+                        probeInfo
+                                .text(TextStyleClass.INFO + "{*supersymmetry.top.conversion*} {*supersymmetry.prefix." +
+                                        conversion.prefix.name.toLowerCase() + "*}");
 
                     }
                 }
