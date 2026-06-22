@@ -1219,7 +1219,8 @@ metaitem.oxygen_sensor.oxygen_level.low=Oxygen Level: §6Low
 metaitem.oxygen_sensor.oxygen_level.medium=Oxygen Level: §eModerate
 metaitem.oxygen_sensor.oxygen_level.high=Oxygen Level: §aHigh
 metaitem.tungsten_electrode.name=Thoriated Tungsten Electrode
-metaitem.shape.mold.target=Sputtering Target Mold
+metaitem.shape.mold.target.name=Sputtering Target Mold
+metaitem.rocket_configurer.name=Rocket Configuration Tool
 
 # Catalysts
 susy.universal.catalysts.tooltip.tier=§eMax Voltage: §f%,d EU/T (%s§f)

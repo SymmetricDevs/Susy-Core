@@ -48,6 +48,7 @@ import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCupol
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimitiveMudPump;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimitiveSmelter;
 import supersymmetry.common.metatileentities.multi.rail.MetaTileEntityLargeRES;
+import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityRocketProgrammer;
 import supersymmetry.common.metatileentities.multi.rocket.*;
 import supersymmetry.common.metatileentities.multi.steam.MetaTileEntitySuSyLargeBoiler;
 import supersymmetry.common.metatileentities.multi.steam.MetaTileEntitySuSyLargeHammer;
