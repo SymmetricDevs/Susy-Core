@@ -533,7 +533,7 @@ susy.machine.rocket_assembler.gui.overall_progress=Component no. %d/%d (%s%%)
 susy.machine.rocket_assembler.error.no_erector=No Transporter Erector found on the rails!
 susy.machine.rocket_assembler.warning.no_electrodes=Not enough tungsten electrodes in the input buses!
 susy.machine.rocket_programmer.name=Rocket Programmer
-susy.machine.rocket_programmer.gui.not_enough_budget=The rocket cannot perform every programmed mission.
+susy.rocket_programmer.not_enough_budget=The rocket cannot perform every programmed mission.
 susy.machine.metallurgical_converter.name=Metallurgical Converter
 susy.machine.injection_molder.name=Injection Molder
 
@@ -1349,6 +1349,8 @@ susy.gui.rocket_programmer.mission_type=Mission type
 susy.gui.rocket_programmer.planetoid=Destination
 susy.gui.rocket_programmer.destination_type=Destination type
 susy.gui.rocket_programmer.landing_coordinates=Landing coordinates
+susy.rocket_programmer.circuit_slot=Place Rocket Programmer Here
+
 
 susy.gui.page=Page %s / %s
 
