@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
+import gregicality.multiblocks.api.fluids.GCYMFluidStorageKeys;
 import gregtech.api.GregTechAPI;
+import gregtech.api.fluids.FluidBuilder;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.properties.FluidProperty;
 import gregtech.api.unification.material.properties.PropertyKey;
@@ -27,6 +29,8 @@ public class SusyGeneratedFluidHandler {
 
         if (material.hasFlag(SuSyMaterialFlags.CONTINUOUSLY_CAST)) {
             CAST_MATERIALS.add(material);
+            fluidProperty.enqueueRegistration(GCYMFluidStorageKeys.MOLTEN, new FluidBuilder()
+                    .temperature(material.getBlastTemperature() + 1000));
         }
     }
 }
