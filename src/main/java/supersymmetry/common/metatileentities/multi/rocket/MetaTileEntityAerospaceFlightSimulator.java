@@ -2,6 +2,7 @@ package supersymmetry.common.metatileentities.multi.rocket;
 
 import static supercritical.api.pattern.SCPredicates.FLUID_BLOCKS_KEY;
 import static supercritical.api.pattern.SCPredicates.fluid;
+import static supersymmetry.api.capability.SuSyDataCodes.SYNC_AFS;
 import static supersymmetry.common.rocketry.SuccessCalculation.ESCAPE_VELOCITY_CONSTANT;
 
 import java.io.IOException;
@@ -327,6 +328,16 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         if (dataId == GregtechDataCodes.LOCK_OBJECT_HOLDER) {
             this.rocketBlueprintSlot.setLocked(buf.readBoolean());
         }
+        if (dataId == SYNC_AFS) {
+            this.computationPerTick = buf.readInt();
+            this.coolantPerTick = buf.readInt();
+            this.energyPerTick = buf.readInt();
+            this.currentSuccessProbability = buf.readDouble();
+            this.mass = buf.readDouble();
+            this.fuelMass = buf.readDouble();
+            this.escapeVelocity = buf.readDouble();
+            this.velocity = buf.readDouble();
+        }
     }
 
     @Override
@@ -491,6 +502,20 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         this.computationPerTick = context.getOrDefault("computation", 0);
         this.coolantPerTick = context.getOrDefault("coolant", 0);
         this.energyPerTick = context.getOrDefault("energy", 0);
+        sendComputationInfoToClient();
+    }
+
+    private void sendComputationInfoToClient() {
+        this.writeCustomData(SYNC_AFS, (tag) -> {
+            tag.writeInt(this.computationPerTick);
+            tag.writeInt(this.coolantPerTick);
+            tag.writeInt(this.energyPerTick);
+            tag.writeDouble(this.currentSuccessProbability);
+            tag.writeDouble(this.mass);
+            tag.writeDouble(this.fuelMass);
+            tag.writeDouble(this.escapeVelocity);
+            tag.writeDouble(this.velocity);
+        });
     }
 
     @Override
@@ -567,21 +592,17 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         if (getOffsetTimer() % 20 == 0) {
             this.currentSuccessProbability = this.getBlueprint().calculateInitialSuccess(gravity, this.fuel,
                     this.progress);
+            this.mass = this.getBlueprint().getMass();
+            this.fuelMass = this.getBlueprint().getFuelVolume() * this.fuel.getDensity();
+            this.escapeVelocity = ESCAPE_VELOCITY_CONSTANT * gravity;
+            this.velocity = this.getBlueprint().calculateVelocity(gravity, fuel);
+            sendComputationInfoToClient();
         }
     }
 
     @Override
     public void update() {
         super.update();
-        // Client update
-        if (!this.getWorld().isRemote || !this.isActive())
-            return;
-        if (getOffsetTimer() % 20 == 0 && this.getBlueprint() != null) {
-            this.mass = this.getBlueprint().getMass();
-            this.fuelMass = this.getBlueprint().getFuelVolume() * this.fuel.getDensity();
-            this.escapeVelocity = ESCAPE_VELOCITY_CONSTANT * gravity;
-            this.velocity = this.getBlueprint().calculateVelocity(gravity, fuel);
-        }
     }
 
     @Override
@@ -747,43 +768,43 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                                 this.getCoolantToConsume() * 20),
                         0xffffff));
         menuGroup.addWidget(
-                new LabelWidget(
+                new DynamicLabelWidget(
                         width - 130,
                         31,
-                        I18n.format(getMetaName() + ".gui.energy_consumption", this.getEnergyToConsume()),
+                        () -> I18n.format(getMetaName() + ".gui.energy_consumption", this.getEnergyToConsume()),
                         0xffffff));
         menuGroup.addWidgetWithTest(
-                new LabelWidget(
+                new DynamicLabelWidget(
                         width - 130,
                         52,
-                        I18n.format(getMetaName() + ".gui.success_chance",
+                        () -> I18n.format(getMetaName() + ".gui.success_chance",
                                 String.format("%.2f", this.getSuccessChance())),
                         0xffffff),
                 () -> !this.isActive() && this.getSuccessChance() != -1);
         // Various stats beneath
         // Dry weight
         menuGroup.addWidgetWithTest(
-                new LabelWidget(
+                new DynamicLabelWidget(
                         width - 130,
                         63,
-                        I18n.format(getMetaName() + ".gui.mass",
+                        () -> I18n.format(getMetaName() + ".gui.mass",
                                 this.mass)),
                 () -> !this.isActive() && this.getSuccessChance() != -1 && this.fuel != null);
         // Fuel mass
         menuGroup.addWidgetWithTest(
-                new LabelWidget(
+                new DynamicLabelWidget(
                         width - 130,
                         74,
-                        I18n.format(getMetaName() + ".gui.fuel_mass",
+                        () -> I18n.format(getMetaName() + ".gui.fuel_mass",
                                 this.fuelMass)),
                 () -> !this.isActive() && this.getSuccessChance() != -1 && this.fuel != null);
         // Velocity/escape velocity
         menuGroup.addWidgetWithTest(
-                new LabelWidget(
+                new DynamicLabelWidget(
                         width - 130,
                         85,
-                        I18n.format(getMetaName() + ".gui.velocity_percent",
-                                String.format("%.2f", velocity / escapeVelocity))),
+                        () -> I18n.format(getMetaName() + ".gui.velocity_percent",
+                                String.format("%.2f", 100 * velocity / escapeVelocity))),
                 () -> !this.isActive() && this.getSuccessChance() != -1 && this.fuel != null);
 
         menuGroup.addWidget(
