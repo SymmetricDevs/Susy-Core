@@ -16,4 +16,5 @@ public class SuSyDataCodes {
     public static final int BLUEPRINT_BUILD_RESULT = assignId();
     public static final int BLUEPRINT_BUILD_STATE = assignId();
     public static final int SYNC_FLUIDS = assignId();
+    public static final int SYNC_AFS = assignId();
 }

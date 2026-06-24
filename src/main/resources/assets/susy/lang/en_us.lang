@@ -295,7 +295,7 @@ susy.machine.aerospace_flight_simulator.gui.gravity_selector_label=Set simulatio
 susy.machine.aerospace_flight_simulator.gui.success_chance=Success chance: %.1f
 susy.machine.aerospace_flight_simulator.gui.mass=Dry mass: %s kg
 susy.machine.aerospace_flight_simulator.gui.fuel_mass=Fuel mass: %s kg
-susy.machine.aerospace_flight_simulator.gui.velocity_percent=Escape velocity%: %s
+susy.machine.aerospace_flight_simulator.gui.velocity_percent=Escape velocity%%: %s
 
 susy.machine.aerospace_flight_simulator.gui.rocket_name=Rocket: %s
 susy.machine.aerospace_flight_simulator.gui.stages=Stages:
