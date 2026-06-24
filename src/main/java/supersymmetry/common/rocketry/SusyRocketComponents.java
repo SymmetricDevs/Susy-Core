@@ -27,8 +27,11 @@ public class SusyRocketComponents {
         AbstractComponent.registerComponent(new ComponentLiquidFuelTank());
         AbstractComponent.lockRegistry();
 
+
         new RocketFuelEntry.RocketFuelEntryBuilder("Methane-LOX")
-                .addComponent(Materials.Methane.getFluid(), 100)
+                .addComponent(Materials.Methane.getFluid(FluidStorageKeys.LIQUID) != null ?
+                        Materials.Methane.getFluid(FluidStorageKeys.LIQUID) :
+                        Materials.Methane.getFluid(), 100)
                 .addComponent(Materials.Oxygen.getFluid(FluidStorageKeys.LIQUID), 355)
                 .density(0.983).sIVacuum(330).sIPerPressure(240)
                 .register();
