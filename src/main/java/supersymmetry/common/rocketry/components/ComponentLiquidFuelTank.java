@@ -112,11 +112,6 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
                 analysis.status = BuildStat.HULL_WEAK;
                 return analysis.errorPos(block);
             }
-            TileEntityCoverable blockTiles = (TileEntityCoverable) analysis.world.getTileEntity(block);
-            if (blockTiles == null) {
-                analysis.status = BuildStat.ERROR;
-                return analysis.errorPos(block);
-            }
             EnumFacing facingFromBlock = analysis.world.getBlockState(block).getValue(FACING);
             for (EnumFacing facing : EnumFacing.values()) {
                 BlockPos neighbor = block.add(facing.getDirectionVec());
