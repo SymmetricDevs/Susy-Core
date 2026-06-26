@@ -9,7 +9,8 @@ import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantBlock;
 import supersymmetry.api.rocketry.WeightedBlock;
 
-public class BlockRocketNozzle extends VariantBlock<BlockRocketNozzle.NozzleShapeType> implements WeightedBlock {
+public class BlockRocketNozzle extends VariantBlock<BlockRocketNozzle.NozzleShapeType>
+                               implements WeightedBlock<BlockRocketNozzle.NozzleShapeType> {
 
     public BlockRocketNozzle() {
         super(Material.IRON);
@@ -50,11 +51,10 @@ public class BlockRocketNozzle extends VariantBlock<BlockRocketNozzle.NozzleShap
     }
 
     @Override
-    public double getMass(IBlockState state) {
-        NozzleShapeType type = getState(state);
+    public double getMass(NozzleShapeType type) {
         double multiplier = switch (type) {
-            case BELL_NOZZLE -> 60.0;
+            case BELL_NOZZLE -> 6.0;
         };
-        return 500 + 100 * multiplier;
+        return 50 + 50 * multiplier;
     }
 }

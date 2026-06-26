@@ -138,16 +138,15 @@ public class RocketStage implements Cloneable {
         return components.values().stream()
                 .flatMap(List::stream)
                 .filter(c -> c.getType().equals(componentType))
-                .mapToDouble(engine -> ((ComponentLavalEngine) engine).fuelThroughput)
+                .mapToDouble(engine -> ((ComponentLavalEngine) engine).getFuelThroughput())
                 .sum();
     }
 
     public int getComponentCount(String componentType) {
-        return components.values().stream()
+        return (int) components.values().stream()
                 .flatMap(List::stream)
                 .filter(c -> c.getType().equals(componentType))
-                .mapToInt(engine -> 1)
-                .sum();
+                .count();
     }
 
     public double getEffectiveFuelVelocity(RocketFuelEntry rocketFuelEntry, double gravity) {

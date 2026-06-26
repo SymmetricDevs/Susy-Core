@@ -1,16 +1,16 @@
 package supersymmetry.common.blocks.rocketry;
 
+import gregtech.api.block.VariantBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.IStringSerializable;
 
 import gregtech.api.block.IStateHarvestLevel;
-import gregtech.api.block.VariantBlock;
 import supersymmetry.api.rocketry.WeightedBlock;
 
 public class BlockCombustionChamber extends VariantBlock<BlockCombustionChamber.CombustionType>
-                                    implements WeightedBlock {
+        implements WeightedBlock<BlockCombustionChamber.CombustionType> {
 
     public BlockCombustionChamber() {
         super(Material.IRON);
@@ -59,12 +59,11 @@ public class BlockCombustionChamber extends VariantBlock<BlockCombustionChamber.
     }
 
     @Override
-    public double getMass(IBlockState state) {
-        CombustionType type = getState(state);
-        return 800 + 100 * switch (type) {
-            case BIPROPELLANT -> 200.0;
-            case MONOPROPELLANT -> 150.0;
-            case OXIDISER -> 200.0;
+    public double getMass(CombustionType type) {
+        return 80 + 10 * switch (type) {
+            case BIPROPELLANT -> 20.0;
+            case MONOPROPELLANT -> 15.0;
+            case OXIDISER -> 20.0;
         };
     }
 }
