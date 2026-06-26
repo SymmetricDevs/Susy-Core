@@ -108,7 +108,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             return;
         }
 
-        scanDuration = (int) (blockList.size() / (Math.pow(2, linkedCleanroom.getEnergyTier() - 3))) + 4; // 5 being the
+        scanDuration = (int) (blockList.size() / (Math.pow(2, linkedCleanroom.getEnergyTier() - 1))) + 4; // 5 being the
         // minimum
         // value
         scannerLogic.setGoalTime(scanDuration);

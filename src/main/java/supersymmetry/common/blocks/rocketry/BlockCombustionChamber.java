@@ -10,9 +10,9 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -71,16 +71,16 @@ public class BlockCombustionChamber extends VariantBlock<BlockCombustionChamber.
 
     @Override
     public double getMass(CombustionType type) {
-        return 80 + 10 * switch (type) {
-            case BIPROPELLANT -> 20.0;
-            case MONOPROPELLANT -> 15.0;
-            case OXIDISER -> 20.0;
+        return switch (type) {
+            case BIPROPELLANT -> 280;
+            case MONOPROPELLANT -> 120;
+            case OXIDISER -> 280;
         };
     }
 
     @SideOnly(Side.CLIENT)
     public void addInformation(@NotNull ItemStack stack, @Nullable World player, @NotNull List<String> tooltip,
-                                @NotNull ITooltipFlag advanced) {
+                               @NotNull ITooltipFlag advanced) {
         tooltip.add(I18n.format("susy.tooltip.mass", getMass(stack)));
     }
 }

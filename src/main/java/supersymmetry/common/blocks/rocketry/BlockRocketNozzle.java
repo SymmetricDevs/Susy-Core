@@ -64,7 +64,7 @@ public class BlockRocketNozzle extends VariantBlock<BlockRocketNozzle.NozzleShap
     @Override
     public double getMass(NozzleShapeType type) {
         return switch (type) {
-            case BELL_NOZZLE -> 350;
+            case BELL_NOZZLE -> 70;
         };
     }
 

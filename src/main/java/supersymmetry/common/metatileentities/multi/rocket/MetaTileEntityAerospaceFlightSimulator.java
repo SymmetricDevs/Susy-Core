@@ -788,7 +788,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                         width - 130,
                         63,
                         () -> I18n.format(getMetaName() + ".gui.mass",
-                                this.mass)),
+                                String.format("%.0f", this.mass))),
                 () -> !this.isActive() && this.getSuccessChance() != -1 && this.fuel != null);
         // Fuel mass
         menuGroup.addWidgetWithTest(
@@ -796,7 +796,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                         width - 130,
                         74,
                         () -> I18n.format(getMetaName() + ".gui.fuel_mass",
-                                this.fuelMass)),
+                                String.format("%.0f", this.fuelMass))),
                 () -> !this.isActive() && this.getSuccessChance() != -1 && this.fuel != null);
         // Velocity/escape velocity
         menuGroup.addWidgetWithTest(

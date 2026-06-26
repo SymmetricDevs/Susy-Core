@@ -126,9 +126,6 @@ public class StructAnalysis {
                             status = BuildStat.INVALID_AIRLIKE;
                             return null;
                         }
-                        if (state.getBlock() instanceof BlockLamp) {
-                            continue;
-                        }
                         ret.add(bp);
                     }
                 }
