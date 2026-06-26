@@ -243,6 +243,10 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         buf.writeDouble(this.currentSuccessProbability);
         if (this.isWorkingEnabled)
             this.rocketBlueprintSlot.setLocked(true);
+
+        buf.writeInt(this.computationPerTick);
+        buf.writeInt(this.coolantPerTick);
+        buf.writeInt(this.energyPerTick);
     }
 
     @Override
@@ -278,6 +282,10 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         }
         this.currentSuccessProbability = buf.readDouble();
         if (this.isWorkingEnabled) this.rocketBlueprintSlot.setLocked(true);
+
+        this.computationPerTick = buf.readInt();
+        this.coolantPerTick = buf.readInt();
+        this.energyPerTick = buf.readInt();
     }
 
     @Override

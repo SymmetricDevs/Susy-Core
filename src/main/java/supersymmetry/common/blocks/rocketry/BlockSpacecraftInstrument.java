@@ -7,12 +7,14 @@ import net.minecraft.util.IStringSerializable;
 
 import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantBlock;
+import supersymmetry.api.rocketry.WeightedBlock;
 import supersymmetry.api.rocketry.components.Instrument;
 import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.rocketry.instruments.InstrumentLander;
 import supersymmetry.common.rocketry.instruments.InstrumentRobotArm;
 
-public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstrument.Type> {
+public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstrument.Type>
+                                       implements WeightedBlock<BlockSpacecraftInstrument.Type> {
 
     public BlockSpacecraftInstrument() {
         super(Material.IRON);
@@ -22,6 +24,19 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
         setSoundType(SoundType.METAL);
         setDefaultState(getState(Type.SENSOR_ARRAY));
         setHarvestLevel("wrench", 4);
+    }
+
+    @Override
+    public double getMass(Type type) {
+        return switch (type) {
+            case SENSOR_ARRAY -> 150;
+            case COLLECTOR -> 200;
+            case CAMERA -> 40;
+            case SOLAR_PANEL -> 100;
+            case BATTERY -> 100;
+            case ARM -> 300;
+            case LANDER -> 800;
+        };
     }
 
     public enum Type implements IStringSerializable, IStateHarvestLevel {
