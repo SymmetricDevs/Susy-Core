@@ -93,7 +93,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         super(metaTileEntityId, SuSyRecipeMaps.ROCKET_ASSEMBLER);
         signalActions.add(
                 () -> {
-                    if (!this.blueprintSlot.isEmpty()) {
+                    if (!this.blueprintSlot.isEmpty() && this.componentList.isEmpty()) {
                         this.startAssembly(this.getCurrentBlueprint());
                     }
                 });
@@ -357,7 +357,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                         18,
                         "",
                         (clickData -> {
-                            if (!this.blueprintSlot.isEmpty()) {
+                            if (!this.blueprintSlot.isEmpty() && this.componentList.isEmpty()) {
                                 this.startAssembly(this.getCurrentBlueprint());
                             }
                         }))
@@ -394,12 +394,12 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         builder.widget(blueprintslot);
         builder.widget(
                 new ItemCostWidget(
-                        new Size(158, 70),
+                        new Size(158, 50),
                         new Position(9, 70),
                         this::getCurrentRecipe,
                         // TODO less stupid predicate thats synced to the client
                         // because isAssemblyWorking is not
-                        () -> !this.blueprintSlot.isLocked()));
+                        () -> this.blueprintSlot.isLocked()));
 
         builder.bindPlayerInventory(entityPlayer.inventory, 133);
         return builder;
