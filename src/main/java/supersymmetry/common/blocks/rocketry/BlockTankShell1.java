@@ -12,7 +12,7 @@ import supersymmetry.api.blocks.VariantDirectionalCoverableBlock;
 import supersymmetry.api.rocketry.WeightedBlock;
 
 public class BlockTankShell1 extends VariantDirectionalCoverableBlock<BlockTankShell1.TankCoverType>
-                             implements WeightedBlock {
+                             implements WeightedBlock<BlockTankShell1.TankCoverType> {
 
     public BlockTankShell1() {
         super(net.minecraft.block.material.Material.IRON);
@@ -53,7 +53,7 @@ public class BlockTankShell1 extends VariantDirectionalCoverableBlock<BlockTankS
     }
 
     @Override
-    public double getMass(IBlockState state) {
+    public double getMass(TankCoverType type) {
         return 25 + 50 * 3;
     }
 }
