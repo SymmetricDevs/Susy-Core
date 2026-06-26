@@ -3,11 +3,13 @@ package supersymmetry.common.rocketry;
 public class SuccessCalculation {
 
     public static final double ESCAPE_VELOCITY_CONSTANT = 1138.92;
+    public static final double AUGMENTATION_CONSTANT = 19480;
+    // A 50% success blueprint takes just under 5 hours at this rate to bring to 80% for a starting-tier AFS
 
     public static double augmentSuccess(double success, long augmentation) {
-        success = Math.min(0.0001, success);
+        success = Math.max(0.0001, success);
         double inverseSigmoid = Math.log(success / (1 - success));
-        inverseSigmoid += success * augmentation;
+        inverseSigmoid += success * Math.log(augmentation / AUGMENTATION_CONSTANT + 1);
         return 1 / (1 + Math.exp(-inverseSigmoid));
     }
 

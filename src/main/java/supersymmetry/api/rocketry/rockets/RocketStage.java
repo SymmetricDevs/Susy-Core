@@ -13,8 +13,8 @@ import net.minecraftforge.common.util.Constants.NBT;
 
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.rocketry.components.AbstractComponent;
+import supersymmetry.api.rocketry.components.RocketEngine;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
-import supersymmetry.common.rocketry.components.ComponentLavalEngine;
 import supersymmetry.common.rocketry.components.ComponentLiquidFuelTank;
 
 public class RocketStage implements Cloneable {
@@ -138,7 +138,7 @@ public class RocketStage implements Cloneable {
         return components.values().stream()
                 .flatMap(List::stream)
                 .filter(c -> c.getType().equals(componentType))
-                .mapToDouble(engine -> ((ComponentLavalEngine) engine).getFuelThroughput())
+                .mapToDouble(engine -> ((RocketEngine) engine).getFuelThroughput())
                 .sum();
     }
 

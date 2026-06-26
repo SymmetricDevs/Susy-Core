@@ -170,7 +170,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
             success *= (1 - (0.5 * Math.exp(3 - (thrust / smallThrust))));
         }
         success *= 0.9;
-        success = Math.min(0, success);
+        success = Math.max(0, success);
 
         success = augmentSuccess(success, augmentation);
         return success;
@@ -224,6 +224,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
 
         // Guidance system TODO: make this more complex when more guidance systems are added
         success *= 0.9;
+        success = Math.max(0, success);
 
         success = augmentSuccess(success, augmentation);
 
