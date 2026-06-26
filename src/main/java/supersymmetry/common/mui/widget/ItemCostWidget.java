@@ -91,11 +91,11 @@ public class ItemCostWidget extends Widget {
 
     @Override
     public boolean mouseDragged(int mouseX, int mouseY, int button, long timeDragged) {
-        int mouseDelta = (mouseY - lastMouseY);
+        int mouseDelta = lastMouseY - mouseY;
         this.lastMouseX = mouseX;
         this.lastMouseY = mouseY;
         if (draggedOnScrollBar) {
-            addScrollOffset(mouseDelta);
+            addScrollOffset(-mouseDelta);
             return true;
         }
         if (isPositionInsideScissor(mouseX, mouseY)) {
@@ -153,7 +153,7 @@ public class ItemCostWidget extends Widget {
 
     @Override
     public void drawInBackground(int mouseX, int mouseY, float partialTicks, IRenderContext context) {
-        if (this.shouldRender.getAsBoolean()) return;
+        if (!this.shouldRender.getAsBoolean()) return;
         Position pos = new Position(getPosition().x, getPosition().y);
         // TODO: move this out of the widget and just use a text widget
         if (lastSyncedItems.size() > 0) {
@@ -252,8 +252,10 @@ public class ItemCostWidget extends Widget {
 
     private void addScrollOffset(int offset) {
         if (this.shouldRender.getAsBoolean()) {
+            int maxScrollOffset = getSize().height - this.getListHeight() - 1;
             this.scrollOffset = MathHelper.clamp(
-                    scrollOffset + offset, -(this.getListHeight() - this.getSize().height), 0);
+                    scrollOffset + offset * maxScrollOffset / (getSize().height - 14),
+                    -(this.getListHeight() - this.getSize().height), 0);
         }
     }
 
