@@ -117,11 +117,18 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
     }
 
     public double calculateVelocity(double gravity, RocketFuelEntry fuel) {
-        double weight = this.getMass();
-
+        double remainingWeight = this.getMass() + fuel.getDensity() * this.getFuelVolume();
+        double deltaV = 0;
         // TODO: somehow incorporate cargo mass in a fair way
-        return this.getEffectiveFuelVelocity(fuel, gravity, "engine") *
-                Math.log((fuel.getDensity() * this.getFuelVolume() + weight) / weight);
+        for (RocketStage stage : this.stages) {
+            double currentFuelWeight = stage.getFuelCapacity() * fuel.getDensity();
+            deltaV += stage.getEffectiveFuelVelocity(fuel, gravity) *
+                    Math.log(remainingWeight / (remainingWeight - currentFuelWeight));
+
+            remainingWeight -= stage.getMass() + currentFuelWeight;
+        }
+
+        return deltaV;
     }
 
     // lobotomized version of the function below to only take in the blueprint
@@ -223,9 +230,11 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         if (Math.random() < success) {
             return SuccessCalculation.LaunchResult.LAUNCHES;
         } else {
-            double engineActivity = this.getThrust(rocket.getFuel(), gravity, "engine") * this.getComponentCount("tank");
+            double engineActivity = this.getThrust(rocket.getFuel(), gravity, "engine") *
+                    this.getComponentCount("tank");
             double chanceExplosion = 1 - Math.exp(-engineActivity / 100000);
-            return Math.random() < chanceExplosion ? SuccessCalculation.LaunchResult.EXPLODES : SuccessCalculation.LaunchResult.CRASHES;
+            return Math.random() < chanceExplosion ? SuccessCalculation.LaunchResult.EXPLODES :
+                    SuccessCalculation.LaunchResult.CRASHES;
         }
     }
 }

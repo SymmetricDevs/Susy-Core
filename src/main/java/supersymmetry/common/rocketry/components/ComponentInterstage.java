@@ -35,7 +35,7 @@ public class ComponentInterstage extends AbstractComponent<ComponentInterstage> 
     public boolean configureDefaults() {
         this.materials.add(new MaterialCost(new ItemStack(Items.DIAMOND), MaterialCost.SourceType.ITEM, 1));
         this.radius = 3.0;
-        this.mass = 5000.0;
+        this.mass = 1000.0;
         return true;
     }
 

@@ -251,10 +251,10 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
     public List<String> getTooltipLines(NBTTagCompound tag) {
         List<String> lines = new ArrayList<>();
         if (tag.hasKey("mass")) {
-            lines.add(I18n.format("susy.rocketry.tooltip.mass", tag.getDouble("mass")));
+            lines.add(I18n.format("susy.rocketry.tooltip.mass", String.format("%.0f", tag.getDouble("mass"))));
         }
         if (tag.hasKey("radius")) {
-            lines.add(I18n.format("susy.rocketry.tooltip.radius", tag.getDouble("radius")));
+            lines.add(I18n.format("susy.rocketry.tooltip.radius", String.format("%.1f", tag.getDouble("radius"))));
         }
         return lines;
     }

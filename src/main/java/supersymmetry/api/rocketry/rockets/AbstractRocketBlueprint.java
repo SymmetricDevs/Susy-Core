@@ -99,14 +99,6 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
                 .sum();
     }
 
-    public double getEffectiveFuelVelocity(RocketFuelEntry entry, double gravity, String componentType) {
-        double totalFuelThroughput = this.getStages().stream()
-                .mapToDouble((stage) -> stage.getFuelThroughput(componentType)).sum();
-
-        return this.getStages().stream().mapToDouble((stage) -> stage.getEffectiveFuelVelocity(entry, gravity) *
-                stage.getFuelThroughput(componentType) / totalFuelThroughput).sum();
-    }
-
     public double getFuelVolume() {
         return this.getStages().stream().mapToDouble(RocketStage::getFuelCapacity).sum();
     }

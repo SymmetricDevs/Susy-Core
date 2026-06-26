@@ -27,7 +27,6 @@ public class SusyRocketComponents {
         AbstractComponent.registerComponent(new ComponentLiquidFuelTank());
         AbstractComponent.lockRegistry();
 
-
         new RocketFuelEntry.RocketFuelEntryBuilder("Methane-LOX")
                 .addComponent(Materials.Methane.getFluid(FluidStorageKeys.LIQUID) != null ?
                         Materials.Methane.getFluid(FluidStorageKeys.LIQUID) :
@@ -62,7 +61,7 @@ public class SusyRocketComponents {
                                 .type("tank")
                                 .limit(4)
                                 .type("engine_small")
-                                .limit(16)
+                                .limit(12)
                                 .build())
                 .stage(
                         new RocketStage.Builder("block_A")
