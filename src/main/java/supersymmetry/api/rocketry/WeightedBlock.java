@@ -31,11 +31,4 @@ public interface WeightedBlock<T extends Enum<T> & IStringSerializable> {
     T getState(IBlockState blockState);
 
     T getState(ItemStack stack);
-
-    @SideOnly(Side.CLIENT)
-    default void addInformation(@NotNull ItemStack stack, @Nullable World player, @NotNull List<String> tooltip,
-                               @NotNull ITooltipFlag advanced) {
-        tooltip.add(I18n.format("susy.tooltip.mass", getMass(stack)));
-    }
-
 }

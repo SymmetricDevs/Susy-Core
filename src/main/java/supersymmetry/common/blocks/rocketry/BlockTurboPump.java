@@ -5,11 +5,14 @@ import java.util.List;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.World;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -70,9 +73,15 @@ public class BlockTurboPump extends VariantDirectionalRotatableBlock<BlockTurboP
 
     @Override
     public double getMass(HPPType type) {
-        double multiplier = switch (type) {
-            case BASIC -> 150.0;
+        return switch (type) {
+            case BASIC -> 1100;
         };
-        return 1000 + 100 * multiplier;
+    }
+
+
+    @SideOnly(Side.CLIENT)
+    public void addInformation(@NotNull ItemStack stack, @Nullable World player, @NotNull List<String> tooltip,
+                               @NotNull ITooltipFlag advanced) {
+        tooltip.add(I18n.format("susy.tooltip.mass", getMass(stack)));
     }
 }
