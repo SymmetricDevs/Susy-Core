@@ -1,8 +1,19 @@
 package supersymmetry.common.blocks.rocketry;
 
+import java.util.List;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.unification.OreDictUnifier;
@@ -54,6 +65,13 @@ public class BlockTankShell1 extends VariantDirectionalCoverableBlock<BlockTankS
 
     @Override
     public double getMass(TankCoverType type) {
-        return 25 + 50 * 3;
+        // Again, using a 4.7mm thickness
+        return 7.9;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void addInformation(@NotNull ItemStack stack, @Nullable World player, @NotNull List<String> tooltip,
+                               @NotNull ITooltipFlag advanced) {
+        tooltip.add(I18n.format("susy.tooltip.mass", getMass(stack)));
     }
 }

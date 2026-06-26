@@ -1,16 +1,27 @@
 package supersymmetry.common.blocks.rocketry;
 
-import gregtech.api.block.VariantBlock;
+import java.util.List;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.world.World;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import gregtech.api.block.IStateHarvestLevel;
+import gregtech.api.block.VariantBlock;
 import supersymmetry.api.rocketry.WeightedBlock;
 
 public class BlockCombustionChamber extends VariantBlock<BlockCombustionChamber.CombustionType>
-        implements WeightedBlock<BlockCombustionChamber.CombustionType> {
+                                    implements WeightedBlock<BlockCombustionChamber.CombustionType> {
 
     public BlockCombustionChamber() {
         super(Material.IRON);
@@ -65,5 +76,11 @@ public class BlockCombustionChamber extends VariantBlock<BlockCombustionChamber.
             case MONOPROPELLANT -> 15.0;
             case OXIDISER -> 20.0;
         };
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void addInformation(@NotNull ItemStack stack, @Nullable World player, @NotNull List<String> tooltip,
+                                @NotNull ITooltipFlag advanced) {
+        tooltip.add(I18n.format("susy.tooltip.mass", getMass(stack)));
     }
 }

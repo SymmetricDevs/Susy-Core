@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -105,6 +106,11 @@ public class StructAnalysis {
     };
     private static final AxisAlignedBB MAX_BB = new AxisAlignedBB(-3.0E7, 0, -3.0E7, 3.0E7, 255, 3.0E7);
 
+    public boolean isEffectiveAir(BlockPos pos) {
+        IBlockState state = world.getBlockState(pos);
+        return state.getBlock() == Blocks.AIR || state.getBlock() instanceof BlockLamp;
+    }
+
     public ArrayList<BlockPos> getBlocks(World world, AxisAlignedBB faaBB, boolean checkAir) {
         AxisAlignedBB aaBB = new AxisAlignedBB(Math.round(faaBB.minX), Math.round(faaBB.minY),
                 Math.round(faaBB.minZ), Math.round(faaBB.maxX),
@@ -114,7 +120,7 @@ public class StructAnalysis {
             for (int y = (int) aaBB.minY; y < aaBB.maxY; y++) {
                 for (int z = (int) aaBB.minZ; z < aaBB.maxZ; z++) {
                     BlockPos bp = new BlockPos(x, y, z);
-                    if (!world.isAirBlock(bp)) {
+                    if (!isEffectiveAir(bp)) {
                         IBlockState state = world.getBlockState(bp);
                         if (checkAir && state.getCollisionBoundingBox(world, bp) == null) {
                             status = BuildStat.INVALID_AIRLIKE;
@@ -143,7 +149,7 @@ public class StructAnalysis {
             BlockPos bp = uncheckedBlocks.remove();
             blocksCollected.add(bp);
             uncheckedBlocks.addAll(getBlockNeighbors(bp, aaBB).stream()
-                    .filter(p -> !world.isAirBlock(p) && !blocksCollected.contains(p) && !uncheckedBlocks.contains(p))
+                    .filter(p -> !isEffectiveAir(p) && !blocksCollected.contains(p) && !uncheckedBlocks.contains(p))
                     .collect(Collectors.toSet()));
         }
         return blocksCollected;
@@ -253,7 +259,7 @@ public class StructAnalysis {
      * @return
      */
     public List<HashSet<BlockPos>> getPartitions(AxisAlignedBB sect) {
-        Predicate<BlockPos> isNotObstacle = ((Predicate<BlockPos>) world::isAirBlock).or(bp -> !blockCont(sect, bp));
+        Predicate<BlockPos> isNotObstacle = ((Predicate<BlockPos>) this::isEffectiveAir).or(bp -> !blockCont(sect, bp));
         Set<BlockPos> blocks = getBlocks(sect).stream().filter(isNotObstacle).collect(Collectors.toSet());
         // the one-argument getBlocks doesn't care about air blocks
 
@@ -318,7 +324,8 @@ public class StructAnalysis {
     public Set<BlockPos> getLayerAir(AxisAlignedBB section, int y) {
         AxisAlignedBB sect = new AxisAlignedBB(section.minX - 1, y, section.minZ - 1, section.maxX + 1, y + 1,
                 section.maxZ + 1);
-        Predicate<BlockPos> isNotObstacle = ((Predicate<BlockPos>) world::isAirBlock).or(bp -> !blockCont(section, bp));
+        Predicate<BlockPos> isNotObstacle = ((Predicate<BlockPos>) this::isEffectiveAir)
+                .or(bp -> !blockCont(section, bp));
         Set<BlockPos> blocks = getBlocks(sect).stream().filter(isNotObstacle).collect(Collectors.toSet());
         // the one-argument getBlocks doesn't care about air blocks (again)
 
