@@ -127,19 +127,7 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
                         analysis.status = BuildStat.HULL_WEAK;
                         return analysis.errorPos(block);
                     }
-                } else if (!interiorAir.contains(neighbor) &&
-                        (analysis.world.isAirBlock(neighbor) ||
-                                !StructAnalysis.blockCont(aabb, neighbor))) { // this means it should be exterior air
-                                    if (!blockTiles.isCovered(facing)) {
-                                        analysis.status = BuildStat.MISSING_TILE;
-                                        return analysis.errorPos(block);
-                                    }
-                                } else
-                    if (hullBlocks.contains(neighbor) && blockTiles.isCovered(facing)) {
-                        analysis.status = BuildStat.WRONG_TILE;
-                        return analysis.errorPos(block);
-                    }
-
+                }
             }
         }
 
