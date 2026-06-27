@@ -174,6 +174,10 @@ public class EventHandlers {
         }
     }
 
+    public static boolean isEntityTravelling(Entity entity) {
+        return travellingPassengers.stream().anyMatch(data -> data.passenger == entity);
+    }
+
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (!event.player.world.isRemote && event.player.world.getTotalWorldTime() % 20 == 0 &&

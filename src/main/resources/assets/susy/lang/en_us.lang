@@ -1414,6 +1414,7 @@ death.attack.spaghettification=%s was spaghettified
 death.attack.age=%s died of old age
 death.attack.chronoerasure=%s never existed
 death.attack.crusher=%s was ground into a pulp
+death.attack.reentry=%s burned up in reentry
 
 metaitem.simple_gas_mask.name=Primitive Gas Mask
 metaitem.simple_gas_mask.tooltip=Survive in oxygenless environments

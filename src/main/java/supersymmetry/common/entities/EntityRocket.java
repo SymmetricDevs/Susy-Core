@@ -344,48 +344,6 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
         this.setAge(age + 1);
     }
 
-    protected void flyToTroll(int flightTime) {
-        // Calculate direction to target
-        double dx = this.trollTargetPos.getX() + 0.5 - this.posX;
-        double dy = this.trollTargetPos.getY() - this.posY;
-        double dz = this.trollTargetPos.getZ() + 0.5 - this.posZ;
-        double horizontalDistance = Math.sqrt(dx * dx + dz * dz);
-
-        // Calculate target yaw and pitch
-        float targetYaw = 90 + (float) (Math.atan2(dz, dx) * 180.0 / Math.PI);
-        float targetPitch = 180 + (float) (-(Math.atan2(dy, horizontalDistance) * 180.0 / Math.PI));
-
-        // Gradually adjust yaw and pitch (semi-realistic curve)
-        float yawDiff = targetYaw - this.rotationYaw;
-        while (yawDiff > 180.0F) yawDiff -= 360.0F;
-        while (yawDiff < -180.0F) yawDiff += 360.0F;
-
-        float pitchDiff = targetPitch - this.rotationPitch;
-        while (pitchDiff > 180.0F) pitchDiff -= 360.0F;
-        while (pitchDiff < -180.0F) pitchDiff += 360.0F;
-
-        // Curve rate increases with flight time (rocket becomes more unstable)
-        float curveRate = Math.min(flightTime * flightTime * 0.000001F, 5.0F);
-        this.rotationYaw += yawDiff * curveRate;
-        this.rotationPitch += pitchDiff * curveRate * 0.05F;
-
-        // Apply lateral motion based on rotation
-        double speed = jerk * Math.pow(flightTime, 2) / 2;
-        double yawRad = Math.toRadians(this.rotationYaw);
-        double pitchRad = Math.toRadians(this.rotationPitch);
-
-        this.motionX = -Math.sin(yawRad) * Math.sin(pitchRad) * speed;
-        this.motionZ = Math.cos(yawRad) * Math.sin(pitchRad) * speed;
-        this.motionY = Math.cos(pitchRad) * speed;
-
-        this.setPositionAndRotation(
-                this.posX + this.motionX,
-                this.posY + this.motionY,
-                this.posZ + this.motionZ,
-                this.rotationYaw,
-                this.rotationPitch);
-    }
-
     @Override
     public RocketFuelEntry getFuel() {
         return fuelEntry;
