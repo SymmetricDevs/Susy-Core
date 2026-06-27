@@ -19,4 +19,10 @@ public class SuccessCalculation {
         CRASHES,
         EXPLODES
     }
+
+    public record AFSStats(double successCalculation, long augmentation,
+                           double mass, double deltaV, double escapeVelocity, double cargoCapacity,
+                           double radialInstability, double thrust) {
+
+    }
 }

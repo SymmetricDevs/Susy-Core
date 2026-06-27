@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants.NBT;
 
+import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.IAFSImprovable;
@@ -18,6 +19,7 @@ import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.api.space.Planetoid;
 import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.rocketry.SuccessCalculation;
+import supersymmetry.common.rocketry.components.ComponentSpacecraft;
 import supersymmetry.common.world.SuSyDimensions;
 
 public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint implements IAFSImprovable {
@@ -131,6 +133,11 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         return deltaV;
     }
 
+    private double getGuidanceMultiplier() {
+        List<AbstractComponent> comps = this.getComponents("spacecraft");
+        return comps.isEmpty() ? 0 : ((ComponentSpacecraft) comps.get(0)).guidanceMultiplier;
+    }
+
     // lobotomized version of the function below to only take in the blueprint
     public double calculateInitialSuccess(double gravity, RocketFuelEntry fuel, long augmentation) {
         double success = 1;
@@ -169,12 +176,14 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         } else if (thrust / smallThrust < 3) {
             success *= (1 - (0.5 * Math.exp(3 - (thrust / smallThrust))));
         }
-        success *= 0.9;
+        success *= this.getGuidanceMultiplier();
         success = Math.max(0, success);
 
         success = augmentSuccess(success, augmentation);
         return success;
     }
+
+
 
     public SuccessCalculation.LaunchResult calculateSuccess(EntityAbstractRocket rocket, long augmentation) {
         double success = 1;
@@ -222,8 +231,8 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
             success *= (1 - (0.5 * Math.exp(3 - (thrust / smallThrust))));
         }
 
-        // Guidance system TODO: make this more complex when more guidance systems are added
-        success *= 0.9;
+        // Guidance system
+        success *= this.getGuidanceMultiplier();
         success = Math.max(0, success);
 
         success = augmentSuccess(success, augmentation);
