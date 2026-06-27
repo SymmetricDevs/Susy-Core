@@ -1,5 +1,6 @@
 package supersymmetry.common.entities;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -15,6 +16,8 @@ import org.jetbrains.annotations.NotNull;
 
 import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
+import supersymmetry.api.util.SuSyDamageSources;
+import supersymmetry.common.EventHandlers;
 import supersymmetry.common.blocks.rocketry.BlockSpacecraftInstrument;
 import supersymmetry.common.rocketry.RocketConfiguration;
 
@@ -155,6 +158,14 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
             BlockSpacecraftInstrument.Type instrument = BlockSpacecraftInstrument.Type.valueOf(key);
             int count = instruments.getInteger(key);
             instrument.act(count, this);
+        }
+        for (Entity passenger : this.getPassengers()) {
+            if (!EventHandlers.isEntityTravelling(passenger)) {
+                if (passenger instanceof EntityLivingBase living) {
+                    living.attackEntityFrom(SuSyDamageSources.REENTRY, 100000000);
+                }
+                passenger.setDead();
+            }
         }
     }
 
