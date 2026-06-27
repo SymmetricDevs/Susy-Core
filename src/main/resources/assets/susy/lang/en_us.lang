@@ -303,7 +303,7 @@ susy.machine.aerospace_flight_simulator.gui.start_button=Begin simulation
 susy.machine.aerospace_flight_simulator.gui.start_button=Stop simulation
 susy.machine.aerospace_flight_simulator.gui.reset_fuel=Clear fuel
 
-susy.machine.aerospace_flight_simulator.gui.computation_power=Computation: %s CWU/t
+susy.machine.aerospace_flight_simulator.gui.computation_power=Computation: %s floppa/t
 # googs/s is a very technical term
 susy.machine.aerospace_flight_simulator.gui.energy_consumption=Power input: %s EU/t
 susy.machine.aerospace_flight_simulator.gui.coolant_flow=Coolant input: %s mB/s

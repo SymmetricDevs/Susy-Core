@@ -119,15 +119,15 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         NBTTagCompound stackdata = (NBTTagCompound) data.getTag("blueprint");
+        this.isAssemblyWorking = data.getBoolean("isWorking");
         if (stackdata != null && stackdata != new NBTTagCompound()) {
             ItemStack stack = new ItemStack(stackdata);
             this.blueprintSlot.setStackInSlot(0, stack);
-            if (!this.blueprintSlot.isEmpty()) {
+            if (!this.blueprintSlot.isEmpty() && isAssemblyWorking) {
                 this.startAssembly(this.getCurrentBlueprint());
             }
         }
         this.componentIndex = data.getInteger("componentIndex");
-        this.isAssemblyWorking = data.getBoolean("isWorking");
         this.blueprintSlot.setLocked(this.isAssemblyWorking);
     }
 
@@ -167,6 +167,12 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         this.isAssemblyWorking = false;
         this.componentIndex = 0;
         this.componentList.clear();
+        // Clear any partially-built rocket left on the erector.
+        EntityTransporterErector erector = findTransporterErector();
+        if (erector != null) {
+            erector.setAssemblyProgress(0f, 0f,
+                    this.getWorld().getWorldTime(), this.getWorld().getWorldTime());
+        }
         this.recipeMapWorkable.invalidate(); // this can break some things
     }
 
@@ -189,6 +195,9 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
 
     public EntityTransporterErector findTransporterErector() {
         AxisAlignedBB internalBB = this.getInternalBB();
+        if (this.getWorld() == null) {
+            return null;
+        }
         List<ModdedEntity> trains = getWorld().getEntitiesWithinAABB(ModdedEntity.class, internalBB);
 
         if (!trains.isEmpty()) {
@@ -231,6 +240,18 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
             this.componentIndex++;
         } else {
             finishAssembly();
+        }
+    }
+
+    public void displayAssemblerProgress() {
+        // Reveal the rocket up to the components built so far on the erector. This is synced to the client
+        // by the T/E itself.
+        EntityTransporterErector erector = findTransporterErector();
+        if (erector != null && !this.componentList.isEmpty()) {
+            erector.setAssemblyProgress((float) this.componentIndex / this.componentList.size(),
+                    (float) (this.componentIndex + 1) / this.componentList.size(),
+                    this.getWorld().getWorldTime(),
+                    this.getWorld().getWorldTime() + this.getRecipeLogic().getMaxProgress());
         }
     }
 

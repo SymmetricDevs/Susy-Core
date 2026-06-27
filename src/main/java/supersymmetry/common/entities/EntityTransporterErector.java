@@ -2,6 +2,8 @@ package supersymmetry.common.entities;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.nbt.NBTTagCompound;
 
 import cam72cam.immersiverailroading.entity.Freight;
@@ -11,14 +13,29 @@ import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.entity.sync.TagSync;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.serialization.TagField;
+import supersymmetry.api.recipes.logic.RocketAssemblerLogic;
 import supersymmetry.client.renderer.handler.IAlwaysRender;
+import supersymmetry.common.metatileentities.multi.rocket.MetaTileEntityRocketAssembler;
 import supersymmetry.integration.immersiverailroading.registry.TransporterErectorDefinition;
 
 public class EntityTransporterErector extends Freight implements IAlwaysRender {
 
-    @TagField("isRocketLoaded")
+    // Fraction (0..1) of the rocket that has been assembled. 0 = no rocket present,
+    // 1 = fully built. Drives the partial sweep render on the transporter erector.
+    @TagField("assemblyProgress")
     @TagSync
-    private boolean isRocketLoaded = false;
+    private float assemblyProgress = 0f;
+    @TagField("nextAssemblyProgress")
+    @TagSync
+    private float nextAssemblyProgress = 0f;
+    // Interpolation helper variables
+    @TagField("start")
+    @TagSync
+    private float start = 0f;
+    @TagField("end")
+    @TagSync
+    private float end = 0f;
+
     @TagField("lifterAngle")
     @TagSync
     private float lifterAngle = (float) 0;
@@ -31,6 +48,7 @@ public class EntityTransporterErector extends Freight implements IAlwaysRender {
 
     // In radians per tick
     private double liftingSpeed = 0.087 / 20;
+    private MetaTileEntityRocketAssembler assembler;
 
     public EntityTransporterErector() {}
 
@@ -53,12 +71,27 @@ public class EntityTransporterErector extends Freight implements IAlwaysRender {
         return super.getDefinition(TransporterErectorDefinition.class);
     }
 
+    /** True only once the rocket is fully assembled (a partially-built rocket is not "loaded"). */
     public boolean isRocketLoaded() {
-        return isRocketLoaded;
+        return assemblyProgress >= 1f;
     }
 
     public void setRocketLoaded(boolean rocketLoaded) {
-        isRocketLoaded = rocketLoaded;
+        assemblyProgress = rocketLoaded ? 1f : 0f;
+    }
+
+    public float getAssemblyProgress(float renderTime) {
+        // Safely lerp (even if start = end)
+        float interpTime = (renderTime - start) / Math.max((end - start), 0.000001f);
+        return (1 - interpTime) * assemblyProgress + interpTime * nextAssemblyProgress;
+    }
+
+    // Set the assembly progress to a specific value, and the assembler for tracking progress more closely
+    public void setAssemblyProgress(float assemblyProgress, float nextAssemblyProgress, float start, float end) {
+        this.assemblyProgress = Math.clamp(assemblyProgress, 0f, 1f);
+        this.nextAssemblyProgress = Math.clamp(nextAssemblyProgress, 0f, 1f);
+        this.start = start;
+        this.end = end;
     }
 
     public LiftingMode getLiftingMode() {
@@ -123,5 +156,11 @@ public class EntityTransporterErector extends Freight implements IAlwaysRender {
             return 1000000;
         }
         return super.getDirectFrictionNewtons(track);
+    }
+
+    @Override
+    public double getWeight() {
+        // Rocket mass scales with how much of it has been assembled.
+        return super.getWeight() - 311500 * (1 - this.assemblyProgress);
     }
 }

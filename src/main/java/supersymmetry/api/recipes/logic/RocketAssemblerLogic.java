@@ -159,6 +159,13 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
         return true;
     }
 
+    @Override
+    protected void setupRecipe(Recipe recipe) {
+        super.setupRecipe(recipe);
+        MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
+        assembler.displayAssemblerProgress();
+    }
+
     // maybe this is a little too much
     private static int getRequiredDamage(@NotNull Recipe recipe, @NotNull AbstractComponent<?> component) {
         return (int) ((double) recipe.getInputs().size() *
