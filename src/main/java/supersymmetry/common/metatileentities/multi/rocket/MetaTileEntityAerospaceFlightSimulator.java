@@ -701,7 +701,10 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
 
         ConditionalWidget mainGroup = new ConditionalWidget(0, 0, width, height, () -> true);
         ConditionalWidget menuGroup = new ConditionalWidget(0, 0, width, height, () -> !this.isActive());
+        ConditionalWidget workingGroup = new ConditionalWidget(0, 0, width, height, this::isActive);
+
         mainGroup.addWidget(menuGroup);
+        mainGroup.addWidget(workingGroup);
         // Fuel selector
         menuGroup.addWidget(
                 new LabelWidget(
@@ -789,32 +792,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                                 String.format("%.2f", this.getSuccessChance())),
                         0xffffff),
                 () -> !this.isActive() && this.getSuccessChance() != -1);
-        // Various stats beneath
-        // Dry weight
-        menuGroup.addWidgetWithTest(
-                new DynamicLabelWidget(
-                        width - 130,
-                        63,
-                        () -> I18n.format(getMetaName() + ".gui.mass",
-                                String.format("%.0f", this.mass))),
-                () -> !this.isActive() && this.getSuccessChance() != -1 && this.fuel != null);
-        // Fuel mass
-        menuGroup.addWidgetWithTest(
-                new DynamicLabelWidget(
-                        width - 130,
-                        74,
-                        () -> I18n.format(getMetaName() + ".gui.fuel_mass",
-                                String.format("%.0f", this.fuelMass))),
-                () -> !this.isActive() && this.getSuccessChance() != -1 && this.fuel != null);
-        // Velocity/escape velocity
-        menuGroup.addWidgetWithTest(
-                new DynamicLabelWidget(
-                        width - 130,
-                        85,
-                        () -> I18n.format(getMetaName() + ".gui.velocity_percent",
-                                String.format("%.2f", 100 * velocity / escapeVelocity))),
-                () -> !this.isActive() && this.getSuccessChance() != -1 && this.fuel != null);
-
         menuGroup.addWidget(
                 new LabelWidget(9, 9, getMetaFullName(), 0xffffff));
 
@@ -846,6 +823,31 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                     return null;
                 });
         builder.widget(mainGroup);
+        // Various stats beneath
+        // Dry weight
+        workingGroup.addWidgetWithTest(
+                new DynamicLabelWidget(
+                        width - 130,
+                        63,
+                        () -> I18n.format(getMetaName() + ".gui.mass",
+                                String.format("%.0f", this.mass))),
+                () -> !this.isActive() && this.getSuccessChance() != -1 && this.fuel != null);
+        // Fuel mass
+        workingGroup.addWidgetWithTest(
+                new DynamicLabelWidget(
+                        width - 130,
+                        74,
+                        () -> I18n.format(getMetaName() + ".gui.fuel_mass",
+                                String.format("%.0f", this.fuelMass))),
+                () -> !this.isActive() && this.getSuccessChance() != -1 && this.fuel != null);
+        // Velocity/escape velocity
+        workingGroup.addWidgetWithTest(
+                new DynamicLabelWidget(
+                        width - 130,
+                        85,
+                        () -> I18n.format(getMetaName() + ".gui.velocity_percent",
+                                String.format("%.2f", 100 * velocity / escapeVelocity))),
+                () -> !this.isActive() && this.getSuccessChance() != -1 && this.fuel != null);
 
         return builder;
     }

@@ -5,11 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
 import supersymmetry.Supersymmetry;
+import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.rocketry.SuccessCalculation;
@@ -107,6 +109,14 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
         return this.getStages().stream()
                 .mapToInt((comp) -> comp.getComponentCount(componentType))
                 .sum();
+    }
+
+    public List<AbstractComponent> getComponents(String componentType) {
+        return this.getStages().stream()
+                .map(RocketStage::getComponents)
+                .flatMap((list) -> list.values().stream().flatMap(List::stream))
+                .filter(c -> c.getType().equals(componentType))
+                .collect(Collectors.toList());
     }
 
     public void setName(String name) {

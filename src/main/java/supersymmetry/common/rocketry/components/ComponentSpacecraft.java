@@ -30,6 +30,7 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
     public Map<String, Integer> instruments = new HashMap<>();
     public boolean hasAir;
     public double volume;
+    public double guidanceMultiplier;
 
     public ComponentSpacecraft() {
         super(
@@ -70,6 +71,7 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         tag.setDouble("radius", this.radius);
         tag.setDouble("volume", this.volume);
         tag.setBoolean("hasAir", this.hasAir);
+        tag.setDouble("guidanceMultiplier", this.guidanceMultiplier);
         NBTTagCompound instrumentsTag = new NBTTagCompound();
         NBTTagCompound partsTag = new NBTTagCompound();
         for (Entry<String, Integer> part : this.parts.entrySet()) {
@@ -103,6 +105,7 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         spacecraft.mass = compound.getDouble("mass");
         spacecraft.volume = compound.getDouble("volume");
         spacecraft.hasAir = compound.getBoolean("hasAir");
+        spacecraft.guidanceMultiplier = compound.getDouble("guidanceMultiplier");
 
         NBTTagCompound instrumentsList = compound.getCompoundTag(AbstractComponent.INSTRUMENTS_KEY);
         for (String key : instrumentsList.getKeySet()) {
@@ -178,7 +181,8 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         }
         IBlockState guidanceBlock = analysis.world.getBlockState(guidanceComputers.get(0));
         tag.setString("guidance", SuSyBlocks.GUIDANCE_SYSTEM.getState(guidanceBlock).toString());
-
+        this.guidanceMultiplier = SuSyBlocks.GUIDANCE_SYSTEM.getState(guidanceBlock).getSuccessChanceMultiplier();
+        tag.setDouble("guidanceMultiplier", SuSyBlocks.GUIDANCE_SYSTEM.getState(guidanceBlock).getSuccessChanceMultiplier());
         if (lifeSupports.isEmpty()) {
             // no airspace necessary
             if (!interior.isEmpty()) {
