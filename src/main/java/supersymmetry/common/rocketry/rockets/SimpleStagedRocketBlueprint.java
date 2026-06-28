@@ -85,6 +85,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         tag.setBoolean("buildstat", complete);
 
         tag.setLong("AFSimprovement", this.AFSimprovement);
+        tag.setDouble("maxVolume", this.getCargoVolume());
 
         return tag;
     }
@@ -164,11 +165,6 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
             if (f < 1e-8) break;
         }
         return guess;
-    }
-
-    private double getGuidanceMultiplier() {
-        List<AbstractComponent> comps = this.getComponents("spacecraft");
-        return comps.isEmpty() ? 0 : ((ComponentSpacecraft) comps.get(0)).guidanceMultiplier;
     }
 
     // lobotomized version of the function below to only take in the blueprint

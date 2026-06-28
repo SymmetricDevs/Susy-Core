@@ -3,7 +3,6 @@ package supersymmetry.common.metatileentities.multi.rocket;
 import static supercritical.api.pattern.SCPredicates.FLUID_BLOCKS_KEY;
 import static supercritical.api.pattern.SCPredicates.fluid;
 import static supersymmetry.api.capability.SuSyDataCodes.SYNC_AFS;
-import static supersymmetry.common.rocketry.SuccessCalculation.ESCAPE_VELOCITY_CONSTANT;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -71,7 +70,6 @@ import supersymmetry.common.mui.widget.ConditionalWidget;
 import supersymmetry.common.mui.widget.FuelRegistrySelectorWidget;
 import supersymmetry.common.mui.widget.RocketRenderWidget;
 import supersymmetry.common.mui.widget.SlotWidgetMentallyStable;
-import supersymmetry.common.rocketry.SuccessCalculation;
 import supersymmetry.common.rocketry.SuccessCalculation.AFSStats;
 
 // TODO add a tooltip to the controller item that mentions losing progress if power/coolant is cut
@@ -800,7 +798,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         // Various stats beneath
         workingGroup.addWidgetWithTest(
                 new DynamicLabelWidget(
-                        20,
+                        10,
                         52,
                         () -> I18n.format(getMetaName() + ".gui.success_chance",
                                 String.format("%.2f", this.stats.success())),
@@ -808,55 +806,74 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 () -> this.isActive() && !this.stats.isNone());
         workingGroup.addWidgetWithTest(
                 new DynamicLabelWidget(
-                        20,
+                        10,
                         63,
                         () -> I18n.format(getMetaName() + ".gui.mass",
-                                String.format("%.0f", this.stats.mass())), 0xffffff),
+                                String.format("%.0f", this.stats.mass())),
+                        0xffffff),
                 () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
         workingGroup.addWidgetWithTest(
                 new DynamicLabelWidget(
-                        20,
+                        10,
                         74,
                         () -> I18n.format(getMetaName() + ".gui.fuel_mass",
-                                String.format("%.0f", this.stats.fuelMass())), 0xffffff),
+                                String.format("%.0f", this.stats.fuelMass())),
+                        0xffffff),
                 () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
         workingGroup.addWidgetWithTest(
                 new DynamicLabelWidget(
-                        20,
+                        10,
                         85,
                         () -> I18n.format(getMetaName() + ".gui.velocity_percent",
-                                String.format("%.2f", 100 * this.stats.deltaV() / this.stats.escapeVelocity())), 0xffffff),
+                                String.format("%.2f", 100 * this.stats.deltaV() / this.stats.escapeVelocity())),
+                        0xffffff),
                 () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
         workingGroup.addWidgetWithTest(
                 new DynamicLabelWidget(
-                        20,
+                        10,
                         96,
                         () -> I18n.format(getMetaName() + ".gui.thrust",
-                                String.format("%.2f", this.stats.thrust())), 0xffffff),
+                                String.format("%.2f", this.stats.thrust())),
+                        0xffffff),
                 () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
         workingGroup.addWidgetWithTest(
                 new DynamicLabelWidget(
-                        20,
+                        10,
                         107,
                         () -> I18n.format(getMetaName() + ".gui.cargo_capacity",
-                                String.format("%.2f", this.stats.cargoCapacity())), 0xffffff),
+                                String.format("%.2f", this.stats.cargoCapacity())),
+                        0xffffff),
                 () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
         workingGroup.addWidgetWithTest(
                 new DynamicLabelWidget(
-                        width - 130,
+                        width - 140,
                         52,
                         () -> I18n.format(getMetaName() + ".gui.radial_instability",
-                                String.format("%.2f", this.stats.radialInstability())), 0xffffff),
+                                String.format("%.2f", this.stats.radialInstability())),
+                        0xffffff),
                 () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
         workingGroup.addWidgetWithTest(
                 new DynamicLabelWidget(
-                        width - 130,
+                        width - 140,
                         63,
                         () -> I18n.format(getMetaName() + ".gui.oblateness",
-                                String.format("%.2f", this.stats.oblateness())), 0xffffff),
+                                String.format("%.2f", this.stats.oblateness())),
+                        0xffffff),
+                () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
+        workingGroup.addWidgetWithTest(
+                new DynamicLabelWidget(
+                        width - 140,
+                        74,
+                        () -> I18n.format(getMetaName() + ".gui.improvement",
+                                this.getAugmentation()),
+                        0xffffff),
                 () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
 
         return builder;
+    }
+
+    public long getAugmentation() {
+        return this.progress;
     }
 
     @Override

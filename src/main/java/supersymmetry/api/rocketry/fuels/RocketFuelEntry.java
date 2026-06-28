@@ -1,11 +1,10 @@
 package supersymmetry.api.rocketry.fuels;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import net.minecraft.util.Tuple;
 import net.minecraftforge.fluids.Fluid;
+import org.jetbrains.annotations.NotNull;
 
 public class RocketFuelEntry {
 
@@ -133,5 +132,17 @@ public class RocketFuelEntry {
 
     public double getSIVariation() {
         return this.sIPerPressure;
+    }
+
+    public static @NotNull Optional<RocketFuelEntry> search(List<Fluid> userFluids) {
+        for (RocketFuelEntry entry : RocketFuelEntry.getFuelRegistry().values()) {
+            boolean matches = entry.getComposition().stream()
+                    .map(Tuple::getFirst)
+                    .allMatch(userFluids::contains);
+            if (matches) {
+                return Optional.of(entry);
+            }
+        }
+        return Optional.empty();
     }
 }

@@ -6,7 +6,7 @@ import net.minecraft.network.PacketBuffer;
 public class SuccessCalculation {
 
     public static final double ESCAPE_VELOCITY_CONSTANT = 1138.92;
-    public static final double AUGMENTATION_CONSTANT = 19480;
+    public static final double AUGMENTATION_CONSTANT = 768000;
     // A 50% success blueprint takes just under 5 hours at this rate to bring to 80% for a starting-tier AFS
 
     public static double augmentSuccess(double success, long augmentation) {

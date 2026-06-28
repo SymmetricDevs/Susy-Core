@@ -51,6 +51,7 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         this.radius = 3.0;
         this.volume = 5.0;
         this.mass = 1000.0;
+        this.guidanceMultiplier = 0.9;
         this.hasAir = true;
         return true;
     }
@@ -182,7 +183,8 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         IBlockState guidanceBlock = analysis.world.getBlockState(guidanceComputers.get(0));
         tag.setString("guidance", SuSyBlocks.GUIDANCE_SYSTEM.getState(guidanceBlock).toString());
         this.guidanceMultiplier = SuSyBlocks.GUIDANCE_SYSTEM.getState(guidanceBlock).getSuccessChanceMultiplier();
-        tag.setDouble("guidanceMultiplier", SuSyBlocks.GUIDANCE_SYSTEM.getState(guidanceBlock).getSuccessChanceMultiplier());
+        tag.setDouble("guidanceMultiplier",
+                SuSyBlocks.GUIDANCE_SYSTEM.getState(guidanceBlock).getSuccessChanceMultiplier());
         if (lifeSupports.isEmpty()) {
             // no airspace necessary
             if (!interior.isEmpty()) {

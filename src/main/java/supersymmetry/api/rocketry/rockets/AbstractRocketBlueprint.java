@@ -15,6 +15,7 @@ import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.rocketry.SuccessCalculation;
+import supersymmetry.common.rocketry.components.ComponentSpacecraft;
 
 public abstract class AbstractRocketBlueprint implements Cloneable {
 
@@ -119,6 +120,17 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
                 .collect(Collectors.toList());
     }
 
+    public double getGuidanceMultiplier() {
+        List<AbstractComponent> comps = this.getComponents("spacecraft");
+        return comps.isEmpty() ? 0 : ((ComponentSpacecraft) comps.get(0)).guidanceMultiplier;
+    }
+
+    public double getCargoVolume() {
+        return this.getComponents("spacecraft").stream()
+                .map(component -> ((ComponentSpacecraft) component).volume)
+                .reduce(0.0, Double::sum);
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -149,7 +161,8 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
         }
     }
 
-    public abstract SuccessCalculation.AFSStats calculateInitialSuccess(double gravity, RocketFuelEntry fuel, long augmentation);
+    public abstract SuccessCalculation.AFSStats calculateInitialSuccess(double gravity, RocketFuelEntry fuel,
+                                                                        long augmentation);
 
     public abstract SuccessCalculation.LaunchResult calculateSuccess(EntityAbstractRocket rocket, long augmentation);
 }

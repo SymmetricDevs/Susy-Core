@@ -144,11 +144,10 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
             this.maxFuelVolume = 1;
             this.augmentation = 0;
         } else {
-            this.cargo = new CargoItemStackHandler(this.getEntityData().getInteger("maxVolume"),
-                    this.getEntityData().getInteger("maxWeight"));
-            this.fuelEntry = RocketFuelEntry.getCopyOf(this.getEntityData().getString("fuel"));
             AbstractRocketBlueprint blueprint = AbstractRocketBlueprint
                     .getCopyOf(this.getEntityData().getCompoundTag("rocket").getString("name"));
+            this.cargo = new CargoItemStackHandler((int) blueprint.getCargoVolume(),
+                    Integer.MAX_VALUE);
             blueprint.readFromNBT(this.getEntityData().getCompoundTag("rocket"));
             BlockPos assemblerPosition = BlockPos.fromLong(this.getEntityData().getLong("assemblerPosition"));
             if (!assemblerPosition.equals(BlockPos.NULL_VECTOR) &&
@@ -429,5 +428,9 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
     @Nullable
     public BlockPos getTrollTargetPos() {
         return this.trollTargetPos;
+    }
+
+    public void setFuel(RocketFuelEntry fuelEntry) {
+        this.fuelEntry = fuelEntry;
     }
 }

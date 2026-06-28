@@ -88,7 +88,7 @@ public class SusyRocketComponents {
                 .stage(
                         new RocketStage.Builder("payload")
                                 .type("spacecraft")
-                                .limit(4)
+                                .limit(1)
                                 .type("fairing")
                                 .limit(2)
                                 .type("engine_small")

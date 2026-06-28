@@ -15,6 +15,7 @@ import net.minecraft.util.Tuple;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import gregtech.api.gui.widgets.AbstractWidgetGroup;
@@ -87,15 +88,7 @@ public class FuelRegistrySelectorWidget extends AbstractWidgetGroup {
                 .map(FluidStack::getFluid)
                 .collect(Collectors.toList());
 
-        for (RocketFuelEntry entry : RocketFuelEntry.getFuelRegistry().values()) {
-            boolean matches = entry.getComposition().stream()
-                    .map(Tuple::getFirst)
-                    .allMatch(userFluids::contains);
-            if (matches) {
-                return Optional.of(entry);
-            }
-        }
-        return Optional.empty();
+        return RocketFuelEntry.search(userFluids);
     }
 
     private PhantomFluidWidget newWidget(final int index) {
