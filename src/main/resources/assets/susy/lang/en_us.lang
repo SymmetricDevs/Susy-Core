@@ -296,6 +296,10 @@ susy.machine.aerospace_flight_simulator.gui.success_chance=Success chance: %.1f
 susy.machine.aerospace_flight_simulator.gui.mass=Dry mass: %s kg
 susy.machine.aerospace_flight_simulator.gui.fuel_mass=Fuel mass: %s kg
 susy.machine.aerospace_flight_simulator.gui.velocity_percent=Escape velocity%%: %s
+susy.machine.aerospace_flight_simulator.gui.cargo_capacity=Cargo capacity: %s kg
+susy.machine.aerospace_flight_simulator.gui.radial_instability=Radial mismatch: %s blocks
+susy.machine.aerospace_flight_simulator.gui.thrust=Thrust: %s N
+susy.machine.aerospace_flight_simulator.gui.oblateness=Oblateness: %s
 
 susy.machine.aerospace_flight_simulator.gui.rocket_name=Rocket: %s
 susy.machine.aerospace_flight_simulator.gui.stages=Stages:

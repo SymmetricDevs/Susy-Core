@@ -40,6 +40,7 @@ public class BlockGuidanceSystem extends VariantBlock<BlockGuidanceSystem.Guidan
         GuidanceSystemType(String name, int harvest, double successChanceMultiplier) {
             this.name = name;
             this.harvest = harvest;
+            this.successChanceMultiplier = successChanceMultiplier;
         }
 
         @Override
