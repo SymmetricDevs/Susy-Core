@@ -118,7 +118,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         return true;
     }
 
-    public double calculateVelocity(double gravity, RocketFuelEntry fuel) {
+    public double calculateVelocity(double gravity, RocketFuelEntry fuel, double cargo) {
         double remainingWeight = this.getMass() + fuel.getDensity() * this.getFuelVolume();
         double deltaV = 0;
         // TODO: somehow incorporate cargo mass in a fair way
@@ -133,20 +133,54 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         return deltaV;
     }
 
+    public double getMaximumCargoMass(double gravity, RocketFuelEntry fuel, double escapeVelocity) {
+        // DeltaV given some cargo mass x from the above is as such, with w_x being the base wet weight at stage x and
+        // d_x being the base dry weight:
+        // escapeVelocity = sum(ln((w_x + x) / (d_x + x)) * v_i)
+        // We have to solve numerically
+        // Newton's method, finding largest root specifically. The guess must start at zero since it's decreasing
+        // concave up
+        double guess = 0;
+        double totalWeight = this.getMass() + fuel.getDensity() * this.getFuelVolume();
+        for (int i = 0; i < 10; i++) {
+            double fprime = 0;
+            double f = 0;
+            double remainingWeight = totalWeight + guess;
+
+            // d/dx (ln((w_x + x) / (d_x + x)) * v_i) =
+            // v_i * (d_x + x) / (w_x + x) * (d_x - w_x) / (d_x + x)^2
+            // x is already accounted for
+            for (RocketStage stage : this.stages) {
+                double currentFuelWeight = stage.getFuelCapacity() * fuel.getDensity();
+                double dryWeight = remainingWeight - currentFuelWeight;
+                fprime += stage.getEffectiveFuelVelocity(fuel, gravity) * dryWeight / remainingWeight *
+                        -currentFuelWeight / Math.pow(dryWeight, 2);
+                f += stage.getEffectiveFuelVelocity(fuel, gravity) * Math.log(remainingWeight / dryWeight);
+                remainingWeight -= stage.getMass() + currentFuelWeight;
+            }
+            f -= escapeVelocity;
+
+            guess -= f / fprime;
+            if (f < 1e-8) break;
+        }
+        return guess;
+    }
+
     private double getGuidanceMultiplier() {
         List<AbstractComponent> comps = this.getComponents("spacecraft");
         return comps.isEmpty() ? 0 : ((ComponentSpacecraft) comps.get(0)).guidanceMultiplier;
     }
 
     // lobotomized version of the function below to only take in the blueprint
-    public double calculateInitialSuccess(double gravity, RocketFuelEntry fuel, long augmentation) {
+    public SuccessCalculation.AFSStats calculateInitialSuccess(double gravity, RocketFuelEntry fuel,
+                                                               long augmentation) {
         double success = 1;
         double weight = this.getMass();
         double thrust = this.getThrust(fuel, gravity, "engine");
         double thrustToWeightRatio = thrust / weight;
-        if (thrustToWeightRatio < 1) return 0d;
+        if (thrustToWeightRatio < 1) success = 0;
 
-        double velocitySpeedup = calculateVelocity(gravity, fuel);
+        double velocitySpeedup = calculateVelocity(gravity, fuel, 0);
 
         // Very approximate, assuming constant density rho = 5515 kg/m^3
         // g = GM / R^2
@@ -156,7 +190,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         double escapeVelocity = ESCAPE_VELOCITY_CONSTANT * gravity;
 
         if (velocitySpeedup < escapeVelocity) {
-            return 0;
+            success = 0;
         } else {
             success *= (1 - (0.1 * Math.exp(10 * (escapeVelocity - velocitySpeedup) / escapeVelocity)));
         }
@@ -165,8 +199,8 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         double oblateness = this.getHeight() / this.getMaxRadius();
         success *= (1 - (0.2 * Math.exp(-oblateness)));
         success *= Math.pow(0.995, this.getComponentCount("engine"));
-        double mismatch = this.getTotalRadiusMismatch();
-        success *= (1 - (0.02 * mismatch * Math.exp(mismatch / 10)));
+        double radialInstability = this.getTotalRadiusMismatch();
+        success *= (1 - (0.02 * radialInstability * Math.exp(radialInstability / 10)));
 
         double smallThrust = this.getThrust(fuel, gravity, "engine_small");
         success *= (1 - (0.2 * Math.exp(3 - smallThrust)));
@@ -180,10 +214,11 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         success = Math.max(0, success);
 
         success = augmentSuccess(success, augmentation);
-        return success;
+
+        return new SuccessCalculation.AFSStats(success, weight, fuel.getDensity() * this.getFuelVolume(),
+                velocitySpeedup, escapeVelocity,
+                getMaximumCargoMass(gravity, fuel, escapeVelocity), radialInstability, thrust, oblateness);
     }
-
-
 
     public SuccessCalculation.LaunchResult calculateSuccess(EntityAbstractRocket rocket, long augmentation) {
         double success = 1;
@@ -205,7 +240,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
             success *= (1 - (0.5 * Math.exp(1 - thrustToWeightRatio)));
         }
 
-        double velocitySpeedup = this.calculateVelocity(gravity, rocket.getFuel());
+        double velocitySpeedup = this.calculateVelocity(gravity, rocket.getFuel(), rocket.getCargoMass());
         if (velocitySpeedup < escapeVelocity) {
             return SuccessCalculation.LaunchResult.CRASHES;
         } else {
